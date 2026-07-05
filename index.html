@@ -19,6 +19,7 @@
   --khaki-d:#8a7c56;
   --linen:#f4f0e6;
   --linen2:#ebe6d8;
+  --bg:#fbfaf7;
   --line:#dcd6c6;
   --ok:#5a7d5a;
   --warn:#b08a3e;
@@ -30,54 +31,76 @@
 html,body{height:100%}
 body{
   font-family:"Noto Sans TC",-apple-system,"Segoe UI",sans-serif;
-  background:var(--linen);color:var(--black);
+  background:var(--bg);color:var(--black);
   font-size:14px;line-height:1.55;
-  display:flex;min-height:100dvh;
+  min-height:100dvh;
 }
 button{font-family:inherit;cursor:pointer}
 input,select,textarea{font-family:inherit;font-size:13px}
 
-/* ── Sidebar ── */
-.side{
-  width:216px;flex-shrink:0;background:var(--black);color:var(--linen);
-  display:flex;flex-direction:column;position:sticky;top:0;height:100dvh;overflow-y:auto;
+/* ── Top App Bar(頂部選單）── */
+.appbar{
+  background:var(--black);color:var(--linen);
+  position:sticky;top:0;z-index:60;
+  display:flex;align-items:center;gap:6px;
+  padding:0 18px;height:56px;flex-wrap:nowrap;
 }
-.brand{padding:22px 20px 16px;border-bottom:1px solid #2a2a27}
-.brand .t1{font-size:15px;font-weight:700;letter-spacing:.14em}
-.brand .t2{font-size:9px;color:var(--khaki);letter-spacing:.24em;text-transform:uppercase;margin-top:3px}
-.nav-sec{padding:14px 12px 4px;font-size:9px;letter-spacing:.22em;color:#6e6c64;text-transform:uppercase}
-.nav-btn{
+.ab-brand{display:flex;flex-direction:column;justify-content:center;margin-right:14px;white-space:nowrap}
+.ab-brand .t1{font-size:14px;font-weight:700;letter-spacing:.12em}
+.ab-brand .t2{font-size:8px;color:var(--khaki);letter-spacing:.22em;text-transform:uppercase;margin-top:1px}
+
+/* 下拉群組 */
+.navrow{display:flex;align-items:center;gap:2px;flex:1;min-width:0}
+.dd{position:relative}
+.dd-btn{
+  display:flex;align-items:center;gap:6px;background:none;border:none;
+  color:#d7d2c3;font-size:13px;font-weight:600;padding:8px 13px;border-radius:6px;
+  white-space:nowrap;transition:.12s;
+}
+.dd-btn .zh{font-size:13px}
+.dd-btn .en{font-size:10px;color:#8f8a7c;letter-spacing:.04em}
+.dd-btn .ca{font-size:9px;opacity:.6;margin-left:1px}
+.dd-btn:hover{background:#232320;color:var(--white)}
+.dd.open .dd-btn{background:#232320;color:var(--white)}
+.dd-menu{
+  display:none;position:absolute;top:calc(100% + 6px);left:0;min-width:230px;
+  background:var(--white);border:1px solid var(--line);border-radius:8px;
+  box-shadow:0 12px 34px rgba(20,18,12,.22);padding:6px;z-index:80;
+}
+.dd.open .dd-menu{display:block;animation:ddin .14s ease}
+@keyframes ddin{from{opacity:0;transform:translateY(-4px)}to{opacity:1}}
+.dd-item{
   display:flex;align-items:center;gap:10px;width:100%;
-  padding:9px 20px;background:none;border:none;color:#c9c4b4;
-  font-size:13px;text-align:left;border-left:2px solid transparent;transition:.12s;
+  padding:9px 11px;background:none;border:none;text-align:left;border-radius:6px;
+  color:var(--black);transition:.1s;text-decoration:none;
 }
-.nav-btn:hover{background:#1d1d1b;color:var(--white)}
-.nav-btn.on{background:#1d1d1b;color:var(--white);border-left-color:var(--khaki)}
-.nav-btn .ic{width:18px;text-align:center;font-size:14px}
-.nav-btn .bdg{margin-left:auto;background:var(--khaki);color:var(--black);font-size:10px;font-weight:700;border-radius:9px;padding:0 6px;min-width:18px;text-align:center}
-.launch-a{
-  display:flex;align-items:center;gap:9px;padding:8px 20px;color:#a5a091;
-  font-size:12.5px;text-decoration:none;transition:.12s;
-}
-.launch-a:hover{background:#1d1d1b;color:var(--khaki)}
-.launch-a .dot{width:6px;height:6px;border-radius:50%;background:#4a4a45;flex-shrink:0}
-.launch-a .dot.g{background:var(--ok)}
-.launch-a .dot.y{background:var(--warn)}
-.launch-a .dot.r{background:var(--bad)}
-.side-foot{margin-top:auto;padding:14px 20px;border-top:1px solid #2a2a27;font-size:10px;color:#6e6c64;font-family:var(--mono)}
+.dd-item:hover{background:var(--linen)}
+.dd-item.on{background:var(--linen2)}
+.dd-item .ic{width:20px;text-align:center;font-size:14px;color:var(--graphite)}
+.dd-item .lbl{display:flex;flex-direction:column;line-height:1.25;flex:1;min-width:0}
+.dd-item .lbl .zh{font-size:13.5px;font-weight:600}
+.dd-item .lbl .en{font-size:10.5px;color:var(--graphite2);letter-spacing:.02em}
+.dd-item .bdg{background:var(--khaki);color:var(--black);font-size:10px;font-weight:700;border-radius:9px;padding:0 6px;min-width:18px;text-align:center}
+.dd-item .dot{width:7px;height:7px;border-radius:50%;background:#c5c0b0;flex-shrink:0}
+.dd-item .dot.g{background:var(--ok)}
+.dd-item .dot.y{background:var(--warn)}
+.dd-item .dot.r{background:var(--bad)}
+.dd-sep{height:1px;background:var(--line);margin:5px 4px}
 
 /* ── Main ── */
-.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.main{width:100%;display:flex;flex-direction:column}
+.ab-right{margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0}
 .topbar{
-  background:var(--white);border-bottom:1px solid var(--line);
-  padding:12px 26px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:20;
+  background:transparent;border-bottom:1px solid var(--line);
+  padding:16px 26px 13px;display:flex;align-items:center;gap:14px;
 }
-.topbar h1{font-size:16px;font-weight:700;letter-spacing:.04em}
-.topbar .sub{font-size:10px;color:var(--graphite2);letter-spacing:.18em;text-transform:uppercase}
+.topbar h1{font-size:17px;font-weight:700;letter-spacing:.02em}
+.topbar h1 .en{font-size:12px;font-weight:500;color:var(--graphite2);margin-left:8px;letter-spacing:.04em}
+.topbar .sub{font-size:10px;color:var(--graphite2);letter-spacing:.16em;text-transform:uppercase}
 .top-right{margin-left:auto;display:flex;align-items:center;gap:10px}
 .cloud-pill{
-  display:flex;align-items:center;gap:7px;background:var(--linen);
-  border:1px solid var(--line);border-radius:20px;padding:5px 13px;font-size:11px;color:var(--graphite);cursor:pointer;
+  display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.12);
+  border:1px solid #3a3a35;border-radius:20px;padding:5px 12px;font-size:11px;color:#d7d2c3;cursor:pointer;
 }
 .cloud-pill .cd{width:7px;height:7px;border-radius:50%;background:#b5b0a0}
 .cloud-pill .cd.ok{background:var(--ok)}
@@ -236,64 +259,93 @@ canvas{max-width:100%}
 .hint{font-size:11.5px;color:var(--graphite2);margin-top:8px;line-height:1.6}
 .hint code{font-family:var(--mono);background:var(--linen2);padding:1px 5px;border-radius:3px;font-size:10.5px}
 
+/* appbar 內的操作鈕(深底）*/
+.ab-right .btn.ghost{background:rgba(255,255,255,.1);color:#e8e4d8;border-color:#3a3a35}
+.ab-right .btn.ghost:hover{background:rgba(255,255,255,.18);border-color:#55554d}
+
 /* ── Mobile ── */
-.menu-btn{display:none;border:none;background:none;font-size:20px;color:var(--black)}
-@media(max-width:860px){
-  .side{position:fixed;left:-220px;z-index:90;transition:.22s;box-shadow:4px 0 20px rgba(0,0,0,.3)}
-  .side.open{left:0}
-  .menu-btn{display:block}
+.menu-btn{display:none;border:none;background:none;font-size:22px;color:var(--linen)}
+@media(max-width:920px){
+  .appbar{flex-wrap:wrap;height:auto;padding:8px 14px;gap:4px}
+  .ab-brand{margin-right:auto}
+  .navrow{order:3;width:100%;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+  .ab-right{order:2}
+  .dd-menu{min-width:210px}
   .content{padding:16px 14px 60px}
   .health{flex-direction:column}
   .hl{border-right:none;border-bottom:1px solid #2a2a27}
+  .topbar{padding:13px 16px 11px}
+}
+@media(max-width:560px){
+  .dd-btn .en{display:none}
+  .dd-menu{position:fixed;left:8px;right:8px;min-width:0}
 }
 </style>
 </head>
 <body>
 
-<!-- ═══════════ SIDEBAR ═══════════ -->
-<aside class="side" id="side">
-  <div class="brand">
+<!-- ═══════════ TOP APP BAR(頂部下拉選單）═══════════ -->
+<div class="appbar" id="appbar">
+  <div class="ab-brand">
     <div class="t1">AC ADMIN CENTER</div>
-    <div class="t2">Factory Administration</div>
+    <div class="t2">行政中心 · Factory Admin</div>
   </div>
 
-  <div class="nav-sec">Management</div>
-  <button class="nav-btn on" data-v="dashboard" onclick="go('dashboard')"><span class="ic">◉</span>Executive Dashboard</button>
-  <button class="nav-btn" data-v="overview" onclick="go('overview')"><span class="ic">▦</span>Factory Overview</button>
-  <button class="nav-btn" data-v="budget" onclick="go('budget')"><span class="ic">◫</span>Budget Dashboard</button>
-  <button class="nav-btn" data-v="notify" onclick="go('notify')"><span class="ic">◈</span>Notification Center<span class="bdg" id="ntfBdg" style="display:none">0</span></button>
-  <button class="nav-btn" data-v="search" onclick="go('search')"><span class="ic">⌕</span>Global Search</button>
-  <button class="nav-btn" data-v="timeline" onclick="go('timeline')"><span class="ic">≡</span>Activity Timeline</button>
+  <div class="navrow" id="navrow">
+    <!-- 管理 Management -->
+    <div class="dd" data-dd="mng">
+      <button class="dd-btn" onclick="toggleDD('mng')"><span class="zh">管理</span><span class="en">Management</span><span class="ca">▾</span></button>
+      <div class="dd-menu">
+        <button class="dd-item" data-v="dashboard" onclick="go('dashboard')"><span class="ic">◉</span><span class="lbl"><span class="zh">主控台</span><span class="en">Executive Dashboard</span></span></button>
+        <button class="dd-item" data-v="overview" onclick="go('overview')"><span class="ic">▦</span><span class="lbl"><span class="zh">工廠總覽</span><span class="en">Factory Overview</span></span></button>
+        <button class="dd-item" data-v="budget" onclick="go('budget')"><span class="ic">◫</span><span class="lbl"><span class="zh">預算儀表板</span><span class="en">Budget Dashboard</span></span></button>
+        <button class="dd-item" data-v="notify" onclick="go('notify')"><span class="ic">◈</span><span class="lbl"><span class="zh">通知中心</span><span class="en">Notification Center</span></span><span class="bdg" id="ntfBdg" style="display:none">0</span></button>
+        <button class="dd-item" data-v="search" onclick="go('search')"><span class="ic">⌕</span><span class="lbl"><span class="zh">全域搜尋</span><span class="en">Global Search</span></span></button>
+        <button class="dd-item" data-v="timeline" onclick="go('timeline')"><span class="ic">≡</span><span class="lbl"><span class="zh">活動時間軸</span><span class="en">Activity Timeline</span></span></button>
+      </div>
+    </div>
 
-  <div class="nav-sec">Admin Modules</div>
-  <button class="nav-btn" data-v="org" onclick="go('org')"><span class="ic">⌘</span>Organization</button>
-  <button class="nav-btn" data-v="salstr" onclick="go('salstr')"><span class="ic">☰</span>Salary Structure</button>
-  <button class="nav-btn" data-v="saladj" onclick="go('saladj')"><span class="ic">↗</span>Salary Adjustment</button>
+    <!-- 行政模組 Admin -->
+    <div class="dd" data-dd="adm">
+      <button class="dd-btn" onclick="toggleDD('adm')"><span class="zh">行政模組</span><span class="en">Admin</span><span class="ca">▾</span></button>
+      <div class="dd-menu">
+        <button class="dd-item" data-v="org" onclick="go('org')"><span class="ic">⌘</span><span class="lbl"><span class="zh">組織架構</span><span class="en">Organization</span></span></button>
+        <button class="dd-item" data-v="salstr" onclick="go('salstr')"><span class="ic">☰</span><span class="lbl"><span class="zh">薪資結構</span><span class="en">Salary Structure</span></span></button>
+        <button class="dd-item" data-v="saladj" onclick="go('saladj')"><span class="ic">↗</span><span class="lbl"><span class="zh">年度調薪</span><span class="en">Salary Adjustment</span></span></button>
+      </div>
+    </div>
 
-  <div class="nav-sec">Platform Launcher</div>
-  <div id="launcher"></div>
+    <!-- 平台 Platforms -->
+    <div class="dd" data-dd="plt">
+      <button class="dd-btn" onclick="toggleDD('plt')"><span class="zh">平台</span><span class="en">Platforms</span><span class="ca">▾</span></button>
+      <div class="dd-menu" id="launcher"></div>
+    </div>
 
-  <div class="nav-sec">System</div>
-  <button class="nav-btn" data-v="settings" onclick="go('settings')"><span class="ic">⚙</span>Settings</button>
+    <!-- 系統 System -->
+    <div class="dd" data-dd="sys">
+      <button class="dd-btn" onclick="toggleDD('sys')"><span class="zh">系統</span><span class="en">System</span><span class="ca">▾</span></button>
+      <div class="dd-menu">
+        <button class="dd-item" data-v="settings" onclick="go('settings')"><span class="ic">⚙</span><span class="lbl"><span class="zh">設定</span><span class="en">Settings</span></span></button>
+      </div>
+    </div>
+  </div>
 
-  <div class="side-foot">SAINTDOU · FAMS v1.0<br>ac-admin · <span id="footDate"></span></div>
-</aside>
+  <div class="ab-right">
+    <div class="cloud-pill" onclick="go('settings')" title="雲端狀態 Cloud status">
+      <span class="cd" id="cloudDot"></span>
+      <span id="cloudTxt">Cloud —</span>
+    </div>
+    <button class="btn ghost sm" onclick="refreshAll()">↻ 更新</button>
+    <button class="btn sm" onclick="syncCloud()">⇅ 同步</button>
+  </div>
+</div>
 
 <!-- ═══════════ MAIN ═══════════ -->
 <div class="main">
   <div class="topbar">
-    <button class="menu-btn" onclick="toggleSide()">☰</button>
     <div>
-      <h1 id="vTitle">Executive Dashboard</h1>
+      <h1><span id="vTitle">主控台</span><span class="en" id="vTitleEn">Executive Dashboard</span></h1>
       <div class="sub" id="vSub">All platforms · Live summary</div>
-    </div>
-    <div class="top-right">
-      <div class="cloud-pill" onclick="go('settings')" title="Cloud status">
-        <span class="cd" id="cloudDot"></span>
-        <span id="cloudTxt">Cloud —</span>
-      </div>
-      <button class="btn ghost sm" onclick="refreshAll()">↻ Refresh</button>
-      <button class="btn sm" onclick="syncCloud()">⇅ Sync</button>
     </div>
   </div>
 
@@ -492,23 +544,25 @@ if(!CFG.gasUrl){CFG.gasUrl='https://script.google.com/macros/s/AKfycbyEWtDE39lzC
 
 /* ── VIEW ROUTER(Platform Router,不用 iframe)── */
 var TITLES={
-  dashboard:['Executive Dashboard','All platforms · Live summary'],
-  overview:['Factory Overview','Cross-platform KPI'],
-  budget:['Budget Dashboard','Budget · Actual · Variance'],
-  notify:['Notification Center','Grouped by platform'],
-  search:['Global Search','Across all platforms'],
-  timeline:['Activity Timeline','All platform updates'],
-  org:['Organization','Departments · Positions · Headcount'],
-  salstr:['Salary Structure','Grade · Range · Allowance'],
-  saladj:['Annual Salary Adjustment','History · Trend · Approval'],
-  settings:['Settings','Cloud · Telegram · Data']
+  dashboard:['主控台','Executive Dashboard','All platforms · Live summary'],
+  overview:['工廠總覽','Factory Overview','Cross-platform KPI'],
+  budget:['預算儀表板','Budget Dashboard','Budget · Actual · Variance'],
+  notify:['通知中心','Notification Center','Grouped by platform'],
+  search:['全域搜尋','Global Search','Across all platforms'],
+  timeline:['活動時間軸','Activity Timeline','All platform updates'],
+  org:['組織架構','Organization','Departments · Positions · Headcount'],
+  salstr:['薪資結構','Salary Structure','Grade · Range · Allowance'],
+  saladj:['年度調薪','Annual Salary Adjustment','History · Trend · Approval'],
+  settings:['設定','Settings','Cloud · Telegram · Data']
 };
 window.go=function(v){
   document.querySelectorAll('.view').forEach(function(e){e.classList.remove('on')});
-  document.querySelectorAll('.nav-btn').forEach(function(e){e.classList.toggle('on',e.dataset.v===v)});
+  document.querySelectorAll('.dd-item').forEach(function(e){e.classList.toggle('on',e.dataset.v===v)});
   $('v-'+v).classList.add('on');
-  $('vTitle').textContent=TITLES[v][0];$('vSub').textContent=TITLES[v][1];
-  $('side').classList.remove('open');
+  $('vTitle').textContent=TITLES[v][0];
+  $('vTitleEn').textContent=TITLES[v][1];
+  $('vSub').textContent=TITLES[v][2];
+  closeDD();
   if(v==='dashboard')renderDashboard();
   if(v==='overview')renderOverview();
   if(v==='budget')renderBudget();
@@ -519,7 +573,14 @@ window.go=function(v){
   if(v==='saladj')renderAdj();
   if(v==='settings'){$('setGas').value=CFG.gasUrl||'';$('setTok').value=CFG.tgToken||'';$('setChat').value=CFG.tgChat||''}
 };
-window.toggleSide=function(){$('side').classList.toggle('open')};
+/* 頂部下拉:開/關 */
+window.toggleDD=function(id){
+  var was=document.querySelector('.dd[data-dd="'+id+'"]').classList.contains('open');
+  closeDD();
+  if(!was)document.querySelector('.dd[data-dd="'+id+'"]').classList.add('open');
+};
+function closeDD(){document.querySelectorAll('.dd.open').forEach(function(e){e.classList.remove('open')})}
+document.addEventListener('click',function(e){ if(!e.target.closest('.dd'))closeDD(); });
 
 /* ═══════════ HUB(透過 PlatformAPI)═══════════ */
 function hub(){return PlatformAPI.readHub()}
@@ -589,10 +650,13 @@ function renderLauncher(all){
   var out='';
   Object.keys(PlatformAPI.platforms).forEach(function(pid){
     if(pid==='admin')return;
+    var p=PlatformAPI.platforms[pid];
     var s=all[pid]||{modulesFound:0,pending:0};
     var h=healthOf(s);
-    out+='<a class="launch-a" href="'+PlatformAPI.platforms[pid].url+'" target="_blank">'
-      +'<span class="dot '+h[0]+'"></span>'+esc(PlatformAPI.platforms[pid].name)+'</a>';
+    out+='<a class="dd-item" href="'+p.url+'" target="_blank">'
+      +'<span class="dot '+h[0]+'"></span>'
+      +'<span class="lbl"><span class="zh">'+esc(p.label||p.name)+'</span><span class="en">'+esc(p.name)+'</span></span>'
+      +'</a>';
   });
   $('launcher').innerHTML=out;
 }
@@ -1102,7 +1166,6 @@ window.wipeAdmin=function(){
 window.refreshAll=function(){PlatformAPI.refresh();renderDashboard();toast('已重新掃描全部平台')};
 
 /* ═══════════ INIT ═══════════ */
-$('footDate').textContent=todayStr();
 renderDashboard();
 updateCloudPill();
 /* 其它分頁修改資料時(同源 storage 事件)自動刷新 */
