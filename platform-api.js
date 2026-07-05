@@ -239,12 +239,17 @@
     };
   }
 
-  /* ── 雲端推送(選用:ac_admin_config.gasUrl)── */
-  function cloudPush() {
+  /* ── 雲端推送(預設已內建 AC_ADMIN_CENTER 部署 URL,免設定)── */
+  var DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbyEWtDE39lzCC_qAIyXNTojWOHlAJj35hnBcj3ayePtJOBhG_zydaQ60AaI2NkMCyo2/exec';
+  function gasUrl() {
     var cfg = safeParse(localStorage.getItem(CFG_KEY)) || {};
-    if (!cfg.gasUrl) return Promise.resolve({ ok: false, error: 'No GAS URL' });
+    return cfg.gasUrl || DEFAULT_GAS_URL;
+  }
+  function cloudPush() {
+    var url = gasUrl();
+    if (!url) return Promise.resolve({ ok: false, error: 'No GAS URL' });
     var hub = readHub();
-    return fetch(cfg.gasUrl, {
+    return fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ action: 'pushHub', hub: hub, from: CURRENT || 'unknown', at: nowStr() })
@@ -252,9 +257,9 @@
       .catch(function (e) { return { ok: false, error: e.message }; });
   }
   function cloudPull() {
-    var cfg = safeParse(localStorage.getItem(CFG_KEY)) || {};
-    if (!cfg.gasUrl) return Promise.resolve({ ok: false, error: 'No GAS URL' });
-    return fetch(cfg.gasUrl + '?action=pullHub', { redirect: 'follow' })
+    var url = gasUrl();
+    if (!url) return Promise.resolve({ ok: false, error: 'No GAS URL' });
+    return fetch(url + '?action=pullHub', { redirect: 'follow' })
       .then(function (r) { return r.json(); })
       .then(function (j) {
         if (j.ok && j.hub) {
