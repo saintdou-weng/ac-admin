@@ -64,24 +64,22 @@ Repo 名稱:ac-admin
 Settings → Pages → main branch → 開啟
 ```
 
-### 2. 部署 GAS 後端
+### 2. 部署 GAS 後端(URL 已填妥,照做即可)
 
 1. script.google.com → 新專案,命名 **AC_ADMIN_CENTER**,貼入 `AC_ADMIN_CENTER.gs`
+   ✅ `EXEC_URL` 已填入您的部署網址,**不需要再改任何程式碼**
 2. 執行一次 `setup()`(授權 → 自動建立 Google Sheet「AC_ADMIN_CENTER_DB」)
-3. 部署 → 新增部署 → 網頁應用程式 → 執行身分:**我**,存取權:**任何人**
-4. 複製 `/exec` URL → **貼回程式碼頂部 `EXEC_URL` 常數**(硬編碼)
-5. 管理部署 → 編輯 → **新版本** 再部署一次
-6. 執行 `fixWebhook()` → Telegram 群組會收到「Webhook 已綁定 ✓」
-7. (選用)執行 `setupDailyDigest()` → 每日 08:00 自動發送全平台摘要
+3. 部署 → 管理部署 → 編輯 → **新版本** → 部署(沿用同一個 /exec 網址)
+4. 執行 `fixWebhook()` → Telegram 群組會收到「Webhook 已綁定 ✓」
+5. (選用)執行 `setupDailyDigest()` → 每日 08:00 自動發送全平台摘要
 
 > ⚠️ 照舊規範:每次重新部署 GAS 後,務必再執行一次 `fixWebhook()`。
 
-### 3. Admin Center 前端設定
+### 3. Admin Center 前端
 
-開啟 https://saintdou-weng.github.io/ac-admin/ → **Settings**:
-- GAS URL 貼入 `/exec`
-- Bot Token 與 Chat ID 已預填(`ac_admin_center_bot` / `-5446063094`)
-- 按 **Test Cloud**、**Test Telegram** 確認,再按頂部 **⇅ Sync**
+開啟 https://saintdou-weng.github.io/ac-admin/ 即可 —
+✅ GAS URL、Bot Token、Chat ID **全部已預填**,不用設定。
+到 **Settings** 按 **Test Cloud**、**Test Telegram** 確認兩顆燈都亮綠即完成。
 
 ### 4. 六大平台接入(每個平台只要貼一行)
 

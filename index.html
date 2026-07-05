@@ -487,7 +487,8 @@ function dl(name,text,mime){var b=new Blob([text],{type:mime||'application/json'
 window.exportJSON=function(key,name){dl('ac_admin_'+name+'_'+todayStr()+'.json',JSON.stringify(jget(key,{}),null,2));toast('已匯出 '+name)};
 window.closeModal=function(id){$(id).classList.remove('on')};
 
-var CFG=jget('ac_admin_config',{gasUrl:'',tgToken:'8943642391:AAEg7x7ZGDRrDg9EUuEy0k_r2JBvGl0nABI',tgChat:'-5446063094'});
+var CFG=jget('ac_admin_config',{gasUrl:'https://script.google.com/macros/s/AKfycbyEWtDE39lzCC_qAIyXNTojWOHlAJj35hnBcj3ayePtJOBhG_zydaQ60AaI2NkMCyo2/exec',tgToken:'8943642391:AAEg7x7ZGDRrDg9EUuEy0k_r2JBvGl0nABI',tgChat:'-5446063094'});
+if(!CFG.gasUrl){CFG.gasUrl='https://script.google.com/macros/s/AKfycbyEWtDE39lzCC_qAIyXNTojWOHlAJj35hnBcj3ayePtJOBhG_zydaQ60AaI2NkMCyo2/exec';jset('ac_admin_config',CFG)}
 
 /* ── VIEW ROUTER(Platform Router,不用 iframe)── */
 var TITLES={
