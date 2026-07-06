@@ -1139,9 +1139,13 @@ window.syncCloud=function(){
   if(!CFG.gasUrl){toast('請先到 Settings 設定 GAS URL');go('settings');return}
   cloudDot('sy');$('cloudTxt').textContent='同步中…';
   PlatformAPI.refresh();
-  /* Push:hub + admin 模組資料 */
+  /* 以即時掃描建立「完整 hub」— 涵蓋全部平台真實筆數,供 Telegram /summary 顯示 */
+  var live=liveSummaries();
+  var h=hub();
+  var fullHub={platforms:live, activity:(h.activity||[]).slice(0,50), at:nowStr()};
+  /* Push:完整 hub + admin 模組資料 */
   var payload={action:'pushAdmin',at:nowStr(),
-    hub:hub(),
+    hub:fullHub,
     org:jget('ac_admin_org',{}),salaryStructure:jget('ac_admin_salary_structure',{}),
     salaryAdjust:jget('ac_admin_salary_adjust',{}),budget:jget('ac_admin_budget',{}),
     overview:jget('ac_admin_overview',{})};
