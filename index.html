@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AC Admin Center · Factory Administration Management System</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+/* ═══════════════════════════════════════════════════
+   SAINTDOU — Simply the Minimalist
+   Black · Graphite · White · Khaki · Linen
+═══════════════════════════════════════════════════ */
+:root{
+  --black:#111110;
+  --graphite:#3d3c38;
+  --graphite2:#6e6c64;
+  --white:#ffffff;
+  --khaki:#a89a72;
+  --khaki-d:#8a7c56;
+  --linen:#f4f0e6;
+  --linen2:#ebe6d8;
+  --bg:#fbfaf7;
+  --line:#dcd6c6;
+  --ok:#5a7d5a;
+  --warn:#b08a3e;
+  --bad:#a05252;
+  --r:6px;
+  --mono:"SF Mono","Cascadia Mono",Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:"Noto Sans TC",-apple-system,"Segoe UI",sans-serif;
+  background:var(--bg);color:var(--black);
+  font-size:14px;line-height:1.55;
+  min-height:100dvh;
+}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:13px}
+
+/* ── Top App Bar(頂部選單）── */
+.appbar{
+  background:#d6e3ec;color:#26343d;
+  border-bottom:1px solid #b9ccd8;
+  position:sticky;top:0;z-index:60;
+  display:flex;align-items:center;gap:6px;
+  padding:0 18px;height:56px;flex-wrap:nowrap;
+}
+.ab-brand{display:flex;flex-direction:column;justify-content:center;margin-right:14px;white-space:nowrap}
+.ab-brand .t1{font-size:14px;font-weight:700;letter-spacing:.12em;color:#1e2b34}
+.ab-brand .t2{font-size:8px;color:#5a7386;letter-spacing:.22em;text-transform:uppercase;margin-top:1px}
+
+/* 下拉群組 */
+.navrow{display:flex;align-items:center;gap:2px;flex:1;min-width:0}
+.dd{position:relative}
+.dd-btn{
+  display:flex;align-items:center;gap:6px;background:none;border:none;
+  color:#34454f;font-size:13px;font-weight:600;padding:8px 13px;border-radius:6px;
+  white-space:nowrap;transition:.12s;
+}
+.dd-btn .zh{font-size:13px}
+.dd-btn .en{font-size:10px;color:#6f8494;letter-spacing:.04em}
+.dd-btn .ca{font-size:9px;opacity:.6;margin-left:1px}
+.dd-btn:hover{background:#c3d5e1;color:#12202a}
+.dd.open .dd-btn{background:#c3d5e1;color:#12202a}
+.dd-menu{
+  display:none;position:absolute;top:calc(100% + 6px);left:0;min-width:230px;
+  background:var(--white);border:1px solid var(--line);border-radius:8px;
+  box-shadow:0 12px 34px rgba(20,18,12,.22);padding:6px;z-index:80;
+}
+.dd.open .dd-menu{display:block;animation:ddin .14s ease}
+@keyframes ddin{from{opacity:0;transform:translateY(-4px)}to{opacity:1}}
+.dd-item{
+  display:flex;align-items:center;gap:10px;width:100%;
+  padding:9px 11px;background:none;border:none;text-align:left;border-radius:6px;
+  color:var(--black);transition:.1s;text-decoration:none;
+}
+.dd-item:hover{background:var(--linen)}
+.dd-item.on{background:var(--linen2)}
+.dd-item .ic{width:20px;text-align:center;font-size:14px;color:var(--graphite)}
+.dd-item .lbl{display:flex;flex-direction:column;line-height:1.25;flex:1;min-width:0}
+.dd-item .lbl .zh{font-size:13.5px;font-weight:600}
+.dd-item .lbl .en{font-size:10.5px;color:var(--graphite2);letter-spacing:.02em}
+.dd-item .bdg{background:var(--khaki);color:var(--black);font-size:10px;font-weight:700;border-radius:9px;padding:0 6px;min-width:18px;text-align:center}
+.dd-item .dot{width:7px;height:7px;border-radius:50%;background:#c5c0b0;flex-shrink:0}
+.dd-item .dot.g{background:var(--ok)}
+.dd-item .dot.y{background:var(--warn)}
+.dd-item .dot.r{background:var(--bad)}
+.dd-sep{height:1px;background:var(--line);margin:5px 4px}
+
+/* ── Main ── */
+.main{width:100%;display:flex;flex-direction:column}
+.ab-right{margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.topbar{
+  background:transparent;border-bottom:1px solid var(--line);
+  padding:16px 26px 13px;display:flex;align-items:center;gap:14px;
+}
+.topbar h1{font-size:17px;font-weight:700;letter-spacing:.02em}
+.topbar h1 .en{font-size:12px;font-weight:500;color:var(--graphite2);margin-left:8px;letter-spacing:.04em}
+.topbar .sub{font-size:10px;color:var(--graphite2);letter-spacing:.16em;text-transform:uppercase}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.cloud-pill{
+  display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.6);
+  border:1px solid #b9ccd8;border-radius:20px;padding:5px 12px;font-size:11px;color:#34454f;cursor:pointer;
+}
+.cloud-pill .cd{width:7px;height:7px;border-radius:50%;background:#b5b0a0}
+.cloud-pill .cd.ok{background:var(--ok)}
+.cloud-pill .cd.err{background:var(--bad)}
+.cloud-pill .cd.sy{background:var(--warn);animation:pl .8s infinite}
+@keyframes pl{50%{opacity:.3}}
+.btn{
+  background:var(--black);color:var(--white);border:1px solid var(--black);
+  border-radius:var(--r);padding:7px 15px;font-size:12.5px;font-weight:600;transition:.12s;
+}
+.btn:hover{background:var(--graphite)}
+.btn.ghost{background:var(--white);color:var(--black);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--graphite2)}
+.btn.khaki{background:var(--khaki-d);border-color:var(--khaki-d)}
+.btn.sm{padding:4px 10px;font-size:11.5px}
+.btn.danger{background:var(--bad);border-color:var(--bad)}
+
+.content{padding:24px 26px 60px;max-width:1280px;width:100%}
+.view{display:none}
+.view.on{display:block;animation:fi .18s ease}
+@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+
+/* ── Health strip(signature)── */
+.health{
+  display:flex;gap:0;background:var(--black);border-radius:var(--r);
+  overflow:hidden;margin-bottom:22px;flex-wrap:wrap;
+}
+.hl{
+  flex:1;min-width:150px;padding:13px 16px;border-right:1px solid #2a2a27;
+  cursor:pointer;transition:.12s;color:var(--linen);
+}
+.hl:hover{background:#1d1d1b}
+.hl .hn{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600}
+.hl .hs{font-size:10.5px;color:#8f8b7c;margin-top:3px;font-family:var(--mono)}
+.hdot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.hdot.g{background:var(--ok);box-shadow:0 0 7px rgba(90,125,90,.8)}
+.hdot.y{background:var(--warn);box-shadow:0 0 7px rgba(176,138,62,.8)}
+.hdot.r{background:var(--bad);box-shadow:0 0 7px rgba(160,82,82,.8)}
+.hdot.x{background:#4a4a45}
+
+/* ── Cards ── */
+.grid{display:grid;gap:14px}
+.g3{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+.g4{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.g6{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+.card{
+  background:var(--white);border:1px solid var(--line);border-radius:var(--r);
+  padding:16px 18px;
+}
+.card.click{cursor:pointer;transition:.13s}
+.card.click:hover{border-color:var(--khaki);transform:translateY(-1px);box-shadow:0 4px 14px rgba(17,17,16,.07)}
+.pc-hd{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.pc-hd .ic{font-size:20px}
+.pc-hd .nm{font-size:14px;font-weight:700}
+.pc-hd .lb{font-size:10px;color:var(--graphite2)}
+.pc-hd .vr{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--graphite2);background:var(--linen);padding:2px 7px;border-radius:4px}
+.pc-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px}
+.pc-stat{background:var(--linen);border-radius:5px;padding:7px 9px}
+.pc-stat .v{font-size:17px;font-weight:700;font-family:var(--mono)}
+.pc-stat .v.warn{color:var(--warn)}
+.pc-stat .v.bad{color:var(--bad)}
+.pc-stat .k{font-size:9.5px;color:var(--graphite2);letter-spacing:.04em;text-transform:uppercase}
+.pc-foot{display:flex;gap:10px;font-size:10.5px;color:var(--graphite2);font-family:var(--mono);flex-wrap:wrap}
+.pc-foot .tag{display:flex;align-items:center;gap:4px}
+.mini-dot{width:6px;height:6px;border-radius:50%;background:#c5c0b0}
+.mini-dot.on{background:var(--ok)}
+
+/* ── KPI ── */
+.kpi{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px}
+.kpi .kv{font-size:23px;font-weight:700;font-family:var(--mono);letter-spacing:-.02em}
+.kpi .kv.warn{color:var(--warn)}
+.kpi .kv.bad{color:var(--bad)}
+.kpi .kv.ok{color:var(--ok)}
+.kpi .kk{font-size:10px;color:var(--graphite2);letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
+.kpi .ks{font-size:10px;color:var(--khaki-d);margin-top:4px}
+.kpi input{width:100%;border:none;background:transparent;font-size:23px;font-weight:700;font-family:var(--mono);color:var(--black);outline:none}
+
+/* ── Sections ── */
+.sec{margin:26px 0 12px;display:flex;align-items:baseline;gap:10px}
+.sec h2{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.sec .ln{flex:1;height:1px;background:var(--line)}
+.sec .note{font-size:11px;color:var(--graphite2)}
+
+/* ── Tables ── */
+.tbl{width:100%;border-collapse:collapse;background:var(--white);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.tbl th{background:var(--black);color:var(--linen);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:9px 12px;text-align:left;font-weight:600;white-space:nowrap}
+.tbl td{padding:8px 12px;border-top:1px solid var(--linen2);font-size:13px;vertical-align:middle}
+.tbl tr:hover td{background:#faf8f2}
+.tbl td.num{font-family:var(--mono);text-align:right}
+.tbl input,.tbl select{width:100%;border:1px solid transparent;background:transparent;padding:4px 6px;border-radius:4px}
+.tbl input:focus,.tbl select:focus{border-color:var(--khaki);background:var(--white);outline:none}
+.tbl input.num{font-family:var(--mono);text-align:right}
+.pos{color:var(--ok);font-weight:600}
+.neg{color:var(--bad);font-weight:600}
+
+/* ── Timeline ── */
+.tline{border-left:2px solid var(--line);margin-left:8px;padding-left:20px}
+.tl-item{position:relative;padding:7px 0}
+.tl-item::before{content:'';position:absolute;left:-25.5px;top:14px;width:9px;height:9px;border-radius:50%;background:var(--khaki);border:2px solid var(--linen)}
+.tl-t{font-family:var(--mono);font-size:11px;color:var(--graphite2)}
+.tl-e{font-size:13px;margin-top:1px}
+.tl-e b{font-weight:600}
+
+/* ── Search ── */
+.search-bar{display:flex;gap:8px;margin-bottom:16px}
+.search-bar input{flex:1;border:1px solid var(--line);border-radius:var(--r);padding:10px 14px;font-size:14px;background:var(--white)}
+.search-bar input:focus{outline:none;border-color:var(--khaki)}
+.sr{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:11px 14px;margin-bottom:8px}
+.sr .sh{display:flex;gap:8px;align-items:center;font-size:12px;font-weight:600}
+.sr .sh .mk{font-size:10px;color:var(--graphite2);font-family:var(--mono);margin-left:auto}
+.sr .sn{font-size:12px;color:var(--graphite);margin-top:4px;font-family:var(--mono);word-break:break-all}
+.sr .sn mark{background:var(--khaki);color:var(--white);padding:0 2px;border-radius:2px}
+
+/* ── Chart ── */
+.chart-wrap{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+canvas{max-width:100%}
+
+/* ── Org tree ── */
+.org-node{margin-left:22px;border-left:1px solid var(--line);padding:4px 0 4px 14px;position:relative}
+.org-node::before{content:'';position:absolute;left:0;top:18px;width:10px;height:1px;background:var(--line)}
+.org-root{margin-left:0;border-left:none;padding-left:0}
+.org-root::before{display:none}
+.org-card{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--line);border-radius:5px;padding:6px 12px;font-size:12.5px}
+.org-card b{font-weight:700}
+.org-card .oc-s{font-size:10.5px;color:var(--graphite2);font-family:var(--mono)}
+.org-card .oc-v{font-size:10px;color:var(--bad);font-weight:700}
+.org-card .oc-btns{display:none;gap:3px}
+.org-card:hover .oc-btns{display:flex}
+.oc-btn{border:none;background:var(--linen);border-radius:3px;font-size:10px;padding:2px 6px}
+
+/* ── Modal / toast ── */
+.modal-bg{position:fixed;inset:0;background:rgba(17,17,16,.45);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
+.modal-bg.on{display:flex}
+.modal{background:var(--white);border-radius:8px;padding:22px;width:100%;max-width:520px;max-height:88dvh;overflow-y:auto}
+.modal h3{font-size:15px;margin-bottom:14px;letter-spacing:.04em}
+.frow{margin-bottom:11px}
+.frow label{display:block;font-size:11px;color:var(--graphite2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.frow input,.frow select,.frow textarea{width:100%;border:1px solid var(--line);border-radius:5px;padding:8px 10px;background:var(--linen)}
+.frow input:focus,.frow select:focus{outline:none;border-color:var(--khaki);background:var(--white)}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--black);color:var(--linen);padding:10px 20px;border-radius:6px;font-size:13px;transition:.25s;z-index:200;opacity:0}
+#toast.on{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* ── Notification groups ── */
+.ntf-grp{margin-bottom:18px}
+.ntf-hd{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;margin-bottom:8px}
+.ntf-item{background:var(--white);border:1px solid var(--line);border-left:3px solid var(--khaki);border-radius:5px;padding:9px 13px;margin-bottom:6px;font-size:12.5px;display:flex;gap:10px}
+.ntf-item .nt{font-family:var(--mono);font-size:11px;color:var(--graphite2);flex-shrink:0}
+
+/* ── Tabs ── */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:16px;flex-wrap:wrap}
+.tab{border:none;background:none;padding:8px 15px;font-size:12.5px;color:var(--graphite2);border-bottom:2px solid transparent;font-weight:600}
+.tab.on{color:var(--black);border-bottom-color:var(--khaki)}
+
+.empty{padding:36px;text-align:center;color:var(--graphite2);font-size:13px;background:var(--white);border:1px dashed var(--line);border-radius:var(--r)}
+.hint{font-size:11.5px;color:var(--graphite2);margin-top:8px;line-height:1.6}
+.hint code{font-family:var(--mono);background:var(--linen2);padding:1px 5px;border-radius:3px;font-size:10.5px}
+
+/* appbar 內的操作鈕(淺藍底）*/
+.card.nodata{opacity:.62;border-style:dashed}
+.card.nodata .pc-stat .v{color:var(--graphite2)}
+.ab-right .btn.ghost{background:rgba(255,255,255,.7);color:#26343d;border-color:#b9ccd8}
+.ab-right .btn.ghost:hover{background:#fff;border-color:#8faabb}
+
+/* ── Mobile ── */
+.menu-btn{display:none;border:none;background:none;font-size:22px;color:#26343d}
+@media(max-width:920px){
+  .appbar{flex-wrap:wrap;height:auto;padding:8px 14px;gap:4px}
+  .ab-brand{margin-right:auto}
+  .navrow{order:3;width:100%;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+  .ab-right{order:2}
+  .dd-menu{min-width:210px}
+  .content{padding:16px 14px 60px}
+  .health{flex-direction:column}
+  .hl{border-right:none;border-bottom:1px solid #2a2a27}
+  .topbar{padding:13px 16px 11px}
+}
+@media(max-width:560px){
+  .dd-btn .en{display:none}
+  .dd-menu{position:fixed;left:8px;right:8px;min-width:0}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ TOP APP BAR(頂部下拉選單）═══════════ -->
+<div class="appbar" id="appbar">
+  <div class="ab-brand">
+    <div class="t1">AC ADMIN CENTER</div>
+    <div class="t2">行政中心 · Factory Admin</div>
+  </div>
+
+  <div class="navrow" id="navrow">
+    <!-- 管理 Management -->
+    <div class="dd" data-dd="mng">
+      <button class="dd-btn" onclick="toggleDD('mng')"><span class="zh">管理</span><span class="en">Management</span><span class="ca">▾</span></button>
+      <div class="dd-menu">
+        <button class="dd-item" data-v="dashboard" onclick="go('dashboard')"><span class="ic">◉</span><span class="lbl"><span class="zh">主控台</span><span class="en">Executive Dashboard</span></span></button>
+        <button class="dd-item" data-v="overview" onclick="go('overview')"><span class="ic">▦</span><span class="lbl"><span class="zh">工廠總覽</span><span class="en">Factory Overview</span></span></button>
+        <button class="dd-item" data-v="budget" onclick="go('budget')"><span class="ic">◫</span><span class="lbl"><span class="zh">預算儀表板</span><span class="en">Budget Dashboard</span></span></button>
+        <button class="dd-item" data-v="notify" onclick="go('notify')"><span class="ic">◈</span><span class="lbl"><span class="zh">通知中心</span><span class="en">Notification Center</span></span><span class="bdg" id="ntfBdg" style="display:none">0</span></button>
+        <button class="dd-item" data-v="search" onclick="go('search')"><span class="ic">⌕</span><span class="lbl"><span class="zh">全域搜尋</span><span class="en">Global Search</span></span></button>
+        <button class="dd-item" data-v="timeline" onclick="go('timeline')"><span class="ic">≡</span><span class="lbl"><span class="zh">活動時間軸</span><span class="en">Activity Timeline</span></span></button>
+      </div>
+    </div>
+
+    <!-- 行政模組 Admin -->
+    <div class="dd" data-dd="adm">
+      <button class="dd-btn" onclick="toggleDD('adm')"><span class="zh">行政模組</span><span class="en">Admin</span><span class="ca">▾</span></button>
+      <div class="dd-menu">
+        <button class="dd-item" data-v="org" onclick="go('org')"><span class="ic">⌘</span><span class="lbl"><span class="zh">組織架構</span><span class="en">Organization</span></span></button>
+        <button class="dd-item" data-v="salstr" onclick="go('salstr')"><span class="ic">☰</span><span class="lbl"><span class="zh">薪資結構</span><span class="en">Salary Structure</span></span></button>
+        <button class="dd-item" data-v="saladj" onclick="go('saladj')"><span class="ic">↗</span><span class="lbl"><span class="zh">年度調薪</span><span class="en">Salary Adjustment</span></span></button>
+      </div>
+    </div>
+
+    <!-- 平台 Platforms -->
+    <div class="dd" data-dd="plt">
+      <button class="dd-btn" onclick="toggleDD('plt')"><span class="zh">平台</span><span class="en">Platforms</span><span class="ca">▾</span></button>
+      <div class="dd-menu" id="launcher"></div>
+    </div>
+
+    <!-- 系統 System -->
+    <div class="dd" data-dd="sys">
+      <button class="dd-btn" onclick="toggleDD('sys')"><span class="zh">系統</span><span class="en">System</span><span class="ca">▾</span></button>
+      <div class="dd-menu">
+        <button class="dd-item" data-v="settings" onclick="go('settings')"><span class="ic">⚙</span><span class="lbl"><span class="zh">設定</span><span class="en">Settings</span></span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ab-right">
+    <div class="cloud-pill" onclick="go('settings')" title="雲端狀態 Cloud status">
+      <span class="cd" id="cloudDot"></span>
+      <span id="cloudTxt">Cloud —</span>
+    </div>
+    <button class="btn ghost sm" onclick="refreshAll()">↻ 更新</button>
+    <button class="btn sm" onclick="syncCloud()">⇅ 同步</button>
+  </div>
+</div>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <h1><span id="vTitle">主控台</span><span class="en" id="vTitleEn">Executive Dashboard</span></h1>
+      <div class="sub" id="vSub">All platforms · Live summary</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ══ VIEW: DASHBOARD ══ -->
+    <div class="view on" id="v-dashboard">
+      <div class="health" id="healthStrip"></div>
+      <div class="sec"><h2>Platform Summary</h2><div class="ln"></div><span class="note" id="dashNote"></span></div>
+      <div class="grid g3" id="platCards"></div>
+    </div>
+
+    <!-- ══ VIEW: FACTORY OVERVIEW ══ -->
+    <div class="view" id="v-overview">
+      <div class="sec"><h2>Workforce</h2><div class="ln"></div><span class="note">自動來源:各平台 Summary · 可點數字手動修正</span></div>
+      <div class="grid g6" id="kpiWork"></div>
+      <div class="sec"><h2>Operations</h2><div class="ln"></div></div>
+      <div class="grid g6" id="kpiOps"></div>
+      <div class="sec"><h2>Finance & Compliance</h2><div class="ln"></div></div>
+      <div class="grid g6" id="kpiFin"></div>
+    </div>
+
+    <!-- ══ VIEW: BUDGET ══ -->
+    <div class="view" id="v-budget">
+      <div class="tabs">
+        <button class="tab on" onclick="setBudgetPeriod('monthly',this)">Monthly</button>
+        <button class="tab" onclick="setBudgetPeriod('quarterly',this)">Quarterly</button>
+        <button class="tab" onclick="setBudgetPeriod('yearly',this)">Yearly</button>
+        <div style="margin-left:auto;display:flex;gap:6px;align-items:center">
+          <select id="budMonth" onchange="renderBudget()" style="border:1px solid var(--line);border-radius:5px;padding:5px 8px;background:var(--white)"></select>
+          <button class="btn sm khaki" onclick="addBudgetRow()">+ Category</button>
+        </div>
+      </div>
+      <div class="chart-wrap" style="margin-bottom:16px"><canvas id="budChart" height="190"></canvas></div>
+      <table class="tbl" id="budTbl"></table>
+      <div class="hint">Budget 為手動輸入年度預算(按月平均)。Actual 可手動輸入或按「⇐ 由平台帶入」抓取各平台費用摘要。資料存於 <code>ac_admin_budget</code>。</div>
+    </div>
+
+    <!-- ══ VIEW: NOTIFICATIONS ══ -->
+    <div class="view" id="v-notify">
+      <div class="sec"><h2>Notification Center</h2><div class="ln"></div><span class="note">依平台分類 · 來自各平台活動紀錄</span></div>
+      <div id="ntfList"></div>
+    </div>
+
+    <!-- ══ VIEW: SEARCH ══ -->
+    <div class="view" id="v-search">
+      <div class="search-bar">
+        <input id="gSearch" placeholder="搜尋 Employee / Document / PO / Repair / CAP / Contract / Salary / 單號…" onkeydown="if(event.key==='Enter')doSearch()">
+        <button class="btn" onclick="doSearch()">Search</button>
+      </div>
+      <div id="searchOut"><div class="empty">跨平台全域搜尋 — 直接掃描六大平台本機資料</div></div>
+    </div>
+
+    <!-- ══ VIEW: TIMELINE ══ -->
+    <div class="view" id="v-timeline">
+      <div class="sec"><h2>Activity Timeline</h2><div class="ln"></div>
+        <button class="btn ghost sm" onclick="clearTimeline()">Clear</button></div>
+      <div class="tline" id="tlList"></div>
+    </div>
+
+    <!-- ══ VIEW: ORGANIZATION ══ -->
+    <div class="view" id="v-org">
+      <div class="sec"><h2>Organization</h2><div class="ln"></div>
+        <button class="btn sm khaki" onclick="openOrgModal(null)">+ 部門/單位</button>
+        <button class="btn ghost sm" onclick="exportJSON('ac_admin_org','organization')">Export</button>
+      </div>
+      <div class="grid g6" id="orgKpi" style="margin-bottom:18px"></div>
+      <div id="orgTree"></div>
+      <div class="hint">整合:組織圖 · 部門 · 主管 · 職位 · 編制 · 缺編。缺編 = 編制 − 在職。資料存於 <code>ac_admin_org</code>。</div>
+    </div>
+
+    <!-- ══ VIEW: SALARY STRUCTURE ══ -->
+    <div class="view" id="v-salstr">
+      <div class="sec"><h2>Salary Structure</h2><div class="ln"></div>
+        <button class="btn sm khaki" onclick="addGrade()">+ Grade</button>
+        <button class="btn ghost sm" onclick="exportJSON('ac_admin_salary_structure','salary_structure')">Export</button>
+      </div>
+      <table class="tbl" id="salstrTbl"></table>
+      <div class="hint">Salary Grade · Range(Min/Mid/Max USD)· Position · Allowance。資料存於 <code>ac_admin_salary_structure</code>。</div>
+    </div>
+
+    <!-- ══ VIEW: SALARY ADJUSTMENT ══ -->
+    <div class="view" id="v-saladj">
+      <div class="sec"><h2>Annual Salary Adjustment</h2><div class="ln"></div>
+        <label class="btn sm khaki" style="display:inline-flex;align-items:center">⬆ Import XLSX<input type="file" accept=".xlsx,.xls" style="display:none" onchange="importAdjXlsx(this)"></label>
+        <button class="btn ghost sm" onclick="addAdjRow()">+ 手動新增</button>
+        <button class="btn ghost sm" onclick="exportJSON('ac_admin_salary_adjust','salary_adjust')">Export</button>
+      </div>
+      <div class="grid g6" id="adjKpi" style="margin-bottom:16px"></div>
+      <div class="chart-wrap" style="margin-bottom:16px"><canvas id="adjChart" height="180"></canvas></div>
+      <div class="tabs" id="adjYears"></div>
+      <div style="overflow-x:auto"><table class="tbl" id="adjTbl"></table></div>
+      <div class="hint">可匯入 <code>2021 Leader salary adjust report.xlsx</code>、<code>2022 Production salary adjust report.xlsx</code>、<code>2026年度管理部考核調薪建議.xlsx</code> — 匯入時選擇年度,自動比對歷年 · 部門 · Increase % · Approval · Trend。</div>
+    </div>
+
+    <!-- ══ VIEW: SETTINGS ══ -->
+    <div class="view" id="v-settings">
+      <div class="sec"><h2>雲端與通知 <span style="font-weight:400;color:var(--graphite2);font-size:12px">Cloud &amp; Telegram</span></h2><div class="ln"></div></div>
+      <div class="card" style="max-width:640px">
+        <div class="frow"><label>AC_ADMIN_CENTER GAS URL(/exec)</label>
+          <input id="setGas" placeholder="https://script.google.com/macros/s/…/exec"></div>
+        <div style="background:var(--linen);border:1px solid var(--line);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--graphite);margin-bottom:12px">
+          🔒 <b>Telegram Bot Token 與 Chat ID 已移至 GAS 後端保管</b>,不再存放於本網頁。<br>
+          因為 GitHub Pages 是公開網頁,任何人都看得到原始碼;放在 GAS 才安全。<br>
+          如需更換,請到 Apps Script 的 <code>AC_ADMIN_CENTER.gs</code> 最上方修改。
+        </div>
+        <div class="modal-btns" style="justify-content:flex-start">
+          <button class="btn" onclick="saveSettings()">儲存 Save</button>
+          <button class="btn ghost" onclick="testCloud()">測試雲端 Test Cloud</button>
+          <button class="btn ghost" onclick="testTG()">測試 Telegram</button>
+        </div>
+      </div>
+      <div class="sec"><h2>Data</h2><div class="ln"></div></div>
+      <div class="card" style="max-width:640px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn ghost" onclick="backupAll()">⬇ Backup(全部匯出)</button>
+          <label class="btn ghost" style="display:inline-flex;align-items:center">⬆ Restore<input type="file" accept=".json" style="display:none" onchange="restoreAll(this)"></label>
+          <button class="btn danger" onclick="wipeAdmin()">清除 Admin Center 資料</button>
+        </div>
+        <div class="hint">Backup 匯出 Admin Center 全部模組(org / salary structure / adjust / budget / overview / hub)為單一 JSON;Restore 完整還原。不影響各平台原始資料。</div>
+      </div>
+      <div class="sec"><h2>Platform Integration</h2><div class="ln"></div></div>
+      <div class="card" style="max-width:640px">
+        <div style="font-size:13px;margin-bottom:8px">各平台入口頁 <b>&lt;/body&gt; 前貼入一行</b>(全平台同一行):</div>
+        <div style="font-family:var(--mono);font-size:11px;background:var(--linen);padding:10px;border-radius:5px;word-break:break-all">
+          &lt;script src="https://saintdou-weng.github.io/ac-admin/shared/platform-api.js"&gt;&lt;/script&gt;
+        </div>
+        <div class="hint">貼入後平台資料一有變動,即自動更新 Admin Center Summary 與 Activity。未貼入時 Admin Center 也可直接掃描讀取(同源 localStorage),但「今日更新次數」與即時活動需靠此 script。</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ Org Modal ══ -->
+<div class="modal-bg" id="orgModal">
+  <div class="modal">
+    <h3 id="orgModalTitle">部門/單位</h3>
+    <div class="frow"><label>名稱 Department / Unit</label><input id="om-name"></div>
+    <div class="frow"><label>上層單位 Parent</label><select id="om-parent"></select></div>
+    <div class="frow"><label>主管 Manager</label><input id="om-mgr"></div>
+    <div class="frow"><label>職位 Position Title</label><input id="om-pos"></div>
+    <div class="frow"><label>編制 Headcount Plan</label><input id="om-plan" type="number" min="0"></div>
+    <div class="frow"><label>在職 Actual</label><input id="om-act" type="number" min="0"></div>
+    <div class="modal-btns">
+      <button class="btn danger sm" id="om-del" onclick="deleteOrgNode()" style="margin-right:auto">Delete</button>
+      <button class="btn ghost" onclick="closeModal('orgModal')">Cancel</button>
+      <button class="btn" onclick="saveOrgNode()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Import year modal ══ -->
+<div class="modal-bg" id="adjModal">
+  <div class="modal">
+    <h3>匯入調薪報表</h3>
+    <div class="frow"><label>年度 Year</label><input id="am-year" type="number" placeholder="2026"></div>
+    <div class="frow"><label>類別 Category</label>
+      <select id="am-cat"><option>Leader</option><option>Production</option><option>Management</option><option>Other</option></select></div>
+    <div id="am-map"></div>
+    <div class="modal-btns">
+      <button class="btn ghost" onclick="closeModal('adjModal')">Cancel</button>
+      <button class="btn" onclick="confirmAdjImport()">Import</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="./shared/platform-api.js"></script>
+<script>
+'use strict';
+/* ═══════════════════════════════════════════════════
+   AC ADMIN CENTER  index.html  v2.1 (安全強化版)
+   Factory Administration Management System
+   所有資料透過 PlatformAPI 取得,不重覆建立資料庫
+═══════════════════════════════════════════════════ */
+
+/* ── 安全網:若 shared/platform-api.js 尚未載入(未與 index.html 一起上傳,
+   或在無法載入相對路徑的預覽視窗中),提供空替身避免整頁崩潰 ── */
+var API_MISSING=(typeof window.PlatformAPI==='undefined');
+if(API_MISSING){
+  window.PlatformAPI={
+    version:function(){return'0'},platform:null,platforms:{},
+    getSummary:function(){return{}},
+    getStatus:function(){return{platform:null,hubPlatforms:0,activity:0}},
+    lastUpdate:function(){return null},
+    search:function(){return[]},
+    sync:function(){return Promise.resolve({ok:false,error:'connector missing'})},
+    upload:function(){return Promise.resolve({ok:false})},
+    download:function(){return Promise.resolve({ok:false})},
+    refresh:function(){},
+    readHub:function(){return{platforms:{},activity:[]}}
+  };
+}
+
+/* ── helpers ── */
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.remove('on')},2400)}
+function nowStr(){var d=new Date();function z(n){return(n<10?'0':'')+n}
+  return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())+' '+z(d.getHours())+':'+z(d.getMinutes())+':'+z(d.getSeconds())}
+function todayStr(){return nowStr().slice(0,10)}
+function jget(k,def){try{var v=JSON.parse(localStorage.getItem(k));return v==null?def:v}catch(e){return def}}
+function jset(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function fmtN(n){if(n==null||isNaN(n))return'—';return Number(n).toLocaleString('en-US',{maximumFractionDigits:1})}
+function fmtUSD(n){if(n==null||isNaN(n))return'—';return '$'+Number(n).toLocaleString('en-US',{maximumFractionDigits:0})}
+function dl(name,text,mime){var b=new Blob([text],{type:mime||'application/json'});var a=document.createElement('a');
+  a.href=URL.createObjectURL(b);a.download=name;a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)}
+window.exportJSON=function(key,name){dl('ac_admin_'+name+'_'+todayStr()+'.json',JSON.stringify(jget(key,{}),null,2));toast('已匯出 '+name)};
+window.closeModal=function(id){$(id).classList.remove('on')};
+
+var CFG=jget('ac_admin_config',{gasUrl:'https://script.google.com/macros/s/AKfycbyEWtDE39lzCC_qAIyXNTojWOHlAJj35hnBcj3ayePtJOBhG_zydaQ60AaI2NkMCyo2/exec'});
+if(!CFG.gasUrl){CFG.gasUrl='https://script.google.com/macros/s/AKfycbyEWtDE39lzCC_qAIyXNTojWOHlAJj35hnBcj3ayePtJOBhG_zydaQ60AaI2NkMCyo2/exec'}
+/* 安全:舊版曾把 Token 存在瀏覽器,這裡一次清除 */
+if(CFG.tgToken||CFG.tgChat){delete CFG.tgToken;delete CFG.tgChat}
+jset('ac_admin_config',CFG);
+
+/* ── VIEW ROUTER(Platform Router,不用 iframe)── */
+var TITLES={
+  dashboard:['主控台','Executive Dashboard','All platforms · Live summary'],
+  overview:['工廠總覽','Factory Overview','Cross-platform KPI'],
+  budget:['預算儀表板','Budget Dashboard','Budget · Actual · Variance'],
+  notify:['通知中心','Notification Center','Grouped by platform'],
+  search:['全域搜尋','Global Search','Across all platforms'],
+  timeline:['活動時間軸','Activity Timeline','All platform updates'],
+  org:['組織架構','Organization','Departments · Positions · Headcount'],
+  salstr:['薪資結構','Salary Structure','Grade · Range · Allowance'],
+  saladj:['年度調薪','Annual Salary Adjustment','History · Trend · Approval'],
+  settings:['設定','Settings','Cloud · Telegram · Data']
+};
+window.go=function(v){
+  document.querySelectorAll('.view').forEach(function(e){e.classList.remove('on')});
+  document.querySelectorAll('.dd-item').forEach(function(e){e.classList.toggle('on',e.dataset.v===v)});
+  $('v-'+v).classList.add('on');
+  $('vTitle').textContent=TITLES[v][0];
+  $('vTitleEn').textContent=TITLES[v][1];
+  $('vSub').textContent=TITLES[v][2];
+  closeDD();
+  if(v==='dashboard')renderDashboard();
+  if(v==='overview')renderOverview();
+  if(v==='budget')renderBudget();
+  if(v==='notify')renderNotify();
+  if(v==='timeline')renderTimeline();
+  if(v==='org')renderOrg();
+  if(v==='salstr')renderSalStr();
+  if(v==='saladj')renderAdj();
+  if(v==='settings'){$('setGas').value=CFG.gasUrl||''}
+};
+/* 頂部下拉:開/關 */
+window.toggleDD=function(id){
+  var was=document.querySelector('.dd[data-dd="'+id+'"]').classList.contains('open');
+  closeDD();
+  if(!was)document.querySelector('.dd[data-dd="'+id+'"]').classList.add('open');
+};
+function closeDD(){document.querySelectorAll('.dd.open').forEach(function(e){e.classList.remove('open')})}
+document.addEventListener('click',function(e){ if(!e.target.closest('.dd'))closeDD(); });
+
+/* ═══════════ HUB(透過 PlatformAPI)═══════════ */
+function hub(){return PlatformAPI.readHub()}
+function liveSummaries(){ /* 即時掃描(Admin Center 本身就在同源,可直接讀所有平台)*/
+  var all=PlatformAPI.getSummary('*'); delete all.admin;
+  var h=hub();
+  /* 合併 hub 內由各平台自行發佈的 todayUpdates */
+  for(var pid in all){
+    var hp=h.platforms[pid];
+    if(hp){all[pid].todayUpdates=hp.todayUpdates||0;all[pid].lastUpdate=hp.lastUpdate||all[pid].lastUpdate;
+      all[pid].version=hp.version||all[pid].version}
+    else all[pid].todayUpdates=0;
+  }
+  return all;
+}
+function healthOf(s){
+  if(s.modulesFound===0)return['x','無資料 · 尚未使用或未同步'];
+  if(s.pending>5)return['r',s.pending+' 件待處理'];
+  if(s.pending>0)return['y',s.pending+' 件待處理'];
+  return['g','正常 · '+fmtN(s.totalRecords)+' 筆'];
+}
+
+/* ═══════════ DASHBOARD ═══════════ */
+function renderDashboard(){
+  var all=liveSummaries();
+  /* Health strip */
+  var hs='';
+  Object.keys(all).forEach(function(pid){
+    var s=all[pid],h=healthOf(s);
+    hs+='<div class="hl" onclick="openPlat(\''+pid+'\')">'
+      +'<div class="hn"><span class="hdot '+h[0]+'"></span>'+esc(s.name)+'</div>'
+      +'<div class="hs">'+esc(h[1])+'</div></div>';
+  });
+  $('healthStrip').innerHTML=hs;
+  /* Cards */
+  var out='';
+  Object.keys(all).forEach(function(pid){
+    var s=all[pid];
+    var none=(s.modulesFound===0);                    /* 完全沒有資料 */
+    var D=function(v){return none?'—':fmtN(v||0)};    /* 沒資料一律顯示 —,不假裝 0 */
+    var doneRate=s.modulesTotal?Math.round(s.modulesFound/s.modulesTotal*100):0;
+    out+='<div class="card click'+(none?' nodata':'')+'" onclick="openPlat(\''+pid+'\')">'
+      +'<div class="pc-hd"><span class="ic">'+s.icon+'</span>'
+      +'<div><div class="nm">'+esc(s.name)+'</div><div class="lb">'+esc(s.label)+'</div></div>'
+      +'<span class="vr">'+esc(none?'—':s.version)+'</span></div>'
+      +'<div class="pc-stats">'
+      +'<div class="pc-stat"><div class="v">'+D(s.totalRecords)+'</div><div class="k">筆數 Records</div></div>'
+      +'<div class="pc-stat"><div class="v '+(!none&&s.pending>0?'warn':'')+'">'+D(s.pending)+'</div><div class="k">待處理 Pending</div></div>'
+      +'<div class="pc-stat"><div class="v '+(!none&&s.alerts>0?'bad':'')+'">'+D(s.alerts)+'</div><div class="k">異常 Alerts</div></div>'
+      +'<div class="pc-stat"><div class="v">'+D(s.todayUpdates)+'</div><div class="k">今日更新 Today</div></div>'
+      +'<div class="pc-stat"><div class="v">'+(none?'—':doneRate+'%')+'</div><div class="k">模組完成率</div></div>'
+      +'<div class="pc-stat"><div class="v" style="font-size:11px;line-height:2">'+esc(none?'—':(s.lastUpdate||'—').slice(5,16))+'</div><div class="k">最後更新 Last</div></div>'
+      +'</div>'
+      +'<div class="pc-foot">'
+      +(none
+        ? '<span class="tag" style="color:var(--graphite2)">尚無資料 · 請先開啟此平台頁面一次</span>'
+        : '<span class="tag"><span class="mini-dot '+(s.cloud?'on':'')+'"></span>Cloud</span>'
+          +'<span class="tag"><span class="mini-dot '+(s.tg?'on':'')+'"></span>Telegram</span>')
+      +'<span class="tag" style="margin-left:auto">'+s.modulesFound+'/'+s.modulesTotal+' 模組</span>'
+      +'</div></div>';
+  });
+  $('platCards').innerHTML=out;
+  $('dashNote').textContent=API_MISSING
+    ? '⚠ 尚未載入連接器 shared/platform-api.js(請確認已與 index.html 一起上傳至 GitHub;此為預覽視窗正常現象)'
+    : '更新於 '+nowStr().slice(11,19);
+  renderLauncher(all);
+  renderNtfBadge();
+}
+window.openPlat=function(pid){window.open(PlatformAPI.platforms[pid].url,'_blank')};
+
+function renderLauncher(all){
+  all=all||liveSummaries();
+  var out='';
+  Object.keys(PlatformAPI.platforms).forEach(function(pid){
+    if(pid==='admin')return;
+    var p=PlatformAPI.platforms[pid];
+    var s=all[pid]||{modulesFound:0,pending:0};
+    var h=healthOf(s);
+    out+='<a class="dd-item" href="'+p.url+'" target="_blank">'
+      +'<span class="dot '+h[0]+'"></span>'
+      +'<span class="lbl"><span class="zh">'+esc(p.label||p.name)+'</span><span class="en">'+esc(p.name)+'</span></span>'
+      +'</a>';
+  });
+  $('launcher').innerHTML=out;
+}
+
+/* ═══════════ FACTORY OVERVIEW ═══════════ */
+/* 自動值來自平台 counts;可手動覆寫,存 ac_admin_overview */
+var OV_DEF=[
+ ['work','totalEmp','Total Employees',function(a){return null}],
+ ['work','newEmp','New Employee',function(a){return cnt(a,'hra','Onboarding')}],
+ ['work','resigned','Resigned',function(a){return cnt(a,'hra','Resignations')}],
+ ['work','probation','Probation',function(a){return null}],
+ ['work','leaveToday','Leave Today',function(a){return null}],
+ ['work','visitors','Visitors Today',function(a){return null}],
+ ['ops','salaryPend','Salary Adjust Pending',function(a){return adjPendingCount()}],
+ ['ops','repairPend','Repair Pending',function(a){return null}],
+ ['ops','poPend','PO Pending',function(a){return null}],
+ ['ops','secInc','Security Incident',function(a){return null}],
+ ['ops','capOpen','Audit CAP Open',function(a){return null}],
+ ['ops','training','Training Completion %',function(a){return null}],
+ ['fin','docExp','Document Expiry',function(a){return null}],
+ ['fin','certExp','Certificate Expiry',function(a){return null}],
+ ['fin','budget','Budget (Month USD)',function(a){return budTotals().b}],
+ ['fin','actual','Actual Expense',function(a){return budTotals().a}],
+ ['fin','variance','Budget Variance',function(a){var t=budTotals();return t.b-t.a}]
+];
+function cnt(all,pid,label){var s=all[pid];return s&&s.counts[label]!=null?s.counts[label]:null}
+function renderOverview(){
+  var all=liveSummaries();
+  var ov=jget('ac_admin_overview',{});
+  var boxes={work:'',ops:'',fin:''};
+  OV_DEF.forEach(function(d){
+    var auto=d[3](all);
+    var manual=ov[d[1]];
+    var val=(manual!=null&&manual!=='')?manual:auto;
+    var src=(manual!=null&&manual!=='')?'manual':(auto!=null?'auto':'');
+    var cls=d[1]==='variance'?(val<0?'bad':'ok'):'';
+    boxes[d[0]]+='<div class="kpi">'
+      +'<input value="'+(val==null?'':esc(val))+'" placeholder="—" class="'+cls+'" onchange="setOV(\''+d[1]+'\',this.value)">'
+      +'<div class="kk">'+d[2]+'</div>'
+      +'<div class="ks">'+(src==='auto'?'⇐ 平台自動':src==='manual'?'✎ 手動':'')+'</div></div>';
+  });
+  $('kpiWork').innerHTML=boxes.work;
+  $('kpiOps').innerHTML=boxes.ops;
+  $('kpiFin').innerHTML=boxes.fin;
+}
+window.setOV=function(k,v){var ov=jget('ac_admin_overview',{});ov[k]=v;jset('ac_admin_overview',ov);toast('已更新 '+k)};
+
+/* ═══════════ BUDGET ═══════════ */
+var BUD_CATS=['HR Payroll','GA Expense','Security Expense','Audit Expense','Repair','Vehicle','Utility','Training'];
+var budPeriod='monthly';
+function budData(){
+  var d=jget('ac_admin_budget',null);
+  if(!d){d={year:new Date().getFullYear(),cats:{}};
+    BUD_CATS.forEach(function(c){d.cats[c]={budgetYear:0,actual:{}}});
+    jset('ac_admin_budget',d)}
+  return d;
+}
+function monthKeys(){var y=budData().year,a=[];for(var m=1;m<=12;m++)a.push(y+'-'+(m<10?'0':'')+m);return a}
+window.setBudgetPeriod=function(p,btn){budPeriod=p;
+  document.querySelectorAll('#v-budget .tab').forEach(function(t){t.classList.remove('on')});
+  btn.classList.add('on');renderBudget()};
+function budTotals(){ /* 當月 */
+  var d=budData(),mk=todayStr().slice(0,7),b=0,a=0;
+  Object.keys(d.cats).forEach(function(c){b+=(d.cats[c].budgetYear||0)/12;a+=Number(d.cats[c].actual[mk]||0)});
+  return{b:Math.round(b),a:Math.round(a)};
+}
+function periodCols(){
+  if(budPeriod==='monthly')return[[$('budMonth').value||todayStr().slice(0,7)],1];
+  if(budPeriod==='quarterly'){var m=parseInt(($('budMonth').value||todayStr().slice(0,7)).slice(5),10);
+    var q=Math.floor((m-1)/3);var y=budData().year;var cols=[];
+    for(var i=q*3+1;i<=q*3+3;i++)cols.push(y+'-'+(i<10?'0':'')+i);return[cols,3]}
+  return[monthKeys(),12];
+}
+function renderBudget(){
+  var d=budData();
+  /* month selector */
+  var sel=$('budMonth');
+  if(!sel.options.length){monthKeys().forEach(function(mk){var o=document.createElement('option');o.value=mk;o.textContent=mk;sel.appendChild(o)});
+    sel.value=todayStr().slice(0,7)}
+  var pc=periodCols(),cols=pc[0],div=pc[1];
+  var html='<tr><th>Category</th><th style="text-align:right">Budget</th><th style="text-align:right">Actual</th><th style="text-align:right">Variance</th><th style="text-align:right">Var %</th><th></th></tr>';
+  var tb=0,ta=0,labels=[],bArr=[],aArr=[];
+  Object.keys(d.cats).forEach(function(c){
+    var cat=d.cats[c];
+    var bud=(cat.budgetYear||0)/12*div;
+    var act=0;cols.forEach(function(mk){act+=Number(cat.actual[mk]||0)});
+    var vr=bud-act,vp=bud?Math.round(vr/bud*100):0;
+    tb+=bud;ta+=act;labels.push(c);bArr.push(bud);aArr.push(act);
+    html+='<tr><td>'+esc(c)+'</td>'
+      +'<td class="num"><input class="num" value="'+(cat.budgetYear||0)+'" title="年度預算(自動÷12)" onchange="setBudget(\''+esc(c)+'\',this.value)"></td>'
+      +'<td class="num">'+(budPeriod==='monthly'
+        ?'<input class="num" value="'+(cat.actual[cols[0]]||'')+'" onchange="setActual(\''+esc(c)+'\',\''+cols[0]+'\',this.value)">'
+        :fmtUSD(act))+'</td>'
+      +'<td class="num '+(vr<0?'neg':'pos')+'">'+fmtUSD(vr)+'</td>'
+      +'<td class="num '+(vr<0?'neg':'pos')+'">'+vp+'%</td>'
+      +'<td><button class="oc-btn" onclick="delBudCat(\''+esc(c)+'\')">✕</button></td></tr>';
+  });
+  html+='<tr style="background:var(--linen2);font-weight:700"><td>Total</td><td class="num">'+fmtUSD(tb)+'</td><td class="num">'+fmtUSD(ta)+'</td>'
+    +'<td class="num '+((tb-ta)<0?'neg':'pos')+'">'+fmtUSD(tb-ta)+'</td>'
+    +'<td class="num">'+(tb?Math.round((tb-ta)/tb*100):0)+'%</td><td></td></tr>';
+  $('budTbl').innerHTML=html;
+  drawBars('budChart',labels,[{name:'Budget',data:bArr,color:'#a89a72'},{name:'Actual',data:aArr,color:'#3d3c38'}]);
+}
+window.setBudget=function(c,v){var d=budData();d.cats[c].budgetYear=Number(v)||0;jset('ac_admin_budget',d);renderBudget()};
+window.setActual=function(c,mk,v){var d=budData();d.cats[c].actual[mk]=Number(v)||0;jset('ac_admin_budget',d);renderBudget()};
+window.addBudgetRow=function(){var n=prompt('新增費用類別名稱:');if(!n)return;var d=budData();
+  if(d.cats[n])return toast('已存在');d.cats[n]={budgetYear:0,actual:{}};jset('ac_admin_budget',d);renderBudget()};
+window.delBudCat=function(c){if(!confirm('刪除類別「'+c+'」?'))return;var d=budData();delete d.cats[c];jset('ac_admin_budget',d);renderBudget()};
+
+/* 簡易長條圖(原生 canvas,無外部依賴)*/
+function drawBars(id,labels,series){
+  var cv=$(id),ctx=cv.getContext('2d');
+  var W=cv.width=cv.parentElement.clientWidth-36,H=cv.height=cv.getAttribute('height')||190;
+  ctx.clearRect(0,0,W,H);
+  var max=1;series.forEach(function(s){s.data.forEach(function(v){if(v>max)max=v})});
+  var pad=30,bw=(W-pad*2)/labels.length;
+  ctx.font='10px monospace';
+  labels.forEach(function(lb,i){
+    var x0=pad+i*bw;
+    series.forEach(function(s,si){
+      var v=s.data[i],h=(v/max)*(H-52);
+      var w=Math.min(26,(bw-14)/series.length);
+      ctx.fillStyle=s.color;
+      ctx.fillRect(x0+bw/2-(series.length*w)/2+si*w, H-32-h, w-3, h);
+    });
+    ctx.fillStyle='#6e6c64';ctx.textAlign='center';
+    ctx.fillText(lb.length>10?lb.slice(0,9)+'…':lb, x0+bw/2, H-16);
+  });
+  /* legend */
+  var lx=pad;
+  series.forEach(function(s){ctx.fillStyle=s.color;ctx.fillRect(lx,6,10,10);
+    ctx.fillStyle='#3d3c38';ctx.textAlign='left';ctx.fillText(s.name,lx+14,15);lx+=ctx.measureText(s.name).width+40});
+}
+
+/* ═══════════ NOTIFICATIONS ═══════════ */
+function renderNotify(){
+  var h=hub();
+  var byP={};
+  (h.activity||[]).forEach(function(a){(byP[a.p]=byP[a.p]||[]).push(a)});
+  if(!Object.keys(byP).length){$('ntfList').innerHTML='<div class="empty">尚無通知 — 各平台貼入 platform-api.js 後,資料變動會自動出現在這裡,同時 Telegram 群組照常收到各平台 Bot 通知</div>';return}
+  var out='';
+  Object.keys(byP).forEach(function(pid){
+    var P=PlatformAPI.platforms[pid]||{icon:'▫',name:pid};
+    out+='<div class="ntf-grp"><div class="ntf-hd">'+P.icon+' '+esc(P.name)
+      +' <span style="font-weight:400;color:var(--graphite2);font-size:11px">'+byP[pid].length+' 則</span></div>';
+    byP[pid].slice(0,15).forEach(function(a){
+      out+='<div class="ntf-item"><span class="nt">'+esc(a.t.slice(5,16))+'</span><span>'+esc(a.e)+'</span></div>';
+    });
+    out+='</div>';
+  });
+  $('ntfList').innerHTML=out;
+}
+function renderNtfBadge(){
+  var h=hub(),today=todayStr();
+  var n=(h.activity||[]).filter(function(a){return a.t.slice(0,10)===today}).length;
+  var b=$('ntfBdg');b.style.display=n?'':'none';b.textContent=n;
+}
+
+/* ═══════════ GLOBAL SEARCH ═══════════ */
+window.doSearch=function(){
+  var q=$('gSearch').value.trim();
+  if(!q)return;
+  var rs=PlatformAPI.search(q);
+  /* Admin 本身模組也可搜 */
+  if(!rs.length){$('searchOut').innerHTML='<div class="empty">找不到「'+esc(q)+'」 — 已掃描全部平台本機資料</div>';return}
+  var out='<div class="hint" style="margin-bottom:10px">'+rs.length+' 筆結果</div>';
+  rs.forEach(function(r){
+    var sn=esc(r.snippet).replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'ig'),function(m){return'<mark>'+m+'</mark>'});
+    out+='<div class="sr"><div class="sh">'+r.icon+' '+esc(r.name)+' › '+esc(r.module)
+      +'<span class="mk">'+esc(r.key)+'</span></div><div class="sn">…'+sn+'…</div></div>';
+  });
+  $('searchOut').innerHTML=out;
+};
+
+/* ═══════════ TIMELINE ═══════════ */
+function renderTimeline(){
+  var h=hub();
+  if(!(h.activity||[]).length){$('tlList').innerHTML='<div class="empty" style="margin-left:-20px">尚無活動紀錄</div>';return}
+  var out='';
+  h.activity.slice(0,120).forEach(function(a){
+    var P=PlatformAPI.platforms[a.p]||{icon:'▫'};
+    out+='<div class="tl-item"><div class="tl-t">'+esc(a.t)+'</div>'
+      +'<div class="tl-e">'+P.icon+' <b>'+esc(a.name||a.p)+'</b> — '+esc(a.e)+'</div></div>';
+  });
+  $('tlList').innerHTML=out;
+}
+window.clearTimeline=function(){if(!confirm('清除全部活動紀錄?'))return;
+  var h=hub();h.activity=[];jset('ac_admin_hub',h);renderTimeline();renderNtfBadge()};
+
+/* ═══════════ ORGANIZATION ═══════════ */
+/* {nodes:[{id,name,parent,mgr,pos,plan,act}]} */
+function orgData(){var d=jget('ac_admin_org',null);
+  if(!d){d={nodes:[
+    {id:'root',name:'VRT 萬泰紡織',parent:null,mgr:'Frank 江 / Dillard Cheek',pos:'Chairman / GM',plan:0,act:0},
+    {id:'ac',name:'Admin Center 行政中心',parent:'root',mgr:'神之道 Paul Weng',pos:'Acting PM / AC Manager',plan:0,act:0},
+    {id:'hra',name:'HRA 人資',parent:'ac',mgr:'Phary',pos:'HRA Supervisor',plan:0,act:0},
+    {id:'ga',name:'GA & Security 總務保全',parent:'ac',mgr:'Phea',pos:'GA Supervisor',plan:0,act:0},
+    {id:'cmp',name:'Compliance 驗廠',parent:'ac',mgr:'Jenny',pos:'Compliance Officer',plan:0,act:0},
+    {id:'ai',name:'AI Project Team',parent:'ac',mgr:'Paul Weng',pos:'Lead',plan:0,act:0}
+  ]};jset('ac_admin_org',d)}
+  return d}
+var orgEditing=null;
+function renderOrg(){
+  var d=orgData();
+  var plan=0,act=0;
+  d.nodes.forEach(function(n){plan+=Number(n.plan)||0;act+=Number(n.act)||0});
+  $('orgKpi').innerHTML=
+    '<div class="kpi"><div class="kv">'+d.nodes.length+'</div><div class="kk">單位數 Units</div></div>'
+    +'<div class="kpi"><div class="kv">'+plan+'</div><div class="kk">編制 Plan</div></div>'
+    +'<div class="kpi"><div class="kv">'+act+'</div><div class="kk">在職 Actual</div></div>'
+    +'<div class="kpi"><div class="kv '+((plan-act)>0?'bad':'ok')+'">'+(plan-act)+'</div><div class="kk">缺編 Vacancy</div></div>';
+  function children(pid){return d.nodes.filter(function(n){return n.parent===pid})}
+  function node(n,root){
+    var vac=(Number(n.plan)||0)-(Number(n.act)||0);
+    var h='<div class="org-node'+(root?' org-root':'')+'">'
+      +'<div class="org-card"><b>'+esc(n.name)+'</b>'
+      +(n.mgr?'<span class="oc-s">'+esc(n.mgr)+(n.pos?' · '+esc(n.pos):'')+'</span>':'')
+      +(n.plan>0?'<span class="oc-s">'+n.act+'/'+n.plan+'</span>':'')
+      +(vac>0?'<span class="oc-v">缺'+vac+'</span>':'')
+      +'<span class="oc-btns"><button class="oc-btn" onclick="openOrgModal(\''+n.id+'\')">✎</button>'
+      +'<button class="oc-btn" onclick="openOrgModal(null,\''+n.id+'\')">＋</button></span>'
+      +'</div>';
+    children(n.id).forEach(function(c){h+=node(c,false)});
+    return h+'</div>';
+  }
+  var roots=d.nodes.filter(function(n){return!n.parent});
+  $('orgTree').innerHTML=roots.map(function(r){return node(r,true)}).join('')||'<div class="empty">尚無組織資料</div>';
+}
+window.openOrgModal=function(id,parentId){
+  var d=orgData();orgEditing=id;
+  var n=id?d.nodes.find(function(x){return x.id===id}):{name:'',parent:parentId||'ac',mgr:'',pos:'',plan:0,act:0};
+  $('orgModalTitle').textContent=id?'編輯:'+n.name:'新增部門/單位';
+  var sel=$('om-parent');sel.innerHTML='<option value="">(最上層)</option>';
+  d.nodes.forEach(function(x){if(x.id===id)return;
+    var o=document.createElement('option');o.value=x.id;o.textContent=x.name;sel.appendChild(o)});
+  sel.value=n.parent||'';
+  $('om-name').value=n.name;$('om-mgr').value=n.mgr||'';$('om-pos').value=n.pos||'';
+  $('om-plan').value=n.plan||0;$('om-act').value=n.act||0;
+  $('om-del').style.display=id&&id!=='root'?'':'none';
+  $('orgModal').classList.add('on');
+};
+window.saveOrgNode=function(){
+  var d=orgData();
+  var vals={name:$('om-name').value.trim(),parent:$('om-parent').value||null,
+    mgr:$('om-mgr').value.trim(),pos:$('om-pos').value.trim(),
+    plan:Number($('om-plan').value)||0,act:Number($('om-act').value)||0};
+  if(!vals.name)return toast('請輸入名稱');
+  if(orgEditing){var n=d.nodes.find(function(x){return x.id===orgEditing});Object.assign(n,vals)}
+  else{vals.id='n'+Date.now();d.nodes.push(vals)}
+  jset('ac_admin_org',d);closeModal('orgModal');renderOrg();toast('已儲存');
+};
+window.deleteOrgNode=function(){
+  if(!orgEditing||!confirm('刪除此單位(含下層)?'))return;
+  var d=orgData();
+  function collect(id,set){set[id]=1;d.nodes.forEach(function(n){if(n.parent===id)collect(n.id,set)})}
+  var del={};collect(orgEditing,del);
+  d.nodes=d.nodes.filter(function(n){return!del[n.id]});
+  jset('ac_admin_org',d);closeModal('orgModal');renderOrg();toast('已刪除');
+};
+
+/* ═══════════ SALARY STRUCTURE ═══════════ */
+function salstrData(){var d=jget('ac_admin_salary_structure',null);
+  if(!d){d={grades:[
+    {grade:'G1',position:'Worker 作業員',min:204,mid:230,max:260,allowance:'Attendance $10 + Meal'},
+    {grade:'G2',position:'Line Leader 組長',min:260,mid:300,max:350,allowance:'Position $30'},
+    {grade:'G3',position:'Supervisor 課長',min:350,mid:450,max:550,allowance:'Position $60 + Phone'},
+    {grade:'G4',position:'Manager 經理',min:600,mid:800,max:1200,allowance:'Position + Housing'}
+  ]};jset('ac_admin_salary_structure',d)}
+  return d}
+function renderSalStr(){
+  var d=salstrData();
+  var h='<tr><th>Grade</th><th>Position 職位</th><th style="text-align:right">Min</th><th style="text-align:right">Mid</th><th style="text-align:right">Max</th><th>Allowance 津貼</th><th></th></tr>';
+  d.grades.forEach(function(g,i){
+    h+='<tr>'
+     +'<td><input value="'+esc(g.grade)+'" onchange="setSS('+i+',\'grade\',this.value)" style="width:64px"></td>'
+     +'<td><input value="'+esc(g.position)+'" onchange="setSS('+i+',\'position\',this.value)"></td>'
+     +'<td class="num"><input class="num" value="'+g.min+'" onchange="setSS('+i+',\'min\',this.value)"></td>'
+     +'<td class="num"><input class="num" value="'+g.mid+'" onchange="setSS('+i+',\'mid\',this.value)"></td>'
+     +'<td class="num"><input class="num" value="'+g.max+'" onchange="setSS('+i+',\'max\',this.value)"></td>'
+     +'<td><input value="'+esc(g.allowance)+'" onchange="setSS('+i+',\'allowance\',this.value)"></td>'
+     +'<td><button class="oc-btn" onclick="delSS('+i+')">✕</button></td></tr>';
+  });
+  $('salstrTbl').innerHTML=h;
+}
+window.setSS=function(i,k,v){var d=salstrData();
+  d.grades[i][k]=(k==='min'||k==='mid'||k==='max')?Number(v)||0:v;
+  jset('ac_admin_salary_structure',d)};
+window.delSS=function(i){var d=salstrData();d.grades.splice(i,1);jset('ac_admin_salary_structure',d);renderSalStr()};
+window.addGrade=function(){var d=salstrData();d.grades.push({grade:'',position:'',min:0,mid:0,max:0,allowance:''});
+  jset('ac_admin_salary_structure',d);renderSalStr()};
+
+/* ═══════════ ANNUAL SALARY ADJUSTMENT ═══════════ */
+/* {years:{2026:{cat,rows:[{id,name,dept,pos,oldSal,newSal,inc,pct,approval}]}}} */
+function adjData(){return jget('ac_admin_salary_adjust',{years:{}})}
+function adjPendingCount(){
+  var d=adjData(),n=0;
+  Object.keys(d.years).forEach(function(y){
+    (d.years[y].rows||[]).forEach(function(r){if(/pending|待/i.test(r.approval||''))n++});
+  });
+  return n||null;
+}
+var adjYear=null,adjImportRows=null,adjImportHeads=null;
+function renderAdj(){
+  var d=adjData(),years=Object.keys(d.years).sort();
+  if(!adjYear||!d.years[adjYear])adjYear=years[years.length-1]||null;
+  /* year tabs */
+  var yt='';
+  years.forEach(function(y){
+    yt+='<button class="tab'+(y===adjYear?' on':'')+'" onclick="setAdjYear(\''+y+'\')">'+y
+      +' <span style="font-size:10px;color:var(--graphite2)">'+esc(d.years[y].cat||'')+'</span></button>';
+  });
+  $('adjYears').innerHTML=yt||'<span class="note" style="padding:8px">尚無資料 — 請匯入調薪報表</span>';
+  /* KPI + trend across years */
+  var kLabels=[],kPct=[];
+  var kp='';
+  years.forEach(function(y){
+    var rows=d.years[y].rows||[],tot=rows.length,oldS=0,newS=0;
+    rows.forEach(function(r){oldS+=Number(r.oldSal)||0;newS+=Number(r.newSal)||0});
+    var pct=oldS?((newS-oldS)/oldS*100):0;
+    kLabels.push(y);kPct.push(Math.round(pct*10)/10);
+  });
+  if(adjYear){
+    var rows=d.years[adjYear].rows||[],oldS=0,newS=0,pend=0,appr=0;
+    rows.forEach(function(r){oldS+=Number(r.oldSal)||0;newS+=Number(r.newSal)||0;
+      if(/approved|核准|同意/i.test(r.approval||''))appr++;else if(r.approval)pend++});
+    var pct=oldS?((newS-oldS)/oldS*100).toFixed(1):'0';
+    kp='<div class="kpi"><div class="kv">'+rows.length+'</div><div class="kk">'+adjYear+' 調薪人數</div></div>'
+      +'<div class="kpi"><div class="kv">'+fmtUSD(oldS)+'</div><div class="kk">調整前月薪總額</div></div>'
+      +'<div class="kpi"><div class="kv">'+fmtUSD(newS)+'</div><div class="kk">調整後月薪總額</div></div>'
+      +'<div class="kpi"><div class="kv ok">'+pct+'%</div><div class="kk">Increase %</div></div>'
+      +'<div class="kpi"><div class="kv">'+fmtUSD((newS-oldS)*12)+'</div><div class="kk">年度 Budget 影響</div></div>'
+      +'<div class="kpi"><div class="kv '+(pend?'warn':'')+'">'+appr+' / '+pend+'</div><div class="kk">Approved / Pending</div></div>';
+  }
+  $('adjKpi').innerHTML=kp;
+  drawBars('adjChart',kLabels.length?kLabels:['—'],[{name:'Increase %',data:kPct.length?kPct:[0],color:'#a89a72'}]);
+  /* table */
+  if(!adjYear){$('adjTbl').innerHTML='';return}
+  var h='<tr><th>ID</th><th>Name</th><th>Dept</th><th>Position</th><th style="text-align:right">Old</th><th style="text-align:right">New</th><th style="text-align:right">+USD</th><th style="text-align:right">+%</th><th>Approval</th><th></th></tr>';
+  (d.years[adjYear].rows||[]).forEach(function(r,i){
+    var inc=(Number(r.newSal)||0)-(Number(r.oldSal)||0);
+    var pct=r.oldSal?((inc/r.oldSal)*100).toFixed(1):'0';
+    h+='<tr>'
+      +'<td><input value="'+esc(r.id||'')+'" onchange="setAdj('+i+',\'id\',this.value)" style="width:80px"></td>'
+      +'<td><input value="'+esc(r.name||'')+'" onchange="setAdj('+i+',\'name\',this.value)"></td>'
+      +'<td><input value="'+esc(r.dept||'')+'" onchange="setAdj('+i+',\'dept\',this.value)" style="width:110px"></td>'
+      +'<td><input value="'+esc(r.pos||'')+'" onchange="setAdj('+i+',\'pos\',this.value)" style="width:110px"></td>'
+      +'<td class="num"><input class="num" value="'+(r.oldSal||'')+'" onchange="setAdj('+i+',\'oldSal\',this.value)" style="width:80px"></td>'
+      +'<td class="num"><input class="num" value="'+(r.newSal||'')+'" onchange="setAdj('+i+',\'newSal\',this.value)" style="width:80px"></td>'
+      +'<td class="num '+(inc>=0?'pos':'neg')+'">'+fmtN(inc)+'</td>'
+      +'<td class="num '+(inc>=0?'pos':'neg')+'">'+pct+'%</td>'
+      +'<td><select onchange="setAdj('+i+',\'approval\',this.value)">'
+        +['','Pending','Approved','Rejected'].map(function(o){return'<option'+(o===(r.approval||'')?' selected':'')+'>'+o+'</option>'}).join('')
+      +'</select></td>'
+      +'<td><button class="oc-btn" onclick="delAdj('+i+')">✕</button></td></tr>';
+  });
+  $('adjTbl').innerHTML=h;
+}
+window.setAdjYear=function(y){adjYear=y;renderAdj()};
+window.setAdj=function(i,k,v){var d=adjData();
+  d.years[adjYear].rows[i][k]=(k==='oldSal'||k==='newSal')?Number(v)||0:v;
+  jset('ac_admin_salary_adjust',d);renderAdj()};
+window.delAdj=function(i){var d=adjData();d.years[adjYear].rows.splice(i,1);jset('ac_admin_salary_adjust',d);renderAdj()};
+window.addAdjRow=function(){
+  var d=adjData();
+  if(!adjYear){var y=prompt('年度(如 2026):');if(!y)return;adjYear=y;d.years[y]={cat:'Manual',rows:[]}}
+  d.years[adjYear].rows.push({id:'',name:'',dept:'',pos:'',oldSal:0,newSal:0,approval:'Pending'});
+  jset('ac_admin_salary_adjust',d);renderAdj();
+};
+
+/* ── XLSX 匯入(SheetJS · cellDates:false, raw:true)── */
+window.importAdjXlsx=function(inp){
+  var f=inp.files[0];if(!f)return;inp.value='';
+  var rd=new FileReader();
+  rd.onload=function(e){
+    var wb=XLSX.read(new Uint8Array(e.target.result),{type:'array',cellDates:false});
+    var ws=wb.Sheets[wb.SheetNames[0]];
+    var rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:''});
+    /* 找標題列:含 2 個以上非空儲存格且含文字 */
+    var hi=0;
+    for(var i=0;i<Math.min(rows.length,15);i++){
+      var nn=rows[i].filter(function(c){return String(c).trim()!==''}).length;
+      if(nn>=3){hi=i;break}
+    }
+    adjImportHeads=rows[hi].map(function(c){return String(c).trim()});
+    adjImportRows=rows.slice(hi+1).filter(function(r){return r.some(function(c){return String(c).trim()!==''})});
+    /* 欄位對應 UI */
+    var fields=[['id','工號 / ID'],['name','姓名 Name'],['dept','部門 Dept'],['pos','職位 Position'],
+      ['oldSal','調整前 Old Salary'],['newSal','調整後 New Salary'],['approval','核准 Approval']];
+    var guess=function(fk){
+      var pats={id:/工號|id|no\.|code/i,name:/姓名|name/i,dept:/部門|dept|section/i,pos:/職位|position|title/i,
+        oldSal:/調整前|現|old|current|before/i,newSal:/調整後|new|after|建議/i,approval:/核准|approval|status/i};
+      for(var j=0;j<adjImportHeads.length;j++)if(pats[fk].test(adjImportHeads[j]))return j;
+      return -1;
+    };
+    var mp='';
+    fields.forEach(function(fd){
+      var g=guess(fd[0]);
+      mp+='<div class="frow"><label>'+fd[1]+'</label><select id="map-'+fd[0]+'"><option value="-1">(不匯入)</option>'
+        +adjImportHeads.map(function(hh,j){return'<option value="'+j+'"'+(j===g?' selected':'')+'>'+esc(hh||('欄 '+(j+1)))+'</option>'}).join('')
+        +'</select></div>';
+    });
+    $('am-map').innerHTML=mp;
+    var ym=f.name.match(/20\d{2}/);
+    $('am-year').value=ym?ym[0]:new Date().getFullYear();
+    if(/leader/i.test(f.name))$('am-cat').value='Leader';
+    else if(/production/i.test(f.name))$('am-cat').value='Production';
+    else if(/管理/i.test(f.name))$('am-cat').value='Management';
+    $('adjModal').classList.add('on');
+  };
+  rd.readAsArrayBuffer(f);
+};
+window.confirmAdjImport=function(){
+  var y=$('am-year').value.trim();if(!y)return toast('請輸入年度');
+  var pick=function(fk,row){var j=Number($('map-'+fk).value);return j>=0?row[j]:''};
+  var rows=adjImportRows.map(function(r){
+    return{id:String(pick('id',r)),name:String(pick('name',r)),dept:String(pick('dept',r)),
+      pos:String(pick('pos',r)),oldSal:Number(pick('oldSal',r))||0,newSal:Number(pick('newSal',r))||0,
+      approval:String(pick('approval',r))||'Approved'};
+  }).filter(function(r){return r.name||r.id});
+  var d=adjData();
+  d.years[y]={cat:$('am-cat').value,rows:rows,importedAt:nowStr()};
+  jset('ac_admin_salary_adjust',d);
+  adjYear=y;closeModal('adjModal');renderAdj();
+  toast('已匯入 '+y+' 年度 '+rows.length+' 筆');
+  PlatformAPI.refresh();
+};
+
+/* ═══════════ CLOUD(AC_ADMIN_CENTER GAS)═══════════ */
+function cloudDot(st){var d=$('cloudDot');d.className='cd '+(st||'')}
+window.saveSettings=function(){
+  CFG.gasUrl=$('setGas').value.trim();
+  delete CFG.tgToken;delete CFG.tgChat;   /* 安全:前端不保存 Token */
+  jset('ac_admin_config',CFG);
+  toast('設定已儲存');updateCloudPill();
+};
+function updateCloudPill(){
+  if(!CFG.gasUrl){cloudDot('');$('cloudTxt').textContent='Cloud 未設定';return}
+  cloudDot('sy');$('cloudTxt').textContent='Cloud 檢查中…';
+  fetch(CFG.gasUrl+'?action=heartbeat',{redirect:'follow'})
+    .then(function(r){return r.json()})
+    .then(function(j){if(j.ok){cloudDot('ok');$('cloudTxt').textContent='Cloud OK'}
+      else{cloudDot('err');$('cloudTxt').textContent='Cloud 異常'}})
+    .catch(function(){cloudDot('err');$('cloudTxt').textContent='Cloud 連線失敗'});
+}
+window.testCloud=function(){saveSettings();updateCloudPill()};
+/* Telegram 測試:改由 GAS 後端代發,前端完全不接觸 Token */
+window.testTG=function(){
+  saveSettings();
+  if(!CFG.gasUrl)return toast('請先填入 GAS URL');
+  toast('測試中…');
+  fetch(CFG.gasUrl,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify({action:'testTelegram'})})
+    .then(function(r){return r.json()})
+    .then(function(j){toast(j.ok?'Telegram 測試成功 ✓ 請看群組':'失敗:'+(j.error||''))})
+    .catch(function(e){toast('失敗:'+e.message)});
+};
+window.syncCloud=function(){
+  if(!CFG.gasUrl){toast('請先到 Settings 設定 GAS URL');go('settings');return}
+  cloudDot('sy');$('cloudTxt').textContent='同步中…';
+  PlatformAPI.refresh();
+  /* 以即時掃描建立「完整 hub」— 涵蓋全部平台真實筆數,供 Telegram /summary 顯示 */
+  var live=liveSummaries();
+  var h=hub();
+  var fullHub={platforms:live, activity:(h.activity||[]).slice(0,50), at:nowStr()};
+  /* Push:完整 hub + admin 模組資料 */
+  var payload={action:'pushAdmin',at:nowStr(),
+    hub:fullHub,
+    org:jget('ac_admin_org',{}),salaryStructure:jget('ac_admin_salary_structure',{}),
+    salaryAdjust:jget('ac_admin_salary_adjust',{}),budget:jget('ac_admin_budget',{}),
+    overview:jget('ac_admin_overview',{})};
+  fetch(CFG.gasUrl,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify(payload)})
+    .then(function(r){return r.json()})
+    .then(function(j){
+      if(j.ok){cloudDot('ok');$('cloudTxt').textContent='已同步 '+nowStr().slice(11,16);toast('雲端同步完成 ✓')}
+      else{cloudDot('err');$('cloudTxt').textContent='同步失敗';toast('失敗:'+(j.error||''))}
+    })
+    .catch(function(e){cloudDot('err');$('cloudTxt').textContent='同步失敗';toast('失敗:'+e.message)});
+};
+
+/* ═══════════ Backup / Restore ═══════════ */
+var ADMIN_KEYS=['ac_admin_org','ac_admin_salary_structure','ac_admin_salary_adjust',
+  'ac_admin_budget','ac_admin_overview','ac_admin_hub','ac_admin_config'];
+window.backupAll=function(){
+  var out={_platform:'ac-admin',_at:nowStr()};
+  ADMIN_KEYS.forEach(function(k){out[k]=jget(k,null)});
+  dl('ac_admin_backup_'+todayStr()+'.json',JSON.stringify(out,null,2));
+  toast('備份已下載');
+};
+window.restoreAll=function(inp){
+  var f=inp.files[0];if(!f)return;inp.value='';
+  var rd=new FileReader();
+  rd.onload=function(e){
+    try{
+      var d=JSON.parse(e.target.result);
+      if(d._platform!=='ac-admin')if(!confirm('檔案來源標記非 ac-admin,仍要還原?'))return;
+      ADMIN_KEYS.forEach(function(k){if(d[k]!=null)jset(k,d[k])});
+      CFG=jget('ac_admin_config',CFG);
+      toast('還原完成');renderDashboard();
+    }catch(err){toast('檔案格式錯誤')}
+  };
+  rd.readAsText(f);
+};
+window.wipeAdmin=function(){
+  if(!confirm('確定清除 Admin Center 全部資料?(不影響各平台)'))return;
+  if(!confirm('再次確認 — 此動作無法復原'))return;
+  ADMIN_KEYS.forEach(function(k){localStorage.removeItem(k)});
+  location.reload();
+};
+window.refreshAll=function(){PlatformAPI.refresh();renderDashboard();toast('已重新掃描全部平台')};
+
+/* ═══════════ INIT ═══════════ */
+renderDashboard();
+updateCloudPill();
+/* 其它分頁修改資料時(同源 storage 事件)自動刷新 */
+window.addEventListener('storage',function(e){
+  if(e.key==='ac_admin_hub'){renderNtfBadge();
+    if($('v-dashboard').classList.contains('on'))renderDashboard();
+    if($('v-timeline').classList.contains('on'))renderTimeline();
+    if($('v-notify').classList.contains('on'))renderNotify();
+  }
+});
+/* 每 60 秒自動刷新 Dashboard */
+setInterval(function(){
+  if($('v-dashboard').classList.contains('on'))renderDashboard();
+},60000);
+</script>
+</body>
+</html>
