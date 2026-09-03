@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>快速心算互動練習器</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--ink:#18324a;--muted:#6b7d8e;--primary:#2f75b5;--primary2:#174f7c;--good:#2f7d32;--bad:#b3261e;--warn:#8a5a00;--line:#dce6ef;--soft:#eaf3f8}
+*{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,"Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+.app{max-width:900px;margin:auto;padding:16px 14px 40px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.brand h1{font-size:clamp(22px,5vw,34px);margin:0;color:var(--primary2)}.brand p{margin:2px 0 0;color:var(--muted);font-size:14px}.pill{background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;font-weight:700;white-space:nowrap}
+.grid{display:grid;grid-template-columns:310px 1fr;gap:14px}@media(max-width:760px){.grid{grid-template-columns:1fr}.top{align-items:flex-start}.pill{font-size:12px}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 8px 24px rgba(26,64,96,.06)}.card h2{font-size:17px;margin:0 0 12px}.controls{display:grid;gap:12px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.field label{display:block;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:5px}.field select,.field input{width:100%;font:inherit;border:1px solid #b9cad8;border-radius:11px;padding:10px;background:#fff;color:var(--ink)}
+.btn{border:0;border-radius:12px;padding:11px 14px;font:inherit;font-weight:800;cursor:pointer;transition:.15s}.btn:active{transform:scale(.98)}.btn-primary{background:var(--primary);color:white}.btn-soft{background:var(--soft);color:var(--primary2)}.btn-danger{background:#fdecea;color:var(--bad)}.btn:disabled{opacity:.45;cursor:not-allowed}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.stat{border:1px solid var(--line);border-radius:12px;padding:9px 5px;text-align:center;background:#fbfdff}.stat b{display:block;font-size:19px}.stat span{font-size:11px;color:var(--muted)}
+.progress{height:9px;background:#e5edf3;border-radius:999px;overflow:hidden}.progress>div{height:100%;width:0;background:var(--primary);transition:.25s}.questionWrap{min-height:460px;display:flex;flex-direction:column}.lessonTip{background:#fff8dd;border:1px solid #f2d786;border-radius:13px;padding:11px 13px;color:#614500;font-size:14px}.question{font-size:clamp(42px,10vw,76px);font-weight:900;text-align:center;margin:30px 0 15px;letter-spacing:1px}.answerBox{display:flex;gap:9px;max-width:430px;margin:0 auto;width:100%}.answerBox input{flex:1;min-width:0;font:inherit;font-size:28px;font-weight:800;text-align:center;border:2px solid #a9bfd0;border-radius:14px;padding:10px}.answerBox input:focus{outline:3px solid #cfe5f7;border-color:var(--primary)}
+.feedback{min-height:70px;text-align:center;margin-top:12px;font-size:17px;font-weight:800}.feedback.good{color:var(--good)}.feedback.bad{color:var(--bad)}.feedback small{display:block;color:var(--muted);font-size:13px;font-weight:600;margin-top:5px}.actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:4px}.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:360px;margin:18px auto 0}.key{padding:12px;border:1px solid #c7d5e0;background:#fff;border-radius:12px;font-size:20px;font-weight:800;cursor:pointer}.key.op{background:var(--soft);font-size:16px}.hidden{display:none!important}
+.review{margin-top:14px}.review h3{font-size:15px;margin:0 0 8px}.wrongList{display:grid;gap:7px;max-height:210px;overflow:auto}.wrong{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:#fff7f6;border:1px solid #f1c7c2;border-radius:10px;padding:8px 10px;font-size:13px}.wrong b{color:var(--bad)}
+.end{text-align:center;padding:24px 8px}.end .grade{font-size:64px;font-weight:900;color:var(--primary)}.end h2{font-size:26px;margin:0}.end p{color:var(--muted)}.mini{font-size:12px;color:var(--muted)}
+.switch{display:flex;gap:4px;background:#edf3f7;border-radius:12px;padding:4px}.switch button{flex:1;border:0;background:transparent;border-radius:9px;padding:8px;font-weight:800;color:var(--muted);cursor:pointer}.switch button.active{background:#fff;color:var(--primary2);box-shadow:0 2px 8px rgba(0,0,0,.07)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="brand"><h1>快速心算互動練習器</h1><p>先求正確，再求穩定，最後才追求速度。</p></div>
+    <div class="pill" id="savedPill">本機紀錄：0 題</div>
+  </div>
+  <div class="grid">
+    <aside class="card">
+      <h2>練習設定</h2>
+      <div class="controls">
+        <div class="switch"><button id="learnMode" class="active">教學模式</button><button id="challengeMode">挑戰模式</button></div>
+        <div class="field"><label>運算類型</label><select id="operation"><option value="add">加法 ＋</option><option value="sub">減法 −</option><option value="mul">乘法 ×</option><option value="div">除法 ÷</option><option value="mixed">四則混合</option></select></div>
+        <div class="row">
+          <div class="field"><label>難度</label><select id="level"><option value="1">第 1 級：0～10</option><option value="2">第 2 級：0～20</option><option value="3" selected>第 3 級：0～100</option><option value="4">第 4 級：進階</option></select></div>
+          <div class="field"><label>題數</label><select id="count"><option>10</option><option selected>20</option><option>30</option><option>50</option></select></div>
+        </div>
+        <button class="btn btn-primary" id="startBtn">開始新練習</button>
+        <div class="stats">
+          <div class="stat"><b id="qStat">0/0</b><span>進度</span></div>
+          <div class="stat"><b id="correctStat">0</b><span>答對</span></div>
+          <div class="stat"><b id="streakStat">0</b><span>連對</span></div>
+          <div class="stat"><b id="timeStat">00:00</b><span>時間</span></div>
+        </div>
+        <div class="progress"><div id="bar"></div></div>
+        <div class="review">
+          <h3>本次錯題</h3><div id="wrongList" class="wrongList"><div class="mini">尚無錯題。</div></div>
+        </div>
+        <button class="btn btn-danger" id="clearBtn">清除本機學習紀錄</button>
+      </div>
+    </aside>
+
+    <main class="card questionWrap">
+      <section id="practiceArea">
+        <div class="lessonTip" id="tip">按「開始新練習」。教學模式可看拆解提示；挑戰模式則不顯示提示。</div>
+        <div class="question" id="question">8 ＋ 5</div>
+        <div class="answerBox"><input id="answer" inputmode="numeric" autocomplete="off" placeholder="答案" disabled><button class="btn btn-primary" id="submitBtn" disabled>送出</button></div>
+        <div class="feedback" id="feedback"></div>
+        <div class="actions"><button class="btn btn-soft" id="hintBtn" disabled>看提示</button><button class="btn btn-soft hidden" id="nextBtn">下一題</button><button class="btn btn-soft" id="skipBtn" disabled>跳過</button></div>
+        <div class="keypad" id="keypad">
+          <button class="key">1</button><button class="key">2</button><button class="key">3</button>
+          <button class="key">4</button><button class="key">5</button><button class="key">6</button>
+          <button class="key">7</button><button class="key">8</button><button class="key">9</button>
+          <button class="key op" data-key="back">⌫</button><button class="key">0</button><button class="key op" data-key="clear">清除</button>
+        </div>
+      </section>
+      <section id="endArea" class="end hidden">
+        <div class="grade" id="grade">90%</div><h2 id="endTitle">完成！</h2><p id="endText"></p><button class="btn btn-primary" id="againBtn">再練一次</button>
+      </section>
+    </main>
+  </div>
+</div>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const els={op:$('operation'),level:$('level'),count:$('count'),start:$('startBtn'),answer:$('answer'),submit:$('submitBtn'),hint:$('hintBtn'),next:$('nextBtn'),skip:$('skipBtn'),question:$('question'),feedback:$('feedback'),tip:$('tip'),bar:$('bar'),q:$('qStat'),correct:$('correctStat'),streak:$('streakStat'),time:$('timeStat'),wrong:$('wrongList'),practice:$('practiceArea'),end:$('endArea'),grade:$('grade'),endTitle:$('endTitle'),endText:$('endText'),saved:$('savedPill')};
+let state={active:false,mode:'learn',index:0,total:20,correct:0,streak:0,bestStreak:0,startTime:0,timer:null,current:null,answered:false,wrongs:[]};
+const symbols={add:'＋',sub:'−',mul:'×',div:'÷'};
+const rnd=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+function ranges(op,level){level=+level;if(op==='mul'||op==='div'){return level===1?5:level===2?9:level===3?12:20}return level===1?10:level===2?20:level===3?100:999}
+function chooseOp(){if(els.op.value!=='mixed')return els.op.value;return ['add','sub','mul','div'][rnd(0,3)]}
+function makeQuestion(){const op=chooseOp(),lv=+els.level.value,max=ranges(op,lv);let a,b,ans;
+ if(op==='add'){a=rnd(0,max);b=rnd(0,max);ans=a+b}
+ if(op==='sub'){a=rnd(0,max);b=rnd(0,max);if(b>a)[a,b]=[b,a];ans=a-b}
+ if(op==='mul'){a=rnd(lv===1?1:2,max);b=rnd(1,max);ans=a*b}
+ if(op==='div'){b=rnd(1,max);ans=rnd(1,max);a=b*ans}
+ return {a,b,op,ans,text:`${a} ${symbols[op]} ${b}`};}
+function hintFor(q){const {a,b,op}=q;
+ if(op==='add'){
+   const to10=(10-a%10)%10;if(a<100&&to10>0&&b>=to10)return `${a} 還差 ${to10} 到下一個整十。把 ${b} 拆成 ${to10}＋${b-to10}，先湊整數再加剩下的。`;
+   return `拆位值：先算較大的整十／整百部分，再處理剩下的數。也可從 ${Math.max(a,b)} 往後加 ${Math.min(a,b)}。`;}
+ if(op==='sub'){
+   if(a-b<=10)return `找差距：問「${b} 加多少會到 ${a}？」`;
+   const near=Math.round(b/10)*10;if(Math.abs(near-b)<=2)return `補償法：先算 ${a}－${near}，再把多減或少減的 ${Math.abs(near-b)} 修正回來。`;
+   return `拆開減：先減十位／百位，再減個位。最後用加法反查。`;}
+ if(op==='mul'){
+   if(b===5||a===5){const x=a===5?b:a;return `乘 5：先算 ${x}×10，再除以 2。`;}
+   if(b===9||a===9){const x=a===9?b:a;return `乘 9：先算 ${x}×10，再減掉 ${x}。`;}
+   const x=Math.max(a,b),y=Math.min(a,b);if(y>5)return `把 ${y} 拆成 5＋${y-5}：${x}×5 再加 ${x}×${y-5}。`;
+   return `乘法就是 ${y} 組，每組 ${x}；也能重複加 ${y} 次。`;}
+ return `用乘法反想：${b} × 多少 = ${a}？答案就是那個數。`;}
+function updateStats(){els.q.textContent=`${Math.min(state.index+1,state.total)}/${state.total}`;els.correct.textContent=state.correct;els.streak.textContent=state.streak;els.bar.style.width=`${(state.index/state.total)*100}%`}
+function showQuestion(){state.current=makeQuestion();state.answered=false;els.question.textContent=state.current.text;els.answer.value='';els.answer.disabled=false;els.submit.disabled=false;els.hint.disabled=state.mode!=='learn';els.skip.disabled=false;els.next.classList.add('hidden');els.feedback.className='feedback';els.feedback.textContent='';els.tip.textContent=state.mode==='learn'?'先自己想 5 秒；卡住再按「看提示」。':'挑戰模式：不顯示提示，完成後看正確率。';updateStats();setTimeout(()=>els.answer.focus(),50)}
+function start(){clearInterval(state.timer);state={...state,active:true,index:0,total:+els.count.value,correct:0,streak:0,bestStreak:0,startTime:Date.now(),current:null,answered:false,wrongs:[]};els.wrong.innerHTML='<div class="mini">尚無錯題。</div>';els.practice.classList.remove('hidden');els.end.classList.add('hidden');state.timer=setInterval(updateTime,1000);showQuestion()}
+function updateTime(){if(!state.active)return;const s=Math.floor((Date.now()-state.startTime)/1000);els.time.textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`}
+function submit(){if(!state.active||state.answered)return;const raw=els.answer.value.trim();if(raw==='')return;const val=Number(raw);state.answered=true;els.answer.disabled=true;els.submit.disabled=true;els.hint.disabled=true;els.skip.disabled=true;const ok=val===state.current.ans;
+ if(ok){state.correct++;state.streak++;state.bestStreak=Math.max(state.bestStreak,state.streak);els.feedback.className='feedback good';els.feedback.innerHTML=`✓ 正確！<small>${explain(state.current)}</small>`;saveLifetime(true)}
+ else{state.streak=0;state.wrongs.push({...state.current,given:raw});els.feedback.className='feedback bad';els.feedback.innerHTML=`✗ 正確答案是 ${state.current.ans}<small>${explain(state.current)}</small>`;renderWrongs();saveLifetime(false)}
+ updateStats();els.next.classList.remove('hidden');els.next.focus()}
+function explain(q){return `${q.text} = ${q.ans}。${hintFor(q)}`}
+function next(){if(!state.answered)return;state.index++;if(state.index>=state.total)finish();else showQuestion()}
+function skip(){if(!state.active||state.answered)return;els.answer.value=String(state.current.ans);submit()}
+function finish(){state.active=false;clearInterval(state.timer);els.bar.style.width='100%';const pct=Math.round(state.correct/state.total*100);els.grade.textContent=pct+'%';els.endTitle.textContent=pct>=90?'通關！':pct>=70?'已掌握大部分':'需要再練一輪';els.endText.textContent=`答對 ${state.correct}/${state.total} 題，最高連對 ${state.bestStreak} 題。${pct<90?'先重做錯題，再用相同難度練一次。':'可以提高難度或切換四則混合。'}`;els.practice.classList.add('hidden');els.end.classList.remove('hidden')}
+function renderWrongs(){els.wrong.innerHTML=state.wrongs.map(x=>`<div class="wrong"><span>${x.text}：你答 <b>${escapeHtml(x.given)}</b></span><strong>${x.ans}</strong></div>`).join('')||'<div class="mini">尚無錯題。</div>'}
+function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function saveLifetime(ok){const d=JSON.parse(localStorage.getItem('mentalMathStats')||'{"total":0,"correct":0}');d.total++;if(ok)d.correct++;localStorage.setItem('mentalMathStats',JSON.stringify(d));showLifetime()}
+function showLifetime(){const d=JSON.parse(localStorage.getItem('mentalMathStats')||'{"total":0,"correct":0}');els.saved.textContent=`本機紀錄：${d.total} 題${d.total?`・${Math.round(d.correct/d.total*100)}%`:''}`}
+$('learnMode').onclick=()=>{state.mode='learn';$('learnMode').classList.add('active');$('challengeMode').classList.remove('active')};
+$('challengeMode').onclick=()=>{state.mode='challenge';$('challengeMode').classList.add('active');$('learnMode').classList.remove('active')};
+els.start.onclick=start;els.submit.onclick=submit;els.next.onclick=next;els.skip.onclick=skip;els.hint.onclick=()=>{if(state.current)els.tip.textContent='提示：'+hintFor(state.current)};$('againBtn').onclick=start;
+els.answer.addEventListener('keydown',e=>{if(e.key==='Enter'){state.answered?next():submit()}});
+$('keypad').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||els.answer.disabled)return;const k=b.dataset.key||b.textContent.trim();if(k==='back')els.answer.value=els.answer.value.slice(0,-1);else if(k==='clear')els.answer.value='';else els.answer.value+=k;els.answer.focus()});
+$('clearBtn').onclick=()=>{if(confirm('確定清除本機累積紀錄？')){localStorage.removeItem('mentalMathStats');showLifetime()}};
+showLifetime();
+</script>
+</body>
+</html>

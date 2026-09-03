@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多框架拉回評估儀表板 — SPY</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep:    #050812;
+    --bg-card:    #0b0f1e;
+    --bg-card2:   #0e1428;
+    --border-dim: rgba(255,255,255,0.06);
+    --accent-cyan:   #00e5ff;
+    --accent-pink:   #ff2d78;
+    --accent-gold:   #ffd700;
+    --accent-orange: #ff6b00;
+    --accent-green:  #00ff9d;
+    --accent-purple: #b44fff;
+    --text-primary: #e8eaf6;
+    --text-dim:     #6b7394;
+    --text-muted:   #3d4466;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: 'Noto Sans TC', sans-serif;
+    min-height: 100vh;
+    padding: 28px 32px;
+    background-image:
+      radial-gradient(ellipse 60% 40% at 80% 10%, rgba(0,229,255,0.04) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 50% at 10% 80%, rgba(180,79,255,0.05) 0%, transparent 70%);
+  }
+
+  /* ── HEADER ── */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .header-left { flex: 1; }
+
+  .breadcrumb {
+    font-family: 'Orbitron', monospace;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    color: var(--accent-cyan);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .breadcrumb::before {
+    content: '▶';
+    font-size: 8px;
+    color: var(--accent-cyan);
+  }
+
+  h1 {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 34px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #ffffff 0%, #a8b8ff 60%, var(--accent-cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+
+  .sub-meta {
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .sub-meta span { color: var(--text-muted); }
+  .sub-meta .dot { color: var(--text-muted); }
+
+  .header-right { text-align: right; }
+
+  .price-big {
+    font-family: 'Orbitron', monospace;
+    font-size: 52px;
+    font-weight: 900;
+    color: var(--accent-gold);
+    letter-spacing: -1px;
+    line-height: 1;
+    text-shadow: 0 0 30px rgba(255,215,0,0.3);
+  }
+
+  .price-change {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+  .change-up { color: var(--accent-green); }
+  .change-pct { color: var(--accent-green); }
+  .change-date { color: var(--text-dim); font-size: 11px; }
+
+  .divider-line {
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple), transparent);
+    margin: 4px 0 14px;
+    opacity: 0.5;
+  }
+
+  .stats-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .stats-bar .sep { color: var(--text-muted); }
+  .stats-bar .val { color: var(--text-primary); }
+
+  /* ── ALERT BOX ── */
+  .alert-box {
+    position: relative;
+    background: linear-gradient(135deg, rgba(255,60,0,0.08) 0%, rgba(180,79,255,0.06) 100%);
+    border: 1px solid rgba(255,100,0,0.3);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .alert-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-orange), var(--accent-pink), var(--accent-purple));
+  }
+
+  .alert-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent-orange);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.05em;
+  }
+  .alert-title .icon { font-size: 14px; }
+  .alert-title .separator { color: var(--text-muted); margin: 0 4px; }
+  .alert-title .highlight { color: var(--accent-pink); font-weight: 700; }
+
+  .alert-body {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    font-size: 14px;
+    line-height: 1.75;
+    color: #c5cae9;
+  }
+  .alert-flame { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+  .alert-text em { font-style: normal; color: var(--accent-gold); font-weight: 700; }
+  .alert-text .support { color: var(--accent-gold); font-weight: 700; }
+  .alert-text .prob { color: var(--accent-orange); font-weight: 600; }
+
+  /* ── GAUGES SECTION ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+  .section-header::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .gauges-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 14px;
+  }
+
+  .gauge-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-dim);
+    border-radius: 14px;
+    padding: 20px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: default;
+  }
+  .gauge-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255,255,255,0.12);
+  }
+  .gauge-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 0 0 14px 14px;
+  }
+
+  .gauge-label {
+    text-align: center;
+    line-height: 1.3;
+  }
+  .gauge-label .zh {
+    font-size: 13px;
+    font-weight: 500;
+    color: #9aa0c8;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .gauge-label .en {
+    font-family: 'Orbitron', monospace;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    display: block;
+  }
+
+  /* SVG Ring */
+  .ring-wrap {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+  }
+  .ring-wrap svg {
+    width: 90px;
+    height: 90px;
+    transform: rotate(-90deg);
+  }
+  .ring-bg { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 7; }
+  .ring-fg { fill: none; stroke-width: 7; stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1); }
+
+  .ring-num {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', monospace;
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  .gauge-tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.06em;
+    text-align: center;
+    min-width: 70px;
+  }
+
+  /* Color themes per card */
+  .card-red   { --gc: #ff3c5a; --gs: rgba(255,60,90,0.15); }
+  .card-amber { --gc: #ffb300; --gs: rgba(255,179,0,0.12); }
+  .card-hot   { --gc: #ff5722; --gs: rgba(255,87,34,0.15); }
+  .card-teal  { --gc: #00e5c8; --gs: rgba(0,229,200,0.12); }
+  .card-cyan  { --gc: #29b6f6; --gs: rgba(41,182,246,0.12); }
+  .card-purple{ --gc: #ce93d8; --gs: rgba(206,147,216,0.12); }
+
+  .gauge-card::after { background: var(--gc); opacity: 0.6; }
+  .ring-fg { stroke: var(--gc); }
+  .ring-num { color: var(--gc); }
+  .ring-num { text-shadow: 0 0 16px var(--gc); }
+  .gauge-tag { background: var(--gs); color: var(--gc); border: 1px solid var(--gc); }
+
+  /* ── FOOTER NOTE ── */
+  .footer-note {
+    margin-top: 20px;
+    font-size: 10px;
+    color: var(--text-muted);
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .header       { animation: fadeIn 0.5s ease both; }
+  .alert-box    { animation: fadeIn 0.5s 0.1s ease both; }
+  .gauges-grid  { animation: fadeIn 0.5s 0.2s ease both; }
+
+  @keyframes glow-pulse {
+    0%, 100% { text-shadow: 0 0 20px rgba(255,215,0,0.3); }
+    50%       { text-shadow: 0 0 40px rgba(255,215,0,0.6); }
+  }
+  .price-big { animation: glow-pulse 3s ease infinite; }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .gauges-grid { grid-template-columns: repeat(3, 1fr); }
+    h1 { font-size: 26px; }
+    .price-big { font-size: 38px; }
+  }
+  @media (max-width: 600px) {
+    body { padding: 16px; }
+    .header { flex-direction: column; gap: 14px; }
+    .header-right { text-align: left; }
+    .gauges-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats-bar { justify-content: flex-start; }
+    .price-change { justify-content: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="breadcrumb">S&P 500 / SPY — 日線多框架技術分析報告</div>
+    <h1>多框架拉回評估儀表板</h1>
+    <div class="sub-meta">
+      <span>DAILY CHART</span>
+      <span class="dot">·</span>
+      <span>SIX-FRAMEWORK ANALYSIS</span>
+      <span class="dot">·</span>
+      <span>2026.04.20</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="price-big">$710.14</div>
+    <div class="price-change">
+      <span class="change-up">▲ +$8.48</span>
+      <span class="change-pct">+1.21%</span>
+      <span class="change-date">4/17 收盤</span>
+    </div>
+    <div class="divider-line"></div>
+    <div class="stats-bar">
+      <span>52W HIGH <span class="val">$712.39</span></span>
+      <span class="sep">|</span>
+      <span>LOW <span class="val">$508.46</span></span>
+      <span class="sep">|</span>
+      <span>P/E <span class="val">20.61</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ALERT BOX -->
+<div class="alert-box">
+  <div class="alert-title">
+    <span class="icon">⚠</span>
+    綜合研判：短線拉回風險偏高
+    <span class="separator">—</span>
+    <span class="highlight">5/6 框架偏空</span>
+  </div>
+  <div class="alert-body">
+    <span class="alert-flame">🔥</span>
+    <div class="alert-text">
+      六大框架中 <em>5 個偏向拉回／整理</em>，1 個多空分歧。RSI 達 <em>76.2（超買）</em>，隨機指標超買連續 <em>8 日</em>，
+      價格與 MA200 乖離 <em>+6.7%</em>，纏論出現頂背馳，葛蘭威爾法則四觸發。Polymarket 市場
+      隱含今日下行機率 <span class="prob">80%</span>。核心支撐帶 <span class="support">$693–$700</span>，建議等待破位確認再行動。
+    </div>
+  </div>
+</div>
+
+<!-- GAUGES -->
+<div class="section-header">各框架拉回壓力指數（0 ＝ 無壓力 ／ 100 ＝ 極高壓力）</div>
+
+<div class="gauges-grid">
+  <!-- Price Action -->
+  <div class="gauge-card card-red">
+    <div class="gauge-label">
+      <span class="zh">價格行為</span>
+      <span class="en">Price Action</span>
+    </div>
+    <div class="ring-wrap">
+      <svg viewBox="0 0 90 90">
+        <circle class="ring-bg" cx="45" cy="45" r="38"/>
+        <circle class="ring-fg" cx="45" cy="45" r="38"
+          stroke-dasharray="238.76"
+          stroke-dashoffset="52.53"
+          data-val="78" data-circ="238.76"/>
+      </svg>
+      <div class="ring-num">78</div>
+    </div>
+    <div class="gauge-tag">偏空</div>
+  </div>
+
+  <!-- Moving Avg -->
+  <div class="gauge-card card-amber">
+    <div class="gauge-label">
+      <span class="zh">移動均線</span>
+      <span class="en">Moving Avg</span>
+    </div>
+    <div class="ring-wrap">
+      <svg viewBox="0 0 90 90">
+        <circle class="ring-bg" cx="45" cy="45" r="38"/>
+        <circle class="ring-fg" cx="45" cy="45" r="38"
+          stroke-dasharray="238.76"
+          stroke-dashoffset="107.44"
+          data-val="55" data-circ="238.76"/>
+      </svg>
+      <div class="ring-num">55</div>
+    </div>
+    <div class="gauge-tag">警戒</div>
+  </div>
+
+  <!-- RSI/MACD -->
+  <div class="gauge-card card-hot">
+    <div class="gauge-label">
+      <span class="zh">技術指標</span>
+      <span class="en">RSI/MACD</span>
+    </div>
+    <div class="ring-wrap">
+      <svg viewBox="0 0 90 90">
+        <circle class="ring-bg" cx="45" cy="45" r="38"/>
+        <circle class="ring-fg" cx="45" cy="45" r="38"
+          stroke-dasharray="238.76"
+          stroke-dashoffset="42.98"
+          data-val="82" data-circ="238.76"/>
+      </svg>
+      <div class="ring-num">82</div>
+    </div>
+    <div class="gauge-tag">超買</div>
+  </div>
+
+  <!-- Chan Theory -->
+  <div class="gauge-card card-teal">
+    <div class="gauge-label">
+      <span class="zh">纏論</span>
+      <span class="en">Chan Theory</span>
+    </div>
+    <div class="ring-wrap">
+      <svg viewBox="0 0 90 90">
+        <circle class="ring-bg" cx="45" cy="45" r="38"/>
+        <circle class="ring-fg" cx="45" cy="45" r="38"
+          stroke-dasharray="238.76"
+          stroke-dashoffset="76.40"
+          data-val="68" data-circ="238.76"/>
+      </svg>
+      <div class="ring-num">68</div>
+    </div>
+    <div class="gauge-tag">疑背馳</div>
+  </div>
+
+  <!-- Elliott Wave -->
+  <div class="gauge-card card-cyan">
+    <div class="gauge-label">
+      <span class="zh">波浪理論</span>
+      <span class="en">Elliott Wave</span>
+    </div>
+    <div class="ring-wrap">
+      <svg viewBox="0 0 90 90">
+        <circle class="ring-bg" cx="45" cy="45" r="38"/>
+        <circle class="ring-fg" cx="45" cy="45" r="38"
+          stroke-dasharray="238.76"
+          stroke-dashoffset="119.38"
+          data-val="50" data-circ="238.76"/>
+      </svg>
+      <div class="ring-num">50</div>
+    </div>
+    <div class="gauge-tag">分歧</div>
+  </div>
+
+  <!-- Granville -->
+  <div class="gauge-card card-purple">
+    <div class="gauge-label">
+      <span class="zh">葛蘭威爾</span>
+      <span class="en">Granville</span>
+    </div>
+    <div class="ring-wrap">
+      <svg viewBox="0 0 90 90">
+        <circle class="ring-bg" cx="45" cy="45" r="38"/>
+        <circle class="ring-fg" cx="45" cy="45" r="38"
+          stroke-dasharray="238.76"
+          stroke-dashoffset="64.56"
+          data-val="74" data-circ="238.76"/>
+      </svg>
+      <div class="ring-num">74</div>
+    </div>
+    <div class="gauge-tag">法則 4</div>
+  </div>
+</div>
+
+<div class="footer-note">GENERATED · VRT ANALYSIS DESK · DATA AS OF 2026.04.17 CLOSE</div>
+
+<script>
+  // Animate rings on load
+  document.addEventListener('DOMContentLoaded', () => {
+    const rings = document.querySelectorAll('.ring-fg');
+    rings.forEach((ring, i) => {
+      const val   = parseFloat(ring.dataset.val);
+      const circ  = parseFloat(ring.dataset.circ);
+      const target = circ * (1 - val / 100);
+      // Start from full offset (empty), animate to target
+      ring.style.strokeDashoffset = circ;
+      setTimeout(() => {
+        ring.style.strokeDashoffset = target;
+      }, 300 + i * 100);
+    });
+  });
+</script>
+</body>
+</html>

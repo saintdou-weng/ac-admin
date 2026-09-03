@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>會計入門互動教室 — 從零開始學會計</title>
+<style>
+:root{
+  --linen:#FAF6EF;
+  --paper:#FFFFFF;
+  --khaki:#A8946A;
+  --khaki-dark:#8A774E;
+  --ink:#1F1D1A;
+  --gray:#6E6A63;
+  --line:#E6DFD2;
+  --debit:#3E6B4F;   /* 借方 綠 */
+  --credit:#8C4A3C;  /* 貸方 磚紅 */
+  --ok:#3E6B4F;
+  --bad:#A24936;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
+  background:var(--linen);
+  color:var(--ink);
+  line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+.num{font-family:Georgia,"Times New Roman",serif;font-variant-numeric:tabular-nums;}
+
+/* ===== 頂部 ===== */
+header{
+  background:var(--ink);
+  color:var(--linen);
+  padding:28px 20px 22px;
+  text-align:center;
+}
+header .eyebrow{font-size:12px;letter-spacing:4px;color:var(--khaki);margin-bottom:8px;}
+header h1{font-size:24px;font-weight:700;letter-spacing:2px;}
+header p{font-size:13px;color:#B8B2A6;margin-top:6px;}
+
+/* ===== 章節導覽 ===== */
+nav{
+  position:sticky;top:0;z-index:50;
+  background:var(--paper);
+  border-bottom:1px solid var(--line);
+  display:flex;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+nav::-webkit-scrollbar{display:none;}
+nav button{
+  flex:0 0 auto;
+  background:none;border:none;
+  padding:14px 16px;
+  font-size:13px;color:var(--gray);
+  border-bottom:3px solid transparent;
+  cursor:pointer;white-space:nowrap;
+  font-family:inherit;
+}
+nav button.active{color:var(--ink);border-bottom-color:var(--khaki);font-weight:700;}
+.progress-wrap{height:3px;background:var(--line);}
+.progress-bar{height:3px;background:var(--khaki);width:0;transition:width .4s;}
+
+/* ===== 主體 ===== */
+main{max-width:760px;margin:0 auto;padding:24px 18px 80px;}
+section.chapter{display:none;animation:fadein .35s ease;}
+section.chapter.show{display:block;}
+@keyframes fadein{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+.ch-label{font-size:12px;letter-spacing:3px;color:var(--khaki-dark);margin-bottom:4px;}
+h2{font-size:22px;margin-bottom:16px;}
+h3{font-size:17px;margin:28px 0 10px;padding-left:10px;border-left:4px solid var(--khaki);}
+p{margin-bottom:12px;font-size:15px;}
+.card{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:18px;
+  margin:14px 0;
+}
+.story{
+  background:#F3EDDF;
+  border-left:4px solid var(--khaki);
+  border-radius:0 10px 10px 0;
+  padding:16px 18px;
+  margin:14px 0;
+  font-size:15px;
+}
+.story b{color:var(--khaki-dark);}
+.tip{
+  background:var(--paper);
+  border:1px dashed var(--khaki);
+  border-radius:10px;
+  padding:14px 16px;
+  margin:14px 0;
+  font-size:14px;
+}
+.tip::before{content:"💡 小重點";display:block;font-weight:700;color:var(--khaki-dark);margin-bottom:6px;font-size:13px;letter-spacing:1px;}
+
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;background:var(--paper);}
+th{background:var(--ink);color:var(--linen);padding:9px 10px;text-align:left;font-weight:600;}
+td{border:1px solid var(--line);padding:9px 10px;vertical-align:top;}
+tr:nth-child(even) td{background:#FBF8F1;}
+.tr-total td{background:#F0E9D8 !important;font-weight:700;}
+.right{text-align:right;}
+
+.dr{color:var(--debit);font-weight:700;}
+.cr{color:var(--credit);font-weight:700;}
+
+/* T字帳 */
+.taccount{max-width:420px;margin:16px auto;background:var(--paper);border-radius:8px;overflow:hidden;border:1px solid var(--line);}
+.taccount .t-title{background:var(--ink);color:var(--linen);text-align:center;padding:8px;font-weight:700;font-size:15px;}
+.taccount .t-cols{display:flex;}
+.taccount .t-col{flex:1;padding:10px 12px;font-size:14px;min-height:90px;}
+.taccount .t-col:first-child{border-right:2px solid var(--ink);}
+.taccount .t-head{font-weight:700;text-align:center;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--line);}
+.taccount .t-line{display:flex;justify-content:space-between;margin:3px 0;}
+.taccount .t-bal{border-top:2px solid var(--ink);margin-top:8px;padding-top:6px;font-weight:700;display:flex;justify-content:space-between;}
+
+/* 天平 */
+.scale-box{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:16px 0;text-align:center;}
+.scale-svg{width:100%;max-width:420px;height:auto;}
+.scale-btns{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px;}
+.scale-readout{font-size:14px;margin-top:10px;color:var(--gray);}
+.scale-readout b{color:var(--ink);}
+
+/* 按鈕 */
+.btn{
+  display:inline-block;
+  background:var(--ink);color:var(--linen);
+  border:none;border-radius:8px;
+  padding:10px 18px;font-size:14px;
+  cursor:pointer;font-family:inherit;
+  transition:opacity .15s;
+}
+.btn:active{opacity:.75;}
+.btn.ghost{background:var(--paper);color:var(--ink);border:1px solid var(--ink);}
+.btn.small{padding:8px 14px;font-size:13px;}
+.btn.khaki{background:var(--khaki-dark);}
+
+/* 測驗 */
+.quiz{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;}
+.quiz .q-text{font-weight:700;margin-bottom:10px;font-size:15px;}
+.quiz .opts{display:flex;flex-direction:column;gap:8px;}
+.quiz .opt{
+  text-align:left;background:var(--linen);
+  border:1px solid var(--line);border-radius:8px;
+  padding:10px 12px;font-size:14px;cursor:pointer;font-family:inherit;
+}
+.quiz .opt.correct{background:#E7F0E9;border-color:var(--ok);color:var(--ok);font-weight:700;}
+.quiz .opt.wrong{background:#F6E7E2;border-color:var(--bad);color:var(--bad);}
+.quiz .fb{margin-top:10px;font-size:14px;display:none;}
+.quiz .fb.show{display:block;}
+.quiz .fb.good{color:var(--ok);}
+.quiz .fb.no{color:var(--bad);}
+
+/* 分類遊戲 */
+.sortgame .item-show{
+  background:var(--ink);color:var(--linen);
+  border-radius:10px;padding:16px;text-align:center;
+  font-size:17px;font-weight:700;margin-bottom:12px;min-height:58px;
+  display:flex;align-items:center;justify-content:center;
+}
+.sortgame .cat-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.sortgame .cat-btns .btn{width:100%;}
+.sortgame .sg-fb{text-align:center;margin-top:10px;font-size:14px;min-height:24px;font-weight:700;}
+.sortgame .sg-score{text-align:center;color:var(--gray);font-size:13px;margin-top:6px;}
+
+/* 分錄練習 */
+.je{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;}
+.je .je-tx{font-weight:700;font-size:15px;margin-bottom:6px;}
+.je .je-hint{font-size:13px;color:var(--gray);margin-bottom:10px;}
+.je .je-answer{display:none;margin-top:10px;border-top:1px dashed var(--line);padding-top:10px;font-size:14px;}
+.je .je-answer.show{display:block;}
+.je .je-row{display:flex;justify-content:space-between;padding:3px 0;}
+.je .je-row.credit-row{padding-left:28px;}
+.je .je-why{margin-top:8px;font-size:13px;color:var(--gray);background:var(--linen);border-radius:6px;padding:8px 10px;}
+
+/* 報表 */
+.stmt{max-width:460px;margin:14px auto;background:var(--paper);border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+.stmt .s-title{background:var(--khaki-dark);color:#fff;text-align:center;padding:10px;font-weight:700;}
+.stmt .s-sub{text-align:center;font-size:12px;color:var(--gray);padding:4px;border-bottom:1px solid var(--line);}
+.stmt .s-row{display:flex;justify-content:space-between;padding:7px 16px;font-size:14px;}
+.stmt .s-row.indent{padding-left:32px;color:var(--gray);}
+.stmt .s-row.total{border-top:2px solid var(--ink);font-weight:700;background:#F0E9D8;}
+.stmt .s-row.sub-total{border-top:1px solid var(--line);font-weight:700;}
+.stmt .s-head{padding:7px 16px;font-weight:700;font-size:14px;background:#F7F2E7;}
+
+/* 底部前後章按鈕 */
+.pager{display:flex;justify-content:space-between;margin-top:32px;gap:10px;}
+.pager .btn{flex:1;text-align:center;}
+
+/* 總測驗 */
+#finalScore{display:none;text-align:center;padding:20px;}
+#finalScore .big{font-size:40px;font-weight:700;color:var(--khaki-dark);}
+.badge{display:inline-block;background:var(--khaki);color:#fff;border-radius:99px;padding:2px 10px;font-size:12px;margin-left:6px;vertical-align:middle;}
+
+@media (max-width:480px){
+  h2{font-size:20px;}
+  .sortgame .cat-btns{grid-template-columns:1fr 1fr;}
+  .sortgame .cat-btns .btn:last-child{grid-column:span 2;}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important;transition:none !important;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">ACCOUNTING · FROM ZERO</div>
+  <h1>會計入門互動教室</h1>
+  <p>跟著「明珍奶」飲料店的故事,從零開始一步步學會會計</p>
+</header>
+
+<nav id="nav"></nav>
+<div class="progress-wrap"><div class="progress-bar" id="pbar"></div></div>
+
+<main id="main">
+
+<!-- ============ 第0章 ============ -->
+<section class="chapter" data-title="開場">
+  <div class="ch-label">序章</div>
+  <h2>為什麼要學會計?</h2>
+
+  <div class="story">
+    <b>阿明</b>存了十萬元,決定開一間手搖飲料店「<b>明珍奶</b>」。<br>
+    第一個月結束,他看著抽屜裡的現金,心裡冒出三個問題:<br>
+    ① 我到底<b>賺錢了沒</b>?<br>
+    ② 我現在<b>有多少家當、欠多少錢</b>?<br>
+    ③ 錢<b>從哪裡來、跑去哪裡了</b>?
+  </div>
+
+  <p>會計,就是回答這三個問題的「<b>生意的記帳語言</b>」。它不是數學,更像是一套<b>整理規則</b>:把每天發生的每一筆錢,分門別類記下來,最後整理成幾張報表,讓你一眼看懂自己的生意。</p>
+
+  <div class="tip">
+    你平常記帳(今天吃飯花 150 元)只記「錢變少」;會計厲害的地方是<b>每筆錢都記兩面</b>——錢變少的同時,一定「換到了什麼」或「還掉了什麼」。這叫<b>複式簿記</b>,是整門會計的核心,後面會慢慢教。
+  </div>
+
+  <h3>這堂課的學習地圖</h3>
+  <div class="card">
+    <table>
+      <tr><th style="width:70px;">章節</th><th>你會學到</th></tr>
+      <tr><td>第 1 章</td><td>會計的五大分類:資產、負債、權益、收入、費用</td></tr>
+      <tr><td>第 2 章</td><td>會計恆等式:資產 = 負債 + 權益(互動天平)</td></tr>
+      <tr><td>第 3 章</td><td>借與貸:左手與右手的規則</td></tr>
+      <tr><td>第 4 章</td><td>分錄實作:把飲料店的交易一筆筆記下來</td></tr>
+      <tr><td>第 5 章</td><td>過帳與試算表:把帳整理起來、檢查有沒有錯</td></tr>
+      <tr><td>第 6 章</td><td>三大財務報表:損益表、資產負債表、現金流量</td></tr>
+      <tr><td>第 7 章</td><td>總測驗:檢驗你是不是真的會了</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 第1章 ============ -->
+<section class="chapter" data-title="1·五大分類">
+  <div class="ch-label">第 1 章</div>
+  <h2>會計的五大分類</h2>
+
+  <p>會計把生意上出現的每一樣東西、每一筆錢,通通歸進<b>五個抽屜</b>。先把這五個抽屜認熟,後面就都簡單了。</p>
+
+  <div class="card">
+    <table>
+      <tr><th>抽屜</th><th>白話定義</th><th>飲料店的例子</th></tr>
+      <tr><td><b>資產</b></td><td>你<b>擁有</b>、未來能帶來好處的東西</td><td>現金、封口機、珍珠庫存、客人欠你的錢</td></tr>
+      <tr><td><b>負債</b></td><td>你<b>欠別人</b>、未來要還的</td><td>銀行貸款、還沒付的原料貨款</td></tr>
+      <tr><td><b>權益</b></td><td><b>老闆自己的份</b>:投入的本錢 + 賺來留下的</td><td>阿明投入的 10 萬、開店賺的利潤</td></tr>
+      <tr><td><b>收入</b></td><td>做生意<b>賺進來</b>的</td><td>賣珍奶收到的錢</td></tr>
+      <tr><td><b>費用</b></td><td>為了做生意<b>花掉</b>的</td><td>房租、員工薪水、水電費、用掉的珍珠</td></tr>
+    </table>
+  </div>
+
+  <div class="tip">
+    分不清「資產」和「費用」?問自己一句:<b>「這筆錢花下去,東西還在不在?」</b><br>
+    買封口機 → 機器還在、以後繼續用 → <b>資產</b>。<br>
+    付這個月房租 → 月底就用完了、什麼都不剩 → <b>費用</b>。
+  </div>
+
+  <h3>🎮 小遊戲:這是哪個抽屜?</h3>
+  <p style="font-size:14px;color:var(--gray);">看題目,點下面的按鈕分類看看。</p>
+  <div class="card sortgame" id="sortgame">
+    <div class="item-show" id="sgItem">按「開始」出題</div>
+    <div class="cat-btns" id="sgBtns">
+      <button class="btn ghost small" onclick="sgAnswer('資產')">資產</button>
+      <button class="btn ghost small" onclick="sgAnswer('負債')">負債</button>
+      <button class="btn ghost small" onclick="sgAnswer('權益')">權益</button>
+      <button class="btn ghost small" onclick="sgAnswer('收入')">收入</button>
+      <button class="btn ghost small" onclick="sgAnswer('費用')">費用</button>
+      <button class="btn khaki small" onclick="sgStart()" id="sgStartBtn">開始</button>
+    </div>
+    <div class="sg-fb" id="sgFb"></div>
+    <div class="sg-score" id="sgScore"></div>
+  </div>
+</section>
+
+<!-- ============ 第2章 ============ -->
+<section class="chapter" data-title="2·會計恆等式">
+  <div class="ch-label">第 2 章</div>
+  <h2>會計恆等式:資產 = 負債 + 權益</h2>
+
+  <p>這是全會計<b>唯一要背的公式</b>,而且用日常例子一秒就懂:</p>
+
+  <div class="story">
+    你買了一間 <b>1,000 萬</b>的房子(<b>資產</b>)。<br>
+    錢從哪來?跟銀行貸了 <b>700 萬</b>(<b>負債</b>),自己出了 <b>300 萬</b>(<b>權益</b>)。<br><br>
+    <span class="num" style="font-size:16px;">1,000 萬 = 700 萬 + 300 萬</span><br>
+    <b>你擁有的一切,不是欠來的,就是自己的。</b>永遠相等,所以叫「恆等式」。
+  </div>
+
+  <p>厲害的來了:<b>不管做什麼交易,等式永遠保持平衡</b>。因為每筆交易都有兩面——這就是「複式簿記」的意思。用下面的天平玩玩看:</p>
+
+  <div class="scale-box">
+    <svg class="scale-svg" viewBox="0 0 420 210" aria-label="會計恆等式天平">
+      <g id="scaleArm" style="transform-origin:210px 60px;transition:transform .5s;">
+        <rect x="60" y="56" width="300" height="8" rx="4" fill="#1F1D1A"/>
+        <line x1="80" y1="64" x2="80" y2="96" stroke="#8A774E" stroke-width="3"/>
+        <line x1="340" y1="64" x2="340" y2="96" stroke="#8A774E" stroke-width="3"/>
+        <rect x="30" y="96" width="100" height="46" rx="8" fill="#A8946A"/>
+        <rect x="290" y="96" width="100" height="46" rx="8" fill="#8C4A3C"/>
+        <text x="80" y="115" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">資產</text>
+        <text x="80" y="133" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold" id="lblAsset" class="num">100,000</text>
+        <text x="340" y="112" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">負債+權益</text>
+        <text x="340" y="133" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold" id="lblLE" class="num">100,000</text>
+      </g>
+      <polygon points="210,60 190,180 230,180" fill="#1F1D1A"/>
+      <rect x="150" y="180" width="120" height="10" rx="4" fill="#1F1D1A"/>
+      <text x="210" y="205" text-anchor="middle" font-size="12" fill="#6E6A63">永遠平衡</text>
+    </svg>
+    <div class="scale-readout" id="scaleRead">
+      目前:資產 <b class="num">100,000</b>(現金)= 負債 <b class="num">0</b> + 權益 <b class="num">100,000</b>
+    </div>
+    <div class="scale-btns">
+      <button class="btn small ghost" onclick="scaleTx(1)">① 向銀行借 5 萬</button>
+      <button class="btn small ghost" onclick="scaleTx(2)">② 花 6 萬買設備</button>
+      <button class="btn small ghost" onclick="scaleTx(3)">③ 賣珍奶賺 1 萬</button>
+      <button class="btn small khaki" onclick="scaleReset()">重來</button>
+    </div>
+  </div>
+
+  <div class="tip">
+    注意 ② 花 6 萬買設備:總資產<b>沒有變</b>!只是「現金」這個資產,換成了「設備」這個資產——錢沒有消失,只是<b>換了形狀</b>。這是初學者最重要的觀念轉換。
+  </div>
+
+  <h3>那收入和費用呢?</h3>
+  <p>收入和費用其實是<b>權益的小幫手</b>:賺到收入 → 老闆的份變多(權益↑);花掉費用 → 老闆的份變少(權益↓)。所以完整版等式是:</p>
+  <div class="card" style="text-align:center;font-size:16px;font-weight:700;">
+    資產 = 負債 + 權益 + (收入 − 費用)
+  </div>
+  <p style="font-size:14px;color:var(--gray);">期末結算時,「收入 − 費用 = 淨利」會併回權益,又變回最初的三項式。</p>
+</section>
+
+<!-- ============ 第3章 ============ -->
+<section class="chapter" data-title="3·借與貸">
+  <div class="ch-label">第 3 章</div>
+  <h2>借與貸:只是「左」和「右」</h2>
+
+  <p>初學者最大的心魔就是這兩個字。先破除迷思:</p>
+  <div class="tip">
+    會計裡的「借(Debit)」「貸(Credit)」<b>跟借錢還錢完全無關</b>!<br>
+    它們只是兩個位置代號:<b>借 = 左邊,貸 = 右邊</b>。就這樣,沒有別的意思。
+  </div>
+
+  <p>每個科目都有一本「T 字帳」,長得像英文字母 T,左邊記借、右邊記貸:</p>
+
+  <div class="taccount">
+    <div class="t-title">現 金</div>
+    <div class="t-cols">
+      <div class="t-col">
+        <div class="t-head dr">借方(左)</div>
+        <div class="t-line"><span>增加時記這邊</span></div>
+      </div>
+      <div class="t-col">
+        <div class="t-head cr">貸方(右)</div>
+        <div class="t-line"><span>減少時記這邊</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>唯一要記的規則表</h3>
+  <div class="card">
+    <table>
+      <tr><th>抽屜</th><th class="dr">增加記…</th><th class="cr">減少記…</th></tr>
+      <tr><td><b>資產</b></td><td class="dr">借(左)</td><td class="cr">貸(右)</td></tr>
+      <tr><td><b>費用</b></td><td class="dr">借(左)</td><td class="cr">貸(右)</td></tr>
+      <tr><td><b>負債</b></td><td class="cr">貸(右)</td><td class="dr">借(左)</td></tr>
+      <tr><td><b>權益</b></td><td class="cr">貸(右)</td><td class="dr">借(左)</td></tr>
+      <tr><td><b>收入</b></td><td class="cr">貸(右)</td><td class="dr">借(左)</td></tr>
+    </table>
+    <p style="font-size:13px;color:var(--gray);margin:0;">記法:恆等式左邊的家族(資產,以及讓權益變少的費用)增加記<b class="dr">左</b>;等式右邊的家族(負債、權益、收入)增加記<b class="cr">右</b>。跟它們在等式裡站的位置一樣!</p>
+  </div>
+
+  <div class="tip">
+    每筆交易的鐵律:<b>有借必有貸,借貸必相等</b>。<br>
+    左邊記多少錢,右邊一定也記多少錢——所以帳永遠平,天平永遠不歪。
+  </div>
+
+  <h3>🎮 快問快答:記借還是記貸?</h3>
+  <div id="drcrQuiz"></div>
+</section>
+
+<!-- ============ 第4章 ============ -->
+<section class="chapter" data-title="4·分錄實作">
+  <div class="ch-label">第 4 章</div>
+  <h2>分錄:把交易寫成會計的句子</h2>
+
+  <p>「分錄」就是用固定格式寫下一筆交易:<b>借什麼、貸什麼、各多少錢</b>。寫分錄的思考三步驟:</p>
+  <div class="card">
+    <b>① 這筆交易動到哪兩個(以上)科目?</b><br>
+    <b>② 它們各屬於哪個抽屜?是增加還是減少?</b><br>
+    <b>③ 查上一章的規則表 → 決定記借還是記貸。</b>
+  </div>
+
+  <p>來實戰!以下是「明珍奶」開店第一個月的 9 筆交易。<b>先自己想想答案,再點「看分錄」對答案</b>:</p>
+
+  <div id="jeList"></div>
+
+  <div class="tip">
+    第 ⑨ 筆很多人會漏掉:賣飲料時,除了記「收到錢」,<b>用掉的珍珠、茶葉也要記成本</b>(銷貨成本)。收入和成本配在一起看,才知道真的賺多少——這叫「配合原則」。
+  </div>
+</section>
+
+<!-- ============ 第5章 ============ -->
+<section class="chapter" data-title="5·過帳與試算">
+  <div class="ch-label">第 5 章</div>
+  <h2>過帳與試算表:整理 + 抓錯</h2>
+
+  <h3>過帳:把分錄搬進各科目的 T 字帳</h3>
+  <p>分錄是「按時間」記的流水帳;<b>過帳</b>就是把每筆金額搬進「按科目」分的 T 字帳,這樣才知道每個科目現在剩多少。看「現金」這本帳:</p>
+
+  <div class="taccount">
+    <div class="t-title">現 金</div>
+    <div class="t-cols">
+      <div class="t-col">
+        <div class="t-head dr">借方(增加)</div>
+        <div class="t-line"><span>①老闆投入</span><span class="num">100,000</span></div>
+        <div class="t-line"><span>②銀行借款</span><span class="num">50,000</span></div>
+        <div class="t-line"><span>⑤賣飲料</span><span class="num">45,000</span></div>
+      </div>
+      <div class="t-col">
+        <div class="t-head cr">貸方(減少)</div>
+        <div class="t-line"><span>③買設備</span><span class="num">60,000</span></div>
+        <div class="t-line"><span>⑥付房租</span><span class="num">10,000</span></div>
+        <div class="t-line"><span>⑦付薪水</span><span class="num">12,000</span></div>
+        <div class="t-line"><span>⑧還貨款</span><span class="num">8,000</span></div>
+      </div>
+    </div>
+    <div class="t-cols">
+      <div class="t-col"><div class="t-bal"><span>餘額</span><span class="num">105,000</span></div></div>
+      <div class="t-col"></div>
+    </div>
+  </div>
+  <p style="font-size:13px;color:var(--gray);text-align:center;">借方合計 195,000 − 貸方合計 90,000 = 餘額 105,000(在借方,因為現金是資產)</p>
+
+  <h3>試算表:月底的總體檢</h3>
+  <p>把<b>每個科目的餘額</b>列成一張表,借方總和跟貸方總和<b>一定要相等</b>——不相等就表示哪裡記錯了。這是會計自帶的抓錯機制:</p>
+
+  <div class="card">
+    <table>
+      <tr><th>科目</th><th class="right dr">借方餘額</th><th class="right cr">貸方餘額</th></tr>
+      <tr><td>現金</td><td class="right num">105,000</td><td></td></tr>
+      <tr><td>原料存貨</td><td class="right num">5,000</td><td></td></tr>
+      <tr><td>設備</td><td class="right num">60,000</td><td></td></tr>
+      <tr><td>應付帳款</td><td></td><td class="right num">12,000</td></tr>
+      <tr><td>銀行借款</td><td></td><td class="right num">50,000</td></tr>
+      <tr><td>業主資本</td><td></td><td class="right num">100,000</td></tr>
+      <tr><td>銷貨收入</td><td></td><td class="right num">45,000</td></tr>
+      <tr><td>銷貨成本</td><td class="right num">15,000</td><td></td></tr>
+      <tr><td>租金費用</td><td class="right num">10,000</td><td></td></tr>
+      <tr><td>薪資費用</td><td class="right num">12,000</td><td></td></tr>
+      <tr class="tr-total"><td>合計</td><td class="right num">207,000</td><td class="right num">207,000</td></tr>
+    </table>
+    <p style="text-align:center;font-weight:700;color:var(--ok);margin:0;">✓ 借貸平衡,帳沒記錯!</p>
+  </div>
+
+  <div class="tip">
+    試算表平衡 ≠ 完全沒錯(例如整筆漏記、科目寫錯但金額對,它抓不到),但<b>不平衡就一定有錯</b>。它是月底結帳前的第一道防線。
+  </div>
+</section>
+
+<!-- ============ 第6章 ============ -->
+<section class="chapter" data-title="6·三大報表">
+  <div class="ch-label">第 6 章</div>
+  <h2>三大財務報表:回答阿明的三個問題</h2>
+
+  <p>還記得序章阿明的三個問題嗎?三張報表剛好一張回答一題。所有數字都直接從上一章的試算表搬過來:</p>
+
+  <h3>① 賺錢了沒?→ 損益表</h3>
+  <p>看<b>一段期間</b>(這個月)的收入減費用,像一段影片:</p>
+  <div class="stmt">
+    <div class="s-title">明珍奶 損益表</div>
+    <div class="s-sub">2026 年 6 月 1 日 至 6 月 30 日</div>
+    <div class="s-row"><span>銷貨收入</span><span class="num">45,000</span></div>
+    <div class="s-row"><span>減:銷貨成本</span><span class="num">(15,000)</span></div>
+    <div class="s-row sub-total"><span>毛利</span><span class="num">30,000</span></div>
+    <div class="s-row"><span>減:租金費用</span><span class="num">(10,000)</span></div>
+    <div class="s-row"><span>減:薪資費用</span><span class="num">(12,000)</span></div>
+    <div class="s-row total"><span>本月淨利</span><span class="num">8,000</span></div>
+  </div>
+  <p style="font-size:14px;">✅ 答案:這個月<b>賺了 8,000 元</b>。</p>
+
+  <h3>② 有多少家當、欠多少錢?→ 資產負債表</h3>
+  <p>看<b>某一天</b>(6/30 當天)的財務狀況,像一張照片。它其實就是把恆等式立起來:</p>
+  <div class="stmt">
+    <div class="s-title">明珍奶 資產負債表</div>
+    <div class="s-sub">2026 年 6 月 30 日</div>
+    <div class="s-head">資產</div>
+    <div class="s-row indent"><span>現金</span><span class="num">105,000</span></div>
+    <div class="s-row indent"><span>原料存貨</span><span class="num">5,000</span></div>
+    <div class="s-row indent"><span>設備</span><span class="num">60,000</span></div>
+    <div class="s-row total"><span>資產合計</span><span class="num">170,000</span></div>
+    <div class="s-head">負債</div>
+    <div class="s-row indent"><span>應付帳款</span><span class="num">12,000</span></div>
+    <div class="s-row indent"><span>銀行借款</span><span class="num">50,000</span></div>
+    <div class="s-row sub-total"><span>負債合計</span><span class="num">62,000</span></div>
+    <div class="s-head">權益</div>
+    <div class="s-row indent"><span>業主資本</span><span class="num">100,000</span></div>
+    <div class="s-row indent"><span>本期淨利(從損益表來)</span><span class="num">8,000</span></div>
+    <div class="s-row sub-total"><span>權益合計</span><span class="num">108,000</span></div>
+    <div class="s-row total"><span>負債 + 權益合計</span><span class="num">170,000</span></div>
+  </div>
+  <p style="font-size:14px;">✅ 資產 170,000 = 負債 62,000 + 權益 108,000。<b>天平又平了</b>——而且注意:損益表算出的淨利 8,000,就是這裡權益增加的部分。<b>兩張報表是接在一起的!</b></p>
+
+  <h3>③ 錢從哪來、去了哪?→ 現金流量表</h3>
+  <p>淨利 8,000,但現金從 0 變成 105,000?現金流量表追蹤<b>現金本人</b>的進出:</p>
+  <div class="stmt">
+    <div class="s-title">明珍奶 現金流量(簡化版)</div>
+    <div class="s-sub">2026 年 6 月</div>
+    <div class="s-head">營業活動(做生意)</div>
+    <div class="s-row indent"><span>賣飲料收現</span><span class="num">+45,000</span></div>
+    <div class="s-row indent"><span>付房租、薪水、貨款</span><span class="num">−30,000</span></div>
+    <div class="s-head">投資活動(買家當)</div>
+    <div class="s-row indent"><span>購買設備</span><span class="num">−60,000</span></div>
+    <div class="s-head">籌資活動(找錢)</div>
+    <div class="s-row indent"><span>老闆投入</span><span class="num">+100,000</span></div>
+    <div class="s-row indent"><span>銀行借款</span><span class="num">+50,000</span></div>
+    <div class="s-row total"><span>期末現金餘額</span><span class="num">105,000</span></div>
+  </div>
+
+  <div class="tip">
+    <b>賺錢 ≠ 有現金!</b>如果客人賒帳,損益表照樣算收入,但現金一毛沒進來。很多公司是「帳上有賺、現金卻不夠付薪水」而倒閉的,所以三張報表要一起看。
+  </div>
+</section>
+
+<!-- ============ 第7章 ============ -->
+<section class="chapter" data-title="7·總測驗">
+  <div class="ch-label">第 7 章</div>
+  <h2>總測驗:你會了嗎?</h2>
+  <p>10 題選擇題,涵蓋整堂課。答完自動計分,錯的題目會告訴你為什麼。</p>
+  <div id="finalQuiz"></div>
+  <div style="text-align:center;margin-top:16px;">
+    <button class="btn" onclick="gradeFinal()">交卷計分</button>
+    <button class="btn ghost" onclick="resetFinal()" style="margin-left:8px;">重新作答</button>
+  </div>
+  <div id="finalScore" class="card"></div>
+
+  <h3>畢業備忘卡 🎓</h3>
+  <div class="card">
+    <table>
+      <tr><td><b>五大抽屜</b></td><td>資產、負債、權益、收入、費用</td></tr>
+      <tr><td><b>恆等式</b></td><td>資產 = 負債 + 權益(永遠平衡)</td></tr>
+      <tr><td><b>借貸</b></td><td>借=左、貸=右;資產/費用增加記借,負債/權益/收入增加記貸</td></tr>
+      <tr><td><b>鐵律</b></td><td>有借必有貸,借貸必相等</td></tr>
+      <tr><td><b>流程</b></td><td>交易 → 分錄 → 過帳 → 試算表 → 財務報表</td></tr>
+      <tr><td><b>三報表</b></td><td>損益表(賺沒賺)、資產負債表(家當與欠債)、現金流量表(錢的去向)</td></tr>
+    </table>
+  </div>
+</section>
+
+<div class="pager">
+  <button class="btn ghost" id="prevBtn" onclick="go(-1)">← 上一章</button>
+  <button class="btn" id="nextBtn" onclick="go(1)">下一章 →</button>
+</div>
+
+</main>
+
+<script>
+/* ===== 章節導覽 ===== */
+const chapters=[...document.querySelectorAll('section.chapter')];
+const nav=document.getElementById('nav');
+let cur=0;
+chapters.forEach((c,i)=>{
+  const b=document.createElement('button');
+  b.textContent=c.dataset.title;
+  b.onclick=()=>show(i);
+  nav.appendChild(b);
+});
+function show(i){
+  cur=i;
+  chapters.forEach((c,j)=>c.classList.toggle('show',j===i));
+  [...nav.children].forEach((b,j)=>b.classList.toggle('active',j===i));
+  document.getElementById('pbar').style.width=((i+1)/chapters.length*100)+'%';
+  document.getElementById('prevBtn').style.visibility=i===0?'hidden':'visible';
+  document.getElementById('nextBtn').textContent=i===chapters.length-1?'完成 🎉':'下一章 →';
+  nav.children[i].scrollIntoView({inline:'center',block:'nearest'});
+  window.scrollTo({top:0});
+}
+function go(d){
+  const n=cur+d;
+  if(n<0)return;
+  if(n>=chapters.length){alert('恭喜完成整堂課!🎓 記得回第 7 章交卷看分數。');return;}
+  show(n);
+}
+show(0);
+
+/* ===== 第1章 分類遊戲 ===== */
+const sgItems=[
+  ['收銀機裡的現金','資產','你擁有、能用的錢。'],
+  ['還沒付的珍珠貨款','負債','欠供應商的,未來要還。'],
+  ['阿明投入的 10 萬本錢','權益','老闆自己的份。'],
+  ['賣出 50 杯珍奶收到的錢','收入','做生意賺進來的。'],
+  ['這個月的店面房租','費用','花掉就沒了、為了做生意。'],
+  ['封口機一台','資產','東西還在、以後繼續用。'],
+  ['銀行貸款 5 萬','負債','欠銀行的。'],
+  ['員工薪水','費用','為了營運花掉的。'],
+  ['倉庫裡的茶葉庫存','資產','還沒用掉、未來能做成飲料賣。'],
+  ['開店賺到留在店裡的利潤','權益','賺來的也是老闆的份。'],
+];
+let sgOrder=[],sgIdx=0,sgRight=0;
+function sgStart(){
+  sgOrder=[...sgItems.keys()].sort(()=>Math.random()-.5);
+  sgIdx=0;sgRight=0;
+  document.getElementById('sgStartBtn').textContent='重新開始';
+  sgShow();
+}
+function sgShow(){
+  document.getElementById('sgItem').textContent=sgItems[sgOrder[sgIdx]][0];
+  document.getElementById('sgFb').textContent='';
+  document.getElementById('sgScore').textContent=`第 ${sgIdx+1} / ${sgOrder.length} 題`;
+}
+function sgAnswer(a){
+  if(!sgOrder.length){document.getElementById('sgFb').textContent='先按「開始」哦!';return;}
+  const it=sgItems[sgOrder[sgIdx]];
+  const fb=document.getElementById('sgFb');
+  if(a===it[1]){sgRight++;fb.style.color='var(--ok)';fb.textContent=`✓ 對!${it[2]}`;}
+  else{fb.style.color='var(--bad)';fb.textContent=`✗ 是「${it[1]}」:${it[2]}`;}
+  sgIdx++;
+  if(sgIdx>=sgOrder.length){
+    setTimeout(()=>{
+      document.getElementById('sgItem').textContent=`完成!答對 ${sgRight} / ${sgOrder.length} 題 ${sgRight>=8?'🎉 很棒!':'再玩一次會更熟!'}`;
+      document.getElementById('sgScore').textContent='';
+      sgOrder=[];
+    },1200);
+  }else{
+    setTimeout(sgShow,1400);
+  }
+}
+
+/* ===== 第3章 借貸快答 ===== */
+const drcrQs=[
+  ['現金「增加」了,記在?','借(左)','貸(右)','現金是資產,資產增加記借方。'],
+  ['銀行借款「增加」了,記在?','貸(右)','借(左)','借款是負債,負債增加記貸方。'],
+  ['付了房租(費用發生),記在?','借(左)','貸(右)','費用增加記借方。'],
+  ['賣飲料的收入「增加」了,記在?','貸(右)','借(左)','收入增加記貸方。'],
+  ['現金「減少」了,記在?','貸(右)','借(左)','資產減少記貸方(跟增加相反)。'],
+  ['還掉一筆應付帳款(負債減少),記在?','借(左)','貸(右)','負債減少記借方(跟增加相反)。'],
+];
+const dq=document.getElementById('drcrQuiz');
+drcrQs.forEach((q,i)=>{
+  const opts=[q[1],q[2]].sort(()=>Math.random()-.5);
+  const div=document.createElement('div');
+  div.className='quiz';
+  div.innerHTML=`<div class="q-text">Q${i+1}. ${q[0]}</div>
+    <div class="opts">${opts.map(o=>`<button class="opt" data-ok="${o===q[1]}">${o}</button>`).join('')}</div>
+    <div class="fb"></div>`;
+  div.querySelectorAll('.opt').forEach(btn=>{
+    btn.onclick=()=>{
+      if(div.dataset.done)return;
+      div.dataset.done='1';
+      const ok=btn.dataset.ok==='true';
+      btn.classList.add(ok?'correct':'wrong');
+      if(!ok)div.querySelector('[data-ok="true"]').classList.add('correct');
+      const fb=div.querySelector('.fb');
+      fb.className='fb show '+(ok?'good':'no');
+      fb.textContent=(ok?'✓ 答對!':'✗ ')+q[3];
+    };
+  });
+  dq.appendChild(div);
+});
+
+/* ===== 第4章 分錄練習 ===== */
+const jes=[
+  ['① 阿明拿出 100,000 元現金投入開店',
+   ['現金',100000],['業主資本',100000],
+   '現金(資產)增加→借;老闆投入的本錢(權益)增加→貸。'],
+  ['② 向銀行借入 50,000 元',
+   ['現金',50000],['銀行借款',50000],
+   '現金(資產)增加→借;欠銀行的(負債)增加→貸。'],
+  ['③ 用現金 60,000 元買封口機等設備',
+   ['設備',60000],['現金',60000],
+   '設備(資產)增加→借;現金(資產)減少→貸。資產換形狀,總額不變!'],
+  ['④ 進了 20,000 元的珍珠茶葉原料,先賒帳',
+   ['原料存貨',20000],['應付帳款',20000],
+   '存貨(資產)增加→借;還沒付的貨款(負債)增加→貸。沒付現金,現金完全不動。'],
+  ['⑤ 本月賣飲料,收到現金 45,000 元',
+   ['現金',45000],['銷貨收入',45000],
+   '現金(資產)增加→借;收入增加→貸。'],
+  ['⑥ 付店面房租 10,000 元',
+   ['租金費用',10000],['現金',10000],
+   '費用發生→借;現金(資產)減少→貸。'],
+  ['⑦ 付員工薪水 12,000 元',
+   ['薪資費用',12000],['現金',12000],
+   '費用發生→借;現金減少→貸。'],
+  ['⑧ 償還之前賒帳的貨款 8,000 元',
+   ['應付帳款',8000],['現金',8000],
+   '負債減少→借;現金減少→貸。'],
+  ['⑨ 盤點:本月做飲料用掉了 15,000 元的原料',
+   ['銷貨成本',15000],['原料存貨',15000],
+   '用掉的原料變成費用(銷貨成本)→借;存貨(資產)減少→貸。'],
+];
+const jl=document.getElementById('jeList');
+jes.forEach(j=>{
+  const d=document.createElement('div');
+  d.className='je';
+  d.innerHTML=`<div class="je-tx">${j[0]}</div>
+    <div class="je-hint">想一想:動到哪兩個科目?各是增加還是減少?</div>
+    <button class="btn small ghost">看分錄</button>
+    <div class="je-answer">
+      <div class="je-row"><span class="dr">借:${j[1][0]}</span><span class="num dr">${j[1][1].toLocaleString()}</span></div>
+      <div class="je-row credit-row"><span class="cr">貸:${j[2][0]}</span><span class="num cr">${j[2][1].toLocaleString()}</span></div>
+      <div class="je-why">${j[3]}</div>
+    </div>`;
+  d.querySelector('button').onclick=function(){
+    d.querySelector('.je-answer').classList.add('show');
+    this.style.display='none';
+  };
+  jl.appendChild(d);
+});
+
+/* ===== 第2章 天平 ===== */
+let sA=100000,sL=0,sE=100000;
+const sDetail={cash:100000,equip:0};
+const txDone={};
+function scaleRender(msg){
+  document.getElementById('lblAsset').textContent=sA.toLocaleString();
+  document.getElementById('lblLE').textContent=(sL+sE).toLocaleString();
+  document.getElementById('scaleRead').innerHTML=
+    `資產 <b class="num">${sA.toLocaleString()}</b>(現金 ${sDetail.cash.toLocaleString()}${sDetail.equip?' + 設備 '+sDetail.equip.toLocaleString():''})= 負債 <b class="num">${sL.toLocaleString()}</b> + 權益 <b class="num">${sE.toLocaleString()}</b>`+
+    (msg?`<br><span style="color:var(--khaki-dark);font-weight:700;">${msg}</span>`:'');
+  const arm=document.getElementById('scaleArm');
+  arm.style.transform='rotate(2deg)';
+  setTimeout(()=>arm.style.transform='rotate(0)',400);
+}
+function scaleTx(n){
+  if(txDone[n]){scaleRender('這筆已經做過囉,按「重來」可以重玩。');return;}
+  txDone[n]=1;
+  if(n===1){sDetail.cash+=50000;sA+=50000;sL+=50000;scaleRender('借款:現金+5萬(資產↑),同時欠銀行+5萬(負債↑)→ 還是平的!');}
+  if(n===2){sDetail.cash-=60000;sDetail.equip+=60000;scaleRender('買設備:現金−6萬、設備+6萬 → 總資產不變,只是換了形狀!');}
+  if(n===3){sDetail.cash+=10000;sA+=10000;sE+=10000;scaleRender('賺錢:現金+1萬(資產↑),賺的是老闆的(權益↑)→ 依然平衡!');}
+}
+function scaleReset(){
+  sA=100000;sL=0;sE=100000;sDetail.cash=100000;sDetail.equip=0;
+  for(const k in txDone)delete txDone[k];
+  scaleRender('重置:回到阿明剛投入 10 萬的那一天。');
+}
+
+/* ===== 第7章 總測驗 ===== */
+const finalQs=[
+  ['會計恆等式是?',['資產 = 負債 + 權益','資產 = 收入 − 費用','負債 = 資產 + 權益'],0,'唯一要背的公式:你擁有的,不是欠來的就是自己的。'],
+  ['倉庫裡還沒用掉的茶葉屬於?',['費用','資產','負債'],1,'還在、未來能帶來好處 → 資產。用掉的那一刻才變費用。'],
+  ['「借」在會計裡的意思是?',['向別人借錢','記在左邊','記在右邊'],1,'借=左、貸=右,跟借錢無關。'],
+  ['資產增加時,記在?',['借方','貸方','都可以'],0,'資產、費用增加記借(左)。'],
+  ['收入增加時,記在?',['借方','貸方','不用記'],1,'負債、權益、收入增加記貸(右)。'],
+  ['「賒帳買原料 2 萬」的分錄是?',['借:原料存貨 / 貸:應付帳款','借:原料存貨 / 貸:現金','借:應付帳款 / 貸:原料存貨'],0,'存貨(資產)增加記借;沒付錢所以是應付帳款(負債)增加記貸。'],
+  ['用現金 6 萬買設備後,總資產會?',['減少 6 萬','增加 6 萬','不變'],2,'現金−6萬、設備+6萬,資產只是換形狀。'],
+  ['試算表借方總和 ≠ 貸方總和,代表?',['公司虧錢了','帳一定有記錯','很正常'],1,'有借必有貸、借貸必相等,不平衡必有錯。'],
+  ['想知道公司「這個月賺多少」,要看?',['資產負債表','損益表','現金流量表'],1,'損益表=一段期間的收入−費用;資產負債表是某一天的照片。'],
+  ['帳上有賺錢,現金卻不夠付薪水,最可能因為?',['會計算錯了','客人大量賒帳,錢還沒收到','賺錢一定有現金,不可能發生'],1,'賺錢≠有現金,所以現金流量表很重要。'],
+];
+const fq=document.getElementById('finalQuiz');
+function buildFinal(){
+  fq.innerHTML='';
+  finalQs.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='quiz';d.dataset.q=i;
+    d.innerHTML=`<div class="q-text">Q${i+1}. ${q[0]}</div>
+      <div class="opts">${q[1].map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join('')}</div>
+      <div class="fb"></div>`;
+    d.querySelectorAll('.opt').forEach(btn=>{
+      btn.onclick=()=>{
+        d.querySelectorAll('.opt').forEach(b=>b.style.outline='');
+        btn.style.outline='2px solid var(--khaki-dark)';
+        d.dataset.sel=btn.dataset.j;
+      };
+    });
+    fq.appendChild(d);
+  });
+  document.getElementById('finalScore').style.display='none';
+}
+function gradeFinal(){
+  let right=0,unanswered=0;
+  fq.querySelectorAll('.quiz').forEach(d=>{
+    const q=finalQs[d.dataset.q];
+    const sel=d.dataset.sel;
+    const fb=d.querySelector('.fb');
+    d.querySelectorAll('.opt').forEach((b,j)=>{
+      b.classList.remove('correct','wrong');
+      if(j===q[2])b.classList.add('correct');
+    });
+    if(sel===undefined){unanswered++;fb.className='fb show no';fb.textContent='(未作答)'+q[3];return;}
+    if(+sel===q[2]){right++;fb.className='fb show good';fb.textContent='✓ '+q[3];}
+    else{d.querySelectorAll('.opt')[+sel].classList.add('wrong');fb.className='fb show no';fb.textContent='✗ '+q[3];}
+  });
+  const box=document.getElementById('finalScore');
+  box.style.display='block';
+  let cmt;
+  if(right===10)cmt='滿分!你已經掌握初級會計的核心,可以開始看真實的財務報表了 🏆';
+  else if(right>=8)cmt='很棒!觀念很扎實,把錯的題目看一下解析就完整了 🎉';
+  else if(right>=5)cmt='有基礎了!建議回第 3、4 章把借貸規則和分錄再練一輪 💪';
+  else cmt='別氣餒,從第 1 章的五大抽屜重新走一遍,會突然通的 🌱';
+  box.innerHTML=`<div class="big num">${right} / 10</div><p>${cmt}</p>${unanswered?`<p style="color:var(--gray);font-size:13px;">(有 ${unanswered} 題未作答)</p>`:''}`;
+  box.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function resetFinal(){buildFinal();window.scrollTo({top:0});}
+buildFinal();
+</script>
+</body>
+</html>

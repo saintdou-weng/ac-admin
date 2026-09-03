@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saintdou 質感文件</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5f0e8;
+    --warm-white: #faf8f4;
+    --kraft: #e8ddc8;
+    --kraft-dark: #d4c8b0;
+    --ink-deep: #2c2218;
+    --ink-mid: #4a3828;
+    --ink-light: #7a6450;
+    --ink-faint: #a89880;
+    --gold: #b8943a;
+    --gold-light: #d4ab4a;
+    --sage: #8a9e8a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1a1510;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px;
+    gap: 80px;
+    font-family: 'Noto Serif TC', serif;
+  }
+
+  /* === SECTION LABEL === */
+  .section-label {
+    text-align: center;
+    color: #5a4830;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: -60px;
+    font-family: 'Cormorant Garamond', serif;
+    opacity: 0.6;
+  }
+
+  /* ============================================================
+     INVOICE
+     ============================================================ */
+  .invoice-wrap {
+    width: 100%;
+    max-width: 520px;
+    position: relative;
+  }
+
+  .invoice {
+    background: var(--warm-white);
+    padding: 52px 48px 44px;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      0 2px 4px rgba(0,0,0,0.08),
+      0 8px 24px rgba(0,0,0,0.18),
+      0 24px 60px rgba(0,0,0,0.22);
+  }
+
+  /* Paper grain texture overlay */
+  .invoice::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+    mix-blend-mode: multiply;
+  }
+
+  /* Torn-edge top decoration */
+  .invoice::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg,
+      var(--gold) 0%, var(--gold-light) 30%, var(--gold) 60%, var(--kraft-dark) 100%);
+  }
+
+  .invoice > * { position: relative; z-index: 1; }
+
+  /* Header */
+  .inv-header {
+    text-align: center;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--kraft-dark);
+    margin-bottom: 28px;
+  }
+
+  .inv-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 8px;
+    color: var(--ink-deep);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .inv-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--ink-faint);
+    font-style: italic;
+  }
+
+  /* Meta info */
+  .inv-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    color: var(--ink-faint);
+    margin-bottom: 32px;
+    line-height: 1.8;
+  }
+
+  .inv-meta strong {
+    color: var(--ink-mid);
+    font-weight: 500;
+  }
+
+  .inv-meta-label {
+    font-family: 'Cormorant Garamond', serif;
+    letter-spacing: 1px;
+    font-size: 9px;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 2px;
+  }
+
+  /* Table */
+  .inv-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 28px;
+  }
+
+  .inv-table thead tr {
+    border-bottom: 1px solid var(--kraft-dark);
+  }
+
+  .inv-table th {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding: 0 0 10px 0;
+    font-weight: 400;
+  }
+
+  .inv-table th:last-child,
+  .inv-table th:nth-child(3),
+  .inv-table th:nth-child(2) { text-align: right; }
+
+  .inv-table tbody tr {
+    border-bottom: 1px solid rgba(212, 200, 176, 0.5);
+  }
+
+  .inv-table tbody tr:last-child { border-bottom: none; }
+
+  .inv-table td {
+    padding: 14px 0;
+    vertical-align: middle;
+  }
+
+  .inv-table td:nth-child(2),
+  .inv-table td:nth-child(3),
+  .inv-table td:nth-child(4) { text-align: right; }
+
+  .item-name-en {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--ink-deep);
+    display: block;
+    margin-bottom: 2px;
+    letter-spacing: 0.5px;
+  }
+
+  .item-name-zh {
+    font-size: 10px;
+    color: var(--ink-faint);
+    display: block;
+    letter-spacing: 1px;
+  }
+
+  .item-qty { font-size: 12px; color: var(--ink-light); }
+  .item-price { font-size: 12px; color: var(--ink-light); }
+  .item-total {
+    font-size: 12px;
+    color: var(--ink-mid);
+    font-weight: 500;
+  }
+
+  /* Totals */
+  .inv-totals {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    margin-top: 8px;
+    padding-top: 20px;
+    border-top: 1px solid var(--kraft-dark);
+  }
+
+  .totals-row {
+    display: flex;
+    gap: 32px;
+    align-items: baseline;
+  }
+
+  .totals-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    min-width: 120px;
+    text-align: right;
+  }
+
+  .totals-value {
+    font-size: 12px;
+    color: var(--ink-mid);
+    min-width: 60px;
+    text-align: right;
+  }
+
+  .totals-row.grand {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--kraft-dark);
+  }
+
+  .totals-row.grand .totals-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    color: var(--ink-mid);
+    font-weight: 500;
+    letter-spacing: 2px;
+  }
+
+  .totals-row.grand .totals-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+
+  .totals-row.grand-riel .totals-value {
+    font-size: 12px;
+    color: var(--ink-light);
+  }
+
+  /* Footer */
+  .inv-footer {
+    text-align: center;
+    margin-top: 36px;
+    padding-top: 24px;
+    border-top: 1px solid var(--kraft-dark);
+  }
+
+  .inv-footer p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    font-style: italic;
+    color: var(--ink-faint);
+    letter-spacing: 0.5px;
+    line-height: 1.8;
+  }
+
+  .inv-footer .zh-thanks {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 11px;
+    font-style: normal;
+    letter-spacing: 2px;
+    margin-top: 4px;
+  }
+
+  /* Gold ornament */
+  .ornament {
+    display: block;
+    text-align: center;
+    color: var(--gold);
+    font-size: 16px;
+    letter-spacing: 8px;
+    margin: 16px 0;
+    opacity: 0.5;
+  }
+
+  /* ============================================================
+     MENU
+     ============================================================ */
+  .menu-wrap {
+    width: 100%;
+    max-width: 680px;
+    position: relative;
+  }
+
+  .menu {
+    background: var(--cream);
+    padding: 60px 56px;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      0 2px 4px rgba(0,0,0,0.08),
+      0 8px 24px rgba(0,0,0,0.18),
+      0 24px 60px rgba(0,0,0,0.22);
+  }
+
+  /* Border frame */
+  .menu-frame {
+    position: absolute;
+    inset: 16px;
+    border: 1px solid rgba(184, 148, 58, 0.25);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .menu-frame::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid rgba(184, 148, 58, 0.12);
+  }
+
+  /* Corner ornaments */
+  .corner {
+    position: absolute;
+    width: 20px; height: 20px;
+    border-color: var(--gold);
+    border-style: solid;
+    opacity: 0.4;
+  }
+  .corner-tl { top: 16px; left: 16px; border-width: 1px 0 0 1px; }
+  .corner-tr { top: 16px; right: 16px; border-width: 1px 1px 0 0; }
+  .corner-bl { bottom: 16px; left: 16px; border-width: 0 0 1px 1px; }
+  .corner-br { bottom: 16px; right: 16px; border-width: 0 1px 1px 0; }
+
+  .menu > * { position: relative; z-index: 1; }
+
+  /* Menu header */
+  .menu-header {
+    text-align: center;
+    margin-bottom: 52px;
+  }
+
+  .menu-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+
+  .menu-title-zh {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 34px;
+    font-weight: 300;
+    letter-spacing: 12px;
+    color: var(--ink-deep);
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .menu-title-en {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 5px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+
+  .menu-divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 24px auto;
+    max-width: 240px;
+  }
+
+  .menu-divider::before,
+  .menu-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.5;
+  }
+
+  .menu-divider-gem {
+    color: var(--gold);
+    font-size: 8px;
+    letter-spacing: 4px;
+    opacity: 0.6;
+  }
+
+  /* Menu columns */
+  .menu-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 40px;
+  }
+
+  .menu-section {
+    margin-bottom: 36px;
+  }
+
+  .menu-section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(184, 148, 58, 0.3);
+  }
+
+  .menu-section-zh {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-deep);
+    letter-spacing: 2px;
+  }
+
+  .menu-section-en {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    color: var(--ink-faint);
+    font-style: italic;
+    letter-spacing: 1px;
+  }
+
+  .menu-note {
+    font-size: 9px;
+    color: var(--ink-faint);
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    margin-top: -12px;
+    font-style: italic;
+  }
+
+  .menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 9px 0;
+    border-bottom: 1px dotted rgba(168, 152, 128, 0.35);
+  }
+
+  .menu-item:last-child { border-bottom: none; }
+
+  .menu-item-left {}
+
+  .menu-item-zh {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--ink-mid);
+    display: block;
+    letter-spacing: 1px;
+  }
+
+  .menu-item-en {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 10px;
+    color: var(--ink-faint);
+    font-style: italic;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-top: 1px;
+  }
+
+  .menu-item-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    color: var(--gold);
+    letter-spacing: 1px;
+    white-space: nowrap;
+    margin-left: 12px;
+  }
+
+  .menu-item-price .currency {
+    font-size: 10px;
+    color: var(--ink-faint);
+    margin-right: 2px;
+  }
+
+  /* Full-width sections */
+  .menu-section.full {
+    grid-column: 1 / -1;
+  }
+
+  .menu-section.full .menu-items-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0 16px;
+  }
+
+  /* Drinks section */
+  .menu-section.full.drinks .menu-items-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0 16px;
+  }
+
+  /* Menu footer */
+  .menu-footer {
+    text-align: center;
+    margin-top: 44px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(184, 148, 58, 0.25);
+  }
+
+  .menu-footer-quote {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--ink-faint);
+    letter-spacing: 3px;
+    line-height: 2;
+  }
+
+  .menu-footer-quote em {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    font-style: italic;
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+
+  /* Page separator */
+  .page-separator {
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, #5a4830, transparent);
+    opacity: 0.4;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .menu { padding: 40px 28px; }
+    .menu-body { grid-template-columns: 1fr; }
+    .menu-section.full .menu-items-row { grid-template-columns: 1fr 1fr; }
+    .menu-title-zh { font-size: 26px; letter-spacing: 8px; }
+    .invoice { padding: 36px 28px 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== INVOICE ===================== -->
+<p class="section-label">— ZERO 8 · Dining & Cafe —</p>
+
+<div class="invoice-wrap">
+  <div class="invoice">
+
+    <div class="inv-header">
+      <span class="inv-logo">ZERO 8</span>
+      <span class="inv-tagline">Dining &amp; Cafe · Phnom Penh</span>
+    </div>
+
+    <div class="inv-meta">
+      <div>
+        <div class="inv-meta-label">Invoice No.</div>
+        <strong>M1424 / 2641113951</strong>
+      </div>
+      <div style="text-align:right;">
+        <div class="inv-meta-label">Date &amp; Time</div>
+        <strong>2026 · 04 · 11 &nbsp;|&nbsp; 13:09</strong>
+      </div>
+    </div>
+
+    <table class="inv-table">
+      <thead>
+        <tr>
+          <th style="text-align:left;">Description</th>
+          <th>Qty</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <span class="item-name-en">Americano</span>
+            <span class="item-name-zh">美式咖啡</span>
+          </td>
+          <td class="item-qty">1</td>
+          <td class="item-price">$ 1.75</td>
+          <td class="item-total">$ 1.75</td>
+        </tr>
+        <tr>
+          <td>
+            <span class="item-name-en">Pasta Carbonara</span>
+            <span class="item-name-zh">奶油培根義大利麵</span>
+          </td>
+          <td class="item-qty">1</td>
+          <td class="item-price">$ 4.50</td>
+          <td class="item-total">$ 4.50</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="inv-totals">
+      <div class="totals-row">
+        <span class="totals-label">Subtotal 小計</span>
+        <span class="totals-value">$ 6.25</span>
+      </div>
+      <div class="totals-row">
+        <span class="totals-label">Discount 折扣</span>
+        <span class="totals-value">$ 0.00</span>
+      </div>
+      <div class="totals-row grand">
+        <span class="totals-label">Grand Total · USD</span>
+        <span class="totals-value">$ 6.25</span>
+      </div>
+      <div class="totals-row grand-riel">
+        <span class="totals-label" style="font-size:9px;">Grand Total · KHR</span>
+        <span class="totals-value" style="font-family:'Noto Serif TC'; font-size:12px;">៛ 25,000</span>
+      </div>
+    </div>
+
+    <div class="inv-footer">
+      <span class="ornament">· · ·</span>
+      <p>Thank you for your visit.</p>
+      <p class="zh-thanks">期待您的再次光臨</p>
+    </div>
+
+  </div>
+</div>
+
+<div class="page-separator"></div>
+
+<!-- ===================== MENU ===================== -->
+<p class="section-label">— 專屬菜單目錄 —</p>
+
+<div class="menu-wrap">
+  <div class="menu">
+    <div class="menu-frame"></div>
+    <span class="corner corner-tl"></span>
+    <span class="corner corner-tr"></span>
+    <span class="corner corner-bl"></span>
+    <span class="corner corner-br"></span>
+
+    <div class="menu-header">
+      <p class="menu-subtitle">Artisan Chinese Cuisine</p>
+      <span class="menu-title-zh">中原膳製</span>
+      <span class="menu-title-en">Zhōng Yuán · Heritage Table</span>
+      <div class="menu-divider"><span class="menu-divider-gem">◆</span></div>
+    </div>
+
+    <div class="menu-body">
+
+      <!-- 手工麵點 -->
+      <div class="menu-section">
+        <div class="menu-section-header">
+          <span class="menu-section-zh">手工麵點</span>
+          <span class="menu-section-en">Handmade Noodles</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <span class="menu-item-zh">清燉牛肉拉麵</span>
+            <span class="menu-item-en">Braised Beef Hand-Pulled Noodles</span>
+          </div>
+          <span class="menu-item-price"><span class="currency">$</span>6</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <span class="menu-item-zh">老北京炸醬麵</span>
+            <span class="menu-item-en">Beijing Zhajiang Noodles</span>
+          </div>
+          <span class="menu-item-price"><span class="currency">$</span>6</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <span class="menu-item-zh">西紅柿雞蛋麵</span>
+            <span class="menu-item-en">Tomato & Egg Noodle Soup</span>
+          </div>
+          <span class="menu-item-price"><span class="currency">$</span>5</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <span class="menu-item-zh">手工鮮肉水餃</span>
+            <span class="menu-item-en">Handmade Pork Dumplings</span>
+          </div>
+          <span class="menu-item-price"><span class="currency">$</span>8</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <span class="menu-item-zh">麻醬涼麵</span>
+            <span class="menu-item-en">Sesame Cold Noodles</span>
+          </div>
+          <span class="menu-item-price"><span class="currency">$</span>5</span>
+        </div>
+      </div>
+
+      <!-- 精緻涼菜 -->
+      <div class="menu-section">
+        <div class="menu-section-header">
+          <span class="menu-section-zh">精緻涼菜</span>
+          <span class="menu-section-en">Cold Dishes</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <span class="menu-item-zh">涼拌手切牛肉</span>
+            <span class="menu-item-en">Spiced Sliced Beef</span>
+          </div>
+          <span class="menu-item-price"><span class="currency">$</span>10</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <span class="menu-item-zh">特色涼皮</span>
+            <span class="menu-item-en">Shaanxi Cold Skin Noodles</span>
+          </div>
+          <span class="menu-item-price"><span class="currency">$</span>5</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <span class="menu-item-zh">西芹花生</span>
+            <span class="menu-item-en">Celery & Peanut Salad</span>
+          </div>
+          <span class="menu-item-price"><span class="currency">$</span>5</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <span class="menu-item-zh">老虎菜</span>
+            <span class="menu-item-en">Pepper & Cilantro Salad</span>
+          </div>
+          <span class="menu-item-price"><span class="currency">$</span>4</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <span class="menu-item-zh">糖醋蓮藕</span>
+            <span class="menu-item-en">Sweet & Sour Lotus Root</span>
+          </div>
+          <span class="menu-item-price"><span class="currency">$</span>5</span>
+        </div>
+      </div>
+
+      <!-- 炭火燒烤 -->
+      <div class="menu-section">
+        <div class="menu-section-header">
+          <span class="menu-section-zh">炭火燒烤</span>
+          <span class="menu-section-en">Charcoal Grill</span>
+        </div>
+        <p class="menu-note">以串計價 · Per Skewer</p>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <span class="menu-item-zh">特色烤排骨</span>
+            <span class="menu-item-en">Spiced Pork Rib Skewer</span>
+          </div>
+          <span class="menu-item-price"><span class="currency">$</span>3</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <span class="menu-item-zh">秘製五花烤肉</span>
+            <span class="menu-item-en">Secret Pork Belly</span>
+          </div>
+          <span class="menu-item-price"><span class="currency">$</span>2</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <span class="menu-item-zh">秘製烤大蝦</span>
+            <span class="menu-item-en">Marinated King Prawn</span>
+          </div>
+          <span class="menu-item-price"><span class="currency">$</span>2</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <span class="menu-item-zh">秘製烤牛肉</span>
+            <span class="menu-item-en">House Beef Skewer</span>
+          </div>
+          <span class="menu-item-price"><span class="currency">$</span>2.5</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <span class="menu-item-zh">串燒羊肉</span>
+            <span class="menu-item-en">Cumin Lamb Skewer</span>
+          </div>
+          <span class="menu-item-price"><span class="currency">$</span>2</span>
+        </div>
+      </div>
+
+      <!-- 湯品煲物 -->
+      <div class="menu-section">
+        <div class="menu-section-header">
+          <span class="menu-section-zh">湯品煲物</span>
+          <span class="menu-section-en">Soups & Broth</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <span class="menu-item-zh">豆芽排骨湯</span>
+            <span class="menu-item-en">Bean Sprout & Pork Rib Soup</span>
+          </div>
+          <span class="menu-item-price"><span class="currency">$</span>12</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <span class="menu-item-zh">牛尾清燉湯</span>
+            <span class="menu-item-en">Slow-Braised Oxtail Broth</span>
+          </div>
+          <span class="menu-item-price"><span class="currency">$</span>16</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <span class="menu-item-zh">老母雞湯</span>
+            <span class="menu-item-en">Heritage Hen Broth</span>
+          </div>
+          <span class="menu-item-price"><span class="currency">$</span>14</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <span class="menu-item-zh">番茄蛋花湯</span>
+            <span class="menu-item-en">Tomato Egg Drop Soup</span>
+          </div>
+          <span class="menu-item-price"><span class="currency">$</span>5</span>
+        </div>
+      </div>
+
+      <!-- 熱炒主菜 (full width) -->
+      <div class="menu-section full">
+        <div class="menu-section-header">
+          <span class="menu-section-zh">熱炒主菜</span>
+          <span class="menu-section-en">Stir-Fried Mains</span>
+        </div>
+        <div class="menu-items-row">
+          <div class="menu-item">
+            <div class="menu-item-left">
+              <span class="menu-item-zh">宮保雞丁</span>
+              <span class="menu-item-en">Kung Pao Chicken</span>
+            </div>
+            <span class="menu-item-price"><span class="currency">$</span>8</span>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-left">
+              <span class="menu-item-zh">回鍋肉片</span>
+              <span class="menu-item-en">Twice-Cooked Pork</span>
+            </div>
+            <span class="menu-item-price"><span class="currency">$</span>9</span>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-left">
+              <span class="menu-item-zh">魚香肉絲</span>
+              <span class="menu-item-en">Yu Xiang Pork Shreds</span>
+            </div>
+            <span class="menu-item-price"><span class="currency">$</span>8</span>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-left">
+              <span class="menu-item-zh">番茄炒蛋</span>
+              <span class="menu-item-en">Tomato & Egg</span>
+            </div>
+            <span class="menu-item-price"><span class="currency">$</span>6</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 飲品 (full width) -->
+      <div class="menu-section full drinks">
+        <div class="menu-section-header">
+          <span class="menu-section-zh">精選飲品</span>
+          <span class="menu-section-en">Beverages</span>
+        </div>
+        <div class="menu-items-row">
+          <div class="menu-item">
+            <div class="menu-item-left">
+              <span class="menu-item-zh">手沖美式</span>
+              <span class="menu-item-en">Pour-Over Americano</span>
+            </div>
+            <span class="menu-item-price"><span class="currency">$</span>2</span>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-left">
+              <span class="menu-item-zh">冰拿鐵</span>
+              <span class="menu-item-en">Iced Café Latte</span>
+            </div>
+            <span class="menu-item-price"><span class="currency">$</span>3</span>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-left">
+              <span class="menu-item-zh">新鮮果汁</span>
+              <span class="menu-item-en">Fresh Pressed Juice</span>
+            </div>
+            <span class="menu-item-price"><span class="currency">$</span>3</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /menu-body -->
+
+    <div class="menu-footer">
+      <p class="menu-footer-quote">
+        用心做好，每一件事
+        <em>Crafted with heart · in every detail</em>
+      </p>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>���������������������������������</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="../../assets/course.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">���������������������������������</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#怎麼使用這套教材"
+id="toc-怎麼使用這套教材">怎麼使用這套教材</a></li>
+<li><a href="#本冊學習地圖" id="toc-本冊學習地圖">本冊學習地圖</a></li>
+<li><a href="#統計學到底是什麼" id="toc-統計學到底是什麼">1.1
+統計學到底是什麼？</a>
+<ul>
+<li><a href="#資料不一定都是數字" id="toc-資料不一定都是數字">1.2
+資料不一定都是數字</a></li>
+<li><a href="#母體與樣本" id="toc-母體與樣本">1.3 母體與樣本</a></li>
+<li><a href="#原始資料整理資料與指標"
+id="toc-原始資料整理資料與指標">1.4 原始資料、整理資料與指標</a></li>
+</ul></li>
+<li><a href="#第1章練習" id="toc-第1章練習">第1章練習</a></li>
+<li><a href="#百分比的核心不是乘以100"
+id="toc-百分比的核心不是乘以100">2.1 百分比的核心不是乘以100%</a>
+<ul>
+<li><a href="#件數下降不代表比率一定改善"
+id="toc-件數下降不代表比率一定改善">2.2
+件數下降，不代表比率一定改善</a></li>
+<li><a href="#百分點與百分比變化不是同一件事"
+id="toc-百分點與百分比變化不是同一件事">2.3
+百分點與百分比變化不是同一件事</a></li>
+<li><a href="#百分比檢查清單" id="toc-百分比檢查清單">2.4
+百分比檢查清單</a></li>
+</ul></li>
+<li><a href="#第2章練習" id="toc-第2章練習">第2章練習</a></li>
+<li><a href="#三種代表值回答不同問題"
+id="toc-三種代表值回答不同問題">3.1 三種代表值回答不同問題</a>
+<ul>
+<li><a href="#薪資案例平均數為何會誤導"
+id="toc-薪資案例平均數為何會誤導">3.2
+薪資案例：平均數為何會誤導？</a></li>
+<li><a href="#平均相同穩定度可能完全不同"
+id="toc-平均相同穩定度可能完全不同">3.3
+平均相同，穩定度可能完全不同</a></li>
+<li><a href="#怎麼選代表值" id="toc-怎麼選代表值">3.4
+怎麼選代表值？</a></li>
+</ul></li>
+<li><a href="#第3章練習" id="toc-第3章練習">第3章練習</a></li>
+<li><a href="#先問問題再選圖表" id="toc-先問問題再選圖表">4.1
+先問問題，再選圖表</a>
+<ul>
+<li><a href="#看圖五問" id="toc-看圖五問">4.2 看圖五問</a></li>
+<li><a href="#相關不等於因果" id="toc-相關不等於因果">4.3
+相關不等於因果</a></li>
+</ul></li>
+<li><a href="#第4章練習" id="toc-第4章練習">第4章練習</a></li>
+<li><a href="#案例資料" id="toc-案例資料">5.1 案例資料</a>
+<ul>
+<li><a href="#四個基本指標" id="toc-四個基本指標">5.2
+四個基本指標</a></li>
+<li><a href="#管理判讀" id="toc-管理判讀">5.3 管理判讀</a></li>
+<li><a href="#建議的管理順序" id="toc-建議的管理順序">5.4
+建議的管理順序</a></li>
+</ul></li>
+<li><a href="#第5章練習" id="toc-第5章練習">第5章練習</a></li>
+<li><a href="#綜合測驗15題" id="toc-綜合測驗15題">6.1
+綜合測驗（15題）</a></li>
+<li><a href="#答案與簡要解析" id="toc-答案與簡要解析">6.2
+答案與簡要解析</a></li>
+<li><a href="#常用統計中英名詞表"
+id="toc-常用統計中英名詞表">常用統計中英名詞表</a></li>
+<li><a href="#參考資源與後續學習"
+id="toc-參考資源與後續學習">參考資源與後續學習</a></li>
+</ul>
+</nav>
+<p><strong>從零開始學統計</strong></p>
+<p><strong>第一冊｜資料、百分比、平均數與圖表判讀</strong></p>
+<p>用生活與成衣廠最常見的例子，一步一步學到能實際判斷數據</p>
+<p><img
+src="media/statistics/media/image1.png"
+style="width:6.69291in;height:3.93747in" /></p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>定位</strong></th>
+<th><strong>本冊不是數學考試教材<br />
+</strong>目標是讓完全沒有統計基礎的人，能看懂報表、發現數據問題、知道該追查什麼。公式只保留真正會用到的部分。</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p><strong>中文解說＋英文名詞｜Excel同步練習｜含測驗與答案</strong></p>
+<h1 id="怎麼使用這套教材">怎麼使用這套教材</h1>
+<p>每一個觀念都依照「先看情境、再看數據、接著理解公式、最後做管理判斷」的順序。不要先背英文或公式；先用自己的話說清楚數字的意義。</p>
+<p><img
+src="media/statistics/media/image2.png"
+style="width:6.69291in;height:2.19966in" /></p>
+<p><em>圖 1　統計不是計算終點，而是一個從問題走向行動的流程。</em></p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>步驟</strong></th>
+<th><strong>你要做什麼</strong></th>
+<th><strong>不要做什麼</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1. 看情境</td>
+<td>先讀問題，確認要回答什麼</td>
+<td>看到數字立刻按計算機</td>
+</tr>
+<tr class="even">
+<td>2. 找資料角色</td>
+<td>找出分子、分母、時間、單位與對象</td>
+<td>把不同單位或不同期間直接比較</td>
+</tr>
+<tr class="odd">
+<td>3. 計算／畫圖</td>
+<td>用最簡單的公式與圖表整理</td>
+<td>為了好看而使用複雜圖表</td>
+</tr>
+<tr class="even">
+<td>4. 解釋結果</td>
+<td>用一句完整中文說明數字</td>
+<td>只報「96%」而不說96%是什麼</td>
+</tr>
+<tr class="odd">
+<td>5. 決定下一步</td>
+<td>指出正常、異常或需追查項目</td>
+<td>把相關當成原因，直接下結論</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>操作</strong></th>
+<th><strong>與 Excel 練習簿配合<br />
+</strong>看到黃色儲存格時，可以自行更改數字；公式與圖表會自動更新。先預測結果，再輸入數據，學習效果最好。</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h1 id="本冊學習地圖">本冊學習地圖</h1>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>章節</strong></th>
+<th><strong>主題</strong></th>
+<th><strong>學完能做什麼</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>第1章</td>
+<td>資料概念 Data Basics</td>
+<td>什麼是資料、母體、樣本與資料類型</td>
+</tr>
+<tr class="even">
+<td>第2章</td>
+<td>百分比與比率 Percentages &amp; Rates</td>
+<td>找對分子與分母，避免率的誤判</td>
+</tr>
+<tr class="odd">
+<td>第3章</td>
+<td>平均數、中位數與眾數</td>
+<td>選擇合適的代表值，理解極端值</td>
+</tr>
+<tr class="even">
+<td>第4章</td>
+<td>圖表判讀 Chart Literacy</td>
+<td>選對圖、看懂軸、辨識視覺誤導</td>
+</tr>
+<tr class="odd">
+<td>第5章</td>
+<td>車縫組綜合案例</td>
+<td>用產量、人數、目標與品質做管理判斷</td>
+</tr>
+<tr class="even">
+<td>第6章</td>
+<td>測驗、答案與名詞表</td>
+<td>確認理解並建立常用中英詞彙</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>標準</strong></th>
+<th><strong>學習完成標準<br />
+</strong>不是「看過」就算完成。你需要做到：①能用自己的話解釋；②能在Excel中算出；③能指出數字可能誤導之處；④能提出下一個要追查的問題。</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p><img
+src="media/statistics/media/image3.png"
+style="width:6.49606in;height:2.4412in" /></p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>第 1 章　資料概念</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Data Basics｜先知道資料是誰、從哪裡來、能回答什麼</td>
+</tr>
+</tbody>
+</table>
+<h1 id="統計學到底是什麼">1.1 統計學到底是什麼？</h1>
+<p>統計學（Statistics）是一套把零散資料轉成可理解資訊，並用來支持判斷的方法。它不保證你永遠得到正確答案，但能讓你的結論更透明、更有依據。</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>白話</strong></th>
+<th><strong>一句話理解<br />
+</strong>統計 = 用資料降低「憑感覺決定」的程度。</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="資料不一定都是數字">1.2 資料不一定都是數字</h2>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>例子</strong></th>
+<th><strong>資料類型</strong></th>
+<th><strong>英文</strong></th>
+<th><strong>能不能直接算平均</strong></th>
+<th><strong>合適整理方式</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>車縫組別：1組、2組、3組</td>
+<td>類別資料</td>
+<td>Categorical data</td>
+<td>不能</td>
+<td>次數表、長條圖</td>
+</tr>
+<tr class="even">
+<td>每日產量：820、900、875件</td>
+<td>數值資料</td>
+<td>Numerical data</td>
+<td>可以</td>
+<td>平均、範圍、折線圖</td>
+</tr>
+<tr class="odd">
+<td>品質等級：A、B、C</td>
+<td>有順序類別</td>
+<td>Ordinal data</td>
+<td>通常不直接平均</td>
+<td>次數表、長條圖</td>
+</tr>
+<tr class="even">
+<td>產品重量：198.2、201.4克</td>
+<td>連續數值</td>
+<td>Continuous data</td>
+<td>可以</td>
+<td>平均、直方圖</td>
+</tr>
+<tr class="odd">
+<td>不良件數：0、1、2件</td>
+<td>離散數值</td>
+<td>Discrete data</td>
+<td>可以</td>
+<td>次數、平均、不良率</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>錯誤</strong></th>
+<th><strong>常見錯誤<br />
+</strong>組別雖然寫成1、2、3，但這些數字只是名稱。把組別平均成「2.3組」通常沒有管理意義。</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="母體與樣本">1.3 母體與樣本</h2>
+<p><strong>母體（Population）</strong>是你真正想了解的全部對象；<strong>樣本（Sample）</strong>是從母體中實際取得的一部分。</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>情境</strong></th>
+<th><strong>母體</strong></th>
+<th><strong>樣本</strong></th>
+<th><strong>主要風險</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>了解全廠員工滿意度</td>
+<td>全廠所有員工</td>
+<td>只訪問辦公室10人</td>
+<td>樣本無法代表大量產線員工</td>
+</tr>
+<tr class="even">
+<td>估計整批成衣不良率</td>
+<td>整批10,000件</td>
+<td>各箱隨機抽查共300件</td>
+<td>若抽樣分散，偏差通常較低</td>
+</tr>
+<tr class="odd">
+<td>了解食堂口味</td>
+<td>所有用餐員工</td>
+<td>只問最早到食堂的20人</td>
+<td>時間與人群可能集中</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>提醒</strong></th>
+<th><strong>樣本偏差 Sampling Bias<br />
+</strong>如果被抽到的人或產品，和整體有系統性的不同，樣本再大也可能得到錯誤結論。例如只抽最上層的成衣，無法代表整箱。</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="原始資料整理資料與指標">1.4 原始資料、整理資料與指標</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>層次</strong></th>
+<th><strong>例子</strong></th>
+<th><strong>用途</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>原始資料 Raw data</td>
+<td>每天每組的出勤、產量、不良件數</td>
+<td>保留細節，可重新分析</td>
+</tr>
+<tr class="even">
+<td>整理資料 Summary</td>
+<td>每組月產量、平均出勤、總不良</td>
+<td>快速掌握全貌</td>
+</tr>
+<tr class="odd">
+<td>指標 KPI / Metric</td>
+<td>達成率、不良率、人均產出</td>
+<td>比較表現與追蹤變化</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>管理</strong></th>
+<th><strong>管理原則<br />
+</strong>報表只剩總數而沒有原始明細時，很難驗證計算、追查異常或重新分類。統計分析必須保留可追溯的原始資料。</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h1 id="第1章練習">第1章練習</h1>
+<p><strong>思考：員工編號屬於類別資料還是數值資料？為什麼？</strong></p>
+<p>你的答案：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>思考：若要估計整批貨的不良率，應如何避免只抽到同一箱或同一位置？</strong></p>
+<p>你的答案：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>思考：每日產量與產品顏色，哪一個適合計算平均數？</strong></p>
+<p>你的答案：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>第 2 章　百分比、比例與率</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Percentages, Proportions &amp;
+Rates｜百分比最常見，也最容易因分母選錯而誤導</td>
+</tr>
+</tbody>
+</table>
+<h1 id="百分比的核心不是乘以100">2.1 百分比的核心不是乘以100%</h1>
+<p>計算百分比前，先用中文說出「誰占誰」。你關心的部分是分子，完整的比較基礎是分母。</p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>基本百分比 Percentage</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p><strong>百分比 = 部分 ÷ 整體 × 100%</strong></p>
+<p>先確認分子與分母的單位、期間和對象一致。</p></td>
+</tr>
+</tbody>
+</table>
+<p><img
+src="media/statistics/media/image4.png"
+style="width:6.49606in;height:2.50725in" /></p>
+<p><em>圖 2　三種常見比例：出勤率、不良率與達成率。</em></p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>指標</strong></th>
+<th><strong>分子</strong></th>
+<th><strong>分母</strong></th>
+<th><strong>例子</strong></th>
+<th><strong>解釋</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>出勤率</td>
+<td>實際出勤人數</td>
+<td>應出勤人數</td>
+<td>480 ÷ 500 = 96%</td>
+<td>每100名應出勤者，約96名實際出勤</td>
+</tr>
+<tr class="even">
+<td>不良率</td>
+<td>不良件數</td>
+<td>實際檢查件數</td>
+<td>120 ÷ 8,000 = 1.5%</td>
+<td>每100件檢查品，約1.5件不良</td>
+</tr>
+<tr class="odd">
+<td>達成率</td>
+<td>實際完成量</td>
+<td>目標量</td>
+<td>8,200 ÷ 9,000 = 91.1%</td>
+<td>完成目標的91.1%</td>
+</tr>
+<tr class="even">
+<td>加班占比</td>
+<td>加班人數</td>
+<td>當日出勤人數</td>
+<td>150 ÷ 480 = 31.3%</td>
+<td>當日出勤者中31.3%加班</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>判斷</strong></th>
+<th><strong>達成率可以超過100%<br />
+</strong>實際值大於目標時，達成率自然超過100%。但出勤率、不良率或人員占比通常不應超過100%，超過時先檢查定義或資料。</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="件數下降不代表比率一定改善">2.2
+件數下降，不代表比率一定改善</h2>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>月份</strong></th>
+<th><strong>不良件數</strong></th>
+<th><strong>檢查件數</strong></th>
+<th><strong>不良率</strong></th>
+<th><strong>真正結論</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6月</td>
+<td>120</td>
+<td>8,000</td>
+<td>1.50%</td>
+<td>基準</td>
+</tr>
+<tr class="even">
+<td>7月</td>
+<td>100</td>
+<td>5,000</td>
+<td>2.00%</td>
+<td>不良件數少了，但不良率反而上升</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>陷阱</strong></th>
+<th><strong>分母效應 Denominator Effect<br />
+</strong>只比較件數會忽略工作量或檢查量。產量減少時，不良件數可能下降，但品質未必改善。</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="百分點與百分比變化不是同一件事">2.3
+百分點與百分比變化不是同一件事</h2>
+<p>舊不良率3.0%，新不良率2.1%。</p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>百分點差 Percentage-point difference</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p><strong>3.0% − 2.1% = 0.9 個百分點</strong></p>
+<p>用來描述兩個百分率直接相減。</p></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>相對改善率 Relative improvement</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p><strong>(3.0% − 2.1%) ÷ 3.0% = 30%</strong></p>
+<p>表示相對於原來3.0%，改善了30%。</p></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>寫法</strong></th>
+<th><strong>報告應寫清楚<br />
+</strong>建議寫成：「不良率由3.0%降至2.1%，下降0.9個百分點，相對改善30%。」不要只寫「下降30%」而沒有舊值與新值。</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="百分比檢查清單">2.4 百分比檢查清單</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>檢查項目</strong></th>
+<th><strong>你要問的問題</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>對象一致嗎？</td>
+<td>分子和分母是不是同一批人、同一批貨？</td>
+</tr>
+<tr class="even">
+<td>期間一致嗎？</td>
+<td>分子是每日，分母卻是每月嗎？</td>
+</tr>
+<tr class="odd">
+<td>單位一致嗎？</td>
+<td>件數、箱數、公斤是否混用？</td>
+</tr>
+<tr class="even">
+<td>分母合理嗎？</td>
+<td>問題問「占支出」卻除以收入嗎？</td>
+</tr>
+<tr class="odd">
+<td>基礎量夠大嗎？</td>
+<td>1件不良／10件與10件／1,000件，不確定程度不同</td>
+</tr>
+</tbody>
+</table>
+<h1 id="第2章練習">第2章練習</h1>
+<p><strong>思考：應出勤500人、缺勤18人，缺勤率是多少？請用完整中文解釋。</strong></p>
+<p>你的答案：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>思考：訂單10,000件，已完成7,600件。完成率與未完成件數各是多少？</strong></p>
+<p>你的答案：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>思考：不良率從4%降到3%，是下降1個百分點，還是改善25%？兩種說法都寫出來。</strong></p>
+<p>你的答案：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>第 3 章　平均數、中位數與眾數</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Mean, Median &amp;
+Mode｜「平均」不一定代表一般人，也不一定代表穩定</td>
+</tr>
+</tbody>
+</table>
+<h1 id="三種代表值回答不同問題">3.1 三種代表值回答不同問題</h1>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>代表值</strong></th>
+<th><strong>英文</strong></th>
+<th><strong>怎麼找</strong></th>
+<th><strong>適合回答</strong></th>
+<th><strong>主要限制</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>平均數</td>
+<td>Mean</td>
+<td>全部加總 ÷ 個數</td>
+<td>整體平均水準</td>
+<td>容易受極端值影響</td>
+</tr>
+<tr class="even">
+<td>中位數</td>
+<td>Median</td>
+<td>排序後位於中間</td>
+<td>一般或典型水準</td>
+<td>不反映每個數值距離</td>
+</tr>
+<tr class="odd">
+<td>眾數</td>
+<td>Mode</td>
+<td>出現次數最多</td>
+<td>最常見類別或數值</td>
+<td>可能沒有或不只一個</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>平均數 Arithmetic Mean</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p><strong>平均數 = 所有數值加總 ÷ 數值個數</strong></p>
+<p>Excel：=AVERAGE(範圍)</p></td>
+</tr>
+</tbody>
+</table>
+<h2 id="薪資案例平均數為何會誤導">3.2 薪資案例：平均數為何會誤導？</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>人員</strong></th>
+<th><strong>A</strong></th>
+<th><strong>B</strong></th>
+<th><strong>C</strong></th>
+<th><strong>D</strong></th>
+<th><strong>主管</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>月薪 USD</td>
+<td>380</td>
+<td>400</td>
+<td>420</td>
+<td>420</td>
+<td>5,000</td>
+</tr>
+</tbody>
+</table>
+<p><img
+src="media/statistics/media/image5.png"
+style="width:6.37795in;height:3.01994in" /></p>
+<p><em>圖
+3　主管的高薪將平均數拉到1,324美元，但一般員工都不超過420美元。</em></p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>統計量</strong></th>
+<th><strong>結果</strong></th>
+<th><strong>適合的解釋</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>平均數 Mean</td>
+<td>$1,324</td>
+<td>全部薪資平均分配後的數字，但不代表一般員工</td>
+</tr>
+<tr class="even">
+<td>中位數 Median</td>
+<td>$420</td>
+<td>排序後中間值，較接近典型員工</td>
+</tr>
+<tr class="odd">
+<td>眾數 Mode</td>
+<td>$420</td>
+<td>最常出現的薪資</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>選擇</strong></th>
+<th><strong>重點<br />
+</strong>平均數沒有算錯；錯的是把它用來回答不合適的問題。看房價、薪資、交期延誤等偏斜資料時，中位數通常更有代表性。</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="平均相同穩定度可能完全不同">3.3
+平均相同，穩定度可能完全不同</h2>
+<p><img
+src="media/statistics/media/image6.png"
+style="width:6.49606in;height:3.21515in" /></p>
+<p><em>圖 4　A組與B組五天平均都是800件，但B組波動更大。</em></p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>組別</strong></th>
+<th><strong>五日產量</strong></th>
+<th><strong>平均</strong></th>
+<th><strong>全距（最大−最小）</strong></th>
+<th><strong>管理判斷</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A組</td>
+<td>800、810、805、795、790</td>
+<td>800</td>
+<td>20</td>
+<td>穩定，可進一步看是否能提升平均</td>
+</tr>
+<tr class="even">
+<td>B組</td>
+<td>500、650、800、950、1,100</td>
+<td>800</td>
+<td>600</td>
+<td>平均相同但不穩定，先查條件變化</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>全距 Range</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p><strong>全距 = 最大值 − 最小值</strong></p>
+<p>它是最簡單的波動指標，但只使用最高與最低兩個數。</p></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>延伸</strong></th>
+<th><strong>下一冊預告<br />
+</strong>後續會學變異數與標準差（Standard
+Deviation）：用全部數據衡量波動，比全距更完整。</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="怎麼選代表值">3.4 怎麼選代表值？</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>資料情況</strong></th>
+<th><strong>優先考慮</strong></th>
+<th><strong>例子</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>數據大致對稱、沒有明顯極端值</td>
+<td>平均數</td>
+<td>正常穩定的每日工時</td>
+</tr>
+<tr class="even">
+<td>有極端高值或低值、資料明顯偏斜</td>
+<td>中位數</td>
+<td>薪資、房價、延遲天數</td>
+</tr>
+<tr class="odd">
+<td>想知道最常見類別或尺寸</td>
+<td>眾數</td>
+<td>最常見衣服尺寸、最常見缺陷</td>
+</tr>
+<tr class="even">
+<td>要判斷穩定度</td>
+<td>平均＋全距／標準差</td>
+<td>生產組每日產量</td>
+</tr>
+</tbody>
+</table>
+<h1 id="第3章練習">第3章練習</h1>
+<p><strong>思考：五筆交期延誤為0、1、1、2、30天。平均數與中位數哪個更能代表一般訂單？</strong></p>
+<p>你的答案：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>思考：兩組平均產量都為900件，能否直接判定表現一樣？還需要看什麼？</strong></p>
+<p>你的答案：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>思考：尺寸M、L、L、XL、L、M，眾數是多少？它能回答什麼問題？</strong></p>
+<p>你的答案：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>第 4 章　圖表判讀</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Chart Literacy｜圖表的任務是讓關係更清楚，不是讓差異看起來更大</td>
+</tr>
+</tbody>
+</table>
+<h1 id="先問問題再選圖表">4.1 先問問題，再選圖表</h1>
+<p><img
+src="media/statistics/media/image7.png"
+style="width:6.69291in;height:3.39342in" /></p>
+<p><em>圖 5　圖表選擇取決於你要回答的問題。</em></p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>問題類型</strong></th>
+<th><strong>推薦圖表</strong></th>
+<th><strong>典型例子</strong></th>
+<th><strong>注意事項</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>比較不同類別高低</td>
+<td>長條圖 Bar chart</td>
+<td>各組產量、各類不良件數</td>
+<td>類別太多時難讀</td>
+</tr>
+<tr class="even">
+<td>觀察隨時間變化</td>
+<td>折線圖 Line chart</td>
+<td>每日產量、每月成本</td>
+<td>時間順序不可打亂</td>
+</tr>
+<tr class="odd">
+<td>看整體由哪些部分組成</td>
+<td>圓餅／100%堆疊圖</td>
+<td>支出占比、客戶占比</td>
+<td>類別不宜過多</td>
+</tr>
+<tr class="even">
+<td>看數值集中與分散</td>
+<td>直方圖 Histogram</td>
+<td>產品重量、工時分布</td>
+<td>不是一般長條圖</td>
+</tr>
+<tr class="odd">
+<td>看兩個數值是否一起變</td>
+<td>散布圖 Scatter plot</td>
+<td>人數與產量</td>
+<td>相關不等於因果</td>
+</tr>
+</tbody>
+</table>
+<h2 id="看圖五問">4.2 看圖五問</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>問題</strong></th>
+<th><strong>檢查內容</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>標題說的是什麼？</td>
+<td>是否明確寫出指標、對象與期間？</td>
+</tr>
+<tr class="even">
+<td>橫軸與縱軸是什麼？</td>
+<td>單位是件、人、美元、百分比還是天？</td>
+</tr>
+<tr class="odd">
+<td>縱軸從哪裡開始？</td>
+<td>不從0開始是否刻意放大差異？</td>
+</tr>
+<tr class="even">
+<td>資料期間完整嗎？</td>
+<td>是否只挑有利月份，忽略前後趨勢？</td>
+</tr>
+<tr class="odd">
+<td>結論被原始數據支持嗎？</td>
+<td>圖形看起來相關，但是否還有其他原因？</td>
+</tr>
+</tbody>
+</table>
+<p><img
+src="media/statistics/media/image8.png"
+style="width:6.53543in;height:2.89273in" /></p>
+<p><em>圖
+6　相同的800、820、840，因縱軸範圍不同而產生完全不同的視覺感受。</em></p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>判讀</strong></th>
+<th><strong>截斷縱軸不一定錯<br />
+</strong>在需要觀察小幅波動的工程圖表中，縮小縱軸範圍有時合理；但必須清楚標示，不能讓讀者誤以為差距非常巨大。</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="相關不等於因果">4.3 相關不等於因果</h2>
+<p>如果出勤人數增加時，產量也常增加，兩者可能有正相關（Positive
+Correlation）。但這不代表「只要加人就一定增加同樣比例的產量」。款式難度、物料、機台、技能與加班都可能同時影響結果。</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>限制</strong></th>
+<th><strong>因果判斷 Causation<br />
+</strong>要說A造成B，通常需要更完整的設計與證據，例如控制其他條件、比較改善前後，或使用隨機實驗。單一散布圖通常只能說「有關係」。</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h1 id="第4章練習">第4章練習</h1>
+<p><strong>思考：想呈現六個月的產量趨勢，應選長條圖還是折線圖？為什麼？</strong></p>
+<p>你的答案：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>思考：看到圖表顯示A組比B組高很多，你最先檢查哪三項？</strong></p>
+<p>你的答案：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>思考：人數與產量呈正相關，是否可以直接說增加10%人數就會增加10%產量？</strong></p>
+<p>你的答案：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>第 5 章　車縫組綜合案例</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Integrated Sewing-Line Case｜把數據轉成管理問題與行動</td>
+</tr>
+</tbody>
+</table>
+<h1 id="案例資料">5.1 案例資料</h1>
+<p>以下是八個車縫組某日的簡化數據。目標不是找「最好」或「最差」的組，而是學會同時看產量、人數、目標與品質。</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>組別</strong></th>
+<th><strong>出勤人數</strong></th>
+<th><strong>實際產量</strong></th>
+<th><strong>目標產量</strong></th>
+<th><strong>不良率</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1組</td>
+<td>28</td>
+<td>820</td>
+<td>900</td>
+<td>1.2%</td>
+</tr>
+<tr class="even">
+<td>2組</td>
+<td>30</td>
+<td>910</td>
+<td>900</td>
+<td>1.6%</td>
+</tr>
+<tr class="odd">
+<td>3組</td>
+<td>25</td>
+<td>760</td>
+<td>800</td>
+<td>1.1%</td>
+</tr>
+<tr class="even">
+<td>4組</td>
+<td>32</td>
+<td>980</td>
+<td>950</td>
+<td>2.9%</td>
+</tr>
+<tr class="odd">
+<td>5組</td>
+<td>26</td>
+<td>690</td>
+<td>800</td>
+<td>0.9%</td>
+</tr>
+<tr class="even">
+<td>6組</td>
+<td>29</td>
+<td>870</td>
+<td>850</td>
+<td>1.0%</td>
+</tr>
+<tr class="odd">
+<td>7組</td>
+<td>27</td>
+<td>810</td>
+<td>850</td>
+<td>2.7%</td>
+</tr>
+<tr class="even">
+<td>8組</td>
+<td>31</td>
+<td>930</td>
+<td>950</td>
+<td>1.2%</td>
+</tr>
+</tbody>
+</table>
+<p><img
+src="media/statistics/media/image9.png"
+style="width:6.69291in;height:2.8674in" /></p>
+<p><em>圖 7　實際產量、目標產量與不良率需要一起看。</em></p>
+<h2 id="四個基本指標">5.2 四個基本指標</h2>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>人均產出 Output per person</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p><strong>實際產量 ÷ 出勤人數</strong></p>
+<p>用來減少不同人數造成的比較偏差；仍需考慮款式與工時。</p></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>達成率 Achievement rate</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p><strong>實際產量 ÷ 目標產量</strong></p>
+<p>判斷是否達到當日目標。</p></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>不良率 Defect rate</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p><strong>不良件數 ÷ 檢查件數</strong></p>
+<p>比較品質時必須使用相同定義與抽查方式。</p></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>整體加權不良率 Weighted defect rate</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p><strong>總不良件數 ÷ 總檢查件數</strong></p>
+<p>不能直接把各組不良率加總後除以組數，除非每組檢查量完全相同。</p></td>
+</tr>
+</tbody>
+</table>
+<h2 id="管理判讀">5.3 管理判讀</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>組別</strong></th>
+<th><strong>數據訊號</strong></th>
+<th><strong>不能直接下的結論</strong></th>
+<th><strong>優先追查</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4組</td>
+<td>達成103.2%，但不良率2.9%</td>
+<td>不能只因產量最高而表揚</td>
+<td>返修、操作速度、QC放行、款式難度</td>
+</tr>
+<tr class="even">
+<td>5組</td>
+<td>達成86.3%，不良率0.9%</td>
+<td>不能只說員工效率差</td>
+<td>缺料、機台、換款、技能、目標合理性</td>
+</tr>
+<tr class="odd">
+<td>6組</td>
+<td>達成102.4%，不良率1.0%</td>
+<td>單日好不代表長期穩定</td>
+<td>連續多日趨勢、工時與款式</td>
+</tr>
+<tr class="even">
+<td>7組</td>
+<td>達成95.3%，不良率2.7%</td>
+<td>不能只看接近目標</td>
+<td>主要缺陷類型與返修成本</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>核心</strong></th>
+<th><strong>統計是追查起點<br />
+</strong>數據本身通常不能告訴你完整原因。好的分析會指出：哪個訊號不正常、可能有哪些解釋、需要補查什麼資料，以及如何驗證。</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="建議的管理順序">5.4 建議的管理順序</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>順序</strong></th>
+<th><strong>管理動作</strong></th>
+<th><strong>例子</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>先確認資料定義與正確性</td>
+<td>產量是否含返工？檢查件數是否一致？</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>比較目標、歷史與同類條件</td>
+<td>相同款式、相似人數、相同工時再比較</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>辨認產能與品質的權衡</td>
+<td>高產是否伴隨高不良或高返工？</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>到現場追查原因</td>
+<td>物料、機台、技能、平衡、等待、管理</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>設定改善與驗證期間</td>
+<td>改善後連續追蹤，不用單日數字宣告成功</td>
+</tr>
+</tbody>
+</table>
+<h1 id="第5章練習">第5章練習</h1>
+<p><strong>思考：你會優先追查4組還是5組？兩者的問題有何不同？</strong></p>
+<p>你的答案：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>思考：若不同組生產不同款式，可以直接用人均產出排名嗎？還需要哪些條件？</strong></p>
+<p>你的答案：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>思考：整體不良率應如何計算？為什麼不能直接平均每組百分比？</strong></p>
+<p>你的答案：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>第 6 章　綜合測驗與答案</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Review &amp; Assessment｜先作答，再核對；能解釋比答對更重要</td>
+</tr>
+</tbody>
+</table>
+<h1 id="綜合測驗15題">6.1 綜合測驗（15題）</h1>
+<p><strong>1．組別1、2、3屬於哪一類資料？</strong></p>
+<blockquote>
+<p>A 類別資料　B 連續數值　C 比例資料</p>
+</blockquote>
+<p>答案：＿＿＿　理由：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>2．抽查整批貨中的300件，300件稱為什麼？</strong></p>
+<blockquote>
+<p>A 母體　B 樣本　C 變數</p>
+</blockquote>
+<p>答案：＿＿＿　理由：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>3．出勤480人、應出勤500人，出勤率是多少？</strong></p>
+<blockquote>
+<p>A 96%　B 104.2%　C 20%</p>
+</blockquote>
+<p>答案：＿＿＿　理由：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>4．計算不良率時，正確分母通常是什麼？</strong></p>
+<blockquote>
+<p>A 不良件數　B 檢查總件數　C 出勤人數</p>
+</blockquote>
+<p>答案：＿＿＿　理由：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>5．實際產量9,500、目標9,000，達成率是多少？</strong></p>
+<blockquote>
+<p>A 94.7%　B 105.6%　C 500%</p>
+</blockquote>
+<p>答案：＿＿＿　理由：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>6．380、400、420、420、5,000的中位數是多少？</strong></p>
+<blockquote>
+<p>A 420　B 1,324　C 5,000</p>
+</blockquote>
+<p>答案：＿＿＿　理由：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>7．極端高值通常對哪個統計量影響較大？</strong></p>
+<blockquote>
+<p>A 平均數　B 中位數　C 一定是眾數</p>
+</blockquote>
+<p>答案：＿＿＿　理由：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>8．想看每日產量趨勢，優先使用哪一種圖？</strong></p>
+<blockquote>
+<p>A 折線圖　B 圓餅圖　C 文字段落</p>
+</blockquote>
+<p>答案：＿＿＿　理由：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>9．想比較八個車縫組產量，優先使用哪一種圖？</strong></p>
+<blockquote>
+<p>A 長條圖　B 圓餅圖　C 直方圖</p>
+</blockquote>
+<p>答案：＿＿＿　理由：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>10．圖表縱軸不從0開始，可能造成什麼？</strong></p>
+<blockquote>
+<p>A 視覺放大差異　B 數值自動正確　C 完全沒有影響</p>
+</blockquote>
+<p>答案：＿＿＿　理由：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>11．兩組平均產量相同，代表穩定度也相同嗎？</strong></p>
+<blockquote>
+<p>A 一定相同　B 不一定　C 一定不同</p>
+</blockquote>
+<p>答案：＿＿＿　理由：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>12．不良件數下降，代表品質一定改善嗎？</strong></p>
+<blockquote>
+<p>A 是　B 不一定，要看檢查量　C 只看產量即可</p>
+</blockquote>
+<p>答案：＿＿＿　理由：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>13．達成率可以超過100%嗎？</strong></p>
+<blockquote>
+<p>A 可以　B 不可以　C 只有不良率可以</p>
+</blockquote>
+<p>答案：＿＿＿　理由：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>14．只訪問辦公室人員推估全廠滿意度，主要風險是什麼？</strong></p>
+<blockquote>
+<p>A 樣本偏差　B 平均數太小　C 沒有分母</p>
+</blockquote>
+<p>答案：＿＿＿　理由：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<p><strong>15．統計分析完成後最重要的下一步是什麼？</strong></p>
+<blockquote>
+<p>A 保存報表即可　B 解釋結果並決定追查項目　C 刪除原始資料</p>
+</blockquote>
+<p>答案：＿＿＿　理由：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</p>
+<h1 id="答案與簡要解析">6.2 答案與簡要解析</h1>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>題號</strong></th>
+<th><strong>答案</strong></th>
+<th><strong>解析</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>A</td>
+<td>組號只是名稱，不適合做算術平均。</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>B</td>
+<td>從母體中取得的一部分稱為樣本。</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>A</td>
+<td>480÷500=96%。</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>B</td>
+<td>不良件數要除以實際檢查的總件數。</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>B</td>
+<td>9,500÷9,000=105.6%，達成率可超過100%。</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>A</td>
+<td>排序後第三個數是420。</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>A</td>
+<td>平均數使用全部數值，容易被極端值拉動。</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>A</td>
+<td>折線圖適合觀察時間趨勢。</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>A</td>
+<td>長條圖適合比較不同類別的高低。</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>A</td>
+<td>截斷縱軸可能把小差距畫得很誇張。</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>B</td>
+<td>平均相同，波動範圍仍可完全不同。</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>B</td>
+<td>檢查量減少時，不良件數可能自然下降。</td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td>A</td>
+<td>實際值超過目標時，達成率會超過100%。</td>
+</tr>
+<tr class="even">
+<td>14</td>
+<td>A</td>
+<td>樣本未涵蓋產線員工，可能無法代表全廠。</td>
+</tr>
+<tr class="odd">
+<td>15</td>
+<td>B</td>
+<td>統計要轉化成判斷、追查與行動。</td>
+</tr>
+</tbody>
+</table>
+<h1 id="常用統計中英名詞表">常用統計中英名詞表</h1>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>中文</strong></th>
+<th><strong>English</strong></th>
+<th><strong>白話解釋</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>統計學</td>
+<td>Statistics</td>
+<td>收集、整理、分析與解釋資料的方法</td>
+</tr>
+<tr class="even">
+<td>資料</td>
+<td>Data</td>
+<td>被記錄下來的事實、類別或數值</td>
+</tr>
+<tr class="odd">
+<td>變數</td>
+<td>Variable</td>
+<td>每個對象可能不同的特徵</td>
+</tr>
+<tr class="even">
+<td>母體</td>
+<td>Population</td>
+<td>真正想研究的全部對象</td>
+</tr>
+<tr class="odd">
+<td>樣本</td>
+<td>Sample</td>
+<td>從母體抽出的一部分</td>
+</tr>
+<tr class="even">
+<td>平均數</td>
+<td>Mean</td>
+<td>全部加總後除以個數</td>
+</tr>
+<tr class="odd">
+<td>中位數</td>
+<td>Median</td>
+<td>排序後位於中間的數</td>
+</tr>
+<tr class="even">
+<td>眾數</td>
+<td>Mode</td>
+<td>出現次數最多的值</td>
+</tr>
+<tr class="odd">
+<td>百分比</td>
+<td>Percentage</td>
+<td>把比例換成每100份來表示</td>
+</tr>
+<tr class="even">
+<td>比率</td>
+<td>Rate</td>
+<td>事件相對於基礎量的發生程度</td>
+</tr>
+<tr class="odd">
+<td>極端值</td>
+<td>Outlier</td>
+<td>明顯遠離其他數據的觀察值</td>
+</tr>
+<tr class="even">
+<td>全距</td>
+<td>Range</td>
+<td>最大值減最小值</td>
+</tr>
+<tr class="odd">
+<td>長條圖</td>
+<td>Bar chart</td>
+<td>比較不同類別高低</td>
+</tr>
+<tr class="even">
+<td>折線圖</td>
+<td>Line chart</td>
+<td>觀察隨時間變化</td>
+</tr>
+<tr class="odd">
+<td>直方圖</td>
+<td>Histogram</td>
+<td>觀察連續數值的分布</td>
+</tr>
+<tr class="even">
+<td>散布圖</td>
+<td>Scatter plot</td>
+<td>觀察兩個數值的關係</td>
+</tr>
+<tr class="odd">
+<td>相關</td>
+<td>Correlation</td>
+<td>兩個變數一起變化的程度</td>
+</tr>
+<tr class="even">
+<td>因果</td>
+<td>Causation</td>
+<td>一個因素造成另一個結果的關係</td>
+</tr>
+</tbody>
+</table>
+<h1 id="參考資源與後續學習">參考資源與後續學習</h1>
+<p>本教材的案例、說明與練習為重新編寫；以下公開資源用來核對初級統計課程範圍，並可作為延伸學習。</p>
+<p><strong>OpenStax Introductory Statistics
+2e：</strong>完整的一學期初級統計架構，強調跨領域實際應用。 <a
+href="https://openstax.org/details/books/introductory-statistics-2e"><u>https://openstax.org/details/books/introductory-statistics-2e</u></a></p>
+<p><strong>OpenStax Introductory Business Statistics
+2e：</strong>偏商業與管理應用，包含逐步公式解說。 <a
+href="https://openstax.org/details/books/introductory-business-statistics-2e"><u>https://openstax.org/details/books/introductory-business-statistics-2e</u></a></p>
+<p><strong>Khan Academy - Statistics and
+Probability：</strong>影片、文章與練習，可依不懂的主題補課。 <a
+href="https://www.khanacademy.org/math/statistics-probability"><u>https://www.khanacademy.org/math/statistics-probability</u></a></p>
+<p><strong>Seeing Theory - Brown
+University：</strong>用互動圖形理解機率、分布、推論與迴歸。 <a
+href="https://seeing-theory.brown.edu/"><u>https://seeing-theory.brown.edu/</u></a></p>
+<p><strong>NIST/SEMATECH e-Handbook of Statistical
+Methods：</strong>工程、品質與製程統計的後續參考。 <a
+href="https://www.itl.nist.gov/div898/handbook/"><u>https://www.itl.nist.gov/div898/handbook/</u></a></p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>路線</strong></th>
+<th><strong>下一階段建議<br />
+</strong>第二冊可接續：全距、變異數、標準差、常態分布、Z分數、抽樣與信賴區間；第三冊再進入假設檢定、相關、迴歸與SPC管制圖。</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p><img
+src="media/statistics/media/image3.png"
+style="width:6.41732in;height:2.41161in" /></p>
+<p><strong>學會統計，不是為了把報表做得更複雜，而是讓決策更不容易被錯誤數字帶走。</strong></p>
+<a class="back" href="../../index.html?view=learning">← AC Admin</a></body>
+</html>
