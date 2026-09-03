@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>平織成衣入門|從零開始</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a1a1a; --gray:#6b6b6b; --paper:#faf8f4; --khaki:#b8a67a; --linen:#ede7da;
+  --navy:#1f3864; --khaki-d:#8f7d52; --card:#ffffff;
+  --serif:'Noto Serif TC','PMingLiU',serif;
+  --sans:'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.85;font-size:16px}
+.wrap{max-width:880px;margin:0 auto;padding:0 20px}
+
+/* ---------- hero ---------- */
+header{background:var(--ink);color:var(--paper);padding:52px 0 40px;position:relative;overflow:hidden}
+.eyebrow{color:var(--khaki);letter-spacing:.35em;font-size:12px;font-weight:700;text-transform:uppercase;margin-bottom:14px}
+h1.title{font-family:var(--serif);font-weight:900;font-size:clamp(30px,6vw,52px);line-height:1.25;margin-bottom:10px}
+.sub{color:#b9b3a6;font-size:15px;max-width:520px}
+.weave-panel{margin-top:30px;background:#232323;border:1px solid #3a3a3a;border-radius:14px;padding:20px}
+.weave-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.weave-tabs button{font-family:var(--sans);font-size:14px;font-weight:700;padding:8px 18px;border-radius:999px;border:1px solid #4a4a4a;background:transparent;color:#cfc8b8;cursor:pointer;transition:.2s}
+.weave-tabs button.on{background:var(--khaki);border-color:var(--khaki);color:#1a1a1a}
+.weave-stage{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+#weaveSvg{background:#2c2c2c;border-radius:10px;flex:0 0 auto}
+.weave-info{flex:1;min-width:220px}
+.weave-info h3{font-family:var(--serif);font-size:22px;color:var(--linen);margin-bottom:6px}
+.weave-info p{font-size:14px;color:#b9b3a6}
+.weave-info .ex{margin-top:10px;font-size:13px;color:var(--khaki);border-left:3px solid var(--khaki);padding-left:10px}
+.legend{margin-top:14px;font-size:12px;color:#9a948a}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin:0 5px -1px 12px}
+
+/* ---------- nav ---------- */
+nav.toc{position:sticky;top:0;z-index:50;background:rgba(250,248,244,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--linen)}
+nav.toc .wrap{display:flex;gap:6px;overflow-x:auto;padding:10px 20px;scrollbar-width:none}
+nav.toc a{flex:0 0 auto;font-size:13px;font-weight:500;color:var(--gray);text-decoration:none;padding:6px 13px;border-radius:999px;border:1px solid transparent}
+nav.toc a:hover{color:var(--ink);border-color:var(--khaki)}
+
+/* ---------- lessons ---------- */
+section.lesson{padding:54px 0 10px}
+.lesson-tag{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+.lesson-tag .no{font-family:var(--serif);font-weight:900;font-size:15px;color:var(--khaki-d);letter-spacing:.15em}
+.lesson-tag h2{font-family:var(--serif);font-weight:900;font-size:clamp(22px,4vw,30px)}
+.lesson p.lead{color:#444;margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--linen);border-radius:14px;padding:22px;margin:16px 0;box-shadow:0 1px 3px rgba(26,26,26,.04)}
+.tip{background:#faf6ea;border-left:4px solid var(--khaki);border-radius:0 10px 10px 0;padding:14px 16px;margin:14px 0;font-size:14.5px;color:#5a5a5a}
+.tip b{color:#7a6520}
+.key{background:#e9edf5;border-left:4px solid var(--navy);border-radius:0 10px 10px 0;padding:14px 16px;margin:14px 0;font-size:15px;font-weight:700;color:var(--navy)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:10px 0}
+th{background:var(--navy);color:#fff;font-weight:700;padding:9px 10px;text-align:left}
+td{padding:9px 10px;border-bottom:1px solid var(--linen);vertical-align:top}
+tr:nth-child(even) td{background:#f6f4ee}
+.small{font-size:13px;color:var(--gray)}
+
+/* spec reader */
+.specline{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;background:var(--ink);border-radius:12px;padding:18px 14px;margin:14px 0 8px}
+.specline span{font-family:var(--serif);font-weight:900;font-size:clamp(16px,3.4vw,24px);color:var(--linen);padding:4px 10px;border-radius:8px;cursor:pointer;transition:.15s;border:1px dashed transparent}
+.specline span:hover,.specline span.on{background:var(--khaki);color:#1a1a1a}
+#specExplain{min-height:56px;text-align:center;font-size:14.5px;color:#444;padding:10px 8px}
+#specExplain b{color:var(--navy)}
+
+/* calculators */
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:12px 0}
+.calc label{font-size:12.5px;color:var(--gray);display:block;margin-bottom:4px;font-weight:500}
+.calc input{width:100%;padding:9px 10px;border:1px solid #d8d2c2;border-radius:9px;font-size:16px;font-family:var(--sans);background:#fff;color:var(--ink)}
+.calc input:focus{outline:2px solid var(--khaki);border-color:var(--khaki)}
+.result{background:var(--ink);color:var(--paper);border-radius:12px;padding:18px;margin-top:10px}
+.result .big{font-family:var(--serif);font-weight:900;font-size:34px;color:var(--khaki)}
+.result .formula{font-size:13px;color:#b9b3a6;margin-top:4px}
+.stack{display:flex;height:26px;border-radius:8px;overflow:hidden;margin:12px 0 6px}
+.stack div{height:100%;transition:width .4s}
+.stacklegend{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:#b9b3a6}
+.stacklegend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px}
+
+/* quiz */
+.q{border:1px solid var(--linen);border-radius:12px;padding:14px 16px;margin:10px 0;background:#fff}
+.q .qt{font-weight:700;margin-bottom:6px}
+.q button{font-family:var(--sans);font-size:13px;border:1px solid var(--khaki);background:transparent;color:var(--khaki-d);border-radius:999px;padding:4px 14px;cursor:pointer}
+.q .ans{display:none;margin-top:8px;font-size:14px;color:var(--navy);background:#f0ede4;border-radius:8px;padding:9px 12px}
+.q.open .ans{display:block}
+
+footer{margin-top:60px;padding:34px 0;background:var(--ink);color:#9a948a;font-size:13px;text-align:center}
+footer b{color:var(--khaki)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Woven Garment 101 · Simply the Minimalist</div>
+    <h1 class="title">從零開始的<br>平織成衣入門</h1>
+    <p class="sub">用你身上的襯衫、牛仔褲、家裡的床單,一步步搞懂布怎麼織、衣服怎麼做、成本怎麼算。</p>
+
+    <div class="weave-panel">
+      <div class="weave-tabs">
+        <button class="on" data-w="plain">平紋 Plain</button>
+        <button data-w="twill">斜紋 Twill</button>
+        <button data-w="satin">緞紋 Satin</button>
+      </div>
+      <div class="weave-stage">
+        <svg id="weaveSvg" width="240" height="240" viewBox="0 0 240 240" role="img" aria-label="織法模擬器"></svg>
+        <div class="weave-info">
+          <h3 id="wName">平紋 Plain</h3>
+          <p id="wDesc">經紗與緯紗一上一下、最緊密的交錯。布面平整、結構最穩,但手感偏硬挺。</p>
+          <div class="ex" id="wEx">日常例子:襯衫布(府綢)、床單、手帕</div>
+          <div class="legend">圖例:<i style="background:#5b79b4"></i>經紗(直向)<i style="background:#c9a86a"></i>緯紗(橫向)——點上方按鈕切換織法</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc"><div class="wrap">
+  <a href="#l1">1 紗</a><a href="#l2">2 平織vs針織</a><a href="#l3">3 三大組織</a><a href="#l4">4 讀規格</a>
+  <a href="#l5">5 工廠旅程</a><a href="#l6">6 作工與SMV</a><a href="#l7">7 耗量</a><a href="#l8">8 成本FOB</a><a href="#l9">9 測驗</a>
+</div></nav>
+
+<main class="wrap">
+
+<!-- 第1課 -->
+<section class="lesson" id="l1">
+  <div class="lesson-tag"><span class="no">第 1 課</span><h2>布是從哪裡來的:從棉花到紗</h2></div>
+  <p class="lead">一件衣服往回推是布,布往回推是紗,紗往回推是纖維。棉花經過梳理、拉細、加捻,就變成一根有強度的「紗」。</p>
+  <div class="tip"><b>生活比喻:</b>抓一小撮棉花邊搓邊轉,它會變成一小段線——紡紗廠做的就是這件事,只是用機器做得又快又均勻。</div>
+  <div class="card">
+    <b>紗支(支數):紗的粗細怎麼講</b>
+    <p class="small" style="margin:6px 0 10px">工廠不說粗紗細紗,而是說「幾支」(20s、40s)。方向只有一個:</p>
+    <div class="key" style="margin-top:0">支數越大 → 紗越細 → 布越輕薄細緻,通常也越貴。</div>
+    <table>
+      <tr><th>紗支</th><th>粗細感覺</th><th>日常例子</th></tr>
+      <tr><td>7s–10s(粗)</td><td>像麻繩般厚實</td><td>牛仔褲、帆布袋</td></tr>
+      <tr><td>16s–21s</td><td>一般</td><td>T 恤、工作服</td></tr>
+      <tr><td>30s–40s</td><td>細滑</td><td>普通商務襯衫、床單</td></tr>
+      <tr><td>60s–100s(細)</td><td>輕薄如絲</td><td>高級襯衫、精梳床組</td></tr>
+    </table>
+    <p class="small">小知識:「40s/2」的 2 代表兩根 40 支紗合捻成一股(股線),更強韌飽滿,常用於高級襯衫。</p>
+  </div>
+</section>
+
+<!-- 第2課 -->
+<section class="lesson" id="l2">
+  <div class="lesson-tag"><span class="no">第 2 課</span><h2>平織與針織:為什麼襯衫不彈、T 恤會彈</h2></div>
+  <p class="lead">分辨方法極簡單:<b>拉拉看</b>。襯衫怎麼拉都不太動,是平織;T 恤一拉就伸長回彈,是針織。</p>
+  <div class="card">
+    <table>
+      <tr><th>比較</th><th>平織 Woven</th><th>針織 Knit</th></tr>
+      <tr><td>結構</td><td>經緯兩組紗十字交錯(編竹籃)</td><td>一根紗打圈相扣(織毛衣)</td></tr>
+      <tr><td>彈性</td><td>幾乎沒有</td><td>天生有彈性</td></tr>
+      <tr><td>外觀</td><td>挺、有型、容易皺</td><td>軟、貼身、不太皺</td></tr>
+      <tr><td>裁剪後</td><td>布邊會鬚 → 要拷克收邊</td><td>布邊會捲、線圈會脫散</td></tr>
+      <tr><td>日常例子</td><td>襯衫、牛仔褲、西裝、床單</td><td>T 恤、Polo、內衣、襪子</td></tr>
+    </table>
+  </div>
+  <div class="key">本教材聚焦「平織」:結構穩定、尺寸好控制,但沒彈性,所以版型與尺寸精準度特別重要。</div>
+</section>
+
+<!-- 第3課 -->
+<section class="lesson" id="l3">
+  <div class="lesson-tag"><span class="no">第 3 課</span><h2>平織三大基本組織</h2></div>
+  <p class="lead">同樣是經緯交錯,「怎麼交錯」不同,布的長相就完全不同。回到最上方的<b>織法模擬器</b>切換三種組織,對照下表:</p>
+  <div class="card">
+    <table>
+      <tr><th>組織</th><th>交錯規律</th><th>特性</th><th>日常例子</th></tr>
+      <tr><td><b>平紋</b> Plain</td><td>一上一下,最密集</td><td>最穩最耐磨,手感較硬</td><td>襯衫布、床單、手帕</td></tr>
+      <tr><td><b>斜紋</b> Twill</td><td>規律錯開,出現斜線</td><td>厚實、垂墜、耐穿</td><td>牛仔褲、卡其褲、工作服</td></tr>
+      <tr><td><b>緞紋</b> Satin</td><td>長浮紗,交錯點最少</td><td>光滑有光澤,易勾紗</td><td>領帶、飯店緞面床單</td></tr>
+    </table>
+  </div>
+  <div class="tip"><b>生活比喻:</b>看牛仔褲表面那一條條 45 度斜線——就是斜紋。摸襯衫,平平沒方向——就是平紋。交錯點越多越穩越硬,越少越滑越亮也越脆弱。</div>
+</section>
+
+<!-- 第4課 -->
+<section class="lesson" id="l4">
+  <div class="lesson-tag"><span class="no">第 4 課</span><h2>看懂布的規格:點一段,解一段</h2></div>
+  <p class="lead">採購單上常見這樣一行密碼。<b>點(或滑過)每一段</b>,看它是什麼意思:</p>
+  <div class="specline" id="specline">
+    <span data-k="c">C100%</span><span data-k="y">40×40</span><span style="cursor:default;opacity:.4">/</span><span data-k="d">133×72</span><span data-k="w">57/58"</span><span data-k="g">115gsm</span>
+  </div>
+  <div id="specExplain">👆 點任一段開始</div>
+  <div class="tip"><b>生活比喻:</b>克重(gsm)像紙的磅數:影印紙薄、名片厚。115 gsm 是輕薄襯衫布,340 gsm 就是硬挺牛仔布。</div>
+  <div class="key">讀規格順序:成分 → 紗支 → 密度 → 幅寬 → 克重。會讀這一行,就能跟布廠、跟客戶對話。</div>
+</section>
+
+<!-- 第5課 -->
+<section class="lesson" id="l5">
+  <div class="lesson-tag"><span class="no">第 5 課</span><h2>一件衣服在工廠的旅程</h2></div>
+  <div class="card">
+    <table>
+      <tr><th>站點</th><th>在做什麼</th><th>新人要知道的一句話</th></tr>
+      <tr><td>① 接單看規格</td><td>確認款式、數量、交期</td><td>規格書(Tech Pack)是全廠的聖經</td></tr>
+      <tr><td>② 打版做樣衣</td><td>平面圖 → 紙版 → 樣衣</td><td>樣衣沒過,大貨不能動</td></tr>
+      <tr><td>③ 排馬克算用料</td><td>裁片像拼圖排進布寬</td><td>馬克排得好,布錢省最多</td></tr>
+      <tr><td>④ 拉布裁剪</td><td>疊布、依馬克裁片</td><td>裁錯一刀,錯一整疊</td></tr>
+      <tr><td>⑤ 車縫</td><td>生產線分工縫製</td><td>成本與效率的主戰場(第 6 課)</td></tr>
+      <tr><td>⑥ 整燙</td><td>燙平、定型</td><td>店裡看到的挺度來自這裡</td></tr>
+      <tr><td>⑦ 檢驗 QC</td><td>驗布面、量尺寸、查作工</td><td>不良品流出去,賠的是信用</td></tr>
+      <tr><td>⑧ 包裝出貨</td><td>摺衣、掛牌、裝箱裝櫃</td><td>箱嘜貼錯,到港也提不了貨</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- 第6課 -->
+<section class="lesson" id="l6">
+  <div class="lesson-tag"><span class="no">第 6 課</span><h2>車縫作工:車種、SPI、工序與 SMV</h2></div>
+  <div class="card">
+    <b>三種最常見的車</b>
+    <table>
+      <tr><th>車種</th><th>縫出來的樣子</th><th>在你衣服上的位置</th></tr>
+      <tr><td>平車(單針)</td><td>一條直線,正反面一樣</td><td>襯衫門襟、口袋壓線</td></tr>
+      <tr><td>拷克(包縫)</td><td>線把布邊包起來防鬚</td><td>襯衫內側縫份邊緣</td></tr>
+      <tr><td>雙針車</td><td>兩條平行線,牢又好看</td><td>牛仔褲側縫、T 恤下擺</td></tr>
+    </table>
+    <p class="small" style="margin-top:8px"><b>SPI</b>(每英吋針數)是品質語言:拿尺量襯衫門襟一英吋,好襯衫約 11–12 針。太少廉價易裂,太多起皺又慢。</p>
+  </div>
+  <div class="card">
+    <b>一件長袖襯衫拆成 15 道工序(簡化版,SMV 合計 ≈ 22 分)</b>
+    <table>
+      <tr><th>工序</th><th>SMV</th><th>工序</th><th>SMV</th><th>工序</th><th>SMV</th></tr>
+      <tr><td>做領子</td><td>3.5</td><td>合肩線</td><td>0.8</td><td>上袖克夫</td><td>1.4</td></tr>
+      <tr><td>上領子</td><td>1.2</td><td>上過肩</td><td>1.0</td><td>捲下擺</td><td>1.2</td></tr>
+      <tr><td>做袖克夫</td><td>2.0</td><td>車門襟</td><td>1.5</td><td>鎖釦眼</td><td>1.0</td></tr>
+      <tr><td>開袖衩</td><td>1.5</td><td>貼口袋</td><td>1.2</td><td>釘鈕釦</td><td>1.0</td></tr>
+      <tr><td>上袖子</td><td>1.8</td><td>合側縫</td><td>1.6</td><td>剪線初檢</td><td>1.3</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <b>🧮 效率計算機</b>
+    <p class="small" style="margin:4px 0 8px">SMV = 一道工序的標準分鐘。效率 = 產出標準分鐘 ÷ 投入分鐘。改改看數字:</p>
+    <div class="calc">
+      <div><label>生產線人數</label><input type="number" id="effP" value="30" min="1"></div>
+      <div><label>工作小時</label><input type="number" id="effH" value="8" min="1" step="0.5"></div>
+      <div><label>當日產量(件)</label><input type="number" id="effQ" value="327" min="1"></div>
+      <div><label>單件 SMV(分)</label><input type="number" id="effS" value="22" min="1" step="0.5"></div>
+    </div>
+    <div class="result">
+      <div class="big" id="effOut">50.0%</div>
+      <div class="formula" id="effF"></div>
+    </div>
+    <div class="key" style="margin-bottom:0">效率每提高 1%,同樣的人與時間就多產出 1%——這就是全廠追效率的原因。</div>
+  </div>
+</section>
+
+<!-- 第7課 -->
+<section class="lesson" id="l7">
+  <div class="lesson-tag"><span class="no">第 7 課</span><h2>用料計算:一件襯衫吃掉多少布</h2></div>
+  <p class="lead">布料通常佔成本一半以上。「耗量」來自馬克:裁片在布寬裡排得越緊,浪費越少。</p>
+  <div class="tip"><b>生活比喻:</b>馬克像搬家裝箱——同樣的東西,會裝的人一箱裝完。排馬克師傅省下的每一公分,都直接變成利潤。</div>
+  <div class="card">
+    <b>🧮 耗量計算機</b>
+    <div class="calc">
+      <div><label>馬克總長(碼)</label><input type="number" id="conL" value="18" min="0" step="0.1"></div>
+      <div><label>馬克內件數</label><input type="number" id="conN" value="12" min="1"></div>
+      <div><label>損耗率 %</label><input type="number" id="conW" value="3" min="0" step="0.5"></div>
+    </div>
+    <div class="result">
+      <div class="big" id="conOut">1.545 碼/件</div>
+      <div class="formula" id="conF"></div>
+    </div>
+    <p class="small" style="margin-top:8px">影響耗量四件事:尺碼組合、布幅寬、花格對條(對格多耗 5–10%)、損耗率。談價前先確認。</p>
+  </div>
+</section>
+
+<!-- 第8課 -->
+<section class="lesson" id="l8">
+  <div class="lesson-tag"><span class="no">第 8 課</span><h2>成本怎麼算:從 CM 到 FOB</h2></div>
+  <div class="card">
+    <table>
+      <tr><th>術語</th><th>白話意思</th></tr>
+      <tr><td><b>CM</b>(Cut & Make)</td><td>只算「裁+車」加工費,布料輔料客戶自備</td></tr>
+      <tr><td><b>CMT</b>(+Trim)</td><td>CM 再加輔料(鈕釦、縫線、標籤)</td></tr>
+      <tr><td><b>FOB</b></td><td>含布料+輔料+加工+利潤,貨交到出口港船上</td></tr>
+      <tr><td><b>CIF</b></td><td>FOB 再加海運費與保險,送到對方港口</td></tr>
+      <tr><td><b>LDP</b></td><td>連關稅都付完,送到客戶門口的全包價</td></tr>
+    </table>
+    <div class="tip" style="margin-bottom:0"><b>生活比喻:</b>像網購——CM 是純代工費,FOB 含商品出貨到物流站,CIF 含運費,LDP 含稅送到家。</div>
+  </div>
+  <div class="card">
+    <b>🧮 FOB 報價計算機</b>
+    <p class="small" style="margin:4px 0 8px">CM = SMV × 每分鐘成本(每分鐘成本 = 月營運費用 ÷ 月有效產出分鐘)。改任何數字,下方即時重算:</p>
+    <div class="calc">
+      <div><label>單件耗量(碼)</label><input type="number" id="fY" value="1.55" step="0.01" min="0"></div>
+      <div><label>布價($/碼)</label><input type="number" id="fP" value="1.95" step="0.05" min="0"></div>
+      <div><label>輔料($/件)</label><input type="number" id="fT" value="0.44" step="0.01" min="0"></div>
+      <div><label>SMV(分)</label><input type="number" id="fS" value="22" step="0.5" min="0"></div>
+      <div><label>每分鐘成本($)</label><input type="number" id="fM" value="0.055" step="0.005" min="0"></div>
+      <div><label>包裝運雜($/件)</label><input type="number" id="fO" value="0.27" step="0.01" min="0"></div>
+      <div><label>目標利潤 %</label><input type="number" id="fR" value="10" step="1" min="0" max="60"></div>
+    </div>
+    <div class="result">
+      <div class="big">FOB <span id="fobOut">$5.50</span></div>
+      <div class="stack" id="stack"></div>
+      <div class="stacklegend" id="stackLg"></div>
+      <div class="formula" id="fobF"></div>
+    </div>
+    <div class="key">比例感:布料約五~六成、CM 約兩成、輔料約一成。布價 ±$0.10/碼對 FOB 的影響比任何項目都大。</div>
+    <p class="small">注意:利潤用「除法」——成本 ÷ (1−利潤率)。若用乘法 ×1.10,實際利潤率只有 9.2%,一年下來差很多。</p>
+  </div>
+</section>
+
+<!-- 第9課 -->
+<section class="lesson" id="l9">
+  <div class="lesson-tag"><span class="no">第 9 課</span><h2>十題自我測驗</h2></div>
+  <p class="lead">先自己答,再點「看答案」。</p>
+  <div id="quiz"></div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">平織成衣入門教材 · 互動網頁版<br><b>SAINTDOU</b> · Simply the Minimalist · 2026</div>
+</footer>
+
+<script>
+/* ---------- 織法模擬器 ---------- */
+const WARP='#5b79b4', WEFT='#c9a86a', WARP_D='#3d5788';
+const weaves={
+  plain:{name:'平紋 Plain',desc:'經紗與緯紗一上一下、最緊密的交錯。布面平整、結構最穩,但手感偏硬挺。',ex:'日常例子:襯衫布(府綢)、床單、手帕',fn:(r,c)=>(r+c)%2===0},
+  twill:{name:'斜紋 Twill',desc:'交錯點規律錯開,經紗浮長連成 45 度斜線。厚實、垂墜、耐穿。',ex:'日常例子:牛仔褲(丹寧)、卡其褲、工作服',fn:(r,c)=>((c-r)%4+4)%4<3},
+  satin:{name:'緞紋 Satin',desc:'經紗長距離浮在表面、交錯點最少最分散,所以光滑有光澤,但相對易勾紗。',ex:'日常例子:領帶、飯店緞面床單、禮服',fn:(r,c)=>((c-2*r)%5+5)%5!==0}
+};
+const svg=document.getElementById('weaveSvg');
+function drawWeave(key){
+  const n=8, cs=240/n, f=weaves[key].fn;
+  let s='';
+  for(let c=0;c<n;c++) s+=`<rect x="${c*cs+3}" y="0" width="${cs-8}" height="240" rx="3" fill="${WARP_D}"/>`;
+  for(let r=0;r<n;r++) s+=`<rect x="0" y="${r*cs+3}" width="240" height="${cs-8}" rx="3" fill="${WEFT}"/>`;
+  for(let r=0;r<n;r++)for(let c=0;c<n;c++)
+    if(f(r,c)) s+=`<rect x="${c*cs+3}" y="${r*cs}" width="${cs-8}" height="${cs}" fill="${WARP}"/>`;
+  svg.innerHTML=s;
+  document.getElementById('wName').textContent=weaves[key].name;
+  document.getElementById('wDesc').textContent=weaves[key].desc;
+  document.getElementById('wEx').textContent=weaves[key].ex;
+}
+document.querySelectorAll('.weave-tabs button').forEach(b=>{
+  b.onclick=()=>{document.querySelectorAll('.weave-tabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');drawWeave(b.dataset.w);}
+});
+drawWeave('plain');
+
+/* ---------- 規格解讀器 ---------- */
+const specs={
+  c:'<b>C100% — 成分:</b>100% 棉。C=Cotton、T=聚酯纖維、CVC=棉為主、TC=聚酯為主。',
+  y:'<b>40×40 — 紗支:</b>經紗 40 支 × 緯紗 40 支。支數越大紗越細,布越細緻。',
+  d:'<b>133×72 — 密度:</b>每英吋 133 根經紗 × 72 根緯紗。數字越大越密實、越挺。',
+  w:'<b>57/58" — 幅寬:</b>這匹布攤開 57~58 英吋寬,直接影響馬克排法與用料。',
+  g:'<b>115 gsm — 克重:</b>每平方米 115 克。襯衫布約 100–130,牛仔布 300 以上。'
+};
+document.querySelectorAll('#specline span[data-k]').forEach(sp=>{
+  const act=()=>{document.querySelectorAll('#specline span').forEach(x=>x.classList.remove('on'));sp.classList.add('on');
+    document.getElementById('specExplain').innerHTML=specs[sp.dataset.k];};
+  sp.onclick=act; sp.onmouseenter=act;
+});
+
+/* ---------- 效率計算機 ---------- */
+function effCalc(){
+  const p=+effP.value||0,h=+effH.value||0,q=+effQ.value||0,s=+effS.value||0;
+  const inMin=p*h*60, outMin=q*s;
+  const e=inMin>0?outMin/inMin*100:0;
+  document.getElementById('effOut').textContent=e.toFixed(1)+'%';
+  document.getElementById('effF').textContent=`投入 ${p}人 × ${h}時 × 60 = ${inMin.toLocaleString()} 分;產出 ${q}件 × ${s} SMV = ${outMin.toLocaleString()} 分 → ${outMin.toLocaleString()} ÷ ${inMin.toLocaleString()}`;
+}
+['effP','effH','effQ','effS'].forEach(id=>document.getElementById(id).addEventListener('input',effCalc));
+effCalc();
+
+/* ---------- 耗量計算機 ---------- */
+function conCalc(){
+  const L=+conL.value||0,N=+conN.value||1,W=+conW.value||0;
+  const per=L/N, y=per*(1+W/100);
+  document.getElementById('conOut').textContent=y.toFixed(3)+' 碼/件';
+  document.getElementById('conF').textContent=`${L} ÷ ${N} = ${per.toFixed(3)} 碼,再 × (1+${W}%) 損耗`;
+}
+['conL','conN','conW'].forEach(id=>document.getElementById(id).addEventListener('input',conCalc));
+conCalc();
+
+/* ---------- FOB 計算機 ---------- */
+const COLORS=[['布料','#1f3864'],['輔料','#8496b0'],['CM','#b8a67a'],['包裝運雜','#cfc5a5'],['利潤','#d9d9d9']];
+function fobCalc(){
+  const y=+fY.value||0,p=+fP.value||0,tr=+fT.value||0,s=+fS.value||0,m=+fM.value||0,o=+fO.value||0,r=Math.min(+fR.value||0,60)/100;
+  const fab=y*p, cm=s*m, cost=fab+tr+cm+o;
+  const fob=r<1?cost/(1-r):cost, profit=fob-cost;
+  document.getElementById('fobOut').textContent='$'+fob.toFixed(2);
+  const parts=[fab,tr,cm,o,profit];
+  document.getElementById('stack').innerHTML=parts.map((v,i)=>`<div style="width:${fob>0?(v/fob*100):0}%;background:${COLORS[i][1]}"></div>`).join('');
+  document.getElementById('stackLg').innerHTML=parts.map((v,i)=>`<span><i style="background:${COLORS[i][1]}"></i>${COLORS[i][0]} $${v.toFixed(2)}(${fob>0?(v/fob*100).toFixed(0):0}%)</span>`).join('');
+  document.getElementById('fobF').textContent=`布料 ${y}×${p} + 輔料 ${tr} + CM ${s}×${m} + 其他 ${o} = 成本 $${cost.toFixed(2)};÷(1−${(r*100).toFixed(0)}%) = FOB $${fob.toFixed(2)}`;
+}
+['fY','fP','fT','fS','fM','fO','fR'].forEach(id=>document.getElementById(id).addEventListener('input',fobCalc));
+fobCalc();
+
+/* ---------- 測驗 ---------- */
+const QA=[
+ ['T 恤一拉會彈、襯衫不會,是什麼結構差異?','針織是一根紗打圈相扣、天生有彈性;平織是經緯兩組紗交錯、幾乎沒彈性。'],
+ ['牛仔褲表面的 45 度斜線,代表哪種組織?','斜紋 Twill——交錯點規律錯開,浮長連成斜線。'],
+ ['「40×40 / 133×72」中,133 代表什麼?','經紗密度:每英吋有 133 根經紗。'],
+ ['紗支 80s 和 20s,哪個布比較細緻?','80s。支數越大紗越細,布越輕薄細緻。'],
+ ['SPI 是什麼?好襯衫門襟大約幾針?','每英吋針數(Stitches Per Inch);好襯衫約 11–12 針。'],
+ ['SMV 22 分、每分鐘成本 $0.055,CM 是多少?','22 × 0.055 ≈ $1.21/件。'],
+ ['馬克長 18 碼排 12 件、損耗 3%,單件耗量?','18 ÷ 12 × 1.03 ≈ 1.55 碼。'],
+ ['CM、CMT、FOB,哪個包含布料?','FOB(含布料+輔料+加工+利潤,交到出口港船上)。'],
+ ['成本 $4.95、目標利潤 10%,FOB 報多少?','用除法:4.95 ÷ (1−0.10) = $5.50。'],
+ ['一件襯衫成本裡佔比最大的通常是?','布料,約五到六成。']
+];
+document.getElementById('quiz').innerHTML=QA.map((q,i)=>`
+ <div class="q" id="q${i}">
+   <div class="qt">${i+1}. ${q[0]}</div>
+   <button onclick="document.getElementById('q${i}').classList.toggle('open')">看答案</button>
+   <div class="ans">${q[1]}</div>
+ </div>`).join('');
+</script>
+</body>
+</html>

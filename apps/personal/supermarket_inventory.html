@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>超市進銷存</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg: #f0ede8;
+  --surface: #faf8f5;
+  --surface2: #fff;
+  --border: #e0dbd3;
+  --text: #1a1714;
+  --text2: #6b6560;
+  --accent: #2d6a4f;
+  --accent2: #52b788;
+  --accent3: #b7e4c7;
+  --warn: #d4a017;
+  --danger: #c0392b;
+  --info: #1a6b9a;
+  --tag-green: #d8f3dc;
+  --tag-red: #fde8e6;
+  --tag-yellow: #fef3c7;
+  --shadow: 0 2px 12px rgba(0,0,0,0.07);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.14);
+  --radius: 12px;
+  --radius-lg: 18px;
+  --bottombar: 64px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+}
+
+/* ══ App Shell ══ */
+.app { display: flex; flex-direction: column; height: 100%; }
+
+/* ══ Topbar ══ */
+.topbar {
+  background: var(--text);
+  color: #fff;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+.topbar-left { display: flex; align-items: center; gap: 10px; }
+.topbar-logo { font-size: 20px; }
+.topbar-title { font-size: 15px; font-weight: 700; letter-spacing: 0.02em; }
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+.topbar-alert-badge {
+  background: var(--danger);
+  color: #fff;
+  border-radius: 10px;
+  font-size: 11px;
+  padding: 2px 7px;
+  font-family: 'DM Mono', monospace;
+  font-weight: 600;
+  display: none;
+}
+.topbar-clock { font-family: 'DM Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.5); }
+
+/* ══ Content ══ */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px 14px calc(var(--bottombar) + 16px);
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ══ Pages ══ */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ══ Bottom Nav ══ */
+.bottom-nav {
+  height: var(--bottombar);
+  background: var(--text);
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+  z-index: 10;
+}
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  color: rgba(255,255,255,0.45);
+  font-size: 10px;
+  font-weight: 500;
+  transition: all 0.15s;
+  position: relative;
+  padding: 8px 2px 10px;
+  border-top: 2px solid transparent;
+}
+.nav-item .nav-icon { font-size: 20px; line-height: 1; }
+.nav-item.active { color: var(--accent2); border-top-color: var(--accent2); }
+.nav-badge {
+  position: absolute; top: 6px; right: calc(50% - 16px);
+  background: var(--danger); color: #fff;
+  border-radius: 8px; font-size: 9px; padding: 1px 5px;
+  font-family: 'DM Mono', monospace; font-weight: 700;
+  display: none;
+}
+
+/* ══ KPI Cards ══ */
+.kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  position: relative;
+  overflow: hidden;
+  border-top: 3px solid transparent;
+}
+.kpi-card.green { border-top-color: var(--accent2); }
+.kpi-card.yellow { border-top-color: var(--warn); }
+.kpi-card.red { border-top-color: var(--danger); }
+.kpi-card.blue { border-top-color: var(--info); }
+.kpi-icon { font-size: 26px; opacity: 0.15; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); }
+.kpi-label { font-size: 11px; color: var(--text2); font-weight: 600; margin-bottom: 6px; }
+.kpi-value { font-size: 22px; font-weight: 700; font-family: 'DM Mono', monospace; line-height: 1; }
+.kpi-sub { font-size: 10.5px; color: var(--text2); margin-top: 4px; }
+
+/* ══ Section Header ══ */
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px; margin-top: 4px;
+}
+.section-title { font-size: 13px; font-weight: 700; color: var(--text2); letter-spacing: 0.04em; text-transform: uppercase; }
+
+/* ══ Card ══ */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.card-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+  font-size: 13.5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card-body { padding: 12px 16px; }
+
+/* ══ Buttons ══ */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 18px; border-radius: 10px; font-size: 14px;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 600; cursor: pointer; border: none; transition: all 0.15s;
+  touch-action: manipulation;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:active { background: #245a42; }
+.btn-outline { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+.btn-outline:active { background: var(--border); }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-warn { background: var(--warn); color: #fff; }
+.btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 7px; }
+.btn-full { width: 100%; justify-content: center; margin-top: 14px; padding: 13px; font-size: 15px; }
+.btn-row { display: flex; gap: 8px; }
+
+/* ══ Toolbar ══ */
+.toolbar { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+.search-box {
+  flex: 1; min-width: 160px;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 0 12px;
+}
+.search-box input {
+  border: none; outline: none; background: transparent;
+  font-size: 14px; padding: 10px 0; width: 100%;
+  font-family: 'Noto Sans TC', sans-serif; color: var(--text);
+}
+select {
+  padding: 10px 12px; border: 1px solid var(--border);
+  border-radius: 10px; background: var(--surface);
+  font-size: 13px; color: var(--text);
+  font-family: 'Noto Sans TC', sans-serif;
+  cursor: pointer; outline: none;
+}
+
+/* ══ Product Cards (mobile list) ══ */
+.prod-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 10px;
+}
+.prod-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+.prod-name { font-weight: 700; font-size: 14.5px; }
+.prod-meta { font-size: 11.5px; color: var(--text2); margin-top: 2px; }
+.prod-card-mid { display: flex; gap: 10px; margin-bottom: 8px; }
+.prod-stat { flex: 1; background: var(--bg); border-radius: 8px; padding: 8px 10px; }
+.prod-stat-label { font-size: 10px; color: var(--text2); font-weight: 600; margin-bottom: 3px; }
+.prod-stat-val { font-size: 15px; font-weight: 700; font-family: 'DM Mono', monospace; }
+.prod-card-bot { display: flex; align-items: center; justify-content: space-between; }
+.stock-bar { height: 5px; border-radius: 3px; background: var(--border); flex: 1; margin: 0 10px; }
+.stock-bar-fill { height: 100%; border-radius: 3px; }
+.stock-bar-fill.high { background: var(--accent2); }
+.stock-bar-fill.mid { background: var(--warn); }
+.stock-bar-fill.low { background: var(--danger); }
+
+/* ══ Record Cards ══ */
+.rec-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px 14px; margin-bottom: 8px;
+}
+.rec-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+.rec-card-name { font-weight: 600; font-size: 14px; }
+.rec-card-amount { font-family: 'DM Mono', monospace; font-weight: 700; font-size: 14px; }
+.rec-card-sub { font-size: 11.5px; color: var(--text2); }
+.rec-card-row { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
+
+/* ══ Badges ══ */
+.badge {
+  display: inline-block; padding: 3px 9px;
+  border-radius: 5px; font-size: 11px; font-weight: 700;
+}
+.badge-green { background: var(--tag-green); color: #1a6b40; }
+.badge-red { background: var(--tag-red); color: var(--danger); }
+.badge-yellow { background: var(--tag-yellow); color: #92700a; }
+.badge-blue { background: #e8f4fd; color: var(--info); }
+.badge-gray { background: var(--border); color: var(--text2); }
+
+/* ══ Alert Items ══ */
+.alert-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+}
+.alert-item:last-child { border-bottom: none; }
+.alert-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.alert-dot.red { background: var(--danger); }
+.alert-dot.yellow { background: var(--warn); }
+.alert-text strong { font-size: 13.5px; display: block; }
+.alert-text span { font-size: 11.5px; color: var(--text2); }
+
+/* ══ Log Items ══ */
+.log-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+}
+.log-item:last-child { border-bottom: none; }
+.log-time { font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--text2); white-space: nowrap; margin-top: 2px; }
+.log-icon { font-size: 15px; width: 18px; text-align: center; flex-shrink: 0; }
+
+/* ══ Tabs ══ */
+.tabs {
+  display: flex; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 4px; margin-bottom: 14px; gap: 4px;
+}
+.tab {
+  flex: 1; text-align: center; padding: 9px 4px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  border-radius: 7px; color: var(--text2); transition: all 0.15s;
+}
+.tab.active { background: var(--accent); color: #fff; }
+
+/* ══ Form ══ */
+.form-section { margin-bottom: 14px; }
+.form-group { margin-bottom: 12px; }
+.form-group label { display: block; font-size: 12px; font-weight: 700; color: var(--text2); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.04em; }
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; padding: 12px 14px; border: 1px solid var(--border);
+  border-radius: 10px; font-size: 15px;
+  font-family: 'Noto Sans TC', sans-serif;
+  color: var(--text); background: var(--bg);
+  outline: none; transition: border 0.15s; appearance: auto;
+}
+.form-group input:focus, .form-group select:focus { border-color: var(--accent2); background: var(--surface2); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* ══ Modal ══ */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5); z-index: 200;
+  align-items: flex-end; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--surface2);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  width: 100%; max-width: 600px;
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: slideUp 0.25s ease;
+  -webkit-overflow-scrolling: touch;
+}
+@keyframes slideUp { from { transform: translateY(60px); opacity:0; } to { transform:none; opacity:1; } }
+.modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 12px auto 0; }
+.modal-header { padding: 16px 20px 12px; font-weight: 700; font-size: 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+.modal-close { font-size: 22px; color: var(--text2); cursor: pointer; line-height: 1; padding: 4px; }
+.modal-body { padding: 16px 20px; }
+.modal-footer { padding: 12px 20px 20px; display: flex; gap: 10px; }
+.modal-footer .btn { flex: 1; justify-content: center; }
+
+/* ══ Summary chips ══ */
+.summary-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.summary-chip {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 7px 12px; font-size: 12px;
+}
+.summary-chip strong { font-family: 'DM Mono', monospace; font-size: 13px; }
+
+/* ══ Bar chart ══ */
+.bar-chart-wrap { height: 70px; display: flex; align-items: flex-end; gap: 5px; padding-bottom: 20px; position: relative; }
+.bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; height: 100%; }
+.bar-fill { width: 70%; border-radius: 3px 3px 0 0; background: var(--accent3); transition: all 0.3s; }
+.bar-lbl { font-size: 9.5px; color: var(--text2); position: absolute; bottom: 0; }
+
+/* ══ Report bars ══ */
+.report-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.report-bar-label { width: 72px; font-size: 12px; color: var(--text2); text-align: right; flex-shrink: 0; }
+.report-bar { flex: 1; background: var(--border); border-radius: 4px; height: 14px; overflow: hidden; }
+.report-bar-fill { height: 100%; background: var(--accent2); border-radius: 4px; transition: width 0.5s; }
+.report-bar-val { font-family: 'DM Mono', monospace; font-size: 11px; width: 76px; text-align: right; flex-shrink: 0; }
+
+/* ══ Cat items ══ */
+.cat-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px; border-bottom: 1px solid var(--border);
+}
+.cat-item:last-child { border-bottom: none; }
+
+/* ══ Floating Add Btn ══ */
+.fab {
+  position: fixed; right: 18px; bottom: calc(var(--bottombar) + 18px);
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--accent); color: #fff;
+  font-size: 26px; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(45,106,79,0.45);
+  cursor: pointer; z-index: 50; border: none;
+  transition: all 0.15s; touch-action: manipulation;
+}
+.fab:active { transform: scale(0.93); }
+.fab.hidden { display: none; }
+
+/* ══ Empty ══ */
+.empty { text-align: center; color: var(--text2); padding: 32px 16px; font-size: 13px; }
+
+/* ══ Toast ══ */
+#toast {
+  position: fixed; bottom: calc(var(--bottombar) + 14px); left: 50%; transform: translateX(-50%);
+  background: var(--text); color: #fff;
+  padding: 11px 20px; border-radius: 10px;
+  font-size: 13.5px; white-space: nowrap;
+  box-shadow: var(--shadow-lg);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s; z-index: 999;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+/* ══ Desktop tweaks ══ */
+@media (min-width: 640px) {
+  .kpi-grid { grid-template-columns: repeat(4, 1fr); }
+  .content { padding: 20px 20px calc(var(--bottombar) + 20px); max-width: 800px; margin: 0 auto; }
+  .form-row { grid-template-columns: 1fr 1fr; }
+  .modal { border-radius: var(--radius-lg); margin: auto; }
+  .modal-overlay { align-items: center; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="topbar-logo">🛒</span>
+      <span class="topbar-title" id="pageTitle">儀表板</span>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-alert-badge" id="topAlertBadge"></span>
+      <span class="topbar-clock" id="clock"></span>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content" id="mainContent">
+
+    <!-- ══ Dashboard ══ -->
+    <div class="page active" id="page-dashboard">
+      <div class="kpi-grid">
+        <div class="kpi-card green">
+          <div class="kpi-icon">📦</div>
+          <div class="kpi-label">商品種類</div>
+          <div class="kpi-value" id="kpiTotal">0</div>
+          <div class="kpi-sub">所有商品</div>
+        </div>
+        <div class="kpi-card blue">
+          <div class="kpi-icon">💎</div>
+          <div class="kpi-label">庫存總值</div>
+          <div class="kpi-value" id="kpiValue">0</div>
+          <div class="kpi-sub">NT$</div>
+        </div>
+        <div class="kpi-card yellow">
+          <div class="kpi-icon">⚠️</div>
+          <div class="kpi-label">低庫存</div>
+          <div class="kpi-value" id="kpiLow">0</div>
+          <div class="kpi-sub">需補貨</div>
+        </div>
+        <div class="kpi-card red">
+          <div class="kpi-icon">💰</div>
+          <div class="kpi-label">本月銷售</div>
+          <div class="kpi-value" id="kpiSales">0</div>
+          <div class="kpi-sub">NT$</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">📊 近7日進貨量</div>
+        <div class="card-body" style="padding-bottom:8px;">
+          <div class="bar-chart-wrap" id="barChart"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          ⚠️ 庫存警示
+          <span id="dashAlertCount" style="font-size:12px;font-weight:400;color:var(--danger)"></span>
+        </div>
+        <div class="card-body" id="dashAlertList"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">🕒 最近操作</div>
+        <div class="card-body" id="dashLog"></div>
+      </div>
+    </div>
+
+    <!-- ══ Products ══ -->
+    <div class="page" id="page-products">
+      <div class="toolbar">
+        <div class="search-box">
+          <span>🔍</span>
+          <input type="text" id="prodSearch" placeholder="搜尋商品名稱…" oninput="renderProducts()">
+        </div>
+        <select id="prodCatFilter" onchange="renderProducts()"><option value="">全部</option></select>
+        <select id="prodStatusFilter" onchange="renderProducts()">
+          <option value="">全部</option>
+          <option value="low">低庫存</option>
+          <option value="ok">正常</option>
+        </select>
+      </div>
+      <div id="prodList"></div>
+    </div>
+
+    <!-- ══ Categories ══ -->
+    <div class="page" id="page-categories">
+      <div class="card" id="catList"></div>
+    </div>
+
+    <!-- ══ Purchase ══ -->
+    <div class="page" id="page-purchase">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('purchase','list',this)">進貨記錄</div>
+        <div class="tab" onclick="switchTab('purchase','new',this)">新增進貨</div>
+      </div>
+      <div id="purchase-tab-list">
+        <div class="toolbar">
+          <div class="search-box">
+            <span>🔍</span>
+            <input type="text" id="purchSearch" placeholder="搜尋…" oninput="renderPurchase()">
+          </div>
+        </div>
+        <div id="purchList"></div>
+      </div>
+      <div id="purchase-tab-new" style="display:none;">
+        <div class="card">
+          <div class="card-header">🚛 新增進貨單</div>
+          <div class="card-body">
+            <div class="form-group"><label>廠商名稱</label><input type="text" id="purch_supplier" placeholder="廠商"></div>
+            <div class="form-group"><label>商品</label><select id="purch_product"></select></div>
+            <div class="form-row">
+              <div class="form-group"><label>數量</label><input type="number" id="purch_qty" min="1" value="1" inputmode="numeric"></div>
+              <div class="form-group"><label>單價 (NT$)</label><input type="number" id="purch_price" min="0" value="0" inputmode="decimal"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>進貨日期</label><input type="date" id="purch_date"></div>
+              <div class="form-group"><label>備註</label><input type="text" id="purch_note" placeholder="選填"></div>
+            </div>
+            <button class="btn btn-primary btn-full" onclick="savePurchase()">✅ 確認進貨</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ Sales ══ -->
+    <div class="page" id="page-sales">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('sales','list',this)">銷售記錄</div>
+        <div class="tab" onclick="switchTab('sales','new',this)">新增銷售</div>
+      </div>
+      <div id="sales-tab-list">
+        <div class="summary-row" id="saleSummary"></div>
+        <div id="saleList"></div>
+      </div>
+      <div id="sales-tab-new" style="display:none;">
+        <div class="card">
+          <div class="card-header">💰 新增銷售</div>
+          <div class="card-body">
+            <div class="form-group"><label>商品</label><select id="sale_product" onchange="fillSalePrice()"></select></div>
+            <div class="form-row">
+              <div class="form-group"><label>數量</label><input type="number" id="sale_qty" min="1" value="1" inputmode="numeric"></div>
+              <div class="form-group"><label>售價 (NT$)</label><input type="number" id="sale_price" min="0" value="0" inputmode="decimal"></div>
+            </div>
+            <div class="form-group"><label>日期</label><input type="date" id="sale_date"></div>
+            <button class="btn btn-primary btn-full" onclick="saveSale()">✅ 確認銷售</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ More ══ -->
+    <div class="page" id="page-more">
+      <div class="section-header" style="margin-bottom:12px;">
+        <span class="section-title">更多功能</span>
+      </div>
+
+      <!-- Adjustment -->
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-header">⚖️ 庫存調整</div>
+        <div class="card-body">
+          <div class="form-group"><label>商品</label><select id="adj_product"></select></div>
+          <div class="form-row">
+            <div class="form-group"><label>類型</label>
+              <select id="adj_type">
+                <option>盤點調整</option><option>損耗報廢</option>
+                <option>退貨入庫</option><option>其他</option>
+              </select>
+            </div>
+            <div class="form-group"><label>調整量（±）</label><input type="number" id="adj_qty" value="0" inputmode="numeric"></div>
+          </div>
+          <div class="form-group"><label>備註</label><input type="text" id="adj_note" placeholder="說明原因"></div>
+          <button class="btn btn-warn btn-full" onclick="saveAdjustment()">⚖️ 確認調整</button>
+        </div>
+      </div>
+
+      <!-- Report -->
+      <div class="section-header"><span class="section-title">庫存報表</span></div>
+      <div class="kpi-grid" style="grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div class="kpi-card green" style="padding:10px;">
+          <div class="kpi-label" style="font-size:10px;">庫存總值</div>
+          <div class="kpi-value" id="rptValue" style="font-size:16px;">0</div>
+        </div>
+        <div class="kpi-card blue" style="padding:10px;">
+          <div class="kpi-label" style="font-size:10px;">本月進貨</div>
+          <div class="kpi-value" id="rptPurch" style="font-size:16px;">0</div>
+        </div>
+        <div class="kpi-card red" style="padding:10px;">
+          <div class="kpi-label" style="font-size:10px;">本月毛利</div>
+          <div class="kpi-value" id="rptProfit" style="font-size:16px;">0</div>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:12px;">
+        <div class="card-header">分類庫存分布</div>
+        <div class="card-body" id="catReport"></div>
+      </div>
+      <div id="rptList"></div>
+
+      <!-- Alerts full -->
+      <div class="section-header" style="margin-top:4px;"><span class="section-title">⚠️ 警示中心</span></div>
+      <div class="card"><div class="card-body" id="alertFull"></div></div>
+
+      <!-- Adjustment log -->
+      <div class="section-header" style="margin-top:12px;"><span class="section-title">調整記錄</span></div>
+      <div id="adjList"></div>
+    </div>
+
+  </div><!-- content -->
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="gotoPage('dashboard')">
+      <span class="nav-icon">📊</span><span>總覽</span>
+    </div>
+    <div class="nav-item" onclick="gotoPage('products')">
+      <span class="nav-icon">📦</span><span>商品</span>
+    </div>
+    <div class="nav-item" onclick="gotoPage('purchase')">
+      <span class="nav-icon">🚛</span><span>進貨</span>
+    </div>
+    <div class="nav-item" onclick="gotoPage('sales')">
+      <span class="nav-icon">💰</span><span>銷售</span>
+    </div>
+    <div class="nav-item" onclick="gotoPage('more')" style="position:relative;">
+      <span class="nav-icon">☰</span><span>更多</span>
+      <span class="nav-badge" id="moreBadge"></span>
+    </div>
+  </div>
+
+</div><!-- app -->
+
+<!-- FAB -->
+<button class="fab hidden" id="fab" onclick="handleFab()">＋</button>
+
+<!-- Product Modal -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <span id="prodModalTitle">新增商品</span>
+      <span class="modal-close" onclick="closeModal('productModal')">✕</span>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label>商品名稱 *</label><input type="text" id="f_name" placeholder="例：鮮奶 936ml"></div>
+      <div class="form-row">
+        <div class="form-group"><label>條碼</label><input type="text" id="f_barcode" placeholder="選填" inputmode="numeric"></div>
+        <div class="form-group"><label>分類 *</label><select id="f_category"></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>單位</label>
+          <select id="f_unit"><option>件</option><option>盒</option><option>瓶</option><option>包</option><option>袋</option><option>公斤</option><option>個</option></select>
+        </div>
+        <div class="form-group"><label>進價 (NT$)</label><input type="number" id="f_costPrice" min="0" value="0" inputmode="decimal"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>售價 (NT$)</label><input type="number" id="f_sellPrice" min="0" value="0" inputmode="decimal"></div>
+        <div class="form-group"><label>現有庫存</label><input type="number" id="f_stock" min="0" value="0" inputmode="numeric"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>安全庫存</label><input type="number" id="f_safeStock" min="0" value="10" inputmode="numeric"></div>
+        <div class="form-group"><label>備註</label><input type="text" id="f_note" placeholder="供應商等"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('productModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveProduct()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Category Modal -->
+<div class="modal-overlay" id="catModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <span id="catModalTitle">新增分類</span>
+      <span class="modal-close" onclick="closeModal('catModal')">✕</span>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label>分類名稱 *</label><input type="text" id="cat_name" placeholder="例：飲料、乳製品"></div>
+      <div class="form-group"><label>說明</label><input type="text" id="cat_desc" placeholder="選填"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('catModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveCat()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+// ════════════ STATE ════════════
+let state = JSON.parse(localStorage.getItem('smIMS')||'null') || {
+  products:[], categories:['飲料','乳製品','零食糖果','生鮮蔬果','米麵主食','清潔衛生','酒類','冷凍食品'],
+  catDescs:{'飲料':'各類飲品','乳製品':'奶製品','零食糖果':'零嘴點心','生鮮蔬果':'新鮮農產品','米麵主食':'五穀雜糧','清潔衛生':'家用清潔品','酒類':'酒精飲料','冷凍食品':'冷凍調理包'},
+  purchases:[], sales:[], adjustments:[], logs:[], nextId:1
+};
+
+if (state.products.length === 0) {
+  const demos = [
+    {name:'鮮奶 936ml',cat:'乳製品',barcode:'4710088000001',unit:'瓶',cost:45,sell:65,stock:48,safe:20,note:'統一'},
+    {name:'可口可樂 600ml',cat:'飲料',barcode:'4710088000002',unit:'瓶',cost:18,sell:28,stock:8,safe:30,note:''},
+    {name:'洋芋片 原味',cat:'零食糖果',barcode:'4710088000003',unit:'包',cost:35,sell:55,stock:62,safe:15,note:'樂事'},
+    {name:'無糖綠茶 500ml',cat:'飲料',barcode:'4710088000004',unit:'瓶',cost:15,sell:25,stock:3,safe:25,note:'伊藤園'},
+    {name:'茉莉香米 5kg',cat:'米麵主食',barcode:'4710088000005',unit:'袋',cost:180,sell:250,stock:22,safe:10,note:''},
+    {name:'沙拉油 2L',cat:'米麵主食',barcode:'4710088000006',unit:'瓶',cost:120,sell:165,stock:15,safe:8,note:'維義'},
+    {name:'衛生紙 10包',cat:'清潔衛生',barcode:'4710088000007',unit:'組',cost:130,sell:185,stock:6,safe:10,note:'舒潔'},
+    {name:'啤酒 330ml',cat:'酒類',barcode:'4710088000008',unit:'瓶',cost:28,sell:45,stock:80,safe:20,note:'台啤'},
+  ];
+  demos.forEach(d => {
+    state.products.push({id:state.nextId++,...d});
+    state.logs.unshift({ts:new Date().toISOString(),text:`新增商品「${d.name}」`,icon:'📦'});
+  });
+  const now = new Date();
+  state.products.slice(0,5).forEach((p,i) => {
+    const d = new Date(now); d.setDate(d.getDate()-i);
+    const ds = d.toISOString().split('T')[0];
+    state.purchases.push({id:state.nextId++,date:ds,supplier:'統一超商',product:p.id,qty:20+i*5,price:p.cost,note:''});
+    state.sales.push({id:state.nextId++,date:ds,product:p.id,qty:3+i,price:p.sell});
+  });
+  saveState();
+}
+
+function saveState(){ localStorage.setItem('smIMS', JSON.stringify(state)); }
+
+// ════════════ UTILS ════════════
+const fmt = n => Number(n).toLocaleString();
+const getProd = id => state.products.find(p=>p.id===id);
+const todayStr = () => new Date().toISOString().split('T')[0];
+const thisMonth = () => { const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; };
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.opacity = 1;
+  clearTimeout(t._t); t._t = setTimeout(()=>t.style.opacity=0, 2400);
+}
+function addLog(text, icon='📋') {
+  state.logs.unshift({ts:new Date().toISOString(),icon,text});
+  if(state.logs.length>50) state.logs.pop();
+}
+function populateProdSelect(id) {
+  const s = document.getElementById(id); if(!s) return;
+  s.innerHTML = state.products.map(p=>`<option value="${p.id}">${p.name}（庫存:${p.stock}）</option>`).join('');
+}
+function populateCatSelect(id) {
+  const s = document.getElementById(id); if(!s) return;
+  s.innerHTML = state.categories.map(c=>`<option>${c}</option>`).join('');
+}
+
+// ════════════ CLOCK ════════════
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    now.toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
+}
+updateClock(); setInterval(updateClock,1000);
+
+// ════════════ NAV ════════════
+const pageTitles = {dashboard:'儀表板',products:'商品庫存',purchase:'進貨管理',sales:'銷售記錄',more:'更多功能'};
+
+function gotoPage(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  // activate correct nav item
+  const navItems = document.querySelectorAll('.nav-item');
+  const order = ['dashboard','products','purchase','sales','more'];
+  navItems[order.indexOf(id)]?.classList.add('active');
+  document.getElementById('pageTitle').textContent = pageTitles[id];
+  document.getElementById('mainContent').scrollTop = 0;
+
+  // FAB
+  const fab = document.getElementById('fab');
+  fab.classList.toggle('hidden', !['products','categories'].includes(id));
+
+  if(id==='dashboard') renderDashboard();
+  if(id==='products') { renderProducts(); populateCatFilter(); }
+  if(id==='purchase') { renderPurchase(); populateProdSelect('purch_product'); document.getElementById('purch_date').value=todayStr(); }
+  if(id==='sales') { renderSales(); populateProdSelect('sale_product'); document.getElementById('sale_date').value=todayStr(); }
+  if(id==='more') { renderMore(); }
+}
+
+function handleFab() {
+  const active = document.querySelector('.page.active');
+  if(active?.id==='page-products') openProductModal();
+  if(active?.id==='page-categories') openCatModal();
+}
+
+function switchTab(section, tab, el) {
+  [`${section}-tab-list`,`${section}-tab-new`].forEach(i => {
+    const e = document.getElementById(i);
+    if(e) e.style.display='none';
+  });
+  el.closest('.tabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const target = document.getElementById(`${section}-tab-${tab}`);
+  if(target) target.style.display='';
+}
+
+// ════════════ MODALS ════════════
+let editProductId = null;
+function openProductModal(id) {
+  editProductId = id||null;
+  populateCatSelect('f_category');
+  if(id) {
+    const p = getProd(id);
+    document.getElementById('prodModalTitle').textContent='編輯商品';
+    document.getElementById('f_name').value=p.name;
+    document.getElementById('f_barcode').value=p.barcode||'';
+    document.getElementById('f_category').value=p.cat;
+    document.getElementById('f_unit').value=p.unit;
+    document.getElementById('f_costPrice').value=p.cost;
+    document.getElementById('f_sellPrice').value=p.sell;
+    document.getElementById('f_stock').value=p.stock;
+    document.getElementById('f_safeStock').value=p.safe;
+    document.getElementById('f_note').value=p.note||'';
+  } else {
+    document.getElementById('prodModalTitle').textContent='新增商品';
+    ['f_name','f_barcode','f_note'].forEach(i=>document.getElementById(i).value='');
+    ['f_costPrice','f_sellPrice','f_stock'].forEach(i=>document.getElementById(i).value=0);
+    document.getElementById('f_safeStock').value=10;
+  }
+  document.getElementById('productModal').classList.add('open');
+}
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+function saveProduct() {
+  const name = document.getElementById('f_name').value.trim();
+  if(!name){ toast('請輸入商品名稱'); return; }
+  const p = {
+    name, barcode:document.getElementById('f_barcode').value.trim(),
+    cat:document.getElementById('f_category').value,
+    unit:document.getElementById('f_unit').value,
+    cost:+document.getElementById('f_costPrice').value,
+    sell:+document.getElementById('f_sellPrice').value,
+    stock:+document.getElementById('f_stock').value,
+    safe:+document.getElementById('f_safeStock').value,
+    note:document.getElementById('f_note').value.trim()
+  };
+  if(editProductId) {
+    const idx = state.products.findIndex(x=>x.id===editProductId);
+    state.products[idx]={...state.products[idx],...p};
+    addLog(`編輯商品「${name}」`,'✏️');
+    toast('✅ 已更新');
+  } else {
+    state.products.push({id:state.nextId++,...p});
+    addLog(`新增商品「${name}」庫存${p.stock}${p.unit}`,'📦');
+    toast('✅ 已新增');
+  }
+  saveState(); closeModal('productModal'); renderProducts(); updateBadges();
+}
+
+function deleteProduct(id) {
+  if(!confirm('確定刪除此商品？')) return;
+  const p = getProd(id);
+  addLog(`刪除商品「${p.name}」`,'🗑️');
+  state.products = state.products.filter(x=>x.id!==id);
+  saveState(); renderProducts(); toast('🗑️ 已刪除'); updateBadges();
+}
+
+let editCatIdx = null;
+function openCatModal(idx) {
+  editCatIdx = idx!==undefined?idx:null;
+  if(editCatIdx!==null) {
+    document.getElementById('catModalTitle').textContent='編輯分類';
+    document.getElementById('cat_name').value=state.categories[editCatIdx];
+    document.getElementById('cat_desc').value=state.catDescs[state.categories[editCatIdx]]||'';
+  } else {
+    document.getElementById('catModalTitle').textContent='新增分類';
+    document.getElementById('cat_name').value='';
+    document.getElementById('cat_desc').value='';
+  }
+  document.getElementById('catModal').classList.add('open');
+}
+function saveCat() {
+  const name = document.getElementById('cat_name').value.trim();
+  if(!name){ toast('請輸入分類名稱'); return; }
+  const desc = document.getElementById('cat_desc').value.trim();
+  if(editCatIdx!==null) {
+    const old = state.categories[editCatIdx];
+    state.products.forEach(p=>{ if(p.cat===old)p.cat=name; });
+    delete state.catDescs[old];
+    state.categories[editCatIdx]=name;
+  } else {
+    if(state.categories.includes(name)){ toast('分類已存在'); return; }
+    state.categories.push(name);
+  }
+  state.catDescs[name]=desc;
+  saveState(); closeModal('catModal');
+  renderCategories(); toast('✅ 已儲存');
+}
+function deleteCat(idx) {
+  const name=state.categories[idx];
+  const cnt=state.products.filter(p=>p.cat===name).length;
+  if(cnt>0&&!confirm(`此分類有${cnt}件商品，確定刪除？`)) return;
+  delete state.catDescs[name]; state.categories.splice(idx,1);
+  saveState(); renderCategories(); toast('🗑️ 已刪除');
+}
+
+// ════════════ BADGES ════════════
+function updateBadges() {
+  const low = state.products.filter(p=>p.stock<=p.safe).length;
+  const badge = document.getElementById('topAlertBadge');
+  const moreBadge = document.getElementById('moreBadge');
+  if(low>0){ badge.style.display=''; badge.textContent=low; moreBadge.style.display=''; moreBadge.textContent=low; }
+  else { badge.style.display='none'; moreBadge.style.display='none'; }
+}
+
+// ════════════ DASHBOARD ════════════
+function renderDashboard() {
+  const total = state.products.length;
+  const totalVal = state.products.reduce((s,p)=>s+p.cost*p.stock,0);
+  const low = state.products.filter(p=>p.stock<=p.safe).length;
+  const month = thisMonth();
+  const mSales = state.sales.filter(s=>s.date&&s.date.startsWith(month)).reduce((s,x)=>s+x.qty*x.price,0);
+  document.getElementById('kpiTotal').textContent=total;
+  document.getElementById('kpiValue').textContent=fmt(totalVal);
+  document.getElementById('kpiLow').textContent=low;
+  document.getElementById('kpiSales').textContent=fmt(mSales);
+  updateBadges();
+
+  // Bar chart
+  const days = [];
+  for(let i=6;i>=0;i--) {
+    const d=new Date(); d.setDate(d.getDate()-i);
+    const ds=d.toISOString().split('T')[0];
+    const qty=state.purchases.filter(x=>x.date===ds).reduce((s,x)=>s+x.qty,0);
+    days.push({label:`${d.getMonth()+1}/${d.getDate()}`,qty});
+  }
+  const maxQ=Math.max(...days.map(d=>d.qty),1);
+  const barDiv=document.getElementById('barChart');
+  barDiv.innerHTML=days.map(d=>`
+    <div class="bar-col" style="justify-content:flex-end;position:relative;">
+      <div class="bar-fill" style="height:${Math.max(d.qty/maxQ*100,d.qty?4:0)}%;"></div>
+      <span class="bar-lbl" style="position:static;font-size:9.5px;color:var(--text2);margin-top:3px;">${d.label}</span>
+    </div>`).join('');
+
+  // Alerts
+  const alerts = state.products.filter(p=>p.stock<=p.safe);
+  document.getElementById('dashAlertCount').textContent=low>0?`  ${low}項`:' 全部正常';
+  document.getElementById('dashAlertList').innerHTML=alerts.length===0
+    ?'<div class="empty">✅ 目前無庫存警示</div>'
+    :alerts.map(p=>`<div class="alert-item">
+      <div class="alert-dot ${p.stock===0?'red':'yellow'}"></div>
+      <div class="alert-text"><strong>${p.name}</strong>
+      <span>庫存${p.stock}${p.unit}・安全${p.safe}${p.unit}${p.stock===0?' ⚠️斷貨':''}</span></div>
+    </div>`).join('');
+
+  // Log
+  document.getElementById('dashLog').innerHTML=state.logs.slice(0,8).map(l=>`
+    <div class="log-item">
+      <div class="log-icon">${l.icon}</div>
+      <div style="flex:1;font-size:13px;">${l.text}</div>
+      <div class="log-time">${new Date(l.ts).toLocaleString('zh-TW',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})}</div>
+    </div>`).join('') || '<div class="empty">暫無記錄</div>';
+}
+
+// ════════════ PRODUCTS ════════════
+function populateCatFilter() {
+  const s=document.getElementById('prodCatFilter');
+  s.innerHTML='<option value="">全部</option>'+state.categories.map(c=>`<option>${c}</option>`).join('');
+}
+function renderProducts() {
+  const q=document.getElementById('prodSearch').value.toLowerCase();
+  const cat=document.getElementById('prodCatFilter').value;
+  const status=document.getElementById('prodStatusFilter').value;
+  let prods=[...state.products];
+  if(q) prods=prods.filter(p=>p.name.toLowerCase().includes(q)||(p.barcode||'').includes(q));
+  if(cat) prods=prods.filter(p=>p.cat===cat);
+  if(status==='low') prods=prods.filter(p=>p.stock<=p.safe);
+  if(status==='ok') prods=prods.filter(p=>p.stock>p.safe);
+
+  const div=document.getElementById('prodList');
+  if(prods.length===0){ div.innerHTML='<div class="empty">沒有符合條件的商品</div>'; return; }
+  div.innerHTML=prods.map(p=>{
+    const low=p.stock<=p.safe, out=p.stock===0;
+    const cls=out?'badge-red':low?'badge-yellow':'badge-green';
+    const lbl=out?'斷貨':low?'低庫存':'正常';
+    const pct=Math.min(100,Math.round(p.stock/Math.max(p.safe*2,1)*100));
+    const barCls=out?'low':low?'mid':'high';
+    return `<div class="prod-card">
+      <div class="prod-card-top">
+        <div>
+          <div class="prod-name">${p.name}</div>
+          <div class="prod-meta">${p.cat} ${p.barcode?'· '+p.barcode:''} ${p.note?'· '+p.note:''}</div>
+        </div>
+        <span class="badge ${cls}">${lbl}</span>
+      </div>
+      <div class="prod-card-mid">
+        <div class="prod-stat">
+          <div class="prod-stat-label">庫存</div>
+          <div class="prod-stat-val">${p.stock}<span style="font-size:11px;font-family:sans-serif;font-weight:400;color:var(--text2)"> ${p.unit}</span></div>
+        </div>
+        <div class="prod-stat">
+          <div class="prod-stat-label">進價</div>
+          <div class="prod-stat-val">$${fmt(p.cost)}</div>
+        </div>
+        <div class="prod-stat">
+          <div class="prod-stat-label">售價</div>
+          <div class="prod-stat-val">$${fmt(p.sell)}</div>
+        </div>
+      </div>
+      <div class="prod-card-bot">
+        <span style="font-size:11px;color:var(--text2)">安全庫存：${p.safe}</span>
+        <div class="stock-bar" style="flex:1;margin:0 10px;"><div class="stock-bar-fill ${barCls}" style="width:${pct}%"></div></div>
+        <div class="btn-row">
+          <button class="btn btn-outline btn-sm" onclick="openProductModal(${p.id})">編輯</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id})">刪</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ════════════ CATEGORIES ════════════
+function renderCategories() {
+  const div=document.getElementById('catList');
+  div.innerHTML=state.categories.map((c,i)=>`
+    <div class="cat-item">
+      <div>
+        <div style="font-weight:600;font-size:14px;">${c}</div>
+        <div style="font-size:11.5px;color:var(--text2);">${state.catDescs[c]||''} · ${state.products.filter(p=>p.cat===c).length}種商品</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-outline btn-sm" onclick="openCatModal(${i})">編輯</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteCat(${i})">刪</button>
+      </div>
+    </div>`).join('');
+}
+
+// ════════════ PURCHASE ════════════
+function savePurchase() {
+  const productId=+document.getElementById('purch_product').value;
+  const qty=+document.getElementById('purch_qty').value;
+  const price=+document.getElementById('purch_price').value;
+  const supplier=document.getElementById('purch_supplier').value.trim()||'未知廠商';
+  const date=document.getElementById('purch_date').value||todayStr();
+  if(!productId||qty<=0){ toast('請填寫完整資料'); return; }
+  const p=getProd(productId);
+  state.purchases.push({id:state.nextId++,date,supplier,product:productId,qty,price,note:document.getElementById('purch_note').value});
+  p.stock+=qty; p.cost=price||p.cost;
+  addLog(`進貨「${p.name}」+${qty}${p.unit}・${supplier}`,'🚛');
+  saveState(); toast(`✅ 進貨：${p.name} +${qty}`);
+  renderPurchase(); populateProdSelect('purch_product'); updateBadges();
+}
+function renderPurchase() {
+  const q=(document.getElementById('purchSearch')||{}).value?.toLowerCase()||'';
+  let list=[...state.purchases].reverse();
+  if(q) list=list.filter(x=>{ const p=getProd(x.product); return (p&&p.name.toLowerCase().includes(q))||x.supplier.toLowerCase().includes(q); });
+  const div=document.getElementById('purchList');
+  div.innerHTML=list.map(x=>{
+    const p=getProd(x.product);
+    return `<div class="rec-card">
+      <div class="rec-card-top">
+        <div class="rec-card-name">${p?p.name:'已刪除'}</div>
+        <div class="rec-card-amount" style="color:var(--accent)">NT$${fmt(x.qty*x.price)}</div>
+      </div>
+      <div class="rec-card-sub">${x.supplier} · ${x.date}</div>
+      <div class="rec-card-row">
+        <span class="badge badge-blue">PO${String(x.id).padStart(4,'0')}</span>
+        <span style="font-size:12px;color:var(--text2)">x${x.qty} · NT$${fmt(x.price)}/件 ${x.note?'· '+x.note:''}</span>
+      </div>
+    </div>`;
+  }).join('')||'<div class="empty">暫無進貨記錄</div>';
+}
+
+// ════════════ SALES ════════════
+function fillSalePrice() {
+  const p=getProd(+document.getElementById('sale_product').value);
+  if(p) document.getElementById('sale_price').value=p.sell;
+}
+function saveSale() {
+  const productId=+document.getElementById('sale_product').value;
+  const qty=+document.getElementById('sale_qty').value;
+  const price=+document.getElementById('sale_price').value;
+  const date=document.getElementById('sale_date').value||todayStr();
+  if(!productId||qty<=0){ toast('請填寫完整資料'); return; }
+  const p=getProd(productId);
+  if(p.stock<qty){ toast(`⚠️ 庫存不足！現有${p.stock}${p.unit}`); return; }
+  state.sales.push({id:state.nextId++,date,product:productId,qty,price});
+  p.stock-=qty;
+  addLog(`銷售「${p.name}」-${qty}${p.unit}`,'💰');
+  saveState(); toast(`✅ 銷售：${p.name} -${qty}`);
+  renderSales(); populateProdSelect('sale_product'); updateBadges();
+}
+function renderSales() {
+  const q=(document.getElementById('saleSearch')||{}).value?.toLowerCase()||'';
+  let list=[...state.sales].reverse();
+  if(q) list=list.filter(x=>{ const p=getProd(x.product); return p&&p.name.toLowerCase().includes(q); });
+  const month=thisMonth();
+  const ms=state.sales.filter(s=>s.date&&s.date.startsWith(month));
+  document.getElementById('saleSummary').innerHTML=`
+    <div class="summary-chip">本月筆數：<strong>${ms.length}</strong></div>
+    <div class="summary-chip">本月件數：<strong>${ms.reduce((s,x)=>s+x.qty,0)}</strong></div>
+    <div class="summary-chip">本月銷額：NT$<strong>${fmt(ms.reduce((s,x)=>s+x.qty*x.price,0))}</strong></div>`;
+  document.getElementById('saleList').innerHTML=list.map(x=>{
+    const p=getProd(x.product);
+    const profit=(x.price-(p?p.cost:0))*x.qty;
+    return `<div class="rec-card">
+      <div class="rec-card-top">
+        <div class="rec-card-name">${p?p.name:'已刪除'}</div>
+        <div class="rec-card-amount" style="color:var(--accent)">NT$${fmt(x.qty*x.price)}</div>
+      </div>
+      <div class="rec-card-sub">${x.date}</div>
+      <div class="rec-card-row">
+        <span class="badge badge-green">SO${String(x.id).padStart(4,'0')}</span>
+        <span style="font-size:12px;color:var(--text2)">x${x.qty} · NT$${fmt(x.price)}/件</span>
+        <span style="font-size:12px;color:${profit>=0?'var(--accent)':'var(--danger)'};font-weight:600">利潤 NT$${fmt(profit)}</span>
+      </div>
+    </div>`;
+  }).join('')||'<div class="empty">暫無銷售記錄</div>';
+}
+
+// ════════════ MORE (Adj + Report + Alerts) ════════════
+function renderMore() {
+  populateProdSelect('adj_product');
+  renderAdjList();
+  renderReport();
+  renderAlertsFull();
+}
+
+function saveAdjustment() {
+  const productId=+document.getElementById('adj_product').value;
+  const qty=+document.getElementById('adj_qty').value;
+  const type=document.getElementById('adj_type').value;
+  const note=document.getElementById('adj_note').value;
+  if(!productId||qty===0){ toast('請選擇商品並填寫調整量'); return; }
+  const p=getProd(productId);
+  if(p.stock+qty<0){ toast(`⚠️ 庫存不足，現有${p.stock}${p.unit}`); return; }
+  state.adjustments.push({id:state.nextId++,date:todayStr(),product:productId,type,qty,note});
+  p.stock+=qty;
+  addLog(`調整「${p.name}」${qty>0?'+':''}${qty}（${type}）`,'⚖️');
+  saveState(); toast(`✅ 已調整：${p.name} ${qty>0?'+':''}${qty}`);
+  renderAdjList(); populateProdSelect('adj_product'); updateBadges();
+}
+
+function renderAdjList() {
+  const div=document.getElementById('adjList');
+  div.innerHTML=[...state.adjustments].reverse().map(x=>{
+    const p=getProd(x.product);
+    return `<div class="rec-card">
+      <div class="rec-card-top">
+        <div class="rec-card-name">${p?p.name:'已刪除'}</div>
+        <div style="font-family:'DM Mono',monospace;font-weight:700;font-size:14px;color:${x.qty>=0?'var(--accent)':'var(--danger)'}">${x.qty>0?'+':''}${x.qty}</div>
+      </div>
+      <div class="rec-card-sub">${x.date} · ${x.note||'-'}</div>
+      <div class="rec-card-row"><span class="badge badge-blue">${x.type}</span></div>
+    </div>`;
+  }).join('')||'<div class="empty">暫無調整記錄</div>';
+}
+
+function renderReport() {
+  const month=thisMonth();
+  const totalVal=state.products.reduce((s,p)=>s+p.cost*p.stock,0);
+  const monthPurch=state.purchases.filter(x=>x.date&&x.date.startsWith(month)).reduce((s,x)=>s+x.qty*x.price,0);
+  const msd=state.sales.filter(x=>x.date&&x.date.startsWith(month));
+  const profit=msd.reduce((s,x)=>{ const p=getProd(x.product); return s+(p?(x.price-p.cost)*x.qty:0); },0);
+  document.getElementById('rptValue').textContent=fmt(totalVal);
+  document.getElementById('rptPurch').textContent=fmt(monthPurch);
+  document.getElementById('rptProfit').textContent=fmt(profit);
+
+  const catData=state.categories.map(c=>{
+    const prods=state.products.filter(p=>p.cat===c);
+    return {c, val:prods.reduce((s,p)=>s+p.cost*p.stock,0), cnt:prods.length, stock:prods.reduce((s,p)=>s+p.stock,0)};
+  }).filter(x=>x.cnt>0).sort((a,b)=>b.val-a.val);
+  const maxV=Math.max(...catData.map(x=>x.val),1);
+  document.getElementById('catReport').innerHTML=catData.map(x=>`
+    <div class="report-bar-row">
+      <div class="report-bar-label">${x.c}</div>
+      <div class="report-bar"><div class="report-bar-fill" style="width:${Math.round(x.val/maxV*100)}%"></div></div>
+      <div class="report-bar-val">$${fmt(x.val)}</div>
+    </div>`).join('');
+
+  const mqty={};
+  msd.forEach(x=>{ mqty[x.product]=(mqty[x.product]||0)+x.qty; });
+  const div=document.getElementById('rptList');
+  div.innerHTML=[...state.products].sort((a,b)=>b.cost*b.stock-a.cost*a.stock).map(p=>{
+    const low=p.stock<=p.safe,out=p.stock===0;
+    return `<div class="rec-card">
+      <div class="rec-card-top">
+        <div class="rec-card-name">${p.name}</div>
+        <span class="badge ${out?'badge-red':low?'badge-yellow':'badge-green'}">${out?'斷貨':low?'低庫存':'正常'}</span>
+      </div>
+      <div class="rec-card-sub">${p.cat} · 庫存${p.stock}${p.unit} · 本月銷量${mqty[p.id]||0}</div>
+      <div class="rec-card-row">
+        <span style="font-size:12px;color:var(--text2)">進NT$${fmt(p.cost)} / 售NT$${fmt(p.sell)}</span>
+        <span style="font-family:'DM Mono',monospace;font-weight:700;color:var(--accent)">庫存值 NT$${fmt(p.cost*p.stock)}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderAlertsFull() {
+  const alerts=state.products.filter(p=>p.stock<=p.safe);
+  document.getElementById('alertFull').innerHTML=alerts.length===0
+    ?'<div class="empty">✅ 目前所有商品庫存正常</div>'
+    :alerts.map(p=>`<div class="alert-item">
+      <div class="alert-dot ${p.stock===0?'red':'yellow'}"></div>
+      <div class="alert-text" style="flex:1">
+        <strong>${p.name}</strong>
+        <span>${p.cat} · 庫存${p.stock}${p.unit} · 安全${p.safe}${p.unit}${p.stock===0?' ⚠️斷貨':''}</span>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="gotoPage('purchase');switchTab('purchase','new',document.querySelectorAll('#page-purchase .tab')[1])">進貨</button>
+    </div>`).join('');
+}
+
+// ════════════ INIT ════════════
+document.getElementById('purch_date').value=todayStr();
+document.getElementById('sale_date').value=todayStr();
+renderDashboard();
+updateBadges();
+</script>
+</body>
+</html>

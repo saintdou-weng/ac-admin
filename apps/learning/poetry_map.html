@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>詩詞山河</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#1a0e06;font-family:'Noto Serif SC',serif}
+#app{width:100vw;height:100vh;position:relative;overflow:hidden}
+#map-svg{width:100%;height:100%;display:block}
+
+/* ── Title ── */
+.title-box{
+  position:absolute;top:14px;left:50%;transform:translateX(-50%);
+  background:rgba(248,234,190,0.93);border:1.5px solid #7a4e18;
+  padding:7px 26px;text-align:center;z-index:30;white-space:nowrap;
+  box-shadow:2px 3px 12px rgba(0,0,0,0.45),inset 0 0 18px rgba(190,140,50,0.18);
+}
+.title-main{font-size:clamp(15px,3.5vw,24px);font-weight:700;color:#2C1810;letter-spacing:7px}
+.title-sub{font-size:clamp(9px,1.4vw,11px);color:#7a4e18;letter-spacing:1px;margin-top:3px}
+
+/* ── Poem Panel ── */
+#poem-panel{
+  position:fixed;top:0;right:-100%;
+  width:min(370px,88vw);height:100vh;
+  background:#F7E8C8;
+  background-image:linear-gradient(rgba(160,110,50,0.07) 1px,transparent 1px);
+  background-size:100% 30px;
+  border-left:2px solid #8B5520;
+  transition:right .48s cubic-bezier(.4,0,.2,1);
+  z-index:100;display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:-5px 0 24px rgba(0,0,0,.5);
+}
+#poem-panel.open{right:0}
+.panel-hdr{
+  background:linear-gradient(135deg,#6A3A10,#9A5020);
+  color:#F7E8C8;padding:16px 18px 12px;flex-shrink:0;position:relative;
+}
+.panel-loc{font-size:10px;opacity:.7;letter-spacing:3px;margin-bottom:3px}
+.panel-ttl{font-size:19px;font-weight:700;letter-spacing:4px}
+.panel-author{font-size:11px;margin-top:3px;opacity:.8}
+.panel-close{
+  position:absolute;top:13px;right:13px;width:26px;height:26px;
+  background:rgba(247,232,200,.18);border:1px solid rgba(247,232,200,.38);
+  color:#F7E8C8;cursor:pointer;border-radius:50%;font-size:13px;
+  display:flex;align-items:center;justify-content:center;
+}
+.panel-body{flex:1;overflow-y:auto;padding:22px 18px;display:flex;flex-direction:column;align-items:center}
+.poem-frame{
+  display:flex;flex-direction:row-reverse;gap:14px;
+  justify-content:center;margin:4px auto;
+  padding:18px 22px;
+  background:rgba(139,85,32,.06);
+  border:1px solid rgba(139,85,32,.2);border-radius:2px;
+  width:100%;
+}
+.poem-col{
+  writing-mode:vertical-rl;text-orientation:mixed;
+  font-size:clamp(14px,3.5vw,18px);color:#2C1810;
+  line-height:1.9;letter-spacing:5px;
+}
+.poem-desc{
+  font-size:11.5px;color:#5A3818;line-height:1.85;
+  margin-top:16px;padding:12px 10px;
+  border-top:1px solid rgba(139,85,32,.2);text-align:justify;width:100%;
+}
+.dynasty-tag{
+  display:inline-block;background:#8B5520;color:#F7E8C8;
+  font-size:10px;padding:2px 7px;letter-spacing:2px;margin-bottom:10px;
+}
+
+/* ── Intro ── */
+#intro{
+  position:fixed;inset:0;background:rgba(20,10,2,.78);
+  z-index:200;display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(2px);transition:opacity .5s;
+}
+#intro.gone{opacity:0;pointer-events:none}
+.intro-box{
+  background:#F5E0B0;border:2px solid #7a4e18;
+  padding:34px 38px;text-align:center;max-width:360px;width:88vw;
+  box-shadow:0 0 48px rgba(0,0,0,.55);position:relative;
+}
+.intro-box::before,.intro-box::after{
+  content:'';position:absolute;width:20px;height:20px;border-color:#7a4e18;border-style:solid;
+}
+.intro-box::before{top:8px;left:8px;border-width:1.5px 0 0 1.5px}
+.intro-box::after{bottom:8px;right:8px;border-width:0 1.5px 1.5px 0}
+.intro-title{font-size:28px;font-weight:700;color:#2C1810;letter-spacing:10px}
+.intro-hr{width:55px;height:1px;background:#8B5520;margin:13px auto}
+.intro-sub{font-size:13px;color:#6A3A10;line-height:2.1}
+.intro-note{font-size:10px;opacity:.6;margin-top:6px}
+.intro-btn{
+  margin-top:22px;background:#6A3A10;color:#F5E0B0;border:none;
+  padding:9px 30px;font-size:13px;cursor:pointer;
+  font-family:'Noto Serif SC',serif;letter-spacing:5px;
+  transition:background .2s;
+}
+.intro-btn:hover{background:#9A5020}
+
+/* ── Legend ── */
+.legend{
+  position:absolute;bottom:16px;left:16px;
+  background:rgba(248,234,190,.88);border:1px solid #7a4e18;
+  padding:7px 12px;font-size:10px;color:#5A3818;z-index:20;
+  line-height:1.9;
+}
+.legend-dot{
+  display:inline-block;width:7px;height:7px;border-radius:50%;
+  background:#D06040;margin-right:5px;vertical-align:middle;
+}
+
+/* SVG loc hover */
+.loc-group{cursor:pointer}
+.loc-ring{transition:r .15s}
+.loc-group:hover .loc-ring{r:7}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ════════ MAP SVG ════════ -->
+<svg id="map-svg" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet">
+<defs>
+  <!-- Parchment texture -->
+  <filter id="parchment" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.72,0.68" numOctaves="4" seed="8" result="nz"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 0.82  0 0 0 0 0.65  0 0 0 0 0.35  0 0 0 0.18 0" in="nz" result="col"/>
+    <feBlend in="SourceGraphic" in2="col" mode="multiply"/>
+  </filter>
+  <!-- Ink shadow -->
+  <filter id="ink">
+    <feDropShadow dx="0.5" dy="1" stdDeviation="0.7" flood-color="#2C1810" flood-opacity="0.4"/>
+  </filter>
+  <!-- Soft glow -->
+  <filter id="glow">
+    <feGaussianBlur stdDeviation="3" result="b"/>
+    <feComposite in="SourceGraphic" in2="b" operator="over"/>
+  </filter>
+  <!-- Sea wave pattern -->
+  <pattern id="waves" x="0" y="0" width="28" height="14" patternUnits="userSpaceOnUse">
+    <path d="M0,7 Q7,1 14,7 Q21,13 28,7" fill="none" stroke="#89BCE0" stroke-width="0.7" opacity="0.5"/>
+  </pattern>
+  <!-- Land grid (map lines) -->
+  <pattern id="mapgrid" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+    <path d="M50,0 L0,0 L0,50" fill="none" stroke="rgba(120,80,30,0.06)" stroke-width="0.5"/>
+  </pattern>
+  <!-- Mountain symbol -->
+  <symbol id="mtn" viewBox="0 0 36 22" overflow="visible">
+    <path d="M0,22 L10,4 L20,22 Z" fill="#9A7245" opacity="0.85"/>
+    <path d="M12,22 L24,1 L36,22 Z" fill="#7A5228" opacity="0.9"/>
+    <path d="M26,22 L33,10 L40,22 Z" fill="#8A6238" opacity="0.75"/>
+    <path d="M10,4 L13,10 L20,4" fill="none" stroke="#EAD8B0" stroke-width="0.6" opacity="0.55"/>
+    <path d="M24,1 L28,8 L36,1" fill="none" stroke="#EAD8B0" stroke-width="0.6" opacity="0.5"/>
+  </symbol>
+  <symbol id="mtn-s" viewBox="0 0 24 16" overflow="visible">
+    <path d="M0,16 L7,3 L14,16 Z" fill="#8A6238" opacity="0.8"/>
+    <path d="M9,16 L18,0 L27,16 Z" fill="#7A5228" opacity="0.85"/>
+  </symbol>
+  <!-- Tree symbol -->
+  <symbol id="tree" viewBox="0 0 12 18" overflow="visible">
+    <path d="M6,0 L0,9 L12,9 Z" fill="#4A7535" opacity="0.7"/>
+    <path d="M6,6 L0,15 L12,15 Z" fill="#3A6025" opacity="0.75"/>
+    <rect x="5" y="14" width="2" height="4" fill="#5A3810" opacity="0.55"/>
+  </symbol>
+  <!-- Gradients -->
+  <linearGradient id="g-land" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D5B260"/>
+    <stop offset="50%" stop-color="#C8A248"/>
+    <stop offset="100%" stop-color="#B89038"/>
+  </linearGradient>
+  <radialGradient id="g-sea" cx="70%" cy="50%" r="65%">
+    <stop offset="0%" stop-color="#A8CDE4" stop-opacity="0.3"/>
+    <stop offset="100%" stop-color="#4A6E8A" stop-opacity="0.55"/>
+  </radialGradient>
+  <radialGradient id="g-tibet" cx="50%" cy="50%" r="60%">
+    <stop offset="0%" stop-color="#A87830"/>
+    <stop offset="100%" stop-color="#B89040"/>
+  </radialGradient>
+  <radialGradient id="g-northeast" cx="50%" cy="50%" r="60%">
+    <stop offset="0%" stop-color="#C8AA58"/>
+    <stop offset="100%" stop-color="#B89840"/>
+  </radialGradient>
+  <!-- Clip path for sea waves (inside map) -->
+  <clipPath id="sea-clip">
+    <rect width="1000" height="700"/>
+  </clipPath>
+</defs>
+
+<!-- ═══ SEA BACKGROUND ═══ -->
+<rect width="1000" height="700" fill="#94BCD4"/>
+<rect width="1000" height="700" fill="url(#waves)"/>
+<rect width="1000" height="700" fill="url(#g-sea)"/>
+<!-- Sea labels -->
+<text x="836" y="190" font-family="'Noto Serif SC',serif" font-size="14" fill="#2C4A68" opacity="0.55" writing-mode="vertical-rl" letter-spacing="5">東　海</text>
+<text x="870" y="430" font-family="'Noto Serif SC',serif" font-size="13" fill="#2C4A68" opacity="0.5" writing-mode="vertical-rl" letter-spacing="5">南　海</text>
+<text x="50" y="65" font-family="'Noto Serif SC',serif" font-size="11" fill="#2C4A68" opacity="0.38" writing-mode="vertical-rl" letter-spacing="3">北　海</text>
+<!-- Bohai Sea marker -->
+<text x="685" y="228" font-family="'Noto Serif SC',serif" font-size="10" fill="#2C4A68" opacity="0.45" writing-mode="vertical-rl" letter-spacing="3">渤海</text>
+
+<!-- ═══ CHINA LAND MASS ═══ -->
+<!--
+  Coordinate system:
+  x = (lon - 73) / 62 * 800 + 82   [lon 73°E→82, 135°E→882]
+  y = (53 - lat) / 35 * 600 + 40   [lat 53°N→40, 18°N→640]
+  
+  Key corners verified:
+  NE Heilongjiang 135°E,48°N → (882,126)
+  Shanghai 121°E,31°N → (714,434)
+  Hainan 110°E,18°N → (491,640)
+  Xinjiang 73°E,39°N → (82,308)
+  Tibet 80°E,32°N → (162,400)
+-->
+<path id="china"
+  d="
+  M 878,128
+  Q 856,140 840,158 L 822,178
+  Q 806,196 792,216 L 778,234
+  Q 766,252 756,270 L 744,288
+  Q 734,306 724,322 L 714,338
+  Q 706,354 700,370 L 696,386
+  Q 692,402 690,418 L 688,432
+  Q 686,446 682,460 L 675,474
+  Q 665,490 652,505 L 636,520
+  Q 620,534 602,544 L 582,554
+  Q 562,562 540,566 L 518,568
+  Q 498,567 480,561 L 462,553
+  Q 447,551 432,550 L 415,549
+  Q 398,547 382,540 L 368,530
+  Q 354,518 348,504 L 342,490
+  Q 339,474 342,458 L 346,444
+  Q 332,442 314,444 L 286,446
+  Q 258,447 232,440 L 208,432
+  Q 180,420 163,408 L 148,397
+  Q 125,382 114,363 L 104,344
+  Q 92,322 90,300 L 89,278
+  Q 89,256 97,235 L 108,213
+  Q 122,191 140,174 L 158,158
+  Q 178,143 198,134 L 212,129
+  Q 226,112 244,100 L 268,90
+  Q 293,82 328,80 L 364,78
+  Q 396,76 430,73 L 458,70
+  Q 480,61 500,50 L 516,41
+  Q 532,34 550,30 L 568,28
+  Q 590,28 616,31 L 642,34
+  Q 668,38 688,50 L 704,61
+  Q 720,75 736,90 L 750,102
+  Q 764,110 778,112 L 800,104
+  Q 830,92 856,86
+  Z"
+  fill="url(#g-land)"
+  stroke="#7A4E18"
+  stroke-width="1.8"
+  stroke-linejoin="round"
+/>
+
+<!-- ═══ TERRAIN REGIONS ═══ -->
+<!-- Qinghai–Tibet Plateau (高原) -->
+<path d="M 89,278 Q 128,275 165,280 L 200,287 Q 242,297 272,318 L 302,342 Q 330,358 356,366 L 374,372 Q 382,394 378,424 L 370,442 Q 356,447 346,444 L 286,446 Q 258,447 232,440 L 208,432 Q 180,420 163,408 L 148,397 Q 125,382 114,363 L 104,344 Q 92,322 90,300 Z"
+  fill="url(#g-tibet)" opacity="0.48"/>
+
+<!-- Sichuan Basin (盆地，綠色肥沃) -->
+<path d="M 432,386 Q 462,376 494,384 L 518,400 Q 530,420 524,444 L 512,460 Q 492,468 470,464 L 450,454 Q 435,438 432,418 Z"
+  fill="#7A9A50" opacity="0.3"/>
+
+<!-- Loess Plateau (黃土高原) -->
+<path d="M 460,295 Q 496,284 530,290 L 554,304 Q 570,326 562,354 L 548,370 Q 530,378 508,376 L 484,368 Q 464,352 458,328 Z"
+  fill="#C09840" opacity="0.4"/>
+
+<!-- North China Plain (華北平原) -->
+<path d="M 578,244 Q 620,235 660,242 L 686,256 Q 704,276 700,304 L 692,326 Q 670,340 645,338 L 620,332 Q 600,316 596,292 Z"
+  fill="#D8B870" opacity="0.38"/>
+
+<!-- Yangtze Delta (長江三角洲) -->
+<path d="M 610,396 Q 645,388 678,396 L 700,414 Q 708,434 698,454 L 680,466 Q 656,471 632,463 L 614,450 Q 606,434 608,415 Z"
+  fill="#B8D0A0" opacity="0.4"/>
+
+<!-- Yunnan-Guizhou Plateau -->
+<path d="M 340,488 Q 370,476 408,480 L 434,490 Q 448,508 442,530 L 428,545 Q 408,552 385,546 L 362,536 Q 348,520 348,502 Z"
+  fill="#9AAA60" opacity="0.3"/>
+
+<!-- ═══ MAP GRID OVERLAY ═══ -->
+<path d="M 89,278 Q 128,275 165,280 L 200,287 Q 242,297 272,318 L 302,342 Q 330,358 356,366 L 374,372 Q 382,394 378,424 L 370,442 Q 356,447 346,444 L 286,446 Q 258,447 232,440 L 208,432 Q 180,420 163,408 L 148,397 Q 125,382 114,363 L 104,344 Q 92,322 90,300 Z"
+  fill="url(#mapgrid)" opacity="0.5"/>
+
+<!-- ═══ RIVERS ═══ -->
+<!-- Yangtze 長江 - source → sea -->
+<path id="yangtze-r"
+  d="M 342,490 Q 370,480 398,470 L 432,460 Q 458,452 484,450 L 514,446 Q 548,443 576,440 L 602,437 Q 628,432 650,424 L 670,415 Q 686,406 698,414 L 706,428 Q 710,448 704,465"
+  fill="none" stroke="#6AAED2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.68"/>
+<text font-family="'Noto Serif SC',serif" font-size="9" fill="#3A6888" opacity="0.65" letter-spacing="3">
+  <textPath href="#yangtze-r" startOffset="18%">長　　江</textPath>
+</text>
+
+<!-- Yellow River 黃河 -->
+<path id="huang-r"
+  d="M 388,297 Q 414,283 442,278 L 474,272 Q 504,268 528,278 L 548,292 Q 564,308 568,328 L 570,348 Q 570,366 556,380 L 540,392 Q 520,400 500,396 L 480,388 Q 462,375 448,362"
+  fill="none" stroke="#CAAC5A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+<text font-family="'Noto Serif SC',serif" font-size="9" fill="#7A6020" opacity="0.6" letter-spacing="2">
+  <textPath href="#huang-r" startOffset="12%">黃　河</textPath>
+</text>
+
+<!-- Pearl River 珠江 -->
+<path d="M 488,530 Q 516,522 544,515 L 568,510 Q 590,506 608,510"
+  fill="none" stroke="#6AAED2" stroke-width="1.6" opacity="0.52"/>
+<text x="500" y="505" font-family="'Noto Serif SC',serif" font-size="8" fill="#3A6888" opacity="0.5" letter-spacing="2">珠江</text>
+
+<!-- Wei River 渭水 -->
+<path d="M 460,338 Q 490,332 520,334 L 548,340 Q 568,346 580,355"
+  fill="none" stroke="#CAAC5A" stroke-width="1.4" opacity="0.45"/>
+
+<!-- Han River 漢水 -->
+<path d="M 526,388 Q 548,378 568,370 L 590,362 Q 610,355 624,348"
+  fill="none" stroke="#6AAED2" stroke-width="1.4" opacity="0.45"/>
+
+<!-- ═══ MOUNTAIN RANGES ═══ -->
+<!-- 天山 Tianshan -->
+<g transform="translate(168,168)">
+  <use href="#mtn" width="36" height="22" x="0" y="0"/>
+  <use href="#mtn" width="36" height="22" x="28" y="3"/>
+  <use href="#mtn" width="36" height="22" x="56" y="-2"/>
+  <use href="#mtn-s" width="24" height="16" x="82" y="5"/>
+  <text x="2" y="34" font-family="'Noto Serif SC',serif" font-size="9" fill="#5A3C18" opacity="0.75">天　山</text>
+</g>
+
+<!-- 崑崙山 Kunlun -->
+<g transform="translate(148,318)">
+  <use href="#mtn" width="36" height="22" x="0" y="0"/>
+  <use href="#mtn" width="36" height="22" x="28" y="-4"/>
+  <use href="#mtn" width="36" height="22" x="56" y="2"/>
+  <use href="#mtn-s" width="24" height="16" x="82" y="6"/>
+  <text x="0" y="34" font-family="'Noto Serif SC',serif" font-size="9" fill="#5A3C18" opacity="0.7">崑崙山</text>
+</g>
+
+<!-- 喜馬拉雅 Himalaya -->
+<g transform="translate(130,428)">
+  <use href="#mtn" width="36" height="22" x="0" y="0"/>
+  <use href="#mtn" width="36" height="22" x="28" y="-5"/>
+  <use href="#mtn" width="36" height="22" x="56" y="-2"/>
+  <use href="#mtn" width="36" height="22" x="84" y="1"/>
+  <text x="2" y="35" font-family="'Noto Serif SC',serif" font-size="9" fill="#5A3C18" opacity="0.68">喜馬拉雅山</text>
+</g>
+
+<!-- 秦嶺 Qinling -->
+<g transform="translate(462,352)">
+  <use href="#mtn-s" width="24" height="16" x="0" y="0"/>
+  <use href="#mtn-s" width="24" height="16" x="18" y="-3"/>
+  <use href="#mtn-s" width="24" height="16" x="36" y="1"/>
+  <use href="#mtn-s" width="24" height="16" x="54" y="-1"/>
+  <text x="6" y="26" font-family="'Noto Serif SC',serif" font-size="9" fill="#5A3C18" opacity="0.7">秦　嶺</text>
+</g>
+
+<!-- 太行山 Taihang -->
+<g transform="translate(606,268)">
+  <use href="#mtn-s" width="24" height="16" x="0" y="0"/>
+  <use href="#mtn-s" width="24" height="16" x="18" y="-3"/>
+  <use href="#mtn-s" width="24" height="16" x="36" y="2"/>
+  <text x="2" y="26" font-family="'Noto Serif SC',serif" font-size="9" fill="#5A3C18" opacity="0.68">太行山</text>
+</g>
+
+<!-- 武夷山 Wuyi -->
+<g transform="translate(668,467)">
+  <use href="#mtn-s" width="24" height="16" x="0" y="0"/>
+  <use href="#mtn-s" width="24" height="16" x="17" y="-3"/>
+  <text x="0" y="25" font-family="'Noto Serif SC',serif" font-size="8" fill="#5A3C18" opacity="0.65">武夷山</text>
+</g>
+
+<!-- 大興安嶺 Daxinganling -->
+<g transform="translate(755,106)">
+  <use href="#mtn-s" width="24" height="16" x="0" y="0"/>
+  <use href="#mtn-s" width="24" height="16" x="16" y="4"/>
+  <text x="-8" y="28" font-family="'Noto Serif SC',serif" font-size="8" fill="#5A3C18" opacity="0.55">大興安嶺</text>
+</g>
+
+<!-- 峨眉山 Emei -->
+<g transform="translate(462,446)">
+  <use href="#mtn-s" width="24" height="16" x="0" y="0"/>
+  <use href="#mtn-s" width="24" height="16" x="16" y="-4"/>
+</g>
+
+<!-- 廬山 Lushan -->
+<g transform="translate(627,453)">
+  <use href="#mtn-s" width="24" height="16" x="0" y="0"/>
+</g>
+
+<!-- 桂林山水 Guilin -->
+<g transform="translate(538,514)">
+  <use href="#mtn-s" width="24" height="16" x="0" y="0"/>
+  <use href="#mtn-s" width="24" height="16" x="12" y="-4"/>
+  <use href="#mtn-s" width="24" height="16" x="24" y="2"/>
+</g>
+
+<!-- ═══ FORESTS ═══ -->
+<!-- Northeast forests -->
+<g opacity="0.48">
+  <use href="#tree" width="12" height="18" x="766" y="88"/>
+  <use href="#tree" width="12" height="18" x="780" y="83"/>
+  <use href="#tree" width="12" height="18" x="796" y="91"/>
+  <use href="#tree" width="12" height="18" x="772" y="104"/>
+  <use href="#tree" width="12" height="18" x="788" y="108"/>
+</g>
+<!-- Yunnan forests -->
+<g opacity="0.42">
+  <use href="#tree" width="12" height="18" x="348" y="495"/>
+  <use href="#tree" width="12" height="18" x="362" y="490"/>
+  <use href="#tree" width="12" height="18" x="376" y="497"/>
+  <use href="#tree" width="12" height="18" x="354" y="512"/>
+  <use href="#tree" width="12" height="18" x="368" y="517"/>
+</g>
+
+<!-- ═══ PARCHMENT TEXTURE over land ═══ -->
+<path d="M 878,128 Q 856,140 840,158 L 822,178 Q 806,196 792,216 L 778,234 Q 766,252 756,270 L 744,288 Q 734,306 724,322 L 714,338 Q 706,354 700,370 L 696,386 Q 692,402 690,418 L 688,432 Q 686,446 682,460 L 675,474 Q 665,490 652,505 L 636,520 Q 620,534 602,544 L 582,554 Q 562,562 540,566 L 518,568 Q 498,567 480,561 L 462,553 Q 447,551 432,550 L 415,549 Q 398,547 382,540 L 368,530 Q 354,518 348,504 L 342,490 Q 339,474 342,458 L 346,444 Q 332,442 314,444 L 286,446 Q 258,447 232,440 L 208,432 Q 180,420 163,408 L 148,397 Q 125,382 114,363 L 104,344 Q 92,322 90,300 L 89,278 Q 89,256 97,235 L 108,213 Q 122,191 140,174 L 158,158 Q 178,143 198,134 L 212,129 Q 226,112 244,100 L 268,90 Q 293,82 328,80 L 364,78 Q 396,76 430,73 L 458,70 Q 480,61 500,50 L 516,41 Q 532,34 550,30 L 568,28 Q 590,28 616,31 L 642,34 Q 668,38 688,50 L 704,61 Q 720,75 736,90 L 750,102 Q 764,110 778,112 L 800,104 Q 830,92 856,86 Z"
+  fill="rgba(210,165,85,0.1)" filter="url(#parchment)"/>
+
+<!-- ═══ LOCATION MARKERS (built by JS) ═══ -->
+<g id="locs"></g>
+
+<!-- ═══ POEM HIGHLIGHT BOX (on map) ═══ -->
+<g id="ph" style="display:none">
+  <rect id="ph-bg" rx="3" fill="rgba(248,236,196,0.88)" stroke="#8B5520" stroke-width="0.8"/>
+  <text id="ph-txt" font-family="'Noto Serif SC',serif" font-size="11" fill="#2C1810" writing-mode="vertical-rl" letter-spacing="4"></text>
+  <text id="ph-author" font-family="'Noto Serif SC',serif" font-size="9" fill="#7a4e18" opacity="0.8" writing-mode="vertical-rl"></text>
+</g>
+
+<!-- ═══ FRAME ═══ -->
+<rect x="5" y="5" width="990" height="690" fill="none" stroke="#7A4E18" stroke-width="1.5" opacity="0.45"/>
+<rect x="11" y="11" width="978" height="678" fill="none" stroke="#7A4E18" stroke-width="0.5" opacity="0.22"/>
+<!-- Corner ornaments -->
+<g stroke="#7A4E18" stroke-width="1.5" fill="none" opacity="0.5">
+  <path d="M5,32 L5,5 L32,5"/>
+  <path d="M968,5 L995,5 L995,32"/>
+  <path d="M5,668 L5,695 L32,695"/>
+  <path d="M968,695 L995,695 L995,668"/>
+</g>
+<!-- Corner dots -->
+<g fill="#7A4E18" opacity="0.55">
+  <circle cx="5" cy="5" r="2"/><circle cx="995" cy="5" r="2"/>
+  <circle cx="5" cy="695" r="2"/><circle cx="995" cy="695" r="2"/>
+</g>
+
+</svg><!-- end SVG -->
+
+<!-- ════════ TITLE ════════ -->
+<div class="title-box">
+  <div class="title-main">詩　詞　山　河</div>
+  <div class="title-sub">跨越三千年・六十處河山・百六十五首詩詞</div>
+</div>
+
+<!-- ════════ POEM PANEL ════════ -->
+<div id="poem-panel">
+  <div class="panel-hdr">
+    <div class="panel-loc" id="panel-loc"></div>
+    <div class="panel-ttl" id="panel-ttl"></div>
+    <div class="panel-author" id="panel-author"></div>
+    <button class="panel-close" onclick="closePanel()" title="關閉">✕</button>
+  </div>
+  <div class="panel-body">
+    <div class="dynasty-tag" id="dynasty-tag"></div>
+    <div class="poem-frame" id="poem-frame"></div>
+    <div class="poem-desc" id="poem-desc"></div>
+  </div>
+</div>
+
+<!-- ════════ LEGEND ════════ -->
+<div class="legend">
+  <span class="legend-dot"></span>詩詞地點（點擊查看）
+</div>
+
+<!-- ════════ INTRO ════════ -->
+<div id="intro">
+  <div class="intro-box">
+    <div class="intro-title">詩詞山河</div>
+    <div class="intro-hr"></div>
+    <div class="intro-sub">
+      跨越三千年時光<br/>
+      循著詩人的足跡<br/>
+      探訪錦繡山河
+    </div>
+    <div class="intro-note">點擊地圖上的紅點，聆聽詩篇</div>
+    <button class="intro-btn" id="start-btn">展　開　地　圖</button>
+  </div>
+</div>
+
+<!-- ════════ SCRIPT ════════ -->
+<script>
+// ─────────────────────────────────────────
+//  POETRY DATA
+// ─────────────────────────────────────────
+const POEMS = [
+  {
+    id:'suzhou', name:'姑蘇', region:'蘇州・吳地',
+    lon:120.6, lat:31.3,
+    poet:'張繼', dynasty:'唐', title:'楓橋夜泊',
+    lines:['月落烏啼霜滿天','江楓漁火對愁眠','姑蘇城外寒山寺','夜半鐘聲到客船'],
+    desc:'張繼赴試落第，夜泊蘇州楓橋，聆寒山寺深夜鐘聲，愁思如江水奔湧，由此誕生千古名篇。此詩音韻悠遠，景中有情，成為描繪江南夜色的絕唱。'
+  },
+  {
+    id:'lushan', name:'廬山', region:'江西・九江',
+    lon:115.9, lat:29.6,
+    poet:'李白', dynasty:'唐', title:'望廬山瀑布',
+    lines:['日照香爐生紫煙','遙看瀑布掛前川','飛流直下三千尺','疑是銀河落九天'],
+    desc:'詩仙李白遊廬山，望飛瀑之壯麗，以浪漫想象將天上銀河與人間瀑布相融，誇張而生動，氣魄磅礴，令人嘆絕。'
+  },
+  {
+    id:'wuhan', name:'黃鶴樓', region:'武漢・江夏',
+    lon:114.3, lat:30.6,
+    poet:'崔顥', dynasty:'唐', title:'黃鶴樓',
+    lines:['昔人已乘黃鶴去','此地空餘黃鶴樓','黃鶴一去不復返','白雲千載空悠悠','晴川歷歷漢陽樹','芳草萋萋鸚鵡洲','日暮鄉關何處是','煙波江上使人愁'],
+    desc:'崔顥登黃鶴樓，懷古思鄉，望煙波江上而生愁。此詩被譽為唐代七律第一，連詩仙李白見之亦擱筆而嘆，留下「眼前有景道不得，崔顥題詩在上頭」的佳話。'
+  },
+  {
+    id:'xian', name:'長安', region:'陝西・西安',
+    lon:108.9, lat:34.3,
+    poet:'杜甫', dynasty:'唐', title:'春望',
+    lines:['國破山河在','城春草木深','感時花濺淚','恨別鳥驚心','烽火連三月','家書抵萬金','白頭搔更短','渾欲不勝簪'],
+    desc:'安史之亂中杜甫身陷長安，望春景而憂國憂民。山河猶在而國家破碎，花鳥無情而詩人有淚，「家書抵萬金」一句道盡離亂之苦，千載長嘆。'
+  },
+  {
+    id:'yangzhou', name:'揚州', region:'江蘇・廣陵',
+    lon:119.4, lat:32.4,
+    poet:'李白', dynasty:'唐', title:'黃鶴樓送孟浩然之廣陵',
+    lines:['故人西辭黃鶴樓','煙花三月下揚州','孤帆遠影碧空盡','唯見長江天際流'],
+    desc:'暮春三月，李白於黃鶴樓送別好友孟浩然赴揚州。目送孤帆漸行漸遠，終至天際消失，只餘滾滾長江，友情之深盡在不言之中。'
+  },
+  {
+    id:'hangzhou', name:'西湖', region:'杭州・錢塘',
+    lon:120.1, lat:30.3,
+    poet:'蘇軾', dynasty:'宋', title:'飲湖上初晴後雨',
+    lines:['水光瀲灩晴方好','山色空濛雨亦奇','欲把西湖比西子','淡妝濃抹總相宜'],
+    desc:'蘇軾泛舟西湖，領略晴雨各異之美。以西施之美比西湖之勝，此後西湖又名「西子湖」，這一比喻流傳千年，至今仍是西湖最動人的詮釋。'
+  },
+  {
+    id:'yumen', name:'玉門關', region:'甘肅・敦煌',
+    lon:97.0, lat:40.3,
+    poet:'王之渙', dynasty:'唐', title:'涼州詞',
+    lines:['黃河遠上白雲間','一片孤城萬仞山','羌笛何須怨楊柳','春風不度玉門關'],
+    desc:'王之渙以廣闊視野描繪邊塞蒼涼——黃河天際、孤城萬仞、羌笛幽怨。「春風不度玉門關」不僅是寫景，更道盡了戍邊將士遠離故土的孤苦與悲涼。'
+  },
+  {
+    id:'chengdu', name:'成都', region:'四川・錦官城',
+    lon:104.1, lat:30.7,
+    poet:'杜甫', dynasty:'唐', title:'春夜喜雨',
+    lines:['好雨知時節','當春乃發生','隨風潛入夜','潤物細無聲','野徑雲俱黑','江船火獨明','曉看紅濕處','花重錦官城'],
+    desc:'杜甫寓居成都草堂，喜聞春雨潤物。好雨知時而降，無聲潤物，天明後花朵帶雨，錦官城中一片嬌紅。全詩於寧靜中見喜悅，體現詩人對自然的細膩感悟。'
+  },
+  {
+    id:'beijing', name:'幽燕', region:'北京・燕地',
+    lon:116.4, lat:39.9,
+    poet:'龔自珍', dynasty:'清', title:'己亥雜詩',
+    lines:['浩蕩離愁白日斜','吟鞭東指即天涯','落紅不是無情物','化作春泥更護花'],
+    desc:'龔自珍辭官南歸，離京時胸懷浩蕩愁緒。以落紅化春泥護花自比，雖已離去仍心繫家國，道出士人雖身退而志不退的赤誠情懷，是晚清詩壇一聲震響。'
+  },
+  {
+    id:'guilin', name:'桂林', region:'廣西・靖江',
+    lon:110.3, lat:25.3,
+    poet:'韓愈', dynasty:'唐', title:'送桂州嚴大夫',
+    lines:['蒼蒼森八桂','茲地在湘南','江作青羅帶','山如碧玉篸'],
+    desc:'韓愈以「江作青羅帶，山如碧玉篸」描繪桂林奇山秀水，此後成為形容桂林山水的千古名句。青羅帶與碧玉篸的比喻，生動呈現了漓江與喀斯特山峰的絕美風姿。'
+  },
+  {
+    id:'dongting', name:'洞庭', region:'湖南・岳陽',
+    lon:112.9, lat:29.5,
+    poet:'孟浩然', dynasty:'唐', title:'望洞庭湖贈張丞相',
+    lines:['八月湖水平','涵虛混太清','氣蒸雲夢澤','波撼岳陽城','欲濟無舟楫','端居恥聖明'],
+    desc:'孟浩然望洞庭煙波浩渺，以「氣蒸雲夢澤，波撼岳陽城」描繪湖勢之宏大壯闊，展現盛唐氣象。後以無舟自渡寄托入仕之願，寫景抒懷渾然一體。'
+  },
+  {
+    id:'eimei', name:'峨眉', region:'四川・嘉州',
+    lon:103.5, lat:29.6,
+    poet:'李白', dynasty:'唐', title:'峨眉山月歌',
+    lines:['峨眉山月半輪秋','影入平羌江水流','夜發清溪向三峽','思君不見下渝州'],
+    desc:'李白青年出蜀，月照峨眉，倒影江中，一路南行，月色相伴。短短二十字中嵌入峨眉、平羌、清溪、三峽、渝州五個地名，情景交融，是李白早年最清麗的作品之一。'
+  },
+  {
+    id:'yangguan', name:'陽關', region:'甘肅・沙州',
+    lon:94.0, lat:39.8,
+    poet:'王維', dynasty:'唐', title:'送元二使安西',
+    lines:['渭城朝雨浥輕塵','客舍青青柳色新','勸君更盡一杯酒','西出陽關無故人'],
+    desc:'王維送友人出使西域，渭城朝雨後柳色如洗，一杯餞行酒，西出陽關之後便是茫茫大漠與無盡孤獨。此詩後被譜為《陽關三疊》，成為送別曲中最動人的樂章。'
+  },
+  {
+    id:'chibi', name:'赤壁', region:'湖北・黃州',
+    lon:113.9, lat:29.7,
+    poet:'蘇軾', dynasty:'宋', title:'念奴嬌·赤壁懷古',
+    lines:['大江東去浪淘盡','千古風流人物','故壘西邊人道是','三國周郎赤壁','亂石穿空驚濤裂岸','捲起千堆雪'],
+    desc:'蘇軾貶謫黃州，遊覽赤壁，懷想三國豪傑。大江滾滾，英雄已逝，江山依舊。豪邁之中含悲涼，此詞開豪放詞派之先河，是宋詞史上無可比擬的不朽名篇。'
+  },
+  {
+    id:'taihu', name:'太湖', region:'江蘇・吳縣',
+    lon:120.2, lat:31.2,
+    poet:'韋應物', dynasty:'唐', title:'滁州西澗',
+    lines:['獨憐幽草澗邊生','上有黃鸝深樹鳴','春潮帶雨晚來急','野渡無人舟自橫'],
+    desc:'韋應物描繪澗邊幽靜景色，草長鶯飛，春潮急湧，野渡無人而舟自橫於水面。動靜相生，以自然純淨的意境映照詩人超然物外、不求名利的恬淡心境。'
+  }
+];
+
+// ─────────────────────────────────────────
+//  COORDINATE TRANSFORM
+//  viewBox: 0 0 1000 700
+//  x = (lon - 73) / 62 * 800 + 82
+//  y = (53 - lat) / 35 * 600 + 40
+// ─────────────────────────────────────────
+function toXY(lon, lat) {
+  return {
+    x: (lon - 73) / 62 * 800 + 82,
+    y: (53 - lat) / 35 * 600 + 40
+  };
+}
+
+// ─────────────────────────────────────────
+//  BUILD LOCATION MARKERS
+// ─────────────────────────────────────────
+const NS = 'http://www.w3.org/2000/svg';
+const locsEl = document.getElementById('locs');
+
+POEMS.forEach((p, i) => {
+  const {x, y} = toXY(p.lon, p.lat);
+  const g = document.createElementNS(NS, 'g');
+  g.classList.add('loc-group');
+  g.setAttribute('transform', `translate(${x.toFixed(1)},${y.toFixed(1)})`);
+  g.setAttribute('title', p.title);
+
+  // Animated pulse ring
+  const pulse = document.createElementNS(NS, 'circle');
+  pulse.setAttribute('r', '6');
+  pulse.setAttribute('fill', 'none');
+  pulse.setAttribute('stroke', '#D06040');
+  pulse.setAttribute('stroke-width', '1.2');
+  const a1 = document.createElementNS(NS, 'animate');
+  a1.setAttribute('attributeName', 'r'); a1.setAttribute('values', '6;14;6');
+  a1.setAttribute('dur', `${2.8 + i*0.22}s`); a1.setAttribute('repeatCount', 'indefinite');
+  const a2 = document.createElementNS(NS, 'animate');
+  a2.setAttribute('attributeName', 'opacity'); a2.setAttribute('values', '0.5;0;0.5');
+  a2.setAttribute('dur', `${2.8 + i*0.22}s`); a2.setAttribute('repeatCount', 'indefinite');
+  pulse.appendChild(a1); pulse.appendChild(a2);
+  g.appendChild(pulse);
+
+  // Glow ring
+  const gRing = document.createElementNS(NS, 'circle');
+  gRing.setAttribute('r', '7.5');
+  gRing.setAttribute('fill', 'rgba(220,160,60,0.12)');
+  gRing.setAttribute('stroke', 'rgba(220,160,60,0.38)');
+  gRing.setAttribute('stroke-width', '0.8');
+  g.appendChild(gRing);
+
+  // Main ring
+  const ring = document.createElementNS(NS, 'circle');
+  ring.classList.add('loc-ring');
+  ring.setAttribute('r', '5.5');
+  ring.setAttribute('fill', 'rgba(200,80,40,0.18)');
+  ring.setAttribute('stroke', '#C04820');
+  ring.setAttribute('stroke-width', '1.4');
+  g.appendChild(ring);
+
+  // Inner dot
+  const dot = document.createElementNS(NS, 'circle');
+  dot.setAttribute('r', '2.8');
+  dot.setAttribute('fill', '#D05030');
+  g.appendChild(dot);
+
+  // Name label (vertical)
+  const lbl = document.createElementNS(NS, 'text');
+  lbl.setAttribute('x', '8');
+  lbl.setAttribute('y', '3');
+  lbl.setAttribute('writing-mode', 'vertical-rl');
+  lbl.setAttribute('font-family', "'Noto Serif SC',serif");
+  lbl.setAttribute('font-size', '10');
+  lbl.setAttribute('fill', '#2C1810');
+  lbl.setAttribute('filter', 'url(#ink)');
+  lbl.textContent = p.name;
+  g.appendChild(lbl);
+
+  g.addEventListener('click', (e) => { e.stopPropagation(); openPoem(p, x, y); });
+  locsEl.appendChild(g);
+});
+
+// ─────────────────────────────────────────
+//  POEM PANEL
+// ─────────────────────────────────────────
+let activeId = null;
+
+function openPoem(p, x, y) {
+  activeId = p.id;
+
+  // Panel content
+  document.getElementById('panel-loc').textContent = p.region;
+  document.getElementById('panel-ttl').textContent = p.title;
+  document.getElementById('panel-author').textContent = `${p.poet} 著`;
+  document.getElementById('dynasty-tag').textContent = `${p.dynasty}　代`;
+
+  // Vertical poem layout
+  const frame = document.getElementById('poem-frame');
+  frame.innerHTML = '';
+  p.lines.forEach(line => {
+    const col = document.createElement('div');
+    col.className = 'poem-col';
+    col.textContent = line;
+    frame.appendChild(col);
+  });
+
+  document.getElementById('poem-desc').textContent = p.desc;
+  document.getElementById('poem-panel').classList.add('open');
+
+  // Map highlight box
+  showHighlight(p, x, y);
+}
+
+function closePanel() {
+  activeId = null;
+  document.getElementById('poem-panel').classList.remove('open');
+  document.getElementById('ph').style.display = 'none';
+}
+
+// ─────────────────────────────────────────
+//  MAP HIGHLIGHT
+// ─────────────────────────────────────────
+function showHighlight(p, x, y) {
+  const ph  = document.getElementById('ph');
+  const bg  = document.getElementById('ph-bg');
+  const txt = document.getElementById('ph-txt');
+  const auth = document.getElementById('ph-author');
+
+  // Show first 2 lines vertically
+  const excerpt = p.lines.slice(0, 2);
+  txt.innerHTML = '';
+  excerpt.forEach((line, i) => {
+    const tspan = document.createElementNS(NS, 'tspan');
+    tspan.setAttribute('x', String(30 - i*18));
+    tspan.setAttribute('y', '22');
+    tspan.textContent = line;
+    txt.appendChild(tspan);
+  });
+
+  // Position box near marker, avoid edges
+  const bw = 78, bh = 120;
+  let bx = x + 14, by = y - bh/2;
+  if (bx + bw > 900) bx = x - bw - 14;
+  if (by < 20) by = 20;
+  if (by + bh > 680) by = 680 - bh;
+
+  bg.setAttribute('x', bx); bg.setAttribute('y', by);
+  bg.setAttribute('width', bw); bg.setAttribute('height', bh);
+  txt.setAttribute('transform', `translate(${bx+bw-16},${by+12})`);
+  auth.setAttribute('transform', `translate(${bx+6},${by+10})`);
+  auth.textContent = p.poet;
+
+  ph.style.display = '';
+}
+
+// Close on map click
+document.getElementById('map-svg').addEventListener('click', () => closePanel());
+
+// ─────────────────────────────────────────
+//  INTRO
+// ─────────────────────────────────────────
+document.getElementById('start-btn').addEventListener('click', () => {
+  const intro = document.getElementById('intro');
+  intro.classList.add('gone');
+  setTimeout(() => intro.style.display = 'none', 520);
+});
+
+// Keyboard close
+document.addEventListener('keydown', e => { if(e.key==='Escape') closePanel(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>���������������������������</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="../../assets/course.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">���������������������������</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#一這套課程怎麼學"
+id="toc-一這套課程怎麼學">一、這套課程怎麼學</a></li>
+<li><a href="#二微積分到底在研究什麼"
+id="toc-二微積分到底在研究什麼">二、微積分到底在研究什麼</a></li>
+<li><a href="#三完整零基礎學習地圖"
+id="toc-三完整零基礎學習地圖">三、完整零基礎學習地圖</a></li>
+<li><a href="#四開始前的-8-題小檢查"
+id="toc-四開始前的-8-題小檢查">四、開始前的 8 題小檢查</a></li>
+<li><a href="#第-1-課函數圖形與斜率" id="toc-第-1-課函數圖形與斜率">第 1
+課：函數、圖形與斜率</a>
+<ul>
+<li><a href="#變數會改變的數" id="toc-變數會改變的數">1.
+變數：會改變的數</a></li>
+<li><a href="#函數一套固定的輸入輸出規則"
+id="toc-函數一套固定的輸入輸出規則">2.
+函數：一套固定的輸入—輸出規則</a></li>
+<li><a href="#座標把輸入與輸出畫在同一張圖上"
+id="toc-座標把輸入與輸出畫在同一張圖上">3.
+座標：把輸入與輸出畫在同一張圖上</a></li>
+<li><a href="#斜率x-改變時y-改變得有多快"
+id="toc-斜率x-改變時y-改變得有多快">4. 斜率：x 改變時，y
+改變得有多快</a></li>
+<li><a href="#從平均斜率走向微分" id="toc-從平均斜率走向微分">5.
+從平均斜率走向微分</a></li>
+</ul></li>
+<li><a href="#第-1-課練習" id="toc-第-1-課練習">第 1 課練習</a>
+<ul>
+<li><a href="#圖表閱讀題" id="toc-圖表閱讀題">圖表閱讀題</a></li>
+</ul></li>
+<li><a href="#答案與解析" id="toc-答案與解析">答案與解析</a>
+<ul>
+<li><a href="#開始前-8-題小檢查" id="toc-開始前-8-題小檢查">開始前 8
+題小檢查</a></li>
+<li><a href="#第-1-課練習-1" id="toc-第-1-課練習-1">第 1 課練習</a></li>
+</ul></li>
+<li><a href="#下一課預告極限的第一個直覺"
+id="toc-下一課預告極限的第一個直覺">下一課預告：極限的第一個直覺</a></li>
+</ul>
+</nav>
+<p><strong>初級微積分：從零開始</strong></p>
+<p>第 0 冊｜學習地圖＋第 1 課：函數、圖形與斜率</p>
+<p><img
+src="media/calculus/media/image1.png"
+style="width:5.70866in;height:3.6594in" /></p>
+<p>用速度、產量、費用、水量等日常例子，逐步理解微積分。</p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>這一冊完成後，你應該會：</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>看懂
+x、y、函數與座標圖；分辨輸入與輸出；用「變化量」理解斜率；知道微分在研究瞬間變化、積分在研究累積總量；完成第一組基礎練習。</td>
+</tr>
+</tbody>
+</table>
+<p><em>適合：完全沒學過、以前學過但忘光、看到公式容易緊張的人</em></p>
+<h1 id="一這套課程怎麼學">一、這套課程怎麼學</h1>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>固定四步法</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>① 先講生活問題 → ② 看圖和表格 → ③ 再寫成公式 → ④
+做短練習確認真的懂。公式不是起點，而是把已經理解的事情寫得更精準。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>每課約 30–45 分鐘；不追求一次背完，而是重複看懂。</p></li>
+<li><p>每個新符號第一次出現時，都會說明它代表什麼。</p></li>
+<li><p>計算錯誤不等於概念不懂；先分開檢查「想法」和「算術」。</p></li>
+<li><p>每完成一課，用 5 題自我檢查；80% 正確再往下走。</p></li>
+<li><p>遇到不懂時，回到圖、表格或生活情境，不直接硬背公式。</p></li>
+</ul>
+<h1 id="二微積分到底在研究什麼">二、微積分到底在研究什麼</h1>
+<p>微積分主要處理兩種問題：</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>微分（Derivative）</strong></th>
+<th><strong>積分（Integral）</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>問：「現在這一刻變得多快？」<br />
+例：車速表顯示的瞬間速度、某一刻的產能提升速度、成本對產量的敏感程度。</td>
+<td>問：「一路累積起來共有多少？」<br />
+例：全天用電量、總行駛距離、整天進入水槽的水量、總生產件數。</td>
+</tr>
+<tr class="even">
+<td><strong>核心圖像：曲線某一點的切線斜率。</strong></td>
+<td><strong>核心圖像：曲線下方的面積。</strong></td>
+</tr>
+</tbody>
+</table>
+<p><img
+src="media/calculus/media/image1.png"
+style="width:5.98425in;height:3.83606in" /></p>
+<p>微分預覽：切線斜率表示「當下變化率」。</p>
+<p><img
+src="media/calculus/media/image2.png"
+style="width:5.98425in;height:3.83606in" /></p>
+<p>積分預覽：曲線下方的面積表示「累積總量」。</p>
+<h1 id="三完整零基礎學習地圖">三、完整零基礎學習地圖</h1>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>單元</strong></th>
+<th><strong>內容</strong></th>
+<th><strong>學習目的</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>0. 數學工具箱</strong></td>
+<td>正負數、分數、次方、代數移項、座標。</td>
+<td>先消除符號障礙</td>
+</tr>
+<tr class="even">
+<td><strong>1. 函數與圖形</strong></td>
+<td>輸入、輸出、函數機器、直線、斜率。</td>
+<td>看懂數量之間的關係</td>
+</tr>
+<tr class="odd">
+<td><strong>2. 極限</strong></td>
+<td>「越來越接近」是什麼；左右極限與連續。</td>
+<td>建立微積分的語言</td>
+</tr>
+<tr class="even">
+<td><strong>3. 微分直覺</strong></td>
+<td>平均速度如何變成瞬間速度；切線。</td>
+<td>理解導數的本質</td>
+</tr>
+<tr class="odd">
+<td><strong>4. 微分規則</strong></td>
+<td>常數、次方、加減、乘法、除法、鏈鎖律。</td>
+<td>能有效計算導數</td>
+</tr>
+<tr class="even">
+<td><strong>5. 微分應用</strong></td>
+<td>最大最小、最佳化、邊際成本、變化率。</td>
+<td>把導數用在決策</td>
+</tr>
+<tr class="odd">
+<td><strong>6. 積分直覺</strong></td>
+<td>小塊相加、黎曼和、面積與累積量。</td>
+<td>理解積分的本質</td>
+</tr>
+<tr class="even">
+<td><strong>7. 積分計算</strong></td>
+<td>反導數、基本公式、代換法。</td>
+<td>能計算常見積分</td>
+</tr>
+<tr class="odd">
+<td><strong>8. 微積分基本定理</strong></td>
+<td>為什麼微分與積分互相抵消。</td>
+<td>把兩大主題連起來</td>
+</tr>
+<tr class="even">
+<td><strong>9. 綜合應用</strong></td>
+<td>距離、流量、面積、平均值、簡單商業問題。</td>
+<td>能獨立解題</td>
+</tr>
+<tr class="odd">
+<td><strong>10. 總複習</strong></td>
+<td>概念圖、錯題整理、綜合測驗。</td>
+<td>真正穩定掌握</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>建議進度</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>每週 3 課，每課 30–45 分鐘。大約 10–14
+週可以完成初級微積分。速度可以放慢；真正理解比趕進度重要。</td>
+</tr>
+</tbody>
+</table>
+<h1 id="四開始前的-8-題小檢查">四、開始前的 8 題小檢查</h1>
+<p>不用緊張，也不用先查答案。它只用來判斷哪些基礎要補。</p>
+<p>1. 3 + 5 × 2 等於多少？</p>
+<p>2. −4 + 7 等於多少？</p>
+<p>3. 1/2 + 1/4 等於多少？</p>
+<p>4. 若 2x = 10，x 是多少？</p>
+<p>5. 若 y = 3x + 2，x = 4 時，y 是多少？</p>
+<p>6. 點 (3, 5) 中，哪個數是 x？哪個數是 y？</p>
+<p>7. 從 100 增加到 130，增加量是多少？增加百分比是多少？</p>
+<p>8. 一條直線每向右 1 格就向上 4 格，它的斜率是多少？</p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>判讀方式</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>答對 0–3 題：先從數學工具箱開始；答對 4–6
+題：可直接學本冊，但遇到分數與移項時需補強；答對 7–8
+題：可以快速進入極限。答案在本冊最後。</td>
+</tr>
+</tbody>
+</table>
+<h1 id="第-1-課函數圖形與斜率">第 1 課：函數、圖形與斜率</h1>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>本課目標</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>能把生活中的「一個量影響另一個量」寫成函數；能讀懂座標圖；能計算兩點之間的平均斜率。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="變數會改變的數">1. 變數：會改變的數</h2>
+<p><strong>變數（variable）</strong>就是可能改變的數，通常用字母代表。最常用的是
+x 和 y。</p>
+<ul>
+<li><p>x 常代表輸入、原因或我們主動選擇的量。</p></li>
+<li><p>y 常代表輸出、結果或受到 x 影響的量。</p></li>
+<li><p>例：買幾杯咖啡是 x，總價是 y；工作幾小時是 x，累積產量是
+y。</p></li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>生活情境</strong></th>
+<th><strong>輸入 x</strong></th>
+<th><strong>輸出 y</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>買咖啡</td>
+<td>杯數</td>
+<td>總價</td>
+</tr>
+<tr class="even">
+<td>搭計程車</td>
+<td>里程</td>
+<td>車資</td>
+</tr>
+<tr class="odd">
+<td>車縫生產</td>
+<td>工時</td>
+<td>累積件數</td>
+</tr>
+<tr class="even">
+<td>水槽進水</td>
+<td>時間</td>
+<td>水量</td>
+</tr>
+<tr class="odd">
+<td>存款</td>
+<td>月份</td>
+<td>帳戶餘額</td>
+</tr>
+</tbody>
+</table>
+<h2 id="函數一套固定的輸入輸出規則">2.
+函數：一套固定的輸入—輸出規則</h2>
+<p>函數（function）可以想成一台機器：把 x
+放進去，依照固定規則，得到唯一的 y。</p>
+<p><img
+src="media/calculus/media/image3.png"
+style="width:6.37795in;height:2.15122in" /></p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>最重要的觀念</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>y = 60x 不是神祕公式。它只是在說：「總價 y 等於每杯 60 元乘上杯數
+x。」字母只是暫時代替還不知道或可能改變的數。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>x：杯數</strong></th>
+<th><strong>規則 y = 60x</strong></th>
+<th><strong>計算</strong></th>
+<th><strong>y：總價</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>y = 60x</td>
+<td>y = 60 × 0</td>
+<td>0 元</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>y = 60x</td>
+<td>y = 60 × 1</td>
+<td>60 元</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>y = 60x</td>
+<td>y = 60 × 2</td>
+<td>120 元</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>y = 60x</td>
+<td>y = 60 × 3</td>
+<td>180 元</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>y = 60x</td>
+<td>y = 60 × 5</td>
+<td>300 元</td>
+</tr>
+</tbody>
+</table>
+<p><img
+src="media/calculus/media/image4.png"
+style="width:5.82677in;height:3.58571in" /></p>
+<p>把表格中的點畫出來，就得到函數圖形。</p>
+<h2 id="座標把輸入與輸出畫在同一張圖上">3.
+座標：把輸入與輸出畫在同一張圖上</h2>
+<p><img
+src="media/calculus/media/image5.png"
+style="width:5.70866in;height:3.96435in" /></p>
+<ul>
+<li><p>點 (3, 5) 表示：先從 x 軸走到 3，再向上到 y = 5。</p></li>
+<li><p>括號內一定先寫 x，再寫 y。</p></li>
+<li><p>函數圖形就是把很多組 (x, y) 點連起來，讓關係一眼可見。</p></li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>讀圖技巧</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>先看橫軸代表什麼，再看縱軸代表什麼；接著觀察圖形是上升、下降、平坦，還是彎曲。不要一開始就急著算。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="斜率x-改變時y-改變得有多快">4. 斜率：x 改變時，y
+改變得有多快</h2>
+<p>斜率（slope）是「垂直變化量 ÷ 水平變化量」，也就是：<strong>斜率 = y
+的變化量 ÷ x 的變化量 = Δy / Δx</strong></p>
+<p>符號 Δ（讀作 delta）表示「變化量」。例如 Δy = 新的 y − 原來的 y。</p>
+<p><img
+src="media/calculus/media/image6.png"
+style="width:5.90551in;height:3.78558in" /></p>
+<ol type="1">
+<li><p>先找兩個時間：3 小時與 5 小時。</p></li>
+<li><p>計算產量變化：420 − 240 = 180 件。</p></li>
+<li><p>計算時間變化：5 − 3 = 2 小時。</p></li>
+<li><p>平均斜率：180 ÷ 2 = 90 件/小時。</p></li>
+</ol>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>斜率的單位很重要</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>因為斜率是「y 單位 ÷ x 單位」，所以本例是「件 ÷
+小時」，也就是每小時平均增加多少件。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="從平均斜率走向微分">5. 從平均斜率走向微分</h2>
+<p>兩個時間點之間可以算平均速度；但車速表顯示的是「現在這一刻」的速度。微分就是把兩點靠得越來越近，最後找出單一時刻的斜率。</p>
+<p><img
+src="media/calculus/media/image1.png"
+style="width:5.82677in;height:3.73511in" /></p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>先記住一句話</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>平均斜率看一段區間；導數（微分結果）看某一瞬間。下一階段學「極限」時，會說明兩點如何靠近到幾乎變成一點。</td>
+</tr>
+</tbody>
+</table>
+<h1 id="第-1-課練習">第 1 課練習</h1>
+<p>先自己做，再看解答。能說出理由比只寫答案更重要。</p>
+<p>1. 一個便當 80 元。令 x = 便當數量，y = 總價。請寫出函數。</p>
+<p>2. 使用上一題函數，x = 6 時，y 是多少？</p>
+<p>3. 計程車起跳價 100 元，每公里加 20 元。令 x = 公里數，y =
+車資。請寫出函數。</p>
+<p>4. 在 y = 4x + 3 中，x = 5 時，y 是多少？</p>
+<p>5. 點 (2, 7) 中，橫座標是多少？縱座標是多少？</p>
+<p>6. 某工序 2 小時完成 150 件，6 小時完成 430
+件。平均斜率是多少件/小時？</p>
+<p>7. 水槽在 1 分鐘時有 12 公升，4 分鐘時有 30
+公升。平均進水率是多少公升/分鐘？</p>
+<p>8. 某圖形由左向右上升，通常表示 x 增加時 y 如何變化？</p>
+<p>9. 某函數的斜率是 0，圖形大致是上升、下降，還是水平？</p>
+<p>10. 請用一句自己的話說明：函數是什麼？斜率是什麼？</p>
+<h2 id="圖表閱讀題">圖表閱讀題</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>時間 x（小時）</strong></th>
+<th><strong>0</strong></th>
+<th><strong>2</strong></th>
+<th><strong>5</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>累積產量 y（件）</td>
+<td>0</td>
+<td>180</td>
+<td>510</td>
+</tr>
+</tbody>
+</table>
+<p>11. 0 到 2 小時的平均產量是多少件/小時？</p>
+<p>12. 2 到 5 小時的平均產量是多少件/小時？</p>
+<p>13. 哪一段的平均產量較高？</p>
+<h1 id="答案與解析">答案與解析</h1>
+<h2 id="開始前-8-題小檢查">開始前 8 題小檢查</h2>
+<p>1. 13。先乘除、後加減：5 × 2 = 10，3 + 10 = 13。</p>
+<p>2. 3。從 −4 往右走 7 格到 3。</p>
+<p>3. 3/4。1/2 = 2/4，所以 2/4 + 1/4 = 3/4。</p>
+<p>4. x = 5。兩邊同除以 2。</p>
+<p>5. y = 14。3 × 4 + 2 = 14。</p>
+<p>6. x = 3，y = 5。座標永遠先 x 後 y。</p>
+<p>7. 增加量 30；增加百分比 30/100 = 30%。</p>
+<p>8. 斜率 4。向右 1、向上 4，所以 4 ÷ 1 = 4。</p>
+<h2 id="第-1-課練習-1">第 1 課練習</h2>
+<p>1. y = 80x。</p>
+<p>2. y = 80 × 6 = 480 元。</p>
+<p>3. y = 100 + 20x。起跳價是固定費用，所以即使 x = 0，也有 100 元。</p>
+<p>4. y = 4 × 5 + 3 = 23。</p>
+<p>5. 橫座標 x = 2；縱座標 y = 7。</p>
+<p>6. (430 − 150) ÷ (6 − 2) = 280 ÷ 4 = 70 件/小時。</p>
+<p>7. (30 − 12) ÷ (4 − 1) = 18 ÷ 3 = 6 公升/分鐘。</p>
+<p>8. y 通常跟著增加。</p>
+<p>9. 水平。因為 x 改變時，y 沒有改變。</p>
+<p>10. 參考：函數是固定的輸入—輸出規則；斜率是 x 改變 1 單位時，y
+平均改變多少。</p>
+<p>11. 180 ÷ 2 = 90 件/小時。</p>
+<p>12. (510 − 180) ÷ (5 − 2) = 330 ÷ 3 = 110 件/小時。</p>
+<p>13. 2 到 5 小時較高，因為 110 &gt; 90。</p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>本課過關標準</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>不看答案時，能完成第 1–9 題至少 8
+題；能自己解釋「函數」與「斜率」；看到一張圖時，會先說明橫軸與縱軸代表什麼。</td>
+</tr>
+</tbody>
+</table>
+<h1 id="下一課預告極限的第一個直覺">下一課預告：極限的第一個直覺</h1>
+<p>下一課會從「0.9、0.99、0.999……到底在接近什麼？」開始，學會微積分最核心的語言：極限。接著再把平均斜率變成瞬間斜率。</p>
+<a class="back" href="../../index.html?view=learning">← AC Admin</a></body>
+</html>
