@@ -174,12 +174,19 @@ textarea.field-input{min-height:72px;resize:vertical;line-height:1.6;}
   .waypoint-handle,.mid-handle{display:none!important;}
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
 }
+#canvas-wrap{touch-action:none} @media(max-width:640px){.tb-btn{min-height:40px}}
+
+.ac-phone-only{display:none}
+@media(max-width:640px){body{height:100dvh}#toolbar{height:46px;min-height:46px;overflow-y:hidden}#toolbar .tb-btn{min-height:36px}#toolbar .tb-logo{display:none}#page-tabs{padding:0 4px;overflow-x:auto;overflow-y:hidden}.page-tab{padding:0 10px;height:38px;font-size:12px}#canvas-wrap{min-width:0;touch-action:none}#side-panel{position:fixed;z-index:240;right:0;top:0;bottom:0;width:min(340px,calc(100vw - 24px));box-shadow:-8px 0 35px #102a4355;visibility:hidden;transform:translateX(110%)}body.ac-editor-open #side-panel{visibility:visible;transform:none}#links-panel{position:fixed;z-index:241;right:0;top:44px;bottom:0;width:min(320px,calc(100vw - 24px));box-shadow:-8px 0 35px #102a4355}.ac-phone-only{display:block}#ac-close-editor{margin:8px;min-height:44px;flex-shrink:0}#panel-actions{flex-wrap:wrap;padding-bottom:max(10px,env(safe-area-inset-bottom))}#panel-actions button{min-height:40px}#duties-toolbar{flex-wrap:wrap}.modal{max-width:calc(100vw - 24px);max-height:85dvh;overflow:auto}}
 </style>
+<script src="../../shared/module-shell.js" data-group="admin" data-langfn="setLang" data-zh="tw" defer></script>
 </head>
 <body>
 
 <!-- TOOLBAR -->
 <div id="toolbar">
+<button class="tb-btn ac-phone-only" onclick="fitChart()">全圖 / Fit</button>
+<button id="ac-open-editor" class="tb-btn ac-phone-only" aria-controls="side-panel" aria-expanded="false" onclick="setMobileEditor(!document.body.classList.contains('ac-editor-open'))">編輯面板 / Edit</button>
   <div class="tb-logo">🏭 VRT OrgChart</div>
   <div class="tb-sep"></div>
   <div class="lang-toggle">
@@ -240,6 +247,7 @@ textarea.field-input{min-height:72px;resize:vertical;line-height:1.6;}
 
   <!-- SIDE PANEL -->
   <div id="side-panel">
+<button id="ac-close-editor" class="tb-btn ac-phone-only" onclick="setMobileEditor(false)">✕ 關閉編輯 / Close</button>
     <div id="panel-header">
       <h3 id="ph-title">組織圖編輯器</h3>
       <p  id="ph-sub">點擊節點選取並編輯</p>
@@ -570,7 +578,7 @@ let scale=1, tx=30, ty=20;
 let lang='tw', dutiesLang='tw';
 let selectedId=null;
 let mode='select';
-let idSeq=200;
+let idSeq=Date.now();
 
 let dragNode=null, dragWP=null, panStart=null;
 let connecting=null;
@@ -786,7 +794,7 @@ function renderNodes(){
         fill:'none',stroke:'#2d6a4f','stroke-width':2,'stroke-dasharray':'5,3'}));
     }
 
-    grp.addEventListener('mousedown',e=>{e.stopPropagation();onNodeDown(e,n.id);});
+    grp.addEventListener('pointerdown',e=>{e.stopPropagation();onNodeDown(e,n.id);});
     grp.addEventListener('click',    e=>{e.stopPropagation();if(mode==='select')selectNode(n.id);});
     g.appendChild(grp);
   });
@@ -801,26 +809,26 @@ function renderWaypoints(){
     if(!fn||!tn)return;
     segMids(fn,tn,lk.wps).forEach(mp=>{
       const c=mkEl('circle',{cx:mp.x,cy:mp.y,r:4.5,class:'mid-handle'});
-      c.addEventListener('mousedown',e=>{
+      c.addEventListener('pointerdown',e=>{
         e.stopPropagation();
         lk.wps=lk.wps||[];
         lk.wps.splice(mp.si,0,{x:mp.x,y:mp.y});
         const w=s2w(e.clientX,e.clientY);
         dragWP={lid:lk.id,idx:mp.si,ox:w.x-mp.x,oy:w.y-mp.y};
-        document.addEventListener('mousemove',onWPMove);
-        document.addEventListener('mouseup',onWPUp);
+        document.addEventListener('pointermove',onWPMove);
+        document.addEventListener('pointerup',onWPUp);document.addEventListener('pointercancel',onWPUp);
         render();
       });
       g.appendChild(c);
     });
     (lk.wps||[]).forEach((wp,idx)=>{
       const c=mkEl('circle',{cx:wp.x,cy:wp.y,r:6,class:'waypoint-handle'});
-      c.addEventListener('mousedown',e=>{
+      c.addEventListener('pointerdown',e=>{
         e.stopPropagation();
         const w=s2w(e.clientX,e.clientY);
         dragWP={lid:lk.id,idx,ox:w.x-wp.x,oy:w.y-wp.y};
-        document.addEventListener('mousemove',onWPMove);
-        document.addEventListener('mouseup',onWPUp);
+        document.addEventListener('pointermove',onWPMove);
+        document.addEventListener('pointerup',onWPUp);document.addEventListener('pointercancel',onWPUp);
       });
       c.addEventListener('contextmenu',e=>{e.preventDefault();lk.wps.splice(idx,1);render();});
       c.title='右鍵刪除折點';
@@ -851,8 +859,8 @@ function drawPreview(wx,wy){
 // ═══════════════════════════════════════════════════
 function setupCanvas(){
   const wrap=document.getElementById('canvas-wrap');
-  wrap.addEventListener('mousedown',e=>{
-    if(e.button===1||(e.button===0&&e.altKey)){
+  wrap.addEventListener('pointerdown',e=>{
+    if(e.button===1||(e.button===0&&e.altKey)||(e.pointerType==='touch'&&mode==='select')){
       panStart={x:e.clientX-tx,y:e.clientY-ty};
       wrap.classList.add('panning');
       e.preventDefault();return;
@@ -862,13 +870,13 @@ function setupCanvas(){
       if(mode==='select'){selectedId=null;clearPanel();render();}
     }
   });
-  wrap.addEventListener('mousemove',e=>{
+  wrap.addEventListener('pointermove',e=>{
     if(panStart){tx=e.clientX-panStart.x;ty=e.clientY-panStart.y;render();return;}
     if(mode==='connect'&&connecting){
       const w=s2w(e.clientX,e.clientY);drawPreview(w.x,w.y);
     }
   });
-  wrap.addEventListener('mouseup',e=>{
+  wrap.addEventListener('pointerup',e=>{
     if(panStart){panStart=null;wrap.classList.remove('panning');}
   });
   wrap.addEventListener('wheel',e=>{
@@ -883,6 +891,8 @@ function setupCanvas(){
     render();
   },{passive:false});
   window.addEventListener('resize',render);
+  window.addEventListener('pointerup',()=>{panStart=null;wrap.classList.remove('panning')});
+  window.addEventListener('pointercancel',()=>{panStart=null;wrap.classList.remove('panning')});
 }
 
 // ═══════════════════════════════════════════════════
@@ -934,16 +944,16 @@ function onNodeDown(e,id){
         render();
       }
       function onGroupUp(){
-        document.removeEventListener('mousemove',onGroupMove);
-        document.removeEventListener('mouseup',onGroupUp);
+        document.removeEventListener('pointermove',onGroupMove);
+        document.removeEventListener('pointerup',onGroupUp);document.removeEventListener('pointercancel',onGroupUp);
       }
-      document.addEventListener('mousemove',onGroupMove);
-      document.addEventListener('mouseup',onGroupUp);
+      document.addEventListener('pointermove',onGroupMove);
+      document.addEventListener('pointerup',onGroupUp);document.addEventListener('pointercancel',onGroupUp);
     }else{
       // normal single-node drag
       dragNode={id,ox:w.x-n.x,oy:w.y-n.y};
-      document.addEventListener('mousemove',onNodeMove);
-      document.addEventListener('mouseup',onNodeUp);
+      document.addEventListener('pointermove',onNodeMove);
+      document.addEventListener('pointerup',onNodeUp);document.addEventListener('pointercancel',onNodeUp);
     }
   }
 }
@@ -957,8 +967,8 @@ function onNodeMove(e){
 }
 function onNodeUp(){
   dragNode=null;
-  document.removeEventListener('mousemove',onNodeMove);
-  document.removeEventListener('mouseup',onNodeUp);
+  document.removeEventListener('pointermove',onNodeMove);
+  document.removeEventListener('pointerup',onNodeUp);document.removeEventListener('pointercancel',onNodeUp);
 }
 function onWPMove(e){
   if(!dragWP)return;
@@ -969,14 +979,19 @@ function onWPMove(e){
 }
 function onWPUp(){
   dragWP=null;
-  document.removeEventListener('mousemove',onWPMove);
-  document.removeEventListener('mouseup',onWPUp);
+  document.removeEventListener('pointermove',onWPMove);
+  document.removeEventListener('pointerup',onWPUp);document.removeEventListener('pointercancel',onWPUp);
 }
 
 // ═══════════════════════════════════════════════════
 //  SELECT & PANEL
 // ═══════════════════════════════════════════════════
+function setMobileEditor(open){
+ document.body.classList.toggle('ac-editor-open',open);document.getElementById('ac-open-editor').setAttribute('aria-expanded',String(open));if(open){document.getElementById('links-panel').classList.remove('show');document.getElementById('ac-close-editor').focus();}else document.getElementById('ac-open-editor').focus();
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('ac-editor-open'))setMobileEditor(false)});
 function selectNode(id){
+  if(matchMedia('(max-width:640px)').matches)setMobileEditor(true);
   selectedId=id;render();
   const n=nodes.find(nd=>nd.id===id);
   if(!n){clearPanel();return;}
@@ -1071,6 +1086,7 @@ function deleteLink(lid){links=links.filter(l=>l.id!==lid);render();refreshLinkL
 function toggleLinksPanel(){
   const p=document.getElementById('links-panel');
   p.classList.toggle('show');
+  if(p.classList.contains('show'))document.body.classList.remove('ac-editor-open');
   if(p.classList.contains('show'))refreshLinkList();
 }
 
@@ -1169,6 +1185,7 @@ function setLang(l,doRender=true){
 }
 function zoom(d){scale=Math.max(0.15,Math.min(3.5,scale+d));
   document.getElementById('zoom-label').textContent=Math.round(scale*100)+'%';render();}
+function fitChart(){if(!nodes.length)return;const box=document.getElementById('canvas-wrap').getBoundingClientRect(),x=Math.min(...nodes.map(n=>n.x)),y=Math.min(...nodes.map(n=>n.y)),w=Math.max(...nodes.map(n=>n.x+n.w))-x,h=Math.max(...nodes.map(n=>n.y+n.h))-y;scale=Math.min(1,(box.width-24)/w,(box.height-24)/h);tx=(box.width-w*scale)/2-x*scale;ty=12-y*scale;document.getElementById('zoom-label').textContent=Math.round(scale*100)+'%';render();}
 function resetView(){scale=1;tx=30;ty=20;document.getElementById('zoom-label').textContent='100%';render();}
 
 // ═══════════════════════════════════════════════════
@@ -1209,11 +1226,15 @@ function importJSON(e){
   r.onload=ev=>{
     try{
       const d=JSON.parse(ev.target.result);
-      if(!d.nodes||!d.links)throw new Error('格式錯誤');
+      if(!Array.isArray(d.nodes)||!Array.isArray(d.links))throw new Error('格式錯誤');
+      const ids=new Set(d.nodes.map(n=>n.id));
+      if(ids.size!==d.nodes.length||d.nodes.some(n=>!n.id||!['x','y','w','h'].every(k=>Number.isFinite(n[k])))||d.links.some(l=>!ids.has(l.from)||!ids.has(l.to)))throw new Error('節點或連線資料不正確');
+      if(!confirm('匯入會更新組織圖，並保留原圖備份。是否繼續？'))return;
+      localStorage.setItem('vrt-orgchart-v4-backup',JSON.stringify({nodes,links,lang}));
       nodes=d.nodes;links=d.links;
-      if(d.lang)setLang(d.lang,false);
+      if(['tw','en','km'].includes(d.lang))setLang(d.lang,false);
       selectedId=null;clearPanel();render();refreshLinkList();
-      showToast('📥 匯入成功');
+      saveToStorage();showToast('📥 匯入成功並已儲存');
     }catch(err){alert('匯入失敗：'+err.message);}
   };
   r.readAsText(f);e.target.value='';
@@ -1236,6 +1257,7 @@ function showToast(msg){
 }
 
 init();
+if(matchMedia('(max-width:640px)').matches)requestAnimationFrame(fitChart);
 </script>
 </body>
 </html>
