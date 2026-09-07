@@ -17,7 +17,9 @@
 .review{margin-top:14px}.review h3{font-size:15px;margin:0 0 8px}.wrongList{display:grid;gap:7px;max-height:210px;overflow:auto}.wrong{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:#fff7f6;border:1px solid #f1c7c2;border-radius:10px;padding:8px 10px;font-size:13px}.wrong b{color:var(--bad)}
 .end{text-align:center;padding:24px 8px}.end .grade{font-size:64px;font-weight:900;color:var(--primary)}.end h2{font-size:26px;margin:0}.end p{color:var(--muted)}.mini{font-size:12px;color:var(--muted)}
 .switch{display:flex;gap:4px;background:#edf3f7;border-radius:12px;padding:4px}.switch button{flex:1;border:0;background:transparent;border-radius:9px;padding:8px;font-weight:800;color:var(--muted);cursor:pointer}.switch button.active{background:#fff;color:var(--primary2);box-shadow:0 2px 8px rgba(0,0,0,.07)}
+@media(max-width:760px){.grid{grid-template-columns:minmax(0,1fr)}.grid>*{min-width:0}.top{flex-wrap:wrap}.row{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.field{min-width:0}.field select{min-width:0}.questionWrap{padding:12px}.card summary{cursor:pointer;min-height:40px;padding:8px 0}.question{margin:18px 0;font-size:46px}.lessonTip{font-size:13px}.app{padding:12px 10px 40px}}
 </style>
+<script src="../../shared/module-shell.js" data-group="learning" data-langfn="" data-zh="zh" defer></script>
 </head>
 <body>
 <div class="app">
@@ -27,7 +29,7 @@
   </div>
   <div class="grid">
     <aside class="card">
-      <h2>練習設定</h2>
+      <details id="practiceSettings" open><summary>練習設定／學習紀錄</summary>
       <div class="controls">
         <div class="switch"><button id="learnMode" class="active">教學模式</button><button id="challengeMode">挑戰模式</button></div>
         <div class="field"><label>運算類型</label><select id="operation"><option value="add">加法 ＋</option><option value="sub">減法 −</option><option value="mul">乘法 ×</option><option value="div">除法 ÷</option><option value="mixed">四則混合</option></select></div>
@@ -35,7 +37,7 @@
           <div class="field"><label>難度</label><select id="level"><option value="1">第 1 級：0～10</option><option value="2">第 2 級：0～20</option><option value="3" selected>第 3 級：0～100</option><option value="4">第 4 級：進階</option></select></div>
           <div class="field"><label>題數</label><select id="count"><option>10</option><option selected>20</option><option>30</option><option>50</option></select></div>
         </div>
-        <button class="btn btn-primary" id="startBtn">開始新練習</button>
+        
         <div class="stats">
           <div class="stat"><b id="qStat">0/0</b><span>進度</span></div>
           <div class="stat"><b id="correctStat">0</b><span>答對</span></div>
@@ -48,6 +50,7 @@
         </div>
         <button class="btn btn-danger" id="clearBtn">清除本機學習紀錄</button>
       </div>
+</details><button class="btn btn-primary" id="startBtn" style="width:100%;margin-top:10px">開始新練習</button>
     </aside>
 
     <main class="card questionWrap">
@@ -72,6 +75,7 @@
 </div>
 <script>
 'use strict';
+if(matchMedia('(max-width:760px)').matches){document.getElementById('practiceSettings').open=false;document.getElementById('startBtn').addEventListener('click',()=>{document.getElementById('practiceSettings').open=false;document.querySelector('.questionWrap').scrollIntoView({block:'start',behavior:'smooth'})})}
 const $=id=>document.getElementById(id);
 const els={op:$('operation'),level:$('level'),count:$('count'),start:$('startBtn'),answer:$('answer'),submit:$('submitBtn'),hint:$('hintBtn'),next:$('nextBtn'),skip:$('skipBtn'),question:$('question'),feedback:$('feedback'),tip:$('tip'),bar:$('bar'),q:$('qStat'),correct:$('correctStat'),streak:$('streakStat'),time:$('timeStat'),wrong:$('wrongList'),practice:$('practiceArea'),end:$('endArea'),grade:$('grade'),endTitle:$('endTitle'),endText:$('endText'),saved:$('savedPill')};
 let state={active:false,mode:'learn',index:0,total:20,correct:0,streak:0,bestStreak:0,startTime:0,timer:null,current:null,answered:false,wrongs:[]};
