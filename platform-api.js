@@ -245,35 +245,17 @@
     var cfg = safeParse(localStorage.getItem(CFG_KEY)) || {};
     return cfg.gasUrl || DEFAULT_GAS_URL;
   }
-  function cloudPush() {
-    var url = gasUrl();
-    if (!url) return Promise.resolve({ ok: false, error: 'No GAS URL' });
-    var hub = readHub();
-    return fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ action: 'pushHub', hub: hub, from: CURRENT || 'unknown', at: nowStr() })
-    }).then(function (r) { return r.json(); })
-      .catch(function (e) { return { ok: false, error: e.message }; });
+  function hubRequest(action, payload) {
+    if (G.Admin && typeof G.Admin.cloud === 'function') return G.Admin.cloud(action,payload||{});
+    var auth=safeParse(sessionStorage.getItem('ac_admin_session'));
+    if(!auth||auth.expiresAt<=Date.now()||auth.url!==gasUrl())return Promise.resolve({ok:false,error:'AUTH_REQUIRED: 請先在行政中心完成 Google 連線 / Connect in Admin Center first'});
+    return fetch(gasUrl(),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({},payload||{},{action:action,session:auth.token}))})
+      .then(function(r){return r.json();}).then(function(d){if(!d||d.ok!==true)throw new Error(d&&d.error||'Hub did not confirm success');return d;}).catch(function(e){return {ok:false,error:e.message};});
   }
-  function cloudPull() {
-    var url = gasUrl();
-    if (!url) return Promise.resolve({ ok: false, error: 'No GAS URL' });
-    return fetch(url + '?action=pullHub', { redirect: 'follow' })
-      .then(function (r) { return r.json(); })
-      .then(function (j) {
-        if (j.ok && j.hub) {
-          /* 合併:各平台取 lastUpdate 較新者 */
-          var local = readHub();
-          for (var pid in j.hub.platforms) {
-            var rp = j.hub.platforms[pid], lp = local.platforms[pid];
-            if (!lp || (rp.lastUpdate || '') > (lp.lastUpdate || '')) local.platforms[pid] = rp;
-          }
-          writeHub(local);
-        }
-        return j;
-      }).catch(function (e) { return { ok: false, error: e.message }; });
-  }
+  function cloudPush(){return hubRequest('pushHub',{hub:readHub(),from:CURRENT||'unknown',at:new Date().toISOString()});}
+  function cloudPull(){return hubRequest('pullHub',{}).then(function(j){
+    if(j.ok&&j.hub){var local=readHub();for(var pid in j.hub.platforms){var rp=j.hub.platforms[pid],lp=local.platforms[pid];if(!lp||(rp.lastUpdate||'')>(lp.lastUpdate||''))local.platforms[pid]=rp;}writeHub(local);}return j;
+  });}
 
   /* ── 通用深度搜尋 ── */
   function deepSearch(q) {
@@ -334,6 +316,7 @@
   /* ── 啟動:載入即發佈一次;每 10 分鐘雲端推送(若已設定)── */
   if (CURRENT) {
     setTimeout(function () { publish(null); }, 1200);
-    setInterval(function () { publish(null); cloudPush(); }, 10 * 60 * 1000);
+    // Server fetches summaries on request. No unauthenticated background pushes.
+    setInterval(function () { publish(null); }, 10 * 60 * 1000);
   }
 })(window);
