@@ -556,40 +556,6 @@ window.AC_CATALOG = [
     "search": "saintdou docs premium document"
   },
   {
-    "id": "salary",
-    "group": "admin",
-    "icon": "💰",
-    "title": {
-      "zh": "薪資管理／人工成本",
-      "en": "Salary / labour cost",
-      "km": "គ្រប់គ្រងប្រាក់ខែ និងថ្លៃពលកម្ម"
-    },
-    "desc": {
-      "zh": "開啟既有工具，保留原平台的資料及功能。",
-      "en": "Open the existing tool and its saved data.",
-      "km": "បើកឧបករណ៍ដែលមានស្រាប់។"
-    },
-    "links": [
-      {
-        "label": {
-          "zh": "開啟",
-          "en": "Open",
-          "km": "បើក"
-        },
-        "url": "https://saintdou-weng.github.io/vrt-acc-flow-cost/modules/salary-management.html"
-      },
-      {
-        "label": {
-          "zh": "製造成本",
-          "en": "Manufacturing cost",
-          "km": "ថ្លៃដើមផលិតកម្ម"
-        },
-        "url": "https://saintdou-weng.github.io/vrt-acc-flow-cost/index.html"
-      }
-    ],
-    "search": "薪資管理／人工成本 Salary / labour cost"
-  },
-  {
     "id": "language",
     "group": "learning",
     "icon": "🌐",

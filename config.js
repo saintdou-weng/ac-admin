@@ -1,6 +1,6 @@
 window.AC_CONFIG = {
   "appName": "AC Admin Center",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "repo": "ac-admin",
   "gasProject": "AC_ADMIN_CENTER",
   "telegramBot": "ac_admin_center_bot",
@@ -320,9 +320,25 @@ window.AC_CONFIG = {
         }
       ],
       "source": "Repository source checked 2026-09-06"
+    },
+    {
+      "id": "salary",
+      "name": "VRT Salary Structure",
+      "zh": "薪資架構／人工成本",
+      "km": "រចនាសម្ព័ន្ធប្រាក់ខែ និងថ្លៃពលកម្ម",
+      "icon": "💰",
+      "repo": "vrt-acc-flow-cost",
+      "url": "https://saintdou-weng.github.io/vrt-acc-flow-cost/modules/salary-management.html",
+      "gas": "",
+      "parent": "acc",
+      "probe": "",
+      "localKeys": [],
+      "identity": [],
+      "quick": [],
+      "source": "Current repository salary-management.html read 2026-09-13; original archive retained"
     }
   ],
-  "verifiedAt": "2026-09-06",
+  "verifiedAt": "2026-09-13",
   "timezone": "Asia/Phnom_Penh",
   "hubUrl": "https://script.google.com/macros/s/AKfycbyEWtDE39lzCC_qAIyXNTojWOHlAJj35hnBcj3ayePtJOBhG_zydaQ60AaI2NkMCyo2/exec",
   "authMode": "google-owner"
