@@ -1,0 +1,2430 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>從一個細胞開始｜生物與生物技術完整課程</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4F7F3; --paper-2:#E8EEE7; --ink:#1B3326; --ink-2:#4A5F52; --rule:#C9D4CB;
+  --violet:#5B3FA0; --safranin:#C8325F; --violet-soft:#ECE7F7; --safranin-soft:#FBE8EE;
+  --A:#2E9E4F; --T:#D6453D; --C:#2F6FD1; --G:#C99A12;
+  --card:#FFFFFF; --code:#EEF2EE;
+  --serif:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#111A15; --paper-2:#18241D; --ink:#DCE8DF; --ink-2:#9DB2A4; --rule:#2C3D33;
+    --violet:#A58BEA; --safranin:#F07399; --violet-soft:#241C38; --safranin-soft:#361A24;
+    --A:#4CC46F; --T:#F0625A; --C:#5C95F0; --G:#E6B93A; --card:#16211B; --code:#1C2A22;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111A15; --paper-2:#18241D; --ink:#DCE8DF; --ink-2:#9DB2A4; --rule:#2C3D33;
+  --violet:#A58BEA; --safranin:#F07399; --violet-soft:#241C38; --safranin-soft:#361A24;
+  --A:#4CC46F; --T:#F0625A; --C:#5C95F0; --G:#E6B93A; --card:#16211B; --code:#1C2A22;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;}
+img,svg,canvas{max-width:100%}
+a{color:var(--violet)}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--safranin);outline-offset:2px;border-radius:4px}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;display:flex;align-items:center;gap:12px;
+  padding:10px 18px;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--rule)}
+.topbar .brand{font-family:var(--serif);font-weight:900;font-size:18px;letter-spacing:.02em;white-space:nowrap}
+.topbar .brand small{font-family:var(--sans);font-weight:500;color:var(--ink-2);font-size:13px;margin-left:8px}
+.progress{flex:1;height:6px;background:var(--paper-2);border-radius:3px;overflow:hidden;min-width:60px}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--violet),var(--safranin));transition:width .4s}
+.pct{font-size:13px;color:var(--ink-2);white-space:nowrap}
+.iconbtn{border:1px solid var(--rule);background:var(--card);color:var(--ink);border-radius:8px;padding:6px 10px;font-size:14px}
+.menu-btn{display:none}
+
+/* ---------- layout ---------- */
+.shell{display:grid;grid-template-columns:290px minmax(0,1fr);min-height:calc(100vh - 56px)}
+nav.toc{border-right:1px solid var(--rule);padding:18px 14px 60px;position:sticky;top:57px;height:calc(100vh - 57px);overflow-y:auto;background:var(--paper)}
+.toc h4{font-family:var(--serif);font-size:14px;color:var(--ink-2);margin:20px 8px 6px;font-weight:600}
+.toc h4:first-child{margin-top:0}
+.toc a{display:flex;gap:10px;align-items:baseline;padding:6px 8px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:15px;line-height:1.5}
+.toc a .n{font-variant-numeric:tabular-nums;color:var(--ink-2);font-size:13px;min-width:1.6em}
+.toc a:hover{background:var(--paper-2)}
+.toc a.on{background:var(--violet-soft);color:var(--violet);font-weight:700}
+.toc a.done .n::after{content:"✓";color:var(--A);margin-left:2px}
+main{padding:28px 22px 80px;display:flex;justify-content:center}
+.col{width:100%;max-width:760px}
+
+/* ---------- hero ---------- */
+.hero{position:relative;margin:-28px -22px 30px;padding:40px 22px 36px;border-bottom:1px solid var(--rule);overflow:hidden}
+.hero canvas{position:absolute;right:-20px;top:0;height:100%;width:46%;opacity:.95}
+.hero .inner{position:relative;max-width:760px;margin:0 auto}
+.hero h1{font-family:var(--serif);font-weight:900;font-size:clamp(38px,8vw,72px);line-height:1.08;margin:0 0 14px;max-width:9em}
+.hero p{max-width:30em;color:var(--ink-2);margin:0 0 20px}
+.bases{display:flex;gap:6px;margin-bottom:18px}
+.bases span{font-family:var(--serif);font-weight:900;width:30px;height:30px;display:grid;place-items:center;border-radius:6px;color:#fff;font-size:16px}
+.cta{display:inline-block;background:var(--ink);color:var(--paper);border:0;padding:12px 22px;border-radius:999px;font-weight:700;text-decoration:none}
+
+/* ---------- chapter ---------- */
+.chapter{display:none}
+.chapter.show{display:block}
+.ch-head{margin:6px 0 26px}
+.ch-head .meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:14px;color:var(--ink-2)}
+.lv{display:inline-block;padding:1px 10px;border-radius:999px;font-size:13px;font-weight:700}
+.lv1{background:#DFF3E4;color:#1D6B35}.lv2{background:#FFF1CC;color:#7A5A00}.lv3{background:var(--safranin-soft);color:var(--safranin)}
+:root[data-theme="dark"] .lv1{background:#1B3A25;color:#8BE0A2}
+:root[data-theme="dark"] .lv2{background:#3A2F10;color:#F2D177}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .lv1{background:#1B3A25;color:#8BE0A2}:root:not([data-theme="light"]) .lv2{background:#3A2F10;color:#F2D177}}
+.chapter h2{font-family:var(--serif);font-weight:900;font-size:clamp(28px,5vw,40px);line-height:1.25;margin:8px 0 10px}
+.chapter .lead{font-size:18px;color:var(--ink-2);margin:0}
+.chapter h3{font-family:var(--serif);font-weight:900;font-size:23px;margin:40px 0 10px;line-height:1.4}
+.chapter h3 .num{color:var(--violet);margin-right:.4em;font-variant-numeric:tabular-nums}
+.chapter p{margin:0 0 16px}
+.chapter ul,.chapter ol{padding-left:1.4em;margin:0 0 16px}
+.chapter li{margin-bottom:6px}
+strong{font-weight:700}
+.en{font-family:Georgia,"Times New Roman",serif;font-style:italic;color:var(--ink-2)}
+.kbd{font-family:ui-monospace,Menlo,Consolas,monospace;background:var(--code);padding:1px 6px;border-radius:4px;font-size:.92em}
+.dna-seq{font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.12em;word-break:break-all}
+.bA{color:var(--A);font-weight:700}.bT{color:var(--T);font-weight:700}.bC{color:var(--C);font-weight:700}.bG{color:var(--G);font-weight:700}.bU{color:var(--safranin);font-weight:700}
+
+/* specimen label: etymology — the signature device */
+.etym{position:relative;margin:22px 0;padding:16px 18px 14px 20px;background:var(--card);border:1.5px solid var(--ink);border-radius:3px;
+  box-shadow:5px 5px 0 var(--violet-soft)}
+.etym::before{content:"";position:absolute;left:-1.5px;top:14px;bottom:14px;width:5px;background:var(--violet)}
+.etym .tag{font-family:var(--serif);font-weight:900;font-size:20px;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+.etym .tag .en{font-size:16px}
+.etym .roots{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 8px}
+.etym .roots span{border:1px dashed var(--ink-2);border-radius:4px;padding:2px 10px;font-size:14.5px;background:var(--paper)}
+.etym .roots b{color:var(--violet)}
+.etym p{margin:0;font-size:15.5px;color:var(--ink-2);line-height:1.75}
+.etym .hole{position:absolute;right:14px;top:12px;width:12px;height:12px;border-radius:50%;border:1.5px solid var(--ink-2)}
+
+.box{margin:20px 0;padding:14px 18px;border-radius:10px;font-size:16px}
+.box .h{font-weight:700;margin-bottom:4px;display:block}
+.analogy{background:var(--paper-2)}
+.analogy .h::before{content:"🔍 ";}
+.fact{background:var(--violet-soft)}
+.fact .h::before{content:"💡 "}
+.warn{background:var(--safranin-soft)}
+.warn .h::before{content:"⚠️ "}
+.box p:last-child{margin-bottom:0}
+
+table.t{width:100%;border-collapse:collapse;font-size:15.5px;margin:10px 0 20px}
+.tw{overflow-x:auto;margin:0 0 16px}
+table.t th,table.t td{border-bottom:1px solid var(--rule);padding:8px 10px;text-align:left;vertical-align:top}
+table.t th{font-family:var(--serif);background:var(--paper-2)}
+
+/* lab widgets */
+.lab{margin:26px 0;border:1px solid var(--rule);border-radius:14px;background:var(--card);overflow:hidden}
+.lab .lab-h{padding:10px 16px;background:var(--ink);color:var(--paper);font-weight:700;font-size:15px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.lab .lab-h span{opacity:.75;font-weight:400;font-size:13px}
+.lab .lab-b{padding:16px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+.btn{border:1.5px solid var(--ink);background:var(--card);color:var(--ink);border-radius:8px;padding:6px 14px;font-weight:500;font-size:15px}
+.btn.pri{background:var(--violet);border-color:var(--violet);color:#fff}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.sel{background:var(--ink);color:var(--paper)}
+input[type=range]{accent-color:var(--violet);width:100%;max-width:320px}
+input[type=text]{font:inherit;padding:6px 10px;border:1.5px solid var(--rule);border-radius:8px;background:var(--paper);color:var(--ink);width:100%}
+.readout{font-size:15px;color:var(--ink-2);margin-top:8px}
+.big-num{font-family:var(--serif);font-weight:900;font-size:34px;color:var(--violet);line-height:1.2}
+
+/* stepper */
+.stepper .stage{min-height:200px;display:grid;place-items:center;background:var(--paper);border-radius:10px;padding:8px}
+.stepper .cap{margin-top:12px;font-size:16px}
+.stepper .cap b{color:var(--violet)}
+.dots{display:flex;gap:6px;justify-content:center;margin-top:10px}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--rule)}
+.dots i.on{background:var(--violet)}
+
+/* quiz */
+.quiz-wrap{margin:40px 0 10px;padding:18px;border:2px dashed var(--rule);border-radius:14px}
+.quiz-wrap > .h{font-family:var(--serif);font-weight:900;font-size:20px;margin-bottom:6px}
+.quiz{margin:16px 0}
+.quiz .q{font-weight:700;margin-bottom:8px}
+.quiz button.opt{display:block;width:100%;text-align:left;margin:6px 0;padding:9px 14px;border:1.5px solid var(--rule);background:var(--card);color:var(--ink);border-radius:10px}
+.quiz button.opt:hover{border-color:var(--violet)}
+.quiz button.opt.right{border-color:var(--A);background:color-mix(in srgb,var(--A) 14%,var(--card))}
+.quiz button.opt.wrong{border-color:var(--T);background:color-mix(in srgb,var(--T) 12%,var(--card))}
+.quiz .ex{display:none;font-size:15px;color:var(--ink-2);margin-top:6px;padding-left:10px;border-left:3px solid var(--violet)}
+.quiz.answered .ex{display:block}
+
+.ch-foot{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin-top:44px;padding-top:20px;border-top:1px solid var(--rule)}
+.ch-foot .done-btn{background:var(--A);border-color:var(--A);color:#fff}
+.ch-foot .done-btn.is-done{background:var(--card);color:var(--A)}
+
+/* glossary */
+.gloss-item{padding:14px 0;border-bottom:1px solid var(--rule)}
+.gloss-item .gt{font-family:var(--serif);font-weight:900;font-size:19px}
+.gloss-item .gt .en{font-weight:400;font-size:15px;margin-left:8px}
+.gloss-item .go{font-size:15px;color:var(--violet);margin:2px 0}
+.gloss-item .gd{font-size:15.5px}
+.gloss-item a{font-size:13px}
+
+/* timeline — a real sequence */
+.tl{position:relative;margin:20px 0;padding-left:26px}
+.tl::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--rule)}
+.tl .ev{position:relative;margin-bottom:18px}
+.tl .ev::before{content:"";position:absolute;left:-23px;top:9px;width:12px;height:12px;border-radius:50%;background:var(--card);border:2.5px solid var(--violet)}
+.tl .ev .y{font-family:var(--serif);font-weight:900;color:var(--violet);font-size:18px}
+.tl .ev p{margin:0;font-size:15.5px}
+
+.fig{margin:20px 0;text-align:center}
+.fig svg{background:var(--paper);border-radius:10px;width:100%;height:auto}
+.fig figcaption{font-size:14px;color:var(--ink-2);margin-top:6px}
+
+/* mobile */
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr}
+  nav.toc{position:fixed;left:0;top:0;bottom:0;width:min(86vw,320px);height:100%;z-index:50;transform:translateX(-102%);transition:transform .25s;box-shadow:0 0 40px rgba(0,0,0,.25);padding-top:calc(env(safe-area-inset-top,0px) + 18px)}
+  nav.toc.open{transform:none}
+  .menu-btn{display:inline-block}
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:40;display:none}
+  .scrim.open{display:block}
+  .hero canvas{width:100%;opacity:.18;right:0}
+  .topbar .brand small{display:none}
+  body{font-size:16.5px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{nav.toc,.topbar,.ch-foot,.lab .controls{display:none}.chapter{display:block!important;page-break-after:always}.shell{display:block}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <button class="iconbtn menu-btn" id="menuBtn" aria-label="開啟目錄">☰ 目錄</button>
+  <div class="brand">從一個細胞開始<small>生物與生物技術・國中到專業</small></div>
+  <div class="progress" aria-hidden="true"><i id="progBar"></i></div>
+  <span class="pct" id="progTxt">0/0</span>
+  <button class="iconbtn" id="themeBtn" aria-label="切換深淺色">◐</button>
+</header>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+<nav class="toc" id="toc" aria-label="課程目錄"></nav>
+<main><div class="col" id="col">
+<!-- ================= UNIT 0 ================= -->
+<section class="chapter" id="c0" data-unit="開始之前" data-title="課程導覽：生物學與生物技術" data-level="1">
+  <div class="hero">
+    <canvas id="heroHelix" aria-hidden="true"></canvas>
+    <div class="inner">
+      <div class="bases"><span style="background:var(--A)">A</span><span style="background:var(--T)">T</span><span style="background:var(--C)">C</span><span style="background:var(--G)">G</span></div>
+      <h1>從一個細胞開始</h1>
+      <p>你身上大約有 30 兆個細胞，每一個都藏著一本用四個字母寫成、長達 30 億字的說明書。這門課會帶你讀懂它，然後學會人類怎麼改寫它。</p>
+      <a class="cta" href="#c1">開始第 1 課</a>
+    </div>
+  </div>
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv1">入門</span><span>約 10 分鐘</span></div>
+    <h2>課程導覽：生物學與生物技術</h2>
+    <p class="lead">先搞清楚兩件事：「生物學」在研究什麼，「生物技術」又在做什麼。</p>
+  </div>
+
+  <h3><span class="num">1</span>這門課怎麼用</h3>
+  <p>課程分成六個單元，由淺入深。每一課都有三種等級標籤：<span class="lv lv1">入門</span> 國中生就能讀懂、<span class="lv lv2">進階</span> 大約高中程度、<span class="lv lv3">專業</span> 接近大學與產業的內容。建議照順序讀，因為後面的課會用到前面的觀念。</p>
+  <p>你會在課文中看到這幾種小工具：</p>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">字源標籤 <span class="en">etymology label</span></div>
+    <div class="roots"><span><b>etymon</b> 真正的意思</span><span><b>-logia</b> 研究</span></div>
+    <p>長得像博物館標本籤的這種卡片，專門解釋專有名詞「為什麼叫這個名字」。科學名詞多半來自希臘文或拉丁文，拆開字根，名詞就不再是死背的咒語。</p>
+  </div>
+  <div class="box analogy"><span class="h">生活比喻</span><p>把抽象的東西變成你熟悉的東西。</p></div>
+  <div class="box fact"><span class="h">你知道嗎</span><p>課本之外的有趣故事或冷知識。</p></div>
+  <p>此外還有可以動手操作的<strong>互動實驗室</strong>，以及每課結尾的<strong>小測驗</strong>。讀完一課，按下「完成本課」，上方進度條就會前進。</p>
+
+  <h3><span class="num">2</span>生物學：研究「活著」這件事</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">生物學 <span class="en">Biology</span></div>
+    <div class="roots"><span><b>bios</b>（希臘文）生命</span><span><b>logos</b>（希臘文）話語、道理、學問</span></div>
+    <p>大約在 1800 年前後，德國與法國的幾位學者（包括拉馬克 Lamarck、特雷維拉努斯 Treviranus）開始用這個字，把原本分散的植物學、動物學、醫學統合成「研究生命的學問」。中文「生物學」是從日文借來的翻譯。</p>
+  </div>
+  <p>什麼叫「活著」？科學家通常用幾個特徵判斷：</p>
+  <ul>
+    <li><strong>由細胞組成</strong>：從細菌到大象都是。</li>
+    <li><strong>會代謝</strong>：吃進東西、轉換成能量與身體材料。</li>
+    <li><strong>會生長與繁殖</strong>：能產生後代。</li>
+    <li><strong>會遺傳</strong>：把特徵透過 DNA 傳給下一代。</li>
+    <li><strong>對環境有反應</strong>：手碰到燙的東西會縮回。</li>
+    <li><strong>維持體內穩定</strong>：例如體溫維持在 37°C 左右，這叫「恆定性」。</li>
+  </ul>
+  <div class="box fact"><span class="h">你知道嗎</span><p>病毒只符合其中一部分（它會遺傳、會演化，但沒有細胞、不能自己代謝），所以科學家到今天還在爭論病毒算不算「活的」。第 10 課會再談。</p></div>
+
+  <h3><span class="num">3</span>生物技術：借用生命的力量</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">生物技術 <span class="en">Biotechnology</span></div>
+    <div class="roots"><span><b>bios</b> 生命</span><span><b>technē</b>（希臘文）技藝、手藝</span><span><b>logos</b> 學問</span></div>
+    <p>1919 年，匈牙利農業工程師埃雷奇（Károly Ereky）寫了一本書，第一次用「Biotechnologie」這個字，描述「利用活的生物把原料變成產品」，當時他講的是用甜菜大規模養豬。簡稱「生技」。</p>
+  </div>
+  <p>簡單說：<strong>生物學是「了解」生命，生物技術是「運用」生命</strong>。人類其實幾千年前就在做生技了：</p>
+  <div class="tw"><table class="t">
+    <tr><th>時代</th><th>例子</th><th>用到的生物</th></tr>
+    <tr><td>傳統生技（數千年前起）</td><td>釀酒、做醬油、優格、泡菜、麵包</td><td>酵母菌、乳酸菌、麴菌</td></tr>
+    <tr><td>近代生技（1900年代）</td><td>抗生素、疫苗大量生產</td><td>黴菌、細菌、病毒</td></tr>
+    <tr><td>現代生技（1970年代起）</td><td>基因改造、胰島素、PCR、基因編輯、mRNA 疫苗</td><td>直接操作 DNA</td></tr>
+  </table></div>
+  <div class="box analogy"><span class="h">生活比喻</span><p>傳統生技像是「養一群很會做事的員工，但不知道他們腦袋怎麼想」；現代生技則是「直接打開員工的工作手冊（DNA），把內容改掉」。</p></div>
+
+  <h3><span class="num">4</span>課程地圖</h3>
+  <ol>
+    <li><strong>生命的積木</strong>：細胞、分子、酵素、能量。</li>
+    <li><strong>遺傳的密碼</strong>：孟德爾、DNA、染色體、蛋白質怎麼被製造。</li>
+    <li><strong>微生物與免疫</strong>：細菌、病毒、人體防禦、疫苗。</li>
+    <li><strong>生技工具箱</strong>：發酵、基因重組、PCR、電泳、定序、CRISPR。</li>
+    <li><strong>應用與前沿</strong>：醫療、農業、生物資訊與 AI、倫理。</li>
+    <li><strong>附錄</strong>：學習路線、名詞字源辭典、生技大事年表。</li>
+  </ol>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="2" data-explain="做優格是利用乳酸菌發酵，屬於傳統生物技術。其他三個都跟利用活的生物無關。">
+      <div class="q">下列哪一個是「生物技術」的例子？</div>
+      <button class="opt">用望遠鏡觀察月亮</button><button class="opt">用電鍋煮白飯</button><button class="opt">用乳酸菌做優格</button><button class="opt">用鐵打造菜刀</button>
+    </div>
+    <div class="quiz" data-answer="1" data-explain="bios 是希臘文的「生命」，所以 biology、biotechnology 都有它。">
+      <div class="q">「Bio-」這個字根是什麼意思？</div>
+      <button class="opt">書本</button><button class="opt">生命</button><button class="opt">兩個</button><button class="opt">化學</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= UNIT 1 ================= -->
+<section class="chapter" id="c1" data-unit="單元一　生命的積木" data-title="細胞：生命的最小單位" data-level="1">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv1">入門</span><span>約 20 分鐘</span></div>
+    <h2>細胞：生命的最小單位</h2>
+    <p class="lead">所有生物都由細胞構成。了解細胞，就是了解生命的「基本單位」。</p>
+  </div>
+
+  <h3><span class="num">1</span>一片軟木塞引發的發現</h3>
+  <p>1665 年，英國科學家虎克（Robert Hooke）用自製的顯微鏡觀察一片薄薄的軟木塞，看到一格一格的小空間，像蜂巢一樣。他把它們叫做 cell。</p>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">細胞 <span class="en">Cell</span></div>
+    <div class="roots"><span><b>cella</b>（拉丁文）小房間</span></div>
+    <p>虎克覺得那些小格子很像修道院裡修士住的小房間（cella），所以取名 cell。其實他看到的是軟木死掉後留下的「細胞壁空殼」，裡面的活東西早就不見了。中文「細胞」意思是「細小的胞囊」。</p>
+  </div>
+  <p>幾年後，荷蘭的布商雷文霍克（Antonie van Leeuwenhoek）自己磨鏡片，做出能放大約 200 多倍的顯微鏡，第一次看到在水滴裡游來游去的「微小動物」，也就是細菌和原生生物。一個不是科學家的布商，成了「微生物學之父」。</p>
+
+  <h3><span class="num">2</span>細胞學說：三句話統一生物學</h3>
+  <p>到了 1838 到 1855 年，三位德國科學家整理出「細胞學說」：</p>
+  <ol>
+    <li>所有生物都由一個或多個細胞構成（許萊登 Schleiden 研究植物、許旺 Schwann 研究動物）。</li>
+    <li>細胞是生物構造與功能的基本單位。</li>
+    <li>細胞只能由原本存在的細胞分裂而來。菲爾紹（Virchow）的名言是拉丁文「Omnis cellula e cellula」，意思是「所有細胞都來自細胞」。</li>
+  </ol>
+  <p>第三句很重要：它否定了當時流行的「自然發生說」（認為腐肉會自己長出蛆），也代表你身上的每個細胞，都可以一路往回追溯到你媽媽的卵細胞和爸爸的精子。</p>
+
+  <h3><span class="num">3</span>細胞有多小？</h3>
+  <p>大部分細胞的直徑在 10 到 100 微米之間。1 微米（μm）是一公尺的一百萬分之一。拖拉下面的尺度望遠鏡，感受一下生物世界的大小。</p>
+  <div class="lab" id="scaleLab">
+    <div class="lab-h">互動實驗室：尺度望遠鏡 <span>拖拉滑桿縮放</span></div>
+    <div class="lab-b">
+      <input type="range" id="scaleR" min="0" max="8" value="0" step="1" aria-label="尺度">
+      <div style="display:flex;gap:16px;align-items:center;margin-top:12px;flex-wrap:wrap">
+        <div id="scaleIcon" style="font-size:64px;line-height:1;width:80px;text-align:center"></div>
+        <div style="flex:1;min-width:200px"><div class="big-num" id="scaleSize"></div><div id="scaleName" style="font-weight:700"></div><div class="readout" id="scaleNote"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">微米、奈米 <span class="en">micrometer, nanometer</span></div>
+    <div class="roots"><span><b>mikros</b>（希臘文）小</span><span><b>nanos</b>（希臘文）侏儒</span><span><b>metron</b> 測量</span></div>
+    <p>微米是 10⁻⁶ 公尺，奈米是 10⁻⁹ 公尺。「奈」是 nano 的音譯。一根頭髮大約 80 微米寬，等於 8 萬奈米。</p>
+  </div>
+
+  <h3><span class="num">4</span>兩大類細胞：原核與真核</h3>
+  <div class="tw"><table class="t">
+    <tr><th></th><th>原核細胞</th><th>真核細胞</th></tr>
+    <tr><td>代表生物</td><td>細菌、古菌</td><td>動物、植物、真菌、原生生物</td></tr>
+    <tr><td>有沒有細胞核</td><td>沒有，DNA 散在細胞質裡</td><td>有，DNA 被核膜包起來</td></tr>
+    <tr><td>大小</td><td>約 1 到 5 微米</td><td>約 10 到 100 微米</td></tr>
+    <tr><td>胞器</td><td>很少（有核糖體）</td><td>很多，分工精細</td></tr>
+  </table></div>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">原核、真核 <span class="en">Prokaryote, Eukaryote</span></div>
+    <div class="roots"><span><b>pro</b> 之前</span><span><b>eu</b> 真正的、好的</span><span><b>karyon</b>（希臘文）果仁、核</span></div>
+    <p>原核生物是「在有核之前」的生物，真核生物則有「真正的核」。細胞核在顯微鏡下像果實裡的硬核，所以用 karyon（果仁）命名。</p>
+  </div>
+
+  <h3><span class="num">5</span>細胞裡的工廠</h3>
+  <p>真核細胞內部有許多「胞器」，每一種負責不同工作，就像一座工廠裡的各個部門。點擊下圖中的構造看看它們在做什麼，也可以切換動物細胞與植物細胞。</p>
+  <div class="lab" id="cellLab">
+    <div class="lab-h">互動實驗室：細胞探險 <span>點擊胞器</span></div>
+    <div class="lab-b">
+      <div class="controls"><button class="btn sel" data-cell="animal">動物細胞</button><button class="btn" data-cell="plant">植物細胞</button></div>
+      <div id="cellSvg"></div>
+      <div id="cellInfo" class="box analogy" style="margin-bottom:0"><span class="h">點一個構造開始</span><p>每個胞器都有它的工作。</p></div>
+    </div>
+  </div>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">胞器 <span class="en">Organelle</span></div>
+    <div class="roots"><span><b>organon</b>（希臘文）工具、器官</span><span><b>-elle</b> 小的</span></div>
+    <p>意思是「小器官」。就像人體有心、肝、胃等器官，細胞裡也有各司其職的小器官。</p>
+  </div>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">粒線體 <span class="en">Mitochondrion</span></div>
+    <div class="roots"><span><b>mitos</b> 線</span><span><b>chondros</b> 顆粒</span></div>
+    <p>1898 年德國人本達（Carl Benda）在顯微鏡下看到它時而像線、時而像顆粒，就把兩個字合起來。中文「粒線體」同時保留了這兩個意思，翻得非常漂亮。</p>
+  </div>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">核糖體 <span class="en">Ribosome</span></div>
+    <div class="roots"><span><b>ribo-</b> 核糖核酸 RNA</span><span><b>soma</b>（希臘文）身體、小體</span></div>
+    <p>由 RNA 與蛋白質組成的小顆粒，所以叫「核糖（核酸）小體」。帕拉德（George Palade）在 1950 年代用電子顯微鏡發現它，後來得到諾貝爾獎。</p>
+  </div>
+  <div class="box fact"><span class="h">你知道嗎</span><p>粒線體有自己的 DNA，而且跟細菌很像。科學家認為，大約 15 億年前有一個細菌被另一個細胞吞進去卻沒被消化，兩者從此合作共生，這叫「內共生學說」，由馬古利斯（Lynn Margulis）大力推廣。你的粒線體 DNA 幾乎全部來自媽媽。</p></div>
+
+  <h3><span class="num">6</span>細胞膜：聰明的門禁</h3>
+  <p>細胞膜主要由兩層「磷脂質」排成，像三明治：親水的頭朝外、怕水的尾巴朝內。它讓氧氣、二氧化碳這類小分子自由通過，但葡萄糖、離子這些要靠專門的「通道蛋白」或「運輸蛋白」幫忙。這種「有些能過、有些不能」的特性叫做<strong>選擇性通透</strong>。</p>
+  <div class="box analogy"><span class="h">生活比喻</span><p>細胞膜像捷運站的閘門：小朋友（小分子）可以直接擠過去，大人（大分子）要刷卡（運輸蛋白），有些東西（有害物質）則會被擋在外面。</p></div>
+  <p>水分子通過細胞膜的移動叫做<strong>滲透作用</strong>：水會從「溶質少」的一邊跑到「溶質多」的一邊。這就是為什麼醃小黃瓜時，撒鹽會讓黃瓜出水變軟。</p>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="3" data-explain="粒線體進行細胞呼吸，把葡萄糖的能量轉成 ATP，是細胞的發電廠。">
+      <div class="q">哪個胞器被稱為「細胞的發電廠」？</div>
+      <button class="opt">細胞核</button><button class="opt">高基氏體</button><button class="opt">核糖體</button><button class="opt">粒線體</button>
+    </div>
+    <div class="quiz" data-answer="0" data-explain="細菌是原核生物，沒有被核膜包起來的細胞核。">
+      <div class="q">下列哪一種生物的細胞「沒有」細胞核？</div>
+      <button class="opt">大腸桿菌</button><button class="opt">酵母菌</button><button class="opt">洋蔥</button><button class="opt">人類</button>
+    </div>
+    <div class="quiz" data-answer="2" data-explain="cella 是拉丁文「小房間」，虎克覺得軟木的格子像修道院的小房間。">
+      <div class="q">虎克為什麼把細胞叫做 cell？</div>
+      <button class="opt">因為看起來像電池</button><button class="opt">因為會打電話</button><button class="opt">因為像修道院的小房間</button><button class="opt">因為是細小的顆粒</button>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="c2" data-unit="單元一　生命的積木" data-title="生命的分子：組成你的材料" data-level="1">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv1">入門</span><span class="lv lv2">進階</span><span>約 20 分鐘</span></div>
+    <h2>生命的分子：組成你的材料</h2>
+    <p class="lead">細胞是由什麼做的？答案是五大類分子：水、醣類、脂質、蛋白質、核酸。</p>
+  </div>
+
+  <h3><span class="num">1</span>先認識元素</h3>
+  <p>人體約 96% 的重量由四種元素構成：氧（O）、碳（C）、氫（H）、氮（N）。其中<strong>碳</strong>最特別，它可以同時和四個原子手牽手，能串成長鏈、分支、環狀，所以能組出千變萬化的大分子。以碳為骨架的化合物就叫「有機物」。</p>
+  <div class="box analogy"><span class="h">生活比喻</span><p>碳原子像有四個接頭的樂高積木，其他原子多半只有一兩個接頭。想要蓋出複雜的城堡，就需要大量四接頭積木。</p></div>
+
+  <h3><span class="num">2</span>水：生命的舞台</h3>
+  <p>人體約 60% 是水。水分子（H₂O）一端帶一點負電、另一端帶一點正電，這叫「極性」。因此水很會溶解鹽、糖等東西，細胞裡的化學反應幾乎都在水裡進行。水也很能儲存熱量，幫助身體維持體溫。</p>
+
+  <h3><span class="num">3</span>醣類：快速能源</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">碳水化合物 <span class="en">Carbohydrate</span></div>
+    <div class="roots"><span><b>carbo</b>（拉丁文）碳</span><span><b>hydrate</b> 水合</span></div>
+    <p>早期化學家發現醣類的分子式剛好像「碳加上水」，例如葡萄糖 C₆H₁₂O₆ 可以寫成 C₆(H₂O)₆，就誤以為它是碳的水合物，名字就這樣留下來了。</p>
+  </div>
+  <ul>
+    <li><strong>單醣</strong>：最小單位，如葡萄糖、果糖。</li>
+    <li><strong>雙醣</strong>：兩個單醣相連，如蔗糖（砂糖）、乳糖。</li>
+    <li><strong>多醣</strong>：許多單醣串成長鏈，如澱粉（植物儲存能量）、肝醣（動物儲存能量）、纖維素（植物細胞壁）。</li>
+  </ul>
+  <div class="box fact"><span class="h">你知道嗎</span><p>澱粉和纖維素都是由葡萄糖串成的，差別只在連接的方向。人類有分解澱粉的酵素，卻沒有分解纖維素的酵素，所以吃飯能獲得能量，吃紙卻不行。牛能消化草，是靠胃裡的微生物幫忙。</p></div>
+
+  <h3><span class="num">4</span>脂質：儲能與建材</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">脂質 <span class="en">Lipid</span></div>
+    <div class="roots"><span><b>lipos</b>（希臘文）脂肪</span></div>
+    <p>脂質的共同特色是「怕水」，不溶於水。油浮在湯上面就是這個原因。</p>
+  </div>
+  <p>脂質包括三種主要成員：<strong>三酸甘油酯</strong>（脂肪，儲存能量效率是醣類的兩倍多）、<strong>磷脂質</strong>（組成細胞膜）、<strong>固醇類</strong>（如膽固醇、性荷爾蒙）。</p>
+
+  <h3><span class="num">5</span>蛋白質：生命的工人</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">蛋白質 <span class="en">Protein</span></div>
+    <div class="roots"><span><b>prōteios</b>（希臘文）第一的、最重要的</span></div>
+    <p>1838 年，瑞典化學家貝吉里斯（Berzelius）建議荷蘭化學家穆德（Mulder）用這個名字，因為他們認為它是生物體最重要的物質。中文「蛋白質」則是因為蛋白（蛋清）幾乎就是純的蛋白質。</p>
+  </div>
+  <p>蛋白質由 <strong>20 種胺基酸</strong>串成。串起來的順序不同，就會折疊成不同形狀，而<strong>形狀決定功能</strong>。</p>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">胺基酸 <span class="en">Amino acid</span></div>
+    <div class="roots"><span><b>amine</b> 胺（含氮的基團）</span><span><b>acid</b> 酸</span></div>
+    <p>每個胺基酸都有一個含氮的「胺基」和一個「羧酸基」。有趣的是 amine 來自 ammonia（氨），而氨這個字源自古埃及阿蒙神廟（Ammon）附近出產的「阿蒙鹽」。</p>
+  </div>
+  <div class="box analogy"><span class="h">生活比喻</span><p>20 種胺基酸就像 20 種不同顏色的珠子。用幾百顆珠子串成一條項鍊，再把項鍊揉成特定形狀，就成了一個蛋白質。珠子順序錯一顆，形狀就可能不對，功能就壞掉。</p></div>
+  <p>蛋白質的結構分成四個層次：</p>
+  <ol>
+    <li><strong>一級結構</strong>：胺基酸的排列順序。</li>
+    <li><strong>二級結構</strong>：局部捲成螺旋（α 螺旋）或摺成片狀（β 摺板）。</li>
+    <li><strong>三級結構</strong>：整條鏈折疊成立體形狀。</li>
+    <li><strong>四級結構</strong>：好幾條鏈組合在一起，例如血紅素由四條鏈組成。</li>
+  </ol>
+  <p>蛋白質的工作包括：催化反應（酵素）、運輸（血紅素運送氧氣）、防禦（抗體）、支撐（膠原蛋白、角蛋白）、傳遞訊息（胰島素等荷爾蒙）、運動（肌肉的肌動蛋白）。</p>
+  <div class="box fact"><span class="h">你知道嗎</span><p>煎蛋時蛋白從透明變白，就是蛋白質受熱後形狀被破壞，這叫「變性」。變性後通常回不去，所以你沒辦法把荷包蛋變回生蛋。</p></div>
+
+  <h3><span class="num">6</span>核酸：資訊的載體</h3>
+  <p>核酸分成 <strong>DNA</strong> 和 <strong>RNA</strong>，負責儲存和傳遞遺傳資訊。它們由「核苷酸」串成，每個核苷酸有三個部分：一個五碳醣、一個磷酸、一個含氮鹼基。第 6 課會詳細介紹。</p>
+
+  <div class="tw"><table class="t">
+    <tr><th>大分子</th><th>基本單位</th><th>主要功能</th><th>食物例子</th></tr>
+    <tr><td>醣類</td><td>單醣</td><td>快速能源、結構</td><td>米飯、麵包、水果</td></tr>
+    <tr><td>脂質</td><td>脂肪酸與甘油（非嚴格聚合物）</td><td>長期儲能、細胞膜</td><td>油、奶油、堅果</td></tr>
+    <tr><td>蛋白質</td><td>胺基酸</td><td>催化、運輸、防禦、結構</td><td>蛋、肉、豆腐</td></tr>
+    <tr><td>核酸</td><td>核苷酸</td><td>儲存遺傳資訊</td><td>所有細胞都有</td></tr>
+  </table></div>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="1" data-explain="蛋白質由 20 種胺基酸串接而成。">
+      <div class="q">蛋白質的基本單位是什麼？</div>
+      <button class="opt">葡萄糖</button><button class="opt">胺基酸</button><button class="opt">核苷酸</button><button class="opt">脂肪酸</button>
+    </div>
+    <div class="quiz" data-answer="3" data-explain="加熱破壞了蛋白質的立體形狀，這叫變性。胺基酸順序其實沒變，但形狀變了，性質就改變。">
+      <div class="q">雞蛋煮熟後蛋白變成白色固體，主要原因是？</div>
+      <button class="opt">蛋白質變成了醣類</button><button class="opt">水分全部蒸發</button><button class="opt">胺基酸的順序被打亂</button><button class="opt">蛋白質的立體形狀被破壞（變性）</button>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="c3" data-unit="單元一　生命的積木" data-title="酵素：細胞的魔法剪刀" data-level="1">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv1">入門</span><span class="lv lv2">進階</span><span>約 15 分鐘</span></div>
+    <h2>酵素：細胞的魔法剪刀</h2>
+    <p class="lead">細胞裡每秒發生數百萬個化學反應，如果沒有酵素，這些反應慢到生命根本無法存在。</p>
+  </div>
+
+  <h3><span class="num">1</span>酵素的名字從哪來</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">酵素、酶 <span class="en">Enzyme</span></div>
+    <div class="roots"><span><b>en</b>（希臘文）在裡面</span><span><b>zymē</b>（希臘文）酵母、麵種</span></div>
+    <p>1877 年德國生理學家庫恩（Wilhelm Kühne）創造這個字，意思是「在酵母裡面的東西」，因為當時的人發現酵母能讓麵團發酵、葡萄變成酒。中文有兩種叫法：「酵素」從日文來，「酶」是中國大陸的學術用字，兩者是同一個東西。</p>
+  </div>
+  <p>1897 年，德國化學家布赫納（Eduard Buchner）把酵母細胞磨碎、過濾，發現沒有活細胞的汁液一樣能讓糖發酵。這證明發酵靠的是細胞裡的「化學物質」而非神秘的「生命力」，他因此得到 1907 年諾貝爾化學獎，這也被視為<strong>生物化學</strong>的誕生。</p>
+
+  <h3><span class="num">2</span>酵素是怎麼工作的</h3>
+  <p>大部分酵素是蛋白質。它們是<strong>催化劑</strong>：加速反應，但自己不會被用掉，可以一再重複使用。酵素上有一個凹槽叫<strong>活性部位</strong>，只有形狀剛好合的分子（稱為<strong>受質</strong>）才能卡進去。</p>
+  <div class="lab" id="enzLab">
+    <div class="lab-h">互動實驗室：鎖與鑰匙 <span>選擇受質並觀察</span></div>
+    <div class="lab-b">
+      <div class="controls"><button class="btn" id="enzGood">放入吻合的受質</button><button class="btn" id="enzBad">放入不吻合的分子</button></div>
+      <div class="fig" style="margin:6px 0"><svg id="enzSvg" viewBox="0 0 420 200" role="img" aria-label="酵素與受質動畫"></svg></div>
+      <div class="readout" id="enzTxt">酵素（紫色）有一個特定形狀的凹槽。</div>
+      <hr style="border:0;border-top:1px solid var(--rule);margin:16px 0">
+      <label for="tempR"><strong>溫度實驗：</strong>人體酵素在不同溫度下的活性</label>
+      <input type="range" id="tempR" min="0" max="80" value="37">
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <div class="big-num" id="tempV">37°C</div>
+        <div style="flex:1;min-width:160px"><div style="height:16px;background:var(--paper-2);border-radius:8px;overflow:hidden"><div id="tempBar" style="height:100%;background:var(--A);width:100%;transition:width .2s"></div></div><div class="readout" id="tempTxt"></div></div>
+      </div>
+    </div>
+  </div>
+  <p>1894 年德國化學家費雪（Emil Fischer）提出「<strong>鎖鑰模型</strong>」來比喻這種專一性。1958 年美國科學家科什蘭（Daniel Koshland）修正成「<strong>誘導契合模型</strong>」：活性部位不是完全固定的，受質靠近時，酵素會稍微變形把它抱緊，像手套套上手一樣。</p>
+
+  <h3><span class="num">3</span>影響酵素的因素</h3>
+  <ul>
+    <li><strong>溫度</strong>：溫度升高反應會加快，但超過某個溫度，酵素形狀被破壞（變性）就失效。人體酵素最適溫度約 37°C，所以高燒太久很危險。</li>
+    <li><strong>酸鹼值（pH）</strong>：胃裡的胃蛋白酶喜歡強酸（pH 約 2），小腸裡的胰蛋白酶喜歡弱鹼（pH 約 8）。</li>
+    <li><strong>受質濃度</strong>：受質越多反應越快，直到所有酵素都在忙，速度就不會再增加（飽和）。</li>
+    <li><strong>抑制劑</strong>：有些分子會卡住活性部位，讓酵素停工。很多藥物就是酵素抑制劑，例如阿斯匹靈抑制和發炎有關的環氧合酶。</li>
+  </ul>
+  <div class="box fact"><span class="h">你知道嗎</span><p>酵素的名字通常以「-ase」結尾（中文常譯作「酶」），前面接它處理的東西：分解澱粉的叫 amylase 澱粉酶，分解乳糖的叫 lactase 乳糖酶，分解蛋白質的叫 protease 蛋白酶。很多成人喝牛奶會拉肚子，就是乳糖酶活性變低了。</p></div>
+
+  <h3><span class="num">4</span><span class="lv lv3">專業</span> 活化能與酵素動力學</h3>
+  <p>化學反應要發生，分子得先爬過一座能量的「山」，叫<strong>活化能</strong>。酵素的作用是挖一條隧道，降低這座山的高度，讓反應快上百萬甚至數十億倍，但反應前後的總能量差不變。</p>
+  <p>描述酵素速度的經典公式是 1913 年的<strong>米氏方程式</strong>（Michaelis–Menten equation）：</p>
+  <p style="text-align:center;font-family:var(--serif);font-size:20px">v = V<sub>max</sub>[S] / (K<sub>m</sub> + [S])</p>
+  <p>V<sub>max</sub> 是最大速度；K<sub>m</sub> 是達到一半最大速度時的受質濃度，K<sub>m</sub> 越小代表酵素跟受質「越親密」。這個公式至今仍是藥物開發評估抑制劑效果的基本工具。</p>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="2" data-explain="酵素是催化劑，反應後本身不變，可以重複使用。">
+      <div class="q">關於酵素，下列何者正確？</div>
+      <button class="opt">反應完就被消耗掉</button><button class="opt">溫度越高越好</button><button class="opt">可以重複使用</button><button class="opt">任何分子都能作用</button>
+    </div>
+    <div class="quiz" data-answer="0" data-explain="zymē 是希臘文的酵母，en 是「在裡面」。">
+      <div class="q">Enzyme 這個字原本的意思是？</div>
+      <button class="opt">在酵母裡面</button><button class="opt">能量</button><button class="opt">剪刀</button><button class="opt">蛋白質</button>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="c4" data-unit="單元一　生命的積木" data-title="細胞的能量：光合作用與呼吸作用" data-level="2">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv1">入門</span><span class="lv lv2">進階</span><span>約 20 分鐘</span></div>
+    <h2>細胞的能量：光合作用與呼吸作用</h2>
+    <p class="lead">地球上幾乎所有生命的能量，最終都來自太陽。植物把光變成糖，所有生物再把糖變成能用的能量。</p>
+  </div>
+
+  <h3><span class="num">1</span>ATP：細胞的通用貨幣</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">ATP <span class="en">Adenosine triphosphate，腺苷三磷酸</span></div>
+    <div class="roots"><span><b>adenosine</b> 腺苷（最早從腺體 aden 中分離）</span><span><b>tri-</b> 三個</span><span><b>phosphate</b> 磷酸</span></div>
+    <p>1929 年由德國的洛曼（Karl Lohmann）等人發現。它帶著三個磷酸，最後一個磷酸的鍵斷開時會釋放能量，變成 ADP（二磷酸）。</p>
+  </div>
+  <div class="box analogy"><span class="h">生活比喻</span><p>葡萄糖像一張千元大鈔，ATP 像十元硬幣。大鈔在販賣機投不進去，細胞得先把葡萄糖「換開」成大量 ATP，肌肉收縮、神經傳訊、製造蛋白質時才付得出來。ATP 用完變成 ADP，再充電回 ATP，像可以重複充電的電池。一個人每天周轉的 ATP 總量，大約跟自己的體重差不多。</p></div>
+
+  <h3><span class="num">2</span>光合作用：把陽光存成糖</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">光合作用 <span class="en">Photosynthesis</span></div>
+    <div class="roots"><span><b>phōs / phōtos</b> 光</span><span><b>synthesis</b> 放在一起、合成</span></div>
+    <p>「用光來合成」。發生在<strong>葉綠體</strong>（chloroplast，chloros 綠色 + plastos 被塑造的），葉綠體裡的綠色色素叫葉綠素（chlorophyll，phyllon 是葉子）。</p>
+  </div>
+  <p style="text-align:center;font-family:var(--serif);font-size:18px">6CO₂ + 6H₂O ＋ 光能 → C₆H₁₂O₆ + 6O₂</p>
+  <p>白話文：二氧化碳加水，用光的能量，做成葡萄糖，順便放出氧氣。它分兩個階段：</p>
+  <ol>
+    <li><strong>光反應</strong>（在葉綠體的類囊體膜上）：葉綠素吸收光，把水分子拆開，放出氧氣，同時產生 ATP 和 NADPH（能量搬運工）。</li>
+    <li><strong>碳反應（卡爾文循環）</strong>（在葉綠體的基質）：用 ATP 和 NADPH 把空氣中的 CO₂ 固定下來組成糖。這個循環由美國化學家卡爾文（Melvin Calvin）用放射性碳追蹤發現，1961 年得到諾貝爾獎。</li>
+  </ol>
+  <div class="box fact"><span class="h">你知道嗎</span><p>你呼吸的氧氣，是植物「拆水」的副產品，不是從 CO₂ 來的。這是 1941 年科學家用氧的同位素做實驗證明的。另外，地球上含量最多的蛋白質，很可能就是負責固定 CO₂ 的酵素 Rubisco。</p></div>
+
+  <h3><span class="num">3</span>細胞呼吸：把糖換成 ATP</h3>
+  <p>「呼吸作用」不是指用肺呼吸，而是細胞裡分解葡萄糖來產生 ATP 的過程。它剛好是光合作用的反方向：</p>
+  <p style="text-align:center;font-family:var(--serif);font-size:18px">C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O ＋ 能量（ATP）</p>
+  <figure class="fig">
+    <svg viewBox="0 0 520 230" role="img" aria-label="光合作用與呼吸作用互補循環圖">
+      <rect x="20" y="70" width="150" height="90" rx="14" fill="none" stroke="var(--A)" stroke-width="2.5"/>
+      <text x="95" y="108" text-anchor="middle" font-size="17" font-weight="700" fill="var(--A)">葉綠體</text>
+      <text x="95" y="132" text-anchor="middle" font-size="13" fill="var(--ink-2)">光合作用</text>
+      <rect x="350" y="70" width="150" height="90" rx="14" fill="none" stroke="var(--T)" stroke-width="2.5"/>
+      <text x="425" y="108" text-anchor="middle" font-size="17" font-weight="700" fill="var(--T)">粒線體</text>
+      <text x="425" y="132" text-anchor="middle" font-size="13" fill="var(--ink-2)">細胞呼吸</text>
+      <path d="M170 90 Q260 20 350 90" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#ar)"/>
+      <text x="260" y="42" text-anchor="middle" font-size="14" fill="var(--ink)">葡萄糖 ＋ 氧氣</text>
+      <path d="M350 140 Q260 210 170 140" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#ar)"/>
+      <text x="260" y="200" text-anchor="middle" font-size="14" fill="var(--ink)">二氧化碳 ＋ 水</text>
+      <text x="95" y="30" text-anchor="middle" font-size="26">☀️</text><text x="95" y="56" text-anchor="middle" font-size="12" fill="var(--ink-2)">光能進入</text>
+      <text x="425" y="195" text-anchor="middle" font-size="22">⚡</text><text x="425" y="220" text-anchor="middle" font-size="12" fill="var(--ink-2)">ATP 供細胞使用</text>
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--ink)"/></marker></defs>
+    </svg>
+    <figcaption>光合作用的產物正好是呼吸作用的原料，反之亦然。</figcaption>
+  </figure>
+  <p>細胞呼吸分三個階段：</p>
+  <ol>
+    <li><strong>糖解作用</strong>（細胞質）：一個葡萄糖切成兩個丙酮酸，淨得 2 個 ATP。glycolysis 來自 glykys（甜）+ lysis（分解）。</li>
+    <li><strong>克氏循環</strong>（粒線體基質）：把丙酮酸徹底拆解，放出 CO₂，產生大量高能電子。由英國的克雷布斯（Hans Krebs）於 1937 年發現，又叫檸檬酸循環。</li>
+    <li><strong>電子傳遞鏈</strong>（粒線體內膜）：高能電子傳遞時把氫離子打到膜的另一邊，氫離子流回來時推動一個叫 <strong>ATP 合成酶</strong>的「分子渦輪機」轉動，大量製造 ATP。最後電子交給氧氣，形成水。</li>
+  </ol>
+  <p>總共一個葡萄糖大約能產生 30 到 32 個 ATP（舊課本常寫 36 到 38 個，是較早的估計）。</p>
+  <div class="box fact"><span class="h">你知道嗎</span><p>ATP 合成酶真的會旋轉，每秒可轉超過一百圈，是自然界最小的旋轉馬達之一。1997 年的諾貝爾化學獎就頒給解開它機制的科學家。</p></div>
+
+  <h3><span class="num">4</span>沒有氧氣時：發酵</h3>
+  <p>氧氣不夠時，細胞只能靠糖解作用產生少量 ATP，並把丙酮酸轉成其他東西：</p>
+  <ul>
+    <li><strong>乳酸發酵</strong>：肌肉劇烈運動缺氧時、乳酸菌做優格時，產生乳酸。</li>
+    <li><strong>酒精發酵</strong>：酵母菌把糖變成酒精和 CO₂，所以能釀酒；CO₂ 讓麵包膨脹。</li>
+  </ul>
+  <p>發酵是傳統生技的核心，第 12 課會專門介紹。</p>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="1" data-explain="光合作用把水拆開，氧氣來自水分子。">
+      <div class="q">植物光合作用釋放的氧氣來自哪裡？</div>
+      <button class="opt">二氧化碳</button><button class="opt">水</button><button class="opt">葡萄糖</button><button class="opt">土壤</button>
+    </div>
+    <div class="quiz" data-answer="3" data-explain="麵包膨脹靠酵母菌酒精發酵產生的二氧化碳氣泡；烘烤時酒精大多揮發掉了。">
+      <div class="q">麵包會膨脹，是因為酵母菌產生了？</div>
+      <button class="opt">氧氣</button><button class="opt">乳酸</button><button class="opt">氮氣</button><button class="opt">二氧化碳</button>
+    </div>
+  </div>
+</section>
+<!-- ================= UNIT 2 ================= -->
+<section class="chapter" id="c5" data-unit="單元二　遺傳的密碼" data-title="孟德爾與遺傳法則" data-level="1">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv1">入門</span><span class="lv lv2">進階</span><span>約 20 分鐘</span></div>
+    <h2>孟德爾與遺傳法則</h2>
+    <p class="lead">為什麼你長得像爸媽，卻又不完全一樣？一位修道士用 8 年、上萬株豌豆找到了答案。</p>
+  </div>
+
+  <h3><span class="num">1</span>修道院裡的豌豆實驗</h3>
+  <p>1856 到 1863 年，奧地利修道士孟德爾（Gregor Mendel）在修道院的菜園裡種了大約 28,000 株豌豆。他選豌豆有三個聰明的理由：生長快、特徵清楚（種子黃或綠、圓或皺）、可以自己授粉也可以人工控制授粉。</p>
+  <p>1865 年他發表結果，但當時沒人看得懂他用數學分析生物的方法。直到 1900 年，三位科學家（德弗里斯、柯倫斯、切馬克）各自重新發現他的論文，孟德爾才被尊為<strong>遺傳學之父</strong>，可惜他已經過世 16 年了。</p>
+
+  <h3><span class="num">2</span>關鍵名詞</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">基因 <span class="en">Gene</span></div>
+    <div class="roots"><span><b>genos</b>（希臘文）出生、種族、世代</span></div>
+    <p>1909 年丹麥植物學家約翰森（Wilhelm Johannsen）從達爾文的「泛生論（pangenesis）」取出 gen 這個部分，創造 gene 這個字，指孟德爾說的「遺傳因子」。中文「基因」兼顧了發音（gene）與意思（基本的因子），是音義合譯的經典例子。</p>
+  </div>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">遺傳學 <span class="en">Genetics</span></div>
+    <div class="roots"><span><b>genesis</b>（希臘文）起源、生成</span></div>
+    <p>1905 年英國生物學家貝特森（William Bateson）在寫給朋友的信中提議用 genetics 這個字稱呼研究遺傳的新學科。他也是孟德爾學說在英國最熱情的推廣者。</p>
+  </div>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">對偶基因（等位基因） <span class="en">Allele</span></div>
+    <div class="roots"><span><b>allēlōn</b>（希臘文）彼此、互相</span></div>
+    <p>源自貝特森提出的 allelomorph（互為另一型態）。同一個基因可以有不同版本，例如種子顏色基因有「黃色版」和「綠色版」，這些版本就互為對偶基因。台灣課本多稱「對偶基因」，大陸稱「等位基因」。</p>
+  </div>
+  <ul>
+    <li><strong>顯性</strong>與<strong>隱性</strong>：兩個不同的對偶基因在一起時，表現出來的那個是顯性（用大寫字母，如 Y），被蓋住的是隱性（小寫，如 y）。</li>
+    <li><strong>基因型</strong>：你帶有的基因組合，例如 YY、Yy、yy。</li>
+    <li><strong>表現型</strong>：看得到的特徵，例如「黃色」或「綠色」。這兩個詞也是約翰森在 1909 年提出的（genotype、phenotype，phainein 是希臘文「顯現」）。</li>
+    <li><strong>同型合子</strong>（YY 或 yy）與<strong>異型合子</strong>（Yy）。</li>
+  </ul>
+  <div class="box analogy"><span class="h">生活比喻</span><p>每個基因你都有兩份：一份來自爸爸、一份來自媽媽，就像兩張食譜。如果一張寫「加黃色素」、一張寫「不加」，最後做出來還是黃色，因為只要有一張說加就會加。這就是顯性。</p></div>
+
+  <h3><span class="num">3</span>分離律與棋盤方格</h3>
+  <p>孟德爾的第一定律<strong>分離律</strong>：產生精子或卵時，兩份對偶基因會分開，每個配子只帶其中一份。受精時再隨機組合。我們可以用英國遺傳學家龐尼特（Reginald Punnett）發明的<strong>龐尼特方格</strong>（棋盤方格）來預測後代。</p>
+  <div class="lab" id="punLab">
+    <div class="lab-h">互動實驗室：豌豆配對器 <span>Y＝黃（顯性）、y＝綠（隱性）</span></div>
+    <div class="lab-b">
+      <div class="controls"><strong>父本：</strong><span id="punP1"></span></div>
+      <div class="controls"><strong>母本：</strong><span id="punP2"></span></div>
+      <div id="punGrid" style="margin:14px auto;max-width:360px"></div>
+      <div class="readout" id="punTxt"></div>
+    </div>
+  </div>
+  <p>試試看把兩個 Yy 配在一起：後代基因型比例 YY : Yy : yy = 1 : 2 : 1，表現型黃 : 綠 = 3 : 1。這正是孟德爾實際數出來的比例（他數了 6,022 顆黃色和 2,001 顆綠色，約 3.01 : 1）。</p>
+  <p>孟德爾的第二定律<strong>獨立分配律</strong>：不同的特徵（例如顏色與形狀）在遺傳時各自獨立。兩對特徵的雜交會得到 9 : 3 : 3 : 1。後來發現這只在兩個基因位於不同染色體（或距離很遠）時成立。</p>
+
+  <h3><span class="num">4</span>人類的遺傳</h3>
+  <p>人類有些特徵大致符合孟德爾遺傳，例如 ABO 血型：A 與 B 對 O 都是顯性，但 A 與 B 之間是<strong>共顯性</strong>（兩個都表現，得到 AB 型）。</p>
+  <div class="tw"><table class="t">
+    <tr><th>血型（表現型）</th><th>可能的基因型</th></tr>
+    <tr><td>A 型</td><td>I<sup>A</sup>I<sup>A</sup> 或 I<sup>A</sup>i</td></tr>
+    <tr><td>B 型</td><td>I<sup>B</sup>I<sup>B</sup> 或 I<sup>B</sup>i</td></tr>
+    <tr><td>AB 型</td><td>I<sup>A</sup>I<sup>B</sup></td></tr>
+    <tr><td>O 型</td><td>ii</td></tr>
+  </table></div>
+  <p>但大多數人類特徵，例如身高、膚色、智力，受到<strong>許多基因</strong>加上<strong>環境</strong>共同影響，叫做<strong>多基因遺傳</strong>，不會出現簡單的 3:1。</p>
+  <div class="box warn"><span class="h">常見誤解</span><p>「捲舌」「單眼皮」常被課本當作單基因顯隱性的例子，但後來的研究發現它們其實複雜得多，有雙胞胎一個會捲舌一個不會的例子。科學會隨證據修正，這本身就是很好的一課。</p></div>
+
+  <h3><span class="num">5</span><span class="lv lv3">專業</span> 性聯遺傳與連鎖</h3>
+  <p>人類女性有兩條 X 染色體（XX），男性是 XY。位在 X 染色體上的基因，男生只有一份，所以隱性疾病在男生身上更常出現，例如紅綠色盲、血友病。歐洲王室的血友病，就是由英國維多利亞女王的 X 染色體傳給多位後代。</p>
+  <p>美國的摩根（Thomas Hunt Morgan）用果蠅研究發現，同一條染色體上的基因傾向一起遺傳（<strong>連鎖</strong>），而距離越遠越容易在減數分裂時被「互換」拆開。他的學生據此畫出史上第一張基因地圖，摩根也於 1933 年獲得諾貝爾獎。</p>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="2" data-explain="Yy × Yy 的後代：1/4 YY、1/2 Yy、1/4 yy，只有 yy 是綠色，所以是 1/4。">
+      <div class="q">兩株 Yy（黃色）豌豆雜交，後代出現綠色（yy）的機率是？</div>
+      <button class="opt">0</button><button class="opt">1/2</button><button class="opt">1/4</button><button class="opt">3/4</button>
+    </div>
+    <div class="quiz" data-answer="0" data-explain="爸爸 ii 只能給 i，媽媽 IAIB 給 IA 或 IB，所以孩子是 IAi（A 型）或 IBi（B 型），不可能是 O 型或 AB 型。">
+      <div class="q">O 型爸爸和 AB 型媽媽，孩子可能是什麼血型？</div>
+      <button class="opt">A 型或 B 型</button><button class="opt">只有 O 型</button><button class="opt">只有 AB 型</button><button class="opt">四種都有可能</button>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="c6" data-unit="單元二　遺傳的密碼" data-title="DNA：生命的說明書" data-level="2">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv1">入門</span><span class="lv lv2">進階</span><span>約 25 分鐘</span></div>
+    <h2>DNA：生命的說明書</h2>
+    <p class="lead">孟德爾說的「遺傳因子」到底是什麼物質？答案是一種長得像扭轉梯子的分子。</p>
+  </div>
+
+  <h3><span class="num">1</span>DNA 的全名</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">去氧核糖核酸 <span class="en">Deoxyribonucleic acid, DNA</span></div>
+    <div class="roots"><span><b>de-oxy</b> 少了一個氧</span><span><b>ribo-</b> 核糖</span><span><b>nucleic</b> 來自細胞核</span><span><b>acid</b> 酸</span></div>
+    <p>1869 年瑞士醫生米歇爾（Friedrich Miescher）從醫院丟棄的沾膿繃帶裡，收集白血球的細胞核，分離出一種含磷的酸性物質，取名「核素」（nuclein），後來改稱核酸。DNA 的糖叫「去氧核糖」，因為它比 RNA 的「核糖」少了一個氧原子。而「核糖（ribose）」這個名字，是費雪把另一種糖 arabinose（阿拉伯糖）的字母重組縮寫而來的。</p>
+  </div>
+
+  <h3><span class="num">2</span>誰證明了 DNA 是遺傳物質？</h3>
+  <p>很長一段時間，科學家以為遺傳物質是蛋白質，因為蛋白質有 20 種積木，看起來比只有 4 種積木的 DNA 更能攜帶複雜資訊。推翻這個想法的實驗包括：</p>
+  <ul>
+    <li><strong>1928 年格里菲斯</strong>：把殺死的致病肺炎鏈球菌和活的無害菌混在一起注入老鼠，老鼠竟然死了。死菌裡有某種「轉形因子」讓無害菌變得致病。</li>
+    <li><strong>1944 年艾佛瑞等人</strong>：一個個破壞死菌裡的物質，發現只有破壞 DNA 時，轉形才會消失。轉形因子就是 DNA。</li>
+    <li><strong>1952 年赫雪與蔡斯</strong>：用放射性標記病毒，證明病毒感染細菌時，注入細菌的是 DNA 而不是蛋白質外殼。</li>
+  </ul>
+
+  <h3><span class="num">3</span>雙螺旋的發現</h3>
+  <p>1953 年，美國的華生（James Watson）和英國的克里克（Francis Crick）在英國劍橋提出 DNA 的<strong>雙股螺旋</strong>模型。他們的關鍵線索來自倫敦國王學院的富蘭克林（Rosalind Franklin）拍攝的 X 光繞射照片「51 號照片」，以及查加夫（Erwin Chargaff）發現的規則：DNA 裡 A 的量總是等於 T，C 總是等於 G。</p>
+  <p>1962 年華生、克里克和威爾金斯獲得諾貝爾獎，而富蘭克林已在 1958 年因卵巢癌過世，年僅 37 歲。諾貝爾獎不頒給過世的人，她的貢獻直到多年後才被廣泛承認。</p>
+  <div class="lab">
+    <div class="lab-h">互動實驗室：旋轉的雙螺旋 <span>A-T、C-G 配對</span></div>
+    <div class="lab-b">
+      <canvas id="helixBig" width="640" height="260" style="width:100%;height:auto;background:var(--paper);border-radius:10px" aria-label="旋轉的DNA雙螺旋動畫"></canvas>
+      <div class="controls"><button class="btn" id="helixPause">暫停</button><span class="readout">兩條外側的骨架是「糖＋磷酸」，中間每一階是一對鹼基。</span></div>
+    </div>
+  </div>
+
+  <h3><span class="num">4</span>DNA 的構造</h3>
+  <p>DNA 像一個扭轉的梯子：</p>
+  <ul>
+    <li><strong>梯子的扶手</strong>：糖（去氧核糖）和磷酸交替連接。</li>
+    <li><strong>梯子的橫檔</strong>：兩個鹼基配成一對，用氫鍵連接。</li>
+  </ul>
+  <p>DNA 只有四種鹼基：<span class="bA">A</span> 腺嘌呤（Adenine）、<span class="bT">T</span> 胸腺嘧啶（Thymine）、<span class="bC">C</span> 胞嘧啶（Cytosine）、<span class="bG">G</span> 鳥糞嘌呤（Guanine）。配對規則永遠是 <span class="bA">A</span>–<span class="bT">T</span>、<span class="bC">C</span>–<span class="bG">G</span>，這叫<strong>互補配對</strong>。</p>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">四種鹼基的名字 <span class="en">A, T, C, G</span></div>
+    <div class="roots"><span><b>aden</b> 腺體</span><span><b>thymus</b> 胸腺</span><span><b>kytos</b> 細胞</span><span><b>guano</b> 鳥糞</span></div>
+    <p>它們的名字都來自最早被分離出來的地方：腺嘌呤最早從胰臟（腺體）分離，胸腺嘧啶從小牛胸腺，胞嘧啶也從胸腺組織中分離（cyto 表示細胞），鳥糞嘌呤則是 1844 年從南美海鳥的鳥糞中找到的。沒錯，你的 DNA 裡有一個字母以鳥糞命名。</p>
+  </div>
+  <div class="lab" id="pairLab">
+    <div class="lab-h">互動實驗室：互補配對練習 <span>寫出另一股</span></div>
+    <div class="lab-b">
+      <div>模板股：<span class="dna-seq" id="pairTop" style="font-size:22px"></span></div>
+      <div class="controls" id="pairBtns"></div>
+      <div>你的答案：<span class="dna-seq" id="pairAns" style="font-size:22px"></span></div>
+      <div class="controls"><button class="btn" id="pairUndo">退一格</button><button class="btn pri" id="pairNew">換一題</button></div>
+      <div class="readout" id="pairMsg">點下方的鹼基按鈕，依序寫出互補股。</div>
+    </div>
+  </div>
+
+  <h3><span class="num">5</span>DNA 有多長？</h3>
+  <p>人類一套 DNA（稱為<strong>基因體</strong>）大約有 <strong>31 億個鹼基對</strong>。每個細胞有兩套（父母各一），拉直約 2 公尺長，卻塞在直徑約 6 微米的細胞核裡。如果把一個人全身細胞的 DNA 接起來，長度可以來回太陽很多趟。</p>
+  <div class="box analogy"><span class="h">生活比喻</span><p>如果把人類基因體印成書，每頁 3,000 個字母，要印一百萬頁，大約是 200 本厚厚的電話簿。而且整套書只用 A、T、C、G 四個字母寫成。</p></div>
+
+  <h3><span class="num">6</span>DNA 複製：一變二</h3>
+  <p>細胞分裂前，DNA 必須先複製一份。華生和克里克在論文中寫道，配對規則「立刻暗示了一種可能的複製機制」：</p>
+  <ol>
+    <li><strong>解旋酶</strong>像拉鍊頭一樣把雙股拉開。</li>
+    <li><strong>DNA 聚合酶</strong>沿著每一股，依照互補規則把新的核苷酸一個個接上。</li>
+    <li>結果得到兩條 DNA，每條都是「一條舊股＋一條新股」。這叫<strong>半保留複製</strong>，1958 年由梅瑟生與史塔爾用巧妙的氮同位素實驗證實，被稱為「生物學最美的實驗」。</li>
+  </ol>
+  <p><span class="lv lv3">專業</span> DNA 有方向性，兩股反向平行（一條 5'→3'，另一條 3'→5'）。聚合酶只能往 3' 方向延伸，所以其中一股（落後股）只能一小段一小段地做，這些片段叫<strong>岡崎片段</strong>，以日本科學家岡崎令治與妻子岡崎恆子命名。聚合酶還有校對功能，錯誤率約每十億個鹼基才錯一個。</p>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="1" data-explain="A 配 T、C 配 G，所以 ATGC 的互補股是 TACG。">
+      <div class="q">DNA 一股是 ATGC，另一股是？</div>
+      <button class="opt">ATGC</button><button class="opt">TACG</button><button class="opt">GCAT</button><button class="opt">UACG</button>
+    </div>
+    <div class="quiz" data-answer="3" data-explain="富蘭克林的 51 號照片是雙螺旋結構的關鍵證據。">
+      <div class="q">哪位科學家拍下了揭示 DNA 螺旋結構的關鍵 X 光照片？</div>
+      <button class="opt">孟德爾</button><button class="opt">虎克</button><button class="opt">米歇爾</button><button class="opt">富蘭克林</button>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="c7" data-unit="單元二　遺傳的密碼" data-title="染色體與細胞分裂" data-level="2">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv1">入門</span><span class="lv lv2">進階</span><span>約 20 分鐘</span></div>
+    <h2>染色體與細胞分裂</h2>
+    <p class="lead">2 公尺長的 DNA 怎麼收納？細胞分裂時又怎麼平均分給兩個新細胞？</p>
+  </div>
+
+  <h3><span class="num">1</span>染色體：捲起來的 DNA</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">染色體 <span class="en">Chromosome</span></div>
+    <div class="roots"><span><b>chrōma</b>（希臘文）顏色</span><span><b>sōma</b> 身體、小體</span></div>
+    <p>1888 年德國解剖學家瓦爾代爾（Wilhelm Waldeyer）命名，意思是「容易被染色的小體」。當時科學家用染料染細胞，發現分裂中的細胞核裡有一條條顏色特別深的構造。中文直譯為「染色體」。</p>
+  </div>
+  <p>DNA 先纏繞在一種叫<strong>組織蛋白</strong>的蛋白質上，像線繞在線軸上，形成「核小體」；核小體再層層捲曲摺疊，最後在細胞分裂時濃縮成看得見的染色體。</p>
+  <div class="box analogy"><span class="h">生活比喻</span><p>想像一條 40 公里長的細線，要塞進一顆網球裡，還要隨時能拉出其中某一段來讀。細胞用「線軸＋再捲再摺」的方法做到了。</p></div>
+  <p>人類體細胞有 <strong>46 條染色體</strong>，也就是 23 對：22 對體染色體＋1 對性染色體（女性 XX、男性 XY）。成對的兩條一條來自爸爸、一條來自媽媽，叫<strong>同源染色體</strong>。把染色體照大小排好的圖叫<strong>核型圖</strong>，醫生可用它檢查唐氏症（第 21 號多一條）等異常。</p>
+  <div class="box fact"><span class="h">你知道嗎</span><p>染色體數目跟生物複雜度無關：果蠅 8 條、人類 46 條、黑猩猩 48 條、馬鈴薯 48 條，有一種蕨類有超過 1,200 條。人類的第 2 號染色體，其實是遠古祖先兩條染色體融合而成的。</p></div>
+
+  <h3><span class="num">2</span>有絲分裂：複製自己</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">有絲分裂 <span class="en">Mitosis</span></div>
+    <div class="roots"><span><b>mitos</b>（希臘文）線</span><span><b>-osis</b> 過程</span></div>
+    <p>1882 年德國的弗萊明（Walther Flemming）觀察到分裂時細胞裡出現許多像線一樣的構造（染色體和紡錘絲），於是命名。和粒線體的 mito- 是同一個字根。</p>
+  </div>
+  <p>有絲分裂讓一個細胞變成兩個<strong>一模一樣</strong>的細胞，用於生長和修復傷口。按下一步看看過程：</p>
+  <div class="lab stepper" data-steps="mitosis">
+    <div class="lab-h">互動實驗室：有絲分裂 <span>逐步播放</span></div>
+    <div class="lab-b"><div class="stage"></div><div class="cap"></div><div class="dots"></div>
+      <div class="controls" style="justify-content:center"><button class="btn st-prev">上一步</button><button class="btn pri st-next">下一步</button></div></div>
+  </div>
+
+  <h3><span class="num">3</span>減數分裂：製造精子和卵</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">減數分裂 <span class="en">Meiosis</span></div>
+    <div class="roots"><span><b>meiōsis</b>（希臘文）減少</span></div>
+    <p>1905 年由英國的法默（J. B. Farmer）和摩爾（J. E. S. Moore）命名，因為染色體數目會「減半」。中文「減數」完全對應原意。</p>
+  </div>
+  <p>如果精子和卵都有 46 條染色體，受精卵就會有 92 條，每一代加倍，很快就爆炸了。所以製造配子時要進行減數分裂：<strong>一個細胞分裂兩次，得到四個細胞，每個只有 23 條染色體</strong>。精卵結合後恢復 46 條。</p>
+  <div class="tw"><table class="t">
+    <tr><th></th><th>有絲分裂</th><th>減數分裂</th></tr>
+    <tr><td>目的</td><td>生長、修復</td><td>產生精子或卵</td></tr>
+    <tr><td>分裂次數</td><td>1 次</td><td>2 次</td></tr>
+    <tr><td>產生細胞數</td><td>2 個</td><td>4 個</td></tr>
+    <tr><td>染色體數</td><td>不變（46→46）</td><td>減半（46→23）</td></tr>
+    <tr><td>子細胞基因</td><td>完全相同</td><td>各不相同</td></tr>
+  </table></div>
+  <p>減數分裂有兩個「洗牌」機制，讓每個配子都獨一無二：</p>
+  <ul>
+    <li><strong>獨立分配</strong>：23 對染色體各自隨機分邊，光這樣就有 2²³ ≈ 840 萬種組合。</li>
+    <li><strong>互換</strong>：同源染色體在第一次分裂時會交換片段，產生全新組合。</li>
+  </ul>
+  <p>再加上爸媽配子的隨機結合，這就是為什麼除了同卵雙胞胎，世界上沒有兩個人的基因完全相同。</p>
+
+  <h3><span class="num">4</span><span class="lv lv3">專業</span> 細胞週期與癌症</h3>
+  <p>細胞週期分為 G1（生長）→ S（DNA 合成）→ G2（準備）→ M（分裂）。週期中有多個<strong>檢查點</strong>，由一群叫「週期素」（cyclin）與「週期素依賴激酶」（CDK）的蛋白質控制，確保 DNA 沒受損才繼續。發現這套機制的三位科學家獲得 2001 年諾貝爾獎。</p>
+  <p>當控制細胞分裂的基因突變，細胞就可能失控無限分裂，形成<strong>癌症</strong>。例如 p53 蛋白被稱為「基因體的守護者」，超過一半的人類癌症都有 p53 突變。染色體末端的<strong>端粒</strong>每分裂一次就變短，像鞋帶頭的塑膠套，限制了正常細胞的分裂次數；癌細胞則常重新啟動修補端粒的「端粒酶」。</p>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="2" data-explain="減數分裂讓染色體減半，人類配子有 23 條。">
+      <div class="q">人類的卵細胞有幾條染色體？</div>
+      <button class="opt">46</button><button class="opt">92</button><button class="opt">23</button><button class="opt">2</button>
+    </div>
+    <div class="quiz" data-answer="0" data-explain="傷口癒合是身體細胞生長修復，用有絲分裂產生相同的細胞。">
+      <div class="q">皮膚傷口癒合時，細胞主要進行哪種分裂？</div>
+      <button class="opt">有絲分裂</button><button class="opt">減數分裂</button><button class="opt">二分裂</button><button class="opt">出芽生殖</button>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="c8" data-unit="單元二　遺傳的密碼" data-title="中心法則：從 DNA 到蛋白質" data-level="2">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv2">進階</span><span>約 25 分鐘</span></div>
+    <h2>中心法則：從 DNA 到蛋白質</h2>
+    <p class="lead">DNA 是說明書，但真正做事的是蛋白質。說明書上的字，是怎麼變成蛋白質的？</p>
+  </div>
+
+  <h3><span class="num">1</span>分子生物學的「中心法則」</h3>
+  <p>1958 年，克里克提出了分子生物學的核心概念：遺傳資訊的流動方向是</p>
+  <p style="text-align:center;font-family:var(--serif);font-size:22px;font-weight:900">DNA →<small style="font-size:14px;font-weight:400">轉錄</small>→ RNA →<small style="font-size:14px;font-weight:400">轉譯</small>→ 蛋白質</p>
+  <p>他後來承認用「dogma（教條）」這個字不太恰當，因為教條是不能質疑的，但名字已經傳開了。事實上後來發現了例外，例如 HIV 等<strong>反轉錄病毒</strong>能把 RNA 轉回 DNA。</p>
+  <div class="box analogy"><span class="h">生活比喻</span><p>DNA 是鎖在圖書館（細胞核）裡的珍貴原版藏書，不能外借。要做蛋白質時，先用影印機把需要的那一頁印出來（mRNA），帶到工廠（核糖體），工人照著影本組裝產品（蛋白質）。影本用完就丟，原版永遠安全。</p></div>
+
+  <h3><span class="num">2</span>RNA 跟 DNA 有什麼不同</h3>
+  <div class="tw"><table class="t">
+    <tr><th></th><th>DNA</th><th>RNA</th></tr>
+    <tr><td>糖</td><td>去氧核糖</td><td>核糖</td></tr>
+    <tr><td>鹼基</td><td>A、T、C、G</td><td>A、<span class="bU">U</span>、C、G（U 取代 T）</td></tr>
+    <tr><td>股數</td><td>雙股</td><td>通常單股</td></tr>
+    <tr><td>壽命</td><td>穩定，可保存數萬年</td><td>容易分解</td></tr>
+  </table></div>
+  <p>U 是尿嘧啶（Uracil），名字來自最早從尿素相關化合物中合成（urea）。RNA 有三種主要角色：</p>
+  <ul>
+    <li><strong>mRNA</strong>（信使 RNA）：攜帶基因訊息的影本。「messenger」的概念由法國的雅各布（François Jacob）和莫諾（Jacques Monod）在 1961 年提出。</li>
+    <li><strong>tRNA</strong>（轉送 RNA）：搬運胺基酸，像快遞員。</li>
+    <li><strong>rRNA</strong>（核糖體 RNA）：組成核糖體，而且真正催化胺基酸連接的其實是 rRNA，不是蛋白質。</li>
+  </ul>
+
+  <h3><span class="num">3</span>轉錄：抄寫</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">轉錄 <span class="en">Transcription</span></div>
+    <div class="roots"><span><b>trans</b> 跨越</span><span><b>scribere</b>（拉丁文）書寫</span></div>
+    <p>「抄寫到另一處」。就像把中文從繁體抄成簡體，語言系統（核酸）沒變，只是換了一種寫法（DNA→RNA）。</p>
+  </div>
+  <p><strong>RNA 聚合酶</strong>找到基因前方叫做「啟動子」的起跑線，把 DNA 雙股局部打開，以其中一股為模板，依互補規則合成 mRNA。在真核細胞裡，mRNA 還要經過「剪接」：切掉不需要的片段（<strong>內含子</strong>），把有用的片段（<strong>外顯子</strong>）接起來，再送出細胞核。</p>
+
+  <h3><span class="num">4</span>轉譯：翻譯</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">轉譯 <span class="en">Translation</span></div>
+    <div class="roots"><span><b>trans</b> 跨越</span><span><b>latus</b>（拉丁文）搬運</span></div>
+    <p>「搬到另一種語言」。從核酸的語言（4 個字母）翻譯成蛋白質的語言（20 種胺基酸），就像把中文翻成英文，是真正的換語言，所以叫翻譯。</p>
+  </div>
+  <p>mRNA 上每 <strong>3 個鹼基</strong>組成一個「字」，叫做<strong>密碼子</strong>（codon），對應一種胺基酸。4 種鹼基排 3 個位置，共有 4×4×4 = <strong>64 種</strong>密碼子，足夠編碼 20 種胺基酸，所以很多胺基酸有好幾個密碼子。</p>
+  <ul>
+    <li><strong>AUG</strong>：起始密碼子，同時代表甲硫胺酸（Met）。</li>
+    <li><strong>UAA、UAG、UGA</strong>：終止密碼子，看到就停止。</li>
+  </ul>
+  <p>1961 年美國的尼倫伯格（Marshall Nirenberg）把只含 U 的人工 RNA（UUUUUU…）放進試管，結果做出全是苯丙胺酸的蛋白質，第一個密碼子 UUU 就此破解，幾年內全部 64 個都被解讀完成。</p>
+
+  <div class="lab" id="transLab">
+    <div class="lab-h">互動實驗室：基因翻譯機 <span>輸入 DNA 看蛋白質</span></div>
+    <div class="lab-b">
+      <label for="transIn">輸入 DNA 編碼股（只用 A T C G）：</label>
+      <input type="text" id="transIn" value="ATGGCCATTGTAATGGGCCGCTGAAAG" autocomplete="off" spellcheck="false">
+      <div class="controls"><button class="btn" data-ex="ATGGCCATTGTAATGGGCCGCTGAAAG">範例一</button><button class="btn" data-ex="CCATGTTTAAAGGGCATTAG">範例二</button><button class="btn" data-ex="ATGGTGCACCTGACTCCTGAGGAGAAGTCT">血紅素 β 開頭</button><button class="btn" data-ex="ATGGTGCACCTGACTCCTGTGGAGAAGTCT">鐮刀型突變</button></div>
+      <div id="transOut" style="margin-top:10px"></div>
+    </div>
+  </div>
+  <p>轉譯的過程是：核糖體夾住 mRNA，從 AUG 開始每次讀一個密碼子；帶有對應「反密碼子」的 tRNA 把正確的胺基酸送過來；核糖體把胺基酸接成長鏈，直到碰到終止密碼子，蛋白質就完成了，接著折疊成立體形狀開始工作。</p>
+  <div class="box fact"><span class="h">你知道嗎</span><p>幾乎所有地球生物都用同一套密碼表：細菌的 AUG、香蕉的 AUG、你的 AUG 都是「開始」。這是所有生物來自共同祖先的強力證據，也是基因工程能成功的前提：把人類的胰島素基因放進細菌，細菌能讀懂並正確製造。</p></div>
+
+  <h3><span class="num">5</span><span class="lv lv3">專業</span> 一個基因不只一種蛋白質</h3>
+  <p>人類只有大約 <strong>20,000 個</strong>會製造蛋白質的基因，跟線蟲差不多，遠少於科學家當初預期的 10 萬個。人類複雜度的來源之一是<strong>選擇性剪接</strong>：同一個基因的外顯子可以用不同組合拼接，產生多種蛋白質。此外，編碼蛋白質的 DNA 只占基因體約 1% 到 2%，其餘大量區域負責調控、產生功能性 RNA 等，過去被稱為「垃圾 DNA」的說法已經過時。</p>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="1" data-explain="RNA 用 U 取代 T，所以 DNA 編碼股 ATG 對應的 mRNA 是 AUG。">
+      <div class="q">DNA 編碼股 ATG 對應的 mRNA 是？</div>
+      <button class="opt">TAC</button><button class="opt">AUG</button><button class="opt">UAC</button><button class="opt">ATG</button>
+    </div>
+    <div class="quiz" data-answer="3" data-explain="4 種鹼基，3 個位置：4³ = 64。">
+      <div class="q">總共有多少種密碼子？</div>
+      <button class="opt">4</button><button class="opt">12</button><button class="opt">20</button><button class="opt">64</button>
+    </div>
+    <div class="quiz" data-answer="0" data-explain="轉錄在細胞核進行（真核生物），產物 mRNA 再出核到核糖體轉譯。">
+      <div class="q">真核細胞中「轉錄」主要在哪裡發生？</div>
+      <button class="opt">細胞核</button><button class="opt">核糖體</button><button class="opt">細胞膜</button><button class="opt">液泡</button>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="c9" data-unit="單元二　遺傳的密碼" data-title="突變、基因調控與演化" data-level="2">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv2">進階</span><span class="lv lv3">專業</span><span>約 20 分鐘</span></div>
+    <h2>突變、基因調控與演化</h2>
+    <p class="lead">說明書偶爾會打錯字。這些錯字可能造成疾病，也可能是生物演化的原料。</p>
+  </div>
+
+  <h3><span class="num">1</span>突變是什麼</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">突變 <span class="en">Mutation</span></div>
+    <div class="roots"><span><b>mutare</b>（拉丁文）改變</span></div>
+    <p>1901 年荷蘭植物學家德弗里斯（Hugo de Vries）在研究月見草時，發現有些植株突然出現新特徵並能遺傳，於是用 mutation 描述。和「mutant（突變種）」同源。</p>
+  </div>
+  <p>突變就是 DNA 序列的改變。常見類型：</p>
+  <div class="tw"><table class="t">
+    <tr><th>類型</th><th>比喻（原句：THE CAT ATE THE RAT）</th><th>效果</th></tr>
+    <tr><td>點突變：同義</td><td>THE CAT ATE THE RAT（換了字但意思一樣）</td><td>通常無影響</td></tr>
+    <tr><td>點突變：錯義</td><td>THE CAT ATE THE <b>H</b>AT</td><td>換成另一種胺基酸</td></tr>
+    <tr><td>點突變：無義</td><td>THE CAT ATE（提早終止）</td><td>蛋白質不完整</td></tr>
+    <tr><td>移碼突變（插入或刪除）</td><td>THE CA<b>A</b> TAT ETH ERA T</td><td>後面全部讀錯，影響最大</td></tr>
+  </table></div>
+  <p>突變來源包括 DNA 複製時的錯誤、紫外線、X 光、香菸裡的化學物質等。會引起突變的東西叫<strong>致突變原</strong>。</p>
+  <div class="box fact"><span class="h">實例：鐮刀型貧血症</span><p>血紅素基因中只有一個鹼基從 A 變成 T，讓第 6 個胺基酸從麩胺酸變成纈胺酸。結果血紅素在缺氧時黏在一起，把紅血球扭成鐮刀狀，容易堵塞血管。你可以在上一課的「基因翻譯機」按「鐮刀型突變」比較看看。有趣的是，帶一份突變基因的人比較不容易得瘧疾，所以這個突變在瘧疾流行的非洲地區特別常見。</p></div>
+
+  <h3><span class="num">2</span>基因的開關：調控</h3>
+  <p>你全身的細胞 DNA 幾乎一模一樣，為什麼神經細胞和肌肉細胞差這麼多？因為每種細胞<strong>打開的基因不同</strong>。這叫<strong>基因表現調控</strong>。</p>
+  <div class="box analogy"><span class="h">生活比喻</span><p>每個細胞都有同一本食譜全集，但麵包店只翻開麵包那幾頁，咖啡店只看咖啡那幾頁。</p></div>
+  <p>最經典的例子是大腸桿菌的<strong>乳糖操縱組</strong>（lac operon），由雅各布和莫諾在 1961 年提出，1965 年獲得諾貝爾獎：</p>
+  <ul>
+    <li>沒有乳糖時，一個「阻遏蛋白」卡在 DNA 上，擋住分解乳糖的基因，省下能量。</li>
+    <li>有乳糖時，乳糖的衍生物會拉開阻遏蛋白，基因開始轉錄，細菌就開始製造分解乳糖的酵素。</li>
+  </ul>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">操縱組 <span class="en">Operon</span></div>
+    <div class="roots"><span><b>operari</b>（拉丁文）工作、操作</span><span><b>-on</b> 單位</span></div>
+    <p>指一組一起被開關的基因，加上控制它們的開關區域（操作子 operator），像一個總電源控制一整排燈。</p>
+  </div>
+
+  <h3><span class="num">3</span><span class="lv lv3">專業</span> 表觀遺傳學</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">表觀遺傳學 <span class="en">Epigenetics</span></div>
+    <div class="roots"><span><b>epi</b>（希臘文）在上面、之外</span><span><b>genetics</b> 遺傳學</span></div>
+    <p>1942 年英國的沃丁頓（Conrad Waddington）提出，指「在基因序列之上」的遺傳調控。DNA 字沒改，但在字上貼了便利貼。</p>
+  </div>
+  <p>常見機制：<strong>DNA 甲基化</strong>（在 C 上加一個甲基，通常讓基因關閉）與<strong>組織蛋白修飾</strong>（改變 DNA 纏得鬆或緊）。環境、飲食、壓力都可能影響這些標記。同卵雙胞胎年紀越大，表觀遺傳差異越多，這也是他們會漸漸不一樣的原因之一。</p>
+
+  <h3><span class="num">4</span>演化：突變 + 天擇</h3>
+  <p>1859 年英國博物學家達爾文（Charles Darwin）出版《物種起源》，提出<strong>天擇說</strong>：</p>
+  <ol>
+    <li>同一物種的個體之間有差異（這些差異來自突變與基因重組）。</li>
+    <li>有些差異可以遺傳。</li>
+    <li>生物產生的後代多於環境能負擔的數量，必須競爭。</li>
+    <li>比較適應環境的個體，存活並繁殖得比較多，它們的特徵在族群中越來越常見。</li>
+  </ol>
+  <p>達爾文當時不知道遺傳的機制，孟德爾的論文剛好補上這塊拼圖。20 世紀兩者結合成「現代綜合演化論」。</p>
+  <div class="box warn"><span class="h">身邊的演化：抗藥性細菌</span><p>抗生素殺死大部分細菌，但若有少數細菌剛好帶有抗藥突變，它們會存活並大量繁殖。濫用抗生素或沒吃完療程，就是在幫抗藥細菌「篩選」。世界衛生組織把抗生素抗藥性列為全球重大健康威脅之一。</p></div>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="2" data-explain="插入或刪除一個鹼基會讓後面所有密碼子的讀取框架錯位，影響通常最大。">
+      <div class="q">哪一種突變通常影響最大？</div>
+      <button class="opt">同義突變</button><button class="opt">錯義突變</button><button class="opt">移碼突變</button><button class="opt">都一樣</button>
+    </div>
+    <div class="quiz" data-answer="1" data-explain="所有細胞 DNA 相同，差別在於哪些基因被打開（基因表現調控）。">
+      <div class="q">為什麼神經細胞和皮膚細胞長得不一樣？</div>
+      <button class="opt">它們的 DNA 完全不同</button><button class="opt">它們打開的基因不同</button><button class="opt">一個有細胞核一個沒有</button><button class="opt">染色體數目不同</button>
+    </div>
+  </div>
+</section>
+<!-- ================= UNIT 3 ================= -->
+<section class="chapter" id="c10" data-unit="單元三　微生物與免疫" data-title="微生物的世界" data-level="1">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv1">入門</span><span class="lv lv2">進階</span><span>約 20 分鐘</span></div>
+    <h2>微生物的世界</h2>
+    <p class="lead">肉眼看不見的生物，數量遠遠超過我們。它們會讓人生病，但更多時候是我們的好夥伴，也是生技產業最重要的「員工」。</p>
+  </div>
+
+  <h3><span class="num">1</span>微生物家族</h3>
+  <div class="tw"><table class="t">
+    <tr><th>類群</th><th>大小</th><th>有無細胞</th><th>例子</th></tr>
+    <tr><td>細菌</td><td>約 1–5 μm</td><td>有，原核</td><td>大腸桿菌、乳酸菌、結核桿菌</td></tr>
+    <tr><td>古菌</td><td>約 1–5 μm</td><td>有，原核</td><td>溫泉、鹽湖中的極端生物</td></tr>
+    <tr><td>真菌</td><td>酵母約 5 μm；黴菌可長成肉眼可見</td><td>有，真核</td><td>酵母菌、青黴菌、香菇</td></tr>
+    <tr><td>原生生物</td><td>約 10–200 μm</td><td>有，真核</td><td>草履蟲、瘧原蟲、藻類</td></tr>
+    <tr><td>病毒</td><td>約 20–300 nm</td><td>沒有</td><td>流感病毒、新冠病毒、噬菌體</td></tr>
+  </table></div>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">細菌 <span class="en">Bacterium（複數 bacteria）</span></div>
+    <div class="roots"><span><b>baktērion</b>（希臘文）小棍子</span></div>
+    <p>1828 年德國的埃倫伯格（Christian Ehrenberg）命名，因為他最早觀察到的細菌是桿狀的。其實細菌還有球狀（球菌 coccus，希臘文「漿果」）與螺旋狀（螺旋菌）。</p>
+  </div>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">病毒 <span class="en">Virus</span></div>
+    <div class="roots"><span><b>vīrus</b>（拉丁文）毒液、黏液</span></div>
+    <p>古羅馬人用這個字指蛇毒或有毒的汁液。1892 年俄國的伊凡諾夫斯基發現菸草嵌紋病的病原能穿過連細菌都擋得住的濾網，1898 年荷蘭的貝傑林克稱它為「具傳染性的活液體」，virus 從此專指這類極小的病原。</p>
+  </div>
+
+  <h3><span class="num">2</span>細菌：分裂高手</h3>
+  <p>細菌用<strong>二分裂</strong>繁殖：DNA 複製後，細胞從中間一分為二。條件好時，大腸桿菌大約 20 分鐘就能分裂一次。這種成長方式叫<strong>指數成長</strong>。</p>
+  <div class="lab" id="growLab">
+    <div class="lab-h">互動實驗室：細菌倍增器 <span>每 20 分鐘分裂一次</span></div>
+    <div class="lab-b">
+      <label for="growR">經過時間：<strong id="growT">0 分鐘</strong></label>
+      <input type="range" id="growR" min="0" max="36" value="0">
+      <div class="big-num" id="growN">1 隻</div>
+      <div id="growDots" style="display:flex;flex-wrap:wrap;gap:3px;margin-top:8px;min-height:40px"></div>
+      <div class="readout" id="growNote"></div>
+    </div>
+  </div>
+  <p>現實中細菌不會無限成長，因為養分會用完、廢物會累積。在培養中，成長曲線通常經歷四個階段：<strong>遲滯期</strong>（適應環境）→<strong>對數期</strong>（快速倍增）→<strong>穩定期</strong>（生死平衡）→<strong>死亡期</strong>。生技工廠要讓菌生產藥物，就得精準控制這些階段。</p>
+  <div class="box fact"><span class="h">你知道嗎</span><p>你身上的細菌數量大約和你自己的細胞數量差不多（約 38 兆），主要住在大腸裡。這群微生物合稱<strong>腸道菌相</strong>（microbiome），會幫你消化纖維、製造維生素 K，還與免疫、甚至情緒有關，是目前非常熱門的研究領域。</p></div>
+
+  <h3><span class="num">3</span>微生物學的兩位巨人</h3>
+  <p><strong>巴斯德</strong>（Louis Pasteur，法國）：用著名的「鵝頸瓶實驗」證明微生物不會自己憑空出現，徹底推翻自然發生說；發現發酵是微生物造成的；發明<strong>巴氏殺菌法</strong>（低溫加熱殺菌，今天的鮮奶還在用），並研發狂犬病疫苗。</p>
+  <p><strong>柯霍</strong>（Robert Koch，德國）：證明特定細菌造成特定疾病（炭疽病、結核病、霍亂），提出判斷病原體的「柯霍氏法則」，也發明了用洋菜膠在培養皿上培養細菌的方法。洋菜這個點子其實來自他助手的妻子海瑟（Fanny Hesse），她做果凍時用的就是洋菜。培養皿則是助手佩特里（Julius Petri）設計的，所以英文叫 Petri dish。</p>
+  <div class="box fact"><span class="h">革蘭氏染色：本課程的配色由來</span><p>1884 年丹麥醫生革蘭（Hans Christian Gram）發明一種染色法：先染紫色（結晶紫），再用酒精沖洗，最後染粉紅色（番紅）。細胞壁厚的細菌保留紫色，叫<strong>革蘭氏陽性菌</strong>；細胞壁薄、外面多一層膜的細菌被沖掉紫色、染成粉紅，叫<strong>革蘭氏陰性菌</strong>。這個分類影響醫生選用哪種抗生素，至今仍是細菌鑑定的第一步。你在這門課看到的紫色與粉紅色，就是向它致敬。</p></div>
+
+  <h3><span class="num">4</span>病毒：借屍還魂的寄生者</h3>
+  <p>病毒只有兩個基本部分：<strong>遺傳物質</strong>（DNA 或 RNA）和包住它的<strong>蛋白質外殼</strong>（衣殼），有些還有一層脂質外套膜。病毒沒辦法自己產生能量或製造蛋白質，必須進入宿主細胞，劫持細胞的工廠來複製自己。</p>
+  <ol>
+    <li><strong>吸附</strong>：病毒表面的蛋白質像鑰匙，插入細胞表面特定的受體（鎖）。例如新冠病毒的棘蛋白結合人類細胞的 ACE2 受體。</li>
+    <li><strong>進入</strong>：把遺傳物質送進細胞。</li>
+    <li><strong>複製與合成</strong>：利用細胞的原料和核糖體，大量製造病毒零件。</li>
+    <li><strong>組裝</strong>：零件組合成新病毒。</li>
+    <li><strong>釋放</strong>：新病毒衝出細胞，常常讓細胞死亡，再去感染更多細胞。</li>
+  </ol>
+  <div class="box warn"><span class="h">重要觀念</span><p>抗生素殺細菌，對病毒<strong>完全無效</strong>，因為病毒沒有抗生素攻擊的那些構造（細胞壁、細菌核糖體等）。感冒大多是病毒造成，吃抗生素不但沒用，還會助長抗藥性。</p></div>
+
+  <h3><span class="num">5</span>抗生素</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">抗生素 <span class="en">Antibiotic</span></div>
+    <div class="roots"><span><b>anti</b> 對抗</span><span><b>bios</b> 生命</span></div>
+    <p>1942 年美國微生物學家瓦克斯曼（Selman Waksman）定義這個字，指「由微生物產生、能抑制其他微生物的物質」。他從土壤細菌中找到鏈黴素，是第一個能治療結核病的藥物。</p>
+  </div>
+  <p>1928 年，英國的弗萊明（Alexander Fleming）度假回來，發現一個培養皿被青黴菌汙染了，黴菌周圍的細菌都死掉。他沒有把它丟掉，而是研究下去，發現了<strong>青黴素</strong>（盤尼西林）。後來弗洛里與柴恩在二戰期間將它量產，拯救了無數生命，三人共獲 1945 年諾貝爾獎。這是「幸運只眷顧準備好的人」的最佳例子。</p>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="3" data-explain="每 20 分鐘加倍，2 小時是 6 次分裂：2⁶ = 64。">
+      <div class="q">一隻每 20 分鐘分裂一次的細菌，2 小時後會變成幾隻？</div>
+      <button class="opt">6</button><button class="opt">12</button><button class="opt">32</button><button class="opt">64</button>
+    </div>
+    <div class="quiz" data-answer="1" data-explain="抗生素針對細菌的構造，對病毒無效。流感是病毒感染。">
+      <div class="q">得了流感，吃抗生素有效嗎？</div>
+      <button class="opt">有效，抗生素什麼都殺</button><button class="opt">無效，流感是病毒造成的</button><button class="opt">只有吃兩倍劑量才有效</button><button class="opt">有效，但要配牛奶吃</button>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="c11" data-unit="單元三　微生物與免疫" data-title="免疫系統與疫苗" data-level="2">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv1">入門</span><span class="lv lv2">進階</span><span>約 25 分鐘</span></div>
+    <h2>免疫系統與疫苗</h2>
+    <p class="lead">你的身體有一支隨時待命的軍隊。疫苗的原理，就是先讓軍隊做一次演習。</p>
+  </div>
+
+  <h3><span class="num">1</span>免疫的意思</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">免疫 <span class="en">Immunity</span></div>
+    <div class="roots"><span><b>immūnis</b>（拉丁文）免除義務的</span></div>
+    <p>古羅馬時代，immunis 指「不用繳稅或服役的人」。後來引申為「免於疾病」。中文「免疫」就是「免除疫病」。</p>
+  </div>
+
+  <h3><span class="num">2</span>三道防線</h3>
+  <ol>
+    <li><strong>第一道：物理與化學屏障</strong>。皮膚、黏膜、鼻毛、眼淚中的溶菌酶、胃酸。擋住大部分入侵者。</li>
+    <li><strong>第二道：先天免疫</strong>。天生就有、反應快、但不分對象。例如吞噬細胞（巨噬細胞、嗜中性球）把細菌吃掉；發炎反應讓傷口紅、腫、熱、痛，其實是在把援軍調來；發燒讓病原體不好過。</li>
+    <li><strong>第三道：後天免疫（適應性免疫）</strong>。需要學習、反應較慢，但非常精準，而且會<strong>記憶</strong>。主角是兩種淋巴球：B 細胞與 T 細胞。</li>
+  </ol>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">巨噬細胞 <span class="en">Macrophage</span></div>
+    <div class="roots"><span><b>makros</b> 大的</span><span><b>phagein</b>（希臘文）吃</span></div>
+    <p>「大胃王細胞」。俄國動物學家梅契尼可夫（Élie Metchnikoff）1882 年把玫瑰刺插入海星幼體，隔天看到一群細胞圍住刺，因此發現吞噬作用，1908 年獲諾貝爾獎。噬菌體（bacteriophage）的 phage 也是同一個字根：「吃細菌的東西」。</p>
+  </div>
+
+  <h3><span class="num">3</span>抗體與抗原</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">抗體、抗原 <span class="en">Antibody, Antigen</span></div>
+    <div class="roots"><span><b>anti</b> 對抗</span><span><b>body</b> 物體（德文 Körper）</span><span><b>-gen</b> 產生</span></div>
+    <p>1891 年德國的埃爾利希（Paul Ehrlich）使用 Antikörper（對抗的物體）一詞。antigen 原意是「antibody generator」，也就是「能引發身體產生抗體的東西」，通常是病原體表面的某個分子片段。</p>
+  </div>
+  <p>抗體是 B 細胞製造的 Y 字形蛋白質。Y 的兩個手臂尖端形狀千變萬化，能精準抓住特定抗原。抗體抓住病原後可以：讓病毒無法進入細胞（中和）、把病原黏成一團、做記號讓吞噬細胞來吃。</p>
+  <div class="lab stepper" data-steps="immune">
+    <div class="lab-h">互動實驗室：一場免疫戰爭 <span>逐步播放</span></div>
+    <div class="lab-b"><div class="stage"></div><div class="cap"></div><div class="dots"></div>
+      <div class="controls" style="justify-content:center"><button class="btn st-prev">上一步</button><button class="btn pri st-next">下一步</button></div></div>
+  </div>
+  <p>T 細胞有兩大類：<strong>輔助型 T 細胞</strong>（指揮官，發號施令啟動 B 細胞與其他細胞；HIV 專門攻擊它，所以愛滋病會讓免疫系統崩潰），以及<strong>毒殺型 T 細胞</strong>（特種部隊，直接殺死被病毒感染的細胞或癌細胞）。T 的名字來自它們在「胸腺」（Thymus）成熟；B 則來自最早在鳥類的「法氏囊」（Bursa of Fabricius）發現。</p>
+
+  <h3><span class="num">4</span>免疫記憶與疫苗</h3>
+  <p>第一次遇到病原時，後天免疫要 1 到 2 週才能全面反應，這段時間你可能已經病得很重。但打完仗後，會留下<strong>記憶細胞</strong>。第二次遇到同一種病原，反應更快、更強，常常你還沒感覺到就解決了。</p>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">疫苗 <span class="en">Vaccine</span></div>
+    <div class="roots"><span><b>vacca</b>（拉丁文）母牛</span></div>
+    <p>1796 年，英國醫生詹納（Edward Jenner）注意到擠牛奶的女工得過輕微的「牛痘」後，就不會得致命的天花。他把牛痘膿液接種給一個男孩，男孩果然對天花免疫。接種牛痘叫 vaccination（牛痘接種）。1881 年巴斯德為了紀念詹納，把所有預防接種都稱為 vaccine。1980 年，世界衛生組織宣布天花絕跡，是人類第一個徹底消滅的傳染病。</p>
+  </div>
+  <p>疫苗的原理：<strong>把病原的「通緝照片」先給免疫系統看</strong>，讓身體在不生病的情況下產生記憶細胞。疫苗的種類：</p>
+  <div class="tw"><table class="t">
+    <tr><th>類型</th><th>內容</th><th>例子</th></tr>
+    <tr><td>減毒活疫苗</td><td>削弱的活病原</td><td>麻疹、水痘、卡介苗</td></tr>
+    <tr><td>不活化疫苗</td><td>殺死的病原</td><td>小兒麻痺注射型、A 型肝炎</td></tr>
+    <tr><td>次單位疫苗</td><td>只用病原的一部分蛋白質</td><td>B 型肝炎、HPV（用基因工程生產）</td></tr>
+    <tr><td>類毒素疫苗</td><td>去毒的細菌毒素</td><td>破傷風、白喉</td></tr>
+    <tr><td>mRNA 疫苗</td><td>教細胞自己製造病原蛋白的 mRNA</td><td>新冠疫苗（BNT、莫德納）</td></tr>
+    <tr><td>病毒載體疫苗</td><td>用無害病毒運送病原基因</td><td>AZ 新冠疫苗</td></tr>
+  </table></div>
+  <div class="box analogy"><span class="h">生活比喻：群體免疫</span><p>當社區裡大部分人都有免疫力，病原就像一顆彈珠掉進一堆海綿裡，彈不起來，無法傳播，這樣也保護了無法接種疫苗的嬰兒和病人。</p></div>
+
+  <h3><span class="num">5</span><span class="lv lv3">專業</span> 抗體多樣性之謎</h3>
+  <p>人體能產生數十億種不同的抗體，但人類只有約 2 萬個基因，怎麼做到的？1976 年日本科學家利根川進發現：B 細胞成熟時會把抗體基因的 V、D、J 三類片段「隨機剪貼組合」，再加上連接處的隨機誤差，產生天文數字般的多樣性。他因此獲得 1987 年諾貝爾獎，是第一位獲得生理醫學獎的日本人。免疫系統也會發生問題：攻擊無害物質造成<strong>過敏</strong>，攻擊自己造成<strong>自體免疫疾病</strong>（如第一型糖尿病、紅斑性狼瘡）。</p>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="0" data-explain="vacca 是拉丁文的母牛，紀念詹納用牛痘預防天花。">
+      <div class="q">Vaccine 的字源和哪種動物有關？</div>
+      <button class="opt">牛</button><button class="opt">雞</button><button class="opt">馬</button><button class="opt">猴子</button>
+    </div>
+    <div class="quiz" data-answer="2" data-explain="疫苗的作用是讓身體產生記憶細胞，下次遇到真正病原時快速反應。">
+      <div class="q">疫苗能保護我們，主要是因為身體產生了什麼？</div>
+      <button class="opt">更多紅血球</button><button class="opt">抗生素</button><button class="opt">記憶細胞</button><button class="opt">更厚的皮膚</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= UNIT 4 ================= -->
+<section class="chapter" id="c12" data-unit="單元四　生技工具箱" data-title="發酵：最古老的生物技術" data-level="1">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv1">入門</span><span class="lv lv2">進階</span><span>約 15 分鐘</span></div>
+    <h2>發酵：最古老的生物技術</h2>
+    <p class="lead">早在知道微生物存在之前，人類就已經在「養菌做事」了。今天的巨型生技工廠，本質上仍然是一個超大的發酵槽。</p>
+  </div>
+
+  <h3><span class="num">1</span>名字的由來</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">發酵 <span class="en">Fermentation</span></div>
+    <div class="roots"><span><b>fervēre</b>（拉丁文）沸騰</span></div>
+    <p>葡萄汁發酵時會不斷冒出二氧化碳泡泡，看起來像在沸騰，但其實沒有加熱。古人不明白原因，就用「沸騰」來形容。中文「酵」字本身就有「酒母、麵種」的意思。</p>
+  </div>
+
+  <h3><span class="num">2</span>餐桌上的發酵</h3>
+  <div class="tw"><table class="t">
+    <tr><th>食品</th><th>主要微生物</th><th>產物與作用</th></tr>
+    <tr><td>麵包、啤酒、葡萄酒</td><td>酵母菌（釀酒酵母）</td><td>酒精與 CO₂</td></tr>
+    <tr><td>優格、泡菜、酸菜</td><td>乳酸菌</td><td>乳酸，讓食物變酸並抑制壞菌</td></tr>
+    <tr><td>醬油、味噌、清酒</td><td>米麴菌</td><td>分解蛋白質與澱粉，產生鮮味</td></tr>
+    <tr><td>醋</td><td>醋酸菌</td><td>把酒精氧化成醋酸</td></tr>
+    <tr><td>起司</td><td>乳酸菌、黴菌</td><td>凝乳、風味（藍紋起司的藍色是青黴）</td></tr>
+    <tr><td>紅麴</td><td>紅麴菌</td><td>紅色色素，用於紅糟肉、紅麴米</td></tr>
+    <tr><td>納豆</td><td>納豆菌（枯草桿菌的一種）</td><td>黏絲與納豆激酶</td></tr>
+  </table></div>
+  <div class="box fact"><span class="h">你知道嗎</span><p>考古學家在中國河南賈湖遺址的陶器殘留物中，發現約 9,000 年前以米、蜂蜜、水果釀成的發酵飲料，是目前已知最古老的酒類證據之一。</p></div>
+
+  <h3><span class="num">3</span>工業發酵：從食物到藥物</h3>
+  <p>20 世紀起，發酵被放大到數萬公升的不鏽鋼<strong>發酵槽</strong>（生物反應器）中，用來生產：</p>
+  <ul>
+    <li><strong>抗生素</strong>：青黴素最早產量極低，科學家在美國一家市場找到一顆發霉的哈密瓜，上面的青黴菌產量高出許多，成為量產菌株的祖先。</li>
+    <li><strong>胺基酸</strong>：味精（麩胺酸鈉）用棒狀桿菌發酵生產，1956 年日本協和發酵工業開創這種方法。</li>
+    <li><strong>有機酸</strong>：檸檬酸（用黑麴菌）是飲料中最常見的酸味劑。</li>
+    <li><strong>酵素</strong>：洗衣粉中的蛋白酶、脂肪酶，讓衣服在冷水中也能洗乾淨。</li>
+    <li><strong>生質燃料</strong>：用酵母把甘蔗或玉米的糖發酵成酒精燃料。</li>
+    <li><strong>重組蛋白藥物</strong>：胰島素、生長激素、許多疫苗，是下一課的主角。</li>
+  </ul>
+  <p>要讓菌在大槽裡長得好，工程師必須精準控制溫度、pH、溶氧量、攪拌速度與養分添加，並嚴格防止雜菌汙染。這門學問叫<strong>生物程序工程</strong>（上游：菌株與培養；下游：分離與純化產品）。</p>
+  <div class="box analogy"><span class="h">生活比喻</span><p>發酵槽像一間超大型、24 小時運作的微生物工廠。菌株是員工，培養基是員工餐，工程師是廠長，要讓員工吃飽、溫度舒適、不被外人（雜菌）闖入，產量才會穩定。</p></div>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="1" data-explain="醬油用米麴菌分解大豆和小麥中的蛋白質與澱粉。">
+      <div class="q">醬油主要靠哪種微生物發酵？</div>
+      <button class="opt">乳酸菌</button><button class="opt">米麴菌</button><button class="opt">醋酸菌</button><button class="opt">大腸桿菌</button>
+    </div>
+    <div class="quiz" data-answer="0" data-explain="fervēre 是拉丁文的沸騰，形容發酵時冒泡。">
+      <div class="q">Fermentation 的字源意思是？</div>
+      <button class="opt">沸騰</button><button class="opt">腐爛</button><button class="opt">變甜</button><button class="opt">變酸</button>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="c13" data-unit="單元四　生技工具箱" data-title="基因重組：剪下、貼上 DNA" data-level="2">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv2">進階</span><span class="lv lv3">專業</span><span>約 25 分鐘</span></div>
+    <h2>基因重組：剪下、貼上 DNA</h2>
+    <p class="lead">1970 年代，科學家學會把一種生物的基因剪下來，貼到另一種生物裡。現代生技產業就從這裡誕生。</p>
+  </div>
+
+  <h3><span class="num">1</span>為什麼需要基因重組？</h3>
+  <p>第一型糖尿病患者需要注射<strong>胰島素</strong>。1980 年代以前，胰島素是從屠宰場的豬和牛胰臟萃取的，大約數千公斤胰臟才能提煉出少量胰島素，而且動物胰島素與人類略有不同，有些病人會過敏。如果能讓細菌直接生產「人類的」胰島素呢？</p>
+
+  <h3><span class="num">2</span>工具一：限制酶（分子剪刀）</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">限制酶 <span class="en">Restriction enzyme</span></div>
+    <div class="roots"><span><b>restrict</b> 限制</span><span><b>enzyme</b> 酵素</span></div>
+    <p>科學家發現某些細菌能「限制」噬菌體（感染細菌的病毒）的生長。原來細菌有一種酵素會把入侵病毒的 DNA 切斷，是細菌的免疫武器。發現者亞伯（Werner Arber）、史密斯（Hamilton Smith）、納森斯（Daniel Nathans）獲得 1978 年諾貝爾獎。</p>
+  </div>
+  <p>每種限制酶只認得一段特定序列。例如最有名的 <strong>EcoRI</strong>（名字來自大腸桿菌 <span class="en">E. co</span>li 的 R 菌株、第 I 號酵素）只切 <span class="dna-seq"><span class="bG">G</span>↓<span class="bA">A</span><span class="bA">A</span><span class="bT">T</span><span class="bT">T</span><span class="bC">C</span></span>，切完兩端會留下突出的單股尾巴 AATT，這叫<strong>黏性末端</strong>。任何用同一把剪刀切出來的 DNA，黏性末端都能互補配對，黏在一起。</p>
+  <div class="box fact"><span class="h">回文序列</span><p>GAATTC 的互補股從另一個方向讀也是 GAATTC，這叫「回文」，就像中文的「上海自來水來自海上」。很多限制酶的辨識位都是回文。</p></div>
+
+  <h3><span class="num">3</span>工具二：DNA 連接酶（分子膠水）</h3>
+  <p>黏性末端配對後，DNA 骨架上還有缺口，由 <strong>DNA 連接酶</strong>把它封起來，變成完整的一條 DNA。</p>
+
+  <h3><span class="num">4</span>工具三：質體（分子貨車）</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">質體 <span class="en">Plasmid</span></div>
+    <div class="roots"><span><b>plasma</b> 細胞質</span><span><b>-id</b> 小東西</span></div>
+    <p>1952 年美國遺傳學家萊德伯格（Joshua Lederberg）提出，指「存在於細胞質中、染色體以外的遺傳因子」。</p>
+  </div>
+  <p>質體是細菌體內一種小小的<strong>環狀 DNA</strong>，獨立於細菌的主要染色體之外，能自己複製。質體上常帶有抗生素抗性基因，科學家利用這點來篩選。把目標基因貼進質體，再送回細菌，質體就成了運送基因的「載體」。</p>
+
+  <h3><span class="num">5</span>完整流程</h3>
+  <div class="lab stepper" data-steps="recomb">
+    <div class="lab-h">互動實驗室：製造人類胰島素 <span>逐步播放</span></div>
+    <div class="lab-b"><div class="stage"></div><div class="cap"></div><div class="dots"></div>
+      <div class="controls" style="justify-content:center"><button class="btn st-prev">上一步</button><button class="btn pri st-next">下一步</button></div></div>
+  </div>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">轉形 <span class="en">Transformation</span></div>
+    <div class="roots"><span><b>trans</b> 跨越</span><span><b>forma</b> 形狀</span></div>
+    <p>細菌吸收外來 DNA 並因此改變特性，就是第 6 課格里菲斯看到的現象。實驗室常用氯化鈣處理加上瞬間熱休克（42°C 約 45 秒），或用電擊，讓細菌膜暫時變得容易讓質體進入。</p>
+  </div>
+
+  <h3><span class="num">6</span>歷史里程碑</h3>
+  <div class="tl">
+    <div class="ev"><span class="y">1972</span><p>美國史丹佛的伯格（Paul Berg）首次把兩種不同來源的 DNA 接在一起，1980 年獲諾貝爾獎。</p></div>
+    <div class="ev"><span class="y">1973</span><p>柯恩（Stanley Cohen）與博耶（Herbert Boyer）把外來基因放入質體並轉殖到大腸桿菌中成功表現，重組 DNA 技術正式誕生。據說兩人是在夏威夷一場研討會後，在熟食店吃三明治時討論出合作計畫。</p></div>
+    <div class="ev"><span class="y">1975</span><p>科學家自發在美國阿西洛馬召開會議，討論基因重組的風險並訂出安全規範，成為科學界自律的典範。</p></div>
+    <div class="ev"><span class="y">1976</span><p>博耶與創投家史旺森創立基因泰克（Genentech），被視為第一家現代生技公司。</p></div>
+    <div class="ev"><span class="y">1982</span><p>美國核准第一個基因重組藥物：人類胰島素（商品名 Humulin），由基因泰克開發、禮來藥廠生產。</p></div>
+  </div>
+  <p>今天用重組技術生產的產品包括：胰島素、生長激素、凝血因子（治療血友病）、紅血球生成素 EPO（治療貧血）、干擾素、B 型肝炎疫苗、HPV 疫苗，以及起司製造用的凝乳酶。</p>
+  <p><span class="lv lv3">專業</span> 並非所有蛋白質都能在細菌中做出來。人類很多蛋白質需要加上糖鏈（醣基化）等修飾，細菌沒有這種能力，所以複雜的藥物（例如抗體）通常改用<strong>中國倉鼠卵巢細胞</strong>（CHO 細胞）或酵母生產。選擇什麼「表現系統」，是生技製藥的關鍵決策之一。</p>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="2" data-explain="限制酶負責在特定序列切開 DNA。">
+      <div class="q">在基因重組中，被稱為「分子剪刀」的是？</div>
+      <button class="opt">DNA 連接酶</button><button class="opt">質體</button><button class="opt">限制酶</button><button class="opt">核糖體</button>
+    </div>
+    <div class="quiz" data-answer="3" data-explain="質體是細菌中的小型環狀 DNA，常用作運送基因的載體。">
+      <div class="q">質體是什麼？</div>
+      <button class="opt">一種蛋白質</button><button class="opt">細胞膜上的通道</button><button class="opt">病毒的外殼</button><button class="opt">細菌中的小型環狀 DNA</button>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="c14" data-unit="單元四　生技工具箱" data-title="PCR：DNA 影印機" data-level="2">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv2">進階</span><span>約 20 分鐘</span></div>
+    <h2>PCR：DNA 影印機</h2>
+    <p class="lead">一滴血、一根頭髮裡的 DNA 太少，儀器看不到。PCR 可以在幾小時內把一小段 DNA 複製成十億份。</p>
+  </div>
+
+  <h3><span class="num">1</span>一趟深夜開車想出的點子</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">聚合酶連鎖反應 <span class="en">Polymerase Chain Reaction, PCR</span></div>
+    <div class="roots"><span><b>poly</b> 許多</span><span><b>meros</b>（希臘文）部分</span><span><b>-ase</b> 酵素</span><span><b>chain</b> 連鎖</span></div>
+    <p>polymer（聚合物）是「許多部分組成的東西」，polymerase 就是「把小單位接成聚合物的酵素」。chain reaction 指每一輪的產物會成為下一輪的模板，像骨牌一樣連鎖擴大。</p>
+  </div>
+  <p>1983 年，美國化學家穆利斯（Kary Mullis）在加州一個月夜裡開車，突然想到：如果用兩段短 DNA 當「書籤」，夾住想複製的區域，然後反覆加熱冷卻，每一輪數量就會加倍。他因此獲得 1993 年諾貝爾化學獎。</p>
+
+  <h3><span class="num">2</span>三步驟一循環</h3>
+  <p>PCR 需要：模板 DNA、兩條<strong>引子</strong>（約 20 個鹼基的短 DNA，標記要複製的起點與終點）、四種核苷酸原料、耐熱的 DNA 聚合酶。然後在儀器中反覆變換溫度：</p>
+  <div class="lab" id="pcrLab">
+    <div class="lab-h">互動實驗室：PCR 熱循環機 <span>按下執行循環</span></div>
+    <div class="lab-b">
+      <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start">
+        <div style="flex:1;min-width:230px">
+          <svg id="pcrSvg" viewBox="0 0 300 150" style="width:100%;background:var(--paper);border-radius:10px" role="img" aria-label="PCR 步驟動畫"></svg>
+        </div>
+        <div style="min-width:150px">
+          <div class="readout">溫度</div><div class="big-num" id="pcrTemp">25°C</div>
+          <div class="readout">第 <strong id="pcrCyc">0</strong> 循環，DNA 份數</div><div class="big-num" id="pcrCopies" style="font-size:26px">1</div>
+        </div>
+      </div>
+      <div class="cap" id="pcrStep" style="margin-top:10px">準備好了。按下「執行一個循環」。</div>
+      <div class="controls"><button class="btn pri" id="pcrRun">執行一個循環</button><button class="btn" id="pcrFast">快轉到 30 循環</button><button class="btn" id="pcrReset">重設</button></div>
+      <div id="pcrBars" style="display:flex;align-items:flex-end;gap:2px;height:70px;margin-top:6px"></div>
+    </div>
+  </div>
+  <ol>
+    <li><strong>變性</strong>（約 95°C）：高溫把雙股 DNA 分開成單股。</li>
+    <li><strong>黏合</strong>（約 50 到 65°C）：降溫讓引子貼到單股 DNA 上互補的位置。</li>
+    <li><strong>延伸</strong>（約 72°C）：聚合酶從引子開始，沿著模板接上新的核苷酸。</li>
+  </ol>
+  <p>每一循環約 1 到 3 分鐘，DNA 份數理論上加倍。30 循環後就是 2³⁰ ≈ <strong>10 億</strong>倍。</p>
+
+  <h3><span class="num">3</span>黃石公園溫泉裡的祕密武器</h3>
+  <p>早期 PCR 有個大麻煩：95°C 會把一般的 DNA 聚合酶煮壞，每一輪都要手動補加新酵素。解方來自 1969 年微生物學家布洛克（Thomas Brock）在美國黃石國家公園溫泉中發現的細菌 <span class="en">Thermus aquaticus</span>（拉丁文「水中的熱」）。它能在 70°C 以上的熱水中生活，它的聚合酶自然耐高溫，被稱為 <strong>Taq 聚合酶</strong>（取自學名縮寫 T. aq）。</p>
+  <div class="box fact"><span class="h">你知道嗎</span><p>一個在國家公園做基礎研究的科學家，當年不可能想到他研究的溫泉細菌會在幾十年後成為價值數十億美元產業的核心。這是「基礎研究」價值的經典案例。</p></div>
+
+  <h3><span class="num">4</span>PCR 的應用</h3>
+  <ul>
+    <li><strong>病毒檢測</strong>：新冠肺炎的「PCR 檢測」其實是 <strong>RT-qPCR</strong>：先用反轉錄酶（RT）把病毒 RNA 轉成 DNA，再用即時定量 PCR（qPCR）一邊擴增一邊用螢光測量。病毒越多，越早（越少循環數）偵測到訊號，這個循環數叫 Ct 值。</li>
+    <li><strong>刑事鑑定</strong>：從現場微量的血跡、毛髮中擴增 DNA。</li>
+    <li><strong>親子鑑定</strong>、<strong>遺傳疾病篩檢</strong>、<strong>食品檢驗</strong>（例如檢測是否含有基改成分或摻假肉品）。</li>
+    <li><strong>古 DNA 研究</strong>：從化石中擴增 DNA，2022 年瑞典的帕波（Svante Pääbo）因解讀尼安德塔人基因體獲得諾貝爾獎，研究發現現代非洲以外的人類帶有約 1% 到 2% 的尼安德塔人 DNA。</li>
+  </ul>
+  <div class="box warn"><span class="h">專業提醒</span><p>PCR 敏感度極高，一點點汙染的 DNA 也會被放大，造成「偽陽性」。所以 PCR 實驗室要把配藥區、樣本區、擴增區分開，並使用陰性對照組。</p></div>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="1" data-explain="95°C 讓 DNA 雙股分開，這一步叫變性。">
+      <div class="q">PCR 中，把溫度升到約 95°C 是為了？</div>
+      <button class="opt">讓引子黏上去</button><button class="opt">讓雙股 DNA 分開</button><button class="opt">殺死細菌</button><button class="opt">讓聚合酶休息</button>
+    </div>
+    <div class="quiz" data-answer="3" data-explain="Taq 聚合酶來自溫泉細菌，能耐高溫，不會在 95°C 被破壞。">
+      <div class="q">為什麼 PCR 要用 Taq 聚合酶？</div>
+      <button class="opt">它最便宜</button><button class="opt">它速度最慢最準確</button><button class="opt">它來自人類</button><button class="opt">它耐高溫</button>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="c15" data-unit="單元四　生技工具箱" data-title="電泳與 DNA 定序" data-level="2">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv2">進階</span><span class="lv lv3">專業</span><span>約 25 分鐘</span></div>
+    <h2>電泳與 DNA 定序</h2>
+    <p class="lead">DNA 看不見，要怎麼知道它有多長？怎麼讀出上面的每一個字母？</p>
+  </div>
+
+  <h3><span class="num">1</span>凝膠電泳：DNA 賽跑</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">電泳 <span class="en">Electrophoresis</span></div>
+    <div class="roots"><span><b>ēlektron</b> 琥珀（電的字源）</span><span><b>phorēsis</b>（希臘文）被搬運</span></div>
+    <p>「被電搬運」。古希臘人發現摩擦琥珀會吸引羽毛，electricity 就從琥珀來。瑞典化學家蒂塞利烏斯（Arne Tiselius）因電泳研究獲 1948 年諾貝爾化學獎。</p>
+  </div>
+  <p>原理很簡單：</p>
+  <ol>
+    <li>DNA 的磷酸骨架帶<strong>負電</strong>。</li>
+    <li>把 DNA 樣本放進<strong>洋菜膠</strong>（agarose，與柯霍培養細菌用的洋菜同源）的小井裡，通電後 DNA 往<strong>正極</strong>移動。</li>
+    <li>膠體裡有無數細小孔洞，像一座迷宮森林。<strong>小片段 DNA 鑽得快、跑得遠；大片段卡得多、跑得近。</strong></li>
+    <li>用螢光染劑染色，在紫外光或藍光下就能看到一條條的「帶」。旁邊放已知大小的「分子量標記」（ladder）當尺規比對。</li>
+  </ol>
+  <div class="lab" id="gelLab">
+    <div class="lab-h">互動實驗室：布丁失竊案 <span>DNA 指紋鑑定</span></div>
+    <div class="lab-b">
+      <p style="font-size:15.5px;margin-bottom:8px">冰箱裡的布丁被偷吃了！湯匙上留有唾液。我們用 PCR 擴增 DNA、用限制酶切割，再跑電泳。誰的 DNA 圖譜和現場樣本一樣？</p>
+      <svg id="gelSvg" viewBox="0 0 400 300" style="width:100%;background:#1d1a2e;border-radius:10px" role="img" aria-label="凝膠電泳模擬"></svg>
+      <div class="controls"><button class="btn pri" id="gelRun">通電開始跑膠</button><button class="btn" id="gelReset">重來</button></div>
+      <div class="readout" id="gelTxt">負極在上、正極在下。DNA 帶負電，會往下跑。</div>
+    </div>
+  </div>
+
+  <h3><span class="num">2</span>DNA 指紋</h3>
+  <p>人與人之間 DNA 有約 99.9% 相同，但在某些重複序列區域差異很大。例如<strong>短串聯重複序列（STR）</strong>：某處是「GATA」重複 8 次，另一人可能重複 12 次。檢驗十幾個 STR 位點的組合，兩個無關的人完全相同的機率小於十億分之一。英國遺傳學家傑佛瑞斯（Alec Jeffreys）在 1984 年發明 DNA 指紋技術，1986 年首次用於刑事案件，不但抓到真兇，也洗清了原本被懷疑的嫌犯。</p>
+
+  <h3><span class="num">3</span>DNA 定序：讀出每一個字</h3>
+  <p>定序（sequencing）就是讀出 DNA 的鹼基排列順序。</p>
+  <p><strong>桑格定序法</strong>（1977）：英國的桑格（Frederick Sanger）發明，他是極少數兩度獲得諾貝爾化學獎的人（1958 年定出胰島素的胺基酸序列、1980 年 DNA 定序）。原理是在複製 DNA 時，混入少量特殊的「終止核苷酸」（雙去氧核苷酸，ddNTP），一接上就停止延伸。結果產生各種長度的片段，每個片段的最後一個字母就是停止的位置。把片段依長度排序（電泳），就能讀出序列。現代版本用四種顏色的螢光標記四種終止核苷酸，由機器自動讀取，本課程的 A、T、C、G 配色就來自這種定序圖譜的慣用色。</p>
+  <div class="box analogy"><span class="h">生活比喻</span><p>想像你要知道一串珠子的顏色順序，但一次只能看最後一顆。於是你複製很多串，每串都在隨機位置停下來。把長度 1、2、3、4…的每一串的最後一顆排好，就讀出整串的順序了。</p></div>
+
+  <h3><span class="num">4</span>人類基因體計畫</h3>
+  <p>1990 年，美、英、日、法、德、中六國啟動<strong>人類基因體計畫</strong>，目標是讀出人類全部約 30 億個鹼基對。計畫花了約 13 年、近 30 億美元，於 2003 年宣布完成（2022 年才由「端粒到端粒聯盟」補完最後約 8% 最難讀的重複區域）。</p>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">基因體（基因組） <span class="en">Genome</span></div>
+    <div class="roots"><span><b>gene</b> 基因</span><span><b>chromosome</b> 染色體</span></div>
+    <p>1920 年德國植物學家溫克勒（Hans Winkler）把 gene 和 chromosome 合併成 genome，指一個生物全部的遺傳物質。後來衍生出「-ome」（體、組）一系列字：蛋白質體 proteome、轉錄體 transcriptome、微生物相 microbiome，研究它們的學問統稱「體學」（-omics）。</p>
+  </div>
+
+  <h3><span class="num">5</span><span class="lv lv3">專業</span> 次世代定序（NGS）</h3>
+  <p>2005 年後出現<strong>次世代定序</strong>：把 DNA 打碎成數百萬到數十億個小片段，<strong>同時平行</strong>定序，再用電腦像拼拼圖一樣組回來。代表技術包括 Illumina 的「邊合成邊定序」（短讀長、高準確度）；第三代技術如 PacBio 與 Oxford Nanopore 則能一次讀取數萬甚至上百萬個鹼基的長片段。奈米孔定序讓 DNA 穿過一個蛋白質小孔，根據電流變化判斷鹼基，儀器小到可以插在筆電 USB 上。</p>
+  <div class="tw"><table class="t">
+    <tr><th>年代</th><th>定序一個人類基因體的成本（約略）</th></tr>
+    <tr><td>2003</td><td>約 30 億美元（整個計畫）</td></tr>
+    <tr><td>2007</td><td>約 1,000 萬美元</td></tr>
+    <tr><td>2014</td><td>約 1,000 美元</td></tr>
+    <tr><td>2020 年代</td><td>數百美元以下</td></tr>
+  </table></div>
+  <p>成本下降速度遠快於電腦晶片的摩爾定律，讓<strong>精準醫療</strong>、新生兒篩檢、癌症基因檢測、病原體追蹤（例如新冠變異株監測）變得可行。</p>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="0" data-explain="小片段在膠體孔洞中阻力小，跑得快、跑得遠。">
+      <div class="q">電泳時，哪一種 DNA 片段跑得最遠？</div>
+      <button class="opt">最短的</button><button class="opt">最長的</button><button class="opt">一樣遠</button><button class="opt">帶正電的</button>
+    </div>
+    <div class="quiz" data-answer="2" data-explain="DNA 磷酸骨架帶負電，所以往正極移動。">
+      <div class="q">DNA 在電泳中往哪一極移動？為什麼？</div>
+      <button class="opt">負極，因為 DNA 帶正電</button><button class="opt">不會動</button><button class="opt">正極，因為 DNA 帶負電</button><button class="opt">隨機移動</button>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="c16" data-unit="單元四　生技工具箱" data-title="CRISPR：基因剪刀" data-level="3">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv2">進階</span><span class="lv lv3">專業</span><span>約 25 分鐘</span></div>
+    <h2>CRISPR：基因剪刀</h2>
+    <p class="lead">如果限制酶是只能剪固定圖案的剪刀，CRISPR 就是可以設定任意位置的導航剪刀。它讓修改基因變得前所未有地簡單。</p>
+  </div>
+
+  <h3><span class="num">1</span>一個拗口的名字</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">CRISPR <span class="en">Clustered Regularly Interspaced Short Palindromic Repeats</span></div>
+    <div class="roots"><span><b>Clustered</b> 成簇的</span><span><b>Regularly Interspaced</b> 規律間隔的</span><span><b>Short Palindromic Repeats</b> 短回文重複序列</span></div>
+    <p>中文譯為「常間回文重複序列叢集」，發音類似英文 crisper（爽脆的）。1987 年日本大阪大學的石野良純在大腸桿菌中首次看到這種奇怪的重複序列，但不知道功能。西班牙的莫希卡（Francisco Mojica）長年研究它，2002 年與荷蘭的揚森（Ruud Jansen）共同定下 CRISPR 這個縮寫。附近常伴隨的一組基因就叫 <strong>Cas</strong>（CRISPR-associated，CRISPR 相關基因）。</p>
+  </div>
+
+  <h3><span class="num">2</span>原本是細菌的免疫系統</h3>
+  <p>莫希卡在 2005 年前後發現，CRISPR 重複序列之間夾著的「間隔序列」，竟然跟某些病毒的 DNA 一模一樣。原來這是細菌的<strong>免疫記憶</strong>：</p>
+  <ol>
+    <li>病毒入侵後，細菌把病毒 DNA 剪一小段，存進自己的 CRISPR 區域，像把通緝犯照片貼進檔案。</li>
+    <li>之後細菌把這些片段轉錄成 RNA，交給 Cas 蛋白。</li>
+    <li>如果同一種病毒再來，RNA 會帶著 Cas 蛋白找到吻合的病毒 DNA，把它剪斷。</li>
+  </ol>
+  <p>這是細菌版的「疫苗」與「記憶細胞」，而且這份記憶還能遺傳給後代。</p>
+
+  <h3><span class="num">3</span>變成基因編輯工具</h3>
+  <p>2012 年，美國的道納（Jennifer Doudna）與法國的夏彭蒂耶（Emmanuelle Charpentier）發表論文，證明可以把 <strong>Cas9</strong> 蛋白和一段人工設計的<strong>嚮導 RNA</strong>（guide RNA）組合，讓它在試管中切開任何指定的 DNA 位置。只要改寫嚮導 RNA 的約 20 個字母，就能瞄準新目標。2013 年張鋒（Feng Zhang）等團隊把它用在人類細胞上。道納與夏彭蒂耶獲得 2020 年諾貝爾化學獎，距離論文發表只有 8 年，極為罕見。</p>
+  <div class="box analogy"><span class="h">生活比喻</span><p>Cas9 是一把剪刀，嚮導 RNA 是 GPS 導航。把目的地（20 個字母的地址）輸入 GPS，剪刀就會在 30 億個字母中找到那個地方剪下去。</p></div>
+  <div class="lab" id="crLab">
+    <div class="lab-h">互動實驗室：Cas9 導航剪刀 <span>選擇目標並開始搜尋</span></div>
+    <div class="lab-b">
+      <div class="controls" id="crTargets"></div>
+      <div class="readout">嚮導 RNA 對應的 DNA 序列：<span class="dna-seq" id="crGuide" style="font-size:17px"></span>（真實約 20 個字母，這裡簡化成 8 個）</div>
+      <div id="crDna" class="dna-seq" style="font-size:18px;line-height:2.2;margin:12px 0;padding:10px;background:var(--paper);border-radius:10px;overflow-x:auto;white-space:nowrap"></div>
+      <div class="controls"><button class="btn pri" id="crGo">開始搜尋</button><button class="btn" id="crReset">重設</button></div>
+      <div class="cap" id="crMsg">Cas9 會沿著 DNA 移動，先找 PAM 序列（NGG），再核對嚮導序列。</div>
+    </div>
+  </div>
+
+  <h3><span class="num">4</span>剪完之後呢？</h3>
+  <p>Cas9 只負責「剪斷」DNA 雙股。真正的編輯發生在細胞修補斷口的時候：</p>
+  <ul>
+    <li><strong>非同源末端接合（NHEJ）</strong>：細胞急著把斷口直接黏回去，常常多一個或少幾個字母，造成移碼突變，讓基因失去功能。這叫<strong>基因剔除</strong>（knockout）。</li>
+    <li><strong>同源重組修復（HDR）</strong>：如果同時提供一段設計好的 DNA 模板，細胞可能照著模板修補，就能精準改寫或插入序列。這叫<strong>基因嵌入</strong>（knock-in）。</li>
+  </ul>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">PAM <span class="en">Protospacer Adjacent Motif</span></div>
+    <div class="roots"><span><b>proto-spacer</b> 原間隔序列（病毒上的目標）</span><span><b>adjacent</b> 相鄰的</span><span><b>motif</b> 小圖案</span></div>
+    <p>最常用的 Cas9 要求目標序列後面緊接著「NGG」（N 是任意鹼基）才會切。細菌自己的 CRISPR 區域沒有 PAM，這是 Cas9 分辨「自己」與「敵人」的方法，避免剪到自己。</p>
+  </div>
+
+  <h3><span class="num">5</span><span class="lv lv3">專業</span> 新一代編輯技術</h3>
+  <ul>
+    <li><strong>鹼基編輯</strong>（Base editing，2016，劉如謙 David Liu 實驗室）：不切斷雙股，直接把一個字母化學轉換成另一個（如 C→T、A→G），更安全精準。</li>
+    <li><strong>先導編輯</strong>（Prime editing，2019，同一實驗室）：像「搜尋並取代」功能，能做小段插入、刪除與所有類型的單點替換。</li>
+    <li><strong>Cas12、Cas13</strong>：其他 Cas 家族成員。Cas13 切 RNA，被開發成快速病毒檢測工具（如 SHERLOCK）。</li>
+    <li><strong>表觀編輯</strong>：用「剪刀壞掉」的 dCas9 帶著其他酵素去開關基因，而不改變序列。</li>
+  </ul>
+  <div class="box fact"><span class="h">第一個 CRISPR 藥物</span><p>2023 年，英國與美國先後核准 <strong>Casgevy</strong>，用於治療鐮刀型貧血症與 β 型地中海貧血。做法是取出病人的造血幹細胞，用 CRISPR 關掉一個叫 BCL11A 的開關，讓細胞重新製造「胎兒型血紅素」來取代有缺陷的成人型血紅素，再把細胞輸回病人體內。</p></div>
+  <div class="box warn"><span class="h">挑戰</span><p><strong>脫靶效應</strong>：剪到長得很像但不該剪的地方。<strong>傳遞問題</strong>：怎麼把 CRISPR 工具安全送進體內正確的細胞。<strong>倫理問題</strong>：能不能編輯會遺傳給後代的胚胎？第 20 課會討論 2018 年的基因編輯嬰兒事件。</p></div>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="1" data-explain="嚮導 RNA 決定 Cas9 要去哪裡剪，改寫它就能瞄準新目標。">
+      <div class="q">CRISPR-Cas9 系統中，決定「剪在哪裡」的是？</div>
+      <button class="opt">Cas9 蛋白的形狀</button><button class="opt">嚮導 RNA 的序列</button><button class="opt">溫度</button><button class="opt">限制酶</button>
+    </div>
+    <div class="quiz" data-answer="2" data-explain="CRISPR 是細菌對抗病毒（噬菌體）的免疫機制。">
+      <div class="q">CRISPR 在自然界原本的功能是？</div>
+      <button class="opt">幫助植物光合作用</button><button class="opt">人類的消化系統</button><button class="opt">細菌對抗病毒的免疫系統</button><button class="opt">病毒入侵細胞的工具</button>
+    </div>
+  </div>
+</section>
+<!-- ================= UNIT 5 ================= -->
+<section class="chapter" id="c17" data-unit="單元五　應用與前沿" data-title="醫療生技：新藥與新療法" data-level="3">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv2">進階</span><span class="lv lv3">專業</span><span>約 30 分鐘</span></div>
+    <h2>醫療生技：新藥與新療法</h2>
+    <p class="lead">生技最大的舞台在醫療。從實驗室的發現到你手上的藥，平均要 10 年以上、數十億美元。</p>
+  </div>
+
+  <h3><span class="num">1</span>小分子藥與大分子藥</h3>
+  <div class="tw"><table class="t">
+    <tr><th></th><th>小分子藥物</th><th>生物製劑（大分子）</th></tr>
+    <tr><td>例子</td><td>阿斯匹靈、普拿疼</td><td>胰島素、抗體藥物、疫苗</td></tr>
+    <tr><td>大小</td><td>幾十個原子</td><td>數千到數萬個原子</td></tr>
+    <tr><td>製造</td><td>化學合成</td><td>活細胞生產</td></tr>
+    <tr><td>給藥</td><td>多半可口服</td><td>多半要注射（口服會被胃消化）</td></tr>
+    <tr><td>仿製</td><td>學名藥，可做到完全相同</td><td>生物相似藥，只能「高度相似」</td></tr>
+  </table></div>
+  <div class="box analogy"><span class="h">生活比喻</span><p>小分子藥像一把螺絲起子，任何工廠照圖都能做出一模一樣的。生物製劑像一隻手工訓練的導盲犬，就算血統相同、訓練方法相同，每隻還是有些微差異，所以製程本身就是產品的一部分。</p></div>
+
+  <h3><span class="num">2</span>單株抗體：導彈藥物</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">單株抗體 <span class="en">Monoclonal antibody, mAb</span></div>
+    <div class="roots"><span><b>mono</b> 單一</span><span><b>klōn</b>（希臘文）嫩枝、插枝</span></div>
+    <p>clone 原意是植物的插枝，插枝長出的植株和母株基因完全相同，後來泛指「複製品」。單株抗體就是來自「同一個 B 細胞複製出來的細胞群」所產生的完全相同的抗體。</p>
+  </div>
+  <p>1975 年，英國劍橋的科勒（Georges Köhler）和米爾斯坦（César Milstein）把會製造抗體但壽命短的 B 細胞，與能無限分裂的骨髓瘤癌細胞融合，得到既能長生不死、又能持續分泌單一抗體的<strong>融合瘤</strong>（hybridoma）。他們刻意沒有申請專利，1984 年獲諾貝爾獎。</p>
+  <p>今天單株抗體是全球銷售額最高的藥物類別之一，用於癌症、自體免疫疾病、偏頭痛等。藥名都以 <strong>-mab</strong> 結尾，中間字根透露來源：-ximab 是嵌合型（部分小鼠）、-zumab 是人源化、-umab 是全人類，例如 trastuzumab（賀癌平，乳癌）、adalimumab（復邁，類風濕性關節炎）。</p>
+  <p><span class="lv lv3">專業</span> 延伸技術包括<strong>抗體藥物複合體</strong>（ADC，把化療藥綁在抗體上，精準送到癌細胞）與<strong>雙特異性抗體</strong>（一隻手抓癌細胞、另一隻手抓 T 細胞，把兩者拉在一起）。</p>
+
+  <h3><span class="num">3</span>免疫療法：解放身體的軍隊</h3>
+  <p>癌細胞很狡猾，會按下 T 細胞上的「煞車」（如 PD-1、CTLA-4），讓免疫系統不攻擊它。美國的艾立森（James Allison）和日本的本庶佑發現了這些煞車，並開發出拔掉煞車的抗體藥物（<strong>免疫檢查點抑制劑</strong>），獲得 2018 年諾貝爾獎。</p>
+  <p><strong>CAR-T 細胞療法</strong>：從病人血液取出 T 細胞，用基因工程裝上一個能辨識癌細胞的「嵌合抗原受體」（CAR），在實驗室大量培養後輸回病人體內，變成專門獵殺癌細胞的活體藥物。2017 年美國首次核准用於血癌，部分原本無藥可醫的病人達到長期緩解。</p>
+
+  <h3><span class="num">4</span>mRNA 疫苗</h3>
+  <p>傳統疫苗要在工廠裡培養病毒或生產蛋白質。mRNA 疫苗則直接把「製造病毒棘蛋白的食譜」（mRNA）送進你的細胞，讓你的細胞自己生產一點點棘蛋白，訓練免疫系統。mRNA 幾天內就被分解，不會進入細胞核，也不會改變你的 DNA。</p>
+  <div class="lab stepper" data-steps="mrna">
+    <div class="lab-h">互動實驗室：mRNA 疫苗如何運作 <span>逐步播放</span></div>
+    <div class="lab-b"><div class="stage"></div><div class="cap"></div><div class="dots"></div>
+      <div class="controls" style="justify-content:center"><button class="btn st-prev">上一步</button><button class="btn pri st-next">下一步</button></div></div>
+  </div>
+  <p>兩個關鍵突破：</p>
+  <ul>
+    <li><strong>修飾核苷</strong>：外來 mRNA 原本會引起強烈發炎而被摧毀。匈牙利裔科學家卡里科（Katalin Karikó）與美國的魏斯曼（Drew Weissman）在 2005 年發現，把 U 換成化學修飾過的「假尿苷」，就能躲過警報並提高產量。卡里科曾因研究不受重視而被降職、申請經費屢遭拒絕，兩人於 2023 年獲諾貝爾生理醫學獎。</li>
+    <li><strong>脂質奈米顆粒</strong>：用一層油脂小泡泡包住脆弱的 mRNA，保護它並幫助它進入細胞。這也是 mRNA 疫苗需要低溫保存的原因之一。</li>
+  </ul>
+  <p>因為只要改寫序列就能換目標，mRNA 平台從拿到病毒序列到設計出疫苗只需要幾天。新冠疫苗在不到一年內完成開發與緊急授權，背後其實是數十年的基礎研究累積。目前 mRNA 技術也被用於開發癌症個人化疫苗。</p>
+
+  <h3><span class="num">5</span>基因治療</h3>
+  <p>如果疾病是因為某個基因壞掉，能不能直接送一個好的基因進去？這就是<strong>基因治療</strong>。常用的「運送車」是改造過、不會致病的病毒，例如<strong>腺相關病毒</strong>（AAV）與<strong>慢病毒</strong>。</p>
+  <ul>
+    <li>2017 年美國核准 Luxturna，治療一種遺傳性視網膜病變，讓部分病人恢復一些視力。</li>
+    <li>2019 年核准 Zolgensma，一次注射治療嬰兒脊髓性肌肉萎縮症（SMA），也曾是全世界最貴的藥物之一，單次超過 200 萬美元。</li>
+  </ul>
+  <div class="box warn"><span class="h">歷史教訓</span><p>1999 年，18 歲的美國青年蓋爾辛格（Jesse Gelsinger）參加基因治療試驗，因對病毒載體產生嚴重免疫反應而死亡，調查也發現試驗管理有缺失。這讓整個領域停滯多年，也促使臨床試驗規範大幅加強。</p></div>
+
+  <h3><span class="num">6</span>幹細胞與再生醫學</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">幹細胞 <span class="en">Stem cell</span></div>
+    <div class="roots"><span><b>stem</b>（英文）樹幹、莖</span></div>
+    <p>像樹幹能長出各種分枝，幹細胞能分化成多種細胞。它有兩個特性：能自我更新（分裂出更多幹細胞），以及能分化成特化的細胞。</p>
+  </div>
+  <ul>
+    <li><strong>胚胎幹細胞</strong>：來自早期胚胎，能分化成身體幾乎所有細胞（多能性），但涉及倫理爭議。</li>
+    <li><strong>成體幹細胞</strong>：如骨髓中的造血幹細胞，只能分化成有限種類。骨髓移植其實就是幹細胞療法。</li>
+    <li><strong>誘導式多能幹細胞（iPS 細胞）</strong>：2006 年日本京都大學的山中伸彌發現，只要把 4 個基因（Oct4、Sox2、Klf4、c-Myc，稱為「山中因子」）送進皮膚細胞，就能把它「倒帶」回類似胚胎幹細胞的狀態。這避開了使用胚胎的爭議，2012 年獲諾貝爾獎。</li>
+  </ul>
+  <p>此外，<strong>類器官</strong>（organoid）是用幹細胞在培養皿中長出的迷你器官（迷你腦、迷你腸），可用於研究疾病與測試藥物。</p>
+  <div class="box fact"><span class="h">桃莉羊</span><p>1996 年，英國羅斯林研究所用成年綿羊的乳腺細胞核，放入去核的卵細胞中，誕生了第一隻從成體細胞複製的哺乳動物「桃莉」。因為細胞來自乳腺，研究人員用以豐滿身材聞名的鄉村歌手桃莉·巴頓（Dolly Parton）為她命名。這證明成熟細胞的 DNA 仍保有發育成完整個體的全部資訊。</p></div>
+
+  <h3><span class="num">7</span><span class="lv lv3">專業</span> 新藥開發流程</h3>
+  <div class="tl">
+    <div class="ev"><span class="y">探索期</span><p>找到疾病相關的「標靶」（通常是某個蛋白質），篩選數千到數百萬個候選分子。約 3 到 6 年。</p></div>
+    <div class="ev"><span class="y">臨床前</span><p>細胞與動物實驗，評估藥效、毒性、藥物動力學。</p></div>
+    <div class="ev"><span class="y">第一期臨床</span><p>少數（約 20 到 100 位）健康自願者或病人，主要看安全性與劑量。</p></div>
+    <div class="ev"><span class="y">第二期臨床</span><p>數百位病人，初步確認療效與最佳劑量。</p></div>
+    <div class="ev"><span class="y">第三期臨床</span><p>數百到數千位病人，通常是隨機、雙盲、有對照組的大型試驗，確認療效優於現有治療或安慰劑。</p></div>
+    <div class="ev"><span class="y">審查上市</span><p>向主管機關（美國 FDA、歐盟 EMA、台灣 TFDA 等）申請上市，之後還有第四期上市後監測。</p></div>
+  </div>
+  <p>進入第一期臨床的藥物，最後能成功上市的比例大約只有一成左右。這就是新藥昂貴的原因之一。整個過程也必須遵守<strong>優良實驗室規範（GLP）</strong>、<strong>優良臨床試驗規範（GCP）</strong>與<strong>優良製造規範（GMP）</strong>。</p>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="3" data-explain="mRNA 不進入細胞核、不會整合進 DNA，幾天內就被分解。">
+      <div class="q">關於 mRNA 疫苗，下列何者正確？</div>
+      <button class="opt">它會改變你的 DNA</button><button class="opt">它含有活病毒</button><button class="opt">它會永久留在體內</button><button class="opt">它讓細胞暫時製造病毒蛋白來訓練免疫</button>
+    </div>
+    <div class="quiz" data-answer="0" data-explain="-mab 是 monoclonal antibody 的縮寫。">
+      <div class="q">藥名以 -mab 結尾，代表它是？</div>
+      <button class="opt">單株抗體藥物</button><button class="opt">抗生素</button><button class="opt">維生素</button><button class="opt">中草藥</button>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="c18" data-unit="單元五　應用與前沿" data-title="農業、食品與環境生技" data-level="2">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv1">入門</span><span class="lv lv2">進階</span><span>約 20 分鐘</span></div>
+    <h2>農業、食品與環境生技</h2>
+    <p class="lead">地球人口超過 80 億，要吃飽、又要保護環境。生技在田裡、餐桌上和汙染現場都派得上用場。</p>
+  </div>
+
+  <h3><span class="num">1</span>從育種到基因改造</h3>
+  <p>人類馴化作物已經一萬年。今天的玉米祖先是一種叫大芻草的野草，穗只有幾公分長、十幾顆硬粒。這種「挑好的留下來種」的<strong>傳統育種</strong>，其實也在改變基因，只是又慢又不精準。</p>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">基因改造生物 <span class="en">Genetically Modified Organism, GMO</span></div>
+    <div class="roots"><span><b>genetic</b> 基因的</span><span><b>modify</b> 修改</span><span><b>organism</b> 生物（organon 器官 + -ism）</span></div>
+    <p>指用基因工程技術改變遺傳物質的生物，通常是加入其他物種的基因（轉殖）。台灣法規用語為「基因改造」，常簡稱「基改」。</p>
+  </div>
+  <p>植物基因轉殖常用一種天然的「基因工程師」：<strong>農桿菌</strong>。它在自然界會把自己的一段 DNA 塞進植物細胞，讓植物長出腫瘤並替它製造養分。科學家把致腫瘤的基因換成想要的基因，就能利用它把基因送進植物。</p>
+
+  <h3><span class="num">2</span>經典案例</h3>
+  <ul>
+    <li><strong>Bt 作物</strong>：<span class="en">Bacillus thuringiensis</span>（蘇力菌，以最早發現地德國圖林根 Thuringia 命名）會產生一種只對特定昆蟲幼蟲有毒的蛋白質，對人類無害（人類腸道沒有對應的受體，且蛋白質在酸性胃中會被分解）。把這個基因放進玉米、棉花，作物就能自己抗蟲，減少殺蟲劑使用。蘇力菌本身也是有機農業允許使用的生物農藥。</li>
+    <li><strong>抗除草劑作物</strong>：讓作物對特定除草劑有抗性，除草劑只殺雜草。</li>
+    <li><strong>黃金米</strong>：在稻米中加入製造 β-胡蘿蔔素的基因，米粒呈金黃色，希望改善開發中國家的維生素 A 缺乏（會導致兒童失明甚至死亡）。2021 年菲律賓核准商業種植，但推廣仍面臨爭議。</li>
+    <li><strong>抗病毒木瓜</strong>：1990 年代夏威夷木瓜因輪點病毒幾乎全毀，基改抗病毒木瓜救回了產業。</li>
+    <li><strong>第一個基改食品</strong>：1994 年美國上市的 Flavr Savr 番茄，延緩軟化，但因風味與成本問題幾年後下市。</li>
+  </ul>
+  <div class="box warn"><span class="h">爭議：兩邊的論點</span><p>支持方指出：大規模科學評估（例如美國國家科學院 2016 年報告）認為已上市的基改食品與傳統食品一樣安全，且能減少農藥、提高產量。反對或保留方則關心：長期生態影響（例如害蟲與雜草產生抗性、基因流到野生近親）、種子專利集中在少數大公司、小農的依賴問題，以及消費者的知情權。許多國家因此要求<strong>標示</strong>。了解證據、分辨「食品安全問題」與「經濟社會問題」是不同層次，是理性討論的第一步。</p></div>
+
+  <h3><span class="num">3</span>基因編輯作物與新食品</h3>
+  <p>CRISPR 可以在不加入外來基因的情況下，對作物自己的基因做小修改，結果可能與自然突變無法區分。各國法規對此看法不同：日本、美國等對某些不含外來 DNA 的編輯作物管理較寬鬆，歐盟則在修法討論中。例子包括日本上市的高 GABA 番茄、不容易褐變的蘑菇。</p>
+  <p>其他新興食品生技：</p>
+  <ul>
+    <li><strong>精準發酵</strong>：讓微生物生產牛奶蛋白、蛋白質等，不需要動物。例如用微生物生產的乳清蛋白冰淇淋。</li>
+    <li><strong>細胞培養肉</strong>：從動物取出少量細胞在生物反應器中培養成肉。新加坡在 2020 年成為第一個核准販售培養肉的國家。</li>
+    <li><strong>植物肉</strong>：部分產品使用基改酵母生產「大豆血紅素」，讓植物漢堡有肉的風味與顏色。</li>
+  </ul>
+
+  <h3><span class="num">4</span>環境生技</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">生物復育 <span class="en">Bioremediation</span></div>
+    <div class="roots"><span><b>bios</b> 生命</span><span><b>remedium</b>（拉丁文）治療、補救</span></div>
+    <p>用生物（多半是微生物或植物）來清除環境汙染。</p>
+  </div>
+  <ul>
+    <li><strong>石油汙染</strong>：1989 年艾克森瓦迪茲號油輪在阿拉斯加漏油後，科學家在海灘施肥，促進本地能分解石油的細菌生長。</li>
+    <li><strong>污水處理</strong>：污水廠的「活性污泥」其實就是大量微生物，吃掉水中的有機物。</li>
+    <li><strong>吃塑膠的細菌</strong>：2016 年日本科學家在寶特瓶回收廠附近發現一種細菌，能分解 PET 塑膠，它的酵素（PETase）正被改良以加速塑膠回收。</li>
+    <li><strong>植物復育</strong>：利用某些能吸收重金屬的植物清理受汙染的土壤。</li>
+    <li><strong>生質材料</strong>：用微生物發酵生產可分解的生物塑膠（如 PLA、PHA）。</li>
+  </ul>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="1" data-explain="Bt 蛋白來自蘇力菌，只對特定昆蟲幼蟲有毒。">
+      <div class="q">Bt 玉米能抗蟲，是因為加入了哪種生物的基因？</div>
+      <button class="opt">蜘蛛</button><button class="opt">蘇力菌（一種細菌）</button><button class="opt">大蒜</button><button class="opt">青蛙</button>
+    </div>
+    <div class="quiz" data-answer="2" data-explain="黃金米加入製造 β-胡蘿蔔素的基因，身體可以將其轉換為維生素 A。">
+      <div class="q">黃金米的主要目的是？</div>
+      <button class="opt">讓米更甜</button><button class="opt">讓米可以抗蟲</button><button class="opt">改善維生素 A 缺乏</button><button class="opt">讓米煮得更快</button>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="c19" data-unit="單元五　應用與前沿" data-title="基因體學、生物資訊與 AI" data-level="3">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv2">進階</span><span class="lv lv3">專業</span><span>約 25 分鐘</span></div>
+    <h2>基因體學、生物資訊與 AI</h2>
+    <p class="lead">今天的生物學產生的資料量，早已超過人腦能處理的程度。未來的生物學家，一半時間可能在寫程式。</p>
+  </div>
+
+  <h3><span class="num">1</span>生物資訊學</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">生物資訊學 <span class="en">Bioinformatics</span></div>
+    <div class="roots"><span><b>bio</b> 生命</span><span><b>informatics</b> 資訊學</span></div>
+    <p>1970 年荷蘭的霍格威格（Paulien Hogeweg）與赫斯珀（Ben Hesper）提出，原意是「研究生物系統中資訊處理的學問」。今天多指用電腦分析生物資料，特別是 DNA、RNA、蛋白質序列。</p>
+  </div>
+  <p>生物資訊學的日常工作包括：</p>
+  <ul>
+    <li><strong>序列比對</strong>：比較兩段 DNA 或蛋白質有多相似。1990 年推出的 <strong>BLAST</strong> 工具，讓科學家能在幾秒內從龐大資料庫中找出相似序列，是史上被引用最多的科學論文之一。</li>
+    <li><strong>基因體組裝</strong>：把定序得到的數十億個小片段拼回完整基因體。</li>
+    <li><strong>變異分析</strong>：找出病人與參考基因體的差異，判斷哪些可能致病。</li>
+    <li><strong>基因表現分析</strong>：比較健康與生病組織中哪些基因被打開或關閉。</li>
+    <li><strong>親緣樹</strong>：用序列差異推算物種之間的演化關係。</li>
+  </ul>
+  <p>重要的公開資料庫包括美國的 <strong>NCBI GenBank</strong>（DNA 序列）、歐洲的 <strong>Ensembl</strong>（基因體註解）、<strong>PDB</strong>（蛋白質立體結構，1971 年成立）、<strong>UniProt</strong>（蛋白質資訊）。這些資料全球免費共享，是現代生物學的基礎建設。</p>
+  <div class="box analogy"><span class="h">生活比喻</span><p>定序儀像一台把整套百科全書打成碎紙的碎紙機，只是碎片上都印著字。生物資訊學家的工作，就是用電腦把數十億張碎紙條拼回原本的書，再找出這本書和別本書哪裡不同。</p></div>
+
+  <h3><span class="num">2</span>體學時代</h3>
+  <div class="tw"><table class="t">
+    <tr><th>體學</th><th>研究對象</th><th>回答的問題</th></tr>
+    <tr><td>基因體學 Genomics</td><td>全部 DNA</td><td>說明書寫了什麼？</td></tr>
+    <tr><td>轉錄體學 Transcriptomics</td><td>全部 RNA</td><td>現在打開了哪些章節？</td></tr>
+    <tr><td>蛋白質體學 Proteomics</td><td>全部蛋白質</td><td>實際在工作的有哪些人？</td></tr>
+    <tr><td>代謝體學 Metabolomics</td><td>全部小分子代謝物</td><td>工廠正在生產什麼？</td></tr>
+    <tr><td>微生物體學 Microbiomics</td><td>體內外的微生物群落</td><td>誰跟你住在一起？</td></tr>
+  </table></div>
+  <p><span class="lv lv3">專業</span> <strong>單細胞定序</strong>讓科學家能分析一個一個細胞的基因表現，而不是一團組織的平均值，進而繪製「人類細胞圖譜」。<strong>空間轉錄體學</strong>更進一步，同時知道每個細胞在組織中的位置。</p>
+
+  <h3><span class="num">3</span>精準醫療</h3>
+  <p>同一種藥，對某些人有效、對某些人無效甚至有害，部分原因在於基因差異。<strong>精準醫療</strong>就是根據每個人的基因、環境和生活方式量身訂做治療。</p>
+  <ul>
+    <li><strong>藥物基因體學</strong>：例如帶有 HLA-B*1502 基因型的人，服用抗癲癇藥卡馬西平容易引起嚴重的皮膚反應（史蒂文生氏-強生症候群）。這個基因型在包括台灣在內的東南亞與華人族群較常見，台灣研究團隊的發現促成了用藥前先做基因檢測的做法。</li>
+    <li><strong>癌症標靶藥物</strong>：先定序腫瘤，找出驅動癌症的突變（如 EGFR、HER2），再選擇對應的標靶藥。</li>
+    <li><strong>液態切片</strong>：從血液中偵測腫瘤釋放的 DNA 碎片，追蹤癌症。</li>
+  </ul>
+
+  <h3><span class="num">4</span>AI 解開蛋白質折疊之謎</h3>
+  <p>還記得「形狀決定功能」嗎？從胺基酸序列預測蛋白質的立體形狀，是困擾生物學界 50 年的大難題。用實驗方法（X 光晶體學、冷凍電子顯微鏡）解一個結構，可能要花好幾年。</p>
+  <p>2020 年，Google DeepMind 的 <strong>AlphaFold 2</strong> 在國際蛋白質結構預測競賽（CASP14）中，預測準確度達到接近實驗的水準。2021 年起，團隊公開了超過 2 億個蛋白質的預測結構，幾乎涵蓋所有已知蛋白質。</p>
+  <p>2024 年諾貝爾化學獎一半頒給 DeepMind 的哈薩比斯（Demis Hassabis）與強珀（John Jumper），另一半頒給美國華盛頓大學的貝克（David Baker），表彰他用電腦從頭<strong>設計</strong>自然界不存在的全新蛋白質。</p>
+  <div class="box fact"><span class="h">AI 正在改變生技</span><p>AI 目前被用於：預測蛋白質結構與交互作用、設計新抗體與酵素、篩選藥物候選分子、分析醫學影像、解讀基因變異、自動化實驗室。大型「DNA 語言模型」甚至嘗試像學習人類語言一樣學習基因體的「語法」。這也帶來新的問題：同樣的工具若被濫用，是否可能降低設計有害生物的門檻？這是生物安全領域正在積極討論的議題。</p></div>
+
+  <h3><span class="num">5</span><span class="lv lv3">專業</span> 合成生物學</h3>
+  <p>如果說基因工程是「修改」生命，<strong>合成生物學</strong>就是用工程思維「設計與建造」生命系統：把基因元件標準化成像電子零件一樣的「生物積木」，組合出具有特定功能的基因線路。</p>
+  <ul>
+    <li>2000 年：科學家在大腸桿菌中打造出「基因開關」與「基因振盪器」，被視為合成生物學的起點。</li>
+    <li>2010 年：美國文特爾研究所（JCVI）合成出完整的細菌基因體，並放入另一個細菌中「開機」，創造出 JCVI-syn1.0。</li>
+    <li>瘧疾藥物青蒿素：原本從植物萃取，科學家把整條合成路徑裝進酵母，讓酵母生產青蒿素的前驅物。</li>
+    <li>國際基因工程機器設計競賽（iGEM）：全球大學生與高中生組隊設計生物系統，是入門合成生物學的好舞台。</li>
+  </ul>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="2" data-explain="AlphaFold 從胺基酸序列預測蛋白質立體結構，2024 年獲諾貝爾化學獎。">
+      <div class="q">AlphaFold 主要解決什麼問題？</div>
+      <button class="opt">DNA 定序</button><button class="opt">細菌培養</button><button class="opt">預測蛋白質的立體結構</button><button class="opt">製造疫苗</button>
+    </div>
+    <div class="quiz" data-answer="0" data-explain="轉錄體學研究全部 RNA，反映當下哪些基因正在表現。">
+      <div class="q">想知道某個組織「此刻」打開了哪些基因，最適合用哪種體學？</div>
+      <button class="opt">轉錄體學</button><button class="opt">基因體學</button><button class="opt">化石學</button><button class="opt">天文學</button>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="c20" data-unit="單元五　應用與前沿" data-title="生物倫理與生物安全" data-level="2">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv1">入門</span><span class="lv lv2">進階</span><span>約 20 分鐘</span></div>
+    <h2>生物倫理與生物安全</h2>
+    <p class="lead">科學告訴我們「能不能做」，倫理幫助我們思考「該不該做」。生技越強大，這個問題就越重要。</p>
+  </div>
+
+  <h3><span class="num">1</span>生物倫理學</h3>
+  <div class="etym"><span class="hole"></span>
+    <div class="tag">生物倫理學 <span class="en">Bioethics</span></div>
+    <div class="roots"><span><b>bios</b> 生命</span><span><b>ēthos</b>（希臘文）習俗、品格</span></div>
+    <p>1970 年美國生化學家波特（Van Rensselaer Potter）提出，他希望建立一座連接生物科學與人文價值的「通往未來的橋」。</p>
+  </div>
+  <p>醫學與研究倫理常用的四大原則：</p>
+  <ul>
+    <li><strong>尊重自主</strong>：參與研究或治療必須在充分了解後自願同意（<strong>知情同意</strong>）。</li>
+    <li><strong>不傷害</strong>：避免造成傷害。</li>
+    <li><strong>行善</strong>：以對人有益為目標。</li>
+    <li><strong>正義</strong>：利益與風險公平分配，不剝削弱勢族群。</li>
+  </ul>
+  <p>這些原則來自慘痛的教訓：二戰期間納粹的人體實驗促成 1947 年的《紐倫堡守則》；美國政府在 1932 到 1972 年間進行的塔斯基吉梅毒研究中，研究人員刻意不告知、不治療數百位非裔男性，直到媒體揭露才停止。</p>
+  <div class="box fact"><span class="h">海拉細胞的故事</span><p>1951 年，美國非裔女性海瑞塔·拉克斯（Henrietta Lacks）因子宮頸癌就醫，醫師在她不知情下取走癌細胞培養。這些細胞竟然能無限分裂，成為第一個「不死」的人類細胞株 HeLa，對小兒麻痺疫苗、癌症研究、基因定位等貢獻巨大，但她的家人數十年後才知道。這個故事推動了對檢體使用同意與基因隱私的重視。</p></div>
+
+  <h3><span class="num">2</span>基因編輯嬰兒事件</h3>
+  <p>2018 年 11 月，中國科學家賀建奎宣布，他用 CRISPR 編輯了胚胎的 CCR5 基因（HIV 進入細胞需要的受體之一），誕生了一對雙胞胎女嬰，聲稱讓她們能抵抗愛滋病。這引發全球科學界強烈譴責，原因包括：</p>
+  <ul>
+    <li>沒有醫療上的必要（有其他方法能避免 HIV 傳給孩子）。</li>
+    <li>技術不成熟，有脫靶與「嵌合」（只有部分細胞被編輯）的風險，而且結果顯示編輯並不完全符合預期。</li>
+    <li>編輯的是<strong>生殖細胞系</strong>，改變會遺傳給未來世代，影響無法收回。</li>
+    <li>知情同意程序有嚴重問題，並規避審查。</li>
+  </ul>
+  <p>他後來被法院判刑。這事件讓國際社會更加重視基因編輯的規範。</p>
+  <div class="tw"><table class="t">
+    <tr><th></th><th>體細胞編輯</th><th>生殖細胞系編輯</th></tr>
+    <tr><td>對象</td><td>病人身體的某些細胞</td><td>精子、卵或胚胎</td></tr>
+    <tr><td>會遺傳嗎</td><td>不會</td><td>會傳給後代</td></tr>
+    <tr><td>現況</td><td>已有核准療法（如 Casgevy）</td><td>多數國家禁止用於懷孕</td></tr>
+  </table></div>
+
+  <h3><span class="num">3</span>值得討論的問題</h3>
+  <p>這些問題沒有標準答案，試著和同學或家人討論：</p>
+  <ul>
+    <li>治療疾病與「增強能力」（讓孩子更高、更聰明）的界線在哪裡？誰來決定？</li>
+    <li>如果基因治療一次要數百萬，只有富人負擔得起，會不會加深不平等？</li>
+    <li>保險公司或雇主能不能看你的基因檢測結果？（許多國家已立法禁止基因歧視。）</li>
+    <li>用 CRISPR「基因驅動」技術讓傳播瘧疾的蚊子族群崩潰，可能拯救數十萬人，但也可能影響生態系。該不該做？</li>
+    <li>我們該讓已滅絕的動物（如猛獁象、渡渡鳥）「復活」嗎？</li>
+  </ul>
+
+  <h3><span class="num">4</span>生物安全與生物保全</h3>
+  <p><strong>生物安全</strong>（biosafety）是保護人和環境不被意外傷害，<strong>生物保全</strong>（biosecurity）則是防止生物材料或知識被刻意濫用。實驗室依照處理的病原危險程度分為四級：</p>
+  <div class="tw"><table class="t">
+    <tr><th>等級</th><th>處理對象例子</th><th>防護措施</th></tr>
+    <tr><td>BSL-1</td><td>不致病的大腸桿菌實驗株、酵母</td><td>一般實驗室規範、洗手、實驗衣</td></tr>
+    <tr><td>BSL-2</td><td>一般致病菌、流感病毒等</td><td>生物安全櫃、限制進出、手套與護目</td></tr>
+    <tr><td>BSL-3</td><td>結核菌、新冠病毒（培養時）</td><td>負壓實驗室、呼吸防護、雙門</td></tr>
+    <tr><td>BSL-4</td><td>伊波拉病毒等</td><td>全身正壓防護衣、獨立建築、嚴格消毒</td></tr>
+  </table></div>
+  <p>另外，國際《生物多樣性公約》下的《卡塔赫納生物安全議定書》規範基改生物的跨國移動，《禁止生物武器公約》自 1975 年生效，禁止研發與持有生物武器。</p>
+  <div class="box analogy"><span class="h">給未來科學家的話</span><p>科技本身沒有好壞，但使用它的人有選擇。一位好的生技人，不只要會做實驗，還要能向大眾清楚說明自己在做什麼、為什麼值得做、有什麼風險。</p></div>
+
+  <div class="quiz-wrap"><div class="h">小測驗</div>
+    <div class="quiz" data-answer="1" data-explain="生殖細胞系編輯的改變會遺傳給後代。">
+      <div class="q">為什麼編輯胚胎比編輯病人的血液細胞更具爭議？</div>
+      <button class="opt">胚胎比較小不好操作</button><button class="opt">改變會遺傳給後代</button><button class="opt">血液細胞沒有 DNA</button><button class="opt">胚胎不能用 CRISPR</button>
+    </div>
+    <div class="quiz" data-answer="3" data-explain="知情同意指參與者在充分了解目的、風險、權利後自願同意。">
+      <div class="q">「知情同意」是指？</div>
+      <button class="opt">醫生知道就好</button><button class="opt">家長同意就好</button><button class="opt">簽了名就算，看不懂也沒關係</button><button class="opt">參與者充分了解後自願同意</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= APPENDIX ================= -->
+<section class="chapter" id="c21" data-unit="附錄" data-title="學習路線與生技職涯" data-level="1">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv1">入門</span><span class="lv lv3">專業</span></div>
+    <h2>學習路線與生技職涯</h2>
+    <p class="lead">讀完這門課，你已經有了完整的地圖。接下來怎麼走？</p>
+  </div>
+
+  <h3><span class="num">1</span>由淺入深的學習路線</h3>
+  <div class="tl">
+    <div class="ev"><span class="y">國中階段</span><p>打好自然科基礎：細胞、遺傳、生殖、演化、生態。多做觀察記錄，例如自己用手機加簡易鏡頭看洋蔥表皮細胞，或在家做「萃取香蕉 DNA」實驗（香蕉泥＋洗碗精＋鹽水，過濾後倒入冰的酒精，就能看到白色絲狀的 DNA）。</p></div>
+    <div class="ev"><span class="y">高中階段</span><p>生物、化學都很重要，特別是有機化學與生物化學的基礎；數學的機率統計對遺傳學、生物資訊很有用。可以參加科展、生物奧林匹亞、iGEM 高中組，或暑期大學實驗室體驗營。開始學一點程式（Python）。</p></div>
+    <div class="ev"><span class="y">大學階段</span><p>核心課程：普通生物、普通化學、有機化學、生物化學、分子生物學、細胞生物學、遺傳學、微生物學、免疫學、生物統計。進階選修：生物資訊、生物程序工程、藥理學、基因體學。盡早進入實驗室做專題研究。</p></div>
+    <div class="ev"><span class="y">研究所與專業</span><p>選定方向深入：例如癌症生物學、神經科學、合成生物學、計算生物學、藥物開發。學會閱讀與撰寫英文論文，熟悉實驗設計與統計。產業端還可以學習法規科學、智慧財產、生技管理。</p></div>
+  </div>
+
+  <h3><span class="num">2</span>生技領域有哪些工作？</h3>
+  <div class="tw"><table class="t">
+    <tr><th>類型</th><th>職位例子</th><th>需要的能力</th></tr>
+    <tr><td>研究開發</td><td>研究員、藥物化學家、蛋白質工程師</td><td>實驗技術、實驗設計、解決問題</td></tr>
+    <tr><td>計算與資料</td><td>生物資訊工程師、計算生物學家、AI 藥物設計</td><td>程式、統計、機器學習、生物知識</td></tr>
+    <tr><td>製造與品質</td><td>製程工程師、品保（QA）、品管（QC）</td><td>GMP、細節嚴謹、流程管理</td></tr>
+    <tr><td>臨床</td><td>臨床研究專員（CRA）、臨床試驗協調員</td><td>溝通、法規、醫學知識</td></tr>
+    <tr><td>法規與智財</td><td>法規事務專員、專利工程師或專利師</td><td>讀法規、寫文件、跨領域理解</td></tr>
+    <tr><td>商業</td><td>業務、產品經理、商業開發、生技投資分析</td><td>科學理解加上商業頭腦</td></tr>
+    <tr><td>醫療檢驗</td><td>醫檢師、遺傳諮詢師</td><td>專業證照、與病人溝通</td></tr>
+    <tr><td>傳播與教育</td><td>科學記者、科普作家、教師</td><td>把複雜的事講清楚</td></tr>
+  </table></div>
+
+  <h3><span class="num">3</span>自學資源</h3>
+  <ul>
+    <li><strong>Khan Academy</strong>（可汗學院）：免費生物課程，有中文字幕。</li>
+    <li><strong>HHMI BioInteractive</strong>：美國霍華休斯醫學研究所的免費動畫與互動教材，品質極高。</li>
+    <li><strong>DNA Learning Center</strong>（冷泉港實驗室）：有大量 DNA 動畫。</li>
+    <li><strong>NCBI</strong> 與 <strong>PDB</strong>：真實的研究資料庫，可以搜尋任何基因或看蛋白質 3D 結構。</li>
+    <li><strong>經典入門書</strong>：《基因：人類最親密的歷史》（慕克吉）、《自私的基因》（道金斯）、《破解基因碼的人》（艾薩克森寫道納的傳記）、《雙螺旋》（華生的回憶錄，也可搭配富蘭克林的傳記一起看，對照不同觀點）。</li>
+    <li><strong>課本等級</strong>：Campbell Biology（坎培爾生物學，大一經典）、Alberts《細胞分子生物學》（專業等級）、Lehninger《生物化學原理》。</li>
+  </ul>
+  <div class="box fact"><span class="h">學習建議</span><p>學生物不是背名詞，而是理解「結構決定功能」「資訊如何流動」「演化如何塑造一切」這幾條貫穿所有章節的大原則。遇到新名詞時，拆開字根、問「為什麼叫這個名字」，你會發現很多名詞都在告訴你它的功能或發現故事。</p></div>
+</section>
+
+<section class="chapter" id="c22" data-unit="附錄" data-title="名詞字源辭典" data-level="1">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv1">工具</span></div>
+    <h2>名詞字源辭典</h2>
+    <p class="lead">課程中出現的重要名詞，連同它們名字的由來。可以用中文或英文搜尋。</p>
+  </div>
+  <input type="text" id="glossQ" placeholder="搜尋名詞，例如：粒線體、CRISPR、vaccine" aria-label="搜尋名詞">
+  <div class="readout" id="glossCount"></div>
+  <div id="glossList"></div>
+</section>
+
+<section class="chapter" id="c23" data-unit="附錄" data-title="生物技術大事年表" data-level="1">
+  <div class="ch-head">
+    <div class="meta"><span class="lv lv1">工具</span></div>
+    <h2>生物技術大事年表</h2>
+    <p class="lead">從顯微鏡到 AI，四百年的生命科學簡史。</p>
+  </div>
+  <div class="tl" id="timeline"></div>
+</section>
+</div></main>
+</div>
+<script>
+(function(){
+"use strict";
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+/* ================= NAVIGATION ================= */
+const chapters=$$('.chapter');
+const done=new Set();
+const toc=$('#toc');
+let lastUnit=null, html='';
+chapters.forEach((c,i)=>{
+  const u=c.dataset.unit;
+  if(u!==lastUnit){html+=`<h4>${u}</h4>`;lastUnit=u;}
+  html+=`<a href="#${c.id}" data-id="${c.id}"><span class="n">${i}</span><span>${c.dataset.title}</span></a>`;
+  const prev=chapters[i-1], next=chapters[i+1];
+  const foot=document.createElement('div');foot.className='ch-foot';
+  foot.innerHTML=`<div>${prev?`<a class="btn" href="#${prev.id}">上一課</a>`:''}</div>
+    <button class="btn done-btn" data-id="${c.id}">完成本課</button>
+    <div>${next?`<a class="btn pri" href="#${next.id}" style="text-decoration:none">下一課：${next.dataset.title}</a>`:''}</div>`;
+  c.appendChild(foot);
+});
+toc.innerHTML=html;
+
+function updateProgress(){
+  const n=chapters.length;
+  $('#progBar').style.width=(done.size/n*100)+'%';
+  $('#progTxt').textContent=`${done.size}/${n} 課`;
+  $$('.toc a').forEach(a=>a.classList.toggle('done',done.has(a.dataset.id)));
+  $$('.done-btn').forEach(b=>{const d=done.has(b.dataset.id);b.classList.toggle('is-done',d);b.textContent=d?'已完成 ✓':'完成本課';});
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.done-btn'); if(!b)return;
+  const id=b.dataset.id; done.has(id)?done.delete(id):done.add(id); updateProgress();
+});
+
+function show(id){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=id;
+  const target=document.getElementById(id);
+  if(!target||!target.classList.contains('chapter'))return;
+  chapters.forEach(c=>c.classList.toggle('show',c===target));
+  $$('.toc a').forEach(a=>a.classList.toggle('on',a.dataset.id===id));
+  closeMenu();
+  window.scrollTo(0,0);
+  const on=$('.toc a.on'); if(on) on.scrollIntoView({block:'nearest'});
+}
+function route(){show((location.hash||'#c0').slice(1));}
+window.addEventListener('hashchange',route);
+
+const menuBtn=$('#menuBtn'), scrim=$('#scrim');
+function closeMenu(){toc.classList.remove('open');scrim.classList.remove('open');}
+menuBtn.addEventListener('click',()=>{toc.classList.add('open');scrim.classList.add('open');});
+scrim.addEventListener('click',closeMenu);
+
+$('#themeBtn').addEventListener('click',()=>{
+  const root=document.documentElement;
+  const isDark=root.dataset.theme?root.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+  root.dataset.theme=isDark?'light':'dark';
+  refreshColors();
+  $$('.stepper').forEach(s=>s._render&&s._render());
+});
+
+/* ================= QUIZ ================= */
+$$('.quiz').forEach(q=>{
+  const ans=+q.dataset.answer, opts=$$('button.opt',q);
+  const ex=document.createElement('div');ex.className='ex';q.appendChild(ex);
+  opts.forEach((b,i)=>b.addEventListener('click',()=>{
+    if(q.classList.contains('answered'))return;
+    q.classList.add('answered');
+    opts[ans].classList.add('right');
+    if(i!==ans)b.classList.add('wrong');
+    ex.textContent=(i===ans?'答對了！':'再想想：正確答案是「'+opts[ans].textContent+'」。')+q.dataset.explain;
+  }));
+});
+
+/* ================= HELIX ================= */
+let C={};
+function refreshColors(){C={A:css('--A'),T:css('--T'),C:css('--C'),G:css('--G'),ink:css('--ink'),ink2:css('--ink-2'),violet:css('--violet')};}
+refreshColors();
+const comp={A:'T',T:'A',C:'G',G:'C'};
+const helixSeq='ATGCGTACCGATTACAGGCTAGCATCGGATCCATGCAAGT';
+function makeHelix(canvas,vertical){
+  const ctx=canvas.getContext('2d');let phase=0,running=true;
+  function size(){const r=canvas.getBoundingClientRect(),d=window.devicePixelRatio||1;if(r.width===0)return false;canvas.width=r.width*d;canvas.height=r.height*d;ctx.setTransform(d,0,0,d,0,0);return true;}
+  function draw(){
+    const r=canvas.getBoundingClientRect();if(r.width===0)return;
+    const W=r.width,H=r.height;ctx.clearRect(0,0,W,H);
+    const len=vertical?H:W, across=vertical?W:H;
+    const N=vertical?Math.floor(H/18):Math.floor(W/20), step=len/N, amp=Math.min(across*0.32,vertical?90:80), mid=across/2;
+    const pts=[];
+    for(let i=0;i<=N;i++){
+      const t=i*0.45+phase, a=Math.sin(t)*amp, z=Math.cos(t);
+      const b=helixSeq[i%helixSeq.length];
+      pts.push({p:i*step+step/2,a,z,b});
+    }
+    const P=(along,off)=>vertical?[mid+off,along]:[along,mid+off];
+    // rungs
+    pts.forEach(o=>{
+      const [x1,y1]=P(o.p,o.a),[x2,y2]=P(o.p,-o.a),[xm,ym]=P(o.p,0);
+      ctx.lineWidth=vertical?4:5;ctx.globalAlpha=0.55+0.35*Math.abs(o.z);
+      ctx.strokeStyle=C[o.b];ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(xm,ym);ctx.stroke();
+      ctx.strokeStyle=C[comp[o.b]];ctx.beginPath();ctx.moveTo(xm,ym);ctx.lineTo(x2,y2);ctx.stroke();
+    });
+    // backbones
+    [1,-1].forEach(sg=>{
+      ctx.globalAlpha=1;ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;ctx.beginPath();
+      pts.forEach((o,i)=>{const [x,y]=P(o.p,o.a*sg);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.stroke();
+      pts.forEach(o=>{const z=o.z*sg;const [x,y]=P(o.p,o.a*sg);ctx.globalAlpha=0.35+0.65*(z+1)/2;ctx.fillStyle=C.ink;ctx.beginPath();ctx.arc(x,y,2.5+2*(z+1)/2,0,6.3);ctx.fill();});
+    });
+    ctx.globalAlpha=1;
+  }
+  function loop(){if(running&&canvas.offsetParent!==null){phase+=0.018;draw();}requestAnimationFrame(loop);}
+  size();draw();
+  window.addEventListener('resize',()=>{size();draw();});
+  if(!reduce)requestAnimationFrame(loop);
+  return {toggle(){running=!running;return running;},resize(){size();draw();}};
+}
+const heroH=makeHelix($('#heroHelix'),true);
+const bigH=makeHelix($('#helixBig'),false);
+$('#helixPause').addEventListener('click',e=>{e.target.textContent=bigH.toggle()?'暫停':'繼續旋轉';});
+window.addEventListener('hashchange',()=>setTimeout(()=>{heroH.resize();bigH.resize();},30));
+
+/* ================= SCALE ================= */
+const scaleData=[
+ ['🧍','1.7 公尺','人類','你的身高大約是 1.7 公尺，由約 30 兆個細胞組成。'],
+ ['🥚','約 15 公分','鴕鳥蛋（一個細胞！）','蛋黃其實是一個巨大的卵細胞，鴕鳥蛋黃是最大的單一細胞之一。'],
+ ['〰️','約 80 微米','頭髮的寬度','肉眼勉強能看到的極限大約是 0.1 公釐（100 微米）。'],
+ ['🔵','約 10–30 微米','人類皮膚細胞','需要光學顯微鏡才看得到。大約 5 個排起來才等於一根頭髮寬。'],
+ ['🔴','約 7 微米','紅血球','沒有細胞核，呈中間凹陷的圓盤狀，方便攜帶氧氣。'],
+ ['🦠','約 2 微米','大腸桿菌（細菌）','一個人類細胞的長度，可以並排好幾個細菌。'],
+ ['🧫','約 100 奈米','流感病毒','比細菌小約 20 倍，要用電子顯微鏡才看得到。'],
+ ['🧶','約 5 奈米','一個蛋白質（如血紅素）','由幾千個原子組成的分子機器。'],
+ ['🧬','2 奈米','DNA 雙螺旋的寬度','非常細，但一個細胞裡的 DNA 拉直有 2 公尺長。']];
+function scale(){const d=scaleData[+$('#scaleR').value];$('#scaleIcon').textContent=d[0];$('#scaleSize').textContent=d[1];$('#scaleName').textContent=d[2];$('#scaleNote').textContent=d[3];}
+$('#scaleR').addEventListener('input',scale);scale();
+
+/* ================= CELL ================= */
+const orgInfo={
+ membrane:['細胞膜','Cell membrane','控制物質進出細胞，由雙層磷脂質構成。','工廠的圍牆與門禁警衛'],
+ nucleus:['細胞核','Nucleus（拉丁文「果核」）','儲存 DNA，是細胞的控制中心。1831 年由布朗（Robert Brown）命名。','廠長辦公室，保險箱裡鎖著全廠的設計圖'],
+ nucleolus:['核仁','Nucleolus','位於細胞核內，負責製造核糖體的零件。','訓練新生產線人員的教室'],
+ mito:['粒線體','Mitochondrion','進行細胞呼吸，把葡萄糖的能量轉成 ATP。','發電廠'],
+ rer:['粗糙內質網','Rough ER（reticulum 小網子）','表面附著核糖體，合成要送出細胞或送到膜上的蛋白質。','附有組裝站的輸送帶'],
+ ribo:['核糖體','Ribosome','讀取 mRNA，把胺基酸接成蛋白質。原核與真核細胞都有。','生產線上的組裝機器'],
+ golgi:['高基氏體','Golgi apparatus','把蛋白質加工、分類、包裝後送到目的地。1898 年以義大利學者高基（Camillo Golgi）命名。','包裝與出貨部'],
+ lyso:['溶體','Lysosome（lysis 分解＋soma 小體）','含有消化酵素，分解老舊胞器與吞入的外來物。主要在動物細胞。','清潔隊與資源回收站'],
+ cyto:['細胞質','Cytoplasm（kytos 細胞＋plasma 被塑成的物質）','充滿細胞的膠狀液體，許多化學反應在此進行。','廠區內的地面與空氣'],
+ wall:['細胞壁','Cell wall','位於細胞膜外，主要由纖維素構成，支撐並保護植物細胞。虎克在軟木塞看到的就是它。','工廠外面堅固的水泥外牆'],
+ chloro:['葉綠體','Chloroplast','進行光合作用，把光能轉成糖。有自己的 DNA，也被認為源自古代共生的藍綠菌。','屋頂上的太陽能板加食品工廠'],
+ vacuole:['中央液泡','Central vacuole（vacuus 空的）','儲存水分、養分與廢物，撐起細胞。植物缺水時液泡縮小，葉子就會垂下。','大型儲水塔與倉庫']};
+function cellSvg(type){
+  const mito=(x,y,r)=>`<g class="org" data-o="mito" transform="translate(${x},${y}) rotate(${r})"><ellipse rx="22" ry="11" fill="#F6C9B8" stroke="var(--T)" stroke-width="2"/><path d="M-16 0 q4 -8 8 0 t8 0 t8 0 t8 0" fill="none" stroke="var(--T)" stroke-width="1.5"/></g>`;
+  const chloro=(x,y,r)=>`<g class="org" data-o="chloro" transform="translate(${x},${y}) rotate(${r})"><ellipse rx="24" ry="13" fill="#9BD6A6" stroke="var(--A)" stroke-width="2"/>${[-12,-4,4,12].map(dx=>`<rect x="${dx-3}" y="-7" width="6" height="14" rx="2" fill="var(--A)"/>`).join('')}</g>`;
+  const golgi=(x,y)=>`<g class="org" data-o="golgi" transform="translate(${x},${y})">${[0,8,16,24].map((d,i)=>`<path d="M${-26+i*2} ${d} q${26-i*2} -14 ${52-i*4} 0" fill="none" stroke="var(--G)" stroke-width="5" stroke-linecap="round"/>`).join('')}<circle cx="32" cy="4" r="4" fill="var(--G)"/><circle cx="34" cy="20" r="3" fill="var(--G)"/></g>`;
+  const rer=(x,y)=>{let d='',dots='';for(let i=0;i<4;i++){const yy=y+i*12;d+=`<path d="M${x} ${yy} q10 -8 20 0 t20 0 t20 0" fill="none" stroke="var(--C)" stroke-width="3"/>`;for(let k=0;k<6;k++)dots+=`<circle cx="${x+4+k*11}" cy="${yy-4+(k%2)*6}" r="1.8" fill="var(--ink)"/>`;}return `<g class="org" data-o="rer">${d}${dots}</g>`;};
+  const ribos=(pts)=>`<g class="org" data-o="ribo">${pts.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="3.2" fill="var(--ink)"/>`).join('')}<rect x="${pts[0][0]-10}" y="${pts[0][1]-10}" width="1" height="1" fill="none"/></g>`;
+  if(type==='animal'){
+    return `<svg viewBox="0 0 400 280" role="img" aria-label="動物細胞示意圖">
+      <g class="org" data-o="cyto"><ellipse cx="200" cy="140" rx="182" ry="122" fill="var(--violet-soft)"/></g>
+      <g class="org" data-o="membrane"><ellipse cx="200" cy="140" rx="182" ry="122" fill="none" stroke="var(--violet)" stroke-width="5"/></g>
+      <g class="org" data-o="nucleus"><circle cx="185" cy="135" r="48" fill="#D9D2F2" stroke="var(--violet)" stroke-width="3"/></g>
+      <g class="org" data-o="nucleolus"><circle cx="195" cy="128" r="14" fill="var(--violet)"/></g>
+      ${rer(240,95)}${golgi(290,195)}${mito(80,95,-20)}${mito(110,205,15)}${mito(320,120,70)}
+      <g class="org" data-o="lyso"><circle cx="220" cy="228" r="11" fill="#F2B8CB" stroke="var(--safranin)" stroke-width="2"/><circle cx="60" cy="150" r="9" fill="#F2B8CB" stroke="var(--safranin)" stroke-width="2"/></g>
+      ${ribos([[130,70],[150,215],[340,170],[95,140],[260,60],[180,200]])}
+    </svg>`;
+  }
+  return `<svg viewBox="0 0 400 280" role="img" aria-label="植物細胞示意圖">
+    <g class="org" data-o="wall"><rect x="8" y="8" width="384" height="264" rx="14" fill="#CFE7C9" stroke="var(--A)" stroke-width="6"/></g>
+    <g class="org" data-o="cyto"><rect x="22" y="22" width="356" height="236" rx="10" fill="var(--violet-soft)"/></g>
+    <g class="org" data-o="membrane"><rect x="22" y="22" width="356" height="236" rx="10" fill="none" stroke="var(--violet)" stroke-width="3"/></g>
+    <g class="org" data-o="vacuole"><rect x="150" y="60" width="190" height="150" rx="40" fill="#CFE3F7" stroke="var(--C)" stroke-width="2.5"/></g>
+    <g class="org" data-o="nucleus"><circle cx="85" cy="85" r="38" fill="#D9D2F2" stroke="var(--violet)" stroke-width="3"/></g>
+    <g class="org" data-o="nucleolus"><circle cx="92" cy="80" r="11" fill="var(--violet)"/></g>
+    ${chloro(75,195,20)}${chloro(200,238,0)}${chloro(355,95,80)}${chloro(355,215,95)}${chloro(150,35,0)}
+    ${mito(120,145,40)}${golgi(250,230)}${rer(130,110).replace('<g class="org" data-o="rer">','<g class="org" data-o="rer" transform="translate(-90,0) scale(0.8) translate(0,20)">')}
+    ${ribos([[60,140],[130,245],[290,40],[40,240],[120,60]])}
+  </svg>`;
+}
+function renderCell(type){
+  $('#cellSvg').innerHTML=cellSvg(type);
+  $$('#cellSvg .org').forEach(g=>{
+    g.setAttribute('tabindex','0');g.setAttribute('role','button');g.style.cursor='pointer';
+    const o=orgInfo[g.dataset.o];g.setAttribute('aria-label',o[0]);
+    const act=e=>{e.stopPropagation();pick(g.dataset.o);};
+    g.addEventListener('click',act);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();act(e);}});
+  });
+}
+function pick(k){
+  const o=orgInfo[k];
+  $$('#cellSvg .org').forEach(g=>g.style.opacity=g.dataset.o===k||g.dataset.o==='cyto'||g.dataset.o==='wall'?1:0.45);
+  $('#cellInfo').innerHTML=`<span class="h">${o[0]} <span class="en" style="font-weight:400">${o[1]}</span></span><p>${o[2]}</p><p><strong>工廠比喻：</strong>${o[3]}</p>`;
+}
+$$('#cellLab [data-cell]').forEach(b=>b.addEventListener('click',()=>{
+  $$('#cellLab [data-cell]').forEach(x=>x.classList.toggle('sel',x===b));renderCell(b.dataset.cell);
+  $('#cellInfo').innerHTML='<span class="h">點一個構造開始</span><p>'+(b.dataset.cell==='plant'?'植物細胞多了細胞壁、葉綠體和大型中央液泡。':'動物細胞沒有細胞壁，形狀比較有彈性。')+'</p>';
+}));
+renderCell('animal');
+
+/* ================= ENZYME ================= */
+const enz=$('#enzSvg');
+function enzBase(){
+  enz.innerHTML=`<path d="M220 40 H380 V160 H220 V122 L262 100 L220 78 Z" fill="var(--violet)" opacity=".9"/>
+  <text x="320" y="190" text-anchor="middle" font-size="14" fill="var(--ink-2)">酵素</text>
+  <text x="235" y="30" font-size="12" fill="var(--ink-2)">活性部位 ↓</text>
+  <g id="sub"></g>`;
+}
+enzBase();
+function animate(el,frames,dur){return el.animate(frames,{duration:reduce?1:dur,fill:'forwards',easing:'ease-in-out'}).finished;}
+let enzBusy=false;
+$('#enzGood').addEventListener('click',async()=>{
+  if(enzBusy)return;enzBusy=true;enzBase();const s=$('#sub',enz);
+  s.innerHTML=`<g id="k"><rect x="-44" y="-12" width="44" height="24" fill="var(--G)"/><path d="M0 -22 L42 0 L0 22 Z" fill="var(--A)"/></g>`;
+  const k=$('#k',enz);
+  $('#enzTxt').textContent='受質靠近活性部位……';
+  await animate(k,[{transform:'translate(60px,100px)'},{transform:'translate(220px,100px)'}],1200);
+  $('#enzTxt').textContent='形狀吻合！酵素稍微變形抱緊受質（誘導契合），化學鍵被切開。';
+  await animate(enz.querySelector('path'),[{transform:'scale(1)'},{transform:'scale(1.03)'},{transform:'scale(1)'}],500);
+  k.remove();
+  s.innerHTML=`<rect id="p1" x="-44" y="-12" width="44" height="24" fill="var(--G)"/><path id="p2" d="M0 -22 L42 0 L0 22 Z" fill="var(--A)"/>`;
+  const p1=$('#p1',enz),p2=$('#p2',enz);
+  animate(p1,[{transform:'translate(220px,100px)'},{transform:'translate(90px,45px) rotate(-20deg)'}],900);
+  await animate(p2,[{transform:'translate(220px,100px)'},{transform:'translate(120px,160px) rotate(30deg)'}],900);
+  $('#enzTxt').textContent='產物離開，酵素本身完全沒變，可以立刻處理下一個受質。';enzBusy=false;
+});
+$('#enzBad').addEventListener('click',async()=>{
+  if(enzBusy)return;enzBusy=true;enzBase();const s=$('#sub',enz);
+  s.innerHTML=`<circle id="k" r="24" fill="var(--C)"/>`;const k=$('#k',enz);
+  $('#enzTxt').textContent='另一種分子靠近……';
+  await animate(k,[{transform:'translate(60px,100px)'},{transform:'translate(194px,100px)'},{transform:'translate(80px,110px)'}],1500);
+  $('#enzTxt').textContent='形狀不合，進不去活性部位，所以不會反應。這就是酵素的專一性。';enzBusy=false;
+});
+function temp(){
+  const T=+$('#tempR').value;let a=T<=37?Math.exp(-Math.pow((T-37)/16,2)):Math.exp(-Math.pow((T-37)/7,2));
+  a=Math.round(a*100);$('#tempV').textContent=T+'°C';$('#tempBar').style.width=a+'%';
+  $('#tempBar').style.background=T>45?'var(--T)':(T<20?'var(--C)':'var(--A)');
+  let m;
+  if(T<15)m='低溫：分子運動變慢，反應很慢，但酵素沒有被破壞，回溫就能恢復。這是冰箱能保存食物的原因。';
+  else if(T<33)m='溫度上升，分子碰撞變多，反應加快。';
+  else if(T<=40)m='最適溫度附近！人體酵素在約 37°C 時效率最高。';
+  else if(T<=50)m='過熱：酵素的立體形狀開始被破壞（變性），活性快速下降。';
+  else m='嚴重變性：酵素形狀被永久破壞，就算降溫也無法恢復，像煮熟的蛋。';
+  $('#tempTxt').textContent=`相對活性約 ${a}%。${m}`;
+}
+$('#tempR').addEventListener('input',temp);temp();
+
+/* ================= PUNNETT ================= */
+const gtypes=['YY','Yy','yy'];let P1='Yy',P2='Yy';
+function pbtn(host,get,set){host.innerHTML=gtypes.map(g=>`<button class="btn ${g===get()?'sel':''}" data-g="${g}">${g}（${g.includes('Y')?'黃':'綠'}）</button>`).join(' ');
+  $$('button',host).forEach(b=>b.addEventListener('click',()=>{set(b.dataset.g);punnett();}));}
+function pea(g){const yel=g.includes('Y');return `<span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:${yel?'#F2CE3A':'#6DB55B'};border:2px solid ${yel?'#B8940E':'#3D7D2E'};vertical-align:middle"></span>`;}
+function punnett(){
+  pbtn($('#punP1'),()=>P1,v=>P1=v);pbtn($('#punP2'),()=>P2,v=>P2=v);
+  const g1=[P1[0],P1[1]],g2=[P2[0],P2[1]],cnt={};let yel=0;
+  const sortG=(a,b)=>a===a.toUpperCase()&&b!==b.toUpperCase()?a+b:(b===b.toUpperCase()&&a!==a.toUpperCase()?b+a:a+b);
+  let t=`<table class="t" style="text-align:center"><tr><th style="text-align:center">♀＼♂</th>${g1.map(x=>`<th style="text-align:center">${x}</th>`).join('')}</tr>`;
+  g2.forEach(b=>{t+=`<tr><th style="text-align:center">${b}</th>`;g1.forEach(a=>{const g=sortG(a,b);cnt[g]=(cnt[g]||0)+1;if(g.includes('Y'))yel++;t+=`<td style="text-align:center">${pea(g)} <strong>${g}</strong></td>`;});t+='</tr>';});
+  $('#punGrid').innerHTML=t+'</table>';
+  const order=['YY','Yy','yy'].filter(k=>cnt[k]);
+  $('#punTxt').innerHTML=`基因型比例：${order.map(k=>`${k} × ${cnt[k]}`).join('、')}（共 4 格）<br>表現型：黃色 ${yel}/4（${yel*25}%），綠色 ${4-yel}/4（${(4-yel)*25}%）`;
+}
+punnett();
+
+/* ================= BASE PAIRING ================= */
+let pTop='',pAns='';
+const colorSeq=s=>s.split('').map(b=>`<span class="b${b}">${b}</span>`).join('');
+function newPair(){pTop=Array.from({length:8},()=>'ATCG'[Math.floor(Math.random()*4)]).join('');pAns='';drawPair();$('#pairMsg').textContent='點下方的鹼基按鈕，依序寫出互補股。';}
+function drawPair(){$('#pairTop').innerHTML=colorSeq(pTop);$('#pairAns').innerHTML=colorSeq(pAns)+'<span style="color:var(--rule)">'+'_'.repeat(8-pAns.length)+'</span>';}
+$('#pairBtns').innerHTML='ATCG'.split('').map(b=>`<button class="btn" data-b="${b}" style="color:var(--${b});font-weight:700;min-width:48px">${b}</button>`).join('');
+$$('#pairBtns button').forEach(btn=>btn.addEventListener('click',()=>{
+  if(pAns.length>=8)return;const b=btn.dataset.b,need=comp[pTop[pAns.length]];
+  if(b!==need){$('#pairMsg').textContent=`第 ${pAns.length+1} 個是 ${pTop[pAns.length]}，要配 ${need}。記得：A–T、C–G。`;return;}
+  pAns+=b;drawPair();
+  $('#pairMsg').textContent=pAns.length===8?'完成！完全正確。DNA 複製時，聚合酶就是這樣一個一個配對的。':'正確，繼續！';
+}));
+$('#pairUndo').addEventListener('click',()=>{pAns=pAns.slice(0,-1);drawPair();});
+$('#pairNew').addEventListener('click',newPair);newPair();
+
+/* ================= TRANSLATOR ================= */
+const B='TCAG',AA='FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG';
+const aaName={F:'苯丙胺酸',L:'白胺酸',S:'絲胺酸',Y:'酪胺酸',C:'半胱胺酸',W:'色胺酸',P:'脯胺酸',H:'組胺酸',Q:'麩醯胺酸',R:'精胺酸',I:'異白胺酸',M:'甲硫胺酸',T:'蘇胺酸',N:'天門冬醯胺',K:'離胺酸',V:'纈胺酸',A:'丙胺酸',D:'天門冬胺酸',E:'麩胺酸',G:'甘胺酸','*':'終止'};
+const code=c=>AA[B.indexOf(c[0])*16+B.indexOf(c[1])*4+B.indexOf(c[2])];
+const chip=(txt,sub,col)=>`<span style="display:inline-block;text-align:center;margin:3px;padding:4px 8px;border-radius:8px;background:${col};min-width:62px"><span class="dna-seq" style="font-weight:700">${txt}</span><br><small style="font-size:12px">${sub}</small></span>`;
+function translate(){
+  const raw=$('#transIn').value.toUpperCase().replace(/[^ATCG]/g,'');
+  const out=$('#transOut');
+  if(raw.length<3){out.innerHTML='<p class="readout">請輸入至少 3 個鹼基（只接受 A、T、C、G）。</p>';return;}
+  const tmpl=raw.split('').map(b=>comp[b]).join('');
+  const mrna=raw.replace(/T/g,'U');
+  const st=raw.indexOf('ATG');
+  let h=`<div class="readout">模板股（3'→5'，RNA 聚合酶實際讀的那股）：</div><div class="dna-seq">${colorSeq(tmpl)}</div>
+  <div class="readout">轉錄後的 mRNA（5'→3'）：</div><div class="dna-seq">${mrna.split('').map(b=>b==='U'?'<span class="bU">U</span>':`<span class="b${b}">${b}</span>`).join('')}</div>`;
+  if(st<0){out.innerHTML=h+'<p class="box warn" style="margin-top:10px">找不到起始密碼子 AUG（DNA 上的 ATG），核糖體不知道從哪裡開始讀，所以不會做出蛋白質。</p>';return;}
+  h+=`<div class="readout" style="margin-top:8px">從第 ${st+1} 個鹼基的 AUG 開始轉譯：</div><div>`;
+  const prot=[];let stopped=false;
+  for(let i=st;i+3<=raw.length;i+=3){
+    const c=raw.substr(i,3),a=code(c);
+    if(a==='*'){h+=chip(c.replace(/T/g,'U'),'終止','var(--safranin-soft)');stopped=true;break;}
+    prot.push(a);h+=chip(c.replace(/T/g,'U'),aaName[a]+(a==='M'&&prot.length===1?'（起始）':''),'var(--violet-soft)');
+  }
+  h+='</div>';
+  h+=`<p style="margin-top:8px"><strong>蛋白質（單字母代號）：</strong><span class="dna-seq">${prot.join('-')}</span>，共 ${prot.length} 個胺基酸。${stopped?'遇到終止密碼子，轉譯結束。':'沒有遇到終止密碼子（真實基因通常會有）。'}</p>`;
+  if(raw==='ATGGTGCACCTGACTCCTGTGGAGAAGTCT')h+='<p class="box warn">注意第 7 個密碼子：GAG 變成 GTG，麩胺酸（E）被換成纈胺酸（V）。醫學上習慣不算開頭的甲硫胺酸，所以稱為「第 6 號胺基酸」突變，這就是鐮刀型貧血症。</p>';
+  out.innerHTML=h;
+}
+$('#transIn').addEventListener('input',translate);
+$$('#transLab [data-ex]').forEach(b=>b.addEventListener('click',()=>{$('#transIn').value=b.dataset.ex;translate();}));
+translate();
+
+/* ================= BACTERIA GROWTH ================= */
+function fmtN(n){if(n>=1e8)return (n/1e8).toFixed(n>=1e10?0:1)+' 億';if(n>=1e4)return (n/1e4).toFixed(n>=1e6?0:1)+' 萬';return n.toLocaleString();}
+function grow(){
+  const k=+$('#growR').value,m=k*20,n=Math.pow(2,k);
+  $('#growT').textContent=m<60?`${m} 分鐘`:`${Math.floor(m/60)} 小時${m%60?` ${m%60} 分鐘`:''}`;
+  $('#growN').textContent=fmtN(n)+' 隻';
+  $('#growDots').innerHTML=n<=256?Array.from({length:n},()=>'<span style="width:10px;height:6px;border-radius:3px;background:var(--safranin);display:inline-block"></span>').join(''):'<span class="readout">數量太多，畫不下了！</span>';
+  let note='';
+  if(k===0)note='拖動滑桿，看看時間過去會發生什麼事。';
+  else if(k<=9)note='一開始看起來增加得不多……';
+  else if(k<=21)note='指數成長的可怕之處：每 20 分鐘就翻倍，數量突然爆炸。';
+  else if(k<36)note='只要一滴含菌的水，放在溫暖的地方幾小時，就能長出肉眼可見的菌落。這就是食物不能放在室溫太久的原因。';
+  else note='12 小時後超過 687 億隻。若條件永遠理想，不到兩天細菌總重量就會超過地球！現實中養分耗盡、廢物累積，成長必定停止。';
+  $('#growNote').textContent=note;
+}
+$('#growR').addEventListener('input',grow);grow();
+
+/* ================= STEPPERS ================= */
+const SV=(inner,vb='0 0 320 200')=>`<svg viewBox="${vb}" width="100%" style="max-width:460px" role="img">${inner}</svg>`;
+const T=(x,y,s,sz=12,col='var(--ink-2)',anchor='middle')=>`<text x="${x}" y="${y}" font-size="${sz}" fill="${col}" text-anchor="${anchor}">${s}</text>`;
+const chrCol=['var(--violet)','var(--safranin)','var(--violet)','var(--safranin)'],chrLen=[15,15,9,9];
+const X=(x,y,i,rot=0)=>`<g transform="translate(${x},${y}) rotate(${rot})" stroke="${chrCol[i]}" stroke-width="5" stroke-linecap="round"><line x1="-5" y1="${-chrLen[i]}" x2="5" y2="${chrLen[i]}"/><line x1="5" y1="${-chrLen[i]}" x2="-5" y2="${chrLen[i]}"/></g>`;
+const single=(x,y,i)=>`<line x1="${x}" y1="${y-chrLen[i]}" x2="${x}" y2="${y+chrLen[i]}" stroke="${chrCol[i]}" stroke-width="5" stroke-linecap="round"/>`;
+const chromatin=(cx,cy)=>`<path d="M${cx-22} ${cy-8} q8 -14 16 0 t16 0 t14 4" fill="none" stroke="var(--violet)" stroke-width="2"/><path d="M${cx-20} ${cy+10} q8 12 16 0 t16 0 t12 -6" fill="none" stroke="var(--safranin)" stroke-width="2"/><path d="M${cx-10} ${cy-22} q6 8 12 0 t12 2" fill="none" stroke="var(--safranin)" stroke-width="2"/><path d="M${cx-8} ${cy+22} q6 -8 14 0" fill="none" stroke="var(--violet)" stroke-width="2"/>`;
+const cellC='fill="var(--card)" stroke="var(--ink)" stroke-width="2.5"';
+const pole=(x,y)=>`<text x="${x}" y="${y+5}" font-size="16" text-anchor="middle" fill="var(--G)">✱</text>`;
+const spindle=(px,targets)=>targets.map(([x,y])=>`<line x1="${px}" y1="100" x2="${x}" y2="${y}" stroke="var(--rule)" stroke-width="1.2"/>`).join('');
+const virus=(x,y,r=9,col='var(--safranin)')=>`<g transform="translate(${x},${y})">${Array.from({length:8},(_,i)=>{const a=i*Math.PI/4;return `<line x1="0" y1="0" x2="${Math.cos(a)*(r+5)}" y2="${Math.sin(a)*(r+5)}" stroke="${col}" stroke-width="2"/>`;}).join('')}<circle r="${r}" fill="${col}"/></g>`;
+const Y=(x,y,rot=0,col='var(--violet)')=>`<path transform="translate(${x},${y}) rotate(${rot})" d="M0 12 V0 L-7 -9 M0 0 L7 -9" fill="none" stroke="${col}" stroke-width="3" stroke-linecap="round"/>`;
+const cellL=(x,y,r,label,fill='var(--paper-2)',stroke='var(--ink)')=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${fill}" stroke="${stroke}" stroke-width="2"/>${T(x,y+4,label,11,'var(--ink)')}`;
+const arrow=(x1,y1,x2,y2)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="var(--ink)" stroke-width="2" marker-end="url(#sa)"/>`;
+const defs=`<defs><marker id="sa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--ink)"/></marker></defs>`;
+const squig=(x,y,w,col='var(--safranin)')=>{let d=`M${x} ${y}`;for(let i=0;i<w;i+=10)d+=` q2.5 -6 5 0 t5 0`;return `<path d="${d}" fill="none" stroke="${col}" stroke-width="2.5"/>`;};
+
+const STEPS={
+ mitosis:[
+  [SV(`<circle cx="160" cy="100" r="82" ${cellC}/><circle cx="160" cy="100" r="42" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/>${chromatin(160,100)}`),'<b>間期：</b>細胞正常工作並長大，同時把 DNA 複製一份。此時 DNA 呈細絲狀的「染色質」，散在細胞核裡。細胞一生大部分時間都在間期。'],
+  [SV(`<circle cx="160" cy="100" r="82" ${cellC}/><circle cx="160" cy="100" r="42" fill="none" stroke="var(--violet)" stroke-width="2" stroke-dasharray="6 6"/>${X(140,85,0,20)}${X(178,92,1,-30)}${X(150,122,2,60)}${X(182,120,3,10)}${pole(92,100)}${pole(228,100)}`),'<b>前期：</b>染色質捲縮成粗短的「染色體」，每條由兩條相同的「姊妹染色分體」組成，形狀像 X。核膜開始消失，兩端出現紡錘絲的起點（中心體）。'],
+  [SV(`<circle cx="160" cy="100" r="82" ${cellC}/>${spindle(92,[[160,52],[160,84],[160,114],[160,146]])}${spindle(228,[[160,52],[160,84],[160,114],[160,146]])}${pole(92,100)}${pole(228,100)}${X(160,52,0,90)}${X(160,84,1,90)}${X(160,114,2,90)}${X(160,146,3,90)}<line x1="160" y1="22" x2="160" y2="178" stroke="var(--rule)" stroke-dasharray="3 4"/>`),'<b>中期：</b>所有染色體排列在細胞正中央的「赤道板」上，紡錘絲從兩極抓住每條染色體的中央（著絲點）。這是觀察和計數染色體最好的時機。'],
+  [SV(`<ellipse cx="160" cy="100" rx="110" ry="72" ${cellC}/>${spindle(62,[[105,55],[105,84],[105,114],[105,146]])}${spindle(258,[[215,55],[215,84],[215,114],[215,146]])}${pole(62,100)}${pole(258,100)}${[55,84,114,146].map((y,i)=>single(105,y,i)+single(215,y,i)).join('')}${T(160,105,'← 分開 →',12)}`),'<b>後期：</b>紡錘絲縮短，把每條染色體的兩條姊妹染色分體拉開，分別往兩極移動。兩邊得到的染色體完全一樣。'],
+  [SV(`<path d="M160 40 C100 10 30 40 30 100 C30 160 100 190 160 160 C220 190 290 160 290 100 C290 40 220 10 160 40 Z" ${cellC}/><circle cx="95" cy="100" r="34" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/><circle cx="225" cy="100" r="34" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/>${chromatin(95,100)}${chromatin(225,100)}`),'<b>末期：</b>染色體到達兩極後重新鬆開，兩個新的核膜形成。細胞中央開始向內凹陷。'],
+  [SV(`<circle cx="85" cy="100" r="68" ${cellC}/><circle cx="235" cy="100" r="68" ${cellC}/><circle cx="85" cy="100" r="32" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/><circle cx="235" cy="100" r="32" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/>${chromatin(85,100)}${chromatin(235,100)}`),'<b>細胞質分裂：</b>動物細胞從中間縊縮，植物細胞則在中間長出新的細胞板。最後得到兩個遺傳物質完全相同的子細胞。整個 M 期約 1 小時。']
+ ],
+ immune:[
+  [SV(`${defs}${[40,100,160,220,280].map(x=>cellL(x,165,24,'細胞')).join('')}${virus(60,40)}${virus(120,70)}${virus(200,30)}${virus(250,85)}${T(160,120,'病毒入侵！',14,'var(--safranin)')}`),'<b>入侵：</b>病毒突破皮膚或黏膜，開始感染身體細胞並大量複製。'],
+  [SV(`${defs}<path d="M100 60 C70 50 50 90 70 130 C90 170 150 170 170 140 C200 110 180 60 150 55 C130 50 120 65 100 60Z" fill="var(--paper-2)" stroke="var(--ink)" stroke-width="2"/>${virus(120,110,8,'color-mix(in srgb,var(--safranin) 40%,transparent)')}<path d="M175 95 l14 -8 l0 16 z" fill="var(--safranin)"/>${T(120,160,'巨噬細胞',12,'var(--ink)')}${T(240,95,'展示抗原碎片',12)}${arrow(225,95,195,95)}`),'<b>先天免疫與抗原呈現：</b>巨噬細胞把病毒吞下去分解，再把病毒的一小片（抗原）掛在自己表面，像舉著通緝海報。'],
+  [SV(`${defs}${cellL(70,100,34,'巨噬細胞')}<path d="M104 95 l12 -7 l0 14 z" fill="var(--safranin)"/>${cellL(160,100,26,'輔助 T','var(--violet-soft)','var(--violet)')}${T(160,60,'⚡ 認出抗原！',12,'var(--violet)')}${arrow(186,85,240,50)}${arrow(186,115,240,150)}${cellL(265,45,22,'B 細胞')}${cellL(265,155,22,'毒殺 T')}`),'<b>啟動指揮官：</b>輔助 T 細胞認出抗原後被活化，釋放化學訊號（細胞激素），同時啟動 B 細胞和毒殺型 T 細胞。'],
+  [SV(`${defs}${cellL(50,100,24,'B 細胞')}${arrow(76,100,110,100)}${[[140,55],[140,145],[175,100]].map(([x,y])=>cellL(x,y,20,'漿細胞')).join('')}${[[220,40,-30],[240,70,20],[260,40,60],[215,110,-60],[250,125,10],[280,95,40],[230,160,-20],[270,165,70],[295,135,0]].map(([x,y,r])=>Y(x,y,r)).join('')}${T(255,195,'大量抗體 Y',12)}`),'<b>製造抗體：</b>被活化的 B 細胞大量分裂，變成「漿細胞」，每秒可分泌上千個抗體，全部專門對付這種病毒。'],
+  [SV(`${defs}${virus(60,60)}${Y(45,40,-40)}${Y(78,42,40)}${Y(62,85,180)}${virus(130,120)}${Y(115,100,-40)}${Y(148,102,40)}${T(95,170,'抗體中和病毒',12)}${cellL(250,80,28,'被感染','var(--safranin-soft)','var(--safranin)')}${cellL(250,160,20,'毒殺 T','var(--violet-soft)','var(--violet)')}${arrow(250,138,250,112)}${T(290,50,'✖',20,'var(--T)')}`),'<b>清除：</b>抗體黏住病毒，讓它無法進入細胞，並標記給吞噬細胞吃掉；毒殺型 T 細胞則直接消滅已被感染的細胞。'],
+  [SV(`${defs}${cellL(100,100,34,'記憶 B','var(--violet-soft)','var(--violet)')}${cellL(220,100,34,'記憶 T','var(--violet-soft)','var(--violet)')}${T(160,40,'⏳ 可存活數年到數十年',13,'var(--ink)')}${T(160,170,'下次同一種病毒來，反應更快、更強',13,'var(--violet)')}`),'<b>記憶：</b>戰鬥結束後大部分免疫細胞死亡，但留下長壽的記憶細胞。這正是疫苗利用的機制。']
+ ],
+ recomb:[
+  [SV(`<line x1="20" y1="90" x2="300" y2="90" stroke="var(--ink)" stroke-width="4"/><line x1="20" y1="104" x2="300" y2="104" stroke="var(--ink)" stroke-width="4"/><rect x="120" y="84" width="80" height="26" fill="var(--violet)" opacity=".85"/>${T(160,70,'人類胰島素基因',13,'var(--violet)')}${T(118,140,'✂',22,'var(--safranin)')}${T(202,140,'✂',22,'var(--safranin)')}${T(160,170,'人類 DNA',12)}`),'<b>1. 找到目標基因：</b>從人類 DNA（或由 mRNA 反轉錄得到的 DNA）中找出胰島素基因，兩端有限制酶 EcoRI 的辨識序列 GAATTC。'],
+  [SV(`<line x1="20" y1="120" x2="110" y2="120" stroke="var(--ink)" stroke-width="4"/><line x1="20" y1="134" x2="118" y2="134" stroke="var(--ink)" stroke-width="4"/><line x1="210" y1="120" x2="300" y2="120" stroke="var(--ink)" stroke-width="4"/><line x1="202" y1="134" x2="300" y2="134" stroke="var(--ink)" stroke-width="4"/><rect x="118" y="46" width="84" height="26" fill="var(--violet)" opacity=".85"/><line x1="112" y1="46" x2="118" y2="46" stroke="var(--ink)" stroke-width="4"/><line x1="202" y1="72" x2="208" y2="72" stroke="var(--ink)" stroke-width="4"/>${T(160,35,'剪下的基因片段',12,'var(--violet)')}${T(160,100,'兩端留下單股突出的「黏性末端」AATT',12)}`),'<b>2. 用限制酶剪下：</b>EcoRI 在 G↓AATTC 處切開，兩端留下可以互相配對的黏性末端。'],
+  [SV(`<path d="M175 52 A56 56 0 1 1 145 52" fill="none" stroke="var(--ink)" stroke-width="7"/><path d="M110 150 A56 56 0 0 0 150 164" fill="none" stroke="var(--G)" stroke-width="7"/>${T(160,112,'質體',14,'var(--ink)')}${T(88,178,'抗生素抗性基因',11,'var(--G)')}${T(160,30,'✂ 同一把剪刀切開',12,'var(--safranin)')}`),'<b>3. 切開質體：</b>用同一種限制酶把細菌的質體切開，產生相同的黏性末端。質體上的抗生素抗性基因之後會用來篩選。'],
+  [SV(`<circle cx="160" cy="108" r="56" fill="none" stroke="var(--ink)" stroke-width="7"/><path d="M130 61 A56 56 0 0 1 190 61" fill="none" stroke="var(--violet)" stroke-width="9"/><path d="M110 150 A56 56 0 0 0 150 164" fill="none" stroke="var(--G)" stroke-width="7"/>${T(160,112,'重組質體',14,'var(--ink)')}${T(160,30,'DNA 連接酶封好接口',12,'var(--violet)')}`),'<b>4. 接合：</b>胰島素基因與質體的黏性末端互補配對，再由 DNA 連接酶把骨架封好，得到帶有人類基因的「重組質體」。'],
+  [SV(`<rect x="50" y="55" width="220" height="100" rx="50" fill="var(--safranin-soft)" stroke="var(--safranin)" stroke-width="2.5"/><path d="M90 110 q10 -20 25 0 t25 0 t25 -5 t25 5" fill="none" stroke="var(--ink-2)" stroke-width="2"/><circle cx="215" cy="95" r="18" fill="none" stroke="var(--ink)" stroke-width="4"/><path d="M204 81 A18 18 0 0 1 226 81" fill="none" stroke="var(--violet)" stroke-width="5"/>${T(160,180,'大腸桿菌（帶著重組質體）',12)}${T(130,85,'細菌染色體',11)}`),'<b>5. 轉形：</b>把重組質體送進大腸桿菌。細菌分裂時也會複製質體，並且讀取胰島素基因，開始製造人類胰島素。'],
+  [SV(`${defs}<circle cx="65" cy="100" r="50" fill="var(--paper-2)" stroke="var(--ink)" stroke-width="2"/>${[[45,80],[70,70],[85,105],[55,120],[75,130],[40,105]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="5" fill="var(--G)"/>`).join('')}${T(65,172,'含抗生素的培養皿',11)}${arrow(120,100,150,100)}<rect x="160" y="50" width="60" height="100" rx="10" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/>${T(190,105,'發酵槽',11,'var(--ink)')}${arrow(225,100,250,100)}<rect x="262" y="75" width="30" height="55" rx="5" fill="var(--card)" stroke="var(--ink)" stroke-width="2"/>${T(277,108,'💉',14)}${T(277,150,'胰島素',11)}`),'<b>6. 篩選、量產、純化：</b>只有成功帶有質體的細菌能在含抗生素的培養皿存活。挑出它們放進發酵槽大量培養，最後把胰島素分離純化成藥品。']
+ ],
+ mrna:[
+  [SV(`<circle cx="160" cy="100" r="52" fill="var(--paper-2)" stroke="var(--G)" stroke-width="3" stroke-dasharray="2 5"/>${squig(128,100,60)}${T(160,175,'脂質奈米顆粒（LNP）包著 mRNA',12)}${T(160,40,'mRNA＝製造棘蛋白的食譜',12,'var(--safranin)')}`),'<b>1. 注射：</b>疫苗裡是被脂質奈米顆粒包住的 mRNA，上面寫著「病毒棘蛋白」的製造方法，但不是完整的病毒，不會造成感染。'],
+  [SV(`${defs}<circle cx="160" cy="100" r="88" ${cellC}/><circle cx="110" cy="100" r="30" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/>${T(110,104,'細胞核',11,'var(--ink)')}${squig(190,80,50)}${T(215,125,'mRNA 在細胞質',11)}${T(150,60,'✖',16,'var(--T)')}${T(150,40,'不進入細胞核',11,'var(--T)')}`),'<b>2. 進入細胞：</b>顆粒與細胞膜融合，把 mRNA 釋放到細胞質中。mRNA 沒有進入細胞核的機制，也無法改寫 DNA。'],
+  [SV(`${squig(40,120,240)}<ellipse cx="150" cy="108" rx="28" ry="16" fill="var(--violet)" opacity=".85"/><ellipse cx="150" cy="130" rx="34" ry="12" fill="var(--violet)" opacity=".6"/>${[0,1,2,3,4,5].map(i=>`<circle cx="${140-i*4}" cy="${86-i*10}" r="5" fill="var(--G)"/>`).join('')}${T(150,195,'核糖體讀取 mRNA，接出棘蛋白',12)}`),'<b>3. 製造蛋白：</b>細胞的核糖體讀取 mRNA，照著食譜做出病毒的棘蛋白，就像第 8 課學的轉譯。'],
+  [SV(`<circle cx="160" cy="100" r="70" ${cellC}/>${Array.from({length:10},(_,i)=>{const a=i*Math.PI/5;const x=160+Math.cos(a)*70,y=100+Math.sin(a)*70;return `<g transform="translate(${x},${y}) rotate(${a*180/Math.PI+90})"><path d="M0 0 V-12 M-5 -16 L0 -12 L5 -16" stroke="var(--safranin)" stroke-width="3" fill="none"/></g>`;}).join('')}${T(160,104,'mRNA 已被分解',12)}`),'<b>4. 展示：</b>棘蛋白出現在細胞表面或被釋放出來，mRNA 在幾天內就被細胞分解掉。'],
+  [SV(`${cellL(90,100,34,'B 細胞','var(--violet-soft)','var(--violet)')}${[[160,60,-30],[185,95,40],[165,130,10],[200,55,60],[215,125,-20]].map(([x,y,r])=>Y(x,y,r)).join('')}${cellL(265,100,30,'記憶細胞','var(--violet-soft)','var(--violet)')}${T(160,185,'產生抗體與記憶細胞，等待真正的病毒',12)}`),'<b>5. 建立免疫：</b>免疫系統辨認這個陌生的棘蛋白，產生抗體和記憶細胞。之後真正的病毒來了，身體能快速辨認並攻擊。']
+ ]
+};
+$$('.stepper').forEach(el=>{
+  const steps=STEPS[el.dataset.steps];let i=0;
+  const stage=$('.stage',el),cap=$('.cap',el),dots=$('.dots',el),prev=$('.st-prev',el),next=$('.st-next',el);
+  dots.innerHTML=steps.map(()=>'<i></i>').join('');
+  el._render=()=>{stage.innerHTML=steps[i][0];cap.innerHTML=steps[i][1];$$('i',dots).forEach((d,k)=>d.classList.toggle('on',k===i));prev.disabled=i===0;next.textContent=i===steps.length-1?'重新播放':'下一步';
+    if(!reduce){const s=stage.firstElementChild;s&&s.animate([{opacity:0,transform:'scale(.97)'},{opacity:1,transform:'none'}],{duration:350});}};
+  prev.addEventListener('click',()=>{if(i>0){i--;el._render();}});
+  next.addEventListener('click',()=>{i=i<steps.length-1?i+1:0;el._render();});
+  el._render();
+});
+
+/* ================= PCR ================= */
+let cyc=0,pcrBusy=false;
+function pcrDraw(phase,prog){
+  // phase: 0 double, 1 separated, 2 primers bound, 3 extending(prog)
+  const s=$('#pcrSvg');let g='';
+  const top=phase===0?68:40,bot=phase===0?82:110;
+  g+=`<line x1="30" y1="${top}" x2="270" y2="${top}" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/>`;
+  g+=`<line x1="30" y1="${bot}" x2="270" y2="${bot}" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/>`;
+  if(phase===0){for(let x=40;x<270;x+=12)g+=`<line x1="${x}" y1="${top+3}" x2="${x}" y2="${bot-3}" stroke="var(--rule)" stroke-width="2"/>`;}
+  if(phase>=2){
+    const w=phase===3?prog*150:0;
+    g+=`<line x1="${250-w}" y1="${top+12}" x2="250" y2="${top+12}" stroke="var(--A)" stroke-width="5" stroke-linecap="round"/>`;
+    g+=`<rect x="236" y="${top+8}" width="22" height="8" rx="3" fill="var(--safranin)"/>`;
+    g+=`<line x1="50" y1="${bot-12}" x2="${50+w}" y2="${bot-12}" stroke="var(--A)" stroke-width="5" stroke-linecap="round"/>`;
+    g+=`<rect x="42" y="${bot-16}" width="22" height="8" rx="3" fill="var(--safranin)"/>`;
+  }
+  g+=`<text x="150" y="140" font-size="11" text-anchor="middle" fill="var(--ink-2)">黑：原本 DNA　粉紅：引子　綠：新合成的股</text>`;
+  s.innerHTML=g;
+}
+function pcrBars(){
+  const box=$('#pcrBars');let h='';
+  for(let k=1;k<=30;k++)h+=`<div title="第${k}循環" style="flex:1;height:${k<=cyc?Math.max(4,k/30*100):2}%;background:${k<=cyc?'var(--violet)':'var(--rule)'};border-radius:2px 2px 0 0"></div>`;
+  box.innerHTML=h;
+}
+function pcrUpdate(){$('#pcrCyc').textContent=cyc;$('#pcrCopies').textContent=fmtN(Math.pow(2,cyc));pcrBars();}
+const wait=ms=>new Promise(r=>setTimeout(r,reduce?1:ms));
+async function tempTo(to,ms){const el=$('#pcrTemp');const from=parseInt(el.textContent);const t0=performance.now();
+  return new Promise(res=>{function f(t){const p=Math.min(1,(t-t0)/(reduce?1:ms));el.textContent=Math.round(from+(to-from)*p)+'°C';el.style.color=to>=90?'var(--T)':(to<60?'var(--C)':'var(--G)');p<1?requestAnimationFrame(f):res();}requestAnimationFrame(f);});}
+$('#pcrRun').addEventListener('click',async()=>{
+  if(pcrBusy||cyc>=30)return;pcrBusy=true;
+  $('#pcrStep').innerHTML='<b>① 變性（95°C）：</b>高溫打斷氫鍵，雙股分開。';pcrDraw(0,0);await tempTo(95,700);pcrDraw(1,0);await wait(700);
+  $('#pcrStep').innerHTML='<b>② 黏合（約 55°C）：</b>降溫，引子找到互補位置貼上去。';await tempTo(55,700);pcrDraw(2,0);await wait(600);
+  $('#pcrStep').innerHTML='<b>③ 延伸（72°C）：</b>Taq 聚合酶從引子開始接上核苷酸，合成新股。';await tempTo(72,500);
+  await new Promise(res=>{const t0=performance.now();function f(t){const p=Math.min(1,(t-t0)/(reduce?1:1200));pcrDraw(3,p);p<1?requestAnimationFrame(f):res();}requestAnimationFrame(f);});
+  cyc++;pcrUpdate();
+  $('#pcrStep').innerHTML=`第 ${cyc} 循環完成，DNA 份數加倍為 ${fmtN(Math.pow(2,cyc))}。${cyc<3?'再按一次看看。':'柱狀圖用對數刻度，每一格代表翻倍一次。'}`;
+  pcrBusy=false;
+});
+$('#pcrFast').addEventListener('click',()=>{if(pcrBusy)return;cyc=30;pcrUpdate();pcrDraw(0,0);$('#pcrTemp').textContent='4°C';$('#pcrStep').innerHTML='30 循環後，理論上 1 份 DNA 變成約 <b>10.7 億</b>份，只要 1 到 2 小時。實際上後期原料耗盡，效率會下降，形成平台期。';});
+$('#pcrReset').addEventListener('click',()=>{if(pcrBusy)return;cyc=0;pcrUpdate();pcrDraw(0,0);$('#pcrTemp').textContent='25°C';$('#pcrTemp').style.color='';$('#pcrStep').textContent='準備好了。按下「執行一個循環」。';});
+pcrDraw(0,0);pcrUpdate();
+
+/* ================= GEL ================= */
+const lanes=[['標記','Ladder',[3000,2000,1500,1000,600,400,250,150,100]],['現場','湯匙',[1500,600,250]],['小明','嫌犯 A',[2000,800,250]],['小華','嫌犯 B',[1500,600,250]],['小美','嫌犯 C',[1500,400,150]]];
+const gy=sz=>48+(Math.log10(4000)-Math.log10(sz))/(Math.log10(4000)-Math.log10(80))*220;
+let gelAnim=null;
+function gelDraw(p){
+  const s=$('#gelSvg');let g=`<rect x="0" y="0" width="400" height="300" fill="#1d1a2e"/><text x="12" y="22" fill="#9aa" font-size="16">－</text><text x="12" y="292" fill="#F07399" font-size="16">＋</text>`;
+  lanes.forEach((L,i)=>{const x=60+i*68;
+    g+=`<rect x="${x}" y="36" width="44" height="8" fill="#000" stroke="#555"/><text x="${x+22}" y="16" text-anchor="middle" fill="#ddd" font-size="12">${L[0]}</text><text x="${x+22}" y="30" text-anchor="middle" fill="#999" font-size="10">${L[1]}</text>`;
+    L[2].forEach(sz=>{const y=44+(gy(sz)-44)*p;g+=`<rect x="${x+2}" y="${y}" width="40" height="5" rx="2" fill="#FFB3D6" opacity="${0.35+0.65*Math.min(1,p*3)}" style="filter:drop-shadow(0 0 3px #ff7ab8)"/>`;
+      if(i===0&&p>=1)g+=`<text x="54" y="${y+5}" text-anchor="end" fill="#aaa" font-size="9">${sz}</text>`;});
+  });
+  s.innerHTML=g;
+}
+$('#gelRun').addEventListener('click',()=>{
+  if(gelAnim)return;const t0=performance.now();$('#gelTxt').textContent='通電中……小片段跑得比較快。';
+  function f(t){const p=Math.min(1,(t-t0)/(reduce?1:3500));gelDraw(p);if(p<1)gelAnim=requestAnimationFrame(f);else{gelAnim=null;$('#gelTxt').innerHTML='跑膠完成！比對每一排帶的位置：<b>嫌犯 B 小華</b>的三條帶（1500、600、250 bp）與現場樣本完全一致。小明和小美都有至少一條不同。（真實鑑定會比對十幾個 STR 位點。）';}}
+  gelAnim=requestAnimationFrame(f);
+});
+$('#gelReset').addEventListener('click',()=>{if(gelAnim){cancelAnimationFrame(gelAnim);gelAnim=null;}gelDraw(0);$('#gelTxt').textContent='負極在上、正極在下。DNA 帶負電，會往下跑。';});
+gelDraw(0);
+
+/* ================= CRISPR ================= */
+const crT=[
+ {name:'目標一：色素基因',guide:'GATTACAG',seq:'TTGACCTAGCATGGCTTGATTACAGAGGTCCATGCATTA'},
+ {name:'目標二：易混淆序列',guide:'CCGTAACT',seq:'AGCCGTAACAGGTTACGCCGTAACTTGGAATCCTAGC'},
+ {name:'目標三：沒有 PAM 的陷阱',guide:'TGCATGCA',seq:'GGTGCATGCATTACCATGCATGCAGAACTGCATGCACGGTTA'}];
+let crSel=0,crTimer=null;
+$('#crTargets').innerHTML=crT.map((t,i)=>`<button class="btn ${i===0?'sel':''}" data-i="${i}">${t.name}</button>`).join('');
+$$('#crTargets button').forEach(b=>b.addEventListener('click',()=>{crSel=+b.dataset.i;$$('#crTargets button').forEach(x=>x.classList.toggle('sel',x===b));crReset();}));
+function crRender(pos,state,cut){
+  const t=crT[crSel],L=t.guide.length;let h='';
+  t.seq.split('').forEach((b,i)=>{
+    if(cut!=null&&i===cut)h+='<span style="color:var(--safranin);font-weight:900;margin:0 6px">✂</span>';
+    let st='';
+    if(pos!=null&&i>=pos&&i<pos+L)st=`background:${state==='match'?'color-mix(in srgb,var(--A) 30%,transparent)':state==='mis'?'color-mix(in srgb,var(--T) 25%,transparent)':'var(--violet-soft)'};`;
+    if(pos!=null&&i>=pos+L&&i<pos+L+3)st+='outline:2px solid var(--G);outline-offset:-2px;';
+    h+=`<span class="b${b}" style="padding:2px 1px;border-radius:3px;${st}">${b}</span>`;
+  });
+  $('#crDna').innerHTML=h;
+}
+function crReset(){clearTimeout(crTimer);crTimer=null;$('#crGuide').innerHTML=colorSeq(crT[crSel].guide);crRender(null);$('#crMsg').textContent='Cas9 會沿著 DNA 移動，先找 PAM 序列（NGG），再核對嚮導序列。';}
+$('#crGo').addEventListener('click',()=>{
+  if(crTimer)return;const t=crT[crSel],L=t.guide.length;let pos=0;
+  function step(){
+    if(pos+L+3>t.seq.length){$('#crMsg').textContent='掃描完畢，沒有找到目標。';crTimer=null;return;}
+    const pam=t.seq.substr(pos+L,3),hasPam=pam[1]==='G'&&pam[2]==='G';
+    if(!hasPam){crRender(pos,'scan');$('#crMsg').textContent=`位置 ${pos+1}：後面是 ${pam}，不是 NGG，Cas9 直接跳過。`;pos++;crTimer=setTimeout(step,reduce?20:150);return;}
+    const win=t.seq.substr(pos,L);
+    if(win===t.guide){crRender(pos,'match');$('#crMsg').innerHTML=`位置 ${pos+1}：找到 PAM「${pam}」，而且序列 ${win} 與嚮導完全吻合！`;
+      crTimer=setTimeout(()=>{crRender(pos,'match',pos+L-3);$('#crMsg').innerHTML=`<b>剪斷！</b>Cas9 在 PAM 前方約 3 個鹼基處切斷雙股 DNA。接下來由細胞修復系統決定結果（剔除或嵌入）。`;crTimer=null;},reduce?1:900);return;}
+    crRender(pos,'mis');$('#crMsg').innerHTML=`位置 ${pos+1}：有 PAM「${pam}」，但序列 ${win} 與嚮導 ${t.guide} 不符，放開繼續找。`;pos++;crTimer=setTimeout(step,reduce?20:1100);
+  }
+  step();
+});
+crReset();
+
+/* ================= GLOSSARY ================= */
+const G=[
+['生物學','Biology','bios 生命＋logos 學問','研究生命現象的科學。','c0'],
+['生物技術','Biotechnology','bios＋technē 技藝＋logos；1919 年埃雷奇創用','利用生物或其組成來製造產品或解決問題的技術。','c0'],
+['細胞','Cell','拉丁文 cella 小房間；1665 年虎克命名','生物構造與功能的基本單位。','c1'],
+['原核生物','Prokaryote','pro 之前＋karyon 果仁（核）','沒有核膜包圍細胞核的生物，如細菌、古菌。','c1'],
+['真核生物','Eukaryote','eu 真正的＋karyon 核','具有細胞核與膜狀胞器的生物。','c1'],
+['細胞核','Nucleus','拉丁文「果核」；1831 年布朗命名','儲存 DNA 的胞器，細胞的控制中心。','c1'],
+['胞器','Organelle','organon 器官＋-elle 小','細胞內具特定功能的構造。','c1'],
+['粒線體','Mitochondrion','mitos 線＋chondros 顆粒；1898 年本達命名','進行細胞呼吸、產生 ATP 的胞器。','c1'],
+['核糖體','Ribosome','ribo-（RNA）＋soma 小體','合成蛋白質的分子機器。','c1'],
+['葉綠體','Chloroplast','chloros 綠色＋plastos 被塑造的','進行光合作用的胞器。','c4'],
+['溶體','Lysosome','lysis 分解＋soma 小體','含消化酵素、負責分解的胞器。','c1'],
+['碳水化合物','Carbohydrate','carbo 碳＋hydrate 水合','醣類的總稱，分子式似碳與水的組合。','c2'],
+['脂質','Lipid','希臘文 lipos 脂肪','不溶於水的生物分子，如脂肪、磷脂質、固醇。','c2'],
+['蛋白質','Protein','prōteios 最重要的；1838 年穆德採用','由胺基酸組成、執行多數生命功能的大分子。','c2'],
+['胺基酸','Amino acid','amine 胺（源自阿蒙神廟的氨）＋acid 酸','組成蛋白質的 20 種基本單位。','c2'],
+['酵素','Enzyme','en 在裡面＋zymē 酵母；1877 年庫恩創用','加速生化反應的生物催化劑，多為蛋白質。','c3'],
+['ATP','Adenosine triphosphate','腺苷（aden 腺體）＋三個磷酸','細胞的能量貨幣。','c4'],
+['光合作用','Photosynthesis','phōs 光＋synthesis 合成','利用光能將 CO₂ 與水合成醣類。','c4'],
+['糖解作用','Glycolysis','glykys 甜＋lysis 分解','將葡萄糖分解為丙酮酸的過程。','c4'],
+['基因','Gene','genos 世代、出生；1909 年約翰森創用','DNA 上攜帶遺傳資訊的功能單位。','c5'],
+['遺傳學','Genetics','genesis 起源；1905 年貝特森提議','研究遺傳與變異的科學。','c5'],
+['對偶基因','Allele','allēlōn 彼此；源自 allelomorph','同一基因的不同版本。','c5'],
+['表現型','Phenotype','phainein 顯現＋typos 型','可觀察到的性狀。','c5'],
+['DNA','Deoxyribonucleic acid','de-oxy 去氧＋ribose 核糖＋nucleic 細胞核的','儲存遺傳資訊的雙股螺旋分子。','c6'],
+['鳥糞嘌呤','Guanine','guano 鳥糞（最早從鳥糞分離）','DNA 與 RNA 的四種鹼基之一，G。','c6'],
+['胸腺嘧啶','Thymine','thymus 胸腺','DNA 特有的鹼基，T。','c6'],
+['染色體','Chromosome','chrōma 顏色＋sōma 小體；1888 年瓦爾代爾命名','DNA 與蛋白質緊密捲繞成的構造。','c7'],
+['有絲分裂','Mitosis','mitos 線；1882 年弗萊明命名','產生兩個相同子細胞的分裂方式。','c7'],
+['減數分裂','Meiosis','meiōsis 減少','產生染色體數減半之配子的分裂方式。','c7'],
+['轉錄','Transcription','trans 跨越＋scribere 書寫','以 DNA 為模板合成 RNA。','c8'],
+['轉譯','Translation','trans 跨越＋latus 搬運','依 mRNA 密碼合成蛋白質。','c8'],
+['密碼子','Codon','code 密碼＋-on 單位','mRNA 上決定一個胺基酸的三個鹼基。','c8'],
+['突變','Mutation','拉丁文 mutare 改變','DNA 序列的改變。','c9'],
+['操縱組','Operon','operari 工作＋-on','受同一開關控制的一組基因。','c9'],
+['表觀遺傳學','Epigenetics','epi 在上面＋genetics；1942 年沃丁頓提出','不改變 DNA 序列的遺傳調控。','c9'],
+['細菌','Bacterium','baktērion 小棍子；1828 年埃倫伯格命名','單細胞原核生物。','c10'],
+['病毒','Virus','拉丁文 vīrus 毒液','由核酸與蛋白質外殼構成、需寄生細胞才能複製的病原。','c10'],
+['抗生素','Antibiotic','anti 對抗＋bios 生命；1942 年瓦克斯曼定義','由微生物產生、抑制其他微生物的物質。','c10'],
+['免疫','Immunity','immūnis 免除義務的','身體辨識並抵抗外來物的能力。','c11'],
+['巨噬細胞','Macrophage','makros 大＋phagein 吃','大型吞噬細胞。','c11'],
+['抗體','Antibody','德文 Antikörper；1891 年埃爾利希使用','B 細胞產生、專一結合抗原的 Y 形蛋白質。','c11'],
+['抗原','Antigen','antibody generator 抗體產生者','能引發免疫反應的分子。','c11'],
+['疫苗','Vaccine','vacca 母牛；紀念詹納的牛痘接種','訓練免疫系統的預防製劑。','c11'],
+['發酵','Fermentation','fervēre 沸騰','微生物在缺氧下分解有機物的過程；廣義指微生物生產。','c12'],
+['限制酶','Restriction enzyme','細菌用來「限制」噬菌體生長的酵素','在特定序列切割 DNA 的酵素。','c13'],
+['質體','Plasmid','plasma 細胞質＋-id；1952 年萊德伯格提出','細菌中獨立於染色體的小型環狀 DNA。','c13'],
+['轉形','Transformation','trans 跨越＋forma 形狀','細胞吸收外來 DNA 而改變性狀。','c13'],
+['PCR','Polymerase Chain Reaction','poly 許多＋meros 部分；chain 連鎖','在試管中大量複製特定 DNA 片段的技術。','c14'],
+['電泳','Electrophoresis','ēlektron 琥珀＋phorēsis 被搬運','利用電場依大小分離分子的技術。','c15'],
+['基因體','Genome','gene＋chromosome；1920 年溫克勒創用','一個生物的全部遺傳物質。','c15'],
+['CRISPR','Clustered Regularly Interspaced Short Palindromic Repeats','2002 年揚森與莫希卡定名','細菌的免疫系統，被改造為基因編輯工具。','c16'],
+['PAM','Protospacer Adjacent Motif','原間隔序列相鄰的小圖案','Cas9 切割所需、緊鄰目標序列的短序列（NGG）。','c16'],
+['單株抗體','Monoclonal antibody','mono 單一＋klōn 插枝','來自同一 B 細胞株的完全相同抗體。','c17'],
+['幹細胞','Stem cell','stem 樹幹','能自我更新並分化成多種細胞的細胞。','c17'],
+['基因改造生物','GMO','genetically modified organism','以基因工程改變遺傳物質的生物。','c18'],
+['生物復育','Bioremediation','bios＋remedium 補救','利用生物清除環境污染。','c18'],
+['生物資訊學','Bioinformatics','1970 年霍格威格與赫斯珀提出','以電腦分析生物資料的學科。','c19'],
+['生物倫理學','Bioethics','bios＋ēthos 品格；1970 年波特提出','探討生命科學與醫療中倫理問題的學科。','c20']
+];
+function gloss(){
+  const q=$('#glossQ').value.trim().toLowerCase();
+  const list=G.filter(g=>!q||g.slice(0,4).join(' ').toLowerCase().includes(q));
+  $('#glossCount').textContent=`共 ${list.length} 個名詞`;
+  $('#glossList').innerHTML=list.map(g=>{const ch=document.getElementById(g[4]);return `<div class="gloss-item"><div class="gt">${g[0]}<span class="en">${g[1]}</span></div><div class="go">字源：${g[2]}</div><div class="gd">${g[3]}</div><a href="#${g[4]}">出現在：${ch?ch.dataset.title:''}</a></div>`;}).join('')||'<p class="readout">找不到符合的名詞，試試其他關鍵字，例如「細胞」或「DNA」。</p>';
+}
+$('#glossQ').addEventListener('input',gloss);gloss();
+
+/* ================= TIMELINE ================= */
+const TL=[
+['約前 7000 年','中國賈湖先民已釀造發酵飲料。'],
+['1665','虎克在《顯微圖譜》中描述軟木的「細胞」。'],
+['1676','雷文霍克首次觀察到細菌。'],
+['1796','詹納以牛痘接種預防天花。'],
+['1838–1839','許萊登與許旺提出細胞學說。'],
+['1859','達爾文出版《物種起源》。'],
+['1865','孟德爾發表豌豆遺傳實驗。'],
+['1869','米歇爾從白血球分離出「核素」（DNA）。'],
+['1882','柯霍發現結核桿菌；弗萊明描述有絲分裂。'],
+['1897','布赫納以無細胞酵母汁完成發酵，生化學誕生。'],
+['1919','埃雷奇創造「生物技術」一詞。'],
+['1928','弗萊明發現青黴素；格里菲斯發現細菌轉形。'],
+['1944','艾佛瑞等人證明 DNA 是遺傳物質。'],
+['1953','華生與克里克根據富蘭克林的資料提出 DNA 雙螺旋。'],
+['1958','梅瑟生與史塔爾證實半保留複製；克里克提出中心法則。'],
+['1961','尼倫伯格破解第一個密碼子 UUU；雅各布與莫諾提出操縱組。'],
+['1973','柯恩與博耶完成重組 DNA 技術。'],
+['1975','阿西洛馬會議；科勒與米爾斯坦製造單株抗體。'],
+['1977','桑格發明 DNA 定序法。'],
+['1982','第一個基因重組藥物：人類胰島素上市。'],
+['1983','穆利斯發明 PCR。'],
+['1984','傑佛瑞斯發明 DNA 指紋。'],
+['1990','人類基因體計畫啟動；BLAST 發表。'],
+['1994','第一個基改食品 Flavr Savr 番茄上市。'],
+['1996','複製羊桃莉誕生。'],
+['2003','人類基因體計畫宣布完成。'],
+['2005','卡里科與魏斯曼發表修飾核苷 mRNA；次世代定序問世。'],
+['2006','山中伸彌發明 iPS 細胞。'],
+['2010','第一個合成基因體細胞 JCVI-syn1.0。'],
+['2012','道納與夏彭蒂耶發表 CRISPR-Cas9 基因編輯。'],
+['2017','第一個 CAR-T 療法與體內基因治療在美國核准。'],
+['2018','基因編輯嬰兒事件引發全球譴責。'],
+['2020','新冠 mRNA 疫苗獲緊急授權；AlphaFold 2 突破蛋白質結構預測。'],
+['2022','端粒到端粒聯盟補完人類基因體。'],
+['2023','第一個 CRISPR 療法 Casgevy 核准；mRNA 研究獲諾貝爾獎。'],
+['2024','AlphaFold 與蛋白質設計獲諾貝爾化學獎。']];
+$('#timeline').innerHTML=TL.map(([y,t])=>`<div class="ev"><span class="y">${y}</span><p>${t}</p></div>`).join('');
+
+updateProgress();route();
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-a6bbe733bb" data-category="science"></script></body>
+</html>

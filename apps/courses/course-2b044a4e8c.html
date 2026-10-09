@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>成衣工廠盤點學堂｜從入門到專業</title>
+<style>
+:root{
+  --mat:#1f6b52;        /* 裁床切割墊綠 */
+  --mat-deep:#164d3b;
+  --tape:#f2c230;       /* 皮尺黃 */
+  --chalk:#3a6ea5;      /* 劃粉藍 */
+  --thread:#c8323c;     /* 車線紅 */
+  --ink:#1b2420;
+  --muted:#56625c;
+  --paper:#fbfcfa;
+  --bg:#f3f5f1;
+  --grid:rgba(31,107,82,.07);
+  --line:#d4dbd5;
+  --soft:#e7efe9;
+  --chalk-soft:#e6eef7;
+  --tape-soft:#fdf3cf;
+  --thread-soft:#f9e3e4;
+  --r:10px;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --mat:#5fbf98; --mat-deep:#3f9b77; --tape:#f5cf55; --chalk:#86b0e0; --thread:#ef7880;
+    --ink:#e6ece8; --muted:#a4b0aa; --paper:#18201c; --bg:#111814; --grid:rgba(95,191,152,.06);
+    --line:#2d3a33; --soft:#1d2b24; --chalk-soft:#1c2633; --tape-soft:#2e2915; --thread-soft:#321c1f;
+  }
+}
+:root[data-theme="dark"]{
+  --mat:#5fbf98; --mat-deep:#3f9b77; --tape:#f5cf55; --chalk:#86b0e0; --thread:#ef7880;
+  --ink:#e6ece8; --muted:#a4b0aa; --paper:#18201c; --bg:#111814; --grid:rgba(95,191,152,.06);
+  --line:#2d3a33; --soft:#1d2b24; --chalk-soft:#1c2633; --tape-soft:#2e2915; --thread-soft:#321c1f;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+body{
+  margin:0;min-height:100%;color:var(--ink);background-color:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  font-family:"PingFang TC","Noto Sans TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+  font-size:17px;line-height:1.85;
+}
+h1,h2,h3,.serif{font-family:"Noto Serif TC","Source Han Serif TC","Songti TC","PMingLiU","MingLiU",serif}
+a{color:var(--chalk)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--chalk);outline-offset:2px}
+img,svg{max-width:100%}
+
+/* ---------- 頂列 ---------- */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--paper);border-bottom:1px solid var(--line)}
+.topbar-in{display:flex;align-items:center;gap:12px;padding:10px 16px;max-width:1280px;margin:0 auto}
+.menu-btn{display:none;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:4px 10px;cursor:pointer}
+.brand{font-family:"Noto Serif TC","Songti TC","PMingLiU",serif;font-weight:700;font-size:18px;white-space:nowrap}
+.brand small{font-family:inherit;font-weight:400;color:var(--muted);font-size:13px;margin-left:6px}
+.tape-wrap{flex:1;min-width:80px}
+.tape{position:relative;height:16px;border-radius:3px;background:var(--soft);overflow:hidden;border:1px solid var(--line)}
+.tape-fill{position:absolute;inset:0 auto 0 0;width:0;background:var(--tape);transition:width .5s ease}
+.tape::after{content:"";position:absolute;inset:0;background-image:repeating-linear-gradient(90deg,rgba(0,0,0,.45) 0 1px,transparent 1px 10px),repeating-linear-gradient(90deg,rgba(0,0,0,.55) 0 1px,transparent 1px 50px);background-size:auto 6px,auto 10px;background-repeat:repeat-x;background-position:0 0,0 0;opacity:.35;pointer-events:none}
+.tape-label{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* ---------- 版面 ---------- */
+.layout{display:grid;grid-template-columns:300px minmax(0,1fr);max-width:1280px;margin:0 auto}
+.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 66px);height:calc(100vh - 66px);overflow-y:auto;padding:18px 12px 40px 16px;border-right:1px solid var(--line)}
+.side h3{font-size:14px;color:var(--muted);margin:18px 8px 6px;font-weight:600}
+.nav-item{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;border:0;background:none;padding:7px 10px;border-radius:8px;cursor:pointer;line-height:1.5;font-size:15px}
+.nav-item:hover{background:var(--soft)}
+.nav-item.active{background:var(--mat);color:#fff}
+.nav-item .n{flex:0 0 26px;font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px;padding-top:1px}
+.nav-item.active .n{color:#d6efe4}
+.nav-item .ok{margin-left:auto;color:var(--mat);font-size:13px}
+.nav-item.active .ok{color:#fff}
+.scrim{display:none}
+main{padding:28px 28px 40px;min-width:0}
+.chapter{display:none;max-width:780px}
+.chapter.active{display:block}
+
+@media (max-width:920px){
+  .layout{grid-template-columns:1fr}
+  .menu-btn{display:inline-block}
+  .brand small{display:none}
+  .side{position:fixed;left:0;top:0;bottom:0;height:100%;width:86%;max-width:330px;background:var(--paper);z-index:60;transform:translateX(-105%);transition:transform .25s ease;padding-top:calc(env(safe-area-inset-top,0px) + 18px);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 30px)}
+  .side.open{transform:none;box-shadow:4px 0 24px rgba(0,0,0,.2)}
+  .scrim.show{display:block;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:55}
+  main{padding:18px 16px 30px}
+  body{font-size:16.5px}
+}
+
+/* ---------- 章節標頭：綑票造型 ---------- */
+.ticket{position:relative;display:flex;align-items:stretch;background:var(--paper);border:1px solid var(--line);border-radius:6px 16px 16px 6px;margin:4px 0 26px;overflow:hidden}
+.ticket-stub{flex:0 0 92px;background:var(--mat);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 6px;position:relative}
+.ticket-stub::before{content:"";width:14px;height:14px;border-radius:50%;background:var(--bg);border:2px solid rgba(255,255,255,.6);margin-bottom:8px}
+.ticket-stub .no{font-family:"Noto Serif TC","Songti TC","PMingLiU",serif;font-size:38px;font-weight:700;line-height:1}
+.ticket-stub .lv{font-size:12px;margin-top:6px;opacity:.9}
+.ticket-body{flex:1;padding:14px 18px 14px 22px;border-left:3px dashed var(--line);min-width:0}
+.ticket-body h2{margin:0;font-size:28px;line-height:1.35}
+.ticket-body p{margin:6px 0 0;color:var(--muted);font-size:15px}
+
+h3.sec{font-size:21px;margin:34px 0 8px;padding-bottom:6px;border-bottom:2px dashed var(--line)}
+p{margin:10px 0}
+
+/* ---------- 內容元件 ---------- */
+.box{border-radius:var(--r);padding:14px 18px;margin:18px 0;border:1.5px solid var(--line);background:var(--paper)}
+.box > .h{font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.goal{background:var(--chalk-soft);border-color:transparent}
+.goal ul{margin:4px 0 0;padding-left:22px}
+.analogy{background:var(--tape-soft);border-color:transparent}
+.example{background:var(--paper);border-left:6px solid var(--chalk)}
+.warn{background:var(--thread-soft);border-color:transparent}
+.key{background:var(--soft);border:2px dashed var(--mat)}
+.key ol,.key ul{margin:4px 0 0;padding-left:22px}
+
+.term{border-radius:var(--r);background:var(--paper);border:1px solid var(--line);border-left:6px solid var(--thread);padding:12px 16px;margin:14px 0}
+.t-name{font-family:"Noto Serif TC","Songti TC","PMingLiU",serif;font-weight:700;font-size:19px}
+.t-name span{font-family:"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;font-weight:400;font-size:14px;color:var(--muted);margin-left:8px}
+.t-body{font-size:15.5px;margin-top:4px}
+.t-body b{color:var(--mat-deep)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .t-body b{color:var(--mat)}}
+
+.tbl{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:8px;background:var(--paper)}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:460px}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--soft);font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+
+.formula{font-family:"Noto Serif TC","Songti TC","PMingLiU",serif;background:var(--paper);border:1.5px solid var(--mat);border-radius:8px;padding:10px 14px;margin:12px 0;font-size:18px;text-align:center;overflow-x:auto}
+.formula small{display:block;font-family:"PingFang TC","Noto Sans TC",sans-serif;font-size:13px;color:var(--muted)}
+
+.fig{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin:18px 0}
+.fig figcaption{font-size:14px;color:var(--muted);margin-top:8px;text-align:center}
+.fig svg{display:block;width:100%;height:auto}
+
+.btn{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--mat);background:var(--mat);color:#fff;border-radius:8px;padding:7px 14px;cursor:pointer;font-size:15px;margin:4px 6px 4px 0}
+.btn.ghost{background:transparent;color:var(--mat)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* 計算機 */
+.calc{background:var(--paper);border:1.5px solid var(--chalk);border-radius:var(--r);padding:14px 16px;margin:18px 0}
+.calc .h{font-weight:700;color:var(--chalk);margin-bottom:8px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.fields label{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+.fields input,.fields select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 8px;width:100%}
+.out{margin-top:12px;padding:10px 12px;background:var(--chalk-soft);border-radius:8px;font-size:16px}
+.out b{font-size:19px}
+
+/* 測驗 */
+.quiz{background:var(--paper);border:1.5px solid var(--line);border-radius:var(--r);padding:14px 16px;margin:14px 0}
+.quiz .q{font-weight:700;margin:0 0 8px}
+.opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:var(--bg);border-radius:8px;padding:8px 12px;margin:6px 0;cursor:pointer;line-height:1.55}
+.opt:hover{border-color:var(--chalk)}
+.opt.right{border-color:var(--mat);background:var(--soft);font-weight:700}
+.opt.wrong{border-color:var(--thread);background:var(--thread-soft)}
+.explain{display:none;margin-top:8px;font-size:15px;padding:8px 12px;border-radius:8px;background:var(--chalk-soft)}
+.quiz.done .explain{display:block}
+
+/* 旅程卡片 */
+.journey{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin:14px 0}
+.stage{position:relative;border:1.5px solid var(--line);background:var(--paper);border-radius:10px;padding:10px 10px 8px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
+.stage .ic{font-size:28px;line-height:1.2}
+.stage .nm{font-weight:700;font-size:15px}
+.stage .st{font-size:12px;color:var(--muted)}
+.stage .idx{position:absolute;top:4px;left:8px;font-size:12px;color:var(--muted)}
+.stage.on{border-color:var(--mat);background:var(--soft);box-shadow:0 0 0 3px rgba(31,107,82,.15)}
+.stage-detail{min-height:92px}
+
+/* 生產線模擬 */
+.line{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px}
+.station{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px;min-height:130px;display:flex;flex-direction:column}
+.station .sn{font-size:12.5px;font-weight:700;text-align:center;line-height:1.35;min-height:34px}
+.chips{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;align-content:flex-start;flex:1;padding-top:4px}
+.chip{width:26px;height:18px;border-radius:3px;background:var(--chalk);color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;transition:transform .3s}
+.chip.hidden{background:transparent;border:1.5px dashed var(--thread);color:var(--thread)}
+.station .cnt{font-size:12px;text-align:center;color:var(--muted);margin-top:4px;min-height:18px}
+.station.done-col{background:var(--soft)}
+
+/* 包裝示意 */
+.cartons{display:flex;flex-wrap:wrap;gap:18px;margin:10px 0}
+.carton{border:3px solid #a67c52;border-radius:6px;padding:8px;background:repeating-linear-gradient(45deg,rgba(166,124,82,.08) 0 6px,transparent 6px 12px)}
+.carton .ct{font-size:13px;font-weight:700;text-align:center;margin-bottom:6px}
+.cgrid{display:grid;grid-template-columns:repeat(6,22px);gap:3px}
+.cgrid i{display:block;width:22px;height:22px;border-radius:3px;font-style:normal;font-size:10px;color:#fff;display:flex;align-items:center;justify-content:center}
+.sz-S{background:#6a9fd4}.sz-M{background:var(--mat)}.sz-L{background:#d08a2c}.sz-XL{background:#9b4d8a}
+
+/* 步驟 */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.tab{border:1.5px solid var(--mat);background:transparent;color:var(--mat);border-radius:20px;padding:4px 14px;cursor:pointer}
+.tab.on{background:var(--mat);color:#fff}
+.steps{counter-reset:s;list-style:none;padding:0;margin:8px 0}
+.steps li{counter-increment:s;position:relative;padding:10px 12px 10px 50px;margin:8px 0;background:var(--paper);border:1px solid var(--line);border-radius:8px}
+.steps li::before{content:counter(s);position:absolute;left:12px;top:10px;width:26px;height:26px;border-radius:50%;background:var(--mat);color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center}
+
+/* ABC 圖 */
+.abc-row{display:grid;grid-template-columns:96px 1fr 56px 30px;gap:8px;align-items:center;font-size:14px;margin:5px 0}
+.abc-bar{height:18px;border-radius:3px;background:var(--line);position:relative;overflow:hidden}
+.abc-bar span{position:absolute;inset:0 auto 0 0;border-radius:3px}
+.cls{font-weight:700;text-align:center;border-radius:4px;color:#fff}
+.cls-A{background:var(--thread)}.cls-B{background:#d08a2c}.cls-C{background:var(--chalk)}
+
+/* 盤點卡 */
+.tagcard{max-width:340px;margin:14px auto;background:#fffef6;color:#222;border:1px solid #cfc7a8;border-radius:6px;padding:14px 16px 10px;font-size:14px;position:relative;box-shadow:0 2px 0 #e7dfbf}
+.tagcard::before{content:"";position:absolute;top:10px;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:50%;border:2px solid #b9ae86;background:var(--bg)}
+.tagcard h4{margin:14px 0 8px;text-align:center;font-size:16px}
+.tagcard .row{display:flex;border-bottom:1px dotted #bbb;padding:3px 0}
+.tagcard .row span:first-child{flex:0 0 88px;color:#666}
+.tagcard .tear{border-top:2px dashed #b9ae86;margin-top:10px;padding-top:6px;font-size:12px;color:#666;text-align:center}
+
+/* 名詞總表 */
+.search{width:100%;font:inherit;padding:10px 12px;border-radius:8px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink)}
+.gl-from{font-size:12px;color:var(--muted)}
+
+/* 證書 */
+.cert{display:none;margin:20px 0;padding:28px 22px;background:var(--paper);border:6px double var(--mat);border-radius:8px;text-align:center}
+.cert h2{font-size:30px;margin:6px 0}
+.cert .who{font-family:"Noto Serif TC","Songti TC","PMingLiU",serif;font-size:28px;font-weight:700;border-bottom:2px solid var(--tape);display:inline-block;padding:0 20px;margin:10px 0}
+
+.pager{display:flex;justify-content:space-between;gap:10px;max-width:780px;margin:36px 0 10px;border-top:2px dashed var(--line);padding-top:18px}
+.pager .btn{max-width:48%}
+.pager .btn span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.hero-mini{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.pill{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:3px 12px;font-size:14px}
+
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+@media print{
+  .topbar,.side,.pager,.scrim{display:none!important}
+  .layout{display:block} main{padding:0}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-in">
+    <button class="menu-btn" id="menuBtn" aria-label="開啟課程目錄">☰ 目錄</button>
+    <div class="brand">成衣盤點學堂<small>從入門到專業</small></div>
+    <div class="tape-wrap" aria-hidden="true">
+      <div class="tape"><div class="tape-fill" id="tapeFill"></div></div>
+      <div class="tape-label" id="tapeLabel">學習進度 0%</div>
+    </div>
+  </div>
+</header>
+<div class="scrim" id="scrim"></div>
+<div class="layout">
+<nav class="side" id="side" aria-label="課程目錄"></nav>
+<main id="main">
+
+<!-- ===================== 第0章 ===================== -->
+<section class="chapter" id="ch0" data-title="課程導覽：怎麼使用這門課" data-level="入門">
+  <div class="ticket"><div class="ticket-stub"><div class="no">0</div><div class="lv">入門</div></div>
+    <div class="ticket-body"><h2>課程導覽</h2><p>先花三分鐘了解這門課怎麼上，後面會學得更輕鬆。</p></div></div>
+
+  <p>這是一門教你「在成衣工廠裡怎麼盤點」的課。你不需要任何工廠經驗，也不需要會記帳。只要會加減乘除，就能一路學到能自己帶隊盤點、分析差異、寫報告的程度。</p>
+
+  <div class="box goal"><div class="h">🎯 學完你會</div>
+    <ul>
+      <li>知道成衣工廠裡有哪些東西要盤，以及它們各自用什麼單位計算</li>
+      <li>會盤布料、輔料、裁片、生產線上的半成品、成品和機器</li>
+      <li>會照標準流程（SOP）組織一次完整的盤點</li>
+      <li>會算差異、找原因、做物料平衡，看得懂盤點報告</li>
+    </ul></div>
+
+  <h3 class="sec">課程地圖</h3>
+  <p>課程像一件衣服的製作流程一樣，一步接一步。請<b>依照順序</b>上，因為後面的章節會用到前面學過的名詞和算法。</p>
+  <div class="tbl"><table>
+    <tr><th>階段</th><th>章節</th><th>你會學到</th></tr>
+    <tr><td>入門</td><td>1–3</td><td>盤點是什麼、衣服怎麼做出來、為什麼帳和實物會不一樣</td></tr>
+    <tr><td>基礎</td><td>4–5</td><td>盤點的種類、計量單位與換算</td></tr>
+    <tr><td>實務</td><td>6–11</td><td>主料、輔料、裁剪、車縫在製品、成品、機台設備，一區一區實際盤</td></tr>
+    <tr><td>管理</td><td>12–13</td><td>整套盤點流程、差異分析與調帳</td></tr>
+    <tr><td>專業</td><td>14</td><td>物料平衡、損耗、客供料、庫存指標與數位工具</td></tr>
+    <tr><td>結業</td><td>15–16</td><td>期末測驗、結業證書、名詞總表</td></tr>
+  </table></div>
+
+  <h3 class="sec">看懂課本裡的小框框</h3>
+  <div class="box goal"><div class="h">🎯 學習目標</div>每章開頭告訴你這章要學會什麼。</div>
+  <div class="box analogy"><div class="h">🍎 生活比喻</div>用家裡、學校的事情來比喻工廠裡的事，先懂道理再學專業。</div>
+  <div class="term"><div class="t-name">專有名詞<span>英文原名</span></div><div class="t-body"><b>意思：</b>這個詞代表什麼。<br><b>由來：</b>這個詞為什麼這樣叫，從哪裡來。知道由來，就不用死背。</div></div>
+  <div class="box example"><div class="h">📋 工廠實例</div>用真實工廠會遇到的數字來練習。</div>
+  <div class="calc"><div class="h">🧮 算一算</div>可以自己輸入數字的小計算機，改數字看結果怎麼變。</div>
+  <div class="box key"><div class="h">📌 重點回顧</div>每章最後的整理，複習時看這裡就好。</div>
+  <p>每章最後還有 <b>✅ 小測驗</b>，按下答案會立刻告訴你對不對、為什麼。</p>
+
+  <div class="box warn"><div class="h">💡 小提醒</div>這份檔案可以離線使用，也可以用瀏覽器的「列印」存成 PDF。在手機上，按左上角「☰ 目錄」可以跳到任何一章。</div>
+</section>
+
+<!-- ===================== 第1章 ===================== -->
+<section class="chapter" id="ch1" data-title="什麼是盤點？" data-level="入門">
+  <div class="ticket"><div class="ticket-stub"><div class="no">1</div><div class="lv">入門</div></div>
+    <div class="ticket-body"><h2>什麼是盤點？</h2><p>從你的鉛筆盒開始，理解盤點最核心的道理。</p></div></div>
+
+  <div class="box goal"><div class="h">🎯 本章學習目標</div>
+    <ul><li>用自己的話說出「盤點」是什麼</li><li>知道「盤點」和「庫存」這兩個詞的由來</li><li>記住盤點要回答的四個問題</li></ul></div>
+
+  <div class="box analogy"><div class="h">🍎 生活比喻：開學前的鉛筆盒</div>
+    <p>開學前，媽媽幫你買了 5 支鉛筆、2 個橡皮擦、1 把尺，你在筆記本上寫下：「鉛筆 5、橡皮擦 2、尺 1」。</p>
+    <p>一個月後你打開鉛筆盒，一支一支數：鉛筆只剩 3 支，橡皮擦還有 2 個，尺多了一把（同學借你忘了還）。</p>
+    <p>你剛剛做的事，就是<b>盤點</b>：把<b>實際有的東西</b>一個一個數清楚，再拿去和<b>記錄上應該有的</b>對照，看看哪裡不一樣。</p>
+  </div>
+
+  <div class="term"><div class="t-name">盤點<span>Stocktaking／Physical Inventory Count</span></div>
+    <div class="t-body"><b>意思：</b>實地清點物品的種類、數量、位置和狀態，並和帳上的記錄比對。<br>
+    <b>由來：</b>「盤」在中文裡有「仔細查問、反覆核算」的意思，像「盤問」、「盤算」；「點」就是「點數目」。合起來就是「仔細地查、一個一個地數」。英文 Stocktaking 是 stock（存貨）＋ taking（清點），Physical Count 則強調「實地、用手去數」，不是只看電腦。</div></div>
+
+  <div class="term"><div class="t-name">庫存<span>Inventory／Stock</span></div>
+    <div class="t-body"><b>意思：</b>工廠裡存放著、還沒用掉或還沒賣掉的東西，包括原料、半成品和成品。<br>
+    <b>由來：</b>「庫」是倉庫，「存」是存放。英文 Inventory 來自拉丁文 <i>inventarium</i>，意思是「找到的東西的清單」，字根 <i>invenire</i> 是「找到」。古時候有人過世要清點遺產，就會列一張「找到了哪些東西」的清單，這就是 inventory 最早的用法。</div></div>
+
+  <h3 class="sec">工廠為什麼這麼在意盤點？</h3>
+  <p>因為在工廠裡，<b>東西就是錢</b>。一卷布可能值上百美元，一箱拉鍊可能值好幾百美元。倉庫裡堆滿的布和輔料，等於一疊疊的鈔票。如果不知道自己到底有多少，就等於不知道自己口袋裡有多少錢。</p>
+
+  <h3 class="sec">盤點要回答的四個問題</h3>
+  <div class="tbl"><table>
+    <tr><th>問題</th><th>舉例（以一卷布為例）</th></tr>
+    <tr><td>1. 有<b>什麼</b>？</td><td>藍色棉布，布號 C-1024，缸號 A2301</td></tr>
+    <tr><td>2. 有<b>多少</b>？</td><td>98 碼</td></tr>
+    <tr><td>3. 在<b>哪裡</b>？</td><td>主料倉 B 區第 3 排第 2 層</td></tr>
+    <tr><td>4. <b>狀態</b>好不好？</td><td>完好／有汙漬／受潮／過期不用</td></tr>
+  </table></div>
+  <p>很多新人只記得第 2 個問題「有多少」，其實另外三個一樣重要。數量對了，但放錯地方，生產要用的時候找不到，也等於沒有。</p>
+
+  <div class="box key"><div class="h">📌 重點回顧</div>
+    <ol><li>盤點＝實地數清楚東西，再和記錄比對。</li><li>「盤」是仔細查，「點」是一個一個數。</li><li>盤點回答四件事：什麼、多少、在哪、狀態。</li><li>工廠裡的東西就是錢，所以一定要盤。</li></ol></div>
+
+  <h3 class="sec">✅ 小測驗</h3>
+  <div class="quiz" data-answer="2"><p class="q">1. 下面哪一個最符合「盤點」的意思？</p>
+    <button class="opt">只看電腦上的庫存數字</button><button class="opt">把東西搬到倉庫裡</button><button class="opt">實地數清楚東西，再和記錄比對</button><button class="opt">買新的材料補貨</button>
+    <div class="explain">盤點的重點是「實地去數」再「和記錄比對」。只看電腦是看帳，不是盤點。</div></div>
+  <div class="quiz" data-answer="1"><p class="q">2. 數量完全正確，但布放在沒人知道的角落，生產要用時找不到。這違反了盤點四問中的哪一問？</p>
+    <button class="opt">有什麼</button><button class="opt">在哪裡</button><button class="opt">有多少</button><button class="opt">狀態好不好</button>
+    <div class="explain">「在哪裡」答不出來，東西就等於不存在。所以盤點時要把位置一起記下來。</div></div>
+</section>
+
+<!-- ===================== 第2章 ===================== -->
+<section class="chapter" id="ch2" data-title="一件衣服的旅程" data-level="入門">
+  <div class="ticket"><div class="ticket-stub"><div class="no">2</div><div class="lv">入門</div></div>
+    <div class="ticket-body"><h2>一件衣服的旅程</h2><p>先看懂衣服是怎麼做出來的，才知道每一站要盤什麼。</p></div></div>
+
+  <div class="box goal"><div class="h">🎯 本章學習目標</div>
+    <ul><li>說出一件衣服從布料到出貨經過哪些站</li><li>分清楚主料、輔料、在製品、成品</li><li>理解「同一塊布在不同站，樣子和單位都會改變」</li></ul></div>
+
+  <div class="box analogy"><div class="h">🍎 生活比喻：做蛋糕</div>
+    做蛋糕要先買麵粉、雞蛋、糖（原料），然後攪拌、烤（加工中），最後裝盒（成品）。如果有人問「你現在有多少蛋糕？」，你得分清楚：還沒用的麵粉、正在烤箱裡的、已經裝盒的，是三種不同的東西。成衣工廠也是一樣。</div>
+
+  <h3 class="sec">跟著一件 T 恤走一遍</h3>
+  <p>按「▶ 播放旅程」，或直接點任一站看說明。</p>
+  <div class="fig">
+    <div class="journey" id="journey"></div>
+    <div class="box stage-detail" id="stageDetail" aria-live="polite">點一站看看這裡在做什麼、要盤什麼。</div>
+    <button class="btn" id="journeyPlay">▶ 播放旅程</button>
+  </div>
+
+  <h3 class="sec">四大類要盤的東西</h3>
+  <div class="term"><div class="t-name">主料<span>Main Fabric／Shell Fabric</span></div>
+    <div class="t-body"><b>意思：</b>構成衣服主體的布料，例如 T 恤身上的棉布、外套的面布和裡布。<br><b>由來：</b>「主」是主要的。英文 Shell 是「外殼」，指衣服最外面那層布。</div></div>
+  <div class="term"><div class="t-name">輔料<span>Trims／Accessories</span></div>
+    <div class="t-body"><b>意思：</b>幫忙把衣服完成的其他材料：線、鈕扣、拉鍊、標籤、襯、包裝袋、紙箱等。<br><b>由來：</b>「輔」是輔助。英文 Trim 原本是「修飾、裝飾」，因為這些小東西讓衣服「完整、好看」。</div></div>
+  <div class="term"><div class="t-name">在製品<span>WIP，Work In Process</span></div>
+    <div class="t-body"><b>意思：</b>已經開始加工、但還沒做完的東西，例如裁好的布片、縫到一半的衣服。也叫半成品。<br><b>由來：</b>「在製」就是「正在製造中」。英文 Work In Process（或 In Progress）就是「還在進行中的工作」，工廠裡大家常直接說「WIP」。</div></div>
+  <div class="term"><div class="t-name">成品<span>FG，Finished Goods</span></div>
+    <div class="t-body"><b>意思：</b>完全做好、檢查合格、包裝好，可以出貨的衣服。<br><b>由來：</b>「成」是完成。英文 Finished Goods 就是「完成的貨物」，縮寫 FG。</div></div>
+  <p>再加上第五類：<b>機台設備</b>。它不會被「用掉」，但一樣要盤，第 11 章會專門講。</p>
+
+  <h3 class="sec">最重要的觀念：東西會「變身」</h3>
+  <div class="fig">
+  <svg viewBox="0 0 640 150" role="img" aria-label="布料變成裁片、半成品、成品，計算單位跟著改變">
+    <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+    <g font-size="14" text-anchor="middle" fill="currentColor">
+      <g><ellipse cx="70" cy="60" rx="18" ry="30" fill="#3a6ea5"/><rect x="70" y="30" width="60" height="60" fill="#3a6ea5" opacity=".85"/><ellipse cx="130" cy="60" rx="18" ry="30" fill="#5b8fc6"/><ellipse cx="130" cy="60" rx="5" ry="9" fill="#fff"/>
+        <text x="100" y="118" font-weight="700">布料</text><text x="100" y="138" font-size="12">單位：碼／公斤</text></g>
+      <line x1="160" y1="60" x2="200" y2="60" stroke="currentColor" stroke-width="2" marker-end="url(#ar)" style="color:#56625c"/>
+      <g><path d="M215,35 h40 l6,10 v45 h-52 v-45z" fill="#6a9fd4"/><path d="M225,48 h40 l6,10 v40 h-52 v-40z" fill="#3a6ea5"/><rect x="230" y="60" width="18" height="10" fill="#f2c230"/>
+        <text x="245" y="118" font-weight="700">裁片</text><text x="245" y="138" font-size="12">單位：片／綑／套</text></g>
+      <line x1="300" y1="60" x2="340" y2="60" stroke="currentColor" stroke-width="2" marker-end="url(#ar)" style="color:#56625c"/>
+      <g><path d="M360,35 l18,-8 h24 l18,8 l14,18 l-12,8 l-8,-8 v44 h-48 v-44 l-8,8 l-12,-8z" fill="#3a6ea5"/><path d="M372,95 h48" stroke="#c8323c" stroke-width="2" stroke-dasharray="4 3"/>
+        <text x="390" y="118" font-weight="700">半成品</text><text x="390" y="138" font-size="12">單位：件（未完成）</text></g>
+      <line x1="445" y1="60" x2="485" y2="60" stroke="currentColor" stroke-width="2" marker-end="url(#ar)" style="color:#56625c"/>
+      <g><rect x="505" y="28" width="80" height="62" rx="4" fill="#b58a5c"/><rect x="505" y="28" width="80" height="14" fill="#9c7348"/><text x="545" y="72" fill="#fff" font-size="12">24 件</text>
+        <text x="545" y="118" font-weight="700">成品</text><text x="545" y="138" font-size="12">單位：件／箱</text></g>
+    </g>
+  </svg>
+  <figcaption>同一批布，走到不同站，長相和計算單位都不一樣。</figcaption></div>
+  <p>這就是為什麼工廠盤點要<b>分區、分階段</b>：每一區東西長得不同，要用不同方法數。也因為東西會從一區「流」到下一區，<b>區和區之間的交接</b>一定要清楚，否則同一件東西會被算兩次，或者兩邊都沒算。</p>
+
+  <div class="box key"><div class="h">📌 重點回顧</div>
+    <ol><li>衣服的旅程：入倉 → 驗料 → 裁剪 → 車縫 → 整燙 → 品檢 → 包裝 → 成品倉 → 出貨。</li>
+    <li>要盤的五大類：主料、輔料、在製品、成品、機台設備。</li>
+    <li>東西會變身，單位也會變：碼 → 片 → 件 → 箱。</li>
+    <li>交接處要清楚，才不會重複算或漏算。</li></ol></div>
+
+  <h3 class="sec">✅ 小測驗</h3>
+  <div class="quiz" data-answer="3"><p class="q">1. 裁好、但還沒送去縫的布片，屬於哪一類？</p>
+    <button class="opt">主料</button><button class="opt">輔料</button><button class="opt">成品</button><button class="opt">在製品</button>
+    <div class="explain">布已經被裁開，開始加工了，但衣服還沒做完，所以是在製品（WIP）。</div></div>
+  <div class="quiz" data-answer="0"><p class="q">2. 為什麼區和區之間的交接要清楚？</p>
+    <button class="opt">避免同一件東西被算兩次或都沒算到</button><button class="opt">因為主管喜歡看表格</button><button class="opt">這樣可以少盤一點</button><button class="opt">交接不清楚也沒關係</button>
+    <div class="explain">東西在區與區之間流動，交接不清楚，就會重複或遺漏，盤點數字就不可信。</div></div>
+</section>
+
+<!-- ===================== 第3章 ===================== -->
+<section class="chapter" id="ch3" data-title="帳與物：為什麼一定要盤點" data-level="入門">
+  <div class="ticket"><div class="ticket-stub"><div class="no">3</div><div class="lv">入門</div></div>
+    <div class="ticket-body"><h2>帳與物</h2><p>理解「帳面數」和「實際數」，就懂了盤點的全部意義。</p></div></div>
+
+  <div class="box goal"><div class="h">🎯 本章學習目標</div>
+    <ul><li>分清楚帳面數和實際數</li><li>知道什麼是盤盈、盤虧</li><li>說出工廠一定要盤點的四個理由</li></ul></div>
+
+  <div class="term"><div class="t-name">帳面數<span>Book Quantity／System Quantity</span></div>
+    <div class="t-body"><b>意思：</b>記錄上「應該有」的數量。每次東西進來就加，出去就減，算出來的數字。<br><b>由來：</b>「帳」本來是記錄錢和物進出的本子（帳本）。英文 Book 就是「帳本」，現在很多工廠用電腦系統，所以也叫 System Quantity。</div></div>
+  <div class="term"><div class="t-name">實際數<span>Physical Quantity／Actual Count</span></div>
+    <div class="t-body"><b>意思：</b>盤點時真正數到的數量。<br><b>由來：</b>Physical 是「實體的、摸得到的」，也就是「真的在那裡的東西」。</div></div>
+  <div class="term"><div class="t-name">料卡<span>Bin Card／Stock Card</span></div>
+    <div class="t-body"><b>意思：</b>掛在貨架或物料旁的小卡片，記錄這個東西每次進、出、剩多少。<br><b>由來：</b>英文 Bin 是「箱子、儲物格」。以前倉庫每個儲物格都掛一張卡，所以叫 Bin Card。</div></div>
+
+  <h3 class="sec">天平實驗：帳和物對得上嗎？</h3>
+  <p>左邊是帳面數（固定 1,000 條拉鍊），拖動下方的滑桿改變實際數，看看天平怎麼倒。</p>
+  <div class="fig">
+    <svg viewBox="0 0 340 210" id="scaleSvg" role="img" aria-label="帳面數與實際數的天平">
+      <rect x="120" y="188" width="100" height="10" rx="3" fill="var(--muted)"/>
+      <polygon points="160,188 180,188 170,64" fill="var(--muted)"/>
+      <g id="beam" style="transition:transform .4s ease;transform-origin:170px 64px">
+        <rect x="50" y="60" width="240" height="8" rx="4" fill="var(--mat)"/>
+        <line x1="70" y1="64" x2="55" y2="120" stroke="var(--muted)"/><line x1="70" y1="64" x2="85" y2="120" stroke="var(--muted)"/>
+        <path d="M40,120 h60 a30,12 0 0 1 -60,0z" fill="var(--chalk)"/>
+        <text x="70" y="152" text-anchor="middle" font-size="13" fill="currentColor">帳面數</text>
+        <text x="70" y="170" text-anchor="middle" font-size="15" font-weight="700" fill="currentColor">1,000</text>
+        <line x1="270" y1="64" x2="255" y2="120" stroke="var(--muted)"/><line x1="270" y1="64" x2="285" y2="120" stroke="var(--muted)"/>
+        <path d="M240,120 h60 a30,12 0 0 1 -60,0z" fill="var(--tape)"/>
+        <text x="270" y="152" text-anchor="middle" font-size="13" fill="currentColor">實際數</text>
+        <text x="270" y="170" text-anchor="middle" font-size="15" font-weight="700" fill="currentColor" id="actualTxt">1,000</text>
+      </g>
+      <circle cx="170" cy="64" r="7" fill="var(--thread)"/>
+    </svg>
+    <label style="display:block;font-size:14px;color:var(--muted)">實際數：<input type="range" id="actualRange" min="850" max="1150" value="1000" step="5" style="width:100%"></label>
+    <div class="out" id="scaleOut" aria-live="polite">帳物相符 ✔</div>
+  </div>
+
+  <div class="term"><div class="t-name">盤盈 與 盤虧<span>Inventory Gain / Inventory Loss</span></div>
+    <div class="t-body"><b>意思：</b>實際數比帳面數<b>多</b>，叫盤盈；比帳面數<b>少</b>，叫盤虧。兩者都叫「盤點差異」。<br><b>由來：</b>「盈」是滿出來、有多餘（像「盈餘」），「虧」是缺少（像「虧損」）。前面加上「盤」，就是「盤點時發現多了／少了」。</div></div>
+  <div class="formula">盤點差異 ＝ 實際數 − 帳面數<small>正數是盤盈，負數是盤虧，0 就是帳物相符</small></div>
+  <div class="box warn"><div class="h">⚠️ 盤盈不是好事</div>很多人以為「多出來」是賺到，其實盤盈一樣代表記錄有錯：可能收貨沒入帳、可能發料少發了、也可能是別張訂單的東西放錯地方。盤盈和盤虧都要查原因。</div>
+
+  <h3 class="sec">為什麼帳和物會對不上？（先認識，第 13 章再深入）</h3>
+  <div class="tbl"><table>
+    <tr><th>原因</th><th>例子</th></tr>
+    <tr><td>數錯</td><td>一箱 200 顆鈕扣數成 180</td></tr>
+    <tr><td>單位搞錯</td><td>帳上寫 50「籮」，盤點寫 50「粒」</td></tr>
+    <tr><td>單據沒入帳</td><td>布到了、放進倉庫，但入庫單還沒輸入系統</td></tr>
+    <tr><td>正常損耗</td><td>裁剪留下的布頭碎布沒有登記</td></tr>
+    <tr><td>放錯地方</td><td>A 訂單的拉鍊放到 B 訂單的架上</td></tr>
+    <tr><td>遺失或被拿走</td><td>小件物品不見了</td></tr>
+  </table></div>
+
+  <h3 class="sec">工廠一定要盤點的四個理由</h3>
+  <div class="box example"><div class="h">📋 工廠實例：少了 80 條拉鍊</div>
+    帳上有 500 條拉鍊，生產主管以為夠做 500 件外套，就安排上線。做到第 420 件時拉鍊用完了，倉庫翻遍也找不到。整條線停下來等補貨，幾十個工人沒事做，交期也延誤了。如果上線前先盤點，就能提早發現少了 80 條、提早補貨。</div>
+  <ol>
+    <li><b>讓生產不斷料：</b>知道真的有多少，才能安排生產。</li>
+    <li><b>算對成本和利潤：</b>庫存是公司的資產，數字錯了，賺多少錢也會算錯。</li>
+    <li><b>找出浪費和漏洞：</b>損耗太多、東西不見，都是靠盤點發現。</li>
+    <li><b>應付外部查核：</b>客戶、稽核（驗廠）、海關、會計師都會要求看盤點結果。</li>
+  </ol>
+
+  <div class="box key"><div class="h">📌 重點回顧</div>
+    <ol><li>帳面數＝記錄上應該有的；實際數＝真的數到的。</li><li>差異＝實際 − 帳面；多了叫盤盈，少了叫盤虧。</li><li>盤盈也要查原因，不是賺到。</li><li>盤點讓生產不斷料、成本算得準、找出漏洞、應付查核。</li></ol></div>
+
+  <h3 class="sec">✅ 小測驗</h3>
+  <div class="quiz" data-answer="1"><p class="q">1. 帳面有 1,200 碼布，實際盤到 1,150 碼，差異是多少？</p>
+    <button class="opt">盤盈 50 碼</button><button class="opt">盤虧 50 碼</button><button class="opt">盤虧 1,150 碼</button><button class="opt">沒有差異</button>
+    <div class="explain">差異＝實際 − 帳面＝1,150 − 1,200＝−50，負數代表盤虧 50 碼。</div></div>
+  <div class="quiz" data-answer="2"><p class="q">2. 盤點發現鈕扣多了 300 粒（盤盈），應該怎麼做？</p>
+    <button class="opt">太好了，直接收下不用管</button><button class="opt">偷偷拿走，讓帳對上</button><button class="opt">查清楚原因，例如是否收貨沒入帳或別張單的料放錯</button><button class="opt">把盤點單上的數字改成和帳面一樣</button>
+    <div class="explain">盤盈也代表記錄或流程出了問題，要查原因。改數字或拿走都會讓問題被掩蓋。</div></div>
+</section>
+
+<!-- ===================== 第4章 ===================== -->
+<section class="chapter" id="ch4" data-title="盤點的種類" data-level="基礎">
+  <div class="ticket"><div class="ticket-stub"><div class="no">4</div><div class="lv">基礎</div></div>
+    <div class="ticket-body"><h2>盤點的種類</h2><p>不是每次盤點都要全廠停工。依目的不同，有不同的盤法。</p></div></div>
+
+  <div class="box goal"><div class="h">🎯 本章學習目標</div>
+    <ul><li>分清楚全面盤點、循環盤點、抽盤、臨時盤點</li><li>知道靜態和動態盤點的差別</li><li>理解為什麼「盲盤」比「明盤」準</li></ul></div>
+
+  <div class="box analogy"><div class="h">🍎 生活比喻：打掃房子</div>
+    過年前的<b>大掃除</b>，全家停下來把每個角落都掃一遍 → 這是全面盤點。<br>
+    平常<b>每天掃一個房間</b>，一週下來整間房子都掃過了 → 這是循環盤點。<br>
+    媽媽<b>突然檢查</b>你的書桌有沒有整理 → 這是抽盤。</div>
+
+  <h3 class="sec">依「範圍」分</h3>
+  <div class="term"><div class="t-name">全面盤點<span>Full Count／Wall-to-Wall Count</span></div>
+    <div class="t-body"><b>意思：</b>把全廠（或整個倉庫）所有東西一次盤完。通常在月底、半年底或年底做，常要暫停收發料甚至停工。<br><b>由來：</b>英文 Wall-to-Wall 是「從這面牆到那面牆」，形容整個空間一個角落都不放過。</div></div>
+  <div class="term"><div class="t-name">循環盤點<span>Cycle Count</span></div>
+    <div class="t-body"><b>意思：</b>每天或每週只盤一小部分，輪流盤，一段時間後全部都盤過一輪。不用停工。<br><b>由來：</b>Cycle 是「循環、一輪」，像輪流值日一樣一圈一圈地轉。</div></div>
+  <div class="term"><div class="t-name">抽盤<span>Spot Check／Sample Count</span></div>
+    <div class="t-body"><b>意思：</b>從所有項目中挑幾項出來盤，用來檢查帳準不準，或檢查別人盤得對不對。<br><b>由來：</b>「抽」是抽籤、抽樣；Spot 是「某一點」，就是「隨機點一個地方查」。</div></div>
+  <div class="term"><div class="t-name">臨時盤點<span>Ad-hoc Count</span></div>
+    <div class="t-body"><b>意思：</b>沒排在計畫裡、因為特別原因才做的盤點，例如倉管人員交接、發現大量短少、客戶要求、訂單結案。<br><b>由來：</b>Ad hoc 是拉丁文，意思是「為了這件事而做的」。</div></div>
+
+  <h3 class="sec">依「作業狀態」分</h3>
+  <div class="tbl"><table>
+    <tr><th>種類</th><th>做法</th><th>優點</th><th>缺點</th></tr>
+    <tr><td>靜態盤點</td><td>盤點期間停止所有收料、發料、生產移動</td><td>東西不動，最準</td><td>要停工，影響產量</td></tr>
+    <tr><td>動態盤點</td><td>一邊生產、一邊盤</td><td>不影響生產</td><td>容易重複算或漏算，要有嚴格的截止點</td></tr>
+  </table></div>
+
+  <h3 class="sec">依「看不看帳」分：明盤與盲盤</h3>
+  <div class="term"><div class="t-name">盲盤<span>Blind Count</span></div>
+    <div class="t-body"><b>意思：</b>盤點單上<b>不印帳面數</b>，盤點人只寫自己數到的數字。相反地，印出帳面數讓人照著核對，叫「明盤」。<br><b>由來：</b>「盲」是看不見，指盤點人「看不見帳面數」。這樣做是因為人看到一個數字後，很容易不自覺往那個數字靠，心理學叫做<b>錨定效應</b>（像船下了錨就不太動）。例如看到帳上寫 500，數到 497 時可能就會想「應該是我數錯了，寫 500 吧」。</div></div>
+
+  <h3 class="sec">工廠常見的盤點安排</h3>
+  <div class="tbl"><table>
+    <tr><th>頻率</th><th>範圍</th><th>方式</th></tr>
+    <tr><td>每天／每週</td><td>高價、常用、常出錯的物料</td><td>循環盤點、盲盤</td></tr>
+    <tr><td>每月</td><td>倉庫全部物料、成品、線上 WIP</td><td>月底盤點（多數用靜態）</td></tr>
+    <tr><td>每半年／每年</td><td>全廠，含機台設備、固定資產</td><td>全面盤點，會計師可能來監盤</td></tr>
+    <tr><td>訂單結案時</td><td>該訂單剩下的所有物料</td><td>臨時盤點，準備退料或報告</td></tr>
+  </table></div>
+
+  <div class="box key"><div class="h">📌 重點回顧</div>
+    <ol><li>全面盤點像大掃除；循環盤點像每天掃一間。</li><li>抽盤用來檢查；臨時盤點因特殊事件而做。</li><li>靜態最準但要停；動態不停但要嚴守截止點。</li><li>盲盤避免錨定效應，比明盤準。</li></ol></div>
+
+  <h3 class="sec">✅ 小測驗</h3>
+  <div class="quiz" data-answer="1"><p class="q">1. 倉庫每天盤 20 個物料項目，一個月後全部項目都盤過一次，這是哪一種？</p>
+    <button class="opt">全面盤點</button><button class="opt">循環盤點</button><button class="opt">臨時盤點</button><button class="opt">靜態盤點</button>
+    <div class="explain">每天盤一小部分、輪流盤完，就是循環盤點（Cycle Count）。</div></div>
+  <div class="quiz" data-answer="3"><p class="q">2. 為什麼盲盤通常比明盤準？</p>
+    <button class="opt">因為盲盤比較快</button><button class="opt">因為盲盤不用寫字</button><button class="opt">因為盲盤只盤一半</button><button class="opt">因為看不到帳面數，不會被帳上的數字影響</button>
+    <div class="explain">看到帳面數容易產生錨定效應，把數字「湊」成帳上的樣子，盲盤可以避免。</div></div>
+</section>
+
+<!-- ===================== 第5章 ===================== -->
+<section class="chapter" id="ch5" data-title="計量單位與換算" data-level="基礎">
+  <div class="ticket"><div class="ticket-stub"><div class="no">5</div><div class="lv">基礎</div></div>
+    <div class="ticket-body"><h2>計量單位與換算</h2><p>單位弄錯，是盤點出錯的頭號原因。這章一次搞懂。</p></div></div>
+
+  <div class="box goal"><div class="h">🎯 本章學習目標</div>
+    <ul><li>認識成衣廠常用的單位和它們的由來</li><li>會做碼和米、粒和打和籮的換算</li><li>會用布的重量推算碼數</li></ul></div>
+
+  <div class="box warn"><div class="h">⚠️ 盤點第一守則</div><b>帳用什麼單位，盤就用什麼單位。</b>帳上鈕扣如果是 50「籮」，你盤點寫 50「粒」，就差了 144 倍。每一張盤點單的單位欄一定要寫清楚。</div>
+
+  <h3 class="sec">長度單位</h3>
+  <div class="term"><div class="t-name">碼<span>Yard，縮寫 yd</span></div>
+    <div class="t-body"><b>意思：</b>布料最常用的長度單位，1 碼＝0.9144 公尺＝36 吋。<br><b>由來：</b>英文 yard 來自古英語 <i>gerd</i>，意思是「木棍、量杆」。有個流傳很廣的故事說，英王亨利一世規定「從他的鼻尖到伸直手臂的大拇指尖」為一碼。中文「碼」是 yard 的音譯。1959 年各國統一規定 1 碼剛好等於 0.9144 公尺。</div></div>
+  <div class="term"><div class="t-name">吋<span>Inch，縮寫 in 或 "</span></div>
+    <div class="t-body"><b>意思：</b>1 吋＝2.54 公分。布的寬度（幅寬）常用吋表示，例如 58"、60"。<br><b>由來：</b>英文 inch 來自拉丁文 <i>uncia</i>，意思是「十二分之一」，因為 1 呎＝12 吋。中文「吋」是造出來的字，「口」加「寸」表示「英寸」。</div></div>
+  <div class="term"><div class="t-name">幅寬<span>Fabric Width／Cuttable Width</span></div>
+    <div class="t-body"><b>意思：</b>布從一邊到另一邊的寬度。「可裁幅寬」是扣掉兩邊不能用的布邊後，真正能裁的寬度。<br><b>由來：</b>「幅」本來就是指布帛的寬度，所以古人說「一幅畫」、「幅員遼闊」。有些地方也叫「門幅」。</div></div>
+
+  <h3 class="sec">數量單位</h3>
+  <div class="term"><div class="t-name">打<span>Dozen，縮寫 dz</span></div>
+    <div class="t-body"><b>意思：</b>12 個為 1 打。<br><b>由來：</b>英文 dozen 來自法文 <i>douzaine</i>，再往前是拉丁文 <i>duodecim</i>「十二」。中文「打」是 dozen 的音譯（dozen 的第一個音）。為什麼用 12？因為 12 可以被 2、3、4、6 整除，分東西很方便。</div></div>
+  <div class="term"><div class="t-name">籮<span>Gross，縮寫 gr</span></div>
+    <div class="t-body"><b>意思：</b>12 打＝144 個為 1 籮，鈕扣、扣件常用這個單位。<br><b>由來：</b>英文 gross 來自法文 <i>grosse douzaine</i>，意思是「大的一打」，也就是「一打打」。中文工廠習慣稱「籮」，像是用籮筐裝一大批的意思。</div></div>
+  <div class="term"><div class="t-name">疋／卷<span>Roll／Piece</span></div>
+    <div class="t-body"><b>意思：</b>布料整卷的計數單位。每一卷長度不一定相同，所以盤布不能只數「幾卷」，還要記每卷的碼數。<br><b>由來：</b>「匹（疋）」是古代布帛的計量單位，古人把一定長度的布捲成一匹，所以有「布匹」這個詞。</div></div>
+  <div class="term"><div class="t-name">pcs 與 ctn<span>Pieces／Carton</span></div>
+    <div class="t-body"><b>意思：</b>pcs 是「件、個、片」，ctn 是「箱」。<br><b>由來：</b>pcs 是 pieces 的縮寫，ctn 是 carton（紙箱）的縮寫。在單據上看到這兩個字，就知道是在數個數或箱數。</div></div>
+
+  <h3 class="sec">重量單位與布的「克重」</h3>
+  <div class="term"><div class="t-name">克重<span>GSM，Grams per Square Meter</span></div>
+    <div class="t-body"><b>意思：</b>每一平方公尺的布有幾公克重。數字越大，布越厚重。T 恤布常見 150–220 GSM。<br><b>由來：</b>就是英文的縮寫：Grams（公克）per（每）Square Meter（平方公尺）。</div></div>
+
+  <div class="tbl"><table>
+    <tr><th>物品</th><th>常用單位</th><th>換算</th></tr>
+    <tr><td>梭織布</td><td>碼、公尺</td><td>1 碼＝0.9144 公尺</td></tr>
+    <tr><td>針織布</td><td>公斤</td><td>用克重和幅寬換算碼數</td></tr>
+    <tr><td>鈕扣、扣件</td><td>粒、打、籮</td><td>1 籮＝12 打＝144 粒</td></tr>
+    <tr><td>拉鍊</td><td>條</td><td>—</td></tr>
+    <tr><td>縫紉線</td><td>筒（每筒標示米數）</td><td>例：每筒 5,000 米</td></tr>
+    <tr><td>標籤、吊牌</td><td>張、個</td><td>常以 1,000 張一包</td></tr>
+    <tr><td>鬆緊帶、織帶</td><td>碼、米、卷</td><td>1 碼＝0.9144 公尺</td></tr>
+    <tr><td>成品</td><td>件、套、箱</td><td>依裝箱單每箱件數</td></tr>
+  </table></div>
+
+  <h3 class="sec">🧮 動手算</h3>
+  <div class="calc"><div class="h">🧮 算一算①：碼 ↔ 公尺</div>
+    <div class="fields"><label>碼數<input type="number" id="c1yd" value="100" min="0" step="any"></label><label>公尺數<input type="number" id="c1m" value="91.44" min="0" step="any"></label></div>
+    <div class="out">改其中一格，另一格會自動算出來。公式：公尺＝碼 × 0.9144</div></div>
+
+  <div class="calc"><div class="h">🧮 算一算②：粒 → 打、籮</div>
+    <div class="fields"><label>粒數<input type="number" id="c2pcs" value="3000" min="0" step="1"></label></div>
+    <div class="out" id="c2out"></div></div>
+
+  <div class="calc"><div class="h">🧮 算一算③：用布的重量推算碼數</div>
+    <p style="margin:0 0 8px;font-size:15px">針織布常用秤重進貨，但裁剪時要知道碼數。先算「每碼有多重」，再用總重去除。</p>
+    <div class="formula">每碼重量（克）＝ GSM × 幅寬（公尺）× 0.9144<small>幅寬（公尺）＝幅寬（吋）× 0.0254</small></div>
+    <div class="fields"><label>克重 GSM<input type="number" id="c3gsm" value="180" min="1" step="any"></label><label>幅寬（吋）<input type="number" id="c3w" value="60" min="1" step="any"></label><label>布卷淨重（公斤）<input type="number" id="c3kg" value="25" min="0" step="any"></label></div>
+    <div class="out" id="c3out"></div></div>
+
+  <div class="box key"><div class="h">📌 重點回顧</div>
+    <ol><li>帳用什麼單位，盤就用什麼單位。</li><li>1 碼＝0.9144 公尺；1 吋＝2.54 公分。</li><li>1 打＝12；1 籮＝144。</li><li>針織布秤重：碼數＝總重 ÷ 每碼重，每碼重＝GSM × 幅寬(m) × 0.9144。</li></ol></div>
+
+  <h3 class="sec">✅ 小測驗</h3>
+  <div class="quiz" data-answer="2"><p class="q">1. 5 籮鈕扣是多少粒？</p>
+    <button class="opt">60 粒</button><button class="opt">500 粒</button><button class="opt">720 粒</button><button class="opt">1,440 粒</button>
+    <div class="explain">1 籮＝144 粒，5 × 144＝720 粒。</div></div>
+  <div class="quiz" data-answer="0"><p class="q">2. 「碼」這個單位名稱是怎麼來的？</p>
+    <button class="opt">英文 yard 的音譯，yard 原意是量杆</button><button class="opt">因為布上印了號碼</button><button class="opt">密碼的碼</button><button class="opt">一疊布堆成的高度</button>
+    <div class="explain">「碼」是 yard 的音譯。yard 來自古英語 gerd，原意是木棍、量杆。</div></div>
+</section>
+
+<!-- ===================== 第6章 ===================== -->
+<section class="chapter" id="ch6" data-title="主料（布料）盤點" data-level="實務">
+  <div class="ticket"><div class="ticket-stub"><div class="no">6</div><div class="lv">實務</div></div>
+    <div class="ticket-body"><h2>主料（布料）盤點</h2><p>布是成衣廠最值錢的物料，也是最需要仔細盤的。</p></div></div>
+
+  <div class="box goal"><div class="h">🎯 本章學習目標</div>
+    <ul><li>看懂布卷標籤上每個欄位</li><li>知道缸號為什麼一定要分開記</li><li>會盤整卷布、零布和布頭</li></ul></div>
+
+  <h3 class="sec">先認識布：梭織和針織</h3>
+  <div class="term"><div class="t-name">梭織<span>Woven</span></div>
+    <div class="t-body"><b>意思：</b>用直的經線和橫的緯線上下交錯織成的布，像襯衫布、牛仔布。不太有彈性，通常用<b>碼</b>計算。<br><b>由來：</b>織布時要用一個叫「梭子」的工具，帶著緯線在經線中間來回穿梭，所以叫梭織。成語「日月如梭」就是形容時間像梭子一樣來回得很快。</div></div>
+  <div class="term"><div class="t-name">針織<span>Knit</span></div>
+    <div class="t-body"><b>意思：</b>用針把紗線繞成一個個線圈，圈套圈連起來的布，像 T 恤布、運動衣布。有彈性，常用<b>公斤</b>計算。<br><b>由來：</b>就像奶奶用棒針打毛衣，是「用針編織」出來的，所以叫針織。</div></div>
+
+  <h3 class="sec">看懂布卷標籤</h3>
+  <div class="fig">
+  <svg viewBox="0 0 520 230" role="img" aria-label="布卷與卷標示意">
+    <ellipse cx="60" cy="110" rx="34" ry="70" fill="#2a4d80"/>
+    <rect x="60" y="40" width="210" height="140" fill="#3a6ea5"/>
+    <path d="M60,40 h210" stroke="#5b8fc6" stroke-width="3"/>
+    <ellipse cx="270" cy="110" rx="34" ry="70" fill="#5b8fc6"/>
+    <ellipse cx="270" cy="110" rx="10" ry="20" fill="#e8eef5"/>
+    <rect x="120" y="92" width="64" height="40" fill="#fffef6" stroke="#b9ae86"/>
+    <line x1="184" y1="112" x2="316" y2="112" stroke="var(--muted)" stroke-dasharray="4 3"/>
+    <g font-size="13" fill="currentColor">
+      <rect x="316" y="20" width="196" height="190" rx="6" fill="var(--paper)" stroke="var(--line)"/>
+      <text x="330" y="44" font-weight="700" font-size="14">布卷標籤 Roll Tag</text>
+      <text x="330" y="70">布號：C-1024 全棉平紋</text>
+      <text x="330" y="94">色號：NAVY 深藍</text>
+      <text x="330" y="118" fill="var(--thread)" font-weight="700">缸號：A2301</text>
+      <text x="330" y="142">卷號：R-017</text>
+      <text x="330" y="166">幅寬：58"  長度：102 yd</text>
+      <text x="330" y="190">淨重：24.6 kg</text>
+    </g>
+  </svg>
+  <figcaption>每一卷布都會貼一張卷標，盤點時就是看這張。</figcaption></div>
+
+  <div class="term"><div class="t-name">缸號<span>Dye Lot</span></div>
+    <div class="t-body"><b>意思：</b>布料染色時的批次編號。同一個缸號的布是在同一次、同一個染缸裡染的，顏色一致。<br><b>由來：</b>布是放進大「染缸」裡染色的，每一缸就是一批，所以叫缸號。英文 Dye 是染色，Lot 是批。<b>重要：</b>就算色號一樣，不同缸染出來的顏色也會有一點點差別（叫「色差」）。一件衣服如果前片用 A 缸、後片用 B 缸，穿上身就會看出兩種藍。</div></div>
+  <div class="fig">
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <div style="text-align:center"><div style="width:90px;height:70px;border-radius:6px;background:#2f4b7c"></div><div style="font-size:13px">缸號 A2301</div></div>
+      <div style="text-align:center"><div style="width:90px;height:70px;border-radius:6px;background:#35548c"></div><div style="font-size:13px">缸號 A2302</div></div>
+      <div style="text-align:center"><div style="width:90px;height:70px;border-radius:6px;background:#2b456f"></div><div style="font-size:13px">缸號 A2303</div></div>
+    </div>
+    <figcaption>三缸都是「深藍 NAVY」，但仔細看顏色深淺不同。所以盤點時缸號一定要分開記。</figcaption></div>
+
+  <div class="term"><div class="t-name">卷號<span>Roll No.</span></div>
+    <div class="t-body"><b>意思：</b>每一卷布自己的編號，像身分證字號。<br><b>由來：</b>「卷」就是一卷布。有了卷號，才能追查某一卷布是哪天進來、有沒有被裁過、剩多少。</div></div>
+
+  <h3 class="sec">三種狀態，三種盤法</h3>
+  <div class="tbl"><table>
+    <tr><th>布的狀態</th><th>怎麼盤</th><th>注意事項</th></tr>
+    <tr><td><b>整卷（未拆）</b></td><td>核對卷標：布號、色號、缸號、卷號、碼數。數卷數，加總碼數。</td><td>要<b>抽查</b>部分卷真的量碼數或秤重，確認卷標的數字是對的。</td></tr>
+    <tr><td><b>零布（已拆封、用剩的）</b></td><td>用驗布機或量布機重新量碼數；或秤重後換算碼數。</td><td>寫一張新標籤貼上，註明剩餘碼數和原本卷號、缸號。</td></tr>
+    <tr><td><b>布頭碎布</b></td><td>秤重，以公斤計算。分成「還能用」和「不能用」兩堆。</td><td>不能用的要走報廢流程，不能和好布混在一起。</td></tr>
+  </table></div>
+
+  <div class="term"><div class="t-name">短碼<span>Short Yardage／Shortage</span></div>
+    <div class="t-body"><b>意思：</b>卷標寫 100 碼，實際量只有 97 碼，少了的部分叫短碼。<br><b>由來：</b>「短」是不夠，「碼」是單位，就是「碼數不足」。這是布料盤點最常見的差異原因之一，所以進貨和盤點都要抽量。</div></div>
+  <div class="term"><div class="t-name">先進先出<span>FIFO，First In First Out</span></div>
+    <div class="t-body"><b>意思：</b>先進倉的布先拿去用。<br><b>由來：</b>就是英文的直譯。像超市把舊牛奶放前面、新牛奶放後面，避免舊的放到過期。布放太久會變色、受潮、發霉，所以要先進先出。</div></div>
+
+  <div class="box example"><div class="h">📋 工廠實例：布料盤點表（節錄）</div>
+    <div class="tbl"><table>
+      <tr><th>位置</th><th>布號</th><th>色號</th><th>缸號</th><th>卷號</th><th class="num">帳面碼</th><th class="num">實盤碼</th><th>狀態</th></tr>
+      <tr><td>B-03-2</td><td>C-1024</td><td>NAVY</td><td>A2301</td><td>R-017</td><td class="num">102</td><td class="num">102</td><td>整卷</td></tr>
+      <tr><td>B-03-2</td><td>C-1024</td><td>NAVY</td><td>A2301</td><td>R-018</td><td class="num">98</td><td class="num">95</td><td>整卷，抽量短碼</td></tr>
+      <tr><td>B-03-3</td><td>C-1024</td><td>NAVY</td><td>A2302</td><td>R-031</td><td class="num">37</td><td class="num">37</td><td>零布</td></tr>
+      <tr><td>Z-01</td><td>C-1024</td><td>NAVY</td><td>—</td><td>—</td><td class="num">—</td><td class="num">6.2 kg</td><td>布頭，可用</td></tr>
+    </table></div></div>
+
+  <h3 class="sec">布料倉盤點小技巧</h3>
+  <ul>
+    <li>同布號、同缸號放在一起，卷標一律朝外，盤點時不用翻動。</li>
+    <li>盤過的布卷貼上盤點貼紙或做記號，避免重複盤。</li>
+    <li>把「客戶的布」和「工廠自己買的布」分開放、分開盤（第 14 章會解釋原因）。</li>
+    <li>發現受潮、發霉、破洞、色差的布，另外記錄狀態，不能只寫數量。</li>
+  </ul>
+
+  <div class="box key"><div class="h">📌 重點回顧</div>
+    <ol><li>梭織用碼、針織常用公斤。</li><li>卷標要看：布號、色號、缸號、卷號、幅寬、碼數、重量。</li><li>缸號不同就有色差，一定分開記。</li><li>整卷看卷標加抽量；零布重新量；布頭秤重。</li></ol></div>
+
+  <h3 class="sec">✅ 小測驗</h3>
+  <div class="quiz" data-answer="1"><p class="q">1. 同一個色號的布，為什麼還要分缸號記錄？</p>
+    <button class="opt">因為不同缸的價錢不同</button><button class="opt">因為不同缸染出來會有色差，混用會讓衣服顏色不一致</button><button class="opt">因為缸號就是卷號</button><button class="opt">不用分，色號一樣就好</button>
+    <div class="explain">每一缸染出來的顏色都會有些微差別，混在同一件衣服上就會看出色差。</div></div>
+  <div class="quiz" data-answer="3"><p class="q">2. 一卷已經拆開用過一部分的布，最好怎麼盤？</p>
+    <button class="opt">照原本卷標上的碼數寫</button><button class="opt">算半卷</button><button class="opt">不用盤</button><button class="opt">重新量碼數或秤重換算，並貼新標籤</button>
+    <div class="explain">原卷標的數字已經不對了，必須重新量或秤重，再寫新標籤。</div></div>
+</section>
+
+<!-- ===================== 第7章 ===================== -->
+<section class="chapter" id="ch7" data-title="輔料盤點" data-level="實務">
+  <div class="ticket"><div class="ticket-stub"><div class="no">7</div><div class="lv">實務</div></div>
+    <div class="ticket-body"><h2>輔料盤點</h2><p>東西小、種類多、數量大，要學會聰明地數。</p></div></div>
+
+  <div class="box goal"><div class="h">🎯 本章學習目標</div>
+    <ul><li>認識常見輔料和它們的計量單位</li><li>學會「秤重計數法」，不用一粒一粒數</li><li>分清楚毛重、皮重、淨重</li></ul></div>
+
+  <h3 class="sec">認識常見輔料</h3>
+  <div class="tbl"><table>
+    <tr><th>類別</th><th>例子</th><th>常用單位</th><th>盤法</th></tr>
+    <tr><td>縫紉線</td><td>車縫線、拷克線</td><td>筒</td><td>整筒數筒數；用過的半筒秤重估算，或依公司規定折算</td></tr>
+    <tr><td>扣件</td><td>鈕扣、四合扣、撞釘</td><td>粒、籮</td><td>整包看包裝數加抽查；散裝用秤重計數</td></tr>
+    <tr><td>拉鍊</td><td>尼龍拉鍊、金屬拉鍊</td><td>條</td><td>每捆 100 條時數捆數加抽點；要分長度、顏色</td></tr>
+    <tr><td>標籤類</td><td>主標、洗水嘜、尺碼標、吊牌</td><td>張、個</td><td>分訂單、分尺碼；整包看包裝數，散的逐張數或秤重</td></tr>
+    <tr><td>襯</td><td>黏合襯、無紡襯</td><td>碼、米</td><td>和布料一樣，整卷看標、零卷重量</td></tr>
+    <tr><td>帶類</td><td>鬆緊帶、織帶、繩</td><td>碼、米、卷</td><td>整卷看標；零卷量長度或秤重</td></tr>
+    <tr><td>包裝材料</td><td>膠袋、紙箱、貼紙、防潮包</td><td>個、張</td><td>紙箱數捆數 × 每捆張數；膠袋整包數包</td></tr>
+  </table></div>
+
+  <div class="term"><div class="t-name">洗水嘜<span>Care Label</span></div>
+    <div class="t-body"><b>意思：</b>縫在衣服裡面、寫著成分和洗滌方式的小布標。<br><b>由來：</b>「嘜」是英文 mark（標記）的音譯，這個用法從香港、廣東的工廠流傳開來。「洗水」就是洗滌。英文 Care Label 是「照顧衣服的說明標」。</div></div>
+  <div class="term"><div class="t-name">吊牌<span>Hang Tag</span></div>
+    <div class="t-body"><b>意思：</b>用膠針或繩子掛在衣服外面的紙牌，上面有品牌、價格、條碼。<br><b>由來：</b>因為是「吊掛」在衣服上的牌子。英文 Hang 是掛，Tag 是標籤牌。</div></div>
+  <div class="term"><div class="t-name">襯<span>Interlining</span></div>
+    <div class="t-body"><b>意思：</b>夾在布料中間讓衣領、門襟變挺的材料。<br><b>由來：</b>「襯」有墊在裡面、襯托的意思。英文 inter（在中間）＋ lining（裡布），就是「夾在中間的那層」。</div></div>
+
+  <h3 class="sec">毛重、皮重、淨重</h3>
+  <div class="box analogy"><div class="h">🍎 生活比喻：買一袋糖果</div>
+    你把整袋糖果放上秤，顯示 520 公克（<b>毛重</b>）。倒出糖果後，空袋子重 20 公克（<b>皮重</b>）。糖果本身就是 520 − 20＝500 公克（<b>淨重</b>）。</div>
+  <div class="term"><div class="t-name">毛重、皮重、淨重<span>Gross / Tare / Net Weight</span></div>
+    <div class="t-body"><b>意思：</b>毛重是連包裝一起的重量；皮重是包裝本身的重量；淨重是東西本身的重量。<br><b>由來：</b>「皮」指外面那層包裝，像水果的皮；「淨」是乾淨、只剩本身；「毛」是還沒去掉雜物、粗略的，像「毛利」。英文 Tare 來自阿拉伯文，原意是「扣掉、丟掉的部分」。</div></div>
+  <div class="formula">淨重 ＝ 毛重 − 皮重</div>
+
+  <h3 class="sec">秤重計數法：幾千粒鈕扣不用一粒一粒數</h3>
+  <p>原理很簡單：先數一小份（樣本），秤出重量，就知道「每粒多重」；再秤全部的淨重，用除法算出總數。</p>
+  <div class="formula">總數量 ＝ 淨重 ÷（樣本重量 ÷ 樣本數量）</div>
+  <div class="calc"><div class="h">🧮 算一算：秤重計數</div>
+    <div class="fields">
+      <label>樣本數量（粒）<input type="number" id="w_n" value="100" min="1" step="1"></label>
+      <label>樣本重量（克）<input type="number" id="w_sw" value="42" min="0.01" step="any"></label>
+      <label>整袋毛重（克）<input type="number" id="w_g" value="1280" min="0" step="any"></label>
+      <label>空袋皮重（克）<input type="number" id="w_t" value="20" min="0" step="any"></label>
+    </div>
+    <div class="out" id="w_out"></div></div>
+  <div class="box warn"><div class="h">⚠️ 秤重計數要注意</div>
+    <ul style="margin:0;padding-left:22px">
+      <li>樣本要夠多，建議至少 100 粒，太少誤差會很大。</li>
+      <li>一定要扣皮重（袋子、盒子的重量）。</li>
+      <li>秤要準，最好用電子秤，盤點前先歸零、校正。</li>
+      <li>不同尺寸、不同顏色的扣子重量可能不同，要分開秤。</li>
+      <li>高價物品（例如金屬配件）建議直接點數，不要只靠秤重。</li>
+    </ul></div>
+
+  <h3 class="sec">輔料特別要注意的地方</h3>
+  <p><b>1. 輔料常常是「訂單專用」。</b>印了品牌名稱的標籤、特定顏色的拉鍊，只能用在那張訂單。所以盤點時要記錄「屬於哪張訂單、哪個款號」，不能全部混在一起。</p>
+  <p><b>2. 標籤要分尺碼。</b>S 碼的尺碼標不能拿去縫 L 碼的衣服。數到 3,000 張尺碼標，要寫清楚 S、M、L、XL 各多少。</p>
+  <p><b>3. 訂單結束後剩下的輔料最容易變成呆料。</b>要單獨盤出來，決定退給客戶、轉用或報廢。</p>
+
+  <div class="box key"><div class="h">📌 重點回顧</div>
+    <ol><li>輔料種類多，每種單位不同，盤點單一定寫單位。</li><li>淨重＝毛重 − 皮重。</li><li>秤重計數：總數＝淨重 ÷ 單粒重，樣本至少 100。</li><li>輔料要分訂單、分款號、分尺碼記錄。</li></ol></div>
+
+  <h3 class="sec">✅ 小測驗</h3>
+  <div class="quiz" data-answer="2"><p class="q">1. 100 粒鈕扣重 50 克。一袋毛重 2,030 克，袋子重 30 克，大約有幾粒？</p>
+    <button class="opt">2,030 粒</button><button class="opt">406 粒</button><button class="opt">4,000 粒</button><button class="opt">40 粒</button>
+    <div class="explain">每粒 0.5 克；淨重 2,030 − 30＝2,000 克；2,000 ÷ 0.5＝4,000 粒。</div></div>
+  <div class="quiz" data-answer="0"><p class="q">2. 為什麼尺碼標要分尺碼記錄？</p>
+    <button class="opt">因為 S 碼的標不能用在 L 碼的衣服上</button><button class="opt">因為尺碼標很貴</button><button class="opt">因為秤不出重量</button><button class="opt">不用分，總數對就好</button>
+    <div class="explain">不同尺碼的標不能互相代替，只看總數會以為夠用，實際某個尺碼可能不夠。</div></div>
+</section>
+
+<!-- ===================== 第8章 ===================== -->
+<section class="chapter" id="ch8" data-title="裁剪盤點" data-level="實務">
+  <div class="ticket"><div class="ticket-stub"><div class="no">8</div><div class="lv">實務</div></div>
+    <div class="ticket-body"><h2>裁剪盤點</h2><p>布在這裡第一次「變身」：從一卷布變成一片片裁片。</p></div></div>
+
+  <div class="box goal"><div class="h">🎯 本章學習目標</div>
+    <ul><li>了解裁剪的流程和名詞：排版、拉布、層數、綑扎</li><li>會算「裁了幾件」</li><li>知道裁剪區要盤哪幾種東西、界線在哪裡</li></ul></div>
+
+  <h3 class="sec">裁剪流程</h3>
+  <ol class="steps">
+    <li><b>領布：</b>拿著領料單到布倉領布，這時布從「倉庫帳」轉到「裁剪帳」。</li>
+    <li><b>鬆布：</b>針織布捲得很緊，要先攤開放一段時間讓它回縮，裁出來尺寸才不會跑掉。</li>
+    <li><b>拉布：</b>把布一層一層平鋪在裁床上。</li>
+    <li><b>排版：</b>把衣服各片的紙樣排在最上層，排得越密，浪費越少。</li>
+    <li><b>裁剪：</b>用電剪或自動裁床，一次把很多層一起裁下來。</li>
+    <li><b>打號、綑扎：</b>每片編號，按尺碼、層次綁成一綑一綑，掛上綑票。</li>
+    <li><b>發片：</b>把裁片交給車縫線，簽交接單。</li>
+  </ol>
+
+  <div class="term"><div class="t-name">排版／嘜架<span>Marker</span></div>
+    <div class="t-body"><b>意思：</b>把一件或多件衣服的所有紙樣，排在一張和布一樣寬的大紙上，當作裁剪的「地圖」。<br><b>由來：</b>英文 Marker 是「做記號的東西」，因為要把裁線畫在紙上。廣東、香港工廠把 marker 音譯成「嘜架」。<b>排版效率</b>（Marker Efficiency）＝紙樣面積 ÷ 排版總面積，越高代表浪費越少。</div></div>
+  <div class="term"><div class="t-name">拉布與層數<span>Spreading / Ply</span></div>
+    <div class="t-body"><b>意思：</b>把布一層層鋪平在裁床上叫拉布；鋪了幾層就是層數。<br><b>由來：</b>Spread 是「攤開」；Ply 原本是「層、股」的意思，像「三層衛生紙」就是 3-ply。</div></div>
+  <div class="term"><div class="t-name">綑扎與綑票<span>Bundle / Bundle Ticket</span></div>
+    <div class="t-body"><b>意思：</b>把同尺碼、同一段層次的裁片綁成一綑（例如 10 件或 20 件一綑），掛上寫有款號、顏色、尺碼、件數、綑號的票。<br><b>由來：</b>Bundle 就是「一捆」。廣東工廠也把綑票叫「飛仔」，因為粵語把票叫「飛」（ticket 的音）。</div></div>
+
+  <h3 class="sec">動畫：一次裁出幾件？</h3>
+  <p>這張排版上排了 S×1、M×2、L×2、XL×1，一層布可以裁出 6 件。按播放看拉布過程。</p>
+  <div class="fig">
+    <svg viewBox="0 0 340 200" id="spreadSvg" role="img" aria-label="拉布與排版裁剪動畫">
+      <rect x="20" y="170" width="300" height="12" rx="2" fill="var(--muted)"/>
+      <rect x="30" y="182" width="8" height="16" fill="var(--muted)"/><rect x="302" y="182" width="8" height="16" fill="var(--muted)"/>
+      <g id="layers"></g>
+      <g id="markerG" style="opacity:0;transition:opacity .5s"></g>
+      <text x="170" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="currentColor" id="plyTxt">層數：0</text>
+    </svg>
+    <div class="fields" style="margin-top:8px">
+      <label>拉布層數<input type="number" id="plyIn" value="50" min="1" max="200" step="1"></label>
+    </div>
+    <button class="btn" id="spreadPlay">▶ 播放拉布</button>
+    <div class="out" id="spreadOut">按播放開始。</div>
+  </div>
+  <div class="formula">裁剪件數 ＝ 拉布層數 × 每層排版件數</div>
+
+  <h3 class="sec">為什麼要「打號」？</h3>
+  <p>還記得缸號嗎？就算同一缸，一卷布的頭和尾顏色也可能有極小差別。裁剪後，同一件衣服的前片、後片、袖子，必須來自<b>同一層布</b>。所以每一層裁片都打上相同的號碼，車縫時同號的湊成一件，就不會有色差。這也讓盤點時可以追查：哪一綑、哪幾號、少了哪一片。</p>
+
+  <h3 class="sec">裁剪區要盤什麼？</h3>
+  <div class="tbl"><table>
+    <tr><th>東西</th><th>還算是什麼</th><th>單位</th></tr>
+    <tr><td>已領出、還沒拉的整卷布</td><td>布料（裁剪領用未用）</td><td>碼／公斤</td></tr>
+    <tr><td>拉在裁床上、還沒裁的布</td><td>布料（按層數 × 每層長度估算）</td><td>碼</td></tr>
+    <tr><td>已裁好、還沒發給車縫的裁片</td><td>裁剪在製品</td><td>件（套）／綑</td></tr>
+    <tr><td>裁剪剩下的布頭</td><td>下腳料</td><td>公斤</td></tr>
+    <tr><td>已發給車縫的裁片</td><td><b>不歸裁剪了！</b>算車縫在製品</td><td>—</td></tr>
+  </table></div>
+  <div class="box warn"><div class="h">⚠️ 片、套、件不能混</div>一件 T 恤由前片、後片、兩隻袖子、一條領子組成。你數到 400 片袖子，只能做 200 件，不是 400 件。盤裁片時要以「<b>套</b>」為單位，湊得成一整件的才算一件，缺片的要另外記錄。</div>
+
+  <div class="box example"><div class="h">📋 工廠實例</div>
+    某款 T 恤，排版 S1 M2 L2 XL1，拉布 50 層。<br>
+    裁出：S 50 件、M 100 件、L 100 件、XL 50 件，共 300 件。<br>
+    已發車縫 20 綑（每綑 10 件）＝200 件。<br>
+    所以裁剪區應該還有 300 − 200＝<b>100 件</b>的裁片。現場點數，看看對不對得上。</div>
+
+  <div class="box key"><div class="h">📌 重點回顧</div>
+    <ol><li>流程：領布 → 鬆布 → 拉布 → 排版 → 裁剪 → 打號綑扎 → 發片。</li><li>裁剪件數＝層數 × 每層件數。</li><li>打號讓同一件衣服的裁片來自同一層布。</li><li>已發給車縫的裁片不算裁剪區；片、套、件不能混。</li></ol></div>
+
+  <h3 class="sec">✅ 小測驗</h3>
+  <div class="quiz" data-answer="1"><p class="q">1. 排版每層 8 件，拉布 40 層，共裁出幾件？</p>
+    <button class="opt">48 件</button><button class="opt">320 件</button><button class="opt">40 件</button><button class="opt">800 件</button>
+    <div class="explain">40 層 × 8 件＝320 件。</div></div>
+  <div class="quiz" data-answer="3"><p class="q">2. 已經發給車縫線的裁片，盤點時應該算在哪裡？</p>
+    <button class="opt">裁剪區</button><button class="opt">布料倉</button><button class="opt">成品倉</button><button class="opt">車縫在製品</button>
+    <div class="explain">交接之後就歸車縫線，裁剪區不能再算，否則就重複了。</div></div>
+</section>
+
+<!-- ===================== 第9章 ===================== -->
+<section class="chapter" id="ch9" data-title="車縫在製品（WIP）盤點" data-level="實務">
+  <div class="ticket"><div class="ticket-stub"><div class="no">9</div><div class="lv">實務</div></div>
+    <div class="ticket-body"><h2>車縫在製品盤點</h2><p>整個工廠最難盤的地方：東西一直在動，而且每一站長得都不一樣。</p></div></div>
+
+  <div class="box goal"><div class="h">🎯 本章學習目標</div>
+    <ul><li>理解生產線、工序、在製品的意思</li><li>學會用「帳面推算 ＋ 現場點數」兩邊對照</li><li>進階：會算約當產量</li></ul></div>
+
+  <div class="term"><div class="t-name">流水線<span>Assembly Line／Production Line</span></div>
+    <div class="t-body"><b>意思：</b>把做一件衣服拆成很多小步驟，每個人只負責其中一步，衣服像水流一樣一站站往下傳。<br><b>由來：</b>「流水」形容像水一樣流動不停。1913 年美國福特汽車工廠大規模使用移動式組裝線，讓汽車的組裝時間大幅縮短，之後全世界的工廠都學這種做法。</div></div>
+  <div class="term"><div class="t-name">工序<span>Operation</span></div>
+    <div class="t-body"><b>意思：</b>生產中的一個步驟，例如「合肩」、「上領」、「上袖」。一件 T 恤可能有十幾道工序，一件外套可能有上百道。<br><b>由來：</b>「工」是工作，「序」是順序，就是「工作的順序」。</div></div>
+  <div class="term"><div class="t-name">綑扎式生產<span>PBS，Progressive Bundle System</span></div>
+    <div class="t-body"><b>意思：</b>裁片以「綑」為單位在工序之間傳遞，一個工人做完整綑再往下傳。成衣廠最常見的生產方式。<br><b>由來：</b>Progressive 是「一步步前進的」，Bundle 是一綑，就是「一綑一綑往前推進的系統」。</div></div>
+
+  <h3 class="sec">為什麼 WIP 最難盤？</h3>
+  <ul>
+    <li><b>一直在動：</b>你數完這站，下一分鐘東西就被傳走了。</li>
+    <li><b>每站長相不同：</b>第一站是裁片，中間是縫了一半的衣服，最後是整件。</li>
+    <li><b>散落各處：</b>工作台上、車台下、籃子裡、返修區、剪線區，甚至掉在地上。</li>
+  </ul>
+
+  <h3 class="sec">兩邊一起算：帳面 WIP 對照現場點數</h3>
+  <div class="formula">帳面 WIP ＝ 車縫收到的裁片數 − 車縫交出的件數 − 報廢數<small>先用單據算出「應該有多少」，再到現場點「實際有多少」</small></div>
+
+  <h3 class="sec">模擬：一條車縫線</h3>
+  <p>每個方塊是一綑（10 件）。按「開始生產」讓線動起來，按「停線盤點」看每站有多少。也可以按「模擬掉了一綑」，看看盤點時會發生什麼事。</p>
+  <div class="fig">
+    <div class="line" id="line"></div>
+    <div style="margin-top:8px">
+      <button class="btn" id="lineRun">▶ 開始生產</button>
+      <button class="btn ghost" id="lineCount">⏸ 停線盤點</button>
+      <button class="btn ghost" id="lineLose">模擬掉了一綑</button>
+      <button class="btn ghost" id="lineReset">重設</button>
+    </div>
+    <div class="out" id="lineOut" aria-live="polite">按「開始生產」。</div>
+  </div>
+
+  <h3 class="sec">WIP 盤點的實務做法</h3>
+  <ol class="steps">
+    <li><b>選時間：</b>通常選下班後、午休或週末停線時盤，東西不動最準。</li>
+    <li><b>依工序站點盤：</b>從第一站走到最後一站，每站記錄款號、顏色、尺碼、件數。</li>
+    <li><b>看綑票：</b>有綑票的直接記綑號和件數；散件逐件數。</li>
+    <li><b>搜「死角」：</b>車台下、抽屜、返修籃、剪線區、品檢區都要找。</li>
+    <li><b>對照帳面：</b>把現場點數和帳面 WIP 比，差太多就要找原因。</li>
+  </ol>
+
+  <h3 class="sec">進階：約當產量</h3>
+  <p>會計算成本時會問：「線上 1,000 件半成品，等於幾件成品的價值？」剛上線的只做了一點點，快完成的已經做了九成，不能都當成一件完整的衣服。</p>
+  <div class="term"><div class="t-name">約當產量<span>Equivalent Units</span></div>
+    <div class="t-body"><b>意思：</b>把還沒做完的半成品，按完成程度折算成「等於幾件完成品」。<br><b>由來：</b>「約當」是古漢語「大約相當於」的意思。英文 Equivalent 是「等值的」，就是「換算成等值的完成件數」。</div></div>
+  <div class="formula">約當產量 ＝ Σ（各站件數 × 完成程度 %）</div>
+  <div class="calc"><div class="h">🧮 算一算：約當產量</div>
+    <div class="tbl"><table id="euTable">
+      <tr><th>位置</th><th class="num">件數</th><th class="num">完成程度 %</th><th class="num">約當件數</th></tr>
+    </table></div>
+    <div class="out" id="euOut"></div></div>
+
+  <div class="term"><div class="t-name">精實生產<span>Lean Production</span></div>
+    <div class="t-body"><b>意思：</b>一種盡量減少浪費的生產方式，認為「太多在製品」本身就是一種浪費：占空間、壓資金，還會把品質問題藏起來。<br><b>由來：</b>源自日本豐田汽車的生產方式。1988 年美國學者 John Krafcik 在文章裡用 lean（瘦、精實、沒有贅肉）來形容它，這個名字就流傳開了。所以 WIP 盤點不只是為了算數，也是檢查「線上是不是堆太多了」。</div></div>
+
+  <div class="box key"><div class="h">📌 重點回顧</div>
+    <ol><li>WIP 會動、會變樣、會散落，最好停線盤。</li><li>帳面 WIP＝收到裁片 − 交出件數 − 報廢。</li><li>現場依工序站點盤，死角都要找。</li><li>約當產量＝件數 × 完成程度，用於成本計算。</li></ol></div>
+
+  <h3 class="sec">✅ 小測驗</h3>
+  <div class="quiz" data-answer="2"><p class="q">1. 車縫線收到 2,000 件裁片，已交出 1,650 件，報廢 10 件，帳面 WIP 應該是多少？</p>
+    <button class="opt">350 件</button><button class="opt">1,650 件</button><button class="opt">340 件</button><button class="opt">360 件</button>
+    <div class="explain">2,000 − 1,650 − 10＝340 件。</div></div>
+  <div class="quiz" data-answer="0"><p class="q">2. 線上有 200 件完成 50% 的半成品，約當產量是多少？</p>
+    <button class="opt">100 件</button><button class="opt">200 件</button><button class="opt">50 件</button><button class="opt">400 件</button>
+    <div class="explain">200 × 50%＝100 件。</div></div>
+  <div class="quiz" data-answer="3"><p class="q">3. 帳面 WIP 是 340 件，現場只點到 330 件，下一步最好做什麼？</p>
+    <button class="opt">直接把帳改成 330</button><button class="opt">不用管，差不多就好</button><button class="opt">怪最後一站的工人</button><button class="opt">先搜車台下、返修區、品檢區等死角，再查單據</button>
+    <div class="explain">先確認東西是不是散落在沒盤到的地方，再查單據是否漏記，最後才決定調帳。</div></div>
+</section>
+
+<!-- ===================== 第10章 ===================== -->
+<section class="chapter" id="ch10" data-title="整燙、包裝與成品盤點" data-level="實務">
+  <div class="ticket"><div class="ticket-stub"><div class="no">10</div><div class="lv">實務</div></div>
+    <div class="ticket-body"><h2>整燙、包裝與成品盤點</h2><p>最後一哩路：衣服做好了，要數對、裝對、才能出貨。</p></div></div>
+
+  <div class="box goal"><div class="h">🎯 本章學習目標</div>
+    <ul><li>知道後整區有哪幾個要盤的地方</li><li>看懂裝箱單、箱嘜、單色單碼和混碼裝箱</li><li>會用「箱數 × 每箱件數 ＋ 尾箱」核對成品</li></ul></div>
+
+  <div class="term"><div class="t-name">後整<span>Finishing</span></div>
+    <div class="t-body"><b>意思：</b>車縫完成後的所有步驟：剪線頭、整燙、品檢、掛吊牌、摺衣、入袋、裝箱。<br><b>由來：</b>「後」是車縫之後，「整」是整理。英文 Finishing 是「收尾、完成」。</div></div>
+  <div class="term"><div class="t-name">品檢與 AQL<span>QC／Acceptable Quality Level</span></div>
+    <div class="t-body"><b>意思：</b>品檢是檢查衣服有沒有瑕疵。AQL 是「允收品質水準」，客戶抽查時規定最多允許幾件不良。<br><b>由來：</b>QC 是 Quality Control（品質管制）。AQL 直譯就是「可以接受的品質等級」，因為不可能每件都拆開驗，所以用抽樣和標準決定整批收不收。</div></div>
+  <div class="term"><div class="t-name">次品與返修<span>B-Grade / Rework</span></div>
+    <div class="t-body"><b>意思：</b>有瑕疵不能當正品出貨的叫次品（B 品）；能修好的送回去修，叫返修。<br><b>由來：</b>A 是第一等，B 是第二等，所以叫 B 品。Rework 是「重做」。</div></div>
+
+  <h3 class="sec">後整區的盤點位置</h3>
+  <div class="tbl"><table>
+    <tr><th>位置</th><th>狀態</th><th>盤點重點</th></tr>
+    <tr><td>待剪線／待燙</td><td>車縫已完成</td><td>逐件數，分款、色、碼</td></tr>
+    <tr><td>待檢</td><td>已燙</td><td>逐件數</td></tr>
+    <tr><td>返修區</td><td>不合格，等修</td><td>單獨記錄，不能混進良品</td></tr>
+    <tr><td>次品區</td><td>無法修復</td><td>單獨記錄，走次品流程</td></tr>
+    <tr><td>待包裝</td><td>已檢合格</td><td>逐件數</td></tr>
+    <tr><td>已裝箱、未入倉</td><td>成品</td><td>數箱數，核對箱嘜</td></tr>
+    <tr><td>成品倉</td><td>成品，等出貨</td><td>數箱數 ＋ 抽箱開驗</td></tr>
+  </table></div>
+
+  <h3 class="sec">成品的「身分證」：款、色、碼</h3>
+  <div class="term"><div class="t-name">SKU<span>Stock Keeping Unit，最小庫存單位</span></div>
+    <div class="t-body"><b>意思：</b>款號 ＋ 顏色 ＋ 尺碼的組合。例如「款 T100 深藍 M 碼」就是一個 SKU。<br><b>由來：</b>英文直譯「保存庫存用的單位」，是管理庫存時能分到的最細一層。同一款衣服有 3 色 × 5 碼，就有 15 個 SKU，盤點時每個 SKU 都要分開數。</div></div>
+
+  <h3 class="sec">裝箱方式</h3>
+  <div class="term"><div class="t-name">箱嘜／嘜頭<span>Shipping Mark</span></div>
+    <div class="t-body"><b>意思：</b>印在紙箱外面的資料：客戶、訂單號、款號、顏色、尺碼、件數、箱號、重量等。<br><b>由來：</b>「嘜」是 mark 的音譯。盤點成品時，箱嘜就是「不用打開就知道裡面是什麼」的依據。</div></div>
+  <div class="term"><div class="t-name">裝箱單<span>Packing List</span></div>
+    <div class="t-body"><b>意思：</b>列出每一箱裝了什麼、多少件的清單，出貨時交給客戶和海關。<br><b>由來：</b>Pack 是裝、打包，List 是清單。</div></div>
+  <div class="fig">
+    <div class="cartons" id="cartons"></div>
+    <figcaption>左：單色單碼（Solid Pack）每箱同一色同一碼。右：混碼配比（Ratio Pack）每箱照固定比例混裝。</figcaption>
+  </div>
+  <div class="term"><div class="t-name">尾箱<span>Odd Carton／Partial Carton</span></div>
+    <div class="t-body"><b>意思：</b>最後一箱裝不滿的箱子。<br><b>由來：</b>「尾」是最後。英文 Odd 是「零頭、不成套的」。尾箱最容易出錯，盤點時一定要打開逐件數。</div></div>
+
+  <div class="calc"><div class="h">🧮 算一算：成品箱數核對</div>
+    <div class="fields">
+      <label>訂單件數<input type="number" id="pk_q" value="1210" min="0" step="1"></label>
+      <label>每箱件數<input type="number" id="pk_n" value="24" min="1" step="1"></label>
+    </div>
+    <div class="out" id="pk_out"></div></div>
+
+  <h3 class="sec">成品盤點方法</h3>
+  <ol class="steps">
+    <li>依儲位逐箱核對箱嘜：訂單、款號、顏色、尺碼、箱號。</li>
+    <li>數箱數，乘以每箱件數，再加尾箱件數。</li>
+    <li>檢查箱號是否連號，缺號要找出去哪了。</li>
+    <li>抽幾箱打開驗，確認件數、顏色、尺碼和箱嘜一致。</li>
+    <li>散件（還沒裝箱的）依 SKU 逐件數。</li>
+    <li>返修品、次品、客戶退貨分開記錄，不能算進可出貨的成品。</li>
+  </ol>
+
+  <div class="box key"><div class="h">📌 重點回顧</div>
+    <ol><li>後整區各位置要分開盤，返修和次品不能混進良品。</li><li>成品按 SKU（款＋色＋碼）記錄。</li><li>成品數＝整箱數 × 每箱件數 ＋ 尾箱件數。</li><li>箱號要連號；要抽箱開驗；尾箱一定打開數。</li></ol></div>
+
+  <h3 class="sec">✅ 小測驗</h3>
+  <div class="quiz" data-answer="1"><p class="q">1. 成品倉有 50 箱滿箱（每箱 24 件）和 1 個尾箱（10 件），共幾件？</p>
+    <button class="opt">1,200 件</button><button class="opt">1,210 件</button><button class="opt">1,224 件</button><button class="opt">74 件</button>
+    <div class="explain">50 × 24＋10＝1,210 件。</div></div>
+  <div class="quiz" data-answer="2"><p class="q">2. 一款衣服有 2 個顏色、4 個尺碼，共有幾個 SKU？</p>
+    <button class="opt">2 個</button><button class="opt">6 個</button><button class="opt">8 個</button><button class="opt">1 個</button>
+    <div class="explain">2 色 × 4 碼＝8 個 SKU，盤點時要分 8 格記錄。</div></div>
+</section>
+
+<!-- ===================== 第11章 ===================== -->
+<section class="chapter" id="ch11" data-title="機台設備盤點" data-level="實務">
+  <div class="ticket"><div class="ticket-stub"><div class="no">11</div><div class="lv">實務</div></div>
+    <div class="ticket-body"><h2>機台設備盤點</h2><p>機器不會被用掉，盤點的重點不一樣：在不在、在哪、能不能用、是誰的。</p></div></div>
+
+  <div class="box goal"><div class="h">🎯 本章學習目標</div>
+    <ul><li>分清楚「物料」和「固定資產」</li><li>認識成衣廠常見機台和名稱由來</li><li>知道機台盤點要記哪些欄位、分哪些狀態</li></ul></div>
+
+  <div class="box analogy"><div class="h">🍎 生活比喻：鉛筆和書包</div>
+    鉛筆寫著寫著會變短、用完（像<b>物料</b>）。書包用好幾年，不會被「用掉」，但會變舊（像<b>固定資產</b>）。盤鉛筆要數「還剩幾支」，盤書包是看「還在不在、壞了沒」。</div>
+
+  <div class="term"><div class="t-name">固定資產<span>Fixed Asset</span></div>
+    <div class="t-body"><b>意思：</b>公司買來長期使用（通常超過一年）、不是為了賣掉的東西，例如機器、廠房、車輛、電腦。<br><b>由來：</b>「固定」是指它會長期留在公司，不會像原料一樣流進產品裡賣出去；「資產」是屬於公司、有價值的東西。</div></div>
+  <div class="term"><div class="t-name">折舊<span>Depreciation</span></div>
+    <div class="t-body"><b>意思：</b>機器每用一年價值就降低一些，把這個降低的部分記成成本。<br><b>由來：</b>「折」是減少、打折，「舊」是變舊。英文來自拉丁文 <i>de</i>（往下）＋ <i>pretium</i>（價格），就是「價格往下掉」。<br>例：一台機器 1,000 美元，預計用 5 年，每年折舊 200 美元。</div></div>
+
+  <h3 class="sec">認識常見機台</h3>
+  <div class="tbl"><table>
+    <tr><th>機台</th><th>用途</th><th>名稱由來</th></tr>
+    <tr><td>🧵 單針平車<br><small>Lockstitch</small></td><td>最基本的縫紉機，縫直線，用量最多</td><td>上線和下線在布中間互相「鎖」住，所以英文叫 lockstitch；「平車」是因為機台面是平的</td></tr>
+    <tr><td>🧵 雙針車</td><td>一次縫出兩條平行線</td><td>有兩根針</td></tr>
+    <tr><td>✂️ 拷克／包縫車<br><small>Overlock</small></td><td>邊縫合邊切齊布邊，同時把布邊包起來防止散開</td><td>英文 over（在上面）＋ lock（鎖），線從布邊「上方包住鎖起來」；台灣俗稱拷克，香港常稱鎖邊車</td></tr>
+    <tr><td>🧵 繃縫車<br><small>Coverstitch</small></td><td>T 恤下擺、袖口那種正面兩條線、背面網狀線的縫法</td><td>cover 是「蓋住」，底線把布邊蓋住；粵語叫「冚車」，「冚」在粵語也是蓋住的意思</td></tr>
+    <tr><td>🔘 釘扣機</td><td>自動把鈕扣縫到衣服上</td><td>「釘」上鈕扣</td></tr>
+    <tr><td>🕳️ 鎖眼機</td><td>開鈕扣孔並把孔邊縫密</td><td>把鈕扣「眼」的邊「鎖」起來</td></tr>
+    <tr><td>📌 套結機<br><small>Bartack</small></td><td>在口袋角、褲耳等受力處打一段很密的加固線</td><td>bar（一小條）＋ tack（釘牢），打出來像一個「結」</td></tr>
+    <tr><td>♨️ 燙台、蒸汽鍋爐</td><td>整燙衣服</td><td>—</td></tr>
+    <tr><td>🔪 電剪、自動裁床</td><td>裁布</td><td>自動裁床常搭配 CAD（電腦輔助設計）排版</td></tr>
+    <tr><td>🔍 驗布機</td><td>把布攤開在燈板上檢查瑕疵、量碼數</td><td>—</td></tr>
+  </table></div>
+
+  <h3 class="sec">每台機器的「資產卡」</h3>
+  <div class="tagcard serif">
+    <h4>固定資產標籤</h4>
+    <div class="row"><span>資產編號</span><span>VM-SW-0158</span></div>
+    <div class="row"><span>名稱</span><span>單針平車</span></div>
+    <div class="row"><span>品牌型號</span><span>（依實際機台）</span></div>
+    <div class="row"><span>機身序號</span><span>（機身鋼印號碼）</span></div>
+    <div class="row"><span>所在位置</span><span>車縫 3 線 第 12 站</span></div>
+    <div class="row"><span>所有權</span><span>自有</span></div>
+    <div class="tear">盤點日期：＿＿＿＿　盤點人：＿＿＿＿</div>
+  </div>
+
+  <div class="tbl"><table>
+    <tr><th>欄位</th><th>為什麼要記</th></tr>
+    <tr><td>資產編號</td><td>公司自己編的號碼，一台一號，貼在機身上</td></tr>
+    <tr><td>機身序號</td><td>工廠出廠時刻在機器上的號碼，<b>最可靠</b>。標籤會掉、會被換，序號不會</td></tr>
+    <tr><td>所在位置</td><td>機器常被搬來搬去換線，要記現在在哪條線、哪一站</td></tr>
+    <tr><td>狀態</td><td>運轉中／待維修／閒置／待報廢</td></tr>
+    <tr><td>所有權</td><td>自有／租來的／向別廠借的／客戶提供的，<b>不是自己的不能算進自己的資產</b></td></tr>
+    <tr><td>保管人</td><td>誰負責這台機器</td></tr>
+  </table></div>
+
+  <h3 class="sec">機台盤點步驟</h3>
+  <ol class="steps">
+    <li>從資產系統印出清單（可用盲盤：只印編號，不印位置）。</li>
+    <li>按廠區平面圖，一條線一條線走，逐台核對資產標籤<b>和機身序號</b>。</li>
+    <li>記錄實際位置和狀態，拍照存證。</li>
+    <li>清單上有、現場找不到的 → 列「盤虧待查」；現場有、清單上沒有的 → 列「盤盈待查」（可能是新買未登記、租借機）。</li>
+    <li>標籤脫落或看不清楚的 → 當場補貼。</li>
+    <li>閒置太久、壞了修不好的 → 提出報廢或調撥建議。</li>
+  </ol>
+  <div class="box warn"><div class="h">⚠️ 別忘了零配件</div>車針、梭殼、梭心、壓腳、送布牙、皮帶、馬達等零配件，是用來維修機台的<b>物料</b>，要照第 7 章的方法數量盤點，不能當固定資產。</div>
+
+  <div class="box key"><div class="h">📌 重點回顧</div>
+    <ol><li>機台是固定資產，盤「在不在、在哪、狀態、是誰的」。</li><li>用機身序號核對最可靠。</li><li>租借的、客戶的機台要分開，不算自己的資產。</li><li>零配件是物料，要數量盤點。</li></ol></div>
+
+  <h3 class="sec">✅ 小測驗</h3>
+  <div class="quiz" data-answer="1"><p class="q">1. 核對機台時，為什麼機身序號比資產貼紙可靠？</p>
+    <button class="opt">因為序號比較好看</button><button class="opt">因為貼紙會掉或被換，序號刻在機器上不會變</button><button class="opt">因為貼紙比較貴</button><button class="opt">兩者一樣可靠</button>
+    <div class="explain">貼紙可能脫落、被貼錯或被調包，機身序號是出廠刻上的，最能證明是哪一台。</div></div>
+  <div class="quiz" data-answer="2"><p class="q">2. 從別的工廠借來的 10 台拷克車，盤點時應該怎麼處理？</p>
+    <button class="opt">算進自己的固定資產</button><button class="opt">不用記錄</button><button class="opt">要記錄，但標明所有權是借用，不算自己的資產</button><button class="opt">把貼紙撕掉</button>
+    <div class="explain">借來的機器要記錄在場（才知道要還），但所有權不是自己的，不能列入自己的資產。</div></div>
+</section>
+
+<!-- ===================== 第12章 ===================== -->
+<section class="chapter" id="ch12" data-title="盤點作業 SOP：前・中・後" data-level="管理">
+  <div class="ticket"><div class="ticket-stub"><div class="no">12</div><div class="lv">管理</div></div>
+    <div class="ticket-body"><h2>盤點作業 SOP</h2><p>把前面學的串起來：一次完整的盤點，從準備到結束怎麼做。</p></div></div>
+
+  <div class="box goal"><div class="h">🎯 本章學習目標</div>
+    <ul><li>知道盤點前、中、後各要做什麼</li><li>理解截止點、初盤、複盤、監盤</li><li>會填盤點單、用盤點卡</li></ul></div>
+
+  <div class="term"><div class="t-name">SOP<span>Standard Operating Procedure，標準作業程序</span></div>
+    <div class="t-body"><b>意思：</b>把一件事的正確做法寫成固定步驟，讓每個人照著做都能得到一樣的結果。<br><b>由來：</b>英文直譯「標準的操作程序」。有 SOP，換誰來盤都一樣準。</div></div>
+  <div class="term"><div class="t-name">截止點<span>Cut-off</span></div>
+    <div class="t-body"><b>意思：</b>盤點開始前定下的時間點，這個時間之前的收發都要入帳，之後的收發都算下一期。<br><b>由來：</b>Cut-off 是「切斷」。就像拍全班合照要喊「一、二、三，不要動！」，在那一刻把帳和物同時「定格」，比較才有意義。</div></div>
+  <div class="term"><div class="t-name">5S<span>整理、整頓、清掃、清潔、素養</span></div>
+    <div class="t-body"><b>意思：</b>工作現場管理的五個基本動作。盤點前做好 5S，盤點會快很多。<br><b>由來：</b>來自日本，五個詞的日文羅馬拼音都是 S 開頭：Seiri（整理）、Seiton（整頓）、Seiso（清掃）、Seiketsu（清潔）、Shitsuke（素養）。</div></div>
+
+  <h3 class="sec">三個階段</h3>
+  <div class="tabs" role="tablist">
+    <button class="tab on" data-tab="pre">盤點前</button><button class="tab" data-tab="during">盤點中</button><button class="tab" data-tab="post">盤點後</button>
+  </div>
+  <div class="tab-panel" data-panel="pre">
+    <ol class="steps">
+      <li><b>定計畫：</b>決定日期、範圍、截止點，發通知給各部門。</li>
+      <li><b>組隊伍：</b>分組並指派角色：盤點人（負責數）、記錄人（負責寫）、複盤人、監盤人（在旁監督，通常是財務或稽核）。</li>
+      <li><b>處理單據：</b>截止點前所有收料、發料、入庫、出貨單據都要入帳。</li>
+      <li><b>做 5S：</b>整理現場，同樣的東西放一起，標示清楚，不用的東西清走。</li>
+      <li><b>畫分區圖：</b>把廠區分成盤點區，每區指派負責組別，不重疊、不遺漏。</li>
+      <li><b>準備工具：</b>盤點單、盤點卡、電子秤（先校正）、捲尺、計算機、筆、手電筒。</li>
+      <li><b>做說明會：</b>告訴所有人盤點規則、單位、怎麼填表。</li>
+    </ol>
+  </div>
+  <div class="tab-panel" data-panel="during" hidden>
+    <ol class="steps">
+      <li><b>凍結收發：</b>到了截止點，停止物料進出（靜態盤點）。</li>
+      <li><b>兩人一組：</b>一人點數、一人記錄，互相確認。</li>
+      <li><b>固定路線：</b>由左到右、由上到下、由外到內，照順序盤不跳區。</li>
+      <li><b>貼盤點卡：</b>盤完的東西貼上盤點卡，看到卡就知道盤過了，避免重盤或漏盤。</li>
+      <li><b>用盲盤：</b>盤點單不印帳面數，只寫實際數到的數。</li>
+      <li><b>清楚記錄：</b>數字寫清楚，寫錯了劃線改正並簽名，<b>不可以用立可白塗改</b>。</li>
+      <li><b>記異常：</b>無標示、損壞、受潮、放錯地方的東西，另外寫在備註。</li>
+      <li><b>初盤 → 複盤：</b>另一組人再盤一次（全部或抽查），兩次不一樣就第三次確認。</li>
+      <li><b>監盤：</b>監盤人隨機抽幾項親自盤，確認盤點品質。</li>
+    </ol>
+  </div>
+  <div class="tab-panel" data-panel="post" hidden>
+    <ol class="steps">
+      <li><b>回收單據：</b>盤點單都有連續編號，全部收回，缺號要找出來。</li>
+      <li><b>輸入資料：</b>把盤點數字輸入系統或 Excel。</li>
+      <li><b>產出差異表：</b>系統自動比對帳面數和實際數。</li>
+      <li><b>差異複盤：</b>差異超過標準的項目，再去現場盤一次。</li>
+      <li><b>分析原因：</b>確認差異是怎麼造成的（第 13 章）。</li>
+      <li><b>簽核調帳：</b>經主管和財務核准後，才可以修正帳面。</li>
+      <li><b>寫報告、做改善：</b>報告盤點結果、差異金額、原因和改善措施。</li>
+    </ol>
+  </div>
+
+  <div class="term"><div class="t-name">初盤、複盤、監盤<span>First Count / Recount / Observation</span></div>
+    <div class="t-body"><b>意思：</b>第一次盤叫初盤；另一組人再盤一次叫複盤；由財務、稽核或會計師在旁觀察並抽查叫監盤。<br><b>由來：</b>「初」是第一次，「複」是再一次，「監」是監督。會計師查帳時常要「監盤」，就是親眼看到東西存在，確認帳上的資產是真的。</div></div>
+
+  <h3 class="sec">盤點卡長這樣</h3>
+  <div class="tagcard">
+    <h4>盤點卡　No. 00457</h4>
+    <div class="row"><span>區域／儲位</span><span>輔料倉 A-02-3</span></div>
+    <div class="row"><span>品名規格</span><span>拉鍊 #5 尼龍 18cm 黑</span></div>
+    <div class="row"><span>訂單／款號</span><span>PO-2381／J-205</span></div>
+    <div class="row"><span>單位</span><span>條</span></div>
+    <div class="row"><span>初盤數量</span><span>1,480　（盤點人簽名）</span></div>
+    <div class="row"><span>複盤數量</span><span>1,480　（複盤人簽名）</span></div>
+    <div class="tear">— 撕下聯交盤點小組，存根聯留在物料上 —</div>
+  </div>
+  <p>盤點卡有<b>連續編號</b>，每一張都要收回，這樣才能確定沒有漏交或偷偷塞進多的卡。</p>
+
+  <div class="box key"><div class="h">📌 重點回顧</div>
+    <ol><li>盤點前：計畫、組隊、截止點、單據入帳、5S、分區、工具、說明。</li><li>盤點中：凍結收發、兩人一組、固定路線、貼卡、盲盤、不塗改、初盤複盤監盤。</li><li>盤點後：收單、輸入、差異表、複盤、分析、簽核調帳、報告改善。</li><li>盤點卡、盤點單都要連續編號、全部收回。</li></ol></div>
+
+  <h3 class="sec">✅ 小測驗</h3>
+  <div class="quiz" data-answer="0"><p class="q">1. 盤點時數字寫錯了，正確的改法是？</p>
+    <button class="opt">劃線改正，旁邊簽名</button><button class="opt">用立可白塗掉重寫</button><button class="opt">撕掉那張單重寫</button><button class="opt">在上面直接描粗</button>
+    <div class="explain">劃線改正並簽名，才看得出原本寫什麼、誰改的。塗改或撕單都會讓人無法追查。</div></div>
+  <div class="quiz" data-answer="3"><p class="q">2. 截止點（Cut-off）的目的是什麼？</p>
+    <button class="opt">讓大家早點下班</button><button class="opt">決定誰負責盤點</button><button class="opt">把盤點單印出來</button><button class="opt">讓帳和物在同一個時間點「定格」，比較才準</button>
+    <div class="explain">截止點前的收發都入帳、之後的算下期，帳和物在同一時刻被比較，差異才有意義。</div></div>
+</section>
+
+<!-- ===================== 第13章 ===================== -->
+<section class="chapter" id="ch13" data-title="差異分析與調帳" data-level="管理">
+  <div class="ticket"><div class="ticket-stub"><div class="no">13</div><div class="lv">管理</div></div>
+    <div class="ticket-body"><h2>差異分析與調帳</h2><p>盤點的價值不在數字，而在找到「為什麼不一樣」並把它改好。</p></div></div>
+
+  <div class="box goal"><div class="h">🎯 本章學習目標</div>
+    <ul><li>會算差異率、盤點準確率、差異金額</li><li>會用 ABC 分類決定哪些東西最該管</li><li>會用「5 個為什麼」找出真正原因</li></ul></div>
+
+  <h3 class="sec">四個基本公式</h3>
+  <div class="formula">差異數量 ＝ 實際數 − 帳面數</div>
+  <div class="formula">差異率 ＝ 差異數量 ÷ 帳面數 × 100%</div>
+  <div class="formula">差異金額 ＝ 差異數量 × 單價</div>
+  <div class="formula">筆數準確率 ＝ 沒有差異的項目數 ÷ 總盤點項目數 × 100%</div>
+
+  <div class="calc"><div class="h">🧮 算一算：單一項目差異</div>
+    <div class="fields">
+      <label>帳面數<input type="number" id="d_b" value="1000" min="0" step="any"></label>
+      <label>實際數<input type="number" id="d_a" value="985" min="0" step="any"></label>
+      <label>單價（美元）<input type="number" id="d_p" value="0.35" min="0" step="any"></label>
+    </div>
+    <div class="out" id="d_out"></div></div>
+
+  <div class="box example"><div class="h">📋 為什麼要看金額，不只看數量？</div>
+    少了 100 粒鈕扣（每粒 0.02 美元）＝ 2 美元。<br>少了 100 碼布（每碼 3 美元）＝ 300 美元。<br>數量都是 100，重要性差了 150 倍。所以管理者看報告時，一定要看<b>差異金額</b>。</div>
+
+  <h3 class="sec">ABC 分類：把力氣花在最重要的東西上</h3>
+  <div class="term"><div class="t-name">ABC 分類與 80/20 法則<span>ABC Analysis / Pareto Principle</span></div>
+    <div class="t-body"><b>意思：</b>把物料依「一年用掉的金額」由大到小排，累計到約 80% 的叫 A 類，接下來約 15% 的叫 B 類，剩下的叫 C 類。A 類品項少但金額大，要最常盤、管最嚴。<br><b>由來：</b>義大利經濟學家帕累托（Vilfredo Pareto）發現，當時義大利約 80% 的土地由約 20% 的人擁有。後來大家發現很多事都有這種「少數佔大部分」的現象，就叫帕累托法則或 80/20 法則。</div></div>
+  <div class="fig" id="abc"></div>
+  <p>從圖可以看出：兩三種布料就佔了大部分金額，而鈕扣、標籤、膠袋雖然數量多，金額卻很小。所以 A 類（布料）可以每週循環盤點，C 類一季盤一次就夠。</p>
+
+  <h3 class="sec">差異原因檢查表</h3>
+  <div class="tbl"><table>
+    <tr><th>類別</th><th>常見原因</th></tr>
+    <tr><td>盤點本身</td><td>數錯、看錯單位、重複盤、漏盤、寫錯儲位</td></tr>
+    <tr><td>單據</td><td>收貨未入帳、發料未扣帳、退料未入帳、單據打錯數字</td></tr>
+    <tr><td>單位換算</td><td>碼和米、粒和籮、公斤和碼換算錯</td></tr>
+    <tr><td>損耗</td><td>正常裁剪損耗、報廢未登記、樣衣用料未登記</td></tr>
+    <tr><td>存放</td><td>放錯儲位、放到別張訂單、借給別的線沒記</td></tr>
+    <tr><td>供應商</td><td>短碼、短數，進貨時沒有抽驗</td></tr>
+    <tr><td>人為</td><td>遺失、偷竊</td></tr>
+  </table></div>
+
+  <h3 class="sec">5 個為什麼：追到根本原因</h3>
+  <div class="term"><div class="t-name">5 Why 分析<span>Five Whys</span></div>
+    <div class="t-body"><b>意思：</b>遇到問題時連續問「為什麼」，直到找到真正的根本原因，而不是停在表面。<br><b>由來：</b>由豐田集團創辦人豐田佐吉提出的思考方法，後來成為豐田生產方式的基本工具。</div></div>
+  <div class="box example"><div class="h">📋 實例：拉鍊少了 120 條</div>
+    <ol style="margin:0;padding-left:22px">
+      <li>為什麼少了？→ 車縫線用的比帳上扣的多。</li>
+      <li>為什麼用得多？→ 線上多領了 120 條去換掉壞的拉鍊。</li>
+      <li>為什麼多領沒扣帳？→ 補料是口頭跟倉管拿，沒有開補料單。</li>
+      <li>為什麼沒開單？→ 補料單要主管簽名，晚班找不到主管。</li>
+      <li>為什麼找不到？→ 沒有規定晚班的代理簽核人。</li>
+    </ol>
+    <p style="margin:8px 0 0"><b>對策：</b>指定晚班代理簽核人，補料一律開單。如果只停在第 1 個為什麼，可能就只會怪工人浪費。</p></div>
+
+  <h3 class="sec">調帳的規矩</h3>
+  <div class="box warn"><div class="h">⚠️ 誠實是盤點的底線</div>
+    <ul style="margin:0;padding-left:22px">
+      <li>調帳一定要有<b>書面申請、說明原因、主管和財務簽核</b>，不能自己改。</li>
+      <li>絕對不能為了「數字好看」，把盤點數改成跟帳一樣，或把帳改成跟盤點一樣卻不查原因。</li>
+      <li>找到原因並改善流程，才是盤點真正的目的。</li>
+    </ul></div>
+
+  <div class="box key"><div class="h">📌 重點回顧</div>
+    <ol><li>差異看數量，也要看金額。</li><li>ABC 分類：A 類品項少金額大，管最嚴、盤最勤。</li><li>用 5 個為什麼追到根本原因。</li><li>調帳要簽核，絕不能湊數字。</li></ol></div>
+
+  <h3 class="sec">✅ 小測驗</h3>
+  <div class="quiz" data-answer="2"><p class="q">1. 盤了 200 個項目，其中 190 個完全沒差異，筆數準確率是多少？</p>
+    <button class="opt">90%</button><button class="opt">10%</button><button class="opt">95%</button><button class="opt">190%</button>
+    <div class="explain">190 ÷ 200 × 100%＝95%。</div></div>
+  <div class="quiz" data-answer="1"><p class="q">2. 在 ABC 分類中，A 類通常是？</p>
+    <button class="opt">數量最多的東西</button><button class="opt">品項不多，但金額佔最大部分的東西</button><button class="opt">最便宜的東西</button><button class="opt">名字排最前面的東西</button>
+    <div class="explain">ABC 看的是金額。A 類品項少、金額大，所以要重點管理。</div></div>
+</section>
+
+<!-- ===================== 第14章 ===================== -->
+<section class="chapter" id="ch14" data-title="專業進階：物料平衡與庫存管理" data-level="專業">
+  <div class="ticket"><div class="ticket-stub"><div class="no">14</div><div class="lv">專業</div></div>
+    <div class="ticket-body"><h2>專業進階</h2><p>從「會盤點」到「會用盤點結果管理工廠」。</p></div></div>
+
+  <div class="box goal"><div class="h">🎯 本章學習目標</div>
+    <ul><li>會用庫存恆等式和物料平衡檢查一張訂單</li><li>理解單耗、損耗率、客供料、進口原料核銷</li><li>看懂庫存周轉率、庫齡、呆滯料</li><li>了解條碼、QR Code、RFID 怎麼讓盤點更快更準</li></ul></div>
+
+  <h3 class="sec">1. 庫存恆等式</h3>
+  <div class="box analogy"><div class="h">🍎 生活比喻：零用錢</div>月初有 500 元，這個月收到 300 元，花掉 350 元，月底應該剩 500＋300−350＝450 元。錢包裡如果只有 400 元，就表示有 50 元不知道去哪了。</div>
+  <div class="formula">期初庫存 ＋ 本期入庫 − 本期出庫 ＝ 期末庫存（帳面）<small>期末帳面數再和盤點的實際數比較</small></div>
+
+  <h3 class="sec">2. 單耗與損耗率</h3>
+  <div class="term"><div class="t-name">單耗<span>Consumption</span></div>
+    <div class="t-body"><b>意思：</b>做一件衣服要用多少布或輔料。例如一件 T 恤用布 1.2 碼、用線 150 米、用鈕扣 5 粒。<br><b>由來：</b>「單」是每一件，「耗」是消耗。通常從排版算出來，是採購和發料的依據。</div></div>
+  <div class="term"><div class="t-name">損耗率<span>Wastage / Allowance</span></div>
+    <div class="t-body"><b>意思：</b>超出單耗、在生產過程中被浪費掉的比例，例如布頭布尾、瑕疵、裁錯、試車。採購時通常會多買一點當作預留（Allowance）。<br><b>由來：</b>「損」是損失，「耗」是消耗。Allowance 是「容許量」，就是「允許多用的部分」。</div></div>
+
+  <h3 class="sec">3. 物料平衡（訂單結案對帳）</h3>
+  <p>一張訂單做完後，要檢查領了多少料、用到哪裡去了。這叫物料平衡，也叫訂單核銷。</p>
+  <div class="formula">實際用量 ＝ 領料 − 退料 − 盤點剩餘<br>理論用量 ＝ 裁剪件數 × 單耗<small>實際用量比理論多的部分，就是超耗</small></div>
+  <div class="calc"><div class="h">🧮 算一算：布料物料平衡</div>
+    <div class="fields">
+      <label>總領料（碼）<input type="number" id="mb_issue" value="5000" min="0" step="any"></label>
+      <label>退回倉庫（碼）<input type="number" id="mb_ret" value="0" min="0" step="any"></label>
+      <label>盤點剩餘（碼）<input type="number" id="mb_left" value="250" min="0" step="any"></label>
+      <label>裁剪件數<input type="number" id="mb_cut" value="3900" min="0" step="1"></label>
+      <label>單耗（碼／件）<input type="number" id="mb_cons" value="1.2" min="0" step="any"></label>
+    </div>
+    <div class="out" id="mb_out"></div></div>
+
+  <h3 class="sec">4. 東西是誰的？客供料與自購料</h3>
+  <div class="term"><div class="t-name">CMT 與客供料<span>Cut-Make-Trim / Customer-Supplied Materials</span></div>
+    <div class="t-body"><b>意思：</b>CMT 是「只收加工費」的生產方式：客戶提供布料和輔料，工廠負責裁剪、車縫、後整。客戶提供的料叫客供料，工廠自己買的叫自購料。<br><b>由來：</b>CMT 就是 Cut（裁剪）、Make（縫製）、Trim（加輔料後整）三個英文字的縮寫。</div></div>
+  <p>客供料的<b>所有權是客戶的</b>，工廠只是替客戶保管。所以：</p>
+  <ul>
+    <li>客供料和自購料要<b>分開存放、分開盤點、分開記帳</b>。</li>
+    <li>客供料不能算進工廠自己的資產。</li>
+    <li>訂單結束後，客戶常會要求報告剩料，甚至要求退回或讓他們決定怎麼處理。</li>
+    <li>客供料超耗，可能要賠償客戶，所以物料平衡更重要。</li>
+  </ul>
+
+  <h3 class="sec">5. 進口原料的核銷</h3>
+  <p>很多做出口的成衣廠，布料和輔料是從國外免稅或保稅進口的，條件是用這些料做成衣服後再出口。政府（通常是海關）會要求工廠證明：<b>進口的原料數量，和出口成品用掉的數量（加上合理損耗）對得上</b>。這個對帳的過程常叫「核銷」。</p>
+  <p>盤點記錄、物料平衡表、報廢記錄就是核銷的證據。帳和物對不上，可能被要求補稅或受罰。各國規定不同，實際作法要依當地海關和主管機關的規定辦理。</p>
+
+  <h3 class="sec">6. 庫存健康指標</h3>
+  <div class="term"><div class="t-name">庫存周轉率<span>Inventory Turnover</span></div>
+    <div class="t-body"><b>意思：</b>一年內庫存「用完再補滿」大約幾次。次數越多，代表東西流動越快、壓的錢越少。<br><b>由來：</b>「周轉」是轉一圈的意思，像錢「周轉」得過來。</div></div>
+  <div class="formula">庫存周轉率 ＝ 一年用掉的物料成本 ÷ 平均庫存金額<br>庫存天數 ＝ 365 ÷ 庫存周轉率</div>
+  <div class="box example"><div class="h">📋 例子</div>一年用掉 120 萬美元的布，平均庫存 20 萬美元。周轉率＝120÷20＝6 次；庫存天數＝365÷6≈61 天，也就是布平均在倉庫放兩個月左右才用掉。</div>
+  <div class="term"><div class="t-name">庫齡與呆滯料<span>Inventory Aging / Slow-moving & Dead Stock</span></div>
+    <div class="t-body"><b>意思：</b>庫齡是東西在倉庫放了多久。放很久沒動的叫呆滯料，通常按 0–90 天、91–180 天、181–365 天、一年以上分組看。<br><b>由來：</b>「呆」是不動、「滯」是停住不流通，就是「卡住不動的料」。盤點時順便記下入庫日期，就能做庫齡分析，提早處理呆料。</div></div>
+
+  <h3 class="sec">7. 內部控制：不能自己管自己</h3>
+  <div class="term"><div class="t-name">職責分離<span>Segregation of Duties</span></div>
+    <div class="t-body"><b>意思：</b>管東西的人、記帳的人、盤點的人、核准調帳的人，最好不是同一個人。<br><b>由來：</b>Segregation 是「分開」。如果一個人又保管又記帳又自己盤點，東西少了也可以把帳改平，別人永遠發現不了。這不是懷疑誰，而是保護每一個誠實的人。</div></div>
+
+  <h3 class="sec">8. 數位工具讓盤點更快更準</h3>
+  <div class="tbl"><table>
+    <tr><th>工具</th><th>怎麼用在盤點</th><th>由來</th></tr>
+    <tr><td>Excel／系統</td><td>自動算帳面數、比對差異、出報表</td><td>—</td></tr>
+    <tr><td>條碼 Barcode</td><td>布卷、箱子貼條碼，掃描就記錄，不用手寫</td><td>1974 年美國一家超市第一次用掃描器結帳，掃的是一包口香糖</td></tr>
+    <tr><td>QR Code</td><td>能存更多資料（款、色、碼、缸號），手機就能掃</td><td>1994 年日本 DENSO WAVE 公司為了追蹤汽車零件發明，QR 是 Quick Response「快速回應」</td></tr>
+    <tr><td>RFID</td><td>用無線電讀取標籤，不用對準、可一次讀很多個，整箱不開就能點數</td><td>Radio Frequency Identification「無線射頻辨識」的縮寫</td></tr>
+  </table></div>
+  <p>工具再好，前面學的原則都不變：單位要一致、截止點要清楚、交接要明確、差異要查原因。</p>
+
+  <div class="box key"><div class="h">📌 重點回顧</div>
+    <ol><li>期初＋入庫−出庫＝期末帳面。</li><li>實際用量＝領料−退料−剩餘；理論用量＝件數×單耗。</li><li>客供料是客戶的，分開存放、分開盤。</li><li>進口原料要能和出口成品對帳（核銷）。</li><li>看周轉率、庫齡，提早處理呆滯料。</li><li>職責分離，保護誠實的人。</li></ol></div>
+
+  <h3 class="sec">✅ 小測驗</h3>
+  <div class="quiz" data-answer="0"><p class="q">1. 期初 800 碼，入庫 1,200 碼，出庫 1,500 碼，期末帳面應該是多少？</p>
+    <button class="opt">500 碼</button><button class="opt">1,100 碼</button><button class="opt">3,500 碼</button><button class="opt">300 碼</button>
+    <div class="explain">800＋1,200−1,500＝500 碼。</div></div>
+  <div class="quiz" data-answer="3"><p class="q">2. 為什麼客供料要和自購料分開盤？</p>
+    <button class="opt">因為客供料比較好</button><button class="opt">因為顏色不一樣</button><button class="opt">沒有必要分</button><button class="opt">因為所有權是客戶的，不能算工廠的資產，還要向客戶報告剩料</button>
+    <div class="explain">客供料屬於客戶，工廠只是保管，要分開管理並向客戶交代。</div></div>
+</section>
+
+<!-- ===================== 第15章 ===================== -->
+<section class="chapter" id="ch15" data-title="期末測驗與結業" data-level="結業">
+  <div class="ticket"><div class="ticket-stub"><div class="no">15</div><div class="lv">結業</div></div>
+    <div class="ticket-body"><h2>期末測驗</h2><p>12 題，涵蓋全部課程。答完會自動算分，80 分以上可以領結業證書。</p></div></div>
+
+  <div id="exam">
+  <div class="quiz exam" data-answer="1"><p class="q">1. 盤點要回答的四個問題，不包括下列哪一個？</p>
+    <button class="opt">有多少</button><button class="opt">是誰買的比較便宜</button><button class="opt">在哪裡</button><button class="opt">狀態好不好</button>
+    <div class="explain">四問是：什麼、多少、在哪、狀態。</div></div>
+  <div class="quiz exam" data-answer="2"><p class="q">2. 帳面 600 條，實際 612 條，這叫做？</p>
+    <button class="opt">盤虧 12 條</button><button class="opt">帳物相符</button><button class="opt">盤盈 12 條，也要查原因</button><button class="opt">盤盈，不用管</button>
+    <div class="explain">實際多於帳面是盤盈，一樣代表記錄有問題，要查。</div></div>
+  <div class="quiz exam" data-answer="0"><p class="q">3. 為什麼盲盤比明盤準？</p>
+    <button class="opt">避免被帳面數影響（錨定效應）</button><button class="opt">盲盤不用數</button><button class="opt">盲盤只盤便宜的東西</button><button class="opt">盲盤在晚上做</button>
+    <div class="explain">看不到帳面數，就不會不自覺把數字湊成帳上的樣子。</div></div>
+  <div class="quiz exam" data-answer="3"><p class="q">4. 1 籮等於幾粒？</p>
+    <button class="opt">12</button><button class="opt">100</button><button class="opt">120</button><button class="opt">144</button>
+    <div class="explain">1 籮＝12 打＝144 粒。</div></div>
+  <div class="quiz exam" data-answer="1"><p class="q">5. 布料要分缸號記錄，主要是因為？</p>
+    <button class="opt">缸號就是價格</button><button class="opt">不同缸有色差，混用會造成衣服顏色不一致</button><button class="opt">海關規定</button><button class="opt">方便記帳</button>
+    <div class="explain">不同染缸的顏色會有些微差異。</div></div>
+  <div class="quiz exam" data-answer="2"><p class="q">6. 100 粒扣子重 30 克，一袋淨重 1,800 克，約有幾粒？</p>
+    <button class="opt">540 粒</button><button class="opt">1,800 粒</button><button class="opt">6,000 粒</button><button class="opt">3,000 粒</button>
+    <div class="explain">每粒 0.3 克，1,800 ÷ 0.3＝6,000 粒。</div></div>
+  <div class="quiz exam" data-answer="0"><p class="q">7. 排版每層 6 件，拉布 60 層，共裁幾件？</p>
+    <button class="opt">360 件</button><button class="opt">66 件</button><button class="opt">600 件</button><button class="opt">10 件</button>
+    <div class="explain">60 × 6＝360 件。</div></div>
+  <div class="quiz exam" data-answer="3"><p class="q">8. 車縫收裁片 1,500 件，交出 1,200 件，報廢 5 件，帳面 WIP 是？</p>
+    <button class="opt">300 件</button><button class="opt">305 件</button><button class="opt">1,195 件</button><button class="opt">295 件</button>
+    <div class="explain">1,500 − 1,200 − 5＝295 件。</div></div>
+  <div class="quiz exam" data-answer="1"><p class="q">9. 成品盤點中，哪一種箱子最容易出錯、一定要開箱逐件數？</p>
+    <button class="opt">第一箱</button><button class="opt">尾箱</button><button class="opt">最重的箱子</button><button class="opt">放最高的箱子</button>
+    <div class="explain">尾箱裝不滿，件數不固定，最容易出錯。</div></div>
+  <div class="quiz exam" data-answer="2"><p class="q">10. 核對機台最可靠的依據是？</p>
+    <button class="opt">機台顏色</button><button class="opt">資產貼紙</button><button class="opt">機身序號</button><button class="opt">操作員的名字</button>
+    <div class="explain">機身序號出廠時就刻在機器上，不會脫落或被換。</div></div>
+  <div class="quiz exam" data-answer="0"><p class="q">11. 盤點後發現差異，正確的做法是？</p>
+    <button class="opt">複盤、查原因、經簽核後才調帳</button><button class="opt">直接改帳讓數字一致</button><button class="opt">把盤點單上的數字改掉</button><button class="opt">不用處理，下次再說</button>
+    <div class="explain">差異要複盤、查原因、經主管和財務簽核後才能調帳。</div></div>
+  <div class="quiz exam" data-answer="3"><p class="q">12. 領布 3,000 碼，剩 120 碼，無退料，裁 2,300 件，單耗 1.2 碼。超耗多少？</p>
+    <button class="opt">0 碼</button><button class="opt">240 碼（約 8.7%）</button><button class="opt">2,760 碼</button><button class="opt">120 碼（約 4.3%）</button>
+    <div class="explain">實際用量＝3,000 − 120＝2,880；理論用量＝2,300 × 1.2＝2,760；超耗 120 碼，120 ÷ 2,760 ≈ 4.3%。</div></div>
+  </div>
+  <div class="out" id="examScore" aria-live="polite">已作答 0 / 12 題</div>
+
+  <div id="certWrap" hidden>
+    <div class="fields" style="margin-top:14px"><label>輸入你的名字，領取結業證書<input type="text" id="certName" placeholder="你的名字"></label></div>
+    <button class="btn" id="certBtn">產生證書</button>
+  </div>
+  <div class="cert" id="cert">
+    <div class="serif" style="font-size:15px;color:var(--muted)">成衣盤點學堂</div>
+    <h2>結業證書</h2>
+    <div class="who" id="certWho"></div>
+    <p>已完成「成衣工廠盤點：從入門到專業」全部 16 章課程<br>期末測驗成績 <b id="certScore"></b> 分</p>
+    <p style="font-size:14px;color:var(--muted)" id="certDate"></p>
+    <button class="btn ghost" onclick="window.print()">列印／存成 PDF</button>
+  </div>
+</section>
+
+<!-- ===================== 第16章 ===================== -->
+<section class="chapter" id="ch16" data-title="名詞總表" data-level="結業">
+  <div class="ticket"><div class="ticket-stub"><div class="no">16</div><div class="lv">附錄</div></div>
+    <div class="ticket-body"><h2>名詞總表</h2><p>課程中出現的所有專有名詞，附意思和由來。可以搜尋。</p></div></div>
+  <input class="search" id="glSearch" type="search" placeholder="搜尋名詞，例如：缸號、WIP、籮">
+  <div id="glossary"></div>
+</section>
+
+<div class="pager">
+  <button class="btn ghost" id="prevBtn"><span>← 上一章</span></button>
+  <button class="btn" id="nextBtn"><span>下一章 →</span></button>
+</div>
+</main>
+</div>
+<script>
+(function(){
+  var fmt=function(n,d){if(!isFinite(n))return '—';return Number(n).toLocaleString('zh-TW',{maximumFractionDigits:(d==null?2:d)});};
+  var $=function(id){return document.getElementById(id);};
+
+  /* ---------- 章節導覽 ---------- */
+  var chapters=[].slice.call(document.querySelectorAll('.chapter'));
+  var side=$('side'), visited={}, cur=0;
+  var html='<div class="serif" style="font-weight:700;font-size:17px;padding:0 10px">課程目錄</div>', lastLv='';
+  chapters.forEach(function(c,i){
+    var lv=c.getAttribute('data-level');
+    if(lv!==lastLv){html+='<h3>'+lv+'</h3>';lastLv=lv;}
+    html+='<button class="nav-item" data-i="'+i+'"><span class="n">'+i+'</span><span>'+c.getAttribute('data-title')+'</span><span class="ok"></span></button>';
+  });
+  side.innerHTML=html;
+  var navItems=[].slice.call(side.querySelectorAll('.nav-item'));
+  navItems.forEach(function(b){b.addEventListener('click',function(){show(+b.getAttribute('data-i'));});});
+
+  function closeMenu(){side.classList.remove('open');$('scrim').classList.remove('show');}
+  $('menuBtn').addEventListener('click',function(){side.classList.add('open');$('scrim').classList.add('show');});
+  $('scrim').addEventListener('click',closeMenu);
+
+  function show(i){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=i;
+    i=Math.max(0,Math.min(chapters.length-1,i));cur=i;visited[i]=true;
+    chapters.forEach(function(c,k){c.classList.toggle('active',k===i);});
+    navItems.forEach(function(b){var k=+b.getAttribute('data-i');b.classList.toggle('active',k===i);
+      if(k===i)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');
+      b.querySelector('.ok').textContent=(visited[k]&&k!==i)?'✓':'';});
+    var n=Object.keys(visited).length, pct=Math.round(n/chapters.length*100);
+    $('tapeFill').style.width=pct+'%';
+    $('tapeLabel').textContent='學習進度 '+pct+'%　目前第 '+i+' 章';
+    var pb=$('prevBtn'),nb=$('nextBtn');
+    pb.disabled=(i===0);nb.disabled=(i===chapters.length-1);
+    pb.querySelector('span').textContent=i>0?'← '+chapters[i-1].getAttribute('data-title'):'← 上一章';
+    nb.querySelector('span').textContent=i<chapters.length-1?chapters[i+1].getAttribute('data-title')+' →':'已是最後一章';
+    try{history.replaceState(null,'','#ch'+i);}catch(e){}
+    window.scrollTo(0,0);closeMenu();
+  }
+  $('prevBtn').addEventListener('click',function(){show(cur-1);});
+  $('nextBtn').addEventListener('click',function(){show(cur+1);});
+  document.addEventListener('keydown',function(e){
+    var t=e.target.tagName;if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT')return;
+    if(e.key==='ArrowRight')show(cur+1);if(e.key==='ArrowLeft')show(cur-1);});
+
+  /* ---------- 測驗 ---------- */
+  function wireQuiz(q){
+    var ans=+q.getAttribute('data-answer'),opts=[].slice.call(q.querySelectorAll('.opt')),ex=q.querySelector('.explain');
+    ex.setAttribute('data-orig',ex.innerHTML);
+    opts.forEach(function(o,k){o.addEventListener('click',function(){
+      if(q.classList.contains('done'))return;
+      q.classList.add('done');q.setAttribute('data-picked',k);
+      opts[ans].classList.add('right');if(k!==ans)o.classList.add('wrong');
+      ex.innerHTML=(k===ans?'<b>✔ 答對了！</b> ':'<b>✘ 答錯了，正確答案已標成綠色。</b> ')+ex.getAttribute('data-orig');
+      if(q.classList.contains('exam'))updateExam();
+    });});
+  }
+  [].forEach.call(document.querySelectorAll('.quiz'),wireQuiz);
+
+  /* ---------- 第2章 旅程 ---------- */
+  var stages=[
+    ['📥','物料入倉','Receiving','布料、輔料從供應商或客戶送到工廠，點收數量後放進倉庫。','主料倉、輔料倉裡的布卷、線、鈕扣、拉鍊、標籤等。'],
+    ['🔍','驗布驗料','Inspection','把布攤開在燈板上檢查瑕疵、量碼數；輔料檢查數量和品質。','待驗區、合格區、不合格區的物料要分開盤。'],
+    ['✂️','裁剪','Cutting','把布一層層鋪平，照排版一次裁成很多片。','裁床上還沒裁的布、已裁未發的裁片、布頭。'],
+    ['🧵','車縫','Sewing','一條生產線上很多人分工，一站接一站把裁片縫成衣服。','線上每一道工序的半成品（在製品 WIP）。'],
+    ['♨️','整燙','Pressing','剪掉線頭，用蒸汽熨斗把衣服燙平整。','待燙和已燙的衣服。'],
+    ['✅','品檢','Quality Check','檢查尺寸和瑕疵，不合格的送去返修。','待檢品、返修品、次品，三種要分開。'],
+    ['📦','包裝','Packing','掛吊牌、摺衣、裝袋、裝箱，貼上箱嘜。','已裝箱未入倉的成品、包裝材料。'],
+    ['🏬','成品倉','FG Warehouse','裝好箱的成品放進倉庫等出貨。','成品箱數、尾箱、散件。'],
+    ['🚢','出貨','Shipping','裝進貨櫃運去給客戶。','出貨後就不在庫存裡了，要確認帳上已經扣掉。']
+  ];
+  var jEl=$('journey'),jDet=$('stageDetail'),jOn=-1,jTimer=null;
+  jEl.innerHTML=stages.map(function(s,i){return '<button class="stage" data-i="'+i+'"><span class="idx">'+(i+1)+'</span><div class="ic">'+s[0]+'</div><div class="nm">'+s[1]+'</div><div class="st">'+s[2]+'</div></button>';}).join('');
+  var jCards=[].slice.call(jEl.querySelectorAll('.stage'));
+  function jSel(i){jOn=i;jCards.forEach(function(c,k){c.classList.toggle('on',k===i);});var s=stages[i];
+    jDet.innerHTML='<b>'+s[0]+' 第 '+(i+1)+' 站：'+s[1]+'</b>（'+s[2]+'）<br>'+s[3]+'<br><b>這裡要盤：</b>'+s[4];}
+  function jStop(){clearInterval(jTimer);jTimer=null;$('journeyPlay').textContent='▶ 播放旅程';}
+  jCards.forEach(function(c,i){c.addEventListener('click',function(){jStop();jSel(i);});});
+  $('journeyPlay').addEventListener('click',function(){
+    if(jTimer){jStop();return;}
+    jSel(0);$('journeyPlay').textContent='⏸ 暫停';
+    jTimer=setInterval(function(){if(jOn>=stages.length-1){jStop();return;}jSel(jOn+1);},2200);
+  });
+
+  /* ---------- 第3章 天平 ---------- */
+  function scale(){
+    var a=+$('actualRange').value,d=a-1000,deg=Math.max(-12,Math.min(12,d/150*12));
+    $('beam').setAttribute('transform','rotate('+deg+' 170 64)');
+    $('actualTxt').textContent=fmt(a,0);
+    var o=$('scaleOut');
+    if(d===0)o.innerHTML='帳物相符 ✔ 差異＝0';
+    else if(d>0)o.innerHTML='<b>盤盈 '+fmt(d,0)+' 條</b>：實際比帳面多，差異率 +'+fmt(d/10,1)+'%。也要查原因！';
+    else o.innerHTML='<b>盤虧 '+fmt(-d,0)+' 條</b>：實際比帳面少，差異率 '+fmt(d/10,1)+'%。';
+  }
+  $('actualRange').addEventListener('input',scale);scale();
+
+  /* ---------- 第5章 單位 ---------- */
+  $('c1yd').addEventListener('input',function(){$('c1m').value=+(this.value*0.9144).toFixed(3);});
+  $('c1m').addEventListener('input',function(){$('c1yd').value=+(this.value/0.9144).toFixed(3);});
+  function c2(){var p=Math.max(0,Math.floor(+$('c2pcs').value||0));var g=Math.floor(p/144),r=p%144,dz=Math.floor(r/12),pc=r%12;
+    $('c2out').innerHTML=fmt(p,0)+' 粒 ＝ <b>'+fmt(p/12)+'</b> 打 ＝ <b>'+fmt(p/144)+'</b> 籮<br>也可以說成：'+g+' 籮 '+dz+' 打 '+pc+' 粒';}
+  $('c2pcs').addEventListener('input',c2);c2();
+  function c3(){var gsm=+$('c3gsm').value,w=+$('c3w').value,kg=+$('c3kg').value;var wm=w*0.0254,per=gsm*wm*0.9144,yd=kg*1000/per;
+    $('c3out').innerHTML='幅寬 '+fmt(w)+' 吋 ＝ '+fmt(wm,3)+' 公尺<br>每碼重量 ＝ '+fmt(gsm)+' × '+fmt(wm,3)+' × 0.9144 ＝ <b>'+fmt(per,1)+'</b> 克<br>這卷布約 ＝ '+fmt(kg*1000,0)+' ÷ '+fmt(per,1)+' ＝ <b>'+fmt(yd,1)+'</b> 碼（約 '+fmt(yd*0.9144,1)+' 公尺）';}
+  ['c3gsm','c3w','c3kg'].forEach(function(id){$(id).addEventListener('input',c3);});c3();
+
+  /* ---------- 第7章 秤重計數 ---------- */
+  function wc(){var n=+$('w_n').value,sw=+$('w_sw').value,g=+$('w_g').value,t=+$('w_t').value;var unit=sw/n,net=g-t,cnt=net/unit;
+    var o=$('w_out');if(!(n>0&&sw>0)){o.textContent='請輸入樣本數量和重量。';return;}
+    if(net<0){o.textContent='毛重不能小於皮重，請檢查。';return;}
+    o.innerHTML='每粒重 ＝ '+fmt(sw)+' ÷ '+fmt(n,0)+' ＝ '+fmt(unit,4)+' 克<br>淨重 ＝ '+fmt(g)+' − '+fmt(t)+' ＝ '+fmt(net)+' 克<br>估計數量 ＝ '+fmt(net)+' ÷ '+fmt(unit,4)+' ≈ <b>'+fmt(Math.round(cnt),0)+'</b> 粒（約 '+fmt(cnt/144,1)+' 籮）';}
+  ['w_n','w_sw','w_g','w_t'].forEach(function(id){$(id).addEventListener('input',wc);});wc();
+
+  /* ---------- 第8章 拉布動畫 ---------- */
+  var NS='http://www.w3.org/2000/svg',spTimer=null;
+  function el(tag,attrs){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);return e;}
+  function spread(){
+    clearInterval(spTimer);
+    var N=Math.max(1,Math.min(200,Math.floor(+$('plyIn').value||1)));
+    var L=$('layers'),M=$('markerG');L.innerHTML='';M.innerHTML='';M.style.opacity=0;
+    var vis=Math.min(N,36),h=Math.min(6,108/vis),k=0;
+    $('spreadOut').textContent='拉布中…';
+    spTimer=setInterval(function(){
+      if(k>=vis){clearInterval(spTimer);drawMarker(168-vis*h,N);return;}
+      L.appendChild(el('rect',{x:30,y:(168-(k+1)*h).toFixed(2),width:280,height:Math.max(1,h-0.6).toFixed(2),fill:k%2?'#3a6ea5':'#4a7db3'}));
+      k++;$('plyTxt').textContent='層數：'+Math.round(k/vis*N);
+    },Math.max(40,1400/vis));
+  }
+  function drawMarker(top,N){
+    var M=$('markerG');M.appendChild(el('rect',{x:30,y:top-2,width:280,height:4,fill:'#fffef6'}));
+    var pcs=[['S',38],['M',42],['M',42],['L',46],['L',46],['XL',50]],x=32;
+    pcs.forEach(function(p){var r=el('rect',{x:x,y:top+2,width:p[1],height:Math.max(20,166-top-2),fill:'rgba(255,255,255,.25)',stroke:'#f2c230','stroke-width':2,'stroke-dasharray':'5 3',rx:4});M.appendChild(r);
+      var t=el('text',{x:x+p[1]/2,y:top+Math.max(16,(166-top)/2+5),'text-anchor':'middle','font-size':13,'font-weight':700,fill:'#fff'});t.textContent=p[0];M.appendChild(t);x+=p[1]+2;});
+    var cap=el('text',{x:170,y:top-8,'text-anchor':'middle','font-size':12,fill:'currentColor'});cap.textContent='排版紙：每層 6 件';M.appendChild(cap);
+    M.style.opacity=1;
+    $('spreadOut').innerHTML='拉布 <b>'+N+'</b> 層 × 每層 <b>6</b> 件 ＝ <b>'+fmt(N*6,0)+'</b> 件<br>S '+fmt(N,0)+'、M '+fmt(N*2,0)+'、L '+fmt(N*2,0)+'、XL '+fmt(N,0);
+  }
+  $('spreadPlay').addEventListener('click',spread);
+
+  /* ---------- 第9章 生產線模擬 ---------- */
+  var ST=['合肩','上領','上袖','合側縫','下擺','車縫品檢'],bundles=[],issued=0,finished=0,nextId=1,lineTimer=null;
+  function lineInit(){clearInterval(lineTimer);lineTimer=null;bundles=[];issued=0;finished=0;nextId=1;
+    for(var i=0;i<9;i++){bundles.push({id:nextId++,st:Math.floor(Math.random()*ST.length),hidden:false,found:false});issued++;}
+    $('lineRun').textContent='▶ 開始生產';$('lineOut').textContent='按「開始生產」。每個方塊＝1 綑＝10 件。';renderLine();}
+  function renderLine(){
+    var h='';ST.forEach(function(n,i){var bs=bundles.filter(function(b){return b.st===i&&(!b.hidden||b.found);});
+      h+='<div class="station"><div class="sn">'+(i+1)+'. '+n+'</div><div class="chips">'+bs.map(function(b){return '<span class="chip'+(b.found?' hidden':'')+'">#'+b.id+'</span>';}).join('')+'</div><div class="cnt">'+(bs.length?bs.length*10+' 件':'')+'</div></div>';});
+    h+='<div class="station done-col"><div class="sn">已交後整</div><div class="chips" style="font-size:22px;font-weight:700;align-items:center">'+finished*10+'</div><div class="cnt">件</div></div>';
+    $('line').innerHTML=h;}
+  function lineTick(){
+    for(var i=bundles.length-1;i>=0;i--){var b=bundles[i];if(b.hidden)continue;
+      if(Math.random()<0.33){b.st++;if(b.st>=ST.length){bundles.splice(i,1);finished++;}}}
+    if(Math.random()<0.45&&bundles.length<24){bundles.push({id:nextId++,st:0,hidden:false,found:false});issued++;}
+    renderLine();}
+  $('lineRun').addEventListener('click',function(){if(lineTimer)return;lineTimer=setInterval(lineTick,900);this.textContent='生產中…';$('lineOut').textContent='生產線運轉中，綑一直在往下傳。試著在這時候數數看，很難吧？';});
+  function lineCount(){
+    clearInterval(lineTimer);lineTimer=null;$('lineRun').textContent='▶ 繼續生產';
+    var seen=bundles.filter(function(b){return !b.hidden||b.found;}).length*10,book=(issued-finished)*10;
+    var h='<b>停線盤點結果</b><br>帳面 WIP ＝ 已投入 '+issued*10+' 件 − 已交出 '+finished*10+' 件 ＝ <b>'+book+'</b> 件<br>現場點數 ＝ <b>'+seen+'</b> 件<br>';
+    if(seen===book)h+='✔ 帳物相符！';
+    else h+='<span style="color:var(--thread);font-weight:700">✘ 差了 '+(book-seen)+' 件（'+(book-seen)/10+' 綑）</span>。不要急著改帳，先去死角找找。<br><button class="btn" id="lineFind" style="margin-top:6px">🔦 去車台下、返修籃找找</button>';
+    $('lineOut').innerHTML=h;
+    var f=$('lineFind');if(f)f.addEventListener('click',function(){bundles.forEach(function(b){if(b.hidden)b.found=true;});renderLine();lineCount();
+      $('lineOut').insertAdjacentHTML('beforeend','<br>找到了！虛線框就是掉在車台下的那一綑。這就是為什麼盤 WIP 一定要搜死角。');});
+  }
+  $('lineCount').addEventListener('click',lineCount);
+  $('lineLose').addEventListener('click',function(){var v=bundles.filter(function(b){return !b.hidden;});if(!v.length)return;
+    var b=v[Math.floor(Math.random()*v.length)];b.hidden=true;renderLine();
+    $('lineOut').textContent='有一綑被人順手塞到車台下面了……現場看不到它，但帳上還有它。按「停線盤點」看看。';});
+  $('lineReset').addEventListener('click',lineInit);lineInit();
+
+  /* ---------- 約當產量 ---------- */
+  var eu=[['合肩（剛上線）',120,10],['上領、上袖',200,40],['合側縫',150,65],['下擺',100,85],['車縫品檢、待交',80,95]];
+  var tb=$('euTable');eu.forEach(function(r,i){var tr=document.createElement('tr');
+    tr.innerHTML='<td>'+r[0]+'</td><td class="num"><input type="number" min="0" value="'+r[1]+'" data-q="'+i+'" style="width:80px"></td><td class="num"><input type="number" min="0" max="100" value="'+r[2]+'" data-p="'+i+'" style="width:70px"></td><td class="num" id="eu'+i+'"></td>';tb.appendChild(tr);});
+  [].forEach.call(tb.querySelectorAll('input'),function(inp){inp.style.font='inherit';inp.style.background='var(--bg)';inp.style.color='var(--ink)';inp.style.border='1px solid var(--line)';inp.style.borderRadius='6px';inp.style.padding='3px 6px';inp.addEventListener('input',euCalc);});
+  function euCalc(){var tq=0,te=0;eu.forEach(function(r,i){var q=+tb.querySelector('[data-q="'+i+'"]').value||0,p=+tb.querySelector('[data-p="'+i+'"]').value||0;var e=q*p/100;tq+=q;te+=e;$('eu'+i).textContent=fmt(e,1);});
+    $('euOut').innerHTML='線上實際 <b>'+fmt(tq,0)+'</b> 件半成品，約當 <b>'+fmt(te,1)+'</b> 件成品。<br>意思是：如果算成本，這些半成品的價值大約等於 '+fmt(te,0)+' 件做好的衣服。';}
+  euCalc();
+
+  /* ---------- 第10章 裝箱 ---------- */
+  function grid(arr){return '<div class="cgrid">'+arr.map(function(s){return '<i class="sz-'+s+'">'+s+'</i>';}).join('')+'</div>';}
+  var solid=[],ratio=[],i;for(i=0;i<24;i++)solid.push('M');
+  [['S',4],['M',8],['L',8],['XL',4]].forEach(function(p){for(var k=0;k<p[1];k++)ratio.push(p[0]);});
+  $('cartons').innerHTML='<div class="carton"><div class="ct">單色單碼：M × 24</div>'+grid(solid)+'</div><div class="carton"><div class="ct">混碼 S1:M2:L2:XL1 × 4</div>'+grid(ratio)+'</div>';
+  function pk(){var q=Math.max(0,Math.floor(+$('pk_q').value||0)),n=Math.max(1,Math.floor(+$('pk_n').value||1));var full=Math.floor(q/n),tail=q%n;
+    $('pk_out').innerHTML='滿箱 <b>'+fmt(full,0)+'</b> 箱 × '+n+' 件 ＝ '+fmt(full*n,0)+' 件'+(tail?'<br>尾箱 <b>1</b> 箱，裝 <b>'+tail+'</b> 件':'<br>沒有尾箱')+'<br>共 <b>'+fmt(full+(tail?1:0),0)+'</b> 箱，箱號應為 1 到 '+fmt(full+(tail?1:0),0)+' 連號。';}
+  ['pk_q','pk_n'].forEach(function(id){$(id).addEventListener('input',pk);});pk();
+
+  /* ---------- 第12章 分頁 ---------- */
+  var tabs=[].slice.call(document.querySelectorAll('.tab')),panels=[].slice.call(document.querySelectorAll('.tab-panel'));
+  tabs.forEach(function(t){t.addEventListener('click',function(){var k=t.getAttribute('data-tab');
+    tabs.forEach(function(x){x.classList.toggle('on',x===t);});panels.forEach(function(p){p.hidden=p.getAttribute('data-panel')!==k;});});});
+
+  /* ---------- 第13章 差異 ---------- */
+  function dc(){var b=+$('d_b').value,a=+$('d_a').value,p=+$('d_p').value,d=a-b;
+    var t=d===0?'帳物相符':(d>0?'盤盈':'盤虧');
+    $('d_out').innerHTML='差異數量 ＝ '+fmt(a)+' − '+fmt(b)+' ＝ <b>'+(d>0?'+':'')+fmt(d)+'</b>（'+t+'）<br>差異率 ＝ '+(b?((d>0?'+':'')+fmt(d/b*100,2)+'%'):'—')+'<br>差異金額 ＝ '+fmt(d)+' × '+fmt(p,4)+' ＝ <b>US$ '+fmt(d*p)+'</b>';}
+  ['d_b','d_a','d_p'].forEach(function(id){$(id).addEventListener('input',dc);});dc();
+
+  var items=[['布料 C-1024',52000],['布料 K-880',31000],['拉鍊',6000],['紙箱',3200],['鈕扣',2500],['縫紉線',2200],['襯',1800],['標籤',1500],['膠袋',900]];
+  var tot=items.reduce(function(s,x){return s+x[1];},0),cum=0,mx=items[0][1];
+  var ah='<div style="font-weight:700;margin-bottom:6px">某工廠一年物料用量金額（美元）</div><div class="abc-row" style="color:var(--muted);font-size:12px"><span>品項</span><span>金額</span><span style="text-align:right">累計%</span><span>類</span></div>';
+  items.forEach(function(x){var prev=cum/tot*100;cum+=x[1];var c=prev<80?'A':(prev<95?'B':'C');var col=c==='A'?'var(--thread)':(c==='B'?'#d08a2c':'var(--chalk)');
+    ah+='<div class="abc-row"><span>'+x[0]+'</span><div class="abc-bar" title="US$ '+fmt(x[1],0)+'"><span style="width:'+(x[1]/mx*100)+'%;background:'+col+'"></span></div><span style="text-align:right">'+fmt(cum/tot*100,1)+'%</span><span class="cls cls-'+c+'">'+c+'</span></div>';});
+  ah+='<div class="gl-from" style="margin-top:6px">合計 US$ '+fmt(tot,0)+'。A 類只有 2 項，卻佔了超過八成金額。</div>';
+  $('abc').innerHTML=ah;
+
+  /* ---------- 第14章 物料平衡 ---------- */
+  function mb(){var is=+$('mb_issue').value,r=+$('mb_ret').value,l=+$('mb_left').value,c=+$('mb_cut').value,cs=+$('mb_cons').value;
+    var act=is-r-l,th=c*cs,d=act-th,pct=th?d/th*100:0,h;
+    h='實際用量 ＝ '+fmt(is)+' − '+fmt(r)+' − '+fmt(l)+' ＝ <b>'+fmt(act)+'</b> 碼<br>理論用量 ＝ '+fmt(c,0)+' × '+fmt(cs,3)+' ＝ <b>'+fmt(th)+'</b> 碼<br>';
+    if(Math.abs(d)<1e-9)h+='剛好相等，沒有超耗。';
+    else if(d>0)h+='<span style="color:var(--thread);font-weight:700">超耗 '+fmt(d)+' 碼（'+fmt(pct,2)+'%）</span>：要查是裁剪損耗、瑕疵、重裁，還是單據漏記。';
+    else h+='<span style="color:var(--mat);font-weight:700">比理論少用 '+fmt(-d)+' 碼（'+fmt(pct,2)+'%）</span>：可能是排版改良，也可能是剩料沒盤到或單耗訂太高，一樣要確認。';
+    $('mb_out').innerHTML=h;}
+  ['mb_issue','mb_ret','mb_left','mb_cut','mb_cons'].forEach(function(id){$(id).addEventListener('input',mb);});mb();
+
+  /* ---------- 第15章 期末測驗 ---------- */
+  var exams=[].slice.call(document.querySelectorAll('.quiz.exam')),lastScore=0;
+  function updateExam(){
+    var done=exams.filter(function(q){return q.classList.contains('done');});
+    var right=done.filter(function(q){return q.getAttribute('data-picked')===q.getAttribute('data-answer');}).length;
+    var o=$('examScore');
+    if(done.length<exams.length){o.innerHTML='已作答 '+done.length+' / '+exams.length+' 題，答對 '+right+' 題';return;}
+    lastScore=Math.round(right/exams.length*100);
+    if(lastScore>=80){o.innerHTML='<b>完成！得分 '+lastScore+' 分</b>，恭喜通過，可以領取結業證書。';$('certWrap').hidden=false;}
+    else{o.innerHTML='<b>完成！得分 '+lastScore+' 分</b>。還差一點，看看解析、回去複習相關章節，再重考一次。<br><button class="btn" id="retake" style="margin-top:6px">重新作答</button>';
+      $('retake').addEventListener('click',function(){exams.forEach(function(q){q.classList.remove('done');q.removeAttribute('data-picked');
+        [].forEach.call(q.querySelectorAll('.opt'),function(b){b.classList.remove('right','wrong');});var ex=q.querySelector('.explain');ex.innerHTML=ex.getAttribute('data-orig');});
+        updateExam();$('exam').scrollIntoView();});}
+  }
+  $('certBtn').addEventListener('click',function(){var n=$('certName').value.trim();if(!n){$('certName').focus();return;}
+    $('certWho').textContent=n;$('certScore').textContent=lastScore;var d=new Date();
+    $('certDate').textContent='結業日期：'+d.getFullYear()+' 年 '+(d.getMonth()+1)+' 月 '+d.getDate()+' 日';
+    $('cert').style.display='block';$('cert').scrollIntoView({behavior:'smooth'});});
+
+  /* ---------- 第16章 名詞總表 ---------- */
+  var gl=$('glossary'),gh='';
+  chapters.forEach(function(c,i){if(i===0)return;[].forEach.call(c.querySelectorAll('.term'),function(t){
+    gh+='<div class="term gl-item" data-s="'+t.textContent.replace(/"/g,'').toLowerCase()+'">'+t.innerHTML+'<div class="gl-from">出自第 '+i+' 章：'+c.getAttribute('data-title')+'</div></div>';});});
+  gl.innerHTML=gh;
+  $('glSearch').addEventListener('input',function(){var q=this.value.trim().toLowerCase();
+    [].forEach.call(gl.querySelectorAll('.gl-item'),function(it){it.style.display=(!q||it.getAttribute('data-s').indexOf(q)>-1)?'':'none';});});
+
+  var m=(location.hash||'').match(/ch(\d+)/);show(m?+m[1]:0);
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-2b044a4e8c" data-category="garment"></script></body>
+</html>

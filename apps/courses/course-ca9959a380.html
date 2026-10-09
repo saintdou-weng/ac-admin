@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>一件 T 恤的跨海旅程｜國際貿易從入門到專業</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --hero:#0F3B57; --accent:#0F3B57; --on-accent:#fff; --head:#0F3B57;
+  --paper:#F3F7F9; --card:#FFFFFF; --ink:#1B2530; --muted:#5A6B78; --line:#D5E0E7;
+  --seller:#1F8A70; --buyer:#C8433A; --bank:#B7800A; --carrier:#2F6FB0; --hi:#F2B632;
+  --seller-t:#E3F3EE; --buyer-t:#FBE9E7; --bank-t:#FDF3DC; --carrier-t:#E5EEF8;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --hero:#0A2536; --accent:#8CC3E6; --on-accent:#0E1A23; --head:#CFE4F2;
+    --paper:#0E1A23; --card:#152531; --ink:#E4ECF1; --muted:#95A8B6; --line:#27404F;
+    --seller:#4CC3A2; --buyer:#F07A6E; --bank:#F2B632; --carrier:#6AA6E8;
+    --seller-t:#123A33; --buyer-t:#3D1F1D; --bank-t:#3A2F12; --carrier-t:#16304A;
+  }
+}
+:root[data-theme="dark"]{
+  --hero:#0A2536; --accent:#8CC3E6; --on-accent:#0E1A23; --head:#CFE4F2;
+  --paper:#0E1A23; --card:#152531; --ink:#E4ECF1; --muted:#95A8B6; --line:#27404F;
+  --seller:#4CC3A2; --buyer:#F07A6E; --bank:#F2B632; --carrier:#6AA6E8;
+  --seller-t:#123A33; --buyer-t:#3D1F1D; --bank-t:#3A2F12; --carrier-t:#16304A;
+}
+*{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-behavior:smooth;scroll-padding-top:calc(72px + env(safe-area-inset-top,0px))}
+body{margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;background:var(--paper);color:var(--ink);font-size:17px;line-height:1.85;-webkit-text-size-adjust:100%}
+h1,h2,h3,h4,.display{font-family:"LXGW WenKai TC","Kaiti TC","BiauKai","DFKai-SB","Noto Serif TC",serif;font-weight:700;line-height:1.35;color:var(--head)}
+h2{font-size:clamp(1.7rem,4.6vw,2.3rem);margin:.2em 0 .3em}
+h3{font-size:1.35rem;margin:2em 0 .5em}
+h4{font-size:1.12rem;margin:0 0 .5em}
+p{margin:.7em 0}
+a{color:var(--carrier)}
+b,strong{font-weight:700}
+:focus-visible{outline:3px solid var(--hi);outline-offset:2px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* 頂部列 */
+.topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:12px;padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top,0px));margin-top:calc(-1 * env(safe-area-inset-top,0px));background:var(--hero);color:#fff}
+.topbar button{font:inherit;font-size:.85rem!important;white-space:nowrap;background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.35);border-radius:10px;padding:4px 11px;cursor:pointer;font-size:1rem}
+.brand{font-family:"LXGW WenKai TC",serif;font-size:1.15rem;letter-spacing:.04em;white-space:nowrap}
+.prog{flex:1;display:flex;align-items:center;gap:10px;min-width:0;justify-content:flex-end}
+.prog-bar{flex:0 1 200px;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden}
+.prog-bar i{display:block;height:100%;width:0;background:var(--hi);transition:width .4s}
+#progText{font-size:.85rem;white-space:nowrap;opacity:.9}
+
+/* 版面 */
+.layout{display:grid;grid-template-columns:1fr}
+.sidebar{position:fixed;z-index:50;top:0;left:0;bottom:0;width:min(300px,86vw);background:var(--card);border-right:1px solid var(--line);overflow:auto;transform:translateX(-102%);transition:transform .25s;padding:calc(16px + env(safe-area-inset-top,0px)) 0 calc(24px + env(safe-area-inset-bottom,0px))}
+.sidebar.open{transform:none}
+.scrim{position:fixed;inset:0;z-index:45;background:rgba(0,0,0,.35);display:none}
+.scrim.show{display:block}
+@media(min-width:1000px){
+  .layout{grid-template-columns:290px 1fr}
+  .sidebar{position:sticky;top:52px;height:calc(100vh - 52px);transform:none;width:auto;z-index:1;padding-top:18px}
+  .menu-btn{display:none}
+  .scrim{display:none!important}
+}
+.toc-part{padding:14px 20px 4px;font-family:"LXGW WenKai TC",serif;color:var(--muted);font-size:.95rem}
+.toc a{display:flex;gap:10px;align-items:baseline;padding:7px 20px;color:var(--ink);text-decoration:none;font-size:.95rem;line-height:1.5;border-left:3px solid transparent}
+.toc a:hover{background:var(--paper)}
+.toc a.active{border-left-color:var(--hi);background:var(--paper);font-weight:700}
+.toc a .n{flex:0 0 1.9em;color:var(--muted);font-size:.8rem}
+.toc a .ck{margin-left:auto;color:var(--seller);font-weight:700}
+
+.main{padding:0 20px 90px;min-width:0}
+.chapter{max-width:780px;margin:0 auto;padding:60px 0 30px;border-bottom:1px dashed var(--line)}
+.ch-head .ch-meta{display:flex;align-items:center;gap:10px;font-size:.9rem;color:var(--muted)}
+.lvl{display:inline-block;padding:1px 10px;border-radius:999px;font-size:.8rem;font-weight:700;color:#fff}
+.lv1{background:var(--seller)}.lv2{background:var(--carrier)}.lv3{background:#B7800A}.lv4{background:#6B4FA0}.lv5{background:var(--buyer)}
+.lead{font-size:1.1rem;color:var(--muted)}
+
+/* 封面 */
+.hero{margin:0 -20px;background:var(--hero);color:#fff;position:relative;overflow:hidden}
+.hero-inner{max-width:820px;margin:0 auto;padding:52px 24px 8px;position:relative;z-index:2}
+.hero h1{color:#fff;font-size:clamp(2.2rem,8vw,4rem);margin:0;letter-spacing:.02em}
+.hero .sub{font-size:clamp(1.05rem,3.4vw,1.35rem);margin:.4em 0 1em;opacity:.92}
+.hero p.intro{max-width:36em;opacity:.85}
+.hero-sea{display:block;width:100%;height:190px;margin-top:6px}
+.ship{animation:sail 30s linear infinite;animation-delay:-14s}
+@keyframes sail{from{transform:translateX(-360px)}to{transform:translateX(840px)}}
+.wv{animation:wave 9s linear infinite}
+.wv2{animation-duration:14s;animation-direction:reverse}
+@keyframes wave{from{transform:translateX(0)}to{transform:translateX(-200px)}}
+.route{display:flex;justify-content:space-between;position:relative;margin:26px 0 8px;padding:0 4px}
+.route::before{content:"";position:absolute;left:22px;right:22px;top:17px;border-top:2px dashed rgba(255,255,255,.45)}
+.port{position:relative;background:none;border:0;color:#fff;font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0;min-width:52px}
+.port .dot{width:34px;height:34px;border-radius:50%;background:var(--hero);border:3px solid var(--hi);display:grid;place-items:center;font-size:.85rem;font-weight:700}
+.port .pl{font-family:"LXGW WenKai TC",serif;font-size:1rem}
+.port .pc{font-size:.72rem;opacity:.75}
+
+/* 內容元件 */
+.term{position:relative;background:var(--card);border:1.5px solid var(--line);border-left:7px solid var(--hi);border-radius:4px 16px 16px 4px;padding:14px 18px 12px 30px;margin:22px 0}
+.term::before{content:"";position:absolute;left:10px;top:20px;width:10px;height:10px;border-radius:50%;border:2px solid var(--muted);background:var(--paper)}
+.t-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.t-name{font-family:"LXGW WenKai TC",serif;font-size:1.3rem;font-weight:700;color:var(--head)}
+.t-en{color:var(--muted);font-size:.9rem}
+.term dl{margin:6px 0 0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px}
+.term dt{font-weight:700;color:var(--bank);white-space:nowrap}
+.term dd{margin:0}
+.story{background:var(--seller-t);border-radius:16px;padding:14px 18px;margin:22px 0;position:relative}
+.story .who{display:inline-block;font-size:.85rem;font-weight:700;color:var(--seller);margin-bottom:2px}
+.story.buyer{background:var(--buyer-t)}.story.buyer .who{color:var(--buyer)}
+.note{border-left:4px solid var(--carrier);background:var(--carrier-t);padding:12px 16px;border-radius:0 12px 12px 0;margin:20px 0}
+.warn{border-left:4px solid var(--buyer);background:var(--buyer-t);padding:12px 16px;border-radius:0 12px 12px 0;margin:20px 0}
+.note b:first-child,.warn b:first-child{display:block;margin-bottom:2px}
+.pill{display:inline-block;padding:0 9px;border-radius:999px;font-size:.82rem;font-weight:700;line-height:1.7;white-space:nowrap}
+.p-seller{background:var(--seller-t);color:var(--seller)}.p-buyer{background:var(--buyer-t);color:var(--buyer)}
+.p-bank{background:var(--bank-t);color:var(--bank)}.p-carrier{background:var(--carrier-t);color:var(--carrier)}
+.p-gov{background:var(--paper);color:var(--muted);border:1px solid var(--line)}
+.widget{background:var(--card);border:1.5px solid var(--line);border-radius:20px;padding:18px;margin:28px 0}
+.widget>h4{display:flex;align-items:center;gap:8px}
+.widget .hint{font-size:.9rem;color:var(--muted);margin-top:0}
+.btn{font:inherit;font-size:.95rem;border:0;border-radius:999px;padding:8px 18px;background:var(--accent);color:var(--on-accent);cursor:pointer;line-height:1.4}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.btn:disabled{opacity:.4;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:.9rem;padding:5px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.chip.on{border-color:var(--accent);background:var(--accent);color:var(--on-accent)}
+label.fld{display:flex;flex-direction:column;gap:2px;font-size:.88rem;color:var(--muted)}
+label.fld input,label.fld select{font:inherit;font-size:1rem;color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:6px 10px;width:100%}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+input[type=range]{width:100%;accent-color:var(--hi)}
+.out{background:var(--paper);border-radius:14px;padding:12px 14px;margin-top:12px}
+.big{font-family:"LXGW WenKai TC",serif;font-size:1.5rem;font-weight:700;color:var(--head)}
+.tbl-wrap{overflow-x:auto;margin:18px 0;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:.93rem;background:var(--card)}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--paper);font-weight:700}
+ul.clean{padding-left:1.2em}ul.clean li{margin:.3em 0}
+
+/* 角色卡 */
+.cast{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin:18px 0}
+.role{background:var(--card);border:1.5px solid var(--line);border-top:5px solid var(--c);border-radius:12px;padding:12px 14px}
+.role .ic{font-size:1.7rem;line-height:1}
+.role h4{margin:.3em 0 .1em}
+.role p{margin:.2em 0;font-size:.93rem}
+.role .like{color:var(--muted);font-size:.85rem}
+
+/* 流程 */
+.track{position:relative;height:36px;margin:8px 4px 14px}
+.track .ln{position:absolute;left:0;right:0;top:17px;border-top:3px dotted var(--line)}
+.track .done{position:absolute;left:0;top:16px;height:5px;background:var(--hi);border-radius:5px;transition:width .5s}
+.track .boat{position:absolute;top:-2px;font-size:1.6rem;transition:left .5s;transform:translateX(-50%)}
+.stepcard{background:var(--paper);border-radius:16px;padding:14px 16px;min-height:190px}
+.stepcard .sn{color:var(--muted);font-size:.85rem}
+.flows{display:grid;gap:10px;margin:16px 0}
+.flow{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px;background:var(--card);border:1.5px solid var(--line)}
+.flow .fl-line{flex:1;height:0;border-top:4px solid var(--c);position:relative}
+.flow .fl-line::after{content:"";position:absolute;right:-2px;top:-9px;border:7px solid transparent;border-left:10px solid var(--c)}
+.flow.rev .fl-line::after{right:auto;left:-2px;border-left-color:transparent;border-right:10px solid var(--c)}
+
+/* 文件 */
+.paper-doc{background:#FFFDF7;color:#222;border:1px solid #D9D2BF;border-radius:4px;padding:14px 16px;font-family:"Courier New",Consolas,monospace;font-size:.8rem;line-height:1.55;box-shadow:3px 3px 0 #E7E0CC;margin-top:12px;overflow-x:auto}
+.paper-doc .pd-t{text-align:center;font-weight:700;font-size:.95rem;letter-spacing:.1em;border-bottom:2px solid #222;padding-bottom:4px;margin-bottom:8px}
+.paper-doc .pd-r{display:grid;grid-template-columns:9.5em 1fr;gap:8px;border-bottom:1px dotted #bbb;padding:2px 0}
+.paper-doc .pd-r b{color:#555}
+.doc-info{display:grid;gap:6px;margin-top:10px}
+.doc-info div{display:grid;grid-template-columns:4.5em 1fr;gap:8px}
+.doc-info span:first-child{font-weight:700;color:var(--bank)}
+
+/* Incoterms */
+.split{display:flex;height:22px;border-radius:8px;overflow:hidden;margin:10px 0 4px}
+.split i{flex:1;border-right:1px solid var(--card);transition:background .3s}
+.seg-list{list-style:none;padding:0;margin:10px 0 0}
+.seg-list li{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:7px 10px;border-radius:10px;margin:4px 0;font-size:.95rem;transition:background .3s}
+.seg-list li.s{background:var(--seller-t)}.seg-list li.b{background:var(--buyer-t)}
+.seg-list li.risk{background:none;justify-content:center;color:var(--bank);font-weight:700;border:2px dashed var(--bank);padding:4px 8px;font-size:.9rem}
+.legend{display:flex;gap:14px;font-size:.85rem;color:var(--muted);flex-wrap:wrap}
+.legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px;background:var(--c)}
+
+/* 付款光譜 */
+.spectrum{position:relative;height:16px;border-radius:10px;background:linear-gradient(90deg,var(--seller),var(--hi),var(--buyer));margin:34px 6px 6px}
+.spectrum .pin{position:absolute;top:-30px;transform:translateX(-50%);transition:left .6s cubic-bezier(.3,1.4,.5,1);font-size:1.5rem}
+.spec-lbl{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);margin:0 2px 12px}
+
+/* L/C 圖 */
+.lc-svg{width:100%;max-width:520px;display:block;margin:0 auto}
+.lc-svg .bx rect{fill:var(--paper);stroke:var(--line);stroke-width:2;transition:all .3s}
+.lc-svg .bx.on rect{stroke:var(--hi);stroke-width:4}
+.lc-svg text{fill:var(--ink);font-family:"Noto Sans TC",sans-serif}
+
+/* 貨櫃 */
+.boxes svg{width:100%;height:auto;max-width:560px;display:block}
+.cov{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.cov div{text-align:center;border-radius:12px;padding:10px 4px;font-weight:700;background:var(--paper);border:2px solid var(--line);transition:all .3s}
+.cov div.y{background:var(--seller-t);border-color:var(--seller);color:var(--seller)}
+.cov div.n{background:var(--buyer-t);border-color:var(--buyer);color:var(--buyer)}
+.hs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}
+.hs div{flex:1 1 110px;border-radius:12px;padding:10px;text-align:center;background:var(--paper);border:2px solid var(--c)}
+.hs b{display:block;font-family:"LXGW WenKai TC",serif;font-size:1.8rem;color:var(--c)}
+.hs small{color:var(--muted)}
+.timeline{list-style:none;padding:0;margin:18px 0;border-left:3px solid var(--line)}
+.timeline li{position:relative;padding:4px 0 14px 20px}
+.timeline li::before{content:"";position:absolute;left:-8px;top:12px;width:13px;height:13px;border-radius:50%;background:var(--hi);border:2px solid var(--card)}
+.timeline .y{font-family:"LXGW WenKai TC",serif;font-weight:700;color:var(--head);font-size:1.1rem;margin-right:8px}
+.ladder{display:grid;gap:6px;margin:14px 0}
+.ladder div{padding:8px 14px;border-radius:10px;background:var(--paper);border-left:6px solid var(--c)}
+
+/* 測驗 */
+.quiz{margin:28px 0;border-top:1.5px solid var(--line);padding-top:18px}
+.quiz>h4::before{content:"✏️ "}
+.qitem{margin:14px 0 20px}
+.qitem .q{font-weight:700;margin-bottom:6px}
+.qitem button.op{display:block;width:100%;text-align:left;font:inherit;font-size:.97rem;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:9px 14px;margin:6px 0;cursor:pointer}
+.qitem button.op.ok{border-color:var(--seller);background:var(--seller-t)}
+.qitem button.op.bad{border-color:var(--buyer);background:var(--buyer-t)}
+.qitem .ex{font-size:.93rem;color:var(--muted);display:none;padding:4px 2px}
+.qitem.answered .ex{display:block}
+.done-btn{margin-top:10px}
+.done-btn.is-done{background:var(--seller);color:#fff}
+.gloss-list{display:grid;gap:10px;margin-top:14px}
+.gl{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.gl .gt{font-weight:700;color:var(--head)}.gl .ge{color:var(--muted);font-size:.85rem;margin-left:6px}
+.gl p{margin:.25em 0;font-size:.93rem}
+.gl .go{color:var(--muted)}
+footer{max-width:780px;margin:40px auto 0;font-size:.85rem;color:var(--muted)}
+@media print{.topbar,.sidebar,.scrim,.hero-sea,.done-btn{display:none!important}.layout{display:block}.chapter{page-break-before:always}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="開啟課程目錄">☰</button>
+  <span class="brand">國貿航海課</span>
+  <div class="prog"><div class="prog-bar"><i id="progFill"></i></div><span id="progText">0 / 14 站</span></div>
+  <button id="themeBtn" aria-label="切換深色或淺色">深淺</button>
+</div>
+<div class="layout">
+<nav class="sidebar" id="sidebar" aria-label="課程目錄"><div class="toc" id="toc"></div></nav>
+<div class="scrim" id="scrim"></div>
+<main class="main">
+
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <h1>一件 T 恤的跨海旅程</h1>
+    <div class="sub">國際貿易，從零學到專業</div>
+    <p class="intro">柬埔寨的阿明成衣廠接到美國品牌的一萬件 T 恤訂單。我們跟著這批 T 恤，從縫紉機旁一路到洛杉磯的貨架，看它經過哪些人、帶著哪些文件、錢又是怎麼流過來的。全課 14 站，每一站都有例子、互動小工具和小測驗。</p>
+    <div class="route" id="route"></div>
+  </div>
+  <svg class="hero-sea" viewBox="0 0 800 190" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <g class="ship" id="ship"></g>
+    <g class="wv wv2" id="wave2"></g>
+    <g class="wv" id="wave1"></g>
+  </svg>
+</section>
+
+<!-- ============ 第 1 站 ============ -->
+<section class="chapter" id="c1">
+<header class="ch-head">
+  <div class="ch-meta"><span>第 1 站</span><span class="lvl lv1">入門</span></div>
+  <h2>為什麼國家之間要做生意？</h2>
+  <p class="lead">從你身上穿的衣服開始，弄懂世界為什麼要互相買賣。</p>
+</header>
+
+<h3>先做個小實驗</h3>
+<p>翻開你衣服領口的標籤，很可能寫著 Made in Cambodia（柬埔寨製）、Made in Vietnam（越南製）或 Made in Bangladesh（孟加拉製）。再看看你的手機：晶片可能是台灣做的、螢幕來自韓國、在中國或印度組裝，最後賣到全世界。</p>
+<p>像這樣<b>跨越國界的買賣</b>，就叫做國際貿易，簡稱「國貿」。</p>
+
+<div class="term"><div class="t-head"><span class="t-name">國際貿易</span><span class="t-en">International Trade</span></div>
+<dl><dt>意思</dt><dd>不同國家（或不同關稅地區）之間，買賣商品或服務。</dd>
+<dt>由來</dt><dd>英文 trade 原本的意思是「走過的路、足跡」。古代商人總是沿著固定路線來回走動做買賣，久了「那條路」就變成「做買賣」的意思。中文的「貿」，古書《說文解字》解釋為「易財也」，就是交換財物。</dd></dl></div>
+
+<div class="term"><div class="t-head"><span class="t-name">出口／進口</span><span class="t-en">Export / Import</span></div>
+<dl><dt>意思</dt><dd>把東西賣到國外叫<b>出口</b>；從國外買進來叫<b>進口</b>。阿明把 T 恤賣到美國，對柬埔寨是出口，對美國是進口——同一筆生意，兩邊的說法相反。</dd>
+<dt>由來</dt><dd>拉丁文 portare 是「搬運」的意思，ex- 代表「往外」、im- 代表「往內」。所以 export 就是「搬出去」，import 就是「搬進來」。剛好英文的港口也叫 port，很好記。</dd></dl></div>
+
+<p>貿易不只買賣「看得到的東西」。你看國外的串流影片、出國旅遊、外國人來台灣看病，這些是<b>服務貿易</b>。這門課主要談的是看得到、摸得到、要裝船運送的<b>商品貿易</b>。</p>
+
+<h3>國家為什麼要貿易？三個理由</h3>
+<ul class="clean">
+<li><b>自己沒有：</b>台灣幾乎不產石油，只好從國外買。熱帶水果、某些礦產也是一樣。</li>
+<li><b>別人做得更便宜、更好：</b>有些國家工資較低、有些國家技術較強，向他們買比自己做划算。</li>
+<li><b>分工讓大家都變多：</b>這是最神奇、也最重要的一點，下面用遊戲來體驗。</li>
+</ul>
+
+<p>1776 年，蘇格蘭經濟學家<b>亞當・斯密</b>在《國富論》裡說：每個人專心做自己最厲害的事，再互相交換，大家都會更富有。這叫<b>絕對優勢</b>。</p>
+<p>可是，如果有一個國家「什麼都比較厲害」，還需要跟別人貿易嗎？1817 年，英國經濟學家<b>李嘉圖</b>給了一個出人意料的答案：需要，而且雙方都有好處！他當年用英國的布和葡萄牙的酒舉例，我們換成教室裡的例子。</p>
+
+<div class="widget" id="w-ca">
+<h4>🍪 分工小實驗：園遊會攤位</h4>
+<p class="hint">小美做什麼都比小明快：1 小時小美能做 <b>6 塊餅乾或 3 張海報</b>，小明只能做 <b>4 塊餅乾或 1 張海報</b>。兩人各有 8 小時。<br>如果兩人各做各的、時間對半分，總共會做出 40 塊餅乾、16 張海報。拖動滑桿，看看能不能讓兩樣東西「都變更多」。</p>
+<div class="grid2">
+  <label class="fld">小美花在餅乾的時間：<b id="caA">4</b> 小時<input type="range" id="caSA" min="0" max="8" value="4"></label>
+  <label class="fld">小明花在餅乾的時間：<b id="caB">4</b> 小時<input type="range" id="caSB" min="0" max="8" value="4"></label>
+</div>
+<div class="out" id="caOut"></div>
+<div class="row" style="margin-top:10px"><button class="btn ghost" id="caHint">給我一個提示</button><button class="btn ghost" id="caReset">回到各做各的</button></div>
+</div>
+
+<p>為什麼會這樣？關鍵在於「<b>做一樣東西，要放棄多少另一樣東西</b>」：</p>
+<ul class="clean">
+<li>小美做 1 張海報的時間，本來可以做 2 塊餅乾 → 1 張海報「代價」是 2 塊餅乾。</li>
+<li>小明做 1 張海報的時間，本來可以做 4 塊餅乾 → 1 張海報「代價」是 4 塊餅乾。</li>
+</ul>
+<p>所以海報交給小美做「比較划算」，餅乾交給小明做「比較划算」。雖然小明兩樣都比較慢，但他做餅乾「慢得比較少」，這就是他的<b>比較優勢</b>。</p>
+
+<div class="term"><div class="t-head"><span class="t-name">機會成本</span><span class="t-en">Opportunity Cost</span></div>
+<dl><dt>意思</dt><dd>為了做某件事，而放棄掉的「另一個最好的選擇」。週末去補習的機會成本，可能就是和朋友打一場球。</dd>
+<dt>由來</dt><dd>1894 年美國學者格林（David Green）在論文中首先用英文寫出 opportunity cost，之後奧地利經濟學家維塞爾（Friedrich von Wieser）把這個觀念發揚光大。「機會」指的就是你「錯過的機會」。</dd></dl></div>
+
+<div class="term"><div class="t-head"><span class="t-name">比較優勢</span><span class="t-en">Comparative Advantage</span></div>
+<dl><dt>意思</dt><dd>做某樣東西的機會成本比別人低，就在那樣東西上有比較優勢。國家專做自己有比較優勢的東西，再互相貿易，全世界的東西就會變多。</dd>
+<dt>由來</dt><dd>英國經濟學家李嘉圖（David Ricardo）在 1817 年的著作《政治經濟學及賦稅原理》中提出，被公認是經濟學最漂亮的觀念之一。</dd></dl></div>
+
+<p>這就是為什麼柬埔寨專心做衣服、台灣專心做晶片、美國專心做軟體和飛機，然後互相買賣。</p>
+
+<div class="term"><div class="t-head"><span class="t-name">貿易順差／逆差</span><span class="t-en">Trade Surplus / Deficit</span></div>
+<dl><dt>意思</dt><dd>一個國家一年出口的總金額大於進口，叫<b>順差</b>（賺進來的比花出去的多）；反過來叫<b>逆差</b>。</dd>
+<dt>由來</dt><dd>surplus 來自中世紀拉丁文 superplus，「多出來的」；deficit 來自拉丁文 deficere，「不夠、缺少」。</dd></dl></div>
+
+<div class="quiz" data-quiz="c1"><h4>小測驗</h4></div>
+<button class="btn done-btn" data-ch="c1">我讀完這一站了</button>
+</section>
+
+<!-- ============ 第 2 站 ============ -->
+<section class="chapter" id="c2">
+<header class="ch-head">
+  <div class="ch-meta"><span>第 2 站</span><span class="lvl lv1">入門</span></div>
+  <h2>國貿裡的角色們</h2>
+  <p class="lead">一筆國際生意像一場接力賽，光有買家和賣家是跑不完的。</p>
+</header>
+
+<p>先認識我們故事的兩位主角：</p>
+<div class="story"><span class="who">賣方・出口商</span><p><b>阿明</b>在柬埔寨西哈努克港附近開成衣廠，有十幾條縫紉產線，專做棉質 T 恤。</p></div>
+<div class="story buyer"><span class="who">買方・進口商</span><p><b>莎莉</b>是美國洛杉磯服飾品牌「陽光衣櫥 Sunny Closet」的採購，負責找工廠下單。</p></div>
+
+<p>他們隔著太平洋，語言、法律、貨幣都不一樣。要把一萬件 T 恤從柬埔寨送到美國、把錢從美國送回柬埔寨，需要一整隊幫手。點顏色可以分辨他們管的是什麼：<span class="pill p-seller">賣方</span> <span class="pill p-buyer">買方</span> <span class="pill p-bank">管錢</span> <span class="pill p-carrier">管運送</span> <span class="pill p-gov">管規矩</span></p>
+
+<div class="cast">
+  <div class="role" style="--c:var(--seller)"><div class="ic">🏭</div><h4>出口商 Exporter</h4><p>生產或採購商品，賣到國外。</p><p class="like">本故事的阿明</p></div>
+  <div class="role" style="--c:var(--buyer)"><div class="ic">🛍️</div><h4>進口商 Importer</h4><p>從國外買進商品，在自己國家販售。</p><p class="like">本故事的莎莉</p></div>
+  <div class="role" style="--c:var(--bank)"><div class="ic">🏦</div><h4>銀行 Bank</h4><p>幫忙把錢跨國送達，還能用自己的信用替買方「保證付款」。</p><p class="like">像值得信任的公證人兼快遞</p></div>
+  <div class="role" style="--c:var(--carrier)"><div class="ic">🚢</div><h4>船公司／航空公司 Carrier</h4><p>真正開船、開飛機把貨運走的人。</p><p class="like">像長榮海運、陽明海運、萬海航運</p></div>
+  <div class="role" style="--c:var(--carrier)"><div class="ic">📦</div><h4>貨運承攬 Freight Forwarder</h4><p>幫你訂船位、安排拖車、處理文件，一條龍打點運輸。</p><p class="like">像幫你訂機票飯店的旅行社</p></div>
+  <div class="role" style="--c:var(--carrier)"><div class="ic">📝</div><h4>報關行 Customs Broker</h4><p>代替貨主填寫申報資料，向海關申報進出口。</p><p class="like">像幫你報稅的記帳士</p></div>
+  <div class="role" style="--c:var(--muted)"><div class="ic">🛃</div><h4>海關 Customs</h4><p>國家大門的守衛：收關稅、查違禁品、統計進出口。</p><p class="like">每個國家都有，出口一次、進口一次</p></div>
+  <div class="role" style="--c:var(--muted)"><div class="ic">🔍</div><h4>檢驗公司 Inspection</h4><p>中立的第三方，出貨前幫買方檢查數量與品質。</p><p class="like">像考試的監考老師</p></div>
+  <div class="role" style="--c:var(--bank)"><div class="ic">🛡️</div><h4>保險公司 Insurer</h4><p>貨在路上沉了、濕了、被偷了，負責賠償。</p><p class="like">貨物的安全帽</p></div>
+</div>
+
+<div class="term"><div class="t-head"><span class="t-name">海關</span><span class="t-en">Customs</span></div>
+<dl><dt>意思</dt><dd>政府設在港口、機場、邊界的機關，管理貨物與人員的進出，並徵收關稅。</dd>
+<dt>由來</dt><dd>英文 customs 就是「習俗、慣例」的複數。中世紀歐洲的領主習慣在路口、橋頭向過路商人收一筆「照慣例要繳的錢」（customary dues），後來這筆錢和收錢的機關都叫 customs。中文的「海關」則因為清朝時主要在沿海港口設關收稅而得名。</dd></dl></div>
+
+<div class="term"><div class="t-head"><span class="t-name">貨運承攬業</span><span class="t-en">Freight Forwarder</span></div>
+<dl><dt>意思</dt><dd>本身通常沒有船，但向船公司大量訂位，再分給各個貨主，並幫忙安排整段運輸。業界常簡稱「Forwarder」或「貨代」。</dd>
+<dt>由來</dt><dd>freight 來自中古荷蘭文 vracht，意思是「運費、貨物」；forward 是「往前送」。合起來就是「把貨往前送的人」。</dd></dl></div>
+
+<div class="note"><b>為什麼要這麼多人？</b>因為國際貿易有三個「距離」：空間距離（要運輸）、信任距離（彼此不認識，要銀行和保險）、制度距離（兩國法律規定不同，要海關和報關行）。每個角色都在縮短其中一種距離。</div>
+
+<div class="quiz" data-quiz="c2"><h4>小測驗</h4></div>
+<button class="btn done-btn" data-ch="c2">我讀完這一站了</button>
+</section>
+
+<!-- ============ 第 3 站 ============ -->
+<section class="chapter" id="c3">
+<header class="ch-head">
+  <div class="ch-meta"><span>第 3 站</span><span class="lvl lv1">入門</span></div>
+  <h2>錢怎麼跨國：匯率</h2>
+  <p class="lead">美國人付美元，工廠發薪水要用自己國家的錢，中間要「換錢」。</p>
+</header>
+
+<p>你出國旅行前會去銀行換外幣。做國際生意也一樣，只是金額大很多。兩種貨幣交換的比例，就叫<b>匯率</b>。</p>
+<p>例如「1 美元 = 32 台幣」，意思是 1 美元可以換到 32 元台幣。</p>
+
+<div class="term"><div class="t-head"><span class="t-name">匯率</span><span class="t-en">Exchange Rate</span></div>
+<dl><dt>意思</dt><dd>一國貨幣換成另一國貨幣的比例。每天、甚至每分鐘都在變動。</dd>
+<dt>由來</dt><dd>「匯」本義是水流匯集，引申為把錢從一地送到另一地（匯款）。exchange 則來自古法文 eschangier，「交換」。</dd></dl></div>
+
+<h3>國際貿易為什麼大多用美元？</h3>
+<p>1944 年二次大戰快結束時，四十多個國家在美國的布列敦森林開會，決定各國貨幣跟美元掛鉤、美元跟黃金掛鉤。雖然這套制度 1970 年代就結束了，但大家已經習慣用美元做生意。今天就算是柬埔寨工廠賣衣服給美國，或台灣工廠賣零件給德國，報價多半還是用美元。</p>
+
+<div class="term"><div class="t-head"><span class="t-name">美元的「元」</span><span class="t-en">Dollar</span></div>
+<dl><dt>由來</dt><dd>16 世紀波希米亞（今捷克）有個產銀的山谷叫 Joachimsthal，那裡鑄的銀幣叫 thaler（塔勒）。這個字傳到各國變成 daler、dollar，後來美國建國時就拿來當貨幣名稱。</dd></dl></div>
+
+<h3>升值、貶值，對誰有利？</h3>
+<p>這是最容易搞混的地方，記住一句話：<b>「換到的台幣變少，就是台幣變貴了（升值）」</b>。</p>
+
+<div class="widget" id="w-fx">
+<h4>💱 匯率小工具：一張美元訂單值多少台幣？</h4>
+<p class="hint">假設有一家台灣腳踏車工廠接到 10 萬美元的訂單。拉動匯率看看工廠實際收到的台幣。</p>
+<label class="fld">匯率：1 美元 = <b id="fxV">32.0</b> 台幣<input type="range" id="fxS" min="28" max="35" step="0.1" value="32"></label>
+<div class="out" id="fxOut"></div>
+</div>
+
+<div class="grid2">
+<div class="note"><b>台幣升值（例如 32 → 29）</b>出口商收到同樣的美元，換回的台幣變少，<b>不利出口</b>；進口商買國外東西變便宜，<b>有利進口</b>。</div>
+<div class="warn"><b>台幣貶值（例如 32 → 35）</b>出口商換回的台幣變多，<b>有利出口</b>；進口商買國外東西變貴，<b>不利進口</b>。</div>
+</div>
+
+<div class="term"><div class="t-head"><span class="t-name">外匯</span><span class="t-en">Foreign Exchange（Forex / FX）</span></div>
+<dl><dt>意思</dt><dd>外國貨幣，以及用外國貨幣表示的支票、匯票、存款等。國家手上的外國貨幣叫「外匯存底」。</dd>
+<dt>由來</dt><dd>「外國」＋「匯兌」的簡稱。FX 是 Foreign eXchange 的縮寫，X 取自 exchange 的發音。</dd></dl></div>
+
+<div class="quiz" data-quiz="c3"><h4>小測驗</h4></div>
+<button class="btn done-btn" data-ch="c3">我讀完這一站了</button>
+</section>
+
+<!-- ============ 第 4 站 ============ -->
+<section class="chapter" id="c4">
+<header class="ch-head">
+  <div class="ch-meta"><span>第 4 站</span><span class="lvl lv2">基礎</span></div>
+  <h2>一筆生意的完整流程</h2>
+  <p class="lead">從第一封 email 到 T 恤掛上貨架，一共 12 步。</p>
+</header>
+
+<p>國際貿易看起來很複雜，其實可以拆成三條同時在跑的「線」：</p>
+<div class="flows">
+  <div class="flow" style="--c:var(--carrier)"><span>🏭 阿明</span><span class="fl-line"></span><span>莎莉 🛍️</span><b style="min-width:4.5em">物流</b></div>
+  <div class="flow rev" style="--c:var(--bank)"><span>🏭 阿明</span><span class="fl-line"></span><span>莎莉 🛍️</span><b style="min-width:4.5em">金流</b></div>
+  <div class="flow" style="--c:var(--seller)"><span>🏭 阿明</span><span class="fl-line"></span><span>莎莉 🛍️</span><b style="min-width:4.5em">文件流</b></div>
+</div>
+<p>貨從賣方流向買方，錢從買方流向賣方，而文件就是兩者之間的「憑證」。文件通常也跟著貨走向買方，因為買方要憑文件才能提貨。</p>
+
+<div class="widget" id="w-flow">
+<h4>🚢 跟著訂單走一遍</h4>
+<p class="hint">按「下一步」或「自動播放」，看看阿明和莎莉的訂單怎麼一步步完成。</p>
+<div class="track"><div class="ln"></div><div class="done" id="flDone"></div><div class="boat" id="flBoat">🚢</div></div>
+<div class="stepcard" id="flCard"></div>
+<div class="row" style="margin-top:12px"><button class="btn ghost" id="flPrev">上一步</button><button class="btn" id="flNext">下一步</button><button class="btn ghost" id="flPlay">自動播放</button></div>
+</div>
+
+<div class="term"><div class="t-head"><span class="t-name">詢價</span><span class="t-en">Inquiry</span></div>
+<dl><dt>意思</dt><dd>買方向賣方打聽價格、規格、交期等交易條件。詢價沒有法律拘束力，只是「問問看」。</dd>
+<dt>由來</dt><dd>inquiry 來自拉丁文 inquirere，in-（進入）＋ quaerere（尋找），就是「深入尋找答案」。</dd></dl></div>
+
+<div class="term"><div class="t-head"><span class="t-name">報價／實盤與虛盤</span><span class="t-en">Offer / Firm Offer / Non-firm Offer</span></div>
+<dl><dt>意思</dt><dd>賣方提出願意成交的條件。<b>實盤</b>寫明有效期限，期限內對方一接受，生意就成立，賣方不能反悔；<b>虛盤</b>則有「以我方最後確認為準」之類的保留，沒有拘束力。</dd>
+<dt>由來</dt><dd>「盤」是中國傳統商業用語，「開盤」「報盤」就是開出價格。firm 是「堅定、不動搖」，所以 firm offer 是「說話算話的報價」。</dd></dl></div>
+
+<div class="term"><div class="t-head"><span class="t-name">還價</span><span class="t-en">Counter-offer</span></div>
+<dl><dt>意思</dt><dd>收到報價的一方修改條件後再提出，例如殺價、要求提早交貨。<b>還價等於拒絕原報價，並提出新報價</b>，原報價就失效了。</dd>
+<dt>由來</dt><dd>counter 是「反向、對抗」，counter-offer 就是「反過來的報價」。中文「還」讀作「ㄏㄨㄢˊ」，意思是「回過去」。</dd></dl></div>
+
+<div class="term"><div class="t-head"><span class="t-name">採購單</span><span class="t-en">Purchase Order（PO）</span></div>
+<dl><dt>意思</dt><dd>買方正式下單的文件，寫明品名、數量、價格、交期、付款方式。在成衣業，PO 幾乎就是合約本身。</dd>
+<dt>由來</dt><dd>purchase 來自古法文 pourchacier，「努力追求、取得」；order 是「命令、訂購」。</dd></dl></div>
+
+<div class="quiz" data-quiz="c4"><h4>小測驗</h4></div>
+<button class="btn done-btn" data-ch="c4">我讀完這一站了</button>
+</section>
+
+<!-- ============ 第 5 站 ============ -->
+<section class="chapter" id="c5">
+<header class="ch-head">
+  <div class="ch-meta"><span>第 5 站</span><span class="lvl lv2">基礎</span></div>
+  <h2>國貿文件：貨物的身分證</h2>
+  <p class="lead">在國際貿易裡，銀行和海關都看不到貨，他們只看文件。</p>
+</header>
+
+<p>想像一下：莎莉在洛杉磯，看不到柬埔寨工廠裡的 T 恤；美國的銀行也不可能派人去柬埔寨數衣服。那大家怎麼相信「貨真的出了、數量真的對」？答案是靠一整套文件。點下面的文件看看它長什麼樣子。</p>
+
+<div class="widget" id="w-docs">
+<h4>📄 文件櫃</h4>
+<div class="chips" id="docTabs"></div>
+<div id="docBody"></div>
+</div>
+
+<h3>提單：最重要的一張紙</h3>
+<p>在所有文件中，<b>提單</b>地位最特別，因為它有三種身分：</p>
+<ul class="clean">
+<li><b>收據：</b>證明船公司已經收到這批貨。</li>
+<li><b>運送契約的證明：</b>證明船公司答應把貨運到目的地。</li>
+<li><b>物權憑證：</b>誰手上拿著正本提單，誰就有權去碼頭提貨。這張紙就等於貨本身，可以轉讓、可以拿去跟銀行借錢。</li>
+</ul>
+<div class="term"><div class="t-head"><span class="t-name">提單</span><span class="t-en">Bill of Lading（B/L）</span></div>
+<dl><dt>意思</dt><dd>船公司在貨物裝船後簽發的文件，是海運貿易的核心單據。正本通常一式三份，憑其中一份提貨後，其餘作廢。</dd>
+<dt>由來</dt><dd>lading 來自古英文 hladan，「裝載」。英文的湯杓 ladle 也是同一個字根（把湯「裝」起來的工具）。bill 在古英文裡指「寫下來的文件」。所以 Bill of Lading 就是「裝貨的文件」。</dd></dl></div>
+
+<div class="warn"><b>重要觀念：單證一致</b>所有文件上的品名、數量、金額、港口、日期都必須互相吻合。發票寫 10,000 件、裝箱單寫 9,800 件，銀行就可能拒絕付款。在國貿業界，一個字母拼錯都可能造成損失。</div>
+
+<div class="quiz" data-quiz="c5"><h4>小測驗</h4></div>
+<button class="btn done-btn" data-ch="c5">我讀完這一站了</button>
+</section>
+
+<!-- ============ 第 6 站 ============ -->
+<section class="chapter" id="c6">
+<header class="ch-head">
+  <div class="ch-meta"><span>第 6 站</span><span class="lvl lv3">核心</span></div>
+  <h2>貿易條件：運費誰付？貨壞了誰倒楣？</h2>
+  <p class="lead">國貿最核心的一站。三個英文字母，決定了幾萬美元的責任。</p>
+</header>
+
+<p>阿明報價「每件 3 美元」，莎莉心裡一定會問：這 3 美元包含運到美國的運費嗎？包含保險嗎？如果船在半路遇到颱風，貨泡水了，損失算誰的？</p>
+<p>以前各國商人對這些問題的習慣都不一樣，常常吵架。於是在 1936 年，總部設在巴黎的<b>國際商會</b>（ICC）整理出一套全世界通用的規則，叫做 <b>Incoterms</b>，用三個字母就把「費用」和「風險」講清楚。</p>
+
+<div class="term"><div class="t-head"><span class="t-name">國貿條規</span><span class="t-en">Incoterms®</span></div>
+<dl><dt>意思</dt><dd>由國際商會制定的貿易條件規則，定義買賣雙方各自負擔哪些<b>費用</b>、<b>風險</b>在哪裡轉移、誰負責<b>報關</b>。目前最新版是 Incoterms 2020，共 11 種。</dd>
+<dt>由來</dt><dd>International Commercial Terms（國際商業條件）的縮寫。國際商會成立於 1919 年，1936 年首次發布，之後在 1953、1967、1976、1980、1990、2000、2010、2020 年陸續修訂，大約每十年更新一次。</dd></dl></div>
+
+<div class="note"><b>最重要的一句話</b>錢付到哪裡，不等於風險擔到哪裡。「費用」和「風險」是兩件事，轉移的地點可能不同。下面的工具會讓你親眼看到。</div>
+
+<h3>四大家族，看第一個字母就懂</h3>
+<div class="tbl-wrap"><table>
+<tr><th>字母</th><th>代表</th><th>白話解釋</th><th>成員</th></tr>
+<tr><td><b>E</b></td><td>Ex（從…出發）</td><td>貨在賣方工廠交，買方自己來拿</td><td>EXW</td></tr>
+<tr><td><b>F</b></td><td>Free（免付主運費）</td><td>賣方把貨交給買方指定的運輸，主要運費由<b>買方</b>付</td><td>FCA、FAS、FOB</td></tr>
+<tr><td><b>C</b></td><td>Cost / Carriage（運費）</td><td>主要運費由<b>賣方</b>付，但風險在出口地就轉給買方</td><td>CFR、CIF、CPT、CIP</td></tr>
+<tr><td><b>D</b></td><td>Delivered（送達）</td><td>賣方要把貨送到目的地，風險也一路擔到目的地</td><td>DAP、DPU、DDP</td></tr>
+</table></div>
+
+<div class="widget" id="w-inco">
+<h4>🧭 貿易條件模擬器</h4>
+<p class="hint">選一個條件，看看從阿明工廠到莎莉倉庫的每一段，費用由誰付、風險在哪裡轉移。標 🚢 的只能用在海運。</p>
+<div class="chips" id="incoTabs"></div>
+<div id="incoHead" style="margin-top:12px"></div>
+<div class="split" id="incoSplit"></div>
+<div class="legend"><span style="--c:var(--seller)">賣方（阿明）付</span><span style="--c:var(--buyer)">買方（莎莉）付</span><span style="--c:var(--bank)">⚠ 風險轉移點</span></div>
+<ul class="seg-list" id="incoList"></ul>
+<div class="out" id="incoNote"></div>
+</div>
+
+<h3>最常用的三兄弟：FOB、CFR、CIF</h3>
+<p>海運貿易中，這三個最常見。以阿明的 T 恤為例：</p>
+<ul class="clean">
+<li><b>FOB 西哈努克港 US$3.00：</b>阿明把貨送上船就好，海運費、保險由莎莉自己安排。</li>
+<li><b>CFR 長堤港 US$3.25：</b>阿明另外幫忙付了到長堤港的海運費，所以價格比較高。</li>
+<li><b>CIF 長堤港 US$3.26：</b>再加上阿明幫忙買的保險。</li>
+</ul>
+
+<div class="warn"><b>CIF 陷阱</b>很多人以為 CIF 是「賣方負責到目的港」，其實<b>風險在出口港貨物裝上船時就已經轉給買方</b>。賣方只是「替買方」付了運費和保險費。如果船在半路沉了，損失是買方的，買方要拿保險單去向保險公司索賠。</div>
+
+<div class="term"><div class="t-head"><span class="t-name">FOB 船上交貨</span><span class="t-en">Free On Board</span></div>
+<dl><dt>意思</dt><dd>賣方在約定的出口港把貨裝上買方指定的船，貨一上船，風險和之後的費用就歸買方。</dd>
+<dt>由來</dt><dd>源自 18、19 世紀英國海運的商業習慣，意思是「賣方負責把貨『免費』送上船」。早期版本以「船舷欄杆」為風險分界，貨物吊過欄杆就算交貨；2010 年版起改成「裝上船」為準，更符合現代貨櫃船的作業。</dd></dl></div>
+
+<div class="term"><div class="t-head"><span class="t-name">CIF 運費保險費在內</span><span class="t-en">Cost, Insurance and Freight</span></div>
+<dl><dt>意思</dt><dd>價格包含貨物成本（Cost）、保險費（Insurance）和到目的港的海運費（Freight）。賣方至少要投保最基本的 ICC(C) 條款。</dd>
+<dt>由來</dt><dd>三個英文單字的第一個字母。在台灣和香港，老一輩貿易商常直接唸成「西愛福」。</dd></dl></div>
+
+<div class="note"><b>專業寫法</b>正式報價要寫清楚<b>條件＋地點＋版本</b>，例如：「US$3.00/pc FOB Sihanoukville, Incoterms® 2020」。只寫 FOB 不寫港口，等於沒講清楚。另外要注意：Incoterms 不管「付款方式」，也不管「貨物所有權何時轉移」，這些要在合約裡另外約定。</div>
+
+<div class="note"><b>2020 年版改了什麼？</b>原本的 DAT（終點站交貨）改名為 DPU（卸貨地交貨），因為交貨地不一定是「終點站」；CIP 的最低保險從 ICC(C) 提高到 ICC(A)。</div>
+
+<div class="quiz" data-quiz="c6"><h4>小測驗</h4></div>
+<button class="btn done-btn" data-ch="c6">我讀完這一站了</button>
+</section>
+
+<!-- ============ 第 7 站 ============ -->
+<section class="chapter" id="c7">
+<header class="ch-head">
+  <div class="ch-meta"><span>第 7 站</span><span class="lvl lv3">核心</span></div>
+  <h2>付款方式：先給錢還是先給貨？</h2>
+  <p class="lead">賣方怕出了貨收不到錢，買方怕付了錢收不到貨。</p>
+</header>
+
+<p>網購時，你先付款、店家再出貨，因為平台幫你擔保。但在國際貿易裡，阿明和莎莉可能從沒見過面，誰都不想先冒險。於是發展出好幾種付款方式，差別在於<b>風險偏向哪一邊</b>。</p>
+
+<div class="widget" id="w-pay">
+<h4>⚖️ 付款方式風險光譜</h4>
+<p class="hint">點選付款方式，看看風險落在哪一邊。</p>
+<div class="chips" id="payTabs"></div>
+<div class="spectrum"><span class="pin" id="payPin">📍</span></div>
+<div class="spec-lbl"><span>對賣方較安全</span><span>對買方較安全</span></div>
+<div id="payBody"></div>
+</div>
+
+<div class="term"><div class="t-head"><span class="t-name">電匯</span><span class="t-en">Telegraphic Transfer（T/T）</span></div>
+<dl><dt>意思</dt><dd>透過銀行把錢直接匯到對方帳戶，是目前最常用的付款方式。預付叫 T/T in advance，出貨後付叫 T/T after shipment。</dd>
+<dt>由來</dt><dd>19 世紀銀行用<b>電報</b>通知國外銀行付款，所以叫「電匯」。今天改用 1973 年在比利時成立的 SWIFT 系統傳送付款指令，但名字沿用至今。</dd></dl></div>
+
+<div class="term"><div class="t-head"><span class="t-name">託收：付款交單／承兌交單</span><span class="t-en">Collection：D/P / D/A</span></div>
+<dl><dt>意思</dt><dd>賣方出貨後，把單據交給銀行「代收」貨款。<b>D/P</b>（Documents against Payment）：買方付了錢才拿得到單據；<b>D/A</b>（Documents against Acceptance）：買方只要在匯票上簽名承諾到期付款，就能先拿單據提貨。銀行只負責轉交，不保證付款。</dd>
+<dt>由來</dt><dd>「託收」就是「委託銀行收款」。國際商會訂有《託收統一規則》（URC 522）作為國際共通規範。accept 在這裡指「承兌」——在匯票上寫下「我承認這筆債」。</dd></dl></div>
+
+<div class="term"><div class="t-head"><span class="t-name">記帳（賒帳）</span><span class="t-en">Open Account（O/A）</span></div>
+<dl><dt>意思</dt><dd>賣方出貨後，直接把單據寄給買方，買方在約定天數（例如 60 天）後付款，就像在熟識的雜貨店「先記帳」。</dd>
+<dt>由來</dt><dd>open 是「開著的」，意思是帳戶一直開著、先記下來、之後再結清。</dd></dl></div>
+
+<div class="note"><b>成衣業的真實情況</b>大型國際品牌多半要求供應商接受 O/A，付款期 30 到 90 天不等；小客戶或新客戶則常用「30% 訂金 + 70% 出貨後見提單副本付清」的 T/T 方式。賣方常搭配輸出信用保險來降低收不到錢的風險。</div>
+
+<div class="quiz" data-quiz="c7"><h4>小測驗</h4></div>
+<button class="btn done-btn" data-ch="c7">我讀完這一站了</button>
+</section>
+
+<!-- ============ 第 8 站 ============ -->
+<section class="chapter" id="c8">
+<header class="ch-head">
+  <div class="ch-meta"><span>第 8 站</span><span class="lvl lv3">核心</span></div>
+  <h2>信用狀：讓銀行當保證人</h2>
+  <p class="lead">國貿界最有名、也最容易出錯的付款工具。</p>
+</header>
+
+<p>如果阿明不認識莎莉，但他認識美國的大銀行呢？信用狀的想法就是：<b>讓買方的銀行出面承諾——只要賣方交出符合要求的文件，銀行就付錢</b>。這樣賣方信任的是銀行，而不是陌生的買方。</p>
+
+<div class="term"><div class="t-head"><span class="t-name">信用狀</span><span class="t-en">Letter of Credit（L/C）</span></div>
+<dl><dt>意思</dt><dd>銀行應買方申請，開給賣方的「有條件付款承諾書」。條件就是：賣方要在期限內提出符合規定的全套單據。</dd>
+<dt>由來</dt><dd>credit 來自拉丁文 credere，「相信」。letter of credit 就是「一封讓人相信你的信」。早在中世紀，歐洲銀行家就會寫信給遠方的同業，請對方「借錢給持信人，我來擔保」，這就是信用狀的祖先。</dd></dl></div>
+
+<div class="widget" id="w-lc">
+<h4>🔁 信用狀流程動畫</h4>
+<p class="hint">左邊是出口國（柬埔寨），右邊是進口國（美國）。按「下一步」看錢、文件、承諾如何流動。</p>
+<svg class="lc-svg" viewBox="0 0 360 300" id="lcSvg" role="img" aria-label="信用狀流程圖">
+  <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#E0A21A"/></marker></defs>
+  <line x1="180" y1="10" x2="180" y2="290" stroke="currentColor" stroke-opacity=".25" stroke-dasharray="4 6"/>
+  <text x="90" y="150" text-anchor="middle" font-size="11" opacity=".6">出口國</text>
+  <text x="270" y="150" text-anchor="middle" font-size="11" opacity=".6">進口國</text>
+  <g class="bx" id="bx-adv"><rect x="20" y="30" width="130" height="60" rx="12"/><text x="85" y="56" text-anchor="middle" font-size="13" font-weight="700">🏦 通知／押匯銀行</text><text x="85" y="76" text-anchor="middle" font-size="11" opacity=".7">賣方的銀行</text></g>
+  <g class="bx" id="bx-iss"><rect x="210" y="30" width="130" height="60" rx="12"/><text x="275" y="56" text-anchor="middle" font-size="13" font-weight="700">🏦 開狀銀行</text><text x="275" y="76" text-anchor="middle" font-size="11" opacity=".7">買方的銀行</text></g>
+  <g class="bx" id="bx-sel"><rect x="20" y="210" width="130" height="60" rx="12"/><text x="85" y="236" text-anchor="middle" font-size="13" font-weight="700">🏭 賣方 阿明</text><text x="85" y="256" text-anchor="middle" font-size="11" opacity=".7">受益人</text></g>
+  <g class="bx" id="bx-buy"><rect x="210" y="210" width="130" height="60" rx="12"/><text x="275" y="236" text-anchor="middle" font-size="13" font-weight="700">🛍️ 買方 莎莉</text><text x="275" y="256" text-anchor="middle" font-size="11" opacity=".7">申請人</text></g>
+  <path id="lcArrow" d="" stroke="#E0A21A" stroke-width="4" fill="none" marker-end="url(#arr)" stroke-linecap="round"/>
+</svg>
+<div class="stepcard" id="lcCard" style="min-height:110px;margin-top:10px"></div>
+<div class="row" style="margin-top:12px"><button class="btn ghost" id="lcPrev">上一步</button><button class="btn" id="lcNext">下一步</button></div>
+</div>
+
+<h3>銀行只看文件，不看貨</h3>
+<p>信用狀有一個很重要的特性：<b>獨立性</b>。銀行審查的是「文件是否符合信用狀要求」，而不是貨物本身好不好。這對雙方都是雙面刃：</p>
+<ul class="clean">
+<li>對賣方：只要文件完美，就算買方後悔、想找藉口不付，銀行也得付。</li>
+<li>對買方：如果賣方出了劣質貨，但文件做得漂亮，銀行照樣付錢。所以買方常要求加上<b>檢驗證明</b>作為必要文件。</li>
+</ul>
+
+<div class="term"><div class="t-head"><span class="t-name">UCP 600</span><span class="t-en">Uniform Customs and Practice for Documentary Credits</span></div>
+<dl><dt>意思</dt><dd>國際商會制定的《信用狀統一慣例》，是全世界銀行處理信用狀的共同規則。600 是國際商會的出版品編號，2007 年 7 月 1 日起施行。</dd>
+<dt>由來</dt><dd>1933 年首次發布，之後多次修訂。因為各國銀行對信用狀的解讀不同，需要一套統一的「遊戲規則」。</dd></dl></div>
+
+<div class="warn"><b>常見的「瑕疵」（Discrepancy）</b>
+提單上的裝船日期晚於信用狀規定的最後裝運日；發票金額超過信用狀金額；文件上的公司名稱拼法和信用狀不同；超過交單期限（一般為裝運後 21 天內，且不得超過信用狀有效期）。只要有瑕疵，開狀銀行就有權拒付。</div>
+
+<div class="note"><b>小心「軟條款」</b>如果信用狀規定「需附買方簽發的檢驗合格證明」，等於把付不付款的決定權又交回買方手上，失去銀行保證的意義。這種條款叫軟條款（Soft Clause），收到信用狀時要仔細看，發現了就要求修改。</div>
+
+<div class="quiz" data-quiz="c8"><h4>小測驗</h4></div>
+<button class="btn done-btn" data-ch="c8">我讀完這一站了</button>
+</section>
+
+<!-- ============ 第 9 站 ============ -->
+<section class="chapter" id="c9">
+<header class="ch-head">
+  <div class="ch-meta"><span>第 9 站</span><span class="lvl lv4">進階</span></div>
+  <h2>海運與空運：鐵盒子改變世界</h2>
+  <p class="lead">一個不起眼的鐵盒子，讓一件 T 恤跨越太平洋的運費不到台幣一塊錢。</p>
+</header>
+
+<p>1950 年代以前，貨物是一袋一袋、一箱一箱由工人扛上船，一艘船裝卸要花好幾天，還常常被偷或摔壞。1956 年，美國卡車業者<b>麥克連</b>（Malcom McLean）想到：為什麼不把整個卡車車廂直接吊上船？他改裝了一艘油輪「理想 X 號」，載著 58 個鐵箱從紐澤西州的紐瓦克開到德州休士頓。這就是現代<b>貨櫃運輸</b>的起點。</p>
+<p>貨櫃統一了尺寸，船、火車、卡車都能直接接駁，裝卸時間從幾天變成幾小時，全球貿易因此大爆發。</p>
+
+<div class="widget boxes">
+<h4>📦 三種常見貨櫃</h4>
+<svg viewBox="0 0 560 200" role="img" aria-label="20呎、40呎、40呎高櫃尺寸比較">
+  <g font-family="Noto Sans TC,sans-serif" font-size="13" fill="currentColor">
+    <rect x="10" y="118" width="150" height="60" fill="#2F6FB0" rx="3"/><g stroke="#fff" stroke-opacity=".35"><line x1="30" y1="122" x2="30" y2="174"/><line x1="55" y1="122" x2="55" y2="174"/><line x1="80" y1="122" x2="80" y2="174"/><line x1="105" y1="122" x2="105" y2="174"/><line x1="130" y1="122" x2="130" y2="174"/></g>
+    <text x="85" y="196" text-anchor="middle">20 呎（1 TEU）</text>
+    <rect x="180" y="118" width="300" height="60" fill="#1F8A70" rx="3" transform="translate(0,0)"/>
+    <text x="330" y="153" text-anchor="middle" fill="#fff">40 呎（2 TEU）</text>
+    <rect x="180" y="20" width="300" height="68" fill="#C8433A" rx="3"/>
+    <text x="330" y="59" text-anchor="middle" fill="#fff">40 呎高櫃（多高約 30 公分）</text>
+    <text x="85" y="100" text-anchor="middle" font-size="12" opacity=".7">外長約 6.1 公尺</text>
+  </g>
+</svg>
+<div class="tbl-wrap"><table>
+<tr><th>櫃型</th><th>內部長×寬×高（約）</th><th>總容積</th><th>實際好裝的量</th></tr>
+<tr><td>20 呎（20'GP）</td><td>5.9 × 2.35 × 2.39 m</td><td>約 33 m³</td><td>約 25–28 m³</td></tr>
+<tr><td>40 呎（40'GP）</td><td>12.0 × 2.35 × 2.39 m</td><td>約 67 m³</td><td>約 55–58 m³</td></tr>
+<tr><td>40 呎高櫃（40'HQ）</td><td>12.0 × 2.35 × 2.69 m</td><td>約 76 m³</td><td>約 65–68 m³</td></tr>
+</table></div>
+<p class="hint">成衣很輕、體積卻大，所以服裝業最愛用 40 呎高櫃。</p>
+</div>
+
+<div class="term"><div class="t-head"><span class="t-name">TEU</span><span class="t-en">Twenty-foot Equivalent Unit</span></div>
+<dl><dt>意思</dt><dd>「20 呎貨櫃約當量」，是計算船的載貨量或港口吞吐量的單位。一個 40 呎櫃算 2 TEU。今天最大的貨櫃船可以裝超過 24,000 TEU。</dd>
+<dt>由來</dt><dd>因為 20 呎櫃是最早的標準尺寸之一，大家就拿它當「基本單位」，就像用「一碗飯」來比較食量。</dd></dl></div>
+
+<div class="widget" id="w-cbm">
+<h4>🧮 我的貨需要幾個櫃？</h4>
+<p class="hint">預設值是阿明的訂單：一萬件 T 恤、每箱 50 件、紙箱 60×40×35 公分。</p>
+<div class="grid2">
+  <label class="fld">總件數<input type="number" id="cbQ" value="10000" min="1"></label>
+  <label class="fld">每箱裝幾件<input type="number" id="cbP" value="50" min="1"></label>
+  <label class="fld">紙箱長（cm）<input type="number" id="cbL" value="60" min="1"></label>
+  <label class="fld">紙箱寬（cm）<input type="number" id="cbW" value="40" min="1"></label>
+  <label class="fld">紙箱高（cm）<input type="number" id="cbH" value="35" min="1"></label>
+</div>
+<div class="out" id="cbOut"></div>
+</div>
+
+<div class="term"><div class="t-head"><span class="t-name">材積（才）與 CBM</span><span class="t-en">Cubic Meter</span></div>
+<dl><dt>意思</dt><dd>CBM 是立方公尺，海運主要依體積計算運費。台灣海運業還習慣用「才」：1 才 = 1 立方英尺，約 0.0283 m³，所以 1 CBM ≈ 35.3 才。</dd>
+<dt>由來</dt><dd>CBM 是 Cubic Meter 的縮寫，也有人寫成 M3。算法很簡單：長 × 寬 × 高（公尺）。</dd></dl></div>
+
+<div class="term"><div class="t-head"><span class="t-name">整櫃與併櫃</span><span class="t-en">FCL / LCL</span></div>
+<dl><dt>意思</dt><dd><b>FCL</b>（Full Container Load）：一個貨主包下整個貨櫃。<b>LCL</b>（Less than Container Load）：貨太少，和別人的貨拼在同一個櫃裡，按體積分攤運費，就像共乘計程車。</dd>
+<dt>延伸</dt><dd>整櫃在 <b>CY</b>（Container Yard，貨櫃場）交接；併櫃要先送到 <b>CFS</b>（Container Freight Station，貨櫃集散站）拼櫃。</dd></dl></div>
+
+<h3>時間用語：船務人員的日常</h3>
+<div class="tbl-wrap"><table>
+<tr><th>縮寫</th><th>全名</th><th>意思</th></tr>
+<tr><td>ETD</td><td>Estimated Time of Departure</td><td>預計開航時間</td></tr>
+<tr><td>ETA</td><td>Estimated Time of Arrival</td><td>預計抵達時間</td></tr>
+<tr><td>Cut-off／結關日</td><td>Closing Date</td><td>貨櫃進場和報關的最後期限，錯過就搭不上這班船</td></tr>
+<tr><td>S/O</td><td>Shipping Order</td><td>裝貨單，訂艙成功後船公司給的「登船許可」</td></tr>
+</table></div>
+
+<h3>海運還是空運？</h3>
+<div class="tbl-wrap"><table>
+<tr><th></th><th>海運</th><th>空運</th></tr>
+<tr><td>柬埔寨→美西時間</td><td>約 3–5 週（含轉運）</td><td>約 3–7 天</td></tr>
+<tr><td>運費</td><td>便宜，一件 T 恤分攤不到 0.3 美元</td><td>貴很多，常是海運的 5–10 倍以上</td></tr>
+<tr><td>適合</td><td>量大、不急、重的貨</td><td>急單、樣品、高價小體積（手機、晶片）</td></tr>
+<tr><td>運送單據</td><td>海運提單 B/L（物權憑證）</td><td>空運提單 AWB（<b>不是</b>物權憑證）</td></tr>
+</table></div>
+<p class="hint">以上時間與運費為教學示意，實際會隨航線、油價、旺季大幅波動。</p>
+
+<div class="quiz" data-quiz="c9"><h4>小測驗</h4></div>
+<button class="btn done-btn" data-ch="c9">我讀完這一站了</button>
+</section>
+
+<!-- ============ 第 10 站 ============ -->
+<section class="chapter" id="c10">
+<header class="ch-head">
+  <div class="ch-meta"><span>第 10 站</span><span class="lvl lv4">進階</span></div>
+  <h2>貨物保險：大海上的安全帽</h2>
+  <p class="lead">一家咖啡館，孕育了全世界的海上保險。</p>
+</header>
+
+<p>1688 年前後，倫敦有一家由<b>愛德華・勞埃德</b>（Edward Lloyd）經營的咖啡館，船長、商人、水手常在那裡交換船隻消息。有錢人會在描述航程風險的文件下方簽名，承諾「如果船出事，我賠一部分」，並收取保險費。這就是著名的<b>勞合社</b>（Lloyd's of London）的起源。</p>
+
+<div class="term"><div class="t-head"><span class="t-name">承保人</span><span class="t-en">Underwriter</span></div>
+<dl><dt>意思</dt><dd>負責評估風險、決定是否承保和保費多少的人或保險公司。</dd>
+<dt>由來</dt><dd>字面就是「寫在下面的人」——當年在勞埃德咖啡館，願意承擔風險的人會把名字<b>寫在</b>風險說明的<b>下方</b>。</dd></dl></div>
+
+<div class="term"><div class="t-head"><span class="t-name">共同海損</span><span class="t-en">General Average（G.A.）</span></div>
+<dl><dt>意思</dt><dd>船遇到危險時，船長為了救全船，故意把部分貨物丟進海裡。這個損失不能只讓被丟貨的人承擔，而是由船東和所有貨主<b>按價值比例一起分攤</b>。所以就算你的貨完好無缺，也可能要付共同海損分攤費——這也是買保險的重要原因。</dd>
+<dt>由來</dt><dd>可追溯到兩千多年前地中海羅德島的海商法，後來被羅馬法收錄，是人類最古老的商業規則之一。average 在這裡不是「平均」，而是來自古義大利文 avaria，「海上損失」。</dd></dl></div>
+
+<h3>三種基本條款：A、B、C</h3>
+<p>倫敦保險人協會訂定的<b>協會貨物條款</b>（Institute Cargo Clauses, ICC）是最通用的海上貨物保險條款。A 保得最廣、C 保得最少，保費也依序遞減。</p>
+
+<div class="widget" id="w-ins">
+<h4>🌊 出事了，保險賠不賠？</h4>
+<p class="hint">選一個意外，看看三種條款各自會不會理賠。</p>
+<div class="chips" id="insTabs"></div>
+<div class="cov" id="insCov"><div>ICC (A)</div><div>ICC (B)</div><div>ICC (C)</div></div>
+<div class="out" id="insNote">先選一個意外吧。</div>
+</div>
+
+<h3>為什麼保額是 CIF 價格的 110%？</h3>
+<p>國際慣例上，保險金額通常是 <b>CIF 價格 × 110%</b>。多出來的 10%，是保障買方「預期可以賺到的利潤」。如果貨沉了，買方不只損失貨款，也損失了本來可以賺的錢。</p>
+<p>以阿明的訂單為例：CIF 總價約 US$32,600，保額就是 US$35,860。如果保險費率是 0.3%，保費約 US$108。</p>
+
+<div class="note"><b>CIF 與 CIP 的保險差異</b>CIF（只能用在海運）賣方只要投保最基本的 ICC(C)；CIP（任何運輸方式）賣方必須投保 ICC(A)。如果買方想要更完整的保障，要在合約裡寫清楚。</div>
+
+<div class="quiz" data-quiz="c10"><h4>小測驗</h4></div>
+<button class="btn done-btn" data-ch="c10">我讀完這一站了</button>
+</section>
+
+<!-- ============ 第 11 站 ============ -->
+<section class="chapter" id="c11">
+<header class="ch-head">
+  <div class="ch-meta"><span>第 11 站</span><span class="lvl lv5">專業</span></div>
+  <h2>報價計算：一件 T 恤該賣多少？</h2>
+  <p class="lead">報太高接不到單，報太低做了賠錢。專業業務都會算這一題。</p>
+</header>
+
+<p>報價是從「成本」一層一層往上疊出來的。記住這個順序：</p>
+<div class="ladder">
+  <div style="--c:var(--muted)"><b>生產成本</b>：布料、輔料（線、標籤、吊牌）、工資、工廠管銷</div>
+  <div style="--c:var(--seller)"><b>＋ 出口費用</b>：內陸拖車、報關費、港口雜費、文件費 → 再加上利潤 ＝ <b>FOB</b></div>
+  <div style="--c:var(--carrier)"><b>＋ 海運費</b> ＝ <b>CFR</b></div>
+  <div style="--c:var(--bank)"><b>＋ 保險費</b> ＝ <b>CIF</b></div>
+</div>
+
+<div class="widget" id="w-quote">
+<h4>🧾 報價計算機</h4>
+<p class="hint">預設值是阿明的一萬件 T 恤。改改看數字，體會每個因素對價格的影響。</p>
+<div class="grid2">
+  <label class="fld">每件生產成本（US$）<input type="number" id="qC" value="2.61" step="0.01" min="0"></label>
+  <label class="fld">數量（件）<input type="number" id="qN" value="10000" min="1"></label>
+  <label class="fld">出口費用總額（US$）<input type="number" id="qE" value="1200" min="0"></label>
+  <label class="fld">利潤率（%）<input type="number" id="qP" value="10" step="0.5" min="0"></label>
+  <label class="fld">海運費總額（US$）<input type="number" id="qF" value="2500" min="0"></label>
+  <label class="fld">保險費率（%）<input type="number" id="qI" value="0.3" step="0.05" min="0"></label>
+</div>
+<div class="out" id="qOut"></div>
+</div>
+
+<h3>為什麼 CIF 要用「除」的？</h3>
+<p>保險費是用「CIF 價格 × 110% × 費率」算出來的，可是 CIF 價格本身又包含保險費——這就像雞生蛋、蛋生雞。用一點國中數學就能解開：</p>
+<div class="note"><b>推導</b>
+CIF = CFR + 保險費<br>
+保險費 = CIF × 110% × 費率<br>
+→ CIF = CFR + CIF × 110% × 費率<br>
+→ CIF × (1 − 110% × 費率) = CFR<br>
+→ <b>CIF = CFR ÷ (1 − 110% × 費率)</b></div>
+
+<h3>報價單上還要寫什麼？</h3>
+<ul class="clean">
+<li><b>有效期限：</b>布料價格、匯率、運費都會變，報價通常只保證 7 到 30 天。</li>
+<li><b>最低訂購量（MOQ，Minimum Order Quantity）：</b>成衣廠開一條產線要調機、打版，數量太少不划算。</li>
+<li><b>交期：</b>例如「收到訂金或信用狀後 45 天出貨」。</li>
+<li><b>付款條件：</b>第 7、8 站學過的那些。</li>
+<li><b>佣金：</b>如果有中間商，價格可能寫成 CIFC5，意思是 CIF 價格中含 5% 佣金。</li>
+</ul>
+
+<div class="quiz" data-quiz="c11"><h4>小測驗</h4></div>
+<button class="btn done-btn" data-ch="c11">我讀完這一站了</button>
+</section>
+
+<!-- ============ 第 12 站 ============ -->
+<section class="chapter" id="c12">
+<header class="ch-head">
+  <div class="ch-meta"><span>第 12 站</span><span class="lvl lv5">專業</span></div>
+  <h2>關稅、HS 碼與原產地</h2>
+  <p class="lead">同一件 T 恤，從不同國家出口，進美國的稅可能差很多。</p>
+</header>
+
+<div class="term"><div class="t-head"><span class="t-name">關稅</span><span class="t-en">Tariff / Customs Duty</span></div>
+<dl><dt>意思</dt><dd>貨物進入一個國家時，海關向進口商收的稅。目的有兩個：增加政府收入、保護本國產業。注意：<b>關稅是進口商付的</b>，不是出口國付的，但最後常會轉嫁到消費者身上。</dd>
+<dt>由來</dt><dd>tariff 來自阿拉伯文 ta'rīf（通知、公告），經義大利文 tariffa 傳入歐洲，原意是「價目表」。另一個流傳很廣的說法是它源自西班牙南端的港口塔里法（Tarifa），傳說當地向過往船隻收通行費——不過語言學家多半認為這只是有趣的巧合。</dd></dl></div>
+
+<h3>HS 碼：全世界共用的商品身分證號</h3>
+<p>全世界有上百萬種商品，海關要怎麼知道該收多少稅？答案是給每一類商品一個編號。1988 年起，世界關務組織（WCO）推行的<b>調和制度</b>成為國際標準，全球絕大多數的貿易商品都用它分類。前 6 碼全世界通用，之後各國再自行往下細分。</p>
+
+<p>拆解阿明的棉質 T 恤：</p>
+<div class="hs">
+  <div style="--c:var(--seller)"><b>61</b><small>章：針織或鉤針織的衣服</small></div>
+  <div style="--c:var(--carrier)"><b>09</b><small>節：T 恤、背心</small></div>
+  <div style="--c:var(--bank)"><b>10</b><small>目：棉製</small></div>
+  <div style="--c:var(--muted)"><b>…</b><small>各國自訂（台灣 11 碼、美國 10 碼）</small></div>
+</div>
+<p>如果同一件 T 恤是「梭織」的（像襯衫那種平織布），就會跑到第 62 章；如果是聚酯纖維做的，最後兩碼就不同。<b>分類錯誤會導致稅率錯誤</b>，輕則補稅，重則罰款。</p>
+
+<div class="term"><div class="t-head"><span class="t-name">HS 碼</span><span class="t-en">Harmonized System Code</span></div>
+<dl><dt>意思</dt><dd>「商品名稱及編碼調和制度」的編號，約每五年修訂一次，以反映新產品（例如無人機、電子煙）。</dd>
+<dt>由來</dt><dd>harmonize 是「使和諧、一致」。在 HS 出現之前，各國分類方法不同，同一個商品到每個國家都要重新歸類，HS 讓全世界「講同一種語言」。</dd></dl></div>
+
+<h3>稅要算在什麼價格上？</h3>
+<p>各國計算關稅的基礎不同，這是很多新手忽略的細節：</p>
+<ul class="clean">
+<li><b>美國：</b>以實際成交價格為準，通常<b>不含</b>國際運費與保險，大致接近 FOB。</li>
+<li><b>歐盟、台灣等多數國家：</b>以 <b>CIF</b> 價格為完稅價格，運費和保險也要課稅。</li>
+</ul>
+
+<div class="widget" id="w-duty">
+<h4>🛃 關稅試算</h4>
+<p class="hint">阿明的訂單：FOB US$30,000、海運費 US$2,500、保險費 US$108。稅率為教學假設值，實際稅率請查詢進口國海關最新公告。</p>
+<label class="fld">假設稅率：<b id="dV">15</b>%<input type="range" id="dS" min="0" max="40" step="0.5" value="15"></label>
+<div class="chips" style="margin-top:10px" id="dBase"><button class="chip on" data-b="fob">以 FOB 計稅（美國方式）</button><button class="chip" data-b="cif">以 CIF 計稅（歐盟、台灣方式）</button></div>
+<div class="out" id="dOut"></div>
+</div>
+
+<h3>原產地：「這件衣服算哪國製造？」</h3>
+<p>一件 T 恤可能用美國棉花、在中國紡紗、在越南織布、在柬埔寨裁剪縫製。它的「國籍」是哪裡？這由<b>原產地規則</b>決定。一般原則是看在哪裡發生「<b>實質轉型</b>」——也就是讓商品變成新東西的關鍵加工。成衣通常看在哪裡<b>裁剪縫製</b>成衣服。</p>
+<p>原產地很重要，因為不同國家適用不同稅率。有些自由貿易協定規定更嚴格，例如要求從紗線開始就在協定國家內生產（業界稱「紗線起算」，Yarn Forward），才能享受免稅。</p>
+
+<div class="term"><div class="t-head"><span class="t-name">自由貿易協定</span><span class="t-en">Free Trade Agreement（FTA）</span></div>
+<dl><dt>意思</dt><dd>兩個或多個國家約定，彼此間大部分商品降低或免除關稅。例如《區域全面經濟夥伴協定》（RCEP），包含東協十國和中、日、韓、澳、紐，2022 年生效。</dd>
+<dt>延伸</dt><dd>另外還有<b>普遍化優惠關稅制度</b>（GSP）：已開發國家單方面給開發中國家的產品較低關稅，幫助它們發展經濟。</dd></dl></div>
+
+<h3>關稅以外的門檻</h3>
+<ul class="clean">
+<li><b>非關稅障礙：</b>配額（限制進口數量）、繁複的檢驗標準、標籤規定。例如成衣要標示纖維成分和洗滌方式，各國規定不同。</li>
+<li><b>反傾銷稅：</b>如果外國產品以低於正常價值的價格大量賣進來、傷害本國產業，進口國可加徵額外關稅。</li>
+<li><b>平衡稅：</b>針對外國政府補貼出口商而加徵的稅。</li>
+</ul>
+<div class="term"><div class="t-head"><span class="t-name">傾銷</span><span class="t-en">Dumping</span></div>
+<dl><dt>意思</dt><dd>以低於本國售價或生產成本的價格，把產品大量賣到國外市場。</dd>
+<dt>由來</dt><dd>dump 是「傾倒、丟棄」，像把垃圾一股腦倒出去一樣，把過剩的貨「倒」到別人的市場。</dd></dl></div>
+
+<div class="warn"><b>變動很快，要查最新資料</b>近年各國關稅政策變化頻繁，常被當作外交談判的籌碼。出貨前一定要向報關行或進口國海關確認當下的稅率，課本上的數字只能當參考。</div>
+
+<div class="quiz" data-quiz="c12"><h4>小測驗</h4></div>
+<button class="btn done-btn" data-ch="c12">我讀完這一站了</button>
+</section>
+
+<!-- ============ 第 13 站 ============ -->
+<section class="chapter" id="c13">
+<header class="ch-head">
+  <div class="ch-meta"><span>第 13 站</span><span class="lvl lv5">專業</span></div>
+  <h2>風險管理與貿易糾紛</h2>
+  <p class="lead">做國貿不怕有風險，怕的是沒想到風險。</p>
+</header>
+
+<div class="tbl-wrap"><table>
+<tr><th>風險</th><th>會發生什麼事</th><th>怎麼防</th></tr>
+<tr><td>信用風險</td><td>買方倒閉或賴帳，收不到錢</td><td>先查買方信用、用信用狀或預付、投保輸出信用保險</td></tr>
+<tr><td>匯率風險</td><td>收款前本國貨幣升值，換回的錢變少</td><td>跟銀行簽遠期外匯合約，事先鎖定匯率</td></tr>
+<tr><td>運輸風險</td><td>貨物沉沒、受潮、被偷</td><td>投保適當的貨物保險、做好包裝</td></tr>
+<tr><td>品質風險</td><td>買方說貨不對、拒收或要求賠償</td><td>出貨前讓買方確認樣品、第三方驗貨、合約寫清楚規格</td></tr>
+<tr><td>政治風險</td><td>戰爭、制裁、突然加稅、禁止進口</td><td>分散市場和生產地、關注國際新聞</td></tr>
+<tr><td>詐騙風險</td><td>假冒客戶 email 要求改匯款帳號</td><td>帳號變更一定要用<b>已知的電話</b>向對方本人確認</td></tr>
+</table></div>
+
+<div class="widget">
+<h4>🔒 遠期外匯怎麼用？</h4>
+<p>台灣某出口商 3 個月後會收到 US$100,000。現在匯率是 1:32，他怕台幣升值，於是今天跟銀行簽約：「3 個月後，我用 <b>31.5</b> 的匯率把美元賣給你。」</p>
+<div class="grid2">
+<div class="note"><b>3 個月後台幣升值到 30</b>沒簽約：換到 300 萬台幣<br>有簽約：換到 <b>315 萬</b>台幣 ✔ 保住了 15 萬</div>
+<div class="warn"><b>3 個月後台幣貶值到 33</b>沒簽約：換到 330 萬台幣<br>有簽約：還是 <b>315 萬</b>台幣，少賺 15 萬</div>
+</div>
+<p class="hint" style="margin-bottom:0">避險的目的不是賺錢，而是讓收入「確定」，方便算成本和報價。</p>
+</div>
+
+<div class="warn"><b>真實世界最常見的損失：商業電子郵件詐騙</b>駭客入侵或偽造你客戶、供應商的信箱，在要付款的時間點寄信說「我們銀行帳號換了，請匯到新帳號」。錢一匯出去就很難追回。這類詐騙在國際貿易中非常常見，任何帳號變更都要打電話確認。</div>
+
+<h3>吵架了怎麼辦？糾紛解決四階段</h3>
+<div class="ladder">
+  <div style="--c:var(--seller)"><b>協商</b>：雙方直接談，例如打折、補貨、下次訂單抵扣。最快最便宜，也最能保住關係。</div>
+  <div style="--c:var(--carrier)"><b>調解</b>：請中立的第三方協助溝通，但調解人不做判決。</div>
+  <div style="--c:var(--bank)"><b>仲裁</b>：雙方同意交給仲裁機構判斷，結果有拘束力，而且不公開。</div>
+  <div style="--c:var(--buyer)"><b>訴訟</b>：上法院。跨國打官司耗時昂貴，判決到了外國也不一定能執行。</div>
+</div>
+
+<div class="term"><div class="t-head"><span class="t-name">仲裁</span><span class="t-en">Arbitration</span></div>
+<dl><dt>意思</dt><dd>當事人約定把爭議交給專業的仲裁人裁決，裁決和法院判決一樣有效。國際貿易合約常寫明「如有爭議，提交某某仲裁機構仲裁」。</dd>
+<dt>由來</dt><dd>拉丁文 arbiter 是「見證人、裁判」。1958 年的《紐約公約》讓仲裁裁決可以在超過 170 個締約國被承認和執行，這是仲裁比跨國訴訟好用的主要原因。</dd></dl></div>
+
+<div class="term"><div class="t-head"><span class="t-name">不可抗力</span><span class="t-en">Force Majeure</span></div>
+<dl><dt>意思</dt><dd>當事人無法預見、無法避免、無法克服的事件，例如地震、戰爭、疫情封城。發生時，受影響的一方可以延後或免除履約責任，但要及時通知對方並提出證明。</dd>
+<dt>由來</dt><dd>法文，直譯是「更大的力量」，也就是人力無法抗拒的力量。這個觀念在 1804 年的《拿破崙法典》中就有規定。</dd></dl></div>
+
+<h3>一份好的貿易合約要有哪些條款？</h3>
+<p>品質（規格、樣品）、數量（含允許的短溢裝比例）、包裝、價格（含貿易條件）、交貨（裝運期、港口）、付款、保險、檢驗、索賠、不可抗力、仲裁與準據法。成衣業還特別重視<b>產前樣</b>（PP Sample，Pre-Production Sample）：大量生產前，先做一件給買方確認，確認後就照這件生產，能避免日後很多爭議。</p>
+
+<div class="quiz" data-quiz="c13"><h4>小測驗</h4></div>
+<button class="btn done-btn" data-ch="c13">我讀完這一站了</button>
+</section>
+
+<!-- ============ 第 14 站 ============ -->
+<section class="chapter" id="c14">
+<header class="ch-head">
+  <div class="ch-meta"><span>第 14 站</span><span class="lvl lv5">專業</span></div>
+  <h2>世界貿易的舞台與未來</h2>
+  <p class="lead">從一件 T 恤，看到整個世界的規則與變化。</p>
+</header>
+
+<h3>國際貿易大事年表</h3>
+<ul class="timeline">
+<li><span class="y">1776</span>亞當・斯密出版《國富論》，提出分工與絕對優勢。</li>
+<li><span class="y">1817</span>李嘉圖提出比較優勢理論。</li>
+<li><span class="y">1936</span>國際商會發布第一版 Incoterms。</li>
+<li><span class="y">1944</span>布列敦森林會議，確立美元的國際地位。</li>
+<li><span class="y">1947</span>23 國簽署《關稅暨貿易總協定》（GATT），開始多回合降稅談判。</li>
+<li><span class="y">1956</span>麥克連的「理想 X 號」開啟貨櫃運輸時代。</li>
+<li><span class="y">1973</span>SWIFT 成立，銀行跨國付款進入電子化。</li>
+<li><span class="y">1988</span>HS 商品分類制度開始實施。</li>
+<li><span class="y">1995</span>世界貿易組織（WTO）成立，取代 GATT。</li>
+<li><span class="y">2001</span>中國加入 WTO，「世界工廠」崛起。</li>
+<li><span class="y">2002</span>台灣以「台澎金馬個別關稅領域」名義加入 WTO。</li>
+<li><span class="y">2007</span>信用狀統一慣例 UCP 600 施行。</li>
+<li><span class="y">2022</span>全球最大的自由貿易協定 RCEP 生效。</li>
+<li><span class="y">2025</span>美國對多國實施「對等關稅」，全球供應鏈重新盤算。</li>
+<li><span class="y">2026</span>歐盟碳邊境調整機制（CBAM）進入正式階段。</li>
+</ul>
+
+<div class="term"><div class="t-head"><span class="t-name">世界貿易組織</span><span class="t-en">World Trade Organization（WTO）</span></div>
+<dl><dt>意思</dt><dd>制定和執行國際貿易規則的國際組織，總部在瑞士日內瓦，有 160 多個會員。主要工作是推動降低貿易障礙、處理會員之間的貿易爭端。</dd>
+<dt>由來</dt><dd>前身是 1947 年的 GATT（General Agreement on Tariffs and Trade）。GATT 原本只是一份「協定」，經過烏拉圭回合談判（1986–1994）後，才升級成正式的國際組織。</dd></dl></div>
+
+<div class="term"><div class="t-head"><span class="t-name">最惠國待遇</span><span class="t-en">Most-Favoured-Nation Treatment（MFN）</span></div>
+<dl><dt>意思</dt><dd>WTO 最核心的原則：給任何一個會員的最優惠關稅，也必須給所有其他會員。名字聽起來像「特別優待」，實際上是「一視同仁」。自由貿易協定是它的主要例外。</dd>
+<dt>由來</dt><dd>源自 17、18 世紀歐洲各國的通商條約，承諾「你享受的待遇，不會比任何其他最受優待的國家差」。美國在 1998 年因為這個名稱容易被誤解，改稱「正常貿易關係」（NTR）。</dd></dl></div>
+
+<h3>正在發生的四大趨勢</h3>
+<ul class="clean">
+<li><b>供應鏈分散：</b>品牌不想把所有訂單放在同一個國家，常說的「中國加一」讓越南、柬埔寨、孟加拉、印度等地的工廠接到更多訂單。</li>
+<li><b>關稅與地緣政治：</b>關稅越來越常被當作談判與施壓的工具，原產地規則和產地證明的審查也越來越嚴。</li>
+<li><b>數位化：</b>電子提單、電子產地證明、區塊鏈貿易平台逐漸普及。聯合國國際貿易法委員會在 2017 年通過《電子可轉讓紀錄示範法》，讓電子提單有了法律基礎。</li>
+<li><b>綠色貿易：</b>歐盟碳邊境調整機制先從鋼鐵、水泥、鋁、肥料、電力、氫開始，進口商要為產品生產過程的碳排放付費。紡織業雖然暫時不在名單上，但品牌對供應商的碳排、用水、化學品管理要求越來越高。</li>
+</ul>
+
+<h3>跟國貿有關的工作</h3>
+<div class="cast">
+  <div class="role" style="--c:var(--seller)"><div class="ic">💼</div><h4>國貿業務</h4><p>開發客戶、報價、談判、接單。</p></div>
+  <div class="role" style="--c:var(--seller)"><div class="ic">🧵</div><h4>跟單（Merchandiser）</h4><p>成衣業的靈魂人物，從打樣、生產到出貨全程追蹤。</p></div>
+  <div class="role" style="--c:var(--carrier)"><div class="ic">🚢</div><h4>船務</h4><p>訂艙、安排裝櫃、製作出貨文件。</p></div>
+  <div class="role" style="--c:var(--carrier)"><div class="ic">📝</div><h4>報關</h4><p>商品歸類、申報、計算關稅。</p></div>
+  <div class="role" style="--c:var(--bank)"><div class="ic">🏦</div><h4>銀行外匯／貿易融資</h4><p>審信用狀、辦押匯、處理跨國付款。</p></div>
+  <div class="role" style="--c:var(--buyer)"><div class="ic">🛒</div><h4>國際採購</h4><p>替品牌或工廠在全世界找供應商。</p></div>
+</div>
+
+<div class="quiz" data-quiz="c14"><h4>小測驗</h4></div>
+<button class="btn done-btn" data-ch="c14">我讀完這一站了</button>
+</section>
+
+<!-- ============ 結業測驗 ============ -->
+<section class="chapter" id="exam">
+<header class="ch-head">
+  <div class="ch-meta"><span>終點站</span></div>
+  <h2>結業測驗</h2>
+  <p class="lead">12 題綜合題，看看你從入門走到專業了沒。</p>
+</header>
+<div class="quiz" data-quiz="exam" id="examBox"><h4>作答區</h4></div>
+<div class="out" id="examScore">答完所有題目後，這裡會顯示你的成績。</div>
+</section>
+
+<!-- ============ 名詞辭典 ============ -->
+<section class="chapter" id="gloss">
+<header class="ch-head">
+  <h2>國貿名詞辭典</h2>
+  <p class="lead">忘記某個名詞？在這裡搜尋中文、英文或縮寫。</p>
+</header>
+<label class="fld">搜尋名詞<input type="search" id="glSearch" placeholder="例如：提單、FOB、L/C"></label>
+<div class="gloss-list" id="glList"></div>
+</section>
+
+<footer>
+<p>本教材以 Incoterms® 2020、UCP 600 等現行國際規則為基礎編寫。文中的價格、運費、稅率、運送時間皆為教學示意用的假設數字，實際交易請以最新市場行情與各國官方公告為準。阿明成衣廠與陽光衣櫥為虛構的教學案例。</p>
+</footer>
+</main>
+</div>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s);
+const $$=s=>Array.from(document.querySelectorAll(s));
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const fmt=(n,d=0)=>Number(n).toLocaleString('zh-TW',{minimumFractionDigits:d,maximumFractionDigits:d});
+const pill=(w)=>({seller:'<span class="pill p-seller">賣方 阿明</span>',buyer:'<span class="pill p-buyer">買方 莎莉</span>',bank:'<span class="pill p-bank">銀行</span>',carrier:'<span class="pill p-carrier">運輸業者</span>',gov:'<span class="pill p-gov">海關</span>',insp:'<span class="pill p-gov">檢驗公司</span>'}[w]||'');
+
+/* ---------- 深淺色 ---------- */
+const root=document.documentElement;
+const savedTheme=store.get('tc-theme'); if(savedTheme) root.dataset.theme=savedTheme;
+$('#themeBtn').addEventListener('click',()=>{
+  const cur=root.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  const nx=cur==='dark'?'light':'dark'; root.dataset.theme=nx; store.set('tc-theme',nx);
+});
+
+/* ---------- 目錄與進度 ---------- */
+const parts=[
+ {p:'入門：貿易是什麼',c:[['c1','為什麼要做生意'],['c2','國貿裡的角色們'],['c3','錢怎麼跨國：匯率']]},
+ {p:'基礎：一筆生意怎麼做',c:[['c4','一筆生意的完整流程'],['c5','國貿文件']]},
+ {p:'核心：條件與付款',c:[['c6','貿易條件 Incoterms'],['c7','付款方式'],['c8','信用狀']]},
+ {p:'進階：運輸與保險',c:[['c9','海運與空運'],['c10','貨物保險']]},
+ {p:'專業：算得準、看得遠',c:[['c11','報價計算'],['c12','關稅、HS 碼與原產地'],['c13','風險管理與糾紛'],['c14','世界貿易的舞台']]},
+ {p:'總複習',c:[['exam','結業測驗'],['gloss','名詞辭典']]}
+];
+let done=store.get('tc-done')||{};
+function renderToc(){
+  let h='';
+  parts.forEach(pt=>{
+    h+=`<div class="toc-part">${pt.p}</div>`;
+    pt.c.forEach(([id,t])=>{
+      const n=id.startsWith('c')?id.slice(1):'';
+      h+=`<a href="#${id}" data-id="${id}"><span class="n">${n}</span><span>${t}</span>${done[id]?'<span class="ck">✓</span>':''}</a>`;
+    });
+  });
+  $('#toc').innerHTML=h;
+  const cnt=Object.keys(done).filter(k=>done[k]&&/^c\d+$/.test(k)).length;
+  $('#progFill').style.width=(cnt/14*100)+'%';
+  $('#progText').textContent=`${cnt} / 14 站`;
+  $$('.done-btn').forEach(b=>{const d=done[b.dataset.ch];b.classList.toggle('is-done',!!d);b.textContent=d?'✓ 已完成這一站（再按一次取消）':'我讀完這一站了';});
+}
+$$('.done-btn').forEach(b=>b.addEventListener('click',()=>{done[b.dataset.ch]=!done[b.dataset.ch];store.set('tc-done',done);renderToc();setActive(current);}));
+renderToc();
+
+const sb=$('#sidebar'),scrim=$('#scrim');
+const closeNav=()=>{sb.classList.remove('open');scrim.classList.remove('show')};
+$('#menuBtn').addEventListener('click',()=>{sb.classList.toggle('open');scrim.classList.toggle('show')});
+scrim.addEventListener('click',closeNav);
+$('#toc').addEventListener('click',e=>{if(e.target.closest('a'))closeNav()});
+
+let current='';
+function setActive(id){current=id;$$('#toc a').forEach(a=>a.classList.toggle('active',a.dataset.id===id))}
+if('IntersectionObserver' in window){
+  const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting)setActive(en.target.id)})},{rootMargin:'-35% 0px -60% 0px'});
+  $$('.chapter').forEach(s=>io.observe(s));
+}
+
+/* ---------- 封面：航線與船 ---------- */
+const ports=[['入門','1–3','c1'],['基礎','4–5','c4'],['核心','6–8','c6'],['進階','9–10','c9'],['專業','11–14','c11']];
+$('#route').innerHTML=ports.map((p,i)=>`<button class="port" data-go="${p[2]}"><span class="dot">${i+1}</span><span class="pl">${p[0]}</span><span class="pc">第 ${p[1]} 站</span></button>`).join('');
+$('#route').addEventListener('click',e=>{const b=e.target.closest('.port');if(b)document.getElementById(b.dataset.go).scrollIntoView()});
+(function(){
+  const cols=['#F2B632','#C8433A','#1F8A70','#2F6FB0','#E8EEF2','#F2B632','#2F6FB0'];
+  let g='';
+  [[126,7],[112,7],[98,5]].forEach(([y,n],r)=>{for(let i=0;i<n;i++){g+=`<rect x="${52+i*27}" y="${y}" width="25" height="13" rx="1.5" fill="${cols[(i*3+r*2)%cols.length]}"/>`}});
+  g+=`<rect x="248" y="96" width="30" height="42" fill="#E8EEF2"/><rect x="252" y="100" width="22" height="6" fill="#0F3B57"/><rect x="262" y="82" width="6" height="14" fill="#C8433A"/>`;
+  g+=`<path d="M0 139 L300 139 L286 168 L14 168 Z" fill="#E8EEF2"/><path d="M8 156 L292 156 L286 168 L14 168 Z" fill="#C8433A"/>`;
+  $('#ship').innerHTML=g;
+  const wave=(y,a)=>{let d=`M0 ${y}`;for(let x=0;x<1200;x+=100){d+=` Q ${x+25} ${y-a} ${x+50} ${y} T ${x+100} ${y}`}return d+` L1200 190 L0 190 Z`};
+  $('#wave2').innerHTML=`<path d="${wave(150,7)}" fill="rgba(255,255,255,.08)"/>`;
+  $('#wave1').innerHTML=`<path d="${wave(162,6)}" fill="rgba(140,195,230,.22)"/><rect x="0" y="176" width="1200" height="20" fill="rgba(140,195,230,.22)"/>`;
+})();
+
+/* ---------- 第1站：比較優勢 ---------- */
+const caSA=$('#caSA'),caSB=$('#caSB');
+function ca(){
+  const a=+caSA.value,b=+caSB.value;
+  $('#caA').textContent=a;$('#caB').textContent=b;
+  const mc=a*6,mp=(8-a)*3,xc=b*4,xp=(8-b);
+  const tc=mc+xc,tp=mp+xp;
+  const cmp=(v,base)=>v>base?`<b style="color:var(--seller)">${v}（+${v-base}）</b>`:v<base?`<b style="color:var(--buyer)">${v}（${v-base}）</b>`:`<b>${v}</b>`;
+  let msg;
+  if(tc>=40&&tp>=16&&(tc>40||tp>16)) msg='🎉 兩樣東西都沒變少，而且總量更多了！這就是分工的力量。';
+  else if(tc===40&&tp===16) msg='這是「各做各的」的結果。試著讓小美多做海報、小明多做餅乾。';
+  else msg='有一樣東西變少了。想想看：誰做海報的「代價」比較小？';
+  $('#caOut').innerHTML=`<div class="tbl-wrap" style="margin:0 0 8px"><table style="min-width:0"><tr><th></th><th>🍪 餅乾</th><th>🖼️ 海報</th></tr><tr><td>小美</td><td>${mc}</td><td>${mp}</td></tr><tr><td>小明</td><td>${xc}</td><td>${xp}</td></tr><tr><td><b>合計</b></td><td>${cmp(tc,40)}</td><td>${cmp(tp,16)}</td></tr></table></div>${msg}`;
+}
+caSA.addEventListener('input',ca);caSB.addEventListener('input',ca);
+$('#caHint').addEventListener('click',()=>{caSA.value=2;caSB.value=8;ca()});
+$('#caReset').addEventListener('click',()=>{caSA.value=4;caSB.value=4;ca()});
+ca();
+
+/* ---------- 第3站：匯率 ---------- */
+function fx(){
+  const r=+$('#fxS').value;$('#fxV').textContent=r.toFixed(1);
+  const twd=100000*r,diff=twd-3200000;
+  $('#fxOut').innerHTML=`<div class="big">NT$ ${fmt(twd)}</div>${diff===0?'這是以 1:32 為基準的收入。':diff<0?`比 1:32 時<b style="color:var(--buyer)">少了 NT$ ${fmt(-diff)}</b>——台幣升值，出口商吃虧。`:`比 1:32 時<b style="color:var(--seller)">多了 NT$ ${fmt(diff)}</b>——台幣貶值，出口商賺到匯差。`}`;
+}
+$('#fxS').addEventListener('input',fx);fx();
+
+/* ---------- 第4站：流程 ---------- */
+const steps=[
+ {t:'找客戶',en:'Prospecting',who:['seller'],d:'阿明參加美國的服裝商展，也寄開發信給各品牌。莎莉看到阿明工廠的介紹，覺得品質和價格都有潛力。',k:'商展、開發信、老客戶介紹'},
+ {t:'詢價',en:'Inquiry',who:['buyer'],d:'莎莉寄 email：「我們需要 10,000 件 100% 棉質圓領 T 恤，5 個顏色，請報價並告知最快交期。」',k:'詢價沒有法律拘束力'},
+ {t:'報價',en:'Offer',who:['seller'],d:'阿明算好成本後回覆：「每件 US$3.20 FOB 西哈努克港，收到訂金後 45 天出貨，本報價 7 天內有效。」',k:'實盤、有效期限、貿易條件'},
+ {t:'還價',en:'Counter-offer',who:['buyer'],d:'莎莉回信：「US$2.90 可以嗎？我們之後每季都會下單。」阿明再回：「US$3.00 是最低價了。」',k:'還價＝拒絕原報價＋新報價'},
+ {t:'成交下單',en:'Acceptance & PO',who:['buyer','seller'],d:'莎莉接受 US$3.00，寄出正式採購單（PO）。阿明回傳形式發票（PI）確認所有條件。',k:'PO、PI、合約成立'},
+ {t:'安排付款保障',en:'Payment Arrangement',who:['buyer','bank'],d:'雙方約定用信用狀付款。莎莉請美國的銀行開出信用狀，由柬埔寨的銀行通知阿明。',k:'L/C、T/T 訂金'},
+ {t:'生產與驗貨',en:'Production & Inspection',who:['seller','insp'],d:'阿明買布、裁剪、車縫、整燙、包裝。出貨前，莎莉委託的檢驗公司抽檢數量、尺寸和車縫品質。',k:'產前樣、抽驗'},
+ {t:'訂艙',en:'Booking',who:['seller','carrier'],d:'阿明透過貨運承攬業訂好船位，拿到裝貨單（S/O），並記下結關日。',k:'S/O、ETD、結關日'},
+ {t:'出口報關',en:'Export Clearance',who:['seller','gov'],d:'報關行把發票、裝箱單等資料送交柬埔寨海關申報，海關放行後貨櫃才能上船。',k:'報關、放行'},
+ {t:'裝船、取得提單',en:'Loading & B/L',who:['carrier'],d:'貨櫃吊上貨櫃船，船公司簽發提單給阿明。船開往美國長堤港，大約要 3 到 5 週。',k:'提單 B/L'},
+ {t:'押匯收款',en:'Negotiation',who:['seller','bank'],d:'阿明把提單、發票、裝箱單等全套文件交給自己的銀行。銀行審單無誤後先把錢撥給阿明，再向美國的開狀銀行請款。',k:'押匯、單證一致'},
+ {t:'進口報關、提貨',en:'Import Clearance',who:['buyer','gov'],d:'莎莉付款贖回提單，船到港後向美國海關申報、繳納關稅，再憑提單提貨。T 恤終於掛上洛杉磯的貨架！',k:'進口關稅、提貨'}
+];
+let fi=0,fTimer=null;
+function flow(){
+  const s=steps[fi],pct=fi/(steps.length-1)*100;
+  $('#flDone').style.width=pct+'%';$('#flBoat').style.left=pct+'%';
+  $('#flCard').innerHTML=`<div class="sn">第 ${fi+1} / ${steps.length} 步</div><h4>${s.t} <small style="font-family:inherit;color:var(--muted);font-weight:400">${s.en}</small></h4><div class="chips">${s.who.map(pill).join('')}</div><p>${s.d}</p><p class="hint" style="margin:0">關鍵字：${s.k}</p>`;
+  $('#flPrev').disabled=fi===0;$('#flNext').disabled=fi===steps.length-1;
+}
+function stopPlay(){clearInterval(fTimer);fTimer=null;$('#flPlay').textContent='自動播放'}
+$('#flPrev').addEventListener('click',()=>{stopPlay();if(fi>0){fi--;flow()}});
+$('#flNext').addEventListener('click',()=>{stopPlay();if(fi<steps.length-1){fi++;flow()}});
+$('#flPlay').addEventListener('click',()=>{
+  if(fTimer){stopPlay();return}
+  if(fi===steps.length-1)fi=0;flow();
+  $('#flPlay').textContent='暫停';
+  fTimer=setInterval(()=>{if(fi<steps.length-1){fi++;flow()}else stopPlay()},3500);
+});
+flow();
+
+/* ---------- 第5站：文件 ---------- */
+const docs=[
+ {n:'形式發票',en:'Proforma Invoice（PI）',by:'賣方',when:'成交後、出貨前',use:'像「訂單確認書」。買方拿它去申請開信用狀、匯訂金或申請進口許可。',org:'拉丁文 pro forma，「為了形式」，意思是預先做個樣子，並不是真正的請款單。',t:'PROFORMA INVOICE',f:[['Seller','A-Ming Garment Co., Ltd., Cambodia'],['Buyer','Sunny Closet Inc., Los Angeles, USA'],['Description','100% Cotton Crew-neck T-shirt'],['Quantity','10,000 PCS'],['Unit Price','US$3.00 FOB Sihanoukville'],['Amount','US$30,000.00'],['Payment','Irrevocable L/C at sight'],['Shipment','Within 45 days after L/C received']]},
+ {n:'商業發票',en:'Commercial Invoice（CI）',by:'賣方',when:'出貨時',use:'正式的請款單，也是海關計算關稅的依據。是最基本、幾乎每筆交易都需要的文件。',org:'invoice 源自法文 envois，「寄出的東西」。原本是寄貨時附上的貨物清單。',t:'COMMERCIAL INVOICE',f:[['Invoice No.','AMG-2026-0618'],['Seller','A-Ming Garment Co., Ltd.'],['Buyer','Sunny Closet Inc.'],['Vessel','OCEAN PEARL V.026E'],['From / To','Sihanoukville → Long Beach'],['Quantity','10,000 PCS'],['Amount','US$30,000.00 FOB Sihanoukville']]},
+ {n:'裝箱單',en:'Packing List（P/L）',by:'賣方',when:'出貨時',use:'列出每一箱裝了什麼、幾件、多重、多大。海關查驗、買方收貨點數都靠它。',org:'packing（包裝）＋ list（清單），名字就是用途。',t:'PACKING LIST',f:[['Carton No.','1 – 200'],['Qty / Carton','50 PCS'],['Total','200 CTNS / 10,000 PCS'],['N.W. / G.W.','10 KG / 11 KG per CTN'],['Measurement','60×40×35 CM (0.084 CBM)'],['Total CBM','16.8 CBM'],['Marks','SUNNY CLOSET / LONG BEACH / C/NO.1-200']]},
+ {n:'提單',en:'Bill of Lading（B/L）',by:'船公司',when:'貨物裝上船後',use:'收據＋運送契約證明＋物權憑證。憑正本提單才能在目的港提貨。',org:'lading 源自古英文 hladan，「裝載」。',t:'BILL OF LADING',f:[['Shipper','A-Ming Garment Co., Ltd.'],['Consignee','TO ORDER OF ISSUING BANK'],['Notify Party','Sunny Closet Inc.'],['Vessel / Voy.','OCEAN PEARL V.026E'],['Port of Loading','Sihanoukville, Cambodia'],['Port of Discharge','Long Beach, USA'],['Container','1 × 20\'GP'],['Remark','SHIPPED ON BOARD / FREIGHT COLLECT'],['Originals','THREE (3)']]},
+ {n:'產地證明',en:'Certificate of Origin（C/O）',by:'出口國政府機關或商會',when:'出貨前後',use:'證明貨物在哪個國家製造。進口國據此決定稅率，以及能不能享受自由貿易協定的優惠。',org:'certificate 源自拉丁文 certus，「確定的」；origin 是「起源」。',t:'CERTIFICATE OF ORIGIN',f:[['Exporter','A-Ming Garment Co., Ltd.'],['Consignee','Sunny Closet Inc.'],['Goods','Cotton T-shirts, HS 6109.10'],['Country of Origin','CAMBODIA'],['Certified by','Authorized Issuing Body']]},
+ {n:'保險單',en:'Insurance Policy',by:'保險公司',when:'裝船前投保',use:'證明貨物已經投保。CIF、CIP 條件下由賣方投保後交給買方，出事時買方拿它索賠。',org:'policy 源自義大利文 polizza，「單據、字據」，跟「政策」那個 policy 其實是不同來源。',t:'MARINE CARGO INSURANCE POLICY',f:[['Insured','A-Ming Garment Co., Ltd.'],['Amount Insured','110% of CIF value'],['Conditions','Institute Cargo Clauses (A)'],['Voyage','Sihanoukville → Long Beach'],['Claims payable at','Los Angeles, USA']]},
+ {n:'匯票',en:'Draft / Bill of Exchange',by:'賣方',when:'押匯或託收時',use:'賣方簽發的「付款命令」，要求付款人（銀行或買方）在見票時或某天付一筆錢。',org:'中世紀義大利商人帶現金旅行太危險，發明了「在甲城存錢、拿一張紙到乙城領錢」的方法，這就是匯票，也是現代銀行業的祖先之一。',t:'BILL OF EXCHANGE',f:[['Amount','US$30,000.00'],['Tenor','AT SIGHT'],['Pay to','the order of Cambodia Bank'],['Drawn under','L/C No. LC26-0915'],['Drawee','Issuing Bank, Los Angeles']]}
+];
+let di=0;
+$('#docTabs').innerHTML=docs.map((d,i)=>`<button class="chip" data-i="${i}">${d.n}</button>`).join('');
+function doc(){
+  const d=docs[di];
+  $$('#docTabs .chip').forEach((c,i)=>c.classList.toggle('on',i===di));
+  $('#docBody').innerHTML=`<h4 style="margin-top:14px">${d.n} <small style="font-family:inherit;color:var(--muted);font-weight:400">${d.en}</small></h4>
+  <div class="doc-info"><div><span>誰開</span><span>${d.by}</span></div><div><span>何時</span><span>${d.when}</span></div><div><span>用途</span><span>${d.use}</span></div><div><span>由來</span><span>${d.org}</span></div></div>
+  <div class="paper-doc"><div class="pd-t">${d.t}</div>${d.f.map(r=>`<div class="pd-r"><b>${r[0]}</b><span>${r[1]}</span></div>`).join('')}</div>`;
+}
+$('#docTabs').addEventListener('click',e=>{const b=e.target.closest('.chip');if(b){di=+b.dataset.i;doc()}});
+doc();
+
+/* ---------- 第6站：Incoterms ---------- */
+const segs=['在工廠把貨裝上卡車','內陸運到出口港','出口報關','把貨裝上船','主要運費（海運）','貨物運輸保險','目的港卸船','進口報關＋繳關稅','內陸送到買方倉庫','在買方倉庫卸貨'];
+const inco={
+ EXW:{n:'工廠交貨',en:'Ex Works',sea:0,s:[],r:0,rt:'貨在賣方工廠準備好、交給買方處置時',note:'賣方責任最輕，連裝車和出口報關都歸買方。但外國買方很難在賣方國家辦出口報關，所以國際貿易中其實不太適合，出口報關問題較多時建議改用 FCA。'},
+ FCA:{n:'貨交運送人',en:'Free Carrier',sea:0,s:[0,1,2],r:3,rt:'貨物交給買方指定的運送人時（本例：出口港的貨櫃場）',note:'適用任何運輸方式，是貨櫃運輸時最推薦的 F 類條件。國際商會也建議貨櫃貨用 FCA 取代 FOB，因為貨櫃通常在碼頭就交給船公司，而不是在船上交。'},
+ FAS:{n:'船邊交貨',en:'Free Alongside Ship',sea:1,s:[0,1,2],r:3,rt:'貨物放在出口港買方指定的船邊時',note:'多用於散裝貨，例如穀物、木材、大型機械。成衣這種貨櫃貨很少使用。'},
+ FOB:{n:'船上交貨',en:'Free On Board',sea:1,s:[0,1,2,3],r:4,rt:'貨物裝上船時',note:'全世界最常用的條件之一。賣方把貨裝上船就完成交貨，海運費和保險由買方安排。很多大品牌喜歡用 FOB，因為他們能用自己談好的便宜運費。'},
+ CFR:{n:'運費在內',en:'Cost and Freight',sea:1,s:[0,1,2,3,4],r:4,rt:'貨物裝上船時（還在出口港！）',note:'賣方付海運費，但風險在裝船時已經轉給買方。保險要由買方自己決定買不買，在列表中顯示為買方負擔。'},
+ CIF:{n:'運費保險費在內',en:'Cost, Insurance and Freight',sea:1,s:[0,1,2,3,4,5],r:4,rt:'貨物裝上船時（還在出口港！）',note:'賣方付海運費和保險費，但風險和 FOB 一樣在裝船時轉移。賣方只需投保最基本的 ICC(C)。這是「付錢到哪≠風險到哪」最經典的例子。'},
+ CPT:{n:'運費付訖',en:'Carriage Paid To',sea:0,s:[0,1,2,3,4],r:3,rt:'貨物交給第一個運送人時',note:'CFR 的「任何運輸方式」版本，適合貨櫃、空運、陸運。風險比 CFR 更早轉移。'},
+ CIP:{n:'運保費付訖',en:'Carriage and Insurance Paid To',sea:0,s:[0,1,2,3,4,5],r:3,rt:'貨物交給第一個運送人時',note:'CIF 的「任何運輸方式」版本。2020 年版規定賣方必須投保最高等級的 ICC(A)。'},
+ DAP:{n:'目的地交貨',en:'Delivered at Place',sea:0,s:[0,1,2,3,4,5,6,8],r:9,rt:'貨物運到買方倉庫門口、還沒卸下車時',note:'賣方一路負責運到目的地，但進口報關和關稅由買方處理。保險不是賣方的義務，但因為風險在賣方身上，賣方通常會自己保。'},
+ DPU:{n:'卸貨地交貨',en:'Delivered at Place Unloaded',sea:0,s:[0,1,2,3,4,5,6,8,9],r:10,rt:'在目的地把貨卸下來之後',note:'2020 年版新名稱（取代舊的 DAT），是唯一要求賣方在目的地「卸貨」的條件。'},
+ DDP:{n:'稅訖交貨',en:'Delivered Duty Paid',sea:0,s:[0,1,2,3,4,5,6,7,8],r:9,rt:'貨物運到買方倉庫門口、還沒卸下車時',note:'賣方責任最重，連進口國的關稅都要付。對賣方來說，要在外國辦進口報關很有挑戰，也要承擔關稅突然調漲的風險。'}
+};
+const incoKeys=Object.keys(inco);let ik='FOB';
+$('#incoTabs').innerHTML=incoKeys.map(k=>`<button class="chip" data-k="${k}">${k}${inco[k].sea?' 🚢':''}</button>`).join('');
+function incoR(){
+  const t=inco[ik];
+  $$('#incoTabs .chip').forEach(c=>c.classList.toggle('on',c.dataset.k===ik));
+  $('#incoHead').innerHTML=`<div class="big">${ik}　${t.n}</div><div class="hint" style="margin:0">${t.en}｜${t.sea?'只能用於海運或內河運輸':'任何運輸方式都可以用'}</div><p style="margin:.5em 0 0">⚠ <b>風險轉移：</b>${t.rt}</p>`;
+  $('#incoSplit').innerHTML=segs.map((_,i)=>`<i style="background:${t.s.includes(i)?'var(--seller)':'var(--buyer)'}"></i>`).join('');
+  let li='';
+  segs.forEach((sg,i)=>{
+    if(t.r===i) li+=`<li class="risk">⚠ 風險在這裡從賣方轉給買方</li>`;
+    const sl=t.s.includes(i);
+    li+=`<li class="${sl?'s':'b'}"><span>${sg}</span><span class="pill ${sl?'p-seller':'p-buyer'}">${sl?'賣方付':'買方付'}</span></li>`;
+  });
+  if(t.r===10) li+=`<li class="risk">⚠ 風險在這裡從賣方轉給買方</li>`;
+  $('#incoList').innerHTML=li;
+  $('#incoNote').innerHTML=`<b>重點：</b>${t.note}`;
+}
+$('#incoTabs').addEventListener('click',e=>{const b=e.target.closest('.chip');if(b){ik=b.dataset.k;incoR()}});
+incoR();
+
+/* ---------- 第7站：付款 ---------- */
+const pays=[
+ {k:'預付 T/T',pos:6,how:'買方先把錢電匯給賣方，賣方收到錢才生產或出貨。',s:'幾乎沒有風險。',b:'付了錢卻可能收不到貨，或收到的貨品質不好。',use:'小額訂單、新客戶、樣品費、買方急著要貨時。'},
+ {k:'信用狀 L/C',pos:28,how:'買方的銀行承諾：只要賣方交出符合規定的文件，銀行就付款。',s:'文件有瑕疵就可能被拒付；開狀銀行本身倒閉的風險。',b:'銀行只看文件、不看貨，可能付了錢卻拿到劣質貨；手續費較高。',use:'大額交易、第一次合作、進口國政治或經濟不穩定時。'},
+ {k:'付款交單 D/P',pos:50,how:'賣方出貨後把單據交給銀行代收，買方付清貨款才能拿到單據去提貨。',s:'買方不來付款，貨就卡在國外港口，只好降價轉賣或花錢運回。',b:'付款前不能驗貨。',use:'有一定信任、但還不到可以賒帳的客戶。'},
+ {k:'承兌交單 D/A',pos:72,how:'買方只要在匯票上簽名「承兌」，承諾例如 60 天後付款，就能先拿單據提貨。',s:'貨已經被拿走，到期買方不付就麻煩了。',b:'很有利：可以先把貨賣掉，再用賺來的錢付款。',use:'信用良好的老客戶。'},
+ {k:'記帳 O/A',pos:94,how:'賣方出貨後直接把單據寄給買方，買方在約定天數（例如 60 天）後匯款。',s:'風險最高，全憑對買方的信任。',b:'最安全：收到貨、確認沒問題後才付款。',use:'長期合作的大客戶。很多國際服飾品牌要求供應商接受這種方式。'}
+];
+let pi=0;
+$('#payTabs').innerHTML=pays.map((p,i)=>`<button class="chip" data-i="${i}">${p.k}</button>`).join('');
+function pay(){
+  const p=pays[pi];
+  $$('#payTabs .chip').forEach((c,i)=>c.classList.toggle('on',i===pi));
+  $('#payPin').style.left=p.pos+'%';
+  $('#payBody').innerHTML=`<p><b>怎麼運作：</b>${p.how}</p><div class="grid2"><div class="story" style="margin:0"><span class="who">賣方的風險</span><p style="margin:0">${p.s}</p></div><div class="story buyer" style="margin:0"><span class="who">買方的風險</span><p style="margin:0">${p.b}</p></div></div><p><b>常用在：</b>${p.use}</p>`;
+}
+$('#payTabs').addEventListener('click',e=>{const b=e.target.closest('.chip');if(b){pi=+b.dataset.i;pay()}});
+pay();
+
+/* ---------- 第8站：信用狀 ---------- */
+const bx={adv:[85,60],iss:[275,60],sel:[85,240],buy:[275,240]};
+const lcs=[
+ ['sel','buy','買賣雙方簽訂合約，約定用信用狀付款。'],
+ ['buy','iss','莎莉向她的銀行（開狀銀行）申請開信用狀，可能要繳保證金。'],
+ ['iss','adv','開狀銀行開出信用狀，透過 SWIFT 傳給柬埔寨的通知銀行。'],
+ ['adv','sel','通知銀行確認信用狀是真的，然後通知阿明：「保證付款的信來了！」'],
+ ['sel','sel','阿明仔細檢查信用狀條款，照規定生產、出貨，並取得提單等全套文件。'],
+ ['sel','adv','阿明在期限內把全套單據交給押匯銀行（通常就是通知銀行）。'],
+ ['adv','sel','押匯銀行審單無誤，先把貨款（扣掉利息和手續費）撥給阿明。阿明拿到錢了！'],
+ ['adv','iss','押匯銀行把單據寄給開狀銀行，要求償還墊付的款項。'],
+ ['iss','adv','開狀銀行審單，確認「單證相符」後付款給押匯銀行。'],
+ ['buy','iss','開狀銀行通知莎莉來付款，莎莉付清貨款。'],
+ ['iss','buy','開狀銀行把提單等單據交給莎莉。'],
+ ['buy','buy','船到港後，莎莉憑提單向船公司提貨，交易完成！']
+];
+let li2=0;
+function lc(){
+  const [f,t,txt]=lcs[li2];
+  Object.keys(bx).forEach(k=>document.getElementById('bx-'+k).classList.toggle('on',k===f||k===t));
+  const ar=$('#lcArrow');
+  if(f===t){ar.setAttribute('d','')}
+  else{
+    const [x1,y1]=bx[f],[x2,y2]=bx[t];const dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy);const ux=dx/len,uy=dy/len;
+    const shr=Math.abs(dx)>Math.abs(dy)?68:34;const nx=-uy*9,ny=ux*9;
+    ar.setAttribute('d',`M${x1+ux*shr+nx} ${y1+uy*shr+ny} L${x2-ux*shr+nx} ${y2-uy*shr+ny}`);
+  }
+  $('#lcCard').innerHTML=`<div class="sn">第 ${li2+1} / ${lcs.length} 步</div><p style="margin:.3em 0 0">${txt}</p>`;
+  $('#lcPrev').disabled=li2===0;$('#lcNext').disabled=li2===lcs.length-1;
+}
+$('#lcPrev').addEventListener('click',()=>{if(li2>0){li2--;lc()}});
+$('#lcNext').addEventListener('click',()=>{if(li2<lcs.length-1){li2++;lc()}});
+lc();
+
+/* ---------- 第9站：材積 ---------- */
+function cbm(){
+  const q=+$('#cbQ').value||0,p=+$('#cbP').value||1,L=+$('#cbL').value||0,W=+$('#cbW').value||0,H=+$('#cbH').value||0;
+  const ctn=Math.ceil(q/p),each=L*W*H/1e6,tot=ctn*each;
+  let rec,cap;
+  if(tot<15){rec='📦 LCL 併櫃比較划算（貨不多，跟別人拼櫃）';cap=0}
+  else if(tot<=28){rec='1 個 20 呎櫃';cap=28}
+  else if(tot<=58){rec='1 個 40 呎櫃';cap=58}
+  else if(tot<=68){rec='1 個 40 呎高櫃';cap=68}
+  else{const n=Math.ceil(tot/68);rec=`${n} 個 40 呎高櫃`;cap=68*n}
+  $('#cbOut').innerHTML=`共 <b>${fmt(ctn)}</b> 箱，每箱 ${each.toFixed(3)} CBM<br>總材積 <b>${tot.toFixed(1)} CBM</b>（約 ${fmt(tot*35.315)} 才）<div class="big" style="margin-top:6px">建議：${rec}</div>${cap?`<span class="hint">裝載率約 ${Math.round(tot/cap*100)}%。</span>`:''}`;
+}
+['#cbQ','#cbP','#cbL','#cbW','#cbH'].forEach(s=>$(s).addEventListener('input',cbm));cbm();
+
+/* ---------- 第10站：保險 ---------- */
+const evs=[
+ {e:'船觸礁沉沒',v:[1,1,1],n:'沉沒、擱淺、碰撞是三種條款都保的重大意外。'},
+ {e:'貨艙失火',v:[1,1,1],n:'火災和爆炸三種條款都保。'},
+ {e:'地震或雷擊',v:[1,1,0],n:'ICC(B) 開始才包含地震、火山爆發、雷擊。'},
+ {e:'大浪把貨櫃捲下海',v:[1,1,0],n:'被浪捲落海（washing overboard）屬於 ICC(B) 以上的範圍。'},
+ {e:'海水灌進貨櫃',v:[1,1,0],n:'ICC(B) 保海水、湖水、河水進入造成的損失。'},
+ {e:'下雨淋濕貨物',v:[1,0,0],n:'雨水不是海水、湖水、河水，只有 ICC(A) 會賠。'},
+ {e:'貨物被偷',v:[1,0,0],n:'偷竊只在 ICC(A) 的保障範圍內。'},
+ {e:'包裝太差自己壓壞',v:[0,0,0],n:'包裝不良是「除外不保」的項目，因為這是賣方自己的疏失，連 ICC(A) 都不賠。'},
+ {e:'戰爭或罷工',v:[0,0,0],n:'要另外加保「戰爭險」和「罷工險」才有保障。'}
+];
+$('#insTabs').innerHTML=evs.map((x,i)=>`<button class="chip" data-i="${i}">${x.e}</button>`).join('');
+$('#insTabs').addEventListener('click',e=>{
+  const b=e.target.closest('.chip');if(!b)return;const x=evs[+b.dataset.i];
+  $$('#insTabs .chip').forEach(c=>c.classList.toggle('on',c===b));
+  $$('#insCov div').forEach((d,i)=>{d.className=x.v[i]?'y':'n';d.textContent=['ICC (A)','ICC (B)','ICC (C)'][i]+(x.v[i]?' ✓ 賠':' ✗ 不賠')});
+  $('#insNote').textContent=x.n;
+});
+
+/* ---------- 第11站：報價 ---------- */
+function quote(){
+  const c=+$('#qC').value||0,n=Math.max(1,+$('#qN').value||1),e=+$('#qE').value||0,p=+$('#qP').value||0,f=+$('#qF').value||0,ir=(+$('#qI').value||0)/100;
+  const base=c+e/n,fob=base*(1+p/100),cfr=fob+f/n,cif=cfr/(1-1.1*ir),prem=cif-cfr;
+  $('#qOut').innerHTML=`<div class="tbl-wrap" style="margin:0"><table style="min-width:0">
+  <tr><td>國內總成本／件</td><td>${c.toFixed(2)} ＋ ${fmt(e)} ÷ ${fmt(n)} ＝ <b>${base.toFixed(4)}</b></td></tr>
+  <tr><td><b>FOB</b>／件</td><td>${base.toFixed(4)} × ${(1+p/100).toFixed(3)} ＝ <b class="big" style="font-size:1.2rem">US$ ${fob.toFixed(2)}</b></td></tr>
+  <tr><td><b>CFR</b>／件</td><td>FOB ＋ ${fmt(f)} ÷ ${fmt(n)} ＝ <b class="big" style="font-size:1.2rem">US$ ${cfr.toFixed(2)}</b></td></tr>
+  <tr><td><b>CIF</b>／件</td><td>CFR ÷ (1 − 110% × ${(ir*100).toFixed(2)}%) ＝ <b class="big" style="font-size:1.2rem">US$ ${cif.toFixed(2)}</b></td></tr>
+  <tr><td>整批利潤</td><td>US$ ${fmt((fob-base)*n,0)}（保險費約 US$ ${fmt(prem*n,0)}）</td></tr></table></div>`;
+}
+['#qC','#qN','#qE','#qP','#qF','#qI'].forEach(s=>$(s).addEventListener('input',quote));quote();
+
+/* ---------- 第12站：關稅 ---------- */
+let dBase='fob';
+function duty(){
+  const r=+$('#dS').value/100;$('#dV').textContent=(r*100).toFixed(1).replace('.0','');
+  const fob=30000,cif=30000+2500+108,base=dBase==='fob'?fob:cif,d=base*r,landed=cif+d;
+  $('#dOut').innerHTML=`完稅價格 US$ ${fmt(base)} × ${(r*100).toFixed(1)}% ＝ 關稅 <b>US$ ${fmt(d)}</b><div class="big" style="margin-top:6px">落地成本 US$ ${fmt(landed)}</div>平均每件 US$ ${(landed/10000).toFixed(3)}（FOB 只有 US$3.00）<br><span class="hint">同樣稅率下，兩種計稅基礎相差 US$ ${fmt((cif-fob)*r)}。</span>`;
+}
+$('#dS').addEventListener('input',duty);
+$('#dBase').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;dBase=b.dataset.b;$$('#dBase .chip').forEach(c=>c.classList.toggle('on',c===b));duty()});
+duty();
+
+/* ---------- 測驗 ---------- */
+const Q={
+ c1:[
+  ['台灣幾乎不產石油，所以要從國外進口。這是貿易的哪一個理由？',['自己沒有','比較優勢','匯率比較划算','政府規定'],0,'國內根本無法生產，只能靠進口，這是最直接的貿易理由。'],
+  ['小美做餅乾和海報都比小明快，為什麼兩人還是應該分工？',['因為小美比較忙','兩人的機會成本不同，分工後總產量更多','因為小明做得比較便宜','其實不需要分工'],1,'即使一方樣樣都強，只要機會成本不同，分工就能讓總產量增加，這就是李嘉圖的比較優勢。']],
+ c2:[
+  ['幫貨主訂船位、安排整段運輸，角色像「旅行社」的是？',['報關行','貨運承攬業','海關','保險公司'],1,'貨運承攬業（Forwarder）向船公司大量訂位，再幫各個貨主安排運輸。'],
+  ['英文 customs（海關）這個字和什麼有關？',['顧客','服裝','慣例、習俗','海洋'],2,'中世紀領主照「慣例」向過路商人收費，customs 就是這些慣例費用。']],
+ c3:[
+  ['匯率從「1 美元換 32 台幣」變成「1 美元換 30 台幣」，代表什麼？',['台幣貶值','台幣升值','美元升值','沒有變化'],1,'同樣 1 美元換到的台幣變少，表示台幣變值錢了，也就是台幣升值。'],
+  ['台幣升值時，通常對誰比較不利？',['出口商','進口商','出國旅遊的人','買國外商品的消費者'],0,'出口商收到的美元換回的台幣變少，所以升值不利出口。']],
+ c4:[
+  ['買方收到報價後要求降價，這個動作叫？',['詢價','還價','接受','押匯'],1,'還價等於拒絕原報價，同時提出新的報價。'],
+  ['在國際貿易中，貨物從賣方流向買方，錢則是？',['也從賣方流向買方','從買方流向賣方','由海關分配','不需要流動'],1,'物流和金流方向相反：貨往買方走，錢往賣方走。']],
+ c5:[
+  ['「誰拿著正本提單，誰就能提貨」，這是提單的哪一種功能？',['收據','運送契約證明','物權憑證','產地證明'],2,'提單代表貨物本身的所有權，可以轉讓，也可以拿來向銀行融資。'],
+  ['發票寫 10,000 件，裝箱單寫 9,800 件，可能發生什麼事？',['沒關係，差不多就好','銀行可能因為單證不一致而拒付','海關會自動修正','船公司會幫忙補貨'],1,'單證一致是國貿的鐵則，數字不符就是瑕疵，銀行有權拒付。']],
+ c6:[
+  ['在 CIF 條件下，貨物在海上沉沒，風險由誰承擔？',['賣方，因為他付了運費和保險費','買方，因為風險在裝船時已經轉移','船公司','買賣雙方各負擔一半'],1,'CIF 的風險在出口港裝上船時就轉給買方，賣方只是替買方付運費和保險費。買方可以拿保險單去索賠。'],
+  ['FOB 條件下，主要的海運費由誰支付？',['賣方','買方','銀行','保險公司'],1,'F 家族的共同點：主要運費由買方支付。']],
+ c7:[
+  ['對賣方最安全的付款方式是？',['O/A 記帳','D/A 承兌交單','預付 T/T','D/P 付款交單'],2,'先收錢再出貨，賣方幾乎沒有收不到錢的風險。'],
+  ['D/A 和 D/P 最大的差別是？',['D/A 的買方只要承兌就能先拿單據提貨','D/A 一定要用信用狀','D/P 不需要經過銀行','兩者完全相同'],0,'D/P 要先付錢才拿到單據；D/A 只要簽名承諾到期付款就能先拿單據。']],
+ c8:[
+  ['在信用狀交易中，銀行審查的是什麼？',['貨物的品質','單據是否符合信用狀的規定','買方的財務報表','船的大小'],1,'銀行只看文件、不看貨，這叫信用狀的獨立性。'],
+  ['信用狀規定「需附買方簽發的檢驗證明」，這種條款叫？',['硬條款','軟條款','不可抗力條款','仲裁條款'],1,'軟條款把付款決定權交回買方手上，讓信用狀的保障大打折扣。']],
+ c9:[
+  ['1 個 40 呎貨櫃等於幾個 TEU？',['1','2','4','40'],1,'TEU 以 20 呎為單位，40 呎等於 2 個 TEU。'],
+  ['貨太少裝不滿一個櫃，和別人拼在同一個櫃叫做？',['FCL','LCL','CY','ETA'],1,'LCL 是 Less than Container Load，併櫃運輸。']],
+ c10:[
+  ['國際慣例上，保險金額通常是 CIF 價格的多少？',['100%','110%','150%','200%'],1,'多出來的 10% 用來保障買方預期的利潤。'],
+  ['貨物被雨淋濕，哪種條款會賠？',['只有 ICC(A)','ICC(A) 和 ICC(B)','A、B、C 都會賠','都不會賠'],0,'ICC(B) 只保海水、湖水、河水，雨水要 ICC(A) 才保。']],
+ c11:[
+  ['CFR 價格等於？',['FOB＋海運費','FOB＋保險費','CIF＋海運費','成本＋關稅'],0,'CFR 就是 Cost and Freight，在 FOB 上加上海運費。'],
+  ['計算 CIF 時為什麼要用「除」的？',['因為保險費是以包含保險費的 CIF 價格計算','因為要換算匯率','因為要打折','只是規定，沒有原因'],0,'CIF 本身包含保險費，保險費又以 CIF 計算，解方程式後就變成除法。']],
+ c12:[
+  ['HS 碼全世界共用的是前幾碼？',['2 碼','4 碼','6 碼','11 碼'],2,'前 6 碼國際通用，之後各國自行細分，例如台灣 11 碼、美國 10 碼。'],
+  ['進口關稅是由誰繳給進口國海關？',['出口商','進口商','船公司','出口國政府'],1,'關稅由進口商繳納，不過成本常會轉嫁到售價上。']],
+ c13:[
+  ['客戶來信說「我們換銀行帳號了」，最正確的做法是？',['立刻照新帳號匯款','回同一封信問對方確定嗎','用已知的電話向對方本人確認','不理它'],2,'如果信箱已被駭，回同一封信只會問到騙子。要用原本就知道的電話確認。'],
+  ['跨國糾紛中，仲裁比訴訟好用的主要原因是？',['比較熱鬧','依《紐約公約》可在多國承認和執行','一定比較便宜','不需要證據'],1,'1958 年《紐約公約》讓仲裁裁決能在 170 多個締約國執行。']],
+ c14:[
+  ['世界貿易組織（WTO）的前身是？',['聯合國','GATT','國際商會','SWIFT'],1,'1947 年的關稅暨貿易總協定（GATT）在 1995 年升級為 WTO。'],
+  ['「最惠國待遇」真正的意思是？',['只對最好的朋友降稅','給一個會員的最優惠待遇，也要給所有會員','永遠免稅','只適用於大國'],1,'名字像「特別優待」，其實是「一視同仁」。']],
+ exam:[
+  ['李嘉圖在 1817 年提出的理論是？',['比較優勢','絕對優勢','看不見的手','供需法則'],0,'亞當・斯密提出絕對優勢，李嘉圖進一步提出比較優勢。'],
+  ['阿明報價「US$3.00 FOB Sihanoukville」，莎莉還要自己安排什麼？',['海運和保險','出口報關','生產','裝箱'],0,'FOB 下賣方負責到裝上船，之後的海運費和保險由買方安排。'],
+  ['下列哪一個貿易條件，賣方的責任最大？',['DDP','EXW','FOB','CFR'],0,'DDP 連進口關稅都由賣方負擔；EXW 則是賣方責任最小。'],
+  ['下列哪一個貿易條件只能用於海運？',['CIF','CIP','DAP','FCA'],0,'FAS、FOB、CFR、CIF 四個只能用於海運或內河運輸。'],
+  ['空運提單（AWB）和海運提單最大的不同是？',['AWB 不是物權憑證','AWB 比較長','AWB 可以背書轉讓','沒有差別'],0,'空運太快，貨常比文件先到，所以 AWB 設計成不可轉讓，不是物權憑證。'],
+  ['UCP 600 是關於什麼的國際規則？',['信用狀','貨櫃尺寸','關稅稅率','海上保險'],0,'UCP 600 是國際商會的《信用狀統一慣例》。'],
+  ['賣方想降低「買方不付款」的風險，可以投保什麼？',['輸出信用保險','火災保險','人壽保險','汽車保險'],0,'輸出信用保險保障賣方因買方倒閉或拒付造成的損失。'],
+  ['棉質針織 T 恤的 HS 碼前 4 碼是？',['6109','6205','5208','8471'],0,'61 章是針織衣服，6109 是 T 恤和背心。6205 是梭織男襯衫、5208 是棉布、8471 是電腦。'],
+  ['出口商擔心台幣升值，可以用什麼工具鎖定匯率？',['遠期外匯','信用狀','提單','產地證明'],0,'跟銀行簽遠期外匯合約，事先約定未來的匯率。'],
+  ['「共同海損」是指什麼？',['為了救全船而犧牲部分貨物，損失由大家分攤','所有貨物都沉了','保險公司平均理賠','船公司自己負責所有損失'],0,'源自古代羅德島海商法，是最古老的商業規則之一。'],
+  ['成衣大量生產前，先做一件讓買方確認的樣品叫？',['產前樣（PP Sample）','商業發票','匯票','裝箱單'],0,'買方確認產前樣後，工廠就照這件生產，能避免很多品質糾紛。'],
+  ['歐盟和台灣計算進口關稅時，通常以哪種價格為基礎？',['CIF','EXW','零售價','出廠成本'],0,'多數國家以 CIF 為完稅價格；美國則大致以 FOB 成交價格為準。']
+ ]
+};
+function buildQuiz(box,key){
+  const items=Q[key];if(!items)return;
+  const head=box.querySelector('h4').outerHTML;
+  box.innerHTML=head+items.map((it,qi)=>`<div class="qitem" data-q="${qi}"><div class="q">${qi+1}. ${it[0]}</div>${it[1].map((o,oi)=>`<button class="op" data-o="${oi}">${String.fromCharCode(65+oi)}. ${o}</button>`).join('')}<div class="ex"></div></div>`).join('');
+  box.addEventListener('click',e=>{
+    const b=e.target.closest('button.op');if(!b)return;
+    const qd=b.closest('.qitem');if(qd.classList.contains('answered'))return;
+    const it=items[+qd.dataset.q],pick=+b.dataset.o,ok=pick===it[2];
+    qd.classList.add('answered');qd.dataset.ok=ok?1:0;
+    qd.querySelectorAll('button.op').forEach((x,i)=>{if(i===it[2])x.classList.add('ok');else if(i===pick)x.classList.add('bad');x.disabled=true});
+    qd.querySelector('.ex').innerHTML=(ok?'✅ 答對了！':'❌ 再想想。')+it[3];
+    if(key==='exam')examCheck();
+  });
+}
+$$('.quiz[data-quiz]').forEach(b=>buildQuiz(b,b.dataset.quiz));
+function examCheck(){
+  const all=$$('#examBox .qitem'),ans=all.filter(x=>x.classList.contains('answered'));
+  if(ans.length<all.length){$('#examScore').textContent=`已作答 ${ans.length} / ${all.length} 題`;return}
+  const sc=ans.filter(x=>x.dataset.ok==='1').length,pct=Math.round(sc/all.length*100);
+  const msg=pct>=90?'🏆 太厲害了！你已經具備國貿專業人員的基本功。':pct>=70?'🚢 很不錯！再回頭看看答錯的站，就能更上一層樓。':pct>=50?'⚓ 基礎已經打好，建議複習貿易條件和付款方式這兩站。':'🧭 別灰心，國貿本來就不簡單。從第 1 站慢慢再走一次吧！';
+  $('#examScore').innerHTML=`<div class="big">${sc} / ${all.length} 題　${pct} 分</div><p>${msg}</p><button class="btn ghost" id="examRe">重新作答</button>`;
+  $('#examRe').addEventListener('click',()=>{const box=$('#examBox');const nb=box.cloneNode(false);nb.innerHTML='<h4>作答區</h4>';box.replaceWith(nb);buildQuiz(nb,'exam');$('#examScore').textContent='答完所有題目後，這裡會顯示你的成績。';nb.scrollIntoView()});
+}
+
+/* ---------- 名詞辭典 ---------- */
+const G=[
+ ['國際貿易','International Trade','不同國家之間買賣商品或服務。','trade 原意是「走過的路」，商人沿固定路線往返做買賣。'],
+ ['出口／進口','Export / Import','把貨賣到國外／從國外買進。','拉丁文 portare「搬運」＋ ex-（往外）／im-（往內）。'],
+ ['比較優勢','Comparative Advantage','機會成本較低的一方專做該產品，雙方都受益。','李嘉圖 1817 年提出。'],
+ ['機會成本','Opportunity Cost','為了做某件事而放棄的最好選擇。','「機會」指錯過的機會。'],
+ ['貿易順差／逆差','Trade Surplus / Deficit','出口大於進口為順差，反之為逆差。','surplus「多出來的」；deficit「不足」。'],
+ ['海關','Customs','管理貨物進出、徵收關稅的機關。','中世紀照「慣例」收取的過路費。'],
+ ['貨運承攬業','Freight Forwarder','代貨主安排運輸的業者，俗稱貨代。','freight（貨物、運費）＋ forward（往前送）。'],
+ ['報關行','Customs Broker','代替貨主向海關申報的專業業者。','broker 原指中間人、經紀人。'],
+ ['匯率','Exchange Rate','兩種貨幣交換的比例。','「匯」是把錢從一地送到另一地。'],
+ ['外匯','Foreign Exchange（FX）','外國貨幣及以外幣表示的支付工具。','X 取自 exchange 的發音。'],
+ ['詢價','Inquiry','買方打聽價格與條件，無拘束力。','拉丁文 inquirere「深入尋找」。'],
+ ['報價／實盤','Offer / Firm Offer','賣方提出的交易條件；實盤有期限且有拘束力。','「盤」是傳統商業用語，指開出的價格。'],
+ ['還價','Counter-offer','修改條件後再提出，等於拒絕原報價。','counter「反向」。'],
+ ['採購單','Purchase Order（PO）','買方正式下單的文件。','purchase 源自古法文「努力取得」。'],
+ ['形式發票','Proforma Invoice（PI）','成交後出貨前的確認用發票。','拉丁文 pro forma「為了形式」。'],
+ ['商業發票','Commercial Invoice（CI）','正式請款單，也是海關計稅依據。','法文 envois「寄出的東西」。'],
+ ['裝箱單','Packing List（P/L）','記載每箱內容、重量與材積。','packing＋list，名字就是用途。'],
+ ['提單','Bill of Lading（B/L）','船公司簽發，兼具收據、運送契約證明與物權憑證。','古英文 hladan「裝載」。'],
+ ['空運提單','Air Waybill（AWB）','航空公司簽發的運送單據，不是物權憑證。','waybill 原指「路上隨貨的清單」。'],
+ ['產地證明','Certificate of Origin（C/O）','證明貨物的製造國。','拉丁文 certus「確定的」。'],
+ ['匯票','Draft / Bill of Exchange','要求付款人付款的書面命令。','中世紀義大利商人為避免攜帶現金而發明。'],
+ ['國貿條規','Incoterms®','國際商會制定的 11 種貿易條件規則。','International Commercial Terms 縮寫，1936 年首版。'],
+ ['FOB','Free On Board','船上交貨，貨物裝上船時風險轉移。','18、19 世紀英國海運習慣。'],
+ ['CFR','Cost and Freight','運費在內，賣方付海運費，風險在裝船時轉移。','成本＋運費的縮寫。'],
+ ['CIF','Cost, Insurance and Freight','運費保險費在內，風險仍在裝船時轉移。','成本＋保險＋運費的縮寫。'],
+ ['EXW','Ex Works','工廠交貨，賣方責任最小。','拉丁文 ex「從…出來」。'],
+ ['DDP','Delivered Duty Paid','稅訖交貨，賣方責任最大。','送達且關稅已付。'],
+ ['電匯','Telegraphic Transfer（T/T）','透過銀行直接匯款。','早期以電報通知付款，今日用 SWIFT。'],
+ ['信用狀','Letter of Credit（L/C）','銀行應買方申請開出的有條件付款承諾。','拉丁文 credere「相信」。'],
+ ['UCP 600','Uniform Customs and Practice','國際商會《信用狀統一慣例》，2007 年施行。','600 是出版品編號。'],
+ ['押匯','Negotiation','賣方把單據交給銀行，銀行先墊付貨款。','「押」是抵押，以單據作擔保取得資金。'],
+ ['付款交單／承兌交單','D/P / D/A','託收方式：付款後交單／承兌後交單。','Documents against Payment / Acceptance。'],
+ ['記帳','Open Account（O/A）','出貨後約定期間再付款。','帳戶「開著」，先記帳再結清。'],
+ ['軟條款','Soft Clause','讓付款決定權回到買方手上的信用狀條款。','相對於銀行明確承諾的「硬」保證。'],
+ ['貨櫃／TEU','Container / TEU','標準化鐵箱；TEU 為 20 呎約當量。','1956 年麥克連開啟貨櫃運輸。'],
+ ['整櫃／併櫃','FCL / LCL','包下整櫃／與他人拼櫃。','Full / Less than Container Load。'],
+ ['CBM／才','Cubic Meter','立方公尺；1 才＝1 立方英尺，1 CBM ≈ 35.3 才。','長 × 寬 × 高。'],
+ ['結關日','Cut-off / Closing Date','貨櫃進場與報關的最後期限。','cut-off「截斷」，過了就趕不上船。'],
+ ['協會貨物條款','Institute Cargo Clauses（ICC）','海上貨物保險通用條款，分 A、B、C。','倫敦保險人協會制定。'],
+ ['承保人','Underwriter','承擔保險風險的人或公司。','在風險說明「下方簽名」的人。'],
+ ['共同海損','General Average','為救全船犧牲的損失由所有利害關係人分攤。','源自古羅德島海商法；average 來自 avaria「海上損失」。'],
+ ['關稅','Tariff','進口時由進口商繳納的稅。','阿拉伯文 ta\'rīf「通知、公告」。'],
+ ['HS 碼','Harmonized System Code','國際通用的商品分類編號，前 6 碼共通。','harmonize「使一致」，1988 年實施。'],
+ ['原產地規則','Rules of Origin','判定商品「國籍」的規則，常以實質轉型為準。','決定適用稅率與協定優惠。'],
+ ['自由貿易協定','Free Trade Agreement（FTA）','協定國之間降低或免除關稅。','例如 2022 年生效的 RCEP。'],
+ ['傾銷','Dumping','以低於正常價值的價格大量出口。','dump「傾倒」。'],
+ ['遠期外匯','Forward Contract','事先約定未來某日的匯率，用來避險。','forward「往前」，對未來的約定。'],
+ ['仲裁','Arbitration','由仲裁人裁決爭議，裁決有拘束力。','拉丁文 arbiter「裁判」。'],
+ ['不可抗力','Force Majeure','無法預見與避免的事件，可免除或延後履約責任。','法文「更大的力量」。'],
+ ['最惠國待遇','Most-Favoured-Nation（MFN）','給一會員的最優惠待遇須給所有會員。','源自 17、18 世紀歐洲通商條約。'],
+ ['世界貿易組織','WTO','制定國際貿易規則的組織，1995 年成立。','前身為 1947 年的 GATT。'],
+ ['產前樣','Pre-Production Sample','大貨生產前給買方確認的樣品。','成衣業術語，簡稱 PP Sample。']
+];
+function gloss(){
+  const q=$('#glSearch').value.trim().toLowerCase();
+  const list=G.filter(g=>!q||g.join(' ').toLowerCase().includes(q));
+  $('#glList').innerHTML=list.length?list.map(g=>`<div class="gl"><span class="gt">${g[0]}</span><span class="ge">${g[1]}</span><p>${g[2]}</p><p class="go">由來：${g[3]}</p></div>`).join(''):'<p class="hint">找不到這個名詞。試試英文縮寫，例如「B/L」或「FOB」。</p>';
+}
+$('#glSearch').addEventListener('input',gloss);gloss();
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-ca9959a380" data-category="business"></script></body>
+</html>

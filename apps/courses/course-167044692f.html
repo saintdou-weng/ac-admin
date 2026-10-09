@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>易經八卦入門：從一條線到六十四卦</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E8EEE9; --paper:#F6F9F6; --ink:#1B2521; --soft:#4C5A54; --rule:#C6D2CA;
+  --seal:#B3362B; --indigo:#2E4A6B; --gold:#A8842A; --ok:#2F7A4E;
+  --yinFill:#1B2521; --yangFill:#F6F9F6;
+  --serif:"Noto Serif TC","Songti TC","PMingLiU","MingLiU",serif;
+  --sans:"PingFang TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131C19; --paper:#1B2622; --ink:#E4ECE7; --soft:#A3B2AB; --rule:#34443D;
+    --seal:#E0685B; --indigo:#8FB0D6; --gold:#D6B45A; --ok:#6CC592;
+    --yinFill:#E4ECE7; --yangFill:#1B2622;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#131C19; --paper:#1B2622; --ink:#E4ECE7; --soft:#A3B2AB; --rule:#34443D;
+  --seal:#E0685B; --indigo:#8FB0D6; --gold:#D6B45A; --ok:#6CC592;
+  --yinFill:#E4ECE7; --yangFill:#1B2622;
+}
+:root{box-sizing:border-box;padding-bottom:env(safe-area-inset-bottom,0px);}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px);scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto;}}
+*,*::before,*::after{box-sizing:inherit;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:1.0625rem;line-height:1.8;-webkit-text-size-adjust:100%;}
+svg{max-width:100%;}
+.wrap{max-width:46rem;margin:0 auto;padding:0 1.25rem;}
+h1,h2,h3{font-family:var(--serif);line-height:1.3;margin:0;}
+h2{font-size:1.75rem;font-weight:900;margin-bottom:.9rem;}
+h3{font-size:1.22rem;font-weight:700;margin:1.8rem 0 .5rem;}
+p{margin:.6rem 0;}
+button{font:inherit;color:inherit;}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;}
+.muted{color:var(--soft);}
+.zy{font-size:.72em;color:var(--soft);font-weight:400;letter-spacing:.05em;}
+blockquote{margin:1rem 0;padding:.2rem 0 .2rem 1rem;border-left:3px solid var(--gold);font-family:var(--serif);font-size:1.05rem;}
+blockquote small{display:block;font-family:var(--sans);font-size:.85rem;color:var(--soft);}
+
+/* sticky lesson nav */
+.topnav{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--rule);padding-top:env(safe-area-inset-top,0px);}
+.navin{display:flex;gap:.35rem;overflow-x:auto;padding:.5rem 1rem;scrollbar-width:none;max-width:60rem;margin:0 auto;}
+.navin::-webkit-scrollbar{display:none;}
+.navin a{flex:none;text-decoration:none;color:var(--ink);border:1.5px solid var(--rule);border-radius:999px;padding:.15rem .7rem;font-size:.88rem;white-space:nowrap;background:var(--paper);}
+.navin a.done{border-color:var(--ok);color:var(--ok);}
+.navin a.done::after{content:" ✓";}
+.prog{height:3px;background:var(--rule);}
+.prog i{display:block;height:100%;width:0;background:var(--seal);transition:width .4s;}
+
+/* hero */
+header.hero{padding:2.8rem 0 1.5rem;}
+.hero h1{font-size:clamp(2.2rem,8.5vw,3.8rem);font-weight:900;letter-spacing:.04em;}
+.hero .sub{font-family:var(--serif);font-size:1.15rem;color:var(--soft);margin:.4rem 0 1.4rem;}
+.gen{background:var(--paper);border:1px solid var(--rule);border-radius:14px;padding:1.2rem 1rem 1rem;}
+.gen-rows{display:flex;flex-direction:column;gap:1.1rem;min-height:22rem;}
+.gen-row{display:grid;gap:.3rem;justify-items:center;align-items:end;opacity:0;transform:translateY(-10px);transition:opacity .5s,transform .5s;}
+.gen-row.show{opacity:1;transform:none;}
+.gen-row .cap{grid-column:1/-1;font-family:var(--serif);font-weight:700;color:var(--seal);font-size:.95rem;justify-self:start;}
+.node{display:flex;flex-direction:column;align-items:center;gap:.25rem;font-size:.8rem;text-align:center;line-height:1.3;}
+.node .lab{font-family:var(--serif);font-weight:700;font-size:.95rem;}
+.ctrl{display:flex;gap:.6rem;align-items:center;margin-top:1rem;flex-wrap:wrap;}
+.btn{border:1.5px solid var(--ink);background:transparent;border-radius:999px;padding:.4rem 1.1rem;cursor:pointer;font-weight:600;}
+.btn.primary{background:var(--ink);color:var(--paper);}
+.btn:disabled{opacity:.35;cursor:default;}
+.gen-say{font-size:.98rem;margin-top:.6rem;min-height:3.4em;}
+.howto{font-size:.95rem;color:var(--soft);margin-top:1rem;}
+
+/* lines */
+.tri{display:flex;flex-direction:column;gap:5px;width:var(--w,48px);flex:none;}
+.ln{height:var(--h,7px);display:flex;gap:18%;}
+.ln i{flex:1;background:var(--ink);border-radius:2px;display:block;}
+.ln.new i{background:var(--seal);}
+.ln.up i{background:var(--indigo);}
+.ln.chg i{background:var(--seal);}
+.tri.xs{--w:22px;--h:3px;gap:2px;}
+.tri.sm{--w:30px;--h:5px;gap:4px;}
+.tri.md{--w:40px;--h:6px;}
+.tri.lg{--w:92px;--h:13px;gap:10px;}
+.tri.hx{--w:64px;--h:7px;gap:5px;}
+.tri.hs{--w:34px;--h:4px;gap:3px;}
+.tri.hxl{--w:110px;--h:11px;gap:8px;}
+
+section{padding:2.6rem 0;border-top:1px solid var(--rule);}
+.lesson{font-family:var(--serif);color:var(--seal);font-weight:700;font-size:1rem;margin-bottom:.2rem;}
+
+.origin{position:relative;background:var(--paper);border-left:4px solid var(--seal);border-radius:0 10px 10px 0;padding:.8rem 1rem .8rem 3.4rem;margin:1.1rem 0;font-size:.98rem;}
+.origin::before{content:"源";position:absolute;left:.8rem;top:.9rem;width:1.8rem;height:1.8rem;border:2px solid var(--seal);color:var(--seal);border-radius:4px;display:grid;place-items:center;font-family:var(--serif);font-weight:900;font-size:1rem;line-height:1;}
+.origin b{font-family:var(--serif);}
+.example{border:1.5px dashed var(--indigo);border-radius:10px;padding:.8rem 1rem;margin:1.1rem 0;font-size:.98rem;}
+.example strong{color:var(--indigo);}
+.panel{background:var(--paper);border:1px solid var(--rule);border-radius:12px;padding:1.1rem 1.2rem;margin:1rem 0;}
+
+table.t{border-collapse:collapse;width:100%;font-size:.93rem;}
+table.t th,table.t td{border-bottom:1px solid var(--rule);padding:.45rem .4rem;text-align:left;vertical-align:top;}
+table.t th{font-family:var(--serif);font-weight:700;white-space:nowrap;}
+.scroll{overflow-x:auto;}
+
+/* book anatomy */
+.book{display:grid;grid-template-columns:1fr;gap:.35rem;background:var(--paper);border:1px solid var(--rule);border-radius:12px;padding:1rem 1.1rem;font-family:var(--serif);}
+.pp{border:1.5px solid transparent;border-radius:8px;padding:.35rem .6rem;cursor:pointer;text-align:left;background:transparent;line-height:1.7;}
+.pp:hover{border-color:var(--rule);}
+.pp[aria-pressed="true"]{border-color:var(--seal);background:color-mix(in srgb,var(--seal) 8%,transparent);}
+.pp .tag{font-family:var(--sans);font-size:.75rem;color:var(--seal);font-weight:700;display:block;}
+.pp.row{display:flex;gap:1rem;align-items:center;}
+.anat{min-height:4.5em;}
+
+/* timeline */
+.tl{list-style:none;margin:1rem 0;padding:0;border-left:2px solid var(--rule);}
+.tl li{position:relative;padding:.2rem 0 .9rem 1.2rem;font-size:.97rem;}
+.tl li::before{content:"";position:absolute;left:-7px;top:.65rem;width:12px;height:12px;border-radius:50%;background:var(--paper);border:2px solid var(--seal);}
+.tl b{font-family:var(--serif);display:block;}
+
+/* numbers */
+.numbox{display:flex;gap:2rem;align-items:center;justify-content:center;flex-wrap:wrap;}
+.nums{display:flex;flex-direction:column;gap:.2rem;align-items:center;font-family:var(--serif);font-size:1.6rem;font-weight:900;background:color-mix(in srgb,var(--gold) 18%,transparent);border:2px solid var(--gold);border-radius:10px;padding:.5rem 1rem;min-width:4rem;}
+.nums button{border:none;background:transparent;cursor:pointer;font:inherit;line-height:1.25;}
+.arrow{font-size:1.6rem;color:var(--soft);}
+
+/* lamps */
+.lamps{display:flex;gap:1rem;justify-content:center;align-items:flex-end;margin:1rem 0;flex-wrap:wrap;}
+.lampbox{display:flex;flex-direction:column;align-items:center;gap:.4rem;}
+.lamp{width:52px;height:52px;border-radius:50%;border:2px solid var(--ink);background:transparent;cursor:pointer;transition:background .25s,box-shadow .25s;}
+.lamp.on{background:var(--gold);box-shadow:0 0 18px var(--gold);}
+.yaopair{display:flex;gap:2.5rem;justify-content:center;margin:1.2rem 0;flex-wrap:wrap;}
+.yaopair figure{margin:0;text-align:center;}
+.yaopair figcaption{font-family:var(--serif);font-weight:700;margin-top:.4rem;}
+.bar{width:120px;height:14px;display:flex;gap:22px;}
+.bar i{flex:1;background:var(--ink);border-radius:3px;}
+
+/* bagua */
+.bagua{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin:1rem 0;}
+.gua{background:var(--paper);border:1.5px solid var(--rule);border-radius:10px;padding:.8rem .3rem .6rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.4rem;}
+.gua[aria-pressed="true"]{border-color:var(--seal);box-shadow:inset 0 0 0 1px var(--seal);}
+.gua .nm{font-family:var(--serif);font-weight:900;font-size:1.4rem;line-height:1;}
+.gua .nt{font-size:.85rem;color:var(--soft);line-height:1;}
+.detail{display:grid;grid-template-columns:auto 1fr;gap:1.2rem;align-items:center;}
+.detail h3{margin:0 0 .3rem;font-size:1.6rem;}
+dl.kv{display:grid;grid-template-columns:auto 1fr;gap:.15rem .8rem;margin:.4rem 0 0;font-size:.95rem;}
+dl.kv dt{color:var(--soft);}
+dl.kv dd{margin:0;}
+.chant{font-family:var(--serif);font-size:1.12rem;color:var(--seal);font-weight:700;}
+.chants{display:grid;grid-template-columns:repeat(2,1fr);gap:.4rem 1rem;font-family:var(--serif);font-size:1.1rem;margin:1rem 0;}
+.chants span{display:flex;align-items:center;gap:.6rem;}
+
+/* builder */
+.builder{display:grid;grid-template-columns:auto 1fr;gap:1.5rem;align-items:center;}
+.bl{display:flex;flex-direction:column;gap:.55rem;}
+.blbtn{width:120px;height:24px;border:none;background:transparent;padding:0;cursor:pointer;display:flex;gap:22px;align-items:stretch;}
+.blbtn i{flex:1;background:var(--ink);border-radius:3px;}
+.blbtn:hover i{background:var(--indigo);}
+.blbtn.sel i{background:var(--seal);}
+.blrow{display:flex;align-items:center;gap:.6rem;font-size:.8rem;color:var(--soft);}
+.bin{font-family:var(--serif);font-size:2rem;font-weight:900;letter-spacing:.2em;}
+.bigname{font-family:var(--serif);font-size:2rem;font-weight:900;line-height:1.15;}
+
+/* circle */
+.circlebox{text-align:center;}
+.circlebox svg{width:100%;max-width:420px;height:auto;display:block;margin:0 auto;}
+.seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:999px;overflow:hidden;margin-bottom:.6rem;flex-wrap:wrap;}
+.seg button{border:none;background:transparent;padding:.35rem .95rem;cursor:pointer;font-weight:600;}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper);}
+.spin{transform-origin:200px 200px;animation:spin 24s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* combiner & matrix */
+.combo{display:grid;grid-template-columns:1fr auto;gap:1.2rem;align-items:center;}
+.pick{display:flex;flex-direction:column;gap:.7rem;}
+.pick label{font-size:.9rem;color:var(--soft);display:flex;flex-direction:column;gap:.2rem;}
+select{font:inherit;padding:.35rem .5rem;border-radius:8px;border:1.5px solid var(--ink);background:var(--bg);color:var(--ink);max-width:100%;}
+.matrix{border-collapse:collapse;font-family:var(--serif);font-size:.85rem;margin:0 auto;}
+.matrix th,.matrix td{border:1px solid var(--rule);padding:0;text-align:center;}
+.matrix th{padding:.25rem .3rem;font-size:.8rem;background:var(--paper);}
+.matrix td button{border:none;background:transparent;cursor:pointer;width:100%;min-width:2.4rem;padding:.35rem .15rem;font:inherit;font-weight:700;}
+.matrix td button:hover,.matrix td button.on{background:color-mix(in srgb,var(--seal) 15%,transparent);}
+
+/* 64 grid */
+.song{font-family:var(--serif);font-size:1.12rem;line-height:2.1;}
+.song .h{cursor:pointer;border-bottom:1.5px dotted var(--seal);}
+.song .h:hover{color:var(--seal);}
+.grid64{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:.4rem;}
+.cell{background:var(--paper);border:1.5px solid var(--rule);border-radius:8px;padding:.45rem .15rem .35rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.25rem;font-family:var(--serif);}
+.cell .no{font-size:.7rem;color:var(--soft);line-height:1;}
+.cell .cn{font-weight:900;font-size:.95rem;line-height:1.1;}
+.cell[aria-pressed="true"]{border-color:var(--seal);box-shadow:inset 0 0 0 1px var(--seal);}
+.cell.dim{opacity:.25;}
+.hxd{display:grid;grid-template-columns:auto 1fr;gap:1.3rem;align-items:start;}
+.hxd .gc{font-family:var(--serif);font-size:1.15rem;font-weight:700;background:color-mix(in srgb,var(--gold) 14%,transparent);border-radius:8px;padding:.5rem .8rem;margin:.5rem 0;}
+.linkbtn{border:none;background:none;color:var(--indigo);text-decoration:underline;cursor:pointer;padding:0;font-weight:600;}
+.term{border-bottom:2px solid var(--gold);cursor:pointer;}
+.term:hover{background:color-mix(in srgb,var(--gold) 20%,transparent);}
+.termout{font-size:.95rem;min-height:1.6em;margin-top:.4rem;}
+
+/* relations */
+.rel{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;text-align:center;}
+.rel .cell{cursor:pointer;padding:.7rem .2rem;}
+.rel .rl{font-family:var(--sans);font-size:.78rem;color:var(--seal);font-weight:700;}
+
+/* yao analyzer */
+.yaoA{display:grid;grid-template-columns:auto 1fr;gap:1.4rem;align-items:center;}
+.yl{display:flex;flex-direction:column;gap:7px;}
+.yl button{width:130px;height:18px;border:none;background:transparent;padding:0;cursor:pointer;display:flex;gap:24px;position:relative;}
+.yl button i{flex:1;background:var(--ink);border-radius:3px;}
+.yl button.sel i{background:var(--seal);}
+.yl button.hit i{background:var(--ok);}
+.yl button.miss i{background:var(--seal);}
+.dragon{display:grid;grid-template-columns:auto 1fr;gap:.2rem 1rem;}
+
+/* scale */
+.scale{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin:1rem 0 .3rem;text-align:center;font-family:var(--serif);font-weight:700;font-size:.9rem;}
+.scale span{padding:.45rem .1rem;border-radius:4px;color:#fff;}
+
+/* coins */
+.coins{display:flex;gap:.8rem;justify-content:center;margin:1rem 0;}
+.coin{width:58px;height:58px;border-radius:50%;border:3px solid var(--gold);display:grid;place-items:center;font-family:var(--serif);font-weight:900;font-size:1.1rem;background:color-mix(in srgb,var(--gold) 18%,transparent);position:relative;}
+.coin::after{content:"";position:absolute;width:14px;height:14px;border:2px solid var(--gold);background:var(--bg);}
+.coin span{position:absolute;top:4px;font-size:.7rem;}
+.coin.flip{animation:flip .6s;}
+@keyframes flip{0%{transform:rotateY(0)}50%{transform:rotateY(90deg) translateY(-12px)}100%{transform:rotateY(0)}}
+.toss{list-style:none;padding:0;margin:0;display:flex;flex-direction:column-reverse;gap:.3rem;font-size:.93rem;}
+.toss li{display:grid;grid-template-columns:3.2rem 5.5rem 1fr;gap:.5rem;align-items:center;}
+.two{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;text-align:center;margin-top:1rem;}
+
+/* sort */
+.chips{display:flex;flex-wrap:wrap;gap:.45rem;margin:.6rem 0;}
+.chip{border:1.5px solid var(--rule);background:var(--bg);border-radius:999px;padding:.3rem .8rem;cursor:pointer;}
+.chip[data-v="1"]{background:var(--gold);border-color:var(--gold);color:#1B2521;}
+.chip[data-v="0"]{background:var(--ink);border-color:var(--ink);color:var(--paper);}
+.chip.bad{outline:3px solid var(--seal);outline-offset:1px;}
+
+/* quiz engine */
+.quizbox{margin-top:2rem;background:var(--paper);border:1.5px solid var(--ink);border-radius:14px;padding:1rem 1.1rem 1.1rem;}
+.quizbox>h3{margin:0 0 .3rem;display:flex;align-items:center;gap:.5rem;}
+.quizbox>h3::before{content:"試";display:inline-grid;place-items:center;width:1.6rem;height:1.6rem;background:var(--seal);color:#fff;border-radius:4px;font-size:.95rem;}
+.qhead{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:var(--soft);margin-bottom:.4rem;}
+.dots{display:flex;gap:4px;}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--rule);}
+.dots i.ok{background:var(--ok);}
+.dots i.no{background:var(--seal);}
+.dots i.cur{outline:2px solid var(--ink);}
+.qq{font-weight:700;font-size:1.05rem;margin:.2rem 0 .7rem;}
+.qsym{margin:.3rem 0 .9rem;display:flex;justify-content:center;}
+.opts{display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem;}
+.opt{border:1.5px solid var(--rule);background:var(--bg);border-radius:10px;padding:.55rem .8rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;text-align:center;min-height:3rem;}
+.opt:hover:not(:disabled){border-color:var(--ink);}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 18%,transparent);}
+.opt.wrong{border-color:var(--seal);background:color-mix(in srgb,var(--seal) 14%,transparent);}
+.opt:disabled{cursor:default;}
+.fb{font-size:.95rem;margin-top:.7rem;min-height:1.4em;}
+.fb b.ok{color:var(--ok);}
+.fb b.no{color:var(--seal);}
+.qres{text-align:center;padding:.8rem 0;}
+.qres .big{font-family:var(--serif);font-size:2.4rem;font-weight:900;}
+.stat{display:flex;gap:1.2rem;justify-content:center;font-size:.9rem;color:var(--soft);margin-bottom:.6rem;}
+
+.gloss{display:grid;grid-template-columns:6rem 1fr;border-top:1px solid var(--rule);}
+.gloss dt{font-family:var(--serif);font-weight:900;font-size:1.1rem;padding:.65rem 0;border-bottom:1px solid var(--rule);}
+.gloss dd{margin:0;padding:.65rem 0;border-bottom:1px solid var(--rule);font-size:.96rem;}
+footer{padding:2rem 0 3rem;font-size:.9rem;color:var(--soft);}
+
+@media (prefers-reduced-motion: reduce){.spin{animation:none;}.gen-row{transition:none;}.coin.flip{animation:none;}}
+@media (max-width:560px){
+  .gua .nm{font-size:1.15rem;}
+  .bagua{gap:.4rem;}
+  .detail,.builder,.combo,.hxd,.yaoA{grid-template-columns:1fr;justify-items:center;}
+  .hxd>div:last-child,.yaoA>div:last-child{justify-self:stretch;}
+  .chants{grid-template-columns:1fr;}
+  .gloss{grid-template-columns:4.6rem 1fr;}
+  .tri.sm{--w:26px;}
+  .opts{grid-template-columns:1fr 1fr;}
+  .rel{grid-template-columns:repeat(2,1fr);}
+  .scale{font-size:.75rem;}
+}
+</style>
+</head>
+<body>
+<nav class="topnav" aria-label="課程目錄">
+  <div class="navin" id="navin"></div>
+  <div class="prog"><i id="progbar"></i></div>
+</nav>
+
+<header class="hero wrap" id="top">
+  <h1>易經八卦入門</h1>
+  <p class="sub">從一條線開始，一路學到六十四卦</p>
+  <div class="gen" aria-live="polite">
+    <div class="gen-rows" id="genRows"></div>
+    <p class="gen-say" id="genSay"></p>
+    <div class="ctrl">
+      <button class="btn" id="genPrev">上一步</button>
+      <button class="btn primary" id="genNext">下一步</button>
+      <button class="btn" id="genReset">重來</button>
+    </div>
+  </div>
+  <p class="howto">全套共十三課，每課最後都有「小試身手」互動測驗，答完會在上方目錄打勾。最後還有期末總測驗和名詞小辭典。建議按順序學，一次一兩課就好。</p>
+</header>
+
+<main class="wrap">
+
+<!-- ================= L1 ================= -->
+<section id="l1">
+  <div class="lesson">第一課</div>
+  <h2>認識《易經》這本書</h2>
+  <p>《易經》又叫《周易》，大約在三千年前的西周成形。它原本是周朝官方的<b>占卜手冊</b>：打仗、祭祀、遷都這類大事，要先占卜問吉凶。後來孔子一派的學者替它寫了大量解說，大家發現裡面藏著一套<b>觀察變化、決定怎麼做人做事</b>的道理，於是它變成哲學經典，被尊為「群經之首」——所有經典裡排第一名。</p>
+  <div class="origin"><b>「易」字的由來：</b>一說「易」是「日」在上、「月」在下，日月輪流，代表變化；另一說「易」原本畫的是蜥蜴，蜥蜴會變色，也是「變」。漢代學者說「易」有三層意思：<b>變易</b>（萬物一直在變）、<b>不易</b>（變化背後有不變的規律）、<b>簡易</b>（規律其實很簡單）。</div>
+  <div class="origin"><b>「經」字的由來：</b>「經」原本是織布機上直向的線（經線），固定不動，橫向的緯線才來回穿梭。所以「經」引申為最基本、最重要的書。「周易」的「周」一般指周朝，也有人解釋成「周而復始、無所不包」。</div>
+
+  <h3>三本易，只剩一本</h3>
+  <p>傳說古代有三種「易」：夏朝的《連山》、商朝的《歸藏》、周朝的《周易》。前兩本早已失傳（近代出土過被認為是《歸藏》的秦代竹簡，學者還在研究），今天說的《易經》就是《周易》。</p>
+  <div class="origin"><b>名字的由來：</b>《連山》以艮卦（山）開頭，像群山連綿不斷；《歸藏》以坤卦（地）開頭，萬物最後都回歸、收藏在大地裡；《周易》以乾卦（天）開頭。</div>
+
+  <h3>「人更三聖，世歷三古」</h3>
+  <p>這是《漢書》對《易經》作者的說法：經過三位聖人、跨越三個時代才完成。上古的<b>伏羲</b>畫八卦，中古的<b>周文王</b>推演成六十四卦並寫下卦辭（一說爻辭是他兒子<b>周公</b>寫的），近古的<b>孔子</b>寫了解說的《易傳》。</p>
+  <p class="muted">這是傳統說法。現代學者多半認為《易經》是許多人在很長時間裡慢慢累積而成的，《易傳》也是孔子之後的儒家學者陸續寫成。</p>
+
+  <h3>一本書，兩個部分：經和傳</h3>
+  <p><b>經</b>是本文，就是六十四卦。每一卦都有四樣東西：卦畫（符號）、卦名、卦辭（說明整卦）、爻辭（說明每一條線）。六十四卦分成<b>上經三十卦</b>（乾到離）和<b>下經三十四卦</b>（咸到未濟）。</p>
+  <p><b>傳</b>是解說，一共十篇，叫做「十翼」。「翼」是翅膀，意思是幫經文展翅高飛的輔助。</p>
+  <div class="scroll"><table class="t">
+    <tr><th>十翼</th><th>名字的意思</th><th>內容</th></tr>
+    <tr><td>彖傳（上、下）<br><span class="zy">ㄊㄨㄢˋ</span></td><td>彖＝斷，判斷</td><td>判斷一整卦的意思</td></tr>
+    <tr><td>象傳（上、下）</td><td>象＝形象</td><td>用自然景象解釋卦（大象）和每一爻（小象）</td></tr>
+    <tr><td>繫辭傳（上、下）</td><td>繫＝掛上去</td><td>「掛」在經文後面的總論，講易經的大道理</td></tr>
+    <tr><td>文言傳</td><td>有文采的話</td><td>專門用漂亮的文字解說乾、坤兩卦</td></tr>
+    <tr><td>說卦傳</td><td>解說八卦</td><td>八卦代表什麼：自然、動物、身體、家人……</td></tr>
+    <tr><td>序卦傳</td><td>順序</td><td>解釋六十四卦為什麼這樣排</td></tr>
+    <tr><td>雜卦傳</td><td>打散</td><td>打亂順序，兩兩對比說明</td></tr>
+  </table></div>
+  <p class="muted" style="font-size:.9rem">彖、象、繫辭各分上下兩篇，加上其餘四篇，剛好十篇。</p>
+
+  <h3>翻開乾卦這一頁</h3>
+  <p>下面是《易經》第一卦的樣子。點每個部分，看看它叫什麼：</p>
+  <div class="book" id="book"></div>
+  <div class="panel anat" id="anat" aria-live="polite"><span class="muted">點上面任何一塊。</span></div>
+
+  <h3>易經三千年</h3>
+  <ol class="tl">
+    <li><b>傳說上古</b>伏羲觀察天地，畫出八卦。</li>
+    <li><b>商朝到西周</b>甲骨、陶器、青銅器上出現一組組的「數字卦」（第二課會講）。</li>
+    <li><b>西周（約西元前一千年）</b>《周易》的卦辭、爻辭大致成形。</li>
+    <li><b>春秋</b>《左傳》記錄了許多貴族用《周易》占卜的故事。</li>
+    <li><b>戰國到西漢初</b>《易傳》十翼陸續寫成。</li>
+    <li><b>西漢・前136年</b>漢武帝設立「五經博士」，《易》成為國家認可的經典。</li>
+    <li><b>三國・魏</b>王弼替易經作注，重視講道理，不重占卜。</li>
+    <li><b>北宋</b>周敦頤寫《太極圖說》，邵雍推廣先天八卦圖。</li>
+    <li><b>南宋</b>朱熹寫《周易本義》，是後來科舉考試的標準讀本。</li>
+    <li><b>1703年</b>德國數學家萊布尼茲發表二進位論文，提到伏羲八卦。</li>
+    <li><b>1973年</b>湖南長沙馬王堆漢墓出土寫在絲綢上的《帛書周易》。</li>
+    <li><b>1994年</b>上海博物館收藏一批戰國竹簡，裡面有已知最古老的《周易》抄本之一。</li>
+  </ol>
+  <div class="quizbox"><h3>小試身手</h3><div data-quiz="l1"></div></div>
+</section>
+
+<!-- ================= L2 ================= -->
+<section id="l2">
+  <div class="lesson">第二課</div>
+  <h2>符號從哪裡來？</h2>
+  <p>易經的符號只有兩種線：一條實線 <b>⚊</b>、一條斷線 <b>⚋</b>。它們是怎麼被發明的？有傳說，也有考古證據。</p>
+
+  <h3>傳說：伏羲仰觀俯察</h3>
+  <blockquote>古者包犧氏之王天下也，仰則觀象於天，俯則觀法於地……近取諸身，遠取諸物，於是始作八卦。<small>《易傳・繫辭下》（包犧就是伏羲）</small></blockquote>
+  <p>白話：伏羲抬頭看天上的日月星辰，低頭看地上的山川，觀察鳥獸身上的花紋；近的從自己身體找規律，遠的從萬物找規律，最後把這些規律濃縮成八個符號。</p>
+  <p>另外還有「<b>河圖洛書</b>」的傳說：黃河跳出龍馬、洛水浮出神龜，背上有點點圖案，聖人照著畫出八卦。這些都是神話，但說明古人相信八卦來自對大自然的觀察。</p>
+
+  <h3>考古：原來是「數字」變的</h3>
+  <p>考古學家在商朝、周朝的甲骨、陶器和青銅器上，發現了許多三個或六個一組、疊在一起的數字，例如「七八七六六六」。一直沒人看懂，直到 1978 年，學者<b>張政烺</b>指出：這些是古人占卜時算出來的數字，後來叫「<b>數字卦</b>」。</p>
+  <p>規則很簡單：<b>奇數算陽，偶數算陰</b>。久而久之，奇數寫成「一」，偶數寫成「八」或「∧」，再簡化就變成了今天的 ⚊ 和 ⚋。在馬王堆出土的帛書周易裡，陰爻的寫法還很像一個「八」字。</p>
+  <div class="panel">
+    <p style="margin-top:0"><b>數字卦轉換器</b>：古人的數字由下往上疊。按「擲出數字」，或直接點某個數字換一個，看看它變成哪一卦。</p>
+    <div class="numbox">
+      <div class="nums" id="nums" aria-label="數字卦，由上到下"></div>
+      <div class="arrow">→</div>
+      <div id="numOut" style="text-align:center"></div>
+    </div>
+    <div class="ctrl" style="justify-content:center"><button class="btn primary" id="numRoll">擲出數字</button></div>
+  </div>
+
+  <h3>為什麼是三條線？六條線？</h3>
+  <p>古人認為世界由三個部分組成：<b>天、地、人</b>，叫做「<b>三才</b>」。三條線的八卦裡，最下面代表地、中間代表人、最上面代表天——人站在天地之間。</p>
+  <p>《說卦傳》說「兼三才而兩之，故易六畫而成卦」：天、地、人各自又分陰陽兩面，3×2＝6，所以六十四卦是六條線。</p>
+  <div class="origin"><b>「爻」（ㄧㄠˊ）的由來：</b>字形是兩個「ㄨ」疊起來，像線條交錯。古書說「爻者，交也」，也說「爻也者，效天下之動者也」——爻就是模仿天下萬物的變動。</div>
+  <div class="origin"><b>「卦」字的由來：</b>古書說「卦者，掛也」，把自然的形象「掛」出來給人看。右邊的「卜」表示和占卜有關，左邊的「圭」是古代量日影的玉器，也有人說是聲音符號。</div>
+  <div class="origin"><b>太極圖是後來才有的：</b>那個黑白魚形的「陰陽魚」太極圖，比易經晚了兩千多年。北宋周敦頤畫過一種「太極圖」，但樣子是一層層的圓圈；今天常見的陰陽魚，大約到明朝才定型。</div>
+  <div class="example"><strong>你的電腦裡也有八卦：</strong>國際文字編碼 Unicode 收錄了八卦 ☰☱☲☳☴☵☶☷ 和全部六十四卦 ䷀䷁䷂……䷿，所以你現在就能在手機上打出它們。</div>
+  <div class="quizbox"><h3>小試身手</h3><div data-quiz="l2"></div></div>
+</section>
+
+<!-- ================= L3 ================= -->
+<section id="l3">
+  <div class="lesson">第三課</div>
+  <h2>陰和陽：只有兩種線</h2>
+  <p>古人觀察世界，發現很多東西都是成對的：白天和黑夜、太陽和月亮、熱和冷、動和靜、剛和柔。他們把這些分成兩大類，叫做<b>陽</b>和<b>陰</b>：</p>
+  <div class="yaopair">
+    <figure><div class="bar"><i></i></div><figcaption>陽爻：一條實線</figcaption></figure>
+    <figure><div class="bar"><i></i><i></i></div><figcaption>陰爻：一條斷線</figcaption></figure>
+  </div>
+  <div class="origin"><b>「陰」「陽」的由來：</b>最早的意思很生活化——山的南面曬得到太陽，叫「陽」；山的北面曬不到，叫「陰」。河流則相反，河的北岸叫陽。台灣的「陽明山」、河南的「洛陽」（在洛水北岸）都是這樣取名的。</div>
+  <p>陰陽有三個重要觀念：</p>
+  <p><b>一、互相需要。</b>陰陽不是好和壞，而是一體兩面。只有白天沒有黑夜，你就不能睡覺；只吸氣不呼氣，你就沒法呼吸。</p>
+  <p><b>二、會互相轉換。</b>夏天最熱之後會慢慢變涼，冬天最冷之後會慢慢變暖。這叫「物極必反」。</p>
+  <p><b>三、是相對的。</b>手心和手背，哪個是陰？手背朝外、比較硬，算陽；手心朝內、比較柔，算陰。但和腳比起來，整隻手在上面，又算陽。比較的對象不同，答案就不同。</p>
+  <div class="example"><strong>和電腦一樣：</strong>陽＝開、陰＝關，就是電腦的 1 和 0。點點看下面三盞燈，每盞只有開、關兩種狀態：</div>
+  <div class="lamps" id="lamps"></div>
+  <p class="muted" style="text-align:center">三盞燈的開關組合，一共只有 2×2×2＝8 種——這 8 種，正好就是八卦。</p>
+  <div class="quizbox"><h3>小試身手</h3><div data-quiz="l3"></div></div>
+</section>
+
+<!-- ================= L4 ================= -->
+<section id="l4">
+  <div class="lesson">第四課</div>
+  <h2>太極生兩儀，兩儀生四象，四象生八卦</h2>
+  <blockquote>易有太極，是生兩儀，兩儀生四象，四象生八卦。<small>《易傳・繫辭上》</small></blockquote>
+  <p>這句話是八卦的「家譜」。回到頁面最上方的動畫按「下一步」，你會看到規則只有一條：<b>每一步，都在上面加一條陽爻或陰爻</b>。</p>
+  <p>1 條線有 2 種排法，2 條線有 2×2＝4 種，3 條線有 2×2×2＝8 種。八卦就是「三條線所有可能的排法」，一個不多，一個不少。如果再繼續加到 6 條線，就是 2 的 6 次方＝64，也就是六十四卦。</p>
+  <div class="origin"><b>「太極」的由來：</b>「極」本來是屋頂最高那根大樑，整間房子都靠它撐起來；「太」是「最」。所以太極就是<b>一切的最源頭</b>，還沒分出陰陽之前的狀態。</div>
+  <div class="origin"><b>「兩儀」的由來：</b>「儀」是樣子、標準的意思，像「儀表」「儀容」。兩儀就是世界最基本的兩種樣子：陽和陰，也常說成天和地。</div>
+  <div class="origin"><b>「四象」的由來：</b>「象」是形象。兩條線組出四種：<b>太陽、少陰、少陽、太陰</b>。古人常用四季比喻：夏天最熱是太陽、冬天最冷是太陰、春天剛變暖是少陽、秋天剛變涼是少陰。「太」是到了極點，「少」是剛剛開始。（這裡的太陽不是天上的太陽，是「陽到最多」的意思。）</div>
+  <div class="scroll"><table class="t">
+    <tr><th>四象</th><th>符號（由下往上）</th><th>季節</th><th>一天中</th></tr>
+    <tr><td>太陽</td><td>陽＋陽</td><td>夏</td><td>中午</td></tr>
+    <tr><td>少陰</td><td>陽＋陰（陰剛從上面冒出來）</td><td>秋</td><td>傍晚</td></tr>
+    <tr><td>太陰</td><td>陰＋陰</td><td>冬</td><td>半夜</td></tr>
+    <tr><td>少陽</td><td>陰＋陽（陽剛從上面冒出來）</td><td>春</td><td>清晨</td></tr>
+  </table></div>
+  <div class="quizbox"><h3>小試身手</h3><div data-quiz="l4"></div></div>
+</section>
+
+<!-- ================= L5 ================= -->
+<section id="l5">
+  <div class="lesson">第五課</div>
+  <h2>認識八卦</h2>
+  <p>每個卦有三條線。<b>讀卦一定從下往上</b>：最下面是第一條，最上面是第三條，就像蓋房子從地基蓋起、植物從土裡往上長。點一個卦，看它的名字由來和代表的東西：</p>
+  <div class="bagua" id="bagua" role="group" aria-label="八卦"></div>
+  <div class="panel detail" id="detail" aria-live="polite"></div>
+
+  <h3>八卦代表什麼？（出自《說卦傳》）</h3>
+  <div class="scroll"><table class="t" id="triTable"></table></div>
+
+  <h3>背口訣，一秒認出八卦</h3>
+  <p>這八句是古人為了好記編的口訣（南宋朱熹的書裡就有），每句都在描述卦的<b>形狀</b>：</p>
+  <div class="chants" id="chants"></div>
+  <div class="example"><strong>怎麼理解？</strong>「連」是三條都連著，「斷」是斷開。「震仰盂」：盂是碗，仰是朝上放——下面一條實線像碗底，上面兩條斷線像張開的碗口。「艮覆碗」剛好相反，碗倒扣過來。「中虛」是中間空，「中滿」是中間實，「上缺」是上面缺口，「下斷」是下面斷開。</div>
+
+  <h3>八卦一家人</h3>
+  <p>《說卦傳》把八卦想成一個家庭：乾是爸爸、坤是媽媽，另外六個是三男三女。判斷方法：<b>找出三條線裡「只有一條」的那種線</b>。</p>
+  <p>只有一條陽爻，就是兒子；只有一條陰爻，就是女兒。那一條在最下面是老大（長），在中間是老二（中），在最上面是老么（少）。這叫「<b>少者為主</b>」——物以稀為貴，少的那條最重要。</p>
+  <div class="example"><strong>試試看：</strong>震卦是「一陽在最下」，所以是<b>長男</b>；兌卦是「一陰在最上」，所以是<b>少女</b>；坎卦是「一陽在中間」，所以是<b>中男</b>。</div>
+  <div class="quizbox"><h3>小試身手</h3><div data-quiz="l5"></div></div>
+</section>
+
+<!-- ================= L6 ================= -->
+<section id="l6">
+  <div class="lesson">第六課</div>
+  <h2>八卦圖：先天與後天</h2>
+  <p>把八卦排成一圈，就是常見的「八卦圖」。它有兩種排法，切換看看八個卦怎麼移動：</p>
+  <div class="panel circlebox">
+    <div class="seg" role="group" aria-label="排法">
+      <button id="bXian" aria-pressed="true">先天八卦</button>
+      <button id="bHou" aria-pressed="false">後天八卦</button>
+    </div>
+    <svg id="circle" viewBox="0 0 400 400" role="img" aria-label="八卦方位圖"></svg>
+    <p class="muted" style="font-size:.9rem;margin:.4rem 0 0">古代的圖習慣把<b>南方畫在上面</b>，所以東方在左邊，跟現在的地圖相反。每個卦的第一條線（最下面）都朝向圓心。</p>
+  </div>
+  <p id="circleSay"></p>
+  <div class="origin"><b>「先天」「後天」的由來：</b>「先天」指天地形成以前的理想秩序，傳說是伏羲畫的，所以也叫「伏羲八卦」；「後天」指天地形成以後實際運作的樣子，傳說是周文王排的，所以也叫「文王八卦」。這兩個名稱是北宋邵雍提出來的。</div>
+  <div class="example"><strong>身邊就有八卦：</strong>韓國國旗中間是太極，四個角落的黑色線條就是乾（天）、坤（地）、坎（水）、離（火）四個卦。下次看到可以認認看！</div>
+  <div class="quizbox"><h3>小試身手</h3><div data-quiz="l6"></div></div>
+</section>
+
+<!-- ================= L7 ================= -->
+<section id="l7">
+  <div class="lesson">第七課</div>
+  <h2>重卦：從八卦到六十四卦</h2>
+  <p>把兩個八卦上下疊起來，就變成六條線的卦，這叫「<b>重卦</b>」（重，ㄔㄨㄥˊ，重疊）。8 個上卦 × 8 個下卦＝64 種，一個不多、一個不少。</p>
+  <p>下面三條叫<b>下卦</b>，也叫<b>內卦</b>；上面三條叫<b>上卦</b>，也叫<b>外卦</b>。為什麼叫內外？因為古人覺得下面是自己、裡面，上面是外在、別人。</p>
+  <div class="origin"><b>「經卦」和「別卦」：</b>三條線的八卦叫「經卦」（基本的卦，就像經線是布的基礎）；六條線的六十四卦叫「別卦」（由經卦變化分別出來的）。</div>
+
+  <h3>六十四卦的全名怎麼念？</h3>
+  <p>規則：<b>上卦的自然象 ＋ 下卦的自然象 ＋ 卦名</b>。例如上坎（水）下離（火），卦名叫「既濟」，全名就是「水火既濟」。</p>
+  <p>如果上下兩個卦一樣，就說「<b>某為某</b>」，例如兩個乾疊在一起叫「乾為天」，兩個坎疊在一起叫「坎為水」。這八個叫「八純卦」。</p>
+  <div class="panel combo">
+    <div class="pick">
+      <label>上卦（外卦）<select id="selUp"></select></label>
+      <label>下卦（內卦）<select id="selDn"></select></label>
+      <div class="bigname" id="hexName"></div>
+      <div id="hexSay" style="font-size:.97rem"></div>
+    </div>
+    <div id="hexPic"></div>
+  </div>
+  <p>或者直接在下面的表格點一格（直的是上卦，橫的是下卦）：</p>
+  <div class="scroll"><table class="matrix" id="matrix"></table></div>
+  <div class="example"><strong>最經典的例子：</strong>「地天泰」是地在上、天在下，看起來上下顛倒，卻是好卦。因為天氣往上升、地氣往下降，兩者會<b>交流相遇</b>，所以通順。反過來「天地否」，天在上往上飄、地在下往下沉，<b>各走各的</b>，互不交流，所以閉塞。成語「否極泰來」就是從這裡來的。</div>
+  <div class="quizbox"><h3>小試身手</h3><div data-quiz="l7"></div></div>
+</section>
+
+<!-- ================= L8 ================= -->
+<section id="l8">
+  <div class="lesson">第八課</div>
+  <h2>六條爻的名字與位置</h2>
+  <h3>爻的名字：數字＋位置</h3>
+  <p>六條爻由下往上叫：<b>初、二、三、四、五、上</b>。陽爻叫「<b>九</b>」、陰爻叫「<b>六</b>」。兩個合起來就是爻的名字。</p>
+  <p>規則：最下面和最上面，<b>位置在前</b>（初九、初六、上九、上六）；中間四條，<b>數字在前</b>（九二、六三、九四、六五……）。</p>
+  <div class="origin"><b>為什麼叫「初」和「上」，不叫一和六？</b>唐朝學者孔穎達解釋：「初」講的是<b>時間</b>（事情剛開始），「上」講的是<b>位置</b>（最高處）。一個爻既有時間的先後，也有地位的高低，所以頭尾各用一個字來提醒。</div>
+  <div class="origin"><b>為什麼陽叫「九」、陰叫「六」？</b>古人占卜時，每一條爻會算出 6、7、8、9 其中一個數字：9 叫老陽、7 叫少陽、8 叫少陰、6 叫老陰。「老」代表到了極點、<b>即將變化</b>。易經最重視「變」，所以用會變的 9 和 6 來命名。另一種說法：天數 1、3、5 加起來是 9，地數 2、4 加起來是 6。</div>
+  <div class="panel yaoA">
+    <div>
+      <div class="yl" id="yl"></div>
+    </div>
+    <div>
+      <label class="muted" style="font-size:.9rem">選一卦來分析：<select id="yaoSel"></select></label>
+      <div id="yaoOut" aria-live="polite" style="margin-top:.6rem"></div>
+    </div>
+  </div>
+
+  <h3>位置有高低：六爻就像一所學校</h3>
+  <div class="scroll"><table class="t">
+    <tr><th>位置</th><th>好比</th><th>《繫辭》的說法</th></tr>
+    <tr><td>上</td><td>退休的老校長，地位高但沒實權</td><td>事情到了盡頭</td></tr>
+    <tr><td>五</td><td>校長，最重要的領導位置</td><td>五多功（容易有成就）</td></tr>
+    <tr><td>四</td><td>校長身邊的主任，壓力大</td><td>四多懼（常常擔心害怕）</td></tr>
+    <tr><td>三</td><td>快畢業的學長，不上不下</td><td>三多凶（容易出狀況）</td></tr>
+    <tr><td>二</td><td>班長，在基層但很受信任</td><td>二多譽（容易得到稱讚）</td></tr>
+    <tr><td>初</td><td>剛入學的新生，一切剛開始</td><td>事情的開端</td></tr>
+  </table></div>
+  <p>皇帝被稱為「<b>九五之尊</b>」，就是因為第五爻是最尊貴的位置，而陽爻叫九。</p>
+  <p>三才也對應六爻：初、二是<b>地</b>，三、四是<b>人</b>，五、上是<b>天</b>。</p>
+
+  <h3>看爻的三個重點：正、中、應</h3>
+  <p><b>正（當位）：</b>1、3、5 是奇數位，叫陽位；2、4、6 是偶數位，叫陰位。陽爻在陽位、陰爻在陰位，叫「當位」或「得正」，就像人在適合自己的位子上。</p>
+  <p><b>中：</b>第二爻在下卦正中間，第五爻在上卦正中間，叫「得中」，代表不偏不倚、剛剛好。中國人說「中庸」「中道」就和這有關。</p>
+  <p><b>應：</b>初和四、二和五、三和上是一對對的「朋友」。如果一對剛好一陰一陽，叫「有應」，彼此互相幫忙；都是陽或都是陰，叫「無應」。</p>
+  <p class="muted">在上面的分析器裡點任何一條爻，就會告訴你它正不正、中不中、有沒有應。</p>
+
+  <h3>乾卦六龍：一條龍的成長故事</h3>
+  <p>乾卦的爻辭用一條龍來比喻人生的六個階段，是最有名的爻辭。點左邊的爻看看：</p>
+  <div class="panel yaoA">
+    <div class="yl" id="dragonL"></div>
+    <div id="dragonOut" aria-live="polite"></div>
+  </div>
+  <div class="quizbox"><h3>小試身手</h3><div data-quiz="l8"></div></div>
+</section>
+
+<!-- ================= L9 ================= -->
+<section id="l9">
+  <div class="lesson">第九課</div>
+  <h2>卦與卦的關係：錯、綜、互</h2>
+  <p>六十四卦不是各自獨立的，它們之間有親戚關係。學會這三種關係，你就能從一個卦推出好幾個卦。</p>
+  <p><b>綜卦</b>（又叫覆卦）：把整個卦<b>上下顛倒</b>過來看。就像你和對面的人看同一張紙，你看到的是「屯」，對方看到的是「蒙」。</p>
+  <p><b>錯卦</b>（又叫旁通卦）：每一條爻<b>陰陽全部相反</b>。乾的錯卦是坤，坎的錯卦是離。</p>
+  <p><b>互卦</b>：把第二、三、四爻當下卦，第三、四、五爻當上卦，組出一個新的卦，代表藏在裡面的變化。</p>
+  <div class="origin"><b>名字的由來：</b>「綜」是織布機上負責把經線一下提起、一下壓下的裝置，一上一下正是顛倒的意思。「錯」是交錯、相反。「互」是互相交疊，因為互卦的上下兩半共用了第三、四爻。</div>
+  <div class="panel">
+    <label class="muted" style="font-size:.9rem">選一卦：<select id="relSel"></select></label>
+    <div class="rel" id="rel" style="margin-top:.8rem"></div>
+    <p class="muted" style="font-size:.88rem;margin-bottom:0">點任何一格，就以那一卦為主角重新計算。</p>
+  </div>
+  <h3>「非覆即變」：六十四卦的排列祕密</h3>
+  <p>唐朝孔穎達發現：六十四卦兩兩一組（1 和 2、3 和 4……），後一卦<b>不是前一卦的綜卦（覆），就是錯卦（變）</b>。大部分是綜卦；只有 8 個卦顛倒過來還是自己（乾、坤、頤、大過、坎、離、中孚、小過），它們只好用錯卦配對。</p>
+  <div class="quizbox"><h3>小試身手</h3><div data-quiz="l9"></div></div>
+</section>
+
+<!-- ================= L10 ================= -->
+<section id="l10">
+  <div class="lesson">第十課</div>
+  <h2>讀懂卦辭：易經常用字</h2>
+  <p>卦辭和爻辭是三千年前的文字，但只要認得十幾個常用字，就能看懂大意。下面的字，每一個都有由來：</p>
+  <div class="scroll"><table class="t" id="termTable"></table></div>
+  <h3>吉凶的等級</h3>
+  <p>易經不只說好壞，還分得很細。大致從好到壞：</p>
+  <div class="scale" id="scale"></div>
+  <p class="muted" style="font-size:.9rem">「悔」和「吝」都是中間地帶：<b>悔</b>是犯了小錯但後悔了，會往好的方向走；<b>吝</b>是不肯改，會慢慢往壞的方向走。《繫辭》說「吉凶者，失得之象也；悔吝者，憂虞之象也」——吉凶是結果，悔吝是過程中的擔憂。</p>
+  <h3>練習：讀一段卦辭</h3>
+  <p>選一卦，卦辭裡畫底線的字可以點，會顯示意思：</p>
+  <div class="panel">
+    <label class="muted" style="font-size:.9rem">選一卦：<select id="readSel"></select></label>
+    <div class="hxd" style="margin-top:.8rem">
+      <div id="readPic"></div>
+      <div><div class="gc" id="readCi"></div><div class="termout" id="readOut" aria-live="polite"></div><div id="readBai" style="font-size:.97rem"></div></div>
+    </div>
+  </div>
+  <div class="quizbox"><h3>小試身手</h3><div data-quiz="l10"></div></div>
+</section>
+
+<!-- ================= L11 ================= -->
+<section id="l11">
+  <div class="lesson">第十一課</div>
+  <h2>六十四卦全覽</h2>
+  <p>六十四卦的順序是固定的，從乾開始、到未濟結束。古人為了好背，編了一首《<b>卦名次序歌</b>》（出自朱熹《周易本義》），把六十四個卦名全部串起來。點歌裡任何一個卦名，就會打開它：</p>
+  <div class="panel song" id="song"></div>
+  <h3>六十四卦總表</h3>
+  <div class="seg" role="group" aria-label="篩選" id="gridFilter">
+    <button data-f="all" aria-pressed="true">全部</button>
+    <button data-f="up" aria-pressed="false">上經</button>
+    <button data-f="dn" aria-pressed="false">下經</button>
+    <button data-f="pure" aria-pressed="false">八純卦</button>
+  </div>
+  <div class="grid64" id="grid64"></div>
+  <div class="panel hxd" id="hxDetail" aria-live="polite"></div>
+  <p class="muted" style="font-size:.9rem">六十四卦的順序為什麼這樣排？《序卦傳》用故事串起來：先有天地（乾坤），萬物剛出生會困難（屯），剛出生的東西都很懵懂（蒙），懵懂的要養育（需）……一路講到事情永遠沒有真正結束（未濟）。</p>
+  <div class="quizbox"><h3>小試身手</h3><div data-quiz="l11"></div></div>
+  <div class="quizbox"><h3>六十四卦閃卡練習</h3><p class="muted" style="margin:0 0 .6rem;font-size:.92rem">不計入進度，想練多久就練多久，看你能連續答對幾題。</p><div id="flash64"></div></div>
+</section>
+
+<!-- ================= L12 ================= -->
+<section id="l12">
+  <div class="lesson">第十二課</div>
+  <h2>古人怎麼占卦？（歷史體驗）</h2>
+  <p>古代占卜有兩大方法：<b>卜</b>和<b>筮</b>。</p>
+  <div class="origin"><b>「卜」的由來：</b>商朝人把龜甲、牛骨鑽洞後用火燒，表面會裂出紋路。「卜」字就是那條裂紋的樣子，唸起來也像裂開的聲音。刻在龜甲上的占卜紀錄，就是「甲骨文」。「占」是「卜」加「口」：看著裂紋開口說吉凶。</div>
+  <div class="origin"><b>「筮」（ㄕˋ）的由來：</b>竹字頭加「巫」，用竹子或<b>蓍草</b>（ㄕ，一種莖很直的草）來數算的方法。《周易》就是用「筮」的。所以古書常說「卜筮」。</div>
+  <h3>正式的方法：大衍筮法</h3>
+  <p>《繫辭》記載「大衍之數五十，其用四十有九」：拿 50 根蓍草，先抽掉 1 根不用，把 49 根隨機分成兩堆，再四根四根地數，經過三輪計算得到一個 6、7、8 或 9，這就是一爻。要做 18 輪才得到一個卦，所以叫「十有八變而成卦」。</p>
+  <h3>簡化的方法：三枚銅錢</h3>
+  <p>後代（大約唐宋以後）流行用三枚銅錢代替蓍草，簡單很多。規則：<b>正面算 3，反面算 2</b>，三枚加起來：</p>
+  <div class="scroll"><table class="t">
+    <tr><th>總和</th><th>名稱</th><th>畫成</th><th>會不會變</th></tr>
+    <tr><td>9（三正）</td><td>老陽</td><td>陽爻</td><td>會變成陰</td></tr>
+    <tr><td>8（兩正一反）</td><td>少陰</td><td>陰爻</td><td>不變</td></tr>
+    <tr><td>7（一正兩反）</td><td>少陽</td><td>陽爻</td><td>不變</td></tr>
+    <tr><td>6（三反）</td><td>老陰</td><td>陰爻</td><td>會變成陽</td></tr>
+  </table></div>
+  <p>擲六次，由下往上畫出六爻，得到「<b>本卦</b>」；把會變的爻翻過來，得到「<b>變卦</b>」（也叫「之卦」）。本卦是現在，變卦是可能的發展方向。</p>
+  <div class="panel">
+    <div class="coins" id="coins"></div>
+    <div class="ctrl" style="justify-content:center">
+      <button class="btn primary" id="tossOne">擲一次</button>
+      <button class="btn" id="tossAll">一次擲完</button>
+      <button class="btn" id="tossReset">重來</button>
+    </div>
+    <ul class="toss" id="tossList" style="margin-top:1rem"></ul>
+    <div id="tossOut" aria-live="polite"></div>
+  </div>
+  <p class="muted" style="font-size:.92rem">提醒：這是認識古人文化的體驗活動。用銅錢或蓍草占卜能預測未來，並沒有科學證據支持。學易經真正有價值的，是它「凡事會變、要看時機、要懂進退」的思考方式。</p>
+  <div class="quizbox"><h3>小試身手</h3><div data-quiz="l12"></div></div>
+</section>
+
+<!-- ================= L13 ================= -->
+<section id="l13">
+  <div class="lesson">第十三課</div>
+  <h2>生活中的易經：成語與名言</h2>
+  <p>你可能每天都在用易經裡的話，只是不知道而已。點卦名可以跳到那一卦：</p>
+  <div class="scroll"><table class="t" id="idiomTable"></table></div>
+  <div class="example"><strong>意思變了的成語：</strong>「群龍無首」在易經裡是<b>吉</b>——一群龍都不爭當老大、平等合作，是好事。今天卻變成「一群人沒有領導、亂成一團」的壞意思。語言也會隨時間變化，這正是「易」的道理。</div>
+  <div class="quizbox"><h3>小試身手</h3><div data-quiz="l13"></div></div>
+</section>
+
+<!-- ================= FINAL ================= -->
+<section id="final">
+  <div class="lesson">期末</div>
+  <h2>總測驗</h2>
+  <p>從十三課裡隨機出 15 題，每次都不一樣。拿到 12 題以上就算畢業！</p>
+  <div class="quizbox"><h3>期末總測驗</h3><div data-quiz="final"></div></div>
+</section>
+
+<!-- ================= GLOSSARY ================= -->
+<section id="gloss">
+  <h2>名詞小辭典</h2>
+  <dl class="gloss" id="glossList"></dl>
+</section>
+</main>
+<footer class="wrap">
+  <p>《易經》是古人觀察自然和人生的智慧結晶。學它最有價值的，是「陰陽平衡、凡事會變化、要懂得看時機」這種思考方式。至於用它算命預測未來，並沒有科學證據支持，當作文化來認識就好。</p>
+  <p>本教材的經文引自傳世本《周易》及《易傳》，白話解說為方便國中生理解所做的簡化，深入研究請參考朱熹《周易本義》等注本。</p>
+</footer>
+<script>
+/* 八卦：b = [初, 二, 三]，1=陽 0=陰（由下往上） */
+const TRI=[
+ {n:'乾',zy:'ㄑㄧㄢˊ',b:[1,1,1],nat:'天',q:'乾三連',xing:'健：剛強、不停止',fam:'父',ani:'馬',body:'頭',dir1:'南',dir2:'西北',
+  src:'《說文解字》說「乾，上出也」，像草木從土裡往上冒出來，有向上、剛健的意思。',
+  ex:'天空日夜運轉從不休息，所以乾代表「剛健」。三條全是陽，是陽氣最滿的卦。'},
+ {n:'兌',zy:'ㄉㄨㄟˋ',b:[1,1,0],nat:'澤',q:'兌上缺',xing:'悅：喜悅',fam:'少女',ani:'羊',body:'口',dir1:'東南',dir2:'西',
+  src:'古字形像一個人張開嘴巴笑，古時和「說」「悅」通用。',
+  ex:'澤是湖泊沼澤，水面平靜、滋潤萬物。上面的缺口就像張開的嘴，說話、歡笑。'},
+ {n:'離',zy:'ㄌㄧˊ',b:[1,0,1],nat:'火',q:'離中虛',xing:'麗：依附、光明',fam:'中女',ani:'雉（野雞）',body:'目',dir1:'東',dir2:'南',
+  src:'「離」本來是一種鳥的名字（黃鸝），後來借用為「麗」，意思是附著在某物上。',
+  ex:'火一定要附著在木柴上才燒得起來。外面兩條陽、中間空，像火焰外亮內虛；眼睛也要靠光才看得見。'},
+ {n:'震',zy:'ㄓㄣˋ',b:[1,0,0],nat:'雷',q:'震仰盂',xing:'動：行動、震動',fam:'長男',ani:'龍',body:'足',dir1:'東北',dir2:'東',
+  src:'雨字頭，《說文》解釋為劈開萬物的響雷，有震動的意思。',
+  ex:'一條陽從最底下往上衝，像春天第一聲雷把冬眠的動物驚醒。腳是讓人「動」起來的部位。'},
+ {n:'巽',zy:'ㄒㄩㄣˋ',b:[0,1,1],nat:'風',q:'巽下斷',xing:'入：進入、順從',fam:'長女',ani:'雞',body:'股（大腿）',dir1:'西南',dir2:'東南',
+  src:'古字形像兩個人恭敬地跪著，有順從、謙讓的意思，引申為像風一樣順勢進入。',
+  ex:'風無孔不入，再小的縫都鑽得進去。下面一條陰像縫隙，風就從那裡溜進去。'},
+ {n:'坎',zy:'ㄎㄢˇ',b:[0,1,0],nat:'水',q:'坎中滿',xing:'陷：危險、困難',fam:'中男',ani:'豕（豬）',body:'耳',dir1:'西',dir2:'北',
+  src:'《說文》說「坎，陷也」，本義是地上的坑洞，所以有「坎坷」這個詞。',
+  ex:'水外表柔軟（兩條陰），裡面卻有力量（中間的陽），能沖垮石頭；掉進水坑也很危險。'},
+ {n:'艮',zy:'ㄍㄣˋ',b:[0,0,1],nat:'山',q:'艮覆碗',xing:'止：停止、穩定',fam:'少男',ani:'狗',body:'手',dir1:'西北',dir2:'東北',
+  src:'古字形是一隻眼睛加上一個回頭的人，像停下腳步回頭瞪著看，所以有「停止」的意思。',
+  ex:'山穩穩地立著不會動，所以代表停止。一條陽壓在最上面，像山頂擋住去路。'},
+ {n:'坤',zy:'ㄎㄨㄣ',b:[0,0,0],nat:'地',q:'坤六斷',xing:'順：溫順、包容',fam:'母',ani:'牛',body:'腹（肚子）',dir1:'北',dir2:'西南',
+  src:'從「土」從「申」，申有伸展的意思，像大地向四面八方延伸。',
+  ex:'大地承載萬物、默默付出，像媽媽一樣包容。三條全是陰，六段斷線所以叫「六斷」。'}
+];
+const FAMFULL={'父':'父親','母':'母親','長男':'長男（大兒子）','中男':'中男（二兒子）','少男':'少男（小兒子）','長女':'長女（大女兒）','中女':'中女（二女兒）','少女':'少女（小女兒）'};
+
+/* 六十四卦：[名, 注音, 上卦, 下卦, 卦辭, 關鍵字, 白話]；上下卦以 TRI 索引：0乾1兌2離3震4巽5坎6艮7坤 */
+const HEXRAW=[
+['乾','ㄑㄧㄢˊ',0,0,'元亨利貞。','剛健','六條全是陽，力量最強，代表天。天日夜運轉從不休息，君子也應該自強不息。'],
+['坤','ㄎㄨㄣ',7,7,'元亨，利牝馬之貞。君子有攸往，先迷後得主，利。西南得朋，東北喪朋。安貞吉。','柔順','六條全是陰，代表地。大地承載萬物、默默付出；要像溫順的母馬一樣跟隨正道，先跟隨別人，之後自然有收穫。'],
+['屯','ㄓㄨㄣ',5,3,'元亨利貞。勿用有攸往，利建侯。','起頭難','雷在雲雨中剛要發動，像小草剛破土而出。萬事起頭難，不要急著亂衝，先打好基礎、找好幫手。'],
+['蒙','ㄇㄥˊ',6,5,'亨。匪我求童蒙，童蒙求我。初筮告，再三瀆，瀆則不告。利貞。','啟蒙','山下有泉水剛冒出來，像小孩剛開始學習。不是老師求學生，是學生要主動求教；問一次老師認真答，同樣的問題亂問很多次，就不回答了。'],
+['需','ㄒㄩ',5,0,'有孚，光亨，貞吉。利涉大川。','等待','水氣（雲）在天上，要等它變成雨。心懷誠信、耐心等待時機，時候到了就能渡過大河。'],
+['訟','ㄙㄨㄥˋ',0,5,'有孚窒惕，中吉，終凶。利見大人，不利涉大川。','爭執','天往上、水往下，方向相反，所以起爭執。吵架適可而止還好，吵到底一定兩敗俱傷；最好找公正的人調解。'],
+['師','ㄕ',7,5,'貞，丈人吉，無咎。','軍隊','地底下藏著水，像百姓中藏著兵力。帶領團隊要走正道，由有經驗、受尊敬的人帶頭才吉利。'],
+['比','ㄅㄧˋ',5,7,'吉。原筮元永貞，無咎。不寧方來，後夫凶。','親近','水在大地上，彼此緊緊相依。大家互相親近團結是好事；猶豫太久、最後才來的人會吃虧。'],
+['小畜','ㄒㄧㄠˇ ㄒㄩˋ',4,0,'亨。密雲不雨，自我西郊。','小累積','風在天上吹，雲很密卻還沒下雨。力量還在一點一點累積，時候未到，要有耐心。'],
+['履','ㄌㄩˇ',0,1,'履虎尾，不咥人，亨。','小心行事','踩到老虎尾巴卻沒被咬（咥，ㄉㄧㄝˊ，咬）。只要態度謙和、按禮節做事，再危險也能平安走過。「履」是鞋子、踩踏，也引申為「禮」。'],
+['泰','ㄊㄞˋ',7,0,'小往大來，吉亨。','通順','地在上、天在下，天氣上升、地氣下降，互相交流，所以萬事通順。春節吉祥話「三陽開泰」就是指泰卦下面三條陽。'],
+['否','ㄆㄧˇ',0,7,'否之匪人，不利君子貞，大往小來。','閉塞','天在上、地在下，各自遠離、不交流，所以閉塞不通。但壞到極點就會轉好，這就是「否極泰來」。'],
+['同人','ㄊㄨㄥˊ ㄖㄣˊ',0,2,'同人于野，亨。利涉大川，利君子貞。','同心','火光照亮天空，大家看得清彼此。在廣闊的原野上與人同心，就能一起渡過難關。'],
+['大有','ㄉㄚˋ ㄧㄡˇ',2,0,'元亨。','豐收','太陽高掛天上，照耀萬物，代表大豐收、擁有很多。擁有越多，越要與人分享。'],
+['謙','ㄑㄧㄢ',7,6,'亨，君子有終。','謙虛','高高的山藏在平平的地底下，有本事卻不炫耀。這是六十四卦裡少見的六爻都好的卦，謙虛的人最後一定有好結果。'],
+['豫','ㄩˋ',3,7,'利建侯行師。','快樂預備','雷從地面響起，萬物歡欣鼓舞。「豫」是快樂，也通「預」，提醒快樂時也要預先準備。'],
+['隨','ㄙㄨㄟˊ',1,3,'元亨利貞，無咎。','跟隨','雷藏在澤水之下安靜休息，像人到了晚上就該休息。懂得跟隨正確的人事與時機，隨機應變。'],
+['蠱','ㄍㄨˇ',6,4,'元亨，利涉大川。先甲三日，後甲三日。','整頓','蠱是器皿裡生了蟲，代表事情已經腐壞，要好好整頓。改革前要仔細想前因，改革後要考慮後果。'],
+['臨','ㄌㄧㄣˊ',7,1,'元亨利貞。至于八月有凶。','來臨','地在澤水之上，居高臨下照顧百姓。好運正在來臨，但好時光不會永遠持續，到了八月可能轉壞。'],
+['觀','ㄍㄨㄢ',4,7,'盥而不薦，有孚顒若。','觀察','風吹過大地，無所不到。祭祀前洗手（盥）那一刻最莊嚴，讓人肅然起敬——以身作則，別人看了自然信服。「觀光」一詞就出自這一卦。'],
+['噬嗑','ㄕˋ ㄏㄜˊ',2,3,'亨。利用獄。','咬合','卦形像嘴裡有東西擋著，要咬碎才能合上嘴。代表用法律和規則除去障礙。噬是咬，嗑是合。'],
+['賁','ㄅㄧˋ',6,2,'亨。小利有攸往。','裝飾','山下有火光映照，景色很美。裝飾打扮有好處，但只是小小的幫助，內在比外表更重要。'],
+['剝','ㄅㄛ',6,7,'不利有攸往。','剝落','五條陰往上逼，只剩最上面一條陽，好東西一層層被剝掉。這時不宜行動，要先保護自己、等待時機。'],
+['復','ㄈㄨˋ',7,3,'亨。出入無疾，朋來無咎。反復其道，七日來復，利有攸往。','重新開始','一條陽從最底下回來了，就像冬至過後白天開始變長。失敗後重新開始，只要回到正道，就會越來越好。'],
+['無妄','ㄨˊ ㄨㄤˋ',0,3,'元亨利貞。其匪正有眚，不利有攸往。','不亂來','天下有雷在響，萬物不敢亂來。真誠做事、不存非分之想就會順利；心術不正則會招來災禍（眚）。'],
+['大畜','ㄉㄚˋ ㄒㄩˋ',6,0,'利貞，不家食吉，利涉大川。','大累積','天被包在山裡，累積了巨大的能量。有才能的人應該出來為大家做事，不要只在家吃閒飯。'],
+['頤','ㄧˊ',6,3,'貞吉。觀頤，自求口實。','養育','上下兩條實線、中間空，像張開的嘴巴。觀察一個人吃什麼、怎麼養活自己，就知道他的修養。頤是臉頰、下巴。'],
+['大過','ㄉㄚˋ ㄍㄨㄛˋ',1,4,'棟橈，利有攸往，亨。','過度','中間四條陽太重、兩頭兩條陰太弱，像屋樑被壓彎了（橈）。非常時期，要有非常的勇氣和行動。'],
+['坎','ㄎㄢˇ',5,5,'習坎，有孚，維心亨，行有尚。','險難','兩個坎疊在一起，一個坑接著一個坑。只要內心誠信堅定、不斷前進，就能走出險境。'],
+['離','ㄌㄧˊ',2,2,'利貞，亨。畜牝牛，吉。','光明','兩團火相連，光明一直延續。火要依附木柴，人也要依附正道；像母牛一樣溫順就吉利。'],
+['咸','ㄒㄧㄢˊ',1,6,'亨，利貞，取女吉。','感應','咸就是「感」少了心，代表不刻意、真心自然的感應。下山上澤，像少男少女互相吸引。'],
+['恆','ㄏㄥˊ',3,4,'亨，無咎，利貞，利有攸往。','恆久','雷和風總是相伴出現。家人朋友相處貴在長久，做事也要持之以恆。'],
+['遯','ㄉㄨㄣˋ',0,6,'亨，小利貞。','退隱','天下有山，山再高也碰不到天。情勢不利時懂得退讓，不是懦弱，而是保全自己的智慧。'],
+['大壯','ㄉㄚˋ ㄓㄨㄤˋ',3,0,'利貞。','強盛','雷在天上響，聲勢浩大。力量越強，越要守正道，不要逞強。'],
+['晉','ㄐㄧㄣˋ',2,7,'康侯用錫馬蕃庶，晝日三接。','前進','太陽從地平線升起，一步一步往上。代表晉升、進步、受到重用。'],
+['明夷','ㄇㄧㄥˊ ㄧˊ',7,2,'利艱貞。','光明受傷','太陽落到地底下，光明被遮住（夷，受傷）。在黑暗艱難的環境裡，先把才華藏起來，默默堅持正道。'],
+['家人','ㄐㄧㄚ ㄖㄣˊ',4,2,'利女貞。','家庭','風從火中生出，家裡的風氣往外傳。家庭要和睦，每個人要盡好自己的本分。'],
+['睽','ㄎㄨㄟˊ',2,1,'小事吉。','分歧','火往上燒、澤水往下流，方向相反。意見不同時，先從小事開始合作。'],
+['蹇','ㄐㄧㄢˇ',5,6,'利西南，不利東北。利見大人，貞吉。','艱難','前面有水、後面有山，寸步難行。遇到困難要停下來反省自己，並找有智慧的人幫忙。'],
+['解','ㄐㄧㄝˇ',3,5,'利西南。無所往，其來復吉。有攸往，夙吉。','解除','春雷一響、春雨落下，冬天的困境解除了。問題解決後，要趕快恢復正常，不要拖拖拉拉。'],
+['損','ㄙㄨㄣˇ',6,1,'有孚，元吉，無咎，可貞，利有攸往。曷之用？二簋可用享。','減少','減少自己、成全別人。只要真誠，兩碗（簋）簡單的食物也能拿來祭祀——心意比排場重要。'],
+['益','ㄧˋ',4,3,'利有攸往，利涉大川。','增加','風雷互相助長。在上位的人減少自己、分給下面的人，大家都受益，這時適合做大事。'],
+['夬','ㄍㄨㄞˋ',1,0,'揚于王庭，孚號有厲。告自邑，不利即戎，利有攸往。','果決','五條陽要除掉最上面的一條陰。要光明正大、果斷，但不要靠武力解決。'],
+['姤','ㄍㄡˋ',0,4,'女壯，勿用取女。','相遇','天下有風，無所不遇。一條陰突然在最下面出現，不期而遇。小問題剛冒頭就要留意。'],
+['萃','ㄘㄨㄟˋ',1,7,'亨。王假有廟，利見大人，亨，利貞。用大牲吉，利有攸往。','聚集','澤水聚集在大地上。人才和資源聚集時，要有好的領導、真誠的心，才能成就大事。'],
+['升','ㄕㄥ',7,4,'元亨，用見大人，勿恤，南征吉。','上升','樹苗從地底長出來，一點一點往上長高。循序漸進，就能步步高升。'],
+['困','ㄎㄨㄣˋ',1,5,'亨，貞，大人吉，無咎，有言不信。','困境','水在澤的下面，澤裡的水漏光了。在困境中說什麼別人都不信，要靠行動證明自己；堅持下去終會脫困。'],
+['井','ㄐㄧㄥˇ',5,4,'改邑不改井，無喪無得，往來井井。汔至，亦未繘井，羸其瓶，凶。','資源共享','村子可以搬家，井卻搬不走；井水取不完也不會滿出來，大家都能用。但打水的瓶子若在快到井口時摔破，就前功盡棄。'],
+['革','ㄍㄜˊ',1,2,'己日乃孚，元亨利貞，悔亡。','改革','澤中有火，水火相剋，代表改變。改革要選對時機，等大家都信服了才會成功。'],
+['鼎','ㄉㄧㄥˇ',2,4,'元吉，亨。','建立新秩序','鼎是煮食物的大鍋，也是國家權力的象徵。卦形就像一只鼎：有腳、有腹、有耳。革是去掉舊的，鼎是建立新的。'],
+['震','ㄓㄣˋ',3,3,'亨。震來虩虩，笑言啞啞。震驚百里，不喪匕鬯。','警惕','雷聲一波接一波嚇人，但準備好的人照樣談笑自若。雷聲震驚百里，主持祭祀的人手上的湯匙（匕）和香酒（鬯）都沒掉。'],
+['艮','ㄍㄣˋ',6,6,'艮其背，不獲其身；行其庭，不見其人，無咎。','停止','兩座山重疊，穩穩不動。該停就停，不被外界干擾，心靜下來就沒有過錯。'],
+['漸','ㄐㄧㄢˋ',4,6,'女歸吉，利貞。','循序漸進','山上的樹慢慢長高。就像古代女子出嫁，要按照禮節一步一步來，急不得。'],
+['歸妹','ㄍㄨㄟ ㄇㄟˋ',3,1,'征凶，無攸利。','順序','「歸妹」是嫁妹妹。卦裡代表少女的兌主動追隨代表長男的震，古人認為不合禮節順序。提醒做事要按正當程序，急著前進反而不好。'],
+['豐','ㄈㄥ',3,2,'亨，王假之，勿憂，宜日中。','豐盛','雷電交加，聲勢盛大。就像正中午的太陽最亮，但過了中午就會西斜——盛大時更要珍惜。'],
+['旅','ㄌㄩˇ',2,6,'小亨，旅貞吉。','旅行','山上的火一處燒過一處，不停移動，像旅人在外。出門在外，要謹慎守規矩。'],
+['巽','ㄒㄩㄣˋ',4,4,'小亨，利有攸往，利見大人。','順入','兩陣風接連吹來，無孔不入。溫和、順勢而為，就能深入人心。'],
+['兌','ㄉㄨㄟˋ',1,1,'亨，利貞。','喜悅','兩個湖泊相連，互相滋潤。朋友之間互相學習討論，是最快樂的事。'],
+['渙','ㄏㄨㄢˋ',4,5,'亨。王假有廟，利涉大川，利貞。','渙散','風吹過水面，水波散開。人心渙散時，要靠共同的信念把大家重新凝聚起來。'],
+['節','ㄐㄧㄝˊ',5,1,'亨。苦節不可貞。','節制','澤的容量有限，水多了要節制。但節制過頭、苦苦壓抑自己，也不能長久。'],
+['中孚','ㄓㄨㄥ ㄈㄨˊ',4,1,'豚魚吉，利涉大川，利貞。','誠信','中間兩條陰是空的，像一顆虛心的心。真誠的力量大到連小豬和魚都能被感動。'],
+['小過','ㄒㄧㄠˇ ㄍㄨㄛˋ',3,6,'亨，利貞。可小事，不可大事。飛鳥遺之音，不宜上宜下，大吉。','小有過度','卦形像一隻展翅的飛鳥。可以做小事，不宜做大事；鳥不要飛太高，往下才安全。'],
+['既濟','ㄐㄧˋ ㄐㄧˋ',5,2,'亨小，利貞。初吉終亂。','已完成','水在火上，像一鍋水煮開了，事情已經完成。但完成之後最容易鬆懈，一開始好、最後可能亂。'],
+['未濟','ㄨㄟˋ ㄐㄧˋ',2,5,'亨。小狐汔濟，濡其尾，無攸利。','未完成','火在水上，還沒碰在一起，事情還沒完成。小狐狸快過河時弄濕了尾巴——最後關頭最要小心。這是最後一卦，代表變化永遠不會結束。']
+];
+
+/* 卦辭常用字 */
+const TERMS=[
+ {t:'元亨利貞',s:'乾卦的四種美德',d:'《文言傳》說：元是善的開始，亨是美好的會合，利是恰當合宜，貞是做事的根本。'},
+ {t:'利涉大川',s:'適合冒險做大事',d:'古代沒有橋，渡河很危險。「適合渡過大河」引申為可以去挑戰困難的大事。'},
+ {t:'利見大人',s:'適合拜見有德望的人',d:'「大人」是有德行又有地位的人。遇到事情適合去請教、求助他們。'},
+ {t:'有攸往',s:'有要去做的事',d:'攸就是「所」，「有攸往」是有地方要去、有事情要做。'},
+ {t:'無咎',s:'沒有過錯或災禍',d:'咎是災禍、過錯。《繫辭》說「無咎者，善補過也」——犯了錯能補救，就沒事。'},
+ {t:'元吉',s:'大吉',d:'元是最大、最初，元吉就是最好的吉。'},
+ {t:'元',s:'開始、大',d:'本義是人的頭（所以國家領導叫「元首」），引申為第一、最大。'},
+ {t:'亨',s:'通順',d:'古時和「享」同一個字，本是祭祀時獻上供品；神明接受了，事情就通了。'},
+ {t:'利',s:'適合、有好處',d:'字形是用刀（刂）收割禾苗，有收成、有好處。'},
+ {t:'貞',s:'占問；堅守正道',d:'在甲骨文裡「貞」就是「問卜」的意思。後來的學者解釋成「正」，也就是堅守正道。'},
+ {t:'孚',s:'誠信',d:'本義是鳥用爪子翻動、孵蛋。鳥孵蛋天數固定、從不失誤，所以引申為守信用。'},
+ {t:'吉',s:'好、順利',d:'占卜得到好結果。'},
+ {t:'凶',s:'壞、危險的結果',d:'字形像人掉進地上的陷阱（凵）裡，表示災禍。'},
+ {t:'悔',s:'有懊悔，但會改善',d:'犯了小錯而後悔，因為肯改，情況會往好的方向轉。'},
+ {t:'吝',s:'有遺憾，會越來越差',d:'吝（ㄌㄧㄣˋ）是遺憾、不長進。不肯改，情況會慢慢變壞。'},
+ {t:'厲',s:'危險，要警惕',d:'本義是磨刀石，磨刀要小心，引申為嚴厲、危險。'},
+ {t:'咎',s:'災禍、過錯',d:'由「人」和「各」組成，表示人與人之間起了不和，招來災禍。'},
+ {t:'眚',s:'災禍',d:'眚（ㄕㄥˇ）本義是眼睛生病、看不清楚，引申為過失、災禍。'},
+ {t:'征',s:'出行、出兵',d:'往前走、遠行，也指出兵打仗。'},
+ {t:'君子',s:'品德高尚的人',d:'原本指貴族（國君之子），後來指品德高尚的人。'},
+ {t:'大人',s:'有德有位的人',d:'有德行、又有地位的人。'},
+ {t:'小人',s:'普通人；品德差的人',d:'原本指平民百姓，後來多指品德不好的人。'}
+];
+
+/* 成語 */
+const IDIOMS=[
+ {i:'自強不息',src:'乾卦',h:'乾',m:'努力向上、永不停止。出自象傳「天行健，君子以自強不息」。'},
+ {i:'厚德載物',src:'坤卦',h:'坤',m:'用寬厚的品德包容萬物。出自象傳「地勢坤，君子以厚德載物」。'},
+ {i:'亢龍有悔',src:'乾卦',h:'乾',m:'爬到最高還不知收斂，就會後悔。出自乾卦上九。'},
+ {i:'群龍無首',src:'乾卦',h:'乾',m:'原指大家平等合作（吉），今天指沒有領導、一團亂。出自乾卦用九。'},
+ {i:'九五之尊',src:'乾卦',h:'乾',m:'指皇帝的地位。第五爻最尊貴，乾卦九五是「飛龍在天」。'},
+ {i:'履霜堅冰至',src:'坤卦',h:'坤',m:'踩到霜，就知道結冰的日子快到了，比喻從小徵兆看出大趨勢。出自坤卦初六。'},
+ {i:'否極泰來',src:'否卦、泰卦',h:'否',m:'壞到極點就會轉好。由否、泰兩卦而來。'},
+ {i:'三陽開泰',src:'泰卦',h:'泰',m:'新年吉祥話，冬去春來、好運開始。泰卦下面三條陽，古人對應農曆正月。',noq:1},
+ {i:'謙謙君子',src:'謙卦',h:'謙',m:'謙虛有禮的人。出自謙卦初六。'},
+ {i:'虎視眈眈',src:'頤卦',h:'頤',m:'像老虎一樣緊盯著目標。出自頤卦六四。'},
+ {i:'突如其來',src:'離卦',h:'離',m:'事情突然發生。出自離卦九四。'},
+ {i:'匪夷所思',src:'渙卦',h:'渙',m:'不是平常人想得到的（匪＝非，夷＝平常）。出自渙卦六四。'},
+ {i:'觀光',src:'觀卦',h:'觀',m:'原指觀察一個國家政治的光輝，今天指旅遊。出自觀卦六四「觀國之光」。'},
+ {i:'革故鼎新',src:'雜卦傳',h:'革',m:'去掉舊的、建立新的。《雜卦傳》說「革，去故也；鼎，取新也」。'},
+ {i:'洗心革面',src:'繫辭傳與革卦',h:'革',m:'徹底改過自新。由《繫辭》「聖人以此洗心」和革卦上六「小人革面」合成。',noq:1},
+ {i:'窮則變，變則通',src:'繫辭傳',h:null,m:'走投無路就要改變，改變了才能通達。原文「易窮則變，變則通，通則久」。'},
+ {i:'二人同心，其利斷金',src:'繫辭傳',h:null,m:'兩人同心，力量大到能切斷金屬。'},
+ {i:'物以類聚',src:'繫辭傳',h:null,m:'同類的東西聚在一起。原文「方以類聚，物以群分」。'},
+ {i:'殊途同歸',src:'繫辭傳',h:null,m:'走不同的路，到達同一個地方。原文「天下同歸而殊塗」。'},
+ {i:'見仁見智',src:'繫辭傳',h:null,m:'同一件事，每個人看法不同。原文「仁者見之謂之仁，知者見之謂之知」。'},
+ {i:'同聲相應，同氣相求',src:'文言傳',h:'乾',m:'志趣相同的人會互相吸引。出自乾卦文言傳。'},
+ {i:'積善之家，必有餘慶',src:'文言傳',h:'坤',m:'常做好事的家庭，福氣會延續到子孫。出自坤卦文言傳。'},
+ {i:'言有物，行有恆',src:'家人卦',h:'家人',m:'說話要有內容，做事要有恆心。出自家人卦象傳。'}
+];
+
+/* 乾卦六龍 */
+const DRAGON=[
+ {y:'初九',c:'潛龍勿用。',b:'龍還潛藏在深水裡，本事還不夠，先別急著表現。就像剛入學的新生，先打好基礎。'},
+ {y:'九二',c:'見龍在田，利見大人。',b:'龍出現在田野上，開始被人看見（見，ㄒㄧㄢˋ，出現）。適合去拜見能指導、提拔你的人。'},
+ {y:'九三',c:'君子終日乾乾，夕惕若厲，無咎。',b:'整天努力不懈，晚上還要反省警惕，好像身處危險一樣小心，這樣就不會出錯。'},
+ {y:'九四',c:'或躍在淵，無咎。',b:'龍試著從深淵往上跳，可能飛上去，也可能退回來。保持彈性、看準時機，就沒有過錯。'},
+ {y:'九五',c:'飛龍在天，利見大人。',b:'龍飛上天空，到達最高成就。「九五之尊」就是從這裡來的。'},
+ {y:'上九',c:'亢龍有悔。',b:'龍飛得太高、不知道停下來，就會後悔。物極必反，懂得收斂才是智慧。'},
+ {y:'用九',c:'見群龍無首，吉。',b:'只有乾卦才有的「用九」：一群龍都不爭當老大，大家平等合作，所以吉利。'}
+];
+
+/* 乾卦書頁 */
+const BOOK=[
+ {k:'卦畫',show:'pic',d:'六條線組成的符號，由下往上讀。乾卦六條全是陽爻。卦畫是整部易經的根本，文字都是後來加上去解釋它的。'},
+ {k:'卦名',show:'乾',d:'這一卦的名字。六十四卦的卦名，常常是從卦辭或爻辭裡挑出的關鍵字。'},
+ {k:'卦辭',show:'元亨利貞。',d:'說明整個卦的文字，相傳是周文王所寫。「元亨利貞」是四種美德，第十課會教。'},
+ {k:'爻辭',show:'初九：潛龍勿用。 九二：見龍在田，利見大人。 …… 上九：亢龍有悔。 用九：見群龍無首，吉。',d:'說明每一條爻的文字，相傳是周公所寫。一卦六條，六十四卦共 384 條；乾、坤各多一條「用九」「用六」，總共 386 條。'},
+ {k:'彖傳',show:'彖曰：大哉乾元，萬物資始，乃統天。',d:'這已經屬於「傳」，是後人的解說。彖傳解釋卦辭：偉大的乾元啊，萬物都靠它開始，它統領著天。'},
+ {k:'象傳',show:'象曰：天行健，君子以自強不息。',d:'大象傳用自然景象教人做人：天的運行剛健不停，君子也要自強不息。每條爻還有一句「小象」解釋爻辭。'},
+ {k:'文言傳',show:'文言曰：元者，善之長也；亨者，嘉之會也；利者，義之和也；貞者，事之幹也。',d:'只有乾、坤兩卦才有的文言傳，用優美的文字深入解說。這句把元亨利貞解釋成四種美德。'}
+];
+
+/* 名詞小辭典 */
+const GLOSS=[
+ ['易','變化。有「日月為易」和「蜥蜴變色」兩種說法。包含變易、不易、簡易三義。'],
+ ['周易','周朝的易書，就是《易經》的本名。另有傳說中的《連山》《歸藏》，已失傳。'],
+ ['經','本文，即六十四卦的卦畫、卦名、卦辭、爻辭。本義是織布的直線。'],
+ ['易傳','解說經文的十篇文章，又叫「十翼」（翼＝翅膀）。'],
+ ['上經 下經','六十四卦分兩部分：乾到離三十卦為上經，咸到未濟三十四卦為下經。'],
+ ['數字卦','商周時代刻在甲骨、青銅器上的一組組占卜數字，是陰陽爻的前身。'],
+ ['三才','天、地、人。八卦三爻、六十四卦六爻都以此為根據。'],
+ ['爻','卦中的每一條線。字形像線條交錯，意思是「交」「效」。'],
+ ['陽爻 陰爻','實線是陽，斷線是陰。陰陽原指山的背光面和向光面。'],
+ ['卦','由爻組成的符號。「卦者掛也」，把形象掛出來給人看。'],
+ ['太極','萬物的源頭。「極」原是屋頂最高的大樑。'],
+ ['兩儀','陰與陽兩種基本樣貌。儀＝樣子、準則。'],
+ ['四象','太陽、少陰、少陽、太陰，常比喻為夏秋春冬。'],
+ ['經卦','三條線的卦，也就是八卦。'],
+ ['別卦 重卦','六條線的卦，也就是六十四卦，由兩個經卦上下重疊而成。'],
+ ['上卦 下卦','六爻卦的上半與下半，也叫外卦與內卦。'],
+ ['八純卦','上下卦相同的八個卦，全名叫「某為某」，如乾為天。'],
+ ['先天八卦','傳說伏羲所畫的八卦排列，乾南坤北，講陰陽對稱。'],
+ ['後天八卦','傳說周文王所排的八卦排列，離南坎北，講季節方位。'],
+ ['初 上','第一爻叫初（指時間的開始），第六爻叫上（指位置最高）。'],
+ ['九 六','陽爻稱九，陰爻稱六。9 是老陽、6 是老陰，都是會變的數。'],
+ ['當位','陽爻在奇數位、陰爻在偶數位，又叫得正。'],
+ ['得中','第二爻和第五爻，分別在下卦和上卦的正中間。'],
+ ['應','初與四、二與五、三與上兩兩相對；一陰一陽叫有應。'],
+ ['綜卦','把卦上下顛倒得到的卦，又叫覆卦。'],
+ ['錯卦','把每一爻陰陽全部相反得到的卦，又叫旁通卦。'],
+ ['互卦','取二三四爻為下卦、三四五爻為上卦組成的卦。'],
+ ['卦辭','說明整卦的文字，相傳周文王所作。'],
+ ['爻辭','說明每一爻的文字，共三百八十六條，相傳周公所作。'],
+ ['本卦 變卦','占得的卦叫本卦；老陽老陰變化後得到的叫變卦或之卦。'],
+ ['卜 筮','卜是燒龜甲看裂紋；筮是數蓍草算卦，《周易》用的是筮。'],
+ ['伏羲','神話中的上古帝王，傳說「仰觀天象、俯察地理」創造了八卦。'],
+ ['周文王','周朝的奠基者，傳說他把八卦推演成六十四卦並寫卦辭。']
+];
+
+/* 卦名次序歌（朱熹《周易本義》） */
+const SONG=[
+ '{乾}{坤}{屯}{蒙}{需}{訟}{師}，{比}{小畜}兮{履}{泰}{否}。',
+ '{同人}{大有}{謙}{豫}{隨}，{蠱}{臨}{觀}兮{噬嗑}{賁}。',
+ '{剝}{復}{無妄}{大畜}{頤}，{大過}{坎}{離}三十備。',
+ '{咸}{恆}{遯}兮及{大壯}，{晉}與{明夷}{家人}{睽}。',
+ '{蹇}{解}{損}{益}{夬}{姤}{萃}，{升}{困}{井}{革}{鼎}{震}繼。',
+ '{艮}{漸}{歸妹}{豐}{旅}{巽}，{兌}{渙}{節}兮{中孚}至。',
+ '{小過}{既濟}兼{未濟}，是為下經三十四。'
+];
+/* ========== helpers ========== */
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const rnd=n=>Math.floor(Math.random()*n);
+const pick=a=>a[rnd(a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;};
+function lines(bits,cls='',o={}){
+  let h=`<div class="tri ${cls}" aria-hidden="true">`;
+  for(let i=bits.length-1;i>=0;i--){
+    const c=[];if(o.hl===i)c.push('new');if(o.up&&i>2)c.push('up');if(o.chg&&o.chg.includes(i))c.push('chg');
+    h+=`<div class="ln ${c.join(' ')}">${bits[i]?'<i></i>':'<i></i><i></i>'}</div>`;
+  }
+  return h+'</div>';
+}
+const taijiSVG=(r)=>`<svg width="${r*2}" height="${r*2}" viewBox="-42 -42 84 84" aria-hidden="true"><circle r="40" fill="var(--yangFill)" stroke="var(--ink)" stroke-width="2"/><path d="M0,-40 A40,40 0 0,1 0,40 A20,20 0 0,1 0,0 A20,20 0 0,0 0,-40Z" fill="var(--yinFill)"/><circle cy="-20" r="6" fill="var(--yinFill)"/><circle cy="20" r="6" fill="var(--yangFill)"/></svg>`;
+
+/* ========== hexagram model ========== */
+const HEX=HEXRAW.map((r,i)=>{
+  const [n,zy,up,dn,ci,key,bai]=r;
+  const bits=[...TRI[dn].b,...TRI[up].b];
+  const full=up===dn?`${TRI[up].n}為${TRI[up].nat}`:`${TRI[up].nat}${TRI[dn].nat}${n}`;
+  return {no:i+1,n,zy,up,dn,ci,key,bai,bits,full};
+});
+const BYBITS={};HEX.forEach(h=>BYBITS[h.bits.join('')]=h);
+const hexOf=b=>BYBITS[b.join('')];
+const HEXBY=TRI.map((_,u)=>TRI.map((_,d)=>HEX.find(h=>h.up===u&&h.dn===d)));
+const HEXBYNAME={};HEX.forEach(h=>HEXBYNAME[h.n]=h);
+const triOf=b=>TRI.find(t=>t.b.join('')===b.join(''));
+const zongOf=h=>hexOf(h.bits.slice().reverse());
+const cuoOf=h=>hexOf(h.bits.map(x=>1-x));
+const huOf=h=>{const b=h.bits;return hexOf([b[1],b[2],b[3],b[2],b[3],b[4]]);};
+const POS=['初','二','三','四','五','上'];
+const yaoName=(i,v)=>{const n=v?'九':'六';return i===0?'初'+n:i===5?'上'+n:n+POS[i];};
+function fillHexSelect(sel,def=0){HEX.forEach((h,i)=>sel.add(new Option(`${h.no}. ${h.full}`,i)));sel.value=def;}
+function markTerms(text){
+  const list=TERMS.map(t=>t.t).sort((a,b)=>b.length-a.length);let out='',i=0;
+  while(i<text.length){const m=list.find(t=>text.startsWith(t,i));
+    if(m){out+=`<span class="term" role="button" tabindex="0" data-t="${m}">${m}</span>`;i+=m.length;}else{out+=text[i];i++;}}
+  return out;
+}
+document.addEventListener('click',e=>{const t=e.target.closest('.term');if(!t)return;showTerm(t);});
+document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('term')){e.preventDefault();showTerm(e.target);}});
+function showTerm(el){const d=TERMS.find(x=>x.t===el.dataset.t);const box=el.closest('.panel').querySelector('.termout');if(d&&box)box.innerHTML=`<b>${d.t}</b>：${d.s}。${d.d}`;}
+
+/* ========== progress & nav ========== */
+const LESSONS=[['l1','1 認識易經'],['l2','2 符號由來'],['l3','3 陰陽'],['l4','4 太極到八卦'],['l5','5 八卦'],['l6','6 先天後天'],['l7','7 重卦'],['l8','8 爻位'],['l9','9 錯綜互'],['l10','10 讀卦辭'],['l11','11 六十四卦'],['l12','12 古人占卦'],['l13','13 成語'],['final','總測驗']];
+let PROG={};try{PROG=JSON.parse(localStorage.getItem('baguaProg')||'{}');}catch(e){PROG={};}
+function renderNav(){
+  $('#navin').innerHTML=`<a href="#top">開始</a>`+LESSONS.map(([id,t])=>`<a href="#${id}" class="${PROG[id]?'done':''}">${t}</a>`).join('')+`<a href="#gloss">辭典</a>`;
+  const n=LESSONS.filter(([id])=>PROG[id]).length;$('#progbar').style.width=(n/LESSONS.length*100)+'%';
+}
+function markDone(id,s,t){const old=PROG[id];if(!old||s>old.s)PROG[id]={s,t};try{localStorage.setItem('baguaProg',JSON.stringify(PROG));}catch(e){}renderNav();}
+renderNav();
+
+/* ========== hero: 太極→八卦 ========== */
+const GEN=[
+ {cap:'太極',cols:1,nodes:[{html:taijiSVG(34),lab:'太極'}],say:'一開始只有「太極」：一團還沒分開的整體，就像還沒孵化的蛋。按「下一步」讓它分開。'},
+ {cap:'兩儀：畫出第一條線',cols:2,nodes:[{b:[1],lab:'陽'},{b:[0],lab:'陰'}],say:'太極分成兩半：<b>陽</b>（實線）和<b>陰</b>（斷線），這就是「兩儀」。1 條線，2 種可能。'},
+ {cap:'四象：每個再往上加一條',cols:4,nodes:[{b:[1,1],lab:'太陽',s:'夏'},{b:[1,0],lab:'少陰',s:'秋'},{b:[0,1],lab:'少陽',s:'春'},{b:[0,0],lab:'太陰',s:'冬'}],say:'在每條線<b>上面</b>各加一條陽或陰（紅色是新加的），得到「四象」。2 條線，4 種可能。'},
+ {cap:'八卦：再往上加一條',cols:8,nodes:TRI.map(t=>({b:t.b,lab:t.n,s:t.nat})),say:'再加一次，得到<b>八卦</b>！3 條線，8 種可能。從左到右：乾、兌、離、震、巽、坎、艮、坤，這就是傳說中伏羲的排列順序。'}
+];
+let gStep=0;
+function renderGen(){
+  const box=$('#genRows');box.innerHTML='';
+  GEN.forEach((g,i)=>{
+    const row=document.createElement('div');row.className='gen-row';row.style.gridTemplateColumns=`repeat(${g.cols},1fr)`;
+    let h=`<div class="cap">${g.cap}</div>`;
+    g.nodes.forEach(n=>{const sym=n.html||lines(n.b,i===3?'sm':'md',{hl:i===gStep&&i>1?n.b.length-1:-1});
+      h+=`<div class="node">${sym}<span class="lab">${n.lab}</span>${n.s?`<span class="muted">${n.s}</span>`:''}</div>`;});
+    row.innerHTML=h;box.appendChild(row);
+    if(i<=gStep)requestAnimationFrame(()=>requestAnimationFrame(()=>row.classList.add('show')));else row.style.visibility='hidden';
+  });
+  $('#genSay').innerHTML=GEN[gStep].say;$('#genPrev').disabled=gStep===0;$('#genNext').disabled=gStep===GEN.length-1;
+}
+$('#genNext').onclick=()=>{if(gStep<3){gStep++;renderGen();}};
+$('#genPrev').onclick=()=>{if(gStep>0){gStep--;renderGen();}};
+$('#genReset').onclick=()=>{gStep=0;renderGen();};
+renderGen();
+
+/* ========== L1 book ========== */
+(function(){
+  const box=$('#book');const qian=HEX[0];
+  const top=document.createElement('div');top.style.cssText='display:flex;gap:.6rem;align-items:stretch;flex-wrap:wrap';
+  BOOK.forEach((b,i)=>{
+    const btn=document.createElement('button');btn.className='pp';btn.setAttribute('aria-pressed','false');
+    btn.innerHTML=`<span class="tag">${b.k}</span>`+(b.show==='pic'?lines(qian.bits,'hx'):i===1?`<span style="font-size:2.4rem;font-weight:900;line-height:1.2">${b.show}</span>`:b.show);
+    btn.onclick=()=>{$$('#book .pp').forEach(x=>x.setAttribute('aria-pressed','false'));btn.setAttribute('aria-pressed','true');
+      $('#anat').innerHTML=`<b style="font-family:var(--serif);font-size:1.1rem">${b.k}</b>　${i<4?'<span class="muted">（屬於「經」）</span>':'<span class="muted">（屬於「傳」）</span>'}<br>${b.d}`;};
+    (i<2?top:box).appendChild(btn);
+  });
+  box.prepend(top);
+})();
+
+/* ========== L2 數字卦 ========== */
+const NUMPOOL=[1,5,6,7,8,9];const CN={1:'一',5:'五',6:'六',7:'七',8:'八',9:'九'};
+let numState=[7,8,7,6,6,6];
+function renderNums(){
+  const box=$('#nums');box.innerHTML='';
+  for(let i=5;i>=0;i--){const b=document.createElement('button');b.textContent=CN[numState[i]];
+    b.setAttribute('aria-label',`第${i+1}個數字 ${CN[numState[i]]}，點一下更換`);
+    b.onclick=()=>{numState[i]=NUMPOOL[(NUMPOOL.indexOf(numState[i])+1)%NUMPOOL.length];renderNums();};box.appendChild(b);}
+  const bits=numState.map(n=>n%2);const h=hexOf(bits);
+  $('#numOut').innerHTML=`${lines(bits,'hx',{up:true})}<div class="bigname" style="font-size:1.4rem;margin-top:.5rem">${h.full}</div><div class="muted" style="font-size:.85rem">第 ${h.no} 卦</div>`;
+}
+$('#numRoll').onclick=()=>{numState=numState.map(()=>pick(NUMPOOL));renderNums();};
+renderNums();
+
+/* ========== L3 lamps ========== */
+const lampState=[0,0,0];
+function renderLamps(){
+  const box=$('#lamps');box.innerHTML='';
+  ['第一盞','第二盞','第三盞'].forEach((l,i)=>{
+    const d=document.createElement('div');d.className='lampbox';
+    d.innerHTML=`<button class="lamp ${lampState[i]?'on':''}" aria-label="${l}燈，目前${lampState[i]?'開':'關'}" aria-pressed="${!!lampState[i]}"></button><span style="font-size:.85rem">${lampState[i]?'開＝陽':'關＝陰'}</span>`;
+    d.querySelector('button').onclick=()=>{lampState[i]^=1;renderLamps();};box.appendChild(d);
+  });
+  const t=triOf(lampState.slice());
+  const d=document.createElement('div');d.className='lampbox';d.innerHTML=`${lines(lampState,'md')}<span style="font-size:.85rem">${t.n}（${t.nat}）</span>`;box.appendChild(d);
+}
+renderLamps();
+
+/* ========== L5 bagua ========== */
+let cur=0;
+function renderCards(){
+  const box=$('#bagua');box.innerHTML='';
+  TRI.forEach((t,i)=>{const b=document.createElement('button');b.className='gua';b.setAttribute('aria-pressed',i===cur);
+    b.innerHTML=`${lines(t.b,'md')}<span class="nm">${t.n}</span><span class="nt">${t.nat}</span>`;b.onclick=()=>{cur=i;renderCards();};box.appendChild(b);});
+  const t=TRI[cur];
+  $('#detail').innerHTML=`${lines(t.b,'lg')}<div><h3>${t.n}<span class="zy"> ${t.zy}</span>・${t.nat}</h3><div class="chant">口訣：${t.q}</div><p><b>字的由來：</b>${t.src}</p><p>${t.ex}</p><dl class="kv"><dt>性質</dt><dd>${t.xing}</dd><dt>家庭</dt><dd>${FAMFULL[t.fam]}</dd><dt>動物</dt><dd>${t.ani}</dd><dt>身體</dt><dd>${t.body}</dd><dt>方位</dt><dd>先天在${t.dir1}，後天在${t.dir2}</dd></dl></div>`;
+}
+renderCards();
+$('#triTable').innerHTML=`<tr><th>卦</th><th>自然</th><th>性質</th><th>家人</th><th>動物</th><th>身體</th></tr>`+TRI.map(t=>`<tr><td><span style="display:flex;gap:.5rem;align-items:center">${lines(t.b,'xs')}<b style="font-family:var(--serif)">${t.n}</b></span></td><td>${t.nat}</td><td>${t.xing.split('：')[0]}</td><td>${t.fam}</td><td>${t.ani}</td><td>${t.body}</td></tr>`).join('');
+$('#chants').innerHTML=TRI.map(t=>`<span>${lines(t.b,'sm')}${t.q}</span>`).join('');
+
+/* ========== L6 circle ========== */
+const DIRANG={'南':-90,'西南':-45,'西':0,'西北':45,'北':90,'東北':135,'東':180,'東南':225};
+const svg=$('#circle');const angNow=TRI.map(t=>DIRANG[t.dir1]);
+(function build(){
+  let h=`<circle cx="200" cy="200" r="190" fill="none" stroke="var(--rule)" stroke-width="1.5"/><circle cx="200" cy="200" r="100" fill="none" stroke="var(--rule)" stroke-width="1" stroke-dasharray="3 5"/>`;
+  Object.entries(DIRANG).forEach(([d,a])=>{const r=78,x=200+r*Math.cos(a*Math.PI/180),y=200+r*Math.sin(a*Math.PI/180);h+=`<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" font-size="13" fill="var(--soft)">${d}</text>`;});
+  h+=`<g class="spin"><g transform="translate(200 200) scale(1.1)"><circle r="40" fill="var(--yangFill)" stroke="var(--ink)" stroke-width="2"/><path d="M0,-40 A40,40 0 0,1 0,40 A20,20 0 0,1 0,0 A20,20 0 0,0 0,-40Z" fill="var(--yinFill)"/><circle cy="-20" r="6" fill="var(--yinFill)"/><circle cy="20" r="6" fill="var(--yangFill)"/></g></g>`;
+  TRI.forEach((t,i)=>{let ls='';t.b.forEach((v,k)=>{const y=12-k*12;
+    ls+=v?`<rect x="-22" y="${y-3.5}" width="44" height="7" rx="1.5" fill="var(--ink)"/>`:`<rect x="-22" y="${y-3.5}" width="18" height="7" rx="1.5" fill="var(--ink)"/><rect x="4" y="${y-3.5}" width="18" height="7" rx="1.5" fill="var(--ink)"/>`;});
+    h+=`<g id="tg${i}">${ls}</g><text id="tl${i}" text-anchor="middle" dominant-baseline="central" font-size="17" font-weight="900" fill="var(--seal)" style="font-family:var(--serif)">${t.n}${t.nat}</text>`;});
+  svg.innerHTML=h;
+})();
+function place(){TRI.forEach((t,i)=>{const a=angNow[i],r=a*Math.PI/180;
+  svg.querySelector('#tg'+i).setAttribute('transform',`translate(${200+140*Math.cos(r)} ${200+140*Math.sin(r)}) rotate(${a+90})`);
+  const l=svg.querySelector('#tl'+i);l.setAttribute('x',200+178*Math.cos(r));l.setAttribute('y',200+178*Math.sin(r));});}
+function goCircle(which){
+  $('#bXian').setAttribute('aria-pressed',which==='dir1');$('#bHou').setAttribute('aria-pressed',which==='dir2');
+  const from=angNow.slice();const to=TRI.map((t,i)=>{const a=DIRANG[t[which]];const d=((a-from[i])%360+540)%360-180;return from[i]+d;});
+  const dur=matchMedia('(prefers-reduced-motion: reduce)').matches?1:1200,st=performance.now();
+  (function f(now){const p=Math.min(1,(now-st)/dur),e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;TRI.forEach((_,i)=>angNow[i]=from[i]+(to[i]-from[i])*e);place();if(p<1)requestAnimationFrame(f);})(st);
+  $('#circleSay').innerHTML=which==='dir1'
+   ?'<b>先天八卦</b>講「對稱」：天（乾）在上、地（坤）在下，火（離）和水（坎）左右相對，雷（震）對風（巽），山（艮）對澤（兌）。每一組對面的兩個卦，陰陽剛好完全相反。《說卦傳》說「天地定位，山澤通氣，雷風相薄，水火不相射」就是在講這個。'
+   :'<b>後天八卦</b>講「季節和方位」：火（離）在南方，因為南方熱；水（坎）在北方，因為北方冷；雷（震）在東方，代表春天萬物開始活動；澤（兌）在西方，代表秋天收成的喜悅。古代看方位、定建築朝向多半用這個。';
+}
+$('#bXian').onclick=()=>goCircle('dir1');$('#bHou').onclick=()=>goCircle('dir2');
+place();goCircle('dir1');
+
+/* ========== L7 combiner & matrix ========== */
+const selU=$('#selUp'),selD=$('#selDn');
+TRI.forEach((t,i)=>{selU.add(new Option(`${t.n}（${t.nat}）`,i));selD.add(new Option(`${t.n}（${t.nat}）`,i));});
+selU.value=5;selD.value=2;
+function renderCombo(){
+  const u=+selU.value,d=+selD.value,h=HEXBY[u][d];
+  $('#hexName').innerHTML=`${h.full}`;
+  $('#hexSay').innerHTML=`第 ${h.no} 卦。上卦${TRI[u].n}是${TRI[u].nat}、下卦${TRI[d].n}是${TRI[d].nat}${u===d?'，上下相同，所以叫「'+h.full+'」':''}。<br>${h.bai}`;
+  $('#hexPic').innerHTML=lines(h.bits,'hxl',{up:true})+`<div class="muted" style="font-size:.8rem;text-align:center;margin-top:.4rem">藍＝上卦　黑＝下卦</div>`;
+  $$('#matrix td button').forEach(b=>b.classList.toggle('on',+b.dataset.u===u&&+b.dataset.d===d));
+}
+selU.onchange=selD.onchange=renderCombo;
+$('#matrix').innerHTML=`<tr><th>上＼下</th>${TRI.map(t=>`<th>${t.n}<br>${t.nat}</th>`).join('')}</tr>`+TRI.map((t,u)=>`<tr><th>${t.n}${t.nat}</th>${TRI.map((_,d)=>`<td><button data-u="${u}" data-d="${d}" aria-label="${HEXBY[u][d].full}">${HEXBY[u][d].n}</button></td>`).join('')}</tr>`).join('');
+$$('#matrix td button').forEach(b=>b.onclick=()=>{selU.value=b.dataset.u;selD.value=b.dataset.d;renderCombo();});
+renderCombo();
+
+/* ========== L8 yao analyzer & dragon ========== */
+const SCHOOL=['剛入學的新生','班長','快畢業的學長','校長身邊的主任','校長','退休的老校長'];
+const yaoSel=$('#yaoSel');fillHexSelect(yaoSel,62);let yaoIdx=4;
+function renderYao(){
+  const h=HEX[+yaoSel.value];const box=$('#yl');box.innerHTML='';
+  for(let i=5;i>=0;i--){const b=document.createElement('button');b.className=i===yaoIdx?'sel':'';
+    b.innerHTML=h.bits[i]?'<i></i>':'<i></i><i></i>';b.setAttribute('aria-label',yaoName(i,h.bits[i]));
+    b.onclick=()=>{yaoIdx=i;renderYao();};box.appendChild(b);}
+  const i=yaoIdx,v=h.bits[i],j=(i+3)%6;
+  const posYang=i%2===0,zheng=posYang===!!v,zhong=i===1||i===4,ying=h.bits[i]!==h.bits[j];
+  $('#yaoOut').innerHTML=`<div class="bigname">${yaoName(i,v)}</div>
+  <dl class="kv"><dt>位置</dt><dd>第 ${i+1} 爻（${i+1}是${posYang?'奇數，陽位':'偶數，陰位'}），好比${SCHOOL[i]}</dd>
+  <dt>陰陽</dt><dd>${v?'陽爻，所以叫「九」':'陰爻，所以叫「六」'}</dd>
+  <dt>正</dt><dd>${zheng?'當位（得正）':'不當位'}</dd>
+  <dt>中</dt><dd>${zhong?(i===1?'得中（下卦正中間）':'得中（上卦正中間）'):'不在中位'}</dd>
+  <dt>應</dt><dd>和${yaoName(j,h.bits[j])}${ying?'一陰一陽，有應':'同是'+(v?'陽':'陰')+'，無應'}</dd>
+  <dt>三才</dt><dd>${i<2?'地':i<4?'人':'天'}</dd></dl>${zheng&&zhong?'<p class="muted" style="font-size:.9rem;margin-bottom:0">既中又正，叫「中正」，是最理想的狀態。</p>':''}`;
+}
+yaoSel.onchange=()=>renderYao();renderYao();
+let dragonIdx=0;
+function renderDragon(){
+  const box=$('#dragonL');box.innerHTML='';
+  for(let i=5;i>=0;i--){const b=document.createElement('button');b.className=dragonIdx===i?'sel':'';b.innerHTML='<i></i>';b.setAttribute('aria-label',DRAGON[i].y);b.onclick=()=>{dragonIdx=i;renderDragon();};box.appendChild(b);}
+  const u=document.createElement('button');u.className='btn';u.style.cssText='width:auto;height:auto;margin-top:.5rem;display:block;border:1.5px solid var(--ink);padding:.2rem 1rem;border-radius:999px;'+(dragonIdx===6?'background:var(--seal);color:#fff;border-color:var(--seal)':'');u.textContent='用九';u.onclick=()=>{dragonIdx=6;renderDragon();};box.appendChild(u);
+  const d=DRAGON[dragonIdx];
+  $('#dragonOut').innerHTML=`<div class="bigname">${d.y}</div><div class="chant" style="margin:.3rem 0">${d.c}</div><p>${d.b}</p>`;
+}
+renderDragon();
+
+/* ========== L9 relations ========== */
+const relSel=$('#relSel');fillHexSelect(relSel,2);
+function renderRel(){
+  const h=HEX[+relSel.value];
+  const items=[['本卦',h,'原本的卦'],['綜卦',zongOf(h),'上下顛倒'],['錯卦',cuoOf(h),'陰陽全反'],['互卦',huOf(h),'取中間四爻']];
+  $('#rel').innerHTML=items.map(([l,x,d])=>`<button class="cell" data-i="${x.no-1}"><span class="rl">${l}</span>${lines(x.bits,'hs')}<span class="cn">${x.full}</span><span class="no">${d}${l==='綜卦'&&x===h?'：倒過來還是自己':''}</span></button>`).join('');
+  $$('#rel .cell').forEach(b=>b.onclick=()=>{relSel.value=b.dataset.i;renderRel();});
+}
+relSel.onchange=renderRel;renderRel();
+
+/* ========== L10 terms ========== */
+$('#termTable').innerHTML=`<tr><th>字詞</th><th>意思</th><th>由來</th></tr>`+TERMS.map(t=>`<tr><td><b style="font-family:var(--serif)">${t.t}</b></td><td>${t.s}</td><td>${t.d}</td></tr>`).join('');
+$('#scale').innerHTML=[['元吉','#276B43'],['吉','#3B7F52'],['無咎','#5E7F4A'],['悔','#86702A'],['吝','#9A5A28'],['厲','#A8412E'],['凶','#8A2320']].map(([t,c])=>`<span style="background:${c}">${t}</span>`).join('');
+const readSel=$('#readSel');fillHexSelect(readSel,0);
+function renderRead(){const h=HEX[+readSel.value];
+  $('#readPic').innerHTML=lines(h.bits,'hx',{up:true})+`<div class="bigname" style="font-size:1.2rem;text-align:center;margin-top:.4rem">${h.n}</div>`;
+  $('#readCi').innerHTML=markTerms(h.ci);$('#readOut').innerHTML='<span class="muted">點畫底線的字。</span>';$('#readBai').innerHTML=`<b>白話：</b>${h.bai}`;}
+readSel.onchange=renderRead;renderRead();
+
+/* ========== L11 song / grid / detail ========== */
+$('#song').innerHTML=SONG.map(l=>l.replace(/\{(.+?)\}/g,(m,n)=>`<span class="h" role="button" tabindex="0" data-n="${n}">${n}</span>`)).join('<br>');
+$$('#song .h').forEach(s=>{const go=()=>openHex(HEXBYNAME[s.dataset.n].no-1,true);s.onclick=go;s.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();go();}};});
+let curHex=0,gridF='all';
+function renderGrid(){
+  $('#grid64').innerHTML=HEX.map((h,i)=>{
+    const show=gridF==='all'||(gridF==='up'&&h.no<=30)||(gridF==='dn'&&h.no>30)||(gridF==='pure'&&h.up===h.dn);
+    return `<button class="cell ${show?'':'dim'}" data-i="${i}" aria-pressed="${i===curHex}" aria-label="第${h.no}卦 ${h.full}"><span class="no">${h.no}</span>${lines(h.bits,'hs')}<span class="cn">${h.n}</span></button>`;}).join('');
+  $$('#grid64 .cell').forEach(b=>b.onclick=()=>openHex(+b.dataset.i,false));
+}
+$$('#gridFilter button').forEach(b=>b.onclick=()=>{gridF=b.dataset.f;$$('#gridFilter button').forEach(x=>x.setAttribute('aria-pressed',x===b));renderGrid();});
+function openHex(i,scroll){
+  curHex=i;const h=HEX[i],z=zongOf(h),c=cuoOf(h);
+  renderGrid();
+  $('#hxDetail').innerHTML=`<div style="text-align:center">${lines(h.bits,'hxl',{up:true})}<div class="muted" style="font-size:.8rem;margin-top:.4rem">藍＝上卦　黑＝下卦</div></div>
+  <div><div class="muted" style="font-size:.9rem">第 ${h.no} 卦・${h.no<=30?'上經':'下經'}</div>
+  <div class="bigname">${h.full}</div><div class="zy" style="font-size:.95rem">${h.n}：${h.zy}</div>
+  <dl class="kv"><dt>上卦</dt><dd>${TRI[h.up].n}（${TRI[h.up].nat}）</dd><dt>下卦</dt><dd>${TRI[h.dn].n}（${TRI[h.dn].nat}）</dd><dt>關鍵字</dt><dd>${h.key}</dd></dl>
+  <div class="gc">${h.n}：${markTerms(h.ci)}</div><div class="termout"></div>
+  <p><b>白話：</b>${h.bai}</p>
+  <p style="font-size:.93rem">綜卦：${z===h?'倒過來還是自己':`<button class="linkbtn" data-go="${z.no-1}">${z.full}</button>`}　錯卦：<button class="linkbtn" data-go="${c.no-1}">${c.full}</button></p>
+  <div class="ctrl"><button class="btn" data-go="${(i+63)%64}">上一卦</button><button class="btn" data-go="${(i+1)%64}">下一卦</button></div></div>`;
+  $('#hxDetail').classList.add('panel');
+  $$('#hxDetail [data-go]').forEach(b=>b.onclick=()=>openHex(+b.dataset.go,false));
+  if(scroll)$('#hxDetail').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
+}
+openHex(0,false);
+
+/* ========== L12 coins ========== */
+let tosses=[];
+function coinHTML(v,anim){return `<div class="coin ${anim?'flip':''}" aria-label="${v===3?'正面':'反面'}"><span>${v===3?'正':'反'}</span></div>`;}
+$('#coins').innerHTML=[3,2,3].map(v=>coinHTML(v)).join('');
+const TOSSN={6:['老陰','會變'],7:['少陽',''],8:['少陰',''],9:['老陽','會變']};
+function tossOne(){
+  if(tosses.length>=6)return;
+  const c=[0,0,0].map(()=>Math.random()<.5?3:2);const s=c[0]+c[1]+c[2];tosses.push(s);
+  $('#coins').innerHTML=c.map(v=>coinHTML(v,true)).join('');renderToss();
+}
+function renderToss(){
+  $('#tossList').innerHTML=tosses.map((s,i)=>`<li><span>${POS[i]}爻</span><span>總和 ${s}</span><span style="display:flex;gap:.6rem;align-items:center">${lines([s%2],'sm',{chg:(s===6||s===9)?[0]:[]})}${TOSSN[s][0]}${TOSSN[s][1]?`<b style="color:var(--seal)">（${TOSSN[s][1]}）</b>`:''}</span></li>`).join('');
+  $('#tossOne').disabled=$('#tossAll').disabled=tosses.length>=6;
+  if(tosses.length<6){$('#tossOut').innerHTML=`<p class="muted" style="text-align:center">已擲 ${tosses.length} / 6 次，由下往上畫。</p>`;return;}
+  const bits=tosses.map(s=>s%2),chg=tosses.map((s,i)=>(s===6||s===9)?i:-1).filter(i=>i>=0);
+  const b2=bits.map((v,i)=>chg.includes(i)?1-v:v);const h1=hexOf(bits),h2=hexOf(b2);
+  $('#tossOut').innerHTML=`<div class="two"><div>${lines(bits,'hx',{chg})}<div class="bigname" style="font-size:1.25rem;margin-top:.4rem">本卦<br>${h1.full}</div></div>${chg.length?`<div>${lines(b2,'hx',{chg})}<div class="bigname" style="font-size:1.25rem;margin-top:.4rem">變卦<br>${h2.full}</div></div>`:''}</div>
+  <p>${chg.length?`有 ${chg.length} 條會變的爻（紅色）：${chg.map(i=>yaoName(i,bits[i])).join('、')}。把它們陰陽翻過來，就得到變卦。`:'六條都是少陽或少陰，沒有會變的爻，只看本卦。'}</p>
+  <p><b>${h1.n}卦卦辭：</b>${h1.ci}<br><span class="muted">${h1.bai}</span></p>
+  <p><button class="linkbtn" data-open="${h1.no-1}">到第十一課看「${h1.full}」</button></p>`;
+  $('#tossOut [data-open]').onclick=e=>openHex(+e.target.dataset.open,true);
+}
+$('#tossOne').onclick=tossOne;
+$('#tossAll').onclick=()=>{while(tosses.length<6)tossOne();};
+$('#tossReset').onclick=()=>{tosses=[];renderToss();};
+renderToss();
+
+/* ========== L13 idioms & glossary ========== */
+$('#idiomTable').innerHTML=`<tr><th>成語／名言</th><th>出處</th><th>意思</th></tr>`+IDIOMS.map(x=>`<tr><td><b style="font-family:var(--serif)">${x.i}</b></td><td>${x.h?`<button class="linkbtn" data-open="${HEXBYNAME[x.h].no-1}">${x.src}</button>`:x.src}</td><td>${x.m}</td></tr>`).join('');
+$$('#idiomTable [data-open]').forEach(b=>b.onclick=()=>openHex(+b.dataset.open,true));
+$('#glossList').innerHTML=GLOSS.map(([t,d])=>`<dt>${t}</dt><dd>${d}</dd>`).join('');
+
+/* ========== quiz engine ========== */
+function mcOpts(correct,pool,fmt,n=4){const ds=shuffle(pool.filter(x=>x!==correct&&fmt(x)!==fmt(correct)));const seen=new Set([fmt(correct)]);const out=[correct];
+  for(const d of ds){if(out.length>=n)break;const f=fmt(d);if(!seen.has(f)){seen.add(f);out.push(d);}}
+  return out.map(x=>({h:fmt(x),ok:x===correct}));}
+function fixed(q){return {q:q.q,sym:q.sym,opts:q.o.map((h,i)=>({h,ok:i===q.a})),why:q.why};}
+function series(el,gen,key){
+  let qs,i,res;
+  const dots=()=>qs.map((_,k)=>`<i class="${k<res.length?(res[k]?'ok':'no'):''}${k===i&&k>=res.length?' cur':''}"></i>`).join('');
+  function start(){qs=gen();i=0;res=[];show();}
+  function show(){
+    if(i>=qs.length)return finish();
+    const q=qs[i];
+    el.innerHTML=`<div class="qhead"><span>第 ${i+1} / ${qs.length} 題</span><span class="dots">${dots()}</span></div><p class="qq">${q.q}</p>${q.sym?`<div class="qsym">${q.sym}</div>`:''}<div class="qbody"></div><div class="fb" aria-live="polite"></div><div class="ctrl"><button class="btn primary nextb" hidden>${i===qs.length-1?'看成績':'下一題'}</button></div>`;
+    const body=el.querySelector('.qbody');let answered=false;
+    const done=(ok,why)=>{if(answered)return;answered=true;res.push(ok);
+      el.querySelector('.fb').innerHTML=`<b class="${ok?'ok':'no'}">${ok?'答對了！':'差一點。'}</b>${why||''}`;
+      el.querySelector('.dots').innerHTML=dots();const nb=el.querySelector('.nextb');nb.hidden=false;nb.focus({preventScroll:true});};
+    if(q.render)q.render(body,done);else mcRender(body,q,done);
+    el.querySelector('.nextb').onclick=()=>{i++;show();};
+  }
+  function finish(){
+    const s=res.filter(Boolean).length,t=qs.length,r=s/t;
+    const msg=key==='final'?(s>=12?'恭喜畢業！你已經掌握了易經八卦的基礎。':'再複習幾課，下次一定能畢業。'):(r===1?'全對，太厲害了！':r>=.7?'很不錯，已經掌握重點了。':'往上翻回去複習一下，再試一次會更好。');
+    markDone(key,s,t);
+    el.innerHTML=`<div class="qres"><div class="big">${s} / ${t}</div><p>${msg}</p><div class="dots" style="justify-content:center;margin-bottom:.8rem">${res.map(x=>`<i class="${x?'ok':'no'}"></i>`).join('')}</div><button class="btn primary">再測一次</button></div>`;
+    el.querySelector('button').onclick=start;
+  }
+  start();
+}
+function mcRender(body,q,done){
+  const opts=q.keep?q.opts:shuffle(q.opts);
+  body.innerHTML=`<div class="opts">${opts.map((o,k)=>`<button class="opt" data-k="${k}">${o.h}</button>`).join('')}</div>`;
+  const bs=[...body.querySelectorAll('.opt')];
+  bs.forEach((b,k)=>b.onclick=()=>{bs.forEach(x=>x.disabled=true);const ok=opts[k].ok;b.classList.add(ok?'right':'wrong');bs[opts.findIndex(o=>o.ok)].classList.add('right');done(ok,q.why);});
+}
+
+/* ---- generators ---- */
+const triLabel=t=>`${t.n}（${t.nat}）`;
+function gTri(){const t=pick(TRI);
+  return Math.random()<.5?{q:'這是哪一卦？',sym:lines(t.b,'lg'),opts:mcOpts(t,TRI,triLabel),why:`口訣「${t.q}」，這是${t.n}卦，代表${t.nat}。`}
+  :{q:`「${t.n}」卦（${t.nat}）長什麼樣子？`,opts:mcOpts(t,TRI,x=>lines(x.b,'md')),why:`口訣「${t.q}」。`};}
+function gFam(){const t=pick(TRI.slice(1,7));const ones=t.b.filter(x=>x).length;const odd=ones===1?1:0;const idx=t.b.indexOf(odd);
+  const fams=['父','母','長男','中男','少男','長女','中女','少女'];
+  return {q:`${t.n}卦在「八卦一家人」裡是誰？`,sym:lines(t.b,'lg'),opts:mcOpts(t.fam,fams,x=>x),why:`三條線裡只有一條${odd?'陽':'陰'}爻，所以是${odd?'兒子':'女兒'}；它在${['最下面','中間','最上面'][idx]}，所以是「${['長','中','少'][idx]}」${odd?'男':'女'}。`};}
+function gNum(){const ns=[0,0,0].map(()=>pick(NUMPOOL));const b=ns.map(n=>n%2);const t=triOf(b);
+  return {q:'這組數字卦（由下往上讀）會變成哪一卦？',sym:`<div class="nums">${ns.slice().reverse().map(n=>`<span>${CN[n]}</span>`).join('')}</div>`,opts:mcOpts(t,TRI,triLabel),
+  why:`奇數算陽、偶數算陰。由下往上：${ns.map(n=>CN[n]+(n%2?'（陽）':'（陰）')).join('、')}，所以是${t.n}卦。`};}
+function gHex(){const h=pick(HEX);const near=HEX.filter(x=>x!==h&&(x.up===h.up||x.dn===h.dn));const pool=shuffle(near).slice(0,6).concat(shuffle(HEX).slice(0,6));
+  const why=`上卦是${TRI[h.up].n}（${TRI[h.up].nat}）、下卦是${TRI[h.dn].n}（${TRI[h.dn].nat}），所以是${h.full}。`;
+  return Math.random()<.5?{q:'這是哪一卦？',sym:lines(h.bits,'hx',{up:true}),opts:mcOpts(h,[h,...pool],x=>x.full),why}
+  :{q:`「${h.full}」長什麼樣子？`,opts:mcOpts(h,[h,...pool],x=>lines(x.bits,'hs')),why};}
+function gBuild(){const h=pick(HEX);return {q:`請排出「${h.full}」：點每條爻切換陰陽，排好按「檢查」。`,render(body,done){
+  const st=[0,0,0,0,0,0];let locked=false;
+  body.innerHTML=`<div style="display:flex;gap:1.5rem;align-items:center;justify-content:center;flex-wrap:wrap"><div class="yl"></div><div class="ctrl" style="flex-direction:column;align-items:stretch"><button class="btn primary chk">檢查</button><button class="btn hint">提示</button></div></div><p class="hinttxt muted" style="text-align:center;font-size:.92rem"></p>`;
+  const yl=body.querySelector('.yl');
+  const draw=()=>{yl.innerHTML='';for(let i=5;i>=0;i--){const b=document.createElement('button');b.innerHTML=st[i]?'<i></i>':'<i></i><i></i>';b.setAttribute('aria-label',`第${i+1}爻，${st[i]?'陽':'陰'}`);
+    if(locked)b.className=st[i]===h.bits[i]?'hit':'miss';b.onclick=()=>{if(locked)return;st[i]^=1;draw();};yl.appendChild(b);}};
+  draw();
+  body.querySelector('.hint').onclick=()=>{body.querySelector('.hinttxt').textContent=`上卦：${TRI[h.up].n}（${TRI[h.up].nat}，${TRI[h.up].q}）；下卦：${TRI[h.dn].n}（${TRI[h.dn].nat}，${TRI[h.dn].q}）。記得下卦在下面。`;};
+  body.querySelector('.chk').onclick=()=>{if(locked)return;locked=true;draw();const ok=st.join('')===h.bits.join('');
+    body.querySelectorAll('.btn').forEach(b=>b.disabled=true);
+    done(ok,`全名「上＋下＋卦名」：上卦${TRI[h.up].nat}是${TRI[h.up].n}、下卦${TRI[h.dn].nat}是${TRI[h.dn].n}。${ok?'':'正確答案：'}${ok?'':lines(h.bits,'hs')}`);};
+}};}
+function gYao(){const h=pick(HEX);const k=rnd(6);const nm=yaoName(k,h.bits[k]);return {q:`在「${h.full}」裡，請點出「${nm}」。`,render(body,done){
+  body.innerHTML=`<div style="display:flex;justify-content:center"><div class="yl"></div></div>`;const yl=body.querySelector('.yl');let locked=false;
+  for(let i=5;i>=0;i--){const b=document.createElement('button');b.dataset.i=i;b.innerHTML=h.bits[i]?'<i></i>':'<i></i><i></i>';b.setAttribute('aria-label',`由下往上第${i+1}條`);
+    b.onclick=()=>{if(locked)return;locked=true;const ok=i===k;b.classList.add(ok?'hit':'miss');yl.querySelector(`[data-i="${k}"]`).classList.add('hit');
+      done(ok,`由下往上數：初、二、三、四、五、上。「${nm}」是第 ${k+1} 條，${h.bits[k]?'陽爻叫九':'陰爻叫六'}。`);};yl.appendChild(b);}
+}};}
+function gZong(){let h=pick(HEX);const sym=zongOf(h)===h;const askCuo=sym||Math.random()<.4;
+  const ans=askCuo?cuoOf(h):zongOf(h);const other=askCuo?zongOf(h):cuoOf(h);
+  const pool=[ans,other,huOf(h),...shuffle(HEX).slice(0,5)].filter(x=>x!==h);
+  return {q:`「${h.full}」的<b>${askCuo?'錯卦（陰陽全反）':'綜卦（上下顛倒）'}</b>是哪一個？`,sym:lines(h.bits,'hx'),opts:mcOpts(ans,pool,x=>`${lines(x.bits,'hs')}<span>${x.n}</span>`),
+    why:`${askCuo?'每條爻陰陽相反':'把六爻整個倒過來'}，得到「${ans.full}」。`};}
+function gTerm(){const t=pick(TERMS);return {q:`卦辭裡的「${t.t}」是什麼意思？`,opts:mcOpts(t,TERMS,x=>x.s),why:t.d};}
+function gIdiom(){const pool=IDIOMS.filter(x=>!x.noq);const x=pick(pool);return {q:`「${x.i}」出自哪裡？`,opts:mcOpts(x,pool,y=>y.src),why:x.m};}
+function gSort(){const items=shuffle([['太陽',1],['月亮',0],['白天',1],['夜晚',0],['夏天',1],['冬天',0],['向上',1],['向下',0],['動',1],['靜',0],['剛硬',1],['柔軟',0]]);
+  return {q:'陰陽分類：點每個詞切換成「陽」（金色）或「陰」（深色），全部分好再按「檢查」。',render(body,done){
+    const st=items.map(()=>-1);let locked=false;
+    body.innerHTML=`<div class="chips"></div><div class="ctrl"><button class="btn primary chk">檢查</button></div>`;const box=body.querySelector('.chips');
+    const draw=()=>{box.innerHTML='';items.forEach(([w,v],k)=>{const c=document.createElement('button');c.className='chip'+(locked&&st[k]!==v?' bad':'');c.dataset.v=st[k];c.textContent=w+(st[k]===1?'・陽':st[k]===0?'・陰':'');
+      c.onclick=()=>{if(locked)return;st[k]=st[k]===-1?1:st[k]===1?0:-1;draw();};box.appendChild(c);});};draw();
+    body.querySelector('.chk').onclick=()=>{if(st.includes(-1)){body.parentNode.querySelector('.fb').textContent='還有詞沒分類喔。';return;}
+      locked=true;draw();body.querySelector('.chk').disabled=true;const ok=items.every(([w,v],k)=>st[k]===v);
+      done(ok,'太陽、白天、夏天、向上、動、剛硬屬陽；月亮、夜晚、冬天、向下、靜、柔軟屬陰。'+(ok?'':'紅框是分錯的。'));};
+  }};}
+
+/* ---- fixed question banks ---- */
+const FX={
+ l1:[{q:'《易經》原本是一本什麼書？',o:['占卜書','歷史書','數學課本','詩歌集'],a:0,why:'原本是周朝官方的占卜手冊，後來才被當成哲學經典。'},
+  {q:'《易經》分成哪兩大部分？',o:['經和傳','上冊和下冊','詩和文','圖和表'],a:0,why:'經是六十四卦本文，傳是解說的十翼。'},
+  {q:'「十翼」的「翼」是什麼意思？',o:['翅膀','十個人','寫字','太陽'],a:0,why:'翼是翅膀，比喻幫助經文展翅高飛。'},
+  {q:'上經有幾卦？',o:['30','32','34','64'],a:0,why:'上經 30 卦（乾到離），下經 34 卦（咸到未濟）。'},
+  {q:'「彖傳」的「彖」是什麼意思？',o:['斷定、判斷','形象、圖案','順序、排列','文采、華麗'],a:0,why:'古人說「彖者，斷也」，判斷一整卦的意思。'},
+  {q:'「人更三聖」指的是哪三位？',o:['伏羲、文王、孔子','堯、舜、禹','孔子、孟子、荀子','黃帝、炎帝、蚩尤'],a:0,why:'伏羲畫卦、文王作卦辭、孔子作傳，這是傳統說法。'},
+  {q:'「天行健，君子以自強不息」屬於乾卦這一頁的哪一部分？',o:['象傳','卦辭','爻辭','彖傳'],a:0,why:'這是大象傳，用天的運行來教人做人。'}],
+ l2:[{q:'數字卦怎麼變成陰陽爻？',o:['奇數算陽，偶數算陰','大數算陽，小數算陰','奇數算陰，偶數算陽','看數字的顏色'],a:0,why:'奇數寫成「一」變成陽爻，偶數寫成「八」變成陰爻。'},
+  {q:'「三才」指的是？',o:['天、地、人','金、木、水','父、母、子','日、月、星'],a:0,why:'八卦三爻由下往上就是地、人、天。'},
+  {q:'為什麼六十四卦是六條線？',o:['天地人各分陰陽，3×2＝6','因為一週有六天','因為六是吉利數字','因為八卦有六個'],a:0,why:'《說卦傳》：兼三才而兩之，故易六畫而成卦。'},
+  {q:'今天常見的黑白「陰陽魚」太極圖，大約什麼時候定型？',o:['明朝','周朝','商朝','伏羲時代'],a:0,why:'陰陽魚圖比易經晚兩千多年，大約明朝才定型。'}],
+ l3:[{q:'哪一個是陽爻？',o:[lines([1],'md'),lines([0],'md')],a:0,why:'陽爻是一條實線，陰爻是一條斷線。'},
+  {q:'「陰」「陽」最早指的是？',o:['山的背光面和向光面','月亮和太陽','女生和男生','冷和熱'],a:0,why:'山的南面曬得到太陽叫陽，北面曬不到叫陰。'},
+  {q:'三盞燈（每盞只有開或關）一共有幾種組合？',o:['8','6','3','9'],a:0,why:'2×2×2＝8，正好是八卦的數目。'},
+  {q:'手心和手背比，哪個算陽？',o:['手背','手心','兩個都是陰','不能比'],a:0,why:'手背朝外、較剛硬，算陽；手心朝內、較柔軟，算陰。'}],
+ l4:[{q:'太極生兩儀，兩儀生四象，四象生？',o:['八卦','五行','六十四卦','十二生肖'],a:0,why:'每一步加一條線：1→2→4→8。'},
+  {q:'「太極」的「極」本來是什麼？',o:['屋頂最高的大樑','北極星','地球的盡頭','電池的電極'],a:0,why:'極是屋脊大樑，整間房子都靠它撐起來，所以太極是一切的源頭。'},
+  {q:'如果用 4 條線來排，一共有幾種排法？',o:['16','8','12','4'],a:0,why:'2×2×2×2＝16。每多一條線，種類就翻一倍。'},
+  {q:'哪一個是「少陰」（由下往上：陽、陰）？',o:[lines([1,0],'md'),lines([0,1],'md'),lines([1,1],'md'),lines([0,0],'md')],a:0,why:'少陰：下面是陽，上面剛冒出一條陰，像秋天剛開始變涼。'},
+  {q:'四象中代表冬天的是？',o:['太陰','太陽','少陽','少陰'],a:0,why:'冬天最冷，陰到極點，所以是太陰。'}],
+ l6:[{q:'先天八卦中，和乾（天）相對的是？',o:['坤','離','坎','震'],a:0,why:'先天八卦天在上、地在下，乾坤相對。'},
+  {q:'後天八卦中，南方是哪一卦？',o:['離','乾','坎','震'],a:0,why:'南方炎熱，所以放離（火）；北方寒冷，放坎（水）。'},
+  {q:'古代八卦圖的上方通常是哪個方位？',o:['南','北','東','西'],a:0,why:'古圖習慣南方在上，跟現代地圖相反。'},
+  {q:'先天八卦傳說是誰畫的？',o:['伏羲','周文王','孔子','朱熹'],a:0,why:'先天八卦也叫伏羲八卦，後天八卦也叫文王八卦。'},
+  {q:'韓國國旗四個角落是哪四個卦？',o:['乾、坤、坎、離','震、巽、艮、兌','乾、兌、離、震','坎、離、震、巽'],a:0,why:'乾天、坤地、坎水、離火，圍繞中間的太極。'},
+  {q:'先天八卦裡，面對面的兩個卦有什麼特點？',o:['陰陽完全相反','完全一樣','上下顛倒','沒有規律'],a:0,why:'例如乾（三陽）對坤（三陰），離對坎，每一爻都相反。'}],
+ l7:[{q:'「山水蒙」這一卦，上卦是？',o:['艮（山）','坎（水）','蒙','兌（澤）'],a:0,why:'全名是「上卦＋下卦＋卦名」，所以山在上。'},
+  {q:'上下卦都是震，全名要怎麼說？',o:['震為雷','雷雷震','雷震','震震雷'],a:0,why:'上下相同的八純卦叫「某為某」。'}],
+ l8:[{q:'陽爻在第五爻，叫做？',o:['九五','五九','初五','上九'],a:0,why:'中間四條「數字在前」：陽叫九、第五爻，所以是九五。'},
+  {q:'最下面那條是陰爻，它叫？',o:['初六','六初','一六','六一'],a:0,why:'最下面叫「初」，而且位置寫在前面。'},
+  {q:'哪兩個位置叫「得中」？',o:['第二和第五','第一和第六','第三和第四','第一和第四'],a:0,why:'第二爻是下卦正中間，第五爻是上卦正中間。'},
+  {q:'「九五之尊」為什麼指皇帝？',o:['第五爻是最尊貴的位置','皇帝有九十五個兒子','九和五是皇帝的生日','因為九五是最大的數'],a:0,why:'第五爻是君位，乾卦九五是「飛龍在天」。'},
+  {q:'「亢龍有悔」是乾卦的哪一爻？',o:['上九','初九','九五','用九'],a:0,why:'上九是最高處，飛太高不知停就會後悔。'}],
+ l9:[{q:'把卦上下顛倒得到的叫？',o:['綜卦','錯卦','互卦','本卦'],a:0,why:'綜卦又叫覆卦，就是整個倒過來看。'},
+  {q:'乾卦的錯卦是？',o:['坤','乾','離','坎'],a:0,why:'六條陽全部變陰，就是坤。'}],
+ l10:[{q:'《繫辭》怎麼解釋「無咎」？',o:['善補過也：能補救過錯','大吉大利','非常危險','不能出門'],a:0,why:'無咎者，善補過也——犯了錯能補救，就沒事。'}],
+ l12:[{q:'三枚銅錢擲出三個正面，總和是？',o:['9，老陽','6，老陰','7，少陽','8，少陰'],a:0,why:'正面算 3，3＋3＋3＝9，是會變的老陽。'},
+  {q:'哪兩種爻會變？',o:['老陽和老陰','少陽和少陰','老陽和少陽','都不會變'],a:0,why:'「老」代表到了極點，物極必反，所以會變。'},
+  {q:'「卜」字的形狀原本像什麼？',o:['龜甲燒出的裂紋','一根蓍草','一個跪著的人','一棵樹'],a:0,why:'商朝人燒龜甲看裂紋，卜字就是裂紋的樣子。'},
+  {q:'《周易》占卦主要用哪種方法？',o:['筮：數蓍草','卜：燒龜甲','看星星','抽籤'],a:0,why:'筮是竹字頭，用蓍草數算。'},
+  {q:'本卦的變爻翻過來之後得到的叫？',o:['變卦（之卦）','綜卦','互卦','純卦'],a:0,why:'本卦是現在，變卦是可能的發展方向。'}]
+};
+const F=(k)=>FX[k].map(fixed);
+const times=(n,g)=>Array.from({length:n},g);
+const GENS={
+ l1:()=>shuffle(F('l1')),
+ l2:()=>shuffle([...F('l2'),...times(3,gNum)]),
+ l3:()=>[gSort(),...shuffle(F('l3'))],
+ l4:()=>shuffle(F('l4')),
+ l5:()=>shuffle([...times(7,gTri),...times(3,gFam)]),
+ l6:()=>shuffle(F('l6')),
+ l7:()=>[...times(4,gBuild),...shuffle([...F('l7'),...times(2,gHex)])],
+ l8:()=>shuffle([...times(4,gYao),...F('l8')]),
+ l9:()=>shuffle([...times(5,gZong),...F('l9')]),
+ l10:()=>shuffle([...times(7,gTerm),...F('l10')]),
+ l11:()=>times(10,gHex),
+ l12:()=>shuffle(F('l12')),
+ l13:()=>times(8,gIdiom),
+ final:()=>{const fx=shuffle(['l1','l4','l6','l8','l12'].flatMap(k=>F(k))).slice(0,3);
+   return shuffle([...times(2,gTri),gFam(),gNum(),...times(2,gHex),gBuild(),gYao(),gZong(),...times(2,gTerm),...times(2,gIdiom),...fx]).slice(0,15);}
+};
+/* avoid duplicate question text inside one round */
+function dedupe(gen){return ()=>{for(let t=0;t<20;t++){const qs=gen();const s=new Set(qs.map(q=>q.q+(q.sym||'')));if(s.size===qs.length)return qs;}return gen();};}
+$$('[data-quiz]').forEach(el=>series(el,dedupe(GENS[el.dataset.quiz]),el.dataset.quiz));
+
+/* ---- flash 64 (practice) ---- */
+(function(){
+  const el=$('#flash64');let streak=0,best=0,total=0,right=0;
+  function next(){
+    const q=gHex();
+    el.innerHTML=`<div class="stat"><span>連續答對 <b>${streak}</b></span><span>最佳 <b>${best}</b></span><span>正確 ${right} / ${total}</span></div><p class="qq">${q.q}</p>${q.sym?`<div class="qsym">${q.sym}</div>`:''}<div class="qbody"></div><div class="fb" aria-live="polite"></div><div class="ctrl"><button class="btn primary nb" hidden>下一張</button></div>`;
+    mcRender(el.querySelector('.qbody'),q,(ok,why)=>{total++;if(ok){right++;streak++;best=Math.max(best,streak);}else streak=0;
+      el.querySelector('.fb').innerHTML=`<b class="${ok?'ok':'no'}">${ok?'答對了！':'差一點。'}</b>${why}`;
+      el.querySelector('.stat').innerHTML=`<span>連續答對 <b>${streak}</b></span><span>最佳 <b>${best}</b></span><span>正確 ${right} / ${total}</span>`;
+      const nb=el.querySelector('.nb');nb.hidden=false;nb.onclick=next;nb.focus({preventScroll:true});});
+  }
+  next();
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-167044692f" data-category="classics"></script></body>
+</html>

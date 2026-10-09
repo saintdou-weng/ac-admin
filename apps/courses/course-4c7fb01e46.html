@@ -1,0 +1,2257 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>用 AI 做 3D：從一個點到一座工廠｜Gemini・Claude・ChatGPT 3D 建模完整課程</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EAEEF2; --sheet:#FFFFFF; --ink:#1B2A3A; --ink2:#4E5F70; --line:#C6D0DA;
+  --x:#D64541; --y:#2E9E5B; --z:#2F6FD6; --hazard:#E8A800; --hazard-bg:#FFF6D6;
+  --x-bg:#FCE9E8; --y-bg:#E4F4EA; --z-bg:#E6EEFB;
+  --grid:rgba(47,111,214,.08); --code-bg:#1F2C3A; --code-ink:#E4ECF4;
+  --font:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+  --mono:ui-monospace,"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+  --r:6px;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#141D26; --sheet:#1B2733; --ink:#E3E9EF; --ink2:#A2B0BE; --line:#324457;
+    --x:#F0716C; --y:#5CC98A; --z:#6FA0F0; --hazard:#F2C230; --hazard-bg:#3A3219;
+    --x-bg:#3A2224; --y-bg:#1C3527; --z-bg:#1D2C45; --grid:rgba(111,160,240,.06); --code-bg:#0E161E;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141D26; --sheet:#1B2733; --ink:#E3E9EF; --ink2:#A2B0BE; --line:#324457;
+  --x:#F0716C; --y:#5CC98A; --z:#6FA0F0; --hazard:#F2C230; --hazard-bg:#3A3219;
+  --x-bg:#3A2224; --y-bg:#1C3527; --z-bg:#1D2C45; --grid:rgba(111,160,240,.06); --code-bg:#0E161E;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 16px);scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.85;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  -webkit-text-size-adjust:100%;
+}
+img,svg,canvas{max-width:100%}
+a{color:var(--z)}
+:focus-visible{outline:3px solid var(--z);outline-offset:2px}
+.progress{position:fixed;top:0;left:0;height:4px;width:0;z-index:50;
+  background:linear-gradient(90deg,var(--x) 0 33.3%,var(--y) 33.3% 66.6%,var(--z) 66.6%);
+  margin-top:env(safe-area-inset-top,0px)}
+
+/* ---------- layout ---------- */
+.shell{display:grid;grid-template-columns:270px minmax(0,1fr);max-width:1240px;margin:0 auto}
+nav.toc{position:sticky;top:env(safe-area-inset-top,0px);height:100vh;overflow:auto;padding:28px 18px 40px 22px;border-right:1px solid var(--line);font-size:14.5px;line-height:1.5}
+nav.toc .brand{font-weight:900;font-size:17px;margin-bottom:14px;display:flex;gap:8px;align-items:center}
+.axis-mark{display:inline-flex;gap:3px}
+.axis-mark i{display:block;width:6px;height:18px;border-radius:2px}
+.axis-mark i:nth-child(1){background:var(--x)}.axis-mark i:nth-child(2){background:var(--y)}.axis-mark i:nth-child(3){background:var(--z)}
+nav.toc h4{margin:18px 0 6px;font-size:13px;color:var(--ink2);font-weight:700}
+nav.toc ol{list-style:none;margin:0;padding:0}
+nav.toc a{display:flex;gap:8px;padding:5px 8px;border-radius:5px;color:var(--ink);text-decoration:none}
+nav.toc a .n{color:var(--ink2);min-width:1.6em;font-variant-numeric:tabular-nums}
+nav.toc a:hover{background:var(--z-bg)}
+nav.toc a.on{background:var(--z);color:#fff}
+nav.toc a.on .n{color:#fff}
+.theme-btn{margin-top:22px;font:inherit;font-size:13px;padding:6px 10px;border-radius:5px;border:1px solid var(--line);background:var(--sheet);color:var(--ink);cursor:pointer}
+main{padding:0 40px 120px;min-width:0}
+.col{max-width:46rem}
+.toc-fab{display:none}
+
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr}
+  nav.toc{position:fixed;inset:0 auto 0 0;width:min(86vw,320px);z-index:60;background:var(--sheet);transform:translateX(-105%);transition:transform .25s;height:100%;padding-top:calc(env(safe-area-inset-top,0px) + 24px);box-shadow:0 0 40px rgba(0,0,0,.25)}
+  nav.toc.open{transform:none}
+  main{padding:0 18px 120px}
+  .toc-fab{display:block;position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:55;font:inherit;font-weight:700;font-size:15px;padding:12px 18px;border-radius:999px;border:0;background:var(--ink);color:var(--paper);box-shadow:0 6px 20px rgba(0,0,0,.25)}
+  body{font-size:16.5px}
+}
+@media (prefers-reduced-motion:reduce){nav.toc{transition:none}}
+
+/* ---------- hero ---------- */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:28px;align-items:center;padding:48px 0 36px;border-bottom:2px solid var(--ink)}
+.hero h1{font-size:clamp(34px,5.2vw,58px);line-height:1.15;font-weight:900;margin:0 0 18px;letter-spacing:.01em}
+.hero h1 span{display:block}
+.hero .sub{font-size:18px;color:var(--ink2);margin:0 0 20px;max-width:30em}
+.hero .meta{display:flex;flex-wrap:wrap;gap:8px;font-size:14px}
+.hero .meta b{font-weight:700;padding:3px 10px;border-radius:4px;border:1.5px solid var(--ink)}
+.hero-stage{position:relative;aspect-ratio:1/1;max-height:480px;width:100%}
+.hero-stage .stage{position:absolute;inset:0;height:100%;border:0;background:transparent}
+.hero-cap{font-size:13px;color:var(--ink2);text-align:center;margin-top:4px}
+@media (max-width:900px){.hero{grid-template-columns:1fr;padding-top:28px}.hero-stage{aspect-ratio:4/3}}
+
+/* ---------- stage banners & lessons ---------- */
+.stage-banner{margin:72px 0 8px;padding:22px 0 18px;border-top:2px solid var(--ink);display:grid;grid-template-columns:auto 1fr;gap:6px 18px;align-items:baseline}
+.stage-banner .big{font-size:56px;font-weight:900;line-height:1;color:transparent;-webkit-text-stroke:2px var(--ink)}
+.stage-banner h2{margin:0;font-size:26px;font-weight:900}
+.stage-banner p{grid-column:2;margin:0;color:var(--ink2)}
+section.lesson{padding-top:40px}
+.lesson-head{display:flex;gap:14px;align-items:flex-start;margin-bottom:6px}
+.lesson-head .num{flex:none;width:52px;height:52px;border-radius:8px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-weight:900;font-size:22px;font-variant-numeric:tabular-nums}
+.lesson-head h2{margin:2px 0 0;font-size:clamp(23px,3vw,30px);line-height:1.3;font-weight:900}
+.goal{margin:14px 0 22px;padding:12px 16px;border-left:5px solid var(--ink);background:var(--sheet);border-radius:0 var(--r) var(--r) 0;font-size:15.5px}
+.goal b{display:block;margin-bottom:2px}
+.goal ul{margin:4px 0 0;padding-left:1.2em}
+h3{font-size:21px;margin:36px 0 8px;font-weight:900;line-height:1.4}
+h4{font-size:17px;margin:22px 0 4px}
+p{margin:0 0 14px}
+ul,ol{padding-left:1.4em;margin:0 0 14px}
+li{margin:3px 0}
+strong{font-weight:700}
+.muted{color:var(--ink2)}
+kbd{font-family:var(--mono);font-size:.85em;padding:1px 6px;border:1px solid var(--line);border-bottom-width:3px;border-radius:4px;background:var(--sheet)}
+code{font-family:var(--mono);font-size:.88em;background:var(--z-bg);padding:1px 5px;border-radius:4px}
+
+/* callouts: color = meaning */
+.box{margin:20px 0;padding:14px 18px 6px;border-radius:var(--r);border:1.5px solid}
+.box > .t{font-weight:900;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.box > .t::before{content:"";width:12px;height:12px;border-radius:2px;background:currentColor;flex:none}
+.origin{border-color:var(--z);background:var(--z-bg)}
+.origin > .t{color:var(--z)}
+.try{border-color:var(--y);background:var(--y-bg)}
+.try > .t{color:var(--y)}
+.warn{border-color:var(--x);background:var(--x-bg)}
+.warn > .t{color:var(--x)}
+.note{border-color:var(--hazard);background:var(--hazard-bg)}
+.note > .t{color:var(--ink)}
+.note > .t::before{background:var(--hazard)}
+.key{border:2px solid var(--ink);background:var(--sheet)}
+.key > .t{color:var(--ink)}
+.key ul{margin-top:0}
+
+/* tables */
+.tbl{overflow-x:auto;margin:16px 0 20px;border:1px solid var(--line);border-radius:var(--r);background:var(--sheet)}
+table{border-collapse:collapse;width:100%;font-size:15px;line-height:1.6;min-width:520px}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--paper);font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+
+/* code & prompts */
+.codebox{position:relative;margin:16px 0 20px}
+.codebox .cap{font-size:13.5px;font-weight:700;color:var(--ink2);margin-bottom:4px}
+pre{margin:0;padding:16px 16px 16px;border-radius:var(--r);overflow-x:auto;font-family:var(--mono);font-size:13.5px;line-height:1.65;background:var(--code-bg);color:var(--code-ink);tab-size:2}
+pre.prompt{font-family:var(--font);font-size:15px;line-height:1.8;white-space:pre-wrap;background:var(--sheet);color:var(--ink);border:1.5px dashed var(--y)}
+.copy{position:absolute;top:26px;right:8px;font:inherit;font-size:12.5px;font-weight:700;padding:4px 10px;border-radius:4px;border:0;cursor:pointer;background:var(--y);color:#fff}
+.copy.done{background:var(--ink)}
+pre .c{color:#8FA3B8}
+pre.prompt .c{color:var(--ink2)}
+
+/* steps */
+ol.steps{list-style:none;padding:0;counter-reset:s}
+ol.steps > li{counter-increment:s;position:relative;padding:4px 0 12px 46px;margin:0}
+ol.steps > li::before{content:counter(s);position:absolute;left:0;top:4px;width:32px;height:32px;border-radius:50%;background:var(--y);color:#fff;font-weight:900;display:grid;place-items:center;font-size:15px}
+ol.steps > li::after{content:"";position:absolute;left:15px;top:40px;bottom:0;width:2px;background:var(--line)}
+ol.steps > li:last-child::after{display:none}
+
+/* 3D demos */
+.demo{margin:22px 0 26px;border:1.5px solid var(--ink);border-radius:var(--r);background:var(--sheet);overflow:hidden}
+.demo .dh{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 14px;border-bottom:1.5px solid var(--ink);font-weight:900;font-size:15px}
+.demo .dh small{font-weight:500;color:var(--ink2);font-size:12.5px}
+.stage{position:relative;width:100%;height:clamp(280px,52vw,440px);touch-action:pan-y;background:radial-gradient(circle at 50% 40%,var(--sheet),var(--paper))}
+.stage canvas{display:block;width:100%!important;height:100%!important;cursor:grab}
+.stage canvas:active{cursor:grabbing}
+.zoom{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:6px;z-index:2}
+.zoom button{width:34px;height:34px;border-radius:6px;border:1.5px solid var(--ink);background:var(--sheet);color:var(--ink);font-size:18px;font-weight:700;cursor:pointer;line-height:1}
+.readout{position:absolute;left:10px;bottom:10px;z-index:2;font-size:13.5px;font-weight:700;background:var(--sheet);border:1.5px solid var(--ink);border-radius:5px;padding:4px 10px;line-height:1.5;max-width:calc(100% - 20px)}
+.no3d{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:20px;color:var(--ink2);font-size:15px}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px 18px;padding:12px 14px 14px;border-top:1.5px solid var(--ink);font-size:14.5px}
+.controls label{display:flex;flex-direction:column;gap:2px}
+.controls label.inline{flex-direction:row;align-items:center;gap:8px}
+.controls .row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.controls input[type=range]{width:100%;accent-color:var(--z)}
+.controls input[type=checkbox]{width:18px;height:18px;accent-color:var(--y)}
+.controls select,.btn{font:inherit;font-size:14px;padding:6px 10px;border-radius:5px;border:1.5px solid var(--ink);background:var(--sheet);color:var(--ink);cursor:pointer}
+.btn.on{background:var(--ink);color:var(--paper)}
+.lx{color:var(--x);font-weight:900}.ly{color:var(--y);font-weight:900}.lz{color:var(--z);font-weight:900}
+
+/* figures */
+figure{margin:22px 0}
+figure svg{display:block;width:100%;height:auto;background:var(--sheet);border:1.5px solid var(--line);border-radius:var(--r)}
+figcaption{font-size:13.5px;color:var(--ink2);margin-top:6px}
+.svg-ink{fill:none;stroke:var(--ink);stroke-width:2}
+.svg-text{fill:var(--ink);font-family:var(--font);font-size:15px}
+.svg-small{fill:var(--ink2);font-family:var(--font);font-size:12.5px}
+
+/* quiz */
+.quiz{margin:26px 0;padding:16px 18px;border-radius:var(--r);background:var(--sheet);border:1.5px solid var(--line)}
+.quiz .q{font-weight:700;margin-bottom:10px}
+.quiz .q::before{content:"小測驗　";color:var(--z);font-weight:900}
+.quiz .opts{display:grid;gap:8px}
+.quiz button{font:inherit;font-size:15.5px;text-align:left;padding:9px 12px;border-radius:5px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.quiz button.right{border-color:var(--y);background:var(--y-bg);font-weight:700}
+.quiz button.wrong{border-color:var(--x);background:var(--x-bg);text-decoration:line-through}
+.quiz .exp{margin:12px 0 0;font-size:15px}
+
+/* chat mock */
+.chat{margin:18px 0;display:grid;gap:10px}
+.chat .me,.chat .ai{padding:10px 14px;border-radius:10px;max-width:88%;font-size:15.5px;line-height:1.7}
+.chat .me{justify-self:end;background:var(--z);color:#fff;border-bottom-right-radius:2px}
+.chat .ai{justify-self:start;background:var(--sheet);border:1.5px solid var(--line);border-bottom-left-radius:2px}
+.chat .who{display:block;font-size:12px;font-weight:700;opacity:.8}
+
+.pipeline{list-style:none;padding:0;margin:18px 0;display:grid;gap:0;counter-reset:p}
+.pipeline li{counter-increment:p;display:grid;grid-template-columns:44px 1fr;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line);margin:0}
+.pipeline li::before{content:counter(p);width:36px;height:36px;border:2px solid var(--ink);border-radius:6px;display:grid;place-items:center;font-weight:900}
+.pipeline b{display:block}
+.pipeline span{color:var(--ink2);font-size:15px}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:16px 0}
+.card{padding:14px 16px;border-radius:var(--r);background:var(--sheet);border:1.5px solid var(--line)}
+.card h4{margin:0 0 6px}
+.card p{font-size:15px;margin:0}
+.card.cx{border-top:5px solid var(--x)}.card.cy{border-top:5px solid var(--y)}.card.cz{border-top:5px solid var(--z)}.card.ch{border-top:5px solid var(--hazard)}
+
+footer{margin-top:80px;padding-top:20px;border-top:2px solid var(--ink);font-size:14px;color:var(--ink2)}
+@media print{nav.toc,.toc-fab,.progress,.demo .controls,.copy,.zoom{display:none!important}.shell{display:block}body{background:#fff}}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="shell">
+<nav class="toc" id="toc" aria-label="課程目錄">
+  <div class="brand"><span class="axis-mark" aria-hidden="true"><i></i><i></i><i></i></span>用 AI 做 3D</div>
+  <div id="tocList"></div>
+  <button class="theme-btn" id="themeBtn" type="button">外觀：跟隨系統</button>
+</nav>
+<button class="toc-fab" id="tocFab" type="button" aria-controls="toc" aria-expanded="false">目錄</button>
+
+<main>
+<div class="col" style="max-width:none">
+<header class="hero">
+  <div>
+    <h1><span>從一個點</span><span>到一座工廠</span></h1>
+    <p class="sub">用 Gemini、Claude、ChatGPT 學 3D 建模的完整課程。從「什麼是 X、Y、Z」開始，一步一步做出 VRT 廠房和會走路的動漫角色，最後走到專業流程。</p>
+    <div class="meta"><b>17 課</b><b>4 個階段</b><b>7 個可以轉的 3D 模型</b><b>國中程度就能懂</b></div>
+  </div>
+  <div>
+    <div class="hero-stage"><div class="stage" id="heroStage"></div></div>
+    <p class="hero-cap">用手指或滑鼠左右拖曳可以轉動。這座廠房在第 7 課你會自己做出來。</p>
+  </div>
+</header>
+</div>
+
+<div class="col">
+
+<!-- ================= 第 0 課 ================= -->
+<section class="lesson" id="ch0" data-n="0" data-title="開始之前：怎麼使用這份教材">
+  <div class="lesson-head"><div class="num">0</div><h2>開始之前：怎麼使用這份教材</h2></div>
+  <div class="goal"><b>這一課你會知道</b>要準備什麼、課程怎麼排、每一課的小方塊代表什麼意思。</div>
+
+  <p>很多人以為做 3D 要先學會很難的軟體。其實 3D 建模和堆樂高很像：先認識積木，再學怎麼拼，最後才學怎麼拼得又快又漂亮。現在有了 AI，你還多了一位 24 小時都在的家教和助手。</p>
+  <p>這份教材<strong>請照順序讀</strong>。後面的課一定會用到前面學過的東西，跳著讀很容易卡住。</p>
+
+  <h3>你需要準備的東西</h3>
+  <div class="tbl"><table>
+    <tr><th>東西</th><th>什麼時候要用</th><th>要花錢嗎</th></tr>
+    <tr><td>電腦（最好）或手機</td><td>全程</td><td>—</td></tr>
+    <tr><td>瀏覽器（Chrome、Edge、Safari 都可以）</td><td>第 1 課起，看 3D 模型</td><td>免費</td></tr>
+    <tr><td>至少一個 AI 帳號：ChatGPT、Claude 或 Gemini</td><td>第 4 課起</td><td>免費版就能完成大部分練習</td></tr>
+    <tr><td>Blender（3D 軟體）</td><td>第 11 課起，專業階段</td><td>免費、開源</td></tr>
+    <tr><td>筆記本和筆</td><td>全程，畫草圖真的很有用</td><td>—</td></tr>
+  </table></div>
+
+  <h3>課程地圖</h3>
+  <div class="cards">
+    <div class="card cx"><h4>第一階段　看懂 3D</h4><p>第 1–3 課。座標、點線面、材質燈光。這是地基。</p></div>
+    <div class="card cy"><h4>第二階段　認識 AI 夥伴</h4><p>第 4–6 課。三個 AI 的差別、怎麼下指令，做出第一個 3D 方塊。</p></div>
+    <div class="card cz"><h4>第三階段　實戰</h4><p>第 7–10 課。VRT 廠房、原創動漫角色、讓角色動起來、真人 3D。</p></div>
+    <div class="card ch"><h4>第四階段　專業</h4><p>第 11–16 課。Blender、拓撲、UV、圖轉 3D、檔案格式、專業流程、畢業專案。</p></div>
+  </div>
+
+  <h3>每一課都有的小方塊</h3>
+  <div class="box origin"><div class="t">名詞由來</div><p>專有名詞是從哪裡來的、為什麼叫這個名字。知道由來就不用死背。</p></div>
+  <div class="box try"><div class="t">動手做</div><p>跟著做的練習，或可以直接複製給 AI 的提示詞。</p></div>
+  <div class="box warn"><div class="t">常見錯誤</div><p>新手最常卡住的地方，先知道就能少走冤枉路。</p></div>
+  <div class="box note"><div class="t">注意</div><p>版權、隱私、安全這類「不是技術、但很重要」的事。</p></div>
+
+  <div class="box note"><div class="t">關於灌籃高手、七龍珠這類角色</div>
+    <p>這些是受著作權保護的角色，AI 工具通常也會拒絕直接生成。所以這份課程用一位<strong>原創角色「阿勇」</strong>來教同樣的日漫技巧：頭身比、三視圖、骨架、動畫。學會之後，你可以用同樣方法設計屬於自己的角色，那才是真正能拿出去用的作品。</p>
+  </div>
+
+  <div class="box note"><div class="t">AI 工具變化很快</div>
+    <p>ChatGPT、Claude、Gemini 幾乎每個月都在更新，按鈕位置、功能名稱、免費額度都可能改變。這份課程教的是<strong>不會過時的觀念和方法</strong>；遇到畫面跟課程不一樣時，直接問 AI：「我找不到某某功能，現在要怎麼做？」</p>
+  </div>
+</section>
+
+<!-- ================= 第一階段 ================= -->
+<div class="stage-banner" data-stage="第一階段　看懂 3D"><div class="big">1</div><h2>第一階段　看懂 3D</h2><p>先把 3D 世界的規則弄懂。這三課沒有 AI，但後面每一課都靠它。</p></div>
+
+<!-- ================= 第 1 課 ================= -->
+<section class="lesson" id="ch1" data-n="1" data-title="3D 是什麼？用座標找到每一個位置">
+  <div class="lesson-head"><div class="num">1</div><h2>3D 是什麼？用座標找到每一個位置</h2></div>
+  <div class="goal"><b>這一課你會學到</b><ul><li>1D、2D、3D 的差別</li><li>X、Y、Z 三個軸代表什麼</li><li>為什麼不同軟體「哪個軸朝上」不一樣</li></ul></div>
+
+  <h3>從找教室開始</h3>
+  <p>假設你要告訴轉學生怎麼找到你的座位：</p>
+  <ul>
+    <li>只說「第 3 排」，他只知道在哪一排，這是 <strong>1 個數字</strong>。</li>
+    <li>說「第 3 排、第 5 個」，他就能找到你。這是 <strong>2 個數字</strong>，就像地圖上的位置。</li>
+    <li>如果學校有好幾層樓，你得再加上「3 樓」。這是 <strong>3 個數字</strong>：左右、前後、上下。</li>
+  </ul>
+  <p>這就是 1D、2D、3D 的差別。<strong>3D 世界裡的任何一個位置，都可以用 3 個數字說清楚。</strong>電腦裡的 3D 模型，說穿了就是一大堆「用 3 個數字記錄的位置」。</p>
+
+  <div class="box origin"><div class="t">名詞由來：D 與「維度」</div>
+    <p>3D 是 <em>three-dimensional</em>（三維）的縮寫。<em>Dimension</em> 來自拉丁文 <em>dimensio</em>，意思是「測量」。所以「三維」就是「要測量三個方向」：長、寬、高。</p>
+  </div>
+
+  <h3>X、Y、Z：三把互相垂直的尺</h3>
+  <p>數學家把這三個方向叫做 X 軸、Y 軸、Z 軸。想像房間的一個牆角：地板和兩面牆交會的那一點叫做<strong>原點</strong>，座標是 (0, 0, 0)。從原點出發有三條線，彼此互相垂直，每一條都是一把尺。</p>
+
+  <div class="box origin"><div class="t">名詞由來：笛卡兒座標</div>
+    <p>1637 年，法國數學家笛卡兒（René Descartes）在著作《幾何學》中，把「位置」變成「數字」。傳說他躺在床上看著天花板上的一隻蒼蠅，想到只要知道蒼蠅離兩面牆各多遠，就能準確說出牠在哪裡。這個故事不一定是真的，但他的方法到今天還是 3D 軟體的基礎，所以叫做「笛卡兒座標系」。</p>
+  </div>
+
+  <div class="demo" id="demoAxes">
+    <div class="dh">互動：移動小球，看它的座標 <small>拖曳可旋轉</small></div>
+    <div class="stage"><div class="readout" id="axesReadout"></div></div>
+    <div class="controls">
+      <label><span>左右（<span class="lx">X</span> 軸）</span><input type="range" id="ax" min="-4" max="4" step="0.5" value="2"></label>
+      <label><span>高度</span><input type="range" id="ay" min="0" max="4" step="0.5" value="1.5"></label>
+      <label><span>前後</span><input type="range" id="az" min="-4" max="4" step="0.5" value="1"></label>
+      <label class="inline"><input type="checkbox" id="aBlender"> 改用 Blender 的方向（Z 朝上）</label>
+    </div>
+  </div>
+
+  <h3>兩派人馬：Y 朝上 vs Z 朝上</h3>
+  <p>有一件事會困擾很多新手：<strong>不同軟體對「哪個軸是高度」的看法不一樣</strong>。</p>
+  <div class="tbl"><table>
+    <tr><th>陣營</th><th>高度用哪個軸</th><th>代表軟體</th><th>由來</th></tr>
+    <tr><td>Y 朝上</td><td><span class="ly">Y</span></td><td>Three.js（網頁 3D）、Unity、Maya</td><td>從電腦螢幕的 2D 畫面延伸：X 是橫、Y 是直，再加一個「往螢幕裡面」的 Z</td></tr>
+    <tr><td>Z 朝上</td><td><span class="lz">Z</span></td><td>Blender、Unreal、建築 CAD 軟體</td><td>從建築和工程的平面圖延伸：地圖本來就是 X、Y，高度是後來加上去的 Z</td></tr>
+  </table></div>
+  <p>兩派都沒有錯，就像有人習慣靠左走、有人習慣靠右走。重要的是：<strong>請 AI 幫忙時，要告訴它你用哪一套</strong>。上面的互動圖勾選「改用 Blender 的方向」，你會看到同一顆球在兩種說法下的座標數字不同。</p>
+
+  <div class="box try"><div class="t">記憶口訣：RGB = XYZ</div>
+    <p>幾乎所有 3D 軟體都用<span class="lx">紅色</span>代表 X、<span class="ly">綠色</span>代表 Y、<span class="lz">藍色</span>代表 Z。因為電腦顏色的順序剛好是 RGB（Red、Green、Blue），和 XYZ 一一對應。這份教材的顏色也照這個規則。</p>
+  </div>
+
+  <div class="box try"><div class="t">動手做</div>
+    <p>把教室或房間的一個牆角當作原點，量一量（或用步伐估算）你的書桌離兩面牆各有幾公尺、桌面有多高，寫成 (X, 高度, 前後) 三個數字。你剛剛完成了人生第一次「3D 測量」。</p>
+  </div>
+
+  <div class="quiz" data-a="1">
+    <p class="q">在 Three.js（網頁 3D）裡，哪一個軸代表「高度」？</p>
+    <div class="opts"><button>X 軸</button><button>Y 軸</button><button>Z 軸</button></div>
+    <p class="exp" hidden>答案是 Y 軸。Three.js 屬於「Y 朝上」陣營；Blender 則是 Z 朝上。</p>
+  </div>
+
+  <div class="box key"><div class="t">本課重點</div><ul>
+    <li>3D 的每個位置都能用 3 個數字 (X, Y, Z) 表示。</li>
+    <li>紅綠藍 = X Y Z。</li>
+    <li>Three.js 是 Y 朝上，Blender 是 Z 朝上，跟 AI 溝通時要講清楚。</li>
+  </ul></div>
+</section>
+
+<!-- ================= 第 2 課 ================= -->
+<section class="lesson" id="ch2" data-n="2" data-title="點、線、面：3D 模型的積木">
+  <div class="lesson-head"><div class="num">2</div><h2>點、線、面：3D 模型的積木</h2></div>
+  <div class="goal"><b>這一課你會學到</b><ul><li>頂點、邊、面、多邊形、網格是什麼</li><li>為什麼電腦特別喜歡三角形</li><li>面數多和面數少各有什麼好壞</li></ul></div>
+
+  <h3>從一個點長成一個方塊</h3>
+  <figure>
+    <svg viewBox="0 0 640 170" role="img" aria-label="點、線、面、體四個階段">
+      <g transform="translate(40,30)">
+        <circle cx="50" cy="60" r="7" fill="var(--x)"/>
+        <text class="svg-text" x="50" y="130" text-anchor="middle">點（頂點）</text>
+      </g>
+      <g transform="translate(190,30)">
+        <line x1="10" y1="90" x2="90" y2="30" stroke="var(--y)" stroke-width="4"/>
+        <circle cx="10" cy="90" r="6" fill="var(--x)"/><circle cx="90" cy="30" r="6" fill="var(--x)"/>
+        <text class="svg-text" x="50" y="130" text-anchor="middle">線（邊）</text>
+      </g>
+      <g transform="translate(340,30)">
+        <polygon points="10,95 95,95 55,20" fill="var(--z)" fill-opacity=".35" stroke="var(--y)" stroke-width="3"/>
+        <circle cx="10" cy="95" r="6" fill="var(--x)"/><circle cx="95" cy="95" r="6" fill="var(--x)"/><circle cx="55" cy="20" r="6" fill="var(--x)"/>
+        <text class="svg-text" x="50" y="130" text-anchor="middle">面</text>
+      </g>
+      <g transform="translate(490,30)">
+        <polygon points="10,40 70,40 70,100 10,100" fill="var(--z)" fill-opacity=".45" stroke="var(--ink)" stroke-width="2"/>
+        <polygon points="10,40 40,15 100,15 70,40" fill="var(--z)" fill-opacity=".25" stroke="var(--ink)" stroke-width="2"/>
+        <polygon points="70,40 100,15 100,75 70,100" fill="var(--z)" fill-opacity=".65" stroke="var(--ink)" stroke-width="2"/>
+        <text class="svg-text" x="55" y="130" text-anchor="middle">體（網格）</text>
+      </g>
+    </svg>
+    <figcaption>點連成線，線圍成面，面包成一個立體。電腦裡所有 3D 模型都是這樣組成的。</figcaption>
+  </figure>
+
+  <div class="tbl"><table>
+    <tr><th>中文</th><th>英文</th><th>一句話解釋</th></tr>
+    <tr><td>頂點</td><td>Vertex</td><td>空間中的一個位置，用 (X, Y, Z) 記錄</td></tr>
+    <tr><td>邊</td><td>Edge</td><td>連接兩個頂點的直線</td></tr>
+    <tr><td>面</td><td>Face</td><td>三條以上的邊圍起來的平面</td></tr>
+    <tr><td>多邊形</td><td>Polygon</td><td>面的正式名稱；3D 界常簡稱「poly」</td></tr>
+    <tr><td>網格</td><td>Mesh</td><td>很多面連在一起組成的整個模型外殼</td></tr>
+  </table></div>
+
+  <div class="box origin"><div class="t">名詞由來</div>
+    <p><strong>Vertex</strong>：拉丁文原意是「轉折處、最高點」，就是線條轉彎的地方。<br>
+    <strong>Polygon</strong>：希臘文 <em>poly</em>（很多）+ <em>gōnia</em>（角），意思是「很多角的形狀」。<br>
+    <strong>Mesh</strong>：英文本來是「網子」。3D 模型的線框看起來就像一張罩在物體上的漁網，所以這樣叫。</p>
+  </div>
+
+  <h3>為什麼電腦最愛三角形？</h3>
+  <p>還記得數學課學過的嗎？<strong>不在同一直線上的三個點，一定能決定一個平面</strong>。三角形永遠是平的，不會歪掉。四邊形就不一定了：把一張紙的四個角隨便抬起一個，它就彎了。</p>
+  <p>電腦要算光線照在面上的角度，面「一定是平的」會讓計算簡單又穩定。所以不管你在軟體裡做的是四邊形還是更多邊形，<strong>顯示卡最後都會把它切成三角形</strong>再畫出來。</p>
+
+  <div class="demo" id="demoMesh">
+    <div class="dh">互動：面數越多，越圓滑 <small>拖曳可旋轉</small></div>
+    <div class="stage"><div class="readout" id="meshReadout"></div></div>
+    <div class="controls">
+      <label>形狀<select id="mShape"><option value="sphere">球</option><option value="cyl">圓柱</option><option value="torus">甜甜圈</option><option value="box">方塊</option></select></label>
+      <label>細分數量<input type="range" id="mSeg" min="3" max="48" step="1" value="8"></label>
+      <label class="inline"><input type="checkbox" id="mWire" checked> 顯示線框</label>
+      <label class="inline"><input type="checkbox" id="mFlat" checked> 平面著色（看得出每一面）</label>
+    </div>
+  </div>
+
+  <h3>低面數 vs 高面數</h3>
+  <p>把細分數量拉到 3，球會變成像鑽石一樣的尖角；拉到 48，就很圓了。這就像手機照片的解析度：越高越細緻，但檔案越大、手機越跑不動。</p>
+  <div class="tbl"><table>
+    <tr><th></th><th>低面數（Low Poly）</th><th>高面數（High Poly）</th></tr>
+    <tr><td>看起來</td><td>有稜有角，風格化</td><td>圓滑、細節多</td></tr>
+    <tr><td>電腦負擔</td><td>輕，手機遊戲也跑得動</td><td>重，需要好的顯示卡</td></tr>
+    <tr><td>常見用途</td><td>手機遊戲、網頁、建築示意</td><td>電影、公仔、3D 列印</td></tr>
+  </table></div>
+
+  <h3>萬物都是基本形</h3>
+  <p>3D 軟體都內建幾種「基本形」（Primitive）：方塊、球、圓柱、圓錐、甜甜圈（圓環）。它們就是你的樂高積木。</p>
+  <div class="box origin"><div class="t">名詞由來：Primitive 與塞尚</div>
+    <p><em>Primitive</em> 原意是「最原始、最基本的」。畫家塞尚（Paul Cézanne）在 1904 年寫給朋友的信中說，要用圓柱、球體和圓錐來處理自然。一百多年後，3D 建模師還在用同樣的想法：先用基本形抓出大概的樣子，再慢慢修細節。</p>
+  </div>
+
+  <div class="box try"><div class="t">動手做：用基本形拆解身邊的東西</div>
+    <p>挑三樣東西，寫出它們是由哪些基本形組成的。例如：</p>
+    <ul><li>電風扇 = 圓柱（底座）+ 細圓柱（桿子）+ 扁圓柱（馬達）+ 很扁的方塊（扇葉）</li>
+    <li>VRT 廠房 = 大方塊（主廠房）+ 中方塊（倉庫）+ 高方塊（辦公樓）</li></ul>
+    <p>學會「用基本形看世界」，你就已經具備建模師最重要的眼光。</p>
+  </div>
+
+  <div class="quiz" data-a="2">
+    <p class="q">為什麼顯示卡最後都會把模型切成三角形？</p>
+    <div class="opts"><button>因為三角形最漂亮</button><button>因為三角形的檔案最小</button><button>因為三個點一定在同一個平面上，計算最穩定</button></div>
+    <p class="exp" hidden>三角形永遠是平的，電腦計算光線、陰影時不會出錯，所以是 3D 繪圖的最小單位。</p>
+  </div>
+
+  <div class="box key"><div class="t">本課重點</div><ul>
+    <li>頂點 → 邊 → 面 → 網格，這是 3D 模型的組成方式。</li>
+    <li>三角形是電腦畫 3D 的最小單位。</li>
+    <li>面數是「預算」：越多越細緻，也越吃效能。</li>
+    <li>先用基本形拆解，再修細節。</li>
+  </ul></div>
+</section>
+
+<!-- ================= 第 3 課 ================= -->
+<section class="lesson" id="ch3" data-n="3" data-title="材質、燈光、攝影機與渲染">
+  <div class="lesson-head"><div class="num">3</div><h2>材質、燈光、攝影機與渲染</h2></div>
+  <div class="goal"><b>這一課你會學到</b><ul><li>一個 3D 場景需要哪些角色</li><li>材質的「粗糙度」和「金屬度」</li><li>四種燈光、兩種攝影機，以及「渲染」這個詞怎麼來的</li></ul></div>
+
+  <h3>把 3D 場景想成一齣舞台劇</h3>
+  <div class="tbl"><table>
+    <tr><th>舞台劇</th><th>3D 名詞</th><th>英文</th><th>負責什麼</th></tr>
+    <tr><td>舞台</td><td>場景</td><td>Scene</td><td>所有東西放在裡面</td></tr>
+    <tr><td>演員</td><td>模型</td><td>Model / Mesh</td><td>形狀</td></tr>
+    <tr><td>戲服、化妝</td><td>材質</td><td>Material</td><td>顏色、亮不亮、粗不粗糙</td></tr>
+    <tr><td>燈光師</td><td>燈光</td><td>Light</td><td>沒有光，什麼都看不到</td></tr>
+    <tr><td>觀眾的眼睛</td><td>攝影機</td><td>Camera</td><td>從哪裡、用什麼角度看</td></tr>
+    <tr><td>拍成照片</td><td>渲染</td><td>Render</td><td>電腦把以上全部算成一張圖</td></tr>
+  </table></div>
+  <p>新手最常見的問題：「我的模型怎麼一片黑？」答案通常是<strong>忘了放燈光</strong>。就像舞台燈沒開，演員再好看觀眾也看不到。</p>
+
+  <h3>材質：同樣的形狀，不同的感覺</h3>
+  <p>現代 3D 軟體描述材質，最常用兩個數字，都是從 0 到 1：</p>
+  <ul>
+    <li><strong>粗糙度（Roughness）</strong>：0 像鏡子一樣光滑，1 像黑板一樣霧面。</li>
+    <li><strong>金屬度（Metalness）</strong>：0 是塑膠、布料、木頭，1 是金屬。金屬的反光會帶有自己的顏色，例如金子的反光是金色的。</li>
+  </ul>
+  <p>想想 VRT 廠房裡的東西：縫紉機的金屬外殼（金屬度高、粗糙度中）、布料（金屬度 0、粗糙度接近 1）、剛拖過的地板（金屬度 0、粗糙度低）。</p>
+
+  <h3>四種燈光</h3>
+  <div class="tbl"><table>
+    <tr><th>燈光</th><th>英文</th><th>生活中的例子</th><th>特色</th></tr>
+    <tr><td>環境光</td><td>Ambient</td><td>陰天</td><td>到處一樣亮，沒有影子</td></tr>
+    <tr><td>平行光</td><td>Directional</td><td>太陽</td><td>光線平行照過來，影子方向都一樣</td></tr>
+    <tr><td>點光源</td><td>Point</td><td>燈泡</td><td>從一點往四面八方發光</td></tr>
+    <tr><td>聚光燈</td><td>Spot</td><td>舞台追燈、手電筒</td><td>一個圓錐形的光</td></tr>
+  </table></div>
+
+  <div class="demo" id="demoLight">
+    <div class="dh">互動：調燈光、材質、鏡頭 <small>拖曳可旋轉</small></div>
+    <div class="stage"></div>
+    <div class="controls">
+      <label>燈光種類<select id="lType"><option value="dir">平行光（太陽）</option><option value="point">點光源（燈泡）</option><option value="spot">聚光燈</option><option value="amb">只有環境光（陰天）</option></select></label>
+      <label>光源方向<input type="range" id="lAng" min="0" max="360" value="40"></label>
+      <label>粗糙度 Roughness<input type="range" id="lRough" min="0" max="1" step="0.05" value="0.35"></label>
+      <label>金屬度 Metalness<input type="range" id="lMetal" min="0" max="1" step="0.05" value="0"></label>
+      <label>鏡頭視角 FOV（廣角 ↔ 望遠）<input type="range" id="lFov" min="15" max="90" value="40"></label>
+    </div>
+  </div>
+
+  <h3>兩種攝影機</h3>
+  <ul>
+    <li><strong>透視攝影機（Perspective）</strong>：近大遠小，跟人眼一樣。拍照片、做遊戲用這個。上面互動的 FOV 滑桿，就是調整鏡頭的「視野角度」：數字大是廣角（看得廣，但邊緣變形），數字小是望遠。</li>
+    <li><strong>正交攝影機（Orthographic）</strong>：沒有近大遠小，遠近的東西一樣大。建築平面圖、工程圖、角色三視圖都用這個，因為可以直接量尺寸。</li>
+  </ul>
+  <div class="box origin"><div class="t">名詞由來：透視與正交</div>
+    <p>「透視法」大約在 1415 年由義大利建築師布魯內萊斯基（Filippo Brunelleschi）用鏡子實驗整理出來，文藝復興的畫家從此會畫出有深度的畫。<br>
+    「正交」（Orthographic）來自希臘文 <em>orthos</em>（直的、正的）+ <em>graphein</em>（畫），意思是「垂直投影的畫法」，是工程製圖的基本功。</p>
+  </div>
+
+  <h3>渲染：讓電腦「拍照」</h3>
+  <p>擺好模型、材質、燈光、攝影機之後，電腦要計算每一個像素是什麼顏色，這個過程叫做<strong>渲染</strong>。</p>
+  <ul>
+    <li><strong>即時渲染（Real-time）</strong>：一秒算 30 到 60 張以上，遊戲和這份教材的互動圖都是。</li>
+    <li><strong>離線渲染（Offline）</strong>：一張圖可以算好幾分鐘甚至幾小時，動畫電影就是這樣做出來的，所以光影特別真實。</li>
+  </ul>
+  <div class="box origin"><div class="t">名詞由來：Render 與「渲染」</div>
+    <p>英文 <em>render</em> 來自拉丁文 <em>reddere</em>，意思是「交出去、呈現出來」。中文翻成「渲染」則借用了國畫技法：用水墨一層層暈開，讓畫面有明暗層次。電腦算出光影明暗，正好很像這件事。台灣業界也常說「算圖」。</p>
+  </div>
+
+  <div class="quiz" data-a="1">
+    <p class="q">建築平面圖要能直接量尺寸，應該用哪種攝影機？</p>
+    <div class="opts"><button>透視攝影機</button><button>正交攝影機</button><button>聚光燈</button></div>
+    <p class="exp" hidden>正交攝影機沒有「近大遠小」，所以圖上 1 公分代表的長度到處都一樣，可以量尺寸。聚光燈是燈光，不是攝影機喔。</p>
+  </div>
+
+  <div class="box key"><div class="t">本課重點</div><ul>
+    <li>場景 = 模型 + 材質 + 燈光 + 攝影機，最後渲染成圖。</li>
+    <li>材質靠粗糙度和金屬度描述。</li>
+    <li>模型一片黑，先檢查燈光。</li>
+    <li>透視用來看，正交用來量。</li>
+  </ul></div>
+</section>
+
+<!-- ================= 第二階段 ================= -->
+<div class="stage-banner" data-stage="第二階段　認識 AI 夥伴"><div class="big">2</div><h2>第二階段　認識 AI 夥伴</h2><p>認識三位 AI 助手，學會怎麼說話它們才聽得懂，然後做出你的第一個 3D 作品。</p></div>
+
+<!-- ================= 第 4 課 ================= -->
+<section class="lesson" id="ch4" data-n="4" data-title="三位 AI 助手，和做 3D 的四條路">
+  <div class="lesson-head"><div class="num">4</div><h2>三位 AI 助手，和做 3D 的四條路</h2></div>
+  <div class="goal"><b>這一課你會學到</b><ul><li>AI 和「大型語言模型」是什麼</li><li>ChatGPT、Claude、Gemini 的名字由來和各自強項</li><li>最重要的觀念：聊天 AI 通常不是直接「變出」3D，而是走四條路之一</li></ul></div>
+
+  <h3>AI 是怎麼「會說話」的？</h3>
+  <p>你玩過文字接龍嗎？「今天天氣很……」你會接「好」或「熱」，因為你看過很多這樣的句子。聊天型 AI 的核心叫做<strong>大型語言模型（LLM）</strong>，它讀過非常大量的文字和程式碼，變成一個超級接龍高手：根據前面的內容，一個字一個字地預測接下來最適合說什麼。</p>
+  <p>因為它讀過大量程式碼和教學文件，所以它也很會「寫程式」和「解釋怎麼操作軟體」。這一點對我們做 3D 非常重要。</p>
+
+  <div class="box origin"><div class="t">名詞由來：AI、LLM、Transformer</div>
+    <p><strong>AI</strong>（Artificial Intelligence，人工智慧）這個詞在 1956 年美國達特茅斯學院的一場研討會上，由電腦科學家麥卡錫（John McCarthy）等人正式提出。<br>
+    <strong>LLM</strong> 是 Large Language Model 的縮寫，「大型」指它的參數（可以想成腦中的連結）多到數十億、數千億個。<br>
+    <strong>Transformer</strong> 是 2017 年 Google 研究團隊在論文〈Attention Is All You Need〉中提出的架構，現在幾乎所有聊天 AI 都建立在它上面。</p>
+  </div>
+
+  <h3>認識三位助手</h3>
+  <div class="cards">
+    <div class="card cx"><h4>ChatGPT</h4><p>OpenAI 公司開發，2022 年 11 月推出，讓全世界認識聊天 AI。GPT 是 <em>Generative Pre-trained Transformer</em> 的縮寫：「會生成內容、事先訓練好的 Transformer」。</p></div>
+    <div class="card cy"><h4>Claude</h4><p>Anthropic 公司開發，公司成立於 2021 年。外界普遍認為名字是向「資訊理論之父」克勞德·夏農（Claude Shannon）致敬，他奠定了數位通訊的數學基礎。</p></div>
+    <div class="card cz"><h4>Gemini</h4><p>Google 開發，2023 年 12 月發表。Gemini 是拉丁文「雙胞胎」，也是雙子座。Google 表示這個名字呼應了旗下兩個 AI 團隊（Google Brain 和 DeepMind）合併，也致敬 NASA 的雙子星太空計畫。</p></div>
+  </div>
+
+  <h3>做 3D 時，它們各自擅長什麼？</h3>
+  <p>三者都很聰明，差別在「附帶的工具」。下面是大方向的比較，實際功能請以各官網為準：</p>
+  <div class="tbl"><table>
+    <tr><th>能力</th><th>ChatGPT</th><th>Claude</th><th>Gemini</th></tr>
+    <tr><td>寫 3D 程式碼（Three.js、Blender 腳本）</td><td>可以</td><td>可以，長程式碼和除錯是強項</td><td>可以</td></tr>
+    <tr><td>直接在聊天視窗預覽網頁 3D</td><td>有類似功能</td><td>有（Artifacts）</td><td>有類似功能</td></tr>
+    <tr><td>生成圖片（例如角色三視圖）</td><td>內建</td><td>不直接生成圖片，但可以畫 SVG 向量圖</td><td>內建</td></tr>
+    <tr><td>看懂你上傳的圖片、截圖</td><td>可以</td><td>可以</td><td>可以</td></tr>
+    <tr><td>一步一步教你操作軟體</td><td>可以</td><td>可以</td><td>可以</td></tr>
+  </table></div>
+  <p>所以常見的分工是：<strong>用 ChatGPT 或 Gemini 生成參考圖，用任何一個（例如 Claude）寫程式碼和除錯</strong>。三個一起用，就像同時有美術老師和程式老師。</p>
+
+  <h3>最重要的觀念：做 3D 的四條路</h3>
+  <p>很多人第一次會對 AI 說「幫我做一個 3D 模型」，然後很失望。因為聊天 AI 大多不是直接給你一個 3D 檔，而是走以下四條路之一：</p>
+  <figure>
+    <svg viewBox="0 0 660 330" role="img" aria-label="用 AI 做 3D 的四條路">
+      <rect x="10" y="135" width="90" height="56" rx="8" fill="var(--ink)"/>
+      <text x="55" y="169" text-anchor="middle" fill="var(--paper)" font-family="var(--font)" font-size="17" font-weight="700">你</text>
+      <rect x="140" y="135" width="110" height="56" rx="8" fill="none" stroke="var(--ink)" stroke-width="2"/>
+      <text class="svg-text" x="195" y="160" text-anchor="middle" font-weight="700">AI</text>
+      <text class="svg-small" x="195" y="180" text-anchor="middle">GPT・Claude・Gemini</text>
+      <line x1="100" y1="163" x2="138" y2="163" stroke="var(--ink)" stroke-width="2"/>
+      <g font-family="var(--font)">
+        <path d="M250 150 C 290 60, 300 45, 330 45" fill="none" stroke="var(--x)" stroke-width="2.5"/>
+        <path d="M250 158 C 290 130, 300 125, 330 125" fill="none" stroke="var(--y)" stroke-width="2.5"/>
+        <path d="M250 168 C 290 200, 300 205, 330 205" fill="none" stroke="var(--z)" stroke-width="2.5"/>
+        <path d="M250 176 C 290 270, 300 285, 330 285" fill="none" stroke="var(--hazard)" stroke-width="2.5"/>
+        <rect x="330" y="22" width="320" height="46" rx="6" fill="var(--x-bg)" stroke="var(--x)"/>
+        <text class="svg-text" x="344" y="43" font-weight="700">A　寫網頁程式碼 → 瀏覽器直接看 3D</text>
+        <text class="svg-small" x="344" y="61">最快上手。第 6、7、9 課</text>
+        <rect x="330" y="102" width="320" height="46" rx="6" fill="var(--y-bg)" stroke="var(--y)"/>
+        <text class="svg-text" x="344" y="123" font-weight="700">B　生成參考圖 → 圖轉 3D 工具</text>
+        <text class="svg-small" x="344" y="141">最快得到複雜人物。第 8、13 課</text>
+        <rect x="330" y="182" width="320" height="46" rx="6" fill="var(--z-bg)" stroke="var(--z)"/>
+        <text class="svg-text" x="344" y="203" font-weight="700">C　寫 Blender 腳本 → 專業軟體裡建模</text>
+        <text class="svg-small" x="344" y="221">最精準、可以輸出任何格式。第 11 課</text>
+        <rect x="330" y="262" width="320" height="46" rx="6" fill="var(--hazard-bg)" stroke="var(--hazard)"/>
+        <text class="svg-text" x="344" y="283" font-weight="700">D　當家教 → 你自己動手操作</text>
+        <text class="svg-small" x="344" y="301">學得最紮實。每一課都用得到</text>
+      </g>
+    </svg>
+    <figcaption>AI 是大腦和手，但 3D 模型最後是在瀏覽器、圖轉 3D 工具或 Blender 裡「長出來」的。</figcaption>
+  </figure>
+
+  <div class="tbl"><table>
+    <tr><th>路線</th><th>難度</th><th>適合做什麼</th><th>缺點</th></tr>
+    <tr><td>A 網頁程式碼</td><td>低</td><td>建築示意、簡單角色、互動展示</td><td>複雜曲面（例如真實人臉）很難</td></tr>
+    <tr><td>B 圖轉 3D</td><td>低到中</td><td>人物、公仔、道具</td><td>細節不好控制，常要修模</td></tr>
+    <tr><td>C Blender 腳本</td><td>中</td><td>精準尺寸的建築、大量重複的東西</td><td>要先裝軟體、懂基本操作</td></tr>
+    <tr><td>D 當家教</td><td>看你</td><td>學專業技巧</td><td>要花時間練習</td></tr>
+  </table></div>
+
+  <div class="quiz" data-a="0">
+    <p class="q">想要最快在瀏覽器裡看到一座簡單的 3D 廠房，應該走哪一條路？</p>
+    <div class="opts"><button>A：請 AI 寫網頁 3D 程式碼</button><button>B：先生成照片再轉 3D</button><button>D：自己從頭學 Blender</button></div>
+    <p class="exp" hidden>廠房主要由方塊組成，用程式碼最快也最精準，而且存成一個 HTML 檔就能用瀏覽器打開。</p>
+  </div>
+
+  <div class="box key"><div class="t">本課重點</div><ul>
+    <li>聊天 AI 是「超級接龍高手」，很會寫程式和解說。</li>
+    <li>ChatGPT、Gemini 能生圖；Claude 長於寫程式與除錯；三者可以分工。</li>
+    <li>做 3D 有四條路：程式碼、圖轉 3D、Blender 腳本、當家教。</li>
+  </ul></div>
+</section>
+
+<!-- ================= 第 5 課 ================= -->
+<section class="lesson" id="ch5" data-n="5" data-title="提示詞基本功：讓 AI 聽得懂">
+  <div class="lesson-head"><div class="num">5</div><h2>提示詞基本功：讓 AI 聽得懂</h2></div>
+  <div class="goal"><b>這一課你會學到</b><ul><li>提示詞的五個要素</li><li>好提示和壞提示的差別</li><li>「一次改一件事」的修改技巧</li></ul></div>
+
+  <div class="box origin"><div class="t">名詞由來：Prompt（提示詞）</div>
+    <p>在劇場裡，演員忘詞時，躲在舞台邊小聲提醒台詞的人叫做 <em>prompter</em>（提詞員）。給 AI 的指令就像遞給它的台詞提示，所以叫 <em>prompt</em>。</p>
+  </div>
+
+  <h3>想像你在跟外包建築師說話</h3>
+  <p>如果你只說「幫我蓋一間房子」，建築師會問你一百個問題：多大？幾層？什麼風格？預算多少？AI 也一樣，只是它<strong>不會一直問，而是自己亂猜</strong>。猜錯了，你就得一直重來。</p>
+
+  <h3>好提示的五個要素</h3>
+  <div class="tbl"><table>
+    <tr><th>要素</th><th>問自己</th><th>3D 例子</th></tr>
+    <tr><td>角色</td><td>要 AI 扮演誰？</td><td>你是一位熟悉 Three.js 的 3D 工程師，也是很有耐心的老師</td></tr>
+    <tr><td>目標</td><td>要做出什麼？</td><td>做一座成衣工廠的 3D 示意模型</td></tr>
+    <tr><td>規格</td><td>尺寸、數量、顏色、單位？</td><td>單位公尺；主廠房長 60、寬 30、高 8；Y 軸朝上</td></tr>
+    <tr><td>輸出格式</td><td>要什麼樣的結果？</td><td>一個完整的 HTML 檔，可以直接用瀏覽器打開</td></tr>
+    <tr><td>限制</td><td>什麼不要？</td><td>不要用需要安裝的套件；程式碼加上中文註解</td></tr>
+  </table></div>
+
+  <h3>壞例子 vs 好例子</h3>
+  <div class="box warn"><div class="t">壞提示</div><p>幫我做一個 3D 工廠。</p></div>
+  <div class="codebox"><div class="cap">好提示（可以複製）</div>
+<pre class="prompt">【角色】你是熟悉 Three.js 的 3D 工程師，也是很有耐心的老師，我是初學者。
+【目標】做一座成衣工廠的 3D 示意模型。
+【規格】
+- 單位是公尺，Y 軸朝上，地面在 y = 0
+- 主廠房：長 60、寬 30、高 8，淺灰色
+- 屋頂：平屋頂，深灰色
+【輸出格式】一個完整的 HTML 檔，Three.js 用 cdnjs 的 r128 版本載入，存檔後雙擊就能打開。可以用滑鼠拖曳旋轉視角。
+【限制】不要用 import 或需要安裝的東西。每一段程式碼都加上中文註解。</pre></div>
+
+  <h3>修改的技巧：一次改一件事</h3>
+  <p>AI 第一次做出來的東西很少完美。這是正常的，專業人士也是一來一回慢慢修。修改時記住三件事：</p>
+  <ol>
+    <li><strong>一次只改一件事。</strong>同時要求五個修改，AI 容易漏掉或改壞別的地方。</li>
+    <li><strong>說清楚「哪裡」和「改成怎樣」。</strong>「屋頂不好看」不如「屋頂改成鋸齒狀，共 6 個齒」。</li>
+    <li><strong>有錯誤就整段貼給 AI。</strong>畫面空白、出現紅字時，按 <kbd>F12</kbd> 打開瀏覽器的「主控台」（Console），把紅色的錯誤訊息複製給 AI。也可以直接截圖上傳。</li>
+  </ol>
+
+  <div class="box try"><div class="t">萬用提示模板（存起來，每次都能用）</div></div>
+  <div class="codebox"><div class="cap">萬用 3D 提示模板</div>
+<pre class="prompt">【角色】你是熟悉＿＿＿（Three.js／Blender Python）的 3D 工程師，也是有耐心的老師。我是＿＿＿（初學者／有基礎）。
+【目標】做一個＿＿＿。
+【規格】
+- 單位：＿＿＿（公尺／公分）
+- 座標：＿＿＿（Y 軸朝上／Z 軸朝上）
+- 尺寸與數量：＿＿＿
+- 顏色與材質：＿＿＿
+【輸出格式】＿＿＿（單一 HTML 檔／Blender 腳本／步驟說明）
+【限制】＿＿＿
+【請先做】先用條列簡短說明你打算怎麼做，再給完整程式碼。</pre></div>
+
+  <div class="box warn"><div class="t">常見錯誤</div>
+    <ul>
+      <li><strong>沒講單位</strong>：AI 可能用公分，也可能用「隨便的數字」，結果廠房跟人一樣大。</li>
+      <li><strong>只貼部分程式碼</strong>：請 AI 修改時，最好要求「給我完整的程式碼」，不要只給片段，新手很難自己拼回去。</li>
+      <li><strong>對話太長</strong>：聊了幾十輪後 AI 可能會忘記前面的設定。這時開一個新對話，把最新版程式碼和規格一起貼上。</li>
+    </ul>
+  </div>
+
+  <div class="quiz" data-a="2">
+    <p class="q">AI 做的廠房有三個地方不滿意，最好的做法是？</p>
+    <div class="opts"><button>一次把三個問題都丟給它</button><button>罵它做不好，叫它重做</button><button>一次改一個，改好確認後再改下一個</button></div>
+    <p class="exp" hidden>一次改一件事，AI 最不容易改壞別的地方，你也比較容易知道是哪一步出了問題。</p>
+  </div>
+
+  <div class="box key"><div class="t">本課重點</div><ul>
+    <li>五要素：角色、目標、規格、輸出格式、限制。</li>
+    <li>單位和座標方向一定要講。</li>
+    <li>一次改一件事；錯誤訊息整段貼給 AI。</li>
+  </ul></div>
+</section>
+
+<!-- ================= 第 6 課 ================= -->
+<section class="lesson" id="ch6" data-n="6" data-title="你的第一個 3D 作品：會旋轉的方塊">
+  <div class="lesson-head"><div class="num">6</div><h2>你的第一個 3D 作品：會旋轉的方塊</h2></div>
+  <div class="goal"><b>這一課你會學到</b><ul><li>HTML、JavaScript、WebGL、Three.js 各是什麼</li><li>從提示詞到存檔、打開的完整流程</li><li>讀懂每一行程式碼在做什麼，並自己改改看</li></ul></div>
+
+  <h3>先認識四個名字</h3>
+  <div class="tbl"><table>
+    <tr><th>名字</th><th>比喻</th><th>由來</th></tr>
+    <tr><td>HTML</td><td>網頁的骨架</td><td>HyperText Markup Language（超文本標記語言）。1991 年由英國科學家柏納李（Tim Berners-Lee）公開，他也是全球資訊網的發明人</td></tr>
+    <tr><td>JavaScript</td><td>讓網頁動起來的語言</td><td>1995 年由艾克（Brendan Eich）花大約 10 天寫出原型。名字借了當時很紅的 Java，但兩者是不同的語言</td></tr>
+    <tr><td>WebGL</td><td>讓瀏覽器能叫顯示卡畫 3D</td><td>Web Graphics Library，根據顯示卡繪圖標準 OpenGL 改成網頁版</td></tr>
+    <tr><td>Three.js</td><td>把 WebGL 變簡單的工具箱</td><td>2010 年由西班牙工程師卡貝略（Ricardo Cabello，網名 Mr.doob）公開。名字就是「3D」的 three + JavaScript 的 js</td></tr>
+  </table></div>
+
+  <h3>完整流程：五個步驟</h3>
+  <ol class="steps">
+    <li><strong>複製下面的提示詞</strong>，貼給 ChatGPT、Claude 或 Gemini 任何一個。</li>
+    <li><strong>看 AI 回覆的程式碼</strong>。如果它有「預覽」功能，可以直接在聊天視窗裡看到方塊在轉。手機使用者用預覽就夠了。</li>
+    <li><strong>在電腦上存檔</strong>：打開「記事本」（Windows）或「文字編輯」（Mac，要先切換成純文字格式），貼上程式碼，另存為 <code>cube.html</code>，編碼選 UTF-8。</li>
+    <li><strong>雙擊 <code>cube.html</code></strong>，瀏覽器就會打開，你會看到一個旋轉的藍色方塊。（需要網路，因為 Three.js 要從網路載入。）</li>
+    <li><strong>改改看</strong>：照下面的「小改造挑戰」修改數字，存檔後重新整理（<kbd>F5</kbd>）看變化。</li>
+  </ol>
+
+  <div class="codebox"><div class="cap">第一個提示詞</div>
+<pre class="prompt">你是熟悉 Three.js 的老師，我是完全的初學者。
+請寫一個完整的 HTML 檔：畫面中間有一個藍色方塊，一直慢慢旋轉。
+- Three.js 用 cdnjs 的 r128 版本，用 script 標籤載入
+- 要有燈光，讓方塊看起來有明暗
+- 每一行都加上中文註解，解釋它在做什麼
+- 不要用 import，存檔後雙擊就能打開</pre></div>
+
+  <p>AI 給你的程式碼大概會長這樣（每家 AI 寫法略有不同，都沒關係）：</p>
+  <div class="codebox"><div class="cap">cube.html</div>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;title&gt;我的第一個 3D 方塊&lt;/title&gt;
+  &lt;style&gt; body { margin: 0; overflow: hidden; } &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+<span class="c">// 1. 舞台：場景</span>
+const scene = new THREE.Scene();
+
+<span class="c">// 2. 觀眾的眼睛：透視攝影機（視角 60 度）</span>
+const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 100);
+camera.position.set(3, 2, 4);   <span class="c">// 攝影機站在 x=3, y=2, z=4</span>
+camera.lookAt(0, 0, 0);          <span class="c">// 看向原點</span>
+
+<span class="c">// 3. 畫家：渲染器，把畫面畫到網頁上</span>
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+document.body.appendChild(renderer.domElement);
+
+<span class="c">// 4. 演員：形狀（1×1×1 的方塊）＋ 戲服（藍色材質）</span>
+const cube = new THREE.Mesh(
+  new THREE.BoxGeometry(1, 1, 1),
+  new THREE.MeshStandardMaterial({ color: 0x2f6fd6 })
+);
+scene.add(cube);
+
+<span class="c">// 5. 燈光：環境光（陰天）＋ 平行光（太陽）</span>
+scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+const sun = new THREE.DirectionalLight(0xffffff, 1);
+sun.position.set(5, 10, 7);
+scene.add(sun);
+
+<span class="c">// 6. 開拍：每一格畫面讓方塊轉一點點</span>
+function animate() {
+  requestAnimationFrame(animate);
+  cube.rotation.y += 0.01;
+  renderer.render(scene, camera);
+}
+animate();
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre></div>
+
+  <p>發現了嗎？這段程式碼<strong>完全對應第 3 課的舞台劇</strong>：場景、攝影機、渲染器、模型加材質、燈光、開拍。以後不管程式碼多長，你都可以用這六個角色去找對應的段落。</p>
+
+  <div class="box origin"><div class="t">名詞由來：0x2f6fd6 是什麼顏色？</div>
+    <p>電腦顏色常用「十六進位」表示，<code>0x</code> 是「以下是十六進位數字」的記號。後面六個字兩兩一組，分別是紅、綠、藍的量，從 00（沒有）到 ff（最多）。所以 <code>0xff0000</code> 是純紅、<code>0x00ff00</code> 是純綠、<code>0xffffff</code> 是白色。十六進位用 0–9 加上 a–f 共 16 個符號，因為兩位數剛好能表示 0 到 255，符合電腦一個位元組的大小。</p>
+  </div>
+
+  <div class="box try"><div class="t">小改造挑戰</div>
+    <ol>
+      <li>把 <code>0x2f6fd6</code> 改成 <code>0xe8a800</code>，方塊會變成工安黃。</li>
+      <li>把 <code>BoxGeometry(1, 1, 1)</code> 改成 <code>BoxGeometry(2, 0.5, 1)</code>，它變成什麼形狀？</li>
+      <li>把 <code>0.01</code> 改成 <code>0.05</code>，轉速有什麼變化？</li>
+      <li>挑戰題：請 AI「在旁邊再加一個紅色的球」，看看它改了哪幾行。</li>
+    </ol>
+  </div>
+
+  <div class="box warn"><div class="t">常見錯誤</div>
+    <ul>
+      <li><strong>畫面全白</strong>：通常是沒網路，或存檔時變成 <code>cube.html.txt</code>。Windows 請在檔案總管打開「顯示副檔名」檢查。</li>
+      <li><strong>中文變亂碼</strong>：存檔時沒有選 UTF-8。</li>
+      <li><strong>AI 用了 import</strong>：新版寫法需要架伺服器，直接雙擊打不開。請 AI「改成不用 import、用 script 標籤載入 r128」。</li>
+    </ul>
+  </div>
+
+  <div class="quiz" data-a="1">
+    <p class="q">程式碼裡的 <code>renderer.render(scene, camera)</code> 對應舞台劇的哪一件事？</p>
+    <div class="opts"><button>演員上台</button><button>把舞台上的一切從觀眾眼睛的角度「拍成照片」</button><button>開燈</button></div>
+    <p class="exp" hidden>render 就是渲染：用這台攝影機，把這個場景算成一張畫面。每秒做大約 60 次，就變成動畫。</p>
+  </div>
+
+  <div class="box key"><div class="t">本課重點</div><ul>
+    <li>Three.js 讓瀏覽器能輕鬆畫 3D。</li>
+    <li>流程：提示詞 → 複製程式碼 → 存成 .html → 雙擊打開 → 修改。</li>
+    <li>程式碼的結構 = 場景、攝影機、渲染器、模型、燈光、動畫迴圈。</li>
+  </ul></div>
+</section>
+
+<!-- ================= 第三階段 ================= -->
+<div class="stage-banner" data-stage="第三階段　實戰"><div class="big">3</div><h2>第三階段　實戰</h2><p>把前面學的全部用上：一座廠房、一位原創角色、讓角色動起來，還有真人 3D。</p></div>
+
+<!-- ================= 第 7 課 ================= -->
+<section class="lesson" id="ch7" data-n="7" data-title="建築實戰：用 AI 蓋出 VRT 廠房">
+  <div class="lesson-head"><div class="num">7</div><h2>建築實戰：用 AI 蓋出 VRT 廠房</h2></div>
+  <div class="goal"><b>這一課你會學到</b><ul><li>建模前先規劃：比例、原點、朝向、平面圖</li><li>「粗模」的觀念和把建築拆成方塊</li><li>一來一回地讓 AI 修改，從方塊變成像樣的廠區</li><li>建築建模最常見的三個錯誤</li></ul></div>
+
+  <h3>第一步：建築師不會直接開工</h3>
+  <p>真正的建築師會先畫<strong>平面圖</strong>（從正上方往下看、用正交攝影機畫的圖），確定每棟建築在哪裡、多大。我們也一樣。先決定四件事：</p>
+  <ol>
+    <li><strong>單位</strong>：公尺。</li>
+    <li><strong>原點</strong>：主廠房的正中央地面，座標 (0, 0, 0)。</li>
+    <li><strong>朝向</strong>：X 軸是廠房的長邊方向，Y 軸朝上（我們用 Three.js）。</li>
+    <li><strong>尺寸表</strong>：每棟建築的長、寬、高。</li>
+  </ol>
+
+  <div class="box note"><div class="t">這是教學示意模型</div><p>下面的尺寸是為了教學設定的假設數字。做真正的廠區模型時，請換成實際量測或設計圖上的尺寸，方法完全一樣。</p></div>
+
+  <div class="tbl"><table>
+    <tr><th>建築</th><th>長（X）</th><th>寬（Z）</th><th>高（Y）</th><th>中心位置 (x, z)</th></tr>
+    <tr><td>主廠房（縫紉車間）</td><td>60</td><td>30</td><td>8</td><td>(0, 0)</td></tr>
+    <tr><td>倉庫</td><td>20</td><td>30</td><td>10</td><td>(41, 0)</td></tr>
+    <tr><td>辦公樓（3 層）</td><td>16</td><td>12</td><td>12</td><td>(−39, −9)</td></tr>
+    <tr><td>縫紉線 × 12 條</td><td>40</td><td>0.9</td><td>0.75</td><td>在主廠房內等距排列</td></tr>
+    <tr><td>裝卸平台</td><td>20</td><td>4</td><td>1.2</td><td>倉庫前方 (41, 17)</td></tr>
+  </table></div>
+
+  <figure>
+    <svg viewBox="0 0 660 300" role="img" aria-label="VRT 廠區平面圖">
+      <defs><pattern id="lines12" width="4" height="8.2" patternUnits="userSpaceOnUse"><line x1="0" y1="4" x2="4" y2="4" stroke="var(--z)" stroke-width="2.2"/></pattern></defs>
+      <!-- scale 5px per m, origin (330,140) -->
+      <rect x="180" y="65" width="300" height="150" fill="var(--z-bg)" stroke="var(--ink)" stroke-width="2"/>
+      <rect x="205" y="80" width="200" height="120" fill="url(#lines12)" opacity=".8"/>
+      <rect x="415" y="120" width="50" height="40" fill="none" stroke="var(--z)" stroke-dasharray="4 3"/>
+      <text class="svg-small" x="440" y="144" text-anchor="middle">裁剪</text>
+      <rect x="485" y="65" width="100" height="150" fill="var(--y-bg)" stroke="var(--ink)" stroke-width="2"/>
+      <rect x="485" y="215" width="100" height="20" fill="var(--hazard-bg)" stroke="var(--ink)"/>
+      <rect x="95" y="65" width="80" height="60" fill="var(--x-bg)" stroke="var(--ink)" stroke-width="2"/>
+      <text class="svg-text" x="305" y="58" text-anchor="middle" font-weight="700">主廠房 60 × 30 m</text>
+      <text class="svg-small" x="305" y="232" text-anchor="middle">12 條縫紉線</text>
+      <text class="svg-text" x="535" y="145" text-anchor="middle" font-weight="700">倉庫</text>
+      <text class="svg-small" x="535" y="234" text-anchor="middle">裝卸平台</text>
+      <text class="svg-text" x="135" y="100" text-anchor="middle" font-weight="700">辦公樓</text>
+      <circle cx="330" cy="140" r="5" fill="var(--x)"/>
+      <text class="svg-small" x="338" y="136" font-weight="700">原點 (0,0,0)</text>
+      <line x1="30" y1="270" x2="80" y2="270" stroke="var(--x)" stroke-width="3"/><text class="svg-small" x="86" y="274">X</text>
+      <line x1="30" y1="270" x2="30" y2="240" stroke="var(--z)" stroke-width="3"/><text class="svg-small" x="24" y="234">−Z</text>
+      <line x1="480" y1="280" x2="580" y2="280" stroke="var(--ink)"/><line x1="480" y1="275" x2="480" y2="285" stroke="var(--ink)"/><line x1="580" y1="275" x2="580" y2="285" stroke="var(--ink)"/>
+      <text class="svg-small" x="530" y="296" text-anchor="middle">20 公尺</text>
+    </svg>
+    <figcaption>從正上方往下看的平面圖（正交視角）。右下的比例尺表示圖上這段長度等於 20 公尺。</figcaption>
+  </figure>
+
+  <div class="box origin"><div class="t">名詞由來：粗模（Blockout）</div>
+    <p>遊戲公司設計關卡時，會先用灰色方塊把牆、房間、樓梯「擋」出來，確認大小和動線都對了，才開始做細節。英文叫 <em>blockout</em> 或 <em>blocking</em>，來自 block（方塊）。中文常叫「粗模」或「白模」。建築也一樣：<strong>先用方塊確認比例，細節最後才加</strong>。</p>
+  </div>
+
+  <h3>第二步：給 AI 完整的規格</h3>
+  <div class="codebox"><div class="cap">VRT 廠房提示詞（第一版）</div>
+<pre class="prompt">【角色】你是熟悉 Three.js 的 3D 工程師，也是有耐心的老師，我是初學者。
+【目標】做一座成衣工廠「VRT」的 3D 示意模型。
+【規格】單位公尺，Y 軸朝上，地面在 y = 0，原點在主廠房中央地面。
+1. 地面：110 × 70 的平面，淺灰綠色
+2. 主廠房：長 60（X）、寬 30（Z）、高 8，中心 (0, 0)，淺灰色牆
+3. 倉庫：20 × 30，高 10，中心 (41, 0)，淺綠灰色
+4. 辦公樓：16 × 12，高 12（三層樓），中心 (−39, −9)，每層加一條深色窗帶
+5. 主廠房內 12 條縫紉線：每條是長 40、寬 0.9、高 0.75 的工作桌，沿 X 方向，在 Z 方向等距排開；每張桌上放 20 台小方塊代表縫紉機
+6. 倉庫前方 (41, 17) 放一個 20 × 4、高 1.2 的裝卸平台
+7. 所有方塊都要剛好放在地面上，不能浮空或陷進地裡
+【輸出格式】一個完整 HTML 檔，Three.js 用 cdnjs r128，用 script 標籤載入。滑鼠拖曳可以旋轉視角、滾輪縮放（請自己寫簡單的控制，不要用 OrbitControls）。
+【限制】不要用 import。加上中文註解。牆面先做成半透明，讓我看得到裡面的縫紉線。</pre></div>
+
+  <h3>第三步：一來一回地修改</h3>
+  <p>第一版通常有 80 分。接下來用「一次改一件事」的方式修到 100 分。以下是一段真實感的對話範例：</p>
+  <div class="chat">
+    <div class="me"><span class="who">你</span>很好！請把主廠房的平屋頂改成「鋸齒屋頂」，沿 X 方向共 6 個齒，每個齒高 2.5 公尺，垂直的那一面做成淺藍色玻璃。給我完整程式碼。</div>
+    <div class="ai"><span class="who">AI</span>好的，我用 ExtrudeGeometry 把三角形「擠出」成長條，重複 6 次……（完整程式碼）</div>
+    <div class="me"><span class="who">你</span>屋頂比牆多出來了一截，請讓屋頂剛好對齊牆的邊緣。</div>
+    <div class="ai"><span class="who">AI</span>原因是每個齒寬 10 公尺，但我從 x = −25 開始排。改成從 x = −30 開始就會對齊……</div>
+    <div class="me"><span class="who">你</span>請在每棟建築上方加中文標籤：主廠房、倉庫、辦公樓、裝卸區。</div>
+    <div class="me"><span class="who">你</span>最後加上幾個勾選框：顯示／隱藏屋頂、縫紉線、標籤、線框模式。</div>
+  </div>
+
+  <div class="box origin"><div class="t">名詞由來：鋸齒屋頂</div>
+    <p>19 世紀英國工業革命時期，紡織廠需要大量又均勻的自然光讓工人看清楚布料和線。於是把屋頂做成像鋸子一樣的一排斜面，垂直的那一面裝玻璃並朝向北方（在北半球，北方的光不會直射，比較柔和、不刺眼）。紡織業和這種屋頂淵源很深，所以很適合用在 VRT 的模型上。</p>
+  </div>
+
+  <div class="demo" id="demoFactory">
+    <div class="dh">互動：VRT 廠房示意模型 <small>拖曳旋轉・滾輪或按鈕縮放</small></div>
+    <div class="stage"></div>
+    <div class="controls">
+      <label>屋頂<select id="fRoof"><option value="saw">鋸齒屋頂</option><option value="flat">平屋頂</option><option value="none">不顯示</option></select></label>
+      <label class="inline"><input type="checkbox" id="fGlass" checked> 牆面半透明</label>
+      <label class="inline"><input type="checkbox" id="fLines" checked> 縫紉線（12 條）</label>
+      <label class="inline"><input type="checkbox" id="fLabels" checked> 中文標籤</label>
+      <label class="inline"><input type="checkbox" id="fWire"> 線框模式</label>
+      <div class="row"><button class="btn" id="fReplay" type="button">重播組裝動畫</button><button class="btn" id="fTop" type="button">切到俯視（像平面圖）</button></div>
+    </div>
+  </div>
+
+  <h3>第四步：檢查三個最常見的錯誤</h3>
+  <div class="box warn"><div class="t">錯誤 1：建築浮在空中或一半陷在地下</div>
+    <p>Three.js 的方塊，位置是指它的<strong>正中心</strong>。高 8 公尺的方塊如果放在 y = 0，會有 4 公尺陷在地底下。<br>
+    公式：<strong>要貼齊地面，y 要設成「高度 ÷ 2」</strong>。高 8 的主廠房，y = 4；高 10 的倉庫，y = 5。</p>
+  </div>
+  <div class="box warn"><div class="t">錯誤 2：比例怪怪的</div>
+    <p>在場景裡放一個 1.7 公尺高的小人當「比例尺」，一看就知道門太小、機台太大。專業建築 3D 圖幾乎都會放人形，就是這個原因。</p>
+  </div>
+  <div class="box warn"><div class="t">錯誤 3：兩個面重疊時閃爍（Z-fighting）</div>
+    <p>地板和地面剛好在同一個高度，轉動視角時會一閃一閃的像斑馬紋。這是因為電腦用一個叫<strong>深度緩衝（Z-buffer）</strong>的東西記錄「誰比較靠近鏡頭」，兩個面距離完全一樣時它決定不了，兩個面就「打架」。英文叫 <em>Z-fighting</em>。解法：把其中一個抬高一點點，例如 0.01 公尺。</p>
+  </div>
+
+  <div class="box try"><div class="t">動手做：你的第一座廠區</div>
+    <ol>
+      <li>複製上面的提示詞，交給任一個 AI。</li>
+      <li>照對話範例，至少再修改 3 次。</li>
+      <li>加分題：請 AI 加一台貨車停在裝卸平台旁，或加上幾棵樹（樹 = 圓柱樹幹 + 圓錐樹冠）。</li>
+      <li>把每一版存成 <code>vrt_v1.html</code>、<code>vrt_v2.html</code>……改壞了也能回到上一版。</li>
+    </ol>
+  </div>
+
+  <div class="quiz" data-a="1">
+    <p class="q">倉庫高 10 公尺，要剛好放在地面上，它的 y 座標應該設多少？</p>
+    <div class="opts"><button>0</button><button>5</button><button>10</button></div>
+    <p class="exp" hidden>方塊的位置是指正中心，所以 y = 高度 ÷ 2 = 5，底部才會剛好碰到 y = 0 的地面。</p>
+  </div>
+
+  <div class="box key"><div class="t">本課重點</div><ul>
+    <li>先規劃：單位、原點、朝向、尺寸表、平面圖。</li>
+    <li>先做粗模確認比例，細節最後加。</li>
+    <li>貼地公式 y = 高 ÷ 2；放人形當比例尺；重疊面要錯開。</li>
+    <li>每一版都存檔，改壞了才能回頭。</li>
+  </ul></div>
+</section>
+
+<!-- ================= 第 8 課 ================= -->
+<section class="lesson" id="ch8" data-n="8" data-title="人物實戰（上）：比例、風格與三視圖">
+  <div class="lesson-head"><div class="num">8</div><h2>人物實戰（上）：比例、風格與三視圖</h2></div>
+  <div class="goal"><b>這一課你會學到</b><ul><li>「頭身比」是什麼，Q 版和日漫、寫實差在哪</li><li>三視圖是什麼、為什麼建模前一定要有</li><li>用 ChatGPT 或 Gemini 生成原創角色的三視圖</li><li>T-pose 和 A-pose</li></ul></div>
+
+  <div class="box note"><div class="t">為什麼用原創角色</div>
+    <p>灌籃高手、七龍珠裡的角色都受著作權保護，公開發布、販售或做成商品都需要授權，AI 生圖工具也常拒絕直接畫出他們。但它們的<strong>技法</strong>是大家都能學的：誇張的比例、清楚的輪廓、有力的動作。這一課用原創角色「阿勇」示範，你學會後就能設計自己的角色。</p>
+  </div>
+
+  <h3>頭身比：用頭當尺</h3>
+  <p>畫人物時，畫家會用<strong>頭的高度</strong>當作一把尺，量整個人有幾個頭高。這就是「頭身比」。</p>
+  <div class="tbl"><table>
+    <tr><th>頭身比</th><th>風格</th><th>感覺</th></tr>
+    <tr><td>2～3 頭身</td><td>Q 版、公仔、貼圖</td><td>可愛、頭大身小</td></tr>
+    <tr><td>5～6 頭身</td><td>兒童、偏可愛的動漫</td><td>親切、年輕</td></tr>
+    <tr><td>6.5～7 頭身</td><td>日漫少年主角</td><td>熱血、有活力</td></tr>
+    <tr><td>7～7.5 頭身</td><td>真實成年人平均</td><td>寫實</td></tr>
+    <tr><td>8 頭身以上</td><td>英雄、模特兒、運動漫畫的高個子</td><td>帥氣、修長、有威嚴</td></tr>
+  </table></div>
+
+  <div class="box origin"><div class="t">名詞由來：頭身</div>
+    <p>「頭身」是日文（とうしん），直接被台灣動漫圈借用。用身體某部分當尺的想法很古老：古希臘雕刻家波利克里托斯（Polykleitos）寫過一本叫《法則》（<em>Canon</em>）的書，討論理想人體各部位的比例。今天的繪畫教學還在用同樣的方法。</p>
+  </div>
+
+  <div class="demo" id="demoRatio">
+    <div class="dh">互動：拉動頭身比，看同一個角色的風格變化 <small>拖曳可旋轉</small></div>
+    <div class="stage"><div class="readout" id="ratioReadout"></div></div>
+    <div class="controls">
+      <label>頭身比<input type="range" id="rRatio" min="2" max="8.5" step="0.5" value="6.5"></label>
+      <div class="row"><button class="btn" data-r="2.5" type="button">Q 版 2.5</button><button class="btn on" data-r="6.5" type="button">日漫少年 6.5</button><button class="btn" data-r="7.5" type="button">寫實 7.5</button><button class="btn" data-r="8.5" type="button">英雄 8.5</button></div>
+      <label class="inline"><input type="checkbox" id="rRuler" checked> 顯示頭身刻度</label>
+      <label class="inline"><input type="checkbox" id="rApose"> 改成 A-pose</label>
+    </div>
+  </div>
+  <p class="muted">注意看：頭身比越低，眼睛也被設計得越大、四肢越粗，這就是 Q 版看起來可愛的原因。只改比例，角色的「年齡感」和「個性」就完全不同了。</p>
+
+  <h3>設計原創角色：阿勇</h3>
+  <p>建模前先寫一張<strong>角色設定卡</strong>。越具體，AI 畫出來的越一致：</p>
+  <div class="tbl"><table>
+    <tr><th>項目</th><th>設定</th></tr>
+    <tr><td>名字</td><td>阿勇</td></tr>
+    <tr><td>年齡、身分</td><td>16 歲，高中籃球社</td></tr>
+    <tr><td>比例</td><td>6.5 頭身，日漫少年風</td></tr>
+    <tr><td>外型</td><td>黑色短髮、瀏海略長；眼神有精神</td></tr>
+    <tr><td>服裝</td><td>藍綠色無袖球衣、同色短褲、白色長襪、白色籃球鞋，背號 5</td></tr>
+    <tr><td>個性</td><td>不服輸、練習最晚走</td></tr>
+  </table></div>
+
+  <h3>三視圖：建模的藍圖</h3>
+  <p>蓋房子要有平面圖，做人物要有<strong>三視圖</strong>：同一個角色的正面、側面、背面，用正交視角畫，而且每張圖的頭頂、下巴、肩膀、腳底都要在同一條水平線上。有了它，不管是自己建模還是交給圖轉 3D 工具，都不會「正面看是瘦子，側面看是胖子」。</p>
+
+  <figure>
+    <svg viewBox="0 0 660 320" role="img" aria-label="原創角色阿勇的三視圖，正面、側面、背面">
+      <g stroke="var(--line)" stroke-dasharray="4 4" stroke-width="1">
+        <line x1="40" y1="40" x2="650" y2="40"/><line x1="40" y1="76" x2="650" y2="76"/><line x1="40" y1="112" x2="650" y2="112"/><line x1="40" y1="148" x2="650" y2="148"/><line x1="40" y1="184" x2="650" y2="184"/><line x1="40" y1="220" x2="650" y2="220"/><line x1="40" y1="256" x2="650" y2="256"/><line x1="40" y1="274" x2="650" y2="274"/>
+      </g>
+      <g class="svg-small" text-anchor="end"><text x="34" y="62">1</text><text x="34" y="98">2</text><text x="34" y="134">3</text><text x="34" y="170">4</text><text x="34" y="206">5</text><text x="34" y="242">6</text><text x="34" y="272">6.5</text></g>
+      <!-- FRONT -->
+      <g transform="translate(150,0)">
+        <polygon points="-29,86 -40,96 -52,188 -42,190 -28,104" fill="#F1C7A5" stroke="var(--ink)" stroke-width="1.5"/>
+        <polygon points="29,86 40,96 52,188 42,190 28,104" fill="#F1C7A5" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="-22" y="185" width="16" height="78" fill="#F1C7A5" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="6" y="185" width="16" height="78" fill="#F1C7A5" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="-23" y="222" width="18" height="41" fill="#fff" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="5" y="222" width="18" height="41" fill="#fff" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="-26" y="262" width="22" height="12" rx="4" fill="#fff" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="4" y="262" width="22" height="12" rx="4" fill="#fff" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="-6" y="74" width="12" height="10" fill="#F1C7A5" stroke="var(--ink)" stroke-width="1.5"/>
+        <path d="M-29,84 h58 l2,68 h-62 z" fill="#1E9C9C" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="0" y="128" text-anchor="middle" fill="#fff" font-family="var(--font)" font-weight="900" font-size="22">5</text>
+        <rect x="-31" y="150" width="62" height="38" fill="#16706F" stroke="var(--ink)" stroke-width="1.5"/>
+        <circle cx="0" cy="58" r="18" fill="#F1C7A5" stroke="var(--ink)" stroke-width="1.5"/>
+        <path d="M-19,56 C-20,34 20,34 19,56 C 12,46 4,50 -2,44 C-6,50 -12,48 -19,56 z" fill="#2B2B33"/>
+        <ellipse cx="-7" cy="60" rx="3" ry="4" fill="var(--ink)"/><ellipse cx="7" cy="60" rx="3" ry="4" fill="var(--ink)"/>
+        <text class="svg-text" x="0" y="302" text-anchor="middle" font-weight="700">正面</text>
+      </g>
+      <!-- SIDE -->
+      <g transform="translate(345,0)">
+        <polygon points="-4,86 6,90 8,188 -2,190 -6,104" fill="#F1C7A5" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="-8" y="185" width="16" height="78" fill="#F1C7A5" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="-9" y="222" width="18" height="41" fill="#fff" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="-9" y="262" width="30" height="12" rx="4" fill="#fff" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="-5" y="74" width="10" height="10" fill="#F1C7A5" stroke="var(--ink)" stroke-width="1.5"/>
+        <path d="M-14,84 h28 l1,68 h-30 z" fill="#1E9C9C" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="-16" y="150" width="32" height="38" fill="#16706F" stroke="var(--ink)" stroke-width="1.5"/>
+        <polygon points="-3,88 5,92 7,150 -1,150" fill="#F1C7A5" stroke="var(--ink)" stroke-width="1.5"/>
+        <circle cx="0" cy="58" r="18" fill="#F1C7A5" stroke="var(--ink)" stroke-width="1.5"/>
+        <path d="M17,58 l4,4 l-4,2" fill="#F1C7A5" stroke="var(--ink)" stroke-width="1.2"/>
+        <path d="M-19,62 C-22,34 18,32 18,50 C 10,44 4,48 -2,44 C -4,54 -10,54 -12,60 z" fill="#2B2B33"/>
+        <ellipse cx="11" cy="60" rx="2" ry="4" fill="var(--ink)"/>
+        <text class="svg-text" x="0" y="302" text-anchor="middle" font-weight="700">側面</text>
+      </g>
+      <!-- BACK -->
+      <g transform="translate(540,0)">
+        <polygon points="-29,86 -40,96 -52,188 -42,190 -28,104" fill="#F1C7A5" stroke="var(--ink)" stroke-width="1.5"/>
+        <polygon points="29,86 40,96 52,188 42,190 28,104" fill="#F1C7A5" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="-22" y="185" width="16" height="78" fill="#F1C7A5" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="6" y="185" width="16" height="78" fill="#F1C7A5" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="-23" y="222" width="18" height="41" fill="#fff" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="5" y="222" width="18" height="41" fill="#fff" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="-26" y="262" width="22" height="12" rx="4" fill="#fff" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="4" y="262" width="22" height="12" rx="4" fill="#fff" stroke="var(--ink)" stroke-width="1.5"/>
+        <rect x="-6" y="74" width="12" height="10" fill="#F1C7A5" stroke="var(--ink)" stroke-width="1.5"/>
+        <path d="M-29,84 h58 l2,68 h-62 z" fill="#1E9C9C" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="0" y="132" text-anchor="middle" fill="#fff" font-family="var(--font)" font-weight="900" font-size="30">5</text>
+        <rect x="-31" y="150" width="62" height="38" fill="#16706F" stroke="var(--ink)" stroke-width="1.5"/>
+        <circle cx="0" cy="58" r="18" fill="#2B2B33" stroke="var(--ink)" stroke-width="1.5"/>
+        <text class="svg-text" x="0" y="302" text-anchor="middle" font-weight="700">背面</text>
+      </g>
+    </svg>
+    <figcaption>阿勇的三視圖草稿。虛線是頭身刻度，三張圖的頭頂、肩膀、腰、膝蓋、腳底都在同一條線上。</figcaption>
+  </figure>
+
+  <h3>用 AI 生成三視圖</h3>
+  <p>這一步交給會生圖的 AI（ChatGPT 或 Gemini）。Claude 不直接生圖，但你可以請 Claude 幫你把角色設定卡「翻譯」成更精準的生圖提示詞，這是很好的分工。</p>
+  <div class="codebox"><div class="cap">三視圖生圖提示詞（給 ChatGPT 或 Gemini）</div>
+<pre class="prompt">請畫一張原創角色的「三視圖設定圖」（character turnaround sheet）：
+- 角色：16 歲高中籃球少年，日本動漫風格，6.5 頭身
+- 外型：黑色短髮、瀏海略長，眼神有精神
+- 服裝：藍綠色無袖球衣（背號 5）、同色短褲、白色長襪、白色籃球鞋
+- 姿勢：T-pose（雙手水平張開），站直
+- 並排三個視角：正面、側面、背面
+- 正交視角，沒有透視變形；三個視角的頭頂和腳底對齊同一高度
+- 純白背景，均勻光線，沒有陰影，不要文字
+- 這是原創角色，不要模仿任何現有動漫角色</pre></div>
+
+  <div class="box warn"><div class="t">常見錯誤</div>
+    <ul>
+      <li><strong>三個視角不一樣</strong>：例如正面有瀏海、背面沒頭髮，或側面變胖。請 AI「只修正側面，讓它和正面一致」，或多生成幾次挑最好的。</li>
+      <li><strong>有透視、有陰影</strong>：圖轉 3D 工具會把陰影當成模型的顏色。提示詞裡一定要寫「均勻光線、沒有陰影」。</li>
+      <li><strong>手指糊在一起</strong>：生圖 AI 常把手畫壞。三視圖可以先接受簡化的手，建模時再修。</li>
+    </ul>
+  </div>
+
+  <h3>T-pose 和 A-pose</h3>
+  <p>三視圖和 3D 模型通常用兩種標準姿勢：</p>
+  <ul>
+    <li><strong>T-pose</strong>：雙手水平張開，整個人像大寫字母 T，名字就是這樣來的。好處是手臂和身體完全分開，建模、貼材質都方便。</li>
+    <li><strong>A-pose</strong>：雙手往下斜 30～45 度，像字母 A。肩膀比較接近自然放鬆的樣子，之後做動畫時肩膀變形比較少，現在很多遊戲公司偏好它。上面的互動圖可以勾選切換。</li>
+  </ul>
+
+  <div class="quiz" data-a="2">
+    <p class="q">用三視圖交給圖轉 3D 工具時，為什麼要求「沒有陰影」？</p>
+    <div class="opts"><button>因為比較好看</button><button>因為檔案比較小</button><button>因為工具會把陰影當成模型本身的顏色，轉動時陰影就錯了</button></div>
+    <p class="exp" hidden>陰影如果被「印」在模型顏色上，換個角度或換個燈光時就會出現不該有的黑塊。</p>
+  </div>
+
+  <div class="box key"><div class="t">本課重點</div><ul>
+    <li>頭身比決定風格：Q 版 2～3、日漫少年 6.5 左右、寫實 7～7.5、英雄 8 以上。</li>
+    <li>先寫角色設定卡，再做三視圖；三個視角要對齊。</li>
+    <li>生圖要求：正交、白底、均勻光、T-pose 或 A-pose、原創。</li>
+  </ul></div>
+</section>
+
+<!-- ================= 第 9 課 ================= -->
+<section class="lesson" id="ch9" data-n="9" data-title="人物實戰（下）：組裝、骨架與動畫">
+  <div class="lesson-head"><div class="num">9</div><h2>人物實戰（下）：組裝、骨架與動畫</h2></div>
+  <div class="goal"><b>這一課你會學到</b><ul><li>用基本形組出人物</li><li>軸心、父子關係、骨架、蒙皮、權重</li><li>關鍵影格與走路循環</li><li>請 AI 做出會走路、會運球的阿勇</li></ul></div>
+
+  <h3>美術教室裡的木頭人偶</h3>
+  <p>美術教室常有一種木頭關節人偶：頭是球、身體是橢圓塊、手腳是一節一節的圓柱，關節處可以轉。用程式做人物，第一步就是做一個這樣的人偶。</p>
+
+  <h3>軸心：手臂要繞著肩膀轉</h3>
+  <p>在 Three.js 裡，一個圓柱預設是繞著<strong>自己的正中心</strong>旋轉。但手臂應該繞著肩膀轉，而不是繞著手肘轉！解法是：先放一個看不見的「軸心」（Pivot）在肩膀，再把手臂掛在軸心下面。轉軸心，手臂就跟著繞肩膀轉。</p>
+  <div class="box origin"><div class="t">名詞由來：Pivot（軸心）</div>
+    <p><em>Pivot</em> 原本是法文，指門的「樞軸」：門片繞著它轉。籃球也有這個詞：「軸心腳」就是一腳踩住不動當中心、另一腳轉動，跟 3D 的軸心是同一個意思。</p>
+  </div>
+
+  <h3>父子關係：肩膀帶動手肘，手肘帶動手掌</h3>
+  <p>抬起上臂時，前臂和手掌會跟著一起移動，這叫<strong>父子關係</strong>（Parent–Child，也叫階層 Hierarchy）。上臂是「父」，前臂是「子」，手掌是「孫」。子物件會跟著父物件動，但也可以自己再轉（例如彎手肘）。</p>
+
+  <figure>
+    <svg viewBox="0 0 660 250" role="img" aria-label="人物骨架父子關係樹狀圖">
+      <g font-family="var(--font)" font-size="14">
+        <g stroke="var(--ink2)" stroke-width="1.5" fill="none">
+          <path d="M330,48 V70 H110 V92"/><path d="M330,70 H550 V92"/><path d="M330,70 V92"/>
+          <path d="M330,120 V142 H250 V164"/><path d="M330,142 H410 V164"/><path d="M330,142 V164"/>
+          <path d="M250,192 V210"/><path d="M410,192 V210"/>
+          <path d="M110,120 V138"/><path d="M110,166 V184"/><path d="M550,120 V138"/><path d="M550,166 V184"/>
+        </g>
+        <g>
+          <rect x="280" y="20" width="100" height="28" rx="5" fill="var(--ink)"/><text x="330" y="39" text-anchor="middle" fill="var(--paper)" font-weight="700">骨盆（根）</text>
+          <rect x="60" y="92" width="100" height="28" rx="5" fill="var(--y-bg)" stroke="var(--y)"/><text class="svg-text" x="110" y="111" text-anchor="middle">右大腿</text>
+          <rect x="60" y="138" width="100" height="28" rx="5" fill="var(--y-bg)" stroke="var(--y)"/><text class="svg-text" x="110" y="157" text-anchor="middle">右小腿（膝）</text>
+          <rect x="60" y="184" width="100" height="28" rx="5" fill="var(--y-bg)" stroke="var(--y)"/><text class="svg-text" x="110" y="203" text-anchor="middle">右腳</text>
+          <rect x="500" y="92" width="100" height="28" rx="5" fill="var(--y-bg)" stroke="var(--y)"/><text class="svg-text" x="550" y="111" text-anchor="middle">左大腿</text>
+          <rect x="500" y="138" width="100" height="28" rx="5" fill="var(--y-bg)" stroke="var(--y)"/><text class="svg-text" x="550" y="157" text-anchor="middle">左小腿（膝）</text>
+          <rect x="500" y="184" width="100" height="28" rx="5" fill="var(--y-bg)" stroke="var(--y)"/><text class="svg-text" x="550" y="203" text-anchor="middle">左腳</text>
+          <rect x="280" y="92" width="100" height="28" rx="5" fill="var(--z-bg)" stroke="var(--z)"/><text class="svg-text" x="330" y="111" text-anchor="middle">脊椎・胸</text>
+          <rect x="200" y="164" width="100" height="28" rx="5" fill="var(--x-bg)" stroke="var(--x)"/><text class="svg-text" x="250" y="183" text-anchor="middle">右上臂（肩）</text>
+          <rect x="200" y="210" width="100" height="28" rx="5" fill="var(--x-bg)" stroke="var(--x)"/><text class="svg-text" x="250" y="229" text-anchor="middle">右前臂（肘）</text>
+          <rect x="280" y="164" width="100" height="28" rx="5" fill="var(--z-bg)" stroke="var(--z)"/><text class="svg-text" x="330" y="183" text-anchor="middle">頸・頭</text>
+          <rect x="360" y="164" width="100" height="28" rx="5" fill="var(--x-bg)" stroke="var(--x)"/><text class="svg-text" x="410" y="183" text-anchor="middle">左上臂（肩）</text>
+          <rect x="360" y="210" width="100" height="28" rx="5" fill="var(--x-bg)" stroke="var(--x)"/><text class="svg-text" x="410" y="229" text-anchor="middle">左前臂（肘）</text>
+        </g>
+      </g>
+    </svg>
+    <figcaption>骨架就是一棵「家族樹」。骨盆是根，移動骨盆，全身都會跟著走。</figcaption>
+  </figure>
+
+  <h3>骨架、蒙皮、權重</h3>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>英文</th><th>比喻</th><th>由來</th></tr>
+    <tr><td>骨架</td><td>Skeleton / Armature</td><td>人偶裡面的鐵絲骨</td><td><em>Armature</em> 原指雕塑家做黏土像時，先插在裡面的金屬支架</td></tr>
+    <tr><td>綁骨</td><td>Rigging</td><td>幫人偶裝上操控的線</td><td>原指帆船上控制帆的繩索（索具），操偶師也用線操控木偶</td></tr>
+    <tr><td>蒙皮</td><td>Skinning</td><td>把皮膚套到骨頭上</td><td>讓模型表面（皮）跟著骨頭動</td></tr>
+    <tr><td>權重</td><td>Weight</td><td>手肘附近的皮，一半跟上臂、一半跟前臂</td><td>決定每一點「被哪根骨頭拉多少」，像拔河時兩邊的力量比例</td></tr>
+  </table></div>
+  <p>我們用程式組出的「木頭人偶」是每一塊硬硬地跟著骨頭動（叫做<strong>剛性綁定</strong>）。真正的角色模型是一整張連續的皮，就需要蒙皮和權重，手肘彎起來才不會裂開。這部分在第 11、13 課用 Blender 和自動綁骨工具處理。</p>
+
+  <div class="demo" id="demoPose">
+    <div class="dh">互動：讓阿勇動起來 <small>拖曳可旋轉</small></div>
+    <div class="stage"><div class="readout" id="poseReadout">T-pose</div></div>
+    <div class="controls">
+      <div class="row"><button class="btn on" data-pose="t" type="button">T-pose</button><button class="btn" data-pose="walk" type="button">走路循環</button><button class="btn" data-pose="dribble" type="button">原地運球</button></div>
+      <label class="inline"><input type="checkbox" id="pSkel"> 透視看骨架和關節</label>
+      <label>動作速度<input type="range" id="pSpeed" min="0.2" max="2" step="0.1" value="1"></label>
+    </div>
+  </div>
+
+  <h3>動畫：關鍵影格和中間張</h3>
+  <p>動畫是一張一張的圖快速播放，電影通常是<strong>每秒 24 張</strong>（24 fps），因為這是人眼覺得流暢、又最省底片的數字。</p>
+  <div class="box origin"><div class="t">名詞由來：關鍵影格（Keyframe）</div>
+    <p>早期迪士尼的手繪動畫，資深動畫師只畫最重要的幾張姿勢，叫「關鍵張」（key frame）；再由助手畫中間的過渡，叫「中間張」（in-between）。3D 動畫也一樣：你只要設定幾個關鍵姿勢，電腦會自動算出中間的過渡，這叫<strong>補間</strong>（tweening，來自 in-between）。</p>
+  </div>
+  <p><strong>走路循環（Walk Cycle）</strong>是動畫師的基本功：左腳前、雙腳交錯、右腳前、雙腳交錯，四個關鍵姿勢一直重複。手臂和腳的方向相反（左腳在前時右手在前），這樣身體才會平衡。上面的互動模型就是這樣做的：腿用 sin 函數前後擺，手臂用負的 sin 反方向擺，膝蓋在腳往後時彎曲。</p>
+
+  <div class="codebox"><div class="cap">讓 AI 做出會動的阿勇（提示詞）</div>
+<pre class="prompt">【角色】你是熟悉 Three.js 的角色動畫工程師，我是初學者。
+【目標】用基本形組出一位日漫風原創籃球少年「阿勇」，並做出動畫。
+【規格】Y 軸朝上，單位是「頭高 = 1」，總身高 6.5 頭身，腳底在 y = 0。
+- 頭：球體，黑色短髮用半球蓋在頭上，兩個小球當眼睛
+- 身體：藍綠色無袖球衣（方塊）、同色短褲
+- 手腳：每一肢分兩節（上臂／前臂、大腿／小腿），用圓柱做
+- 每個關節都要有 Group 當軸心：肩、肘、髖、膝。圓柱往下掛在軸心下面，讓它繞關節轉
+- 父子關係：肩 → 肘、髖 → 膝
+【動畫】三個按鈕切換：T-pose、走路循環（手腳反向擺動、腳往後時膝蓋彎）、原地運球（右手上下，橘色籃球在地面和手之間彈跳）
+【輸出】單一 HTML 檔，Three.js 用 cdnjs r128 的 script 標籤載入，不要 import；滑鼠拖曳旋轉；中文註解。</pre></div>
+
+  <div class="box warn"><div class="t">常見錯誤</div>
+    <ul>
+      <li><strong>手臂繞著中間轉，像風車</strong>：忘了做軸心。請 AI「每個關節用 Group 當軸心，圓柱往下移動一半長度」。</li>
+      <li><strong>彎膝蓋時小腿飛走</strong>：小腿沒有放在大腿的軸心「裡面」，父子關係錯了。</li>
+      <li><strong>走路像機器人</strong>：只有腿在動。加上手臂反向擺、身體上下微微起伏，就會自然很多。</li>
+    </ul>
+  </div>
+
+  <div class="quiz" data-a="0">
+    <p class="q">要讓手臂繞著肩膀轉，而不是繞著手臂中間轉，應該怎麼做？</p>
+    <div class="opts"><button>在肩膀放一個軸心（Group），把手臂往下掛在它下面</button><button>把手臂的圓柱做得更長</button><button>把轉動速度調慢</button></div>
+    <p class="exp" hidden>物件預設繞自己的中心轉。先在關節放軸心，把手臂往下移一半長度放進去，轉軸心就是繞關節轉。</p>
+  </div>
+
+  <div class="box key"><div class="t">本課重點</div><ul>
+    <li>關節 = 軸心；肢體掛在軸心下面。</li>
+    <li>骨架是父子關係的樹，骨盆是根。</li>
+    <li>骨架、綁骨、蒙皮、權重讓一整張皮跟著骨頭自然變形。</li>
+    <li>動畫 = 關鍵影格 + 電腦補間；走路時手腳反向。</li>
+  </ul></div>
+</section>
+
+<!-- ================= 第 10 課 ================= -->
+<section class="lesson" id="ch10" data-n="10" data-title="真人 3D：拍照掃描與肖像權">
+  <div class="lesson-head"><div class="num">10</div><h2>真人 3D：拍照掃描與肖像權</h2></div>
+  <div class="goal"><b>這一課你會學到</b><ul><li>把真人變成 3D 的四種方法</li><li>用手機拍照掃描的拍攝要領</li><li>肖像權和同意：什麼人可以掃、什麼不行</li></ul></div>
+
+  <p>做動漫角色可以靠想像，做真人就不一樣了：每個人的臉都很獨特，差一點點就「不像」。所以真人 3D 通常不是從零開始捏，而是<strong>從真實世界「拍」下來</strong>。</p>
+
+  <h3>四種方法</h3>
+  <div class="tbl"><table>
+    <tr><th>方法</th><th>怎麼做</th><th>需要什麼</th><th>由來</th></tr>
+    <tr><td>攝影測量</td><td>繞著人拍幾十到上百張照片，軟體找出照片之間相同的點，算出 3D 形狀</td><td>手機＋攝影測量 App 或軟體</td><td>Photogrammetry：photo（光）＋ gram（記錄）＋ metry（測量），「用照片來測量」。原本用在空拍製作地圖</td></tr>
+    <tr><td>光達掃描</td><td>發射看不見的雷射，量光打回來花多久，算出距離</td><td>有 LiDAR 的手機或平板、專業掃描器</td><td>LiDAR = Light Detection And Ranging，「用光偵測與測距」，原理和蝙蝠用聲音定位很像</td></tr>
+    <tr><td>AI 單張圖轉 3D</td><td>一張或幾張照片交給 AI，它「猜」出看不到的部分</td><td>圖轉 3D 線上工具</td><td>最快，但背面和細節常是猜的，不一定像</td></tr>
+    <tr><td>高斯潑濺</td><td>把場景變成數百萬個半透明的小光點，看起來非常真實</td><td>影片＋專門軟體</td><td>3D Gaussian Splatting，2023 年發表。高斯是數學家的名字（鐘形曲線），splat 是「啪一聲潑上去」</td></tr>
+  </table></div>
+
+  <h3>手機拍照掃描的拍攝要領</h3>
+  <ol class="steps">
+    <li><strong>光線要均勻</strong>：陰天戶外或室內多盞燈最好，避免強烈陽光造成硬影子。</li>
+    <li><strong>被拍的人不能動</strong>：坐在椅子上最穩。眼睛看固定一點，表情放鬆。</li>
+    <li><strong>繞一圈拍三層</strong>：從腰的高度、眼睛高度、稍微從上往下各繞一圈，每一步大約轉 10～15 度。</li>
+    <li><strong>相鄰照片重疊六到八成</strong>：軟體要靠「相同的點」拼起來，重疊太少就拼不起來。</li>
+    <li><strong>避開反光和透明</strong>：眼鏡摘掉，亮面的衣服和飾品盡量避免；頭髮越蓬越難掃。</li>
+  </ol>
+  <p>掃描完的模型通常有幾十萬個三角面、表面有破洞和雜點，還需要修模、減面、重新拓撲。這些是第 12、13 課的內容。</p>
+
+  <div class="box try"><div class="t">AI 能幫什麼</div>
+    <p>把上面的要領交給 AI，請它依你的器材客製化：</p>
+  </div>
+  <div class="codebox"><div class="cap">拍攝規劃提示詞</div>
+<pre class="prompt">我想用手機攝影測量掃描自己的上半身做成 3D 公仔。器材：一支手機、一張椅子、客廳兩盞燈，有一位朋友幫我拍。
+請給我：1. 拍攝前的準備清單 2. 拍攝路線（幾圈、幾張、什麼高度）3. 最容易失敗的 5 個原因和預防方法。用國中生看得懂的中文。</pre></div>
+
+  <div class="box note"><div class="t">一定要知道：肖像權和同意</div>
+    <ul>
+      <li><strong>只掃描自己，或已經同意的人。</strong>每個人對自己的臉和形象都有權利（肖像權）。未成年人要掃描，請讓家長知道並同意。</li>
+      <li><strong>不要用真實名人的臉做 3D 並公開或販售。</strong>名人的形象也受保護，拿來做商品或假影片可能違法，也會傷害本人。</li>
+      <li><strong>不要做「假冒真人」的內容。</strong>用別人的 3D 臉做出他沒說過的話、沒做過的事（深偽，Deepfake），可能構成詐騙或誹謗。</li>
+      <li><strong>掃描檔也是個人資料。</strong>別人的臉部模型不要隨便上傳到不熟悉的網站。</li>
+    </ul>
+  </div>
+
+  <div class="quiz" data-a="1">
+    <p class="q">用攝影測量掃描時，為什麼相鄰的照片要重疊六到八成？</p>
+    <div class="opts"><button>讓照片比較好看</button><button>軟體要找到照片之間相同的點，才能把它們拼成 3D</button><button>因為手機規定的</button></div>
+    <p class="exp" hidden>攝影測量是靠同一個點在不同照片裡的位置差異算出深度，重疊太少就找不到對應點。</p>
+  </div>
+
+  <div class="box key"><div class="t">本課重點</div><ul>
+    <li>真人 3D 靠「拍下來」：攝影測量、光達、AI 圖轉 3D、高斯潑濺。</li>
+    <li>均勻光、不動、繞三圈、重疊六到八成、避開反光。</li>
+    <li>只掃自己或同意的人；不拿名人的臉做公開或商業用途。</li>
+  </ul></div>
+</section>
+
+<!-- ================= 第四階段 ================= -->
+<div class="stage-banner" data-stage="第四階段　專業"><div class="big">4</div><h2>第四階段　專業</h2><p>進入業界用的工具和觀念。到這裡，你的作品可以走出瀏覽器，進入遊戲、動畫和 3D 列印。</p></div>
+
+<!-- ================= 第 11 課 ================= -->
+<section class="lesson" id="ch11" data-n="11" data-title="Blender ＋ AI：讓 AI 寫腳本幫你建模">
+  <div class="lesson-head"><div class="num">11</div><h2>Blender ＋ AI：讓 AI 寫腳本幫你建模</h2></div>
+  <div class="goal"><b>這一課你會學到</b><ul><li>Blender 是什麼、介面的四個區域</li><li>用 AI 寫 Python 腳本，一鍵生出 VRT 廠房</li><li>版本不同造成的錯誤怎麼處理</li></ul></div>
+
+  <div class="box origin"><div class="t">名詞由來：Blender 和 Python</div>
+    <p><strong>Blender</strong>：1990 年代荷蘭一家動畫公司 NeoGeo 內部開發的工具，主要開發者是羅森達爾（Ton Roosendaal）。名字取自瑞士電子樂團 Yello 的一首歌。後來公司倒閉，2002 年社群發起募款，大約七週就湊到 10 萬歐元把它「贖回來」並開放原始碼。從此 Blender 永遠免費，也成為全世界最多人用的 3D 軟體之一。<br>
+    <strong>Python</strong>：1991 年由荷蘭程式設計師范羅蘇姆（Guido van Rossum）發表。名字不是蟒蛇，而是他喜歡的英國喜劇團體「Monty Python」。它語法簡單，是很多人學的第一個程式語言。</p>
+  </div>
+
+  <h3>為什麼要學 Blender？</h3>
+  <p>網頁 3D（Three.js）適合展示，但要做精細模型、動畫、輸出給遊戲或 3D 列印，業界會用專業軟體。Blender 免費、功能完整，而且<strong>內建 Python</strong>：幾乎所有按鈕都能用程式碼操作。這代表 AI 可以寫腳本幫你一口氣完成很多重複的步驟。</p>
+
+  <h3>介面的四個區域</h3>
+  <div class="tbl"><table>
+    <tr><th>區域</th><th>位置（預設）</th><th>做什麼</th></tr>
+    <tr><td>3D 視窗</td><td>中間最大的一塊</td><td>看模型、選取、移動</td></tr>
+    <tr><td>大綱（Outliner）</td><td>右上</td><td>場景裡所有物件的清單，就像檔案總管</td></tr>
+    <tr><td>屬性（Properties）</td><td>右下</td><td>材質、修改器、渲染設定</td></tr>
+    <tr><td>時間軸（Timeline）</td><td>下方</td><td>做動畫時放關鍵影格</td></tr>
+  </table></div>
+  <p>基本操作：按住滑鼠中鍵拖曳是旋轉視角，滾輪是縮放，<kbd>Shift</kbd>＋中鍵是平移。記得：<strong>Blender 是 Z 朝上</strong>（第 1 課）。</p>
+
+  <h3>用腳本一鍵蓋廠房</h3>
+  <ol class="steps">
+    <li>到 Blender 官網（blender.org）下載安裝，打開後先按 <kbd>A</kbd> 全選、<kbd>X</kbd> 刪除預設方塊。</li>
+    <li>點上方的「Scripting」分頁，中間會出現文字編輯區。</li>
+    <li>按「New」新增一個文字檔，把 AI 給的腳本貼上。</li>
+    <li>按 ▶（Run Script）或 <kbd>Alt</kbd>＋<kbd>P</kbd> 執行。</li>
+    <li>切回「Layout」分頁，看你的廠房。</li>
+  </ol>
+
+  <div class="codebox"><div class="cap">Blender 腳本提示詞</div>
+<pre class="prompt">【角色】你是熟悉 Blender Python（bpy）的技術美術，我是初學者。
+【環境】Blender 4.x，Z 軸朝上，單位公尺。
+【目標】寫一個腳本，執行後自動建好 VRT 廠區粗模：
+- 先清空場景
+- 主廠房 60 × 30 × 8，中心 (0, 0)
+- 倉庫 20 × 30 × 10，中心 (41, 0)
+- 辦公樓 16 × 12 × 12，中心 (−39, 9)
+- 12 條縫紉線（40 × 0.9 × 0.75），在主廠房內沿 Y 方向等距排開
+- 每種建築給不同顏色的材質
+- 全部物件放進一個名為「VRT」的集合
+【限制】每一段加中文註解；建築底部要貼齊 z = 0。</pre></div>
+
+  <div class="codebox"><div class="cap">AI 給的腳本大概長這樣（節錄）</div>
+<pre><span class="c"># 匯入 Blender 的 Python 工具</span>
+import bpy
+
+<span class="c"># 清空場景</span>
+bpy.ops.object.select_all(action='SELECT')
+bpy.ops.object.delete()
+
+<span class="c"># 建一個集合（像資料夾）叫 VRT</span>
+col = bpy.data.collections.new("VRT")
+bpy.context.scene.collection.children.link(col)
+
+def make_mat(name, rgb):
+    <span class="c"># 建立一個指定顏色的材質</span>
+    m = bpy.data.materials.new(name)
+    m.use_nodes = True
+    m.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (*rgb, 1)
+    return m
+
+def box(name, sx, sy, sz, x, y, mat):
+    <span class="c"># 先建 1×1×1 的方塊，再用縮放變成需要的尺寸</span>
+    <span class="c"># z 放在 sz/2，底部才會貼齊地面（第 7 課的公式）</span>
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(x, y, sz / 2))
+    o = bpy.context.active_object
+    o.name = name
+    o.scale = (sx, sy, sz)
+    o.data.materials.append(mat)
+    for c in o.users_collection:
+        c.objects.unlink(o)
+    col.objects.link(o)
+    return o
+
+wall = make_mat("牆", (0.80, 0.83, 0.86))
+box("主廠房", 60, 30, 8, 0, 0, wall)
+box("倉庫", 20, 30, 10, 41, 0, make_mat("倉庫", (0.70, 0.80, 0.72)))
+box("辦公樓", 16, 12, 12, -39, 9, make_mat("辦公", (0.90, 0.75, 0.72)))
+
+<span class="c"># 12 條縫紉線，間距 2.2 公尺</span>
+table = make_mat("工作桌", (0.18, 0.44, 0.84))
+for i in range(12):
+    y = (i - 5.5) * 2.2
+    box(f"縫紉線_{i+1:02d}", 40, 0.9, 0.75, -5, y, table)</pre></div>
+
+  <div class="box origin"><div class="t">注意到了嗎？座標換了</div>
+    <p>Three.js 版本裡辦公樓在 z = −9，Blender 版本在 y = 9。因為 Blender 是 Z 朝上，Three.js 的「前後」（Z）變成了 Blender 的 Y，而且方向相反。這就是第 1 課一再強調要告訴 AI 座標系統的原因。</p>
+  </div>
+
+  <div class="box warn"><div class="t">常見錯誤：版本不同</div>
+    <p>Blender 每年都會更新，有些指令的名字會改。如果執行後下方出現紅字（例如 <code>AttributeError</code> 或 <code>KeyError</code>），這樣處理：</p>
+    <ol>
+      <li>選單「Window → Toggle System Console」（Windows）打開完整錯誤訊息。</li>
+      <li>把錯誤訊息整段複製給 AI，並告訴它：「我的 Blender 版本是 4.x」（版本號在 Blender 啟動畫面或「Help → About」可以看到）。</li>
+      <li>請 AI 給你<strong>完整</strong>的修正版，而不是只改一行。</li>
+    </ol>
+  </div>
+
+  <div class="box try"><div class="t">動手做：從粗模到有細節</div>
+    <p>腳本跑出粗模後，照順序一次一件請 AI 加上：①鋸齒屋頂 ②每台縫紉機 ③辦公樓的窗戶 ④地面和道路 ⑤一台攝影機和太陽光，最後按 <kbd>F12</kbd> 渲染一張圖。</p>
+  </div>
+
+  <div class="quiz" data-a="2">
+    <p class="q">Blender 腳本執行出現紅字錯誤，最有效的做法是？</p>
+    <div class="opts"><button>重新安裝 Blender</button><button>換一個 AI 再問一次同樣的問題</button><button>把完整錯誤訊息和 Blender 版本號一起貼給 AI，請它給完整修正版</button></div>
+    <p class="exp" hidden>錯誤訊息會告訴 AI 是哪一行、哪個指令出問題，加上版本號，它就知道要換成新版的寫法。</p>
+  </div>
+
+  <div class="box key"><div class="t">本課重點</div><ul>
+    <li>Blender 免費、開源、內建 Python，AI 能寫腳本幫你操作。</li>
+    <li>Scripting 分頁 → New → 貼上 → Run。</li>
+    <li>Blender Z 朝上；錯誤訊息＋版本號給 AI。</li>
+  </ul></div>
+</section>
+
+<!-- ================= 第 12 課 ================= -->
+<section class="lesson" id="ch12" data-n="12" data-title="專業概念：細分、拓撲、法線、UV 與 PBR">
+  <div class="lesson-head"><div class="num">12</div><h2>專業概念：細分、拓撲、法線、UV 與 PBR</h2></div>
+  <div class="goal"><b>這一課你會學到</b><ul><li>怎麼用少少的面做出圓滑的模型</li><li>什麼是「好的拓撲」</li><li>法線翻轉造成的黑洞</li><li>UV 展開，以及它和成衣打版的關係</li><li>PBR 材質的幾張貼圖</li></ul></div>
+
+  <h3>細分曲面：用粗網格控制圓滑的形狀</h3>
+  <p>專業建模師不會一開始就做幾十萬面。他們先做一個面數很少的「籠子」，再讓電腦自動把每個面切成四個、把角磨圓，重複幾次就變得很光滑。這叫<strong>細分曲面</strong>（Subdivision Surface）。</p>
+  <figure>
+    <svg viewBox="0 0 660 190" role="img" aria-label="細分曲面：方形經過細分逐漸變圓">
+      <g transform="translate(110,90)">
+        <rect x="-55" y="-55" width="110" height="110" fill="var(--z-bg)" stroke="var(--ink)" stroke-width="2"/>
+        <text class="svg-text" x="0" y="85" text-anchor="middle">原始：4 個點</text>
+      </g>
+      <g transform="translate(330,90)">
+        <rect x="-55" y="-55" width="110" height="110" fill="none" stroke="var(--line)" stroke-dasharray="4 3"/>
+        <polygon points="-27,-55 27,-55 55,-27 55,27 27,55 -27,55 -55,27 -55,-27" transform="scale(.92)" fill="var(--z-bg)" stroke="var(--ink)" stroke-width="2"/>
+        <text class="svg-text" x="0" y="85" text-anchor="middle">細分 1 次：8 個點</text>
+      </g>
+      <g transform="translate(550,90)">
+        <rect x="-55" y="-55" width="110" height="110" fill="none" stroke="var(--line)" stroke-dasharray="4 3"/>
+        <circle r="44" fill="var(--z-bg)" stroke="var(--ink)" stroke-width="2"/>
+        <text class="svg-text" x="0" y="85" text-anchor="middle">細分 3 次：接近圓</text>
+      </g>
+    </svg>
+    <figcaption>虛線是原本的「控制籠」。你只要調整少數幾個點，就能控制圓滑的形狀。</figcaption>
+  </figure>
+  <div class="box origin"><div class="t">名詞由來：Catmull–Clark</div>
+    <p>目前最常用的細分方法，是 1978 年由卡特莫爾（Edwin Catmull）和克拉克（Jim Clark）發表的。卡特莫爾後來成為皮克斯動畫工作室的共同創辦人，皮克斯的角色就大量使用細分曲面。在 Blender 裡，它是一個叫「Subdivision Surface」的修改器。</p>
+  </div>
+
+  <h3>拓撲：線要怎麼走</h3>
+  <p><strong>拓撲</strong>（Topology）指的是網格裡的點、線、面「怎麼連接」，也就是線的走向。兩個模型外型一樣，拓撲可能完全不同。好的拓撲有幾個特徵：</p>
+  <ul>
+    <li><strong>以四邊形為主</strong>：細分和彎曲時最穩定（最後顯示卡還是會切成三角形）。</li>
+    <li><strong>邊流沿著肌肉和結構走</strong>：臉上的線要繞著眼睛和嘴巴轉圈，像水波一樣。這叫<strong>邊流</strong>（Edge Flow）。</li>
+    <li><strong>要彎的地方多幾條線</strong>：手肘、膝蓋、手指關節處要有 3 條左右的環狀線，彎起來才不會像吸管折到。</li>
+    <li><strong>不需要的地方少一點</strong>：平平的背部不用太多面。</li>
+  </ul>
+  <div class="box origin"><div class="t">名詞由來：拓撲</div>
+    <p>來自希臘文 <em>topos</em>（地方）＋ <em>logos</em>（學問），原本是數學的一個分支，研究「形狀怎麼連接」而不管它的大小。中文「拓撲」是音譯。數學家有個有名的笑話：在拓撲學家眼中，甜甜圈和馬克杯是一樣的，因為它們都只有一個洞。</p>
+  </div>
+  <p>把掃描或 AI 生成的亂七八糟網格，重新做成乾淨拓撲的過程，叫做<strong>重新拓撲</strong>（Retopology，常簡稱 retopo）。這是專業人物建模很重要的一步。</p>
+
+  <h3>法線：面的正面朝哪裡</h3>
+  <p>每個面都有「正面」和「背面」。從正面垂直往外指的那個方向，叫做<strong>法線</strong>（Normal）。電腦用法線判斷光從哪個角度照到這個面，所以法線決定明暗。</p>
+  <div class="box origin"><div class="t">名詞由來：Normal（法線）</div>
+    <p>拉丁文 <em>norma</em> 是木匠用的直角尺。所以 normal 在數學裡的意思是「垂直的」，跟「正常」的意思是後來才衍生的。</p>
+  </div>
+  <div class="box warn"><div class="t">常見錯誤：模型上出現黑洞或看不見的面</div>
+    <p>如果有些面的法線朝內（翻轉了），在網頁 3D 裡它們可能會消失，在 Blender 裡則會顯得很黑。解法：在 Blender 的編輯模式全選，按 <kbd>Shift</kbd>＋<kbd>N</kbd>「重新計算法線」。從別處匯入的模型特別常見這個問題。</p>
+  </div>
+
+  <h3>UV 展開：就是成衣打版</h3>
+  <p>要把一張 2D 的圖片（例如球衣上的號碼、布料花紋）貼到 3D 模型上，電腦得知道「模型上的每一點對應到圖片上的哪一點」。做法是把 3D 模型的表面<strong>剪開、攤平</strong>成 2D，這叫 <strong>UV 展開</strong>。</p>
+  <p>在 VRT 工作過的人一聽就懂：<strong>這就是打版的反過來</strong>。打版是把 2D 的布片縫成立體的衣服；UV 展開則是把立體的模型拆回平面的版片。剪開的那條線，3D 界也叫做<strong>縫線</strong>（Seam）。國中數學的「正方體展開圖」就是最簡單的 UV 展開：</p>
+  <figure>
+    <svg viewBox="0 0 660 260" role="img" aria-label="正方體 UV 展開圖，像衣服版片">
+      <g transform="translate(60,70)">
+        <polygon points="0,40 80,40 80,120 0,120" fill="var(--z-bg)" stroke="var(--ink)" stroke-width="2"/>
+        <polygon points="0,40 40,10 120,10 80,40" fill="var(--y-bg)" stroke="var(--ink)" stroke-width="2"/>
+        <polygon points="80,40 120,10 120,90 80,120" fill="var(--x-bg)" stroke="var(--ink)" stroke-width="2"/>
+        <line x1="0" y1="40" x2="40" y2="10" stroke="var(--x)" stroke-width="4"/>
+        <line x1="80" y1="120" x2="120" y2="90" stroke="var(--x)" stroke-width="4"/>
+        <text class="svg-text" x="60" y="160" text-anchor="middle">3D 方塊</text>
+      </g>
+      <text class="svg-text" x="235" y="140" text-anchor="middle" font-size="28">→</text>
+      <g transform="translate(290,20)" font-family="var(--font)" font-size="14">
+        <rect x="60" y="0" width="60" height="60" fill="var(--y-bg)" stroke="var(--ink)" stroke-width="2"/><text class="svg-text" x="90" y="35" text-anchor="middle">上</text>
+        <rect x="0" y="60" width="60" height="60" fill="var(--hazard-bg)" stroke="var(--ink)" stroke-width="2"/><text class="svg-text" x="30" y="95" text-anchor="middle">左</text>
+        <rect x="60" y="60" width="60" height="60" fill="var(--z-bg)" stroke="var(--ink)" stroke-width="2"/><text class="svg-text" x="90" y="95" text-anchor="middle">前</text>
+        <rect x="120" y="60" width="60" height="60" fill="var(--x-bg)" stroke="var(--ink)" stroke-width="2"/><text class="svg-text" x="150" y="95" text-anchor="middle">右</text>
+        <rect x="180" y="60" width="60" height="60" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/><text class="svg-text" x="210" y="95" text-anchor="middle">後</text>
+        <rect x="60" y="120" width="60" height="60" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/><text class="svg-text" x="90" y="155" text-anchor="middle">下</text>
+        <line x1="0" y1="200" x2="240" y2="200" stroke="var(--ink2)"/>
+        <text class="svg-small" x="0" y="222">U（橫）</text>
+        <line x1="-14" y1="0" x2="-14" y2="200" stroke="var(--ink2)"/>
+        <text class="svg-small" x="-10" y="-6">V</text>
+      </g>
+    </svg>
+    <figcaption>紅色粗線是「縫線」：沿著它剪開，方塊就攤平成一張十字形的版片，圖片就可以畫在上面。</figcaption>
+  </figure>
+  <div class="box origin"><div class="t">名詞由來：為什麼叫 UV？</div>
+    <p>因為 X、Y、Z 已經被 3D 空間用掉了！2D 圖片也需要兩個座標軸，於是就用字母表中 X 前面的 U 和 V。（有時還會用到 W。）</p>
+  </div>
+  <div class="box warn"><div class="t">常見錯誤：貼圖拉伸、接縫明顯</div>
+    <p>版片攤得不平，圖案就會被拉長或擠在一起；縫線放在正面，接縫就很明顯。原則跟做衣服一樣：<strong>縫線藏在不顯眼的地方</strong>（腋下、側邊、背後），版片盡量攤平不變形。</p>
+  </div>
+
+  <h3>PBR：像真的一樣的材質</h3>
+  <p>第 3 課學過粗糙度和金屬度。專業模型會用好幾張<strong>貼圖</strong>（Texture），讓模型每一點都有不同的數值：</p>
+  <div class="tbl"><table>
+    <tr><th>貼圖</th><th>記錄什麼</th><th>例子</th></tr>
+    <tr><td>顏色貼圖（Base Color）</td><td>表面本來的顏色，不含光影</td><td>球衣的藍綠色和號碼</td></tr>
+    <tr><td>粗糙度貼圖</td><td>哪裡亮滑、哪裡霧面</td><td>鞋子的亮面皮革和霧面鞋底</td></tr>
+    <tr><td>金屬度貼圖</td><td>哪裡是金屬</td><td>縫紉機的金屬壓腳</td></tr>
+    <tr><td>法線貼圖（Normal Map）</td><td>假裝有凹凸的細節，不必真的多做面</td><td>布料的織紋、牆面的磚縫</td></tr>
+  </table></div>
+  <div class="box origin"><div class="t">名詞由來：PBR</div>
+    <p>Physically Based Rendering，「以物理為基礎的渲染」。依照真實世界光的物理規律計算材質。2012 年迪士尼公開了一套易用的材質原則，之後幾年遊戲業和電影業普遍採用，Blender 的「Principled BSDF」材質就是這套想法。</p>
+  </div>
+
+  <div class="quiz" data-a="1">
+    <p class="q">UV 展開最像成衣廠的哪一項工作？</p>
+    <div class="opts"><button>車縫</button><button>打版（版片和立體衣服之間的轉換）</button><button>包裝出貨</button></div>
+    <p class="exp" hidden>打版是把立體的衣服拆成平面版片的學問，UV 展開也是把立體模型剪開攤平，連「縫線」這個詞都一樣。</p>
+  </div>
+
+  <div class="box key"><div class="t">本課重點</div><ul>
+    <li>細分曲面：少少的面控制圓滑的形狀。</li>
+    <li>好拓撲：四邊形為主、邊流順著結構、關節多加線。</li>
+    <li>黑洞通常是法線翻轉，重新計算法線。</li>
+    <li>UV 展開 = 打版的反過來；縫線藏好。</li>
+    <li>PBR 用多張貼圖描述每一點的顏色、粗糙度、金屬度和細節。</li>
+  </ul></div>
+</section>
+
+<!-- ================= 第 13 課 ================= -->
+<section class="lesson" id="ch13" data-n="13" data-title="AI 圖轉 3D：從一張圖到可用的模型">
+  <div class="lesson-head"><div class="num">13</div><h2>AI 圖轉 3D：從一張圖到可用的模型</h2></div>
+  <div class="goal"><b>這一課你會學到</b><ul><li>「文字 → 圖 → 3D → 修模」的完整流程</li><li>三個 AI 和圖轉 3D 工具怎麼分工</li><li>怎麼檢查一個 AI 生成的模型能不能用</li></ul></div>
+
+  <p>近幾年出現很多「上傳一張圖，幾分鐘就變成 3D 模型」的線上工具（例如 Meshy、Tripo 這類服務，名稱、價格和免費額度變化很快，請自行搜尋最新的）。它們讓人物建模的門檻大幅降低，但產出的模型通常<strong>還不能直接用</strong>。這一課教你把它變成真正能用的模型。</p>
+
+  <h3>完整流程</h3>
+  <ol class="pipeline">
+    <li><div><b>寫角色設定卡</b><span>第 8 課。可以請 Claude 幫你把設定整理成精準的生圖提示詞。</span></div></li>
+    <li><div><b>生成三視圖或正面立繪</b><span>用 ChatGPT 或 Gemini。白底、均勻光、T-pose 或 A-pose。</span></div></li>
+    <li><div><b>上傳到圖轉 3D 工具</b><span>有「多視角輸入」就放三視圖，結果通常比單張圖好。</span></div></li>
+    <li><div><b>匯入 Blender 檢查</b><span>用下面的檢查清單一項一項看。</span></div></li>
+    <li><div><b>清理和減面</b><span>刪掉雜點、補洞，把面數降到用途需要的程度。</span></div></li>
+    <li><div><b>重新拓撲（需要動畫時）</b><span>做出乾淨的四邊面，關節多加線。</span></div></li>
+    <li><div><b>UV 與材質</b><span>修正糊掉的貼圖，重畫需要清楚的地方（例如背號）。</span></div></li>
+    <li><div><b>綁骨與動畫</b><span>可以先用自動綁骨服務（例如 Adobe 的 Mixamo）試試，再用 Blender 微調權重。</span></div></li>
+    <li><div><b>匯出</b><span>依用途選格式，第 14 課。</span></div></li>
+  </ol>
+
+  <div class="box origin"><div class="t">名詞由來：Decimate（減面）</div>
+    <p>Blender 的減面修改器叫 <em>Decimate</em>。這個字來自拉丁文 <em>decimare</em>，原意是古羅馬的「十中取一」，後來變成「大量減少」的意思。減面就是在盡量不改變外型的前提下，把面數大幅降低。</p>
+  </div>
+
+  <h3>檢查清單：這個模型能用嗎？</h3>
+  <div class="tbl"><table>
+    <tr><th>檢查項目</th><th>怎麼看</th><th>常見問題</th></tr>
+    <tr><td>比例</td><td>放一個 1.7 公尺的人形方塊對照</td><td>模型只有 2 公分高，或 200 公尺高</td></tr>
+    <tr><td>面數</td><td>Blender 右下角狀態列開啟「場景統計」</td><td>幾十萬到上百萬面，網頁和遊戲會卡</td></tr>
+    <tr><td>背面</td><td>轉到背後看</td><td>背面糊成一團，因為 AI 是用猜的</td></tr>
+    <tr><td>手指、頭髮</td><td>放大看</td><td>手指黏在一起、頭髮變成一坨</td></tr>
+    <tr><td>貼圖光影</td><td>換一個方向的燈光</td><td>原圖的陰影被「印」在顏色上</td></tr>
+    <tr><td>破洞、法線</td><td>編輯模式檢查、重新計算法線</td><td>有洞、有些面變黑</td></tr>
+    <tr><td>拓撲</td><td>切到線框模式</td><td>全是亂七八糟的三角形，無法做好動畫</td></tr>
+  </table></div>
+
+  <h3>讓對話 AI 當技術顧問</h3>
+  <p>遇到問題時，截圖加上說明，丟給 ChatGPT、Claude 或 Gemini 都可以：</p>
+  <div class="codebox"><div class="cap">修模求救提示詞</div>
+<pre class="prompt">我用圖轉 3D 工具做了一個人物模型，匯入 Blender 4.x 後有這些問題（附截圖）：
+1. 面數約 50 萬
+2. 雙手手指黏在一起
+3. 背後有一塊黑色
+我的用途是：放在網頁上展示，要能做簡單的走路動畫。
+請告訴我：處理順序、每一步在 Blender 裡要點哪裡，以及建議的目標面數。如果有步驟可以用 Python 腳本自動化，也請給我腳本。</pre></div>
+
+  <div class="box note"><div class="t">注意：生成內容的權利</div>
+    <p>各家生圖和圖轉 3D 服務對「產出內容能不能商用」的規定都不一樣，免費方案常有限制。作品要拿去販售、做商品或放在公司官網前，請先讀該服務的使用條款。上傳別人的作品或照片去轉 3D，也可能侵害對方的權利。</p>
+  </div>
+
+  <div class="quiz" data-a="2">
+    <p class="q">AI 圖轉 3D 產生的人物模型，最常見的問題是哪一個？</p>
+    <div class="opts"><button>面數太少、太簡單</button><button>檔案格式無法打開</button><button>背面和手指不準確、面數過多、拓撲雜亂</button></div>
+    <p class="exp" hidden>AI 看不到背面，只能猜；生成的網格通常是大量雜亂的三角面，需要減面和重新拓撲才能做動畫。</p>
+  </div>
+
+  <div class="box key"><div class="t">本課重點</div><ul>
+    <li>設定卡 → 三視圖 → 圖轉 3D → 檢查 → 清理減面 → 重新拓撲 → UV 材質 → 綁骨 → 匯出。</li>
+    <li>生圖用 ChatGPT／Gemini，技術顧問和腳本三者都行。</li>
+    <li>生成的模型是「半成品」，要照清單檢查。</li>
+    <li>商用前先讀使用條款。</li>
+  </ul></div>
+</section>
+
+<!-- ================= 第 14 課 ================= -->
+<section class="lesson" id="ch14" data-n="14" data-title="檔案格式與輸出：網頁、遊戲、3D 列印、建築">
+  <div class="lesson-head"><div class="num">14</div><h2>檔案格式與輸出：網頁、遊戲、3D 列印、建築</h2></div>
+  <div class="goal"><b>這一課你會學到</b><ul><li>四種最常見的 3D 檔案格式和它們的由來</li><li>不同用途要選哪一種</li><li>單位換算的陷阱、3D 列印的「水密」、建築的 BIM</li></ul></div>
+
+  <p>就像照片有 JPG、PNG，文件有 DOCX、PDF，3D 模型也有很多格式。每一種都是為了某個目的誕生的。</p>
+  <div class="tbl"><table>
+    <tr><th>格式</th><th>全名與由來</th><th>能存什麼</th><th>最適合</th></tr>
+    <tr><td>.obj</td><td>1980 年代 Wavefront Technologies 公司為自家動畫軟體設計的格式，簡單又通用</td><td>形狀、UV；材質另存成 .mtl</td><td>在不同軟體之間交換靜態模型</td></tr>
+    <tr><td>.fbx</td><td>Filmbox，原本是加拿大 Kaydara 公司的動作捕捉軟體，2006 年被 Autodesk 收購</td><td>形狀、材質、骨架、動畫</td><td>遊戲引擎（Unity、Unreal）、動畫</td></tr>
+    <tr><td>.gltf / .glb</td><td>GL Transmission Format，由制定 OpenGL 的 Khronos Group 在 2015 年推出，號稱「3D 界的 JPEG」。.glb 是把所有東西打包成一個檔</td><td>形狀、PBR 材質、骨架、動畫</td><td>網頁、手機 AR、Three.js</td></tr>
+    <tr><td>.stl</td><td>Stereolithography（立體光刻），1987 年 3D Systems 公司為第一代 3D 列印機設計</td><td>只有形狀（三角面），沒有顏色</td><td>3D 列印</td></tr>
+  </table></div>
+
+  <h3>依用途選格式</h3>
+  <div class="cards">
+    <div class="card cz"><h4>放在網頁上</h4><p>選 <strong>.glb</strong>。Three.js 用 GLTFLoader 載入。檔案盡量小，建議先減面、壓縮貼圖。</p></div>
+    <div class="card cy"><h4>放進遊戲引擎</h4><p>選 <strong>.fbx</strong> 或 <strong>.glb</strong>。注意 Blender（Z 朝上）和 Unity（Y 朝上）的座標轉換，匯出時有選項。</p></div>
+    <div class="card cx"><h4>3D 列印成公仔</h4><p>選 <strong>.stl</strong>（或 .3mf）。模型必須「水密」，而且單位要是公釐。</p></div>
+    <div class="card ch"><h4>廠房設施管理</h4><p>專業建築用 <strong>BIM</strong> 軟體和 <strong>.ifc</strong> 格式，模型裡不只有形狀，還有設備資料。</p></div>
+  </div>
+
+  <div class="box warn"><div class="t">常見錯誤：單位差了 1000 倍</div>
+    <p>Blender 預設用公尺，3D 列印軟體大多用公釐（mm）。一個 0.2 公尺高的公仔，如果匯出時沒換算，列印軟體會以為它只有 0.2 公釐，小到看不見。反過來也會出現「公仔比房子還大」。匯出前先確認：<strong>1 公尺 = 1000 公釐</strong>，並在匯出設定中調整比例。</p>
+  </div>
+
+  <div class="box origin"><div class="t">名詞由來：水密（Watertight）</div>
+    <p>原本是造船用語：船身沒有任何縫隙，水進不來。3D 列印需要模型像一艘船一樣完全封閉，沒有破洞、沒有兩個面沒接好的縫，列印機才分得清楚「哪裡是裡面、哪裡是外面」。也叫做「流形」（Manifold）。</p>
+  </div>
+
+  <div class="box origin"><div class="t">名詞由來：BIM 與 IFC</div>
+    <p><strong>BIM</strong> 是 Building Information Modeling，「建築資訊模型」。它不只是建築的 3D 外型，每一根柱子、每一台設備都帶有資料：材質、規格、廠商、保養日期。<br>
+    <strong>IFC</strong> 是 Industry Foundation Classes，一種開放的 BIM 交換格式，讓不同公司的軟體能互相讀取。<br>
+    對工廠來說，把縫紉機、空壓機、消防設備都放進 BIM 模型，就能在 3D 裡查詢每一台設備的資料，這是走向「數位雙胞胎」的第一步（第 16 課）。</p>
+  </div>
+
+  <div class="quiz" data-a="0">
+    <p class="q">想把阿勇放在網頁上，用 Three.js 顯示，最適合的格式是？</p>
+    <div class="opts"><button>.glb</button><button>.stl</button><button>.obj 加 .mtl</button></div>
+    <p class="exp" hidden>.glb 一個檔就包含形狀、材質、骨架和動畫，是網頁 3D 的標準格式。.stl 沒有顏色，是給 3D 列印用的。</p>
+  </div>
+
+  <div class="box key"><div class="t">本課重點</div><ul>
+    <li>網頁 .glb、遊戲 .fbx／.glb、交換 .obj、列印 .stl、建築 BIM／.ifc。</li>
+    <li>匯出前確認單位和座標朝向。</li>
+    <li>3D 列印的模型要水密。</li>
+  </ul></div>
+</section>
+
+<!-- ================= 第 15 課 ================= -->
+<section class="lesson" id="ch15" data-n="15" data-title="專業工作流與除錯大全">
+  <div class="lesson-head"><div class="num">15</div><h2>專業工作流與除錯大全</h2></div>
+  <div class="goal"><b>這一課你會學到</b><ul><li>把前面 14 課串成一條專業流程</li><li>面數預算和 LOD</li><li>和 AI 長期合作的規矩</li><li>一張「看症狀、找原因、跟 AI 怎麼說」的除錯表</li></ul></div>
+
+  <h3>專業 3D 製作流程</h3>
+  <p>不管是遊戲公司、動畫公司還是建築事務所，流程大同小異。括號是對應的課：</p>
+  <ol class="pipeline">
+    <li><div><b>需求與參考</b><span>做給誰看？用在哪裡？收集參考照片、尺寸圖。（第 5、7 課）</span></div></li>
+    <li><div><b>概念設計</b><span>角色設定卡、三視圖、建築平面圖。（第 7、8 課）</span></div></li>
+    <li><div><b>粗模</b><span>用基本形確認比例和構圖。（第 2、7 課）</span></div></li>
+    <li><div><b>細模</b><span>加上細節，細分曲面或雕刻。（第 12 課）</span></div></li>
+    <li><div><b>拓撲</b><span>重新拓撲成乾淨、面數合適的網格。（第 12、13 課）</span></div></li>
+    <li><div><b>UV 與材質</b><span>展開、畫貼圖、PBR 材質。（第 12 課）</span></div></li>
+    <li><div><b>骨架與動畫</b><span>綁骨、蒙皮、關鍵影格。（第 9 課）</span></div></li>
+    <li><div><b>燈光與渲染</b><span>擺燈、擺鏡頭、算圖。（第 3 課）</span></div></li>
+    <li><div><b>輸出與交付</b><span>選對格式和單位。（第 14 課）</span></div></li>
+  </ol>
+  <p>建築類通常停在第 6 步再接第 8、9 步（建築不用骨架）；人物類則全部都要走。</p>
+
+  <h3>面數預算和 LOD</h3>
+  <p>就像零用錢要分配，面數也要分配。一般來說，手機遊戲的角色常在幾千到兩萬個三角面左右，電腦和主機遊戲的主角可以到幾萬甚至十萬以上，電影角色則可以高得多（因為是離線渲染）。實際數字依專案而定，重要的是<strong>先問清楚用途，再決定預算</strong>。</p>
+  <div class="box origin"><div class="t">名詞由來：LOD</div>
+    <p>Level of Detail，「細節層級」。同一個模型準備好幾個版本：鏡頭靠近時用高面數，遠遠一個小點時換成低面數，觀眾看不出差別，電腦卻省下很多力氣。VRT 廠區如果要做成網頁導覽，遠處的縫紉機就可以只用一個方塊代表。</p>
+  </div>
+
+  <h3>和 AI 長期合作的五條規矩</h3>
+  <ol>
+    <li><strong>存版本。</strong>每一版都存檔（v1、v2、v3）。AI 改壞了，你能退回上一版。專業團隊會用 Git 這類「版本控制」工具做同樣的事。</li>
+    <li><strong>先說計畫，再動手。</strong>複雜修改先請 AI「用條列說明你打算改哪裡」，你確認後再給程式碼。</li>
+    <li><strong>一次一件事。</strong>第 5 課學過，到專業階段更重要。</li>
+    <li><strong>自己驗證。</strong>AI 說「已經對齊地面」，你要轉過去看；說「尺寸是 60 公尺」，你要量。AI 會犯錯，也可能很有自信地說錯。</li>
+    <li><strong>對話太長就重開。</strong>把「目前規格＋最新程式碼」整理好，貼進新的對話繼續。</li>
+  </ol>
+
+  <h3>除錯大全</h3>
+  <div class="tbl"><table>
+    <tr><th>症狀</th><th>最可能的原因</th><th>跟 AI 這樣說</th></tr>
+    <tr><td>畫面全白或全黑，什麼都沒有</td><td>程式出錯、沒網路、Three.js 沒載入</td><td>「畫面空白，F12 主控台的錯誤是：（貼上）」</td></tr>
+    <tr><td>模型一片黑</td><td>沒有燈光，或法線翻轉</td><td>「模型全黑，請檢查燈光設定和法線方向」</td></tr>
+    <tr><td>模型看不到，但沒有錯誤</td><td>攝影機在模型裡面，或模型太大／太小</td><td>「請把攝影機自動對準整個模型，並印出模型的尺寸」</td></tr>
+    <tr><td>建築浮空或陷進地面</td><td>y（Blender 是 z）沒設成高度的一半</td><td>「所有建築的底部要貼齊地面，請用 高度÷2 計算位置」</td></tr>
+    <tr><td>表面有閃爍的條紋</td><td>Z-fighting，兩個面重疊</td><td>「地板和地面在閃爍，請把地板抬高 0.01」</td></tr>
+    <tr><td>手臂繞奇怪的點轉</td><td>沒有軸心，或軸心位置錯</td><td>「請在肩膀加 Group 當軸心，手臂往下掛」</td></tr>
+    <tr><td>中文變亂碼</td><td>存檔編碼不是 UTF-8</td><td>（自己改：另存新檔選 UTF-8）</td></tr>
+    <tr><td>Blender 腳本紅字</td><td>版本差異</td><td>「錯誤訊息是：（貼上），我的 Blender 版本是 4.x」</td></tr>
+    <tr><td>貼圖被拉長、接縫明顯</td><td>UV 沒攤平、縫線位置不好</td><td>「貼圖在手臂上被拉長，請教我怎麼重新展開 UV」</td></tr>
+    <tr><td>網頁很卡</td><td>面數太多、貼圖太大、燈光太多</td><td>「網頁在手機上很卡，請幫我找出最耗效能的地方並優化」</td></tr>
+  </table></div>
+
+  <div class="quiz" data-a="1">
+    <p class="q">AI 說「我已經把所有建築都對齊地面了」，你應該？</p>
+    <div class="opts"><button>相信它，直接進行下一步</button><button>自己轉到側面看，確認真的對齊了</button><button>請它再說一次</button></div>
+    <p class="exp" hidden>AI 會犯錯，也可能自信地說錯。驗證是你的責任，這也是專業和業餘的差別。</p>
+  </div>
+
+  <div class="box key"><div class="t">本課重點</div><ul>
+    <li>需求 → 概念 → 粗模 → 細模 → 拓撲 → UV 材質 → 骨架動畫 → 燈光渲染 → 輸出。</li>
+    <li>面數依用途編預算；LOD 讓遠處省效能。</li>
+    <li>存版本、先說計畫、一次一件、自己驗證、太長就重開。</li>
+  </ul></div>
+</section>
+
+<!-- ================= 第 16 課 ================= -->
+<section class="lesson" id="ch16" data-n="16" data-title="畢業專案與名詞總表">
+  <div class="lesson-head"><div class="num">16</div><h2>畢業專案與名詞總表</h2></div>
+  <div class="goal"><b>這一課你會做到</b>從三個專案中選一個完成，用評分清單檢查自己，並把所有名詞複習一遍。</div>
+
+  <h3>三選一畢業專案</h3>
+  <div class="cards">
+    <div class="card cz"><h4>A　VRT 廠區數位雙胞胎</h4><p>用 Three.js 或 Blender 做出完整廠區：鋸齒屋頂、12 條縫紉線、倉庫、辦公樓、道路。點擊每條縫紉線，會顯示它的名稱和一段說明。</p></div>
+    <div class="card cy"><h4>B　原創角色動起來</h4><p>設計自己的原創角色：設定卡、三視圖、3D 模型（程式組裝或圖轉 3D 後修模），至少有走路和一個招牌動作，匯出成 .glb 放上網頁。</p></div>
+    <div class="card cx"><h4>C　自己的 3D 公仔</h4><p>用攝影測量掃描自己的上半身，清理、減面、補洞，做成水密模型，匯出 .stl。有機會的話送去 3D 列印。</p></div>
+  </div>
+
+  <div class="box origin"><div class="t">名詞由來：數位雙胞胎（Digital Twin）</div>
+    <p>在電腦裡做一個和真實工廠、機器「一模一樣」的虛擬分身，並且讓它跟著現實的資料一起變化，例如哪條線正在生產、哪台機器需要保養。這個概念在 2002 年前後由美國學者葛理夫斯（Michael Grieves）提出，後來 NASA 在太空任務中推廣這個名稱。專案 A 就是數位雙胞胎的起點：先有準確的 3D 模型，之後才能接上真實資料。</p>
+  </div>
+
+  <h3>評分清單</h3>
+  <div class="tbl"><table>
+    <tr><th>項目</th><th>及格</th><th>優秀</th></tr>
+    <tr><td>規劃</td><td>有尺寸表或角色設定卡</td><td>還有平面圖或三視圖，而且和成品一致</td></tr>
+    <tr><td>比例</td><td>看起來大致正確</td><td>放了人形比例尺，量過尺寸</td></tr>
+    <tr><td>模型品質</td><td>沒有浮空、閃爍、黑洞</td><td>面數合理、拓撲乾淨</td></tr>
+    <tr><td>材質燈光</td><td>有顏色和燈光</td><td>使用 PBR，有明確的光影氣氛</td></tr>
+    <tr><td>互動或動畫</td><td>可以旋轉觀看</td><td>有動畫或點擊互動</td></tr>
+    <tr><td>AI 協作紀錄</td><td>存了至少 3 個版本</td><td>記錄了每一版改了什麼、怎麼問 AI 的</td></tr>
+    <tr><td>權利與倫理</td><td>使用原創或有授權的內容</td><td>作品說明中註明使用的工具和素材來源</td></tr>
+  </table></div>
+
+  <h3>名詞總表</h3>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>英文</th><th>一句話</th><th>課</th></tr>
+    <tr><td>維度</td><td>Dimension</td><td>需要測量的方向數量</td><td>1</td></tr>
+    <tr><td>笛卡兒座標</td><td>Cartesian coordinates</td><td>用 (X, Y, Z) 表示位置</td><td>1</td></tr>
+    <tr><td>原點</td><td>Origin</td><td>座標 (0, 0, 0) 的位置</td><td>1</td></tr>
+    <tr><td>頂點／邊／面</td><td>Vertex / Edge / Face</td><td>點、線、面，模型的組成單位</td><td>2</td></tr>
+    <tr><td>多邊形</td><td>Polygon</td><td>面的正式名稱，希臘文「很多角」</td><td>2</td></tr>
+    <tr><td>網格</td><td>Mesh</td><td>面連成的整個模型外殼</td><td>2</td></tr>
+    <tr><td>基本形</td><td>Primitive</td><td>方塊、球、圓柱等內建積木</td><td>2</td></tr>
+    <tr><td>低面數</td><td>Low Poly</td><td>面少、有稜角、效能好</td><td>2</td></tr>
+    <tr><td>材質</td><td>Material</td><td>表面的顏色和質感</td><td>3</td></tr>
+    <tr><td>粗糙度／金屬度</td><td>Roughness / Metalness</td><td>描述材質的兩個 0～1 數值</td><td>3</td></tr>
+    <tr><td>透視／正交</td><td>Perspective / Orthographic</td><td>近大遠小／可以量尺寸</td><td>3</td></tr>
+    <tr><td>視角</td><td>FOV (Field of View)</td><td>鏡頭看得到的角度範圍</td><td>3</td></tr>
+    <tr><td>渲染</td><td>Render</td><td>電腦把場景算成圖片</td><td>3</td></tr>
+    <tr><td>大型語言模型</td><td>LLM</td><td>讀過大量文字的超級接龍高手</td><td>4</td></tr>
+    <tr><td>提示詞</td><td>Prompt</td><td>給 AI 的指令，來自劇場提詞</td><td>5</td></tr>
+    <tr><td>網頁 3D 函式庫</td><td>Three.js / WebGL</td><td>讓瀏覽器畫 3D 的工具</td><td>6</td></tr>
+    <tr><td>主控台</td><td>Console</td><td>瀏覽器顯示錯誤訊息的地方（F12）</td><td>5, 6</td></tr>
+    <tr><td>粗模</td><td>Blockout</td><td>用方塊先確認比例</td><td>7</td></tr>
+    <tr><td>深度打架</td><td>Z-fighting</td><td>兩個面重疊造成閃爍</td><td>7</td></tr>
+    <tr><td>頭身比</td><td>Head-to-body ratio</td><td>身高是幾個頭高</td><td>8</td></tr>
+    <tr><td>三視圖</td><td>Turnaround</td><td>正、側、背三個正交視角</td><td>8</td></tr>
+    <tr><td>T-pose／A-pose</td><td>—</td><td>建模用的標準站姿</td><td>8</td></tr>
+    <tr><td>軸心</td><td>Pivot</td><td>物件旋轉的中心點</td><td>9</td></tr>
+    <tr><td>父子關係</td><td>Parent–Child / Hierarchy</td><td>子物件跟著父物件動</td><td>9</td></tr>
+    <tr><td>骨架／綁骨</td><td>Armature / Rigging</td><td>模型內部可操控的骨頭</td><td>9</td></tr>
+    <tr><td>蒙皮／權重</td><td>Skinning / Weight</td><td>皮膚跟著骨頭動的程度</td><td>9</td></tr>
+    <tr><td>關鍵影格／補間</td><td>Keyframe / Tweening</td><td>設定重要姿勢，電腦算中間</td><td>9</td></tr>
+    <tr><td>攝影測量</td><td>Photogrammetry</td><td>用很多照片算出 3D</td><td>10</td></tr>
+    <tr><td>光達</td><td>LiDAR</td><td>用雷射測距掃描</td><td>10</td></tr>
+    <tr><td>高斯潑濺</td><td>Gaussian Splatting</td><td>用大量半透明光點重現場景</td><td>10</td></tr>
+    <tr><td>腳本</td><td>Script (Python / bpy)</td><td>用程式碼操作 Blender</td><td>11</td></tr>
+    <tr><td>細分曲面</td><td>Subdivision Surface</td><td>少面控制圓滑形狀</td><td>12</td></tr>
+    <tr><td>拓撲／重新拓撲</td><td>Topology / Retopology</td><td>網格線的走向／重做乾淨網格</td><td>12</td></tr>
+    <tr><td>邊流</td><td>Edge Flow</td><td>線順著結構走</td><td>12</td></tr>
+    <tr><td>法線</td><td>Normal</td><td>面朝外的垂直方向</td><td>12</td></tr>
+    <tr><td>UV 展開／縫線</td><td>UV Unwrap / Seam</td><td>把模型剪開攤平，像打版</td><td>12</td></tr>
+    <tr><td>貼圖</td><td>Texture / Normal Map</td><td>貼在模型上的圖片資料</td><td>12</td></tr>
+    <tr><td>以物理為基礎的渲染</td><td>PBR</td><td>照真實物理規律算材質</td><td>12</td></tr>
+    <tr><td>減面</td><td>Decimate</td><td>降低面數、保留外型</td><td>13</td></tr>
+    <tr><td>檔案格式</td><td>OBJ / FBX / glTF / STL</td><td>交換／動畫／網頁／列印</td><td>14</td></tr>
+    <tr><td>水密</td><td>Watertight / Manifold</td><td>完全封閉、沒有破洞</td><td>14</td></tr>
+    <tr><td>建築資訊模型</td><td>BIM / IFC</td><td>帶有資料的建築模型</td><td>14</td></tr>
+    <tr><td>細節層級</td><td>LOD</td><td>遠近用不同面數的版本</td><td>15</td></tr>
+    <tr><td>數位雙胞胎</td><td>Digital Twin</td><td>和真實工廠同步的虛擬分身</td><td>16</td></tr>
+  </table></div>
+
+  <h3>結語</h3>
+  <p>回頭看，你從「一個點要用三個數字表示」開始，學會了點線面、材質燈光、和 AI 說話的方法，做出廠房和會運球的角色，最後走到業界的專業流程。</p>
+  <p>AI 讓 3D 的入門變得前所未有的簡單，但決定作品好壞的，仍然是你<strong>觀察世界的眼光、規劃的能力，以及願意一次改一件事、一版一版修到好的耐心</strong>。這些東西，AI 替代不了。</p>
+  <p>現在，打開一個新的對話，開始你的畢業專案吧。</p>
+</section>
+
+<footer>
+  <p>本教材為教學用途。VRT 廠區模型為教學示意，尺寸為假設數字；阿勇為本教材的原創角色。AI 工具的功能、名稱與方案變化很快，實際操作請以各服務官方說明為準。互動 3D 需要網路以載入 Three.js。</p>
+</footer>
+</div><!-- /col -->
+</main>
+</div><!-- /shell -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+'use strict';
+var reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+function $(s,r){return (r||document).querySelector(s);}
+function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+
+/* ---------- 目錄 ---------- */
+(function buildToc(){
+  var list=$('#tocList'); var html='<ol>';
+  $$('main .stage-banner, main section.lesson').forEach(function(el){
+    if(el.classList.contains('stage-banner')) html+='</ol><h4>'+el.dataset.stage+'</h4><ol>';
+    else html+='<li><a href="#'+el.id+'" data-id="'+el.id+'"><span class="n">'+el.dataset.n+'</span><span>'+el.dataset.title+'</span></a></li>';
+  });
+  list.innerHTML=html+'</ol>';
+  var links=$$('a',list), map={};
+  links.forEach(function(a){map[a.dataset.id]=a;});
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(e.isIntersecting){links.forEach(function(l){l.classList.remove('on');}); if(map[e.target.id]) map[e.target.id].classList.add('on');}
+    });},{rootMargin:'-30% 0px -65% 0px'});
+    $$('section.lesson').forEach(function(s){io.observe(s);});
+  }
+  var toc=$('#toc'), fab=$('#tocFab');
+  function setOpen(o){toc.classList.toggle('open',o); fab.setAttribute('aria-expanded',String(o)); fab.textContent=o?'關閉':'目錄';}
+  fab.addEventListener('click',function(){setOpen(!toc.classList.contains('open'));});
+  list.addEventListener('click',function(e){if(e.target.closest('a')) setOpen(false);});
+})();
+
+/* ---------- 進度條 ---------- */
+var prog=$('#progress');
+function onScroll(){var h=document.documentElement; var max=h.scrollHeight-h.clientHeight; prog.style.width=(max>0?h.scrollTop/max*100:0)+'%';}
+addEventListener('scroll',onScroll,{passive:true}); onScroll();
+
+/* ---------- 外觀 ---------- */
+var modes=['system','light','dark'], names={system:'跟隨系統',light:'淺色',dark:'深色'}, mi=0, tb=$('#themeBtn');
+tb.addEventListener('click',function(){mi=(mi+1)%3; var m=modes[mi];
+  if(m==='system') delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme=m;
+  tb.textContent='外觀：'+names[m];});
+
+/* ---------- 小測驗 ---------- */
+$$('.quiz').forEach(function(q){
+  var a=+q.dataset.a, bs=$$('button',q), exp=$('.exp',q);
+  bs.forEach(function(b,i){b.type='button'; b.addEventListener('click',function(){
+    if(i===a){b.classList.add('right'); exp.hidden=false; if(exp.textContent.indexOf('答對了')!==0) exp.textContent='答對了！'+exp.textContent; bs.forEach(function(x){x.disabled=true;});}
+    else {b.classList.add('wrong'); b.disabled=true;}
+  });});
+});
+
+/* ---------- 複製按鈕 ---------- */
+$$('.codebox').forEach(function(cb){
+  var pre=$('pre',cb), b=document.createElement('button'); b.className='copy'; b.type='button'; b.textContent='複製'; cb.appendChild(b);
+  b.addEventListener('click',function(){
+    var t=pre.textContent;
+    function done(){b.textContent='已複製'; b.classList.add('done'); setTimeout(function(){b.textContent='複製'; b.classList.remove('done');},1600);}
+    function fallback(){var ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} ta.remove(); done();}
+    if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done,fallback); else fallback();
+  });
+});
+
+/* ================= 3D 共用工具 ================= */
+var HAS3D=!!window.THREE;
+var viewers=[];
+var vio=('IntersectionObserver' in window)?new IntersectionObserver(function(es){es.forEach(function(e){if(e.target.__v) e.target.__v.visible=e.isIntersecting;});},{rootMargin:'120px'}):null;
+
+function msg(stage,text){var p=document.createElement('p'); p.className='no3d'; p.textContent=text; stage.appendChild(p);}
+
+function makeViewer(stage,o){
+  o=Object.assign({target:[0,1,0],radius:10,yaw:0.7,pitch:0.45,fov:40,auto:true,minR:2,maxR:250,shadows:false,lights:true},o||{});
+  if(!stage) return null;
+  if(!HAS3D){msg(stage,'互動 3D 需要網路載入 Three.js。請連上網路後重新打開這個檔案。'); return null;}
+  var renderer;
+  try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});}catch(e){msg(stage,'這個瀏覽器無法顯示 WebGL 3D，請換用新版 Chrome、Edge 或 Safari。'); return null;}
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  if(o.shadows){renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;}
+  stage.insertBefore(renderer.domElement,stage.firstChild);
+  var scene=new THREE.Scene(), camera=new THREE.PerspectiveCamera(o.fov,1,0.05,3000);
+  var v={stage:stage,renderer:renderer,scene:scene,camera:camera,yaw:o.yaw,pitch:o.pitch,radius:o.radius,
+    target:new THREE.Vector3(o.target[0],o.target[1],o.target[2]),auto:o.auto&&!reduce,visible:!vio,updates:[],
+    minR:o.minR,maxR:o.maxR,last:-1e9,init:{yaw:o.yaw,pitch:o.pitch,radius:o.radius}};
+  v.boost=1; v.place=function(){var r=v.radius*v.boost,cp=Math.cos(v.pitch);
+    camera.position.set(v.target.x+r*cp*Math.sin(v.yaw),v.target.y+r*Math.sin(v.pitch),v.target.z+r*cp*Math.cos(v.yaw)); camera.lookAt(v.target);};
+  if(o.lights){
+    scene.add(new THREE.HemisphereLight(0xffffff,0x7d8a98,0.62));
+    var sun=new THREE.DirectionalLight(0xffffff,0.62); sun.position.set(0.6,1,0.45).multiplyScalar(50); scene.add(sun); v.sun=sun;
+  }
+  var cv=renderer.domElement, drag=null;
+  function touch(){v.last=performance.now();}
+  cv.addEventListener('pointerdown',function(e){drag={x:e.clientX,y:e.clientY,t:e.pointerType}; v.engaged=true; touch();});
+  cv.addEventListener('pointermove',function(e){if(!drag) return; var dx=e.clientX-drag.x, dy=e.clientY-drag.y; drag.x=e.clientX; drag.y=e.clientY;
+    v.yaw-=dx*0.008; if(drag.t==='mouse') v.pitch=clamp(v.pitch+dy*0.006,-0.25,1.52); touch();});
+  function end(){drag=null;}
+  cv.addEventListener('pointerup',end); cv.addEventListener('pointercancel',end);
+  cv.addEventListener('pointerleave',function(){end(); v.engaged=false;});
+  cv.addEventListener('wheel',function(e){if(!v.engaged) return; e.preventDefault(); v.radius=clamp(v.radius*(e.deltaY>0?1.1:0.9),v.minR,v.maxR); touch();},{passive:false});
+  var z=document.createElement('div'); z.className='zoom';
+  [['＋','放大',function(){v.radius=clamp(v.radius*0.85,v.minR,v.maxR);touch();}],
+   ['－','縮小',function(){v.radius=clamp(v.radius*1.18,v.minR,v.maxR);touch();}],
+   ['⟲','重設視角',function(){v.yaw=v.init.yaw;v.pitch=v.init.pitch;v.radius=v.init.radius;v.last=-1e9; if(v.onReset) v.onReset();}]
+  ].forEach(function(b){var el=document.createElement('button'); el.type='button'; el.textContent=b[0]; el.setAttribute('aria-label',b[1]); el.title=b[1]; el.addEventListener('click',b[2]); z.appendChild(el);});
+  stage.appendChild(z);
+  function resize(){var w=stage.clientWidth||300,h=stage.clientHeight||200; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); v.boost=Math.max(1,1.5/(w/h));}
+  if('ResizeObserver' in window) new ResizeObserver(resize).observe(stage); else addEventListener('resize',resize);
+  resize();
+  stage.__v=v; if(vio) vio.observe(stage);
+  viewers.push(v); return v;
+}
+var lastT=performance.now();
+function loop(now){
+  var dt=Math.min(0.05,(now-lastT)/1000); lastT=now;
+  for(var i=0;i<viewers.length;i++){var v=viewers[i]; if(!v.visible) continue;
+    if(v.auto && now-v.last>5000) v.yaw+=dt*0.2;
+    for(var k=0;k<v.updates.length;k++) v.updates[k](dt,now/1000);
+    v.place(); v.renderer.render(v.scene,v.camera);}
+  requestAnimationFrame(loop);
+}
+
+function std(c,o){return new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:0.8,metalness:0},o||{}));}
+function mbox(parent,w,h,d,x,y,z,mat){var m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat); m.position.set(x,y,z); parent.add(m); return m;}
+function msph(parent,r,x,y,z,mat,seg){var m=new THREE.Mesh(new THREE.SphereGeometry(r,seg||20,Math.round((seg||20)*0.7)),mat); m.position.set(x,y,z); parent.add(m); return m;}
+function label(text,size,color){
+  var fs=56, c=document.createElement('canvas'), ctx=c.getContext('2d'), font='700 '+fs+'px "Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif';
+  ctx.font=font; var w=Math.ceil(ctx.measureText(text).width)+36; c.width=w; c.height=fs+28;
+  ctx.font=font; ctx.fillStyle='rgba(255,255,255,0.92)'; ctx.fillRect(0,0,w,c.height);
+  ctx.strokeStyle='#1B2A3A'; ctx.lineWidth=4; ctx.strokeRect(2,2,w-4,c.height-4);
+  ctx.fillStyle=color||'#1B2A3A'; ctx.textBaseline='middle'; ctx.fillText(text,18,c.height/2+2);
+  var tex=new THREE.CanvasTexture(c); tex.minFilter=THREE.LinearFilter;
+  var s=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,depthTest:false,transparent:true}));
+  s.scale.set(size*w/c.height,size,1); s.renderOrder=20; return s;
+}
+function lineGeo(a,b){return new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(a[0],a[1],a[2]),new THREE.Vector3(b[0],b[1],b[2])]);}
+function setLine(l,a,b){l.geometry.dispose(); l.geometry=lineGeo(a,b); if(l.computeLineDistances) l.computeLineDistances();}
+
+/* ================= 第 1 課：座標軸 ================= */
+function initAxes(){
+  var v=makeViewer($('#demoAxes .stage'),{target:[0,1.2,0],radius:14,yaw:0.75,pitch:0.42}); if(!v) return;
+  var s=v.scene, L=5;
+  s.add(new THREE.GridHelper(10,10,0x8899aa,0xc6d0da));
+  var neg=new THREE.LineBasicMaterial({color:0x9aa7b4});
+  s.add(new THREE.Line(lineGeo([-L,0,0],[0,0,0]),neg)); s.add(new THREE.Line(lineGeo([0,0,-L],[0,0,0]),neg)); s.add(new THREE.Line(lineGeo([0,0,0],[0,0,L]),neg));
+  function arrow(dir,col){var a=new THREE.ArrowHelper(new THREE.Vector3(dir[0],dir[1],dir[2]),new THREE.Vector3(),L,col,0.45,0.28); s.add(a); return a;}
+  var three=new THREE.Group(), blend=new THREE.Group(); s.add(three,blend);
+  var ax=arrow([1,0,0],0xd64541); // X 兩派相同
+  var y3=arrow([0,1,0],0x2e9e5b), z3=arrow([0,0,1],0x2f6fd6); three.add(y3,z3);
+  var zb=arrow([0,1,0],0x2f6fd6), yb=arrow([0,0,-1],0x2e9e5b); blend.add(zb,yb);
+  var lx=label('X',0.6,'#D64541'); lx.position.set(L+0.6,0,0); s.add(lx);
+  var ly3=label('Y',0.6,'#2E9E5B'); ly3.position.set(0,L+0.6,0); three.add(ly3);
+  var lz3=label('Z',0.6,'#2F6FD6'); lz3.position.set(0,0,L+0.6); three.add(lz3);
+  var lzb=label('Z',0.6,'#2F6FD6'); lzb.position.set(0,L+0.6,0); blend.add(lzb);
+  var lyb=label('Y',0.6,'#2E9E5B'); lyb.position.set(0,0,-L-0.6); blend.add(lyb);
+  var lo=label('原點 (0,0,0)',0.45); lo.position.set(-1.3,-0.45,0.9); s.add(lo);
+  var ball=msph(s,0.32,0,0,0,std(0xe8a800,{roughness:0.35}),28);
+  var dm=new THREE.LineDashedMaterial({color:0x4e5f70,dashSize:0.2,gapSize:0.12});
+  var l1=new THREE.Line(lineGeo([0,0,0],[0,1,0]),dm), l2=new THREE.Line(lineGeo([0,0,0],[1,0,0]),dm), l3=new THREE.Line(lineGeo([0,0,0],[1,0,0]),dm); s.add(l1,l2,l3);
+  var dot=new THREE.Mesh(new THREE.CircleGeometry(0.16,20),new THREE.MeshBasicMaterial({color:0x4e5f70})); dot.rotation.x=-Math.PI/2; s.add(dot);
+  var ro=$('#axesReadout');
+  function f(n){n=Math.round(n*10)/10+0; return (n===0?0:n);}
+  function up(){
+    var x=+$('#ax').value, y=+$('#ay').value, z=+$('#az').value, bl=$('#aBlender').checked;
+    ball.position.set(x,y,z); dot.position.set(x,0.01,z);
+    setLine(l1,[x,y,z],[x,0,z]); setLine(l2,[x,0,z],[x,0,0]); setLine(l3,[x,0,z],[0,0,z]);
+    three.visible=!bl; blend.visible=bl;
+    var a='Three.js：(<span class="lx">'+f(x)+'</span>, <span class="ly">'+f(y)+'</span>, <span class="lz">'+f(z)+'</span>)';
+    var b='Blender：(<span class="lx">'+f(x)+'</span>, <span class="ly">'+f(-z)+'</span>, <span class="lz">'+f(y)+'</span>)';
+    ro.innerHTML=bl?('<b>'+b+'</b><br><span style="opacity:.6">'+a+'</span>'):('<b>'+a+'</b><br><span style="opacity:.6">'+b+'</span>');
+  }
+  ['#ax','#ay','#az','#aBlender'].forEach(function(id){$(id).addEventListener('input',up);});
+  up();
+}
+
+/* ================= 第 2 課：面數 ================= */
+function initMesh(){
+  var v=makeViewer($('#demoMesh .stage'),{target:[0,0,0],radius:7,pitch:0.35}); if(!v) return;
+  var mat=std(0x2f6fd6,{roughness:0.45,flatShading:true});
+  var wmat=new THREE.LineBasicMaterial({color:0x1b2a3a,transparent:true,opacity:0.55});
+  var mesh=null, ro=$('#meshReadout');
+  function geo(shape,n){
+    if(shape==='sphere') return new THREE.SphereGeometry(1.7,n,Math.max(2,Math.round(n*0.6)));
+    if(shape==='cyl') return new THREE.CylinderGeometry(1.3,1.3,2.8,n,Math.max(1,Math.round(n/6)));
+    if(shape==='torus') return new THREE.TorusGeometry(1.4,0.55,Math.max(3,Math.round(n*0.5)),n);
+    var k=Math.max(1,Math.round(n/6)); return new THREE.BoxGeometry(2.5,2.5,2.5,k,k,k);
+  }
+  function rebuild(){
+    if(mesh){v.scene.remove(mesh); mesh.geometry.dispose();}
+    var g=geo($('#mShape').value,+$('#mSeg').value);
+    mesh=new THREE.Mesh(g,mat); var w=new THREE.LineSegments(new THREE.WireframeGeometry(g),wmat); mesh.add(w);
+    w.visible=$('#mWire').checked; mat.flatShading=$('#mFlat').checked; mat.needsUpdate=true;
+    v.scene.add(mesh);
+    var tris=g.index?g.index.count/3:g.attributes.position.count/3;
+    ro.textContent='三角形 '+tris+' 個　頂點資料 '+g.attributes.position.count+' 筆';
+  }
+  ['#mShape','#mSeg','#mWire','#mFlat'].forEach(function(id){$(id).addEventListener('input',rebuild);});
+  rebuild();
+}
+
+/* ================= 第 3 課：燈光材質 ================= */
+function makeEnv(renderer){
+  var c=document.createElement('canvas'); c.width=512; c.height=256; var x=c.getContext('2d');
+  var g=x.createLinearGradient(0,0,0,256); g.addColorStop(0,'#f4f7fb'); g.addColorStop(0.47,'#cfd8e2'); g.addColorStop(0.53,'#8c96a0'); g.addColorStop(1,'#3a414a');
+  x.fillStyle=g; x.fillRect(0,0,512,256); x.fillStyle='#ffffff'; x.fillRect(60,40,90,36); x.fillRect(300,28,130,46); x.fillStyle='#ffe7a8'; x.fillRect(200,60,40,24);
+  var tex=new THREE.CanvasTexture(c); tex.mapping=THREE.EquirectangularReflectionMapping;
+  var pm=new THREE.PMREMGenerator(renderer); var rt=pm.fromEquirectangular(tex); pm.dispose(); return rt.texture;
+}
+function initLight(){
+  var v=makeViewer($('#demoLight .stage'),{target:[0,0.9,0],radius:9,pitch:0.38,shadows:true,lights:false}); if(!v) return;
+  var s=v.scene, env=null; try{env=makeEnv(v.renderer);}catch(e){}
+  var amb=new THREE.AmbientLight(0xffffff,0.22); s.add(amb);
+  var dir=new THREE.DirectionalLight(0xffffff,1.1); dir.castShadow=true; dir.shadow.mapSize.set(1024,1024);
+  var sc=dir.shadow.camera; sc.left=-7; sc.right=7; sc.top=7; sc.bottom=-7; sc.near=1; sc.far=30; s.add(dir);
+  var point=new THREE.PointLight(0xffffff,1.6,25); point.castShadow=true; s.add(point);
+  var spot=new THREE.SpotLight(0xffffff,2.2,40,Math.PI/7,0.4); spot.castShadow=true; spot.target.position.set(0,0.8,0); s.add(spot,spot.target);
+  var marker=msph(s,0.16,0,0,0,new THREE.MeshBasicMaterial({color:0xffd24a}),12);
+  var floor=new THREE.Mesh(new THREE.PlaneGeometry(16,16),std(0xdfe5ea,{roughness:0.95})); floor.rotation.x=-Math.PI/2; floor.receiveShadow=true; s.add(floor);
+  var mats=[std(0xd64541,{roughness:0.35}),std(0x2f6fd6,{roughness:0.35}),std(0xe8a800,{roughness:0.35})];
+  if(env) mats.forEach(function(m){m.envMap=env; m.envMapIntensity=0.7;});
+  var ob=[new THREE.Mesh(new THREE.SphereGeometry(1,48,32),mats[0]),new THREE.Mesh(new THREE.BoxGeometry(1.2,1.2,1.2),mats[1]),new THREE.Mesh(new THREE.CylinderGeometry(0.55,0.55,1.6,40),mats[2])];
+  ob[0].position.set(0,1,0); ob[1].position.set(-2.3,0.6,0.9); ob[1].rotation.y=0.5; ob[2].position.set(2.2,0.8,-0.6);
+  ob.forEach(function(o){o.castShadow=true; o.receiveShadow=true; s.add(o);});
+  var baseR=9, baseTan=Math.tan(20*Math.PI/180);
+  function up(){
+    var t=$('#lType').value, a=+$('#lAng').value*Math.PI/180, r=+$('#lRough').value, m=+$('#lMetal').value, fov=+$('#lFov').value;
+    mats.forEach(function(mm){mm.roughness=r; mm.metalness=m;});
+    dir.visible=t==='dir'; point.visible=t==='point'; spot.visible=t==='spot'; marker.visible=t!=='amb';
+    amb.intensity=t==='amb'?0.95:0.22;
+    dir.position.set(6*Math.cos(a),7,6*Math.sin(a)); point.position.set(3*Math.cos(a),3.2,3*Math.sin(a)); spot.position.set(5*Math.cos(a),6,5*Math.sin(a));
+    marker.position.copy(t==='dir'?dir.position.clone().multiplyScalar(0.75):t==='point'?point.position:spot.position);
+    v.camera.fov=fov; v.camera.updateProjectionMatrix();
+    v.radius=clamp(baseR*baseTan/Math.tan(fov*Math.PI/360),3,40); v.init.radius=v.radius;
+  }
+  ['#lType','#lAng','#lRough','#lMetal','#lFov'].forEach(function(id){$(id).addEventListener('input',up);});
+  up();
+}
+
+/* ================= 第 7 課：VRT 廠房 ================= */
+function buildFactory(){
+  var root=new THREE.Group(), pieces=[], P={}, mats=[];
+  function M(c,o){var m=std(c,o); mats.push(m); return m;}
+  function piece(name){var g=new THREE.Group(); g.userData.on=true; root.add(g); pieces.push(g); P[name]=g; return g;}
+  // 地面與道路（不參與組裝）
+  var ground=new THREE.Mesh(new THREE.PlaneGeometry(110,70),M(0xb4c4b0,{roughness:1})); ground.rotation.x=-Math.PI/2; root.add(ground);
+  mbox(root,110,0.06,6,0,0.03,30,M(0x7d8791,{roughness:0.9}));
+  // 辦公樓
+  var off=piece('office'), offM=M(0xe3c7c0), winM=M(0x3b4c5e,{roughness:0.3,metalness:0.3});
+  mbox(off,16,12,12,-39,6,-9,offM);
+  for(var f=0;f<3;f++) mbox(off,16.12,1.4,12.12,-39,2.3+f*4,-9,winM);
+  mbox(off,2.4,2.6,0.2,-39,1.3,-2.95,winM);
+  // 廠房地板
+  mbox(piece('floor'),60,0.1,30,0,0.05,0,M(0xb9c3cc,{roughness:0.5}));
+  // 12 條縫紉線
+  var tableM=M(0x2f6fd6,{roughness:0.6}), machM=M(0xf4f6f8,{roughness:0.4,metalness:0.2});
+  var machGeo=new THREE.BoxGeometry(0.55,0.4,0.35), dummy=new THREE.Object3D();
+  for(var i=0;i<12;i++){
+    var z=(i-5.5)*2.2, g=piece('line'+(i+1));
+    mbox(g,40,0.75,0.9,-5,0.375,z,tableM);
+    var im=new THREE.InstancedMesh(machGeo,machM,20);
+    for(var j=0;j<20;j++){dummy.position.set(-24.5+j*2,0.95,z); dummy.updateMatrix(); im.setMatrixAt(j,dummy.matrix);}
+    g.add(im);
+  }
+  // 裁剪區
+  mbox(piece('cutting'),10,0.9,4,22,0.45,0,M(0xd9c7a8));
+  // 主廠房牆面
+  var walls=piece('walls'), wallM=M(0xd9dee3,{roughness:0.85});
+  var wb=mbox(walls,60,8,30,0,4,0,wallM);
+  var edge=new THREE.LineSegments(new THREE.EdgesGeometry(wb.geometry),new THREE.LineBasicMaterial({color:0x1b2a3a})); edge.position.copy(wb.position); walls.add(edge);
+  // 平屋頂
+  var rf=piece('roofFlat'); mbox(rf,60.4,0.4,30.4,0,8.2,0,M(0x8a96a3)); rf.userData.on=false;
+  // 鋸齒屋頂
+  var rs=piece('roofSaw'), sawM=M(0x9aa5b1,{roughness:0.7}), glassM=M(0x8ec5ea,{roughness:0.1,metalness:0.2,side:THREE.DoubleSide});
+  var sh=new THREE.Shape(); sh.moveTo(0,0); sh.lineTo(10,0); sh.lineTo(10,2.5); sh.lineTo(0,0);
+  var sawGeo=new THREE.ExtrudeGeometry(sh,{depth:30,bevelEnabled:false});
+  for(var k=0;k<6;k++){
+    var t=new THREE.Mesh(sawGeo,sawM); t.position.set(-30+k*10,8.02,-15); rs.add(t);
+    var gl=new THREE.Mesh(new THREE.PlaneGeometry(30,2.4),glassM); gl.rotation.y=Math.PI/2; gl.position.set(-30+k*10+10.04,8.02+1.22,0); rs.add(gl);
+  }
+  // 倉庫
+  var wh=piece('warehouse'), doorM=M(0x8a96a3,{roughness:0.5,metalness:0.4});
+  mbox(wh,20,10,30,41,5,0,M(0xb7cbb9));
+  [35,41,47].forEach(function(x){mbox(wh,4,4.5,0.2,x,2.25,15.1,doorM);});
+  // 裝卸平台
+  var dk=piece('dock'); mbox(dk,20,1.2,4,41,0.6,17,M(0xc9ced4)); mbox(dk,20,0.16,0.22,41,1.22,18.9,M(0xe8a800));
+  // 貨車
+  var tr=piece('truck'); mbox(tr,3,3.2,10,37,2.3,24.6,M(0xf1f1f1,{roughness:0.5})); mbox(tr,2.8,2.6,2.4,37,1.9,31.2,M(0xd64541,{roughness:0.5}));
+  var wheelM=M(0x2b2b33), wg=new THREE.CylinderGeometry(0.5,0.5,0.4,16);
+  [[35.4,21.5],[38.6,21.5],[35.4,28],[38.6,28],[35.4,31.5],[38.6,31.5]].forEach(function(p){var w=new THREE.Mesh(wg,wheelM); w.rotation.z=Math.PI/2; w.position.set(p[0],0.5,p[1]); tr.add(w);});
+  // 樹
+  var trees=piece('trees'), trunkM=M(0x7a5a3a), crownM=M(0x2e9e5b,{roughness:0.9});
+  [-45,-30,-15,0,15,30,45].forEach(function(x,n){
+    var tz=-26+(n%2)*2.5;
+    var tk=new THREE.Mesh(new THREE.CylinderGeometry(0.3,0.35,2,8),trunkM); tk.position.set(x,1,tz); trees.add(tk);
+    var cr=new THREE.Mesh(new THREE.ConeGeometry(2,4.5,10),crownM); cr.position.set(x,4.2,tz); trees.add(cr);
+  });
+  // 人形比例尺 1.7 m
+  var ps=piece('person'), inkM=M(0x1b2a3a,{roughness:0.5});
+  var bd=new THREE.Mesh(new THREE.CylinderGeometry(0.22,0.26,1.4,12),inkM); bd.position.set(-35,0.7,-1); ps.add(bd);
+  msph(ps,0.2,-35,1.55,-1,inkM,14);
+  // 標籤
+  var labels=new THREE.Group(); root.add(labels);
+  [['主廠房・縫紉車間',[0,14,0],4],['倉庫',[41,15.5,0],4],['辦公樓',[-39,17,-9],4],['裝卸區',[41,5,21],3.2],['裁剪區',[22,4,0],3],['人 1.7 m',[-35,4,-1],2.6]]
+    .forEach(function(a){var l=label(a[0],a[2]); l.position.set(a[1][0],a[1][1],a[1][2]); labels.add(l);});
+  var F={root:root,pieces:pieces,P:P,mats:mats,labels:labels,wallM:wallM,t0:null,started:false};
+  F.setGlass=function(on){wallM.transparent=on; wallM.opacity=on?0.28:1; wallM.depthWrite=!on; wallM.needsUpdate=true;};
+  F.setWire=function(on){mats.forEach(function(m){m.wireframe=on;}); ground.material.wireframe=false;};
+  F.assemble=function(now){F.t0=reduce?-1e9:now; F.started=true;};
+  F.update=function(now){
+    var step=0.13,dur=0.7,t0=F.t0;
+    for(var i=0;i<pieces.length;i++){var g=pieces[i];
+      if(t0===null){g.visible=false; continue;}
+      var p=clamp((now-t0-i*step)/dur,0,1), e=1-Math.pow(1-p,3);
+      g.position.y=(1-e)*30; g.visible=g.userData.on&&p>0;}
+  };
+  F.setGlass(true);
+  return F;
+}
+function initHero(){
+  var v=makeViewer($('#heroStage'),{target:[2,1,2],radius:125,yaw:0.35,pitch:0.72,fov:38,minR:25,maxR:220}); if(!v) return;
+  var F=buildFactory(); F.labels.visible=false; v.scene.add(F.root);
+  v.updates.push(function(dt,t){if(!F.started) F.assemble(t+0.3); F.update(t);});
+}
+function initFactory(){
+  var v=makeViewer($('#demoFactory .stage'),{target:[2,1,0],radius:120,yaw:0.35,pitch:0.68,fov:40,minR:15,maxR:220}); if(!v) return;
+  var F=buildFactory(); v.scene.add(F.root);
+  v.updates.push(function(dt,t){if(!F.started) F.assemble(t+0.3); F.update(t); v.now=t;});
+  function up(){
+    var r=$('#fRoof').value; F.P.roofSaw.userData.on=r==='saw'; F.P.roofFlat.userData.on=r==='flat';
+    F.setGlass($('#fGlass').checked); F.setWire($('#fWire').checked); F.labels.visible=$('#fLabels').checked;
+    for(var i=1;i<=12;i++) F.P['line'+i].userData.on=$('#fLines').checked;
+  }
+  ['#fRoof','#fGlass','#fLines','#fLabels','#fWire'].forEach(function(id){$(id).addEventListener('input',up);});
+  $('#fReplay').addEventListener('click',function(){F.assemble((v.now||performance.now()/1000)+0.1);});
+  var top=false, tb=$('#fTop');
+  tb.addEventListener('click',function(){top=!top;
+    if(top){v.pitch=1.5; v.yaw=0; v.radius=95; v.auto=false; tb.textContent='切回斜角'; tb.classList.add('on');}
+    else {v.pitch=0.68; v.yaw=0.35; v.radius=120; v.auto=!reduce; tb.textContent='切到俯視（像平面圖）'; tb.classList.remove('on');}
+    v.last=performance.now();});
+  v.onReset=function(){if(top) tb.click();};
+  up();
+}
+
+/* ================= 第 8、9 課：原創角色阿勇 ================= */
+function numberTex(txt){
+  var c=document.createElement('canvas'); c.width=128; c.height=128; var x=c.getContext('2d');
+  x.fillStyle='#ffffff'; x.font='900 100px "Noto Sans TC",sans-serif'; x.textAlign='center'; x.textBaseline='middle'; x.fillText(txt,64,70);
+  return new THREE.CanvasTexture(c);
+}
+function buildCharacter(ratio,opts){
+  opts=opts||{};
+  var C={j:{},bones:[],mats:[]};
+  C.boneMat=new THREE.MeshBasicMaterial({color:0xd64541,depthTest:false,transparent:true});
+  C.jointMat=new THREE.MeshBasicMaterial({color:0xe8a800,depthTest:false,transparent:true});
+  var jointGeo=new THREE.SphereGeometry(0.1,12,8);
+  var m={skin:std(0xf1c7a5,{roughness:0.7}),hair:std(0x2b2b33,{roughness:0.55}),jersey:std(0x1e9c9c,{roughness:0.8}),
+    shorts:std(0x16706f,{roughness:0.8}),white:std(0xf3f4f5,{roughness:0.6}),dark:std(0x1b2a3a,{roughness:0.3})};
+  var num=new THREE.MeshBasicMaterial({map:numberTex('5'),transparent:true});
+  C.mats=[m.skin,m.hair,m.jersey,m.shorts,m.white,m.dark,num];
+  var root=new THREE.Group(), body=new THREE.Group(); root.add(body); C.root=root; C.body=body;
+  var t=clamp((8.5-ratio)/6.5,0,1);
+  var bodyH=ratio-1, torso=bodyH*0.45, legs=bodyH*0.55, hipY=legs;
+  var sw=0.95+(ratio-2)*0.16, limb=0.15+t*0.13;
+  var hipX=Math.max(limb*1.15,sw*0.24);
+  var upper=(torso*0.95+legs*0.18)*0.52, fore=upper*0.92, thigh=legs*0.5, shin=legs*0.5;
+  var neckY=hipY+torso;
+  function bone(parent,a,b){
+    var va=new THREE.Vector3(a[0],a[1],a[2]), vb=new THREE.Vector3(b[0],b[1],b[2]), d=vb.clone().sub(va), len=d.length();
+    var bm=new THREE.Mesh(new THREE.CylinderGeometry(0.045,0.045,len,6),C.boneMat);
+    bm.position.copy(va.clone().add(vb).multiplyScalar(0.5)); bm.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());
+    bm.visible=false; bm.renderOrder=30; parent.add(bm); C.bones.push(bm);
+  }
+  function joint(parent,x,y,z){var j=new THREE.Mesh(jointGeo,C.jointMat); j.position.set(x,y,z); j.visible=false; j.renderOrder=31; parent.add(j); C.bones.push(j);}
+  function seg(parent,pos,len,rad,mat){
+    var p=new THREE.Group(); p.position.set(pos[0],pos[1],pos[2]); parent.add(p);
+    var mm=new THREE.Mesh(new THREE.CylinderGeometry(rad*0.9,rad,len,16),mat); mm.position.y=-len/2; p.add(mm);
+    msph(p,rad*1.02,0,0,0,mat,14);
+    bone(p,[0,0,0],[0,-len,0]); joint(p,0,0,0);
+    return p;
+  }
+  // 短褲與球衣
+  var sTop=hipY+torso*0.22, sBot=hipY-thigh*0.5;
+  mbox(body,sw*0.96,sTop-sBot,sw*0.56,0,(sTop+sBot)/2,0,m.shorts);
+  var jTop=neckY-0.06, jBot=sTop-0.02, jH=jTop-jBot;
+  mbox(body,sw,jH,sw*0.5,0,(jTop+jBot)/2,0,m.jersey);
+  var ns=Math.min(sw*0.45,jH*0.55);
+  var nf=new THREE.Mesh(new THREE.PlaneGeometry(ns,ns),num); nf.position.set(0,(jTop+jBot)/2+jH*0.05,sw*0.25+0.01); body.add(nf);
+  var nb=new THREE.Mesh(new THREE.PlaneGeometry(ns*1.2,ns*1.2),num); nb.position.set(0,(jTop+jBot)/2+jH*0.05,-sw*0.25-0.01); nb.rotation.y=Math.PI; body.add(nb);
+  // 頸與頭
+  var nk=new THREE.Mesh(new THREE.CylinderGeometry(0.15,0.17,0.3,12),m.skin); nk.position.set(0,neckY+0.04,0); body.add(nk);
+  var head=new THREE.Group(); head.position.set(0,neckY+0.5,0); body.add(head); C.j.head=head;
+  var hd=msph(head,0.5,0,0,0,m.skin,32); hd.scale.set(0.92,1,0.95);
+  var hair=new THREE.Mesh(new THREE.SphereGeometry(0.54,28,14,0,Math.PI*2,0,Math.PI*0.5),m.hair); hair.rotation.x=-0.32; hair.position.y=0.03; head.add(hair);
+  var fringe=new THREE.Mesh(new THREE.SphereGeometry(0.535,24,10,Math.PI*0.3,Math.PI*0.4,Math.PI*0.28,Math.PI*0.14),m.hair); head.add(fringe);
+  var es=0.065+t*0.06;
+  [-1,1].forEach(function(sd){
+    var e=msph(head,es,sd*0.17,-0.04,0.42,m.dark,14); e.scale.set(1,1.45,0.6);
+    msph(head,es*0.33,sd*0.17+0.025,-0.04+es*0.55,0.42+es*0.35,m.white,8);
+    msph(head,0.09,sd*0.465,-0.04,0,m.skin,10);
+  });
+  bone(body,[0,hipY,0],[0,neckY,0]); bone(body,[0,neckY,0],[0,neckY+0.95,0]); joint(body,0,hipY,0); joint(body,0,neckY,0);
+  // 手臂與腿
+  var shY=neckY-torso*0.1, shX=sw/2+limb*0.85, shoeH=limb*1.35, shinLen=shin-shoeH*0.55;
+  bone(body,[-shX,shY,0],[shX,shY,0]); bone(body,[-hipX,hipY,0],[hipX,hipY,0]);
+  [1,-1].forEach(function(sd){
+    var k=sd>0?'L':'R';
+    var sh=seg(body,[sd*shX,shY,0],upper,limb,m.skin); C.j['sh'+k]=sh;
+    var el=seg(sh,[0,-upper,0],fore,limb*0.9,m.skin); C.j['el'+k]=el;
+    msph(el,limb*1.2,0,-fore,0,m.skin,14);
+    var hp=seg(body,[sd*hipX,hipY,0],thigh,limb*1.2,m.skin); C.j['hip'+k]=hp;
+    var kn=seg(hp,[0,-thigh,0],shinLen,limb,m.skin); C.j['kn'+k]=kn;
+    var sockL=shinLen*0.55, sock=new THREE.Mesh(new THREE.CylinderGeometry(limb*1.06,limb*1.08,sockL,16),m.white); sock.position.y=-shinLen+sockL/2; kn.add(sock);
+    mbox(kn,limb*2.3,shoeH,limb*3.6,0,-shin+shoeH/2,limb*0.55,m.white);
+    mbox(kn,limb*2.35,shoeH*0.22,limb*3.65,0,-shin+shoeH*0.11,limb*0.55,m.dark);
+  });
+  // 籃球
+  C.ball=msph(root,0.42,-shX-0.05,0.42,0.8,std(0xe07a2a,{roughness:0.7}),24); C.ball.visible=false;
+  C.dims={legs:legs,shX:shX,shY:shY,upper:upper,fore:fore};
+  // 頭身刻度
+  if(opts.ruler){
+    var span=shX+upper+fore+0.4, lm=new THREE.LineBasicMaterial({color:0x4e5f70,transparent:true,opacity:0.7}), rg=new THREE.Group(); root.add(rg);
+    var ys=[]; for(var q=0;q<=Math.floor(ratio);q++) ys.push(ratio-q); if(ys[ys.length-1]>0.001) ys.push(0);
+    ys.forEach(function(y){rg.add(new THREE.Line(lineGeo([-span,y,-0.7],[span,y,-0.7]),lm));});
+    var ls=0.42*ratio/4.2;
+    for(var n=1;n<=Math.ceil(ratio);n++){var yt=ratio-(n-1), yb=Math.max(0,ratio-n); var lb=label(String(n),ls); lb.position.set(-span-ls*0.9,(yt+yb)/2,-0.7); rg.add(lb);}
+  }
+  return C;
+}
+function setPose(C,pose,time){
+  var J=C.j; ['shL','shR','elL','elR','hipL','hipR','knL','knR'].forEach(function(k){J[k].rotation.set(0,0,0);});
+  C.body.position.y=0; C.ball.visible=false; var L=C.dims.legs;
+  if(pose==='t'){J.shL.rotation.z=Math.PI/2; J.shR.rotation.z=-Math.PI/2;}
+  else if(pose==='a'){J.shL.rotation.z=Math.PI/4; J.shR.rotation.z=-Math.PI/4;}
+  else if(pose==='walk'){
+    var ph=time*5, s=Math.sin(ph), sw=0.55;
+    J.hipL.rotation.x=s*sw; J.hipR.rotation.x=-s*sw;
+    J.knL.rotation.x=Math.max(0,s)*0.9; J.knR.rotation.x=Math.max(0,-s)*0.9;
+    J.shL.rotation.z=0.12; J.shR.rotation.z=-0.12; J.shL.rotation.x=-s*0.45; J.shR.rotation.x=s*0.45;
+    J.elL.rotation.x=-0.4; J.elR.rotation.x=-0.4;
+    C.body.position.y=-L*(1-Math.cos(sw*s));
+  }
+  else if(pose==='dribble'){
+    var b=Math.abs(Math.cos(time*3.2));
+    J.hipL.rotation.x=-0.35; J.hipR.rotation.x=-0.35; J.knL.rotation.x=0.6; J.knR.rotation.x=0.6;
+    C.body.position.y=-L*0.045;
+    J.shR.rotation.x=-0.45-0.2*b; J.shR.rotation.z=-0.08; J.elR.rotation.x=-0.55-0.35*(1-b);
+    J.shL.rotation.z=0.3; J.shL.rotation.x=-0.25; J.elL.rotation.x=-0.5;
+    var top=C.dims.shY-(C.dims.upper+C.dims.fore)*0.78-L*0.045;
+    C.ball.visible=true; C.ball.position.y=0.42+(top-0.42)*b;
+  }
+}
+function setSkeleton(C,on){
+  C.mats.forEach(function(m){m.transparent=on||m.map!=null; m.opacity=on?0.2:1; m.depthWrite=!on; m.needsUpdate=true;});
+  C.bones.forEach(function(b){b.visible=on;});
+}
+function floorDisc(scene){var d=new THREE.Mesh(new THREE.CircleGeometry(2.6,48),std(0xdfe5ea,{roughness:1})); d.rotation.x=-Math.PI/2; scene.add(d);}
+function initRatio(){
+  var v=makeViewer($('#demoRatio .stage'),{target:[0,2.1,0],radius:10,yaw:0.45,pitch:0.15,minR:4,maxR:24}); if(!v) return;
+  floorDisc(v.scene);
+  var C=null, rr=$('#rRatio'), ro=$('#ratioReadout'), btns=$$('#demoRatio [data-r]');
+  function style(r){return r<=3?'Q 版、公仔':r<=5.5?'兒童、可愛動漫':r<=7?'日漫少年主角':r<=7.5?'寫實成年人':'英雄、模特兒';}
+  function rebuild(){
+    if(C) v.scene.remove(C.root);
+    var r=+rr.value; C=buildCharacter(r,{ruler:$('#rRuler').checked}); C.root.scale.setScalar(4.2/r);
+    setPose(C,$('#rApose').checked?'a':'t',0); v.scene.add(C.root);
+    ro.textContent=r+' 頭身：'+style(r);
+    btns.forEach(function(b){b.classList.toggle('on',+b.dataset.r===r);});
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){rr.value=b.dataset.r; rebuild();});});
+  ['#rRatio','#rRuler','#rApose'].forEach(function(id){$(id).addEventListener('input',rebuild);});
+  rebuild();
+}
+function initPose(){
+  var v=makeViewer($('#demoPose .stage'),{target:[0,2.1,0],radius:10,yaw:0.5,pitch:0.15,minR:4,maxR:24}); if(!v) return;
+  floorDisc(v.scene);
+  var C=buildCharacter(6.5,{}); C.root.scale.setScalar(4.2/6.5); v.scene.add(C.root);
+  var pose='t', time=0, ro=$('#poseReadout'), btns=$$('#demoPose [data-pose]'), nm={t:'T-pose',walk:'走路循環：手腳反向擺動',dribble:'原地運球：膝蓋微彎，右手控球'};
+  v.updates.push(function(dt){time+=dt*(+$('#pSpeed').value)*(reduce?0.4:1); setPose(C,pose,time);});
+  btns.forEach(function(b){b.addEventListener('click',function(){pose=b.dataset.pose; ro.textContent=nm[pose]; btns.forEach(function(x){x.classList.toggle('on',x===b);});});});
+  $('#pSkel').addEventListener('input',function(e){setSkeleton(C,e.target.checked);});
+}
+
+/* ---------- 啟動 ---------- */
+[initHero,initAxes,initMesh,initLight,initFactory,initRatio,initPose].forEach(function(fn){
+  try{fn();}catch(e){if(window.console) console.error(fn.name,e);}
+});
+if(HAS3D) requestAnimationFrame(loop);
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-4c7fb01e46" data-category="creative"></script></body>
+</html>

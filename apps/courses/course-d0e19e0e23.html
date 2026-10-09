@@ -1,0 +1,2011 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>看懂成衣廠的 ERP｜從入門到專業的完整課程</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --nav:#1E3557; --nav2:#2B4A76; --btn:#1E3557; --brand:#1E3557; --tape:#F2C230; --tape-ink:#4A3A00;
+  --paper:#F3F5F8; --card:#FFFFFF; --ink:#1B2432; --muted:#586477; --line:#D3DBE5;
+  --thread:#B8323A; --ok:#2A7A5A; --okbg:#E3F2EA; --badbg:#F7E4E5; --note:#E8EFF8; --warnbg:#FFF6DA;
+  --serif:"Noto Serif TC","Songti TC","PMingLiU","MingLiU",serif;
+  --sans:"PingFang TC","Noto Sans TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --nav:#0F1B2E; --nav2:#1F3558; --btn:#2E5288; --brand:#A9C3EA; --paper:#111925; --card:#182232; --ink:#E4EAF2; --muted:#9AA7B9;
+    --line:#2B3A51; --thread:#E0666D; --ok:#5CC49A; --okbg:#153327; --badbg:#3A1C21; --note:#1C2A3F; --warnbg:#3A3113;
+  }
+}
+:root[data-theme="dark"]{
+  --nav:#0F1B2E; --nav2:#1F3558; --btn:#2E5288; --brand:#A9C3EA; --paper:#111925; --card:#182232; --ink:#E4EAF2; --muted:#9AA7B9;
+  --line:#2B3A51; --thread:#E0666D; --ok:#5CC49A; --okbg:#153327; --badbg:#3A1C21; --note:#1C2A3F; --warnbg:#3A3113;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-text-size-adjust:100%}
+img,svg{max-width:100%}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--tape);outline-offset:2px}
+
+/* ---------- top bar + tape measure progress ---------- */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--nav);color:#fff}
+.topbar .row{display:flex;align-items:center;gap:12px;padding:10px 16px}
+.topbar .ttl{font-family:var(--serif);font-weight:900;font-size:18px;letter-spacing:.02em;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#menuBtn{background:transparent;border:1.5px solid rgba(255,255,255,.5);color:#fff;border-radius:6px;padding:4px 12px;font-size:15px}
+#progTxt{font-size:14px;opacity:.85;white-space:nowrap}
+.tape{position:relative;height:22px;background:
+  repeating-linear-gradient(90deg,rgba(0,0,0,.28) 0 1px,transparent 1px 10px),
+  repeating-linear-gradient(90deg,rgba(0,0,0,.45) 0 1.5px,transparent 1.5px 50px),#C9CFD8;
+  background-size:auto 7px,auto 12px,auto;background-repeat:repeat-x;background-position:0 0,0 0,0 0}
+.tape-fill{position:absolute;inset:0 auto 0 0;width:0;background:
+  repeating-linear-gradient(90deg,rgba(60,40,0,.55) 0 1px,transparent 1px 10px),
+  repeating-linear-gradient(90deg,rgba(60,40,0,.85) 0 1.5px,transparent 1.5px 50px),var(--tape);
+  background-size:auto 7px,auto 12px,auto;background-repeat:repeat-x;transition:width .5s ease}
+.tape-here{position:absolute;top:-2px;bottom:-2px;width:3px;background:var(--thread);transition:left .4s ease}
+
+/* ---------- layout ---------- */
+.wrap{display:flex;align-items:flex-start}
+#toc{width:290px;flex:none;position:sticky;top:calc(env(safe-area-inset-top,0px) + 74px);max-height:calc(100vh - 80px);overflow:auto;padding:18px 10px 40px 16px}
+#toc h3{font-family:var(--serif);font-size:15px;color:var(--muted);margin:18px 0 4px 6px;font-weight:600}
+#toc a{display:flex;gap:8px;align-items:baseline;padding:5px 8px;border-radius:6px;color:var(--ink);text-decoration:none;font-size:15px;line-height:1.5}
+#toc a .n{flex:none;width:2.2em;color:var(--muted);font-variant-numeric:tabular-nums;font-size:13px}
+#toc a:hover{background:var(--note)}
+#toc a.on{background:var(--btn);color:#fff}
+#toc a.on .n{color:#fff}
+#toc a .ck{margin-left:auto;color:var(--ok);font-size:13px}
+#toc a.on .ck{color:var(--tape)}
+main{flex:1;min-width:0;padding:28px 22px 80px}
+.lesson{display:none;max-width:760px;margin:0 auto}
+.lesson.on{display:block}
+.scrim{display:none}
+@media (max-width:900px){
+  #toc{position:fixed;left:0;top:0;bottom:0;max-height:none;z-index:50;background:var(--card);transform:translateX(-105%);transition:transform .25s ease;
+    padding-top:calc(env(safe-area-inset-top,0px) + 16px);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 30px);box-shadow:4px 0 24px rgba(0,0,0,.25)}
+  body.navopen #toc{transform:none}
+  body.navopen .scrim{display:block;position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.4)}
+  main{padding:20px 16px 70px}
+  body{font-size:16.5px}
+}
+@media (min-width:901px){ #menuBtn{display:none} }
+
+/* ---------- lesson typography ---------- */
+.lnum{font-size:14px;color:var(--muted);margin-bottom:2px}
+.lnum .lv{display:inline-block;border:1.5px solid currentColor;border-radius:4px;padding:0 6px;margin-right:8px;font-size:13px}
+.lesson h2{font-family:var(--serif);font-weight:900;font-size:clamp(26px,5.4vw,36px);line-height:1.3;margin:4px 0 14px;color:var(--brand)}
+.lesson h3{font-family:var(--serif);font-weight:600;font-size:21px;line-height:1.45;margin:34px 0 8px;color:var(--brand)}
+.lesson p{margin:0 0 14px}
+.goal{background:var(--card);border-left:6px solid var(--tape);padding:12px 16px;border-radius:0 8px 8px 0;margin:0 0 22px}
+.goal b{display:block;font-size:14px;color:var(--muted);font-weight:600}
+.goal ul{margin:4px 0 0;padding-left:1.2em}
+ul,ol{padding-left:1.4em}
+li{margin:3px 0}
+strong{color:var(--brand)}
+code,.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9em;background:var(--note);padding:1px 5px;border-radius:4px}
+
+/* boxes: analogy, example, warning */
+.box{border-radius:10px;padding:14px 16px;margin:18px 0;background:var(--card);border:1px solid var(--line)}
+.box>b.tag{display:inline-block;font-size:14px;font-weight:700;margin-bottom:4px}
+.box p:last-child{margin-bottom:0}
+.box.analogy{background:var(--note);border-color:transparent}
+.box.analogy>b.tag{color:var(--brand)}
+.box.example>b.tag{color:var(--ok)}
+.box.warn{background:var(--warnbg);border-color:transparent}
+.box.warn>b.tag{color:var(--thread)}
+
+/* term card: stitched seam border */
+.term{position:relative;margin:20px 0;padding:14px 16px 12px;background:var(--card);border-radius:10px;border:2px dashed var(--thread);outline:4px solid var(--card);outline-offset:-8px}
+.term h4{margin:0 0 4px;font-size:19px;font-family:var(--serif);font-weight:900;color:var(--ink)}
+.term h4 small{display:block;font-family:var(--sans);font-weight:400;font-size:14px;color:var(--muted)}
+.term p{margin:6px 0 0;font-size:16px}
+.term .orig{color:var(--muted);font-size:15px}
+.term .orig b{color:var(--thread);margin-right:4px}
+
+/* tables */
+.tw{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:8px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:15px;line-height:1.55}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;white-space:nowrap}
+td.w,th.w{white-space:normal;min-width:160px}
+th{background:var(--note);font-weight:700}
+tr:last-child td{border-bottom:none}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+
+/* formula */
+.formula{font-size:17px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:14px 0;text-align:center;line-height:1.7}
+.formula .eq{font-weight:700;color:var(--brand)}
+
+/* interactive panels */
+.lab{background:var(--card);border:1.5px solid var(--nav2);border-radius:12px;margin:22px 0;overflow:hidden}
+.lab .lh{background:var(--btn);color:#fff;padding:8px 14px;font-weight:700;font-size:15px}
+.lab .lb{padding:14px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px 12px}
+.fields label{display:flex;flex-direction:column;font-size:14px;color:var(--muted);gap:3px}
+.fields input,.fields select{font:inherit;font-size:16px;padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);width:100%}
+.out{margin-top:14px;padding:12px 14px;border-radius:8px;background:var(--note);font-size:16px;line-height:1.8}
+.out .big{font-size:24px;font-weight:900;color:var(--brand);font-family:var(--serif)}
+.btn{border:none;border-radius:8px;padding:9px 16px;background:var(--btn);color:#fff;font-weight:700}
+.btn.ghost{background:transparent;color:var(--brand);border:1.5px solid var(--line)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
+/* flow player */
+.flow .stations{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.flow .st{border:1.5px solid var(--line);background:var(--paper);color:var(--ink);border-radius:20px;padding:4px 11px;font-size:14px;transition:background .2s,border-color .2s}
+.flow .st.done{border-color:var(--tape);background:var(--warnbg)}
+.flow .st.cur{background:var(--btn);border-color:var(--btn);color:#fff}
+.flow .card{min-height:150px;border-radius:10px;border:1px solid var(--line);padding:14px;background:var(--paper)}
+.flow .card .ic{font-size:34px;line-height:1}
+.flow .card h5{margin:6px 0 4px;font-size:19px;font-family:var(--serif)}
+.flow .card .dt{font-size:14.5px;color:var(--muted);margin-top:8px;border-top:1px dashed var(--line);padding-top:8px}
+
+/* quiz */
+.quiz{margin:22px 0;border:1.5px solid var(--line);border-radius:12px;padding:14px;background:var(--card)}
+.quiz .q{font-weight:700;margin-bottom:10px}
+.quiz .q::before{content:"小測驗　";color:var(--thread)}
+#exam .quiz .q::before{content:none}
+.quiz button.op{display:block;width:100%;text-align:left;margin:6px 0;padding:9px 12px;border-radius:8px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);font-size:16px;line-height:1.5}
+.quiz button.op:hover{border-color:var(--nav2)}
+.quiz button.op.right{background:var(--okbg);border-color:var(--ok)}
+.quiz button.op.wrong{background:var(--badbg);border-color:var(--thread)}
+.quiz .ex{display:none;margin-top:10px;font-size:15.5px;padding:10px 12px;border-radius:8px;background:var(--note)}
+.quiz.answered .ex{display:block}
+
+/* lesson footer nav */
+.lnav{display:flex;justify-content:space-between;gap:10px;margin-top:40px;padding-top:18px;border-top:2px dashed var(--line)}
+.lnav .btn{flex:1;max-width:48%}
+
+/* hero */
+.hero{padding:10px 0 6px}
+.hero h1{font-family:var(--serif);font-weight:900;font-size:clamp(38px,9vw,64px);line-height:1.15;margin:0 0 10px;color:var(--brand);letter-spacing:.01em}
+.hero .sub{font-size:18px;color:var(--muted);max-width:34em}
+.seam{display:block;width:100%;height:auto;margin:18px 0 8px}
+.seam .stitch{stroke:var(--thread);stroke-width:3;fill:none;stroke-dasharray:9 7}
+.seam .reveal{stroke:var(--paper);stroke-width:8;fill:none;stroke-dasharray:900;stroke-dashoffset:0;animation:sew 3.2s ease-in-out .3s forwards}
+.seam text{font-family:var(--serif);font-weight:900;font-size:26px;fill:var(--ink)}
+.seam circle{fill:var(--card);stroke:var(--brand);stroke-width:2}
+@keyframes sew{to{stroke-dashoffset:-900}}
+@media (prefers-reduced-motion: reduce){.seam .reveal{animation:none;display:none}.tape-fill,.tape-here,#toc{transition:none}}
+
+/* misc interactive bits */
+.rel table tr{cursor:pointer}
+.rel tr.hl td{background:var(--warnbg)}
+.rel tr.sel td{background:var(--btn);color:#fff}
+.bars .bar{display:grid;grid-template-columns:7.5em 1fr 4.5em;align-items:center;gap:8px;margin:6px 0;font-size:14px}
+.bars .track{position:relative;height:22px;background:var(--paper);border-radius:4px;border:1px solid var(--line)}
+.bars .fill{position:absolute;inset:0 auto 0 0;background:var(--nav2);border-radius:3px}
+.bars .fill.bott{background:var(--thread)}
+.bars .takt{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--tape);box-shadow:0 0 0 1px var(--tape-ink)}
+.bars .ctl{display:flex;align-items:center;gap:4px;justify-content:flex-end}
+.bars .ctl button{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:0;line-height:1}
+.gantt{display:grid;gap:3px;font-size:12.5px;min-width:560px}
+.gantt .gh{text-align:center;color:var(--muted)}
+.gantt .gl{font-weight:700;align-self:center}
+.gantt .gb{border-radius:4px;padding:3px 5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:700}
+.gantt .gb.hot{background:var(--thread)!important}
+.sm .states{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.sm .s{padding:4px 10px;border-radius:6px;border:1.5px solid var(--line);font-size:14px;color:var(--muted)}
+.sm .s.cur{background:var(--btn);color:#fff;border-color:var(--btn)}
+.log{font-size:13.5px;margin-top:10px;max-height:170px;overflow:auto;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:8px 10px;font-family:ui-monospace,Menlo,Consolas,monospace;line-height:1.6}
+.modmap text{font-size:13px;font-family:var(--sans);fill:var(--ink);pointer-events:none}
+.modmap .mod rect{fill:var(--card);stroke:var(--nav2);stroke-width:1.5;cursor:pointer}
+.modmap .mod.on rect{fill:var(--tape);stroke:var(--tape-ink)}
+.modmap .mod.rel rect{stroke:var(--thread);stroke-width:2.5}
+.modmap line{stroke:var(--line);stroke-width:2}
+.modmap line.on{stroke:var(--thread);stroke-dasharray:5 4}
+.layers text{font-family:var(--sans);fill:var(--ink)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.kpi .v{font-family:var(--serif);font-weight:900;font-size:26px;color:var(--brand)}
+.kpi .k{font-size:13.5px;color:var(--muted)}
+.kpi.bad .v{color:var(--thread)}
+.gsearch{width:100%;font:inherit;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);margin:6px 0 10px}
+.gl-item .term{margin:12px 0}
+.gl-item .from{font-size:13.5px;color:var(--muted);margin:-6px 0 0 4px}
+.gl-item .from a{color:var(--brand)}
+.score{font-family:var(--serif);font-size:30px;font-weight:900;color:var(--brand)}
+.mapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:14px 0}
+.mapgrid div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px;line-height:1.6}
+.mapgrid b{font-family:var(--serif);display:block;font-size:17px;color:var(--brand)}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:12px 0}
+.legend span{font-size:14.5px;padding:8px 10px;border-radius:8px;background:var(--card);border:1px solid var(--line)}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="row">
+    <button id="menuBtn" aria-label="打開目錄">目錄</button>
+    <div class="ttl">看懂成衣廠的 ERP</div>
+    <span id="progTxt"></span>
+  </div>
+  <div class="tape" aria-hidden="true"><div class="tape-fill" id="tapeFill"></div><div class="tape-here" id="tapeHere"></div></div>
+</header>
+<div class="scrim" id="scrim"></div>
+<div class="wrap">
+<nav id="toc" aria-label="課程目錄"></nav>
+<main id="main">
+
+<!-- ======================= 第 0 課 ======================= -->
+<section class="lesson" data-part="開始之前" data-title="這門課怎麼上">
+  <div class="hero">
+    <div class="lnum">第 0 課</div>
+    <h1>看懂成衣廠的 ERP</h1>
+    <p class="sub">從一件 T 恤出發，一步一步搞懂工廠的「數位大腦」是怎麼設計的。不需要會寫程式，也不需要在工廠上過班。</p>
+    <svg class="seam" viewBox="0 0 700 120" role="img" aria-label="一條縫線把布、裁剪、縫製、檢驗、裝箱五個站串起來">
+      <path class="stitch" d="M40 70 C120 10, 170 110, 250 60 S380 20, 420 70 S560 110, 660 55"/>
+      <path class="reveal" d="M40 70 C120 10, 170 110, 250 60 S380 20, 420 70 S560 110, 660 55"/>
+      <circle cx="40" cy="70" r="32"/><text x="40" y="79" text-anchor="middle">布</text>
+      <circle cx="195" cy="80" r="32"/><text x="195" y="89" text-anchor="middle">裁</text>
+      <circle cx="340" cy="44" r="32"/><text x="340" y="53" text-anchor="middle">縫</text>
+      <circle cx="500" cy="88" r="32"/><text x="500" y="97" text-anchor="middle">檢</text>
+      <circle cx="660" cy="55" r="32"/><text x="660" y="64" text-anchor="middle">箱</text>
+    </svg>
+  </div>
+
+  <h3>這門課適合誰</h3>
+  <p>想知道成衣工廠的電腦系統在管什麼的人：新進的辦公室同事、想轉職做系統的工廠幹部、要幫工廠導入 ERP 的人，或是單純好奇的學生。我們用國中生聽得懂的方式講，但內容會一路走到專業人員在討論的「系統架構」。</p>
+
+  <h3>課程地圖：四篇、二十三課</h3>
+  <div class="mapgrid">
+    <div><b>入門篇（1–4 課）</b>衣服是怎麼做出來的、成衣生意怎麼運作、ERP 是什麼、電腦怎麼存資料。</div>
+    <div><b>基礎篇（5–9 課）</b>主檔、物料清單、工時、訂單、算出要買多少料。</div>
+    <div><b>進階篇（10–16 課）</b>採購、倉庫、排程、裁剪、縫製、品管、出貨，一個部門一個部門走一遍。</div>
+    <div><b>專業篇（17–23 課）</b>成本、薪資、系統架構、設計原則、KPI、如何導入，最後是畢業考。</div>
+  </div>
+  <p>請<strong>按照順序上</strong>。後面的課都會用到前面學過的東西，就像蓋房子要先打地基。</p>
+
+  <h3>貫穿全課的故事</h3>
+  <p>整門課都用同一個例子：<strong>晨光成衣廠</strong>接到品牌客戶<strong>藍鯨服飾</strong>的一張訂單。你會看著這張訂單從進門到出貨、收到錢，經過工廠每一個部門。</p>
+  <div class="tw"><table>
+    <tr><th>項目</th><th>內容</th></tr>
+    <tr><td>客戶</td><td>藍鯨服飾</td></tr>
+    <tr><td>款號</td><td>BW-TS01 圓領短袖 T 恤</td></tr>
+    <tr><td>顏色</td><td>白色 1,800 件、藏青色 1,200 件</td></tr>
+    <tr><td>尺碼（白）</td><td>S 300、M 600、L 600、XL 300</td></tr>
+    <tr><td>尺碼（藏青）</td><td>S 200、M 400、L 400、XL 200</td></tr>
+    <tr><td>總數</td><td>3,000 件</td></tr>
+    <tr><td>出貨日</td><td>12 月 20 日</td></tr>
+  </table></div>
+  <p>晨光成衣廠有 10 條縫製生產線，每條線 25 人。這些數字會在後面的計算裡一直出現。</p>
+
+  <h3>每一課會出現的幫手</h3>
+  <div class="legend">
+    <span><b style="color:var(--brand)">生活比喻</b>：用日常生活的事來類比</span>
+    <span><b style="color:var(--ok)">實際例子</b>：用晨光成衣廠的真實情境算給你看</span>
+    <span style="border:2px dashed var(--thread)"><b>名詞卡</b>：縫線框起來的，解釋專有名詞的意思和由來</span>
+    <span><b style="color:var(--thread)">小測驗</b>：每課最後一題，確認你真的懂了</span>
+  </div>
+  <p>名詞卡最後都會收進「附錄：名詞總表」，忘記時可以去查。上方那條黃色的<strong>捲尺</strong>是你的學習進度，每完成一課就會往前量一格。</p>
+</section>
+
+<!-- ======================= 第 1 課 ======================= -->
+<section class="lesson" data-part="入門篇" data-title="一件 T 恤的旅程">
+  <div class="lnum"><span class="lv">入門</span>第 1 課</div>
+  <h2>一件 T 恤的旅程</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>一件衣服從接單到出貨，要經過哪些站</li><li>每一站會產生哪些「資料」</li><li>工廠裡流動的三種東西：貨、資料、錢</li></ul></div>
+
+  <p>在學電腦系統之前，我們要先知道工廠在做什麼。系統是用來「記錄」和「指揮」工廠的，如果不懂工廠，就一定看不懂系統。</p>
+  <p>按下「播放」，看藍鯨服飾那 3,000 件 T 恤怎麼一站一站誕生。</p>
+
+  <div class="lab flow" data-flow="shirt">
+    <div class="lh">動畫：T 恤的十站旅程</div>
+    <div class="lb">
+      <div class="stations"></div>
+      <div class="card"></div>
+      <div class="btnrow"><button class="btn" data-act="play">播放</button><button class="btn ghost" data-act="prev">上一站</button><button class="btn ghost" data-act="next">下一站</button></div>
+    </div>
+  </div>
+
+  <h3>注意每一站下方的「產生的資料」</h3>
+  <p>你會發現，每一站除了在「做衣服」，同時也在「產生資料」：客人要幾件、買了多少布、裁了幾片、縫好幾件、有幾件不合格、裝了幾箱。</p>
+  <p>這些資料如果寫在各自的筆記本上，就會發生這種事：業務說訂單是 3,000 件，裁剪組以為是 2,800 件，倉庫又說布只夠做 2,500 件。<strong>誰才是對的？沒人知道。</strong>這就是工廠需要 ERP 的原因。</p>
+
+  <h3>工廠裡流動的三種東西</h3>
+  <div class="tw"><table>
+    <tr><th>流</th><th class="w">是什麼</th><th class="w">例子</th></tr>
+    <tr><td><b>物流</b></td><td class="w">實體的東西在移動</td><td class="w">布從倉庫搬到裁床、衣服從生產線到包裝區</td></tr>
+    <tr><td><b>資訊流</b></td><td class="w">資料和單據在傳遞</td><td class="w">訂單、採購單、裁剪單、裝箱單</td></tr>
+    <tr><td><b>金流</b></td><td class="w">錢在進出</td><td class="w">付錢給布廠、發薪水、向客人收款</td></tr>
+  </table></div>
+  <div class="box analogy"><b class="tag">生活比喻</b><p>想像你去便利商店買飲料。飲料從冰箱到你手上是<b>物流</b>；收銀機「嗶」一聲、印出發票是<b>資訊流</b>；你付的錢是<b>金流</b>。收銀機就是一台迷你 ERP：它讓「東西少了一瓶」「帳上多了 25 元」這兩件事同時被記下來，永遠對得上。</p></div>
+
+  <aside class="term"><h4>成衣<small>Ready-made garment / Ready-to-wear</small></h4>
+    <p>先照標準尺碼大量做好、放著等人買的衣服。相對的是「量身訂做」，要先量你的身材才開始做。</p>
+    <p class="orig"><b>由來</b>19 世紀縫紉機普及後，衣服才能一次大量生產。法文 prêt-à-porter（直譯「準備好可以穿」）就是成衣的意思，中文「成衣」是「已經做成的衣服」。</p></aside>
+  <aside class="term"><h4>單據<small>Document / Form</small></h4>
+    <p>記錄一件事情發生的正式紙本或電子表格，例如訂單、採購單、出貨單。ERP 裡幾乎所有動作都是「開一張單據」。</p>
+    <p class="orig"><b>由來</b>「單」是寫著項目的紙條，「據」是憑證。古代商人用單據當作交易證明，現代系統把它變成電子版，但概念一樣：<b>有單才有憑</b>。</p></aside>
+
+  <div class="quiz" data-a="2"><div class="q">裁剪組要開始裁布之前，布料一定要先經過哪一站？</div>
+    <button class="op">直接從供應商卡車搬到裁床</button><button class="op">包裝</button><button class="op">收貨驗布、入倉</button>
+    <div class="ex">布料要先檢查有沒有瑕疵、色差，合格才入倉，裁剪組再從倉庫領出來。如果跳過驗布，整批裁下去才發現布有問題，損失就大了。</div></div>
+</section>
+
+<!-- ======================= 第 2 課 ======================= -->
+<section class="lesson" data-part="入門篇" data-title="成衣廠的生意怎麼做">
+  <div class="lnum"><span class="lv">入門</span>第 2 課</div>
+  <h2>成衣廠的生意怎麼做</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>品牌、工廠、供應商之間的關係</li><li>OEM、ODM、CMT、FOB 四種常聽到的合作方式</li><li>為什麼「訂單類型」會影響 ERP 的設計</li></ul></div>
+
+  <p>你衣櫃裡的衣服，標籤上寫的品牌名稱，大多數<strong>不是品牌自己做的</strong>。品牌負責設計、行銷、開店；真正把衣服縫出來的，是像晨光這樣的成衣工廠，常常在柬埔寨、越南、孟加拉等地。</p>
+
+  <h3>三個角色</h3>
+  <div class="tw"><table>
+    <tr><th>角色</th><th class="w">在我們的故事裡</th><th class="w">他要什麼</th></tr>
+    <tr><td>客戶（Buyer）</td><td class="w">藍鯨服飾</td><td class="w">準時、品質好、價格合理</td></tr>
+    <tr><td>工廠</td><td class="w">晨光成衣廠</td><td class="w">有利潤、產線不要閒著</td></tr>
+    <tr><td>供應商</td><td class="w">布廠、線廠、標籤廠、紙箱廠</td><td class="w">工廠準時付款、訂單穩定</td></tr>
+  </table></div>
+
+  <aside class="term"><h4>Buyer（客戶／買家）<small>也常叫「客人」「品牌方」</small></h4>
+    <p>向工廠下訂單的品牌或貿易商。成衣業習慣直接說「Buyer」。</p>
+    <p class="orig"><b>由來</b>英文 buy（買）加上 -er（做這件事的人），就是「買的人」。因為成衣業的客人多半是國外品牌，英文說法就一路沿用到亞洲的工廠。</p></aside>
+  <aside class="term"><h4>款號<small>Style number</small></h4>
+    <p>每一款衣服的編號，例如 BW-TS01。同一個款號可以有很多顏色、很多尺碼。</p>
+    <p class="orig"><b>由來</b>「款」是款式。品牌每季推出幾百款衣服，光靠名字（「白色短T」）一定會搞混，所以給每一款一個獨一無二的號碼。</p></aside>
+
+  <h3>四種合作方式</h3>
+  <p>工廠和客人談生意時，最重要的問題之一是：<strong>布料和輔料由誰買？設計由誰做？</strong>答案不同，工廠要管的事情就完全不同。</p>
+
+  <aside class="term"><h4>OEM<small>Original Equipment Manufacturer｜代工生產</small></h4>
+    <p>客人給設計圖，工廠照著做，衣服掛客人的牌子。</p>
+    <p class="orig"><b>由來</b>這個詞最早在電腦、電子、汽車業流行，原意是「原始設備製造商」。後來各行各業都拿來指「幫別的品牌生產、自己不掛名」，中文通常直接叫「代工」。</p></aside>
+  <aside class="term"><h4>ODM<small>Original Design Manufacturer｜設計代工</small></h4>
+    <p>工廠不只生產，還幫客人<b>設計</b>，客人挑中後掛自己的牌子賣。</p>
+    <p class="orig"><b>由來</b>把 OEM 中間的 Equipment（設備）換成 Design（設計）。台灣電子業很早就大量使用這個說法，強調「我們不只會做，也會設計」。</p></aside>
+  <aside class="term"><h4>CMT<small>Cut, Make, Trim｜來料加工</small></h4>
+    <p>布料和大部分輔料由客人提供，工廠只負責裁剪（Cut）、縫製（Make）、整理修線頭（Trim），賺的是「加工費」。</p>
+    <p class="orig"><b>由來</b>直接取三個英文動詞的第一個字母。名字本身就告訴你工廠只做這三件事。</p></aside>
+  <aside class="term"><h4>FOB<small>Free On Board｜船上交貨</small></h4>
+    <p>原本是國際貿易的交貨條件：賣方負責把貨送上船，之後的運費和風險由買方負責。在成衣業，「FOB 訂單」常常也表示<b>工廠自己買料</b>，報給客人的價格包含布料、輔料和加工。</p>
+    <p class="orig"><b>由來</b>來自國際商會（ICC）在 1936 年制定的《國際貿易條規》（Incoterms），這套規則讓全世界的買賣雙方對「在哪裡交貨、誰付運費」有共同語言。</p></aside>
+
+  <div class="box example"><b class="tag">實際例子</b><p>藍鯨服飾這張單是 <b>FOB 訂單</b>：晨光要自己買布、買線、買標籤，報價 2.59 美元一件（第 17 課會教你怎麼算出來的）。如果換成 CMT 訂單，布由藍鯨寄來，晨光可能只收 0.40 美元一件的加工費，但也不用先花錢買布。</p></div>
+
+  <h3>這跟 ERP 有什麼關係？</h3>
+  <div class="tw"><table>
+    <tr><th>訂單類型</th><th class="w">ERP 要多管的事</th></tr>
+    <tr><td>FOB</td><td class="w">完整的採購、付款給供應商、計算布料成本</td></tr>
+    <tr><td>CMT</td><td class="w">「客供料」：布是客人的，要記錄收到多少、用掉多少、剩下多少要還給客人，但不算工廠的成本</td></tr>
+    <tr><td>ODM</td><td class="w">多了設計和打樣的資料，例如設計稿版本、樣衣費用</td></tr>
+  </table></div>
+  <p>所以一套好的成衣 ERP，在建立訂單的第一步就會問：<strong>這是哪一種訂單？</strong>後面所有流程都會跟著這個選擇走不同的路。</p>
+
+  <div class="quiz" data-a="1"><div class="q">一張 CMT 訂單，布料是誰買的？</div>
+    <button class="op">工廠自己買</button><button class="op">客人提供給工廠</button><button class="op">政府配給</button>
+    <div class="ex">CMT 只做 Cut、Make、Trim，布料由客人提供。所以 ERP 要記錄「客供料」的收、用、剩，但不算進工廠的採購成本。</div></div>
+</section>
+
+<!-- ======================= 第 3 課 ======================= -->
+<section class="lesson" data-part="入門篇" data-title="ERP 到底是什麼">
+  <div class="lnum"><span class="lv">入門</span>第 3 課</div>
+  <h2>ERP 到底是什麼</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>ERP 三個字母的意思</li><li>ERP 從 1960 年代演變到今天的歷史</li><li>什麼是「模組」，以及 ERP 不是什麼</li></ul></div>
+
+  <h3>沒有 ERP 的工廠長什麼樣子</h3>
+  <p>業務用 Excel 記訂單，採購用另一個 Excel 記採購，倉庫用手寫的簿子記進出，生產組長把每小時產量寫在白板上，會計再把所有東西重新打一遍。每個人都很努力，但：</p>
+  <ul>
+    <li>同一個數字被抄了四五次，每抄一次就可能抄錯一次。</li>
+    <li>老闆問「藍鯨那張單現在做到哪了？」要打電話問三個部門。</li>
+    <li>布快用完了，採購卻不知道，因為倉庫的簿子他看不到。</li>
+  </ul>
+  <div class="box analogy"><b class="tag">生活比喻</b><p>全班要辦園遊會。如果每個人各自在筆記本上寫「我負責買什麼」，最後可能買了三箱可樂、沒人買杯子。如果大家共用<b>同一份線上表格</b>，誰買了什麼一目了然，就不會重複或漏掉。ERP 就是全工廠共用的那份表格，而且它還會自動幫你算帳、提醒你缺什麼。</p></div>
+
+  <aside class="term"><h4>ERP<small>Enterprise Resource Planning｜企業資源規劃</small></h4>
+    <p>把一家公司所有部門的資料放在<b>同一個系統</b>裡，讓訂單、採購、庫存、生產、財務、人事彼此連動的軟體。</p>
+    <p>拆開來看：Enterprise＝企業，Resource＝資源（人、料、機器、錢、時間），Planning＝規劃。意思是「把企業的資源規劃好」。</p>
+    <p class="orig"><b>由來</b>1990 年，美國研究機構 Gartner 提出 ERP 這個名稱，用來形容當時從「製造業算料系統」擴大到「管理整家公司」的新一代軟體。</p></aside>
+
+  <h3>ERP 的家譜</h3>
+  <div class="tw"><table>
+    <tr><th>年代</th><th>名稱</th><th class="w">它解決的問題</th></tr>
+    <tr><td>1960 年代</td><td>MRP</td><td class="w">「要做這麼多產品，需要買多少零件？」用電腦算料，取代手算。</td></tr>
+    <tr><td>1980 年代</td><td>MRP II</td><td class="w">不只算料，還算「產能夠不夠」「要花多少錢」。</td></tr>
+    <tr><td>1990 年代</td><td>ERP</td><td class="w">把財務、人事、銷售、採購全部整合進來，管整家公司。</td></tr>
+    <tr><td>2000 年後</td><td>雲端 ERP</td><td class="w">不用在公司裝伺服器，用瀏覽器或手機就能開。</td></tr>
+  </table></div>
+
+  <aside class="term"><h4>MRP<small>Material Requirements Planning｜物料需求規劃</small></h4>
+    <p>根據要生產的數量，自動算出每種材料需要多少、什麼時候要到。這是 ERP 的「老祖宗」，也是 ERP 裡最核心的計算之一（第 9 課會實際算）。</p>
+    <p class="orig"><b>由來</b>1960 年代由 IBM 的工程師 Joseph Orlicky 等人發展並推廣。當時電腦剛進入工廠，第一件被交給電腦做的大事，就是這種又多又煩的算料工作。1980 年代 Oliver Wight 把它擴大成 MRP II（Manufacturing Resource Planning，製造資源規劃）。</p></aside>
+
+  <h3>模組：ERP 是用積木組起來的</h3>
+  <p>一套 ERP 通常分成很多「模組」，每個模組對應一個部門或一種工作，例如銷售模組、採購模組、庫存模組、生產模組、財務模組。模組之間<b>共用同一個資料庫</b>，所以採購模組收到的布，庫存模組馬上就看得到。</p>
+  <aside class="term"><h4>模組<small>Module</small></h4>
+    <p>一個功能完整、可以單獨使用、也可以和其他部分組合的單元。</p>
+    <p class="orig"><b>由來</b>來自拉丁文 modulus，意思是「小的量度單位」。建築師用它指標準尺寸的構件；電腦界借用來指「可以拆裝替換的程式單元」，就像樂高積木。</p></aside>
+
+  <h3>ERP 不是什麼</h3>
+  <div class="box warn"><b class="tag">常見誤會</b><p><b>ERP 不是買了裝上就會自動變好的魔法。</b>它是「流程 + 資料 + 人」三件事的組合。流程亂，系統只會把亂的流程跑得更快；資料錯，系統算出來的結果也是錯的；人不願意用，系統就是一台昂貴的擺設。第 22 課會專門講怎麼導入才會成功。</p></div>
+  <p>市面上有 SAP、Oracle 這類國際大廠的 ERP，也有專為成衣業設計的系統，還有很多工廠自己開發。不管哪一種，底層的觀念都一樣，這就是這門課要教你的。</p>
+
+  <div class="quiz" data-a="0"><div class="q">ERP 最早的祖先 MRP，主要是在解決什麼問題？</div>
+    <button class="op">算出要生產這麼多產品，需要多少材料</button><button class="op">幫員工排休假</button><button class="op">設計衣服的款式</button>
+    <div class="ex">MRP 的 M 就是 Material（物料）。它最早的任務就是「算料」，後來才慢慢長大，把產能、財務、人事都包進來，變成 ERP。</div></div>
+</section>
+
+<!-- ======================= 第 4 課 ======================= -->
+<section class="lesson" data-part="入門篇" data-title="電腦怎麼把資料存起來">
+  <div class="lnum"><span class="lv">入門</span>第 4 課</div>
+  <h2>電腦怎麼把資料存起來</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>資料庫、資料表、欄位、紀錄是什麼</li><li>主鍵和外鍵：ERP 把資料「串起來」的關鍵</li><li>為什麼同一個資料只能存一次</li></ul></div>
+
+  <p>ERP 的心臟是<strong>資料庫</strong>。你不用會寫程式，但一定要懂資料庫的基本長相，因為之後講的每一個模組，本質上都是「在某幾張表上新增、修改、查詢資料」。</p>
+
+  <aside class="term"><h4>資料庫<small>Database</small></h4>
+    <p>有規則、有組織地存放大量資料的地方，讓電腦可以快速找到、修改、統計。</p>
+    <p class="orig"><b>由來</b>英文原本寫成兩個字 data base，意思是「資料的基地」。1960 年代美國軍方和企業開始用電腦集中存放資料時流行起來。</p></aside>
+
+  <h3>資料表長得像 Excel</h3>
+  <p>一個資料庫裡有很多<strong>資料表</strong>，每一張表就像一張 Excel 工作表：</p>
+  <ul>
+    <li>每一<strong>欄</strong>（直的）叫做<b>欄位</b>，代表一種資訊，例如「客戶名稱」「電話」。</li>
+    <li>每一<strong>列</strong>（橫的）叫做一筆<b>紀錄</b>，代表一個東西，例如「藍鯨服飾」這個客戶。</li>
+  </ul>
+
+  <aside class="term"><h4>主鍵<small>Primary Key</small></h4>
+    <p>每一筆紀錄都有的、絕對不會重複的編號，用來確定「就是這一筆」。例如客戶編號 C001。</p>
+    <p class="orig"><b>由來</b>Key 是「鑰匙」。一把鑰匙只開一扇門，一個主鍵只對應一筆資料。Primary 是「主要的」，因為一張表只能有一把主要的鑰匙。</p></aside>
+  <div class="box analogy"><b class="tag">生活比喻</b><p>班上可能有兩個同學都叫「陳小明」，但他們的<b>學號</b>一定不同。老師登記成績時看學號，不看名字，就不會把分數登錯人。主鍵就是資料的學號。</p></div>
+
+  <aside class="term"><h4>外鍵<small>Foreign Key</small></h4>
+    <p>寫在一張表裡、指向<b>另一張表</b>主鍵的欄位。例如訂單表裡的「客戶編號」欄位，指向客戶表。</p>
+    <p class="orig"><b>由來</b>Foreign 是「外來的」。這把鑰匙不是用來開自己這張表，而是用來開「外面」另一張表的門。</p></aside>
+
+  <div class="lab rel">
+    <div class="lh">動手玩：主鍵和外鍵</div>
+    <div class="lb">
+      <p style="margin-top:0">點一下上面的客戶，看看下面哪些訂單屬於他。</p>
+      <div class="tw"><table id="relCust">
+        <tr><th>客戶編號（主鍵）</th><th>客戶名稱</th><th>國家</th></tr>
+        <tr data-k="C001"><td>C001</td><td class="cn">藍鯨服飾</td><td>美國</td></tr>
+        <tr data-k="C002"><td>C002</td><td class="cn">山海運動</td><td>日本</td></tr>
+        <tr data-k="C003"><td>C003</td><td class="cn">小森童裝</td><td>德國</td></tr>
+      </table></div>
+      <div class="tw"><table id="relOrd">
+        <tr><th>訂單號（主鍵）</th><th>客戶編號（外鍵）</th><th>客戶名稱（查出來的）</th><th>款號</th><th class="num">數量</th></tr>
+        <tr data-f="C001"><td>SO-001</td><td>C001</td><td class="cn"></td><td>BW-TS01</td><td class="num">3,000</td></tr>
+        <tr data-f="C002"><td>SO-002</td><td>C002</td><td class="cn"></td><td>SH-201</td><td class="num">5,200</td></tr>
+        <tr data-f="C001"><td>SO-003</td><td>C001</td><td class="cn"></td><td>BW-PL02</td><td class="num">1,500</td></tr>
+        <tr data-f="C003"><td>SO-004</td><td>C003</td><td class="cn"></td><td>KD-11</td><td class="num">2,400</td></tr>
+      </table></div>
+      <div class="btnrow"><button class="btn" id="relRename">把 C001 改名為「藍鯨服飾集團」</button></div>
+      <div class="out" id="relOut">還沒選擇客戶。</div>
+    </div>
+  </div>
+  <p>按下改名按鈕你會發現：客戶表只改了<b>一個地方</b>，但兩張訂單上顯示的名字<b>全部自動跟著變</b>。這是因為訂單表根本沒有存「名字」，它只存了「C001」這把鑰匙，要顯示時才去客戶表查。</p>
+
+  <h3>為什麼同一個資料只能存一次</h3>
+  <p>如果每張訂單都自己打一次客戶名稱，就會出現「藍鯨服飾」「藍鯨服飾 」「藍鯨服飭」三種寫法，電腦會以為是三個不同客戶，統計「藍鯨今年下了多少單」就會算錯。而且客戶一改名，要改一百張訂單。</p>
+  <p>把資料拆成好幾張表、每種資料只存一次、用鑰匙互相連起來，這個設計方法叫做<strong>正規化</strong>。</p>
+
+  <aside class="term"><h4>關聯式資料庫<small>Relational Database</small></h4>
+    <p>用很多張表、再用主鍵和外鍵把它們「關聯」起來的資料庫。今天幾乎所有 ERP 都用這種資料庫。</p>
+    <p class="orig"><b>由來</b>1970 年，IBM 的研究員 Edgar F. Codd 發表論文提出「關聯模型」，用數學的方式證明這樣存資料最不容易出錯。這個想法改變了整個軟體業。</p></aside>
+  <aside class="term"><h4>正規化<small>Normalization</small></h4>
+    <p>把資料拆到適當的表裡，避免同樣的資料重複存放，減少錯誤。</p>
+    <p class="orig"><b>由來</b>同樣來自 Codd 的研究。Normal 在這裡是「符合標準規則」的意思，正規化就是「讓資料表符合規則的過程」。</p></aside>
+  <aside class="term"><h4>SQL<small>Structured Query Language｜結構化查詢語言</small></h4>
+    <p>用來對資料庫下命令的語言，例如「幫我找出所有藍鯨的訂單」。</p>
+    <p class="orig"><b>由來</b>1970 年代 IBM 為了實現 Codd 的關聯模型而發明，最早叫 SEQUEL，後來因為商標問題改名 SQL。很多人還是習慣把它唸成 "sequel"。</p></aside>
+
+  <div class="quiz" data-a="1"><div class="q">訂單表裡為什麼存「客戶編號」，而不是直接存「客戶名稱」？</div>
+    <button class="op">因為編號比較短，可以省電</button><button class="op">名稱可能打錯或改名，存編號只要在客戶表改一次，所有訂單都會跟著正確</button><button class="op">因為客戶不喜歡別人寫他的名字</button>
+    <div class="ex">這就是外鍵的威力：每種資料只存一次（正規化），其他地方用編號去「指向」它。改一處、處處正確。</div></div>
+</section>
+
+<!-- ======================= 第 5 課 ======================= -->
+<section class="lesson" data-part="基礎篇" data-title="主檔：工廠的身分證">
+  <div class="lnum"><span class="lv">基礎</span>第 5 課</div>
+  <h2>主檔：工廠的身分證</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>主檔和交易資料的差別</li><li>成衣業特有的「款號 × 顏色 × 尺碼」結構</li><li>計量單位和編碼規則為什麼這麼重要</li></ul></div>
+
+  <p>上一課學到資料存在很多張表裡。這些表分成兩大類：</p>
+  <div class="tw"><table>
+    <tr><th>類別</th><th class="w">特性</th><th class="w">例子</th></tr>
+    <tr><td><b>主檔</b></td><td class="w">基本資料，建好之後很少改，會被一直重複使用</td><td class="w">客戶、供應商、物料、款式、員工、產線、倉庫</td></tr>
+    <tr><td><b>交易資料</b></td><td class="w">每天發生的事情，一直在增加</td><td class="w">訂單、採購單、收貨、領料、出貨、打卡</td></tr>
+  </table></div>
+  <div class="box analogy"><b class="tag">生活比喻</b><p>手機裡的<b>通訊錄</b>是主檔：朋友的名字、電話，存一次就一直用。<b>聊天紀錄</b>是交易資料：每天都在增加，而且每則訊息都會「指向」通訊錄裡的某個人。</p></div>
+  <aside class="term"><h4>主檔<small>Master Data｜主資料</small></h4>
+    <p>系統裡的基本資料，被交易資料重複引用。主檔錯了，所有用到它的單據都會跟著錯。</p>
+    <p class="orig"><b>由來</b>Master 是「主人、主要的」，就像錄音的「母帶」（master tape）是所有拷貝的來源。主檔就是所有單據的資料來源。</p></aside>
+
+  <h3>成衣業特有的三層結構</h3>
+  <p>一般工廠一個產品就一個編號，但衣服不一樣：同一款衣服有很多顏色，每個顏色又有很多尺碼。所以成衣 ERP 的產品主檔是<strong>款號 → 顏色 → 尺碼</strong>三層。</p>
+  <div class="tw"><table>
+    <tr><th>款號</th><th>顏色</th><th>尺碼</th><th>SKU 編號</th><th class="num">訂單數</th></tr>
+    <tr><td rowspan="4">BW-TS01</td><td rowspan="4">白 WHT</td><td>S</td><td>BW-TS01-WHT-S</td><td class="num">300</td></tr>
+    <tr><td>M</td><td>BW-TS01-WHT-M</td><td class="num">600</td></tr>
+    <tr><td>L</td><td>BW-TS01-WHT-L</td><td class="num">600</td></tr>
+    <tr><td>XL</td><td>BW-TS01-WHT-XL</td><td class="num">300</td></tr>
+    <tr><td rowspan="4">BW-TS01</td><td rowspan="4">藏青 NVY</td><td>S</td><td>BW-TS01-NVY-S</td><td class="num">200</td></tr>
+    <tr><td>M</td><td>BW-TS01-NVY-M</td><td class="num">400</td></tr>
+    <tr><td>L</td><td>BW-TS01-NVY-L</td><td class="num">400</td></tr>
+    <tr><td>XL</td><td>BW-TS01-NVY-XL</td><td class="num">200</td></tr>
+  </table></div>
+  <p>一個款號、兩個顏色、四個尺碼，就變成 8 個 SKU。成衣業的人常把這種表叫做<strong>顏色尺碼矩陣</strong>（Color/Size Matrix），因為畫出來就像一個方格表。</p>
+  <aside class="term"><h4>SKU<small>Stock Keeping Unit｜庫存單位</small></h4>
+    <p>庫存管理上「最小、不能再細分」的單位。白色 M 號和白色 L 號是不同的 SKU，因為倉庫要分開數。</p>
+    <p class="orig"><b>由來</b>來自零售業。商店要知道「白色 M 號還剩幾件」，光知道「白 T 恤還剩幾件」不夠，所以替每個顏色尺碼都給一個庫存編號。</p></aside>
+
+  <h3>物料主檔</h3>
+  <p>物料主檔記錄所有會買進來的東西，通常分成三大類：</p>
+  <ul>
+    <li><b>布料（面料）</b>：主布、羅紋、襯布。要記成分（例如 100% 棉）、克重、幅寬、顏色。</li>
+    <li><b>輔料</b>：縫線、拉鍊、鈕扣、標籤、吊牌。</li>
+    <li><b>包材</b>：膠袋、紙箱、貼紙、膠帶。</li>
+  </ul>
+  <aside class="term"><h4>克重<small>GSM｜Grams per Square Meter</small></h4>
+    <p>一平方公尺的布有幾公克重，用來表示布的厚薄。一般 T 恤的布大約 140 到 200 克。</p>
+    <p class="orig"><b>由來</b>GSM 就是「每平方公尺幾公克」的英文縮寫。因為布料很難量「厚度」，秤重量最準，所以業界用重量代替厚度。</p></aside>
+
+  <h3>計量單位：最容易出大錯的小地方</h3>
+  <aside class="term"><h4>計量單位<small>UOM｜Unit of Measure</small></h4>
+    <p>東西用什麼單位來數。布可以用「碼」「米」「公斤」；縫線用「米」或「個（一個線筒）」；鈕扣用「個」或「羅」。</p>
+    <p class="orig"><b>由來</b>「碼」（yard）是英制長度，1 碼＝0.9144 米，因為很多布料和客戶來自美國而沿用。「打」（dozen）是 12 個；「羅」（gross）是 12 打＝144 個，都是歐洲古老的計數習慣，因為 12 可以被 2、3、4、6 整除，方便分裝。</p></aside>
+  <div class="box warn"><b class="tag">常見錯誤</b><p>採購向布廠買 1,000 <b>碼</b>，倉庫收貨時卻用 <b>米</b> 登記成 1,000。帳上憑空多出 86 米的布（1,000 碼其實只有 914.4 米），之後裁剪就會發現「帳上有、倉庫沒有」。好的 ERP 會在物料主檔設定<b>採購單位、庫存單位、換算率</b>，由系統自動換算，不讓人工換算。</p></div>
+
+  <h3>編碼規則</h3>
+  <p>物料編號最好<b>簡單、固定、不重複</b>。例如 <code>FB-000123</code>（FB 代表布料，後面是流水號），詳細的顏色、克重寫在其他欄位裡。</p>
+  <p>不好的做法是把太多會變的資訊塞進編號，例如 <code>FB-藍鯨-白-180G-2026</code>：萬一同一塊布後來也用在別的客人身上，編號就變得很奇怪；如果改成別的克重，也不能改編號（因為一堆單據已經用了它）。原則是<strong>一物一碼</strong>：同一種東西只有一個編號，一個編號只代表一種東西。</p>
+
+  <aside class="term"><h4>GIGO<small>Garbage In, Garbage Out｜垃圾進，垃圾出</small></h4>
+    <p>輸入的資料是錯的，系統算出來的結果一定也是錯的。電腦不會幫你把錯的變成對的。</p>
+    <p class="orig"><b>由來</b>1950 到 60 年代電腦剛出現時，程式設計師和軍方就用這句話提醒大家。它到今天仍然是所有 ERP 專案最重要的一句話，因為主檔的品質決定了整個系統的品質。</p></aside>
+
+  <div class="quiz" data-a="2"><div class="q">下面哪一個是「主檔」？</div>
+    <button class="op">今天上午收到的 20 卷布</button><button class="op">昨天出貨的 125 箱</button><button class="op">供應商「大同紡織」的名稱、地址、付款條件</button>
+    <div class="ex">供應商的基本資料建一次後會一直被採購單引用，是主檔。收貨和出貨是每天發生的事，屬於交易資料。</div></div>
+</section>
+
+<!-- ======================= 第 6 課 ======================= -->
+<section class="lesson" data-part="基礎篇" data-title="BOM：衣服的食譜">
+  <div class="lnum"><span class="lv">基礎</span>第 6 課</div>
+  <h2>BOM：衣服的食譜</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>BOM 是什麼、長什麼樣子</li><li>單耗與損耗率</li><li>為什麼成衣 BOM 會隨顏色、尺碼而不同</li></ul></div>
+
+  <div class="box analogy"><b class="tag">生活比喻</b><p>做一個蛋糕的食譜會寫：麵粉 200 克、雞蛋 3 顆、糖 80 克。要做 10 個蛋糕，就把每樣乘以 10。<b>BOM 就是衣服的食譜</b>：做一件衣服需要哪些材料、各要多少。</p></div>
+  <aside class="term"><h4>BOM<small>Bill of Materials｜物料清單</small></h4>
+    <p>列出做一個產品需要的所有材料和每樣的用量。它是 MRP 算料、成本計算、倉庫發料的共同依據。</p>
+    <p class="orig"><b>由來</b>Bill 在古英文裡是「一張寫了項目的清單」，同樣的用法還有 bill of lading（提單，第 16 課會學）。Bill of Materials 就是「材料的清單」。</p></aside>
+
+  <h3>BW-TS01 白色款的 BOM</h3>
+  <div class="tw"><table>
+    <tr><th>物料</th><th>類別</th><th class="num">單耗</th><th>單位</th><th class="num">損耗率</th></tr>
+    <tr><td>主布 棉平紋 160g 白</td><td>布料</td><td class="num">0.28</td><td>公斤</td><td class="num">4%</td></tr>
+    <tr><td>領口羅紋 白</td><td>布料</td><td class="num">0.015</td><td>公斤</td><td class="num">5%</td></tr>
+    <tr><td>縫線 白</td><td>輔料</td><td class="num">150</td><td>米</td><td class="num">10%</td></tr>
+    <tr><td>主標</td><td>輔料</td><td class="num">1</td><td>個</td><td class="num">2%</td></tr>
+    <tr><td>尺碼標</td><td>輔料</td><td class="num">1</td><td>個</td><td class="num">2%</td></tr>
+    <tr><td>洗水標（成分與洗滌說明）</td><td>輔料</td><td class="num">1</td><td>個</td><td class="num">2%</td></tr>
+    <tr><td>吊牌</td><td>輔料</td><td class="num">1</td><td>個</td><td class="num">2%</td></tr>
+    <tr><td>膠袋</td><td>包材</td><td class="num">1</td><td>個</td><td class="num">2%</td></tr>
+    <tr><td>外箱（24 件一箱）</td><td>包材</td><td class="num">0.0417</td><td>個</td><td class="num">2%</td></tr>
+  </table></div>
+  <p>外箱的單耗是 1 ÷ 24 ≈ 0.0417，意思是每件衣服「分攤」到 0.0417 個箱子。</p>
+
+  <aside class="term"><h4>單耗<small>Consumption｜單位用量</small></h4>
+    <p>做<b>一件</b>成品需要多少這種材料。</p>
+    <p class="orig"><b>由來</b>「單」是單件，「耗」是消耗，合起來就是「每一件消耗多少」。布料的單耗通常由排料（第 13 課）算出來。</p></aside>
+  <aside class="term"><h4>損耗率<small>Wastage allowance</small></h4>
+    <p>生產過程中一定會浪費的比例，例如裁剪剩下的邊角、布上的瑕疵要避開、試縫的樣品、車縫出錯要重做的。</p>
+    <p class="orig"><b>由來</b>「損」是損失，「耗」是消耗。工廠從經驗知道「照理論算一定不夠」，所以要多準備一點，這個「多準備的比例」就叫損耗率。</p></aside>
+
+  <div class="formula"><span class="eq">材料需求量 ＝ 訂單數量 × 單耗 × （1 ＋ 損耗率）</span></div>
+
+  <div class="lab">
+    <div class="lh">計算器：BOM 用量</div>
+    <div class="lb">
+      <div class="fields">
+        <label>訂單數量（件）<input type="number" id="bomQty" value="1800" min="0"></label>
+        <label>單耗<input type="number" id="bomCons" value="0.28" step="0.001" min="0"></label>
+        <label>損耗率（%）<input type="number" id="bomWaste" value="4" step="0.5" min="0"></label>
+      </div>
+      <div class="out" id="bomOut"></div>
+    </div>
+  </div>
+
+  <h3>成衣 BOM 的特別之處</h3>
+  <p><b>1. 顏色不同，材料不同。</b>白 T 用白線、白羅紋；藏青 T 用藏青線、藏青羅紋。所以 BOM 裡的縫線不能只寫「縫線」，要寫「跟著成衣顏色走」。成衣 ERP 會用一張「顏色對照表」處理：成衣白色 → 線色白；成衣藏青 → 線色藏青。</p>
+  <p><b>2. 尺碼不同，用布量不同。</b>XL 當然比 S 用布多：</p>
+  <div class="tw"><table>
+    <tr><th>尺碼</th><th class="num">主布單耗（公斤）</th><th class="num">白色件數</th><th class="num">小計（公斤）</th></tr>
+    <tr><td>S</td><td class="num">0.25</td><td class="num">300</td><td class="num">75</td></tr>
+    <tr><td>M</td><td class="num">0.27</td><td class="num">600</td><td class="num">162</td></tr>
+    <tr><td>L</td><td class="num">0.29</td><td class="num">600</td><td class="num">174</td></tr>
+    <tr><td>XL</td><td class="num">0.31</td><td class="num">300</td><td class="num">93</td></tr>
+    <tr><th>合計</th><th></th><th class="num">1,800</th><th class="num">504</th></tr>
+  </table></div>
+  <p>504 ÷ 1,800 ＝ 0.28，這就是上面 BOM 表裡「平均單耗 0.28」的由來。有些工廠只用平均值，有些 ERP 可以精確到每個尺碼。</p>
+  <p><b>3. 多層 BOM。</b>如果衣服要先印花再縫，BOM 就會有兩層：成衣 ← 印好花的裁片 ← 白布＋油墨。系統要一層一層往下拆，才知道最底層的原料要買多少。</p>
+
+  <div class="quiz" data-a="1"><div class="q">藏青色 1,200 件，主布單耗 0.28 公斤，損耗率 4%，需要多少主布？</div>
+    <button class="op">336 公斤</button><button class="op">約 349.4 公斤</button><button class="op">約 1,248 公斤</button>
+    <div class="ex">1,200 × 0.28 × 1.04 ＝ 349.44 公斤。336 公斤是忘了加損耗；1,248 是把損耗乘到數量上卻忘了乘單耗。</div></div>
+</section>
+
+<!-- ======================= 第 7 課 ======================= -->
+<section class="lesson" data-part="基礎篇" data-title="工序、SAM 與效率">
+  <div class="lnum"><span class="lv">基礎</span>第 7 課</div>
+  <h2>工序、SAM 與效率</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>一件衣服被拆成哪些工序</li><li>SAM 是什麼、怎麼量出來的</li><li>生產效率怎麼算</li></ul></div>
+
+  <p>BOM 告訴我們一件衣服要「用多少料」，這一課要回答另一個問題：一件衣服要「花多少時間」？這個答案決定了成本、產能、交期和薪水，是成衣 ERP 裡第二重要的主檔。</p>
+
+  <h3>把衣服拆成工序</h3>
+  <p>一件 T 恤不是一個人從頭縫到尾，而是拆成很多小步驟，每個人只做其中一步。這些步驟叫做<strong>工序</strong>。</p>
+  <div class="tw"><table>
+    <tr><th>順序</th><th>工序</th><th>機器</th><th class="num">SAM（分鐘）</th></tr>
+    <tr><td>1</td><td>合肩縫</td><td>拷克機</td><td class="num">0.30</td></tr>
+    <tr><td>2</td><td>上領</td><td>拷克機</td><td class="num">0.45</td></tr>
+    <tr><td>3</td><td>壓領貼條</td><td>平車</td><td class="num">0.40</td></tr>
+    <tr><td>4</td><td>上袖</td><td>拷克機</td><td class="num">0.65</td></tr>
+    <tr><td>5</td><td>合脇縫（兩側）</td><td>拷克機</td><td class="num">0.70</td></tr>
+    <tr><td>6</td><td>袖口折邊</td><td>三本車</td><td class="num">0.50</td></tr>
+    <tr><td>7</td><td>下擺折邊</td><td>三本車</td><td class="num">0.45</td></tr>
+    <tr><td>8</td><td>剪線頭、自檢</td><td>手工</td><td class="num">0.35</td></tr>
+    <tr><th colspan="3">合計（這件 T 恤的 SAM）</th><th class="num">3.80</th></tr>
+  </table></div>
+  <p class="mono" style="background:none;padding:0;font-size:14px;color:var(--muted)">（為了教學簡化過，真實的 T 恤還有釘標、打結等更多工序。）</p>
+  <aside class="term"><h4>工序<small>Operation</small></h4>
+    <p>生產過程中一個不能再拆、由一個人（或一台機器）完成的步驟。</p>
+    <p class="orig"><b>由來</b>「工」是工作，「序」是順序。工序就是「按順序排好的工作步驟」。</p></aside>
+
+  <aside class="term"><h4>SAM<small>Standard Allowed Minute｜標準允許分鐘</small></h4>
+    <p>一個<b>熟練的工人</b>用<b>正常速度</b>完成一道工序（或一整件衣服）所需要的標準時間，已經包含合理的休息時間。有些工廠叫 SMV（Standard Minute Value），意思一樣。</p>
+    <p class="orig"><b>由來</b>來自 19 世紀末美國工程師 Frederick Taylor 的「時間研究」：拿碼錶記錄工人每個動作花多久。後來發展出「預定時間標準」：1948 年的 MTM（Methods-Time Measurement）把每個基本動作（伸手、抓取、移動）都定出標準時間；1980 年代英國在 MTM 的基礎上發展出專給縫紉業用的 GSD（General Sewing Data），今天很多成衣廠仍用它來訂 SAM。</p></aside>
+
+  <h3>SAM 是怎麼量出來的</h3>
+  <p>最簡單的方法是用碼錶：</p>
+  <ol>
+    <li>觀察一位工人做「上領」10 次，平均 0.36 分鐘。</li>
+    <li>評比：這位工人比正常人快還是慢？如果他特別快，速度是正常的 110%，基本時間就是 0.36 × 1.10 ≈ 0.40 分鐘。</li>
+    <li>加上寬放：人不可能一整天不停手，要喝水、上廁所、換線、稍微休息。假設寬放 12%，SAM ≈ 0.40 × 1.12 ≈ 0.45 分鐘。</li>
+  </ol>
+  <aside class="term"><h4>寬放<small>Allowance</small></h4>
+    <p>在基本時間上多加的百分比，用來涵蓋疲勞、個人需要（喝水、上廁所）和不可避免的小延誤。</p>
+    <p class="orig"><b>由來</b>「寬」是放寬，「放」是給予。意思是「給時間標準放寬一點空間」，因為人不是機器。</p></aside>
+
+  <h3>成衣廠其實在賣「分鐘」</h3>
+  <p>這是很多人第一次聽到會嚇一跳的觀念：成衣工廠賣的不是衣服，而是<strong>工人的分鐘數</strong>。一件 T 恤 3.8 分鐘、一件夾克 25 分鐘，工廠報價、排產能、算薪水，全都用分鐘來換算。</p>
+
+  <h3>效率怎麼算</h3>
+  <div class="formula"><span class="eq">效率 ＝ 產出分鐘 ÷ 投入分鐘 × 100%</span><br>產出分鐘 ＝ 產量 × SAM　　投入分鐘 ＝ 人數 × 上班分鐘</div>
+  <div class="box example"><b class="tag">實際例子</b><p>晨光的第 3 線有 25 人，一天上班 8 小時（480 分鐘），投入 25 × 480 ＝ 12,000 分鐘。今天做了 1,900 件 BW-TS01，產出 1,900 × 3.8 ＝ 7,220 分鐘。效率 ＝ 7,220 ÷ 12,000 ≈ <b>60.2%</b>。</p><p>這不代表工人偷懶了四成時間。換款、等裁片、機器壞、新手還在學，都會讓效率下降。很多成衣廠的日常效率落在 50% 到 70% 之間。</p></div>
+  <aside class="term"><h4>效率<small>Efficiency</small></h4>
+    <p>實際做出來的「標準工作量」佔投入時間的比例。這是成衣廠最常看的數字。</p>
+    <p class="orig"><b>由來</b>「效」是成果，「率」是比例。英文 efficiency 源自拉丁文 efficere，意思是「做成、完成」。</p></aside>
+
+  <div class="lab">
+    <div class="lh">計算器：產線效率與目標產量</div>
+    <div class="lb">
+      <div class="fields">
+        <label>SAM（分鐘）<input type="number" id="efSam" value="3.8" step="0.01" min="0"></label>
+        <label>人數<input type="number" id="efPpl" value="25" min="0"></label>
+        <label>上班分鐘<input type="number" id="efMin" value="480" min="0"></label>
+        <label>實際產量（件）<input type="number" id="efOut" value="1900" min="0"></label>
+        <label>目標效率（%）<input type="number" id="efTgt" value="65" min="0"></label>
+      </div>
+      <div class="out" id="efRes"></div>
+    </div>
+  </div>
+  <div class="formula">每小時目標產量 ＝ 人數 × 60 × 目標效率 ÷ SAM</div>
+
+  <div class="quiz" data-a="0"><div class="q">一條 20 人的產線，上班 480 分鐘，做了 1,200 件 SAM 4.0 的衣服，效率是多少？</div>
+    <button class="op">50%</button><button class="op">60%</button><button class="op">250%</button>
+    <div class="ex">產出 1,200 × 4.0 ＝ 4,800 分鐘；投入 20 × 480 ＝ 9,600 分鐘；4,800 ÷ 9,600 ＝ 50%。</div></div>
+</section>
+
+<!-- ======================= 第 8 課 ======================= -->
+<section class="lesson" data-part="基礎篇" data-title="從詢價到訂單">
+  <div class="lnum"><span class="lv">基礎</span>第 8 課</div>
+  <h2>從詢價到訂單</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>訂單成立前要經過哪些步驟</li><li>「表頭」與「表身」：所有單據共用的結構</li><li>用 TNA 從出貨日往回排出每一個關卡</li></ul></div>
+
+  <h3>訂單成立前的四個步驟</h3>
+  <ol>
+    <li><b>詢價</b>：藍鯨寄來設計稿，問「3,000 件大概多少錢、多久能交？」</li>
+    <li><b>打樣</b>：晨光做樣衣給客人看，可能改好幾輪。</li>
+    <li><b>報價</b>：根據 BOM 算布料錢、根據 SAM 算加工費，報出一件的價格。</li>
+    <li><b>下單</b>：客人同意後，寄來正式的採購單（PO）。</li>
+  </ol>
+  <aside class="term"><h4>產前樣<small>PP Sample｜Pre-Production Sample</small></h4>
+    <p>大貨開始生產前，用真正的大貨布料和輔料做的樣衣。客人核准後，大貨就要做得跟它一模一樣。</p>
+    <p class="orig"><b>由來</b>Pre-production 就是「生產之前」。在它之前還有原型樣（Proto，看設計）、尺寸樣（Fit，看合身），一路確認下來，PP 樣是最後一關。</p></aside>
+
+  <h3>一張單的兩個名字</h3>
+  <div class="box warn"><b class="tag">常見混淆</b><p>藍鯨寄來的是<b>他們的採購單</b>（Purchase Order，PO），因為對藍鯨來說是「買」。但對晨光來說，這是「賣」，所以晨光在自己系統裡建立的是<b>銷售訂單</b>（Sales Order，SO）。同一件事，兩邊的名字不一樣。好的做法是在 SO 上記下客人的 PO 號碼，將來對帳、出貨文件上都要用到。</p></div>
+
+  <h3>表頭與表身</h3>
+  <p>打開任何一張 ERP 單據，你幾乎都會看到上下兩部分：</p>
+  <div class="tw"><table>
+    <tr><th colspan="4">表頭：銷售訂單 SO-2610-0015</th></tr>
+    <tr><td>客戶</td><td>C001 藍鯨服飾</td><td>客戶 PO</td><td>BW-8812</td></tr>
+    <tr><td>訂單類型</td><td>FOB</td><td>出廠日</td><td>12/20</td></tr>
+    <tr><th>行號</th><th>SKU</th><th class="num">數量</th><th class="num">單價（USD）</th></tr>
+    <tr><td>1</td><td>BW-TS01-WHT-S</td><td class="num">300</td><td class="num">2.59</td></tr>
+    <tr><td>2</td><td>BW-TS01-WHT-M</td><td class="num">600</td><td class="num">2.59</td></tr>
+    <tr><td>…</td><td>…</td><td class="num">…</td><td class="num">…</td></tr>
+    <tr><td>8</td><td>BW-TS01-NVY-XL</td><td class="num">200</td><td class="num">2.59</td></tr>
+  </table></div>
+  <aside class="term"><h4>表頭與表身<small>Header &amp; Lines（Detail）</small></h4>
+    <p><b>表頭</b>存「整張單共用」的資訊：單號、客戶、日期。<b>表身</b>存一行一行的明細：哪個 SKU、幾件、多少錢。在資料庫裡它們是兩張表，表身用單號（外鍵）連到表頭。</p>
+    <p class="orig"><b>由來</b>來自紙本單據的排版：最上面是「頭」，下面填明細的表格是「身」。電腦化後完全沿用這種結構，採購單、收貨單、出貨單全都是表頭加表身。</p></aside>
+
+  <h3>交期的三種說法</h3>
+  <div class="tw"><table>
+    <tr><th>名稱</th><th class="w">意思</th></tr>
+    <tr><td>Ex-factory（出廠日）</td><td class="w">貨離開工廠的日子，工廠最在意的日期</td></tr>
+    <tr><td>ETD（預計開船日）</td><td class="w">Estimated Time of Departure，船預計離港</td></tr>
+    <tr><td>ETA（預計到港日）</td><td class="w">Estimated Time of Arrival，船預計抵達客人的港口</td></tr>
+  </table></div>
+
+  <h3>TNA：從出貨日往回排</h3>
+  <p>訂單一成立，第一件事不是開始縫，而是排出<strong>每一個關卡最晚要在哪一天完成</strong>。做法是從出貨日往回推：</p>
+  <div class="tw"><table>
+    <tr><th>關卡</th><th>最晚日期</th><th class="w">怎麼推出來的</th></tr>
+    <tr><td>出廠</td><td>12/20</td><td class="w">客人規定</td></tr>
+    <tr><td>終期檢驗</td><td>12/17</td><td class="w">出貨前留 3 天處理文件與訂艙</td></tr>
+    <tr><td>包裝完成</td><td>12/16</td><td class="w">檢驗前一天</td></tr>
+    <tr><td>縫製完成</td><td>12/13</td><td class="w">整燙包裝需要 3 天</td></tr>
+    <tr><td>開始縫製</td><td>12/08</td><td class="w">排在 1 條線，加上學習期約 5 天</td></tr>
+    <tr><td>開始裁剪</td><td>12/04</td><td class="w">裁剪要比縫製早幾天，先累積裁片</td></tr>
+    <tr><td>布料驗完入倉</td><td>12/01</td><td class="w">裁剪前留緩衝</td></tr>
+    <tr><td>布料到廠</td><td>11/26</td><td class="w">驗布要 3–5 天</td></tr>
+    <tr><td>布料下單</td><td>11/05</td><td class="w">布廠要 21 天生產</td></tr>
+    <tr><td>PP 樣核准</td><td>11/03</td><td class="w">核准才能確定用哪種布下單</td></tr>
+  </table></div>
+  <aside class="term"><h4>TNA<small>Time and Action Calendar｜時間行動表</small></h4>
+    <p>把一張訂單從下單到出貨的所有關卡列出來，每一關有負責人和截止日。ERP 會每天檢查，哪一關快要超時就提醒相關人。</p>
+    <p class="orig"><b>由來</b>名字直接說明內容：Time（什麼時間）＋ Action（要做什麼事）。成衣業交期緊、環節多，大型品牌客人都會要求工廠提交 TNA。</p></aside>
+  <aside class="term"><h4>倒推排程<small>Backward Scheduling</small></h4>
+    <p>從最後期限往回推每個步驟的最晚開始時間。相對的「順推排程」是從今天開始往後排。</p>
+    <p class="orig"><b>由來</b>Backward 就是「往後、倒著」。成衣業交期是客人訂死的，所以最常用倒推：先知道哪天一定要出貨，再算每一步哪天一定要開始。</p></aside>
+  <p>你會發現：布料必須在 11/05 下單，比開始縫製早了一個多月。<strong>交期延誤的原因，大多數在布料，不在縫製。</strong>這就是為什麼下一課要學的 MRP 這麼重要。</p>
+
+  <div class="quiz" data-a="2"><div class="q">藍鯨服飾寄來的採購單 PO BW-8812，在晨光的 ERP 裡應該怎麼處理？</div>
+    <button class="op">在晨光的系統裡建立一張採購單 PO</button><button class="op">不用建檔，把 PDF 存在電腦裡就好</button><button class="op">建立一張銷售訂單 SO，並記下客人的 PO 號碼 BW-8812</button>
+    <div class="ex">客人的「買」就是晨光的「賣」，所以是銷售訂單。記下客人 PO 號碼，將來出貨文件、發票、對帳都用得到。</div></div>
+</section>
+
+<!-- ======================= 第 9 課 ======================= -->
+<section class="lesson" data-part="基礎篇" data-title="MRP：算出要買多少">
+  <div class="lnum"><span class="lv">基礎</span>第 9 課</div>
+  <h2>MRP：算出要買多少</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>毛需求與淨需求的差別</li><li>庫存、已預留、在途如何影響採購量</li><li>用前置時間推出最晚下單日</li></ul></div>
+
+  <p>第 6 課我們算出白色主布需要 524.16 公斤。但這就是要買的量嗎？不一定。倉庫可能還有庫存，也可能已經有一批布在路上。MRP 的工作就是把這些都考慮進去。</p>
+
+  <aside class="term"><h4>毛需求與淨需求<small>Gross Requirement / Net Requirement</small></h4>
+    <p><b>毛需求</b>：照 BOM 算出來、總共需要多少。<b>淨需求</b>：扣掉手上已經有的、路上會來的之後，真正還缺多少。</p>
+    <p class="orig"><b>由來</b>借用商業上的「毛」與「淨」：毛重包含包裝，淨重扣掉包裝；毛利扣掉成本前，淨利扣掉所有費用後。「毛」是還沒扣，「淨」是扣乾淨了。</p></aside>
+
+  <div class="formula"><span class="eq">淨需求 ＝ 毛需求 －（庫存 － 已預留）－ 在途 ＋ 安全庫存</span></div>
+  <ul>
+    <li><b>庫存</b>：倉庫裡現在有的。</li>
+    <li><b>已預留</b>：雖然在倉庫裡，但已經答應給別張訂單用了，不能動。</li>
+    <li><b>在途</b>：已經下單、還沒到的。</li>
+    <li><b>安全庫存</b>：為了防意外，永遠想多留一點的量（第 11 課詳談）。</li>
+  </ul>
+  <aside class="term"><h4>預留<small>Allocation / Reservation｜分配</small></h4>
+    <p>把庫存「保留」給某張訂單，其他訂單就不能拿去用。它讓系統知道哪些庫存是真的「可用」。</p>
+    <p class="orig"><b>由來</b>跟餐廳訂位一樣：桌子明明空著，但已經有人預約了，你就不能坐。系統裡的庫存也是這樣。</p></aside>
+
+  <h3>買布還要考慮「一次最少買多少」</h3>
+  <p>布廠通常是一卷一卷賣，或規定一次至少要訂多少。所以算出淨需求後，還要<strong>往上進位到包裝倍數或最小訂購量</strong>。</p>
+  <aside class="term"><h4>MOQ<small>Minimum Order Quantity｜最小訂購量</small></h4>
+    <p>供應商一次最少要你買的數量。布廠開機染一缸布成本很高，量太少他就不做。</p>
+    <p class="orig"><b>由來</b>三個英文字的縮寫。在成衣業特別重要，因為一張小訂單常常要買「整缸」的布，剩下的布就變成庫存。</p></aside>
+
+  <h3>什麼時候要下單</h3>
+  <aside class="term"><h4>前置時間<small>Lead Time｜交貨週期</small></h4>
+    <p>從下單到東西送到手上需要的時間。布料常常要 2 到 6 週。</p>
+    <p class="orig"><b>由來</b>Lead 是「引導、領先」。你必須「提前」這麼多天行動，才來得及。</p></aside>
+  <div class="formula"><span class="eq">最晚下單日 ＝ 需要到料日 － 前置時間</span></div>
+
+  <div class="lab">
+    <div class="lh">計算器：一次跑完 MRP</div>
+    <div class="lb">
+      <div class="fields">
+        <label>訂單數量（件）<input type="number" id="mrpQty" value="1800" min="0"></label>
+        <label>單耗（公斤）<input type="number" id="mrpCons" value="0.28" step="0.001" min="0"></label>
+        <label>損耗率（%）<input type="number" id="mrpWaste" value="4" step="0.5" min="0"></label>
+        <label>倉庫庫存<input type="number" id="mrpStock" value="80" min="0"></label>
+        <label>其中已預留<input type="number" id="mrpAlloc" value="30" min="0"></label>
+        <label>在途數量<input type="number" id="mrpTransit" value="0" min="0"></label>
+        <label>安全庫存<input type="number" id="mrpSafety" value="0" min="0"></label>
+        <label>包裝倍數（每卷公斤）<input type="number" id="mrpPack" value="25" min="1"></label>
+        <label>需要到料日<input type="date" id="mrpNeed" value="2026-11-26"></label>
+        <label>前置時間（天）<input type="number" id="mrpLead" value="21" min="0"></label>
+      </div>
+      <div class="out" id="mrpOut"></div>
+    </div>
+  </div>
+
+  <div class="box example"><b class="tag">真正的 MRP 一次算幾百種料</b><p>計算器一次只算一種料。真實的 ERP 會把<b>所有訂單</b>、<b>所有 BOM</b> 一起展開，同一種白線如果三張訂單都要用，就合併成一筆需求，再扣庫存、進位、排日期，最後產生一整批「建議採購」給採購人員審核。這個動作常叫「跑 MRP」。</p></div>
+
+  <div class="quiz" data-a="1"><div class="q">倉庫有 100 公斤白布，其中 40 公斤已預留給別張單，路上還有 50 公斤。新訂單毛需求 200 公斤，淨需求是多少？</div>
+    <button class="op">50 公斤</button><button class="op">90 公斤</button><button class="op">150 公斤</button>
+    <div class="ex">可用庫存 ＝ 100 － 40 ＝ 60；淨需求 ＝ 200 － 60 － 50 ＝ 90 公斤。如果忘了扣預留，會算成 50 公斤，結果布不夠。</div></div>
+</section>
+
+<!-- ======================= 第 10 課 ======================= -->
+<section class="lesson" data-part="進階篇" data-title="採購與收貨驗布">
+  <div class="lnum"><span class="lv">進階</span>第 10 課</div>
+  <h2>採購與收貨驗布</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>請購、採購、收貨三張單的分工</li><li>收貨時要檢查什麼</li><li>用「四分制」替布料打分數</li></ul></div>
+
+  <h3>從 MRP 建議到東西進倉</h3>
+  <ol>
+    <li><b>請購單（PR）</b>：MRP 算出來的建議，或部門自己提出「我需要買這個」。</li>
+    <li><b>審核</b>：主管確認真的需要、預算夠。</li>
+    <li><b>採購單（PO）</b>：採購人員向供應商正式下單，寫明價格、數量、交期、付款條件。</li>
+    <li><b>收貨單（GRN）</b>：東西送到，倉庫點收。</li>
+    <li><b>來料檢驗</b>：品管檢查品質，合格入庫，不合格退貨或讓步接收。</li>
+  </ol>
+  <aside class="term"><h4>請購單 PR 與採購單 PO<small>Purchase Requisition / Purchase Order</small></h4>
+    <p>PR 是公司內部的「我想買」，PO 是對外給供應商的「我要買」。</p>
+    <p class="orig"><b>由來</b>Requisition 來自拉丁文 requirere（要求），是對內的申請；Order 是「命令、訂購」，是對外的正式指令。分成兩張單，是為了讓「需要東西的人」和「花錢買東西的人」不是同一個人，互相監督，避免有人亂買或收回扣。</p></aside>
+  <aside class="term"><h4>收貨單<small>GRN｜Goods Received Note</small></h4>
+    <p>記錄「哪一天、從哪張採購單、收到什麼、收了多少」的單據。它是之後付款給供應商的重要依據。</p>
+    <p class="orig"><b>由來</b>直譯就是「貨物已收到的紀錄」。英國和英聯邦國家的工廠特別常用這個名稱，傳到亞洲的外資工廠後沿用下來。</p></aside>
+
+  <div class="box example"><b class="tag">實際例子</b><p>晨光向大同紡織下了 PO-2611-0042：白布 475 公斤（19 卷）。11/26 到了 18 卷共 452 公斤。倉庫開 GRN，系統自動把 PO 的狀態從「已核准」改成「部分到貨」，還差 23 公斤。等最後一卷到了，PO 才會變成「已結案」。</p></div>
+  <p>很多工廠也會設定<b>超收容許範圍</b>，例如 ±3%。布廠送來 480 公斤（多 1%）可以收；送來 520 公斤（多 9.5%）系統就擋下來，要主管同意。</p>
+
+  <h3>布料要檢查什麼</h3>
+  <ul>
+    <li><b>外觀瑕疵</b>：破洞、污漬、斷紗、結頭。</li>
+    <li><b>顏色</b>：跟客人核准的顏色一不一樣、同一批內有沒有色差。</li>
+    <li><b>規格</b>：克重、幅寬對不對。</li>
+    <li><b>縮水率</b>：洗過之後會縮多少，太大衣服洗完就變小了。</li>
+  </ul>
+
+  <aside class="term"><h4>四分制<small>4-Point System</small></h4>
+    <p>檢查布料瑕疵的評分方法：每個瑕疵依長度扣 1 到 4 分，最後換算成「每 100 平方碼幾分」。</p>
+    <div class="tw" style="margin:8px 0"><table>
+      <tr><th>瑕疵長度</th><th class="num">扣分</th></tr>
+      <tr><td>3 英吋以下</td><td class="num">1</td></tr>
+      <tr><td>3 到 6 英吋</td><td class="num">2</td></tr>
+      <tr><td>6 到 9 英吋</td><td class="num">3</td></tr>
+      <tr><td>9 英吋以上，或破洞</td><td class="num">4</td></tr>
+    </table></div>
+    <p class="orig"><b>由來</b>美國紡織與成衣業在 20 世紀中期開始推廣，後來由 ASTM（美國材料與試驗協會）寫成標準 D5430。因為規則簡單、全世界的驗布員都能用同一把尺，所以成為成衣業最通用的驗布方法。</p></aside>
+  <div class="formula"><span class="eq">每 100 平方碼分數 ＝ 總扣分 × 3,600 ÷（檢驗碼數 × 幅寬英吋）</span><br>3,600 是 36 英吋（1 碼）× 100 的簡化</div>
+  <p>很多客人的標準是 <b>40 分以下合格</b>，但各品牌不同，實際要看客人的品質手冊。</p>
+
+  <div class="lab">
+    <div class="lh">計算器：四分制驗布</div>
+    <div class="lb">
+      <div class="fields">
+        <label>1 分瑕疵（個）<input type="number" id="fp1" value="10" min="0"></label>
+        <label>2 分瑕疵（個）<input type="number" id="fp2" value="4" min="0"></label>
+        <label>3 分瑕疵（個）<input type="number" id="fp3" value="2" min="0"></label>
+        <label>4 分瑕疵（個）<input type="number" id="fp4" value="1" min="0"></label>
+        <label>檢驗長度（碼）<input type="number" id="fpY" value="100" min="1"></label>
+        <label>幅寬（英吋）<input type="number" id="fpW" value="60" min="1"></label>
+        <label>合格標準（分）<input type="number" id="fpStd" value="40" min="0"></label>
+      </div>
+      <div class="out" id="fpOut"></div>
+    </div>
+  </div>
+
+  <div class="quiz" data-a="0"><div class="q">為什麼要把「請購」和「採購」分成兩張單？</div>
+    <button class="op">讓需要東西的人和花錢買的人互相監督，減少亂買和舞弊</button><button class="op">因為紙比較多，看起來比較專業</button><button class="op">因為供應商規定</button>
+    <div class="ex">這是內部控制的基本原則：同一個人不能「自己說要、自己去買、自己收貨」。第 20 課講權限時會再看到這個觀念。</div></div>
+</section>
+
+<!-- ======================= 第 11 課 ======================= -->
+<section class="lesson" data-part="進階篇" data-title="倉庫與庫存">
+  <div class="lnum"><span class="lv">進階</span>第 11 課</div>
+  <h2>倉庫與庫存</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>庫存數字是怎麼「算」出來的</li><li>各種進出倉單據</li><li>缸號、先進先出、盤點、安全庫存、呆滯料</li></ul></div>
+
+  <h3>庫存像你的錢包</h3>
+  <div class="formula"><span class="eq">期末庫存 ＝ 期初庫存 ＋ 本期入庫 － 本期出庫</span></div>
+  <div class="box analogy"><b class="tag">生活比喻</b><p>早上錢包有 500 元，媽媽給你 200 元，你買午餐花了 120 元，晚上應該剩 580 元。如果打開錢包只剩 480 元，一定是哪一筆忘了記。庫存也是這樣：<b>系統裡的庫存數字不是「打」進去的，而是由每一張進出單據「加減」出來的。</b></p></div>
+  <p>所以在一套設計良好的 ERP 裡，<strong>沒有人可以直接修改庫存數字</strong>。想讓庫存變多或變少，只能開一張單據，這樣每一次變動都查得到原因。</p>
+
+  <h3>常見的進出倉單據</h3>
+  <div class="tw"><table>
+    <tr><th>單據</th><th>方向</th><th class="w">什麼時候用</th></tr>
+    <tr><td>採購入庫</td><td>＋</td><td class="w">供應商的貨驗收合格</td></tr>
+    <tr><td>生產領料</td><td>－</td><td class="w">裁剪組依生產單領布</td></tr>
+    <tr><td>生產退料</td><td>＋</td><td class="w">裁完剩下的布退回倉庫</td></tr>
+    <tr><td>成品入庫</td><td>＋</td><td class="w">包裝好的衣服進成品倉</td></tr>
+    <tr><td>出貨出庫</td><td>－</td><td class="w">成品裝櫃出貨</td></tr>
+    <tr><td>調撥</td><td>－ / ＋</td><td class="w">從 A 倉搬到 B 倉，總數不變</td></tr>
+    <tr><td>盤點調整</td><td>± </td><td class="w">實際點數和帳上不同時修正，必須主管核准</td></tr>
+  </table></div>
+
+  <h3>成衣倉庫的特別規則：缸號</h3>
+  <aside class="term"><h4>缸號<small>Dye Lot｜染缸批號</small></h4>
+    <p>布料在同一個染缸、同一次染出來的批次編號。不同缸號的布，就算都叫「藏青」，顏色也會有一點點差別。</p>
+    <p class="orig"><b>由來</b>布是放進大染缸裡染色的，每一缸的溫度、時間、染料濃度都不可能完全一樣。所以布廠替每一缸編號，工廠就用這個號碼來管理色差。</p></aside>
+  <div class="box warn"><b class="tag">為什麼重要</b><p>如果一件衣服的前片用了 A 缸、後片用了 B 缸，穿在身上就會看出前後顏色不一樣，客人會整批退貨。所以成衣 ERP 的布料庫存一定要記錄<b>缸號</b>，裁剪領料時也要指定缸號，同一件衣服只能用同一缸的布。</p></div>
+
+  <h3>儲位</h3>
+  <p>大倉庫要知道東西放在「哪裡」。常見的儲位編碼像 <code>A-03-02</code>：A 區、第 3 排貨架、第 2 層。收貨時記下儲位，領料時系統就能直接告訴倉管員去哪裡拿。</p>
+
+  <aside class="term"><h4>先進先出<small>FIFO｜First In, First Out</small></h4>
+    <p>先進倉的東西先拿出去用。避免舊的放太久變質、過期、褪色。</p>
+    <p class="orig"><b>由來</b>原本是會計和倉儲管理的用語，就像排隊買票，先排的先買。超市把舊牛奶放前面、新牛奶放後面，就是先進先出。</p></aside>
+
+  <aside class="term"><h4>盤點<small>Stock Take / Cycle Count</small></h4>
+    <p>實際去數倉庫裡有多少，和系統上的數字比對。「全盤」是全部停下來一次數完；「循環盤點」是每天數一小部分，一段時間輪完一遍。</p>
+    <p class="orig"><b>由來</b>「盤」有清點、查核的意思，古代商店年底「盤貨」算帳。循環盤點（cycle count）是現代倉庫的做法，因為大工廠很難為了盤點停工好幾天。</p></aside>
+  <p>帳上數字和實際數字不同，叫做<b>帳實不符</b>。常見原因：收貨沒開單、領料多拿沒登記、單位換算錯、放錯儲位。每一次帳實不符都是一個「流程漏洞」的線索。</p>
+
+  <aside class="term"><h4>安全庫存<small>Safety Stock</small></h4>
+    <p>為了應付意外（供應商延誤、突然多用），刻意多存的一點量。常用在縫線、膠袋、紙箱這類很多款式都會用到的共用料。</p>
+    <p class="orig"><b>由來</b>Safety 是「安全」。它就像手機的備用電量，平常不動它，萬一出事才有得用。</p></aside>
+  <aside class="term"><h4>呆滯料<small>Dead Stock / Slow-moving Stock</small></h4>
+    <p>放在倉庫很久、沒有訂單會用到的料。常見來源：客人取消訂單、因 MOQ 多買、損耗率抓太高。</p>
+    <p class="orig"><b>由來</b>「呆」是不動，「滯」是停住。這些料占空間、壓資金，還會慢慢發霉褪色。好的 ERP 會定期列出「超過 180 天沒動的料」，提醒大家處理。</p></aside>
+
+  <div class="quiz" data-a="2"><div class="q">倉管員發現系統上白布 500 公斤，實際只有 480 公斤。最正確的做法是？</div>
+    <button class="op">直接在系統裡把 500 改成 480</button><button class="op">假裝沒看到，等年底再說</button><button class="op">開盤點調整單，寫明原因並送主管核准，同時追查差異來源</button>
+    <div class="ex">庫存只能靠單據改變。開調整單會留下紀錄（誰、何時、為什麼），而追查原因才能堵住流程漏洞，下次不再發生。</div></div>
+</section>
+
+<!-- ======================= 第 12 課 ======================= -->
+<section class="lesson" data-part="進階篇" data-title="生產計畫與排程">
+  <div class="lnum"><span class="lv">進階</span>第 12 課</div>
+  <h2>生產計畫與排程</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>產能怎麼計算</li><li>排程的三個層次和限制條件</li><li>學習曲線與甘特圖</li></ul></div>
+
+  <p>訂單接了、布也買了，接下來要決定：<strong>哪張訂單在哪條線、哪一天做？</strong>這就是排程。</p>
+
+  <h3>先算產能</h3>
+  <div class="formula"><span class="eq">一條線每天產量 ＝ 人數 × 上班分鐘 × 效率 ÷ SAM</span></div>
+  <div class="box example"><b class="tag">實際例子</b><p>25 人 × 480 分鐘 × 60% ÷ 3.8 ≈ <b>1,895 件／天</b>。3,000 件放一條線大約 1.6 天，但這是「熟練之後」的速度。</p></div>
+
+  <aside class="term"><h4>學習曲線<small>Learning Curve</small></h4>
+    <p>換新款式時，工人一開始不熟，效率很低，做越多越快。例如第 1 天 30%、第 2 天 45%、第 3 天 55%、之後穩定在 60%。</p>
+    <p class="orig"><b>由來</b>1936 年，美國航空工程師 Theodore Wright 發現：飛機的累積產量每增加一倍，每架需要的工時就會減少一個固定比例。後來所有製造業都用這個觀念來估算新產品的產能。</p></aside>
+  <p>所以排程時，小訂單常常「一天半就做完」只是理論。考慮學習曲線，BW-TS01 可能要排 3 天。這也是為什麼成衣廠喜歡大訂單：同一款做越久，效率越高。</p>
+
+  <div class="lab">
+    <div class="lh">計算器：這張單要做幾天</div>
+    <div class="lb">
+      <div class="fields">
+        <label>訂單數量（件）<input type="number" id="capQty" value="3000" min="0"></label>
+        <label>SAM（分鐘）<input type="number" id="capSam" value="3.8" step="0.01" min="0.01"></label>
+        <label>每線人數<input type="number" id="capPpl" value="25" min="1"></label>
+        <label>每天上班分鐘<input type="number" id="capMin" value="480" min="1"></label>
+        <label>穩定效率（%）<input type="number" id="capEff" value="60" min="1"></label>
+        <label>使用幾條線<input type="number" id="capLines" value="1" min="1"></label>
+        <label>考慮學習曲線<select id="capLc"><option value="1">是（30%→45%→55%→穩定）</option><option value="0">否</option></select></label>
+      </div>
+      <div class="out" id="capOut"></div>
+    </div>
+  </div>
+
+  <h3>排程的三個層次</h3>
+  <div class="tw"><table>
+    <tr><th>層次</th><th>看多遠</th><th class="w">回答的問題</th></tr>
+    <tr><td>產能規劃</td><td>3–6 個月</td><td class="w">接下來每個月工廠的分鐘數夠不夠？還能接多少單？</td></tr>
+    <tr><td>產線排程</td><td>2–6 週</td><td class="w">每張單排在哪條線、哪天上線、哪天下線？</td></tr>
+    <tr><td>每日計畫</td><td>今天、明天</td><td class="w">今天每條線每小時要做幾件？</td></tr>
+  </table></div>
+
+  <h3>排程不能只看產能</h3>
+  <p>一張訂單要能上線，必須同時滿足：</p>
+  <ul>
+    <li><b>料齊了</b>：布和輔料都已入倉、驗過。</li>
+    <li><b>樣批了</b>：PP 樣已經核准。</li>
+    <li><b>線會做</b>：這條線的工人有這種衣服需要的技能和機器。</li>
+    <li><b>時間夠</b>：做完還來得及包裝和檢驗。</li>
+  </ul>
+  <p>只要有一項不滿足，排上去也做不了。好的 ERP 排程畫面會把「料未齊」的訂單標成紅色提醒。</p>
+
+  <aside class="term"><h4>甘特圖<small>Gantt Chart</small></h4>
+    <p>用橫條表示「什麼工作、從哪天到哪天」的圖。一眼就能看出每條線什麼時候忙、什麼時候空。</p>
+    <p class="orig"><b>由來</b>美國工程師 Henry Gantt 在 1910 年代推廣這種圖，用來管理工廠和造船計畫。一百多年後，幾乎所有專案管理和排程軟體都還在用它。</p></aside>
+  <div class="lab">
+    <div class="lh">晨光 12 月第一、二週的產線排程（示意）</div>
+    <div class="lb"><div class="tw" style="border:none;margin:0"><div class="gantt" id="gantt"></div></div>
+    <p style="font-size:14.5px;color:var(--muted);margin:8px 0 0">紅色是 BW-TS01。第 3 線 12/08 開始做，考慮學習曲線排了 3 天。12/06–12/07 的空檔，排程員可以再插一張料已齊的小單。</p></div>
+  </div>
+
+  <div class="quiz" data-a="1"><div class="q">第 4 線明天有空，產能也夠，但 SH-206 的布還在驗布、沒入倉。可以排 SH-206 明天上線嗎？</div>
+    <button class="op">可以，產能夠就好</button><button class="op">不行，料還沒齊，排上去也做不了</button><button class="op">可以，先讓工人空手練習</button>
+    <div class="ex">排程要同時滿足料齊、樣批、線會做、時間夠。料沒齊的訂單硬排上去，工人只會停工等料，效率反而掉下來。</div></div>
+</section>
+
+<!-- ======================= 第 13 課 ======================= -->
+<section class="lesson" data-part="進階篇" data-title="裁剪：從一捲布到一捆裁片">
+  <div class="lnum"><span class="lv">進階</span>第 13 課</div>
+  <h2>裁剪：從一捲布到一捆裁片</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>紙樣、放碼、排料、拉布、裁剪、捆紮六個步驟</li><li>排料效率怎麼算</li><li>用尺碼配比算出要拉幾層布</li></ul></div>
+
+  <h3>六個步驟</h3>
+  <ol>
+    <li><b>紙樣</b>：衣服每一片（前片、後片、袖子、領）的形狀。</li>
+    <li><b>放碼</b>：把基本尺碼的紙樣放大縮小成 S、M、L、XL。</li>
+    <li><b>排料</b>：把所有紙樣像拼圖一樣排在布上，盡量不浪費。</li>
+    <li><b>拉布</b>：把布一層一層平鋪在長長的裁床上，可能疊幾十層。</li>
+    <li><b>裁剪</b>：用電剪沿著排料圖一次裁穿所有層。</li>
+    <li><b>捆紮</b>：把裁好的裁片分捆，貼上票，送上生產線。</li>
+  </ol>
+
+  <aside class="term"><h4>放碼<small>Grading</small></h4>
+    <p>以一個基本尺碼的紙樣為準，按規則放大或縮小成其他尺碼。</p>
+    <p class="orig"><b>由來</b>「碼」是尺碼，「放」是放大縮小。英文 grade 是「分級」，把一個版型分成好幾個級距。</p></aside>
+  <aside class="term"><h4>排料／唛架<small>Marker</small></h4>
+    <p>把所有要裁的紙樣排在布上的那張圖。排得越緊密，浪費的布越少。</p>
+    <p class="orig"><b>由來</b>「唛架」是粵語從英文 marker 音譯來的，因為早期香港成衣業很發達，很多術語跟著傳到整個亞洲的工廠。「嘜」「唛」這類字，常常就是英文 mark 的音譯。</p></aside>
+  <div class="formula"><span class="eq">排料效率 ＝ 所有紙樣面積 ÷ 排料圖佔用的布面積 × 100%</span></div>
+  <p>T 恤這類簡單款的排料效率常在 80% 以上。電腦排料系統可以在幾分鐘內試上千種排法，找出最省布的一種，而這個結果就是第 6 課 BOM 裡「單耗」最準確的來源。</p>
+
+  <h3>尺碼配比與拉布層數</h3>
+  <p>一張排料圖上可以同時放好幾個尺碼。白色 BW-TS01 要 S 300、M 600、L 600、XL 300，比例剛好是 1 : 2 : 2 : 1。所以排一張「1 個 S、2 個 M、2 個 L、1 個 XL」的排料圖，拉 300 層，一刀下去就全部裁完：</p>
+  <div class="formula">S：1 × 300 ＝ 300　M：2 × 300 ＝ 600　L：2 × 300 ＝ 600　XL：1 × 300 ＝ 300</div>
+  <p>實際上一張裁床疊不了 300 層（太厚刀子會歪），所以會分成好幾「床」，例如 5 床、每床 60 層。</p>
+
+  <div class="lab">
+    <div class="lh">計算器：配比與層數</div>
+    <div class="lb">
+      <div class="fields">
+        <label>S 需求<input type="number" id="ctS" value="300" min="0"></label>
+        <label>M 需求<input type="number" id="ctM" value="600" min="0"></label>
+        <label>L 需求<input type="number" id="ctL" value="600" min="0"></label>
+        <label>XL 需求<input type="number" id="ctXL" value="300" min="0"></label>
+        <label>S 配比<input type="number" id="crS" value="1" min="0"></label>
+        <label>M 配比<input type="number" id="crM" value="2" min="0"></label>
+        <label>L 配比<input type="number" id="crL" value="2" min="0"></label>
+        <label>XL 配比<input type="number" id="crXL" value="1" min="0"></label>
+        <label>每床最多層數<input type="number" id="ctMax" value="60" min="1"></label>
+      </div>
+      <div class="out" id="ctOut"></div>
+    </div>
+  </div>
+  <p>試試看把藏青色的 200、400、400、200 放進去，或故意把配比改成 1:1:1:1，看看會多裁出多少件。</p>
+
+  <h3>捆紮和菲票</h3>
+  <aside class="term"><h4>菲票<small>Bundle Ticket｜捆票、工票</small></h4>
+    <p>貼在每一捆裁片上的小票，寫著款號、顏色、尺碼、床次、層號範圍、件數、捆號。上面常印有條碼，每一道工序做完就撕下一小聯或掃一次碼。</p>
+    <p class="orig"><b>由來</b>「菲」來自粵語的「飛」，就是「票」的意思（像「車飛」是車票）。同樣是從香港成衣業傳開的說法。</p></aside>
+  <div class="box warn"><b class="tag">為什麼要記層號</b><p>同一床裡，第 1 層和第 60 層可能來自不同的布卷，甚至不同缸號。如果一件衣服的前片來自第 5 層、後片來自第 50 層，就可能有色差。所以捆紮時要確保<b>同一件衣服的所有裁片都來自同一層</b>，這個原則叫「對層」或「分色」。</p></div>
+  <p>ERP 在這一課會產生很多重要資料：裁剪單（依哪張生產單、用哪個缸號、拉幾層）、實際裁出數、剩布退料數、每一捆的菲票。這些資料會一路跟著衣服走到出貨。</p>
+
+  <div class="quiz" data-a="2"><div class="q">需求 S 100、M 200、L 200、XL 100，配比 1:2:2:1，每床最多 50 層，要幾床？</div>
+    <button class="op">1 床</button><button class="op">4 床</button><button class="op">2 床</button>
+    <div class="ex">需要拉 100 層（S 需求 100 ÷ 配比 1）。每床最多 50 層，所以 100 ÷ 50 ＝ 2 床。</div></div>
+</section>
+
+<!-- ======================= 第 14 課 ======================= -->
+<section class="lesson" data-part="進階篇" data-title="縫製現場與在製品追蹤">
+  <div class="lnum"><span class="lv">進階</span>第 14 課</div>
+  <h2>縫製現場與在製品追蹤</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>生產線平衡、瓶頸與節拍時間</li><li>在製品是什麼、為什麼太多不好</li><li>現場產量怎麼即時回報到 ERP</li></ul></div>
+
+  <aside class="term"><h4>流水線<small>Assembly Line / Production Line</small></h4>
+    <p>把工作拆成很多工序，讓產品依序經過每個人手上，每人只做一步。</p>
+    <p class="orig"><b>由來</b>1913 年，美國福特汽車工廠建立了會移動的組裝線，組一台車的時間從十幾個小時縮短到大約一個半小時。「流水」形容產品像水一樣流過每一個工位。</p></aside>
+
+  <h3>一條線的速度，由最慢的那一站決定</h3>
+  <div class="box analogy"><b class="tag">生活比喻</b><p>班上接力傳球，每人傳給下一個人。如果有一個人每次都要 5 秒，其他人只要 1 秒，整條隊伍一分鐘最多也只能傳 12 顆球。那個最慢的人就是<b>瓶頸</b>。</p></div>
+  <aside class="term"><h4>瓶頸<small>Bottleneck</small></h4>
+    <p>整個流程中產能最小的那個環節，它決定了整條線的產量。</p>
+    <p class="orig"><b>由來</b>瓶子的脖子比瓶身窄，倒水時不管瓶子多大，水流的速度都被瓶頸限制住。</p></aside>
+  <aside class="term"><h4>節拍時間<small>Takt Time</small></h4>
+    <p>為了達到目標產量，每隔多久必須完成一件。例如目標每小時 150 件，節拍時間就是 60 ÷ 150 ＝ 0.4 分鐘。每一站的週期時間都不能超過它。</p>
+    <p class="orig"><b>由來</b>Takt 是德文，原意是音樂的「拍子」，像指揮家的節拍。1930 年代德國飛機工廠用它來讓各站同步前進，後來豐田汽車把這個觀念發揚光大。</p></aside>
+
+  <div class="lab">
+    <div class="lh">動手玩：幫 BW-TS01 平衡生產線</div>
+    <div class="lb">
+      <p style="margin-top:0">每一道工序旁邊可以加減人數。紅色是目前的瓶頸，黃色直線是節拍時間。試著讓所有橫條都不超過黃線。</p>
+      <div class="fields" style="margin-bottom:10px">
+        <label>目標每小時產量（件）<input type="number" id="lbTarget" value="170" min="1"></label>
+        <label>工人效率（%）<input type="number" id="lbEff" value="100" min="10" max="150"></label>
+      </div>
+      <div class="bars" id="lbBars"></div>
+      <div class="out" id="lbOut"></div>
+      <div class="btnrow"><button class="btn ghost" id="lbReset">重設</button></div>
+    </div>
+  </div>
+  <div class="formula">週期時間 ＝ 工序 SAM ÷ 人數 ÷ 效率　　線平衡率 ＝ 總 SAM ÷（總人數 × 最長週期時間）</div>
+  <p>線平衡率越接近 100%，代表大家的工作量越平均，沒有人閒著等、也沒有人被壓垮。實務上 85% 以上就算平衡得不錯。</p>
+
+  <h3>在製品</h3>
+  <aside class="term"><h4>在製品<small>WIP｜Work In Process</small></h4>
+    <p>已經開始做、但還沒做完的東西。例如已經裁好、在生產線上排隊等著縫的裁片。</p>
+    <p class="orig"><b>由來</b>直譯是「正在過程中的工作」。會計上它也是一種庫存，因為布已經花錢買了、也花了工時，但還不能賣。</p></aside>
+  <p>瓶頸工序前面一定會堆積一大堆裁片。在製品太多有幾個壞處：佔空間、裁片容易弄髒弄亂、一旦發現問題要重做一大批、而且把錢卡在半成品上。所以精實生產（Lean）的一個重要目標就是<b>降低在製品</b>。</p>
+
+  <h3>產量怎麼回報到 ERP</h3>
+  <div class="tw"><table>
+    <tr><th>方式</th><th class="w">做法</th><th class="w">優缺點</th></tr>
+    <tr><td>手寫看板</td><td class="w">組長每小時在白板上寫數字，下班再輸入電腦</td><td class="w">便宜；但晚一天才知道問題，容易寫錯</td></tr>
+    <tr><td>撕工票</td><td class="w">每做完一捆撕下菲票的一小聯，集中貼在卡上</td><td class="w">能算計件工資；但要人工統計</td></tr>
+    <tr><td>掃條碼／QR</td><td class="w">每捆做完用手機或掃描槍掃菲票</td><td class="w">即時、準確，能同時算產量、在製品、薪資</td></tr>
+  </table></div>
+  <aside class="term"><h4>條碼與 QR 碼<small>Barcode / QR Code</small></h4>
+    <p>把一串數字或文字變成機器能快速讀的圖案。條碼是一條條直線，QR 碼是方格，能存更多資料。</p>
+    <p class="orig"><b>由來</b>1974 年，美國一家超市第一次用掃描器掃了一包口香糖的條碼，從此條碼改變了零售業。QR 碼是 1994 年日本電裝公司（Denso Wave，豐田集團的零件廠）發明的，用來追蹤汽車零件。QR 是 Quick Response（快速回應）的縮寫。</p></aside>
+
+  <div class="quiz" data-a="1"><div class="q">一條線上，「上袖」每小時只能做 110 件，其他工序都能做 180 件以上。這條線每小時最多能產出幾件？</div>
+    <button class="op">180 件</button><button class="op">110 件</button><button class="op">把所有工序的產能加起來</button>
+    <div class="ex">整條線的產量由瓶頸決定。上袖只能做 110 件，後面的工序再快也拿不到更多衣服。要提高產量，就要替上袖加人、換更快的機器或重新分配工作。</div></div>
+</section>
+
+<!-- ======================= 第 15 課 ======================= -->
+<section class="lesson" data-part="進階篇" data-title="品質管理：DHU 與 AQL">
+  <div class="lnum"><span class="lv">進階</span>第 15 課</div>
+  <h2>品質管理：DHU 與 AQL</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>品質檢查的四道關卡</li><li>疵點的三個等級與 DHU</li><li>用 AQL 抽樣決定整批貨能不能出</li></ul></div>
+
+  <h3>四道關卡</h3>
+  <div class="tw"><table>
+    <tr><th>關卡</th><th>時機</th><th class="w">目的</th></tr>
+    <tr><td>來料檢驗</td><td>收貨時</td><td class="w">布和輔料有問題，不讓它進工廠（第 10 課）</td></tr>
+    <tr><td>線上巡檢（Inline）</td><td>縫製過程中</td><td class="w">品管員在線上走動抽查，早點發現問題</td></tr>
+    <tr><td>線尾檢驗（Endline）</td><td>每件縫好時</td><td class="w">每件都檢查，不合格送回返修</td></tr>
+    <tr><td>終期檢驗（Final）</td><td>包裝完、出貨前</td><td class="w">用 AQL 抽樣，決定整批能不能出貨</td></tr>
+  </table></div>
+  <p>越早發現問題越省錢。在線上發現一件衣服縫歪，修一件就好；到終檢才發現，可能要整批拆箱重檢。</p>
+
+  <h3>疵點分三級</h3>
+  <ul>
+    <li><b>嚴重（Critical）</b>：可能傷害穿著的人，例如衣服裡留了斷針。一件都不能有。</li>
+    <li><b>主要（Major）</b>：客人會因此退貨，例如破洞、明顯色差、尺寸錯。</li>
+    <li><b>次要（Minor）</b>：小瑕疵，不影響穿，例如一小段線頭沒剪。</li>
+  </ul>
+
+  <aside class="term"><h4>DHU<small>Defects per Hundred Units｜每百件疵點數</small></h4>
+    <p>檢查的每一百件衣服裡，總共發現幾個疵點。</p>
+    <p class="orig"><b>由來</b>成衣業習慣的品質指標。它和「不良率」不同：一件衣服可能同時有 3 個疵點，不良率只算 1 件，DHU 算 3 個，所以 DHU 更能反映做工的細緻程度。</p></aside>
+  <div class="formula"><span class="eq">DHU ＝ 疵點總數 ÷ 檢驗件數 × 100</span></div>
+  <div class="box example"><b class="tag">實際例子</b><p>線尾今天檢查 1,900 件 BW-TS01，發現 95 個疵點（其中 60 個是線頭、20 個跳針、15 個領口不平），分布在 80 件衣服上。DHU ＝ 95 ÷ 1,900 × 100 ＝ <b>5.0</b>；不良率 ＝ 80 ÷ 1,900 ≈ <b>4.2%</b>。</p></div>
+
+  <aside class="term"><h4>柏拉圖分析<small>Pareto Analysis｜80/20 法則</small></h4>
+    <p>把疵點依種類從多到少排列，你通常會發現少數幾種疵點佔了大部分。先解決那幾種，效果最大。</p>
+    <p class="orig"><b>由來</b>義大利經濟學家 Vilfredo Pareto 在 1890 年代發現，義大利約 80% 的土地由約 20% 的人擁有。1940 年代品質管理大師 Joseph Juran 把這個觀察用在品質上，說「少數關鍵問題造成大部分損失」。</p></aside>
+  <p>上面例子裡，線頭一項就佔了 95 個疵點中的 60 個（63%）。只要在「剪線頭」工序加強，DHU 就能大幅下降。ERP 如果有記錄每個疵點的種類，就能自動畫出這張排名。</p>
+
+  <h3>AQL：只檢查一部分，決定整批</h3>
+  <p>3,000 件衣服全部拆袋檢查太花時間，所以客人的品管員會<strong>抽樣</strong>。抽多少件、容許幾件不良，由 AQL 表決定。</p>
+  <aside class="term"><h4>AQL<small>Acceptance Quality Limit｜允收品質水準</small></h4>
+    <p>一套抽樣規則：根據整批的數量決定抽幾件，再根據客人要求的品質等級，決定抽到幾件不良還能接受。成衣業最常用「一般檢驗水準 II」，主要疵點 AQL 2.5、次要疵點 AQL 4.0。</p>
+    <p class="orig"><b>由來</b>源自 1950 年美國軍方的抽樣標準 MIL-STD-105，當時是用來檢驗大量採購的軍需品。後來變成國際標準 ISO 2859-1。舊名稱是 Acceptable Quality Level（可接受品質水準）。</p></aside>
+
+  <div class="lab">
+    <div class="lh">工具：AQL 抽樣查詢（一般檢驗水準 II、正常檢驗、單次抽樣）</div>
+    <div class="lb">
+      <div class="fields">
+        <label>整批數量（件）<input type="number" id="aqlLot" value="3000" min="1"></label>
+        <label>主要疵點發現件數<input type="number" id="aqlMaj" value="5" min="0"></label>
+        <label>次要疵點發現件數<input type="number" id="aqlMin" value="9" min="0"></label>
+      </div>
+      <div class="out" id="aqlOut"></div>
+      <p style="font-size:13.5px;color:var(--muted);margin:8px 0 0">本工具只收錄 91 到 35,000 件的範圍。實際使用時請以客人的品質手冊和正式標準表為準。</p>
+    </div>
+  </div>
+  <p>Ac 是 Accept（允收）：不良數小於或等於這個數字，允收。Re 是 Reject（拒收）：不良數達到這個數字，整批拒收，要全部重檢後再驗一次。</p>
+
+  <div class="quiz" data-a="0"><div class="q">檢查 200 件，發現 30 個疵點，分布在 18 件衣服上。DHU 是多少？</div>
+    <button class="op">15</button><button class="op">9</button><button class="op">30</button>
+    <div class="ex">DHU ＝ 疵點數 ÷ 檢驗件數 × 100 ＝ 30 ÷ 200 × 100 ＝ 15。9 是不良率（18 ÷ 200 ＝ 9%），兩者不要搞混。</div></div>
+</section>
+
+<!-- ======================= 第 16 課 ======================= -->
+<section class="lesson" data-part="進階篇" data-title="包裝與出貨">
+  <div class="lnum"><span class="lv">進階</span>第 16 課</div>
+  <h2>包裝與出貨</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>單色單碼與混碼的裝箱方式</li><li>裝箱單、箱嘜、材積與貨櫃</li><li>出貨文件和裁出比</li></ul></div>
+
+  <h3>兩種裝箱方式</h3>
+  <aside class="term"><h4>單色單碼與混碼<small>Solid Pack / Assorted（Ratio）Pack</small></h4>
+    <p><b>單色單碼</b>：一箱只放同一個顏色、同一個尺碼，例如一箱 24 件白色 M。<b>混碼</b>：一箱裡按比例放多個尺碼，例如白色 S2、M4、L4、XL2，剛好 12 件，客人的門市收到一箱就能直接上架。</p>
+    <p class="orig"><b>由來</b>Solid 是「純的、單一的」；Assorted 是「各種混在一起的」，Ratio 是「比例」。混碼是應零售店的需要發展出來的，這樣小店不必拆好幾箱才湊齊所有尺碼。</p></aside>
+
+  <aside class="term"><h4>裝箱單<small>Packing List</small></h4>
+    <p>列出每一箱的箱號、裝了哪些 SKU、各幾件、重量、尺寸。海關、客人倉庫、船公司都會看它。</p>
+    <p class="orig"><b>由來</b>Packing 是「打包」，List 是「清單」。它和發票是國際貿易最基本的兩份文件。</p></aside>
+  <div class="tw"><table>
+    <tr><th>箱號</th><th>SKU</th><th class="num">件數</th><th class="num">毛重 kg</th></tr>
+    <tr><td>1–12</td><td>BW-TS01-WHT-S</td><td class="num">每箱 24</td><td class="num">5.2</td></tr>
+    <tr><td>13–37</td><td>BW-TS01-WHT-M</td><td class="num">每箱 24</td><td class="num">5.5</td></tr>
+    <tr><td>…</td><td>…</td><td class="num">…</td><td class="num">…</td></tr>
+    <tr><td colspan="2"><b>合計 125 箱</b></td><td class="num"><b>3,000</b></td><td class="num"></td></tr>
+  </table></div>
+  <p>白色 S 300 件 ÷ 24 ＝ 12.5 箱，怎麼辦？最後那半箱叫<b>尾箱</b>，可以裝 12 件，或依客人規定改成混碼箱。ERP 產生裝箱單時要能處理這種情況。</p>
+
+  <aside class="term"><h4>箱嘜<small>Shipping Mark / Carton Mark</small></h4>
+    <p>印在紙箱外面的標示：客人名稱、PO 號、款號、顏色、尺碼、件數、箱號（例如 13/125）、目的港。</p>
+    <p class="orig"><b>由來</b>「嘜」是粵語對英文 mark（記號）的音譯，跟「唛架」是同一個來源。</p></aside>
+
+  <h3>要用多大的貨櫃</h3>
+  <aside class="term"><h4>材積<small>CBM｜Cubic Meter，立方米</small></h4>
+    <p>貨物佔的空間大小。一箱的材積 ＝ 長 × 寬 × 高（公尺）。運費常按材積計算。</p>
+    <p class="orig"><b>由來</b>「材」是材料，「積」是體積。CBM 是英文 cubic meter 的縮寫。海運按空間收費，因為一個貨櫃塞滿衣服不一定很重，但空間已經用完了。</p></aside>
+  <div class="lab">
+    <div class="lh">計算器：材積與貨櫃</div>
+    <div class="lb">
+      <div class="fields">
+        <label>總件數<input type="number" id="cbQty" value="3000" min="1"></label>
+        <label>每箱件數<input type="number" id="cbPer" value="24" min="1"></label>
+        <label>箱長（公分）<input type="number" id="cbL" value="60" min="1"></label>
+        <label>箱寬（公分）<input type="number" id="cbW" value="40" min="1"></label>
+        <label>箱高（公分）<input type="number" id="cbH" value="30" min="1"></label>
+      </div>
+      <div class="out" id="cbOut"></div>
+      <p style="font-size:13.5px;color:var(--muted);margin:8px 0 0">貨櫃可用容量為常見估計值：20 呎約 28 CBM、40 呎約 58 CBM、40 呎高櫃約 68 CBM。實際依裝櫃方式與船公司而定。</p>
+    </div>
+  </div>
+
+  <h3>出貨文件</h3>
+  <div class="tw"><table>
+    <tr><th>文件</th><th class="w">用途</th></tr>
+    <tr><td>商業發票（Commercial Invoice）</td><td class="w">向客人請款，也給海關看貨值</td></tr>
+    <tr><td>裝箱單（Packing List）</td><td class="w">每箱內容</td></tr>
+    <tr><td>提單（B/L）</td><td class="w">船公司收到貨的證明，也是提貨的憑證</td></tr>
+    <tr><td>產地證明（C/O）</td><td class="w">證明在哪國生產，影響進口關稅</td></tr>
+  </table></div>
+  <aside class="term"><h4>提單<small>B/L｜Bill of Lading</small></h4>
+    <p>船公司簽發的文件，證明已收到貨物並會運到目的地。拿著正本提單的人才能提貨。</p>
+    <p class="orig"><b>由來</b>Lading 是古英文「裝貨」的意思。又是一個 bill（清單）！幾百年前海上貿易就開始用這種文件，至今仍是國際運輸最重要的單據。</p></aside>
+  <aside class="term"><h4>HS 編碼<small>Harmonized System Code｜商品分類編號</small></h4>
+    <p>全世界海關共用的商品分類號碼。例如針織棉 T 恤和梭織襯衫的編碼不同，關稅也可能不同。</p>
+    <p class="orig"><b>由來</b>由世界海關組織（WCO）制定，1988 年開始施行。Harmonized 是「調和、統一」，讓各國海關講同一種分類語言。</p></aside>
+
+  <h3>出貨後看一個重要數字</h3>
+  <aside class="term"><h4>裁出比<small>Cut-to-Ship Ratio</small></h4>
+    <p>實際出貨件數 ÷ 實際裁剪件數。例如裁了 3,060 件、出了 3,000 件，裁出比 ≈ 98%。剩下的 60 件是損壞、次品、樣衣或多裁的。</p>
+    <p class="orig"><b>由來</b>成衣業衡量「從裁剪到出貨之間漏掉多少」的指標。因為布料是最大的成本，每掉一件都是真金白銀的損失。</p></aside>
+  <p>出貨單一確認，ERP 會同時做三件事：成品庫存減少、銷售訂單標記已出貨、產生一筆<b>應收帳款</b>，等著向客人收錢。下一篇我們就要走進錢的世界。</p>
+
+  <div class="quiz" data-a="1"><div class="q">每箱 60 × 40 × 30 公分，共 125 箱，總材積大約是多少？</div>
+    <button class="op">72 CBM</button><button class="op">9 CBM</button><button class="op">0.9 CBM</button>
+    <div class="ex">一箱 0.6 × 0.4 × 0.3 ＝ 0.072 CBM，乘以 125 箱 ＝ 9 CBM。一個 20 呎櫃就放得下，還有很多空間可以跟別張單併櫃。</div></div>
+</section>
+
+<!-- ======================= 第 17 課 ======================= -->
+<section class="lesson" data-part="專業篇" data-title="成本與財務">
+  <div class="lnum"><span class="lv">專業</span>第 17 課</div>
+  <h2>成本與財務</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>每分鐘成本（CPM）與報價怎麼算</li><li>應收、應付與三單比對</li><li>ERP 如何把每個動作自動變成會計紀錄</li></ul></div>
+
+  <h3>工廠一分鐘值多少錢</h3>
+  <p>第 7 課說過成衣廠在賣「分鐘」。那一分鐘要賣多少錢才不會虧？</p>
+  <aside class="term"><h4>每分鐘成本<small>CPM｜Cost Per Minute</small></h4>
+    <p>工廠每產出一個標準分鐘，平均要花多少錢（工資、管理費、水電、折舊等）。</p>
+    <p class="orig"><b>由來</b>把 SAM 的觀念延伸到財務：既然每件衣服都用「分鐘」衡量，成本也用「每分鐘多少錢」來算，報價就只要做一個乘法。</p></aside>
+  <div class="formula"><span class="eq">CPM ＝ 每月總費用 ÷（直接人數 × 每人每月上班分鐘 × 效率）</span></div>
+  <div class="box example"><b class="tag">實際例子</b><p>晨光每月費用約 240,000 美元。直接生產人員 400 人，每人每月 26 天 × 480 分鐘 ＝ 12,480 分鐘，效率 60%。能賣的分鐘 ＝ 400 × 12,480 × 0.6 ＝ 2,995,200 分鐘。CPM ＝ 240,000 ÷ 2,995,200 ≈ <b>0.080 美元</b>。</p><p>BW-TS01 的加工費（CM）＝ 3.8 × 0.080 ≈ 0.30 美元。你會發現：<b>效率每提高一點，CPM 就降一點，報價就更有競爭力。</b></p></div>
+
+  <h3>一件衣服的報價</h3>
+  <div class="lab">
+    <div class="lh">計算器：FOB 報價</div>
+    <div class="lb">
+      <div class="fields">
+        <label>布料單價（USD/公斤）<input type="number" id="fcFab" value="5.5" step="0.1" min="0"></label>
+        <label>布料單耗（公斤）<input type="number" id="fcCons" value="0.28" step="0.01" min="0"></label>
+        <label>布料損耗（%）<input type="number" id="fcWaste" value="4" min="0"></label>
+        <label>輔料包材（USD/件）<input type="number" id="fcTrim" value="0.35" step="0.01" min="0"></label>
+        <label>SAM（分鐘）<input type="number" id="fcSam" value="3.8" step="0.1" min="0"></label>
+        <label>CPM（USD/分鐘）<input type="number" id="fcCpm" value="0.08" step="0.005" min="0"></label>
+        <label>其他（測試、運雜，USD/件）<input type="number" id="fcOther" value="0.10" step="0.01" min="0"></label>
+        <label>利潤（%）<input type="number" id="fcProfit" value="10" min="0"></label>
+      </div>
+      <div class="out" id="fcOut"></div>
+    </div>
+  </div>
+  <p>布料往往佔成本的一半以上，所以第 6 課的單耗、第 9 課的損耗、第 13 課的排料效率，其實都在直接影響報價。</p>
+
+  <h3>標準成本與實際成本</h3>
+  <aside class="term"><h4>標準成本與實際成本<small>Standard Cost / Actual Cost</small></h4>
+    <p><b>標準成本</b>是報價時「預計」要花的錢；<b>實際成本</b>是做完後「真的」花掉的錢。兩者的差叫<b>成本差異</b>，是找出問題的線索：布用多了？效率太低？加班太多？</p>
+    <p class="orig"><b>由來</b>20 世紀初，美國工業工程師把 Taylor 的時間標準延伸到會計，發展出標準成本制度，讓管理者可以「先訂標準、再比實際、找出差異」。</p></aside>
+  <p>ERP 能做到「訂單結案後自動算實際成本」：從領料單知道用了多少布、從產量回報知道花了多少工時、從採購單知道買價。這是手工 Excel 幾乎做不到的。</p>
+
+  <h3>應收、應付與三單比對</h3>
+  <aside class="term"><h4>應收帳款與應付帳款<small>AR｜Accounts Receivable ／ AP｜Accounts Payable</small></h4>
+    <p><b>應收</b>：別人欠我們的錢（客人還沒付的貨款）。<b>應付</b>：我們欠別人的錢（還沒付給布廠的料款）。</p>
+    <p class="orig"><b>由來</b>Receivable 是「可以收到的」，Payable 是「必須付出的」。成衣業常有 30 到 90 天的付款期，所以這兩筆帳要仔細追。</p></aside>
+  <aside class="term"><h4>三單比對<small>Three-way Match</small></h4>
+    <p>付款給供應商之前，要核對三張單：<b>採購單</b>（我們訂了什麼、什麼價錢）、<b>收貨單</b>（實際收到多少）、<b>供應商發票</b>（他向我們要多少錢）。三者一致才付款。</p>
+    <p class="orig"><b>由來</b>企業內部控制的經典做法。只看發票付款，供應商多寫、少送都發現不了。ERP 可以自動比對，不一致的就卡住等人處理。</p></aside>
+  <div class="box example"><b class="tag">實際例子</b><p>大同紡織的發票寫白布 475 公斤 × 5.5 美元。系統比對：PO 是 475 公斤 × 5.5，但 GRN 只收到 452 公斤（最後一卷還沒到）。三單不符，系統只允許先付 452 公斤的款，剩下的等收貨後再付。</p></div>
+
+  <h3>ERP 如何自動記帳</h3>
+  <aside class="term"><h4>複式簿記<small>Double-entry Bookkeeping</small></h4>
+    <p>每一筆交易都同時記在兩個地方：一邊增加、一邊減少，兩邊金額永遠相等。例如買布：「存貨」增加 2,612 美元，「應付帳款」也增加 2,612 美元。</p>
+    <p class="orig"><b>由來</b>中世紀義大利商人就在用，1494 年數學家 Luca Pacioli 在書中完整寫下這套方法，流傳到今天，全世界的會計都在用。</p></aside>
+  <p>好的 ERP 會讓業務動作<b>自動產生會計分錄</b>（常叫「拋轉」）：倉庫開收貨單，會計那邊就自動多一筆「存貨增加、應付增加」；出貨單確認，就自動多一筆「應收增加、收入增加」。會計不用重打，而且每一筆帳都能點回去看是哪張單據造成的。</p>
+
+  <div class="quiz" data-a="2"><div class="q">供應商發票要付 1,000 公斤的錢，但收貨單只記錄收到 950 公斤。系統應該怎麼做？</div>
+    <button class="op">照發票付 1,000 公斤，相信供應商</button><button class="op">一毛都不付</button><button class="op">三單比對不符，先卡住，只付已收貨的部分或待人員確認差異</button>
+    <div class="ex">三單比對的目的就是在付款前抓出不一致。差的 50 公斤可能還在路上、可能少送、也可能收貨時漏登記，要查清楚再付。</div></div>
+</section>
+
+<!-- ======================= 第 18 課 ======================= -->
+<section class="lesson" data-part="專業篇" data-title="人事、考勤與計件工資">
+  <div class="lnum"><span class="lv">專業</span>第 18 課</div>
+  <h2>人事、考勤與計件工資</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>員工主檔與技能矩陣</li><li>考勤資料從哪來</li><li>計件工資怎麼從產量資料算出來</li></ul></div>
+
+  <p>成衣廠是勞力密集的產業，人事薪資往往是除了布料以外最大的成本。人事模組和生產模組的連接，是成衣 ERP 最能展現「整合」威力的地方。</p>
+
+  <h3>員工主檔與技能矩陣</h3>
+  <p>員工主檔除了姓名、到職日、部門、產線，成衣廠還會記錄<b>技能</b>：誰會開拷克機、誰會上袖、誰熟練到什麼程度。</p>
+  <div class="tw"><table>
+    <tr><th>員工</th><th>拷克機</th><th>平車</th><th>三本車</th><th>上袖</th></tr>
+    <tr><td>E1021</td><td>★★★</td><td>★</td><td>—</td><td>★★★</td></tr>
+    <tr><td>E1045</td><td>★</td><td>★★★</td><td>★★</td><td>—</td></tr>
+    <tr><td>E1102</td><td>★★</td><td>—</td><td>★★★</td><td>★</td></tr>
+  </table></div>
+  <aside class="term"><h4>技能矩陣<small>Skill Matrix</small></h4>
+    <p>用表格列出每個人會哪些技能、熟練程度多高。排線、代班、安排訓練時都會用到。</p>
+    <p class="orig"><b>由來</b>Matrix 在數學裡是「矩陣」，一個有行有列的方格。人放在一邊、技能放在另一邊，交叉點填熟練度，就是技能矩陣。</p></aside>
+  <p>第 14 課平衡生產線時，如果上袖需要多一個人，組長可以從技能矩陣找出誰會上袖，而不是靠記憶。</p>
+
+  <h3>考勤</h3>
+  <aside class="term"><h4>打卡<small>Time Clock / Time Attendance</small></h4>
+    <p>記錄員工上下班時間，作為計算工時、加班、遲到、請假的依據。現在常用刷卡、指紋、人臉辨識。</p>
+    <p class="orig"><b>由來</b>1888 年，美國珠寶商 Willard Bundy 發明了打卡鐘：員工把卡片插進機器，機器在卡上「打」印時間。中文「打卡」這個說法就是從這裡來的，雖然今天已經不用紙卡了。</p></aside>
+  <p>考勤資料要和排班、請假、加班申請一起比對，才知道每個人每天「應該」上幾小時、「實際」上幾小時。加班規定、休假天數等依各國勞動法規不同，ERP 要能設定這些規則。</p>
+
+  <h3>計件工資</h3>
+  <aside class="term"><h4>計件工資<small>Piece Rate</small></h4>
+    <p>按照做了多少件來計算工資。做越多、拿越多，鼓勵員工提高產量。</p>
+    <p class="orig"><b>由來</b>「件」就是一件一件的產品。這種計薪方式歷史很久，工業革命時期的紡織業就大量使用。現代通常會搭配「保底工資」，確保每個人至少拿到法定最低工資。</p></aside>
+  <div class="formula"><span class="eq">工序單價 ＝ 工序 SAM × 每標準分鐘工資率</span><br>當日計件工資 ＝ Σ（各工序件數 × 工序單價）</div>
+  <div class="box example"><b class="tag">實際例子（數字為教學假設）</b><p>晨光把每標準分鐘工資率訂為 0.024 美元。「上袖」SAM 0.65，單價 ＝ 0.65 × 0.024 ≈ 0.0156 美元。E1021 今天上袖做了 560 件，計件工資 ≈ 560 × 0.0156 ＝ <b>8.74 美元</b>。如果這個數字低於當地法定日薪，就按保底發放。</p></div>
+
+  <h3>整合的威力：一次輸入，四處使用</h3>
+  <p>當工人在第 14 課掃了一次菲票，這一個動作同時產生：</p>
+  <ul>
+    <li>生產模組：這條線的產量、在製品數量更新。</li>
+    <li>品管模組：知道這捆是誰做的，出問題可以追溯。</li>
+    <li>薪資模組：這個人今天的計件數量增加。</li>
+    <li>成本模組：這張訂單實際花了多少工時。</li>
+  </ul>
+  <p>在沒有 ERP 的工廠，這四件事要四個不同的人各自統計一次，而且數字常常對不上。</p>
+  <div class="box warn"><b class="tag">注意</b><p>薪資是非常敏感的資料。系統要嚴格控制誰能看、誰能改（第 20 課講權限），而且任何修改都要留下紀錄。</p></div>
+
+  <div class="quiz" data-a="0"><div class="q">工人掃一次菲票，為什麼可以同時更新產量和薪資？</div>
+    <button class="op">因為各模組共用同一個資料庫，一筆產量資料可以被生產和薪資模組同時使用</button><button class="op">因為掃描器很貴</button><button class="op">因為薪資部門會手動再輸入一次</button>
+    <div class="ex">這就是 ERP 的核心價值：資料只輸入一次、存在一個地方，所有需要它的模組都去同一個地方讀，數字自然一致。</div></div>
+</section>
+
+<!-- ======================= 第 19 課 ======================= -->
+<section class="lesson" data-part="專業篇" data-title="系統架構全景">
+  <div class="lnum"><span class="lv">專業</span>第 19 課</div>
+  <h2>系統架構全景</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>三層架構：畫面、邏輯、資料</li><li>各模組如何圍繞同一個資料庫</li><li>單據鏈：一張訂單如何一路串到收款</li></ul></div>
+
+  <p>前面十八課，我們一個部門一個部門地看。現在要退後一步，從高處看整個系統是怎麼「搭」起來的。這就是<strong>架構</strong>。</p>
+  <aside class="term"><h4>架構<small>Architecture｜系統架構</small></h4>
+    <p>一個系統由哪些部分組成、各部分負責什麼、彼此怎麼溝通的整體設計。</p>
+    <p class="orig"><b>由來</b>原本是建築學用語，希臘文 architekton 意思是「總工匠」。蓋房子要先有設計圖，決定哪裡是柱子、哪裡是牆；軟體界從 1960 年代開始借用這個詞，指軟體的「設計藍圖」。</p></aside>
+
+  <h3>三層架構</h3>
+  <div class="box analogy"><b class="tag">生活比喻：一家餐廳</b><p><b>服務生</b>（畫面層）：幫你點菜、把菜端給你，但他不煮菜。<br><b>廚房</b>（邏輯層）：照著食譜和規則煮菜，例如「牛排要先確認有沒有庫存」「兒童餐不能加辣」。<br><b>冰箱和倉庫</b>（資料層）：存放所有食材，只有廚房能進去拿。</p></div>
+  <svg class="layers" viewBox="0 0 360 300" role="img" aria-label="三層架構圖：畫面層、邏輯層、資料層由上而下排列">
+    <rect x="20" y="10" width="320" height="70" rx="10" fill="var(--note)" stroke="var(--nav2)" stroke-width="1.5"/>
+    <text x="36" y="38" font-size="16" font-weight="700">畫面層（前端）</text>
+    <text x="36" y="62" font-size="13" fill="var(--muted)">手機、電腦瀏覽器看到的畫面、按鈕、表單</text>
+    <path d="M180 82 v24" stroke="var(--thread)" stroke-width="2.5" marker-end="url(#ar)"/>
+    <rect x="20" y="112" width="320" height="70" rx="10" fill="var(--warnbg)" stroke="var(--tape-ink)" stroke-width="1.5"/>
+    <text x="36" y="140" font-size="16" font-weight="700">邏輯層（後端）</text>
+    <text x="36" y="164" font-size="13" fill="var(--muted)">檢查規則、計算 MRP、核准流程、權限判斷</text>
+    <path d="M180 184 v24" stroke="var(--thread)" stroke-width="2.5" marker-end="url(#ar)"/>
+    <rect x="20" y="214" width="320" height="70" rx="10" fill="var(--card)" stroke="var(--nav2)" stroke-width="1.5"/>
+    <text x="36" y="242" font-size="16" font-weight="700">資料層（資料庫）</text>
+    <text x="36" y="266" font-size="13" fill="var(--muted)">主檔、交易資料，所有表格都存在這裡</text>
+    <defs><marker id="ar" viewBox="0 0 10 10" refX="5" refY="8" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 0 L5 10 z" fill="var(--thread)"/></marker></defs>
+  </svg>
+  <aside class="term"><h4>前端與後端<small>Front-end / Back-end</small></h4>
+    <p><b>前端</b>是使用者直接看到、操作的部分；<b>後端</b>是在伺服器上默默處理規則和資料的部分。</p>
+    <p class="orig"><b>由來</b>就像商店的「前台」和「後台」。前台接待客人，後台處理倉儲和帳務。軟體界沿用這個比喻，把看得到的叫前端、看不到的叫後端。</p></aside>
+  <p>為什麼要分層？因為這樣<b>換一層不會影響其他層</b>。例如要新增手機 App，只要做新的畫面層，後面的規則和資料完全不用改。而且所有規則都在邏輯層，不管從電腦還是手機操作，檢查標準都一樣。</p>
+  <div class="box warn"><b class="tag">一個重要原則</b><p>規則一定要寫在<b>後端</b>，不能只寫在畫面上。例如「庫存不能變成負數」，如果只在畫面擋，懂技術的人繞過畫面直接送資料，規則就失效了。</p></div>
+
+  <h3>模組地圖</h3>
+  <p>點一下任何一個模組，看它負責什麼、和哪些模組交換資料。</p>
+  <div class="lab">
+    <div class="lh">互動圖：成衣 ERP 模組地圖</div>
+    <div class="lb">
+      <svg class="modmap" id="modmap" viewBox="0 0 360 330" role="img" aria-label="九個模組圍繞中央共用資料庫"></svg>
+      <div class="out" id="modOut">點選一個模組。</div>
+    </div>
+  </div>
+  <aside class="term"><h4>單一真相來源<small>SSOT｜Single Source of Truth</small></h4>
+    <p>每一種資料只有一個正式的存放地點，所有人、所有模組都從那裡讀。不會有「業務的版本」和「倉庫的版本」。</p>
+    <p class="orig"><b>由來</b>資訊系統設計的原則，2000 年代在企業資料管理領域廣泛使用。其實就是第 4 課「正規化」觀念放大到整家公司的層級。</p></aside>
+
+  <h3>單據鏈：從客人下單到收到錢</h3>
+  <p>ERP 最重要的架構觀念之一：<strong>每一張單據都「引用」前一張單據</strong>，一環扣一環，像一條鏈子。按下播放，看看藍鯨的訂單如何一路傳下去。</p>
+  <div class="lab flow" data-flow="docs">
+    <div class="lh">動畫：單據鏈</div>
+    <div class="lb">
+      <div class="stations"></div>
+      <div class="card"></div>
+      <div class="btnrow"><button class="btn" data-act="play">播放</button><button class="btn ghost" data-act="prev">上一張</button><button class="btn ghost" data-act="next">下一張</button></div>
+    </div>
+  </div>
+  <aside class="term"><h4>追溯性<small>Traceability｜可追溯</small></h4>
+    <p>能從任何一點往前或往後查出完整的來龍去脈。例如客人投訴某一箱衣服有色差，可以從箱號 → 裝箱單 → 菲票 → 裁剪單 → 缸號 → 收貨單 → 布廠，一路查到源頭。</p>
+    <p class="orig"><b>由來</b>Trace 是「追蹤、描摹」。食品和汽車業最早嚴格要求可追溯，出問題時才能精準召回；現在成衣品牌也常要求工廠證明原料來源。</p></aside>
+  <p>單據鏈斷掉，追溯就斷掉。所以設計良好的 ERP 會<b>強制</b>引用：例如開收貨單時一定要選一張採購單，不能憑空收貨。</p>
+
+  <div class="quiz" data-a="1"><div class="q">「庫存不能是負數」這條規則，最應該放在哪一層？</div>
+    <button class="op">畫面層，因為使用者會看到</button><button class="op">邏輯層（後端），不管從哪裡送來的資料都會被檢查</button><button class="op">不用放，員工自己注意就好</button>
+    <div class="ex">規則放在後端，不管從電腦、手機還是其他系統進來的資料都會被同一套規則檢查。畫面層也可以提示，但真正把關的一定是後端。</div></div>
+</section>
+
+<!-- ======================= 第 20 課 ======================= -->
+<section class="lesson" data-part="專業篇" data-title="架構設計的關鍵觀念">
+  <div class="lnum"><span class="lv">專業</span>第 20 課</div>
+  <h2>架構設計的關鍵觀念</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>狀態機：單據的生命週期</li><li>權限、簽核與稽核軌跡</li><li>系統整合、即時與批次、客製化的取捨</li></ul></div>
+
+  <h3>狀態機：單據的一生</h3>
+  <p>每一張單據都有「狀態」，而且狀態不能亂跳。一張採購單不可能還沒核准就收貨，也不能已經結案了又改數量。</p>
+  <aside class="term"><h4>狀態機<small>State Machine｜有限狀態機</small></h4>
+    <p>定義一個東西有哪些狀態、在什麼條件下可以從哪個狀態變到哪個狀態的規則。</p>
+    <p class="orig"><b>由來</b>1950 年代數學家和電機工程師（如 Mealy、Moore）研究電路和計算理論時提出。紅綠燈就是最簡單的狀態機：綠 → 黃 → 紅 → 綠，不能從綠直接跳到紅。</p></aside>
+
+  <div class="lab sm">
+    <div class="lh">動手玩：採購單 PO-2611-0042 的狀態機</div>
+    <div class="lb">
+      <div class="states" id="smStates"></div>
+      <div class="btnrow" id="smBtns"></div>
+      <div class="log" id="smLog" aria-live="polite"></div>
+      <div class="btnrow"><button class="btn ghost" id="smReset">重來一次</button></div>
+    </div>
+  </div>
+  <p>注意兩件事：第一，灰色的按鈕代表<b>這個狀態下不允許的動作</b>，這些規則寫在後端。第二，下面的紀錄就是<b>稽核軌跡</b>：誰、什麼時候、做了什麼，全部留下來。</p>
+
+  <h3>簽核流程</h3>
+  <aside class="term"><h4>簽核流程<small>Approval Workflow｜審批流</small></h4>
+    <p>一張單據要經過哪些人核准才能生效。例如採購金額 1,000 美元以下組長核准即可，1,000 到 10,000 要經理，超過 10,000 要總經理。</p>
+    <p class="orig"><b>由來</b>來自紙本時代「傳簽」：公文一個一個辦公桌傳過去蓋章。Workflow 是「工作流程」，電腦化後單據自動送到下一位簽核人的待辦清單。</p></aside>
+
+  <h3>權限：誰可以做什麼</h3>
+  <aside class="term"><h4>角色權限控管<small>RBAC｜Role-Based Access Control</small></h4>
+    <p>不直接給「人」權限，而是先定義「角色」（採購員、倉管員、會計），給角色權限，再把人放進角色。有人換職位，只要換角色就好。</p>
+    <p class="orig"><b>由來</b>1992 年美國國家標準與技術研究院（NIST）的研究人員 David Ferraiolo 和 Richard Kuhn 正式提出這個模型，後來成為企業系統權限設計的標準做法。</p></aside>
+  <div class="tw"><table>
+    <tr><th>角色</th><th>開請購</th><th>開採購單</th><th>核准採購</th><th>開收貨單</th><th>付款</th></tr>
+    <tr><td>生產組長</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+    <tr><td>採購員</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>—</td></tr>
+    <tr><td>採購經理</td><td>✓</td><td>✓</td><td>✓</td><td>—</td><td>—</td></tr>
+    <tr><td>倉管員</td><td>—</td><td>—</td><td>—</td><td>✓</td><td>—</td></tr>
+    <tr><td>會計</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✓</td></tr>
+  </table></div>
+  <aside class="term"><h4>職務分離<small>Segregation of Duties</small></h4>
+    <p>把一件事的關鍵步驟分給不同的人，避免一個人從頭到尾包辦而可能舞弊。上表裡，沒有任何一個角色能同時「開採購單、收貨、付款」。</p>
+    <p class="orig"><b>由來</b>會計與稽核的基本原則，可以追溯到古代的財政管理：管錢的人和記帳的人不能是同一個。第 10 課請購和採購分開，就是這個原則。</p></aside>
+
+  <h3>稽核軌跡：不刪除，只作廢</h3>
+  <aside class="term"><h4>稽核軌跡<small>Audit Trail｜異動紀錄</small></h4>
+    <p>系統自動記錄每一次資料變動：誰、在什麼時間、改了哪個欄位、改之前是什麼、改之後是什麼。</p>
+    <p class="orig"><b>由來</b>Audit 是「稽核、查帳」，Trail 是「足跡」。會計師查帳時要能順著足跡查到每一筆數字的來源，電腦系統把這些足跡自動保存下來。</p></aside>
+  <p>正式的單據一旦生效，<b>不應該被刪除</b>。開錯了就「作廢」並開一張新的，舊的留著。這樣帳才查得到，也不會有人偷偷把不利的紀錄刪掉。客戶驗廠、會計師查帳時，都會檢查系統有沒有這種能力。</p>
+
+  <h3>編號規則</h3>
+  <p>單據編號最好一眼看得出類型和時間，例如 <code>PO-2611-0042</code>：採購單、2026 年 11 月、當月第 42 張。編號由系統自動產生，不讓人手打，才不會重複或跳號。</p>
+
+  <h3>和其他系統溝通</h3>
+  <aside class="term"><h4>API<small>Application Programming Interface｜應用程式介面</small></h4>
+    <p>兩個軟體之間約定好的溝通方式。例如 ERP 透過 API 把出貨資料送給客人的系統，或從掃描器、打卡機接收資料。</p>
+    <p class="orig"><b>由來</b>Interface 是「介面、接觸面」。就像餐廳的點菜單：客人不用進廚房，只要照格式填好菜單交出去就行。API 就是軟體之間的標準點菜單，這個說法 1960 到 70 年代開始在電腦界使用。</p></aside>
+  <aside class="term"><h4>EDI<small>Electronic Data Interchange｜電子資料交換</small></h4>
+    <p>企業之間用標準格式自動交換訂單、出貨通知、發票，不用人工寄 Email 或打字。大品牌常要求工廠用 EDI 接單和回報出貨。</p>
+    <p class="orig"><b>由來</b>1960 到 70 年代從美國運輸業開始，為了取代大量紙本文件，後來各行業都制定了自己的標準格式。</p></aside>
+
+  <h3>即時還是批次</h3>
+  <aside class="term"><h4>即時處理與批次處理<small>Real-time / Batch Processing</small></h4>
+    <p><b>即時</b>：資料一進來馬上處理，例如掃菲票後產量看板立刻更新。<b>批次</b>：累積起來一次處理，例如每天晚上跑一次 MRP、每月底算一次薪資。</p>
+    <p class="orig"><b>由來</b>早期電腦很貴，大家把工作收集成一「批」，排隊一次交給電腦跑。後來電腦變快變便宜，才越來越多東西改成即時。</p></aside>
+  <p>架構設計時要決定每種資料「多即時才夠」。產量看板要即時，才能馬上處理瓶頸；MRP 計算量大，每天跑一兩次通常就夠了。</p>
+
+  <h3>最難的取捨：改系統還是改流程</h3>
+  <div class="box warn"><b class="tag">專業判斷</b><p>導入 ERP 時一定會遇到「系統的做法跟我們習慣的不一樣」。每一次都改系統配合舊習慣（客製化），系統會越來越複雜、越來越難升級；每一次都要人改流程配合系統，現場又會抗拒。成熟的做法是先問：<b>我們的習慣是真的有道理，還是只是「以前都這樣」？</b>有道理的才客製，其他的就改流程。</p></div>
+
+  <div class="quiz" data-a="2"><div class="q">會計發現上個月有一張開錯的出貨單，最正確的處理方式是？</div>
+    <button class="op">直接刪除，當作沒發生過</button><button class="op">打開舊單據，直接把數字改掉</button><button class="op">作廢原單據並開立正確的新單據，保留完整紀錄</button>
+    <div class="ex">正式單據不刪除、不直接改，而是作廢再重開。這樣稽核軌跡完整，任何人都查得到發生過什麼、為什麼改。</div></div>
+</section>
+
+<!-- ======================= 第 21 課 ======================= -->
+<section class="lesson" data-part="專業篇" data-title="報表與 KPI">
+  <div class="lnum"><span class="lv">專業</span>第 21 課</div>
+  <h2>報表與 KPI</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>成衣廠最重要的幾個 KPI 和它們的資料來源</li><li>看板、日報、月報的差別</li><li>為什麼指標也會「騙人」</li></ul></div>
+
+  <p>ERP 收集了這麼多資料，最終目的是讓管理者<strong>看得懂、做得出決定</strong>。把資料變成決定的工具，就是報表和 KPI。</p>
+  <aside class="term"><h4>KPI<small>Key Performance Indicator｜關鍵績效指標</small></h4>
+    <p>少數幾個最能代表工作表現的數字。不是越多越好，而是挑最「關鍵」的。</p>
+    <p class="orig"><b>由來</b>管理學者 Peter Drucker 在 1954 年提出「目標管理」，主張用可衡量的目標來管理組織。KPI 這個說法在 1990 年代隨著平衡計分卡等管理方法普及開來。</p></aside>
+
+  <h3>晨光 12 月的管理看板（示意）</h3>
+  <div class="kpis">
+    <div class="kpi"><div class="v">94%</div><div class="k">準時出貨率 OTD</div></div>
+    <div class="kpi"><div class="v">61.5%</div><div class="k">全廠平均效率</div></div>
+    <div class="kpi bad"><div class="v">5.8</div><div class="k">線尾 DHU（目標 4.0）</div></div>
+    <div class="kpi"><div class="v">98.1%</div><div class="k">裁出比</div></div>
+    <div class="kpi"><div class="v">87%</div><div class="k">準時到料率</div></div>
+    <div class="kpi bad"><div class="v">12%</div><div class="k">呆滯料佔庫存金額</div></div>
+  </div>
+
+  <div class="tw"><table>
+    <tr><th>KPI</th><th class="w">公式</th><th class="w">資料從哪個模組來</th></tr>
+    <tr><td>準時出貨率（OTD）</td><td class="w">準時出貨的訂單數 ÷ 應出貨訂單數</td><td class="w">銷售（交期）＋ 出貨（實際日）</td></tr>
+    <tr><td>效率</td><td class="w">產出分鐘 ÷ 投入分鐘</td><td class="w">生產（產量、SAM）＋ 人事（出勤工時）</td></tr>
+    <tr><td>DHU</td><td class="w">疵點數 ÷ 檢驗件數 × 100</td><td class="w">品管</td></tr>
+    <tr><td>裁出比</td><td class="w">出貨件數 ÷ 裁剪件數</td><td class="w">裁剪 ＋ 出貨</td></tr>
+    <tr><td>準時到料率</td><td class="w">準時到貨的採購行數 ÷ 總採購行數</td><td class="w">採購（約定交期）＋ 收貨（實際日）</td></tr>
+    <tr><td>庫存周轉天數</td><td class="w">平均庫存金額 ÷ 每日平均耗用金額</td><td class="w">倉庫 ＋ 財務</td></tr>
+  </table></div>
+  <aside class="term"><h4>OTD<small>On-Time Delivery｜準時交貨率</small></h4>
+    <p>在約定日期（或之前）出貨的比例。這是品牌客人評比工廠時最看重的數字之一，太低就可能被減少下單。</p>
+    <p class="orig"><b>由來</b>三個英文字的縮寫。對成衣這種季節性很強的商品，晚到兩週可能就錯過銷售季，所以品牌特別在意。</p></aside>
+  <p>注意表格最右欄：<strong>幾乎每一個 KPI 都需要兩個以上的模組的資料</strong>。沒有整合的系統，這些數字要靠人從不同 Excel 拼湊，又慢又容易錯。這就是 ERP 在管理層面最大的價值。</p>
+
+  <h3>三種報表節奏</h3>
+  <div class="tw"><table>
+    <tr><th>類型</th><th>給誰看</th><th class="w">目的</th></tr>
+    <tr><td>即時看板</td><td>組長、現場主管</td><td class="w">現在就要處理的問題：哪條線落後、哪個工序卡住</td></tr>
+    <tr><td>日報</td><td>廠長、部門主管</td><td class="w">昨天做得怎樣、今天重點是什麼</td></tr>
+    <tr><td>月報</td><td>總經理、董事會</td><td class="w">趨勢、成本、客戶表現、要做什麼策略調整</td></tr>
+  </table></div>
+
+  <h3>指標也會騙人</h3>
+  <aside class="term"><h4>古德哈特定律<small>Goodhart's Law</small></h4>
+    <p>當一個指標變成大家追逐的目標，它就不再是好的指標了。</p>
+    <p class="orig"><b>由來</b>英國經濟學家 Charles Goodhart 在 1975 年談貨幣政策時提出。後來被廣泛用在管理上，提醒大家數字背後要看真實情況。</p></aside>
+  <div class="box example"><b class="tag">實際例子</b><p>如果只用「產量」獎勵產線，組長可能挑簡單的款先做、把難的一直往後推，結果產量很漂亮，難的訂單卻全部延誤。所以 KPI 要<b>成組看</b>：產量配效率、效率配品質、品質配交期，互相牽制。</p></div>
+
+  <div class="quiz" data-a="1"><div class="q">計算「效率」這個 KPI，至少需要哪兩個模組的資料？</div>
+    <button class="op">財務和出貨</button><button class="op">生產（產量與 SAM）和人事（實際出勤工時）</button><button class="op">只要品管就夠了</button>
+    <div class="ex">效率 ＝ 產出分鐘 ÷ 投入分鐘。產出分鐘來自產量 × SAM（生產），投入分鐘來自實際出勤人數與工時（人事考勤）。</div></div>
+</section>
+
+<!-- ======================= 第 22 課 ======================= -->
+<section class="lesson" data-part="專業篇" data-title="導入 ERP：從規劃到上線">
+  <div class="lnum"><span class="lv">專業</span>第 22 課</div>
+  <h2>導入 ERP：從規劃到上線</h2>
+  <div class="goal"><b>這課學完你會知道</b><ul><li>導入 ERP 的九個步驟</li><li>常見的失敗原因</li><li>為什麼要分階段上線</li></ul></div>
+
+  <p>懂了 ERP 怎麼設計，最後一個問題是：怎麼讓一家工廠真的用起來？許多研究和經驗都指出，ERP 專案超出預算、延期、甚至失敗是很常見的事，原因大多不是技術，而是人和流程。</p>
+
+  <h3>九個步驟</h3>
+  <ol>
+    <li><b>現況盤點</b>：訪談每個部門，畫出現在的流程，找出痛點。</li>
+    <li><b>設計未來流程</b>：決定導入後每件事要怎麼做。</li>
+    <li><b>選擇方案</b>：買現成系統、找廠商客製，還是自己開發。</li>
+    <li><b>清理主檔</b>：客戶、供應商、物料、款式、BOM、SAM 全部整理乾淨。</li>
+    <li><b>設定與開發</b>：依照未來流程設定系統。</li>
+    <li><b>使用者測試</b>：讓真正會用的人拿真實情境去測。</li>
+    <li><b>教育訓練</b>：每個角色學會自己要用的功能。</li>
+    <li><b>上線</b>：開始正式使用，常搭配一段平行運行。</li>
+    <li><b>持續改善</b>：上線只是開始，依使用回饋不斷調整。</li>
+  </ol>
+  <aside class="term"><h4>As-Is 與 To-Be<small>現況流程與未來流程</small></h4>
+    <p>As-Is 是「現在是怎麼做的」，To-Be 是「以後要怎麼做」。兩者之間的差距，就是導入要改變的地方。</p>
+    <p class="orig"><b>由來</b>1990 年代「企業流程再造」（BPR）運動中流行起來的說法。它提醒大家：導入系統不是把舊流程搬到電腦上，而是趁機把流程變好。</p></aside>
+  <aside class="term"><h4>使用者驗收測試<small>UAT｜User Acceptance Testing</small></h4>
+    <p>上線前，由實際使用系統的人（倉管員、採購員、組長）用真實情境測試，確認系統真的能用。</p>
+    <p class="orig"><b>由來</b>Acceptance 是「接受、驗收」。就像蓋好的房子要屋主來驗屋，工程師覺得沒問題不算，住的人說可以才算。</p></aside>
+  <aside class="term"><h4>上線與平行運行<small>Go-live / Parallel Run</small></h4>
+    <p><b>上線</b>是新系統正式開始使用的那一天。<b>平行運行</b>是一段時間內新舊方法同時進行，比對結果一致後才停用舊方法。</p>
+    <p class="orig"><b>由來</b>Go-live 字面是「開始活起來」，像電視節目開始直播。平行運行則是風險控制的老方法：新橋蓋好了，舊橋先別拆，確定新橋安全再說。</p></aside>
+
+  <h3>常見的失敗原因</h3>
+  <div class="tw"><table>
+    <tr><th>原因</th><th class="w">會發生什麼</th><th class="w">怎麼預防</th></tr>
+    <tr><td>高層不參與</td><td class="w">部門之間意見衝突時沒人拍板，專案卡住</td><td class="w">老闆或廠長親自擔任專案負責人</td></tr>
+    <tr><td>主檔很髒</td><td class="w">垃圾進垃圾出，大家不信任系統的數字</td><td class="w">上線前花足時間清理，指定每種主檔的負責人</td></tr>
+    <tr><td>只電子化不改流程</td><td class="w">舊問題原封不動，只是變成電腦版</td><td class="w">認真做 To-Be，敢刪掉不必要的步驟</td></tr>
+    <tr><td>訓練不足</td><td class="w">現場偷偷回去用紙和 Excel，系統資料不完整</td><td class="w">按角色訓練、準備簡單的操作卡、上線初期有人在現場支援</td></tr>
+    <tr><td>一次上太多</td><td class="w">問題同時爆發，找不出原因</td><td class="w">分階段上線</td></tr>
+  </table></div>
+
+  <h3>分階段上線的建議順序</h3>
+  <p>因為後面的模組都依賴前面的資料，所以順序很重要：</p>
+  <ol>
+    <li><b>主檔 ＋ 倉庫</b>：先讓庫存數字準確。這是所有計算的基礎。</li>
+    <li><b>採購 ＋ 收貨</b>：接上來源，庫存開始自動變動。</li>
+    <li><b>銷售訂單 ＋ BOM ＋ MRP</b>：讓系統幫忙算料。</li>
+    <li><b>生產排程 ＋ 現場回報</b>：追蹤產量與在製品。</li>
+    <li><b>品管、出貨、成本、薪資</b>：把整條鏈接完。</li>
+    <li><b>報表與 KPI</b>：資料齊了，看板才有意義。</li>
+  </ol>
+  <div class="box analogy"><b class="tag">生活比喻</b><p>這就像學游泳：先學漂浮，再學換氣，最後才學蝶式。一下子全部學，只會嗆水。</p></div>
+  <p>今天也有越來越多工廠用 AI 輔助，自己一個模組一個模組開發小型系統，再慢慢串成完整的平台。不管用哪種方式，這門課教的觀念都一樣適用：先主檔、再單據鏈、規則放後端、保留稽核軌跡、分階段上線。</p>
+
+  <div class="quiz" data-a="0"><div class="q">一家工廠準備導入 ERP，第一階段最適合先上線哪一部分？</div>
+    <button class="op">主檔和倉庫，先讓庫存數字準確</button><button class="op">老闆的 KPI 看板，因為最好看</button><button class="op">全部模組同一天一起上線</button>
+    <div class="ex">MRP、成本、KPI 全都依賴準確的主檔和庫存。地基不穩，上面蓋什麼都會歪。看板要等資料齊了才有意義。</div></div>
+</section>
+
+<!-- ======================= 第 23 課 ======================= -->
+<section class="lesson" data-part="專業篇" data-title="畢業考">
+  <div class="lnum"><span class="lv">專業</span>第 23 課</div>
+  <h2>畢業考</h2>
+  <div class="goal"><b>說明</b><ul><li>共 12 題，涵蓋全部四篇</li><li>每題點選一次就會顯示對錯和解析</li><li>全部答完會顯示總分</li></ul></div>
+  <div id="exam">
+    <div class="quiz" data-a="1"><div class="q">1. 下列哪一個是「交易資料」而不是「主檔」？</div>
+      <button class="op">物料 FB-000123 的名稱與克重</button><button class="op">11 月 26 日的收貨單 GRN-2611-0031</button><button class="op">客戶 C001 的地址</button>
+      <div class="ex">收貨單是某一天發生的事，屬於交易資料。物料和客戶資料是主檔。（第 5 課）</div></div>
+    <div class="quiz" data-a="2"><div class="q">2. 一件衣服 SAM 5.0，30 人的線上班 480 分鐘，目標效率 60%，一天目標產量是？</div>
+      <button class="op">2,880 件</button><button class="op">1,440 件</button><button class="op">1,728 件</button>
+      <div class="ex">30 × 480 × 0.6 ÷ 5.0 ＝ 1,728 件。（第 7、12 課）</div></div>
+    <div class="quiz" data-a="0"><div class="q">3. 為什麼成衣 ERP 的布料庫存一定要記錄缸號？</div>
+      <button class="op">不同缸染出的布會有色差，同一件衣服不能混用</button><button class="op">為了讓編號看起來比較長</button><button class="op">海關規定</button>
+      <div class="ex">同一件衣服混用不同缸號，前後片可能顏色不同。領料、裁剪都要依缸號管理。（第 11、13 課）</div></div>
+    <div class="quiz" data-a="1"><div class="q">4. 毛需求 500 公斤、庫存 120 公斤（其中 20 已預留）、在途 80 公斤，淨需求是？</div>
+      <button class="op">300 公斤</button><button class="op">320 公斤</button><button class="op">400 公斤</button>
+      <div class="ex">可用庫存 100，淨需求 ＝ 500 － 100 － 80 ＝ 320 公斤。（第 9 課）</div></div>
+    <div class="quiz" data-a="2"><div class="q">5. 客人的品管員來驗 3,000 件的貨，依一般檢驗水準 II，要抽幾件？</div>
+      <button class="op">80 件</button><button class="op">200 件</button><button class="op">125 件</button>
+      <div class="ex">1,201–3,200 件屬於字碼 K，抽 125 件。（第 15 課）</div></div>
+    <div class="quiz" data-a="0"><div class="q">6. 一條線的產量主要由什麼決定？</div>
+      <button class="op">最慢的工序（瓶頸）</button><button class="op">最快的工序</button><button class="op">所有工序產能的平均</button>
+      <div class="ex">瓶頸決定整條線的速度，後面再快也拿不到更多半成品。（第 14 課）</div></div>
+    <div class="quiz" data-a="1"><div class="q">7. 付款給供應商前，「三單比對」比的是哪三張？</div>
+      <button class="op">銷售訂單、出貨單、發票</button><button class="op">採購單、收貨單、供應商發票</button><button class="op">請購單、菲票、裝箱單</button>
+      <div class="ex">訂了什麼（PO）、收到什麼（GRN）、他要多少錢（發票），三者一致才付。（第 17 課）</div></div>
+    <div class="quiz" data-a="2"><div class="q">8. 下列哪一個最能說明「外鍵」？</div>
+      <button class="op">資料表裡最重要的欄位</button><button class="op">一種加密方法</button><button class="op">訂單表裡的「客戶編號」，指向客戶表的主鍵</button>
+      <div class="ex">外鍵是寫在一張表裡、用來指向另一張表主鍵的欄位，讓資料可以串起來。（第 4 課）</div></div>
+    <div class="quiz" data-a="0"><div class="q">9. 採購單在「待審核」狀態時，下列哪個動作應該被系統擋下？</div>
+      <button class="op">開收貨單收貨</button><button class="op">主管核准</button><button class="op">主管退回</button>
+      <div class="ex">還沒核准的採購單不能收貨，這是狀態機的規則，而且要寫在後端。（第 20 課）</div></div>
+    <div class="quiz" data-a="1"><div class="q">10. 採購員同時擁有「開採購單」「收貨」「付款」的權限，違反了什麼原則？</div>
+      <button class="op">先進先出</button><button class="op">職務分離</button><button class="op">倒推排程</button>
+      <div class="ex">關鍵步驟應分給不同的人，避免一人包辦造成舞弊風險。（第 10、20 課）</div></div>
+    <div class="quiz" data-a="2"><div class="q">11. 客人投訴某箱衣服有色差，工廠能從箱號一路查到布廠和缸號，這是因為系統具備什麼能力？</div>
+      <button class="op">批次處理</button><button class="op">學習曲線</button><button class="op">單據鏈與追溯性</button>
+      <div class="ex">每張單據都引用上一張，形成單據鏈，就能從任何一點追回源頭。（第 19 課）</div></div>
+    <div class="quiz" data-a="0"><div class="q">12. 導入 ERP 時，哪一種情況最可能讓專案失敗？</div>
+      <button class="op">主檔沒清理、流程沒改，只是把舊做法搬進電腦</button><button class="op">分階段上線</button><button class="op">讓現場人員參與測試</button>
+      <div class="ex">垃圾進垃圾出，加上舊問題原封不動，系統不會帶來改善。分階段和 UAT 都是降低風險的好做法。（第 22 課）</div></div>
+  </div>
+  <div class="out" id="examScore">還沒開始作答。</div>
+
+  <h3>接下來可以怎麼學</h3>
+  <ul>
+    <li>拿你工廠的一張真實訂單，自己畫出它的單據鏈，看看哪一環是斷的。</li>
+    <li>挑一個模組（例如倉庫），把 As-Is 流程畫出來，想想 To-Be 要改哪裡。</li>
+    <li>用試算表練習設計三張表：物料主檔、採購單表頭、採購單表身，並用編號把它們連起來。</li>
+    <li>回頭翻「附錄：名詞總表」，試著不看解釋說出每個名詞的意思和由來。</li>
+  </ul>
+  <p>恭喜你走完這條捲尺。你現在看任何一套成衣 ERP，都能說出它每個畫面背後在做什麼了。</p>
+</section>
+
+<!-- ======================= 附錄 ======================= -->
+<section class="lesson" data-part="附錄" data-title="名詞總表" data-nocount="1">
+  <div class="lnum">附錄</div>
+  <h2>名詞總表</h2>
+  <p>這裡收錄全課程出現過的名詞卡，依出現順序排列。可以用關鍵字搜尋，點課名可以回到那一課。</p>
+  <input class="gsearch" id="gsearch" type="search" placeholder="搜尋名詞，例如 SAM、缸號、主鍵" aria-label="搜尋名詞">
+  <div id="glossary"></div>
+</section>
+
+</main>
+</div>
+<script>
+(function(){
+"use strict";
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+function num(id){var v=parseFloat(($('#'+id)||{}).value);return isFinite(v)?v:0}
+function f(n,d){if(!isFinite(n))return '—';return n.toLocaleString('zh-TW',{minimumFractionDigits:d||0,maximumFractionDigits:d||0})}
+var store={get:function(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}},
+           set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+/* ---------------- lessons, TOC, progress ---------------- */
+var L=$$('.lesson'), countable=L.filter(function(s){return !s.dataset.nocount}), total=countable.length;
+var done=store.get('gerp-done',[]); if(!Array.isArray(done))done=[];
+var cur=0;
+function label(i){return L[i].dataset.nocount?'附':String(i)}
+var toc=$('#toc'), lastPart='', html='';
+L.forEach(function(s,i){
+  if(s.dataset.part!==lastPart){lastPart=s.dataset.part;html+='<h3>'+lastPart+'</h3>'}
+  html+='<a href="#L'+i+'" data-i="'+i+'"><span class="n">'+label(i)+'</span><span>'+s.dataset.title+'</span><span class="ck"></span></a>';
+});
+toc.innerHTML=html;
+L.forEach(function(s,i){
+  var nav=document.createElement('div');nav.className='lnav';
+  var prev=i>0?'<button class="btn ghost" data-go="'+(i-1)+'">上一課</button>':'<span></span>';
+  var next='';
+  if(i<L.length-1){next='<button class="btn" data-done="'+i+'" data-go="'+(i+1)+'">'+(i===0?'開始上課':(i===L.length-2?'完成課程，看名詞總表':'完成，下一課'))+'</button>'}
+  nav.innerHTML=prev+next;s.appendChild(nav);
+});
+function paint(){
+  $$('#toc a').forEach(function(a){var i=+a.dataset.i;a.classList.toggle('on',i===cur);$('.ck',a).textContent=done.indexOf(i)>-1?'✓':''});
+  var n=done.filter(function(i){return !L[i].dataset.nocount}).length;
+  $('#tapeFill').style.width=(n/total*100)+'%';
+  $('#tapeHere').style.left='calc('+(Math.min(cur,total-1)/(total-1)*100)+'% - 1.5px)';
+  $('#progTxt').textContent='已完成 '+n+' / '+total;
+}
+function show(i,noScroll){
+  i=Math.max(0,Math.min(L.length-1,i|0));cur=i;
+  L.forEach(function(s,k){s.classList.toggle('on',k===i)});
+  paint();store.set('gerp-last',i);
+  if(location.hash!=='#L'+i){try{history.replaceState(null,'','#L'+i)}catch(e){}}
+  document.body.classList.remove('navopen');
+  if(!noScroll)window.scrollTo(0,0);
+}
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-go]');
+  if(b){var d=b.getAttribute('data-done');if(d!==null&&done.indexOf(+d)<0){done.push(+d);store.set('gerp-done',done)}show(+b.dataset.go);return}
+  var a=e.target.closest('#toc a');if(a){e.preventDefault();show(+a.dataset.i)}
+});
+$('#menuBtn').addEventListener('click',function(){document.body.classList.toggle('navopen')});
+$('#scrim').addEventListener('click',function(){document.body.classList.remove('navopen')});
+window.addEventListener('hashchange',function(){var m=location.hash.match(/^#L(\d+)$/);if(m&&+m[1]!==cur)show(+m[1])});
+
+/* ---------------- quizzes ---------------- */
+$$('.quiz').forEach(function(q){
+  var ops=$$('button.op',q),a=+q.dataset.a;
+  ops.forEach(function(b,k){b.addEventListener('click',function(){
+    if(q.classList.contains('answered'))return;
+    q.classList.add('answered');q.dataset.ok=(k===a)?'1':'0';
+    ops[a].classList.add('right');if(k!==a)b.classList.add('wrong');
+    ops.forEach(function(o){o.setAttribute('aria-disabled','true')});
+    if(q.closest('#exam'))examScore();
+  })});
+});
+function examScore(){
+  var qs=$$('#exam .quiz'),ans=qs.filter(function(q){return q.classList.contains('answered')}),ok=ans.filter(function(q){return q.dataset.ok==='1'}).length;
+  var msg='已作答 '+ans.length+' / '+qs.length+' 題，答對 '+ok+' 題。';
+  if(ans.length===qs.length){
+    var r=ok/qs.length;
+    msg='<div class="score">'+ok+' / '+qs.length+'</div>'+(r>=.9?'太厲害了，你已經能用專業的角度看懂成衣 ERP。':r>=.7?'很不錯！答錯的題目後面都標了課號，回去複習那一課就能補起來。':'建議按照答錯題目標示的課號，回頭再讀一次，再來挑戰。');
+  }
+  $('#examScore').innerHTML=msg;
+}
+
+/* ---------------- flow players ---------------- */
+var FLOWS={
+ shirt:{lab:'產生的資料：',items:[
+  {n:'接單',i:'📝',d:'藍鯨服飾寄來訂單：款號 BW-TS01 圓領 T 恤，3,000 件，12 月 20 日出貨。',x:'客戶、款號、顏色尺碼、數量、交期、價格'},
+  {n:'打樣',i:'🧷',d:'先做幾件樣衣給客人確認版型、尺寸、顏色。客人說可以，才能開始大量生產。',x:'樣衣版本、客人意見、核准日期'},
+  {n:'採購',i:'🛒',d:'算好要多少布、線、標籤、吊牌、膠袋、紙箱，向各個供應商下單。',x:'物料需求、採購單、供應商、預計到貨日'},
+  {n:'收貨驗布',i:'🔍',d:'布送到了，先檢查有沒有破洞、污漬、色差，合格才能入倉。',x:'收貨單、驗布分數、缸號、入庫數量'},
+  {n:'裁剪',i:'✂️',d:'把布一層層鋪在長桌上，照紙樣裁成前片、後片、袖子、領子，再分捆貼票。',x:'裁剪單、層數、各尺碼裁出數、菲票'},
+  {n:'縫製',i:'🧵',d:'裁片送上生產線，每個人只負責一道工序，衣服一站一站被縫起來。',x:'每小時產量、在製品數量、每個人的件數'},
+  {n:'品檢',i:'✅',d:'檢查線頭、跳針、破洞、尺寸，不合格的送回去修。',x:'檢驗件數、疵點種類與數量、返修數'},
+  {n:'整燙',i:'♨️',d:'把衣服燙平、摺好、掛上吊牌。',x:'完成件數'},
+  {n:'包裝',i:'📦',d:'每件裝膠袋，照規定件數裝箱，貼上箱嘜。',x:'裝箱單、箱數、每箱內容與重量'},
+  {n:'出貨',i:'🚢',d:'貨櫃把紙箱載到港口上船，把文件寄給客人，等著收款。',x:'出貨單、發票、提單、應收帳款'}]},
+ docs:{lab:'',items:[
+  {n:'客戶 PO',i:'📨',d:'藍鯨服飾寄來他們的採購單 BW-8812。這是一切的起點，但這是客人的單據。',x:'引用：無（源頭）'},
+  {n:'銷售訂單',i:'📝',d:'晨光建立銷售訂單 SO-2610-0015，表身 8 行 SKU，共 3,000 件。',x:'引用：客戶 PO 號 BW-8812'},
+  {n:'生產單',i:'🏭',d:'依銷售訂單開立生產單 MO-2610-0021，決定要生產什麼、生產多少。',x:'引用：SO-2610-0015'},
+  {n:'MRP 建議',i:'🧮',d:'系統展開 BOM，扣掉可用庫存與在途，算出白布還缺約 474 公斤。',x:'引用：MO-2610-0021 與 BOM'},
+  {n:'請購單',i:'🙋',d:'MRP 建議轉成請購單 PR-2611-0008，送主管審核。',x:'引用：MRP 建議'},
+  {n:'採購單',i:'🛒',d:'採購向大同紡織下單 PO-2611-0042，白布 475 公斤。',x:'引用：PR-2611-0008'},
+  {n:'收貨單',i:'🚚',d:'11/26 收到 18 卷共 452 公斤，記錄缸號 D2611-07。',x:'引用：PO-2611-0042'},
+  {n:'驗布報告',i:'🔍',d:'四分制平均 18 分，低於 40 分，合格。',x:'引用：GRN-2611-0031'},
+  {n:'入庫',i:'🏬',d:'布料放進 A-03-02 儲位，庫存增加。',x:'引用：GRN-2611-0031 與驗布報告'},
+  {n:'領料單',i:'📤',d:'裁剪組依生產單領白布 524 公斤，指定缸號 D2611-07。',x:'引用：MO-2610-0021'},
+  {n:'裁剪單',i:'✂️',d:'配比 1:2:2:1，5 床 × 60 層，產生 1,800 件的裁片和菲票。',x:'引用：MO-2610-0021 與領料單'},
+  {n:'產量回報',i:'📱',d:'每捆做完掃一次菲票，同時更新產量、在製品、計件工資。',x:'引用：菲票（來自裁剪單）'},
+  {n:'品檢紀錄',i:'✅',d:'線尾全檢，終期 AQL 抽 125 件，允收。',x:'引用：MO-2610-0021'},
+  {n:'裝箱單',i:'📦',d:'125 箱，記錄每箱的 SKU、件數、重量與箱號。',x:'引用：SO-2610-0015'},
+  {n:'出貨單',i:'🚢',d:'12/20 出廠，成品庫存減少，銷售訂單標記為已出貨。',x:'引用：SO-2610-0015 與裝箱單'},
+  {n:'發票',i:'🧾',d:'商業發票 INV-2612-0009：3,000 × 2.59 ＝ 7,770 美元，產生應收帳款。',x:'引用：出貨單'},
+  {n:'收款',i:'💰',d:'客人付款，沖銷應收帳款。這張訂單的單據鏈完整閉合。',x:'引用：INV-2612-0009'}]}
+};
+$$('.flow').forEach(function(box){
+  var F=FLOWS[box.dataset.flow],items=F.items,k=0,timer=null;
+  var st=$('.stations',box),card=$('.card',box),play=$('[data-act=play]',box);
+  st.innerHTML=items.map(function(it,i){return '<button class="st" data-k="'+i+'">'+(i+1)+'. '+it.n+'</button>'}).join('');
+  function draw(){
+    $$('.st',st).forEach(function(b,i){b.classList.toggle('cur',i===k);b.classList.toggle('done',i<k)});
+    var it=items[k];
+    card.innerHTML='<div class="ic" aria-hidden="true">'+it.i+'</div><h5>'+(k+1)+' / '+items.length+'　'+it.n+'</h5><div>'+it.d+'</div><div class="dt">'+F.lab+it.x+'</div>';
+  }
+  function stop(){clearInterval(timer);timer=null;play.textContent='播放'}
+  play.addEventListener('click',function(){
+    if(timer){stop();return}
+    if(k>=items.length-1)k=0;draw();play.textContent='暫停';
+    timer=setInterval(function(){if(k>=items.length-1){stop();return}k++;draw()},2400);
+  });
+  $('[data-act=prev]',box).addEventListener('click',function(){stop();k=Math.max(0,k-1);draw()});
+  $('[data-act=next]',box).addEventListener('click',function(){stop();k=Math.min(items.length-1,k+1);draw()});
+  st.addEventListener('click',function(e){var b=e.target.closest('.st');if(b){stop();k=+b.dataset.k;draw()}});
+  draw();
+});
+
+/* ---------------- lesson 4: keys demo ---------------- */
+(function(){
+  var names={C001:'藍鯨服飾',C002:'山海運動',C003:'小森童裝'},renamed=false,sel=null;
+  function render(){
+    $$('#relCust tr[data-k]').forEach(function(r){$('.cn',r).textContent=names[r.dataset.k];r.classList.toggle('sel',r.dataset.k===sel)});
+    $$('#relOrd tr[data-f]').forEach(function(r){$('.cn',r).textContent=names[r.dataset.f];r.classList.toggle('hl',r.dataset.f===sel)});
+  }
+  $$('#relCust tr[data-k]').forEach(function(r){r.addEventListener('click',function(){
+    sel=r.dataset.k;render();
+    var n=$$('#relOrd tr[data-f="'+sel+'"]').length;
+    $('#relOut').innerHTML='你選了主鍵 <b>'+sel+'</b>（'+names[sel]+'）。訂單表裡外鍵等於 '+sel+' 的有 <b>'+n+'</b> 筆，已標成黃色。';
+  })});
+  $('#relRename').addEventListener('click',function(){
+    renamed=!renamed;names.C001=renamed?'藍鯨服飾集團':'藍鯨服飾';render();
+    this.textContent=renamed?'把 C001 改回「藍鯨服飾」':'把 C001 改名為「藍鯨服飾集團」';
+    $('#relOut').innerHTML='客戶表只改了 <b>1 格</b>，訂單表裡 C001 的 <b>2 筆</b>訂單自動顯示新名稱，因為它們只存了鑰匙「C001」。';
+  });
+  render();
+})();
+
+/* ---------------- calculators ---------------- */
+function bind(ids,fn){ids.forEach(function(id){var el=$('#'+id);if(el)el.addEventListener('input',fn)});fn()}
+
+bind(['bomQty','bomCons','bomWaste'],function(){
+  var q=num('bomQty'),c=num('bomCons'),w=num('bomWaste'),base=q*c,t=base*(1+w/100);
+  $('#bomOut').innerHTML='理論用量 '+f(q)+' × '+c+' ＝ '+f(base,2)+'<br>加上損耗 '+w+'%：<span class="big">'+f(t,2)+'</span>（多準備 '+f(t-base,2)+'）';
+});
+
+bind(['efSam','efPpl','efMin','efOut','efTgt'],function(){
+  var s=num('efSam'),p=num('efPpl'),m=num('efMin'),o=num('efOut'),t=num('efTgt')/100;
+  var prod=o*s,inp=p*m,e=inp?prod/inp:NaN,hr=s?p*60*t/s:NaN,day=s?p*m*t/s:NaN;
+  $('#efRes').innerHTML='產出分鐘 '+f(o)+' × '+s+' ＝ '+f(prod,1)+'；投入分鐘 '+f(p)+' × '+f(m)+' ＝ '+f(inp)+'<br>效率：<span class="big">'+f(e*100,1)+'%</span><br>要達到目標效率 '+f(t*100)+'%：每小時 '+f(hr)+' 件、整天 '+f(day)+' 件';
+});
+
+function pd(s){var a=String(s).split('-');return a.length===3?new Date(+a[0],+a[1]-1,+a[2]):null}
+var WD='日一二三四五六';
+bind(['mrpQty','mrpCons','mrpWaste','mrpStock','mrpAlloc','mrpTransit','mrpSafety','mrpPack','mrpNeed','mrpLead'],function(){
+  var gross=num('mrpQty')*num('mrpCons')*(1+num('mrpWaste')/100),avail=Math.max(num('mrpStock')-num('mrpAlloc'),0);
+  var net=Math.max(gross-avail-num('mrpTransit')+num('mrpSafety'),0),pk=Math.max(num('mrpPack'),1),units=Math.ceil(net/pk-1e-9),buy=units*pk;
+  var need=pd($('#mrpNeed').value),dl='（請輸入需要到料日）';
+  if(need&&!isNaN(need)){var o=new Date(need);o.setDate(o.getDate()-num('mrpLead'));
+    dl=(o.getMonth()+1)+'/'+o.getDate()+'（週'+WD[o.getDay()]+'）';
+    var today=new Date();today.setHours(0,0,0,0);if(o<today)dl+='　<b style="color:var(--thread)">這一天已經過了，照正常前置時間來不及，要找供應商趕工或改交期。</b>';}
+  $('#mrpOut').innerHTML='毛需求：'+f(gross,2)+'<br>可用庫存：'+f(num('mrpStock'))+' － '+f(num('mrpAlloc'))+' ＝ '+f(avail)+'<br>淨需求：'+f(net,2)+
+    '<br>建議採購：<span class="big">'+f(buy)+'</span>（'+units+' 個包裝單位 × '+f(pk)+'）<br>最晚下單日：'+dl;
+});
+
+bind(['fp1','fp2','fp3','fp4','fpY','fpW','fpStd'],function(){
+  var pts=num('fp1')+2*num('fp2')+3*num('fp3')+4*num('fp4'),y=num('fpY'),w=num('fpW'),sc=(y&&w)?pts*3600/(y*w):NaN,ok=sc<=num('fpStd');
+  $('#fpOut').innerHTML='總扣分 '+f(pts)+' 分<br>每 100 平方碼：<span class="big">'+f(sc,1)+'</span> 分　'+(isFinite(sc)?(ok?'<b style="color:var(--ok)">合格</b>':'<b style="color:var(--thread)">不合格，需通知供應商處理</b>'):'');
+});
+
+bind(['capQty','capSam','capPpl','capMin','capEff','capLines','capLc'],function(){
+  var q=num('capQty'),s=Math.max(num('capSam'),.01),p=num('capPpl'),m=num('capMin'),e=num('capEff')/100,ln=Math.max(num('capLines'),1),lc=$('#capLc').value==='1';
+  var ramp=[.30,.45,.55],cum=0,d=0,rows='',steady=p*m*e/s*ln;
+  while(cum<q&&d<200){var ef=lc&&d<3?Math.min(ramp[d],e):e,out=p*m*ef/s*ln;d++;var need=q-cum,use=Math.min(out,need);cum+=use;
+    if(d<=12)rows+='<tr><td>第 '+d+' 天</td><td class="num">'+f(ef*100)+'%</td><td class="num">'+f(use)+'</td><td class="num">'+f(Math.min(cum,q))+'</td></tr>';}
+  $('#capOut').innerHTML='穩定時每天產量（'+ln+' 條線合計）：'+f(steady)+' 件<br>完成 '+f(q)+' 件需要：<span class="big">'+d+' 天</span>'+
+   '<div class="tw" style="margin:10px 0 0"><table><tr><th>天</th><th class="num">效率</th><th class="num">當天產量</th><th class="num">累計</th></tr>'+rows+'</table></div>';
+});
+
+bind(['ctS','ctM','ctL','ctXL','crS','crM','crL','crXL','ctMax'],function(){
+  var sz=['S','M','L','XL'],need=sz.map(function(z){return num('ct'+z)}),r=sz.map(function(z){return num('cr'+z)}),bad=[];
+  var plies=0;sz.forEach(function(z,i){if(need[i]>0&&r[i]<=0)bad.push(z);if(r[i]>0)plies=Math.max(plies,Math.ceil(need[i]/r[i]))});
+  if(bad.length){$('#ctOut').innerHTML='<b style="color:var(--thread)">'+bad.join('、')+' 有需求，但配比是 0，排料圖上沒有這個尺碼，永遠裁不出來。</b>';return}
+  var mx=Math.max(num('ctMax'),1),lays=Math.ceil(plies/mx),rs=r.reduce(function(a,b){return a+b},0),rows='',over=0;
+  sz.forEach(function(z,i){var got=r[i]*plies;over+=got-need[i];rows+='<tr><td>'+z+'</td><td class="num">'+f(need[i])+'</td><td class="num">'+r[i]+'</td><td class="num">'+f(got)+'</td><td class="num">'+(got-need[i]>0?'+'+f(got-need[i]):'0')+'</td></tr>'});
+  $('#ctOut').innerHTML='一張排料圖放 '+rs+' 件，需要拉 <span class="big">'+f(plies)+' 層</span>，分成 <b>'+lays+' 床</b>（每床最多 '+mx+' 層）'+
+   '<div class="tw" style="margin:10px 0 0"><table><tr><th>尺碼</th><th class="num">需求</th><th class="num">配比</th><th class="num">裁出</th><th class="num">多裁</th></tr>'+rows+'</table></div>'+
+   (over>0?'總共多裁 '+f(over)+' 件。多裁的布就是浪費，除非客人允許多交。':'配比剛好，沒有多裁。');
+});
+
+var OPS=[['合肩縫',.30],['上領',.45],['壓領貼條',.40],['上袖',.65],['合脇縫',.70],['袖口折邊',.50],['下擺折邊',.45],['剪線頭',.35]],N0=[1,1,1,2,2,2,2,2],N=N0.slice();
+function lb(){
+  var T=Math.max(num('lbTarget'),1),E=Math.max(num('lbEff'),10)/100,takt=60/T;
+  var cyc=OPS.map(function(o,i){return N[i]>0?o[1]/N[i]/E:Infinity}),mc=Math.max.apply(null,cyc),scale=Math.max(isFinite(mc)?mc:1,takt)*1.2;
+  var tot=N.reduce(function(a,b){return a+b},0),sam=OPS.reduce(function(a,o){return a+o[1]},0),out=isFinite(mc)?60/mc:0;
+  $('#lbBars').innerHTML=OPS.map(function(o,i){var c=cyc[i],w=isFinite(c)?Math.min(c/scale*100,100):100,b=c===mc;
+    return '<div class="bar"><span>'+o[0]+' <small style="color:var(--muted)">'+o[1].toFixed(2)+'</small></span><div class="track"><div class="fill'+(b?' bott':'')+'" style="width:'+w+'%"></div><div class="takt" style="left:'+(takt/scale*100)+'%"></div></div>'+
+    '<span class="ctl"><button data-lb="'+i+'" data-d="-1" aria-label="'+o[0]+'減一人">−</button><b>'+N[i]+'</b><button data-lb="'+i+'" data-d="1" aria-label="'+o[0]+'加一人">+</button></span></div>'}).join('');
+  var bi=cyc.indexOf(mc),bal=isFinite(mc)?sam/E/(tot*mc)*100:0;
+  $('#lbOut').innerHTML='總人數 <b>'+tot+'</b>　節拍時間 '+takt.toFixed(3)+' 分鐘<br>瓶頸：<b style="color:var(--thread)">'+OPS[bi][0]+'</b>（週期 '+(isFinite(mc)?mc.toFixed(3):'∞')+' 分鐘）<br>整條線每小時：<span class="big">'+f(out)+' 件</span>　線平衡率 '+f(bal,1)+'%<br>'+
+    (out>=T?'<b style="color:var(--ok)">已達成目標 '+f(T)+' 件／小時。</b>試試看能不能用更少的人做到。':'離目標 '+f(T)+' 件還差 '+f(T-out)+' 件，替紅色的工序加人看看。');
+}
+$('#lbBars').addEventListener('click',function(e){var b=e.target.closest('[data-lb]');if(!b)return;var i=+b.dataset.lb;N[i]=Math.max(0,Math.min(9,N[i]+(+b.dataset.d)));lb()});
+$('#lbReset').addEventListener('click',function(){N=N0.slice();lb()});
+bind(['lbTarget','lbEff'],lb);
+
+var AQL=[[91,150,'F',20,[1,2],[2,3]],[151,280,'G',32,[2,3],[3,4]],[281,500,'H',50,[3,4],[5,6]],[501,1200,'J',80,[5,6],[7,8]],[1201,3200,'K',125,[7,8],[10,11]],[3201,10000,'L',200,[10,11],[14,15]],[10001,35000,'M',315,[14,15],[21,22]]];
+bind(['aqlLot','aqlMaj','aqlMin'],function(){
+  var n=num('aqlLot'),row=null;AQL.forEach(function(r){if(n>=r[0]&&n<=r[1])row=r});
+  if(!row){$('#aqlOut').innerHTML='這個數量不在本工具收錄的 91–35,000 件範圍內，請查完整的 AQL 標準表。';return}
+  var mj=num('aqlMaj'),mn=num('aqlMin'),okJ=mj<=row[4][0],okN=mn<=row[5][0];
+  $('#aqlOut').innerHTML='批量 '+f(row[0])+'–'+f(row[1])+' 件 → 字碼 <b>'+row[2]+'</b>，抽樣 <span class="big">'+row[3]+' 件</span>'+
+   '<div class="tw" style="margin:10px 0"><table><tr><th>疵點</th><th>AQL</th><th class="num">Ac 允收</th><th class="num">Re 拒收</th><th class="num">發現</th><th>判定</th></tr>'+
+   '<tr><td>主要</td><td>2.5</td><td class="num">'+row[4][0]+'</td><td class="num">'+row[4][1]+'</td><td class="num">'+mj+'</td><td>'+(okJ?'允收':'<b style="color:var(--thread)">拒收</b>')+'</td></tr>'+
+   '<tr><td>次要</td><td>4.0</td><td class="num">'+row[5][0]+'</td><td class="num">'+row[5][1]+'</td><td class="num">'+mn+'</td><td>'+(okN?'允收':'<b style="color:var(--thread)">拒收</b>')+'</td></tr></table></div>'+
+   '整批結果：'+(okJ&&okN?'<b style="color:var(--ok)">允收，可以出貨</b>':'<b style="color:var(--thread)">拒收，需全數重檢後再驗</b>')+'（嚴重疵點只要發現 1 件就拒收）';
+});
+
+bind(['cbQty','cbPer','cbL','cbW','cbH'],function(){
+  var q=num('cbQty'),p=Math.max(num('cbPer'),1),c=Math.ceil(q/p),one=num('cbL')*num('cbW')*num('cbH')/1e6,t=c*one,tail=q%p;
+  var box=t<=28?'一個 20 呎櫃（約 28 CBM）放得下':t<=58?'需要一個 40 呎櫃（約 58 CBM）':t<=68?'需要一個 40 呎高櫃（約 68 CBM）':'需要約 '+Math.ceil(t/68)+' 個 40 呎高櫃';
+  $('#cbOut').innerHTML='箱數：'+f(c)+' 箱'+(tail?'（最後一箱是尾箱，只裝 '+tail+' 件）':'')+'<br>每箱 '+f(one,4)+' CBM，總材積：<span class="big">'+f(t,2)+' CBM</span><br>'+box;
+});
+
+bind(['fcFab','fcCons','fcWaste','fcTrim','fcSam','fcCpm','fcOther','fcProfit'],function(){
+  var fab=num('fcFab')*num('fcCons')*(1+num('fcWaste')/100),tr=num('fcTrim'),cm=num('fcSam')*num('fcCpm'),ot=num('fcOther'),sub=fab+tr+cm+ot,fob=sub*(1+num('fcProfit')/100);
+  function r(n,v){return '<tr><td>'+n+'</td><td class="num">'+f(v,3)+'</td><td class="num">'+(sub?f(v/sub*100,1):'—')+'%</td></tr>'}
+  $('#fcOut').innerHTML='<div class="tw" style="margin:0 0 10px"><table><tr><th>項目</th><th class="num">USD</th><th class="num">佔成本</th></tr>'+r('布料',fab)+r('輔料包材',tr)+r('加工費 CM',cm)+r('其他',ot)+'<tr><th>成本合計</th><th class="num">'+f(sub,3)+'</th><th></th></tr></table></div>FOB 報價：<span class="big">'+f(fob,2)+' 美元／件</span>';
+});
+
+/* ---------------- lesson 12: gantt ---------------- */
+(function(){
+  var g=$('#gantt');if(!g)return;
+  var C=['#2B4A76','#2A7A5A','#6B5A9E','#2E7F8F','#8A6A1F'];
+  var rows=[['L1',[['SH-201',1,6,0],['KD-11',8,5,2]]],['L2',[['SH-202',1,9,1]]],['L3',[['KD-10',1,5,2],['BW-TS01',8,3,-1],['SH-205',11,4,0]]],['L4',[['SH-203',2,6,3],['BW-PL02',9,5,4]]]];
+  g.style.gridTemplateColumns='2.6em repeat(14,minmax(34px,1fr))';
+  var h='<div class="gh">12月</div>';for(var d=1;d<=14;d++)h+='<div class="gh">'+d+'</div>';
+  rows.forEach(function(r,ri){h+='<div class="gl" style="grid-row:'+(ri+2)+';grid-column:1">'+r[0]+'</div>';
+    r[1].forEach(function(b){h+='<div class="gb'+(b[3]<0?' hot':'')+'" style="grid-row:'+(ri+2)+';grid-column:'+(b[1]+1)+' / span '+b[2]+';background:'+(b[3]<0?'':C[b[3]])+'" title="'+b[0]+'">'+b[0]+'</div>'})});
+  g.innerHTML=h;
+})();
+
+/* ---------------- lesson 19: module map ---------------- */
+(function(){
+  var svg=$('#modmap');if(!svg)return;
+  var M=[
+   ['業務','客戶主檔、報價、銷售訂單、TNA。所有生產活動的起點。',['計畫','出貨','財務']],
+   ['採購','請購、採購單、供應商主檔、交期追蹤。',['倉庫','品管','財務']],
+   ['倉庫','收貨入庫、領料、調撥、盤點、缸號與儲位管理。',['採購','裁剪','出貨','財務']],
+   ['計畫','BOM、MRP、產能規劃、產線排程。',['業務','倉庫','裁剪','縫製']],
+   ['裁剪','排料、裁剪單、菲票、剩布退料。',['倉庫','計畫','縫製']],
+   ['縫製','產量回報、在製品、生產線平衡、看板。',['裁剪','品管','人事']],
+   ['品管','來料檢驗、線上與線尾檢驗、AQL 終檢、疵點統計。',['採購','縫製','出貨']],
+   ['出貨','裝箱單、箱嘜、出貨單、出口文件。',['業務','倉庫','品管','財務']],
+   ['財務','應收應付、三單比對、成本計算、會計分錄。',['業務','採購','倉庫','出貨','人事']],
+   ['人事','員工主檔、技能矩陣、考勤、計件與薪資。',['縫製','財務']]];
+  var cx=180,cy=165,R=125,ns='http://www.w3.org/2000/svg',pos={},h='';
+  M.forEach(function(m,i){var a=(-90+i*36)*Math.PI/180;pos[m[0]]=[cx+R*Math.cos(a),cy+R*Math.sin(a)]});
+  M.forEach(function(m){var p=pos[m[0]];h+='<line data-m="'+m[0]+'" x1="'+cx+'" y1="'+cy+'" x2="'+p[0].toFixed(1)+'" y2="'+p[1].toFixed(1)+'"/>'});
+  h+='<circle cx="'+cx+'" cy="'+cy+'" r="46" fill="var(--nav)"/><text x="'+cx+'" y="'+(cy-4)+'" text-anchor="middle" style="fill:#fff;font-weight:700">共用</text><text x="'+cx+'" y="'+(cy+14)+'" text-anchor="middle" style="fill:#fff;font-weight:700">資料庫</text>';
+  M.forEach(function(m,i){var p=pos[m[0]];h+='<g class="mod" data-i="'+i+'" tabindex="0" role="button" aria-label="'+m[0]+'模組"><rect x="'+(p[0]-33).toFixed(1)+'" y="'+(p[1]-15).toFixed(1)+'" width="66" height="30" rx="7"/><text x="'+p[0].toFixed(1)+'" y="'+(p[1]+5).toFixed(1)+'" text-anchor="middle">'+m[0]+'</text></g>'});
+  svg.innerHTML=h;
+  function pick(i){var m=M[i],rel=m[2];
+    $$('.mod',svg).forEach(function(g){var n=M[+g.dataset.i][0];g.classList.toggle('on',+g.dataset.i===i);g.classList.toggle('rel',rel.indexOf(n)>-1)});
+    $$('line',svg).forEach(function(l){var n=l.getAttribute('data-m');l.classList.toggle('on',n===m[0]||rel.indexOf(n)>-1)});
+    $('#modOut').innerHTML='<b>'+m[0]+'模組</b>：'+m[1]+'<br>主要交換資料的模組：'+rel.join('、')+'（全部透過中間的共用資料庫，不是各自傳檔案）';}
+  svg.addEventListener('click',function(e){var g=e.target.closest('.mod');if(g)pick(+g.dataset.i)});
+  svg.addEventListener('keydown',function(e){var g=e.target.closest('.mod');if(g&&(e.key==='Enter'||e.key===' ')){e.preventDefault();pick(+g.dataset.i)}});
+})();
+
+/* ---------------- lesson 20: state machine ---------------- */
+(function(){
+  var S=['草稿','待審核','已核准','部分到貨','已結案','已作廢'];
+  var A=[['送出審核',['草稿'],'待審核','採購員'],['主管核准',['待審核'],'已核准','採購經理'],['主管退回',['待審核'],'草稿','採購經理'],
+         ['收到部分貨',['已核准','部分到貨'],'部分到貨','倉管員'],['收齊結案',['已核准','部分到貨'],'已結案','倉管員'],['作廢',['草稿','待審核','已核准'],'已作廢','採購經理']];
+  var st,t,log;
+  function reset(){st='草稿';t=new Date(2026,10,5,9,0);log=['2026-11-05 09:00｜採購員｜建立採購單｜→ 草稿'];draw()}
+  function p2(n){return (n<10?'0':'')+n}
+  function draw(){
+    $('#smStates').innerHTML=S.map(function(s){return '<span class="s'+(s===st?' cur':'')+'">'+s+'</span>'}).join('');
+    $('#smBtns').innerHTML=A.map(function(a,i){var ok=a[1].indexOf(st)>-1;return '<button class="btn'+(ok?'':' ghost')+'" data-sm="'+i+'"'+(ok?'':' disabled')+'>'+a[0]+'</button>'}).join('');
+    $('#smLog').innerHTML=log.map(function(x){return '<div>'+x+'</div>'}).join('');$('#smLog').scrollTop=1e6;
+  }
+  $('#smBtns').addEventListener('click',function(e){var b=e.target.closest('[data-sm]');if(!b||b.disabled)return;var a=A[+b.dataset.sm],from=st;st=a[2];
+    t=new Date(t.getTime()+(20+Math.floor(Math.random()*100))*60000);
+    log.push(t.getFullYear()+'-'+p2(t.getMonth()+1)+'-'+p2(t.getDate())+' '+p2(t.getHours())+':'+p2(t.getMinutes())+'｜'+a[3]+'｜'+a[0]+'｜'+from+' → '+st);
+    if(st==='已結案'||st==='已作廢')log.push('（這張單已經是最終狀態，不能再修改。要變更只能另開新單。）');draw()});
+  $('#smReset').addEventListener('click',reset);reset();
+})();
+
+/* ---------------- glossary ---------------- */
+(function(){
+  var gl=$('#glossary'),h=[];
+  L.forEach(function(s,i){if(s.dataset.nocount)return;$$('.term',s).forEach(function(t){h.push('<div class="gl-item">'+t.outerHTML+'<div class="from">出自：<a href="#L'+i+'" data-go="'+i+'">第 '+i+' 課 '+s.dataset.title+'</a></div></div>')})});
+  gl.innerHTML=h.join('');
+  $('#gsearch').addEventListener('input',function(){var q=this.value.trim().toLowerCase();
+    $$('.gl-item',gl).forEach(function(it){it.style.display=!q||it.textContent.toLowerCase().indexOf(q)>-1?'':'none'})});
+})();
+
+/* ---------------- start ---------------- */
+var m=location.hash.match(/^#L(\d+)$/);
+show(m?+m[1]:store.get('gerp-last',0),true);
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-d0e19e0e23" data-category="garment"></script></body>
+</html>

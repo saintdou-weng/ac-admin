@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>從零開始學會計｜入門到專業的完整課程</title>
+<style>
+:root{
+  --paper:#EEF2EC; --sheet:#F8FAF6; --ink:#1D2B36; --muted:#56655F;
+  --rule:#CFDFD3; --rule-strong:#8DB59A; --red:#B8322A; --blue:#245C8F;
+  --gold:#8A6A16; --hl:#FFF3B8;
+  --serif:"Noto Serif TC","Source Han Serif TC","Songti TC","PMingLiU","MingLiU",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#141C18; --sheet:#1B2520; --ink:#E3EAE5; --muted:#9DB0A6;
+    --rule:#2C3D34; --rule-strong:#4F7560; --red:#E8736A; --blue:#7FB0DF; --gold:#D9B95A; --hl:#4A4220;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141C18; --sheet:#1B2520; --ink:#E3EAE5; --muted:#9DB0A6;
+  --rule:#2C3D34; --rule-strong:#4F7560; --red:#E8736A; --blue:#7FB0DF; --gold:#D9B95A; --hl:#4A4220;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-text-size-adjust:100%}
+a{color:var(--blue)}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.num,table,.je{font-variant-numeric:tabular-nums}
+
+/* ---------- layout ---------- */
+.app{display:grid;grid-template-columns:290px 1fr;min-height:100vh}
+nav#toc{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--rule);background:var(--sheet);padding:22px 0 40px}
+.brand{font-family:var(--serif);font-size:22px;font-weight:700;padding:0 22px 4px;line-height:1.35}
+.brand small{display:block;font-family:var(--sans);font-size:13px;font-weight:400;color:var(--muted);margin-top:4px}
+.prog{margin:14px 22px 10px;height:6px;background:var(--rule);border-radius:3px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--rule-strong);transition:width .4s}
+.progtxt{font-size:13px;color:var(--muted);padding:0 22px 8px}
+#toc .part{font-family:var(--serif);font-size:14px;color:var(--red);padding:16px 22px 4px;font-weight:700}
+#toc a{display:flex;gap:8px;align-items:baseline;padding:5px 22px 5px 26px;color:var(--ink);text-decoration:none;font-size:15px;line-height:1.5;border-left:3px solid transparent}
+#toc a:hover{background:var(--paper)}
+#toc a.active{border-left-color:var(--red);background:var(--paper);font-weight:600}
+#toc a .ck{margin-left:auto;color:var(--rule-strong);font-size:13px}
+.navtools{display:flex;gap:8px;padding:14px 22px 0}
+.navtools button{flex:1;border:1px solid var(--rule-strong);background:transparent;color:var(--ink);border-radius:6px;padding:6px 8px;font-size:13px}
+main{padding:0 28px 80px;min-width:0}
+.topbar{display:none}
+.wrap{max-width:760px;margin:0 auto}
+
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  nav#toc{position:fixed;left:0;top:0;bottom:0;width:86%;max-width:330px;z-index:30;transform:translateX(-105%);transition:transform .25s;padding-top:calc(env(safe-area-inset-top,0px) + 18px);height:100%}
+  nav#toc.open{transform:none;box-shadow:0 0 0 100vmax rgba(0,0,0,.35)}
+  .topbar{display:flex;position:sticky;top:env(safe-area-inset-top,0px);z-index:20;align-items:center;gap:10px;background:var(--sheet);border-bottom:1px solid var(--rule);margin:0 -28px 0;padding:10px 16px}
+  .topbar button{border:1px solid var(--rule-strong);background:transparent;color:var(--ink);border-radius:6px;padding:4px 12px}
+  .topbar b{font-family:var(--serif);font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  main{padding:0 18px 80px}
+  .topbar{margin:0 -18px}
+  body{font-size:16.5px}
+}
+
+/* ---------- typography ---------- */
+section.ch{display:none;padding-top:34px}
+section.ch.show{display:block}
+.kicker{font-family:var(--serif);color:var(--red);font-size:15px;margin:0}
+h1,h2,h3{font-family:var(--serif);line-height:1.35;font-weight:700}
+h2.title{font-size:clamp(28px,5vw,38px);margin:.2em 0 .6em;position:relative;padding-bottom:14px}
+h2.title::after{content:"";position:absolute;left:0;bottom:0;width:88px;height:7px;border-top:2px solid var(--red);border-bottom:2px solid var(--red)}
+h3{font-size:22px;margin:1.8em 0 .5em}
+h4{font-size:17px;margin:1.4em 0 .3em}
+p{margin:.6em 0 1em}
+.lead{font-size:19px;color:var(--ink)}
+ul,ol{padding-left:1.4em}
+li{margin:.3em 0}
+strong{font-weight:700}
+mark{background:var(--hl);color:inherit;padding:0 2px}
+.en{color:var(--muted);font-size:.88em}
+
+/* ---------- boxes ---------- */
+.box{border-radius:8px;padding:14px 18px;margin:1.3em 0;background:var(--sheet);border:1px solid var(--rule)}
+.box > :first-child{margin-top:0}.box > :last-child{margin-bottom:0}
+.box .lab{font-family:var(--serif);font-weight:700;display:block;margin-bottom:4px}
+.origin{border-left:4px solid var(--red);position:relative;padding-right:64px}
+.origin::after{content:"源";position:absolute;right:14px;top:14px;width:38px;height:38px;border:2px solid var(--red);color:var(--red);font-family:var(--serif);font-weight:700;display:grid;place-items:center;border-radius:4px;transform:rotate(-8deg);font-size:20px;opacity:.85}
+.origin .lab{color:var(--red)}
+.eg{border-left:4px solid var(--blue)}
+.eg .lab{color:var(--blue)}
+.tip{border-left:4px solid var(--gold)}
+.tip .lab{color:var(--gold)}
+.warn{border-left:4px solid var(--red);background:transparent}
+
+/* ---------- ledger tables ---------- */
+.tscroll{overflow-x:auto;margin:1em 0 1.4em;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:15.5px;background:var(--sheet)}
+th,td{padding:7px 10px;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}
+th{font-family:var(--serif);border-bottom:2px solid var(--rule-strong);white-space:nowrap}
+td.r,th.r{text-align:right;white-space:nowrap}
+tr.sub td{font-weight:600}
+tr.total td{font-weight:700;border-bottom:4px double var(--red)}
+td.ind{padding-left:28px}
+td.ind2{padding-left:46px}
+caption{caption-side:top;text-align:left;font-family:var(--serif);font-weight:700;padding:0 0 6px;font-size:16px}
+.neg{color:var(--red)}
+
+/* journal entry */
+.je{background:var(--sheet);border:1px solid var(--rule);border-radius:8px;padding:10px 14px;margin:1em 0;font-size:15.5px}
+.je .row{display:grid;grid-template-columns:1fr 90px 90px;gap:6px;border-bottom:1px dashed var(--rule);padding:3px 0}
+.je .row:last-child{border-bottom:0}
+.je .cr .acc{padding-left:2em}
+.je .hd{font-family:var(--serif);font-weight:700;color:var(--muted);font-size:14px}
+.je .r{text-align:right}
+.je .memo{grid-column:1/-1;color:var(--muted);font-size:14px}
+
+/* T account */
+.tacc{display:inline-block;min-width:220px;margin:8px 14px 8px 0;vertical-align:top}
+.tacc .nm{text-align:center;font-family:var(--serif);font-weight:700;border-bottom:2px solid var(--ink);padding-bottom:2px}
+.tacc .body{display:grid;grid-template-columns:1fr 1fr}
+.tacc .body div{padding:3px 8px;font-size:15px;min-height:28px}
+.tacc .body div:first-child{border-right:2px solid var(--ink)}
+.tacc .lr{display:grid;grid-template-columns:1fr 1fr;font-size:12.5px;color:var(--muted);text-align:center}
+
+/* hero */
+.hero{padding:40px 0 10px}
+.eq{font-family:var(--serif);font-weight:700;font-size:clamp(34px,8.5vw,68px);line-height:1.2;letter-spacing:.02em;margin:.2em 0 .1em;position:relative;display:inline-block}
+.eq .u{position:absolute;left:0;right:0;bottom:-10px;height:10px;border-top:3px solid var(--red);border-bottom:3px solid var(--red);transform-origin:left;animation:draw 1.1s .5s cubic-bezier(.6,.1,.2,1) both}
+@keyframes draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.hero p.sub{font-size:19px;max-width:36em;margin-top:28px}
+.map{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:1.2em 0}
+.map a{display:block;text-decoration:none;color:var(--ink);background:var(--sheet);border:1px solid var(--rule);border-top:3px solid var(--rule-strong);padding:12px 14px;border-radius:4px}
+.map a b{font-family:var(--serif);display:block;font-size:17px}
+.map a span{font-size:14px;color:var(--muted);line-height:1.6;display:block}
+.btn{display:inline-block;border:0;background:var(--red);color:#fff;border-radius:6px;padding:10px 20px;font-weight:600;text-decoration:none}
+.btn.ghost{background:transparent;border:1px solid var(--rule-strong);color:var(--ink)}
+.btn.sm{padding:6px 14px;font-size:14px}
+
+/* pager */
+.pager{display:flex;gap:12px;justify-content:space-between;align-items:stretch;margin:48px 0 0;padding-top:20px;border-top:1px solid var(--rule);flex-wrap:wrap}
+.pager a{flex:1 1 200px;text-decoration:none;color:var(--ink);border:1px solid var(--rule);background:var(--sheet);border-radius:6px;padding:10px 14px;font-size:15px}
+.pager a small{display:block;color:var(--muted);font-size:13px}
+.pager a.next{text-align:right}
+.donebtn{display:block;margin:34px auto 0;border:2px solid var(--rule-strong);background:transparent;color:var(--ink);border-radius:30px;padding:8px 26px}
+.donebtn.on{background:var(--rule-strong);color:#fff;border-color:var(--rule-strong)}
+
+/* widgets */
+.widget{border:2px solid var(--rule-strong);border-radius:10px;padding:16px;margin:1.5em 0;background:var(--sheet)}
+.widget h4{margin-top:0;font-family:var(--serif)}
+.wbtns{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.wbtns button{border:1px solid var(--rule-strong);background:var(--paper);color:var(--ink);border-radius:6px;padding:6px 14px}
+.wbtns button.pri{background:var(--red);border-color:var(--red);color:#fff}
+.cols3{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:6px;align-items:start}
+.col{background:var(--paper);border-radius:6px;padding:8px 10px;min-width:0}
+.col h5{margin:0 0 6px;font-family:var(--serif);font-size:16px;text-align:center}
+.col .it{display:flex;justify-content:space-between;font-size:14px;padding:2px 4px;border-radius:3px;transition:background .6s}
+.col .it.flash{background:var(--hl)}
+.col .tot{border-top:3px double var(--red);margin-top:6px;padding-top:4px;display:flex;justify-content:space-between;font-weight:700;font-size:15px}
+.opsym{font-family:var(--serif);font-size:26px;align-self:center;font-weight:700}
+.story{min-height:3.4em;font-size:15.5px;margin:10px 0}
+@media (max-width:560px){.cols3{grid-template-columns:1fr}.opsym{text-align:center;font-size:20px;line-height:1}}
+.scale{display:block;margin:6px auto;max-width:360px;width:100%}
+.scale .beam{transition:transform .8s cubic-bezier(.3,1.6,.5,1);transform-origin:180px 40px}
+input[type=number],select,input[type=search]{font:inherit;font-size:15px;padding:6px 8px;border:1px solid var(--rule-strong);border-radius:6px;background:var(--paper);color:var(--ink);width:100%}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.form label{font-size:14px;color:var(--muted);display:block}
+.fb{padding:8px 12px;border-radius:6px;margin-top:8px;font-size:15px}
+.fb.ok{background:rgba(80,160,110,.18)}
+.fb.no{background:rgba(200,60,50,.15)}
+.bars{width:100%;height:auto;display:block;margin-top:8px}
+#dTable td:first-child{white-space:nowrap}
+.rrow{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;padding:8px 2px;border-bottom:1px solid var(--rule)}
+.rrow b{font-family:var(--serif)}
+.rrow .v{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.rrow .d{grid-column:1/-1;font-size:14.5px;color:var(--muted)}
+
+/* quiz */
+.quiz{margin:2em 0 0;border-top:1px dashed var(--rule-strong);padding-top:10px}
+.quiz h3{margin-top:.6em}
+.q{margin:14px 0 20px}
+.q p{font-weight:600;margin-bottom:6px}
+.q button{display:block;width:100%;text-align:left;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);border-radius:6px;padding:8px 12px;margin:6px 0;font-size:15.5px;line-height:1.6}
+.q button.right{border-color:#3E9A63;background:rgba(80,160,110,.18)}
+.q button.wrong{border-color:var(--red);background:rgba(200,60,50,.12)}
+.q .ex{font-size:15px;color:var(--muted);display:none;margin:4px 0}
+.q.answered .ex{display:block}
+
+details{border:1px solid var(--rule);border-radius:8px;padding:8px 14px;margin:1em 0;background:var(--sheet)}
+details summary{cursor:pointer;font-weight:600;font-family:var(--serif)}
+details[open] summary{margin-bottom:6px}
+
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:1em 0}
+.flow span{background:var(--sheet);border:1px solid var(--rule-strong);border-radius:4px;padding:4px 10px;font-size:15px}
+.flow i{font-style:normal;color:var(--muted)}
+
+.gl{border-bottom:1px solid var(--rule);padding:12px 0}
+.gl b{font-family:var(--serif);font-size:18px}
+.gl .o{font-size:15px;color:var(--muted)}
+.gl .o::before{content:"由來｜";color:var(--red);font-weight:700}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{nav#toc,.topbar,.pager,.donebtn{display:none}.app{display:block}section.ch{display:block!important;page-break-after:always}}
+</style>
+</head>
+<body>
+<div class="app">
+<nav id="toc" aria-label="課程目錄">
+  <div class="brand">從零開始學會計<small>入門到專業｜台灣與柬埔寨實例</small></div>
+  <div class="prog"><i id="progbar"></i></div>
+  <div class="progtxt" id="progtxt">已完成 0 章</div>
+  <div id="toclist"></div>
+  <div class="navtools"><button id="themeBtn" type="button">切換深淺色</button><button id="resetBtn" type="button">清除進度</button></div>
+</nav>
+<main>
+<div class="topbar"><button id="menuBtn" type="button" aria-controls="toc">目錄</button><b id="curTitle">從零開始學會計</b></div>
+<div class="wrap">
+<!-- ================= HOME ================= -->
+<section class="ch" id="home" data-title="課程首頁">
+<div class="hero">
+  <p class="kicker">一整門課，只需要記住一條式子</p>
+  <div class="eq">資產 ＝ 負債 ＋ 權益<span class="u"></span></div>
+  <p class="sub">會計聽起來很難，其實它只是在回答三個問題：<strong>我有什麼？我欠誰？剩下的是誰的？</strong>這門課從一個珍珠奶茶攤開始，一路走到看懂上市公司財報、準備會計師查核、申報台灣與柬埔寨的稅。</p>
+  <p><a class="btn" href="#ch1">從第 1 章開始</a> <a class="btn ghost" href="#glossary">先翻名詞辭典</a></p>
+</div>
+
+<h3>課程地圖</h3>
+<div class="map">
+  <a href="#ch1"><b>第一篇　會計的語言</b><span>會計恆等式、借與貸、會計循環、權責發生制</span></a>
+  <a href="#ch6"><b>第二篇　看懂四大報表</b><span>資產負債表、損益表、現金流量表、權益變動表</span></a>
+  <a href="#ch10"><b>第三篇　重要科目深入</b><span>存貨、製造成本、折舊、應收帳款與負債</span></a>
+  <a href="#ch14"><b>第四篇　財報分析</b><span>比率分析、杜邦分析、找出財報警訊</span></a>
+  <a href="#ch16"><b>第五篇　內控與稽核</b><span>內部控制、會計師查核、如何準備稽核</span></a>
+  <a href="#ch18"><b>第六篇　稅務實務</b><span>財稅差異、台灣稅制、柬埔寨稅制</span></a>
+  <a href="#ch21"><b>第七篇　專業之路</b><span>會計準則、證照，以及一個月完整實戰</span></a>
+</div>
+
+<h3>怎麼使用這份教材</h3>
+<ul>
+  <li>每章都有<strong>例子</strong>（藍色框）、<strong>名詞由來</strong>（紅色印章框）和章末<strong>小測驗</strong>。</li>
+  <li>有「互動」標示的地方可以按按鈕、改數字，親手看數字怎麼變。</li>
+  <li>讀完一章按「完成本章」，進度會記在這台裝置的瀏覽器裡。</li>
+  <li>這是單一檔案，存到電腦或手機後<strong>不用網路也能打開</strong>。</li>
+</ul>
+<div class="box tip"><span class="lab">學習建議</span>第一篇一定要紮實讀完，尤其第 2、3 章。後面所有內容，都是那兩章的延伸。每天讀一到兩章，大約三週可以讀完。</div>
+<div class="box warn"><span class="lab">稅務資料提醒</span>第六篇的稅率與申報期限，是依撰寫時（2026 年）查得的規定整理，稅法常常修改。實際申報前，請以台灣財政部／國稅局、柬埔寨稅務總局（GDT）的最新公告為準，或請教會計師。</div>
+</section>
+
+<!-- ================= CH1 ================= -->
+<section class="ch" id="ch1" data-part="第一篇　會計的語言" data-title="1. 會計是什麼？">
+<p class="kicker">第一篇　會計的語言</p>
+<h2 class="title">會計是什麼？</h2>
+<p class="lead">會計是一種<strong>記錄、整理、報告錢怎麼流動</strong>的方法。人們常說它是「商業的語言」：老闆、銀行、投資人、政府都透過會計報表，了解一家公司的狀況。</p>
+
+<div class="box eg"><span class="lab">例子：你早就在做會計了</span>
+<p>小美每週有 500 元零用錢。她在筆記本寫下：「週一收到 500，週二買文具 80，週三買飲料 50……」週末一看，還剩 370 元，而且發現飲料花最多。</p>
+<p>這就是會計最原始的樣子：<strong>記錄</strong>每一筆進出，<strong>整理</strong>成分類，最後<strong>報告</strong>結果，幫自己做決定（少買飲料）。</p>
+</div>
+
+<h3>為什麼公司需要會計？</h3>
+<p>一個小攤子，老闆看抽屜裡的錢就大概知道賺不賺。但一家有 500 位員工、每天進出幾百筆交易的工廠，光靠感覺一定會出錯。會計把所有交易用<strong>同一套規則</strong>記下來，讓不同的人看報表時，得到的是同一個答案。</p>
+<div class="tscroll"><table>
+<tr><th>誰在看報表</th><th>他想知道什麼</th></tr>
+<tr><td>老闆、經理</td><td>哪個產品賺錢？成本能不能降？下個月錢夠不夠用？</td></tr>
+<tr><td>銀行</td><td>借錢給你，你還得起嗎？</td></tr>
+<tr><td>投資人、股東</td><td>公司賺多少？值不值得投資？</td></tr>
+<tr><td>政府（稅務機關）</td><td>你該繳多少稅？</td></tr>
+<tr><td>客戶、供應商</td><td>這家公司會不會突然倒閉？</td></tr>
+</table></div>
+
+<div class="box origin"><span class="lab">「會計」這個詞的由來</span>
+<p>《孟子》記載孔子年輕時當過管倉庫的小官，他說：「會計當而已矣」，意思是帳目算得正確就好。清朝學者焦循解釋：<strong>「零星算之為計，總合算之為會」</strong>，每天零散地記是「計」，一段時間彙總起來是「會」。所以「會計」本來就包含「記錄」與「彙總」兩件事。</p>
+<p>英文 <em>accounting</em> 來自古法文 <em>aconter</em>，意思是「計數、交代」。會計不只是算數，也是向別人<strong>交代</strong>錢去了哪裡，所以中文也說「給個交代」。</p>
+</div>
+
+<h3>會計家族的成員</h3>
+<p>這些詞常常被混在一起，先分清楚：</p>
+<ul>
+  <li><strong>簿記</strong>（bookkeeping）：把每筆交易記進帳本，是會計最基礎的動作。</li>
+  <li><strong>財務會計</strong>：依照公認規則編製報表，給<em>外部的人</em>（銀行、股東、政府）看。</li>
+  <li><strong>管理會計／成本會計</strong>：幫<em>內部主管</em>做決策，例如一件衣服成本多少、要不要接這張訂單。</li>
+  <li><strong>審計（查核）</strong>：由獨立的人檢查報表是否可信。</li>
+  <li><strong>稅務會計</strong>：依稅法計算該繳多少稅。</li>
+</ul>
+
+<h3>會計的四個基本假設</h3>
+<p>所有會計規則，都建立在這四個「預設前提」上。</p>
+<ol>
+  <li><strong>企業個體</strong>：公司的錢和老闆私人的錢要分開。老闆用店裡的錢買自己的手機，不能算店的費用。</li>
+  <li><strong>繼續經營</strong>：假設公司會一直營業下去，所以機器可以分好幾年慢慢攤成本（第 12 章會教）。</li>
+  <li><strong>會計期間</strong>：把時間切成一段一段（月、季、年）來結算，才能比較。</li>
+  <li><strong>貨幣評價</strong>：只記能用錢衡量的事。員工很有熱情很重要，但無法入帳。</li>
+</ol>
+<div class="box tip"><span class="lab">柬埔寨的小提醒</span>柬埔寨日常交易大量使用美元，但法定貨幣是瑞爾（KHR）。公司帳上用哪種貨幣記帳、稅報怎麼換算，是柬埔寨會計很實際的問題，第 20 章會談。</div>
+<div class="quiz" data-ch="ch1"></div>
+</section>
+
+<!-- ================= CH2 ================= -->
+<section class="ch" id="ch2" data-part="第一篇　會計的語言" data-title="2. 會計恆等式">
+<p class="kicker">第一篇　會計的語言</p>
+<h2 class="title">會計恆等式：永遠平衡的天平</h2>
+<p class="lead">整個會計世界建立在一條式子上：<strong>資產 ＝ 負債 ＋ 權益</strong>。它像一座天平，不管發生什麼交易，兩邊永遠一樣重。</p>
+
+<h3>三個主角</h3>
+<div class="tscroll"><table>
+<tr><th>名稱</th><th>白話</th><th>例子</th></tr>
+<tr><td><strong>資產</strong></td><td>公司擁有、未來能帶來好處的東西</td><td>現金、存貨、機器、客戶欠我們的錢</td></tr>
+<tr><td><strong>負債</strong></td><td>公司欠別人、將來要還的</td><td>銀行借款、欠供應商的貨款、還沒發的薪水</td></tr>
+<tr><td><strong>權益</strong></td><td>資產扣掉負債後，真正屬於老闆（股東）的部分</td><td>老闆投入的錢、累積賺到的錢</td></tr>
+</table></div>
+<div class="box eg"><span class="lab">例子：買房子</span>
+<p>一間房子值 1,000 萬（資產），向銀行貸款 700 萬（負債），自己出了 300 萬（權益）。1,000 ＝ 700 ＋ 300。</p>
+<p>換個角度看：等號左邊是「<strong>錢變成了什麼</strong>」，右邊是「<strong>錢從哪裡來</strong>」。錢不是借來的，就是自己的，所以兩邊一定相等。</p>
+</div>
+
+<div class="box origin"><span class="lab">名詞由來</span>
+<p><strong>資產</strong>（asset）來自古法文 <em>asez</em>，意思是「足夠」，原指一個人留下的財產「夠不夠」還他的債。<strong>負債</strong>（liability）來自拉丁文 <em>ligare</em>「綁住」，被債務綁住的意思。<strong>權益</strong>（equity）原意是「公平」，指扣掉債務後，公平歸屬於所有者的部分。</p>
+</div>
+
+<h3>互動：阿明的珍奶攤</h3>
+<p>阿明在台中開了一個珍珠奶茶攤。按「下一筆交易」，看看每筆交易如何同時影響兩邊，天平卻始終平衡。</p>
+<div class="widget" id="eqsim">
+  <h4>會計恆等式模擬器（新台幣）</h4>
+  <svg class="scale" viewBox="0 0 360 120" aria-hidden="true">
+    <line x1="180" y1="40" x2="180" y2="112" stroke="currentColor" stroke-width="4"/>
+    <rect x="140" y="108" width="80" height="8" rx="2" fill="currentColor"/>
+    <g class="beam" id="beam">
+      <line x1="40" y1="40" x2="320" y2="40" stroke="currentColor" stroke-width="4"/>
+      <line x1="60" y1="40" x2="40" y2="80" stroke="currentColor"/><line x1="60" y1="40" x2="80" y2="80" stroke="currentColor"/>
+      <line x1="300" y1="40" x2="280" y2="80" stroke="currentColor"/><line x1="300" y1="40" x2="320" y2="80" stroke="currentColor"/>
+      <path d="M30 80 h60 a30 12 0 0 1 -60 0z" fill="var(--blue)" opacity=".75"/>
+      <path d="M270 80 h60 a30 12 0 0 1 -60 0z" fill="var(--red)" opacity=".75"/>
+      <text x="60" y="30" text-anchor="middle" font-size="13" fill="currentColor" id="lpan">資產 0</text>
+      <text x="300" y="30" text-anchor="middle" font-size="13" fill="currentColor" id="rpan">負債＋權益 0</text>
+    </g>
+    <circle cx="180" cy="40" r="6" fill="var(--red)"/>
+  </svg>
+  <div class="story" id="eqstory">阿明準備開店，帳本還是空白的。</div>
+  <div class="cols3">
+    <div class="col"><h5>資產</h5><div id="colA"></div><div class="tot"><span>合計</span><span id="totA">0</span></div></div>
+    <div class="opsym">＝</div>
+    <div class="col"><h5>負債</h5><div id="colL"></div><div class="tot"><span>合計</span><span id="totL">0</span></div></div>
+    <div class="opsym">＋</div>
+    <div class="col"><h5>權益</h5><div id="colE"></div><div class="tot"><span>合計</span><span id="totE">0</span></div></div>
+  </div>
+  <div id="eqje"></div>
+  <div class="wbtns"><button class="pri" id="eqNext" type="button">下一筆交易</button><button id="eqReset" type="button">重來</button></div>
+</div>
+
+<h3>發現規律了嗎？</h3>
+<p>每一筆交易，一定至少影響<strong>兩個</strong>地方：</p>
+<ul>
+  <li>兩邊一起增加（借錢：現金＋，借款＋）</li>
+  <li>兩邊一起減少（還錢給供應商：現金－，應付帳款－）</li>
+  <li>同一邊一增一減（用現金買機器：現金－，設備＋）</li>
+</ul>
+<p>還有一個重點：<strong>賺錢會讓權益增加，花費會讓權益減少</strong>。所以恆等式可以展開成：</p>
+<div class="box"><p style="font-family:var(--serif);font-size:19px;text-align:center;margin:0">資產 ＝ 負債 ＋ 業主投入 ＋ 收入 － 費用</p></div>
+<p>收入和費用最後都會流進權益。這就是第 7 章損益表和第 6 章資產負債表的關係。</p>
+<div class="quiz" data-ch="ch2"></div>
+</section>
+
+<!-- ================= CH3 ================= -->
+<section class="ch" id="ch3" data-part="第一篇　會計的語言" data-title="3. 借與貸：複式簿記">
+<p class="kicker">第一篇　會計的語言</p>
+<h2 class="title">借與貸：複式簿記</h2>
+<p class="lead">「借」「貸」是會計初學者最大的關卡，但它其實只是兩個<strong>方向標籤</strong>：借＝左邊，貸＝右邊。跟「借錢」「貸款」的日常意思無關。</p>
+
+<div class="box origin"><span class="lab">借、貸的由來</span>
+<p>1494 年，義大利數學家帕喬利（Luca Pacioli）出版《算術、幾何、比例總論》，第一次把威尼斯商人使用的<strong>複式簿記</strong>完整寫成書，他因此被稱為「會計之父」。</p>
+<p>英文 <em>debit</em> 來自拉丁文 <em>debere</em>「欠」，<em>credit</em> 來自 <em>credere</em>「相信、信任」。當時銀行記帳是站在銀行角度：客戶<strong>欠</strong>銀行記左邊，銀行<strong>欠</strong>客戶（客戶借給銀行、銀行信任他）記右邊。日本明治時期翻譯西方簿記書時譯成「借方」「貸方」，後來傳入中文。</p>
+<p>幾百年下來，原本的意思早就模糊了，今天只要記住：<strong>借＝左、貸＝右</strong>。簡寫 Dr. 與 Cr. 也是從拉丁文來的。</p>
+</div>
+
+<h3>T 字帳：每個科目一張小表</h3>
+<p>把每個科目畫成一個「T」，左邊是借方、右邊是貸方：</p>
+<div class="tacc"><div class="nm">現金</div><div class="lr"><span>借方（左）</span><span>貸方（右）</span></div><div class="body"><div>50,000<br>20,000<br>12,000</div><div>30,000<br>3,000<br>5,000</div></div></div>
+<p>左邊加總 82,000，右邊加總 38,000，相減餘額 44,000 在借方，表示現金還有 44,000 元。</p>
+
+<h3>唯一要背的規則</h3>
+<div class="tscroll"><table>
+<tr><th>科目類別</th><th>增加記在</th><th>減少記在</th><th>正常餘額</th></tr>
+<tr><td>資產</td><td><strong>借</strong></td><td>貸</td><td>借</td></tr>
+<tr><td>費用</td><td><strong>借</strong></td><td>貸</td><td>借</td></tr>
+<tr><td>負債</td><td>貸</td><td><strong>借</strong></td><td>貸</td></tr>
+<tr><td>權益</td><td>貸</td><td><strong>借</strong></td><td>貸</td></tr>
+<tr><td>收入</td><td>貸</td><td><strong>借</strong></td><td>貸</td></tr>
+</table></div>
+<div class="box tip"><span class="lab">記憶口訣</span><strong>「資費在左，負權收在右。」</strong>資產、費用增加記左（借）；負債、權益、收入增加記右（貸）。
+<br>為什麼費用跟資產同一邊？因為費用會減少權益，而權益在右邊，減少就記左邊。</div>
+
+<h3>分錄：交易的標準寫法</h3>
+<p>把一筆交易寫成「借什麼、貸什麼」，叫做<strong>分錄</strong>。規則只有一條：<mark>借方總額＝貸方總額</mark>。這就是「複式」的意思：每筆交易至少記兩個科目，而且左右相等。</p>
+<div class="je"><div class="row hd"><span>科目</span><span class="r">借方</span><span class="r">貸方</span></div>
+<div class="row"><span class="acc">設備</span><span class="r">30,000</span><span class="r"></span></div>
+<div class="row cr"><span class="acc">現金</span><span class="r"></span><span class="r">30,000</span></div>
+<div class="memo">阿明用現金買封口機。設備（資產）增加記借；現金（資產）減少記貸。貸方科目習慣往右縮排。</div></div>
+
+<div class="widget" id="dctrain">
+  <h4>互動：借貸反應練習</h4>
+  <p style="margin:0 0 4px">題目會說某個科目增加或減少，你判斷該記借方還是貸方。</p>
+  <div class="story" id="dcq" style="font-size:19px;font-family:var(--serif)"></div>
+  <div class="wbtns"><button class="pri" data-a="借" type="button">借方（左）</button><button class="pri" data-a="貸" type="button">貸方（右）</button></div>
+  <div id="dcfb"></div>
+  <p class="num" style="font-size:14px;color:var(--muted);margin:6px 0 0">答對 <span id="dcs">0</span> 題／共 <span id="dcn">0</span> 題</p>
+</div>
+
+<h3>為什麼要這麼麻煩？</h3>
+<p>單式記帳（像零用錢筆記）只記現金。複式簿記則同時記「錢從哪來、變成什麼」，好處是：</p>
+<ul>
+  <li><strong>自動檢查</strong>：借貸不相等就一定有錯。</li>
+  <li><strong>完整</strong>：能看到欠款、存貨、設備，不只是現金。</li>
+  <li><strong>能編報表</strong>：資產負債表和損益表都從它產生。</li>
+</ul>
+<div class="quiz" data-ch="ch3"></div>
+</section>
+
+<!-- ================= CH4 ================= -->
+<section class="ch" id="ch4" data-part="第一篇　會計的語言" data-title="4. 會計循環">
+<p class="kicker">第一篇　會計的語言</p>
+<h2 class="title">會計循環：帳是怎麼做出來的</h2>
+<p class="lead">從一張發票到一份財務報表，中間有固定的八個步驟，每個會計期間重複一次，所以叫<strong>會計循環</strong>。</p>
+<div class="widget" id="cycle">
+  <h4>互動：點圓圈或按「下一步」</h4>
+  <svg id="cyclesvg" viewBox="0 0 340 340" style="width:100%;max-width:340px;display:block;margin:0 auto" role="img" aria-label="會計循環八步驟"></svg>
+  <div class="box" id="cycledesc" style="margin:10px 0"></div>
+  <div class="wbtns"><button id="cyPrev" type="button">上一步</button><button class="pri" id="cyNext" type="button">下一步</button><button id="cyPlay" type="button">自動播放</button></div>
+</div>
+
+<div class="box origin"><span class="lab">帳本名稱的由來</span>
+<p><strong>日記簿</strong>（journal）來自法文 <em>jour</em>「日」，按日期逐筆記錄，像日記一樣。<strong>分類帳</strong>（ledger）來自古英文，意思是「一直放在同一個地方的書」，因為這本大帳簿太重，平常就擺在帳房桌上不動。</p>
+<p>「帳」字原本是布幔的意思，後來借用來指記錄錢財的簿冊，民間又造了從「貝」（古代貨幣）的「賬」字，今天兩字通用。</p>
+</div>
+
+<h3>日記簿與分類帳的差別</h3>
+<p>日記簿按<strong>時間</strong>排，看得到「那天發生什麼」；分類帳按<strong>科目</strong>排，看得到「現金總共剩多少」。把日記簿的分錄抄到分類帳，叫做<strong>過帳</strong>。現代會計軟體輸入一筆分錄就自動過帳，但原理完全一樣。</p>
+
+<h3>試算表</h3>
+<p>把每個科目的餘額列出來，借方餘額一欄、貸方餘額一欄，兩欄總數應該相等。</p>
+<div class="tscroll"><table><caption>阿明珍奶攤　試算表（調整前）</caption>
+<tr><th>科目</th><th class="r">借方</th><th class="r">貸方</th></tr>
+<tr><td>現金</td><td class="r">44,000</td><td></td></tr>
+<tr><td>存貨</td><td class="r">4,000</td><td></td></tr>
+<tr><td>設備</td><td class="r">30,000</td><td></td></tr>
+<tr><td>銀行借款</td><td></td><td class="r">20,000</td></tr>
+<tr><td>應付帳款</td><td></td><td class="r">3,000</td></tr>
+<tr><td>業主資本</td><td></td><td class="r">50,000</td></tr>
+<tr><td>銷貨收入</td><td></td><td class="r">12,000</td></tr>
+<tr><td>銷貨成本</td><td class="r">4,000</td><td></td></tr>
+<tr><td>租金費用</td><td class="r">3,000</td><td></td></tr>
+<tr class="total"><td>合計</td><td class="r">85,000</td><td class="r">85,000</td></tr>
+</table></div>
+<div class="box warn"><span class="lab">試算平衡不代表沒錯</span>如果整筆交易漏記、記錯科目（該記租金卻記成水電），或借貸兩邊同時記錯同一個金額，試算表仍然平衡。所以後面還需要內部控制與查核。</div>
+<div class="quiz" data-ch="ch4"></div>
+</section>
+
+<!-- ================= CH5 ================= -->
+<section class="ch" id="ch5" data-part="第一篇　會計的語言" data-title="5. 權責發生制與調整">
+<p class="kicker">第一篇　會計的語言</p>
+<h2 class="title">權責發生制與調整分錄</h2>
+<p class="lead">收到錢的那天，不一定是賺到錢的那天。會計要問的是：<strong>這筆收入或費用，屬於哪一段期間？</strong></p>
+
+<h3>兩種記帳基礎</h3>
+<div class="tscroll"><table>
+<tr><th></th><th>現金基礎</th><th>權責發生制（應計基礎）</th></tr>
+<tr><td>何時記收入</td><td>收到錢時</td><td>商品交出、服務完成時</td></tr>
+<tr><td>何時記費用</td><td>付出錢時</td><td>為了賺那筆收入而發生時</td></tr>
+<tr><td>適合</td><td>很小的攤商、個人</td><td>公司，也是國際準則的要求</td></tr>
+</table></div>
+<div class="box eg"><span class="lab">例子：補習班預收學費</span>
+<p>9 月 1 日，補習班向學生收了一整年學費 12,000 元。</p>
+<p>現金基礎：9 月收入 12,000，其他 11 個月收入 0。9 月看起來大賺，其他月看起來大虧，完全失真。</p>
+<p>權責發生制：9 月收到錢時先記為「<strong>預收學費</strong>」（負債，因為還欠學生 12 個月的課），每上完一個月，才把 1,000 轉成收入。每月收入都是 1,000，才反映真實狀況。</p>
+</div>
+<div class="box origin"><span class="lab">名詞由來</span><p>「權責」指<strong>權利</strong>（有權收款）與<strong>責任</strong>（有責任付款）。權利或責任一「發生」就入帳，不等現金進出，英文是 <em>accrual</em>，來自拉丁文 <em>accrescere</em>「逐漸增長」，像利息一天天累積一樣。</p></div>
+
+<h3>配合原則</h3>
+<p>費用要和它所幫忙賺到的收入，放在<strong>同一期</strong>。例如 12 月賣掉的衣服，它的布料成本就算 11 月買的，也要記在 12 月的銷貨成本。</p>
+
+<h3>期末的調整分錄</h3>
+<p>月底結帳前，要把「已經發生但還沒記」的東西補上。常見有五種：</p>
+<div class="tscroll"><table>
+<tr><th>類型</th><th>狀況</th><th>例子</th></tr>
+<tr><td>應計費用</td><td>已經用了，還沒付錢</td><td>本月利息、本月水電（帳單下月才來）</td></tr>
+<tr><td>應計收入</td><td>已經賺了，還沒收錢</td><td>銀行存款利息尚未入帳</td></tr>
+<tr><td>預付費用</td><td>先付了錢，逐月用掉</td><td>預付一年保險費</td></tr>
+<tr><td>預收收入</td><td>先收了錢，逐月交付</td><td>補習班預收學費</td></tr>
+<tr><td>折舊</td><td>設備價值隨使用而減少</td><td>封口機每月折舊</td></tr>
+</table></div>
+
+<h3>阿明的月底調整</h3>
+<p>阿明的封口機 30,000 元預計用 5 年，每月折舊 500 元；銀行借款 20,000 元年利率 6%，本月利息 100 元，下個月才付。</p>
+<div class="je"><div class="row hd"><span>科目</span><span class="r">借方</span><span class="r">貸方</span></div>
+<div class="row"><span class="acc">折舊費用</span><span class="r">500</span><span></span></div>
+<div class="row cr"><span class="acc">累計折舊—設備</span><span></span><span class="r">500</span></div>
+<div class="row"><span class="acc">利息費用</span><span class="r">100</span><span></span></div>
+<div class="row cr"><span class="acc">應付利息</span><span></span><span class="r">100</span></div>
+<div class="memo">累計折舊是資產的「減項」，記在貸方，讓設備的帳面價值逐漸變小。第 12 章詳細說明。</div></div>
+<p>調整後，本月淨利由 5,000 變成 <strong>4,400</strong> 元。接下來第二篇的四張報表，都用調整後的數字。</p>
+<div class="quiz" data-ch="ch5"></div>
+</section>
+<!-- ================= CH6 ================= -->
+<section class="ch" id="ch6" data-part="第二篇　看懂四大報表" data-title="6. 資產負債表">
+<p class="kicker">第二篇　看懂四大報表</p>
+<h2 class="title">資產負債表：某一天的「照片」</h2>
+<p class="lead">資產負債表顯示公司在<strong>某一個時間點</strong>（例如 12 月 31 日）擁有什麼、欠什麼。它是一張照片，不是一段影片。</p>
+<div class="box origin"><span class="lab">名詞由來</span><p>英文叫 <em>balance sheet</em>，<em>balance</em> 就是「平衡」：左邊資產等於右邊負債加權益。國際準則的正式名稱是「財務狀況表」，但大家仍習慣叫資產負債表。</p></div>
+
+<div class="tscroll"><table><caption>阿明珍奶攤　資產負債表　（某年 1 月 31 日）</caption>
+<tr><th>項目</th><th class="r">金額（NT$）</th></tr>
+<tr class="sub"><td>流動資產</td><td></td></tr>
+<tr><td class="ind">現金</td><td class="r">44,000</td></tr>
+<tr><td class="ind">存貨</td><td class="r">4,000</td></tr>
+<tr class="sub"><td class="ind">流動資產合計</td><td class="r">48,000</td></tr>
+<tr class="sub"><td>非流動資產</td><td></td></tr>
+<tr><td class="ind">設備</td><td class="r">30,000</td></tr>
+<tr><td class="ind">減：累計折舊</td><td class="r neg">(500)</td></tr>
+<tr class="sub"><td class="ind">非流動資產合計</td><td class="r">29,500</td></tr>
+<tr class="total"><td>資產總計</td><td class="r">77,500</td></tr>
+<tr class="sub"><td>流動負債</td><td></td></tr>
+<tr><td class="ind">應付帳款</td><td class="r">3,000</td></tr>
+<tr><td class="ind">應付利息</td><td class="r">100</td></tr>
+<tr class="sub"><td>非流動負債</td><td></td></tr>
+<tr><td class="ind">長期銀行借款</td><td class="r">20,000</td></tr>
+<tr class="sub"><td class="ind">負債合計</td><td class="r">23,100</td></tr>
+<tr class="sub"><td>權益</td><td></td></tr>
+<tr><td class="ind">業主資本</td><td class="r">50,000</td></tr>
+<tr><td class="ind">保留盈餘（本期淨利）</td><td class="r">4,400</td></tr>
+<tr class="sub"><td class="ind">權益合計</td><td class="r">54,400</td></tr>
+<tr class="total"><td>負債及權益總計</td><td class="r">77,500</td></tr>
+</table></div>
+<p>會計習慣用<strong>括號</strong>表示負數或減項，並在總計下畫<strong>雙底線</strong>，表示「算到這裡為止，數字確定」。</p>
+
+<h3>流動與非流動</h3>
+<p>以<strong>一年</strong>（或一個營業週期）為界：一年內會變成現金或用掉的資產叫<strong>流動資產</strong>；一年內要還的負債叫<strong>流動負債</strong>。</p>
+<div class="box origin"><span class="lab">「流動」的由來</span><p>英文 <em>current</em> 來自拉丁文 <em>currere</em>「奔跑」，同一個字根還有 currency（貨幣）。流動資產就是在公司裡「跑來跑去」、很快轉手的資產，像水流一樣。</p></div>
+
+<h3>常見科目一覽</h3>
+<div class="tscroll"><table>
+<tr><th>類別</th><th>常見科目</th></tr>
+<tr><td>流動資產</td><td>現金及約當現金、應收帳款、應收票據、存貨、預付款項</td></tr>
+<tr><td>非流動資產</td><td>不動產廠房及設備（土地、廠房、機器）、無形資產（商標、軟體）、長期投資、使用權資產（租來的廠房）</td></tr>
+<tr><td>流動負債</td><td>應付帳款、應付薪資、應付稅款、短期借款、預收款項、一年內到期長期借款</td></tr>
+<tr><td>非流動負債</td><td>長期借款、租賃負債、員工退休金負債</td></tr>
+<tr><td>權益</td><td>股本、資本公積、保留盈餘、其他權益</td></tr>
+</table></div>
+<div class="box tip"><span class="lab">讀表的第一眼</span>先比較「流動資產」和「流動負債」。如果流動負債比流動資產大很多，代表一年內要還的錢，比一年內能變現的東西還多，公司可能周轉不靈。</div>
+<div class="quiz" data-ch="ch6"></div>
+</section>
+
+<!-- ================= CH7 ================= -->
+<section class="ch" id="ch7" data-part="第二篇　看懂四大報表" data-title="7. 綜合損益表">
+<p class="kicker">第二篇　看懂四大報表</p>
+<h2 class="title">綜合損益表：一段時間的「影片」</h2>
+<p class="lead">損益表記錄一段<strong>期間</strong>（一個月、一年）內賺了多少、花了多少，最後得到<strong>淨利</strong>或<strong>淨損</strong>。</p>
+<div class="tscroll"><table><caption>阿明珍奶攤　綜合損益表　（某年 1 月 1 日至 1 月 31 日）</caption>
+<tr><th>項目</th><th class="r">金額（NT$）</th></tr>
+<tr><td>營業收入</td><td class="r">12,000</td></tr>
+<tr><td>營業成本（銷貨成本）</td><td class="r neg">(4,000)</td></tr>
+<tr class="sub"><td>營業毛利</td><td class="r">8,000</td></tr>
+<tr><td class="ind">租金費用</td><td class="r neg">(3,000)</td></tr>
+<tr><td class="ind">折舊費用</td><td class="r neg">(500)</td></tr>
+<tr class="sub"><td>營業利益</td><td class="r">4,500</td></tr>
+<tr><td>營業外支出：利息費用</td><td class="r neg">(100)</td></tr>
+<tr class="sub"><td>稅前淨利</td><td class="r">4,400</td></tr>
+<tr><td>所得稅費用（本例略）</td><td class="r">—</td></tr>
+<tr class="total"><td>本期淨利</td><td class="r">4,400</td></tr>
+</table></div>
+
+<h3>一層一層往下扣</h3>
+<div class="flow"><span>營收</span><i>－成本＝</i><span>毛利</span><i>－營業費用＝</i><span>營業利益</span><i>±業外＝</i><span>稅前淨利</span><i>－所得稅＝</i><span>淨利</span></div>
+<ul>
+  <li><strong>毛利</strong>：產品本身賺多少。一杯奶茶賣 60 元、原料 20 元，毛利 40 元。</li>
+  <li><strong>營業利益</strong>：扣掉租金、薪水、廣告等經營開銷後，本業賺多少。這是判斷本業好壞的關鍵。</li>
+  <li><strong>業外收支</strong>：跟本業無關的，例如利息、賣掉舊機器的利得、匯兌損益。</li>
+  <li><strong>淨利</strong>：最後真正屬於股東的利潤，英文常說 bottom line（最底下那一行）。</li>
+</ul>
+<div class="box origin"><span class="lab">名詞由來</span>
+<p><strong>收入</strong>（revenue）來自法文 <em>revenir</em>「回來」，投出去的心力，換回來的錢。<strong>毛利</strong>的「毛」和「毛重」一樣，指還沒扣乾淨的。</p>
+<p><strong>赤字</strong>：以前手寫帳本，虧損的數字用紅墨水寫，所以虧損叫「赤字」（red ink），賺錢叫「黑字」（in the black）。這份教材用紅色表示負數，就是延續這個傳統。</p>
+</div>
+<h3>為什麼叫「綜合」損益表？</h3>
+<p>國際準則（IFRS）要求在淨利下面再加上<strong>其他綜合損益</strong>，例如海外子公司的匯率換算差額、某些投資的未實現價值變動。這些還沒真正實現，所以不算進淨利，但仍要揭露。淨利加上其他綜合損益，叫<strong>綜合損益總額</strong>。</p>
+<div class="box eg"><span class="lab">例子：成衣廠的損益表長什麼樣</span><p>一家在西哈努克的成衣代工廠，營收主要是出口訂單；營業成本包含布料、縫紉工人薪資、廠房電費、機器折舊；營業費用則是行政人員薪水、辦公費、驗貨運費。美元對瑞爾或新台幣的匯率變動，會出現在業外的「兌換損益」。</p></div>
+<div class="quiz" data-ch="ch7"></div>
+</section>
+
+<!-- ================= CH8 ================= -->
+<section class="ch" id="ch8" data-part="第二篇　看懂四大報表" data-title="8. 現金流量表">
+<p class="kicker">第二篇　看懂四大報表</p>
+<h2 class="title">現金流量表：錢真的進來了嗎？</h2>
+<p class="lead">損益表說賺了 4,400 元，但賺錢不等於有錢。現金流量表只看<strong>現金實際的進出</strong>，是很多專業投資人最先看的報表。</p>
+<div class="box eg"><span class="lab">例子：賺錢卻倒閉</span><p>一家工廠接了大訂單，帳上賺很多，但客戶 90 天後才付款。這 90 天裡要先付布料錢、發薪水、繳電費。如果手上現金不夠，公司就會「黑字倒閉」：有利潤，卻付不出錢而倒閉。</p></div>
+
+<h3>三種活動</h3>
+<div class="tscroll"><table>
+<tr><th>活動</th><th>內容</th><th>健康公司通常</th></tr>
+<tr><td><strong>營業活動</strong></td><td>本業：收客戶的錢、付供應商、發薪水、繳稅</td><td>正數（本業會生錢）</td></tr>
+<tr><td><strong>投資活動</strong></td><td>買賣機器、廠房、長期投資</td><td>負數（持續投資未來）</td></tr>
+<tr><td><strong>籌資活動</strong></td><td>向銀行借錢、還錢、股東增資、發股利</td><td>看階段而定</td></tr>
+</table></div>
+
+<div class="tscroll"><table><caption>阿明珍奶攤　現金流量表（間接法）　1 月</caption>
+<tr class="sub"><td>營業活動之現金流量</td><td></td></tr>
+<tr><td class="ind">本期淨利</td><td class="r">4,400</td></tr>
+<tr><td class="ind">加：折舊費用（沒有付現金的費用）</td><td class="r">500</td></tr>
+<tr><td class="ind">存貨增加（錢變成了茶葉）</td><td class="r neg">(4,000)</td></tr>
+<tr><td class="ind">應付帳款增加（還沒付的錢）</td><td class="r">3,000</td></tr>
+<tr><td class="ind">應付利息增加</td><td class="r">100</td></tr>
+<tr class="sub"><td class="ind">營業活動淨現金流入</td><td class="r">4,000</td></tr>
+<tr class="sub"><td>投資活動之現金流量</td><td></td></tr>
+<tr><td class="ind">購置設備</td><td class="r neg">(30,000)</td></tr>
+<tr class="sub"><td>籌資活動之現金流量</td><td></td></tr>
+<tr><td class="ind">業主投入資本</td><td class="r">50,000</td></tr>
+<tr><td class="ind">舉借銀行借款</td><td class="r">20,000</td></tr>
+<tr class="sub"><td class="ind">籌資活動淨現金流入</td><td class="r">70,000</td></tr>
+<tr><td>本期現金增加</td><td class="r">44,000</td></tr>
+<tr><td>期初現金</td><td class="r">0</td></tr>
+<tr class="total"><td>期末現金</td><td class="r">44,000</td></tr>
+</table></div>
+<p>期末現金 44,000，正好等於資產負債表上的現金。三張表就是這樣互相勾稽的。</p>
+
+<h3>直接法與間接法</h3>
+<p><strong>直接法</strong>直接列出「收客戶 12,000、付供應商 5,000、付租金 3,000」，得到 4,000。<strong>間接法</strong>從淨利出發，把不影響現金的項目調回來，結果一樣。實務上大多用間接法，因為它能看出「淨利和現金差在哪裡」。</p>
+<div class="box tip"><span class="lab">間接法的調整口訣</span>資產增加，現金減少（錢被綁住了）；負債增加，現金增加（錢還沒付出去）。折舊、攤銷這類「不花現金的費用」要加回。</div>
+<div class="quiz" data-ch="ch8"></div>
+</section>
+
+<!-- ================= CH9 ================= -->
+<section class="ch" id="ch9" data-part="第二篇　看懂四大報表" data-title="9. 權益變動表、附註與報表連動">
+<p class="kicker">第二篇　看懂四大報表</p>
+<h2 class="title">權益變動表、附註，以及四表如何串在一起</h2>
+<h3>權益變動表</h3>
+<p>說明股東的「那一份」這期怎麼變：期初多少、增資多少、賺了多少、發了多少股利、期末多少。</p>
+<div class="tscroll"><table><caption>阿明珍奶攤　權益變動表　1 月</caption>
+<tr><th></th><th class="r">業主資本</th><th class="r">保留盈餘</th><th class="r">合計</th></tr>
+<tr><td>期初餘額</td><td class="r">0</td><td class="r">0</td><td class="r">0</td></tr>
+<tr><td>業主投入</td><td class="r">50,000</td><td class="r"></td><td class="r">50,000</td></tr>
+<tr><td>本期淨利</td><td class="r"></td><td class="r">4,400</td><td class="r">4,400</td></tr>
+<tr><td>分配股利</td><td class="r"></td><td class="r">0</td><td class="r">0</td></tr>
+<tr class="total"><td>期末餘額</td><td class="r">50,000</td><td class="r">4,400</td><td class="r">54,400</td></tr>
+</table></div>
+<div class="box origin"><span class="lab">名詞由來</span><p><strong>保留盈餘</strong>：賺到的錢沒有發給股東、「保留」在公司裡繼續使用。<strong>股利</strong>（dividend）來自拉丁文 <em>dividendum</em>「要被分掉的東西」。</p></div>
+
+<h3>附註：報表的使用說明書</h3>
+<p>報表上只有數字，附註則解釋數字背後的故事。專業人員讀財報，常常花在附註上的時間比報表本身還多。重要附註包括：</p>
+<ul>
+  <li><strong>重大會計政策</strong>：存貨用什麼方法計價、機器折舊幾年。</li>
+  <li><strong>關係人交易</strong>：跟老闆的其他公司、母公司之間的買賣。</li>
+  <li><strong>或有負債與承諾</strong>：官司、替別人作保、已簽約但還沒付的採購。</li>
+  <li><strong>期後事項</strong>：結帳日之後、報表發布前發生的大事，例如工廠火災。</li>
+</ul>
+
+<h3>四張表的連動關係</h3>
+<div class="tscroll"><svg viewBox="0 0 680 290" style="width:100%;min-width:560px;height:auto;display:block;margin:1em 0" role="img" aria-label="四張報表的連動關係圖">
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--red)"/></marker></defs>
+  <g font-size="15" fill="var(--ink)" font-family="var(--serif)">
+    <rect x="20" y="20" width="200" height="70" rx="6" fill="var(--sheet)" stroke="var(--rule-strong)" stroke-width="2"/>
+    <text x="120" y="50" text-anchor="middle" font-weight="700">綜合損益表</text><text x="120" y="72" text-anchor="middle" font-size="13">本期淨利 4,400</text>
+    <rect x="460" y="20" width="200" height="70" rx="6" fill="var(--sheet)" stroke="var(--rule-strong)" stroke-width="2"/>
+    <text x="560" y="50" text-anchor="middle" font-weight="700">權益變動表</text><text x="560" y="72" text-anchor="middle" font-size="13">期末權益 54,400</text>
+    <rect x="240" y="190" width="200" height="80" rx="6" fill="var(--sheet)" stroke="var(--red)" stroke-width="2.5"/>
+    <text x="340" y="222" text-anchor="middle" font-weight="700">資產負債表</text><text x="340" y="246" text-anchor="middle" font-size="13">現金 44,000／權益 54,400</text>
+    <rect x="20" y="190" width="190" height="80" rx="6" fill="var(--sheet)" stroke="var(--rule-strong)" stroke-width="2"/>
+    <text x="115" y="222" text-anchor="middle" font-weight="700">現金流量表</text><text x="115" y="246" text-anchor="middle" font-size="13">期末現金 44,000</text>
+  </g>
+  <g stroke="var(--red)" stroke-width="2" fill="none" marker-end="url(#ar)">
+    <path d="M222 55 H456"/><path d="M560 92 V150 H400 V186"/><path d="M110 92 V186"/><path d="M212 230 H236"/>
+  </g>
+  <g font-size="12.5" fill="var(--muted)">
+    <text x="300" y="46">淨利流入保留盈餘</text><text x="470" y="142">期末權益</text><text x="118" y="140">淨利是間接法起點</text><text x="200" y="285">期末現金＝帳上現金</text>
+  </g>
+</svg></div>
+<div class="box tip"><span class="lab">專業人員的核對習慣</span>拿到任何一份財報，先檢查這三個「勾稽」：損益表淨利＝權益變動表淨利；權益變動表期末數＝資產負債表權益；現金流量表期末現金＝資產負債表現金。對不起來，就一定有錯。</div>
+<div class="quiz" data-ch="ch9"></div>
+</section>
+
+<!-- ================= CH10 ================= -->
+<section class="ch" id="ch10" data-part="第三篇　重要科目深入" data-title="10. 存貨與銷貨成本">
+<p class="kicker">第三篇　重要科目深入</p>
+<h2 class="title">存貨與銷貨成本</h2>
+<p class="lead">買進來準備賣的東西叫<strong>存貨</strong>。賣掉時，它的成本從資產搬到損益表，變成<strong>銷貨成本</strong>。問題是：同樣的東西、不同時間買、價格不一樣，賣掉的是哪一批？</p>
+<div class="tscroll"><table>
+<tr><th>日期</th><th>事件</th><th class="r">數量</th><th class="r">單價</th><th class="r">金額</th></tr>
+<tr><td>1/1</td><td>期初存貨（T 恤）</td><td class="r">100</td><td class="r">10</td><td class="r">1,000</td></tr>
+<tr><td>1/10</td><td>進貨</td><td class="r">200</td><td class="r">12</td><td class="r">2,400</td></tr>
+<tr><td>1/20</td><td>賣出</td><td class="r">250</td><td></td><td></td></tr>
+</table></div>
+<h3>方法一：先進先出法（FIFO）</h3>
+<p>假設<strong>先買的先賣</strong>，像超市把舊牛奶擺前面。</p>
+<p>銷貨成本 ＝ 100×10 ＋ 150×12 ＝ <strong>2,800</strong>；期末存貨 ＝ 50×12 ＝ <strong>600</strong>。</p>
+<h3>方法二：加權平均法</h3>
+<p>把所有存貨混在一起算平均單價：(1,000＋2,400) ÷ 300 ＝ 11.33。</p>
+<p>銷貨成本 ＝ 250×11.33 ≈ <strong>2,833</strong>；期末存貨 ≈ <strong>567</strong>。</p>
+<div class="box tip"><span class="lab">觀察</span>物價上漲時，先進先出法的銷貨成本比較低、利潤比較高。方法不同，利潤就不同，所以公司必須在附註寫清楚用哪種方法，而且不能隨便換。IFRS 不允許「後進先出法」（LIFO），美國準則則允許。</div>
+
+<h3>成本與淨變現價值孰低</h3>
+<p>如果存貨放到過時（例如去年流行的款式），售價可能低於成本。會計要求把存貨寫低到「<strong>淨變現價值</strong>」（估計售價減去還要花的成本），認列<strong>存貨跌價損失</strong>。這叫<strong>成本與淨變現價值孰低法</strong>，目的是不要讓資產看起來比實際值錢。</p>
+<div class="box origin"><span class="lab">名詞由來</span><p>英文 <em>inventory</em> 來自拉丁文 <em>inventarium</em>「找到的東西的清單」，所以存貨一開始就和「盤點清單」分不開。中文「孰低」是文言「哪一個比較低」的意思。</p></div>
+
+<h3>盤點：帳和實物要一致</h3>
+<p>帳上寫有 50 件，倉庫裡真的有 50 件嗎？定期<strong>盤點</strong>是存貨管理和查核的核心。差異可能來自失竊、損壞、收發料沒登記。會計師查核時，通常會到現場「觀察盤點」（第 17 章）。</p>
+<div class="quiz" data-ch="ch10"></div>
+</section>
+
+<!-- ================= CH11 ================= -->
+<section class="ch" id="ch11" data-part="第三篇　重要科目深入" data-title="11. 製造業成本會計">
+<p class="kicker">第三篇　重要科目深入</p>
+<h2 class="title">製造業成本會計：一件衣服的成本</h2>
+<p class="lead">買賣業的存貨是「買來的」，製造業的存貨是「做出來的」。做一件衣服的成本，由三個部分組成：<strong>直接材料、直接人工、製造費用</strong>。</p>
+
+<div class="tscroll"><table>
+<tr><th>成本要素</th><th>意思</th><th>成衣廠例子</th></tr>
+<tr><td>直接材料</td><td>能直接追溯到產品上的材料</td><td>布料、拉鍊、鈕扣、線、吊牌</td></tr>
+<tr><td>直接人工</td><td>直接做產品的人的薪資</td><td>裁剪工、車縫工、整燙工</td></tr>
+<tr><td>製造費用</td><td>工廠裡其他無法直接對應到單件的成本</td><td>廠房租金、電費、機器折舊、品管與線長薪資、機針等耗材</td></tr>
+</table></div>
+<p>直接人工＋製造費用，又合稱<strong>加工成本</strong>。成衣業常說的 CMT（Cut, Make, Trim，裁剪、車縫、整理），就是代工廠只收加工費、布料由客戶提供的模式。</p>
+
+<h3>生產流程上的會計科目</h3>
+<div class="flow"><span>原料</span><i>領料→</i><span>在製品</span><i>完工→</i><span>製成品</span><i>出貨→</i><span>銷貨成本</span></div>
+<p>三種存貨依序流動：原料倉的布料被領出來、投入生產線變成在製品、完工入庫成為製成品、出貨後才變成銷貨成本。</p>
+
+<h3>實例：柬埔寨工廠一件 T 恤的標準成本</h3>
+<p>以下數字是教學用的假設。一張 10,000 件的圓領 T 恤訂單，FOB 單價 US$4.20：</p>
+<div class="tscroll"><table>
+<tr><th>項目</th><th>計算</th><th class="r">每件（US$）</th></tr>
+<tr><td>布料</td><td>單耗 0.9 碼 × 每碼 2.50</td><td class="r">2.25</td></tr>
+<tr><td>輔料</td><td>線、標籤、吊牌、包裝</td><td class="r">0.30</td></tr>
+<tr><td>直接人工</td><td>標準工時 12 分鐘 × 每分鐘人工成本 0.035</td><td class="r">0.42</td></tr>
+<tr><td>製造費用</td><td>以人工分鐘分攤：12 分鐘 × 0.025</td><td class="r">0.30</td></tr>
+<tr class="sub"><td>標準製造成本</td><td></td><td class="r">3.27</td></tr>
+<tr><td>售價（FOB）</td><td></td><td class="r">4.20</td></tr>
+<tr class="total"><td>每件毛利</td><td>毛利率約 22%</td><td class="r">0.93</td></tr>
+</table></div>
+<div class="box origin"><span class="lab">名詞由來</span>
+<p><strong>SAM</strong>（Standard Allowed Minutes，標準允許分鐘）是成衣業衡量工時的單位，源自二十世紀初美國工程師泰勒的「科學管理」和動作時間研究：把每個動作計時，定出合理的標準時間。</p>
+<p><strong>FOB</strong>（Free On Board）是國際貿易條件，指賣方負責把貨送上船，之後的運費和風險由買方負擔。</p>
+</div>
+
+<h3>製造費用怎麼分攤？</h3>
+<p>電費、廠房租金不會寫著「這是哪件衣服用的」，所以要選一個<strong>分攤基礎</strong>。成衣廠最常用<strong>標準分鐘</strong>，因為越複雜的款式，占用機器和廠房的時間越久。</p>
+<p>預計分攤率 ＝ 預計全年製造費用 ÷ 預計全年標準分鐘數。</p>
+
+<h3>標準成本與差異分析</h3>
+<p>做完之後，拿實際成本和標準成本比較，找出差在哪：</p>
+<ul>
+  <li><strong>材料價格差異</strong>：布料實際買得比預算貴。</li>
+  <li><strong>材料數量差異</strong>：裁剪排版不好，用布比標準多。</li>
+  <li><strong>人工效率差異</strong>：產線效率 60%，本來 12 分鐘的衣服實際花了 20 分鐘。</li>
+</ul>
+<div class="box eg"><span class="lab">例子：效率就是成本</span><p>上表的 0.42 是假設產線效率 100%。如果每分鐘人工成本 0.035 不變，但產線效率從 70% 掉到 50%，實際人工成本會從約 0.60 升到 0.84，這張單的毛利會被吃掉一大半。所以工廠管理者看效率報表，其實就是在看成本。</p></div>
+<div class="quiz" data-ch="ch11"></div>
+</section>
+
+<!-- ================= CH12 ================= -->
+<section class="ch" id="ch12" data-part="第三篇　重要科目深入" data-title="12. 固定資產與折舊">
+<p class="kicker">第三篇　重要科目深入</p>
+<h2 class="title">固定資產與折舊</h2>
+<p class="lead">一台縫紉機可以用好幾年。如果買的那年一次當成費用，那年會看起來大虧、之後幾年又虛胖。<strong>折舊</strong>就是把成本平均分攤到它有用的每一年。</p>
+<div class="box origin"><span class="lab">「折舊」的由來</span><p>中文字面很直白：東西變「舊」了，價值打「折」。英文 <em>depreciation</em> 來自拉丁文 <em>de</em>（向下）＋ <em>pretium</em>（價格），就是價格往下掉。</p><p>但要注意：會計上的折舊主要是<strong>分攤成本</strong>，不是估計二手市價。</p></div>
+
+<h3>計算折舊需要三個數字</h3>
+<ul>
+  <li><strong>成本</strong>：買價＋運費＋安裝費等，讓機器能用所花的一切。</li>
+  <li><strong>耐用年限</strong>：預計能用幾年。</li>
+  <li><strong>殘值</strong>：用完後還能賣多少。</li>
+</ul>
+<div class="widget" id="depcalc">
+  <h4>互動：折舊計算機</h4>
+  <div class="form">
+    <label>成本<input type="number" id="dCost" value="36000" min="0"></label>
+    <label>殘值<input type="number" id="dSal" value="6000" min="0"></label>
+    <label>耐用年限<input type="number" id="dLife" value="5" min="1" max="20"></label>
+    <label>方法<select id="dMeth"><option value="sl">直線法</option><option value="ddb">雙倍餘額遞減法</option><option value="syd">年數合計法</option></select></label>
+  </div>
+  <svg class="bars" id="dBars" viewBox="0 0 420 220" role="img" aria-label="各年帳面價值"></svg>
+  <div class="tscroll"><table id="dTable"></table></div>
+</div>
+<ul>
+  <li><strong>直線法</strong>：每年一樣多，（成本－殘值）÷ 年限。最常用。</li>
+  <li><strong>雙倍餘額遞減法</strong>：前幾年提得多、後面少，適合一買來就掉價快的東西，例如電腦。</li>
+  <li><strong>年數合計法</strong>：也是前多後少，但比較溫和。</li>
+</ul>
+
+<h3>帳面價值</h3>
+<p>成本 － 累計折舊 ＝ <strong>帳面價值</strong>。資產負債表上寫的是帳面價值，不是市價。土地通常<strong>不提折舊</strong>，因為土地不會用壞。</p>
+<h3>資本支出與收益支出</h3>
+<p>換一根縫紉機的針，是當期<strong>費用</strong>；幫機器加裝自動剪線裝置、延長壽命或提升效能，要加到機器<strong>成本</strong>裡（資本化）。分錯的話，當年利潤就會被高估或低估，這也是稽核常查的地方。</p>
+<h3>減損</h3>
+<p>如果機器因為技術淘汰、訂單消失而大幅貶值，可回收金額低於帳面價值，就要認列<strong>減損損失</strong>。</p>
+<div class="box tip"><span class="lab">攤銷</span>無形資產（軟體、專利）的「折舊」叫<strong>攤銷</strong>，道理一樣。英文 <em>amortization</em> 來自古法文，字根有「讓它死去」的意思，指把成本慢慢消滅掉。</div>
+<div class="quiz" data-ch="ch12"></div>
+</section>
+
+<!-- ================= CH13 ================= -->
+<section class="ch" id="ch13" data-part="第三篇　重要科目深入" data-title="13. 應收帳款、負債與權益">
+<p class="kicker">第三篇　重要科目深入</p>
+<h2 class="title">應收帳款、負債與權益</h2>
+<h3>應收帳款與預期信用損失</h3>
+<p>賣貨給客戶、約定 60 天後付款，這 60 天裡客戶欠你的錢就是<strong>應收帳款</strong>。但總有些客戶最後付不出來。</p>
+<p>會計不等客戶真的倒了才認損失，而是事先<strong>估計</strong>收不回的比例，提列<strong>備抵損失</strong>（以前叫備抵呆帳）。常用方法是<strong>帳齡分析</strong>：欠越久，收不回的機率越高。</p>
+<div class="tscroll"><table><caption>帳齡分析範例（US$）</caption>
+<tr><th>逾期天數</th><th class="r">金額</th><th class="r">預估損失率</th><th class="r">備抵損失</th></tr>
+<tr><td>未逾期</td><td class="r">80,000</td><td class="r">1%</td><td class="r">800</td></tr>
+<tr><td>1–30 天</td><td class="r">15,000</td><td class="r">5%</td><td class="r">750</td></tr>
+<tr><td>31–90 天</td><td class="r">4,000</td><td class="r">20%</td><td class="r">800</td></tr>
+<tr><td>90 天以上</td><td class="r">1,000</td><td class="r">60%</td><td class="r">600</td></tr>
+<tr class="total"><td>合計</td><td class="r">100,000</td><td></td><td class="r">2,950</td></tr>
+</table></div>
+<div class="box origin"><span class="lab">名詞由來</span><p><strong>呆帳</strong>的「呆」是「不動、死掉」的意思，帳款卡住收不回來。<strong>備抵</strong>是「預備抵銷」：先準備一筆數字，將來用來抵銷真正收不回的帳。</p></div>
+
+<h3>負債：不只是借款</h3>
+<ul>
+  <li><strong>應付帳款</strong>：欠供應商的貨款。</li>
+  <li><strong>應付費用</strong>：已發生未付的薪資、電費、利息。</li>
+  <li><strong>負債準備</strong>：金額或時間不確定但很可能要付的，例如保固、員工資遣費、訴訟可能的賠償。</li>
+  <li><strong>或有負債</strong>：不太可能發生、或金額無法估計的，只在附註揭露，不入帳。</li>
+  <li><strong>租賃負債</strong>：依 IFRS 16，租用廠房多年，要把未來租金的現值記成負債，同時記一筆「使用權資產」。</li>
+</ul>
+<div class="box eg"><span class="lab">例子：員工的年資給付</span><p>許多國家的勞動法規定，員工離職或退休時要依年資付一筆錢。公司在員工工作的每一年就要把這份「將來要付的錢」逐步估列為負債，而不是等員工離職才一次認列。柬埔寨、台灣都有類似的年資或退休給付制度。</p></div>
+
+<h3>權益的組成</h3>
+<div class="tscroll"><table>
+<tr><th>科目</th><th>說明</th></tr>
+<tr><td>股本</td><td>股東投入、按面額計算的部分</td></tr>
+<tr><td>資本公積</td><td>股東投入超過面額的部分（溢價）</td></tr>
+<tr><td>保留盈餘</td><td>歷年累積淨利減去已發放股利</td></tr>
+<tr><td>法定盈餘公積</td><td>法律要求從盈餘提撥、不能隨意分配的部分（台灣公司法規定提 10%）</td></tr>
+</table></div>
+<div class="box origin"><span class="lab">「資本」的由來</span><p>英文 <em>capital</em> 來自拉丁文 <em>caput</em>「頭」。古代財富用牲畜「頭數」計算，所以本錢叫 capital。中文「資本」則是「資財的根本」。</p></div>
+<div class="quiz" data-ch="ch13"></div>
+</section>
+<!-- ================= CH14 ================= -->
+<section class="ch" id="ch14" data-part="第四篇　財報分析" data-title="14. 比率分析與杜邦分析">
+<p class="kicker">第四篇　財報分析</p>
+<h2 class="title">比率分析：用幾個數字看穿一家公司</h2>
+<p class="lead">單看「淨利 100 萬」看不出好壞：營收 200 萬賺 100 萬很厲害，營收 10 億只賺 100 萬就很危險。<strong>比率</strong>把數字放在一起比較，才有意義。</p>
+<h3>四大類比率</h3>
+<div class="tscroll"><table>
+<tr><th>類別</th><th>比率</th><th>公式</th><th>回答的問題</th></tr>
+<tr><td rowspan="2">償債能力（短期）</td><td>流動比率</td><td>流動資產 ÷ 流動負債</td><td>一年內還得出錢嗎？</td></tr>
+<tr><td>速動比率</td><td>（流動資產－存貨）÷ 流動負債</td><td>不賣存貨也還得出嗎？</td></tr>
+<tr><td>財務結構（長期）</td><td>負債比率</td><td>總負債 ÷ 總資產</td><td>公司靠借錢的程度</td></tr>
+<tr><td rowspan="4">獲利能力</td><td>毛利率</td><td>毛利 ÷ 營收</td><td>產品本身賺不賺</td></tr>
+<tr><td>淨利率</td><td>淨利 ÷ 營收</td><td>每 100 元營收最後剩多少</td></tr>
+<tr><td>資產報酬率 ROA</td><td>淨利 ÷ 總資產</td><td>資產用得有沒有效率</td></tr>
+<tr><td>股東權益報酬率 ROE</td><td>淨利 ÷ 權益</td><td>股東的錢賺了多少回報</td></tr>
+<tr><td rowspan="2">經營效率</td><td>存貨週轉天數</td><td>365 ÷（銷貨成本 ÷ 平均存貨）</td><td>貨放多久才賣掉</td></tr>
+<tr><td>應收帳款收現天數</td><td>365 ÷（營收 ÷ 平均應收帳款）</td><td>客戶多久付錢</td></tr>
+<tr><td>現金品質</td><td>營業現金流 ÷ 淨利</td><td>營業現金流 ÷ 淨利</td><td>利潤有沒有真的變成現金</td></tr>
+</table></div>
+<div class="widget" id="ratiocalc">
+  <h4>互動：比率計算機</h4>
+  <p style="margin:0 0 8px;font-size:15px">預設數字是第 22 章成衣小廠的月報。改改看，觀察比率變化。</p>
+  <div class="form" id="rForm"></div>
+  <div id="rOut"></div>
+</div>
+
+<h3>杜邦分析：把 ROE 拆開看</h3>
+<p>ROE 高是好事，但高的原因不同，意義完全不一樣。杜邦分析把它拆成三個乘數：</p>
+<div class="box"><p style="font-family:var(--serif);font-size:18px;text-align:center;margin:0">ROE ＝ 淨利率 × 資產週轉率 × 權益乘數<br><span style="font-size:15px;color:var(--muted)">（淨利÷營收）×（營收÷總資產）×（總資產÷權益）</span></p></div>
+<ul>
+  <li><strong>淨利率高</strong>：產品有定價能力，例如名牌。</li>
+  <li><strong>週轉率高</strong>：薄利多銷，例如超市、代工廠。</li>
+  <li><strong>權益乘數高</strong>：借很多錢來做生意，報酬放大，風險也放大。</li>
+</ul>
+<div class="box origin"><span class="lab">杜邦分析的由來</span><p>1910 年代，美國杜邦公司的財務人員唐納森．布朗（Donaldson Brown）為了評估公司各個事業部，發明了這套拆解方法，後來通用汽車也採用，成為財務分析的經典工具，至今仍以杜邦命名。</p></div>
+<div class="box tip"><span class="lab">比率的三個比較方向</span>一、和自己的過去比（趨勢）；二、和同業比（成衣業毛利率和科技業不能直接比）；三、和目標或預算比。單一時點的單一比率，幾乎說明不了什麼。</div>
+<div class="quiz" data-ch="ch14"></div>
+</section>
+
+<!-- ================= CH15 ================= -->
+<section class="ch" id="ch15" data-part="第四篇　財報分析" data-title="15. 閱讀真實財報">
+<p class="kicker">第四篇　財報分析</p>
+<h2 class="title">閱讀一份真實財報的步驟</h2>
+<p class="lead">上市公司的財報動輒上百頁。專業人員有固定的閱讀順序，而不是從第一頁讀到最後一頁。</p>
+<h3>去哪裡找財報</h3>
+<ul>
+  <li><strong>台灣</strong>：上市櫃公司財報在「公開資訊觀測站」（MOPS），可以查到季報、年報、重大訊息。</li>
+  <li><strong>柬埔寨</strong>：在柬埔寨證券交易所（CSX）掛牌的公司會公告財報；一般非上市公司的報表則提交給稅務機關與會計審計監理機關。</li>
+</ul>
+<h3>八個步驟</h3>
+<ol>
+  <li><strong>先看會計師查核報告</strong>：意見是不是「無保留意見」？有沒有「繼續經營重大不確定性」段落？（第 17 章）</li>
+  <li><strong>看資產負債表結構</strong>：資產主要是什麼？負債占多少？有沒有大筆短期借款？</li>
+  <li><strong>看損益表趨勢</strong>：營收、毛利率、營業利益率連續幾年怎麼走？</li>
+  <li><strong>比對淨利與營業現金流</strong>：長期淨利為正、現金流卻為負，要特別小心。</li>
+  <li><strong>讀重要附註</strong>：會計政策、關係人交易、或有負債、期後事項。</li>
+  <li><strong>算關鍵比率</strong>並和同業比較。</li>
+  <li><strong>看股利與籌資</strong>：錢是靠本業賺的，還是一直靠借錢、增資？</li>
+  <li><strong>回到經營面</strong>：數字背後的原因是什麼？訂單、產能、匯率、原料價格？</li>
+</ol>
+<h3>財報警訊清單</h3>
+<div class="tscroll"><table>
+<tr><th>現象</th><th>可能代表</th></tr>
+<tr><td>營收成長 10%，應收帳款成長 50%</td><td>放寬信用硬塞貨給客戶，甚至虛增營收</td></tr>
+<tr><td>存貨週轉天數越來越長</td><td>產品賣不動、可能有過時存貨未提跌價</td></tr>
+<tr><td>淨利長年為正，營業現金流長年為負</td><td>利潤品質差，可能提早認列收入</td></tr>
+<tr><td>大量、金額大的關係人交易</td><td>利益輸送、美化報表</td></tr>
+<tr><td>頻繁更換會計師或會計主管</td><td>內部可能有爭議或問題</td></tr>
+<tr><td>突然改變折舊年限或存貨方法</td><td>用會計手法拉高利潤</td></tr>
+<tr><td>第四季營收異常集中</td><td>年底衝業績、可能跨期認列</td></tr>
+</table></div>
+<div class="box eg"><span class="lab">例子：安隆案</span><p>2001 年，美國能源巨頭安隆（Enron）利用大量特殊目的公司把負債藏在報表外，最後破產。它的簽證會計師事務所安達信（Arthur Andersen）也因此瓦解。美國隨後通過《沙賓法案》（Sarbanes-Oxley Act），大幅強化內部控制與會計師的責任。這件事說明：讀財報一定要讀附註，也說明為什麼需要第五篇的內控和查核。</p></div>
+<div class="quiz" data-ch="ch15"></div>
+</section>
+
+<!-- ================= CH16 ================= -->
+<section class="ch" id="ch16" data-part="第五篇　內控與稽核" data-title="16. 內部控制">
+<p class="kicker">第五篇　內控與稽核</p>
+<h2 class="title">內部控制：讓錯誤和舞弊很難發生</h2>
+<p class="lead">內部控制是公司自己設計的一套制度，確保資產安全、帳目正確、營運有效率、遵守法令。它的核心想法是：<strong>不要讓任何一個人，可以從頭到尾一手包辦。</strong></p>
+<div class="box eg"><span class="lab">例子：如果一個人全包</span><p>如果同一個人可以決定買什麼、向誰買、驗收貨物、再付款，他就能找親戚開公司、報高價、甚至貨沒來也付錢，而且沒有人會發現。把這些工作拆給不同的人，彼此就會互相檢查。</p></div>
+
+<h3>COSO 內部控制五大要素</h3>
+<div class="box origin"><span class="lab">COSO 的由來</span><p>1985 年美國成立「崔德威委員會」（Treadway Commission）研究財報舞弊，其贊助組織委員會（COSO）在 1992 年發表內部控制整合架構，2013 年更新。台灣上市櫃公司的內控制度規範、許多國際企業的內控，都以它為基礎。</p></div>
+<ol>
+  <li><strong>控制環境</strong>：高層的態度、組織架構、權責劃分。老闆自己不守規矩，其他控制都沒用。</li>
+  <li><strong>風險評估</strong>：找出哪裡最容易出錯或被舞弊，例如現金、採購、存貨。</li>
+  <li><strong>控制活動</strong>：具體的做法，如核准、職能分工、盤點、對帳、系統權限。</li>
+  <li><strong>資訊與溝通</strong>：正確的資訊能及時傳到該知道的人手上，也包括檢舉管道。</li>
+  <li><strong>監督</strong>：內部稽核定期檢查控制有沒有真的在運作。</li>
+</ol>
+
+<h3>採購付款循環：三單比對</h3>
+<div class="flow"><span>請購單</span><i>→</i><span>採購單</span><i>→</i><span>驗收單</span><i>→</i><span>供應商發票</span><i>→</i><span>付款</span></div>
+<p>付款前，會計要核對<strong>採購單、驗收單、發票</strong>三份文件的品名、數量、單價是否一致，叫做<strong>三單比對</strong>。三單一致才付款，就能擋掉大部分「多付、重複付、付給不存在的貨」的問題。</p>
+
+<h3>工廠常見的關鍵控制</h3>
+<div class="tscroll"><table>
+<tr><th>循環</th><th>風險</th><th>控制</th></tr>
+<tr><td>現金</td><td>挪用、假付款</td><td>每月銀行調節表由非出納人員編製；大額付款雙人簽核；零用金定額制</td></tr>
+<tr><td>薪資</td><td>幽靈員工、工時灌水</td><td>人事與薪資計算分開；打卡資料與薪資表核對；薪資直接匯入員工帳戶</td></tr>
+<tr><td>存貨</td><td>失竊、帳實不符</td><td>倉管與帳務分開；定期與不定期盤點；領料必須有單據</td></tr>
+<tr><td>銷貨</td><td>虛增營收、呆帳</td><td>出貨單與發票核對；客戶信用額度核准；應收帳齡定期檢討</td></tr>
+<tr><td>固定資產</td><td>資產遺失、閒置</td><td>財產編號貼標；年度盤點；報廢需核准</td></tr>
+</table></div>
+<div class="box tip"><span class="lab">三道防線</span>第一道是各部門自己（做事的人自我控制）；第二道是風險管理、法遵等功能部門（訂規則、監看）；第三道是獨立的內部稽核（查前兩道有沒有做好）。</div>
+<div class="quiz" data-ch="ch16"></div>
+</section>
+
+<!-- ================= CH17 ================= -->
+<section class="ch" id="ch17" data-part="第五篇　內控與稽核" data-title="17. 查核與如何準備稽核">
+<p class="kicker">第五篇　內控與稽核</p>
+<h2 class="title">會計師查核，以及如何準備稽核</h2>
+<p class="lead">報表是公司自己編的，外人憑什麼相信？所以需要一位<strong>獨立</strong>的會計師檢查，並簽發意見。</p>
+<div class="box origin"><span class="lab">「審計」與「稽核」的由來</span><p>英文 <em>audit</em> 來自拉丁文 <em>audire</em>「聽」。中世紀的莊園和政府，由管帳的人把帳目<strong>大聲唸出來</strong>，查帳的人負責聽，所以查帳人叫 auditor（聽的人）。英文 audience（聽眾）是同一個字根。</p><p>中文「稽」是考察、查究（如「無稽之談」就是無從查考的話），「核」是核對。「審計」則是審查會計的意思。</p></div>
+
+<h3>內部稽核與外部查核</h3>
+<div class="tscroll"><table>
+<tr><th></th><th>內部稽核</th><th>外部查核（會計師簽證）</th></tr>
+<tr><td>誰做</td><td>公司自己的稽核部門</td><td>獨立的會計師事務所</td></tr>
+<tr><td>向誰報告</td><td>董事會、審計委員會</td><td>股東、公眾、主管機關</td></tr>
+<tr><td>重點</td><td>內控有沒有運作、流程改善</td><td>財報是否允當表達</td></tr>
+<tr><td>頻率</td><td>全年持續</td><td>通常一年一次，上市公司另有季報核閱</td></tr>
+</table></div>
+<div class="box tip"><span class="lab">別搞混：驗廠稽核</span>成衣廠常遇到品牌客戶的社會責任稽核、安全稽核（查工時、薪資、消防、童工等）。它們和財務查核不同，但準備的精神一樣：制度要寫清楚、有紀錄可查、實際做法和文件一致。</div>
+
+<h3>四種查核意見</h3>
+<div class="tscroll"><table>
+<tr><th>意見</th><th>意思</th></tr>
+<tr><td><strong>無保留意見</strong></td><td>報表在所有重大方面允當表達。最好、也最常見。</td></tr>
+<tr><td><strong>保留意見</strong></td><td>大致沒問題，但某一項有重大錯誤或查不到證據，且影響不是全面性。</td></tr>
+<tr><td><strong>否定意見</strong></td><td>錯誤重大且全面，整份報表不可信。</td></tr>
+<tr><td><strong>無法表示意見</strong></td><td>會計師拿不到足夠證據，無法判斷。</td></tr>
+</table></div>
+<p>另外，即使是無保留意見，報告中若有「<strong>繼續經營有關之重大不確定性</strong>」段落，表示會計師擔心公司撐不下去，要特別注意。</p>
+
+<h3>會計師怎麼查？</h3>
+<ul>
+  <li><strong>函證</strong>：直接寫信給銀行、客戶、供應商，確認餘額。</li>
+  <li><strong>觀察盤點</strong>：到倉庫看存貨盤點，並抽點。</li>
+  <li><strong>檢查憑證</strong>：抽樣核對發票、合約、驗收單。</li>
+  <li><strong>分析性程序</strong>：比較今年和去年、和預算，找異常波動並請公司解釋。</li>
+  <li><strong>截止測試</strong>：年底前後幾天的出貨與收入，是否記在正確年度。</li>
+  <li><strong>期後事項檢查</strong>：年度結束後的收款、付款、重大事件。</li>
+</ul>
+
+<h3>如何準備稽核：實務清單</h3>
+<p>會計師會給一份 <strong>PBC 清單</strong>（Prepared By Client，由客戶準備的資料）。準備得好，查核快、費用低、意見也順利。</p>
+<details open><summary>年度結束前 1–2 個月</summary><ul>
+  <li>和會計師開規劃會議，確認時程、盤點日期、重大事項（新投資、新借款、訴訟）。</li>
+  <li>檢查會計政策是否變更，有變更要準備說明。</li>
+  <li>安排年底存貨與固定資產盤點計畫，通知會計師觀察。</li>
+</ul></details>
+<details><summary>結帳與報表</summary><ul>
+  <li>完成所有調整分錄：折舊、應計費用、預付攤銷、備抵損失、存貨跌價、員工福利負債。</li>
+  <li>試算表、總分類帳、各科目明細帳，數字彼此一致。</li>
+  <li>初稿財務報表與附註。</li>
+</ul></details>
+<details><summary>常見 PBC 資料</summary><ul>
+  <li>所有銀行帳戶的年底對帳單與<strong>銀行調節表</strong>。</li>
+  <li>應收帳款、應付帳款明細與<strong>帳齡表</strong>，以及期後收付款紀錄。</li>
+  <li>存貨盤點表、盤盈盤虧說明、存貨計價與跌價分析。</li>
+  <li>固定資產明細、本年增加與處分的憑證、折舊計算表。</li>
+  <li>借款合約、利息計算、擔保品資料。</li>
+  <li>重大合約：銷售合約、租約、長期採購合約。</li>
+  <li>薪資總表、員工人數、社會保險申報、薪資稅或扣繳申報。</li>
+  <li>全年各月稅務申報書與繳款證明、稅務機關的來函。</li>
+  <li>董事會、股東會議事錄。</li>
+  <li>關係人名單與關係人交易明細。</li>
+  <li>訴訟、保證、承諾事項說明（律師函證）。</li>
+</ul></details>
+<details><summary>查核進行中與結束後</summary><ul>
+  <li>指定一位窗口，統一收發資料、追蹤問題清單。</li>
+  <li>會計師提出的調整分錄，要理解原因再同意入帳。</li>
+  <li>簽署<strong>管理階層聲明書</strong>，確認提供的資料完整真實。</li>
+  <li>收到<strong>管理建議書</strong>（內控缺失建議）後，列出改善計畫與負責人，明年查核前完成。</li>
+</ul></details>
+<div class="box warn"><span class="lab">最常被查到的問題</span>銀行調節表有長期未解決的差異；應收帳款長期掛帳沒提損失；年底前後出貨跨期；費用與資本支出分錯；關係人交易沒揭露；存貨帳實不符。</div>
+<div class="quiz" data-ch="ch17"></div>
+</section>
+
+<!-- ================= CH18 ================= -->
+<section class="ch" id="ch18" data-part="第六篇　稅務實務" data-title="18. 稅務基本觀念">
+<p class="kicker">第六篇　稅務實務</p>
+<h2 class="title">稅務基本觀念：會計利潤不等於課稅所得</h2>
+<p class="lead">會計的目標是「如實反映」，稅法的目標是「公平課稅、方便徵收」。兩套規則不同，所以<strong>帳上賺的錢，和要繳稅的所得，常常不一樣</strong>。</p>
+<h3>企業常碰到的三大類稅</h3>
+<div class="tscroll"><table>
+<tr><th>類別</th><th>課什麼</th><th>台灣</th><th>柬埔寨</th></tr>
+<tr><td>營利事業所得稅</td><td>公司一年的所得</td><td>營利事業所得稅</td><td>所得稅（Tax on Income／Tax on Profit）</td></tr>
+<tr><td>加值型營業稅</td><td>每一個環節「增加的價值」</td><td>營業稅（加值型）</td><td>增值稅（VAT）</td></tr>
+<tr><td>扣繳</td><td>付錢給別人時先代扣的稅</td><td>各類所得扣繳</td><td>薪資稅、預扣稅（WHT）</td></tr>
+</table></div>
+
+<h3>加值稅怎麼運作？</h3>
+<div class="box eg"><span class="lab">例子：一件襯衫的旅程（稅率 5%）</span>
+<p>布廠賣布給成衣廠 1,000 元，收稅 50。成衣廠做成襯衫賣給商店 2,000 元，收稅 100，但可以扣掉買布時付的 50，只要繳 <strong>50</strong>。商店賣給消費者 3,000 元，收稅 150，扣掉 100，繳 <strong>50</strong>。</p>
+<p>政府總共收到 50＋50＋50＝150，正好是最終售價 3,000 的 5%。每個環節只繳自己「加值」那段的稅，真正負擔稅的是最後的消費者。</p>
+</div>
+<p>所以公式是：<strong>應納稅額 ＝ 銷項稅額 － 進項稅額</strong>。保存好合法的進項憑證（發票），才能扣抵，這就是為什麼會計對發票那麼在意。</p>
+<div class="box tip"><span class="lab">出口零稅率</span>貨物出口到國外，多數國家適用<strong>零稅率</strong>：銷項稅是 0，但買原料付的進項稅仍可退還或留抵。出口型成衣廠因此常有「留抵稅額」或申請退稅的問題。</div>
+
+<h3>財稅差異</h3>
+<p>會計利潤要經過調整，才變成課稅所得：</p>
+<ul>
+  <li><strong>永久性差異</strong>：稅法永遠不承認的。例如超過限額的交際費、罰款、沒有合法憑證的費用。</li>
+  <li><strong>暫時性差異</strong>：只是時間不同，最後會迴轉。例如會計和稅法的折舊年限不同、備抵損失稅法要等真的收不回才准扣。</li>
+</ul>
+<p>暫時性差異會產生<strong>遞延所得稅資產或負債</strong>，這是進階會計的重要主題。</p>
+<div class="box origin"><span class="lab">名詞由來</span><p>「稅」字從「禾」，古代人民以穀物繳納賦稅。英文 <em>tax</em> 來自拉丁文 <em>taxare</em>「估價、評定」。<strong>財政</strong>（fiscal）來自拉丁文 <em>fiscus</em>「籃子」，羅馬皇帝的錢放在籃子裡，後來指國庫。</p></div>
+<div class="quiz" data-ch="ch18"></div>
+</section>
+
+<!-- ================= CH19 ================= -->
+<section class="ch" id="ch19" data-part="第六篇　稅務實務" data-title="19. 台灣稅務實務">
+<p class="kicker">第六篇　稅務實務</p>
+<h2 class="title">台灣稅務實務</h2>
+<div class="box warn"><span class="lab">提醒</span>以下為 2026 年撰寫時的一般規定摘要，稅法常有修正，申報前請以財政部與各地國稅局最新公告為準。</div>
+<h3>營業稅</h3>
+<ul>
+  <li>一般稅額計算的營業人，稅率 <strong>5%</strong>，出口適用零稅率。</li>
+  <li>每<strong>兩個月</strong>為一期，於單月 15 日前申報上一期（例如 1–2 月在 3 月 15 日前申報）。</li>
+  <li>小規模營業人（如小吃攤）由國稅局查定課徵，稅率通常為 1%。</li>
+</ul>
+<div class="box origin"><span class="lab">統一發票的由來</span><p>1951 年台灣開始實施統一發票，目的是掌握營業額、防止逃漏稅。為了讓消費者主動索取發票，同時舉辦<strong>發票對獎</strong>，讓每位買東西的人都變成「稅務監督員」。這個設計後來被許多國家研究參考。</p></div>
+<div class="je"><div class="row hd"><span>計算例：某雙月期</span><span class="r"></span><span class="r">金額</span></div>
+<div class="row"><span class="acc">銷售額 2,000,000 × 5% ＝ 銷項稅額</span><span></span><span class="r">100,000</span></div>
+<div class="row"><span class="acc">進貨與費用 1,200,000 × 5% ＝ 進項稅額</span><span></span><span class="r">(60,000)</span></div>
+<div class="row"><span class="acc"><strong>本期應納營業稅</strong></span><span></span><span class="r"><strong>40,000</strong></span></div></div>
+
+<h3>營利事業所得稅</h3>
+<ul>
+  <li>稅率 <strong>20%</strong>。課稅所得 12 萬元以下免稅；超過 12 萬元的，稅額不超過「超過 12 萬元部分的一半」。</li>
+  <li>每年 <strong>5 月</strong>辦理上一年度結算申報。</li>
+  <li><strong>9 月</strong>辦理暫繳，一般以上年度應納稅額的一半預繳（符合條件可免辦）。</li>
+  <li>當年度盈餘未分配的部分，另加徵 <strong>5% 未分配盈餘稅</strong>。</li>
+</ul>
+<h3>扣繳</h3>
+<ul>
+  <li>公司付薪資、租金、佣金、利息、執行業務報酬等，依規定比率先扣稅，於<strong>次月 10 日前</strong>繳納。</li>
+  <li>每年 <strong>1 月</strong>申報上一年度扣繳憑單，並交給所得人，所得人 5 月報個人綜合所得稅時使用。</li>
+  <li>付給非居住者（外國公司、外籍人士）的扣繳率通常較高，且須在給付後 10 日內扣繳申報。</li>
+</ul>
+<h3>其他常見</h3>
+<ul>
+  <li><strong>二代健保補充保費</strong>：高額獎金、兼職薪資、執行業務收入等要另外扣取補充保費。</li>
+  <li><strong>勞保、健保、勞退</strong>：雇主提撥 6% 勞工退休金至個人帳戶。</li>
+  <li><strong>印花稅、房屋稅、地價稅</strong>：依持有與交易情況繳納。</li>
+</ul>
+<h3>台灣年度稅務行事曆（一般情況）</h3>
+<div class="tscroll"><table>
+<tr><th>時間</th><th>事項</th></tr>
+<tr><td>每月 10 日前</td><td>繳納上月扣繳稅款</td></tr>
+<tr><td>單月 15 日前</td><td>申報上一期（兩個月）營業稅</td></tr>
+<tr><td>1 月</td><td>申報扣繳憑單、股利憑單</td></tr>
+<tr><td>5 月</td><td>營利事業所得稅結算申報、未分配盈餘申報</td></tr>
+<tr><td>9 月</td><td>營所稅暫繳申報</td></tr>
+</table></div>
+<div class="quiz" data-ch="ch19"></div>
+</section>
+
+<!-- ================= CH20 ================= -->
+<section class="ch" id="ch20" data-part="第六篇　稅務實務" data-title="20. 柬埔寨稅務實務">
+<p class="kicker">第六篇　稅務實務</p>
+<h2 class="title">柬埔寨稅務實務</h2>
+<div class="box warn"><span class="lab">提醒</span>柬埔寨 2023 年頒布新的稅法，相關施行規定（Prakas）陸續發布。以下為一般規定摘要，實際申報請以稅務總局（GDT）最新公告、或請當地會計師確認。</div>
+<h3>主管機關與基本觀念</h3>
+<ul>
+  <li>稅務由經濟財政部轄下的<strong>稅務總局（GDT）</strong>主管，採<strong>自行申報</strong>制度，多數公司透過 GDT 電子申報系統申報。</li>
+  <li>會計年度原則上是<strong>曆年</strong>（1 月 1 日至 12 月 31 日）。</li>
+  <li>日常交易多用美元，但稅務申報以<strong>瑞爾（KHR）</strong>表達，美元金額要依官方公告匯率換算。</li>
+  <li>納稅人依規模分為小型、中型、大型，義務不同。</li>
+</ul>
+<h3>每月申報（次月 20 日前；電子申報可至 25 日）</h3>
+<div class="tscroll"><table>
+<tr><th>稅目</th><th>一般規定</th></tr>
+<tr><td>所得稅預繳</td><td>每月營業額的 <strong>1%</strong>，可抵年度所得稅。享有免稅期的合格投資案（QIP）通常免預繳，但仍要零申報。</td></tr>
+<tr><td>增值稅 VAT</td><td>標準稅率 <strong>10%</strong>，出口為 0%。銷項減進項。</td></tr>
+<tr><td>薪資稅</td><td>居民員工按月薪以瑞爾計算的累進稅率 0%–20%；非居民 20%。另有附加福利稅。</td></tr>
+<tr><td>預扣稅 WHT</td><td>付給居民的服務費、權利金等常見 15%；租金 10%；付給非居民的利息、權利金、服務費等 14%。</td></tr>
+</table></div>
+<div class="box eg"><span class="lab">例子：薪資稅怎麼算（居民員工，累進稅率）</span>
+<p>一般級距（月薪，瑞爾）：150 萬以下 0%；150 萬至 200 萬 5%；200 萬至 850 萬 10%；850 萬至 1,250 萬 15%；超過 1,250 萬 20%。</p>
+<p>某位主管月薪 2,400,000 瑞爾：<br>（2,000,000 － 1,500,000）× 5% ＝ 25,000<br>（2,400,000 － 2,000,000）× 10% ＝ 40,000<br>合計 <strong>65,000 瑞爾</strong>。有配偶或扶養子女可再扣除，實際以 GDT 規定為準。</p>
+<p>多數車縫工的月薪落在免稅級距內，但加班費、獎金併入後可能超過，薪資系統要每月計算。</p>
+</div>
+<h3>每年申報（次年 3 月 31 日前）</h3>
+<ul>
+  <li><strong>年度所得稅申報</strong>：標準稅率 <strong>20%</strong>，減去全年已預繳的 1%。虧損可在規定年限內往後扣抵。</li>
+  <li><strong>營業執照稅（Patent Tax）</strong>：每年更新，金額依納稅人規模而定。</li>
+</ul>
+<h3>社會保險（NSSF）</h3>
+<p>國家社會保障基金涵蓋職業傷害、健康照護、退休金等項目，雇主與員工依規定比率按月提撥，繳納期限與稅務申報不同，費率也有逐年調整的時程，請依 NSSF 最新公告辦理。</p>
+<h3>合格投資案（QIP）</h3>
+<p>向柬埔寨發展理事會（CDC）申請核准的投資案，可享所得稅免稅期、生產設備與原料進口免稅等優惠，是許多外資成衣廠的做法。但<strong>優惠不代表不用申報</strong>：每月零申報、保存帳冊、年度申報仍然要做，而且享受的優惠通常附帶條件。</p>
+<h3>稅務查核</h3>
+<p>GDT 的稅務查核分為<strong>有限查核</strong>與<strong>全面查核</strong>。常見被調整的地方：薪資稅與附加福利稅計算、未依規定預扣稅、費用缺乏合法憑證、美元與瑞爾換算、關係人交易的定價。</p>
+<div class="box tip"><span class="lab">實務準備</span>每月報完稅就把申報書、繳款收據、當月發票、薪資表、匯率依據歸檔在一起；年底把 12 個月的申報數字加總，和帳上營收、薪資、費用逐項核對。差異當下解決，比等查核時再解釋容易得多。</div>
+<h3>柬埔寨年度稅務行事曆（一般情況）</h3>
+<div class="tscroll"><table>
+<tr><th>時間</th><th>事項</th></tr>
+<tr><td>每月 20 日前（電子申報 25 日前）</td><td>預繳所得稅、增值稅、薪資稅、預扣稅申報與繳納</td></tr>
+<tr><td>每月（依 NSSF 期限）</td><td>社會保險提撥</td></tr>
+<tr><td>3 月 31 日前</td><td>年度所得稅申報、營業執照稅</td></tr>
+</table></div>
+<div class="quiz" data-ch="ch20"></div>
+</section>
+
+<!-- ================= CH21 ================= -->
+<section class="ch" id="ch21" data-part="第七篇　專業之路" data-title="21. 會計準則與職涯">
+<p class="kicker">第七篇　專業之路</p>
+<h2 class="title">會計準則與專業之路</h2>
+<p class="lead">全世界的公司要用同一種「文法」寫財報，別人才讀得懂。這套文法就是<strong>會計準則</strong>。</p>
+<h3>主要準則</h3>
+<div class="tscroll"><table>
+<tr><th>準則</th><th>誰制定</th><th>誰使用</th></tr>
+<tr><td>IFRS 國際財務報導準則</td><td>國際會計準則理事會（IASB，2001 年成立）</td><td>全球一百多個國家與地區</td></tr>
+<tr><td>US GAAP 美國一般公認會計原則</td><td>美國財務會計準則委員會（FASB）</td><td>美國公司</td></tr>
+<tr><td>台灣 IFRSs</td><td>金管會認可版本</td><td>台灣上市櫃及公開發行公司（2013 年起分階段採用）</td></tr>
+<tr><td>台灣企業會計準則公報（EAS）</td><td>會計研究發展基金會</td><td>台灣非公開發行公司</td></tr>
+<tr><td>CIFRS 與中小企業版</td><td>柬埔寨依 IFRS 採用</td><td>柬埔寨公共利益實體與一般企業，由會計審計監理機關（ACAR）監督</td></tr>
+</table></div>
+<div class="box origin"><span class="lab">名詞由來</span><p><strong>GAAP</strong> 是 Generally Accepted Accounting Principles 的縮寫，「一般公認」強調這些原則是大家共同接受的慣例，而不是某個人發明的。<strong>IFRS</strong> 的前身是 IAS（國際會計準則），所以很多準則今天仍叫 IAS 2（存貨）、IAS 16（不動產廠房及設備）。</p></div>
+
+<h3>進階主題地圖</h3>
+<p>學完這門課，你已經具備基礎。往專業再走，常見的進階主題包括：</p>
+<ul>
+  <li><strong>收入認列（IFRS 15）</strong>：五步驟模型，辨認合約、履約義務、交易價格、分攤、認列。</li>
+  <li><strong>租賃（IFRS 16）</strong>、<strong>金融工具（IFRS 9）</strong>、<strong>所得稅（IAS 12）</strong>。</li>
+  <li><strong>合併報表</strong>：母公司和子公司（例如台灣母公司與柬埔寨子公司）要合併成一份報表，並消除彼此交易。</li>
+  <li><strong>外幣換算（IAS 21）</strong>：功能性貨幣、表達貨幣、匯兌差額。</li>
+  <li><strong>成本管理</strong>：作業基礎成本法、預算編製、差異分析。</li>
+</ul>
+
+<h3>證照與職涯</h3>
+<div class="tscroll"><table>
+<tr><th>證照</th><th>適合方向</th></tr>
+<tr><td>記帳士（台灣）</td><td>中小企業記帳與報稅</td></tr>
+<tr><td>會計師 CPA（台灣）</td><td>查核簽證、稅務、顧問</td></tr>
+<tr><td>ACCA（英國特許公認會計師）</td><td>國際通用，東南亞（含柬埔寨）很普遍</td></tr>
+<tr><td>CIA 國際內部稽核師</td><td>內部稽核</td></tr>
+<tr><td>CMA 美國管理會計師</td><td>成本、預算、公司財務</td></tr>
+</table></div>
+<div class="box tip"><span class="lab">自學路線建議</span>1. 用這門課打好基礎；2. 找一套真的會計軟體，把自己家或公司一個月的交易親手做一次；3. 讀一家熟悉產業的上市公司年報，照第 15 章步驟分析；4. 挑一個證照當目標，系統化補齊。</div>
+<div class="quiz" data-ch="ch21"></div>
+</section>
+<!-- ================= CH22 ================= -->
+<section class="ch" id="ch22" data-part="第七篇　專業之路" data-title="22. 綜合實戰：成衣小廠一個月">
+<p class="kicker">第七篇　專業之路</p>
+<h2 class="title">綜合實戰：西哈努克成衣小廠的第一個月</h2>
+<p class="lead">把整門課串起來。以下是一家新成立成衣廠第一個月的交易（美元，簡化版）。建議先自己寫分錄、編報表，再打開答案對照。</p>
+<h3>本月交易</h3>
+<div class="tscroll"><table>
+<tr><th>#</th><th>交易</th></tr>
+<tr><td>1</td><td>股東投入現金 100,000 成立公司。</td></tr>
+<tr><td>2</td><td>現金購買縫紉機一批 36,000，耐用 5 年、無殘值，直線法。</td></tr>
+<tr><td>3</td><td>賒購布料 20,000，入原料倉。</td></tr>
+<tr><td>4</td><td>生產線領用布料 15,000。</td></tr>
+<tr><td>5</td><td>發放薪資 12,000 現金：車縫工（直接人工）10,000，行政人員 2,000。</td></tr>
+<tr><td>6</td><td>現金支付廠房租金 3,000。</td></tr>
+<tr><td>7</td><td>月底提列縫紉機折舊。</td></tr>
+<tr><td>8</td><td>本月生產全部完工入庫，並全數出貨給海外客戶，售價 40,000，貨款賒欠（出口，增值稅 0%）。</td></tr>
+<tr><td>9</td><td>月底收到客戶部分貨款 25,000。</td></tr>
+<tr><td>10</td><td>支付供應商布料款 12,000。</td></tr>
+<tr><td>11</td><td>依營業額估列本月應預繳的所得稅 1%（下月申報繳納）。</td></tr>
+</table></div>
+<p style="font-size:15px;color:var(--muted)">註：本例為教學簡化，假設該廠未享有所得稅免稅期，並忽略薪資稅與社會保險。</p>
+
+<details><summary>答案一：分錄</summary>
+<div class="je"><div class="row hd"><span>科目</span><span class="r">借方</span><span class="r">貸方</span></div>
+<div class="row"><span class="acc">1 現金</span><span class="r">100,000</span><span></span></div><div class="row cr"><span class="acc">股本</span><span></span><span class="r">100,000</span></div>
+<div class="row"><span class="acc">2 機器設備</span><span class="r">36,000</span><span></span></div><div class="row cr"><span class="acc">現金</span><span></span><span class="r">36,000</span></div>
+<div class="row"><span class="acc">3 原料</span><span class="r">20,000</span><span></span></div><div class="row cr"><span class="acc">應付帳款</span><span></span><span class="r">20,000</span></div>
+<div class="row"><span class="acc">4 在製品</span><span class="r">15,000</span><span></span></div><div class="row cr"><span class="acc">原料</span><span></span><span class="r">15,000</span></div>
+<div class="row"><span class="acc">5 在製品（直接人工）</span><span class="r">10,000</span><span></span></div><div class="row"><span class="acc">　管理費用—薪資</span><span class="r">2,000</span><span></span></div><div class="row cr"><span class="acc">現金</span><span></span><span class="r">12,000</span></div>
+<div class="row"><span class="acc">6 製造費用</span><span class="r">3,000</span><span></span></div><div class="row cr"><span class="acc">現金</span><span></span><span class="r">3,000</span></div>
+<div class="row"><span class="acc">7 製造費用（36,000÷60 個月）</span><span class="r">600</span><span></span></div><div class="row cr"><span class="acc">累計折舊—機器設備</span><span></span><span class="r">600</span></div>
+<div class="row"><span class="acc">8a 在製品（分攤製造費用）</span><span class="r">3,600</span><span></span></div><div class="row cr"><span class="acc">製造費用</span><span></span><span class="r">3,600</span></div>
+<div class="row"><span class="acc">8b 製成品</span><span class="r">28,600</span><span></span></div><div class="row cr"><span class="acc">在製品</span><span></span><span class="r">28,600</span></div>
+<div class="row"><span class="acc">8c 應收帳款</span><span class="r">40,000</span><span></span></div><div class="row cr"><span class="acc">銷貨收入</span><span></span><span class="r">40,000</span></div>
+<div class="row"><span class="acc">8d 銷貨成本</span><span class="r">28,600</span><span></span></div><div class="row cr"><span class="acc">製成品</span><span></span><span class="r">28,600</span></div>
+<div class="row"><span class="acc">9 現金</span><span class="r">25,000</span><span></span></div><div class="row cr"><span class="acc">應收帳款</span><span></span><span class="r">25,000</span></div>
+<div class="row"><span class="acc">10 應付帳款</span><span class="r">12,000</span><span></span></div><div class="row cr"><span class="acc">現金</span><span></span><span class="r">12,000</span></div>
+<div class="row"><span class="acc">11 預付所得稅</span><span class="r">400</span><span></span></div><div class="row cr"><span class="acc">應付稅款</span><span></span><span class="r">400</span></div>
+<div class="memo">預繳的 1% 可抵年度所得稅，所以是資產（預付所得稅），不是費用。年度結算時，再計算真正的所得稅費用。</div>
+</div></details>
+
+<details><summary>答案二：產品成本計算</summary>
+<div class="tscroll"><table>
+<tr><td>直接材料</td><td class="r">15,000</td></tr>
+<tr><td>直接人工</td><td class="r">10,000</td></tr>
+<tr><td>製造費用（租金 3,000＋折舊 600）</td><td class="r">3,600</td></tr>
+<tr class="total"><td>本月完工產品成本（＝銷貨成本）</td><td class="r">28,600</td></tr>
+</table></div></details>
+
+<details><summary>答案三：試算表</summary>
+<div class="tscroll"><table>
+<tr><th>科目</th><th class="r">借方</th><th class="r">貸方</th></tr>
+<tr><td>現金</td><td class="r">62,000</td><td></td></tr>
+<tr><td>應收帳款</td><td class="r">15,000</td><td></td></tr>
+<tr><td>原料</td><td class="r">5,000</td><td></td></tr>
+<tr><td>預付所得稅</td><td class="r">400</td><td></td></tr>
+<tr><td>機器設備</td><td class="r">36,000</td><td></td></tr>
+<tr><td>累計折舊—機器設備</td><td></td><td class="r">600</td></tr>
+<tr><td>應付帳款</td><td></td><td class="r">8,000</td></tr>
+<tr><td>應付稅款</td><td></td><td class="r">400</td></tr>
+<tr><td>股本</td><td></td><td class="r">100,000</td></tr>
+<tr><td>銷貨收入</td><td></td><td class="r">40,000</td></tr>
+<tr><td>銷貨成本</td><td class="r">28,600</td><td></td></tr>
+<tr><td>管理費用—薪資</td><td class="r">2,000</td><td></td></tr>
+<tr class="total"><td>合計</td><td class="r">149,000</td><td class="r">149,000</td></tr>
+</table></div></details>
+
+<details><summary>答案四：損益表與資產負債表</summary>
+<div class="tscroll"><table><caption>損益表（第一個月）</caption>
+<tr><td>銷貨收入</td><td class="r">40,000</td></tr>
+<tr><td>銷貨成本</td><td class="r neg">(28,600)</td></tr>
+<tr class="sub"><td>營業毛利（毛利率 28.5%）</td><td class="r">11,400</td></tr>
+<tr><td>管理費用</td><td class="r neg">(2,000)</td></tr>
+<tr class="total"><td>營業利益／稅前淨利</td><td class="r">9,400</td></tr>
+</table></div>
+<div class="tscroll"><table><caption>資產負債表（月底）</caption>
+<tr><td>現金</td><td class="r">62,000</td></tr>
+<tr><td>應收帳款</td><td class="r">15,000</td></tr>
+<tr><td>原料存貨</td><td class="r">5,000</td></tr>
+<tr><td>預付所得稅</td><td class="r">400</td></tr>
+<tr class="sub"><td>流動資產合計</td><td class="r">82,400</td></tr>
+<tr><td>機器設備淨額（36,000－600）</td><td class="r">35,400</td></tr>
+<tr class="total"><td>資產總計</td><td class="r">117,800</td></tr>
+<tr><td>應付帳款</td><td class="r">8,000</td></tr>
+<tr><td>應付稅款</td><td class="r">400</td></tr>
+<tr class="sub"><td>負債合計</td><td class="r">8,400</td></tr>
+<tr><td>股本</td><td class="r">100,000</td></tr>
+<tr><td>保留盈餘（本期淨利）</td><td class="r">9,400</td></tr>
+<tr class="sub"><td>權益合計</td><td class="r">109,400</td></tr>
+<tr class="total"><td>負債及權益總計</td><td class="r">117,800</td></tr>
+</table></div></details>
+
+<details><summary>答案五：現金流量與管理者該注意的事</summary>
+<div class="tscroll"><table>
+<tr><td>營業活動：收客戶 25,000 － 付供應商 12,000 － 薪資 12,000 － 租金 3,000</td><td class="r neg">(2,000)</td></tr>
+<tr><td>投資活動：購買機器</td><td class="r neg">(36,000)</td></tr>
+<tr><td>籌資活動：股東投入</td><td class="r">100,000</td></tr>
+<tr class="total"><td>期末現金</td><td class="r">62,000</td></tr>
+</table></div>
+<p>這個月<strong>帳上賺了 9,400，營業現金流卻是負 2,000</strong>。原因是還有 15,000 的貨款沒收回來、又先買了 5,000 的布料庫存。這就是第 8 章說的「賺錢不等於有錢」。如果下個月訂單翻倍，需要先墊付的布料和薪水也會翻倍，管理者必須提前規劃資金。</p>
+</details>
+<div class="box tip"><span class="lab">恭喜</span>能獨立做完這一題，代表你已經掌握從交易到報表的完整流程。把第 14 章的比率計算機套用這組數字，看看這家工廠的體質。</div>
+<div class="quiz" data-ch="ch22"></div>
+</section>
+
+<!-- ================= GLOSSARY ================= -->
+<section class="ch" id="glossary" data-part="附錄" data-title="名詞辭典（含由來）">
+<p class="kicker">附錄</p>
+<h2 class="title">名詞辭典</h2>
+<p>課程中出現的重要名詞，附白話解釋與由來。可以輸入關鍵字搜尋。</p>
+<input type="search" id="glq" placeholder="搜尋名詞，例如：折舊、VAT、借方" aria-label="搜尋名詞">
+<div id="gllist"></div>
+</section>
+
+<div id="pagerbox"></div>
+</div>
+</main>
+</div>
+<script>
+(function(){
+"use strict";
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var fmt=function(n){var neg=n<0;n=Math.round(Math.abs(n)*100)/100;var t=n.toLocaleString('en-US',{maximumFractionDigits:2});return neg?'('+t+')':t};
+
+/* ---------- storage ---------- */
+var KEY='acct-course-done-v1',done={};
+try{done=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){done={}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(done))}catch(e){}}
+
+/* ---------- theme ---------- */
+try{var th=localStorage.getItem('acct-theme');if(th)document.documentElement.setAttribute('data-theme',th)}catch(e){}
+$('#themeBtn').addEventListener('click',function(){
+  var cur=document.documentElement.getAttribute('data-theme');
+  var dark=cur?cur==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+  var next=dark?'light':'dark';document.documentElement.setAttribute('data-theme',next);
+  try{localStorage.setItem('acct-theme',next)}catch(e){}
+});
+
+/* ---------- navigation ---------- */
+var secs=$$('section.ch'),order=secs.map(function(s){return s.id});
+var chapters=secs.filter(function(s){return /^ch\d+/.test(s.id)});
+function buildToc(){
+  var h='',part='';
+  secs.forEach(function(s){
+    var p=s.getAttribute('data-part')||'';
+    if(p!==part){part=p;if(p)h+='<div class="part">'+p+'</div>'}
+    h+='<a href="#'+s.id+'" data-id="'+s.id+'"><span>'+s.getAttribute('data-title')+'</span><span class="ck">'+(done[s.id]?'✓':'')+'</span></a>';
+  });
+  $('#toclist').innerHTML=h;
+  var n=chapters.filter(function(s){return done[s.id]}).length;
+  $('#progbar').style.width=(n/chapters.length*100)+'%';
+  $('#progtxt').textContent='已完成 '+n+'／'+chapters.length+' 章';
+}
+chapters.forEach(function(s){
+  var b=document.createElement('button');b.type='button';b.className='donebtn';
+  function paint(){b.textContent=done[s.id]?'✓ 已完成本章':'完成本章';b.classList.toggle('on',!!done[s.id])}
+  paint();
+  b.addEventListener('click',function(){done[s.id]=!done[s.id];if(!done[s.id])delete done[s.id];save();paint();buildToc();mark(cur)});
+  s.appendChild(b);
+});
+var cur='home';
+function mark(id){$$('#toclist a').forEach(function(a){a.classList.toggle('active',a.getAttribute('data-id')===id)})}
+function show(id){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=id;
+  if(order.indexOf(id)<0)id='home';cur=id;
+  secs.forEach(function(s){s.classList.toggle('show',s.id===id)});
+  var i=order.indexOf(id),p=order[i-1],n=order[i+1],h='';
+  if(p||n){h='<div class="pager">'+(p?'<a class="prev" href="#'+p+'"><small>上一章</small>'+$('#'+p).getAttribute('data-title')+'</a>':'<span></span>')+(n?'<a class="next" href="#'+n+'"><small>下一章</small>'+$('#'+n).getAttribute('data-title')+'</a>':'')+'</div>'}
+  $('#pagerbox').innerHTML=h;
+  $('#curTitle').textContent=$('#'+id).getAttribute('data-title');
+  document.title=$('#'+id).getAttribute('data-title')+'｜從零開始學會計';
+  mark(id);$('#toc').classList.remove('open');window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',function(){show(location.hash.slice(1))});
+$('#menuBtn').addEventListener('click',function(e){e.stopPropagation();$('#toc').classList.toggle('open')});
+document.addEventListener('click',function(e){var t=$('#toc');if(t.classList.contains('open')&&!t.contains(e.target))t.classList.remove('open')});
+$('#resetBtn').addEventListener('click',function(){if(confirm('確定清除所有完成紀錄？')){done={};save();location.reload()}});
+
+/* ---------- quizzes ---------- */
+var Q={
+ch1:[{q:'「零星算之為計，總合算之為會」，這句話說明會計包含哪兩件事？',o:['買和賣','記錄與彙總','收入與支出','借與貸'],a:1,e:'「計」是平時零散記錄，「會」是彙總，所以會計＝記錄＋彙總。'},
+{q:'老闆用店裡的錢買了自己的手機，這筆錢應該怎麼處理？',o:['算店的費用','不算，因為公司和老闆的錢要分開（企業個體假設）','算店的資產','不用記'],a:1,e:'企業個體假設：公司是獨立個體，老闆私人支出不是公司費用，應視為老闆從公司拿回資金。'},
+{q:'給公司內部主管做決策用的會計，稱為？',o:['財務會計','稅務會計','管理會計','審計'],a:2,e:'管理會計服務內部決策，財務會計服務外部使用者。'}],
+ch2:[{q:'公司有資產 500 萬、負債 200 萬，權益是多少？',o:['700 萬','300 萬','200 萬','無法計算'],a:1,e:'權益＝資產－負債＝500－200＝300 萬。'},
+{q:'用現金買一台機器，會計恆等式怎麼變？',o:['資產增加、負債增加','資產一增一減，總數不變','資產減少、權益減少','負債增加、權益減少'],a:1,e:'現金（資產）減少，機器（資產）增加，同一邊一增一減。'},
+{q:'公司賺了錢（收入），會讓哪一項增加？',o:['負債','權益','只有現金','費用'],a:1,e:'收入最終流入權益（保留盈餘）；費用則減少權益。'}],
+ch3:[{q:'下列哪一個科目「增加」時記在貸方？',o:['現金','租金費用','應付帳款','存貨'],a:2,e:'負債增加記貸方。現金、存貨是資產，租金是費用，增加都記借方。'},
+{q:'向銀行借款 10 萬元，正確分錄是？',o:['借：銀行借款／貸：現金','借：現金／貸：銀行借款','借：現金／貸：收入','借：費用／貸：現金'],a:1,e:'現金（資產）增加記借；銀行借款（負債）增加記貸。借錢不是收入。'},
+{q:'複式簿記的基本規則是？',o:['借方一定大於貸方','每筆交易借方總額等於貸方總額','只記現金','收入記借方'],a:1,e:'有借必有貸，借貸必相等。'}],
+ch4:[{q:'把日記簿的分錄抄到分類帳各科目，這個步驟叫？',o:['試算','過帳','結帳','調整'],a:1,e:'過帳（posting）。'},
+{q:'試算表平衡，代表？',o:['帳一定完全正確','借貸總額相等，但仍可能有漏記或記錯科目','公司有賺錢','不用調整了'],a:1,e:'整筆漏記、科目記錯等錯誤不會讓試算表失衡。'}],
+ch5:[{q:'9 月收到一年份學費，權責發生制下 9 月應認列多少收入？',o:['全部','1/12','0','一半'],a:1,e:'只有 9 月的課上完了，所以認列 1/12，其餘是預收收入（負債）。'},
+{q:'本月已用電但帳單下月才到，月底應作什麼調整？',o:['應計費用','預付費用','預收收入','不用處理'],a:0,e:'已發生、未付款的費用＝應計費用：借 水電費／貸 應付費用。'}],
+ch6:[{q:'資產負債表表達的是？',o:['一段期間的經營成果','某一時間點的財務狀況','一段期間的現金進出','股東人數'],a:1,e:'它是「照片」，只代表那一天。'},
+{q:'下列何者屬於流動資產？',o:['廠房','應收帳款','長期借款','商標'],a:1,e:'應收帳款通常一年內會收回現金。'},
+{q:'流動比率遠小於 1，最可能表示？',o:['公司很賺錢','短期償債壓力大','存貨很多','股東很多'],a:1,e:'一年內要還的比一年內能變現的多。'}],
+ch7:[{q:'營收 100、銷貨成本 60、營業費用 25，營業利益是？',o:['40','15','75','35'],a:1,e:'毛利 40，減營業費用 25，得 15。'},
+{q:'「赤字」一詞的由來是？',o:['古代用紅色印章','手寫帳本時虧損用紅墨水寫','紅色代表喜氣','政府規定'],a:1,e:'紅墨水寫虧損，所以虧損叫赤字。'}],
+ch8:[{q:'下列哪一項屬於投資活動現金流？',o:['發放薪水','購買機器','向銀行借款','收客戶貨款'],a:1,e:'買賣長期資產屬投資活動。'},
+{q:'間接法下，應收帳款增加，對營業現金流的影響是？',o:['加回','減除','不影響','列在籌資活動'],a:1,e:'營收記了但錢沒收到，現金比淨利少，所以要減除。'},
+{q:'折舊為什麼在間接法中要加回？',o:['因為折舊是收入','因為折舊是不需付現金的費用','因為稅法規定','因為折舊是負債'],a:1,e:'折舊減少了淨利，但沒有現金流出。'}],
+ch9:[{q:'損益表的本期淨利，會流到哪一張表？',o:['只到現金流量表','權益變動表的保留盈餘','只到附註','不會流到其他表'],a:1,e:'淨利增加保留盈餘，進而影響資產負債表的權益（也是現金流量表間接法的起點）。'},
+{q:'公司替關係企業做保證，這類資訊主要在哪裡揭露？',o:['損益表','附註','封面','現金流量表'],a:1,e:'或有負債與承諾在附註揭露。'}],
+ch10:[{q:'物價上漲時，採先進先出法，銷貨成本會比加權平均法？',o:['高','低','一樣','無法比較'],a:1,e:'先賣的是舊的便宜貨，銷貨成本較低。'},
+{q:'存貨過時、預估售價低於成本時應該？',o:['維持成本不變','寫低至淨變現價值並認列損失','提高售價','記為負債'],a:1,e:'成本與淨變現價值孰低法。'},
+{q:'IFRS 不允許使用哪一種存貨計價方法？',o:['先進先出法','加權平均法','後進先出法','個別認定法'],a:2,e:'IFRS 禁止後進先出法（LIFO）。'}],
+ch11:[{q:'成衣廠品管人員的薪資，通常屬於？',o:['直接材料','直接人工','製造費用','管理費用'],a:2,e:'品管不直接做產品，但屬工廠成本，列入製造費用。'},
+{q:'產線效率下降，最直接影響哪一項成本？',o:['布料單價','每件的人工與製造費用','運費','稅金'],a:1,e:'效率低表示每件花更多分鐘，人工與分攤的製造費用都上升。'}],
+ch12:[{q:'機器成本 10,000、殘值 1,000、耐用 3 年，直線法每年折舊？',o:['3,333','3,000','3,667','10,000'],a:1,e:'(10,000－1,000)÷3＝3,000。'},
+{q:'下列何者通常不提折舊？',o:['廠房','電腦','土地','車輛'],a:2,e:'土地不會因使用而耗損。'},
+{q:'幫機器加裝提升產能的零件，這筆支出應？',o:['當期費用','加入機器成本（資本化）','記為收入','記為負債'],a:1,e:'延長壽命或提升效能的支出屬資本支出。'}],
+ch13:[{q:'帳齡分析的基本假設是？',o:['客戶都會付錢','欠款越久越可能收不回','欠款越久越好收','只看金額大小'],a:1,e:'逾期越久，預估損失率越高。'},
+{q:'很可能發生、金額可估計的訴訟賠償，應？',o:['只在附註揭露','認列負債準備','不處理','記為資產'],a:1,e:'很可能且能估計，應認列負債準備；否則才只揭露為或有負債。'}],
+ch14:[{q:'速動比率和流動比率的差別在於扣除了？',o:['現金','存貨','應收帳款','負債'],a:1,e:'存貨不一定能很快變現，所以速動比率把它排除。'},
+{q:'兩家公司 ROE 相同，A 靠高淨利率，B 靠高權益乘數，哪家風險較高？',o:['A','B','一樣','無法判斷'],a:1,e:'高權益乘數代表大量借錢，報酬與風險都被放大。'}],
+ch15:[{q:'讀財報第一步，建議先看？',o:['股價','會計師查核報告','董事長照片','產品目錄'],a:1,e:'先確認報表可信度，再往下讀。'},
+{q:'營收成長 10%，應收帳款成長 60%，最需要懷疑？',o:['公司很健康','收入品質或信用政策有問題','存貨太少','負債太少'],a:1,e:'應收帳款成長遠快於營收，是常見的財報警訊。'}],
+ch16:[{q:'付款前核對採購單、驗收單、發票，稱為？',o:['三單比對','試算平衡','過帳','盤點'],a:0,e:'三單比對是採購付款循環的關鍵控制。'},
+{q:'銀行調節表最好由誰編製？',o:['出納本人','不經手現金的人員','供應商','客戶'],a:1,e:'職能分工：經手現金的人不應自己核對現金。'}],
+ch17:[{q:'會計師認為報表錯誤重大且全面，會出具？',o:['無保留意見','保留意見','否定意見','無法表示意見'],a:2,e:'錯誤重大且全面＝否定意見。'},
+{q:'「audit」一詞源自拉丁文的？',o:['看','聽','寫','數'],a:1,e:'audire（聽）：古代查帳人聽管帳者唸出帳目。'},
+{q:'PBC 清單指的是？',o:['稅務罰款清單','由受查公司準備的資料清單','會計師收費表','客戶名單'],a:1,e:'Prepared By Client。'}],
+ch18:[{q:'加值型營業稅（VAT）的應納稅額公式是？',o:['銷售額×稅率','銷項稅額－進項稅額','進項稅額－銷項稅額','淨利×稅率'],a:1,e:'只就本環節增加的價值課稅。'},
+{q:'超過稅法限額的交際費造成的差異，屬於？',o:['暫時性差異','永久性差異','不是差異','會計錯誤'],a:1,e:'稅法永遠不准扣除的部分，屬永久性差異。'}],
+ch19:[{q:'台灣營業稅一般多久申報一次？',o:['每月','每兩個月','每季','每年'],a:1,e:'一般每兩個月一期，單月 15 日前申報。'},
+{q:'台灣營利事業所得稅結算申報在每年幾月？',o:['1 月','3 月','5 月','9 月'],a:2,e:'5 月結算申報，9 月暫繳。'}],
+ch20:[{q:'柬埔寨一般企業每月需預繳營業額多少比例的所得稅？',o:['0.5%','1%','10%','20%'],a:1,e:'每月 1% 預繳，可抵年度所得稅。'},
+{q:'享有免稅期的 QIP 公司，每月申報怎麼處理？',o:['完全不用申報','仍需依規定申報（例如零申報）','只要年報','由客戶代報'],a:1,e:'優惠不代表免除申報義務。'},
+{q:'柬埔寨年度所得稅申報期限一般是？',o:['次年 1 月 31 日','次年 3 月 31 日','次年 5 月 31 日','次年 12 月 31 日'],a:1,e:'一般為會計年度結束後三個月內，即 3 月 31 日前。'}],
+ch21:[{q:'台灣上市櫃公司編製財報依據？',o:['US GAAP','金管會認可之 IFRSs','只依稅法','企業自訂'],a:1,e:'2013 年起分階段採用 IFRSs。'},
+{q:'IAS 16 規範的是？',o:['存貨','不動產、廠房及設備','收入','租賃'],a:1,e:'IAS 2 存貨、IAS 16 不動產廠房及設備。'}],
+ch22:[{q:'實戰題中，這家工廠本月營業現金流是負數，主要原因是？',o:['虧損','應收帳款未收回及布料庫存占用資金','折舊太多','稅太高'],a:1,e:'賺了 9,400，但 15,000 貨款還沒收、5,000 變成布料庫存。'},
+{q:'每月預繳 1% 所得稅，在帳上應記為？',o:['所得稅費用','預付所得稅（資產）','銷貨成本','收入減項'],a:1,e:'預繳可抵年度稅額，年度結算前是資產。'}]
+};
+$$('.quiz').forEach(function(box){
+  var list=Q[box.getAttribute('data-ch')];if(!list)return;
+  var h='<h3>小測驗</h3>';
+  list.forEach(function(it,i){
+    h+='<div class="q" data-i="'+i+'"><p>'+(i+1)+'. '+it.q+'</p>';
+    it.o.forEach(function(o,j){h+='<button type="button" data-j="'+j+'">'+String.fromCharCode(65+j)+'. '+o+'</button>'});
+    h+='<div class="ex">'+it.e+'</div></div>';
+  });
+  box.innerHTML=h;
+  $$('.q',box).forEach(function(qd){
+    var it=list[+qd.getAttribute('data-i')];
+    $$('button',qd).forEach(function(b){b.addEventListener('click',function(){
+      var j=+b.getAttribute('data-j');
+      $$('button',qd).forEach(function(x){x.classList.remove('right','wrong')});
+      b.classList.add(j===it.a?'right':'wrong');
+      $$('button',qd)[it.a].classList.add('right');
+      qd.classList.add('answered');
+    })});
+  });
+});
+
+/* ---------- equation simulator ---------- */
+(function(){
+  var A=['現金','存貨','設備'],L=['銀行借款','應付帳款'],E=['業主資本','本期損益'];
+  var steps=[
+   {s:'① 阿明拿出自己的存款 50,000 元開店。',c:{'現金':50000,'業主資本':50000},je:[['現金',50000,0],['業主資本',0,50000]]},
+   {s:'② 向銀行借了 20,000 元。',c:{'現金':20000,'銀行借款':20000},je:[['現金',20000,0],['銀行借款',0,20000]]},
+   {s:'③ 用現金買封口機、冰箱等設備 30,000 元。',c:{'現金':-30000,'設備':30000},je:[['設備',30000,0],['現金',0,30000]]},
+   {s:'④ 向供應商賒購茶葉、珍珠 8,000 元，下個月再付。',c:{'存貨':8000,'應付帳款':8000},je:[['存貨',8000,0],['應付帳款',0,8000]]},
+   {s:'⑤ 這個月賣出奶茶收現 12,000 元，用掉的原料成本 4,000 元。賺了 8,000，權益增加。',c:{'現金':12000,'存貨':-4000,'本期損益':8000},je:[['現金',12000,0],['銷貨收入',0,12000],['銷貨成本',4000,0],['存貨',0,4000]]},
+   {s:'⑥ 付店面租金 3,000 元。費用讓權益減少。',c:{'現金':-3000,'本期損益':-3000},je:[['租金費用',3000,0],['現金',0,3000]]},
+   {s:'⑦ 還給供應商 5,000 元。兩邊一起減少。',c:{'現金':-5000,'應付帳款':-5000},je:[['應付帳款',5000,0],['現金',0,5000]]}
+  ];
+  var st,k;
+  function reset(){st={};A.concat(L,E).forEach(function(n){st[n]=0});k=0;$('#eqstory').textContent='阿明準備開店，帳本還是空白的。按「下一筆交易」開始。';$('#eqje').innerHTML='';render({});$('#eqNext').disabled=false;$('#eqNext').textContent='下一筆交易'}
+  function col(id,names,ch){var t=0,h='';names.forEach(function(n){t+=st[n];h+='<div class="it'+(ch[n]?' flash':'')+'"><span>'+n+'</span><span class="num">'+fmt(st[n])+(ch[n]?' <small style="color:var(--'+(ch[n]>0?'blue':'red')+')">'+(ch[n]>0?'+':'')+fmt(ch[n]).replace(/[()]/g,'')+(ch[n]<0?'↓':'↑')+'</small>':'')+'</span></div>'});$(id).innerHTML=h;return t}
+  function render(ch){
+    var a=col('#colA',A,ch),l=col('#colL',L,ch),e=col('#colE',E,ch);
+    $('#totA').textContent=fmt(a);$('#totL').textContent=fmt(l);$('#totE').textContent=fmt(e);
+    $('#lpan').textContent='資產 '+fmt(a);$('#rpan').textContent='負債＋權益 '+fmt(l+e);
+    var bm=$('#beam');bm.style.transform='rotate(-4deg)';setTimeout(function(){bm.style.transform='rotate(0deg)'},250);
+  }
+  $('#eqNext').addEventListener('click',function(){
+    if(k>=steps.length)return;var sp=steps[k++];
+    Object.keys(sp.c).forEach(function(n){st[n]+=sp.c[n]});
+    $('#eqstory').textContent=sp.s+(k===steps.length?'　全部完成：資產 78,000 ＝ 負債 23,000 ＋ 權益 55,000。':'');
+    var h='<div class="je"><div class="row hd"><span>分錄</span><span class="r">借方</span><span class="r">貸方</span></div>';
+    sp.je.forEach(function(r){h+='<div class="row'+(r[2]?' cr':'')+'"><span class="acc">'+r[0]+'</span><span class="r">'+(r[1]?fmt(r[1]):'')+'</span><span class="r">'+(r[2]?fmt(r[2]):'')+'</span></div>'});
+    if(k===5)h+='<div class="memo">收入與成本先記在各自科目，月底結轉到權益；這裡直接顯示在「本期損益」方便觀察。</div>';
+    $('#eqje').innerHTML=h+'</div>';
+    render(sp.c);
+    if(k>=steps.length){$('#eqNext').disabled=true;$('#eqNext').textContent='已完成'}
+  });
+  $('#eqReset').addEventListener('click',reset);reset();
+})();
+
+/* ---------- debit/credit trainer ---------- */
+(function(){
+  var acc=[['現金','資產'],['應收帳款','資產'],['存貨','資產'],['機器設備','資產'],['預付租金','資產'],['應付帳款','負債'],['銀行借款','負債'],['應付薪資','負債'],['預收貨款','負債'],['股本','權益'],['保留盈餘','權益'],['銷貨收入','收入'],['利息收入','收入'],['租金費用','費用'],['薪資費用','費用'],['水電費','費用'],['折舊費用','費用']];
+  var cur,ok=0,n=0;
+  function next(){var a=acc[Math.floor(Math.random()*acc.length)],inc=Math.random()<.7;cur={n:a[0],t:a[1],inc:inc};$('#dcq').textContent='「'+a[0]+'」'+(inc?'增加':'減少');}
+  $$('#dctrain .wbtns button').forEach(function(b){b.addEventListener('click',function(){
+    var left=(cur.t==='資產'||cur.t==='費用');var ans=(left===cur.inc)?'借':'貸';
+    n++;var right=b.getAttribute('data-a')===ans;if(right)ok++;
+    $('#dcfb').innerHTML='<div class="fb '+(right?'ok':'no')+'">'+(right?'答對！':'再想想：')+cur.n+'是<strong>'+cur.t+'</strong>，'+cur.t+(left?'增加記借、減少記貸':'增加記貸、減少記借')+'，所以'+(cur.inc?'增加':'減少')+'記在<strong>'+ans+'方</strong>。</div>';
+    $('#dcs').textContent=ok;$('#dcn').textContent=n;next();
+  })});
+  next();
+})();
+
+/* ---------- accounting cycle ---------- */
+(function(){
+  var S=[['原始憑證','交易發生，取得發票、收據、出貨單、薪資表等證明文件。沒有憑證就不能記帳，這也是稽核最先要看的東西。'],
+  ['分錄','依憑證判斷借什麼、貸什麼，按日期記入日記簿（或在會計軟體輸入傳票）。'],
+  ['過帳','把分錄的金額，分別記到各科目的分類帳（T 字帳）。軟體會自動完成。'],
+  ['試算','列出所有科目餘額，檢查借方總額是否等於貸方總額。'],
+  ['調整','期末補記應計、預付、預收、折舊、備抵損失等，讓收入與費用落在正確期間（第 5 章）。'],
+  ['編製報表','以調整後的數字編製資產負債表、損益表、權益變動表、現金流量表。'],
+  ['結帳','把收入、費用科目歸零，餘額轉入保留盈餘，本期帳目關閉，不再修改。'],
+  ['開帳','新期間開始，資產、負債、權益的餘額延續到下一期，循環重新開始。']];
+  var svg=$('#cyclesvg'),i=0,timer=null,cx=170,cy=170,R=120,h='';
+  h+='<circle cx="170" cy="170" r="120" fill="none" stroke="var(--rule-strong)" stroke-width="2" stroke-dasharray="4 6"/>';
+  h+='<text x="170" y="164" text-anchor="middle" font-family="var(--serif)" font-weight="700" font-size="18" fill="var(--ink)">會計循環</text><text x="170" y="188" text-anchor="middle" font-size="13" fill="var(--muted)" id="cyc">第 1 步</text>';
+  S.forEach(function(s,k){var ang=-Math.PI/2+k*2*Math.PI/8,x=cx+R*Math.cos(ang),y=cy+R*Math.sin(ang);
+    h+='<g class="cn" data-k="'+k+'" style="cursor:pointer" tabindex="0" role="button" aria-label="'+s[0]+'"><circle cx="'+x+'" cy="'+y+'" r="30" fill="var(--sheet)" stroke="var(--rule-strong)" stroke-width="2"/><text x="'+x+'" y="'+(y-4)+'" text-anchor="middle" font-size="12" fill="var(--muted)">'+(k+1)+'</text><text x="'+x+'" y="'+(y+12)+'" text-anchor="middle" font-size="'+(s[0].length>3?11.5:13)+'" fill="var(--ink)" font-weight="600">'+s[0]+'</text></g>'});
+  svg.innerHTML=h;
+  function go(k){i=(k+8)%8;$$('.cn',svg).forEach(function(g,j){var c=g.querySelector('circle');c.setAttribute('fill',j===i?'var(--red)':'var(--sheet)');c.setAttribute('stroke',j===i?'var(--red)':'var(--rule-strong)');$$('text',g).forEach(function(t){t.setAttribute('fill',j===i?'#fff':(t.getAttribute('font-weight')?'var(--ink)':'var(--muted)'))})});
+    $('#cyc').textContent='第 '+(i+1)+' 步';$('#cycledesc').innerHTML='<span class="lab" style="font-family:var(--serif);font-weight:700">'+(i+1)+'. '+S[i][0]+'</span>'+S[i][1]}
+  $$('.cn',svg).forEach(function(g){var f=function(){go(+g.getAttribute('data-k'))};g.addEventListener('click',f);g.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();f()}})});
+  $('#cyNext').addEventListener('click',function(){go(i+1)});$('#cyPrev').addEventListener('click',function(){go(i-1)});
+  $('#cyPlay').addEventListener('click',function(){if(timer){clearInterval(timer);timer=null;this.textContent='自動播放';return}this.textContent='停止';timer=setInterval(function(){go(i+1)},2200)});
+  go(0);
+})();
+
+/* ---------- depreciation ---------- */
+(function(){
+  function calc(){
+    var c=+$('#dCost').value||0,s=+$('#dSal').value||0,n=Math.max(1,Math.min(20,Math.round(+$('#dLife').value||1))),m=$('#dMeth').value;
+    if(s>c)s=c;var bv=c,rows=[],sum=n*(n+1)/2,acc=0;
+    for(var y=1;y<=n;y++){var d;
+      if(m==='sl')d=(c-s)/n;
+      else if(m==='syd')d=(c-s)*(n-y+1)/sum;
+      else{d=bv*2/n;if(bv-d<s)d=bv-s;if(y===n)d=bv-s}
+      d=Math.max(0,d);acc+=d;bv-=d;rows.push([y,d,acc,bv])}
+    var h='<tr><th>年度</th><th class="r">折舊費用</th><th class="r">累計折舊</th><th class="r">年底帳面價值</th></tr>';
+    rows.forEach(function(r){h+='<tr><td>第 '+r[0]+' 年</td><td class="r">'+fmt(Math.round(r[1]))+'</td><td class="r">'+fmt(Math.round(r[2]))+'</td><td class="r">'+fmt(Math.round(r[3]))+'</td></tr>'});
+    $('#dTable').innerHTML=h;
+    var W=420,H=220,pad=20,bw=(W-pad*2)/(n+1),g='';
+    var data=[c].concat(rows.map(function(r){return r[3]}));
+    data.forEach(function(v,k){var hh=c?(v/c)*(H-60):0,x=pad+k*bw+bw*.15,y=H-26-hh;
+      g+='<rect x="'+x+'" y="'+y+'" width="'+(bw*.7)+'" height="'+hh+'" fill="'+(k===0?'var(--blue)':'var(--rule-strong)')+'" rx="2"><animate attributeName="height" from="0" to="'+hh+'" dur=".5s"/><animate attributeName="y" from="'+(H-26)+'" to="'+y+'" dur=".5s"/></rect>';
+      if(n<=12)g+='<text x="'+(x+bw*.35)+'" y="'+(y-5)+'" text-anchor="middle" font-size="12" fill="var(--ink)">'+fmt(Math.round(v))+'</text>';
+      g+='<text x="'+(x+bw*.35)+'" y="'+(H-8)+'" text-anchor="middle" font-size="11" fill="var(--muted)">'+(k===0?'取得':'Y'+k)+'</text>'});
+    g+='<line x1="'+pad+'" x2="'+(W-pad)+'" y1="'+(H-26)+'" y2="'+(H-26)+'" stroke="var(--ink)"/>';
+    if(s>0){var sy=H-26-(s/c)*(H-60);g+='<line x1="'+pad+'" x2="'+(W-pad)+'" y1="'+sy+'" y2="'+sy+'" stroke="var(--red)" stroke-dasharray="5 4"/><text x="'+(pad+2)+'" y="'+(sy+13)+'" text-anchor="start" font-size="11" fill="var(--red)">殘值線</text>'}
+    $('#dBars').innerHTML=g;
+  }
+  ['#dCost','#dSal','#dLife','#dMeth'].forEach(function(s){$(s).addEventListener('input',calc)});calc();
+})();
+
+/* ---------- ratio calculator ---------- */
+(function(){
+  var F=[['ca','流動資產',82400],['inv','存貨',5000],['cl','流動負債',8400],['ta','總資產',117800],['tl','總負債',8400],['eq','權益',109400],['rev','營收',40000],['cogs','銷貨成本',28600],['ni','淨利',9400],['ocf','營業現金流',-2000]];
+  var h='';F.forEach(function(f){h+='<label>'+f[1]+'<input type="number" id="r_'+f[0]+'" value="'+f[2]+'"></label>'});$('#rForm').innerHTML=h;
+  function v(k){return +$('#r_'+k).value||0}
+  function pct(x){return isFinite(x)?(x*100).toFixed(1)+'%':'—'}
+  function x2(x){return isFinite(x)?x.toFixed(2)+' 倍':'—'}
+  function calc(){
+    var cr=v('ca')/v('cl'),qr=(v('ca')-v('inv'))/v('cl'),dr=v('tl')/v('ta'),gm=(v('rev')-v('cogs'))/v('rev'),nm=v('ni')/v('rev'),roa=v('ni')/v('ta'),roe=v('ni')/v('eq'),at=v('rev')/v('ta'),em=v('ta')/v('eq'),cq=v('ocf')/v('ni');
+    var R=[['流動比率',x2(cr),cr>=2?'短期償債能力充裕':cr>=1?'尚可，留意資金調度':'偏低，一年內可能周轉吃緊'],
+    ['速動比率',x2(qr),qr>=1?'不靠賣存貨也還得出短期債':'需要靠存貨變現才能還債'],
+    ['負債比率',pct(dr),dr<.4?'借款少，結構保守':dr<.7?'中等':'偏高，利率或景氣變動風險大'],
+    ['毛利率',pct(gm),'和同業比較：代工業通常低於品牌業'],
+    ['淨利率',pct(nm),'每 100 元營收最後留下的利潤'],
+    ['ROA',pct(roa),'資產運用效率（本例為單月）'],
+    ['ROE',pct(roe),'股東報酬（本例為單月，年化約 ×12）'],
+    ['杜邦拆解',isFinite(nm*at*em)?pct(nm)+' × '+at.toFixed(2)+' × '+em.toFixed(2):'—','淨利率 × 資產週轉率 × 權益乘數 ＝ ROE'],
+    ['現金品質',x2(cq),cq<0?'有利潤但營業現金流為負，檢查應收與存貨':cq<.8?'利潤轉成現金的比例偏低':'利潤大致有現金支撐']];
+    var t='';R.forEach(function(r){t+='<div class="rrow"><b>'+r[0]+'</b><span class="v">'+r[1]+'</span><span class="d">'+r[2]+'</span></div>'});$('#rOut').innerHTML=t;
+  }
+  $$('#rForm input').forEach(function(i){i.addEventListener('input',calc)});calc();
+})();
+
+/* ---------- glossary ---------- */
+var G=[
+['會計','Accounting','記錄、彙總並報告經濟活動的方法。','「零星算之為計，總合算之為會」；英文源自古法文 aconter（計數、交代）。'],
+['簿記','Bookkeeping','把交易記入帳簿的基本工作。','「簿」是登記用的冊子，「記」是記錄。'],
+['資產','Asset','公司擁有、預期能帶來經濟效益的資源。','古法文 asez「足夠」，原指遺產是否足以清償債務。'],
+['負債','Liability','公司現在的義務，將來要以資源償還。','拉丁文 ligare「綁住」。'],
+['權益','Equity','資產減負債後屬於業主的剩餘權利。','原意「公平」，指公平歸屬於所有者的部分。'],
+['資本','Capital','業主投入的資金。','拉丁文 caput「頭」，古代以牲畜頭數計算財富。'],
+['借方','Debit (Dr.)','T 字帳的左邊。','拉丁文 debere「欠」；日本明治時期譯為借方。'],
+['貸方','Credit (Cr.)','T 字帳的右邊。','拉丁文 credere「相信、信任」。'],
+['複式簿記','Double-entry bookkeeping','每筆交易同時記借貸兩方且金額相等。','1494 年帕喬利在《算術、幾何、比例總論》中系統記載。'],
+['分錄','Journal entry','以借貸形式記錄一筆交易。','把交易「分」別記「錄」到各科目。'],
+['日記簿','Journal','按日期順序記錄分錄的帳簿。','法文 jour「日」。'],
+['分類帳','Ledger','按科目彙集金額的帳簿。','古英文，指一直放在固定地方的大書。'],
+['過帳','Posting','把分錄金額轉記到分類帳。','「過」是轉移，「帳」是帳簿。'],
+['試算表','Trial balance','列出科目餘額以檢驗借貸是否相等。','「試」算平衡，正式編表前的檢查。'],
+['權責發生制','Accrual basis','收入費用在發生時認列，不看現金收付。','accrual 源自拉丁文 accrescere「逐漸增長」。'],
+['資產負債表','Balance sheet','某時點的資產、負債、權益。','balance「平衡」，左右兩邊相等。'],
+['綜合損益表','Statement of comprehensive income','一段期間的收入、費用與損益。','「綜合」指含其他綜合損益。'],
+['現金流量表','Statement of cash flows','一段期間現金的來源與去處。','分營業、投資、籌資三類活動。'],
+['收入','Revenue','日常營業活動產生的經濟效益流入。','法文 revenir「回來」。'],
+['毛利','Gross profit','營收減銷貨成本。','「毛」即未扣除乾淨，如毛重。'],
+['赤字','Deficit / in the red','虧損。','手寫帳本以紅墨水記虧損。'],
+['流動','Current','一年或一個營業週期內會變現或到期。','拉丁文 currere「奔跑」。'],
+['存貨','Inventory','為出售而持有的商品或原料。','拉丁文 inventarium「找到的東西的清單」。'],
+['折舊','Depreciation','將有形資產成本分攤至耐用年限。','拉丁文 de＋pretium「價格往下」。'],
+['攤銷','Amortization','無形資產成本的分攤。','古法文字根有「使之消亡」之意。'],
+['呆帳／備抵損失','Bad debt / Loss allowance','預估收不回的應收帳款。','「呆」為停滯不動；「備抵」為預備抵銷。'],
+['保留盈餘','Retained earnings','累積淨利減已發股利。','賺到後「保留」在公司的盈餘。'],
+['股利','Dividend','分配給股東的盈餘。','拉丁文 dividendum「要被分掉的東西」。'],
+['標準分鐘 SAM','Standard Allowed Minutes','完成一件產品的標準工時。','源自泰勒的科學管理與時間研究。'],
+['FOB','Free On Board','賣方負責交貨上船的貿易條件。','字面為「船上交貨」。'],
+['杜邦分析','DuPont analysis','把 ROE 拆成淨利率、週轉率、權益乘數。','1910 年代杜邦公司的布朗所創。'],
+['內部控制','Internal control','確保資產安全、報表可靠、合法營運的制度。','COSO 架構 1992 年發表、2013 年更新。'],
+['審計／稽核','Audit','由獨立者檢查紀錄與報表。','拉丁文 audire「聽」；「稽」為查考，「核」為核對。'],
+['查核意見','Audit opinion','會計師對報表是否允當表達的結論。','分無保留、保留、否定、無法表示。'],
+['加值型營業稅','VAT','就各交易環節的增加價值課稅。','Value Added Tax 直譯。'],
+['統一發票','Uniform invoice','台灣法定銷售憑證。','1951 年實施，並以對獎鼓勵索取。'],
+['扣繳','Withholding tax','支付所得時由給付人先代扣稅款。','「扣」下再「繳」納。'],
+['財政','Fiscal','與政府收支有關的事務。','拉丁文 fiscus「籃子」，引申為國庫。'],
+['GAAP','Generally Accepted Accounting Principles','一般公認會計原則。','強調是普遍接受的慣例。'],
+['IFRS','International Financial Reporting Standards','國際財務報導準則。','由 IASB 制定，前身為 IAS。'],
+['GDT','General Department of Taxation','柬埔寨稅務總局。','隸屬經濟財政部。'],
+['QIP','Qualified Investment Project','柬埔寨合格投資案，可享租稅優惠。','經柬埔寨發展理事會（CDC）核准。']
+];
+function renderG(q){q=(q||'').trim().toLowerCase();var h='';
+  G.forEach(function(g){if(q&&(g.join(' ').toLowerCase().indexOf(q)<0))return;h+='<div class="gl"><b>'+g[0]+'</b> <span class="en">'+g[1]+'</span><div>'+g[2]+'</div><div class="o">'+g[3]+'</div></div>'});
+  $('#gllist').innerHTML=h||'<p>找不到符合的名詞，試試更短的關鍵字。</p>'}
+$('#glq').addEventListener('input',function(){renderG(this.value)});renderG('');
+
+buildToc();show(location.hash.slice(1)||'home');
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-143b17f8e6" data-category="business"></script></body>
+</html>

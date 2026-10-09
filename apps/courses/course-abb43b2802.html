@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>記憶術互動教室 — 長數字與語言的長期記憶法</title>
+<style>
+:root{
+  --linen:#FAF6EF;--paper:#FFFFFF;--khaki:#A8946A;--khaki-dark:#8A774E;
+  --ink:#1F1D1A;--gray:#6E6A63;--line:#E6DFD2;--blue:#2E5E7E;--red:#8C4A3C;
+  --ok:#3E6B4F;--bad:#A24936;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;background:var(--linen);color:var(--ink);line-height:1.8;-webkit-font-smoothing:antialiased;}
+.num{font-family:Georgia,"Times New Roman",serif;font-variant-numeric:tabular-nums;}
+header{background:var(--ink);color:var(--linen);padding:28px 20px 22px;text-align:center;}
+header .eyebrow{font-size:12px;letter-spacing:4px;color:var(--khaki);margin-bottom:8px;}
+header h1{font-size:24px;font-weight:700;letter-spacing:2px;}
+header p{font-size:13px;color:#B8B2A6;margin-top:6px;}
+nav{position:sticky;top:0;z-index:50;background:var(--paper);border-bottom:1px solid var(--line);display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+nav::-webkit-scrollbar{display:none;}
+nav button{flex:0 0 auto;background:none;border:none;padding:14px 13px;font-size:13px;color:var(--gray);border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;font-family:inherit;}
+nav button.active{color:var(--ink);border-bottom-color:var(--khaki);font-weight:700;}
+.progress-wrap{height:3px;background:var(--line);}
+.progress-bar{height:3px;background:var(--khaki);width:0;transition:width .4s;}
+main{max-width:760px;margin:0 auto;padding:24px 18px 80px;}
+section.chapter{display:none;animation:fadein .35s ease;}
+section.chapter.show{display:block;}
+@keyframes fadein{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.ch-label{font-size:12px;letter-spacing:3px;color:var(--khaki-dark);margin-bottom:4px;}
+h2{font-size:22px;margin-bottom:16px;}
+h3{font-size:17px;margin:28px 0 10px;padding-left:10px;border-left:4px solid var(--khaki);}
+p{margin-bottom:12px;font-size:15px;}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px;margin:14px 0;}
+.story{background:#F3EDDF;border-left:4px solid var(--khaki);border-radius:0 10px 10px 0;padding:16px 18px;margin:14px 0;font-size:15px;}
+.story b{color:var(--khaki-dark);}
+.tip{background:var(--paper);border:1px dashed var(--khaki);border-radius:10px;padding:14px 16px;margin:14px 0;font-size:14px;}
+.tip::before{content:"💡 小重點";display:block;font-weight:700;color:var(--khaki-dark);margin-bottom:6px;font-size:13px;letter-spacing:1px;}
+.origin{background:#EFF3F5;border-left:4px solid var(--blue);border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:14px;}
+.origin::before{content:"📖 名詞的由來";display:block;font-weight:700;color:var(--blue);margin-bottom:4px;font-size:13px;letter-spacing:1px;}
+.steps{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;font-size:15px;counter-reset:st;}
+.steps .st{position:relative;padding:6px 0 6px 40px;counter-increment:st;}
+.steps .st::before{content:counter(st);position:absolute;left:0;top:8px;width:26px;height:26px;background:var(--khaki-dark);color:#fff;border-radius:50%;text-align:center;line-height:26px;font-size:13px;font-weight:700;}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;background:var(--paper);}
+th{background:var(--ink);color:var(--linen);padding:9px 10px;text-align:left;font-weight:600;}
+td{border:1px solid var(--line);padding:9px 10px;vertical-align:top;}
+tr:nth-child(even) td{background:#FBF8F1;}
+.btn{display:inline-block;background:var(--ink);color:var(--linen);border:none;border-radius:8px;padding:10px 18px;font-size:14px;cursor:pointer;font-family:inherit;transition:opacity .15s;margin:3px;}
+.btn:active{opacity:.75;}
+.btn.ghost{background:var(--paper);color:var(--ink);border:1px solid var(--ink);}
+.btn.small{padding:8px 14px;font-size:13px;}
+.btn.khaki{background:var(--khaki-dark);}
+.btn.okb{background:var(--ok);}
+.btn.badb{background:var(--bad);}
+.btn[disabled]{opacity:.35;cursor:default;}
+.center{text-align:center;}
+.lab{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:16px 0;}
+.lab .lab-title{font-weight:700;margin-bottom:10px;font-size:15px;}
+.lab .lab-title::before{content:"🔬 ";}
+.lab .result{background:var(--linen);border-radius:8px;padding:12px 14px;margin-top:10px;font-size:14px;}
+.lab .result b{color:var(--khaki-dark);}
+.lab input[type=text],.lab input[type=date]{font-family:inherit;font-size:16px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--linen);width:100%;max-width:340px;}
+.slider-row{display:flex;align-items:center;gap:10px;margin:10px 0;font-size:14px;}
+.slider-row label{width:96px;flex:0 0 auto;font-weight:700;}
+.slider-row input[type=range]{flex:1;accent-color:var(--khaki-dark);}
+.slider-row .val{width:70px;text-align:right;flex:0 0 auto;}
+.narr{background:#F3EDDF;border-radius:8px;padding:10px 14px;margin:10px 0;font-size:14px;min-height:48px;}
+.narr b{color:var(--khaki-dark);}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;}
+.chip{background:var(--ink);color:var(--linen);border-radius:8px;padding:6px 10px;font-size:14px;text-align:center;line-height:1.3;}
+.chip .d{display:block;font-family:Georgia,serif;font-size:17px;font-weight:700;color:var(--khaki);}
+.chip.lt{background:var(--paper);color:var(--ink);border:1px solid var(--line);}
+.bignum{font-family:Georgia,serif;font-size:24px;letter-spacing:2px;text-align:center;word-break:break-all;background:var(--linen);border-radius:8px;padding:10px;margin:8px 0;}
+.bignum span{display:inline-block;margin:0 6px;}
+.chart svg{width:100%;height:auto;display:block;}
+.codegrid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;font-size:13px;}
+.codegrid div{background:var(--linen);border-radius:6px;padding:5px 4px;text-align:center;line-height:1.3;}
+.codegrid b{display:block;font-family:Georgia,serif;color:var(--khaki-dark);}
+.palace{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:10px 0;}
+.palace .loc{background:var(--linen);border:1px solid var(--line);border-radius:8px;padding:6px 4px;text-align:center;font-size:12px;min-height:74px;}
+.palace .loc .ln{font-weight:700;color:var(--khaki-dark);font-size:12px;}
+.palace .loc .li{font-size:14px;font-weight:700;margin-top:4px;}
+.palace .loc.on{border-color:var(--blue);background:#EFF3F5;}
+.palace .loc.good{border-color:var(--ok);background:#E7F0E9;}
+.palace .loc.bad{border-color:var(--bad);background:#F6E7E2;}
+.pq-opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px;}
+.pq-opts button{background:var(--linen);border:1px solid var(--line);border-radius:8px;padding:8px 14px;font-size:15px;cursor:pointer;font-family:inherit;}
+.boxes{display:flex;gap:6px;margin:10px 0;}
+.boxes .bx{flex:1;background:var(--linen);border:1px solid var(--line);border-radius:8px;padding:6px 2px;text-align:center;font-size:12px;}
+.boxes .bx b{display:block;font-size:20px;font-family:Georgia,serif;color:var(--khaki-dark);}
+.boxes .bx.cur{border-color:var(--blue);background:#EFF3F5;}
+.flash{background:var(--ink);color:var(--linen);border-radius:10px;padding:18px;text-align:center;margin:8px 0;min-height:96px;}
+.flash .fw{font-size:24px;font-weight:700;font-family:Georgia,serif;}
+.flash .fa{font-size:15px;color:var(--khaki);margin-top:6px;min-height:22px;}
+.quiz{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;}
+.quiz .q-text{font-weight:700;margin-bottom:10px;font-size:15px;}
+.quiz .opts{display:flex;flex-direction:column;gap:8px;}
+.quiz .opt{text-align:left;background:var(--linen);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px;cursor:pointer;font-family:inherit;}
+.quiz .opt.correct{background:#E7F0E9;border-color:var(--ok);color:var(--ok);font-weight:700;}
+.quiz .opt.wrong{background:#F6E7E2;border-color:var(--bad);color:var(--bad);}
+.quiz .fb{margin-top:10px;font-size:14px;display:none;}
+.quiz .fb.show{display:block;}
+.quiz .fb.good{color:var(--ok);}
+.quiz .fb.no{color:var(--bad);}
+.pager{display:flex;justify-content:space-between;margin-top:32px;gap:10px;}
+.pager .btn{flex:1;text-align:center;}
+#finalScore{display:none;text-align:center;padding:20px;}
+#finalScore .big{font-size:40px;font-weight:700;color:var(--khaki-dark);}
+.note{font-size:12px;color:var(--gray);margin-top:24px;}
+@media (max-width:480px){
+  h2{font-size:20px;}
+  .codegrid{grid-template-columns:repeat(4,1fr);font-size:12px;}
+  .palace{grid-template-columns:repeat(2,1fr);}
+  .slider-row label{width:80px;font-size:13px;}
+}
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">MEMORY TECHNIQUES · FROM ZERO</div>
+  <h1>記憶術互動教室</h1>
+  <p>長數字、外語單字——記得住,而且記得久的整套方法</p>
+</header>
+
+<nav id="nav"></nav>
+<div class="progress-wrap"><div class="progress-bar" id="pbar"></div></div>
+
+<main>
+
+<!-- ======== 序章 ======== -->
+<section class="chapter" data-title="開場">
+  <div class="ch-label">序章</div>
+  <h2>記憶力是天生的嗎?</h2>
+
+  <div class="story">
+    世界記憶錦標賽的選手,能在 5 分鐘內記住幾百位隨機數字、1 小時記住上千位。很多人以為他們天生腦袋不一樣——<br>
+    但研究人員掃描過他們的大腦,發現<b>腦子的結構和一般人沒什麼差別</b>。差別只在一件事:<b>他們用了方法</b>。<br><br>
+    這堂課要教的,就是那套方法。它不靠天分,靠的是四個步驟,整堂課都會照這個順序走:
+  </div>
+
+  <div class="card">
+    <table>
+      <tr><th style="width:84px;">步驟</th><th>一句話</th><th>在哪章學</th></tr>
+      <tr><td><b>① 編碼</b></td><td>把抽象的東西(數字、外文)<b>變成圖像</b></td><td>第 3~6 章</td></tr>
+      <tr><td><b>② 聯結</b></td><td>把圖像<b>串成故事</b></td><td>第 4 章</td></tr>
+      <tr><td><b>③ 定位</b></td><td>把故事<b>放進熟悉的地方</b></td><td>第 7 章</td></tr>
+      <tr><td><b>④ 複習</b></td><td>在<b>快要忘記前</b>複習,鎖進長期記憶</td><td>第 10 章</td></tr>
+    </table>
+  </div>
+
+  <h3>學習地圖(請照順序走)</h3>
+  <div class="card">
+    <table>
+      <tr><th style="width:64px;">章節</th><th>你會學到</th><th style="width:88px;">地基</th></tr>
+      <tr><td>第 1 章</td><td>大腦怎麼記:短期記憶、長期記憶、海馬迴</td><td>—</td></tr>
+      <tr><td>第 2 章</td><td>遺忘曲線:大腦忘東西的速度(互動圖表)</td><td>第 1 章</td></tr>
+      <tr><td>第 3 章</td><td>組塊:把長串切成小塊(互動切塊器)</td><td>第 1 章</td></tr>
+      <tr><td>第 4 章</td><td>圖像與聯想:大腦最愛的記憶形式</td><td>第 3 章</td></tr>
+      <tr><td>第 5 章</td><td>數字編碼 I:0~9 形狀碼</td><td>第 4 章</td></tr>
+      <tr><td>第 6 章</td><td>數字編碼 II:00~99 雙位碼(練習器)</td><td>第 5 章</td></tr>
+      <tr><td>第 7 章</td><td>記憶宮殿:把資訊放進房間(互動遊戲)</td><td>第 4 章</td></tr>
+      <tr><td>第 8 章</td><td>實戰長數字:圓周率、電話、證件號(轉換器)</td><td>第 6、7 章</td></tr>
+      <tr><td>第 9 章</td><td>實戰語言:外語單字的四種記法</td><td>第 4、7 章</td></tr>
+      <tr><td>第 10 章</td><td>長期保存:間隔複習、卡片盒、排程計算器</td><td>第 2 章</td></tr>
+      <tr><td>第 11 章</td><td>整套每日流程 SOP</td><td>全部</td></tr>
+      <tr><td>第 12 章</td><td>總測驗 + 畢業備忘卡</td><td>全部</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ======== 第1章 ======== -->
+<section class="chapter" data-title="1·大腦怎麼記">
+  <div class="ch-label">第 1 章</div>
+  <h2>大腦怎麼記:三個抽屜</h2>
+
+  <p>記憶不是一個地方,而是一條流水線。資訊要走過三個抽屜,才算真正記住:</p>
+
+  <div class="card">
+    <table>
+      <tr><th>抽屜</th><th>能放多久</th><th>能放多少</th><th>比喻</th></tr>
+      <tr><td><b>感覺記憶</b></td><td>不到 1 秒~幾秒</td><td>眼睛耳朵收到的全部</td><td>路過的風景,一閃而過</td></tr>
+      <tr><td><b>短期記憶</b></td><td>約 20~30 秒</td><td>只有 4~7 樣東西</td><td>書桌桌面:小、滿了就掉</td></tr>
+      <tr><td><b>長期記憶</b></td><td>幾天到一輩子</td><td>幾乎無限</td><td>圖書館:很大,但要編號才找得到</td></tr>
+    </table>
+  </div>
+
+  <div class="story">
+    你看了一眼朋友的電話號碼,轉身要撥——<b>咦,忘了</b>。這就是短期記憶:桌面太小,放不下 10 個數字,而且 30 秒沒整理就掉光。<br>
+    這堂課要做的事,就是<b>幫資訊從「桌面」搬進「圖書館」,而且貼好標籤、找得回來</b>。
+  </div>
+
+  <div class="origin">
+    負責「搬家」的大腦部位叫<b>海馬迴(Hippocampus)</b>。16 世紀的解剖學家發現它彎彎曲曲的形狀很像<b>海馬</b>,就用希臘文 hippos(馬)+ kampos(海怪)為它命名。它像圖書館的<b>櫃檯管理員</b>:把新資訊登記、編號,之後在<b>睡覺時</b>慢慢搬進長期記憶的書架。
+  </div>
+
+  <div class="tip">
+    這章帶走三個重點:<br>
+    ① 短期記憶<b>很小</b>(4~7 樣)→ 第 3 章教你把東西「變少」。<br>
+    ② 長期記憶<b>很大,但要標籤</b>→ 第 4~7 章教你用圖像當標籤。<br>
+    ③ 搬家主要在<b>睡覺時</b>發生 → 第 10 章教你怎麼利用睡眠。
+  </div>
+
+  <div id="q1"></div>
+</section>
+
+<!-- ======== 第2章 ======== -->
+<section class="chapter" data-title="2·遺忘曲線">
+  <div class="ch-label">第 2 章</div>
+  <h2>遺忘曲線:大腦忘東西的速度</h2>
+
+  <div class="origin">
+    1885 年,德國心理學家 <b>艾賓浩斯(Hermann Ebbinghaus)</b>做了一個很辛苦的實驗:他編了幾千個沒有意義的音節(像 WID、ZOF),自己背、隔一段時間再測自己忘了多少。他把結果畫成一條往下掉的線,這就是著名的<b>遺忘曲線(Forgetting Curve)</b>。他用無意義音節,是為了排除「本來就懂」的干擾,量出最純粹的遺忘速度。
+  </div>
+
+  <div class="card">
+    他的發現大致是這樣(不同人、不同材料會有差異):<br>
+    學完 <b>20 分鐘</b>後,約剩 6 成<br>
+    <b>1 小時</b>後,約剩 4~5 成<br>
+    <b>1 天</b>後,約剩 3 成多<br>
+    <b>1 個月</b>後,約剩 2 成<br>
+    重點不是數字,而是形狀:<b>剛學完忘得最快,之後慢慢變平</b>。
+  </div>
+
+  <h3>好消息:每複習一次,曲線就變平一點</h3>
+  <p>艾賓浩斯還發現:<b>在快忘記時複習,下一次忘得更慢</b>。複習越多次,曲線越平,最後幾乎不會掉。拉開開關看看:</p>
+
+  <div class="lab chart">
+    <div class="lab-title">互動圖表:遺忘曲線(示意)</div>
+    <svg viewBox="0 0 400 230" id="fcSvg"></svg>
+    <div class="center">
+      <button class="btn small" id="fcToggle" onclick="fcToggle()">➕ 加入間隔複習</button>
+    </div>
+    <div class="result" id="fcOut"></div>
+  </div>
+
+  <div class="tip">
+    整堂課最重要的一句話:<b>記憶不是「背一次很久」,是「短短複習很多次、間隔越拉越長」</b>。第 10 章會把這個原理變成一張可以照做的複習時間表。
+  </div>
+
+  <div id="q2"></div>
+</section>
+
+<!-- ======== 第3章 ======== -->
+<section class="chapter" data-title="3·組塊">
+  <div class="ch-label">第 3 章</div>
+  <h2>組塊:把長串切成小塊</h2>
+
+  <p>第 1 章說短期記憶只能放 4~7 樣東西。那怎麼記 10 個數字的電話?答案是:<b>讓「一樣東西」變大</b>。</p>
+
+  <div class="story">
+    試著記這串字母:<b>F B I C I A N B A U S A</b>——12 個,很難。<br>
+    換個切法:<b>FBI - CIA - NBA - USA</b>——只剩 4 塊,一眼就記住。<br>
+    字母一個都沒少,但你的大腦只需要記 <b>4 樣東西</b>。這就是組塊。
+  </div>
+
+  <div class="origin">
+    <b>組塊(Chunking)</b>:chunk 是英文「一大塊」(像一大塊麵包)。1956 年美國心理學家 <b>George Miller</b> 發表了一篇有名的論文〈神奇的數字 7±2〉,指出短期記憶大約只能放 7 樣東西,但「一樣東西」可以是一個數字、一個字,也可以是一整塊有意義的組合。後來的研究認為真正的容量更接近 <b>4 塊</b>左右——所以切塊比我們想像的更重要。
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">互動切塊器:輸入任何一串數字</div>
+    <input type="text" id="ckIn" value="0912345678" inputmode="numeric" oninput="ckCalc()">
+    <div class="slider-row">
+      <label>每塊幾位</label>
+      <input type="range" id="ckN" min="1" max="5" value="3" oninput="ckCalc()">
+      <span class="val num" id="ckNv">3 位</span>
+    </div>
+    <div class="bignum" id="ckOut"></div>
+    <div class="result" id="ckRes"></div>
+  </div>
+
+  <div class="card">
+    <b>生活裡的組塊:</b><br>
+    電話 0912-345-678、信用卡 4 碼一組、身分證「英文字母 + 9 碼」、年份「1949」當成一塊而不是四個數字。<br>
+    <b>最強的組塊是「有意義」的組塊</b>:0520(我愛你)、1111(光棍節)、1024(程式設計師節)。能跟你已知的東西連上,一塊就牢牢記住。
+  </div>
+
+  <div id="q3"></div>
+</section>
+
+<!-- ======== 第4章 ======== -->
+<section class="chapter" data-title="4·圖像與聯想">
+  <div class="ch-label">第 4 章</div>
+  <h2>圖像與聯想:大腦最愛的記憶形式</h2>
+
+  <p>組塊能讓東西變少,但還不夠牢。要讓它進入長期記憶,要用大腦最擅長的格式:<b>圖像</b>。</p>
+
+  <div class="story">
+    你可能記不住昨天看的新聞標題,卻記得十年前某個<b>好笑的畫面</b>。為什麼?<br>
+    人類祖先幾百萬年來靠眼睛求生——記得哪裡有水、哪裡有獅子。文字才出現幾千年,數字更晚。所以大腦對<b>畫面</b>是頂級配備,對抽象符號是入門配備。<br><br>
+    記憶術的核心策略就是:<b>把抽象的東西翻譯成畫面</b>。
+  </div>
+
+  <h3>好畫面的四個要素</h3>
+  <div class="card">
+    <table>
+      <tr><th>要素</th><th>意思</th><th>例子(要記「雨傘」)</th></tr>
+      <tr><td><b>誇張</b></td><td>尺寸、數量放大</td><td>一把跟房子一樣大的雨傘</td></tr>
+      <tr><td><b>動作</b></td><td>讓它動起來</td><td>雨傘自己打開、旋轉著飛走</td></tr>
+      <tr><td><b>感官</b></td><td>加上聲音、氣味、觸感</td><td>雨傘「啪」一聲打開,濺你一臉水</td></tr>
+      <tr><td><b>荒謬</b></td><td>越不合理越好記</td><td>雨傘在跳舞、在吃麵</td></tr>
+    </table>
+  </div>
+
+  <h3>聯想:把圖像串成故事(鎖鏈法)</h3>
+  <p>一個圖像記住了,下一步是把<b>好幾個圖像串起來</b>。方法很簡單:讓第一個東西和第二個東西<b>發生互動</b>,第二個再和第三個互動……像一條鎖鏈。</p>
+
+  <div class="lab">
+    <div class="lab-title">練習:30 秒記住 10 樣購物清單</div>
+    <div class="narr" id="lkNarr">按「開始」會出現 10 樣東西,先試著硬背,再看鎖鏈故事的版本。</div>
+    <div class="chips" id="lkItems"></div>
+    <div class="center">
+      <button class="btn small" onclick="lkStart()">▶ 開始</button>
+      <button class="btn small khaki" onclick="lkStory()">📖 看鎖鏈故事</button>
+    </div>
+  </div>
+
+  <div class="tip">
+    自己編的故事比別人編的好記十倍,因為<b>「自己想」這個動作本身就是在加深記憶</b>。所以上面的故事只是示範,你可以蓋掉它、自己再編一個。
+  </div>
+
+  <div id="q4"></div>
+</section>
+
+<!-- ======== 第5章 ======== -->
+<section class="chapter" data-title="5·數字形狀碼">
+  <div class="ch-label">第 5 章</div>
+  <h2>數字編碼 I:0~9 形狀碼</h2>
+
+  <p>第 4 章說要把抽象的東西變成畫面。數字是最抽象的東西——「7」本身沒有畫面。所以我們先幫 0~9 每個數字<b>配一個固定圖像</b>,最簡單的方法是看<b>形狀</b>:</p>
+
+  <div class="card">
+    <table>
+      <tr><th>數字</th><th>圖像</th><th>為什麼</th></tr>
+      <tr><td class="num"><b>0</b></td><td>雞蛋</td><td>圓圓的</td></tr>
+      <tr><td class="num"><b>1</b></td><td>蠟燭</td><td>直直一根</td></tr>
+      <tr><td class="num"><b>2</b></td><td>天鵝</td><td>彎彎的脖子</td></tr>
+      <tr><td class="num"><b>3</b></td><td>耳朵</td><td>側面像耳朵</td></tr>
+      <tr><td class="num"><b>4</b></td><td>帆船</td><td>三角形的帆</td></tr>
+      <tr><td class="num"><b>5</b></td><td>秤鉤</td><td>下面有個鉤</td></tr>
+      <tr><td class="num"><b>6</b></td><td>哨子</td><td>圓肚子加一根管</td></tr>
+      <tr><td class="num"><b>7</b></td><td>鋤頭</td><td>橫一條、斜一條</td></tr>
+      <tr><td class="num"><b>8</b></td><td>雪人</td><td>上下兩顆圓</td></tr>
+      <tr><td class="num"><b>9</b></td><td>氣球</td><td>圓球拖著線</td></tr>
+    </table>
+  </div>
+
+  <div class="story">
+    試試看:記住保險箱密碼 <b>2 9 8 4</b>。<br>
+    → 一隻<b>天鵝</b>(2)咬著一顆<b>氣球</b>(9),氣球飛上天撞到一個<b>雪人</b>(8),雪人被撞飛掉進海裡,剛好落在一艘<b>帆船</b>(4)上。<br>
+    閉上眼睛回想畫面:天鵝→氣球→雪人→帆船 = 2984。明天再問你,你大概還記得。
+  </div>
+
+  <div class="origin">
+    這種把數字對應成固定圖像的方法,英文叫 <b>Peg System(掛鉤法)</b>:peg 是牆上用來掛衣服的木釘。每個數字就是一根釘子,要記的東西「掛」上去。類似的方法在 17 世紀歐洲的記憶術書籍裡就出現過,已經流傳了幾百年。
+  </div>
+
+  <div class="tip">
+    這 10 個圖像要<b>背到反射</b>——看到 7 腦中直接跳出鋤頭,不用想。建議做 10 張小卡片,正面數字、背面圖像,每天翻 2 分鐘,3 天就熟。你也可以換成自己覺得更像的圖像,<b>用自己的最好記</b>,只要固定不改就行。
+  </div>
+
+  <div id="q5"></div>
+</section>
+
+<!-- ======== 第6章 ======== -->
+<section class="chapter" data-title="6·雙位碼">
+  <div class="ch-label">第 6 章</div>
+  <h2>數字編碼 II:00~99 雙位碼</h2>
+
+  <p>0~9 形狀碼一個圖像只能記 1 位數。記 100 位數就要 100 個圖像,故事會很長。記憶選手的做法是:<b>每兩位數配一個圖像</b>,00~99 總共 100 個——圖像數量少一半,效率加倍。這也是第 3 章「組塊」的延伸:兩位數當成一塊。</p>
+
+  <div class="card">
+    <b>中文雙位碼主要靠三種聯想:</b><br>
+    ① <b>諧音</b>:14 → 鑰匙(yāo-sì ≈ yào-shi)、18 → 腰包、79 → 氣球<br>
+    ② <b>形狀</b>:10 → 棒球(1 是球棒、0 是球)、11 → 筷子<br>
+    ③ <b>意義</b>:38 → 婦女(三八婦女節)、61 → 兒童(六一兒童節)、24 → 鬧鐘(一天 24 小時)
+  </div>
+
+  <h3>完整 00~99 編碼表</h3>
+  <div class="codegrid" id="codeGrid"></div>
+  <p style="font-size:13px;color:var(--gray);margin-top:8px;">這是一份參考表。覺得哪個不順,就換成你自己想得到的圖像——關鍵是<b>具體、能畫出來、固定不改</b>。</p>
+
+  <div class="lab">
+    <div class="lab-title">練習器:看數字,選圖像</div>
+    <div class="bignum" id="cdNum" style="font-size:40px;"></div>
+    <div class="pq-opts" id="cdOpts"></div>
+    <div class="narr" id="cdFb" style="text-align:center;">選出這個數字的圖像。</div>
+    <div class="center" style="font-size:13px;color:var(--gray);" id="cdScore">連續答對 0 題</div>
+    <p style="font-size:13px;color:var(--gray);margin:8px 0 0;">建議進度:每天熟記 10 個,10 天背完 100 個;之後用練習器每天 3 分鐘,目標每個 1 秒內反應。</p>
+  </div>
+
+  <div class="origin">
+    西方記憶選手用的是另一套叫 <b>Major System(主要系統)</b>的方法:每個數字對應一個子音(例如 1=t、2=n),再拼成單字。它在 17 世紀就有雛形,19 世紀被改良定型。中文沒有字母拼寫,所以華人選手發展出用<b>諧音、形狀、意義</b>的雙位碼,原理一樣:把數字翻譯成畫面。
+  </div>
+
+  <div id="q6"></div>
+</section>
+
+<!-- ======== 第7章 ======== -->
+<section class="chapter" data-title="7·記憶宮殿">
+  <div class="ch-label">第 7 章</div>
+  <h2>記憶宮殿:把資訊放進房間裡</h2>
+
+  <p>鎖鏈故事(第 4 章)有個弱點:故事中間一環斷了,後面全部想不起來。記憶宮殿解決了這個問題——每個圖像都<b>放在一個固定的位置</b>,一個忘了,不影響下一個。</p>
+
+  <div class="origin">
+    <b>記憶宮殿</b>又叫<b>位置記憶法(Method of Loci)</b>,loci 是拉丁文「地點」locus 的複數。相傳兩千五百年前,古希臘詩人 <b>Simonides</b> 參加宴會時剛好離席,大廳隨即倒塌,遺體無法辨認。他閉上眼睛回想<b>每個人坐在哪個位置</b>,一一認出了死者。他因此發現:<b>人對「位置」的記憶特別強</b>。古羅馬的演說家就用這個方法背長篇演講稿。
+  </div>
+
+  <h3>建立你的第一座宮殿</h3>
+  <div class="steps">
+    <div class="st">選一個你<b>閉著眼睛也能走一遍</b>的地方:你家、你的辦公室、上班的路線。</div>
+    <div class="st">沿著固定方向(例如順時針)挑出 <b>10 個位置</b>:大門、鞋櫃、沙發、電視……每個位置要不同、要明顯。</div>
+    <div class="st">在腦中從 1 走到 10,練習 3 次,確定順序不會亂。這座宮殿就可以重複使用一輩子。</div>
+    <div class="st">要記東西時,把第 1 樣的圖像「放」在位置 1,和那個位置<b>發生互動</b>(第 4 章的四要素)。依此類推。</div>
+    <div class="st">回想時,在腦中沿路走一遍,每個位置都會「提醒」你那裡放了什麼。</div>
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">互動遊戲:用記憶宮殿記 10 樣東西</div>
+    <div class="narr" id="plNarr">這是一座範例宮殿(你家的 10 個位置)。按「放置物品」開始。</div>
+    <div class="palace" id="plGrid"></div>
+    <div class="pq-opts" id="plOpts"></div>
+    <div class="center">
+      <button class="btn small" id="plBtn" onclick="plPlace()">▶ 放置物品</button>
+      <button class="btn small khaki" id="plTest" onclick="plStartTest()" disabled>📝 開始測驗</button>
+      <button class="btn small ghost" onclick="plReset()">重來</button>
+    </div>
+  </div>
+
+  <div class="tip">
+    進階玩法:一座宮殿 10 個位置不夠用,就把房子擴大成 30 個、50 個位置,或建好幾座宮殿(家、公司、老家)。記憶選手常有幾十座宮殿、上千個位置。還有一個規則:<b>同一座宮殿,至少隔一兩天再放新東西</b>,讓舊畫面先淡掉,免得互相干擾。
+  </div>
+
+  <div id="q7"></div>
+</section>
+
+<!-- ======== 第8章 ======== -->
+<section class="chapter" data-title="8·實戰長數字">
+  <div class="ch-label">第 8 章</div>
+  <h2>實戰長數字:圓周率、電話、證件號</h2>
+
+  <p>現在把武器全部組合:<b>組塊(第 3 章)→ 雙位碼(第 6 章)→ 故事或宮殿(第 4、7 章)</b>。</p>
+
+  <h3>示範:圓周率小數點後 14 位</h3>
+  <div class="bignum">3. <span>14</span><span>15</span><span>92</span><span>65</span><span>35</span><span>89</span><span>79</span></div>
+  <div class="card">
+    <b>第一步 組塊</b>:兩位一組 → 14 15 92 65 35 89 79<br>
+    <b>第二步 編碼</b>:鑰匙、鸚鵡、球兒、老虎、珊瑚、芭蕉、氣球<br>
+    <b>第三步 故事</b>:一把<b>鑰匙</b>打開鳥籠,<b>鸚鵡</b>飛出來,叼起一顆<b>球兒</b>,丟向一隻<b>老虎</b>;老虎嚇得跳進海裡撞上<b>珊瑚</b>,在珊瑚上吃了一根<b>芭蕉</b>,肚子立刻脹成一顆<b>氣球</b>飄走了。<br>
+    <b>第四步 回想</b>:閉眼播放畫面,逐一翻譯回數字。
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">數字轉圖像轉換器:輸入你要記的任何數字</div>
+    <input type="text" id="cvIn" value="0912345678" inputmode="numeric" oninput="cvCalc()">
+    <div class="chips" id="cvOut"></div>
+    <div class="result" id="cvRes"></div>
+  </div>
+
+  <h3>長數字用記憶宮殿</h3>
+  <div class="card">
+    超過 20 位,建議改用記憶宮殿:<b>每個位置放 2 個圖像(4 位數)</b>,兩個圖像互動。<br>
+    例:位置 1「大門」放 14、15 → 「一把巨大的<b>鑰匙</b>插在大門上,鑰匙上站著一隻<b>鸚鵡</b>」。<br>
+    10 個位置 = 40 位數;50 個位置 = 200 位數。記憶選手記上千位數,就是這樣一格一格放進去的。
+  </div>
+
+  <div class="tip">
+    常用數字的建議記法:<b>手機號</b>→ 雙位碼串成和那個人有關的故事(把他本人放進故事裡);<b>證件號、帳號</b>→ 放在固定的一座小宮殿;<b>生日、紀念日</b>→ 找有意義的組塊(0520、1225)。
+  </div>
+
+  <div id="q8"></div>
+</section>
+
+<!-- ======== 第9章 ======== -->
+<section class="chapter" data-title="9·實戰語言">
+  <div class="ch-label">第 9 章</div>
+  <h2>實戰語言:外語單字的四種記法</h2>
+
+  <p>外語單字難記,因為它對你來說就像第 2 章艾賓浩斯的無意義音節——聲音和意思之間<b>沒有任何連結</b>。記憶術要做的,就是幫它們<b>搭一座橋</b>。</p>
+
+  <h3>方法一:關鍵字法(聲音的橋)</h3>
+  <div class="card">
+    <b>步驟</b>:① 找一個發音像外語單字的中文詞(關鍵字)② 把關鍵字和單字意思編成一個畫面。<br><br>
+    <b>ambulance(救護車)</b>→ 聽起來像「俺不能死」→ 畫面:一個人躺在救護車上大喊「俺不能死!」<br>
+    <b>pest(害蟲)</b>→ 像「拍死它」→ 畫面:一隻害蟲飛過來,你大喊「拍死它!」<br>
+    <b>bamboo(竹子)</b>→ 像「搬布」→ 畫面:熊貓扛著竹子在搬布。
+  </div>
+  <div class="origin">
+    <b>關鍵字法(Keyword Method)</b>由美國史丹佛大學的心理學家 <b>Richard Atkinson</b> 在 1970 年代提出並做實驗驗證:用這個方法學俄文單字的學生,記住的數量明顯多於死背的學生。keyword 就是那個「鑰匙詞」——它打開外語單字和意思之間的門。
+  </div>
+  <div class="tip">
+    關鍵字只是<b>暫時的橋</b>:它幫你記住「意思」,但會讓發音偏掉。所以一定要搭配<b>聽真人發音</b>、跟著唸。用幾次之後,單字自然記住,橋就可以拆掉了。
+  </div>
+
+  <h3>方法二:字根拆解(結構的橋)</h3>
+  <div class="card">
+    很多語言的單字是「積木」拼成的。英文大量借用拉丁文與希臘文字根:<br>
+    <b>tele</b>(遠)+ <b>phone</b>(聲音)= telephone 電話<br>
+    <b>tele</b>(遠)+ <b>scope</b>(看)= telescope 望遠鏡<br>
+    <b>bio</b>(生命)+ <b>logy</b>(學問)= biology 生物學<br>
+    學會 100 個常用字根,能幫你猜出上千個單字。這和中文的部首是同一個道理:看到「氵」就知道和水有關。
+  </div>
+
+  <h3>方法三:句子情境(意義的橋)</h3>
+  <div class="card">
+    單字不要單獨背,放進一個<b>跟你自己有關</b>的句子裡:與其背「deadline = 截止日期」,不如記「The deadline for the report is Friday.(報告週五要交)」。大腦記得住「故事」,記不住「清單」——這正是第 4 章的原理。
+  </div>
+
+  <h3>方法四:語言宮殿(分類的橋)</h3>
+  <div class="card">
+    用第 7 章的宮殿,依主題分房間:<b>廚房</b>放食物單字、<b>浴室</b>放身體部位、<b>客廳</b>放家具。要記 fork(叉子),就想像一支巨大的叉子插在餐桌上。回想時「走進廚房」,單字就一個個出現。
+  </div>
+
+  <div id="q9"></div>
+</section>
+
+<!-- ======== 第10章 ======== -->
+<section class="chapter" data-title="10·長期保存">
+  <div class="ch-label">第 10 章</div>
+  <h2>長期保存:讓記憶留一輩子</h2>
+
+  <p>前九章讓你「記得住」,這一章讓你「記得久」。回到第 2 章的遺忘曲線,三個科學方法:</p>
+
+  <h3>一、間隔複習:在快忘記前複習</h3>
+  <div class="card">
+    複習的時機比次數重要。常見的間隔表:<br>
+    <b>學完當天睡前 → 隔 1 天 → 隔 2 天 → 隔 4 天 → 隔 7 天 → 隔 15 天 → 隔 30 天</b><br>
+    間隔一次比一次長,因為每複習一次,遺忘曲線就變平一點,下一次可以等更久。
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">複習排程計算器:輸入你開始學的日期</div>
+    <input type="date" id="rvDate" onchange="rvCalc()">
+    <div id="rvOut"></div>
+  </div>
+
+  <h3>二、主動回想:考自己,不要重讀</h3>
+  <div class="card">
+    複習時<b>不要把筆記再讀一遍</b>,而是<b>蓋起來、先自己想</b>,想不起來再看答案。重讀會讓你覺得「好像都會了」,其實只是眼熟;自己想的那個「用力」過程,才會真正加深記憶。
+  </div>
+  <div class="origin">
+    這在心理學叫<b>測驗效應(Testing Effect)</b>或<b>提取練習</b>。2006 年美國華盛頓大學的 <b>Roediger 與 Karpicke</b> 做過一個經典實驗:兩組學生讀同一篇文章,一組重讀好幾次,一組讀一次後反覆考自己。一週後測驗,<b>考自己那組記得多很多</b>——雖然他們自己覺得重讀那組比較有把握。
+  </div>
+
+  <h3>三、卡片盒:讓系統替你安排複習</h3>
+  <div class="origin">
+    1970 年代,德國科普作家 <b>Sebastian Leitner</b> 發明了<b>萊特納卡片盒(Leitner System)</b>:用 5 個盒子裝單字卡,答對就往後一格(複習間隔變長),答錯就回到第 1 格(每天複習)。今天流行的記憶卡 App <b>Anki</b> 就是這個原理的電腦版——它的名字來自日文<b>「暗記(あんき)」</b>,就是「背誦」的意思。
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">萊特納卡片盒體驗(8 個英文單字)</div>
+    <div class="boxes" id="ltBoxes"></div>
+    <div class="flash"><div class="fw" id="ltWord"></div><div class="fa" id="ltAns"></div></div>
+    <div class="center">
+      <button class="btn small" id="ltShow" onclick="ltShow()">👁 看答案</button>
+      <button class="btn small okb" id="ltYes" onclick="ltAnswer(true)" disabled>✓ 記得</button>
+      <button class="btn small badb" id="ltNo" onclick="ltAnswer(false)" disabled>✗ 忘了</button>
+      <button class="btn small ghost" onclick="ltReset()">重來</button>
+    </div>
+    <div class="narr" id="ltNarr">先自己想意思(主動回想),再按「看答案」,誠實回答記得或忘了。</div>
+  </div>
+
+  <h3>四、睡眠:大腦的存檔時間</h3>
+  <div class="card">
+    第 1 章說過:海馬迴主要在<b>睡覺時</b>把當天的新資訊搬進長期記憶。所以:<br>
+    ① <b>睡前複習</b>一次當天學的東西,效果特別好。<br>
+    ② 熬夜背書是虧本生意——省下睡眠,等於跳過存檔。
+  </div>
+
+  <div id="q10"></div>
+</section>
+
+<!-- ======== 第11章 ======== -->
+<section class="chapter" data-title="11·每日流程">
+  <div class="ch-label">第 11 章</div>
+  <h2>整套每日流程 SOP</h2>
+
+  <p>把前十章組成一套每天照做的流程。先建系統(只做一次),再每天使用:</p>
+
+  <h3>第一階段:建系統(約 2~3 週,一輩子用)</h3>
+  <div class="card">
+    <table>
+      <tr><th>週次</th><th>任務</th><th>對應章節</th></tr>
+      <tr><td>第 1 週</td><td>背熟 0~9 形狀碼;建好第一座 10 位置的記憶宮殿</td><td>第 5、7 章</td></tr>
+      <tr><td>第 2 週</td><td>每天背 10 個雙位碼(00~49)</td><td>第 6 章</td></tr>
+      <tr><td>第 3 週</td><td>雙位碼 50~99;宮殿擴大到 30 個位置</td><td>第 6、7 章</td></tr>
+    </table>
+  </div>
+
+  <h3>第二階段:每天使用(20~30 分鐘)</h3>
+  <div class="steps">
+    <div class="st"><b>早上 5 分鐘:暖身</b>——雙位碼練習器 20 題,讓編碼保持反射速度。</div>
+    <div class="st"><b>學新東西 10~15 分鐘</b>:照「組塊 → 編碼 → 故事或宮殿」四步驟,一次 10~20 個單字或 20~40 位數字就好,<b>寧少勿多</b>。</div>
+    <div class="st"><b>建立複習排程</b>:把今天學的放進卡片盒或 Anki;或用第 10 章的計算器記下複習日期。</div>
+    <div class="st"><b>複習 5~10 分鐘</b>:處理今天到期的舊內容,<b>先主動回想,再看答案</b>。</div>
+    <div class="st"><b>睡前 2 分鐘</b>:閉眼把今天的新故事、新宮殿在腦中走一遍。</div>
+  </div>
+
+  <div class="card">
+    <b>用這套流程,一個月後大約可以做到:</b><br>
+    ✅ 5 分鐘記住 40 位隨機數字<br>
+    ✅ 每天 20 個外語新單字,一個月累積 600 個,而且一個月後大多還記得<br>
+    ✅ 背下自己和家人的所有證件號、重要電話
+  </div>
+
+  <div class="tip">
+    最常見的失敗原因不是方法不對,是<b>一次學太多、不複習</b>。第 2 章的遺忘曲線對每個人都公平:沒有複習的記憶,方法再好也會掉。每天 20 分鐘持續做,遠勝過週末狂背 3 小時。
+  </div>
+</section>
+
+<!-- ======== 第12章 ======== -->
+<section class="chapter" data-title="12·總測驗">
+  <div class="ch-label">第 12 章</div>
+  <h2>總測驗:你會了嗎?</h2>
+  <p>12 題,涵蓋整堂課。答完自動計分,錯的題目會告訴你為什麼。</p>
+  <div id="finalQuiz"></div>
+  <div class="center" style="margin-top:16px;">
+    <button class="btn" onclick="gradeFinal()">交卷計分</button>
+    <button class="btn ghost" onclick="resetFinal()">重新作答</button>
+  </div>
+  <div id="finalScore" class="card"></div>
+
+  <h3>畢業備忘卡 🎓</h3>
+  <div class="card">
+    <table>
+      <tr><td><b>四步驟</b></td><td>編碼(變圖像)→ 聯結(串故事)→ 定位(放宮殿)→ 複習(間隔回想)</td></tr>
+      <tr><td><b>三個抽屜</b></td><td>感覺記憶 → 短期記憶(4~7 樣)→ 長期記憶(睡眠時存檔)</td></tr>
+      <tr><td><b>遺忘曲線</b></td><td>剛學完忘最快;每複習一次曲線變平</td></tr>
+      <tr><td><b>組塊</b></td><td>把長串切成少數有意義的塊</td></tr>
+      <tr><td><b>好畫面</b></td><td>誇張、動作、感官、荒謬</td></tr>
+      <tr><td><b>數字編碼</b></td><td>0~9 形狀碼 → 00~99 雙位碼(諧音、形狀、意義)</td></tr>
+      <tr><td><b>記憶宮殿</b></td><td>熟悉路線上的固定位置,每格放 1~2 個圖像</td></tr>
+      <tr><td><b>外語單字</b></td><td>關鍵字法、字根拆解、句子情境、語言宮殿</td></tr>
+      <tr><td><b>長期保存</b></td><td>間隔複習(1-2-4-7-15-30 天)、主動回想、卡片盒、睡眠</td></tr>
+      <tr><td><b>每日 SOP</b></td><td>暖身 5 分 → 學新 10~15 分 → 排程 → 複習 → 睡前走一遍</td></tr>
+    </table>
+  </div>
+
+  <p class="note">※ 課程中提到的研究與人物(艾賓浩斯、Miller、Atkinson、Leitner、Roediger 與 Karpicke 等)為概略介紹,數字以「約」表示;若要引用於正式場合,建議再查證原始資料。</p>
+</section>
+
+<div class="pager">
+  <button class="btn ghost" id="prevBtn" onclick="go(-1)">← 上一章</button>
+  <button class="btn" id="nextBtn" onclick="go(1)">下一章 →</button>
+</div>
+
+</main>
+
+<script>
+/* ===== 章節導覽 ===== */
+const chapters=[...document.querySelectorAll('section.chapter')];
+const nav=document.getElementById('nav');
+let cur=0;
+chapters.forEach((c,i)=>{
+  const b=document.createElement('button');
+  b.textContent=c.dataset.title;
+  b.onclick=()=>show(i);
+  nav.appendChild(b);
+});
+function show(i){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=i;
+  cur=i;
+  chapters.forEach((c,j)=>c.classList.toggle('show',j===i));
+  [...nav.children].forEach((b,j)=>b.classList.toggle('active',j===i));
+  document.getElementById('pbar').style.width=((i+1)/chapters.length*100)+'%';
+  document.getElementById('prevBtn').style.visibility=i===0?'hidden':'visible';
+  document.getElementById('nextBtn').textContent=i===chapters.length-1?'完成 🎉':'下一章 →';
+  nav.children[i].scrollIntoView({inline:'center',block:'nearest'});
+  window.scrollTo({top:0});
+}
+function go(d){
+  const n=cur+d;
+  if(n<0)return;
+  if(n>=chapters.length){alert('恭喜完成整堂課!🎓 記得回第 12 章交卷,然後從今天開始第 11 章的每日流程。');return;}
+  show(n);
+}
+show(0);
+
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ===== 編碼表 ===== */
+const SHAPE=['雞蛋','蠟燭','天鵝','耳朵','帆船','秤鉤','哨子','鋤頭','雪人','氣球'];
+const CODES={
+'00':'望遠鏡','01':'靈藥','02':'鈴兒','03':'三角凳','04':'零食','05':'手套','06':'靈鹿','07':'鋤頭','08':'葫蘆','09':'小貓',
+'10':'棒球','11':'筷子','12':'椅兒','13':'醫生','14':'鑰匙','15':'鸚鵡','16':'石榴','17':'儀器','18':'腰包','19':'藥酒',
+'20':'耳環','21':'鱷魚','22':'雙胞胎','23':'耳塞','24':'鬧鐘','25':'二胡','26':'河流','27':'耳機','28':'惡霸','29':'二舅',
+'30':'山林','31':'鯊魚','32':'扇兒','33':'星星','34':'紗巾','35':'珊瑚','36':'山鹿','37':'山雞','38':'婦女','39':'三角',
+'40':'司令','41':'蜥蜴','42':'柿兒','43':'石山','44':'獅子','45':'師父','46':'飼料','47':'司機','48':'絲襪','49':'石臼',
+'50':'五環','51':'工人','52':'木耳','53':'烏紗帽','54':'青年','55':'火車','56':'蝸牛','57':'武器','58':'尾巴','59':'五角星',
+'60':'榴槤','61':'兒童','62':'牛兒','63':'硫酸','64':'螺絲','65':'老虎','66':'溜溜球','67':'油漆','68':'喇叭','69':'鹿角',
+'70':'麒麟','71':'雞翼','72':'企鵝','73':'七仙女','74':'騎士','75':'西服','76':'汽油','77':'機器','78':'西瓜','79':'氣球',
+'80':'巴黎鐵塔','81':'白蟻','82':'靶兒','83':'爬山','84':'巴士','85':'白虎','86':'菠蘿','87':'白旗','88':'爸爸','89':'芭蕉',
+'90':'酒瓶','91':'球衣','92':'球兒','93':'救生圈','94':'教師','95':'酒壺','96':'酒樓','97':'酒器','98':'酒吧','99':'舅舅'
+};
+document.getElementById('codeGrid').innerHTML=Object.keys(CODES).map(k=>`<div><b>${k}</b>${CODES[k]}</div>`).join('');
+
+/* ===== 第2章 遺忘曲線 ===== */
+let fcWith=false;
+const REVIEWS=[1,2,4,7,15];
+function retention(t,withRev){
+  let S=0.9,last=0;
+  if(withRev){
+    for(const r of REVIEWS){
+      if(t>=r){S*=2.3;last=r;}
+    }
+  }
+  return Math.exp(-(t-last)/S)*0.8+0.2*Math.exp(-(t-last)/(S*20));
+}
+function fcDraw(){
+  const W=400,H=230,L=40,R=390,T=15,B=195,days=30;
+  const x=d=>L+(R-L)*d/days, y=v=>B-(B-T)*v;
+  let s=`<rect x="0" y="0" width="${W}" height="${H}" fill="#FFFFFF"/>`;
+  [0,0.25,0.5,0.75,1].forEach(v=>{
+    s+=`<line x1="${L}" y1="${y(v)}" x2="${R}" y2="${y(v)}" stroke="#E6DFD2"/>`+
+       `<text x="${L-6}" y="${y(v)+4}" font-size="10" text-anchor="end" fill="#6E6A63">${Math.round(v*100)}%</text>`;
+  });
+  [0,5,10,15,20,25,30].forEach(d=>{
+    s+=`<text x="${x(d)}" y="${B+16}" font-size="10" text-anchor="middle" fill="#6E6A63">${d}天</text>`;
+  });
+  const path=w=>{let p='';for(let d=0;d<=days;d+=0.05){p+=(p?'L':'M')+x(d).toFixed(1)+' '+y(retention(d,w)).toFixed(1)+' ';}return p;};
+  s+=`<path d="${path(false)}" fill="none" stroke="#8C4A3C" stroke-width="2.5"/>`;
+  if(fcWith){
+    s+=`<path d="${path(true)}" fill="none" stroke="#3E6B4F" stroke-width="2.5"/>`;
+    REVIEWS.forEach(r=>{s+=`<line x1="${x(r)}" y1="${T}" x2="${x(r)}" y2="${B}" stroke="#3E6B4F" stroke-dasharray="3 3" opacity=".5"/>`;});
+    s+=`<text x="${R}" y="${T+12}" font-size="11" text-anchor="end" fill="#3E6B4F" font-weight="bold">綠線:有間隔複習</text>`;
+  }
+  s+=`<text x="${R}" y="${T+(fcWith?28:12)}" font-size="11" text-anchor="end" fill="#8C4A3C" font-weight="bold">紅線:學完不管它</text>`;
+  document.getElementById('fcSvg').innerHTML=s;
+  const noRev=Math.round(retention(30,false)*100),withRev=Math.round(retention(30,true)*100);
+  document.getElementById('fcOut').innerHTML=fcWith?
+    `第 30 天:不複習約剩 <b>${noRev}%</b>;在第 1、2、4、7、15 天各複習一次,約剩 <b>${withRev}%</b>。複習總共只花 5 次、每次幾分鐘。`:
+    `學完不複習,30 天後約只剩 <b>${noRev}%</b>。按上面的按鈕,看看複習會發生什麼事。`;
+  document.getElementById('fcToggle').textContent=fcWith?'➖ 移除複習':'➕ 加入間隔複習';
+}
+function fcToggle(){fcWith=!fcWith;fcDraw();}
+fcDraw();
+
+/* ===== 第3章 組塊 ===== */
+function ckCalc(){
+  const raw=document.getElementById('ckIn').value.replace(/\D/g,'');
+  const n=+document.getElementById('ckN').value;
+  document.getElementById('ckNv').textContent=n+' 位';
+  if(!raw){document.getElementById('ckOut').innerHTML='(請輸入數字)';document.getElementById('ckRes').innerHTML='';return;}
+  const parts=[];for(let i=0;i<raw.length;i+=n)parts.push(raw.slice(i,i+n));
+  document.getElementById('ckOut').innerHTML=parts.map(p=>`<span>${p}</span>`).join('');
+  const ok=parts.length<=7;
+  document.getElementById('ckRes').innerHTML=`原本要記 <b>${raw.length}</b> 個數字 → 切塊後只要記 <b>${parts.length}</b> 塊。`+
+    (ok?' ✅ 在短期記憶的容量內。':' ⚠️ 還是太多塊,試著把每塊調大,或改用第 6 章的雙位碼。');
+}
+ckCalc();
+
+/* ===== 第4章 鎖鏈法 ===== */
+const LK_ITEMS=['牛奶','雨傘','電池','香蕉','牙刷','報紙','雞蛋','膠帶','鑰匙圈','麵包'];
+const LK_STORY='一瓶巨大的<b>牛奶</b>倒出來,淹過街道,大家只好撐<b>雨傘</b>;雨傘柄一按,竟然彈出一顆<b>電池</b>,電池滾進一根<b>香蕉</b>裡,香蕉開始發光震動,震掉了一支<b>牙刷</b>;牙刷自己跳起來刷一疊<b>報紙</b>,報紙被刷破,掉出一顆顆<b>雞蛋</b>;雞蛋全部被<b>膠帶</b>黏成一串,膠帶另一頭掛著一個叮噹響的<b>鑰匙圈</b>,最後鑰匙圈被塞進一條<b>麵包</b>裡烤熟了。';
+function lkStart(){
+  document.getElementById('lkItems').innerHTML=LK_ITEMS.map((x,i)=>`<div class="chip lt">${i+1}. ${x}</div>`).join('');
+  document.getElementById('lkNarr').innerHTML='給你 30 秒,先試著<b>硬背</b>這 10 樣。背完蓋住螢幕,試著照順序說出來——大多數人只記得 5~7 樣。';
+}
+function lkStory(){
+  if(!document.getElementById('lkItems').innerHTML)lkStart();
+  document.getElementById('lkNarr').innerHTML='<b>鎖鏈故事版:</b>'+LK_STORY+'<br><br>閉上眼睛播放一次畫面,再試著說出 10 樣。這次通常能全部答對,而且順序正確。';
+}
+
+/* ===== 第6章 雙位碼練習器 ===== */
+let cdStreak=0,cdAns='';
+function cdNew(){
+  const keys=Object.keys(CODES);
+  const k=keys[Math.floor(Math.random()*keys.length)];
+  cdAns=CODES[k];
+  document.getElementById('cdNum').textContent=k;
+  const wrong=shuffle(keys.filter(x=>x!==k)).slice(0,3).map(x=>CODES[x]);
+  document.getElementById('cdOpts').innerHTML=shuffle([cdAns,...wrong]).map(o=>`<button onclick="cdPick('${o}')">${o}</button>`).join('');
+}
+function cdPick(o){
+  const fb=document.getElementById('cdFb');
+  const k=document.getElementById('cdNum').textContent;
+  if(o===cdAns){cdStreak++;fb.style.color='var(--ok)';fb.textContent=`✓ ${k} = ${cdAns}`;}
+  else{cdStreak=0;fb.style.color='var(--bad)';fb.textContent=`✗ ${k} 是「${cdAns}」`;}
+  document.getElementById('cdScore').textContent='連續答對 '+cdStreak+' 題'+(cdStreak>=30?' 🏆':'');
+  setTimeout(cdNew,800);
+}
+cdNew();
+
+/* ===== 第7章 記憶宮殿遊戲 ===== */
+const PL_LOCS=['大門','鞋櫃','沙發','電視','餐桌','冰箱','水槽','床','衣櫃','窗戶'];
+const PL_POOL=['鋼琴','西瓜','恐龍','雨傘','火箭','企鵝','吉他','足球','蛋糕','手錶','玫瑰','輪胎','蜜蜂','皇冠','枕頭','望遠鏡','獅子','漢堡','氣球','拖鞋'];
+const PL_IMG={
+  '大門':'卡在門框上擋住出入','鞋櫃':'從鞋櫃裡擠出來','沙發':'躺在沙發上翹腳','電視':'從電視螢幕裡衝出來',
+  '餐桌':'被端上餐桌當晚餐','冰箱':'被冰在冰箱裡凍得發抖','水槽':'泡在水槽裡洗澡','床':'蓋著被子睡在床上',
+  '衣櫃':'穿著衣服從衣櫃走出來','窗戶':'把窗戶撞破飛出去'
+};
+let pl={items:[],phase:0,qi:0,score:0,res:[]};
+function plRender(){
+  document.getElementById('plGrid').innerHTML=PL_LOCS.map((l,i)=>{
+    let cls='',item='';
+    if(pl.phase===1){item=pl.items[i];}
+    if(pl.phase===2){
+      if(i===pl.qi)cls='on';
+      if(pl.res[i]===true){cls='good';item=pl.items[i];}
+      if(pl.res[i]===false){cls='bad';item=pl.items[i];}
+    }
+    if(pl.phase===3){cls=pl.res[i]?'good':'bad';item=pl.items[i];}
+    return `<div class="loc ${cls}"><div class="ln">${i+1}. ${l}</div><div class="li">${item}</div></div>`;
+  }).join('');
+}
+function plPlace(){
+  pl={items:shuffle(PL_POOL).slice(0,10),phase:1,qi:0,score:0,res:[]};
+  plRender();
+  document.getElementById('plNarr').innerHTML='花 1 分鐘,在腦中把每樣東西和位置編成畫面。範例:<br>'+
+    pl.items.slice(0,3).map((it,i)=>`${i+1}. 一台巨大的<b>${it}</b>${PL_IMG[PL_LOCS[i]]}`).join('<br>')+'<br>……剩下的自己想!準備好就按「開始測驗」。';
+  document.getElementById('plTest').disabled=false;
+  document.getElementById('plOpts').innerHTML='';
+}
+function plStartTest(){
+  pl.phase=2;pl.qi=0;pl.score=0;pl.res=[];
+  document.getElementById('plTest').disabled=true;
+  plAsk();
+}
+function plAsk(){
+  plRender();
+  if(pl.qi>=10){
+    pl.phase=3;plRender();
+    document.getElementById('plOpts').innerHTML='';
+    document.getElementById('plNarr').innerHTML=`測驗完成:答對 <b>${pl.score} / 10</b>。${pl.score>=8?'🎉 很好!你已經會用記憶宮殿了。':'多練幾次,畫面越誇張、越有動作,效果越好。'}明天再回想一次這座宮殿,看還剩多少。`;
+    return;
+  }
+  const ans=pl.items[pl.qi];
+  const opts=shuffle([ans,...shuffle(PL_POOL.filter(x=>x!==ans)).slice(0,3)]);
+  document.getElementById('plNarr').innerHTML=`在腦中走到第 ${pl.qi+1} 個位置「<b>${PL_LOCS[pl.qi]}</b>」——那裡放了什麼?`;
+  document.getElementById('plOpts').innerHTML=opts.map(o=>`<button onclick="plPick('${o}')">${o}</button>`).join('');
+}
+function plPick(o){
+  const ok=o===pl.items[pl.qi];
+  pl.res[pl.qi]=ok;if(ok)pl.score++;
+  pl.qi++;plAsk();
+}
+function plReset(){
+  pl={items:[],phase:0,qi:0,score:0,res:[]};
+  plRender();
+  document.getElementById('plOpts').innerHTML='';
+  document.getElementById('plTest').disabled=true;
+  document.getElementById('plNarr').innerHTML='這是一座範例宮殿(你家的 10 個位置)。按「放置物品」開始。';
+}
+plReset();
+
+/* ===== 第8章 數字轉換器 ===== */
+function cvCalc(){
+  const raw=document.getElementById('cvIn').value.replace(/\D/g,'');
+  const out=document.getElementById('cvOut');
+  if(!raw){out.innerHTML='';document.getElementById('cvRes').innerHTML='請輸入數字。';return;}
+  const parts=[];
+  for(let i=0;i<raw.length;i+=2)parts.push(raw.slice(i,i+2));
+  const imgs=parts.map(p=>p.length===2?CODES[p]:SHAPE[+p]);
+  out.innerHTML=parts.map((p,i)=>`<div class="chip"><span class="d">${p}</span>${imgs[i]}</div>`).join('');
+  document.getElementById('cvRes').innerHTML=`<b>${raw.length}</b> 位數 → <b>${parts.length}</b> 個圖像:${imgs.join(' → ')}<br>`+
+    `現在用第 4 章的四要素(誇張、動作、感官、荒謬),把這些圖像串成一個故事,或放進記憶宮殿(每個位置 2 個圖像)。`+
+    (raw.length%2?'<br><span style="font-size:13px;color:var(--gray)">最後落單的 1 位數用 0~9 形狀碼。</span>':'');
+}
+cvCalc();
+
+/* ===== 第10章 複習排程 ===== */
+const RV=[['當天睡前',0],['第 1 次複習',1],['第 2 次複習',3],['第 3 次複習',7],['第 4 次複習',14],['第 5 次複習',29],['第 6 次複習',59]];
+const RVgap=['學完當天','隔 1 天','再隔 2 天','再隔 4 天','再隔 7 天','再隔 15 天','再隔 30 天'];
+function fmtD(d){const w='日一二三四五六'[d.getDay()];return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}(${w})`;}
+function rvCalc(){
+  const v=document.getElementById('rvDate').value;
+  if(!v)return;
+  const d0=new Date(v+'T00:00:00');
+  let h='<table><tr><th>複習</th><th>日期</th><th>間隔</th></tr>';
+  RV.forEach((r,i)=>{const d=new Date(d0);d.setDate(d.getDate()+r[1]);h+=`<tr><td>${r[0]}</td><td class="num">${fmtD(d)}</td><td>${RVgap[i]}</td></tr>`;});
+  h+='</table><p style="font-size:13px;color:var(--gray);">每次複習都「先蓋住、自己回想」,想不起來的項目下次間隔重新從短的開始。</p>';
+  document.getElementById('rvOut').innerHTML=h;
+}
+(function(){const d=new Date();document.getElementById('rvDate').value=d.toISOString().slice(0,10);rvCalc();})();
+
+/* ===== 第10章 萊特納卡片盒 ===== */
+const LT_WORDS=[['ambulance','救護車(俺不能死)'],['pest','害蟲(拍死它)'],['bamboo','竹子(搬布)'],['telescope','望遠鏡(tele遠+scope看)'],
+  ['biology','生物學(bio生命+logy學問)'],['deadline','截止日期'],['memory','記憶'],['review','複習(re再+view看)']];
+const LT_GAP=['每天','每 2 天','每 4 天','每週','每 2 週'];
+let lt={box:[],cur:-1,shown:false,done:0};
+function ltRenderBoxes(){
+  document.getElementById('ltBoxes').innerHTML=[0,1,2,3,4].map(b=>{
+    const n=lt.box.filter(x=>x===b).length;
+    const isCur=lt.cur>=0&&lt.box[lt.cur]===b;
+    return `<div class="bx ${isCur?'cur':''}">第 ${b+1} 盒<b>${n}</b>${LT_GAP[b]}</div>`;
+  }).join('');
+}
+function ltPick(){
+  // 從編號最小、有卡的盒子挑一張(不重複上一張)
+  let best=-1;
+  for(let b=0;b<5&&best<0;b++){
+    const c=lt.box.map((x,i)=>x===b?i:-1).filter(i=>i>=0&&i!==lt.cur);
+    if(c.length)best=c[Math.floor(Math.random()*c.length)];
+  }
+  if(best<0)best=lt.cur;
+  lt.cur=best;lt.shown=false;
+  document.getElementById('ltWord').textContent=LT_WORDS[best][0];
+  document.getElementById('ltAns').textContent='';
+  document.getElementById('ltShow').disabled=false;
+  document.getElementById('ltYes').disabled=true;
+  document.getElementById('ltNo').disabled=true;
+  ltRenderBoxes();
+}
+function ltShow(){
+  document.getElementById('ltAns').textContent=LT_WORDS[lt.cur][1];
+  document.getElementById('ltShow').disabled=true;
+  document.getElementById('ltYes').disabled=false;
+  document.getElementById('ltNo').disabled=false;
+}
+function ltAnswer(ok){
+  const w=LT_WORDS[lt.cur][0];
+  if(ok){lt.box[lt.cur]=Math.min(4,lt.box[lt.cur]+1);}
+  else{lt.box[lt.cur]=0;}
+  lt.done++;
+  const allTop=lt.box.every(x=>x>=3);
+  document.getElementById('ltNarr').innerHTML=ok?
+    `✓ <b>${w}</b> 往後移到第 ${lt.box[lt.cur]+1} 盒,下次${LT_GAP[lt.box[lt.cur]]}才複習。`:
+    `✗ <b>${w}</b> 回到第 1 盒,每天複習,直到記住為止。`;
+  if(allTop){
+    document.getElementById('ltNarr').innerHTML+=`<br>🎉 所有單字都到第 4 盒以後了!真實使用時,這些卡片會隔一週、兩週才再出現,你每天只需要處理少數到期的卡。`;
+  }
+  ltPick();
+}
+function ltReset(){
+  lt={box:LT_WORDS.map(()=>0),cur:-1,shown:false,done:0};
+  document.getElementById('ltNarr').innerHTML='先自己想意思(主動回想),再按「看答案」,誠實回答記得或忘了。';
+  ltPick();
+}
+ltReset();
+
+/* ===== 各章小測 ===== */
+function makeQuiz(elId,qs){
+  const box=document.getElementById(elId);
+  if(!box)return;
+  const h=document.createElement('h3');h.textContent='✏️ 隨堂小測';box.appendChild(h);
+  qs.forEach((q,i)=>{
+    const opts=shuffle(q[1].map((t,j)=>({t,ok:j===q[2]})));
+    const div=document.createElement('div');
+    div.className='quiz';
+    div.innerHTML=`<div class="q-text">Q${i+1}. ${q[0]}</div>
+      <div class="opts">${opts.map(o=>`<button class="opt" data-ok="${o.ok}">${o.t}</button>`).join('')}</div>
+      <div class="fb"></div>`;
+    div.querySelectorAll('.opt').forEach(btn=>{
+      btn.onclick=()=>{
+        if(div.dataset.done)return;
+        div.dataset.done='1';
+        const ok=btn.dataset.ok==='true';
+        btn.classList.add(ok?'correct':'wrong');
+        if(!ok)div.querySelector('[data-ok="true"]').classList.add('correct');
+        const fb=div.querySelector('.fb');
+        fb.className='fb show '+(ok?'good':'no');
+        fb.textContent=(ok?'✓ 答對!':'✗ ')+q[3];
+      };
+    });
+    box.appendChild(div);
+  });
+}
+makeQuiz('q1',[
+  ['短期記憶大約能放幾樣東西?',['4~7 樣','100 樣','無限'],0,'像一張小書桌,放滿就掉。'],
+  ['海馬迴主要在什麼時候把資訊搬進長期記憶?',['睡覺時','吃飯時','運動時'],0,'所以睡前複習、不熬夜都很重要。'],
+]);
+makeQuiz('q2',[
+  ['遺忘曲線的形狀是?',['剛學完忘最快,之後慢慢變平','一直等速下降','一開始不會忘'],0,'艾賓浩斯 1885 年用無意義音節實驗得出。'],
+  ['怎樣讓遺忘曲線變平?',['在快忘記時間隔複習','一次背很久','完全不複習'],0,'每複習一次,下一次忘得更慢。'],
+]);
+makeQuiz('q3',[
+  ['「FBI-CIA-NBA-USA」示範的是?',['組塊','遺忘','關鍵字法'],0,'12 個字母變 4 塊,短期記憶就放得下。'],
+  ['最強的組塊是?',['和你已知的東西有關、有意義的塊','越長越好的塊','隨便切'],0,'0520、1225 這種有意義的塊一次就記住。'],
+]);
+makeQuiz('q4',[
+  ['好畫面的四要素是?',['誇張、動作、感官、荒謬','小、靜止、黑白、合理','文字、數字、表格、清單'],0,'越不合理、越有動作,越好記。'],
+  ['自己編故事比看別人編的好記,原因是?',['「自己想」的動作本身就在加深記憶','別人的故事比較差','其實沒差別'],0,'主動加工資訊就是加深記憶的過程。'],
+]);
+makeQuiz('q5',[
+  ['0~9 形狀碼中,8 通常是?',['雪人','帆船','鋤頭'],0,'上下兩顆圓,像雪人。'],
+  ['Peg System(掛鉤法)的 peg 原意是?',['牆上掛衣服的木釘','一種鳥','數字'],0,'每個數字是一根釘子,把要記的東西掛上去。'],
+]);
+makeQuiz('q6',[
+  ['為什麼要用 00~99 雙位碼?',['一個圖像記兩位數,效率加倍','比較好看','只能記電話'],0,'也是組塊的延伸:兩位數當一塊。'],
+  ['14 在參考表中是「鑰匙」,屬於哪種聯想?',['諧音','形狀','節日'],0,'yāo-sì 聽起來像 yào-shi。'],
+]);
+makeQuiz('q7',[
+  ['記憶宮殿比鎖鏈故事強在哪裡?',['一個位置忘了不影響下一個','比較短','不需要圖像'],0,'每個圖像都有固定位置,不會整串斷掉。'],
+  ['Method of Loci 的 loci 是什麼意思?',['拉丁文「地點」','希臘文「記憶」','英文「鎖」'],0,'locus 的複數;源自 Simonides 靠座位認人的故事。'],
+]);
+makeQuiz('q8',[
+  ['記長數字的正確順序是?',['組塊 → 編碼 → 故事或宮殿 → 回想','直接死背','只複習不編碼'],0,'把前面各章的武器依序組合。'],
+  ['用記憶宮殿記數字時,每個位置通常放幾個圖像?',['2 個(4 位數)','20 個','0 個'],0,'10 個位置就能記 40 位數。'],
+]);
+makeQuiz('q9',[
+  ['關鍵字法的缺點是?',['發音可能被中文關鍵字帶偏,要搭配聽真人發音','記不住意思','只能記數字'],0,'關鍵字是暫時的橋,記住後就拆掉。'],
+  ['telescope 可以拆成?',['tele(遠)+ scope(看)','tel(電話)+ escape(逃)','無法拆'],0,'字根拆解像中文的部首。'],
+]);
+makeQuiz('q10',[
+  ['「測驗效應」告訴我們複習時應該?',['蓋起來先自己回想','把筆記重讀很多遍','只看重點'],0,'自己想的「用力」過程才會加深記憶。'],
+  ['萊特納卡片盒中,答錯的卡片會?',['回到第 1 盒,每天複習','直接丟掉','往後移一格'],0,'答對往後移、間隔變長;答錯回到起點。'],
+]);
+
+/* ===== 總測驗 ===== */
+const finalQs=[
+  ['記憶術的四個步驟依序是?',['編碼 → 聯結 → 定位 → 複習','複習 → 編碼 → 定位 → 聯結','死背 → 考試 → 忘記 → 重背'],0,'把抽象變圖像、串起來、放進位置、間隔複習。'],
+  ['遺忘曲線是誰提出的?',['艾賓浩斯','愛因斯坦','牛頓'],0,'1885 年,德國心理學家用自己做實驗。'],
+  ['學完不複習,什麼時候忘得最快?',['剛學完的頭幾個小時到一天','一個月後','一年後'],0,'曲線一開始最陡。'],
+  ['電話號碼切成 0912-345-678,用的是?',['組塊','記憶宮殿','關鍵字法'],0,'10 個數字變 3 塊。'],
+  ['要記「雨傘」,最好記的畫面是?',['一把房子大的雨傘自己旋轉飛走','一把普通的傘','「雨傘」兩個字'],0,'誇張、動作、荒謬。'],
+  ['0~9 形狀碼中,2 是?',['天鵝','雪人','耳朵'],0,'彎彎的脖子。'],
+  ['用參考表,圓周率 14 15 對應的圖像是?',['鑰匙、鸚鵡','醫生、石榴','棒球、筷子'],0,'14 鑰匙、15 鸚鵡,都是諧音。'],
+  ['記憶宮殿的起源故事是?',['Simonides 靠記住座位辨認宴會遇難者','一位國王蓋了宮殿','電腦科學家發明'],0,'人對「位置」的記憶特別強。'],
+  ['ambulance →「俺不能死」屬於哪種方法?',['關鍵字法','字根拆解','記憶宮殿'],0,'用發音相近的中文搭橋。'],
+  ['Anki 這個名字來自?',['日文「暗記」,背誦的意思','英文 ankle','一位科學家的名字'],0,'它是萊特納卡片盒的電腦版。'],
+  ['以下哪個複習方式效果最好?',['蓋住筆記先回想,再對答案','重讀筆記三遍','劃重點'],0,'測驗效應:考自己比重讀有效。'],
+  ['每日流程中,學新東西最常見的失敗原因是?',['一次學太多又不複習','每天學太少','睡太多'],0,'每天 20 分鐘持續,勝過週末狂背 3 小時。'],
+];
+const fq=document.getElementById('finalQuiz');
+function buildFinal(){
+  fq.innerHTML='';
+  finalQs.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='quiz';d.dataset.q=i;
+    d.innerHTML=`<div class="q-text">Q${i+1}. ${q[0]}</div>
+      <div class="opts">${q[1].map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join('')}</div>
+      <div class="fb"></div>`;
+    d.querySelectorAll('.opt').forEach(btn=>{
+      btn.onclick=()=>{
+        d.querySelectorAll('.opt').forEach(b=>b.style.outline='');
+        btn.style.outline='2px solid var(--khaki-dark)';
+        d.dataset.sel=btn.dataset.j;
+      };
+    });
+    fq.appendChild(d);
+  });
+  document.getElementById('finalScore').style.display='none';
+}
+function gradeFinal(){
+  let right=0,unanswered=0;
+  fq.querySelectorAll('.quiz').forEach(d=>{
+    const q=finalQs[d.dataset.q];
+    const sel=d.dataset.sel;
+    const fb=d.querySelector('.fb');
+    d.querySelectorAll('.opt').forEach((b,j)=>{
+      b.classList.remove('correct','wrong');
+      if(j===q[2])b.classList.add('correct');
+    });
+    if(sel===undefined){unanswered++;fb.className='fb show no';fb.textContent='(未作答)'+q[3];return;}
+    if(+sel===q[2]){right++;fb.className='fb show good';fb.textContent='✓ '+q[3];}
+    else{d.querySelectorAll('.opt')[+sel].classList.add('wrong');fb.className='fb show no';fb.textContent='✗ '+q[3];}
+  });
+  const box=document.getElementById('finalScore');
+  box.style.display='block';
+  let cmt;
+  if(right===12)cmt='滿分!原理全通了——明天早上就從第 11 章的每日流程開始 🏆';
+  else if(right>=9)cmt='很棒!把錯的題目看一下解析,再玩一次第 7 章的記憶宮殿遊戲 🎉';
+  else if(right>=6)cmt='有基礎了!建議回第 2、6、10 章,把遺忘曲線、雙位碼和間隔複習再走一遍 💪';
+  else cmt='別氣餒,照學習地圖從第 1 章重新走——這一次,記得用第 10 章的方法複習這堂課 🌱';
+  box.innerHTML=`<div class="big num">${right} / 12</div><p>${cmt}</p>${unanswered?`<p style="color:var(--gray);font-size:13px;">(有 ${unanswered} 題未作答)</p>`:''}`;
+  box.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function resetFinal(){buildFinal();window.scrollTo({top:0});}
+buildFinal();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-abb43b2802" data-category="general"></script></body>
+</html>

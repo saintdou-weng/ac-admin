@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>挖掘時間：從零開始的歷史課</title>
+<style>
+:root{
+  --paper:#EEF1F4; --paper2:#E2E7EC; --card:#FFFFFF; --ink:#17213A; --ink2:#4A5570;
+  --bronze:#2F8F83; --bronze-soft:#D6ECE8; --cinnabar:#C8322F; --gold:#B8862E;
+  --l1:#D9C9A3; --l2:#A7866A; --l3:#5E4A3F; --line:#CBD3DC;
+  --serif:"Noto Serif TC","Songti TC","Source Han Serif TC","PMingLiU","MingLiU",serif;
+  --sans:"PingFang TC","Noto Sans TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#121826; --paper2:#1A2233; --card:#1E2738; --ink:#E6EAF2; --ink2:#A9B3C7;
+    --bronze:#5CC2B4; --bronze-soft:#1F3B3A; --cinnabar:#E5534F; --gold:#D9A94F;
+    --l1:#6B5E44; --l2:#5A4636; --l3:#3A2E28; --line:#2E3A50;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#121826; --paper2:#1A2233; --card:#1E2738; --ink:#E6EAF2; --ink2:#A9B3C7;
+  --bronze:#5CC2B4; --bronze-soft:#1F3B3A; --cinnabar:#E5534F; --gold:#D9A94F;
+  --l1:#6B5E44; --l2:#5A4636; --l3:#3A2E28; --line:#2E3A50;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.8;-webkit-text-size-adjust:100%}
+img,svg{max-width:100%}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--bronze);outline-offset:2px;border-radius:4px}
+h1,h2,h3{font-family:var(--serif);line-height:1.35;font-weight:700;margin:0}
+
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);border-bottom:1px solid var(--line)}
+.bar-in{max-width:880px;margin:0 auto;display:flex;align-items:center;gap:6px;padding:10px 14px}
+.logo{font-family:var(--serif);font-weight:700;font-size:18px;margin-right:auto;background:none;border:0;padding:4px 0;display:flex;align-items:center;gap:8px}
+.logo i{display:inline-block;width:22px;height:22px;border-radius:50%;background:conic-gradient(var(--l1) 0 33%,var(--l2) 0 66%,var(--l3) 0)}
+.nav{background:none;border:1px solid transparent;border-radius:8px;padding:6px 10px;font-size:15px;color:var(--ink2)}
+.nav.on{color:var(--ink);border-color:var(--line);background:var(--card)}
+.prog{height:3px;background:var(--paper2)}
+.prog b{display:block;height:100%;background:var(--bronze);width:0;transition:width .6s}
+
+main{max-width:760px;margin:0 auto;padding:20px 18px 80px}
+
+/* home */
+.hero{padding:26px 0 8px}
+.hero h1{font-size:clamp(32px,8vw,52px);letter-spacing:.02em}
+.hero p{color:var(--ink2);max-width:36em;margin:10px 0 0}
+.shaft{margin:28px 0 10px;position:relative}
+.stratum{position:relative;padding:22px 18px 18px 18px;border-radius:0}
+.stratum:first-child{border-radius:16px 16px 0 0}
+.stratum:last-child{border-radius:0 0 16px 16px}
+.s1{background:var(--l1)} .s2{background:var(--l2);color:#fff} .s3{background:var(--l3);color:#fff}
+.stratum::before{content:"";position:absolute;left:0;right:0;top:-6px;height:12px;background:inherit;
+  -webkit-mask:radial-gradient(12px 6px at 12px 6px,#000 98%,transparent) -12px 0/24px 12px repeat-x;
+          mask:radial-gradient(12px 6px at 12px 6px,#000 98%,transparent) -12px 0/24px 12px repeat-x}
+.stratum:first-child::before{display:none}
+.s-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.s-head h2{font-size:24px}
+.s-head span{font-size:14px;opacity:.85}
+.depth{font-size:13px;opacity:.75;margin-top:2px}
+.finds{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:14px}
+.find{position:relative;text-align:left;border:0;border-radius:12px;padding:12px 12px 14px;background:rgba(255,255,255,.72);color:var(--ink);min-height:92px;transition:transform .15s}
+.s2 .find,.s3 .find{background:rgba(255,255,255,.12);color:#fff}
+.find:hover{transform:translateY(-2px)}
+.find .n{font-size:12px;opacity:.7}
+.find .ic{font-size:24px;display:block;line-height:1.3}
+.find .tt{font-weight:600;font-size:15px;line-height:1.4;display:block;margin-top:4px}
+.seal{position:absolute;right:8px;top:8px;width:36px;height:36px;border:2px solid var(--cinnabar);color:var(--cinnabar);border-radius:6px;
+  font-family:var(--serif);font-size:13px;line-height:1.05;display:grid;place-items:center;transform:rotate(-8deg);background:rgba(255,255,255,.85);font-weight:700;letter-spacing:.05em}
+.seal.pop{animation:stamp .5s cubic-bezier(.2,1.6,.4,1)}
+@keyframes stamp{0%{transform:scale(2.4) rotate(-20deg);opacity:0}100%{transform:scale(1) rotate(-8deg);opacity:1}}
+.home-links{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.hl{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:14px;text-align:left}
+.hl b{display:block;font-family:var(--serif);font-size:17px}
+.hl small{color:var(--ink2);font-size:14px}
+.howto{margin-top:22px;color:var(--ink2);font-size:15px}
+
+/* lesson */
+.crumb{font-size:14px;color:var(--ink2)}
+.l-title{font-size:clamp(28px,6.5vw,40px);margin:6px 0 4px}
+.goal{border-left:4px solid var(--bronze);padding:6px 0 6px 14px;margin:14px 0 8px;color:var(--ink2)}
+.sec{margin-top:30px}
+.sec h3{font-size:22px;margin-bottom:8px}
+.sec p{margin:10px 0}
+.sec ul,.sec ol{padding-left:1.3em;margin:8px 0}
+.sec li{margin:4px 0}
+.t{border-bottom:2px dotted var(--bronze);cursor:help;font-weight:600;color:inherit;background:none;border-top:0;border-left:0;border-right:0;padding:0;font-size:inherit;line-height:inherit}
+.ex{background:var(--bronze-soft);border-radius:12px;padding:12px 16px;margin:14px 0}
+.ex b:first-child{color:var(--bronze)}
+.warn{background:var(--paper2);border-radius:12px;padding:12px 16px;margin:14px 0;font-size:16px}
+.terms{display:grid;gap:10px;margin-top:10px}
+.term{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.term summary{list-style:none;cursor:pointer;padding:12px 16px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.term summary::-webkit-details-marker{display:none}
+.term summary::after{content:"＋";margin-left:auto;color:var(--ink2)}
+.term[open] summary::after{content:"－"}
+.term .w{font-family:var(--serif);font-size:19px;font-weight:700}
+.term .en{color:var(--ink2);font-size:14px}
+.term .body{padding:0 16px 14px;font-size:16px}
+.term .body div{margin-top:6px}
+.term .lab{display:inline-block;font-size:12px;border-radius:4px;padding:0 6px;margin-right:6px;background:var(--paper2);color:var(--ink2)}
+.widget{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:18px 0}
+.widget h4{margin:0 0 4px;font-family:var(--serif);font-size:18px}
+.widget .hint{font-size:14px;color:var(--ink2);margin:0 0 10px}
+.btn{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:7px 14px;font-size:15px}
+.btn.pri{background:var(--bronze);border-color:var(--bronze);color:#fff}
+.btn:disabled{opacity:.4;cursor:default}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:5px 12px;font-size:14px}
+.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.out{margin-top:12px;padding:12px 14px;border-radius:10px;background:var(--paper);font-size:16px;min-height:48px}
+.scroll-x{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:460px}
+th,td{border-bottom:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}
+th{font-family:var(--serif)}
+
+/* quiz */
+.quiz{margin-top:34px;border-top:2px solid var(--ink);padding-top:16px}
+.quiz h3{font-size:22px}
+.q{margin:16px 0}
+.q p{margin:0 0 8px;font-weight:600}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 12px;margin:6px 0;font-size:16px}
+.opt.ok{border-color:var(--bronze);background:var(--bronze-soft)}
+.opt.no{border-color:var(--cinnabar);text-decoration:line-through;opacity:.75}
+.why{font-size:15px;color:var(--ink2);margin-top:6px}
+.pager{display:flex;justify-content:space-between;gap:10px;margin-top:30px}
+.pager .btn{max-width:48%}
+.done-box{margin-top:20px;display:flex;align-items:center;gap:14px;padding:14px;border-radius:12px;background:var(--card);border:1px solid var(--line)}
+.done-box .seal{position:static;width:54px;height:54px;font-size:18px;flex:none}
+
+/* timeline page */
+.tl{position:relative;margin-top:16px;padding-left:22px}
+.tl::before{content:"";position:absolute;left:7px;top:0;bottom:0;width:2px;background:var(--line)}
+.era{font-family:var(--serif);font-size:20px;margin:24px 0 8px;position:relative}
+.era::before{content:"";position:absolute;left:-22px;top:9px;width:16px;height:16px;border-radius:50%;background:var(--ink)}
+.ev{position:relative;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:8px 0;font-size:15px}
+.ev::before{content:"";position:absolute;left:-19px;top:15px;width:10px;height:10px;border-radius:50%;background:var(--rc,var(--bronze))}
+.ev .y{font-weight:700;font-family:var(--serif);margin-right:6px}
+.ev .rg{font-size:12px;color:var(--ink2);border:1px solid var(--line);border-radius:4px;padding:0 5px;margin-left:4px;white-space:nowrap}
+
+/* glossary */
+.search{width:100%;font:inherit;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);margin:14px 0}
+
+/* sheet */
+.sheet-bg{position:fixed;inset:0;background:rgba(10,15,30,.45);z-index:50;display:none}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:51;background:var(--card);border-radius:18px 18px 0 0;padding:18px 20px calc(24px + env(safe-area-inset-bottom,0px));max-width:680px;margin:0 auto;
+  transform:translateY(110%);transition:transform .28s ease;max-height:75vh;overflow:auto;box-shadow:0 -8px 30px rgba(0,0,0,.18)}
+.sheet{visibility:hidden}.sheet.on{transform:none;visibility:visible}
+.sheet h3{font-size:24px}
+.sheet .x{position:absolute;right:12px;top:10px;border:0;background:none;font-size:22px;padding:6px 10px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:8px 16px;border-radius:999px;font-size:15px;z-index:60;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.on{opacity:1}
+
+/* specific widgets */
+.gridDots{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;max-width:420px}
+.gridDots i{aspect-ratio:1;border-radius:50%;background:var(--bronze);transition:opacity .4s,transform .4s}
+.gridDots i.gone{opacity:.12;transform:scale(.6)}
+input[type=range]{width:100%;accent-color:var(--bronze)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.num{font:inherit;width:120px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}
+.chainv{display:flex;flex-direction:column;gap:0;margin-top:8px}
+.link{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--paper);opacity:0;transform:translateY(8px);transition:.35s;display:none}
+.link.on{display:block;opacity:1;transform:none}
+.arrow{text-align:center;color:var(--ink2);display:none;line-height:1.4}
+.arrow.on{display:block}
+.xg{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:relative}
+.xcol{background:var(--paper);border-radius:10px;padding:10px;min-height:170px}
+.xcol h5{margin:0 0 6px;font-family:var(--serif);font-size:16px}
+.item{display:inline-block;margin:3px;padding:2px 8px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:14px;transition:transform 1.2s ease,opacity .3s}
+.cls{display:flex;flex-direction:column;gap:8px}
+.cls .c{display:flex;align-items:center;gap:8px;flex-wrap:wrap;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.cls .c span{flex:1 1 180px}
+.cls .c.ok{border-color:var(--bronze);background:var(--bronze-soft)}
+.cls .c.no{border-color:var(--cinnabar)}
+.scene{font-size:17px;line-height:2.1}
+.scene button{border:0;border-bottom:2px dashed var(--line);background:none;padding:0 2px;font-size:inherit}
+.scene button.hit{border-bottom-color:var(--cinnabar);color:var(--cinnabar);font-weight:700}
+.scene button.miss{border-bottom-color:var(--ink2);opacity:.6}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (max-width:520px){.home-links{grid-template-columns:1fr}.nav{padding:6px 7px;font-size:14px}.logo span{display:none}}
+a{color:var(--bronze)}
+a.btn{text-decoration:none;display:inline-block;color:var(--ink);line-height:1.5}
+a.btn.pri{color:#fff}
+a.find{display:block}
+.ev{font:inherit;color:inherit}
+</style>
+</head>
+<body>
+<header class="bar"><div class="bar-in">
+  <button class="logo" data-go="home" aria-label="回到課程首頁"><i></i><span>挖掘時間</span></button>
+  <button class="nav" data-go="home">課程</button>
+  <button class="nav" data-go="timeline">時間軸</button>
+  <button class="nav" data-go="glossary">名詞庫</button>
+  <button class="nav" data-go="exam">總測驗</button>
+  <button class="nav" id="themeBtn" aria-label="切換深淺色">◐</button>
+</div><div class="prog"><b id="progBar"></b></div></header>
+<main id="app"></main>
+<div class="sheet-bg" id="sheetBg"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true"><button class="x" id="sheetX" aria-label="關閉">×</button><div id="sheetBody"></div></div>
+<div class="toast" id="toast"></div>
+<script>
+/* ===== 名詞庫：每個專有名詞的意思與由來 ===== */
+const TERMS = {
+"歷史":{en:"History",m:"人類過去發生的事，以及人們對這些事的記錄與研究。",o:"中文「歷」本義是「經過」（《說文解字》：歷，過也）；「史」在甲骨文裡是一隻手拿著記事的工具，原指專門記錄事情的官員。兩字合起來就是「經過的事被記錄下來」。英文 history 來自希臘文 historia，意思是「探究、打聽來的知識」，希羅多德用它當書名，把寫歷史變成一種調查工作。"},
+"史料":{en:"Historical source",m:"一切能讓我們認識過去的材料：文字、文物、照片、口述、建築、甚至垃圾堆。",o:"「史」＋「料」（材料）。就像做菜需要食材，寫歷史需要史料。"},
+"一手史料":{en:"Primary source",m:"事件發生當時、由親身經歷者或當時的人留下的材料，例如日記、信件、當年的報紙、出土器物。",o:"英文 primary 意為「第一的」。因為它離事件最近，所以叫「第一手」，就像直接從產地買到的東西。"},
+"二手史料":{en:"Secondary source",m:"後人根據一手史料研究、整理、解釋後寫出的作品，例如教科書、歷史書、紀錄片。",o:"經過「第二隻手」轉述加工，所以叫二手。二手不代表不好，而是已經加入了作者的解釋。"},
+"考古學":{en:"Archaeology",m:"透過挖掘和研究古人留下的實物（遺址、工具、骨骸）來了解過去的學問。",o:"希臘文 archaios（古老的）＋ logia（學問、論述）。中文「考」是考察，「古」是古代：考察古代。"},
+"西元":{en:"Anno Domini (AD) / Common Era (CE)",m:"以傳說中耶穌誕生那年為第 1 年的紀年方法，現在全世界通用。",o:"西元 525 年左右，一位名叫狄奧尼修斯（Dionysius Exiguus）的修士為了計算復活節日期，把年份改成從耶穌誕生算起，稱為 Anno Domini（拉丁文「主的年份」）。因為從西方傳來，中文稱「西元」。現在學界常用中性說法 CE（公元，Common Era）。"},
+"世紀":{en:"Century",m:"一百年為一個世紀。西元 1–100 年是 1 世紀，1901–2000 年是 20 世紀。",o:"英文 century 來自拉丁文 centum（一百），和 cent（一分錢＝百分之一元）、percent（百分比）同源。中文「世」原指三十年一代人，「紀」是記錄的段落，合起來借用來翻譯 century。"},
+"碳十四定年法":{en:"Radiocarbon dating",m:"利用生物死亡後體內碳十四會以固定速度減少的原理，推算有機物（骨頭、木頭、布料）有多老。",o:"1949 年美國化學家利比（Willard Libby）發明，他因此獲得 1960 年諾貝爾化學獎。「十四」是指這種碳原子的質量數是 14。"},
+"半衰期":{en:"Half-life",m:"放射性物質減少到剩下一半所需的時間。碳十四的半衰期約 5,730 年。",o:"「半」＋「衰」（減少）＋「期」（期間）：衰減一半所需的時間。"},
+"史前時代":{en:"Prehistory",m:"人類發明文字以前的時代。沒有文字記錄，只能靠考古研究。",o:"英文 prehistory 的 pre 意為「在……之前」，就是「在歷史（文字記錄）之前」。19 世紀的學者開始普遍使用這個詞。"},
+"舊石器時代":{en:"Paleolithic Age",m:"人類使用打製石器、靠狩獵採集維生的時代，約從 300 多萬年前到 1 萬多年前。",o:"1865 年英國學者約翰·盧伯克（John Lubbock）創造：希臘文 palaios（古老）＋ lithos（石頭）＝「古老的石頭時代」。"},
+"新石器時代":{en:"Neolithic Age",m:"人類開始使用磨製石器、種田、養牲畜、定居村落的時代，約從 1 萬多年前開始。",o:"同樣由盧伯克在 1865 年命名：neo（新）＋ lithos（石頭）。重點不只是石器變精細，而是生活方式徹底改變。"},
+"農業革命":{en:"Agricultural (Neolithic) Revolution",m:"人類從狩獵採集轉向種植作物、馴養動物的巨大轉變，約 1 萬 2 千年前開始。",o:"考古學家柴爾德（V. Gordon Childe）在 1930 年代提出「新石器革命」，強調這個改變之深遠，不亞於後來的工業革命。"},
+"文明":{en:"Civilization",m:"人類發展出城市、文字、政府、分工與複雜社會後的狀態。",o:"中文出自《易經》「見龍在田，天下文明」，原意是光明、有文采。英文 civilization 來自拉丁文 civis（市民）、civitas（城市），18 世紀法國人開始使用，意思是「像城市人一樣有組織的生活」。"},
+"美索不達米亞":{en:"Mesopotamia",m:"位於底格里斯河與幼發拉底河之間的地區（大約今天的伊拉克），人類最早的文明之一在此誕生。",o:"古希臘文 meso（中間）＋ potamos（河流）＝「兩河之間的土地」，所以中文也叫「兩河流域」。"},
+"楔形文字":{en:"Cuneiform",m:"蘇美人約在西元前 3200 年發明的文字，用蘆葦筆在濕泥板上壓出楔子形狀的筆畫。",o:"英文 cuneiform 來自拉丁文 cuneus（楔子）。楔子就是一頭粗一頭尖的木塊，中文「楔形」就是「楔子的形狀」。"},
+"象形文字":{en:"Hieroglyph",m:"以圖畫符號表示意思的文字，最有名的是古埃及文字。",o:"希臘文 hieros（神聖的）＋ glyphein（雕刻）＝「神聖的刻字」，因為古希臘人看到這些字多刻在神廟牆上。中文「象形」是「模仿形狀」，也是漢字造字法之一。"},
+"甲骨文":{en:"Oracle bone script",m:"商朝人刻在龜甲和牛骨上的文字，是目前已知最早的成熟漢字，約西元前 1300 年。",o:"因為刻在「龜甲」與「獸骨」上而得名。商王用它占卜，所以英文叫 oracle（神諭）bone。1899 年王懿榮在中藥材「龍骨」上發現了它。"},
+"民主":{en:"Democracy",m:"由人民作主、參與決定公共事務的政治制度。",o:"希臘文 demos（人民）＋ kratos（力量、統治）＝「人民的統治」。西元前 508 年左右雅典的克里斯提尼改革被視為起點。中文「民主」古代原指「民之主（君王）」，近代才被借來翻譯 democracy，意思剛好相反，很有趣。"},
+"共和":{en:"Republic",m:"國家領導人不是世襲的國王，而是選出來、有任期的制度。",o:"英文 republic 來自拉丁文 res publica，意思是「公眾的事」。中文「共和」出自西周「共和行政」（西元前 841 年），當時國王出逃，由大臣共同執政，後來被借來翻譯 republic。"},
+"皇帝":{en:"Emperor",m:"中國自秦朝起最高統治者的稱號。",o:"西元前 221 年秦王嬴政統一六國，認為自己功業超越傳說中的「三皇五帝」，於是各取一字，自稱「始皇帝」。英文 emperor 則來自拉丁文 imperator（軍隊統帥）。"},
+"軸心時代":{en:"Axial Age",m:"約西元前 800–200 年，世界多地同時出現偉大思想家的時期：孔子、老子、釋迦牟尼、蘇格拉底等。",o:"德國哲學家雅斯培（Karl Jaspers）在 1949 年提出，比喻這段時期像車輪的「軸心」，後來人類的思想都繞著它轉。"},
+"中古時代":{en:"Middle Ages",m:"歐洲史上約西元 5 世紀到 15 世紀的時期（西羅馬帝國滅亡到文藝復興）。",o:"15 世紀義大利的人文學者自認在復興古希臘羅馬文化，就把中間那一千年稱為 medium aevum（拉丁文「中間的時代」），帶有一點看不起的意思。現代史家已不認為那是「黑暗時代」。"},
+"封建":{en:"Feudalism",m:"君主把土地分封給貴族，貴族效忠並提供軍事服務的制度。",o:"中文出自《左傳》「封建親戚，以蕃屏周」：封土地、建諸侯國。英文 feudalism 來自中古拉丁文 feudum（封地），17–18 世紀學者才發明這個詞。注意：周朝的封建和中古歐洲的 feudalism 並不完全一樣，只是被拿來互相翻譯。"},
+"絲路":{en:"Silk Road",m:"古代連接中國與中亞、西亞、歐洲的貿易路線網路，交流的不只絲綢，還有宗教、技術與疾病。",o:"1877 年德國地理學家李希霍芬（Ferdinand von Richthofen）首次使用 Seidenstraße（德文「絲綢之路」）。古人自己其實不這樣叫它。"},
+"伊斯蘭":{en:"Islam",m:"西元 7 世紀由穆罕默德在阿拉伯半島創立的宗教，信徒稱為穆斯林。",o:"阿拉伯文 islām 意為「順服（於真主）」，muslim 意為「順服的人」。"},
+"代數":{en:"Algebra",m:"用符號代替數字來解題的數學分支。",o:"來自 9 世紀巴格達學者花拉子米的書名中的 al-jabr（阿拉伯文「還原、補足」）。這個詞本身就證明伊斯蘭世界對科學的貢獻。中文「代數」意思是「用符號代替數」。"},
+"吳哥王朝":{en:"Khmer Empire",m:"約 802–1431 年以今柬埔寨為中心的強大王國，建造了吳哥窟等宏偉建築，勢力一度擴及中南半島大部分。",o:"「吳哥」（Angkor）源自梵文 nagara，意為「城市」。西元 802 年闍耶跋摩二世宣布自己為「宇宙之王」，被視為王朝開端。"},
+"文藝復興":{en:"Renaissance",m:"14–16 世紀從義大利開始，重新重視古希臘羅馬文化、重視人的價值的文化運動。",o:"法文 renaissance 意為「重生」。16 世紀義大利畫家瓦薩里已用 rinascita（再生）描述藝術的復興；19 世紀歷史學家米什萊、布克哈特讓這個詞成為一個時代的名稱。"},
+"宗教改革":{en:"Reformation",m:"16 世紀歐洲基督教分裂為天主教與新教的運動，起於 1517 年馬丁·路德質疑教會販售贖罪券。",o:"英文 reform 來自拉丁文 reformare，re（再次）＋ formare（塑形）＝「重新塑造」。"},
+"大航海時代":{en:"Age of Discovery / Age of Exploration",m:"約 15–17 世紀歐洲人大規模遠洋航行、建立全球航線的時期。",o:"西方傳統稱「地理大發現」，但美洲和非洲本來就有人住，對當地人來說並不是被「發現」，所以現在多用「大航海時代」或「探索時代」這類較中性的名稱。"},
+"哥倫布大交換":{en:"Columbian Exchange",m:"1492 年後，美洲與歐亞非之間大規模交換作物、動物、人口與疾病的過程。",o:"1972 年美國歷史學家克羅斯比（Alfred Crosby）在同名著作中提出。"},
+"科學革命":{en:"Scientific Revolution",m:"16–17 世紀人們開始用觀察、實驗和數學來理解自然，而不是只相信古代權威。",o:"這個名稱是 20 世紀史學家（如柯瓦雷、巴特菲爾德）普及的。代表人物有哥白尼、伽利略、牛頓。"},
+"啟蒙運動":{en:"Enlightenment",m:"17–18 世紀歐洲思想家主張用理性思考，批評專制與迷信，提倡自由、平等、權利。",o:"英文 enlighten 是「照亮」。德國哲學家康德在 1784 年的文章中用拉丁文 Sapere aude（勇於運用你的理智）作為啟蒙的口號。中文「啟蒙」原指替孩童開始識字教育。"},
+"革命":{en:"Revolution",m:"在短時間內徹底改變政治、社會或技術的巨大變化。",o:"中文出自《易經》「湯武革命，順乎天而應乎人」：「革」是改變，「命」是天命，意思是改朝換代。英文 revolution 來自拉丁文 revolvere（旋轉、回轉），原本指天體運行（哥白尼的書名就是《天體運行論》De revolutionibus），17 世紀起才用來指政治劇變。"},
+"工業革命":{en:"Industrial Revolution",m:"約 1760 年起從英國開始，以機器、工廠和新能源（煤、蒸汽）取代手工生產的巨大轉變。",o:"英國史學家阿諾德·湯恩比（Arnold Toynbee）在 1880 年代的講座使這個詞普及。industry 來自拉丁文 industria（勤勞）。"},
+"帝國主義":{en:"Imperialism",m:"強國用軍事、政治、經濟力量控制其他地區的行為與思想，19 世紀末達到高峰。",o:"來自拉丁文 imperium（統治權、命令），和 emperor（皇帝）同源。"},
+"殖民地":{en:"Colony",m:"被外國統治、失去自主權的地區。",o:"拉丁文 colonia 原指古羅馬在外地建立的農民定居點，colonus 是「耕種者」。"},
+"冷戰":{en:"Cold War",m:"1947–1991 年美國與蘇聯兩大陣營的長期對抗，雙方沒有直接開戰，而是比軍備、比太空、在別處打代理戰爭。",o:"英國作家歐威爾在 1945 年的一篇文章中用過這個說法；1947 年美國政治家巴魯克在演說中使用後廣為流行。「冷」是指沒有真的「熱」戰（直接交火）。"},
+"全球化":{en:"Globalization",m:"世界各地在經濟、文化、科技上越來越緊密連結的過程。",o:"globe 是「地球儀、球體」。這個詞在 1980–90 年代開始被大量使用。"},
+"時代錯置":{en:"Anachronism",m:"把不屬於那個時代的東西、觀念放進那個時代的錯誤。",o:"希臘文 ana（逆、反）＋ chronos（時間）＝「時間錯亂」。例如古裝劇裡出現手錶。"},
+"史學史":{en:"Historiography",m:"研究「歷史是怎麼被寫出來的」的學問：誰寫的、用什麼方法、有什麼觀點。",o:"希臘文 historia（探究）＋ graphein（書寫）。"},
+"紀傳體":{en:"Biographical-style history",m:"以人物傳記為主體來寫歷史的體裁，由司馬遷《史記》開創。",o:"「本紀」記帝王，「列傳」記各種人物，合稱紀傳體。二十四史都用這個格式。"},
+"編年體":{en:"Annals / Chronicle",m:"按照年月日順序記事的史書體裁，例如《春秋》、《資治通鑑》。",o:"「編」排「年」代，一年一年往下寫。"},
+"年鑑學派":{en:"Annales School",m:"20 世紀法國史學流派，主張研究普通人的生活、經濟、氣候與心態，而不只是帝王將相和戰爭。",o:"得名自 1929 年布洛克與費夫爾創辦的期刊《經濟與社會史年鑑》（Annales）。"},
+"長時段":{en:"Longue durée",m:"觀察歷史中變化極慢的結構，例如地理、氣候、長期經濟模式，時間尺度以百年計。",o:"年鑑學派的布勞岱爾（Fernand Braudel）在 1958 年提出的法文詞，意為「長的持續時間」。"},
+"外部考證":{en:"External criticism",m:"檢查史料本身是不是真的：年代、作者、材質、字跡是否符合。",o:"從史料的「外部」（形式、來源）去考察真偽。"},
+"內部考證":{en:"Internal criticism",m:"檢查史料內容可不可信：作者有沒有親眼看到、有沒有偏見、內容是否前後矛盾。",o:"從史料的「內部」（內容）去考察可信度。"},
+"大歷史":{en:"Big History",m:"從宇宙大爆炸講到今天，把人類史放在 138 億年尺度中觀看的研究方法。",o:"1990 年前後由澳洲史學家大衛·克里斯蒂安（David Christian）推動。"},
+"全球史":{en:"Global history",m:"不以單一國家為中心，而是研究不同地區之間的連結、交流與比較。",o:"20 世紀後期興起，回應全球化時代，並反省以歐洲為中心的寫法。"},
+"歐洲中心論":{en:"Eurocentrism",m:"不自覺以歐洲的經驗和標準看待全世界歷史的觀點。",o:"Euro（歐洲）＋ centric（以……為中心）。"},
+"數位人文":{en:"Digital humanities",m:"用電腦、資料庫、地圖、程式等數位工具研究歷史與人文學。",o:"21 世紀初由 humanities computing（人文計算）改名而來。"}
+};
+/* ===== 課程內容 ===== */
+const LEVELS = [
+  {id:1, name:"入門層", sub:"學會看懂歷史的工具", depth:"表土：地表下 0–1 公尺", cls:"s1"},
+  {id:2, name:"進階層", sub:"人類文明的大旅程", depth:"文化層：地表下 1–5 公尺", cls:"s2"},
+  {id:3, name:"專業層", sub:"像史學家一樣思考", depth:"原生層：最深處", cls:"s3"}
+];
+
+const LESSONS = [
+/* ---------- 第 1 課 ---------- */
+{id:1, level:1, icon:"🔍", title:"什麼是歷史？",
+goal:"讀完這課，你能說出「歷史」和「過去」的差別，也知道人類的歷史在地球的時間裡有多短。",
+secs:[
+{h:"過去 ≠ 歷史",html:`
+<p>你昨天吃了什麼？這是「過去」。但如果沒有人記得、沒有照片、沒有收據，這件事就消失了。</p>
+<p>[[歷史]]是「被記錄下來、被研究和解釋的過去」。所以歷史有兩層意思：</p>
+<ol><li><b>發生過的事</b>：例如秦始皇統一六國。</li><li><b>人們寫下的關於這些事的敘述</b>：例如司馬遷寫的《史記》。</li></ol>
+<div class="ex"><b>生活例子</b>　班上同學吵架，老師問經過。小明說是小華先動手，小華說是小明先罵人。事情只發生一次，但「說法」有兩種。歷史學家的工作，就像這位老師：收集各方說法和證據，找出最接近真相的版本。</div>`},
+{h:"為什麼要學歷史？",html:`
+<ul><li><b>了解現在</b>：你說的語言、住的城市、用的錢，都是過去一步步形成的。</li>
+<li><b>學會判斷</b>：網路上真假消息很多，學歷史就是在練習「看證據、分辨可信度」。</li>
+<li><b>理解別人</b>：不同國家、民族為什麼想法不同？答案常常藏在他們的歷史裡。</li></ul>`},
+{w:"dayclock"},
+{h:"從這張「時鐘」學到什麼？",html:`<p>如果把地球 46 億年壓縮成一天 24 小時，現代人類到最後幾秒才出現，有文字記錄的歷史只佔不到 0.1 秒。我們要學的，就是這最後一眨眼裡發生的精彩故事。</p>`}
+],
+terms:["歷史","史料"],
+quiz:[
+{q:"下列哪一個最符合「歷史」的意思？",o:["所有過去發生的事","被記錄、研究和解釋的過去","古代的傳說故事"],a:1,why:"沒被記錄或研究的過去，我們無從得知；歷史是有證據、有解釋的過去。"},
+{q:"英文 history 的希臘文字源 historia 原本是什麼意思？",o:["國王的故事","探究、調查","古老的書"],a:1,why:"希羅多德把寫歷史當成調查工作，所以 history 帶有「探究」的精神。"},
+{q:"甲骨文的「史」字畫的是什麼？",o:["一個人拿著記事的工具","一座高山","一條河流"],a:0,why:"「史」原指記事的官員，所以字形是手拿記事工具。"}
+]},
+
+/* ---------- 第 2 課 ---------- */
+{id:2, level:1, icon:"🗓️", title:"時間怎麼算？西元與世紀",
+goal:"學會西元紀年、「西元前」的算法，以及怎麼把年份換算成世紀。",
+secs:[
+{h:"人類需要一把共同的時間尺",html:`
+<p>古代每個國家有自己的紀年方式：中國用皇帝年號（例如「貞觀三年」）、古羅馬從建城那年算起、伊斯蘭世界從穆罕默德遷往麥地那那年算起。不同紀年要互相換算非常麻煩。</p>
+<p>今天全世界最通用的是[[西元]]：把傳說中耶穌誕生的那一年當作第 1 年。</p>
+<div class="warn"><b>冷知識</b>　現代學者推算，耶穌可能其實出生在西元前 4 年左右。當年計算的修士算錯了，但大家已經用習慣，就一直沿用下來。</div>`},
+{h:"西元前：倒著數的時間",html:`
+<p>西元 1 年以前的年份叫「西元前」，數字越大越古老。西元前 221 年（秦統一）比西元前 202 年（漢朝建立）還早 19 年。</p>
+<p>重點：<b>沒有「西元 0 年」</b>。西元前 1 年的下一年就是西元 1 年。這是因為發明這套方法的中古歐洲還沒有「零」的概念。</p>
+<div class="ex"><b>算算看</b>　從西元前 5 年到西元 5 年，過了幾年？直接 5＋5＝10 是錯的，因為沒有 0 年，答案是 9 年。</div>`},
+{w:"century"},
+{h:"世紀的算法",html:`
+<p>[[世紀]]是一百年。算法口訣：<b>年份去掉後兩位，再加 1</b>（但剛好是整百年的，不用加 1）。</p>
+<ul><li>1945 年 → 19＋1 → 20 世紀</li><li>2026 年 → 20＋1 → 21 世紀</li><li>2000 年 → 整百年 → 20 世紀（因為 20 世紀是 1901–2000）</li></ul>
+<p>「年代」則是十年一組，例如「1980 年代」就是 1980–1989 年。</p>`}
+],
+terms:["西元","世紀"],
+quiz:[
+{q:"西元 1776 年是幾世紀？",o:["17 世紀","18 世紀","19 世紀"],a:1,why:"17＋1＝18，所以是 18 世紀。"},
+{q:"西元前 500 年和西元前 300 年，哪一個比較早？",o:["西元前 500 年","西元前 300 年","一樣早"],a:0,why:"西元前是倒數的，數字越大越古老。"},
+{q:"為什麼沒有西元 0 年？",o:["那一年什麼事都沒發生","發明這套紀年時，歐洲還沒有使用「零」的概念","0 年被戰爭毀掉了"],a:1,why:"西元紀年在 6 世紀發明，當時歐洲還沒使用零，所以直接從 1 開始。"}
+]},
+
+/* ---------- 第 3 課 ---------- */
+{id:3, level:1, icon:"🏺", title:"我們怎麼知道過去？史料與考古",
+goal:"分辨一手與二手史料，了解考古學家如何用科學方法替文物「量年紀」。",
+secs:[
+{h:"史料：歷史的證據",html:`
+<p>歷史學家不能坐時光機，只能靠[[史料]]。史料分兩大類：</p>
+<ul><li>[[一手史料]]：當時留下的，例如日記、信件、法律條文、出土陶器、老照片。</li>
+<li>[[二手史料]]：後人研究後寫的，例如教科書、傳記、紀錄片。</li></ul>
+<div class="ex"><b>生活例子</b>　你參加畢業旅行拍的照片是一手史料；十年後學弟妹看了你的照片寫一篇〈學長姊的畢旅〉，就是二手史料。</div>`},
+{w:"classify",title:"練習：這是一手還是二手史料？",hint:"點選每個史料的分類，看看你判斷得對不對。",cats:["一手","二手"],items:[
+["1945 年一位士兵寫給家人的信",0,"寫信的人就在當時當地。"],
+["國中歷史課本",1,"課本是後人整理研究的成果。"],
+["從古墓挖出的青銅器",0,"文物本身就是當時留下的。"],
+["2020 年拍的秦始皇紀錄片",1,"紀錄片是現代人對過去的解說。"],
+["1969 年登月當天的報紙",0,"事件發生當時的報導。"],
+["一本講唐朝的歷史小說",1,"小說是後人創作，還加入了想像。"]]},
+{h:"考古學：用鏟子讀歷史",html:`
+<p>文字出現前的幾百萬年，沒有任何書面記錄，這時就要靠[[考古學]]。考古學家有一個重要原則叫「地層」：</p>
+<p><b>越下層的東西，通常越古老。</b>就像你房間的一疊舊考卷，最下面那張一定是最早放的。這個網站的課程地圖就是用地層來畫的：越往下挖，內容越深。</p>`},
+{w:"c14"},
+{h:"碳十四：大自然的計時器",html:`
+<p>活著的生物會不斷吸收碳，其中有一點點是具放射性的碳十四。生物死後就不再吸收，體內的碳十四開始慢慢減少，每過約 5,730 年剩下一半，這段時間叫[[半衰期]]。</p>
+<p>只要測出一塊古代木頭還剩多少碳十四，就能倒推它是多久以前死亡的。這就是[[碳十四定年法]]，大約可以測到 5 萬年以內的東西。</p>`}
+],
+terms:["史料","一手史料","二手史料","考古學","碳十四定年法","半衰期"],
+quiz:[
+{q:"下列哪一個是一手史料？",o:["一本研究清朝的論文","清朝官員寫的奏摺","介紹清朝的網路影片"],a:1,why:"奏摺是清朝當時留下的文件。"},
+{q:"一塊木頭剩下原本 25% 的碳十四，大約死亡多久了？",o:["約 2,865 年","約 5,730 年","約 11,460 年"],a:2,why:"100%→50% 是一個半衰期，50%→25% 是第二個，5,730×2＝11,460 年。"},
+{q:"考古學的「地層」原則是什麼？",o:["越上層越古老","越下層通常越古老","地層跟年代無關"],a:1,why:"東西一層層堆積，底下的先堆，所以通常更古老。"}
+]},
+
+/* ---------- 第 4 課 ---------- */
+{id:4, level:1, icon:"🪨", title:"史前時代：從石頭到農田",
+goal:"認識舊石器、新石器時代的生活，理解農業革命為什麼改變了一切。",
+secs:[
+{h:"沒有文字的漫長時光",html:`
+<p>文字發明以前的時代叫[[史前時代]]，佔了人類經歷的絕大部分時間。學者依照人類使用的工具，把它分成幾個時代：</p>
+<ul><li>[[舊石器時代]]：把石頭敲出尖銳邊緣使用（打製石器），靠打獵、採集野果維生，跟著食物到處移動。人類學會用火，也開始畫洞穴壁畫。</li>
+<li>[[新石器時代]]：石器磨得光滑精緻（磨製石器），更重要的是開始種田、養動物、做陶器、蓋村莊。</li></ul>`},
+{w:"yearcal"},
+{h:"農業革命：人類最大的轉彎",html:`
+<p>大約 1 萬 2 千年前，在西亞的「肥沃月灣」（因地形像一彎新月而得名）、中國的黃河與長江流域、美洲等地，人們各自開始種植作物。這叫[[農業革命]]。</p>`},
+{w:"chain",title:"連鎖反應：種田之後發生什麼事？",hint:"按「下一步」，看一個改變怎麼引發下一個改變。",steps:[
+"🌾 開始種田：食物來源變穩定",
+"🏠 不再遷徙：要照顧田地，只好定居下來",
+"👶 人口變多：食物有剩，能養活更多小孩",
+"📦 有了剩餘：吃不完的糧食需要儲存和分配",
+"🔨 出現分工：不是每個人都要種田，有人專做陶器、有人當祭司、有人當戰士",
+"👑 出現階級與首領：誰管理存糧，誰就有權力",
+"🏙️ 城市與國家誕生：文明即將登場"]},
+{h:"文明的條件",html:`
+<p>當社會發展出城市、文字、政府、分工與宗教，學者就稱之為[[文明]]。下一層，我們要去看最早的文明。</p>
+<div class="warn"><b>想一想</b>　農業一定比較好嗎？有些學者指出，早期農民工作更累、營養更單調、傳染病更多（因為人和牲畜擠在一起）。歷史的改變常常有得有失。</div>`}
+],
+terms:["史前時代","舊石器時代","新石器時代","農業革命","文明"],
+quiz:[
+{q:"「新石器時代」的 neo-lithic 是什麼意思？",o:["新的石頭","神聖的石頭","黑色的石頭"],a:0,why:"neo 是新，lithos 是石頭。"},
+{q:"農業革命後，下列哪一件事最直接出現？",o:["人類開始定居","人類發明電","人類開始狩獵"],a:0,why:"種田需要照顧土地，人們因此定居。"},
+{q:"下列哪一個不是一般認為「文明」的條件？",o:["城市","文字","手機"],a:2,why:"文明的條件包括城市、文字、政府、分工等，手機是現代發明。"}
+]},
+
+/* ---------- 第 5 課 ---------- */
+{id:5, level:2, icon:"🌊", title:"大河文明與文字的誕生",
+goal:"認識四大古文明的所在地與特色，理解文字如何從圖畫演變而來。",
+secs:[
+{h:"為什麼文明都在河邊？",html:`
+<p>河流提供灌溉用水、肥沃的泥土、交通和魚類。管理河水（防洪、挖渠道）需要很多人合作，這就促成了組織與政府。最早的四個文明都靠著大河：</p>
+<div class="scroll-x"><table><tr><th>文明</th><th>河流</th><th>約始於</th><th>代表成就</th></tr>
+<tr><td>[[美索不達米亞]]</td><td>底格里斯河、幼發拉底河</td><td>西元前 3500 年</td><td>[[楔形文字]]、漢摩拉比法典、輪子</td></tr>
+<tr><td>古埃及</td><td>尼羅河</td><td>西元前 3100 年</td><td>[[象形文字]]、金字塔、太陽曆</td></tr>
+<tr><td>印度河流域</td><td>印度河</td><td>西元前 2600 年</td><td>規劃整齊的城市、下水道系統</td></tr>
+<tr><td>中國</td><td>黃河、長江</td><td>西元前 2000 年前後</td><td>[[甲骨文]]、青銅器</td></tr></table></div>`},
+{h:"文字：把話留下來的發明",html:`
+<p>文字出現後，人類的記憶可以跨越時間和距離，這就是「史前」與「歷史時代」的分界。最早的文字多半用來<b>記帳</b>：誰欠了多少麥子、神廟收了幾隻羊。</p>`},
+{w:"writing"},
+{h:"兩個重要的解謎故事",html:`
+<p><b>羅塞塔石碑</b>：1799 年在埃及發現，上面用象形文字、埃及草書和古希臘文刻了同一段內容。因為學者讀得懂希臘文，法國學者商博良在 1822 年破解了象形文字。這就像拿著「翻譯對照表」解密碼。</p>
+<p><b>甲骨文</b>：1899 年，王懿榮在中藥「龍骨」上看到刻痕，認出是古文字，一路追查到河南安陽的殷墟，證實了商朝真的存在。</p>
+<div class="ex"><b>漢摩拉比法典</b>（約西元前 1754 年）是保存最完整的古代法律之一，刻在石柱上公開展示。其中有「以眼還眼」式的原則，也規定不同身分的人受到不同處罰，讓我們看見當時的階級社會。</div>`}
+],
+terms:["美索不達米亞","楔形文字","象形文字","甲骨文"],
+quiz:[
+{q:"「美索不達米亞」的意思是？",o:["太陽升起的地方","兩河之間的土地","沙漠中的綠洲"],a:1,why:"meso＋potamos＝兩河之間。"},
+{q:"讓學者破解古埃及象形文字的關鍵是？",o:["金字塔","羅塞塔石碑","木乃伊"],a:1,why:"石碑上有同一段文字的三種版本，其中希臘文可讀。"},
+{q:"最早的文字常被用來做什麼？",o:["寫小說","記帳與記錄財物","寫情書"],a:1,why:"管理糧食和財物需要記錄，是文字最早的用途之一。"}
+]},
+
+/* ---------- 第 6 課 ---------- */
+{id:6, level:2, icon:"🏛️", title:"古典時代：希臘、羅馬、秦漢與思想的軸心",
+goal:"比較東西方古典帝國的政治制度，認識影響人類兩千多年的思想家。",
+secs:[
+{h:"雅典：人民自己做決定",html:`
+<p>西元前 5 世紀的雅典，成年男性公民可以直接到廣場投票決定戰爭、法律等大事。這就是[[民主]]的起源。</p>
+<div class="warn"><b>要注意</b>　雅典的民主只屬於成年男性公民。女性、奴隸、外邦人都不能投票，大約只有一成多的人口有權參與。用今天的標準直接說它「很民主」，就忽略了當時的限制。</div>`},
+{h:"羅馬：從共和到帝國",html:`
+<p>羅馬在西元前 509 年趕走國王，建立[[共和]]：由選出的兩位執政官和元老院治理。後來羅馬不斷擴張，內戰頻繁，西元前 27 年屋大維成為第一位皇帝，羅馬進入帝國時代，疆域環繞整個地中海。</p>
+<p>羅馬留給世界的禮物：法律體系、道路、拉丁文（英文大量單字來自拉丁文），以及後來的基督教會組織。</p>`},
+{h:"秦漢：大一統的中國",html:`
+<p>西元前 221 年，秦王嬴政統一六國，自稱[[皇帝]]。他統一文字、貨幣、度量衡和車軌寬度，設立郡縣由中央派官治理。秦朝雖然只維持 15 年，但它建立的制度被後來的朝代延續了兩千年。</p>
+<p>漢朝（西元前 202 年–西元 220 年）接手秦的制度，採用儒家思想治國，並開通了通往西域的道路。「漢人」「漢字」的名稱都來自這個朝代。</p>`},
+{w:"compare",title:"比一比：三個古典政權",hint:"點選上方名稱，切換比較。",tabs:[
+{n:"雅典",rows:[["誰做決定","公民大會（成年男性公民直接投票）"],["領導人怎麼產生","多數官職用抽籤決定，將軍由選舉"],["留下的影響","民主觀念、哲學、戲劇、奧運"]]},
+{n:"羅馬共和",rows:[["誰做決定","元老院、執政官與人民大會互相制衡"],["領導人怎麼產生","每年選出兩位執政官，任期一年"],["留下的影響","共和制度、羅馬法、三權制衡的靈感"]]},
+{n:"秦漢帝國",rows:[["誰做決定","皇帝，由中央官僚執行"],["領導人怎麼產生","世襲；官員由推薦或考核任用"],["留下的影響","中央集權、郡縣制、統一文字"]]}]},
+{h:"軸心時代：思想大爆發",html:`
+<p>在西元前 800 到 200 年之間，世界各地彼此幾乎沒有聯絡，卻同時出現了偉大的思想家，這段時期被稱為[[軸心時代]]：</p>
+<ul><li>中國：孔子、老子、墨子、孟子，諸子百家</li><li>印度：釋迦牟尼（佛教）</li><li>希臘：蘇格拉底、柏拉圖、亞里斯多德</li><li>西亞：猶太教的先知們</li></ul>
+<p>他們都在問類似的問題：人應該怎麼活？什麼是好的社會？這些答案至今仍影響著數十億人。</p>`}
+],
+terms:["民主","共和","皇帝","軸心時代"],
+quiz:[
+{q:"democracy 的字源 demos 是什麼意思？",o:["人民","神明","國王"],a:0,why:"demos＝人民，kratos＝統治。"},
+{q:"秦始皇的「皇帝」稱號從何而來？",o:["向羅馬學的","取自三皇五帝","周天子封給他的"],a:1,why:"他認為自己功業超越三皇五帝，各取一字。"},
+{q:"古代雅典的民主有什麼限制？",o:["只有國王能投票","女性和奴隸不能投票","每個人都能投票，沒有限制"],a:1,why:"只有成年男性公民有政治權利。"}
+]},
+
+/* ---------- 第 7 課 ---------- */
+{id:7, level:2, icon:"🐫", title:"中古世界：絲路上的交流",
+goal:"了解 5–15 世紀歐亞各大文明的樣貌，以及它們如何透過絲路與海路相互影響。",
+secs:[
+{h:"「中古」是誰取的名字？",html:`
+<p>476 年西羅馬帝國滅亡，歐洲進入所謂的[[中古時代]]，一直到 15 世紀左右。這個名字是後來的人取的，暗示這一千年只是兩個輝煌時代「中間」的空檔。</p>
+<p>但同一時期，世界其他地方正非常熱鬧：</p>
+<ul><li><b>中國</b>：唐朝長安是百萬人口的國際大城，宋朝發展出活字印刷、火藥、指南針的應用，經濟繁榮。</li>
+<li><b>伊斯蘭世界</b>：7 世紀[[伊斯蘭]]興起，巴格達的「智慧宮」翻譯保存了大量古希臘著作，並發展出[[代數]]、醫學和天文學。</li>
+<li><b>東南亞</b>：[[吳哥王朝]]在今天的柬埔寨建造了世界最大的宗教建築群之一——吳哥窟（12 世紀）。</li>
+<li><b>歐洲</b>：以[[封建]]制度和基督教會為核心組織社會，城堡和大教堂是這時期的象徵。</li></ul>`},
+{w:"silkroad"},
+{h:"絲路上流動的不只是絲",html:`
+<p>[[絲路]]不是一條路，而是一整張路網。沿路交換的東西包括：</p>
+<ul><li><b>商品</b>：中國的絲綢、瓷器、茶葉；西方的玻璃、香料、馬匹</li>
+<li><b>宗教</b>：佛教從印度傳入中國，伊斯蘭教傳入中亞</li>
+<li><b>技術</b>：造紙術在 8 世紀傳到阿拉伯世界，再傳到歐洲</li>
+<li><b>疾病</b>：14 世紀的黑死病沿著貿易路線從亞洲傳到歐洲，約三分之一的歐洲人死亡</li></ul>
+<div class="ex"><b>生活例子</b>　今天的網路讓一支影片一天就傳遍全球；古代的絲路就是當時的「網路」，只是傳一個想法可能要花幾十年。</div>`},
+{h:"蒙古帝國：把歐亞連成一片",html:`<p>13 世紀，成吉思汗和他的子孫建立了史上陸地面積最大的連續帝國，從朝鮮半島延伸到東歐。蒙古人的征服造成巨大破壞，但也讓歐亞大陸的道路空前暢通，馬可波羅就是在這時期來到中國的。</p>`}
+],
+terms:["中古時代","封建","絲路","伊斯蘭","代數","吳哥王朝"],
+quiz:[
+{q:"「絲路」這個名字是誰取的？",o:["漢武帝","19 世紀德國地理學家李希霍芬","馬可波羅"],a:1,why:"1877 年李希霍芬首次使用，古人並不這樣稱呼。"},
+{q:"「代數」algebra 這個字來自哪裡？",o:["拉丁文","阿拉伯文 al-jabr","中文"],a:1,why:"來自巴格達學者花拉子米的書名。"},
+{q:"黑死病如何從亞洲傳到歐洲？",o:["沿著貿易路線","透過飛機","透過網路"],a:0,why:"商隊和船隻把病菌和帶病的跳蚤一起帶到各地。"}
+]},
+/* ---------- 第 8 課 ---------- */
+{id:8, level:2, icon:"⛵", title:"近代的開端：重生、改革與遠航",
+goal:"理解文藝復興、宗教改革與大航海如何讓世界從各自發展走向連結。",
+secs:[
+{h:"文藝復興：把「人」放回中心",html:`
+<p>14 世紀起，義大利的佛羅倫斯、威尼斯等城市靠貿易致富，有錢的商人贊助藝術家與學者。他們重新研究古希臘羅馬的作品，重視人的能力與個性，這就是[[文藝復興]]。</p>
+<p>代表人物：達文西（畫家也是工程師）、米開朗基羅（雕刻家）、但丁（詩人）。</p>
+<div class="ex"><b>觀察重點</b>　中古的畫作裡，人物常常扁平、比例由重要性決定；文藝復興的畫家研究解剖和透視法，讓畫面像真實的三維空間。畫風的改變，反映了看世界方式的改變。</div>`},
+{h:"印刷術點燃的改革",html:`
+<p>1450 年前後，德國人古騰堡改良了活字印刷機。書變便宜了，知識不再只屬於少數人。</p>
+<p>1517 年，德國修士馬丁·路德公開質疑教會販賣「贖罪券」（花錢就能減輕罪罰）。靠著印刷術，他的文章幾週內就傳遍德國，引發[[宗教改革]]，基督教從此分裂成天主教和新教。</p>`},
+{h:"大航海：世界連成一體",html:`
+<p>鄂圖曼帝國控制了東西貿易的陸路，歐洲人想找海路直接買亞洲的香料。在[[大航海時代]]：</p>
+<ul><li>1405–1433 年：明朝鄭和七次下西洋，最遠到達非洲東岸（比歐洲人更早，但後來中國停止遠航）</li>
+<li>1492 年：哥倫布橫越大西洋抵達美洲</li>
+<li>1498 年：達伽馬繞過非洲抵達印度</li>
+<li>1519–1522 年：麥哲倫船隊完成第一次環球航行</li></ul>`},
+{w:"exchange"},
+{h:"交換的另一面",html:`
+<p>[[哥倫布大交換]]讓馬鈴薯、玉米養活了歐亞大量人口，但也帶來悲劇：美洲原住民對天花等疾病沒有抵抗力，人口在一百多年內大量死亡。歐洲人又從非洲強迫運送上千萬人到美洲當奴隸，這就是大西洋奴隸貿易。</p>
+<p>許多地方從此淪為歐洲國家的[[殖民地]]。</p>`}
+],
+terms:["文藝復興","宗教改革","大航海時代","哥倫布大交換","殖民地"],
+quiz:[
+{q:"Renaissance 的原意是？",o:["革命","重生","發現"],a:1,why:"法文 renaissance＝重生。"},
+{q:"哪項技術幫助路德的思想快速傳播？",o:["蒸汽機","活字印刷","電報"],a:1,why:"古騰堡的印刷機讓文章能大量、便宜地複製。"},
+{q:"為什麼現在多用「大航海時代」而不說「地理大發現」？",o:["因為那些土地本來就有人住","因為航海比較好聽","因為沒有發現任何東西"],a:0,why:"美洲、非洲早有人居住，「發現」是歐洲人的角度。"}
+]},
+
+/* ---------- 第 9 課 ---------- */
+{id:9, level:2, icon:"⚙️", title:"革命的時代：理性、自由與機器",
+goal:"認識科學革命、啟蒙運動、政治革命與工業革命如何塑造現代世界。",
+secs:[
+{h:"「革命」這個詞的奇妙旅程",html:`
+<p>[[革命]]在中文原本是改朝換代的意思；英文 revolution 原本是天體「旋轉」。後來兩個詞都被用來形容「徹底、快速的改變」。這一課會遇到四種革命。</p>`},
+{h:"① 科學革命：不再只聽權威",html:`
+<p>過去歐洲人相信地球是宇宙中心，因為古代學者和教會都這麼說。[[科學革命]]時期：</p>
+<ul><li>1543 年，哥白尼提出太陽才是中心</li><li>伽利略用望遠鏡觀察到木星的衛星</li><li>1687 年，牛頓用萬有引力解釋天上和地上的運動</li></ul>
+<p>最重要的不是某個發現，而是新的方法：<b>觀察、實驗、用數學驗證</b>。</p>`},
+{h:"② 啟蒙運動：用理性檢查一切",html:`
+<p>既然理性能解釋自然，能不能也用來改善社會？[[啟蒙運動]]的思想家這樣想：</p>
+<ul><li>洛克：人天生擁有生命、自由、財產的權利</li><li>孟德斯鳩：政府權力應分成立法、行政、司法，互相制衡</li><li>盧梭：政府的權力來自人民的同意</li></ul>`},
+{h:"③ 政治革命：把想法變成國家",html:`
+<p>1776 年美國發表《獨立宣言》，脫離英國；1789 年法國大革命推翻君主專制，發表《人權宣言》。從此，「人民是國家的主人」逐漸成為全世界的主流想法。1911 年中國的辛亥革命推翻清朝、建立亞洲第一個共和國，也受這股潮流影響。</p>`},
+{h:"④ 工業革命：機器改變生活",html:`<p>約 1760 年起，英國開始了[[工業革命]]。為什麼是英國？它有豐富的煤礦、海外市場、資金，以及鼓勵發明的專利制度。</p>`},
+{w:"chain",title:"工業革命的骨牌效應",hint:"一步一步揭開，看蒸汽機怎麼改變整個社會。",steps:[
+"⛏️ 煤礦需要抽水 → 發明了蒸汽抽水機",
+"🔧 瓦特在 1760–70 年代大幅改良蒸汽機，效率提高許多",
+"🏭 蒸汽機帶動紡織機器，工廠取代家庭手工",
+"🚂 蒸汽火車與輪船出現，運輸又快又便宜",
+"🏙️ 大量農民湧入城市當工人，城市急速擴大",
+"😷 工時長、童工、污染、貧民窟等問題出現",
+"✊ 工人組織工會爭取權益，社會主義等新思想誕生",
+"🌍 工業國家需要原料和市場，開始向外擴張"]},
+{h:"今天的你，也活在工業革命之後",html:`<p>工廠、上下班時間、鐘錶精準的生活節奏、大量生產的衣服，都是工業革命的遺產。今天的成衣工廠、電子工廠，其實延續的正是 18 世紀英國紡織工廠開創的生產方式。</p>`}
+],
+terms:["革命","科學革命","啟蒙運動","工業革命"],
+quiz:[
+{q:"科學革命最重要的遺產是什麼？",o:["發現了新大陸","觀察與實驗的科學方法","發明了印刷術"],a:1,why:"方法比單一發現更重要，它讓知識可以被檢驗和累積。"},
+{q:"主張政府權力應分為立法、行政、司法的是？",o:["孟德斯鳩","牛頓","哥倫布"],a:0,why:"孟德斯鳩提出三權分立。"},
+{q:"工業革命最早在哪個國家開始？",o:["法國","英國","中國"],a:1,why:"英國有煤、資金、市場與專利制度。"}
+]},
+
+/* ---------- 第 10 課 ---------- */
+{id:10, level:2, icon:"🌐", title:"二十世紀：戰爭、對立與連結",
+goal:"掌握 20 世紀的主要事件脈絡，理解今天的國際局勢從何而來。",
+secs:[
+{h:"帝國主義：瓜分世界",html:`
+<p>19 世紀末，工業國家為了原料、市場和國家威望，展開[[帝國主義]]競賽。到 1914 年，非洲幾乎全被歐洲國家瓜分，亞洲許多地區也成為殖民地。例如 1863 年起柬埔寨成為法國的保護國，後來併入法屬印度支那。</p>`},
+{w:"timeline",title:"二十世紀大事時間軸",hint:"點選事件，看看它和前後事件的關係。",evs:[
+["1914","第一次世界大戰爆發","奧匈帝國皇儲在塞拉耶佛遇刺，同盟關係把各國一個個拉進戰爭。坦克、毒氣、機關槍讓死傷空前慘重。"],
+["1917","俄國革命","俄國推翻沙皇，隨後共產黨建立蘇聯，成為第一個共產主義國家。"],
+["1918","一戰結束","德國戰敗，《凡爾賽條約》的嚴厲條件埋下德國人的不滿。"],
+["1929","經濟大恐慌","美國股市崩盤，全球大量失業。人們對現況絕望，極端政黨趁機崛起。"],
+["1939","第二次世界大戰爆發","德國入侵波蘭。戰火延燒歐、亞、非洲，約七千萬人以上死亡，包括納粹屠殺約六百萬猶太人。"],
+["1945","二戰結束、聯合國成立","美國在日本投下原子彈，日本投降。各國成立聯合國，希望避免下一次大戰。"],
+["1947","冷戰開始","美國和蘇聯從盟友變成對手，世界分成兩大陣營。"],
+["1950–70年代","殖民地獨立潮","亞洲與非洲數十個國家陸續獨立，例如柬埔寨在 1953 年脫離法國獨立。"],
+["1969","人類登陸月球","美蘇太空競賽的高峰，美國太空人阿姆斯壯踏上月球。"],
+["1989","柏林圍牆倒塌","東歐共產政權接連垮台，德國在隔年統一。"],
+["1991","蘇聯解體","冷戰結束，世界進入美國獨強與全球化加速的時代。"]]},
+{h:"冷戰：沒有開火的對抗",html:`
+<p>[[冷戰]]期間，美蘇雙方都擁有足以毀滅世界的核子武器，所以不敢直接開戰。它們改用別的方式競爭：軍備競賽、太空競賽、支持不同國家的內戰（韓戰、越戰就是例子）。</p>
+<div class="ex"><b>為什麼叫「冷」</b>　「熱戰」是真的開槍打仗；兩強之間沒直接交火，卻長期處在緊張狀態，就像兩個人冷戰不說話，但氣氛很僵。</div>`},
+{h:"全球化：世界變成地球村",html:`<p>冷戰結束後，貿易、網路、交通讓世界越來越緊密，這就是[[全球化]]。你身上的一件衣服，可能是美國品牌設計、用印度棉花、在東南亞工廠縫製、再賣到歐洲。全球化帶來便利和經濟成長，也帶來貧富差距、文化衝突和環境問題的爭論。</p>`}
+],
+terms:["帝國主義","殖民地","冷戰","全球化"],
+quiz:[
+{q:"經濟大恐慌和第二次世界大戰有什麼關係？",o:["沒有關係","經濟崩潰讓極端政黨得到支持","大恐慌是二戰造成的"],a:1,why:"人們在絕望中容易支持承諾改變的極端勢力，例如德國的納粹。"},
+{q:"為什麼美蘇的對抗被稱為「冷」戰？",o:["因為在寒冷的地方打","因為兩國沒有直接開戰","因為發生在冬天"],a:1,why:"雙方沒有直接交火，是長期緊張的對峙。"},
+{q:"冷戰在哪一年隨著蘇聯解體結束？",o:["1945","1969","1991"],a:2,why:"1991 年蘇聯解體。"}
+]},
+
+/* ---------- 第 11 課 ---------- */
+{id:11, level:3, icon:"🧠", title:"歷史思維：因果、變遷與脈絡",
+goal:"學會史學家常用的思考工具，並避開最常見的思考陷阱。",
+secs:[
+{h:"從「背答案」到「會思考」",html:`<p>前面兩層我們認識了很多事件。專業的歷史學習，重點不在記住年份，而在學會提問。以下是史學家最常用的四把工具。</p>`},
+{h:"工具一：因果關係",html:`
+<p>事件很少只有一個原因。史學家會區分：</p>
+<ul><li><b>長期原因</b>（深層結構）：例如一戰前歐洲的軍備競賽、同盟對立、民族主義</li>
+<li><b>短期原因</b>（導火線）：例如 1914 年奧匈皇儲遇刺</li></ul>
+<div class="ex"><b>生活例子</b>　杯子掉到地上破了。導火線是你碰到它，但長期原因是它一直放在桌子邊緣。只怪最後那一下，就看不到真正的問題。</div>`},
+{h:"工具二：變遷與延續",html:`<p>歷史不只有「改變」，也有「沒變」的部分。秦朝滅亡了，但郡縣制延續了兩千年；法國大革命推翻國王，但後來又出現了拿破崙稱帝。問「什麼變了？什麼沒變？」常常能看出更深的道理。</p>`},
+{h:"工具三：歷史脈絡",html:`
+<p>評價古人要先放回他的時代。古代的人不知道細菌的存在，不能用今天的醫學知識笑他們「迷信」。但理解不等於認同：理解奴隸制存在的原因，並不代表奴隸制是對的。</p>
+<p>把現代的東西或觀念錯放進過去，就叫[[時代錯置]]。</p>`},
+{w:"anachronism"},
+{h:"工具四：多元觀點",html:`
+<p>同一件事，不同立場的人看法不同。1492 年哥倫布抵達美洲，對西班牙王室是「開拓新領土」，對當地的泰諾人卻是災難的開始。</p>
+<p>還要小心[[歐洲中心論]]：很多傳統的世界史以歐洲發展當作標準，把其他地區當成配角。好的歷史研究會問：「這件事在其他地方的人看來是什麼樣子？」</p>`}
+],
+terms:["時代錯置","歐洲中心論"],
+quiz:[
+{q:"一戰的「導火線」是什麼？",o:["軍備競賽","奧匈皇儲遇刺","民族主義"],a:1,why:"遇刺是短期觸發事件；其他選項是長期原因。"},
+{q:"下列哪一個是「時代錯置」？",o:["電影裡唐朝人用毛筆寫字","電影裡唐朝人戴眼鏡看報紙","電影裡唐朝人騎馬"],a:1,why:"唐朝沒有眼鏡和報紙。"},
+{q:"「理解一個歷史現象的原因」代表什麼？",o:["代表我們贊成它","代表我們更能解釋它，但不一定認同","代表它一定是對的"],a:1,why:"理解和認同是兩件事。"}
+]},
+
+/* ---------- 第 12 課 ---------- */
+{id:12, level:3, icon:"🕵️", title:"史料批判：當一個歷史偵探",
+goal:"學會用系統方法檢驗史料的真偽與可信度。",
+secs:[
+{h:"每份史料都要被「審問」",html:`
+<p>史料不會自動告訴你真相。史學家會進行兩種考證：</p>
+<ul><li>[[外部考證]]：這份東西是真的嗎？紙張、墨水、字體、用語符合那個年代嗎？</li>
+<li>[[內部考證]]：內容可信嗎？作者在場嗎？有沒有理由說謊或誇大？</li></ul>`},
+{h:"偵探的六個問題",html:`
+<ol><li><b>誰</b>寫的？他的身分、立場是什麼？</li><li><b>什麼時候</b>寫的？事發當下，還是幾十年後的回憶？</li><li>寫給<b>誰</b>看的？私人日記和公開宣傳，說法會不同。</li><li><b>為什麼</b>寫？記錄、辯護、宣傳，還是賺錢？</li><li>和<b>其他史料</b>對得上嗎？</li><li>作者<b>沒說</b>什麼？沉默有時也是線索。</li></ol>`},
+{h:"真實案例：一份造假千年的文件",html:`
+<p>中古歐洲流傳一份《君士坦丁贈禮》，聲稱 4 世紀的羅馬皇帝把西歐的統治權送給了教宗。教會用它來主張權力，長達數百年。</p>
+<p>1440 年，義大利學者瓦拉仔細分析它的拉丁文，發現裡面用了許多 4 世紀根本還沒出現的詞彙和說法，證明它是幾百年後偽造的。這就是用「時代錯置」破案的經典例子，也是外部考證的典範。</p>`},
+{w:"sources"},
+{h:"有偏見的史料就沒用嗎？",html:`<p>不是。一份滿是宣傳的戰時海報，雖然不能告訴我們「戰爭真實情況」，卻能準確告訴我們「政府希望人民怎麼想」。史學家的本事，就是知道每份史料能回答什麼問題、不能回答什麼問題。</p>`}
+],
+terms:["外部考證","內部考證","一手史料"],
+quiz:[
+{q:"檢查一封信的紙張和墨水是否符合年代，屬於？",o:["外部考證","內部考證","二手史料"],a:0,why:"檢查史料本身的形式和真偽，是外部考證。"},
+{q:"瓦拉如何證明《君士坦丁贈禮》是假的？",o:["用碳十四","發現文中的用語不屬於那個時代","找到偽造者的自白"],a:1,why:"語言的時代錯置揭穿了偽造。"},
+{q:"一份政府宣傳海報最適合用來研究什麼？",o:["戰爭中真實的死傷人數","政府想塑造的民眾想法","士兵的真實心情"],a:1,why:"宣傳品反映的是發布者的意圖。"}
+]},
+
+/* ---------- 第 13 課 ---------- */
+{id:13, level:3, icon:"📚", title:"史學史：歷史是怎麼被寫的",
+goal:"認識東西方重要史學家與流派，理解「寫歷史的方法」本身也有歷史。",
+secs:[
+{h:"寫歷史的人也有歷史",html:`<p>[[史學史]]研究的是：不同時代的人，用什麼方法、帶著什麼問題去寫歷史。了解這一點，你讀任何歷史書時，都會多問一句「作者是從什麼角度寫的？」</p>`},
+{w:"timeline",title:"史學發展時間軸",hint:"點選每位史學家或流派，看他們帶來了什麼改變。",evs:[
+["約前430","希羅多德《歷史》","古希臘人，被羅馬的西塞羅稱為「歷史之父」。他四處旅行打聽，記錄波斯戰爭，也收錄許多傳聞。"],
+["約前400","修昔底德","寫伯羅奔尼撒戰爭，強調親身見證與查證，拒絕神話解釋，被視為批判史學的先驅。"],
+["約前91","司馬遷《史記》","開創[[紀傳體]]，從黃帝寫到漢武帝。他立志要探究天與人的關係、貫通古今的變化，寫出自己獨到的見解。"],
+["1084","司馬光《資治通鑑》","[[編年體]]通史巨作，寫給皇帝當施政參考，書名意思是「幫助治理的一面鏡子」。"],
+["1824","蘭克","德國史家，主張依據檔案，「如實地」呈現過去，建立了以史料考證為核心的近代史學。"],
+["1929","年鑑學派","法國的布洛克與費夫爾主張研究普通人、經濟、氣候與心態，開啟社會史。見[[年鑑學派]]。"],
+["1949","布勞岱爾","提出[[長時段]]觀念，把歷史分成地理、社會、事件三種速度的時間。"],
+["1961","卡爾《歷史是什麼？》","英國史家卡爾強調，史學家會選擇和解釋事實，歷史是現在與過去不斷的對話。"],
+["1990年代後","全球史與大歷史","[[全球史]]研究跨地區連結；[[大歷史]]把人類放進宇宙尺度。"],
+["21世紀","數位人文","用資料庫、地圖和程式分析大量史料，見[[數位人文]]。"]]},
+{h:"兩大傳統的對照",html:`
+<div class="scroll-x"><table><tr><th></th><th>中國傳統史學</th><th>西方近代史學</th></tr>
+<tr><td>誰寫</td><td>多為朝廷史官，後朝修前朝史</td><td>大學裡的專業史學家</td></tr>
+<tr><td>目的</td><td>以史為鑑，提供治國教訓</td><td>追求客觀認識過去</td></tr>
+<tr><td>體裁</td><td>紀傳體、編年體、紀事本末體</td><td>專題研究論文、專書</td></tr>
+<tr><td>要小心</td><td>勝利者書寫失敗者，可能不公平</td><td>可能以歐洲經驗為標準</td></tr></table></div>`},
+{h:"從帝王將相到普通人",html:`<p>傳統歷史多半寫國王、戰爭和條約。20 世紀以後，史學家越來越關心農民、女性、工人、兒童、少數族群、甚至疾病和氣候。你家族的故事、你家鄉市場的變遷，都可以是歷史研究的題目。</p>`}
+],
+terms:["史學史","紀傳體","編年體","年鑑學派","長時段","全球史","大歷史"],
+quiz:[
+{q:"《史記》開創的史書體裁是？",o:["編年體","紀傳體","紀事本末體"],a:1,why:"以本紀、列傳為主體，稱紀傳體。"},
+{q:"年鑑學派最主要的貢獻是？",o:["專寫帝王傳記","把研究焦點擴大到普通人、經濟與環境","發明碳十四定年"],a:1,why:"它把歷史研究從政治史擴展到社會史。"},
+{q:"蘭克建立的近代史學最重視什麼？",o:["以檔案史料為依據","文學性的描寫","預測未來"],a:0,why:"他強調依據原始檔案考證。"}
+]},
+
+/* ---------- 第 14 課 ---------- */
+{id:14, level:3, icon:"✍️", title:"動手做研究：寫出你的第一篇歷史小論文",
+goal:"學會從提出問題、蒐集史料到寫作與引用的完整研究流程。",
+secs:[
+{h:"研究不是抄資料，是回答問題",html:`<p>專業的歷史研究從一個<b>好問題</b>開始。好問題有三個特徵：範圍夠小、有史料可以回答、答案不是一查就知道。</p>`},
+{w:"classify",title:"練習：哪個是好的研究問題？",hint:"判斷每個題目是「好問題」還是「需要修改」。",cats:["好問題","需要修改"],items:[
+["第二次世界大戰",1,"只是主題，不是問題，而且範圍太大。"],
+["1950–1970 年代，我家鄉的市場販賣的商品有什麼變化？為什麼？",0,"範圍明確、可以訪談長輩和找老照片。"],
+["秦始皇是好人還是壞人？",1,"太籠統，可以改成「秦朝統一文字對後世有哪些影響？」"],
+["工業革命時期英國童工的工作條件為何引起改革？",0,"有明確焦點，也有大量史料可查。"],
+["恐龍為什麼滅絕？",1,"這是地質學與古生物學的問題，不是歷史學。"]]},
+{w:"chain",title:"研究的七個步驟",hint:"一步一步完成你的研究路線。",steps:[
+"❓ 提出問題：從好奇開始，把範圍縮小到可以回答",
+"📖 讀二手資料：先看別人研究過什麼，避免重複",
+"🗂️ 蒐集一手史料：檔案、報紙、照片、訪談長輩（口述歷史）",
+"🕵️ 考證史料：用上一課的六個問題檢驗每份資料",
+"💡 形成論點：用一句話回答你的問題，這就是你的主張",
+"✍️ 寫作論證：每個論點都要有證據支持，並處理反面證據",
+"🔗 註明出處：用註腳告訴讀者證據從哪來，讓別人可以檢查"]},
+{h:"論點與證據：寫作的骨架",html:`
+<p>一篇歷史小論文的基本結構：</p>
+<ol><li><b>前言</b>：你的問題是什麼？為什麼值得研究？</li><li><b>本文</b>：分成幾個段落，每段一個論點＋證據＋解釋</li><li><b>結論</b>：回答問題，說明研究的限制</li><li><b>參考資料</b>：列出所有用過的史料與書籍</li></ol>
+<div class="ex"><b>好段落的公式</b>　論點（我認為……）＋證據（根據 1965 年的報紙……）＋解釋（這顯示……）。只有證據沒有解釋，是資料堆積；只有論點沒有證據，是個人意見。</div>`},
+{h:"新工具：數位時代的史學家",html:`
+<p>[[數位人文]]讓研究者可以用電腦搜尋成千上萬份數位化的古籍和報紙、把人物移動路線畫在地圖上、分析詞彙的使用變化。</p>
+<div class="warn"><b>使用 AI 的提醒</b>　AI 工具可以幫你整理想法、找方向，但它可能會編造不存在的書或事件。任何 AI 給的事實和出處，都要回到原始史料查證，這正是你在這門課學到的史料批判精神。</div>`},
+{h:"恭喜你挖到最深處",html:`<p>你已經從「什麼是歷史」一路學到「怎麼研究歷史」。接下來，最好的練習是：挑一個你真正好奇的小問題，從身邊的長輩、老照片、地方文獻開始，寫下屬於你自己的第一篇歷史。</p>`}
+],
+terms:["數位人文","一手史料","二手史料"],
+quiz:[
+{q:"下列哪一個最適合當作研究問題？",o:["中國歷史","清末鴉片戰爭後，廣州的對外貿易有什麼變化？","古代很厲害嗎？"],a:1,why:"範圍明確、可用史料回答。"},
+{q:"一個好的論證段落應該包含？",o:["只有很多資料","論點、證據和解釋","只有個人感想"],a:1,why:"三者缺一不可。"},
+{q:"AI 給了你一本參考書的書名，你應該？",o:["直接引用","先查證這本書是否真的存在、內容是否相符","不用管出處"],a:1,why:"AI 可能編造資料，必須查證。"}
+]}
+];
+
+/* ===== 全局時間軸資料 ===== */
+const REGIONS = {"東亞":"#C8322F","南亞與東南亞":"#B8862E","西亞與北非":"#2F8F83","歐洲":"#3E63B8","美洲":"#8A4FB0","全球":"#4A5570"};
+const TIMELINE = [
+{era:"史前時代",evs:[["約 300 萬年前","人類祖先開始製作石器","全球"],["約 30 萬年前","現代人類（智人）出現於非洲","全球"],["約 7 萬年前起","智人大規模走出非洲、遍布各大洲","全球"],["約 1.2 萬年前","農業革命在肥沃月灣開始","西亞與北非"],["約 9 千年前","黃河、長江流域開始種植小米與稻米","東亞"]]},
+{era:"古代文明（前 3500–前 500）",evs:[["約前 3200","蘇美人發明楔形文字","西亞與北非"],["約前 3100","古埃及統一","西亞與北非"],["約前 2600","印度河流域城市興盛","南亞與東南亞"],["約前 1754","漢摩拉比法典","西亞與北非"],["約前 1300","商朝甲骨文","東亞"],["約前 1200","中美洲奧爾梅克文明興起","美洲"]]},
+{era:"古典時代（前 500–後 500）",evs:[["前 551","孔子出生","東亞"],["約前 500","釋迦牟尼在印度傳法","南亞與東南亞"],["前 508","雅典民主改革","歐洲"],["前 221","秦統一中國","東亞"],["前 27","羅馬進入帝國時期","歐洲"],["約 1 世紀","扶南王國在湄公河下游興起","南亞與東南亞"],["476","西羅馬帝國滅亡","歐洲"]]},
+{era:"中古世界（500–1400）",evs:[["618","唐朝建立","東亞"],["622","穆罕默德遷往麥地那，伊斯蘭曆元年","西亞與北非"],["802","吳哥王朝建立","南亞與東南亞"],["約 830","巴格達智慧宮翻譯運動興盛","西亞與北非"],["12 世紀","吳哥窟建成","南亞與東南亞"],["1206","成吉思汗建立蒙古帝國","東亞"],["1347","黑死病傳入歐洲","歐洲"],["約 1430","印加帝國開始擴張","美洲"]]},
+{era:"近代早期（1400–1750）",evs:[["1405","鄭和首次下西洋","東亞"],["約 1450","古騰堡活字印刷機","歐洲"],["1453","鄂圖曼帝國攻下君士坦丁堡","西亞與北非"],["1492","哥倫布抵達美洲","美洲"],["1517","馬丁·路德發起宗教改革","歐洲"],["1521","西班牙征服阿茲特克帝國","美洲"],["1687","牛頓發表萬有引力定律","歐洲"]]},
+{era:"革命的時代（1750–1914）",evs:[["約 1760","工業革命在英國開始","歐洲"],["1776","美國獨立宣言","美洲"],["1789","法國大革命","歐洲"],["1840","鴉片戰爭","東亞"],["1863","柬埔寨成為法國保護國","南亞與東南亞"],["1868","日本明治維新","東亞"],["1911","辛亥革命，清朝結束","東亞"]]},
+{era:"現代世界（1914–今）",evs:[["1914–1918","第一次世界大戰","全球"],["1939–1945","第二次世界大戰","全球"],["1945","聯合國成立","全球"],["1947","印度獨立；冷戰開始","南亞與東南亞"],["1953","柬埔寨脫離法國獨立","南亞與東南亞"],["1969","人類登陸月球","美洲"],["1991","蘇聯解體，冷戰結束","歐洲"],["1990 年代起","網際網路普及，全球化加速","全球"]]}
+];
+/* ===== 工具 ===== */
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const linkTerms=s=>String(s).replace(/\[\[(.+?)\]\]/g,(m,t)=>TERMS[t]?`<button class="t" data-term="${t}">${t}</button>`:t);
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let prog=store.get("hist-progress",{done:[]});
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("on");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("on"),1800)}
+function updProg(){$("#progBar").style.width=(prog.done.length/LESSONS.length*100)+"%"}
+function markDone(id){if(!prog.done.includes(id)){prog.done.push(id);store.set("hist-progress",prog);updProg();return true}return false}
+
+/* ===== 名詞彈窗 ===== */
+function openTerm(t){const d=TERMS[t];if(!d)return;
+  const used=LESSONS.filter(l=>l.terms.includes(t)).map(l=>`<a href="#/lesson/${l.id}">第 ${l.id} 課</a>`).join("、");
+  $("#sheetBody").innerHTML=`<h3>${t}</h3><div style="color:var(--ink2)">${esc(d.en)}</div>
+  <p><span class="lab">意思</span>${d.m}</p><p><span class="lab">由來</span>${d.o}</p>${used?`<p style="font-size:14px;color:var(--ink2)">出現在：${used}</p>`:""}`;
+  $("#sheetBg").style.display="block";requestAnimationFrame(()=>$("#sheet").classList.add("on"));$("#sheetX").focus()}
+function closeSheet(){$("#sheet").classList.remove("on");setTimeout(()=>$("#sheetBg").style.display="none",250)}
+$("#sheetBg").onclick=closeSheet;$("#sheetX").onclick=closeSheet;
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeSheet()});
+document.addEventListener("click",e=>{const b=e.target.closest(".t");if(b){e.preventDefault();openTerm(b.dataset.term)}
+  const g=e.target.closest("[data-go]");if(g){location.hash="#/"+g.dataset.go}});
+$("#sheet").addEventListener("click",e=>{if(e.target.closest("a"))closeSheet()});
+
+/* ===== 首頁 ===== */
+function renderHome(){
+  const strata=LEVELS.map(L=>{
+    const ls=LESSONS.filter(l=>l.level===L.id).map(l=>`<a class="find" href="#/lesson/${l.id}" style="text-decoration:none">
+      ${prog.done.includes(l.id)?'<span class="seal">已<br>習</span>':""}<span class="n">第 ${l.id} 課</span><span class="ic">${l.icon}</span><span class="tt">${l.title}</span></a>`).join("");
+    return `<section class="stratum ${L.cls}"><div class="s-head"><h2>${L.name}</h2><span>${L.sub}</span></div><div class="depth">${L.depth}</div><div class="finds">${ls}</div></section>`}).join("");
+  const n=prog.done.length;
+  return `<div class="hero"><h1>挖掘時間</h1><p>一門從零開始的歷史課。像考古學家一樣，從地表往下挖：先學會看懂時間和證據，再走過人類文明的大旅程，最後學會像史學家一樣思考和研究。</p></div>
+  <div class="shaft">${strata}</div>
+  <p style="font-size:15px;color:var(--ink2)">${n?`已完成 ${n} / ${LESSONS.length} 課。每完成一課的小測驗，就會蓋上一枚「已習」印章。`:`共 ${LESSONS.length} 課。每課最後有小測驗，答對就能蓋上「已習」印章。建議從第 1 課依序往下挖。`}</p>
+  <div class="home-links">
+    <button class="hl" data-go="timeline"><b>世界大時間軸</b><small>一條線看完人類幾百萬年，可以依地區篩選</small></button>
+    <button class="hl" data-go="glossary"><b>名詞庫</b><small>${Object.keys(TERMS).length} 個專有名詞的意思與由來</small></button>
+  </div>
+  <p class="howto">使用方式：文章中<button class="t" data-term="歷史">畫虛線的詞</button>可以點開，看它的意思和名字的由來。學習進度只存在這台裝置的瀏覽器裡。${n?` <button class="btn" id="resetBtn" style="margin-left:6px">清除進度</button>`:""}</p>`}
+
+/* ===== 課程頁 ===== */
+function renderLesson(id){window.AC_COURSE_GO=function(v){renderLesson(v)};window.AC_COURSE_POSITION=id;
+  const l=LESSONS.find(x=>x.id===id);if(!l)return renderHome();
+  const L=LEVELS.find(x=>x.id===l.level);
+  const body=l.secs.map((s,i)=>s.w?`<div class="widget" data-w="${s.w}" data-i="${i}"></div>`:`<section class="sec"><h3>${s.h}</h3>${linkTerms(s.html)}</section>`).join("");
+  const terms=l.terms.map(t=>{const d=TERMS[t];return `<details class="term"><summary><span class="w">${t}</span><span class="en">${esc(d.en)}</span></summary><div class="body"><div><span class="lab">意思</span>${d.m}</div><div><span class="lab">由來</span>${d.o}</div></div></details>`}).join("");
+  const quiz=l.quiz.map((q,qi)=>`<div class="q" data-q="${qi}"><p>${qi+1}. ${q.q}</p>${q.o.map((o,oi)=>`<button class="opt" data-o="${oi}">${o}</button>`).join("")}<div class="why"></div></div>`).join("");
+  const prev=LESSONS.find(x=>x.id===id-1),next=LESSONS.find(x=>x.id===id+1);
+  return `<div class="crumb">${L.name}　第 ${l.id} 課 / 共 ${LESSONS.length} 課</div>
+  <h1 class="l-title">${l.icon} ${l.title}</h1><div class="goal">${l.goal}</div>${body}
+  <section class="sec"><h3>本課名詞卡</h3><p style="font-size:15px;color:var(--ink2);margin:0">點開卡片，看每個詞的意思和由來。</p><div class="terms">${terms}</div></section>
+  <section class="quiz" id="quiz"><h3>小測驗</h3><p style="font-size:15px;color:var(--ink2);margin:4px 0 0">答對 ${Math.ceil(l.quiz.length*2/3)} 題以上就完成這一課。</p>${quiz}<div id="qres"></div></section>
+  <nav class="pager">${prev?`<a class="btn" href="#/lesson/${prev.id}">上一課：${prev.title}</a>`:"<span></span>"}${next?`<a class="btn pri" href="#/lesson/${next.id}">下一課：${next.title}</a>`:`<a class="btn pri" href="#/exam">去做總測驗</a>`}</nav>`}
+
+function bindQuiz(root,qs,onFinish){
+  let answered=0,right=0;
+  root.querySelectorAll(".q").forEach(qel=>{const q=qs[+qel.dataset.q];
+    qel.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{if(qel.dataset.done)return;qel.dataset.done=1;answered++;
+      const oi=+b.dataset.o;const ok=oi===q.a;if(ok)right++;
+      qel.querySelectorAll(".opt").forEach(x=>{x.disabled=true;if(+x.dataset.o===q.a)x.classList.add("ok")});if(!ok)b.classList.add("no");
+      qel.querySelector(".why").innerHTML=(ok?"✅ 答對了！":"❌ 再想想。")+" "+linkTerms(q.why);
+      if(answered===qs.length)onFinish(right)})})}
+
+function afterLesson(id){
+  const l=LESSONS.find(x=>x.id===id);
+  document.querySelectorAll(".widget").forEach(w=>{const s=l.secs[+w.dataset.i];WIDGETS[s.w](w,s)});
+  const need=Math.ceil(l.quiz.length*2/3);
+  bindQuiz($("#quiz"),l.quiz,right=>{const r=$("#qres");
+    if(right>=need){const first=markDone(id);
+      r.innerHTML=`<div class="done-box"><span class="seal ${first&&!reduce?"pop":""}">已<br>習</span><div><b>答對 ${right} / ${l.quiz.length} 題，完成第 ${id} 課！</b><br><span style="font-size:15px;color:var(--ink2)">這枚印章會出現在課程地圖上。</span></div></div>`}
+    else r.innerHTML=`<div class="done-box"><div><b>答對 ${right} / ${l.quiz.length} 題</b>，還差一點。回頭看看上面的內容，再試一次。<br><button class="btn" id="retry" style="margin-top:8px">重新作答</button></div></div>`;
+    const rt=$("#retry");if(rt)rt.onclick=()=>{render();setTimeout(()=>$("#quiz").scrollIntoView(),30)}})}
+
+/* ===== 時間軸頁 ===== */
+let tlFilter="全部";
+function renderTimeline(){
+  const chips=["全部",...Object.keys(REGIONS)].map(r=>`<button class="chip ${r===tlFilter?"on":""}" data-rg="${r}">${r}</button>`).join("");
+  const body=TIMELINE.map(E=>{const evs=E.evs.filter(e=>tlFilter==="全部"||e[2]===tlFilter);if(!evs.length)return "";
+    return `<div class="era">${E.era}</div>`+evs.map(e=>`<div class="ev" style="--rc:${REGIONS[e[2]]}"><span class="y">${e[0]}</span>${e[1]}<span class="rg">${e[2]}</span></div>`).join("")}).join("");
+  return `<h1 class="l-title">世界大時間軸</h1><p style="color:var(--ink2)">同一個時期，世界不同地方在發生什麼？選一個地區篩選，或看「全部」做橫向比較。</p>
+  <div class="chips" id="rgChips">${chips}</div><div class="tl">${body}</div>
+  <p style="font-size:14px;color:var(--ink2);margin-top:20px">「約」表示年代是學者推估，不同研究可能有些差距。</p>`}
+
+/* ===== 名詞庫頁 ===== */
+function renderGlossary(){
+  return `<h1 class="l-title">名詞庫</h1><p style="color:var(--ink2)">每個名詞都附上意思和由來。知道一個詞怎麼來的，就更容易記住它。</p>
+  <input class="search" id="gq" type="search" placeholder="搜尋名詞，例如：革命、民主、civilization" aria-label="搜尋名詞">
+  <div class="terms" id="glist"></div>`}
+function fillGlossary(q=""){
+  q=q.trim().toLowerCase();
+  const html=Object.entries(TERMS).filter(([k,d])=>!q||(k+d.en+d.m+d.o).toLowerCase().includes(q)).map(([k,d])=>`<details class="term"><summary><span class="w">${k}</span><span class="en">${esc(d.en)}</span></summary><div class="body"><div><span class="lab">意思</span>${d.m}</div><div><span class="lab">由來</span>${d.o}</div></div></details>`).join("");
+  $("#glist").innerHTML=html||`<p>找不到「${esc(q)}」。試試較短的關鍵字，或英文名稱。</p>`}
+
+/* ===== 總測驗 ===== */
+let examSet=[];
+function renderExam(){
+  const all=LESSONS.flatMap(l=>l.quiz.map(q=>({...q,from:l.id})));
+  examSet=all.sort(()=>Math.random()-.5).slice(0,12);
+  return `<h1 class="l-title">總測驗</h1><p style="color:var(--ink2)">從全部 ${LESSONS.length} 課隨機抽 12 題。答對 10 題以上，就能拿到結業印章。每次進來題目都不一樣。</p>
+  <section class="quiz" id="exam">${examSet.map((q,qi)=>`<div class="q" data-q="${qi}"><p>${qi+1}. ${q.q} <span style="font-weight:400;font-size:13px;color:var(--ink2)">（第 ${q.from} 課）</span></p>${q.o.map((o,oi)=>`<button class="opt" data-o="${oi}">${o}</button>`).join("")}<div class="why"></div></div>`).join("")}<div id="eres"></div></section>`}
+function afterExam(){bindQuiz($("#exam"),examSet,right=>{const pass=right>=10;if(pass)store.set("hist-graduated",true);
+  $("#eres").innerHTML=`<div class="done-box">${pass?`<span class="seal ${reduce?"":"pop"}" style="width:64px;height:64px;font-size:20px">結<br>業</span>`:""}<div><b>答對 ${right} / ${examSet.length} 題</b><br>${pass?"你已經從地表挖到最深處。接下來，試著挑一個自己好奇的小問題開始研究吧。":"把答錯題目標示的那一課再讀一次，然後重新測驗。"}<br><button class="btn" id="again" style="margin-top:8px">換一組題目</button></div></div>`;
+  $("#again").onclick=()=>{render();scrollTo(0,0)}})}
+
+/* ===== 路由 ===== */
+function render(){
+  const h=location.hash.replace(/^#\/?/,"")||"home";const [page,arg]=h.split("/");
+  document.querySelectorAll(".nav[data-go]").forEach(n=>n.classList.toggle("on",n.dataset.go===(page==="lesson"?"home":page)));
+  const app=$("#app");
+  if(page==="lesson"){app.innerHTML=renderLesson(+arg);afterLesson(+arg);document.title=LESSONS.find(l=>l.id===+arg).title+"｜挖掘時間"}
+  else if(page==="timeline"){app.innerHTML=renderTimeline();$("#rgChips").onclick=e=>{const c=e.target.closest(".chip");if(c){tlFilter=c.dataset.rg;render()}};document.title="世界大時間軸｜挖掘時間"}
+  else if(page==="glossary"){app.innerHTML=renderGlossary();fillGlossary();$("#gq").oninput=e=>fillGlossary(e.target.value);document.title="名詞庫｜挖掘時間"}
+  else if(page==="exam"){app.innerHTML=renderExam();afterExam();document.title="總測驗｜挖掘時間"}
+  else{app.innerHTML=renderHome();document.title="挖掘時間：從零開始的歷史課";const rb=$("#resetBtn");if(rb)rb.onclick=()=>{if(confirm("確定清除所有學習進度和印章？")){prog={done:[]};store.set("hist-progress",prog);updProg();render()}}}}
+addEventListener("hashchange",()=>{render();scrollTo(0,0)});
+
+/* ===== 深淺色 ===== */
+(function(){const t=store.get("hist-theme",null);if(t)document.documentElement.dataset.theme=t;
+  $("#themeBtn").onclick=()=>{const cur=document.documentElement.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+    const nx=cur==="dark"?"light":"dark";document.documentElement.dataset.theme=nx;store.set("hist-theme",nx);toast(nx==="dark"?"深色模式":"淺色模式")}})();
+/* ===== 互動元件 ===== */
+const fmtY=n=>n>=1e8?(n/1e8).toFixed(n%1e8?1:0)+" 億":n>=1e4?(n/1e4).toLocaleString("zh-Hant",{maximumFractionDigits:1})+" 萬":n.toLocaleString("zh-Hant");
+const WIDGETS={
+dayclock(el){
+  const EV=[["地球誕生",4.6e9],["最早的生命",3.8e9],["恐龍出現",2.3e8],["恐龍滅絕",6.6e7],["人類祖先開始用石器",3.3e6],["現代人類（智人）出現",3e5],["農業開始",1.2e4],["文字發明",5200],["工業革命",265]];
+  el.innerHTML=`<h4>如果地球的歷史只有一天</h4><p class="hint">把 46 億年壓縮成 24 小時，點選事件，看它發生在幾點。</p>
+  <div class="row" style="align-items:flex-start;gap:16px"><svg viewBox="0 0 200 200" width="170" height="170" aria-hidden="true">
+  <circle cx="100" cy="100" r="92" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/>
+  ${Array.from({length:24},(_,i)=>{const a=i/24*2*Math.PI;return `<line x1="${100+80*Math.sin(a)}" y1="${100-80*Math.cos(a)}" x2="${100+(i%6?86:74)*Math.sin(a)}" y2="${100-(i%6?86:74)*Math.cos(a)}" stroke="var(--ink2)" stroke-width="${i%6?1:2.5}"/>`}).join("")}
+  <text x="100" y="40" text-anchor="middle" font-size="12" fill="var(--ink2)">0 / 24 時</text><text x="165" y="104" text-anchor="middle" font-size="12" fill="var(--ink2)">6</text><text x="100" y="170" text-anchor="middle" font-size="12" fill="var(--ink2)">12</text><text x="35" y="104" text-anchor="middle" font-size="12" fill="var(--ink2)">18</text>
+  <g id="dcHand" style="transform-origin:100px 100px;transition:transform 1.4s cubic-bezier(.3,.7,.2,1)"><line x1="100" y1="100" x2="100" y2="22" stroke="var(--cinnabar)" stroke-width="4" stroke-linecap="round"/></g><circle cx="100" cy="100" r="6" fill="var(--cinnabar)"/></svg>
+  <div class="chips" style="flex:1 1 200px">${EV.map((e,i)=>`<button class="chip" data-i="${i}">${e[0]}</button>`).join("")}</div></div><div class="out">點一個事件開始。</div>`;
+  const hand=el.querySelector("#dcHand"),out=el.querySelector(".out");let turns=0,last=0;
+  el.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{const [n,y]=EV[+c.dataset.i];el.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x===c));
+    const sec=86400*(1-y/4.6e9),left=86400-sec;const deg=sec/86400*360;
+    hand.style.transform=`rotate(${deg}deg)`;
+    const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=(sec%60);
+    const t=`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${s.toFixed(left<60?2:0).padStart(left<60?5:2,"0")}`;
+    out.innerHTML=`<b>${n}</b>（約 ${fmtY(y)} 年前）<br>發生在 <b style="font-size:20px;font-family:var(--serif)">${t}</b><br><span style="color:var(--ink2);font-size:15px">距離午夜只剩 ${left<1?left.toFixed(2):left<60?left.toFixed(1):Math.round(left).toLocaleString()} 秒${left<60?"，指針看起來已經貼在 12 點上了":""}。</span>`})},
+
+century(el){
+  el.innerHTML=`<h4>年份換算器</h4><p class="hint">輸入年份，看看它屬於哪個世紀；下方的數線說明為什麼沒有 0 年。</p>
+  <div class="row"><select class="num" id="ce" style="width:auto"><option value="1">西元</option><option value="-1">西元前</option></select><input class="num" id="cy" type="number" min="1" value="1945" inputmode="numeric" aria-label="年份"><span>年</span></div>
+  <div class="out" id="co"></div>
+  <svg viewBox="0 0 340 70" style="width:100%;max-width:460px;margin-top:10px" aria-label="西元前三年到西元三年的數線">
+  <line x1="10" y1="35" x2="330" y2="35" stroke="var(--ink2)" stroke-width="2"/>
+  ${["前3","前2","前1","1","2","3"].map((t,i)=>`<g><circle cx="${30+i*56}" cy="35" r="${i===2||i===3?7:5}" fill="${i<3?"var(--gold)":"var(--bronze)"}"/><text x="${30+i*56}" y="62" text-anchor="middle" font-size="13" fill="var(--ink)">${t}</text></g>`).join("")}
+  <path d="M142 26 Q170 -2 198 26" fill="none" stroke="var(--cinnabar)" stroke-width="2" stroke-dasharray="4 3"/><text x="170" y="12" text-anchor="middle" font-size="11" fill="var(--cinnabar)">直接跳過，沒有 0 年</text></svg>`;
+  const f=()=>{const y=Math.abs(parseInt(el.querySelector("#cy").value)||0),bc=el.querySelector("#ce").value==="-1",o=el.querySelector("#co");
+    if(!y){o.textContent="請輸入 1 以上的年份。";return}
+    const c=Math.ceil(y/100),s=(c-1)*100+1,e=c*100;
+    o.innerHTML=bc?`西元前 ${y} 年屬於 <b>西元前 ${c} 世紀</b>（西元前 ${e}–前 ${s} 年）。<br><span style="font-size:15px;color:var(--ink2)">距離 2026 年約 ${y+2026-1} 年（因為沒有 0 年，要減 1）。</span>`
+      :`西元 ${y} 年屬於 <b>${c} 世紀</b>（${s}–${e} 年）。<br><span style="font-size:15px;color:var(--ink2)">口訣：${y%100===0?`${y} 是整百年，${Math.floor(y/100)} 不用加 1`:`去掉後兩位得 ${Math.floor(y/100)}，再加 1`}。</span>`};
+  el.querySelector("#cy").oninput=f;el.querySelector("#ce").onchange=f;f()},
+
+c14(el){
+  const N=200;el.innerHTML=`<h4>碳十四衰變模擬</h4><p class="hint">每一點代表原本的碳十四原子。拖動時間，或按「播放」，看它們怎麼慢慢減少。</p>
+  <div class="gridDots">${"<i></i>".repeat(N)}</div>
+  <div style="margin-top:12px"><input type="range" id="cr" min="0" max="40000" step="100" value="0" aria-label="經過年數"></div>
+  <div class="row"><button class="btn pri" id="cp">播放</button><span id="cv"></span></div><div class="out" id="cx"></div>`;
+  const dots=[...el.querySelectorAll(".gridDots i")];const order=dots.map((_,i)=>i).sort(()=>Math.random()-.5);
+  const r=el.querySelector("#cr");
+  const f=()=>{const t=+r.value,p=Math.pow(.5,t/5730),keep=Math.round(N*p);
+    order.forEach((d,k)=>dots[d].classList.toggle("gone",k>=keep));
+    el.querySelector("#cv").textContent=`經過 ${t.toLocaleString()} 年`;
+    el.querySelector("#cx").innerHTML=`剩下 <b>${(p*100).toFixed(1)}%</b>（${keep} / ${N} 顆）。${t>=5730?` 已經過了 ${(t/5730).toFixed(1)} 個半衰期。`:""}${t>=40000?"<br>剩下的量已經很少，所以碳十四只能測到大約 5 萬年內的東西。":""}`};
+  r.oninput=f;f();let timer;
+  el.querySelector("#cp").onclick=e=>{if(timer){clearInterval(timer);timer=null;e.target.textContent="播放";return}
+    if(+r.value>=40000)r.value=0;e.target.textContent="暫停";timer=setInterval(()=>{r.value=+r.value+400;f();if(+r.value>=40000){clearInterval(timer);timer=null;e.target.textContent="播放"}},90)}},
+
+yearcal(el){
+  const Y=300000,EV=[["現代人類出現",300000],["走出非洲",70000],["農業開始",12000],["文字發明",5200],["秦始皇統一",2247],["哥倫布抵達美洲",534],["工業革命",265],["人類登月",57]];
+  el.innerHTML=`<h4>如果智人的歷史只有一年</h4><p class="hint">把現代人類 30 萬年的歷史壓縮成 1 月 1 日到 12 月 31 日午夜。</p>
+  <div class="chips">${EV.map((e,i)=>`<button class="chip" data-i="${i}">${e[0]}</button>`).join("")}</div>
+  <div style="position:relative;height:36px;margin:16px 4px 4px;border-radius:6px;background:linear-gradient(90deg,var(--l1),var(--l2),var(--l3))"><div id="ym" style="position:absolute;top:-6px;width:4px;height:48px;background:var(--cinnabar);border-radius:2px;left:0;transition:left 1s"></div></div>
+  <div class="row" style="justify-content:space-between;font-size:13px;color:var(--ink2)"><span>1 月 1 日</span><span>7 月</span><span>12 月 31 日</span></div><div class="out">點一個事件。</div>`;
+  const out=el.querySelector(".out");
+  el.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{const [n,y]=EV[+c.dataset.i];el.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x===c));
+    const frac=1-y/Y;el.querySelector("#ym").style.left=`calc(${frac*100}% - 2px)`;
+    const d=new Date(2025,0,1);d.setTime(d.getTime()+frac*365*864e5);
+    const leftMin=(y/Y)*365*24*60;
+    out.innerHTML=`<b>${n}</b>（約 ${fmtY(y)} 年前）落在 <b style="font-family:var(--serif);font-size:20px">${d.getMonth()+1} 月 ${d.getDate()} 日 ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}</b><br><span style="font-size:15px;color:var(--ink2)">${leftMin<60*24?`距離跨年只剩約 ${leftMin<60?Math.round(leftMin)+" 分鐘":(leftMin/60).toFixed(1)+" 小時"}。`:`距離跨年還有約 ${Math.round(leftMin/1440)} 天。`}${y<=12000?" 也就是說，有文明的日子只佔這一年的最後幾天。":""}</span>`})},
+
+writing(el){
+  const S=[["日","sun",'<circle cx="50" cy="50" r="30" fill="var(--gold)"/><g stroke="var(--gold)" stroke-width="5" stroke-linecap="round"><line x1="50" y1="6" x2="50" y2="14"/><line x1="50" y1="86" x2="50" y2="94"/><line x1="6" y1="50" x2="14" y2="50"/><line x1="86" y1="50" x2="94" y2="50"/></g>','<circle cx="50" cy="50" r="28" fill="none" stroke="var(--ink)" stroke-width="5"/><line x1="40" y1="50" x2="60" y2="50" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/>'],
+  ["月","moon",'<path d="M62 12 A38 38 0 1 0 62 88 A30 30 0 1 1 62 12Z" fill="var(--gold)"/>','<path d="M60 14 A36 36 0 1 0 60 86 A28 28 0 1 1 60 14Z" fill="none" stroke="var(--ink)" stroke-width="5"/><line x1="36" y1="50" x2="46" y2="50" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/>'],
+  ["山","mountain",'<path d="M5 88 L28 40 L42 62 L55 18 L72 60 L82 44 L95 88Z" fill="var(--bronze)"/><path d="M50 30 L55 18 L60 30Z" fill="#fff"/>','<path d="M15 80 L15 45 M50 80 L50 20 M85 80 L85 45 M12 80 L88 80" fill="none" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/>'],
+  ["水","water",'<path d="M5 30 Q20 15 35 30 T65 30 T95 30 M5 55 Q20 40 35 55 T65 55 T95 55 M5 80 Q20 65 35 80 T65 80 T95 80" fill="none" stroke="#3E83C8" stroke-width="7" stroke-linecap="round"/>','<path d="M50 10 Q60 30 50 50 T50 90 M25 25 L32 35 M25 65 L32 55 M75 25 L68 35 M75 65 L68 55" fill="none" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/>'],
+  ["人","person",'<circle cx="55" cy="20" r="11" fill="var(--l2)"/><path d="M55 32 L48 60 L40 92 M48 60 L62 92 M53 40 L30 58" fill="none" stroke="var(--l2)" stroke-width="8" stroke-linecap="round"/>','<path d="M60 12 Q52 50 30 88 M48 52 Q60 66 72 88" fill="none" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/>'],
+  ["木","tree",'<rect x="44" y="55" width="12" height="38" fill="var(--l2)"/><circle cx="50" cy="38" r="28" fill="var(--bronze)"/>','<path d="M50 8 L50 92 M20 38 L80 38 M50 42 L22 78 M50 42 L78 78" fill="none" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/>']];
+  const stages=["① 看到的東西","② 簡化成線條（類似甲骨文）","③ 今天的漢字"];
+  el.innerHTML=`<h4>文字的演變：從圖畫到符號</h4><p class="hint">選一個字，按「下一階段」看它怎麼從圖畫變成文字。</p>
+  <div class="chips">${S.map((s,i)=>`<button class="chip ${i?"":"on"}" data-i="${i}">${s[0]}</button>`).join("")}</div>
+  <div class="row" style="margin-top:12px;gap:16px"><div id="wbox" style="width:140px;height:140px;border-radius:12px;background:var(--paper);display:grid;place-items:center;transition:opacity .3s"></div>
+  <div><div id="wst" style="font-family:var(--serif);font-size:18px"></div><button class="btn pri" id="wn" style="margin-top:8px">下一階段</button></div></div>
+  <p style="font-size:15px;color:var(--ink2);margin:12px 0 0">這種「照著樣子畫」的造字法叫「象形」。不過漢字大多數其實是「形聲字」，一半表意思、一半表讀音，例如「河」＝水（意思）＋可（讀音）。</p>`;
+  let cur=0,st=0;const box=el.querySelector("#wbox");
+  const draw=()=>{box.style.opacity=0;setTimeout(()=>{const s=S[cur];box.innerHTML=st<2?`<svg viewBox="0 0 100 100" width="110" height="110">${s[st+2]}</svg>`:`<span style="font-family:var(--serif);font-size:96px;line-height:1">${s[0]}</span>`;box.style.opacity=1},reduce?0:200);
+    el.querySelector("#wst").textContent=stages[st];el.querySelector("#wn").textContent=st<2?"下一階段":"重新開始"};
+  el.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{cur=+c.dataset.i;st=0;el.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x===c));draw()});
+  el.querySelector("#wn").onclick=()=>{st=(st+1)%3;draw()};draw()},
+
+compare(el,s){
+  el.innerHTML=`<h4>${s.title}</h4><p class="hint">${s.hint}</p><div class="chips">${s.tabs.map((t,i)=>`<button class="chip ${i?"":"on"}" data-i="${i}">${t.n}</button>`).join("")}</div><div class="out" id="cmp"></div>`;
+  const show=i=>{el.querySelector("#cmp").innerHTML=`<table style="min-width:0">${s.tabs[i].rows.map(r=>`<tr><th style="width:36%">${r[0]}</th><td>${r[1]}</td></tr>`).join("")}</table>`;el.querySelectorAll(".chip").forEach((x,k)=>x.classList.toggle("on",k===i))};
+  el.querySelectorAll(".chip").forEach(c=>c.onclick=()=>show(+c.dataset.i));show(0)},
+
+chain(el,s){
+  el.innerHTML=`<h4>${s.title}</h4><p class="hint">${s.hint}</p><div class="chainv">${s.steps.map((t,i)=>`${i?'<div class="arrow">↓</div>':""}<div class="link">${t}</div>`).join("")}</div><div class="row" style="margin-top:12px"><button class="btn pri" id="cn">第一步</button><button class="btn" id="cr">重來</button></div>`;
+  const links=[...el.querySelectorAll(".link")],arrows=[...el.querySelectorAll(".arrow")];let k=0;
+  const nb=el.querySelector("#cn");
+  nb.onclick=()=>{if(k>=links.length)return;if(k)arrows[k-1].classList.add("on");const L=links[k];L.style.display="block";requestAnimationFrame(()=>L.classList.add("on"));k++;
+    nb.textContent=k>=links.length?"全部揭曉":"下一步";nb.disabled=k>=links.length};
+  el.querySelector("#cr").onclick=()=>{k=0;links.forEach(l=>{l.classList.remove("on");l.style.display=""});arrows.forEach(a=>a.classList.remove("on"));nb.disabled=false;nb.textContent="第一步"}},
+
+timeline(el,s){
+  el.innerHTML=`<h4>${s.title}</h4><p class="hint">${s.hint}</p><div class="tl" style="margin-top:4px">${s.evs.map((e,i)=>`<button class="ev" data-i="${i}" style="display:block;width:100%;text-align:left"><span class="y">${e[0]}</span>${e[1]}</button>`).join("")}</div><div class="out" id="tlo">點一個事件看說明。</div>`;
+  const o=el.querySelector("#tlo");
+  el.querySelectorAll(".ev").forEach(b=>b.onclick=()=>{const e=s.evs[+b.dataset.i];el.querySelectorAll(".ev").forEach(x=>x.style.borderColor=x===b?"var(--bronze)":"");
+    o.innerHTML=`<b>${e[0]}　${e[1]}</b><br>${linkTerms(e[2])}`;
+    if(innerWidth<700)o.scrollIntoView({behavior:reduce?"auto":"smooth",block:"nearest"})})},
+
+classify(el,s){
+  el.innerHTML=`<h4>${s.title}</h4><p class="hint">${s.hint}</p><div class="cls">${s.items.map((it,i)=>`<div class="c" data-i="${i}"><span>${it[0]}</span>${s.cats.map((c,ci)=>`<button class="btn" data-c="${ci}">${c}</button>`).join("")}<div class="why" style="flex-basis:100%;display:none"></div></div>`).join("")}</div><div class="out" id="clo">已完成 0 / ${s.items.length}</div>`;
+  let done=0,right=0;
+  el.querySelectorAll(".c").forEach(row=>row.querySelectorAll("button").forEach(b=>b.onclick=()=>{if(row.dataset.d)return;row.dataset.d=1;done++;
+    const it=s.items[+row.dataset.i],ok=+b.dataset.c===it[1];if(ok)right++;row.classList.add(ok?"ok":"no");
+    row.querySelectorAll("button").forEach(x=>{x.disabled=true;if(+x.dataset.c===it[1])x.classList.add("pri")});
+    const w=row.querySelector(".why");w.style.display="block";w.textContent=(ok?"✅ ":"❌ 答案是「"+s.cats[it[1]]+"」。")+it[2];
+    el.querySelector("#clo").textContent=`已完成 ${done} / ${s.items.length}，答對 ${right} 題`}))},
+
+anachronism(el){
+  const P=[["商人",0,"唐代長安有來自各地的商人。"],["駱駝",0,"駱駝是絲路上重要的運輸動物。"],["口袋裡的手機",1,"手機是 20 世紀末才普及的。"],["絲綢",0,"絲綢正是當時的重要商品。"],["一杯珍珠奶茶",1,"珍珠奶茶是 1980 年代的發明。"],["胡人樂師",0,"唐代有很多中亞、西亞來的「胡人」。"],["琵琶",0,"琵琶經西域傳入，唐代非常流行。"],["烤玉米",1,"玉米原產美洲，要到 1492 年後的哥倫布大交換才傳到亞洲。"],["毛筆",0,"毛筆是中國傳統書寫工具。"],["科舉",0,"科舉從隋朝開始，唐朝已經實施。"],["電子鐘",1,"電子鐘是 20 世紀的產物。"],["眼鏡",1,"眼鏡在 13 世紀的義大利才出現，傳入中國約在明朝。"]];
+  const tpl=`西元 750 年的長安西市，一位{0}牽著{1}走進市場，這時{2}響了起來。他放下一捆{3}，買了{4}，一邊喝一邊看{5}彈奏{6}。路邊有人在賣{7}，一位書生正用{8}抄寫詩文，準備參加{9}。街角的{10}顯示下午三點，一位老先生推了推鼻樑上的{11}。`;
+  const total=P.filter(p=>p[1]).length;
+  el.innerHTML=`<h4>時代錯置大挑戰</h4><p class="hint">這段描述藏了 ${total} 個不屬於唐朝的東西，點出來！（畫虛線的都可以點）</p>
+  <div class="scene">${tpl.replace(/\{(\d+)\}/g,(m,i)=>`<button data-i="${i}">${P[i][0]}</button>`)}</div><div class="out" id="ano">找到 0 / ${total}</div>`;
+  let found=0;const o=el.querySelector("#ano");
+  el.querySelectorAll(".scene button").forEach(b=>b.onclick=()=>{const p=P[+b.dataset.i];
+    if(p[1]){if(!b.classList.contains("hit")){b.classList.add("hit");found++}o.innerHTML=`✅ 抓到了！${p[2]}<br><b>找到 ${found} / ${total}</b>${found===total?"　全部找到了！":""}`}
+    else{b.classList.add("miss");o.innerHTML=`這個沒問題：${p[2]}<br><b>找到 ${found} / ${total}</b>`}})},
+
+sources(el){
+  const A=[["甲：將軍給皇帝的奏報（戰後第三天）","臣率軍於河口大破敵軍，斬首三千，敵人狼狽逃竄。我軍將士奮勇，傷亡甚微。全賴陛下洪福。"],
+  ["乙：一名士兵寫給母親的信（戰後一週）","娘，我還活著。那天從早打到晚，同營的阿福、老張都沒回來，我們營少了快一半的人。敵人天黑後退走了。這幾天糧食不夠，每天只有一碗稀粥。"],
+  ["丙：敵國的史書（五十年後編寫）","我軍在河口與敵交戰，為保存實力，主將下令夜間有序撤退，損失不大。"]];
+  const Q=[{q:"三份史料都同意的事是什麼？",o:["敵軍損失三千人","戰爭發生在河口，戰後敵軍離開了戰場","將軍的軍隊傷亡很少"],a:1,why:"交叉比對後，共同點最可能是事實：地點和敵軍撤離。"},
+  {q:"關於「將軍部隊的傷亡」，哪份史料可能比較可信？為什麼？",o:["甲，因為將軍官位最高","乙，因為士兵親身在場，寫私人信件沒有必要美化","丙，因為時間最晚、資料最完整"],a:1,why:"將軍向皇帝報告有誇大戰功的動機；士兵寫家書則沒有這種壓力。但乙也只看到自己營的情況，仍需其他證據。"},
+  {q:"史料丙最大的問題是什麼？",o:["它是敵國寫的，而且在五十年後才寫，可能替自己的失敗找理由","它的字太少","它沒有提到皇帝"],a:0,why:"丙是二手、晚出，又有維護自己國家形象的立場，「主動撤退」可能是美化說法。"}];
+  el.innerHTML=`<h4>史料偵探：河口之戰</h4><p class="hint">這是一場虛構的戰役，有三份說法不同的史料。先讀完，再回答問題。</p>
+  ${A.map(a=>`<div class="ex" style="background:var(--paper)"><b style="color:var(--ink)">${a[0]}</b><br>${a[1]}</div>`).join("")}
+  <div id="srcq">${Q.map((q,qi)=>`<div class="q" data-q="${qi}"><p>${q.q}</p>${q.o.map((o,oi)=>`<button class="opt" data-o="${oi}">${o}</button>`).join("")}<div class="why"></div></div>`).join("")}</div>
+  <div class="out" id="srco">回答完三題後，這裡會出現偵探總結。</div>`;
+  bindQuiz(el.querySelector("#srcq"),Q,r=>{el.querySelector("#srco").innerHTML=`答對 ${r} / 3。<b>偵探總結</b>：沒有一份史料是完全中立的。把它們放在一起比對，問「誰寫的、何時寫的、為什麼寫」，就能拼出最接近真相的樣子：這場戰役雙方都損失慘重，敵軍最後撤離。`})},
+
+silkroad(el){
+  const C=[["長安",330,120,"唐朝首都，人口百萬，西市聚集了來自各地的商人。絲路東方的起點。"],["敦煌",268,95,"沙漠中的綠洲城市。莫高窟保存了大量佛教壁畫與經書，是東西文化交會的寶庫。"],["撒馬爾罕",185,82,"中亞粟特人的商業中心。粟特商人是絲路上最活躍的中間商。"],["巴格達",112,112,"阿拔斯王朝首都，智慧宮在此翻譯古希臘著作。751 年後，造紙術從這一帶傳往西方。"],["君士坦丁堡",62,72,"拜占庭帝國首都（今伊斯坦堡），連接歐洲與亞洲的樞紐。"],["威尼斯",18,58,"義大利商業城市，把東方貨物轉賣到整個歐洲。馬可波羅就是威尼斯人。"]];
+  const pts=C.map(c=>[c[1],c[2]]);
+  let d=`M${pts[0][0]} ${pts[0][1]}`;for(let i=1;i<pts.length;i++){const [x0,y0]=pts[i-1],[x1,y1]=pts[i];d+=` Q${(x0+x1)/2} ${Math.min(y0,y1)-22} ${x1} ${y1}`}
+  el.innerHTML=`<h4>跟著商隊走絲路</h4><p class="hint">示意圖，不按實際比例。按「出發」看商隊移動，點城市看介紹。</p>
+  <div class="scroll-x"><svg viewBox="0 0 350 150" style="width:100%;min-width:320px;background:var(--paper);border-radius:10px">
+  <path d="${d}" fill="none" stroke="var(--gold)" stroke-width="3" stroke-dasharray="6 5" id="srp"/>
+  ${C.map((c,i)=>`<g class="city" data-i="${i}" style="cursor:pointer" tabindex="0" role="button" aria-label="${c[0]}"><circle cx="${c[1]}" cy="${c[2]}" r="7" fill="var(--bronze)" stroke="var(--card)" stroke-width="2"/><text x="${c[1]}" y="${c[2]+20}" text-anchor="middle" font-size="11" fill="var(--ink)">${c[0]}</text></g>`).join("")}
+  <text id="camel" font-size="18" x="0" y="0" style="pointer-events:none">🐫</text></svg></div>
+  <div class="row" style="margin-top:10px"><button class="btn pri" id="sgo">出發</button></div><div class="out" id="sro">點一座城市。</div>`;
+  const path=el.querySelector("#srp"),cam=el.querySelector("#camel"),L=path.getTotalLength(),o=el.querySelector("#sro");
+  const put=t=>{const p=path.getPointAtLength(t*L);cam.setAttribute("x",p.x-9);cam.setAttribute("y",p.y-6)};put(0);
+  const info=i=>{const c=C[i];o.innerHTML=`<b>${c[0]}</b>　${c[3]}`};
+  el.querySelectorAll(".city").forEach(g=>{g.onclick=()=>info(+g.dataset.i);g.onkeydown=e=>{if(e.key==="Enter")info(+g.dataset.i)}});
+  el.querySelector("#sgo").onclick=()=>{const t0=performance.now(),dur=reduce?1:7000;let lastCity=-1;
+    const step=now=>{const t=Math.min(1,(now-t0)/dur);put(t);
+      const idx=Math.min(C.length-1,Math.round(t*(C.length-1)));if(idx!==lastCity&&Math.abs(t*(C.length-1)-Math.round(t*(C.length-1)))<.06){lastCity=idx;info(idx)}
+      if(t<1)requestAnimationFrame(step)};requestAnimationFrame(step)}},
+
+exchange(el){
+  const N=[["🌽 玉米","養活了非洲與中國大量人口"],["🥔 馬鈴薯","成為歐洲窮人的主食，推動人口成長"],["🍅 番茄","後來成為義大利料理的招牌"],["🌶️ 辣椒","明朝後傳入中國，改變了川菜、湘菜"],["🍫 可可","製成巧克力風靡歐洲"],["🍍 鳳梨","傳到熱帶亞洲廣泛種植"]];
+  const O=[["🐎 馬","改變了美洲平原原住民的生活與狩獵方式"],["🐄 牛","美洲出現大牧場"],["🌾 小麥","在美洲大量種植"],["🎋 甘蔗","美洲出現大型甘蔗園，大量使用非洲奴隸"],["🦠 天花","原住民沒有抵抗力，人口大量死亡"],["⛓️ 被奴役的非洲人","上千萬人被強迫運往美洲"]];
+  el.innerHTML=`<h4>哥倫布大交換</h4><p class="hint">按「開始交換」，看東西如何越過大西洋。點選任何一項看它帶來的影響。</p>
+  <div class="xg"><div class="xcol" id="xa"><h5>美洲（新大陸）</h5></div><div class="xcol" id="xb"><h5>歐洲、亞洲、非洲（舊大陸）</h5></div></div>
+  <div class="row" style="margin-top:10px"><button class="btn pri" id="xgo">開始交換</button><button class="btn" id="xre">重來</button></div><div class="out" id="xo">點選任何一項。</div>`;
+  const a=el.querySelector("#xa"),b=el.querySelector("#xb"),o=el.querySelector("#xo");
+  const mk=(it,from)=>{const s=document.createElement("button");s.className="item";s.textContent=it[0];s.onclick=()=>o.innerHTML=`<b>${it[0]}</b>　原產${from}。${it[1]}。`;return s};
+  let items=[];const reset=()=>{a.querySelectorAll(".item").forEach(x=>x.remove());b.querySelectorAll(".item").forEach(x=>x.remove());
+    items=[...N.map(it=>({el:mk(it,"美洲"),to:b})),...O.map(it=>({el:mk(it,"舊大陸"),to:a}))];
+    items.forEach((x,i)=>(i<N.length?a:b).appendChild(x.el));el.querySelector("#xgo").disabled=false};reset();
+  el.querySelector("#xre").onclick=reset;
+  el.querySelector("#xgo").onclick=e=>{e.target.disabled=true;
+    items.forEach((x,i)=>setTimeout(()=>{const r1=x.el.getBoundingClientRect();x.to.appendChild(x.el);const r2=x.el.getBoundingClientRect();
+      if(reduce)return;x.el.style.transition="none";x.el.style.transform=`translate(${r1.left-r2.left}px,${r1.top-r2.top}px)`;
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{x.el.style.transition="transform .9s ease";x.el.style.transform=""}))},i*(reduce?0:260)));
+    setTimeout(()=>o.innerHTML="交換完成。今天你吃的薯條、番茄醬和辣椒，都是這場五百年前大交換的結果。",items.length*(reduce?0:260)+900)}}
+};
+
+/* ===== 啟動 ===== */
+updProg();render();
+
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-5b63459777" data-category="general"></script></body>
+</html>

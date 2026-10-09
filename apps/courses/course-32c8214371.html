@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>廠務學堂：從零開始學工廠總務</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --concrete:#E4E7E3; --paper:#FFFFFF; --ink:#1E2A30; --ink2:#4A5860; --line:#C9CFCB;
+  --yellow:#F2C230; --green:#1E8A5A; --red:#C8352B; --blue:#2F7FC1;
+  --stage:#3B4A52;
+  --head:"LXGW WenKai TC","Kaiti TC","STKaiti","DFKai-SB","PingFang TC","Microsoft JhengHei",serif;
+  --body:"PingFang TC","Noto Sans TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+  box-sizing:border-box; color-scheme:light;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+body{margin:0;background:var(--concrete);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.85;min-height:100%}
+button,input,select{font:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.app{display:grid;grid-template-columns:300px 1fr;min-height:100vh}
+/* ---------- route map sidebar ---------- */
+.route{background:var(--ink);color:#DDE3E0;padding:24px 18px 40px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.route h1{font-family:var(--head);font-size:28px;line-height:1.2;margin:0 0 4px;color:#fff}
+.route .sub{font-size:13px;color:#9FB0B5;margin:0 0 18px}
+.meter{height:8px;background:#34444B;border-radius:4px;overflow:hidden;margin-bottom:6px}
+.meter i{display:block;height:100%;width:0;background:var(--yellow);transition:width .5s}
+.meter-t{font-size:13px;color:#9FB0B5;margin-bottom:18px}
+.route ol{list-style:none;margin:0;padding:0}
+.route .st-name{font-family:var(--head);font-size:15px;color:#fff;margin:16px 0 4px;padding-left:34px;position:relative}
+.route .st-name::before{content:"";position:absolute;left:4px;top:5px;width:18px;height:12px;border-radius:3px;background:var(--c)}
+.route li.stop{position:relative;padding:5px 0 5px 34px;font-size:14px;line-height:1.5;cursor:pointer;color:#C4CFCC}
+.route li.stop::before{content:"";position:absolute;left:11px;top:0;bottom:0;width:4px;background:var(--c)}
+.route li.stop::after{content:"";position:absolute;left:6px;top:9px;width:14px;height:14px;border-radius:50%;background:var(--ink);border:3px solid var(--c)}
+.route li.stop.done::after{background:var(--c)}
+.route li.stop.cur{color:#fff;font-weight:700}
+.route li.stop.cur::after{left:3px;top:6px;width:20px;height:20px;box-shadow:0 0 0 3px rgba(255,255,255,.25)}
+.route li.stop:hover{color:#fff}
+.route .extra{margin-top:22px;border-top:1px solid #34444B;padding-top:14px}
+.route .extra button{display:block;width:100%;text-align:left;background:none;border:0;color:#C4CFCC;padding:6px 0;cursor:pointer;font-size:14px}
+.route .extra button:hover{color:#fff}
+/* ---------- top bar (mobile) ---------- */
+.topbar{display:none}
+/* ---------- main ---------- */
+main{padding:40px 5vw 80px;min-width:0}
+.lesson,.page{display:none;max-width:760px;margin:0 auto}
+.lesson.show,.page.show{display:block}
+.lesson-head{border-left:10px solid var(--stage);padding:4px 0 4px 18px;margin-bottom:26px}
+.lesson-head .no{font-size:14px;color:var(--ink2)}
+.lesson-head .no b{display:inline-block;background:var(--stage);color:#fff;border-radius:3px;padding:0 8px;margin-right:8px;font-weight:600}
+.lesson h2,.page h2{font-family:var(--head);font-size:clamp(28px,5vw,40px);line-height:1.25;margin:6px 0 0;font-weight:700}
+.lesson h3,.page h3{font-family:var(--head);font-size:23px;margin:36px 0 8px;line-height:1.4}
+.lesson p,.page p{margin:0 0 14px}
+.lead{font-size:19px;color:var(--ink2)}
+.sheet{background:var(--paper);border-radius:6px;padding:28px clamp(18px,4vw,40px);box-shadow:0 1px 0 var(--line)}
+ul.dots,ol.steps{margin:0 0 16px;padding-left:1.4em}
+ul.dots li,ol.steps li{margin-bottom:6px}
+table.t{width:100%;border-collapse:collapse;font-size:15px;margin:8px 0 18px}
+table.t th,table.t td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+table.t th{background:#F1F3F1}
+.scroll{overflow-x:auto}
+/* analogy box */
+.ex{border:2px dashed var(--stage);border-radius:6px;padding:14px 18px;margin:18px 0;background:#FBFCFB}
+.ex>strong:first-child{display:block;font-family:var(--head);font-size:17px;color:var(--stage);margin-bottom:4px}
+/* term = inspection tag */
+.term{position:relative;background:#FFF8DC;border:1px solid #E6D38A;border-radius:4px 14px 14px 4px;padding:14px 18px 12px 44px;margin:18px 0}
+.term::before{content:"";position:absolute;left:14px;top:18px;width:14px;height:14px;border-radius:50%;background:var(--paper);border:2px solid #C9B25A}
+.term h4{margin:0 0 4px;font-size:17px;font-family:var(--head)}
+.term p{margin:0 0 6px;font-size:15.5px}
+.term .origin{color:#6B5A1E;font-size:14.5px}
+/* warning = hazard tape */
+.warn{border:2px solid var(--ink);border-radius:4px;margin:20px 0;background:var(--paper)}
+.warn::before{content:"";display:block;height:12px;background:repeating-linear-gradient(-45deg,var(--yellow) 0 12px,var(--ink) 12px 24px)}
+.warn>div{padding:12px 18px}
+.warn strong{color:var(--red)}
+/* widget */
+.widget{background:#EEF1EE;border:1px solid var(--line);border-radius:8px;padding:18px;margin:22px 0}
+.widget .wt{font-family:var(--head);font-size:18px;margin:0 0 4px}
+.widget .hint{font-size:14px;color:var(--ink2);margin:0 0 12px}
+.widget svg{display:block;max-width:100%;height:auto;margin:0 auto}
+.btn{background:var(--ink);color:#fff;border:0;border-radius:4px;padding:8px 16px;cursor:pointer;font-size:15px}
+.btn.alt{background:var(--paper);color:var(--ink);border:1px solid var(--ink)}
+.btn:hover{opacity:.88}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.out{margin-top:12px;padding:10px 14px;background:var(--paper);border-radius:4px;min-height:2.6em;font-size:15.5px}
+/* quiz */
+.quiz{border-top:3px solid var(--stage);background:var(--paper);padding:16px 18px;margin:18px 0;border-radius:0 0 6px 6px}
+.quiz .qq{font-weight:700;margin-bottom:8px}
+.quiz ol{list-style:none;padding:0;margin:0}
+.quiz li button{display:block;width:100%;text-align:left;background:#F3F5F3;border:1px solid var(--line);border-radius:4px;padding:8px 12px;margin:6px 0;cursor:pointer;font-size:15.5px}
+.quiz li button.ok{background:#DDF1E6;border-color:var(--green)}
+.quiz li button.no{background:#F8E1DE;border-color:var(--red)}
+.quiz .fb{font-size:15px;margin-top:8px;display:none}
+.quiz .fb.show{display:block}
+.quiz-title{font-family:var(--head);font-size:21px;margin:40px 0 0}
+/* nav */
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:40px;flex-wrap:wrap}
+.pager .btn{padding:12px 20px;font-size:16px}
+/* flow chips */
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:stretch;margin:12px 0}
+.flow span{background:var(--paper);border:2px solid var(--stage);border-radius:4px;padding:6px 10px;font-size:14.5px;position:relative}
+.flow span.ccp{border-color:var(--red);background:#FCEDEB}
+.flow i{align-self:center;font-style:normal;color:var(--ink2)}
+/* hero */
+.hero{text-align:left;padding:10px 0 0}
+.hero h2{font-size:clamp(36px,8vw,64px);line-height:1.1}
+.hero svg{width:100%;height:auto;margin:24px 0}
+.hero .draw{stroke-dasharray:1600;stroke-dashoffset:1600;animation:draw 3.2s ease-out forwards}
+.hero .pin{opacity:0;animation:pop .4s ease-out forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes pop{to{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes roll{0%{transform:translate(0,0)}100%{transform:translate(260px,-90px)}}
+@keyframes fall{0%{transform:translateY(0);opacity:1}100%{transform:translateY(120px);opacity:0}}
+@keyframes flick{0%,100%{transform:scale(1,1)}50%{transform:scale(1.06,.92)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.hero .draw{stroke-dashoffset:0}.hero .pin{opacity:1}}
+/* glossary & cert */
+.gloss{columns:2 300px;column-gap:24px}
+.gloss .term{break-inside:avoid;margin-top:0}
+.cert{border:6px double var(--ink);padding:30px;text-align:center;background:var(--paper);margin-top:20px;display:none}
+.cert.show{display:block}
+.cert h3{font-size:34px;margin:0}
+input[type=text],input[type=number]{border:1px solid var(--ink2);border-radius:4px;padding:6px 10px;background:#fff;width:9em}
+input[type=range]{width:100%}
+/* responsive */
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .route{position:fixed;inset:0 auto 0 0;width:min(320px,86vw);z-index:20;transform:translateX(-105%);transition:transform .3s;padding-top:calc(24px + env(safe-area-inset-top,0px))}
+  .route.open{transform:none;box-shadow:0 0 0 100vmax rgba(0,0,0,.45)}
+  .topbar{display:flex;position:sticky;top:0;z-index:10;background:var(--ink);color:#fff;align-items:center;gap:12px;padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top,0px))}
+  .topbar button{background:var(--yellow);color:var(--ink);border:0;border-radius:4px;padding:6px 12px;font-weight:700}
+  .topbar span{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  main{padding:24px 16px 60px}
+  body{font-size:16.5px}
+}
+@media print{
+  .route,.topbar,.pager,.no-print{display:none!important}
+  .app{display:block}
+  .lesson,.page{display:block!important;page-break-after:always}
+  .quiz .fb{display:block}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+<div class="topbar"><button id="menuBtn" aria-controls="route" aria-expanded="false">課程路線</button><span id="topTitle">廠務學堂</span></div>
+<div class="app">
+<nav class="route" id="route" aria-label="課程路線">
+  <h1>廠務學堂</h1>
+  <p class="sub">從零開始學工廠總務｜共 8 站 21 課</p>
+  <div class="meter"><i id="meterBar"></i></div>
+  <div class="meter-t" id="meterTxt">已完成 0 課</div>
+  <ol id="routeList"></ol>
+  <div class="extra">
+    <button data-go="glossary">名詞辭典（所有專有名詞）</button>
+    <button data-go="exam">結業測驗與證書</button>
+    <button id="printBtn">列印全部課程 / 存成 PDF</button>
+    <button id="resetBtn">清除學習紀錄</button>
+  </div>
+</nav>
+<main id="main">
+
+<section class="page" id="home">
+ <div class="hero">
+  <h2>廠務學堂</h2>
+  <p class="lead">一套從零開始、按順序學的工廠總務課程。清潔、交通、餐廳、宿舍、環境、安全，21 堂課帶你從「看懂」走到「會管」。</p>
+  <svg viewBox="0 0 800 225" role="img" aria-label="課程路線圖：入門、清潔、運輸、膳食、住宿、環境、安全、專業八站">
+   <path class="draw" d="M30 170 H150 Q180 170 190 140 L220 70 Q230 50 260 50 H420 Q450 50 460 80 L490 160 Q500 180 530 180 H640 Q670 180 680 150 L700 90 Q710 60 740 60 H780" fill="none" stroke="#1E2A30" stroke-width="8" stroke-linecap="round"/>
+   <g font-size="22" text-anchor="middle" fill="#1E2A30" font-family="PingFang TC,Microsoft JhengHei,sans-serif">
+    <g class="pin" style="animation-delay:.2s"><circle cx="40" cy="170" r="13" fill="#3B4A52"/><text x="40" y="208">入門</text></g>
+    <g class="pin" style="animation-delay:.6s"><circle cx="150" cy="170" r="13" fill="#2F7FC1"/><text x="150" y="208">清潔</text></g>
+    <g class="pin" style="animation-delay:1s"><circle cx="262" cy="50" r="13" fill="#D9A300"/><text x="262" y="24">運輸</text></g>
+    <g class="pin" style="animation-delay:1.3s"><circle cx="400" cy="50" r="13" fill="#1E8A5A"/><text x="400" y="24">膳食</text></g>
+    <g class="pin" style="animation-delay:1.8s"><circle cx="487" cy="152" r="13" fill="#8A5AB5"/><text x="530" y="152">住宿</text></g>
+    <g class="pin" style="animation-delay:2.2s"><circle cx="600" cy="180" r="13" fill="#0E8C8C"/><text x="600" y="218">環境</text></g>
+    <g class="pin" style="animation-delay:2.6s"><circle cx="700" cy="90" r="13" fill="#C8352B"/><text x="660" y="94">安全</text></g>
+    <g class="pin" style="animation-delay:3s"><circle cx="780" cy="60" r="13" fill="#B5651D"/><text x="765" y="32">專業</text></g>
+   </g>
+  </svg>
+  <div class="sheet">
+   <h3 style="margin-top:0">怎麼使用這套課程</h3>
+   <ul class="dots">
+    <li><b>照順序走。</b>每一課都用到前一課教過的東西，就像搭車一站一站坐，不要跳站。左邊（手機在左上角「課程路線」）的路線圖會標出你走到哪。</li>
+    <li><b>每課都有「打個比方」。</b>先用生活中的例子懂道理，再學工廠裡的做法。</li>
+    <li><b>黃色吊牌是專有名詞。</b>每個名詞都會告訴你「它是什麼」和「為什麼叫這個名字」。全部名詞也收在「名詞辭典」。</li>
+    <li><b>灰色框是互動練習。</b>可以按、可以拉，動手玩過比讀十遍更記得住。</li>
+    <li><b>每課最後有隨堂小測。</b>答對了再往下走。全部學完可以做結業測驗、拿結業證書。</li>
+   </ul>
+   <p>這個檔案可以直接存在電腦或手機裡，離線也能打開（只有標題字型需要網路，沒網路時會自動換成系統字型）。</p>
+   <button class="btn" data-go="L1" style="padding:12px 22px;font-size:17px">從第 1 課開始</button>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 第一站 入門 ================= -->
+<section class="lesson" id="L1" data-stage="入門：認識廠務" data-c="#3B4A52" data-title="廠務是什麼？工廠像一座小城市">
+<div class="sheet">
+<p class="lead">想像你走進一間有五百人的成衣廠。大家都在車縫衣服，那是誰在打掃廁所？誰載大家上下班？中午一千份飯菜是誰準備的？這些「讓生產能順利進行的支援工作」，就是廠務。</p>
+
+<h3>工廠就是一座小城市</h3>
+<p>一座城市要運作，除了有人上班賺錢，還需要清潔隊、公車、餐廳、旅館、環保局和消防隊。工廠也一樣，只是規模比較小，而這些工作全部交給同一個部門負責。</p>
+<div class="widget">
+ <p class="wt">點點看：工廠城市地圖</p>
+ <p class="hint">點任何一棟建築，看看它在城市裡是什麼、在工廠裡又是什麼。</p>
+ <svg id="cityMap" viewBox="0 0 600 290" role="group" aria-label="工廠城市地圖">
+  <rect x="0" y="0" width="600" height="290" fill="#DCE3DD"/>
+  <path d="M0 150 H600 M300 0 V290" stroke="#B9C3BC" stroke-width="26"/>
+  <g class="bld" data-k="clean" tabindex="0" style="cursor:pointer"><rect x="30" y="30" width="110" height="80" fill="#2F7FC1"/><text x="85" y="78" fill="#fff" text-anchor="middle" font-size="17">清潔隊</text></g>
+  <g class="bld" data-k="bus" tabindex="0" style="cursor:pointer"><rect x="170" y="45" width="100" height="55" rx="10" fill="#D9A300"/><circle cx="195" cy="104" r="9" fill="#1E2A30"/><circle cx="245" cy="104" r="9" fill="#1E2A30"/><text x="220" y="80" fill="#1E2A30" text-anchor="middle" font-size="17">公車</text></g>
+  <g class="bld" data-k="food" tabindex="0" style="cursor:pointer"><rect x="340" y="30" width="110" height="80" fill="#1E8A5A"/><text x="395" y="78" fill="#fff" text-anchor="middle" font-size="17">餐廳</text></g>
+  <g class="bld" data-k="dorm" tabindex="0" style="cursor:pointer"><rect x="475" y="15" width="95" height="105" fill="#8A5AB5"/><text x="522" y="75" fill="#fff" text-anchor="middle" font-size="17">旅館</text></g>
+  <g class="bld" data-k="env" tabindex="0" style="cursor:pointer"><rect x="30" y="180" width="120" height="80" fill="#0E8C8C"/><text x="90" y="228" fill="#fff" text-anchor="middle" font-size="17">環保局</text></g>
+  <g class="bld" data-k="fire" tabindex="0" style="cursor:pointer"><rect x="175" y="185" width="100" height="75" fill="#C8352B"/><text x="225" y="228" fill="#fff" text-anchor="middle" font-size="17">消防隊</text></g>
+  <g><rect x="340" y="175" width="230" height="95" fill="#3B4A52"/><text x="455" y="218" fill="#fff" text-anchor="middle" font-size="17">生產車間</text><text x="455" y="244" fill="#C9D3CF" text-anchor="middle" font-size="13">（大家賺錢的地方）</text></g>
+ </svg>
+ <div class="out" id="cityOut">先點一棟建築。</div>
+</div>
+
+<div class="term" data-name="總務（GA）">
+ <h4>總務（General Affairs，簡稱 GA）</h4>
+ <p>負責公司裡所有「不是直接生產、但少了就不行」的事務，例如清潔、車輛、餐廳、宿舍、採購日用品、門禁保全。</p>
+ <p class="origin">由來：「總」是全部，「務」是事務，合起來就是「總管各種事務」。英文 General Affairs 直譯是「一般事務」，這個部門名稱在日本、韓國、台灣的企業特別常見，所以台資工廠常直接把總務部叫「GA 部」。</p>
+</div>
+<div class="term" data-name="廠務">
+ <h4>廠務</h4>
+ <p>字面意思是「工廠的事務」。在成衣、製鞋這類人很多的工廠，廠務通常就是指本課程教的總務後勤工作。</p>
+ <p class="origin">小提醒：在半導體、面板這種高科技工廠，「廠務」常專指水、電、氣體、無塵室這些設施系統，意思比較窄。同一個詞在不同產業意思不同，聽到時要看場合。</p>
+</div>
+<div class="term" data-name="後勤">
+ <h4>後勤（Logistics）</h4>
+ <p>在背後支援主要工作的一切安排：吃、住、行、物資。</p>
+ <p class="origin">由來：原本是軍事用語。前線士兵打仗，後方要有人運送糧食、彈藥、藥品，這就叫後勤。工廠裡「前線」是生產線，廠務就是後勤部隊。</p>
+</div>
+
+<h3>為什麼廠務很重要？</h3>
+<p>用數字想一想：一間 500 人的工廠，一天要準備大約 1000 份餐點，交通車每天來回載 1000 人次，宿舍可能住了上百人。只要一個環節出錯，後果都很大：</p>
+<ul class="dots">
+ <li>餐廳發生一次食物中毒，可能上百人同時送醫，整廠停工。</li>
+ <li>交通車出一次車禍，可能造成多人傷亡。</li>
+ <li>宿舍電線走火，晚上大家都在睡覺，非常危險。</li>
+ <li>品牌客戶來「驗廠」時，會仔細檢查廁所、餐廳、宿舍和消防，不合格可能失去訂單。</li>
+</ul>
+
+<h3>廠務人的三種身分</h3>
+<ol class="steps">
+ <li><b>服務者</b>：讓員工吃得好、住得安心、上下班順利。</li>
+ <li><b>管理者</b>：管人（清潔工、廚師、司機）、管錢（預算）、管東西（車輛、設備）。</li>
+ <li><b>守門人</b>：守住安全和法規的底線，有危險時要敢說「不行」。</li>
+</ol>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="2" data-exp="廠務是支援生產的後勤工作。車縫衣服是生產線本身的工作。">
+ <div class="qq">下列哪一項「不是」廠務的工作？</div>
+ <ol><li>安排員工交通車</li><li>檢查宿舍消防設備</li><li>在生產線上車縫衣服</li><li>管理員工餐廳</li></ol>
+</div>
+<div class="quiz" data-a="1" data-exp="後勤原本是軍事用語，指在後方供應糧食、彈藥的支援工作。">
+ <div class="qq">「後勤」這個詞最早來自哪裡？</div>
+ <ol><li>餐飲業</li><li>軍事</li><li>醫院</li><li>學校</li></ol>
+</div>
+</section>
+
+<section class="lesson" id="L2" data-stage="入門：認識廠務" data-c="#3B4A52" data-title="廠務人的第一個基本功：5S">
+<div class="sheet">
+<p class="lead">你有沒有過這種經驗：明天要考試，卻在亂七八糟的房間找不到課本，找了半小時，心情也變差了。工廠也會這樣，只是浪費的是幾百人的時間。5S 就是解決「亂」的方法。</p>
+
+<div class="term" data-name="5S">
+ <h4>5S</h4>
+ <p>整理環境的五個步驟：整理、整頓、清掃、清潔、素養。它是所有工廠管理的地基，廠務的清潔、宿舍、倉庫管理都會用到。</p>
+ <p class="origin">由來：起源於日本製造業，五個步驟的日文發音剛好都是 S 開頭：Seiri（整理）、Seiton（整頓）、Seiso（清掃）、Seiketsu（清潔）、Shitsuke（躾，教養）。1980 年代以後隨日本工廠的成功傳到全世界，所以大家就叫它 5S。</p>
+</div>
+
+<h3>五個步驟，一步都不能少</h3>
+<div class="scroll"><table class="t">
+<tr><th>步驟</th><th>日文</th><th>一句話解釋</th><th>房間的例子</th></tr>
+<tr><td>1 整理</td><td>Seiri</td><td>分出要的和不要的，不要的丟掉或移走</td><td>把壞掉的筆、舊考卷清出去</td></tr>
+<tr><td>2 整頓</td><td>Seiton</td><td>要的東西定位、標示，30 秒內找得到</td><td>課本放固定那一格，貼上標籤</td></tr>
+<tr><td>3 清掃</td><td>Seiso</td><td>打掃乾淨，順便檢查有沒有壞掉</td><td>擦桌子時發現檯燈線破了</td></tr>
+<tr><td>4 清潔</td><td>Seiketsu</td><td>把前三步變成規定，隨時保持</td><td>每天睡前花 5 分鐘收桌子</td></tr>
+<tr><td>5 素養</td><td>Shitsuke</td><td>養成習慣，不用別人提醒</td><td>自己就會收，爸媽不用再唸</td></tr>
+</table></div>
+<p>注意順序：一定要先「整理」再「整頓」。如果不先丟掉不要的東西，你會花很多時間去「整齊地收好垃圾」。</p>
+
+<div class="widget">
+ <p class="wt">動手做：把一張工作台做完 5S</p>
+ <p class="hint">依序按下五個按鈕，看看每一步發生什麼變化。</p>
+ <svg id="fiveS" viewBox="0 0 520 280" aria-label="5S 工作台示意圖">
+  <rect x="20" y="15" width="300" height="80" fill="#C9B89A" rx="4"/>
+  <text x="170" y="110" text-anchor="middle" font-size="12" fill="#6b6152">工具掛板</text>
+  <g class="spot" style="opacity:0;transition:opacity .6s">
+   <rect x="42" y="28" width="46" height="50" fill="none" stroke="#1E2A30" stroke-dasharray="4 3"/>
+   <rect x="120" y="28" width="36" height="50" fill="none" stroke="#1E2A30" stroke-dasharray="4 3"/>
+   <rect x="162" y="28" width="36" height="50" fill="none" stroke="#1E2A30" stroke-dasharray="4 3"/>
+   <rect x="212" y="45" width="96" height="20" fill="none" stroke="#1E2A30" stroke-dasharray="4 3"/>
+   <text x="65" y="92" font-size="11" text-anchor="middle">剪刀</text><text x="138" y="92" font-size="11" text-anchor="middle">白線</text><text x="180" y="92" font-size="11" text-anchor="middle">黑線</text><text x="260" y="92" font-size="11" text-anchor="middle">尺</text>
+  </g>
+  <rect x="10" y="190" width="370" height="16" fill="#8C7B61"/>
+  <rect x="25" y="206" width="12" height="60" fill="#8C7B61"/><rect x="353" y="206" width="12" height="60" fill="#8C7B61"/>
+  <rect x="405" y="200" width="100" height="70" fill="#F4D6D2" stroke="#C8352B" stroke-width="2"/>
+  <text x="455" y="194" text-anchor="middle" font-size="13" fill="#C8352B">紅牌區</text>
+  <g class="dust"><circle cx="60" cy="186" r="3" fill="#9A8F80"/><circle cx="150" cy="187" r="2.5" fill="#9A8F80"/><circle cx="210" cy="186" r="3" fill="#9A8F80"/><circle cx="330" cy="187" r="2.5" fill="#9A8F80"/><circle cx="120" cy="268" r="4" fill="#9A8F80"/><circle cx="260" cy="270" r="3" fill="#9A8F80"/><circle cx="300" cy="266" r="4" fill="#9A8F80"/></g>
+  <g class="it keep" data-m="translate(250px,140px) rotate(35deg)" data-t="translate(48px,32px)"><circle cx="10" cy="36" r="7" fill="none" stroke="#1E2A30" stroke-width="3"/><circle cx="26" cy="36" r="7" fill="none" stroke="#1E2A30" stroke-width="3"/><path d="M13 30 L30 0 M23 30 L6 0" stroke="#5c6b73" stroke-width="4"/></g>
+  <g class="it keep" data-m="translate(90px,150px)" data-t="translate(124px,32px)"><rect x="0" y="6" width="28" height="30" fill="#F5F5F5" stroke="#1E2A30"/><rect x="-3" y="0" width="34" height="7" fill="#8C7B61"/><rect x="-3" y="36" width="34" height="7" fill="#8C7B61"/></g>
+  <g class="it keep" data-m="translate(330px,120px) rotate(-25deg)" data-t="translate(166px,32px)"><rect x="0" y="6" width="28" height="30" fill="#333" stroke="#1E2A30"/><rect x="-3" y="0" width="34" height="7" fill="#8C7B61"/><rect x="-3" y="36" width="34" height="7" fill="#8C7B61"/></g>
+  <g class="it keep" data-m="translate(40px,160px) rotate(-12deg)" data-t="translate(216px,48px)"><rect width="88" height="14" fill="#F2C230" stroke="#1E2A30"/><path d="M10 0 v6 M20 0 v4 M30 0 v6 M40 0 v4 M50 0 v6 M60 0 v4 M70 0 v6" stroke="#1E2A30"/></g>
+  <g class="it junk" data-m="translate(170px,140px) rotate(8deg)" data-t="translate(418px,210px) rotate(0deg)"><rect width="50" height="40" fill="#C49A63" stroke="#7a5a30"/><path d="M8 5 L22 20 L14 38" stroke="#7a5a30" fill="none" stroke-width="2"/><text x="25" y="56" font-size="10" text-anchor="middle">破紙箱</text></g>
+  <g class="it junk" data-m="translate(215px,150px) rotate(-70deg)" data-t="translate(475px,215px) rotate(0deg)"><path d="M0 0 H20 L17 30 H3 Z" fill="#E7E2D5" stroke="#1E2A30"/><text x="10" y="44" font-size="10" text-anchor="middle">舊杯子</text></g>
+  <g class="sign" style="opacity:0;transition:opacity .6s"><rect x="345" y="20" width="160" height="70" fill="#fff" stroke="#1E2A30"/><text x="425" y="44" text-anchor="middle" font-size="13">每日下班 5 分鐘</text><text x="425" y="64" text-anchor="middle" font-size="12">□ 工具歸位 □ 桌面擦拭</text><text x="425" y="80" text-anchor="middle" font-size="12">□ 地面清掃 □ 簽名</text></g>
+  <g class="habit" style="opacity:0;transition:opacity .6s"><circle cx="440" cy="130" r="22" fill="#1E8A5A"/><path d="M430 128 l7 8 l13 -14" stroke="#fff" stroke-width="4" fill="none"/><text x="440" y="175" text-anchor="middle" font-size="13" fill="#1E8A5A">自動自發</text></g>
+ </svg>
+ <div class="row" style="margin-top:12px">
+  <button class="btn alt" data-s="1">1 整理</button><button class="btn alt" data-s="2">2 整頓</button><button class="btn alt" data-s="3">3 清掃</button><button class="btn alt" data-s="4">4 清潔</button><button class="btn alt" data-s="5">5 素養</button><button class="btn" data-s="0">重來</button>
+ </div>
+ <div class="out" id="fiveSOut">現在工作台一團亂。先按「1 整理」。</div>
+</div>
+
+<div class="term" data-name="紅牌作戰">
+ <h4>紅牌作戰</h4>
+ <p>整理時，把「可能不需要」的東西貼上紅色標籤，集中放到紅牌區，一段時間（例如兩週）沒人來認領就處理掉。</p>
+ <p class="origin">由來：也是日本工廠的做法，因為用醒目的紅色牌子標示而得名。好處是不用當場吵「這個到底要不要」，給大家一段觀察期。</p>
+</div>
+<div class="term" data-name="目視管理">
+ <h4>目視管理</h4>
+ <p>讓人「一眼就看懂」狀況的管理方法，例如地上畫定位線、架子貼標籤、滅火器上方掛紅色標示牌。</p>
+ <p class="origin">由來：字面就是「用眼睛看就能管理」。人看圖和顏色的速度比看文字快很多，所以工廠大量用顏色和線條來溝通，連不識字或語言不通的人也看得懂。</p>
+</div>
+<div class="ex"><strong>打個比方</strong>停車場畫格子就是目視管理：你不用問任何人，一看就知道車子要停哪、哪裡是走道。工廠地上的黃線也是同樣的道理。</div>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="0" data-exp="要先整理（丟掉不要的），再整頓（把要的定位）。不然會花時間整齊地收好垃圾。">
+ <div class="qq">5S 裡，為什麼「整理」一定要排在「整頓」前面？</div>
+ <ol><li>先丟掉不要的，才不會浪費力氣收納垃圾</li><li>因為日文字母排序</li><li>因為整理比較簡單</li><li>其實順序可以隨便換</li></ol>
+</div>
+<div class="quiz" data-a="3" data-exp="素養（Shitsuke）是把前面的規定變成習慣，不用別人提醒。">
+ <div class="qq">員工下班前不用主管提醒，就自己把工具歸位，這是 5S 的哪一個？</div>
+ <ol><li>整理</li><li>整頓</li><li>清掃</li><li>素養</li></ol>
+</div>
+</section>
+
+<section class="lesson" id="L3" data-stage="入門：認識廠務" data-c="#3B4A52" data-title="讓事情越做越好：PDCA、SOP、5W1H">
+<div class="sheet">
+<p class="lead">5S 讓環境變整齊，但怎樣讓「做事的方法」也越來越好？這一課學三個工具，後面每一課都會用到它們。</p>
+
+<h3>PDCA：改善的輪子</h3>
+<div class="ex"><strong>打個比方</strong>準備段考：先訂讀書計畫（Plan），照計畫讀書（Do），考完看成績哪裡錯（Check），把錯的觀念補起來、下次改用新方法（Act）。下一次段考再來一輪，成績就會一次比一次好。</div>
+<div class="term" data-name="PDCA">
+ <h4>PDCA 循環</h4>
+ <p>Plan 計畫 → Do 執行 → Check 檢查 → Act 處置改善，然後再回到 Plan，一圈一圈持續改善。</p>
+ <p class="origin">由來：美國統計學家休哈特（Walter Shewhart）在 1930 年代提出類似的想法，後來他的學生戴明（W. Edwards Deming）在 1950 年代到日本推廣品質管理，這個循環在日本大受歡迎，所以又叫「戴明循環」。</p>
+</div>
+<div class="widget">
+ <p class="wt">看動畫：輪子為什麼不會往下滑？</p>
+ <p class="hint">PDCA 輪子一圈一圈往上爬，每爬上一段，就用「SOP」這塊楔子擋住，讓進步不會退回去。</p>
+ <svg viewBox="0 0 520 270" aria-label="PDCA 輪子在斜坡上轉動，SOP 楔子擋住不讓它下滑">
+  <polygon points="30,255 490,255 490,88" fill="#D5DBD6"/>
+  <line x1="30" y1="255" x2="490" y2="88" stroke="#3B4A52" stroke-width="4"/>
+  <polygon points="150,212 205,192 190,166" fill="#F2C230" stroke="#1E2A30" stroke-width="2"/>
+  <text x="150" y="240" font-size="15" font-weight="700">SOP（標準化）</text>
+  <g transform="translate(222,120)">
+   <g style="transform-box:fill-box;transform-origin:center;animation:spin 8s linear infinite">
+    <path d="M0 0 L0 -70 A70 70 0 0 1 70 0 Z" fill="#2F7FC1"/>
+    <path d="M0 0 L70 0 A70 70 0 0 1 0 70 Z" fill="#1E8A5A"/>
+    <path d="M0 0 L0 70 A70 70 0 0 1 -70 0 Z" fill="#D9A300"/>
+    <path d="M0 0 L-70 0 A70 70 0 0 1 0 -70 Z" fill="#C8352B"/>
+    <g fill="#fff" font-size="22" font-weight="700" text-anchor="middle"><text x="30" y="-22">P</text><text x="30" y="40">D</text><text x="-30" y="40">C</text><text x="-30" y="-22">A</text></g>
+   </g>
+  </g>
+  <text x="300" y="36" font-size="15">往上＝品質越來越好</text>
+  <path d="M330 80 l70 -26" stroke="#1E2A30" stroke-width="2" marker-end="url(#ar)"/>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#1E2A30"/></marker></defs>
+ </svg>
+</div>
+
+<h3>SOP：把好方法寫下來</h3>
+<div class="term" data-name="SOP">
+ <h4>SOP（Standard Operating Procedure，標準作業程序）</h4>
+ <p>把一件工作「誰做、什麼時候做、怎麼做、做到什麼程度」寫成固定步驟，讓每個人做出來的結果都一樣好。</p>
+ <p class="origin">由來：Standard 是標準、Operating 是作業、Procedure 是程序。軍隊和工業很早就用這種寫法，因為人員常常換，照著寫好的步驟做，新人也不容易出錯。</p>
+</div>
+<p>一份好的 SOP 有四個特點：<b>步驟短</b>（一步只做一件事）、<b>有圖</b>（看圖比看字快）、<b>有標準</b>（例如「洗手至少 20 秒」而不是「洗乾淨」）、<b>用員工看得懂的語言</b>（在柬埔寨工廠就要有高棉文版本）。</p>
+
+<h3>5W1H：把事情想清楚</h3>
+<div class="term" data-name="5W1H">
+ <h4>5W1H</h4>
+ <p>六個問題：Who 誰、What 做什麼、When 何時、Where 何地、Why 為什麼、How 怎麼做。規劃任何工作前問一遍，就不容易漏東漏西。</p>
+ <p class="origin">由來：取這六個英文疑問詞的字首。英國作家吉卜林在 1902 年的童書裡寫過一首小詩，說他有「六個忠實的僕人」就是這六個詞；新聞記者寫報導也用它確保資訊完整。</p>
+</div>
+<div class="ex"><strong>用 5W1H 安排一次宿舍大掃除</strong>
+Who：清潔班 4 人＋每房房長｜What：全面清潔與消毒｜When：週日上午 8–11 點｜Where：A 棟 1–3 樓｜Why：雨季前預防黴菌和登革熱｜How：先清雜物、再由上而下清掃、最後噴消毒，房長簽名確認。</div>
+
+<h3>檢查表：不靠記憶，靠清單</h3>
+<div class="term" data-name="檢查表（Checklist）">
+ <h4>檢查表（Checklist）</h4>
+ <p>把要檢查的項目列成清單，一項一項打勾，確保沒有遺漏。</p>
+ <p class="origin">由來：1935 年美國一架新型轟炸機試飛時墜毀，原因是經驗豐富的機師忘了解除一個鎖定裝置。之後飛行員開始使用起飛前檢查表，從此航空業、醫院、工廠都學起這個方法。連最專業的人都會忘記，所以要靠清單。</p>
+</div>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="2" data-exp="Check 是檢查結果。看投訴數量有沒有下降，就是在檢查改善有沒有效。">
+ <div class="qq">餐廳換了新菜單後，廠務統計一個月的投訴數量有沒有減少。這是 PDCA 的哪一步？</div>
+ <ol><li>Plan</li><li>Do</li><li>Check</li><li>Act</li></ol>
+</div>
+<div class="quiz" data-a="1" data-exp="好的標準要能量化、能檢查。「至少 20 秒」任何人都能判斷有沒有做到。">
+ <div class="qq">下面哪一句最適合寫進 SOP？</div>
+ <ol><li>手要洗乾淨</li><li>用肥皂搓洗雙手至少 20 秒</li><li>盡量常常洗手</li><li>洗手很重要</li></ol>
+</div>
+</section>
+
+<!-- ================= 第二站 清潔 ================= -->
+<section class="lesson" id="L4" data-stage="清潔管理" data-c="#2F7FC1" data-title="清潔的科學：髒污從哪裡來？">
+<div class="sheet">
+<p class="lead">清潔不是「拿抹布擦一擦」這麼簡單。不同的髒污要用不同的方法，用錯清潔劑不但擦不乾淨，還可能讓人中毒。</p>
+
+<h3>為什麼工廠一定要乾淨？</h3>
+<ul class="dots">
+ <li><b>健康</b>：髒的廁所和餐廳會傳播腸胃炎等疾病。</li>
+ <li><b>安全</b>：地上有油會滑倒；成衣廠的布毛堆在燈管、馬達、電箱上，遇到高溫或火花會起火。</li>
+ <li><b>品質</b>：衣服沾到油漬或灰塵，整批可能被客戶退貨。</li>
+ <li><b>信任</b>：客戶驗廠第一眼看的就是環境。</li>
+</ul>
+
+<h3>四種常見髒污</h3>
+<div class="scroll"><table class="t">
+<tr><th>髒污</th><th>常見地點</th><th>性質</th><th>用什麼對付</th></tr>
+<tr><td>灰塵、布毛</td><td>車間、燈具、機台</td><td>乾的、會飄</td><td>吸塵器、除塵拖把</td></tr>
+<tr><td>油污</td><td>廚房、機台、車輛</td><td>偏酸性</td><td>鹼性清潔劑（去油劑）</td></tr>
+<tr><td>水垢、尿垢</td><td>廁所、水龍頭</td><td>偏鹼性的礦物</td><td>酸性清潔劑</td></tr>
+<tr><td>細菌、黴菌</td><td>廚房、廁所、潮濕角落</td><td>活的</td><td>先清洗，再用消毒劑</td></tr>
+</table></div>
+<p>記一個口訣：<b>酸鹼相反才去得掉</b>。油污偏酸，就用鹼性的去；水垢偏鹼，就用酸性的去。</p>
+
+<div class="term" data-name="pH 值">
+ <h4>pH 值（酸鹼值）</h4>
+ <p>表示液體有多酸或多鹼的數字，從 0 到 14。7 是中性（像純水），小於 7 是酸性，越小越酸；大於 7 是鹼性，越大越鹼。</p>
+ <p class="origin">由來：1909 年丹麥化學家索倫森（Sørensen）在啤酒廠的實驗室發明的。p 通常解釋成「power（力量、次方）」，H 是氫（Hydrogen），意思是「氫離子的濃度有多少」。</p>
+</div>
+<div class="widget">
+ <p class="wt">看圖：常見清潔用品在酸鹼尺的哪裡？</p>
+ <svg viewBox="0 0 560 150" aria-label="pH 酸鹼尺">
+  <defs><linearGradient id="ph" x1="0" x2="1"><stop offset="0" stop-color="#C8352B"/><stop offset=".3" stop-color="#F2C230"/><stop offset=".5" stop-color="#7BC47F"/><stop offset=".75" stop-color="#2F7FC1"/><stop offset="1" stop-color="#5B3A8C"/></linearGradient></defs>
+  <rect x="20" y="60" width="520" height="26" fill="url(#ph)" rx="4"/>
+  <g font-size="12" text-anchor="middle" fill="#1E2A30">
+   <text x="20" y="104">0</text><text x="280" y="104">7 中性</text><text x="540" y="104">14</text>
+   <text x="100" y="128" fill="#C8352B">強酸 ← 越酸</text><text x="460" y="128" fill="#5B3A8C">越鹼 → 強鹼</text>
+   <path d="M57 58 v-14" stroke="#1E2A30"/><text x="57" y="38">馬桶清潔劑 1–2</text>
+   <path d="M150 58 v-26" stroke="#1E2A30"/><text x="150" y="26">醋 約 3</text>
+   <path d="M280 58 v-14" stroke="#1E2A30"/><text x="280" y="38">清水 7</text>
+   <path d="M420 58 v-26" stroke="#1E2A30"/><text x="420" y="26">去油劑 11–12</text>
+   <path d="M500 58 v-14" stroke="#1E2A30"/><text x="500" y="38">漂白水 12–13</text>
+  </g>
+ </svg>
+</div>
+
+<div class="warn"><div><strong>絕對不能混用的清潔劑</strong><br>漂白水（含氯）＋酸性清潔劑（如馬桶清潔劑）→ 產生有毒的<b>氯氣</b>。<br>漂白水＋含氨的清潔劑 → 產生有毒的<b>氯胺</b>。<br>每年都有人在打掃廁所時，因為「兩種一起用比較乾淨」而中毒送醫。清潔劑一次只用一種，換另一種前先用清水沖乾淨，並保持通風、戴手套。</div></div>
+
+<div class="term" data-name="SDS（安全資料表）">
+ <h4>SDS（Safety Data Sheet，安全資料表）</h4>
+ <p>每一種化學品（包括清潔劑）都應該附的說明書，寫了成分、危害、急救方法、怎麼存放、洩漏時怎麼處理。</p>
+ <p class="origin">由來：以前叫 MSDS（Material Safety Data Sheet，物質安全資料表）。聯合國推動全球化學品統一分類標示制度（GHS）後，格式統一成 16 個章節，名稱也簡化成 SDS。清潔劑倉庫和使用地點都要放一份，驗廠時一定會查。</p>
+</div>
+
+<h3>稀釋：不是越濃越好</h3>
+<p>濃縮清潔劑要照標籤比例加水。例如標示「1:100」，就是 1 份清潔劑加 100 份水，10 毫升清潔劑配 1 公升水。倒太多不會更乾淨，反而會殘留黏膩、傷害地板和皮膚，還浪費錢。最好的做法是在調配處貼上稀釋對照表，並提供量杯。</p>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="1" data-exp="水垢、尿垢偏鹼性，要用酸性清潔劑；酸鹼相反才去得掉。">
+ <div class="qq">廁所地板上黃黃的尿垢，應該用哪一類清潔劑？</div>
+ <ol><li>鹼性去油劑</li><li>酸性清潔劑</li><li>什麼都不用，清水就好</li><li>漂白水加馬桶清潔劑一起用</li></ol>
+</div>
+<div class="quiz" data-a="3" data-exp="漂白水和酸性清潔劑混合會產生有毒的氯氣。一次只用一種，中間用清水沖乾淨。">
+ <div class="qq">清潔工說：「漂白水和馬桶清潔劑一起倒，洗得更乾淨。」你應該怎麼回答？</div>
+ <ol><li>好主意，省時間</li><li>可以，但要戴口罩</li><li>只能在戶外這樣做</li><li>不行，會產生有毒氣體</li></ol>
+</div>
+</section>
+
+<section class="lesson" id="L5" data-stage="清潔管理" data-c="#2F7FC1" data-title="清潔的方法：順序、分區、顏色">
+<div class="sheet">
+<p class="lead">知道髒污的科學之後，這一課學「怎麼掃才有效率」。掃錯順序，等於掃完又弄髒一次。</p>
+
+<h3>清潔四大順序</h3>
+<ol class="steps">
+ <li><b>由上而下</b>：先清天花板、燈具，再清桌面，最後才掃地。因為灰塵會往下掉。</li>
+ <li><b>由內而外</b>：從房間最裡面清到門口，才不會踩過剛清好的地方。</li>
+ <li><b>由乾到濕</b>：先把灰塵吸乾淨再拖地，不然灰塵遇水會變成泥。</li>
+ <li><b>由淨到髒</b>：先擦比較乾淨的地方，最後才擦最髒的（例如馬桶），避免把髒東西帶到乾淨的地方。</li>
+</ol>
+<div class="widget">
+ <p class="wt">看動畫：由上而下</p>
+ <p class="hint">按「下一步」，看看為什麼地板要留到最後。</p>
+ <svg id="topDown" viewBox="0 0 460 250" aria-label="由上而下清潔示意">
+  <rect x="20" y="10" width="420" height="230" fill="#F7F8F6" stroke="#9AA6A0"/>
+  <rect class="zone" x="20" y="10" width="420" height="40" fill="#F2C230" opacity="0"/>
+  <rect class="zone" x="20" y="50" width="420" height="75" fill="#F2C230" opacity="0"/>
+  <rect class="zone" x="20" y="125" width="420" height="75" fill="#F2C230" opacity="0"/>
+  <rect class="zone" x="20" y="200" width="420" height="40" fill="#F2C230" opacity="0"/>
+  <rect x="160" y="18" width="140" height="10" fill="#fff" stroke="#6b7a73"/><text x="230" y="44" font-size="12" text-anchor="middle">燈具、天花板</text>
+  <rect x="40" y="62" width="90" height="55" fill="#CFE0EE" stroke="#6b7a73"/><text x="85" y="94" font-size="12" text-anchor="middle">窗戶</text>
+  <rect x="300" y="70" width="110" height="10" fill="#8C7B61"/><text x="355" y="100" font-size="12" text-anchor="middle">牆面、層架</text>
+  <rect x="120" y="150" width="220" height="12" fill="#8C7B61"/><rect x="130" y="162" width="10" height="38" fill="#8C7B61"/><rect x="320" y="162" width="10" height="38" fill="#8C7B61"/><text x="230" y="144" font-size="12" text-anchor="middle">桌面、機台</text>
+  <text x="230" y="230" font-size="12" text-anchor="middle">地面</text>
+  <g id="dustFall" fill="#8a7f70">
+   <circle cx="180" cy="30" r="3"/><circle cx="230" cy="32" r="2.5"/><circle cx="270" cy="30" r="3"/><circle cx="330" cy="84" r="2.5"/><circle cx="370" cy="84" r="3"/><circle cx="200" cy="166" r="2.5"/><circle cx="260" cy="166" r="3"/>
+  </g>
+ </svg>
+ <div class="row" style="margin-top:12px"><button class="btn" id="tdNext">下一步</button><button class="btn alt" id="tdReset">重來</button></div>
+ <div class="out" id="tdOut">一個有灰塵的房間。按「下一步」開始清潔。</div>
+</div>
+
+<h3>分區分級：不是每個地方都一樣重要</h3>
+<p>工廠很大，清潔人力有限，所以要依「風險」決定清潔頻率。風險越高（和食物、身體接觸越多、人越多），清得越勤。</p>
+<div class="scroll"><table class="t">
+<tr><th>等級</th><th>區域舉例</th><th>頻率舉例</th></tr>
+<tr><td>高風險</td><td>廚房、備餐區、廁所、醫務室</td><td>每天多次，餐後或每 2 小時巡一次</td></tr>
+<tr><td>中風險</td><td>車縫車間、食堂用餐區、宿舍走廊、樓梯</td><td>每天 1–2 次，布毛每班清</td></tr>
+<tr><td>低風險</td><td>辦公室、會議室、倉庫</td><td>每天 1 次或隔天 1 次</td></tr>
+<tr><td>定期深度</td><td>燈具、排水溝、屋頂天溝、水塔</td><td>每週、每月或每季</td></tr>
+</table></div>
+
+<h3>顏色管理：抹布也要分顏色</h3>
+<div class="term" data-name="交叉污染">
+ <h4>交叉污染（Cross-contamination）</h4>
+ <p>細菌或髒東西從一個地方被「帶」到另一個地方。例如用擦過馬桶的抹布去擦餐桌。</p>
+ <p class="origin">由來：「交叉」是指污染在不同區域之間互相跑來跑去。這個詞最早在醫院和食品業使用，因為那裡的交叉污染會直接讓人生病。</p>
+</div>
+<div class="term" data-name="顏色管理（清潔工具）">
+ <h4>顏色管理（清潔工具分色）</h4>
+ <p>不同區域用不同顏色的抹布、拖把、水桶，一看顏色就知道能不能在這裡用，避免交叉污染。</p>
+ <p class="origin">由來：醫院和食品工廠發展出來的做法，英國醫療體系在 2000 年代推廣一套全國統一的四色規則，後來很多工廠也跟著用。常見的是：紅色＝廁所、綠色＝廚房與食物區、藍色＝一般區域、黃色＝醫務室或隔離區。</p>
+</div>
+<div class="widget">
+ <p class="wt">配配看：每個區域要用什麼顏色的工具？</p>
+ <div id="colorGame"></div>
+ <div class="row" style="margin-top:10px"><button class="btn" id="cgCheck">檢查答案</button></div>
+ <div class="out" id="cgOut">每一區選一個顏色，然後按「檢查答案」。</div>
+</div>
+
+<h3>成衣廠的特別功課：布毛</h3>
+<p>車縫、剪線會產生大量棉絮布毛。它們又輕又易燃，會飄到燈管上、馬達裡、電箱中。清布毛要用<b>吸塵器</b>，不要用高壓風槍吹，吹只是把布毛從這裡「搬家」到那裡，還會讓它飄進員工的鼻子。</p>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="0" data-exp="由上而下：灰塵往下掉，所以先清高處，地板最後。">
+ <div class="qq">清潔一間辦公室，下列順序哪一個最正確？</div>
+ <ol><li>燈具 → 桌面 → 地板</li><li>地板 → 桌面 → 燈具</li><li>桌面 → 地板 → 燈具</li><li>哪個順序都一樣</li></ol>
+</div>
+<div class="quiz" data-a="2" data-exp="綠色通常用在廚房和食物區，紅色是廁所。用錯顏色會造成交叉污染。">
+ <div class="qq">清潔工拿紅色抹布走進廚房，你應該？</div>
+ <ol><li>沒關係，抹布洗過了</li><li>讓他擦完再說</li><li>阻止他，廚房要用綠色的，紅色是廁所用的</li><li>換成黃色就好</li></ol>
+</div>
+</section>
+
+<section class="lesson" id="L6" data-stage="清潔管理" data-c="#2F7FC1" data-title="清潔檢查與外包管理">
+<div class="sheet">
+<p class="lead">清潔做了，怎麼知道做得好不好？如果清潔工作外包給清潔公司，又要怎麼管？這一課學「驗收」。</p>
+
+<h3>標準要能「量」</h3>
+<p>「廁所要乾淨」是一句沒辦法檢查的話，每個人心中的乾淨都不一樣。好的標準要讓任何人來檢查，結果都一樣：</p>
+<div class="scroll"><table class="t">
+<tr><th>模糊的說法</th><th>可以檢查的標準</th></tr>
+<tr><td>地板要乾淨</td><td>地面沒有看得到的垃圾、沒有積水、沒有腳印水漬</td></tr>
+<tr><td>垃圾要倒</td><td>垃圾桶不超過八分滿，桶身外側沒有污漬</td></tr>
+<tr><td>廁所不能臭</td><td>站在門口聞不到異味；衛生紙、洗手乳、擦手紙都有補</td></tr>
+<tr><td>常常打掃</td><td>每 2 小時巡一次，門後簽到表有時間與簽名</td></tr>
+</table></div>
+
+<h3>清潔檢查表的樣子</h3>
+<div class="scroll"><table class="t">
+<tr><th>區域</th><th>項目</th><th>標準</th><th>合格</th><th>不合格原因／照片</th></tr>
+<tr><td>2F 女廁</td><td>地面</td><td>無垃圾、無積水</td><td>✓</td><td></td></tr>
+<tr><td>2F 女廁</td><td>洗手台</td><td>洗手乳有補、鏡面無水垢</td><td>✗</td><td>洗手乳空了（附照片）</td></tr>
+<tr><td>2F 女廁</td><td>異味</td><td>門口聞不到</td><td>✓</td><td></td></tr>
+</table></div>
+<p>檢查的三個好習慣：<b>隨機抽查</b>（不要每天同一時間，不然大家只在那時候打掃）、<b>拍照留證據</b>（不合格和改善後各拍一張）、<b>當場回饋</b>（找到問題馬上告訴負責人，並約定改好的時間）。</p>
+<div class="ex"><strong>打個比方</strong>老師不會只在學期末才看你的作業，而是隨時抽考。清潔檢查也一樣，隨機抽查才看得到平常的真實樣子。</div>
+
+<h3>外包：把工作交給專業公司</h3>
+<div class="term" data-name="外包（Outsourcing）">
+ <h4>外包（Outsourcing）</h4>
+ <p>把公司的某項工作，付錢交給外面的公司來做，例如清潔、保全、餐廳、交通車。</p>
+ <p class="origin">由來：英文 out（外面）＋ source（來源），意思是「從外面找資源」。1980–90 年代企業開始流行「只做自己最擅長的，其他交給專家」，這個詞就普及了。</p>
+</div>
+<p>外包<b>不等於</b>丟給別人就不用管。工作外包了，出問題時責任還是在工廠身上（客戶驗廠只看你的廠，不會管是誰掃的）。外包合約至少要寫清楚：</p>
+<ul class="dots">
+ <li><b>範圍</b>：哪些區域、哪些工作、哪些不包含。</li>
+ <li><b>人力</b>：每天幾個人、幾點到幾點。</li>
+ <li><b>標準與頻率</b>：直接附上前面那種可量化的標準表。</li>
+ <li><b>獎懲</b>：抽查不合格幾次要扣款，連續不合格可以解約。</li>
+ <li><b>勞工與安全</b>：外包公司也要依法給員工薪資、保險、防護用品。</li>
+</ul>
+<div class="term" data-name="SLA（服務水準協議）">
+ <h4>SLA（Service Level Agreement，服務水準協議）</h4>
+ <p>雙方約定好「服務要做到什麼程度」的協議，例如「廁所抽查合格率每月不低於 95%」「接到清潔需求 30 分鐘內到場」。</p>
+ <p class="origin">由來：最早在電信和資訊業使用，例如網路公司保證「一年斷線不超過幾小時」。後來各種服務外包都借用這個概念。</p>
+</div>
+
+<h3>別忘了清潔人員的安全</h3>
+<p>拖地時放「小心地滑」警示牌；使用化學品要戴手套，必要時戴護目鏡；搬重物要蹲下用腿出力；高處清潔要用穩固的梯子並有人扶。清潔工是廠務團隊的一份子，他們的安全也歸廠務管。</p>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="1" data-exp="可量化的標準才能讓每個人檢查的結果一樣。">
+ <div class="qq">下列哪一項是「可以檢查」的清潔標準？</div>
+ <ol><li>廁所要很乾淨</li><li>垃圾桶不超過八分滿</li><li>清潔工要認真</li><li>盡量不要有味道</li></ol>
+</div>
+<div class="quiz" data-a="3" data-exp="外包的是工作，不是責任。出事時客戶和政府找的是工廠。">
+ <div class="qq">清潔外包給別的公司後，驗廠時廁所不合格，責任在誰？</div>
+ <ol><li>全部是外包公司的責任</li><li>清潔工個人的責任</li><li>客戶的責任</li><li>工廠仍然要負責，所以要管好外包</li></ol>
+</div>
+</section>
+
+<!-- ================= 第三站 運輸 ================= -->
+<section class="lesson" id="L7" data-stage="運輸管理" data-c="#B88A00" data-title="員工交通車：安全第一">
+<div class="sheet">
+<p class="lead">在很多東南亞工廠，員工住在附近的村莊，每天靠交通車上下班。一天來回兩趟，路上的時間往往是員工一天當中風險最高的時候。</p>
+
+<h3>為什麼交通是大事？</h3>
+<p>在柬埔寨，成衣工人上下班途中的交通事故曾多次登上新聞，常見原因是車輛超載、讓人站在貨車車斗、司機超速或疲勞駕駛。工廠就算把交通外包給車行，只要是「工廠安排的通勤」，員工的安全就和工廠有關，品牌客戶驗廠也會問。</p>
+
+<h3>規劃交通車的五個步驟</h3>
+<ol class="steps">
+ <li><b>畫出員工住在哪裡</b>：統計各村莊、各區的人數。</li>
+ <li><b>設計路線與站點</b>：站點要在安全、有空間停車的地方，不要停在彎道或大馬路中間。</li>
+ <li><b>排時間表</b>：配合上下班時間，也要考慮加班時段。</li>
+ <li><b>決定車輛與人數</b>：每台車坐幾人，絕不超過核載人數。</li>
+ <li><b>建立乘客名單</b>：誰搭哪一台車、哪一站上車，發生事故時才知道車上有誰。</li>
+</ol>
+
+<div class="term" data-name="核載人數">
+ <h4>核載人數</h4>
+ <p>政府核定一台車「最多可以載幾個人」，通常寫在行車執照或車身上。</p>
+ <p class="origin">由來：「核」是核定、審查過的意思，「載」是裝載。車廠根據座椅、車重、煞車能力設計出安全上限，政府審查後核准，超過就是違法超載。</p>
+</div>
+<div class="ex"><strong>打個比方</strong>一台腳踏車規定載一個人。硬要載三個人，重心會不穩、煞車煞不住、轉彎容易倒。汽車也一樣，超載時煞車距離變長、輪胎容易爆、翻車時傷亡更多。</div>
+
+<h3>出車前點檢</h3>
+<div class="widget">
+ <p class="wt">試試看：司機出車前要檢查的項目</p>
+ <p class="hint">全部勾完才可以出車。</p>
+ <div id="preTrip"></div>
+ <div class="out" id="ptOut">還有項目沒檢查，不可以出車。</div>
+</div>
+
+<h3>乘車守則（要用員工看得懂的語言貼在車上）</h3>
+<ul class="dots">
+ <li>每人一個座位，坐好再開車；不站立、不坐在車斗邊緣。</li>
+ <li>頭、手不伸出車外。</li>
+ <li>依序排隊上下車，車停穩才下車。</li>
+ <li>知道緊急出口和滅火器位置。</li>
+</ul>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="2" data-exp="超過核載人數就是超載，會讓煞車距離變長、翻車時傷亡更多。員工多就要多派車。">
+ <div class="qq">今天加班，有 35 人要搭一台核載 30 人的車，司機說擠一擠沒關係。你應該？</div>
+ <ol><li>同意，只有一趟</li><li>讓多出來的 5 個人坐車斗</li><li>不同意，加派車輛或分兩趟</li><li>叫 5 個人自己想辦法</li></ol>
+</div>
+<div class="quiz" data-a="0" data-exp="有名單，發生事故時才能確認車上有誰、有沒有人失蹤，也方便聯絡家屬。">
+ <div class="qq">為什麼要有「乘客名單」？</div>
+ <ol><li>發生事故時才知道車上有哪些人</li><li>為了收車費</li><li>為了考勤扣薪</li><li>沒有特別用途</li></ol>
+</div>
+</section>
+
+<section class="lesson" id="L8" data-stage="運輸管理" data-c="#B88A00" data-title="車輛保養、司機管理與廠內搬運">
+<div class="sheet">
+<p class="lead">上一課談「怎麼安排交通車」，這一課談「怎麼讓車和人都保持在安全狀態」，再把範圍擴大到工廠裡面的搬運。</p>
+
+<h3>每台車都要有一份檔案</h3>
+<p>車牌、車型、核載人數、保險到期日、年度檢驗日期、每次保養和維修紀錄、指派的司機。到期日前一個月就要提醒，保險或檢驗過期的車不可以上路。</p>
+
+<div class="term" data-name="預防保養（PM）">
+ <h4>預防保養（Preventive Maintenance，PM）</h4>
+ <p>在東西壞掉之前，就按時間或里程定期檢查、換零件。和「壞了才修」（事後維修）相反。</p>
+ <p class="origin">由來：Preventive 是「預防」。二十世紀中期工業界發現，機器突然壞掉的損失遠比定期保養貴，於是發展出這套做法，後來延伸到車輛、建築、設備各方面。</p>
+</div>
+<div class="ex"><strong>打個比方</strong>每半年去看牙醫洗牙，就是預防保養；等到牙痛得睡不著才去，就是事後維修。前者便宜又不痛，後者又貴又痛。車子也一樣，定期換機油比引擎壞掉便宜太多。</div>
+
+<h3>司機管理</h3>
+<ul class="dots">
+ <li><b>資格</b>：有合法且對應車種的駕照，定期查驗。</li>
+ <li><b>工時</b>：連續開車要休息，不要讓司機一早跑交通車、白天跑貨車、晚上又跑加班車。疲勞駕駛和酒駕一樣危險。</li>
+ <li><b>禁酒</b>：出車前可以做酒測，有酒味就不能開車。</li>
+ <li><b>禁用手機</b>、遵守速限；可以在車上裝行車紀錄器。</li>
+ <li><b>訓練</b>：防禦駕駛、事故應變、滅火器使用。</li>
+</ul>
+
+<h3>萬一發生事故：五個動作</h3>
+<ol class="steps">
+ <li><b>停</b>：停車、打開警示燈、在後方放三角警示牌，避免再被撞。</li>
+ <li><b>救</b>：先確認有沒有人受傷，打急救電話，不要隨便移動重傷者。</li>
+ <li><b>報</b>：通報警察和公司（廠務主管）。</li>
+ <li><b>記</b>：拍照、記錄時間地點、對照乘客名單清點人數。</li>
+ <li><b>查</b>：事後找出原因，用 PDCA 改善，防止再發生。</li>
+</ol>
+
+<h3>廠內搬運：推車與堆高機</h3>
+<div class="term" data-name="棧板（Pallet）">
+ <h4>棧板（Pallet）</h4>
+ <p>放貨物用的平台，通常是木頭或塑膠做的，下面有空隙讓堆高機的叉子插進去。</p>
+ <p class="origin">由來：英文 pallet 來自法文，原意是「平平的小板子」。「棧」在中文是存放貨物的地方（例如「貨棧」），所以叫棧板，有些地方也叫托盤、卡板。</p>
+</div>
+<div class="term" data-name="堆高機（Forklift）">
+ <h4>堆高機（Forklift，叉車）</h4>
+ <p>前面有兩根叉子、能把棧板抬高搬運的車輛，倉庫和裝卸貨區一定會用到。</p>
+ <p class="origin">由來：英文 fork 是叉子、lift 是舉起，合起來就是「用叉子舉起來的車」。中文有人叫它堆高機（因為能把貨堆得很高），也有人叫叉車。二十世紀初發明，二次大戰時為了快速搬運軍需物資而大量普及。</p>
+</div>
+<ul class="dots">
+ <li>只有受過訓練、有證照的人可以開。</li>
+ <li>行駛時叉子放低（離地約 10–20 公分），貨物擋住視線時要倒著開。</li>
+ <li>不可以載人，不可以站在叉子下面。</li>
+</ul>
+<div class="term" data-name="人車分道">
+ <h4>人車分道</h4>
+ <p>用地面標線、護欄把「人走的路」和「車走的路」分開，減少人被車撞的機會。</p>
+ <p class="origin">由來：來自道路交通的觀念（人行道和車道分開），工廠把它搬進廠區。常見做法是用黃線劃出通道，人行道用綠色或另外的標示，這就是第 2 課學的「目視管理」。</p>
+</div>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="1" data-exp="預防保養是在壞掉之前按時間或里程保養，例如定期換機油。">
+ <div class="qq">下列哪一個是「預防保養」？</div>
+ <ol><li>煞車失靈後送修</li><li>每 5,000 公里定期換機油、檢查煞車</li><li>爆胎後換輪胎</li><li>車子冒煙才打電話叫拖車</li></ol>
+</div>
+<div class="quiz" data-a="0" data-exp="第一步是停車並設置警示，避免二次事故，接著才是救人、通報、記錄。">
+ <div class="qq">交通車發生擦撞，第一個動作是什麼？</div>
+ <ol><li>停車、開警示燈、放三角警示牌</li><li>先打電話給車行老闆</li><li>先拍照上傳群組</li><li>繼續開回工廠再說</li></ol>
+</div>
+</section>
+
+<!-- ================= 第四站 膳食 ================= -->
+<section class="lesson" id="L9" data-stage="膳食管理" data-c="#1E8A5A" data-title="食物中毒是怎麼發生的？">
+<div class="sheet">
+<p class="lead">員工餐廳一天要做上千份飯菜，只要一道菜出問題，就可能上百人同時腹瀉、嘔吐。想預防食物中毒，要先知道敵人是誰。</p>
+
+<h3>食物裡的三種危害</h3>
+<div class="scroll"><table class="t">
+<tr><th>種類</th><th>是什麼</th><th>例子</th></tr>
+<tr><td>生物性</td><td>細菌、病毒、寄生蟲</td><td>放太久的剩飯長細菌、沒煮熟的雞肉</td></tr>
+<tr><td>化學性</td><td>不該出現在食物裡的化學物質</td><td>蔬菜農藥沒洗乾淨、清潔劑殘留在餐具上</td></tr>
+<tr><td>物理性</td><td>吃到會受傷的異物</td><td>頭髮、碎玻璃、鐵絲刷的鐵絲、骨頭碎片</td></tr>
+</table></div>
+<p>工廠餐廳最常出事的是<b>生物性</b>危害，所以這一課重點放在細菌。</p>
+
+<div class="term" data-name="食物中毒">
+ <h4>食物中毒</h4>
+ <p>吃了被細菌、病毒、毒素或化學物質污染的食物後，出現腹瀉、嘔吐、腹痛、發燒等症狀。兩個人以上吃了同樣的食物、出現同樣症狀，通常就會被當成一起食物中毒事件調查。</p>
+ <p class="origin">由來：「中」讀第四聲，是「被打中」的意思，就像「中彈」「中暑」。所以食物中毒就是「被食物裡的毒打中了」。</p>
+</div>
+
+<h3>細菌長大需要什麼？</h3>
+<p>細菌和我們一樣需要<b>食物</b>（有營養的東西，像肉、飯、蛋）、<b>水分</b>、<b>適合的溫度</b>和<b>時間</b>。在舒服的環境裡，很多細菌大約 20 分鐘就會一分為二。聽起來很慢，但算一算就知道有多可怕。</p>
+
+<div class="term" data-name="溫度危險區">
+ <h4>溫度危險區（Danger Zone）</h4>
+ <p>大約 5°C 到 60°C 之間，是細菌長得最快的溫度。食物要嘛冰在 5°C 以下，要嘛熱在 60°C 以上，不要讓它長時間待在中間。</p>
+ <p class="origin">由來：美國食品安全單位最早用「危險區」這個好記的說法教大眾（原本是 40°F 到 140°F，換算大約 4°C 到 60°C）。各國數字略有不同，台灣的規範常用 7°C 以下冷藏、60°C 以上熱藏。重點不是背數字，而是記得「中間溫度最危險」。</p>
+</div>
+<div class="widget">
+ <p class="wt">實驗：一碗雞肉飯放在不同溫度下</p>
+ <p class="hint">先拉溫度，再按「過了 20 分鐘」，看細菌怎麼變化。</p>
+ <label for="tempR">溫度：<b id="tempV">30</b>°C</label>
+ <input type="range" id="tempR" min="-20" max="100" value="30">
+ <div id="tempZone" class="out" style="margin-top:6px"></div>
+ <svg id="germBox" viewBox="0 0 400 120" aria-label="細菌數量示意"></svg>
+ <div class="row" style="margin-top:8px"><button class="btn" id="germStep">過了 20 分鐘</button><button class="btn alt" id="germReset">重來</button></div>
+ <div class="out" id="germOut">經過時間 0 分鐘，細菌 1 隻。</div>
+</div>
+<p>在危險溫度下，1 隻細菌 5 小時後會變成三萬多隻。柬埔寨這樣的熱帶地區，室溫常常超過 30°C，正好在危險區裡。美國食品安全單位的建議是：煮好的食物放在室溫不要超過 2 小時，天氣超過 32°C 時只能 1 小時。</p>
+
+<h3>人是最大的傳染源</h3>
+<ul class="dots">
+ <li>上廁所後、摸生肉後、倒垃圾後、摸手機後都要洗手。</li>
+ <li>廚工手上有傷口要包紮並戴手套，傷口化膿不能碰食物。</li>
+ <li>腹瀉、嘔吐、發燒時不能進廚房工作，要先休息或就醫。</li>
+ <li>戴帽子（包住頭髮）、穿乾淨工作服，不戴戒指手錶。</li>
+ <li>廚工上工前和每年要做健康檢查。</li>
+</ul>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="2" data-exp="30°C 在 5–60°C 的危險區內，細菌會快速增加。熟食要保溫在 60°C 以上或冷藏。">
+ <div class="qq">中午煮好的菜在 30°C 的室溫放到晚上再賣給加班員工，有什麼問題？</div>
+ <ol><li>沒問題，菜已經煮熟了</li><li>只是味道變差而已</li><li>放在溫度危險區太久，細菌會大量增加</li><li>只要再加點鹽就好</li></ol>
+</div>
+<div class="quiz" data-a="1" data-exp="拉肚子的廚工可能把病菌帶進食物，應該先休息或就醫，不能碰食物。">
+ <div class="qq">廚工今天拉肚子，但說「還可以撐」。你應該？</div>
+ <ol><li>讓他戴口罩繼續煮</li><li>讓他暫停廚房工作，先休息或就醫</li><li>讓他只負責洗菜</li><li>多發一份獎金鼓勵他</li></ol>
+</div>
+</section>
+
+<section class="lesson" id="L10" data-stage="膳食管理" data-c="#1E8A5A" data-title="從菜市場到餐盤：HACCP 與餐廳流程">
+<div class="sheet">
+<p class="lead">上一課知道了危害從哪裡來，這一課沿著食物的旅程走一遍，看每一站要怎麼把關。</p>
+
+<div class="term" data-name="HACCP">
+ <h4>HACCP（危害分析重要管制點）</h4>
+ <p>一套食品安全方法：先分析每個步驟可能出什麼問題（危害分析），再找出「一旦沒控制好就會出事」的關鍵步驟，在那裡嚴格把關、量測、記錄。</p>
+ <p class="origin">由來：Hazard Analysis and Critical Control Points 的縮寫。1959 年開始，美國太空總署（NASA）和食品公司品食樂（Pillsbury）、美國陸軍實驗室一起發展這套方法，因為太空人在太空中吃壞肚子是非常危險的事，食物必須做到幾乎零風險。後來全世界的食品業都採用了。</p>
+</div>
+<div class="term" data-name="CCP（重要管制點）">
+ <h4>CCP（Critical Control Point，重要管制點）</h4>
+ <p>整個流程中「最後一次可以把危害消滅或降低」的步驟。例如烹煮：只要煮到夠熱，細菌就會被殺死；如果這步沒做好，後面就沒機會補救了。</p>
+ <p class="origin">由來：Critical 是關鍵的，Control 是控制，Point 是點。就像考試的「必考重點」，要特別看住。</p>
+</div>
+
+<h3>食物的旅程（紅框是重要管制點）</h3>
+<div class="flow"><span>採購</span><i>→</i><span class="ccp">驗收</span><i>→</i><span class="ccp">儲存</span><i>→</i><span>清洗切配</span><i>→</i><span class="ccp">烹煮</span><i>→</i><span class="ccp">保溫配膳</span><i>→</i><span>供餐</span><i>→</i><span>留樣</span></div>
+<div class="scroll"><table class="t">
+<tr><th>站</th><th>怎麼把關</th></tr>
+<tr><td>驗收</td><td>量溫度（冷藏品 7°C 以下、冷凍品 −18°C 以下）；看外觀、聞味道、看有效日期；不合格當場退貨並記錄。</td></tr>
+<tr><td>儲存</td><td>冷藏庫、冷凍庫每天記錄溫度；生的放下層、熟的放上層（避免生肉汁滴到熟食）；離地離牆；先進先出。</td></tr>
+<tr><td>清洗切配</td><td>生、熟食用不同的砧板和刀具（可以用顏色區分）；蔬菜多次沖洗。</td></tr>
+<tr><td>烹煮</td><td>肉類、蛋類要熟透，中心溫度至少 75°C；用探針溫度計量，不要只靠眼睛看。</td></tr>
+<tr><td>保溫配膳</td><td>熱食保持 60°C 以上；配菜人員戴手套、口罩；餐具消毒後保持乾燥。</td></tr>
+<tr><td>留樣</td><td>每道菜留一份樣品封好、標示日期餐別，冷藏保存約 48 小時。</td></tr>
+</table></div>
+
+<div class="term" data-name="先進先出（FIFO）">
+ <h4>先進先出（FIFO，First In First Out）</h4>
+ <p>先買進來的食材先用掉，避免舊的一直被壓在後面放到過期。</p>
+ <p class="origin">由來：原本是會計和倉庫管理的用語。排隊就是先進先出：先來的人先買到。冰箱上架時，新貨放後面、舊貨往前推，就能自然做到。</p>
+</div>
+<div class="term" data-name="留樣">
+ <h4>留樣</h4>
+ <p>把每一餐、每一道菜留一小份（常見做法是約 100–125 克）封存在冰箱，保存大約 48 小時。</p>
+ <p class="origin">由來：「留下樣品」的簡稱。萬一有人吃了不舒服，衛生單位可以拿樣品去檢驗，找出是哪道菜、哪種細菌出了問題；如果檢驗沒問題，也能證明餐廳的清白。</p>
+</div>
+<div class="ex"><strong>打個比方</strong>HACCP 就像機場安檢。不是每個角落都派一樣多的人，而是在「登機前那一道門」集中最嚴格的檢查。烹煮就是餐廳的那道門。</div>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="0" data-exp="生下熟上：生肉放下層，才不會滴到熟食造成交叉污染。">
+ <div class="qq">冰箱裡生雞肉和煮好的湯應該怎麼放？</div>
+ <ol><li>生雞肉放下層，熟湯放上層</li><li>生雞肉放上層，熟湯放下層</li><li>放同一層就好</li><li>生雞肉不用冰</li></ol>
+</div>
+<div class="quiz" data-a="3" data-exp="HACCP 最早是為了太空人的食物安全，由 NASA 和食品公司合作發展。">
+ <div class="qq">HACCP 最早是為了誰的食物而發展出來的？</div>
+ <ol><li>學校營養午餐</li><li>軍隊前線</li><li>醫院病人</li><li>太空人</li></ol>
+</div>
+</section>
+
+<section class="lesson" id="L11" data-stage="膳食管理" data-c="#1E8A5A" data-title="菜單、成本與員工滿意度">
+<div class="sheet">
+<p class="lead">食物安全是底線，但員工每天吃，還要吃得飽、吃得好、價格合理。這一課學「經營」一間員工餐廳。</p>
+
+<h3>設計菜單</h3>
+<ul class="dots">
+ <li><b>吃得飽</b>：車縫和搬運都是體力活，主食份量要夠。</li>
+ <li><b>營養均衡</b>：每餐有主食（飯、麵）、蛋白質（肉、魚、蛋、豆類）、蔬菜，最好有湯或水果。</li>
+ <li><b>合當地口味</b>：柬埔寨員工和台灣幹部的口味不同，菜色以多數員工為主。</li>
+ <li><b>尊重飲食習慣</b>：例如有穆斯林員工時，提供不含豬肉的選擇，並分開烹調器具。</li>
+ <li><b>天氣熱多補水</b>：提供乾淨的飲用水，炎熱季節可以加一道湯。</li>
+</ul>
+<div class="term" data-name="循環菜單">
+ <h4>循環菜單（Cycle Menu）</h4>
+ <p>事先排好一段期間（例如 2 到 4 週）的菜單，時間到了再從頭循環，中間盡量不重複。</p>
+ <p class="origin">由來：學校、醫院、軍隊這種每天要煮大量餐點的地方最早使用。好處是採購可以提前計畫、成本好控制，員工也不會天天吃一樣的菜。</p>
+</div>
+
+<h3>算成本：一餐到底多少錢？</h3>
+<p>最重要的指標是「每人每餐成本」：把一段期間的總花費除以用餐人次。總花費不只是買菜的錢，還有廚工薪資、燃料（瓦斯、電）、水費、餐具耗材。</p>
+<div class="widget">
+ <p class="wt">計算機：一天的餐廳成本</p>
+ <div class="row" style="gap:14px">
+  <label>食材費（美元）<br><input type="number" id="cFood" value="900"></label>
+  <label>人工費<br><input type="number" id="cLabor" value="180"></label>
+  <label>燃料水電耗材<br><input type="number" id="cUtil" value="120"></label>
+  <label>用餐人次<br><input type="number" id="cMeals" value="1000"></label>
+ </div>
+ <div class="out" id="costOut"></div>
+</div>
+<p>「食材占比」也很重要：食材費占總成本越高，代表錢越多花在員工吃進嘴裡的東西上。如果食材占比一直往下掉，可能是菜變少了，要注意。</p>
+
+<h3>減少剩食</h3>
+<p>每天把收回來的剩菜秤重、記錄是哪道菜剩最多。某道菜天天剩很多，代表員工不愛吃，就換掉；飯常常不夠，就加量。這就是用 PDCA 改善菜單。</p>
+
+<h3>聽員工的聲音</h3>
+<div class="term" data-name="伙食委員會">
+ <h4>伙食委員會</h4>
+ <p>由員工代表和餐廳、廠務人員一起組成的小組，定期開會討論菜色、份量、衛生和價格，也可以一起去廚房檢查。</p>
+ <p class="origin">由來：「伙食」是團體一起吃的飯（古代軍隊十人為一「火」，一起開伙吃飯，後來寫成「伙」，同伙、伙伴也是這樣來的）。讓吃飯的人參與管理，意見比較容易被聽見，也比較願意接受改變。</p>
+</div>
+<p>其他方法：意見箱、每季滿意度問卷（題目要簡單，用當地語言，可以用笑臉圖示讓不識字的人也能填）、定期試吃。</p>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="2" data-exp="每人每餐成本 = 總成本 ÷ 用餐人次。1200 ÷ 1000 = 1.2。">
+ <div class="qq">一天總成本 1,200 美元，用餐 1,000 人次，每人每餐成本是多少？</div>
+ <ol><li>0.83 美元</li><li>12 美元</li><li>1.2 美元</li><li>120 美元</li></ol>
+</div>
+<div class="quiz" data-a="1" data-exp="天天剩最多代表員工不喜歡，應該用數據調整菜單，這就是 PDCA。">
+ <div class="qq">秤剩菜發現「苦瓜炒蛋」連續兩週剩最多，最好的做法是？</div>
+ <ol><li>繼續煮，員工要學會吃苦瓜</li><li>換成其他菜，下個月再觀察剩食量</li><li>減少飯的份量</li><li>不用理會</li></ol>
+</div>
+</section>
+
+<!-- ================= 第五站 住宿 ================= -->
+<section class="lesson" id="L12" data-stage="住宿管理" data-c="#8A5AB5" data-title="宿舍規劃與生活規章">
+<div class="sheet">
+<p class="lead">對住宿員工來說，宿舍就是家。一個讓人睡得好、住得安心的宿舍，員工的精神和留任率都會比較好。</p>
+
+<h3>規劃宿舍要想到的事</h3>
+<div class="scroll"><table class="t">
+<tr><th>項目</th><th>基本要求（常見做法）</th></tr>
+<tr><td>位置</td><td>和生產車間、倉庫分開，不在同一棟建築裡（萬一工廠失火，宿舍不會被波及）</td></tr>
+<tr><td>分區</td><td>男女分棟或分樓層，有各自的廁所與浴室</td></tr>
+<tr><td>床位</td><td>每人一張自己的床，床不超過兩層；每人有可以上鎖的置物櫃</td></tr>
+<tr><td>空間</td><td>通風、採光良好，房間不過度擁擠（當地法規或客戶標準常有每人最小面積規定）</td></tr>
+<tr><td>衛生設備</td><td>廁所、淋浴間數量足夠（依人數比例配置），有乾淨飲用水</td></tr>
+<tr><td>生活設施</td><td>洗衣、晾衣空間；公共照明；必要時設休閒區</td></tr>
+<tr><td>安全</td><td>至少兩個逃生方向、逃生門不上鎖、緊急照明、滅火器、煙霧偵測器</td></tr>
+</table></div>
+
+<div class="term" data-name="入住率">
+ <h4>入住率（Occupancy Rate）</h4>
+ <p>實際住的人數 ÷ 可以住的床位數。例如 200 張床住了 170 人，入住率是 85%。</p>
+ <p class="origin">由來：旅館業最常用的指標，Occupancy 是「佔用」的意思。入住率太低代表浪費空間和成本；接近 100% 則要注意是不是太擠、新進員工有沒有床位。</p>
+</div>
+
+<h3>生活規章：寫清楚，也要合理</h3>
+<ul class="dots">
+ <li><b>門禁</b>：幾點關大門、晚歸怎麼登記（為了安全，不是為了限制自由）。</li>
+ <li><b>訪客</b>：訪客要登記，異性訪客不能進入寢室區。</li>
+ <li><b>用電</b>：不能在房間煮食、不能用電熱爐等高功率電器、不能私接電線。</li>
+ <li><b>衛生</b>：每房輪值打掃，垃圾拿到指定地點。</li>
+ <li><b>違規處理</b>：先提醒、再書面警告，處罰方式要事先公告，不能隨意罰款或扣押證件。</li>
+</ul>
+<div class="warn"><div><strong>管理的界線</strong><br>宿舍管理員不可以扣留員工的身分證、護照，不可以用鎖門的方式「管住」員工，也不可以未經同意隨意進房搜查。這些做法不只不尊重人，在國際品牌的社會責任稽核裡屬於嚴重違規。需要進房檢查時，要事先公告理由，並有室友或第二位管理人員在場。</div></div>
+
+<div class="term" data-name="房長制">
+ <h4>房長制（宿舍自治）</h4>
+ <p>每間寢室選一位房長，負責輪值表、轉達公告、反映問題；每層樓或每棟可以再有樓長。</p>
+ <p class="origin">由來：學校宿舍常見的「室長」制度。管理員不可能 24 小時盯著每個房間，讓住戶自己參與管理，問題更早被發現，大家也更願意遵守自己參與訂的規則。這也呼應第 2 課 5S 的「素養」。</p>
+</div>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="1" data-exp="宿舍要和生產車間、倉庫分開，萬一工廠失火才不會波及睡覺中的員工。">
+ <div class="qq">為什麼宿舍不應該設在工廠車間的樓上？</div>
+ <ol><li>因為太吵</li><li>因為工廠失火時會危及睡覺中的員工</li><li>因為樓梯太少</li><li>其實沒關係</li></ol>
+</div>
+<div class="quiz" data-a="3" data-exp="扣押證件是嚴重違規，也侵犯員工權利。違規要依事先公告的規則處理。">
+ <div class="qq">有員工常常晚歸，下列哪個做法「不可以」？</div>
+ <ol><li>先口頭提醒</li><li>請房長了解原因</li><li>依公告的規則書面警告</li><li>扣下他的身分證，等他守規矩再還</li></ol>
+</div>
+</section>
+
+<section class="lesson" id="L13" data-stage="住宿管理" data-c="#8A5AB5" data-title="宿舍安全巡查與報修管理">
+<div class="sheet">
+<p class="lead">宿舍最怕的是晚上大家睡著時發生火災。這一課練習「看出危險」，再學怎麼處理宿舍裡大大小小的維修。</p>
+
+<div class="widget">
+ <p class="wt">找找看：這間寢室有 5 個危險</p>
+ <p class="hint">點你覺得危險的地方。</p>
+ <svg id="dormHunt" viewBox="0 0 520 300" aria-label="寢室找危險遊戲">
+  <rect width="520" height="300" fill="#F3EFE6"/>
+  <rect x="0" y="240" width="520" height="60" fill="#D8CCB6"/>
+  <rect x="200" y="30" width="110" height="80" fill="#CFE0EE" stroke="#6b7a73" stroke-width="3"/>
+  <path d="M255 30 V110 M200 70 H310" stroke="#6b7a73" stroke-width="2"/>
+  <!-- bunk bed -->
+  <rect x="20" y="70" width="150" height="12" fill="#8C7B61"/><rect x="20" y="170" width="150" height="12" fill="#8C7B61"/>
+  <rect x="20" y="40" width="8" height="220" fill="#8C7B61"/><rect x="162" y="40" width="8" height="220" fill="#8C7B61"/>
+  <rect x="28" y="58" width="134" height="12" fill="#fff" stroke="#bbb"/><rect x="28" y="158" width="134" height="12" fill="#fff" stroke="#bbb"/>
+  <path d="M28 90 Q95 120 162 90 V165 H28 Z" fill="#E8F0F7" opacity=".7" stroke="#9fb6c8"/>
+  <text x="95" y="120" font-size="11" text-anchor="middle" fill="#56708a">蚊帳</text>
+  <!-- hazard 1: candle near net -->
+  <g class="hz" data-i="床邊點蠟燭或蚊香，離蚊帳太近，一翻身就可能起火。應改用電蚊拍或裝紗窗。" style="cursor:pointer">
+   <rect x="176" y="222" width="30" height="18" fill="#8C7B61"/><rect x="186" y="200" width="10" height="22" fill="#FFF7E0" stroke="#999"/><path d="M191 186 q6 8 0 14 q-6 -6 0 -14" fill="#F29A30"/>
+  </g>
+  <!-- desk -->
+  <rect x="330" y="170" width="120" height="10" fill="#8C7B61"/><rect x="338" y="180" width="8" height="60" fill="#8C7B61"/><rect x="434" y="180" width="8" height="60" fill="#8C7B61"/>
+  <!-- hazard 2: hot plate cooking -->
+  <g class="hz" data-i="在房間用電熱爐煮東西，耗電大又有明火高溫，是宿舍火災的常見原因。應統一到公共廚房或餐廳。" style="cursor:pointer">
+   <rect x="350" y="152" width="50" height="18" fill="#444"/><ellipse cx="375" cy="150" rx="18" ry="5" fill="#C8352B"/><rect x="360" y="126" width="30" height="22" fill="#9AA" /><path d="M368 120 q4 -8 0 -14 M380 120 q4 -8 0 -14" stroke="#aaa" fill="none"/>
+  </g>
+  <!-- hazard 3: daisy chain -->
+  <g class="hz" data-i="延長線接延長線（串接），電流過大會讓電線發熱、融化起火。一個插座只接一條合格延長線，不要串接。" style="cursor:pointer">
+   <rect x="330" y="255" width="40" height="12" fill="#fff" stroke="#333"/><rect x="380" y="262" width="40" height="12" fill="#fff" stroke="#333"/><rect x="430" y="255" width="40" height="12" fill="#fff" stroke="#333"/>
+   <path d="M370 261 Q376 270 380 268 M420 268 Q426 262 430 261 M470 261 Q490 258 500 230" stroke="#333" fill="none" stroke-width="2"/>
+  </g>
+  <!-- door + hazard 4 blocked -->
+  <rect x="470" y="60" width="44" height="180" fill="#A7896A"/><circle cx="478" cy="150" r="3" fill="#333"/>
+  <text x="492" y="52" font-size="11" text-anchor="middle" fill="#1E8A5A">出口</text>
+  <g class="hz" data-i="紙箱和行李堆在門口，擋住逃生路線。火災時煙很濃看不清楚，一絆倒就逃不出去。門口和走道要淨空。" style="cursor:pointer">
+   <rect x="440" y="195" width="50" height="45" fill="#C49A63" stroke="#7a5a30"/><rect x="450" y="160" width="40" height="35" fill="#C49A63" stroke="#7a5a30"/>
+  </g>
+  <!-- hazard 5: clothes on fan/lamp -->
+  <g class="hz" data-i="濕衣服掛在電風扇或燈上，會讓電器過熱，水滴進去還可能漏電短路。衣服要晾在晾衣區。" style="cursor:pointer">
+   <circle cx="260" cy="170" r="26" fill="#DDE3E0" stroke="#6b7a73" stroke-width="3"/><rect x="256" y="196" width="8" height="44" fill="#6b7a73"/>
+   <path d="M236 150 H286 L280 190 H242 Z" fill="#E48CB0" opacity=".9"/>
+  </g>
+  <g id="hzMarks"></g>
+ </svg>
+ <div class="out" id="dormOut">已找到 0 / 5 個危險。</div>
+</div>
+
+<h3>定期巡查</h3>
+<p>管理員每天巡公共區域，每週或每月抽查寢室（依規章事先公告）。檢查項目可以直接做成第 3 課學的檢查表：滅火器壓力指針在綠色區、有效期限內；緊急照明按測試鈕會亮；逃生門可從內側推開；走道沒有堆物；沒有私接電線或高功率電器。</p>
+
+<h3>報修：從「有人說」到「真的修好」</h3>
+<div class="flow"><span>員工報修</span><i>→</i><span>分級</span><i>→</i><span>派工</span><i>→</i><span>維修</span><i>→</i><span>驗收</span><i>→</i><span>結案記錄</span></div>
+<div class="scroll"><table class="t">
+<tr><th>等級</th><th>例子</th><th>處理時限（舉例）</th></tr>
+<tr><td>緊急</td><td>電線冒煙、插座燒焦、漏水流到電器、逃生門打不開</td><td>立即處理，先斷電、隔離</td></tr>
+<tr><td>重要</td><td>整層沒水、廁所堵塞、門鎖壞掉</td><td>24 小時內</td></tr>
+<tr><td>一般</td><td>一盞燈不亮、櫃子門鬆了</td><td>3 天內</td></tr>
+</table></div>
+<p>「驗收」這一步常被忘記：維修工說修好了，要請報修的人確認真的好了，才能結案。每個月統計報修件數和完成時間，就能看出哪裡最常壞。</p>
+
+<div class="term" data-name="根本原因（5 Whys）">
+ <h4>根本原因與「五個為什麼」（5 Whys）</h4>
+ <p>遇到問題時連續問「為什麼」，一層一層往下挖，直到找到真正的源頭，而不是只處理表面。</p>
+ <p class="origin">由來：豐田汽車創辦人家族的豐田佐吉提出，後來成為豐田生產方式的基本功。「五」只是大概的次數，重點是問到能夠「一次解決、不再發生」為止。</p>
+</div>
+<div class="ex"><strong>五個為什麼：宿舍跳電</strong>
+為什麼跳電？→ 電流太大。為什麼電流太大？→ 好幾間房同時用電熱水壺。為什麼大家用電熱水壺？→ 想喝熱水。為什麼宿舍沒熱水？→ 飲水機只有冷水。<b>根本解決</b>：在每層裝有熱水的飲水機，電熱水壺的需求自然消失，比一直罰款更有效。</div>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="0" data-exp="電線冒煙是立即的火災危險，要先斷電、隔離再修，屬於緊急等級。">
+ <div class="qq">員工半夜報修「插座在冒煙」，這屬於哪一級？</div>
+ <ol><li>緊急，立即斷電處理</li><li>重要，明天處理</li><li>一般，三天內處理</li><li>等白天維修工上班再說</li></ol>
+</div>
+<div class="quiz" data-a="2" data-exp="驗收是讓報修的人確認真的修好，避免「紙上結案、實際沒修好」。">
+ <div class="qq">報修流程中，為什麼一定要有「驗收」？</div>
+ <ol><li>為了多簽一個名</li><li>為了讓維修工被扣分</li><li>確認問題真的解決才結案</li><li>客戶規定的形式</li></ol>
+</div>
+</section>
+
+<!-- ================= 第六站 環境 ================= -->
+<section class="lesson" id="L14" data-stage="環境管理" data-c="#0E8C8C" data-title="廢棄物與污水">
+<div class="sheet">
+<p class="lead">工廠每天都會產生垃圾和污水。處理得好，可以省錢甚至賣錢；處理不好，會污染環境、被罰款，也會讓品牌客戶不敢下單。</p>
+
+<h3>先減少，再分類</h3>
+<div class="term" data-name="3R">
+ <h4>3R：減量、再使用、回收</h4>
+ <p>Reduce 減量（一開始就少用）、Reuse 再使用（用過的東西再用）、Recycle 回收（變成原料重新做成新東西）。順序很重要，減量最優先。</p>
+ <p class="origin">由來：取三個英文字的字首 R。1970–90 年代環保運動推廣的口號，被各國政府和學校廣泛使用。</p>
+</div>
+
+<div class="widget">
+ <p class="wt">分類遊戲：這個要丟哪裡？</p>
+ <div id="wasteGame"></div>
+</div>
+
+<div class="term" data-name="有害廢棄物">
+ <h4>有害廢棄物</h4>
+ <p>會傷害人體或環境的廢棄物，例如廢機油、廢日光燈管（含汞）、廢電池、裝過化學品的空桶、醫務室的針頭和沾血紗布。不能和一般垃圾混在一起，要分開存放、標示、交給有執照的業者處理。</p>
+ <p class="origin">由來：「有害」就是會造成傷害。各國法律對它有特別的規定，因為一顆電池丟進土裡，裡面的重金屬可能污染地下水很多年。</p>
+</div>
+<div class="term" data-name="聯單">
+ <h4>聯單（廢棄物清運單據）</h4>
+ <p>廢棄物交給清運業者時填寫的單據，記錄種類、重量、從哪裡運到哪裡。工廠、清運者、處理場各留一份。</p>
+ <p class="origin">由來：「聯」是好幾張連在一起的複寫單據，一式多聯，每個經手的人都拿一聯，就能追查廢棄物最後去了哪裡，防止被偷偷亂倒。</p>
+</div>
+<p><b>成衣廠的寶藏：布料邊角料。</b>裁剪後剩下的布量很大，分色、分材質收好，可以賣給回收商做成填充棉、再生紗或擦拭布。分得越乾淨，賣得越好。</p>
+
+<h3>污水</h3>
+<p>一般成衣廠（沒有染整工序）主要是<b>生活污水</b>：廁所、廚房、宿舍浴室。廁所污水進化糞池或污水處理設施；廚房污水油很多，要先經過截油槽。</p>
+<div class="term" data-name="截油槽">
+ <h4>截油槽（Grease Trap）</h4>
+ <p>裝在廚房排水管上的槽子。油比水輕會浮在上面，被隔板攔住，水從下面流走。要定期把浮油撈掉。</p>
+ <p class="origin">由來：「截」就是攔截。沒有它，油污流進水管會冷卻凝固，時間久了把管子塞住，還會發臭、引來老鼠蟑螂。</p>
+</div>
+<div class="term" data-name="BOD / COD">
+ <h4>BOD 與 COD</h4>
+ <p>檢驗污水「有多髒」的兩個常見數字，數字越大代表水裡的有機污染越多。</p>
+ <p class="origin">由來：BOD 是生化需氧量（Biochemical Oxygen Demand），指細菌分解水中污染物要用掉多少氧氣；COD 是化學需氧量（Chemical Oxygen Demand），用化學藥劑去分解。水裡的氧氣被用光，魚就會死，所以用「需要多少氧」來衡量污染。</p>
+</div>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="1" data-exp="日光燈管含有汞，屬於有害廢棄物，要分開收集交給有執照的業者。">
+ <div class="qq">換下來的舊日光燈管要怎麼處理？</div>
+ <ol><li>丟一般垃圾</li><li>當有害廢棄物分開收集處理</li><li>敲碎比較不佔空間</li><li>放進資源回收的玻璃類</li></ol>
+</div>
+<div class="quiz" data-a="0" data-exp="3R 的順序是減量優先，最好的垃圾就是一開始就沒產生的垃圾。">
+ <div class="qq">3R 裡面最優先的是哪一個？</div>
+ <ol><li>減量 Reduce</li><li>再使用 Reuse</li><li>回收 Recycle</li><li>三個一樣重要</li></ol>
+</div>
+</section>
+
+<section class="lesson" id="L15" data-stage="環境管理" data-c="#0E8C8C" data-title="工作環境：熱、光、噪音、空氣">
+<div class="sheet">
+<p class="lead">員工一天有八小時以上待在車間。太熱、太暗、太吵、空氣太差，不只讓人不舒服，還會生病、出錯、發生意外。</p>
+
+<h3>熱：熱帶工廠的頭號敵人</h3>
+<p>只看溫度計不夠，因為同樣 32°C，潮濕悶熱的時候比乾爽時難受得多，身體的汗也蒸發不掉。</p>
+<div class="term" data-name="WBGT（綜合溫度熱指數）">
+ <h4>WBGT（綜合溫度熱指數）</h4>
+ <p>同時考慮氣溫、濕度、太陽或機器的輻射熱、風，算出來的「身體實際感受到的熱」。</p>
+ <p class="origin">由來：Wet Bulb Globe Temperature 的縮寫，濕球（量濕度）＋黑球（量輻射熱）溫度。1950 年代美國海軍陸戰隊的新兵訓練營有很多人中暑，軍方為了判斷「今天還能不能出操」而發展出來，後來成為全世界評估熱危害的標準方法。</p>
+</div>
+<div class="widget">
+ <p class="wt">拉拉看：熱指數與對應措施（示意）</p>
+ <p class="hint">實際的分級數字依工作強度和當地法規而不同，這裡只是讓你理解「越熱要越多保護」。</p>
+ <label for="wbgtR">WBGT：<b id="wbgtV">27</b>°C</label>
+ <input type="range" id="wbgtR" min="22" max="36" value="27">
+ <div class="out" id="wbgtOut"></div>
+</div>
+<p>降溫的方法：屋頂隔熱、排風扇與水簾降溫、隨處有飲水、安排休息、新員工或剛放假回來的員工要有幾天適應期。</p>
+<div class="warn"><div><strong>中暑的警訊</strong><br>頭暈、頭痛、噁心想吐、全身發燙、意識不清、甚至不再流汗。發現時馬上把人移到陰涼處，鬆開衣服、用濕毛巾和風扇降溫，意識清楚才小口喝水，並立刻通知醫務室或送醫。</div></div>
+
+<h3>光：看得清楚才不會出錯</h3>
+<div class="term" data-name="照度（lux）">
+ <h4>照度（單位：lux，勒克斯）</h4>
+ <p>照在一個表面上的光有多亮。用照度計一量就知道。</p>
+ <p class="origin">由來：lux 是拉丁文的「光」。參考國際照明建議，走道大約 100 lux，辦公室約 300–500 lux，像車縫、驗布、檢查這種精細作業通常需要 750 lux 以上。</p>
+</div>
+<p>還要注意燈管上的布毛（會讓燈變暗又有火災風險）、燈管閃爍、反光刺眼。</p>
+
+<h3>噪音：聽力受傷是回不來的</h3>
+<div class="term" data-name="分貝（dB）">
+ <h4>分貝（dB）</h4>
+ <p>聲音大小的單位。一般說話大約 60 dB。長時間在 85 dB 以上的環境工作，聽力會慢慢受損，要戴耳塞或耳罩並減少暴露時間。</p>
+ <p class="origin">由來：「貝」（Bel）是為了紀念發明電話的貝爾（Alexander Graham Bell），「分」是十分之一，一分貝就是 1/10 貝。每增加 10 dB，聲音的能量就變成 10 倍。</p>
+</div>
+<p>簡單判斷法：兩個人相距一公尺，要用喊的才聽得到對方說話，那裡的噪音就可能太大了，要找人測量。</p>
+
+<h3>空氣：布毛與通風</h3>
+<p>車縫區的布毛粉塵會刺激呼吸道。對策：機台加裝吸塵、每班清理、保持通風換氣，需要時提供口罩。廚房油煙要有排煙設備。</p>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="2" data-exp="WBGT 同時考慮溫度、濕度、輻射熱和風，比單看氣溫更能反映身體感受。">
+ <div class="qq">為什麼要用 WBGT，而不是只看溫度計？</div>
+ <ol><li>因為溫度計比較貴</li><li>因為 WBGT 數字比較小</li><li>因為悶熱潮濕和輻射熱也會影響身體</li><li>因為法律只認 WBGT</li></ol>
+</div>
+<div class="quiz" data-a="1" data-exp="85 dB 以上長時間暴露會損傷聽力，要測量、減少暴露並提供聽力防護。">
+ <div class="qq">長時間在多少分貝以上工作，就要注意聽力保護？</div>
+ <ol><li>40 dB</li><li>85 dB</li><li>120 dB</li><li>多大聲都沒關係</li></ol>
+</div>
+</section>
+
+<section class="lesson" id="L16" data-stage="環境管理" data-c="#0E8C8C" data-title="病媒防治：蚊子、蒼蠅、蟑螂、老鼠">
+<div class="sheet">
+<p class="lead">在熱帶地區，一場登革熱就可能讓好幾個員工同時住院。對付病媒，靠的不是狂噴殺蟲劑，而是讓牠們沒地方生活。</p>
+
+<div class="term" data-name="病媒">
+ <h4>病媒</h4>
+ <p>會把疾病從一個人（或動物）傳給另一個人的小動物，工廠最常見的是蚊子、蒼蠅、蟑螂、老鼠。</p>
+ <p class="origin">由來：「媒」是媒介、中間人的意思，就像「媒人」介紹兩個人認識。病媒就是「幫疾病牽線的中間人」。</p>
+</div>
+
+<h3>登革熱與斑蚊</h3>
+<p>登革熱由斑蚊傳播。斑蚊喜歡在乾淨的小積水產卵：花盆底盤、廢輪胎、飲料杯、水桶、屋頂排水溝。雨季（柬埔寨大約 5 月到 10 月）是高峰期。</p>
+<div class="widget">
+ <p class="wt">看動畫：蚊子的一生</p>
+ <p class="hint">按「播放」看從卵到成蚊的過程。注意需要幾天？</p>
+ <svg id="mosq" viewBox="0 0 420 260" aria-label="蚊子生命週期">
+  <circle cx="210" cy="130" r="88" fill="none" stroke="#9FC7C7" stroke-width="6" stroke-dasharray="6 8"/>
+  <g class="ms" data-t="卵：媽媽把卵產在容器內壁的水線附近。卵很耐乾，乾掉幾個月後碰到水還能孵化。"><circle cx="210" cy="42" r="30" fill="#fff" stroke="#0E8C8C" stroke-width="3"/><text x="210" y="47" text-anchor="middle" font-size="15">卵</text></g>
+  <g class="ms" data-t="幼蟲（孑孓）：在水裡游來游去，吃水中的有機物，大約 5–7 天。"><circle cx="298" cy="130" r="30" fill="#fff" stroke="#0E8C8C" stroke-width="3"/><text x="298" y="135" text-anchor="middle" font-size="15">孑孓</text></g>
+  <g class="ms" data-t="蛹：還在水裡，不吃東西，大約 2 天後羽化。"><circle cx="210" cy="218" r="30" fill="#fff" stroke="#0E8C8C" stroke-width="3"/><text x="210" y="223" text-anchor="middle" font-size="15">蛹</text></g>
+  <g class="ms" data-t="成蚊：飛出水面。母蚊吸血後產卵，又開始下一輪。從卵到成蚊大約 7–10 天，所以每週清一次積水，就能在牠長大前打斷循環！"><circle cx="122" cy="130" r="30" fill="#fff" stroke="#0E8C8C" stroke-width="3"/><text x="122" y="135" text-anchor="middle" font-size="15">成蚊</text></g>
+  <text x="210" y="126" text-anchor="middle" font-size="14" fill="#0E8C8C">約 7–10 天</text><text x="210" y="146" text-anchor="middle" font-size="14" fill="#0E8C8C">一個循環</text>
+ </svg>
+ <div class="row" style="margin-top:8px"><button class="btn" id="mosqPlay">播放</button></div>
+ <div class="out" id="mosqOut">按「播放」開始。</div>
+</div>
+<div class="term" data-name="孑孓">
+ <h4>孑孓（ㄐㄧㄝˊ ㄐㄩㄝˊ）</h4>
+ <p>蚊子的幼蟲，在水裡一扭一扭地游。</p>
+ <p class="origin">由來：古字「孑」是沒有右手臂、「孓」是沒有左手臂，兩個字合在一起形容蚊子幼蟲在水中左右扭動的樣子。</p>
+</div>
+<div class="ex"><strong>巡、倒、清、刷：每週一次</strong>
+<b>巡</b>：巡視廠區、宿舍內外所有可能積水的地方。<b>倒</b>：倒掉積水。<b>清</b>：清除不用的容器和廢輪胎。<b>刷</b>：刷洗容器內壁，因為卵黏在壁上，只倒水沒有用。<br>這是台灣衛生單位推廣的防蚊口號，簡單好記，很適合做成宿舍與廠區的每週檢查表。</div>
+
+<h3>綜合防治：藥是最後一招</h3>
+<div class="term" data-name="IPM（綜合蟲害管理）">
+ <h4>IPM（Integrated Pest Management，綜合蟲害管理）</h4>
+ <p>用多種方法一起控制病媒：先<b>防堵</b>（封住孔洞、裝紗窗、門下加擋鼠板），再<b>清潔</b>（不留食物殘渣、廚餘加蓋、清積水），然後<b>監測</b>（放捕蟲燈、捕鼠盒看數量），最後才<b>用藥</b>，而且用對藥、用在對的地方。</p>
+ <p class="origin">由來：1950–60 年代農業專家發現，一直噴農藥會讓害蟲產生抗藥性，還會毒死益蟲、污染環境，於是提出「綜合」多種方法的觀念，後來也用在建築和食品工廠。</p>
+</div>
+<p>如果請除蟲公司，要求他們提供：每次施作的紀錄、使用藥劑的名稱和 SDS、捕鼠站和誘餌的位置圖，並確認藥劑不會接觸到食物和員工。</p>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="3" data-exp="斑蚊的卵黏在容器內壁，只倒水卵還在，要刷洗內壁。">
+ <div class="qq">「巡倒清刷」為什麼要「刷」？</div>
+ <ol><li>讓容器看起來比較新</li><li>刷掉水垢</li><li>其實不用刷</li><li>蚊子的卵黏在容器內壁，不刷掉會再孵化</li></ol>
+</div>
+<div class="quiz" data-a="1" data-exp="從卵到成蚊約 7–10 天，每週清一次就能在牠長大之前打斷循環。">
+ <div class="qq">為什麼清積水建議「每週」至少一次？</div>
+ <ol><li>因為清潔工一週只上班一天</li><li>因為蚊子從卵到成蚊大約 7–10 天</li><li>因為雨一週只下一次</li><li>隨便定的</li></ol>
+</div>
+</section>
+
+<!-- ================= 第七站 安全 ================= -->
+<section class="lesson" id="L17" data-stage="安全與緊急應變" data-c="#C8352B" data-title="消防基礎：火是怎麼燒起來的？">
+<div class="sheet">
+<p class="lead">成衣廠到處是布料、紙箱和布毛，全都很容易燒。廠務人不一定要會救火，但一定要懂火、會用滅火器，也要讓每位員工都會。</p>
+
+<div class="term" data-name="燃燒三要素（火三角）">
+ <h4>燃燒三要素（火三角）</h4>
+ <p>火要燒起來，需要三樣東西同時存在：<b>可燃物</b>（布、紙、油）、<b>氧氣</b>（空氣）、<b>熱</b>（達到能點燃的溫度）。拿掉任何一樣，火就會熄滅。</p>
+ <p class="origin">由來：把三要素畫成三角形的三個邊，一邊斷了三角形就不成立，方便記憶。後來科學家發現燃燒還需要「連鎖反應」持續進行，所以進階的說法是「燃燒四面體」，乾粉滅火器就是靠打斷這個連鎖反應來滅火。</p>
+</div>
+<div class="widget">
+ <p class="wt">動手試：拿掉一邊，火就熄滅</p>
+ <p class="hint">點三角形的任一邊，把它「拿掉」。再點一次可以放回去。</p>
+ <svg id="fireTri" viewBox="0 0 420 300" aria-label="火三角互動">
+  <g class="side" data-k="fuel" style="cursor:pointer"><line x1="60" y1="260" x2="360" y2="260" stroke="#8C5A2B" stroke-width="16" stroke-linecap="round"/><text x="210" y="292" text-anchor="middle" font-size="16">可燃物（布、紙、油）</text></g>
+  <g class="side" data-k="oxy" style="cursor:pointer"><line x1="60" y1="260" x2="210" y2="30" stroke="#2F7FC1" stroke-width="16" stroke-linecap="round"/><text x="92" y="130" text-anchor="middle" font-size="16">氧氣</text></g>
+  <g class="side" data-k="heat" style="cursor:pointer"><line x1="360" y1="260" x2="210" y2="30" stroke="#C8352B" stroke-width="16" stroke-linecap="round"/><text x="330" y="130" text-anchor="middle" font-size="16">熱</text></g>
+  <g id="flame" style="transform-box:fill-box;transform-origin:50% 100%;transition:transform .6s">
+   <g style="transform-box:fill-box;transform-origin:50% 100%;animation:flick 1s ease-in-out infinite">
+    <path d="M210 235 C160 230 165 175 195 150 C195 175 210 180 212 160 C215 130 235 120 240 100 C255 140 270 170 255 205 C250 225 235 236 210 235 Z" fill="#F29A30"/>
+    <path d="M210 232 C190 228 190 200 205 185 C207 200 218 200 222 188 C232 205 232 228 210 232 Z" fill="#F2C230"/>
+   </g>
+  </g>
+ </svg>
+ <div class="out" id="fireOut">三要素都在，火正在燒。</div>
+</div>
+
+<h3>火災分類與滅火器</h3>
+<div class="scroll"><table class="t">
+<tr><th>類別</th><th>燒的是什麼</th><th>可以用</th><th>不要用</th></tr>
+<tr><td>A 類</td><td>布、紙、木頭、塑膠</td><td>水、ABC 乾粉</td><td></td></tr>
+<tr><td>B 類</td><td>汽油、機油、溶劑</td><td>ABC 乾粉、二氧化碳、泡沫</td><td>水（油會浮在水上到處流）</td></tr>
+<tr><td>C 類</td><td>通電中的電器、電線</td><td>先斷電；ABC 乾粉、二氧化碳</td><td>水（會觸電）</td></tr>
+<tr><td>廚房油鍋</td><td>食用油起火</td><td>蓋上鍋蓋或滅火毯、關火；廚房專用滅火器</td><td>水（會爆炸噴濺）</td></tr>
+</table></div>
+<p>工廠最常見的是 <b>ABC 乾粉滅火器</b>，A、B、C 三類都能用。各國分類的字母略有不同，看滅火器瓶身的圖示最準。</p>
+
+<h3>滅火器四步驟</h3>
+<div class="term" data-name="PASS 口訣">
+ <h4>PASS 口訣：拉、瞄、壓、掃</h4>
+ <p>使用滅火器的四個動作。</p>
+ <p class="origin">由來：英文 Pull（拉插銷）、Aim（瞄準火源底部）、Squeeze（壓把手）、Sweep（左右掃射）的字首，剛好拼成 pass（通過），好記又吉利。</p>
+</div>
+<div class="widget">
+ <p class="wt">跟著做一次</p>
+ <div class="row" id="passSteps" style="gap:10px"></div>
+ <div class="row" style="margin-top:12px"><button class="btn" id="passNext">下一步</button></div>
+ <div class="out" id="passOut">按「下一步」開始。</div>
+</div>
+<p>使用前後的小提醒：站在上風處、距離火源約 2 到 3 公尺；火太大（超過人的高度）或煙很濃，就不要逞強，立刻逃生並通報。</p>
+
+<h3>滅火器每月檢查</h3>
+<ul class="dots">
+ <li>壓力錶指針在綠色區域。</li>
+ <li>插銷和封條完整，沒有被拉過。</li>
+ <li>瓶身沒有生鏽、凹陷，噴管沒有破裂或堵塞。</li>
+ <li>放在固定位置、沒被東西擋住，上方有醒目的標示牌（目視管理）。</li>
+ <li>檢查卡上簽名、寫日期。</li>
+</ul>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="2" data-exp="電器火災用水可能觸電，要先斷電，再用 ABC 乾粉或二氧化碳滅火器。">
+ <div class="qq">配電箱起火冒煙，下列哪個做法最正確？</div>
+ <ol><li>馬上潑水</li><li>用濕毛巾拍打</li><li>先斷電，再用乾粉或二氧化碳滅火器</li><li>打開門窗讓煙散掉就好</li></ol>
+</div>
+<div class="quiz" data-a="0" data-exp="用鍋蓋蓋住是隔絕氧氣，把火三角的「氧氣」拿掉。">
+ <div class="qq">油鍋起火時蓋上鍋蓋，是拿掉了火三角的哪一邊？</div>
+ <ol><li>氧氣</li><li>可燃物</li><li>熱</li><li>三邊都拿掉</li></ol>
+</div>
+</section>
+
+<section class="lesson" id="L18" data-stage="安全與緊急應變" data-c="#C8352B" data-title="緊急應變與逃生演練">
+<div class="sheet">
+<p class="lead">緊急事件發生時，人會緊張、腦袋一片空白。唯一有效的方法，是平常就規劃好、練熟，讓身體自動知道要做什麼。</p>
+
+<h3>應變組織：每個人都知道自己的角色</h3>
+<div class="scroll"><table class="t">
+<tr><th>小組</th><th>任務</th></tr>
+<tr><td>指揮</td><td>判斷狀況、下決定、對外聯絡（通常是廠長或廠務主管）</td></tr>
+<tr><td>通報</td><td>按警報、打消防與急救電話、通知各單位</td></tr>
+<tr><td>滅火</td><td>火還小時用滅火器、消防栓初期滅火</td></tr>
+<tr><td>疏散引導</td><td>打開逃生門、引導員工從最近的出口離開、檢查廁所等角落有沒有人</td></tr>
+<tr><td>救護</td><td>照顧受傷或不舒服的人（醫務室人員與受過急救訓練的員工）</td></tr>
+</table></div>
+<p>每個小組都要有正、副兩位負責人，因為事件發生時，負責人可能剛好不在。</p>
+
+<h3>逃生時要記得</h3>
+<ul class="dots">
+ <li>聽到警報立刻停下工作，關掉機器，<b>不要回頭拿東西</b>。</li>
+ <li>有煙時<b>低姿勢</b>前進，用衣服或濕布摀住口鼻（熱煙會往上飄，地面附近空氣比較好）。</li>
+ <li>不搭電梯，走樓梯；不推擠、不奔跑。</li>
+ <li>到<b>集合點</b>報到，讓組長點名。</li>
+</ul>
+<div class="term" data-name="集合點">
+ <h4>集合點（Assembly Point）</h4>
+ <p>疏散後大家要去集合的空地，要離建築物夠遠，不妨礙消防車進出。</p>
+ <p class="origin">由來：集合點名是為了確認「每個人都出來了」。如果少一個人，救援人員才知道要進去找；如果大家都到了，就不用冒險再進火場。這也是為什麼乘客名單、出勤名單那麼重要。</p>
+</div>
+<div class="term" data-name="綠色逃生標示">
+ <h4>綠色逃生標示（跑步小人）</h4>
+ <p>出口上方那個綠底白色、正在跑向門口的小人圖示。停電時也要能亮（緊急照明）。</p>
+ <p class="origin">由來：由日本設計師太田幸夫在 1970 年代設計，1980 年代被國際標準組織採用，成為全世界通用的出口圖示。用綠色，是因為在安全標誌裡綠色代表「安全、可以通行」，紅色代表「禁止、消防設備」，黃色代表「注意」。</p>
+</div>
+
+<h3>演練：沒練過就等於不會</h3>
+<ol class="steps">
+ <li><b>計畫</b>：決定情境（例如 2 樓車間起火）、時間、觀察員。</li>
+ <li><b>執行</b>：拉警報、全員疏散、點名、初期滅火示範。宿舍也要演練，最好有一次在晚上。</li>
+ <li><b>檢討</b>：記錄疏散花了幾分鐘、有沒有人走錯路、有沒有門打不開。</li>
+ <li><b>改善</b>：修正問題，下次演練看有沒有進步。</li>
+</ol>
+<p>看出來了嗎？演練本身就是一次 PDCA。常見做法是每半年演練一次，並留下照片、簽到表和檢討紀錄。</p>
+
+<h3>不只是火災</h3>
+<div class="ex"><strong>案例：車間好幾個人突然昏倒</strong>
+東南亞的成衣廠曾發生過多起「集體昏倒」事件，常和高溫悶熱、通風不良、沒吃早餐、聞到刺鼻氣味、疲勞有關，而且一個人昏倒後，緊張的氣氛可能讓更多人跟著不舒服。<br>
+<b>應變</b>：停止作業、打開門窗通風、把人移到陰涼通風處、補充水分和食物、需要時送醫、安撫其他員工。<br>
+<b>事後</b>：用「五個為什麼」找原因——是溫度？氣味來源？員工沒吃飯？然後從根本改善。</div>
+<p>其他要準備的情境：大雨淹水、雷擊停電、化學品洩漏、交通事故、員工重傷或急病。每一種都寫一頁簡單的應變卡，貼在相關地點。</p>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="1" data-exp="點名是為了確認每個人都安全出來，少了人才知道要派人去找。">
+ <div class="qq">疏散後在集合點點名，最主要的目的是？</div>
+ <ol><li>記錄誰遲到</li><li>確認每個人都安全出來</li><li>計算加班費</li><li>拍照給客戶看</li></ol>
+</div>
+<div class="quiz" data-a="3" data-exp="熱煙往上飄，靠近地面的空氣比較多、比較涼，所以要低姿勢前進。">
+ <div class="qq">火場有濃煙時為什麼要低姿勢？</div>
+ <ol><li>比較不會被看到</li><li>跑得比較快</li><li>避免撞到頭</li><li>熱煙往上飄，地面附近空氣比較好</li></ol>
+</div>
+</section>
+
+<!-- ================= 第八站 專業 ================= -->
+<section class="lesson" id="L19" data-stage="專業管理" data-c="#B5651D" data-title="用數字管理：KPI 與柏拉圖">
+<div class="sheet">
+<p class="lead">到這裡，你已經知道每一項廠務「要做什麼」。要從「會做」升級到「會管」，就要學會用數字說話：做得好不好、哪裡最需要改善，不靠感覺，靠數據。</p>
+
+<div class="term" data-name="KPI（關鍵績效指標）">
+ <h4>KPI（Key Performance Indicator，關鍵績效指標）</h4>
+ <p>用來衡量一項工作「做得好不好」的少數幾個重要數字。</p>
+ <p class="origin">由來：Key 關鍵、Performance 表現、Indicator 指標。就像學生看成績單，不用看每一張考卷，看幾個主要科目的分數就知道狀況。重點是「關鍵」：選太多就等於沒有重點。</p>
+</div>
+<div class="term" data-name="SMART 原則">
+ <h4>SMART 原則</h4>
+ <p>好目標的五個條件：Specific 具體、Measurable 可衡量、Achievable 做得到、Relevant 和工作相關、Time-bound 有期限。</p>
+ <p class="origin">由來：1981 年美國管理顧問杜倫（George Doran）在一篇文章中提出，取五個英文字首拼成 smart（聰明），從此成為最常見的目標設定方法。</p>
+</div>
+<p>比較一下：「讓宿舍變好」不 SMART；「今年 12 月底前，宿舍報修 24 小時內完成率從 70% 提高到 90%」就很 SMART。</p>
+
+<h3>廠務 KPI 範例</h3>
+<div class="scroll"><table class="t">
+<tr><th>領域</th><th>KPI 舉例</th><th>怎麼算</th></tr>
+<tr><td>清潔</td><td>抽查合格率</td><td>合格項目數 ÷ 檢查項目數</td></tr>
+<tr><td>運輸</td><td>準點率、事故件數</td><td>準時到廠班次 ÷ 總班次</td></tr>
+<tr><td>膳食</td><td>每人每餐成本、食安事件數、滿意度</td><td>總成本 ÷ 用餐人次</td></tr>
+<tr><td>住宿</td><td>入住率、報修準時完成率</td><td>準時完成件數 ÷ 報修件數</td></tr>
+<tr><td>環境</td><td>廢棄物回收率</td><td>回收重量 ÷ 廢棄物總重量</td></tr>
+<tr><td>安全</td><td>演練疏散時間、消防設備檢查完成率</td><td>從警報到點名完成的分鐘數</td></tr>
+</table></div>
+
+<h3>柏拉圖：先解決最大的問題</h3>
+<div class="term" data-name="柏拉圖（Pareto Chart）">
+ <h4>柏拉圖（Pareto Chart）與 80/20 法則</h4>
+ <p>把問題依次數從多到少排列成長條圖，再畫一條累計百分比的線。通常會發現少數幾種問題，就佔了大部分的次數。</p>
+ <p class="origin">由來：和希臘哲學家柏拉圖無關！是義大利經濟學家帕雷托（Vilfredo Pareto）約 1900 年發現義大利約 80% 的土地屬於約 20% 的人。後來品質管理專家朱蘭（Joseph Juran）把這個現象用在品質問題上，叫它「關鍵的少數」。中文音譯成「柏拉圖」，所以常被誤會。</p>
+</div>
+<div class="widget">
+ <p class="wt">看圖：一季的餐廳投訴統計</p>
+ <p class="hint">長條是各類投訴件數，折線是累計百分比，虛線是 80%。</p>
+ <svg id="pareto" viewBox="0 0 500 300" aria-label="餐廳投訴柏拉圖"></svg>
+ <div class="out">前兩項「太鹹／口味」和「份量不足」就佔了約七成。與其五個問題平均用力，不如先集中火力解決這兩個，效果最大。</div>
+</div>
+<p>其他實用的數字習慣：每月做一張簡單的報表（本月數字、上月、目標、差距原因、下月對策）；看<b>趨勢</b>比看單月重要；數字變好或變壞，都要能說出原因。</p>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="2" data-exp="有具體數字（90%）、可衡量、有期限（12 月底），符合 SMART。">
+ <div class="qq">下列哪一個目標最符合 SMART？</div>
+ <ol><li>讓員工更滿意</li><li>努力改善交通車</li><li>12 月底前，清潔抽查合格率達到 90%</li><li>宿舍要越來越好</li></ol>
+</div>
+<div class="quiz" data-a="0" data-exp="柏拉圖來自義大利經濟學家帕雷托，是音譯，跟希臘哲學家柏拉圖無關。">
+ <div class="qq">品質管理的「柏拉圖」名字從哪來？</div>
+ <ol><li>義大利經濟學家帕雷托的音譯</li><li>希臘哲學家柏拉圖</li><li>一種圖表軟體</li><li>日本工廠的發明</li></ol>
+</div>
+</section>
+
+<section class="lesson" id="L20" data-stage="專業管理" data-c="#B5651D" data-title="驗廠與國際標準">
+<div class="sheet">
+<p class="lead">成衣廠替國際品牌生產，品牌會派稽核員來「驗廠」，檢查工廠是不是安全、合法、善待員工。廠務負責的範圍，幾乎都是驗廠的重點。</p>
+
+<div class="term" data-name="驗廠">
+ <h4>驗廠（工廠稽核）</h4>
+ <p>客戶或第三方機構到工廠實地檢查，看工廠是否符合法律和客戶的標準，通常包括看現場、查文件、私下訪談員工。</p>
+ <p class="origin">由來：「驗」是檢驗。1990 年代起，國際媒體多次揭露血汗工廠問題，品牌為了保護名聲、對消費者負責，開始要求供應商接受社會責任稽核，這在成衣和製鞋業特別普遍。</p>
+</div>
+<div class="term" data-name="ISO">
+ <h4>ISO（國際標準化組織）</h4>
+ <p>制定全球通用標準的國際組織，總部在瑞士日內瓦。它發布的標準讓不同國家的工廠用同一套語言管理。</p>
+ <p class="origin">由來：很多人以為 ISO 是英文縮寫，其實它來自希臘文 isos，意思是「相等」。因為組織的英文、法文、俄文名稱縮寫都不一樣，乾脆統一用 ISO，任何語言都通用。</p>
+</div>
+<div class="scroll"><table class="t">
+<tr><th>標準或稽核</th><th>管什麼</th><th>和廠務的關係</th></tr>
+<tr><td>ISO 14001</td><td>環境管理</td><td>廢棄物、污水、能源、化學品</td></tr>
+<tr><td>ISO 45001</td><td>職業安全衛生</td><td>消防、熱危害、噪音、演練、防護用品</td></tr>
+<tr><td>ISO 22000 / HACCP</td><td>食品安全</td><td>員工餐廳</td></tr>
+<tr><td>社會責任稽核（例如 amfori BSCI、WRAP、SMETA）</td><td>勞工權益、健康安全、環境、道德</td><td>宿舍、餐廳、廁所、飲水、交通、消防全部都看</td></tr>
+</table></div>
+
+<h3>稽核員常看的廠務項目</h3>
+<ul class="dots">
+ <li>逃生門有沒有上鎖、走道有沒有被擋住、緊急照明和逃生標示會不會亮。</li>
+ <li>滅火器檢查卡、演練紀錄、消防設備檢測報告。</li>
+ <li>廁所夠不夠、乾不乾淨、有沒有衛生紙和洗手設備；飲用水有沒有檢驗報告。</li>
+ <li>宿舍是否與車間分開、有沒有擁擠、有沒有扣押證件。</li>
+ <li>化學品有沒有 SDS、有沒有標示、有沒有防漏盤；廢棄物有沒有合法清運的單據。</li>
+ <li>廚房衛生、廚工健康檢查、餐廳執照。</li>
+ <li>交通車的車輛文件、有沒有超載。</li>
+</ul>
+
+<h3>準備驗廠的心法</h3>
+<div class="ex"><strong>寫你所做、做你所寫、留下紀錄</strong>
+這是 ISO 圈子常說的一句話。<b>寫你所做</b>：把實際的做法寫成 SOP。<b>做你所寫</b>：真的照 SOP 做，不是寫好看的。<b>留下紀錄</b>：檢查表、簽到表、照片，證明你真的做了。平常就這樣做，驗廠那天就只是「給別人看看你每天的樣子」。</div>
+<div class="warn"><div><strong>絕對不能做的事</strong><br>臨時造假紀錄、教員工背標準答案、驗廠當天才把逃生門打開。稽核員經驗很豐富，發現造假的後果通常比原本的問題嚴重得多，可能直接失去客戶的信任和訂單。</div></div>
+<div class="term" data-name="矯正行動計畫（CAP）">
+ <h4>矯正行動計畫（CAP，Corrective Action Plan）</h4>
+ <p>驗廠發現不合格項目後，工廠提出的改善計畫：問題是什麼、根本原因、要怎麼改、誰負責、什麼時候完成。</p>
+ <p class="origin">由來：Corrective 是「矯正、改正」。它其實就是 PDCA 的 Act 加上「五個為什麼」找根本原因，只是換了一個正式的名字、寫成表格交給客戶追蹤。</p>
+</div>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="1" data-exp="ISO 來自希臘文 isos（相等），不是英文縮寫。">
+ <div class="qq">ISO 這個名字的由來是？</div>
+ <ol><li>International Standard Organization 的縮寫</li><li>希臘文 isos，意思是「相等」</li><li>一位瑞士科學家的名字</li><li>日文的「標準」</li></ol>
+</div>
+<div class="quiz" data-a="3" data-exp="平常照 SOP 做並留下紀錄才是正確的準備，造假的後果非常嚴重。">
+ <div class="qq">下週要驗廠，但上個月的滅火器檢查忘了做，最好的做法是？</div>
+ <ol><li>補簽上個月的日期</li><li>請員工說有做</li><li>把檢查卡藏起來</li><li>立刻檢查並如實記錄，找出忘記的原因並改善</li></ol>
+</div>
+</section>
+
+<section class="lesson" id="L21" data-stage="專業管理" data-c="#B5651D" data-title="數位化、年度計畫與結業">
+<div class="sheet">
+<p class="lead">最後一課，我們把前面 20 課串起來：用工具讓管理更輕鬆，用年度計畫讓工作不再手忙腳亂，最後看看一位廠務人的成長路線。</p>
+
+<h3>數位化：從小地方開始</h3>
+<p>數位化不是一次買一套很貴的系統，而是把最常做、最麻煩的紙本工作，一件一件變簡單：</p>
+<ul class="dots">
+ <li><b>報修</b>：宿舍和車間貼 QR code，員工用手機掃描就能報修、附照片，系統自動記錄時間。</li>
+ <li><b>巡檢</b>：檢查表做成手機表單，拍照上傳，主管隨時看得到。</li>
+ <li><b>通報</b>：用通訊軟體群組即時通報異常，但重要事項仍要留下正式紀錄。</li>
+ <li><b>看板</b>：把第 19 課的 KPI 自動畫成圖表，每天一眼看懂。</li>
+</ul>
+<div class="term" data-name="看板">
+ <h4>看板</h4>
+ <p>把重要資訊集中顯示、讓大家一眼看懂的板子或電子畫面（也叫儀表板、Dashboard）。</p>
+ <p class="origin">由來：日文 Kanban（看板）原本指店家的招牌。豐田汽車用寫著零件資訊的卡片來通知「該補貨了」，也叫看板，成為豐田生產方式的代表工具。現在「看板」也泛指電子化的資訊顯示畫面，精神一樣：讓資訊看得見。</p>
+</div>
+<p>數位化的順序：<b>先把流程理順，再數位化</b>。一個亂七八糟的流程搬上手機，只會變成一個亂七八糟的 App。</p>
+
+<h3>廠務年度行事曆（以柬埔寨為例）</h3>
+<div class="scroll"><table class="t">
+<tr><th>時間</th><th>重點工作</th></tr>
+<tr><td>1–2 月</td><td>訂年度計畫與預算；外包合約（清潔、交通、餐廳、除蟲）續約與評鑑</td></tr>
+<tr><td>3–5 月（熱季）</td><td>防熱措施：通風、降溫設備保養、飲水點檢查、熱指數監測</td></tr>
+<tr><td>4 月（高棉新年）</td><td>返鄉交通安排；放假前宿舍安全檢查（斷電、關水、鎖門）；收假後新人和返工員工適應期</td></tr>
+<tr><td>5–10 月（雨季）</td><td>每週巡倒清刷；排水溝、屋頂天溝清理；漏水檢查；淹水與雷擊應變準備</td></tr>
+<tr><td>9–10 月（亡人節）</td><td>再次返鄉交通高峰；宿舍安全檢查</td></tr>
+<tr><td>每半年</td><td>消防演練（含宿舍）；消防設備檢測</td></tr>
+<tr><td>每季</td><td>餐廳滿意度調查；伙食委員會；外包服務評分；飲用水檢驗</td></tr>
+<tr><td>12 月</td><td>年度檢討：KPI 達成情況、重大事件回顧，做為明年計畫的依據（PDCA 又一圈）</td></tr>
+</table></div>
+
+<h3>廠務人的成長路線</h3>
+<ol class="steps">
+ <li><b>入門：會做。</b>知道每項工作的標準和 SOP，能正確執行（第 1–18 課）。</li>
+ <li><b>熟手：會檢查。</b>能用檢查表發現問題、看出危險、當場回饋。</li>
+ <li><b>管理：會帶人、會算錢。</b>能管理外包、排人力、控制預算、用 KPI 追蹤（第 19 課）。</li>
+ <li><b>專業：會設計制度。</b>能從零建立一套廠務管理制度、面對國際稽核、帶團隊持續改善（第 20–21 課）。</li>
+</ol>
+
+<h3>最後，回到第一課</h3>
+<p>還記得「工廠就是一座小城市」嗎？一座好城市，住在裡面的人很少感覺到清潔隊、公車、自來水的存在，因為一切都運作得很順。廠務做得最好的時候，常常就是「沒有人注意到你」的時候：地板總是乾淨、車總是準時、飯總是安全、宿舍總是安心。這份「沒事」，正是廠務人最大的成就。</p>
+<p>現在，去做結業測驗吧。</p>
+<button class="btn" data-go="exam" style="padding:12px 22px;font-size:17px">前往結業測驗</button>
+</div>
+<p class="quiz-title">隨堂小測</p>
+<div class="quiz" data-a="0" data-exp="先理順流程再數位化，不然只是把混亂搬到手機上。">
+ <div class="qq">數位化正確的順序是？</div>
+ <ol><li>先把流程理順，再數位化</li><li>先買系統，流程之後再想</li><li>全部一次數位化</li><li>數位化以後就不用 SOP</li></ol>
+</div>
+<div class="quiz" data-a="2" data-exp="雨季積水多，斑蚊繁殖快，要每週巡倒清刷並清理排水。">
+ <div class="qq">在柬埔寨，每週「巡倒清刷」最需要加強的是什麼季節？</div>
+ <ol><li>熱季</li><li>高棉新年</li><li>雨季</li><li>沒有差別</li></ol>
+</div>
+</section>
+
+<!-- ================= 辭典與測驗 ================= -->
+<section class="page" id="glossary">
+ <h2>名詞辭典</h2>
+ <p class="lead">課程裡出現的所有專有名詞，依照上課順序排列。點「回到課程」可以跳回那一課。</p>
+ <div class="gloss" id="glossList"></div>
+</section>
+
+<section class="page" id="exam">
+ <h2>結業測驗</h2>
+ <p class="lead">共 12 題，每題第一次作答才算分。答對 10 題以上就能拿到結業證書。</p>
+ <div id="examBox"></div>
+ <div class="out" id="examScore" style="font-size:17px">還沒開始作答。</div>
+ <div id="certForm" class="no-print" style="display:none;margin-top:16px">
+  <label>你的名字：<input type="text" id="certName" placeholder="請輸入姓名"></label>
+  <button class="btn" id="certBtn">產生證書</button>
+ </div>
+ <div class="cert" id="cert">
+  <p style="margin:0;color:#4A5860">廠務學堂</p>
+  <h3>結業證書</h3>
+  <p style="font-size:26px;font-family:var(--head);margin:18px 0" id="certWho"></p>
+  <p>已完成「從零開始學工廠總務」全部 21 堂課程，<br>內容涵蓋清潔、運輸、膳食、住宿、環境、安全與專業管理，<br>並通過結業測驗，成績 <b id="certScore"></b> 分。</p>
+  <p id="certDate" style="color:#4A5860"></p>
+  <button class="btn no-print" onclick="window.print()">列印證書</button>
+ </div>
+</section>
+
+</main>
+</div>
+<style>
+#fiveS .it{transition:transform .9s ease}
+#fiveS .dust{transition:opacity .6s}
+.side{transition:opacity .4s}
+.passbox{width:64px;height:64px;border:3px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--head);font-size:30px;background:var(--paper);transition:all .3s}
+.passbox.on{border-color:var(--red);background:#FCEDEB;transform:scale(1.08)}
+.ans{display:none}
+.ms circle{transition:fill .3s}
+@media print{
+ .ans{display:block;font-size:14px;color:#4A5860;margin-top:6px}
+ body.pc .lesson,body.pc .page:not(#exam),body.pc #exam>:not(#cert){display:none!important}
+ body.pc #exam{page-break-after:auto}
+}
+</style>
+<script>
+(function(){
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},clear(){try{localStorage.removeItem('ga-done');localStorage.removeItem('ga-last');localStorage.removeItem('ga-cert')}catch(e){}}};
+const lessons=$$('.lesson');
+const done=new Set(store.get('ga-done',[]));
+
+/* ---------- lesson headers, pagers ---------- */
+let stageNo=0,lastStage='';const rl=$('#routeList');
+const numCN=['一','二','三','四','五','六','七','八'];
+lessons.forEach((s,i)=>{
+  s.style.setProperty('--stage',s.dataset.c);
+  const h=document.createElement('div');h.className='lesson-head';
+  h.innerHTML='<div class="no"><b>'+s.dataset.stage+'</b>第 '+(i+1)+' 課／共 '+lessons.length+' 課</div><h2>'+s.dataset.title+'</h2>';
+  s.prepend(h);
+  const p=document.createElement('div');p.className='pager';
+  p.innerHTML=(i>0?'<button class="btn alt" data-go="'+lessons[i-1].id+'">上一課</button>':'<button class="btn alt" data-go="home">回到首頁</button>')+
+    (i<lessons.length-1?'<button class="btn" data-next="'+s.id+'" data-go="'+lessons[i+1].id+'">完成本課，前往第 '+(i+2)+' 課</button>':'<button class="btn" data-next="'+s.id+'" data-go="exam">完成本課，前往結業測驗</button>');
+  s.append(p);
+  if(s.dataset.stage!==lastStage){lastStage=s.dataset.stage;const li=document.createElement('li');li.className='st-name';li.style.setProperty('--c',s.dataset.c);li.textContent='第'+numCN[stageNo++]+'站　'+lastStage;rl.append(li)}
+  const li=document.createElement('li');li.className='stop';li.dataset.go=s.id;li.tabIndex=0;li.style.setProperty('--c',s.dataset.c);li.textContent=(i+1)+'. '+s.dataset.title;rl.append(li);
+});
+function meter(){
+  $('#meterBar').style.width=(done.size/lessons.length*100)+'%';
+  $('#meterTxt').textContent='已完成 '+done.size+' / '+lessons.length+' 課';
+  $$('.route li.stop').forEach(li=>li.classList.toggle('done',done.has(li.dataset.go)));
+}
+const route=$('#route'),menuBtn=$('#menuBtn');
+function closeMenu(){route.classList.remove('open');menuBtn.setAttribute('aria-expanded','false')}
+menuBtn.addEventListener('click',e=>{e.stopPropagation();const o=route.classList.toggle('open');menuBtn.setAttribute('aria-expanded',o)});
+document.addEventListener('click',e=>{if(route.classList.contains('open')&&!route.contains(e.target))closeMenu()});
+function show(id){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=id;
+  const el=document.getElementById(id);const t=(el&&(el.classList.contains('lesson')||el.classList.contains('page')))?el:$('#home');
+  $$('.lesson,.page').forEach(x=>x.classList.toggle('show',x===t));
+  $$('.route li.stop').forEach(li=>li.classList.toggle('cur',li.dataset.go===t.id));
+  $('#topTitle').textContent=t.dataset.title||(t.querySelector('h2')||{}).textContent||'廠務學堂';
+  try{history.replaceState(null,'','#'+t.id)}catch(e){}
+  window.scrollTo(0,0);closeMenu();
+  if(t.classList.contains('lesson'))store.set('ga-last',t.id);
+  if(t.id==='L13'&&window.__dormHit)window.__dormHit();
+}
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-go]');if(!t)return;
+  if(t.dataset.next){done.add(t.dataset.next);store.set('ga-done',[...done]);meter()}
+  show(t.dataset.go);
+});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('li.stop'))show(e.target.dataset.go)});
+$('#printBtn').addEventListener('click',()=>window.print());
+$('#resetBtn').addEventListener('click',()=>{if(confirm('確定要清除所有學習紀錄嗎？')){store.clear();done.clear();meter()}});
+window.addEventListener('afterprint',()=>document.body.classList.remove('pc'));
+
+/* ---------- continue button on home ---------- */
+const last=store.get('ga-last',null);
+if(last&&document.getElementById(last)){const b=document.createElement('button');b.className='btn alt';b.style.cssText='padding:12px 22px;font-size:17px;margin-left:8px';b.dataset.go=last;const n=lessons.findIndex(l=>l.id===last)+1;b.textContent='繼續上次：第 '+n+' 課';$('#home [data-go="L1"]').after(b)}
+
+/* ---------- quizzes ---------- */
+function bindQuiz(q,onFirst){
+  const a=+q.dataset.a,lis=[...q.querySelectorAll('li')];let first=true;
+  const fb=document.createElement('div');fb.className='fb';fb.setAttribute('aria-live','polite');q.append(fb);
+  const ans=document.createElement('div');ans.className='ans';ans.textContent='答案：'+lis[a].textContent+'。'+(q.dataset.exp||'');q.append(ans);
+  lis.forEach((li,i)=>{
+    const b=document.createElement('button');b.textContent=li.textContent;li.textContent='';li.append(b);
+    b.addEventListener('click',()=>{
+      if(q.dataset.solved)return;
+      if(i===a){b.classList.add('ok');fb.innerHTML='<b style="color:#1E8A5A">答對了！</b>'+(q.dataset.exp||'');q.dataset.solved='1'}
+      else{b.classList.add('no');fb.innerHTML='<b style="color:#C8352B">不對喔。</b>再想一想，換一個答案試試。'}
+      fb.classList.add('show');
+      if(first&&onFirst)onFirst(i===a);first=false;
+    });
+  });
+}
+$$('.lesson .quiz').forEach(q=>bindQuiz(q));
+
+/* ---------- glossary ---------- */
+const gl=$('#glossList');
+lessons.forEach((s,i)=>s.querySelectorAll('.term').forEach(t=>{const c=t.cloneNode(true);const b=document.createElement('button');b.className='btn alt no-print';b.style.cssText='font-size:13px;padding:2px 10px;margin-top:4px';b.dataset.go=s.id;b.textContent='回到第 '+(i+1)+' 課';c.append(b);gl.append(c)}));
+
+/* ---------- W: city map ---------- */
+const city={clean:['清潔隊','工廠的「清潔管理」：車間、廁所、餐廳、宿舍的打掃與消毒。（第 4–6 課）'],bus:['公車','工廠的「運輸管理」：員工交通車、公務車、廠內搬運。（第 7–8 課）'],food:['餐廳','工廠的「膳食管理」：員工餐廳的食品安全、菜單和成本。（第 9–11 課）'],dorm:['旅館','工廠的「住宿管理」：員工宿舍的規劃、規章、安全與維修。（第 12–13 課）'],env:['環保局','工廠的「環境管理」：垃圾、污水、熱、噪音和病媒蚊。（第 14–16 課）'],fire:['消防隊','工廠的「安全與緊急應變」：消防設備、逃生演練。（第 17–18 課）']};
+$$('#cityMap .bld').forEach(g=>{const f=()=>{const v=city[g.dataset.k];$('#cityOut').innerHTML='<b>城市的'+v[0]+'</b>，就是'+v[1];$$('#cityMap .bld').forEach(x=>x.style.opacity=x===g?1:.55)};g.addEventListener('click',f);g.addEventListener('keydown',e=>{if(e.key==='Enter')f()})});
+
+/* ---------- W: 5S ---------- */
+const fs=$('#fiveS');
+const fsMsg=['現在工作台一團亂。先按「1 整理」。','整理：破紙箱和舊杯子是「不要的」，移到紅牌區。桌上只剩真正需要的東西。','整頓：在掛板畫出每樣工具的定位框並貼標籤。現在剪刀在哪裡，一眼就知道。','清掃：把灰塵、布毛清乾淨。清掃時順便檢查工具有沒有壞。','清潔：把前三步變成每天的規定，貼上「每日下班 5 分鐘」檢查表。','素養：大家不用提醒就自動照做，這才算真正完成 5S！'];
+function s5(n){
+  fs.querySelectorAll('.it').forEach(g=>{const on=g.classList.contains('junk')?n>=1:n>=2;g.style.transform=on?g.dataset.t:g.dataset.m});
+  fs.querySelector('.spot').style.opacity=n>=2?1:0;fs.querySelector('.dust').style.opacity=n>=3?0:1;
+  fs.querySelector('.sign').style.opacity=n>=4?1:0;fs.querySelector('.habit').style.opacity=n>=5?1:0;
+  $('#fiveSOut').textContent=fsMsg[n];
+}
+s5(0);let fsState=0;
+$$('[data-s]').forEach(b=>b.addEventListener('click',()=>{const n=+b.dataset.s;if(n>fsState+1){$('#fiveSOut').textContent='要照順序喔！下一步是「'+(fsState+1)+'」。';return}fsState=n;s5(n)}));
+
+/* ---------- W: top-down ---------- */
+const td=$('#topDown'),zones=[...td.querySelectorAll('.zone')],dust=[...td.querySelectorAll('#dustFall circle')],lv=[0,0,0,1,1,2,2];let ts=0;
+const tdMsg=['一個有灰塵的房間。按「下一步」開始清潔。','第 1 步：清燈具、天花板。灰塵往下掉，落到地上。','第 2 步：清牆面、窗戶、層架。又有一些灰塵掉下去。','第 3 步：清桌面、機台。所有掉下來的灰塵都集中到地上了。','第 4 步：最後掃地、拖地，一次把全部灰塵帶走。如果一開始就先拖地，後面掉下來的灰塵會讓地板又髒一次！'];
+dust.forEach(c=>c.style.transition='transform 1s ease-in, opacity .6s');
+$('#tdNext').addEventListener('click',()=>{if(ts>=4)return;ts++;zones.forEach((z,i)=>z.setAttribute('opacity',i===ts-1?.35:0));
+  if(ts<=3)dust.forEach((c,i)=>{if(lv[i]===ts-1)c.style.transform='translateY('+(228-(+c.getAttribute('cy')))+'px)'});else dust.forEach(c=>c.style.opacity=0);
+  $('#tdOut').textContent=tdMsg[ts]});
+$('#tdReset').addEventListener('click',()=>{ts=0;zones.forEach(z=>z.setAttribute('opacity',0));dust.forEach(c=>{c.style.transform='';c.style.opacity=1});$('#tdOut').textContent=tdMsg[0]});
+
+/* ---------- W: color game ---------- */
+const cg=[['廁所','紅'],['廚房、食物處理區','綠'],['辦公室、走廊等一般區域','藍'],['醫務室、隔離區','黃']],cols=['紅','綠','藍','黃'];
+$('#colorGame').innerHTML=cg.map((r,i)=>'<div class="row" style="justify-content:space-between;border-bottom:1px solid var(--line);padding:6px 0"><span>'+r[0]+'</span><span><select id="cg'+i+'" aria-label="'+r[0]+'使用的顏色"><option value="">選顏色</option>'+cols.map(o=>'<option>'+o+'</option>').join('')+'</select> <b id="cgm'+i+'"></b></span></div>').join('');
+$('#cgCheck').addEventListener('click',()=>{let ok=0;cg.forEach((r,i)=>{const v=$('#cg'+i).value,m=$('#cgm'+i);if(v===r[1]){ok++;m.textContent='✓';m.style.color='#1E8A5A'}else{m.textContent='✗';m.style.color='#C8352B'}});
+  $('#cgOut').textContent=ok===4?'全對！記住：紅色廁所、綠色廚房、藍色一般區、黃色隔離區。':'答對 '+ok+' / 4。提示：紅色最「危險」給廁所，綠色像蔬菜給廚房。'});
+
+/* ---------- W: pre-trip ---------- */
+const pt=['輪胎：胎壓足、胎紋夠深、沒有裂痕','煞車：踩起來有力，手煞車正常','燈光：大燈、方向燈、煞車燈都會亮','雨刷和喇叭正常','機油、水箱水、電瓶沒問題','車門和緊急出口能正常打開','車上有滅火器和急救箱','司機精神好、沒有喝酒'];
+$('#preTrip').innerHTML=pt.map((t,i)=>'<label style="display:block;padding:4px 0"><input type="checkbox" class="ptc"> '+t+'</label>').join('');
+$$('.ptc').forEach(c=>c.addEventListener('change',()=>{const n=$$('.ptc').filter(x=>x.checked).length;const o=$('#ptOut');if(n===pt.length){o.innerHTML='<b style="color:#1E8A5A">全部檢查完成，可以出車！</b>記得在點檢表上簽名、寫日期。'}else{o.textContent='已檢查 '+n+' / '+pt.length+' 項，還不可以出車。'}}));
+
+/* ---------- W: temperature & germs ---------- */
+let germ=1,mins=0;
+function zoneOf(t){if(t<=5)return['cold','冷藏／冷凍（5°C 以下）：細菌長得很慢或停止生長。注意：低溫只是讓細菌「睡著」，不會殺死它。','#DDEBF7'];if(t<60)return['danger','溫度危險區（5–60°C）：細菌快速繁殖！','#F8E1DE'];if(t<75)return['hot','熱藏（60°C 以上）：大部分細菌無法繁殖，適合保溫。','#FFF1D6'];return['kill','烹煮溫度（75°C 以上）：大部分細菌會被殺死。','#DDF1E6']}
+function tempUI(){const t=+$('#tempR').value;$('#tempV').textContent=t;const z=zoneOf(t);const o=$('#tempZone');o.textContent=z[1];o.style.background=z[2]}
+function drawGerm(){const n=Math.min(germ,300);let s='<rect width="400" height="120" fill="#fff" rx="6"/>';for(let i=0;i<n;i++){s+='<circle cx="'+(10+(i*97)%380)+'" cy="'+(10+(i*53)%100)+'" r="3.2" fill="#6A9E3B"/>'}$('#germBox').innerHTML=s}
+function germMsg(extra){$('#germOut').innerHTML='經過時間 '+mins+' 分鐘，細菌 <b>'+germ.toLocaleString()+'</b> 隻。'+(germ>300?'（圖上最多畫 300 隻）':'')+(extra||'')}
+$('#tempR').addEventListener('input',tempUI);tempUI();drawGerm();
+$('#germStep').addEventListener('click',()=>{const z=zoneOf(+$('#tempR').value)[0];mins+=20;let ex='';
+  if(z==='danger'){germ=Math.min(germ*2,1073741824);ex=' 又分裂了一次！'}else if(z==='kill'){if(germ>0)ex=' 高溫把細菌殺死了。但煮熟後如果又放回危險區，手、器具、空氣中的細菌還是會再污染它。';germ=0}else ex=' 數量沒有增加。';
+  drawGerm();germMsg(ex)});
+$('#germReset').addEventListener('click',()=>{germ=1;mins=0;drawGerm();germMsg()});
+
+/* ---------- W: cost ---------- */
+function cost(){const f=+$('#cFood').value||0,l=+$('#cLabor').value||0,u=+$('#cUtil').value||0,m=+$('#cMeals').value||0,tot=f+l+u;
+  $('#costOut').innerHTML=m>0&&tot>0?'總成本 <b>'+tot.toLocaleString()+'</b> 美元 ÷ '+m.toLocaleString()+' 人次 ＝ 每人每餐 <b>'+(tot/m).toFixed(2)+'</b> 美元<br>食材占比 ＝ '+f+' ÷ '+tot+' ＝ <b>'+(f/tot*100).toFixed(1)+'%</b>':'請輸入大於 0 的數字。'}
+['#cFood','#cLabor','#cUtil','#cMeals'].forEach(s=>$(s).addEventListener('input',cost));cost();
+
+/* ---------- W: dorm hunt ---------- */
+const found=new Set();
+window.__dormHit=()=>{if(window.__dh)return;window.__dh=1;$$('#dormHunt .hz').forEach(g=>{const b=g.getBBox(),r=document.createElementNS('http://www.w3.org/2000/svg','rect');r.setAttribute('x',b.x-6);r.setAttribute('y',b.y-6);r.setAttribute('width',b.width+12);r.setAttribute('height',b.height+12);r.setAttribute('fill','transparent');g.prepend(r)})};
+$$('#dormHunt .hz').forEach((g,i)=>g.addEventListener('click',()=>{
+  if(!found.has(i)){found.add(i);const b=g.getBBox(),e=document.createElementNS('http://www.w3.org/2000/svg','ellipse');e.setAttribute('cx',b.x+b.width/2);e.setAttribute('cy',b.y+b.height/2);e.setAttribute('rx',b.width/2+10);e.setAttribute('ry',b.height/2+10);e.setAttribute('fill','none');e.setAttribute('stroke','#C8352B');e.setAttribute('stroke-width','3');$('#hzMarks').append(e)}
+  $('#dormOut').innerHTML='<b>已找到 '+found.size+' / 5 個危險。</b>'+g.dataset.i+(found.size===5?'<br><b style="color:#1E8A5A">全部找到了，你已經有宿舍巡查員的眼光！</b>':'')}));
+
+/* ---------- W: waste game ---------- */
+const W=[['布料邊角料','可回收','分色、分材質收好，可以賣給回收商。'],['空紙箱','可回收','壓扁、綁好、保持乾燥。'],['廢日光燈管','有害廢棄物','含汞，要完整不打破，交給合格業者。'],['用過的機油','有害廢棄物','裝在密封容器，絕不能倒進水溝。'],['午餐剩菜','廚餘','加蓋存放、每天清運，才不會招來蒼蠅和老鼠。'],['沾滿油污的塑膠便當袋','一般垃圾','髒污的塑膠很難回收，只能當一般垃圾。'],['廢電池','有害廢棄物','含重金屬，要另外收集。'],['寶特瓶','可回收','倒空、壓扁再回收。'],['果皮','廚餘','可以拿去做堆肥。'],['醫務室用過的針頭','有害廢棄物','屬於醫療廢棄物，放進專用的硬質收集盒。']],bins=['可回收','一般垃圾','有害廢棄物','廚餘'];
+let wi=0,wsc=0;
+function wRender(){const box=$('#wasteGame');
+  if(wi>=W.length){box.innerHTML='<p style="font-size:19px">完成！答對 <b>'+wsc+' / '+W.length+'</b> 件。</p><button class="btn" id="wAgain">再玩一次</button>';$('#wAgain').onclick=()=>{wi=0;wsc=0;wRender()};return}
+  box.innerHTML='<p style="font-size:20px;font-family:var(--head);margin:0 0 8px">第 '+(wi+1)+' / '+W.length+' 件：'+W[wi][0]+'</p><div class="row">'+bins.map(b=>'<button class="btn alt wb">'+b+'</button>').join('')+'</div><div class="out" id="wOut">這個要丟進哪一個桶子？</div>';
+  let ans=false;$$('.wb').forEach(b=>b.onclick=()=>{if(ans)return;ans=true;const ok=b.textContent===W[wi][1];if(ok)wsc++;b.style.background=ok?'#DDF1E6':'#F8E1DE';
+    $('#wOut').innerHTML=(ok?'<b style="color:#1E8A5A">正確！</b>':'<b style="color:#C8352B">應該是「'+W[wi][1]+'」。</b>')+W[wi][2]+' <button class="btn" id="wNext" style="margin-left:8px">下一件</button>';$('#wNext').onclick=()=>{wi++;wRender()}})}
+wRender();
+
+/* ---------- W: WBGT ---------- */
+function wbgt(){const v=+$('#wbgtR').value;$('#wbgtV').textContent=v;const o=$('#wbgtOut');let t,c;
+  if(v<28){t='一般：正常作業，飲水隨時可取。';c='#DDF1E6'}else if(v<30){t='注意：定時提醒喝水（例如每 20–30 分鐘喝一杯），多留意新員工和剛放假回來的員工。';c='#FFF6D6'}else if(v<32){t='警戒：增加休息次數，加強通風降溫，主管巡視每位員工的狀況。';c='#FCE3C8'}else{t='危險：大幅減少重體力工作、延長休息、考慮調整工作時間；有人不適立即處理。';c='#F8D3CE'}
+  o.textContent=t;o.style.background=c}
+$('#wbgtR').addEventListener('input',wbgt);wbgt();
+
+/* ---------- W: mosquito ---------- */
+const ms=[...document.querySelectorAll('#mosq .ms')];let mt=null;
+function msOn(k){ms.forEach((g,i)=>g.querySelector('circle').setAttribute('fill',i===k?'#FFE9A8':'#fff'));$('#mosqOut').textContent=ms[k].dataset.t}
+ms.forEach((g,i)=>{g.style.cursor='pointer';g.addEventListener('click',()=>{clearInterval(mt);msOn(i)})});
+$('#mosqPlay').addEventListener('click',()=>{clearInterval(mt);let k=0;msOn(0);mt=setInterval(()=>{k++;if(k>3){clearInterval(mt);return}msOn(k)},2600)});
+
+/* ---------- W: fire triangle ---------- */
+const rem=new Set(),fm={fuel:'拿掉可燃物（把旁邊的布料搬走、關掉瓦斯或油料開關），這叫「隔離法」。',oxy:'隔絕氧氣（蓋上鍋蓋、用滅火毯蓋住），這叫「窒息法」。',heat:'降低溫度（用水澆），這叫「冷卻法」。'};
+$$('#fireTri .side').forEach(g=>g.addEventListener('click',()=>{const k=g.dataset.k;rem.has(k)?rem.delete(k):rem.add(k);g.style.opacity=rem.has(k)?.18:1;
+  $('#flame').style.transform=rem.size?'scale(0)':'scale(1)';
+  $('#fireOut').innerHTML=rem.size?'<b style="color:#1E8A5A">火熄滅了！</b>'+[...rem].map(x=>fm[x]).join('<br>'):'三要素都在，火正在燒。'}));
+
+/* ---------- W: PASS ---------- */
+const P=[['拉','拉（Pull）：拉開插銷。先把滅火器提到火場附近，站在上風處，距離約 2–3 公尺。'],['瞄','瞄（Aim）：噴嘴對準火源「底部」，不是火焰的頂端。'],['壓','壓（Squeeze）：用力壓下握把，讓藥劑噴出。'],['掃','掃（Sweep）：左右來回掃射，直到火完全熄滅，並留意會不會復燃。']];let pk=-1;
+$('#passSteps').innerHTML=P.map(p=>'<div class="passbox">'+p[0]+'</div>').join('');
+$('#passNext').addEventListener('click',()=>{pk=(pk+1)%P.length;$$('.passbox').forEach((b,i)=>b.classList.toggle('on',i===pk));$('#passOut').textContent=P[pk][1];$('#passNext').textContent=pk===3?'從頭再練一次':'下一步'});
+
+/* ---------- W: pareto ---------- */
+(function(){const d=[['太鹹／口味',46],['份量不足',28],['等太久',12],['餐具不潔',8],['其他',6]],tot=100,L=44,T=20,W2=412,H=210,bw=W2/d.length;let s='',cum=0,pts=[];
+  s+='<line x1="'+L+'" y1="'+(T+H)+'" x2="'+(L+W2)+'" y2="'+(T+H)+'" stroke="#1E2A30"/><line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+(T+H)+'" stroke="#1E2A30"/><line x1="'+(L+W2)+'" y1="'+T+'" x2="'+(L+W2)+'" y2="'+(T+H)+'" stroke="#1E2A30"/>';
+  [0,50,100].forEach(v=>s+='<text x="'+(L-6)+'" y="'+(T+H-v/100*H+4)+'" font-size="11" text-anchor="end">'+v+'</text>');
+  [0,50,80,100].forEach(v=>s+='<text x="'+(L+W2+6)+'" y="'+(T+H-v/100*H+4)+'" font-size="11">'+v+'%</text>');
+  s+='<line x1="'+L+'" y1="'+(T+H-.8*H)+'" x2="'+(L+W2)+'" y2="'+(T+H-.8*H)+'" stroke="#C8352B" stroke-dasharray="5 4"/>';
+  d.forEach((r,i)=>{const x=L+i*bw+bw*.15,h=r[1]/100*H;cum+=r[1];s+='<rect x="'+x+'" y="'+(T+H-h)+'" width="'+(bw*.7)+'" height="'+h+'" fill="'+(i<2?'#B5651D':'#D9BFA5')+'"/><text x="'+(x+bw*.35)+'" y="'+(h>24?T+H-h+16:T+H-h-5)+'" font-size="12" text-anchor="middle" fill="'+(i<2?'#fff':'#1E2A30')+'">'+r[1]+'</text><text x="'+(x+bw*.35)+'" y="'+(T+H+18)+'" font-size="12" text-anchor="middle">'+r[0]+'</text>';pts.push([L+i*bw+bw/2,T+H-cum/tot*H,cum])});
+  s+='<polyline points="'+pts.map(p=>p[0]+','+p[1]).join(' ')+'" fill="none" stroke="#1E2A30" stroke-width="2"/>';
+  pts.forEach(p=>s+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="4" fill="#1E2A30"/><text x="'+(p[0]+8)+'" y="'+(p[1]-8)+'" font-size="11">'+p[2]+'%</text>');
+  s+='<text x="'+L+'" y="'+(T+H+42)+'" font-size="11" fill="#4A5860">左軸：件數　右軸：累計百分比</text>';
+  $('#pareto').innerHTML=s})();
+
+/* ---------- final exam ---------- */
+const EX=[
+ ['5S 的正確順序是？',['整理 → 整頓 → 清掃 → 清潔 → 素養','整頓 → 整理 → 清潔 → 清掃 → 素養','清掃 → 整理 → 整頓 → 素養 → 清潔','素養 → 清潔 → 清掃 → 整頓 → 整理'],0],
+ ['PDCA 輪子在斜坡上，SOP 的角色像什麼？',['輪子的引擎','擋住輪子、防止退步的楔子','斜坡本身','輪子的剎車燈'],1],
+ ['清潔時為什麼要「由上而下」？',['上面比較髒','比較不累','灰塵會往下掉，地板最後清才不會白做','客戶規定的'],2],
+ ['漂白水和酸性馬桶清潔劑混在一起會？',['清得更乾淨','沒有任何反應','變成清水','產生有毒的氯氣'],3],
+ ['清潔工具分顏色，最主要是為了？',['好看','避免交叉污染','方便採購','讓清潔工好認自己的東西'],1],
+ ['食物的「溫度危險區」大約是？',['0°C 以下','5°C 到 60°C','60°C 到 100°C','100°C 以上'],1],
+ ['員工餐廳「留樣」的主要目的是？',['給員工加菜','萬一有人吃壞肚子，可以檢驗找出原因','給老闆試吃','減少剩食'],1],
+ ['交通車核載 30 人，有 35 人要搭，應該？',['擠一擠','讓 5 個人站車斗','加派車輛或分兩趟','請司機開快一點早點回來再載'],2],
+ ['下列哪一個是宿舍管理「不可以」做的事？',['公告門禁時間','訪客登記','輪值打掃','扣押員工身分證'],3],
+ ['下列哪一個屬於有害廢棄物？',['空紙箱','布料邊角料','廢電池','果皮'],2],
+ ['配電箱起火，第一步應該？',['潑水','先斷電','打開窗戶','拍照上傳群組'],1],
+ ['柏拉圖（Pareto Chart）最主要的用途是？',['畫出問題的歷史','找出佔大部分的少數關鍵問題，優先改善','比較兩間工廠','計算預算'],1]];
+const eb=$('#examBox');let eAns=0,eOk=0;
+EX.forEach((q,i)=>{const d=document.createElement('div');d.className='quiz';d.style.setProperty('--stage','#1E2A30');d.dataset.a=q[2];d.dataset.exp='';
+  d.innerHTML='<div class="qq">'+(i+1)+'. '+q[0]+'</div><ol>'+q[1].map(o=>'<li>'+o+'</li>').join('')+'</ol>';eb.append(d);
+  bindQuiz(d,ok=>{eAns++;if(ok)eOk++;const sc=Math.round(eOk/EX.length*100);
+    if(eAns<EX.length){$('#examScore').textContent='已作答 '+eAns+' / '+EX.length+' 題，第一次就答對 '+eOk+' 題。'}
+    else{const pass=eOk>=10;$('#examScore').innerHTML='測驗完成！第一次就答對 <b>'+eOk+' / '+EX.length+'</b> 題（'+sc+' 分）。'+(pass?'<b style="color:#1E8A5A">恭喜通過！</b>請輸入名字產生結業證書。':'還差一點點，回去複習答錯的單元，再重新打開這一頁作答吧。');
+      if(pass){$('#certForm').style.display='block';$('#certScore').textContent=sc}}})});
+$('#certBtn').addEventListener('click',()=>{const n=$('#certName').value.trim();if(!n){$('#certName').focus();return}
+  $('#certWho').textContent=n;$('#certDate').textContent='發證日期：'+new Date().toLocaleDateString('zh-TW',{year:'numeric',month:'long',day:'numeric'});$('#cert').classList.add('show')});
+$('#cert .btn').onclick=()=>{document.body.classList.add('pc');window.print()};
+
+meter();show(location.hash.slice(1)||'home');
+window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-32c8214371" data-category="business"></script></body>
+</html>

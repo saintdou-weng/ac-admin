@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>日常心算・從零到專業</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1c1c1c; --gray:#6b6b6b; --paper:#faf8f3; --khaki:#b8a67a; --khaki-d:#8a7647;
+  --linen:#ede7da; --steel:#4a6fa5; --coral:#c05a3c; --leaf:#7a8f5a; --card:#ffffff;
+  --serif:'Noto Serif TC','PMingLiU',serif;
+  --sans:'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif;
+  --mono:'Consolas','Courier New',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);color:var(--ink);line-height:1.9;font-size:16px;
+  background:var(--paper);
+  background-image:
+    linear-gradient(90deg,rgba(184,166,122,.14) 2px,transparent 2px),
+    radial-gradient(rgba(74,111,165,.12) 2.2px,transparent 2.2px);
+  background-size:56px 100%,56px 34px; /* 像算盤的直桿與算珠 */
+}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
+
+/* ---------- 封面 ---------- */
+header{background:var(--ink);color:var(--paper);padding:56px 0 44px;position:relative}
+header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;
+  background:repeating-linear-gradient(90deg,var(--khaki) 0 10px,transparent 10px 18px,var(--steel) 18px 28px,transparent 28px 36px);} /* 算珠串 */
+.eyebrow{color:var(--khaki);letter-spacing:.35em;font-size:12px;font-weight:700;margin-bottom:14px}
+h1.title{font-family:var(--serif);font-weight:900;font-size:clamp(30px,6vw,52px);line-height:1.28;margin-bottom:12px}
+.sub{color:#b9b3a6;font-size:15px;max-width:580px}
+.route{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.route span{font-size:13px;border:1px solid #4a4a4a;color:#cfc8b8;border-radius:999px;padding:5px 14px}
+.route span b{color:var(--khaki)}
+
+/* ---------- 導覽 ---------- */
+nav.toc{position:sticky;top:0;z-index:50;background:rgba(250,248,243,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--linen)}
+nav.toc .wrap{display:flex;gap:6px;overflow-x:auto;padding:10px 20px;scrollbar-width:none}
+nav.toc a{flex:0 0 auto;font-size:13px;font-weight:500;color:var(--gray);text-decoration:none;padding:6px 12px;border-radius:999px;border:1px solid transparent;white-space:nowrap}
+nav.toc a:hover,nav.toc a:focus-visible{color:var(--ink);border-color:var(--khaki);outline:none}
+
+/* ---------- 章節 ---------- */
+.part{margin-top:58px;padding:20px 22px;border-radius:16px;background:var(--ink);color:var(--paper)}
+.part .pno{color:var(--khaki);font-size:13px;letter-spacing:.25em;font-weight:700}
+.part h2{font-family:var(--serif);font-weight:900;font-size:clamp(22px,4.5vw,32px);margin-top:4px}
+.part p{color:#b9b3a6;font-size:14px;margin-top:6px}
+
+section.lesson{padding:46px 0 6px}
+.lesson-tag{display:flex;align-items:baseline;gap:14px;margin-bottom:12px}
+.lesson-tag .no{font-family:var(--serif);font-weight:900;font-size:15px;color:var(--khaki-d);letter-spacing:.12em;white-space:nowrap}
+.lesson-tag h3{font-family:var(--serif);font-weight:900;font-size:clamp(21px,4vw,28px)}
+.lesson p.lead{color:#444;margin-bottom:12px}
+
+.card{background:var(--card);border:1px solid var(--linen);border-radius:14px;padding:22px;margin:16px 0;box-shadow:0 1px 3px rgba(26,26,26,.05)}
+.tip{background:#faf6ea;border-left:4px solid var(--khaki);border-radius:0 10px 10px 0;padding:13px 16px;margin:14px 0;font-size:14.5px;color:#5a5a5a}
+.tip b{color:#7a6520}
+.key{background:#e9edf5;border-left:4px solid var(--steel);border-radius:0 10px 10px 0;padding:13px 16px;margin:14px 0;font-size:15px;font-weight:700;color:#2c4a75}
+.etym{background:#fdf1ec;border-left:4px solid var(--coral);border-radius:0 10px 10px 0;padding:13px 16px;margin:14px 0;font-size:14.5px;color:#6a453a}
+.etym b{color:var(--coral)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:10px 0}
+th{background:var(--ink);color:#fff;font-weight:700;padding:9px 10px;text-align:left}
+td{padding:9px 10px;border-bottom:1px solid var(--linen);vertical-align:top}
+tr:nth-child(even) td{background:#f6f4ee}
+.small{font-size:13px;color:var(--gray)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.two{grid-template-columns:1fr}}
+
+/* 流程膠囊 */
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+.flow span{background:var(--linen);border:1px solid #ddd3bd;border-radius:10px;padding:7px 12px;font-size:13.5px;font-weight:500}
+.flow i{color:var(--khaki-d);font-style:normal;font-weight:700}
+.flow em{color:var(--gray);font-style:normal}
+
+/* 算式展示 */
+.mathline{font-family:var(--serif);font-weight:900;font-size:clamp(20px,4.5vw,28px);color:var(--ink);text-align:center;background:var(--linen);border-radius:12px;padding:14px 10px;margin:12px 0;letter-spacing:1px}
+.mathline em{font-style:normal;color:var(--coral)}
+.mathline u{text-decoration:none;color:var(--steel)}
+.steps{counter-reset:st;margin:10px 0}
+.steps div{position:relative;padding:8px 8px 8px 42px;font-size:15px;border-bottom:1px dashed var(--linen)}
+.steps div::before{counter-increment:st;content:counter(st);position:absolute;left:6px;top:9px;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--khaki);font-size:13px;font-weight:700;text-align:center;line-height:24px}
+.steps b{color:#2c4a75}
+
+/* 互動共用 */
+.stage{background:#22262b;border-radius:14px;padding:18px;color:#d8d2c4}
+.stage h4{font-family:var(--serif);color:var(--linen);font-size:18px;margin-bottom:8px}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+button.ui{font-family:var(--sans);font-size:14px;font-weight:700;padding:8px 18px;border-radius:999px;border:1px solid #555;background:transparent;color:#d8d2c4;cursor:pointer;transition:.15s}
+button.ui:hover{border-color:var(--khaki);color:var(--khaki)}
+button.ui.primary{background:var(--khaki);border-color:var(--khaki);color:#1a1a1a}
+button.ui:disabled{opacity:.35;cursor:default}
+.stageflex{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start}
+.stageinfo{flex:1;min-width:230px;font-size:14px;color:#b9b3a6}
+.stageinfo b{color:var(--linen)}
+.stage input[type=number],.stage input[type=text]{
+  width:100%;padding:9px 10px;border:1px solid #4a4f57;border-radius:9px;font-size:17px;
+  font-family:var(--mono);background:#2c3138;color:#e8e2d4}
+.stage label{font-size:12.5px;color:#8d867a;display:block;margin:8px 0 4px}
+.bigq{font-family:var(--serif);font-weight:900;font-size:34px;color:var(--linen);text-align:center;padding:8px}
+.feedback{min-height:26px;font-size:14.5px;text-align:center;margin-top:6px}
+.good{color:#a9c48f}.bad{color:#e07b6a}
+.scorebar{display:flex;gap:16px;justify-content:center;font-size:13px;color:#8d867a;margin-top:6px}
+.scorebar b{color:var(--khaki);font-size:16px}
+.mstep{background:#2c3138;border-left:4px solid var(--khaki);border-radius:0 8px 8px 0;padding:9px 12px;margin:6px 0;font-size:15px}
+.mstep b{color:var(--khaki)}
+
+/* 測驗 */
+.q{border:1px solid var(--linen);border-radius:12px;padding:14px 16px;margin:10px 0;background:#fff}
+.q .qt{font-weight:700;margin-bottom:6px}
+.q button{font-family:var(--sans);font-size:13px;border:1px solid var(--khaki);background:transparent;color:var(--khaki-d);border-radius:999px;padding:4px 14px;cursor:pointer}
+.q .ans{display:none;margin-top:8px;font-size:14px;color:#2c4a75;background:#eef1f7;border-radius:8px;padding:9px 12px}
+.q.open .ans{display:block}
+
+footer{margin-top:64px;padding:34px 0;background:var(--ink);color:#9a948a;font-size:13px;text-align:center}
+footer b{color:var(--khaki)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+:focus-visible{outline:2px solid var(--steel);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Mental Math 101</div>
+    <h1 class="title">日常心算<br>不掏手機,三秒算出答案</h1>
+    <p class="sub">買東西找多少零?打 79 折是多少?五個人分帳每人付多少?這門課不教魔術,教一套人人學得會的心算系統——從「換一顆腦」開始,一步步練到你在收銀機前露出微笑。</p>
+    <div class="route">
+      <span><b>第一部</b> 心算的地基:換一顆腦</span>
+      <span><b>第二部</b> 四則武器庫</span>
+      <span><b>第三部</b> 高手之路:折扣、分帳、防錯</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc"><div class="wrap">
+  <a href="#l1">1 心算是什麼</a><a href="#l2">2 湊十</a><a href="#l3">3 拆數</a>
+  <a href="#l4">4 加法</a><a href="#l5">5 減法找零</a><a href="#l6">6 乘法</a><a href="#l7">7 除法</a><a href="#l8">8 估算</a>
+  <a href="#l9">9 折扣％</a><a href="#l10">10 日常應用</a><a href="#l11">11 驗算防錯</a><a href="#l12">12 練功計畫</a><a href="#dojo">道場</a><a href="#quiz">總測驗</a>
+</div></nav>
+
+<main class="wrap">
+
+<div class="part">
+  <div class="pno">PART 1</div>
+  <h2>心算的地基:換一顆腦</h2>
+  <p>心算不是「在腦中寫直式」——那條路又慢又累。第一部先安裝三個新習慣:方向反過來、跟 10 做朋友、把數字拆開。地基三課,決定你後面的速度上限。</p>
+</div>
+
+<!-- 第1課 -->
+<section class="lesson" id="l1">
+  <div class="lesson-tag"><span class="no">第 1 課</span><h3>心算是什麼?先換方向再說</h3></div>
+  <p class="lead">學校教的直式筆算,是<b>從個位往高位算</b>(先算 7+8,再進位)。它適合紙筆,卻不適合腦袋——因為要一直「記住進位」。心算高手全部反過來:<b>從最大的位數開始算</b>。看同一題的兩條路:</p>
+  <div class="card">
+    <div class="two">
+      <div>
+        <b>✏️ 筆算腦(由右往左)</b>
+        <div class="steps">
+          <div>7+8=15,寫 5 <b>進 1</b>(要記住!)</div>
+          <div>4+3=7,再<b>+剛剛的 1</b>=8</div>
+          <div>倒著組回來:85</div>
+        </div>
+        <p class="small">三步裡有兩步在「記住小抄」——腦內記憶體很快爆掉,這就是多數人心算慢的原因。</p>
+      </div>
+      <div>
+        <b>🧠 心算腦(由左往右)</b>
+        <div class="mathline">47+38 → 47+<u>30</u>=77 → 77+<em>8</em>=85</div>
+        <p class="small">先吞大的(+30),再吞小的(+8)。每一步的結果都是「目前的答案」,不用記進位、不用倒著組——講到一半被打斷,你手上還是有個接近的數。</p>
+      </div>
+    </div>
+    <table>
+      <tr><th>比較</th><th>筆算</th><th>心算</th></tr>
+      <tr><td>方向</td><td>個位 → 高位</td><td><b>高位 → 個位</b></td></tr>
+      <tr><td>中途狀態</td><td>一堆零件+進位小抄</td><td>永遠是「越來越準的答案」</td></tr>
+      <tr><td>適合</td><td>紙筆、精確大數</td><td>日常、快、夠準</td></tr>
+    </table>
+  </div>
+  <div class="etym"><b>詞源|「算」與 Digit:</b>「算」字上面是竹字頭——古代中國人用一根根小竹棍(算籌)擺在桌上計算,「算」就是擺弄竹籌這個動作;後來竹籌串成算盤,「珠算」誕生,不用工具、全在腦中就叫「心算」。英文的 digit(數字/位數)更妙:拉丁文 digitus 是「手指」——人類最早的計算機就是十根手指,十進位也是這麼來的。</div>
+  <div class="key">整門課的第一心法,現在就背起來:<b>從大到小、由左往右</b>。之後每一課的技巧,全部建立在這個方向上。</div>
+</section>
+
+<!-- 第2課 -->
+<section class="lesson" id="l2">
+  <div class="lesson-tag"><span class="no">第 2 課</span><h3>跟 10 做朋友:湊十與補數</h3></div>
+  <p class="lead">十進位世界裡,<b>10、100、1000 是高速公路</b>——跟它們有關的計算都特別快。所以心算第二個地基:看到任何數字,反射性知道「它離下一個整十還差多少」。這個「還差多少」就叫<b>補數</b>:</p>
+  <div class="card">
+    <div class="mathline">7 的補數是 <em>3</em>(湊成10) ・ 67 的補數是 <em>33</em>(湊成100)</div>
+    <p class="small">湊 100 的口訣:<b>「前面湊 9、最後湊 10」</b>——67 的補數:6 湊 9 得 3、7 湊 10 得 3 → 33。一位一位看,不用借位。(尾數是 0 的更簡單:60 的補數就是 40。)</p>
+    <div class="stage">
+      <h4>互動:湊十快答——練出反射神經</h4>
+      <div class="stageflex">
+        <div style="flex:1;min-width:220px;text-align:center">
+          <div class="bigq" id="cpQ">7 湊到 10 = ?</div>
+          <input type="number" id="cpA" inputmode="numeric" placeholder="輸入補數後按 Enter" aria-label="輸入補數" style="text-align:center;font-size:20px">
+          <div class="feedback" id="cpF"></div>
+          <div class="scorebar"><span>答對 <b id="cpOK">0</b></span><span>連對 <b id="cpStreak">0</b></span></div>
+        </div>
+        <div class="stageinfo">
+          <div class="btnrow">
+            <button class="ui primary" data-cp="10">湊 10</button>
+            <button class="ui" data-cp="100">湊 100</button>
+            <button class="ui" data-cp="1000">湊 1000</button>
+          </div>
+          答完按 Enter,對了自動出下一題。目標:<b>湊 10 一秒內、湊 100 三秒內</b>脫口而出。這個反射,是第 5 課「找零神功」的全部原料——現在流的汗,都是等下的帥。
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="etym"><b>詞源|補數 Complement:</b>拉丁文 complere =「填滿」(com 完全 + plere 填)。補數就是「把杯子填滿到 10 還需要的水量」。英文的 compliment(讚美)是同源兄弟——讚美是「把對方的心填滿」,一個填數字、一個填心,都是同一個字根。</div>
+  <div class="tip"><b>生活比喻:</b>補數就像拼圖的另一半:看到 7,腦中自動浮出缺角形狀的 3。練到不用想,你就拿到心算世界的第一張黑帶。</div>
+</section>
+
+<!-- 第3課 -->
+<section class="lesson" id="l3">
+  <div class="lesson-tag"><span class="no">第 3 課</span><h3>拆數:所有心算技巧的共同祖先</h3></div>
+  <p class="lead">第三個地基:<b>數字是可以拆開的積木</b>。38 不是一個神祕符號,它是「30 和 8」,也可以是「40 少 2」。心算所有招式,本質都是同一句話——<b>把難的數,拆成好算的數</b>:</p>
+  <div class="card">
+    <table>
+      <tr><th>拆法</th><th>例子</th><th>什麼時候用</th></tr>
+      <tr><td><b>按位拆</b>(拆成幾十和幾)</td><td>38 = 30+8</td><td>最常用,加減乘全吃</td></tr>
+      <tr><td><b>湊整拆</b>(看成整十的鄰居)</td><td>38 = 40−2;99 = 100−1</td><td>數字尾巴是 8、9 時超省力</td></tr>
+      <tr><td><b>對半拆</b></td><td>16 = 8×2;5 = 10÷2</td><td>乘除法的祕密通道(第 6、7 課)</td></tr>
+    </table>
+    <div class="mathline">同一題三條路:26+38<br>
+      <span style="font-size:16px;font-weight:400">按位拆:26+30+8 ・ 湊整拆:26+40−2 ・ 都到 <em>64</em></span>
+    </div>
+    <p class="small">沒有「標準答案的算法」——<b>哪條路對你順,哪條就是對的路</b>。高手和新手的差別,只是高手看到題目時,腦中同時亮起三條路,然後挑最短的走。</p>
+  </div>
+  <div class="etym"><b>詞源|位值 Place Value:</b>「38 的 3 代表 30」這件事叫位值——同一個符號,站的「位置」決定它的「價值」,像同一個人站在不同職位就有不同權限。這套系統源自古印度、經阿拉伯商人傳到歐洲,所以叫「印度–阿拉伯數字」;沒有位值概念的羅馬數字(XXXVIII=38)幾乎沒辦法心算,位值是心算存在的前提。</div>
+  <div class="key">三個地基到齊:<b>①方向由左往右 ②補數反射 ③數字是積木</b>。接下來的四則武器庫,每一招都只是這三塊積木的不同拼法。</div>
+</section>
+
+<div class="part">
+  <div class="pno">PART 2</div>
+  <h2>四則武器庫</h2>
+  <p>地基打好,開始發武器。加、減、乘、除、估算各一課——每課都是「一個核心招式+日常實戰」,而且每一招都能在互動器材上立刻練。</p>
+</div>
+
+<!-- 第4課 -->
+<section class="lesson" id="l4">
+  <div class="lesson-tag"><span class="no">第 4 課</span><h3>加法:由左往右,一路吞過去</h3></div>
+  <p class="lead">加法只有一招,就是第 1 課那招的完全體:<b>先加十位、再加個位;遇到 8、9 結尾,改用湊整</b>。輸入任何兩個數,看心算路徑怎麼走:</p>
+  <div class="card">
+    <div class="stage">
+      <h4>互動:加法拆解器——輸入兩個數,看腦內路徑</h4>
+      <div class="stageflex">
+        <div style="flex:0 0 190px">
+          <label for="adA">第一個數(1–999)</label>
+          <input type="number" id="adA" value="47" min="1" max="999">
+          <label for="adB">第二個數(1–999)</label>
+          <input type="number" id="adB" value="38" min="1" max="999">
+        </div>
+        <div class="stageinfo" id="adOut"></div>
+      </div>
+    </div>
+    <table style="margin-top:12px">
+      <tr><th>實戰</th><th>心算路徑</th></tr>
+      <tr><td>早餐 65+55</td><td>65+50=115 → +5=<b>120</b></td></tr>
+      <tr><td>飲料 59+48(湊整)</td><td>59 當 60:60+48=108 → 多加了 1,還回去=<b>107</b></td></tr>
+      <tr><td>三筆 120+85+15</td><td>先挑好朋友:85+15=100 → 120+100=<b>220</b>(交換順序不犯法!)</td></tr>
+    </table>
+  </div>
+  <div class="tip"><b>生活比喻:</b>由左往右加,像吃牛排先切大塊——每吞一口,肚子裡都是「目前的總量」。筆算腦是把牛排切成碎屑編號,吃完才知道吃了多少。</div>
+  <div class="key">加法三反射:<b>①大位先吞 ②尾巴 8、9 就湊整借還 ③一串數先找湊成整十整百的好朋友</b>。</div>
+</section>
+
+<!-- 第5課 -->
+<section class="lesson" id="l5">
+  <div class="lesson-tag"><span class="no">第 5 課</span><h3>減法:別用減的,用「爬」的(找零神功)</h3></div>
+  <p class="lead">100−67 用筆算腦要借位兩次,超痛。但你看過收銀員找零嗎?他們不做減法——<b>從 67 往上「爬」到 100</b>:67 爬 3 到 70,再爬 30 到 100,零錢就是 3+30=33。這正是第 2 課的補數反射!</p>
+  <div class="card">
+    <div class="stage">
+      <h4>互動:找零模擬器</h4>
+      <div class="stageflex">
+        <div style="flex:0 0 190px">
+          <label for="chP">商品價格</label>
+          <input type="number" id="chP" value="267" min="1" max="9999">
+          <label for="chPay">你付的鈔票</label>
+          <div class="btnrow" style="margin-top:2px">
+            <button class="ui" data-pay="100">100</button>
+            <button class="ui" data-pay="500">500</button>
+            <button class="ui primary" data-pay="1000">1000</button>
+          </div>
+        </div>
+        <div class="stageinfo" id="chOut"></div>
+      </div>
+    </div>
+    <table style="margin-top:12px">
+      <tr><th>減法兩招</th><th>用在</th><th>例</th></tr>
+      <tr><td><b>往上爬(補數)</b></td><td>減整十整百、找零</td><td>1000−267:爬 3→270、爬 30→300、爬 700→1000,答 <b>733</b></td></tr>
+      <tr><td><b>湊整借還</b></td><td>減 8、9 結尾的數</td><td>82−29:先減 30=52,多減了 1 還回來=<b>53</b></td></tr>
+    </table>
+    <p class="small">「前面湊 9、最後湊 10」在這裡大顯神威:1000−267,直接一位一位報:2湊9=7、6湊9=3、7湊10=3 → <b>733</b>,連爬都不用爬。</p>
+  </div>
+  <div class="etym"><b>詞源|找「零」:</b>為什麼叫「找」零?宋代市集交易,買方付整貫錢、賣方要「找還」差額——「找」就是補足的意思,「找零」=把差額補回給你。英文 change(零錢)原意是「交換」:你用整鈔「換」回商品加零錢。東西方都把找零看成「補差額」,而不是「做減法」——收銀員的爬樓梯法,幾百年前就內建在語言裡了。</div>
+  <div class="key">從今天起,看到減法先問:<b>「往上爬會不會比較快?」</b>十次有八次,答案是會。</div>
+</section>
+
+<!-- 第6課 -->
+<section class="lesson" id="l6">
+  <div class="lesson-tag"><span class="no">第 6 課</span><h3>乘法:拆開來,各個擊破</h3></div>
+  <p class="lead">23×7 看起來可怕,拆開就溫馴:<b>23 是 20 和 3 → 20×7=140,3×7=21,合計 161</b>。這招的正式名字叫分配律,白話是「分頭打、再會合」。輸入試試:</p>
+  <div class="card">
+    <div class="stage">
+      <h4>互動:乘法拆解器</h4>
+      <div class="stageflex">
+        <div style="flex:0 0 190px">
+          <label for="muA">兩位數(10–99)</label>
+          <input type="number" id="muA" value="23" min="10" max="99">
+          <label for="muB">一位數(2–9)</label>
+          <input type="number" id="muB" value="7" min="2" max="9">
+        </div>
+        <div class="stageinfo" id="muOut"></div>
+      </div>
+    </div>
+    <table style="margin-top:12px">
+      <tr><th>特快車</th><th>原理</th><th>例</th></tr>
+      <tr><td><b>×5</b> = ×10 再對半</td><td>5 是 10 的一半</td><td>48×5 → 480÷2=<b>240</b></td></tr>
+      <tr><td><b>×9</b> = ×10 再減自己</td><td>9 = 10−1</td><td>37×9 → 370−37=<b>333</b></td></tr>
+      <tr><td><b>×11</b> = 兩頭不動,中間放和</td><td>11 = 10+1</td><td>23×11 → 2〔2+3〕3=<b>253</b>(和超過 9 要進位:68×11→6〔14〕8→<b>748</b>)</td></tr>
+      <tr><td><b>×4</b> = 對半的反面:加倍兩次</td><td>4 = 2×2</td><td>35×4 → 70 → <b>140</b></td></tr>
+    </table>
+  </div>
+  <div class="etym"><b>詞源|九九乘法表:</b>中國的乘法口訣兩千多年前就有了,但古代是從「九九八十一」開始背、倒著背到「一一如一」——開頭兩個字是「九九」,整首歌就叫「九九歌」,名字沿用到今天,雖然現在都從一一背起。順帶一提,「乘」字本義是「登上、疊上去」(如「乘車」)——乘法就是同一個數一層層疊上去。</div>
+  <div class="tip"><b>生活比喻:</b>拆數乘法像搬一箱 23 公斤的貨:整箱搬會閃到腰,拆成 20 公斤和 3 公斤兩趟,輕鬆走完。數字跟貨物一樣,能拆就別硬扛。</div>
+  <div class="key">乘法心算=<b>按位拆+分頭打</b>,再加背四班特快車(×5、×9、×11、×4)。日常九成的乘法,到這裡已經全部繳械。</div>
+</section>
+
+<!-- 第7課 -->
+<section class="lesson" id="l7">
+  <div class="lesson-tag"><span class="no">第 7 課</span><h3>除法:分東西的藝術</h3></div>
+  <p class="lead">除法的日常面貌就是「分」:五個人吃了 465,一人多少?心算除法兩招走天下:</p>
+  <div class="card">
+    <div class="two">
+      <div>
+        <b>招式一:拆成好分的塊</b>
+        <div class="mathline" style="font-size:20px">465÷5 → <u>450</u>÷5=90,<em>15</em>÷5=3 → 93</div>
+        <p class="small">訣竅:把被除數拆成「除數的漂亮倍數」。465 看到 5,先抓出 450(5 的 90 倍),剩 15 再分。跟乘法拆解是同一個祖先——分頭打。</p>
+      </div>
+      <div>
+        <b>招式二:÷5 的祕密通道</b>
+        <div class="mathline" style="font-size:20px">÷5 = <em>×2</em> 再 <u>÷10</u></div>
+        <p class="small">465÷5 → 465×2=930 → ÷10=<b>93</b>。因為 5=10÷2,除以 5 等於「乘 2 再除 10」——除 10 只是搬小數點,免費!同理 ÷25 = ×4÷100。</p>
+      </div>
+    </div>
+    <table>
+      <tr><th>實戰</th><th>路徑</th></tr>
+      <tr><td>4 人分 288 的火鍋</td><td>280÷4=70,8÷4=2 → 每人 <b>72</b></td></tr>
+      <tr><td>除不盡?抓「大概」就好</td><td>3 人分 250:240÷3=80,剩 10 → <b>每人 83,有人多付 1 元</b>——日常精度到此為止,完全夠用</td></tr>
+    </table>
+  </div>
+  <div class="etym"><b>詞源|「除」:</b>「除」的本義是「宮殿的台階」,引申為「去掉、分掉」(如「掃除」)。除法就是把一堆東西「一階一階分掉」。英文 divide 來自拉丁文 dividere(分開),和「分紅 dividend」同源——公司賺的錢「除」給股東,每一份就叫 dividend,這也是為什麼數學裡「被除數」的英文正是 dividend:等著被分的那筆錢。</div>
+  <div class="key">除法心態最重要:<b>日常分帳不需要小數點</b>。抓到整數、講清楚「誰多付一塊」,你就是全桌最可靠的人。</div>
+</section>
+
+<!-- 第8課 -->
+<section class="lesson" id="l8">
+  <div class="lesson-tag"><span class="no">第 8 課</span><h3>估算:高手其實都在「算大概」</h3></div>
+  <p class="lead">祕密揭曉:心算高手九成時間不算精確值,而是<b>快速抓一個「夠用的大概」</b>。購物車裡五樣東西,錢包裡一張 500,夠不夠?這種題目,估算三秒,精算三分鐘——而你只需要三秒的答案。</p>
+  <div class="card">
+    <table>
+      <tr><th>估算三式</th><th>做法</th><th>例</th></tr>
+      <tr><td><b>四捨五入法</b></td><td>每個數變成最近的整十,再加</td><td>68+91+123 → 70+90+120=<b>約 280</b></td></tr>
+      <tr><td><b>保守進位法</b>(怕不夠付時用)</td><td>全部無條件<b>往上</b>抓</td><td>68+91+123 → 70+100+130=300,錢包有 300 就穩</td></tr>
+      <tr><td><b>量級檢查</b></td><td>只問「幾十?幾百?幾千?」</td><td>42×38 → 40×40=<b>約 1600</b>,誰跟你說 600 或 16000 都是錯的</td></tr>
+    </table>
+    <div class="mathline" style="font-size:19px">估算的黃金原則:<em>有的往上估、有的往下估,誤差會互相抵銷</em></div>
+    <p class="small">68 估成 70(多 2)、123 估成 120(少 3)——一多一少,幾乎打平。這就是為什麼四捨五入的估算常常準得嚇人。</p>
+  </div>
+  <div class="etym"><b>詞源|估 Estimate:</b>拉丁文 aestimare「評定價值」——古羅馬市場上替貨物「喊價」的動作。所以 estimate 從出生就是個「市場字」:不求分毫不差,只求價值判斷夠準、能做決定。中文「估」也是人字旁+古(價),一樣是市井裡估價的字。估算不是偷懶,是兩千年來商人的核心技能。</div>
+  <div class="key">日常心算的完整流程:<b>先估算定範圍 → 需要再精算 → 精算結果跳出範圍就重算</b>。估算不是精算的替代品,是精算的保鑣。</div>
+</section>
+
+<div class="part">
+  <div class="pno">PART 3</div>
+  <h2>高手之路:折扣、分帳、防錯</h2>
+  <p>四則到手,開始打真實世界的怪:百分比與折扣、時間與單價、以及高手最重要的隱藏技能——怎麼知道自己算錯了。最後進道場實戰。</p>
+</div>
+
+<!-- 第9課 -->
+<section class="lesson" id="l9">
+  <div class="lesson-tag"><span class="no">第 9 課</span><h3>百分比與折扣:一切從 10% 出發</h3></div>
+  <p class="lead">百分比看起來是新東西,其實只是「把 100 當全部」的說法。心算百分比只需要一把萬能鑰匙:<b>10% = 把數字的小數點左移一位</b>。650 的 10% 就是 65——免費!其他所有百分比,都用 10% 拼出來:</p>
+  <div class="card">
+    <table>
+      <tr><th>要算</th><th>用 10% 拼</th><th>例:650 元</th></tr>
+      <tr><td>20%</td><td>10%×2</td><td>65×2=130</td></tr>
+      <tr><td>5%</td><td>10% 的一半</td><td>65÷2=32.5</td></tr>
+      <tr><td>15%</td><td>10%+5%</td><td>65+32.5=97.5</td></tr>
+      <tr><td>1%</td><td>小數點再左移一位</td><td>6.5</td></tr>
+    </table>
+    <div class="mathline" style="font-size:19px">打折的翻譯:79 折 = <em>付 79%</em> = 付「8 個 10%,再退 1 個 1%」</div>
+    <div class="stage">
+      <h4>互動:折扣快算器</h4>
+      <div class="stageflex">
+        <div style="flex:0 0 190px">
+          <label for="dcP">原價</label>
+          <input type="number" id="dcP" value="650" min="10" max="99999">
+          <label>折數</label>
+          <div class="btnrow" style="margin-top:2px">
+            <button class="ui" data-dc="9">9 折</button>
+            <button class="ui primary" data-dc="8">8 折</button>
+            <button class="ui" data-dc="79">79 折</button>
+            <button class="ui" data-dc="65">65 折</button>
+            <button class="ui" data-dc="5">5 折</button>
+          </div>
+        </div>
+        <div class="stageinfo" id="dcOut"></div>
+      </div>
+    </div>
+    <p class="small"><b>另一個角度:算你「省多少」常常更快。</b>9 折=省 10%,650 省 65 → 付 585。買不買的決策,常常知道「省 65」就夠了,根本不用算付多少——挑資訊量大的那邊算,是高手的偷懶智慧。</p>
+  </div>
+  <div class="etym"><b>詞源|Percent 與「折」:</b>percent 來自拉丁文 per centum「每一百」,% 符號就是 100 兩個 0 加一條斜線變形而成。中文的「折」原意是「折斷、打斷」——古代商家降價叫「折閱」(折損售價),「打八折」=價格被打斷只剩八成。西方說「每一百拿幾」,中國說「原價折剩幾成」,方向相反,講的是同一件事:<b>折數=你付的比例,percent off=你省的比例</b>,出國購物別搞反(30% off=7 折)。</div>
+  <div class="key">百分比心算=<b>10% 起手 + 加倍/對半/移小數點拼出來</b>。練熟這一課,全商場的紅色標籤都是你的口算題。</div>
+</section>
+
+<!-- 第10課 -->
+<section class="lesson" id="l10">
+  <div class="lesson-tag"><span class="no">第 10 課</span><h3>日常應用:時間、單價、分帳全餐</h3></div>
+  <p class="lead">把前九課的招式,套進三個每天都會遇到的場景:</p>
+  <div class="card">
+    <div class="two">
+      <div>
+        <b>⏰ 時間計算:湊整點爬樓梯</b>
+        <div class="mathline" style="font-size:18px">8:40 到 14:25 是多久?</div>
+        <div class="steps">
+          <div>8:40 爬到 9:00 → <b>20 分</b>(補數反射!)</div>
+          <div>9:00 爬到 14:00 → <b>5 小時</b></div>
+          <div>14:00 爬到 14:25 → <b>25 分</b></div>
+          <div>合計:5 小時 45 分</div>
+        </div>
+        <p class="small">跟找零一模一樣——時間是 60 進位的世界,照樣用「往上爬」,只是高速公路從整百換成整點。</p>
+      </div>
+      <div>
+        <b>🛒 單價比較:同一把尺再比</b>
+        <div class="mathline" style="font-size:18px">大包 480g/120 元 vs 小包 300g/78 元</div>
+        <div class="steps">
+          <div>換算成「每 100g 多少錢」這把共同的尺</div>
+          <div>大包:120÷4.8 ≈ <b>25 元</b>/100g</div>
+          <div>小包:78÷3 = <b>26 元</b>/100g</div>
+          <div>大包每 100g 便宜 1 元 → 吃得完就買大包</div>
+        </div>
+        <p class="small">除法(第 7 課)+估算(第 8 課)合體。挑一把好算的尺(每 100g、每顆、每次)是關鍵。</p>
+      </div>
+    </div>
+    <table>
+      <tr><th>🍲 分帳全餐(綜合演練)</th><th>心算路徑</th></tr>
+      <tr><td>四人聚餐 1,285,加一成服務費,均分</td><td>服務費=10%=128.5≈130 → 總額約 1285+130=1415 → ÷4:1400÷4=350,15÷4≈4 → <b>每人約 354,喊 355 收整最快</b></td></tr>
+    </table>
+    <p class="small">注意這一題動用了:10% 鑰匙(第9課)、估算(第8課)、拆數除法(第7課)、湊整(第2課)——所謂高手,只是把基本功串成一口氣。</p>
+  </div>
+  <div class="tip"><b>生活比喻:</b>心算招式像廚房的刀工:切絲、切丁、切片各自簡單,一道菜是好幾種刀工的組合。日常題目=食材,你已經有整套刀了。</div>
+</section>
+
+<!-- 第11課 -->
+<section class="lesson" id="l11">
+  <div class="lesson-tag"><span class="no">第 11 課</span><h3>驗算與防錯:高手的隱藏技能</h3></div>
+  <p class="lead">心算比筆算容易滑手,所以真正的高手都內建三道保險。花三秒驗算,比重算三次划算:</p>
+  <div class="card">
+    <table>
+      <tr><th>三道保險</th><th>怎麼做</th><th>例</th></tr>
+      <tr><td><b>① 量級檢查</b></td><td>答案的「位數」合理嗎?</td><td>42×38 算出 15,960?不對——40×40 才 1600,多了一個 0</td></tr>
+      <tr><td><b>② 尾數檢查</b></td><td>只看個位:個位算出來要對得上</td><td>47+38 個位是 7+8=15 → 答案尾數必是 5;算出 84 立刻抓包</td></tr>
+      <tr><td><b>③ 反向檢查</b></td><td>用相反的運算走回去</td><td>1000−267=733?那 733+267 該回到 1000:733+267=1000 ✓</td></tr>
+    </table>
+    <div class="mathline" style="font-size:19px">進階玩具:棄九法——把每個數的各位數字加到剩一位,加減乘照樣成立</div>
+    <div class="steps">
+      <div>驗 47+38=85:47→4+7=11→2;38→3+8=11→2;兩者相加 2+2=4</div>
+      <div>答案 85→8+5=13→<b>4</b> → 對上了,通過!(對不上=一定錯;對上了=大概率沒錯)</div>
+    </div>
+  </div>
+  <div class="etym"><b>詞源|棄九法 Casting Out Nines:</b>「把 9 丟掉」——因為在十進位裡,任何數減去它的各位數字和,必是 9 的倍數,所以 9 可以整批丟掉不影響餘數。這招起源於古印度數學、經阿拉伯學者花拉子米(al-Khwarizmi)的著作傳入歐洲,中世紀歐洲商人靠它查帳。順帶一提,「演算法 algorithm」這個字,就是花拉子米名字的拉丁化——你每天聽到的演算法,姓氏來自一位一千兩百年前的巴格達數學家。</div>
+  <div class="key">高手心算的完整動作:<b>估算定範圍 → 心算出答案 → 尾數/量級三秒驗</b>。快而不驗是賭博,快又會驗才是實力。</div>
+</section>
+
+<!-- 第12課 -->
+<section class="lesson" id="l12">
+  <div class="lesson-tag"><span class="no">第 12 課</span><h3>練功計畫:21 天長出心算反射</h3></div>
+  <p class="lead">心算是肌肉,不是知識——看懂只是拿到入場券,<b>每天五分鐘、連續三週</b>才會長出反射。照這張表練:</p>
+  <div class="card">
+    <table>
+      <tr><th>階段</th><th>每天 5 分鐘練什麼</th><th>過關標準</th></tr>
+      <tr><td><b>第 1 週</b>|地基</td><td>湊十/湊百快答(第 2 課互動)+兩位數加法(第 4 課)</td><td>湊百 3 秒內、兩位數加法 5 秒內</td></tr>
+      <tr><td><b>第 2 週</b>|四則</td><td>找零(第 5 課)+拆數乘法(第 6 課)+÷5 通道(第 7 課)</td><td>1000 找零脫口而出、兩位×一位 10 秒內</td></tr>
+      <tr><td><b>第 3 週</b>|實戰</td><td>下方道場 60 秒挑戰+每次購物實地估算一次</td><td>道場 60 秒答對 8 題、購物估算誤差 5% 內</td></tr>
+    </table>
+    <p class="small"><b>最好的練功房是日常:</b>結帳前先算、看到打折先算、等公車算車牌數字加總——生活出題永遠比題庫新鮮。三週後你會發現一件妙事:不是你在找題目,是數字自己跳出來被你算。</p>
+    <div class="two" style="margin-top:10px">
+      <div>
+        <b>再往上還有什麼?</b>
+        <p style="font-size:14px;margin-top:6px">競技心算的世界:兩位數×兩位數(交叉相乘法)、平方速算(a²=(a+b)(a−b)+b²)、<b>珠心算</b>——把算盤內化成腦中影像,頂尖選手撥的是「想像的算珠」,速度超過計算機。這些都是同一條路的延伸:拆數、湊整、由左往右。</p>
+      </div>
+      <div>
+        <b>心算的極限與本分</b>
+        <p style="font-size:14px;margin-top:6px">報稅、工程、發薪水請交給計算機——心算的本分不是取代機器,而是:<b>①機器按錯時你抓得到 ②沒機器時你不慌 ③數字感讓你做決定更快</b>。工具算得快,但「值不值得買」永遠是人腦的判斷。</p>
+      </div>
+    </div>
+  </div>
+  <div class="etym"><b>詞源|Arithmetic:</b>算術的英文來自希臘文 arithmos(數)——最古老的數學分支,比幾何還早。中文「算術」一詞則來自兩千年前的《九章算術》,九章裡全是方田、粟米、均輸這種田地買賣、糧食分配的<b>日常應用題</b>——你這門課學的,正是兩千年來一脈相承的「過日子的數學」。</div>
+  <div class="key">結業心法只有一句:<b>由左往右、能拆就拆、跟 10 做朋友、算完驗三秒</b>。下面道場見真章。</div>
+</section>
+
+<!-- 道場 -->
+<section class="lesson" id="dojo">
+  <div class="lesson-tag"><span class="no">實戰</span><h3>心算道場:60 秒挑戰</h3></div>
+  <p class="lead">隨機出題、限時 60 秒,答對自動下一題。選好武器,按「開始」:</p>
+  <div class="card">
+    <div class="stage">
+      <div class="btnrow" id="dojoModes">
+        <button class="ui primary" data-m="add">加減</button>
+        <button class="ui" data-m="mul">乘除</button>
+        <button class="ui" data-m="pct">折扣</button>
+        <button class="ui" data-m="mix">綜合</button>
+      </div>
+      <div class="stageflex">
+        <div style="flex:1;min-width:230px;text-align:center">
+          <div class="bigq" id="djQ">按「開始挑戰」</div>
+          <input type="number" id="djA" inputmode="numeric" placeholder="輸入答案按 Enter" aria-label="道場答案" style="text-align:center;font-size:20px" disabled>
+          <div class="feedback" id="djF"></div>
+        </div>
+        <div class="stageinfo" style="text-align:center">
+          <div class="scorebar"><span>剩餘 <b id="djT">60</b> 秒</span><span>答對 <b id="djOK">0</b></span><span>最佳 <b id="djBest">0</b></span></div>
+          <div class="btnrow" style="justify-content:center;margin-top:12px"><button class="ui primary" id="djStart">▶ 開始挑戰</button></div>
+          <p style="font-size:12.5px;color:#8d867a;margin-top:8px">段位:5 題=入門 ・ 8 題=熟手 ・ 12 題=高手 ・ 16 題=道場主。卡住就按 Enter 跳過(不扣分,但浪費的是時間)。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 總測驗 -->
+<section class="lesson" id="quiz">
+  <div class="lesson-tag"><span class="no">結業</span><h3>十題觀念總測驗</h3></div>
+  <p class="lead">道場練的是手速,這裡驗的是觀念。先自己想,再點「看答案」。</p>
+  <div id="quizBox"></div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">日常心算・從零到專業|單檔離線教材<br><b>SAINTDOU</b> · Simply the Minimalist · 2026</div>
+</footer>
+
+<script>
+/* ---------- 第2課 湊十快答 ---------- */
+let cpBase=10, cpCur=7, cpOK=0, cpStreak=0;
+function cpNew(){
+  const max=cpBase===10?9:(cpBase===100?99:999);
+  const min=cpBase===10?1:(cpBase===100?11:101);
+  cpCur=Math.floor(Math.random()*(max-min+1))+min;
+  if(cpCur%cpBase===0)cpCur+=1;
+  document.getElementById('cpQ').textContent=`${cpCur} 湊到 ${cpBase} = ?`;
+  document.getElementById('cpA').value='';
+}
+document.querySelectorAll('[data-cp]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('[data-cp]').forEach(x=>x.classList.remove('primary'));
+    b.classList.add('primary');cpBase=parseInt(b.dataset.cp);cpStreak=0;
+    document.getElementById('cpStreak').textContent=0;cpNew();
+    document.getElementById('cpF').textContent='';
+    document.getElementById('cpA').focus();
+  });
+});
+document.getElementById('cpA').addEventListener('keydown',e=>{
+  if(e.key!=='Enter')return;
+  const v=parseInt(e.target.value);
+  const ans=cpBase-cpCur;
+  const f=document.getElementById('cpF');
+  if(v===ans){cpOK++;cpStreak++;f.textContent='✓ 漂亮!';f.className='feedback good';cpNew();}
+  else{cpStreak=0;f.textContent=`✗ 再想想:${cpCur} 還差多少到 ${cpBase}?(前面湊9、最後湊10)`;f.className='feedback bad';}
+  document.getElementById('cpOK').textContent=cpOK;
+  document.getElementById('cpStreak').textContent=cpStreak;
+});
+cpNew();
+
+/* ---------- 第4課 加法拆解器 ---------- */
+function adUpdate(){
+  const a=Math.min(999,Math.max(1,parseInt(document.getElementById('adA').value)||0)),
+        b=Math.min(999,Math.max(1,parseInt(document.getElementById('adB').value)||0));
+  const out=document.getElementById('adOut');
+  let html=`<b>${a} + ${b} 的心算路徑:</b>`;
+  const bd=b%10, bt=b-bd;
+  let run=a, steps=[];
+  if(bd>=8 && b<100){ // 湊整借還
+    const up=bt+10;
+    steps.push(`尾巴是 ${bd},走湊整:把 ${b} 當 <b>${up}</b> → ${a}+${up}=<b>${a+up}</b>`);
+    steps.push(`多加了 ${up-b},還回去:${a+up}−${up-b}=<b>${a+b}</b>`);
+  }else{
+    const bh=Math.floor(b/100)*100, bt2=Math.floor((b%100)/10)*10;
+    if(bh){run+=bh;steps.push(`先吞百位:+${bh} → <b>${run}</b>`);}
+    if(bt2){run+=bt2;steps.push(`再吞十位:+${bt2} → <b>${run}</b>`);}
+    if(bd){run+=bd;steps.push(`最後個位:+${bd} → <b>${run}</b>`);}
+    if(steps.length===1)steps.push(`一步到位!`);
+  }
+  html+=steps.map(s=>`<div class="mstep">${s}</div>`).join('');
+  html+=`<div class="mstep" style="border-color:#a9c48f"><b>答案:${a+b}</b> ・ 三秒驗算:個位 ${a%10}+${b%10}=${a%10+b%10},尾數該是 <b>${(a+b)%10}</b> ✓</div>`;
+  out.innerHTML=html;
+}
+['adA','adB'].forEach(id=>document.getElementById(id).addEventListener('input',adUpdate));
+adUpdate();
+
+/* ---------- 第5課 找零模擬器 ---------- */
+let chPay=1000;
+function chUpdate(){
+  const p=Math.max(1,parseInt(document.getElementById('chP').value)||0);
+  const out=document.getElementById('chOut');
+  if(p>=chPay){out.innerHTML=`<b>價格 ≥ 鈔票!</b>換一張大一點的鈔票,或改個價格。`;return;}
+  let steps=[],run=p,total=0;
+  const d1=(10-run%10)%10;
+  if(d1){run+=d1;total+=d1;steps.push(`${p} 爬 <b>${d1}</b> 到 ${run}(湊十反射)`);}
+  const d2=(100-run%100)%100;
+  if(d2 && run+d2<=chPay){run+=d2;total+=d2;steps.push(`爬 <b>${d2}</b> 到 ${run}`);}
+  const d3=chPay-run;
+  if(d3){total+=d3;steps.push(`爬 <b>${d3}</b> 到 ${chPay}`);}
+  let html=`<b>付 ${chPay},買 ${p} → 找多少?</b>`;
+  html+=steps.map(s=>`<div class="mstep">${s}</div>`).join('');
+  html+=`<div class="mstep" style="border-color:#a9c48f"><b>找零 = ${steps.length>1?'爬過的加總 = ':''}${chPay-p}</b> ・ 反向驗算:${p}+${chPay-p}=${chPay} ✓</div>`;
+  out.innerHTML=html;
+}
+document.querySelectorAll('[data-pay]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('[data-pay]').forEach(x=>x.classList.remove('primary'));
+    b.classList.add('primary');chPay=parseInt(b.dataset.pay);chUpdate();
+  });
+});
+document.getElementById('chP').addEventListener('input',chUpdate);
+chUpdate();
+
+/* ---------- 第6課 乘法拆解器 ---------- */
+function muUpdate(){
+  const a=Math.min(99,Math.max(10,parseInt(document.getElementById('muA').value)||10)),
+        b=Math.min(9,Math.max(2,parseInt(document.getElementById('muB').value)||2));
+  const t=Math.floor(a/10)*10, d=a%10;
+  let html=`<b>${a} × ${b}:拆成 ${t} 和 ${d},分頭打</b>`;
+  html+=`<div class="mstep">大塊:${t}×${b} = <b>${t*b}</b></div>`;
+  if(d)html+=`<div class="mstep">小塊:${d}×${b} = <b>${d*b}</b></div>`;
+  html+=`<div class="mstep">會合:${t*b}${d?`+${d*b}`:''} = <b>${a*b}</b></div>`;
+  if(b===5)html+=`<div class="mstep" style="border-color:#5b79b4">特快車:×5=×10÷2 → ${a}0÷2=<b>${a*5}</b>,更快!</div>`;
+  if(b===9)html+=`<div class="mstep" style="border-color:#5b79b4">特快車:×9=×10−自己 → ${a*10}−${a}=<b>${a*9}</b>,更快!</div>`;
+  html+=`<div class="mstep" style="border-color:#a9c48f">三秒驗算:尾數 ${d}×${b} 個位是 <b>${(d*b)%10}</b>,答案尾數 ${(a*b)%10} ✓</div>`;
+  document.getElementById('muOut').innerHTML=html;
+}
+['muA','muB'].forEach(id=>document.getElementById(id).addEventListener('input',muUpdate));
+muUpdate();
+
+/* ---------- 第9課 折扣快算器 ---------- */
+let dcD=8;
+function dcUpdate(){
+  const p=Math.max(10,parseInt(document.getElementById('dcP').value)||0);
+  const ten=p/10;
+  const fmt=n=>Math.round(n*100)/100;
+  let html=`<b>${p} 元打 ${dcD===5?'5':dcD} 折:</b>`;
+  html+=`<div class="mstep">萬能鑰匙:10% = 小數點左移 = <b>${fmt(ten)}</b></div>`;
+  if(dcD<10){ // 整數折
+    html+=`<div class="mstep">付 ${dcD} 個 10%:${fmt(ten)}×${dcD} = <b>${fmt(ten*dcD)}</b></div>`;
+    html+=`<div class="mstep" style="border-color:#5b79b4">或算省的:省 ${10-dcD} 個 10% = ${fmt(ten*(10-dcD))} → ${p}−${fmt(ten*(10-dcD))}=<b>${fmt(p*dcD/10)}</b></div>`;
+  }else{ // 79 之類
+    const t=Math.floor(dcD/10), o=dcD%10;
+    html+=`<div class="mstep">先付 ${t+1} 個 10%(${(t+1)}0%):${fmt(ten)}×${t+1} = <b>${fmt(ten*(t+1))}</b></div>`;
+    html+=`<div class="mstep">退 ${10-o} 個 1%(1%=${fmt(p/100)}):${fmt(ten*(t+1))}−${fmt(p/100*(10-o))} = <b>${fmt(p*dcD/100)}</b></div>`;
+  }
+  html+=`<div class="mstep" style="border-color:#a9c48f"><b>付 ${fmt(p*(dcD<10?dcD*10:dcD)/100)} 元</b> ・ 量級檢查:比 ${dcD<10?dcD:Math.floor(dcD/10)} 成多一點點,合理 ✓</div>`;
+  document.getElementById('dcOut').innerHTML=html;
+}
+document.querySelectorAll('[data-dc]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('[data-dc]').forEach(x=>x.classList.remove('primary'));
+    b.classList.add('primary');dcD=parseInt(b.dataset.dc);dcUpdate();
+  });
+});
+document.getElementById('dcP').addEventListener('input',dcUpdate);
+dcUpdate();
+
+/* ---------- 道場 ---------- */
+let djMode='add', djTimer=null, djLeft=60, djScore=0, djBest=0, djAns=0, djOn=false;
+const R=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+function djGen(){
+  const modes=djMode==='mix'?['add','mul','pct'][R(0,2)]:djMode;
+  let q='',ans=0;
+  if(modes==='add'){
+    if(Math.random()<0.5){const a=R(15,89),b=R(15,89);q=`${a} + ${b}`;ans=a+b;}
+    else{const b=R(15,88),a=R(b+10,99);q=`${a} − ${b}`;ans=a-b;}
+  }else if(modes==='mul'){
+    if(Math.random()<0.6){const a=R(12,49),b=R(3,9);q=`${a} × ${b}`;ans=a*b;}
+    else{const b=R(3,8),ansd=R(11,40);q=`${b*ansd} ÷ ${b}`;ans=ansd;}
+  }else{
+    const p=R(2,20)*50, d=[9,8,7,5][R(0,3)];q=`${p} 元打 ${d} 折 = ?`;ans=p*d/10;
+  }
+  djAns=ans;
+  document.getElementById('djQ').textContent=q;
+  const a=document.getElementById('djA');a.value='';a.focus();
+}
+function djEnd(){
+  clearInterval(djTimer);djOn=false;
+  document.getElementById('djA').disabled=true;
+  const lv=djScore>=16?'道場主!':djScore>=12?'高手!':djScore>=8?'熟手!':djScore>=5?'入門!':'再練練,回第 2 課湊十開始';
+  document.getElementById('djQ').textContent=`時間到!答對 ${djScore} 題 — ${lv}`;
+  document.getElementById('djF').textContent='';
+  if(djScore>djBest){djBest=djScore;document.getElementById('djBest').textContent=djBest;}
+  document.getElementById('djStart').textContent='▶ 再來一次';
+}
+document.getElementById('djStart').addEventListener('click',()=>{
+  clearInterval(djTimer);djLeft=60;djScore=0;djOn=true;
+  document.getElementById('djOK').textContent=0;
+  document.getElementById('djT').textContent=60;
+  const a=document.getElementById('djA');a.disabled=false;
+  djGen();
+  djTimer=setInterval(()=>{
+    djLeft--;document.getElementById('djT').textContent=djLeft;
+    if(djLeft<=0)djEnd();
+  },1000);
+});
+document.querySelectorAll('#dojoModes button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('#dojoModes button').forEach(x=>x.classList.remove('primary'));
+    b.classList.add('primary');djMode=b.dataset.m;
+  });
+});
+document.getElementById('djA').addEventListener('keydown',e=>{
+  if(e.key!=='Enter'||!djOn)return;
+  const v=parseFloat(e.target.value);
+  const f=document.getElementById('djF');
+  if(v===djAns){djScore++;document.getElementById('djOK').textContent=djScore;
+    f.textContent='✓';f.className='feedback good';}
+  else{f.textContent=`跳過(答案 ${djAns})`;f.className='feedback bad';}
+  djGen();
+});
+
+/* ---------- 總測驗 ---------- */
+const QA=[
+ ['心算和筆算最根本的方向差異是?為什麼?','筆算從個位往高位、心算從高位往個位(由左往右)。因為由左往右每一步的結果都是「目前的答案」,不用記進位小抄。'],
+ ['67 湊到 100 的口訣是?答案是多少?','「前面湊 9、最後湊 10」:6湊9得3、7湊10得3 → 33。'],
+ ['1000−267 有哪兩條快路?','①往上爬:267→270(3)→300(30)→1000(700),共 733;②口訣直報:2湊9=7、6湊9=3、7湊10=3 → 733。'],
+ ['82−29 用「湊整借還」怎麼走?','29 當 30:82−30=52,多減了 1 還回來 → 53。'],
+ ['23×7 的拆數路徑?','拆成 20 和 3:20×7=140、3×7=21,會合 161。'],
+ ['×5 和 ÷5 的祕密通道各是什麼?','×5=×10 再對半;÷5=×2 再 ÷10(搬小數點免費)。'],
+ ['650 元打 79 折,用 10% 鑰匙怎麼拼?','10%=65 → 付 8 個 10%=520,再退 1 個 1%(6.5)→ 513.5。或直接:80%−1%。'],
+ ['「30% off」是打幾折?','7 折。percent off=省的比例,折數=付的比例,方向相反。'],
+ ['42×38 算出 15,960,哪道保險立刻抓包?','量級檢查:40×40≈1600,答案應是一千六左右,15,960 多了一個 0。'],
+ ['「演算法 algorithm」這個字的由來?','來自九世紀巴格達數學家花拉子米(al-Khwarizmi)名字的拉丁化——他的著作把印度數字與棄九法等技巧傳入歐洲。']
+];
+document.getElementById('quizBox').innerHTML=QA.map((q,i)=>`
+ <div class="q" id="qq${i}">
+   <div class="qt">${i+1}. ${q[0]}</div>
+   <button onclick="document.getElementById('qq${i}').classList.toggle('open')">看答案</button>
+   <div class="ans">${q[1]}</div>
+ </div>`).join('');
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-658b8d2035" data-category="general"></script></body>
+</html>

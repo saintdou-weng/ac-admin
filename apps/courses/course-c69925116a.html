@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>餐飲學堂｜從零開始學開餐廳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --steel:#e7ecee; --steel2:#d5dde0; --paper:#ffffff; --ink:#1c2326; --muted:#5b676c;
+  --tile:#1f4e5a; --tile2:#2c6b7a; --mustard:#e8b923; --mustard-soft:#fbf1cc;
+  --ketchup:#c62f2f; --ketchup-soft:#fbe3e1; --basil:#3d7a3a; --basil-soft:#e2f0df;
+  --line:#c9d3d7; --shadow:0 1px 0 #c3ccd0, 0 6px 14px -8px rgba(20,40,48,.35);
+  --hand:"LXGW WenKai TC","Kaiti TC","STKaiti","DFKai-SB","BiauKai",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --steel:#162024; --steel2:#1e2b30; --paper:#212e33; --ink:#e8eef0; --muted:#9fb0b6;
+    --tile:#7fc0cf; --tile2:#9ad3e0; --mustard:#f0c948; --mustard-soft:#3b3417;
+    --ketchup:#ff7a70; --ketchup-soft:#3e2221; --basil:#8fcf89; --basil-soft:#1f3320;
+    --line:#34464d; --shadow:0 1px 0 #0d1417, 0 6px 14px -8px rgba(0,0,0,.6);
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--steel);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;
+  background-image:linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:6px 6px}
+a{color:var(--tile)}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--mustard);outline-offset:2px}
+
+/* ===== top bar ===== */
+.top{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;padding:10px 18px;
+  background:var(--tile);color:#fff}
+@media (prefers-color-scheme: dark){.top{background:#0f2a31}}
+.top .brand{font-family:var(--hand);font-size:22px;font-weight:700;letter-spacing:.04em;white-space:nowrap}
+.top .prog{flex:1;display:flex;align-items:center;gap:10px;min-width:0}
+.bar{flex:1;height:8px;background:rgba(255,255,255,.2);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--mustard);transition:width .5s}
+.top .pct{font-size:14px;white-space:nowrap}
+.menuBtn{display:none;background:var(--mustard);color:#1c2326;border:0;border-radius:6px;padding:4px 12px;font-weight:700}
+
+/* ===== layout ===== */
+.wrap{display:grid;grid-template-columns:290px 1fr;min-height:calc(100% - 52px)}
+.rail{position:sticky;top:52px;height:calc(100vh - 52px);overflow:auto;padding:18px 14px 40px;
+  border-right:2px solid var(--line);background:var(--steel2)}
+.rail h2{font-family:var(--hand);font-size:18px;margin:4px 6px 10px;color:var(--muted);font-weight:400}
+.lvl{font-family:var(--hand);font-size:15px;color:var(--muted);margin:16px 8px 6px;display:flex;align-items:center;gap:8px}
+.lvl::after{content:"";flex:1;border-top:1px dashed var(--line)}
+.tk{display:flex;gap:10px;align-items:baseline;width:100%;text-align:left;background:var(--paper);color:var(--ink);
+  border:0;border-left:4px solid transparent;margin:4px 0;padding:8px 10px;border-radius:2px;box-shadow:var(--shadow);font-size:15px;line-height:1.4}
+.tk .n{font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px;min-width:26px}
+.tk.on{border-left-color:var(--mustard);transform:translateX(4px)}
+.tk.done .n::after{content:" ✓";color:var(--basil);font-weight:700}
+main{padding:28px 22px 80px;min-width:0}
+.unit{display:none;max-width:780px;margin:0 auto}
+.unit.show{display:block}
+
+/* ===== ticket header (signature element) ===== */
+.ticket{position:relative;background:var(--paper);padding:26px 26px 30px;margin:6px 0 34px;box-shadow:var(--shadow);
+  border-top:10px solid var(--tile)}
+.ticket::after{content:"";position:absolute;left:0;right:0;bottom:-10px;height:10px;
+  background:linear-gradient(-45deg,transparent 7px,var(--paper) 0) 0 0/14px 10px,
+             linear-gradient(45deg,transparent 7px,var(--paper) 0) 0 0/14px 10px;}
+.ticket .meta{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:14px;color:var(--muted);
+  border-bottom:2px dashed var(--line);padding-bottom:10px;margin-bottom:14px}
+.ticket h1{font-family:var(--hand);font-size:clamp(30px,5vw,42px);line-height:1.25;margin:0 0 10px;font-weight:700}
+.ticket .goal{margin:0;padding-left:0;list-style:none}
+.ticket .goal li{padding-left:26px;position:relative}
+.ticket .goal li::before{content:"☐";position:absolute;left:0;color:var(--tile)}
+.badge{display:inline-block;padding:0 10px;border-radius:20px;font-size:13px;font-weight:700;color:#fff}
+.b1{background:var(--basil)} .b2{background:#2d6a9f} .b3{background:#b8860b} .b4{background:var(--ketchup)}
+@media (prefers-color-scheme: dark){.b1,.b2,.b3,.b4{color:#10181b}.b2{background:#8ab8e0}.b3{background:#e3b64a}}
+
+/* ===== content ===== */
+.unit h2{font-family:var(--hand);font-size:28px;margin:44px 0 10px;line-height:1.3;color:var(--tile)}
+.unit h3{font-size:19px;margin:28px 0 6px}
+.unit p{margin:10px 0}
+.unit ul,.unit ol{padding-left:1.4em}
+.unit li{margin:4px 0}
+strong{color:inherit;background:linear-gradient(transparent 62%,var(--mustard-soft) 0)}
+.box{padding:16px 18px;margin:20px 0;border-radius:4px;background:var(--paper);box-shadow:var(--shadow)}
+.box > :first-child{margin-top:0}.box > :last-child{margin-bottom:0}
+.box .h{font-family:var(--hand);font-size:19px;font-weight:700;display:block;margin-bottom:4px}
+.story{border-left:6px solid var(--mustard);display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:start}
+.story .face{font-size:38px;line-height:1;text-align:center}
+.story p{margin:0 0 6px}
+.origin{border:2px solid var(--tile);background:transparent;box-shadow:none;position:relative;padding-top:20px}
+.origin .h{color:var(--tile)}
+.origin em{font-style:normal;color:var(--muted);font-size:15px}
+.warn{background:var(--ketchup-soft);box-shadow:none;border-left:6px solid var(--ketchup)}
+.tip{background:var(--basil-soft);box-shadow:none;border-left:6px solid var(--basil)}
+.formula{font-size:19px;text-align:center;background:var(--paper);border:2px dashed var(--tile);padding:14px;margin:18px 0;border-radius:4px;line-height:1.6}
+.formula small{display:block;font-size:14px;color:var(--muted)}
+details.think{margin:20px 0;background:var(--paper);box-shadow:var(--shadow);border-radius:4px;padding:12px 16px}
+details.think summary{cursor:pointer;font-family:var(--hand);font-size:19px;font-weight:700}
+details.think summary::marker{color:var(--mustard)}
+details.think[open] summary{margin-bottom:6px}
+table{border-collapse:collapse;width:100%;font-size:15.5px;background:var(--paper)}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:var(--steel2)}
+.tbl{overflow-x:auto;margin:16px 0;box-shadow:var(--shadow)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+
+/* ===== widgets ===== */
+.widget{background:var(--paper);box-shadow:var(--shadow);border-top:4px solid var(--mustard);padding:18px;margin:24px 0;border-radius:2px}
+.widget .wt{font-family:var(--hand);font-size:21px;font-weight:700;margin:0 0 4px}
+.widget .wd{color:var(--muted);font-size:15px;margin:0 0 12px}
+.btn{background:var(--tile);color:#fff;border:0;border-radius:6px;padding:8px 16px;font-weight:700;margin:4px 6px 4px 0}
+.btn.alt{background:transparent;color:var(--tile);border:2px solid var(--tile)}
+@media (prefers-color-scheme: dark){.btn{color:#10181b}}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin:8px 0}
+.field{display:flex;flex-direction:column;font-size:14px;color:var(--muted);min-width:120px;flex:1}
+.field input{font:inherit;font-size:17px;color:var(--ink);background:var(--steel);border:2px solid var(--line);border-radius:6px;padding:6px 10px;width:100%}
+.out{background:var(--steel);border-radius:6px;padding:12px 14px;margin-top:12px;line-height:1.7}
+.out b{font-size:20px}
+.good{color:var(--basil);font-weight:700}.bad{color:var(--ketchup);font-weight:700}
+
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.fstep{background:var(--steel);border-radius:6px;padding:10px;text-align:center;font-size:14px;line-height:1.4;border:2px solid transparent;transition:.3s}
+.fstep .e{font-size:28px;display:block}
+.fstep.lit{border-color:var(--mustard);background:var(--mustard-soft);transform:translateY(-3px)}
+.fstep .who{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.fstep.foh .who::before{content:"外場 ";color:var(--tile)}.fstep.boh .who::before{content:"內場 ";color:var(--ketchup)}
+.fcap{min-height:3.4em;background:var(--steel);border-radius:6px;padding:10px 14px}
+@media (max-width:560px){.flow{grid-template-columns:repeat(2,1fr)}}
+
+/* thermometer */
+.thermo{display:grid;grid-template-columns:60px 1fr;gap:16px;align-items:center}
+.tube{height:220px;width:34px;margin:auto;border-radius:17px;background:linear-gradient(to top,#5aa0d6 0%,#5aa0d6 16.6%,var(--ketchup) 16.6%,var(--ketchup) 66.6%,var(--basil) 66.6%);position:relative}
+.tube .mark{position:absolute;left:-12px;right:-12px;height:4px;background:var(--ink);border-radius:2px;transition:bottom .2s}
+.zone{font-size:18px}
+
+/* fifo */
+.shelf{display:flex;gap:8px;min-height:92px;align-items:flex-end;padding:10px;border-bottom:8px solid var(--line);overflow-x:auto}
+.can{flex:0 0 74px;height:74px;border-radius:8px 8px 4px 4px;background:var(--mustard-soft);border:2px solid var(--mustard);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px;line-height:1.3;animation:pop .35s}
+.can.old{background:var(--ketchup-soft);border-color:var(--ketchup)}
+@keyframes pop{from{transform:scale(.4);opacity:0}}
+.shelfLbl{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+
+/* matrix */
+.matrix{display:grid;grid-template-columns:28px 1fr 1fr;grid-template-rows:1fr 1fr 28px;gap:6px;aspect-ratio:1.3/1;max-height:420px}
+.quad{border-radius:6px;padding:10px;font-size:14px;position:relative;cursor:pointer;border:2px solid transparent}
+.quad:hover,.quad.sel{border-color:var(--ink)}
+.quad b{font-family:var(--hand);font-size:19px;display:block}
+.q1{background:var(--mustard-soft)}.q2{background:var(--basil-soft)}.q3{background:#e4ecf6}.q4{background:var(--steel2)}
+@media (prefers-color-scheme: dark){.q3{background:#1f2e3f}}
+.ax{font-size:13px;color:var(--muted);display:flex;align-items:center;justify-content:center}
+.ax.y{writing-mode:vertical-rl}
+
+/* bars */
+.bars{display:flex;gap:4px;align-items:flex-end;height:160px;border-bottom:2px solid var(--line);padding-top:10px}
+.bars div{flex:1;background:var(--tile2);border-radius:3px 3px 0 0;position:relative;min-width:0}
+.bars div.peak{background:var(--ketchup)}
+.bars div span{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--muted);white-space:nowrap}
+
+/* quiz */
+.quiz{margin-top:50px;border-top:3px double var(--line);padding-top:10px}
+.q{background:var(--paper);box-shadow:var(--shadow);padding:14px 16px;margin:14px 0;border-radius:2px}
+.q .qt{font-weight:700;margin-bottom:8px}
+.q button.opt{display:block;width:100%;text-align:left;background:var(--steel);color:var(--ink);border:2px solid transparent;border-radius:6px;padding:8px 12px;margin:6px 0;line-height:1.5}
+.q button.opt.right{border-color:var(--basil);background:var(--basil-soft)}
+.q button.opt.wrong{border-color:var(--ketchup);background:var(--ketchup-soft)}
+.q .ex{display:none;font-size:15px;margin-top:8px;padding:8px 12px;border-left:4px solid var(--tile);background:var(--steel)}
+.q.answered .ex{display:block}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:40px;flex-wrap:wrap}
+.done-msg{font-family:var(--hand);font-size:20px;color:var(--basil);margin-top:10px;min-height:1.5em}
+
+/* glossary */
+.gsearch{width:100%;font:inherit;padding:10px 14px;border:2px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink)}
+.gl{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-top:16px}
+.gl .g{background:var(--paper);box-shadow:var(--shadow);padding:12px 14px;border-radius:2px;font-size:15px;line-height:1.65}
+.gl .g b{font-family:var(--hand);font-size:19px;display:block}
+.gl .g i{font-style:normal;color:var(--muted);font-size:13px}
+
+/* kitchen svg */
+.ksvg{width:100%;height:auto;display:block}
+.ksvg .zoneR{fill:var(--steel);stroke:var(--line);stroke-width:2}
+.ksvg text{fill:var(--ink);font-family:var(--sans);font-size:14px}
+.ksvg .flowline{fill:none;stroke:var(--basil);stroke-width:4;stroke-dasharray:10 8;animation:dash 1.2s linear infinite}
+.ksvg .dirty{stroke:var(--ketchup)}
+@keyframes dash{to{stroke-dashoffset:-18}}
+
+/* org chart */
+.org{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:14px;text-align:center}
+.org .lv{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.org .p{background:var(--paper);box-shadow:var(--shadow);padding:6px 10px;border-radius:4px;line-height:1.35}
+.org .p small{display:block;color:var(--muted)}
+.org .arrow{color:var(--muted)}
+
+.hero-note{font-family:var(--hand);font-size:20px;color:var(--muted)}
+.checklist li{list-style:none;margin-left:-1.4em}
+.checklist label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.checklist input{margin-top:.5em;width:18px;height:18px;accent-color:var(--basil)}
+
+/* mobile */
+@media (max-width:860px){
+  .wrap{grid-template-columns:1fr}
+  .menuBtn{display:inline-block}
+  .top .brand{font-size:18px}
+  .rail{position:fixed;left:0;top:52px;bottom:0;width:86%;max-width:330px;height:auto;z-index:25;transform:translateX(-105%);transition:transform .25s;box-shadow:4px 0 20px rgba(0,0,0,.3)}
+  .rail.open{transform:none}
+  main{padding:18px 14px 70px}
+  .ticket{padding:20px 18px 24px}
+  body{font-size:16.5px}
+}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media print{.top,.rail,.nav,.menuBtn{display:none}.unit{display:block!important;page-break-after:always}.wrap{display:block}}
+</style>
+</head>
+<body>
+<header class="top">
+  <button class="menuBtn" id="menuBtn" aria-label="開啟課程目錄">目錄</button>
+  <div class="brand">餐飲學堂</div>
+  <div class="prog"><div class="bar"><i id="pbar"></i></div><span class="pct" id="ptxt">完成 0 / 14 課</span></div>
+</header>
+<div class="wrap">
+<nav class="rail" id="rail" aria-label="課程目錄"></nav>
+<main id="main">
+<!-- ================= 第0課 ================= -->
+<section class="unit" id="u0" data-title="開課：一碗麵的旅程" data-level="1">
+<div class="ticket">
+  <div class="meta"><span>單號 #00｜第 0 課</span><span class="badge b1">入門</span></div>
+  <h1>開課：一碗麵的旅程</h1>
+  <ul class="goal">
+    <li>知道一家餐廳每天在做哪些事</li>
+    <li>認識這門課的主角「小明」和他的牛肉麵店</li>
+    <li>知道接下來 13 課的學習順序</li>
+  </ul>
+</div>
+
+<p>你一定去過餐廳：走進去、坐下、點餐、吃飯、付錢、離開。整個過程可能只有 30 分鐘。但你看不見的地方，其實有一大群人、一大堆東西在同時運轉——就像一台機器。</p>
+<p>這門課要帶你<strong>把這台機器拆開來看</strong>，一個零件一個零件學，最後你會知道怎麼自己組裝一台。</p>
+
+<div class="box story"><div class="face">🧑‍🍳</div><div>
+<p><b>認識主角：小明</b></p>
+<p>小明今年 25 歲，從小最愛吃阿嬤煮的紅燒牛肉麵。他存了一筆錢，決定開一家 20 張桌子的牛肉麵店。可是他只會煮麵，完全不知道怎麼「開店」。</p>
+<p>接下來每一課，你都會跟著小明遇到真實的問題，然後一起學會解決方法。</p>
+</div></div>
+
+<h2>一碗麵的旅程</h2>
+<p>我們先看最核心的一件事：客人點了一碗牛肉麵，這碗麵是怎麼「跑」到客人桌上，錢又是怎麼「跑」進店裡的？按下播放，跟著看 8 個步驟。</p>
+
+<div class="widget" id="flowW">
+  <p class="wt">動畫：一張點菜單的旅行</p>
+  <p class="wd">藍色字是「外場」的工作，紅色字是「內場」的工作。這兩個詞第 1 課會詳細解釋。</p>
+  <div class="flow" id="flow"></div>
+  <div class="fcap" id="fcap">按下「播放」開始。</div>
+  <div class="row"><button class="btn" id="flowPlay">播放</button><button class="btn alt" id="flowNext">下一步</button></div>
+</div>
+
+<p>你會發現：一碗麵上桌之前，其實早在好幾天前就開始了——要先<strong>採購</strong>牛肉、要先<strong>定好價錢</strong>、要先把湯<strong>熬好</strong>。而客人付完錢之後，老闆還要<strong>算帳</strong>，看看今天到底賺了還是賠了。</p>
+
+<h2>餐廳的五大系統</h2>
+<p>把一家餐廳想成人的身體，大概可以分成五個系統：</p>
+<div class="tbl"><table>
+<tr><th>系統</th><th>像身體的</th><th>負責什麼</th><th>在哪幾課學</th></tr>
+<tr><td>內場（廚房）</td><td>心臟</td><td>把食材變成菜</td><td>第 2、3、4 課</td></tr>
+<tr><td>外場（服務）</td><td>臉和手</td><td>接待客人、送菜、讓客人開心</td><td>第 5 課</td></tr>
+<tr><td>收銀（金流）</td><td>血液</td><td>把錢收進來、管好</td><td>第 6 課</td></tr>
+<tr><td>採購庫存</td><td>胃</td><td>把食材買進來、存好</td><td>第 7 課</td></tr>
+<tr><td>成本與經營</td><td>大腦</td><td>算錢、定價、做決定</td><td>第 8～13 課</td></tr>
+</table></div>
+
+<h2>這門課怎麼上</h2>
+<p>課程分成四個等級，<strong>請照順序上</strong>，因為後面的課會用到前面學過的東西：</p>
+<ul>
+<li><span class="badge b1">入門</span> 第 0～3 課：認識餐廳、食品安全、廚房長什麼樣子。</li>
+<li><span class="badge b2">基礎</span> 第 4～7 課：內場做菜流程、外場服務、收錢、買菜。</li>
+<li><span class="badge b3">進階</span> 第 8～11 課：算成本、訂價錢、看懂賺不賺錢、設計菜單。</li>
+<li><span class="badge b4">專業</span> 第 12～13 課：帶人管團隊、從零規劃一家店。</li>
+</ul>
+<p>每課都有這幾種小方塊，看到就知道它的用途：</p>
+<div class="box origin"><span class="h">名詞由來</span>解釋專有名詞是怎麼來的。知道由來，就比較不會背了又忘。</div>
+<div class="box warn"><span class="h">注意</span>做錯會出事（有人生病、受傷或賠錢）的地方。</div>
+<div class="box tip"><span class="h">老手訣竅</span>在餐廳工作多年的人才知道的小技巧。</div>
+<details class="think"><summary>想一想（點開看答案）</summary>先自己想，再點開。這是最有效的學習方法。</details>
+<p>每課最後有<strong>小測驗</strong>，全部答對就會在左邊目錄打勾。</p>
+
+<details class="think"><summary>想一想：客人吃完一碗麵、付了 220 元，這 220 元全部都是小明賺的嗎？</summary>
+<p>不是！這 220 元裡面，要先扣掉牛肉、麵條、青菜的錢，還要付店租、員工薪水、水電瓦斯……最後剩下的才是真正賺到的。到底剩多少？我們會在第 8～10 課一步步算出來。</p>
+</details>
+<div class="quiz" data-u="0"></div>
+</section>
+
+<!-- ================= 第1課 ================= -->
+<section class="unit" id="u1" data-title="餐飲業的世界：店型與分工" data-level="1">
+<div class="ticket">
+  <div class="meta"><span>單號 #01｜第 1 課</span><span class="badge b1">入門</span></div>
+  <h1>餐飲業的世界：店型與分工</h1>
+  <ul class="goal">
+    <li>分得出常見的餐廳類型</li>
+    <li>知道「內場」「外場」是什麼、從哪裡來</li>
+    <li>認識餐廳裡的各種職位</li>
+  </ul>
+</div>
+
+<div class="box story"><div class="face">🧑‍🍳</div><div>
+<p>小明第一個問題：「我的店要做成什麼樣子？像路邊麵攤那樣便宜快速？還是像百貨公司裡的餐廳，有人帶位、有人倒水？」</p>
+<p>這個問題決定了後面所有事情：要請幾個人、要花多少錢裝潢、一碗麵要賣多少錢。</p>
+</div></div>
+
+<div class="box origin"><span class="h">名詞由來：餐廳 Restaurant</span>
+<p>英文 restaurant 來自法文 <i>restaurer</i>，意思是「恢復、補充體力」。一般流傳的說法是：18 世紀的巴黎，有店家專賣能「恢復元氣」的濃湯，這種湯就叫 restaurant。後來大家乾脆用這個字稱呼「賣食物給人吃的店」。</p>
+<p><em>所以餐廳最原始的任務就是：讓累了的人吃飽、恢復精神。</em></p></div>
+
+<h2>常見的餐廳類型</h2>
+<p>我們可以用兩個問題把餐廳分類：<strong>客人要等多久？</strong>和<strong>有沒有人服務你？</strong></p>
+<div class="tbl"><table>
+<tr><th>類型</th><th>例子</th><th>特色</th><th>一個人大約花</th></tr>
+<tr><td>小吃攤、攤販</td><td>麵攤、雞排攤</td><td>菜色少、快、便宜，常常老闆一個人做全部</td><td>低</td></tr>
+<tr><td>速食（快速服務）</td><td>漢堡店、便當店</td><td>自己到櫃台點餐拿餐，強調速度與統一</td><td>低～中</td></tr>
+<tr><td>休閒餐廳</td><td>家庭餐廳、火鍋店、小明的麵店</td><td>坐下來有人點餐送餐，氣氛輕鬆</td><td>中</td></tr>
+<tr><td>精緻餐廳</td><td>高級西餐、日式割烹</td><td>一道一道上菜，服務講究，食材高級</td><td>高</td></tr>
+<tr><td>飲品、烘焙</td><td>咖啡廳、手搖飲、麵包店</td><td>以飲料或點心為主，常外帶</td><td>低～中</td></tr>
+</table></div>
+<p>這些不同的經營方式，業界叫做<strong>「業態」</strong>（經營的型態）。小明最後決定做「休閒餐廳」：客人坐下來，由服務生點餐送餐，但氣氛輕鬆、價格親民。</p>
+
+<h2>內場與外場</h2>
+<p>不管哪種餐廳，工作都可以分成兩大塊：</p>
+<ul>
+<li><strong>內場</strong>：客人看不到的地方——廚房、倉庫、洗碗區。負責「把菜做出來」。</li>
+<li><strong>外場</strong>：客人看得到的地方——用餐區、櫃台、門口。負責「照顧客人」。</li>
+</ul>
+<div class="box origin"><span class="h">名詞由來：外場 Front of House、內場 Back of House</span>
+<p>這兩個詞其實來自<strong>劇場</strong>。劇院裡，觀眾坐的地方叫 front of house（房子的前面），演員化妝、道具堆放的後台叫 back of house（房子的後面）。</p>
+<p>餐廳很像劇場：客人是觀眾，外場人員是舞台上的演員，廚房是後台。所以英文常縮寫成 <b>FOH</b>（外場）和 <b>BOH</b>（內場），中文就翻成「外場」「內場」。</p></div>
+
+<h2>餐廳裡有哪些人</h2>
+<div class="tbl"><table>
+<tr><th>區域</th><th>職位</th><th>主要工作</th></tr>
+<tr><td rowspan="4">內場</td><td>主廚</td><td>管整個廚房：菜單、口味、人員、成本</td></tr>
+<tr><td>廚師（各站）</td><td>負責某一區，例如煮麵、炒菜、炸物</td></tr>
+<tr><td>助手（學徒）</td><td>洗菜、切菜、備料，一邊做一邊學</td></tr>
+<tr><td>洗碗員</td><td>洗碗盤、鍋具，維持廚房乾淨</td></tr>
+<tr><td rowspan="4">外場</td><td>店長／外場主管</td><td>管外場人員、處理客訴、看營業狀況</td></tr>
+<tr><td>服務生</td><td>帶位、點餐、送餐、收桌</td></tr>
+<tr><td>收銀員</td><td>結帳、管現金</td></tr>
+<tr><td>帶位（接待）</td><td>站門口迎接客人、安排座位（大店才有）</td></tr>
+</table></div>
+<p>小店常常一個人兼好幾個職位，例如店長兼收銀。店越大，分工越細。</p>
+
+<div class="box tip"><span class="h">老手訣竅</span>內場和外場常常吵架：外場覺得廚房出菜太慢，廚房覺得外場亂催單。好的餐廳會讓新人<strong>兩邊都做過一段時間</strong>，互相了解對方的辛苦，吵架就會少很多。</div>
+
+<details class="think"><summary>想一想：為什麼速食店不需要服務生送餐？</summary>
+<p>因為速食店的做法是「讓客人自己做一部分工作」：自己點餐、自己拿餐、甚至自己收托盤。這樣就能少請很多人，價格也就能壓低。這就是不同「業態」的取捨。</p>
+</details>
+<div class="quiz" data-u="1"></div>
+</section>
+
+<!-- ================= 第2課 ================= -->
+<section class="unit" id="u2" data-title="食品安全第一課" data-level="1">
+<div class="ticket">
+  <div class="meta"><span>單號 #02｜第 2 課</span><span class="badge b1">入門</span></div>
+  <h1>食品安全第一課</h1>
+  <ul class="goal">
+    <li>知道細菌在什麼溫度最會長大</li>
+    <li>學會避免「交叉污染」</li>
+    <li>認識洗手、過敏原和 HACCP</li>
+  </ul>
+</div>
+<p>為什麼第 2 課就學食品安全，而不是先學做菜？因為<strong>菜不好吃，客人下次不來；菜不衛生，客人會生病</strong>，餐廳可能被罰款、被勒令停業。這是餐飲業最不能犯的錯。</p>
+
+<div class="box story"><div class="face">🧑‍🍳</div><div>
+<p>小明試營業那天，把滷好的牛肉放在爐子旁邊的桌上，想說「等一下就要用」。結果放了一整個下午……</p>
+<p>這樣做哪裡有問題？學完這課你就知道了。</p>
+</div></div>
+
+<h2>細菌最喜歡的溫度：危險溫度帶</h2>
+<p>會讓人拉肚子的細菌，大部分在<strong>大約 5°C 到 60°C</strong> 之間長得最快。在最舒服的溫度下，數量可能每 20 分鐘就翻一倍——1 隻變 2 隻、2 隻變 4 隻……幾個小時就會變成好幾百萬隻。</p>
+<p>所以食物要嘛<strong>夠冷</strong>（冷藏 5°C 以下、冷凍 −18°C 以下），要嘛<strong>夠熱</strong>（保溫 60°C 以上）。夾在中間的溫度，就叫<strong>危險溫度帶</strong>。</p>
+
+<div class="widget">
+  <p class="wt">互動：食物溫度檢查器</p>
+  <p class="wd">拖動滑桿，看看食物放在不同溫度安不安全。</p>
+  <div class="thermo">
+    <div class="tube"><div class="mark" id="tmark"></div></div>
+    <div>
+      <input type="range" id="trange" min="-20" max="100" value="25" style="width:100%" aria-label="溫度">
+      <p class="zone" id="tzone"></p>
+    </div>
+  </div>
+</div>
+
+<div class="warn box"><span class="h">注意：兩小時原則</span>食物放在危險溫度帶（例如室溫）加起來<strong>最好不要超過 2 小時</strong>。小明把滷牛肉在室溫放一整個下午，細菌早就大量繁殖了。正確做法是：放冷一點後盡快冰進冰箱，或是一直用保溫設備維持 60°C 以上。</div>
+<p>熱的食物要冰之前，先分成小份、攤開、放在冰水上幫忙降溫，讓它<strong>快速</strong>通過危險溫度帶。一大鍋熱湯直接冰進冰箱，中間可能好幾個小時都降不下來，還會讓冰箱裡其他東西跟著變溫。</p>
+
+<h2>交叉污染：細菌的搭便車</h2>
+<p><strong>交叉污染</strong>是指：細菌從髒的東西「搭便車」跑到乾淨的東西上。例如：用切過生牛肉的刀和砧板，直接切要生吃的小黃瓜——生肉上的細菌就跑到小黃瓜上了，而小黃瓜不會再煮，細菌就直接進到客人嘴裡。</p>
+<p>防止方法有三個：</p>
+<ol>
+<li><strong>生熟分開</strong>：生的和熟的（或要生吃的）用不同的刀、砧板、容器。</li>
+<li><strong>上熟下生</strong>：冰箱裡，熟食放上層，生肉放下層，避免生肉的血水滴到熟食上。</li>
+<li><strong>用顏色分</strong>：很多廚房用不同顏色的砧板，一眼就知道用途。</li>
+</ol>
+<div class="tbl"><table>
+<tr><th>砧板顏色（常見分法）</th><th>用途</th></tr>
+<tr><td>🟥 紅色</td><td>生肉</td></tr>
+<tr><td>🟦 藍色</td><td>生海鮮</td></tr>
+<tr><td>🟨 黃色</td><td>熟食</td></tr>
+<tr><td>🟩 綠色</td><td>蔬菜水果</td></tr>
+<tr><td>⬜ 白色</td><td>麵包、乳製品</td></tr>
+</table></div>
+<p>顏色分法各店可能不同，重點是<strong>全店統一、大家都遵守</strong>。</p>
+
+<h2>洗手：最便宜也最有用的防護</h2>
+<p>廚房裡最常把細菌帶來帶去的，就是人的手。什麼時候要洗手？上工前、上完廁所、摸過生肉、摸過錢或手機、倒完垃圾、擦完鼻涕之後。</p>
+<div class="widget">
+  <p class="wt">互動：20 秒洗手計時器</p>
+  <p class="wd">用肥皂搓洗至少 20 秒：手心、手背、指縫、指尖、大拇指、手腕。按下開始，跟著搓。</p>
+  <button class="btn" id="washBtn">開始 20 秒</button>
+  <div class="out" id="washOut">準備好了嗎？</div>
+</div>
+
+<h2>過敏原：對某些人來說是毒藥</h2>
+<p>有些人吃到特定食物會嚴重過敏，喉嚨腫起來、無法呼吸，甚至有生命危險。常見的過敏原有：<strong>花生、堅果、蛋、牛奶、蝦蟹貝類、魚、黃豆、小麥、芝麻</strong>。</p>
+<p>所以廚房要清楚知道每道菜放了什麼；外場在客人問「這有沒有花生？」的時候，<strong>不知道就說不知道，去問廚房</strong>，千萬不能用猜的。</p>
+
+<h2>HACCP：專業廚房的安全系統</h2>
+<p>前面講的都是「單一規則」。專業廚房會把它們變成一套<strong>系統</strong>，叫做 HACCP。</p>
+<div class="box origin"><span class="h">名詞由來：HACCP</span>
+<p>HACCP 是英文 Hazard Analysis and Critical Control Points 的縮寫，中文叫「危害分析重要管制點」。</p>
+<p>它的由來很酷：1960 年代，美國要送太空人上太空。太空人在太空中如果食物中毒，後果不堪設想，所以美國太空總署（NASA）和食品公司 Pillsbury 等單位一起發展出這套方法，確保太空食物百分之百安全。後來這套方法被推廣到全世界的食品工廠和餐廳。</p></div>
+<p>HACCP 的核心想法用國中生的話說就是：</p>
+<ol>
+<li><b>找出危險</b>：從買菜到上桌，每一步可能出什麼事？（例如牛肉沒煮熟）</li>
+<li><b>找出關鍵點</b>：哪一步最重要、做錯就會出事？（例如燉煮這一步）</li>
+<li><b>訂標準</b>：這一步要做到什麼程度？（例如中心溫度要夠高、燉夠久）</li>
+<li><b>檢查並記錄</b>：每次都量、都寫下來，出錯就馬上處理。</li>
+</ol>
+<div class="box tip"><span class="h">老手訣竅</span>專業廚房一定有一支<strong>食物溫度計</strong>和一張<strong>溫度記錄表</strong>，每天記冰箱溫度。「感覺應該有冰」不算數，量出來寫下來才算。</div>
+
+<details class="think"><summary>想一想：為什麼冰箱裡要「上熟下生」，而不是反過來？</summary>
+<p>因為液體會往下滴。如果生肉放上面，血水滴到下面的熟食，熟食不會再加熱，細菌就直接被客人吃下去。反過來，熟食就算滴到生肉上，生肉之後還會煮熟，比較安全。</p>
+</details>
+<div class="quiz" data-u="2"></div>
+</section>
+
+<!-- ================= 第3課 ================= -->
+<section class="unit" id="u3" data-title="走進廚房：動線、工作站、編制" data-level="1">
+<div class="ticket">
+  <div class="meta"><span>單號 #03｜第 3 課</span><span class="badge b1">入門</span></div>
+  <h1>走進廚房：動線、工作站、編制</h1>
+  <ul class="goal">
+    <li>看懂廚房的「動線」設計</li>
+    <li>認識專業廚房的分工制度</li>
+    <li>理解廚師最重要的習慣：各就各位</li>
+  </ul>
+</div>
+
+<div class="box story"><div class="face">🧑‍🍳</div><div>
+<p>小明在家煮麵很順手，但到了店裡，同時有 15 碗麵要出，他發現自己一下跑冰箱、一下跑水槽、一下找不到蔥，手忙腳亂。</p>
+<p>問題不是他不會煮，而是廚房的<strong>擺法</strong>和<strong>做法</strong>不對。</p>
+</div></div>
+
+<h2>動線：東西和人在廚房裡走的路</h2>
+<p><strong>動線</strong>就是「移動的路線」。好的廚房動線有兩個原則：</p>
+<ol>
+<li><strong>一路往前，不走回頭路</strong>：食材從後門進來，一路經過儲藏、清洗切配、烹調，最後從出餐口出去。</li>
+<li><strong>乾淨和髒污分開</strong>：客人吃完的髒碗盤，要走另一條路去洗碗區，不能跟要出去的乾淨菜擠在一起。</li>
+</ol>
+
+<div class="widget">
+  <p class="wt">圖解：小明的廚房動線</p>
+  <p class="wd">綠色虛線是食材變成菜的路線；紅色虛線是髒碗盤回收的路線。兩條路不交叉。</p>
+  <svg class="ksvg" viewBox="0 0 640 300" role="img" aria-label="廚房動線圖">
+    <rect class="zoneR" x="10" y="20" width="110" height="80" rx="6"/><text x="65" y="55" text-anchor="middle">① 驗收</text><text x="65" y="78" text-anchor="middle" font-size="12">後門進貨</text>
+    <rect class="zoneR" x="140" y="20" width="110" height="80" rx="6"/><text x="195" y="55" text-anchor="middle">② 儲藏</text><text x="195" y="78" text-anchor="middle" font-size="12">冷藏／冷凍／乾貨</text>
+    <rect class="zoneR" x="270" y="20" width="110" height="80" rx="6"/><text x="325" y="55" text-anchor="middle">③ 前處理</text><text x="325" y="78" text-anchor="middle" font-size="12">洗、切、醃</text>
+    <rect class="zoneR" x="400" y="20" width="110" height="80" rx="6"/><text x="455" y="55" text-anchor="middle">④ 烹調</text><text x="455" y="78" text-anchor="middle" font-size="12">煮麵、燉湯</text>
+    <rect class="zoneR" x="530" y="20" width="100" height="80" rx="6"/><text x="580" y="55" text-anchor="middle">⑤ 出餐口</text><text x="580" y="78" text-anchor="middle" font-size="12">檢查後送出</text>
+    <rect class="zoneR" x="140" y="200" width="200" height="80" rx="6"/><text x="240" y="235" text-anchor="middle">⑦ 洗碗區</text><text x="240" y="258" text-anchor="middle" font-size="12">洗好後回到出餐口備用</text>
+    <rect class="zoneR" x="430" y="200" width="200" height="80" rx="6"/><text x="530" y="235" text-anchor="middle">⑥ 用餐區（外場）</text><text x="530" y="258" text-anchor="middle" font-size="12">客人吃完</text>
+    <path class="flowline" d="M120 60 H140 M250 60 H270 M380 60 H400 M510 60 H530"/>
+    <path class="flowline" d="M580 100 V200"/>
+    <path class="flowline dirty" d="M430 250 H340"/>
+    <text x="590" y="155" font-size="12">送菜</text><text x="355" y="240" font-size="12">髒碗盤</text>
+  </svg>
+</div>
+
+<h2>工作站：每個人守好自己的位置</h2>
+<p>餐廳廚房會分成幾個<strong>工作站</strong>，每一站負責一類菜，需要的工具和食材都放在伸手拿得到的地方。以小明的麵店來說：</p>
+<ul>
+<li><b>煮麵站</b>：煮麵鍋、濾網、各種麵條。</li>
+<li><b>湯頭站</b>：大湯桶、湯勺，保溫在 60°C 以上。</li>
+<li><b>小菜站</b>：冷藏櫃裡放好切好的滷味、小菜。</li>
+<li><b>出餐站</b>：把麵、湯、牛肉、蔥花組合在一起，檢查後送出。</li>
+</ul>
+
+<h2>專業廚房的編制：像軍隊一樣分工</h2>
+<div class="box origin"><span class="h">名詞由來：廚房編制 Brigade、Chef</span>
+<p>19 世紀末，法國名廚<b>奧古斯特・艾斯可菲</b>（Auguste Escoffier）參考軍隊的組織方式，把廚房分成好幾個部門，每個部門有負責人，上下層級清楚。這套制度叫做 <i>brigade de cuisine</i>，brigade 就是軍隊裡的「旅、隊」。</p>
+<p>我們現在說的「主廚 Chef」，其實是法文 <i>chef de cuisine</i> 的簡稱，意思是「廚房的頭」。chef 這個字最早來自拉丁文 <i>caput</i>（頭）。</p></div>
+
+<div class="widget">
+  <p class="wt">圖解：大型餐廳的廚房編制</p>
+  <div class="org">
+    <div class="lv"><div class="p"><b>主廚</b><small>Chef de cuisine：廚房的頭</small></div></div>
+    <div class="arrow">↓</div>
+    <div class="lv"><div class="p"><b>副主廚</b><small>Sous chef：sous 是「在…之下」</small></div></div>
+    <div class="arrow">↓</div>
+    <div class="lv">
+      <div class="p"><b>醬汁站</b><small>Saucier</small></div>
+      <div class="p"><b>冷盤站</b><small>Garde manger</small></div>
+      <div class="p"><b>甜點站</b><small>Pâtissier</small></div>
+      <div class="p"><b>燒烤站</b><small>Grillardin</small></div>
+    </div>
+    <div class="arrow">↓ 每站的站長叫 Chef de partie（部門主廚）</div>
+    <div class="lv"><div class="p"><b>助手</b><small>Commis：學徒、打雜</small></div><div class="p"><b>洗碗員</b><small>Plongeur：原意「潛水的人」</small></div></div>
+  </div>
+</div>
+<p>小明的店沒那麼大，但道理一樣：<strong>每個人知道自己負責什麼、聽誰指揮</strong>。尖峰時間廚房很吵很忙，如果每個人都各做各的，就會亂成一團。</p>
+
+<h2>廚師最重要的習慣：各就各位</h2>
+<div class="box origin"><span class="h">名詞由來：Mise en place</span>
+<p>法文，唸作「米桑普拉斯」，意思是「放在該放的位置」。是專業廚師最重要的習慣：<strong>開始煮之前，把所有要用的東西都準備好、擺好</strong>。</p>
+<p><em>就像考試前把鉛筆、橡皮擦、准考證都放在桌上，考試時就不用翻書包。</em></p></div>
+<p>小明後來這樣改：每天開店前，蔥花切好一盒、酸菜一盒、牛肉切片分好、麵條分成一份一份，全部擺在出餐站固定的位置。尖峰時他不用再離開位子，出一碗麵的時間從 5 分鐘縮到 2 分鐘。</p>
+
+<div class="box tip"><span class="h">老手訣竅：「邊做邊收」</span>專業廚師會一邊煮一邊擦檯面、收工具。工作台永遠保持乾淨，下一道菜才不會亂，也比較不容易交叉污染。</div>
+
+<details class="think"><summary>想一想：如果洗碗區放在出餐口旁邊，會發生什麼問題？</summary>
+<p>髒碗盤和要出去的乾淨菜會擠在同一個地方，容易交叉污染；服務生送菜和收碗會撞在一起，動線打結。所以設計廚房時，乾淨和髒污的路線要盡量分開。</p>
+</details>
+<div class="quiz" data-u="3"></div>
+</section>
+<!-- ================= 第4課 ================= -->
+<section class="unit" id="u4" data-title="內場實務：備料、標準食譜、出餐" data-level="2">
+<div class="ticket">
+  <div class="meta"><span>單號 #04｜第 4 課</span><span class="badge b2">基礎</span></div>
+  <h1>內場實務：備料、標準食譜、出餐</h1>
+  <ul class="goal">
+    <li>會計算「可食率」</li>
+    <li>知道為什麼要寫標準食譜</li>
+    <li>了解尖峰時段廚房怎麼出餐</li>
+  </ul>
+</div>
+
+<div class="box story"><div class="face">🧑‍🍳</div><div>
+<p>小明請了一位廚師阿傑。結果客人反應：「今天的牛肉麵怎麼比上禮拜鹹？」「為什麼我的牛肉比隔壁桌少？」原來阿傑煮的方法跟小明不太一樣。</p>
+<p>客人要的是<strong>每次來都吃到一樣的味道</strong>。怎麼辦？</p>
+</div></div>
+
+<h2>備料與可食率</h2>
+<p><strong>備料</strong>就是在開店前把食材處理好，也就是上一課的「各就各位」。這時候你會發現一件事：<strong>買進來的重量，不等於能用的重量</strong>。</p>
+<p>洋蔥要剝皮、青菜要摘掉黃葉、牛腱燉完會縮水。能真正用在菜裡的部分，占買進來的比例，就叫<strong>可食率</strong>（也叫產出率，英文 yield，原意是「產出、收成」）。</p>
+<div class="formula">可食率 ＝ 能用的重量 ÷ 買進來的重量 × 100%<small>例：牛腱生的 1 公斤，燉好切片後剩 0.6 公斤 → 可食率 60%</small></div>
+<p>可食率為什麼重要？因為它會讓食材的<strong>真實價格</strong>變貴：</p>
+<div class="formula">真實單價 ＝ 買進來的單價 ÷ 可食率<small>牛腱每公斤 300 元 ÷ 60% ＝ 熟牛肉其實每公斤 500 元</small></div>
+
+<div class="widget">
+  <p class="wt">計算器：可食率與真實單價</p>
+  <div class="row">
+    <label class="field">買進來的重量（公斤）<input type="number" id="y1" value="1" step="0.1" min="0"></label>
+    <label class="field">能用的重量（公斤）<input type="number" id="y2" value="0.6" step="0.1" min="0"></label>
+    <label class="field">每公斤買價（元）<input type="number" id="y3" value="300" min="0"></label>
+  </div>
+  <div class="out" id="yOut"></div>
+</div>
+<div class="box warn"><span class="h">注意</span>很多新手老闆算成本時用「買價」而不是「真實單價」，結果以為很賺，其實在賠錢。第 8 課算成本時一定會用到這裡的觀念。</div>
+
+<h2>標準食譜：讓每一碗都一樣</h2>
+<p><strong>標準食譜</strong>（Standard Recipe）是一份把「怎麼做」寫得清清楚楚的文件，任何人照著做，都能做出一樣的菜。它跟家裡的食譜不同，家裡寫「鹽少許」，餐廳必須寫「鹽 3 公克」。</p>
+<div class="tbl"><table>
+<tr><th colspan="3">標準食譜：紅燒牛肉麵（1 碗）</th></tr>
+<tr><th>項目</th><th>份量</th><th>說明</th></tr>
+<tr><td>熟牛腱片</td><td>100 g</td><td>切 0.5 公分厚，約 6 片</td></tr>
+<tr><td>麵條</td><td>150 g</td><td>滾水煮 3 分 30 秒</td></tr>
+<tr><td>紅燒湯</td><td>450 ml</td><td>用 450 ml 湯勺一勺，溫度 85°C 以上</td></tr>
+<tr><td>青江菜</td><td>2 株</td><td>燙 40 秒</td></tr>
+<tr><td>蔥花</td><td>5 g</td><td>最後撒上</td></tr>
+<tr><td>碗</td><td>大碗</td><td>牛肉排在麵的右側，菜在左側</td></tr>
+</table></div>
+<p>一份好的標準食譜包含：<b>食材和精確份量、步驟、時間溫度、擺盤方式（最好有照片）、使用的器具</b>。有了它：</p>
+<ul>
+<li>味道穩定，客人放心。</li>
+<li>新人很快就學會，不用全靠老師傅口傳。</li>
+<li>成本算得出來（第 8 課會用）。</li>
+</ul>
+<div class="box tip"><span class="h">老手訣竅：用工具取代感覺</span>專業廚房會用固定大小的湯勺、秤、計時器，而不是「大概一勺」「差不多了」。小明買了 450 ml 的湯勺和廚房計時器之後，客訴就少了。</div>
+
+<h2>出餐流程：尖峰時段怎麼不亂</h2>
+<p>中午 12 點，20 桌同時點餐。廚房靠一套流程撐過去：</p>
+<ol>
+<li><b>收單</b>：點單從外場傳進廚房（印出來的單子或螢幕）。</li>
+<li><b>喊單</b>：負責指揮的人把單子念出來：「三號桌，紅燒兩碗、清燉一碗！」每站的人回答「收到！」</li>
+<li><b>各站製作</b>：煮麵站煮麵、小菜站準備小菜。</li>
+<li><b>組合與檢查</b>：出餐站把東西組合好，檢查份量、擺盤、有沒有漏。</li>
+<li><b>出餐</b>：交給外場送到正確的桌子。</li>
+</ol>
+<div class="box origin"><span class="h">名詞由來：Expo（出餐指揮）</span>
+<p>站在出餐口指揮、檢查的人，英文叫 expeditor，常簡稱 expo。這個字來自拉丁文 <i>expedire</i>，本來的意思是「把腳從腳鐐中解開」，後來引申為「讓事情加速完成」。</p>
+<p><em>他就是讓菜「順利、快速、正確」出去的人，也是內場和外場之間的橋樑。</em></p></div>
+<div class="box origin"><span class="h">名詞由來：「86」</span>
+<p>在歐美廚房，如果某道菜賣完了，大家會喊「86 紅燒牛肉麵！」意思是「這道沒了，不能再點」。為什麼是 86？說法很多，有人說跟舊時餐廳的暗號有關，但沒有確定答案。中文餐廳通常直接說「<b>售完</b>」或「<b>停賣</b>」，並且要<strong>馬上通知外場</strong>，免得服務生又點給客人。</p></div>
+
+<details class="think"><summary>想一想：為什麼廚師聽到喊單要回答「收到」？</summary>
+<p>因為廚房很吵。回答「收到」代表訊息確定傳到了，不會因為沒聽清楚而漏做一碗麵。軍隊、飛機駕駛艙也用同樣的方法溝通。</p>
+</details>
+<div class="quiz" data-u="4"></div>
+</section>
+
+<!-- ================= 第5課 ================= -->
+<section class="unit" id="u5" data-title="外場服務：從迎賓到送客" data-level="2">
+<div class="ticket">
+  <div class="meta"><span>單號 #05｜第 5 課</span><span class="badge b2">基礎</span></div>
+  <h1>外場服務：從迎賓到送客</h1>
+  <ul class="goal">
+    <li>熟悉完整的服務流程</li>
+    <li>會計算「翻桌率」</li>
+    <li>學會處理客人抱怨</li>
+  </ul>
+</div>
+
+<div class="box story"><div class="face">🧑‍🍳</div><div>
+<p>小明的麵很好吃，但網路上有人留言：「進門沒人理，站了 5 分鐘才有人帶位」「點的小菜最後忘了上」。</p>
+<p>原來，<strong>客人記得的不只是味道，還有被對待的感覺</strong>。</p>
+</div></div>
+
+<h2>服務的 9 個步驟</h2>
+<p>點每個步驟看說明。這就是外場人員每天要重複幾百次的工作。</p>
+<div class="widget">
+  <p class="wt">互動：服務流程</p>
+  <div class="flow" id="svc"></div>
+  <div class="fcap" id="svcCap">點上面任一個步驟。</div>
+</div>
+
+<div class="box tip"><span class="h">老手訣竅：點餐一定要「複誦」</span>客人點完後，把內容念一遍：「跟您確認，紅燒牛肉麵兩碗、一碗不要蔥，燙青菜一份，對嗎？」這 10 秒鐘可以避免送錯菜、重做、客人生氣，是最划算的 10 秒。</div>
+
+<h2>翻桌率：一張桌子一天坐幾組客人</h2>
+<p>餐廳的座位是有限的。同樣 20 張桌子，一天能接待越多組客人，營業額就越高。</p>
+<div class="formula">翻桌率 ＝ 來客組數 ÷ 桌數<small>小明午餐時段來了 50 組客人，店裡有 20 張桌子 → 翻桌率 50 ÷ 20 ＝ 2.5 次</small></div>
+<div class="box origin"><span class="h">名詞由來：翻桌</span>
+<p>客人走了以後，服務生把桌子收乾淨、重新擺好，就像把桌子「翻」到新的一頁，讓下一組客人使用。英文叫 table turnover，turn over 就是「翻過來」。</p></div>
+<p>怎麼提高翻桌率？不是趕客人走，而是<strong>把「沒必要的等待」拿掉</strong>：</p>
+<ul>
+<li>客人坐下馬上給菜單和水。</li>
+<li>出餐快（上一課的備料和出餐流程）。</li>
+<li>客人吃完，結帳不用等。</li>
+<li>客人一離開，<strong>立刻</strong>清桌，讓在門口等的客人進來。</li>
+</ul>
+<p>但要注意：精緻餐廳的客人是來享受時間的，翻桌太快反而讓人覺得被趕。<strong>翻桌率的目標要配合你的業態</strong>。</p>
+
+<h2>客人抱怨怎麼辦</h2>
+<p>抱怨的客人其實是在給你機會，因為大部分不滿意的客人什麼都不說，直接不再來。處理抱怨可以記四個步驟：</p>
+<div class="tbl"><table>
+<tr><th>步驟</th><th>做法</th><th>小明店裡的例子</th></tr>
+<tr><td>① 聽</td><td>讓客人說完，不打斷、不辯解</td><td>「麵是溫的，湯也不夠熱。」</td></tr>
+<tr><td>② 道歉</td><td>為客人的不愉快道歉</td><td>「很抱歉讓您吃到不夠熱的麵。」</td></tr>
+<tr><td>③ 解決</td><td>提出具體做法</td><td>「我馬上請廚房重新煮一碗熱的給您。」</td></tr>
+<tr><td>④ 感謝</td><td>謝謝客人告訴你</td><td>「謝謝您告訴我們，我們會檢查湯的溫度。」</td></tr>
+</table></div>
+<p>英文把這四步叫 <b>LAST</b>：Listen（聽）、Apologize（道歉）、Solve（解決）、Thank（感謝），剛好拼成 last（持續），很好記。</p>
+<div class="box warn"><span class="h">注意</span>處理完之後，一定要回頭找出原因。這次是湯的保溫設備壞了？還是湯勺溫度沒檢查？只道歉不改進，同樣的抱怨會一直出現。</div>
+
+<details class="think"><summary>想一想：為什麼服務生在客人吃了幾口之後要過去問「餐點還可以嗎？」</summary>
+<p>因為如果有問題（太鹹、不夠熱、送錯），這時候發現還來得及補救。等客人吃完、結帳時才說，就只剩道歉了。業界叫這個動作「巡桌」。</p>
+</details>
+<div class="quiz" data-u="5"></div>
+</section>
+
+<!-- ================= 第6課 ================= -->
+<section class="unit" id="u6" data-title="收銀與金流" data-level="2">
+<div class="ticket">
+  <div class="meta"><span>單號 #06｜第 6 課</span><span class="badge b2">基礎</span></div>
+  <h1>收銀與金流</h1>
+  <ul class="goal">
+    <li>知道收銀機和 POS 系統從哪裡來、做什麼用</li>
+    <li>學會快速又不出錯的找零方法</li>
+    <li>懂得開班、交班點帳和防弊</li>
+  </ul>
+</div>
+
+<div class="box story"><div class="face">🧑‍🍳</div><div>
+<p>小明第一個月底對帳，POS 系統說今天賣了 35,000 元，可是抽屜裡的現金加上刷卡，只有 34,200 元。<strong>800 元跑去哪裡了？</strong></p>
+</div></div>
+
+<h2>收銀機的由來</h2>
+<div class="box origin"><span class="h">名詞由來：收銀機、POS</span>
+<p>1879 年，美國一家酒吧的老闆<b>詹姆斯・里提</b>（James Ritty）發現店員常偷偷把錢放進自己口袋。他發明了一台機器：每收一筆錢都要按鍵登記，還會發出「叮」的一聲讓大家都聽到。這就是最早的收銀機，當時的名字叫「不會被收買的收銀員」。</p>
+<p>現代餐廳用的是 <b>POS</b> 系統，是 Point of Sale 的縮寫，意思是「銷售發生的那個點」。它是電腦化的收銀機，除了收錢，還會把點單傳到廚房、記錄每道菜賣了幾份、統計每天營業額。</p>
+<p><em>你看，收銀機一開始被發明，就是為了「防弊」。</em></p></div>
+
+<h2>找零：往上數法</h2>
+<p>客人消費 185 元，給你 500 元。直接心算 500 − 185 容易算錯，收銀員常用<strong>往上數法</strong>：從消費金額開始，用硬幣和紙鈔「加」到客人給的錢。</p>
+<div class="formula">185 → 加 5 元 → 190 → 加 10 元 → 200 → 加 100 元 → 300 → 加 200 元 → 500<small>找零 ＝ 5 ＋ 10 ＋ 100 ＋ 200 ＝ 315 元，一邊數一邊把錢交給客人</small></div>
+<div class="widget">
+  <p class="wt">小遊戲：收銀員練習</p>
+  <p class="wd">算出要找多少錢，輸入後按「確認」。</p>
+  <div class="out" id="cgQ" style="font-size:18px"></div>
+  <div class="row"><label class="field">應找零（元）<input type="number" id="cgIn" inputmode="numeric"></label><button class="btn" id="cgOk">確認</button><button class="btn alt" id="cgNew">換一題</button></div>
+  <div class="out" id="cgOut">答對會顯示往上數的過程。</div>
+</div>
+<div class="box tip"><span class="h">老手訣竅：大鈔先別收進抽屜</span>客人給 1000 元時，先把鈔票放在收銀機<strong>檯面上</strong>，找完錢、客人確認後才收進去。這樣如果客人說「我剛剛給的是 1000 喔」，大家都看得到，不會吵起來。</div>
+
+<h2>開班與交班：每天的對帳</h2>
+<p>收銀抽屜開店時會先放一些零錢，叫<strong>備用金</strong>（零用金），例如 5,000 元，方便找零。打烊或換人時要點帳：</p>
+<div class="formula">抽屜裡應該有的現金 ＝ 備用金 ＋ 今天的現金營收<small>備用金 5,000 ＋ 現金營收 18,000 ＝ 抽屜應該有 23,000 元</small></div>
+<p>實際點出來的錢比應該有的多，叫<b>長款</b>；比較少，叫<b>短款</b>。兩種都代表流程出問題了（找錯錢、漏打單、或有人拿了錢），都要查清楚。</p>
+
+<h2>防弊：讓錯誤和偷竊都不容易發生</h2>
+<p>回到小明的 800 元。他查了一下，發現有兩筆問題：一筆是服務生把客人加點的小菜忘了輸入，一筆是有一張單被取消了，但不知道是誰取消的。好的收銀制度會這樣規定：</p>
+<ul>
+<li><b>每筆都要打單</b>：沒有打進 POS 的菜，廚房不做。</li>
+<li><b>取消和打折要主管同意</b>：系統要記錄是誰、什麼時候做的。</li>
+<li><b>兩人一起點鈔</b>：交班時一個人點，另一個人確認並簽名。</li>
+<li><b>每天對帳</b>：POS 報表、現金、刷卡、電子支付，四個數字要對得上。</li>
+</ul>
+<div class="box warn"><span class="h">注意：電子支付不是免費的</span>客人刷卡或用行動支付，店家通常要付<strong>手續費</strong>，大約是金額的百分之一到三。一個月營業額 50 萬，手續費可能就是 5,000～15,000 元。算成本的時候不要漏掉。</div>
+
+<details class="think"><summary>想一想：為什麼規定「沒打單，廚房就不做」？</summary>
+<p>這樣每一碗出去的麵都一定有紀錄，也就一定有收到錢。如果允許口頭點菜，就可能發生「菜送出去了，錢卻沒收到」，或有人私下送菜給朋友。</p>
+</details>
+<div class="quiz" data-u="6"></div>
+</section>
+
+<!-- ================= 第7課 ================= -->
+<section class="unit" id="u7" data-title="採購、驗收與庫存" data-level="2">
+<div class="ticket">
+  <div class="meta"><span>單號 #07｜第 7 課</span><span class="badge b2">基礎</span></div>
+  <h1>採購、驗收與庫存</h1>
+  <ul class="goal">
+    <li>會用公式算出該叫多少貨</li>
+    <li>知道進貨時要檢查什麼</li>
+    <li>理解「先進先出」和盤點</li>
+  </ul>
+</div>
+
+<div class="box story"><div class="face">🧑‍🍳</div><div>
+<p>小明遇到兩種惡夢：星期六晚上 7 點，牛肉賣完了，客人一直問「怎麼沒有牛肉麵？」；另一週他怕不夠，一次買了很多青菜，結果爛掉丟了一大袋。</p>
+<p><strong>買太少會賣不出東西，買太多會浪費錢</strong>。要怎麼買剛剛好？</p>
+</div></div>
+
+<h2>採購：買對的東西、對的量</h2>
+<p>採購有四個「對」：<b>對的品質、對的數量、對的價格、對的時間</b>。數量最難，專業餐廳用公式來算：</p>
+<div class="formula">叫貨量 ＝ 到下次進貨前會用掉的量 ＋ 安全存量 − 現在還有的量</div>
+<p><strong>安全存量</strong>是「以防萬一」多留的一點，例如突然來了一團客人、或供應商送貨遲到。</p>
+<div class="widget">
+  <p class="wt">計算器：這次要叫多少牛腱？</p>
+  <div class="row">
+    <label class="field">每天用量（公斤）<input type="number" id="o1" value="8" min="0"></label>
+    <label class="field">幾天進一次貨<input type="number" id="o2" value="3" min="1"></label>
+    <label class="field">安全存量（公斤）<input type="number" id="o3" value="4" min="0"></label>
+    <label class="field">現在還有（公斤）<input type="number" id="o4" value="6" min="0"></label>
+  </div>
+  <div class="out" id="oOut"></div>
+</div>
+<div class="box origin"><span class="h">名詞由來：標準存量 Par</span>
+<p>英文把「到下次進貨前要用的量＋安全存量」合起來叫 par level（標準存量）。par 來自拉丁文，意思是「相等、標準」，高爾夫球的「標準桿」也是同一個字。每次叫貨就是把庫存「補回標準」。</p></div>
+
+<h2>驗收：貨到了不是直接收</h2>
+<p>供應商把貨送來時，要當場檢查，發現問題馬上退回。收下來之後才發現，通常就很難退了。</p>
+<div class="tbl"><table>
+<tr><th>檢查什麼</th><th>怎麼檢查</th></tr>
+<tr><td>數量、重量</td><td>對照叫貨單，用秤秤，不是看箱子上寫的</td></tr>
+<tr><td>溫度</td><td>冷藏品 5°C 以下、冷凍品 −18°C 以下、不能有退冰再冰的跡象（冰晶很多、包裝有血水凍住）</td></tr>
+<tr><td>品質</td><td>顏色、氣味、有沒有爛或撞傷</td></tr>
+<tr><td>包裝和日期</td><td>包裝完整、有效日期夠長</td></tr>
+<tr><td>價格</td><td>送貨單上的價格和當初講好的一樣</td></tr>
+</table></div>
+<p>驗收完的冷藏、冷凍品要<strong>立刻</strong>收進冰箱，不能放在門口曬太陽（還記得第 2 課的危險溫度帶嗎？）。</p>
+
+<h2>先進先出：先買的先用</h2>
+<div class="box origin"><span class="h">名詞由來：FIFO 先進先出</span>
+<p>英文 First In, First Out，縮寫 FIFO。原本是會計和倉庫管理的用語，意思是「先進倉庫的東西先拿出來用」。在餐廳，它能確保食材不會因為放在後面被遺忘而過期。</p></div>
+<div class="widget">
+  <p class="wt">動畫：冰箱層架上的先進先出</p>
+  <p class="wd">每次進貨，新的放後面（右邊）；每次取用，從前面（左邊）拿最舊的。紅色代表快到期。</p>
+  <div class="shelfLbl"><span>← 前面（先拿）</span><span>後面（新貨放這） →</span></div>
+  <div class="shelf" id="shelf"></div>
+  <div class="row"><button class="btn" id="fIn">進貨一箱</button><button class="btn alt" id="fOut">取用一箱</button></div>
+  <div class="out" id="fMsg">按按看。</div>
+</div>
+<p>實際做法：每一樣食材貼上<strong>日期標籤</strong>（進貨日或製作日、到期日），進貨時把舊的移到前面，新的放後面。</p>
+
+<h2>盤點：數一數到底還有多少</h2>
+<p><strong>盤點</strong>就是定期把倉庫、冰箱裡所有東西數一遍、秤一遍，記錄下來。小一點的店每週盤一次重要食材，每月盤一次全部。盤點有三個用途：</p>
+<ol>
+<li>知道要叫多少貨（上面的公式要用「現在還有的量」）。</li>
+<li>算出這個月真正用掉多少食材（第 8 課會用）。</li>
+<li>發現「不見」的東西：應該剩 10 公斤牛肉，只剩 7 公斤，另外 3 公斤是被浪費、做壞、還是被拿走？</li>
+</ol>
+<div class="box tip"><span class="h">老手訣竅：盤點要「同樣的人、同樣的順序、同樣的時間」</span>例如每週日打烊後，從冷凍庫開始，照固定順序數到乾貨區。這樣每次的數字才比得出變化，也比較不會漏。</div>
+
+<details class="think"><summary>想一想：葉菜類（青菜）和乾貨（麵條）的安全存量，哪個應該留多一點？</summary>
+<p>乾貨可以留多一點，因為放得久、不容易壞。葉菜類一兩天就不新鮮了，留太多只會浪費，應該少量、多次進貨。安全存量要看食材「能放多久」。</p>
+</details>
+<div class="quiz" data-u="7"></div>
+</section>
+<!-- ================= 第8課 ================= -->
+<section class="unit" id="u8" data-title="算成本：一碗麵的成本是多少" data-level="3">
+<div class="ticket">
+  <div class="meta"><span>單號 #08｜第 8 課</span><span class="badge b3">進階</span></div>
+  <h1>算成本：一碗麵的成本是多少</h1>
+  <ul class="goal">
+    <li>會算一道菜的「標準成本」</li>
+    <li>會算「食材成本率」並判斷好壞</li>
+    <li>會用盤點算出「實際成本」，找出浪費</li>
+  </ul>
+</div>
+
+<div class="box story"><div class="face">🧑‍🍳</div><div>
+<p>小明問朋友：「我的牛肉麵成本多少？」朋友說：「牛肉 30 元、麵 10 元，加一加大概 50 元吧。」</p>
+<p>小明差點就用這個數字去定價了。但這個算法漏掉了很多東西。我們來用正確的方法算一次。</p>
+</div></div>
+
+<h2>標準成本：照標準食譜算出來的成本</h2>
+<p>把第 4 課的標準食譜拿出來，每一樣食材都用「真實單價」（有算可食率的價格）乘上份量，全部加起來，就是這道菜的<strong>標準成本</strong>，也就是「照規矩做，一碗應該花多少錢」。</p>
+<div class="widget">
+  <p class="wt">計算器：紅燒牛肉麵的標準成本</p>
+  <p class="wd">每一格都可以改。試試看把牛腱的可食率從 60% 改成 70%，成本會怎麼變？</p>
+  <div class="tbl" style="box-shadow:none"><table id="costT">
+    <thead><tr><th>食材</th><th class="num">買價（元／公斤或公升）</th><th class="num">可食率 %</th><th class="num">每碗用量（公克或毫升）</th><th class="num">每碗成本</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+  <div class="row">
+    <label class="field">調味料、紙巾、筷子等（每碗）<input type="number" id="cMisc" value="5" min="0"></label>
+    <label class="field">售價（元）<input type="number" id="cPrice" value="220" min="1"></label>
+  </div>
+  <div class="out" id="cOut"></div>
+</div>
+<p>算出來大約 <b>80 元</b>，比朋友說的 50 元多了 30 元。差在哪？朋友用的是生牛肉的買價、漏了可食率，也漏了湯頭、青菜、配料和耗材。</p>
+
+<h2>食材成本率：成本占售價的幾成</h2>
+<div class="formula">食材成本率 ＝ 食材成本 ÷ 售價 × 100%<small>80 元 ÷ 220 元 ＝ 約 36%</small></div>
+<p>意思是客人付的 220 元裡，大約 36% 拿去買食材了。一般休閒餐廳的食材成本率大多落在 <strong>28%～38%</strong> 之間（業態不同差很多：飲料店可能更低，吃到飽或高級牛排可能更高）。</p>
+<div class="box origin"><span class="h">名詞由來：成本率 Food cost %</span>
+<p>「率」就是比例。英文 food cost percentage，業界常直接說「food cost」。用比例而不是金額來看，是因為比例才能比較：一碗 80 元成本的麵和一盤 300 元成本的牛排，光看金額無法判斷哪個比較划算，看成本率就一目了然。</p></div>
+
+<h2>實際成本：到底真的用掉多少</h2>
+<p>標準成本是「應該」花多少，但真實世界會有浪費：煮壞了、掉地上、份量給太多、食材壞掉、甚至被偷。要知道「實際」用掉多少食材，要用第 7 課的<strong>盤點</strong>：</p>
+<div class="formula">實際用掉的食材 ＝ 月初庫存 ＋ 本月進貨 − 月底庫存</div>
+<div class="tbl"><table>
+<tr><th>小明的 9 月</th><th class="num">金額（元）</th></tr>
+<tr><td>月初庫存（上個月底盤點）</td><td class="num">30,000</td></tr>
+<tr><td>＋ 本月進貨</td><td class="num">190,000</td></tr>
+<tr><td>－ 月底庫存（這個月底盤點）</td><td class="num">25,000</td></tr>
+<tr><td><b>＝ 實際用掉</b></td><td class="num"><b>195,000</b></td></tr>
+<tr><td>標準應該用掉（賣了 2,400 碗 × 80 元）</td><td class="num">192,000</td></tr>
+<tr><td><b>差距（浪費或損耗）</b></td><td class="num bad">3,000</td></tr>
+</table></div>
+<p>差 3,000 元，大約 1.5%，算是還可以接受。如果差距很大，就要去查：是份量不準？冰箱溫度不對讓東西壞了？還是有人拿走？</p>
+<div class="box tip"><span class="h">老手訣竅：設一個「報廢記錄本」</span>任何丟掉的東西（煮壞、過期、掉地上）都寫下來。月底一看，就知道錢漏在哪裡。很多店光是開始記錄，浪費就自己變少了，因為大家會更小心。</div>
+
+<details class="think"><summary>想一想：如果牛肉漲價 20%，成本率會變成多少？</summary>
+<p>牛肉一碗 50 元，漲 20% 變 60 元，總成本從 80 元變 90 元。售價不變的話，成本率變成 90 ÷ 220 ≈ 41%。這時候小明就要考慮：要漲價？調整份量？還是換別的部位？下一課會學。</p>
+</details>
+<div class="quiz" data-u="8"></div>
+</section>
+
+<!-- ================= 第9課 ================= -->
+<section class="unit" id="u9" data-title="定價的學問" data-level="3">
+<div class="ticket">
+  <div class="meta"><span>單號 #09｜第 9 課</span><span class="badge b3">進階</span></div>
+  <h1>定價的學問</h1>
+  <ul class="goal">
+    <li>會用成本率反推售價</li>
+    <li>知道定價要同時看成本、對手、客人</li>
+    <li>認識「每份毛利」和常見的心理定價</li>
+  </ul>
+</div>
+
+<div class="box story"><div class="face">🧑‍🍳</div><div>
+<p>小明算出一碗成本 80 元。那要賣多少？100 元好像很便宜、會很多人來；300 元好像很賺，可是會有人買嗎？</p>
+</div></div>
+
+<h2>定價要看三個方向</h2>
+<p>定價就像綁三條繩子，要同時拉住：</p>
+<ol>
+<li><b>成本（最低不能低於）</b>：賣的錢一定要能付成本，還要有剩。</li>
+<li><b>對手（附近別人賣多少）</b>：隔壁同樣的牛肉麵賣 180 元，你賣 300 元就要有很好的理由。</li>
+<li><b>價值（客人覺得值多少）</b>：好吃、份量大、環境舒服、有特色，客人就願意多付一點。</li>
+</ol>
+
+<h2>方法一：成本率定價法</h2>
+<p>這是最基本的方法：先決定你希望的食材成本率，再反推售價。</p>
+<div class="formula">建議售價 ＝ 食材成本 ÷ 目標成本率<small>80 元 ÷ 35% ≈ 229 元</small></div>
+<p>229 元這種數字很奇怪，所以會再調整成客人看起來舒服的價格，例如 220 元或 230 元。</p>
+
+<div class="widget">
+  <p class="wt">計算器：這道菜該賣多少？</p>
+  <div class="row">
+    <label class="field">食材成本（元）<input type="number" id="p1" value="80" min="0"></label>
+    <label class="field">目標成本率 %<input type="number" id="p2" value="35" min="1" max="100"></label>
+    <label class="field">附近對手售價（元）<input type="number" id="p3" value="200" min="0"></label>
+  </div>
+  <div class="out" id="pOut"></div>
+</div>
+
+<h2>每份毛利：真正幫你付房租的錢</h2>
+<p>售價減掉食材成本，剩下的叫<strong>毛利</strong>（有時也叫「邊際貢獻」）。</p>
+<div class="formula">每份毛利 ＝ 售價 − 食材成本<small>220 − 80 ＝ 140 元</small></div>
+<div class="box origin"><span class="h">名詞由來：毛利</span>
+<p>「毛」在中文裡有「還沒扣乾淨、粗的」的意思，就像「毛重」是還沒扣掉包裝的重量。毛利就是「只扣了食材，還沒扣房租、薪水等其他費用」的利潤。全部扣完剩下的才叫<b>淨利</b>，「淨」就是乾淨的意思。</p></div>
+<p>毛利這個觀念很重要，因為<strong>成本率低不一定比較賺</strong>：</p>
+<div class="tbl"><table>
+<tr><th>菜</th><th class="num">售價</th><th class="num">成本</th><th class="num">成本率</th><th class="num">每份毛利</th></tr>
+<tr><td>燙青菜</td><td class="num">50</td><td class="num">10</td><td class="num">20%</td><td class="num">40</td></tr>
+<tr><td>紅燒牛肉麵</td><td class="num">220</td><td class="num">80</td><td class="num">36%</td><td class="num">140</td></tr>
+</table></div>
+<p>燙青菜的成本率比較漂亮，但賣一碗牛肉麵賺的錢是青菜的 3.5 倍。<strong>房租和薪水是用「毛利的金額」付的，不是用「成本率」付的</strong>。</p>
+
+<h2>心理定價：客人的腦袋怎麼看價格</h2>
+<ul>
+<li><b>尾數定價</b>：199 元看起來比 200 元便宜很多，雖然只差 1 元。因為人習慣先看第一個數字。</li>
+<li><b>對比效果</b>：菜單上放一道 380 元的「招牌牛肉麵」，220 元的紅燒牛肉麵看起來就很合理。就算那道貴的很少人點，它也在幫其他菜「撐場面」。</li>
+<li><b>套餐</b>：麵＋小菜＋飲料，分開買 300 元，套餐 270 元。客人覺得省到，店家多賣了高毛利的小菜飲料。</li>
+<li><b>整數顯得高級</b>：精緻餐廳常用 1,200、1,500 這種整數，反而給人「品質」的感覺。所以尾數定價要看業態。</li>
+</ul>
+<div class="box warn"><span class="h">注意：價格很難往回調</span>開幕時賣太便宜，之後要漲價，客人會很有感。定價一開始就要把成本算清楚，寧可用「開幕優惠」的方式短期打折，也不要把正常價格定太低。</div>
+
+<details class="think"><summary>想一想：如果附近的牛肉麵都賣 180 元，小明算出來要 229 元才夠，怎麼辦？</summary>
+<p>有幾條路：①讓客人覺得值得多付（牛肉更多、湯頭有特色、環境更好）；②降低成本（換部位、提高可食率、減少浪費）；③接受稍高的成本率，靠賣高毛利的小菜飲料補回來。第 11 課的菜單工程會教你怎麼判斷。</p>
+</details>
+<div class="quiz" data-u="9"></div>
+</section>
+
+<!-- ================= 第10課 ================= -->
+<section class="unit" id="u10" data-title="看懂經營數字：到底賺不賺" data-level="3">
+<div class="ticket">
+  <div class="meta"><span>單號 #10｜第 10 課</span><span class="badge b3">進階</span></div>
+  <h1>看懂經營數字：到底賺不賺</h1>
+  <ul class="goal">
+    <li>看得懂簡單的損益表</li>
+    <li>會算「損益平衡點」：一天要賣幾碗才不賠</li>
+    <li>知道「客單價」「主要成本」這些常用指標</li>
+  </ul>
+</div>
+
+<div class="box story"><div class="face">🧑‍🍳</div><div>
+<p>開店三個月，小明每天都很忙，店裡看起來生意很好。可是他的存款卻沒有變多。<strong>忙，不等於賺錢</strong>。他需要一張表來看清楚錢去了哪裡。</p>
+</div></div>
+
+<h2>損益表：一個月的成績單</h2>
+<div class="box origin"><span class="h">名詞由來：損益表</span>
+<p>「損」是虧損，「益」是利益。損益表就是記錄「賺了多少、花了多少、最後剩多少」的表，英文叫 Profit and Loss statement，常縮寫 <b>P&amp;L</b>。</p></div>
+<p>這是小明 9 月的損益表（賣了 2,400 碗，每碗 220 元）：</p>
+<div class="tbl"><table>
+<tr><th>項目</th><th class="num">金額（元）</th><th class="num">占營收</th><th>說明</th></tr>
+<tr><td><b>營業收入</b></td><td class="num"><b>528,000</b></td><td class="num">100%</td><td>2,400 碗 × 220 元</td></tr>
+<tr><td>－ 食材成本</td><td class="num">192,000</td><td class="num">36%</td><td>第 8 課算的</td></tr>
+<tr><td>－ 人事成本</td><td class="num">150,000</td><td class="num">28%</td><td>薪水、勞健保等</td></tr>
+<tr><td>－ 租金</td><td class="num">60,000</td><td class="num">11%</td><td></td></tr>
+<tr><td>－ 水電瓦斯</td><td class="num">25,000</td><td class="num">5%</td><td></td></tr>
+<tr><td>－ 其他（手續費、維修、清潔、行銷）</td><td class="num">20,000</td><td class="num">4%</td><td></td></tr>
+<tr><td><b>＝ 淨利</b></td><td class="num good"><b>81,000</b></td><td class="num">15%</td><td>真正賺到的</td></tr>
+</table></div>
+<p>第 0 課的問題有答案了：客人付的 220 元，小明真正賺到的大約是 <b>15%，也就是 33 元</b>左右。</p>
+
+<h2>主要成本：最大的兩塊</h2>
+<p>食材和人事是餐廳最大的兩筆支出，合起來叫<strong>主要成本</strong>（英文 prime cost，prime 是「第一的、最重要的」）。</p>
+<div class="formula">主要成本率 ＝（食材成本 ＋ 人事成本）÷ 營業收入<small>（192,000 ＋ 150,000）÷ 528,000 ≈ 65%</small></div>
+<p>業界常把 <strong>60%～65% 左右</strong> 當作警戒線。超過太多，扣完房租水電通常就很難賺錢了。老闆每個月第一個要看的就是這個數字。</p>
+
+<h2>固定成本和變動成本</h2>
+<ul>
+<li><b>變動成本</b>：賣越多、花越多。例如食材：賣 1 碗用 1 碗的料，賣 100 碗用 100 碗的料。</li>
+<li><b>固定成本</b>：不管賣多少都要付。例如租金：今天一碗都沒賣，房租照付。</li>
+</ul>
+<p>人事成本比較特別：正職員工的薪水比較像固定成本，計時工讀生可以依生意調整，比較像變動成本。</p>
+
+<h2>損益平衡點：一天要賣幾碗才不賠</h2>
+<p><strong>損益平衡</strong>就是「剛好不賺也不賠」。每賣一碗麵，毛利（上一課學的）140 元就拿去「填」固定成本的洞。洞填滿之後，再賣的才是賺的。</p>
+<div class="formula">損益平衡銷量 ＝ 每月固定成本 ÷ 每份毛利<small>200,000 ÷ 140 ≈ 1,429 碗／月 ≈ 每天 48 碗（以 30 天計）</small></div>
+<div class="widget">
+  <p class="wt">計算器：損益平衡點</p>
+  <div class="row">
+    <label class="field">每月固定成本（元）<input type="number" id="b1" value="200000" min="0" step="1000"></label>
+    <label class="field">售價（元）<input type="number" id="b2" value="220" min="0"></label>
+    <label class="field">每份食材成本（元）<input type="number" id="b3" value="80" min="0"></label>
+    <label class="field">每月營業天數<input type="number" id="b4" value="30" min="1" max="31"></label>
+    <label class="field">實際每天賣幾碗<input type="number" id="b5" value="80" min="0"></label>
+  </div>
+  <div class="out" id="bOut"></div>
+</div>
+
+<h2>另外兩個常用指標</h2>
+<div class="formula">客單價 ＝ 營業收入 ÷ 來客數<small>一天營收 17,600 元，來了 70 位客人 → 客單價約 251 元</small></div>
+<p>客單價告訴你「平均每位客人花多少」。想提高營收，只有兩條路：<strong>讓更多客人來（來客數）</strong>，或<strong>讓每位客人多花一點（客單價）</strong>，例如推薦加點小菜、飲料。</p>
+<div class="formula">營業收入 ＝ 來客數 × 客單價</div>
+
+<details class="think"><summary>想一想：房東說租金要漲 30,000 元，小明每天要多賣幾碗才打平？</summary>
+<p>30,000 ÷ 140 ≈ 215 碗／月，除以 30 天，每天大約多賣 7 碗。用損益平衡的觀念，任何新增的固定費用都可以換算成「要多賣幾份」，做決定就很清楚。</p>
+</details>
+<div class="quiz" data-u="10"></div>
+</section>
+
+<!-- ================= 第11課 ================= -->
+<section class="unit" id="u11" data-title="菜單設計與菜單工程" data-level="3">
+<div class="ticket">
+  <div class="meta"><span>單號 #11｜第 11 課</span><span class="badge b3">進階</span></div>
+  <h1>菜單設計與菜單工程</h1>
+  <ul class="goal">
+    <li>用「人氣」和「毛利」兩個數字分析每道菜</li>
+    <li>知道四種菜各該怎麼處理</li>
+    <li>懂得菜單版面的基本技巧</li>
+  </ul>
+</div>
+
+<div class="box origin"><span class="h">名詞由來：菜單 Menu</span>
+<p>menu 是法文，來自拉丁文 <i>minutus</i>，意思是「細小的、詳細的」。菜單原本就是「把今天的菜詳細列出來的小清單」。英文的 minute（分鐘，把一小時切細）也是同一個字根。</p></div>
+
+<div class="box story"><div class="face">🧑‍🍳</div><div>
+<p>小明的菜單上有四道主食。他想知道：哪道菜該留、哪道該改、哪道該刪？光憑感覺，他很捨不得刪任何一道。</p>
+</div></div>
+
+<h2>菜單工程：用兩個問題幫菜分類</h2>
+<p>1982 年，美國兩位學者 Michael Kasavana 和 Donald Smith 提出了<strong>菜單工程</strong>（Menu Engineering）：用兩個問題幫每道菜打分數。</p>
+<ol>
+<li><b>人氣高不高？</b>這道菜賣的份數，跟平均比起來多還是少。</li>
+<li><b>毛利高不高？</b>這道菜每份賺的錢（第 9 課），跟平均比起來多還是少。</li>
+</ol>
+<p>兩個問題各有高、低兩種答案，就分成四種菜，而且每種都取了好記的名字：</p>
+<div class="tbl"><table>
+<tr><th>小明的菜</th><th class="num">月賣份數</th><th class="num">每份毛利</th><th>人氣</th><th>毛利</th></tr>
+<tr><td>紅燒牛肉麵</td><td class="num">900</td><td class="num">140</td><td class="good">高</td><td class="good">高</td></tr>
+<tr><td>陽春麵</td><td class="num">700</td><td class="num">50</td><td class="good">高</td><td class="bad">低</td></tr>
+<tr><td>半筋半肉麵</td><td class="num">150</td><td class="num">170</td><td class="bad">低</td><td class="good">高</td></tr>
+<tr><td>番茄牛肉湯餃</td><td class="num">100</td><td class="num">40</td><td class="bad">低</td><td class="bad">低</td></tr>
+<tr><td colspan="3">平均</td><td>462.5 份</td><td>100 元</td></tr>
+</table></div>
+<div class="widget">
+  <p class="wt">互動：菜單工程四象限</p>
+  <p class="wd">點任一格，看這一類菜該怎麼處理。</p>
+  <div class="matrix">
+    <div class="ax y">人氣 高 ↑</div>
+    <div class="quad q2" data-q="plow" tabindex="0"><b>🐴 耕馬</b>陽春麵</div>
+    <div class="quad q1" data-q="star" tabindex="0"><b>⭐ 明星</b>紅燒牛肉麵</div>
+    <div class="ax y">人氣 低 ↓</div>
+    <div class="quad q4" data-q="dog" tabindex="0"><b>🐶 狗</b>番茄牛肉湯餃</div>
+    <div class="quad q3" data-q="puzzle" tabindex="0"><b>🧩 謎題</b>半筋半肉麵</div>
+    <div></div><div class="ax">← 毛利 低</div><div class="ax">毛利 高 →</div>
+  </div>
+  <div class="out" id="mxOut">點一格看看。</div>
+</div>
+<div class="box origin"><span class="h">名詞由來：為什麼叫明星、耕馬、謎題、狗？</span>
+<p>這四個名字借用自企業管理的經典工具「波士頓矩陣」。<b>明星</b>是又受歡迎又賺錢的；<b>耕馬</b>（Plowhorse）像田裡拉犁的馬，很勤勞、很多人點，但賺得少；<b>謎題</b>（Puzzle）賺很多卻沒人點，讓人想不通為什麼；<b>狗</b>（Dog）在英文俗語裡指「表現差的東西」，不賺錢也沒人愛。</p>
+<p><em>正式的菜單工程判斷人氣時，用的是「平均份額的 70%」當門檻，這裡為了好懂，先直接跟平均比。</em></p></div>
+
+<h2>菜單版面的小技巧</h2>
+<ul>
+<li><b>把明星和謎題放在最顯眼的位置</b>：一般認為客人看菜單時，第一眼常落在上方或右上方的區域，每一區的第一、二個品項也最容易被注意。</li>
+<li><b>加框、加照片、加小圖示</b>：想推的菜，用框框圈起來或配一張好照片。</li>
+<li><b>寫出讓人想吃的描述</b>：「半筋半肉麵」改成「慢燉 6 小時・Q 彈牛筋配軟嫩牛腱」，客人就更容易點。</li>
+<li><b>選項不要太多</b>：選擇太多，客人反而決定不了，廚房也要準備更多食材，浪費更多。</li>
+<li><b>價格不要排成一直行</b>：價格全部對齊在右邊，客人會直接往下比哪個最便宜。把價格跟在描述後面，客人會先看菜再看價錢。</li>
+</ul>
+
+<details class="think"><summary>想一想：陽春麵是「耕馬」，毛利低，要直接刪掉嗎？</summary>
+<p>不要急著刪！很多客人是為了便宜的陽春麵才走進來，順便加點小菜和飲料。可以試試：小幅漲價、推「陽春麵＋滷蛋＋小菜」套餐，把低毛利的主食變成帶動高毛利小菜的入口。</p>
+</details>
+<div class="quiz" data-u="11"></div>
+</section>
+<!-- ================= 第12課 ================= -->
+<section class="unit" id="u12" data-title="帶人與排班：管理一個團隊" data-level="4">
+<div class="ticket">
+  <div class="meta"><span>單號 #12｜第 12 課</span><span class="badge b4">專業</span></div>
+  <h1>帶人與排班：管理一個團隊</h1>
+  <ul class="goal">
+    <li>會依照來客量排班，控制人力成本</li>
+    <li>學會一套有系統的教人方法</li>
+    <li>知道怎麼用 SOP 讓品質不靠運氣</li>
+  </ul>
+</div>
+
+<div class="box story"><div class="face">🧑‍🍳</div><div>
+<p>小明的店現在有 6 個員工。他發現：下午 3 點店裡只有兩桌客人，卻有 5 個人站著聊天；晚上 7 點客人排隊，卻只有 3 個人在忙。<strong>人不是不夠，是放錯時間</strong>。</p>
+</div></div>
+
+<h2>人力成本率</h2>
+<div class="formula">人力成本率 ＝ 人事成本 ÷ 營業收入 × 100%<small>150,000 ÷ 528,000 ≈ 28%</small></div>
+<p>一般餐廳大多落在 <strong>25%～35%</strong>。人事和食材合起來就是第 10 課的「主要成本」，兩個要一起看：食材成本率高的店（例如牛排館），人力就要精簡一點。</p>
+
+<h2>依來客量排班</h2>
+<p>排班的第一步是<strong>預測每個時段會來多少客人</strong>。看 POS 系統過去幾週的紀錄，就能畫出下面這張圖：</p>
+<div class="widget">
+  <p class="wt">圖表：小明的店平日每小時來客數與建議人力</p>
+  <p class="wd">紅色是尖峰時段。每根柱子上的數字是建議上班人數（這裡假設每 15 位客人需要 1 位人力，最少 2 人）。</p>
+  <div class="bars" id="staffBars"></div>
+  <div style="height:26px"></div>
+</div>
+<p>看出來了嗎？午餐 12 點和晚餐 6 點是兩個高峰，下午 2～4 點是低谷。所以小明這樣安排：</p>
+<ul>
+<li><b>正職員工</b>上完整的班，負責開店準備、收店和關鍵工作站。</li>
+<li><b>計時人員</b>只排在尖峰前後，例如 11:00～14:00、17:00～20:00。</li>
+<li>下午低谷時段，安排正職做備料、清潔、盤點等「不用面對客人」的工作。</li>
+</ul>
+<div class="box warn"><span class="h">注意：要遵守當地勞動法規</span>每個國家對工時、休息時間、加班費、休假都有規定。排班省成本不能違法，也不能讓員工長期過勞。累壞的員工最容易出錯、受傷，也最容易離職，重新招人訓練的成本更高。</div>
+
+<h2>SOP：把做法寫下來</h2>
+<div class="box origin"><span class="h">名詞由來：SOP</span>
+<p>Standard Operating Procedure 的縮寫，中文叫「標準作業程序」。它是把一件工作「最好的做法」寫成固定步驟，讓每個人都照著做。第 4 課的標準食譜，其實就是廚房的 SOP。</p></div>
+<p>餐廳常見的 SOP 有：開店檢查、收店清潔、收銀交班、冰箱溫度記錄、客訴處理。好的 SOP 要<strong>短、清楚、有圖</strong>，貼在工作的地方，而不是鎖在辦公室的抽屜裡。</p>
+
+<h2>教人的方法：TWI 四步驟</h2>
+<div class="box origin"><span class="h">名詞由來：TWI</span>
+<p>第二次世界大戰時，美國工廠的老師傅大多上了戰場，工廠裡突然來了大批沒有經驗的新人。政府發展了一套快速教人的方法，叫 <b>TWI</b>（Training Within Industry，產業內訓練）。戰後這套方法傳到日本，影響了許多日本企業的現場管理，到今天工廠和餐廳都還在用。</p></div>
+<p>它的「工作教導」部分只有四步，照順序做：</p>
+<ol>
+<li><b>準備</b>：讓新人放鬆，先告訴他要學什麼、為什麼重要。</li>
+<li><b>示範說明</b>：你一邊做一邊講，把<strong>重點</strong>和<strong>為什麼</strong>講清楚。「煮 3 分 30 秒，因為少了會硬、多了會爛。」</li>
+<li><b>讓他試做</b>：換他做，一邊做一邊講重點給你聽。做錯了當場溫和地修正。</li>
+<li><b>追蹤指導</b>：讓他獨立做，但告訴他有問題找誰，並且常常回去看，慢慢減少檢查次數。</li>
+</ol>
+<div class="box tip"><span class="h">老手訣竅：公開稱讚，私下糾正</span>員工做得好，在大家面前說出來；做錯了，找個沒人的地方講。沒有人喜歡在同事或客人面前被罵，被罵的人只會記得丟臉，記不得你要他改什麼。</div>
+
+<details class="think"><summary>想一想：為什麼示範時要講「為什麼」，不能只講「怎麼做」？</summary>
+<p>因為只知道「怎麼做」，遇到不一樣的狀況就不知道怎麼辦。知道「為什麼麵要煮 3 分 30 秒」的人，換了一種比較粗的麵，就會自己想到要煮久一點。懂原因的員工才會判斷。</p>
+</details>
+<div class="quiz" data-u="12"></div>
+</section>
+
+<!-- ================= 第13課 ================= -->
+<section class="unit" id="u13" data-title="畢業專題：從零規劃一家店" data-level="4">
+<div class="ticket">
+  <div class="meta"><span>單號 #13｜第 13 課</span><span class="badge b4">專業</span></div>
+  <h1>畢業專題：從零規劃一家店</h1>
+  <ul class="goal">
+    <li>把前面 12 課串成一份完整的開店計畫</li>
+    <li>會用試算表判斷一家店能不能賺錢、多久回本</li>
+    <li>知道開店後每個月要看哪些數字</li>
+  </ul>
+</div>
+
+<div class="box story"><div class="face">🧑‍🍳</div><div>
+<p>一年後，小明的店穩定賺錢。他的朋友小華也想開一家店，跑來問他：「我該從哪裡開始？」小明拿出一張清單，這張清單就是你這門課學過的全部內容。</p>
+</div></div>
+
+<h2>開店的 12 個步驟</h2>
+<p>這是有順序的，前面沒想清楚，後面就會出問題。可以勾選，檢查自己是不是每一步都懂了：</p>
+<ol class="checklist" id="plan">
+<li><label><input type="checkbox"><span><b>定位</b>：客人是誰？什麼業態？一句話說出你的特色。（第 1 課）</span></label></li>
+<li><label><input type="checkbox"><span><b>選地點</b>：附近有沒有你的客人？對手賣多少錢？租金多少？（第 9、10 課）</span></label></li>
+<li><label><input type="checkbox"><span><b>設計菜單</b>：少而精，每道菜寫好標準食譜。（第 4、11 課）</span></label></li>
+<li><label><input type="checkbox"><span><b>算成本、定價格</b>：每道菜的標準成本、成本率、毛利。（第 8、9 課）</span></label></li>
+<li><label><input type="checkbox"><span><b>財務試算</b>：開店要花多少錢？損益平衡要賣幾份？多久回本？（第 10 課和下方試算器）</span></label></li>
+<li><label><input type="checkbox"><span><b>設計廚房與店面</b>：動線、工作站、設備清單。（第 3 課）</span></label></li>
+<li><label><input type="checkbox"><span><b>辦理證照與法規</b>：營業登記、衛生、消防、招牌等，依當地法規辦理。（第 2 課）</span></label></li>
+<li><label><input type="checkbox"><span><b>找供應商</b>：比較價格與品質，談好送貨時間和付款方式。（第 7 課）</span></label></li>
+<li><label><input type="checkbox"><span><b>招募與訓練</b>：寫好 SOP，用 TWI 方法教人。（第 12 課）</span></label></li>
+<li><label><input type="checkbox"><span><b>建立收銀與防弊制度</b>：POS 設定、備用金、交班點帳。（第 6 課）</span></label></li>
+<li><label><input type="checkbox"><span><b>試營運</b>：先請親友來吃，練習服務流程、找出問題。（第 5 課）</span></label></li>
+<li><label><input type="checkbox"><span><b>正式開幕與每月檢討</b>：每月看損益表、盤點、菜單工程，持續調整。（第 8、10、11 課）</span></label></li>
+</ol>
+<div class="out" id="planOut">已完成 0 / 12 步</div>
+
+<h2>開店要準備多少錢</h2>
+<p>開店的錢分成兩大類：</p>
+<ul>
+<li><b>一次性投資</b>：裝潢、廚房設備、桌椅、餐具、租屋押金、第一批食材、招牌。</li>
+<li><b>周轉金</b>：開幕初期生意通常還不穩，要準備好幾個月的租金、薪水、食材錢。很多人建議至少預留 <strong>3～6 個月</strong>的營運費用。</li>
+</ul>
+<p>很多店不是因為菜不好吃而倒閉，而是<strong>錢在生意穩定之前就用完了</strong>。</p>
+<div class="formula">回本期（月）＝ 開店總投資 ÷ 每月淨利<small>小明投資 150 萬元，每月淨利 8.1 萬元 → 大約 18.5 個月回本</small></div>
+
+<div class="widget">
+  <p class="wt">總複習試算器：我的店會賺錢嗎？</p>
+  <p class="wd">預設值就是小明的店。改改看，觀察哪個數字影響最大。</p>
+  <div class="row">
+    <label class="field">桌數<input type="number" id="s1" value="20" min="1"></label>
+    <label class="field">一天翻桌率<input type="number" id="s2" value="2" step="0.1" min="0"></label>
+    <label class="field">每組平均人數<input type="number" id="s3" value="2" step="0.1" min="1"></label>
+    <label class="field">客單價（元）<input type="number" id="s4" value="220" min="0"></label>
+  </div>
+  <div class="row">
+    <label class="field">每月營業天數<input type="number" id="s5" value="30" min="1" max="31"></label>
+    <label class="field">食材成本率 %<input type="number" id="s6" value="36.4" step="0.1" min="0" max="100"></label>
+    <label class="field">每月人事（元）<input type="number" id="s7" value="150000" step="1000" min="0"></label>
+    <label class="field">每月租金（元）<input type="number" id="s8" value="60000" step="1000" min="0"></label>
+  </div>
+  <div class="row">
+    <label class="field">每月水電及其他（元）<input type="number" id="s9" value="45000" step="1000" min="0"></label>
+    <label class="field">開店總投資（元）<input type="number" id="s10" value="1500000" step="10000" min="0"></label>
+  </div>
+  <div class="out" id="sOut"></div>
+</div>
+
+<h2>結業：接下來怎麼繼續學</h2>
+<p>恭喜你走完整條路！你現在知道一碗麵從採購、驗收、備料、烹調、出餐、服務、收錢，一直到算成本、定價、看損益的全部過程。要從「懂」變成「會」，還需要實際經驗：</p>
+<ul>
+<li><b>去餐廳打工，內外場都做做看</b>：書上的流程，在真正的尖峰時段會完全不一樣。</li>
+<li><b>考取當地的餐飲或食品衛生證照</b>：很多地方規定廚房人員必須具備。</li>
+<li><b>練習看數字</b>：去喜歡的餐廳吃飯時，試著估估看它的翻桌率、客單價、成本率。</li>
+<li><b>回來複習</b>：隨時用左邊的目錄或「名詞小辭典」查回任何一課。</li>
+</ul>
+<div class="box story"><div class="face">🧑‍🍳</div><div>
+<p>小明最後對小華說：「好吃只是開店的門票。讓每一碗都一樣好吃、讓每位客人都被好好對待、讓每一塊錢都算得清楚，才是讓店活下去的本事。」</p>
+</div></div>
+<div class="quiz" data-u="13"></div>
+</section>
+
+<!-- ================= 名詞小辭典 ================= -->
+<section class="unit" id="ug" data-title="名詞小辭典" data-level="0">
+<div class="ticket">
+  <div class="meta"><span>附錄</span><span>隨時查詢</span></div>
+  <h1>名詞小辭典</h1>
+  <p style="margin:0">課程中所有專有名詞的意思、由來，以及在第幾課學到。</p>
+</div>
+<input class="gsearch" id="gq" type="search" placeholder="輸入關鍵字，例如：毛利、FIFO、翻桌">
+<div class="gl" id="gl"></div>
+</section>
+
+</main>
+</div>
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const fmt=n=>Math.round(n).toLocaleString('zh-TW');
+const num=id=>{const v=parseFloat(document.getElementById(id).value);return isNaN(v)?0:v};
+
+/* ---------- 導覽 ---------- */
+const units=$$('.unit'), rail=$('#rail');
+const LV={1:'入門',2:'基礎',3:'進階',4:'專業',0:'附錄'};
+let html='<h2>課程目錄</h2>', last=null;
+units.forEach(u=>{
+  const lv=u.dataset.level;
+  if(lv!==last){html+=`<div class="lvl">${LV[lv]}</div>`;last=lv}
+  const n=u.id==='ug'?'📖':u.id.slice(1).padStart(2,'0');
+  html+=`<button class="tk" data-go="${u.id}"><span class="n">${n}</span><span>${u.dataset.title}</span></button>`;
+});
+rail.innerHTML=html;
+const courseUnits=units.filter(u=>u.id!=='ug');
+courseUnits.forEach((u,i)=>{
+  const nav=document.createElement('div');nav.className='nav';
+  const prev=courseUnits[i-1], next=courseUnits[i+1];
+  nav.innerHTML=(prev?`<button class="btn alt" data-go="${prev.id}">上一課：${prev.dataset.title}</button>`:'<span></span>')+
+    (next?`<button class="btn" data-go="${next.id}">下一課：${next.dataset.title}</button>`:`<button class="btn" data-go="ug">查看名詞小辭典</button>`);
+  u.appendChild(nav);
+});
+function show(id){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=id;
+  if(!document.getElementById(id)) id='u0';
+  units.forEach(u=>u.classList.toggle('show',u.id===id));
+  $$('.tk').forEach(t=>t.classList.toggle('on',t.dataset.go===id));
+  rail.classList.remove('open');
+  window.scrollTo(0,0);
+  if(id==='u0') flowReset();
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]'); if(!g) return;
+  e.preventDefault();
+  if(location.hash.slice(1)===g.dataset.go) show(g.dataset.go); else location.hash=g.dataset.go;
+});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
+$('#menuBtn').onclick=()=>rail.classList.toggle('open');
+
+/* ---------- 進度 ---------- */
+const done=new Set();
+function updateProgress(){
+  const total=courseUnits.length;
+  $('#pbar').style.width=(done.size/total*100)+'%';
+  $('#ptxt').textContent=`完成 ${done.size} / ${total} 課`;
+  $$('.tk').forEach(t=>t.classList.toggle('done',done.has(t.dataset.go)));
+}
+
+/* ---------- 小測驗 ---------- */
+const Q={
+0:[["餐廳的「內場」主要負責什麼？",["接待客人、帶位","把食材變成菜","收錢和找零","站在門口招呼客人"],1,"內場就是廚房、倉庫、洗碗區這些客人看不到的地方，負責把菜做出來。"],
+["客人付了 220 元，下列哪個說法正確？",["220 元全部都是老闆賺的","要扣掉食材、薪水、租金等費用，剩下的才是賺的","只要扣掉食材錢就是賺的","只要生意很忙就一定賺錢"],1,"營業收入不等於利潤。第 10 課會算出，小明一碗麵真正賺到的大約只有 15%。"],
+["為什麼這門課建議照順序上？",["因為後面的課會用到前面學過的觀念","因為前面的課比較好玩","因為後面的課比較短","沒有特別原因"],0,"例如第 8 課算成本要用到第 4 課的可食率、第 7 課的盤點。"]],
+1:[["「外場」「內場」這兩個詞，英文原本來自哪裡？",["軍隊","劇場","醫院","學校"],1,"Front of house 是觀眾席，Back of house 是後台。餐廳就像劇場。"],
+["Restaurant 這個字的原意是什麼？",["很貴的地方","恢復、補充體力","坐下來","好吃的湯"],1,"來自法文 restaurer，恢復元氣的意思。"],
+["速食店價格通常比較便宜，原因之一是？",["食材比較差","讓客人自己點餐、拿餐，節省人力","不用付房租","不用繳稅"],1,"不同業態的取捨：讓客人自己做一部分服務，就能少請很多人。"]],
+2:[["細菌最容易大量繁殖的「危險溫度帶」大約是？",["−18°C 到 0°C","0°C 到 5°C","5°C 到 60°C","60°C 到 100°C"],2,"所以食物要夠冷（5°C 以下）或夠熱（60°C 以上）。"],
+["冰箱裡生肉和熟食應該怎麼放？",["熟食在上，生肉在下","生肉在上，熟食在下","放在一起比較省空間","都放最上層"],0,"上熟下生，避免生肉的血水滴到不會再加熱的熟食上。"],
+["HACCP 一開始是為了什麼而發展出來的？",["讓菜更好吃","確保太空人的食物安全","讓廚房更漂亮","算食材成本"],1,"1960 年代美國為太空計畫發展，後來推廣到全世界的食品業。"]],
+3:[["法文 mise en place 是什麼意思？",["今天的特餐","放在該放的位置","廚房的頭","快一點"],1,"開始煮之前，把所有東西準備好、擺好。"],
+["好的廚房動線應該？",["越短越好，所有東西擠在一起","一路往前、不走回頭路，乾淨和髒污分開","洗碗區放在出餐口旁邊","客人可以走進廚房"],1,"食材一路從驗收走到出餐，髒碗盤走另一條路。"],
+["Sous chef 是什麼職位？",["洗碗員","甜點師","副主廚","學徒"],2,"sous 是法文「在…之下」，就是主廚底下的第二號人物。"]],
+4:[["牛腱每公斤 300 元，1 公斤燉好後剩 0.6 公斤。熟牛肉的真實單價是每公斤多少？",["180 元","300 元","360 元","500 元"],3,"300 ÷ 60% ＝ 500 元。忘了可食率，成本就會算太低。"],
+["標準食譜的寫法，哪個比較正確？",["鹽少許","鹽適量","鹽 3 公克","鹽看心情"],2,"要寫出精確份量，任何人照做都一樣。"],
+["廚師聽到喊單後回答「收到」，主要是為了？",["表示禮貌","確認訊息真的傳到了","讓客人聽到","讓主廚高興"],1,"廚房很吵，確認回覆可以避免漏單。"]],
+5:[["30 張桌子，一天來了 75 組客人，翻桌率是多少？",["2.5 次","1.5 次","45 次","0.4 次"],0,"75 ÷ 30 ＝ 2.5。"],
+["處理客訴的 LAST 四步，正確順序是？",["道歉、解決、聽、感謝","聽、道歉、解決、感謝","解決、感謝、聽、道歉","感謝、聽、解決、道歉"],1,"Listen、Apologize、Solve、Thank。先讓客人把話說完。"],
+["點完餐後把內容念一遍給客人聽（複誦），最主要的好處是？",["顯得很專業","避免送錯菜、重做","拖延時間","讓廚房準備"],1,"10 秒的確認，省下重做和客訴的成本。"]],
+6:[["客人消費 365 元，給你 1,000 元，要找多少？",["735 元","635 元","645 元","535 元"],1,"365→370(+5)→400(+30)→500(+100)→1000(+500)，共 635 元。"],
+["備用金 5,000 元，今天現金營收 12,000 元，打烊時抽屜應該有多少現金？",["12,000 元","7,000 元","17,000 元","5,000 元"],2,"備用金＋現金營收＝5,000＋12,000＝17,000 元。"],
+["世界上第一台收銀機被發明，主要是為了？",["算得比較快","防止店員把錢私吞","看起來比較高級","印收據"],1,"1879 年里提發明它，就是為了防弊。"]],
+7:[["牛腱每天用 10 公斤，每 2 天進一次貨，安全存量 5 公斤，現在還有 7 公斤。這次該叫多少？",["18 公斤","20 公斤","25 公斤","13 公斤"],0,"10×2＋5−7＝18 公斤。"],
+["FIFO（先進先出）是什麼意思？",["最新鮮的先用","先買進來的先用掉","最便宜的先用","最貴的先用"],1,"新貨放後面，舊貨放前面先拿，避免過期。"],
+["驗收冷凍品時，溫度應該在？",["10°C 以下","5°C 以下","0°C 以下","−18°C 以下"],3,"冷凍 −18°C 以下，冷藏 5°C 以下。"]],
+8:[["一道菜成本 60 元，售價 200 元，食材成本率是？",["20%","30%","40%","60%"],1,"60 ÷ 200 ＝ 30%。"],
+["月初庫存 20,000 元，本月進貨 100,000 元，月底庫存 15,000 元。本月實際用掉多少食材？",["85,000 元","105,000 元","120,000 元","135,000 元"],1,"20,000＋100,000−15,000＝105,000 元。"],
+["實際成本比標準成本高很多，最可能代表什麼？",["生意很好","有浪費、份量不準或損耗","菜太便宜","客人太多"],1,"要去查份量、報廢記錄、冰箱溫度，甚至有沒有東西被拿走。"]],
+9:[["成本 90 元，目標成本率 30%，建議售價是？",["120 元","270 元","300 元","390 元"],2,"90 ÷ 30% ＝ 300 元。"],
+["哪一道菜每份毛利比較高？",["燙青菜：售價 50、成本 10","牛肉麵：售價 220、成本 80","一樣高","無法判斷"],1,"青菜毛利 40，牛肉麵毛利 140。成本率低不一定比較賺。"],
+["下列哪個是「對比效果」的例子？",["價格寫 199 而不是 200","在菜單上放一道比較貴的招牌，讓其他菜顯得合理","把套餐算便宜一點","每道菜都一樣價錢"],1,"貴的那道就算很少人點，也幫其他菜撐場面。"]],
+10:[["「主要成本」指的是哪兩項加起來？",["租金＋水電","食材＋人事","人事＋租金","食材＋租金"],1,"餐廳最大的兩筆支出，業界常以 60～65% 左右為警戒線。"],
+["每月固定成本 150,000 元，每份毛利 100 元，每月要賣幾份才損益平衡？",["1,000 份","1,500 份","15,000 份","150 份"],1,"150,000 ÷ 100 ＝ 1,500 份。"],
+["營業收入可以拆成哪兩個數字相乘？",["來客數 × 客單價","桌數 × 租金","成本 × 售價","員工 × 薪水"],0,"想提高營收，就是讓更多人來，或讓每人多花一點。"]],
+11:[["人氣高、但毛利低的菜，在菜單工程裡叫做？",["明星","耕馬","謎題","狗"],1,"像勤勞拉犁的馬：很多人點，但賺得少。"],
+["「謎題」類的菜（毛利高但沒人點）通常可以怎麼做？",["直接刪掉","降價到最便宜","換到顯眼位置、改寫描述、請服務生推薦","藏到菜單最後面"],2,"它很賺，只是客人沒注意到或不了解它。"],
+["Menu 這個字的原意是？",["好吃的","細小的、詳細的","很多的","貴的"],1,"來自拉丁文 minutus，minute 也是同一個字根。"]],
+12:[["月營收 400,000 元，人事成本 120,000 元，人力成本率是？",["12%","25%","30%","40%"],2,"120,000 ÷ 400,000 ＝ 30%。"],
+["TWI 教人四步驟的正確順序是？",["示範說明→準備→追蹤指導→讓他試做","準備→示範說明→讓他試做→追蹤指導","讓他試做→準備→示範說明→追蹤指導","準備→讓他試做→追蹤指導→示範說明"],1,"先讓他準備好，再示範，再讓他做，最後持續追蹤。"],
+["排班最主要應該依據什麼？",["員工喜歡哪個時段","各時段的來客量預測","老闆的心情","每天都排一樣"],1,"人要排在客人多的時候，低谷時段安排備料、清潔等工作。"]],
+13:[["開店投資 120 萬元，每月淨利 6 萬元，大約多久回本？",["6 個月","12 個月","20 個月","72 個月"],2,"120 ÷ 6 ＝ 20 個月。"],
+["開店時為什麼要預留幾個月的周轉金？",["可以多買裝潢","撐過開幕初期生意還不穩定的時期","拿來發獎金","沒有必要"],1,"很多店是錢在生意穩定之前就用完了，而不是菜不好吃。"],
+["開幕後，老闆每個月最應該優先檢視的是？",["社群按讚數","損益表與主要成本率","競爭對手的裝潢","員工的髮型"],1,"數字會告訴你錢漏在哪裡，第 10 課學過的指標要每月看。"]]
+};
+$$('.quiz').forEach(box=>{
+  const u=box.dataset.u, list=Q[u]; if(!list) return;
+  box.innerHTML='<h2>小測驗</h2><p>答錯會顯示解釋，可以再選一次。全部答對，這一課就完成了。</p>';
+  const state=list.map(()=>false);
+  list.forEach((it,qi)=>{
+    const d=document.createElement('div');d.className='q';
+    d.innerHTML=`<div class="qt">${qi+1}. ${it[0]}</div>`+it[1].map((o,oi)=>`<button class="opt" data-i="${oi}">${o}</button>`).join('')+`<div class="ex"></div>`;
+    d.addEventListener('click',e=>{
+      const b=e.target.closest('.opt'); if(!b||state[qi]) return;
+      const ok=+b.dataset.i===it[2];
+      b.classList.add(ok?'right':'wrong');
+      d.classList.add('answered');
+      d.querySelector('.ex').innerHTML=(ok?'<span class="good">答對了！</span> ':'<span class="bad">再想想。</span> ')+it[3];
+      if(ok){state[qi]=true;
+        if(state.every(Boolean)){done.add('u'+u);updateProgress();box.querySelector('.done-msg').textContent='這一課完成了，左邊目錄已打勾。'}}
+    });
+    box.appendChild(d);
+  });
+  const m=document.createElement('div');m.className='done-msg';box.appendChild(m);
+});
+
+/* ---------- 第0課：一碗麵的旅程 ---------- */
+const FLOW=[["🚪","客人進門，入座","foh","客人走進店裡，服務生說「歡迎光臨」，帶到空的桌子，送上菜單和水。"],
+["📝","點餐並複誦","foh","客人點了一碗紅燒牛肉麵。服務生念一遍確認：「紅燒牛肉麵一碗，對嗎？」"],
+["🖥️","輸入收銀系統","foh","服務生把點單輸入 POS 系統，系統自動把單子印在廚房的出單機上。"],
+["🔥","廚房製作","boh","廚師看到單子，煮麵、舀湯、放上牛肉和青菜。這些食材早在前幾天就採購、驗收、備料好了。"],
+["✅","出餐檢查","boh","出餐口確認份量、擺盤、桌號都正確，才交給外場。"],
+["🍜","送到桌上","foh","服務生把麵送到正確的桌子。客人吃了幾口，服務生過來問：「還合口味嗎？」"],
+["💰","結帳收錢","foh","客人吃完到櫃台結帳，收銀員收錢、找零、開收據。錢進入店的「金流」。"],
+["🧽","清桌、洗碗","boh","服務生收走碗盤、擦乾淨桌子，讓下一組客人入座；碗盤送到洗碗區洗好，準備再次使用。"]];
+const flow=$('#flow');
+flow.innerHTML=FLOW.map((f,i)=>`<div class="fstep ${f[2]}"><span class="e">${f[0]}</span>${i+1}. ${f[1]}<span class="who">${f[2]==='foh'?'':''}</span></div>`).join('');
+let fi=-1, ftimer=null;
+function flowGo(i){
+  fi=i; const steps=flow.children;
+  Array.from(steps).forEach((s,k)=>s.classList.toggle('lit',k===i));
+  $('#fcap').innerHTML=i<0?'按下「播放」開始。':`<b>第 ${i+1} 步：${FLOW[i][1]}</b><br>${FLOW[i][3]}`;
+}
+function flowReset(){clearInterval(ftimer);ftimer=null;$('#flowPlay').textContent='播放';}
+$('#flowNext').onclick=()=>{flowReset();flowGo((fi+1)%FLOW.length)};
+$('#flowPlay').onclick=()=>{
+  if(ftimer){flowReset();return}
+  $('#flowPlay').textContent='暫停';
+  if(fi>=FLOW.length-1) fi=-1;
+  flowGo(fi+1);
+  ftimer=setInterval(()=>{ if(fi>=FLOW.length-1){flowReset();return} flowGo(fi+1)},3200);
+};
+
+/* ---------- 第2課：溫度與洗手 ---------- */
+function thermo(){
+  const t=+$('#trange').value, pct=(t+20)/120*100;
+  $('#tmark').style.bottom=`calc(${pct}% - 2px)`;
+  let z;
+  if(t<=-18) z=`<b>${t}°C</b>：<span class="good">冷凍安全區</span>。細菌幾乎停止活動（但沒有死掉，解凍後會再長）。`;
+  else if(t<=5) z=`<b>${t}°C</b>：<span class="good">冷藏安全區</span>。細菌長得很慢，食物可以保存一段時間。`;
+  else if(t<60) z=`<b>${t}°C</b>：<span class="bad">危險溫度帶！</span>細菌大量繁殖。食物放在這裡加起來最好不超過 2 小時。`;
+  else z=`<b>${t}°C</b>：<span class="good">熱保溫安全區</span>。大部分細菌無法繁殖，湯頭要保持在這裡。`;
+  $('#tzone').innerHTML=z;
+}
+$('#trange').oninput=thermo; thermo();
+let wt=null;
+$('#washBtn').onclick=()=>{
+  if(wt) return; let s=20; const steps=['搓手心','搓手背','洗指縫','洗指尖','洗大拇指','洗手腕'];
+  const tick=()=>{ $('#washOut').innerHTML=`還剩 <b>${s}</b> 秒　現在：${steps[Math.min(5,Math.floor((20-s)/3.4))]}`;
+    if(s--<=0){clearInterval(wt);wt=null;$('#washOut').innerHTML='<span class="good">完成！</span>記得用擦手紙擦乾，濕的手更容易沾上細菌。'}};
+  tick(); wt=setInterval(tick,1000);
+};
+
+/* ---------- 第4課：可食率 ---------- */
+function yieldCalc(){
+  const a=num('y1'),b=num('y2'),p=num('y3');
+  if(a<=0||b<=0){$('#yOut').innerHTML='請輸入大於 0 的重量。';return}
+  const y=b/a*100;
+  $('#yOut').innerHTML=`可食率：<b>${y.toFixed(1)}%</b><br>真實單價：<b>${fmt(p/(b/a))} 元／公斤</b>（比買價貴了 ${fmt(p/(b/a)-p)} 元）`+(b>a?'<br><span class="bad">能用的重量比買的還多？請檢查數字。</span>':'');
+}
+['y1','y2','y3'].forEach(i=>document.getElementById(i).oninput=yieldCalc); yieldCalc();
+
+/* ---------- 第5課：服務流程 ---------- */
+const SVC=[["🙇","迎賓","客人一進門就要有人打招呼，就算很忙也要說「歡迎光臨，請稍等一下」。被看見的客人願意等；沒被看見的客人會生氣。"],
+["🪑","帶位","依人數安排合適的桌子。兩個人不要一直安排到四人桌，尖峰時會浪費座位。"],
+["🥤","遞菜單、倒水","坐下後馬上送上菜單和水，讓客人知道「我們在照顧你了」。"],
+["📝","點餐並複誦","可以推薦招牌菜。記下特別要求（不要蔥、小辣），最後一定要複誦確認。"],
+["🖥️","下單","馬上輸入 POS 傳到廚房。拖越久，客人等越久。"],
+["🍜","上菜","確認桌號和菜名，說出菜名：「這是您的紅燒牛肉麵。」從客人不會被打擾的方向上菜。"],
+["👀","巡桌","客人吃了幾口後過去關心，也順便加水、收走空盤、詢問要不要加點。"],
+["💳","結帳","客人示意要結帳，就不要讓他等。確認金額、找零、給收據。"],
+["👋","送客與清桌","說「謝謝光臨」，然後立刻清桌、擦桌、重新擺設，準備迎接下一組客人。"]];
+const svc=$('#svc'); svc.style.gridTemplateColumns='repeat(3,1fr)';
+svc.innerHTML=SVC.map((s,i)=>`<button class="fstep" data-s="${i}" style="font:inherit;color:inherit"><span class="e">${s[0]}</span>${i+1}. ${s[1]}</button>`).join('');
+svc.onclick=e=>{const b=e.target.closest('[data-s]');if(!b)return;const i=+b.dataset.s;
+  Array.from(svc.children).forEach((c,k)=>c.classList.toggle('lit',k===i));
+  $('#svcCap').innerHTML=`<b>第 ${i+1} 步：${SVC[i][1]}</b><br>${SVC[i][2]}`;};
+
+/* ---------- 第6課：找零遊戲 ---------- */
+let cg={};
+function newChange(){
+  const total=Math.floor(Math.random()*95+5)*5;
+  const pays=[100,200,500,1000].filter(p=>p>total);
+  const paid=pays[Math.floor(Math.random()*pays.length)]||1000;
+  cg={total,paid};
+  $('#cgQ').innerHTML=`客人消費 <b>${total}</b> 元，給你 <b>${paid}</b> 元。`;
+  $('#cgIn').value=''; $('#cgOut').textContent='答對會顯示往上數的過程。';
+}
+function countUp(from,to){
+  // 先用最少張數湊出找零，再從小面額開始往上數
+  const D=[1000,500,200,100,50,10,5,1]; let r=to-from; const coins=[];
+  D.forEach(d=>{while(r>=d){coins.push(d);r-=d}});
+  coins.reverse(); const path=[from]; let cur=from;
+  coins.forEach(c=>{cur+=c;path.push(cur)});
+  return {path,add:coins};
+}
+function checkChange(){
+  const v=Math.round(num('cgIn')), ans=cg.paid-cg.total;
+  if(v===ans){
+    const {path,add}=countUp(cg.total,cg.paid);
+    $('#cgOut').innerHTML=`<span class="good">答對了！找 ${ans} 元。</span><br>往上數：${path[0]}`+add.map((a,i)=>` → 加 ${a} → ${path[i+1]}`).join('');
+  } else $('#cgOut').innerHTML=`<span class="bad">不對喔。</span>試試從 ${cg.total} 開始，一步一步往上加到 ${cg.paid}。`;
+}
+$('#cgOk').onclick=checkChange; $('#cgNew').onclick=newChange;
+$('#cgIn').addEventListener('keydown',e=>{if(e.key==='Enter')checkChange()});
+newChange();
+
+/* ---------- 第7課：叫貨與 FIFO ---------- */
+function orderCalc(){
+  const need=num('o1')*num('o2'), q=need+num('o3')-num('o4');
+  $('#oOut').innerHTML=`到下次進貨前會用掉：${num('o1')} × ${num('o2')} ＝ ${need} 公斤<br>叫貨量 ＝ ${need} ＋ ${num('o3')} − ${num('o4')} ＝ <b>${q>0?q:0} 公斤</b>`+(q<=0?'<br><span class="good">現有庫存已經夠用，這次不用叫。</span>':'');
+}
+['o1','o2','o3','o4'].forEach(i=>document.getElementById(i).oninput=orderCalc); orderCalc();
+let day=1; const shelf=[];
+function drawShelf(){
+  const el=$('#shelf');
+  el.innerHTML=shelf.map((d,i)=>`<div class="can ${i===0&&shelf.length>2?'old':''}">牛腱<br>第 ${d} 天<br>進貨</div>`).join('')||'<span style="color:var(--muted)">空的！要叫貨了。</span>';
+}
+[1,2,3].forEach(()=>shelf.push(day++)); drawShelf();
+$('#fIn').onclick=()=>{ if(shelf.length>=6){$('#fMsg').textContent='層架滿了！買太多會占空間、容易過期。';return}
+  shelf.push(day++); drawShelf(); $('#fMsg').textContent=`新進的「第 ${day-1} 天」放在最後面。`;};
+$('#fOut').onclick=()=>{ if(!shelf.length){$('#fMsg').textContent='沒有庫存了，趕快叫貨！';return}
+  const d=shelf.shift(); drawShelf(); $('#fMsg').textContent=`從最前面拿走「第 ${d} 天」進的那箱，最舊的先用掉。`;};
+
+/* ---------- 第8課：成本表 ---------- */
+const COST=[["熟牛腱",300,60,100],["麵條",60,100,150],["紅燒湯（整鍋成本換算）",18,100,450],["青江菜",50,80,80],["蔥花、酸菜",120,100,25]];
+const tb=$('#costT tbody');
+tb.innerHTML=COST.map((r,i)=>`<tr><td>${r[0]}</td>`+[1,2,3].map(k=>`<td class="num"><input type="number" data-r="${i}" data-k="${k}" value="${r[k]}" min="0" style="width:80px;font:inherit;text-align:right;background:var(--steel);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:2px 4px"></td>`).join('')+`<td class="num" id="cc${i}"></td></tr>`).join('');
+function costCalc(){
+  let sum=0;
+  COST.forEach((r,i)=>{const y=r[2]>0?r[2]/100:1; const c=r[1]/y*r[3]/1000; sum+=c; document.getElementById('cc'+i).textContent=c.toFixed(1)});
+  sum+=num('cMisc'); const p=num('cPrice'); const rate=p>0?sum/p*100:0;
+  let v=rate<=38?'<span class="good">在一般休閒餐廳常見範圍內。</span>':'<span class="bad">偏高，要考慮調整份量、換食材或調整售價。</span>';
+  if(rate<28&&rate>0) v='<span class="good">成本率偏低，很賺，但也要確認份量會不會讓客人覺得太少。</span>';
+  $('#cOut').innerHTML=`每碗標準成本：<b>${sum.toFixed(1)} 元</b><br>食材成本率：<b>${rate.toFixed(1)}%</b>　${v}<br>每碗毛利：${fmt(p-sum)} 元`;
+}
+tb.addEventListener('input',e=>{const t=e.target;if(!t.dataset.r)return;COST[t.dataset.r][t.dataset.k]=parseFloat(t.value)||0;costCalc()});
+['cMisc','cPrice'].forEach(i=>document.getElementById(i).oninput=costCalc); costCalc();
+
+/* ---------- 第9課：定價 ---------- */
+function priceCalc(){
+  const c=num('p1'), r=num('p2'), comp=num('p3');
+  if(r<=0){$('#pOut').textContent='目標成本率要大於 0。';return}
+  const raw=c/(r/100), round=Math.round(raw/10)*10, tail=Math.ceil(raw/10)*10-1;
+  let adv='';
+  if(comp>0){const diff=(round-comp)/comp*100;
+    if(diff>10) adv=`<br><span class="bad">比對手貴約 ${diff.toFixed(0)}%。</span>要讓客人覺得值得多付（份量、特色、環境），或想辦法降低成本。`;
+    else if(diff<-10) adv=`<br><span class="good">比對手便宜約 ${(-diff).toFixed(0)}%。</span>有價格優勢，也可以考慮稍微提高價格或增加份量。`;
+    else adv=`<br>跟對手差不多（差 ${diff.toFixed(0)}%），價格有競爭力。`;}
+  $('#pOut').innerHTML=`計算出的售價：${raw.toFixed(1)} 元<br>整數定價：<b>${round} 元</b>（實際成本率 ${(c/round*100).toFixed(1)}%，每份毛利 ${fmt(round-c)} 元）<br>尾數定價：<b>${tail} 元</b>（實際成本率 ${(c/tail*100).toFixed(1)}%）${adv}`;
+}
+['p1','p2','p3'].forEach(i=>document.getElementById(i).oninput=priceCalc); priceCalc();
+
+/* ---------- 第10課：損益平衡 ---------- */
+function beCalc(){
+  const F=num('b1'),P=num('b2'),V=num('b3'),D=num('b4')||30,A=num('b5'), m=P-V;
+  if(m<=0){$('#bOut').innerHTML='<span class="bad">售價低於或等於食材成本，每賣一份都在賠錢，永遠無法損益平衡。</span>';return}
+  const bm=F/m, bd=bm/D, profit=(A*D)*m-F, maxv=Math.max(bd,A)*1.1||1;
+  $('#bOut').innerHTML=`每份毛利：${fmt(m)} 元<br>損益平衡：每月 <b>${fmt(Math.ceil(bm))} 份</b>，每天約 <b>${Math.ceil(bd)} 份</b><br>
+  <div style="margin:10px 0;font-size:14px">損益平衡每天 ${Math.ceil(bd)} 份<div style="height:14px;background:var(--mustard);width:${bd/maxv*100}%;border-radius:3px"></div>
+  實際每天 ${A} 份<div style="height:14px;background:${A>=bd?'var(--basil)':'var(--ketchup)'};width:${A/maxv*100}%;border-radius:3px"></div></div>
+  每月${profit>=0?'<span class="good">賺</span>':'<span class="bad">賠</span>'}：<b>${fmt(Math.abs(profit))} 元</b>（只算食材和固定成本的簡化版）`;
+}
+['b1','b2','b3','b4','b5'].forEach(i=>document.getElementById(i).oninput=beCalc); beCalc();
+
+/* ---------- 第11課：菜單工程 ---------- */
+const MX={star:["⭐ 明星：紅燒牛肉麵","又受歡迎又賺錢，是店的招牌。<b>做法：</b>維持品質、放在菜單最顯眼的位置、不要隨便改。"],
+plow:["🐴 耕馬：陽春麵","很多人點，但每份賺得少。<b>做法：</b>小幅漲價、稍微調整份量，或搭配高毛利小菜做成套餐。不要急著刪，它可能是吸引客人上門的原因。"],
+puzzle:["🧩 謎題：半筋半肉麵","很賺但沒人點。<b>做法：</b>換到顯眼位置、改寫成讓人想吃的描述、請服務生主動推薦、放上照片。"],
+dog:["🐶 狗：番茄牛肉湯餃","沒人點也不賺。<b>做法：</b>通常考慮刪掉，把廚房的時間、冰箱的空間留給其他菜。除非它有特殊理由（例如某群老客人一定會點）。"]};
+$$('.quad').forEach(q=>{const f=()=>{$$('.quad').forEach(x=>x.classList.remove('sel'));q.classList.add('sel');const d=MX[q.dataset.q];$('#mxOut').innerHTML=`<b>${d[0]}</b><br>${d[1]}`};
+  q.onclick=f; q.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();f()}}});
+
+/* ---------- 第12課：排班 ---------- */
+const HRS=[[10,5],[11,25],[12,60],[13,35],[14,10],[15,6],[16,8],[17,25],[18,55],[19,45],[20,18],[21,6]];
+$('#staffBars').innerHTML=HRS.map(([h,c])=>{const s=Math.max(2,Math.ceil(c/15));
+  return `<div class="${c>=45?'peak':''}" style="height:${c/60*100}%" title="${h}點：${c} 位客人，${s} 人"><b style="position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:12px">${s}人</b><span>${h}點</span></div>`}).join('');
+
+/* ---------- 第13課：清單與總試算 ---------- */
+$('#plan').addEventListener('change',()=>{const n=$$('#plan input:checked').length;
+  $('#planOut').innerHTML=`已完成 ${n} / 12 步`+(n===12?'　<span class="good">你已經掌握開一家店的完整流程了！</span>':'')});
+function simCalc(){
+  const guests=num('s1')*num('s2')*num('s3'), rev=guests*num('s4')*num('s5');
+  const food=rev*num('s6')/100, labor=num('s7'), fixed=num('s8')+num('s9'), net=rev-food-labor-fixed;
+  const prime=rev>0?(food+labor)/rev*100:0, inv=num('s10');
+  let msg=[];
+  if(prime>65) msg.push('<span class="bad">主要成本率超過 65%，</span>食材或人事偏高。');
+  else msg.push('<span class="good">主要成本率在合理範圍。</span>');
+  if(rev>0 && num('s8')/rev>0.15) msg.push('<span class="bad">租金超過營收的 15%，</span>地點可能太貴。');
+  $('#sOut').innerHTML=`每天來客：${fmt(guests)} 人<br>每月營收：<b>${fmt(rev)} 元</b><br>食材 ${fmt(food)}｜人事 ${fmt(labor)}｜租金及其他 ${fmt(fixed)}<br>
+  主要成本率：<b>${prime.toFixed(1)}%</b><br>每月淨利：<b class="${net>=0?'good':'bad'}">${net<0?'−':''}${fmt(Math.abs(net))} 元</b>（淨利率 ${rev>0?(net/rev*100).toFixed(1):0}%）<br>
+  回本期：<b>${net>0?(inv/net).toFixed(1)+' 個月':'目前無法回本'}</b><br>${msg.join('<br>')}`;
+}
+for(let i=1;i<=10;i++) document.getElementById('s'+i).oninput=simCalc; simCalc();
+
+/* ---------- 名詞小辭典 ---------- */
+const G=[["餐廳","Restaurant","賣餐點給人吃的店。來自法文「恢復體力」。",1],["業態","Business format","餐廳的經營型態，例如小吃、速食、休閒餐廳、精緻餐廳。",1],
+["外場","Front of House, FOH","客人看得到的區域與工作：帶位、點餐、送餐、收銀。源自劇場的觀眾席。",1],["內場","Back of House, BOH","客人看不到的區域與工作：廚房、倉庫、洗碗。源自劇場的後台。",1],
+["危險溫度帶","Danger zone","約 5°C～60°C，細菌繁殖最快的溫度範圍。",2],["交叉污染","Cross-contamination","細菌從髒的東西轉移到乾淨的東西上，例如生肉砧板切生菜。",2],
+["過敏原","Allergen","會讓部分人嚴重過敏的食物，如花生、蝦蟹、蛋、奶。",2],["HACCP","Hazard Analysis and Critical Control Points","危害分析重要管制點。1960 年代為太空人食物安全發展的系統化方法。",2],
+["動線","Workflow","人和東西在空間裡移動的路線。好的動線一路往前、乾淨髒污分開。",3],["工作站","Station","廚房裡負責某一類菜的區域，工具食材都在手邊。",3],
+["廚房編制","Brigade de cuisine","艾斯可菲參考軍隊建立的廚房分工制度。",3],["主廚","Chef","法文 chef de cuisine「廚房的頭」，chef 源自拉丁文「頭」。",3],
+["副主廚","Sous chef","sous 是「在…之下」，主廚之下的第二號人物。",3],["各就各位","Mise en place","法文「放在該放的位置」。開工前準備好所有東西。",3],
+["備料","Prep","開店前把食材洗、切、醃、分裝好。",4],["可食率","Yield","能用的重量 ÷ 買進來的重量。yield 原意是產出、收成。",4],
+["標準食譜","Standard recipe","寫清楚精確份量、步驟、溫度時間、擺盤的食譜，讓每份都一樣。",4],["出餐指揮","Expeditor, Expo","在出餐口檢查、協調的人。源自拉丁文「解開腳鐐」，引申為加速。",4],
+["售完（86）","Eighty-six","歐美廚房用語，表示某道菜賣完了。由來說法不一。",4],["複誦","Repeat back","點完餐把內容念一遍給客人確認。",5],
+["巡桌","Table check","客人用餐時過去關心、補水、收盤，及早發現問題。",5],["翻桌率","Table turnover","來客組數 ÷ 桌數。一張桌子一段時間內接待幾組客人。",5],
+["LAST","Listen, Apologize, Solve, Thank","處理客訴四步：聽、道歉、解決、感謝。",5],["POS","Point of Sale","銷售點系統。電腦化收銀機，能傳單到廚房、統計銷售。",6],
+["備用金","Cash float","開店時先放在收銀抽屜裡用來找零的錢。",6],["長款、短款","Over / Short","實際現金比應有的多（長）或少（短）。",6],
+["手續費","Processing fee","客人刷卡或用電子支付時，店家要付給支付業者的費用。",6],["標準存量","Par level","到下次進貨前要用的量加安全存量。par 意為「標準」。",7],
+["安全存量","Safety stock","以防萬一多留的庫存。",7],["驗收","Receiving","貨送到時當場檢查數量、溫度、品質、日期、價格。",7],
+["先進先出","FIFO","First In, First Out，先買進來的先用。",7],["盤點","Stocktaking","定期清點所有庫存的數量與金額。",7],
+["標準成本","Standard cost","照標準食譜算出一份「應該」花多少食材錢。",8],["實際成本","Actual cost","期初庫存＋進貨−期末庫存，真正用掉的食材錢。",8],
+["食材成本率","Food cost %","食材成本 ÷ 售價（或營收）。",8],["毛利","Gross profit","售價減食材成本。「毛」是還沒扣乾淨的意思。",9],
+["淨利","Net profit","扣掉所有費用後真正賺到的錢。",10],["心理定價","Psychological pricing","利用人對價格的感受來定價，如尾數定價、對比效果。",9],
+["損益表","Profit and Loss, P&L","記錄一段時間收入、費用和利潤的表。",10],["主要成本","Prime cost","食材成本加人事成本。prime 是「最重要的」。",10],
+["固定成本","Fixed cost","不管賣多少都要付的錢，如租金。",10],["變動成本","Variable cost","賣越多花越多的錢，如食材。",10],
+["損益平衡點","Break-even point","剛好不賺不賠的銷售量。固定成本 ÷ 每份毛利。",10],["客單價","Average check","營業收入 ÷ 來客數，平均每位客人花多少。",10],
+["菜單","Menu","源自拉丁文「細小的、詳細的」。",11],["菜單工程","Menu engineering","用人氣和毛利把菜分成明星、耕馬、謎題、狗四類。1982 年提出。",11],
+["人力成本率","Labor cost %","人事成本 ÷ 營業收入。",12],["SOP","Standard Operating Procedure","標準作業程序。把最好的做法寫成固定步驟。",12],
+["TWI","Training Within Industry","二戰時美國發展的快速教人方法：準備、示範、試做、追蹤。",12],["周轉金","Working capital","開店初期用來支付租金、薪水、食材的預備資金。",13],
+["回本期","Payback period","開店總投資 ÷ 每月淨利，要多少個月才能把投資賺回來。",13]];
+function drawG(){
+  const q=$('#gq').value.trim().toLowerCase();
+  const list=G.filter(g=>!q||(g[0]+g[1]+g[2]).toLowerCase().includes(q));
+  $('#gl').innerHTML=list.map(g=>`<div class="g"><b>${g[0]}</b><i>${g[1]}｜第 ${g[3]} 課</i><br>${g[2]}<br><a href="#u${g[3]}" data-go="u${g[3]}">前往第 ${g[3]} 課</a></div>`).join('')||'<p>找不到這個名詞，換個關鍵字試試。</p>';
+}
+$('#gq').oninput=drawG; drawG();
+
+updateProgress();
+show(location.hash.slice(1)||'u0');
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-c69925116a" data-category="business"></script></body>
+</html>

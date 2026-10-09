@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>服裝設計與打版・從零到專業</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1c1c1c; --gray:#6b6b6b; --paper:#faf8f3; --khaki:#b8a67a; --khaki-d:#8a7647;
+  --linen:#ede7da; --chalk:#4a6fa5; --thread:#b8443c; --card:#ffffff;
+  --serif:'Noto Serif TC','PMingLiU',serif;
+  --sans:'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);color:var(--ink);line-height:1.9;font-size:16px;
+  background:var(--paper);
+  background-image:
+    linear-gradient(rgba(184,166,122,.10) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(184,166,122,.10) 1px,transparent 1px);
+  background-size:28px 28px; /* 像打版紙的方格 */
+}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
+
+/* ---------- 封面 ---------- */
+header{background:var(--ink);color:var(--paper);padding:56px 0 44px;position:relative}
+header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;
+  background:repeating-linear-gradient(90deg,var(--thread) 0 14px,transparent 14px 24px);} /* 紅色縫線 */
+.eyebrow{color:var(--khaki);letter-spacing:.35em;font-size:12px;font-weight:700;margin-bottom:14px}
+h1.title{font-family:var(--serif);font-weight:900;font-size:clamp(30px,6vw,52px);line-height:1.28;margin-bottom:12px}
+.sub{color:#b9b3a6;font-size:15px;max-width:560px}
+.route{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.route span{font-size:13px;border:1px solid #4a4a4a;color:#cfc8b8;border-radius:999px;padding:5px 14px}
+.route span b{color:var(--khaki)}
+
+/* ---------- 導覽 ---------- */
+nav.toc{position:sticky;top:0;z-index:50;background:rgba(250,248,243,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--linen)}
+nav.toc .wrap{display:flex;gap:6px;overflow-x:auto;padding:10px 20px;scrollbar-width:none}
+nav.toc a{flex:0 0 auto;font-size:13px;font-weight:500;color:var(--gray);text-decoration:none;padding:6px 12px;border-radius:999px;border:1px solid transparent;white-space:nowrap}
+nav.toc a:hover,nav.toc a:focus-visible{color:var(--ink);border-color:var(--khaki);outline:none}
+
+/* ---------- 章節 ---------- */
+.part{margin-top:58px;padding:20px 22px;border-radius:16px;background:var(--ink);color:var(--paper)}
+.part .pno{color:var(--khaki);font-size:13px;letter-spacing:.25em;font-weight:700}
+.part h2{font-family:var(--serif);font-weight:900;font-size:clamp(22px,4.5vw,32px);margin-top:4px}
+.part p{color:#b9b3a6;font-size:14px;margin-top:6px}
+
+section.lesson{padding:46px 0 6px}
+.lesson-tag{display:flex;align-items:baseline;gap:14px;margin-bottom:12px}
+.lesson-tag .no{font-family:var(--serif);font-weight:900;font-size:15px;color:var(--khaki-d);letter-spacing:.12em;white-space:nowrap}
+.lesson-tag h3{font-family:var(--serif);font-weight:900;font-size:clamp(21px,4vw,28px)}
+.lesson p.lead{color:#444;margin-bottom:12px}
+
+.card{background:var(--card);border:1px solid var(--linen);border-radius:14px;padding:22px;margin:16px 0;box-shadow:0 1px 3px rgba(26,26,26,.05)}
+.tip{background:#faf6ea;border-left:4px solid var(--khaki);border-radius:0 10px 10px 0;padding:13px 16px;margin:14px 0;font-size:14.5px;color:#5a5a5a}
+.tip b{color:#7a6520}
+.key{background:#e9edf5;border-left:4px solid var(--chalk);border-radius:0 10px 10px 0;padding:13px 16px;margin:14px 0;font-size:15px;font-weight:700;color:#2c4a75}
+.etym{background:#fdf1ef;border-left:4px solid var(--thread);border-radius:0 10px 10px 0;padding:13px 16px;margin:14px 0;font-size:14.5px;color:#6a4a46}
+.etym b{color:var(--thread)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:10px 0}
+th{background:var(--ink);color:#fff;font-weight:700;padding:9px 10px;text-align:left}
+td{padding:9px 10px;border-bottom:1px solid var(--linen);vertical-align:top}
+tr:nth-child(even) td{background:#f6f4ee}
+.small{font-size:13px;color:var(--gray)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.two{grid-template-columns:1fr}}
+
+/* 流程膠囊 */
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+.flow span{background:var(--linen);border:1px solid #ddd3bd;border-radius:10px;padding:7px 12px;font-size:13.5px;font-weight:500}
+.flow i{color:var(--khaki-d);font-style:normal;font-weight:700}
+.flow em{color:var(--gray);font-style:normal}
+
+/* 工具卡 */
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:12px}
+.tool{border:1px solid var(--linen);border-radius:12px;padding:14px;background:#fff}
+.tool svg{display:block;margin-bottom:8px}
+.tool b{font-size:15px}
+.tool p{font-size:13px;color:var(--gray);margin-top:4px;line-height:1.7}
+
+/* 互動共用 */
+.stage{background:#22262b;border-radius:14px;padding:18px;color:#d8d2c4}
+.stage h4{font-family:var(--serif);color:var(--linen);font-size:18px;margin-bottom:8px}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+button.ui{font-family:var(--sans);font-size:14px;font-weight:700;padding:8px 18px;border-radius:999px;border:1px solid #555;background:transparent;color:#d8d2c4;cursor:pointer;transition:.15s}
+button.ui:hover{border-color:var(--khaki);color:var(--khaki)}
+button.ui.primary{background:var(--khaki);border-color:var(--khaki);color:#1a1a1a}
+button.ui:disabled{opacity:.35;cursor:default}
+.stageflex{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start}
+.stageinfo{flex:1;min-width:230px;font-size:14px;color:#b9b3a6}
+.stageinfo b{color:var(--linen)}
+.stageinfo .num{font-family:var(--serif);color:var(--khaki);font-size:15px;font-weight:900}
+input[type=range]{width:100%;accent-color:var(--khaki)}
+.measure-dot{cursor:pointer}
+.measure-dot circle{transition:.15s}
+.measure-dot:hover circle,.measure-dot.on circle{r:7;fill:var(--thread)}
+
+/* 測驗 */
+.q{border:1px solid var(--linen);border-radius:12px;padding:14px 16px;margin:10px 0;background:#fff}
+.q .qt{font-weight:700;margin-bottom:6px}
+.q button{font-family:var(--sans);font-size:13px;border:1px solid var(--khaki);background:transparent;color:var(--khaki-d);border-radius:999px;padding:4px 14px;cursor:pointer}
+.q .ans{display:none;margin-top:8px;font-size:14px;color:#2c4a75;background:#eef1f7;border-radius:8px;padding:9px 12px}
+.q.open .ans{display:block}
+
+footer{margin-top:64px;padding:34px 0;background:var(--ink);color:#9a948a;font-size:13px;text-align:center}
+footer b{color:var(--khaki)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Fashion Design &amp; Pattern Making</div>
+    <h1 class="title">服裝設計與打版<br>從零到專業的一堂課</h1>
+    <p class="sub">不需要任何基礎。從「一件衣服怎麼誕生」講起,量身、畫版、褶子、袖子,一步一步往上蓋,連專有名詞是怎麼來的都講給你聽。</p>
+    <div class="route">
+      <span><b>第一部</b> 認識服裝的世界</span>
+      <span><b>第二部</b> 打版核心:平面變立體</span>
+      <span><b>第三部</b> 走向專業</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc"><div class="wrap">
+  <a href="#l1">1 衣服的誕生</a><a href="#l2">2 量身</a><a href="#l3">3 工具</a>
+  <a href="#l4">4 什麼是版</a><a href="#l5">5 鬆份</a><a href="#l6">6 褶子</a>
+  <a href="#l7">7 畫A字裙</a><a href="#l8">8 袖子</a><a href="#l9">9 領子</a>
+  <a href="#l10">10 版的語言</a><a href="#l11">11 放縮</a><a href="#l12">12 專業之路</a><a href="#quiz">總測驗</a>
+</div></nav>
+
+<main class="wrap">
+
+<div class="part">
+  <div class="pno">PART 1</div>
+  <h2>認識服裝的世界</h2>
+  <p>先不畫任何線。第一部只做三件事:看懂一件衣服的旅程、學會量身、認識桌上的工具。地基打穩,後面才快。</p>
+</div>
+
+<!-- 第1課 -->
+<section class="lesson" id="l1">
+  <div class="lesson-tag"><span class="no">第 1 課</span><h3>一件衣服是怎麼誕生的?</h3></div>
+  <p class="lead">你身上這件衣服,在變成衣服之前,曾經是一張畫、一疊紙、一塊平平的布。整個旅程長這樣:</p>
+  <div class="card">
+    <div class="flow">
+      <span><i>①</i> 靈感企劃<br><em>想做什麼、給誰穿</em></span>
+      <span><i>②</i> 款式圖<br><em>把想法畫出來</em></span>
+      <span><i>③</i> 規格書<br><em>寫清楚尺寸細節</em></span>
+      <span><i>④</i> 打版<br><em>畫出紙版</em></span>
+      <span><i>⑤</i> 裁布車縫<br><em>做出樣衣</em></span>
+      <span><i>⑥</i> 試穿修版<br><em>改到合身好看</em></span>
+      <span><i>⑦</i> 量產<br><em>工廠大量生產</em></span>
+    </div>
+    <p class="small">這條路上有三個關鍵角色:<b>設計師</b>負責①②③(想什麼、長怎樣),<b>打版師</b>負責④⑥(把平面圖變成能穿的立體),<b>樣衣師</b>負責⑤(把紙版縫成第一件衣服)。本課程教的,就是設計師與打版師的核心功夫。</p>
+  </div>
+  <div class="tip"><b>生活比喻:</b>蓋房子要先有建築師畫設計圖,再有結構技師畫施工圖,工人才能蓋。設計師=建築師,打版師=結構技師,紙版=施工圖。沒有版,再美的設計都只是一張畫。</div>
+  <div class="etym"><b>詞源|「打版」:</b>「版」原指印刷用的模板——同一塊版可以印出千百張一樣的紙。服裝借用這個字:把衣服每一片的形狀畫在紙上做成模板(紙版),照著它裁一百次,一百件都一樣。「打」是動詞,就是「製作出」的意思,跟「打鐵」「打造」同源。英文叫 Pattern Making。</div>
+  <div class="key">記住這句話:設計解決「好不好看」,打版解決「穿不穿得上、合不合身」。兩者都會,你就是完整的服裝人。</div>
+</section>
+
+<!-- 第2課 -->
+<section class="lesson" id="l2">
+  <div class="lesson-tag"><span class="no">第 2 課</span><h3>認識人體:量身,一切的起點</h3></div>
+  <p class="lead">衣服是給「人」穿的,所以打版的第一個數字永遠來自人體。<b>點下面人形上的圓點</b>,認識每個量身部位:</p>
+  <div class="card">
+    <div class="stage">
+      <h4>互動:量身部位地圖</h4>
+      <div class="stageflex">
+        <svg id="bodySvg" width="230" height="330" viewBox="0 0 230 330" role="img" aria-label="量身部位互動人形">
+          <!-- 人形 -->
+          <g fill="none" stroke="#8d867a" stroke-width="2">
+            <circle cx="115" cy="34" r="20"/>
+            <path d="M115 54 v10" />
+            <path d="M78 78 Q115 64 152 78 L158 118 Q160 140 152 160 L150 200 Q115 210 80 200 L78 160 Q70 140 72 118 Z"/>
+            <path d="M78 78 L58 96 L50 170 L64 172 L74 112"/>
+            <path d="M152 78 L172 96 L180 170 L166 172 L156 112"/>
+            <path d="M85 205 L80 320 M145 205 L150 320 M115 214 V250"/>
+          </g>
+          <!-- 量身線 -->
+          <g stroke="#5b79b4" stroke-width="1.6" stroke-dasharray="4 3">
+            <line x1="78" y1="78" x2="152" y2="78"/>
+            <line x1="72" y1="112" x2="158" y2="112"/>
+            <line x1="76" y1="150" x2="154" y2="150"/>
+            <line x1="79" y1="196" x2="151" y2="196"/>
+          </g>
+          <!-- 點 -->
+          <g id="dots" fill="#c9a86a" stroke="#1c1c1c" stroke-width="1.5">
+            <g class="measure-dot" data-m="shoulder"><circle cx="115" cy="76" r="5.5"/></g>
+            <g class="measure-dot" data-m="bust"><circle cx="115" cy="112" r="5.5"/></g>
+            <g class="measure-dot" data-m="waist"><circle cx="115" cy="150" r="5.5"/></g>
+            <g class="measure-dot" data-m="hip"><circle cx="115" cy="196" r="5.5"/></g>
+            <g class="measure-dot" data-m="back"><circle cx="184" cy="120" r="5.5"/></g>
+            <g class="measure-dot" data-m="sleeve"><circle cx="55" cy="130" r="5.5"/></g>
+          </g>
+          <text x="192" y="124" fill="#8d867a" font-size="10">背長</text>
+          <text x="30" y="134" fill="#8d867a" font-size="10">袖長</text>
+        </svg>
+        <div class="stageinfo" id="bodyInfo">
+          <b>👆 點一個圓點試試</b><br>每個部位都有「量哪裡」和「為什麼重要」。量身是打版的原料——量錯 1 公分,版就錯 1 公分。
+        </div>
+      </div>
+    </div>
+    <table>
+      <tr><th>部位</th><th>怎麼量</th><th>國中生參考值</th><th>決定什麼</th></tr>
+      <tr><td>胸圍</td><td>繞胸部最高點水平一圈</td><td>約 76–88 cm</td><td>上衣的寬度</td></tr>
+      <tr><td>腰圍</td><td>繞腰最細處一圈</td><td>約 60–70 cm</td><td>裙、褲的腰</td></tr>
+      <tr><td>臀圍</td><td>繞臀部最豐滿處一圈</td><td>約 82–92 cm</td><td>裙、褲穿不穿得進去</td></tr>
+      <tr><td>肩寬</td><td>左肩點量到右肩點</td><td>約 36–42 cm</td><td>上衣的骨架</td></tr>
+      <tr><td>背長</td><td>後頸骨凸點量到腰</td><td>約 36–39 cm</td><td>上衣腰線位置</td></tr>
+      <tr><td>袖長</td><td>肩點沿手臂量到手腕</td><td>約 50–56 cm</td><td>袖子長度</td></tr>
+    </table>
+    <p class="small">量身口訣:<b>皮尺貼身不勒肉、水平環繞不歪斜、受量者自然站立正常呼吸</b>。找家人互量一次,把自己的六個數字記下來——第 7 課畫裙子會用到。</p>
+  </div>
+  <div class="tip"><b>生活比喻:</b>量身就像做蛋糕前秤麵粉。食譜再好,麵粉秤錯,蛋糕一定失敗;設計再美,尺寸量錯,衣服一定不合身。</div>
+</section>
+
+<!-- 第3課 -->
+<section class="lesson" id="l3">
+  <div class="lesson-tag"><span class="no">第 3 課</span><h3>打版工具箱:桌上的七件武器</h3></div>
+  <p class="lead">工欲善其事,必先利其器。打版桌上常備這些工具,每一件都有它存在的理由:</p>
+  <div class="card">
+    <div class="tools">
+      <div class="tool"><svg width="60" height="34"><rect x="2" y="6" width="56" height="14" rx="2" fill="none" stroke="#4a6fa5" stroke-width="2"/><g stroke="#4a6fa5"><line x1="10" y1="6" x2="10" y2="20"/><line x1="18" y1="6" x2="18" y2="20"/><line x1="26" y1="6" x2="26" y2="20"/><line x1="34" y1="6" x2="34" y2="20"/><line x1="42" y1="6" x2="42" y2="20"/><line x1="50" y1="6" x2="50" y2="20"/></g></svg>
+        <b>方格尺</b><p>透明、印滿小方格的直尺。畫直線、量距離、抓平行,一支搞定,是打版師的第一把武器。</p></div>
+      <div class="tool"><svg width="60" height="34"><path d="M4 30 Q18 4 56 6" fill="none" stroke="#4a6fa5" stroke-width="2.5"/></svg>
+        <b>彎尺(雲尺/D 彎尺)</b><p>人體沒有直線——腰是彎的、袖窿是弧的。彎尺提供各種漂亮的曲線讓你「借」來畫。</p></div>
+      <div class="tool"><svg width="60" height="34"><path d="M4 17 h52" stroke="#b8443c" stroke-width="4" stroke-linecap="round"/><rect x="0" y="12" width="8" height="10" rx="2" fill="#b8443c"/></svg>
+        <b>皮尺</b><p>軟軟的量身尺,能貼著身體繞一圈。量人用皮尺,畫紙用硬尺,分工明確。</p></div>
+      <div class="tool"><svg width="60" height="34"><circle cx="14" cy="17" r="9" fill="none" stroke="#4a6fa5" stroke-width="2"/><g fill="#4a6fa5"><circle cx="23" cy="17" r="1.5"/><circle cx="20.5" cy="10.5" r="1.5"/><circle cx="14" cy="8" r="1.5"/><circle cx="7.5" cy="10.5" r="1.5"/><circle cx="5" cy="17" r="1.5"/></g><line x1="23" y1="17" x2="56" y2="17" stroke="#4a6fa5" stroke-width="2.5"/></svg>
+        <b>點線器</b><p>像小齒輪的滾輪,滾過紙會留下一排小點,用來把版型「複印」到另一張紙或布上。</p></div>
+      <div class="tool"><svg width="60" height="34"><path d="M8 26 L30 6 L52 26 Z" fill="#4a6fa5" opacity=".7"/></svg>
+        <b>粉片</b><p>三角形的畫布粉塊,在布上做記號,洗了就掉。裁縫界的「可擦拭粉筆」。</p></div>
+      <div class="tool"><svg width="60" height="34"><path d="M10 28 L44 8" stroke="#8a7647" stroke-width="3" stroke-linecap="round"/><path d="M44 8 L52 4" stroke="#333" stroke-width="5" stroke-linecap="round"/></svg>
+        <b>錐子</b><p>尖尖一支,在紙版上戳小洞標記褶尖、口袋位置——洞會透到下面每一層。</p></div>
+      <div class="tool"><svg width="60" height="34"><rect x="4" y="4" width="52" height="26" fill="none" stroke="#b8a67a" stroke-width="2"/><g stroke="#e4dcc8"><line x1="17" y1="4" x2="17" y2="30"/><line x1="30" y1="4" x2="30" y2="30"/><line x1="43" y1="4" x2="43" y2="30"/><line x1="4" y1="17" x2="56" y2="17"/></g></svg>
+        <b>打版紙(白報紙)</b><p>畫版用的大張紙,常印有淡淡方格幫你對齊——本頁的背景就是向它致敬。</p></div>
+    </div>
+  </div>
+  <div class="etym"><b>詞源|「胚布(坯布)」:</b>打版後先用便宜的白棉布做試穿樣,這種布叫胚布,英文 muslin,源自古代盛產這種布的伊拉克城市 Mosul(摩蘇爾)。「胚」就是「還沒完成的雛形」——跟「胚胎」同一個字。</div>
+  <div class="key">新手只要三樣就能開工:方格尺、皮尺、打版紙(用舊報紙、牛皮紙也行)。工具不必貴,先動手最重要。</div>
+</section>
+
+<div class="part">
+  <div class="pno">PART 2</div>
+  <h2>打版核心:讓平面變立體</h2>
+  <p>人是立體的,布是平面的——打版全部的學問,就是在這兩者之間翻譯。這一部從「版」的概念講到你親手畫出第一件 A 字裙。</p>
+</div>
+
+<!-- 第4課 -->
+<section class="lesson" id="l4">
+  <div class="lesson-tag"><span class="no">第 4 課</span><h3>什麼是「版」?把立體攤成平面</h3></div>
+  <p class="lead">先做個想像實驗:把地球儀的紙皮完整剝下來、壓平——它一定會裂開、變成好幾片奇怪的形狀,這就是世界地圖。衣服也一樣:一件立體的衣服拆開攤平,會變成好幾片形狀奇特的平面,<b>每一片的形狀,就是「版」</b>。</p>
+  <div class="card">
+    <div class="two">
+      <div>
+        <b>一件襯衫拆開有哪些片?</b>
+        <table>
+          <tr><th>裁片</th><th>片數</th></tr>
+          <tr><td>前片(左右)</td><td>2</td></tr>
+          <tr><td>後片</td><td>1</td></tr>
+          <tr><td>過肩</td><td>1–2</td></tr>
+          <tr><td>袖子(左右)</td><td>2</td></tr>
+          <tr><td>領面+領座</td><td>2–4</td></tr>
+          <tr><td>袖克夫、口袋…</td><td>若干</td></tr>
+        </table>
+        <p class="small">一件普通襯衫拆開超過 10 片。打版師的工作,就是精準畫出每一片的形狀。</p>
+      </div>
+      <div>
+        <b>「原型」:所有版的媽媽</b>
+        <p style="font-size:14px;margin-top:6px">打版不是每件衣服都從零開始。前輩們把「最貼合標準人體、沒有任何設計」的基本版先畫好,叫做<b>原型</b>(英文 Block 或 Sloper)。要設計新款時,拿原型來加寬、改長、移褶子——就像做菜先有高湯,再變化出各種湯品。</p>
+        <div class="etym" style="margin-bottom:0"><b>詞源|Block:</b>英文原意是「墊在下面的基座木塊」。原型就是墊在所有設計底下的那塊基座——先有它,上面才能長出千變萬化的款式。</div>
+      </div>
+    </div>
+  </div>
+  <div class="tip"><b>生活比喻:</b>剝橘子。橘子皮完整剝下壓平,會裂成花瓣狀的幾片——那就是橘子的「版」。人體比橘子複雜,所以衣服的版更多片、形狀更妙。</div>
+  <div class="key">打版 = 立體 → 平面的翻譯;車縫 = 平面 → 立體的還原。你畫的每一條線,最後都會站起來。</div>
+</section>
+
+<!-- 第5課 -->
+<section class="lesson" id="l5">
+  <div class="lesson-tag"><span class="no">第 5 課</span><h3>鬆份:為什麼衣服要比身體大?</h3></div>
+  <p class="lead">量出來胸圍 84,衣服就做 84?——那你連手都舉不起來。人要呼吸、要坐下、要抬手,衣服必須比身體大一點,多出來的量叫<b>鬆份</b>。</p>
+  <div class="card">
+    <table>
+      <tr><th>合身程度</th><th>胸圍鬆份</th><th>例子</th><th>感覺</th></tr>
+      <tr><td>極貼身</td><td>0 ~ +4 cm</td><td>禮服、旗袍、泳裝</td><td>展現身形,活動受限</td></tr>
+      <tr><td>合身</td><td>+6 ~ +10 cm</td><td>襯衫、西裝</td><td>俐落,日常夠用</td></tr>
+      <tr><td>寬鬆</td><td>+12 ~ +20 cm</td><td>休閒外套、工作服</td><td>好活動</td></tr>
+      <tr><td>Oversize</td><td>+20 cm 以上</td><td>落肩T、oversize 風衣</td><td>寬鬆是設計本身</td></tr>
+    </table>
+    <p class="small">同一個人、同一個胸圍 84,做旗袍可能用 88,做襯衫用 92,做 oversize 外套用 110——<b>鬆份是設計的第一個決定</b>。</p>
+  </div>
+  <div class="etym"><b>詞源|鬆份 Ease:</b>英文 ease 本意是「舒適、輕鬆」。多給的這幾公分,買的就是「舒適」二字。日文系統稱「ゆとり」(餘裕),台灣師傅也常直接說「放鬆量」。</div>
+  <div class="tip"><b>生活比喻:</b>買鞋要留一根手指的空間。腳 24 公分買 24.5 的鞋——那 0.5 公分就是鞋子的「鬆份」。</div>
+</section>
+
+<!-- 第6課 -->
+<section class="lesson" id="l6">
+  <div class="lesson-tag"><span class="no">第 6 課</span><h3>褶子:平面變立體的魔法</h3></div>
+  <p class="lead">用一張平的紙包住一顆球,紙一定會皺出多餘的角。把多餘的部分捏起來、摺掉,紙就服服貼貼包住球——<b>那個被摺掉的三角形,就是褶子(Dart)</b>。人體的胸、腰、臀都是「球面」,所以合身的衣服到處都有褶子。</p>
+  <div class="card">
+    <div class="stage">
+      <h4>互動:把褶子收起來</h4>
+      <div class="stageflex">
+        <svg id="dartSvg" width="260" height="200" viewBox="0 0 260 200" role="img" aria-label="褶子收合動畫">
+          <!-- 左:平面版 -->
+          <g id="dartFlat">
+            <path d="M20 40 L120 40 L120 170 L20 170 Z" fill="#3a3f46" stroke="#8d867a" stroke-width="1.5"/>
+            <path d="M55 170 L70 95 L85 170" fill="#22262b" stroke="#c9a86a" stroke-width="1.6" stroke-dasharray="5 3"/>
+            <circle cx="70" cy="95" r="3" fill="#c9a86a"/>
+            <text x="70" y="86" fill="#c9a86a" font-size="11" text-anchor="middle">褶尖</text>
+            <text x="70" y="190" fill="#8d867a" font-size="11" text-anchor="middle">平面:有一個三角形缺口</text>
+          </g>
+          <!-- 箭頭 -->
+          <path d="M132 105 h18 m0 0 l-6 -5 m6 5 l-6 5" stroke="#b8a67a" stroke-width="2" fill="none"/>
+          <!-- 右:立體示意 -->
+          <g id="dartSolid" opacity="0.25">
+            <path d="M170 40 L240 40 L240 170 L170 170 Z" fill="#3a3f46" stroke="#8d867a" stroke-width="1.5"/>
+            <path d="M205 170 L205 95" stroke="#c9a86a" stroke-width="1.6"/>
+            <ellipse cx="205" cy="128" rx="26" ry="34" fill="#c9a86a" opacity="0.28"/>
+            <text x="205" y="190" fill="#8d867a" font-size="11" text-anchor="middle">收合:布凸起、貼合身體</text>
+          </g>
+        </svg>
+        <div class="stageinfo">
+          <div class="btnrow"><button class="ui primary" id="dartBtn">▶ 收合褶子</button></div>
+          <span id="dartTxt"><b>左圖</b>是攤平的版:三角形是「要被摺掉的多餘量」。按下按鈕,把三角形兩邊拉在一起縫合——</span>
+        </div>
+      </div>
+    </div>
+    <p class="small" style="margin-top:10px"><b>進階一句話(先聽過就好):</b>褶子可以「搬家」。胸口那支褶,可以轉到肩線、腋下、甚至變成公主線的一部分——立體量不變,位置改變,款式就千變萬化。這叫「褶子轉移」,是中高級打版的核心技法。</p>
+  </div>
+  <div class="etym"><b>詞源|Dart:</b>英文原意是「飛鏢」。看看版上那個細長三角形——像不像一支鏢?中文「褶」從「衣」部,本意就是衣服上的摺痕。<b>「公主線 Princess Line」</b>則源自 1870 年代英國時尚為 Alexandra 王妃設計的連身剪裁:把褶子藏進一條從肩(或袖窿)直落到下擺的弧線裡,又合身又優雅,流傳至今。</div>
+  <div class="key">看到衣服上任何「縫起來的小三角」或「弧形剪接線」,你現在知道了:那都是為了把平面的布,摺成你身體的形狀。</div>
+</section>
+
+<!-- 第7課 -->
+<section class="lesson" id="l7">
+  <div class="lesson-tag"><span class="no">第 7 課</span><h3>動手畫第一個版:A 字裙(逐步教學)</h3></div>
+  <p class="lead">理論夠了,來真的。A 字裙是全世界打版課的第一件作品:片數少、線條單純,又用得到前面所有觀念。範例尺寸:<b>腰圍 64、臀圍 88、裙長 50</b>(單位 cm,畫前片的一半,因為左右對稱)。按「下一步」跟著畫:</p>
+  <div class="card">
+    <div class="stage">
+      <h4>互動:A 字裙製圖播放器</h4>
+      <div class="stageflex">
+        <svg id="skirtSvg" width="300" height="260" viewBox="0 0 300 260" role="img" aria-label="A字裙製圖步驟"></svg>
+        <div class="stageinfo">
+          <div class="num" id="skStep">步驟 0 / 8</div>
+          <div id="skTxt" style="margin-top:6px">準備好了嗎?按「下一步」開始畫線。</div>
+          <div class="btnrow" style="margin-top:14px">
+            <button class="ui" id="skPrev">← 上一步</button>
+            <button class="ui primary" id="skNext">下一步 →</button>
+            <button class="ui" id="skReset">重來</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="small" style="margin-top:10px">畫完別忘了:這只是「淨版」(衣服完成後的實際形狀)。真的要裁布,還要外加縫份、標上布紋線——第 10 課會教。</p>
+  </div>
+  <div class="tip"><b>為什麼臀圍要 ÷4?</b>裙子有前、後兩片,每片又左右對稱,所以只要畫「四分之一」再鏡射。88 ÷ 4 = 22,加 1 cm 鬆份 = 23,就是半個前片的臀寬。</div>
+  <div class="key">打版三步驟口訣:<b>先直後彎、先大後小、先框架後細節</b>——先畫基礎直線框架,再畫弧線,最後放褶子與記號。所有版都是這個順序。</div>
+</section>
+
+<!-- 第8課 -->
+<section class="lesson" id="l8">
+  <div class="lesson-tag"><span class="no">第 8 課</span><h3>袖子:打版裡最難也最迷人的一片</h3></div>
+  <p class="lead">袖子要蓋住一個會 360 度旋轉的關節——肩膀,所以它是公認最考功夫的裁片。先認識兩個名詞:衣身上挖給手臂的洞叫<b>袖窿</b>,袖子上那條山丘般的弧線叫<b>袖山</b>,兩條弧線長度必須幾乎相等,縫起來才平整。</p>
+  <div class="etym"><b>詞源|袖窿・袖山:</b>「窿」就是洞(想想「窟窿」),袖窿=給袖子的洞,英文 Armhole 直譯「手臂洞」,中西想法一模一樣。「袖山」因為那條弧線畫出來像一座山,山頂那一點正好對準肩膀最高點,叫「袖山點」。</div>
+  <div class="card">
+    <div class="stage">
+      <h4>互動:袖山高度的取捨</h4>
+      <div class="stageflex">
+        <svg id="sleeveSvg" width="280" height="190" viewBox="0 0 280 190" role="img" aria-label="袖山高度示意"></svg>
+        <div class="stageinfo">
+          <label for="capH" style="color:#d8d2c4;font-size:13.5px">拖動滑桿,改變袖山高度:</label>
+          <input type="range" id="capH" min="8" max="17" value="13" step="0.5" aria-label="袖山高度">
+          <div id="capTxt" style="margin-top:8px"></div>
+        </div>
+      </div>
+    </div>
+    <p class="small" style="margin-top:10px">這就是為什麼西裝好看但舉手卡卡,運動服好動但吊掛時腋下垮垮——<b>沒有完美的袖子,只有適合用途的袖子</b>。設計就是取捨。</p>
+  </div>
+  <div class="key">袖山高 → 袖子窄挺、垂墜漂亮、活動受限(西裝);袖山低 → 袖子寬鬆、好活動、腋下有餘布(T恤、運動服)。</div>
+</section>
+
+<!-- 第9課 -->
+<section class="lesson" id="l9">
+  <div class="lesson-tag"><span class="no">第 9 課</span><h3>領子:臉旁邊的那一圈學問</h3></div>
+  <p class="lead">領子離臉最近,是視覺焦點,也是打版精度要求最高的地方之一(誤差 0.3 cm 就看得出來)。入門先認識三種:</p>
+  <div class="card">
+    <table>
+      <tr><th>領型</th><th>結構</th><th>日常例子</th><th>打版重點</th></tr>
+      <tr><td><b>立領</b></td><td>一條豎起來的布圈</td><td>中山裝、旗袍領、教練外套</td><td>上緣要比下緣略短,才會貼脖子</td></tr>
+      <tr><td><b>襯衫領</b></td><td>領座(立起)+ 領面(翻下)兩片</td><td>你的制服襯衫</td><td>領面要比領座寬,翻下來才蓋得住縫線</td></tr>
+      <tr><td><b>平翻領</b></td><td>整片攤平貼在肩上翻出</td><td>水手領、娃娃領</td><td>外圍弧線越長越平貼,越短越立體</td></tr>
+    </table>
+    <p class="small">共同原則:<b>領子的下緣長度=衣身領圍長度</b>,兩條線要像拼圖一樣剛好接上。量領圍時皮尺繞脖子根部一圈,再加 1–2 cm 呼吸空間。</p>
+  </div>
+  <div class="etym"><b>詞源|領:</b>「領」字從「頁」部——「頁」在古文字裡就是「人頭」。所以「領」本義是脖子,「衣領」就是衣服包住脖子的部分;「領袖」一詞更是直接用衣服最重要的兩個部位(領子、袖子)比喻帶頭的人。打版師打趣說:把領子和袖子做好,你就是「領袖」了。</div>
+</section>
+
+<div class="part">
+  <div class="pno">PART 3</div>
+  <h2>走向專業</h2>
+  <p>會畫版只是開始。專業打版師的版,任何工廠拿到都能直接生產——因為版上有一套全世界通用的「語言」。</p>
+</div>
+
+<!-- 第10課 -->
+<section class="lesson" id="l10">
+  <div class="lesson-tag"><span class="no">第 10 課</span><h3>版上的語言:布紋線、縫份、刀眼</h3></div>
+  <p class="lead">一張專業的紙版,除了外形,還寫滿了「給裁剪與車縫看的指令」。少一個記號,工廠就可能做錯一整批:</p>
+  <div class="card">
+    <div class="stageflex" style="align-items:center">
+      <svg width="240" height="230" viewBox="0 0 240 230" role="img" aria-label="完整標註的裁片示意">
+        <!-- 縫份外框 -->
+        <path d="M40 24 L166 24 L186 200 L26 200 Z" fill="#fff" stroke="#b8443c" stroke-width="1.6" stroke-dasharray="6 4"/>
+        <!-- 淨版 -->
+        <path d="M52 36 L154 36 L172 188 L38 188 Z" fill="#f2eee2" stroke="#1c1c1c" stroke-width="1.8"/>
+        <!-- 布紋線 -->
+        <line x1="105" y1="56" x2="105" y2="168" stroke="#4a6fa5" stroke-width="2"/>
+        <path d="M105 56 l-5 9 h10 z M105 168 l-5 -9 h10 z" fill="#4a6fa5"/>
+        <!-- 刀眼 -->
+        <line x1="52" y1="100" x2="60" y2="100" stroke="#b8443c" stroke-width="3"/>
+        <line x1="158" y1="100" x2="166" y2="100" stroke="#b8443c" stroke-width="3"/>
+        <!-- 標籤 -->
+        <text x="105" y="90" font-size="11" fill="#1c1c1c" text-anchor="middle">A字裙・前片 ×1</text>
+        <text x="105" y="106" font-size="10" fill="#6b6b6b" text-anchor="middle">尺寸 M|布紋 ↕</text>
+        <text x="196" y="30" font-size="10" fill="#b8443c">縫份線</text>
+        <text x="120" y="184" font-size="10" fill="#1c1c1c">淨版線</text>
+        <text x="112" y="150" font-size="10" fill="#4a6fa5">布紋線</text>
+        <text x="12" y="96" font-size="10" fill="#b8443c">刀眼</text>
+      </svg>
+      <div style="flex:1;min-width:230px">
+        <table>
+          <tr><th>記號</th><th>意思</th></tr>
+          <tr><td><b style="color:#4a6fa5">布紋線(雙箭頭)</b></td><td>這條線必須平行於布的經紗方向。放歪了,裙子會斜斜地扭</td></tr>
+          <tr><td><b style="color:#b8443c">縫份(外圈虛線)</b></td><td>淨版外加的車縫餘量,一般 1 cm、下擺 3–4 cm</td></tr>
+          <tr><td><b style="color:#b8443c">刀眼(小缺口)</b></td><td>裁片邊緣剪的小記號,兩片衣服的刀眼對刀眼,車起來才不會歪</td></tr>
+          <tr><td><b>片名標註</b></td><td>款號、片名、裁幾片、尺碼、布紋方向,寫好寫滿</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="etym"><b>詞源|布紋 Grain:</b>英文 grain 原指木頭的紋理。布跟木頭一樣有「順紋」:沿著經紗(直向)最穩定不變形,斜 45 度(正斜紋 bias)最會伸縮——斜裁禮服的垂墜感就是利用這一點。<b>刀眼 Notch</b> 原意是「刻痕」,因為早期就是用剪刀在布邊剪一小刀。</div>
+  <div class="key">記住這個順序:淨版 → 加縫份 → 標布紋 → 打刀眼 → 寫片名。五步做完,你的版才算「能交給別人」的版。</div>
+</section>
+
+<!-- 第11課 -->
+<section class="lesson" id="l11">
+  <div class="lesson-tag"><span class="no">第 11 課</span><h3>放縮:一個版,變出 S 到 XL</h3></div>
+  <p class="lead">品牌不會為每個尺碼重新打版。打版師先做出中間碼(通常是 M)的「母版」,再按規則往外放大、往內縮小——這門技術叫<b>放縮</b>(Grading)。勾選下面的尺碼,看版型怎麼一圈圈長大:</p>
+  <div class="card">
+    <div class="stage">
+      <h4>互動:尺碼疊圖</h4>
+      <div class="stageflex" style="align-items:center">
+        <svg id="gradeSvg" width="250" height="230" viewBox="0 0 250 230" role="img" aria-label="放縮疊圖"></svg>
+        <div class="stageinfo">
+          <div class="btnrow" id="gradeBtns">
+            <button class="ui" data-s="S">S</button>
+            <button class="ui primary" data-s="M" disabled>M(母版)</button>
+            <button class="ui" data-s="L">L</button>
+            <button class="ui" data-s="XL">XL</button>
+          </div>
+          <div id="gradeTxt">點尺碼按鈕,把它疊上來或收起來。注意:每一圈之間的距離是固定的——這個固定距離叫<b>檔差</b>。</div>
+        </div>
+      </div>
+    </div>
+    <table>
+      <tr><th>部位</th><th>常見檔差(相鄰兩碼)</th></tr>
+      <tr><td>胸圍/臀圍</td><td>4 cm(每片 ÷4 = 1 cm)</td></tr>
+      <tr><td>腰圍</td><td>4 cm</td></tr>
+      <tr><td>衣長/裙長</td><td>1 ~ 1.5 cm</td></tr>
+      <tr><td>肩寬</td><td>1 ~ 1.2 cm</td></tr>
+    </table>
+    <p class="small">所以 M 號臀圍 92 的裙子,L 號就是 96、XL 是 100。放縮不是「等比例放大影印」——長度長得慢、圍度長得快,各部位有各自的規則,這正是專業所在。</p>
+  </div>
+  <div class="tip"><b>生活比喻:</b>放縮像俄羅斯娃娃:一層套一層、形狀相似,但不是單純放大——娃娃的臉不會跟著身體等比變大,版型的領口、袖窿也一樣有自己的節奏。</div>
+</section>
+
+<!-- 第12課 -->
+<section class="lesson" id="l12">
+  <div class="lesson-tag"><span class="no">第 12 課</span><h3>從樣衣到量產,以及你的下一步</h3></div>
+  <p class="lead">版畫好、樣衣縫好,接著是專業世界最真實的一環——<b>試穿修版</b>:請模特兒穿上樣衣,設計師與打版師圍著看:這裡吊起來、那裡多一坨、腰線高了 1 cm……記下問題、回去改版、再做一件。一個款式改 2–3 輪是家常便飯。</p>
+  <div class="card">
+    <b>兩條進階路線,都值得認識:</b>
+    <table>
+      <tr><th>路線</th><th>是什麼</th><th>特色</th></tr>
+      <tr><td><b>立體裁剪</b><br>Draping</td><td>不先畫圖,直接把胚布披在人台上,用珠針邊別邊剪,「雕塑」出形狀,再拆下來變成版</td><td>適合禮服、垂墜、不對稱等平面難以想像的設計。法國高級訂製服的看家本領</td></tr>
+      <tr><td><b>數位打版</b><br>CAD</td><td>用電腦軟體畫版、放縮、排馬克,3D 軟體還能讓虛擬模特兒直接試穿</td><td>業界主流,改版快、資料好保存。手繪基礎好的人,學 CAD 事半功倍</td></tr>
+    </table>
+    <div class="etym" style="margin-top:10px;margin-bottom:0"><b>詞源|人台・Draping:</b>立體裁剪用的假人叫「人台」(dress form),19 世紀縫紉普及後出現的工具。Draping 源自 drape(懸掛布料),因為這門技法的本質就是「讓布自己垂出形狀」。</div>
+  </div>
+  <div class="card">
+    <b>零基礎的練功地圖(照順序,不要跳)</b>
+    <div class="flow">
+      <span><i>①</i> 量身練熟<br><em>幫 5 個人量</em></span>
+      <span><i>②</i> A字裙紙版<br><em>本課第 7 課</em></span>
+      <span><i>③</i> 縫出裙子<br><em>胚布就好</em></span>
+      <span><i>④</i> 上身原型<br><em>找書照畫</em></span>
+      <span><i>⑤</i> 褶子轉移<br><em>剪紙練習</em></span>
+      <span><i>⑥</i> 襯衫全套<br><em>含領與袖</em></span>
+      <span><i>⑦</i> 放縮+CAD<br><em>進入業界標準</em></span>
+    </div>
+    <p class="small">每一步都「畫版 → 縫出來 → 穿上檢討」。衣服會誠實告訴你版哪裡畫錯了——它是最好的老師。</p>
+  </div>
+  <div class="key">職涯出口:服裝設計師、打版師(業界薪資常高於設計師,因為稀缺)、樣品開發、3D 服裝建模師。共同起點,都是你今天學的這十二課。</div>
+</section>
+
+<!-- 總測驗 -->
+<section class="lesson" id="quiz">
+  <div class="lesson-tag"><span class="no">結業</span><h3>十題總測驗</h3></div>
+  <p class="lead">先自己想,再點「看答案」。十題全對,代表你已經有跟打版師對話的基本語言了。</p>
+  <div id="quizBox"></div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">服裝設計與打版・從零到專業|單檔離線教材<br><b>SAINTDOU</b> · Simply the Minimalist · 2026</div>
+</footer>
+
+<script>
+/* ---------- 第2課 量身互動 ---------- */
+const M_INFO={
+ shoulder:'<b>肩寬</b>|左肩骨端點量到右肩骨端點(經過後頸)。它是上衣的「衣架」,肩寬錯了整件衣服都會歪。',
+ bust:'<b>胸圍</b>|皮尺經過胸部最高點,水平繞一圈。上衣所有寬度計算的起點——原型製圖第一個用到的數字。',
+ waist:'<b>腰圍</b>|腰部最細的位置水平一圈(通常在肚臍上方一點)。裙子、褲子的生死線。',
+ hip:'<b>臀圍</b>|臀部最豐滿處水平一圈。裙褲「穿不穿得進去」由它決定——版再漂亮,臀圍不夠就是進不去。',
+ back:'<b>背長</b>|從後頸最凸的那顆骨頭(低頭摸得到)沿背量到腰圍線。決定上衣腰線落在哪裡。',
+ sleeve:'<b>袖長</b>|從肩點沿微彎的手臂量到手腕骨。長袖蓋到腕骨、短袖停在上臂中段,都從這個數字增減。'
+};
+document.querySelectorAll('.measure-dot').forEach(d=>{
+  d.addEventListener('click',()=>{
+    document.querySelectorAll('.measure-dot').forEach(x=>x.classList.remove('on'));
+    d.classList.add('on');
+    document.getElementById('bodyInfo').innerHTML=M_INFO[d.dataset.m];
+  });
+});
+
+/* ---------- 第6課 褶子動畫 ---------- */
+let dartOn=false;
+document.getElementById('dartBtn').addEventListener('click',()=>{
+  dartOn=!dartOn;
+  document.getElementById('dartSolid').style.transition='opacity .6s';
+  document.getElementById('dartSolid').style.opacity=dartOn?'1':'0.25';
+  document.getElementById('dartFlat').style.transition='opacity .6s';
+  document.getElementById('dartFlat').style.opacity=dartOn?'0.35':'1';
+  document.getElementById('dartBtn').textContent=dartOn?'↺ 攤回平面':'▶ 收合褶子';
+  document.getElementById('dartTxt').innerHTML=dartOn
+    ?'<b>右圖:</b>三角形兩邊被縫在一起後,周圍的布被「逼」得凸起來(黃色亮區)——平面從此有了立體,剛好包住胸或臀的弧度。'
+    :'<b>左圖</b>是攤平的版:三角形是「要被摺掉的多餘量」。按下按鈕,把三角形兩邊拉在一起縫合——';
+});
+
+/* ---------- 第7課 A字裙播放器 ---------- */
+/* 座標:1cm = 4px,原點(30,25)。腰64 臀88 裙長50 → 前片1/4 */
+const O={x:30,y:25}, S=4;
+const P=(cx,cy)=>[O.x+cx*S, O.y+cy*S];
+function L(a,b,st){const[x1,y1]=P(...a),[x2,y2]=P(...b);return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" ${st}/>`}
+function TXT(a,t,st=''){const[x,y]=P(...a);return `<text x="${x}" y="${y}" font-size="11" fill="#d8d2c4" ${st}>${t}</text>`}
+const G='stroke="#8d867a" stroke-width="1.4" stroke-dasharray="4 3"', // 基礎線
+      K='stroke="#c9a86a" stroke-width="2.2" fill="none"',            // 完成線
+      R='stroke="#e07b6a" stroke-width="1.8" fill="none"';            // 褶
+const skSteps=[
+ {t:'<b>準備。</b>範例尺寸:腰 64、臀 88、裙長 50。我們畫「前片的一半」(左邊是前中心,會對摺裁布)。',d:''},
+ {t:'<b>步驟 1|畫基礎直角:</b>左邊直線是「前中心線」,長 50cm(裙長);上邊橫線是「腰圍基礎線」。所有版都從一個直角開始。',
+  d:L([0,0],[0,50],G)+L([0,0],[30,0],G)+TXT([1,52],'前中心線')+TXT([20,-1.5],'腰圍線')},
+ {t:'<b>步驟 2|定臀圍線:</b>從腰往下量 18cm(一般人腰到臀的距離)畫一條水平線,這是「臀圍線」。',
+  d:L([0,18],[30,18],G)+TXT([20,16.5],'臀圍線')},
+ {t:'<b>步驟 3|定臀寬:</b>臀圍 88 ÷ 4 = 22,加 1cm 鬆份 = <b>23cm</b>。在臀圍線上從前中心量 23cm,得到側縫的位置點。',
+  d:L([23,17],[23,19],'stroke="#c9a86a" stroke-width="2.5"')+TXT([24,17],'23')},
+ {t:'<b>步驟 4|定腰寬:</b>腰圍 64 ÷ 4 = 16,加褶份 2.5cm = <b>18.5cm</b>。在腰圍線上量 18.5cm。(為什麼加 2.5?因為等一下要摺掉一支 2.5cm 的褶,先借後還。)',
+  d:L([18.5,-1],[18.5,1],'stroke="#c9a86a" stroke-width="2.5"')+TXT([15.5,-1.5],'18.5')},
+ {t:'<b>步驟 5|畫側縫:</b>腰點先往上翹 0.7cm(腰是弧面,側邊要提高才平順),用彎尺把「腰點→臀點」連成微彎的弧,臀點以下畫直線到下擺、並向外撇 3cm——這 3cm 就是 A 字的「A」。',
+  d:`<path d="M ${P(18.5,-0.7)} Q ${P(21.5,8)} ${P(23,18)} L ${P(26,49)}" ${K}/>`+TXT([24,34],'側縫')},
+ {t:'<b>步驟 6|放腰褶:</b>腰寬中點(約 9cm 處)畫一支褶:寬 2.5cm、長 10cm。把步驟 4 借來的量還回去——摺起來後腰圍剛好 16cm。',
+  d:`<path d="M ${P(7.75,-0.35)} L ${P(9,10)} L ${P(10.25,-0.35)}" ${R}/>`+TXT([10.8,8],'腰褶','fill="#e07b6a"')},
+ {t:'<b>步驟 7|畫順腰線與下擺:</b>腰圍從前中心經褶子到側縫上翹點,畫成自然弧線;下擺在側縫處微微上弧,攤平才不會尖角。',
+  d:`<path d="M ${P(0,0)} Q ${P(10,0.4)} ${P(18.5,-0.7)}" ${K}/><path d="M ${P(0,50)} Q ${P(16,50.6)} ${P(26,49)}" ${K}/>`},
+ {t:'<b>步驟 8|完成!</b>描出完整外框,加上布紋線(平行前中心)。恭喜——這就是你的第一張淨版。下一步:第 10 課教你加縫份、打刀眼,就能真的裁布縫一件了。',
+  d:`<path d="M ${P(0,0)} Q ${P(10,0.4)} ${P(18.5,-0.7)} Q ${P(21.5,8)} ${P(23,18)} L ${P(26,49)} Q ${P(16,50.6)} ${P(0,50)} Z" fill="rgba(201,168,106,.14)" ${K}/>`+
+    L([4,26],[4,44],'stroke="#5b79b4" stroke-width="2"')+`<path d="M ${P(4,26)} l -4 8 h 8 z M ${P(4,44)} l -4 -8 h 8 z" fill="#5b79b4"/>`+TXT([5.5,36],'布紋','fill="#5b79b4"')}
+];
+let skI=0;
+const skSvg=document.getElementById('skirtSvg');
+function skDraw(){
+  let acc='';
+  for(let i=1;i<=skI;i++) acc+=skSteps[i].d;
+  skSvg.innerHTML=acc;
+  document.getElementById('skStep').textContent=`步驟 ${skI} / ${skSteps.length-1}`;
+  document.getElementById('skTxt').innerHTML=skSteps[skI].t;
+  document.getElementById('skPrev').disabled=skI===0;
+  document.getElementById('skNext').disabled=skI===skSteps.length-1;
+}
+document.getElementById('skNext').onclick=()=>{if(skI<skSteps.length-1){skI++;skDraw();}};
+document.getElementById('skPrev').onclick=()=>{if(skI>0){skI--;skDraw();}};
+document.getElementById('skReset').onclick=()=>{skI=0;skDraw();};
+skDraw();
+
+/* ---------- 第8課 袖山滑桿 ---------- */
+const slSvg=document.getElementById('sleeveSvg');
+function drawSleeve(){
+  const h=parseFloat(document.getElementById('capH').value); // cm
+  const s=6, ox=25, oy=20, W=38;                              // 袖寬38cm示意
+  const y0=oy+17*s*0.55;                                      // 底線位置(固定畫布)
+  const capPx=h*s*0.55, top=y0-capPx, midX=ox+W*s/2*0.55;
+  const x1=ox, x2=ox+W*s*0.55;
+  slSvg.innerHTML=
+   `<line x1="${x1}" y1="${y0}" x2="${x2}" y2="${y0}" stroke="#8d867a" stroke-width="1.4" stroke-dasharray="4 3"/>`+
+   `<path d="M ${x1} ${y0} C ${x1+30} ${y0-capPx*0.15}, ${midX-42} ${top}, ${midX} ${top} C ${midX+42} ${top}, ${x2-30} ${y0-capPx*0.15}, ${x2} ${y0}" fill="rgba(201,168,106,.15)" stroke="#c9a86a" stroke-width="2.2"/>`+
+   `<line x1="${midX}" y1="${top}" x2="${midX}" y2="${y0}" stroke="#5b79b4" stroke-width="1.5" stroke-dasharray="3 3"/>`+
+   `<circle cx="${midX}" cy="${top}" r="4" fill="#e07b6a"/>`+
+   `<text x="${midX+8}" y="${top+4}" font-size="11" fill="#e07b6a">袖山點(對肩點)</text>`+
+   `<text x="${midX+8}" y="${(top+y0)/2}" font-size="11" fill="#5b79b4">袖山高 ${h} cm</text>`+
+   `<text x="${x1}" y="${y0+16}" font-size="11" fill="#8d867a">袖寬線(手臂粗細)</text>`;
+  const t=document.getElementById('capTxt');
+  if(h>=15) t.innerHTML='<b>高袖山('+h+'cm):</b>袖子窄而挺、垂墜漂亮——西裝、正式襯衫。代價:手舉高會整件被拉起來。';
+  else if(h>=11.5) t.innerHTML='<b>中袖山('+h+'cm):</b>外觀與活動度的平衡點——大多數日常襯衫、洋裝落在這區。';
+  else t.innerHTML='<b>低袖山('+h+'cm):</b>袖子寬鬆、手怎麼舉都自由——T恤、運動服、工作服。代價:手放下時腋下有餘布。';
+}
+document.getElementById('capH').addEventListener('input',drawSleeve);
+drawSleeve();
+
+/* ---------- 第11課 放縮疊圖 ---------- */
+const gSvg=document.getElementById('gradeSvg');
+const gState={S:false,M:true,L:false,XL:false};
+const gConf={S:{k:-1,c:'#8496b0'},M:{k:0,c:'#c9a86a'},L:{k:1,c:'#a9c48f'},XL:{k:2,c:'#e07b6a'}};
+function skirtPath(k){ // k=檔差倍數:圍度每片±1cm、長±1.2cm(示意)
+  const o={x:55,y:20},s=4.2;
+  const w0=18.5+k*1, w1=23+k*1, len=50+k*1.2, flare=26+k*1;
+  const p=(cx,cy)=>`${o.x+cx*s} ${o.y+cy*s}`;
+  return `M ${p(0,0)} Q ${p(w0*0.54,0.4)} ${p(w0,-0.7)} Q ${p(w0+3,8)} ${p(w1,18)} L ${p(flare,len-1)} Q ${p(flare*0.6,len+0.6)} ${p(0,len)} Z`;
+}
+function gDraw(){
+  let s='';
+  ['XL','L','M','S'].forEach(sz=>{
+    if(gState[sz]) s+=`<path d="${skirtPath(gConf[sz].k)}" fill="none" stroke="${gConf[sz].c}" stroke-width="${sz==='M'?2.6:1.8}" ${sz==='M'?'':'stroke-dasharray="6 4"'}/>`;
+  });
+  s+='<text x="60" y="235" font-size="0"> </text>';
+  gSvg.innerHTML=s+`<text x="58" y="14" font-size="11" fill="#8d867a">實線=母版 M,虛線=放縮出的碼</text>`;
+}
+document.querySelectorAll('#gradeBtns button').forEach(b=>{
+  if(b.dataset.s==='M')return;
+  b.addEventListener('click',()=>{
+    gState[b.dataset.s]=!gState[b.dataset.s];
+    b.classList.toggle('primary',gState[b.dataset.s]);
+    gDraw();
+  });
+});
+gDraw();
+
+/* ---------- 總測驗 ---------- */
+const QA=[
+ ['設計師和打版師,誰負責「把平面圖變成能穿的立體」?','打版師。設計師解決好不好看,打版師解決穿不穿得上、合不合身。'],
+ ['「打版」的「版」字是從哪裡借來的?','印刷的模板——同一塊版能印千百張一樣的紙;紙版能裁千百片一樣的布。'],
+ ['臀圍 88 的裙子,為什麼製圖時用 88÷4=22 再加 1?','裙子分前後兩片、每片左右對稱,所以畫 1/4;加 1cm 是鬆份,人要能坐下呼吸。'],
+ ['衣服比身體大出來的量叫什麼?貼身洋裝和寬鬆外套誰的比較多?','鬆份(Ease)。寬鬆外套多(+12cm 以上),貼身洋裝少(0~+4cm)。'],
+ ['褶子(Dart)這個英文字的原意是什麼?它的功能是?','飛鏢(形狀像細長三角)。功能:把平面布多餘的量摺掉,讓布凸起貼合人體曲面。'],
+ ['「袖窿」的「窿」是什麼意思?','洞(如「窟窿」)。袖窿=衣身上給手臂的洞,英文 Armhole 同義。'],
+ ['袖山高的袖子和袖山低的袖子,各適合什麼衣服?','高袖山:窄挺好看、活動受限 → 西裝;低袖山:寬鬆好動、腋下有餘布 → T恤運動服。'],
+ ['布紋線為什麼必須平行經紗方向?','經紗方向最穩定不變形;放歪了衣服會扭斜。斜 45 度(bias)最會伸縮,是斜裁禮服的秘密。'],
+ ['什麼是「檔差」?胸圍常見檔差是多少?','相鄰兩個尺碼之間的固定差量;胸圍常見 4cm(每片 1cm)。'],
+ ['「淨版」和「裁布用的版」差在哪?','裁布的版=淨版+縫份(一般 1cm、下擺 3-4cm),還要標布紋線、刀眼、片名。']
+];
+document.getElementById('quizBox').innerHTML=QA.map((q,i)=>`
+ <div class="q" id="qq${i}">
+   <div class="qt">${i+1}. ${q[0]}</div>
+   <button onclick="document.getElementById('qq${i}').classList.toggle('open')">看答案</button>
+   <div class="ans">${q[1]}</div>
+ </div>`).join('');
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-7e61040ac4" data-category="garment"></script></body>
+</html>

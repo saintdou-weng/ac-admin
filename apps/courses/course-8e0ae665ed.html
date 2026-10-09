@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>紫微斗數｜從零到專業的互動課程</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f2f0f6;--bg2:#e7e3f0;--card:#fbfaff;--ink:#221c33;--muted:#625a75;--line:#d9d3e6;
+  --accent:#5b3a9e;--accent-soft:#ebe4f7;--on-accent:#fff;--red:#b7322c;--gold:#9a7414;--jade:#23755f;--blue:#2d5fa6;
+  --lu:#23864f;--quan:#7d3fb0;--ke:#2d64b3;--ji:#c5352b;
+  --serif:"Noto Serif TC","Songti TC","PMingLiU","MingLiU",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#120f1c;--bg2:#1b1629;--card:#1e1830;--ink:#ebe7f5;--muted:#a49cb8;--line:#342b4a;
+    --accent:#b99cf0;--accent-soft:#2a2142;--on-accent:#150f22;--red:#ec6f63;--gold:#dcb654;--jade:#5cc4a6;--blue:#7fa9ec;
+    --lu:#4cc07a;--quan:#b77ff0;--ke:#6f9fea;--ji:#ec6a5f;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#120f1c;--bg2:#1b1629;--card:#1e1830;--ink:#ebe7f5;--muted:#a49cb8;--line:#342b4a;
+  --accent:#b99cf0;--accent-soft:#2a2142;--on-accent:#150f22;--red:#ec6f63;--gold:#dcb654;--jade:#5cc4a6;--blue:#7fa9ec;
+  --lu:#4cc07a;--quan:#b77ff0;--ke:#6f9fea;--ji:#ec6a5f;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px);-webkit-text-size-adjust:100%}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16.5px;line-height:1.85}
+img,svg{max-width:100%}
+a{color:var(--accent)}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px}
+
+/* ===== shell ===== */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;display:flex;align-items:center;gap:10px;padding:9px 14px;background:var(--bg);border-bottom:1px solid var(--line)}
+.menu-btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:9px;padding:6px 11px;font:inherit;font-size:15px;cursor:pointer}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-weight:900;font-size:17px;white-space:nowrap}
+.seal{display:inline-grid;place-items:center;width:28px;height:28px;background:var(--red);color:#fff;border-radius:5px;font-size:15px;font-family:var(--serif)}
+.prog{flex:1;min-width:60px;display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
+.prog-bar{flex:1;height:6px;background:var(--bg2);border-radius:9px;overflow:hidden}
+.prog-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .4s}
+#nav{position:fixed;top:0;bottom:0;left:0;width:min(300px,86vw);background:var(--card);border-right:1px solid var(--line);transform:translateX(-102%);transition:transform .25s ease;z-index:50;overflow-y:auto;padding:calc(env(safe-area-inset-top,0px) + 16px) 10px calc(env(safe-area-inset-bottom,0px) + 24px)}
+#nav.open{transform:none}
+#nav h4{font-family:var(--serif);margin:0 8px 8px;font-size:18px}
+.nav-stage{font-size:12.5px;color:var(--muted);margin:14px 8px 4px;font-weight:700}
+#navList a{display:flex;gap:8px;align-items:flex-start;padding:6px 8px;border-radius:8px;text-decoration:none;color:var(--ink);font-size:14.5px;line-height:1.5}
+#navList a:hover{background:var(--bg2)}
+#navList a.cur{background:var(--accent-soft);color:var(--accent);font-weight:700}
+.chk{flex:none;width:16px;height:16px;border-radius:50%;border:1.5px solid var(--line);margin-top:3px}
+#navList a.done .chk{background:var(--jade);border-color:var(--jade)}
+.scrim{position:fixed;inset:0;background:rgba(10,6,20,.4);opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
+.scrim.show{opacity:1;pointer-events:auto}
+@media (min-width:1080px){
+  #nav{transform:none}
+  .scrim{display:none}
+  .menu-btn{display:none}
+  .shell{margin-left:300px}
+}
+main{max-width:740px;margin:0 auto;padding:20px 16px 70px}
+section.lesson{display:none}
+section.lesson.active{display:block;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){section.lesson.active{animation:none}.rot{animation:none!important}}
+
+/* ===== type ===== */
+.kicker{font-size:13px;color:var(--muted);margin:0 0 2px}
+h2{font-family:var(--serif);font-weight:900;font-size:clamp(25px,6vw,32px);line-height:1.3;margin:0 0 14px}
+h3{font-family:var(--serif);font-weight:900;font-size:20px;margin:30px 0 8px;padding-left:12px;border-left:5px solid var(--red);line-height:1.4}
+h4{margin:14px 0 6px;font-size:16.5px}
+p{margin:10px 0}
+ul,ol{padding-left:1.4em;margin:8px 0}
+li{margin:4px 0}
+b,strong{font-weight:700}
+.lead{font-size:17.5px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.kj{font-family:var(--serif);font-weight:900;letter-spacing:.06em;color:var(--accent);background:var(--accent-soft);padding:1px 8px;border-radius:6px;display:inline-block;margin:2px 0}
+
+/* ===== boxes ===== */
+.term,.ana,.pro,.warn,.sum{border-radius:12px;padding:12px 15px;margin:16px 0;background:var(--card);border:1px solid var(--line)}
+.term{border-left:5px solid var(--accent)}
+.term .th{font-family:var(--serif);font-weight:900;font-size:19px;color:var(--accent)}
+.term .th small{font-family:var(--sans);font-weight:500;font-size:13px;color:var(--muted);margin-left:6px}
+.origin{background:var(--accent-soft);border-radius:8px;padding:8px 11px;margin:8px 0 2px;font-size:15.5px}
+.origin::before{content:"名稱由來　";font-weight:700;color:var(--accent)}
+.ana{border-left:5px solid var(--gold)}
+.ana::before{content:"生活比喻";display:block;font-weight:700;color:var(--gold);font-size:14px}
+.pro{border-left:5px solid var(--blue)}
+.pro::before{content:"進階補充";display:block;font-weight:700;color:var(--blue);font-size:14px}
+.warn{border-left:5px solid var(--red)}
+.warn::before{content:"請注意";display:block;font-weight:700;color:var(--red);font-size:14px}
+.sum{border:2px dashed var(--line);background:transparent}
+.sum h4{margin:0 0 4px;font-family:var(--serif)}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:12px 0;border-radius:10px;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;min-width:500px;font-size:14.5px;background:var(--card);line-height:1.6}
+th,td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th:last-child,td:last-child{border-right:0}
+tr:last-child td{border-bottom:0}
+th{background:var(--bg2);font-weight:700;white-space:nowrap}
+td.big{font-family:var(--serif);font-weight:900;font-size:18px;white-space:nowrap}
+.tbl-sm table{min-width:0}
+
+/* ===== widgets ===== */
+.widget{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:18px 0}
+.wt{font-weight:700;margin:0 0 10px;display:flex;align-items:center;gap:8px;font-size:15.5px}
+.wt::before{content:"動手玩";font-size:12px;font-weight:700;background:var(--accent);color:var(--on-accent);padding:1px 8px;border-radius:20px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 10px}
+.controls label{font-size:14.5px;display:flex;align-items:center;gap:5px}
+select,input[type=number],input[type=time]{font:inherit;font-size:16px;padding:5px 8px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);max-width:100%}
+input[type=number]{width:96px}
+.btn{font:inherit;font-size:15px;font-weight:700;border:0;background:var(--accent);color:var(--on-accent);padding:7px 14px;border-radius:9px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.btn:disabled{opacity:.5}
+.seg{display:inline-flex;border:1.5px solid var(--accent);border-radius:9px;overflow:hidden}
+.seg button{font:inherit;font-size:14.5px;border:0;background:transparent;color:var(--accent);padding:5px 12px;cursor:pointer}
+.seg button.on{background:var(--accent);color:var(--on-accent)}
+.out{background:var(--bg);border-radius:10px;padding:10px 12px;font-size:15px;line-height:1.75;margin-top:10px;min-height:2.2em}
+.out b{color:var(--accent)}
+
+/* ===== sky ===== */
+.hero{border-radius:18px;overflow:hidden;background:#150f2b;color:#efe9ff;margin:0 0 20px;position:relative}
+.hero svg{display:block;width:100%;height:auto}
+.hero-txt{padding:4px 18px 18px;margin-top:-8px}
+.hero-txt h1{font-family:var(--serif);font-weight:900;font-size:clamp(34px,10vw,52px);margin:0;line-height:1.1;letter-spacing:.08em}
+.hero-txt p{margin:6px 0 0;font-size:14.5px;color:#cfc4ee}
+.rot{transform-box:view-box;transform-origin:160px 105px;animation:spin 40s linear infinite}
+@keyframes spin{to{transform:rotate(-360deg)}}
+.sky-card{border-radius:14px;overflow:hidden;background:#150f2b}
+
+/* ===== board ===== */
+.board-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:2px 0}
+.board{display:grid;grid-template-columns:repeat(4,minmax(76px,1fr));grid-auto-rows:minmax(86px,auto);gap:3px;background:var(--line);padding:3px;border-radius:12px;min-width:316px;max-width:580px;margin:0 auto}
+.cell{background:var(--card);border-radius:7px;padding:4px 5px 3px;position:relative;font-size:11.5px;line-height:1.38;display:flex;flex-direction:column;min-width:0;transition:background .3s,box-shadow .3s}
+.cell.click{cursor:pointer}
+.center{grid-row:2/4;grid-column:2/4;background:var(--bg2);border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px;font-size:12.5px;line-height:1.6}
+.center .ct{font-family:var(--serif);font-weight:900;font-size:15px;color:var(--accent)}
+.zbig{font-family:var(--serif);font-weight:900;font-size:22px;color:var(--ink);line-height:1.2}
+.zsub{font-size:11.5px;color:var(--muted)}
+.cell .tag{position:absolute;right:4px;top:3px;font-size:10.5px;font-weight:700;color:var(--muted)}
+.cell.hl{background:var(--accent-soft);box-shadow:inset 0 0 0 2px var(--accent)}
+.cell.step{background:color-mix(in srgb,var(--jade) 16%,var(--card));box-shadow:inset 0 0 0 2px var(--jade)}
+.cell.step2{background:color-mix(in srgb,var(--gold) 18%,var(--card));box-shadow:inset 0 0 0 2px var(--gold)}
+.cell.step3{background:color-mix(in srgb,var(--blue) 16%,var(--card));box-shadow:inset 0 0 0 2px var(--blue)}
+.cell.final{background:color-mix(in srgb,var(--red) 20%,var(--card));box-shadow:inset 0 0 0 3px var(--red)}
+.cell.final2{background:color-mix(in srgb,var(--blue) 26%,var(--card));box-shadow:inset 0 0 0 3px var(--blue)}
+.cell.sf-self{box-shadow:inset 0 0 0 3px var(--red);background:color-mix(in srgb,var(--red) 10%,var(--card))}
+.cell.sf-opp{box-shadow:inset 0 0 0 3px var(--blue)}
+.cell.sf-tri{box-shadow:inset 0 0 0 3px var(--gold)}
+.cell.jia{box-shadow:inset 0 0 0 2px var(--muted);background:repeating-linear-gradient(45deg,var(--card),var(--card) 6px,var(--bg2) 6px,var(--bg2) 8px)}
+.cell.fly0{box-shadow:inset 0 0 0 3px var(--lu)}.cell.fly1{box-shadow:inset 0 0 0 3px var(--quan)}.cell.fly2{box-shadow:inset 0 0 0 3px var(--ke)}.cell.fly3{box-shadow:inset 0 0 0 3px var(--ji)}
+.c-stars{display:flex;flex-wrap:wrap;gap:0 5px;font-family:var(--serif);font-weight:900;font-size:13px}
+.ms{white-space:nowrap}
+.empty{color:var(--muted);font-weight:600;font-size:11px;font-family:var(--sans)}
+.h{font-style:normal;font-family:var(--sans);font-size:10px;font-weight:700;color:#fff;border-radius:3px;padding:0 2px;margin-left:1px;vertical-align:1px}
+.h0{background:var(--lu)}.h1{background:var(--quan)}.h2{background:var(--ke)}.h3{background:var(--ji)}
+.hf{background:transparent;border:1px solid currentColor}
+.hf.h0{color:var(--lu)}.hf.h1{color:var(--quan)}.hf.h2{color:var(--ke)}.hf.h3{color:var(--ji)}
+.c-aux{font-size:10.5px;display:flex;flex-wrap:wrap;gap:0 4px;margin-top:1px}
+.gs{color:var(--jade)}.bs{color:var(--red)}.ls{color:var(--gold)}
+.c-bottom{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:2px;font-size:10.5px;padding-top:2px;border-top:1px dotted var(--line)}
+.c-pal{font-weight:700;color:var(--accent);white-space:nowrap}
+.c-gz{color:var(--muted);white-space:nowrap}
+.c-dx{font-size:10px;color:var(--muted);text-align:right}
+.tg{display:inline-block;font-size:9.5px;font-style:normal;font-weight:700;padding:0 3px;border-radius:3px;margin-left:2px;background:var(--red);color:#fff;vertical-align:1px}
+.tg.b{background:var(--blue)}.tg.g{background:var(--gold)}.tg.j{background:var(--jade)}
+.legend{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;font-size:11px;margin-top:4px}
+.info{background:var(--bg);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:14.5px;line-height:1.7}
+.info h5{margin:0 0 4px;font-size:15px;font-family:var(--serif)}
+
+/* ===== wuxing ===== */
+.wx-node text{font-family:var(--serif);font-weight:900;font-size:20px;fill:#fff;text-anchor:middle;dominant-baseline:central}
+.wx-line{fill:none;stroke-width:3;stroke-dasharray:6 6;animation:dash 1s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-12}}
+
+/* ===== star cards ===== */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:12px 0}
+.scard{border:1px solid var(--line);border-radius:12px;background:var(--card);padding:10px 11px;cursor:pointer;text-align:left;font:inherit;color:inherit;line-height:1.5}
+.scard .sn{font-family:var(--serif);font-weight:900;font-size:20px}
+.scard .sm{font-size:12.5px;color:var(--muted)}
+.scard.on{border-color:var(--accent);box-shadow:inset 0 0 0 1.5px var(--accent)}
+.sdetail{margin-top:10px}
+
+/* ===== sihua chips ===== */
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.chip{border-radius:10px;padding:6px 12px;color:#fff;font-weight:700;font-family:var(--serif);font-size:17px}
+.chip small{font-family:var(--sans);font-weight:500;font-size:12px;opacity:.9;margin-left:4px}
+.c0{background:var(--lu)}.c1{background:var(--quan)}.c2{background:var(--ke)}.c3{background:var(--ji)}
+.kjlist div{padding:3px 8px;border-radius:6px;font-family:var(--serif);font-weight:600}
+.kjlist div.on{background:var(--accent-soft);color:var(--accent);font-weight:900}
+
+/* ===== stages / pager / quiz ===== */
+.stages{display:grid;gap:10px;margin:14px 0}
+.stage{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--card)}
+.stage .no{flex:none;width:34px;height:34px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-family:var(--serif);font-weight:900}
+.stage b{display:block}
+.stage span{font-size:14px;color:var(--muted)}
+.pager{display:flex;gap:10px;justify-content:space-between;margin:34px 0 0;padding-top:16px;border-top:1px solid var(--line)}
+.pager a{flex:1;text-decoration:none;border:1px solid var(--line);border-radius:12px;padding:10px 12px;color:var(--ink);background:var(--card);font-size:14px;line-height:1.5}
+.pager a small{display:block;color:var(--muted);font-size:12.5px}
+.pager a.next{text-align:right;border-color:var(--accent)}
+.pager a.next small{color:var(--accent)}
+.quiz{margin:16px 0}
+.qq{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:10px 0}
+.qt{margin:0 0 8px;font-weight:700}
+.qo{display:grid;gap:6px}
+.qo button{font:inherit;font-size:15px;text-align:left;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:9px;padding:7px 10px;cursor:pointer}
+.qo button.ok{border-color:var(--jade);background:color-mix(in srgb,var(--jade) 16%,var(--card))}
+.qo button.no{border-color:var(--red);background:color-mix(in srgb,var(--red) 14%,var(--card))}
+.qe{margin:6px 0 0;font-size:14.5px;color:var(--muted)}
+.qscore{font-weight:700;color:var(--accent);margin-top:8px}
+.steps-list{counter-reset:s;list-style:none;padding:0}
+.steps-list li{counter-increment:s;position:relative;padding-left:38px;margin:10px 0}
+.steps-list li::before{content:counter(s);position:absolute;left:0;top:1px;width:26px;height:26px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-weight:700;font-size:14px}
+.formgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px 10px;margin-bottom:10px}
+.formgrid label{display:flex;flex-direction:column;font-size:13.5px;color:var(--muted);gap:3px}
+.formgrid select,.formgrid input{width:100%}
+</style>
+</head>
+<body>
+<nav id="nav" aria-label="課程目錄"><h4>課程目錄</h4><div id="navList"></div></nav>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="開啟目錄">目錄</button>
+  <div class="brand"><span class="seal">紫</span><span>紫微斗數課</span></div>
+  <div class="prog"><div class="prog-bar"><i id="progBar"></i></div><span id="progTxt">0%</span></div>
+</header>
+<main>
+<!-- ============ L0 ============ -->
+<section class="lesson" id="L0" data-stage="開始" data-title="課程導覽">
+  <div class="hero">
+    <svg viewBox="0 0 320 210" aria-label="星空繞著北極星旋轉的動畫">
+      <defs>
+        <radialGradient id="pg"><stop offset="0" stop-color="#e8d8ff"/><stop offset="1" stop-color="#e8d8ff" stop-opacity="0"/></radialGradient>
+        <linearGradient id="skyg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f0a24"/><stop offset="1" stop-color="#2a1d52"/></linearGradient>
+      </defs>
+      <rect width="320" height="210" fill="url(#skyg)"/>
+      <g class="rot" id="heroStars"></g>
+      <circle cx="160" cy="105" r="18" fill="url(#pg)"/>
+      <circle cx="160" cy="105" r="3.6" fill="#fff"/>
+    </svg>
+    <div class="hero-txt"><h1>紫微斗數</h1><p>從一顆不動的星開始，二十二堂課，從入門走到會自己排盤、解盤。</p></div>
+  </div>
+  <p class="lead">這是一套<b>按順序</b>設計的課程：每一課只用到前面教過的東西，所以請從第 1 課開始，一課一課往下走。</p>
+  <h3>學習地圖</h3>
+  <div class="stages">
+    <div class="stage"><div class="no">一</div><div><b>打地基（第 1–4 課）</b><span>紫微斗數是什麼、陰陽五行、天干地支、出生資料怎麼準備。</span></div></div>
+    <div class="stage"><div class="no">二</div><div><b>認識命盤（第 5–8 課）</b><span>十二格的命盤、十二宮、找出命宮與身宮、宮干和五行局。</span></div></div>
+    <div class="stage"><div class="no">三</div><div><b>安星與星曜（第 9–13 課）</b><span>親手把十四主星、輔星排進命盤，認識每顆星的個性與亮度。</span></div></div>
+    <div class="stage"><div class="no">四</div><div><b>解盤入門（第 14–17 課）</b><span>四化、三方四正、完整看盤步驟、常見格局。</span></div></div>
+    <div class="stage"><div class="no">五</div><div><b>運勢與專業（第 18–21 課）</b><span>大限、流年、飛星四化、學習路線與正確態度。</span></div></div>
+    <div class="stage"><div class="no">具</div><div><b>排盤工具（第 22 課）</b><span>輸入農曆生日，自動排出命盤，點任何一宮就能分析。</span></div></div>
+  </div>
+  <h3>課程裡的小標示</h3>
+  <div class="term"><div class="th">專有名詞<small>藍紫色框</small></div>每個新名詞第一次出現時會解釋意思。<p class="origin">也會告訴你這個名字是怎麼來的，理解由來會比死背好記很多。</p></div>
+  <div class="ana">黃色框用日常生活的例子幫你理解抽象概念。</div>
+  <div class="pro">藍色框是給想學到專業程度的人看的補充，第一次讀可以先跳過。</div>
+  <p>每個階段最後都有小測驗，答錯會告訴你原因。完成的課程會在目錄打勾。</p>
+</section>
+
+<!-- ============ L1 ============ -->
+<section class="lesson" id="L1" data-stage="第一階段　打地基" data-title="第 1 課　紫微斗數是什麼？">
+  <p class="kicker">第一階段　打地基</p>
+  <h2>第 1 課　紫微斗數是什麼？</h2>
+  <p class="lead">紫微斗數是中國傳統的一種「命理」方法：把一個人出生的<b>年、月、日、時</b>換算成一張有十二個格子的圖，叫做<b>命盤</b>，再把一百多顆有名字的「星」排進格子裡，用來描述個性、擅長的事，以及人生不同階段的狀況。</p>
+  <div class="ana">你可以先把命盤想成「用出生時間畫出來的一張人生地圖」。地圖有 12 個區域，每區代表一個人生主題（自己、家人、朋友、學業、錢…），星星就是放在區域裡的「角色」。</div>
+
+  <h3>名字拆開來看</h3>
+  <div class="term"><div class="th">紫微</div>
+    天空中北極星附近的一片星區。
+    <p class="origin">古人把天空分成「三垣二十八宿」。「垣」是城牆的意思。北天正中央、北極星周圍那一區叫「紫微垣」，被想像成天帝住的皇宮。紫微斗數把「紫微星」當成全盤最尊貴的「帝星」，就是借用這個意思。</p></div>
+  <div class="term"><div class="th">斗</div>
+    指北斗七星和南斗六星。
+    <p class="origin">古人傍晚看北斗七星的「斗柄」指向哪個方向，就知道現在是哪個季節，所以北斗像是掛在天上的時鐘和日曆。</p></div>
+  <div class="term"><div class="th">數</div>
+    推算、計算。
+    <p class="origin">合起來，「紫微斗數」就是「以紫微星為首，用星斗來推算的方法」。</p></div>
+
+  <div class="widget">
+    <div class="wt">看天空怎麼轉</div>
+    <div class="sky-card">
+      <svg viewBox="0 0 320 210" aria-label="北斗七星繞著北極星轉">
+        <rect width="320" height="210" fill="url(#skyg)"/>
+        <g class="rot" style="animation-duration:14s">
+          <g id="skyDots"></g>
+          <line x1="215" y1="68" x2="160" y2="105" stroke="#8f7fd1" stroke-width="1" stroke-dasharray="3 4"/>
+          <polyline points="200,80 215,68 232,85 218,96 200,80" fill="none" stroke="#c9b8ff" stroke-width="1.3"/>
+          <polyline points="218,96 230,112 238,130 256,142" fill="none" stroke="#c9b8ff" stroke-width="1.3"/>
+          <g fill="#fff"><circle cx="200" cy="80" r="3"/><circle cx="215" cy="68" r="3"/><circle cx="232" cy="85" r="2.6"/><circle cx="218" cy="96" r="2.4"/><circle cx="230" cy="112" r="2.8"/><circle cx="238" cy="130" r="2.8"/><circle cx="256" cy="142" r="2.8"/></g>
+          <text x="240" y="160" fill="#c9b8ff" font-size="11">北斗七星</text>
+        </g>
+        <circle cx="160" cy="105" r="18" fill="url(#pg)"/>
+        <circle cx="160" cy="105" r="3.6" fill="#fff"/>
+        <text x="160" y="130" fill="#efe9ff" font-size="11" text-anchor="middle">北極星（紫微）</text>
+      </svg>
+    </div>
+    <p class="small muted" style="margin-bottom:0">因為地球自轉，整片星空看起來都繞著北極星轉，只有北極星幾乎不動，就像大臣圍著皇帝。古人因此把它當成「帝星」。虛線是北斗「指向」北極星的方向，今天我們仍用這個方法找北極星。</p>
+  </div>
+
+  <h3>它是從哪裡來的？</h3>
+  <p>傳說是五代末、北宋初一位道士<b>陳摶</b>（號「希夷先生」）所創。不過目前能看到的比較完整古書，例如《紫微斗數全書》，大多是明代以後才刊印的，所以真正的起源學者們還在討論。近幾十年它在台灣、香港特別流行，也發展出不同的派別。</p>
+
+  <h3>跟星座、八字有什麼不同？</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th></th><th>西洋星座</th><th>八字</th><th>紫微斗數</th></tr>
+    <tr><td><b>用什麼資料</b></td><td>出生時太陽的位置</td><td>年月日時換成 8 個字</td><td>農曆年月日時與性別</td></tr>
+    <tr><td><b>長什麼樣</b></td><td>12 個星座</td><td>4 組干支</td><td>12 格命盤＋上百顆星</td></tr>
+    <tr><td><b>特色</b></td><td>簡單好入門</td><td>重五行強弱</td><td>圖像化，每個人生主題都有自己的格子</td></tr>
+  </table></div>
+
+  <div class="warn">紫微斗數是傳統文化，<b>沒有被科學證實能準確預測未來</b>。這門課把它當成一種「符號語言」和「推理遊戲」來學：可以練習邏輯、認識古代天文與曆法，也可以當成認識自己的聊天話題。但請不要用它來決定重大的事，更不要拿它嚇唬別人或替人貼標籤。</div>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>紫微斗數用「出生時間」排出一張 12 格的命盤。</li>
+    <li>紫微＝北極星附近的帝王星區；斗＝北斗南斗；數＝推算。</li>
+    <li>把它當文化與思考工具，而不是命運判決書。</li></ul></div>
+</section>
+
+<!-- ============ L2 ============ -->
+<section class="lesson" id="L2" data-stage="第一階段　打地基" data-title="第 2 課　陰陽與五行">
+  <p class="kicker">第一階段　打地基</p>
+  <h2>第 2 課　陰陽與五行</h2>
+  <p class="lead">排命盤之前，要先認識兩個古代的「分類工具」。就像學方程式之前要先會加減乘除一樣。</p>
+
+  <div class="term"><div class="th">陰陽</div>
+    把事物分成相對的兩類：白天／黑夜、熱／冷、動／靜、外向／內向、奇數／偶數。
+    <p class="origin">最早「陽」是山坡曬得到太陽的那一面，「陰」是背光的那一面。同一座山有兩面，所以陰陽不是好與壞，而是「一體的兩面」。</p></div>
+  <p>在紫微斗數裡，陰陽最重要的用途是：決定一個人的運勢是<b>順時針</b>還是<b>逆時針</b>走（第 18 課會用到）。</p>
+
+  <div class="term"><div class="th">五行</div>
+    木、火、土、金、水五種「狀態」或「能量」。
+    <p class="origin">「行」是運行、流動的意思。五行不是五種材料，而是五種變化的樣子：木＝生長向外，火＝熱力向上，土＝承載穩定，金＝收斂堅硬，水＝流動向下。</p></div>
+
+  <div class="widget">
+    <div class="wt">五行的相生與相剋</div>
+    <div class="controls"><div class="seg" id="wxSeg"><button class="on" data-m="sheng">相生</button><button data-m="ke">相剋</button></div></div>
+    <svg id="wxSvg" viewBox="0 0 300 260" style="display:block;margin:0 auto;max-width:340px"></svg>
+    <div class="out" id="wxOut"></div>
+  </div>
+
+  <div class="ana">相生像接力賽，一棒傳給下一棒；相剋像剪刀石頭布，彼此牽制，誰都不會一直贏。</div>
+  <div class="pro">相剋不一定是壞事：水剋火可以救火，金剋木可以把木頭雕成家具。命理看的是「平衡」，太多或太少都不好。</div>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>陰陽＝一體兩面，用來決定運勢方向。</li>
+    <li>相生：木→火→土→金→水→木（一個生下一個）。</li>
+    <li>相剋：木→土→水→火→金→木（隔一個剋一個）。</li></ul></div>
+</section>
+
+<!-- ============ L3 ============ -->
+<section class="lesson" id="L3" data-stage="第一階段　打地基" data-title="第 3 課　天干地支與時辰">
+  <p class="kicker">第一階段　打地基</p>
+  <h2>第 3 課　天干地支與時辰</h2>
+  <p class="lead">古人沒有阿拉伯數字，他們用兩組符號來數年、月、日、時：<b>天干</b>和<b>地支</b>。紫微斗數從頭到尾都用它們。</p>
+  <div class="term"><div class="th">干支</div>
+    天干有 10 個，地支有 12 個。
+    <p class="origin">「干」就是樹「幹」，「支」就是樹「枝」。樹幹在上面、比較少，叫天干；樹枝在下面、比較多，叫地支。</p></div>
+
+  <h3>十天干</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>順序</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr>
+    <tr><th>天干</th><td class="big">甲</td><td class="big">乙</td><td class="big">丙</td><td class="big">丁</td><td class="big">戊</td><td class="big">己</td><td class="big">庚</td><td class="big">辛</td><td class="big">壬</td><td class="big">癸</td></tr>
+    <tr><th>陰陽</th><td>陽</td><td>陰</td><td>陽</td><td>陰</td><td>陽</td><td>陰</td><td>陽</td><td>陰</td><td>陽</td><td>陰</td></tr>
+    <tr><th>五行</th><td colspan="2">木</td><td colspan="2">火</td><td colspan="2">土</td><td colspan="2">金</td><td colspan="2">水</td></tr>
+  </table></div>
+  <p>規律很好記：<b>單數是陽、雙數是陰</b>；每兩個一組，依序是木火土金水（就是上一課的相生順序）。</p>
+
+  <h3>十二地支</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>地支</th><th>生肖</th><th>時辰（現代時間）</th><th>農曆月</th><th>陰陽</th><th>五行</th></tr>
+    <tbody id="zhiTable"></tbody>
+  </table></div>
+  <div class="term"><div class="th">時辰</div>
+    古代一天分成 12 個時辰，一個時辰等於現在的 2 小時。
+    <p class="origin">每個時辰用一個地支命名。注意「子時」是晚上 11 點到凌晨 1 點，跨過了半夜，所以古人的一天其實從晚上 11 點開始。</p></div>
+  <div class="term"><div class="th">為什麼正月是「寅」？</div>
+    農曆正月對應地支「寅」，而不是第一個地支「子」。
+    <p class="origin">古人黃昏觀察北斗七星，斗柄指向「寅」方位的那個月就定為一年的第一個月，稱為「斗柄指寅」。你看，「斗」又出現了！這也是為什麼命盤從寅宮開始數月份。</p></div>
+
+  <h3>六十甲子</h3>
+  <p>天干和地支一起往前走：甲子、乙丑、丙寅、丁卯……因為陽干只配陽支、陰干只配陰支，要走 <b>60</b> 組才會再回到「甲子」。所以滿 60 歲叫「花甲」。年、月、日、時都可以用一組干支表示。</p>
+
+  <div class="widget">
+    <div class="wt">查查看：年份的干支和時辰</div>
+    <div class="controls"><label>西元年 <input type="number" id="gzYear" value="2026" min="1" max="3000"></label></div>
+    <div class="out" id="gzOut"></div>
+    <div class="controls" style="margin-top:14px"><label>出生時間 <input type="time" id="hrIn" value="21:30"></label></div>
+    <div class="out" id="hrOut"></div>
+  </div>
+  <div class="pro">公式：年干 ＝（西元年 − 4）÷ 10 的餘數（0＝甲）；年支 ＝（西元年 − 4）÷ 12 的餘數（0＝子）。例如 2026：2022 ÷ 10 餘 2 → 丙；2022 ÷ 12 餘 6 → 午，所以 2026 是丙午年（馬年）。紫微斗數用<b>農曆新年</b>換年，所以一、二月出生的人要先確認是否已過農曆年。</div>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>天干 10 個、地支 12 個，單數陽、雙數陰。</li>
+    <li>一個時辰 2 小時，子時是 23:00–00:59。</li>
+    <li>正月＝寅，因為「斗柄指寅」。</li></ul></div>
+</section>
+
+<!-- ============ L4 ============ -->
+<section class="lesson" id="L4" data-stage="第一階段　打地基" data-title="第 4 課　準備出生資料">
+  <p class="kicker">第一階段　打地基</p>
+  <h2>第 4 課　準備出生資料</h2>
+  <p class="lead">排盤需要四樣東西：<b>性別、農曆出生年、農曆月日、出生時辰</b>。這一課教你把資料準備正確，資料錯了，後面全部都會錯。</p>
+  <div class="term"><div class="th">農曆</div>
+    依照月亮圓缺訂定月份的曆法，每月初一是新月、十五左右是滿月。
+    <p class="origin">也叫「陰曆」或「夏曆」。紫微斗數以農曆的月和日來排星，所以國曆生日要先用萬年曆或手機 App 換成農曆。</p></div>
+  <ol class="steps-list">
+    <li><b>查農曆日期：</b>用萬年曆把國曆生日換成農曆，記下「農曆幾年幾月幾日」。</li>
+    <li><b>確認年份：</b>紫微斗數多以<b>農曆正月初一</b>換年。例如國曆 1 月出生、但還沒過農曆年，年份要算前一年。（八字是用「立春」換年，兩者不同。）</li>
+    <li><b>換成時辰：</b>把出生時間換成地支時辰（用上一課的工具）。</li>
+    <li><b>記下性別：</b>後面決定運勢順逆時會用到。</li>
+  </ol>
+  <div class="term"><div class="th">閏月</div>
+    農曆有時一年有 13 個月，多出來的那個月叫閏月，例如「閏四月」。
+    <p class="origin">「閏」是多出來、補上的意思，用來讓月亮曆和季節對齊。閏月出生怎麼算，各派不同：常見做法是閏月上半月（1–15 日）當本月，下半月（16 日後）當下個月；也有人整個閏月都當下個月。</p></div>
+  <div class="pro"><b>早子時與晚子時：</b>23:00–23:59 出生的人，有人認為日期要算隔天（子時已是新的一天），也有人分成「晚子時」仍算當天。<br><b>真太陽時：</b>專業排盤會依出生地的經度修正時間，因為時鐘時間和太陽實際位置不一定一致；另外台灣某些年份實施過夏令時間，要先扣掉一小時。出生時間在兩個時辰交界時，要特別小心。</div>
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>排盤要用農曆，並以農曆新年換年。</li>
+    <li>閏月、子時各派做法不同，要知道自己用的是哪一種。</li></ul></div>
+  <h3>第一階段小測驗</h3>
+  <div class="quiz" data-id="q1"></div>
+</section>
+
+<!-- ============ L5 ============ -->
+<section class="lesson" id="L5" data-stage="第二階段　認識命盤" data-title="第 5 課　命盤的樣子">
+  <p class="kicker">第二階段　認識命盤</p>
+  <h2>第 5 課　命盤的樣子</h2>
+  <p class="lead">命盤是一個 4×4 的方格，但只用<b>外圈的 12 格</b>；中間 4 格合起來，用來寫這個人的基本資料。</p>
+  <div class="term"><div class="th">宮</div>
+    命盤上的每一格叫做一個「宮」。
+    <p class="origin">「宮」原本是房屋、宮殿。命盤就像一座有 12 個房間的宮殿，每個房間住著不同的星，也負責人生的一個主題。</p></div>
+  <div class="widget">
+    <div class="wt">12 個地支的固定位置</div>
+    <div class="controls"><button class="btn" id="b5cw">播放順時針（順行）</button><button class="btn ghost" id="b5ccw">播放逆時針（逆行）</button></div>
+    <div class="board-wrap"><div id="board5"></div></div>
+    <p class="small muted" style="margin-bottom:0">點任一格，會標出它的「對宮」。</p>
+  </div>
+  <h3>三件一定要記住的事</h3>
+  <ol>
+    <li><b>寅宮永遠在左下角。</b>地支的位置是固定的，不管誰的命盤都一樣。</li>
+    <li><b>順時針叫「順行」，逆時針叫「逆行」。</b>從寅往上走到卯、辰、巳，再往右到午……就是順行。</li>
+    <li><b>正月在寅宮，二月在卯宮……</b>跟上一課「斗柄指寅」一樣。</li>
+  </ol>
+  <div class="term"><div class="th">對宮</div>
+    隔著中間、正對面的那一宮，兩者相差 6 格。例如子和午、寅和申。
+    <p class="origin">就像住在走廊對面的鄰居，門對著門，彼此影響最直接。</p></div>
+  <div class="ana">命盤像一座四合院：四邊各有房間，中間是天井。左下角的寅宮就是「大門」，數月份、數時辰都從這附近開始。</div>
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>外圈 12 格，地支位置固定，寅在左下。</li>
+    <li>順時針＝順行；逆時針＝逆行。</li>
+    <li>對宮相差 6 格。</li></ul></div>
+</section>
+
+<!-- ============ L6 ============ -->
+<section class="lesson" id="L6" data-stage="第二階段　認識命盤" data-title="第 6 課　十二宮">
+  <p class="kicker">第二階段　認識命盤</p>
+  <h2>第 6 課　十二宮：每個房間管什麼</h2>
+  <p class="lead">地支的位置固定，但「宮名」會隨著每個人的<b>命宮</b>在哪裡而移動。規則只有一條：<b>從命宮開始，逆時針依序排出 12 宮。</b></p>
+  <div class="widget">
+    <div class="wt">從命宮開始逆時針排宮</div>
+    <div class="controls"><label>命宮在 <select id="s6"></select></label><button class="btn" id="b6">逆時針排一次</button></div>
+    <div class="board-wrap"><div id="board6"></div></div>
+    <div class="info" id="i6">點命盤上任何一宮，看它負責什麼。</div>
+  </div>
+  <div class="tbl-wrap"><table>
+    <tr><th>宮名</th><th>管什麼</th><th>名稱由來</th></tr>
+    <tr><td class="big">命宮</td><td>自己的個性、天賦、做事風格，全盤最重要</td><td>「命」是天生帶來的本質</td></tr>
+    <tr><td class="big">兄弟</td><td>兄弟姊妹、同學、合作夥伴</td><td>同一輩的人</td></tr>
+    <tr><td class="big">夫妻</td><td>感情觀、伴侶相處</td><td>古代成年就婚配，所以直接叫夫妻</td></tr>
+    <tr><td class="big">子女</td><td>子女、晚輩、學生，也看創造力</td><td>下一代</td></tr>
+    <tr><td class="big">財帛</td><td>賺錢方式、理財與用錢習慣</td><td>「帛」是絲綢，古代可以當錢用</td></tr>
+    <tr><td class="big">疾厄</td><td>體質傾向、壓力來源</td><td>「疾」是病，「厄」是災難</td></tr>
+    <tr><td class="big">遷移</td><td>出門在外、旅行、在外面的人緣</td><td>「遷」是搬動、移動</td></tr>
+    <tr><td class="big">交友</td><td>朋友、同事、部屬</td><td>古書叫「奴僕宮」，現代改稱交友或僕役</td></tr>
+    <tr><td class="big">官祿</td><td>學業、工作、事業方向</td><td>古代讀書做官，領國家的「俸祿」</td></tr>
+    <tr><td class="big">田宅</td><td>家、房子、家庭氣氛、存款的「庫」</td><td>田地和住宅是古代最重要的財產</td></tr>
+    <tr><td class="big">福德</td><td>內心世界、興趣、精神享受</td><td>「福」氣和「德」行，看心裡快不快樂</td></tr>
+    <tr><td class="big">父母</td><td>父母、長輩、老師、上司、考試文書</td><td>生我、教我、管我的人</td></tr>
+  </table></div>
+  <p>口訣（逆時針順序）：<span class="kj">命兄夫子財，疾遷友官田，福父</span></p>
+  <div class="warn">疾厄宮只是傳統上看「體質傾向」的地方，不能拿來診斷疾病。身體不舒服一定要看醫生。</div>
+  <div class="pro">每一宮都可以用「命、財、官」的角度再細看。例如看「兄弟宮」時，也可以把它當成兄弟的命宮，這叫「轉宮」或「借宮」，是專業解盤常用的技巧。</div>
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>地支固定，宮名隨命宮移動。</li>
+    <li>從命宮逆時針：命、兄、夫、子、財、疾、遷、友、官、田、福、父。</li></ul></div>
+</section>
+
+<!-- ============ L7 ============ -->
+<section class="lesson" id="L7" data-stage="第二階段　認識命盤" data-title="第 7 課　找出命宮與身宮">
+  <p class="kicker">第二階段　認識命盤</p>
+  <h2>第 7 課　找出命宮與身宮</h2>
+  <p class="lead">上一課說宮名跟著命宮走，那命宮在哪裡？答案只要用<b>出生月</b>和<b>出生時辰</b>就能算出來。</p>
+  <h3>口訣與步驟</h3>
+  <p><span class="kj">寅起正月順數至生月，再起子時逆數至生時</span></p>
+  <ol class="steps-list">
+    <li>從<b>寅宮</b>當正月，<b>順時針</b>一格一個月，數到出生月份。</li>
+    <li>在停下來的那一格當作「子時」。</li>
+    <li>從那格開始<b>逆時針</b>一格一個時辰（子、丑、寅…），數到出生時辰，停下的格子就是<b>命宮</b>。</li>
+    <li>如果第 3 步改成<b>順時針</b>數，停下的格子就是<b>身宮</b>。</li>
+  </ol>
+  <div class="widget">
+    <div class="wt">一步一步安命宮、身宮</div>
+    <div class="controls"><label>農曆 <select id="s7m"></select></label><label><select id="s7h"></select></label><button class="btn" id="b7">開始</button></div>
+    <div class="board-wrap"><div id="board7"></div></div>
+    <div class="out" id="o7">選好月份和時辰後按「開始」。綠色是數月份、黃色是逆數時辰、藍色是順數時辰。</div>
+  </div>
+  <div class="term"><div class="th">身宮</div>
+    代表一個人「後天」努力的方向，傳統說中年以後影響更明顯。身宮不是第 13 個宮，而是附加在某一宮上的標記。
+    <p class="origin">命宮像「先天的你」，身宮像「你後來把自己放在哪裡」。一個是出生時的設定，一個是長大後的重心。</p></div>
+  <div class="ana">安命宮像走迷宮找寶藏：先照月份往前走幾步，再照時辰往回走幾步。月份和時辰一樣，就會走到同一個地方。</div>
+  <div class="pro"><b>速算公式：</b>把地支編號 子=0、丑=1…亥=11，時辰也一樣編號。<br>命宮 ＝（1 ＋ 月 − 時）除以 12 的餘數；身宮 ＝（1 ＋ 月 ＋ 時）除以 12 的餘數。<br><b>冷知識：</b>身宮只可能落在命宮、夫妻、財帛、遷移、官祿、福德這六宮。因為身宮比命宮多走了「兩倍時辰」的格數，永遠是偶數格。子時和午時出生的人，命宮和身宮會在同一格，叫「命身同宮」。</div>
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>寅起正月順數到生月，再從該宮起子時：逆數得命宮、順數得身宮。</li>
+    <li>身宮只會落在六個宮位之一。</li></ul></div>
+</section>
+
+<!-- ============ L8 ============ -->
+<section class="lesson" id="L8" data-stage="第二階段　認識命盤" data-title="第 8 課　宮干與五行局">
+  <p class="kicker">第二階段　認識命盤</p>
+  <h2>第 8 課　宮干與五行局</h2>
+  <p class="lead">每一宮除了地支，還要配上一個天干，叫<b>宮干</b>。有了命宮的干支，就能求出<b>五行局</b>，而五行局是下一課「安紫微星」的鑰匙。</p>
+  <h3>第一步：用「五虎遁」定宮干</h3>
+  <div class="term"><div class="th">五虎遁</div>
+    用出生年的天干，決定寅宮是哪個天干，再順時針依序往下排。
+    <p class="origin">「虎」是寅（寅年屬虎），「遁」是依序推移。意思是「從寅宮推出天干」。因為 10 個天干兩兩一組，剛好 5 組口訣，所以叫「五」虎遁。</p></div>
+  <div class="tbl-wrap tbl-sm"><table>
+    <tr><th>出生年干</th><th>寅宮天干</th><th>口訣</th></tr>
+    <tr><td>甲、己</td><td class="big">丙</td><td>甲己之年丙作首</td></tr>
+    <tr><td>乙、庚</td><td class="big">戊</td><td>乙庚之歲戊為頭</td></tr>
+    <tr><td>丙、辛</td><td class="big">庚</td><td>丙辛之歲尋庚上</td></tr>
+    <tr><td>丁、壬</td><td class="big">壬</td><td>丁壬壬寅順水流</td></tr>
+    <tr><td>戊、癸</td><td class="big">甲</td><td>戊癸甲寅好追求</td></tr>
+  </table></div>
+  <div class="widget">
+    <div class="wt">選出生年干，看 12 宮的宮干</div>
+    <div class="controls"><label>出生年干 <select id="s8"></select></label></div>
+    <div class="board-wrap"><div id="board8"></div></div>
+    <p class="small muted" style="margin-bottom:0">從寅宮開始順時針，天干依序往下排；排到子、丑時，天干剛好和寅、卯相同。</p>
+  </div>
+
+  <h3>第二步：命宮干支 → 納音 → 五行局</h3>
+  <div class="term"><div class="th">納音</div>
+    六十甲子每兩組配一種五行，而且各有一個像詩一樣的名字，例如「甲子、乙丑＝海中金」。
+    <p class="origin">「納」是收入，「音」是音律。古人把六十甲子配上五音十二律來推出五行，所以叫納音。名字很有畫面：海中金、爐中火、大林木……</p></div>
+  <div class="term"><div class="th">五行局</div>
+    把命宮干支的納音五行換成一個數字：<b>水二局、木三局、金四局、土五局、火六局</b>。
+    <p class="origin">「局」是格局、局面。這個數字是規定，直接背口訣「水二、木三、金四、土五、火六」即可。它有兩個用途：安紫微星，以及決定第一個十年大運從幾歲開始。</p></div>
+  <div class="widget">
+    <div class="wt">算出五行局</div>
+    <div class="controls"><label>出生年干 <select id="s8y"></select></label><label>命宮在 <select id="s8m"></select></label></div>
+    <div class="out" id="o8"></div>
+  </div>
+  <details><summary style="cursor:pointer;font-weight:700;margin:8px 0">展開六十甲子納音表</summary><div class="tbl-wrap"><table id="nayinTable"></table></div></details>
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>年干 → 五虎遁 → 寅宮天干 → 順排 12 宮。</li>
+    <li>命宮干支 → 納音五行 → 五行局（水2 木3 金4 土5 火6）。</li></ul></div>
+  <h3>第二階段小測驗</h3>
+  <div class="quiz" data-id="q2"></div>
+</section>
+<!-- ============ L9 ============ -->
+<section class="lesson" id="L9" data-stage="第三階段　安星與星曜" data-title="第 9 課　安紫微星">
+  <p class="kicker">第三階段　安星與星曜</p>
+  <h2>第 9 課　先找到「皇帝」：安紫微星</h2>
+  <p class="lead">命盤上有十四顆最重要的「主星」。其中紫微星是帝星，只要找到它，其他十三顆都能跟著排出來。安紫微星只需要兩個資料：<b>五行局</b>和<b>農曆出生日</b>。</p>
+  <h3>方法：做一次除法</h3>
+  <ol class="steps-list">
+    <li>用<b>出生日 ÷ 局數</b>。</li>
+    <li>如果除不盡，就「借」一個最小的數加到出生日上，讓它剛好整除。借來的數叫<b>借數</b>。</li>
+    <li>把得到的<b>商</b>從寅宮算 1，順時針數過去。</li>
+    <li>最後看借數：<b>借數是奇數，往回（逆時針）退幾格；借數是偶數，往前（順時針）進幾格</b>；沒有借數就不動。停下的地方就是紫微星。</li>
+  </ol>
+  <div class="ana">想像你有一盒糖果（出生日），要平均分給幾個人（局數）。分不完時，就向朋友借幾顆湊整。因為是「借來的」，最後要依借了幾顆，往前或往後調整位置來「還」。</div>
+  <div class="widget">
+    <div class="wt">安紫微星計算器</div>
+    <div class="controls"><label><select id="s9j"></select></label><label>農曆 <select id="s9d"></select></label></div>
+    <div class="board-wrap"><div id="board9"></div></div>
+    <div class="out" id="o9"></div>
+  </div>
+  <p>例題：金四局、十五日出生。15 ÷ 4 除不盡，借 1 變成 16，16 ÷ 4 ＝ 4。從寅數 4：寅、卯、辰、巳。借數 1 是奇數，往回退 1 格 → <b>紫微在辰</b>。</p>
+  <details><summary style="cursor:pointer;font-weight:700;margin:8px 0">展開紫微星位置總表（專業排盤用）</summary><div class="tbl-wrap"><table id="zwTable"></table></div></details>
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>出生日 ÷ 局數，除不盡就借數。</li>
+    <li>商從寅起數；借數奇數退、偶數進。</li></ul></div>
+</section>
+
+<!-- ============ L10 ============ -->
+<section class="lesson" id="L10" data-stage="第三階段　安星與星曜" data-title="第 10 課　排出十四主星">
+  <p class="kicker">第三階段　安星與星曜</p>
+  <h2>第 10 課　排出十四主星</h2>
+  <p class="lead">十四主星分成兩個「家族」：<b>紫微星系</b>（6 顆，逆時針排）和<b>天府星系</b>（8 顆，順時針排）。</p>
+  <h3>紫微星系：逆時針</h3>
+  <p><span class="kj">紫微逆去宿天機，隔一太陽武曲辰，連接天同空二宮，廉貞居處方是真</span></p>
+  <p>白話：從紫微開始逆時針，下一格是<b>天機</b>；空一格放<b>太陽</b>；接著<b>武曲</b>、<b>天同</b>；再空兩格放<b>廉貞</b>。</p>
+  <h3>天府的位置：和紫微對稱</h3>
+  <p>天府和紫微以「寅—申」這條斜線為鏡子，互相對稱。紫微在寅，天府也在寅；紫微在子，天府在辰；紫微在午，天府在戌。</p>
+  <div class="pro">公式：天府位置 ＝（4 − 紫微位置）除以 12 的餘數（子=0…亥=11）。</div>
+  <h3>天府星系：順時針</h3>
+  <p><span class="kj">天府太陰與貪狼，巨門天相及天梁，七殺空三破軍位</span></p>
+  <p>白話：從天府開始順時針依序是<b>太陰、貪狼、巨門、天相、天梁、七殺</b>，然後空三格，放<b>破軍</b>。</p>
+  <div class="widget">
+    <div class="wt">看十四主星一顆顆就位</div>
+    <div class="controls"><label>紫微在 <select id="s10"></select></label><button class="btn" id="b10">開始排星</button></div>
+    <div class="board-wrap"><div id="board10"></div></div>
+    <div class="out" id="o10">選紫微的位置，按「開始排星」。</div>
+  </div>
+  <div class="pro"><b>重要發現：</b>十四主星的排列完全由紫微的位置決定，而紫微只有 12 個可能位置，所以全世界的命盤，主星排法只有 <b>12 種基本型</b>。每個人的差別來自命宮落在哪裡、輔星、四化和大運。專業的人會把這 12 種盤型背熟。</div>
+  <div class="term"><div class="th">空宮</div>
+    沒有任何主星的宮位。
+    <p class="origin">14 顆星分 12 宮，有些宮會有兩顆，有些就空著。空宮不是壞事，看的時候會「借對宮的主星」來參考。</p></div>
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>紫微系逆行：紫微、天機、（空）、太陽、武曲、天同、（空空）、廉貞。</li>
+    <li>天府與紫微以寅申線對稱。</li>
+    <li>天府系順行：天府、太陰、貪狼、巨門、天相、天梁、七殺、（空空空）、破軍。</li></ul></div>
+</section>
+
+<!-- ============ L11 ============ -->
+<section class="lesson" id="L11" data-stage="第三階段　安星與星曜" data-title="第 11 課　十四主星的個性">
+  <p class="kicker">第三階段　安星與星曜</p>
+  <h2>第 11 課　十四主星的個性</h2>
+  <p class="lead">每顆主星都像一個有個性的角色。認識它們有三個角度：屬於哪一組星、五行、以及「化氣」。</p>
+  <div class="term"><div class="th">化氣</div>
+    一顆星最核心的性質，用一個字表示，例如紫微「化氣為尊」。
+    <p class="origin">「化」是變化、表現出來，「氣」是本質。化氣就像每個角色的「一字標籤」，是最好記的入門方法。</p></div>
+  <div class="term"><div class="th">北斗、南斗、中天</div>
+    主星分成北斗星、南斗星，以及太陽、太陰兩顆「中天星」。
+    <p class="origin">古人把天上的星群分派給不同主星，北斗主星是紫微，南斗主星是天府。太陽和月亮在天空正中運行，所以叫中天。</p></div>
+  <div class="widget">
+    <div class="wt">點卡片看每顆星</div>
+    <div class="cards" id="starCards"></div>
+    <div class="info sdetail" id="starDetail">點上面任何一顆星。</div>
+  </div>
+  <div class="warn">不能只看一顆星就下結論。同一顆星在不同宮位、和不同星同宮、有沒有四化，意思都會改變。就像同一個人在家裡和在學校表現不同。</div>
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>先記化氣：紫尊、機善、陽貴、武財、同福、廉囚、府令、陰富、貪桃花、巨暗、相印、梁蔭、殺將、破耗。</li>
+    <li>星性要搭配宮位與組合一起看。</li></ul></div>
+</section>
+
+<!-- ============ L12 ============ -->
+<section class="lesson" id="L12" data-stage="第三階段　安星與星曜" data-title="第 12 課　輔星：吉星與煞星">
+  <p class="kicker">第三階段　安星與星曜</p>
+  <h2>第 12 課　輔星：六吉、六煞、祿存與天馬</h2>
+  <p class="lead">主星是主角，輔星是配角。配角雖小，卻能讓主角的表現更好或更辛苦。入門先學這 14 顆最常用的輔星。</p>
+  <div class="term"><div class="th">六吉星與六煞星</div>
+    六吉：文昌、文曲、左輔、右弼、天魁、天鉞。六煞：擎羊、陀羅、火星、鈴星、地空、地劫。
+    <p class="origin">「吉」是幫助，「煞」是衝擊、刺激。都是兩兩成對出現，好記又好排。</p></div>
+  <div class="tbl-wrap"><table>
+    <tr><th>星名</th><th>怎麼安</th><th>代表什麼</th><th>名稱由來</th></tr>
+    <tr><td class="big" style="color:var(--jade)">文昌</td><td>戌宮起子時，逆數到生時</td><td>讀書考試、文字條理</td><td>古代管文運的星，文昌帝君</td></tr>
+    <tr><td class="big" style="color:var(--jade)">文曲</td><td>辰宮起子時，順數到生時</td><td>才藝、口才、音樂</td><td>北斗星名之一，「曲」有曲藝之意</td></tr>
+    <tr><td class="big" style="color:var(--jade)">左輔</td><td>辰宮起正月，順數到生月</td><td>同輩助力、合作</td><td>「輔」是君王的左右手</td></tr>
+    <tr><td class="big" style="color:var(--jade)">右弼</td><td>戌宮起正月，逆數到生月</td><td>較柔和、暗中的幫助</td><td>「弼」也是輔助</td></tr>
+    <tr><td class="big" style="color:var(--jade)">天魁</td><td>依出生年干（見下方口訣）</td><td>陽貴人、長輩提拔</td><td>「魁」是第一名、魁首</td></tr>
+    <tr><td class="big" style="color:var(--jade)">天鉞</td><td>依出生年干</td><td>陰貴人、暗中相助</td><td>「鉞」是古代儀仗用的大斧</td></tr>
+    <tr><td class="big" style="color:var(--gold)">祿存</td><td>依出生年干</td><td>穩定財源、保守守成</td><td>「存」下來的俸祿</td></tr>
+    <tr><td class="big" style="color:var(--red)">擎羊</td><td>祿存順時針下一格</td><td>衝勁、競爭、直接</td><td>取「羊刃」之意，像舉起的刀</td></tr>
+    <tr><td class="big" style="color:var(--red)">陀羅</td><td>祿存逆時針下一格</td><td>拖延、糾結、慢工</td><td>像陀螺在原地打轉</td></tr>
+    <tr><td class="big" style="color:var(--red)">火星</td><td>依年支定起點，順數到生時</td><td>急躁、爆發力</td><td>像烈火，一下就燒起來</td></tr>
+    <tr><td class="big" style="color:var(--red)">鈴星</td><td>依年支定起點，順數到生時</td><td>悶燒、內心壓力</td><td>像鈴聲一直在耳邊響</td></tr>
+    <tr><td class="big" style="color:var(--red)">地空</td><td>亥宮起子時，逆數到生時</td><td>想法特別、不按常理、易落空</td><td>「空」是落空</td></tr>
+    <tr><td class="big" style="color:var(--red)">地劫</td><td>亥宮起子時，順數到生時</td><td>波折、損耗</td><td>「劫」是被奪走</td></tr>
+    <tr><td class="big" style="color:var(--gold)">天馬</td><td>依出生年支</td><td>移動、變動、奔波</td><td>馬代表跑動</td></tr>
+  </table></div>
+  <h4>要背的口訣</h4>
+  <p><b>天魁天鉞：</b><span class="kj">甲戊庚牛羊，乙己鼠猴鄉，丙丁豬雞位，壬癸兔蛇藏，六辛逢馬虎</span><br><span class="small muted">例：甲年生，天魁在丑（牛）、天鉞在未（羊）。</span></p>
+  <p><b>祿存：</b>甲在寅、乙在卯、丙戊在巳、丁己在午、庚在申、辛在酉、壬在亥、癸在子。</p>
+  <p><b>火星、鈴星起點（依年支）：</b>寅午戌年：火丑、鈴卯；申子辰年：火寅、鈴戌；巳酉丑年：火卯、鈴戌；亥卯未年：火酉、鈴戌。從起點當子時順數到生時。</p>
+  <p><b>天馬：</b>申子辰年在寅、寅午戌年在申、巳酉丑年在亥、亥卯未年在巳。</p>
+  <div class="ana">煞星像辣椒：太多會嗆，但適量能讓菜更有味道。很多成功的人命盤裡都有煞星，因為煞星也代表衝勁與突破。</div>
+  <div class="pro">斗數還有上百顆「雜曜」，例如紅鸞、天喜、天刑、天姚等。各派重視程度不同，入門先把十四主星和這十四顆輔星學熟，比背很多雜曜有用。</div>
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>六吉＝昌曲、輔弼、魁鉞；六煞＝羊陀、火鈴、空劫。</li>
+    <li>擎羊、陀羅永遠夾著祿存。</li></ul></div>
+</section>
+
+<!-- ============ L13 ============ -->
+<section class="lesson" id="L13" data-stage="第三階段　安星與星曜" data-title="第 13 課　星星的亮度">
+  <p class="kicker">第三階段　安星與星曜</p>
+  <h2>第 13 課　星星的亮度：廟、旺、利、陷</h2>
+  <p class="lead">同一顆星放在不同的宮位，發揮的程度不一樣，這叫<b>亮度</b>。</p>
+  <div class="term"><div class="th">廟旺利陷</div>
+    亮度從高到低，常見分成：廟、旺、得、利、平、不、陷。
+    <p class="origin">「廟」是星住進自己的廟裡，像主人回到家，最自在；「旺」是很有力；「陷」是掉進坑裡，力量發揮不出來。</p></div>
+  <div class="widget">
+    <div class="wt">用太陽理解亮度（示意）</div>
+    <div class="controls"><button class="btn" id="b13">播放一天</button></div>
+    <div class="board-wrap"><div id="board13"></div></div>
+    <p class="small muted" style="margin-bottom:0">太陽在午宮（中午）最亮，在子宮（半夜）最暗。這是幫助理解的示意圖，實際亮度要查各派的亮度表。</p>
+  </div>
+  <div class="ana">同一個會打籃球的同學，在自己學校主場比賽特別有精神（廟旺），到很遠的客場、又遇到下雨（陷），表現就打折扣。能力沒變，是環境影響發揮。</div>
+  <div class="warn">亮度表在各派之間有不少差異，也有派別不太重視亮度。陷地的星不代表壞，只是比較需要努力或換個方式表現。</div>
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>亮度影響星曜發揮的程度。</li>
+    <li>太陽、太陰最容易理解：日在白天亮、月在夜裡亮。</li></ul></div>
+  <h3>第三階段小測驗</h3>
+  <div class="quiz" data-id="q3"></div>
+</section>
+
+<!-- ============ L14 ============ -->
+<section class="lesson" id="L14" data-stage="第四階段　解盤入門" data-title="第 14 課　四化：祿權科忌">
+  <p class="kicker">第四階段　解盤入門</p>
+  <h2>第 14 課　四化：命盤的「特效」</h2>
+  <p class="lead">排好星之後，出生年的天干會讓其中四顆星產生變化，分別加上「祿、權、科、忌」四種標記。這就是紫微斗數最核心的技巧：<b>四化</b>。</p>
+  <div class="term"><div class="th">四化</div>
+    化祿、化權、化科、化忌的合稱。
+    <p class="origin">「化」是變化。祿是古代官員的薪水，代表財源與順利；權是權力，代表掌控與主導；科是科舉考試，代表名聲、考試、貴人；忌是忌諱、阻礙，代表在意、執著、卡關。</p></div>
+  <div class="chips"><span class="chip c0">化祿<small>順利、收穫</small></span><span class="chip c1">化權<small>掌控、能力</small></span><span class="chip c2">化科<small>名聲、貴人</small></span><span class="chip c3">化忌<small>在意、卡關</small></span></div>
+  <div class="ana">把四化想成開車：化祿是綠燈一路順；化權是握緊方向盤自己決定；化科是拿到「優良駕駛」獎狀；化忌是紅燈，得停下來想清楚。紅燈不是壞東西，它提醒你哪裡要小心。</div>
+  <div class="widget">
+    <div class="wt">查十天干的四化</div>
+    <div class="controls"><label>出生年干 <select id="s14"></select></label></div>
+    <div class="chips" id="o14"></div>
+    <div class="kjlist" id="kj14"></div>
+  </div>
+  <div class="warn">「庚」和「壬」年的四化，各派有不同版本：庚年有人用「陽武同陰」（天同化科、太陰化忌），壬年有人把化科放在天府。本課程採用常見的「陽武陰同」「梁紫輔武」。</div>
+  <div class="pro">出生年干產生的四化叫<b>生年四化</b>，是一輩子都在的。之後還會學到：每十年的大限天干、每一年的流年天干、甚至每一宮的宮干，都會產生自己的四化。專業解盤就是觀察這些四化如何互相重疊。</div>
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>祿＝順利收穫、權＝掌控、科＝名聲貴人、忌＝在意卡關。</li>
+    <li>生年四化由出生年干決定，要背十句口訣。</li></ul></div>
+</section>
+
+<!-- ============ L15 ============ -->
+<section class="lesson" id="L15" data-stage="第四階段　解盤入門" data-title="第 15 課　三方四正">
+  <p class="kicker">第四階段　解盤入門</p>
+  <h2>第 15 課　三方四正：看一宮要看四宮</h2>
+  <p class="lead">解盤時，不能只看一個格子。每一宮都和另外三宮關係特別密切，合起來叫<b>三方四正</b>。</p>
+  <div class="term"><div class="th">三方四正</div>
+    本宮、對宮，加上兩個「三合宮」，一共四個宮。
+    <p class="origin">「三方」是本宮和兩個三合宮，在盤上連成一個三角形；「四正」再加上對宮，四個方向都照到。三合來自地支三合：申子辰、寅午戌、巳酉丑、亥卯未，每組彼此相隔 4 格。</p></div>
+  <div class="widget">
+    <div class="wt">點一宮，看它的三方四正</div>
+    <div class="controls"><div class="seg" id="seg15"><button class="on" data-m="sf">三方四正</button><button data-m="jia">夾宮</button></div></div>
+    <div class="board-wrap"><div id="board15"></div></div>
+    <div class="out" id="o15">點任何一格。紅框＝本宮、藍框＝對宮、黃框＝三合宮。</div>
+  </div>
+  <p>以命宮來說，它的三方四正就是：<b>命宮、遷移宮（對宮）、財帛宮、官祿宮</b>。所以看一個人的個性時，也要看他在外表現（遷移）、賺錢方式（財帛）和做事態度（官祿）。</p>
+  <div class="term"><div class="th">夾宮</div>
+    本宮左右兩邊的鄰宮。
+    <p class="origin">像坐在你左右兩邊的同學。兩邊都是吉星叫「吉星夾」，兩邊都是煞星叫「煞星夾」，對本宮有影響，但比三方四正弱。</p></div>
+  <div class="ana">評價一位同學，不只看他本人，也看他常跟誰在一起（三合）、他在對面怎麼被看待（對宮）。三方四正就是這個道理。</div>
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>三方四正＝本宮＋對宮（差 6 格）＋兩個三合宮（差 4 格）。</li>
+    <li>命宮的三方四正＝命、遷、財、官。</li></ul></div>
+</section>
+
+<!-- ============ L16 ============ -->
+<section class="lesson" id="L16" data-stage="第四階段　解盤入門" data-title="第 16 課　完整看盤一次">
+  <p class="kicker">第四階段　解盤入門</p>
+  <h2>第 16 課　完整看盤一次</h2>
+  <p class="lead">把前面學的全部串起來。以下用一位虛構人物「小明」示範，看盤的<b>順序</b>比結論更重要。</p>
+  <p>小明：男，農曆 <b>1984 年（甲子年）三月十五日 申時</b>出生。</p>
+  <div class="widget">
+    <div class="wt">小明的命盤</div>
+    <div class="board-wrap"><div id="board16"></div></div>
+    <div class="info" id="i16">點任何一宮，看它的三方四正與星曜。</div>
+  </div>
+  <h3>看盤七步驟</h3>
+  <ol class="steps-list">
+    <li><b>確認基本資料。</b>甲是陽干，所以是「陽男」。命宮在申，宮干是壬（甲年寅宮起丙，順數到申是壬），壬申納音是劍鋒金，所以是<b>金四局</b>。身宮在子，落在官祿宮。</li>
+    <li><b>看命宮主星。</b>命宮只有一顆主星<b>廉貞</b>，而且甲年廉貞<b>化祿</b>，還有右弼同宮。傳統解讀：有原則、重規矩，同時懂得經營人際關係，容易得到幫手。</li>
+    <li><b>看三方四正。</b>對宮遷移（寅）有貪狼、祿存、天馬、文昌；財帛（辰）有紫微、天相；官祿（子）有武曲化科、天府、文曲。命宮三方聚集紫微、天府、廉貞、武曲、天相，這組合叫「紫府廉武相」，特色是穩重、重視組織與管理。</li>
+    <li><b>找生年四化。</b>祿在命宮（廉貞）；權在福德（破軍）→ 內心有主見，想改變現狀；科在官祿（武曲）→ 做事重信用、容易有好名聲；忌在交友（太陽）→ 對朋友付出多，但要留意溝通，避免覺得不被理解。</li>
+    <li><b>看吉星與煞星的位置。</b>遷移宮祿存和天馬同宮，叫「祿馬交馳」，傳統認為外出發展較有利。疾厄宮有擎羊、地空，搭配天機巨門，傳統說容易想太多、神經緊繃。</li>
+    <li><b>看身宮。</b>身宮在官祿，代表後天重心放在學業與工作，而官祿宮又有化科，前後呼應。</li>
+    <li><b>處理空宮。</b>兄弟宮（未）和父母宮（酉）沒有主星，分別借對宮的「太陽太陰」和「天機巨門」來看。</li>
+  </ol>
+  <div class="warn">以上是用傳統說法做的「解盤練習」，示範思考順序，不是對任何真人的判斷。真正解盤時也要把這些描述當成「傾向」，而不是「一定會發生」。</div>
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>順序：資料 → 命宮 → 三方四正 → 四化 → 吉煞 → 身宮 → 空宮。</li>
+    <li>每個結論都要能說出「是從哪顆星、哪個宮看出來的」。</li></ul></div>
+</section>
+
+<!-- ============ L17 ============ -->
+<section class="lesson" id="L17" data-stage="第四階段　解盤入門" data-title="第 17 課　常見格局">
+  <p class="kicker">第四階段　解盤入門</p>
+  <h2>第 17 課　常見格局</h2>
+  <p class="lead">古人把一些常見的星曜組合取了名字，叫<b>格局</b>。認識格局，就像下棋時認得「定式」，看盤會快很多。</p>
+  <div class="term"><div class="th">格局</div>
+    特定星曜在特定位置組合出來的型態。
+    <p class="origin">「格」是規格、形式，「局」是局面。古書中有很多格局名稱，而且大多有附帶條件，不能只看名字。</p></div>
+  <div class="tbl-wrap"><table>
+    <tr><th>格局</th><th>怎麼組成</th><th>傳統解讀</th></tr>
+    <tr><td class="big">殺破狼</td><td>七殺、破軍、貪狼（三顆永遠在三方四正互相照）</td><td>變動、開創、衝勁，適合開拓型工作</td></tr>
+    <tr><td class="big">機月同梁</td><td>天機、太陰、天同、天梁在命宮三方四正會合</td><td>穩定、規劃、服務，傳統說適合公職或組織工作</td></tr>
+    <tr><td class="big">紫府廉武相</td><td>紫微、天府、廉貞、武曲、天相在三方四正</td><td>穩重、重秩序，擅長管理</td></tr>
+    <tr><td class="big">紫府同宮</td><td>紫微、天府同在寅或申宮</td><td>帝星加庫星，格局大、守得住</td></tr>
+    <tr><td class="big">君臣慶會</td><td>紫微遇左輔、右弼等吉星會照</td><td>領導者有好幫手</td></tr>
+    <tr><td class="big">祿馬交馳</td><td>祿存或化祿與天馬同宮或對照</td><td>動中得財，外出有利</td></tr>
+    <tr><td class="big">火貪格</td><td>貪狼與火星（或鈴星，叫鈴貪格）同宮</td><td>容易有突然的機會</td></tr>
+    <tr><td class="big">羊陀夾忌</td><td>化忌和祿存同宮，被擎羊、陀羅左右夾住</td><td>壓力較大，要穩紮穩打</td></tr>
+  </table></div>
+  <div class="pro">為什麼殺破狼一定互相照？因為在天府星系裡，貪狼在天府順數第 2 格、七殺在第 6 格、破軍在第 10 格，彼此剛好相差 4 格，正是三合的距離。同樣的推理可以用來驗證其他格局，這就是「理解」比「背誦」強的地方。</div>
+  <div class="warn">格局只是解盤的起點。古書說的「富貴」「辛苦」，都要看亮度、四化、煞星和大運來調整，不能看到名字就下定論。</div>
+  <h3>第四階段小測驗</h3>
+  <div class="quiz" data-id="q4"></div>
+</section>
+<!-- ============ L18 ============ -->
+<section class="lesson" id="L18" data-stage="第五階段　運勢與專業" data-title="第 18 課　大限：十年一運">
+  <p class="kicker">第五階段　運勢與專業</p>
+  <h2>第 18 課　大限：人生每十年換一個主題</h2>
+  <p class="lead">前面看的是「本命」，也就是一輩子的基本設定。接下來要看時間：人生每 10 年一段，叫<b>大限</b>。</p>
+  <div class="term"><div class="th">大限</div>
+    以 10 年為一段的運勢，每段落在一個宮位。
+    <p class="origin">「限」是期限、階段。人生被分成一段一段的期限，每段有不同的舞台，所以叫大限；後面還有更小的「小限」。</p></div>
+  <h3>規則</h3>
+  <ol class="steps-list">
+    <li>第一個大限在<b>命宮</b>，起始歲數就是<b>五行局數</b>。例如金四局：4–13 歲。</li>
+    <li>之後每 10 年換下一宮。方向看<b>陰陽和性別</b>：<b>陽男、陰女順行</b>（順時針）；<b>陰男、陽女逆行</b>（逆時針）。</li>
+    <li>陽男是陽年（甲丙戊庚壬）出生的男生，以此類推。</li>
+  </ol>
+  <div class="term"><div class="th">虛歲</div>
+    傳統算年齡的方法：出生就算 1 歲，每過一個農曆年加 1 歲。
+    <p class="origin">古人把在媽媽肚子裡的時間也算進去，所以一出生就是 1 歲。大限、小限都用虛歲。</p></div>
+  <div class="widget">
+    <div class="wt">小明的大限：切換性別看方向</div>
+    <div class="controls"><div class="seg" id="seg18"><button class="on" data-g="1">男（陽男・順行）</button><button data-g="0">女（陽女・逆行）</button></div></div>
+    <div class="board-wrap"><div id="board18"></div></div>
+    <div class="out" id="o18"></div>
+  </div>
+  <div class="term"><div class="th">疊宮</div>
+    大限命宮落在本命的哪一宮，就把兩者「疊」起來看。
+    <p class="origin">像把兩張透明片疊在一起。例如小明 34–43 歲的大限命宮在亥宮，而亥宮是他本命的田宅宮，傳統就會說這十年「家庭、居住、置產」的主題比較突出。</p></div>
+  <div class="pro">每個大限也有自己的十二宮：大限命宮所在的宮當作「大命」，再逆時針排出大兄、大夫……大限命宮的宮干會產生<b>大限四化</b>，是判斷這十年重點的關鍵。</div>
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>第一個大限從命宮起，起歲＝局數。</li>
+    <li>陽男陰女順行，陰男陽女逆行，用虛歲計算。</li></ul></div>
+</section>
+
+<!-- ============ L19 ============ -->
+<section class="lesson" id="L19" data-stage="第五階段　運勢與專業" data-title="第 19 課　流年、小限、流月">
+  <p class="kicker">第五階段　運勢與專業</p>
+  <h2>第 19 課　流年、小限、流月</h2>
+  <p class="lead">大限看十年，<b>流年</b>看一年，<b>流月</b>看一個月。時間越短，影響越細。</p>
+  <div class="term"><div class="th">流年</div>
+    每一年的運勢。那一年的地支在哪一宮，那一宮就是當年的「流年命宮」。
+    <p class="origin">「流」是流動，時間像水一樣流過每個宮位。例如 2026 是丙午年，所有人的流年命宮都在<b>午宮</b>；流年天干「丙」會產生<b>流年四化</b>。</p></div>
+  <div class="term"><div class="th">小限</div>
+    另一種看每年運勢的方法，依出生年支決定起點，男順女逆，每歲走一宮。
+    <p class="origin">比大限小，所以叫小限。起點：寅午戌年生在辰、申子辰年生在戌、巳酉丑年生在未、亥卯未年生在丑，1 歲從這裡開始。現在很多派別以流年為主、小限為輔。</p></div>
+  <div class="term"><div class="th">斗君與流月</div>
+    斗君是流年的「正月」所在的宮，從斗君開始順時針就是二月、三月……
+    <p class="origin">「斗君」就是北斗之君，古人靠北斗定月份，所以用它來定流月。算法：從流年地支宮起正月，逆數到生月；再從那一宮起子時，順數到生時。</p></div>
+  <div class="widget">
+    <div class="wt">小明在不同年份的運勢位置</div>
+    <div class="controls"><label>流年（西元） <input type="number" id="y19" value="2026" min="1985" max="2080"></label></div>
+    <div class="board-wrap"><div id="board19"></div></div>
+    <div class="out" id="o19"></div>
+  </div>
+  <p>看 2026 年的例子：小明虛歲 43，走在 34–43 歲的大限（亥宮）。丙年四化是「天同祿、天機權、文昌科、廉貞忌」，其中<b>流年廉貞化忌</b>剛好落在他本命命宮，和生年廉貞化祿在同一宮，叫「祿忌同宮」，傳統說是「好事中夾著煩惱」，提醒這一年要留意自己的堅持。</p>
+  <div class="ana">本命是你的「個性」，大限是你「這十年在哪個舞台」，流年是「今年的劇情」。同一個演員，換了舞台和劇本，表現也不同。</div>
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>流年命宮＝當年地支所在宮，人人相同；差別在它落在你本命的哪一宮。</li>
+    <li>流年天干產生流年四化；斗君定流月。</li></ul></div>
+</section>
+
+<!-- ============ L20 ============ -->
+<section class="lesson" id="L20" data-stage="第五階段　運勢與專業" data-title="第 20 課　飛星四化與自化">
+  <p class="kicker">第五階段　運勢與專業</p>
+  <h2>第 20 課　飛星四化與自化</h2>
+  <p class="lead">第 8 課每一宮都有宮干。宮干也能產生四化，這是進階派別最常用的技巧，叫<b>飛星</b>或<b>飛化</b>。</p>
+  <div class="term"><div class="th">飛化</div>
+    用某一宮的宮干，找出它的祿權科忌，看這四顆星落在哪些宮，就說「A 宮化祿入 B 宮」。
+    <p class="origin">四化像從本宮「飛」出去的箭，射到別的宮位，代表這兩個人生主題之間有連結。</p></div>
+  <div class="widget">
+    <div class="wt">點小明命盤的任一宮，看它飛出的四化</div>
+    <div class="board-wrap"><div id="board20"></div></div>
+    <div class="info" id="i20">點任何一宮。四化的顏色框會標出飛到哪裡。</div>
+  </div>
+  <p><b>例子：</b>小明命宮是壬申，壬干的四化是天梁祿、紫微權、左輔科、武曲忌。武曲在官祿宮，所以叫「<b>命宮化忌入官祿</b>」。飛星派會解讀成：他心裡很在意工作，對事業特別執著。</p>
+  <div class="term"><div class="th">自化</div>
+    某宮的宮干，剛好讓本宮裡的星產生四化。
+    <p class="origin">箭沒飛出去，打在自己身上，所以叫「自化」。例如小明福德宮是甲戌，甲干讓破軍化權，而破軍就在戌宮，所以福德宮「自化權」。一般認為自化代表那一宮的狀態容易變化、比較不穩定。</p></div>
+  <div class="term"><div class="th">來因宮</div>
+    宮干和出生年干相同的那一宮（子丑宮除外，看寅至亥）。
+    <p class="origin">飛星派認為這是「這輩子為何而來」的起因宮。小明是甲年生，宮干為甲的是戌宮，所以來因宮是福德宮。</p></div>
+  <div class="pro">常見的飛化觀察包括：化忌入對宮叫「沖」，力量比較強；甲宮化祿入乙宮、乙宮又化忌回甲宮，叫「祿忌交流」。飛星技巧變化很多，各派說法差異也大，建議先把三方四正和生年四化練熟，再慢慢學。</div>
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>每宮宮干都能飛出四化，描述宮與宮的連結。</li>
+    <li>宮干化到本宮的星＝自化。</li></ul></div>
+</section>
+
+<!-- ============ L21 ============ -->
+<section class="lesson" id="L21" data-stage="第五階段　運勢與專業" data-title="第 21 課　學習路線與正確態度">
+  <p class="kicker">第五階段　運勢與專業</p>
+  <h2>第 21 課　學習路線與正確態度</h2>
+  <p class="lead">恭喜你走完整套觀念！從這裡到「專業」，靠的是大量練習和正確的態度。</p>
+  <h3>建議的練習順序</h3>
+  <ol class="steps-list">
+    <li><b>手排 20 張盤。</b>不用工具，照第 7–12 課的步驟自己排，排完再用第 22 課的工具對答案。</li>
+    <li><b>背熟 12 種主星盤型。</b>知道紫微在哪，就能說出十四主星的位置。</li>
+    <li><b>熟練十句四化口訣。</b>看到年干就能說出祿權科忌。</li>
+    <li><b>每張盤都用三方四正練習描述命宮。</b>說出每個結論的來源。</li>
+    <li><b>讀古書與不同派別的書。</b>例如《紫微斗數全書》，再比較各派說法。</li>
+  </ol>
+  <h3>認識主要派別</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>派別</th><th>重點</th></tr>
+    <tr><td><b>三合派</b></td><td>重視星曜組合、三方四正、格局，最適合入門</td></tr>
+    <tr><td><b>四化派／飛星派</b></td><td>重視宮干四化的飛化與宮位之間的因果關係</td></tr>
+    <tr><td><b>中州派</b></td><td>香港王亭之推廣，重視星曜性質、亮度與雜曜的細節</td></tr>
+  </table></div>
+  <p class="small muted">以上是概略介紹，各派之間也會互相借用方法。</p>
+  <h3>學命理的五個原則</h3>
+  <ul>
+    <li><b>不恐嚇：</b>不說「你一定會怎樣」，只說「傳統上這代表什麼傾向」。</li>
+    <li><b>不宿命：</b>命盤描述的是可能性，選擇和努力永遠在自己手上。</li>
+    <li><b>尊重隱私：</b>別人的生日和命盤是私人資料，要經過同意才看，也不要到處說。</li>
+    <li><b>不取代專業：</b>健康問醫生、法律問律師、心情低落找信任的人或輔導老師。</li>
+    <li><b>保持懷疑：</b>各派說法不同，也沒有科學證據，把它當成文化與思考練習最健康。</li>
+  </ul>
+  <h3>期末測驗</h3>
+  <div class="quiz" data-id="q5"></div>
+</section>
+
+<!-- ============ L22 ============ -->
+<section class="lesson" id="L22" data-stage="工具" data-title="第 22 課　排盤工具">
+  <p class="kicker">工具</p>
+  <h2>第 22 課　排盤工具</h2>
+  <p class="lead">輸入<b>農曆</b>出生資料，自動排出命盤。建議先自己手排，再用它對答案。</p>
+  <div class="widget">
+    <div class="formgrid">
+      <label>農曆出生年（西元）<input type="number" id="tY" value="1984" min="1900" max="2100"></label>
+      <label>農曆月<select id="tM"></select></label>
+      <label>農曆日<select id="tD"></select></label>
+      <label>出生時辰<select id="tH"></select></label>
+      <label>性別<select id="tG"><option value="1">男</option><option value="0">女</option></select></label>
+      <label>看流年（西元）<input type="number" id="tF" value="2026" min="1900" max="2200"></label>
+    </div>
+    <div class="controls"><button class="btn" id="tGo">排盤</button><span class="small muted" id="tYgz"></span></div>
+    <div class="board-wrap"><div id="board22"></div></div>
+    <div class="info" id="i22">點任何一宮，會標出三方四正並列出宮干飛化。</div>
+  </div>
+  <div class="pro">這個工具包含十四主星、十四顆常用輔星、生年四化、宮干自化（格子裡的「自」字標記）、大限、流年命宮、小限與斗君。雜曜與亮度未列入。閏月請依你採用的規則先換成一般月份再輸入；庚、壬年四化採用本課程的版本。</div>
+</section>
+
+<div class="pager" id="pager"></div>
+</main>
+</div>
+<script>
+/*CORE_START*/
+const G='甲乙丙丁戊己庚辛壬癸'.split(''), Z='子丑寅卯辰巳午未申酉戌亥'.split('');
+const SX='鼠牛虎兔龍蛇馬羊猴雞狗豬'.split('');
+const ZWX='水土木木土火火土金金土水'.split('');
+const PAL=['命宮','兄弟','夫妻','子女','財帛','疾厄','遷移','交友','官祿','田宅','福德','父母'];
+const MONTHS=['正月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+const HUA=['祿','權','科','忌'];
+const m12=n=>((n%12)+12)%12, m10=n=>((n%10)+10)%10;
+const NUM='一二三四五六七八九十'.split('');
+function dayName(d){if(d<=10)return '初'+NUM[d-1];if(d<20)return '十'+NUM[d-11];if(d===20)return '二十';if(d<30)return '廿'+NUM[d-21];return '三十';}
+function hourRange(i){const s=m12(0)+((i*2-1+24)%24);const e=(s+1)%24;const p=n=>String(n).padStart(2,'0');return p(s)+':00–'+p(e)+':59';}
+const NAYIN='金火木土金火水土金木水土火木水金火木土金火水土金木水土火木水'.split('');
+const NAYIN_NAME='海中金,爐中火,大林木,路旁土,劍鋒金,山頭火,澗下水,城頭土,白蠟金,楊柳木,泉中水,屋上土,霹靂火,松柏木,長流水,沙中金,山下火,平地木,壁上土,金箔金,覆燈火,天河水,大驛土,釵釧金,桑柘木,大溪水,沙中土,天上火,石榴木,大海水'.split(',');
+const JU={水:2,木:3,金:4,土:5,火:6};
+const JUNAME={2:'水二局',3:'木三局',4:'金四局',5:'土五局',6:'火六局'};
+function jiazi(s,b){for(let i=0;i<60;i++)if(i%10===s&&i%12===b)return i;return -1;}
+function yinStart(ys){return [2,4,6,8,0][ys%5];}
+function palStem(ys,b){return (yinStart(ys)+m12(b-2))%10;}
+function ziweiPos(ju,day){let x=0;while((day+x)%ju)x++;const q=(day+x)/ju;return {x,q,pos:m12(2+q-1+(x%2?-x:x))};}
+const ZW_SYS=[['紫微',0],['天機',-1],['太陽',-3],['武曲',-4],['天同',-5],['廉貞',-8]];
+const TF_SYS=[['天府',0],['太陰',1],['貪狼',2],['巨門',3],['天相',4],['天梁',5],['七殺',6],['破軍',10]];
+const SIHUA=[['廉貞','破軍','武曲','太陽'],['天機','天梁','紫微','太陰'],['天同','天機','文昌','廉貞'],['太陰','天同','天機','巨門'],['貪狼','太陰','右弼','天機'],['武曲','貪狼','天梁','文曲'],['太陽','武曲','太陰','天同'],['巨門','太陽','文曲','文昌'],['天梁','紫微','左輔','武曲'],['破軍','巨門','太陰','貪狼']];
+const KUI=[1,0,11,11,1,0,1,6,3,3], YUE=[7,8,9,9,7,8,7,2,5,5];
+const LUCUN=[2,3,5,6,5,6,8,9,11,0];
+const MINGZHU=['貪狼','巨門','祿存','文曲','廉貞','武曲','破軍','武曲','廉貞','文曲','祿存','巨門'];
+const SHENZHU=['火星','天相','天梁','天同','文昌','天機','火星','天相','天梁','天同','文昌','天機'];
+function grp(yb){return [2,6,10].includes(yb)?0:[8,0,4].includes(yb)?1:[5,9,1].includes(yb)?2:3;} // 寅午戌,申子辰,巳酉丑,亥卯未
+function calc(o){
+  const ys=m10(o.year-4), yb=m12(o.year-4);
+  const ming=m12(1+o.month-o.hour), shen=m12(1+o.month+o.hour);
+  const stem=[];for(let b=0;b<12;b++)stem[b]=palStem(ys,b);
+  const ji=jiazi(stem[ming],ming), nyEl=NAYIN[ji>>1], ju=JU[nyEl];
+  const zwi=ziweiPos(ju,o.day), zw=zwi.pos, tf=m12(4-zw);
+  const stars=Array.from({length:12},()=>({main:[],good:[],bad:[],ls:[]}));
+  const where={};
+  const put=(n,p,t)=>{stars[p][t].push(n);where[n]=p;};
+  ZW_SYS.forEach(([n,d])=>put(n,m12(zw+d),'main'));
+  TF_SYS.forEach(([n,d])=>put(n,m12(tf+d),'main'));
+  put('文昌',m12(10-o.hour),'good');put('文曲',m12(4+o.hour),'good');
+  put('左輔',m12(4+o.month-1),'good');put('右弼',m12(10-(o.month-1)),'good');
+  put('天魁',KUI[ys],'good');put('天鉞',YUE[ys],'good');
+  const lc=LUCUN[ys];put('祿存',lc,'ls');put('擎羊',m12(lc+1),'bad');put('陀羅',m12(lc-1),'bad');
+  const g=grp(yb);const fs=[1,2,3,9][g], ls=[3,10,10,10][g];
+  put('火星',m12(fs+o.hour),'bad');put('鈴星',m12(ls+o.hour),'bad');
+  put('地空',m12(11-o.hour),'bad');put('地劫',m12(11+o.hour),'bad');
+  put('天馬',[8,2,11,5][g],'ls');
+  const hua={};SIHUA[ys].forEach((n,k)=>hua[n]=k);
+  const palName=[],palIdx=[];for(let k=0;k<12;k++){const b=m12(ming-k);palName[b]=PAL[k];palIdx[b]=k;}
+  const yang=ys%2===0, fwd=(yang&&o.male)||(!yang&&!o.male);
+  const dx=[];for(let b=0;b<12;b++){const st=fwd?m12(b-ming):m12(ming-b);dx[b]=[ju+st*10,ju+st*10+9];}
+  const selfHua=[];for(let b=0;b<12;b++){selfHua[b]=[];SIHUA[stem[b]].forEach((n,k)=>{if(where[n]===b)selfHua[b].push({n,k});});}
+  return {o,ys,yb,ming,shen,stem,nayin:NAYIN_NAME[ji>>1],ju,zw,zwi,tf,stars,where,hua,palName,palIdx,yang,fwd,dx,selfHua,mingZhu:MINGZHU[ming],shenZhu:SHENZHU[yb]};
+}
+function flow(r,Y){
+  const liu=m12(Y-4), fys=m10(Y-4), age=Y-r.o.year+1;
+  let dxc=-1;for(let b=0;b<12;b++)if(age>=r.dx[b][0]&&age<=r.dx[b][1])dxc=b;
+  const xs=[4,10,7,1][grp(r.yb)];const xiao=age>=1?m12(xs+(r.o.male?1:-1)*(age-1)):-1;
+  const dou=m12(m12(liu-(r.o.month-1))+r.o.hour);
+  const fh={};SIHUA[fys].forEach((n,k)=>fh[n]=k);
+  return {Y,liu,fys,age,dxc,xiao,dou,fh};
+}
+function flyFrom(r,b){return SIHUA[r.stem[b]].map((n,k)=>({n,k,to:r.where[n]}));}
+function sanfang(b){return {self:b,opp:m12(b+6),tri:[m12(b+4),m12(b+8)]};}
+/*CORE_END*/
+
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const POS=[[4,3],[4,2],[4,1],[3,1],[2,1],[1,1],[1,2],[1,3],[1,4],[2,4],[3,4],[4,4]];
+function Board(el,opt={}){
+  el.classList.add('board');el.innerHTML='';
+  const cells=[];
+  for(let b=0;b<12;b++){const d=document.createElement('div');d.className='cell';d.style.gridRow=POS[b][0];d.style.gridColumn=POS[b][1];
+    if(opt.onClick){d.classList.add('click');d.tabIndex=0;d.setAttribute('role','button');d.addEventListener('click',()=>opt.onClick(b));d.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();opt.onClick(b);}});}
+    el.appendChild(d);cells.push(d);}
+  const c=document.createElement('div');c.className='center';el.appendChild(c);
+  return {cells,center:c,fill(fn){cells.forEach((d,b)=>d.innerHTML=fn(b));},add(b,cls){cells[b].classList.add(cls);},clear(...cls){cells.forEach(d=>d.classList.remove(...cls));}};
+}
+const ALLHL=['hl','step','step2','step3','final','final2','sf-self','sf-opp','sf-tri','jia','fly0','fly1','fly2','fly3'];
+function opts(sel,arr,val){sel.innerHTML=arr.map((t,i)=>`<option value="${t[0]}"${String(t[0])===String(val)?' selected':''}>${t[1]}</option>`).join('');}
+const HOUR_OPTS=Z.map((z,i)=>[i,`${z}時（${hourRange(i)}）`]);
+const MONTH_OPTS=MONTHS.map((m,i)=>[i+1,m]);
+const DAY_OPTS=Array.from({length:30},(_,i)=>[i+1,dayName(i+1)]);
+const ZHI_OPTS=Z.map((z,i)=>[i,z+'宮']);
+const GAN_OPTS=G.map((g,i)=>[i,g]);
+
+/* ===== chart rendering ===== */
+function hBadge(k,cls=''){return `<i class="h h${k} ${cls}">${HUA[k]}</i>`;}
+function chartCell(r,b,f){
+  const s=r.stars[b];
+  const fb=n=>(f&&f.fh[n]!=null)?hBadge(f.fh[n],'hf'):'';
+  const hb=n=>(r.hua[n]!=null?hBadge(r.hua[n]):'')+fb(n);
+  const main=s.main.map(n=>`<span class="ms">${n}${hb(n)}</span>`).join('');
+  const aux=s.good.map(n=>`<span class="gs">${n}${hb(n)}</span>`).join('')+s.ls.map(n=>`<span class="ls">${n}</span>`).join('')+s.bad.map(n=>`<span class="bs">${n}</span>`).join('');
+  const self=r.selfHua[b].map(x=>`<i class="tg" style="background:var(--${['lu','quan','ke','ji'][x.k]})" title="${x.n}自化${HUA[x.k]}">自${HUA[x.k]}</i>`).join('');
+  let tags='';
+  if(b===r.shen)tags+='<i class="tg b">身</i>';
+  if(f){if(b===f.liu)tags+='<i class="tg">流年</i>';if(b===f.xiao)tags+='<i class="tg g">小限</i>';if(b===f.dou)tags+='<i class="tg j">斗君</i>';}
+  return `<div class="c-stars">${main||'<span class="empty">空宮</span>'}</div><div class="c-aux">${aux}</div>`+
+    `<div class="c-dx">${self}${f&&b===f.dxc?'<i class="tg b">大限</i>':''} ${r.dx[b][0]}–${r.dx[b][1]}</div>`+
+    `<div class="c-bottom"><span class="c-pal">${r.palName[b]}${tags}</span><span class="c-gz">${G[r.stem[b]]}${Z[b]}</span></div>`;
+}
+function chartCenter(r,f){
+  const o=r.o;
+  return `<div class="ct">命盤</div><div>農曆 ${o.year}（${G[r.ys]}${Z[r.yb]}）年<br>${MONTHS[o.month-1]}${dayName(o.day)}　${Z[o.hour]}時</div>`+
+  `<div>${r.yang?'陽':'陰'}${o.male?'男':'女'}・${JUNAME[r.ju]}</div><div>命主 ${r.mingZhu}・身主 ${r.shenZhu}</div>`+
+  (f?`<div>${f.Y} ${G[f.fys]}${Z[f.liu]}年・虛歲 ${f.age}</div>`:'')+
+  `<div class="legend"><span class="h h0">祿</span><span class="h h1">權</span><span class="h h2">科</span><span class="h h3">忌</span></div>`;
+}
+function renderChart(bd,r,f){bd.fill(b=>chartCell(r,b,f));bd.center.innerHTML=chartCenter(r,f);}
+function starsText(r,b){const s=r.stars[b];const all=[...s.main,...s.good,...s.ls,...s.bad];return all.length?all.map(n=>n+(r.hua[n]!=null?'（化'+HUA[r.hua[n]]+'）':'')).join('、'):'（無）';}
+function palaceInfo(r,b){
+  const sf=sanfang(b);
+  const main=r.stars[b].main;
+  const borrow=main.length?'':`　空宮，借對宮主星：${r.stars[sf.opp].main.join('、')||'（對宮也無主星）'}`;
+  const fly=flyFrom(r,b).map(x=>`<span style="color:var(--${['lu','quan','ke','ji'][x.k]});font-weight:700">${x.n}化${HUA[x.k]}</span>→${x.to!=null?r.palName[x.to]+(x.to===b?'（自化）':''):'（不在盤上）'}`).join('、');
+  return `<h5>${r.palName[b]}（${G[r.stem[b]]}${Z[b]}）　大限 ${r.dx[b][0]}–${r.dx[b][1]} 歲</h5>`+
+  `<div><b>本宮星曜：</b>${starsText(r,b)}${borrow}</div>`+
+  `<div><b style="color:var(--blue)">對宮 ${r.palName[sf.opp]}：</b>${starsText(r,sf.opp)}</div>`+
+  `<div><b style="color:var(--gold)">三合 ${r.palName[sf.tri[0]]}：</b>${starsText(r,sf.tri[0])}</div>`+
+  `<div><b style="color:var(--gold)">三合 ${r.palName[sf.tri[1]]}：</b>${starsText(r,sf.tri[1])}</div>`+
+  `<div style="margin-top:6px"><b>宮干 ${G[r.stem[b]]} 飛化：</b>${fly}</div>`;
+}
+function hlSanfang(bd,b){bd.clear(...ALLHL);const s=sanfang(b);bd.add(s.self,'sf-self');bd.add(s.opp,'sf-opp');s.tri.forEach(t=>bd.add(t,'sf-tri'));}
+
+/* ===== hero stars ===== */
+(function(){
+  let seed=7;const rnd=()=>(seed=(seed*9301+49297)%233280)/233280;
+  const mk=(n,rmax)=>{let s='';for(let i=0;i<n;i++){const x=(rnd()*460-70).toFixed(1),y=(rnd()*400-95).toFixed(1),r=(rnd()*rmax+.3).toFixed(2),o=(rnd()*.6+.3).toFixed(2);s+=`<circle cx="${x}" cy="${y}" r="${r}" fill="#fff" opacity="${o}"/>`;}return s;};
+  $('#heroStars').innerHTML=mk(140,1.3)+'<polyline points="200,80 215,68 232,85 218,96 200,80" fill="none" stroke="#c9b8ff" stroke-width="1.1" opacity=".8"/><polyline points="218,96 230,112 238,130 256,142" fill="none" stroke="#c9b8ff" stroke-width="1.1" opacity=".8"/><g fill="#fff"><circle cx="200" cy="80" r="2.6"/><circle cx="215" cy="68" r="2.6"/><circle cx="232" cy="85" r="2.3"/><circle cx="218" cy="96" r="2.1"/><circle cx="230" cy="112" r="2.4"/><circle cx="238" cy="130" r="2.4"/><circle cx="256" cy="142" r="2.4"/></g>';
+  $('#skyDots').innerHTML=mk(90,1.1);
+})();
+
+/* ===== L2 wuxing ===== */
+(function(){
+  const E=['木','火','土','金','水'], C=['#3f8f4f','#cf4f36','#b0831e','#7d8594','#2f6cb0'];
+  const cx=150,cy=132,R=95;const P=E.map((_,i)=>{const a=(-90+i*72)*Math.PI/180;return [cx+R*Math.cos(a),cy+R*Math.sin(a)];});
+  const SH=['木生火：木頭可以燒起火來。','火生土：東西燒完變成灰，回到土裡。','土生金：金屬礦藏在土裡。','金生水：古人看到金屬表面凝結水珠，認為金能生水。','水生木：澆水讓植物長大。'];
+  const KE=['木剋土：樹根鑽進土裡、抓住土。','土剋水：築堤防可以擋住洪水。','水剋火：水可以滅火。','火剋金：高溫能熔化金屬。','金剋木：斧頭可以砍樹。'];
+  const KEORD=[[0,2],[2,4],[4,1],[1,3],[3,0]];
+  function draw(m){
+    let s='<defs>'+C.map((c,i)=>`<marker id="ar${i}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0L10,5L0,10z" fill="${c}"/></marker>`).join('')+'</defs>';
+    const pairs=m==='sheng'?E.map((_,i)=>[i,(i+1)%5]):KEORD;
+    pairs.forEach(([a,b])=>{const [x1,y1]=P[a],[x2,y2]=P[b];const dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy),ux=dx/L,uy=dy/L;
+      s+=`<line class="wx-line" x1="${(x1+ux*30).toFixed(1)}" y1="${(y1+uy*30).toFixed(1)}" x2="${(x2-ux*32).toFixed(1)}" y2="${(y2-uy*32).toFixed(1)}" stroke="${C[a]}" marker-end="url(#ar${a})"/>`;});
+    P.forEach(([x,y],i)=>{s+=`<g class="wx-node"><circle cx="${x}" cy="${y}" r="25" fill="${C[i]}"/><text x="${x}" y="${y}">${E[i]}</text></g>`;});
+    $('#wxSvg').innerHTML=s;
+    $('#wxOut').innerHTML=(m==='sheng'?'<b>相生（順著圓圈走）：</b><br>'+SH.join('<br>'):'<b>相剋（隔一個，走出五角星）：</b><br>'+KE.join('<br>'));
+  }
+  $('#wxSeg').addEventListener('click',e=>{const bt=e.target.closest('button');if(!bt)return;$$('#wxSeg button').forEach(x=>x.classList.toggle('on',x===bt));draw(bt.dataset.m);});
+  draw('sheng');
+})();
+
+/* ===== L3 ===== */
+(function(){
+  $('#zhiTable').innerHTML=Z.map((z,i)=>`<tr><td class="big">${z}</td><td>${SX[i]}</td><td>${z}時 ${hourRange(i)}</td><td>${MONTHS[m12(i-2)]}</td><td>${i%2?'陰':'陽'}</td><td>${ZWX[i]}</td></tr>`).join('');
+  const upd=()=>{const y=parseInt($('#gzYear').value,10);if(!y){$('#gzOut').textContent='請輸入年份。';return;}
+    $('#gzOut').innerHTML=`${y} 年是 <b>${G[m10(y-4)]}${Z[m12(y-4)]}年</b>，生肖屬<b>${SX[m12(y-4)]}</b>。（${y}−4＝${y-4}，÷10 餘 ${m10(y-4)} → ${G[m10(y-4)]}；÷12 餘 ${m12(y-4)} → ${Z[m12(y-4)]}）`;};
+  const upH=()=>{const v=$('#hrIn').value||'00:00';const h=parseInt(v.split(':')[0],10);const i=Math.floor((h+1)/2)%12;
+    $('#hrOut').innerHTML=`${v} 是 <b>${Z[i]}時</b>（${hourRange(i)}）${i===0?'。子時跨過半夜，注意第 4 課的「早子時、晚子時」。':''}`;};
+  $('#gzYear').addEventListener('input',upd);$('#hrIn').addEventListener('input',upH);upd();upH();
+})();
+
+/* ===== L5 ===== */
+(function(){
+  const bd=Board($('#board5'),{onClick:b=>{bd.clear(...ALLHL);bd.add(b,'final');bd.add(m12(b+6),'final2');}});
+  bd.fill(b=>`<div class="zbig">${Z[b]}</div><div class="zsub">${SX[b]}・${MONTHS[m12(b-2)]}</div>`);
+  bd.center.innerHTML='<div class="ct">命盤中央</div><div>寫基本資料的地方</div><div class="small">寅在左下角</div>';
+  let t;
+  const play=dir=>{clearInterval(t);bd.clear(...ALLHL);let k=0;t=setInterval(()=>{bd.clear('hl');bd.add(m12(2+dir*k),'hl');if(++k>12){clearInterval(t);bd.clear('hl');}},380);};
+  $('#b5cw').onclick=()=>play(1);$('#b5ccw').onclick=()=>play(-1);
+})();
+
+/* ===== L6 ===== */
+const PAL_INFO=['自己的個性、天賦、做事風格，全盤最重要。','兄弟姊妹、同學同輩、合作夥伴。','感情觀、伴侶相處；國中生可以看成「理想型」。','子女、晚輩、學生，也代表創造力。','賺錢方式、理財觀念、用錢習慣。','體質傾向與壓力來源（只看傾向，不舒服要看醫生）。','出門在外、旅行、搬遷、在外面的人緣與機會。','朋友、同事、部屬，古稱奴僕宮。','學業、工作、事業方向與做事態度。','家、房子、家庭氣氛，也是存錢的「庫」。','內心世界、興趣、精神享受。','父母、長輩、老師、上司，也看考試與文件。'];
+(function(){
+  const sel=$('#s6');opts(sel,ZHI_OPTS,6);
+  let ming=6;
+  const bd=Board($('#board6'),{onClick:b=>{const k=m12(ming-b);bd.clear(...ALLHL);bd.add(b,'hl');$('#i6').innerHTML=`<h5>${PAL[k]}（${Z[b]}宮）</h5>${PAL_INFO[k]}`;}});
+  const label=(b,show)=>`<div class="zbig" style="font-size:18px">${show?PAL[m12(ming-b)]:'&nbsp;'}</div><div class="zsub">${Z[b]}</div>`;
+  const drawAll=()=>{bd.fill(b=>label(b,true));};
+  bd.center.innerHTML='<div class="ct">十二宮</div><div>從命宮開始<br>逆時針排列</div>';
+  let t;
+  const anim=()=>{clearInterval(t);bd.clear(...ALLHL);bd.fill(b=>label(b,false));let k=0;t=setInterval(()=>{const b=m12(ming-k);bd.cells[b].innerHTML=label(b,true);bd.clear('hl');bd.add(b,'hl');if(++k>=12){clearInterval(t);setTimeout(()=>bd.clear('hl'),600);}},330);};
+  sel.onchange=()=>{ming=+sel.value;drawAll();bd.clear(...ALLHL);bd.add(ming,'final');};
+  $('#b6').onclick=anim;drawAll();bd.add(ming,'final');
+})();
+
+/* ===== L7 ===== */
+(function(){
+  opts($('#s7m'),MONTH_OPTS,3);opts($('#s7h'),HOUR_OPTS,8);
+  const bd=Board($('#board7'));
+  const base=()=>bd.fill(b=>`<span class="tag"></span><div class="zbig">${Z[b]}</div><div class="zsub">${MONTHS[m12(b-2)]}</div>`);
+  base();bd.center.innerHTML='<div class="ct">安命宮</div><div>先數月，再數時</div>';
+  let t;
+  $('#b7').onclick=()=>{
+    clearInterval(t);base();bd.clear(...ALLHL);
+    const m=+$('#s7m').value,h=+$('#s7h').value,mp=m12(2+m-1),ming=m12(mp-h),shen=m12(mp+h);
+    const S=[];
+    for(let i=0;i<m;i++)S.push({p:m12(2+i),c:'step',t:MONTHS[i],msg:`從寅宮起正月，順時針數到 <b>${MONTHS[m-1]}</b>，停在 <b>${Z[mp]}宮</b>。`});
+    S.push({clear:['step'],keep:mp});
+    for(let j=0;j<=h;j++)S.push({p:m12(mp-j),c:'step2',t:Z[j]+'時',msg:`在 ${Z[mp]}宮起子時，<b>逆時針</b>數到 <b>${Z[h]}時</b>……`});
+    S.push({p:ming,c:'final',t:'命宮',msg:`命宮在 <b>${Z[ming]}宮</b>！接著回到 ${Z[mp]}宮，改成<b>順時針</b>數時辰找身宮……`,clear:['step2']});
+    for(let j=0;j<=h;j++)S.push({p:m12(mp+j),c:'step3',t:Z[j]+'時',msg:`從 ${Z[mp]}宮起子時，<b>順時針</b>數到 <b>${Z[h]}時</b>……`});
+    S.push({p:shen,c:'final2',t:'身宮',clear:['step3'],msg:`完成！命宮在 <b>${Z[ming]}宮</b>，身宮在 <b>${Z[shen]}宮</b>${ming===shen?'（命身同宮）':''}。<br>公式驗算：命宮＝(1+${m}−${h}) mod 12＝${ming} → ${Z[ming]}；身宮＝(1+${m}+${h}) mod 12＝${shen} → ${Z[shen]}。`});
+    let i=0;
+    t=setInterval(()=>{const s=S[i];if(!s){clearInterval(t);return;}
+      if(s.clear){s.clear.forEach(c=>{bd.cells.forEach((d,b)=>{if(d.classList.contains(c)){d.classList.remove(c);if(!d.classList.contains('final')&&!d.classList.contains('final2'))d.querySelector('.tag').textContent='';}});});}
+      if(s.p!=null){const cl=bd.cells[s.p].classList;const locked=(cl.contains('final')||cl.contains('final2'))&&!s.c.startsWith('final');if(!locked){cl.remove('step','step2','step3');bd.add(s.p,s.c);bd.cells[s.p].querySelector('.tag').textContent=s.t;}}
+      if(s.msg)$('#o7').innerHTML=s.msg;i++;},420);
+  };
+})();
+
+/* ===== L8 ===== */
+(function(){
+  opts($('#s8'),GAN_OPTS,0);
+  const bd=Board($('#board8'));
+  const KJ=['甲己之年丙作首','乙庚之歲戊為頭','丙辛之歲尋庚上','丁壬壬寅順水流','戊癸甲寅好追求'];
+  const draw=()=>{const ys=+$('#s8').value;bd.fill(b=>`<div class="zbig">${G[palStem(ys,b)]}${Z[b]}</div><div class="zsub">${b===2?'起點':''}</div>`);bd.clear(...ALLHL);bd.add(2,'final');bd.add(0,'step2');bd.add(1,'step2');
+    bd.center.innerHTML=`<div class="ct">${G[ys]}年生</div><div>${KJ[ys%5]}</div><div class="small">寅宮 ${G[palStem(ys,2)]}，順時針往下排</div>`;};
+  $('#s8').onchange=draw;draw();
+  opts($('#s8y'),GAN_OPTS,0);opts($('#s8m'),ZHI_OPTS,8);
+  const up=()=>{const ys=+$('#s8y').value,b=+$('#s8m').value,s=palStem(ys,b),ji=jiazi(s,b);
+    $('#o8').innerHTML=`① ${G[ys]}年，寅宮天干是 ${G[palStem(ys,2)]}，順數到 ${Z[b]}宮 → 命宮干支 <b>${G[s]}${Z[b]}</b><br>② 查納音：${G[s]}${Z[b]} 是「<b>${NAYIN_NAME[ji>>1]}</b>」，五行屬${NAYIN[ji>>1]}<br>③ ${NAYIN[ji>>1]} → <b>${JUNAME[JU[NAYIN[ji>>1]]]}</b>`;};
+  $('#s8y').onchange=up;$('#s8m').onchange=up;up();
+  let h='<tr><th>干支</th><th>納音</th><th>五行局</th><th>干支</th><th>納音</th><th>五行局</th></tr>';
+  for(let i=0;i<30;i+=2){const row=k=>`<td class="big">${G[(2*k)%10]}${Z[(2*k)%12]}、${G[(2*k+1)%10]}${Z[(2*k+1)%12]}</td><td>${NAYIN_NAME[k]}</td><td>${JUNAME[JU[NAYIN[k]]]}</td>`;h+=`<tr>${row(i)}${row(i+1)}</tr>`;}
+  $('#nayinTable').innerHTML=h;
+})();
+
+/* ===== L9 ===== */
+(function(){
+  opts($('#s9j'),[2,3,4,5,6].map(j=>[j,JUNAME[j]]),4);opts($('#s9d'),DAY_OPTS,15);
+  const bd=Board($('#board9'));
+  const base=()=>bd.fill(b=>`<span class="tag"></span><div class="zbig">${Z[b]}</div>`);
+  const up=()=>{const ju=+$('#s9j').value,d=+$('#s9d').value,r=ziweiPos(ju,d);base();bd.clear(...ALLHL);
+    for(let i=0;i<r.q;i++){const p=m12(2+i);bd.add(p,'step');bd.cells[p].querySelector('.tag').textContent=String(i+1);}
+    const qp=m12(2+r.q-1);
+    if(r.x){const dir=r.x%2?-1:1;for(let i=1;i<=r.x;i++){const p=m12(qp+dir*i);bd.cells[p].classList.remove('step');bd.add(p,'step2');}}
+    bd.cells[r.pos].classList.remove('step','step2');bd.add(r.pos,'final');bd.cells[r.pos].querySelector('.tag').textContent='紫微';
+    bd.center.innerHTML=`<div class="ct">紫微在${Z[r.pos]}</div><div>${JUNAME[ju]}・${dayName(d)}</div>`;
+    $('#o9').innerHTML=r.x===0?`${d} ÷ ${ju} 剛好整除，商 ${r.q}，不用借數。<br>從寅宮算 1 順數到第 ${r.q} 格 → <b>紫微在${Z[r.pos]}</b>。`
+      :`${d} ÷ ${ju} 除不盡，借 ${r.x} 變成 ${d+r.x}，${d+r.x} ÷ ${ju} ＝ ${r.q}。<br>從寅宮算 1 順數到第 ${r.q} 格是 ${Z[qp]}（綠色）。<br>借數 ${r.x} 是<b>${r.x%2?'奇數，往回（逆時針）退':'偶數，往前（順時針）進'} ${r.x} 格</b>（黃色）→ <b>紫微在${Z[r.pos]}</b>。`;};
+  $('#s9j').onchange=up;$('#s9d').onchange=up;up();
+  let h='<tr><th>局＼日</th>'+DAY_OPTS.map(d=>`<th>${d[0]}</th>`).join('')+'</tr>';
+  [2,3,4,5,6].forEach(j=>{h+=`<tr><th>${JUNAME[j]}</th>`+DAY_OPTS.map(d=>`<td>${Z[ziweiPos(j,d[0]).pos]}</td>`).join('')+'</tr>';});
+  $('#zwTable').innerHTML=h;$('#zwTable').style.minWidth='900px';
+})();
+
+/* ===== L10 ===== */
+(function(){
+  opts($('#s10'),ZHI_OPTS,4);
+  const bd=Board($('#board10'));
+  const base=()=>{bd.fill(b=>`<div class="c-stars" style="min-height:2.6em"></div><div class="c-bottom"><span></span><span class="c-gz">${Z[b]}</span></div>`);bd.clear(...ALLHL);};
+  base();bd.center.innerHTML='<div class="ct">十四主星</div><div>紫微系逆行<br>天府系順行</div>';
+  let t;
+  $('#b10').onclick=()=>{clearInterval(t);base();const zw=+$('#s10').value,tf=m12(4-zw);
+    const seq=[...ZW_SYS.map(([n,d])=>({n,p:m12(zw+d),msg:d===0?`紫微在 ${Z[zw]}。`:`${n}：紫微逆行 ${-d} 格 → ${Z[m12(zw+d)]}`,c:'step2'})),
+      {n:'天府',p:tf,msg:`天府與紫微以寅申線對稱：紫微${Z[zw]} ↔ 天府${Z[tf]}`,c:'step3'},
+      ...TF_SYS.slice(1).map(([n,d])=>({n,p:m12(tf+d),msg:`${n}：天府順行 ${d} 格 → ${Z[m12(tf+d)]}`,c:'step3'}))];
+    let i=0;const log=[];
+    t=setInterval(()=>{const s=seq[i];if(!s){clearInterval(t);$('#o10').innerHTML=log.join('<br>')+'<br><b>十四主星排好了！</b>';return;}
+      const c=bd.cells[s.p].querySelector('.c-stars');c.insertAdjacentHTML('beforeend',`<span class="ms">${s.n}</span>`);bd.add(s.p,s.c);
+      log.push(s.msg);$('#o10').innerHTML=log.slice(-4).join('<br>');i++;},520);};
+})();
+
+/* ===== L11 star cards ===== */
+const STARS=[
+ ['紫微','北斗主星','陰土','尊','領導、自尊、氣度','有主見、有擔當，想把事情做好','重面子、耳根軟，喜歡被稱讚','班長、皇帝','取自紫微垣，天帝住的宮殿，所以是帝星'],
+ ['天機','南斗','陰木','善','聰明、思考、變化','反應快、善於規劃和出主意','想太多、容易三心二意','軍師、諸葛亮','「機」是機關、機智，天的機要'],
+ ['太陽','中天','陽火','貴','熱情、付出、光明','大方、樂於助人、有正義感','忙著照顧別人，忽略自己','太陽、熱心的學長姊','就是天上的太陽，照亮萬物'],
+ ['武曲','北斗','陰金','財','剛毅、果斷、執行力','重信用、有行動力，是正財星','太直接、不擅表達情感','將軍、銀行家','名字帶「武」，代表剛強；化氣為財'],
+ ['天同','南斗','陽水','福','溫和、知足、童心','好相處、懂得享受生活','容易懶散、缺乏衝勁','開心果','「同」是和同，大家和和氣氣'],
+ ['廉貞','北斗','陰火','囚','原則、複雜、公關','有原則、手腕好、能屈能伸','情緒起伏、容易鑽牛角尖','外交官','「廉」有稜角，「貞」是堅持；化氣為囚，像被規矩框住的力量'],
+ ['天府','南斗主星','陽土','令（庫）','穩重、保守、管理','穩定可靠、善於守成與理財','保守、不愛冒險','管家、倉庫主人','「府」是府庫、倉庫，管理財物'],
+ ['太陰','中天','陰水','富','溫柔、細膩、累積','體貼、有耐心、善於存錢','多愁善感、想法藏在心裡','月亮、細心的姊姊','就是月亮，由缺到圓慢慢累積'],
+ ['貪狼','北斗','陽木','桃花','多才、慾望、交際','多才多藝、人緣好、學得快','貪多、定性不夠','多才多藝的社交達人','「貪」是想要很多，對世界充滿好奇'],
+ ['巨門','北斗','陰水','暗','口才、研究、是非','善於分析、口才好、會追根究柢','說話太直、容易有口舌是非','律師、評論家','「巨大的門」關起來就暗；嘴巴也是門'],
+ ['天相','南斗','陽水','印','協調、服務、公正','公正、會替人著想、擅長協調','受環境影響大、不好拒絕人','宰相、秘書','「相」是宰相，化氣為印，像負責蓋章的官'],
+ ['天梁','南斗','陽土','蔭','照顧、原則、老成','成熟、愛照顧人、講道理','愛說教、太愛管閒事','老師、長輩','「梁」是屋梁，撐起房子；化氣為蔭，庇蔭他人'],
+ ['七殺','南斗','陰金','將','衝勁、獨立、果斷','勇敢、敢衝、能獨當一面','急躁、不喜歡被管','大將軍、開路先鋒','將星，「殺」代表決斷力'],
+ ['破軍','北斗','陰水','耗','開創、改革、打破','勇於改變、有開創力','喜新厭舊、容易浪費','改革者、先鋒部隊','「破」是打破，軍隊的先鋒；化氣為耗']];
+(function(){
+  const box=$('#starCards');
+  box.innerHTML=STARS.map((s,i)=>`<button class="scard" data-i="${i}"><div class="sn">${s[0]}</div><div class="sm">${s[1]}・${s[2]}・化氣為${s[3]}</div></button>`).join('');
+  box.addEventListener('click',e=>{const c=e.target.closest('.scard');if(!c)return;$$('.scard',box).forEach(x=>x.classList.toggle('on',x===c));const s=STARS[+c.dataset.i];
+    $('#starDetail').innerHTML=`<h5>${s[0]}　<span class="small muted">${s[1]}・五行${s[2]}・化氣為「${s[3]}」</span></h5><div><b>關鍵字：</b>${s[4]}</div><div><b>優點：</b>${s[5]}</div><div><b>要注意：</b>${s[6]}</div><div><b>比喻：</b>${s[7]}</div><div class="origin" style="margin-top:6px">${s[8]}</div>`;});
+})();
+
+/* ===== L13 sun ===== */
+(function(){
+  const bd=Board($('#board13'));
+  const lv=b=>{const d=Math.min(m12(b-6),m12(6-b));return 6-d;};
+  const NAMES=['最暗','很暗','偏暗','平','偏亮','很亮','最亮'];
+  const draw=(sun)=>{bd.fill(b=>{const l=lv(b);return `<div class="zbig" style="opacity:${.3+l*.12}">${b===sun?'☀':Z[b]}</div><div class="zsub">${NAMES[l]}</div>`;});
+    bd.cells.forEach((d,b)=>{const l=lv(b);d.style.background=`color-mix(in srgb, var(--gold) ${l*6}%, var(--card))`;});
+    bd.center.innerHTML=sun==null?'<div class="ct">太陽的亮度</div><div>越接近午宮越亮</div>':`<div class="ct">${Z[sun]}時</div><div>太陽在${Z[sun]}宮：${NAMES[lv(sun)]}</div>`;};
+  draw(null);let t;
+  $('#b13').onclick=()=>{clearInterval(t);let k=0;t=setInterval(()=>{draw(k%12);if(++k>12){clearInterval(t);draw(null);}},450);};
+})();
+
+/* ===== L14 ===== */
+(function(){
+  opts($('#s14'),GAN_OPTS,0);
+  const KJ=['甲廉破武陽','乙機梁紫陰','丙同機昌廉','丁陰同機巨','戊貪陰弼機','己武貪梁曲','庚陽武陰同','辛巨陽曲昌','壬梁紫輔武','癸破巨陰貪'];
+  const up=()=>{const y=+$('#s14').value;$('#o14').innerHTML=SIHUA[y].map((n,k)=>`<span class="chip c${k}">${n}<small>化${HUA[k]}</small></span>`).join('');
+    $('#kj14').innerHTML=KJ.map((s,i)=>`<div class="${i===y?'on':''}">${s}</div>`).join('');};
+  $('#s14').onchange=up;up();
+})();
+
+/* ===== L15 ===== */
+(function(){
+  let mode='sf';
+  const bd=Board($('#board15'),{onClick:b=>click(b)});
+  bd.fill(b=>`<div class="zbig">${Z[b]}</div>`);bd.center.innerHTML='<div class="ct">三方四正</div><div>點任何一宮</div>';
+  let last=null;
+  function click(b){last=b;bd.clear(...ALLHL);
+    if(mode==='sf'){const s=sanfang(b);bd.add(b,'sf-self');bd.add(s.opp,'sf-opp');s.tri.forEach(t=>bd.add(t,'sf-tri'));
+      const tri=[b,...s.tri].sort((a,c)=>a-c).map(x=>Z[x]).join('');
+      $('#o15').innerHTML=`本宮 <b>${Z[b]}</b>、對宮 <b>${Z[s.opp]}</b>、三合宮 <b>${Z[s.tri[0]]}</b> 和 <b>${Z[s.tri[1]]}</b>。<br>${Z[b]}、${Z[s.tri[0]]}、${Z[s.tri[1]]} 連起來是一個三角形（地支三合）。`;}
+    else{bd.add(b,'sf-self');bd.add(m12(b-1),'jia');bd.add(m12(b+1),'jia');$('#o15').innerHTML=`${Z[b]}宮被左右的 <b>${Z[m12(b-1)]}</b> 和 <b>${Z[m12(b+1)]}</b> 兩宮「夾」著。`;}}
+  $('#seg15').addEventListener('click',e=>{const bt=e.target.closest('button');if(!bt)return;mode=bt.dataset.m;$$('#seg15 button').forEach(x=>x.classList.toggle('on',x===bt));if(last!=null)click(last);});
+})();
+
+/* ===== example charts ===== */
+const EX={year:1984,month:3,day:15,hour:8,male:true};
+(function(){
+  const r=calc(EX);
+  const bd=Board($('#board16'),{onClick:b=>{hlSanfang(bd,b);$('#i16').innerHTML=palaceInfo(r,b);}});
+  renderChart(bd,r);hlSanfang(bd,r.ming);$('#i16').innerHTML=palaceInfo(r,r.ming);
+})();
+(function(){
+  const bd=Board($('#board18'));
+  const up=male=>{const r=calc({...EX,male});renderChart(bd,r);bd.clear(...ALLHL);bd.add(r.ming,'final');
+    const order=[];for(let k=0;k<6;k++){const b=r.fwd?m12(r.ming+k):m12(r.ming-k);order.push(`${Z[b]}（${r.palName[b]}）${r.dx[b][0]}–${r.dx[b][1]}`);}
+    $('#o18').innerHTML=`${r.yang?'陽':'陰'}${male?'男':'女'} → <b>${r.fwd?'順時針':'逆時針'}</b>，${JUNAME[r.ju]}所以從 ${r.ju} 歲開始：<br>${order.join(' → ')} ……`;};
+  $('#seg18').addEventListener('click',e=>{const bt=e.target.closest('button');if(!bt)return;$$('#seg18 button').forEach(x=>x.classList.toggle('on',x===bt));up(bt.dataset.g==='1');});
+  up(true);
+})();
+(function(){
+  const r=calc(EX);const bd=Board($('#board19'));
+  const up=()=>{const Y=parseInt($('#y19').value,10);if(!Y||Y<1985||Y>2080){$('#o19').textContent='請輸入 1985 到 2080 之間的年份。';return;}
+    const f=flow(r,Y);renderChart(bd,r,f);bd.clear(...ALLHL);bd.add(f.liu,'final');if(f.dxc>=0)bd.add(f.dxc,'step3');
+    $('#o19').innerHTML=`${Y} 年是 <b>${G[f.fys]}${Z[f.liu]}年</b>，小明虛歲 ${f.age}。<br>流年命宮在 <b>${Z[f.liu]}宮</b>（本命${r.palName[f.liu]}，紅框）；大限在 <b>${f.dxc>=0?Z[f.dxc]+'宮（'+r.palName[f.dxc]+'）':'—'}</b>（藍框）；小限在 ${Z[f.xiao]}宮；斗君（流年正月）在 ${Z[f.dou]}宮。<br>流年四化（空心框）：${SIHUA[f.fys].map((n,k)=>`${n}化${HUA[k]}→${r.palName[r.where[n]]}`).join('、')}`;};
+  $('#y19').addEventListener('input',up);up();
+})();
+(function(){
+  const r=calc(EX);
+  const bd=Board($('#board20'),{onClick:b=>{bd.clear(...ALLHL);bd.add(b,'sf-self');const fl=flyFrom(r,b);
+    fl.forEach(x=>{if(x.to!=null&&x.to!==b)bd.add(x.to,'fly'+x.k);});
+    $('#i20').innerHTML=`<h5>${r.palName[b]}（${G[r.stem[b]]}${Z[b]}）的宮干「${G[r.stem[b]]}」飛出：</h5>`+fl.map(x=>`<div><span style="color:var(--${['lu','quan','ke','ji'][x.k]});font-weight:700">${x.n}化${HUA[x.k]}</span> → ${x.to==null?'不在盤上':x.to===b?'<b>本宮（自化'+HUA[x.k]+'）</b>':r.palName[x.to]+'（'+Z[x.to]+'）'}</div>`).join('')+
+    `<div class="small muted" style="margin-top:4px">白話：「${r.palName[b]}化祿入${r.stars&&fl[0].to!=null?r.palName[fl[0].to]:'?'}」「${r.palName[b]}化忌入${fl[3].to!=null?r.palName[fl[3].to]:'?'}」。</div>`;}});
+  renderChart(bd,r);
+})();
+
+/* ===== L22 tool ===== */
+(function(){
+  opts($('#tM'),MONTH_OPTS,3);opts($('#tD'),DAY_OPTS,15);opts($('#tH'),HOUR_OPTS,8);
+  let r=null,f=null;
+  const bd=Board($('#board22'),{onClick:b=>{if(!r)return;hlSanfang(bd,b);$('#i22').innerHTML=palaceInfo(r,b);}});
+  const yg=()=>{const y=parseInt($('#tY').value,10);$('#tYgz').textContent=y?`${y} 年＝${G[m10(y-4)]}${Z[m12(y-4)]}年（屬${SX[m12(y-4)]}）`:'';};
+  const go=()=>{const y=parseInt($('#tY').value,10),F=parseInt($('#tF').value,10);
+    if(!y||y<1900||y>2100){$('#i22').textContent='請輸入 1900 到 2100 之間的農曆出生年。';return;}
+    r=calc({year:y,month:+$('#tM').value,day:+$('#tD').value,hour:+$('#tH').value,male:$('#tG').value==='1'});
+    f=(F&&F>=y)?flow(r,F):null;renderChart(bd,r,f);hlSanfang(bd,r.ming);$('#i22').innerHTML=palaceInfo(r,r.ming);};
+  $('#tY').addEventListener('input',yg);$('#tGo').onclick=go;yg();go();
+})();
+
+/* ===== quizzes ===== */
+const QUIZ={
+ q1:[{q:'「紫微」原本指的是什麼？',o:['一種紫色的花','北極星附近、被想像成天帝皇宮的星區','古代皇帝的名字','月亮的別名'],a:1,e:'紫微垣位在北天中央，北極星附近。'},
+     {q:'下列哪一個是「相生」？',o:['水剋火','金剋木','水生木','土剋水'],a:2,e:'澆水讓植物長大，水生木。'},
+     {q:'農曆正月對應哪個地支？',o:['子','丑','寅','卯'],a:2,e:'斗柄指寅，正月建寅。'},
+     {q:'晚上 9 點半是什麼時辰？',o:['酉時','戌時','亥時','子時'],a:2,e:'亥時是 21:00–22:59。'},
+     {q:'1984 年是哪一年？',o:['甲子年','乙丑年','癸亥年','甲午年'],a:0,e:'(1984−4)÷10 餘 0→甲；÷12 餘 0→子。'}],
+ q2:[{q:'命盤上的寅宮在哪裡？',o:['右上角','左下角','正上方','中間'],a:1,e:'寅宮固定在左下角。'},
+     {q:'十二宮從命宮開始，往哪個方向排？',o:['順時針','逆時針','上下交錯','每個人不同'],a:1,e:'命、兄、夫、子……逆時針排列。'},
+     {q:'農曆五月、卯時出生，命宮在？',o:['寅宮','辰宮','卯宮','午宮'],a:2,e:'寅起正月數到五月是午；午起子時逆數：子午、丑巳、寅辰、卯卯 → 卯宮。'},
+     {q:'乙年出生，寅宮的天干是？',o:['丙','戊','庚','壬'],a:1,e:'乙庚之歲戊為頭。'},
+     {q:'命宮干支是丙寅（納音爐中火），五行局是？',o:['水二局','金四局','土五局','火六局'],a:3,e:'火→火六局。'}],
+ q3:[{q:'紫微在子宮時，天府在哪裡？',o:['子','辰','午','申'],a:1,e:'以寅申線對稱：(4−0) mod 12＝4 → 辰。'},
+     {q:'天機永遠在紫微的哪裡？',o:['順時針下一格','逆時針下一格','對宮','同一格'],a:1,e:'紫微逆去宿天機。'},
+     {q:'「化氣為財」的是哪顆星？',o:['天同','破軍','武曲','天梁'],a:2,e:'武曲是正財星。'},
+     {q:'擎羊永遠在祿存的哪裡？',o:['順時針下一格','逆時針下一格','對宮','同一格'],a:0,e:'擎羊在祿存前一格（順），陀羅在後一格（逆）。'},
+     {q:'太陽在哪一宮最亮？',o:['子','卯','午','酉'],a:2,e:'午是正中午，太陽最亮。'}],
+ q4:[{q:'甲年生，化忌的是哪顆星？',o:['廉貞','武曲','破軍','太陽'],a:3,e:'甲廉破武陽：廉貞祿、破軍權、武曲科、太陽忌。'},
+     {q:'「三方四正」不包含哪一宮？',o:['本宮','對宮','三合宮','隔壁的宮'],a:3,e:'隔壁的宮叫「夾宮」，不在三方四正裡。'},
+     {q:'申宮的對宮是？',o:['子','辰','寅','午'],a:2,e:'相差 6 格：申↔寅。'},
+     {q:'「殺破狼」指哪三顆星？',o:['七殺、破軍、貪狼','七殺、破軍、太陽','天府、破軍、貪狼','七殺、廉貞、貪狼'],a:0,e:'三顆星永遠在三合位置互相照。'},
+     {q:'看盤時通常第一個看？',o:['疾厄宮','命宮和它的三方四正','雜曜','父母宮'],a:1,e:'先抓主軸，再看細節。'}],
+ q5:[{q:'水二局的人，第一個大限從幾歲開始？',o:['1 歲','2 歲','6 歲','10 歲'],a:1,e:'起歲＝局數。'},
+     {q:'陽年出生的男生，大限怎麼走？',o:['逆時針','順時針','不會移動','看出生月'],a:1,e:'陽男陰女順行。'},
+     {q:'2026 丙午年，所有人的流年命宮都在？',o:['子宮','寅宮','午宮','申宮'],a:2,e:'流年命宮＝當年地支所在的宮。'},
+     {q:'用某一宮的宮干找出四化，叫做？',o:['納音','宮干飛化','廟旺','五虎遁'],a:1,e:'四化像箭一樣從本宮飛出去。'},
+     {q:'學紫微斗數最健康的態度是？',o:['用它決定所有大事','拿來嚇唬朋友','當成文化與認識自己的工具，保持思考','完全相信不需懷疑'],a:2,e:'命盤是可能性，選擇在自己。'}]
+};
+$$('.quiz').forEach(el=>{
+  const qs=QUIZ[el.dataset.id];let got=0,ans=0;
+  el.innerHTML=qs.map((q,i)=>`<div class="qq" data-i="${i}"><p class="qt">${i+1}. ${q.q}</p><div class="qo">${q.o.map((o,j)=>`<button data-j="${j}">${o}</button>`).join('')}</div><p class="qe"></p></div>`).join('')+'<div class="qscore"></div>';
+  el.addEventListener('click',e=>{const bt=e.target.closest('button[data-j]');if(!bt)return;const qq=bt.closest('.qq');if(qq.dataset.done)return;qq.dataset.done='1';
+    const q=qs[+qq.dataset.i],j=+bt.dataset.j;$$('button',qq).forEach((b,k)=>{b.disabled=true;if(k===q.a)b.classList.add('ok');else if(k===j)b.classList.add('no');});
+    ans++;if(j===q.a)got++;$('.qe',qq).textContent=(j===q.a?'答對了！':'正確答案已標出。')+q.e;
+    if(ans===qs.length)$('.qscore',el).textContent=`得分：${got} / ${qs.length}　${got===qs.length?'全對，可以進入下一階段！':'建議回頭複習答錯的課程。'}`;});
+});
+
+/* ===== navigation ===== */
+(function(){
+  const lessons=$$('section.lesson'),nav=$('#navList');let st=null;
+  lessons.forEach(s=>{if(s.dataset.stage!==st){st=s.dataset.stage;nav.insertAdjacentHTML('beforeend',`<div class="nav-stage">${st}</div>`);}
+    nav.insertAdjacentHTML('beforeend',`<a href="#${s.id}" data-id="${s.id}"><span class="chk"></span><span>${s.dataset.title}</span></a>`);});
+  let done={};try{done=JSON.parse(localStorage.getItem('zw-done')||'{}')||{};}catch(e){done={};}
+  const save=()=>{try{localStorage.setItem('zw-done',JSON.stringify(done));}catch(e){}};
+  const navEl=$('#nav'),scrim=$('#scrim');
+  const openNav=()=>{navEl.classList.add('open');scrim.classList.add('show');};
+  const closeNav=()=>{navEl.classList.remove('open');scrim.classList.remove('show');};
+  $('#menuBtn').onclick=openNav;scrim.onclick=closeNav;
+  function refresh(){const n=lessons.filter(s=>done[s.id]).length;const p=Math.round(n/lessons.length*100);$('#progBar').style.width=p+'%';$('#progTxt').textContent=p+'%';
+    $$('#navList a').forEach(a=>a.classList.toggle('done',!!done[a.dataset.id]));}
+  function show(id){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=id;const i=Math.max(0,lessons.findIndex(s=>s.id===id));const s=lessons[i];
+    lessons.forEach(x=>x.classList.toggle('active',x===s));$$('#navList a').forEach(a=>a.classList.toggle('cur',a.dataset.id===s.id));
+    const prev=lessons[i-1],next=lessons[i+1];
+    $('#pager').innerHTML=(prev?`<a href="#${prev.id}"><small>上一課</small>${prev.dataset.title}</a>`:'<span style="flex:1"></span>')+
+      (next?`<a class="next" href="#${next.id}" data-mark="${s.id}"><small>完成本課，下一課</small>${next.dataset.title}</a>`:`<a class="next" href="#L22" data-mark="${s.id}"><small>完成</small>全部課程完成！</a>`);
+    closeNav();window.scrollTo(0,0);try{localStorage.setItem('zw-last',s.id);}catch(e){}}
+  $('#pager').addEventListener('click',e=>{const a=e.target.closest('a[data-mark]');if(a){done[a.dataset.mark]=1;save();refresh();}});
+  window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
+  let start=location.hash.slice(1);if(!start){try{start=localStorage.getItem('zw-last')||'L0';}catch(e){start='L0';}}
+  show(start);refresh();
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-8e0ae665ed" data-category="classics"></script></body>
+</html>

@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>寫一個世界｜玄幻 × 武俠 × 懸疑 × 科技 跨類型小說寫作課</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@400;600;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDF0EA; --paper-2:#E1E7DE; --card:#F7F9F5;
+  --ink:#1E2833; --ink-soft:#4A5663; --rule:#C3CCC2;
+  --seal:#B03A2E;
+  --xuan:#6A4BC4; --wu:#2C7A6E; --yi:#A8660E; --ke:#1D66C9;
+  --serif:"Noto Serif TC","Noto Serif CJK TC","Songti TC","PMingLiU","MingLiU",serif;
+  --sans:"Noto Sans TC","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#151C24; --paper-2:#1D2630; --card:#1A222C;
+    --ink:#E4E8E1; --ink-soft:#A6B0AA; --rule:#34404C;
+    --seal:#E0685A; --xuan:#A48CF0; --wu:#5CC0AE; --yi:#E0A04A; --ke:#62A4F5;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#151C24; --paper-2:#1D2630; --card:#1A222C;
+  --ink:#E4E8E1; --ink-soft:#A6B0AA; --rule:#34404C;
+  --seal:#E0685A; --xuan:#A48CF0; --wu:#5CC0AE; --yi:#E0A04A; --ke:#62A4F5;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:17.5px;line-height:1.95;-webkit-text-size-adjust:100%}
+img,svg{max-width:100%}
+a{color:var(--ke)}
+:focus-visible{outline:3px solid var(--ke);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+/* ===== 頂欄 ===== */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--paper);border-bottom:1px solid var(--rule);font-family:var(--sans)}
+.topbar-in{max-width:60rem;margin:auto;display:flex;align-items:center;gap:.75rem;padding:.55rem 1rem}
+.brand{font-family:var(--serif);font-weight:900;font-size:1.05rem;letter-spacing:.08em;text-decoration:none;color:var(--ink);white-space:nowrap}
+.meter{flex:1;display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--ink-soft)}
+.meter-bar{flex:1;height:6px;background:var(--paper-2);border-radius:3px;overflow:hidden}
+.meter-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--wu),var(--xuan),var(--yi),var(--ke));transition:width .4s}
+.iconbtn{font-family:var(--sans);border:1px solid var(--rule);background:var(--card);color:var(--ink);border-radius:8px;padding:.35rem .65rem;font-size:.9rem;cursor:pointer;min-height:36px}
+
+/* ===== 目錄抽屜 ===== */
+.drawer{position:fixed;inset:0;z-index:80;display:none}
+.drawer.open{display:block}
+.drawer-bg{position:absolute;inset:0;background:rgba(10,15,20,.45)}
+.drawer-panel{position:absolute;top:0;right:0;bottom:0;width:min(22rem,88vw);background:var(--card);overflow-y:auto;padding:calc(env(safe-area-inset-top,0px) + 1rem) 1rem calc(env(safe-area-inset-bottom,0px) + 1rem);font-family:var(--sans);border-left:1px solid var(--rule)}
+.drawer-panel h2{font-family:var(--serif);font-size:1.2rem;margin:.2rem 0 1rem}
+.toc-vol{font-weight:700;font-size:.92rem;margin:1rem 0 .3rem;color:var(--ink)}
+.toc a{display:flex;gap:.5rem;padding:.35rem .4rem;border-radius:6px;text-decoration:none;color:var(--ink-soft);font-size:.9rem;line-height:1.5}
+.toc a:hover{background:var(--paper-2)}
+.toc a .ck{width:1.1rem;flex:none;color:var(--wu)}
+
+/* ===== 首頁 ===== */
+.hero{max-width:60rem;margin:auto;padding:2.5rem 1.25rem 2rem;display:grid;grid-template-columns:auto 1fr;column-gap:1.6rem;align-items:start}
+.hero-title{writing-mode:vertical-rl;text-orientation:upright;font-weight:900;font-size:clamp(3.4rem,17vw,7.5rem);line-height:1.1;letter-spacing:.08em;margin:0;color:var(--ink);grid-row:span 2}
+.hero-kicker{font-family:var(--sans);font-weight:700;color:var(--seal);margin:.2rem 0 .5rem!important;letter-spacing:.15em}
+.hero-side h1{font-size:clamp(1.25rem,4.8vw,1.9rem);line-height:1.45;margin:0 0 .8rem;font-weight:900}
+.hero-side p{margin:0 0 1rem;color:var(--ink-soft)}
+.hero-foot{grid-column:2}
+.hero-note{font-family:var(--sans);font-size:.9rem;color:var(--ink-soft);margin:.4rem 0 1rem}
+.seals{display:flex;gap:.7rem;flex-wrap:wrap;margin:.6rem 0 1.8rem}
+.seal{width:3.4rem;height:3.4rem;display:grid;place-items:center;border:2.5px solid currentColor;border-radius:6px;font-weight:900;font-size:1.7rem;position:relative;animation:stamp .5s cubic-bezier(.2,1.6,.4,1) both}
+.seal span{position:absolute;bottom:-1.45rem;left:-.5rem;right:-.5rem;text-align:center;font-family:var(--sans);font-size:.7rem;font-weight:500;color:var(--ink-soft)}
+.seal:nth-child(1){color:var(--xuan);animation-delay:.15s}
+.seal:nth-child(2){color:var(--wu);animation-delay:.35s}
+.seal:nth-child(3){color:var(--yi);animation-delay:.55s}
+.seal:nth-child(4){color:var(--ke);animation-delay:.75s}
+@keyframes stamp{from{opacity:0;transform:scale(1.6) rotate(-8deg)}to{opacity:1;transform:none}}
+@media (max-width:560px){.hero{padding-top:1.6rem;column-gap:1rem}.hero-title{grid-row:auto}.hero-foot{grid-column:1 / -1}.seal{width:3.2rem;height:3.2rem;font-size:1.55rem}.seals{gap:1rem}}
+.btn{display:inline-block;font-family:var(--sans);font-weight:700;background:var(--ink);color:var(--paper);border:none;border-radius:10px;padding:.7rem 1.2rem;text-decoration:none;cursor:pointer;font-size:1rem;min-height:44px}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.btn.sm{padding:.45rem .9rem;font-size:.9rem;min-height:38px}
+
+/* ===== 內文 ===== */
+main{max-width:43rem;margin:auto;padding:0 1.25rem 4rem}
+.map{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:1.2rem 1.2rem .6rem;margin:1rem 0 2rem}
+.map h2{margin:0 0 .6rem;font-size:1.3rem}
+.map ol{margin:0;padding-left:1.4rem}
+.map li{margin:.3rem 0}
+.volume{margin:4rem 0 1.5rem;padding:1.2rem 0 1rem;border-top:3px double var(--ink)}
+.volume .vno{font-family:var(--sans);font-size:.9rem;color:var(--seal);font-weight:700;letter-spacing:.2em}
+.volume h2{font-size:clamp(1.6rem,6vw,2.2rem);line-height:1.35;margin:.2rem 0 .5rem;font-weight:900}
+.volume p{margin:0;color:var(--ink-soft)}
+.lesson{margin:2.8rem 0 0}
+.lesson > header{border-left:5px solid var(--ink);padding-left:.9rem;margin-bottom:1.2rem}
+.hui{font-family:var(--sans);font-size:.85rem;font-weight:700;color:var(--ink-soft)}
+.lesson h3{font-size:clamp(1.3rem,5vw,1.6rem);line-height:1.45;margin:.1rem 0 .4rem;font-weight:900}
+.goal{font-family:var(--sans);font-size:.9rem;color:var(--ink-soft);margin:0;line-height:1.7}
+.lesson h4{font-size:1.15rem;margin:1.8rem 0 .4rem;font-weight:700}
+p{margin:.8rem 0}
+ul,ol{padding-left:1.4rem}
+li{margin:.25rem 0}
+strong{font-weight:700}
+.kbd{font-family:var(--sans);background:var(--paper-2);border-radius:5px;padding:.05rem .4rem;font-size:.92em}
+
+/* 方框元件 */
+.box{border-radius:12px;padding:.9rem 1.05rem;margin:1.2rem 0;background:var(--card);border:1px solid var(--rule)}
+.box > b:first-child{display:block;font-family:var(--sans);font-size:.9rem;margin-bottom:.2rem}
+.box p:first-of-type{margin-top:.2rem}
+.box p:last-child{margin-bottom:0}
+.origin{border-left:5px solid var(--seal)}
+.origin > b:first-child{color:var(--seal)}
+.eg{border-left:5px solid var(--wu)}
+.eg > b:first-child{color:var(--wu)}
+.try{border:2px dashed var(--ke);background:transparent}
+.try > b:first-child{color:var(--ke)}
+.tip{border-left:5px solid var(--yi)}
+.tip > b:first-child{color:var(--yi)}
+.warn{border-left:5px solid var(--xuan)}
+.warn > b:first-child{color:var(--xuan)}
+blockquote.prose{margin:.8rem 0;padding:.2rem 0 .2rem 1rem;border-left:2px solid var(--rule);color:var(--ink)}
+
+/* 類型色 */
+.g{font-family:var(--sans);font-size:.78rem;font-weight:700;padding:.1rem .5rem;border-radius:99px;color:#fff;white-space:nowrap;vertical-align:.1em}
+.g.x{background:var(--xuan)}.g.w{background:var(--wu)}.g.y{background:var(--yi)}.g.k{background:var(--ke)}
+:root[data-theme="dark"] .g{color:#111820}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .g{color:#111820}}
+
+.genres{display:grid;gap:1rem;margin:1.2rem 0}
+.gcard{border-radius:14px;padding:1rem 1.1rem;background:var(--card);border:1px solid var(--rule);border-top:6px solid var(--c)}
+.gcard h4{margin:0 0 .3rem;color:var(--c);font-size:1.25rem}
+.gcard dl{margin:.4rem 0 0;font-size:.96rem;line-height:1.8}
+.gcard dt{font-family:var(--sans);font-weight:700;font-size:.82rem;color:var(--ink-soft);margin-top:.5rem}
+.gcard dd{margin:0}
+
+/* 表格 */
+.tw{overflow-x:auto;margin:1rem 0;border:1px solid var(--rule);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:30rem;font-size:.93rem;line-height:1.7;background:var(--card)}
+th,td{padding:.55rem .7rem;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}
+th{font-family:var(--sans);font-size:.85rem;background:var(--paper-2)}
+tr:last-child td{border-bottom:none}
+
+/* 互動工坊 */
+.lab{background:var(--paper-2);border-radius:16px;padding:1rem;margin:1.5rem 0;font-family:var(--sans);line-height:1.7}
+.lab-h{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem}
+.lab-h b{font-size:1.02rem}
+.lab-h span{font-size:.82rem;color:var(--ink-soft)}
+.lab .row{display:flex;gap:.5rem;flex-wrap:wrap;margin:.6rem 0}
+.chip{border:1.5px solid var(--rule);background:var(--card);color:var(--ink);border-radius:99px;padding:.35rem .85rem;font-size:.9rem;cursor:pointer;font-family:var(--sans);min-height:36px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.lab textarea,.lab input[type=text]{width:100%;font-family:var(--serif);font-size:1rem;padding:.6rem .7rem;border-radius:10px;border:1.5px solid var(--rule);background:var(--card);color:var(--ink);line-height:1.7}
+.lab label.f{display:block;font-size:.85rem;font-weight:700;margin:.6rem 0 .2rem}
+.out{background:var(--card);border-radius:12px;padding:.9rem 1rem;margin-top:.7rem;font-family:var(--serif);border:1px solid var(--rule)}
+
+/* 靈感骰子 */
+.dice{display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));gap:.5rem}
+.die{background:var(--card);border-radius:10px;padding:.55rem .7rem;border:1px solid var(--rule)}
+.die small{display:block;font-size:.75rem;color:var(--ink-soft)}
+.die div{font-family:var(--serif);font-weight:600;min-height:3.2em;line-height:1.55}
+.die.spin div{animation:flick .08s linear infinite}
+@keyframes flick{50%{opacity:.35}}
+
+/* 曲線 */
+.curve svg{width:100%;height:auto;display:block;background:var(--card);border-radius:12px}
+.curve .path{fill:none;stroke:var(--ink);stroke-width:3;stroke-linecap:round}
+.curve .draw{animation:draw 1.4s ease forwards}
+@keyframes draw{from{stroke-dashoffset:var(--len)}to{stroke-dashoffset:0}}
+.curve text{font-family:var(--sans);font-size:18px;fill:var(--ink)}
+.curve .dot{fill:var(--seal)}
+.stage-list{margin:.6rem 0 0;padding:0;list-style:none;font-size:.92rem}
+.stage-list li{padding:.35rem 0;border-bottom:1px dashed var(--rule)}
+.stage-list b{color:var(--seal);margin-right:.3rem}
+
+/* 天梯 */
+.ladder{display:flex;flex-direction:column-reverse;gap:.35rem}
+.rung{display:grid;grid-template-columns:2.2rem 1fr 1fr;gap:.5rem;align-items:center;background:var(--card);border:1.5px solid var(--rule);border-radius:10px;padding:.45rem .6rem;cursor:pointer;text-align:left;font-family:var(--sans);color:var(--ink);font-size:.92rem;transition:transform .25s,border-color .25s}
+.rung .n{font-weight:700;color:var(--ink-soft)}
+.rung .a{color:var(--xuan);font-weight:700}
+.rung .b{color:var(--ke);font-weight:700}
+.rung.on{border-color:var(--ink);transform:translateX(.25rem)}
+.rung.lit{background:linear-gradient(90deg,color-mix(in srgb,var(--xuan) 12%,var(--card)),color-mix(in srgb,var(--ke) 12%,var(--card)))}
+
+/* 炸彈 */
+.stage{background:var(--card);border-radius:12px;padding:.9rem;border:1px solid var(--rule);min-height:11rem;position:relative;overflow:hidden}
+.stage .line{margin:.25rem 0;font-family:var(--serif)}
+.stage .bomb{text-align:right;font-size:1.15rem;margin:.2rem 0;font-family:var(--sans);font-weight:700;color:var(--seal);font-variant-numeric:tabular-nums}
+.boom{animation:shake .5s}
+@keyframes shake{20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.meterline{height:8px;border-radius:4px;background:var(--paper);margin-top:.6rem;overflow:hidden}
+.meterline i{display:block;height:100%;width:0;background:var(--seal);transition:width .5s}
+
+/* 對照切換 */
+.st .txt{font-family:var(--serif);background:var(--card);border-radius:12px;padding:.8rem 1rem;border:1px solid var(--rule);min-height:5rem}
+
+/* 推理遊戲 */
+.suspects{display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));gap:.5rem}
+.sus{background:var(--card);border:1.5px solid var(--rule);border-radius:12px;padding:.7rem;cursor:pointer;text-align:left;font-family:var(--sans);color:var(--ink);font-size:.9rem;line-height:1.6}
+.sus b{display:block;font-size:1rem}
+.clues li{margin:.35rem 0}
+
+/* 節奏條 */
+.bars{display:flex;flex-direction:column;gap:3px;margin-top:.7rem}
+.bars div{height:14px;border-radius:3px;background:var(--wu);min-width:6px;position:relative}
+.bars div.long{background:var(--yi)}
+.bars div span{position:absolute;left:calc(100% + 6px);font-size:.72rem;color:var(--ink-soft);top:-2px;white-space:nowrap}
+
+/* 融合實驗室 */
+.fuse-out h5{font-size:1.15rem;margin:.1rem 0 .4rem;font-family:var(--serif)}
+.fuse-out dl{margin:0}
+.fuse-out dt{font-family:var(--sans);font-weight:700;font-size:.8rem;color:var(--ink-soft);margin-top:.5rem}
+.fuse-out dd{margin:0;font-family:var(--serif)}
+
+/* 贅字 */
+mark.fl{background:color-mix(in srgb,var(--yi) 35%,transparent);color:inherit;border-radius:3px;padding:0 1px}
+
+/* 測驗 */
+.quiz{background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:1rem 1.1rem;margin:2.5rem 0 1rem;font-family:var(--sans)}
+.quiz h4{margin:0 0 .6rem;font-family:var(--serif);font-size:1.2rem}
+.q{margin:1rem 0;padding-top:.8rem;border-top:1px dashed var(--rule)}
+.q p{margin:.2rem 0 .5rem;font-weight:700;line-height:1.7}
+.opt{display:block;width:100%;text-align:left;margin:.3rem 0;padding:.55rem .75rem;border-radius:10px;border:1.5px solid var(--rule);background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:.95rem;cursor:pointer;line-height:1.6}
+.opt.right{border-color:var(--wu);background:color-mix(in srgb,var(--wu) 14%,var(--paper))}
+.opt.wrong{border-color:var(--seal);background:color-mix(in srgb,var(--seal) 12%,var(--paper))}
+.why{font-size:.9rem;color:var(--ink-soft);margin:.3rem 0 0;display:none}
+.why.show{display:block}
+.score{font-weight:700;margin-top:.8rem}
+
+/* 完成勾選 */
+.done{display:flex;align-items:center;gap:.6rem;margin:1.6rem 0 0;padding:.7rem .9rem;border-radius:12px;background:var(--paper-2);font-family:var(--sans);font-size:.95rem;cursor:pointer}
+.done input{width:1.3rem;height:1.3rem;accent-color:var(--wu)}
+
+/* 辭典 */
+.gloss-search{width:100%;font-family:var(--sans);font-size:1rem;padding:.7rem .9rem;border-radius:12px;border:1.5px solid var(--rule);background:var(--card);color:var(--ink);margin:.6rem 0 1rem}
+.term{padding:.8rem 0;border-bottom:1px solid var(--rule)}
+.term h5{margin:0;font-size:1.08rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.term p{margin:.25rem 0;font-size:.96rem;line-height:1.8}
+.term .src{color:var(--ink-soft)}
+
+/* 30天計畫 */
+.plan{display:grid;grid-template-columns:repeat(auto-fill,minmax(9.5rem,1fr));gap:.45rem}
+.day{display:flex;gap:.45rem;align-items:flex-start;background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:.5rem .6rem;font-size:.84rem;line-height:1.55;cursor:pointer}
+.day input{margin-top:.2rem;accent-color:var(--wu)}
+.day b{display:block;font-size:.78rem;color:var(--ink-soft)}
+
+/* 結業 */
+.cert{border:3px double var(--ink);border-radius:6px;padding:1.5rem 1.2rem;text-align:center;background:var(--card);margin-top:1rem;position:relative}
+.cert h5{font-size:1.6rem;margin:.2rem 0;font-weight:900;letter-spacing:.2em}
+.cert .stamp{display:inline-grid;place-items:center;width:4.2rem;height:4.2rem;border:3px solid var(--seal);color:var(--seal);font-weight:900;font-size:1rem;line-height:1.2;border-radius:6px;transform:rotate(-8deg);margin-top:.6rem}
+footer{max-width:43rem;margin:auto;padding:2rem 1.25rem 3rem;font-family:var(--sans);font-size:.85rem;color:var(--ink-soft);border-top:1px solid var(--rule)}
+@media print{.topbar,.drawer,.lab,.quiz,.done{display:none!important}body{font-size:12pt}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="topbar-in">
+  <a class="brand" href="#top">寫作秘笈</a>
+  <div class="meter" aria-label="學習進度"><div class="meter-bar"><i id="meterFill"></i></div><span id="meterText">0/20</span></div>
+  <button class="iconbtn" id="themeBtn" aria-label="切換深淺色">明暗</button>
+  <button class="iconbtn" id="tocBtn" aria-expanded="false">目錄</button>
+</div></div>
+
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-bg" data-close></div>
+  <nav class="drawer-panel" aria-label="課程目錄">
+    <div style="display:flex;justify-content:space-between;align-items:center"><h2>課程目錄</h2><button class="iconbtn" data-close>關閉</button></div>
+    <div class="toc" id="toc"></div>
+  </nav>
+</div>
+
+<header class="hero" id="top">
+  <p class="hero-title">寫一個<br>世界</p>
+  <div class="hero-side">
+    <p class="hero-kicker">跨類型小說寫作課</p>
+    <h1>把玄幻、武俠、懸疑、科技揉進同一部現代小說</h1>
+    <p>五卷二十回，從「故事是什麼」一路學到完成長篇、修改、發表。每個專有名詞都告訴你它從哪裡來，每個技巧都有範例和可以動手玩的小工具。</p>
+  </div>
+  <div class="hero-foot">
+    <div class="seals" aria-hidden="true">
+      <div class="seal">玄<span>玄幻</span></div>
+      <div class="seal">武<span>武俠</span></div>
+      <div class="seal">懸<span>懸疑</span></div>
+      <div class="seal">科<span>科技</span></div>
+    </div>
+    <p class="hero-note">國中生讀得懂，想走專業的人也用得上。</p>
+    <a class="btn" href="#howto">開始上課</a>
+  </div>
+</header>
+
+<main>
+<section class="map" id="howto">
+  <h2>這本秘笈怎麼讀</h2>
+  <p>課程照順序排好，建議從第一回讀到第二十回，每天一回剛剛好。每一回都有這幾種方框：</p>
+  <div class="box origin"><b>📜 名詞由來</b><p>專有名詞是誰發明的、為什麼叫這個名字。知道由來，就不會死背。</p></div>
+  <div class="box eg"><b>✍️ 範例</b><p>把技巧實際寫出來給你看，常常是「壞的寫法」和「好的寫法」對照。</p></div>
+  <div class="box tip"><b>💡 小祕訣</b><p>老手才知道的做法。</p></div>
+  <div class="box warn"><b>⚠️ 新手地雷</b><p>最常見的錯誤，先知道就能避開。</p></div>
+  <div class="box try"><b>🖊️ 動手練習</b><p>準備一本筆記本或開一個檔案，照著做。寫作是練出來的，只讀不寫等於只看游泳影片。</p></div>
+  <p>灰色區塊是「互動工坊」，可以按、可以輸入。每回最後勾選「我學會了」，上方進度條會記錄你的進度（用同一個瀏覽器打開才會記得）。每卷結尾有小測驗。</p>
+  <div class="box origin"><b>📜 為什麼叫「第一回」而不是「第一課」？</b><p>向中國的<strong>章回小說</strong>致敬。宋朝、元朝時，街頭有「說書人」在茶館講長篇故事，一次講不完，就分成好幾次，每次叫做「一回」。講到最緊張的地方，說書人會停下來說「欲知後事如何，且聽下回分解」，讓聽眾明天再來付錢聽。後來文人把這些故事寫成書，保留了分回的形式，像《三國演義》、《水滸傳》、《西遊記》都是章回小說。那句「且聽下回分解」，就是最古老的「吊胃口」技巧，第十五回我們會專門學它。</p></div>
+</section>
+
+<!-- ================= 卷一 ================= -->
+<div class="volume" id="V1"><div class="vno">卷一</div><h2>入門：故事是什麼，類型又是什麼</h2><p>先把地基打好。這一卷不急著寫長篇，只要搞懂三件事：故事的零件、四大類型的來歷、為什麼要混搭。</p></div>
+
+<section class="lesson" id="L1"><header><div class="hui">第一回</div><h3>故事的最小零件：誰、想要什麼、被什麼擋住</h3><p class="goal">學完你會：分辨「事件」和「情節」，並用一個公式寫出三句話的小故事。</p></header>
+
+<div class="box origin"><b>📜 「小說」這個詞的由來</b><p>「小說」最早出現在《莊子》，意思是「瑣碎、不重要的言論」，跟今天的意思差很遠。到了漢朝，班固在《漢書・藝文志》說小說家的內容來自「街談巷語，道聽塗說」，也就是路邊聽來的故事。古人看不起它，覺得不是大道理。沒想到兩千年後，「街頭聽來的故事」變成了全世界最多人讀的文學形式。</p></div>
+
+<h4>事件不等於故事</h4>
+<p>英國作家佛斯特（E. M. Forster）在1927年出版的《小說面面觀》裡舉過一個有名的例子，我們換個說法：</p>
+<ul>
+<li>「國王死了，後來王后也死了。」這只是兩件<strong>事件</strong>，按時間排好而已。</li>
+<li>「國王死了，王后因為太過悲傷，也跟著死了。」這就變成<strong>情節</strong>，因為中間多了「因為」。</li>
+</ul>
+<p>故事的魔力不在於發生了什麼，而在於<strong>事情之間的因果</strong>，以及<strong>角色的感受</strong>。讀者會一直讀下去，是因為他想知道「然後呢？為什麼？他會怎麼做？」</p>
+
+<h4>故事公式</h4>
+<p>幾乎所有故事，從童話到十本厚的長篇，都能拆成這個公式：</p>
+<div class="box" style="text-align:center;font-weight:700;font-size:1.1rem">角色 ＋ 渴望 ＋ 阻礙 ＝ 衝突<br><span style="font-weight:400;font-size:1rem">衝突 → 角色做出選擇 → 角色（或世界）改變</span></div>
+<ul>
+<li><strong>角色</strong>：不一定是人，一隻貓、一個AI、一把會說話的劍都可以。重點是它要有想法和感受。</li>
+<li><strong>渴望</strong>：角色非常想要的東西。越具體越好，「想變強」太模糊，「想在三個月後的宗門大比贏過欺負我的師兄」就很清楚。</li>
+<li><strong>阻礙</strong>：擋在角色和渴望中間的東西。可以是敵人、規則、時間、自己的缺點。</li>
+<li><strong>衝突</strong>：渴望撞上阻礙時產生的火花。沒有衝突就沒有故事。</li>
+</ul>
+
+<div class="box eg"><b>✍️ 範例：同一件事，有沒有衝突差很多</b>
+<p><strong>沒有衝突：</strong>小安放學回家，想吃冰。他打開冰箱，拿了一支冰，吃掉了。</p>
+<p><strong>有衝突：</strong>小安放學回家，冰箱裡只剩最後一支冰。問題是冰箱被裝了新的密碼鎖，密碼只有奶奶知道，而奶奶正在午睡，吵醒她的人會被念一小時。更糟的是，弟弟再過五分鐘就要回家了。</p>
+<p>第二個版本你會想知道結果，因為有<strong>渴望</strong>（冰）、<strong>阻礙</strong>（密碼鎖、奶奶、弟弟）、還有<strong>時間壓力</strong>（五分鐘）。這就是寫作最基本的功夫。</p></div>
+
+<div class="box tip"><b>💡 小祕訣：阻礙最好有好幾層</b><p>外在阻礙（敵人、密碼鎖）讓故事熱鬧，內在阻礙（害怕、自卑、不信任人）讓故事感人。好故事通常兩種都有：主角要打倒魔王，也要打倒心裡那個說「你不行」的聲音。</p></div>
+
+<div class="box try"><b>🖊️ 動手練習</b><p>用公式寫三個「三句話故事」。第一句介紹角色和渴望，第二句寫阻礙，第三句寫角色做了什麼選擇。可以是任何類型，例如：「一個不會武功的店小二，想保護被追殺的客人。追兵是江湖第一殺手，而且就坐在隔壁桌喝茶。店小二端起那壺滾燙的茶，走了過去。」</p></div>
+<label class="done"><input type="checkbox" data-lesson="L1">我學會了第一回</label>
+</section>
+
+<section class="lesson" id="L2"><header><div class="hui">第二回</div><h3>認識四大類型和它們的家譜</h3><p class="goal">學完你會：說出玄幻、武俠、懸疑、科幻各自讓讀者著迷的「核心樂趣」，以及它們是怎麼誕生的。</p></header>
+
+<p><strong>類型</strong>（genre）就像餐廳的菜系。讀者走進川菜館，期待的是辣；翻開一本武俠小說，期待的是刀光劍影和江湖恩怨。每個類型都對讀者做了一個<strong>承諾</strong>，寫作者的工作就是兌現它，甚至給得更多。</p>
+<div class="box origin"><b>📜 「類型」genre 的由來</b><p>genre 是法文，來自拉丁文 genus，意思是「種類、家族」，生物學的「屬」也是同一個字。文學和電影借用它，把有相似規則的作品歸成一家人。</p></div>
+
+<div class="genres">
+<article class="gcard" style="--c:var(--wu)"><h4>武俠</h4>
+<dl><dt>核心樂趣</dt><dd>俠義精神、江湖恩怨、武功的想像，還有「一個人憑本事和良心，面對不公平的世界」。</dd>
+<dt>家譜</dt><dd>「俠」這個字很古老。戰國時代的韓非子說「俠以武犯禁」，意思是俠客用武力打破法律，他並不喜歡這種人。漢朝司馬遷卻在《史記》寫了〈游俠列傳〉，稱讚他們講信用、肯犧牲。唐朝的傳奇小說出現了〈虬髯客傳〉、〈聶隱娘〉這些俠客故事。<br>「武俠」兩個字合在一起，一般認為是二十世紀初從日本傳進中文的（日本作家押川春浪的作品常用這個詞）。1920年代平江不肖生的《江湖奇俠傳》掀起熱潮；1950年代以後，金庸、古龍、梁羽生開創了「新派武俠」，讓武俠成為華人世界的共同記憶。</dd>
+<dt>代表作</dt><dd>金庸《射鵰英雄傳》、古龍《楚留香傳奇》、梁羽生《七劍下天山》</dd></dl></article>
+
+<article class="gcard" style="--c:var(--xuan)"><h4>玄幻（含仙俠、修仙）</h4>
+<dl><dt>核心樂趣</dt><dd>超越凡人的力量、一步步變強的成長感、巨大又神祕的世界。</dd>
+<dt>家譜</dt><dd>「玄」在古代指深奧神祕，《老子》說「玄之又玄，眾妙之門」。「玄幻小說」這個名稱，一般認為最早出現在1988年香港作家黃易的小說《月魔》出版時的序言，用來形容這種融合奇幻想像的新寫法。<br>更早的源頭是<strong>仙俠</strong>：1930年代還珠樓主的《蜀山劍俠傳》寫了飛劍、法寶、修煉成仙，被視為仙俠的開山之作。「修仙」的觀念則來自道教追求長生不老的修煉。2000年以後網路小說興起，玄幻、仙俠成為最熱門的類型之一。</dd>
+<dt>代表作</dt><dd>還珠樓主《蜀山劍俠傳》、黃易《尋秦記》、網路小說《凡人修仙傳》</dd></dl></article>
+
+<article class="gcard" style="--c:var(--yi)"><h4>懸疑（含推理、偵探）</h4>
+<dl><dt>核心樂趣</dt><dd>解謎的腦力激盪、緊張不安的感覺，以及真相大白那一刻「原來如此！」的爽快。</dd>
+<dt>家譜</dt><dd>中國古代就有「公案小說」，像《包公案》，寫清官辦案。西方一般把1841年美國作家愛倫坡的〈莫爾格街兇殺案〉視為第一篇現代推理小說，1887年柯南・道爾讓福爾摩斯登場，之後有阿嘉莎・克莉絲蒂等大師。</dd>
+<dt>分清楚</dt><dd><strong>推理</strong>重點在「是誰做的？怎麼做到的？」；<strong>懸疑</strong>重點在「接下來會發生什麼？」那種提心吊膽。推理一定有懸疑，懸疑不一定要推理。</dd>
+<dt>代表作</dt><dd>柯南・道爾《福爾摩斯》、克莉絲蒂《一個都不留》、東野圭吾《嫌疑犯X的獻身》</dd></dl></article>
+
+<article class="gcard" style="--c:var(--ke)"><h4>科幻（科技）</h4>
+<dl><dt>核心樂趣</dt><dd>「如果科技這樣發展，人類會變成什麼樣子？」這種大膽的想像，以及對未來的驚奇與警惕。</dd>
+<dt>家譜</dt><dd>1818年，英國作家瑪麗・雪萊出版《科學怪人》，寫科學家用科學方法創造生命，常被視為第一部科幻小說。之後有法國的凡爾納（《海底兩萬里》）和英國的威爾斯（《時間機器》）。英文 science fiction 這個說法，是美國編輯雨果・根斯巴克在1929年推廣開來的，今天科幻界最重要的「雨果獎」就是用他的名字命名。中文「科幻」是「科學幻想」的縮寫。</dd>
+<dt>代表作</dt><dd>瑪麗・雪萊《科學怪人》、劉慈欣《三體》、艾西莫夫《基地》</dd></dl></article>
+</div>
+
+<div class="box origin"><b>📜 為什麼日本叫「推理小說」？</b><p>日本原本也叫「偵探小說」。二戰後的1946年，日本政府公布「當用漢字表」限制常用漢字，「偵」字不在表內。作家木々高太郎等人提倡的「推理小說」一詞因此普及，一直用到今天，也傳回了中文世界。一個名字的誕生，有時只是因為一個字被刪掉了。</p></div>
+
+<div class="box try"><b>🖊️ 動手練習</b><p>寫下你最喜歡的三部作品（小說、動畫、遊戲、電影都行），分別判斷它屬於哪些類型，再寫一句「它最讓我著迷的地方是……」。你會發現，讓你著迷的往往就是那個類型的核心樂趣。</p></div>
+<label class="done"><input type="checkbox" data-lesson="L2">我學會了第二回</label>
+</section>
+
+<section class="lesson" id="L3"><header><div class="hui">第三回</div><h3>為什麼要混搭？跨類型的魔法</h3><p class="goal">學完你會：理解類型融合的原理，知道「一主一副」原則，並認識連接玄幻與科技的關鍵定律。</p></header>
+
+<p>混搭類型，就像珍珠奶茶：奶茶很好喝，珍珠很好吃，放在一起變成了全新的東西。讀者一次得到兩種樂趣，又能吃到沒吃過的味道。</p>
+
+<h4>已經成功的混搭</h4>
+<div class="tw"><table>
+<tr><th>作品</th><th>混了什麼</th><th>化學反應</th></tr>
+<tr><td>古龍《楚留香》《陸小鳳》</td><td><span class="g w">武俠</span> <span class="g y">懸疑</span></td><td>主角像偵探一樣查案，武功是破案的工具之一，真兇往往是最意想不到的朋友。</td></tr>
+<tr><td>溫瑞安《四大名捕》</td><td><span class="g w">武俠</span> <span class="g y">懸疑</span></td><td>主角是朝廷捕快，江湖加上辦案，正義和規矩之間的拉扯。</td></tr>
+<tr><td>電影《星際大戰》</td><td><span class="g k">科幻</span> <span class="g w">武俠</span></td><td>絕地武士拿光劍、練原力、講師徒傳承，導演喬治・盧卡斯深受黑澤明武士電影影響。</td></tr>
+<tr><td>電影《駭客任務》</td><td><span class="g k">科幻</span> <span class="g w">武俠</span></td><td>虛擬世界裡用功夫戰鬥，武打設計請來香港武術指導袁和平。</td></tr>
+<tr><td>劉慈欣《三體》</td><td><span class="g k">科幻</span> <span class="g y">懸疑</span></td><td>開頭一連串科學家離奇死亡、眼前出現倒數計時，用懸疑勾住讀者，再揭開宇宙級的真相。</td></tr>
+<tr><td>網路小說《詭秘之主》</td><td><span class="g x">玄幻</span> <span class="g y">懸疑</span> <span class="g k">科技</span></td><td>蒸汽機時代的城市、神祕的超凡力量、步步為營的解謎，被讀者視為融合的經典。</td></tr>
+</table></div>
+
+<h4>一主一副原則</h4>
+<p>新手最容易犯的錯，是四種類型平均分配，結果每種都淺淺的。比較好的做法是：</p>
+<ul>
+<li><strong>主類型</strong>決定讀者的期待和故事的骨架。例如主類型是懸疑，整本書的核心問題就是「真相是什麼」。</li>
+<li><strong>副類型</strong>負責帶來驚喜和獨特的味道。例如副類型是修仙，破案的線索可能藏在一個法術的副作用裡。</li>
+<li>第三、第四種類型當作<strong>調味料</strong>，點到為止。</li>
+</ul>
+
+<div class="box origin"><b>📜 克拉克第三定律：玄幻和科技之間的橋</b><p>英國科幻作家亞瑟・克拉克提出過三條定律，其中第三條最有名：<strong>「任何足夠先進的科技，都與魔法無從區分。」</strong>（1973年修訂版《未來的輪廓》）</p><p>這句話是跨類型寫作的萬能鑰匙。一個古代人看到手機視訊，會以為是千里傳音的仙術；反過來，你也可以寫一個世界，裡面的「修仙」其實是遠古文明遺留的高科技。玄幻和科技，本來就只隔著一層「你懂不懂原理」的紗。</p></div>
+
+<div class="box tip"><b>💡 小祕訣：類型承諾</b><p>書名、封面、簡介、第一章，都在對讀者許下承諾。如果簡介寫得像熱血修仙，結果整本都在慢慢推理，讀者會覺得被騙。融合可以，但要在開頭就讓讀者嚐到主類型和副類型的味道。</p></div>
+
+<div class="box try"><b>🖊️ 動手練習</b><p>選一部你熟悉的單一類型作品，替它「加一個副類型」。例如：如果《西遊記》加上懸疑，會怎樣？（也許：唐僧每到一個國家，就有一個徒弟被懷疑是妖怪假扮的……）寫出一段五十字的新故事簡介。</p></div>
+<label class="done"><input type="checkbox" data-lesson="L3">我學會了第三回</label>
+</section>
+
+<div class="quiz" data-quiz="q1"><h4>卷一小測驗</h4><div class="qbody"></div></div>
+
+<!-- ================= 卷二 ================= -->
+<div class="volume" id="V2"><div class="vno">卷二</div><h2>基礎：點子、主題、角色、世界、骨架</h2><p>蓋房子要有設計圖。這一卷教你在動筆寫正文之前，先把故事的五大支柱立起來。</p></div>
+
+<section class="lesson" id="L4"><header><div class="hui">第四回</div><h3>點子從哪裡來：「如果……會怎樣？」</h3><p class="goal">學完你會：用四種方法產生點子，並把點子濃縮成一句話故事。</p></header>
+
+<p>很多人以為作家是等靈感從天上掉下來。其實職業作家更像廚師：靈感是可以「做」出來的。下面四招最好用。</p>
+<h4>第一招：如果……會怎樣？</h4>
+<p>拿一個平常的東西，加上一個不平常的假設。「如果手機可以打電話給十年前的自己，會怎樣？」「如果武功秘笈是一個APP，會怎樣？」這一招英文叫 <em>what if</em>，幾乎所有科幻和玄幻都從這裡出發。</p>
+<h4>第二招：拼接</h4>
+<p>把A類型的世界，套上B類型的問題。修仙世界（A）＋密室殺人（B）＝「宗門閉關室裡，一位長老死了，門從裡面鎖著，而全宗門能穿牆的法術只有三個人會。」</p>
+<h4>第三招：翻轉老梗</h4>
+<p>把大家熟悉的套路反過來。「退婚流」是網路小說老梗，主角被未婚妻退婚後發憤圖強。翻轉一下：如果退婚的是主角，而他退婚是為了保護對方不被捲入一樁謀殺案呢？</p>
+<h4>第四招：現實＋放大</h4>
+<p>從新聞或生活找真實的事，再放大。「AI可以模仿聲音詐騙」是真實新聞，放大後：「在一個人人能複製聲音的時代，一位盲眼的武林高手，成了唯一能分辨真假聲音的人。」</p>
+
+<div class="lab" id="dice">
+  <div class="lab-h"><b>互動工坊・靈感骰子</b><span>按一下擲骰，得到五個隨機元素，把它們串成故事</span></div>
+  <div class="dice">
+    <div class="die"><small>世界</small><div data-d="0">？</div></div>
+    <div class="die"><small>主角</small><div data-d="1">？</div></div>
+    <div class="die"><small>能力或祕密</small><div data-d="2">？</div></div>
+    <div class="die"><small>謎團</small><div data-d="3">？</div></div>
+    <div class="die"><small>代價</small><div data-d="4">？</div></div>
+  </div>
+  <div class="row"><button class="btn sm" id="rollBtn">擲骰</button></div>
+  <div class="out" id="diceOut">擲出骰子後，這裡會幫你組成一句話故事的草稿。</div>
+</div>
+
+<div class="box origin"><b>📜 一句話故事 logline 的由來</b><p>logline 是好萊塢電影界的用語。log 原本是「航海日誌、登記簿」。早期電影公司會把收到的劇本登記在簿子上，每部只寫一行摘要，方便老闆快速決定要不要讀，這一行就叫 logline。後來它變成所有說故事的人都要練的基本功：如果你無法用一句話說出故事，代表你自己還沒想清楚。</p></div>
+<p>一句話故事的萬用模板：</p>
+<div class="box" style="font-weight:700">當〔有特點的主角〕遇上〔改變一切的事件〕，他必須〔具體目標〕，否則〔嚴重代價〕。</div>
+<div class="box eg"><b>✍️ 範例</b><p>當<strong>一個沒錢安裝靈根晶片的外送少年</strong>，收到<strong>一把住著三百年前劍仙意識的古劍</strong>，他必須<strong>在七天內找出吸乾全城修士靈根的兇手</strong>，否則<strong>他就會成為下一個被吸乾的人</strong>。</p><p>這一句話裡同時有科技（晶片）、玄幻（靈根、劍仙）、懸疑（兇手）、武俠（劍），而且有時間壓力。第十七回我們會把它寫成完整的故事。</p></div>
+<div class="box try"><b>🖊️ 動手練習</b><p>擲骰子五次，挑出你最有感覺的一組，寫成一句話故事。再用「翻轉老梗」寫一個。把兩句都留著，後面的課會一直用到。</p></div>
+<label class="done"><input type="checkbox" data-lesson="L4">我學會了第四回</label>
+</section>
+
+<section class="lesson" id="L5"><header><div class="hui">第五回</div><h3>主題：故事真正想說的話</h3><p class="goal">學完你會：分辨「題材」和「主題」，並用一個問題當作你的故事核心。</p></header>
+<p>很多人會把兩件事搞混：</p>
+<ul>
+<li><strong>題材</strong>：故事寫的是什麼。修仙、偵探、機器人、江湖。</li>
+<li><strong>主題</strong>：故事想讓人思考什麼。力量的代價、真相值不值得、什麼才算是人。</li>
+</ul>
+<p>兩部小說可以題材一樣、主題完全不同。同樣寫修仙，一部可能在問「為了長生，可以拋棄多少感情？」另一部在問「弱者有沒有資格追求自由？」</p>
+<div class="box origin"><b>📜 「主題」theme 的由來</b><p>英文 theme 來自希臘文 thema，意思是「被放下、被提出來的東西」，也就是「被擺上桌討論的題目」。音樂裡也有 theme，指一首曲子反覆出現的主旋律。小說的主題就像主旋律，不一定大聲唱出來，但一直在背景迴響。</p></div>
+<h4>把主題寫成問題，而不是教訓</h4>
+<p>「做人要誠實」是教訓，讀起來像上課。「如果說實話會害死你最愛的人，你還會說嗎？」是問題，讀者會跟著主角一起掙扎。好的主題讓不同角色給出不同答案，由故事的結局給出作者的回應，但不強迫讀者接受。</p>
+<div class="box eg"><b>✍️ 範例：主題決定兩種類型怎麼融合</b><p>假設題材是「賽博修仙」（高科技城市＋修仙）。</p><p>如果主題是<strong>「力量能不能用錢買？」</strong>，故事重點就會放在：富人買晶片速成，窮人苦修，誰才是真正的強者。</p><p>如果主題是<strong>「一個能無限升級的人，還算是人嗎？」</strong>，故事重點就會變成：主角越來越強，也越來越不像自己，身邊的人漸漸認不出他。</p><p>同樣的設定，主題不同，寫出來就是兩本書。</p></div>
+<div class="box tip"><b>💡 小祕訣：主題不用一開始就想好</b><p>有些作家是寫完初稿才發現「原來我一直在寫這件事」。先有大概的方向就好，修改時再讓它更清楚。</p></div>
+<div class="box try"><b>🖊️ 動手練習</b><p>替第四回的一句話故事，寫出三個不同的主題問題，選一個你最想回答的。</p></div>
+<label class="done"><input type="checkbox" data-lesson="L5">我學會了第五回</label>
+</section>
+
+<section class="lesson" id="L6"><header><div class="hui">第六回</div><h3>角色：讓讀者在乎的人</h3><p class="goal">學完你會：用「渴望、需要、缺陷、祕密」設計立體的角色，並知道主角、反派、導師各自的功能。</p></header>
+<p>讀者可以原諒普通的情節，但不會原諒無聊的角色。讀者追一部小說，常常不是為了看發生什麼事，而是想知道「這個人會怎麼樣」。</p>
+<h4>角色的四個核心</h4>
+<div class="tw"><table>
+<tr><th>核心</th><th>意思</th><th>例子：武俠少年阿岳</th></tr>
+<tr><td>渴望（want）</td><td>角色自己知道、嘴上說出來的目標</td><td>為被滅門的師父報仇</td></tr>
+<tr><td>需要（need）</td><td>角色真正需要、但自己還不知道的東西</td><td>學會放下仇恨，不讓仇恨把自己變成下一個兇手</td></tr>
+<tr><td>缺陷</td><td>阻止他得到「需要」的性格弱點</td><td>衝動、不相信任何人</td></tr>
+<tr><td>祕密</td><td>他隱瞞的事，或連他自己都不知道的事</td><td>滅門那晚，其實是他忘了鎖上後門</td></tr>
+</table></div>
+<p><strong>渴望和需要打架</strong>的地方，就是角色最精彩的地方。阿岳越接近報仇，就越接近毀掉自己。</p>
+
+<div class="box origin"><b>📜 角色弧線 character arc 的由來</b><p>arc 是「弧線」。劇作理論用它形容角色從故事開頭的A點，彎彎曲曲走到結尾的B點，畫出一道弧。常見有三種：</p><ul><li><strong>正向弧</strong>：角色變好。膽小的人學會勇敢。</li><li><strong>負向弧</strong>：角色墮落。理想主義者變成他最討厭的那種人。</li><li><strong>平弧</strong>：角色本身不太變，但他改變了周圍的世界。像福爾摩斯，他一直是那個福爾摩斯，變的是案件和身邊的人。</li></ul></div>
+
+<h4>反派：他覺得自己是對的</h4>
+<p>最可怕的反派不是單純的壞人，而是有一套自己的道理。試著從反派的角度寫一段他的日記，你會發現他是「自己故事裡的主角」。例如一位想統一江湖的盟主，他真心相信：只有一個人說了算，江湖才不會再有人被滅門。他的方法是錯的，但他的痛是真的。</p>
+<div class="box origin"><b>📜 導師 mentor 的由來</b><p>mentor 這個英文字來自希臘史詩《奧德賽》。英雄奧德修斯出征前，把兒子託付給好友門托爾（Mentor）照顧。後來女神雅典娜常常化身成門托爾的樣子，給少年建議和勇氣。從此 mentor 就成了「指引者、導師」的意思。在故事裡，導師負責給主角工具和方向，而且常常會在關鍵時刻離開或犧牲，逼主角自己長大。</p></div>
+<h4>配角的三種功能</h4>
+<ul><li><strong>夥伴</strong>：陪主角冒險，也讓主角有機會說出心裡話（讀者才知道他在想什麼）。</li><li><strong>對照組</strong>：和主角處境相似，卻做了不同選擇，讓讀者看見「另一條路」。</li><li><strong>考驗者</strong>：不是敵人，但會擋路、會質疑主角，逼主角證明自己。</li></ul>
+
+<div class="lab" id="charLab">
+  <div class="lab-h"><b>互動工坊・角色卡</b><span>填好欄位，生成你的角色卡</span></div>
+  <label class="f" for="c_name">名字與身分</label><input type="text" id="c_name" placeholder="例：沈硯，十七歲的外送員">
+  <label class="f" for="c_want">渴望（他說他想要）</label><input type="text" id="c_want" placeholder="例：存錢裝上人工靈根">
+  <label class="f" for="c_need">需要（他真正缺的）</label><input type="text" id="c_need" placeholder="例：明白強大不是買來的">
+  <label class="f" for="c_flaw">缺陷</label><input type="text" id="c_flaw" placeholder="例：不相信任何人">
+  <label class="f" for="c_secret">祕密</label><input type="text" id="c_secret" placeholder="例：他其實偷過客人的包裹">
+  <div class="row"><button class="btn sm" id="charBtn">生成角色卡</button></div>
+  <div class="out" id="charOut">填寫後按下按鈕。</div>
+</div>
+<div class="box try"><b>🖊️ 動手練習</b><p>替你的故事做三張角色卡：主角、反派、導師。再替反派寫一段一百字的「我為什麼沒有錯」。</p></div>
+<label class="done"><input type="checkbox" data-lesson="L6">我學會了第六回</label>
+</section>
+
+<section class="lesson" id="L7"><header><div class="hui">第七回</div><h3>世界觀：打造一個會運作的世界</h3><p class="goal">學完你會：用「三個問題」設計力量體系，把修仙和科技對照融合，並認識修仙境界名稱的由來。</p></header>
+<div class="box origin"><b>📜 「世界觀」的由來</b><p>「世界觀」原本是哲學用語，翻譯自德文 Weltanschauung，意思是「一個人看待整個世界的方式」。後來小說、動畫、遊戲圈借用這個詞，指一部作品的整套世界設定：地理、歷史、力量、社會、規則。</p></div>
+<h4>冰山原則：設定十分，只露一分</h4>
+<p>美國作家海明威提出過「冰山理論」：海面上看得到的冰山只有一小部分，大部分藏在水下。寫作也一樣，你可以設定很多，但只寫出故事需要的部分。讀者感覺得到水面下的重量，卻不會被一大堆說明淹沒。</p>
+<h4>力量體系三問</h4>
+<ol>
+<li><strong>力量從哪裡來？</strong>天地靈氣、基因突變、晶片、血脈、契約？</li>
+<li><strong>要付出什麼代價？</strong>壽命、記憶、金錢、人性、痛苦？沒有代價的力量會讓故事失去緊張感。</li>
+<li><strong>誰掌握它？</strong>是少數貴族、大企業、宗門，還是人人都有？這決定了你的社會長什麼樣子、誰壓迫誰。</li>
+</ol>
+<div class="box origin"><b>📜 山德森魔法第一定律</b><p>美國奇幻作家布蘭登・山德森在2007年寫過一篇談魔法系統的文章，提出一條常被引用的原則，大意是：<strong>作者用魔法解決問題的能力，和讀者對這套魔法的理解程度成正比。</strong></p><p>意思是，如果讀者不知道規則，主角突然用一招新法術脫困，讀者會覺得作者在作弊；如果規則早就講清楚了，主角靈活運用規則脫困，讀者會拍案叫絕。反過來，規則模糊的魔法適合製造神祕與恐懼，但不適合拿來解決問題。</p></div>
+
+<h4>融合對照表：把修仙翻譯成科技</h4>
+<div class="tw"><table>
+<tr><th>修仙元素</th><th>科技版本</th><th>融合點子</th></tr>
+<tr><td>靈氣</td><td>能源、訊號、算力</td><td>城市上空的通訊網路，其實就是現代的靈氣</td></tr>
+<tr><td>靈根（天賦）</td><td>基因、神經晶片</td><td>有錢人可以買人工靈根，窮人只能靠苦修</td></tr>
+<tr><td>丹田</td><td>體內電池、核心處理器</td><td>修為被量化成數字，顯示在手腕上</td></tr>
+<tr><td>法寶</td><td>裝備、無人機、義肢</td><td>古劍裡住著一個會說話的AI劍靈</td></tr>
+<tr><td>宗門</td><td>企業、財團、研究所</td><td>宗門大比變成上市公司的年度考核</td></tr>
+<tr><td>天劫</td><td>系統審查、強制更新</td><td>突破境界時，會被城市監控系統「偵測並清除」</td></tr>
+<tr><td>神識</td><td>腦機介面、網路意識</td><td>神識出竅＝意識上傳到網路</td></tr>
+</table></div>
+
+<div class="lab" id="ladderLab">
+  <div class="lab-h"><b>互動工坊・境界天梯</b><span>點任一層，看名稱由來和科技版點子；按「一路突破」看動畫</span></div>
+  <div class="ladder" id="ladder"></div>
+  <div class="row"><button class="btn sm" id="climbBtn">一路突破</button></div>
+  <div class="out" id="ladderOut">點選一個境界。</div>
+</div>
+<div class="box tip"><b>💡 小祕訣：卡爾達肖夫指數</b><p>1964年，蘇聯天文學家卡爾達肖夫提出用「能用多少能量」來替文明分級：第一型能用盡一顆行星的能量，第二型能用盡一顆恆星，第三型能用盡整個星系。很多科幻作品借用這個分級。你也可以把它當作「科技版的修仙境界」，替你的世界設計文明等級。</p></div>
+<div class="box warn"><b>⚠️ 新手地雷：設定寫太多</b><p>第一章就花三千字介紹九大境界、十八個宗門、五百年歷史，讀者會直接關掉。設定要在故事需要的時候才出現，而且最好透過角色的行動和對話帶出來。</p></div>
+<div class="box try"><b>🖊️ 動手練習</b><p>替你的故事回答「力量體系三問」，每題至少三句話。再設計五個等級，每個等級寫一句「到了這一級能做什麼、要付出什麼」。</p></div>
+<label class="done"><input type="checkbox" data-lesson="L7">我學會了第七回</label>
+</section>
+
+<section class="lesson" id="L8"><header><div class="hui">第八回</div><h3>結構：故事的骨架</h3><p class="goal">學完你會：使用起承轉合、三幕劇、英雄旅程三種結構，並用雪花法寫出大綱。</p></header>
+<p>骨架決定故事站不站得起來。三種最常用的結構，其實說的是同一件事：<strong>開始、麻煩變大、翻轉、收尾</strong>。差別只在切得粗或細。</p>
+
+<div class="lab curve" id="curveLab">
+  <div class="lab-h"><b>互動工坊・情節曲線</b><span>切換三種結構，看故事張力怎麼起伏</span></div>
+  <div class="row" role="group" aria-label="結構選擇">
+    <button class="chip" data-curve="qc" aria-pressed="true">起承轉合</button>
+    <button class="chip" data-curve="act" aria-pressed="false">三幕劇</button>
+    <button class="chip" data-curve="hero" aria-pressed="false">英雄旅程</button>
+  </div>
+  <svg viewBox="0 0 640 260" id="curveSvg" role="img" aria-label="情節張力曲線圖"></svg>
+  <ul class="stage-list" id="curveList"></ul>
+</div>
+
+<div class="box origin"><b>📜 三種結構的由來</b>
+<p><strong>起承轉合</strong>：原本是中國古典詩（律詩、絕句）的寫作章法，元代的詩論書已經有明確討論。「起」開頭，「承」接續發展，「轉」出現轉折，「合」收束。後來被用在文章和故事上。</p>
+<p><strong>三幕劇</strong>：兩千多年前，古希臘哲學家亞里斯多德在《詩學》說，完整的故事要有開端、中段、結尾。1979年美國編劇老師席德・菲爾德在《實用電影編劇技巧》把它整理成「三幕」，成為好萊塢的標準。</p>
+<p><strong>英雄旅程</strong>：美國神話學家約瑟夫・坎伯在1949年出版《千面英雄》，發現世界各地神話都有類似的模式：英雄離開家、遇到考驗、得到寶物、回到家鄉。後來編劇克里斯多福・沃格勒把它整理成十二個階段，《星際大戰》就是著名的應用例子。</p></div>
+
+<div class="box eg"><b>✍️ 範例：用起承轉合寫一個短篇</b>
+<p><strong>起</strong>：2077年，機器保全統治的古城裡，老鐵匠是最後一個會打造真劍的人。一天，一個少女拿著斷劍來求他修。</p>
+<p><strong>承</strong>：修劍過程中，老鐵匠發現劍身刻著他三十年前親手打的記號。這把劍，是他當年為一位俠客所鑄。少女說，那是她父親，被機器保全殺了。</p>
+<p><strong>轉</strong>：劍修好的那晚，老鐵匠在劍柄暗格裡找到一枚晶片，裡面是保全系統的關閉密碼。原來少女的父親不是死於意外，而是因為知道了這個祕密。</p>
+<p><strong>合</strong>：老鐵匠把劍交給少女，自己拿起鐵鎚走向城中心的主控塔。他打了一輩子的劍，這一次，他要親手打碎一個時代。</p></div>
+
+<h4>雪花法：從一句話長成一本書</h4>
+<div class="box origin"><b>📜 雪花法的由來</b><p>美國作家兼物理學家蘭迪・英格曼森設計的大綱方法。他從數學的「科赫雪花」得到靈感：從一個三角形開始，每一邊不斷長出更小的三角形，最後變成複雜又美麗的雪花。寫大綱也是從最簡單的一句話開始，一層一層長出細節。</p></div>
+<ol>
+<li>寫一句話故事（第四回做過了）。</li>
+<li>把它擴寫成一段五句話：開頭、三個大災難、結局。</li>
+<li>替主要角色寫角色卡（第六回做過了）。</li>
+<li>把五句話的每一句擴寫成一段，變成一頁大綱。</li>
+<li>列出場景清單：每個場景寫一行「誰、在哪、想要什麼、結果出了什麼事」。</li>
+</ol>
+<div class="box tip"><b>💡 小祕訣：每個場景都要改變一點什麼</b><p>一個場景結束時，角色的處境要比開始時更好或更糟。如果一個場景前後什麼都沒變，它大概可以刪掉。美國寫作老師德懷特・史溫把場景拆成「目標、衝突、災難」：角色想做某件事，遇到阻撓，結果搞砸了或得到意外的結果，逼他進入下一步。</p></div>
+<div class="box try"><b>🖊️ 動手練習</b><p>用起承轉合寫一個四段的短篇大綱，每段兩到三句。再用雪花法第二步，把你的一句話故事擴寫成五句話。</p></div>
+<label class="done"><input type="checkbox" data-lesson="L8">我學會了第八回</label>
+</section>
+
+<div class="quiz" data-quiz="q2"><h4>卷二小測驗</h4><div class="qbody"></div></div>
+
+<!-- ================= 卷三 ================= -->
+<div class="volume" id="V3"><div class="vno">卷三</div><h2>技法：把故事寫得好看</h2><p>有了骨架，接著長肉。這一卷是各類型的「獨門功夫」：懸疑怎麼吊胃口、武俠怎麼寫打鬥、玄幻怎麼製造爽感、科幻怎麼讓人相信。</p></div>
+
+<section class="lesson" id="L9"><header><div class="hui">第九回</div><h3>視角與「展示，不要告訴」</h3><p class="goal">學完你會：選擇適合的敘事視角，並把「告訴讀者」的句子改寫成「展示給讀者看」。</p></header>
+<h4>三種常見視角</h4>
+<div class="tw"><table>
+<tr><th>視角</th><th>樣子</th><th>優點</th><th>適合</th></tr>
+<tr><td>第一人稱</td><td>「我推開門，血腥味撲鼻而來。」</td><td>親密、有代入感</td><td>懸疑（讀者只知道主角知道的事）</td></tr>
+<tr><td>第三人稱限知</td><td>「她推開門，血腥味撲鼻而來。」鏡頭只跟著一個人</td><td>有代入感又比較自由，可以換章換人</td><td>最萬用，長篇最常見</td></tr>
+<tr><td>第三人稱全知</td><td>作者像神一樣，知道每個人在想什麼</td><td>視野大，適合史詩</td><td>多勢力的武俠、玄幻群像</td></tr>
+</table></div>
+<div class="box tip"><b>💡 小祕訣：懸疑的祕密武器是「限知」</b><p>視角限制在一個人身上，你就能合理地「不告訴讀者」某些事。偵探還沒發現的線索，讀者自然也不知道。一旦用了全知視角，讀者會問：「作者明明知道兇手在想什麼，為什麼不說？」</p></div>
+<div class="box origin"><b>📜 不可靠的敘事者</b><p>美國文學評論家韋恩・布斯在1961年的《小說修辭學》提出這個概念：說故事的人，自己說的話不一定可信。他可能在說謊、記憶錯亂，或誤會了真相。推理小說常用這一招製造最後的大翻轉。在科技融合的故事裡，敘事者可以是記憶被竄改過的人，或是一個自以為是人類的AI。</p></div>
+
+<h4>展示，不要告訴</h4>
+<p>這是寫作課最常聽到的一句話，英文是 <em>show, don't tell</em>。「告訴」是直接下結論，「展示」是給讀者看證據，讓他自己得出結論。讀者自己推出來的感受，會比你告訴他的深刻十倍。</p>
+<div class="box origin"><b>📜 由來</b><p>這個觀念常被歸功於俄國作家契訶夫，流傳的說法是「不要告訴我月光很亮，讓我看碎玻璃上閃著的光」。其實契訶夫原信裡的說法比較長，這句是後人濃縮改寫的版本。1921年，英國評論家帕西・盧伯克在《小說的技藝》裡系統討論「展示」與「講述」，讓這個觀念在寫作教學中普及。</p></div>
+<div class="lab st" id="showLab">
+  <div class="lab-h"><b>互動工坊・告訴 vs 展示</b><span>選一個情境，切換兩種寫法比較</span></div>
+  <div class="row" role="group" aria-label="情境">
+    <button class="chip" data-st="0" aria-pressed="true">害怕</button>
+    <button class="chip" data-st="1" aria-pressed="false">武功高強</button>
+    <button class="chip" data-st="2" aria-pressed="false">城市很未來</button>
+    <button class="chip" data-st="3" aria-pressed="false">他在說謊</button>
+  </div>
+  <div class="row" role="group" aria-label="寫法">
+    <button class="chip" data-mode="tell" aria-pressed="true">告訴</button>
+    <button class="chip" data-mode="show" aria-pressed="false">展示</button>
+  </div>
+  <div class="txt" id="showTxt"></div>
+</div>
+<div class="box warn"><b>⚠️ 別走火入魔</b><p>不是每一句都要展示。不重要的過場，用「告訴」快速帶過反而好，例如「三天後，他們到了京城」。<strong>重要的情緒和關鍵時刻用展示，過場用告訴</strong>。</p></div>
+<div class="box try"><b>🖊️ 動手練習</b><p>把這三句改寫成展示：「她很生氣。」「這個門派很有錢。」「機器人開始有了感情。」每句至少寫三句話，不准出現「生氣」「有錢」「感情」這些字。</p></div>
+<label class="done"><input type="checkbox" data-lesson="L9">我學會了第九回</label>
+</section>
+
+<section class="lesson" id="L10"><header><div class="hui">第十回</div><h3>懸疑的武器庫：伏筆、懸念、紅鯡魚</h3><p class="goal">學完你會：分辨驚嚇和懸念，埋伏筆並回收，用紅鯡魚誤導讀者，並寫出「公平」的謎題。</p></header>
+<h4>懸念和驚嚇不一樣</h4>
+<div class="box origin"><b>📜 希區考克的炸彈理論</b><p>英國導演希區考克被稱為「懸疑大師」，他解釋過驚嚇和懸念的差別：兩個人在桌邊聊天，桌下有顆炸彈。如果觀眾不知道，炸彈突然爆炸，觀眾只會嚇一跳，大約十五秒。如果觀眾一開始就看到炸彈和倒數計時器，那兩人聊的每一句無聊家常，都會讓觀眾坐立難安，想大喊「快跑！」。這種緊張可以維持好幾分鐘。</p></div>
+<div class="lab" id="bombLab">
+  <div class="lab-h"><b>互動工坊・桌下的炸彈</b><span>分別按兩個按鈕，感受讀者心裡的緊張程度</span></div>
+  <div class="row"><button class="btn sm ghost" id="bombA">版本一：驚嚇</button><button class="btn sm" id="bombB">版本二：懸念</button></div>
+  <div class="stage" id="bombStage"><div class="line" style="color:var(--ink-soft)">選一個版本開始。</div></div>
+  <div style="font-size:.82rem;margin-top:.5rem">讀者的緊張程度</div>
+  <div class="meterline"><i id="tension"></i></div>
+</div>
+<p>結論：<strong>讓讀者比角色知道得多，就能製造懸念</strong>。這叫<strong>戲劇反諷</strong>，也就是觀眾知道、角色卻不知道的落差。</p>
+
+<h4>伏筆：前面埋，後面收</h4>
+<div class="box origin"><b>📜 草蛇灰線</b><p>清朝初年的評論家金聖歎在評點《水滸傳》時，歸納出許多寫作技法，其中一招叫「草蛇灰線」：蛇爬過草地會留下淡淡的痕跡，一條線沾過灰會留下若有若無的印子。意思是線索要埋得很淡，讀者當下不注意，回頭一看才發現早就寫在那裡了。這就是「伏筆」的精神。</p></div>
+<div class="box origin"><b>📜 契訶夫之槍</b><p>契訶夫在給朋友的信中，大意說過：如果第一幕牆上掛著一把槍，那它在後面就一定要開火；不會開火的槍，就不應該掛在那裡。這條原則有兩層意思：一、故事裡重要的東西都該有用處；二、反過來說，你想讓某個東西在高潮派上用場，就要提早讓它出現。</p></div>
+<div class="lab" id="gunLab">
+  <div class="lab-h"><b>互動工坊・契訶夫之槍</b><span>選擇有沒有提早埋下伏筆，看讀者反應</span></div>
+  <div class="row"><button class="chip" data-gun="0" aria-pressed="false">沒埋伏筆</button><button class="chip" data-gun="1" aria-pressed="false">第一章就埋</button></div>
+  <div class="out" id="gunOut">選一個試試。</div>
+</div>
+<div class="box tip"><b>💡 伏筆的三種藏法</b><ul><li><strong>藏在笑點裡</strong>：一句玩笑話，後來變成真相。</li><li><strong>藏在清單裡</strong>：描述房間時列出七樣東西，關鍵的那個放在第五個。</li><li><strong>藏在大事旁邊</strong>：讀者被爆炸吸引時，你順手寫下一個小細節。</li></ul></div>
+
+<h4>紅鯡魚：故意的誤導</h4>
+<div class="box origin"><b>📜 紅鯡魚 red herring 的由來</b><p>鯡魚經過鹽醃和煙燻後會變成紅褐色，味道非常濃烈。傳說有人用它拖過地面來擾亂獵犬的嗅覺，讓狗追錯方向。1807年，英國作家威廉・科貝特寫過一篇文章，說自己小時候用紅鯡魚引開獵犬，並拿來諷刺報紙用假新聞轉移大眾注意力，這個詞從此流行。推理小說中，紅鯡魚就是作者故意放的假線索，讓讀者懷疑錯的人。</p></div>
+<div class="lab" id="mysLab">
+  <div class="lab-h"><b>互動工坊・迷你推理：藏經閣失竊案</b><span>讀完線索，指出真正的犯人</span></div>
+  <p style="margin:.2rem 0">2150年，太虛宗的藏經閣由AI守衛「閣靈」看管。昨夜子時，鎮宗秘笈《九霄劍訣》的晶片被偷。閣靈的紀錄顯示：子時整，只有一個人的「靈紋」通過大門。</p>
+  <ul class="clues">
+    <li>① 大師兄趙烈昨天當眾說：「那本秘笈遲早是我的。」他的房間找到一張藏經閣的平面圖。</li>
+    <li>② 小師妹林葉是修復古籍的弟子，她的靈紋可以進出藏經閣，但她說昨晚一直在房裡睡覺。</li>
+    <li>③ 負責維修閣靈的工匠莫七，前天剛替閣靈更新過系統。他說更新後「閣靈變得比較笨」。</li>
+    <li>④ 閣靈紀錄中通過大門的靈紋，是林葉的。</li>
+    <li>⑤ 林葉的靈紋樣本，存放在維修用的資料庫裡。</li>
+    <li>⑥ 子時整，趙烈在演武場練劍，有十個弟子作證。</li>
+  </ul>
+  <div class="suspects">
+    <button class="sus" data-s="0"><b>大師兄趙烈</b>有動機，還有平面圖</button>
+    <button class="sus" data-s="1"><b>小師妹林葉</b>紀錄上是她的靈紋</button>
+    <button class="sus" data-s="2"><b>工匠莫七</b>剛動過閣靈的系統</button>
+  </div>
+  <div class="out" id="mysOut">選一位嫌疑人。</div>
+</div>
+<div class="box origin"><b>📜 麥高芬 MacGuffin</b><p>希區考克推廣的電影用語，據說名稱來自他的編劇朋友安格斯・麥克菲爾講的一個笑話。麥高芬指的是「大家都在搶、推動整個故事的東西，但它到底是什麼其實不重要」。像上面的《九霄劍訣》，讀者不必知道裡面寫了什麼劍招，重要的是有人為它犯罪。</p></div>
+
+<h4>公平原則：推理不能作弊</h4>
+<div class="box origin"><b>📜 諾克斯十誡</b><p>1929年，英國推理作家羅納德・諾克斯替推理小說訂下十條規則，半開玩笑、半認真，被稱為「諾克斯十誡」。其中幾條很適合新手：犯人必須在故事前段出場；偵探發現的線索必須讓讀者也看得到；不能在最後才冒出一種讀者沒聽過的毒藥或機器。還有一條是「不可以用超自然力量破案」。</p></div>
+<div class="box tip"><b>💡 玄幻推理怎麼辦？</b><p>既然不能用超自然力量，那修仙推理不就犯規了？不會。關鍵是回到第七回的山德森第一定律：<strong>只要在謎題揭曉之前，就把法術的規則清楚告訴讀者，法術就變成了公平的線索</strong>。例如早早寫明「隱身術在雨中會露出輪廓」，最後偵探靠雨天的監視畫面破案，讀者會覺得漂亮而不是作弊。</p></div>
+<div class="box origin"><b>📜 兩個經典謎題格局</b><p><strong>密室</strong>：案發現場從裡面鎖住，兇手是怎麼進出的？愛倫坡的〈莫爾格街兇殺案〉就是密室。<strong>暴風雪山莊</strong>：一群人被困在與外界隔絕的地方（暴風雪中的山莊、孤島），兇手就在其中。克莉絲蒂的《一個都不留》是代表作。這些名稱來自日本推理迷的歸納，把「封閉空間」的經典情境取了好記的名字。換成修仙版：封山大陣啟動的宗門；換成科幻版：斷訊的太空站。</p></div>
+<div class="box try"><b>🖊️ 動手練習</b><p>設計一個小謎題：一個犯人、兩個嫌疑人（其中一個是紅鯡魚）、三條線索。至少一條線索要跟你世界的特殊規則有關（法術、科技、武功）。</p></div>
+<label class="done"><input type="checkbox" data-lesson="L10">我學會了第十回</label>
+</section>
+
+<section class="lesson" id="L11"><header><div class="hui">第十一回</div><h3>武俠的招式：江湖、俠義與打鬥</h3><p class="goal">學完你會：寫出有節奏、有情緒、有利害關係的打鬥場面，並替招式取一個好名字。</p></header>
+<div class="box origin"><b>📜 「江湖」的由來</b><p>「江湖」原本就是江河湖泊。《莊子》裡有個故事：泉水乾了，兩條魚困在陸地上，互相吐泡沫沾濕對方，莊子說與其這樣，不如在江湖裡各自自在，互相忘記。宋朝范仲淹在〈岳陽樓記〉寫「處江湖之遠，則憂其君」，江湖變成「遠離朝廷的民間」。到了武俠小說，江湖成了一個有自己規矩、恩怨和道義的世界，在官府管不到的地方運作。</p></div>
+<p>在現代融合小說裡，江湖可以是地下駭客圈、財團之外的黑市、網路上的匿名論壇。只要有「官方規則之外的另一套規矩」，就有江湖。</p>
+<h4>俠的精神</h4>
+<p>金庸在《神鵰俠侶》裡讓郭靖說出「俠之大者，為國為民」。俠不只是會打架，而是<strong>用自己的力量，去做對的事，即使要付出代價</strong>。沒有俠義，武俠就只剩打架；有了俠義，最普通的打鬥也會讓人熱血。</p>
+
+<h4>打鬥場面的五個訣竅</h4>
+<ol>
+<li><strong>先講利害</strong>：打之前讓讀者知道，輸了會失去什麼。打鬥的張力來自後果，不是招式。</li>
+<li><strong>短句加速</strong>：出手的瞬間用短句，節奏就快；打鬥間隙用長句，讓讀者喘氣。</li>
+<li><strong>五感</strong>：不只寫看到的，還有聲音、氣味、痛覺、溫度。</li>
+<li><strong>以智取勝</strong>：靠力量碾壓很快就膩，靠頭腦、地形、對手弱點取勝才精彩。</li>
+<li><strong>打鬥中揭露角色</strong>：一個人在生死關頭做的選擇，最能看出他是誰。</li>
+</ol>
+<div class="box eg"><b>✍️ 範例：流水帳 vs 有張力</b>
+<p><strong>流水帳：</strong>黑衣人使出一招飛龍在天，阿岳用鐵牛耕地擋住，然後阿岳使出猛虎下山，黑衣人用靈蛇出洞閃開，兩人又打了三十回合，最後阿岳贏了。</p>
+<p><strong>有張力：</strong>刀來了。<br>阿岳沒有擋。他知道擋不住，師父就是擋了這一刀，才斷了右臂。他往後倒，任由刀鋒掠過鼻尖，冰涼的風帶著鐵鏽味。背後是懸崖，碎石在腳跟邊滾落，很久都沒有聲音。黑衣人笑了，第二刀慢了半拍，因為他以為自己贏了。<br>就是這半拍。</p>
+<p>第二段只寫了一刀半，卻比三十回合還緊張，因為有利害（懸崖、師父的斷臂）、有感官（鐵鏽味、碎石聲）、有節奏（短句「刀來了」「就是這半拍」）、有智取（利用對手的得意）。</p></div>
+
+<div class="lab" id="rhythmLab">
+  <div class="lab-h"><b>互動工坊・句子節奏儀</b><span>貼上一段文字，看每個句子的長短（綠色短、橘色長）</span></div>
+  <textarea id="rhythmIn" rows="5">刀來了。阿岳沒有擋。他知道擋不住，師父就是擋了這一刀，才斷了右臂。他往後倒，任由刀鋒掠過鼻尖，冰涼的風帶著鐵鏽味。黑衣人笑了，第二刀慢了半拍，因為他以為自己贏了。就是這半拍。</textarea>
+  <div class="row"><button class="btn sm" id="rhythmBtn">分析節奏</button></div>
+  <div class="bars" id="bars"></div>
+  <div id="rhythmNote" style="font-size:.88rem;margin-top:.6rem"></div>
+</div>
+
+<h4>替招式取名</h4>
+<p>好的招式名會讓讀者「看見」畫面，還能透露使用者的個性。常用的方法：</p>
+<ul>
+<li><strong>借古詩</strong>：唐朝柳宗元的詩句「孤舟蓑笠翁，獨釣寒江雪」，可以變成一招以靜制動的劍法「獨釣寒江」。</li>
+<li><strong>意象加動作</strong>：「斷雲」「驚鴻回首」「落葉歸根」，四個字最有節奏。</li>
+<li><strong>融合科技</strong>：「零點一秒・流星」「超頻・焚天」，用現代詞彙配古典意象，一看就知道是跨類型。</li>
+</ul>
+<div class="box try"><b>🖊️ 動手練習</b><p>寫一段三百字的打鬥，限制：只能出現兩招；主角必須因為一個「非武功」的原因獲勝。寫完貼進節奏儀，看看長短句是否交錯。</p></div>
+<label class="done"><input type="checkbox" data-lesson="L11">我學會了第十一回</label>
+</section>
+
+<section class="lesson" id="L12"><header><div class="hui">第十二回</div><h3>玄幻的引擎：升級、爽點與期待感</h3><p class="goal">學完你會：理解網路小說常用術語，設計「壓抑、蓄力、爆發」的節奏，並替金手指加上限制。</p></header>
+<p>玄幻和仙俠小說在網路上發展出一套自己的語言。這些詞不是正式的文學術語，但如果你要在網路連載，一定要懂。</p>
+<div class="tw"><table>
+<tr><th>術語</th><th>意思</th><th>由來</th></tr>
+<tr><td>金手指</td><td>主角獨有的特殊能力或寶物，讓他比別人更快變強</td><td>借用自電子遊戲的作弊卡帶，當年插在遊戲機上就能無敵、無限生命，玩家稱它「金手指」</td></tr>
+<tr><td>升級流</td><td>以主角境界一級一級提升為主線的寫法</td><td>來自電子角色扮演遊戲「打怪升級」的體驗</td></tr>
+<tr><td>爽點</td><td>讓讀者感到痛快、解氣的情節點</td><td>網路讀者的口語，「爽」就是痛快</td></tr>
+<tr><td>打臉</td><td>瞧不起主角的人，被主角的實力當場證明錯了</td><td>比喻被事實「打了一巴掌」</td></tr>
+<tr><td>扮豬吃老虎</td><td>主角隱藏實力，讓對手輕敵後再反擊</td><td>民間俗語，比喻裝傻示弱以取勝</td></tr>
+<tr><td>挖坑、填坑</td><td>埋下伏筆或開啟新故事線；回收它</td><td>把未完成的故事比喻成挖好的坑，讀者「入坑」就是開始追</td></tr>
+</table></div>
+
+<h4>期待感：欲揚先抑</h4>
+<div class="box origin"><b>📜 欲揚先抑</b><p>古代文章學的說法：想要把一件事捧高，先把它壓低。壓得越低，彈得越高。網路小說把這個古老技巧發揮到極致：主角先被羞辱、被看不起、被逼到絕境（抑），讀者憋了一肚子氣；然後主角爆發（揚），讀者跟著痛快。</p></div>
+<p>一個完整的爽點循環分三步：</p>
+<ol>
+<li><strong>壓抑</strong>：主角受委屈，讀者跟著生氣。</li>
+<li><strong>蓄力</strong>：讀者知道主角有底牌（伏筆），開始期待「快用出來！」。這一步最重要，期待本身就是樂趣。</li>
+<li><strong>爆發</strong>：主角出手，對手震驚，旁觀者改變態度。</li>
+</ol>
+<div class="box eg"><b>✍️ 範例：同一個爆發，有沒有蓄力差很多</b>
+<p><strong>沒有蓄力：</strong>考核時，主角突然使出一招絕學，全場震驚。（讀者：他什麼時候會的？）</p>
+<p><strong>有蓄力：</strong>前兩章，主角每晚偷偷在廢棄機房，用老舊的模擬器練同一招，失敗了三百多次，手腕的晶片都燒壞了。考核時，對手嘲笑他的晶片是二手貨。讀者此時已經在心裡倒數了。</p></div>
+<div class="box warn"><b>⚠️ 新手地雷：金手指太強</b><p>如果主角的金手指什麼都能解決，讀者就不會緊張。給金手指加上限制：<strong>冷卻時間</strong>（一天只能用一次）、<strong>代價</strong>（每用一次就失去一段記憶）、<strong>條件</strong>（只在月圓時有效）、<strong>副作用</strong>（會被敵人偵測到）。限制越有趣，故事越好看。</p></div>
+<div class="box tip"><b>💡 小祕訣：爽點之外要有「痛點」</b><p>一直爽，讀者會麻木。偶爾讓主角失去重要的東西，讀者才會真正在乎他。好的長篇，讀者的心情應該像雲霄飛車，有上有下。</p></div>
+<div class="box try"><b>🖊️ 動手練習</b><p>替你的主角設計一個金手指，寫出它的能力和兩個限制。再用「壓抑、蓄力、爆發」三步，列出一個爽點情節的大綱。</p></div>
+<label class="done"><input type="checkbox" data-lesson="L12">我學會了第十二回</label>
+</section>
+
+<section class="lesson" id="L13"><header><div class="hui">第十三回</div><h3>科技的邏輯：讓未來看起來真的</h3><p class="goal">學完你會：分辨硬科幻與軟科幻，用「一個大假設」原則設計科技，並推想科技如何改變社會。</p></header>
+<div class="box origin"><b>📜 硬科幻與軟科幻</b><p>「硬科幻」一詞一般認為是美國評論家P・史凱勒・米勒在1957年的書評中首先使用，指嚴格遵守物理、化學等「硬科學」的作品，像劉慈欣《三體》。「軟科幻」則較重視社會、心理、人性，科技只是背景，像很多反烏托邦小說。兩者沒有高下之分，只是口味不同。</p></div>
+<h4>一個大假設原則</h4>
+<p>這條經驗法則常被歸功於《時間機器》的作者威爾斯：<strong>一個故事最好只允許一個「不可能」，其他的一切都照邏輯走</strong>。</p>
+<div class="box eg"><b>✍️ 範例</b><p>假設：「人類可以把記憶存進晶片，並且買賣。」只准這一個不可能。接著問邏輯問題：</p><ul><li>法庭怎麼辦？證人的記憶可以被賣掉或換掉，證詞還可信嗎？</li><li>窮人會怎樣？他們可能被迫賣掉美好的回憶換錢。</li><li>會出現什麼新犯罪？偷記憶、偽造記憶、記憶走私。</li><li>武林會怎樣？如果武功可以用記憶傳承，苦練還有意義嗎？</li></ul><p>每一個問題都是一個故事。這就是科幻的樂趣：<strong>科技本身不是故事，科技對人的影響才是</strong>。</p></div>
+<div class="box origin"><b>📜 賽博龐克 cyberpunk</b><p>cyber 來自「控制論」（cybernetics），這是美國數學家維納在1948年創的學科名稱，字根是希臘文的「舵手」。punk 是龐克，一種反叛的搖滾文化。美國作家布魯斯・貝斯克寫了一篇短篇就叫〈Cyberpunk〉，1983年發表；隔年威廉・吉布森出版《神經喚術士》，定下了這個類型的樣子。它最常被概括成一句話：<strong>高科技，低生活</strong>。科技很發達，但普通人過得很苦，大企業比政府還有權力。</p></div>
+<div class="box origin"><b>📜 另外兩個好用的「龐克」和「克蘇魯」</b><p><strong>蒸汽龐克</strong>：1987年美國作家K・W・杰特在一封信中半開玩笑地創造了 steampunk 這個詞，指以蒸汽機時代為背景、充滿齒輪和黃銅機械的幻想。<strong>克蘇魯</strong>：美國作家洛夫克拉夫特在1928年發表〈克蘇魯的呼喚〉，創造出人類無法理解的古老神祇。克蘇魯風格的重點是「知道真相會讓人發瘋」，非常適合和懸疑融合。</p></div>
+<div class="box tip"><b>💡 小祕訣：怎麼查資料</b><p>你不需要是科學家，但要有「查一下」的習慣。想寫太空站，就查查太空人怎麼喝水、怎麼睡覺。一個真實的小細節（例如在無重力環境眼淚不會流下來，而是在眼睛周圍聚成一團），比十句「很先進的科技」更能讓讀者相信。</p></div>
+<div class="box try"><b>🖊️ 動手練習</b><p>寫下你故事的「一個大假設」，然後列出五個「如果這是真的，那麼……」的推論，其中至少一個要能變成懸疑情節，一個能變成武俠情節。</p></div>
+<label class="done"><input type="checkbox" data-lesson="L13">我學會了第十三回</label>
+</section>
+
+<section class="lesson" id="L14"><header><div class="hui">第十四回</div><h3>對話：讓角色一開口就有個性</h3><p class="goal">學完你會：寫出有潛台詞、能推進情節、分得出是誰在說話的對話。</p></header>
+<p>好的對話同時做三件事：<strong>推進情節、揭露角色、製造衝突</strong>。如果一段對話只做了其中一件，它就還不夠好。</p>
+<div class="box origin"><b>📜 潛台詞 subtext</b><p>這個詞來自俄國戲劇家史坦尼斯拉夫斯基的表演理論。他要求演員不只念台詞，還要知道角色「話中沒說出口的意思」。真實的人很少直接說出心裡話：說「我沒事」的人，往往最有事。</p></div>
+<div class="box eg"><b>✍️ 範例：沒有潛台詞 vs 有潛台詞</b>
+<p><strong>沒有：</strong><br>「師父，我很擔心你明天去赴約會死，因為對方很強。」<br>「我也很害怕，但我必須去，因為這是我的責任。」</p>
+<p><strong>有：</strong><br>「師父，明天的茶……我替您泡好一點的。」<br>「不必了。」師父把劍擦了又擦，「上回那罐太苦，你留著自己喝。」</p>
+<p>第二段一個「死」字都沒有，但讀者全看懂了：徒弟擔心師父回不來，師父知道自己可能回不來，而且在交代後事。</p></div>
+<h4>讓每個角色的聲音不一樣</h4>
+<div class="tw"><table>
+<tr><th>角色</th><th>說話特色</th><th>同一句意思：「我們快走」</th></tr>
+<tr><td>老江湖</td><td>簡短、帶俗語</td><td>「風緊，扯呼。」</td></tr>
+<tr><td>AI劍靈</td><td>精確、帶數字、偶爾不懂人情</td><td>「敵方抵達時間預估四十七秒。建議立即撤離，成功率會提高百分之六十。」</td></tr>
+<tr><td>熱血少年</td><td>情緒化、感嘆多</td><td>「還發什麼呆！跑啊！」</td></tr>
+<tr><td>宗門大小姐</td><td>客氣但有距離感</td><td>「此地不宜久留，諸位請隨我來。」</td></tr>
+</table></div>
+<div class="box origin"><b>📜 「扯呼」</b><p>「風緊，扯呼」是舊時江湖黑話，「風緊」指情況危急，「扯呼」指撤退逃跑。武俠小說常借用這類黑話營造江湖味。你也可以替你的世界發明黑話，例如駭客圈把「斷網逃跑」說成「拔線」。</p></div>
+<div class="box tip"><b>💡 對話小規則</b><ul><li>「他說」「她問」就夠了，不需要每次都「他咆哮道」「她嬌嗔道」。</li><li>用動作代替說話標籤：「師父把劍擦了又擦」比「師父擔憂地說」好。</li><li>不要讓角色說出雙方都已經知道的事，只為了告訴讀者。「你也知道，我們的父親十年前被魔教殺了。」這種話真人不會講。</li></ul></div>
+<div class="box try"><b>🖊️ 動手練習</b><p>寫一段兩個角色吵架的對話，但他們吵的表面主題（例如誰吃了最後一顆包子）和真正的問題（例如一個人覺得被背叛）不一樣。不准直接說出真正的問題。</p></div>
+<label class="done"><input type="checkbox" data-lesson="L14">我學會了第十四回</label>
+</section>
+
+<section class="lesson" id="L15"><header><div class="hui">第十五回</div><h3>節奏與章節：讓人停不下來</h3><p class="goal">學完你會：設計章尾鉤子，掌握「黃金三章」，並安排緊張與放鬆的交替。</p></header>
+<div class="box origin"><b>📜 懸崖吊掛 cliffhanger</b><p>1873年，英國作家湯瑪斯・哈代在雜誌連載小說《一雙藍眼睛》，其中一期結尾讓主角懸吊在懸崖邊，讀者得等下一期才知道他的命運。「懸崖吊掛」從此成了「在最緊張處停下」的代名詞。中國的說書人早就在用這招了，就是卷首提過的「且聽下回分解」。</p></div>
+<h4>章尾鉤子的五種款式</h4>
+<ol>
+<li><strong>危機</strong>：刀已經架在脖子上。</li>
+<li><strong>揭露</strong>：「兇手就是……你？」</li>
+<li><strong>問題</strong>：一個新謎團出現。「屍體的手裡，握著一張我的照片。」</li>
+<li><strong>決定</strong>：主角做了一個大膽的選擇，讀者想知道後果。</li>
+<li><strong>反轉</strong>：以為安全了，其實才剛開始。</li>
+</ol>
+<div class="box tip"><b>💡 小祕訣：把一章的結尾往前移</b><p>寫完一章後，看看最後幾段。很多時候，真正的鉤子藏在倒數第三段，後面兩段只是在收尾交代。把它們刪掉，讓章節停在最有力的那一句。</p></div>
+<h4>黃金三章</h4>
+<p>網路小說圈有個說法叫「黃金三章」：讀者通常只給你三章的耐心，前三章沒抓住他，他就走了。前三章要完成：</p>
+<ul><li><strong>第一章</strong>：主角登場，而且馬上遇到麻煩。讓讀者看到主角的處境和個性。</li><li><strong>第二章</strong>：展示這個世界的特別之處（副類型的味道要出現），麻煩升級。</li><li><strong>第三章</strong>：主角做出第一個重大選擇，故事的主線問題正式成立。</li></ul>
+<div class="box warn"><b>⚠️ 新手地雷：從起床開始寫</b><p>「清晨，陽光灑進房間，主角睜開眼睛……」這是最常見也最無聊的開頭。試著從事情已經發生的地方開始，這叫<strong>從中間開始</strong>，拉丁文是 <em>in medias res</em>，古羅馬詩人賀拉斯就用這個詞稱讚荷馬的史詩直接從故事中段開始。</p></div>
+<h4>張弛有度</h4>
+<p>一直緊張，讀者會累；一直放鬆，讀者會睡。長篇的節奏應該像呼吸：<strong>激烈場景之後，給一個安靜的場景</strong>，讓角色消化發生的事、讓感情有空間發展、讓讀者喘氣，同時偷偷埋下下一個危機。</p>
+<div class="box eg"><b>✍️ 範例：一段四章的節奏安排</b><p>第一章（緊）：地下擂台被警方突襲，主角帶著劍逃走。<br>第二章（鬆）：躲在舊書店，和劍靈第一次好好聊天，知道劍靈失去了記憶。結尾，書店老闆認出了這把劍。<br>第三章（緊）：書店老闆被殺，主角成為嫌疑人。<br>第四章（鬆中帶緊）：在刑警的幫助下暫時脫險，但刑警的一句話讓主角起了疑心。</p></div>
+<div class="box try"><b>🖊️ 動手練習</b><p>替你的故事寫前三章的大綱，每章三句話，而且每章最後一句都必須是一個鉤子。</p></div>
+<label class="done"><input type="checkbox" data-lesson="L15">我學會了第十五回</label>
+</section>
+
+<div class="quiz" data-quiz="q3"><h4>卷三小測驗</h4><div class="qbody"></div></div>
+
+<!-- ================= 卷四 ================= -->
+<div class="volume" id="V4"><div class="vno">卷四</div><h2>融合實戰：讓類型起化學反應</h2><p>前面學的都是單一類型的功夫。這一卷把它們合在一起，最後從零開始，示範一個完整故事怎麼誕生。</p></div>
+
+<section class="lesson" id="L16"><header><div class="hui">第十六回</div><h3>融合實驗室：三層融合法</h3><p class="goal">學完你會：分辨淺層和深層的類型融合，並替任意兩種類型找到化學反應。</p></header>
+<p>把兩種類型放在同一本書裡很簡單，讓它們真正「反應」起來很難。我把融合分成三層，越往下越深：</p>
+<div class="tw"><table>
+<tr><th>層次</th><th>做法</th><th>例子</th><th>效果</th></tr>
+<tr><td>第一層：外衣</td><td>只換造型和名詞</td><td>把「長劍」改名「光劍」，故事其他部分完全照舊</td><td>新鮮感很快消失</td></tr>
+<tr><td>第二層：骨架</td><td>用A類型的結構，講B類型的故事</td><td>用推理小說的結構（命案、調查、嫌疑人、真相）寫一個修仙故事</td><td>讀者同時得到兩種樂趣</td></tr>
+<tr><td>第三層：靈魂</td><td>讓兩種類型的核心問題互相碰撞</td><td>修仙追求「長生」，科技可以「數位永生」，兩者撞出一個問題：什麼才是真正活著？</td><td>會讓人記很久</td></tr>
+</table></div>
+<div class="box tip"><b>💡 找靈魂碰撞的方法</b><p>寫下每個類型的「核心問題」：武俠問「什麼是對的，值得我付出什麼？」玄幻問「力量的極限在哪，代價是什麼？」懸疑問「真相是什麼，知道真相會怎樣？」科幻問「科技會把人變成什麼？」然後把兩個問題合成一個新問題。例如武俠加科幻：「當機器也能行俠仗義時，俠義還是人類獨有的嗎？」</p></div>
+
+<div class="lab" id="fuseLab">
+  <div class="lab-h"><b>互動工坊・融合實驗室</b><span>選兩種類型（選四種有驚喜）</span></div>
+  <div class="row" role="group" aria-label="選擇類型">
+    <button class="chip" data-g="x" aria-pressed="false">玄幻</button>
+    <button class="chip" data-g="w" aria-pressed="false">武俠</button>
+    <button class="chip" data-g="y" aria-pressed="false">懸疑</button>
+    <button class="chip" data-g="k" aria-pressed="false">科技</button>
+  </div>
+  <div class="out fuse-out" id="fuseOut">請選擇兩種類型。</div>
+</div>
+<div class="box warn"><b>⚠️ 融合時最常見的問題：兩套力量打架</b><p>如果世界裡既有飛劍又有飛彈，讀者一定會問：「為什麼不直接用飛彈？」你必須回答這個問題。可能是飛彈會被靈氣干擾、可能是科技被法律禁止、可能是修仙者有科技做不到的能力。<strong>兩套力量要能「換算」，也要各有做不到的事</strong>，這樣它們才能在故事裡共存。</p></div>
+<div class="box try"><b>🖊️ 動手練習</b><p>用實驗室抽出三組組合，每組寫一個「第二層」的故事點子和一個「第三層」的核心問題。</p></div>
+<label class="done"><input type="checkbox" data-lesson="L16">我學會了第十六回</label>
+</section>
+
+<section class="lesson" id="L17"><header><div class="hui">第十七回</div><h3>從零到一：完整示範《霓虹劍塚》</h3><p class="goal">學完你會：把前面十六回的方法串起來，看一個跨類型故事從一句話長成大綱和開場。</p></header>
+<p>這一回我們用第四回的一句話故事，一步一步做出完整的設計。你可以把每一步當作範本，換成你自己的故事。</p>
+
+<h4>步驟一：一句話故事</h4>
+<div class="box">當一個沒錢安裝靈根晶片的外送少年，收到一把住著三百年前劍仙意識的古劍，他必須在七天內找出吸乾全城修士靈根的兇手，否則他就會成為下一個被吸乾的人。</div>
+<p>類型配方：主類型 <span class="g y">懸疑</span>，副類型 <span class="g x">玄幻</span>，調味 <span class="g k">科技</span> <span class="g w">武俠</span>。</p>
+
+<h4>步驟二：主題</h4>
+<p>兩個互相呼應的問題：<strong>力量能用錢買嗎？一個被複製出來的靈魂，還是真的嗎？</strong></p>
+
+<h4>步驟三：世界（力量體系三問）</h4>
+<ul>
+<li><strong>力量從哪來</strong>：2089年的新蓬萊市，科學家證實古代修仙者的「靈根」是一種特殊的神經訊號，可以用晶片模擬。</li>
+<li><strong>代價</strong>：人工靈根要花大錢，而且晶片會慢慢「吃掉」使用者原本的記憶來運算。天生的靈根則要靠苦修。</li>
+<li><strong>誰掌握</strong>：玄穹集團壟斷人工靈根。地下還有一個叫「劍塚」的組織，堅持不裝晶片、用古法練武，被政府視為非法幫派。</li>
+</ul>
+
+<h4>步驟四：角色</h4>
+<div class="tw"><table>
+<tr><th>角色</th><th>渴望</th><th>需要</th><th>缺陷／祕密</th></tr>
+<tr><td>沈硯（主角，17歲外送員）</td><td>存夠錢裝人工靈根，擺脫底層</td><td>明白強大不是買來的，是選擇成為怎樣的人</td><td>誰都不信；手腕上的二手晶片來路不明</td></tr>
+<tr><td>無名（古劍裡的意識）</td><td>找回失去的記憶</td><td>接受自己可能不是「原本的那個人」</td><td>自稱三百年前的劍仙謝寒舟，但記憶破碎</td></tr>
+<tr><td>顧青衡（刑警）</td><td>破案（表面上）</td><td>——</td><td>左手永遠戴著手套</td></tr>
+<tr><td>陸長空（玄穹集團總裁）</td><td>掩蓋二十年前的祕密實驗</td><td>——</td><td>看起來最像兇手</td></tr>
+<tr><td>柳三娘（劍塚掌門）</td><td>摧毀玄穹集團</td><td>——</td><td>恨集團入骨，有強烈動機</td></tr>
+</table></div>
+
+<h4>步驟五：起承轉合大綱</h4>
+<div class="box eg"><b>✍️ 大綱</b>
+<p><strong>起</strong>：沈硯送貨到一間古董店，發現店主已被吸乾靈根而死，而他手上的包裹是一把會說話的古劍。他被當成嫌疑人，刑警顧青衡卻選擇相信他，給他七天證明清白。</p>
+<p><strong>承</strong>：接連出現死者，他們都參加過二十年前玄穹集團的「靈根計畫」。沈硯被劍塚收留，跟著無名學古劍法。所有證據都指向玄穹集團總裁陸長空，劍塚掌門柳三娘也有嫌疑。無名的記憶一點一點回來。</p>
+<p><strong>轉</strong>：真相翻轉兩次。第一，無名不是真正的劍仙，而是靈根計畫用古代劍仙的腦紋複製出來的第一個人工意識。第二，兇手是顧青衡。他是計畫唯一活下來的實驗體，當年他的靈根被切成碎片分給其他受試者，他在收回「被偷走的自己」。</p>
+<p><strong>合</strong>：玄穹集團開出條件：幫忙抓住顧青衡，就免費送沈硯最頂級的人工靈根，這正是他一開始的渴望。沈硯拒絕了，選擇公開實驗真相。最後一戰，沈硯靠著無名教的劍法和自己的選擇擊敗顧青衡，無名也決定：不管自己是不是複製品，他要以「無名」的身分活下去。</p></div>
+<p>注意，結局讓主角面對「渴望」和「需要」的最終選擇（第六回），也同時回答了兩個主題問題（第五回）。</p>
+
+<h4>步驟六：伏筆清單（埋下 → 回收）</h4>
+<div class="tw"><table>
+<tr><th>埋在哪裡</th><th>伏筆</th><th>回收</th></tr>
+<tr><td>第2章</td><td>顧青衡左手永遠戴著手套</td><td>第45章：手背上刻著實驗編號「07」</td></tr>
+<tr><td>第3章</td><td>顧青衡第一次看到古劍，脫口說出「寒……」，又改口說「好冷的劍」</td><td>第46章：他認得劍仙謝寒舟的名字，因為他看過實驗檔案</td></tr>
+<tr><td>第12章</td><td>閒聊時顧青衡提到，自己當刑警前做過監視系統工程師</td><td>第48章：他的不在場證明（監視器畫面）是他自己改的</td></tr>
+<tr><td>第20章</td><td>無名教的劍法中，有一招永遠使不完整</td><td>第70章：缺的那部分，就在顧青衡體內的靈根碎片裡，最後一戰才完成</td></tr>
+<tr><td>第1章</td><td>無名說沈硯的晶片是「二手的」</td><td>第55章：晶片原本屬於一名實驗受試者，所以古劍會被送到他手上</td></tr>
+</table></div>
+<p>紅鯡魚：陸長空（真的有罪，但罪名是非法實驗，不是謀殺）、柳三娘（有動機，但她只是想揭發集團）。</p>
+
+<h4>步驟七：開場示範</h4>
+<div class="box eg"><b>✍️ 《霓虹劍塚》第一章開頭</b>
+<blockquote class="prose">
+<p>「第七十三號訂單，送達時限：子時前。」</p>
+<p>手腕上的舊晶片閃了兩下紅光，沈硯罵了一聲，把機車騎進新蓬萊市最窄的巷子。頭頂上，玄穹集團的廣告飛艇緩緩飄過，全息投影的仙人朝他微笑：「人工靈根，分期零利率，今天就踏上仙途。」</p>
+<p>他這個月的薪水，連一期的利息都付不起。</p>
+<p>古董店的鐵門半開著，裡面沒有燈。</p>
+<p>「有人嗎？您的包裹。」</p>
+<p>沒人回答。只有一股味道，像雷雨過後的燒焦味，又混著鐵鏽。沈硯幹外送三年了，知道這種時候最聰明的做法，是把包裹放在門口、拍照、走人。</p>
+<p>他往裡面走了一步。後來他常常想，如果那天沒有走這一步就好了。</p>
+<p>店主倒在櫃台後面，眼睛睜得很大，皮膚乾得像放了一百年的紙。他的額頭正中間，有一個指甲大小的焦黑圓孔，那是靈根晶片的位置。</p>
+<p>沈硯往後退，腳跟撞到懷裡的包裹。長條形，很沉，外面裹著褪色的黃布。</p>
+<p>就在這時候，包裹開口說話了。</p>
+<p>「小子，」一個蒼老的聲音從黃布裡傳出來，「你身上的晶片，是二手的吧？」</p>
+<p>巷口傳來警笛聲。</p>
+<p>「還有，」那個聲音補了一句，「你最好現在就跑。」</p>
+</blockquote></div>
+
+<h4>步驟八：拆解這個開場用了哪些技巧</h4>
+<div class="tw"><table>
+<tr><th>技巧</th><th>在哪裡</th><th>學自</th></tr>
+<tr><td>從中間開始，第一段就有時間壓力</td><td>「送達時限：子時前」</td><td>第十五回</td></tr>
+<tr><td>展示世界，不用說明</td><td>廣告飛艇＋付不起利息，一句話就交代了科技、修仙和階級</td><td>第七、九回</td></tr>
+<tr><td>五感</td><td>燒焦味、鐵鏽味、乾得像紙的皮膚</td><td>第十一回</td></tr>
+<tr><td>角色透過選擇展現</td><td>明知該走，卻往裡面走了一步</td><td>第一、六回</td></tr>
+<tr><td>預示</td><td>「後來他常常想……」讓讀者知道大事要發生了</td><td>第十回</td></tr>
+<tr><td>伏筆</td><td>額頭的焦孔（殺人手法）、二手晶片</td><td>第十回</td></tr>
+<tr><td>懸崖吊掛</td><td>警笛聲＋「你最好現在就跑」</td><td>第十五回</td></tr>
+<tr><td>四種類型第一頁全出現</td><td>晶片與飛艇（科技）、靈根與仙途（玄幻）、屍體（懸疑）、黃布裡的劍（武俠）</td><td>第三回</td></tr>
+</table></div>
+<div class="box try"><b>🖊️ 動手練習（本課程最重要的作業）</b><p>照著八個步驟，完成你自己故事的設計：一句話故事、主題、力量體系三問、角色表、起承轉合大綱、五條伏筆、開場五百字，最後用表格檢查你用了哪些技巧。</p></div>
+<label class="done"><input type="checkbox" data-lesson="L17">我學會了第十七回</label>
+</section>
+
+<div class="quiz" data-quiz="q4"><h4>卷四小測驗</h4><div class="qbody"></div></div>
+
+<!-- ================= 卷五 ================= -->
+<div class="volume" id="V5"><div class="vno">卷五</div><h2>專業之路：修改、避坑、成為作者</h2><p>寫完初稿只完成一半。這一卷教你把作品改到能見人、避開最常見的坑，並養成長期寫作的習慣。</p></div>
+
+<section class="lesson" id="L18"><header><div class="hui">第十八回</div><h3>修改：好作品是改出來的</h3><p class="goal">學完你會：用「由大到小」三層修改法修稿，並檢查贅字。</p></header>
+<p>古人說「文章不厭百回改」。幾乎所有作家的初稿都很粗糙，差別在於他們願意改。<strong>初稿的任務是「寫完」，不是「寫好」</strong>。寫的時候別回頭改，寫完再說。</p>
+<h4>第一步：冷卻</h4>
+<p>寫完後放幾天到一週，不要看。剛寫完時你記得自己「想寫什麼」，會自動腦補；冷卻後重讀，才看得到自己「實際寫了什麼」。</p>
+<h4>第二步：由大到小，三層修改</h4>
+<ol>
+<li><strong>結構層</strong>：故事的因果通嗎？主角的渴望和需要清楚嗎？有沒有伏筆忘了收？哪些章節可以整章刪掉？（先改這層，不然你可能花時間潤飾一段最後會被刪掉的文字。）</li>
+<li><strong>場景層</strong>：每個場景都有改變嗎？開頭夠快嗎？章尾有鉤子嗎？對話有潛台詞嗎？</li>
+<li><strong>句子層</strong>：刪贅字、換掉模糊的詞、檢查錯字和標點。</li>
+</ol>
+<h4>第三步：朗讀</h4>
+<p>把文章念出來。念起來卡卡的地方，讀者讀起來也會卡。對話念出來不像真人會講的話，就要改。</p>
+
+<div class="lab" id="fillerLab">
+  <div class="lab-h"><b>互動工坊・贅字偵測器</b><span>貼上你的文字，標出常見的贅字</span></div>
+  <textarea id="fillerIn" rows="5">突然，他非常緊張地開始慢慢地拔出了他的劍，然後他突然感覺到了一種非常強大的殺氣，於是他就開始了他的反擊。</textarea>
+  <div class="row"><button class="btn sm" id="fillerBtn">開始偵測</button></div>
+  <div class="out" id="fillerOut"></div>
+</div>
+<div class="box eg"><b>✍️ 範例：刪贅字前後</b><p><strong>前：</strong>突然，他非常緊張地開始慢慢地拔出了他的劍，然後他突然感覺到了一種非常強大的殺氣，於是他就開始了他的反擊。</p><p><strong>後：</strong>他握緊劍柄，一寸一寸拔出。殺氣撲面而來。他出劍。</p><p>刪掉「突然」「非常」「開始」「然後」「了」這些字，句子反而更有力。「非常強大的殺氣」是告訴，「殺氣撲面而來」是展示。</p></div>
+<div class="box tip"><b>💡 修改清單</b><ul><li>「突然」：真正突然的事，讀者自己會感覺到，不用說。</li><li>「非常、十分、很」：換一個更精準的詞。「非常大」換成「遮住半邊天」。</li><li>「開始」：「他開始跑」通常直接寫「他跑」就好。</li><li>「的、了」：連續出現三次以上就要檢查。</li><li>「他感覺到」「他看到」：直接寫他感覺或看到的東西。</li></ul></div>
+<div class="box try"><b>🖊️ 動手練習</b><p>拿出你第十七回寫的開場五百字，冷卻至少兩天後，照三層修改。目標：字數減少百分之十，但意思不變。</p></div>
+<label class="done"><input type="checkbox" data-lesson="L18">我學會了第十八回</label>
+</section>
+
+<section class="lesson" id="L19"><header><div class="hui">第十九回</div><h3>新手十大地雷</h3><p class="goal">學完你會：認出最常見的十種毛病和它們的名稱由來，知道怎麼修。</p></header>
+<div class="tw"><table>
+<tr><th>地雷</th><th>症狀</th><th>解藥</th></tr>
+<tr><td>1. 資訊傾瀉</td><td>一口氣塞給讀者大量設定、歷史、規則</td><td>等故事需要時才透露，用行動和對話帶出來（第七回冰山原則）</td></tr>
+<tr><td>2. 瑪麗蘇／龍傲天</td><td>主角完美無缺，人人愛他，沒有真正的缺點</td><td>給主角真正的缺陷，讓他失敗、犯錯、被討厭</td></tr>
+<tr><td>3. 機械降神</td><td>主角快輸了，突然冒出救兵或新能力解決一切</td><td>高潮的解法必須用到前面埋好的東西（契訶夫之槍）</td></tr>
+<tr><td>4. 主角光環</td><td>主角怎麼亂來都不會出事</td><td>讓主角的選擇有真實的後果</td></tr>
+<tr><td>5. 吃書</td><td>後面的情節推翻前面的設定</td><td>建立設定筆記，每次寫新章前查一下</td></tr>
+<tr><td>6. 挖坑不填</td><td>伏筆和謎團埋了卻忘記回收</td><td>用第十七回的伏筆清單追蹤</td></tr>
+<tr><td>7. 開頭太慢</td><td>前幾千字都是起床、天氣、背景介紹</td><td>從麻煩開始（第十五回）</td></tr>
+<tr><td>8. 反派降智</td><td>反派為了讓主角贏，突然變笨</td><td>讓反派聰明，主角贏得更難、更精彩</td></tr>
+<tr><td>9. 視角亂跳</td><td>同一個場景裡一下進入這個人的腦袋，一下進入那個人的</td><td>一個場景只跟著一個角色，要換視角就換場景</td></tr>
+<tr><td>10. 對話在上課</td><td>角色對話只是在解釋設定</td><td>讓對話有衝突和潛台詞（第十四回）</td></tr>
+</table></div>
+<div class="box origin"><b>📜 這些名詞從哪來</b>
+<p><strong>瑪麗蘇</strong>：1973年，美國的寶拉・史密斯在《星艦迷航記》的同人雜誌上寫了一篇諷刺短文，主角是個十五歲、完美到誇張的少女軍官「瑪麗・蘇」，人人愛她，最後她壯烈犧牲，全艦為她哭泣。這篇文章在嘲笑當時流行的完美主角同人文，從此「瑪麗蘇」就成了完美到不真實的角色的代名詞。<strong>龍傲天</strong>是中文網路讀者後來發展出的類似說法，指無敵又自戀的男主角，名字本身就是在戲仿那種霸氣的取名方式。</p>
+<p><strong>機械降神</strong>：拉丁文 <em>deus ex machina</em>，意思是「從機器裡出來的神」。古希臘戲劇在劇情無法收拾時，會用起重機把扮演神明的演員吊到舞台上，一次解決所有問題。亞里斯多德在《詩學》裡就批評過這種做法，認為結局應該從情節本身產生。</p>
+<p><strong>吃書</strong>：華人網路讀者的用語，形容作者好像把自己寫過的書「吃掉」、忘記了，前後設定互相矛盾。</p></div>
+<div class="box try"><b>🖊️ 動手練習</b><p>拿你的大綱和開場，逐條檢查十大地雷，把中了的寫下來，並寫出你打算怎麼修。</p></div>
+<label class="done"><input type="checkbox" data-lesson="L19">我學會了第十九回</label>
+</section>
+
+<section class="lesson" id="L20"><header><div class="hui">第二十回</div><h3>成為作者：習慣、學習、發表與保護作品</h3><p class="goal">學完你會：建立可持續的寫作習慣，知道怎麼向好作品學習、在哪裡發表，以及如何保護自己和作品。</p></header>
+<h4>習慣比天分重要</h4>
+<ul>
+<li><strong>固定份量</strong>：每天三百字，一年就是十萬字，足夠寫完一部長篇。重點是「每天」，不是「很多」。</li>
+<li><strong>固定時間</strong>：例如每天放學後、寫完作業的二十五分鐘。</li>
+<li><strong>靈感筆記</strong>：隨身記下看到的有趣名字、新聞、對話、夢。</li>
+</ul>
+<div class="box origin"><b>📜 番茄鐘工作法</b><p>1980年代，義大利大學生弗朗切斯科・奇里洛讀書常分心，他拿了一個番茄造型的廚房計時器，設定二十五分鐘專心讀書，響了就休息五分鐘。這個方法後來就叫「番茄鐘」。寫作時用它，二十五分鐘內只寫、不查資料、不回訊息。</p></div>
+<h4>拆書：向喜歡的作品偷師</h4>
+<p>讀一本你喜歡的書時，拿一張紙，每讀完一章寫下：這章發生什麼事？主角想要什麼？結尾的鉤子是什麼？哪一句讓我印象最深，為什麼？讀完整本，你就得到了一份職業作家的大綱。這叫<strong>拆書</strong>，是最有效的自學方法。</p>
+<div class="box warn"><b>⚠️ 學習和抄襲的界線</b><p>可以學的：結構、節奏、技巧、類型的套路。不可以抄的：別人的文字、獨特的角色和具體情節。簡單的判斷方法：<strong>學的是「怎麼寫」，不是「寫了什麼」</strong>。致敬可以，但要讓人看得出你自己的東西。</p></div>
+<h4>發表的管道</h4>
+<ul>
+<li><strong>從身邊開始</strong>：校刊、班級刊物、寫作社團。先讓信任的朋友讀，請他們告訴你「哪裡讀不下去」。</li>
+<li><strong>文學獎與徵文</strong>：很多縣市、學校、出版社會舉辦學生文學獎，有明確的主題和字數，很適合練習把故事寫完。</li>
+<li><strong>網路連載平台</strong>：台灣有鏡文學、POPO原創等，中國大陸有起點中文網、晉江文學城等，每個平台偏好的類型和規則不同。未成年人註冊通常需要家長同意，投稿前一定要讀清楚平台最新的規定和合約。</li>
+</ul>
+<h4>保護作品，也保護自己</h4>
+<div class="box origin"><b>📜 著作權</b><p>在台灣和大多數國家，你的作品<strong>一寫完就自動享有著作權</strong>，不需要登記或申請。這是國際《伯恩公約》確立的原則（1886年簽訂）。保存好你的草稿檔案和寫作日期，將來有爭議時就是證明。簽任何合約之前，一定要請家長或信任的大人一起看。</p></div>
+<div class="box origin"><b>📜 筆名</b><p>作家用筆名很常見，金庸本名查良鏞，「金庸」是把「鏞」字拆成「金」和「庸」。古龍本名熊耀華。上網發表時，用筆名、不透露真實姓名、學校和住址，是保護自己最基本的做法。</p></div>
+<div class="box tip"><b>💡 面對批評</b><p>一定會有人說你寫得不好。分辨兩種批評：「第三章我看不懂主角為什麼要回去」是有用的，值得思考；「好爛」是沒用的，可以忽略。還有，寫作最大的敵人不是別人的批評，是你自己的放棄。</p></div>
+<div class="box try"><b>🖊️ 動手練習</b><p>挑一本你最喜歡的小說，拆前五章。然後用下面的三十天計畫，開始你的第一部作品。</p></div>
+<label class="done"><input type="checkbox" data-lesson="L20">我學會了第二十回</label>
+</section>
+
+<div class="quiz" data-quiz="q5"><h4>卷五小測驗</h4><div class="qbody"></div></div>
+
+<!-- ================= 附錄 ================= -->
+<div class="volume" id="A1"><div class="vno">附錄一</div><h2>名詞辭典</h2><p>課程中所有專有名詞的意思和由來，可以搜尋。</p></div>
+<input class="gloss-search" id="glossQ" type="search" placeholder="搜尋名詞，例如：伏筆、金手指、賽博">
+<div id="gloss"></div>
+
+<div class="volume" id="A2"><div class="vno">附錄二</div><h2>三十天完成第一個短篇</h2><p>每天大約二十五分鐘。勾選完成的天數，進度會被記住。</p></div>
+<div class="plan" id="plan"></div>
+
+<div class="volume" id="A3"><div class="vno">附錄三</div><h2>結業</h2><p>二十回都勾選「我學會了」之後，就能領取結業證書。</p></div>
+<div class="lab">
+  <label class="f" for="certName">你的名字或筆名</label>
+  <input type="text" id="certName" placeholder="例：寒江客">
+  <div class="row"><button class="btn sm" id="certBtn">領取證書</button></div>
+  <div id="certOut"></div>
+</div>
+</main>
+<footer>
+<p>本課程為寫作教學用途。文中提到的作品與作家僅作為學習例子，範例文字皆為本課程原創。類型的由來與年代採用常見說法，部分名詞的起源在學界仍有不同意見，歡迎進一步查證。</p>
+<p>打開方式：把這個HTML檔存在電腦或手機，用瀏覽器開啟即可離線閱讀（字型需連網才會載入，離線時會使用系統字型）。</p>
+</footer>
+
+<script>
+(function(){
+"use strict";
+var KEY="wf_course_v1";
+var store={lessons:[],plan:[],theme:null};
+try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&typeof o==="object"){store.lessons=o.lessons||[];store.plan=o.plan||[];store.theme=o.theme||null;}}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){}}
+function $(s,r){return (r||document).querySelector(s);}
+function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));}
+function esc(t){return String(t).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- 深淺色 ---------- */
+var root=document.documentElement;
+if(store.theme)root.setAttribute("data-theme",store.theme);
+$("#themeBtn").addEventListener("click",function(){
+  var cur=root.getAttribute("data-theme");
+  var dark=cur?cur==="dark":(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches);
+  var next=dark?"light":"dark";root.setAttribute("data-theme",next);store.theme=next;save();
+});
+
+/* ---------- 目錄 ---------- */
+var toc=$("#toc"),drawer=$("#drawer"),tocBtn=$("#tocBtn");
+function buildToc(){
+  var html="";
+  $$(".volume, .lesson").forEach(function(el){
+    if(el.classList.contains("volume")){
+      html+='<div class="toc-vol"><a href="#'+el.id+'" style="padding-left:0;color:var(--ink);font-weight:700">'+esc($(".vno",el).textContent)+"　"+esc($("h2",el).textContent)+"</a></div>";
+    }else{
+      var done=store.lessons.indexOf(el.id)>-1;
+      html+='<a href="#'+el.id+'"><span class="ck">'+(done?"✓":"")+"</span><span>"+esc($(".hui",el).textContent)+"　"+esc($("h3",el).textContent)+"</span></a>";
+    }
+  });
+  toc.innerHTML=html;
+}
+function openDrawer(o){drawer.classList.toggle("open",o);drawer.setAttribute("aria-hidden",!o);tocBtn.setAttribute("aria-expanded",o);}
+tocBtn.addEventListener("click",function(){buildToc();openDrawer(true);});
+drawer.addEventListener("click",function(e){if(e.target.hasAttribute("data-close")||e.target.closest("a"))openDrawer(false);});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")openDrawer(false);});
+
+/* ---------- 進度 ---------- */
+var boxes=$$("input[data-lesson]");
+function updateMeter(){
+  var n=store.lessons.length;$("#meterFill").style.width=(n/20*100)+"%";$("#meterText").textContent=n+"/20";
+}
+boxes.forEach(function(b){
+  b.checked=store.lessons.indexOf(b.dataset.lesson)>-1;
+  b.addEventListener("change",function(){
+    var id=b.dataset.lesson,i=store.lessons.indexOf(id);
+    if(b.checked&&i<0)store.lessons.push(id);
+    if(!b.checked&&i>-1)store.lessons.splice(i,1);
+    save();updateMeter();
+  });
+});
+updateMeter();
+
+/* ---------- 靈感骰子 ---------- */
+var D=[
+ ["2089年霓虹閃爍的修仙都市","被機器保全統治的古城","漂浮在雲海上的武林群島","斷訊的深海研究站","修士與AI共治的帝國","末日後重建的江湖","每晚午夜都會重置的虛擬城市","藏在學校地下的古老宗門"],
+ ["沒有靈根的外送員","失去記憶的女捕快","會寫程式的少林小和尚","退休的AI殺手","被逐出師門的駭客","只剩一條手臂的鑄劍師","轉學第一天的國中生","替死者整理遺物的少女"],
+ ["能聽見器物的記憶","體內住著一個古代劍仙","身上的晶片會吞噬記憶","能看見別人剩下的壽命","一天只能說十句真話","可以讓時間暫停三秒","其實是被複製出來的","夢裡能進入別人的意識"],
+ ["城裡的修士一個接一個被吸乾靈根","密室裡的長老死了，門從裡面鎖著","師父留下一段加密的遺言","所有人都忘了某個人曾經存在","一把劍自己殺了人","每天都有同一個陌生人傳訊息警告他","鎮派秘笈被換成了假的","月亮上出現了一串倒數計時"],
+ ["失去最重要的一段回憶","欠下一輩子還不完的債","被整座城市通緝","變得越來越不像人類","讓朋友被捲入危險","壽命減少十年","必須背叛師門","永遠無法回家"]
+];
+var dieEls=$$("[data-d]"),rolling=false;
+function pick(a){return a[Math.floor(Math.random()*a.length)];}
+$("#rollBtn").addEventListener("click",function(){
+  if(rolling)return;rolling=true;
+  var res=D.map(pick),t=0,steps=reduce?1:10;
+  dieEls.forEach(function(el){el.parentNode.classList.add("spin");});
+  var iv=setInterval(function(){
+    t++;
+    dieEls.forEach(function(el,i){el.textContent=t>=steps?res[i]:pick(D[i]);});
+    if(t>=steps){clearInterval(iv);rolling=false;
+      dieEls.forEach(function(el){el.parentNode.classList.remove("spin");});
+      $("#diceOut").innerHTML="在<strong>"+esc(res[0])+"</strong>，一個<strong>"+esc(res[1])+"</strong>，他的祕密是：<strong>"+esc(res[2])+"</strong>。當<strong>"+esc(res[3])+"</strong>，他必須查出真相，即使代價是<strong>"+esc(res[4])+"</strong>。<br><span style='font-family:var(--sans);font-size:.85rem;color:var(--ink-soft)'>這只是草稿。試著改寫成更具體、更有畫面的句子。</span>";
+    }
+  },70);
+});
+
+/* ---------- 角色卡 ---------- */
+$("#charBtn").addEventListener("click",function(){
+  var v=function(id){return $("#"+id).value.trim();};
+  var n=v("c_name"),w=v("c_want"),nd=v("c_need"),f=v("c_flaw"),s=v("c_secret");
+  if(!n||!w||!nd){$("#charOut").textContent="至少要填名字、渴望和需要。";return;}
+  $("#charOut").innerHTML="<div style='font-weight:900;font-size:1.15rem'>"+esc(n)+"</div>"+
+   "<p style='margin:.4rem 0'><b>他說他想要：</b>"+esc(w)+"</p>"+
+   "<p style='margin:.4rem 0'><b>他真正需要：</b>"+esc(nd)+"</p>"+
+   (f?"<p style='margin:.4rem 0'><b>擋住他的缺陷：</b>"+esc(f)+"</p>":"")+
+   (s?"<p style='margin:.4rem 0'><b>藏著的祕密：</b>"+esc(s)+"</p>":"")+
+   "<p style='margin:.6rem 0 0;font-family:var(--sans);font-size:.9rem;color:var(--ink-soft)'>故事核心：「"+esc(w)+"」和「"+esc(nd)+"」在哪一刻會互相衝突？那一刻就是你的高潮。"+(s?"祕密在什麼時候被揭開，會讓局勢翻轉？":"")+"</p>";
+});
+
+/* ---------- 境界天梯 ---------- */
+var L=[
+ ["煉氣","初連","道教內丹術的第一步叫「煉精化氣」，把身體的精華轉化成氣。","神經晶片第一次連線，開始感應城市的訊號網。"],
+ ["築基","融合","內丹學說有「百日築基」，用一百天打好修煉的根基，就像蓋房子先打地基。","義體和神經系統完成穩定融合，身體不再排斥。"],
+ ["金丹","核心","古代煉丹術追求吃了能長生的「金丹」；內丹家則把體內凝聚的精氣比喻成丹。","體內生成一顆能自己供電的微型核心。"],
+ ["元嬰","分身","內丹學說認為修到高深時，體內會孕育出嬰兒般的元神（也叫聖胎），象徵新生的真我。","意識可以完整備份成一個獨立的數位分身。"],
+ ["化神","多核","內丹有「煉氣化神」「煉神還虛」的階段，氣再昇華為神。","意識能同時在好幾個身體或網路節點上運作。"],
+ ["渡劫","審查","「劫」來自梵語 kalpa（劫波），原本是佛教裡極長的時間單位，每一劫結束世界都會經歷大災難，後來引申為「大難」。小說裡指突破時要承受的天雷考驗。","突破時必須通過城市AI的全面審查，沒通過就會被刪除。"],
+ ["大乘","合網","佛教用語，「乘」是車子，大乘指能載很多人渡到彼岸的大車。修仙小說借來指接近圓滿的境界。","意識和整座城市的網路融為一體。"]
+];
+var ladder=$("#ladder"),lout=$("#ladderOut");
+ladder.innerHTML=L.map(function(r,i){return '<button class="rung" data-i="'+i+'"><span class="n">'+(i+1)+'</span><span class="a">'+r[0]+'</span><span class="b">科技版：'+r[1]+'</span></button>';}).join("");
+var rungs=$$(".rung",ladder);
+function showRung(i){
+  rungs.forEach(function(b,j){b.classList.toggle("on",j===i);b.classList.toggle("lit",j<=i);});
+  var r=L[i];lout.innerHTML="<b style='color:var(--xuan)'>"+r[0]+"</b>　<span style='font-family:var(--sans);font-size:.85rem'>由來</span><br>"+r[2]+"<br><b style='color:var(--ke)'>科技版・"+r[1]+"</b><br>"+r[3]+"<br><span style='font-family:var(--sans);font-size:.8rem;color:var(--ink-soft)'>不同小說的境界名稱不完全一樣，這裡用最常見的一套。</span>";
+}
+rungs.forEach(function(b,i){b.addEventListener("click",function(){showRung(i);});});
+var climbing=null;
+$("#climbBtn").addEventListener("click",function(){
+  clearInterval(climbing);var i=0;showRung(0);
+  climbing=setInterval(function(){i++;if(i>=L.length){clearInterval(climbing);return;}showRung(i);},reduce?10:900);
+});
+
+/* ---------- 情節曲線 ---------- */
+var C={
+ qc:{pts:[[45,215],[120,190],[300,135],[470,40],[600,175]],marks:[null,"起","承","轉","合"],list:[["起","介紹主角、世界和第一個麻煩。約佔全書15%。"],["承","麻煩擴大，主角努力、失敗、再努力，局勢越來越緊。約45%。"],["轉","意外的轉折或真相揭露，局勢翻轉。約25%。"],["合","高潮對決和收尾，角色的改變完成。約15%。"]]},
+ act:{pts:[[45,210],[110,185],[190,150],[330,105],[440,168],[540,35],[610,170]],marks:["1","2","3","4","5","6","7"],list:[["1","開場：主角的日常，讓讀者認識他。（第一幕）"],["2","引發事件：打破日常的事發生了。"],["3","第一幕轉折：主角決定踏上旅程，回不去了。"],["4","中點：重大發現或反轉，主角從被動變主動。（第二幕）"],["5","最低點：一切看似失敗，主角失去最重要的東西。"],["6","高潮：最終對決，主角用學到的一切面對問題。（第三幕）"],["7","結局：新的日常，看見主角的改變。"]]},
+ hero:{pts:[[45,205],[95,190],[145,198],[195,178],[245,150],[295,130],[345,108],[395,62],[445,110],[495,92],[545,32],[605,185]],marks:["1","2","3","4","5","6","7","8","9","10","11","12"],list:[["1","平凡世界：英雄原本的生活。"],["2","冒險的召喚：有事找上門。"],["3","拒絕召喚：英雄害怕、猶豫。"],["4","遇見導師：得到建議、工具或勇氣。"],["5","跨越第一道門檻：正式踏入陌生世界。"],["6","試煉、盟友與敵人：學習新世界的規則。"],["7","接近最深的洞穴：準備面對最大的危險。"],["8","苦難考驗：生死關頭，像是死過一次。"],["9","獲得獎賞：拿到寶物、真相或力量。"],["10","回歸之路：帶著獎賞回家，卻被追擊。"],["11","復活：最終考驗，英雄徹底蛻變。"],["12","帶著寶物歸來：用得到的東西改變原本的世界。"]]}
+};
+var svg=$("#curveSvg");
+function smooth(p){var d="M"+p[0][0]+","+p[0][1];for(var i=0;i<p.length-1;i++){var p0=p[i-1]||p[i],p1=p[i],p2=p[i+1],p3=p[i+2]||p2;var c1x=p1[0]+(p2[0]-p0[0])/6,c1y=p1[1]+(p2[1]-p0[1])/6,c2x=p2[0]-(p3[0]-p1[0])/6,c2y=p2[1]-(p3[1]-p1[1])/6;d+=" C"+c1x.toFixed(1)+","+c1y.toFixed(1)+" "+c2x.toFixed(1)+","+c2y.toFixed(1)+" "+p2[0]+","+p2[1];}return d;}
+function drawCurve(k){
+  var c=C[k];
+  var s='<line x1="40" y1="228" x2="625" y2="228" stroke="var(--rule)" stroke-width="2"/><line x1="40" y1="30" x2="40" y2="228" stroke="var(--rule)" stroke-width="2"/>'+
+   '<text x="50" y="22">張力</text><text x="625" y="252" text-anchor="end">故事進展</text>'+
+   '<path class="path" id="cp" d="'+smooth(c.pts)+'"/>';
+  c.pts.forEach(function(p,i){if(c.marks[i]==null)return;
+    s+='<g class="mk" style="opacity:0;transition:opacity .3s '+(reduce?0:(0.25+i*0.1))+'s"><circle class="dot" cx="'+p[0]+'" cy="'+p[1]+'" r="17"/><text x="'+p[0]+'" y="'+(p[1]+6)+'" text-anchor="middle" style="fill:#fff;font-size:17px;font-weight:700">'+c.marks[i]+'</text></g>';});
+  svg.innerHTML=s;
+  var path=$("#cp",svg),len=path.getTotalLength?path.getTotalLength():1200;
+  path.style.strokeDasharray=len;path.style.setProperty("--len",len);
+  if(!reduce){path.classList.add("draw");}
+  requestAnimationFrame(function(){$$(".mk",svg).forEach(function(g){g.style.opacity=1;});});
+  $("#curveList").innerHTML=c.list.map(function(x){return "<li><b>"+x[0]+"</b>"+x[1]+"</li>";}).join("");
+}
+$$("[data-curve]").forEach(function(b){b.addEventListener("click",function(){
+  $$("[data-curve]").forEach(function(x){x.setAttribute("aria-pressed",x===b);});drawCurve(b.dataset.curve);});});
+drawCurve("qc");
+
+/* ---------- 告訴 vs 展示 ---------- */
+var ST=[
+ ["林小雨很害怕，她覺得那個機器人要來抓她了。","林小雨把呼吸壓到最輕。走廊盡頭，金屬腳步聲停了。她數著自己的心跳，數到十七，才發現手心的汗已經把門把弄濕了。門縫底下，一道紅光慢慢掃了過來。"],
+ ["老乞丐的武功非常高強，是天下第一。","三把刀同時砍到，老乞丐沒有起身，只是把手裡的破碗轉了半圈。叮、叮、叮三聲，三把刀尖全插進碗底，拔都拔不出來。他低頭看看碗：「可惜，今天討的飯都灑了。」"],
+ ["新蓬萊市是一座非常先進的未來城市，科技很發達。","雨落到半空就被頭頂的能量網蒸發了，所以這座城市的人已經三十年沒帶過傘。街角的算命攤掛著招牌：「量子卜卦，準確率百分之九十九點七，不準退費。」"],
+ ["錢管事說他昨晚在練劍，但他其實在說謊。","「昨晚？我在演武場練劍。」錢管事答得很快，快得像背好的。他說話時一直轉著手上的戒指。昨天下過雨，演武場的泥地上只有一排腳印，而那不是他的鞋子尺寸。"]
+];
+var stI=0,stM="tell";
+function renderST(){$("#showTxt").innerHTML=(stM==="tell"?"<span style='font-family:var(--sans);font-size:.8rem;color:var(--ink-soft)'>告訴：直接下結論</span><br>":"<span style='font-family:var(--sans);font-size:.8rem;color:var(--ink-soft)'>展示：給證據，讓讀者自己感受</span><br>")+esc(ST[stI][stM==="tell"?0:1]);}
+$$("[data-st]").forEach(function(b){b.addEventListener("click",function(){stI=+b.dataset.st;$$("[data-st]").forEach(function(x){x.setAttribute("aria-pressed",x===b);});renderST();});});
+$$("[data-mode]").forEach(function(b){b.addEventListener("click",function(){stM=b.dataset.mode;$$("[data-mode]").forEach(function(x){x.setAttribute("aria-pressed",x===b);});renderST();});});
+renderST();
+
+/* ---------- 炸彈理論 ---------- */
+var stage=$("#bombStage"),tens=$("#tension"),timers=[];
+function clearT(){timers.forEach(clearTimeout);timers=[];}
+function later(fn,ms){timers.push(setTimeout(fn,reduce?Math.min(ms,50):ms));}
+function line(t,st){var d=document.createElement("div");d.className="line";if(st)d.setAttribute("style",st);d.textContent=t;stage.appendChild(d);}
+var chat=["阿明：「今天的湯有點鹹。」","小芳：「是你舌頭有問題吧。」","阿明：「上週的球賽你看了嗎？」","小芳：「沒有，我在追劇。」","阿明：「又是那部穿越的？」","小芳：「嗯，男主角剛剛失憶了。」","阿明：「怎麼每部都失憶……」"];
+$("#bombA").addEventListener("click",function(){
+  clearT();stage.innerHTML="";tens.style.width="5%";
+  chat.slice(0,3).forEach(function(c,i){later(function(){line(c);},i*1100);});
+  later(function(){stage.classList.remove("boom");void stage.offsetWidth;stage.classList.add("boom");line("💥 轟！","font-size:1.6rem;font-weight:900;color:var(--seal)");tens.style.width="100%";},3600);
+  later(function(){tens.style.width="8%";line("讀者：嚇一跳！……然後就沒了。緊張只維持了一瞬間。","font-family:var(--sans);font-size:.88rem;color:var(--ink-soft)");},4700);
+});
+$("#bombB").addEventListener("click",function(){
+  clearT();stage.innerHTML="";tens.style.width="30%";
+  line("（讀者看見：桌子底下綁著一顆炸彈，計時器正在倒數。兩個人都不知道。）","font-family:var(--sans);font-size:.88rem;color:var(--seal)");
+  var bomb=document.createElement("div");bomb.className="bomb";stage.appendChild(bomb);
+  var sec=10;bomb.textContent="💣 00:10";
+  for(var k=1;k<=9;k++){(function(k){later(function(){sec=10-k;bomb.textContent="💣 00:0"+sec;tens.style.width=(30+k*7.5)+"%";},k*1000);})(k);}
+  chat.forEach(function(c,i){later(function(){line(c);},600+i*1250);});
+  later(function(){line("小芳：「咦，桌子底下是什麼在滴答響？」","font-weight:700");},9300);
+  later(function(){line("（且聽下回分解）同樣是閒聊，讀者卻緊張了整整十秒。讓讀者知道得比角色多，就是懸念。","font-family:var(--sans);font-size:.88rem;color:var(--ink-soft)");},10100);
+});
+
+/* ---------- 契訶夫之槍 ---------- */
+var GUN=[
+ "<b>第一章</b>　主角回老家整理爺爺的遺物。<br><b>第二章</b>　主角被神祕組織追殺。<br><b>第三章</b>　反派舉刀，主角突然從腰間拔出一把祖傳手槍，一槍打倒反派。<p style='font-family:var(--sans);color:var(--seal);margin-bottom:0'>讀者：「等一下，他什麼時候有槍？太方便了吧！」這就是機械降神的感覺。</p>",
+ "<b>第一章</b>　主角整理爺爺遺物時，在閣樓看見一把生鏽的老手槍，嚇了一跳，又把它放回箱子。<br><b>第二章</b>　搬家時，他順手把那個箱子也帶走了。<br><b>第三章</b>　反派舉刀，主角撲向角落的箱子……<p style='font-family:var(--sans);color:var(--wu);margin-bottom:0'>讀者：「我就知道那把槍會派上用場！」合理，而且過癮。</p>"
+];
+$$("[data-gun]").forEach(function(b){b.addEventListener("click",function(){$$("[data-gun]").forEach(function(x){x.setAttribute("aria-pressed",x===b);});$("#gunOut").innerHTML=GUN[+b.dataset.gun];});});
+
+/* ---------- 迷你推理 ---------- */
+var MYS=[
+ ["趙烈是這個案子的<b>紅鯡魚</b>。他有動機、有平面圖，作者故意讓他看起來最可疑。可是線索⑥說，子時整他在演武場，十個人作證。<b>有動機不等於有機會</b>。再想想看。",false],
+ ["林葉是<b>被陷害</b>的。紀錄上確實是她的靈紋（線索④），但線索⑤告訴你，她的靈紋樣本存在維修資料庫，能碰資料庫的人都能偽造。證據太剛好，反而要懷疑。再想想看。",false],
+ ["<b>答對了！</b>莫七前天更新過閣靈的系統（線索③），又能接觸存放林葉靈紋的維修資料庫（線索⑤）。他用偽造的靈紋通過大門，嫁禍給林葉。他抱怨閣靈「變得比較笨」，其實是預先替系統被動過手腳找藉口。關鍵線索就藏在一句抱怨裡，這是「藏在笑點裡」的伏筆。而且所有線索都事先給了讀者，這就是公平的推理。",true]
+];
+$$(".sus").forEach(function(b){b.addEventListener("click",function(){
+  var m=MYS[+b.dataset.s];$$(".sus").forEach(function(x){x.style.borderColor="";});
+  b.style.borderColor=m[1]?"var(--wu)":"var(--seal)";$("#mysOut").innerHTML=m[0];});});
+
+/* ---------- 節奏儀 ---------- */
+function rhythm(){
+  var t=$("#rhythmIn").value;
+  var ss=t.split(/[。！？!?…\n]+/).map(function(x){return x.replace(/[\s「」『』，、；：,;:“”"]/g,"");}).filter(function(x){return x.length;});
+  if(!ss.length){$("#bars").innerHTML="";$("#rhythmNote").textContent="請先貼上文字。";return;}
+  var max=Math.max(40,Math.max.apply(null,ss.map(function(x){return x.length;})));
+  $("#bars").innerHTML=ss.map(function(s){var w=Math.max(3,s.length/max*80);return '<div class="'+(s.length>18?"long":"")+'" style="width:'+w+'%"><span>'+s.length+'字</span></div>';}).join("");
+  var lens=ss.map(function(x){return x.length;}),avg=lens.reduce(function(a,b){return a+b;},0)/lens.length;
+  var sd=Math.sqrt(lens.reduce(function(a,b){return a+(b-avg)*(b-avg);},0)/lens.length);
+  var sh=lens.filter(function(x){return x<=8;}).length,lg=lens.filter(function(x){return x>18;}).length;
+  var msg="共 "+lens.length+" 句，平均每句 "+avg.toFixed(1)+" 字；短句（8字以內）"+sh+" 句，長句（超過18字）"+lg+" 句。";
+  if(sd<4&&lens.length>2)msg+="句子長短差不多，讀起來可能有點單調，試著加入幾個很短的句子。";
+  else if(avg<10)msg+="短句多，節奏快，適合打鬥和追逐。";
+  else if(avg>20)msg+="長句多，節奏慢，適合描寫和沉思；如果這是動作場面，試著切短。";
+  else msg+="長短交錯，節奏有起伏，很好。";
+  $("#rhythmNote").textContent=msg;
+}
+$("#rhythmBtn").addEventListener("click",rhythm);rhythm();
+
+/* ---------- 融合實驗室 ---------- */
+var F={
+ wy:["江湖探案","武功成為線索和兇器：傷口能看出是哪一派的招式，門派恩怨讓每個人都有動機。","古龍《陸小鳳》《楚留香》、溫瑞安《四大名捕》","武林大會前夜，盟主死在自己的練功房，致命傷是他自己門派從不外傳的獨門掌法。","當真相和江湖道義衝突時，俠客該追求真相，還是保護朋友？","偵探不能靠打贏每個人來破案，要靠觀察和推理。"],
+ kw:["賽博江湖","冰冷的科技社會裡，俠義顯得更珍貴；血肉練成的武功和機械義體形成強烈對比。","電影《星際大戰》《駭客任務》","義體普及的城市裡，一位堅持不改造身體的老拳師開了最後一家武館，唯一的徒弟是一台想學「心法」的機器人。","當機器也能行俠仗義，俠義還是人類獨有的嗎？","科技太強會讓武功顯得多餘，要給武功一個科技做不到的價值。"],
+ wx:["仙俠","武功延伸成法術，江湖升級成修真界，是最自然、也最常見的組合。","還珠樓主《蜀山劍俠傳》","一個只會凡人武功的鏢師，接下護送一位修仙者遺體回宗門的任務，一路上想搶遺體的全是神仙。","凡人的俠義，在長生不死的修仙者眼中還有意義嗎？","力量升級太快，武俠的人情味就會消失。讓角色之間的情義一直在場。"],
+ xy:["詭祕修仙","法術成為作案手法，力量規則就是推理規則，讀者必須懂法術才能解謎。","網路小說《詭秘之主》","宗門閉關室裡長老死了，門被封山大陣從內封住，全宗門會穿牆術的只有三人，而三人在同一時間都在閉關。","如果力量能改變一切，真相還有意義嗎？","法術規則一定要在真相揭曉前交代清楚（第十回的公平原則）。"],
+ kx:["科技修真","克拉克第三定律發揮到極致：修仙可能是遠古文明的科技，科技也可能被當成修仙。","網路小說中的「科技修仙」「賽博修仙」一類","考古隊在崑崙山挖出一座「仙府」，裡面的陣法其實是一台運轉了一萬年的量子電腦，而它剛剛醒來。","如果修仙可以被科學解釋，那「仙」還神聖嗎？","兩套力量要能換算，也要各有做不到的事，否則讀者會問「為什麼不直接用槍？」"],
+ ky:["科技懸疑","新科技創造新犯罪，也創造新的破案方法；讀者一邊解謎，一邊思考科技的危險。","劉慈欣《三體》、影集《黑鏡》","在記憶可以買賣的城市，一位證人賣掉了目擊命案的記憶，買下那段記憶的人，隔天就死了。","如果記憶可以被竄改，我們還能相信什麼是真的？","科技不能萬能到直接找出兇手，例如全城監視器；要故意設計盲點。"],
+ kwxy:["四合一：霓虹劍塚式","主類型懸疑撐起骨架，玄幻提供力量體系，科技提供世界，武俠提供角色的靈魂。","本課第十七回《霓虹劍塚》","請看第十七回的完整示範，從一句話一路做到開場。","力量能用錢買嗎？被複製的靈魂還是真的嗎？","四種不能平均分配，一定要決定誰是主類型（第三回的一主一副原則）。"]
+};
+var sel=[];
+$$("[data-g]").forEach(function(b){b.addEventListener("click",function(){
+  var g=b.dataset.g,i=sel.indexOf(g);if(i>-1)sel.splice(i,1);else sel.push(g);
+  b.setAttribute("aria-pressed",i<0);
+  var key=sel.slice().sort().join(""),o=$("#fuseOut");
+  if(sel.length<2){o.textContent="請選擇兩種類型。";return;}
+  if(sel.length===3){o.textContent="三種也可以寫，但建議先挑一個主類型、一個副類型，第三種當調味。取消一個，看看主副組合的化學反應；或者四種全選，看看驚喜。";return;}
+  var d=F[key];if(!d){o.textContent="請重新選擇。";return;}
+  o.innerHTML="<h5>"+d[0]+"</h5><dl><dt>化學反應</dt><dd>"+d[1]+"</dd><dt>可以參考</dt><dd>"+d[2]+"</dd><dt>故事種子</dt><dd>"+d[3]+"</dd><dt>第三層：靈魂問題</dt><dd>"+d[4]+"</dd><dt>要小心</dt><dd>"+d[5]+"</dd></dl>";
+});});
+
+/* ---------- 贅字偵測 ---------- */
+var FW=["感覺到","慢慢地","突然","非常","十分","開始","然後","於是","似乎","一種","很","了","的"];
+function filler(){
+  var t=$("#fillerIn").value,counts={},total=0;
+  var re=new RegExp("("+FW.join("|")+")","g");
+  var html=esc(t).replace(re,function(m){counts[m]=(counts[m]||0)+1;total++;return '<mark class="fl">'+m+"</mark>";});
+  var len=t.replace(/\s/g,"").length;
+  var list=Object.keys(counts).sort(function(a,b){return counts[b]-counts[a];}).map(function(k){return "「"+k+"」×"+counts[k];}).join("、");
+  $("#fillerOut").innerHTML="<div style='font-family:var(--sans);font-size:.88rem;margin-bottom:.5rem'>共 "+len+" 字，標出 "+total+" 處可能的贅字"+(list?"："+list:"")+"。不是每個都要刪，念念看，刪了意思不變的就刪。</div>"+html.replace(/\n/g,"<br>");
+}
+$("#fillerBtn").addEventListener("click",filler);filler();
+
+/* ---------- 測驗 ---------- */
+var Q={
+ q1:[["下面哪一句是「情節」，而不只是「事件」？",["國王死了，後來王后也死了。","國王死了，王后因為太過悲傷，也跟著死了。","國王和王后都死了。"],1,"多了「因為」把事情用因果串起來，才是情節。這是佛斯特《小說面面觀》的經典例子。"],
+     ["「俠以武犯禁」這句話出自誰？",["司馬遷","韓非子","金庸"],1,"韓非子批評俠客用武力違反法律；司馬遷反而在〈游俠列傳〉稱讚俠客。"],
+     ["克拉克第三定律說的是什麼？",["任何足夠先進的科技，都與魔法無從區分","機器人不得傷害人類","一個故事只能有一個不可能"],0,"「機器人不得傷害人類」是艾西莫夫的機器人三定律；「只能有一個不可能」是常歸於威爾斯的經驗法則（第十三回）。"],
+     ["寫跨類型小說時，比較好的做法是？",["四種類型平均分配","一主一副，其他當調味","哪種流行就寫哪種"],1,"主類型決定讀者期待和骨架，副類型帶來驚喜。平均分配容易每種都很淺。"]],
+ q2:[["角色的「需要」（need）是指？",["角色嘴上說想要的東西","角色真正缺少、自己卻還不知道的東西","作者需要角色去做的事"],1,"嘴上說的是「渴望」。渴望和需要衝突的地方，就是角色最精彩的地方。"],
+     ["mentor（導師）這個詞來自哪裡？",["希臘史詩《奧德賽》裡的人物門托爾","英文 mental 的變形","好萊塢電影公司的名稱"],0,"奧德修斯把兒子託給好友門托爾，女神雅典娜常化身成他給少年建議。"],
+     ["山德森第一定律的重點是？",["魔法越強越好","讀者越懂規則，作者越能用它合理地解決問題","魔法一定要念咒語"],1,"規則講清楚，主角靈活運用規則脫困，讀者才不會覺得作者作弊。"],
+     ["「題材」和「主題」的差別是？",["意思一樣","題材是寫什麼，主題是想讓人思考什麼","主題就是書名"],1,"同樣寫修仙（題材），可以問完全不同的問題（主題）。"],
+     ["「起承轉合」原本是什麼的寫作章法？",["中國古典詩","好萊塢電影劇本","電子遊戲"],0,"起承轉合原本用在律詩、絕句，元代詩論就有討論，後來才用在文章和故事上。"]],
+ q3:[["根據希區考克的炸彈理論，怎樣才能製造懸念？",["讓炸彈突然爆炸","讓觀眾先知道桌下有炸彈","乾脆不要放炸彈"],1,"讓觀眾知道得比角色多，平凡的對話也會變得緊張。突然爆炸只是驚嚇。"],
+     ["「紅鯡魚」在推理小說裡是指？",["兇器","故意誤導讀者的假線索","偵探的外號"],1,"傳說用氣味濃烈的燻鯡魚擾亂獵犬的嗅覺，讓牠追錯方向。"],
+     ["契訶夫之槍告訴我們什麼？",["故事裡一定要有槍","重要的東西要有用處，高潮要用的東西要提早出現","槍戰寫得越多越好"],1,"提早出現的東西在後面派上用場，讀者才會覺得合理又過癮。"],
+     ["玄幻推理要怎樣才符合公平原則？",["完全不能出現法術","在真相揭曉前，把法術規則清楚告訴讀者","最後才說明一種新法術"],1,"規則事先講清楚，法術就變成公平的線索。"],
+     ["打鬥場面最主要的張力來自哪裡？",["招式名稱越多越好","輸了會失去什麼的利害關係","打了多少回合"],1,"讀者緊張的是後果，不是招式。"],
+     ["網路小說的「金手指」借用自什麼？",["希臘神話","電子遊戲的作弊卡帶","金庸小說"],1,"當年插在遊戲機上就能無敵的作弊卡帶，玩家稱為金手指。"],
+     ["在最緊張的地方停下、結束一章，這技巧叫什麼？",["懸崖吊掛","機械降神","資訊傾瀉"],0,"來自哈代連載小說裡懸在懸崖邊的主角，中國說書人的「且聽下回分解」也是同一招。"]],
+ q4:[["「用推理小說的結構寫一個修仙故事」屬於三層融合的哪一層？",["外衣","骨架","靈魂"],1,"用A類型的結構講B類型的故事，是骨架層。靈魂層要讓兩種類型的核心問題碰撞。"],
+     ["世界裡同時有飛劍和飛彈，最需要先解決什麼？",["讓飛劍比飛彈帥","回答「為什麼不直接用飛彈」，讓兩套力量能換算、各有限制","把飛彈刪掉"],1,"兩套力量要能共存，就要各有做不到的事。"],
+     ["《霓虹劍塚》裡，刑警顧青衡永遠戴著手套，這是什麼？",["紅鯡魚","伏筆","機械降神"],1,"第2章埋下，第45章回收：手背上刻著實驗編號。"],
+     ["《霓虹劍塚》的開場為什麼讓四種類型都在第一頁出現？",["為了湊字數","兌現類型承諾，讓讀者立刻嚐到每種味道","沒有特別原因"],1,"第三回說過，開頭就要讓讀者嚐到主類型和副類型的味道。"]],
+ q5:[["修改時應該先改哪一層？",["句子層","場景層","結構層"],2,"先改結構，免得花時間潤飾一段最後會被整段刪掉的文字。"],
+     ["「機械降神」原本指什麼？",["古希臘戲劇用起重機把神明吊上舞台解決劇情","機器人變成神","一種電玩招式"],0,"拉丁文 deus ex machina，「從機器裡出來的神」。亞里斯多德就批評過。"],
+     ["「瑪麗蘇」指的是？",["一種推理詭計","完美到不真實的角色","女主角都叫瑪麗"],1,"來自1973年一篇諷刺《星艦迷航記》同人文的短文。"],
+     ["在台灣，作品寫完之後，著作權怎麼取得？",["要去政府登記才有","一完成就自動享有","要正式出版才有"],1,"著作權在創作完成時就自動產生，記得保存草稿和日期。"],
+     ["學習和抄襲的界線是？",["學「怎麼寫」，不抄「寫了什麼」","改幾個字就不算抄","只要真心喜歡就能照抄"],0,"結構、節奏、技巧可以學；別人的文字、獨特角色和具體情節不能抄。"]]
+};
+$$(".quiz").forEach(function(qz){
+  var qs=Q[qz.dataset.quiz],body=$(".qbody",qz),answered=0,right=0;
+  body.innerHTML=qs.map(function(q,i){return '<div class="q"><p>'+(i+1)+". "+esc(q[0])+"</p>"+q[1].map(function(o,j){return '<button class="opt" data-q="'+i+'" data-o="'+j+'">'+esc(o)+"</button>";}).join("")+'<div class="why">'+esc(q[3])+"</div></div>";}).join("")+'<div class="score" aria-live="polite"></div>';
+  $$(".opt",body).forEach(function(b){b.addEventListener("click",function(){
+    var qi=+b.dataset.q,oi=+b.dataset.o,wrap=b.parentNode;if(wrap.dataset.done)return;wrap.dataset.done=1;
+    var ok=oi===qs[qi][2];answered++;if(ok)right++;
+    $$(".opt",wrap).forEach(function(x){x.disabled=true;if(+x.dataset.o===qs[qi][2])x.classList.add("right");});
+    if(!ok)b.classList.add("wrong");
+    $(".why",wrap).classList.add("show");$(".why",wrap).textContent=(ok?"答對了！":"再想想：")+qs[qi][3];
+    if(answered===qs.length)$(".score",body).textContent="得分："+right+" / "+qs.length+(right===qs.length?"　全對，這一卷你學透了。":"　答錯的題目，回去重讀那一回吧。");
+  });});
+});
+
+/* ---------- 名詞辭典 ---------- */
+var G=[
+ ["小說","通","用散文講述虛構故事的文學形式。","最早見於《莊子》，指瑣碎言論；班固說小說來自「街談巷語，道聽塗說」。","第一回"],
+ ["情節","通","有因果關係的一連串事件。","佛斯特《小說面面觀》（1927）以國王與王后之死區分事件與情節。","第一回"],
+ ["衝突","通","角色的渴望撞上阻礙時產生的對抗，是故事的動力。","","第一回"],
+ ["類型 genre","通","有共同規則和讀者期待的一群作品。","法文，源自拉丁文 genus，「種類、家族」。","第二回"],
+ ["章回小說","通","分成許多「回」的長篇小說，如《西遊記》。","源自宋元說書人分次講故事，每次一回，以「且聽下回分解」作結。","卷首"],
+ ["俠","w","用自己的力量行正義、重信守諾的人。","韓非子批評「俠以武犯禁」；司馬遷在《史記・游俠列傳》稱讚俠客。","第二回"],
+ ["武俠","w","以俠客、武功、江湖為核心的小說類型。","一般認為此詞於二十世紀初自日本傳入中文；1950年代後金庸、古龍、梁羽生開創新派武俠。","第二回"],
+ ["江湖","w","官府管不到、有自己規矩和恩怨的民間世界。","本義是江河湖泊，見《莊子》「相忘於江湖」；范仲淹〈岳陽樓記〉用以指遠離朝廷。","第十一回"],
+ ["黑話","w","特定團體的祕密用語，如「風緊，扯呼」（情況危急，快逃）。","舊時江湖行走時用來避免外人聽懂。","第十四回"],
+ ["玄幻","x","融合東方神祕想像與奇幻元素的小說類型。","「玄」出自《老子》「玄之又玄」；一般認為此名稱最早見於1988年黃易《月魔》的出版序言。","第二回"],
+ ["仙俠","x","以修煉成仙、飛劍法寶為主的類型。","還珠樓主《蜀山劍俠傳》（1930年代起）被視為開山之作。","第二回"],
+ ["修仙境界","x","煉氣、築基、金丹、元嬰、化神等修煉等級。","多借自道教內丹術語，各小說名稱不盡相同。","第七回"],
+ ["渡劫","x","突破大境界時要承受的天雷等考驗。","「劫」源自梵語 kalpa（劫波），佛教的極長時間單位，引申為大難。","第七回"],
+ ["金手指","x","主角獨有、讓他快速變強的能力或寶物。","借自電子遊戲的作弊卡帶。","第十二回"],
+ ["升級流","x","以主角一級一級變強為主線的寫法。","來自角色扮演遊戲「打怪升級」的體驗。","第十二回"],
+ ["爽點","x","讓讀者感到痛快、解氣的情節點。","網路讀者口語。","第十二回"],
+ ["扮豬吃老虎","x","隱藏實力讓對手輕敵，再一舉反擊。","民間俗語。","第十二回"],
+ ["欲揚先抑","x","想把一件事捧高，先把它壓低。","古代文章學的技法。","第十二回"],
+ ["挖坑、填坑","通","開啟故事線或伏筆；回收它。","網路用語，把未完成的故事比喻成坑。","第十二回"],
+ ["推理小說","y","以解開犯罪謎團為核心的小說。","愛倫坡〈莫爾格街兇殺案〉（1841）常被視為第一篇；日本因1946年「當用漢字」限制「偵」字，「推理小說」一詞得以普及。","第二回"],
+ ["懸疑","y","著重「接下來會怎樣」的緊張不安。","","第二回"],
+ ["公案小說","y","中國古代寫清官斷案的小說，如《包公案》。","","第二回"],
+ ["炸彈理論","y","讓觀眾先知道危險，才能製造懸念；突然爆炸只是驚嚇。","希區考克的說明。","第十回"],
+ ["戲劇反諷","y","讀者知道、角色卻不知道的資訊落差。","源自戲劇理論。","第十回"],
+ ["伏筆、草蛇灰線","y","事先埋下、後來回收的線索。","金聖歎評點《水滸傳》時提出「草蛇灰線法」。","第十回"],
+ ["契訶夫之槍","y","故事中出現的重要物件必須派上用場。","出自契訶夫書信中的說法。","第十回"],
+ ["紅鯡魚","y","作者故意放的假線索。","傳說用燻鯡魚擾亂獵犬；1807年威廉・科貝特的文章使其流行。","第十回"],
+ ["麥高芬","y","推動故事、人人爭奪，但本身是什麼並不重要的東西。","希區考克推廣，據說名稱來自編劇安格斯・麥克菲爾。","第十回"],
+ ["諾克斯十誡","y","推理小說的十條公平規則。","羅納德・諾克斯於1929年提出。","第十回"],
+ ["密室","y","案發現場從內部封閉，兇手如何進出成謎。","愛倫坡〈莫爾格街兇殺案〉即為密室。","第十回"],
+ ["暴風雪山莊","y","一群人被困在與外界隔絕處，兇手就在其中。","日本推理迷對此類情境的稱呼；代表作為克莉絲蒂《一個都不留》。","第十回"],
+ ["不可靠的敘事者","y","說故事的人所說不一定可信。","韋恩・布斯《小說修辭學》（1961）提出。","第九回"],
+ ["科幻","k","以科學或科技的假設想像未來與人性的類型。","瑪麗・雪萊《科學怪人》（1818）常被視為第一部；雨果・根斯巴克推廣 science fiction 一詞。","第二回"],
+ ["克拉克第三定律","k","任何足夠先進的科技，都與魔法無從區分。","亞瑟・克拉克提出。","第三回"],
+ ["卡爾達肖夫指數","k","以能使用多少能量替文明分級。","蘇聯天文學家卡爾達肖夫於1964年提出。","第七回"],
+ ["硬科幻、軟科幻","k","嚴守自然科學的科幻；著重社會人性的科幻。","「硬科幻」一般認為由P・史凱勒・米勒於1957年首先使用。","第十三回"],
+ ["一個大假設","k","一個故事只允許一個不可能，其餘遵守邏輯。","常被歸於威爾斯的經驗法則。","第十三回"],
+ ["賽博龐克","k","高科技、低生活的未來世界。","cyber 來自維納1948年的「控制論」；貝斯克1983年發表同名短篇，吉布森《神經喚術士》定型。","第十三回"],
+ ["蒸汽龐克","k","以蒸汽機時代為背景的機械幻想。","K・W・杰特於1987年創造此詞。","第十三回"],
+ ["克蘇魯","k","人類無法理解的古老神祇與恐怖。","洛夫克拉夫特〈克蘇魯的呼喚〉（1928）。","第十三回"],
+ ["一句話故事 logline","通","用一句話說出故事的核心。","好萊塢用語，源自劇本登記簿上的一行摘要。","第四回"],
+ ["主題","通","故事想讓人思考的問題。","希臘文 thema，「被提出的東西」。","第五回"],
+ ["角色弧線","通","角色從開頭到結尾的改變軌跡。","劇作理論用語，arc 即弧線。","第六回"],
+ ["導師","通","給主角指引和工具的角色。","來自《奧德賽》人物門托爾。","第六回"],
+ ["世界觀","通","作品的整套世界設定。","原為哲學用語，譯自德文 Weltanschauung。","第七回"],
+ ["冰山理論","通","只寫出一小部分，大部分藏在水面下。","海明威提出。","第七回"],
+ ["山德森第一定律","通","讀者越懂魔法規則，作者越能用魔法合理解決問題。","布蘭登・山德森於2007年的文章提出。","第七回"],
+ ["起承轉合","通","開頭、發展、轉折、收束的四段結構。","原為古典詩的章法，元代詩論已有討論。","第八回"],
+ ["三幕劇","通","建置、對抗、解決的三段結構。","源自亞里斯多德《詩學》；席德・菲爾德於1979年系統化。","第八回"],
+ ["英雄旅程","通","英雄離家、受考驗、得寶、歸來的十二階段模式。","約瑟夫・坎伯《千面英雄》（1949），沃格勒整理成十二階段。","第八回"],
+ ["雪花法","通","從一句話逐層擴寫成完整大綱。","蘭迪・英格曼森設計，靈感來自科赫雪花。","第八回"],
+ ["展示，不要告訴","通","用細節讓讀者自己感受，而非直接下結論。","常歸於契訶夫（流傳句為後人濃縮）；盧伯克《小說的技藝》（1921）系統討論。","第九回"],
+ ["潛台詞","通","話中沒說出口的真正意思。","史坦尼斯拉夫斯基的表演理論。","第十四回"],
+ ["懸崖吊掛","通","在最緊張處結束一章。","哈代連載《一雙藍眼睛》（1873）中主角懸於崖邊。","第十五回"],
+ ["黃金三章","通","網路小說開頭三章決定讀者去留。","網路小說圈用語。","第十五回"],
+ ["從中間開始","通","直接從事件進行中開場。","拉丁文 in medias res，古羅馬詩人賀拉斯用以稱讚荷馬。","第十五回"],
+ ["資訊傾瀉","通","一次塞給讀者大量設定。","英文 info dump 的意譯。","第十九回"],
+ ["瑪麗蘇","通","完美到不真實的角色。","1973年寶拉・史密斯諷刺《星艦迷航記》同人文的短文。","第十九回"],
+ ["龍傲天","通","無敵又自戀的男主角。","中文網路讀者的戲稱。","第十九回"],
+ ["機械降神","通","靠突然出現的外力解決劇情。","拉丁文 deus ex machina，古希臘戲劇用起重機吊神上台。","第十九回"],
+ ["主角光環","通","主角怎麼亂來都不會出事。","網路用語。","第十九回"],
+ ["吃書","通","作者推翻自己前面的設定。","網路用語，彷彿作者把自己的書吃掉了。","第十九回"],
+ ["番茄鐘","通","專心二十五分鐘、休息五分鐘的工作法。","1980年代奇里洛用番茄造型計時器發明。","第二十回"],
+ ["拆書","通","逐章分析喜歡的作品來學習寫法。","","第二十回"],
+ ["著作權","通","創作者對作品的權利，完成即自動取得。","1886年《伯恩公約》確立自動保護原則。","第二十回"],
+ ["筆名","通","作者發表時使用的名字。","例：金庸本名查良鏞，拆「鏞」字而成。","第二十回"]
+];
+var TAG={x:["玄幻","x"],w:["武俠","w"],y:["懸疑","y"],k:["科技","k"],"通":["通用",""]};
+function renderGloss(q){
+  q=(q||"").trim().toLowerCase();
+  var items=G.filter(function(g){return !q||(g[0]+g[2]+g[3]).toLowerCase().indexOf(q)>-1;});
+  $("#gloss").innerHTML=items.length?items.map(function(g){var t=TAG[g[1]];
+    return '<div class="term"><h5>'+esc(g[0])+' <span class="g '+t[1]+'" style="'+(t[1]?"":"background:var(--ink-soft)")+'">'+t[0]+'</span><span style="font-family:var(--sans);font-size:.78rem;font-weight:400;color:var(--ink-soft)">'+g[4]+'</span></h5><p>'+esc(g[2])+'</p>'+(g[3]?'<p class="src">由來：'+esc(g[3])+'</p>':'')+'</div>';}).join(""):'<p>找不到這個名詞。試試更短的關鍵字，例如「伏筆」或「龐克」。</p>';
+}
+$("#glossQ").addEventListener("input",function(e){renderGloss(e.target.value);});renderGloss("");
+
+/* ---------- 30天計畫 ---------- */
+var P=["讀完卷一，寫三個三句話故事","擲靈感骰子十次，選出最愛的點子","寫一句話故事（兩個版本）","寫出三個主題問題，選一個","主角角色卡","反派角色卡＋反派日記","導師或夥伴角色卡","回答力量體系三問","設計五個力量等級","寫出一個大假設和五個推論","起承轉合四段大綱","雪花法：擴寫成五句話","列出八到十二個場景","寫伏筆清單（至少五條）","休息：拆一本書的第一章","寫場景一（開場）","寫場景二","寫場景三","寫場景四（打鬥或追逐）","寫場景五（中點轉折）","寫場景六","寫場景七（最低點）","寫場景八（高潮）","寫結局","冷卻：不看稿，讀一本書","修改結構層","修改場景層：鉤子和對話","修改句子層：跑贅字偵測器","朗讀全文，請一位朋友讀","依回饋定稿，替作品取名"];
+$("#plan").innerHTML=P.map(function(t,i){var c=store.plan.indexOf(i)>-1;return '<label class="day"><input type="checkbox" data-day="'+i+'"'+(c?" checked":"")+'><span><b>第'+(i+1)+'天</b>'+t+'</span></label>';}).join("");
+$$("[data-day]").forEach(function(b){b.addEventListener("change",function(){var i=+b.dataset.day,k=store.plan.indexOf(i);if(b.checked&&k<0)store.plan.push(i);if(!b.checked&&k>-1)store.plan.splice(k,1);save();});});
+
+/* ---------- 結業證書 ---------- */
+$("#certBtn").addEventListener("click",function(){
+  var n=$("#certName").value.trim(),done=store.lessons.length,o=$("#certOut");
+  if(!n){o.innerHTML="<p>請先輸入名字或筆名。</p>";return;}
+  if(done<20){o.innerHTML="<p>目前完成 "+done+" / 20 回，還差 "+(20-done)+" 回。打開目錄，沒有打勾的就是還沒讀完的。</p>";return;}
+  var d=new Date();
+  o.innerHTML='<div class="cert"><div style="font-family:var(--sans);font-size:.85rem;color:var(--ink-soft)">寫一個世界・跨類型小說寫作課</div><h5>結業證書</h5><p>茲證明<br><strong style="font-size:1.4rem">'+esc(n)+'</strong><br>已修完玄幻、武俠、懸疑、科技五卷二十回，<br>習得故事、角色、世界、結構與融合之法，<br>即日起下山，自成一家。</p><p style="font-family:var(--sans);font-size:.85rem">'+d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+'日</p><div class="stamp">秘笈<br>傳人</div></div>';
+});
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-efb4539f59" data-category="creative"></script></body>
+</html>

@@ -1,0 +1,2007 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>布料學堂：成衣主料 梭織與針織 從入門到專業</title>
+<style>
+:root{
+  --ink:#1B2A4E;          /* 靛藍墨色 */
+  --ink-soft:#3D4C70;
+  --paper:#F3F5F8;        /* 淡青灰布面 */
+  --card:#FFFFFF;
+  --line:#CDD4E0;
+  --selvedge:#C2352B;     /* 布邊紅線 */
+  --chalk:#E2A919;        /* 裁剪粉筆黃 */
+  --warp:#2C4A8A;
+  --weft:#E9E3D3;
+  --good:#2E7D4F;
+  --bad:#B8392F;
+  --muted:#5F6B82;
+  --code:#E7EBF2;
+  --serif:"Noto Serif TC","Source Han Serif TC","Songti TC","PMingLiU",serif;
+  --sans:"PingFang TC","Noto Sans TC","Microsoft JhengHei","Heiti TC",sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ink:#E4E8F2; --ink-soft:#B9C2D6; --paper:#111A2E; --card:#18233B; --line:#2E3B58;
+    --selvedge:#E0584C; --chalk:#F0C04A; --warp:#6E8FD6; --weft:#D9D1BE; --muted:#9AA6BF; --code:#22304D;
+    --good:#5BC285; --bad:#F07366;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#E4E8F2; --ink-soft:#B9C2D6; --paper:#111A2E; --card:#18233B; --line:#2E3B58;
+  --selvedge:#E0584C; --chalk:#F0C04A; --warp:#6E8FD6; --weft:#D9D1BE; --muted:#9AA6BF; --code:#22304D;
+  --good:#5BC285; --bad:#F07366;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 16px)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;
+  -webkit-text-size-adjust:100%;}
+/* 左側布邊 selvedge：整頁的識別記號 */
+body::before{content:"";position:fixed;left:0;top:0;bottom:0;width:10px;z-index:50;
+  background:repeating-linear-gradient(90deg,#fff 0 3px,var(--selvedge) 3px 5px,#fff 5px 7px,var(--warp) 7px 10px);
+  opacity:.9}
+a{color:var(--warp)}
+img,svg,canvas{max-width:100%}
+.layout{display:grid;grid-template-columns:280px minmax(0,1fr);min-height:100vh;padding-left:10px}
+/* ---------- 目錄 ---------- */
+nav.toc{position:sticky;top:0;height:100vh;overflow-y:auto;padding:28px 18px 40px 22px;border-right:1px solid var(--line);
+  background:var(--card)}
+.toc h2{font-family:var(--serif);font-size:20px;margin:0 0 4px;line-height:1.3}
+.toc .sub{font-size:13px;color:var(--muted);margin:0 0 18px}
+.toc ol{list-style:none;padding:0;margin:0;counter-reset:l}
+.toc li{margin:0}
+.toc a{display:flex;gap:10px;align-items:baseline;padding:7px 8px;border-radius:6px;text-decoration:none;color:var(--ink);font-size:15px;line-height:1.45}
+.toc a:hover{background:var(--code)}
+.toc a.active{background:var(--ink);color:var(--paper)}
+.toc .n{font-family:var(--serif);font-size:13px;min-width:2.4em;color:var(--muted)}
+.toc a.active .n{color:inherit;opacity:.8}
+.toc .done-mark{margin-left:auto;font-size:13px;color:var(--good)}
+.toc a.active .done-mark{color:var(--chalk)}
+.lvl-head{font-size:12px;color:var(--muted);margin:16px 8px 4px;letter-spacing:.05em}
+.progress{margin:6px 0 18px;height:6px;background:var(--code);border-radius:3px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:var(--selvedge);transition:width .4s}
+.toc-tools{display:flex;gap:8px;margin-top:22px;flex-wrap:wrap}
+.btn{font:inherit;font-size:14px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);padding:6px 14px;border-radius:999px;cursor:pointer}
+.btn:hover{background:var(--ink);color:var(--paper)}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn.solid:hover{opacity:.88}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--chalk);outline-offset:2px}
+.menu-btn{display:none}
+/* ---------- 主內容 ---------- */
+main{padding:0 clamp(16px,4vw,56px) 80px;min-width:0}
+.col{max-width:760px;margin:0 auto}
+header.hero{padding:40px 0 20px}
+.hero-title{font-family:var(--serif);font-weight:700;font-size:clamp(34px,6vw,58px);line-height:1.15;margin:10px 0 14px;letter-spacing:.02em}
+.hero-title small{display:block;font-size:.42em;font-weight:400;color:var(--muted);letter-spacing:.08em;margin-top:10px}
+.hero-lead{font-size:18px;color:var(--ink-soft);max-width:36em}
+.hero-stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin:26px 0 8px}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.stage canvas{display:block;width:100%;height:220px}
+.stage p{margin:0;padding:10px 14px 12px;font-size:14px;color:var(--ink-soft);line-height:1.6}
+.stage b{color:var(--ink);font-family:var(--serif);font-size:17px}
+.howto{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:26px 0 0;font-size:14px}
+.howto div{border-top:3px solid var(--ink);padding-top:8px;line-height:1.6}
+.howto b{display:block;font-family:var(--serif);font-size:16px}
+
+section.lesson{padding:56px 0 24px;border-top:1px solid var(--line)}
+.lesson-no{font-family:var(--serif);color:var(--selvedge);font-size:16px;margin:0}
+.lesson h2{font-family:var(--serif);font-size:clamp(26px,4vw,36px);line-height:1.25;margin:4px 0 6px}
+.lesson .tag{display:inline-block;font-size:12.5px;padding:1px 10px;border-radius:999px;border:1px solid var(--muted);color:var(--muted);margin-right:6px;vertical-align:middle}
+.lesson .goal{color:var(--ink-soft);margin:10px 0 24px;padding-left:14px;border-left:3px solid var(--line)}
+.lesson h3{font-family:var(--serif);font-size:22px;margin:36px 0 8px;line-height:1.35}
+.lesson h4{font-size:17px;margin:22px 0 4px}
+p{margin:0 0 14px}
+ul,ol{padding-left:1.4em;margin:0 0 14px}
+li{margin:3px 0}
+.en{font-family:Georgia,"Times New Roman",serif;font-style:italic;color:var(--ink-soft);font-size:.95em}
+strong{color:var(--ink)}
+kbd,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.88em;background:var(--code);padding:1px 6px;border-radius:4px}
+
+/* 三種提示框：各自代表一種資訊類型 */
+.origin{position:relative;margin:20px 0;padding:14px 18px 12px 18px;border:2px dashed var(--selvedge);border-radius:10px;background:var(--card)}
+.origin::before{content:"名詞由來";position:absolute;top:-12px;left:14px;background:var(--paper);padding:0 8px;font-size:13px;color:var(--selvedge);font-weight:700}
+.origin p:last-child{margin:0}
+.try{margin:20px 0;padding:14px 18px;background:var(--card);border-left:6px solid var(--chalk);border-radius:0 10px 10px 0}
+.try::before{content:"動手試試";display:block;font-weight:700;font-size:14px;color:var(--ink);margin-bottom:4px}
+.try p:last-child,.try ul:last-child{margin:0}
+.factory{margin:20px 0;padding:14px 18px;background:var(--ink);color:var(--paper);border-radius:10px}
+.factory::before{content:"工廠現場";display:block;font-weight:700;font-size:14px;color:var(--chalk);margin-bottom:4px}
+.factory strong{color:var(--paper)}
+.factory p:last-child,.factory ul:last-child{margin:0}
+.analogy{font-family:var(--serif);font-size:19px;line-height:1.7;margin:22px 0;padding:0 0 0 18px;border-left:4px solid var(--warp)}
+
+/* 表格 */
+.tbl{overflow-x:auto;margin:16px 0 20px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:15px;line-height:1.6;min-width:520px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--code);font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+
+/* 圖卡 */
+figure{margin:22px 0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+figcaption{font-size:14px;color:var(--muted);margin-top:8px;line-height:1.6}
+.row-ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 4px}
+.chip{font:inherit;font-size:14px;padding:5px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+input[type=range]{width:180px;accent-color:var(--selvedge)}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center;font-size:14px}
+.flow div{padding:10px 6px;border-radius:10px;background:var(--paper);border:1px solid var(--line);line-height:1.5}
+.flow b{display:block;font-family:var(--serif);font-size:17px}
+.flow svg{height:54px;display:block;margin:0 auto 6px}
+.cols2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.steps figure{margin:0;padding:10px;text-align:center}
+.steps svg{height:120px}
+
+/* 計算機 */
+.calc{margin:20px 0;padding:16px 18px;background:var(--card);border:1.5px solid var(--ink);border-radius:12px}
+.calc h4{margin:0 0 10px;font-family:var(--serif);font-size:18px}
+.calc label{display:flex;flex-direction:column;font-size:14px;color:var(--ink-soft);gap:3px}
+.calc .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.calc input,.calc select{font:inherit;font-size:16px;padding:7px 10px;border:1.5px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);width:100%}
+.calc .out{margin-top:12px;padding:10px 12px;background:var(--code);border-radius:8px;font-size:15px;line-height:1.7}
+.calc .out b{font-size:18px}
+
+/* 小測驗 */
+.quiz{margin:30px 0 10px;padding:18px;border-radius:12px;background:var(--card);border:1px solid var(--line)}
+.quiz h4{margin:0 0 10px;font-family:var(--serif);font-size:19px}
+.q{margin:14px 0 18px}
+.q p{margin:0 0 8px;font-weight:600}
+.q button{display:block;width:100%;text-align:left;font:inherit;font-size:15.5px;padding:9px 12px;margin:6px 0;border:1.5px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);cursor:pointer;line-height:1.5}
+.q button:hover{border-color:var(--ink)}
+.q button.right{border-color:var(--good);background:color-mix(in srgb,var(--good) 14%,var(--paper))}
+.q button.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,var(--paper))}
+.q .why{display:none;font-size:14.5px;color:var(--ink-soft);padding:8px 12px;border-left:3px solid var(--good);margin-top:6px}
+.q.answered .why{display:block}
+.finish{display:flex;align-items:center;gap:12px;margin:18px 0 0;flex-wrap:wrap}
+.finish .ok{color:var(--good);font-weight:700}
+.summary{margin:26px 0 0;padding:14px 18px;border:1.5px solid var(--line);border-radius:10px}
+.summary h4{margin:0 0 6px;font-family:var(--serif)}
+.summary ul{margin:0}
+
+/* 詞彙表 */
+.gloss-search{font:inherit;width:100%;padding:10px 14px;border:1.5px solid var(--ink);border-radius:10px;background:var(--card);color:var(--ink);font-size:16px;margin:8px 0 14px}
+.gloss dl{margin:0}
+.gloss .item{padding:10px 0;border-bottom:1px solid var(--line)}
+.gloss dt{font-weight:700;font-size:16px}
+.gloss dt .en{font-weight:400;margin-left:6px}
+.gloss dd{margin:2px 0 0;font-size:15px;color:var(--ink-soft);line-height:1.7}
+footer{padding:40px 0;color:var(--muted);font-size:14px;text-align:center}
+
+@media (max-width:900px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  nav.toc{position:fixed;left:10px;top:0;bottom:0;width:min(300px,84vw);z-index:40;transform:translateX(-110%);transition:transform .25s;box-shadow:4px 0 24px rgba(0,0,0,.25);
+    padding-top:calc(env(safe-area-inset-top,0px) + 24px)}
+  nav.toc.open{transform:none}
+  .menu-btn{display:inline-flex;position:fixed;right:14px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);z-index:45;background:var(--ink);color:var(--paper);border:0;border-radius:999px;padding:12px 18px;font:inherit;font-size:15px;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+  .hero-stage{grid-template-columns:minmax(0,1fr)}
+  .stage canvas{height:180px}
+  .howto{grid-template-columns:1fr}
+  .flow{grid-template-columns:repeat(2,1fr)}
+  .cols2{grid-template-columns:minmax(0,1fr)}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  body{font-size:16.5px}
+}
+@media print{
+  nav.toc,.menu-btn,.quiz,.calc,.row-ctrl,.finish{display:none!important}
+  .layout{display:block}
+  body::before{display:none}
+  section.lesson{break-before:page}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc" id="toc" aria-label="課程目錄">
+  <h2>布料學堂</h2>
+  <p class="sub">成衣主料：梭織與針織</p>
+  <div class="progress" aria-hidden="true"><i id="progBar"></i></div>
+  <p class="sub" id="progText" style="margin-top:-10px">已完成 0 / 12 課</p>
+  <ol id="tocList">
+    <li class="lvl-head">入門：認識布從哪裡來</li>
+    <li><a href="#l0"><span class="n">第0課</span>什麼是「主料」</a></li>
+    <li><a href="#l1"><span class="n">第1課</span>纖維：布的原料</a></li>
+    <li><a href="#l2"><span class="n">第2課</span>紗線：把纖維變成線</a></li>
+    <li><a href="#l3"><span class="n">第3課</span>布的兩大家族</a></li>
+    <li class="lvl-head">進階：兩種布怎麼做</li>
+    <li><a href="#l4"><span class="n">第4課</span>梭織：經緯交錯</a></li>
+    <li><a href="#l5"><span class="n">第5課</span>梭織布名錄</a></li>
+    <li><a href="#l6"><span class="n">第6課</span>針織：線圈相扣</a></li>
+    <li><a href="#l7"><span class="n">第7課</span>針織布名錄</a></li>
+    <li class="lvl-head">專業：工廠與採購實務</li>
+    <li><a href="#l8"><span class="n">第8課</span>看懂布料規格</a></li>
+    <li><a href="#l9"><span class="n">第9課</span>染色與後整理</a></li>
+    <li><a href="#l10"><span class="n">第10課</span>品質檢驗</a></li>
+    <li><a href="#l11"><span class="n">第11課</span>從布到成衣</a></li>
+    <li class="lvl-head">工具</li>
+    <li><a href="#gloss"><span class="n">附錄</span>名詞辭典</a></li>
+  </ol>
+  <div class="toc-tools">
+    <button class="btn" id="themeBtn" type="button">切換深淺色</button>
+    <button class="btn" id="resetBtn" type="button">清除進度</button>
+  </div>
+</nav>
+<button class="menu-btn" id="menuBtn" type="button" aria-controls="toc" aria-expanded="false">課程目錄</button>
+<main>
+<div class="col">
+<header class="hero">
+  <h1 class="hero-title">一件衣服，<br>先從一塊布開始。<small>成衣主料入門到專業：梭織與針織完整課程</small></h1>
+  <p class="hero-lead">你身上的襯衫和 T 恤，看起來都是「布」，其實是用兩種完全不同的方法做出來的。下面兩個動畫正在即時「織布」，左邊是梭織，右邊是針織。看完這 12 課，你會知道它們差在哪裡、叫什麼名字、名字從哪裡來，以及在工廠裡怎麼判斷一塊布的好壞。</p>
+  <div class="hero-stage">
+    <div class="stage"><canvas id="heroWoven" aria-label="梭織布正在被織出來的動畫"></canvas>
+      <p><b>梭織</b>　直的線和橫的線，一上一下交叉。像編竹籬笆。</p></div>
+    <div class="stage"><canvas id="heroKnit" aria-label="針織布線圈一排排形成的動畫"></canvas>
+      <p><b>針織</b>　一條線繞成一個個小圈，圈套著圈。像打毛線。</p></div>
+  </div>
+  <div class="howto">
+    <div><b>照順序讀</b>每一課都用到前一課的觀念，第 0 到 3 課是地基。</div>
+    <div><b>玩一玩圖</b>有按鈕、滑桿的圖都可以操作，動手比讀十遍更有用。</div>
+    <div><b>做小測驗</b>每課最後有 3 題，全對就會記錄為「已完成」。</div>
+  </div>
+</header>
+
+<!-- ============ 第 0 課 ============ -->
+<section class="lesson" id="l0" data-lesson="0">
+  <p class="lesson-no">第 0 課</p>
+  <h2>什麼是「主料」？</h2>
+  <span class="tag">入門</span><span class="tag">約 5 分鐘</span>
+  <p class="goal">讀完這課你會知道：一件衣服由哪些材料組成，以及為什麼我們要先學「主料」。</p>
+
+  <p>拿起你現在穿的一件外套，把它「拆」開來想像一下，它其實是由很多種材料組成的：</p>
+  <div class="tbl"><table>
+    <tr><th>類別</th><th>意思</th><th>例子</th></tr>
+    <tr><td><strong>主料</strong></td><td>衣服最主要、面積最大、別人一眼看到的那塊布</td><td>襯衫的布、T 恤的布、牛仔褲的布</td></tr>
+    <tr><td><strong>裡布</strong></td><td>縫在衣服內側、貼著身體的布</td><td>西裝外套裡面滑滑的那層</td></tr>
+    <tr><td><strong>輔料</strong></td><td>幫衣服「完成」的零件</td><td>鈕扣、拉鍊、縫紉線、襯（讓領子挺的材料）、洗標、吊牌</td></tr>
+  </table></div>
+
+  <div class="origin">
+    <p><strong>主料</strong>的英文是 <span class="en">shell fabric</span> 或 <span class="en">main fabric</span>，也常看到 <span class="en">self fabric</span>。Shell 是「殼」，意思是衣服最外面那層殼；self 是「自己」，意思是「跟衣服本身同一塊布」。例如口袋蓋如果寫 <span class="en">self fabric</span>，就是指口袋蓋用跟衣身一樣的主料做。</p>
+  </div>
+
+  <p>為什麼要先學主料？因為在成衣工廠裡，<strong>主料通常佔一件衣服材料成本的六到七成</strong>，而且主料決定了衣服怎麼裁、怎麼縫、用什麼機器、洗了會不會縮。主料搞懂了，後面所有工序都會變得有道理。</p>
+
+  <p>這門課的地圖是這樣的：</p>
+  <figure>
+    <div class="flow">
+      <div><svg viewBox="0 0 60 50" aria-hidden="true"><g stroke="currentColor" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M8 40c10-14 8-24 18-30"/><path d="M16 42c8-16 14-22 26-30"/><path d="M28 44c6-12 14-20 24-26"/></g></svg><b>纖維</b>棉花、羊毛、聚酯纖維<br>第 1 課</div>
+      <div><svg viewBox="0 0 60 50" aria-hidden="true"><g stroke="currentColor" fill="none" stroke-width="2"><path d="M4 25c6-8 10 8 16 0s10 8 16 0 10 8 16 0"/><path d="M4 29c6-8 10 8 16 0s10 8 16 0 10 8 16 0" opacity=".5"/></g></svg><b>紗線</b>把纖維扭成線<br>第 2 課</div>
+      <div><svg viewBox="0 0 60 50" aria-hidden="true"><g stroke="currentColor" stroke-width="2"><path d="M10 8v34M20 8v34M30 8v34M40 8v34M50 8v34"/><path d="M6 15h48M6 25h48M6 35h48" opacity=".55"/></g></svg><b>布</b>梭織或針織<br>第 3 到 7 課</div>
+      <div><svg viewBox="0 0 60 50" aria-hidden="true"><path d="M20 6l-14 8 5 10 6-3v23h26V21l6 3 5-10-14-8c-2 5-6 7-10 7s-8-2-10-7z" stroke="currentColor" fill="none" stroke-width="2" stroke-linejoin="round"/></svg><b>成衣</b>染整、檢驗、裁縫<br>第 8 到 11 課</div>
+    </div>
+    <figcaption>布料的一生：纖維 → 紗線 → 布 → 成衣。這門課就照這個順序走。</figcaption>
+  </figure>
+
+  <div class="quiz" data-quiz="0">
+    <h4>小測驗</h4>
+    <div class="q" data-answer="1"><p>1. 一件襯衫上，下面哪一個屬於「主料」？</p>
+      <button type="button">鈕扣</button><button type="button">做襯衫衣身的那塊布</button><button type="button">領子裡面讓它挺起來的襯</button>
+      <div class="why">主料是面積最大、構成衣服本體的布。鈕扣和襯都是輔料。</div></div>
+    <div class="q" data-answer="2"><p>2. 規格表上寫「pocket flap: self fabric」，意思是？</p>
+      <button type="button">口袋蓋要自己設計</button><button type="button">口袋蓋用裡布</button><button type="button">口袋蓋用和衣身同一塊主料</button>
+      <div class="why">self 是「自己」，self fabric 指跟衣服本身同一塊布。</div></div>
+    <div class="q" data-answer="0"><p>3. 布料的一生，正確順序是？</p>
+      <button type="button">纖維 → 紗線 → 布 → 成衣</button><button type="button">紗線 → 纖維 → 布 → 成衣</button><button type="button">布 → 纖維 → 紗線 → 成衣</button>
+      <div class="why">先有纖維，纖維扭成紗線，紗線做成布，布再裁縫成衣服。</div></div>
+  </div>
+</section>
+
+<!-- ============ 第 1 課 ============ -->
+<section class="lesson" id="l1" data-lesson="1">
+  <p class="lesson-no">第 1 課</p>
+  <h2>纖維：布的原料</h2>
+  <span class="tag">入門</span><span class="tag">約 15 分鐘</span>
+  <p class="goal">讀完這課你會知道：纖維分成哪三大類、常見纖維的特性，以及 Nylon、Spandex、Rayon 這些名字是怎麼來的。</p>
+
+  <p><strong>纖維</strong>就是非常細、非常長（相對於它的粗細）的材料。一根棉纖維大約只有頭髮的五分之一粗，但長度是它粗細的一千倍以上。所有的布，最小的單位都是纖維。</p>
+
+  <p class="analogy">如果布是一面牆，紗線就是磚塊，纖維就是做磚塊的泥土。</p>
+
+  <h3>纖維的三大類</h3>
+  <div class="tbl"><table>
+    <tr><th>類別</th><th>從哪裡來</th><th>常見例子</th></tr>
+    <tr><td><strong>天然纖維</strong></td><td>大自然直接長出來的</td><td>植物：棉、麻（亞麻）<br>動物：羊毛、蠶絲</td></tr>
+    <tr><td><strong>再生纖維</strong><br>（又叫人造纖維）</td><td>拿天然材料（多半是木頭）溶解後重新抽成絲</td><td>嫘縈（Rayon / Viscose）、莫代爾（Modal）、萊賽爾（Lyocell，品牌名天絲 Tencel）</td></tr>
+    <tr><td><strong>合成纖維</strong></td><td>從石油化學原料「合成」出來的</td><td>聚酯纖維（Polyester）、尼龍（Nylon）、彈性纖維（Spandex）</td></tr>
+  </table></div>
+  <p>再生纖維常讓人搞混：它的原料是天然的木頭，但要經過化學溶解再「重新生成」纖維，所以叫<strong>再生</strong>。合成纖維則是從小分子「合成」出大分子，原料本來就不是纖維。</p>
+
+  <h3>認識最常見的七種纖維</h3>
+  <h4>棉 Cotton</h4>
+  <p>棉花是棉樹種子外面的絨毛。優點是<strong>吸水、透氣、柔軟、不刺激皮膚</strong>；缺點是容易皺、會縮水、乾得慢。T 恤、襯衫、牛仔褲最常用。棉纖維越長越好，長纖維做出的紗更細、更亮、更不起毛球，像埃及棉、美國的 Pima 棉（比馬棉）都以纖維長著名。</p>
+  <div class="origin"><p><strong>Pima 比馬棉</strong>：名字來自美國亞利桑那州的原住民 Pima 族，二十世紀初美國農業部和 Pima 族人在他們的土地上一起培育這種長纖維棉，就用他們的名字命名。</p></div>
+
+  <h4>麻 Linen</h4>
+  <p>通常指亞麻，從亞麻莖裡的纖維取出。非常涼爽、吸濕快乾、越洗越軟，但<strong>很容易皺</strong>。夏季襯衫、休閒褲常用。</p>
+  <div class="origin"><p>英文 <span class="en">linen</span> 來自拉丁文 <span class="en">linum</span>（亞麻）。英文裡的 line（線）、lingerie（女性內衣，原本指亞麻做的貼身衣物）都是同一個字根。</p></div>
+
+  <h4>羊毛 Wool</h4>
+  <p>羊毛表面有像屋瓦一樣的<strong>鱗片</strong>，加上天然捲曲，所以能把空氣留住，非常保暖。缺點是用熱水洗、用力搓會讓鱗片互相卡住，整件衣服縮小變硬，這叫<strong>縮絨（氈化）</strong>。</p>
+
+  <h4>蠶絲 Silk</h4>
+  <p>蠶吐出來的絲，是天然纖維中唯一的<strong>長絲</strong>（一個蠶繭可以抽出上千公尺）。光澤漂亮、手感滑順，但價格高、怕曬、怕汗。</p>
+
+  <h4>聚酯纖維 Polyester</h4>
+  <p>現在全世界用量最大的纖維，比棉還多。<strong>強韌、不易皺、快乾、便宜</strong>；缺點是不吸水、比較悶熱、容易起靜電、容易吸附油污。運動服幾乎都用它，因為做成特殊形狀的纖維後，可以把汗「導」到布表面蒸發（吸濕排汗）。</p>
+  <div class="origin"><p><span class="en">Poly</span> 是希臘文「很多」，<span class="en">ester</span> 是一種化學結構「酯」。聚酯就是「很多個酯連在一起」的長鏈分子。台灣俗稱的「特多龍」是日本帝人與東麗兩家公司的聚酯纖維商標 Tetoron 的音譯，這個名字後面在「TC 布」還會再遇到。</p></div>
+
+  <h4>尼龍 Nylon</h4>
+  <p>比聚酯更耐磨、更有彈性、手感更柔。常用於風衣、羽絨外套外層、泳衣、絲襪。</p>
+  <div class="origin"><p>尼龍是 1935 年美國杜邦公司的化學家卡羅瑟斯（Wallace Carothers）發明的第一種完全人工合成的纖維。1939 年推出尼龍絲襪時轟動全美。名字由來有很多傳說，例如「紐約（NY）＋倫敦（LON）」，但杜邦官方說法是：原本想取 <span class="en">No-run</span>（不會脫線），後來改來改去變成 Nylon，是一個<strong>刻意造出來的新字</strong>，沒有特別意思。</p></div>
+
+  <h4>彈性纖維 Spandex</h4>
+  <p>可以拉長到原本的 5 到 7 倍再彈回來。通常只加 2% 到 10% 在布裡，就能讓布變得有彈性，例如彈性牛仔褲、運動緊身褲、內衣。</p>
+  <div class="origin"><p><span class="en">Spandex</span> 是把英文 <span class="en">expands</span>（擴張）的字母<strong>重新排列</strong>而成的字，很有創意。歐洲叫它 <span class="en">Elastane</span>（來自 elastic 彈性）。大家常聽到的「萊卡 Lycra」則是杜邦（現屬 The LYCRA Company）的<strong>品牌名稱</strong>，就像「OK 繃」是品牌、「膠布」才是通稱。</p></div>
+
+  <h4>再生纖維：嫘縈、莫代爾、天絲</h4>
+  <p>這三種都是用木頭（纖維素）溶解後抽絲做成的，特性像棉但更滑、更有垂墜感、更吸濕。差別在於做法和原料：嫘縈最早也最便宜；莫代爾多用櫸木，濕的時候比較不會變弱；萊賽爾（天絲）使用可回收溶劑的封閉式製程，被視為比較環保。</p>
+  <div class="origin"><p><span class="en">Rayon</span> 嫘縈：1924 年美國業界公開徵名後選出，<span class="en">ray</span> 是光線（形容它有絲一般的光澤），<span class="en">on</span> 則取自 cotton 的結尾，暗示它像棉。在此之前它被叫作「人造絲」。<span class="en">Viscose</span> 則是因為製造過程中的溶液非常<strong>黏稠</strong>（viscous）。</p></div>
+
+  <div class="try"><p>找三件衣服，翻到內側看<strong>洗標</strong>（縫在側縫的小布標），抄下成分。你會看到像「60% Cotton 40% Polyester」這樣的寫法。現在你已經知道這兩種纖維各有什麼優缺點了：這件衣服想要棉的舒服，又想要聚酯的不易皺和便宜。</p></div>
+
+  <h3>長纖與短纖</h3>
+  <p>纖維還可以依長度分兩種，這個觀念在下一課非常重要：</p>
+  <ul>
+    <li><strong>短纖</strong>（<span class="en">staple fiber</span>）：一根只有幾公分長，像棉花、羊毛。要把很多根「扭」在一起才能變成長長的紗。合成纖維也可以故意切成短纖，模仿棉的手感。</li>
+    <li><strong>長絲</strong>（<span class="en">filament</span>）：一根可以長到幾公里，像蠶絲、以及從噴絲頭連續擠出來的聚酯和尼龍。</li>
+  </ul>
+  <div class="origin"><p><span class="en">Staple</span> 在這裡的意思是「主要貨品、標準品」，中世紀英國的羊毛貿易叫 staple trade，後來用來指羊毛、棉花這類要評估纖維長度的原料，「staple length」就成了纖維長度的專有名詞。<span class="en">Filament</span> 來自拉丁文 <span class="en">filum</span>（線），燈泡裡的「燈絲」也是同一個字。</p></div>
+
+  <div class="summary"><h4>這課重點</h4><ul>
+    <li>纖維分三類：天然（棉麻毛絲）、再生（嫘縈、莫代爾、天絲）、合成（聚酯、尼龍、彈性纖維）。</li>
+    <li>棉舒服但會皺會縮；聚酯強韌快乾但悶；彈性纖維少量加入就能讓布有彈性。</li>
+    <li>纖維有短纖和長絲兩種，這會影響紗怎麼做。</li>
+  </ul></div>
+
+  <div class="quiz" data-quiz="1">
+    <h4>小測驗</h4>
+    <div class="q" data-answer="2"><p>1. 天絲（Lyocell）屬於哪一類纖維？</p>
+      <button type="button">天然纖維</button><button type="button">合成纖維</button><button type="button">再生纖維</button>
+      <div class="why">天絲用木頭的纖維素溶解後重新抽絲，屬於再生纖維。</div></div>
+    <div class="q" data-answer="0"><p>2. Spandex 這個字是怎麼來的？</p>
+      <button type="button">把 expands 的字母重新排列</button><button type="button">發明人的名字</button><button type="button">一個城市的名字</button>
+      <div class="why">Spandex 是 expands（擴張）的字母重組，很貼切地描述了它的彈性。</div></div>
+    <div class="q" data-answer="1"><p>3. 為什麼羊毛衣用熱水搓洗會縮小變硬？</p>
+      <button type="button">羊毛會融化</button><button type="button">羊毛表面的鱗片互相卡住（縮絨）</button><button type="button">染料掉色</button>
+      <div class="why">羊毛表面有鱗片，熱、水和搓揉讓鱗片互相勾住，整塊布就縮緊變硬了。</div></div>
+  </div>
+</section>
+
+<!-- ============ 第 2 課 ============ -->
+<section class="lesson" id="l2" data-lesson="2">
+  <p class="lesson-no">第 2 課</p>
+  <h2>紗線：把纖維變成線</h2>
+  <span class="tag">入門</span><span class="tag">約 20 分鐘</span>
+  <p class="goal">讀完這課你會知道：紗是怎麼紡出來的、「30 支」和「75 丹尼」是什麼意思、為什麼支數越大紗越細，但丹尼越大紗越粗。</p>
+
+  <h3>紡紗：把短短的纖維扭成長長的紗</h3>
+  <p>棉纖維只有兩三公分長，怎麼變成幾千公尺的紗？答案是<strong>扭</strong>。你可以拿一小團棉花，一邊拉一邊用手指搓，就會變成一條細線。纖維被扭在一起後互相摩擦、抓住，所以不會散開。這個動作叫<strong>加撚</strong>，工廠用機器做的整個過程叫<strong>紡紗</strong>。</p>
+  <p>棉紗的紡紗大致流程：</p>
+  <ol>
+    <li><strong>開清棉</strong>：把壓成一大包的棉花打鬆，去掉雜質。</li>
+    <li><strong>梳棉</strong>：像梳頭髮一樣，把纖維梳開、排直，變成一條粗粗的棉條。</li>
+    <li><strong>精梳</strong>（可選）：再用更細的梳子，把太短的纖維梳掉。</li>
+    <li><strong>併條、粗紗</strong>：把好幾條棉條合併拉細，讓粗細更均勻。</li>
+    <li><strong>細紗</strong>：最後拉到需要的細度，加撚變成紗，捲在紗管上。</li>
+  </ol>
+
+  <h4>精梳紗 vs 普梳紗</h4>
+  <p>有經過第 3 步的叫<strong>精梳紗</strong>（<span class="en">combed yarn</span>），沒有的叫<strong>普梳紗</strong>（<span class="en">carded yarn</span>）。精梳去掉了短纖維，所以紗更光滑、更強、比較不起毛球，當然也比較貴。T 恤規格上看到「CM」就是 combed，「CD」就是 carded。</p>
+  <div class="origin"><p><span class="en">Card</span> 這個字來自拉丁文 <span class="en">carduus</span>（薊草）。古時候人們用乾燥的薊草花球（上面有很多小鉤刺）來梳理羊毛，後來梳棉的機器就沿用了這個名字 carding。<span class="en">Comb</span> 則就是一般「梳子」的意思。</p></div>
+
+  <h4>環錠紡、氣流紡</h4>
+  <ul>
+    <li><strong>環錠紡</strong>（<span class="en">ring spun</span>）：傳統方法，紗管高速旋轉，一個小鋼圈（環）上的鋼絲圈帶著紗繞圈加撚。紗柔軟、強度好。</li>
+    <li><strong>氣流紡</strong>（<span class="en">open-end</span>，簡稱 OE）：用高速旋轉的杯子和氣流把纖維聚集加撚，速度快、成本低，但紗比較粗硬。常用於較便宜的 T 恤、牛仔布。</li>
+    <li><strong>緊密紡</strong>（<span class="en">compact</span>）：環錠紡的進化版，加撚前先用吸風把纖維收緊，毛羽更少、更光滑，高級 T 恤和襯衫常用。</li>
+  </ul>
+
+  <h3>撚向：S 撚和 Z 撚</h3>
+  <figure>
+    <svg viewBox="0 0 520 170" role="img" aria-label="S 撚與 Z 撚示意圖">
+      <g font-family="var(--sans)" font-size="15" fill="currentColor">
+        <rect x="60" y="20" width="60" height="120" rx="30" fill="none" stroke="currentColor" stroke-width="2"/>
+        <g stroke="var(--warp)" stroke-width="4" stroke-linecap="round">
+          <line x1="68" y1="40" x2="112" y2="60"/><line x1="66" y1="62" x2="114" y2="84"/><line x1="66" y1="86" x2="114" y2="108"/><line x1="68" y1="108" x2="112" y2="128"/></g>
+        <text x="90" y="162" text-anchor="middle">S 撚：斜線像 S 的中段 ＼</text>
+        <rect x="300" y="20" width="60" height="120" rx="30" fill="none" stroke="currentColor" stroke-width="2"/>
+        <g stroke="var(--selvedge)" stroke-width="4" stroke-linecap="round">
+          <line x1="308" y1="60" x2="352" y2="40"/><line x1="306" y1="84" x2="354" y2="62"/><line x1="306" y1="108" x2="354" y2="86"/><line x1="308" y1="128" x2="352" y2="108"/></g>
+        <text x="330" y="162" text-anchor="middle">Z 撚：斜線像 Z 的中段 ／</text>
+        <text x="160" y="70" font-size="60" font-family="var(--serif)" opacity=".25">S</text>
+        <text x="400" y="70" font-size="60" font-family="var(--serif)" opacity=".25">Z</text>
+      </g>
+    </svg>
+    <figcaption>把紗直立拿著，看表面纖維的斜線方向：和字母 S 中間那一筆同方向就是 S 撚，和 Z 同方向就是 Z 撚。大部分單紗是 Z 撚。</figcaption>
+  </figure>
+  <p>撚向看似小事，對針織布影響很大：單紗的撚力會想「轉回去」，織成汗布後會讓整塊布往一邊歪，洗過以後 T 恤側縫跑到前面，就是這個原因（第 10 課會講「扭度」）。</p>
+
+  <h3>紗的粗細：支數與丹尼</h3>
+  <p>紗太細了，沒辦法用尺量粗細，所以業界用「<strong>長度和重量的比例</strong>」來表示。這裡有兩種相反的系統，是初學者最容易搞混的地方：</p>
+  <div class="tbl"><table>
+    <tr><th>系統</th><th>定義</th><th>數字變大代表</th><th>常用於</th></tr>
+    <tr><td><strong>英制支數 Ne</strong><br>（簡稱「支」，寫 30s、40s）</td><td>1 磅重的紗，有幾個 840 碼長</td><td><strong>越細</strong></td><td>棉紗、混紡短纖紗</td></tr>
+    <tr><td><strong>公制支數 Nm</strong></td><td>1 公克重的紗，有幾公尺長</td><td><strong>越細</strong></td><td>毛紗、麻紗</td></tr>
+    <tr><td><strong>丹尼 D</strong>（Denier）</td><td>9000 公尺長的紗，重幾公克</td><td><strong>越粗</strong></td><td>聚酯、尼龍長絲</td></tr>
+    <tr><td><strong>特克斯 tex</strong></td><td>1000 公尺長的紗，重幾公克</td><td><strong>越粗</strong></td><td>國際標準，各種紗都可用</td></tr>
+  </table></div>
+
+  <p class="analogy">支數像「一斤麵粉能拉出幾碗麵」：拉得越多碗，每碗越少（越細）。丹尼像「一條固定長的繩子有多重」：越重就越粗。</p>
+
+  <div class="origin">
+    <p><strong>丹尼 Denier</strong>：來自中世紀法國的一種小銀幣 <span class="en">denier</span>。古時候秤蠶絲，是拿這種硬幣當砝碼，後來就變成紗線重量的單位。所以「丹尼」本來是一枚錢幣的名字。</p>
+    <p><strong>840 碼</strong>：為什麼是這個奇怪的數字？因為英國早期棉紡廠的紗框一圈是 1.5 碼，繞 80 圈做成一小束，7 小束合成一大束（hank）：1.5 × 80 × 7 = 840 碼。英制支數就是「一磅有幾個 hank」。</p>
+    <p><strong>tex</strong>：取自 textile（紡織品），1960 年代起國際標準組織推廣，希望統一全世界的算法。</p>
+  </div>
+
+  <h4>舉個例子</h4>
+  <ul>
+    <li><strong>20 支</strong>棉紗比 <strong>40 支</strong>棉紗粗一倍。20 支常用於厚實的 T 恤，40 支用於輕薄的襯衫。</li>
+    <li><strong>150D</strong> 的聚酯紗比 <strong>75D</strong> 的粗一倍。</li>
+    <li>規格上的 <span class="mono">40/2</span> 是「兩根 40 支單紗合撚成一股」，稱為<strong>雙股紗</strong>或<strong>股線</strong>。它的粗細大約等於 20 支，但更強、更均勻、更光滑，高級襯衫常用。</li>
+    <li>長絲常寫成 <span class="mono">75D/72F</span>：總粗細 75 丹尼，由 72 根（Filament）單絲組成。同樣粗細下根數越多，每根越細，手感越柔軟。</li>
+  </ul>
+
+  <div class="calc" id="yarnCalc">
+    <h4>紗支換算器</h4>
+    <div class="grid">
+      <label>輸入數值<input type="number" id="yc-val" value="30" min="0.1" step="any" inputmode="decimal"></label>
+      <label>單位<select id="yc-unit"><option value="ne">英制支數 Ne</option><option value="nm">公制支數 Nm</option><option value="d">丹尼 D</option><option value="tex">特克斯 tex</option></select></label>
+    </div>
+    <div class="out" id="yc-out"></div>
+  </div>
+
+  <h3>長絲的「身分證」：POY、FDY、DTY</h3>
+  <p>聚酯、尼龍長絲在規格上常看到這些縮寫：</p>
+  <ul>
+    <li><strong>POY</strong>（<span class="en">Partially Oriented Yarn</span>，預取向絲）：半成品，還沒完全拉伸，通常不直接織布。</li>
+    <li><strong>FDY</strong>（<span class="en">Fully Drawn Yarn</span>，全拉伸絲）：拉伸完成的直直長絲，光滑、有光澤，做出來的布比較涼、比較亮。</li>
+    <li><strong>DTY</strong>（<span class="en">Draw Textured Yarn</span>，拉伸變形絲，也叫加工絲）：把長絲加熱扭曲再固定，讓它像毛一樣蓬鬆捲曲。手感柔軟、有點彈性，運動服和針織布最常用。</li>
+  </ul>
+  <p>另外還有「<strong>空氣變形紗</strong>」（ATY），用高速空氣把長絲吹出很多小圈圈，模仿短纖紗的外觀，衝鋒衣常用的「塔絲隆 Taslan」就是這種紗做的布。</p>
+
+  <div class="try"><p>拿一根縫衣線，用兩手在兩端往相反方向轉，會看到它越來越緊，然後自己打結捲起來：這就是撚力「想轉回去」的力量。再把一段線拆開，你會看到裡面其實是兩三股細線撚在一起，這就是股線。</p></div>
+
+  <div class="summary"><h4>這課重點</h4><ul>
+    <li>紡紗就是把纖維排直、拉細、加撚。精梳（CM）比普梳（CD）更光滑。</li>
+    <li>支數（Ne、Nm）數字大 ＝ 細；丹尼、tex 數字大 ＝ 粗。</li>
+    <li>40/2 ＝ 兩根 40 支合股；75D/72F ＝ 75 丹尼、72 根單絲。</li>
+  </ul></div>
+
+  <div class="quiz" data-quiz="2">
+    <h4>小測驗</h4>
+    <div class="q" data-answer="1"><p>1. 下面哪一種紗最細？</p>
+      <button type="button">20 支棉紗</button><button type="button">60 支棉紗</button><button type="button">30 支棉紗</button>
+      <div class="why">支數是「越大越細」，所以 60 支最細。</div></div>
+    <div class="q" data-answer="0"><p>2. 「丹尼」這個單位的名字原本是？</p>
+      <button type="button">一種法國小錢幣，古時拿來當砝碼</button><button type="button">發明者的名字</button><button type="button">丹麥尼龍的簡稱</button>
+      <div class="why">denier 是中世紀法國錢幣，秤蠶絲時拿來當砝碼。</div></div>
+    <div class="q" data-answer="2"><p>3. T 恤規格寫「CM 32s」，CM 是什麼意思？</p>
+      <button type="button">公分（centimeter）</button><button type="button">棉與莫代爾混紡</button><button type="button">精梳（combed），去除短纖、更光滑</button>
+      <div class="why">CM ＝ combed 精梳；CD ＝ carded 普梳。32s 是 32 支。</div></div>
+  </div>
+</section>
+
+<!-- ============ 第 3 課 ============ -->
+<section class="lesson" id="l3" data-lesson="3">
+  <p class="lesson-no">第 3 課</p>
+  <h2>布的兩大家族：梭織與針織</h2>
+  <span class="tag">入門</span><span class="tag">約 15 分鐘</span>
+  <p class="goal">讀完這課你會知道：梭織和針織最根本的差別，以及三個不用工具就能分辨它們的方法。</p>
+
+  <p>有了紗線，接下來要把它變成一片布。做布的方法主要有三種：</p>
+  <ul>
+    <li><strong>梭織</strong>（<span class="en">woven</span>）：兩組紗線，一組直的、一組橫的，<strong>一上一下交叉</strong>。</li>
+    <li><strong>針織</strong>（<span class="en">knit</span>）：紗線繞成<strong>一個個線圈</strong>，新的線圈穿過舊的線圈，圈圈相扣。</li>
+    <li><strong>不織布</strong>（<span class="en">nonwoven</span>）：不用紡成紗，直接把纖維用膠、熱或針刺黏在一起，像口罩、環保袋。成衣主料很少用，這門課就不細講。</li>
+  </ul>
+
+  <figure>
+    <div class="cols2">
+      <svg viewBox="0 0 200 200" role="img" aria-label="梭織結構放大圖">
+        <rect width="200" height="200" fill="var(--paper)"/>
+        <g id="wvDemo"></g>
+      </svg>
+      <svg viewBox="0 0 200 200" role="img" aria-label="針織結構放大圖">
+        <rect width="200" height="200" fill="var(--paper)"/>
+        <g id="knDemo"></g>
+      </svg>
+    </div>
+    <figcaption>放大來看。左：梭織，藍色直紗和米色橫紗一上一下交錯。右：針織，每一排是同一條紗繞出來的線圈，上一排的圈穿過下一排的圈。</figcaption>
+  </figure>
+
+  <div class="origin">
+    <p><strong>梭織的「梭」</strong>：就是<strong>梭子</strong>，一個兩頭尖尖、像小船的木頭工具，裡面裝著橫向的紗。織布時把梭子從左邊「穿梭」到右邊，就放進一根橫紗。成語「日月如梭」形容時間過得像梭子來回那麼快，就是從這裡來的。英文 <span class="en">woven</span> 是 <span class="en">weave</span>（編織）的過去分詞。</p>
+    <p><strong>針織的「針」</strong>：用鉤狀的針把紗鉤成線圈，就像阿嬤用棒針打毛衣。英文 <span class="en">knit</span> 來自古英文 <span class="en">cnyttan</span>，意思是「打結、綁在一起」，和 knot（結）是親戚。</p>
+  </div>
+
+  <h3>一張表看懂差別</h3>
+  <div class="tbl"><table>
+    <tr><th>比較</th><th>梭織 Woven</th><th>針織 Knit</th></tr>
+    <tr><td>結構</td><td>經紗和緯紗垂直交叉</td><td>線圈互相串套</td></tr>
+    <tr><td>彈性</td><td>幾乎沒有（除非加彈性纖維）</td><td>天生有彈性，尤其橫向</td></tr>
+    <tr><td>挺度</td><td>挺、有型、不易變形</td><td>柔軟、貼身、會隨身體變形</td></tr>
+    <tr><td>皺褶</td><td>較容易皺</td><td>較不易皺</td></tr>
+    <tr><td>剪開後</td><td>邊緣會「抽紗」散開</td><td>會「脫散」（像毛衣勾到一根線整排拆掉）；布邊常會捲起來</td></tr>
+    <tr><td>典型衣服</td><td>襯衫、西裝、牛仔褲、洋裝、外套</td><td>T 恤、Polo 衫、帽 T、運動服、內衣、毛衣</td></tr>
+    <tr><td>縫紉</td><td>平車（單針鎖式線跡）為主</td><td>拷克、三本（有彈性的線跡）為主</td></tr>
+  </table></div>
+
+  <h3>不用工具的三個分辨法</h3>
+  <ol>
+    <li><strong>拉拉看</strong>：抓住布的橫向輕拉。針織布明顯會伸長再彈回；梭織布幾乎拉不動（有加 Spandex 的彈性梭織例外，但通常只有一個方向有彈性）。</li>
+    <li><strong>看表面</strong>：用手機相機放大。梭織看到的是「格子」般的交錯點；針織的正面看到一排排像小小的 <strong>V</strong> 字，背面則是一排排像小拱門的圈。</li>
+    <li><strong>拆拆看</strong>：從剪開的邊抽一根紗。梭織會抽出一根直直、帶波浪的紗；針織的紗會彎彎曲曲，而且一拉可能整排線圈跟著散開。</li>
+  </ol>
+  <div class="try"><p>現在就去比較你的 T 恤和襯衫。先看 T 恤正面，找找看小小的 V 字；再看襯衫，找「一上一下」的交錯點。然後輕輕拉 T 恤的袖口，再拉襯衫的袖口，感受彈性的差別。</p></div>
+
+  <div class="factory"><p>成衣工廠通常會把生產線分成<strong>針織線</strong>和<strong>梭織線</strong>，因為兩者用的縫紉機、針、線跡、工序都不一樣。接單時先分清楚是哪一種布，才知道要排到哪一條線、準備哪些機台。</p></div>
+
+  <div class="summary"><h4>這課重點</h4><ul>
+    <li>梭織 ＝ 直線橫線交叉，挺、不彈；針織 ＝ 線圈相扣，軟、有彈。</li>
+    <li>梭織的「梭」是穿緯紗的梭子；針織的「針」是鉤線圈的針。</li>
+    <li>分辨法：拉拉看、看表面（V 字 vs 交錯點）、拆拆看。</li>
+  </ul></div>
+
+  <div class="quiz" data-quiz="3">
+    <h4>小測驗</h4>
+    <div class="q" data-answer="1"><p>1. T 恤的正面放大看，會看到什麼？</p>
+      <button type="button">一上一下的格子交錯點</button><button type="button">一排排小小的 V 字</button><button type="button">一團亂的纖維</button>
+      <div class="why">針織布正面是一排排 V 字（線圈的兩隻腳），背面才是小拱門。</div></div>
+    <div class="q" data-answer="0"><p>2. 成語「日月如梭」的「梭」是指什麼？</p>
+      <button type="button">織布時穿送橫紗的梭子</button><button type="button">打毛衣的棒針</button><button type="button">縫紉機</button>
+      <div class="why">梭子在織布機上左右穿梭，速度很快，所以用來形容時光飛逝。梭織的名字也來自它。</div></div>
+    <div class="q" data-answer="2"><p>3. 哪一件衣服最可能是針織布做的？</p>
+      <button type="button">西裝外套</button><button type="button">牛仔褲</button><button type="button">運動帽 T</button>
+      <div class="why">帽 T 通常用毛圈布或刷毛布，屬於針織。西裝和牛仔褲是梭織。</div></div>
+  </div>
+</section>
+<!-- ============ 第 4 課 ============ -->
+<section class="lesson" id="l4" data-lesson="4">
+  <p class="lesson-no">第 4 課</p>
+  <h2>梭織：經緯交錯的學問</h2>
+  <span class="tag">進階</span><span class="tag">約 25 分鐘</span>
+  <p class="goal">讀完這課你會知道：經紗與緯紗、織布機的五個動作、三原組織（平紋、斜紋、緞紋），以及布邊與斜紋方向。</p>
+
+  <h3>經紗與緯紗</h3>
+  <p>梭織布裡有兩組紗：</p>
+  <ul>
+    <li><strong>經紗</strong>（<span class="en">warp</span>）：沿著布的<strong>長度方向</strong>，也就是一整捲布拉開的方向。織布前就要先把幾千根經紗平行排好、拉緊。</li>
+    <li><strong>緯紗</strong>（<span class="en">weft</span>，也叫 <span class="en">filling</span>）：沿著布的<strong>寬度方向</strong>，一根一根橫著穿進經紗之間。</li>
+  </ul>
+  <div class="origin"><p>中文「經緯」本來就是紡織用語：「經」是織布機上直向的長紗，「緯」是橫向的紗。後來人們把地球上直向的線叫「經線」、橫向的叫「緯線」，還有「經天緯地」「經典」等詞，都是從織布借過去的。英文 <span class="en">warp</span> 來自古英文 <span class="en">wearp</span>（被拋出去的東西），<span class="en">weft</span> 來自 <span class="en">wefan</span>（編織），和 weave 同源。</p></div>
+
+  <p class="analogy">記法：經紗是「經常存在」的，織布前就已經排好在機台上；緯紗是「後來才穿進去」的。</p>
+
+  <h3>織布機的五個動作</h3>
+  <p>不管是古代的手織機還是現代每分鐘上千轉的高速織機，都在重複這五個動作。按「播放」看看布是怎麼一根一根長出來的：</p>
+  <figure>
+    <canvas id="loomCanvas" style="width:100%;height:300px;display:block" aria-label="織布機動作動畫"></canvas>
+    <div class="row-ctrl">
+      <button class="btn solid" type="button" id="loomPlay">暫停</button>
+      <button class="btn" type="button" id="loomStep">下一步</button>
+      <span id="loomLabel" style="font-weight:700"></span>
+    </div>
+    <figcaption>上方深藍色的是經紗。每一回合，一半的經紗升起、一半降下，張開一個縫（梭口），梭子帶著米色緯紗穿過去，再用筘把它推緊。</figcaption>
+  </figure>
+  <ol>
+    <li><strong>開口</strong>（<span class="en">shedding</span>）：用<strong>綜框</strong>把一部分經紗提起、一部分壓下，中間張開一個菱形的空間，叫<strong>梭口</strong>。</li>
+    <li><strong>引緯</strong>（<span class="en">picking</span>）：把緯紗送過梭口。每穿一次叫<strong>一梭</strong>（<span class="en">pick</span>）。</li>
+    <li><strong>打緯</strong>（<span class="en">beating-up</span>）：用<strong>筘</strong>（一排像梳子的細鋼片）把剛穿進去的緯紗推到布邊，壓緊。</li>
+    <li><strong>捲取</strong>（<span class="en">take-up</span>）：把織好的布慢慢捲到布軸上。</li>
+    <li><strong>送經</strong>（<span class="en">let-off</span>）：從後面的經軸放出經紗補上。</li>
+  </ol>
+  <div class="origin">
+    <p><strong>綜框</strong>：裝著很多「綜絲」的框。每根綜絲中間有一個小孔，經紗穿過小孔，框子一提，那些經紗就跟著上去。英文 <span class="en">heddle</span>。</p>
+    <p><strong>筘</strong>：音同「扣」，以前用竹子做，所以是竹字頭。英文 <span class="en">reed</span>（蘆葦），因為最早是用蘆葦片做的。一片筘上每英寸有多少個縫，會影響布的經密。</p>
+  </div>
+
+  <h4>現代織布機：沒有梭子的「梭織」</h4>
+  <p>有趣的是，今天工廠裡大部分的織機<strong>已經沒有梭子了</strong>，但我們還是叫它梭織。現代織機用不同方法把緯紗送過去：</p>
+  <div class="tbl"><table>
+    <tr><th>織機</th><th>怎麼送緯紗</th><th>特點</th></tr>
+    <tr><td>劍桅織機<br><span class="en">Rapier</span></td><td>兩根像劍一樣的桿子，一根把紗送到中間，另一根接過去帶到對面</td><td>適應性最廣，花式紗、粗紗、多色緯都能織</td></tr>
+    <tr><td>噴氣織機<br><span class="en">Air-jet</span></td><td>用壓縮空氣把緯紗「吹」過去</td><td>速度最快，適合大量生產棉布、襯衫布</td></tr>
+    <tr><td>噴水織機<br><span class="en">Water-jet</span></td><td>用一小股水柱把緯紗「射」過去</td><td>很快、便宜，但只能織不怕水的合成長絲（聚酯、尼龍）</td></tr>
+    <tr><td>片梭織機<br><span class="en">Projectile</span></td><td>一個小金屬夾子夾著紗飛過去</td><td>可織很寬的布</td></tr>
+  </table></div>
+  <div class="origin"><p><strong>飛梭</strong>：1733 年英國人約翰・凱伊（John Kay）發明「飛梭」，讓梭子用拉繩彈射過去，一個人就能織寬布，速度大增，是工業革命的起點之一。1785 年卡特萊特（Edmund Cartwright）發明<strong>動力織布機</strong>，織布從此交給機器。</p></div>
+
+  <h3>組織：一上一下的規則</h3>
+  <p>經紗和緯紗怎麼上下交錯的規則，叫做<strong>組織</strong>（<span class="en">weave</span>）。業界用一張黑白方格圖表示，叫<strong>組織圖</strong>：黑格代表<strong>經紗浮在上面</strong>，白格代表<strong>緯紗浮在上面</strong>。</p>
+  <p>下面的模擬器可以切換不同組織，看組織圖和織出來的布長什麼樣子。你也可以<strong>直接點方格</strong>自己設計組織。</p>
+  <figure>
+    <div class="row-ctrl" id="weaveBtns" role="group" aria-label="選擇組織">
+      <button class="chip" type="button" data-w="plain" aria-pressed="true">平紋</button>
+      <button class="chip" type="button" data-w="basket" aria-pressed="false">方平（2×2）</button>
+      <button class="chip" type="button" data-w="twill21" aria-pressed="false">2/1 斜紋</button>
+      <button class="chip" type="button" data-w="twill31" aria-pressed="false">3/1 斜紋（牛仔）</button>
+      <button class="chip" type="button" data-w="twill22" aria-pressed="false">2/2 斜紋</button>
+      <button class="chip" type="button" data-w="satin5" aria-pressed="false">五枚緞紋</button>
+      <button class="chip" type="button" data-w="herring" aria-pressed="false">人字紋</button>
+    </div>
+    <div class="cols2" style="align-items:start">
+      <div>
+        <svg id="draftSvg" viewBox="0 0 200 200" style="width:100%;max-width:240px;cursor:pointer" role="img" aria-label="組織圖，可點擊方格修改"></svg>
+        <p style="font-size:14px;color:var(--muted);margin:4px 0 0">組織圖（一個循環）。點方格可切換黑白。</p>
+      </div>
+      <div>
+        <svg id="clothSvg" viewBox="0 0 240 240" style="width:100%" role="img" aria-label="模擬布面"></svg>
+        <p style="font-size:14px;color:var(--muted);margin:4px 0 0">模擬布面：藍色是經紗，米色是緯紗。</p>
+      </div>
+    </div>
+    <p id="weaveInfo" style="margin:10px 0 0;font-size:15.5px"></p>
+  </figure>
+
+  <h3>三原組織</h3>
+  <p>所有梭織組織都是從三種基本組織變化出來的，就像三原色能調出所有顏色：</p>
+  <h4>1. 平紋 Plain weave</h4>
+  <p>最簡單：一上一下。每一個點都是交錯點，所以結構<strong>最緊密、最堅固、正反面一樣</strong>，但也比較硬、容易皺。代表布：府綢、雪紡、帆布、青年布、泡泡紗。</p>
+  <h4>2. 斜紋 Twill weave</h4>
+  <p>經紗連續跨過兩根以上緯紗，而且每一排往旁邊移一格，布面就出現<strong>斜斜的線條</strong>（斜紋線）。交錯點比平紋少，所以<strong>更柔軟、更耐磨、更有垂墜感、不容易看出髒污</strong>。代表布：牛仔布、卡其、華達呢。</p>
+  <p>斜紋的寫法像分數：<span class="mono">3/1</span> 讀作「三上一下」，經紗跨過 3 根緯紗、再從 1 根緯紗下面鑽過去。上面的數字大，表示<strong>經紗浮在表面比較多</strong>，叫經面斜紋。</p>
+  <div class="origin"><p><span class="en">Twill</span> 來自古英文 <span class="en">twilic</span>，意思是「雙線的」。中文「斜紋」則直接描述它的外觀。斜紋線從左下往右上的叫<strong>右斜</strong>，形狀像字母 Z，所以也叫 Z 斜；反過來叫左斜（S 斜）。大部分牛仔布是右斜，但也有品牌刻意用左斜，例如 Lee 的經典牛仔布，手感比較軟。</p></div>
+  <h4>3. 緞紋 Satin weave</h4>
+  <p>經紗（或緯紗）一口氣跨過四根以上的紗才交錯一次，而且交錯點<strong>分散開來、不相鄰</strong>，所以看不出斜線，布面幾乎全是同一方向長長的「浮線」，反射光線就變得<strong>非常光亮、滑順</strong>。缺點是浮線長容易勾紗、磨損。</p>
+  <p>「五枚緞」表示一個循環是 5 根經 × 5 根緯，每 5 根只交錯 1 次。另有八枚緞，浮線更長、更亮。</p>
+  <div class="origin"><p><span class="en">Satin</span> 的名字來自中國福建的<strong>泉州</strong>！中世紀阿拉伯商人稱泉州為 <span class="en">Zaitun</span>（刺桐，因城裡種滿刺桐樹），從泉州港出口的絲綢緞子就被叫做 zaituni，傳到歐洲變成 satin。</p>
+  <p>另外，<strong>緞</strong>是用長絲織的緞紋布；用棉等短纖紗織成緞紋的，英文叫 <span class="en">sateen</span>（貢緞），常用於高級床單和光澤感的褲子。</p></div>
+
+  <h3>布的方向：經向、緯向、斜向</h3>
+  <figure>
+    <svg viewBox="0 0 520 250" role="img" aria-label="布的方向示意：布邊、經向、緯向、斜向">
+      <rect x="40" y="30" width="440" height="190" fill="var(--weft)" opacity=".35" stroke="currentColor"/>
+      <rect x="40" y="30" width="440" height="12" fill="var(--selvedge)" opacity=".7"/>
+      <rect x="40" y="208" width="440" height="12" fill="var(--selvedge)" opacity=".7"/>
+      <g font-size="14" fill="currentColor" font-family="var(--sans)">
+        <text x="260" y="24" text-anchor="middle">布邊（selvedge）</text>
+        <text x="260" y="242" text-anchor="middle">布邊</text>
+        <line x1="110" y1="125" x2="250" y2="125" stroke="var(--warp)" stroke-width="3" marker-end="url(#ar)"/>
+        <text x="115" y="115">經向（直紋，grain）</text>
+        <line x1="330" y1="60" x2="330" y2="190" stroke="var(--selvedge)" stroke-width="3" marker-end="url(#ar)"/>
+        <text x="340" y="130">緯向（橫紋）</text>
+        <line x1="380" y1="190" x2="460" y2="70" stroke="var(--chalk)" stroke-width="3" marker-end="url(#ar)"/>
+        <text x="390" y="95" transform="rotate(-56 400 95)">45° 斜向（bias）</text>
+      </g>
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
+    </svg>
+    <figcaption>布捲攤開時，上下兩條紅色是布邊。經向最穩定、最不會伸長；45 度斜向最有彈性。</figcaption>
+  </figure>
+  <ul>
+    <li><strong>布邊</strong>（<span class="en">selvedge</span>）：布寬的兩側邊緣，織得比較密，不會散開。</li>
+    <li><strong>經向／直紋</strong>（<span class="en">grain line</span>）：和布邊平行。紙樣上一定畫著一條箭頭叫「布紋線」，裁剪時要跟經向對齊，衣服才不會歪。</li>
+    <li><strong>斜向</strong>（<span class="en">bias</span>）：45 度方向。梭織布在這個方向最有伸縮性，所以包邊用的「斜布條」要斜著剪，才能順著弧線彎。</li>
+  </ul>
+  <div class="origin"><p><span class="en">Selvedge</span> 就是 <span class="en">self-edge</span>（自己的邊），意思是布「自己形成的邊」，不用另外車縫收邊。「赤耳牛仔」（selvedge denim）就是用老式窄幅有梭織機織成、布邊有紅白線的牛仔布，會把布邊留在褲子側縫內，捲起褲管就看得到。</p></div>
+
+  <h3>密度：布有多緊</h3>
+  <p>梭織布的密度用「每英寸有幾根紗」表示，寫成 <span class="mono">經密 × 緯密</span>。例如：</p>
+  <p style="text-align:center"><span class="mono">CM40 × CM40 / 133 × 72</span></p>
+  <p>意思是：經紗和緯紗都是 40 支精梳棉紗，每英寸有 133 根經紗、72 根緯紗。這是很標準的襯衫府綢規格。同樣紗支，密度越高，布越緊密、越不透、越貴。</p>
+  <div class="origin"><p>台灣和大陸業界常把經密寫為 <span class="en">ends per inch</span>（EPI），緯密為 <span class="en">picks per inch</span>（PPI）。<span class="en">End</span> 指一根經紗的「頭」（經紗是一整條從頭到尾）；<span class="en">pick</span> 是「挑、投」，指梭子每投一次就放進一根緯紗。</p></div>
+
+  <div class="summary"><h4>這課重點</h4><ul>
+    <li>經紗＝直向（布長方向），緯紗＝橫向（布寬方向）。</li>
+    <li>織機五動作：開口、引緯、打緯、捲取、送經。</li>
+    <li>三原組織：平紋（緊、挺）、斜紋（斜線、耐磨、柔）、緞紋（浮線長、亮滑）。</li>
+    <li>布邊不散；裁剪要對齊經向；斜向最有伸縮。</li>
+    <li>133×72 是經密×緯密（每英寸根數）。</li>
+  </ul></div>
+
+  <div class="quiz" data-quiz="4">
+    <h4>小測驗</h4>
+    <div class="q" data-answer="2"><p>1. 為什麼緞紋布特別亮？</p>
+      <button type="button">因為用的是金屬紗</button><button type="button">因為交錯點最多</button><button type="button">因為浮線很長，表面平整，反射光線</button>
+      <div class="why">緞紋交錯點少且分散，布面由長浮線組成，像鏡面一樣反光。</div></div>
+    <div class="q" data-answer="0"><p>2. 「3/1 斜紋」是什麼意思？</p>
+      <button type="button">經紗跨過 3 根緯紗後，從 1 根緯紗下方穿過</button><button type="button">3 根經紗配 1 根緯紗</button><button type="button">每英寸 31 根紗</button>
+      <div class="why">3/1 讀作三上一下，是牛仔布最常見的組織，所以牛仔布正面藍色（經紗）多。</div></div>
+    <div class="q" data-answer="1"><p>3. Satin（緞）這個字的來源是？</p>
+      <button type="button">義大利的一個家族</button><button type="button">中國泉州的阿拉伯古名 Zaitun</button><button type="button">拉丁文的「光滑」</button>
+      <div class="why">阿拉伯商人稱泉州為 Zaitun，從那裡出口的緞子就被叫做 satin。</div></div>
+  </div>
+</section>
+
+<!-- ============ 第 5 課 ============ -->
+<section class="lesson" id="l5" data-lesson="5">
+  <p class="lesson-no">第 5 課</p>
+  <h2>梭織布名錄：名字背後的故事</h2>
+  <span class="tag">進階</span><span class="tag">約 25 分鐘</span>
+  <p class="goal">讀完這課你會認識二十多種常見梭織布，知道它們屬於哪一種組織、用在哪裡，以及名字從哪裡來。很多布是用<strong>地名</strong>命名的，因為那裡是它最早的產地或貿易港。</p>
+
+  <h3>平紋家族</h3>
+  <div class="tbl"><table>
+    <tr><th>布名</th><th>特徵與用途</th><th>名字由來</th></tr>
+    <tr><td><strong>府綢</strong><br><span class="en">Poplin</span></td><td>經密大約是緯密的兩倍，布面有細細的橫向小顆粒紋路，光滑挺括。襯衫最常用。</td><td>法文 <span class="en">papeline</span>，一說來自教皇居住過的法國城市亞維農（教皇的 papal），一說來自比利時的織布小鎮 Poperinge。中文「府綢」一說源自山東，原本是官府（一說孔府）使用的精細織品，後來借用來稱呼這種細密的棉布。</td></tr>
+    <tr><td><strong>青年布</strong><br><span class="en">Chambray</span></td><td>色經白緯（藍色經紗＋白色緯紗）的平紋布，看起來像淺色牛仔布但更輕薄。</td><td>法國北部城市 Cambrai（康布雷），以產細亞麻布聞名。</td></tr>
+    <tr><td><strong>帆布</strong><br><span class="en">Canvas</span></td><td>粗紗、高密度的厚重平紋布。帆布鞋、包包、工作服。</td><td>拉丁文 <span class="en">cannabis</span>（大麻），因為最早的帆布是用大麻纖維織的，用來做船帆。</td></tr>
+    <tr><td><strong>細平布</strong><br><span class="en">Muslin / Calico</span></td><td>輕薄便宜的棉平紋布。打版用的「胚布」常用它。</td><td>Muslin 來自伊拉克古城摩蘇爾（Mosul）；Calico 來自印度港口卡利卡特（Calicut）。</td></tr>
+    <tr><td><strong>雪紡</strong><br><span class="en">Chiffon</span></td><td>用強撚紗織的極輕薄透明平紋布，飄逸。洋裝、上衣。</td><td>法文 <span class="en">chiffe</span>，意思是「碎布、破布」，形容它輕薄得像一片碎布。</td></tr>
+    <tr><td><strong>喬其紗</strong><br><span class="en">Georgette</span></td><td>比雪紡稍重、表面有細小的顆粒皺紋。</td><td>以二十世紀初法國服裝設計師 Georgette de la Plante 的名字命名。</td></tr>
+    <tr><td><strong>塔夫綢</strong><br><span class="en">Taffeta</span></td><td>緊密、挺、會發出「沙沙」聲的平紋布，常用於禮服、羽絨衣。</td><td>波斯文 <span class="en">tāftah</span>，意思是「撚過的、織過的」。</td></tr>
+    <tr><td><strong>泡泡紗</strong><br><span class="en">Seersucker</span></td><td>一條平整、一條皺起的條紋，穿著時不貼身、很涼爽。</td><td>波斯文 <span class="en">shir o shakar</span>，「牛奶和糖」，比喻一條光滑（牛奶）一條粗糙（糖粒）。</td></tr>
+    <tr><td><strong>防撕裂布</strong><br><span class="en">Ripstop</span></td><td>每隔一段距離織入較粗的加強紗，形成小方格。破了一個洞也不會繼續撕開。戶外外套、降落傘。</td><td>直接的英文：<span class="en">rip</span>（撕裂）＋<span class="en">stop</span>（停止）。二次大戰時為降落傘開發。</td></tr>
+  </table></div>
+
+  <h4>平紋的變化：方平與牛津布</h4>
+  <p>把平紋的「一根」變成「兩根一起」，就是<strong>方平組織</strong>（<span class="en">basket weave</span>），像編籃子。<strong>牛津布</strong>（<span class="en">Oxford</span>）就是方平變化組織，常用較粗的緯紗和雙根經紗，布面有小顆粒感，是經典休閒襯衫布。</p>
+  <div class="origin"><p>牛津布和英國牛津大學其實沒什麼直接關係。十九世紀蘇格蘭一家布廠推出一系列以名校命名的襯衫布：牛津、劍橋、耶魯、哈佛……最後只有「牛津」這個名字流傳下來。</p></div>
+
+  <h3>斜紋家族</h3>
+  <div class="tbl"><table>
+    <tr><th>布名</th><th>特徵與用途</th><th>名字由來</th></tr>
+    <tr><td><strong>牛仔布</strong><br><span class="en">Denim</span></td><td>3/1 右斜紋，靛藍色經紗、白色緯紗，所以正面藍、反面白。越洗越淡。</td><td>法文 <span class="en">serge de Nîmes</span>，「來自尼姆的斜紋布」，尼姆是法國南部城市。de Nîmes 念快了就成了 denim。</td></tr>
+    <tr><td><strong>（牛仔褲）Jeans</strong></td><td>指用斜紋棉布做的褲子。</td><td>來自義大利港口熱那亞，法文叫 <span class="en">Gênes</span>。熱那亞水手穿的粗棉布褲被稱為 jeans。1873 年 Levi Strauss 與裁縫 Jacob Davis 申請用銅鉚釘加固口袋的專利，現代牛仔褲誕生。</td></tr>
+    <tr><td><strong>卡其布</strong><br><span class="en">Khaki / Chino</span></td><td>2/1 或 3/1 斜紋棉布，休閒褲、制服。</td><td>Khaki 是印地語／波斯語的「塵土色」，英國軍隊在印度把白制服染成土色來偽裝。Chino 源自西班牙語「中國的」，因為美軍在菲律賓穿的斜紋棉布原本從中國進口。</td></tr>
+    <tr><td><strong>華達呢</strong><br><span class="en">Gabardine</span></td><td>斜紋線很陡、很密的斜紋布，防風防潑水，經典風衣布。</td><td>中世紀指一種長斗篷。1879 年 Burberry 創辦人 Thomas Burberry 發明了防水的華達呢布料，因此廣為人知。</td></tr>
+    <tr><td><strong>嗶嘰</strong><br><span class="en">Serge</span></td><td>2/2 斜紋、正反面斜線都清楚。西裝、制服。</td><td>拉丁文 <span class="en">serica</span>，「絲的」；中文「嗶嘰」是音譯。</td></tr>
+    <tr><td><strong>人字呢</strong><br><span class="en">Herringbone</span></td><td>斜紋線一段往右、一段往左，形成 V 字連續紋路。西裝外套、大衣。</td><td>英文 herring 是鯡魚，看起來像鯡魚的魚骨，所以中文又叫「魚骨紋」。</td></tr>
+    <tr><td><strong>法蘭絨</strong><br><span class="en">Flannel</span></td><td>通常是斜紋或平紋，再經過起毛（刷毛）處理，表面有絨毛、柔軟保暖。格子襯衫。</td><td>威爾斯語 <span class="en">gwlanen</span>，「羊毛的」，因為原本是威爾斯的羊毛布。</td></tr>
+  </table></div>
+  <div class="factory"><p><strong>牛仔布為什麼正面藍、反面白？</strong>因為它是 3/1 經面斜紋：正面 3/4 的面積是藍色經紗，反面 3/4 是白色緯紗。而且靛藍染料只染在紗線<strong>外層</strong>，裡面還是白的，所以穿久了、洗久了、磨白了，就會露出白芯，這就是牛仔褲「刷白」的原理。</p></div>
+
+  <h3>緞紋家族</h3>
+  <div class="tbl"><table>
+    <tr><th>布名</th><th>特徵與用途</th><th>名字由來</th></tr>
+    <tr><td><strong>緞</strong><br><span class="en">Satin</span></td><td>長絲織的緞紋布，極光亮。禮服、睡衣、裡布。</td><td>泉州古名 Zaitun（見第 4 課）。</td></tr>
+    <tr><td><strong>貢緞</strong><br><span class="en">Sateen</span></td><td>棉紗織的緞紋布，光澤柔和。高級床單、休閒褲。</td><td>由 satin 變化而來。中文「貢」強調高級，像進貢的東西。</td></tr>
+    <tr><td><strong>縐緞</strong><br><span class="en">Crepe-back satin</span></td><td>一面是亮面緞，另一面是強撚紗形成的消光縐面，兩面都能用。</td><td>crepe 法文「捲曲、起縐」，和可麗餅（crêpe）同一個字。</td></tr>
+  </table></div>
+
+  <h3>需要特殊織機的花式布</h3>
+  <ul>
+    <li><strong>多臂布</strong>（<span class="en">dobby</span>）：用多臂織機控制十幾片綜框，可以織出小幾何圖案，例如襯衫上的小點點、小菱格暗紋。<br><span class="en">Dobby</span> 名稱一般認為來自 <span class="en">draw boy</span>（拉線的男孩）：早期織花布時，要有一個小男孩坐在織機上方，照順序拉起不同的經紗。</li>
+    <li><strong>提花布</strong>（<span class="en">jacquard</span>）：每一根經紗都能獨立控制，可以織出任何圖案，像大花朵、文字、Logo。</li>
+    <li><strong>燈芯絨</strong>（<span class="en">corduroy</span>）：在布面額外織入浮長的緯紗，再把浮紗割斷刷起，形成一條條直向的絨條。燈芯絨的「條數」指每英寸有幾條，例如 8 條（寬條）、14 條（細條）、21 條（極細條）。</li>
+    <li><strong>絲絨</strong>（<span class="en">velvet</span>）：有兩層布同時織、中間用紗連接，再從中間切開，形成滿面短絨毛。</li>
+  </ul>
+  <div class="origin"><p><strong>提花 Jacquard</strong>：1804 年法國人約瑟夫・瑪麗・雅卡爾（Joseph Marie Jacquard）發明用<strong>打孔卡片</strong>控制經紗升降的裝置，有孔就提起、沒孔就不提。這個「用卡片存指令」的想法，後來啟發了巴貝奇設計分析機，以及早期電腦用的打孔卡。所以你可以說，<strong>電腦的祖先有一部分是織布機</strong>。</p>
+  <p><strong>燈芯絨 Corduroy</strong>：常聽到的說法是法文 <span class="en">corde du roi</span>（國王的繩子），但語言學家認為這是後人編的，法文裡並沒有這個說法，真正來源仍不確定。中文「燈芯絨」則是形容絨條像一根根油燈的燈芯。</p></div>
+
+  <h3>其他你會遇到的名詞</h3>
+  <ul>
+    <li><strong>色織布</strong>（<span class="en">yarn-dyed</span>）：先染紗再織布，可以織出格子、條紋。例如格子襯衫、牛仔布。</li>
+    <li><strong>格子</strong>：<span class="en">Gingham</span>（小格子，源自馬來語 genggang「條紋的」）、<span class="en">Plaid / Tartan</span>（蘇格蘭格紋，不同家族有自己的格紋）、<span class="en">Madras</span>（印度馬德拉斯城的彩色棉格布）。</li>
+    <li><strong>塔絲隆</strong>（<span class="en">Taslan</span>）：用空氣變形尼龍紗織的布，有類似棉的消光手感，外套、衝鋒衣常用。名字來自杜邦的紗線加工商標。</li>
+    <li><strong>春亞紡、桃皮絨</strong>：台灣和大陸業界常見的聚酯梭織布俗名。春亞紡是輕薄平紋；桃皮絨表面經過磨毛，摸起來像桃子皮的細絨。</li>
+  </ul>
+
+  <div class="try"><p>去衣櫃找：一件牛仔褲（翻過來看反面是不是比較白、斜紋線往哪邊斜）、一件休閒襯衫（看是不是牛津布的顆粒感）、一件西裝褲（找找斜紋線）。每認出一種，就把名字和由來講給家人聽，講得出來才代表真的記住了。</p></div>
+
+  <div class="summary"><h4>這課重點</h4><ul>
+    <li>平紋：府綢、青年布、帆布、雪紡、泡泡紗、防撕裂布；方平變化：牛津布。</li>
+    <li>斜紋：牛仔、卡其、華達呢、嗶嘰、人字呢、法蘭絨。</li>
+    <li>緞紋：緞、貢緞。花式：多臂、提花、燈芯絨、絲絨。</li>
+    <li>很多布名來自產地或貿易港：Nîmes、Genoa、Cambrai、Mosul、Calicut、泉州。</li>
+  </ul></div>
+
+  <div class="quiz" data-quiz="5">
+    <h4>小測驗</h4>
+    <div class="q" data-answer="1"><p>1. Denim 這個字的來源是？</p>
+      <button type="button">發明者 Dennis 的名字</button><button type="button">法文 serge de Nîmes（來自尼姆的斜紋布）</button><button type="button">英文「深藍色」</button>
+      <div class="why">de Nîmes 念快就變成 denim。牛仔褲 jeans 則來自熱那亞的法文名 Gênes。</div></div>
+    <div class="q" data-answer="2"><p>2. 哪一種布的發明，和電腦打孔卡的起源有關？</p>
+      <button type="button">泡泡紗</button><button type="button">燈芯絨</button><button type="button">提花布（Jacquard）</button>
+      <div class="why">Jacquard 用打孔卡片控制每一根經紗，這個概念啟發了早期計算機。</div></div>
+    <div class="q" data-answer="0"><p>3. 一件夏天襯衫，布面是一條平一條皺的條紋，穿起來不貼身，它最可能是？</p>
+      <button type="button">泡泡紗 Seersucker</button><button type="button">華達呢 Gabardine</button><button type="button">燈芯絨 Corduroy</button>
+      <div class="why">泡泡紗的名字意思是「牛奶和糖」，比喻光滑和粗糙交替的條紋。</div></div>
+  </div>
+</section>
+<!-- ============ 第 6 課 ============ -->
+<section class="lesson" id="l6" data-lesson="6">
+  <p class="lesson-no">第 6 課</p>
+  <h2>針織：線圈相扣的學問</h2>
+  <span class="tag">進階</span><span class="tag">約 25 分鐘</span>
+  <p class="goal">讀完這課你會知道：線圈怎麼形成、橫列與縱行、緯編與經編、圓機與橫機、機號（G），以及組成所有針織布的三種基本動作。</p>
+
+  <h3>一切從一個線圈開始</h3>
+  <p>針織布最小的單位是<strong>線圈</strong>（<span class="en">loop</span>，也叫 <span class="en">stitch</span>）。一個線圈有兩個部分：上面彎彎的<strong>圈頭</strong>和兩旁的<strong>圈腳</strong>。新的線圈從舊線圈中間穿過去，舊線圈就被「鎖」住了。</p>
+  <figure>
+    <canvas id="knitCanvas" style="width:100%;height:300px;display:block" aria-label="針織線圈動畫"></canvas>
+    <div class="row-ctrl">
+      <label style="display:flex;align-items:center;gap:8px;font-size:14.5px">橫向拉伸 <input type="range" id="knitStretch" min="0" max="100" value="0"></label>
+      <button class="btn" type="button" id="knitUnravel">拆一排</button>
+      <button class="btn" type="button" id="knitRestart">重新織</button>
+    </div>
+    <figcaption>每一種顏色代表一個橫列，也就是一條紗橫向繞出的一整排線圈，上一排的線圈穿過下一排的圈頭。拖動滑桿，看線圈怎麼變形：這就是針織布有彈性的原因。按「拆一排」看看為什麼針織布會脫散。</figcaption>
+  </figure>
+
+  <p class="analogy">梭織布的彈性來自「紗本身」；針織布的彈性來自「線圈的形狀」。就像彈簧，材料本身不太能伸長，但捲成圈圈後就能伸縮。</p>
+
+  <h3>橫列與縱行</h3>
+  <ul>
+    <li><strong>橫列</strong>（<span class="en">course</span>）：橫向的一排線圈，由同一條紗依序形成。</li>
+    <li><strong>縱行</strong>（<span class="en">wale</span>）：直向的一列線圈，由同一根針一排一排疊上去。</li>
+  </ul>
+  <p>針織布的密度就用「每英寸（或每公分）有幾個橫列、幾個縱行」來表示，對應梭織的緯密和經密。</p>
+  <div class="origin"><p><span class="en">Course</span> 有「一道、一層、一輪」的意思，像一道菜（a course of meal），一排線圈就是一道。<span class="en">Wale</span> 來自古英文 <span class="en">walu</span>，意思是「隆起的條痕」，就像被鞭子打出的痕跡，形容針織布上一條條直的凸起。燈芯絨的一條條絨條也叫 wale。</p></div>
+
+  <h3>針是怎麼「鉤」出線圈的</h3>
+  <p>現代針織機大多用<strong>舌針</strong>（<span class="en">latch needle</span>），針頭有一個小鉤，旁邊有一片可以開合的「舌頭」。每根針上下動一次，就完成一個線圈：</p>
+  <div class="steps">
+    <figure><svg viewBox="0 0 100 130" role="img" aria-label="步驟一 退圈">
+      <line x1="50" y1="20" x2="50" y2="125" stroke="currentColor" stroke-width="4"/>
+      <path d="M50 20c0-12 16-12 16 0v6" fill="none" stroke="currentColor" stroke-width="4"/>
+      <line x1="50" y1="34" x2="62" y2="48" stroke="var(--chalk)" stroke-width="4"/>
+      <ellipse cx="50" cy="90" rx="20" ry="7" fill="none" stroke="var(--warp)" stroke-width="4"/>
+      <path d="M50 10v-8M44 6l6-6 6 6" stroke="var(--selvedge)" stroke-width="2" fill="none"/>
+    </svg><figcaption>1 退圈：針往上升，舊線圈滑到針桿下方，舌頭打開。</figcaption></figure>
+    <figure><svg viewBox="0 0 100 130" role="img" aria-label="步驟二 墊紗">
+      <line x1="50" y1="20" x2="50" y2="125" stroke="currentColor" stroke-width="4"/>
+      <path d="M50 20c0-12 16-12 16 0v6" fill="none" stroke="currentColor" stroke-width="4"/>
+      <line x1="50" y1="34" x2="62" y2="48" stroke="var(--chalk)" stroke-width="4"/>
+      <ellipse cx="50" cy="90" rx="20" ry="7" fill="none" stroke="var(--warp)" stroke-width="4"/>
+      <path d="M8 22h84" stroke="var(--selvedge)" stroke-width="4"/>
+    </svg><figcaption>2 墊紗：新的紗（紅）被送到打開的針鉤裡。</figcaption></figure>
+    <figure><svg viewBox="0 0 100 130" role="img" aria-label="步驟三 閉口">
+      <line x1="50" y1="50" x2="50" y2="125" stroke="currentColor" stroke-width="4"/>
+      <path d="M50 50c0-12 16-12 16 0v4" fill="none" stroke="currentColor" stroke-width="4"/>
+      <line x1="50" y1="64" x2="66" y2="54" stroke="var(--chalk)" stroke-width="4"/>
+      <ellipse cx="50" cy="68" rx="20" ry="7" fill="none" stroke="var(--warp)" stroke-width="4"/>
+      <path d="M8 44c20 0 30 6 42 6s22-6 42-6" stroke="var(--selvedge)" stroke-width="4" fill="none"/>
+    </svg><figcaption>3 閉口：針往下降，舊線圈把舌頭往上推，關住針鉤。</figcaption></figure>
+    <figure><svg viewBox="0 0 100 130" role="img" aria-label="步驟四 脫圈成圈">
+      <line x1="50" y1="80" x2="50" y2="125" stroke="currentColor" stroke-width="4"/>
+      <path d="M50 80c0-12 16-12 16 0v4" fill="none" stroke="currentColor" stroke-width="4"/>
+      <path d="M30 40c0 20 10 34 20 34s20-14 20-34" fill="none" stroke="var(--warp)" stroke-width="4"/>
+      <path d="M8 60c16 0 22 22 34 30 4 2 12 2 16 0 12-8 18-30 34-30" stroke="var(--selvedge)" stroke-width="4" fill="none"/>
+    </svg><figcaption>4 成圈：舊線圈從針頭脫出，新紗被拉穿過去，變成新的線圈。</figcaption></figure>
+  </div>
+  <div class="origin"><p>1589 年英國牧師威廉・李（William Lee）發明了第一台<strong>織襪機</strong>。傳說他看到妻子（一說是女友）整天手工織襪，就想用機器代勞。他向伊莉莎白女王申請專利被拒，女王擔心這台機器會讓以手工編織為生的人失業。1849 年英國人湯森（Matthew Townsend）取得舌針的專利，讓針織機速度大幅提升，一直用到今天。</p></div>
+
+  <h3>緯編與經編</h3>
+  <figure>
+    <svg viewBox="0 0 520 200" role="img" aria-label="緯編與經編的紗線走向比較">
+      <g font-family="var(--sans)" font-size="14" fill="currentColor">
+        <text x="120" y="20" text-anchor="middle" font-weight="700">緯編：紗線橫著走</text>
+        <text x="390" y="20" text-anchor="middle" font-weight="700">經編：紗線直著走（之字形）</text>
+      </g>
+      <g fill="none" stroke-width="4" stroke-linecap="round">
+        <path d="M20 60 q15 -26 30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0" stroke="var(--warp)"/>
+        <path d="M230 100 q-15 -26 -30 0 t-30 0 t-30 0 t-30 0 t-30 0 t-30 0 t-30 0" stroke="var(--warp)" opacity=".75"/>
+        <path d="M20 140 q15 -26 30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0" stroke="var(--warp)" opacity=".5"/>
+        <path d="M320 180 l20 -40 l-20 -40 l20 -40 l-20 -40" stroke="var(--selvedge)"/>
+        <path d="M370 180 l20 -40 l-20 -40 l20 -40 l-20 -40" stroke="var(--warp)"/>
+        <path d="M420 180 l20 -40 l-20 -40 l20 -40 l-20 -40" stroke="var(--chalk)"/>
+      </g>
+    </svg>
+    <figcaption>緯編像打毛衣，一條紗橫向一路繞過去；經編則是很多條紗同時從上往下走，每條紗左右擺動和鄰居互相串套。</figcaption>
+  </figure>
+  <div class="tbl"><table>
+    <tr><th>比較</th><th>緯編 Weft knitting</th><th>經編 Warp knitting</th></tr>
+    <tr><td>紗線方向</td><td>橫向，一條紗形成一整排</td><td>直向，每條紗各自往下走</td></tr>
+    <tr><td>會不會脫散</td><td>會，可以從一端拆開</td><td>幾乎不會</td></tr>
+    <tr><td>彈性</td><td>較大</td><td>較小、較穩定</td></tr>
+    <tr><td>常見用途</td><td>T 恤、Polo、帽 T、毛衣、運動服（成衣主料的大多數）</td><td>內衣、泳衣、網眼布、蕾絲、運動鞋面、裡布</td></tr>
+  </table></div>
+  <p>成衣工廠接觸最多的是緯編，所以接下來主要講緯編。</p>
+
+  <h3>圓機與橫機</h3>
+  <ul>
+    <li><strong>圓機</strong>（<span class="en">circular knitting machine</span>）：針排成一個大圓圈，一直轉圈，織出來的布是<strong>筒狀</strong>的。產量大，T 恤布、運動布幾乎都是圓機織的。布出來可以保持筒狀（<strong>筒狀布</strong>），或沿一條線剖開變成平幅（<strong>開幅布</strong>）。</li>
+    <li><strong>橫機</strong>（<span class="en">flat knitting machine</span>）：針排成直線，機頭左右來回。主要用來織<strong>毛衣</strong>和羅紋領、袖口。現代電腦橫機甚至可以直接織出一整件無縫毛衣（全成型）。</li>
+  </ul>
+  <p>圓機又分<strong>單面機</strong>（一圈針筒，織出單面布，正反面不同）和<strong>雙面機</strong>（針筒加上一個平躺的針盤，兩組針配合，織出雙面布）。</p>
+
+  <h3>機號 Gauge：針有多密</h3>
+  <p><strong>機號</strong>（寫成 G）是<strong>每英寸有幾根針</strong>。針越密，能用的紗越細，布就越細緻：</p>
+  <div class="tbl"><table>
+    <tr><th>機號</th><th>機型</th><th>常見產品</th></tr>
+    <tr><td>3G、5G、7G</td><td>橫機</td><td>粗針毛衣，看得到一粒粒大針目</td></tr>
+    <tr><td>12G、14G</td><td>橫機</td><td>細針毛衣、針織衫</td></tr>
+    <tr><td>18G、20G</td><td>圓機</td><td>較粗的汗布、毛圈布</td></tr>
+    <tr><td>24G、28G</td><td>圓機</td><td>一般 T 恤、Polo、運動布</td></tr>
+    <tr><td>32G、36G 以上</td><td>圓機</td><td>超細緻的內衣、高級汗布</td></tr>
+  </table></div>
+  <p>圓機常寫成 <span class="mono">30" × 24G</span>，意思是針筒直徑 30 英寸、機號 24 針。直徑越大，總針數越多，織出來的布越寬。</p>
+  <div class="origin"><p><span class="en">Gauge</span> 本意是「量規、測量的標準」，像鐵路的軌距也叫 gauge。針織業借來表示針的密度。</p></div>
+
+  <h3>三種基本動作：成圈、集圈、浮線</h3>
+  <p>這是從「會分辨」走向「會設計」的關鍵。每根針在每一排，只有三種選擇：</p>
+  <div class="tbl"><table>
+    <tr><th>動作</th><th>針怎麼做</th><th>效果</th></tr>
+    <tr><td><strong>成圈</strong>（<span class="en">knit</span>）</td><td>正常勾紗、脫圈，形成新線圈</td><td>普通的線圈</td></tr>
+    <tr><td><strong>集圈</strong>（<span class="en">tuck</span>）</td><td>勾了新紗，但舊線圈沒脫掉，兩個疊在一起</td><td>布面出現小凸點、小孔；布變厚、寬，彈性變小。珠地布就是這樣做的。</td></tr>
+    <tr><td><strong>浮線</strong>（<span class="en">miss / float</span>）</td><td>針不動，紗直接從針後面經過</td><td>背面留下一段橫浮線；可以用來做多色提花、讓布更穩定</td></tr>
+  </table></div>
+  <p>電腦選針圓機可以讓每根針每一排自由選擇這三種動作，就能變出幾百種不同的針織布。</p>
+
+  <h3>線圈長度：決定布的厚薄鬆緊</h3>
+  <p>同樣的紗、同樣的機器，把每個線圈拉長一點或縮短一點，布就會完全不同。工廠用<strong>線圈長度</strong>（<span class="en">stitch length</span>，常以 100 個線圈多少公分表示）來控制。線圈越長：布越鬆、越薄、越軟、克重越輕，但越容易變形和縮水。</p>
+  <div class="factory"><p>客人說「布太鬆、洗後縮太多」，針織廠第一個調整的通常就是<strong>線圈長度</strong>和<strong>定型的寬度</strong>。所以跟布廠溝通時，除了紗支和克重，也可以要求對方提供線圈長度的紀錄，每一批才會一致。</p></div>
+
+  <div class="summary"><h4>這課重點</h4><ul>
+    <li>線圈 ＝ 圈頭 ＋ 圈腳。橫列（course）橫向、縱行（wale）直向。</li>
+    <li>舌針四步驟：退圈、墊紗、閉口、成圈。</li>
+    <li>緯編會脫散、彈性大（成衣主料多數）；經編穩定、不脫散。</li>
+    <li>圓機織筒狀布（T 恤布）；橫機織毛衣。機號 G ＝ 每英寸針數。</li>
+    <li>三個基本動作：成圈、集圈、浮線。線圈長度決定鬆緊與克重。</li>
+  </ul></div>
+
+  <div class="quiz" data-quiz="6">
+    <h4>小測驗</h4>
+    <div class="q" data-answer="1"><p>1. 針織布的彈性主要從哪裡來？</p>
+      <button type="button">紗本身都是彈性纖維</button><button type="button">線圈的形狀可以變形，像彈簧</button><button type="button">染色時加了彈性劑</button>
+      <div class="why">線圈受拉時會變窄變長或變寬變扁，放開又回復，就像彈簧。</div></div>
+    <div class="q" data-answer="0"><p>2. 規格寫「30" × 28G」，28G 是指？</p>
+      <button type="button">每英寸 28 根針</button><button type="button">布重 28 克</button><button type="button">28 支紗</button>
+      <div class="why">G 是機號 gauge，每英寸針數。30" 是針筒直徑。</div></div>
+    <div class="q" data-answer="2"><p>3. 針勾了新紗但舊線圈沒有脫掉，這個動作叫？</p>
+      <button type="button">成圈</button><button type="button">浮線</button><button type="button">集圈（tuck）</button>
+      <div class="why">集圈讓兩個線圈疊在一起，形成凸點或小孔，珠地布就是靠集圈做出來的。</div></div>
+  </div>
+</section>
+
+<!-- ============ 第 7 課 ============ -->
+<section class="lesson" id="l7" data-lesson="7">
+  <p class="lesson-no">第 7 課</p>
+  <h2>針織布名錄：從汗布到空氣層</h2>
+  <span class="tag">進階</span><span class="tag">約 25 分鐘</span>
+  <p class="goal">讀完這課你會認識成衣工廠最常見的針織布，知道它們怎麼做、用在哪種衣服、名字從哪裡來。</p>
+
+  <h3>單面布（單面機）</h3>
+  <div class="tbl"><table>
+    <tr><th>布名</th><th>結構與特徵</th><th>常見用途</th></tr>
+    <tr><td><strong>汗布</strong><br><span class="en">Single jersey</span></td><td>最基本的針織布，全部都是成圈。正面 V 字、背面小拱門。輕、薄、軟，但<strong>布邊會捲</strong>，也容易歪斜。</td><td>T 恤、內衣</td></tr>
+    <tr><td><strong>彈性汗布</strong><br><span class="en">Spandex jersey</span></td><td>汗布裡每一個線圈都（或每隔一排）加入彈性纖維，彈性大幅提升。</td><td>貼身 T 恤、瑜伽服、內衣</td></tr>
+    <tr><td><strong>珠地</strong><br><span class="en">Piqué</span></td><td>在汗布裡規律地加入<strong>集圈</strong>，布面形成一粒粒像小珠、像蜂巢的凹凸。透氣、挺、不易貼身。分單珠地和雙珠地。</td><td>Polo 衫</td></tr>
+    <tr><td><strong>毛圈布</strong><br><span class="en">French terry</span></td><td>正面是汗布，背面有一個個小毛圈（額外的紗形成的長線圈）。吸汗、有厚度。</td><td>帽 T、衛衣、休閒褲</td></tr>
+    <tr><td><strong>刷毛布</strong><br><span class="en">Fleece</span></td><td>把毛圈布背面的毛圈用刷毛機刷開，變成蓬鬆絨毛，更保暖。</td><td>冬季帽 T、運動外套</td></tr>
+    <tr><td><strong>搖粒絨</strong><br><span class="en">Polar fleece</span></td><td>聚酯毛圈布兩面刷毛、再把絨毛「搖」成一粒粒小球狀，輕、暖、快乾。</td><td>刷毛外套、毯子</td></tr>
+    <tr><td><strong>網眼布／鳥眼布</strong><br><span class="en">Mesh / Bird's eye</span></td><td>利用集圈形成規律的小孔，非常透氣。</td><td>運動衣、球衣、內裡</td></tr>
+  </table></div>
+  <div class="origin">
+    <p><strong>Jersey 汗布</strong>：名字來自英吉利海峽的<strong>澤西島</strong>（Jersey），島上漁民自古穿當地織的羊毛針織衫。1910 年代，香奈兒（Coco Chanel）大膽把原本只做內衣的 jersey 拿來做女裝，讓它登上時尚舞台。中文「汗布」則是因為最早用來做吸汗的<strong>汗衫</strong>。</p>
+    <p><strong>Piqué 珠地</strong>：法文 <span class="en">piquer</span> 是「刺、縫」，原本指一種有凸起紋路的梭織布。1933 年網球名將拉科斯特（René Lacoste）用針織珠地布做了短袖、有領的網球衫，透氣又不貼身，就是今天 Polo 衫的原型。「Polo 衫」這個名字則借自馬球（polo）運動員穿的上衣。</p>
+    <p><strong>Fleece</strong>：英文原意是一整張剪下來的<strong>羊毛</strong>（羊身上的毛皮）。搖粒絨在 1979 年由美國 Malden Mills 公司和戶外品牌 Patagonia 合作開發，後來以 Polartec 品牌推廣，因為用回收寶特瓶也能做，至今仍很常見。</p>
+    <p><strong>Terry 毛圈</strong>：來源不確定，一般認為可能源自法文 <span class="en">tiré</span>（被拉出來的），形容被拉出的長線圈。French terry 的「法國」只是商業名稱，用來和兩面都有毛圈的毛巾布區分。</p>
+  </div>
+
+  <h3>雙面布（雙面機）</h3>
+  <div class="tbl"><table>
+    <tr><th>布名</th><th>結構與特徵</th><th>常見用途</th></tr>
+    <tr><td><strong>羅紋</strong><br><span class="en">Rib</span></td><td>正面線圈和反面線圈交替排列，形成直條凹凸。<strong>橫向彈性非常大</strong>，布邊不捲。1×1 是一正一反，2×2 是兩正兩反。</td><td>領口、袖口、下擺，貼身背心</td></tr>
+    <tr><td><strong>雙面布／棉毛布</strong><br><span class="en">Interlock</span></td><td>兩組 1×1 羅紋交錯疊在一起，<strong>兩面看起來都像汗布正面</strong>。厚實、穩定、不捲邊、不易脫散。</td><td>童裝、內衣、高級 T 恤、運動褲</td></tr>
+    <tr><td><strong>羅馬布</strong><br><span class="en">Ponte</span></td><td>一種雙面組織的厚針織布，挺度高，看起來幾乎像梭織布，但有彈性。</td><td>女裝褲、裙、外套</td></tr>
+    <tr><td><strong>空氣層</strong><br><span class="en">Air layer / Scuba</span></td><td>表裡兩層布之間夾一層紗，中間留有空氣。挺、有份量、保暖。</td><td>時尚上衣、裙、運動外套</td></tr>
+    <tr><td><strong>華夫格</strong><br><span class="en">Waffle</span></td><td>利用集圈和浮線做出一格格像鬆餅的凹凸方格。</td><td>休閒上衣、家居服</td></tr>
+  </table></div>
+  <div class="origin">
+    <p><strong>Rib 羅紋</strong>：英文 rib 是<strong>肋骨</strong>，因為一條條直直凸起的紋路像肋骨。</p>
+    <p><strong>Interlock 棉毛布</strong>：interlock 是「互相鎖住」，形容兩組線圈交錯扣合。中文「棉毛布」來自大陸常用它做的保暖內衣「棉毛衫、棉毛褲」；台灣業界多叫雙面布。</p>
+    <p><strong>Ponte</strong>：全名 <span class="en">Ponte di Roma</span>，義大利文「羅馬之橋」，確切命名原因已不可考。</p>
+    <p><strong>Waffle 華夫格</strong>：waffle 就是格子鬆餅，外觀一模一樣。</p>
+  </div>
+
+  <h3>經編布</h3>
+  <ul>
+    <li><strong>經編平布</strong>（<span class="en">tricot</span>）：細密平滑、不脫散，內衣、裡布、運動服。<span class="en">Tricot</span> 來自法文 <span class="en">tricoter</span>（編織）。</li>
+    <li><strong>拉舍爾</strong>（<span class="en">raschel</span>）：用粗針的經編機，可以織出網布、蕾絲、毛毯。據說機器以十九世紀法國名演員 Rachel（Élisa Rachel Félix）命名，因為早期產品類似她披戴的蕾絲披肩。</li>
+    <li><strong>強力網</strong>（<span class="en">power net</span>）：含高比例彈性纖維的經編網，束腹、內衣。</li>
+    <li><strong>三明治網布</strong>（<span class="en">spacer mesh</span>）：兩層網布中間用支撐紗撐開，有厚度又透氣，運動鞋面、背包背帶。</li>
+  </ul>
+
+  <h3>毛衣（橫機）</h3>
+  <p>毛衣是直接織出衣片（甚至整件），而不是先織一大塊布再剪，所以叫<strong>成型針織</strong>（<span class="en">fully fashioned</span>）。常見花樣有：</p>
+  <ul>
+    <li><strong>平針</strong>：就是汗布組織，最素的毛衣。</li>
+    <li><strong>羅紋</strong>：領口、袖口、下擺必用。</li>
+    <li><strong>絞花</strong>（<span class="en">cable</span>）：把幾個縱行的線圈交換位置，形成麻花辮般的立體紋路，愛爾蘭漁夫毛衣最有名。<span class="en">Cable</span> 是「纜繩」，因為像船上的粗纜繩。</li>
+    <li><strong>提花</strong>（<span class="en">intarsia / jacquard</span>）：多色圖案，例如聖誕毛衣。</li>
+  </ul>
+
+  <h3>常見針織布的克重參考</h3>
+  <div class="tbl"><table>
+    <tr><th>布種</th><th>常見紗支</th><th>大約克重（g/m²）</th><th>感覺</th></tr>
+    <tr><td>汗布</td><td>40s</td><td>120–135</td><td>很薄，夏季內搭</td></tr>
+    <tr><td>汗布</td><td>32s / 30s</td><td>140–170</td><td>標準 T 恤</td></tr>
+    <tr><td>汗布</td><td>20s</td><td>180–220</td><td>厚磅、潮流寬版 T 恤</td></tr>
+    <tr><td>珠地</td><td>32s / 26s</td><td>180–230</td><td>Polo 衫</td></tr>
+    <tr><td>毛圈 / 刷毛</td><td>面紗 32s，毛圈紗 16s–10s</td><td>260–400</td><td>帽 T、衛衣</td></tr>
+    <tr><td>雙面布</td><td>40s</td><td>180–220</td><td>童裝、內衣</td></tr>
+  </table></div>
+  <p style="font-size:14.5px;color:var(--muted)">以上是業界常見範圍，實際克重會因機號、線圈長度、成分和後整理而不同，下單時一定要以實際樣布和規格書為準。</p>
+
+  <div class="try"><p>找一件 T 恤、一件 Polo 衫和一件帽 T。T 恤：找到 V 字，確認是汗布。Polo 衫：摸摸看有沒有一粒粒的凹凸（珠地）。帽 T：翻到反面，是小毛圈（毛圈布）還是蓬鬆絨毛（刷毛）？最後看看它們的袖口和領口，是不是都用了羅紋？</p></div>
+
+  <div class="summary"><h4>這課重點</h4><ul>
+    <li>單面：汗布（T 恤）、珠地（Polo）、毛圈與刷毛（帽 T）、網眼（運動）。</li>
+    <li>雙面：羅紋（領袖口）、雙面布／棉毛布、羅馬布、空氣層。</li>
+    <li>經編：tricot、raschel、強力網、三明治網。毛衣：橫機成型針織。</li>
+    <li>Jersey 來自澤西島；Polo 衫原型來自 Lacoste 的珠地網球衫。</li>
+  </ul></div>
+
+  <div class="quiz" data-quiz="7">
+    <h4>小測驗</h4>
+    <div class="q" data-answer="2"><p>1. T 恤的領口為什麼大多用羅紋？</p>
+      <button type="button">因為羅紋最便宜</button><button type="button">因為羅紋最亮</button><button type="button">因為羅紋橫向彈性很大，頭套得過去又能回彈貼合</button>
+      <div class="why">羅紋正反線圈交替，橫向伸縮性極佳，而且布邊不捲，最適合領口、袖口。</div></div>
+    <div class="q" data-answer="0"><p>2. Jersey（汗布）這個名字來自？</p>
+      <button type="button">英吉利海峽的澤西島，漁民穿當地的針織衫</button><button type="button">美國紐澤西州的球隊</button><button type="button">法文的「流汗」</button>
+      <div class="why">澤西島漁民的針織衫讓這種布得名，球衣叫 jersey 也是從這裡來的。</div></div>
+    <div class="q" data-answer="1"><p>3. 帽 T 反面有一個個小線圈，這種布是？</p>
+      <button type="button">珠地</button><button type="button">毛圈布（French terry）</button><button type="button">雙面布</button>
+      <div class="why">毛圈布背面有長線圈；如果把線圈刷開變成絨毛，就是刷毛布。</div></div>
+  </div>
+</section>
+<!-- ============ 第 8 課 ============ -->
+<section class="lesson" id="l8" data-lesson="8">
+  <p class="lesson-no">第 8 課</p>
+  <h2>看懂布料規格</h2>
+  <span class="tag">專業</span><span class="tag">約 25 分鐘</span>
+  <p class="goal">讀完這課你能讀懂一行布料規格，知道 CVC、TC、57/58"、gsm、oz 的意思，並會做梭織「碼」與針織「公斤」之間的換算。</p>
+
+  <h3>一行規格，拆成五個部分</h3>
+  <p>業務和採購每天在看的布料描述通常長這樣：</p>
+  <p style="text-align:center;font-size:15.5px"><span class="mono">CVC 60/40　CM32s　Single Jersey　160 gsm　72" open width</span></p>
+  <div class="tbl"><table>
+    <tr><th>部分</th><th>範例</th><th>意思</th></tr>
+    <tr><td>成分</td><td>CVC 60/40</td><td>60% 棉、40% 聚酯</td></tr>
+    <tr><td>紗線</td><td>CM32s</td><td>32 支精梳紗</td></tr>
+    <tr><td>組織</td><td>Single Jersey</td><td>汗布</td></tr>
+    <tr><td>重量</td><td>160 gsm</td><td>每平方公尺 160 公克</td></tr>
+    <tr><td>幅寬</td><td>72" open width</td><td>開幅，寬 72 英寸</td></tr>
+  </table></div>
+  <p>梭織的規格則會多一組密度：</p>
+  <p style="text-align:center;font-size:15.5px"><span class="mono">100% Cotton Poplin　CM40×CM40　133×72　57/58"　115 gsm</span></p>
+
+  <h3>成分縮寫</h3>
+  <div class="tbl"><table>
+    <tr><th>縮寫</th><th>意思</th><th>常見比例</th></tr>
+    <tr><td><strong>C</strong> / 100% Cotton</td><td>全棉</td><td>100%</td></tr>
+    <tr><td><strong>CVC</strong></td><td>棉為主的棉聚酯混紡</td><td>60/40、55/45、80/20</td></tr>
+    <tr><td><strong>TC</strong> 或 T/C</td><td>聚酯為主的聚酯棉混紡</td><td>65/35</td></tr>
+    <tr><td><strong>T/R</strong></td><td>聚酯 ＋ 嫘縈</td><td>65/35，西裝褲、制服</td></tr>
+    <tr><td><strong>C/Sp</strong>、<strong>T/Sp</strong>、<strong>N/Sp</strong></td><td>棉、聚酯、尼龍 ＋ 彈性纖維</td><td>95/5、92/8、80/20</td></tr>
+    <tr><td><strong>100% P</strong></td><td>全聚酯</td><td>運動服</td></tr>
+  </table></div>
+  <div class="origin">
+    <p><strong>CVC</strong> ＝ <span class="en">Chief Value of Cotton</span>，原本是美國海關的分類用語，意思是「價值主要來自棉花」，也就是棉的比例超過一半。</p>
+    <p><strong>TC</strong> 的 T，台灣和日本業界一般認為來自 <strong>Tetoron</strong>（特多龍）：日本<strong>帝</strong>人（Teijin）和<strong>東</strong>麗（Toray）兩家公司共同使用的聚酯纖維商標，名字就是兩家公司名稱的組合。因為當年台灣和日本進口的聚酯大多是這個牌子，TC 就成了「聚酯棉」的代名詞，一直沿用到今天。</p>
+  </div>
+
+  <h3>幅寬：57/58" 是什麼意思</h3>
+  <p>幅寬是布從一邊布邊到另一邊布邊的寬度，業界多用<strong>英寸</strong>（1 英寸 ＝ 2.54 公分）。</p>
+  <ul>
+    <li><strong>57/58"</strong>：幅寬在 57 到 58 英寸之間。布邊的寬度會有一點誤差，所以寫一個範圍。</li>
+    <li><strong>全幅</strong>（<span class="en">full width</span>）vs <strong>可用幅寬</strong>（<span class="en">cuttable width</span>）：布邊、針孔、印字的部分不能用，排料時要用可用幅寬計算，通常比全幅少 1 到 2 英寸。</li>
+    <li><strong>筒狀</strong>（<span class="en">tubular</span>）vs <strong>開幅</strong>（<span class="en">open width</span>）：針織圓機布如果保持筒狀，標示的寬度是「對折後」的寬，展開要乘以 2。</li>
+  </ul>
+
+  <h3>重量：gsm 與 oz</h3>
+  <p><strong>gsm</strong>（<span class="en">grams per square meter</span>，g/m²）是每平方公尺多重，國際通用。美國和牛仔布習慣用 <strong>oz/yd²</strong>（每平方碼幾盎司），例如「14 oz 牛仔布」就是很厚的牛仔褲布。</p>
+  <p>換算：<span class="mono">1 oz/yd² ≈ 33.9 gsm</span>。所以 14 oz 約等於 475 gsm。</p>
+  <div class="factory"><p>要問清楚克重是<strong>洗前</strong>（<span class="en">before wash</span>）還是<strong>洗後</strong>（<span class="en">after wash</span>）。布經過水洗會縮，面積變小，所以洗後克重通常比較重。客人規格寫 180 gsm，布廠交 180 gsm 洗前的布，成衣洗完可能變 190 多，就可能被判不合格，反之亦然。一般允許誤差多在 ±5% 左右，依客戶要求而定。</p></div>
+
+  <h3>梭織按「長度」買，針織按「重量」買</h3>
+  <p>這是工廠實務中非常重要的一點：<strong>梭織布通常用碼（yard）或公尺計價；針織布通常用公斤計價</strong>。因為針織布會伸縮，長度不準；重量則不受拉伸影響。所以你常常要在兩者之間換算：</p>
+  <p style="text-align:center"><span class="mono">每公斤的長度（公尺）＝ 1000 ÷（克重 g/m² × 幅寬 m）</span></p>
+  <p>例：160 gsm、開幅 72"（1.83 m）的汗布，每公斤大約 1000 ÷ (160 × 1.83) ≈ 3.4 公尺。</p>
+  <div class="origin"><p><strong>碼 yard</strong>：傳說是英王亨利一世從鼻尖到伸直手臂拇指尖的距離，雖然多半是傳說，但 1 碼 ＝ 3 英尺 ＝ 36 英寸 ＝ 0.9144 公尺是確定的。<strong>盎司 ounce</strong> 來自拉丁文 <span class="en">uncia</span>，意思是「十二分之一」（古羅馬一磅分成 12 份），和 inch（英寸，一英尺的十二分之一）其實是同一個字根。</p></div>
+
+  <div class="calc" id="wtCalc">
+    <h4>重量與長度換算器</h4>
+    <div class="grid">
+      <label>克重（g/m²）<input type="number" id="wc-gsm" value="160" min="1" step="any" inputmode="decimal"></label>
+      <label>幅寬（英寸）<input type="number" id="wc-w" value="72" min="1" step="any" inputmode="decimal"></label>
+      <label>寬度類型<select id="wc-type"><option value="open">開幅</option><option value="tube">筒狀（標示為對折寬）</option></select></label>
+      <label>數量（公斤）<input type="number" id="wc-kg" value="100" min="0" step="any" inputmode="decimal"></label>
+    </div>
+    <div class="out" id="wc-out"></div>
+  </div>
+
+  <h3>其他你會在規格上看到的字</h3>
+  <ul>
+    <li><strong>色號／色卡</strong>：客人指定顏色的編號，常引用 Pantone（潘通）的色號，例如 19-4052 TCX。</li>
+    <li><strong>批號／缸號</strong>（<span class="en">lot / batch</span>）：同一次染色的布，顏色才會完全一致。</li>
+    <li><strong>MOQ</strong>（<span class="en">Minimum Order Quantity</span>）：最小訂量。染一缸通常有最低重量，太少的量布廠不願意做，或要加收小量費。</li>
+    <li><strong>現貨</strong>（<span class="en">stock</span>）vs <strong>訂織</strong>：現貨可以直接買；訂織要從紗開始排產，交期長很多。</li>
+  </ul>
+
+  <div class="summary"><h4>這課重點</h4><ul>
+    <li>規格 ＝ 成分 ＋ 紗線 ＋ 組織 ＋（密度）＋ 重量 ＋ 幅寬。</li>
+    <li>CVC ＝ 棉為主；TC 的 T 是 Tetoron（帝人＋東麗的商標）。</li>
+    <li>1 oz/yd² ≈ 33.9 gsm；要問清楚洗前或洗後克重。</li>
+    <li>梭織按長度買、針織按重量買，要會換算。</li>
+  </ul></div>
+
+  <div class="quiz" data-quiz="8">
+    <h4>小測驗</h4>
+    <div class="q" data-answer="1"><p>1. TC 65/35 的 T 原本代表什麼？</p>
+      <button type="button">Textile（紡織）</button><button type="button">Tetoron，帝人與東麗的聚酯纖維商標</button><button type="button">Taiwan（台灣）</button>
+      <div class="why">Tetoron 取自 Teijin 和 Toray，後來 TC 就成了聚酯棉混紡的通稱。</div></div>
+    <div class="q" data-answer="2"><p>2. 為什麼針織布常用公斤計價？</p>
+      <button type="button">因為針織布比較便宜</button><button type="button">因為海關規定</button><button type="button">因為針織布會伸縮，長度不準，重量比較準確</button>
+      <div class="why">針織布一拉就變長，量長度會有很大誤差，重量則穩定。</div></div>
+    <div class="q" data-answer="0"><p>3. 一塊 12 oz 的牛仔布，大約是多少 gsm？</p>
+      <button type="button">約 407 gsm</button><button type="button">約 120 gsm</button><button type="button">約 1200 gsm</button>
+      <div class="why">12 × 33.9 ≈ 407 gsm。</div></div>
+  </div>
+</section>
+
+<!-- ============ 第 9 課 ============ -->
+<section class="lesson" id="l9" data-lesson="9">
+  <p class="lesson-no">第 9 課</p>
+  <h2>染色與後整理：讓胚布變成成品</h2>
+  <span class="tag">專業</span><span class="tag">約 30 分鐘</span>
+  <p class="goal">讀完這課你會知道：胚布要經過哪些處理、不同纖維要用哪一種染料、什麼是跳燈，以及定型、預縮、磨毛等後整理的目的。</p>
+
+  <h3>胚布：剛從織機下來的布</h3>
+  <p>剛織好、還沒有任何處理的布叫<strong>胚布</strong>（<span class="en">greige</span>，也寫 <span class="en">grey goods</span>）。它通常是米黃色、有油漬、摸起來粗硬，不能直接做衣服。從胚布到可以裁剪的成品布，這一大段工序統稱<strong>染整</strong>（染色 ＋ 整理）。</p>
+  <div class="origin"><p><span class="en">Greige</span> 來自法文 <span class="en">grège</span>，原指「生絲」，也就是還沒處理過的絲。英文常被寫成 grey，但它和灰色無關，只是發音相近。</p></div>
+
+  <h3>前處理：先把布洗乾淨</h3>
+  <ol>
+    <li><strong>燒毛</strong>（<span class="en">singeing</span>）：布快速通過火焰，燒掉表面的毛羽，讓布面光潔。</li>
+    <li><strong>退漿</strong>（<span class="en">desizing</span>）：梭織時為了讓經紗耐得住幾千次摩擦，會先在經紗上「上漿」（塗一層像漿糊的保護膜），染色前要把它去掉。針織布不用上漿，所以沒有這一步。</li>
+    <li><strong>精練</strong>（<span class="en">scouring</span>）：用鹼液煮布，去掉棉纖維天然的蠟質、油污，讓布容易吸水、吃染料。</li>
+    <li><strong>漂白</strong>（<span class="en">bleaching</span>）：用雙氧水等把布漂白，淺色、白色的布尤其需要。</li>
+    <li><strong>絲光</strong>（<span class="en">mercerizing</span>，選用）：棉布在拉緊的狀態下浸濃鹼液，纖維會膨脹變圓，因此<strong>更有光澤、更好染、更強</strong>。高級襯衫布、絲光棉 Polo 衫常用。</li>
+  </ol>
+  <div class="origin"><p><strong>上漿</strong>的英文 <span class="en">size</span> 在這裡和「尺寸」無關，是一種膠料的古字，油畫打底用的膠也叫 size。<strong>絲光 Mercerizing</strong>：1844 年英國化學家約翰・默瑟（John Mercer）發現這個處理方法，所以用他的名字命名。中文「絲光」則是形容處理後棉布有絲一般的光澤。</p></div>
+
+  <h3>在哪個階段染色</h3>
+  <div class="tbl"><table>
+    <tr><th>階段</th><th>做法</th><th>例子與特點</th></tr>
+    <tr><td>纖維染 / 原液染</td><td>纖維還沒紡成紗前就染，或聚酯在熔融時就加色</td><td>麻灰紗（Heather，把不同顏色的纖維混紡）；原液染最省水</td></tr>
+    <tr><td>紗染（色織）</td><td>先染紗再織</td><td>格子、條紋、牛仔布；顏色最牢、可做圖案，但交期長</td></tr>
+    <tr><td>布染（匹染）</td><td>整疋布染成一色</td><td>最常見的素色布</td></tr>
+    <tr><td>成衣染</td><td>衣服做好了再整件染</td><td>顏色有自然深淺、復古感；但縫紉線要能一起上色、縮率要事先控制</td></tr>
+  </table></div>
+  <div class="origin"><p><strong>Heather 麻灰</strong>：英文 heather 是蘇格蘭高地的<strong>石南花</strong>，荒野上一大片混著紫、綠、褐的顏色，所以用來形容多種顏色纖維混在一起的霧濛濛效果。</p></div>
+
+  <h3>不同纖維，用不同染料</h3>
+  <p>染料和纖維就像鑰匙和鎖，要配對才能「鎖」住顏色：</p>
+  <div class="tbl"><table>
+    <tr><th>纖維</th><th>染料</th><th>說明</th></tr>
+    <tr><td>棉、麻、嫘縈、天絲</td><td><strong>活性染料</strong>（<span class="en">reactive</span>）</td><td>和纖維產生化學鍵結，顏色鮮艷、水洗牢度好</td></tr>
+    <tr><td>聚酯</td><td><strong>分散染料</strong>（<span class="en">disperse</span>）</td><td>要在約 130°C 高溫高壓下，讓染料「鑽進」纖維裡</td></tr>
+    <tr><td>尼龍、羊毛、蠶絲</td><td><strong>酸性染料</strong>（<span class="en">acid</span>）</td><td>在酸性環境下和纖維結合</td></tr>
+    <tr><td>棉（牛仔）</td><td><strong>還原染料</strong>（<span class="en">vat</span>），靛藍是其中一種</td><td>染料要先「還原」成可溶的形態，染上後接觸空氣氧化，才變回藍色</td></tr>
+    <tr><td>各種纖維</td><td><strong>塗料</strong>（<span class="en">pigment</span>）</td><td>不是真的染進去，而是用膠把色粉黏在表面，常用於印花</td></tr>
+  </table></div>
+  <div class="factory"><p><strong>混紡布的挑戰</strong>：CVC、TC 這種棉和聚酯混紡的布，要分別用分散染料染聚酯、用活性染料染棉，通常要染兩次（兩浴）。兩種纖維顏色如果沒對準，就會出現「雙色」或「閃色」，這也是混紡布比全棉布更難控制色差的原因。</p></div>
+  <div class="origin"><p><strong>Vat 還原染料</strong>：vat 是「大桶」，古時靛藍要放在大木桶裡發酵還原。牛仔布從染缸拉出來時是<strong>黃綠色</strong>，接觸空氣後幾秒鐘內慢慢變成藍色，是染廠裡很神奇的一幕。</p></div>
+
+  <h3>對色：打色、光源與跳燈</h3>
+  <p>客人會給一個顏色標準（色卡或樣布），染廠先在實驗室打小樣，這叫<strong>打色</strong>或 <strong>Lab dip</strong>，通常一次送 A、B、C 三個接近的顏色讓客人選。</p>
+  <p>對色一定要在<strong>標準光源箱</strong>裡看，常見光源有：</p>
+  <ul>
+    <li><strong>D65</strong>：模擬中午的自然日光。</li>
+    <li><strong>TL84</strong>：歐洲商店常用的螢光燈。</li>
+    <li><strong>CWF</strong>：美國商店常用的冷白螢光燈。</li>
+    <li><strong>A 光</strong>：傳統鎢絲燈泡的暖黃光。</li>
+  </ul>
+  <p>有時兩塊布在日光下看一模一樣，換到商店燈光下卻明顯不同，這叫<strong>同色異譜</strong>，業界俗稱<strong>跳燈</strong>。原因是兩塊布用了不同的染料配方，反射光的「成分」不一樣，只是在某一種光下剛好看起來相同。</p>
+  <div class="origin"><p><strong>Lab dip</strong>：在實驗室（laboratory）裡把布或紗「浸」（dip）進小染杯染出的樣品。<strong>同色異譜</strong>英文 <span class="en">metamerism</span>，來自希臘文 <span class="en">meta</span>（改變）＋ <span class="en">meros</span>（部分），意思是「組成不同，但結果看起來一樣」。</p></div>
+
+  <h3>印花</h3>
+  <div class="tbl"><table>
+    <tr><th>方法</th><th>原理</th><th>特點</th></tr>
+    <tr><td>活性印花</td><td>用活性染料印在棉布上，再蒸化固色、水洗</td><td>手感軟、顏色牢，全棉布常用</td></tr>
+    <tr><td>塗料印花</td><td>用膠把色粉印在表面</td><td>便宜、步驟少，但手感偏硬，深色印在淺底較適合</td></tr>
+    <tr><td>拔染印花</td><td>在深色布上印上「拔色劑」，把原本的顏色拔掉（可同時上新色）</td><td>深底淺花也能保持軟手感</td></tr>
+    <tr><td>昇華轉印</td><td>先印在紙上，再加熱讓染料變成氣體鑽進聚酯纖維</td><td>顏色鮮艷、可做照片般圖案；<strong>只適用聚酯</strong>，運動球衣常用</td></tr>
+    <tr><td>數位印花</td><td>像噴墨印表機一樣直接噴在布上</td><td>免製版、小量快速，適合打樣與小批量</td></tr>
+  </table></div>
+  <p>注意「布料印花」（整疋布印）和成衣廠常做的「裁片印花」（衣服剪成片再用網版印胸前圖案）是不同的工序。</p>
+
+  <h3>後整理：決定手感和功能</h3>
+  <div class="tbl"><table>
+    <tr><th>工序</th><th>做什麼</th><th>為什麼</th></tr>
+    <tr><td><strong>定型</strong></td><td>布夾在拉幅定型機上，控制寬度和克重，經過熱風烘箱</td><td>固定幅寬、克重和尺寸穩定性；聚酯與彈性布必須熱定型</td></tr>
+    <tr><td><strong>預縮</strong></td><td>梭織用橡膠毯預縮機，針織用壓縮機（compactor），讓布先「縮好」</td><td>降低成衣洗後縮水</td></tr>
+    <tr><td><strong>磨毛</strong>（桃皮）</td><td>用砂輥輕磨布面，產生極短細絨</td><td>手感像桃子皮，溫暖柔軟</td></tr>
+    <tr><td><strong>刷毛／起毛</strong></td><td>用鋼絲刷把纖維刷起成絨</td><td>刷毛布、法蘭絨，保暖</td></tr>
+    <tr><td><strong>柔軟、矽油</strong></td><td>加入柔軟劑</td><td>手感滑順、有垂度</td></tr>
+    <tr><td><strong>酵素洗</strong></td><td>用纖維素酶吃掉棉布表面的毛羽</td><td>布面乾淨、較不易起毛球、手感柔軟</td></tr>
+    <tr><td><strong>功能性整理</strong></td><td>吸濕排汗、防潑水、抗菌、抗 UV、抗起毛球等</td><td>運動與戶外服裝的賣點</td></tr>
+  </table></div>
+  <div class="origin">
+    <p><strong>拉幅定型機</strong>英文叫 <span class="en">stenter</span> 或 <span class="en">tenter</span>，兩邊用一排小鉤子（tenterhooks）或針夾住布邊。以前人們把洗好的羊毛布掛在戶外木架的鉤子上晾乾拉平，布被拉得緊繃繃的，所以英文片語 <span class="en">on tenterhooks</span> 就是「提心吊膽、坐立不安」。你仔細看某些布的布邊，還能看到一排小針孔，就是定型機留下的。</p>
+    <p><strong>Sanforized 預縮</strong>：1930 年美國人桑福德・克魯特（Sanford Lockwood Cluett）取得機械預縮法的專利，後來「Sanforized」成為預縮處理的商標，很多牛仔褲標籤上都印著這個字。相反地，沒有預縮的牛仔布叫「原色／生牛」（<span class="en">raw / unsanforized</span>），買來要先泡水縮過再穿。</p>
+    <p><strong>DWR 防潑水</strong>：<span class="en">Durable Water Repellent</span>，「持久防潑水」。它讓水在布面變成水珠滾落，但不是完全防水；真正防水還需要貼合防水膜或塗層。</p>
+  </div>
+
+  <div class="summary"><h4>這課重點</h4><ul>
+    <li>胚布 → 前處理（燒毛、退漿、精練、漂白、絲光）→ 染色或印花 → 後整理。</li>
+    <li>棉用活性、聚酯用分散（高溫）、尼龍羊毛用酸性、牛仔用還原（靛藍）。</li>
+    <li>對色看標準光源；同一顏色不同光下看起來不同叫跳燈（同色異譜）。</li>
+    <li>定型控制幅寬克重；預縮控制縮水；磨毛刷毛改變手感。</li>
+  </ul></div>
+
+  <div class="quiz" data-quiz="9">
+    <h4>小測驗</h4>
+    <div class="q" data-answer="0"><p>1. 為什麼梭織布染色前要「退漿」，針織布卻不用？</p>
+      <button type="button">梭織經紗織布前有上漿保護，針織紗不需要上漿</button><button type="button">針織布比較乾淨</button><button type="button">梭織布比較厚</button>
+      <div class="why">經紗在織機上要承受大量摩擦，所以要上漿；染色前必須把漿去掉，染料才吃得進去。</div></div>
+    <div class="q" data-answer="2"><p>2. 100% 聚酯的運動球衣，要印滿版照片般的圖案，最適合哪一種方法？</p>
+      <button type="button">活性印花</button><button type="button">拔染印花</button><button type="button">昇華轉印</button>
+      <div class="why">昇華轉印讓染料氣化鑽進聚酯纖維，色彩鮮艷、手感不變，只適用聚酯。</div></div>
+    <div class="q" data-answer="1"><p>3. 兩塊布在日光燈箱下顏色一樣，在商店燈下卻不同，這叫？</p>
+      <button type="button">缸差</button><button type="button">跳燈（同色異譜）</button><button type="button">色牢度不良</button>
+      <div class="why">不同染料配方在某種光下剛好看起來一樣，換光就現形，這叫同色異譜，俗稱跳燈。</div></div>
+  </div>
+</section>
+<!-- ============ 第 10 課 ============ -->
+<section class="lesson" id="l10" data-lesson="10">
+  <p class="lesson-no">第 10 課</p>
+  <h2>品質檢驗：怎麼判斷一塊布合不合格</h2>
+  <span class="tag">專業</span><span class="tag">約 30 分鐘</span>
+  <p class="goal">讀完這課你會用四分制驗布、會算縮水率和扭度，並認識色牢度、起毛球等實驗室測試。</p>
+
+  <h3>驗布：四分制</h3>
+  <p>布進廠後，要放上<strong>驗布機</strong>（布從燈箱上慢慢捲過去），由驗布員找出瑕疵並「扣分」。全世界最常用的是<strong>四分制</strong>（<span class="en">4-Point System</span>），源自美國標準 ASTM D5430：</p>
+  <div class="tbl"><table>
+    <tr><th>瑕疵長度（任何方向）</th><th>扣分</th></tr>
+    <tr><td>3 英寸以下</td><td>1 分</td></tr>
+    <tr><td>超過 3，到 6 英寸</td><td>2 分</td></tr>
+    <tr><td>超過 6，到 9 英寸</td><td>3 分</td></tr>
+    <tr><td>超過 9 英寸</td><td>4 分</td></tr>
+    <tr><td>破洞：1 英寸以下／超過 1 英寸</td><td>2 分／4 分</td></tr>
+  </table></div>
+  <p>規則：同一碼布最多扣 4 分。最後換算成「每 100 平方碼扣幾分」：</p>
+  <p style="text-align:center"><span class="mono">每百平方碼分數 ＝ 總分 × 3600 ÷（檢驗碼數 × 可用幅寬英寸）</span></p>
+  <p>很多客戶的標準是<strong>每卷不超過 40 分</strong>（成衣大貨常見），高級品牌可能要求 20 分，實際以客戶規定為準。3600 是怎麼來的？1 平方碼 ＝ 36 × 36 平方英寸，再乘以 100 平方碼，除以 36（一碼的英寸數）就是 3600。</p>
+
+  <div class="calc" id="fpCalc">
+    <h4>四分制計算器</h4>
+    <div class="grid">
+      <label>1 分瑕疵（個）<input type="number" id="fp1" value="6" min="0" step="1" inputmode="numeric"></label>
+      <label>2 分瑕疵（個）<input type="number" id="fp2" value="3" min="0" step="1" inputmode="numeric"></label>
+      <label>3 分瑕疵（個）<input type="number" id="fp3" value="1" min="0" step="1" inputmode="numeric"></label>
+      <label>4 分瑕疵（個）<input type="number" id="fp4" value="2" min="0" step="1" inputmode="numeric"></label>
+      <label>檢驗長度（碼）<input type="number" id="fpy" value="100" min="1" step="any" inputmode="decimal"></label>
+      <label>可用幅寬（英寸）<input type="number" id="fpw" value="56" min="1" step="any" inputmode="decimal"></label>
+      <label>合格標準（分）<input type="number" id="fpl" value="40" min="1" step="any" inputmode="decimal"></label>
+    </div>
+    <div class="out" id="fp-out"></div>
+  </div>
+
+  <h3>常見瑕疵</h3>
+  <div class="cols2">
+    <div>
+      <h4>梭織</h4>
+      <ul>
+        <li><strong>斷經</strong>：一根經紗斷了，布面一條直線缺紗。</li>
+        <li><strong>缺緯／稀緯</strong>：少了緯紗，出現一條橫向稀薄線。</li>
+        <li><strong>密路</strong>：緯紗太密，出現一條較深的橫紋。</li>
+        <li><strong>粗節、竹節</strong>：紗線局部變粗。</li>
+        <li><strong>緯斜、弓緯</strong>：緯紗沒有垂直於布邊，斜的或彎成弓形，格子布最明顯。</li>
+      </ul>
+    </div>
+    <div>
+      <h4>針織</h4>
+      <ul>
+        <li><strong>破洞</strong>：斷紗或針壞造成。</li>
+        <li><strong>漏針</strong>：某根針沒織到，出現一條直的梯狀缺口。</li>
+        <li><strong>橫條</strong>（<span class="en">barré</span>）：一排排橫向深淺條紋，多半是紗批不同。</li>
+        <li><strong>針路</strong>：一條直向的細紋，通常是某根針有問題。</li>
+        <li><strong>油針、油污</strong>：機油沾到布。</li>
+      </ul>
+    </div>
+  </div>
+  <div class="origin"><p><span class="en">Barré</span> 是法文「有橫條的、被畫線的」。因為針織圓機同時有幾十個餵紗口在送紗，只要其中一個紗筒的紗來自不同批次，布上就會每隔固定幾排出現一條顏色不同的橫條。</p></div>
+
+  <h3>色差：三種要分清楚</h3>
+  <ul>
+    <li><strong>缸差</strong>：不同染缸之間的顏色差。解法是<strong>分缸裁剪</strong>，同一件衣服的所有裁片要來自同一缸。</li>
+    <li><strong>左中右色差</strong>：同一塊布的兩邊和中間顏色不同。裁片擺放位置就要注意。</li>
+    <li><strong>頭尾色差</strong>：一卷布的前段和後段顏色不同。</li>
+  </ul>
+  <p>工廠會把每一缸、每一卷剪一小塊，貼成<strong>色差卡／缸差卡</strong>（<span class="en">shade band</span>），分成 A、B、C 級，讓客人確認可以接受哪些顏色範圍，裁剪時也照著分開。</p>
+
+  <h3>實驗室測試</h3>
+  <p>大貨布料通常要送實驗室（像 SGS、Intertek、BV 這類第三方檢測機構）測試。測試方法最常依照美國的 <strong>AATCC</strong>、<strong>ASTM</strong> 或國際的 <strong>ISO</strong> 標準，客人會在規格書指定。</p>
+  <div class="tbl"><table>
+    <tr><th>測試</th><th>測什麼</th><th>結果怎麼看</th></tr>
+    <tr><td><strong>縮水率</strong><br>尺寸穩定性</td><td>洗後長度、寬度變化多少</td><td>百分比，例如 −3% 表示縮 3%</td></tr>
+    <tr><td><strong>扭度</strong><br>（針織）</td><td>洗後側縫歪斜多少</td><td>百分比，常見要求 5% 以內</td></tr>
+    <tr><td><strong>色牢度</strong></td><td>水洗、摩擦（乾、濕）、汗漬、日曬時會不會掉色或染到別的布</td><td>用灰卡評 1 到 5 級，<strong>5 級最好</strong>；日曬用藍色羊毛標準評 1 到 8 級</td></tr>
+    <tr><td><strong>起毛球</strong></td><td>摩擦後表面起毛球的程度</td><td>1 到 5 級，5 級最好</td></tr>
+    <tr><td><strong>強力</strong></td><td>梭織測拉伸、撕破；針織測<strong>頂破</strong>（像用手指戳破）</td><td>牛頓（N）或磅力</td></tr>
+    <tr><td><strong>滑紗</strong>（梭織）</td><td>縫線處被拉扯時，紗會不會滑開形成裂縫</td><td>裂縫寬度（mm）</td></tr>
+    <tr><td><strong>化學安全</strong></td><td>甲醛、pH 值、禁用偶氮染料、重金屬等</td><td>要符合客戶限用物質清單（RSL）</td></tr>
+  </table></div>
+  <div class="origin"><p><strong>AATCC</strong> ＝ 美國紡織化學家與染色家協會（American Association of Textile Chemists and Colorists），1921 年成立，色牢度測試幾乎都用它的方法。<strong>灰卡</strong>（<span class="en">gray scale</span>）是一組深淺不同的灰色卡片，用來比較測試前後的顏色變化有多大，就像拿尺比長短一樣。</p></div>
+
+  <h3>自己動手：縮水率與扭度</h3>
+  <p>在布或成衣上畫一個 50 × 50 公分的方框，洗一次（照客人指定的洗法）、晾乾後再量：</p>
+  <p style="text-align:center"><span class="mono">縮水率 ＝（洗後長度 − 洗前長度）÷ 洗前長度 × 100%</span></p>
+  <p>扭度則是量側縫（或原本垂直的線）在洗後偏移了多少：</p>
+  <p style="text-align:center"><span class="mono">扭度 ＝ 偏移距離 ÷ 量測長度 × 100%</span></p>
+
+  <div class="calc" id="shCalc">
+    <h4>縮水率與扭度計算器</h4>
+    <div class="grid">
+      <label>洗前長度（直向，cm）<input type="number" id="sh-l0" value="50" min="0.1" step="any" inputmode="decimal"></label>
+      <label>洗後長度（直向，cm）<input type="number" id="sh-l1" value="48.4" min="0" step="any" inputmode="decimal"></label>
+      <label>洗前寬度（橫向，cm）<input type="number" id="sh-w0" value="50" min="0.1" step="any" inputmode="decimal"></label>
+      <label>洗後寬度（橫向，cm）<input type="number" id="sh-w1" value="51" min="0" step="any" inputmode="decimal"></label>
+      <label>扭斜偏移距離（cm）<input type="number" id="sh-t" value="2" min="0" step="any" inputmode="decimal"></label>
+    </div>
+    <div class="out" id="sh-out"></div>
+  </div>
+
+  <div class="factory"><p><strong>為什麼 T 恤洗完側縫會跑到前面？</strong>汗布是單面組織，紗本身的撚力會讓線圈歪斜；染整時如果又被拉得太緊、沒有鬆弛定型，洗後就會「彈回去」。解法包括：用撚度較低或 S、Z 撚交替餵紗、改善定型與預縮，或是在裁剪時依照布的歪斜方向調整。這也是為什麼 T 恤驗貨一定會洗水測扭度。</p></div>
+
+  <div class="summary"><h4>這課重點</h4><ul>
+    <li>四分制：依瑕疵長度扣 1 到 4 分，換算每百平方碼，常見合格線 40 分。</li>
+    <li>色差分缸差、左中右、頭尾；用色差卡分級、分缸裁剪。</li>
+    <li>色牢度、起毛球 5 級最好；針織測頂破、梭織測撕破與滑紗。</li>
+    <li>縮水率與扭度可以自己畫框洗水計算。</li>
+  </ul></div>
+
+  <div class="quiz" data-quiz="10">
+    <h4>小測驗</h4>
+    <div class="q" data-answer="2"><p>1. 四分制中，一個 7 英寸長的瑕疵扣幾分？</p>
+      <button type="button">1 分</button><button type="button">2 分</button><button type="button">3 分</button>
+      <div class="why">超過 6 到 9 英寸扣 3 分。</div></div>
+    <div class="q" data-answer="0"><p>2. 色牢度測試結果「4-5 級」代表？</p>
+      <button type="button">很好，幾乎不掉色</button><button type="button">很差，大量掉色</button><button type="button">中等</button>
+      <div class="why">灰卡評級 5 級最好，1 級最差。4-5 級表示變化非常小。</div></div>
+    <div class="q" data-answer="1"><p>3. 汗布上每隔固定幾排出現一條顏色較深的橫紋，最可能原因是？</p>
+      <button type="button">斷經</button><button type="button">某個餵紗口用了不同批的紗，形成橫條（barré）</button><button type="button">定型溫度太高</button>
+      <div class="why">圓機多個餵紗口輪流送紗，其中一個紗批不同，就會週期性出現橫條。</div></div>
+  </div>
+</section>
+
+<!-- ============ 第 11 課 ============ -->
+<section class="lesson" id="l11" data-lesson="11">
+  <p class="lesson-no">第 11 課</p>
+  <h2>從布到成衣：工廠實務與專業判斷</h2>
+  <span class="tag">專業</span><span class="tag">約 30 分鐘</span>
+  <p class="goal">讀完這課你會知道：針織和梭織在裁剪、縫紉上的差別，怎麼估算用布量，怎麼選布配衣，以及環保認證和燃燒辨識法。</p>
+
+  <h3>裁剪前：布要先「休息」</h3>
+  <ul>
+    <li><strong>鬆布</strong>：針織布在捲布時被拉長了，如果直接裁，裁片會慢慢縮回去，尺寸就不對。所以針織布要先攤開<strong>靜置</strong>（常見 12 到 24 小時，依客戶與布種規定），讓它回到自然狀態再裁。</li>
+    <li><strong>先測縮率</strong>：大貨裁剪前先做洗水測試，如果布會縮 4%，紙樣就要先放大 4%，洗完才會剛好。</li>
+    <li><strong>分缸</strong>：依色差卡把不同缸的布分開，同一件衣服用同一缸。</li>
+  </ul>
+
+  <h3>排料與拉布</h3>
+  <p><strong>排料</strong>（<span class="en">marker</span>）是把所有紙樣像拼圖一樣排在布上，要盡量省布。<strong>排料利用率</strong>（紙樣面積 ÷ 用布面積）通常在 75% 到 90% 之間，每提高 1%，大貨就能省下可觀的布料成本。</p>
+  <ul>
+    <li><strong>有方向性的布</strong>：燈芯絨、絲絨、刷毛、某些緞面，順著絨毛和逆著絨毛看起來顏色不同，所以所有裁片要<strong>同一方向</strong>排（叫「一順」），會比較耗布。</li>
+    <li><strong>條格布</strong>：要<strong>對條對格</strong>，前後片、口袋、袖子的條紋要接得起來，也會比較耗布。</li>
+    <li><strong>拉布張力</strong>：針織布拉布時<strong>不能拉緊</strong>，要自然平放；梭織布可以稍微拉平。</li>
+  </ul>
+  <div class="origin"><p><span class="en">Marker</span> 原意是「做記號的東西」。早期是用粉筆直接在布上畫出紙樣輪廓，現在多用電腦排版印在紙上，鋪在布最上層當裁剪指引，但名字留了下來。</p></div>
+
+  <h3>縫紉：針、線跡、機台都不同</h3>
+  <div class="tbl"><table>
+    <tr><th>項目</th><th>梭織</th><th>針織</th></tr>
+    <tr><td>針</td><td>一般尖頭針，能穿過緊密的紗</td><td><strong>圓頭針</strong>（<span class="en">ball point</span>），把紗推開而不是刺斷，避免破洞</td></tr>
+    <tr><td>主要線跡</td><td>301 平車（鎖式線跡）、401 鏈式線跡</td><td>504／514 拷克、406 二本／605 三本（綳縫）、607 爬網（扁平縫）</td></tr>
+    <tr><td>縫份處理</td><td>拷克包邊、來去縫、包縫（牛仔褲側縫的雙線包縫）</td><td>拷克直接合縫，不需另外包邊</td></tr>
+    <tr><td>重點</td><td>布不會伸，重點在平整、對位</td><td>線跡必須<strong>能伸縮</strong>，否則一拉就斷線</td></tr>
+  </table></div>
+  <div class="origin"><p>線跡編號（301、401、504、406……）來自國際標準 <strong>ISO 4915</strong>，第一個數字代表線跡類別：3 開頭是鎖式、4 是鏈式、5 是包縫（拷克）、6 是覆蓋縫。所以只要看編號，全世界的工廠都知道是哪一種線跡。台灣和大陸工廠常說的「三本」來自日語「三本針」（三根針）。</p></div>
+  <div class="factory"><p>在針織線上最常見的問題是<strong>跳針和針洞</strong>，通常要檢查三件事：針是不是圓頭針、針號是不是太粗、布有沒有做柔軟處理。在梭織線上常見的是<strong>縫皺</strong>（縫線處起波浪），常與線張力、送布、針號與布的密度有關。</p></div>
+
+  <h3>用布量估算</h3>
+  <p>接單報價時，一定要算每一打（12 件）要用多少布。</p>
+  <ul>
+    <li><strong>梭織</strong>（碼／打）：每一床排料長度 ÷ 這床排了幾件 × 12 ×（1 ＋ 損耗率）。</li>
+    <li><strong>針織</strong>（公斤／打）：先算出每件用布面積，再乘以克重換成重量。</li>
+  </ul>
+  <div class="calc" id="csCalc">
+    <h4>用布量計算器</h4>
+    <div class="grid">
+      <label>布種<select id="cs-type"><option value="knit">針織（算公斤）</option><option value="woven">梭織（算碼）</option></select></label>
+      <label>排料長度（公尺）<input type="number" id="cs-len" value="6.5" min="0.1" step="any" inputmode="decimal"></label>
+      <label>可用幅寬（英寸）<input type="number" id="cs-w" value="70" min="1" step="any" inputmode="decimal"></label>
+      <label>這床排幾件<input type="number" id="cs-pcs" value="6" min="1" step="1" inputmode="numeric"></label>
+      <label id="cs-gsm-l">克重（g/m²）<input type="number" id="cs-gsm" value="180" min="1" step="any" inputmode="decimal"></label>
+      <label>損耗率（%）<input type="number" id="cs-loss" value="5" min="0" step="any" inputmode="decimal"></label>
+    </div>
+    <div class="out" id="cs-out"></div>
+  </div>
+
+  <h3>選布配衣：專業判斷表</h3>
+  <div class="tbl"><table>
+    <tr><th>衣服</th><th>常用主料</th><th>選布考量</th></tr>
+    <tr><td>基本 T 恤</td><td>汗布 30s–32s、150–180 gsm</td><td>全棉最舒服；CVC 較不易縮、不易皺；看扭度與縮水</td></tr>
+    <tr><td>Polo 衫</td><td>珠地 180–230 gsm</td><td>領和袖口用配色羅紋或橫機領；絲光棉更高級</td></tr>
+    <tr><td>帽 T／衛衣</td><td>毛圈或刷毛 280–400 gsm</td><td>袖口下擺用 2×2 羅紋；注意起毛球</td></tr>
+    <tr><td>運動上衣</td><td>100% 聚酯或聚酯彈性，網眼、鳥眼布</td><td>吸濕排汗、快乾、昇華印花</td></tr>
+    <tr><td>瑜伽褲／緊身褲</td><td>尼龍或聚酯 ＋ 15–25% 彈性纖維</td><td>不透光（蹲下測試）、回彈、抗起毛球</td></tr>
+    <tr><td>正式襯衫</td><td>府綢、牛津、貢緞，40s 以上</td><td>免燙整理、縫皺控制、對條對格</td></tr>
+    <tr><td>牛仔褲</td><td>3/1 斜紋牛仔 10–14 oz，常加 1–2% 彈性</td><td>洗水後縮率與顏色、扭腿</td></tr>
+    <tr><td>休閒褲</td><td>卡其斜紋、華達呢、T/R</td><td>耐磨、挺度、起毛球</td></tr>
+    <tr><td>洋裝、上衣</td><td>雪紡、喬其、嫘縈平紋、緞</td><td>垂墜感、透不透、滑紗</td></tr>
+    <tr><td>外套、風衣</td><td>塔絲隆、防撕裂布、華達呢</td><td>防潑水、防風、耐磨</td></tr>
+  </table></div>
+
+  <h3>燃燒辨識法：不知道成分時的簡易判斷</h3>
+  <p>如果拿到一塊不知道成分的布，專業人員會剪一小段紗，用鑷子夾著靠近火焰觀察。<strong>這個方法只能由大人在安全的地方進行</strong>（遠離易燃物、準備一杯水、不要用手直接拿），而且只能粗略判斷，混紡布還是要送實驗室。</p>
+  <div class="tbl"><table>
+    <tr><th>纖維</th><th>燃燒狀態</th><th>氣味</th><th>灰燼</th></tr>
+    <tr><td>棉、麻、嫘縈</td><td>燒得快，像紙</td><td>燒紙味</td><td>柔軟的灰白色灰</td></tr>
+    <tr><td>羊毛、蠶絲</td><td>燒得慢，會捲縮，離火會自己熄滅</td><td>燒頭髮味</td><td>黑色、一捏就碎</td></tr>
+    <tr><td>聚酯</td><td>先熔化再燒，冒黑煙</td><td>略帶甜味</td><td>硬的黑色小珠</td></tr>
+    <tr><td>尼龍</td><td>熔化、滴落</td><td>類似芹菜的氣味</td><td>硬的淺褐色小珠</td></tr>
+  </table></div>
+
+  <h3>環保與認證</h3>
+  <p>越來越多品牌要求主料有環保或安全認證，採購時常會遇到：</p>
+  <ul>
+    <li><strong>GOTS</strong>：全球有機紡織品標準，從有機棉到整個加工過程都要符合。</li>
+    <li><strong>OCS</strong>：有機成分標準，只驗證有機纖維的含量和追溯。</li>
+    <li><strong>GRS／RCS</strong>：回收材料標準，例如用回收寶特瓶做的回收聚酯（rPET）。</li>
+    <li><strong>OEKO-TEX Standard 100</strong>：成品對人體無害，檢測有害化學物質。名字來自德文 <span class="en">Öko</span>（生態）＋ tex（紡織）。</li>
+    <li><strong>bluesign</strong>：著重在生產過程的化學品管理和環境影響。</li>
+    <li><strong>Better Cotton</strong>（原 BCI）：推廣用較少水、較少農藥的方式種棉。</li>
+  </ul>
+  <p>認證通常需要整條供應鏈都有證書，並且每批貨附上<strong>交易證書</strong>（TC，<span class="en">Transaction Certificate</span>，注意和 TC 布是不同的東西）。</p>
+
+  <h3>從入門到專業，下一步可以做什麼</h3>
+  <ol>
+    <li>建立自己的<strong>布樣本</strong>：每種布剪一塊 10 × 10 公分，貼上規格、成分、克重、用途、供應商。</li>
+    <li>每接到一張規格書，練習把它拆成「成分、紗、組織、密度、重量、幅寬、後整理」七項。</li>
+    <li>去一趟染整廠或織布廠，親眼看定型機、圓機、噴氣織機，會讓書上的字全部活起來。</li>
+    <li>每一次品質問題都回頭問：是纖維、紗、織造、染整，還是裁縫造成的？會分辨原因，就是專業。</li>
+  </ol>
+
+  <div class="summary"><h4>這課重點</h4><ul>
+    <li>針織要鬆布、不拉緊；先測縮率再放大紙樣；分缸裁剪。</li>
+    <li>有方向的布要一順排、條格要對條對格，都更耗布。</li>
+    <li>針織用圓頭針和能伸縮的線跡（拷克、三本、爬網）；線跡編號來自 ISO 4915。</li>
+    <li>梭織算碼／打，針織算公斤／打；認證要看整條供應鏈。</li>
+  </ul></div>
+
+  <div class="quiz" data-quiz="11">
+    <h4>小測驗</h4>
+    <div class="q" data-answer="1"><p>1. 縫針織布為什麼要用圓頭針？</p>
+      <button type="button">比較便宜</button><button type="button">把紗推開而不刺斷，避免針洞和脫散</button><button type="button">縫得比較快</button>
+      <div class="why">尖頭針會刺斷針織的紗，斷一根就可能整排脫散形成破洞。</div></div>
+    <div class="q" data-answer="0"><p>2. 燈芯絨裁剪時為什麼所有裁片要同一方向排？</p>
+      <button type="button">順毛逆毛看起來顏色不同，方向不一致會像兩種顏色</button><button type="button">因為布太厚</button><button type="button">因為布會捲邊</button>
+      <div class="why">有絨毛的布在不同方向反光不同，所以要「一順」排料。</div></div>
+    <div class="q" data-answer="2"><p>3. 一塊布燒起來先熔化、冒黑煙、留下硬黑珠，最可能是？</p>
+      <button type="button">棉</button><button type="button">羊毛</button><button type="button">聚酯</button>
+      <div class="why">合成纖維遇熱會熔化；聚酯冒黑煙、帶甜味、留下硬珠。</div></div>
+  </div>
+</section>
+
+<!-- ============ 名詞辭典 ============ -->
+<section class="lesson" id="gloss">
+  <p class="lesson-no">附錄</p>
+  <h2>名詞辭典</h2>
+  <p class="goal">課程裡出現的專有名詞都整理在這裡，包含英文和由來。可以用中文、英文或縮寫搜尋。</p>
+  <input type="search" class="gloss-search" id="glossSearch" placeholder="搜尋，例如：丹尼、jersey、CVC" aria-label="搜尋名詞">
+  <div class="gloss"><dl id="glossList"></dl></div>
+  <p id="glossEmpty" style="display:none;color:var(--muted)">找不到這個詞。試試看換成英文或縮寫，例如 gsm、twill。</p>
+</section>
+
+<footer>
+  <p>布料學堂：成衣主料梭織與針織完整課程<br>本頁可離線使用。進度只存在這台裝置的瀏覽器裡。</p>
+</footer>
+</div>
+</main>
+</div>
+<script>
+(function(){
+"use strict";
+const root=document.documentElement;
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let C={};
+function readColors(){
+  const cs=getComputedStyle(root);
+  ['ink','paper','card','line','warp','weft','selvedge','chalk','muted'].forEach(k=>C[k]=cs.getPropertyValue('--'+k).trim()||'#888');
+}
+readColors();
+function hexToRgb(h){h=h.replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');const n=parseInt(h,16);return[(n>>16)&255,(n>>8)&255,n&255];}
+function shade(hex,f,a){try{const[r,g,b]=hexToRgb(hex);const m=v=>Math.max(0,Math.min(255,Math.round(f>1?v+(255-v)*(f-1):v*f)));return`rgba(${m(r)},${m(g)},${m(b)},${a==null?1:a})`;}catch(e){return hex;}}
+function setup(cv){const r=cv.getBoundingClientRect();const d=Math.min(window.devicePixelRatio||1,2);cv.width=Math.max(1,Math.round(r.width*d));cv.height=Math.max(1,Math.round(r.height*d));const ctx=cv.getContext('2d');ctx.setTransform(d,0,0,d,0,0);return{ctx,W:r.width,H:r.height};}
+function visibleWatch(el,cb){if(!('IntersectionObserver' in window)){cb(true);return;}new IntersectionObserver(es=>es.forEach(e=>cb(e.isIntersecting)),{threshold:0.05}).observe(el);}
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+
+/* ---------- 梭織：畫一排 ---------- */
+function drawWeftRow(ctx,x0,y,cols,s,isUp,fromX,toX){
+  // isUp(x) 為 true 表示經紗在上
+  ctx.save();ctx.beginPath();ctx.rect(fromX,y-1,toX-fromX,s+2);ctx.clip();
+  ctx.fillStyle=C.weft;ctx.fillRect(x0,y+s*.12,cols*s,s*.76);
+  ctx.fillStyle=shade(C.weft,.78);ctx.fillRect(x0,y+s*.8,cols*s,s*.08);
+  for(let x=0;x<cols;x++){
+    const cx=x0+x*s;
+    if(isUp(x)){
+      ctx.fillStyle=C.warp;ctx.fillRect(cx+s*.12,y,s*.76,s);
+      ctx.fillStyle=shade(C.warp,1.35,.55);ctx.fillRect(cx+s*.4,y+s*.15,s*.12,s*.7);
+      ctx.fillStyle=shade(C.warp,.55,.6);ctx.fillRect(cx+s*.12,y,s*.76,s*.08);ctx.fillRect(cx+s*.12,y+s*.92,s*.76,s*.08);
+    }else{
+      ctx.fillStyle=shade(C.weft,1.15,.7);ctx.fillRect(cx+s*.15,y+s*.4,s*.7,s*.1);
+      ctx.fillStyle=shade(C.weft,.6,.5);ctx.fillRect(cx,y+s*.12,s*.06,s*.76);ctx.fillRect(cx+s*.94,y+s*.12,s*.06,s*.76);
+    }
+  }
+  ctx.restore();
+}
+function drawWarps(ctx,x0,cols,s,y0,y1,styleFn){
+  for(let x=0;x<cols;x++){
+    const st=styleFn?styleFn(x):{a:1,w:.76};
+    ctx.fillStyle=shade(C.warp,1,st.a);
+    ctx.fillRect(x0+x*s+s*(1-st.w)/2,y0,s*st.w,y1-y0);
+  }
+}
+function boat(ctx,x,y,len,col){
+  ctx.save();ctx.fillStyle=col;ctx.strokeStyle=shade(col,.55);ctx.lineWidth=1.2;
+  ctx.beginPath();ctx.moveTo(x-len/2,y);ctx.quadraticCurveTo(x-len/4,y-7,x,y-7);ctx.quadraticCurveTo(x+len/4,y-7,x+len/2,y);
+  ctx.quadraticCurveTo(x+len/4,y+7,x,y+7);ctx.quadraticCurveTo(x-len/4,y+7,x-len/2,y);ctx.fill();ctx.stroke();ctx.restore();
+}
+
+/* ---------- 針織：畫一個橫列 ---------- */
+function coursePath(ctx,x0,yb,cols,w,h){
+  ctx.beginPath();ctx.moveTo(x0,yb);
+  for(let c=0;c<cols;c++){
+    const cx=x0+c*w+w/2;
+    ctx.bezierCurveTo(cx-w*.1,yb,cx-w*.42,yb-h*.8,cx-w*.3,yb-h*1.25);
+    ctx.bezierCurveTo(cx-w*.22,yb-h*1.75,cx+w*.22,yb-h*1.75,cx+w*.3,yb-h*1.25);
+    ctx.bezierCurveTo(cx+w*.42,yb-h*.8,cx+w*.1,yb,cx+w/2,yb);
+  }
+}
+function drawCourse(ctx,x0,yb,cols,w,h,col,alpha){
+  ctx.save();ctx.globalAlpha=alpha==null?1:alpha;ctx.lineCap='round';ctx.lineJoin='round';
+  coursePath(ctx,x0,yb,cols,w,h);ctx.strokeStyle=shade(col,.5);ctx.lineWidth=Math.max(3,w*.24);ctx.stroke();
+  coursePath(ctx,x0,yb,cols,w,h);ctx.strokeStyle=col;ctx.lineWidth=Math.max(2,w*.16);ctx.stroke();
+  coursePath(ctx,x0,yb,cols,w,h);ctx.strokeStyle=shade(col,1.45,.55);ctx.lineWidth=Math.max(1,w*.045);ctx.stroke();
+  ctx.restore();
+}
+
+/* ---------- 首頁動畫：梭織 ---------- */
+function heroWoven(){
+  const cv=document.getElementById('heroWoven');if(!cv)return;
+  let g,k=0,prog=0,run=true,last=0,on=true;
+  function size(){g=setup(cv);}
+  size();
+  function frame(ts){
+    if(!on){requestAnimationFrame(frame);return;}
+    const dt=Math.min(50,ts-(last||ts));last=ts;
+    if(run&&!reduce){prog+=dt/900;if(prog>=1){prog=0;k++;}}
+    const{ctx,W,H}=g;const s=14;const cols=Math.ceil(W/s)+1;const fell=H*.34;
+    ctx.fillStyle=C.card;ctx.fillRect(0,0,W,H);
+    const par=k%2;
+    drawWarps(ctx,0,cols,s,0,fell,x=>((x+par)%2===0)?{a:1,w:.76}:{a:.45,w:.5});
+    drawWarps(ctx,0,cols,s,fell,H);
+    const rows=Math.ceil((H-fell)/s)+1;
+    for(let j=0;j<rows;j++){const gi=k-1-j;if(gi<0)break;drawWeftRow(ctx,0,fell+j*s+(reduce?0:0),cols,s,x=>(x+gi)%2===0,0,W);}
+    if(!reduce){
+      const dir=k%2===0;const sx=dir?(-30+prog*(W+60)):(W+30-prog*(W+60));
+      const y=fell-s;
+      drawWeftRow(ctx,0,y,cols,s,x=>(x+k)%2===0,dir?0:clamp(sx,0,W),dir?clamp(sx,0,W):W);
+      boat(ctx,sx,y+s/2,38,C.selvedge);
+    }
+    requestAnimationFrame(frame);
+  }
+  k=reduce?40:30;
+  requestAnimationFrame(frame);
+  visibleWatch(cv,v=>on=v);
+  window.addEventListener('resize',()=>size());
+}
+
+/* ---------- 首頁動畫：針織 ---------- */
+function heroKnit(){
+  const cv=document.getElementById('heroKnit');if(!cv)return;
+  let g,k=2,prog=0,last=0,on=true,hold=0;
+  function size(){g=setup(cv);}size();
+  function frame(ts){
+    if(!on){requestAnimationFrame(frame);return;}
+    const dt=Math.min(50,ts-(last||ts));last=ts;
+    const{ctx,W,H}=g;const w=34,h=20;const cols=Math.ceil(W/w)+1;const maxRows=Math.floor((H-10)/h);
+    if(!reduce){
+      if(hold>0){hold-=dt;if(hold<=0){k=0;prog=0;}}
+      else{prog+=dt/1100;if(prog>=1){prog=0;k++;if(k>=maxRows)hold=1600;}}
+    }else{k=maxRows;}
+    ctx.fillStyle=C.card;ctx.fillRect(0,0,W,H);
+    const x0=-w/2;
+    for(let r=0;r<Math.min(k,maxRows);r++){drawCourse(ctx,x0,H-8-r*h,cols,w,h,r%2?shade(C.warp,1.35):C.warp);}
+    if(!reduce&&hold<=0&&k<maxRows){
+      ctx.save();ctx.beginPath();ctx.rect(0,0,prog*W,H);ctx.clip();
+      drawCourse(ctx,x0,H-8-k*h,cols,w,h,k%2?shade(C.warp,1.35):C.warp);ctx.restore();
+      ctx.fillStyle=C.selvedge;ctx.beginPath();ctx.arc(prog*W,H-8-k*h-h*.6,4,0,7);ctx.fill();
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);visibleWatch(cv,v=>on=v);window.addEventListener('resize',size);
+}
+
+/* ---------- 第 3 課 靜態放大圖（SVG） ---------- */
+function svgWeave(n,s,fn){
+  let o='';
+  for(let y=0;y<n;y++)o+=`<rect x="0" y="${y*s+s*.12}" width="${n*s}" height="${s*.76}" fill="var(--weft)"/><rect x="0" y="${y*s+s*.82}" width="${n*s}" height="${s*.06}" fill="#000" opacity=".12"/>`;
+  for(let x=0;x<n;x++)o+=`<rect x="${x*s+s*.12}" y="0" width="${s*.76}" height="${n*s}" fill="var(--warp)"/>`;
+  for(let y=0;y<n;y++)for(let x=0;x<n;x++){
+    if(!fn(x,y)){o+=`<rect x="${x*s}" y="${y*s+s*.12}" width="${s}" height="${s*.76}" fill="var(--weft)"/><rect x="${x*s}" y="${y*s+s*.12}" width="${s*.05}" height="${s*.76}" fill="#000" opacity=".18"/><rect x="${x*s+s*.95}" y="${y*s+s*.12}" width="${s*.05}" height="${s*.76}" fill="#000" opacity=".18"/>`;}
+    else{o+=`<rect x="${x*s+s*.12}" y="${y*s}" width="${s*.76}" height="${s*.06}" fill="#000" opacity=".25"/><rect x="${x*s+s*.12}" y="${y*s+s*.94}" width="${s*.76}" height="${s*.06}" fill="#000" opacity=".25"/><rect x="${x*s+s*.44}" y="${y*s+s*.15}" width="${s*.1}" height="${s*.7}" fill="#fff" opacity=".25"/>`;}
+  }
+  return o;
+}
+function knitPathD(x0,yb,cols,w,h){
+  let d=`M${x0} ${yb}`;
+  for(let c=0;c<cols;c++){const cx=x0+c*w+w/2;
+    d+=` C${cx-w*.1} ${yb} ${cx-w*.42} ${yb-h*.8} ${cx-w*.3} ${yb-h*1.25}`;
+    d+=` C${cx-w*.22} ${yb-h*1.75} ${cx+w*.22} ${yb-h*1.75} ${cx+w*.3} ${yb-h*1.25}`;
+    d+=` C${cx+w*.42} ${yb-h*.8} ${cx+w*.1} ${yb} ${cx+w/2} ${yb}`;}
+  return d;
+}
+function lesson3Demos(){
+  const wv=document.getElementById('wvDemo');if(wv)wv.innerHTML=svgWeave(10,20,(x,y)=>(x+y)%2===0);
+  const kn=document.getElementById('knDemo');if(kn){
+    let o='';const w=48,h=38;const cols=5;
+    const cols2=['var(--warp)','var(--selvedge)','var(--chalk)','var(--warp)','var(--selvedge)','var(--chalk)','var(--warp)','var(--selvedge)'];
+    for(let r=0;r<6;r++){const d=knitPathD(-24,196-r*h,cols,w,h);
+      o+=`<path d="${d}" fill="none" stroke="#000" stroke-opacity=".45" stroke-width="8" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${cols2[r]}" stroke-width="5.5" stroke-linecap="round"/><path d="${d}" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/>`;}
+    kn.innerHTML=o;
+  }
+}
+
+/* ---------- 第 4 課 織布機 ---------- */
+function loom(){
+  const cv=document.getElementById('loomCanvas');if(!cv)return;
+  const lbl=document.getElementById('loomLabel'),play=document.getElementById('loomPlay'),step=document.getElementById('loomStep');
+  const phases=[{n:'第 1 步 開口：綜框把一半經紗提起',d:800},{n:'第 2 步 引緯：梭子帶著緯紗穿過梭口',d:1500},{n:'第 3 步 打緯：筘把緯紗推緊',d:650},{n:'第 4–5 步 捲取與送經：布往前捲，經紗補上',d:650}];
+  let g,k=4,p=0,t=0,playing=!reduce,last=0,on=true;
+  function size(){g=setup(cv);}size();
+  function setLabel(){lbl.textContent=phases[p].n;}
+  setLabel();play.textContent=playing?'暫停':'播放';
+  play.addEventListener('click',()=>{playing=!playing;play.textContent=playing?'暫停':'播放';});
+  step.addEventListener('click',()=>{playing=false;play.textContent='播放';advance();});
+  function advance(){t=0;p++;if(p>=phases.length){p=0;k++;}setLabel();}
+  function frame(ts){
+    const dt=Math.min(50,ts-(last||ts));last=ts;
+    if(on){
+      if(playing){t+=dt/phases[p].d;if(t>=1)advance();}
+      draw();
+    }
+    requestAnimationFrame(frame);
+  }
+  function draw(){
+    const{ctx,W,H}=g;const s=clamp(W/22,14,24);const cols=Math.floor((W-24)/s);const x0=(W-cols*s)/2;
+    const fell=H*.62;const reedBase=H*.2;
+    ctx.fillStyle=C.card;ctx.fillRect(0,0,W,H);
+    // 開口程度
+    let open=1;if(p===0)open=ease(clamp(t,0,1));if(p===3)open=1-ease(clamp(t,0,1));
+    const par=k%2;
+    drawWarps(ctx,x0,cols,s,8,fell,x=>((x+par)%2===0)?{a:1,w:.5+.28*open}:{a:1-.55*open,w:.76-.3*open});
+    // 捲取位移
+    const off=p===3?ease(t)*s:0;
+    drawWarps(ctx,x0,cols,s,fell,H);
+    const rows=Math.ceil((H-fell)/s)+2;
+    for(let j=0;j<rows;j++){const gi=k-1-j;if(gi<0)break;drawWeftRow(ctx,x0,fell+j*s+off,cols,s,x=>(x+gi)%2===0,x0,x0+cols*s);}
+    // 新緯紗與筘、梭子
+    let yNew=reedBase+16,reedY=reedBase,from=x0,to=x0;
+    const dir=k%2===0;
+    if(p===1){const sx=dir?(x0-30+t*(cols*s+60)):(x0+cols*s+30-t*(cols*s+60));from=dir?x0:clamp(sx,x0,x0+cols*s);to=dir?clamp(sx,x0,x0+cols*s):x0+cols*s;
+      drawWeftRow(ctx,x0,yNew,cols,s,x=>(x+k)%2===0,from,to);
+      boat(ctx,sx,yNew+s/2,44,C.selvedge);
+    }else if(p===2){yNew=reedBase+16+(fell-s-reedBase-16)*ease(t);reedY=yNew-16;drawWeftRow(ctx,x0,yNew,cols,s,x=>(x+k)%2===0,x0,x0+cols*s);}
+    else if(p===3){reedY=(fell-s-16)+(reedBase-(fell-s-16))*ease(t);drawWeftRow(ctx,x0,fell-s+off,cols,s,x=>(x+k)%2===0,x0,x0+cols*s);}
+    // 筘
+    ctx.fillStyle=shade(C.ink,1,.85);ctx.fillRect(x0-12,reedY,cols*s+24,5);
+    ctx.fillStyle=shade(C.ink,1,.35);for(let x=0;x<=cols;x++)ctx.fillRect(x0+x*s-1,reedY-10,2,10);
+    ctx.fillStyle=C.muted;ctx.font='13px '+getComputedStyle(document.body).fontFamily;
+    ctx.fillText('筘',x0-10>30?x0-28:4,reedY+6);
+    ctx.fillText('經紗',4,20);
+    ctx.fillText('織好的布',4,H-8);
+    // 織口線
+    ctx.strokeStyle=shade(C.selvedge,1,.6);ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(0,fell);ctx.lineTo(W,fell);ctx.stroke();ctx.setLineDash([]);
+  }
+  requestAnimationFrame(frame);visibleWatch(cv,v=>on=v);window.addEventListener('resize',()=>{size();draw();});
+}
+
+/* ---------- 第 4 課 組織模擬器 ---------- */
+function weaveSim(){
+  const draft=document.getElementById('draftSvg'),cloth=document.getElementById('clothSvg'),info=document.getElementById('weaveInfo'),btns=document.getElementById('weaveBtns');
+  if(!draft)return;
+  const defs={
+    plain:{n:2,m:2,f:(x,y)=>(x+y)%2===0,t:'<strong>平紋</strong>：一上一下，循環只要 2 × 2。交錯點最多，所以最緊密、最挺、正反面相同。'},
+    basket:{n:4,m:4,f:(x,y)=>((x>>1)+(y>>1))%2===0,t:'<strong>方平</strong>：兩根經紗和兩根緯紗當成一根來織，像編籃子。牛津布就是它的變化。'},
+    twill21:{n:3,m:3,f:(x,y)=>((x+y)%3+3)%3<2,t:'<strong>2/1 斜紋</strong>：經紗跨 2 根緯紗、鑽 1 根。每排往旁邊移一格，就出現斜線。卡其布常用。'},
+    twill31:{n:4,m:4,f:(x,y)=>((x+y)%4+4)%4<3,t:'<strong>3/1 斜紋</strong>：經紗跨 3 鑽 1，正面 3/4 是經紗顏色。這就是牛仔布：藍色經紗多在正面，所以正面藍、反面白。'},
+    twill22:{n:4,m:4,f:(x,y)=>((x+y)%4+4)%4<2,t:'<strong>2/2 斜紋</strong>：兩上兩下，正反面看起來差不多，都有斜線。嗶嘰、部分西裝布。'},
+    satin5:{n:5,m:5,f:(x,y)=>((x*2+y)%5+5)%5!==0,t:'<strong>五枚緞紋</strong>：經紗一次跨 4 根緯紗才交錯 1 次，交錯點（米色小點）分散不相鄰，看不出斜線，布面幾乎全是浮線，所以最亮滑。'},
+    herring:{n:8,m:4,f:(x,y)=>{const xx=x%8;return xx<4?((xx+y)%4+4)%4<2:((-xx+y)%4+4+4)%4<2;},t:'<strong>人字紋</strong>：2/2 斜紋每 4 根經紗就反轉方向，斜線一段往右一段往左，像魚骨。'}
+  };
+  let cur='plain',mat=null;
+  function fromDef(d){const m=[];for(let y=0;y<d.m;y++){m[y]=[];for(let x=0;x<d.n;x++)m[y][x]=!!d.f(x,y);}return m;}
+  function render(){
+    const m=mat;const rows=m.length,cols=m[0].length;
+    const cs=200/Math.max(8,Math.max(rows,cols));
+    let o='';
+    const R=Math.max(8,rows),Cc=Math.max(8,cols);
+    for(let y=0;y<R;y++)for(let x=0;x<Cc;x++){
+      const inRep=x<cols&&y<rows;const v=m[y%rows][x%cols];
+      o+=`<rect data-x="${x%cols}" data-y="${y%rows}" x="${x*cs+.5}" y="${y*cs+.5}" width="${cs-1}" height="${cs-1}" fill="${v?'#1B2A4E':'#FFFFFF'}" stroke="#9AA6BF" opacity="${inRep?1:.35}"/>`;
+    }
+    o+=`<rect x=".5" y=".5" width="${cols*cs-1}" height="${rows*cs-1}" fill="none" stroke="var(--selvedge)" stroke-width="2.5"/>`;
+    draft.setAttribute('viewBox',`0 0 ${Cc*cs} ${R*cs}`);draft.innerHTML=o;
+    cloth.innerHTML=svgWeave(16,15,(x,y)=>m[y%rows][x%cols]);
+  }
+  function select(key){
+    cur=key;mat=fromDef(defs[key]);
+    btns.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.w===key?'true':'false'));
+    info.innerHTML=defs[key].t;render();
+  }
+  btns.addEventListener('click',e=>{const b=e.target.closest('.chip');if(b)select(b.dataset.w);});
+  draft.addEventListener('click',e=>{const r=e.target.closest('rect[data-x]');if(!r)return;const x=+r.dataset.x,y=+r.dataset.y;mat[y][x]=!mat[y][x];
+    btns.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed','false'));
+    info.innerHTML='<strong>自訂組織</strong>：你改了組織圖，右邊就是新的布面。試著做出一條很長的浮線，想想看它穿在身上會不會容易勾到。';render();});
+  select('plain');
+}
+
+/* ---------- 第 6 課 針織線圈 ---------- */
+function knitLesson(){
+  const cv=document.getElementById('knitCanvas');if(!cv)return;
+  const sl=document.getElementById('knitStretch'),un=document.getElementById('knitUnravel'),rs=document.getElementById('knitRestart');
+  let g,k=0,prog=0,last=0,on=true,fade=null;const MAX=6;
+  function size(){g=setup(cv);}size();
+  const pal=()=>[C.warp,C.selvedge,C.chalk,shade(C.warp,1.4),shade(C.selvedge,.8),shade(C.chalk,.8)];
+  if(reduce)k=MAX;
+  un.addEventListener('click',()=>{if(fade)return;const n=Math.min(k,MAX);if(n<=0)return;if(prog>0&&k<MAX){prog=0;}fade={r:Math.min(k,MAX)-1,a:1};});
+  rs.addEventListener('click',()=>{k=reduce?MAX:0;prog=0;fade=null;});
+  function frame(ts){
+    const dt=Math.min(50,ts-(last||ts));last=ts;
+    if(on){
+      if(fade){fade.a-=dt/450;if(fade.a<=0){k=fade.r;fade=null;prog=0;k=Math.min(k,MAX);stopGrow=true;}}
+      else if(!reduce&&!stopGrow&&k<MAX){prog+=dt/1000;if(prog>=1){prog=0;k++;}}
+      draw();
+    }
+    requestAnimationFrame(frame);
+  }
+  let stopGrow=false;
+  rs.addEventListener('click',()=>{stopGrow=false;});
+  function draw(){
+    const{ctx,W,H}=g;const st=(+sl.value)/100;
+    const bw=clamp(W/8,34,58);const w=bw*(1+st*.7),h=bw*.78*(1-st*.32);
+    const cols=Math.max(3,Math.floor((W-20)/w));const x0=(W-cols*w)/2;
+    ctx.fillStyle=C.card;ctx.fillRect(0,0,W,H);
+    const P=pal();const base=H-24;const fitRows=Math.max(3,Math.floor((base-bw*.78*1.8)/(bw*.78))+1);const n=Math.min(k,MAX,fitRows);
+    for(let r=0;r<n;r++){const a=(fade&&fade.r===r)?Math.max(0,fade.a):1;drawCourse(ctx,x0,base-r*h,cols,w,h,P[r%P.length],a);}
+    if(!fade&&!stopGrow&&k<Math.min(MAX,fitRows)&&prog>0){ctx.save();ctx.beginPath();ctx.rect(0,0,x0+prog*cols*w,H);ctx.clip();drawCourse(ctx,x0,base-k*h,cols,w,h,P[k%P.length]);ctx.restore();}
+    ctx.fillStyle=C.muted;ctx.font='13px '+getComputedStyle(document.body).fontFamily;
+    ctx.fillText('← 橫列 course →',8,H-6);
+    ctx.save();ctx.translate(W-8,base-h*2);ctx.rotate(-Math.PI/2);ctx.textAlign='center';ctx.fillText('縱行 wale',0,0);ctx.restore();
+  }
+  sl.addEventListener('input',draw);
+  requestAnimationFrame(frame);visibleWatch(cv,v=>on=v);window.addEventListener('resize',()=>{size();draw();});
+}
+
+/* ---------- 計算機 ---------- */
+const f=(v,d)=>Number.isFinite(v)?v.toLocaleString('zh-TW',{maximumFractionDigits:d,minimumFractionDigits:0}):'—';
+const val=id=>parseFloat(document.getElementById(id).value);
+function bind(ids,fn){ids.forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener('input',fn);el.addEventListener('change',fn);}});fn();}
+function calcs(){
+  if(document.getElementById('yc-val'))bind(['yc-val','yc-unit'],()=>{
+    const v=val('yc-val'),u=document.getElementById('yc-unit').value,o=document.getElementById('yc-out');
+    if(!(v>0)){o.textContent='請輸入大於 0 的數字。';return;}
+    let tex={ne:590.5/v,nm:1000/v,d:v/9,tex:v}[u];
+    const ne=590.5/tex,nm=1000/tex,d=tex*9;
+    o.innerHTML=`英制 <b>${f(ne,1)} 支</b>　公制 <b>Nm ${f(nm,1)}</b>　<b>${f(d,1)} D</b>　<b>${f(tex,2)} tex</b><br><span style="font-size:14px">支數越大越細，丹尼和 tex 越大越粗。例如 30 支棉紗約等於 177 D。</span>`;
+  });
+  if(document.getElementById('wc-gsm'))bind(['wc-gsm','wc-w','wc-type','wc-kg'],()=>{
+    const gsm=val('wc-gsm'),w=val('wc-w'),kg=val('wc-kg'),tube=document.getElementById('wc-type').value==='tube',o=document.getElementById('wc-out');
+    if(!(gsm>0&&w>0)){o.textContent='請輸入克重和幅寬。';return;}
+    const wm=w*.0254*(tube?2:1);const mpk=1000/(gsm*wm);
+    o.innerHTML=`實際展開幅寬 <b>${f(wm*100,1)} cm</b>${tube?'（筒狀已乘 2）':''}<br>每公斤約 <b>${f(mpk,2)} 公尺</b>（${f(mpk/.9144,2)} 碼）<br>${kg>0?`${f(kg,1)} 公斤約 <b>${f(mpk*kg,0)} 公尺</b>（${f(mpk*kg/.9144,0)} 碼）<br>`:''}克重換算：${f(gsm,0)} gsm ≈ <b>${f(gsm/33.906,2)} oz/yd²</b>`;
+  });
+  if(document.getElementById('fp1'))bind(['fp1','fp2','fp3','fp4','fpy','fpw','fpl'],()=>{
+    const tot=(val('fp1')||0)+2*(val('fp2')||0)+3*(val('fp3')||0)+4*(val('fp4')||0);const y=val('fpy'),w=val('fpw'),lim=val('fpl'),o=document.getElementById('fp-out');
+    if(!(y>0&&w>0)){o.textContent='請輸入檢驗長度和幅寬。';return;}
+    const sc=tot*3600/(y*w);const ok=sc<=lim;
+    o.innerHTML=`總扣分 <b>${f(tot,0)} 分</b>　每百平方碼 <b>${f(sc,1)} 分</b><br><span style="color:var(--${ok?'good':'bad'});font-weight:700">${ok?'合格':'不合格'}</span>（標準 ${f(lim,0)} 分）。別忘了：同一碼最多只能扣 4 分。`;
+  });
+  if(document.getElementById('sh-l0'))bind(['sh-l0','sh-l1','sh-w0','sh-w1','sh-t'],()=>{
+    const l0=val('sh-l0'),l1=val('sh-l1'),w0=val('sh-w0'),w1=val('sh-w1'),t=val('sh-t'),o=document.getElementById('sh-out');
+    if(!(l0>0&&w0>0)){o.textContent='請輸入洗前尺寸。';return;}
+    const ls=(l1-l0)/l0*100,ws=(w1-w0)/w0*100,tw=t/l0*100;
+    const word=v=>v<0?'縮了':v>0?'伸長了':'沒有變化';
+    o.innerHTML=`直向 <b>${ls>0?'+':''}${f(ls,1)}%</b>（${word(ls)}）　橫向 <b>${ws>0?'+':''}${f(ws,1)}%</b>（${word(ws)}）<br>扭度 <b>${f(tw,1)}%</b>${tw>5?'，<span style="color:var(--bad);font-weight:700">超過常見的 5% 要求</span>':''}<br><span style="font-size:14px">負數代表縮水，正數代表伸長。針織布常見直向縮、橫向伸。</span>`;
+  });
+  if(document.getElementById('cs-len'))bind(['cs-type','cs-len','cs-w','cs-pcs','cs-gsm','cs-loss'],()=>{
+    const type=document.getElementById('cs-type').value,len=val('cs-len'),w=val('cs-w'),pcs=val('cs-pcs'),gsm=val('cs-gsm'),loss=(val('cs-loss')||0)/100,o=document.getElementById('cs-out');
+    if(!(len>0&&w>0&&pcs>0)){o.textContent='請輸入排料長度、幅寬和件數。';return;}
+    const wm=w*.0254;const perPcM=len/pcs;const ydDz=perPcM/.9144*12*(1+loss);
+    const kgDz=gsm>0?perPcM*wm*gsm/1000*12*(1+loss):NaN;
+    if(type==='knit')o.innerHTML=`每件用布 <b>${f(perPcM*wm*gsm,0)} 公克</b>（含損耗前）<br>每打約 <b>${f(kgDz,2)} 公斤</b>（含 ${f(loss*100,1)}% 損耗）<br><span style="font-size:14px">換成長度約 ${f(ydDz,2)} 碼／打，可和布廠的每公斤碼數互相驗算。</span>`;
+    else o.innerHTML=`每件用布 <b>${f(perPcM,2)} 公尺</b>（含損耗前）<br>每打約 <b>${f(ydDz,2)} 碼</b>（含 ${f(loss*100,1)}% 損耗）${gsm>0?`<br><span style="font-size:14px">若克重 ${f(gsm,0)} gsm，約 ${f(kgDz,2)} 公斤／打。</span>`:''}`;
+  });
+}
+
+/* ---------- 進度與測驗 ---------- */
+const KEY='fabric-course-progress-v1';
+let done={};
+try{done=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){done={};}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(done));}catch(e){}}
+const TOTAL=12;
+function updateProgress(){
+  const n=Object.keys(done).filter(k=>done[k]).length;
+  document.getElementById('progBar').style.width=(n/TOTAL*100)+'%';
+  document.getElementById('progText').textContent=`已完成 ${n} / ${TOTAL} 課`;
+  document.querySelectorAll('#tocList a').forEach(a=>{
+    const id=a.getAttribute('href').slice(2);let m=a.querySelector('.done-mark');
+    if(done[id]){if(!m){m=document.createElement('span');m.className='done-mark';m.textContent='✓';m.setAttribute('aria-label','已完成');a.appendChild(m);}}
+    else if(m)m.remove();
+  });
+  document.querySelectorAll('.finish').forEach(fi=>{const id=fi.dataset.l;const s=fi.querySelector('.state');s.textContent=done[id]?'本課已完成':'';s.className='state'+(done[id]?' ok':'');fi.querySelector('button').textContent=done[id]?'標記為未完成':'標記為已完成';});
+}
+function quizzes(){
+  document.querySelectorAll('.quiz').forEach(qz=>{
+    const id=qz.dataset.quiz;
+    qz.querySelectorAll('.q').forEach(q=>{
+      const ans=+q.dataset.answer;const bs=[...q.querySelectorAll('button')];
+      bs.forEach((b,i)=>b.addEventListener('click',()=>{
+        if(q.classList.contains('answered'))return;
+        if(i===ans){b.classList.add('right');q.classList.add('answered');q.dataset.ok='1';check();}
+        else{b.classList.add('wrong');b.setAttribute('aria-label',b.textContent+'（答錯，再試一次）');}
+      }));
+    });
+    const fi=document.createElement('div');fi.className='finish';fi.dataset.l=id;
+    fi.innerHTML='<button type="button" class="btn"></button><span class="state"></span>';
+    qz.appendChild(fi);
+    fi.querySelector('button').addEventListener('click',()=>{done[id]=!done[id];save();updateProgress();});
+    function check(){const all=[...qz.querySelectorAll('.q')].every(q=>q.dataset.ok==='1');if(all){done[id]=true;save();updateProgress();}}
+  });
+  document.getElementById('resetBtn').addEventListener('click',()=>{
+    if(!confirm('確定要清除所有課程進度嗎？'))return;
+    done={};save();
+    document.querySelectorAll('.q').forEach(q=>{q.classList.remove('answered');delete q.dataset.ok;q.querySelectorAll('button').forEach(b=>{b.classList.remove('right','wrong');b.removeAttribute('aria-label');});});
+    updateProgress();
+  });
+  updateProgress();
+}
+
+/* ---------- 目錄、主題 ---------- */
+function nav(){
+  const toc=document.getElementById('toc'),mb=document.getElementById('menuBtn');
+  mb.addEventListener('click',()=>{const o=toc.classList.toggle('open');mb.setAttribute('aria-expanded',o);mb.textContent=o?'關閉目錄':'課程目錄';});
+  toc.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{toc.classList.remove('open');mb.setAttribute('aria-expanded','false');mb.textContent='課程目錄';}));
+  const links={};toc.querySelectorAll('a').forEach(a=>links[a.getAttribute('href').slice(1)]=a);
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){Object.values(links).forEach(l=>l.classList.remove('active'));const l=links[e.target.id];if(l){l.classList.add('active');}}});},{rootMargin:'-40% 0px -55% 0px'});
+    document.querySelectorAll('section.lesson').forEach(s=>io.observe(s));
+  }
+  document.getElementById('themeBtn').addEventListener('click',()=>{
+    const cur=root.getAttribute('data-theme');const sysDark=window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark=cur?cur==='dark':sysDark;root.setAttribute('data-theme',isDark?'light':'dark');
+    try{localStorage.setItem('fabric-theme',root.getAttribute('data-theme'));}catch(e){}
+    readColors();
+  });
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',readColors);
+}
+try{const t=localStorage.getItem('fabric-theme');if(t){root.setAttribute('data-theme',t);readColors();}}catch(e){}
+
+/* ---------- 名詞辭典 ---------- */
+const G=[
+['主料','Shell / Main / Self fabric','衣服主體、面積最大的布。shell 是外殼，self 是「和衣服本身同一塊布」。'],
+['輔料','Trims / Accessories','鈕扣、拉鍊、縫線、襯、標籤等幫衣服完成的材料。'],
+['纖維','Fiber','構成紗線的最小材料，分天然、再生、合成三類。'],
+['短纖','Staple fiber','幾公分長的纖維，如棉、羊毛。staple 原指中世紀羊毛貿易的標準貨品。'],
+['長絲','Filament','可長達數公里的連續纖維，如蠶絲、聚酯。拉丁文 filum 是線。'],
+['比馬棉','Pima cotton','美國長纖棉，以亞利桑那州原住民 Pima 族命名。'],
+['聚酯纖維','Polyester','poly（多）＋ ester（酯）。台灣俗稱特多龍，來自帝人與東麗的商標 Tetoron。'],
+['尼龍','Nylon','1935 年杜邦發明。名字是刻意造的新字，一說由 No-run 演變而來。'],
+['彈性纖維','Spandex / Elastane / Lycra','Spandex 是 expands 的字母重組；Lycra 是品牌名。'],
+['嫘縈','Rayon / Viscose','ray（光）＋ on（取自 cotton）；viscose 因溶液黏稠（viscous）。'],
+['莫代爾','Modal','以櫸木纖維素製成的再生纖維，濕強度較嫘縈好。'],
+['萊賽爾（天絲）','Lyocell / Tencel','封閉式溶劑製程的再生纖維，Tencel 是 Lenzing 的品牌。'],
+['紡紗','Spinning','把纖維排直、拉細、加撚成紗。'],
+['普梳','Carded (CD)','card 源自拉丁文 carduus（薊草），古人用帶刺的草球梳毛。'],
+['精梳','Combed (CM)','再用細梳去掉短纖，紗更光滑強韌。'],
+['環錠紡','Ring spun','傳統紡紗法，紗柔軟強度好。'],
+['氣流紡','Open-end (OE)','用轉杯與氣流加撚，快而便宜，紗較粗硬。'],
+['緊密紡','Compact','加撚前收緊纖維，毛羽少、更光滑。'],
+['撚向','S / Z twist','表面纖維斜線像 S 或 Z 的中段。'],
+['英制支數','Ne / count','1 磅紗有幾個 840 碼。數字越大越細。840 ＝ 1.5 碼 × 80 圈 × 7。'],
+['丹尼','Denier (D)','9000 公尺重幾公克，越大越粗。名稱來自法國古錢幣 denier。'],
+['特克斯','tex','1000 公尺重幾公克，取自 textile。'],
+['股線','Ply yarn','如 40/2：兩根 40 支單紗合撚。'],
+['DTY','Draw Textured Yarn','拉伸變形絲，蓬鬆捲曲，針織與運動布常用。'],
+['FDY','Fully Drawn Yarn','全拉伸絲，光滑有光澤。'],
+['梭織','Woven','經緯交錯的布。「梭」是穿緯紗的梭子，成語「日月如梭」由此而來。'],
+['針織','Knit','線圈相扣的布。knit 源自古英文 cnyttan（打結）。'],
+['經紗','Warp','布長方向的紗。「經緯」本是紡織用語，後來借作地理名詞。'],
+['緯紗','Weft / Filling','布寬方向的紗。'],
+['綜框','Heddle / Harness','提起經紗形成梭口的框。'],
+['筘','Reed','打緯用的梳狀鋼片，英文 reed 是蘆葦，最早以蘆葦製成。'],
+['開口、引緯、打緯','Shedding, Picking, Beating-up','織機的三個主要動作，加上捲取、送經共五個。'],
+['劍桅、噴氣、噴水織機','Rapier, Air-jet, Water-jet','現代無梭織機，以不同方式送緯紗。'],
+['組織圖','Weave draft','黑格經紗在上、白格緯紗在上的方格圖。'],
+['平紋','Plain weave','一上一下，最緊密堅固。'],
+['斜紋','Twill','布面有斜線。twill 源自古英文 twilic（雙線的）。'],
+['緞紋','Satin','浮線長、最光亮。satin 來自泉州的阿拉伯古名 Zaitun。'],
+['貢緞','Sateen','棉紗織的緞紋布。'],
+['布邊','Selvedge','self-edge，布自己形成、不會散開的邊。'],
+['斜向','Bias','45 度方向，梭織布在此方向最有伸縮。'],
+['經密 × 緯密','EPI × PPI','每英寸經紗與緯紗根數，如 133×72。'],
+['府綢','Poplin','經密約為緯密兩倍的平紋襯衫布。'],
+['牛津布','Oxford','方平變化組織，名稱來自十九世紀蘇格蘭布廠以名校命名的系列。'],
+['青年布','Chambray','色經白緯平紋布，源自法國城市 Cambrai。'],
+['牛仔布','Denim','3/1 斜紋，源自 serge de Nîmes（尼姆的斜紋布）。'],
+['牛仔褲','Jeans','源自熱那亞的法文名 Gênes。'],
+['卡其','Khaki / Chino','khaki 是塵土色；chino 是西班牙語「中國的」。'],
+['華達呢','Gabardine','陡斜紋防風布，Burberry 使其聞名。'],
+['泡泡紗','Seersucker','波斯文「牛奶和糖」，一平一皺的條紋。'],
+['雪紡','Chiffon','法文 chiffe（碎布），極輕薄透明。'],
+['帆布','Canvas','源自拉丁文 cannabis（大麻），最早以大麻纖維製成。'],
+['防撕裂布','Ripstop','織入加強紗的小方格，破洞不擴大。'],
+['提花','Jacquard','以 1804 年 Joseph Marie Jacquard 的打孔卡裝置命名，啟發了早期電腦。'],
+['多臂','Dobby','小幾何花紋，一般認為名稱來自 draw boy（拉線童工）。'],
+['燈芯絨','Corduroy','直條絨布，「國王的繩子」之說並無根據。'],
+['線圈','Loop / Stitch','針織最小單位，由圈頭與圈腳組成。'],
+['橫列','Course','橫向一排線圈。'],
+['縱行','Wale','直向一列線圈，古英文 walu 為隆起的條痕。'],
+['舌針','Latch needle','有可開合舌片的針，1849 年 Matthew Townsend 取得專利。'],
+['緯編','Weft knitting','紗線橫向成圈，會脫散，成衣主料多數。'],
+['經編','Warp knitting','紗線直向走之字形，不易脫散。'],
+['圓機','Circular knitting machine','織筒狀布，T 恤布多由圓機生產。'],
+['橫機','Flat knitting machine','主要織毛衣、領與袖口。'],
+['機號','Gauge (G)','每英寸針數。gauge 本意是量規。'],
+['集圈','Tuck','勾新紗但不脫舊圈，形成凸點或小孔。'],
+['浮線','Miss / Float','針不動，紗從背後經過。'],
+['線圈長度','Stitch length','決定針織布鬆緊與克重的關鍵參數。'],
+['汗布','Single jersey','源自澤西島；中文因做汗衫而得名。'],
+['珠地','Piqué','集圈形成蜂巢凹凸，Polo 衫用布。法文 piquer（刺、縫）。'],
+['羅紋','Rib','正反線圈交替的直條，英文 rib 是肋骨。'],
+['雙面布／棉毛布','Interlock','兩組羅紋交錯，兩面都像汗布正面。'],
+['毛圈布','French terry','背面有小毛圈，帽 T 常用。'],
+['刷毛布','Fleece','毛圈刷開成絨；fleece 原指一整張羊毛。'],
+['羅馬布','Ponte di Roma','挺度高的雙面針織布，義大利文「羅馬之橋」。'],
+['空氣層','Air layer / Scuba','兩層布夾一層紗，挺而有份量。'],
+['經編平布','Tricot','法文 tricoter（編織）。'],
+['拉舍爾','Raschel','粗針經編，據說以法國演員 Rachel 命名。'],
+['成分縮寫 CVC','Chief Value of Cotton','棉為主的棉聚酯混紡，原為美國海關用語。'],
+['成分縮寫 TC','Tetoron / Cotton','聚酯為主的聚酯棉，T 一般認為來自 Tetoron。'],
+['克重','GSM (g/m²)','每平方公尺公克數。1 oz/yd² ≈ 33.9 gsm。'],
+['幅寬','Width','布的寬度，分全幅與可用幅寬、開幅與筒狀。'],
+['胚布','Greige','未處理的布，法文 grège（生絲）。'],
+['上漿／退漿','Sizing / Desizing','經紗塗保護漿，染色前要退掉。size 是古時的膠料。'],
+['絲光','Mercerizing','濃鹼處理棉，更亮更好染，以 John Mercer 命名。'],
+['色織','Yarn-dyed','先染紗再織，格子條紋布。'],
+['麻灰','Heather','多色纖維混紡的霧色，heather 是蘇格蘭石南花。'],
+['活性染料','Reactive dye','與棉等纖維素化學鍵結。'],
+['分散染料','Disperse dye','高溫高壓染聚酯。'],
+['還原染料','Vat dye','靛藍屬之，vat 是大桶。'],
+['打色','Lab dip','實驗室打的小樣，送客人確認顏色。'],
+['跳燈','Metamerism','同色異譜：換光源顏色就不同。'],
+['昇華轉印','Sublimation','染料氣化鑽入聚酯，只適用聚酯。'],
+['定型','Heat setting / Stenter','拉幅定型機控制幅寬克重，tenterhooks 典故由此而來。'],
+['預縮','Sanforizing / Compacting','讓布先縮好，Sanforized 以 Sanford Cluett 命名。'],
+['磨毛','Peaching / Sanding','砂輥磨出細絨，手感如桃皮。'],
+['DWR','Durable Water Repellent','持久防潑水整理，不等於完全防水。'],
+['四分制','4-Point System','依瑕疵長度扣 1 到 4 分的驗布法（ASTM D5430）。'],
+['橫條','Barré','針織布週期性橫向色差，法文「有橫條的」。'],
+['缸差','Dye lot variation','不同染缸的色差，要分缸裁剪。'],
+['色差卡','Shade band','各缸各卷的色樣卡，用來分級。'],
+['色牢度','Color fastness','掉色、染色程度，灰卡 1 到 5 級，5 最好。'],
+['扭度','Spirality / Torque','針織布洗後歪斜，常見要求 5% 以內。'],
+['AATCC','AATCC','美國紡織化學家與染色家協會，1921 年成立。'],
+['鬆布','Fabric relaxing','針織布裁前攤開靜置，回到自然狀態。'],
+['排料','Marker','紙樣在布上的排列；marker 原指畫記號。'],
+['圓頭針','Ball point needle','推開針織紗而不刺斷。'],
+['線跡編號','ISO 4915','301 平車、401 鏈式、504 拷克、406/605 綳縫、607 爬網。'],
+['GOTS／GRS／OEKO-TEX','Certifications','有機、回收與有害物質相關認證；Öko 是德文生態。']
+];
+function glossary(){
+  const list=document.getElementById('glossList'),inp=document.getElementById('glossSearch'),empty=document.getElementById('glossEmpty');
+  if(!list)return;
+  const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  list.innerHTML=G.map(([t,e,d])=>`<div class="item" data-s="${esc((t+' '+e+' '+d).toLowerCase())}"><dt>${esc(t)}<span class="en">${esc(e)}</span></dt><dd>${esc(d)}</dd></div>`).join('');
+  const items=[...list.children];
+  inp.addEventListener('input',()=>{const q=inp.value.trim().toLowerCase();let n=0;items.forEach(it=>{const m=!q||it.dataset.s.includes(q);it.style.display=m?'':'none';if(m)n++;});empty.style.display=n?'none':'block';});
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  lesson3Demos();heroWoven();heroKnit();loom();weaveSim();knitLesson();calcs();quizzes();nav();glossary();
+});
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-ad80387239" data-category="garment"></script></body>
+</html>

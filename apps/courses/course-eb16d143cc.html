@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>個人品牌網站・從零到專業</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1c1c1c; --gray:#6b6b6b; --paper:#faf8f3; --khaki:#b8a67a; --khaki-d:#8a7647;
+  --linen:#ede7da; --steel:#4a6fa5; --coral:#c05a3c; --leaf:#7a8f5a; --card:#ffffff;
+  --serif:'Noto Serif TC','PMingLiU',serif;
+  --sans:'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif;
+  --mono:'Consolas','Courier New',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);color:var(--ink);line-height:1.9;font-size:16px;
+  background:var(--paper);
+  background-image:
+    linear-gradient(rgba(74,111,165,.07) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(74,111,165,.07) 1px,transparent 1px);
+  background-size:32px 32px; /* 藍圖格線 */
+}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
+
+/* ---------- 封面 ---------- */
+header{background:var(--ink);color:var(--paper);padding:56px 0 44px;position:relative}
+header::before{content:"● ● ●";position:absolute;top:14px;left:20px;color:#555;font-size:11px;letter-spacing:4px} /* 瀏覽器紅黃綠 */
+header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;
+  background:linear-gradient(90deg,var(--steel) 0 34%,var(--khaki) 34% 67%,var(--coral) 67%);} /* 載入進度條 */
+.eyebrow{color:var(--khaki);letter-spacing:.35em;font-size:12px;font-weight:700;margin-bottom:14px}
+h1.title{font-family:var(--serif);font-weight:900;font-size:clamp(30px,6vw,52px);line-height:1.28;margin-bottom:12px}
+.sub{color:#b9b3a6;font-size:15px;max-width:580px}
+.route{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.route span{font-size:13px;border:1px solid #4a4a4a;color:#cfc8b8;border-radius:999px;padding:5px 14px}
+.route span b{color:var(--khaki)}
+
+/* ---------- 導覽 ---------- */
+nav.toc{position:sticky;top:0;z-index:50;background:rgba(250,248,243,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--linen)}
+nav.toc .wrap{display:flex;gap:6px;overflow-x:auto;padding:10px 20px;scrollbar-width:none}
+nav.toc a{flex:0 0 auto;font-size:13px;font-weight:500;color:var(--gray);text-decoration:none;padding:6px 12px;border-radius:999px;border:1px solid transparent;white-space:nowrap}
+nav.toc a:hover,nav.toc a:focus-visible{color:var(--ink);border-color:var(--khaki);outline:none}
+
+/* ---------- 章節 ---------- */
+.part{margin-top:58px;padding:20px 22px;border-radius:16px;background:var(--ink);color:var(--paper)}
+.part .pno{color:var(--khaki);font-size:13px;letter-spacing:.25em;font-weight:700}
+.part h2{font-family:var(--serif);font-weight:900;font-size:clamp(22px,4.5vw,32px);margin-top:4px}
+.part p{color:#b9b3a6;font-size:14px;margin-top:6px}
+
+section.lesson{padding:46px 0 6px}
+.lesson-tag{display:flex;align-items:baseline;gap:14px;margin-bottom:12px}
+.lesson-tag .no{font-family:var(--serif);font-weight:900;font-size:15px;color:var(--khaki-d);letter-spacing:.12em;white-space:nowrap}
+.lesson-tag h3{font-family:var(--serif);font-weight:900;font-size:clamp(21px,4vw,28px)}
+.lesson p.lead{color:#444;margin-bottom:12px}
+
+.card{background:var(--card);border:1px solid var(--linen);border-radius:14px;padding:22px;margin:16px 0;box-shadow:0 1px 3px rgba(26,26,26,.05)}
+.tip{background:#faf6ea;border-left:4px solid var(--khaki);border-radius:0 10px 10px 0;padding:13px 16px;margin:14px 0;font-size:14.5px;color:#5a5a5a}
+.tip b{color:#7a6520}
+.key{background:#e9edf5;border-left:4px solid var(--steel);border-radius:0 10px 10px 0;padding:13px 16px;margin:14px 0;font-size:15px;font-weight:700;color:#2c4a75}
+.etym{background:#fdf1ec;border-left:4px solid var(--coral);border-radius:0 10px 10px 0;padding:13px 16px;margin:14px 0;font-size:14.5px;color:#6a453a}
+.etym b{color:var(--coral)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:10px 0}
+th{background:var(--ink);color:#fff;font-weight:700;padding:9px 10px;text-align:left}
+td{padding:9px 10px;border-bottom:1px solid var(--linen);vertical-align:top}
+tr:nth-child(even) td{background:#f6f4ee}
+.small{font-size:13px;color:var(--gray)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.two{grid-template-columns:1fr}}
+
+/* 流程膠囊 */
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+.flow span{background:var(--linen);border:1px solid #ddd3bd;border-radius:10px;padding:7px 12px;font-size:13.5px;font-weight:500}
+.flow i{color:var(--khaki-d);font-style:normal;font-weight:700}
+.flow em{color:var(--gray);font-style:normal}
+
+/* 互動共用 */
+.stage{background:#22262b;border-radius:14px;padding:18px;color:#d8d2c4}
+.stage h4{font-family:var(--serif);color:var(--linen);font-size:18px;margin-bottom:8px}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+button.ui{font-family:var(--sans);font-size:14px;font-weight:700;padding:8px 18px;border-radius:999px;border:1px solid #555;background:transparent;color:#d8d2c4;cursor:pointer;transition:.15s}
+button.ui:hover{border-color:var(--khaki);color:var(--khaki)}
+button.ui.primary{background:var(--khaki);border-color:var(--khaki);color:#1a1a1a}
+button.ui:disabled{opacity:.35;cursor:default}
+.stageflex{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start}
+.stageinfo{flex:1;min-width:230px;font-size:14px;color:#b9b3a6}
+.stageinfo b{color:var(--linen)}
+.stageinfo .num{font-family:var(--serif);color:var(--khaki);font-size:15px;font-weight:900}
+.stage input[type=text],.stage textarea,.stage select{
+  width:100%;padding:9px 10px;border:1px solid #4a4f57;border-radius:9px;font-size:14px;
+  font-family:var(--sans);background:#2c3138;color:#e8e2d4}
+.stage textarea{font-family:var(--mono);font-size:13px;line-height:1.6;resize:vertical}
+.stage label{font-size:12.5px;color:#8d867a;display:block;margin:8px 0 4px}
+.pitch{font-family:var(--serif);font-size:18px;color:var(--linen);background:#2c3138;border-left:4px solid var(--khaki);border-radius:0 10px 10px 0;padding:14px 16px;margin-top:12px;line-height:1.8}
+iframe.preview{width:100%;height:260px;border:1px solid #4a4f57;border-radius:10px;background:#fff}
+
+/* 搜尋結果預覽 */
+.serp{background:#fff;border-radius:12px;padding:16px 18px;border:1px solid #4a4f57}
+.serp .u{color:#202124;font-size:13px}
+.serp .u small{color:#5f6368}
+.serp .t{color:#1a0dab;font-size:19px;font-family:arial,sans-serif;margin:2px 0;line-height:1.35;overflow-wrap:anywhere}
+.serp .d{color:#4d5156;font-size:13.5px;font-family:arial,sans-serif;line-height:1.55;overflow-wrap:anywhere}
+
+/* 測驗 */
+.q{border:1px solid var(--linen);border-radius:12px;padding:14px 16px;margin:10px 0;background:#fff}
+.q .qt{font-weight:700;margin-bottom:6px}
+.q button{font-family:var(--sans);font-size:13px;border:1px solid var(--khaki);background:transparent;color:var(--khaki-d);border-radius:999px;padding:4px 14px;cursor:pointer}
+.q .ans{display:none;margin-top:8px;font-size:14px;color:#2c4a75;background:#eef1f7;border-radius:8px;padding:9px 12px}
+.q.open .ans{display:block}
+
+footer{margin-top:64px;padding:34px 0;background:var(--ink);color:#9a948a;font-size:13px;text-align:center}
+footer b{color:var(--khaki)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+:focus-visible{outline:2px solid var(--steel);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Personal Brand &amp; Website 101</div>
+    <h1 class="title">打造你的個人品牌網站<br>寫小說、放畫作、說你的故事</h1>
+    <p class="sub">不用會寫程式、不用花一毛錢,也不一定要賣東西。這門課帶你從「我是誰」想起,一路做到「我的網站上線了」——連載小說、作品畫廊、個人簡介,全部自己來。</p>
+    <div class="route">
+      <span><b>第一部</b> 想清楚:品牌是什麼</span>
+      <span><b>第二部</b> 蓋出來:你的第一個網站</span>
+      <span><b>第三部</b> 經營它:被看見、走長遠</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc"><div class="wrap">
+  <a href="#l1">1 品牌是什麼</a><a href="#l2">2 定位</a><a href="#l3">3 命名與視覺</a>
+  <a href="#l4">4 網站原理</a><a href="#l5">5 第一頁HTML</a><a href="#l6">6 CSS打扮</a><a href="#l7">7 網站藍圖</a><a href="#l8">8 免費上線</a>
+  <a href="#l9">9 內容經營</a><a href="#l10">10 被搜尋到</a><a href="#l11">11 數據回饋</a><a href="#l12">12 專業之路</a><a href="#quiz">總測驗</a>
+</div></nav>
+
+<main class="wrap">
+
+<div class="part">
+  <div class="pno">PART 1</div>
+  <h2>想清楚:品牌是什麼</h2>
+  <p>先不碰電腦。網站只是容器,裝的是「你」——第一部花三課,把「你是誰、要給誰看、叫什麼名字」想清楚。這三課想得越透,後面蓋網站越快。</p>
+</div>
+
+<!-- 第1課 -->
+<section class="lesson" id="l1">
+  <div class="lesson-tag"><span class="no">第 1 課</span><h3>個人品牌不是 Logo,是「印象」</h3></div>
+  <p class="lead">聽到「品牌」你可能想到大公司的商標。其實品牌的本質簡單得多:<b>當別人想到你,腦中浮現的那個印象,就是你的品牌</b>。「那個每週五更新武俠小說的人」「畫貓超可愛的那位」「筆記整理得超清楚的同學」——這些都是品牌,而且已經在運作了。</p>
+  <div class="card">
+    <table>
+      <tr><th>迷思</th><th>事實</th></tr>
+      <tr><td>要有 Logo、要花錢設計</td><td>一個好記的名字+固定的風格,就是品牌的起點</td></tr>
+      <tr><td>要賣東西才需要品牌</td><td>寫小說、畫圖、寫筆記,只要想「被記住」,就需要品牌</td></tr>
+      <tr><td>要很厲害才能開始</td><td>品牌記錄的是「你成長的過程」——邊做邊變強,觀眾最愛看這種</td></tr>
+      <tr><td>社群帳號就夠了</td><td>社群是租來的攤位(平台說了算),網站是自己的家(規則你訂)</td></tr>
+    </table>
+    <p class="small">為什麼要有「自己的網站」?三個理由:①社群平台會改演算法、會倒、會封號,網站不會;②網址可以印在任何地方,是你在網路上的永久地址;③想怎麼排版、放什麼,完全自由——連載小說可以有目錄,畫廊可以全螢幕。</p>
+  </div>
+  <div class="etym"><b>詞源|Brand:</b>來自古北歐語 brandr,「燃燒」。牧場主人用燒紅的鐵印在牛身上烙下記號,宣告「這是我的牛」——那個烙印就叫 brand。今天的品牌做的還是同一件事:<b>在別人腦中烙下一個記號</b>。中文「品牌」的「牌」,也是掛在店門口讓人認得的那塊招牌。</div>
+  <div class="tip"><b>生活比喻:</b>班上每個人其實都有品牌:「問他數學就對了」「她的筆記全班搶著借」。個人品牌網站,就是把這個口碑從班上搬到全世界,並且由你自己書寫。</div>
+  <div class="key">這門課的終點:一個有你的名字、你的作品、你的風格,而且真的掛在網路上的家。第一步不是打開電腦,是回答下一課的三個問題。</div>
+</section>
+
+<!-- 第2課 -->
+<section class="lesson" id="l2">
+  <div class="lesson-tag"><span class="no">第 2 課</span><h3>定位:用一句話說清楚你是誰</h3></div>
+  <p class="lead">網路上什麼都有,所以「什麼都做」等於「什麼都不是」。定位就是選一塊小小的地盤深耕:<b>不求所有人喜歡,只求對的人一眼認出你</b>。定位語有個萬用公式:</p>
+  <div class="card">
+    <div class="key" style="margin-top:0">我為【誰】創作【什麼】,讓他們【得到什麼】。</div>
+    <div class="stage">
+      <h4>互動:定位語產生器——填三格,拼出你的一句話</h4>
+      <div class="two" style="gap:10px">
+        <div>
+          <label for="pzWho">【誰】你想給誰看?(越具體越好)</label>
+          <input type="text" id="pzWho" value="喜歡武俠又沒時間看長篇的學生" maxlength="30">
+          <label for="pzWhat">【什麼】你創作什麼?</label>
+          <input type="text" id="pzWhat" value="每篇十分鐘讀完的短篇武俠" maxlength="30">
+          <label for="pzGain">【得到什麼】他們得到什麼?</label>
+          <input type="text" id="pzGain" value="下課十分鐘就能過癮一場江湖" maxlength="30">
+          <label for="pzStyle">句型風格</label>
+          <select id="pzStyle">
+            <option value="a">標準版</option>
+            <option value="b">熱血版</option>
+            <option value="c">安靜版</option>
+          </select>
+        </div>
+        <div>
+          <div class="stageinfo" style="min-width:0"><b>你的定位語:</b></div>
+          <div class="pitch" id="pzOut"></div>
+          <p style="font-size:12.5px;color:#8d867a;margin-top:10px">檢查三關:①夠具體嗎?(「大家」不是定位)②你做得到每週持續嗎?③這句話放在網站首頁,陌生人三秒能懂嗎?——三關都過,抄下來,它就是你網站的第一句話。</p>
+        </div>
+      </div>
+    </div>
+    <table style="margin-top:12px">
+      <tr><th>模糊的定位</th><th>清楚的定位</th></tr>
+      <tr><td>我喜歡畫畫</td><td>我畫「上班族的貓同事」四格漫畫,讓社畜午休笑一下</td></tr>
+      <tr><td>我寫小說</td><td>我寫校園裡的懸疑短篇,每篇都在放學鐘響前破案</td></tr>
+      <tr><td>我分享生活</td><td>我記錄用零用錢做出的一週便當,給小資族抄作業</td></tr>
+    </table>
+  </div>
+  <div class="etym"><b>詞源|利基 Niche:</b>定位常說「找到你的利基」。niche 是法文「牆上的壁龕」——教堂牆上挖的小凹洞,剛好放一尊雕像,不大,但那個位置只屬於它。你的利基就是網路世界牆上那個「剛好放得下你、而且只放得下你」的小凹洞。</div>
+  <div class="key">定位不是把自己關起來,是先讓一小群人深深記住你——記住了,再慢慢擴大。所有大創作者都是從一個小壁龕開始的。</div>
+</section>
+
+<!-- 第3課 -->
+<section class="lesson" id="l3">
+  <div class="lesson-tag"><span class="no">第 3 課</span><h3>命名與視覺:讓人記得住、認得出</h3></div>
+  <p class="lead">名字會跟你很久,值得花一個下午。好名字只需要過四關:</p>
+  <div class="card">
+    <table>
+      <tr><th>四關</th><th>怎麼檢查</th><th>例</th></tr>
+      <tr><td>① 好唸好記</td><td>唸給家人聽一次,明天問他還記不記得</td><td>「墨魚燒」比「Mysterious Ink Studio 2024」強</td></tr>
+      <tr><td>② 跟定位有關</td><td>聽到名字能猜到你在做什麼,加分</td><td>寫武俠叫「十分江湖」,一聽就懂</td></tr>
+      <tr><td>③ 搜尋得到</td><td>Google 一下:同名的人多不多?會不會撞到大品牌?</td><td>太菜市場的名字會被淹沒</td></tr>
+      <tr><td>④ 網址還活著</td><td>查這個名字的網域(第 8 課會用到)和社群帳號還能不能註冊</td><td>名字、網址、帳號三者一致最理想</td></tr>
+    </table>
+    <div class="two" style="margin-top:12px">
+      <div>
+        <b>視覺:三樣就夠</b>
+        <p style="font-size:14px;margin-top:6px">新手不必畫 Logo。準備三樣,風格立刻統一:<b>①一組顏色</b>(主色1+底色1+點綴色1,以後到處都用它們);<b>②一兩種字體</b>(標題一種、內文一種,不再多);<b>③一張頭像</b>(自畫像、照片、或名字兩個字做成方塊)。每次發文、每頁網站都長一樣,「認得出」就達成了。</p>
+      </div>
+      <div>
+        <b>選色小抄(挑一組先用起來)</b>
+        <table>
+          <tr><th>個性</th><th>組合</th></tr>
+          <tr><td>溫暖手作</td><td>米白底+焦糖主色+墨綠點綴</td></tr>
+          <tr><td>清爽日系</td><td>白底+霧藍主色+淺灰點綴</td></tr>
+          <tr><td>神祕武俠</td><td>墨黑底+米白字+朱紅點綴</td></tr>
+          <tr><td>極簡專業</td><td>白底+黑字+一色點綴(本課程就是)</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="etym"><b>詞源|Logo:</b>是 logotype 的縮寫,來自希臘文 logos(字、話語)+ typos(印模)——原指印刷廠把常用的「整個字」鑄成一塊鉛字,一次印出。所以 Logo 的本意是「做成圖形的名字」:文字本身就可以是 Logo,不會畫圖完全沒關係。</div>
+  <div class="tip"><b>生活比喻:</b>視覺一致就像制服:看到那套配色,不用看臉就知道是哪間學校的學生。你的顏色+字體,就是作品的制服。</div>
+  <div class="key">本課作業(真的動手):①名字過四關;②選定三個顏色,把色碼抄下來(例:#1C1C1C);③準備一張頭像。這三樣,第 5 課蓋網站馬上用到。</div>
+</section>
+
+<div class="part">
+  <div class="pno">PART 2</div>
+  <h2>蓋出來:你的第一個網站</h2>
+  <p>名字有了、定位有了,開工。這一部從「網站到底是什麼」講到「你的網頁真的掛上網路」——中間你會親手寫出人生第一段 HTML,就在這個頁面裡,改了馬上看到。</p>
+</div>
+
+<!-- 第4課 -->
+<section class="lesson" id="l4">
+  <div class="lesson-tag"><span class="no">第 4 課</span><h3>網站是怎麼運作的?四個角色一次認識</h3></div>
+  <p class="lead">你在瀏覽器輸入網址、按下 Enter 的那一秒,發生了一場接力賽:</p>
+  <div class="card">
+    <div class="flow">
+      <span><i>①</i> 瀏覽器<br><em>你的「點餐員」:幫你送出請求</em></span>
+      <span><i>②</i> DNS<br><em>網路電話簿:把網址翻成主機的門牌號碼(IP)</em></span>
+      <span><i>③</i> 伺服器<br><em>存放網頁檔案的電腦,24 小時待命出餐</em></span>
+      <span><i>④</i> 網頁檔案<br><em>HTML/CSS/JS,被送回你的瀏覽器「畫」出來</em></span>
+    </div>
+    <p class="small">所以「架網站」翻成白話就是:<b>把你寫好的網頁檔案,放到一台永遠開機的電腦(伺服器)上,並給它一個好記的地址(網址)</b>。第 8 課會教你免費借到這台電腦。</p>
+    <table>
+      <tr><th>三兄弟</th><th>負責什麼</th><th>比喻</th></tr>
+      <tr><td><b>HTML</b></td><td>內容與結構:標題、段落、圖片、連結</td><td>房子的骨架與隔間</td></tr>
+      <tr><td><b>CSS</b></td><td>外觀:顏色、字體、排版、間距</td><td>油漆、家具、裝潢</td></tr>
+      <tr><td><b>JavaScript</b></td><td>互動:按了會動、輸入有反應</td><td>電燈開關、自動門</td></tr>
+    </table>
+    <p class="small">好消息:<b>只用 HTML+CSS 就能做出漂亮的個人網站</b>,JS 是進階選配。本頁你正在用的定位語產生器,就是 JS 做的——學到後面你也做得出來。</p>
+  </div>
+  <div class="etym"><b>詞源|Domain・HTML:</b>網域 domain 來自拉丁文 dominus(主人)——你的網域就是你在網路上的「領地」,難怪買網域叫「註冊」,跟登記土地一樣。HTML = HyperText Markup Language,「標記語言」的 markup 借自出版業:編輯在紙稿上圈圈畫畫標注「這行放大、這句斜體」,那些記號就叫 markup——HTML 的角括號標籤,就是寫給瀏覽器看的編輯記號。</div>
+  <div class="tip"><b>生活比喻:</b>整套流程像點外送:你(瀏覽器)打開 App 輸入店名(網址),平台查出店家地址(DNS),餐廳(伺服器)出餐(網頁檔案),外送到你手上,App 把餐擺好給你看(瀏覽器渲染)。</div>
+</section>
+
+<!-- 第5課 -->
+<section class="lesson" id="l5">
+  <div class="lesson-tag"><span class="no">第 5 課</span><h3>親手寫你的第一頁 HTML(就在這裡改)</h3></div>
+  <p class="lead">HTML 的規則五分鐘就能懂:內容用「標籤」包起來,標籤長這樣 <b>&lt;名字&gt;內容&lt;/名字&gt;</b>——開頭一個、結尾一個(多了斜線)。下面是一個真的能用的個人首頁,<b>左邊隨便改,右邊立刻變</b>:</p>
+  <div class="card">
+    <div class="stage">
+      <h4>互動:HTML 即時編輯器——把「墨魚燒」改成你的名字試試</h4>
+      <div class="two" style="gap:12px">
+        <div>
+          <label for="htmlEd">HTML 原始碼(可編輯)</label>
+          <textarea id="htmlEd" rows="16" spellcheck="false"></textarea>
+        </div>
+        <div>
+          <label>瀏覽器看到的樣子(即時預覽)</label>
+          <iframe class="preview" id="htmlPv" title="HTML 預覽"></iframe>
+          <p style="font-size:12.5px;color:#8d867a;margin-top:8px">試試:①改名字和介紹;②把 h2 改成 h1 看標題變大;③複製一整行 &lt;li&gt;…&lt;/li&gt; 貼在下面,多一筆作品。改壞了?按重置就好——<b>網頁改壞不會爆炸,大膽試</b>。</p>
+          <div class="btnrow"><button class="ui" id="htmlReset">↺ 重置範例</button></div>
+        </div>
+      </div>
+    </div>
+    <table style="margin-top:12px">
+      <tr><th>常用標籤</th><th>意思</th><th>記法</th></tr>
+      <tr><td>&lt;h1&gt;~&lt;h3&gt;</td><td>標題,數字越小字越大</td><td>h = heading(標題)</td></tr>
+      <tr><td>&lt;p&gt;</td><td>段落</td><td>p = paragraph</td></tr>
+      <tr><td>&lt;a href="網址"&gt;</td><td>超連結</td><td>a = anchor(錨),href = 連去哪</td></tr>
+      <tr><td>&lt;img src="圖檔"&gt;</td><td>圖片(不用結尾標籤)</td><td>img = image,src = source 來源</td></tr>
+      <tr><td>&lt;ul&gt;+&lt;li&gt;</td><td>清單與清單項目</td><td>unordered list / list item</td></tr>
+    </table>
+  </div>
+  <div class="etym"><b>詞源|Home Page:</b>1990 年代瀏覽器把「打開時的起始頁」叫 home(家),後來延伸成「一個網站的大門頁」。網站首頁的檔案習慣命名為 <b>index.html</b>——index 是「索引、目錄」:伺服器收到「給我看這個資料夾」的請求時,預設就翻出叫 index 的那頁,像書一打開先看到目錄。第 8 課上傳檔案時,首頁一定要叫這個名字。</div>
+  <div class="key">今天的成就:你已經會讀、會改 HTML 了。把編輯器裡的內容換成你自己的名字、定位語(第 2 課)和三件作品——這就是你網站首頁的草稿。</div>
+</section>
+
+<!-- 第6課 -->
+<section class="lesson" id="l6">
+  <div class="lesson-tag"><span class="no">第 6 課</span><h3>用 CSS 打扮:同一頁,三種人生</h3></div>
+  <p class="lead">HTML 決定「有什麼」,CSS 決定「長怎樣」。CSS 的句型也只有一種:<b>選誰 { 改什麼: 改成怎樣; }</b>,例如 <b>h1 { color: red; }</b> = 把所有大標題變紅色。看威力最快的方式——同一份 HTML,套三套不同的 CSS:</p>
+  <div class="card">
+    <div class="stage">
+      <h4>互動:CSS 換裝秀(HTML 完全沒變,只換衣服)</h4>
+      <div class="btnrow">
+        <button class="ui primary" data-css="plain" id="cssBtn0">素顏(無 CSS)</button>
+        <button class="ui" data-css="warm">溫暖手作風</button>
+        <button class="ui" data-css="dark">神祕武俠風</button>
+      </div>
+      <iframe class="preview" id="cssPv" style="height:300px" title="CSS 預覽"></iframe>
+      <div class="stageinfo" id="cssTxt" style="margin-top:10px"><b>素顏:</b>這就是瀏覽器的預設樣式——能看,但誰都記不住。注意內容(文字、清單)三種造型下一字未改。</div>
+    </div>
+    <table style="margin-top:12px">
+      <tr><th>新手最常用的五個屬性</th><th>做什麼</th><th>例</th></tr>
+      <tr><td>color / background</td><td>文字色/背景色</td><td>color:#1c1c1c;</td></tr>
+      <tr><td>font-family / font-size</td><td>字體/字級</td><td>font-size:18px;</td></tr>
+      <tr><td>margin / padding</td><td>外距/內距(留白是高級感的來源)</td><td>padding:20px;</td></tr>
+      <tr><td>max-width + margin:auto</td><td>內容置中、不要滿版太寬</td><td>max-width:700px;</td></tr>
+      <tr><td>border-radius</td><td>圓角</td><td>border-radius:12px;</td></tr>
+    </table>
+    <p class="small">把第 3 課選好的三個顏色填進 color/background,你的「制服」就穿上了。CSS 寫在 HTML 檔頭部的 &lt;style&gt;…&lt;/style&gt; 裡即可,一個檔案搞定整個網站——本課程檔案自己就是這樣做的,你可以用瀏覽器「檢視原始碼」偷看。</p>
+  </div>
+  <div class="etym"><b>詞源|CSS(Cascading Style Sheets):</b>style sheet「樣式表」借自出版業的「版式規範」:報社規定標題幾號字、內文什麼字體,整份報紙才統一。cascading 是「像瀑布層層流下」——樣式規則會從整站→頁面→段落一層層往下套用、後面的可以蓋過前面的,像瀑布一層層落下,所以叫「串接/層疊樣式表」。</div>
+  <div class="key">設計新手三原則:<b>顏色不超過三個、字體不超過兩種、留白給足</b>。守住這三條,素人做的網站也有質感——回頭看第 3 課的色卡,一切都串起來了。</div>
+</section>
+
+<!-- 第7課 -->
+<section class="lesson" id="l7">
+  <div class="lesson-tag"><span class="no">第 7 課</span><h3>網站藍圖:先畫地圖,再蓋房間</h3></div>
+  <p class="lead">寫小說的、畫圖的、寫筆記的,網站骨架其實都一樣——四個房間就夠:</p>
+  <div class="card">
+    <div class="stageflex" style="align-items:center">
+      <svg width="270" height="210" viewBox="0 0 270 210" role="img" aria-label="網站地圖">
+        <rect x="85" y="10" width="100" height="38" rx="8" fill="#1c1c1c"/>
+        <text x="135" y="34" fill="#c9a86a" font-size="13" text-anchor="middle" font-weight="bold">首頁 index</text>
+        <g stroke="#b8a67a" stroke-width="1.6">
+          <line x1="135" y1="48" x2="45" y2="92"/><line x1="135" y1="48" x2="135" y2="92"/><line x1="135" y1="48" x2="225" y2="92"/>
+        </g>
+        <g font-size="12" text-anchor="middle">
+          <rect x="5" y="92" width="80" height="34" rx="8" fill="#ede7da" stroke="#b8a67a"/>
+          <text x="45" y="113" fill="#1c1c1c">關於我</text>
+          <rect x="95" y="92" width="80" height="34" rx="8" fill="#ede7da" stroke="#b8a67a"/>
+          <text x="135" y="113" fill="#1c1c1c">作品</text>
+          <rect x="185" y="92" width="80" height="34" rx="8" fill="#ede7da" stroke="#b8a67a"/>
+          <text x="225" y="113" fill="#1c1c1c">聯絡</text>
+          <g stroke="#b8a67a" stroke-width="1.4"><line x1="135" y1="126" x2="95" y2="162"/><line x1="135" y1="126" x2="175" y2="162"/></g>
+          <rect x="55" y="162" width="80" height="32" rx="8" fill="#fff" stroke="#ddd3bd"/>
+          <text x="95" y="182" fill="#555" font-size="11">章節/畫作 1</text>
+          <rect x="145" y="162" width="80" height="32" rx="8" fill="#fff" stroke="#ddd3bd"/>
+          <text x="185" y="182" fill="#555" font-size="11">章節/畫作 2…</text>
+        </g>
+      </svg>
+      <div style="flex:1;min-width:230px">
+        <table>
+          <tr><th>房間</th><th>裡面放什麼</th></tr>
+          <tr><td><b>首頁</b></td><td>定位語(第2課)+最新/最好的 3 件作品+往其他頁的門</td></tr>
+          <tr><td><b>關於我</b></td><td>你是誰、為什麼創作、頭像——寫得像自我介紹,不像履歷</td></tr>
+          <tr><td><b>作品頁</b></td><td>小說:章節目錄(新→舊)。畫作:縮圖牆,點開看大圖</td></tr>
+          <tr><td><b>聯絡</b></td><td>Email 或社群連結,一行就好</td></tr>
+        </table>
+      </div>
+    </div>
+    <p class="small"><b>新手捷徑:先做「一頁式」</b>——四個房間全放在同一頁,由上到下排,導覽列點了跳到該區(錨點連結 &lt;a href="#about"&gt;)。等內容多了,再拆成多個 .html 檔。本課程頁面就是一頁式的完整示範。</p>
+  </div>
+  <div class="etym"><b>詞源|導覽列 Navigation:</b>navigation 原是拉丁文 navigare「航行」(navis=船)。網站的選單負責帶訪客「航行」到每一頁,所以叫導覽列;瀏覽器(navigator)一詞同源——1990 年代第一批瀏覽器之一就叫 Netscape Navigator,把上網比喻成大航海。</div>
+  <div class="key">藍圖原則:<b>任何訪客,三次點擊內要能到任何一頁</b>。房間少沒關係,迷路才致命。</div>
+</section>
+
+<!-- 第8課 -->
+<section class="lesson" id="l8">
+  <div class="lesson-tag"><span class="no">第 8 課</span><h3>免費上線:GitHub Pages 七步走</h3></div>
+  <p class="lead">檔案寫好了,該搬進「永遠開機的電腦」了。免費方案不少(Netlify、Neocities…),這裡教最通用的 <b>GitHub Pages</b>:大廠(微軟)撐腰、完全免費、不塞廣告。按「下一步」走一遍流程:</p>
+  <div class="card">
+    <div class="stage">
+      <h4>互動:上線流程播放器</h4>
+      <div class="stageflex">
+        <svg id="ghSvg" width="290" height="150" viewBox="0 0 290 150" role="img" aria-label="上線步驟進度"></svg>
+        <div class="stageinfo">
+          <div class="num" id="ghStep">步驟 0 / 7</div>
+          <div id="ghTxt" style="margin-top:6px">準備好你的 index.html(第 5、6 課的成果)。按「下一步」。</div>
+          <div class="btnrow" style="margin-top:14px">
+            <button class="ui" id="ghPrev">← 上一步</button>
+            <button class="ui primary" id="ghNext">下一步 →</button>
+            <button class="ui" id="ghReset">重來</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <table style="margin-top:12px">
+      <tr><th>之後想升級?</th><th>說明</th><th>費用感</th></tr>
+      <tr><td>自訂網域</td><td>把 xxx.github.io 換成 yourname.com,去網域商註冊再指向 GitHub</td><td>一年約幾百元台幣</td></tr>
+      <tr><td>其他免費主機</td><td>Netlify(拖拉上傳超簡單)、Neocities(復古社群風)</td><td>免費</td></tr>
+      <tr><td>現成平台</td><td>不想碰程式:Blogger、WordPress.com 也能開站,但客製自由度低</td><td>免費~月費</td></tr>
+    </table>
+  </div>
+  <div class="etym"><b>詞源|上線 Launch・倉庫 Repository:</b>網站發布叫 launch,借自「發射火箭/新船下水」——你的作品從此離開自己的電腦,航向公海。GitHub 上放檔案的地方叫 repository(縮寫 repo),拉丁文 reponere「存放」,原指圖書館的典藏庫:你的網站檔案就典藏在那裡,每一次修改都留有紀錄,永遠可以回到過去的版本。</div>
+  <div class="key">上線那一刻請截圖留念——從這秒起,地球上任何角落輸入那串網址,看到的都是你做的東西。這是你的第一塊網路領地。</div>
+</section>
+
+<div class="part">
+  <div class="pno">PART 3</div>
+  <h2>經營它:被看見、走長遠</h2>
+  <p>網站上線只是開幕。第三部教你把內容擺好、讓搜尋引擎找到你、看懂數據,以及這條路可以走到多專業。</p>
+</div>
+
+<!-- 第9課 -->
+<section class="lesson" id="l9">
+  <div class="lesson-tag"><span class="no">第 9 課</span><h3>內容經營:連載與畫廊的擺法</h3></div>
+  <p class="lead">內容是品牌的本體。小說站和畫廊站各有一套「讓人一直看下去」的擺法:</p>
+  <div class="card">
+    <div class="two">
+      <div>
+        <b>📖 連載小說站</b>
+        <table>
+          <tr><th>要素</th><th>做法</th></tr>
+          <tr><td>目錄頁</td><td>全部章節列表,標「更新日期」,新章置頂</td></tr>
+          <tr><td>章節頁</td><td>內文字級 18px 以上、行距 1.8、每行別太寬(max-width:700px)——讀者的眼睛會謝謝你</td></tr>
+          <tr><td>上一章/下一章</td><td>每章底部一定要有,這是「追下去」的關鍵鈕</td></tr>
+          <tr><td>更新節奏</td><td>寫在首頁:「每週五更新」。守住它,比寫得快更重要</td></tr>
+        </table>
+      </div>
+      <div>
+        <b>🎨 作品畫廊站</b>
+        <table>
+          <tr><th>要素</th><th>做法</th></tr>
+          <tr><td>縮圖牆</td><td>小圖排格子、點開看大圖;小圖壓縮過(200KB 內),頁面才不會慢</td></tr>
+          <tr><td>alt 說明</td><td>每張 &lt;img&gt; 都寫 alt="圖的描述"——給看不見圖的人和搜尋引擎「看」</td></tr>
+          <tr><td>作品資訊</td><td>標題+日期+一句創作理念,故事讓圖更值錢</td></tr>
+          <tr><td>浮水印</td><td>角落放上你的名字/網址,被轉貼時觀眾找得回來</td></tr>
+        </table>
+      </div>
+    </div>
+    <p class="small"><b>版權小学堂:</b>你的小說和圖,完成的那一刻就自動受著作權保護,不用申請。在網站頁尾放一行「© 2026 你的名字」是宣示;若願意讓人在標明出處下轉載,可研究「創用 CC 授權」——讓分享有規則。也提醒:別人的圖與文,同樣不能隨意搬進你的網站。</p>
+  </div>
+  <div class="etym"><b>詞源|連載・Blog:</b>「連載」來自報紙時代:小說一天登一段,「連」續刊「載」,金庸的武俠正是這樣紅遍華人圈——你的每週更新,承接的是同一個傳統。Blog 則是 weblog(網路日誌)的縮寫:1999 年有人開玩笑把 weblog 拆成「we blog」(我們寫網誌),blog 從此變成動詞兼名詞。</div>
+  <div class="key">經營鐵律:<b>穩定 &gt; 爆發</b>。每週一篇持續一年(52 篇),勝過熱血連發十篇然後消失。品牌是「重複出現」堆出來的印象——還記得第 1 課的烙印嗎?烙印要燙好幾次才深。</div>
+</section>
+
+<!-- 第10課 -->
+<section class="lesson" id="l10">
+  <div class="lesson-tag"><span class="no">第 10 課</span><h3>讓人找到你:SEO 與分享卡</h3></div>
+  <p class="lead">網站上線了,但 Google 憑什麼把你排在搜尋結果前面?這門學問叫 <b>SEO(搜尋引擎最佳化)</b>。新手只要顧好兩個標籤,效果就贏過八成的人——它們就是搜尋結果上那兩行字:</p>
+  <div class="card">
+    <div class="stage">
+      <h4>互動:搜尋結果預覽器——寫出讓人想點的兩行字</h4>
+      <div class="two" style="gap:12px">
+        <div>
+          <label for="seoT">網頁標題 &lt;title&gt;(建議 30 字內)</label>
+          <input type="text" id="seoT" value="十分江湖|每篇 10 分鐘讀完的短篇武俠,每週五更新" maxlength="60">
+          <div style="font-size:12px;color:#8d867a" id="seoTC"></div>
+          <label for="seoD">描述 &lt;meta description&gt;(建議 80 字內)</label>
+          <textarea id="seoD" rows="3" maxlength="120">下課十分鐘,過癮一場江湖。校園裡的少年劍客、便利商店旁的隱世高手——短篇武俠小說連載中,新讀者從〈第一章:轉學生的木劍〉開始。</textarea>
+          <div style="font-size:12px;color:#8d867a" id="seoDC"></div>
+        </div>
+        <div>
+          <label>Google 搜尋結果會長這樣:</label>
+          <div class="serp">
+            <div class="u">shifenjianghu.github.io<br><small>https://shifenjianghu.github.io</small></div>
+            <div class="t" id="serpT"></div>
+            <div class="d" id="serpD"></div>
+          </div>
+          <p style="font-size:12.5px;color:#8d867a;margin-top:8px">好標題公式:<b>名字+定位語關鍵字</b>。想像讀者會搜什麼字(「短篇武俠」「10分鐘 小說」),自然地寫進去——不要堆砌,Google 和讀者都討厭關鍵字轟炸。</p>
+          </div>
+      </div>
+    </div>
+    <table style="margin-top:12px">
+      <tr><th>被找到的三條路</th><th>做法</th></tr>
+      <tr><td>搜尋(SEO)</td><td>title/description 寫好、內容持續更新、頁面開得快</td></tr>
+      <tr><td>社群導流</td><td>作品發到社群,文末放網站連結:「完整目錄在我的網站」</td></tr>
+      <tr><td>口碑互連</td><td>和同好互放連結、參加創作社群活動——外部連結是搜尋引擎眼中的推薦信</td></tr>
+    </table>
+  </div>
+  <div class="etym"><b>詞源|SEO・OG:</b>SEO = Search Engine Optimization,optimization 源自拉丁文 optimus(最好的)——把網頁調整成搜尋引擎眼中「最好的答案」。網址貼到 LINE/FB 會展開的那張預覽小卡,靠的是 <b>OG 標籤</b>(Open Graph,2010 年 Facebook 制定的開放規格):在網頁 head 加上 og:title、og:image,分享出去就有漂亮卡片——等於幫每次分享附上一張名片。</div>
+  <div class="key">SEO 的真相:沒有魔法,就是「<b>把讀者會搜的字,誠實地寫在標題與內容裡,然後持續更新</b>」。內容好+活得久,排名自然來。</div>
+</section>
+
+<!-- 第11課 -->
+<section class="lesson" id="l11">
+  <div class="lesson-tag"><span class="no">第 11 課</span><h3>數據與回饋:網站的體檢表</h3></div>
+  <p class="lead">上線一個月後,你會很想知道:有人來嗎?從哪來?看了什麼?這就是流量分析。新手看懂四個數字就夠:</p>
+  <div class="card">
+    <table>
+      <tr><th>指標</th><th>白話</th><th>它告訴你</th></tr>
+      <tr><td>訪客數</td><td>來了幾個人</td><td>品牌聲量的基本盤</td></tr>
+      <tr><td>瀏覽量</td><td>總共翻了幾頁</td><td>÷訪客數=平均每人看幾頁,黏不黏</td></tr>
+      <tr><td>來源</td><td>從搜尋?社群?別人網站連來?</td><td>哪條路有效,就多鋪那條(第 10 課)</td></tr>
+      <tr><td>熱門頁面</td><td>哪一章/哪張圖最多人看</td><td>觀眾用點擊投票,告訴你該多做什麼</td></tr>
+    </table>
+    <p class="small">工具:GitHub Pages 本身不附統計,可加免費的輕量分析服務(貼一行程式碼即可);在意隱私的話,選「不用 Cookie」的極簡方案,並在頁尾說明。<b>回饋管道</b>也要開一條:頁尾放 Email、或掛免費表單服務——讀者的一句「第三章結尾好猛」,比任何數字都補血。</p>
+    <table>
+      <tr><th>數據解讀範例</th><th>行動</th></tr>
+      <tr><td>社群來的人多、搜尋來的少</td><td>正常,新站搜尋要養幾個月;繼續每篇文末放連結</td></tr>
+      <tr><td>大家都看第 1 章,第 2 章掉一半</td><td>第 1 章結尾不夠勾人——修稿,加一個讓人非追不可的鉤子</td></tr>
+      <tr><td>某張貓圖流量爆高</td><td>觀眾投票了:貓系列,加開!</td></tr>
+    </table>
+  </div>
+  <div class="etym"><b>詞源|Cookie:</b>網站放在你瀏覽器裡的小記事,用來記住「你來過、你是誰」。名字來自「fortune cookie 幸運餅乾」——一張藏著訊息的小紙條包在餅乾裡。因為它能跨網站追蹤行為,近年各國隱私法規都要求網站誠實告知,這也是為什麼你到處看到「本網站使用 Cookie」的橫幅。</div>
+  <div class="key">數據不是成績單,是導航:它不評價你的才華,只告訴你<b>「觀眾在哪裡、往哪走」</b>。每月看一次、調一次方向,就贏過 90% 放著不管的網站。</div>
+</section>
+
+<!-- 第12課 -->
+<section class="lesson" id="l12">
+  <div class="lesson-tag"><span class="no">第 12 課</span><h3>專業之路:從個人網站到個人事業</h3></div>
+  <p class="lead">走到這裡,你已經有:定位、名字、上線的網站、經營方法。最後看看這條路往上還有哪些階梯——<b>不趕路,但知道路在哪</b>:</p>
+  <div class="card">
+    <div class="flow">
+      <span><i>①</i> 自訂網域<br><em>yourname.com,名片級的專業感</em></span>
+      <span><i>②</i> 內容庫存<br><em>累積 30+ 篇作品,搜尋流量開始複利</em></span>
+      <span><i>③</i> 名單經營<br><em>電子報:讀者留 Email,更新直達</em></span>
+      <span><i>④</i> 變現嘗試<br><em>接委託、贊助、電子書、周邊</em></span>
+      <span><i>⑤</i> 品牌延伸<br><em>出書、開課、聯名——網站是總部</em></span>
+    </div>
+    <table>
+      <tr><th>創作者常見變現</th><th>適合誰</th><th>門檻</th></tr>
+      <tr><td>委託創作(接案)</td><td>畫圖、寫作、設計</td><td>作品頁+報價說明即可開始</td></tr>
+      <tr><td>贊助/抖內</td><td>有固定讀者的連載作者</td><td>掛上贊助連結,一杯咖啡的支持</td></tr>
+      <tr><td>電子書/合集</td><td>連載滿一部的小說家</td><td>整理+封面,上架電子書平台</td></tr>
+      <tr><td>周邊商品</td><td>有代表角色/圖像的畫家</td><td>用「按需印製」服務,零庫存</td></tr>
+    </table>
+    <p class="small">職涯出口:自媒體創作者、接案設計/插畫/文案、社群小編、前端網頁入門(第 5、6 課就是起點)、品牌企劃。共同語言,都是這十二課。</p>
+  </div>
+  <div class="card">
+    <b>✅ 結業檢查清單(全勾=你出師了)</b>
+    <table>
+      <tr><th>#</th><th>項目</th><th>對應課</th></tr>
+      <tr><td>1</td><td>一句話定位語,放在首頁最上方</td><td>第 2 課</td></tr>
+      <tr><td>2</td><td>名字過四關,三色一頭像備齊</td><td>第 3 課</td></tr>
+      <tr><td>3</td><td>index.html 寫好:標題、介紹、三件作品、聯絡方式</td><td>第 5、7 課</td></tr>
+      <tr><td>4</td><td>CSS 套上自己的顏色,行距留白舒服</td><td>第 6 課</td></tr>
+      <tr><td>5</td><td>GitHub Pages 上線,網址發給三個朋友打開測試</td><td>第 8 課</td></tr>
+      <tr><td>6</td><td>title 與 description 寫好,貼到社群看預覽卡</td><td>第 10 課</td></tr>
+      <tr><td>7</td><td>訂下更新節奏並寫在網站上(例:每週五)</td><td>第 9 課</td></tr>
+      <tr><td>8</td><td>一個月後看一次數據,調整一件事</td><td>第 11 課</td></tr>
+    </table>
+  </div>
+  <div class="etym"><b>詞源|Portfolio:</b>作品集。義大利文 portafoglio = portare(攜帶)+ foglio(紙頁)——文藝復興時代,畫家提著一個「裝紙頁的皮夾」去見贊助人,夾裡是最好的畫作。你的網站,就是 21 世紀版的那個皮夾:隨時攜帶、永遠展開、全世界都翻得到。</div>
+  <div class="key">最後一句話:<b>品牌不是做一個網站,而是「持續出現」的承諾</b>。網站只是承諾的地址。今天上線,下週五,記得更新。</div>
+</section>
+
+<!-- 總測驗 -->
+<section class="lesson" id="quiz">
+  <div class="lesson-tag"><span class="no">結業</span><h3>十題總測驗</h3></div>
+  <p class="lead">先自己想,再點「看答案」。全對的話——去把網站開起來吧,你準備好了。</p>
+  <div id="quizBox"></div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">個人品牌網站・從零到專業|單檔離線教材<br><b>SAINTDOU</b> · Simply the Minimalist · 2026</div>
+</footer>
+
+<script>
+/* ---------- 第2課 定位語產生器 ---------- */
+function pzUpdate(){
+  const w=document.getElementById('pzWho').value.trim()||'____',
+        x=document.getElementById('pzWhat').value.trim()||'____',
+        g=document.getElementById('pzGain').value.trim()||'____',
+        s=document.getElementById('pzStyle').value;
+  let out='';
+  if(s==='a') out=`我為「${w}」創作「${x}」,讓他們「${g}」。`;
+  else if(s==='b') out=`嘿,${w}!這裡有${x}——保證讓你${g}!`;
+  else out=`寫給${w}。這裡只有${x},願你在這裡${g}。`;
+  document.getElementById('pzOut').textContent=out;
+}
+['pzWho','pzWhat','pzGain'].forEach(id=>document.getElementById(id).addEventListener('input',pzUpdate));
+document.getElementById('pzStyle').addEventListener('change',pzUpdate);
+pzUpdate();
+
+/* ---------- 第5課 HTML 即時編輯器 ---------- */
+const htmlSample=`<h2>墨魚燒的江湖</h2>
+<p>我為忙碌的學生寫短篇武俠,
+每篇十分鐘,過癮一場江湖。</p>
+
+<h3>最新作品</h3>
+<ul>
+  <li>第三章:雨夜的便當劍客</li>
+  <li>第二章:福利社決鬥</li>
+  <li>第一章:轉學生的木劍</li>
+</ul>
+
+<p>聯絡我:<a href="#">寫信給墨魚燒</a></p>`;
+const htmlEd=document.getElementById('htmlEd'), htmlPv=document.getElementById('htmlPv');
+function htmlRender(){
+  htmlPv.srcdoc='<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;padding:18px;line-height:1.8;color:#222}</style></head><body>'+htmlEd.value+'</body></html>';
+}
+htmlEd.value=htmlSample;
+htmlEd.addEventListener('input',htmlRender);
+document.getElementById('htmlReset').addEventListener('click',()=>{htmlEd.value=htmlSample;htmlRender();});
+htmlRender();
+
+/* ---------- 第6課 CSS 換裝秀 ---------- */
+const cssBaseHTML=`<h2>墨魚燒的江湖</h2>
+<p>每篇十分鐘,過癮一場江湖。每週五更新。</p>
+<ul><li>第三章:雨夜的便當劍客</li><li>第二章:福利社決鬥</li><li>第一章:轉學生的木劍</li></ul>
+<a href="#">開始閱讀 →</a>`;
+const cssSets={
+ plain:{css:'',txt:'<b>素顏:</b>這就是瀏覽器的預設樣式——能看,但誰都記不住。注意內容(文字、清單)三種造型下一字未改。'},
+ warm:{css:`body{font-family:"Noto Sans TC",sans-serif;background:#faf4ea;color:#5a4632;padding:26px;line-height:1.9;max-width:560px;margin:auto}
+ h2{font-family:"Noto Serif TC",serif;color:#b06a3b;border-bottom:3px solid #e8d5b5;padding-bottom:8px}
+ ul{background:#fff;border-radius:14px;padding:18px 18px 18px 38px;box-shadow:0 2px 6px rgba(90,70,50,.08)}
+ li{margin:6px 0}
+ a{display:inline-block;background:#b06a3b;color:#fff;text-decoration:none;padding:9px 22px;border-radius:999px;margin-top:8px}`,
+ txt:'<b>溫暖手作風:</b>米白底+焦糖主色、圓角卡片、圓潤按鈕——適合插畫、手作、生活記錄。CSS 只有十幾行。'},
+ dark:{css:`body{font-family:"Noto Serif TC",serif;background:#141414;color:#e8e2d4;padding:26px;line-height:2;max-width:560px;margin:auto}
+ h2{color:#c9a86a;letter-spacing:6px;font-weight:900;border-left:6px solid #a33a2e;padding-left:14px}
+ ul{list-style:none;padding:0}
+ li{border-bottom:1px dashed #3a3a3a;padding:10px 2px}
+ a{color:#a33a2e;font-weight:bold;letter-spacing:2px;text-decoration:none;border:1px solid #a33a2e;padding:8px 20px;display:inline-block;margin-top:10px}`,
+ txt:'<b>神祕武俠風:</b>墨黑底+米白字+朱紅點綴、標題拉大字距——第 3 課色卡「神祕武俠」的實作。同一份內容,氣質完全翻轉,這就是 CSS。'}
+};
+const cssPv=document.getElementById('cssPv');
+function cssRender(k){
+  cssPv.srcdoc='<!DOCTYPE html><html><head><meta charset="UTF-8"><style>'+cssSets[k].css+'</style></head><body>'+cssBaseHTML+'</body></html>';
+  document.getElementById('cssTxt').innerHTML=cssSets[k].txt;
+}
+document.querySelectorAll('[data-css]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('[data-css]').forEach(x=>x.classList.remove('primary'));
+    b.classList.add('primary');cssRender(b.dataset.css);
+  });
+});
+cssRender('plain');
+
+/* ---------- 第8課 GitHub Pages 播放器 ---------- */
+const ghSteps=[
+ {t:'準備好你的 index.html(第 5、6 課的成果)。按「下一步」。'},
+ {t:'<b>步驟 1|註冊 GitHub:</b>到 github.com 用 Email 免費註冊。<b>帳號名慎選</b>——它會出現在你的網址裡(例:帳號 moyu → 網址 moyu.github.io),用第 3 課過了四關的那個名字。'},
+ {t:'<b>步驟 2|建立倉庫(repo):</b>點 New repository,名稱填「<b>帳號名.github.io</b>」(一字不差,這個特殊名稱就是開站暗號),設為 Public,按 Create。'},
+ {t:'<b>步驟 3|上傳檔案:</b>在倉庫頁點 Add file → Upload files,把 index.html(和圖片)拖進去,按 Commit changes(=存檔)。不用會任何指令。'},
+ {t:'<b>步驟 4|等它上菜:</b>因為用了「帳號名.github.io」這個名稱,Pages 自動啟用。等 1–3 分鐘,伺服器把你的檔案端上桌。'},
+ {t:'<b>步驟 5|開站!</b>瀏覽器輸入 https://帳號名.github.io——你的網站正式對全世界開放。手機也開開看,檢查排版。'},
+ {t:'<b>步驟 6|之後怎麼更新:</b>回倉庫點 index.html → 鉛筆圖示線上編輯 → Commit,幾分鐘後全世界同步更新。每週五的新章節,就是這樣發布的。'},
+ {t:'<b>步驟 7|備份與里程碑:</b>倉庫本身就是雲端備份+歷史紀錄(repository=典藏庫)。截圖上線畫面,發到社群:「我的網站開張了」——第一批訪客,現在就邀。'}
+];
+let ghI=0;
+const ghSvg=document.getElementById('ghSvg');
+const ghNames=['註冊','建倉庫','上傳','啟用','開站','更新','備份'];
+function ghDraw(){
+  let s='<line x1="18" y1="75" x2="272" y2="75" stroke="#555" stroke-width="3"/>';
+  ghNames.forEach((n,i)=>{
+    const x=30+i*40, on=ghI===i+1, done=ghI>i+1;
+    const col=on?'#c9a86a':(done?'#a9c48f':'#555');
+    s+=`<circle cx="${x}" cy="75" r="${on?13:10}" fill="${on?'#c9a86a':'#2c3138'}" stroke="${col}" stroke-width="2"/>`;
+    s+=`<text x="${x}" y="${on?80:79}" font-size="${on?12:10}" fill="${on?'#1a1a1a':col}" text-anchor="middle" font-weight="bold">${done?'✓':i+1}</text>`;
+    s+=`<text x="${x}" y="108" font-size="10" fill="${on?'#c9a86a':'#8d867a'}" text-anchor="middle">${n}</text>`;
+  });
+  s+=`<text x="145" y="30" font-size="12" fill="#8d867a" text-anchor="middle">${ghI===0?'GitHub Pages 上線之路':'進度:'+ghI+' / 7 — '+ghNames[ghI-1]}</text>`;
+  ghSvg.innerHTML=s;
+  document.getElementById('ghStep').textContent=`步驟 ${ghI} / ${ghSteps.length-1}`;
+  document.getElementById('ghTxt').innerHTML=ghSteps[ghI].t;
+  document.getElementById('ghPrev').disabled=ghI===0;
+  document.getElementById('ghNext').disabled=ghI===ghSteps.length-1;
+}
+document.getElementById('ghNext').onclick=()=>{if(ghI<ghSteps.length-1){ghI++;ghDraw();}};
+document.getElementById('ghPrev').onclick=()=>{if(ghI>0){ghI--;ghDraw();}};
+document.getElementById('ghReset').onclick=()=>{ghI=0;ghDraw();};
+ghDraw();
+
+/* ---------- 第10課 搜尋結果預覽器 ---------- */
+function seoUpdate(){
+  const t=document.getElementById('seoT').value, d=document.getElementById('seoD').value;
+  document.getElementById('serpT').textContent=t.length>32?t.slice(0,32)+'…':t;
+  document.getElementById('serpD').textContent=d.length>82?d.slice(0,82)+'…':d;
+  const tc=document.getElementById('seoTC'), dc=document.getElementById('seoDC');
+  tc.textContent=`目前 ${t.length} 字`+(t.length>32?'——太長,搜尋結果會被切掉(如右)':' ✓');
+  tc.style.color=t.length>32?'#e07b6a':'#8d867a';
+  dc.textContent=`目前 ${d.length} 字`+(d.length>82?'——太長會被截斷':' ✓');
+  dc.style.color=d.length>82?'#e07b6a':'#8d867a';
+}
+['seoT','seoD'].forEach(id=>document.getElementById(id).addEventListener('input',seoUpdate));
+seoUpdate();
+
+/* ---------- 總測驗 ---------- */
+const QA=[
+ ['「品牌」的英文 brand 原意是什麼?這告訴我們品牌的本質是?','古北歐語「燃燒」,指牛身上的烙印。品牌的本質=在別人腦中烙下的印象,靠重複出現燙深。'],
+ ['為什麼有社群帳號還需要自己的網站?','社群是租來的攤位(演算法、封號、倒站都不由你),網站是自己的家,規則自訂、地址永久。'],
+ ['定位語的萬用公式是?','我為【誰】創作【什麼】,讓他們【得到什麼】——三格都要具體,「大家」不是定位。'],
+ ['HTML、CSS、JavaScript 三兄弟各管什麼?','HTML=骨架內容、CSS=外觀打扮、JS=互動動作。只用前兩個就能做出個人網站。'],
+ ['網站首頁的檔案為什麼要叫 index.html?','index=索引目錄:伺服器收到「看這個資料夾」的請求時,預設端出叫 index 的那頁,像書先翻目錄。'],
+ ['DNS 在上網流程中扮演什麼角色?','網路電話簿:把好記的網址翻譯成伺服器的門牌號碼(IP),瀏覽器才知道去哪拿檔案。'],
+ ['GitHub Pages 免費開站,倉庫名稱有什麼暗號?','取名「帳號名.github.io」(一字不差),Pages 自動啟用,網址就是它。'],
+ ['設計新手三原則是?','顏色不超過三個、字體不超過兩種、留白給足。'],
+ ['SEO 新手最該顧好的兩個標籤?寫的原則?','title 與 meta description——把讀者會搜的字誠實寫進去,不堆砌;它們就是搜尋結果上那兩行字。'],
+ ['品牌經營的鐵律「穩定>爆發」是什麼意思?','每週一篇持續一年,勝過連發十篇後消失——品牌是重複出現堆出來的,承諾了更新日就要守住。']
+];
+document.getElementById('quizBox').innerHTML=QA.map((q,i)=>`
+ <div class="q" id="qq${i}">
+   <div class="qt">${i+1}. ${q[0]}</div>
+   <button onclick="document.getElementById('qq${i}').classList.toggle('open')">看答案</button>
+   <div class="ans">${q[1]}</div>
+ </div>`).join('');
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-eb16d143cc" data-category="creative"></script></body>
+</html>

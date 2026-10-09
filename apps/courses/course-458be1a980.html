@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>開廠經營治理互動教室 — 從登記到治理的完整流程</title>
+<style>
+:root{
+  --linen:#FAF6EF;--paper:#FFFFFF;--khaki:#A8946A;--khaki-dark:#8A774E;
+  --ink:#1F1D1A;--gray:#6E6A63;--line:#E6DFD2;--blue:#2E5E7E;--red:#8C4A3C;
+  --ok:#3E6B4F;--bad:#A24936;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;background:var(--linen);color:var(--ink);line-height:1.8;-webkit-font-smoothing:antialiased;}
+.num{font-family:Georgia,"Times New Roman",serif;font-variant-numeric:tabular-nums;}
+header{background:var(--ink);color:var(--linen);padding:28px 20px 22px;text-align:center;}
+header .eyebrow{font-size:12px;letter-spacing:4px;color:var(--khaki);margin-bottom:8px;}
+header h1{font-size:24px;font-weight:700;letter-spacing:2px;}
+header p{font-size:13px;color:#B8B2A6;margin-top:6px;}
+nav{position:sticky;top:0;z-index:50;background:var(--paper);border-bottom:1px solid var(--line);display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+nav::-webkit-scrollbar{display:none;}
+nav button{flex:0 0 auto;background:none;border:none;padding:14px 12px;font-size:13px;color:var(--gray);border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;font-family:inherit;}
+nav button.active{color:var(--ink);border-bottom-color:var(--khaki);font-weight:700;}
+.progress-wrap{height:3px;background:var(--line);}
+.progress-bar{height:3px;background:var(--khaki);width:0;transition:width .4s;}
+main{max-width:760px;margin:0 auto;padding:24px 18px 80px;}
+section.chapter{display:none;animation:fadein .35s ease;}
+section.chapter.show{display:block;}
+@keyframes fadein{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.ch-label{font-size:12px;letter-spacing:3px;color:var(--khaki-dark);margin-bottom:4px;}
+h2{font-size:22px;margin-bottom:16px;}
+h3{font-size:17px;margin:28px 0 10px;padding-left:10px;border-left:4px solid var(--khaki);}
+p{margin-bottom:12px;font-size:15px;}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px;margin:14px 0;}
+.story{background:#F3EDDF;border-left:4px solid var(--khaki);border-radius:0 10px 10px 0;padding:16px 18px;margin:14px 0;font-size:15px;}
+.story b{color:var(--khaki-dark);}
+.tip{background:var(--paper);border:1px dashed var(--khaki);border-radius:10px;padding:14px 16px;margin:14px 0;font-size:14px;}
+.tip::before{content:"💡 小重點";display:block;font-weight:700;color:var(--khaki-dark);margin-bottom:6px;font-size:13px;letter-spacing:1px;}
+.warn{background:#F6E7E2;border-left:4px solid var(--bad);border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:14px;}
+.warn::before{content:"⚠️ 注意";display:block;font-weight:700;color:var(--bad);margin-bottom:4px;font-size:13px;letter-spacing:1px;}
+.origin{background:#EFF3F5;border-left:4px solid var(--blue);border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:14px;}
+.origin::before{content:"📖 名詞的由來";display:block;font-weight:700;color:var(--blue);margin-bottom:4px;font-size:13px;letter-spacing:1px;}
+.steps{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;font-size:15px;counter-reset:st;}
+.steps .st{position:relative;padding:6px 0 6px 40px;counter-increment:st;}
+.steps .st::before{content:counter(st);position:absolute;left:0;top:8px;width:26px;height:26px;background:var(--khaki-dark);color:#fff;border-radius:50%;text-align:center;line-height:26px;font-size:13px;font-weight:700;}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;background:var(--paper);}
+th{background:var(--ink);color:var(--linen);padding:9px 10px;text-align:left;font-weight:600;}
+td{border:1px solid var(--line);padding:9px 10px;vertical-align:top;}
+tr:nth-child(even) td{background:#FBF8F1;}
+.right{text-align:right;}
+.center{text-align:center;}
+.btn{display:inline-block;background:var(--ink);color:var(--linen);border:none;border-radius:8px;padding:10px 18px;font-size:14px;cursor:pointer;font-family:inherit;transition:opacity .15s;margin:3px;}
+.btn:active{opacity:.75;}
+.btn.ghost{background:var(--paper);color:var(--ink);border:1px solid var(--ink);}
+.btn.small{padding:8px 14px;font-size:13px;}
+.btn.on{background:var(--khaki-dark);color:#fff;border-color:var(--khaki-dark);}
+.lab{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:16px 0;}
+.lab .lab-title{font-weight:700;margin-bottom:10px;font-size:15px;}
+.lab .lab-title::before{content:"🔬 ";}
+.lab .result{background:var(--linen);border-radius:8px;padding:12px 14px;margin-top:10px;font-size:14px;}
+.lab .result b{color:var(--khaki-dark);font-size:16px;}
+.lab svg{width:100%;height:auto;display:block;}
+.slider-row{display:flex;align-items:center;gap:10px;margin:10px 0;font-size:14px;}
+.slider-row label{width:112px;flex:0 0 auto;font-weight:700;}
+.slider-row input[type=range]{flex:1;accent-color:var(--khaki-dark);}
+.slider-row .val{width:92px;text-align:right;flex:0 0 auto;}
+.good{color:var(--ok);font-weight:700;}
+.bad{color:var(--bad);font-weight:700;}
+/* 文件清單 */
+.chk{display:flex;align-items:flex-start;gap:10px;padding:8px 4px;border-bottom:1px solid var(--line);font-size:14px;cursor:pointer;}
+.chk input{margin-top:5px;accent-color:var(--ok);width:18px;height:18px;flex:0 0 auto;}
+.chk .who{font-size:12px;color:var(--gray);display:block;}
+.chk.done{color:var(--gray);text-decoration:line-through;}
+.pbar{height:10px;background:var(--line);border-radius:5px;overflow:hidden;margin:8px 0;}
+.pbar div{height:10px;background:var(--ok);width:0;transition:width .3s;}
+/* 組織圖 */
+.org{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.org .row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
+.org .node{background:var(--ink);color:var(--linen);border-radius:8px;padding:6px 10px;font-size:13px;cursor:pointer;text-align:center;min-width:80px;}
+.org .node.lv2{background:var(--khaki-dark);}
+.org .node.lv3{background:var(--paper);color:var(--ink);border:1px solid var(--khaki);}
+.org .node.sel{box-shadow:0 0 0 3px var(--blue);}
+.org .arrow{color:var(--khaki-dark);font-size:14px;line-height:1;}
+.org .grp{border:1px dashed var(--khaki);border-radius:10px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.org .grp .gt{font-size:12px;color:var(--khaki-dark);font-weight:700;}
+.info{background:var(--linen);border-radius:8px;padding:12px 14px;margin-top:10px;font-size:14px;min-height:70px;}
+.info b{color:var(--khaki-dark);}
+/* 測驗 */
+.quiz{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;}
+.quiz .q-text{font-weight:700;margin-bottom:10px;font-size:15px;}
+.quiz .opts{display:flex;flex-direction:column;gap:8px;}
+.quiz .opt{text-align:left;background:var(--linen);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px;cursor:pointer;font-family:inherit;}
+.quiz .opt.correct{background:#E7F0E9;border-color:var(--ok);color:var(--ok);font-weight:700;}
+.quiz .opt.wrong{background:#F6E7E2;border-color:var(--bad);color:var(--bad);}
+.quiz .fb{margin-top:10px;font-size:14px;display:none;}
+.quiz .fb.show{display:block;}
+.quiz .fb.good{color:var(--ok);}
+.quiz .fb.no{color:var(--bad);}
+.pager{display:flex;justify-content:space-between;margin-top:32px;gap:10px;}
+.pager .btn{flex:1;text-align:center;}
+#finalScore{display:none;text-align:center;padding:20px;}
+#finalScore .big{font-size:40px;font-weight:700;color:var(--khaki-dark);}
+.note{font-size:12px;color:var(--gray);margin-top:24px;}
+@media (max-width:480px){
+  h2{font-size:20px;}
+  .slider-row label{width:88px;font-size:13px;}
+  .slider-row .val{width:78px;}
+  .org .node{font-size:12px;min-width:66px;padding:5px 6px;}
+}
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">COMPANY &amp; FACTORY · FROM ZERO</div>
+  <h1>開廠經營治理互動教室</h1>
+  <p>從一個想法,到一間能長久經營的工廠——文件、資金、人員、產品、治理全流程</p>
+</header>
+
+<nav id="nav"></nav>
+<div class="progress-wrap"><div class="progress-bar" id="pbar"></div></div>
+
+<main>
+
+<!-- ======== 序章 ======== -->
+<section class="chapter" data-title="開場">
+  <div class="ch-label">序章</div>
+  <h2>開一間工廠,像養大一個孩子</h2>
+
+  <div class="story">
+    <b>阿泰</b>在台灣成衣業做了二十年,手上有幾個穩定的品牌客戶。他決定自己出來開廠:台灣人工太貴,他看上<b>柬埔寨西哈努克港</b>——工資較低、出口歐美有關稅優勢、港口就在旁邊。<br><br>
+    他很快發現,開廠不只是「買機器、請工人」。他得先<b>成立一家公司</b>(一個法律上的「人」),拿到政府的各種<b>文件</b>,籌到足夠的<b>錢</b>,找到並管好<b>幾百個人</b>,接到訂單做出<b>產品</b>,再讓整間公司被<b>好好治理</b>,不因為一次危機就倒下。<br><br>
+    這堂課就跟著阿泰,從<b>「想開廠」</b>一路走到<b>「工廠穩定運轉」</b>。
+  </div>
+
+  <h3>經營一間工廠的六大面向</h3>
+  <div class="card">
+    <table>
+      <tr><th>面向</th><th>回答的問題</th><th>在哪章學</th></tr>
+      <tr><td>🏛️ <b>法人與文件</b></td><td>公司在法律上怎麼「出生」?</td><td>第 1、3 章</td></tr>
+      <tr><td>💰 <b>資金</b></td><td>要多少錢?錢從哪來?</td><td>第 2、4 章</td></tr>
+      <tr><td>🏭 <b>廠房設備</b></td><td>在哪裡做?用什麼做?</td><td>第 5 章</td></tr>
+      <tr><td>👥 <b>人員</b></td><td>誰來做?怎麼組織?</td><td>第 6 章</td></tr>
+      <tr><td>👕 <b>產品營運</b></td><td>做什麼?怎麼報價?怎麼做好?</td><td>第 7、8 章</td></tr>
+      <tr><td>⚖️ <b>財稅、法遵、治理</b></td><td>怎麼守規矩、防弊、長久經營?</td><td>第 9~12 章</td></tr>
+    </table>
+  </div>
+
+  <h3>學習地圖(請照順序走)</h3>
+  <div class="card">
+    <table>
+      <tr><th style="width:64px;">章節</th><th>你會學到</th></tr>
+      <tr><td>第 1 章</td><td>公司是什麼:法人、有限責任、四種企業型態</td></tr>
+      <tr><td>第 2 章</td><td>開廠前規劃:商業計畫、選址、損益兩平(計算器)</td></tr>
+      <tr><td>第 3 章</td><td>登記與文件:台灣 vs 柬埔寨流程(互動清單)</td></tr>
+      <tr><td>第 4 章</td><td>資金:資本額、股權與借款、開辦資金(計算器)</td></tr>
+      <tr><td>第 5 章</td><td>廠房與設備:租或買、廠區動線規劃</td></tr>
+      <tr><td>第 6 章</td><td>人員:組織圖(互動)、招募、薪資、社保</td></tr>
+      <tr><td>第 7 章</td><td>產品與報價:接單、SAM、CM 報價(計算器)</td></tr>
+      <tr><td>第 8 章</td><td>生產營運:KPI、PDCA、日常管理</td></tr>
+      <tr><td>第 9 章</td><td>財務與稅務:帳、稅、內部控制</td></tr>
+      <tr><td>第 10 章</td><td>法遵與驗廠:勞動法、社會責任、ESG</td></tr>
+      <tr><td>第 11 章</td><td>公司治理:三層結構、核決權限(互動)</td></tr>
+      <tr><td>第 12 章</td><td>風險管理:保險、危機、客戶集中</td></tr>
+      <tr><td>第 13 章</td><td>全流程串連:開廠甘特圖 + 月度治理儀表板</td></tr>
+      <tr><td>第 14 章</td><td>總測驗 + 畢業備忘卡</td></tr>
+    </table>
+  </div>
+
+  <div class="warn">
+    本課程談的法規流程是<b>概念與一般做法</b>。各國法規經常修改,實際辦理時請以<b>主管機關最新公告</b>為準,並諮詢當地的<b>律師與會計師</b>。
+  </div>
+</section>
+
+<!-- ======== 第1章 ======== -->
+<section class="chapter" data-title="1·公司是什麼">
+  <div class="ch-label">第 1 章</div>
+  <h2>公司是什麼?法律上的「人」</h2>
+
+  <p>開廠第一步,不是買機器,而是先弄懂一個觀念:<b>公司是一個「人」</b>——不是真的人,是法律上的人。</p>
+
+  <div class="story">
+    阿泰如果用<b>自己的名字</b>跟銀行借錢、跟客戶簽約,萬一工廠倒了,債主可以來拿他的<b>房子、存款</b>。<br>
+    但如果他先成立一家「泰成製衣有限公司」,由<b>公司</b>去借錢、簽約、雇人,那麼公司倒了,阿泰原則上只會損失<b>他投進公司的錢</b>,家裡的房子保得住。<br>
+    這道防火牆,叫做<b>有限責任</b>。
+  </div>
+
+  <div class="origin">
+    <b>公司(company)</b>源自拉丁文 <b>com(一起)+ panis(麵包)</b>——「一起分麵包的人」,和 companion(同伴)同源。<br>
+    <b>法人(juristic person)</b>:法律創造出來的「人」,可以擁有財產、簽合約、告人和被告。它和自然人(真正的人)相對。<br>
+    <b>有限責任(limited liability)</b>:股東只對公司的債務負責到「出資額」為止。英國在 1855 年立法普遍承認這個制度,它讓一般人也敢投資做生意,被視為近代經濟快速成長的關鍵之一。這也是為什麼很多公司名稱後面有「有限公司」或 Ltd.(Limited)。
+  </div>
+
+  <h3>四種常見的企業型態(以台灣為例)</h3>
+  <div class="card">
+    <table>
+      <tr><th>型態</th><th>老闆要負的責任</th><th>適合</th></tr>
+      <tr><td><b>獨資</b>(行號)</td><td>無限責任:賠到個人財產</td><td>小攤、小店</td></tr>
+      <tr><td><b>合夥</b></td><td>合夥人一起負無限責任</td><td>幾個朋友合開小店</td></tr>
+      <tr><td><b>有限公司</b></td><td>有限責任(出資為限)</td><td>中小企業、家族企業</td></tr>
+      <tr><td><b>股份有限公司</b></td><td>有限責任;資本分成「股份」,可轉讓</td><td>要擴大、找投資人、將來上市的企業</td></tr>
+    </table>
+  </div>
+
+  <div class="origin">
+    <b>股份(share)</b>:把公司切成很多等份,每份可以買賣。1602 年成立的<b>荷蘭東印度公司</b>被認為是最早公開發行、讓一般民眾買賣股份的公司——遠洋貿易風險太大,一個人扛不起,就切成小份讓很多人一起出錢、一起分紅。
+  </div>
+
+  <div class="tip">
+    台資企業到海外設廠,常見的做法是:台灣母公司(或透過第三地控股公司)出資,在當地成立一家<b>子公司</b>。子公司是當地的法人,遵守當地法律;母公司是它的股東。這樣海外工廠的風險也被有限責任隔開。
+  </div>
+
+  <div id="q1"></div>
+</section>
+
+<!-- ======== 第2章 ======== -->
+<section class="chapter" data-title="2·開廠規劃">
+  <div class="ch-label">第 2 章</div>
+  <h2>開廠前的規劃:先在紙上把工廠開一遍</h2>
+
+  <h3>商業計畫書:工廠的設計圖</h3>
+  <div class="card">
+    蓋房子前要畫設計圖;開廠前要寫<b>商業計畫書(Business Plan)</b>。它要回答六個問題:<br>
+    ① <b>做什麼產品?</b>(針織衫、制服、毛巾……)<br>
+    ② <b>賣給誰?</b>(哪些品牌客戶、市場在哪)<br>
+    ③ <b>在哪裡做?</b>(選址,下一段)<br>
+    ④ <b>要多少錢?</b>(第 4 章)<br>
+    ⑤ <b>要多少人?</b>(第 6 章)<br>
+    ⑥ <b>多久賺錢?</b>(本章的損益兩平)<br>
+    寫計畫書的真正價值,是<b>逼自己在花錢之前,先想清楚每一個環節</b>。銀行貸款、找投資人,也都會要求看這份文件。
+  </div>
+
+  <h3>選址:台灣還是柬埔寨?</h3>
+  <div class="card">
+    <table>
+      <tr><th>考量</th><th>台灣</th><th>柬埔寨(如西港)</th></tr>
+      <tr><td>人工成本</td><td>高</td><td>低很多</td></tr>
+      <tr><td>出口關稅</td><td>一般稅率</td><td>身為低度開發國家,出口部分市場享有優惠關稅(但會隨國際情勢調整)</td></tr>
+      <tr><td>供應鏈</td><td>布料、輔料就近取得</td><td>多數布料需進口,交期要拉長</td></tr>
+      <tr><td>基礎建設</td><td>水電穩定</td><td>要注意電力穩定度、備用發電機</td></tr>
+      <tr><td>管理難度</td><td>語言文化相通</td><td>語言、文化、法規都要重新學</td></tr>
+    </table>
+  </div>
+
+  <div class="origin">
+    <b>經濟特區(SEZ,Special Economic Zone)</b>:政府劃出一塊區域,區內企業享有特別的稅務、海關和行政便利,常設有一站式辦公室。西港就有經濟特區。<br>
+    <b>EBA(Everything But Arms)</b>:歐盟給低度開發國家的關稅優惠,意思是「除了武器以外,全部免關稅」。柬埔寨成衣出口歐洲長期受惠於此;但歐盟在 2020 年以人權等理由<b>部分撤銷</b>柬埔寨的優惠,部分成衣品項開始課稅。這提醒我們:<b>選址時的優惠不是永遠的</b>。
+  </div>
+
+  <h3>損益兩平:做多少才不賠錢?</h3>
+  <p>工廠的成本分兩種:<b>固定成本</b>(不管做多少都要付:租金、管理人員薪水、機器折舊)和<b>變動成本</b>(做越多花越多:布料、計件工資、電費)。損益兩平點 = 固定成本 ÷(每件售價 − 每件變動成本)。</p>
+
+  <div class="lab">
+    <div class="lab-title">互動:損益兩平計算器(每月)</div>
+    <div class="slider-row"><label>每月固定成本</label><input type="range" id="beF" min="20000" max="300000" step="5000" value="120000" oninput="beCalc()"><span class="val num" id="beFv"></span></div>
+    <div class="slider-row"><label>每件收入</label><input type="range" id="beP" min="0.5" max="6" step="0.1" value="2.0" oninput="beCalc()"><span class="val num" id="bePv"></span></div>
+    <div class="slider-row"><label>每件變動成本</label><input type="range" id="beV" min="0.1" max="5" step="0.1" value="0.8" oninput="beCalc()"><span class="val num" id="beVv"></span></div>
+    <div class="slider-row"><label>每月實際產量</label><input type="range" id="beQ" min="10000" max="400000" step="5000" value="150000" oninput="beCalc()"><span class="val num" id="beQv"></span></div>
+    <div class="result" id="beOut"></div>
+    <p style="font-size:13px;color:var(--gray);margin:8px 0 0;">單位為美元,數字為示範。「每件收入」在代工廠通常是加工費(第 7 章的 CM)。</p>
+  </div>
+
+  <div id="q2"></div>
+</section>
+
+<!-- ======== 第3章 ======== -->
+<section class="chapter" data-title="3·登記與文件">
+  <div class="ch-label">第 3 章</div>
+  <h2>登記與文件:讓公司在法律上「出生」</h2>
+
+  <p>公司要合法存在,得向政府<b>登記</b>——就像嬰兒出生要報戶口。登記完成,公司才能開銀行戶、開發票、雇員工、出口貨物。</p>
+
+  <div class="origin">
+    <b>公司章程(Articles of Incorporation)</b>:公司的「憲法」,寫明公司名稱、營業項目、資本額、股東與董事的權利、開會規則。章程的「章」是條文、「程」是規矩。<br>
+    <b>統一編號</b>:台灣政府給每個營利事業的 8 位數號碼,像公司的身分證字號,開發票、報稅、投標都要用。柬埔寨也有對應的稅號(TIN,Tax Identification Number)。
+  </div>
+
+  <h3>兩條登記路線</h3>
+  <div class="card">
+    <table>
+      <tr><th style="width:36px;">#</th><th>台灣(一般製造業)</th><th>柬埔寨(台資成衣廠)</th></tr>
+      <tr><td>1</td><td>公司名稱及營業項目預查</td><td>選定廠址(一般工業區或經濟特區)</td></tr>
+      <tr><td>2</td><td>開籌備處帳戶、股東匯入股款</td><td>向商業部(MOC)線上辦理公司登記</td></tr>
+      <tr><td>3</td><td>會計師做資本額查核簽證</td><td>向稅務總局(GDT)辦理稅務登記、增值稅(VAT)</td></tr>
+      <tr><td>4</td><td>申請公司設立登記 → 取得統一編號</td><td>視需要向投資委員會(CDC)申請合格投資項目(QIP)優惠</td></tr>
+      <tr><td>5</td><td>國稅局稅籍登記</td><td>向工業主管機關申請工廠營運許可;視規模辦理環境評估</td></tr>
+      <tr><td>6</td><td>工廠登記、消防、環保</td><td>向勞動部申報開業、提交內部規章;登記國家社會保障基金(NSSF)</td></tr>
+      <tr><td>7</td><td>員工勞保、就保、健保、勞退投保</td><td>外籍幹部申請工作許可證</td></tr>
+      <tr><td>8</td><td>開始營業、開立發票</td><td>海關登記、原產地證明;加入產業協會(如成衣製造商協會 GMAC)</td></tr>
+    </table>
+    <p style="font-size:13px;color:var(--gray);margin:0;">兩國近年都在推動線上與一站式辦理,實際順序和機關名稱可能調整。</p>
+  </div>
+
+  <div class="origin">
+    <b>QIP(Qualified Investment Project,合格投資項目)</b>:柬埔寨給符合條件的投資案的優惠身分,可能包含所得稅減免期、設備與原料進口關稅減免等。申請窗口是柬埔寨發展理事會(CDC)。優惠內容以最新投資法規為準。
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">互動:開廠文件清單(勾選追蹤進度)</div>
+    <div class="center">
+      <button class="btn small on" id="tabTW" onclick="docTab('tw')">🇹🇼 台灣</button>
+      <button class="btn small ghost" id="tabKH" onclick="docTab('kh')">🇰🇭 柬埔寨</button>
+    </div>
+    <div class="pbar"><div id="docBar"></div></div>
+    <div id="docPct" style="font-size:13px;color:var(--gray);text-align:right;"></div>
+    <div id="docList"></div>
+  </div>
+
+  <h3>文件保存:公司的記憶</h3>
+  <div class="card">
+    公司成立後,文件會越來越多。要建立一套<b>文件管理制度</b>:<br>
+    ① <b>法定文件</b>(章程、登記證照、股東名冊、董事會與股東會議紀錄)→ 正本鎖在保險櫃,掃描存雲端。<br>
+    ② <b>證照到期提醒</b>(營業許可、消防、工作許可證)→ 建立到期日一覽表,提前 60 天提醒續辦。<br>
+    ③ <b>帳冊憑證</b>→ 依法保存。以台灣為例,會計憑證一般至少保存 5 年、帳簿與財務報表至少 10 年。<br>
+    ④ <b>員工檔案、合約</b>→ 一人一檔,離職後也要依法保存一段時間。
+  </div>
+
+  <div id="q3"></div>
+</section>
+
+<!-- ======== 第4章 ======== -->
+<section class="chapter" data-title="4·資金">
+  <div class="ch-label">第 4 章</div>
+  <h2>資金:要多少錢?錢從哪來?</h2>
+
+  <div class="origin">
+    <b>資本(capital)</b>源自拉丁文 <b>caput(頭)</b>。古代財富以牲畜的「頭數」計算,後來就把做生意的本錢叫 capital。<br>
+    <b>資本額</b>:股東承諾投入公司的錢,登記在公司資料上,代表公司的「底子」。
+  </div>
+
+  <h3>錢的兩個來源</h3>
+  <div class="card">
+    <table>
+      <tr><th></th><th>股權(自己人出錢)</th><th>債務(向別人借錢)</th></tr>
+      <tr><td>例子</td><td>阿泰和合夥人出資</td><td>銀行貸款、設備租賃</td></tr>
+      <tr><td>要還嗎?</td><td>不用還,但要分享利潤和經營權</td><td>要還本金加利息</td></tr>
+      <tr><td>風險</td><td>稀釋持股</td><td>還不出來會被追討、甚至倒閉</td></tr>
+      <tr><td>會計位置</td><td>權益</td><td>負債</td></tr>
+    </table>
+    <p style="font-size:13px;color:var(--gray);margin:0;">回想會計課的恆等式:資產 = 負債 + 權益。這張表就是右邊的兩個來源。</p>
+  </div>
+
+  <h3>開辦資金 = 開辦費 + 營運週轉金</h3>
+  <p>新手最常犯的錯:<b>只算買機器、裝修的錢,忘了營運週轉金</b>。工廠開始生產後,要先付工資、電費、布料,客戶的貨款卻要等出貨後 30~90 天才進來。這段空窗期,得靠準備好的現金撐過去。</p>
+
+  <div class="lab">
+    <div class="lab-title">互動:開辦資金計算器(美元,示範數字)</div>
+    <div class="slider-row"><label>機器設備</label><input type="range" id="caE" min="50000" max="1500000" step="10000" value="450000" oninput="caCalc()"><span class="val num" id="caEv"></span></div>
+    <div class="slider-row"><label>廠房裝修</label><input type="range" id="caR" min="20000" max="800000" step="10000" value="200000" oninput="caCalc()"><span class="val num" id="caRv"></span></div>
+    <div class="slider-row"><label>月租金</label><input type="range" id="caT" min="2000" max="60000" step="1000" value="15000" oninput="caCalc()"><span class="val num" id="caTv"></span></div>
+    <div class="slider-row"><label>押金月數</label><input type="range" id="caD" min="0" max="12" step="1" value="3" oninput="caCalc()"><span class="val num" id="caDv"></span></div>
+    <div class="slider-row"><label>每月營運開支</label><input type="range" id="caM" min="20000" max="500000" step="5000" value="180000" oninput="caCalc()"><span class="val num" id="caMv"></span></div>
+    <div class="slider-row"><label>週轉月數</label><input type="range" id="caW" min="1" max="9" step="1" value="4" oninput="caCalc()"><span class="val num" id="caWv"></span></div>
+    <div class="result" id="caOut"></div>
+  </div>
+
+  <div class="tip">
+    週轉月數怎麼抓?從「開始付工資」到「收到第一筆貨款」要幾個月:招募培訓(1 個月)+ 試產到量產(1~2 個月)+ 客戶付款條件(1~3 個月)。一般建議準備 <b>3~6 個月</b>的營運開支。<b>很多工廠不是因為沒訂單倒閉,而是因為現金撐不到收款那一天。</b>
+  </div>
+
+  <div id="q4"></div>
+</section>
+
+<!-- ======== 第5章 ======== -->
+<section class="chapter" data-title="5·廠房設備">
+  <div class="ch-label">第 5 章</div>
+  <h2>廠房與設備:在哪裡做、用什麼做</h2>
+
+  <h3>租還是買?</h3>
+  <div class="card">
+    <table>
+      <tr><th></th><th>租廠房</th><th>買地自建</th></tr>
+      <tr><td>初期資金</td><td>少(押金 + 裝修)</td><td>多(土地 + 建築)</td></tr>
+      <tr><td>彈性</td><td>高,生意變化可搬遷</td><td>低,但可依需求設計</td></tr>
+      <tr><td>適合</td><td>新廠、不確定能經營多久</td><td>長期經營、規模穩定</td></tr>
+    </table>
+    <p style="font-size:13px;color:var(--gray);margin:0;">在柬埔寨,外國人持有土地受到限制,外資廠多採租地或在經濟特區內租廠房。</p>
+  </div>
+
+  <h3>廠區動線:讓布料「一路往前走」</h3>
+  <p>好的廠房規劃,讓材料像河流一樣<b>單向流動</b>,不回頭、不交叉。以成衣廠為例:</p>
+
+  <div class="lab">
+    <div class="lab-title">成衣廠標準動線(平面示意)</div>
+    <svg viewBox="0 0 420 200">
+      <rect x="4" y="4" width="412" height="192" rx="8" fill="#FFFFFF" stroke="#C9BFA8"/>
+      <g font-size="11" text-anchor="middle" font-weight="bold">
+        <rect x="14" y="20" width="70" height="70" rx="6" fill="#2E5E7E"/><text x="49" y="52" fill="#fff">原料倉</text><text x="49" y="68" fill="#fff">IQC</text>
+        <rect x="100" y="20" width="70" height="70" rx="6" fill="#8A774E"/><text x="135" y="60" fill="#fff">裁剪</text>
+        <rect x="186" y="20" width="130" height="70" rx="6" fill="#1F1D1A"/><text x="251" y="52" fill="#fff">縫紉線</text><text x="251" y="68" fill="#B8B2A6">(11~12 條)</text>
+        <rect x="332" y="20" width="74" height="70" rx="6" fill="#8A774E"/><text x="369" y="60" fill="#fff">整燙</text>
+        <rect x="332" y="110" width="74" height="70" rx="6" fill="#8C4A3C"/><text x="369" y="140" fill="#fff">包裝</text><text x="369" y="156" fill="#fff">FQC</text>
+        <rect x="236" y="110" width="80" height="70" rx="6" fill="#2E5E7E"/><text x="276" y="140" fill="#fff">成品倉</text><text x="276" y="156" fill="#fff">出貨</text>
+        <rect x="14" y="110" width="200" height="70" rx="6" fill="#EDE6D6"/><text x="114" y="136" fill="#6E6A63">辦公室·機修·</text><text x="114" y="152" fill="#6E6A63">餐廳·醫務室</text>
+      </g>
+      <g stroke="#A8946A" stroke-width="3" fill="none" stroke-dasharray="6 4">
+        <path d="M84 55 H100"/><path d="M170 55 H186"/><path d="M316 55 H332"/><path d="M369 90 V110"/><path d="M332 145 H316"/>
+      </g>
+    </svg>
+    <p style="font-size:13px;color:var(--gray);margin:0;">虛線是物料流向:進料 → 裁剪 → 縫紉 → 整燙 → 包裝 → 成品出貨,一路向前,不走回頭路。</p>
+  </div>
+
+  <h3>設備清單與保養</h3>
+  <div class="card">
+    <b>生產設備</b>:平車、拷克車、坎車、裁床、整燙設備、驗針機(防止斷針混入衣服)。<br>
+    <b>公用設備</b>:空壓機、發電機、變電設備、消防系統。(電機課學過的馬達們全在這裡!)<br>
+    <b>保養制度</b>:每台設備建立<b>設備卡</b>(編號、購入日、保養紀錄),依計畫定期保養,而不是壞了才修——這叫<b>預防保養</b>。
+  </div>
+
+  <div class="tip">
+    消防和逃生動線要在<b>設計階段</b>就做好:足夠的逃生門、通道不堆貨、緊急照明、定期演練。2013 年孟加拉 Rana Plaza 大樓倒塌造成一千多名成衣工人罹難,之後全球品牌對工廠建築與消防安全的要求大幅提高——驗廠(第 10 章)一定會檢查。
+  </div>
+
+  <div id="q5"></div>
+</section>
+
+<!-- ======== 第6章 ======== -->
+<section class="chapter" data-title="6·人員組織">
+  <div class="ch-label">第 6 章</div>
+  <h2>人員:誰來做、怎麼組織</h2>
+
+  <p>一間約 500 人、十多條縫紉線的台資成衣廠(像 VRT 這樣的規模),組織大致長這樣。<b>點任一個方塊</b>看它負責什麼:</p>
+
+  <div class="lab">
+    <div class="lab-title">互動組織圖(台資成衣廠常見架構)</div>
+    <div class="org" id="org"></div>
+    <div class="info" id="orgInfo">👆 點一個方塊,看這個單位負責什麼。</div>
+  </div>
+
+  <div class="origin">
+    <b>組織圖(Organization Chart)</b>:把「誰向誰報告」畫成樹狀圖。一般認為最早的現代組織圖出現在 1850 年代美國的鐵路公司:鐵路路線很長、員工分散各地,老闆需要一張圖弄清楚誰管誰、出事找誰負責。
+  </div>
+
+  <h3>人員管理五件事</h3>
+  <div class="card">
+    ① <b>招募</b>:確認年齡(嚴禁童工,入職查驗身分證件)、健康、技能;新人先訓練再上線。<br>
+    ② <b>勞動合約</b>:寫清楚職務、工資、工時、試用期、合約期限。柬埔寨常見定期合約(FDC)和不定期合約(UDC),規定依當地勞動法。<br>
+    ③ <b>薪資</b>:基本工資不得低於法定最低工資(柬埔寨成衣業最低工資每年由政府公告調整);加上加班費、全勤獎、津貼。薪資單要讓員工看得懂。<br>
+    ④ <b>社會保險</b>:台灣是勞保、就保、健保、勞退;柬埔寨是 NSSF(工傷、健康照護、退休金等)。<br>
+    ⑤ <b>內部規章/員工手冊</b>:上下班、請假、獎懲、申訴管道。柬埔寨依法須報勞動部;台灣僱用 30 人以上應訂定工作規則報主管機關核備。
+  </div>
+
+  <div class="tip">
+    台資海外廠有一個特別的挑戰:<b>語言</b>。台籍幹部說中文、員工說高棉語。解法是雙語(甚至三語)的 SOP、公告和表單,以及可靠的翻譯與溝通窗口。制度寫得再好,員工看不懂就等於沒有。
+  </div>
+
+  <div id="q6"></div>
+</section>
+
+<!-- ======== 第7章 ======== -->
+<section class="chapter" data-title="7·產品報價">
+  <div class="ch-label">第 7 章</div>
+  <h2>產品與報價:做什麼、怎麼算錢</h2>
+
+  <h3>代工廠的兩種接單模式</h3>
+  <div class="card">
+    <table>
+      <tr><th></th><th>CM(Cut &amp; Make,加工)</th><th>FOB(含料)</th></tr>
+      <tr><td>布料誰買</td><td>客戶提供布料輔料</td><td>工廠自己採購</td></tr>
+      <tr><td>工廠收什麼錢</td><td>只收裁剪+縫製的加工費</td><td>材料 + 加工 + 利潤的總價</td></tr>
+      <tr><td>資金需求</td><td>低(不用墊料錢)</td><td>高(要先付布料錢)</td></tr>
+      <tr><td>利潤空間</td><td>較小但穩</td><td>較大,但要承擔材料風險</td></tr>
+    </table>
+    <p style="font-size:13px;color:var(--gray);margin:0;">新廠常從 CM 開始,資金壓力小;有經驗和現金後再承接 FOB 訂單。</p>
+  </div>
+
+  <h3>報價的核心:SAM</h3>
+  <div class="origin">
+    <b>SAM(Standard Allowed Minute,標準允許分鐘)</b>:一個熟練工人用標準方法做完一件衣服,<b>應該</b>花的分鐘數(已含合理的休息與寬放)。例如一件 T 恤約 5~8 分鐘、一件襯衫約 20~30 分鐘。它源自 20 世紀初<b>泰勒(Frederick Taylor)</b>的「科學管理」:用碼錶量每個動作的時間,找出最好的做法和標準時間。成衣業幾乎所有報價、排產、績效都以 SAM 為共同語言。
+  </div>
+
+  <div class="card">
+    <b>CM 報價四步驟:</b><br>
+    ① 每分鐘成本 = 每位直接工人每月成本 ÷ 每月工作分鐘數<br>
+    ② 實際分鐘 = SAM ÷ 效率(新廠效率低,實際花的時間比 SAM 多)<br>
+    ③ 直接人工成本 = 實際分鐘 × 每分鐘成本<br>
+    ④ CM 報價 = 直接人工 ×(1 + 管銷費用率)×(1 + 利潤率)
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">互動:CM 報價計算器(美元,示範數字)</div>
+    <div class="slider-row"><label>款式 SAM</label><input type="range" id="cmS" min="3" max="40" step="0.5" value="12" oninput="cmCalc()"><span class="val num" id="cmSv"></span></div>
+    <div class="slider-row"><label>產線效率</label><input type="range" id="cmE" min="35" max="85" step="1" value="60" oninput="cmCalc()"><span class="val num" id="cmEv"></span></div>
+    <div class="slider-row"><label>每人每月成本</label><input type="range" id="cmW" min="150" max="600" step="5" value="300" oninput="cmCalc()"><span class="val num" id="cmWv"></span></div>
+    <div class="slider-row"><label>管銷費用率</label><input type="range" id="cmO" min="20" max="150" step="5" value="80" oninput="cmCalc()"><span class="val num" id="cmOv"></span></div>
+    <div class="slider-row"><label>利潤率</label><input type="range" id="cmP" min="0" max="25" step="1" value="10" oninput="cmCalc()"><span class="val num" id="cmPv"></span></div>
+    <div class="result" id="cmOut"></div>
+    <p style="font-size:13px;color:var(--gray);margin:8px 0 0;">每月工作分鐘以 26 天 × 8 小時 × 60 分 = 12,480 分計。「每人每月成本」包含工資、社保與福利。</p>
+  </div>
+
+  <div class="tip">
+    拉動「產線效率」你會發現:<b>效率從 50% 提升到 70%,每件成本下降將近三成</b>。所以代工廠的獲利,主要不是靠報高價(客戶不接受),而是靠<b>提升效率</b>——這就是下一章的主題。
+  </div>
+
+  <div id="q7"></div>
+</section>
+
+<!-- ======== 第8章 ======== -->
+<section class="chapter" data-title="8·生產營運">
+  <div class="ch-label">第 8 章</div>
+  <h2>生產營運:把工廠跑好</h2>
+
+  <h3>用數字管理:KPI</h3>
+  <div class="origin">
+    <b>KPI(Key Performance Indicator,關鍵績效指標)</b>:從眾多數字裡挑出<b>最能代表好壞的幾個</b>來盯。就像開車時不看引擎所有數據,只看儀表板上的速度、油量、水溫。
+  </div>
+
+  <div class="card">
+    <table>
+      <tr><th>KPI</th><th>算法</th><th>代表什麼</th></tr>
+      <tr><td><b>效率</b></td><td>產出件數 × SAM ÷ 投入工時分鐘</td><td>人有沒有做在刀口上</td></tr>
+      <tr><td><b>準時交貨率(OTD)</b></td><td>準時出貨訂單 ÷ 總訂單</td><td>客戶信任的基礎</td></tr>
+      <tr><td><b>一次合格率(FPY)</b></td><td>一次就合格的件數 ÷ 總件數</td><td>品質,也代表返工浪費</td></tr>
+      <tr><td><b>出勤率/流動率</b></td><td>出勤人數 ÷ 應出勤;離職人數 ÷ 平均人數</td><td>人員穩定度</td></tr>
+      <tr><td><b>每件成本</b></td><td>總成本 ÷ 產出件數</td><td>最後的賺賠</td></tr>
+    </table>
+  </div>
+
+  <h3>持續改善:PDCA 循環</h3>
+  <div class="lab">
+    <div class="lab-title">PDCA 循環(點按鈕轉一圈)</div>
+    <svg viewBox="0 0 300 220" id="pdcaSvg" style="max-width:320px;margin:0 auto;"></svg>
+    <div class="center"><button class="btn small" onclick="pdcaNext()">↻ 下一步</button></div>
+    <div class="info" id="pdcaInfo"></div>
+  </div>
+  <div class="origin">
+    <b>PDCA</b> = Plan(計畫)、Do(執行)、Check(檢查)、Act(改善)。最早由美國統計學家 <b>Shewhart</b> 提出雛形,<b>戴明(W. Edwards Deming)</b>在 1950 年代到日本推廣後廣為流傳,所以也叫「戴明循環」。日本企業的「改善(Kaizen)」文化就建立在它上面。
+  </div>
+
+  <h3>一天的工廠節奏</h3>
+  <div class="card">
+    <b>早會(10 分鐘)</b>:各線組長報告昨天產量、今天目標、問題。<br>
+    <b>每小時看板</b>:每條線掛產量看板,每小時記錄實際 vs 目標,落後立刻處理。<br>
+    <b>品管巡檢</b>:IPQC 在線上巡,問題當場抓。<br>
+    <b>下班前結算</b>:當天產量、品質、出勤數字彙整成日報。<br>
+    <b>每週檢討</b>:看 KPI 趨勢,用 PDCA 選一個問題改善。
+  </div>
+
+  <div id="q8"></div>
+</section>
+
+<!-- ======== 第9章 ======== -->
+<section class="chapter" data-title="9·財務稅務">
+  <div class="ch-label">第 9 章</div>
+  <h2>財務與稅務:錢的紀律</h2>
+
+  <h3>每月必做的財務工作</h3>
+  <div class="steps">
+    <div class="st"><b>記帳</b>:每筆交易都有憑證(發票、收據、合約),依會計原則入帳。</div>
+    <div class="st"><b>對帳</b>:銀行帳戶、應收帳款(客戶欠的)、應付帳款(欠供應商的)逐一核對。</div>
+    <div class="st"><b>月結</b>:出三大報表——損益表(賺多少)、資產負債表(家當與負債)、現金流量表(錢的去向)。</div>
+    <div class="st"><b>報稅</b>:按期申報營業稅/增值稅、代扣員工薪資所得稅。</div>
+    <div class="st"><b>向管理層報告</b>:讓老闆看懂數字,決定下個月怎麼做。</div>
+  </div>
+
+  <h3>工廠常見的稅</h3>
+  <div class="card">
+    <table>
+      <tr><th>稅</th><th>白話</th><th>備註</th></tr>
+      <tr><td><b>營業稅/增值稅(VAT)</b></td><td>商品每經過一手加值,就對加值部分課稅</td><td>出口貨物多數國家適用零稅率或退稅</td></tr>
+      <tr><td><b>營利事業所得稅</b></td><td>公司賺錢(淨利)要繳的稅</td><td>投資優惠(如 QIP)可能有減免期</td></tr>
+      <tr><td><b>薪資代扣稅</b></td><td>公司發薪時先幫員工扣下的所得稅</td><td>未按時代繳會被罰</td></tr>
+      <tr><td><b>進口關稅</b></td><td>進口原料、設備時繳</td><td>加工出口、特區常有減免</td></tr>
+    </table>
+  </div>
+
+  <h3>內部控制:讓弊端「很難發生」</h3>
+  <div class="card">
+    內部控制最核心的原則是<b>職能分離</b>:一件事拆給不同的人做,讓一個人沒辦法獨自作弊。以採購為例:<br>
+    <b>申請的人 ≠ 下單的人 ≠ 驗收的人 ≠ 付款的人</b><br>
+    如果同一個人可以下單、自己驗收、自己付款,他就可以向親戚的公司買貴的東西,甚至付錢給不存在的供應商。拆開後,每一關都是另一關的檢查。
+  </div>
+
+  <div class="origin">
+    <b>稽核(audit)</b>源自拉丁文 <b>audire(聽)</b>。古代識字的人少,查帳時是由管帳的人把帳目<b>念出來給查帳官「聽」</b>。今天的 audio(聲音)也是同一個字根。
+  </div>
+
+  <div id="q9"></div>
+</section>
+
+<!-- ======== 第10章 ======== -->
+<section class="chapter" data-title="10·法遵驗廠">
+  <div class="ch-label">第 10 章</div>
+  <h2>法遵與驗廠:守規矩才有訂單</h2>
+
+  <p>對代工廠來說,守法不只是避免罰款——<b>國際品牌只跟通過驗廠的工廠下單</b>。法遵做不好,訂單直接消失。</p>
+
+  <div class="origin">
+    <b>法遵(Compliance)</b>:遵守法律、規章和客戶要求。compliance 源自拉丁文 complere(完成、履行)——把該盡的義務都做到。大型工廠通常設有獨立的法遵部門。
+  </div>
+
+  <h3>驗廠在查什麼?</h3>
+  <div class="card">
+    <table>
+      <tr><th>類別</th><th>重點</th></tr>
+      <tr><td><b>勞工權益</b></td><td>無童工、無強迫勞動、工資與加班費合法、工時不超標、結社自由</td></tr>
+      <tr><td><b>健康安全</b></td><td>消防設備、逃生門、機器安全防護、化學品管理、急救設施</td></tr>
+      <tr><td><b>環境</b></td><td>廢水、廢棄物、能源使用、化學品排放</td></tr>
+      <tr><td><b>管理系統</b></td><td>制度是否寫下來、有沒有執行紀錄、申訴管道是否有效</td></tr>
+      <tr><td><b>商業道德</b></td><td>反賄賂、帳目誠實、不做兩套帳</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <b>常見的驗廠與計畫</b>:品牌自己的驗廠、第三方社會責任稽核(如 amfori BSCI、WRAP、SMETA)。柬埔寨成衣業還有國際勞工組織(ILO)參與的 <b>Better Factories Cambodia</b> 計畫,長期監測工廠的勞動條件並公開部分結果。
+  </div>
+
+  <div class="origin">
+    <b>ESG</b> = Environmental(環境)、Social(社會)、Governance(治理)。這個詞一般認為源自 2004 年聯合國全球盟約發表的報告〈Who Cares Wins〉(在乎的人才會贏),呼籲投資人評估企業時,不只看賺多少錢,也看它如何對待環境、員工與社會。今天品牌挑選供應商,ESG 表現越來越重要。
+  </div>
+
+  <div class="tip">
+    驗廠最怕的不是「有問題」,而是<b>「沒有紀錄」</b>。稽核員的原則是「<b>沒有寫下來、沒有紀錄,就等於沒做</b>」。所以法遵工作的日常,就是讓每一項制度都有文件、有執行紀錄、有簽名——這也是數位化系統最能幫忙的地方。
+  </div>
+
+  <div id="q10"></div>
+</section>
+
+<!-- ======== 第11章 ======== -->
+<section class="chapter" data-title="11·公司治理">
+  <div class="ch-label">第 11 章</div>
+  <h2>公司治理:讓公司可以長久</h2>
+
+  <div class="origin">
+    <b>治理(governance)</b>源自希臘文 <b>kybernan,「掌舵」</b>。一艘船要有人決定方向、有人划槳、有人監督航線——公司也一樣。有趣的是,「網路控制論」cybernetics 和 cyber 一詞,也來自同一個「掌舵」的字根。
+  </div>
+
+  <h3>三層結構:誰擁有、誰監督、誰執行</h3>
+  <div class="card">
+    <table>
+      <tr><th>層級</th><th>角色</th><th>比喻</th></tr>
+      <tr><td><b>股東會</b></td><td>公司的主人。選董事、決定重大事項(修改章程、增資、合併)</td><td>船東</td></tr>
+      <tr><td><b>董事會</b></td><td>代表股東監督經營、決定策略、任命總經理</td><td>船長</td></tr>
+      <tr><td><b>經營團隊</b></td><td>總經理、廠長、各部門主管,負責日常執行</td><td>航海士與船員</td></tr>
+    </table>
+    <p style="font-size:13px;color:var(--gray);margin:0;">小公司可能同一個人身兼三層;但角色要分清楚,帳和決策紀錄也要分清楚。</p>
+  </div>
+
+  <div class="origin">
+    <b>董事會(Board of Directors)</b>的 board 原意是「木板、桌子」。早期董事們圍著一張長木桌開會,後來「board」就成了這群人的代稱——我們今天說「上板」、「進董事會」,說的其實是「坐上那張桌子」。
+  </div>
+
+  <h3>核決權限:這筆錢誰可以簽?</h3>
+  <p>治理最實用的工具之一,是<b>核決權限表(Delegation of Authority)</b>:依金額大小與事項重要性,規定誰有權核准。小事授權下去,大事往上呈報,每個人都知道自己的界線。</p>
+
+  <div class="lab">
+    <div class="lab-title">互動:核決權限表(示範)</div>
+    <div class="slider-row"><label>支出金額</label><input type="range" id="doaA" min="0" max="100" step="1" value="30" oninput="doaCalc()"><span class="val num" id="doaAv"></span></div>
+    <div class="result" id="doaOut"></div>
+    <table style="margin-top:10px;">
+      <tr><th>金額(美元)</th><th>核准人</th></tr>
+      <tr><td class="num">500 以下</td><td>部門主管</td></tr>
+      <tr><td class="num">500 ~ 5,000</td><td>廠長 / 行政中心主管</td></tr>
+      <tr><td class="num">5,000 ~ 50,000</td><td>總經理</td></tr>
+      <tr><td class="num">50,000 以上</td><td>董事長 / 董事會</td></tr>
+    </table>
+    <p style="font-size:13px;color:var(--gray);margin:0;">金額級距為示範,每家公司依規模自訂,寫進內部規章並公告。</p>
+  </div>
+
+  <h3>好治理的四個習慣</h3>
+  <div class="card">
+    ① <b>重要決策留紀錄</b>:董事會、股東會開會要有會議紀錄,簽名存檔。<br>
+    ② <b>制度寫下來</b>:SOP、內部規章、核決權限,白紙黑字,人換了制度還在。<br>
+    ③ <b>定期報告</b>:經營團隊每月向董事會報告財務、營運、風險。<br>
+    ④ <b>內部稽核</b>:有獨立的人定期檢查制度是否真的被執行。
+  </div>
+
+  <div id="q11"></div>
+</section>
+
+<!-- ======== 第12章 ======== -->
+<section class="chapter" data-title="12·風險管理">
+  <div class="ch-label">第 12 章</div>
+  <h2>風險管理:為壞日子做準備</h2>
+
+  <p>工廠經營了幾年,真正考驗的是<b>出事的那一天</b>。風險管理就是在事情發生前,先想好「萬一」。</p>
+
+  <h3>成衣廠常見的六大風險</h3>
+  <div class="card">
+    <table>
+      <tr><th>風險</th><th>例子</th><th>對策</th></tr>
+      <tr><td><b>客戶集中</b></td><td>一個客戶占營收 60%,他轉單就完了</td><td>分散客戶,單一客戶最好不超過三到四成</td></tr>
+      <tr><td><b>現金流</b></td><td>客戶延遲付款,發不出薪水</td><td>保留週轉金、爭取好的付款條件、備用銀行額度</td></tr>
+      <tr><td><b>政策與關稅</b></td><td>出口優惠被取消、最低工資大幅調升</td><td>持續關注政策、多市場布局</td></tr>
+      <tr><td><b>勞資關係</b></td><td>罷工、集體爭議</td><td>暢通的申訴與溝通管道、依法給付、公平對待</td></tr>
+      <tr><td><b>安全事故</b></td><td>火災、停電、工安意外</td><td>消防演練、備用發電機、保險</td></tr>
+      <tr><td><b>品質與交期</b></td><td>整批貨驗貨不過、趕不上船</td><td>品質四道關卡、交期倒推管理(製鞋課 T&amp;A)</td></tr>
+    </table>
+  </div>
+
+  <h3>保險:把風險轉出去</h3>
+  <div class="card">
+    <b>財產險/火險</b>(廠房、設備、存貨)、<b>公共意外責任險</b>、<b>貨物運輸險</b>、員工的<b>工傷保障</b>(社保 + 團體保險)。保險不能讓壞事不發生,但能讓公司在壞事發生後<b>活下來</b>。
+  </div>
+
+  <div class="tip">
+    每個重大風險都要有一份<b>應變計畫</b>,寫清楚三件事:<b>誰負責、第一個小時做什麼、要通知誰</b>。然後每年演練一次。危機發生時,人會慌;慌的時候,只做得出平常練過的事。
+  </div>
+
+  <div id="q12"></div>
+</section>
+
+<!-- ======== 第13章 ======== -->
+<section class="chapter" data-title="13·全流程串連">
+  <div class="ch-label">第 13 章</div>
+  <h2>全流程串連:開廠第一年</h2>
+
+  <p>把前十二章排在一條時間軸上,就是一間新工廠第一年的樣子:</p>
+
+  <div class="lab">
+    <div class="lab-title">開廠甘特圖(示範時程)</div>
+    <svg viewBox="0 0 420 300" id="gantt"></svg>
+    <p style="font-size:13px;color:var(--gray);margin:0;">實際時程依國家、規模、廠房狀況差異很大。關鍵是看出<b>哪些事可以同時做、哪些必須等前一件完成</b>。</p>
+  </div>
+
+  <h3>穩定營運後:每月治理儀表板</h3>
+  <div class="card">
+    <table>
+      <tr><th>面向</th><th>每月要看的指標</th><th>對應章節</th></tr>
+      <tr><td>💰 財務</td><td>營收、淨利、現金餘額、應收帳款天數</td><td>第 4、9 章</td></tr>
+      <tr><td>👕 營運</td><td>效率、準交率、一次合格率、每件成本</td><td>第 7、8 章</td></tr>
+      <tr><td>👥 人員</td><td>在職人數、出勤率、流動率、工傷件數</td><td>第 6 章</td></tr>
+      <tr><td>⚖️ 法遵</td><td>證照到期、驗廠發現事項、申訴案件</td><td>第 3、10 章</td></tr>
+      <tr><td>🛡️ 風險</td><td>最大客戶占比、重大事故、待決訴訟</td><td>第 12 章</td></tr>
+    </table>
+  </div>
+
+  <div class="tip">
+    這張儀表板就是整堂課的總結:一間工廠要長久,<b>五個面向都要亮綠燈</b>。很多工廠只盯營收和產量,等到人員流失、驗廠不過、現金斷掉才發現——那時通常已經太晚。好的治理,就是<b>讓問題在變成危機之前被看見</b>。
+  </div>
+</section>
+
+<!-- ======== 第14章 ======== -->
+<section class="chapter" data-title="14·總測驗">
+  <div class="ch-label">第 14 章</div>
+  <h2>總測驗:你會了嗎?</h2>
+  <p>12 題,涵蓋整堂課。答完自動計分,錯的題目會告訴你為什麼。</p>
+  <div id="finalQuiz"></div>
+  <div class="center" style="margin-top:16px;">
+    <button class="btn" onclick="gradeFinal()">交卷計分</button>
+    <button class="btn ghost" onclick="resetFinal()">重新作答</button>
+  </div>
+  <div id="finalScore" class="card"></div>
+
+  <h3>畢業備忘卡 🎓</h3>
+  <div class="card">
+    <table>
+      <tr><td><b>法人</b></td><td>公司是法律上的人;有限責任保護股東個人財產</td></tr>
+      <tr><td><b>規劃</b></td><td>商業計畫六問;選址看成本、關稅、供應鏈、政策風險;損益兩平 = 固定成本 ÷ 單位邊際</td></tr>
+      <tr><td><b>登記文件</b></td><td>章程、統一編號/稅號、營運許可、社保登記;證照到期表</td></tr>
+      <tr><td><b>資金</b></td><td>股權 vs 債務;開辦資金 = 開辦費 + 3~6 個月週轉金</td></tr>
+      <tr><td><b>廠房</b></td><td>物料單向流動;消防逃生設計在先;預防保養</td></tr>
+      <tr><td><b>人員</b></td><td>組織圖;招募、合約、薪資、社保、內部規章;雙語制度</td></tr>
+      <tr><td><b>報價</b></td><td>CM vs FOB;CM = SAM ÷ 效率 × 每分鐘成本 × 管銷 × 利潤</td></tr>
+      <tr><td><b>營運</b></td><td>KPI 儀表板;PDCA 持續改善;早會、看板、日報</td></tr>
+      <tr><td><b>財稅</b></td><td>記帳、對帳、月結、報稅;職能分離防弊</td></tr>
+      <tr><td><b>法遵</b></td><td>驗廠查勞工、安全、環境、管理、道德;沒紀錄 = 沒做</td></tr>
+      <tr><td><b>治理</b></td><td>股東會、董事會、經營團隊;核決權限;會議紀錄與內部稽核</td></tr>
+      <tr><td><b>風險</b></td><td>客戶集中、現金流、政策、勞資、安全、品質交期;保險 + 應變計畫</td></tr>
+    </table>
+  </div>
+
+  <p class="note">※ 本課程的法規與流程為概念性介紹,台灣與柬埔寨的機關名稱、程序、稅率、工資與優惠會隨時間調整;歷史典故與名詞由來為一般通說。實際開廠請以主管機關最新規定為準,並諮詢當地律師與會計師。</p>
+</section>
+
+<div class="pager">
+  <button class="btn ghost" id="prevBtn" onclick="go(-1)">← 上一章</button>
+  <button class="btn" id="nextBtn" onclick="go(1)">下一章 →</button>
+</div>
+
+</main>
+
+<script>
+/* ===== 章節導覽 ===== */
+const chapters=[...document.querySelectorAll('section.chapter')];
+const nav=document.getElementById('nav');
+let cur=0;
+chapters.forEach((c,i)=>{
+  const b=document.createElement('button');
+  b.textContent=c.dataset.title;
+  b.onclick=()=>show(i);
+  nav.appendChild(b);
+});
+function show(i){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=i;
+  cur=i;
+  chapters.forEach((c,j)=>c.classList.toggle('show',j===i));
+  [...nav.children].forEach((b,j)=>b.classList.toggle('active',j===i));
+  document.getElementById('pbar').style.width=((i+1)/chapters.length*100)+'%';
+  document.getElementById('prevBtn').style.visibility=i===0?'hidden':'visible';
+  document.getElementById('nextBtn').textContent=i===chapters.length-1?'完成 🎉':'下一章 →';
+  nav.children[i].scrollIntoView({inline:'center',block:'nearest'});
+  window.scrollTo({top:0});
+}
+function go(d){
+  const n=cur+d;
+  if(n<0)return;
+  if(n>=chapters.length){alert('恭喜完成整堂課!🎓 記得回第 14 章交卷看分數。');return;}
+  show(n);
+}
+show(0);
+
+const fmt=n=>Math.round(n).toLocaleString();
+const $=id=>document.getElementById(id);
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ===== 第2章 損益兩平 ===== */
+function beCalc(){
+  const F=+$('beF').value,P=+$('beP').value,V=+$('beV').value,Q=+$('beQ').value;
+  $('beFv').textContent='$'+fmt(F);$('bePv').textContent='$'+P.toFixed(2);$('beVv').textContent='$'+V.toFixed(2);$('beQv').textContent=fmt(Q)+' 件';
+  const m=P-V;
+  if(m<=0){$('beOut').innerHTML='<span class="bad">⚠ 每件收入低於變動成本:做越多賠越多,永遠不會打平。</span>';return;}
+  const be=F/m,profit=Q*m-F;
+  $('beOut').innerHTML=`每件邊際貢獻 = ${P.toFixed(2)} − ${V.toFixed(2)} = <b>$${m.toFixed(2)}</b><br>`+
+    `損益兩平產量 = ${fmt(F)} ÷ ${m.toFixed(2)} = <b>${fmt(be)} 件/月</b><br>`+
+    `以目前產量 ${fmt(Q)} 件,本月 ${profit>=0?'<span class="good">獲利 $'+fmt(profit)+'</span>':'<span class="bad">虧損 $'+fmt(-profit)+'</span>'}`;
+}
+beCalc();
+
+/* ===== 第3章 文件清單 ===== */
+const DOCS={
+  tw:[
+    ['公司名稱及營業項目預查','經濟部商工登記系統'],
+    ['公司章程、股東同意書/發起人會議紀錄','股東、律師或會計師'],
+    ['籌備處帳戶、股款匯入','銀行'],
+    ['會計師資本額查核簽證','會計師'],
+    ['公司設立登記 → 取得統一編號','經濟部或地方政府'],
+    ['稅籍登記、申請發票','國稅局'],
+    ['工廠登記(製造業)','地方政府'],
+    ['消防安全設備檢查、環保許可','消防局、環保局'],
+    ['勞保、就保、健保、勞退投保','勞保局、健保署'],
+    ['工作規則(30 人以上報備)','地方勞工主管機關'],
+    ['證照到期日一覽表建立','公司內部'],
+  ],
+  kh:[
+    ['選定廠址、簽訂租約(工業區或經濟特區)','業主/特區管理單位'],
+    ['公司登記(章程、股東與董事資料)','商業部 MOC'],
+    ['稅務登記、增值稅(VAT)登記','稅務總局 GDT'],
+    ['合格投資項目 QIP 申請(選擇性)','柬埔寨發展理事會 CDC'],
+    ['工廠營運許可','工業主管機關'],
+    ['環境影響評估(視規模)','環境部'],
+    ['開業申報、內部規章報備','勞動部'],
+    ['社會保險登記','國家社會保障基金 NSSF'],
+    ['外籍員工工作許可證','勞動部'],
+    ['海關登記、原產地證明','海關 GDCE、商業部'],
+    ['加入產業協會(如 GMAC)','產業協會'],
+    ['消防與安全檢查','消防主管機關'],
+  ]
+};
+const docState={tw:DOCS.tw.map(()=>false),kh:DOCS.kh.map(()=>false)};
+let docCur='tw';
+function docTab(t){
+  docCur=t;
+  $('tabTW').className='btn small '+(t==='tw'?'on':'ghost');
+  $('tabKH').className='btn small '+(t==='kh'?'on':'ghost');
+  docRender();
+}
+function docRender(){
+  const list=DOCS[docCur],st=docState[docCur];
+  $('docList').innerHTML=list.map((d,i)=>`<label class="chk ${st[i]?'done':''}"><input type="checkbox" ${st[i]?'checked':''} onchange="docToggle(${i})"><span>${i+1}. ${d[0]}<span class="who">窗口:${d[1]}</span></span></label>`).join('');
+  const done=st.filter(Boolean).length;
+  $('docBar').style.width=(done/list.length*100)+'%';
+  $('docPct').textContent=`已完成 ${done} / ${list.length}`+(done===list.length?' 🎉 可以準備開工了!':'');
+}
+function docToggle(i){docState[docCur][i]=!docState[docCur][i];docRender();}
+docRender();
+
+/* ===== 第4章 開辦資金 ===== */
+function caCalc(){
+  const E=+$('caE').value,R=+$('caR').value,T=+$('caT').value,D=+$('caD').value,M=+$('caM').value,W=+$('caW').value;
+  $('caEv').textContent='$'+fmt(E);$('caRv').textContent='$'+fmt(R);$('caTv').textContent='$'+fmt(T);
+  $('caDv').textContent=D+' 個月';$('caMv').textContent='$'+fmt(M);$('caWv').textContent=W+' 個月';
+  const setup=E+R+T*D, work=M*W, total=setup+work;
+  $('caOut').innerHTML=`開辦費 = 設備 ${fmt(E)} + 裝修 ${fmt(R)} + 押金 ${fmt(T*D)} = <b>$${fmt(setup)}</b><br>`+
+    `營運週轉金 = ${fmt(M)} × ${W} 個月 = <b>$${fmt(work)}</b><br>`+
+    `開辦資金合計 ≈ <b style="font-size:20px;">$${fmt(total)}</b>`+
+    (W<3?'<br><span class="bad">⚠ 週轉金少於 3 個月,現金可能撐不到第一筆貨款。</span>':'<br><span class="good">✓ 週轉金在建議範圍內。</span>');
+}
+caCalc();
+
+/* ===== 第6章 組織圖 ===== */
+const ORG={
+  '股東會':'公司的主人。選出董事、決定修改章程、增資、合併等重大事項(第 11 章)。',
+  '董事會':'代表股東監督經營、決定策略方向、任命總經理。董事長主持董事會。',
+  '總經理':'經營團隊的最高負責人,對董事會負責,統籌生產、行政、財務各線。',
+  '廠長':'負責整個生產體系:產量、品質、交期、效率、成本(第 7、8 章)。',
+  '行政中心':'支援全廠運作的後勤核心,常見下轄人資、總務安全、法遵,以及數位化專案。',
+  '財會部':'記帳、對帳、月結、報稅、資金調度、成本分析(第 9 章)。',
+  '生產部':'裁剪、縫紉(十多條線)、整燙包裝。每條線有組長,按 SAM 與看板管理。',
+  '品管部':'IQC、IPQC、FQC 四道關卡,配合客戶驗貨。',
+  '計畫跟單':'接單評審、排產、物料追蹤、交期倒推(T&A)、與客戶溝通。',
+  '倉儲':'原料與成品倉庫、收發貨、盤點、出貨裝櫃。',
+  '機修':'設備保養維修、公用設備(空壓機、發電機)管理。',
+  'HRA 人資':'招募、合約、出勤、薪資、社保、員工關係、內部規章(第 6 章)。',
+  'GA & Security':'總務與安全:採購支援、宿舍餐廳、門禁警衛、消防安全。',
+  'Compliance 法遵':'勞動法遵、驗廠準備、證照管理、申訴機制、ESG(第 10 章)。',
+  'AI/數位專案':'把表單、報表、流程數位化,讓數字即時可見,支援治理與法遵紀錄。'
+};
+function orgNode(n,lv){return `<div class="node ${lv}" onclick="orgPick(this,'${n}')">${n}</div>`;}
+$('org').innerHTML=
+  `<div class="row">${orgNode('股東會','')}</div><div class="arrow">▼</div>`+
+  `<div class="row">${orgNode('董事會','')}</div><div class="arrow">▼</div>`+
+  `<div class="row">${orgNode('總經理','')}</div><div class="arrow">▼</div>`+
+  `<div class="row">`+
+    `<div class="grp">${orgNode('廠長','lv2')}${['生產部','品管部','計畫跟單','倉儲','機修'].map(x=>orgNode(x,'lv3')).join('')}</div>`+
+    `<div class="grp">${orgNode('行政中心','lv2')}${['HRA 人資','GA & Security','Compliance 法遵','AI/數位專案'].map(x=>orgNode(x,'lv3')).join('')}</div>`+
+    `<div class="grp">${orgNode('財會部','lv2')}</div>`+
+  `</div>`;
+function orgPick(el,n){
+  document.querySelectorAll('.org .node').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel');
+  $('orgInfo').innerHTML=`<b>${n}</b><br>${ORG[n]}`;
+}
+
+/* ===== 第7章 CM 報價 ===== */
+function cmCalc(){
+  const S=+$('cmS').value,E=+$('cmE').value,W=+$('cmW').value,O=+$('cmO').value,P=+$('cmP').value;
+  $('cmSv').textContent=S+' 分';$('cmEv').textContent=E+' %';$('cmWv').textContent='$'+W;$('cmOv').textContent=O+' %';$('cmPv').textContent=P+' %';
+  const cpm=W/12480, act=S/(E/100), lab=act*cpm, cm=lab*(1+O/100)*(1+P/100);
+  const perLine=30*480*(E/100)/S;
+  $('cmOut').innerHTML=`每分鐘成本 = ${W} ÷ 12,480 = <b>$${cpm.toFixed(4)}</b><br>`+
+    `實際分鐘 = ${S} ÷ ${E}% = <b>${act.toFixed(1)} 分</b><br>`+
+    `直接人工 = ${act.toFixed(1)} × ${cpm.toFixed(4)} = <b>$${lab.toFixed(3)}</b><br>`+
+    `CM 報價 ≈ <b style="font-size:20px;">$${cm.toFixed(2)} / 件</b>(一打 $${(cm*12).toFixed(2)})<br>`+
+    `<span style="font-size:13px;color:var(--gray)">參考:一條 30 人的線,一天 8 小時約可產出 ${fmt(perLine)} 件</span>`;
+}
+cmCalc();
+
+/* ===== 第8章 PDCA ===== */
+const PDCA=[
+  ['P 計畫','Plan:找出問題、設目標。例:第 5 線效率只有 48%,目標一個月內提升到 58%。分析原因:瓶頸在上領工序。'],
+  ['D 執行','Do:小範圍試做。例:在上領工序多配一位熟練工、調整工位順序。'],
+  ['C 檢查','Check:看數字有沒有變好。例:兩週後效率到 55%,瓶頸消除,但返工率略升。'],
+  ['A 改善','Act:有效的寫進 SOP、推廣到其他線;沒達標的找新原因,進入下一輪 P。'],
+];
+let pdcaI=-1;
+function pdcaDraw(){
+  const cx=150,cy=110,r=80,cols=['#2E5E7E','#8A774E','#3E6B4F','#8C4A3C'];
+  let s='';
+  for(let i=0;i<4;i++){
+    const a0=(-90+i*90)*Math.PI/180,a1=(-90+(i+1)*90)*Math.PI/180;
+    const x0=cx+r*Math.cos(a0),y0=cy+r*Math.sin(a0),x1=cx+r*Math.cos(a1),y1=cy+r*Math.sin(a1);
+    const am=(-45+i*90)*Math.PI/180;
+    s+=`<path d="M${cx} ${cy} L${x0} ${y0} A${r} ${r} 0 0 1 ${x1} ${y1} Z" fill="${cols[i]}" opacity="${pdcaI===i?1:.35}" stroke="#fff" stroke-width="3"/>`;
+    s+=`<text x="${cx+r*0.55*Math.cos(am)}" y="${cy+r*0.55*Math.sin(am)+6}" text-anchor="middle" font-size="20" font-weight="bold" fill="#fff">${'PDCA'[i]}</text>`;
+  }
+  s+=`<circle cx="${cx}" cy="${cy}" r="22" fill="#FAF6EF"/><text x="${cx}" y="${cy+5}" text-anchor="middle" font-size="13" fill="#1F1D1A">↻</text>`;
+  $('pdcaSvg').innerHTML=s;
+  $('pdcaInfo').innerHTML=pdcaI<0?'按「下一步」開始一輪改善循環。':`<b>${PDCA[pdcaI][0]}</b><br>${PDCA[pdcaI][1]}`;
+}
+function pdcaNext(){pdcaI=(pdcaI+1)%4;pdcaDraw();}
+pdcaDraw();
+
+/* ===== 第11章 核決權限 ===== */
+function doaAmount(v){ // 0-100 對數刻度 → 10 ~ 200,000
+  return Math.round(10*Math.pow(20000,v/100));
+}
+function doaCalc(){
+  const a=doaAmount(+$('doaA').value);
+  $('doaAv').textContent='$'+fmt(a);
+  let who,ex;
+  if(a<500){who='部門主管';ex='例:買辦公文具、小五金零件。';}
+  else if(a<5000){who='廠長 / 行政中心主管';ex='例:更換幾台縫紉機零件、辦一場消防演練。';}
+  else if(a<50000){who='總經理';ex='例:添購一批平車、宿舍整修。';}
+  else{who='董事長 / 董事會';ex='例:新增一條生產線、大型廠房擴建、對外借款。';}
+  $('doaOut').innerHTML=`支出 <b>$${fmt(a)}</b> → 核准人:<b style="font-size:18px;">${who}</b><br><span style="font-size:13px;color:var(--gray)">${ex} 請購、核准、驗收、付款仍由不同的人負責(職能分離)。</span>`;
+}
+doaCalc();
+
+/* ===== 第13章 甘特圖 ===== */
+(function(){
+  const tasks=[
+    ['商業計畫、選址',1,2,'#2E5E7E'],
+    ['公司登記、稅務登記',2,3,'#2E5E7E'],
+    ['資金到位、銀行開戶',2,3,'#8A774E'],
+    ['廠房裝修、消防',3,5,'#8A774E'],
+    ['設備採購、安裝',4,5,'#8A774E'],
+    ['工廠許可、勞動申報',4,5,'#2E5E7E'],
+    ['招募、訓練',4,6,'#3E6B4F'],
+    ['試產、內部稽核',6,6,'#3E6B4F'],
+    ['客戶驗廠',6,7,'#8C4A3C'],
+    ['量產、PDCA 改善',7,12,'#1F1D1A'],
+  ];
+  const L=128,R=412,T=30,rowH=25,months=12,w=(R-L)/months;
+  let s='';
+  for(let m=0;m<months;m++){
+    s+=`<rect x="${L+m*w}" y="${T-18}" width="${w}" height="${tasks.length*rowH+18}" fill="${m%2?'#FBF8F1':'#FFFFFF'}"/>`;
+    s+=`<text x="${L+m*w+w/2}" y="${T-5}" font-size="10" text-anchor="middle" fill="#6E6A63">${m+1}月</text>`;
+  }
+  tasks.forEach((t,i)=>{
+    const y=T+i*rowH;
+    s+=`<text x="${L-6}" y="${y+16}" font-size="11" text-anchor="end" fill="#1F1D1A">${t[0]}</text>`;
+    s+=`<rect x="${L+(t[1]-1)*w+2}" y="${y+5}" width="${(t[2]-t[1]+1)*w-4}" height="15" rx="4" fill="${t[3]}"/>`;
+  });
+  $('gantt').innerHTML=s;
+})();
+
+/* ===== 各章小測 ===== */
+function makeQuiz(elId,qs){
+  const box=$(elId);
+  if(!box)return;
+  const h=document.createElement('h3');h.textContent='✏️ 隨堂小測';box.appendChild(h);
+  qs.forEach((q,i)=>{
+    const opts=shuffle(q[1].map((t,j)=>({t,ok:j===q[2]})));
+    const div=document.createElement('div');
+    div.className='quiz';
+    div.innerHTML=`<div class="q-text">Q${i+1}. ${q[0]}</div>
+      <div class="opts">${opts.map(o=>`<button class="opt" data-ok="${o.ok}">${o.t}</button>`).join('')}</div>
+      <div class="fb"></div>`;
+    div.querySelectorAll('.opt').forEach(btn=>{
+      btn.onclick=()=>{
+        if(div.dataset.done)return;
+        div.dataset.done='1';
+        const ok=btn.dataset.ok==='true';
+        btn.classList.add(ok?'correct':'wrong');
+        if(!ok)div.querySelector('[data-ok="true"]').classList.add('correct');
+        const fb=div.querySelector('.fb');
+        fb.className='fb show '+(ok?'good':'no');
+        fb.textContent=(ok?'✓ 答對!':'✗ ')+q[3];
+      };
+    });
+    box.appendChild(div);
+  });
+}
+makeQuiz('q1',[
+  ['「有限責任」的意思是?',['股東只賠到出資額為止','公司不用負責任','老闆責任有限所以不用管'],0,'公司倒了,股東原則上只損失投入公司的錢。'],
+  ['company 的拉丁字源意思是?',['一起分麵包的人','很多錢','一棟大樓'],0,'com(一起)+ panis(麵包)。'],
+]);
+makeQuiz('q2',[
+  ['每月固定成本 $10 萬,每件邊際貢獻 $1,損益兩平產量是?',['10 萬件','1 萬件','100 萬件'],0,'固定成本 ÷ 每件邊際貢獻。'],
+  ['EBA 優惠的例子告訴我們?',['選址時的關稅優惠不是永遠的','關稅永遠不變','只要看工資就好'],0,'2020 年歐盟部分撤銷柬埔寨的優惠。'],
+]);
+makeQuiz('q3',[
+  ['公司的「憲法」是?',['公司章程','員工手冊','營業額'],0,'寫明名稱、營業項目、資本、股東董事權利。'],
+  ['證照管理最重要的習慣是?',['建立到期日一覽表,提前提醒續辦','過期再說','只保存影本'],0,'營業許可、工作許可證過期都會出大問題。'],
+]);
+makeQuiz('q4',[
+  ['開辦資金新手最常漏算的是?',['營運週轉金','機器設備','裝修'],0,'從付工資到收貨款之間的空窗期要靠週轉金撐。'],
+  ['向銀行貸款在會計上屬於?',['負債','權益','收入'],0,'股東出資是權益,借款是負債。'],
+]);
+makeQuiz('q5',[
+  ['好的廠區動線原則是?',['物料單向流動,不回頭不交叉','越複雜越好','倉庫放最中間'],0,'進料 → 裁剪 → 縫紉 → 整燙 → 包裝 → 出貨。'],
+  ['預防保養的意思是?',['依計畫定期保養,不等壞了才修','壞了再修','不保養'],0,'每台設備有設備卡與保養紀錄。'],
+]);
+makeQuiz('q6',[
+  ['招募時最重要的法遵檢查之一是?',['查驗身分證件,確保無童工','看星座','看身高'],0,'童工是驗廠的零容忍項目。'],
+  ['台資海外廠的制度推行,特別要注意?',['雙語 SOP、公告與表單','只用中文','不需要寫下來'],0,'員工看不懂的制度等於沒有。'],
+]);
+makeQuiz('q7',[
+  ['SAM 是什麼?',['標準允許分鐘:熟練工人做一件應花的時間','一種布料','銷售額'],0,'源自泰勒的科學管理,是成衣業的共同語言。'],
+  ['CM 接單和 FOB 接單最大的差別是?',['CM 由客戶提供布料,工廠只收加工費','CM 比較貴','沒有差別'],0,'CM 資金壓力小;FOB 要自己墊材料錢。'],
+]);
+makeQuiz('q8',[
+  ['PDCA 的 C 是?',['Check 檢查','Cost 成本','Cut 裁剪'],0,'計畫、執行、檢查、改善。'],
+  ['準時交貨率(OTD)代表?',['客戶信任的基礎','員工出勤','電費'],0,'準交是代工廠留住客戶的關鍵。'],
+]);
+makeQuiz('q9',[
+  ['「職能分離」的目的是?',['讓一個人無法獨自完成作弊','讓大家更累','減少人手'],0,'申請、下單、驗收、付款分給不同的人。'],
+  ['audit(稽核)的拉丁字源是?',['audire,聽','audio,音響','auto,自動'],0,'古時查帳是把帳目念出來給查帳官聽。'],
+]);
+makeQuiz('q10',[
+  ['稽核員的基本原則是?',['沒有紀錄就等於沒做','口頭說明就夠了','只看老闆簽名'],0,'制度要有文件、有執行紀錄。'],
+  ['ESG 三個字母分別代表?',['環境、社會、治理','效率、速度、成長','員工、銷售、商品'],0,'2004 年聯合國〈Who Cares Wins〉報告帶起這個詞。'],
+]);
+makeQuiz('q11',[
+  ['governance(治理)的希臘字源意思是?',['掌舵','賺錢','管人'],0,'kybernan = 掌舵,cyber 也是同一個字根。'],
+  ['核決權限表的作用是?',['規定不同金額與事項由誰核准','記錄員工生日','計算薪水'],0,'小事授權下去,大事往上呈報。'],
+]);
+makeQuiz('q12',[
+  ['「客戶集中」風險的對策是?',['分散客戶,單一客戶不宜占太高比例','只做一個大客戶','不接新客戶'],0,'一個客戶轉單,工廠不能跟著倒。'],
+  ['應變計畫至少要寫清楚?',['誰負責、第一個小時做什麼、要通知誰','公司口號','年度旅遊'],0,'危機時人只做得出平常練過的事,所以要演練。'],
+]);
+
+/* ===== 總測驗 ===== */
+const finalQs=[
+  ['公司是「法人」的意思是?',['法律上的人,可以擁有財產、簽約','公司裡的法務人員','老闆本人'],0,'法人與自然人相對。'],
+  ['想找投資人、將來上市,較適合哪種型態?',['股份有限公司','獨資','合夥'],0,'資本分成股份,可以轉讓。'],
+  ['損益兩平公式是?',['固定成本 ÷(售價 − 變動成本)','售價 × 產量','固定成本 × 變動成本'],0,'每件邊際貢獻累積到蓋過固定成本就打平。'],
+  ['在台灣,公司登記完成後會取得?',['8 位數的統一編號','護照','駕照'],0,'公司的身分證字號,開發票報稅都要用。'],
+  ['柬埔寨合格投資項目 QIP 向哪裡申請?',['柬埔寨發展理事會 CDC','銀行','客戶'],0,'可能取得稅務與關稅優惠,以最新法規為準。'],
+  ['一般建議準備幾個月的營運週轉金?',['3~6 個月','0 個月','10 年'],0,'撐過從付工資到收貨款的空窗期。'],
+  ['成衣廠物料的正確流向是?',['原料倉 → 裁剪 → 縫紉 → 整燙 → 包裝 → 成品倉','縫紉 → 原料倉 → 裁剪','隨便放'],0,'單向流動,不回頭。'],
+  ['SAM 12 分、效率 60%,實際每件花幾分鐘?',['20 分','12 分','7.2 分'],0,'12 ÷ 0.6 = 20。效率越低,成本越高。'],
+  ['PDCA 最早由誰提出雛形、誰推廣?',['Shewhart 提出,戴明推廣','泰勒提出,福特推廣','愛迪生'],0,'所以也叫戴明循環。'],
+  ['採購的職能分離是?',['申請、下單、驗收、付款由不同人負責','同一個人全包比較快','只要老闆簽名'],0,'每一關都是另一關的檢查。'],
+  ['公司治理三層結構由上而下是?',['股東會 → 董事會 → 經營團隊','經營團隊 → 股東會 → 董事會','員工 → 老闆 → 客戶'],0,'擁有、監督、執行。'],
+  ['board of directors 的 board 原意是?',['木板、桌子','船','旗子'],0,'董事們圍著長桌開會而得名。'],
+];
+const fq=$('finalQuiz');
+function buildFinal(){
+  fq.innerHTML='';
+  finalQs.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='quiz';d.dataset.q=i;
+    d.innerHTML=`<div class="q-text">Q${i+1}. ${q[0]}</div>
+      <div class="opts">${q[1].map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join('')}</div>
+      <div class="fb"></div>`;
+    d.querySelectorAll('.opt').forEach(btn=>{
+      btn.onclick=()=>{
+        d.querySelectorAll('.opt').forEach(b=>b.style.outline='');
+        btn.style.outline='2px solid var(--khaki-dark)';
+        d.dataset.sel=btn.dataset.j;
+      };
+    });
+    fq.appendChild(d);
+  });
+  $('finalScore').style.display='none';
+}
+function gradeFinal(){
+  let right=0,unanswered=0;
+  fq.querySelectorAll('.quiz').forEach(d=>{
+    const q=finalQs[d.dataset.q];
+    const sel=d.dataset.sel;
+    const fb=d.querySelector('.fb');
+    d.querySelectorAll('.opt').forEach((b,j)=>{
+      b.classList.remove('correct','wrong');
+      if(j===q[2])b.classList.add('correct');
+    });
+    if(sel===undefined){unanswered++;fb.className='fb show no';fb.textContent='(未作答)'+q[3];return;}
+    if(+sel===q[2]){right++;fb.className='fb show good';fb.textContent='✓ '+q[3];}
+    else{d.querySelectorAll('.opt')[+sel].classList.add('wrong');fb.className='fb show no';fb.textContent='✗ '+q[3];}
+  });
+  const box=$('finalScore');
+  box.style.display='block';
+  let cmt;
+  if(right===12)cmt='滿分!從法人到治理全線打通,你已經有廠長的全局視野了 🏆';
+  else if(right>=9)cmt='很棒!骨架很扎實,把錯的題目看一下解析就完整了 🎉';
+  else if(right>=6)cmt='有基礎了!建議回第 4、7、11 章,把資金、報價和治理再走一遍 💪';
+  else cmt='別氣餒,照學習地圖從第 1 章重新走,跟著阿泰再開一次廠 🌱';
+  box.innerHTML=`<div class="big num">${right} / 12</div><p>${cmt}</p>${unanswered?`<p style="color:var(--gray);font-size:13px;">(有 ${unanswered} 題未作答)</p>`:''}`;
+  box.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function resetFinal(){buildFinal();window.scrollTo({top:0});}
+buildFinal();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-458be1a980" data-category="business"></script></body>
+</html>

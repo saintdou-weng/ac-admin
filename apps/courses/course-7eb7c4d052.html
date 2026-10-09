@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>看懂K線：台股技術分析從零開始</title>
+<style>
+:root{
+  --paper:#F5F8F7; --grid:#DCE8E2; --ink:#1F2A44; --muted:#5B667A; --line:#C9D6D0;
+  --card:#FFFFFF; --hl:#FFE58A; --up:#D93A3A; --dn:#169457; --flat:#7A7A7A;
+  --acc:#2B4C9B; --acc2:#E7EEFB; --warn:#FFF4DC; --warnb:#E8B64C; --ok:#E3F5EA;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#121821; --grid:#1B2430; --ink:#E6ECF5; --muted:#9AA6BA; --line:#2B3747;
+    --card:#18202B; --hl:#6B5A12; --up:#FF5C5C; --dn:#2FC47A; --flat:#9A9A9A;
+    --acc:#8FB0FF; --acc2:#1E2A44; --warn:#2E2614; --warnb:#9C7A2A; --ok:#15301F; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#121821; --grid:#1B2430; --ink:#E6ECF5; --muted:#9AA6BA; --line:#2B3747;
+  --card:#18202B; --hl:#6B5A12; --up:#FF5C5C; --dn:#2FC47A; --flat:#9A9A9A;
+  --acc:#8FB0FF; --acc2:#1E2A44; --warn:#2E2614; --warnb:#9C7A2A; --ok:#15301F; color-scheme:dark;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px);height:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;background-attachment:fixed;
+  font-family:"PingFang TC","Noto Sans TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+  font-size:17px;line-height:1.85;-webkit-text-size-adjust:100%}
+.num,.kchart text,table{font-variant-numeric:tabular-nums}
+a{color:var(--acc)}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+
+/* layout */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;gap:12px;
+  padding:10px 16px;background:var(--card);border-bottom:1px solid var(--line)}
+.top .brand{font-weight:800;letter-spacing:.02em;white-space:nowrap}
+.top .brand b{color:var(--up)}.top .brand i{font-style:normal;color:var(--dn)}
+.bar{flex:1;height:8px;background:var(--grid);border-radius:4px;overflow:hidden;min-width:60px}
+.bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--dn),var(--up));transition:width .4s}
+.top .pct{font-size:14px;color:var(--muted);white-space:nowrap}
+.menu-btn,.theme-btn{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:8px;padding:4px 10px;font-size:15px}
+.wrap{display:flex;max-width:1180px;margin:0 auto}
+nav.toc{width:290px;flex:none;position:sticky;top:calc(env(safe-area-inset-top,0px) + 53px);height:calc(100vh - 53px);overflow:auto;
+  padding:18px 14px 40px;border-right:1px solid var(--line);background:var(--card)}
+nav.toc h4{margin:18px 6px 6px;font-size:14px;color:var(--muted);font-weight:700}
+nav.toc h4:first-child{margin-top:0}
+nav.toc a{display:flex;gap:8px;align-items:baseline;padding:5px 8px;border-radius:6px;text-decoration:none;color:var(--ink);font-size:15px;line-height:1.5}
+nav.toc a .n{flex:none;width:2.2em;color:var(--muted);font-size:13px}
+nav.toc a.on{background:var(--acc2);font-weight:700}
+nav.toc a.done .n::after{content:" ✓";color:var(--dn)}
+main{flex:1;min-width:0;padding:28px 22px 80px}
+.lesson{display:none;max-width:760px;margin:0 auto}
+.lesson.show{display:block}
+.lesson > header{margin-bottom:22px}
+.lesson > header .unit{color:var(--muted);font-size:15px}
+.lesson > header h1{font-size:clamp(28px,5.4vw,40px);line-height:1.25;margin:4px 0 10px;font-weight:900}
+.lesson > header h1 small{display:block;font-size:.5em;font-weight:700;color:var(--acc);margin-bottom:2px}
+.lesson > header .goal{background:var(--card);border-left:5px solid var(--acc);padding:10px 14px;border-radius:0 8px 8px 0;font-size:16px}
+h2{font-size:23px;margin:36px 0 10px;line-height:1.4}
+h3{font-size:19px;margin:26px 0 6px}
+p{margin:10px 0}
+mark,.k{background:linear-gradient(transparent 55%,var(--hl) 55%);color:inherit;font-weight:700;padding:0 1px}
+.up{color:var(--up);font-weight:700}.dn{color:var(--dn);font-weight:700}
+.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:16px 0}
+.origin{background:var(--acc2);border-radius:10px;padding:12px 16px;margin:16px 0}
+.origin::before{content:"📜 名詞由來";display:block;font-weight:800;font-size:15px;color:var(--acc);margin-bottom:2px}
+.tip{background:var(--ok);border-radius:10px;padding:12px 16px;margin:16px 0}
+.tip::before{content:"💡 小技巧";display:block;font-weight:800;font-size:15px;margin-bottom:2px}
+.warn{background:var(--warn);border:1px solid var(--warnb);border-radius:10px;padding:12px 16px;margin:16px 0}
+.warn::before{content:"⚠️ 要小心";display:block;font-weight:800;font-size:15px;margin-bottom:2px}
+.story{border:2px dashed var(--line);border-radius:10px;padding:12px 16px;margin:16px 0}
+.story::before{content:"🍎 生活比喻";display:block;font-weight:800;font-size:15px;margin-bottom:2px}
+ul,ol{padding-left:1.4em}li{margin:4px 0}
+table{border-collapse:collapse;width:100%;font-size:15px;background:var(--card)}
+.tw{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:8px}
+th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--acc2);white-space:nowrap}
+.formula{font-size:16px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:12px 0;overflow-x:auto}
+
+/* charts */
+.chart{position:relative;margin:16px 0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 6px 4px}
+.chart .cap{font-size:14px;color:var(--muted);padding:2px 8px 4px}
+.chart .ctl{display:flex;gap:8px;flex-wrap:wrap;padding:4px 8px 6px}
+.kchart{display:block;width:100%;height:auto;touch-action:pan-y}
+.kchart .grid{stroke:var(--grid);stroke-width:1}
+.kchart .ax{fill:var(--muted);font-size:11px}
+.kchart .lbl{font-size:12px;font-weight:700;paint-order:stroke;stroke:var(--card);stroke-width:4px;stroke-linejoin:round}
+.kchart.anim .cd{animation:grow .35s both;animation-delay:var(--d);transform-box:fill-box;transform-origin:center}
+@keyframes grow{from{opacity:0;transform:scaleY(.1)}to{opacity:1;transform:none}}
+.ktip{position:absolute;top:8px;left:12px;pointer-events:none;background:var(--card);border:1px solid var(--line);border-radius:6px;
+  font-size:13px;line-height:1.5;padding:4px 8px;display:none;box-shadow:0 2px 8px rgba(0,0,0,.12);z-index:3}
+.btn{border:1px solid var(--acc);background:var(--acc);color:#fff;border-radius:8px;padding:6px 14px;font-size:15px}
+.btn.ghost{background:transparent;color:var(--acc)}
+.btn:disabled{opacity:.45;cursor:default}
+.mc{display:inline-block;vertical-align:middle}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin:14px 0}
+.gallery .g{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px;line-height:1.65}
+.gallery .g svg{display:block;margin:0 auto 6px}
+.gallery .g b{display:block;font-size:16px}
+
+/* widgets */
+.widget{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin:16px 0}
+.widget h4{margin:0 0 8px;font-size:16px}
+.rowflex{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.sl{display:grid;grid-template-columns:3.5em 1fr 3.2em;gap:8px;align-items:center;font-size:15px;margin:4px 0}
+.sl input{width:100%}
+.readout{font-size:15px;line-height:1.7}
+.big{font-size:28px;font-weight:900}
+.quote{font-size:14px}
+.quote td,.quote th{padding:5px 8px}
+
+/* quiz */
+.quiz{background:var(--card);border:2px solid var(--acc);border-radius:12px;padding:12px 16px;margin:18px 0}
+.quiz .q{font-weight:800;margin:4px 0 8px}
+.quiz .q::before{content:"✏️ 小測驗　";color:var(--acc)}
+.quiz ol{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.quiz li{margin:0}
+.quiz li button{width:100%;text-align:left;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:8px;padding:8px 12px;line-height:1.5}
+.quiz li button.right{background:var(--ok);border-color:var(--dn);font-weight:700}
+.quiz li button.wrong{border-color:var(--up);text-decoration:line-through;opacity:.7}
+.quiz .ex{display:none;margin-top:10px;font-size:15px}
+.quiz.answered .ex{display:block}
+
+.pager{display:flex;justify-content:space-between;gap:12px;margin:44px 0 0;padding-top:18px;border-top:1px solid var(--line)}
+.pager button{flex:1;max-width:48%;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);text-align:left;line-height:1.4}
+.pager button.next{background:var(--acc);border-color:var(--acc);color:#fff;text-align:right;margin-left:auto}
+.pager small{display:block;opacity:.75;font-size:13px}
+
+.hero{display:grid;grid-template-columns:1fr 260px;gap:20px;align-items:center}
+.hero svg{width:100%;height:auto}
+.map{display:grid;gap:10px;margin:16px 0}
+.map .u{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.map .u b{color:var(--acc)}
+dl.gl dt{font-weight:800;margin-top:14px}
+dl.gl dd{margin:2px 0 0 0;padding-left:12px;border-left:3px solid var(--line)}
+
+@media (max-width:860px){
+  nav.toc{position:fixed;left:0;top:calc(env(safe-area-inset-top,0px) + 53px);z-index:30;transform:translateX(-105%);transition:transform .25s;height:calc(100% - 53px);box-shadow:4px 0 20px rgba(0,0,0,.2)}
+  nav.toc.open{transform:none}
+  main{padding:20px 14px 70px}
+  .hero{grid-template-columns:1fr}
+  .hero .hv{max-width:240px;margin:0 auto}
+  body{font-size:16.5px}
+}
+@media (min-width:861px){.menu-btn{display:none}}
+@media (prefers-reduced-motion:reduce){.kchart.anim .cd{animation:none}*{transition:none!important}}
+@media print{nav.toc,.top,.pager,.ctl{display:none!important}.lesson{display:block!important;page-break-after:always}body{background:#fff}}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="menu-btn" id="menuBtn" aria-label="開啟目錄">☰ 目錄</button>
+  <div class="brand">看懂<b>K</b><i>線</i></div>
+  <div class="bar" aria-hidden="true"><span id="progBar"></span></div>
+  <div class="pct" id="progTxt">0 / 0</div>
+  <button class="theme-btn" id="themeBtn" aria-label="切換深淺色">◐</button>
+</div>
+<div class="wrap">
+<nav class="toc" id="toc" aria-label="課程目錄"></nav>
+<main id="main">
+<!-- ============ 課程導覽 ============ -->
+<section class="lesson" id="L0" data-unit="開始之前" data-t="課程導覽：怎麼使用這份教材">
+<header>
+  <div class="unit">開始之前</div>
+  <h1><small>第 0 課</small>看懂K線：台股技術分析從零開始</h1>
+</header>
+<div class="hero">
+  <div>
+    <p>你一定在新聞或爸媽的手機上看過這種紅紅綠綠、像一根根小蠟燭的圖。它叫做 <mark>K線圖</mark>，是全世界的投資人用來「看盤」的共同語言。</p>
+    <p>這份教材會帶你從「股票是什麼」開始，一步一步學到專業投資人用的均線、KD、MACD、型態與風險管理。每一課都建立在前一課上，<b>請照順序讀</b>，不要跳課。</p>
+  </div>
+  <div class="hv" data-w="tick" data-mini="1"></div>
+</div>
+
+<h2>課程地圖</h2>
+<div class="map">
+  <div class="u"><b>單元一　入門基礎</b>（第 1–3 課）：股票是什麼、台股怎麼運作、K線從哪裡來。</div>
+  <div class="u"><b>單元二　認識K線</b>（第 4–7 課）：開高低收、K棒的零件、單根K棒的意思、日K週K月K。</div>
+  <div class="u"><b>單元三　K線組合與成交量</b>（第 8–10 課）：量價關係、兩三根K棒的組合、缺口。</div>
+  <div class="u"><b>單元四　趨勢與均線</b>（第 11–14 課）：趨勢、支撐壓力、移動平均線與它的用法。</div>
+  <div class="u"><b>單元五　技術指標與型態</b>（第 15–19 課）：KD、RSI、MACD、布林通道、頭肩頂與W底。</div>
+  <div class="u"><b>單元六　台股實戰與專業</b>（第 20–25 課）：看盤軟體、籌碼、台股特殊規則、風險管理、實戰演練、結業測驗與名詞總表。</div>
+</div>
+
+<h2>怎麼使用</h2>
+<ul>
+  <li>用上方「☰ 目錄」或每課最下方的按鈕換課。按「完成本課」會打勾，進度會記在你這台裝置的瀏覽器裡。</li>
+  <li>圖表上可以<b>用手指點或滑鼠移動</b>，會顯示那一根K棒的開盤、最高、最低、收盤價。</li>
+  <li>每課最後都有小測驗，答錯沒關係，會有解析。</li>
+  <li>黃色螢光筆標記的是<mark>重要名詞</mark>，藍色「名詞由來」框會告訴你這個詞為什麼叫這個名字。</li>
+</ul>
+<div class="warn">這是一份<b>教學教材</b>，所有圖表都是為了教學而製作的<b>模擬資料</b>，不是真實股票的走勢，也不是投資建議。技術分析談的是「機率」，不是「保證」。在台灣未滿 18 歲開證券戶需要法定代理人（通常是爸媽）同意，建議先用模擬交易練習，並和家人一起討論。</div>
+</section>
+
+<!-- ============ L1 ============ -->
+<section class="lesson" id="L1" data-unit="單元一　入門基礎" data-t="股票是什麼？價格為什麼會動？">
+<header>
+  <div class="unit">單元一　入門基礎</div>
+  <h1><small>第 1 課</small>股票是什麼？價格為什麼會動？</h1>
+  <div class="goal">學完這課你會知道：股票代表什麼、股價是怎麼被決定的。</div>
+</header>
+<h2>一、股票就是「公司的一小塊」</h2>
+<div class="story">小明想開一家飲料店，需要 100 萬元，但他只有 20 萬。於是他找了朋友一起出錢，把店分成 100 份，每份 1 萬元。出錢的人拿到「這家店有幾份是我的」的證明。<br>這張證明，就是<mark>股票</mark>；擁有股票的人，叫做<mark>股東</mark>。店賺錢了，股東可以分到錢，這叫<mark>股利</mark>。</div>
+<p>大公司也是一樣，只是規模大很多。例如台積電就把公司分成兩百多億「股」。你買一股，就真的擁有台積電非常非常小的一部分。</p>
+<div class="origin">「股」這個字原本指大腿，後來引申為「一部分、一份」，像「分成三股」。「股票」就是「記錄你擁有幾份的票據」。英文 stock 原意是「樹幹、根基」，後來指「本錢、存貨」；share 則是「分享的那一份」。</div>
+
+<h2>二、股價由「買的人」和「賣的人」決定</h2>
+<p>股票在<mark>股票市場</mark>裡買賣，就像菜市場一樣：</p>
+<ul>
+  <li>想買的人很多、想賣的人很少 → 大家搶著買，願意出更高的價錢 → <span class="up">價格上漲</span>。</li>
+  <li>想賣的人很多、想買的人很少 → 賣方只好降價求售 → <span class="dn">價格下跌</span>。</li>
+</ul>
+<p>這就是經濟學的<mark>供給與需求</mark>。下面你可以自己試試看：調整買方與賣方的力量，按「開始交易」，看看價格怎麼走。</p>
+<div class="widget" data-w="market"></div>
+<p>那為什麼有時候大家搶著買？可能是公司賺更多錢、推出熱門新產品、經濟變好；也可能只是大家的情緒很樂觀。研究「公司好不好」的方法叫<mark>基本面分析</mark>；研究「價格和成交量的圖形」的方法叫<mark>技術分析</mark>。這整份教材教的就是技術分析，而K線是技術分析最基本的工具。</p>
+<div class="tip">技術分析的核心想法是：所有人的想法（樂觀、害怕、貪心）最後都會反映在「價格」和「成交量」上。所以看懂圖，就能大概看出現在市場上是買方強還是賣方強。</div>
+
+<div class="quiz" data-a="2"><p class="q">如果某支股票想買的人突然變得很多，但想賣的人沒有變多，價格最可能怎樣？</p>
+<ol><li>下跌</li><li>上漲</li><li>完全不會變</li></ol>
+<p class="ex">答案是「上漲」。買方搶著買，只好出更高的價錢才買得到，這就是需求大於供給。</p></div>
+<div class="quiz" data-a="3"><p class="q">「看圖形、看價格和成交量來判斷」的方法叫做什麼？</p>
+<ol><li>基本面分析</li><li>財務報表分析</li><li>技術分析</li></ol>
+<p class="ex">答案是技術分析。基本面分析看的是公司賺不賺錢、產業前景等。</p></div>
+</section>
+
+<!-- ============ L2 ============ -->
+<section class="lesson" id="L2" data-unit="單元一　入門基礎" data-t="台灣股市是怎麼運作的？">
+<header>
+  <div class="unit">單元一　入門基礎</div>
+  <h1><small>第 2 課</small>台灣股市是怎麼運作的？</h1>
+  <div class="goal">學完這課你會知道：上市是什麼、股票代號、交易時間、一張是幾股、漲跌停，以及台股最特別的「紅漲綠跌」。</div>
+</header>
+<h2>一、上市、上櫃、興櫃</h2>
+<p>在台灣，公司要讓一般人買賣它的股票，必須通過審查，到正式的交易所「掛牌」。</p>
+<div class="tw"><table>
+<tr><th>名稱</th><th>在哪裡交易</th><th>白話解釋</th></tr>
+<tr><td><b>上市</b></td><td>臺灣證券交易所（簡稱<b>證交所</b>，TWSE）</td><td>條件最嚴格，多半是規模較大的公司。本教材的主角。</td></tr>
+<tr><td><b>上櫃</b></td><td>證券櫃檯買賣中心（簡稱<b>櫃買中心</b>，TPEx）</td><td>條件比上市寬一些，很多中小型成長公司。</td></tr>
+<tr><td><b>興櫃</b></td><td>櫃買中心的興櫃市場</td><td>準備上市或上櫃前的「預備區」，規則不同，風險較高。</td></tr>
+</table></div>
+<div class="origin">「上市」就是「上到市場」掛牌買賣。「上櫃」的「櫃」來自「櫃檯買賣」：早年有些股票不在交易所的集中市場，而是在證券商的<b>櫃檯</b>上一對一議價買賣，英文叫 Over-the-Counter（OTC，隔著櫃檯），後來發展成櫃買中心。不管上市或上櫃，看K線的方法完全一樣。</div>
+
+<h2>二、股票代號</h2>
+<p>每支股票都有一個數字代號，就像學號。例如：<b>2330</b> 是台積電、<b>2317</b> 是鴻海、<b>0050</b> 是元大台灣50（一種ETF，一次買進一籃子股票）。在看盤軟體輸入代號就能查到它。一般公司股票多半是 4 位數；0 開頭的通常是 ETF。</p>
+
+<h2>三、「張」和「股」</h2>
+<p>台股的基本單位是<mark>一張 = 1,000 股</mark>。如果股價是 50 元，買一張就要 50 × 1,000 = 50,000 元（還要加手續費）。錢不夠也可以買<mark>零股</mark>，就是不到 1,000 股，例如只買 10 股。</p>
+<div class="origin">為什麼叫「張」？早期股票是真正印出來的紙本股票，一張紙代表 1,000 股，大家就習慣說「一張」。現在股票已經全面電子化（放在「集保」帳戶裡），但「張」這個說法留了下來。</div>
+
+<h2>四、交易時間（台灣時間）</h2>
+<div class="tw"><table>
+<tr><th>時段</th><th>時間</th><th>說明</th></tr>
+<tr><td>盤前</td><td>08:30–09:00</td><td>可以先下單，但還不成交，用來決定<b>開盤價</b>。</td></tr>
+<tr><td>盤中（一般交易）</td><td>09:00–13:30</td><td>正式買賣時間，週一到週五。</td></tr>
+<tr><td>收盤前 5 分鐘</td><td>13:25–13:30</td><td>集中撮合，決定當天的<b>收盤價</b>。</td></tr>
+<tr><td>盤後定價</td><td>14:00–14:30</td><td>用當天收盤價買賣。</td></tr>
+</table></div>
+<p>「<mark>盤</mark>」指的是市場行情，所以「開盤」是市場開始交易，「收盤」是結束，「看盤」就是看行情。</p>
+
+<h2>五、漲跌停：一天最多漲跌 10%</h2>
+<p>為了避免價格一天之內暴漲暴跌，台股規定：每天的價格只能在<b>前一天收盤價的上下 10%</b> 以內變動。</p>
+<ul>
+  <li>昨天收 100 元，今天最高只能到 110 元，這叫<span class="up">漲停</span>；</li>
+  <li>最低只能到 90 元，這叫<span class="dn">跌停</span>。</li>
+</ul>
+<p>「停」就是「停在那裡，不能再更高或更低」。</p>
+
+<h2>六、最重要的：台股是「紅漲綠跌」</h2>
+<p>在台灣，<span class="up">紅色代表漲</span>、<span class="dn">綠色代表跌</span>。紅色在華人文化代表喜氣、好事，所以漲用紅色。<b>但美國、歐洲剛好相反</b>：綠色是漲、紅色是跌。以後如果你看國外網站，千萬別看反了！</p>
+<div class="rowflex"><span class="mc" data-k="30,95,20,85" data-w="60"></span><div>台灣：紅色＝漲<br>美國：這種顏色卻代表跌</div><span class="mc" data-k="85,95,20,30" data-w="60"></span><div>台灣：綠色＝跌</div></div>
+
+<h2>七、買賣要付的費用</h2>
+<ul>
+  <li><b>手續費</b>：付給證券商（幫你下單的公司），買和賣各收一次，法定上限是成交金額的 0.1425%，很多券商會打折。</li>
+  <li><b>證券交易稅</b>：付給政府，<b>賣出時</b>才收，一般股票是 0.3%。</li>
+</ul>
+<p>所以一買一賣大約要付 0.5% 左右的成本。這代表：<b>股票漲一點點就賣，扣完費用可能反而是虧的</b>。</p>
+<p>另外，台股是 <mark>T+2 交割</mark>：你在 T 日（交易日當天）買了股票，第 2 個營業日錢才會真正從銀行帳戶扣走，所以帳戶裡一定要準備足夠的錢，否則會「違約交割」，後果很嚴重。</p>
+
+<div class="quiz" data-a="3"><p class="q">昨天收盤價 80 元，今天的漲停價是多少？</p>
+<ol><li>80 元</li><li>84 元</li><li>88 元</li><li>96 元</li></ol>
+<p class="ex">80 × 10% = 8，80 + 8 = 88 元。（實際上漲停價還會依規定的價格跳動單位調整，但原理就是 10%。）</p></div>
+<div class="quiz" data-a="1"><p class="q">在台灣的看盤軟體上看到一個「綠色」的數字，通常代表？</p>
+<ol><li>下跌</li><li>上漲</li><li>停止交易</li></ol>
+<p class="ex">台灣是紅漲綠跌。美國則是綠漲紅跌，剛好相反。</p></div>
+<div class="quiz" data-a="2"><p class="q">買 2 張股價 30 元的股票，大約需要多少錢（不算手續費）？</p>
+<ol><li>60 元</li><li>60,000 元</li><li>6,000 元</li></ol>
+<p class="ex">一張 1,000 股，2 張就是 2,000 股 × 30 元 = 60,000 元。</p></div>
+</section>
+
+<!-- ============ L3 ============ -->
+<section class="lesson" id="L3" data-unit="單元一　入門基礎" data-t="K線從哪裡來？">
+<header>
+  <div class="unit">單元一　入門基礎</div>
+  <h1><small>第 3 課</small>K線從哪裡來？一段兩百多年的故事</h1>
+  <div class="goal">學完這課你會知道：K線的歷史、為什麼叫「K」、它為什麼能流傳全世界。</div>
+</header>
+<h2>一、日本江戶時代的米市場</h2>
+<p>1700 年代的日本（江戶時代），米不只是食物，還是「錢」——武士的薪水是用米發的。大阪的<mark>堂島米市場</mark>每天都有大量的米在買賣，價格天天變化。1730 年，幕府正式承認這個市場，它被許多人認為是世界上最早的有組織期貨市場之一。</p>
+<p>商人們為了掌握米價，開始把每天的價格畫在紙上記錄。相傳一位叫做<mark>本間宗久</mark>（1724–1803）的米商特別厲害，他研究價格變化和人的心理，據說靠米市交易成為巨富。後人把許多K線的判讀方法歸功於他，稱為「酒田戰法」（酒田是他的家鄉）。不過歷史學者認為，這些方法很可能是很多代米商一起累積下來的。</p>
+
+<h2>二、為什麼叫「K」線？</h2>
+<div class="origin">日本人把這種價格圖叫做「<b>罫線</b>」，日文讀音是 <b>keisen</b>（けいせん）。「罫」是「格線」的意思，就像筆記本上的格子線。台灣早年從日本學到這套方法，取了發音的第一個字母 <b>K</b>，就叫「K線」。<br>又因為每一根看起來像一根蠟燭（中間是燭身、上下有燭芯），所以英文叫 <b>Candlestick（蠟燭圖）</b>。日本也把它叫做「陰陽線」：上漲的叫<b>陽線</b>，下跌的叫<b>陰線</b>，這來自中國古代的陰陽思想。</div>
+
+<h2>三、從日本傳到全世界</h2>
+<p>K線在日本用了兩百多年，但西方世界原本幾乎不知道。直到 1991 年，美國分析師<mark>史蒂夫・尼森</mark>（Steve Nison）出版《日本蠟燭圖技術》（Japanese Candlestick Charting Techniques），K線才在歐美流行起來。今天，全世界的股票、外匯、黃金、加密貨幣幾乎都用K線圖。</p>
+<p>在K線流行之前，西方主要用「<mark>美國線</mark>」（Bar Chart，又叫長條圖、OHLC圖）和「折線圖」（只連接收盤價）。</p>
+<div class="chart" data-c="lineVsK" data-cap="同一段模擬行情：上方是只畫收盤價的折線圖，下方是K線圖。K線多了開盤、最高、最低的資訊，能看出每天多空雙方的「戰況」。"></div>
+
+<h2>四、為什麼K線這麼好用？</h2>
+<ul>
+  <li><b>資訊多</b>：一根就包含一天的四個重要價格（下一課會教）。</li>
+  <li><b>一眼看出強弱</b>：紅色多還是綠色多、蠟燭長還是短，馬上就能感覺買方或賣方誰比較強。</li>
+  <li><b>反映心理</b>：影線長短代表價格被「推上去又被打下來」，這背後是人的貪婪與恐懼。</li>
+</ul>
+
+<div class="quiz" data-a="2"><p class="q">「K線」的 K 是從哪裡來的？</p>
+<ol><li>英文 King（國王）</li><li>日文「罫線」的讀音 keisen</li><li>發明人名字的第一個字母</li></ol>
+<p class="ex">日文「罫線」讀作 keisen，台灣取它的第一個字母，稱為K線。</p></div>
+<div class="quiz" data-a="1"><p class="q">K線最早是用來記錄什麼東西的價格？</p>
+<ol><li>米</li><li>黃金</li><li>石油</li></ol>
+<p class="ex">日本江戶時代大阪堂島米市場的米價。</p></div>
+</section>
+
+<!-- ============ L4 ============ -->
+<section class="lesson" id="L4" data-unit="單元二　認識K線" data-t="一根K棒的四個價格：開高低收">
+<header>
+  <div class="unit">單元二　認識K線</div>
+  <h1><small>第 4 課</small>一根K棒的四個價格：開、高、低、收</h1>
+  <div class="goal">學完這課你會知道：一根K棒是怎麼「長」出來的，以及開盤價、最高價、最低價、收盤價的意思。</div>
+</header>
+<p>一根K棒（也叫K棒、一根K）記錄了<b>一段時間內</b>的價格變化。最常見的是「日K」，也就是一天。它記住四個價格：</p>
+<div class="tw"><table>
+<tr><th>名稱</th><th>意思</th><th>英文</th></tr>
+<tr><td><b>開盤價</b>（開）</td><td>今天第一筆成交的價格</td><td>Open</td></tr>
+<tr><td><b>最高價</b>（高）</td><td>今天所有成交裡最高的價格</td><td>High</td></tr>
+<tr><td><b>最低價</b>（低）</td><td>今天所有成交裡最低的價格</td><td>Low</td></tr>
+<tr><td><b>收盤價</b>（收）</td><td>今天最後一筆成交的價格</td><td>Close</td></tr>
+</table></div>
+<p>專業的人常把這四個價格合起來叫 <mark>OHLC</mark>（取四個英文字的第一個字母）。</p>
+
+<h2>看一根K棒怎麼長出來</h2>
+<p>按下「播放一天行情」，你會看到從 9:00 開盤到 13:30 收盤，價格一路上上下下，K棒跟著慢慢變形，最後定型。注意觀察：<b>最高點和最低點會留下「痕跡」</b>。</p>
+<div class="widget" data-w="tick"></div>
+<div class="story">把一天的股價想成一場拔河。開盤是比賽開始的位置，收盤是比賽結束的位置。最高價是買方（往上拉的一隊）曾經拉到最遠的地方，最低價是賣方（往下拉的一隊）曾經拉到最遠的地方。K棒就是這場比賽的「紀錄照片」。</div>
+
+<h2>收盤價最重要</h2>
+<p>四個價格中，<mark>收盤價</mark>被認為最重要。因為它是一天多空雙方打完仗的「最後結果」，而且很多人會等收盤後才做決定。之後要學的均線、KD、MACD，大多是用收盤價算出來的。</p>
+
+<div class="quiz" data-a="3"><p class="q">今天價格走勢：開盤 50 元 → 最高到 54 元 → 最低跌到 48 元 → 收在 53 元。「最低價」是多少？</p>
+<ol><li>50 元</li><li>53 元</li><li>48 元</li><li>54 元</li></ol>
+<p class="ex">最低價是一天中所有成交的最低價格，也就是 48 元。</p></div>
+<div class="quiz" data-a="2"><p class="q">OHLC 的 C 代表什麼？</p>
+<ol><li>成交量</li><li>收盤價</li><li>開盤價</li></ol>
+<p class="ex">C 是 Close，收盤價。</p></div>
+</section>
+
+<!-- ============ L5 ============ -->
+<section class="lesson" id="L5" data-unit="單元二　認識K線" data-t="K棒的零件：實體、影線、紅K與綠K">
+<header>
+  <div class="unit">單元二　認識K線</div>
+  <h1><small>第 5 課</small>K棒的零件：實體、影線、紅K與綠K</h1>
+  <div class="goal">學完這課你會知道：K棒每個部分叫什麼、代表什麼意思，並能自己「做」出一根K棒。</div>
+</header>
+<h2>一、三個零件</h2>
+<div class="widget" data-w="anatomy"></div>
+<ul>
+  <li><mark>實體</mark>：開盤價和收盤價之間的「方塊」。像蠟燭的燭身。</li>
+  <li><mark>上影線</mark>：實體上方的細線，頂端是最高價。</li>
+  <li><mark>下影線</mark>：實體下方的細線，底端是最低價。</li>
+</ul>
+<div class="origin">「影線」是因為細細一條，像實體拖出的影子。英文叫 Shadow（影子）或 Wick（燭芯）。「實體」英文叫 Real Body，代表這一天真正的「漲跌結果」。</div>
+
+<h2>二、紅K和綠K</h2>
+<ul>
+  <li><span class="up">紅K（陽線）</span>：收盤價 <b>比開盤價高</b>。開盤在實體下緣，收盤在上緣。代表從開盤到收盤，買方贏了。</li>
+  <li><span class="dn">綠K（陰線）</span>：收盤價 <b>比開盤價低</b>。開盤在實體上緣，收盤在下緣。代表賣方贏了。台灣有些軟體會把陰線畫成黑色，所以也叫「黑K」。</li>
+  <li>開盤價＝收盤價：實體變成一條橫線，叫做<mark>十字線</mark>（第 6 課詳細介紹）。</li>
+</ul>
+
+<div class="warn"><b>最容易搞混的地方：「紅K」不等於「今天有漲」！</b><br>K棒的顏色是比較「今天的收盤」和「今天的開盤」。<br>但看盤軟體上寫的「漲跌」，是比較「今天的收盤」和「<b>昨天</b>的收盤」。<br>例子：昨天收 100 元，今天開盤直接跌到 92 元，盤中慢慢拉回，收在 95 元。<br>→ 收盤 95 高於開盤 92，所以是<span class="up">紅K</span>；<br>→ 但 95 比昨天 100 低，所以今天其實是<span class="dn">下跌 5 元</span>。</div>
+<div class="chart" data-c="redButDown" data-cap="最後一根是紅K，可是它的收盤價比前一天低：顏色是紅的，但當天是「跌」。"></div>
+
+<h2>三、實體與影線透露的訊息</h2>
+<div class="tw"><table>
+<tr><th>看到什麼</th><th>代表什麼</th></tr>
+<tr><td>實體很長</td><td>一方打得很徹底，力道強。長紅＝買方強；長綠＝賣方強。</td></tr>
+<tr><td>實體很短</td><td>收盤和開盤差不多，雙方勢均力敵，市場在猶豫。</td></tr>
+<tr><td>上影線很長</td><td>價格曾經被推得很高，但後來被賣壓打下來 → 上方有<b>賣壓</b>。</td></tr>
+<tr><td>下影線很長</td><td>價格曾經跌很深，但後來被買盤拉上來 → 下方有<b>支撐</b>（有人願意接）。</td></tr>
+</table></div>
+
+<h2>四、K棒實驗室</h2>
+<p>拖動下面的滑桿，自己做出一根K棒。電腦會告訴你它大概屬於哪一種K棒。試試看做出「長紅」、「十字線」、「長下影線」。</p>
+<div class="widget" data-w="lab"></div>
+
+<div class="quiz" data-a="1"><p class="q">一根K棒開盤 30 元、收盤 27 元，它是什麼顏色？</p>
+<ol><li>綠K（陰線）</li><li>紅K（陽線）</li><li>十字線</li></ol>
+<p class="ex">收盤低於開盤，是綠K（陰線）。</p></div>
+<div class="quiz" data-a="2"><p class="q">上影線很長，最可能代表什麼？</p>
+<ol><li>下方有很多買盤支撐</li><li>價格衝高後被賣壓打回來</li><li>今天沒有人交易</li></ol>
+<p class="ex">上影線的頂端是最高價，代表曾經衝到那裡，但收盤時已經掉下來，表示上方有人在賣。</p></div>
+<div class="quiz" data-a="3"><p class="q">昨天收盤 50 元。今天開 45、收 48。以下何者正確？</p>
+<ol><li>綠K，今天上漲</li><li>紅K，今天上漲</li><li>紅K，但今天是下跌</li></ol>
+<p class="ex">收盤 48 高於開盤 45 → 紅K；但 48 低於昨收 50 → 今天下跌 2 元。</p></div>
+</section>
+
+<!-- ============ L6 ============ -->
+<section class="lesson" id="L6" data-unit="單元二　認識K線" data-t="單根K棒的語言：K棒圖鑑">
+<header>
+  <div class="unit">單元二　認識K線</div>
+  <h1><small>第 6 課</small>單根K棒的語言：K棒圖鑑</h1>
+  <div class="goal">學完這課你會認得最常見的 12 種單根K棒，並知道它們代表的市場心理。</div>
+</header>
+<p>每一根K棒都在「說話」。下面是最常見的形狀。<b>記得：同一種K棒出現在不同位置，意思可能完全不同</b>——出現在大漲之後（高檔）和大跌之後（低檔），解讀會不一樣。</p>
+
+<h2>一、力道型</h2>
+<div class="gallery">
+  <div class="g"><span class="mc" data-k="12,92,10,90"></span><b class="up">長紅K（大陽線）</b>開低走高、收在最高附近。買方全天主導，非常強勢。</div>
+  <div class="g"><span class="mc" data-k="90,92,10,12"></span><b class="dn">長綠K（大陰線）</b>開高走低、收在最低附近。賣方全天主導，非常弱勢。</div>
+  <div class="g"><span class="mc" data-k="45,72,30,55"></span><b>紡錘線（小紅／小綠）</b>實體小、上下都有影線。雙方拉鋸，市場在猶豫。</div>
+  <div class="g"><span class="mc" data-k="50,50,50,50"></span><b>一字線</b>開高低收都一樣。在台股常代表<b>開盤就鎖漲停或跌停</b>，一整天買不到或賣不掉。</div>
+</div>
+<div class="origin">「紡錘」是紡紗用的工具，中間粗兩頭細，這種K棒的樣子很像，英文叫 Spinning Top（陀螺）。</div>
+
+<h2>二、十字線家族（開盤≒收盤）</h2>
+<div class="gallery">
+  <div class="g"><span class="mc" data-k="50,80,20,50.3"></span><b>十字線</b>開盤等於收盤，上下有影線。多空打成平手，常是<b>變盤訊號</b>（趨勢可能要改變）。</div>
+  <div class="g"><span class="mc" data-k="80,80,15,80.3"></span><b>T字線（蜻蜓十字）</b>曾經大跌，但被拉回到開盤價收盤。在低檔出現時，代表下方買盤很強。</div>
+  <div class="g"><span class="mc" data-k="20,85,20,20.3"></span><b>倒T字線（墓碑十字）</b>曾經大漲，但被打回開盤價。在高檔出現時，代表上方賣壓很重。</div>
+</div>
+<div class="origin">十字線英文叫 <b>Doji</b>，來自日文「同事（どうじ）」，意思是「同時、一樣」，指開盤和收盤一樣。「墓碑」是因為形狀像一塊立著的墓碑，暗示漲勢可能「死」了；「蜻蜓」則是形狀像停著的蜻蜓。</div>
+
+<h2>三、長影線家族（最常考！）</h2>
+<p>這四種的形狀其實只有兩種，<b>差別在出現的位置</b>：</p>
+<div class="gallery">
+  <div class="g"><span class="mc" data-k="70,80,18,78"></span><b>錘子線（在低檔）</b>小實體、長下影線（至少實體的 2 倍）。跌了一段後出現，代表賣方殺下去卻被買方拉回來 → 可能止跌。</div>
+  <div class="g"><span class="mc" data-k="70,80,18,78"></span><b>吊人線（在高檔）</b>形狀跟錘子一樣，但出現在漲了一段之後。代表盤中曾經有大量賣壓 → 要小心可能轉跌。</div>
+  <div class="g"><span class="mc" data-k="22,82,20,30"></span><b>倒錘線（在低檔）</b>小實體、長上影線。在低檔出現，代表買方開始嘗試往上攻，需要下一根確認。</div>
+  <div class="g"><span class="mc" data-k="30,82,20,22"></span><b>流星線（在高檔）</b>形狀跟倒錘一樣，但出現在高檔。衝高後被打下來 → 可能是漲勢結束的警訊。</div>
+</div>
+<div class="origin">「錘子」像一把鐵鎚，底部在「敲打出底部」。「吊人」是像一個被吊起來的人，雙腳垂下，暗示危險。「流星」像天上劃過的流星，尾巴在上面，一閃而逝，象徵漲勢可能曇花一現。</div>
+<div class="chart" data-c="hammerCtx" data-cap="同樣形狀的K棒：左邊在低檔（錘子，看漲）、右邊在高檔（吊人，看跌）。點點看它們的開高低收。"></div>
+
+<div class="tip">單根K棒的訊號比較弱，<b>一定要等下一根K棒確認</b>。例如低檔出現錘子線，隔天再收一根紅K、收盤更高，止跌的可能性才比較大。</div>
+
+<div class="quiz" data-a="2"><p class="q">股價已經漲了很久，今天出現一根小實體、很長上影線的K棒，它叫什麼？</p>
+<ol><li>錘子線</li><li>流星線</li><li>長紅K</li></ol>
+<p class="ex">高檔＋長上影線＝流星線，代表衝高被打回，要小心漲勢結束。</p></div>
+<div class="quiz" data-a="3"><p class="q">錘子線和吊人線最大的差別是？</p>
+<ol><li>顏色不同</li><li>影線方向不同</li><li>出現的位置不同（低檔 vs 高檔）</li></ol>
+<p class="ex">兩者形狀相同，出現在低檔叫錘子、在高檔叫吊人。</p></div>
+<div class="quiz" data-a="1"><p class="q">台股出現「一字線」，最可能的情況是？</p>
+<ol><li>一開盤就鎖在漲停或跌停</li><li>這天休市</li><li>成交量非常大</li></ol>
+<p class="ex">開高低收都相同，代表整天都在同一個價格，台股最常見的就是一開盤就鎖漲停或跌停。</p></div>
+</section>
+
+<!-- ============ L7 ============ -->
+<section class="lesson" id="L7" data-unit="單元二　認識K線" data-t="時間週期：分K、日K、週K、月K">
+<header>
+  <div class="unit">單元二　認識K線</div>
+  <h1><small>第 7 課</small>時間週期：分K、日K、週K、月K</h1>
+  <div class="goal">學完這課你會知道：K棒可以代表不同長度的時間，以及週K是怎麼由日K組成的。</div>
+</header>
+<p>一根K棒不一定代表一天。它可以代表任何一段時間：</p>
+<div class="tw"><table>
+<tr><th>名稱</th><th>一根代表</th><th>適合誰看</th></tr>
+<tr><td>分K（1分、5分、60分…）</td><td>幾分鐘</td><td>當天就買賣完的短線交易者</td></tr>
+<tr><td>日K</td><td>一個交易日</td><td>最常用，大多數人的主要圖</td></tr>
+<tr><td>週K</td><td>一週（通常 5 個交易日）</td><td>看中期趨勢</td></tr>
+<tr><td>月K</td><td>一個月</td><td>看長期大方向</td></tr>
+</table></div>
+
+<h2>週K怎麼來？</h2>
+<p>把一週 5 根日K「合併」起來，規則很簡單：</p>
+<ul>
+  <li>週K的<b>開盤價</b> ＝ 週一的開盤價</li>
+  <li>週K的<b>收盤價</b> ＝ 週五的收盤價</li>
+  <li>週K的<b>最高價</b> ＝ 這 5 天裡最高的那個最高價</li>
+  <li>週K的<b>最低價</b> ＝ 這 5 天裡最低的那個最低價</li>
+</ul>
+<div class="widget" data-w="merge"></div>
+<p>你會發現：<b>好幾根有紅有綠的日K，合起來可能是一根很單純的K棒</b>。週K把每天的雜訊「濾掉」，讓你看清楚大方向。</p>
+
+<h2>專業習慣：「由大看到小」</h2>
+<p>專業交易者會先看月K、週K了解大趨勢（像先看地圖），再看日K找進出點（像看路口），最後可能用 60 分K找精確時機。這叫<mark>多週期分析</mark>。如果週K是往上的，日K出現的下跌就比較可能只是「休息」。</p>
+<div class="story">就像看天氣：月K是「季節」（夏天整體熱），週K是「這週天氣」，日K是「今天會不會下雨」。夏天裡的一場雨（日K下跌）不會讓夏天變冬天。</div>
+
+<div class="quiz" data-a="2"><p class="q">某週五天的最高價分別是 52、55、53、58、56，這根週K的最高價是？</p>
+<ol><li>56</li><li>58</li><li>52</li></ol>
+<p class="ex">週K最高價取這五天中最高的，也就是 58。</p></div>
+<div class="quiz" data-a="1"><p class="q">週K的收盤價是？</p>
+<ol><li>這週最後一個交易日的收盤價</li><li>五天收盤價的平均</li><li>這週最高的收盤價</li></ol>
+<p class="ex">週K收盤價是這一週最後一個交易日（通常是週五）的收盤價。</p></div>
+</section>
+<!-- ============ L8 ============ -->
+<section class="lesson" id="L8" data-unit="單元三　K線組合與成交量" data-t="成交量：價格背後的力氣">
+<header>
+  <div class="unit">單元三　K線組合與成交量</div>
+  <h1><small>第 8 課</small>成交量：價格背後的「力氣」</h1>
+  <div class="goal">學完這課你會知道：成交量是什麼、怎麼看量價關係，以及「量先價行」的意思。</div>
+</header>
+<h2>一、什麼是成交量？</h2>
+<p><mark>成交量</mark>就是一段時間內「成交了多少」。台股通常用「張」來算。例如今天成交 5,000 張，代表今天總共有 500 萬股換了主人。</p>
+<p>注意：<b>每一筆成交都是「有人買、同時有人賣」</b>。所以成交量大不代表「買的人比賣的人多」，而是代表「雙方交戰得很激烈、很多人在參與」。</p>
+<p>在K線圖下方，通常會畫一排直條，就是成交量。直條的顏色跟上面的K棒一樣（紅K配紅量、綠K配綠量）。</p>
+<div class="chart" data-c="volPrice" data-cap="上方K線、下方成交量。注意上漲的那一段，量明顯放大。"></div>
+
+<h2>二、量價關係四種組合</h2>
+<div class="tw"><table>
+<tr><th>情況</th><th>白話</th><th>通常代表</th></tr>
+<tr><td><span class="up">價漲</span>＋量增</td><td>越漲越多人搶</td><td>健康的上漲，買氣足。</td></tr>
+<tr><td><span class="up">價漲</span>＋量縮</td><td>漲了但跟的人變少</td><td>上漲力道減弱，要注意（叫做<b>量價背離</b>）。</td></tr>
+<tr><td><span class="dn">價跌</span>＋量增</td><td>很多人急著賣</td><td>賣壓沉重，可能是恐慌或有人大量出貨。</td></tr>
+<tr><td><span class="dn">價跌</span>＋量縮</td><td>跌了但沒什麼人賣</td><td>賣壓減輕，下跌可能接近尾聲。</td></tr>
+</table></div>
+<div class="story">成交量像跑步時的「力氣」。上坡（上漲）需要很多力氣（量），如果爬坡時力氣越來越小，就可能爬不上去了。下坡（下跌）就算沒什麼力氣也會自己滑下去，所以「量縮下跌」不一定會停，但「量縮到極點」通常代表想賣的人都賣得差不多了。</div>
+<div class="chart" data-c="volDiverge" data-cap="價格創新高，但成交量一波比一波小（量價背離）。隨後價格反轉向下。"></div>
+
+<h2>三、幾個常見說法</h2>
+<ul>
+  <li><mark>量先價行</mark>：成交量常常比價格先出現變化。例如股價還沒大漲，成交量先慢慢放大，代表有人在默默買進。這句話是台灣投資界的老話，意思跟美國技術分析大師葛蘭碧（Joseph Granville）強調「成交量領先價格」的觀念相同。</li>
+  <li><mark>爆量</mark>：成交量突然變成平常的好幾倍。出現在低檔可能是換手、有人進場；出現在高檔長上影線，常是<b>出貨</b>（大戶把股票賣給散戶）。</li>
+  <li><mark>均量</mark>：成交量的平均，例如「5日均量」，用來判斷今天的量算大還是小。</li>
+  <li><mark>窒息量</mark>：成交量小到極點，代表幾乎沒人要賣也沒人要買，常出現在底部附近。</li>
+</ul>
+<div class="origin">「散戶」指資金分散的一般小投資人；「大戶」「主力」指資金很大、能影響股價的人或機構。「出貨」原本是商店把貨賣出去，在股市指主力把手上的大量股票賣掉。</div>
+
+<div class="quiz" data-a="2"><p class="q">股價一直創新高，但成交量卻越來越小，這叫什麼？</p>
+<ol><li>量價齊揚</li><li>量價背離</li><li>窒息量</li></ol>
+<p class="ex">價格和成交量方向不一致，叫量價背離，代表上漲的力氣在減弱。</p></div>
+<div class="quiz" data-a="1"><p class="q">今天成交量是 3,000 張，代表什麼？</p>
+<ol><li>今天總共有 300 萬股成交，每筆都有買方和賣方</li><li>今天有 3,000 個人買股票</li><li>買的人比賣的人多 3,000 張</li></ol>
+<p class="ex">1 張 = 1,000 股，3,000 張 = 300 萬股。每一筆成交都有一買一賣，所以量不代表買方比較多。</p></div>
+</section>
+
+<!-- ============ L9 ============ -->
+<section class="lesson" id="L9" data-unit="單元三　K線組合與成交量" data-t="雙K與三K組合型態">
+<header>
+  <div class="unit">單元三　K線組合與成交量</div>
+  <h1><small>第 9 課</small>雙K與三K組合型態</h1>
+  <div class="goal">學完這課你會認得 10 種最經典的K線組合，並理解每一種背後多空力量的變化。</div>
+</header>
+<p>單根K棒像一個字，兩三根組合起來就像一句話，意思更完整、訊號也比較可靠。以下都是「<b>反轉型態</b>」，意思是趨勢可能要轉向。<b>它們一定要出現在對的位置才有意義</b>：看漲的型態要出現在下跌之後，看跌的型態要出現在上漲之後。</p>
+
+<h2>一、吞噬（最強的雙K訊號之一）</h2>
+<div class="gallery">
+  <div class="g"><span class="mc" data-k="60,62,40,42;38,70,36,68" data-w="80"></span><b class="up">多頭吞噬</b>下跌後，一根大紅K的實體「完全包住」前一根綠K的實體。買方一口氣把賣方的戰果全部吃掉。</div>
+  <div class="g"><span class="mc" data-k="40,62,38,60;62,64,30,32" data-w="80"></span><b class="dn">空頭吞噬</b>上漲後，一根大綠K的實體完全包住前一根紅K的實體。賣方反撲，強烈看跌。</div>
+</div>
+<div class="origin">「吞噬」就是一口吞下去，英文叫 Engulfing（吞沒）。「多頭」指看漲、做買方的人；「空頭」指看跌、做賣方的人。常見的說法是：看漲的人先買進，手上的「頭寸」（部位）是多出來的，叫多頭；看跌的人先賣出或手上沒有股票（空的），叫空頭。英文則用 Bull（牛，用角往上頂）和 Bear（熊，用掌往下拍）。</div>
+<div class="chart" data-c="engulfCtx" data-cap="一段下跌後，最後兩根形成多頭吞噬，隨後反彈。"></div>
+
+<h2>二、母子線（孕線）</h2>
+<div class="gallery">
+  <div class="g"><span class="mc" data-k="80,82,20,24;38,55,34,50" data-w="80"></span><b class="up">多頭母子</b>下跌中一根長綠K之後，出現一根小K棒，實體被包在前一根實體裡面。賣方力道突然縮小，可能止跌。</div>
+  <div class="g"><span class="mc" data-k="20,80,18,76;60,66,45,50" data-w="80"></span><b class="dn">空頭母子</b>上漲中一根長紅K之後，出現一根小K棒被包在裡面。買方突然沒力了。</div>
+</div>
+<div class="origin">英文 Harami 來自日文「孕み（はらみ）」，意思是「懷孕」。大K棒像媽媽，小K棒像肚子裡的寶寶，所以中文叫「母子線」或「孕線」。它是吞噬的「相反」：吞噬是後面大包前面小，母子是前面大包後面小。</div>
+
+<h2>三、烏雲罩頂與曙光乍現</h2>
+<div class="gallery">
+  <div class="g"><span class="mc" data-k="30,78,28,75;82,85,45,48" data-w="80"></span><b class="dn">烏雲罩頂</b>上漲中，第二天開得比昨天最高還高，卻一路跌，收盤跌進昨天紅K實體的一半以下。像晴天突然被烏雲蓋住。</div>
+  <div class="g"><span class="mc" data-k="75,78,30,32;25,68,22,62" data-w="80"></span><b class="up">曙光乍現（貫穿線）</b>下跌中，第二天開得比昨天最低還低，卻一路漲，收盤超過昨天綠K實體的一半。像黑夜裡出現第一道曙光。</div>
+</div>
+
+<h2>四、晨星與夜星（三K）</h2>
+<div class="gallery">
+  <div class="g"><span class="mc" data-k="85,87,40,42;35,38,28,32;40,80,38,76" data-w="100"></span><b class="up">晨星</b>①長綠K ②小K棒（常跳空往下）③長紅K收進第一根實體一半以上。從下跌→猶豫→上漲，典型的底部反轉。</div>
+  <div class="g"><span class="mc" data-k="20,62,18,60;66,72,63,68;62,64,22,26" data-w="100"></span><b class="dn">夜星</b>①長紅K ②小K棒（常跳空往上）③長綠K跌進第一根實體一半以下。典型的頭部反轉。</div>
+</div>
+<div class="origin">「晨星」指清晨出現在東方的金星，它出現代表天快亮了（價格快要上漲）。「夜星」指黃昏出現的金星，代表天快黑了（價格快要下跌）。中間那根小K棒就是那顆「星」。</div>
+<div class="chart" data-c="morningCtx" data-cap="下跌末端出現晨星（最後三根），隨後開始反彈。"></div>
+
+<h2>五、三白兵與三隻烏鴉</h2>
+<div class="gallery">
+  <div class="g"><span class="mc" data-k="20,40,18,38;33,58,31,56;52,78,50,76" data-w="100"></span><b class="up">紅三兵（三白兵）</b>連續三根紅K，每根收盤都比前一根高。像三個士兵整齊地往前推進，代表買方穩定進攻。</div>
+  <div class="g"><span class="mc" data-k="80,82,60,62;66,68,42,44;48,50,22,24" data-w="100"></span><b class="dn">三隻烏鴉</b>連續三根綠K，每根收盤都更低。烏鴉在很多文化被視為不祥之兆，代表賣方持續打壓。</div>
+</div>
+<div class="origin">日本傳統K線中陽線是白色的，所以叫「三白兵」（英文 Three White Soldiers）；台灣陽線是紅色，所以也叫「紅三兵」。</div>
+
+<div class="warn">型態只是「提高機率」，不是一定會發生。專業做法是看到型態後，還要配合：①位置對不對（是否在支撐或壓力附近）②成交量有沒有配合 ③下一根K棒是否確認。</div>
+
+<div class="quiz" data-a="3"><p class="q">上漲一段後，出現一根小紅K，接著一根大綠K的實體把小紅K的實體完全包住。這是？</p>
+<ol><li>多頭吞噬</li><li>晨星</li><li>空頭吞噬</li></ol>
+<p class="ex">上漲後綠K包住紅K，叫空頭吞噬，是看跌訊號。</p></div>
+<div class="quiz" data-a="1"><p class="q">「晨星」通常出現在哪裡才有意義？</p>
+<ol><li>一段下跌之後</li><li>一段上漲之後</li><li>任何地方都一樣</li></ol>
+<p class="ex">晨星是底部反轉型態，要出現在下跌之後。</p></div>
+<div class="quiz" data-a="2"><p class="q">「母子線」為什麼又叫「孕線」？</p>
+<ol><li>因為常出現在母親節</li><li>日文原意是懷孕，大K棒包著小K棒像懷著寶寶</li><li>因為會生出新的趨勢</li></ol>
+<p class="ex">來自日文「孕み（harami）」，懷孕的意思。</p></div>
+</section>
+
+<!-- ============ L10 ============ -->
+<section class="lesson" id="L10" data-unit="單元三　K線組合與成交量" data-t="跳空缺口">
+<header>
+  <div class="unit">單元三　K線組合與成交量</div>
+  <h1><small>第 10 課</small>跳空缺口：價格「跳過去」的地方</h1>
+  <div class="goal">學完這課你會知道：什麼是缺口、四種缺口的差別、什麼叫「回補」和「島狀反轉」。</div>
+</header>
+<h2>一、什麼是缺口？</h2>
+<ul>
+  <li><span class="up">向上跳空缺口</span>：今天的<b>最低價</b>比昨天的<b>最高價</b>還高。兩根K棒之間出現一段「沒有任何成交」的空白。</li>
+  <li><span class="dn">向下跳空缺口</span>：今天的<b>最高價</b>比昨天的<b>最低價</b>還低。</li>
+</ul>
+<p>缺口通常是因為收盤後到隔天開盤前出現重大消息（財報、新聞、國際股市大漲大跌），大家開盤就搶著用更高（或更低）的價格成交。</p>
+<div class="origin">「跳空」就是價格「跳過一段空白」，英文叫 Gap（空隙）。日本K線術語叫「窗口（窓）」，所以「回補缺口」在日本叫「關窗」。</div>
+
+<h2>二、四種缺口</h2>
+<div class="tw"><table>
+<tr><th>種類</th><th>出現位置</th><th>意義</th></tr>
+<tr><td><b>普通缺口</b></td><td>盤整區間內</td><td>沒什麼意義，常常很快就被回補。</td></tr>
+<tr><td><b>突破缺口</b></td><td>剛突破盤整或壓力時，常伴隨大量</td><td>新趨勢的起點，力道強，不容易回補。</td></tr>
+<tr><td><b>逃逸缺口</b>（中繼缺口、測量缺口）</td><td>趨勢進行到一半</td><td>趨勢仍強，常在整段行情的中間，可用來估計還有多少空間。</td></tr>
+<tr><td><b>竭盡缺口</b></td><td>趨勢末端、常伴隨爆量</td><td>最後一口氣，之後很快就反轉。</td></tr>
+</table></div>
+<div class="chart" data-c="gaps" data-cap="一段完整上漲中的三個缺口：突破缺口 → 逃逸缺口 → 竭盡缺口，最後反轉下跌。框起來的地方就是缺口。"></div>
+
+<h2>三、回補與島狀反轉</h2>
+<p><mark>回補缺口</mark>：之後價格又回到缺口的區間，把那段空白「填起來」。突破缺口若很快被回補，代表突破可能是假的。</p>
+<p><mark>島狀反轉</mark>：先向上跳空，在高處停留幾天，接著又向下跳空。中間那幾根K棒就像一座被海水（缺口）隔開的孤島，是很強的反轉訊號。</p>
+<div class="tip">缺口常變成之後的<b>支撐或壓力</b>。向上缺口的下緣，常是未來回檔時的支撐；向下缺口的上緣，常是未來反彈時的壓力。</div>
+
+<div class="quiz" data-a="2"><p class="q">昨天最高 52 元，今天最低 54 元，這是？</p>
+<ol><li>向下跳空缺口</li><li>向上跳空缺口</li><li>沒有缺口</li></ol>
+<p class="ex">今天最低 54 比昨天最高 52 還高，中間 52～54 沒有成交，是向上跳空缺口。</p></div>
+<div class="quiz" data-a="3"><p class="q">漲了一大段之後，爆量跳空向上，但之後幾天就跌回來補掉缺口，這最可能是？</p>
+<ol><li>突破缺口</li><li>普通缺口</li><li>竭盡缺口</li></ol>
+<p class="ex">出現在趨勢末端、爆量、又很快被回補，符合竭盡缺口的特徵。</p></div>
+</section>
+
+<!-- ============ L11 ============ -->
+<section class="lesson" id="L11" data-unit="單元四　趨勢與均線" data-t="趨勢：順勢而為">
+<header>
+  <div class="unit">單元四　趨勢與均線</div>
+  <h1><small>第 11 課</small>趨勢：技術分析最重要的觀念</h1>
+  <div class="goal">學完這課你會判斷上升、下降、盤整三種趨勢，並學會畫趨勢線。</div>
+</header>
+<h2>一、道氏理論：趨勢的起源</h2>
+<p>一百多年前，美國《華爾街日報》創辦人<mark>查爾斯・道</mark>（Charles Dow）發現，市場價格會形成一段一段的「趨勢」，而且趨勢一旦形成，常常會持續一段時間。後人把他的觀點整理成<mark>道氏理論</mark>，這是所有技術分析的老祖宗。道瓊工業指數的「道」也是他。</p>
+
+<h2>二、怎麼判斷趨勢？看「高點」和「低點」</h2>
+<p>價格不會直直地漲或跌，而是像波浪一樣上下起伏。每一個浪頭叫<b>高點</b>、每一個浪谷叫<b>低點</b>。</p>
+<div class="tw"><table>
+<tr><th>趨勢</th><th>判斷方法</th><th>俗稱</th></tr>
+<tr><td><span class="up">上升趨勢</span></td><td>高點越來越高、低點越來越高（頭頭高、底底高）</td><td>多頭市場</td></tr>
+<tr><td><span class="dn">下降趨勢</span></td><td>高點越來越低、低點越來越低（頭頭低、底底低）</td><td>空頭市場</td></tr>
+<tr><td>盤整</td><td>高點和低點差不多，在一個範圍內來回</td><td>箱型整理、區間震盪</td></tr>
+</table></div>
+<div class="chart" data-c="trendUp" data-cap="上升趨勢：每一次回檔的低點都比前一次高。藍色斜線是連接兩個低點畫出的「上升趨勢線」。"></div>
+<div class="chart" data-c="trendDn" data-cap="下降趨勢：每一次反彈的高點都比前一次低。連接兩個高點就是「下降趨勢線」。"></div>
+
+<h2>三、怎麼畫趨勢線？</h2>
+<ol>
+  <li><b>上升趨勢線</b>：找兩個明顯的、越來越高的<b>低點</b>，把它們連起來往右延伸。</li>
+  <li><b>下降趨勢線</b>：找兩個明顯的、越來越低的<b>高點</b>，連起來往右延伸。</li>
+  <li>被碰觸越多次、越久沒被跌破的趨勢線，越有參考價值。</li>
+  <li>當價格<b>有效跌破</b>上升趨勢線（例如收盤價跌破、而且帶量），代表上升趨勢可能結束。</li>
+</ol>
+<div class="story">趨勢就像河流的水流。<b>「順勢」</b>就是順著水流划船，省力又快；<b>「逆勢」</b>就是逆流划船，很累而且容易翻船。華爾街有句名言：「趨勢是你的朋友（The trend is your friend）」。</div>
+<div class="chart" data-c="rangeBox" data-cap="盤整：價格在一個箱子裡上下來回，直到某天突破箱子。"></div>
+
+<div class="quiz" data-a="1"><p class="q">「高點越來越低、低點越來越低」是什麼趨勢？</p>
+<ol><li>下降趨勢</li><li>上升趨勢</li><li>盤整</li></ol>
+<p class="ex">頭頭低、底底低是下降趨勢，也叫空頭市場。</p></div>
+<div class="quiz" data-a="3"><p class="q">上升趨勢線要連接什麼？</p>
+<ol><li>兩個高點</li><li>最高點和最低點</li><li>兩個越來越高的低點</li></ol>
+<p class="ex">上升趨勢線連接低點（像地板），下降趨勢線連接高點（像天花板）。</p></div>
+</section>
+
+<!-- ============ L12 ============ -->
+<section class="lesson" id="L12" data-unit="單元四　趨勢與均線" data-t="支撐與壓力">
+<header>
+  <div class="unit">單元四　趨勢與均線</div>
+  <h1><small>第 12 課</small>支撐與壓力：看不見的地板和天花板</h1>
+  <div class="goal">學完這課你會找出支撐與壓力，並理解「角色互換」和「假突破」。</div>
+</header>
+<h2>一、定義</h2>
+<ul>
+  <li><mark>支撐</mark>：價格跌到某個位置，好像踩到地板，很多人願意在那裡買進，所以跌不下去。</li>
+  <li><mark>壓力</mark>（也叫阻力）：價格漲到某個位置，好像碰到天花板，很多人在那裡賣出，所以漲不上去。</li>
+</ul>
+<h2>二、支撐壓力從哪裡來？——人的記憶</h2>
+<div class="story">假設很多人在 100 元買了股票，後來跌到 80 元，他們很後悔，心想「只要回到 100 元我就賣掉，不賠就好」。所以當價格再漲回 100 元時，這群人一起賣，100 元就變成<b>壓力</b>。<br>反過來，曾經在 60 元大量成交、之後大漲，錯過的人心想「再跌回 60 我一定買」，60 元就變成<b>支撐</b>。</div>
+<p>常見的支撐壓力位置：</p>
+<ul>
+  <li><b>前波高點、前波低點</b>：最常用。</li>
+  <li><b>大量成交的價格區</b>：很多人的「成本」在那裡。</li>
+  <li><b>整數關卡</b>：例如 100 元、500 元、1,000 元，大家心理上特別在意。</li>
+  <li><b>缺口</b>、<b>趨勢線</b>、<b>均線</b>（下一課教）。</li>
+</ul>
+
+<h2>三、角色互換</h2>
+<p>這是最重要的觀念：<mark>壓力被突破後，會變成支撐；支撐被跌破後，會變成壓力</mark>。</p>
+<div class="chart" data-c="srFlip" data-cap="虛線原本是壓力（碰了三次都過不去），突破後拉回，反而在同一個位置得到支撐。"></div>
+
+<h2>四、真突破與假突破</h2>
+<p>價格衝過壓力不一定就是真的突破。判斷時可以看：</p>
+<ul>
+  <li><b>收盤價</b>有沒有站上去（盤中衝過去又掉回來不算）。</li>
+  <li><b>成交量</b>有沒有放大（突破要有力氣）。</li>
+  <li><b>能不能站穩幾天</b>，或回測不破。</li>
+</ul>
+<p>衝過去又很快跌回來的叫<mark>假突破</mark>，常常讓追高的人被套住。</p>
+<div class="origin">「被套」「套牢」是指買進後價格下跌，賣掉會賠錢、不賣又一直虧，像被繩子套住動不了。「解套」就是價格回到成本，終於可以不賠賣出。這正是壓力形成的原因。</div>
+
+<div class="quiz" data-a="2"><p class="q">某股票三次漲到 120 元都過不去，後來終於帶量突破站上 125 元。之後回跌時，120 元最可能變成？</p>
+<ol><li>壓力</li><li>支撐</li><li>沒有意義</li></ol>
+<p class="ex">壓力被突破後會變成支撐，這叫角色互換。</p></div>
+<div class="quiz" data-a="3"><p class="q">下列哪一個「最不像」真突破？</p>
+<ol><li>收盤價站上壓力</li><li>突破當天成交量放大</li><li>盤中衝過壓力，但收盤又跌回壓力下方、成交量很小</li></ol>
+<p class="ex">盤中衝過又收回、沒有量，很可能是假突破。</p></div>
+</section>
+
+<!-- ============ L13 ============ -->
+<section class="lesson" id="L13" data-unit="單元四　趨勢與均線" data-t="移動平均線是什麼？">
+<header>
+  <div class="unit">單元四　趨勢與均線</div>
+  <h1><small>第 13 課</small>移動平均線（均線）是什麼？</h1>
+  <div class="goal">學完這課你會自己算均線，並知道台股常用的週線、月線、季線、年線。</div>
+</header>
+<h2>一、先從「平均」開始</h2>
+<p>你考了五次數學：70、80、75、85、90 分。平均 = (70+80+75+85+90) ÷ 5 = 80 分。</p>
+<p><mark>5日移動平均線</mark>（簡稱 5MA 或 5日線）就是：<b>最近 5 天收盤價的平均</b>。明天又多一天的收盤價，就把最舊的一天丟掉、加入最新的一天，再算一次平均。這個「平均」每天都往前移動，把每天的平均點連起來，就成了一條線。</p>
+<div class="formula">5日均線 ＝（今天收盤＋昨天收盤＋前天收盤＋前3天收盤＋前4天收盤）÷ 5</div>
+<div class="widget" data-w="macalc"></div>
+<div class="origin">「移動平均」（Moving Average，MA）是統計學的方法，最早用來平滑各種數據的雜訊（例如天氣、人口），後來被用在股價上。「移動」指的是計算的那個「窗口」每天往前移一格。</div>
+
+<h2>二、均線代表什麼？——大家的平均成本</h2>
+<p>20日均線大約代表<b>最近 20 天買進的人的平均成本</b>。</p>
+<ul>
+  <li>股價在均線<b>之上</b> → 最近買的人平均來說是賺錢的，心情好，不急著賣 → 均線有<b>支撐</b>作用。</li>
+  <li>股價在均線<b>之下</b> → 最近買的人平均在賠錢，一反彈就想解套 → 均線有<b>壓力</b>作用。</li>
+</ul>
+
+<h2>三、台股常用均線與俗稱</h2>
+<div class="tw"><table>
+<tr><th>天數</th><th>俗稱</th><th>為什麼這樣叫</th><th>用途</th></tr>
+<tr><td>5 日</td><td>週線</td><td>一週有 5 個交易日</td><td>極短線</td></tr>
+<tr><td>10 日</td><td>雙週線</td><td>兩週</td><td>短線</td></tr>
+<tr><td>20 日</td><td>月線</td><td>一個月約 20 個交易日</td><td>短中線，最多人看</td></tr>
+<tr><td>60 日</td><td>季線</td><td>一季（3 個月）約 60 個交易日</td><td>中期趨勢，常被稱為「多空分界線」</td></tr>
+<tr><td>120 日</td><td>半年線</td><td>半年約 120 個交易日</td><td>中長期</td></tr>
+<tr><td>240 日</td><td>年線</td><td>一年約 240 個交易日</td><td>長期、景氣的方向</td></tr>
+</table></div>
+<div class="warn">注意：K線圖上的「週線」有兩種意思：可能是<b>週K線</b>（第 7 課，一根代表一週），也可能是<b>5日均線</b>。聽別人說的時候要看前後文。</div>
+<div class="chart" data-c="maLines" data-cap="K線加上 5日（橘）、20日（紫）、60日（藍）均線。天數越短的均線越貼近股價、越敏感；天數越長越平滑、越慢。"></div>
+<p>短天期均線反應快，但容易被騙；長天期均線反應慢，但方向比較可靠。這是均線永遠的取捨。</p>
+
+<div class="quiz" data-a="2"><p class="q">最近 5 天收盤價是 10、12、11、13、14，5日均線是多少？</p>
+<ol><li>11</li><li>12</li><li>14</li></ol>
+<p class="ex">(10+12+11+13+14) ÷ 5 = 60 ÷ 5 = 12。</p></div>
+<div class="quiz" data-a="3"><p class="q">台股俗稱的「季線」是幾日均線？</p>
+<ol><li>20 日</li><li>120 日</li><li>60 日</li></ol>
+<p class="ex">一季 3 個月，大約 60 個交易日。</p></div>
+</section>
+
+<!-- ============ L14 ============ -->
+<section class="lesson" id="L14" data-unit="單元四　趨勢與均線" data-t="均線的用法：交叉、排列與葛蘭碧法則">
+<header>
+  <div class="unit">單元四　趨勢與均線</div>
+  <h1><small>第 14 課</small>均線的用法：交叉、排列與葛蘭碧八大法則</h1>
+  <div class="goal">學完這課你會用均線判斷趨勢與買賣時機。</div>
+</header>
+<h2>一、看均線的方向（斜率）</h2>
+<p>均線往上彎＝趨勢向上；往下彎＝趨勢向下；走平＝盤整。這是最簡單也最實用的用法。</p>
+
+<h2>二、黃金交叉與死亡交叉</h2>
+<ul>
+  <li><span class="up">黃金交叉</span>：短天期均線<b>由下往上</b>穿過長天期均線（例如 5日線往上穿過 20日線）。代表短期買氣轉強，常被視為買進訊號。</li>
+  <li><span class="dn">死亡交叉</span>：短天期均線<b>由上往下</b>穿過長天期均線。代表短期轉弱，常被視為賣出訊號。</li>
+</ul>
+<div class="origin">「黃金」代表好事、會賺錢；「死亡」代表壞事。英文就是 Golden Cross 和 Death Cross。國外最有名的是 50日線與 200日線的交叉。</div>
+<div class="chart" data-c="crossChart" data-cap="5日線（橘）與 20日線（紫）：先出現死亡交叉（▼），之後出現黃金交叉（▲）。"></div>
+<div class="warn">均線是用「過去」的價格算出來的，所以交叉訊號一定會<b>比較慢</b>。在盤整的時候，均線會一直交叉來交叉去，訊號常常是錯的。</div>
+
+<h2>三、多頭排列與空頭排列</h2>
+<ul>
+  <li><span class="up">多頭排列</span>：由上到下依序是 股價 ＞ 5日 ＞ 20日 ＞ 60日，而且都往上。代表短中長期的人都賺錢，是最強的上升趨勢。</li>
+  <li><span class="dn">空頭排列</span>：股價 ＜ 5日 ＜ 20日 ＜ 60日，而且都往下。最弱的下降趨勢。</li>
+  <li><mark>均線糾結</mark>：幾條均線纏在一起。代表大家成本差不多，正在醞釀；一旦往某個方向突破，常會走出一段大行情。</li>
+</ul>
+
+<h2>四、乖離率：離均線太遠會被「拉回來」</h2>
+<p><mark>乖離率</mark> ＝（股價 − 均線）÷ 均線 × 100%。「乖離」就是「偏離、背離」的意思。股價離均線太遠（乖離率太大），就像橡皮筋拉太緊，常常會拉回靠近均線。</p>
+
+<h2>五、葛蘭碧八大法則</h2>
+<p>美國分析師<mark>葛蘭碧</mark>（Joseph Granville）在 1960 年代提出用股價和均線（原本用 200 日線）的關係判斷買賣，共八條，四買四賣：</p>
+<div class="widget" data-w="granville"></div>
+<div class="tw"><table>
+<tr><th>編號</th><th>情況</th><th>訊號</th></tr>
+<tr><td>買 1</td><td>均線由下跌轉為走平或上揚，股價由下往上突破均線</td><td class="up">買進</td></tr>
+<tr><td>買 2</td><td>均線仍上揚，股價跌破均線但很快又站回</td><td class="up">買進</td></tr>
+<tr><td>買 3</td><td>股價在均線上方，回檔靠近均線但沒跌破就再上漲</td><td class="up">買進</td></tr>
+<tr><td>買 4</td><td>股價在均線下方跌太深，乖離過大，可能反彈</td><td class="up">短線搶反彈</td></tr>
+<tr><td>賣 1</td><td>均線由上漲轉為走平或下彎，股價由上往下跌破均線</td><td class="dn">賣出</td></tr>
+<tr><td>賣 2</td><td>均線仍下彎，股價反彈站上均線但很快又跌破</td><td class="dn">賣出</td></tr>
+<tr><td>賣 3</td><td>股價在均線下方，反彈接近均線但沒站上就再下跌</td><td class="dn">賣出</td></tr>
+<tr><td>賣 4</td><td>股價在均線上方漲太多，乖離過大，可能回檔</td><td class="dn">短線獲利了結</td></tr>
+</table></div>
+
+<div class="quiz" data-a="1"><p class="q">5日均線由下往上穿過 20日均線，叫做？</p>
+<ol><li>黃金交叉</li><li>死亡交叉</li><li>均線糾結</li></ol>
+<p class="ex">短天期由下往上穿越長天期叫黃金交叉。</p></div>
+<div class="quiz" data-a="3"><p class="q">為什麼盤整時均線交叉訊號常常失靈？</p>
+<ol><li>因為盤整時沒有成交量</li><li>因為均線在盤整時不會計算</li><li>因為價格上下來回，均線會反覆交叉，產生很多假訊號</li></ol>
+<p class="ex">均線是順勢工具，在沒有趨勢的盤整期特別容易被「巴來巴去」。</p></div>
+<div class="quiz" data-a="2"><p class="q">股價 ＞ 5日線 ＞ 20日線 ＞ 60日線，且均線都往上，叫做？</p>
+<ol><li>空頭排列</li><li>多頭排列</li><li>乖離過大</li></ol>
+<p class="ex">這是多頭排列，代表各期間的買方都在賺錢，趨勢最強。</p></div>
+</section>
+<!-- ============ L15 ============ -->
+<section class="lesson" id="L15" data-unit="單元五　技術指標與型態" data-t="KD 指標">
+<header>
+  <div class="unit">單元五　技術指標與型態</div>
+  <h1><small>第 15 課</small>KD 指標：台灣人最愛用的指標</h1>
+  <div class="goal">學完這課你會知道 KD 怎麼算、超買超賣、交叉與「鈍化」。</div>
+</header>
+<h2>一、技術指標是什麼？</h2>
+<p><mark>技術指標</mark>就是用開高低收和成交量，透過數學公式算出來的數字，再畫成線。它把K線圖的資訊「整理」成更容易判斷的樣子。指標都是從價格算來的，所以<b>指標不會比價格本身更準</b>，它只是換個角度看。</p>
+
+<h2>二、KD 的核心想法</h2>
+<div class="story">全班身高從 150 到 180 公分，你 177 公分，就是在「很高的那一端」。KD 做的事一樣：看<b>今天的收盤價在最近 9 天的最高與最低之間，排在哪個位置</b>。在最上面是 100，在最下面是 0。</div>
+<div class="formula">
+第一步　RSV ＝（今天收盤 − 最近9天最低）÷（最近9天最高 − 最近9天最低）× 100<br>
+第二步　今天的 K ＝ 昨天的 K × 2/3 ＋ 今天的 RSV × 1/3<br>
+第三步　今天的 D ＝ 昨天的 D × 2/3 ＋ 今天的 K × 1/3
+</div>
+<p>第二、三步是「平滑」：讓 K 不會因為一天的波動就亂跳，D 又比 K 更平滑。所以 <b>K 是快線、D 是慢線</b>。台灣看盤軟體預設多是 KD(9,3,3)，就是 9 天、平滑用 3。</p>
+<div class="box"><b>算算看：</b>最近 9 天最高 60、最低 40，今天收 55。<br>RSV ＝ (55−40) ÷ (60−40) × 100 ＝ 15 ÷ 20 × 100 ＝ <b>75</b>。代表今天收在這 9 天區間的 75% 位置，偏高。</div>
+<div class="origin">KD 的正式名稱是<b>隨機指標</b>（Stochastic Oscillator），由美國的喬治・萊恩（George Lane）在 1950 年代推廣。Stochastic 這個字源自希臘文，有「推測」的意思，在數學上翻成「隨機」。原本叫 %K 和 %D，一般理解成 K 是快線、D 是慢線。RSV 是 Raw Stochastic Value（未成熟隨機值）的縮寫。</div>
+
+<h2>三、怎麼用？</h2>
+<ul>
+  <li><b>超買區</b>：K、D 在 80 以上。價格處在近期高位，買方可能太熱。</li>
+  <li><b>超賣區</b>：K、D 在 20 以下。價格處在近期低位，賣方可能太過頭。</li>
+  <li><b>黃金交叉</b>：K 由下往上穿過 D，在 20 附近發生最有參考價值。</li>
+  <li><b>死亡交叉</b>：K 由上往下穿過 D，在 80 附近發生最有參考價值。</li>
+</ul>
+<div class="chart" data-c="kdChart" data-cap="下方是 KD 指標（K 橘色、D 藍色）。灰色虛線是 80 和 20。注意 KD 在低檔黃金交叉後，股價開始上漲。"></div>
+
+<h2>四、鈍化：KD 最常騙人的地方</h2>
+<p>當股價很強、一直漲，KD 會長時間停在 80 以上，叫做<mark>高檔鈍化</mark>。這時候如果因為「超買」就賣出，會錯過整段大漲。同理，很弱的股票會<mark>低檔鈍化</mark>。</p>
+<div class="warn">「超買」不等於「要跌了」。強勢股本來就會一直超買。KD 在<b>盤整</b>時最好用，在<b>強烈趨勢</b>中容易失靈，要搭配趨勢與均線一起看。</div>
+
+<div class="quiz" data-a="2"><p class="q">最近 9 天最高 100、最低 80，今天收 85，RSV 是多少？</p>
+<ol><li>85</li><li>25</li><li>50</li></ol>
+<p class="ex">(85−80) ÷ (100−80) × 100 = 5 ÷ 20 × 100 = 25。</p></div>
+<div class="quiz" data-a="3"><p class="q">某強勢股 KD 已經在 80 以上停留兩週，股價還在漲。這叫做？</p>
+<ol><li>死亡交叉</li><li>超賣</li><li>高檔鈍化</li></ol>
+<p class="ex">這是高檔鈍化，代表趨勢很強，此時「超買」不能直接當賣出訊號。</p></div>
+</section>
+
+<!-- ============ L16 ============ -->
+<section class="lesson" id="L16" data-unit="單元五　技術指標與型態" data-t="RSI 相對強弱指標">
+<header>
+  <div class="unit">單元五　技術指標與型態</div>
+  <h1><small>第 16 課</small>RSI：相對強弱指標</h1>
+  <div class="goal">學完這課你會知道 RSI 怎麼算，以及什麼是「背離」。</div>
+</header>
+<h2>一、核心想法</h2>
+<div class="story">一場籃球賽，看最近 6 節裡「我方得分」佔「雙方總得分」多少比例。如果 80% 的分數都是我方拿的，代表我方非常強勢。RSI 就是把「上漲的幅度」當得分、「下跌的幅度」當失分。</div>
+<div class="formula">RSI ＝ 最近 N 天平均上漲幅度 ÷（平均上漲幅度 ＋ 平均下跌幅度）× 100</div>
+<div class="box"><b>算算看：</b>最近幾天平均每天漲 3 元、平均每天跌 1 元（漲跌都取正數）。<br>RSI ＝ 3 ÷ (3 + 1) × 100 ＝ <b>75</b>。代表上漲力道佔了 75%，偏強。</div>
+<p>RSI 介於 0～100。台灣常用 <b>6 日 RSI（快）</b>與 <b>12 日 RSI（慢）</b>，國外常用 14 日。</p>
+<div class="origin">RSI 是 Relative Strength Index（相對強弱指數）的縮寫，由美國的威爾斯・威爾德（J. Welles Wilder Jr.）在 1978 年的著作《技術交易系統新概念》中提出。同一本書還發明了 ATR、ADX、拋物線 SAR 等指標，他是技術指標史上非常重要的人物。</div>
+
+<h2>二、怎麼用？</h2>
+<ul>
+  <li>RSI ＞ 70（或 80）：<b>超買</b>，上漲力道很強但可能過熱。</li>
+  <li>RSI ＜ 30（或 20）：<b>超賣</b>，下跌過度，可能反彈。</li>
+  <li>RSI ＝ 50：多空平衡。在 50 以上偏多，50 以下偏空。</li>
+</ul>
+<h2>三、背離：專業玩家最重視的訊號</h2>
+<ul>
+  <li><span class="dn">頂背離（熊市背離）</span>：股價創新高，但 RSI 沒有創新高（反而較低）。代表上漲的力氣在變小。</li>
+  <li><span class="up">底背離（牛市背離）</span>：股價創新低，但 RSI 沒有創新低。代表下跌的力氣在變小。</li>
+</ul>
+<div class="chart" data-c="rsiDiv" data-cap="股價第二個高點比第一個高（創新高），但下方 RSI 的第二個高點反而比較低 → 頂背離，隨後股價下跌。"></div>
+<div class="tip">背離跟第 8 課的「量價背離」是同樣的道理：價格往一個方向走，但背後的「力氣」往反方向走。背離可以用在 KD、RSI、MACD 和成交量上。</div>
+
+<div class="quiz" data-a="1"><p class="q">股價創新低，但 RSI 沒有創新低，這叫？</p>
+<ol><li>底背離，下跌力道減弱</li><li>頂背離，上漲力道減弱</li><li>鈍化</li></ol>
+<p class="ex">價創新低、指標沒創新低，是底背離，常是止跌的前兆。</p></div>
+<div class="quiz" data-a="2"><p class="q">平均漲幅 2、平均跌幅 2，RSI 是？</p>
+<ol><li>100</li><li>50</li><li>0</li></ol>
+<p class="ex">2 ÷ (2+2) × 100 = 50，多空平衡。</p></div>
+</section>
+
+<!-- ============ L17 ============ -->
+<section class="lesson" id="L17" data-unit="單元五　技術指標與型態" data-t="MACD 指標">
+<header>
+  <div class="unit">單元五　技術指標與型態</div>
+  <h1><small>第 17 課</small>MACD：用均線看趨勢的「加速度」</h1>
+  <div class="goal">學完這課你會看懂 MACD 的兩條線與柱狀體。</div>
+</header>
+<h2>一、先認識 EMA（指數移動平均）</h2>
+<p>第 13 課的均線（SMA，簡單移動平均）把每一天看得一樣重要。但其實「昨天」的價格應該比「一個月前」更重要。<mark>EMA</mark>（指數移動平均）就是讓<b>越近的日子佔越大的比重</b>，所以它比一般均線反應更快。</p>
+<div class="story">算學期成績時，老師說「最近的考試比重比較高」，因為最近的表現更能代表你現在的程度。EMA 就是這個意思。</div>
+
+<h2>二、MACD 的三個部分</h2>
+<div class="formula">
+DIF（快線）＝ 12日 EMA − 26日 EMA<br>
+MACD（慢線，也叫訊號線）＝ DIF 的 9日 EMA<br>
+柱狀體（OSC）＝ DIF − MACD
+</div>
+<ul>
+  <li><b>DIF</b>：短期均線和長期均線的「距離」。DIF ＞ 0 代表短期均線在長期均線上方（偏多）；越大代表上漲越有力。</li>
+  <li><b>MACD 線</b>：把 DIF 再平滑一次，當作比較的基準。</li>
+  <li><b>柱狀體</b>：DIF 和 MACD 的差距。紅柱（正）變長＝多方加速；紅柱縮短＝多方減速；綠柱（負）同理。</li>
+</ul>
+<div class="origin">MACD 是 Moving Average Convergence Divergence 的縮寫，中文叫<b>平滑異同移動平均線</b>。Convergence 是「收斂、靠近」，Divergence 是「發散、分開」，指的就是快慢兩條均線一下靠近、一下分開。它由美國的傑拉德・阿佩爾（Gerald Appel）在 1970 年代末提出，柱狀體則是後來其他分析師加上去的。</div>
+
+<h2>三、怎麼用？</h2>
+<ul>
+  <li><b>零軸</b>：DIF 和 MACD 都在 0 以上，屬於多頭；都在 0 以下，屬於空頭。</li>
+  <li><b>交叉</b>：DIF 由下往上穿過 MACD＝黃金交叉；反之為死亡交叉。在零軸之上的黃金交叉比零軸之下的更強。</li>
+  <li><b>柱狀體轉折</b>：綠柱開始縮短，常是下跌減速的第一個跡象，比交叉更早。</li>
+  <li><b>背離</b>：股價創新高但 MACD 高點變低，是頂背離。</li>
+</ul>
+<div class="chart" data-c="macdChart" data-cap="下方是 MACD：橘線 DIF、藍線 MACD、紅綠柱為柱狀體。上漲時柱狀體在零軸上方並放大，下跌時在下方。"></div>
+<div class="tip">MACD 用的是 12、26 日等較長的期間，所以它比 KD 慢、比 KD 穩。常見組合是：<b>用 MACD 看大方向，用 KD 找進出點</b>。</div>
+
+<div class="quiz" data-a="3"><p class="q">MACD 的柱狀體由長綠柱慢慢縮短，最可能代表？</p>
+<ol><li>下跌正在加速</li><li>已經確定上漲</li><li>下跌的力道正在減弱</li></ol>
+<p class="ex">綠柱縮短代表空方在減速，但還不等於上漲，需要後續確認。</p></div>
+<div class="quiz" data-a="2"><p class="q">EMA 和一般均線（SMA）最大的差別是？</p>
+<ol><li>EMA 只用開盤價</li><li>EMA 讓越近的日子比重越大，反應更快</li><li>EMA 一定比較準</li></ol>
+<p class="ex">EMA 給近期價格較高權重，反應比較快，但不代表一定比較準。</p></div>
+</section>
+
+<!-- ============ L18 ============ -->
+<section class="lesson" id="L18" data-unit="單元五　技術指標與型態" data-t="布林通道">
+<header>
+  <div class="unit">單元五　技術指標與型態</div>
+  <h1><small>第 18 課</small>布林通道：價格的「活動範圍」</h1>
+  <div class="goal">學完這課你會看懂布林通道的三條線，以及「縮口」和「沿上軌」的意思。</div>
+</header>
+<h2>一、三條線</h2>
+<ul>
+  <li><b>中軌</b>：20日均線（就是月線）。</li>
+  <li><b>上軌</b>：中軌 ＋ 2 倍標準差。</li>
+  <li><b>下軌</b>：中軌 − 2 倍標準差。</li>
+</ul>
+<p><mark>標準差</mark>是統計學用來衡量「數字有多分散」的方法。白話說：<b>最近價格平常大概會離平均多遠</b>。價格波動大，標準差就大，通道就變寬；波動小，通道就變窄。</p>
+<div class="story">全班平均身高 160 公分，大部分同學都在 150～170 之間，這個範圍就像布林通道。如果突然來了一個 190 公分的同學，他就「跑出通道」了，非常少見。統計上，如果數據大致呈常態分布，大約 95% 會落在平均 ±2 個標準差之內。</div>
+<div class="origin">布林通道（Bollinger Bands）由美國分析師約翰・布林格（John Bollinger）在 1980 年代提出，以他的名字命名。「布林」是 Bollinger 的音譯，跟電腦的「布林值」（Boolean）無關。</div>
+<div class="chart" data-c="bollChart" data-cap="布林通道：先是通道很窄（縮口），接著價格突破、通道張開，並沿著上軌上漲。"></div>
+
+<h2>二、怎麼用？</h2>
+<ul>
+  <li><mark>縮口</mark>（通道變很窄）：波動很小，市場在醞釀，接下來常會出現大行情，但方向要等突破才知道。</li>
+  <li><mark>開口</mark>（通道突然張開）：大行情開始了。</li>
+  <li><b>沿上軌走</b>：價格一直貼著上軌，是<b>強勢</b>的表現，不是賣出訊號。</li>
+  <li><b>盤整時</b>：碰到上軌容易回落、碰到下軌容易反彈，可以當作區間的上下緣。</li>
+  <li><b>中軌</b>：多頭時常是回檔的支撐，空頭時常是反彈的壓力。</li>
+</ul>
+<div class="warn">「碰到上軌就賣、碰到下軌就買」只在盤整時有效。在強勢上漲時這樣做會一直賣太早，在崩跌時這樣做會一直接刀子。</div>
+
+<div class="quiz" data-a="2"><p class="q">布林通道變得非常窄，代表？</p>
+<ol><li>一定會上漲</li><li>波動很小，可能正在醞釀大行情</li><li>這支股票不能交易</li></ol>
+<p class="ex">縮口代表波動變小，之後常出現大波動，但方向要看突破。</p></div>
+<div class="quiz" data-a="1"><p class="q">布林通道的中軌通常是？</p>
+<ol><li>20日均線</li><li>5日均線</li><li>240日均線</li></ol>
+<p class="ex">標準設定是 20 日均線 ± 2 個標準差。</p></div>
+</section>
+
+<!-- ============ L19 ============ -->
+<section class="lesson" id="L19" data-unit="單元五　技術指標與型態" data-t="經典型態：頭肩、M頭、W底、三角形">
+<header>
+  <div class="unit">單元五　技術指標與型態</div>
+  <h1><small>第 19 課</small>經典型態：頭肩頂、M頭、W底、三角收斂</h1>
+  <div class="goal">學完這課你會辨認最重要的價格型態、畫出頸線，並估算目標價。</div>
+</header>
+<p>第 9 課的K線組合看的是 2～3 根，這一課的<mark>型態</mark>看的是幾十根K棒形成的「形狀」。型態分兩大類：<b>反轉型態</b>（趨勢要轉向）和<b>整理型態</b>（休息一下，通常繼續原來方向）。</p>
+
+<h2>一、頭肩頂（最經典的頭部）</h2>
+<p>上漲後出現三個高點：左肩、頭（最高）、右肩。把兩個肩膀之間的兩個低點連起來，就是<mark>頸線</mark>。</p>
+<div class="chart" data-c="hsTop" data-cap="頭肩頂：左肩、頭、右肩，虛線是頸線。收盤跌破頸線後，型態完成。"></div>
+<ul>
+  <li><b>完成條件</b>：收盤價有效跌破頸線。在這之前都只是「可能」。</li>
+  <li><b>成交量</b>：通常左肩量最大，右肩量明顯較小（買氣退潮）。</li>
+  <li><b>目標價（滿足點）</b>：從頭部最高點量到頸線的距離，從跌破頸線的位置再往下量一樣的距離。</li>
+  <li><b>頭肩底</b>：上下顛倒，出現在下跌後，是底部型態，突破頸線時最好帶量。</li>
+</ul>
+<div class="box"><b>算算看：</b>頭部最高 120 元，頸線在 100 元。距離 ＝ 20 元。跌破頸線後的目標約 100 − 20 ＝ <b>80 元</b>。</div>
+<div class="origin">「頸線」就是脖子的位置：頭肩頂像一個人的頭和兩邊肩膀，連接兩肩下方的線剛好在脖子。跌破頸線，就像「斷頭」，所以是很強的賣出訊號。</div>
+
+<h2>二、M頭與W底（雙重頂／雙重底）</h2>
+<p>兩個差不多高的高點像英文字母 <b>M</b>，叫<mark>M頭</mark>（雙重頂）；兩個差不多低的低點像 <b>W</b>，叫<mark>W底</mark>（雙重底）。中間的轉折點畫一條水平線就是頸線。</p>
+<div class="chart" data-c="wBottom" data-cap="W底：兩次跌到差不多的位置都沒跌破，第二次量縮，接著帶量突破頸線。"></div>
+<p>W底第二個低點如果<b>量縮</b>，代表賣壓已經減輕，可信度更高。目標價算法和頭肩一樣：底到頸線的距離，從頸線往上量。</p>
+
+<h2>三、整理型態：三角收斂、旗形、箱型</h2>
+<ul>
+  <li><mark>三角收斂</mark>：高點越來越低、低點越來越高，像一個越來越尖的三角形。代表多空都在觀望，最後會往某一邊突破，通常順著原本的趨勢。</li>
+  <li><mark>旗形</mark>：一段急漲（旗竿）之後，出現一小段往下斜的小整理（旗面），然後繼續上漲。</li>
+  <li><mark>箱型</mark>：第 11 課教過的盤整，突破箱子上緣看漲、跌破下緣看跌。</li>
+</ul>
+<div class="chart" data-c="triangle" data-cap="三角收斂：上下兩條線越來越靠近，成交量也越來越小，最後帶量往上突破。"></div>
+
+<div class="warn">型態在「形成中」時，每個人都可以看出不同的東西。一定要等<b>頸線或邊界被收盤價有效突破</b>，型態才算完成。</div>
+
+<div class="quiz" data-a="1"><p class="q">W底的頸線在 50 元，底部最低 42 元。突破頸線後的目標價大約是？</p>
+<ol><li>58 元</li><li>50 元</li><li>92 元</li></ol>
+<p class="ex">底到頸線距離 8 元，從頸線往上量 8 元，50 + 8 = 58 元。</p></div>
+<div class="quiz" data-a="3"><p class="q">頭肩頂什麼時候才算「完成」？</p>
+<ol><li>出現右肩的時候</li><li>頭部創新高的時候</li><li>收盤價有效跌破頸線的時候</li></ol>
+<p class="ex">沒有跌破頸線之前，右肩之後也可能再漲上去，型態就不成立。</p></div>
+</section>
+<!-- ============ L20 ============ -->
+<section class="lesson" id="L20" data-unit="單元六　台股實戰與專業" data-t="看懂看盤軟體">
+<header>
+  <div class="unit">單元六　台股實戰與專業</div>
+  <h1><small>第 20 課</small>看懂看盤軟體：報價、五檔、內外盤</h1>
+  <div class="goal">學完這課你會看懂券商 App 上的報價畫面，並知道內盤、外盤的意思。</div>
+</header>
+<p>打開任何一家券商的 App，輸入股票代號，都會看到類似下面的畫面。這是<b>模擬</b>的盤中報價，數字會即時跳動：</p>
+<div class="widget" data-w="quote"></div>
+
+<h2>一、報價欄位</h2>
+<div class="tw"><table>
+<tr><th>欄位</th><th>意思</th></tr>
+<tr><td>成交價</td><td>最新一筆成交的價格。</td></tr>
+<tr><td>漲跌／漲跌幅</td><td>成交價和<b>昨收</b>相比差多少、差幾 %。</td></tr>
+<tr><td>昨收（參考價）</td><td>昨天的收盤價，是今天漲跌和漲跌停的計算基準。</td></tr>
+<tr><td>總量</td><td>今天到目前為止的成交張數。</td></tr>
+<tr><td>單量</td><td>最新這一筆成交了幾張。</td></tr>
+<tr><td>均價</td><td>今天所有成交的平均價格，可以看出今天進場的人平均成本。</td></tr>
+</table></div>
+
+<h2>二、五檔報價</h2>
+<p><mark>五檔</mark>是目前「排隊中還沒成交」的委託：</p>
+<ul>
+  <li><b>委買</b>（買進的一方）：最高的 5 個買價，以及各排了幾張。</li>
+  <li><b>委賣</b>（賣出的一方）：最低的 5 個賣價，以及各排了幾張。</li>
+</ul>
+<p>想馬上買到，就要用「委賣價」買（向賣方靠攏）；想馬上賣掉，就要用「委買價」賣（向買方靠攏）。</p>
+<div class="origin">「委」是「委託」：你不能自己跑去交易所買賣，而是委託證券商幫你下單，所以叫委買、委賣。</div>
+
+<h2>三、內盤與外盤</h2>
+<ul>
+  <li><mark>外盤</mark>：成交在<b>委賣價</b>。代表<b>買方主動</b>去買賣方掛的價格，比較急著買。</li>
+  <li><mark>內盤</mark>：成交在<b>委買價</b>。代表<b>賣方主動</b>去賣給買方掛的價格，比較急著賣。</li>
+</ul>
+<p>外盤量明顯大於內盤量，代表今天主動買的力道較強；反之賣方較強。不過大戶也可能故意製造假象，所以只能當參考。</p>
+
+<h2>四、大盤與分時走勢</h2>
+<p><mark>大盤</mark>指整個台股市場的表現，通常用<b>發行量加權股價指數</b>（簡稱<b>加權指數</b>、台股指數）代表。它把所有上市股票依照市值大小加權計算，所以台積電這種超大公司對指數影響非常大。個股漲跌常常受大盤影響，看個股前先看大盤是好習慣。</p>
+<p>報價畫面的<b>分時走勢圖</b>，是今天從 9:00 到現在每一分鐘的價格連線，中間通常有一條<b>昨收</b>水平線當基準，線在上方是漲、下方是跌。</p>
+
+<div class="quiz" data-a="2"><p class="q">一筆成交發生在「委賣價」，這筆算是？</p>
+<ol><li>內盤</li><li>外盤</li><li>漲停</li></ol>
+<p class="ex">成交在委賣價，代表買方主動去買，算外盤。</p></div>
+<div class="quiz" data-a="1"><p class="q">報價畫面的「漲跌」是跟什麼比較？</p>
+<ol><li>昨天的收盤價</li><li>今天的開盤價</li><li>今天的均價</li></ol>
+<p class="ex">漲跌是和昨收比。K棒顏色才是和今天開盤比（第 5 課）。</p></div>
+</section>
+
+<!-- ============ L21 ============ -->
+<section class="lesson" id="L21" data-unit="單元六　台股實戰與專業" data-t="籌碼面：法人、融資融券">
+<header>
+  <div class="unit">單元六　台股實戰與專業</div>
+  <h1><small>第 21 課</small>籌碼面：三大法人、融資融券、大戶</h1>
+  <div class="goal">學完這課你會知道「誰在買、誰在賣」的資料去哪看，以及融資融券的風險。</div>
+</header>
+<div class="origin">「籌碼」原本是賭場裡代替現金的小圓片。在股市，<b>籌碼</b>指流通在市場上的股票，<b>籌碼面</b>分析就是研究「這些股票現在在誰手上、誰在買、誰在賣」。台灣的交易資訊公開得很詳細，所以籌碼分析在台股特別流行。</div>
+
+<h2>一、三大法人</h2>
+<p><mark>法人</mark>是法律上可以像人一樣做事的組織（例如公司）。台股的三大法人是：</p>
+<div class="tw"><table>
+<tr><th>名稱</th><th>是誰</th><th>特色</th></tr>
+<tr><td><b>外資</b></td><td>外國的投資機構，例如國外基金、銀行</td><td>資金最大，對權值股影響最大，偏中長期。</td></tr>
+<tr><td><b>投信</b></td><td>證券投資信託公司，也就是發行基金的公司</td><td>常集中買中小型股，季底常有「作帳」行情。</td></tr>
+<tr><td><b>自營商</b></td><td>證券公司用自己的錢買賣</td><td>進出較短線，也包含避險用途的買賣。</td></tr>
+</table></div>
+<p>證交所每天收盤後會公布三大法人在每支股票的<b>買超</b>（買的比賣的多）或<b>賣超</b>（賣的比買的多）。連續多天大量買超，代表有大資金看好。</p>
+<div class="origin">「作帳」是指基金經理人在季底或年底前，把手上持有的股票拉高，讓基金的績效報告比較好看。</div>
+
+<h2>二、融資與融券</h2>
+<ul>
+  <li><mark>融資</mark>：向券商<b>借錢</b>來買股票。自己只要出一部分錢。看好會漲才會融資。</li>
+  <li><mark>融券</mark>：向券商<b>借股票</b>來賣，之後再買回來還。看壞會跌才會融券，這就是「放空」。</li>
+</ul>
+<div class="origin">「融」是「融通」，也就是調度、借用資金或物品的意思。「放空」是賣出自己手上沒有（空的）的股票。</div>
+<div class="warn"><b>融資的最大危險：斷頭。</b><br>借錢買股票，如果股價大跌，擔保品價值不夠，券商會要求你補錢（稱為<b>追繳</b>，一般是整戶<b>維持率</b>低於 130% 時）。補不出來，券商就會強制把你的股票賣掉，叫<b>斷頭</b>。借錢會讓賺和賠都放大，新手非常不建議使用。</div>
+<p>籌碼判讀：<b>融資餘額</b>在股價上漲時快速增加，代表散戶借錢追高，籌碼變得「不乾淨」，之後容易震盪；<b>融券</b>很多時如果股價不跌反漲，放空的人被迫買回，可能讓股價漲更兇，叫<mark>軋空</mark>。</p>
+
+<h2>三、大戶持股與當沖</h2>
+<ul>
+  <li><b>集保股權分散表</b>：集保結算所每週公布每支股票由不同持股規模的人持有多少比例。很多人會看「持有 400 張或 1,000 張以上的大戶」比例是增加還是減少。</li>
+  <li><mark>當沖</mark>（當日沖銷）：同一天買進又賣出（或先賣後買），不留到隔天。需要符合開戶條件並簽署風險文件。當沖的人很多時，股價盤中波動會變大。</li>
+</ul>
+
+<div class="quiz" data-a="3"><p class="q">「融券」是什麼意思？</p>
+<ol><li>向券商借錢買股票</li><li>把股票存到集保</li><li>向券商借股票來賣，看跌時使用</li></ol>
+<p class="ex">融券是借股票來賣，之後買回歸還，也就是放空。</p></div>
+<div class="quiz" data-a="1"><p class="q">三大法人不包括哪一個？</p>
+<ol><li>散戶</li><li>外資</li><li>投信</li></ol>
+<p class="ex">三大法人是外資、投信、自營商。散戶是一般個人投資者。</p></div>
+</section>
+
+<!-- ============ L22 ============ -->
+<section class="lesson" id="L22" data-unit="單元六　台股實戰與專業" data-t="台股特殊事件：除權息、處置股">
+<header>
+  <div class="unit">單元六　台股實戰與專業</div>
+  <h1><small>第 22 課</small>台股特殊事件：除權息、處置股、漲停鎖死</h1>
+  <div class="goal">學完這課你會避開看K線時最常見的「假訊號」，並了解台股特有的制度。</div>
+</header>
+<h2>一、除權息：K線圖上的「假缺口」</h2>
+<p>公司賺錢會分給股東，叫<mark>股利</mark>，分兩種：</p>
+<ul>
+  <li><b>現金股利</b>：直接發錢。發錢那天叫<mark>除息</mark>，股價會扣掉發出去的錢。例如 100 元的股票發 5 元，除息參考價就變成 95 元。</li>
+  <li><b>股票股利</b>：發股票給你。發股票那天叫<mark>除權</mark>，股數變多，股價也會依比例調降。</li>
+</ul>
+<p>這個調降不是真的「跌」，你的錢只是從股票變成現金（或更多股票）。但在一般K線圖上，它看起來就像一個<b>向下跳空缺口</b>。</p>
+<div class="chart" data-c="exDiv" data-cap="上圖：原始K線，除息當天出現一個看起來很嚇人的「缺口」。下圖：還原權值後的K線，缺口消失，走勢連續。"></div>
+<ul>
+  <li><mark>還原權值</mark>（還原K線）：把除權息前的歷史價格往下調整，讓圖形連續。<b>看長期走勢、畫均線和型態時，專業做法是用還原K線</b>，大部分看盤軟體都可以切換。</li>
+  <li><mark>填息</mark>：除息後股價漲回除息前的價格，代表市場認同這家公司。</li>
+  <li><mark>貼息</mark>：除息後股價反而繼續往下跌，拿到的股利被股價下跌吃掉了。</li>
+</ul>
+<p>台股的除權息大多集中在每年 6～9 月，俗稱「除權息旺季」。</p>
+
+<h2>二、注意股與處置股</h2>
+<p>如果一支股票短期內漲跌太兇、成交量或周轉率異常，證交所會公告為<mark>注意股</mark>，提醒投資人。如果連續多次被列為注意股，就會變成<mark>處置股</mark>：交易方式會被限制，例如改成每 5 分鐘或 20 分鐘才撮合一次，甚至要先把錢或股票準備好才能下單（預收款券）。處置期間成交量和K線常會變得很奇怪，判讀時要特別小心。</p>
+
+<h2>三、漲停鎖死與打開</h2>
+<ul>
+  <li><b>鎖漲停</b>：價格停在漲停，委買排了很多張買不到，K棒常是一字線或很短的實體。</li>
+  <li><b>漲停打開</b>：原本鎖住的漲停，突然有大量賣單把排隊的買單吃掉，價格從漲停掉下來。如果打開時爆量，常代表有人趁機大量出貨。</li>
+</ul>
+
+<h2>四、其他會讓K線異常的時間</h2>
+<ul>
+  <li><b>月營收公布</b>：上市公司每月 10 日前要公布上個月的營收，常引發跳空。</li>
+  <li><b>財報公布</b>、法說會（公司對法人的說明會）。</li>
+  <li><b>封關與開紅盤</b>：農曆春節前最後一個交易日叫「封關」，春節後第一個交易日叫「開紅盤」，取「開門紅」的吉利說法。</li>
+</ul>
+
+<div class="quiz" data-a="2"><p class="q">某股票 80 元，發放 4 元現金股利，除息參考價是？</p>
+<ol><li>80 元</li><li>76 元</li><li>84 元</li></ol>
+<p class="ex">80 − 4 = 76 元。這不是真的跌，是把錢發給股東了。</p></div>
+<div class="quiz" data-a="3"><p class="q">要看一支股票十年的長期趨勢，最好用什麼K線？</p>
+<ol><li>1 分K</li><li>未還原的日K</li><li>還原權值的週K或月K</li></ol>
+<p class="ex">長期要用週K或月K，而且要還原權值，才不會被除權息的假缺口干擾。</p></div>
+</section>
+
+<!-- ============ L23 ============ -->
+<section class="lesson" id="L23" data-unit="單元六　台股實戰與專業" data-t="風險管理與交易計畫">
+<header>
+  <div class="unit">單元六　台股實戰與專業</div>
+  <h1><small>第 23 課</small>風險管理：專業與業餘真正的差別</h1>
+  <div class="goal">學完這課你會設定停損、計算該買多少，並理解「賺多賠少」比「常常猜對」更重要。</div>
+</header>
+<p>很多人以為學會看K線就能賺錢。但事實是：<b>沒有任何方法能每次都猜對</b>。專業交易者跟業餘者最大的差別，不是誰比較會猜，而是誰比較會<b>控制虧損</b>。</p>
+
+<h2>一、停損：先想好「錯了怎麼辦」</h2>
+<p><mark>停損</mark>就是事先決定：「如果價格跌到某個位置，證明我看錯了，我就賣掉認賠。」</p>
+<div class="story">騎腳踏車一定要有煞車。停損就是交易的煞車。沒有煞車也許騎很多次都沒事，但只要出一次事，就可能很嚴重。</div>
+<p>停損設在哪？用這份教材學到的東西：跌破<b>支撐</b>、跌破<b>頸線</b>、跌破重要<b>均線</b>、跌破<b>趨勢線</b>、或跌破進場那根K棒的最低點。也就是「如果價格到了這裡，我買進的理由就不存在了」。</p>
+<div class="warn">虧損的數學很殘酷：<br>虧 10%，要賺 11% 才能回本；<br>虧 30%，要賺 43% 才能回本；<br>虧 50%，要賺 <b>100%</b> 才能回本。<br>所以小虧就要走，不要讓小虧變大虧。</div>
+
+<h2>二、一次該買多少？——1% 法則</h2>
+<p>很多專業交易者遵守：<b>每一筆交易最多只賠總資金的 1%～2%</b>。注意，不是只買 1%，而是「如果停損出場，損失不超過 1%」。</p>
+<div class="formula">可以買的股數 ＝（總資金 × 願意承擔的風險%）÷（進場價 − 停損價）</div>
+<div class="widget" data-w="risk"></div>
+
+<h2>三、風報比與期望值</h2>
+<p><mark>風報比</mark>（風險報酬比）＝ 可能賺的 ÷ 可能賠的。例如停損賠 5 元、目標賺 15 元，風報比就是 1：3。</p>
+<div class="box"><b>神奇的數學：</b>假設你每次賠 1 份、賺 3 份，就算 10 次只猜對 3 次：<br>賺：3 次 × 3 ＝ 9　賠：7 次 × 1 ＝ 7　→ 最後還是<span class="up">賺 2 份</span>！<br>反過來，每次賺 1 份、賠 3 份，就算 10 次猜對 7 次：7 − 9 ＝ <span class="dn">賠 2 份</span>。</div>
+<p>這就是<mark>期望值</mark>的概念：重點不是「猜對幾次」，而是「對的時候賺多少、錯的時候賠多少」。</p>
+
+<h2>四、交易計畫與紀律</h2>
+<p>進場<b>之前</b>就寫下：</p>
+<ol>
+  <li>為什麼要買？（看到什麼訊號）</li>
+  <li>在哪裡買？（進場價）</li>
+  <li>錯了在哪裡走？（停損價）</li>
+  <li>對了在哪裡走？（目標價，或跌破某條均線才走的「移動停利」）</li>
+  <li>買多少？（用上面的計算機）</li>
+</ol>
+<p>每筆交易結束後寫<mark>交易日誌</mark>：當時的理由、結果、做得好和不好的地方。這是進步最快的方法。</p>
+
+<h2>五、最大的敵人是自己</h2>
+<ul>
+  <li><b>追高</b>（害怕錯過，英文叫 FOMO，Fear Of Missing Out）：看到大漲就衝進去，常買在最高點。</li>
+  <li><b>凹單</b>：跌破停損不甘心賣，一直等「回本」，結果越套越深。</li>
+  <li><b>攤平</b>：越跌越買來降低平均成本。在下跌趨勢中攤平，常常是越攤越平（越賠越多）。</li>
+  <li><b>過度交易</b>：一直買賣，光手續費和稅就吃掉獲利（記得第 2 課，一買一賣約 0.5%）。</li>
+</ul>
+<div class="origin">「凹單」是台灣俗語，「凹」有硬撐、不肯認輸的意思。「攤平」是把成本「攤開、拉平」，也就是加碼買進來降低平均成本。</div>
+
+<div class="quiz" data-a="2"><p class="q">資金 10 萬元、每筆最多賠 1%。進場價 50 元、停損價 45 元，最多可以買幾股？</p>
+<ol><li>2,000 股</li><li>200 股</li><li>1,000 股</li></ol>
+<p class="ex">願意賠 100,000 × 1% = 1,000 元；每股風險 50 − 45 = 5 元；1,000 ÷ 5 = 200 股。</p></div>
+<div class="quiz" data-a="1"><p class="q">虧損 50% 後，要賺多少 % 才能回本？</p>
+<ol><li>100%</li><li>50%</li><li>75%</li></ol>
+<p class="ex">100 元賠到 50 元，要從 50 漲回 100，就是漲 100%。</p></div>
+</section>
+
+<!-- ============ L24 ============ -->
+<section class="lesson" id="L24" data-unit="單元六　台股實戰與專業" data-t="綜合實戰演練">
+<header>
+  <div class="unit">單元六　台股實戰與專業</div>
+  <h1><small>第 24 課</small>綜合實戰演練：把全部串起來</h1>
+  <div class="goal">學完這課你會用一套固定的步驟看一張完整的K線圖，並做判讀練習。</div>
+</header>
+<h2>一、看盤七步驟</h2>
+<p>專業的人不會一打開圖就憑感覺，而是照固定順序檢查。這個順序從「大」到「小」：</p>
+<ol>
+  <li><b>看大盤</b>：加權指數現在是多頭還是空頭？（第 20 課）</li>
+  <li><b>看長週期</b>：週K、月K 的趨勢方向。（第 7、11 課）</li>
+  <li><b>看趨勢與均線</b>：日K是頭頭高底底高嗎？均線是多頭排列嗎？價格在季線上方嗎？（第 11、13、14 課）</li>
+  <li><b>找支撐壓力</b>：前高、前低、缺口、頸線在哪？（第 10、12、19 課）</li>
+  <li><b>看量價</b>：上漲有量嗎？有沒有背離？（第 8 課）</li>
+  <li><b>看K線與指標</b>：關鍵位置有沒有出現反轉K線？KD、MACD 怎麼說？（第 6、9、15–18 課）</li>
+  <li><b>訂計畫</b>：進場、停損、目標、張數。（第 23 課）</li>
+</ol>
+
+<h2>二、完整範例</h2>
+<div class="chart" data-c="final" data-cap="模擬個股日K：5日、20日、60日均線，加上成交量、KD 與 MACD。請先自己用七步驟看一遍，再往下看解說。"></div>
+<div class="box">
+<p><b>判讀示範：</b></p>
+<p>① 前段價格在 60日均線下方、均線往下，是<b>空頭趨勢</b>。</p>
+<p>② 中段出現兩個差不多的低點，第二個低點<b>成交量明顯較小</b>，KD 在低檔黃金交叉，而且第二個低點的 MACD 沒有創新低（<b>底背離</b>）。</p>
+<p>③ 隨後價格帶量突破兩個低點中間的高點（<b>W底頸線</b>），5日線與 20日線黃金交叉，MACD 翻上零軸。</p>
+<p>④ 突破後回測頸線不破（<b>壓力變支撐</b>），這常是較好的進場點，停損可以設在頸線下方。</p>
+<p>⑤ 後段均線轉為多頭排列，價格沿著 20日線上漲。此時 KD 一直在高檔（<b>高檔鈍化</b>），不應該因為「超買」就急著賣。</p>
+</div>
+
+<h2>三、猜猜看：接下來會怎麼走？</h2>
+<p>下面的圖把最後一段「遮起來」了。用你學到的東西判斷，然後按「揭曉」看結果。記得，就算判斷正確，實際也可能走相反方向——這就是為什麼要停損。</p>
+<div class="widget" data-w="guess"></div>
+
+<div class="quiz" data-a="2"><p class="q">看盤七步驟的第一步是？</p>
+<ol><li>看 KD 有沒有交叉</li><li>看大盤</li><li>直接下單</li></ol>
+<p class="ex">由大到小：先看大盤，再看個股的長週期、趨勢，最後才看指標和訂計畫。</p></div>
+</section>
+
+<!-- ============ L25 ============ -->
+<section class="lesson" id="L25" data-unit="單元六　台股實戰與專業" data-t="結業測驗">
+<header>
+  <div class="unit">單元六　台股實戰與專業</div>
+  <h1><small>第 25 課</small>結業測驗</h1>
+  <div class="goal">10 題綜合題，檢查你是否真的學會了。答完後看看自己的分數。</div>
+</header>
+<div class="box" id="examScore">目前得分：<b class="num">0</b> / 10（已作答 <span class="num">0</span> 題）</div>
+<div class="quiz exam" data-a="3"><p class="q">1. 台灣K線的「紅K」代表？</p><ol><li>今天比昨天漲</li><li>成交量很大</li><li>收盤價高於開盤價</li></ol><p class="ex">紅K比較的是今天的收盤與開盤。今天漲不漲要和昨收比。</p></div>
+<div class="quiz exam" data-a="1"><p class="q">2. 在一段長期上漲後，出現一根小實體、長下影線的K棒，應該叫它？</p><ol><li>吊人線</li><li>錘子線</li><li>流星線</li></ol><p class="ex">高檔＋長下影線＝吊人線，要提高警覺。</p></div>
+<div class="quiz exam" data-a="2"><p class="q">3. 股價創新高、成交量卻遞減，代表？</p><ol><li>買氣越來越強</li><li>上漲力道減弱（量價背離）</li><li>一定會馬上崩跌</li></ol><p class="ex">量價背離是警訊，但不是「一定」會崩跌。</p></div>
+<div class="quiz exam" data-a="3"><p class="q">4. 前高 150 元被帶量突破、站穩後，股價回檔到 150 元附近，150 元最可能是？</p><ol><li>壓力</li><li>缺口</li><li>支撐</li></ol><p class="ex">壓力突破後轉為支撐（角色互換）。</p></div>
+<div class="quiz exam" data-a="2"><p class="q">5. 台股俗稱「月線」的是？</p><ol><li>5日均線</li><li>20日均線</li><li>60日均線</li></ol><p class="ex">一個月約 20 個交易日。</p></div>
+<div class="quiz exam" data-a="1"><p class="q">6. 強勢股 KD 長時間在 80 以上，正確的態度是？</p><ol><li>可能是高檔鈍化，搭配趨勢判斷，不急著因超買而賣</li><li>立刻全部賣出</li><li>立刻融券放空</li></ol><p class="ex">強勢股常出現高檔鈍化。</p></div>
+<div class="quiz exam" data-a="3"><p class="q">7. MACD 的 DIF 是？</p><ol><li>9日 EMA</li><li>成交量的平均</li><li>12日 EMA 減 26日 EMA</li></ol><p class="ex">DIF ＝ EMA12 − EMA26。</p></div>
+<div class="quiz exam" data-a="2"><p class="q">8. 頭肩頂頭部 90 元、頸線 75 元，跌破後的目標大約？</p><ol><li>75 元</li><li>60 元</li><li>45 元</li></ol><p class="ex">距離 15 元，75 − 15 = 60 元。</p></div>
+<div class="quiz exam" data-a="1"><p class="q">9. 除息造成K線圖出現向下缺口，要看長期走勢應該？</p><ol><li>使用還原權值K線</li><li>當作突破缺口</li><li>當作竭盡缺口並放空</li></ol><p class="ex">除權息缺口是制度造成的，用還原K線才看得出真正的走勢。</p></div>
+<div class="quiz exam" data-a="3"><p class="q">10. 以下哪個觀念最正確？</p><ol><li>學會K線就能每次都賺錢</li><li>虧損時一直攤平就會回本</li><li>控制虧損與風報比，比每次猜對更重要</li></ol><p class="ex">技術分析是機率，風險管理才是長期存活的關鍵。</p></div>
+<div class="tip" id="examDone" style="display:none"></div>
+</section>
+
+<!-- ============ L26 ============ -->
+<section class="lesson" id="L26" data-unit="附錄" data-t="名詞總表與下一步">
+<header>
+  <div class="unit">附錄</div>
+  <h1><small>附錄</small>名詞總表與下一步</h1>
+  <div class="goal">忘記某個名詞時，回來這裡查。括號內是介紹它的課次。</div>
+</header>
+<dl class="gl">
+<dt>K線（第 3 課）</dt><dd>記錄一段時間開高低收的圖。來自日文「罫線 keisen」，英文 Candlestick（蠟燭圖）。</dd>
+<dt>開盤價、最高價、最低價、收盤價／OHLC（第 4 課）</dt><dd>一根K棒的四個價格，英文 Open、High、Low、Close 的縮寫。</dd>
+<dt>實體、上影線、下影線（第 5 課）</dt><dd>開收之間的方塊叫實體；上下的細線像影子，叫影線，英文 Shadow。</dd>
+<dt>紅K（陽線）、綠K／黑K（陰線）（第 5 課）</dt><dd>收盤高於開盤為紅K，低於開盤為綠K。名稱來自陰陽思想。台灣紅漲綠跌，歐美相反。</dd>
+<dt>十字線 Doji（第 6 課）</dt><dd>開盤＝收盤。日文「同事」，意為一樣、同時。常是變盤訊號。</dd>
+<dt>錘子線、吊人線（第 6 課）</dt><dd>長下影線小實體。低檔叫錘子（看漲），高檔叫吊人（看跌）。</dd>
+<dt>倒錘線、流星線（第 6 課）</dt><dd>長上影線小實體。低檔叫倒錘，高檔叫流星（看跌）。</dd>
+<dt>週K、月K（第 7 課）</dt><dd>一根代表一週、一個月的K棒。</dd>
+<dt>成交量、爆量、窒息量（第 8 課）</dt><dd>成交的張數；突然暴增叫爆量；小到極點叫窒息量。</dd>
+<dt>量價背離（第 8 課）</dt><dd>價格和成交量方向不一致，代表力道減弱。</dd>
+<dt>多頭、空頭（第 9 課）</dt><dd>看漲與看跌的一方，英文 Bull（牛）與 Bear（熊）。</dd>
+<dt>吞噬 Engulfing（第 9 課）</dt><dd>後一根實體完全包住前一根實體。</dd>
+<dt>母子線／孕線 Harami（第 9 課）</dt><dd>前一根大實體包住後一根小實體，日文「懷孕」之意。</dd>
+<dt>晨星、夜星（第 9 課）</dt><dd>三K反轉型態，名稱來自清晨與黃昏的金星。</dd>
+<dt>紅三兵、三隻烏鴉（第 9 課）</dt><dd>連續三根上漲紅K／連續三根下跌綠K。</dd>
+<dt>跳空缺口 Gap（第 10 課）</dt><dd>兩根K棒之間沒有成交的價格空白。分普通、突破、逃逸、竭盡四種。</dd>
+<dt>島狀反轉（第 10 課）</dt><dd>兩邊都有缺口、像孤島的一群K棒，強烈反轉訊號。</dd>
+<dt>道氏理論（第 11 課）</dt><dd>查爾斯・道提出的趨勢理論，技術分析的基礎。</dd>
+<dt>趨勢線（第 11 課）</dt><dd>上升連低點、下降連高點的斜線。</dd>
+<dt>支撐、壓力、角色互換（第 12 課）</dt><dd>價格的地板與天花板；突破後兩者會互換。</dd>
+<dt>套牢、解套（第 12 課）</dt><dd>買進後下跌被困住；回到成本可以脫身。</dd>
+<dt>移動平均線 MA（第 13 課）</dt><dd>最近 N 天收盤價的平均，每天往前移動一格。</dd>
+<dt>週線、月線、季線、半年線、年線（第 13 課）</dt><dd>5、20、60、120、240 日均線的台股俗稱。</dd>
+<dt>黃金交叉、死亡交叉（第 14 課）</dt><dd>短天期線由下往上／由上往下穿過長天期線。</dd>
+<dt>多頭排列、空頭排列、均線糾結（第 14 課）</dt><dd>均線由短到長依序往下排且上揚／相反／纏在一起。</dd>
+<dt>乖離率（第 14 課）</dt><dd>股價偏離均線的百分比。</dd>
+<dt>葛蘭碧八大法則（第 14 課）</dt><dd>Joseph Granville 提出，用股價與均線關係判斷的四買四賣。</dd>
+<dt>KD 隨機指標、RSV（第 15 課）</dt><dd>今天收盤在近 9 天區間的位置，再經平滑得出 K、D。George Lane 推廣。</dd>
+<dt>超買、超賣、鈍化（第 15 課）</dt><dd>指標在極高／極低區；強勢或弱勢時指標長時間停在極端區叫鈍化。</dd>
+<dt>RSI 相對強弱指標（第 16 課）</dt><dd>上漲幅度佔總漲跌幅度的比例。Welles Wilder 1978 年提出。</dd>
+<dt>背離（第 16 課）</dt><dd>價格創新高／新低，指標卻沒有跟上。</dd>
+<dt>EMA、MACD、DIF、柱狀體（第 17 課）</dt><dd>EMA 是近期權重較大的均線；DIF＝EMA12−EMA26；MACD 是 DIF 的 9日 EMA；柱狀體＝DIF−MACD。Gerald Appel 提出。</dd>
+<dt>布林通道、標準差（第 18 課）</dt><dd>20日均線 ± 2 倍標準差形成的通道。John Bollinger 提出。</dd>
+<dt>頭肩頂、頭肩底、頸線（第 19 課）</dt><dd>三個高點（低點）的反轉型態；連接肩部轉折點的線叫頸線。</dd>
+<dt>M頭、W底（第 19 課）</dt><dd>雙重頂與雙重底，形狀像字母 M 和 W。</dd>
+<dt>三角收斂、旗形、箱型（第 19 課）</dt><dd>常見的整理型態，通常順原趨勢突破。</dd>
+<dt>五檔、委買、委賣（第 20 課）</dt><dd>最佳 5 個買價與賣價及排隊張數。「委」是委託證券商。</dd>
+<dt>內盤、外盤（第 20 課）</dt><dd>成交在委買價叫內盤（賣方主動）；成交在委賣價叫外盤（買方主動）。</dd>
+<dt>大盤、加權指數（第 20 課）</dt><dd>代表整個台股上市市場的指數，依市值加權計算。</dd>
+<dt>三大法人（第 21 課）</dt><dd>外資、投信、自營商。</dd>
+<dt>融資、融券、斷頭、軋空（第 21 課）</dt><dd>借錢買股／借股票賣；擔保不足被強制賣出；放空者被迫回補推升股價。</dd>
+<dt>當沖（第 21 課）</dt><dd>當日沖銷，同一天買進又賣出。</dd>
+<dt>除權、除息、填息、貼息、還原權值（第 22 課）</dt><dd>發股票股利／現金股利造成股價調整；漲回除息前價格／繼續下跌；把歷史價格調整成連續的K線。</dd>
+<dt>注意股、處置股（第 22 課）</dt><dd>交易異常被證交所提醒／限制交易方式的股票。</dd>
+<dt>停損、1% 法則、風報比、期望值（第 23 課）</dt><dd>錯了就出場；每筆最多賠總資金 1%；可能賺÷可能賠；長期平均下來賺或賠多少。</dd>
+<dt>追高、凹單、攤平（第 23 課）</dt><dd>最常見的三種虧損行為。</dd>
+</dl>
+
+<h2>下一步怎麼學？</h2>
+<ol>
+  <li><b>先模擬、再真實</b>：很多券商 App 都有模擬交易功能，先用假錢練習至少幾個月，並寫交易日誌。</li>
+  <li><b>每天看圖</b>：挑 5～10 支熟悉的股票，每天收盤後用第 24 課的七步驟看一次，看久了眼睛就會「長出來」。</li>
+  <li><b>讀原典</b>：史蒂夫・尼森的《日本蠟燭圖技術》，約翰・墨菲（John J. Murphy）的《金融市場技術分析》，都是公認的經典。</li>
+  <li><b>學基本面</b>：技術分析告訴你「什麼時候」，基本面告訴你「買什麼」。兩者一起用更完整。</li>
+  <li><b>查官方資料</b>：臺灣證券交易所官網（www.twse.com.tw）可以查到每天的行情、三大法人買賣超、除權息預告與注意／處置股公告。</li>
+</ol>
+<div class="warn">再提醒一次：本教材所有圖表都是模擬資料，內容僅供學習，不構成任何投資建議。投資一定有風險，請用自己能承受的金額，並和家人討論。</div>
+</section>
+</main>
+</div>
+<style>.kchart .hid{visibility:hidden}</style>
+<script>
+/* ========== 基礎工具 ========== */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const UPC='var(--up)',DNC='var(--dn)',FLC='var(--flat)';
+const MAC=['#F39C12','#9B59B6','#3B82F6','#14B8A6'];
+const RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const colOf=k=>k.c>k.o?UPC:k.c<k.o?DNC:FLC;
+const fmt=v=>v==null?'-':(Math.abs(v)>=1000?v.toFixed(0):Math.abs(v)>=100?v.toFixed(1):v.toFixed(2));
+const f1=v=>(Math.round(v*100)/100).toString();
+function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+function rng(seed){let s=((seed||1)*2654435761)>>>0||1;return()=>{s^=s<<13;s>>>=0;s^=s>>>17;s^=s<<5;s>>>=0;return s/4294967296;};}
+function sma(a,p){return a.map((_,i)=>{if(i<p-1)return null;let t=0;for(let j=i-p+1;j<=i;j++)t+=a[j];return t/p;});}
+function ema(a,p){const k=2/(p+1);let prev=null;return a.map(v=>(prev=prev===null?v:v*k+prev*(1-k)));}
+function calcKD(d,n=9){let K=50,D=50;return d.map((x,i)=>{const s=d.slice(Math.max(0,i-n+1),i+1);const hh=Math.max(...s.map(z=>z.h)),ll=Math.min(...s.map(z=>z.l));const rsv=hh===ll?50:(x.c-ll)/(hh-ll)*100;K=K*2/3+rsv/3;D=D*2/3+K/3;return{k:K,d:D};});}
+function calcRSI(c,n){let ag=0,al=0;return c.map((v,i)=>{if(i===0)return null;const ch=v-c[i-1],g=Math.max(ch,0),l=Math.max(-ch,0);if(i<=n){ag+=g/n;al+=l/n;return i<n?null:(al===0?100:100*ag/(ag+al));}ag=(ag*(n-1)+g)/n;al=(al*(n-1)+l)/n;return al===0?100:100*ag/(ag+al);});}
+function calcMACD(c){const a=ema(c,12),b=ema(c,26);const dif=a.map((v,i)=>v-b[i]);const sig=ema(dif,9);return dif.map((v,i)=>({dif:v,sig:sig[i],osc:v-sig[i]}));}
+
+/* 以「路徑點」產生模擬K線 */
+function build(g){
+  const r=rng(g.seed||7),pts=g.pts,n=pts[pts.length-1][0]+1,base=g.noise??0.012;
+  const path=new Array(n);
+  for(let k=0;k<pts.length-1;k++){const[a,pa]=pts[k],[b,pb]=pts[k+1];for(let i=a;i<=b;i++)path[i]=pa+(pb-pa)*(i-a)/(b-a);}
+  const inj={};(g.inject||[]).forEach(x=>inj[x.i]=x.k);
+  const d=[];let prev=path[0];
+  for(let i=0;i<n;i++){
+    let nz=base;(g.nz||[]).forEach(([a,b,v])=>{if(i>=a&&i<=b)nz=v});
+    let o,h,l,c;
+    if(inj[i]){[o,h,l,c]=inj[i].map(x=>prev*(1+x/100));}
+    else{c=path[i]*(1+(r()-.5)*nz*1.6);o=prev*(1+(r()-.5)*nz*.8);h=Math.max(o,c)*(1+r()*nz*.9);l=Math.min(o,c)*(1-r()*nz*.9);}
+    const ret=Math.abs(c-prev)/prev;
+    let v=(g.v||3000)*(.65+r()*.5)*(1+ret*18);
+    (g.vm||[]).forEach(([a,b,m])=>{if(i>=a&&i<=b)v*=m});
+    d.push({o,h,l,c,v:Math.round(v)});prev=c;
+  }
+  return d;
+}
+function polyl(arr,X,Y,color,w=1.6,dash){let s='',on=false;arr.forEach((v,i)=>{if(v==null||isNaN(v)){on=false;return}s+=(on?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)+' ';on=true});return s?`<path d="${s}" fill="none" style="stroke:${color}" stroke-width="${w}"${dash?' stroke-dasharray="5 4"':''} stroke-linejoin="round"/>`:'';}
+const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+/* ========== K線圖繪製 ========== */
+const META=new WeakMap();
+function chartSVG(cfg,full,anim){
+  const warm=cfg.warm||0,closes=full.map(x=>x.c),d=full.slice(warm),n=d.length,sl=a=>a.slice(warm);
+  const mas=(cfg.ma||[]).map(p=>({p,v:sl(sma(closes,p))}));
+  const inds=cfg.ind||[];let boll=null;
+  if(inds.includes('boll')){const m=sma(closes,20);const sd=closes.map((_,i)=>i<19?null:Math.sqrt(closes.slice(i-19,i+1).reduce((a,b)=>a+(b-m[i])**2,0)/20));boll={m:sl(m),u:sl(m.map((v,i)=>v==null?null:v+2*sd[i])),l:sl(m.map((v,i)=>v==null?null:v-2*sd[i]))};}
+  const panels=inds.filter(x=>x!=='boll');
+  const W=640,pl=6,pr=46,pt=20,gap=12,volH=cfg.vol?54:0,pH=80;
+  const mainH=cfg.h||(n>70?230:200);
+  const H=pt+mainH+(cfg.vol?gap+volH:0)+panels.length*(gap+pH)+10;
+  const step=(W-pl-pr)/n,bw=Math.max(1.2,step*.64),X=i=>pl+step*(i+.5);
+  const ix=i=>i<0?n+i:i;
+  let hi=-1e9,lo=1e9;d.forEach(k=>{hi=Math.max(hi,k.h);lo=Math.min(lo,k.l)});
+  [...mas.map(m=>m.v),...(boll?[boll.u,boll.l]:[])].forEach(a=>a.forEach(v=>{if(v!=null){hi=Math.max(hi,v);lo=Math.min(lo,v)}}));
+  const rg=hi-lo||1;hi+=rg*.09;lo-=rg*.07;
+  const Y=p=>pt+(hi-p)/(hi-lo)*mainH;
+  const pick=(r,use)=>{if(!Array.isArray(r))return ix(r);let best=r[0];for(let i=r[0];i<=r[1];i++){if(use==='h'?d[i].h>d[best].h:d[i].l<d[best].l)best=i}return best;};
+  const val=(i,use)=>use==='h'?d[i].h:use==='l'?d[i].l:d[i].c;
+  let s=`<svg viewBox="0 0 ${W} ${H}" class="kchart${anim&&!RM?' anim':''}" role="img" aria-label="${esc(cfg.alt||'K線圖')}">`;
+  for(let k=0;k<=4;k++){const p=lo+(hi-lo)*k/4,y=Y(p);s+=`<line x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}" class="grid"/><text x="${W-pr+4}" y="${y+4}" class="ax">${fmt(p)}</text>`;}
+  // legend
+  let lx=pl+4;if(cfg.title){s+=`<text x="${lx}" y="13" class="lbl" style="fill:var(--muted)">${esc(cfg.title)}</text>`;lx+=cfg.title.length*13+10;}
+  mas.forEach((m,j)=>{s+=`<text x="${lx}" y="13" class="lbl" style="fill:${MAC[j]}">MA${m.p}</text>`;lx+=46;});
+  if(boll){s+=`<text x="${lx}" y="13" class="lbl" style="fill:var(--acc)">布林通道(20,2)</text>`;}
+  (cfg.boxes||[]).forEach(b=>{const a=ix(b.a),e=ix(b.b);s+=`<rect x="${X(a)-step/2}" y="${pt}" width="${X(e)-X(a)+step}" height="${mainH}" style="fill:var(--acc2)" opacity=".8"/>`;if(b.t)s+=`<text x="${X(a)}" y="${pt+14}" class="lbl" style="fill:var(--acc)">${esc(b.t)}</text>`;});
+  if(boll){let up='',dn='';boll.u.forEach((v,i)=>{if(v!=null)up+=`${X(i)},${Y(v)} `});for(let i=n-1;i>=0;i--)if(boll.l[i]!=null)dn+=`${X(i)},${Y(boll.l[i])} `;s+=`<polygon points="${up+dn}" style="fill:var(--acc)" opacity=".08"/>`+polyl(boll.u,X,Y,'var(--acc)',1.2)+polyl(boll.l,X,Y,'var(--acc)',1.2)+polyl(boll.m,X,Y,'#9B59B6',1.2,1);}
+  (cfg.gaps||[]).forEach(g=>{const i=ix(g.i),a=d[i-1],b=d[i];const up=b.l>a.h;const y1=up?Y(b.l):Y(a.l),y2=up?Y(a.h):Y(b.h);const x2=X(Math.min(n-1,i+(g.w||6)));s+=`<rect x="${X(i-1)}" y="${Math.min(y1,y2)}" width="${x2-X(i-1)}" height="${Math.max(2,Math.abs(y2-y1))}" style="fill:var(--hl)" opacity=".85"/>`;if(g.t)s+=`<text x="${X(i)+4}" y="${Math.max(y1,y2)+14}" class="lbl" style="fill:var(--ink)">${esc(g.t)}</text>`;});
+  const hid=cfg.hideFrom!=null?ix(cfg.hideFrom):1e9;
+  if(cfg.mode==='line'){s+=polyl(d.map(k=>k.c),X,Y,'var(--ink)',2);}
+  else d.forEach((k,i)=>{const c=colOf(k),x=X(i),yo=Y(k.o),yc=Y(k.c),top=Math.min(yo,yc),bh=Math.max(1,Math.abs(yo-yc));
+    s+=`<g class="cd${i>=hid?' hid':''}" style="--d:${Math.min(i*16,1400)}ms"><line x1="${x}" x2="${x}" y1="${Y(k.h)}" y2="${Y(k.l)}" style="stroke:${c}" stroke-width="1.2"/><rect x="${x-bw/2}" y="${top}" width="${bw}" height="${bh}" style="fill:${c}"/></g>`;});
+  mas.forEach((m,j)=>{s+=`<g class="${hid<1e9?'hidl':''}">`+polyl(m.v.map((v,i)=>i>=hid?null:v),X,Y,MAC[j],1.6)+`</g>`;if(hid<1e9)s+=`<g class="hid">`+polyl(m.v.map((v,i)=>i<hid-1?null:v),X,Y,MAC[j],1.6)+`</g>`;});
+  (cfg.lines||[]).forEach(L=>{const a=pick(L.a,L.use),b=pick(L.b,L.use),pa=val(a,L.use),pb=val(b,L.use),sl=(pb-pa)/(b-a),e=L.to!=null?ix(L.to):n-1;const c=L.c||'var(--acc)';s+=`<line x1="${X(a)}" y1="${Y(pa)}" x2="${X(e)}" y2="${Y(pa+sl*(e-a))}" style="stroke:${c}" stroke-width="2"${L.dash?' stroke-dasharray="6 4"':''}/>`;if(L.t)s+=`<text x="${X(e)-4}" y="${Y(pa+sl*(e-a))+(L.use==='h'?-6:16)}" text-anchor="end" class="lbl" style="fill:${c}">${esc(L.t)}</text>`;});
+  (cfg.hlines||[]).forEach(L=>{let p=L.p;if(L.r){const i=pick(L.r,L.use);p=val(i,L.use)}else if(L.at!=null)p=val(ix(L.at),L.use||'c');const c=L.c||'var(--muted)',x1=L.from!=null?X(ix(L.from)):pl;s+=`<line x1="${x1}" x2="${W-pr}" y1="${Y(p)}" y2="${Y(p)}" style="stroke:${c}" stroke-width="1.6" stroke-dasharray="6 4"/>`;if(L.t)s+=`<text x="${x1+4}" y="${Y(p)-5}" class="lbl" style="fill:${c}">${esc(L.t)}</text>`;});
+  if(cfg.crosses){const[a,b]=cfg.crosses.map(p=>mas.find(m=>m.p===p).v);for(let i=1;i<n;i++){if(a[i-1]==null||b[i-1]==null)continue;const s0=a[i-1]-b[i-1],s1=a[i]-b[i];if(s0<=0&&s1>0)s+=`<text x="${X(i)}" y="${Y(d[i].l)+18}" text-anchor="middle" class="lbl" style="fill:var(--up)">▲黃金</text>`;if(s0>=0&&s1<0)s+=`<text x="${X(i)}" y="${Y(d[i].h)-8}" text-anchor="middle" class="lbl" style="fill:var(--dn)">▼死亡</text>`;}}
+  let NT='';(cfg.notes||[]).forEach(t=>{const i=ix(t.i),k=d[i],c=t.c||'var(--ink)';const up=t.at!=='l';const y=up?Y(k.h)-8:Y(k.l)+8;const anc=i<4?'start':i>n-5?'end':'middle';NT+=`<text x="${X(i)}" y="${up?y-2:y+12}" text-anchor="middle" style="fill:${c}" font-size="11">${up?'▼':'▲'}</text><text x="${X(i)}" y="${up?y-14:y+30}" text-anchor="${anc}" class="lbl" style="fill:${c}">${esc(t.t)}</text>`;});
+  if(hid<1e9){s+=`<g class="hidbox"><rect x="${X(hid)-step/2}" y="${pt}" width="${W-pr-X(hid)+step/2}" height="${H-pt-10}" style="fill:var(--grid)" opacity=".9"/><text x="${(X(hid)+W-pr)/2}" y="${pt+mainH/2}" text-anchor="middle" font-size="40" font-weight="900" style="fill:var(--muted)">?</text></g>`;}
+  let y0=pt+mainH;
+  if(cfg.vol){y0+=gap;const mv=Math.max(...d.map(k=>k.v));s+=`<text x="${pl+2}" y="${y0+10}" class="ax">成交量</text>`;d.forEach((k,i)=>{const h=k.v/mv*(volH-4);s+=`<rect class="${i>=hid?'hid':''}" x="${X(i)-bw/2}" y="${y0+volH-h}" width="${bw}" height="${h}" style="fill:${colOf(k)}" opacity=".75"/>`;});s+=`<line x1="${pl}" x2="${W-pr}" y1="${y0+volH}" y2="${y0+volH}" class="grid"/>`;y0+=volH;}
+  panels.forEach(p=>{y0+=gap;const top=y0,PY=(v,a,b)=>top+(b-v)/(b-a)*pH;s+=`<rect x="${pl}" y="${top}" width="${W-pl-pr}" height="${pH}" fill="none" style="stroke:var(--grid)"/>`;
+    if(p==='kd'){const kd=sl(calcKD(full));const Yk=v=>PY(v,0,100);[80,20].forEach(v=>{s+=`<line x1="${pl}" x2="${W-pr}" y1="${Yk(v)}" y2="${Yk(v)}" style="stroke:var(--muted)" stroke-dasharray="3 3" opacity=".6"/><text x="${W-pr+4}" y="${Yk(v)+4}" class="ax">${v}</text>`});s+=polyl(kd.map((x,i)=>i>=hid?null:x.k),X,Yk,'#F39C12',1.5)+polyl(kd.map((x,i)=>i>=hid?null:x.d),X,Yk,'#3B82F6',1.5)+`<text x="${pl+4}" y="${top+12}" class="lbl" style="fill:var(--muted)">KD(9,3,3)　<tspan style="fill:#F39C12">K</tspan>　<tspan style="fill:#3B82F6">D</tspan></text>`;}
+    if(p==='rsi'){const r6=sl(calcRSI(closes,6)),r12=sl(calcRSI(closes,12)),Yr=v=>PY(v,0,100);[70,30].forEach(v=>{s+=`<line x1="${pl}" x2="${W-pr}" y1="${Yr(v)}" y2="${Yr(v)}" style="stroke:var(--muted)" stroke-dasharray="3 3" opacity=".6"/><text x="${W-pr+4}" y="${Yr(v)+4}" class="ax">${v}</text>`});s+=polyl(r6,X,Yr,'#F39C12',1.5)+polyl(r12,X,Yr,'#3B82F6',1.5)+`<text x="${pl+4}" y="${top+12}" class="lbl" style="fill:var(--muted)">RSI　<tspan style="fill:#F39C12">6日</tspan>　<tspan style="fill:#3B82F6">12日</tspan></text>`;}
+    if(p==='macd'){const m=sl(calcMACD(closes));const mx=Math.max(...m.map(x=>Math.max(Math.abs(x.dif),Math.abs(x.sig),Math.abs(x.osc))))*1.1||1;const Ym=v=>PY(v,-mx,mx);s+=`<line x1="${pl}" x2="${W-pr}" y1="${Ym(0)}" y2="${Ym(0)}" style="stroke:var(--muted)" opacity=".7"/><text x="${W-pr+4}" y="${Ym(0)+4}" class="ax">0</text>`;m.forEach((x,i)=>{if(i>=hid)return;const y=Ym(x.osc),z=Ym(0);s+=`<rect x="${X(i)-bw/2}" y="${Math.min(y,z)}" width="${bw}" height="${Math.max(.5,Math.abs(y-z))}" style="fill:${x.osc>=0?UPC:DNC}" opacity=".6"/>`});s+=polyl(m.map((x,i)=>i>=hid?null:x.dif),X,Ym,'#F39C12',1.5)+polyl(m.map((x,i)=>i>=hid?null:x.sig),X,Ym,'#3B82F6',1.5)+`<text x="${pl+4}" y="${top+12}" class="lbl" style="fill:var(--muted)">MACD(12,26,9)　<tspan style="fill:#F39C12">DIF</tspan>　<tspan style="fill:#3B82F6">MACD</tspan>　柱狀體</text>`;}
+    y0+=pH;});
+  s+=NT;s+=`<line class="xh" x1="0" x2="0" y1="${pt}" y2="${H-10}" style="stroke:var(--muted)" stroke-dasharray="3 3" visibility="hidden"/></svg>`;
+  return {s,meta:{d,W,pl,step,hid,n}};
+}
+function attachTip(box,tip){
+  $$('svg.kchart',box).forEach(svg=>{const m=META.get(svg);if(!m)return;const xh=svg.querySelector('.xh');
+    const mv=e=>{const r=svg.getBoundingClientRect();const vx=(e.clientX-r.left)/r.width*m.W;const i=Math.floor((vx-m.pl)/m.step);if(i<0||i>=m.n||(i>=m.hid&&!svg.classList.contains('rev'))){tip.style.display='none';xh.setAttribute('visibility','hidden');return}
+      const k=m.d[i],p=i>0?m.d[i-1].c:null,ch=p?k.c-p:0;const x=m.pl+m.step*(i+.5);xh.setAttribute('x1',x);xh.setAttribute('x2',x);xh.setAttribute('visibility','visible');
+      tip.innerHTML=`<b>第 ${i+1} 根</b>　<span style="color:${colOf(k)}">${k.c>k.o?'紅K':k.c<k.o?'綠K':'十字'}</span><br>開 ${fmt(k.o)}　高 ${fmt(k.h)}<br>低 ${fmt(k.l)}　收 ${fmt(k.c)}<br>${p?`漲跌 <span style="color:${ch>=0?'var(--up)':'var(--dn)'}">${ch>=0?'+':''}${fmt(ch)}</span>　`:''}量 ${k.v.toLocaleString()} 張`;
+      tip.style.display='block';const br=box.getBoundingClientRect();tip.style.left=(e.clientX-br.left>br.width/2?8:br.width-tip.offsetWidth-8)+'px';};
+    svg.addEventListener('pointermove',mv);svg.addEventListener('pointerdown',mv);svg.addEventListener('pointerleave',()=>{tip.style.display='none';xh.setAttribute('visibility','hidden')});});
+}
+function renderChart(el,anim){
+  const cfg=CH[el.dataset.c];if(!cfg){el.textContent='（圖表載入失敗）';return}
+  const list=cfg.dual||[cfg];
+  const parts=list.map(c=>{const data=c.data||(c.make?c.make():build(c.gen));return chartSVG(c,data,anim)});
+  el.innerHTML=`<div class="ktip"></div><div class="svgbox">${parts.map(p=>p.s).join('')}</div><div class="ctl"><button class="btn ghost" type="button">▶ 重播動畫</button></div>${el.dataset.cap?`<div class="cap">${el.dataset.cap}</div>`:''}`;
+  $$('svg.kchart',el).forEach((svg,j)=>META.set(svg,parts[j].meta));
+  attachTip($('.svgbox',el),$('.ktip',el));
+  $('.ctl button',el).onclick=()=>renderChart(el,true);
+}
+/* ========== 圖表設定（全部為模擬資料） ========== */
+const EXDIV=(()=>{const adj=build({seed:31,pts:[[0,92],[18,97],[24,95],[45,101]],noise:.012});const ex=22,D=6;const raw=adj.map((k,i)=>i<ex?{o:k.o+D,h:k.h+D,l:k.l+D,c:k.c+D,v:k.v}:k);return{raw,adj,ex};})();
+const CH={
+ lineVsK:{dual:[
+   {title:'折線圖（只有收盤價）',mode:'line',gen:{seed:5,pts:[[0,50],[12,57],[22,51],[34,60],[40,58]],noise:.02},h:130},
+   {title:'K線圖（開高低收）',gen:{seed:5,pts:[[0,50],[12,57],[22,51],[34,60],[40,58]],noise:.02},h:170}]},
+ redButDown:{gen:{seed:8,pts:[[0,96],[14,104]],noise:.01,inject:[{i:15,k:[-7,-2.5,-8,-3.5]}]},hlines:[{at:-2,use:'c',t:'昨收',c:'var(--acc)',from:9}],notes:[{i:-1,at:'l',t:'紅K，但比昨收低＝下跌',c:'var(--up)'}]},
+ hammerCtx:{gen:{seed:12,pts:[[0,80],[12,58],[26,88],[31,92],[42,76]],noise:.011,inject:[{i:12,k:[-.5,.3,-6,0]},{i:31,k:[-.5,.3,-6,0]}]},notes:[{i:12,at:'l',t:'錘子線（低檔）',c:'var(--up)'},{i:31,at:'h',t:'吊人線（高檔）',c:'var(--dn)'}]},
+ volPrice:{vol:true,gen:{seed:14,pts:[[0,40],[20,41],[22,40],[40,56]],noise:.012,vm:[[21,40,2.3]]},boxes:[{a:21,b:39,t:'上漲段：量增'}]},
+ volDiverge:{vol:true,gen:{seed:15,pts:[[0,40],[12,52],[16,48],[26,56],[30,52],[38,58],[48,46]],noise:.012,vm:[[4,12,2.2],[18,26,1.3],[32,38,.6]]},notes:[{i:12,at:'h',t:'高點1'},{i:26,at:'h',t:'高點2'},{i:38,at:'h',t:'高點3（量最小）',c:'var(--dn)'}]},
+ engulfCtx:{gen:{seed:17,pts:[[0,60],[20,45],[32,54]],noise:.011,inject:[{i:19,k:[.3,.6,-3.2,-2.8]},{i:20,k:[-.6,4.2,-1.2,3.8]}]},notes:[{i:20,at:'l',t:'多頭吞噬',c:'var(--up)'}]},
+ morningCtx:{gen:{seed:19,pts:[[0,70],[22,50],[36,61]],noise:.011,inject:[{i:20,k:[0,.3,-4.5,-4.2]},{i:21,k:[-1.5,-.5,-2.8,-1.8]},{i:22,k:[.5,5.5,.2,5.2]}]},notes:[{i:21,at:'l',t:'晨星',c:'var(--up)'}]},
+ gaps:{vol:true,gen:{seed:22,pts:[[0,40],[10,41],[11,45],[20,52],[21,55],[30,62],[31,66],[34,67],[36,60],[45,52]],noise:.01,inject:[{i:11,k:[4,6,3.5,5.5]},{i:21,k:[3,5,2.6,4.5]},{i:31,k:[3,5.5,2.6,3.2]}],vm:[[11,11,3],[21,21,1.6],[31,32,4]]},gaps:[{i:11,t:'突破缺口'},{i:21,t:'逃逸缺口'},{i:31,t:'竭盡缺口',w:3}]},
+ trendUp:{gen:{seed:24,pts:[[0,40],[8,48],[13,44],[22,54],[27,50],[36,60],[41,56],[50,66]],noise:.01},lines:[{a:[10,16],b:[24,30],use:'l',t:'上升趨勢線'}],notes:[{i:8,at:'h',t:'高'},{i:22,at:'h',t:'更高'},{i:36,at:'h',t:'再更高'}]},
+ trendDn:{gen:{seed:25,pts:[[0,66],[8,58],[13,62],[22,52],[27,56],[36,46],[41,50],[50,40]],noise:.01},lines:[{a:[10,16],b:[24,30],use:'h',t:'下降趨勢線',c:'var(--dn)'}],notes:[{i:8,at:'l',t:'低'},{i:22,at:'l',t:'更低'},{i:36,at:'l',t:'再更低'}]},
+ rangeBox:{vol:true,gen:{seed:26,pts:[[0,50],[6,58],[12,50],[18,58],[24,50],[30,58],[36,51],[40,56],[42,63],[48,67]],noise:.009,vm:[[41,43,2.4]]},hlines:[{r:[0,38],use:'h',t:'箱頂（壓力）',c:'var(--up)'},{r:[0,38],use:'l',t:'箱底（支撐）',c:'var(--dn)'}],notes:[{i:42,at:'l',t:'帶量突破'}]},
+ srFlip:{vol:true,gen:{seed:28,pts:[[0,40],[6,50],[10,45],[16,50],[20,46],[26,50],[29,47],[33,56],[38,51.5],[40,51],[47,60]],noise:.008,vm:[[31,33,2.2]]},hlines:[{r:[0,29],use:'h',t:'原本的壓力 → 突破後變支撐',c:'var(--acc)'}],notes:[{i:6,at:'h',t:'碰壁1'},{i:16,at:'h',t:'碰壁2'},{i:26,at:'h',t:'碰壁3'},{i:39,at:'l',t:'回測有撐',c:'var(--up)'}]},
+ maLines:{warm:60,ma:[5,20,60],gen:{seed:30,pts:[[0,50],[40,60],[70,52],[100,70],[130,64],[160,80]],noise:.013}},
+ crossChart:{warm:20,ma:[5,20],crosses:[5,20],gen:{seed:32,pts:[[0,57],[30,63],[44,55],[54,51.5],[68,59],[80,63]],noise:.01}},
+ kdChart:{warm:20,ind:['kd'],gen:{seed:34,pts:[[0,60],[28,46],[32,47],[48,58],[60,53],[80,62]],noise:.012}},
+ rsiDiv:{warm:15,ind:['rsi'],gen:{seed:36,pts:[[0,42],[15,40],[27,56],[35,50],[55,58],[67,46]],noise:.009},notes:[{i:12,at:'h',t:'高點1'},{i:40,at:'h',t:'高點2（更高）',c:'var(--dn)'}]},
+ macdChart:{warm:30,ind:['macd'],gen:{seed:38,pts:[[0,50],[30,52],[55,70],[70,63],[95,46],[115,55]],noise:.012}},
+ bollChart:{warm:20,ind:['boll'],gen:{seed:40,pts:[[0,50],[30,54],[40,53],[70,53.5],[86,61],[100,63.5]],noise:.014,nz:[[40,70,.006]]},boxes:[{a:22,b:48,t:'縮口'}]},
+ hsTop:{vol:true,gen:{seed:42,pts:[[0,50],[10,62],[15,56],[23,70],[29,56],[36,62],[42,55],[50,46]],noise:.009,vm:[[5,10,1.8],[19,23,1.3],[33,36,.6],[42,44,1.8]]},lines:[{a:[13,17],b:[27,31],use:'l',t:'頸線',c:'var(--acc)',dash:1}],notes:[{i:10,at:'h',t:'左肩'},{i:23,at:'h',t:'頭'},{i:36,at:'h',t:'右肩'},{i:43,at:'l',t:'跌破頸線',c:'var(--dn)'}]},
+ wBottom:{vol:true,gen:{seed:44,pts:[[0,62],[10,48],[16,56],[24,48.5],[30,55],[33,57.5],[37,55.5],[45,64]],noise:.009,vm:[[8,10,1.8],[22,24,.5],[31,33,2.6]]},hlines:[{r:[12,20],use:'h',t:'頸線',c:'var(--acc)',from:8}],notes:[{i:10,at:'l',t:'第一底'},{i:24,at:'l',t:'第二底（量縮）'},{i:32,at:'h',t:'帶量突破',c:'var(--up)'}]},
+ triangle:{vol:true,gen:{seed:46,pts:[[0,40],[5,52],[10,44],[15,50],[20,46],[24,49],[27,47],[29,48],[31,54],[36,58]],noise:.006,vm:[[0,10,1.5],[18,29,.55],[30,31,2.8]]},lines:[{a:[3,7],b:[13,17],use:'h',to:30,c:'var(--dn)'},{a:[8,12],b:[18,22],use:'l',to:30,c:'var(--up)'}],notes:[{i:31,at:'h',t:'帶量突破'}]},
+ exDiv:{dual:[
+   {title:'原始K線（未還原）',data:EXDIV.raw,h:150,notes:[{i:EXDIV.ex,at:'l',t:'除息日：假缺口',c:'var(--dn)'}]},
+   {title:'還原權值K線',data:EXDIV.adj,h:150}]},
+ final:{warm:60,ma:[5,20,60],vol:true,ind:['kd','macd'],h:240,gen:{seed:48,pts:[[0,90],[45,82],[80,62],[88,67],[97,62.5],[106,69],[112,66.5],[125,73],[140,76],[160,80]],noise:.011,vm:[[76,80,1.8],[94,98,.5],[104,106,2.4]]},hlines:[{r:[24,32],use:'h',t:'頸線',c:'var(--acc)',from:14}],notes:[{i:20,at:'l',t:'第一底'},{i:37,at:'l',t:'第二底・量縮'},{i:46,at:'h',t:'帶量突破',c:'var(--up)'},{i:52,at:'l',t:'回測頸線'}]}
+};
+
+/* ========== 小K棒圖示 ========== */
+function miniCandles(el){
+  const ks=el.dataset.k.split(';').map(s=>{const[o,h,l,c]=s.split(',').map(Number);return{o,h,l,c}});
+  const w=+el.dataset.w||(ks.length*30+20),h=70;let hi=Math.max(...ks.map(k=>k.h)),lo=Math.min(...ks.map(k=>k.l));if(hi===lo){hi+=10;lo-=10}
+  const Y=p=>6+(hi-p)/(hi-lo)*(h-12),st=w/ks.length,bw=Math.min(18,st*.5);
+  let s=`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true">`;
+  ks.forEach((k,i)=>{const x=st*(i+.5),c=colOf(k),t=Math.min(Y(k.o),Y(k.c)),bh=Math.max(2,Math.abs(Y(k.o)-Y(k.c)));s+=`<line x1="${x}" x2="${x}" y1="${Y(k.h)}" y2="${Y(k.l)}" style="stroke:${c}" stroke-width="1.6"/><rect x="${x-bw/2}" y="${t}" width="${bw}" height="${bh}" style="fill:${c}"/>`});
+  el.innerHTML=s+'</svg>';
+}
+
+/* ========== 互動元件 ========== */
+const WID={};
+WID.tick=function(el){
+  const mini=!!el.dataset.mini;let seed=mini?11:3,ticks,timer=null,pos=0;
+  el.innerHTML=`<svg viewBox="0 0 ${mini?300:340} 230" class="kchart" style="max-width:${mini?'260px':'520px'};margin:0 auto"></svg>`+(mini?'':`<div class="readout" aria-live="polite"></div><div class="ctl" style="padding:8px 0 0"><button class="btn" type="button" data-a="play">▶ 播放一天行情</button><button class="btn ghost" type="button" data-a="new">換一天</button></div>`);
+  const svg=$('svg',el),ro=$('.readout',el);
+  function gen(){const r=rng(seed);ticks=[];let p=50;const dr=(r()-.5)*.45;for(let i=0;i<=54;i++){if(i>0)p+=dr+(r()-.5)*1.5;ticks.push(Math.max(41,Math.min(59,p)))}}
+  const tm=i=>{const m=540+i*5;return`${Math.floor(m/60)}:${String(m%60).padStart(2,'0')}`};
+  function draw(k){
+    const t=ticks.slice(0,k+1),o=t[0],c=t[k],h=Math.max(...t),l=Math.min(...t);
+    const hi=Math.max(...ticks)+1,lo=Math.min(...ticks)-1,Y=p=>18+(hi-p)/(hi-lo)*180,X=i=>14+i*(206/54);
+    const col=c>o?UPC:c<o?DNC:FLC;
+    let s=`<rect x="10" y="12" width="214" height="192" style="fill:var(--paper)" rx="6"/>`;
+    s+=`<text x="14" y="224" class="ax">9:00</text><text x="120" y="224" class="ax" text-anchor="middle">11:15</text><text x="222" y="224" class="ax" text-anchor="end">13:30</text>`;
+    s+=`<line x1="14" x2="222" y1="${Y(o)}" y2="${Y(o)}" style="stroke:var(--muted)" stroke-dasharray="2 3" opacity=".6"/>`;
+    s+=polyl(t,X,Y,'var(--ink)',1.8);
+    s+=`<circle cx="${X(k)}" cy="${Y(c)}" r="4" style="fill:${col}"/><line x1="${X(k)}" x2="262" y1="${Y(c)}" y2="${Y(c)}" style="stroke:${col}" stroke-dasharray="3 3"/>`;
+    const cx=272;s+=`<line x1="${cx}" x2="${cx}" y1="${Y(h)}" y2="${Y(l)}" style="stroke:${col}" stroke-width="2"/><rect x="${cx-14}" y="${Math.min(Y(o),Y(c))}" width="28" height="${Math.max(2,Math.abs(Y(o)-Y(c)))}" style="fill:${col}"/>`;
+    const lab=(p,t,dy=4)=>`<text x="${cx+20}" y="${Y(p)+dy}" class="lbl" style="fill:var(--ink)">${t} ${p.toFixed(1)}</text>`;
+    if(!mini){s+=lab(h,'高',-2)+lab(l,'低',10);if(Math.abs(Y(o)-Y(c))>14)s+=lab(o,'開')+lab(c,k===54?'收':'現');else s+=lab(c,k===54?'收':'現');}
+    s+=`<text x="${cx}" y="12" text-anchor="middle" class="lbl" style="fill:var(--muted)">${tm(k)}</text>`;
+    svg.innerHTML=s;
+    if(ro)ro.innerHTML=`時間 <b>${tm(k)}</b>　開盤 ${o.toFixed(1)}　最高 <span class="up">${h.toFixed(1)}</span>　最低 <span class="dn">${l.toFixed(1)}</span>　${k===54?'收盤':'現價'} <b>${c.toFixed(1)}</b>`+(k===54?`<br>收盤了！收盤 ${c>o?'高於':'低於'}開盤，所以今天是一根<b style="color:${col}">${c>o?'紅K（陽線）':c<o?'綠K（陰線）':'十字線'}</b>。上下的細線，就是盤中曾經到過、但沒有停留的最高與最低價。`:'');
+  }
+  function play(){clearInterval(timer);pos=0;if(RM){draw(54);return}timer=setInterval(()=>{draw(pos);pos++;if(pos>54){clearInterval(timer);if(mini)setTimeout(()=>{if(!el.isConnected)return;seed++;gen();play()},2600)}},mini?90:120);}
+  gen();draw(mini?54:0);if(mini)play();
+  el.addEventListener('click',e=>{const a=e.target.dataset.a;if(a==='play')play();if(a==='new'){seed=Math.floor(Math.random()*9999)+1;gen();play()}});
+};
+WID.market=function(el){
+  el.innerHTML=`<h4>買賣力量模擬器</h4><div class="sl"><span class="up">買方</span><input type="range" min="1" max="10" value="7" aria-label="買方力量"><b class="num">7</b></div><div class="sl"><span class="dn">賣方</span><input type="range" min="1" max="10" value="4" aria-label="賣方力量"><b class="num">4</b></div><svg viewBox="0 0 400 150" class="kchart"></svg><div class="readout" aria-live="polite">價格從 50 元開始。按下按鈕開始交易。</div><div class="ctl" style="padding:6px 0 0"><button class="btn" type="button">▶ 開始交易</button></div>`;
+  const [bi,si]=$$('input',el),[bv,sv]=$$('.sl b',el),svg=$('svg',el),ro=$('.readout',el);let timer;
+  bi.oninput=()=>bv.textContent=bi.value;si.oninput=()=>sv.textContent=si.value;
+  const draw=a=>{const Y=p=>10+(75-p)/50*130,X=i=>10+i*9.5;let s=`<line x1="10" x2="390" y1="${Y(50)}" y2="${Y(50)}" style="stroke:var(--muted)" stroke-dasharray="4 4"/><text x="392" y="${Y(50)+4}" class="ax" text-anchor="end">50</text>`;const last=a[a.length-1];s+=polyl(a,X,Y,last>=50?UPC:DNC,2.2);svg.innerHTML=s;};
+  draw([50]);
+  $('button',el).onclick=()=>{clearInterval(timer);const b=+bi.value,se=+si.value,r=rng(Date.now()%9999+1);let p=50,a=[50];timer=setInterval(()=>{p+=(b-se)*.13+(r()-.5)*.9;p=Math.max(26,Math.min(74,p));a.push(p);draw(a);const ch=p-50;ro.innerHTML=`目前價格 <b class="${ch>=0?'up':'dn'}">${p.toFixed(1)} 元</b>（${ch>=0?'+':''}${ch.toFixed(1)}）`;if(a.length>40){clearInterval(timer);ro.innerHTML+=`<br>${b>se?'買方比賣方多，大家願意出更高的價錢，價格往上走。':b<se?'賣方比買方多，只好降價才賣得掉，價格往下走。':'買賣力量差不多，價格在原地上下晃動。'}`}},RM?0:70);};
+};
+WID.anatomy=function(el){
+  const one=(cx,up)=>{const c=up?UPC:DNC,top=80,bot=170;const L=up?-1:1,tx=cx+L*34,an=up?'end':'start';const lab=(y,t,b)=>`<line x1="${cx+L*18}" x2="${tx-L*4}" y1="${y}" y2="${y}" style="stroke:var(--muted)" stroke-dasharray="2 2"/><text x="${tx}" y="${y+5}" text-anchor="${an}" font-size="15" ${b?'font-weight="800"':''} style="fill:var(--ink)">${t}</text>`;
+    return `<line x1="${cx}" x2="${cx}" y1="30" y2="225" style="stroke:${c}" stroke-width="3"/><rect x="${cx-16}" y="${top}" width="32" height="${bot-top}" style="fill:${c}"/>`+lab(30,'最高價')+lab(55,'上影線',1)+lab(top,up?'收盤價':'開盤價')+lab(125,'實體',1)+lab(bot,up?'開盤價':'收盤價')+lab(198,'下影線',1)+lab(225,'最低價')+`<text x="${cx}" y="254" text-anchor="middle" font-size="15" font-weight="800" style="fill:${c}">${up?'紅K（陽線）':'綠K（陰線）'}</text>`;};
+  el.innerHTML=`<svg viewBox="0 0 380 262" class="kchart" style="max-width:420px;margin:0 auto">${one(125,true)+one(255,false)}</svg><p class="cap" style="text-align:center;margin:4px 0 0;font-size:14px;color:var(--muted)">紅K由下往上走（開在下、收在上）；綠K由上往下走（開在上、收在下）。</p>`;
+};
+const KINFO={
+  '一字線':'開高低收全部一樣，整天只有一個價格。台股常見於開盤就鎖漲停或跌停。',
+  '十字線':'開盤≒收盤，上下都有影線。多空打成平手，常是趨勢可能改變的訊號。',
+  'T字線（蜻蜓十字）':'開盤≒收盤≒最高價，只有長下影線。在低檔出現時，代表下方有強力買盤。',
+  '倒T字線（墓碑十字）':'開盤≒收盤≒最低價，只有長上影線。在高檔出現時，代表上方賣壓很重。',
+  '錘子線／吊人線':'小實體、長下影線。低檔出現叫錘子（可能止跌），高檔出現叫吊人（小心轉跌）。',
+  '倒錘線／流星線':'小實體、長上影線。低檔出現叫倒錘，高檔出現叫流星（衝高被打回，小心）。',
+  '長紅K':'實體很長、影線很短。買方從開盤強勢主導到收盤。',
+  '長綠K':'實體很長、影線很短。賣方從開盤強勢主導到收盤。',
+  '紡錘線':'實體小、上下都有影線。雙方拉鋸，市場在猶豫。'
+};
+function classify(o,h,l,c){
+  const range=h-l,body=Math.abs(c-o),up=h-Math.max(o,c),lw=Math.min(o,c)-l;
+  if(range<0.5)return'一字線';
+  if(body<=range*.08){if(up<range*.12)return'T字線（蜻蜓十字）';if(lw<range*.12)return'倒T字線（墓碑十字）';return'十字線'}
+  if(lw>=body*2&&up<=body*.7)return'錘子線／吊人線';
+  if(up>=body*2&&lw<=body*.7)return'倒錘線／流星線';
+  if(body>=range*.7)return c>o?'長紅K':'長綠K';
+  if(body<=range*.35)return'紡錘線';
+  return c>o?'一般紅K':'一般綠K';
+}
+WID.lab=function(el){
+  el.innerHTML=`<h4>K棒實驗室</h4><div class="rowflex" style="align-items:flex-start"><svg viewBox="0 0 170 220" style="width:170px;flex:none" class="kchart"></svg><div style="flex:1;min-width:220px"><div class="sl"><span>開盤</span><input type="range" min="0" max="100" value="30" data-k="o" aria-label="開盤價"><b class="num"></b></div><div class="sl"><span>最高</span><input type="range" min="0" max="100" value="90" data-k="h" aria-label="最高價"><b class="num"></b></div><div class="sl"><span>最低</span><input type="range" min="0" max="100" value="20" data-k="l" aria-label="最低價"><b class="num"></b></div><div class="sl"><span>收盤</span><input type="range" min="0" max="100" value="80" data-k="c" aria-label="收盤價"><b class="num"></b></div><div class="ctl" style="padding:6px 0"><button class="btn ghost" type="button" data-p="15,92,12,90">長紅</button><button class="btn ghost" type="button" data-p="50,80,20,50">十字</button><button class="btn ghost" type="button" data-p="72,78,15,76">長下影線</button><button class="btn ghost" type="button" data-p="25,88,22,30">長上影線</button></div></div></div><div class="readout" aria-live="polite"></div>`;
+  const inp={};$$('input',el).forEach(i=>inp[i.dataset.k]=i);const svg=$('svg',el),ro=$('.readout',el);
+  function upd(src){let o=+inp.o.value,h=+inp.h.value,l=+inp.l.value,c=+inp.c.value;
+    if(src==='h'){if(h<Math.max(o,c)){h=Math.max(o,c)}}else if(src==='l'){if(l>Math.min(o,c)){l=Math.min(o,c)}}else{h=Math.max(h,o,c);l=Math.min(l,o,c)}
+    inp.h.value=h;inp.l.value=l;$$('.sl b',el).forEach((b,j)=>b.textContent=[o,h,l,c][j]);
+    const Y=p=>10+(100-p)*2,col=c>o?UPC:c<o?DNC:FLC;
+    svg.innerHTML=`<rect x="0" y="0" width="170" height="220" rx="8" style="fill:var(--paper)"/><line x1="70" x2="70" y1="${Y(h)}" y2="${Y(l)}" style="stroke:${col}" stroke-width="3"/><rect x="50" y="${Math.min(Y(o),Y(c))}" width="40" height="${Math.max(2,Math.abs(Y(o)-Y(c)))}" style="fill:${col}"/><text x="98" y="${Y(h)+4}" class="ax">高${h}</text><text x="98" y="${Y(l)+4}" class="ax">低${l}</text><text x="98" y="${Y(Math.max(o,c))+14}" class="ax">${c>=o?'收':'開'}${Math.max(o,c)}</text><text x="98" y="${Y(Math.min(o,c))-4}" class="ax">${c>=o?'開':'收'}${Math.min(o,c)}</text>`;
+    const name=classify(o,h,l,c);ro.innerHTML=`這是一根 <b style="color:${col}">${name}</b>。實體 ${Math.abs(c-o)}、上影線 ${h-Math.max(o,c)}、下影線 ${Math.min(o,c)-l}。<br>${KINFO[name]||(c>o?'收盤高於開盤，買方小勝。':'收盤低於開盤，賣方小勝。')}`;}
+  $$('input',el).forEach(i=>i.oninput=()=>upd(i.dataset.k));
+  $$('[data-p]',el).forEach(b=>b.onclick=()=>{const[o,h,l,c]=b.dataset.p.split(',');inp.o.value=o;inp.h.value=h;inp.l.value=l;inp.c.value=c;upd()});
+  upd();
+};
+WID.merge=function(el){
+  const D=[[50,53,49,52],[52,55,51,54],[54,54.5,50,51],[51,56,50.5,55.5],[55.5,57,54,56],[56,56.5,52,53],[53,54,51,51.5],[51.5,52,48,49],[49,51,47.5,50.5],[50.5,52.5,49.5,52]].map(([o,h,l,c])=>({o,h,l,c}));
+  const WK=[0,1].map(w=>{const s=D.slice(w*5,w*5+5);return{o:s[0].o,c:s[4].c,h:Math.max(...s.map(k=>k.h)),l:Math.min(...s.map(k=>k.l)),hi:w*5+s.findIndex(k=>k.h===Math.max(...s.map(z=>z.h))),li:w*5+s.findIndex(k=>k.l===Math.min(...s.map(z=>z.l)))}});
+  el.innerHTML=`<h4>把日K合併成週K</h4><svg viewBox="0 0 600 250" class="kchart"></svg><div class="readout" aria-live="polite"></div><div class="ctl" style="padding:6px 0 0"><button class="btn" type="button" data-a="n">下一步</button><button class="btn ghost" type="button" data-a="r">重來</button></div>`;
+  const svg=$('svg',el),ro=$('.readout',el);let st=0;
+  const Y=p=>20+(58-p)/(58-46.5)*190,X=i=>30+i*33,WX=w=>455+w*80,days='一二三四五';
+  const cd=(x,k,bw)=>{const c=colOf(k);return`<line x1="${x}" x2="${x}" y1="${Y(k.h)}" y2="${Y(k.l)}" style="stroke:${c}" stroke-width="1.6"/><rect x="${x-bw/2}" y="${Math.min(Y(k.o),Y(k.c))}" width="${bw}" height="${Math.max(2,Math.abs(Y(k.o)-Y(k.c)))}" style="fill:${c}"/>`};
+  const msgs=w=>[`第${w+1}週的<b>開盤價</b>＝週一的開盤價 <b>${WK[w].o}</b>。`,`第${w+1}週的<b>最高價</b>＝這5天裡最高的最高價 <b>${WK[w].h}</b>（週${days[WK[w].hi-w*5]}）。`,`第${w+1}週的<b>最低價</b>＝這5天裡最低的最低價 <b>${WK[w].l}</b>（週${days[WK[w].li-w*5]}）。`,`第${w+1}週的<b>收盤價</b>＝週五的收盤價 <b>${WK[w].c}</b>。`,`四個價格都找到了，畫出第${w+1}根週K：${WK[w].c>WK[w].o?'<b class="up">紅K</b>':'<b class="dn">綠K</b>'}。這週雖然有紅有綠，合起來只是一根簡單的K棒。`];
+  function draw(){
+    let s=`<rect x="12" y="8" width="167" height="222" style="fill:var(--acc2)" rx="6" opacity=".7"/><rect x="177" y="8" width="167" height="222" style="fill:var(--grid)" rx="6" opacity=".7"/><text x="95" y="244" text-anchor="middle" class="lbl" style="fill:var(--muted)">第1週（日K）</text><text x="260" y="244" text-anchor="middle" class="lbl" style="fill:var(--muted)">第2週（日K）</text><line x1="400" x2="400" y1="10" y2="230" style="stroke:var(--line)"/><text x="495" y="244" text-anchor="middle" class="lbl" style="fill:var(--muted)">週K</text>`;
+    D.forEach((k,i)=>{s+=cd(X(i),k,18)+`<text x="${X(i)}" y="226" text-anchor="middle" class="ax">${days[i%5]}</text>`});
+    for(let w=0;w<2;w++){const done=st-w*5;if(done<=0)continue;const K=WK[w],mk=(i,p,t,c)=>`<circle cx="${X(i)}" cy="${Y(p)}" r="6" fill="none" style="stroke:${c}" stroke-width="2.5"/><line x1="${X(i)+8}" x2="${WX(w)-20}" y1="${Y(p)}" y2="${Y(p)}" style="stroke:${c}" stroke-dasharray="3 3" opacity=".8"/><text x="${WX(w)+22}" y="${Y(p)+4}" class="ax">${t}${p}</text>`;
+      if(done>=1)s+=mk(w*5,K.o,'開','var(--acc)');if(done>=2)s+=mk(K.hi,K.h,'高','var(--up)');if(done>=3)s+=mk(K.li,K.l,'低','var(--dn)');if(done>=4)s+=mk(w*5+4,K.c,'收','var(--ink)');if(done>=5)s+=cd(WX(w),K,34)+`<text x="${WX(w)}" y="226" text-anchor="middle" class="ax">第${w+1}週</text>`;}
+    svg.innerHTML=s;ro.innerHTML=st===0?'左邊是兩週共 10 根日K。按「下一步」，一步一步把每週 5 根日K合併成 1 根週K。':st===10?msgs(1)[4]+'<br><b>完成！</b>比較左右兩邊：週K更簡潔，一眼就看出「第1週漲、第2週跌」。':msgs(Math.floor((st-1)/5))[(st-1)%5];
+    $('[data-a="n"]',el).disabled=st>=10;}
+  el.addEventListener('click',e=>{const a=e.target.dataset.a;if(a==='n'&&st<10){st++;draw()}if(a==='r'){st=0;draw()}});draw();
+};
+WID.macalc=function(el){
+  const C=[20,21,23,22,24,26,25,27,29,28,30,31];const D=C.map((c,i)=>{const o=i?C[i-1]:19.5;return{o,c,h:Math.max(o,c)+.6,l:Math.min(o,c)-.6}});
+  el.innerHTML=`<h4>動手算 5日均線</h4><svg viewBox="0 0 600 230" class="kchart"></svg><div class="readout" aria-live="polite"></div><div class="ctl" style="padding:6px 0 0"><button class="btn" type="button" data-a="n">下一天</button><button class="btn ghost" type="button" data-a="p">自動播放</button><button class="btn ghost" type="button" data-a="r">重來</button></div>`;
+  const svg=$('svg',el),ro=$('.readout',el);let k=3,timer;
+  const Y=p=>15+(33-p)/(33-18)*180,X=i=>30+i*46;
+  function draw(){let s='';if(k>=4)s+=`<rect x="${X(k-4)-20}" y="8" width="${X(k)-X(k-4)+40}" height="195" rx="6" style="fill:var(--hl)" opacity=".55"/>`;
+    D.forEach((d,i)=>{const c=colOf(d);s+=`<line x1="${X(i)}" x2="${X(i)}" y1="${Y(d.h)}" y2="${Y(d.l)}" style="stroke:${c}" stroke-width="1.5"/><rect x="${X(i)-9}" y="${Math.min(Y(d.o),Y(d.c))}" width="18" height="${Math.max(2,Math.abs(Y(d.o)-Y(d.c)))}" style="fill:${c}"/><text x="${X(i)}" y="222" text-anchor="middle" class="ax">${d.c}</text>`});
+    const ma=C.map((_,i)=>i<4||i>k?null:C.slice(i-4,i+1).reduce((a,b)=>a+b)/5);s+=polyl(ma,X,Y,'#F39C12',2.5);ma.forEach((v,i)=>{if(v!=null)s+=`<circle cx="${X(i)}" cy="${Y(v)}" r="4" style="fill:#F39C12"/>`});
+    svg.innerHTML=s;
+    if(k<4){ro.innerHTML='下方數字是每天的收盤價。前 4 天還湊不滿 5 天，所以沒有 5日均線。按「下一天」開始計算。';}
+    else{const w=C.slice(k-4,k+1),v=w.reduce((a,b)=>a+b)/5;ro.innerHTML=`第 ${k+1} 天的 5日均線＝(${w.join('＋')}) ÷ 5 ＝ ${w.reduce((a,b)=>a+b)} ÷ 5 ＝ <b style="color:#F39C12">${f1(v)}</b><br>黃色框就是「移動」的窗口：每過一天，丟掉最舊的一天、加入最新的一天。`;}
+    $('[data-a="n"]',el).disabled=k>=11;}
+  el.addEventListener('click',e=>{const a=e.target.dataset.a;if(a==='n'&&k<11){k++;draw()}if(a==='r'){clearInterval(timer);k=3;draw()}if(a==='p'){clearInterval(timer);k=3;draw();timer=setInterval(()=>{k++;draw();if(k>=11)clearInterval(timer)},RM?10:900)}});draw();
+};
+WID.granville=function(el){
+  const G=[['買1','均線走平翻揚，股價向上突破',[[0,15],[50,35],[100,31]],[[0,25],[30,48],[55,50],[75,34],[100,16]],[82,29],1],
+    ['買2','均線上揚，股價短暫跌破又站回',[[0,50],[100,20]],[[0,40],[30,25],[55,45],[65,42],[80,25],[100,10]],[57,45],1],
+    ['買3','股價回檔到均線附近不破',[[0,50],[100,20]],[[0,35],[30,20],[55,33],[75,18],[100,5]],[55,33],1],
+    ['買4','股價跌離均線太遠，乖離大',[[0,10],[100,30]],[[0,15],[40,30],[65,55],[80,45],[100,40]],[65,55],1],
+    ['賣1','均線走平下彎，股價向下跌破',[[0,45],[50,25],[100,29]],[[0,35],[30,12],[55,10],[75,26],[100,44]],[82,31],0],
+    ['賣2','均線下彎，股價短暫站上又跌破',[[0,10],[100,40]],[[0,20],[30,35],[55,15],[65,18],[80,35],[100,50]],[57,15],0],
+    ['賣3','股價反彈到均線附近過不去',[[0,10],[100,40]],[[0,25],[30,40],[55,27],[75,42],[100,55]],[55,27],0],
+    ['賣4','股價漲離均線太遠，乖離大',[[0,50],[100,30]],[[0,45],[35,30],[60,5],[80,15],[100,20]],[60,5],0]];
+  el.innerHTML=`<h4>葛蘭碧八大法則示意圖</h4><p style="font-size:14px;color:var(--muted);margin:0 0 6px">紫線＝均線，黑線＝股價，圓圈＝訊號點</p><div class="gallery" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))">${G.map(([t,dsc,ma,p,[mx,my],b])=>`<div class="g"><svg viewBox="-4 -4 108 68" width="100%" height="80">${`<polyline points="${ma.map(q=>q.join(',')).join(' ')}" fill="none" style="stroke:#9B59B6" stroke-width="2.5"/><polyline points="${p.map(q=>q.join(',')).join(' ')}" fill="none" style="stroke:var(--ink)" stroke-width="1.8" stroke-linejoin="round"/><circle cx="${mx}" cy="${my}" r="5" fill="none" style="stroke:${b?UPC:DNC}" stroke-width="2.5"/>`}</svg><b class="${b?'up':'dn'}">${t}</b>${dsc}</div>`).join('')}</div>`;
+};
+WID.quote=function(el){
+  const PC=58,T=.1;let r=rng(77),price=58.3,open=58.3,hi=58.3,lo=58.3,tot=1260,last=12,amt=58.3*1260,inV=560,outV=700,line=[58.3],book=[];
+  const rb=()=>Math.round(20+r()*180);const mkBook=()=>{book={a:[1,2,3,4,5].map(k=>[+(price+T*k).toFixed(1),rb()]),b:[0,1,2,3,4].map(k=>[+(price-T*k).toFixed(1),rb()])}};mkBook();
+  el.innerHTML=`<h4>模擬報價畫面　（代號 9999　範例股份）</h4><div class="rowflex" style="align-items:flex-start"><div style="flex:1;min-width:200px"><div class="big num" data-q="p"></div><div class="num" data-q="ch" style="font-weight:700"></div><div class="tw"><table class="quote num"><tbody data-q="info"></tbody></table></div></div><div style="flex:1;min-width:230px"><div class="tw"><table class="quote num"><thead><tr><th>委買量</th><th>委買價</th><th>委賣價</th><th>委賣量</th></tr></thead><tbody data-q="book"></tbody></table></div><div data-q="io" style="font-size:14px"></div></div></div><svg viewBox="0 0 700 150" class="kchart" data-q="svg"></svg><div class="ctl" style="padding:4px 0 0"><button class="btn ghost" type="button" data-a="t">⏸ 暫停</button></div>`;
+  const q=k=>$(`[data-q="${k}"]`,el);let on=true;
+  function tick(){if(!el.offsetParent||!on)return;const buy=r()<.55+(price<PC?.08:-.03);const qty=Math.max(1,Math.round(r()*r()*40));if(buy){price=book.a[0][0];outV+=qty}else{price=book.b[0][0];inV+=qty}
+    price=Math.max(PC*.9,Math.min(PC*1.1,price));last=qty;tot+=qty;amt+=price*qty;hi=Math.max(hi,price);lo=Math.min(lo,price);line.push(price);if(line.length>80)line.shift();mkBook();show(buy);}
+  function show(buy){const ch=price-PC,c=ch>0?'var(--up)':ch<0?'var(--dn)':'var(--ink)';q('p').innerHTML=`<span style="color:${c}">${price.toFixed(2)}</span>`;q('ch').innerHTML=`<span style="color:${c}">${ch>0?'▲':ch<0?'▼':''} ${Math.abs(ch).toFixed(2)}　(${(ch/PC*100).toFixed(2)}%)</span>`;
+    q('info').innerHTML=`<tr><td>開盤</td><td>${open.toFixed(2)}</td><td>昨收</td><td>${PC.toFixed(2)}</td></tr><tr><td>最高</td><td class="up">${hi.toFixed(2)}</td><td>最低</td><td class="dn">${lo.toFixed(2)}</td></tr><tr><td>總量</td><td>${tot.toLocaleString()}</td><td>單量</td><td>${last}${buy===undefined?'':buy?' <span class="up">外</span>':' <span class="dn">內</span>'}</td></tr><tr><td>均價</td><td>${(amt/tot).toFixed(2)}</td><td>漲停</td><td class="up">${(PC*1.1).toFixed(1)}</td></tr>`;
+    q('book').innerHTML=[0,1,2,3,4].map(i=>`<tr><td>${book.b[i][1]}</td><td class="${book.b[i][0]>PC?'up':book.b[i][0]<PC?'dn':''}">${book.b[i][0].toFixed(1)}</td><td class="${book.a[i][0]>PC?'up':book.a[i][0]<PC?'dn':''}">${book.a[i][0].toFixed(1)}</td><td>${book.a[i][1]}</td></tr>`).join('');
+    const op=outV/(inV+outV)*100;q('io').innerHTML=`內盤 <b class="dn">${inV}</b>　外盤 <b class="up">${outV}</b><div style="display:flex;height:10px;border-radius:5px;overflow:hidden;margin-top:4px"><span style="width:${100-op}%;background:var(--dn)"></span><span style="width:${op}%;background:var(--up)"></span></div>`;
+    const lo2=PC*.985,hi2=PC*1.015,Y=p=>10+(hi2-p)/(hi2-lo2)*118,X=i=>4+i*(636/79);q('svg').innerHTML=`<line x1="4" x2="644" y1="${Y(PC)}" y2="${Y(PC)}" style="stroke:var(--muted)" stroke-dasharray="4 3"/><text x="650" y="${Y(PC)+4}" class="ax">昨收</text>`+polyl(line,X,Y,'var(--acc)',1.8)+`<text x="6" y="146" class="ax">分時走勢（模擬）</text>`;}
+  show();setInterval(tick,RM?2500:900);
+  $('[data-a="t"]',el).onclick=e=>{on=!on;e.target.textContent=on?'⏸ 暫停':'▶ 繼續'};
+};
+WID.risk=function(el){
+  el.innerHTML=`<h4>部位大小計算機</h4><div class="rowflex" style="gap:10px">${[['cap','總資金（元）',100000],['pct','每筆最多賠（%）',1],['en','進場價',50],['sl','停損價',46],['tg','目標價',62]].map(([k,t,v])=>`<label style="flex:1;min-width:130px;font-size:14px">${t}<br><input type="number" data-k="${k}" value="${v}" step="any" style="width:100%;font:inherit;padding:6px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink)"></label>`).join('')}</div><div class="readout box" aria-live="polite" style="margin-bottom:0"></div>`;
+  const g=k=>+$(`[data-k="${k}"]`,el).value;
+  function upd(){const cap=g('cap'),pct=g('pct'),en=g('en'),sl=g('sl'),tg=g('tg'),ro=$('.readout',el);
+    if(!(cap>0&&pct>0&&en>0&&sl>0)){ro.textContent='請輸入大於 0 的數字。';return}if(sl>=en){ro.innerHTML='停損價要<b>低於</b>進場價（這裡計算的是做多買進）。';return}
+    const risk=cap*pct/100,per=en-sl,sh=Math.floor(risk/per),need=sh*en,rr=tg>en?(tg-en)/per:null;
+    ro.innerHTML=`最多願意賠：${cap.toLocaleString()} × ${pct}% ＝ <b>${Math.round(risk).toLocaleString()} 元</b><br>每股風險：${en} − ${sl} ＝ <b>${f1(per)} 元</b><br>最多可買：${Math.round(risk).toLocaleString()} ÷ ${f1(per)} ＝ <b class="up">${sh.toLocaleString()} 股</b>（約 ${(sh/1000).toFixed(2)} 張${sh<1000?'，要用零股買':''}）<br>需要資金：約 ${Math.round(need).toLocaleString()} 元${need>cap?' <b class="dn">（超過總資金，要減少股數）</b>':''}${rr!=null?`<br>風報比：可能賺 ${f1(tg-en)} ÷ 可能賠 ${f1(per)} ＝ <b>1 : ${rr.toFixed(1)}</b>${rr<1.5?'　<span class="dn">（小於 1:1.5，很多交易者會放棄這筆）</span>':''}`:''}`;}
+  $$('input',el).forEach(i=>i.oninput=upd);upd();
+};
+WID.guess=function(el){
+  const S=[
+   {t:'情境一',gen:{seed:51,pts:[[0,60],[12,48],[18,54],[26,48.5],[32,55],[34,57.5],[44,66]],noise:.009,vm:[[10,12,1.8],[24,26,.5],[32,34,2.5]]},vol:true,hideFrom:35,ans:'up',ex:'兩個低點差不多高、第二個低點量縮，接著帶量突破中間的高點（頸線）→ W底完成，後面上漲。'},
+   {t:'情境二',gen:{seed:52,pts:[[0,50],[10,62],[15,56],[23,70],[29,56],[36,62],[41,56],[42,54.5],[52,44]],noise:.009,vm:[[5,10,1.8],[20,23,1.3],[33,36,.6],[42,42,2]]},vol:true,hideFrom:43,ans:'down',ex:'左肩、頭、右肩成形，右肩量縮，最後一根帶量跌破頸線 → 頭肩頂完成，後面下跌。'},
+   {t:'情境三',gen:{seed:53,pts:[[0,40],[25,60],[30,65.5],[31,66],[42,54]],noise:.01,inject:[{i:31,k:[2,6,0,.3]}],vm:[[18,30,.7],[31,31,3.8]]},vol:true,hideFrom:32,ans:'down',ex:'漲了一大段、量越來越小（量價背離），最後出現爆量的流星線（長上影線）→ 高檔出貨訊號，後面下跌。'},
+   {t:'情境四',warm:20,ma:[20],gen:{seed:54,pts:[[0,34],[20,40],[40,52],[47,48.5],[60,58]],noise:.01,inject:[{i:47,k:[-.3,.4,-4,.2]},{i:48,k:[.3,3,.1,2.6]}]},hideFrom:29,ans:'up',ex:'上升趨勢中回檔到月線（20日均線）附近，出現錘子線，隔天紅K確認 → 回檔結束，繼續上漲（葛蘭碧買3）。'}];
+  let cur=0;
+  el.innerHTML=`<div class="ctl" style="padding:0 0 6px">${S.map((s,i)=>`<button class="btn ghost" type="button" data-s="${i}">${s.t}</button>`).join('')}</div><div class="chart" style="margin:0"><div class="ktip"></div><div class="svgbox"></div></div><div class="ctl" style="padding:8px 0 0"><button class="btn" type="button" data-g="up" style="background:var(--up);border-color:var(--up)">我看漲 ▲</button><button class="btn" type="button" data-g="down" style="background:var(--dn);border-color:var(--dn)">我看跌 ▼</button></div><div class="readout" aria-live="polite" style="margin-top:8px"></div>`;
+  const box=$('.svgbox',el),ro=$('.readout',el);
+  function load(i,reveal){cur=i;const s=S[i];const c=Object.assign({},s);if(reveal)delete c.hideFrom;const p=chartSVG(c,build(s.gen),!!reveal);box.innerHTML=p.s;META.set($('svg',box),p.meta);attachTip(box,$('.ktip',el));
+    $$('[data-s]',el).forEach((b,j)=>{b.style.background=j===i?'var(--acc2)':''});if(!reveal)ro.textContent='看完圖後，選擇你的判斷。';$$('[data-g]',el).forEach(b=>b.disabled=!!reveal);}
+  el.addEventListener('click',e=>{const t=e.target;if(t.dataset.s)load(+t.dataset.s);if(t.dataset.g){const s=S[cur],ok=t.dataset.g===s.ans;load(cur,true);ro.innerHTML=`${ok?'<b class="up">判斷正確！</b>':'<b class="dn">這次判斷錯了。</b>'}結果是${s.ans==='up'?'<span class="up">上漲</span>':'<span class="dn">下跌</span>'}。<br>${s.ex}`;}});
+  load(0);
+};
+
+/* ========== 測驗 ========== */
+function initQuiz(q){
+  const a=+q.dataset.a;$$('li',q).forEach((li,i)=>{const b=document.createElement('button');b.type='button';b.innerHTML=li.innerHTML;li.innerHTML='';li.appendChild(b);
+    b.onclick=()=>{if(q.classList.contains('answered'))return;q.classList.add('answered');const btns=$$('li button',q);btns[a-1].classList.add('right');if(i!==a-1)b.classList.add('wrong');
+      const ex=$('.ex',q);ex.innerHTML=(i===a-1?'<b class="up">答對了！</b> ':'<b class="dn">再想想。</b> ')+ex.innerHTML;q.dataset.ok=i===a-1?1:0;if(q.classList.contains('exam'))examScore();};});
+}
+function examScore(){const qs=$$('.quiz.exam'),done=qs.filter(q=>q.classList.contains('answered')),ok=done.filter(q=>q.dataset.ok==='1').length;const box=$('#examScore');box.innerHTML=`目前得分：<b class="num">${ok}</b> / 10（已作答 <span class="num">${done.length}</span> 題）`;
+  if(done.length===qs.length){const m=$('#examDone');m.style.display='block';m.innerHTML=ok>=9?`太厲害了！${ok} 分，你已經掌握了K線與技術分析的完整觀念。接下來請用模擬交易練習，並持續寫交易日誌。`:ok>=7?`很不錯！${ok} 分。把答錯的題目對應的課程再看一次，就更完整了。`:`${ok} 分。沒關係，技術分析需要時間消化。建議從答錯的題目回頭複習相關課程，再來挑戰一次（重新整理頁面即可重答）。`;}}
+
+/* ========== 導覽 ========== */
+const lessons=$$('.lesson'),ids=lessons.map(s=>s.id);
+let done=new Set();try{done=new Set(JSON.parse(store('kline-done')||'[]'))}catch(e){}
+function saveDone(){store('kline-done',JSON.stringify([...done]))}
+function buildToc(){let h='',u='';lessons.forEach(s=>{if(s.dataset.unit!==u){u=s.dataset.unit;h+=`<h4>${u}</h4>`}const n=s.id==='L0'?'導覽':s.id==='L26'?'附錄':s.id.slice(1);h+=`<a href="#${s.id}" data-id="${s.id}"><span class="n">${n}</span><span>${s.dataset.t}</span></a>`});$('#toc').innerHTML=h;}
+function prog(){const n=ids.length;$('#progBar').style.width=done.size/n*100+'%';$('#progTxt').textContent=`已完成 ${done.size} / ${n}`;$$('#toc a').forEach(a=>a.classList.toggle('done',done.has(a.dataset.id)));}
+function addPager(s,i){const p=document.createElement('div');p.className='pager';const pv=lessons[i-1],nx=lessons[i+1];
+  p.innerHTML=(pv?`<button type="button" data-go="${pv.id}"><small>← 上一課</small>${pv.dataset.t}</button>`:'<span></span>')+`<button type="button" class="next" data-done="${s.id}" data-go="${nx?nx.id:''}"><small>${nx?'完成本課，前往下一課 →':'全部完成'}</small>${nx?nx.dataset.t:'恭喜你完成整份課程！'}</button>`;
+  s.appendChild(p);p.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.done){done.add(b.dataset.done);saveDone();prog();}if(b.dataset.go)location.hash=b.dataset.go;else if(b.dataset.done)b.querySelector('small').textContent='已全部完成 ✓';});}
+function initLesson(s){if(s._init)return;s._init=true;$$('.chart[data-c]',s).forEach(c=>renderChart(c,true));$$('[data-w]',s).forEach(w=>{if(WID[w.dataset.w]&&!w._w){w._w=1;WID[w.dataset.w](w)}});}
+function show(id){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=id;if(!ids.includes(id))id='L0';lessons.forEach(s=>s.classList.toggle('show',s.id===id));const s=$('#'+id);initLesson(s);$$('#toc a').forEach(a=>a.classList.toggle('on',a.dataset.id===id));$('#toc').classList.remove('open');window.scrollTo(0,0);store('kline-last',id);const a=$(`#toc a[data-id="${id}"]`);if(a&&a.scrollIntoView)a.scrollIntoView({block:'nearest'});}
+buildToc();lessons.forEach(addPager);$$('.mc').forEach(miniCandles);$$('.quiz').forEach(initQuiz);prog();
+window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
+$('#menuBtn').onclick=()=>$('#toc').classList.toggle('open');
+$('#themeBtn').onclick=()=>{const cur=document.documentElement.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');const n=cur==='dark'?'light':'dark';document.documentElement.dataset.theme=n;store('kline-theme',n);$$('.lesson.show .chart[data-c]').forEach(c=>renderChart(c,false));};
+const th=store('kline-theme');if(th)document.documentElement.dataset.theme=th;
+show(location.hash.slice(1)||store('kline-last')||'L0');
+
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-7eb7c4d052" data-category="business"></script></body>
+</html>

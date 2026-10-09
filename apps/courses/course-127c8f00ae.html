@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>用 Claude 把成衣廠搬上網｜VRT 線上化與自動化課程</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F7F3; --grid:rgba(40,70,110,.06); --grid-strong:rgba(40,70,110,.11);
+  --ink:#1D2C47; --ink-2:#4B5B75; --thread:#27457A; --thread-2:#8CA3CC;
+  --chalk:#C2412D; --tailor:#C99315; --tailor-bg:#FBF3DC; --seam:#2D7657; --seam-bg:#E4F1EA;
+  --surface:#FFFFFF; --surface-2:#ECF0EA; --rule:#CAD3CB;
+  --code-bg:#1B263A; --code-fg:#E3EAF5; --code-key:#F2C75C; --code-str:#8FD6A8; --code-com:#8C9BB5;
+  --r-s:4px; --r-m:10px;
+  --shadow:0 1px 0 rgba(29,44,71,.06),0 8px 20px -14px rgba(29,44,71,.35);
+  --f-head:'LXGW WenKai TC','Kaiti TC','BiauKai','DFKai-SB','STKaiti',serif;
+  --f-body:'Noto Sans TC','PingFang TC','Microsoft JhengHei','Heiti TC',system-ui,sans-serif;
+  --f-code:ui-monospace,'Cascadia Code','SF Mono',Consolas,'Courier New',monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#111A28; --grid:rgba(150,180,230,.045); --grid-strong:rgba(150,180,230,.085);
+    --ink:#E3E9F3; --ink-2:#A7B3C8; --thread:#9DB8EC; --thread-2:#4F6795;
+    --chalk:#F08A70; --tailor:#F0C552; --tailor-bg:#2A2515; --seam:#63C495; --seam-bg:#16302A;
+    --surface:#172234; --surface-2:#1C293D; --rule:#2B3A52;
+    --code-bg:#0B1220; --shadow:0 1px 0 rgba(0,0,0,.3),0 10px 24px -16px rgba(0,0,0,.8);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111A28; --grid:rgba(150,180,230,.045); --grid-strong:rgba(150,180,230,.085);
+  --ink:#E3E9F3; --ink-2:#A7B3C8; --thread:#9DB8EC; --thread-2:#4F6795;
+  --chalk:#F08A70; --tailor:#F0C552; --tailor-bg:#2A2515; --seam:#63C495; --seam-bg:#16302A;
+  --surface:#172234; --surface-2:#1C293D; --rule:#2B3A52;
+  --code-bg:#0B1220; --shadow:0 1px 0 rgba(0,0,0,.3),0 10px 24px -16px rgba(0,0,0,.8);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px);-webkit-text-size-adjust:100%}
+html,body{height:100%}
+body{margin:0;font-family:var(--f-body);font-size:17px;line-height:1.8;color:var(--ink);
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px),
+    linear-gradient(var(--grid-strong) 1px,transparent 1px),linear-gradient(90deg,var(--grid-strong) 1px,transparent 1px);
+  background-size:20px 20px,20px 20px,100px 100px,100px 100px;}
+img,svg{max-width:100%}
+a{color:var(--thread)}
+:focus-visible{outline:3px solid var(--tailor);outline-offset:2px;border-radius:3px}
+h1,h2,h3,h4{font-family:var(--f-head);font-weight:700;line-height:1.35;margin:0}
+p{margin:.7em 0}
+code{font-family:var(--f-code);font-size:.88em;background:var(--surface-2);padding:.08em .35em;border-radius:3px}
+strong{font-weight:700}
+button{font:inherit;color:inherit}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1.5px solid var(--rule);border-radius:var(--r-s);padding:.35em .55em;max-width:100%}
+
+/* ---------- app shell ---------- */
+.app{display:grid;grid-template-columns:292px minmax(0,1fr);min-height:100%}
+.side{position:sticky;top:0;height:100vh;height:100dvh;overflow:auto;border-right:1.5px solid var(--rule);
+  background:color-mix(in srgb,var(--paper) 88%,var(--surface));padding:1.4rem 1.1rem 2rem}
+.brand{display:block;text-decoration:none;color:var(--ink);margin-bottom:1rem}
+.brand b{font-family:var(--f-head);font-size:1.35rem;display:block;line-height:1.3}
+.brand span{font-size:.82rem;color:var(--ink-2)}
+.progress{margin:.6rem 0 1.2rem;font-size:.85rem;color:var(--ink-2)}
+.progress .bar{height:6px;margin-top:.35rem;background:repeating-linear-gradient(90deg,var(--thread-2) 0 8px,transparent 8px 13px);border-radius:3px;position:relative;overflow:hidden}
+.progress .bar i{position:absolute;inset:0 auto 0 0;background:var(--thread);width:0;transition:width .5s}
+.navlv{font-family:var(--f-head);font-size:1rem;margin:1.1rem 0 .3rem;color:var(--ink)}
+.navlv small{display:block;font-family:var(--f-body);font-size:.75rem;color:var(--ink-2);font-weight:400}
+.navlist{list-style:none;margin:0;padding:0}
+.navlist li{position:relative}
+.navlist li:not(:last-child)::after{content:"";position:absolute;left:10px;top:24px;bottom:-8px;border-left:2px dashed var(--thread-2)}
+.navlist li.done:not(:last-child)::after{border-left-style:solid;border-left-color:var(--thread)}
+.navlist a{display:flex;gap:.6rem;align-items:flex-start;padding:.3rem .4rem .3rem 0;text-decoration:none;color:var(--ink-2);font-size:.92rem;line-height:1.5;border-radius:var(--r-s)}
+.navlist a:hover{color:var(--ink)}
+.navlist a[aria-current="page"]{color:var(--ink);font-weight:700;background:var(--surface-2)}
+.knot{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--thread-2);background:var(--paper);display:grid;place-items:center;font-size:.68rem;margin-top:.05rem;position:relative;z-index:1}
+li.done .knot{background:var(--thread);border-color:var(--thread);color:var(--paper)}
+.side .extra a{display:block;padding:.35rem 0;color:var(--ink);text-decoration:none;font-size:.92rem}
+.side .extra{border-top:1.5px dashed var(--rule);margin-top:1.2rem;padding-top:.8rem}
+.topbar{display:none}
+.main{min-width:0;padding:2rem clamp(1rem,4vw,3.2rem) 5rem}
+.page{max-width:47rem}
+.page[hidden]{display:none}
+
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .side{position:fixed;top:0;left:0;bottom:0;width:min(86vw,320px);z-index:60;transform:translateX(-105%);transition:transform .25s;box-shadow:var(--shadow);padding-top:calc(env(safe-area-inset-top,0px) + 1.2rem)}
+  .side.open{transform:none}
+  .scrim{position:fixed;inset:0;background:rgba(10,15,25,.4);z-index:55;display:none}
+  .scrim.show{display:block}
+  .topbar{display:flex;position:sticky;top:0;z-index:40;align-items:center;gap:.6rem;padding:.55rem .9rem;padding-top:calc(env(safe-area-inset-top,0px) + .55rem);
+    background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1.5px solid var(--rule)}
+  .topbar b{font-family:var(--f-head);font-size:1.05rem;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .main{padding-top:1.2rem}
+  body{font-size:16px}
+}
+.iconbtn{border:1.5px solid var(--rule);background:var(--surface);border-radius:var(--r-s);padding:.3rem .6rem;cursor:pointer;line-height:1.4}
+.themebtn{margin-top:1rem}
+
+/* ---------- lesson typography ---------- */
+.lhead{margin-bottom:1.6rem;padding-bottom:1rem;border-bottom:2px dashed var(--rule)}
+.lhead .op{font-size:.9rem;color:var(--ink-2)}
+.lhead .op b{color:var(--thread)}
+.lhead h2{font-size:clamp(1.8rem,5vw,2.5rem);margin:.25rem 0 .4rem}
+.lhead .goal{font-size:1.02rem;color:var(--ink-2);margin:0}
+.page h3{font-size:1.45rem;margin:2.2rem 0 .6rem;display:flex;gap:.5rem;align-items:baseline}
+.page h3::before{content:"";flex:none;width:.9rem;height:2px;background:var(--thread);transform:translateY(-.35em)}
+.page h4{font-size:1.12rem;margin:1.2rem 0 .3rem}
+.page ul,.page ol{padding-left:1.4rem;margin:.6rem 0}
+.page li{margin:.3rem 0}
+
+/* hang tag label */
+.tag{display:inline-flex;align-items:center;gap:.45rem;font-size:.8rem;font-weight:700;padding:.12rem .7rem .12rem .5rem;border-radius:3px 12px 12px 3px;background:var(--ink);color:var(--paper);margin-bottom:.35rem;letter-spacing:.02em}
+.tag::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--paper);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.box{position:relative;margin:1.3rem 0;padding:1rem 1.15rem;border-radius:var(--r-m);background:var(--surface);box-shadow:var(--shadow)}
+.box > p:first-of-type{margin-top:.2rem}
+.box > :last-child{margin-bottom:0}
+.box.analogy{background:var(--seam-bg);box-shadow:none}
+.box.analogy .tag{background:var(--seam)}
+.box.vrt{border-left:5px solid var(--thread);border-radius:3px var(--r-m) var(--r-m) 3px}
+.box.vrt .tag{background:var(--thread)}
+.box.story{background:var(--tailor-bg);box-shadow:none;outline:1.5px dashed var(--tailor);outline-offset:-7px}
+.box.story .tag{background:var(--tailor);color:#1D2C47}
+.box.warn{border-left:5px solid var(--chalk);border-radius:3px var(--r-m) var(--r-m) 3px}
+.box.warn .tag{background:var(--chalk)}
+.box.try{border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.recap{margin:2rem 0 1rem;padding:1rem 1.15rem;border-top:3px double var(--rule);border-bottom:3px double var(--rule)}
+.recap h4{margin-top:0}
+.recap ol{margin-bottom:0}
+
+/* tables */
+.tbl{overflow-x:auto;margin:1rem 0;border-radius:var(--r-s);background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.93rem;line-height:1.55}
+th,td{padding:.5rem .65rem;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}
+th{background:var(--surface-2);font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+
+/* code */
+.codewrap{position:relative;margin:1rem 0}
+pre.code{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--f-code);font-size:.84rem;line-height:1.65;padding:1rem 1.1rem;border-radius:var(--r-m);overflow-x:auto;white-space:pre}
+pre.code.wrap{white-space:pre-wrap;word-break:break-word}
+pre.code .k{color:var(--code-key)} pre.code .s{color:var(--code-str)} pre.code .c{color:var(--code-com);font-style:italic}
+.copy{position:absolute;top:.45rem;right:.45rem;font-size:.75rem;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#E3EAF5;border-radius:4px;padding:.15rem .55rem;cursor:pointer}
+.copy:hover{background:rgba(255,255,255,.18)}
+
+/* term chips */
+button.term{border:0;background:none;padding:0;color:var(--thread);font-weight:700;border-bottom:1.5px dotted var(--thread);cursor:help;line-height:1.2}
+dialog.termdlg{border:0;border-radius:var(--r-m);padding:0;max-width:min(92vw,30rem);background:var(--surface);color:var(--ink);box-shadow:0 20px 50px -20px rgba(0,0,0,.6)}
+dialog.termdlg::backdrop{background:rgba(10,15,25,.45)}
+.termdlg .in{padding:1.2rem 1.3rem}
+.termdlg h4{font-size:1.4rem;margin-bottom:.2rem}
+.termdlg .zh{color:var(--ink-2);font-size:.9rem}
+.termdlg .origin{margin-top:.8rem;padding:.7rem .85rem;background:var(--tailor-bg);border-radius:var(--r-s);font-size:.93rem}
+.termdlg .origin b{display:block;font-size:.8rem;color:var(--ink-2)}
+.termdlg .close{margin-top:1rem}
+
+/* quiz */
+.quiz{margin:1.6rem 0;padding:1rem 1.15rem;border-radius:var(--r-m);background:var(--surface);border:2px dashed var(--thread-2)}
+.quiz .q{font-weight:700;margin:.1rem 0 .7rem}
+.quiz .opts{display:grid;gap:.5rem}
+.quiz .opts button{text-align:left;padding:.55rem .8rem;border-radius:var(--r-s);border:1.5px solid var(--rule);background:var(--paper);cursor:pointer;line-height:1.5}
+.quiz .opts button:hover{border-color:var(--thread)}
+.quiz .opts button.right{border-color:var(--seam);background:var(--seam-bg)}
+.quiz .opts button.wrong{border-color:var(--chalk);text-decoration:line-through;opacity:.75}
+.quiz .explain{margin-top:.8rem;font-size:.95rem;padding:.6rem .8rem;border-radius:var(--r-s);background:var(--surface-2)}
+.quiz .explain[hidden]{display:none}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:.4rem;border:2px solid var(--ink);background:var(--ink);color:var(--paper);padding:.5rem 1.05rem;border-radius:var(--r-s);cursor:pointer;font-weight:700;text-decoration:none;line-height:1.4}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.sm{padding:.25rem .7rem;font-size:.88rem;border-width:1.5px}
+.btn:active{transform:translateY(1px)}
+.pager{display:flex;flex-wrap:wrap;gap:.7rem;justify-content:space-between;align-items:center;margin-top:2.6rem;padding-top:1.2rem;border-top:2px dashed var(--rule)}
+.pager .donebtn[aria-pressed="true"]{background:var(--seam);border-color:var(--seam)}
+
+/* demos */
+.demo{margin:1.3rem 0;padding:1rem 1.15rem;border-radius:var(--r-m);background:var(--surface);border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.demo .dh{display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem}
+.demo .dh b{font-family:var(--f-head);font-size:1.1rem}
+.row{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin:.7rem 0;min-height:2.2rem}
+.chips span{padding:.1rem .4rem;border-radius:4px;font-size:.95rem;border:1px solid rgba(0,0,0,.08)}
+.chips span:nth-child(4n+1){background:#DCE7F7}.chips span:nth-child(4n+2){background:#F7E6C4}
+.chips span:nth-child(4n+3){background:#D9EFE2}.chips span:nth-child(4n+4){background:#F4D9D3}
+:root[data-theme="dark"] .chips span,.dark-auto .chips span{color:#1D2C47}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .chips span{color:#1D2C47}}
+.log{font-family:var(--f-code);font-size:.8rem;background:var(--code-bg);color:var(--code-fg);border-radius:var(--r-s);padding:.6rem .8rem;min-height:4.5rem;margin-top:.6rem;white-space:pre-wrap;line-height:1.6}
+.flowlane{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center;margin:.4rem 0 1rem}
+.flowlane .st{padding:.35rem .65rem;border-radius:var(--r-s);background:var(--surface-2);font-size:.9rem;line-height:1.4}
+.flowlane .ar{color:var(--ink-2)}
+.flowlane .time{margin-left:auto;font-weight:700;font-size:.9rem}
+.stairs{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;align-items:end;margin:1rem 0}
+.stairs div{background:var(--surface);box-shadow:var(--shadow);border-radius:var(--r-s);padding:.7rem;font-size:.9rem;line-height:1.5;border-top:5px solid var(--thread)}
+.stairs div:nth-child(1){min-height:7rem;border-top-color:var(--thread-2)}
+.stairs div:nth-child(2){min-height:9.5rem}
+.stairs div:nth-child(3){min-height:12rem;border-top-color:var(--seam)}
+.stairs b{font-family:var(--f-head);font-size:1.1rem;display:block}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin:1rem 0}
+.card{background:var(--surface);box-shadow:var(--shadow);border-radius:var(--r-m);padding:.9rem 1rem;font-size:.94rem;line-height:1.6}
+.card b{font-family:var(--f-head);font-size:1.12rem;display:block;margin-bottom:.2rem}
+.card .meta{color:var(--ink-2);font-size:.84rem}
+.hl{background:var(--tailor-bg);outline:1.5px solid var(--tailor);border-radius:3px}
+.bad{color:var(--chalk);font-weight:700}
+.good{color:var(--seam);font-weight:700}
+.strike td{text-decoration:line-through;opacity:.55}
+
+/* layers demo */
+.ly-card.styled{background:linear-gradient(160deg,var(--surface-2),var(--surface));border-radius:12px;padding:1rem;border:1.5px solid var(--rule)}
+.ly-card.styled h5{font-family:var(--f-head);font-size:1.2rem;margin:0 0 .6rem}
+.ly-card.styled label{display:flex;justify-content:space-between;align-items:center;gap:.6rem;margin:.4rem 0;font-size:.95rem}
+.ly-card.styled input{width:7rem;text-align:right}
+.ly-card.styled button{margin-top:.5rem;background:var(--seam);color:#fff;border:0;border-radius:999px;padding:.45rem 1.1rem;font-weight:700;cursor:pointer}
+.ly-card.styled p{font-size:1.1rem;font-weight:700;margin:.6rem 0 0}
+.ly-card:not(.styled),.ly-card:not(.styled) *{all:revert}
+.ly-card:not(.styled){display:block;padding:.4rem;color:CanvasText;background:Canvas;font-family:serif}
+
+/* agent ring */
+.ring{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin:.8rem 0}
+.ring div{border:2px solid var(--rule);border-radius:var(--r-m);padding:.6rem .75rem;font-size:.9rem;line-height:1.5;transition:border-color .25s,background .25s}
+.ring div b{font-family:var(--f-head);font-size:1.1rem;display:block}
+.ring div.on{border-color:var(--thread);background:var(--surface-2)}
+
+/* chat sim */
+.chat{background:var(--surface-2);border-radius:var(--r-m);padding:.8rem;min-height:10rem;display:flex;flex-direction:column;gap:.5rem;max-height:26rem;overflow:auto}
+.bub{max-width:88%;padding:.5rem .75rem;border-radius:12px;font-size:.9rem;line-height:1.55;background:var(--surface);box-shadow:var(--shadow)}
+.bub small{display:block;font-size:.75rem;color:var(--ink-2);font-weight:700}
+.bub.bot{align-self:flex-start;border-left:4px solid var(--thread)}
+.bub.me{align-self:flex-end;background:var(--seam-bg)}
+.bub .kb{display:flex;gap:.4rem;margin-top:.4rem}
+.bub .kb span{border:1.5px solid var(--thread);border-radius:6px;padding:.05rem .6rem;font-size:.82rem;color:var(--thread);font-weight:700}
+
+/* timeline */
+.tline{display:flex;gap:0;align-items:center;margin:.8rem 0;overflow-x:auto;padding-bottom:.3rem}
+.tline button{flex:none;border:2px solid var(--thread);background:var(--paper);color:var(--thread);border-radius:50%;width:3.2rem;height:3.2rem;font-weight:700;cursor:pointer}
+.tline button[aria-pressed="true"]{background:var(--thread);color:var(--paper)}
+.tline i{flex:1 0 1.5rem;height:0;border-top:3px solid var(--thread)}
+.checklist label{display:flex;gap:.6rem;align-items:flex-start;padding:.45rem 0;border-bottom:1px dashed var(--rule);cursor:pointer}
+.checklist input{margin-top:.4rem;flex:none;width:1.1rem;height:1.1rem;accent-color:var(--seam)}
+
+/* hero */
+.hero h1{font-size:clamp(2.2rem,8vw,3.6rem);line-height:1.2;margin:.4rem 0 .5rem}
+.hero .sub{font-size:1.08rem;color:var(--ink-2);max-width:34rem}
+.stitch{display:block;height:10px;margin:.2rem 0 1rem;width:min(100%,24rem)}
+.stitch line{stroke:var(--chalk);stroke-width:3;stroke-dasharray:10 7;stroke-linecap:round}
+.herofig{margin:1.4rem 0 .4rem;background:var(--surface);border-radius:var(--r-m);box-shadow:var(--shadow);padding:.6rem}
+.herofig svg{display:block;width:100%;height:auto}
+.herofig text{font-family:var(--f-body);fill:var(--ink)}
+.herofig .muted{fill:var(--ink-2)}
+.herocap{display:flex;justify-content:space-between;align-items:center;gap:.6rem;font-size:.85rem;color:var(--ink-2);flex-wrap:wrap}
+.play .h-paper{animation:fadeIn .6s both}
+.play .h-write{stroke-dasharray:80;stroke-dashoffset:80;animation:draw .5s forwards}
+.play .h-write.w2{animation-delay:.5s}.play .h-write.w3{animation-delay:.9s}.play .h-write.w4{animation-delay:1.3s}
+.play .h-dot1{animation:move1 1s 1.9s both}
+.play .h-cell{opacity:0;animation:fadeIn .3s forwards}
+.play .c1{animation-delay:2.9s}.play .c2{animation-delay:3.15s}.play .c3{animation-delay:3.4s}.play .c4{animation-delay:3.65s}
+.play .h-dot2{animation:move2 1s 4s both}
+.play .h-bub{opacity:0;transform-box:fill-box;transform-origin:left bottom;animation:pop .45s 5.05s forwards}
+.play .h-lbl{opacity:0;animation:fadeIn .4s forwards}
+.play .l1{animation-delay:.2s}.play .l2{animation-delay:2.8s}.play .l3{animation-delay:5s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes move1{0%{opacity:0;transform:translateX(0)}10%{opacity:1}90%{opacity:1}100%{opacity:0;transform:translateX(52px)}}
+@keyframes move2{0%{opacity:0;transform:translateX(0)}10%{opacity:1}90%{opacity:1}100%{opacity:0;transform:translateX(52px)}}
+@keyframes pop{0%{opacity:0;transform:scale(.6)}70%{opacity:1;transform:scale(1.05)}100%{opacity:1;transform:scale(1)}}
+.h-dot1,.h-dot2{opacity:0}
+
+.levels{list-style:none;padding:0;margin:1rem 0;counter-reset:lv}
+.levels li{position:relative;padding:0 0 1.3rem 3.2rem}
+.levels li::before{counter-increment:lv;content:counter(lv);position:absolute;left:0;top:0;width:2.3rem;height:2.3rem;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-family:var(--f-head);font-size:1.15rem}
+.levels li:not(:last-child)::after{content:"";position:absolute;left:1.1rem;top:2.5rem;bottom:.2rem;border-left:2px dashed var(--thread-2)}
+.levels b{font-family:var(--f-head);font-size:1.2rem}
+.levels span{display:block;color:var(--ink-2);font-size:.93rem}
+
+.gloss-search{width:100%;padding:.6rem .8rem;margin:.6rem 0 1rem}
+.gitem{padding:.9rem 0;border-bottom:1px dashed var(--rule)}
+.gitem h4{margin:0;font-size:1.2rem}
+.gitem .zh{color:var(--ink-2);font-size:.88rem}
+.gitem p{margin:.3rem 0}
+.gitem .o{font-size:.93rem;background:var(--tailor-bg);padding:.45rem .7rem;border-radius:var(--r-s)}
+.cert{text-align:center;padding:1.6rem 1.2rem;border:3px double var(--ink);border-radius:var(--r-m);background:var(--surface);outline:1.5px dashed var(--tailor);outline-offset:-12px;margin:1.2rem 0}
+.cert h4{font-size:1.8rem}
+.cert .name{font-family:var(--f-head);font-size:2rem;color:var(--thread);margin:.4rem 0}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}
+}
+@media print{
+  .side,.topbar,.pager,.copy,.scrim{display:none!important}
+  .app{display:block} .page[hidden]{display:block!important}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <button class="iconbtn" id="menuBtn" type="button" aria-controls="side" aria-expanded="false">目錄</button>
+  <b id="topTitle">用 Claude 把成衣廠搬上網</b>
+</div>
+<div class="scrim" id="scrim"></div>
+<div class="app">
+<nav class="side" id="side" aria-label="課程目錄">
+  <a class="brand" href="#home"><b>用 Claude 把成衣廠搬上網</b><span>VRT 線上化與自動化課程</span></a>
+  <div class="progress"><span id="progText">已完成 0 課</span><div class="bar"><i id="progBar"></i></div></div>
+  <div id="navTree"></div>
+  <div class="extra">
+    <a href="#glossary">名詞辭典（附由來）</a>
+    <a href="#home">回到課程首頁</a>
+    <button class="iconbtn themebtn" id="themeBtn" type="button">切換深色／淺色</button>
+  </div>
+</nav>
+<main class="main" id="main">
+
+<!-- ======================= HOME ======================= -->
+<section class="page hero" id="home" data-title="課程首頁">
+  <p class="lhead op" style="border:0;margin:0;padding:0;color:var(--ink-2)">給不會寫程式、但想讓工廠變聰明的人</p>
+  <h1>用 Claude<br>把成衣廠搬上網</h1>
+  <svg class="stitch" viewBox="0 0 384 10" preserveAspectRatio="none" aria-hidden="true"><line x1="4" y1="5" x2="380" y2="5"/></svg>
+  <p class="sub">從「AI 是什麼」開始，一路學到自己做出產量登記頁、接上雲端、讓 Telegram 機器人自動通知，最後讓 Claude 當你的 24 小時助理。全部用 VRT 的真實工作當例子，國中生也看得懂。</p>
+
+  <figure class="herofig" id="heroFig">
+    <svg viewBox="0 0 480 230" role="img" aria-label="動畫：紙本日報變成雲端資料，再變成手機通知">
+      <!-- station 1 paper -->
+      <g class="h-paper">
+        <rect x="18" y="34" width="112" height="150" rx="6" fill="var(--surface-2)" stroke="var(--ink)" stroke-width="2"/>
+        <rect x="52" y="26" width="44" height="14" rx="3" fill="var(--ink)"/>
+        <text x="74" y="62" text-anchor="middle" font-size="14" font-weight="700">車縫日報</text>
+        <line class="h-write" x1="32" y1="84" x2="116" y2="84" stroke="var(--ink-2)" stroke-width="2"/>
+        <line class="h-write w2" x1="32" y1="106" x2="116" y2="106" stroke="var(--ink-2)" stroke-width="2"/>
+        <line class="h-write w3" x1="32" y1="128" x2="100" y2="128" stroke="var(--ink-2)" stroke-width="2"/>
+        <line class="h-write w4" x1="32" y1="150" x2="110" y2="150" stroke="var(--chalk)" stroke-width="3"/>
+        <text x="32" y="80" font-size="11" class="muted">Line 3</text>
+        <text x="116" y="146" font-size="11" text-anchor="end" fill="var(--chalk)">1240 件</text>
+      </g>
+      <line x1="136" y1="109" x2="186" y2="109" stroke="var(--thread-2)" stroke-width="2" stroke-dasharray="5 4"/>
+      <circle class="h-dot1" cx="136" cy="109" r="6" fill="var(--chalk)"/>
+      <!-- station 2 sheet -->
+      <g>
+        <rect x="192" y="40" width="100" height="138" rx="6" fill="var(--surface)" stroke="var(--ink)" stroke-width="2"/>
+        <rect x="192" y="40" width="100" height="22" rx="6" fill="var(--seam)"/>
+        <text x="242" y="56" text-anchor="middle" font-size="12" fill="#fff" style="fill:#fff" font-weight="700">雲端試算表</text>
+        <g stroke="var(--rule)" stroke-width="1"><line x1="192" y1="86" x2="292" y2="86"/><line x1="192" y1="110" x2="292" y2="110"/><line x1="192" y1="134" x2="292" y2="134"/><line x1="192" y1="158" x2="292" y2="158"/><line x1="232" y1="62" x2="232" y2="178"/></g>
+        <rect class="h-cell c1" x="196" y="66" width="32" height="16" rx="2" fill="#DCE7F7"/>
+        <rect class="h-cell c2" x="236" y="66" width="52" height="16" rx="2" fill="#DCE7F7"/>
+        <rect class="h-cell c3" x="196" y="138" width="32" height="16" rx="2" fill="#F7E6C4"/>
+        <rect class="h-cell c4" x="236" y="138" width="52" height="16" rx="2" fill="#F7E6C4"/>
+      </g>
+      <line x1="298" y1="109" x2="348" y2="109" stroke="var(--thread-2)" stroke-width="2" stroke-dasharray="5 4"/>
+      <circle class="h-dot2" cx="298" cy="109" r="6" fill="var(--chalk)"/>
+      <!-- station 3 phone -->
+      <g>
+        <rect x="354" y="18" width="104" height="180" rx="16" fill="var(--surface)" stroke="var(--ink)" stroke-width="2"/>
+        <rect x="390" y="26" width="32" height="5" rx="2.5" fill="var(--ink-2)"/>
+        <g class="h-bub">
+          <rect x="362" y="66" width="88" height="70" rx="10" fill="var(--seam-bg)" stroke="var(--seam)" stroke-width="1.5"/>
+          <text x="370" y="84" font-size="10" font-weight="700" fill="var(--seam)" style="fill:var(--seam)">VRT 機器人</text>
+          <text x="370" y="102" font-size="11.5">Line 3 今日</text>
+          <text x="370" y="120" font-size="12.5" font-weight="700">1,240 件 ✓</text>
+        </g>
+      </g>
+      <text class="h-lbl l1" x="74" y="210" text-anchor="middle" font-size="13" font-weight="700">① 現場記錄</text>
+      <text class="h-lbl l2" x="242" y="210" text-anchor="middle" font-size="13" font-weight="700">② 變成資料</text>
+      <text class="h-lbl l3" x="406" y="216" text-anchor="middle" font-size="13" font-weight="700">③ 自動通知</text>
+    </svg>
+    <figcaption class="herocap"><span>這整門課，就是在學怎麼讓這三步自己發生。</span><button class="btn ghost sm" id="replay" type="button">重播動畫</button></figcaption>
+  </figure>
+
+  <h3>五個階段，像員工升職一樣</h3>
+  <ol class="levels">
+    <li><b>學徒：認識 AI</b><span>AI 和 Claude 是什麼、怎麼跟它說話、它有哪些工具。</span></li>
+    <li><b>車工：做出第一個工具</b><span>為什麼要線上化、資料怎麼整理、網頁怎麼組成，親手做出「車縫日產量登記頁」。</span></li>
+    <li><b>組長：接上雲端與機器人</b><span>資料存哪裡、Google Apps Script、Telegram 機器人審核、用 GitHub 發布上線。</span></li>
+    <li><b>技術員：做對、做穩</b><span>工廠數字的正確算法（加權效率）、常見錯誤和除錯方法。</span></li>
+    <li><b>廠長：系統思維與自動化</b><span>讓 Claude 當代理人自動做事、Factory OS 架構、安全與交接，最後完成畢業專題。</span></li>
+  </ol>
+
+  <div class="box analogy">
+    <span class="tag">怎麼用這份教材</span>
+    <p>一次讀一課，大約 15～25 分鐘。每課都有：<strong>生活比喻</strong>（先懂概念）、<strong>VRT 現場</strong>（看真的怎麼用）、<strong>名詞由來</strong>（知道這個字從哪來，就不會忘）、<strong>動手試試</strong>（可以點、可以玩）、<strong>小測驗</strong>。看到<button class="term" type="button" data-t="API">藍色虛線字</button>可以點開看解釋。讀完按「我學會了」，左邊的縫線就會縫實一段。</p>
+  </div>
+  <p><a class="btn" href="#l1">開始第一課</a> <a class="btn ghost" href="#glossary">先看名詞辭典</a></p>
+</section>
+<!-- ======================= L1 ======================= -->
+<section class="page lesson" id="l1" data-level="1" data-title="AI 是什麼？Claude 是誰？">
+<header class="lhead"><div class="op">工序 <b>01</b>｜學徒</div><h2>AI 是什麼？Claude 是誰？</h2><p class="goal">這課學完，你能用一句話跟同事解釋 Claude，並知道它擅長什麼、哪裡要小心。</p></header>
+
+<div class="box analogy"><span class="tag">生活比喻</span>
+<p>想像工廠來了一位<strong>新同事</strong>：他讀過全世界數不清的書、會中文、英文、高棉文，會寫文章、算數、寫程式，而且 24 小時不用休息。</p>
+<p>但是——他<strong>從來沒進過 VRT 的廠房</strong>。他不知道你們有幾條線、款號怎麼編、組長叫什麼名字。你不告訴他，他就只能猜。<strong>Claude 就是這樣的新同事。</strong></p></div>
+
+<h3>AI 到底是怎麼「想」的？</h3>
+<p><button class="term" type="button" data-t="AI">AI</button> 是「人工智慧」。Claude 屬於其中一種，叫做<button class="term" type="button" data-t="LLM">大型語言模型（LLM）</button>。它的核心本事其實很像一個遊戲：<strong>猜下一個字</strong>。</p>
+<p>你說「今天車縫三線的產量……」，它讀過太多類似的句子，所以知道後面很可能接「是 1,240 件」「比昨天高」這類的字。它一個字一個字地猜，猜得非常準，準到看起來像在思考。</p>
+<p>AI 讀文字時，不是一個字一個字讀，而是切成小塊，叫做 <button class="term" type="button" data-t="Token">Token</button>。試試看：</p>
+
+<div class="demo"><div class="dh"><b>動手試試：Token 切字機（示意）</b></div>
+<input id="tokIn" type="text" value="Line 3 今天做了 1240 件 T-shirt，效率 82%" style="width:100%" aria-label="輸入一句話">
+<div class="chips" id="tokOut"></div>
+<div style="font-size:.9rem;color:var(--ink-2)">大約 <b id="tokN">0</b> 個 Token。真正的切法更複雜，這裡只是讓你看個概念：中文常常一兩個字一塊，英文長單字會被切成幾段。Token 也是 AI 計算「用了多少量」的單位。</div>
+</div>
+
+<h3>Claude 擅長什麼？哪裡要小心？</h3>
+<div class="tbl"><table>
+<tr><th>擅長（放心交給它）</th><th>要小心（你一定要檢查）</th></tr>
+<tr><td>寫公告、Email、報告初稿</td><td>數字計算：它可能算錯，要抽查</td></tr>
+<tr><td>中英高棉三語翻譯</td><td>會「一本正經地胡說八道」，叫做<button class="term" type="button" data-t="Hallucination">幻覺</button></td></tr>
+<tr><td>整理 Excel、找出異常</td><td>它不知道 VRT 內部資料，除非你給它</td></tr>
+<tr><td>寫網頁程式、做小工具</td><td>法規（例如柬埔寨勞工法）要再查證</td></tr>
+<tr><td>解釋看不懂的東西</td><td>跟錢、人事有關的決定，最後要人拍板</td></tr>
+</table></div>
+
+<div class="box vrt"><span class="tag">VRT 現場</span>
+<p>VRT 約 512 位員工、11～12 條車縫線。過去每天的車縫日報、裁剪報表、採購申請、請假單都靠紙本和 Excel 傳來傳去。現在這些事情大部分都能請 Claude 幫忙：做成網頁表單、自動加總、自動翻成高棉文、自動發 Telegram 通知。<strong>做這些系統的人不需要會寫程式</strong>——只要會把事情講清楚。這就是這門課要教你的。</p></div>
+
+<h3>Claude 有大、中、小三種腦袋</h3>
+<p>Claude 有不同型號，常見的名字是 Opus、Sonnet、Haiku。越大的越聰明、越適合難題；越小的越快、適合簡單大量的工作。型號會隨時間更新，但這三個名字的由來很有趣：</p>
+<div class="grid2">
+<div class="card"><b>Opus（大）</b>拉丁文「作品」，音樂家的大型作品編號就叫 Opus。適合：設計整個系統、分析複雜報表。</div>
+<div class="card"><b>Sonnet（中）</b>十四行詩，莎士比亞寫過很多。適合：日常大多數工作。</div>
+<div class="card"><b>Haiku（小）</b>日本俳句，只有短短 17 個音。適合：快速分類、簡短回覆。</div>
+</div>
+<p>三個名字都是「詩和作品的長度」——從長篇巨作到短短一句，剛好對應模型的大小。</p>
+
+<div class="box story"><span class="tag">名詞由來</span>
+<p><strong>AI（人工智慧）</strong>：1956 年，一群科學家在美國達特茅斯學院開會，約翰‧麥卡錫提出了 artificial intelligence 這個詞。artificial 來自拉丁文「技藝 + 做出來」，意思是「人做出來的」。</p>
+<p><strong>Anthropic</strong>：做出 Claude 的公司。名字來自希臘文 anthropos「人」，意思是「跟人類有關的」——這家公司強調 AI 要對人類安全、有益。</p>
+<p><strong>Claude</strong>：一般認為是向「資訊理論之父」克勞德‧夏農（Claude Shannon）致敬，他在 1948 年證明了所有資訊都能變成 0 和 1。</p></div>
+
+<div class="recap"><h4>重點回顧</h4><ol>
+<li>Claude 像一位很聰明、但沒來過你工廠的新同事。</li>
+<li>它的原理是「猜下一個字」，文字會被切成 Token。</li>
+<li>文字工作放心交給它；數字、法規、錢和人的決定，一定要人檢查。</li></ol></div>
+
+<div class="quiz" data-answer="b"><p class="q">小測驗：Claude 算出「本週全廠效率 97%」，但你覺得太高了。最好的做法是？</p>
+<div class="opts"><button type="button" data-o="a">A. AI 很聰明，直接交給主管</button><button type="button" data-o="b">B. 請 Claude 列出計算過程，自己抽查幾條線的數字</button><button type="button" data-o="c">C. 以後都不要用 AI 算數字</button></div>
+<p class="explain" hidden>答案是 B。AI 可能算錯，但它非常擅長「把過程攤開」。請它一步步列出來，你抽查幾個，就能又快又準。完全不用（C）太可惜了。</p></div>
+</section>
+
+<!-- ======================= L2 ======================= -->
+<section class="page lesson" id="l2" data-level="1" data-title="提示詞：跟 Claude 說話的藝術">
+<header class="lhead"><div class="op">工序 <b>02</b>｜學徒</div><h2>提示詞：跟 Claude 說話的藝術</h2><p class="goal">學會寫出「一次就讓 Claude 聽懂」的指令，這是整門課最重要的基本功。</p></header>
+
+<div class="box analogy"><span class="tag">生活比喻</span>
+<p>去飲料店說「給我一杯飲料」，店員只能亂猜。說「<strong>大杯珍珠奶茶、半糖、少冰</strong>」，一次就拿到你要的。</p>
+<p>跟 Claude 說的話，叫做<button class="term" type="button" data-t="Prompt">提示詞（Prompt）</button>。說得越清楚，結果越好。</p></div>
+
+<h3>好提示詞的五個零件</h3>
+<p>把它想成一張<strong>生產工單</strong>：工單寫不清楚，產線一定做錯。</p>
+<div class="tbl"><table>
+<tr><th>零件</th><th>問自己</th><th>VRT 例子</th></tr>
+<tr><td><b>角色</b></td><td>它要扮演誰？</td><td>你是 VRT 成衣廠的人資助理</td></tr>
+<tr><td><b>任務</b></td><td>要做什麼？</td><td>寫一則全廠公告：本週六加班到 17:00</td></tr>
+<tr><td><b>背景</b></td><td>它需要知道什麼？</td><td>員工約 500 人，多數看高棉文</td></tr>
+<tr><td><b>格式</b></td><td>成品長什麼樣？</td><td>中英高棉三語，每種不超過 5 行</td></tr>
+<tr><td><b>限制</b></td><td>有什麼不要？</td><td>用詞簡單，不要提到沒確定的加班費金額</td></tr>
+</table></div>
+
+<div class="grid2">
+<div class="card"><b class="bad">不好的提示詞</b>「寫個加班通知」<div class="meta">結果：可能是英文、可能太長、可能亂寫加班費。</div></div>
+<div class="card"><b class="good">好的提示詞</b>「你是 VRT 人資助理。寫一則全廠公告：本週六加班到 17:00。讀者是約 500 位柬埔寨員工。請用中、英、高棉三語，每種不超過 5 行，用詞簡單。」<div class="meta">結果：一次就能貼到公告欄。</div></div>
+</div>
+
+<div class="demo"><div class="dh"><b>動手試試：提示詞組裝機</b><button class="btn sm" type="button" data-copy="pbOut">複製</button></div>
+<div class="grid2" style="margin:.3rem 0">
+<label>角色<br><select id="pbRole"><option>你是 VRT 成衣廠的人資助理</option><option>你是有 10 年經驗的成衣廠 IE 工程師</option><option>你是專門幫不會寫程式的人做網頁工具的工程師</option></select></label>
+<label>任務<br><select id="pbTask"><option>寫一則全廠公告：本週六加班到 17:00</option><option>分析我貼上的車縫日報，找出效率最低的三條線和可能原因</option><option>做一個 QC 不良品登記頁</option></select></label>
+<label>背景<br><select id="pbCtx"><option>員工約 500 人，多數是柬埔寨籍，看高棉文</option><option>共有 12 條車縫線，SMV 資料在附件</option><option>使用者是組長，用手機操作，不熟電腦</option></select></label>
+<label>格式<br><select id="pbFmt"><option>中文、英文、高棉文三語，每種不超過 5 行</option><option>先給表格，再用 3 句話總結</option><option>給我完整、可以直接存檔的單一 HTML 檔</option></select></label>
+<label>限制<br><select id="pbLim"><option>語氣親切，不要用艱深詞彙</option><option>數字不確定就標示出來，不要自己編</option><option>不要用任何需要付費或安裝的工具</option></select></label>
+</div>
+<pre class="code wrap" id="pbOut"></pre>
+</div>
+
+<h3>四個讓結果更好的小技巧</h3>
+<ol>
+<li><strong>給範例</strong>：貼一份舊的報表或公告，說「照這個格式」。範例勝過千言萬語。</li>
+<li><strong>請它先問你</strong>：加一句「資訊不夠就先問我」，它會回頭確認，而不是亂猜。</li>
+<li><strong>一次一件事</strong>：大工作拆成小步驟，一步做完、檢查、再下一步。</li>
+<li><strong>像打樣一樣修改</strong>：第一版不完美很正常。就像成衣打樣：打樣、看、修改、再打樣。直接說「第 2 段太長，改成 3 行」。</li>
+</ol>
+
+<div class="box story"><span class="tag">名詞由來</span>
+<p><strong>Prompt（提示）</strong>來自拉丁文 promptus「準備好、拿出來」。在劇場裡，躲在舞台邊小箱子裡、演員忘詞時小聲「提詞」的人，就叫 prompter（提詞人）。你寫提示詞，就是在當 Claude 的提詞人。</p>
+<p>還有一個跟成衣廠有關的秘密：英文 <strong>text（文字）</strong>和 <strong>textile（紡織品）</strong>來自同一個拉丁字 texere「編織」。古人覺得寫文章就像織布——字是線，文章是布。</p></div>
+
+<div class="recap"><h4>重點回顧</h4><ol>
+<li>提示詞 = 給 Claude 的工單：角色、任務、背景、格式、限制。</li>
+<li>給範例、請它先問、一次一件事。</li>
+<li>修改就像打樣，直接指出哪裡要改、改成怎樣。</li></ol></div>
+
+<div class="quiz" data-answer="c"><p class="q">小測驗：下面哪一句最像「好提示詞」？</p>
+<div class="opts"><button type="button" data-o="a">A. 幫我分析報表</button><button type="button" data-o="b">B. 幫我分析這份報表，要很專業</button><button type="button" data-o="c">C. 你是 IE 工程師。分析附件第 38 週車縫日報，找出效率最低的三條線，用表格列出原因，最後 3 句話總結</button></div>
+<p class="explain" hidden>C 有角色、任務、背景（第 38 週日報）、格式（表格 + 3 句總結）。「要很專業」聽起來有要求，其實 Claude 不知道你說的專業是什麼。</p></div>
+</section>
+
+<!-- ======================= L3 ======================= -->
+<section class="page lesson" id="l3" data-level="1" data-title="Claude 的工具箱">
+<header class="lhead"><div class="op">工序 <b>03</b>｜學徒</div><h2>Claude 的工具箱</h2><p class="goal">認識 Claude 的各種用法，知道什麼工作該用哪個工具。</p></header>
+
+<div class="box analogy"><span class="tag">生活比喻</span>
+<p>車縫部有平車、拷克車、雙針車、打結車……每台車做不同的事。Claude 也一樣，同一個腦袋，搭配不同「車台」就能做不同的工作。</p></div>
+
+<div class="tbl"><table>
+<tr><th>工具</th><th>像工廠裡的什麼</th><th>VRT 可以拿來做</th></tr>
+<tr><td><b>聊天</b></td><td>跟同事面對面討論</td><td>寫公告、翻譯、問問題</td></tr>
+<tr><td><b>專案 Projects</b></td><td>每個部門的文件櫃</td><td>把「VRT 規則、欄位定義、舊報表」放進去，每次聊天都自動帶著</td></tr>
+<tr><td><b><button class="term" type="button" data-t="Artifact">Artifact</button> 成品</b></td><td>做好的樣衣，可以直接拿去用</td><td>一個能打開、能點的網頁工具</td></tr>
+<tr><td><b>建立檔案</b></td><td>文員幫你打好 Word／Excel</td><td>週報 Word、產能 Excel、簡報 PPT</td></tr>
+<tr><td><b>連接器 Connectors</b></td><td>接上工廠的電話線</td><td>讀 Gmail、Google Drive、行事曆（透過 <button class="term" type="button" data-t="MCP">MCP</button>）</td></tr>
+<tr><td><b>Claude Code</b></td><td>專門寫程式的技術員</td><td>在電腦上直接建立、修改整個專案的程式檔案</td></tr>
+<tr><td><b>Cowork</b></td><td>能坐在你電腦前幫你做事的助理</td><td>整理資料夾、收 Telegram 檔案、匯入平台、寫報告草稿</td></tr>
+<tr><td><b>Claude in Chrome／Excel</b></td><td>派到特定工位的專員</td><td>在瀏覽器裡操作網站；在 Excel 裡直接寫公式、整理資料</td></tr>
+</table></div>
+
+<div class="box vrt"><span class="tag">VRT 現場</span>
+<p>一個好習慣：<strong>每個系統開一個專案</strong>，例如「VRT 生產平台」「行政中心 HRA」。專案說明裡寫清楚：資料欄位、計算規則、三語要求、「只收完整檔案」等規矩。這樣以後每次開新對話，Claude 都已經「上過新人訓練」了，不用每次重講。</p></div>
+
+<h3>要怎麼選？</h3>
+<ul>
+<li>只是要<strong>一段文字</strong> → 聊天就好。</li>
+<li>要一個<strong>能用的小工具或網頁</strong> → 請它做成 Artifact 或 HTML 檔。</li>
+<li>要<strong>正式文件</strong>寄給台北 → 請它建立 Word 或 PPT 檔。</li>
+<li>要它<strong>每天自己做重複的事</strong> → Cowork 這類代理人（第 14 課詳細教）。</li>
+</ul>
+
+<div class="box warn"><span class="tag">小心</span>
+<p>AI 產品更新很快，按鈕位置和功能名稱可能會變。遇到找不到的功能，直接問 Claude，或查官方說明 support.claude.com。</p></div>
+
+<div class="box story"><span class="tag">名詞由來</span>
+<p><strong>Artifact</strong>：拉丁文 arte（用技藝）+ factum（做成的）＝「人用手藝做出來的東西」。考古學家挖到的陶罐就叫 artifact。在 Claude 裡，指它幫你做出來的成品。</p>
+<p><strong>MCP</strong>：Model Context Protocol，2024 年底由 Anthropic 公開的標準，常被比喻成「AI 的 USB-C 萬用插頭」——不同的服務只要做一個插頭，AI 就都能接上。Protocol 原本是希臘文「黏在卷軸第一頁的說明」，後來變成外交禮儀，再變成電腦之間的溝通規則。</p></div>
+
+<div class="recap"><h4>重點回顧</h4><ol>
+<li>同一個 Claude，搭配不同工具做不同的事。</li>
+<li>每個系統開一個專案，把規則寫進去。</li>
+<li>文字用聊天、工具做 Artifact、正式文件用檔案、重複工作交給代理人。</li></ol></div>
+
+<div class="quiz" data-answer="a"><p class="q">小測驗：你希望每次問 Claude 生產問題時，它都自動知道「VRT 有 12 條線、效率怎麼算」。應該用？</p>
+<div class="opts"><button type="button" data-o="a">A. 專案，把規則寫在專案說明裡</button><button type="button" data-o="b">B. 每次聊天都重新打一遍</button><button type="button" data-o="c">C. 做成 PPT</button></div>
+<p class="explain" hidden>A。專案就像部門文件櫃，放一次、一直有效。</p></div>
+</section>
+
+<!-- ======================= L4 ======================= -->
+<section class="page lesson" id="l4" data-level="2" data-title="為什麼要線上化？">
+<header class="lhead"><div class="op">工序 <b>04</b>｜車工</div><h2>為什麼要線上化？</h2><p class="goal">看懂「紙本流程」和「線上流程」差在哪，分清楚數位化、線上化、自動化。</p></header>
+
+<div class="box analogy"><span class="tag">生活比喻</span>
+<p>上課傳紙條：寫好、傳給隔壁、再傳、再傳……傳到最後一排可能已經下課了，中間還可能被偷看、弄丟、寫錯。換成班級群組：一發出去，全班同時看到。</p></div>
+
+<h3>一份車縫日報的旅程</h3>
+<div class="box vrt"><span class="tag">VRT 現場</span>
+<p><strong>紙本流程</strong></p>
+<div class="flowlane"><span class="st">組長手寫</span><span class="ar">›</span><span class="st">交給文員</span><span class="ar">›</span><span class="st">打進 Excel</span><span class="ar">›</span><span class="st">寄 Email</span><span class="ar">›</span><span class="st">主管下載、手動加總</span><span class="time bad">隔天才知道</span></div>
+<p><strong>線上流程</strong></p>
+<div class="flowlane"><span class="st">組長用手機輸入</span><span class="ar">›</span><span class="st">自動存到雲端、自動加總</span><span class="ar">›</span><span class="st">機器人發 Telegram</span><span class="time good">幾秒鐘</span></div>
+<p>紙本流程每多一手，就多一次打錯、漏掉、延遲的機會。</p></div>
+
+<h3>三個台階：數位化、線上化、自動化</h3>
+<div class="stairs">
+<div><b>數位化</b>紙變檔案。例：把手寫日報打成 Excel。</div>
+<div><b>線上化</b>大家在網路上用同一份。例：組長手機填、主管同時看到。</div>
+<div><b><button class="term" type="button" data-t="Automation">自動化</button></b>機器自己跑。例：每天 17:00 自動彙整、自動發報告、異常自動警告。</div>
+</div>
+
+<h3>線上化的四個好處</h3>
+<ul>
+<li><strong>快</strong>：數字即時出現，早上就能發現昨天哪條線落後。</li>
+<li><strong>準</strong>：電腦加總不會按錯計算機；欄位可以設定「只能填數字」。</li>
+<li><strong>查得到</strong>：誰、什麼時候、改了什麼，都有紀錄。驗廠時很好用。</li>
+<li><strong>省</strong>：少印紙、少跑腿、文員可以做更有價值的事。</li>
+</ul>
+
+<div class="box warn"><span class="tag">小心</span>
+<p>有一句話要記住：<strong>把亂的流程數位化，只會得到更快的亂。</strong>動手做系統之前，先用紙筆把流程畫出來：誰填、誰看、誰核准、多久一次。流程順了，再請 Claude 做系統。</p></div>
+
+<div class="box story"><span class="tag">名詞由來</span>
+<p><strong>Automation（自動化）</strong>：1946 年，美國福特汽車的副總裁德爾瑪‧哈德讓這個詞流行起來，用來形容工廠裡零件自己在機器之間移動。字根是希臘文 automatos「自己動的」。</p></div>
+
+<div class="recap"><h4>重點回顧</h4><ol>
+<li>紙本流程手越多、錯越多、越慢。</li>
+<li>數位化 → 線上化 → 自動化，一步一步來。</li>
+<li>先理順流程，再做系統。</li></ol></div>
+
+<div class="quiz" data-answer="b"><p class="q">小測驗：「組長用手機填日報，主管在辦公室同時看到」屬於哪個台階？</p>
+<div class="opts"><button type="button" data-o="a">A. 數位化</button><button type="button" data-o="b">B. 線上化</button><button type="button" data-o="c">C. 自動化</button></div>
+<p class="explain" hidden>B。大家在網路上共用同一份資料就是線上化。如果系統每天 17:00 自己彙整、自己發報告，那才是自動化。</p></div>
+</section>
+
+<!-- ======================= L5 ======================= -->
+<section class="page lesson" id="l5" data-level="2" data-title="資料：表格就是工廠的記憶">
+<header class="lhead"><div class="op">工序 <b>05</b>｜車工</div><h2>資料：表格就是工廠的記憶</h2><p class="goal">看懂表格的「列」和「欄」，學會好資料的三條規則，親手清洗一份亂資料。</p></header>
+
+<div class="box analogy"><span class="tag">生活比喻</span>
+<p>班上的點名簿：<strong>一橫列是一個人</strong>，<strong>一直欄是一個項目</strong>（座號、姓名、出席）。工廠的每一種紀錄，都可以整理成這樣的表格。</p></div>
+
+<h3>車縫日報，變成表格長這樣</h3>
+<div class="tbl"><table>
+<tr><th>日期</th><th>線別</th><th>款號</th><th class="num">產量（件）</th><th class="num">人數</th><th class="num">工時</th></tr>
+<tr><td>2026-09-21</td><td>Line 3</td><td>VR2201</td><td class="num">1240</td><td class="num">38</td><td class="num">8</td></tr>
+<tr><td>2026-09-21</td><td>Line 5</td><td>VR2201</td><td class="num">980</td><td class="num">34</td><td class="num">8</td></tr>
+<tr><td>2026-09-21</td><td>Line 7</td><td>VR2305</td><td class="num">1105</td><td class="num">40</td><td class="num">8</td></tr>
+</table></div>
+<p>每一列是「某天某條線的一筆紀錄」，每一欄是一種資訊。這種表格叫<button class="term" type="button" data-t="Spreadsheet">試算表</button>，Excel 和 Google Sheets 都是。</p>
+
+<h3>好資料的三條規則</h3>
+<ol>
+<li><strong>一格只放一件事</strong>：不要在產量格寫「1240（有 20 件重工）」，重工另開一欄。</li>
+<li><strong>同一件事，同一種寫法</strong>：「L3」「line 3」「3線」電腦會以為是三條不同的線。VRT 的規定是一律寫成「Line 3」。</li>
+<li><strong>每筆要有身分證</strong>：像員工有工號一樣，每筆資料要有一個不會重複的編號，叫做「主鍵」。名字會重複，工號不會。</li>
+</ol>
+
+<div class="demo"><div class="dh"><b>動手試試：資料清洗機</b><button class="btn sm" type="button" id="cleanBtn">開始清洗</button></div>
+<p style="margin-top:0;font-size:.92rem">這是從不同組長收來的原始資料。看看哪裡亂，然後按「開始清洗」。</p>
+<div class="tbl" style="box-shadow:none;border:1px solid var(--rule)"><table id="cleanTbl"></table></div>
+<p id="cleanMsg" style="font-size:.92rem"></p>
+</div>
+
+<div class="box vrt"><span class="tag">VRT 現場</span>
+<p>VRT 平台裡真的有這幾條「清洗規則」：線別一律統一成「Line N」；表格最下面的「合計」列要排除（判斷方法：款號和客戶都是空白），不然總數會被算兩次。這些規則是踩過坑才寫下來的——你以後也會有自己的規則清單。</p></div>
+
+<div class="box story"><span class="tag">名詞由來</span>
+<p><strong>Spreadsheet（試算表）</strong>：以前會計師把帳目「攤開（spread）」在一張跨兩頁的大紙（sheet）上。1979 年出現第一套電子試算表 VisiCalc，讓很多公司第一次買電腦；Excel 在 1985 年問世。</p>
+<p><strong>Data（資料）</strong>：拉丁文 datum「被給予的東西」，複數是 data。資料就是「別人交給你的事實」。</p></div>
+
+<div class="recap"><h4>重點回顧</h4><ol>
+<li>列是一筆紀錄，欄是一種資訊。</li>
+<li>一格一事、寫法統一、每筆有唯一編號。</li>
+<li>合計列、重複資料要排除，不然數字會變成兩倍。</li></ol></div>
+
+<div class="quiz" data-answer="c"><p class="q">小測驗：為什麼把「合計」列一起加總，結果會錯？</p>
+<div class="opts"><button type="button" data-o="a">A. 合計列的字太多</button><button type="button" data-o="b">B. 電腦不會加法</button><button type="button" data-o="c">C. 合計已經是其他列加起來的數字，再加一次就變兩倍</button></div>
+<p class="explain" hidden>C。這是工廠報表最常見的錯誤之一，在清洗機裡你已經親眼看到了：4,185 會變成 8,370。</p></div>
+</section>
+<!-- ======================= L6 ======================= -->
+<section class="page lesson" id="l6" data-level="2" data-title="網頁三兄弟：HTML、CSS、JavaScript">
+<header class="lhead"><div class="op">工序 <b>06</b>｜車工</div><h2>網頁三兄弟：HTML、CSS、JavaScript</h2><p class="goal">不用會寫，但要看得懂：一個網頁由哪三種東西組成、各管什麼。</p></header>
+
+<div class="box analogy"><span class="tag">生活比喻：做一件衣服</span>
+<ul>
+<li><strong><button class="term" type="button" data-t="HTML">HTML</button> = 裁片</strong>：決定有哪些部分——前片、後片、袖子、領子。網頁上就是標題、輸入框、按鈕。</li>
+<li><strong><button class="term" type="button" data-t="CSS">CSS</button> = 布料和款式</strong>：什麼顏色、多寬、圓角還是方角。</li>
+<li><strong><button class="term" type="button" data-t="JavaScript">JavaScript</button> = 拉鍊和鈕扣</strong>：會動、有功能的部分。按下按鈕會計算、會存檔。</li>
+</ul></div>
+
+<div class="demo"><div class="dh"><b>動手試試：把三兄弟拆開看</b></div>
+<div class="row" style="margin-bottom:.7rem"><label><input type="checkbox" id="lyCss" checked> 有 CSS（外觀）</label><label><input type="checkbox" id="lyJs" checked> 有 JavaScript（功能）</label></div>
+<div class="ly-card styled" id="lyCard">
+<h5>Line 3 達成率計算</h5>
+<label>今日產量（件）<input id="lyQty" type="number" value="1240"></label>
+<label>今日目標（件）<input id="lyTgt" type="number" value="1200"></label>
+<button type="button" id="lyBtn">計算達成率</button>
+<p id="lyOut">按下按鈕看結果</p>
+</div>
+<p style="font-size:.9rem;color:var(--ink-2);margin-bottom:0">把 CSS 關掉：東西都還在，只是變醜。把 JavaScript 關掉：看起來一樣，但按鈕按了沒反應。</p>
+</div>
+
+<h4>三兄弟長什麼樣子（看一眼就好）</h4>
+<div class="codewrap"><pre class="code"><span class="c">&lt;!-- HTML：有什麼 --&gt;</span>
+&lt;button id=<span class="s">"calc"</span>&gt;計算達成率&lt;/button&gt;
+
+<span class="c">/* CSS：長怎樣 */</span>
+button { <span class="k">background</span>: green; <span class="k">border-radius</span>: 20px; }
+
+<span class="c">// JavaScript：會做什麼</span>
+calc.onclick = () =&gt; { out.textContent = qty / target * 100 + <span class="s">'%'</span>; }</pre></div>
+
+<h3>為什麼 VRT 的工具都做成「單一 HTML 檔」？</h3>
+<ul>
+<li><strong>不用安裝</strong>：任何電腦、手機的瀏覽器都能開。</li>
+<li><strong>雙擊就能用</strong>：存在桌面，點兩下就打開。</li>
+<li><strong>三兄弟住在同一個檔案裡</strong>：HTML、CSS、JavaScript 全部放一起，不會「少了一個檔案就壞掉」。</li>
+<li><strong>好交給 Claude 修改</strong>：把整個檔案丟給它，說哪裡要改，它給你新的完整檔案。</li>
+</ul>
+
+<div class="box story"><span class="tag">名詞由來</span>
+<p><strong>HTML</strong>（HyperText Markup Language，超文字標記語言）：1989 年英國科學家提姆‧柏納李在瑞士的研究機構 CERN 提出「全球資訊網」，1991 年第一個網站上線。<strong>Markup（標記）</strong>來自印刷業：編輯在稿紙上做記號，告訴排版工人「這裡用粗體、這裡是標題」。<strong>Hypertext</strong> 是「可以跳來跳去的文字」，也就是超連結。</p>
+<p><strong>CSS</strong>（Cascading Style Sheets）：1994 年由挪威人哈孔‧維姆‧萊提出。Cascade 是「瀑布」，樣式規則像瀑布一層層往下流，後面的可以蓋過前面的。</p>
+<p><strong>JavaScript</strong>：1995 年，布蘭登‧艾克只花了大約 10 天就做出雛形。原本叫 Mocha、又改成 LiveScript，後來為了搭當時很紅的 Java 語言的順風車才改名——其實它跟 Java 沒什麼關係，就像「鳳梨」和「梨子」一樣。</p></div>
+
+<div class="recap"><h4>重點回顧</h4><ol>
+<li>HTML 是結構（裁片）、CSS 是外觀（布料）、JavaScript 是功能（拉鍊鈕扣）。</li>
+<li>VRT 工具做成單一 HTML 檔：不用安裝、雙擊即用、好交給 Claude 改。</li>
+<li>你不用會寫，但要知道問題出在哪一層，才能跟 Claude 說清楚。</li></ol></div>
+
+<div class="quiz" data-answer="c"><p class="q">小測驗：按鈕顏色正常、位置正常，但按下去沒反應。問題最可能在哪一層？</p>
+<div class="opts"><button type="button" data-o="a">A. HTML</button><button type="button" data-o="b">B. CSS</button><button type="button" data-o="c">C. JavaScript</button></div>
+<p class="explain" hidden>C。「會不會動」是 JavaScript 管的。跟 Claude 回報時可以直接說「按鈕沒反應，可能是 JavaScript 的問題」，它會更快找到。</p></div>
+</section>
+
+<!-- ======================= L7 ======================= -->
+<section class="page lesson" id="l7" data-level="2" data-title="第一個作品：車縫日產量登記頁">
+<header class="lhead"><div class="op">工序 <b>07</b>｜車工</div><h2>第一個作品：車縫日產量登記頁</h2><p class="goal">跟著七個步驟，用 Claude 做出一個真的能用的網頁工具。</p></header>
+
+<div class="box analogy"><span class="tag">生活比喻</span>
+<p>第一次上車台，不會叫你車整件西裝，而是先車一片口袋。這課的作品很小，但它包含了之後所有系統的基本動作。</p></div>
+
+<h3>步驟一：寫需求（複製這段去給 Claude）</h3>
+<div class="codewrap"><button class="copy" type="button" data-copy="req1">複製</button><pre class="code wrap" id="req1">你是專門幫不會寫程式的人做網頁工具的工程師。
+請幫我做一個「車縫日產量登記頁」，做成單一 HTML 檔。
+
+使用者：VRT 車縫組長，用手機填寫，不熟電腦。
+欄位：日期（預設今天）、線別（下拉選單 Line 1～Line 12）、款號、產量（件，只能填數字）、備註。
+功能：
+1. 按「儲存」後把資料存在瀏覽器（localStorage），重新整理也不會不見。
+2. 下方表格顯示今天所有紀錄，最後一列顯示今日合計。
+3. 每筆可以刪除，刪除前要確認。
+4. 可以匯出成 Excel 能開的 CSV 檔。
+介面：中文、英文、高棉文三語切換；按鈕要大，手機好按。
+要求：給我完整、可以直接存檔的單一檔案，不要只給片段。資訊不夠就先問我。</pre></div>
+
+<h3>步驟二到七</h3>
+<ol>
+<li><strong>送出後，Claude 會做出成品</strong>，通常可以直接在畫面上預覽、試按。</li>
+<li><strong>下載或複製</strong>：把整段程式碼存成 <code>sewing_v1.html</code>。用記事本貼上、另存新檔時，編碼選 UTF-8，副檔名要是 .html。</li>
+<li><strong>雙擊打開</strong>：會用瀏覽器（Chrome、Edge）打開，就像一個網站。</li>
+<li><strong>測試</strong>：照下面的清單一項一項試。</li>
+<li><strong>回報問題</strong>：用這個句型——「<strong>我做了＿＿，預期＿＿，結果卻＿＿</strong>」。例如：「我選 Line 3 填 1240 按儲存，預期表格出現一筆，結果沒出現。」</li>
+<li><strong>存新版本</strong>：改好的另存 <code>sewing_v2.html</code>，舊的不要刪。萬一新版壞了，還能回去。</li>
+</ol>
+
+<div class="demo"><div class="dh"><b>測試清單（勾選會記住）</b></div>
+<div class="checklist" data-store="test7">
+<label><input type="checkbox"> 填三筆不同線別的資料，都有出現在表格</label>
+<label><input type="checkbox"> 合計數字正確（自己用計算機驗一次）</label>
+<label><input type="checkbox"> 產量欄填「abc」會被擋下來</label>
+<label><input type="checkbox"> 重新整理網頁，資料還在</label>
+<label><input type="checkbox"> 切換到高棉文，按鈕文字都變了</label>
+<label><input type="checkbox"> 用手機打開，按鈕好按、字看得清楚</label>
+<label><input type="checkbox"> 匯出的 CSV 用 Excel 打開，中文不是亂碼</label>
+</div></div>
+
+<div class="box vrt"><span class="tag">VRT 現場</span>
+<p>VRT 做系統有一條鐵律：<strong>只收完整、可以直接貼上的單一檔案</strong>。因為做系統的人不寫程式，如果 Claude 只給「把第 200 行改成這樣」的片段，自己拼接最容易拼錯。所以每次都要求「給我完整檔案」。檔名也固定用 <code>模組名_v版本.html</code>，例如 <code>sewing_v9.html</code>、<code>cutting_v4.html</code>，一看就知道是第幾版。</p></div>
+
+<div class="box story"><span class="tag">名詞由來</span>
+<p><strong>Browser（瀏覽器）</strong>：browse 原本是牛羊吃草，東咬一口、西咬一口；後來指隨意翻看。1990 年，柏納李寫出第一個瀏覽器。</p>
+<p><strong>Version（版本）</strong>：拉丁文 vertere「轉」，versio 是「轉換後的樣子」。每改一次，就是轉成一個新樣子。</p></div>
+
+<div class="recap"><h4>重點回顧</h4><ol>
+<li>需求寫清楚：使用者、欄位、功能、介面、要求完整檔案。</li>
+<li>存檔、打開、照清單測試。</li>
+<li>用「做了什麼、預期什麼、結果什麼」回報；每一版都留著。</li></ol></div>
+
+<div class="quiz" data-answer="b"><p class="q">小測驗：Claude 回你「請把 saveData 函式換成下面這段」，你不會寫程式。最好的回應是？</p>
+<div class="opts"><button type="button" data-o="a">A. 自己試著找到那段，貼上去</button><button type="button" data-o="b">B. 請 Claude 給修改後的完整檔案</button><button type="button" data-o="c">C. 放棄這個功能</button></div>
+<p class="explain" hidden>B。不寫程式的人，最安全的做法永遠是「整個檔案換掉」。</p></div>
+</section>
+
+<!-- ======================= L8 ======================= -->
+<section class="page lesson" id="l8" data-level="3" data-title="資料存在哪裡？">
+<header class="lhead"><div class="op">工序 <b>08</b>｜組長</div><h2>資料存在哪裡？</h2><p class="goal">分清楚四種存資料的地方，知道 VRT 為什麼「先存本機、再同步雲端」。</p></header>
+
+<div class="box analogy"><span class="tag">生活比喻</span>
+<p>第 7 課的登記頁，資料存在「組長自己的手機」裡。那主管要怎麼看到？這就像你在自己的筆記本記了東西，別人看不到——除非你交到辦公室。</p></div>
+
+<div class="grid2">
+<div class="card"><b><button class="term" type="button" data-t="localStorage">localStorage</button></b>口袋小筆記本<div class="meta">約 5MB｜只在這台裝置、這個瀏覽器｜簡單設定、少量資料</div></div>
+<div class="card"><b><button class="term" type="button" data-t="IndexedDB">IndexedDB</button></b>個人置物櫃<div class="meta">大很多｜也只在這台裝置｜上萬筆日報、PDF 都放得下</div></div>
+<div class="card"><b>Google Sheets</b>公司共用倉庫<div class="meta">在<button class="term" type="button" data-t="Cloud">雲端</button>｜大家都看得到｜需要網路</div></div>
+<div class="card"><b>匯出檔案</b>影印一份存檔<div class="meta">Excel、CSV、JSON｜備份、寄給別人</div></div>
+</div>
+
+<h3>VRT 的做法：先存本機，再同步雲端</h3>
+<div class="flowlane"><span class="st">組長手機輸入</span><span class="ar">›</span><span class="st">① 立刻存進 IndexedDB（沒網路也行）</span><span class="ar">›</span><span class="st">② 有網路時<button class="term" type="button" data-t="Sync">同步</button>上雲端</span><span class="ar">›</span><span class="st">③ 主管電腦從雲端拉下來看</span></div>
+<p>為什麼這樣設計？因為工廠網路不一定穩定。如果「一定要有網路才能存」，網路一斷，組長就沒辦法登記了。先存本機，保證不會掉資料；有網路再慢慢送上去。</p>
+
+<div class="box vrt"><span class="tag">VRT 現場</span>
+<p>VRT 以前的溫濕度監測系統把資料存在 localStorage，後來資料越來越多，<strong>把 5MB 裝滿了</strong>，新資料存不進去。解決方法就是搬家到 IndexedDB。所以現在 VRT 所有模組都是「IndexedDB 優先」。資料很多時，同步也要「分批送」，就像大批貨物分幾台卡車運，一台太重會翻車。</p></div>
+
+<div class="box warn"><span class="tag">小心</span>
+<p>存在本機的資料，只要有人「清除瀏覽器資料」或換手機，<strong>就會全部不見</strong>。所以一定要：同步到雲端，或定期匯出備份。</p></div>
+
+<div class="box story"><span class="tag">名詞由來</span>
+<p><strong>Cloud（雲端）</strong>：早年工程師畫網路圖時，用一朵雲代表「外面那一大片不用管細節的網路」。約 2006 年起，「雲端運算」這個詞開始流行。雲端其實不在天上，而是在世界各地的大型機房裡。</p>
+<p><strong>Sync（同步）</strong>：synchronize 的縮寫，希臘文 syn（一起）+ chronos（時間）＝「讓時間對齊」，也就是讓兩邊的資料變成一樣。</p>
+<p><strong>IndexedDB</strong>：Indexed 是「有索引的」，就像書後面的索引，找資料很快；DB 是 Database（資料庫）。</p></div>
+
+<div class="recap"><h4>重點回顧</h4><ol>
+<li>localStorage 小、IndexedDB 大，都只在自己的裝置上。</li>
+<li>要讓大家看到，就要同步到雲端（Google Sheets）。</li>
+<li>先存本機、再同步雲端：斷網不怕、資料不掉。</li></ol></div>
+
+<div class="quiz" data-answer="a"><p class="q">小測驗：組長換了新手機，打開登記頁發現以前的紀錄都不見了。為什麼？</p>
+<div class="opts"><button type="button" data-o="a">A. 資料存在舊手機的瀏覽器裡，沒有同步到雲端</button><button type="button" data-o="b">B. 網頁壞了</button><button type="button" data-o="c">C. 被 AI 刪掉了</button></div>
+<p class="explain" hidden>A。本機儲存只在那一台裝置。這就是為什麼要有雲端同步。</p></div>
+</section>
+
+<!-- ======================= L9 ======================= -->
+<section class="page lesson" id="l9" data-level="3" data-title="雲端後端：Google Apps Script 與 API">
+<header class="lhead"><div class="op">工序 <b>09</b>｜組長</div><h2>雲端後端：Google Apps Script 與 API</h2><p class="goal">看懂網頁怎麼把資料送到 Google Sheets，認識 API、GET、POST。</p></header>
+
+<div class="box analogy"><span class="tag">生活比喻：餐廳</span>
+<p>你（網頁）是客人，Google Sheets 是廚房。客人不能自己衝進廚房拿菜，要透過<strong>服務生</strong>：你點菜，服務生送進廚房，再把菜端出來。</p>
+<p>這個「服務生」就叫 <button class="term" type="button" data-t="API">API</button>。在 VRT 的系統裡，服務生是用 <button class="term" type="button" data-t="GAS">Google Apps Script（GAS）</button>寫出來的。</p></div>
+
+<div class="demo"><div class="dh"><b>動手試試：看一筆資料怎麼旅行</b><button class="btn sm" type="button" id="apiBtn">送出一筆日報</button></div>
+<svg viewBox="0 0 360 130" style="width:100%;height:auto;display:block" aria-hidden="true">
+<g font-size="12" text-anchor="middle" style="font-family:var(--f-body)">
+<rect id="apiN1" x="8" y="30" width="96" height="56" rx="8" fill="var(--surface-2)" stroke="var(--ink)" stroke-width="1.5"/>
+<text x="56" y="54" fill="var(--ink)" font-weight="700">網頁</text><text x="56" y="72" fill="var(--ink-2)">客人</text>
+<rect id="apiN2" x="132" y="30" width="96" height="56" rx="8" fill="var(--surface-2)" stroke="var(--ink)" stroke-width="1.5"/>
+<text x="180" y="54" fill="var(--ink)" font-weight="700">GAS</text><text x="180" y="72" fill="var(--ink-2)">服務生</text>
+<rect id="apiN3" x="256" y="30" width="96" height="56" rx="8" fill="var(--surface-2)" stroke="var(--ink)" stroke-width="1.5"/>
+<text x="304" y="54" fill="var(--ink)" font-weight="700">Sheets</text><text x="304" y="72" fill="var(--ink-2)">廚房</text>
+</g>
+<line x1="104" y1="104" x2="256" y2="104" stroke="var(--thread-2)" stroke-dasharray="5 4" stroke-width="2"/>
+<circle id="apiDot" cx="56" cy="104" r="7" fill="var(--chalk)" style="transition:transform .7s ease-in-out"/>
+</svg>
+<div class="log" id="apiLog">按「送出一筆日報」開始。</div>
+</div>
+
+<h3>GET 和 POST：兩種跟服務生說話的方式</h3>
+<div class="tbl"><table>
+<tr><th>方式</th><th>像是</th><th>VRT 例子</th></tr>
+<tr><td><b>GET</b></td><td>「請問今天有什麼菜？」（問）</td><td>拿本週所有日報回來畫圖表</td></tr>
+<tr><td><b>POST</b></td><td>「我要點這些菜」（送）</td><td>把一筆新日報送去寫進試算表</td></tr>
+</table></div>
+<p>送出去的資料，通常用一種叫 <button class="term" type="button" data-t="JSON">JSON</button> 的格式包起來，像一張填好的單子：</p>
+<div class="codewrap"><pre class="code">{ <span class="k">"date"</span>: <span class="s">"2026-09-21"</span>, <span class="k">"line"</span>: <span class="s">"Line 3"</span>, <span class="k">"style"</span>: <span class="s">"VR2201"</span>, <span class="k">"qty"</span>: 1240 }</pre></div>
+
+<h3>GAS 是什麼？</h3>
+<p>Google 免費提供的「小型雲端電腦」。你把 <button class="term" type="button" data-t="Script">程式（Script）</button>寫在 Google Sheets 的「擴充功能 › Apps Script」裡，它就能：讀寫試算表、寄信、叫 Telegram 機器人講話、每天定時執行。寫好之後按「部署 › 網頁應用程式」，就會得到一個網址，網頁就是把資料送到這個網址。</p>
+
+<div class="box vrt"><span class="tag">VRT 現場</span>
+<p>VRT 每個平台都有一個自己的 GAS，例如生產平台一個、行政中心的保安、總務、稽核、人資各一個。做法都一樣：請 Claude 寫好完整的 <code>.gs</code> 檔，貼進 Apps Script，部署，把網址貼回網頁的設定裡。成本是零元。</p></div>
+
+<div class="box story"><span class="tag">名詞由來</span>
+<p><strong>API</strong>（Application Programming Interface，應用程式介面）：interface 是「兩個東西接觸的那一面」，像插座和插頭接觸的地方。API 就是兩個程式之間約好的溝通窗口。</p>
+<p><strong>Server（伺服器）</strong>：來自 serve「服務」，就是負責服務別人的電腦。</p>
+<p><strong>Script（腳本）</strong>：拉丁文 scribere「寫」，原意是劇本。電腦照著劇本一行一行演。</p>
+<p><strong>POST</strong>：原意是「郵寄」，把東西寄出去。</p></div>
+
+<div class="recap"><h4>重點回顧</h4><ol>
+<li>API 是程式之間的服務生；VRT 用 GAS 當服務生。</li>
+<li>GET 是問、POST 是送；資料用 JSON 包起來。</li>
+<li>GAS 免費、能讀寫 Sheets、寄信、叫機器人、定時執行。</li></ol></div>
+
+<div class="quiz" data-answer="b"><p class="q">小測驗：主管的看板要「讀取本週全部日報來畫圖」，應該用哪一種？</p>
+<div class="opts"><button type="button" data-o="a">A. POST</button><button type="button" data-o="b">B. GET</button><button type="button" data-o="c">C. 直接打開廚房</button></div>
+<p class="explain" hidden>B。只是「拿資料回來看」就是 GET；「送新資料進去」才是 POST。</p></div>
+</section>
+
+<!-- ======================= L10 ======================= -->
+<section class="page lesson" id="l10" data-level="3" data-title="Telegram 機器人：會自己說話的助理">
+<header class="lhead"><div class="op">工序 <b>10</b>｜組長</div><h2>Telegram 機器人：會自己說話的助理</h2><p class="goal">知道機器人能做什麼，看懂一個「申請、驗證、核准」的審核流程。</p></header>
+
+<div class="box analogy"><span class="tag">生活比喻</span>
+<p>學校廣播站：有事情就廣播，全校都聽到。<button class="term" type="button" data-t="Bot">Telegram 機器人</button>就是你工廠的廣播站，而且它還會「接電話」——大家可以按按鈕回覆它。</p></div>
+
+<h3>為什麼選 Telegram？</h3>
+<ul>
+<li>VRT 各部門本來就用 <button class="term" type="button" data-t="Telegram">Telegram</button> 群組溝通，不用教大家裝新東西。</li>
+<li>手機會即時跳通知。</li>
+<li>機器人免費，而且訊息下面可以放按鈕（核准／退回）。</li>
+</ul>
+
+<div class="demo"><div class="dh"><b>動手試試：採購審核流程</b><div class="row"><button class="btn sm" type="button" id="tgNext">下一步</button><button class="btn ghost sm" type="button" id="tgReset">重來</button></div></div>
+<div class="chat" id="tgChat" aria-live="polite"></div>
+</div>
+
+<p>這個流程就是「三個人分工」：<strong>申請人</strong>提出、<strong>驗證人</strong>確認數量合理、<strong>核准人</strong>決定花錢。機器人負責傳話和記錄，<strong>錢的決定永遠是人按的</strong>。</p>
+
+<h3>機器人怎麼知道有人按了按鈕？</h3>
+<div class="grid2">
+<div class="card"><b>輪詢 Polling</b>每隔一段時間打電話問：「有新消息嗎？有嗎？有嗎？」<div class="meta">簡單，但浪費、會慢半拍</div></div>
+<div class="card"><b><button class="term" type="button" data-t="Webhook">Webhook</button></b>留下電話號碼：「有消息就打給我。」<div class="meta">即時、省資源。VRT 用 GAS 網址當這個電話號碼</div></div>
+</div>
+
+<div class="box warn"><span class="tag">小心</span>
+<ul>
+<li><strong>Bot Token 是機器人的鑰匙</strong>。拿到它的人可以用你的機器人發任何訊息。絕對不能貼在公開的地方。</li>
+<li><strong>訊息裡的特殊符號要「包起來」</strong>：如果員工名字或備註裡有 <code>&lt;</code> 這種符號，Telegram 會以為是格式指令而發送失敗。VRT 的規定是：所有文字送出前都先經過 <code>escapeHtml()</code> 處理，就像寄易碎品要先包泡泡紙。</li>
+<li>同一個 GAS 網址只能接一個機器人的 Webhook；兩個系統搶同一個會互相打架。</li>
+</ul></div>
+
+<div class="box story"><span class="tag">名詞由來</span>
+<p><strong>Bot</strong>：robot 的縮寫。robot 這個字出自 1920 年捷克作家恰佩克的劇本《R.U.R.》，來自捷克文 robota「苦役、勞役」——機器人一開始就是「替人做苦工的」。</p>
+<p><strong>Telegram</strong>：希臘文 tele（遠）+ gramma（寫下的東西）＝「電報」。這個 App 在 2013 年推出。</p>
+<p><strong>Webhook</strong>：2007 年由程式設計師傑夫‧林賽提出。hook 是「鉤子」，有事情發生就「勾住」並通知你。</p></div>
+
+<div class="recap"><h4>重點回顧</h4><ol>
+<li>機器人能推播、收檔案、放審核按鈕。</li>
+<li>Webhook 是「有事打給我」，比一直問省很多。</li>
+<li>Token 要保密；文字要 escape；錢的決定由人按。</li></ol></div>
+
+<div class="quiz" data-answer="c"><p class="q">小測驗：同事把機器人的 Token 貼到了公開網頁上。應該怎麼辦？</p>
+<div class="opts"><button type="button" data-o="a">A. 沒關係，沒人會看</button><button type="button" data-o="b">B. 把網頁刪掉就好</button><button type="button" data-o="c">C. 立刻到 BotFather 重新產生 Token，舊的作廢，再更新到 GAS</button></div>
+<p class="explain" hidden>C。刪網頁不夠，可能早就被複製了。像鑰匙掉了要換鎖，Token 外流就要換新的。</p></div>
+</section>
+<!-- ======================= L11 ======================= -->
+<section class="page lesson" id="l11" data-level="3" data-title="上線：GitHub 與 GitHub Pages">
+<header class="lhead"><div class="op">工序 <b>11</b>｜組長</div><h2>上線：GitHub 與 GitHub Pages</h2><p class="goal">把網頁放上網，讓全廠用同一個網址打開，並學會用版本保護自己。</p></header>
+
+<div class="box analogy"><span class="tag">生活比喻</span>
+<p><button class="term" type="button" data-t="GitHub">GitHub</button> 像打版室的<strong>紙樣櫃</strong>：每一版紙樣都收好、標上日期，什麼時候改了什麼都查得到。<strong>GitHub Pages</strong> 則是一面<strong>免費的公告欄</strong>：把網頁貼上去，任何人輸入網址就能看到。</p></div>
+
+<h3>上線五步驟</h3>
+<ol>
+<li>到 github.com 註冊帳號（免費）。</li>
+<li>建立一個<button class="term" type="button" data-t="Repository">倉庫（Repository）</button>，例如叫 <code>vrt-prod</code>。</li>
+<li>把 <code>sewing_v1.html</code> 上傳進去（網頁上可以直接拖曳）。首頁檔案通常命名為 <code>index.html</code>。</li>
+<li>到倉庫的 Settings › Pages，選擇要發布的分支（branch），按儲存。</li>
+<li>等一兩分鐘，就會得到網址：<code>你的帳號.github.io/vrt-prod/</code>。把網址做成 QR Code 貼在產線上，組長手機一掃就能用。</li>
+</ol>
+
+<div class="demo"><div class="dh"><b>動手試試：點點看每一個版本</b></div>
+<div class="tline" id="gitLine"><button type="button" data-v="0">v1</button><i></i><button type="button" data-v="1">v2</button><i></i><button type="button" data-v="2">v3</button><i></i><button type="button" data-v="3">v4</button></div>
+<p id="gitNote" style="margin-bottom:0">點一個版本看它改了什麼。</p>
+</div>
+
+<div class="box vrt"><span class="tag">VRT 現場</span>
+<p>VRT 的每個平台都是一個倉庫：生產平台、人資入口、保安、總務、稽核……分開放，一個出問題不會拖累別的。所有網頁都掛在 GitHub Pages 上，背後接各自的 GAS。這就是「零成本架構」：GitHub Pages 免費、GAS 免費、Google Sheets 免費、Telegram 免費。</p></div>
+
+<div class="box warn"><span class="tag">小心</span>
+<p>免費帳號的公開倉庫，<strong>全世界都看得到裡面的檔案</strong>。所以：Bot Token、密碼、試算表 ID、員工薪資、身分證號碼<strong>絕對不能寫在網頁程式裡</strong>。這些要放在 GAS 裡（第 16 課教）。</p></div>
+
+<div class="box story"><span class="tag">名詞由來</span>
+<p><strong>Git</strong>：2005 年由 Linux 的創造者林納斯‧托瓦茲寫出。git 在英國俚語是「討厭鬼」，他開玩笑說自己很自大，所以所有專案都用自己命名。</p>
+<p><strong>GitHub</strong>：2008 年上線，2018 年被微軟收購。hub 是輪子中心的軸，引申為「集散中心」。</p>
+<p><strong>Repository（倉庫）</strong>：拉丁文 reponere「放回去、收藏」。大家常簡稱 repo。</p></div>
+
+<div class="recap"><h4>重點回顧</h4><ol>
+<li>GitHub 存版本，GitHub Pages 免費發布網頁。</li>
+<li>網址做成 QR Code，全廠同一個入口。</li>
+<li>公開倉庫不能放任何秘密和個資。</li></ol></div>
+
+<div class="quiz" data-answer="a"><p class="q">小測驗：v4 上線後，組長反映登記頁壞了，今天還要用。最快的處理方式是？</p>
+<div class="opts"><button type="button" data-o="a">A. 先換回 v3 讓大家繼續用，再慢慢修 v4</button><button type="button" data-o="b">B. 叫大家今天改用紙本</button><button type="button" data-o="c">C. 從頭重做</button></div>
+<p class="explain" hidden>A。這就是保留每一版的價值：出事先退回上一個好的版本，產線不停，再來修。</p></div>
+</section>
+
+<!-- ======================= L12 ======================= -->
+<section class="page lesson" id="l12" data-level="4" data-title="工廠數字的正確算法">
+<header class="lhead"><div class="op">工序 <b>12</b>｜技術員</div><h2>工廠數字的正確算法</h2><p class="goal">理解 SMV 和效率，學會「加權」為什麼比「平均」正確，並把規則教給 Claude。</p></header>
+
+<div class="box analogy"><span class="tag">生活比喻</span>
+<p>全班數學平均：A 班 40 人平均 80 分，B 班 10 人平均 100 分。兩班合起來平均是 90 分嗎？<strong>不是。</strong>40 個 80 分和 10 個 100 分，真正的平均是 84 分。人多的班，份量本來就比較重。這就是「加權」。</p></div>
+
+<h3>先認識 SMV 和效率</h3>
+<p><button class="term" type="button" data-t="SMV">SMV（標準分鐘值）</button>：一件衣服「標準上」要花幾分鐘做完。例如一件 T 恤 SMV 12 分鐘，代表熟練的人按標準方法做，大約 12 分鐘。</p>
+<div class="box try"><p style="margin:0;font-size:1.05rem;text-align:center"><strong>效率 ＝ 產出的標準分鐘 ÷ 投入的分鐘</strong><br><span style="font-size:.95rem;color:var(--ink-2)">＝（產量 × SMV）÷（人數 × 工時 × 60）</span></p></div>
+<p>例：Line 1 有 50 人做 8 小時，投入 50×8×60 = 24,000 分鐘；做了 1,500 件、SMV 12，產出 18,000 標準分鐘。效率 = 18,000 ÷ 24,000 = 75%。</p>
+
+<div class="demo"><div class="dh"><b>動手試試：效率計算機</b></div>
+<div class="tbl" style="box-shadow:none;border:1px solid var(--rule)"><table id="effTbl">
+<tr><th>線別</th><th class="num">產量</th><th class="num">SMV</th><th class="num">人數</th><th class="num">工時</th><th class="num">效率</th></tr>
+</table></div>
+<div class="grid2" style="margin-bottom:0">
+<div class="card"><span class="meta">各線效率直接平均（錯誤）</span><b class="bad" id="effAvg">–</b></div>
+<div class="card"><span class="meta">加權效率（正確）</span><b class="good" id="effW">–</b></div>
+</div>
+<p style="font-size:.9rem;color:var(--ink-2);margin-bottom:0">試著把 Line 2 的人數改成 5，或把 Line 1 的產量改低，看兩個數字差多少。小線的效率再高，也不該跟大線「一票抵一票」。</p>
+</div>
+
+<div class="box vrt"><span class="tag">VRT 現場：寫進系統的規則</span>
+<ul>
+<li><strong>加權效率</strong>：Σ 標準分鐘 ÷ Σ 可用分鐘，永遠不用算術平均。</li>
+<li><strong>一天只算一個來源</strong>：同一天可能同時有好幾份報表（例如標準版、目標版、每日產出報告），如果全部加起來就重複了。VRT 訂好優先順序，每天只取一份。</li>
+<li><strong>用關鍵字找欄位</strong>：生產計畫表每個月欄位位置會移動，所以不寫死「第 5 欄是產量」，而是去找「標題有『產量』兩個字的那一欄」。</li>
+<li><strong>排除合計列</strong>：款號和客戶都空白的列，就是合計列。</li>
+<li><strong>一週從星期一開始</strong>。</li>
+</ul></div>
+
+<h3>把規則教給 Claude</h3>
+<p>這些規則寫成一份「規則文件」，放進 Claude 的專案說明裡，每次它寫程式、算報表時都會照做。例如：</p>
+<div class="codewrap"><button class="copy" type="button" data-copy="rule12">複製</button><pre class="code wrap" id="rule12">【VRT 計算規則】
+1. 效率一律用加權：Σ(產量×SMV) ÷ Σ(人數×工時×60)，禁止把各線效率直接平均。
+2. 線別一律寫成「Line N」（例：L3、3線、line 03 都改成 Line 3）。
+3. 款號和客戶都空白的列視為合計列，不列入計算。
+4. 欄位用標題關鍵字尋找，不用固定欄位位置。
+5. 一週從星期一開始。
+6. 算完請列出每條線的計算過程，方便我抽查。</pre></div>
+
+<div class="box story"><span class="tag">名詞由來</span>
+<p><strong>IE（工業工程）</strong>：Industrial Engineering。美國工程師泰勒拿著碼表研究工人每個動作花幾秒，1911 年出版《科學管理原理》；吉爾布雷斯夫婦則拍影片研究「多餘的動作」。SMV 就是從這些「時間研究」發展來的。</p>
+<p><strong>WIP（在製品）</strong>：Work In Progress，已經開始做、還沒做完的貨。WIP 太多代表產線卡住了。</p>
+<p><strong>Lean（精實）</strong>：1988 年研究者克拉夫奇克研究豐田汽車的生產方式後，用 lean（瘦、沒有贅肉）來形容它：沒有浪費。</p></div>
+
+<div class="recap"><h4>重點回顧</h4><ol>
+<li>效率 = 產出標準分鐘 ÷ 投入分鐘。</li>
+<li>合計多條線要加權，不能直接平均。</li>
+<li>把規則寫成文件放進專案，Claude 就每次都算對。</li></ol></div>
+
+<div class="quiz" data-answer="b"><p class="q">小測驗：一條 10 人的小線效率 95%，一條 50 人的大線效率 65%。兩條線合計效率比較接近？</p>
+<div class="opts"><button type="button" data-o="a">A. 80%（兩個平均）</button><button type="button" data-o="b">B. 接近 70%</button><button type="button" data-o="c">C. 95%</button></div>
+<p class="explain" hidden>B。假設工時和 SMV 條件相同，大線人多、份量重，合計會被拉向 65%：(10×95 + 50×65) ÷ 60 ≈ 70%。</p></div>
+</section>
+
+<!-- ======================= L13 ======================= -->
+<section class="page lesson" id="l13" data-level="4" data-title="除錯：抓蟲的方法">
+<header class="lhead"><div class="op">工序 <b>13</b>｜技術員</div><h2>除錯：抓蟲的方法</h2><p class="goal">學會把問題描述清楚交給 Claude，並認識 VRT 踩過的經典陷阱。</p></header>
+
+<div class="box analogy"><span class="tag">生活比喻</span>
+<p>車縫出現跳針，師傅不會亂換零件，而是：先讓它再跳一次（重現）、看是哪一段（定位）、換針或調線（修正）、再車一段確認（驗證）。修程式也是一樣，這叫<button class="term" type="button" data-t="Debug">除錯</button>。</p></div>
+
+<h3>除錯五步</h3>
+<ol>
+<li><strong>重現</strong>：確定「怎麼做」會出錯。每次都錯？還是只有某條線、某一天？</li>
+<li><strong>收集證據</strong>：截圖。按鍵盤 F12 打開「開發者工具」，點 Console（主控台），紅色的字就是錯誤訊息，整段複製。</li>
+<li><strong>描述</strong>：做了什麼、預期什麼、結果什麼。</li>
+<li><strong>交給 Claude</strong>：附上完整檔案＋截圖＋錯誤訊息。</li>
+<li><strong>驗證</strong>：確認修好了，也確認<strong>別的功能沒被弄壞</strong>。</li>
+</ol>
+<div class="codewrap"><button class="copy" type="button" data-copy="bug13">複製</button><pre class="code wrap" id="bug13">【問題回報】
+檔案：sewing_v3.html（附上完整檔案）
+我做了：選 Line 3、日期 9/21，按「同步雲端」
+我預期：試算表多一筆 9/21 的資料
+實際上：試算表出現的是 9/20
+錯誤訊息：（貼上 F12 Console 的紅字，沒有就寫「無」）
+請找出原因，說明給我聽，然後給我修好的完整檔案。</pre></div>
+
+<h3>VRT 踩過的經典陷阱</h3>
+<p>上面那個「日期少一天」的例子，就是最有名的陷阱：<strong>時區</strong>。試試看：</p>
+<div class="demo"><div class="dh"><b>動手試試：日期為什麼少一天？</b></div>
+<div class="row"><label>柬埔寨日期 <input type="date" id="tzDate" value="2026-09-21"></label><label>時間 <input type="time" id="tzTime" value="06:30"></label></div>
+<div class="grid2" style="margin-bottom:0">
+<div class="card"><span class="meta">錯誤寫法 toISOString() 取出的日期</span><b id="tzWrong">–</b><span class="meta" id="tzIso"></span></div>
+<div class="card"><span class="meta">正確寫法：用本地時間取日期</span><b class="good" id="tzRight">–</b></div>
+</div>
+<p id="tzMsg" style="font-size:.92rem;margin-bottom:0"></p>
+</div>
+<p>柬埔寨時間比 <button class="term" type="button" data-t="UTC">UTC 世界標準時間</button>快 7 小時。<code>toISOString()</code> 會先換成 UTC 再給你日期，所以<strong>早上 7 點以前</strong>的紀錄，日期都會變成前一天。VRT 的規定：日期一律用本地時間取。</p>
+
+<div class="tbl"><table>
+<tr><th>陷阱</th><th>發生什麼事</th><th>VRT 規定</th></tr>
+<tr><td>ID 沒加引號</td><td><code>onclick="show(VRT-001)"</code>，電腦以為是「VRT 減 1」</td><td>傳到 onclick 的值一律加引號：<code>show('VRT-001')</code></td></tr>
+<tr><td>GAS 用 /dev 網址</td><td>只有自己測試時能用，別人用就失敗</td><td>一律用 /exec 結尾的正式網址</td></tr>
+<tr><td>改了 GAS 沒重新部署</td><td>程式改了，但網址還在跑舊版</td><td>改完要「管理部署 › 編輯 › 新版本」</td></tr>
+<tr><td>網頁送資料被瀏覽器擋</td><td>瀏覽器的保全規定 <button class="term" type="button" data-t="CORS">CORS</button> 會先「預檢」，GAS 不回應預檢</td><td>POST 時用 <code>Content-Type: text/plain</code>，變成不需要預檢的簡單請求</td></tr>
+<tr><td>找不到試算表</td><td><code>getActiveSpreadsheet()</code> 在網頁程式裡沒有「目前開著的表」</td><td>用 <code>openById('試算表ID')</code> 指定</td></tr>
+<tr><td>Excel 日期變數字</td><td>Excel 把日期存成「從 1900 年開始第幾天」，46023 其實是 2026-01-01</td><td>讀 Excel 時用固定設定，並統一轉換日期</td></tr>
+</table></div>
+
+<div class="box vrt"><span class="tag">VRT 現場</span>
+<p>VRT 把所有踩過的坑整理成一份「Top 100 錯誤清單」，放進 Claude 的專案裡。每次做新模組，Claude 都會先避開這些坑。<strong>錯誤只該犯一次</strong>——第二次就應該寫進清單。</p></div>
+
+<div class="box story"><span class="tag">名詞由來</span>
+<p><strong>Bug（蟲）</strong>：1947 年，美國哈佛大學的 Mark II 電腦故障，工程師在繼電器裡發現一隻飛蛾，把它貼在工作日誌上，寫著「第一個真的找到蟲的案例」。電腦先驅葛麗絲‧霍普常講這個故事。其實更早在 1870 年代，愛迪生就用 bug 形容機器的小毛病了。</p>
+<p><strong>UTC</strong>：世界協調時間。英文想叫 CUT，法文想叫 TUT，最後折衷成誰的語序都不是的 UTC。</p>
+<p><strong>ISO</strong>：國際標準化組織。名字取自希臘文 isos「相等」，所以各國語言都叫 ISO。ISO 8601 就是 2026-09-21 這種日期寫法的標準。</p></div>
+
+<div class="recap"><h4>重點回顧</h4><ol>
+<li>重現、證據、描述、交給 Claude、驗證。</li>
+<li>F12 Console 的紅字是最好的線索。</li>
+<li>把每個坑寫進錯誤清單，同樣的錯只犯一次。</li></ol></div>
+
+<div class="quiz" data-answer="c"><p class="q">小測驗：夜班 05:40 登記的產量，系統記成前一天。最可能的原因是？</p>
+<div class="opts"><button type="button" data-o="a">A. 組長手機時間錯了</button><button type="button" data-o="b">B. Google 壞了</button><button type="button" data-o="c">C. 程式用 toISOString() 取日期，被換成 UTC 時間</button></div>
+<p class="explain" hidden>C。05:40 減 7 小時是前一天 22:40。只要早上 7 點前的資料日期都錯，幾乎一定是時區陷阱。</p></div>
+</section>
+
+<!-- ======================= L14 ======================= -->
+<section class="page lesson" id="l14" data-level="5" data-title="AI 代理人：讓 Claude 幫你做事">
+<header class="lhead"><div class="op">工序 <b>14</b>｜廠長</div><h2>AI 代理人：讓 Claude 幫你做事</h2><p class="goal">從「問答」升級到「交代任務」：知道代理人怎麼工作、怎麼寫交代單、什麼一定要人決定。</p></header>
+
+<div class="box analogy"><span class="tag">生活比喻</span>
+<p>聊天是「你問、它答」，像問路。<button class="term" type="button" data-t="Agent">代理人</button>是「你交代、它去做」，像請一位助理：「每半小時去收一次各組的報表，分類放好，有問題跟我說。」它會自己看螢幕、點滑鼠、開檔案，做完回報。</p></div>
+
+<div class="demo"><div class="dh"><b>動手試試：代理人的工作循環</b><button class="btn sm" type="button" id="ringBtn">跑一輪</button></div>
+<div class="ring" id="ring">
+<div><b>① 觀察</b>打開 Telegram 網頁版，看到 QA/QC 群組有 2 個新檔案。</div>
+<div><b>② 計畫</b>判斷：這是 QC 報表，要匯入平台的 Final QC 模組。</div>
+<div><b>④ 檢查</b>打開平台確認筆數正確，寫一段摘要回報。</div>
+<div><b>③ 行動</b>下載檔案、在訊息上按一個表情回應、匯入平台。</div>
+</div>
+<p style="font-size:.9rem;color:var(--ink-2);margin-bottom:0">觀察 › 計畫 › 行動 › 檢查，再回到觀察。好的代理人每一步都會「檢查」，而不是做完就算。</p>
+</div>
+
+<div class="box vrt"><span class="tag">VRT 現場：交給 Claude 的日常工作</span>
+<p>VRT 已經把很多重複的電腦工作交給 Claude（Cowork）排程執行，工作電腦週一到週六整天開著：</p>
+<div class="tbl" style="box-shadow:none"><table>
+<tr><th>收到的檔案</th><th>自動放進</th></tr>
+<tr><td>每週未結訂單總表</td><td>生產平台「訂單」模組</td></tr>
+<tr><td>QC 報表</td><td>Final QC 模組</td></tr>
+<tr><td>倉庫群組的布料、輔料檔</td><td>布料庫存模組</td></tr>
+<tr><td>BOM 用料表 PDF</td><td>BOM 模組</td></tr>
+<tr><td>胚布庫存 Email</td><td>布料進倉模組</td></tr>
+<tr><td>零件、針具報告</td><td>零件備品模組</td></tr>
+</table></div>
+<p>另外還有：定時檢查 AI 行政群組、確認人資項目的人數和金額是否正確、產出週報草稿。做這些事的是 Claude，<strong>決定錢的是人</strong>——採購相關一律整理好品項、數量、金額、異常，送給廠長自己核准。</p></div>
+
+<h3>人和 AI 怎麼分工？</h3>
+<div class="grid2">
+<div class="card"><b class="good">放心交給代理人</b>下載、分類、改檔名、匯入、整理摘要、寫草稿、核對數字、提醒異常</div>
+<div class="card"><b class="bad">一定要人決定</b>花錢（採購核准）、對外寄出（給客戶、驗廠單位）、人事決定（調動、處分）、法律判斷</div>
+</div>
+<p>這種「流程裡一定保留人的判斷」的設計，叫做 <button class="term" type="button" data-t="HITL">Human-in-the-loop（人在迴路中）</button>。</p>
+
+<h3>代理人的交代單（範本）</h3>
+<div class="codewrap"><button class="copy" type="button" data-copy="sop14">複製</button><pre class="code wrap" id="sop14">【任務】收集 Telegram 工作群組的新檔案並匯入平台
+【頻率】週一到週六，每 30 分鐘一次，到 18:00 為止
+【步驟】
+1. 打開 Telegram 網頁版，依序檢查：QA/QC 群組、倉庫群組、機針報告群組
+2. 下載上次檢查之後的新檔案，存到「下載/日期」資料夾
+3. 在每個檔案訊息上按一個表示「收到」的表情
+4. 依對照表匯入平台對應模組（QC 報表 → Final QC；布料檔 → 布料庫存……）
+【判斷規則】看不出是哪種檔案時，不要匯入，列在回報裡問我
+【禁止】不可以按任何「核准」按鈕；不可以刪除任何訊息或檔案
+【回報格式】中文，列出：收到幾個檔、各匯入哪裡、有沒有異常</pre></div>
+
+<div class="box warn"><span class="tag">小心：換手要並行</span>
+<p>把工作從舊方法（或另一個 AI 工具）交給 Claude 時，不要一刀切。先讓兩邊<strong>並行跑幾天</strong>、比對結果都一樣，確認沒問題後才正式切換。同時要規定清楚：<strong>同一個核准按鈕只能有一個人（或一個 AI）按</strong>，不然會重複核准。</p></div>
+
+<div class="box story"><span class="tag">名詞由來</span>
+<p><strong>Agent（代理人）</strong>：拉丁文 agere「做、推動」。agent 就是「替你去做事的人」，旅行社、房仲、特務都叫 agent。</p>
+<p><strong>Schedule（排程）</strong>：拉丁文 schedula「小紙條」，古時候把事情寫在小紙條上排順序。</p></div>
+
+<div class="recap"><h4>重點回顧</h4><ol>
+<li>代理人會觀察、計畫、行動、檢查，一直循環。</li>
+<li>重複的電腦工作交給它；錢、對外、人事、法律由人決定。</li>
+<li>交代單寫清楚頻率、步驟、判斷規則、禁止事項、回報格式；換手先並行。</li></ol></div>
+
+<div class="quiz" data-answer="b"><p class="q">小測驗：代理人發現一張採購單金額比平常高三倍。它應該？</p>
+<div class="opts"><button type="button" data-o="a">A. 金額合理就自己核准</button><button type="button" data-o="b">B. 不核准，把品項、數量、金額和「比平常高三倍」這個異常整理給廠長</button><button type="button" data-o="c">C. 直接退回申請</button></div>
+<p class="explain" hidden>B。代理人最有價值的地方是「發現異常並說清楚」，而花錢的決定留給人。</p></div>
+</section>
+<!-- ======================= L15 ======================= -->
+<section class="page lesson" id="l15" data-level="5" data-title="系統架構：Factory OS 的設計思維">
+<header class="lhead"><div class="op">工序 <b>15</b>｜廠長</div><h2>系統架構：Factory OS 的設計思維</h2><p class="goal">從「做一個工具」升級到「設計一整套系統」：看懂 VRT 的架構圖和設計原則。</p></header>
+
+<div class="box analogy"><span class="tag">生活比喻</span>
+<p>蓋一間房子前要有<strong>藍圖</strong>：地基在哪、水管怎麼走、電線怎麼拉。沒有藍圖，每個房間各蓋各的，最後水管接不起來。系統也一樣，這張藍圖叫做<strong>架構</strong>。</p></div>
+
+<h3>VRT Factory OS 架構圖</h3>
+<figure class="herofig" style="margin-top:.6rem">
+<svg viewBox="0 0 360 470" role="img" aria-label="Factory OS 架構圖：使用者、GitHub Pages、IndexedDB、GAS、Google Sheets 與 Telegram">
+<g style="font-family:var(--f-body)" text-anchor="middle">
+<rect x="20" y="10" width="320" height="50" rx="8" fill="var(--surface-2)" stroke="var(--ink)" stroke-width="1.5"/>
+<text x="180" y="32" font-size="14" font-weight="700" fill="var(--ink)">使用者：手機／電腦</text>
+<text x="180" y="50" font-size="11.5" fill="var(--ink-2)">中文・English・ខ្មែរ 三語介面</text>
+<path d="M180 60 v18" stroke="var(--ink-2)" stroke-width="2"/><path d="M174 72 l6 8 6-8" fill="none" stroke="var(--ink-2)" stroke-width="2"/>
+<rect x="20" y="82" width="320" height="50" rx="8" fill="var(--surface)" stroke="var(--thread)" stroke-width="2"/>
+<text x="180" y="104" font-size="14" font-weight="700" fill="var(--thread)">GitHub Pages：網頁門面</text>
+<text x="180" y="122" font-size="11.5" fill="var(--ink-2)">單一 HTML 檔，免費發布</text>
+<path d="M180 132 v18" stroke="var(--ink-2)" stroke-width="2"/><path d="M174 144 l6 8 6-8" fill="none" stroke="var(--ink-2)" stroke-width="2"/>
+<rect x="20" y="154" width="320" height="50" rx="8" fill="var(--surface)" stroke="var(--thread)" stroke-width="2"/>
+<text x="180" y="176" font-size="14" font-weight="700" fill="var(--thread)">IndexedDB：先存本機</text>
+<text x="180" y="194" font-size="11.5" fill="var(--ink-2)">斷網也能用</text>
+<path d="M160 206 v28 M200 206 v28" stroke="var(--seam)" stroke-width="2" stroke-dasharray="4 3"/>
+<text x="250" y="224" font-size="11.5" fill="var(--seam)" style="fill:var(--seam)">分批同步</text>
+<rect x="20" y="236" width="320" height="56" rx="8" fill="var(--surface)" stroke="var(--seam)" stroke-width="2.5"/>
+<text x="180" y="259" font-size="14.5" font-weight="700" fill="var(--seam)" style="fill:var(--seam)">Google Apps Script：雲端大腦</text>
+<text x="180" y="279" font-size="11.5" fill="var(--ink-2)">規則、計算、轉送、定時任務</text>
+<path d="M110 292 v26 M250 292 v26" stroke="var(--ink-2)" stroke-width="2"/>
+<rect x="20" y="320" width="150" height="56" rx="8" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+<text x="95" y="343" font-size="13.5" font-weight="700" fill="var(--ink)">Google Sheets</text>
+<text x="95" y="362" font-size="11.5" fill="var(--ink-2)">共用倉庫</text>
+<rect x="190" y="320" width="150" height="56" rx="8" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/>
+<text x="265" y="343" font-size="13.5" font-weight="700" fill="var(--ink)">Telegram 機器人</text>
+<text x="265" y="362" font-size="11.5" fill="var(--ink-2)">廣播＋審核按鈕</text>
+<text x="180" y="404" font-size="12.5" font-weight="700" fill="var(--ink)">八大平台共用這一套骨架</text>
+<g font-size="11">
+<rect x="20" y="414" width="74" height="22" rx="11" fill="var(--surface-2)"/><text x="57" y="429" fill="var(--ink)">生產</text>
+<rect x="102" y="414" width="74" height="22" rx="11" fill="var(--surface-2)"/><text x="139" y="429" fill="var(--ink)">計畫</text>
+<rect x="184" y="414" width="74" height="22" rx="11" fill="var(--surface-2)"/><text x="221" y="429" fill="var(--ink)">倉庫</text>
+<rect x="266" y="414" width="74" height="22" rx="11" fill="var(--surface-2)"/><text x="303" y="429" fill="var(--ink)">品質</text>
+<rect x="20" y="442" width="74" height="22" rx="11" fill="var(--surface-2)"/><text x="57" y="457" fill="var(--ink)">IE</text>
+<rect x="102" y="442" width="74" height="22" rx="11" fill="var(--surface-2)"/><text x="139" y="457" fill="var(--ink)">出貨</text>
+<rect x="184" y="442" width="74" height="22" rx="11" fill="var(--surface-2)"/><text x="221" y="457" fill="var(--ink)">精簡 ERP</text>
+<rect x="266" y="442" width="74" height="22" rx="11" fill="var(--surface-2)"/><text x="303" y="457" fill="var(--ink)">行政</text>
+</g></g></svg></figure>
+
+<h3>六個設計原則</h3>
+<div class="tbl"><table>
+<tr><th>原則</th><th>意思</th><th>為什麼</th></tr>
+<tr><td><b>零成本</b></td><td>只用免費服務</td><td>不用申請預算，壞了也不怕被綁住</td></tr>
+<tr><td><b>最多八類平台</b></td><td>新需求放進現有類別，不無限開新系統</td><td>系統越多越難維護，一個人顧不來</td></tr>
+<tr><td><b><button class="term" type="button" data-t="Module">模組化</button></b></td><td>每個功能一個檔案，像衣服分裁片</td><td>改袖子不用拆整件衣服</td></tr>
+<tr><td><b>三語</b></td><td>中、英、高棉文隨時切換</td><td>台籍幹部、外籍客戶、柬籍員工都能用</td></tr>
+<tr><td><b>離線優先</b></td><td>先存本機再同步</td><td>工廠網路不穩也不掉資料</td></tr>
+<tr><td><b>一個真相</b></td><td>同一種資料只有一個正式來源</td><td>不會出現「兩張表數字不一樣，不知道信哪個」</td></tr>
+</table></div>
+
+<div class="box vrt"><span class="tag">VRT 現場</span>
+<p>VRT 的系統分成兩大家族：<strong>生產平台</strong>（車縫、裁剪、生產計畫、訂單、BOM、布料、成品庫存、出貨、零件備品……）和<strong>行政中心</strong>（人資入口、薪資、保安、總務採購、稽核）。它們長得不一樣，但骨架全部相同——所以學會一個，就會全部。</p>
+<p>更重要的是，這套設計被寫成了文件：總藍圖、開發手冊、萬用提示詞、系統 DNA、Top 100 錯誤。任何人（或任何 AI）拿到這些文件，都能照同樣的規矩繼續做。</p></div>
+
+<div class="box story"><span class="tag">名詞由來</span>
+<p><strong>Architecture（架構）</strong>：希臘文 arkhi（首領）+ tekton（工匠）＝「總工匠」，就是建築師。</p>
+<p><strong>Module（模組）</strong>：拉丁文 modulus「小量尺、小單位」。古羅馬建築用柱子的寬度當單位，整棟建築都是它的倍數。</p>
+<p><strong>ERP</strong>：Enterprise Resource Planning（企業資源規劃）。1990 年左右由研究機構 Gartner 取名，前身是製造業的 MRP（物料需求規劃）。</p></div>
+
+<div class="recap"><h4>重點回顧</h4><ol>
+<li>架構是系統的藍圖：門面、本機、雲端大腦、倉庫、廣播。</li>
+<li>零成本、最多八類、模組化、三語、離線優先、一個真相。</li>
+<li>把設計寫成文件，人和 AI 都能照著做。</li></ol></div>
+
+<div class="quiz" data-answer="c"><p class="q">小測驗：宿舍部門想要一個「報修登記」系統。依照 Factory OS 原則，應該？</p>
+<div class="opts"><button type="button" data-o="a">A. 另外買一套宿舍管理軟體</button><button type="button" data-o="b">B. 開第九大類「宿舍平台」</button><button type="button" data-o="c">C. 做成一個新模組，放進現有的「行政」平台，沿用同一套骨架</button></div>
+<p class="explain" hidden>C。新需求優先放進現有類別，共用 GAS、Telegram 和樣式，維護最省力。</p></div>
+</section>
+
+<!-- ======================= L16 ======================= -->
+<section class="page lesson" id="l16" data-level="5" data-title="安全、治理與交接">
+<header class="lhead"><div class="op">工序 <b>16</b>｜廠長</div><h2>安全、治理與交接</h2><p class="goal">讓系統「做得出來」之外，還要「守得住、傳得下去」。</p></header>
+
+<div class="box analogy"><span class="tag">生活比喻</span>
+<p>工廠大門有保全、倉庫有鎖、每個工序有作業指導書、新人有師傅帶。系統也需要這四樣東西：<strong>門禁、鑰匙、說明書、交接</strong>。這些合起來叫做<button class="term" type="button" data-t="Governance">治理</button>。</p></div>
+
+<h3>一、保護個人資料</h3>
+<ul>
+<li>薪資、身分證號、銀行帳號、健康紀錄都是<strong>個資</strong>。只給需要的人看（最少權限原則）。</li>
+<li>公開的 GitHub 網頁裡<strong>不放任何個資</strong>；個資只存在有權限控管的 Google Sheets 裡。</li>
+<li>把資料丟給 AI 分析前，想一想：真的需要姓名嗎？很多時候用工號就夠了。</li>
+</ul>
+
+<h3>二、管好鑰匙</h3>
+<p>Bot Token、試算表 ID 這些「鑰匙」，放在 GAS 的<strong>指令碼屬性（Script Properties）</strong>裡，程式要用時再去拿，不寫死在程式碼中。這樣就算程式碼被別人看到，鑰匙也不會外流。</p>
+<div class="codewrap"><pre class="code"><span class="c">// 在 GAS 裡：專案設定 › 指令碼屬性，新增 BOT_TOKEN</span>
+<span class="k">const</span> token = PropertiesService.getScriptProperties().getProperty(<span class="s">'BOT_TOKEN'</span>);</pre></div>
+
+<h3>三、備份：3-2-1 規則</h3>
+<div class="grid2">
+<div class="card"><b>3 份</b>正本 1 份＋備份 2 份</div>
+<div class="card"><b>2 種地方</b>例如雲端＋外接硬碟</div>
+<div class="card"><b>1 份在別處</b>不跟正本放在同一個地方</div>
+</div>
+
+<h3>四、寫下來：系統的作業指導書</h3>
+<p>工廠的每個工序都有 <button class="term" type="button" data-t="SOP">SOP</button>，系統也要有。至少要有：</p>
+<ul>
+<li><strong>總藍圖</strong>：有哪些平台、資料怎麼流。</li>
+<li><strong>規則文件</strong>：欄位定義、計算規則、命名規則。</li>
+<li><strong>錯誤清單</strong>：踩過的坑。</li>
+<li><strong>操作說明</strong>：給使用者的三語簡易手冊。</li>
+<li><strong>帳號清單</strong>：每個系統的倉庫、GAS、機器人、試算表、負責人（這份要鎖起來）。</li>
+</ul>
+
+<h3>五、驗收和交接</h3>
+<ol>
+<li>新系統上線前，讓真正的使用者（組長、文員）試用一週。</li>
+<li>新舊並行，數字對得上才切換。</li>
+<li>交接時，新負責人照著文件從頭部署一次，能做出來才算交接完成。</li>
+</ol>
+
+<div class="box warn"><span class="tag">小心：AI 的產出一定要抽查</span>
+<p>特別是：<strong>數字</strong>（抽查幾筆）、<strong>法規</strong>（柬埔寨勞工法、加班與假日規定要對照官方來源）、<strong>對外文件</strong>（寄給客戶、驗廠單位、台北總部之前，人要讀過一遍）。</p></div>
+
+<div class="box story"><span class="tag">名詞由來</span>
+<p><strong>Governance（治理）</strong>：希臘文 kybernan「掌舵」→ 拉丁文 gubernare → 英文 govern。有趣的是，<strong>cyber（網路、數位）</strong>也是同一個字根——管理數位系統，本來就是在掌舵。</p>
+<p><strong>SOP</strong>：Standard Operating Procedure（標準作業程序）。procedure 來自拉丁文 procedere「一步一步向前走」。</p></div>
+
+<div class="recap"><h4>重點回顧</h4><ol>
+<li>個資最少權限、不放公開處；鑰匙放指令碼屬性。</li>
+<li>3-2-1 備份；系統要有自己的 SOP。</li>
+<li>試用、並行、照文件重建一次，才算交接完成。</li></ol></div>
+
+<div class="quiz" data-answer="a"><p class="q">小測驗：怎麼確認「系統交接成功」？</p>
+<div class="opts"><button type="button" data-o="a">A. 新負責人只看文件，就能從頭把系統部署起來</button><button type="button" data-o="b">B. 把帳號密碼給他</button><button type="button" data-o="c">C. 口頭說明一小時</button></div>
+<p class="explain" hidden>A。文件能讓別人重建，才代表知識真的留下來了，而不是只存在某個人的腦袋裡。</p></div>
+</section>
+
+<!-- ======================= L17 ======================= -->
+<section class="page lesson" id="l17" data-level="5" data-title="畢業專題：從 0 到 1 做一個模組">
+<header class="lhead"><div class="op">工序 <b>17</b>｜廠長</div><h2>畢業專題：從 0 到 1 做一個模組</h2><p class="goal">把 16 課學到的串起來，自己完成一個真正上線的系統。</p></header>
+
+<h3>挑一個題目</h3>
+<div class="grid2">
+<div class="card"><b>宿舍報修</b>員工掃 QR Code 報修，總務收到 Telegram 通知，修好後回報。</div>
+<div class="card"><b>針具管理</b>斷針登記、換針紀錄、每週針具報告自動彙整。</div>
+<div class="card"><b>QC 不良統計</b>每天各線不良項目登記，自動算出前五大不良原因。</div>
+<div class="card"><b>訪客登記</b>保安在門口登記訪客，接待部門同時收到通知。</div>
+</div>
+
+<h3>八步路線圖（勾選會記住）</h3>
+<div class="demo" style="box-shadow:none;border-width:1.5px">
+<div class="checklist" data-store="road17">
+<label><input type="checkbox"><span><strong>1. 找痛點</strong>：現在哪裡最慢、最常出錯？問使用者，不要自己猜。（第 4 課）</span></label>
+<label><input type="checkbox"><span><strong>2. 紙上畫流程</strong>：誰填、誰看、誰核准、多久一次。（第 4 課）</span></label>
+<label><input type="checkbox"><span><strong>3. 定欄位</strong>：列出每個欄位、格式、哪個是唯一編號。（第 5 課）</span></label>
+<label><input type="checkbox"><span><strong>4. 寫需求提示詞</strong>：角色、任務、背景、格式、限制，要求完整單一檔案。（第 2、7 課）</span></label>
+<label><input type="checkbox"><span><strong>5. 做出 v1 並測試</strong>：本機儲存、三語、手機好用。（第 6、7、8 課）</span></label>
+<label><input type="checkbox"><span><strong>6. 接雲端和機器人</strong>：GAS 寫入試算表、Telegram 通知或審核。（第 9、10 課）</span></label>
+<label><input type="checkbox"><span><strong>7. 上線與試用</strong>：GitHub Pages 發布、QR Code、使用者試用一週、並行比對。（第 11、16 課）</span></label>
+<label><input type="checkbox"><span><strong>8. 寫文件、進錯誤清單、交接</strong>：讓別人也能接手。（第 13、16 課）</span></label>
+</div></div>
+
+<h3>之後可以往哪裡走？</h3>
+<ul>
+<li><strong>看板</strong>：把各模組的數字集中成一個主管看板，每週自動產出雙語週報。</li>
+<li><strong>代理人</strong>：讓 Claude 定時收集、匯入、核對，你只處理例外。（第 14 課）</li>
+<li><strong>分析</strong>：請 Claude 找出效率下降的原因、預測交期風險。</li>
+<li><strong>教別人</strong>：把這份教材傳給其他部門主管。教會別人，是最好的複習。</li>
+</ul>
+
+<div class="cert" id="cert">
+<p style="margin:0;color:var(--ink-2)">結業證明</p>
+<h4>用 Claude 把成衣廠搬上網</h4>
+<div id="certLocked"><p>完成全部 17 課（按每課最下面的「我學會了」）就會解鎖。<br>目前完成 <b id="certN">0</b> / 17 課。</p></div>
+<div id="certOpen" hidden>
+<p>茲證明</p>
+<div class="name" id="certName">（請輸入姓名）</div>
+<p>已完成全部 17 道工序，具備用 Claude 規劃、製作、上線與維護工廠系統的能力。</p>
+<p style="color:var(--ink-2);font-size:.9rem" id="certDate"></p>
+<label>姓名 <input type="text" id="certInput" maxlength="30" aria-label="輸入你的姓名"></label>
+</div>
+</div>
+</section>
+
+<!-- ======================= GLOSSARY ======================= -->
+<section class="page" id="glossary" data-title="名詞辭典">
+<header class="lhead"><div class="op">附錄</div><h2>名詞辭典（附由來）</h2><p class="goal">課程裡所有專有名詞都在這裡。知道一個字從哪裡來，就不容易忘記它的意思。</p></header>
+<input class="gloss-search" id="gSearch" type="search" placeholder="搜尋：例如 API、雲端、效率" aria-label="搜尋名詞">
+<div id="gList"></div>
+</section>
+
+</main>
+</div>
+
+<dialog class="termdlg" id="termDlg"><div class="in">
+<h4 id="tdTitle"></h4><div class="zh" id="tdZh"></div>
+<p id="tdDesc"></p>
+<div class="origin"><b>名詞由來</b><span id="tdOrigin"></span></div>
+<button class="btn sm close" type="button" id="tdClose">知道了</button>
+</div></dialog>
+<script>
+(function(){
+'use strict';
+var GL=[
+{k:'AI',t:'AI',zh:'人工智慧 Artificial Intelligence',d:'讓電腦做出看起來「有智慧」的事，例如理解文字、辨識圖片、下判斷。',o:'1956 年美國達特茅斯會議，約翰‧麥卡錫等人提出這個詞。artificial 來自拉丁文「技藝＋做出」，意思是人造的。'},
+{k:'Anthropic',t:'Anthropic',zh:'做出 Claude 的公司',d:'一家專注在 AI 安全與研究的公司，2021 年成立。',o:'希臘文 anthropos「人」，anthropic 意思是「跟人類有關的」。'},
+{k:'Claude',t:'Claude',zh:'Anthropic 的 AI 助理',d:'能對話、寫作、分析資料、寫程式，也能當代理人操作電腦做事。',o:'一般認為是向「資訊理論之父」克勞德‧夏農致敬，他在 1948 年證明所有資訊都能用 0 和 1 表示。'},
+{k:'LLM',t:'LLM',zh:'大型語言模型 Large Language Model',d:'讀過大量文字、學會語言規律的 AI。核心原理是預測下一個 Token。',o:'model（模型）原本是按比例做的樣品，就像打樣的樣衣；語言模型就是「用數學模仿語言的樣品」。'},
+{k:'Token',t:'Token',zh:'詞元、字塊',d:'AI 讀寫文字的最小單位。中文常常一兩個字一個 Token；也用來計算使用量。',o:'古英文 tācen「記號」，後來指代幣、車票。每一小塊文字就像一枚代幣。'},
+{k:'Prompt',t:'Prompt',zh:'提示詞',d:'你給 AI 的指令和說明。寫得越清楚，結果越好。',o:'拉丁文 promptus「準備好、拿出來」。劇場裡躲在台邊小聲提醒演員台詞的人叫 prompter（提詞人）。'},
+{k:'Hallucination',t:'Hallucination',zh:'幻覺',d:'AI 很有自信地說出錯誤或不存在的內容，所以重要資訊要查證。',o:'拉丁文 alucinari「神遊、胡思亂想」。醫學用來指看到不存在的東西，AI 領域借來用。'},
+{k:'Context',t:'Context',zh:'上下文、情境',d:'AI 在回答時能「看到」的所有內容：對話紀錄、你給的檔案、專案說明。',o:'拉丁文 contexere「編織在一起」（con 一起＋texere 編織）。textile（紡織品）和 text（文字）也是同一個字根。'},
+{k:'Artifact',t:'Artifact',zh:'成品、作品',d:'Claude 在對話中做出來、可以直接看或使用的東西，例如一個網頁工具。',o:'拉丁文 arte（用技藝）＋factum（做成的），原指考古挖到的人造器物。'},
+{k:'MCP',t:'MCP',zh:'模型上下文協定 Model Context Protocol',d:'讓 AI 能接上各種外部服務（信箱、雲端硬碟、行事曆）的開放標準，常被比喻成 AI 的 USB-C 插頭。',o:'2024 年底由 Anthropic 公開。protocol 來自希臘文「黏在卷軸第一頁的說明」，後來變成外交禮儀，再變成電腦溝通規則。'},
+{k:'Agent',t:'Agent',zh:'代理人',d:'不只回答問題，還會自己觀察、計畫、行動、檢查，替你完成任務的 AI。',o:'拉丁文 agere「做、推動」。旅行社、房仲、特務英文都叫 agent，意思是「替你辦事的人」。'},
+{k:'HITL',t:'Human-in-the-loop',zh:'人在迴路中',d:'自動化流程中，重要決定（錢、對外、人事）一定保留給人來按。',o:'來自控制工程：自動控制的「迴路」裡，刻意保留一個由人判斷的環節。'},
+{k:'Automation',t:'Automation',zh:'自動化',d:'讓機器或程式自己完成重複的工作，不用人一步步操作。',o:'1946 年福特汽車副總裁德爾瑪‧哈德讓這個詞流行。字根是希臘文 automatos「自己動的」。'},
+{k:'HTML',t:'HTML',zh:'超文字標記語言',d:'網頁的骨架，決定頁面上有哪些東西：標題、輸入框、按鈕、表格。',o:'1991 年提姆‧柏納李在 CERN 推出全球資訊網。markup 來自印刷業在稿紙上做「標記」告訴排版工人；hypertext 是可以跳轉的文字。'},
+{k:'CSS',t:'CSS',zh:'階層式樣式表',d:'網頁的外觀：顏色、大小、排版、圓角。',o:'1994 年由哈孔‧維姆‧萊提出。cascading 是「瀑布般層層往下」，後面的規則可以蓋過前面的。'},
+{k:'JavaScript',t:'JavaScript',zh:'網頁程式語言',d:'讓網頁「會動」：按鈕會計算、資料會儲存、畫面會更新。',o:'1995 年布蘭登‧艾克約 10 天做出雛形。原名 Mocha、LiveScript，為了搭 Java 的熱潮改名，其實跟 Java 關係不大。'},
+{k:'Browser',t:'Browser',zh:'瀏覽器',d:'用來打開網頁的程式，例如 Chrome、Edge、Safari。',o:'browse 原指牛羊東咬一口西咬一口地吃嫩葉，後來指隨意翻看。1990 年柏納李寫出第一個瀏覽器。'},
+{k:'Spreadsheet',t:'Spreadsheet',zh:'試算表',d:'用列和欄整理資料的表格，例如 Excel、Google Sheets。',o:'會計師把帳目攤開（spread）在跨兩頁的大紙（sheet）上。1979 年第一套電子試算表 VisiCalc 問世，Excel 在 1985 年推出。'},
+{k:'Data',t:'Data',zh:'資料',d:'記錄下來的事實，例如產量、日期、線別。',o:'拉丁文 datum「被給予的東西」，data 是複數。'},
+{k:'localStorage',t:'localStorage',zh:'瀏覽器本機儲存',d:'瀏覽器內建的小儲存空間，約 5MB，只存在這台裝置的這個瀏覽器。',o:'local（本地）＋storage（儲存）。HTML5 時代（約 2009 年起）加入瀏覽器。'},
+{k:'IndexedDB',t:'IndexedDB',zh:'瀏覽器索引資料庫',d:'瀏覽器內建的大型資料庫，可以存上萬筆資料和檔案，也只在本機。',o:'indexed（有索引的）＋DB（database 資料庫）。像書後面的索引，找東西很快。2010 年代成為瀏覽器標準。'},
+{k:'Cloud',t:'Cloud',zh:'雲端',d:'放在網路另一端、大型機房裡的電腦和儲存空間，隨時隨地都能連上。',o:'早年工程師畫網路圖時，用雲朵代表「外面不用管細節的那一大片網路」。約 2006 年起「雲端運算」一詞流行。'},
+{k:'Sync',t:'Sync',zh:'同步',d:'讓兩個地方的資料變成一樣，例如手機本機和雲端試算表。',o:'synchronize 的縮寫：希臘文 syn（一起）＋chronos（時間），讓時間對齊。'},
+{k:'Server',t:'Server',zh:'伺服器',d:'負責提供服務給其他電腦的電腦。',o:'來自 serve「服務、上菜」。'},
+{k:'API',t:'API',zh:'應用程式介面',d:'兩個程式之間約好的溝通窗口。像餐廳服務生，幫你把點單送進廚房、把菜端出來。',o:'Application Programming Interface。interface 是「兩個東西接觸的那一面」，像插頭和插座接觸的地方。'},
+{k:'GAS',t:'Google Apps Script',zh:'Google 應用程式指令碼',d:'Google 免費提供的雲端程式環境，能讀寫試算表、寄信、叫機器人、定時執行。',o:'2009 年推出，語法是 JavaScript。'},
+{k:'Script',t:'Script',zh:'腳本、指令碼',d:'一段讓電腦照順序執行的程式。',o:'拉丁文 scribere「寫」，原意是劇本：電腦照著劇本一行行演。'},
+{k:'JSON',t:'JSON',zh:'JavaScript 物件表示法',d:'一種整理資料的文字格式，像一張填好的單子：{"line":"Line 3","qty":1240}。',o:'JavaScript Object Notation，2000 年代初由道格拉斯‧克羅克福特推廣，因為簡單，現在幾乎所有系統都在用。'},
+{k:'GETPOST',t:'GET／POST',zh:'兩種網路請求方式',d:'GET 是「問、拿資料回來」；POST 是「送資料過去」。',o:'都是 HTTP 的方法。post 原意是「郵寄」。'},
+{k:'Webhook',t:'Webhook',zh:'網路鉤子',d:'「有事就打給我」的機制：事情發生時，對方主動通知你的網址。',o:'2007 年由程式設計師傑夫‧林賽提出。hook 是鉤子，事情一發生就勾住通知你。'},
+{k:'Bot',t:'Bot',zh:'機器人',d:'自動執行任務的程式，例如 Telegram 上自動發通知、放審核按鈕的帳號。',o:'robot 的縮寫。robot 出自 1920 年捷克作家恰佩克的劇本《R.U.R.》，來自捷克文 robota「苦役」。'},
+{k:'Telegram',t:'Telegram',zh:'電報（通訊 App）',d:'VRT 各部門使用的通訊軟體，可以建立機器人、放按鈕。',o:'2013 年推出。希臘文 tele（遠）＋gramma（寫下的東西）＝電報。'},
+{k:'Git',t:'Git',zh:'版本控制系統',d:'記錄檔案每一次修改的工具，可以隨時回到舊版本。',o:'2005 年由林納斯‧托瓦茲寫出。git 是英國俚語「討厭鬼」，他開玩笑說專案都用自己命名。'},
+{k:'GitHub',t:'GitHub',zh:'程式碼雲端倉庫',d:'存放程式和版本紀錄的網站；GitHub Pages 可以免費發布網頁。',o:'2008 年上線，2018 年被微軟收購。hub 是輪子中心的軸，引申為集散中心。'},
+{k:'Repository',t:'Repository',zh:'倉庫（repo）',d:'GitHub 上存放一個專案所有檔案和版本的地方。',o:'拉丁文 reponere「放回去、收藏」。'},
+{k:'Version',t:'Version',zh:'版本',d:'檔案的某一次樣子，例如 v1、v2。保留舊版，壞了可以退回。',o:'拉丁文 vertere「轉」，versio 是「轉換後的樣子」。'},
+{k:'Bug',t:'Bug',zh:'程式錯誤（蟲）',d:'程式裡讓結果出錯的問題。',o:'1947 年哈佛 Mark II 電腦的繼電器卡了一隻飛蛾，被貼在日誌上。但更早的 1870 年代，愛迪生就用 bug 形容機器毛病。'},
+{k:'Debug',t:'Debug',zh:'除錯',d:'找出並修正錯誤的過程：重現、收集證據、描述、修正、驗證。',o:'de（去除）＋bug（蟲）＝抓蟲。'},
+{k:'UTC',t:'UTC',zh:'世界協調時間',d:'全世界共用的標準時間。柬埔寨是 UTC+7，比它快 7 小時。',o:'1960 年代訂立。英文想叫 CUT、法文想叫 TUT，最後折衷成 UTC。'},
+{k:'ISO',t:'ISO',zh:'國際標準化組織',d:'制定國際標準的組織。ISO 8601 規定日期寫成 2026-09-21。',o:'取自希臘文 isos「相等」，所以各國語言都叫 ISO。'},
+{k:'CORS',t:'CORS',zh:'跨來源資源共用',d:'瀏覽器的保全規定：網頁要送資料到別的網站前，有時會先「預檢」問可不可以。',o:'Cross-Origin Resource Sharing。origin 是「來源」，這條規定防止壞網站偷偷用你的身分送資料。'},
+{k:'IE',t:'IE',zh:'工業工程 Industrial Engineering',d:'研究怎麼讓人、機器、材料配合得最有效率的學問。',o:'泰勒用碼表研究工作時間，1911 年出版《科學管理原理》；吉爾布雷斯夫婦研究動作浪費。'},
+{k:'SMV',t:'SMV',zh:'標準分鐘值 Standard Minute Value',d:'熟練的人用標準方法做完一件（或一道工序）需要的分鐘數，是算效率和產能的基礎。',o:'源自泰勒的時間研究和吉爾布雷斯的動作研究，成衣業再發展出各工序的標準時間。'},
+{k:'WIP',t:'WIP',zh:'在製品 Work In Progress',d:'已經開始做、還沒完成的貨。WIP 太多代表產線卡住。',o:'progress 來自拉丁文 progressus「向前走」。'},
+{k:'KPI',t:'KPI',zh:'關鍵績效指標',d:'用來判斷做得好不好的重要數字，例如效率、達成率、不良率。',o:'Key Performance Indicator。indicator 是「指針」，像儀表板上的指針。'},
+{k:'Lean',t:'Lean',zh:'精實生產',d:'消除浪費、讓流程順暢的管理方法。',o:'1988 年研究者克拉夫奇克研究豐田生產方式後，用 lean（精瘦、沒有贅肉）來形容。'},
+{k:'SOP',t:'SOP',zh:'標準作業程序',d:'把做事的步驟寫下來，讓每個人照同樣方法做。',o:'Standard Operating Procedure。procedure 來自拉丁文 procedere「一步步向前走」。'},
+{k:'Module',t:'Module',zh:'模組',d:'系統裡一個獨立的功能單位，例如車縫模組、裁剪模組。',o:'拉丁文 modulus「小量尺」。古羅馬建築用柱寬當單位，整棟房子都是它的倍數。'},
+{k:'Architecture',t:'Architecture',zh:'架構',d:'系統的整體藍圖：有哪些部分、資料怎麼流、怎麼連接。',o:'希臘文 arkhi（首領）＋tekton（工匠）＝總工匠，也就是建築師。'},
+{k:'ERP',t:'ERP',zh:'企業資源規劃',d:'把採購、庫存、生產、財務等資料整合在一起的系統。',o:'Enterprise Resource Planning，約 1990 年由 Gartner 取名，前身是製造業的 MRP（物料需求規劃）。'},
+{k:'Governance',t:'Governance',zh:'治理',d:'讓系統安全、有規矩、能傳承的管理：權限、備份、文件、交接。',o:'希臘文 kybernan「掌舵」→ 拉丁文 gubernare → govern。cyber（數位）也是同一個字根。'},
+{k:'Backup',t:'Backup',zh:'備份',d:'另外保存一份資料，原本的壞了還能救回來。建議 3-2-1 規則。',o:'back up 原意是「在後面撐住、支援」。'},
+{k:'Schedule',t:'Schedule',zh:'排程',d:'設定工作在固定時間自動執行，例如每 30 分鐘收一次檔案。',o:'拉丁文 schedula「小紙條」，古人把待辦事項寫在小紙條上排順序。'}
+];
+
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var store={get:function(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+var P='vrtClaudeCourse.';
+var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+
+/* theme */
+var th=store.get(P+'theme',null); if(th) document.documentElement.setAttribute('data-theme',th);
+$('#themeBtn').addEventListener('click',function(){
+  var cur=document.documentElement.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  var nx=cur==='dark'?'light':'dark'; document.documentElement.setAttribute('data-theme',nx); store.set(P+'theme',nx);
+});
+
+/* nav */
+var LV={1:['學徒','認識 AI'],2:['車工','做出第一個工具'],3:['組長','接上雲端與機器人'],4:['技術員','做對、做穩'],5:['廠長','系統思維與自動化']};
+var CN='一二三四五';
+var lessons=$$('section.lesson'), pages=$$('section.page');
+var done=new Set(store.get(P+'done',[]));
+var h='',cur=0;
+lessons.forEach(function(s,i){
+  var lv=+s.dataset.level;
+  if(lv!==cur){ if(cur) h+='</ul>'; h+='<div class="navlv">第'+CN[lv-1]+'階 '+LV[lv][0]+'<small>'+LV[lv][1]+'</small></div><ul class="navlist">'; cur=lv; }
+  h+='<li data-id="'+s.id+'"><a href="#'+s.id+'"><span class="knot">'+(i+1)+'</span><span>'+esc(s.dataset.title)+'</span></a></li>';
+});
+$('#navTree').innerHTML=h+'</ul>';
+
+lessons.forEach(function(s,i){
+  var f=document.createElement('div'); f.className='pager';
+  var prev=i>0?'<a class="btn ghost" href="#'+lessons[i-1].id+'">上一道工序</a>':'<a class="btn ghost" href="#home">課程首頁</a>';
+  var next=i<lessons.length-1?'<a class="btn ghost" href="#'+lessons[i+1].id+'">下一道工序</a>':'<a class="btn ghost" href="#glossary">名詞辭典</a>';
+  f.innerHTML=prev+'<button class="btn donebtn" type="button" data-id="'+s.id+'" aria-pressed="false">我學會了</button>'+next;
+  s.appendChild(f);
+});
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.donebtn'); if(!b) return;
+  var id=b.dataset.id; if(done.has(id)) done.delete(id); else done.add(id);
+  store.set(P+'done',Array.from(done)); refresh();
+});
+
+function refresh(){
+  $$('.navlist li').forEach(function(li){li.classList.toggle('done',done.has(li.dataset.id))});
+  $$('.donebtn').forEach(function(b){var d=done.has(b.dataset.id);b.setAttribute('aria-pressed',d);b.textContent=d?'已完成（再按可取消）':'我學會了'});
+  var n=lessons.filter(function(s){return done.has(s.id)}).length;
+  $('#progText').textContent='已完成 '+n+' / '+lessons.length+' 課';
+  $('#progBar').style.width=(n/lessons.length*100)+'%';
+  $('#certN').textContent=n;
+  var all=n===lessons.length; $('#certLocked').hidden=all; $('#certOpen').hidden=!all;
+}
+
+/* drawer */
+var side=$('#side'),scrim=$('#scrim'),menuBtn=$('#menuBtn');
+function setSide(o){side.classList.toggle('open',o);scrim.classList.toggle('show',o);menuBtn.setAttribute('aria-expanded',o)}
+menuBtn.addEventListener('click',function(){setSide(!side.classList.contains('open'))});
+scrim.addEventListener('click',function(){setSide(false)});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')setSide(false)});
+
+/* routing */
+function route(){
+  var id=(location.hash||'#home').slice(1), el=document.getElementById(id);
+  if(!el||!el.classList.contains('page')) id='home';
+  var pg=document.getElementById(id);
+  pages.forEach(function(p){p.hidden=p.id!==id});
+  $$('.navlist a').forEach(function(a){ if(a.getAttribute('href')==='#'+id) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+  var t=pg.dataset.title||''; $('#topTitle').textContent=id==='home'?'用 Claude 把成衣廠搬上網':t;
+  document.title=(id==='home'?'':t+'｜')+'用 Claude 把成衣廠搬上網';
+  setSide(false); window.scrollTo(0,0);
+  if(id==='home') playHero();
+}
+window.addEventListener('hashchange',route);
+
+/* hero */
+function playHero(){var f=$('#heroFig'); f.classList.remove('play'); void f.offsetWidth; f.classList.add('play');}
+$('#replay').addEventListener('click',playHero);
+
+/* quiz */
+document.addEventListener('click',function(e){
+  var b=e.target.closest('.quiz .opts button'); if(!b) return;
+  var q=b.closest('.quiz'); b.classList.add(b.dataset.o===q.dataset.answer?'right':'wrong');
+  q.querySelector('.explain').hidden=false;
+});
+
+/* copy */
+function fallbackCopy(t,cb){var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(e){}ta.remove();cb()}
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-copy]'); if(!b) return;
+  var src=document.getElementById(b.dataset.copy); if(!src) return;
+  var t=src.innerText; if(!b.dataset.label) b.dataset.label=b.textContent;
+  var ok=function(){b.textContent='已複製';setTimeout(function(){b.textContent=b.dataset.label},1500)};
+  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(ok,function(){fallbackCopy(t,ok)})} else fallbackCopy(t,ok);
+});
+
+/* term dialog */
+var dlg=$('#termDlg');
+function findG(k){for(var i=0;i<GL.length;i++) if(GL[i].k===k) return GL[i]; return null}
+document.addEventListener('click',function(e){
+  var b=e.target.closest('button.term'); if(!b) return;
+  var g=findG(b.dataset.t); if(!g) return;
+  $('#tdTitle').textContent=g.t; $('#tdZh').textContent=g.zh; $('#tdDesc').textContent=g.d; $('#tdOrigin').textContent=g.o;
+  if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open','');
+});
+$('#tdClose').addEventListener('click',function(){dlg.close()});
+dlg.addEventListener('click',function(e){if(e.target===dlg) dlg.close()});
+
+/* glossary */
+function renderG(q){
+  q=(q||'').trim().toLowerCase();
+  var list=GL.slice().sort(function(a,b){return a.t.localeCompare(b.t,'en')}).filter(function(g){return !q||(g.t+g.zh+g.d+g.o).toLowerCase().indexOf(q)>-1});
+  $('#gList').innerHTML=list.length?list.map(function(g){return '<div class="gitem"><h4>'+esc(g.t)+'</h4><div class="zh">'+esc(g.zh)+'</div><p>'+esc(g.d)+'</p><p class="o"><b>由來：</b>'+esc(g.o)+'</p></div>'}).join(''):'<p>找不到這個詞。試試別的關鍵字，例如「雲端」或「API」。</p>';
+}
+$('#gSearch').addEventListener('input',function(e){renderG(e.target.value)});
+renderG('');
+
+/* L1 token */
+function tok(){
+  var t=$('#tokIn').value, parts=t.match(/[\u3400-\u9fff\uf900-\ufaff]|[A-Za-z]{1,5}|\d{1,3}|\s+|[^\sA-Za-z\d\u3400-\u9fff]/g)||[];
+  parts=parts.filter(function(p){return !/^\s+$/.test(p)});
+  $('#tokOut').innerHTML=parts.map(function(p){return '<span>'+esc(p)+'</span>'}).join('');
+  $('#tokN').textContent=parts.length;
+}
+$('#tokIn').addEventListener('input',tok); tok();
+
+/* L2 prompt builder */
+function pb(){
+  $('#pbOut').textContent=$('#pbRole').value+'。\n任務：'+$('#pbTask').value+'。\n背景：'+$('#pbCtx').value+'。\n格式：'+$('#pbFmt').value+'。\n限制：'+$('#pbLim').value+'。\n如果資訊不夠，請先問我問題再開始。';
+}
+['#pbRole','#pbTask','#pbCtx','#pbFmt','#pbLim'].forEach(function(s){$(s).addEventListener('change',pb)}); pb();
+
+/* L5 cleaner */
+var RAW=[['2026/9/21','L3','VR2201','1,240'],['2026-09-21','line 5','VR2201','980'],['21/09/2026','7線','VR2305','1105'],['2026-09-21','Line 07 ','VR2305','860'],['','合計','','4,185']];
+function nDate(s){s=s.trim();if(!s)return '';var m=s.match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})$/);if(m)return m[1]+'-'+('0'+m[2]).slice(-2)+'-'+('0'+m[3]).slice(-2);m=s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);if(m)return m[3]+'-'+('0'+m[2]).slice(-2)+'-'+('0'+m[1]).slice(-2);return s}
+function nLine(s){var m=s.match(/\d+/);return m?'Line '+parseInt(m[0],10):s.trim()}
+var cleaned=false;
+function renderClean(){
+  var r='<tr><th>日期</th><th>線別</th><th>款號</th><th class="num">產量</th></tr>';
+  RAW.forEach(function(row){
+    var total=!row[2].trim();
+    if(!cleaned){ r+='<tr><td>'+esc(row[0]||'（空白）')+'</td><td>'+esc(row[1])+'</td><td>'+esc(row[2]||'（空白）')+'</td><td class="num">'+esc(row[3])+'</td></tr>'; return; }
+    var d=nDate(row[0]),l=nLine(row[1]),q=parseInt(row[3].replace(/,/g,''),10);
+    r+='<tr'+(total?' class="strike"':'')+'><td'+(d!==row[0]?' class="hl"':'')+'>'+esc(d||'（空白）')+'</td><td'+(!total&&l!==row[1]?' class="hl"':'')+'>'+esc(total?row[1]:l)+'</td><td>'+esc(row[2]||'（空白）')+'</td><td class="num'+(String(q)!==row[3]?' hl':'')+'">'+q+'</td></tr>';
+  });
+  $('#cleanTbl').innerHTML=r;
+  $('#cleanMsg').innerHTML=cleaned?'<span class="good">清洗後合計：4,185 件。</span>日期都變成 2026-09-21 格式、線別統一成「Line N」、數字去掉逗號，最後一列款號空白，判斷為合計列，已排除。':'<span class="bad">如果直接把整欄加起來：8,370 件（錯！）</span>因為最後一列「合計」又被加了一次。而且「L3」「line 5」「7線」寫法都不一樣，電腦分不出是哪條線。';
+  $('#cleanBtn').textContent=cleaned?'看原始資料':'開始清洗';
+}
+$('#cleanBtn').addEventListener('click',function(){cleaned=!cleaned;renderClean()}); renderClean();
+
+/* L6 layers */
+function ly(){$('#lyCard').classList.toggle('styled',$('#lyCss').checked)}
+$('#lyCss').addEventListener('change',ly);
+$('#lyBtn').addEventListener('click',function(){
+  if(!$('#lyJs').checked){$('#lyOut').textContent='按鈕按下去……沒有反應（沒有 JavaScript）';return}
+  var q=+$('#lyQty').value,t=+$('#lyTgt').value;
+  if(!t){$('#lyOut').textContent='目標不能是 0';return}
+  var p=Math.round(q/t*1000)/10; $('#lyOut').textContent='達成率 '+p+'% '+(p>=100?'✓ 達標':'✗ 未達標');
+});
+
+/* L7 / L17 checklists */
+$$('.checklist[data-store]').forEach(function(c){
+  var key=P+'chk.'+c.dataset.store, st=store.get(key,[]), boxes=$$('input',c);
+  boxes.forEach(function(b,i){b.checked=!!st[i];b.addEventListener('change',function(){store.set(key,boxes.map(function(x){return x.checked}))})});
+});
+
+/* L9 API */
+var apiRunning=false;
+$('#apiBtn').addEventListener('click',function(){
+  if(apiRunning) return; apiRunning=true;
+  var dot=$('#apiDot'),log=$('#apiLog'),nodes=['#apiN1','#apiN2','#apiN3'];
+  var steps=[[0,0,'① 網頁：組長按下「儲存」，資料打包成 JSON\n   {"line":"Line 3","qty":1240}'],[124,1,'② POST 送到 GAS 的網址（…/exec）\n   GAS：收到，檢查欄位都有填'],[248,2,'③ GAS 把資料寫進 Google Sheets 第 57 列'],[124,1,'④ Sheets 回覆：寫入成功'],[0,0,'⑤ GAS 回傳 {"ok":true}\n   網頁顯示「已同步 ✓」']];
+  log.textContent=''; var i=0;
+  (function step(){
+    if(i>=steps.length){apiRunning=false;nodes.forEach(function(n){$(n).setAttribute('stroke','var(--ink)')});return}
+    var s=steps[i]; dot.style.transform='translateX('+s[0]+'px)';
+    nodes.forEach(function(n,j){$(n).setAttribute('stroke',j===s[1]?'var(--chalk)':'var(--ink)')});
+    log.textContent+=(i?'\n':'')+s[2]; i++; setTimeout(step,reduce?500:1100);
+  })();
+});
+
+/* L10 telegram */
+var TG=[
+ ['me','申請人（GA 採購）','/申請 縫紉機針 DBx1 #14，200 支，約 US$38'],
+ ['bot','VRT 採購機器人','採購單 PO-0927-03<br>品項：縫紉機針 DBx1 #14<br>數量：200 支｜金額：US$38<br>狀態：待驗證<div class="kb"><span>驗證</span><span>退回</span></div>'],
+ ['me','驗證人（GA 主管）','按下「驗證」：庫存只剩 40 支，數量合理'],
+ ['bot','VRT 採購機器人','已驗證，等待廠長核准<div class="kb"><span>核准</span><span>退回</span></div>'],
+ ['me','核准人（廠長）','按下「核准」'],
+ ['bot','VRT 採購機器人','✅ 已核准。已寫入採購總表第 128 列，並通知申請人下單。']
+];
+var tgI=0;
+function tgReset(){tgI=0;$('#tgChat').innerHTML='<p style="margin:auto;color:var(--ink-2);font-size:.9rem">按「下一步」看流程</p>';$('#tgNext').disabled=false}
+$('#tgNext').addEventListener('click',function(){
+  if(tgI===0) $('#tgChat').innerHTML='';
+  var m=TG[tgI]; var d=document.createElement('div'); d.className='bub '+m[0]; d.innerHTML='<small>'+m[1]+'</small>'+m[2];
+  $('#tgChat').appendChild(d); $('#tgChat').scrollTop=1e6; tgI++;
+  if(tgI>=TG.length) $('#tgNext').disabled=true;
+});
+$('#tgReset').addEventListener('click',tgReset); tgReset();
+
+/* L11 git */
+var GITN=['<b>v1</b> sewing_v1.html：只能登記產量，資料存在本機。','<b>v2</b> 加入中、英、高棉三語切換，可以匯出 CSV。','<b>v3</b> 加入 GAS 雲端同步，主管電腦也看得到。','<b>v4</b> 修正：早上 7 點前登記的資料日期會少一天（時區問題，第 13 課）。萬一 v4 出新問題，隨時可以退回 v3。'];
+$$('#gitLine button').forEach(function(b){b.addEventListener('click',function(){
+  $$('#gitLine button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});
+  $('#gitNote').innerHTML=GITN[+b.dataset.v];
+})});
+
+/* L12 efficiency */
+var EFF=[['Line 1',1500,12,50,8],['Line 2',216,20,10,8],['Line 3',1152,10,40,8]];
+var et=$('#effTbl');
+EFF.forEach(function(r,i){
+  var tr=document.createElement('tr'); var c='<td>'+r[0]+'</td>';
+  for(var j=1;j<5;j++) c+='<td class="num"><input type="number" min="0" step="any" value="'+r[j]+'" data-r="'+i+'" data-c="'+j+'" style="width:4.8rem;text-align:right" aria-label="'+r[0]+['','產量','SMV','人數','工時'][j]+'"></td>';
+  c+='<td class="num" id="effL'+i+'">–</td>'; tr.innerHTML=c; et.appendChild(tr);
+});
+function eff(){
+  var sumE=0,sumOut=0,sumIn=0,n=0;
+  EFF.forEach(function(r,i){
+    var v=[0];for(var j=1;j<5;j++){v[j]=+$('input[data-r="'+i+'"][data-c="'+j+'"]').value||0}
+    var out=v[1]*v[2], inn=v[3]*v[4]*60, e=inn?out/inn:0;
+    $('#effL'+i).textContent=inn?(e*100).toFixed(1)+'%':'–';
+    if(inn){sumE+=e;n++;sumOut+=out;sumIn+=inn}
+  });
+  $('#effAvg').textContent=n?(sumE/n*100).toFixed(1)+'%':'–';
+  $('#effW').textContent=sumIn?(sumOut/sumIn*100).toFixed(1)+'%':'–';
+}
+et.addEventListener('input',eff); eff();
+
+/* L13 timezone */
+function tz(){
+  var d=$('#tzDate').value,t=$('#tzTime').value; if(!d||!t) return;
+  var a=d.split('-').map(Number),b=t.split(':').map(Number);
+  var iso=new Date(Date.UTC(a[0],a[1]-1,a[2],b[0]-7,b[1])).toISOString(), w=iso.slice(0,10), bad=w!==d;
+  $('#tzWrong').textContent=w; $('#tzWrong').className=bad?'bad':'good';
+  $('#tzIso').textContent='（完整輸出：'+iso+'，Z 代表 UTC）';
+  $('#tzRight').textContent=d;
+  $('#tzMsg').textContent=bad?('出錯了！柬埔寨 '+t+' 減 7 小時，是 UTC 的前一天，所以日期少了一天。'):(t+' 在早上 7 點以後，這次剛好沒出錯。但陷阱還在，改成 06:30 試試看。');
+}
+$('#tzDate').addEventListener('input',tz); $('#tzTime').addEventListener('input',tz); tz();
+
+/* L14 ring */
+var ringRun=false;
+$('#ringBtn').addEventListener('click',function(){
+  if(ringRun) return; ringRun=true;
+  var cells=$$('#ring div'), order=[0,1,3,2], i=0;
+  (function s(){
+    cells.forEach(function(c){c.classList.remove('on')});
+    if(i>=order.length){ringRun=false;return}
+    cells[order[i]].classList.add('on'); i++; setTimeout(s,reduce?600:1100);
+  })();
+});
+
+/* certificate */
+var nm=store.get(P+'name','');
+function setName(v){$('#certName').textContent=v||'（請輸入姓名）'}
+$('#certInput').value=nm; setName(nm);
+$('#certInput').addEventListener('input',function(e){store.set(P+'name',e.target.value);setName(e.target.value)});
+var now=new Date(); $('#certDate').textContent=now.getFullYear()+' 年 '+(now.getMonth()+1)+' 月 '+now.getDate()+' 日';
+
+refresh(); route();
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-127c8f00ae" data-category="garment"></script></body>
+</html>

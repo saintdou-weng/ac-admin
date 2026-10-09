@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>從一根針開始：成衣機台學習課程（針織與梭織）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDF0F3; --paper:#FFFFFF; --ink:#1E3354; --ink2:#44556E; --muted:#6F7C8E;
+  --line:#D5DCE4; --navbg:#1E3354; --denim:#2C4A78; --thread:#D99A2B; --thread-d:#9A6510;
+  --tint:#FBF6EC; --fabric:#E3E8EE; --ok:#2F7D5B; --bad:#C2413A;
+  --serif:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#131A25;--paper:#1A2331;--ink:#E4EAF2;--ink2:#B3BFCF;--muted:#8592A5;--line:#2B384C;
+  --navbg:#0D141F;--denim:#7FA3DA;--tint:#221E16;--fabric:#2A3547;--thread-d:#E8B45A}
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85}
+a{color:var(--denim)}
+h1,h2,h3,h4{font-family:var(--serif);line-height:1.35;color:var(--ink)}
+button{font-family:inherit}
+:focus-visible{outline:3px solid var(--thread);outline-offset:2px;border-radius:4px}
+
+/* ---------- layout ---------- */
+.app{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:100vh}
+.nav{position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--navbg);color:#D8E0EA;padding:30px 22px 48px}
+.brand{display:block;text-decoration:none;color:#fff;font-family:var(--serif);font-weight:900;font-size:25px;line-height:1.3;letter-spacing:.04em}
+.brand small{display:block;font-family:var(--sans);font-weight:400;font-size:13px;letter-spacing:0;color:#9FB0C6;margin-top:4px}
+.navprog{margin:18px 0 4px;font-size:13px;color:#9FB0C6}
+.navprog .bar{height:4px;border-radius:2px;background:rgba(255,255,255,.12);margin-top:6px;overflow:hidden}
+.navprog .bar i{display:block;height:100%;width:0;background:var(--thread);transition:width .6s}
+.nav h3{font-family:var(--sans);font-size:13px;font-weight:500;color:#9FB0C6;margin:24px 0 6px}
+.seam{list-style:none;margin:0;padding:0 0 0 24px;position:relative}
+.seam::before{content:"";position:absolute;left:7px;top:12px;bottom:12px;border-left:2px dashed rgba(217,154,43,.42)}
+.seam a{display:block;position:relative;color:#D8E0EA;text-decoration:none;padding:6px 8px;border-radius:8px;font-size:15px;line-height:1.45}
+.seam a::before{content:"";position:absolute;left:-22px;top:11px;width:10px;height:10px;border-radius:50%;background:var(--navbg);border:2px solid rgba(217,154,43,.65);transition:background .4s}
+.seam li.done a::before{background:var(--thread);border-color:var(--thread)}
+.seam li.cur a{background:rgba(255,255,255,.09);color:#fff}
+.seam a:hover{background:rgba(255,255,255,.06)}
+.seam .n{color:#8EA0B8;font-size:12px;margin-right:6px}
+.navx{margin-top:26px;display:grid;gap:6px}
+.navx a{color:#D8E0EA;text-decoration:none;padding:8px 10px;border:1px solid rgba(255,255,255,.14);border-radius:10px;font-size:15px}
+.navx a:hover{background:rgba(255,255,255,.06)}
+.topbar{display:none}
+#scrim{display:none}
+.wrap{max-width:780px;margin:0 auto;padding:52px 26px 140px}
+
+@media (max-width:900px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .topbar{display:flex;position:sticky;top:0;z-index:30;align-items:center;gap:12px;min-height:54px;padding:env(safe-area-inset-top,0px) 14px 0;background:var(--navbg);color:#fff}
+  .topbar button{background:none;border:0;color:#fff;font-size:22px;width:40px;height:40px;cursor:pointer;border-radius:8px}
+  .tb-title{font-family:var(--serif);font-weight:900;font-size:18px;flex:1;letter-spacing:.03em}
+  .tb-prog{font-size:13px;color:#9FB0C6}
+  .nav{position:fixed;left:0;top:0;bottom:0;height:100%;width:min(320px,86vw);z-index:50;transform:translateX(-102%);transition:transform .25s ease;padding-top:calc(24px + env(safe-area-inset-top,0px))}
+  .nav.open{transform:none}
+  #scrim.show{display:block;position:fixed;inset:0;background:rgba(5,12,24,.45);z-index:40}
+  .wrap{padding:26px 18px 120px}
+}
+
+/* ---------- typography in lessons ---------- */
+.kicker{font-size:14px;color:var(--muted);margin:0}
+.lesson-h h1{font-size:clamp(30px,5.4vw,44px);font-weight:900;margin:.15em 0 .35em;letter-spacing:.02em}
+.goal{font-size:16px;color:var(--ink2);border-left:3px solid var(--thread);padding:2px 0 2px 14px;margin:0 0 30px}
+.wrap h2{font-size:24px;font-weight:700;margin:2.1em 0 .55em}
+.wrap h3{font-size:19px;font-weight:700;margin:1.6em 0 .4em}
+.wrap p{margin:.7em 0}
+.wrap ul,.wrap ol{padding-left:1.4em;margin:.6em 0}
+.wrap li{margin:.3em 0}
+.big{font-family:var(--serif);font-size:24px;font-weight:900;color:var(--ink);margin:1em 0!important;padding-left:14px;border-left:4px solid var(--thread)}
+.note{font-size:14px;color:var(--muted)}
+.t{border-bottom:2px dotted var(--thread);cursor:help;font-weight:700}
+.t:hover{background:rgba(217,154,43,.12)}
+.ex{border:2px dashed var(--thread);border-radius:12px;background:var(--tint);padding:14px 18px;margin:1.5em 0}
+.ex>b:first-child{display:block;color:var(--thread-d);font-size:15px;margin-bottom:2px}
+.think{background:var(--paper);border-left:4px solid var(--denim);border-radius:0 12px 12px 0;padding:14px 18px;margin:1.5em 0}
+.think>b:first-child{color:var(--denim);font-size:15px}
+.think p{margin:.3em 0}
+details summary{cursor:pointer;color:var(--denim);font-weight:700;font-size:15px;margin-top:6px}
+.tbl{overflow-x:auto;margin:1.2em 0;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:15px;line-height:1.6;min-width:520px}
+th,td{border-bottom:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}
+th{font-weight:700;color:var(--ink2);background:var(--paper)}
+.timeline{list-style:none;padding:0!important;margin:1em 0}
+.timeline li{display:grid;grid-template-columns:4.2em 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);margin:0}
+.timeline .y{font-family:var(--serif);font-weight:900;font-size:19px;color:var(--thread-d)}
+
+/* ---------- labs ---------- */
+.lab{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px;margin:1.7em 0}
+.lab-t{font-weight:700;font-size:16px;margin:0 0 12px;display:flex;gap:10px;align-items:center;line-height:1.4}
+.lab-t::before{content:"";flex:none;width:14px;height:14px;border-radius:50%;border:2.5px dashed var(--thread)}
+.lab svg{display:block;width:100%;height:auto;max-width:100%}
+.svgbox{margin:10px 0;overflow-x:auto}
+.cap{font-size:14px;color:var(--muted);margin:.4em 0 0!important}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{font-size:15px;border:0;border-radius:10px;padding:9px 16px;background:var(--denim);color:#fff;cursor:pointer;line-height:1.4}
+@media (prefers-color-scheme:dark){.btn{color:#0D141F}}
+.btn.ghost{background:transparent;color:var(--denim);border:1.5px solid var(--denim)}
+.btn:hover{filter:brightness(1.08)}
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.seg button{font-size:14.5px;padding:7px 13px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--denim);border-color:var(--denim);color:#fff}
+@media (prefers-color-scheme:dark){.seg button[aria-pressed="true"]{color:#0D141F}}
+.rl{display:block;font-size:15px;margin:10px 0}
+.rl b{color:var(--thread-d)}
+input[type=range]{width:100%;accent-color:var(--thread)}
+select,input[type=number],input[type=text],input[type=search]{font:inherit;font-size:16px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);max-width:100%}
+.verdict{margin-top:10px;padding:10px 14px;border-radius:10px;background:var(--bg);font-size:15px;line-height:1.7;border-left:4px solid var(--muted)}
+.verdict.ok{border-left-color:var(--ok)}
+.verdict.bad{border-left-color:var(--bad)}
+.kv{display:grid;grid-template-columns:6.5em 1fr;gap:4px 12px;font-size:15.5px;margin:8px 0 0}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0}
+.fab{fill:var(--fabric);stroke:var(--line);stroke-width:1}
+.svt{fill:var(--ink2);font-size:12px;font-family:var(--sans)}
+.svt-b{fill:var(--ink);font-size:13px;font-weight:700;font-family:var(--sans)}
+.steps{list-style:none;padding:0!important;display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px!important}
+.steps li{margin:0!important}
+.steps button{font-size:14.5px;padding:6px 12px 6px 6px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:6px}
+.steps button span{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--bg);font-size:12px;font-weight:700}
+.steps button.hot{border-color:var(--thread)}
+.steps button[aria-pressed="true"]{background:var(--denim);color:#fff;border-color:var(--denim)}
+.steps button[aria-pressed="true"] span{background:var(--thread);color:#1E3354}
+.hot-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(8.5em,1fr));gap:6px;margin-top:10px}
+.hot-list button{font-size:14px;text-align:left;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.hot-list button[aria-pressed="true"]{border-color:var(--thread);background:var(--tint)}
+.hs{cursor:pointer}
+.hs circle{fill:var(--thread);stroke:#fff;stroke-width:2}
+.hs text{fill:#1E3354;font-size:12px;font-weight:700;font-family:var(--sans)}
+.hs.on circle{fill:var(--bad)}
+.hs.on text{fill:#fff}
+.lanes{display:grid;gap:10px;margin:8px 0}
+.lane{display:grid;grid-template-columns:7.5em 1fr 4.5em;gap:10px;align-items:center;font-size:14.5px}
+.lane .tr{height:14px;border-radius:7px;background:var(--bg);overflow:hidden}
+.lane .tr i{display:block;height:100%;width:0;background:var(--thread);border-radius:7px}
+.lane .c{font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.gsteps{list-style:none;padding:0!important;margin:10px 0 0!important;counter-reset:g}
+.gsteps li{border-bottom:1px solid var(--line);padding:10px 0;margin:0!important;display:grid;grid-template-columns:2em 1fr;gap:8px;counter-increment:g}
+.gsteps li::before{content:counter(g);font-family:var(--serif);font-weight:900;color:var(--thread-d);font-size:18px}
+.gsteps .m{display:inline-block;font-size:13.5px;padding:1px 9px;border-radius:999px;background:var(--bg);color:var(--ink2);margin:2px 6px 0 0}
+.gsteps button.m{border:1px solid var(--thread);cursor:pointer;background:var(--tint)}
+.gmini{margin-top:6px}
+.cards2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.cards2 figure{margin:0;border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.cards2 figcaption{font-size:14px;line-height:1.5}
+.cards2 figcaption b{display:block;font-size:15px}
+
+/* machine card */
+.mc{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:1.2em 0;background:var(--paper)}
+.mc h3{margin:0!important}
+.mc .en{color:var(--muted);font-size:14px}
+.mc .mini{margin:10px 0 4px}
+.mini-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mini-row.one{grid-template-columns:1fr;max-width:320px;margin:0 auto}
+.mini-row{max-width:600px}
+.mini-row figure{margin:0}
+.mini-row figcaption{font-size:12.5px;color:var(--muted);text-align:center}
+
+/* quiz */
+.quiz{margin-top:3.2em;border-top:2px dashed var(--thread);padding-top:1.2em}
+.quiz h2{margin-top:.4em!important}
+.q{margin:1.3em 0}
+.qt{font-weight:700}
+.opts{display:grid;gap:8px;margin-top:8px}
+.opts button{text-align:left;font-size:15.5px;line-height:1.55;padding:10px 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.opts button:hover:not(:disabled){border-color:var(--denim)}
+.opts button:disabled{cursor:default}
+.opts button.right{border-color:var(--ok);background:rgba(47,125,91,.12)}
+.opts button.wrong{border-color:var(--bad);background:rgba(194,65,58,.1)}
+.ex-ans{font-size:15px;color:var(--ink2);margin-top:6px;line-height:1.7}
+.okc{color:var(--ok)} .badc{color:var(--bad)}
+.pager{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:3em}
+.pager a{padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--paper);text-decoration:none;color:var(--ink);font-weight:700;line-height:1.45}
+.pager a small{display:block;color:var(--muted);font-size:13px;font-weight:400}
+.pager .next{text-align:right;grid-column:2}
+
+/* home */
+.hero h1{font-size:clamp(44px,9vw,78px);font-weight:900;letter-spacing:.05em;margin:0;line-height:1.12}
+.hero .sub{font-size:18px;color:var(--ink2);max-width:32em;margin:.9em 0 0}
+.hero svg{margin:30px 0 6px;cursor:pointer;width:100%;height:auto;display:block}
+.hero .row{margin-top:18px}
+.map{margin-top:40px}
+.lvl{margin:34px 0}
+.lvl h2{margin:0 0 2px!important;font-size:23px}
+.lvl>p{margin:0 0 10px!important;color:var(--ink2);font-size:15px}
+.lessons{list-style:none;margin:0;padding:0!important;border-top:1px solid var(--line)}
+.lessons li{margin:0!important}
+.lessons a{display:grid;grid-template-columns:2.6em 1fr auto;gap:10px;align-items:baseline;padding:12px 4px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.lessons a:hover{background:var(--paper)}
+.lessons .no{font-family:var(--serif);font-weight:900;color:var(--thread-d);font-size:19px}
+.lessons .ttl{font-weight:700;line-height:1.45}
+.lessons .ttl small{display:block;font-weight:400;color:var(--muted);font-size:14px}
+.lessons .st{font-size:13px;color:var(--muted);white-space:nowrap}
+.lessons .done .st{color:var(--ok);font-weight:700}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.tools a{display:block;padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--paper);text-decoration:none;color:var(--ink);font-weight:700}
+.tools a small{display:block;font-weight:400;color:var(--muted);font-size:14px;margin-top:2px}
+
+/* glossary */
+.gl-item{padding:14px 0;border-bottom:1px solid var(--line)}
+.gl-item h3{margin:0!important;font-size:20px}
+.gl-item .en{color:var(--thread-d);font-size:14px;margin-left:8px;font-family:var(--sans);font-weight:500}
+.gl-item p{margin:.3em 0!important;font-size:15.5px}
+.gl-item a{font-size:14px}
+
+/* popover */
+.pop{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(540px,calc(100vw - 24px));max-height:60vh;overflow:auto;background:var(--navbg);color:#E8EEF5;border-radius:16px;padding:18px 44px 16px 20px;box-shadow:0 14px 44px rgba(5,12,24,.4);z-index:60}
+.pop[hidden]{display:none}
+.pop h4{margin:0;font-size:22px;color:#fff}
+.pop .en{color:var(--thread);font-size:14px}
+.pop p{font-size:15.5px;line-height:1.75;margin:8px 0 0}
+.pop a{color:#F0C27A;font-size:14px}
+.pop .x{position:absolute;right:8px;top:6px;background:none;border:0;color:#9FB0C6;font-size:26px;cursor:pointer;width:36px;height:36px}
+
+/* exam + certificate */
+.eq{border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:12px 0;background:var(--paper)}
+.eq legend{font-weight:700;padding:0 4px}
+.eq label{display:flex;gap:8px;align-items:flex-start;padding:5px 0;font-size:15.5px;line-height:1.55;cursor:pointer}
+.eq input{margin-top:6px;accent-color:var(--denim)}
+.eq.r{border-color:var(--ok)} .eq.w{border-color:var(--bad)}
+.eq .ex-ans{border-top:1px dashed var(--line);padding-top:6px}
+.score{font-family:var(--serif);font-weight:900;font-size:56px;color:var(--thread-d);line-height:1}
+.cert{margin:24px 0;background:#FFFDF8;color:#1E3354;border-radius:6px;padding:14px}
+.cert-in{border:2.5px dashed #D99A2B;outline:1.5px solid #1E3354;outline-offset:6px;padding:40px 26px;text-align:center}
+.cert .c1{font-family:var(--serif);font-size:15px;letter-spacing:.4em;color:#9A6510;margin:0}
+.cert h2{font-family:var(--serif);font-size:40px;margin:.35em 0!important;color:#1E3354;border-bottom:1.5px solid #1E3354;display:inline-block;min-width:6em;padding:0 .4em}
+.cert p{font-size:16px;line-height:1.9;color:#1E3354}
+.cert .c-date{font-size:14px;color:#5B6B82}
+
+@media print{
+  body *{visibility:hidden}
+  #cert,#cert *{visibility:visible}
+  #cert{position:absolute;left:0;top:0;width:100%;margin:0}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<div class="topbar"><button id="menuBtn" aria-label="開啟課程目錄" aria-controls="nav" aria-expanded="false">☰</button><span class="tb-title">從一根針開始</span><span class="tb-prog" id="tbProg"></span></div>
+<div class="app">
+  <aside class="nav" id="nav" aria-label="課程目錄"></aside>
+  <main id="main"><div class="wrap" id="view"></div></main>
+</div>
+<div id="scrim"></div>
+<div id="pop" class="pop" role="dialog" aria-live="polite" hidden></div>
+<script>
+/* ================= 名詞辭典（名稱、英文、意思與由來、出現課次） ================= */
+const G = [
+['成衣','Ready-to-wear garment','「成」是完成、現成的意思。以前的人買布請裁縫量身訂做；工業化以後，工廠照標準尺寸（S、M、L……）大量生產，做好了直接擺在店裡賣，這就叫成衣。','l1'],
+['車縫','Machine sewing','「車」本來指靠輪子轉動的機械，像紡車、車床。縫紉機靠手輪和馬達轉動，所以用機器縫就叫「車」，例如「車衣服」「車一條線」。粵語的「車衣」也是同樣的用法。','l1'],
+['工序','Operation','把一件衣服拆開來的每一個小步驟，例如「合肩」「上袖」「車下擺」。「序」是順序，工序就是照順序排好的工作。','l1'],
+['車工','Sewing operator','操作縫紉機的作業員。熟練的車工看布、控速、對位都又快又準，是成衣廠最核心的人力。','l1'],
+['梭織','Woven fabric','「梭」是織布機上兩頭尖、像小船的工具，裡面裝著緯紗，在經紗之間來回穿梭。用經緯「上下交錯」織出來的布就叫梭織布。現代織布機很多已改用劍桿、噴氣，不用梭子了，但名字保留下來。','l2'],
+['梭','Shuttle','織布機上載著緯紗、來回穿越經紗的船形工具。英文 shuttle 也有「來回往返」的意思，所以太空梭（Space Shuttle）、接駁車（shuttle bus）都用這個字。','l2'],
+['經紗','Warp','「經」本來就是指織布機上先拉好、直向的紗。因為它是固定不動的主幹，後來引申出「常道、準則」的意思（如經典）；地圖上直向的經線，名字也從這裡來。','l2'],
+['緯紗','Weft','織布時橫向穿過經紗的紗。地圖上橫向的緯線，名字就是從織布來的。','l2'],
+['平紋','Plain weave','經紗和緯紗一上一下輪流交錯，是最簡單、最牢固的織法。襯衫的府綢、帆布都是平紋。','l2'],
+['斜紋','Twill','每一行交錯的位置錯開一格，布面出現斜斜的紋路。丹寧布、卡其布都是斜紋。','l2'],
+['緞紋','Satin','經紗（或緯紗）一次浮在表面好幾格才交錯一次，布面又滑又亮，但比較不耐磨。一般認為 satin 這個字和中世紀阿拉伯商人對泉州港的稱呼 Zaitun（刺桐）有關，因為絲綢從那裡出口。','l2'],
+['丹寧','Denim','牛仔布：用靛藍色經紗和白色緯紗織成的斜紋布，所以正面偏藍、反面偏白。一般認為 denim 來自法文 serge de Nîmes（法國尼姆城的斜紋布），「丹寧」是音譯。','l2'],
+['針織','Knit fabric','用針把紗線勾成一個個線圈，再一圈套一圈連起來的布。因為是靠「針」把線「織」起來，所以叫針織。手打毛衣也是針織。','l2'],
+['緯編','Weft knitting','一條紗線沿著橫向（緯向）繞成一整排線圈，再一排接一排往上長。T恤的汗布、羅紋都是緯編。','l2'],
+['經編','Warp knitting','很多條紗各自沿著直向（經向）成圈，左右互相勾連。比較不容易脫散，常見於蕾絲、網布、運動服的網眼。','l2'],
+['汗布','Single jersey','最基本的單面針織布，正面是一條條V字紋，反面像小波浪。以前主要拿來做吸汗的汗衫，所以叫汗布。英文 jersey 來自英吉利海峽的澤西島（Jersey），當地以編織漁夫毛衣出名。','l2'],
+['羅紋','Rib knit','正面線圈和反面線圈一直條一直條輪流排列，表面一條條凸起，像肋骨（rib）一樣，彈性特別好，常用在領口、袖口、褲腳。','l2'],
+['珠地','Piqué','表面有小顆粒、像蜂巢的針織布，Polo 衫最常用。piqué 是法文，原意是「刺、繡出凹凸」；中文「珠地」形容布面像鋪滿小珠子。','l2'],
+['縫紉機','Sewing machine','日文叫「ミシン」（mishin），是英文 sewing machine 後半 machine 的音譯。台灣和不少華人工廠的機台用語受日本影響，例如「三本車」。','l3'],
+['平車','Flatbed lockstitch machine','「平」指的是機台放布的車床面是平的（flatbed），布可以平放著推送；相對的還有筒車、高車等造型。平車車出的是鎖式線跡 301，是成衣廠數量最多的機台。','l4'],
+['面線','Needle thread','從機頭上方線筒來、穿過針眼的線，車好後主要在布的正面看得到。','l4'],
+['底線','Bobbin thread','繞在梭心上、從台面下方供應的線，車好後主要在布的反面看得到。','l4'],
+['梭心','Bobbin','繞底線的小線軸。早期縫紉機用一個像織布梭子一樣來回擺動的零件裝著它，所以叫「梭」心；英文 bobbin 原本就是紡織用的小線軸。','l4'],
+['梭殼','Bobbin case','包住梭心的小殼子，側面有一片小彈簧片壓著底線，轉它上面的小螺絲就能調底線張力。','l4'],
+['旋梭','Rotary hook','在台面下不停旋轉的勾子，負責把面線勾下來、繞過梭心。從前是「擺動的梭」，後來改良成「旋轉的梭」，所以叫旋梭。工業平車每車一針，旋梭轉兩圈。','l4'],
+['送布牙','Feed dog','針板下面一排像牙齒的鋸齒片，會上下前後移動，把布一格一格往後送。英文 dog 在機械用語裡指「咬住、卡住東西的零件」；中文取它像牙齒的樣子。','l4'],
+['壓腳','Presser foot','把布壓在送布牙上的零件，形狀像一隻小腳。壓力太輕布會跳動，太重布會被壓出痕跡。','l4'],
+['針板','Needle plate','台面上、針正下方的金屬板，中間有讓針穿過的針孔，旁邊有讓送布牙冒出來的長槽，上面常刻有縫份刻度。英文也叫 throat plate。','l4'],
+['挑線桿','Take-up lever','機頭前方上下擺動的小桿：往下時放出面線讓旋梭勾，往上時把線收回，把針目拉緊。「挑」就是把線挑起來。','l4'],
+['夾線器','Tension regulator','兩片小圓盤夾住面線，把螺帽轉緊或轉鬆，就能調整面線的鬆緊（張力）。','l4'],
+['手輪','Handwheel','機頭右側的大輪子。轉動它能讓針慢慢上下，用來對位、穿線或檢查。工業平車的手輪只能朝操作者的方向轉。','l4'],
+['膝抬','Knee lifter','桌子下方用膝蓋頂的小板，一頂壓腳就抬起來，雙手不必離開布。','l4'],
+['鎖式線跡','Lockstitch','面線和底線在布的中間互相「鎖」住的線跡，ISO 編號 301。牢固、正反面看起來一樣，但幾乎沒有彈性。','l5'],
+['鏈式線跡','Chainstitch','線自己一圈套一圈，像鎖鏈一樣連下去，用彎針代替梭心。有彈性、不用換底線，但抓對線頭一拉，可能整條拆開。','l5'],
+['彎針','Looper','拷克車、三本車、鏈式車裡代替旋梭的彎曲零件，帶著線來回擺動，去勾住面線形成線圈。英文 looper 就是「做線圈的東西」。','l5'],
+['線跡','Stitch','線在布上形成的圖樣，每一針叫一個針目。國際標準 ISO 4915 用三位數字把線跡分類。','l6'],
+['ISO 4915','ISO 4915 stitch types','國際標準化組織為線跡訂的分類號碼。百位數代表家族：100 單線鏈式、200 手縫類、300 鎖式、400 多線鏈式、500 包縫、600 覆蓋縫。和客戶、機台廠溝通時講號碼最不會誤會。','l6'],
+['針號','Needle size','常寫成 90/14。前面是公制 Nm，數字等於針桿直徑（單位 0.01 mm），Nm 90 就是約 0.9 mm；後面是美式 Singer 號碼。數字越大針越粗。','l7'],
+['球針','Ball point needle','針尖磨成小圓頭的針（如 SES、SUK）。車針織布時，圓頭會把紗線「推開」而不是「刺斷」，避免破洞。','l7'],
+['Tex','Tex','表示線粗細的單位：1000 公尺長的線有幾公克重，數字越大越粗。另一種常見的 Tkt（票號）剛好相反，數字越大越細。','l7'],
+['包芯線','Core-spun thread','中間是強韌的聚酯長絲當「芯」，外面「包」一層短纖維的縫線。又強又耐熱、好車，是成衣廠最常用的線。','l7'],
+['膨體紗','Textured thread','經過加工、蓬鬆柔軟又有伸縮性的聚酯或尼龍線，常放在拷克車、三本車的彎針上，讓針織衣的線跡柔軟有彈性。','l7'],
+['差動送布','Differential feed','前後兩組送布牙用不同速度送布。後面的主送布牙速度固定，前面的差動送布牙可以快一點或慢一點，用來防止針織布被拉長或薄布起皺。「差動」就是「動作有差別」。','l8'],
+['人字車','Zigzag machine','針會左右擺動，線跡像一連串「人」字（或 Z 字）的平車，ISO 304。有一點彈性，常用在內衣、縫鬆緊帶。','l9'],
+['拷克','Overlock','一邊把布邊切齊、一邊用線把布邊包起來的機台。日本人把拷克車叫「ロックミシン」（lock machine），一般認為「拷克」就是這個 lock 的音譯。英文也叫 serger。','l10'],
+['三本車','Coverstitch machine','「本」是日文數長條物品的量詞，「三本針」就是三支針。台灣工廠沿用日文說法，把三針覆蓋縫機叫三本車，兩針的叫二本車。','l11'],
+['爬網','Coverstitch (netted back)','覆蓋縫線跡的反面，彎針線在幾條直線之間來回交錯，看起來像一張網，所以工廠常叫它「爬網」。英文 coverstitch 是「蓋住布邊的線跡」。','l11'],
+['扁車','Flatlock machine','把兩塊布邊對邊平平接起來、正反兩面都有網狀線覆蓋的機台（如四針六線 607）。接縫又扁又平，貼身穿不磨皮膚。','l11'],
+['筒車','Cylinder bed machine','車床做成細長圓筒狀的機台，可以把袖口、褲腳這種「筒」狀部位套上去轉著車。','l11'],
+['打結車','Bartack machine','在一小段範圍內來回車很多針密集的鋸齒，像「打一個結」一樣把受力點釘牢，例如口袋角、褲耳、門襟底部。','l12'],
+['鈕門','Buttonhole','「鈕」是鈕扣，「門」是讓鈕扣進出的開口。鈕門車會先把開口四周車好，再用刀切開。','l12'],
+['撬邊','Blind hem','「撬」是挑起來的意思。撬邊車的彎針每一針只挑起表布幾根紗，所以正面幾乎看不到線跡，用在西褲褲腳、裙擺。','l12'],
+['埋夾車','Feed-off-the-arm machine','車「埋夾縫」的機台：兩片布邊互相包住，把毛邊「埋」起來再「夾」住壓線。一般認為這個叫法來自香港成衣業的粵語用語。牛仔褲內長縫、襯衫側縫常用。','l12'],
+['多針車','Multi-needle machine','一次好幾支針並排車的機台，常用來車鬆緊帶腰頭、褲耳帶。因為日本 Kansai Special 這個品牌很有名，工廠常直接叫它「Kansai」。','l12'],
+['張力','Thread tension','線被拉住的鬆緊程度。面線和底線的張力要平衡，交鎖點才會剛好在布的中間。','l14'],
+['針距','Stitch length','相鄰兩針之間的距離，平車常用 2～3 mm。針距越小，線跡越密。','l14'],
+['SPI','Stitches per inch','每英寸有幾針。換算：針距（mm）＝ 25.4 ÷ SPI，例如 SPI 12 約等於針距 2.1 mm。歐美客戶的工藝單常寫 SPI。','l14'],
+['縫份','Seam allowance','縫線到布邊之間留下的那一段布。「份」是預留的份量；太窄容易爆口，太寬浪費布又厚。','l14'],
+['縫型','Seam type','布片怎麼疊、怎麼摺、怎麼接在一起的方式，由 ISO 4916 分類。線跡是「線怎麼走」，縫型是「布怎麼放」。','l14'],
+['跳針','Skipped stitch','旋梭或彎針沒勾到線環，漏掉一針，線跡上出現一段特別長的線。','l15'],
+['縫皺','Seam pucker','車好的接縫起皺、不平整，薄布和高密度布最常見。','l15'],
+['斷針管理','Needle control','品牌客戶要求的安全制度：換針要以舊換新，斷針要找齊碎片並登記，避免針頭殘留在衣服裡傷到消費者。','l16'],
+['伺服馬達','Servo motor','直接驅動、能精準控制轉速和停針位置的馬達，不車的時候不轉，比傳統離合器馬達省電又安靜。servo 源自拉丁文 servus（僕人），意思是「隨時跟著指令動作」。','l17'],
+['SMV','Standard Minute Value','標準分鐘值：受過訓練的作業員，用正常速度完成一道工序需要的分鐘數（含合理的寬放時間）。也叫 SAM。排產、算效率、算工價都靠它。','l17'],
+];
+const GM = {}; G.forEach(g => GM[g[0]] = g);
+
+const LV = {
+  1:{name:'入門篇', desc:'衣服從哪裡來、布有哪兩大家族、縫紉機怎麼發明、平車長什麼樣子。'},
+  2:{name:'原理篇', desc:'放慢看兩條線怎麼鎖在一起，再學線跡的號碼、針線怎麼挑、布是怎麼走的。'},
+  3:{name:'機台篇', desc:'一台一台認識成衣廠裡的車，最後把它們放回一件件衣服上。'},
+  4:{name:'專業篇', desc:'調張力、看線跡找病因、保養安全與斷針管理，再用管理者的眼光看效率。'}
+};
+
+const FLOW = [
+ ['纖維','棉花、羊毛是天然纖維；聚酯（polyester）、尼龍是用石油做成的人造纖維。現在很多衣服是兩種混在一起。'],
+ ['紡紗','把短短的纖維拉長、撚（扭）在一起，變成一條長長的紗。就像把一團棉花在手心搓成一條線。'],
+ ['織布','把紗變成布。一種是經紗緯紗上下交錯的「梭織」，一種是用針勾成線圈的「針織」。下一課詳細講。'],
+ ['染整','染色、印花，再做各種處理：防縮、柔軟、抗皺、吸濕排汗……'],
+ ['打版','照設計圖畫出每一片布的形狀（紙樣），再放大縮小成各種尺碼。'],
+ ['裁剪','把幾十層布疊起來（拉布），照紙樣一次裁出一大疊裁片。'],
+ ['車縫','用各種縫紉機把裁片縫成衣服。這是成衣廠人最多、機台最多的地方，也是這門課的主角。'],
+ ['整燙與檢驗','剪線頭、熨燙、量尺寸、找瑕疵、過驗針機，最後包裝出貨。']
+];
+/* ================= 課程內容 ================= */
+function mc(o){
+  return `<div class="mc"><h3>${o.n}</h3><div class="en">${o.en}${o.code?'　ISO '+o.code:''}</div>
+  ${o.draw?`<div class="mini" data-lab="mini" data-code="${o.draw}"></div>`:''}
+  <dl class="kv">${o.rows.map(r=>`<dt>${r[0]}</dt><dd>${r[1]}</dd>`).join('')}</dl></div>`;
+}
+
+const LESSONS = [
+/* ---------------- 第 1 課 ---------------- */
+{id:'l1', lv:1, title:'一件衣服的旅程', sub:'從棉花到衣架，車縫在哪一站',
+goal:'知道一件衣服從纖維到出貨要經過哪些步驟，以及我們要學的「機台」在哪裡出場。',
+html:`
+<p>你身上穿的衣服，是從一朵棉花或一滴石油開始的。先看看它走過哪些站，再看看我們要學的縫紉「機台」在哪一站出場。</p>
+<div class="lab" data-lab="flow"></div>
+<h2>什麼叫「成衣」？</h2>
+<p><b class="t">成衣</b>就是「現成做好的衣服」。一百多年前，大部分人是買一塊布，請裁縫量身體、一件一件縫。後來工廠照標準尺寸 S、M、L 大量生產，做好了放在店裡直接買，這就是成衣。</p>
+<h2>為什麼工廠說「車」衣服？</h2>
+<p>在台灣和很多華人工廠裡，用縫紉機縫東西叫做<b class="t">車縫</b>，縫紉機叫「車」或「機台」。「車」這個字本來是指靠輪子轉動的機械，像紡車、車床；縫紉機靠手輪和馬達轉動，所以用它縫就叫「車」。你會聽到「車一條線」「這台車」「車工」這些說法。</p>
+<div class="ex"><b>舉個例子</b>一件最簡單的短袖T恤，大約要經過十道左右的小步驟：合肩、上領、壓領、上袖、合脅、車袖口、車下擺、車標籤……每一個小步驟叫一個<b class="t">工序</b>，常常要用到不同的機台。一條牛仔褲更複雜，工序常常超過三十道。</div>
+<h2>成衣廠裡的人</h2>
+<p>車縫部門通常分成好幾條生產線，每條線有十幾到幾十位<b class="t">車工</b>，一個人負責一兩道工序，裁片像接力賽一樣往下傳。另外還有組長（帶線、安排位置）、機修師傅（調機、修機）、品檢（QC）等角色。</p>
+<div class="think"><b>想一想</b><p>為什麼不讓一個人從頭到尾做完一整件衣服，而要拆成很多工序？</p>
+<details><summary>看答案</summary><p>拆開以後，每個人只做一兩個動作，可以練到非常熟練；每道工序也能配上最適合的專用機台，例如包布邊就用拷克車。整條線加起來，速度和品質都比一個人包辦高很多。這就是工業化「分工」的威力。</p></details></div>
+<h2>這門課會學到什麼</h2>
+<p>入門篇先認識布和縫紉機；原理篇拆開線跡、針線、送布的秘密；機台篇一台一台認識工廠裡的車；專業篇學會調機、排除問題、保養安全和效率。每一課最後有三題小測驗，答對兩題就算完成。</p>
+<p>看到<b class="t" data-g="車縫">底下有虛線的字</b>就點一下，會跳出它的意思和名稱的由來。</p>
+`,
+quiz:[
+ ['「成衣」的意思最接近哪一個？',['成年人穿的衣服','照標準尺寸、大量生產的現成衣服','用成品布做的衣服','只在工廠裡穿的衣服'],1,'「成」是現成、做好的意思。成衣是工廠照 S、M、L 等標準尺寸大量生產、可以直接買的衣服。'],
+ ['把裁片縫合成衣服的步驟叫做？',['車縫','紡紗','染整','打版'],0,'紡紗是做紗、染整是處理布、打版是畫紙樣，把裁片縫起來的是車縫。'],
+ ['工廠為什麼把一件衣服拆成很多工序？',['因為機器不夠用','因為布太大塊','讓每個人專精一兩道、搭配專用機台，速度和品質都更好','為了讓衣服更重'],2,'分工讓每個人熟練、每道工序都有最適合的機台，整條線的效率就高。']
+]},
+
+/* ---------------- 第 2 課 ---------------- */
+{id:'l2', lv:1, title:'梭織與針織', sub:'兩大布料家族，決定用什麼車',
+goal:'分得出梭織布和針織布，知道它們的結構差在哪裡，以及為什麼這會影響機台的選擇。',
+html:`
+<p>布料大致分成兩大家族：<b class="t">梭織</b>和<b class="t">針織</b>。學機台一定要先認識布，因為<strong>布是什麼，決定了要用什麼車、什麼針、什麼線</strong>。</p>
+<h2>梭織：一上一下的十字交錯</h2>
+<p>梭織布由兩組紗組成。先在織布機上直向拉好一整排<b class="t">經紗</b>，再讓一條<b class="t">緯紗</b>橫著一上一下穿過去，來回一次又一次。負責帶著緯紗穿來穿去的工具，就是兩頭尖尖、像小船的<b class="t">梭</b>子。</p>
+<div class="ex"><b>舉個例子</b>地圖上的「經線」是直的、「緯線」是橫的，名字正是從織布來的。下次看地球儀，可以想像整個地球是被「織」起來的。</div>
+<div class="lab" data-lab="weave"></div>
+<p>只要改變經緯交錯的規律，就能織出不同的「組織」：</p>
+<ul>
+<li><b class="t">平紋</b>：一上一下，最牢固。襯衫的府綢、帆布。</li>
+<li><b class="t">斜紋</b>：每一行錯開一格，出現斜線。牛仔褲的<b class="t">丹寧</b>布、卡其褲。</li>
+<li><b class="t">緞紋</b>：紗線在表面浮一大段，滑滑亮亮。禮服、睡衣、領帶。</li>
+</ul>
+<h2>針織：一圈套一圈的線圈</h2>
+<p>針織布沒有經緯十字交錯，而是用針把紗線勾成一個個小線圈，下一排線圈再穿過上一排，一路往上長。手打毛衣就是手工的針織。</p>
+<div class="lab" data-lab="knit"></div>
+<p>針織又分兩類：<b class="t">緯編</b>（一條紗橫著繞一整排）和<b class="t">經編</b>（很多條紗直著走、互相勾連）。成衣廠最常見的針織布有：</p>
+<ul>
+<li><b class="t">汗布</b>（單面 jersey）：T恤。</li>
+<li><b class="t">羅紋</b>：領口、袖口，彈性特別好。</li>
+<li><b class="t">珠地</b>：Polo 衫。</li>
+<li>毛圈布、刷毛布：帽T、運動褲。</li>
+</ul>
+<h2>兩大家族比一比</h2>
+<div class="tbl"><table>
+<tr><th></th><th>梭織</th><th>針織</th></tr>
+<tr><td>結構</td><td>經緯十字交錯</td><td>線圈互相套住</td></tr>
+<tr><td>彈性</td><td>幾乎沒有（加了彈性紗的除外）</td><td>好，尤其是橫向</td></tr>
+<tr><td>剪開的布邊</td><td>容易「脫紗」，一根根散開</td><td>不太會散，但容易捲邊；被勾到會「脫圈」跑線</td></tr>
+<tr><td>代表衣物</td><td>襯衫、牛仔褲、西裝、外套</td><td>T恤、Polo 衫、運動服、內衣</td></tr>
+<tr><td>主力機台</td><td>平車、五線拷克、埋夾車</td><td>拷克車、三本車、扁車</td></tr>
+</table></div>
+<h2>怎麼分辨？三招就夠</h2>
+<ol>
+<li><strong>拉一拉</strong>：橫向輕輕拉，很有彈性、會變窄的多半是針織。</li>
+<li><strong>看表面</strong>：湊近一點看，梭織是一格格小方格；針織正面是一條條 V 字，反面像小波浪。</li>
+<li><strong>看剪口</strong>：梭織的剪口會掉出一根根紗；針織的剪口會往內捲。</li>
+</ol>
+<div class="ex"><b>舉個例子</b>拿出制服襯衫和運動服，各拉一下領口。襯衫幾乎拉不動，運動服可以拉很開，一個梭織、一個針織。</div>
+<h2>布的家族，決定機台的選擇</h2>
+<p>針織布會伸縮，如果用沒有彈性的線跡去縫，一穿一拉線就斷了，所以針織衣大量使用有彈性的<b class="t">拷克</b>和<b class="t">三本車</b>；針也要換成不會刺斷紗線的<b class="t">球針</b>。梭織布不會伸縮，但布邊會散，所以用牢固的平車縫合，再用拷克把布邊包起來。這個原則整門課都會一直用到。</p>
+`,
+quiz:[
+ ['「經紗」指的是？',['橫著穿過去的紗','縫衣服用的線','織布時先固定好、直向的紗','針織的線圈'],2,'經紗是先在織布機上直向拉好的紗，緯紗才是橫向穿過去的。'],
+ ['下面哪一種通常是針織布？',['牛仔褲的丹寧布','T恤的汗布','襯衫的府綢','西裝的毛料'],1,'汗布是最基本的單面針織布，T恤最常用。丹寧、府綢、西裝料都是梭織。'],
+ ['針織衣服為什麼要用有彈性的線跡？',['布會伸縮，線跡不能伸縮的話一拉就斷線','因為比較便宜','只是為了好看','因為針織布太厚'],0,'針織布一穿一拉就會伸長，線跡要跟著伸縮，不然線會斷。']
+]},
+
+/* ---------------- 第 3 課 ---------------- */
+{id:'l3', lv:1, title:'縫紉機的誕生', sub:'那個開在針尖的針眼',
+goal:'了解縫紉機要解決什麼難題、關鍵的發明是什麼，以及家用車和工業車差在哪裡。',
+html:`
+<p>縫紉機發明以前，所有衣服都是一針一線用手縫的。熟練的裁縫一分鐘大約只能縫三、四十針，一件男襯衫常常要縫上十幾個小時。先來比一比速度：</p>
+<div class="lab" data-lab="speed"></div>
+<h2>難題：機器很難「穿過去再拉回來」</h2>
+<p>手縫的時候，針整支穿過布，從另一面拉出來，再從另一面穿回來。但要讓機器「把針整支穿過去、再從另一邊抓回來」非常困難。發明家們想了很久，最後的解法是：</p>
+<p class="big">把針眼開在針尖旁邊。</p>
+<p>針不必整支穿過布，只要帶著線往下刺一下，把線「送」到布的背面，再由背面另一個機構（梭子或彎針）把線勾住就好。這是幾乎所有縫紉機共同的秘密。</p>
+<div class="ex"><b>舉個例子</b>想像你和朋友隔著一道有小洞的牆傳繩子：你把繩子從洞口推過去，朋友在另一邊把它套在一根棍子上，你再把繩子拉回來，繩子就被「扣」在洞裡了。縫紉機的面線和底線就是這樣合作的。</div>
+<h2>幾位重要的發明家</h2>
+<ol class="timeline">
+<li><span class="y">1830</span><span>法國的蒂莫尼耶（Thimonnier）做出單線鏈式縫紉機，還開工廠做軍服。據說當地裁縫怕丟飯碗，闖進工廠把機器砸了。</span></li>
+<li><span class="y">1846</span><span>美國的豪（Elias Howe）取得「兩條線互相鎖住」的縫紉機專利，也就是今天平車線跡的祖先。有個流傳很廣的故事說，他是夢見長矛尖端有個洞，才想到把針眼開在針尖。這故事很有名，但真假已無從查證。</span></li>
+<li><span class="y">1851</span><span>美國的勝家（Isaac Singer）改良成針直上直下、有壓腳、用腳踏板驅動的機型，還用分期付款大量賣給家庭，讓縫紉機走進千家萬戶。</span></li>
+<li><span class="y">1900s</span><span>電動馬達和工業專用機台普及，成衣開始大量工廠化生產；日本的 JUKI、Brother 等品牌後來成為工業車的主力。</span></li>
+<li><span class="y">今天</span><span>電腦控制、伺服直驅馬達、自動剪線、自動模板機……一台車一分鐘可以車幾千針。</span></li>
+</ol>
+<p>日文把縫紉機叫「ミシン」，是從英文 machine 音譯來的。台灣的成衣業早年跟日本學技術，所以很多機台和零件的叫法都帶著日文的影子，後面的課會一直看到。</p>
+<h2>家用縫紉機 vs 工業縫紉機</h2>
+<div class="tbl"><table>
+<tr><th></th><th>家用縫紉機</th><th>工業縫紉機</th></tr>
+<tr><td>速度</td><td>每分鐘約幾百到一千多針</td><td>平車可達約 5,000 針</td></tr>
+<tr><td>功能</td><td>一台什麼都能做一點</td><td>一台只專做一種線跡，做到最好</td></tr>
+<tr><td>耐用度</td><td>偶爾使用</td><td>一天運轉 8～10 小時以上，天天如此</td></tr>
+<tr><td>馬達</td><td>藏在機身裡的小馬達</td><td>裝在桌子下面，現在大多是伺服馬達</td></tr>
+<tr><td>潤滑</td><td>偶爾滴油</td><td>油盤和油泵自動循環，或是少油的半乾式機頭</td></tr>
+</table></div>
+<div class="ex"><b>舉個例子</b>每分鐘 5,000 針，等於每秒 80 多針，比眼睛能看清楚的速度快得多。所以工業車縫的安全規定特別嚴格，這在第 16 課會講。</div>
+`,
+quiz:[
+ ['縫紉機最關鍵的發明之一是什麼？',['腳踏板','針眼開在針尖附近的針','電燈','剪刀'],1,'針眼開在針尖旁，針只要把線送到布背面，再由下方的梭或彎針勾住就行，不必整支穿過布。'],
+ ['1846 年取得「兩條線互相鎖住」縫紉機專利的是誰？',['愛迪生','瓦特','牛頓','Elias Howe（豪）'],3,'Howe 的鎖式縫紉機是今天平車 301 線跡的祖先。'],
+ ['現代工業平車每分鐘最高大約能車幾針？',['約 50 針','約 500 針','約 5,000 針','約 50,000 針'],2,'工業平車最高約每分鐘 5,000 針，也就是每秒 80 多針。']
+]},
+
+/* ---------------- 第 4 課 ---------------- */
+{id:'l4', lv:1, title:'認識工業平車', sub:'點一點，認識每個零件',
+goal:'叫得出工業平車主要零件的名字，知道面線和底線各走哪條路。',
+html:`
+<p>成衣廠裡數量最多的機台，就是工業<b class="t">平車</b>。它車出的是鎖式線跡，幾乎每一件衣服都會用到。先把它的身體認識一遍。</p>
+<h2>為什麼叫「平」車？</h2>
+<p>「平」指的是機台放布的<strong>車床面是平的</strong>（英文 flatbed），布可以平平地放在上面推送。工業車還有其他造型的車床，專門對付不同形狀的部位：</p>
+<div class="lab" data-lab="beds"></div>
+<div class="lab" data-lab="parts"></div>
+<h2>一條面線的旅程</h2>
+<p>穿線的順序，就是<b class="t">面線</b>走的路：</p>
+<ol>
+<li>線架上的大線筒</li>
+<li>機頭上的過線孔、過線鉤</li>
+<li><b class="t">夾線器</b>：兩片圓盤夾住線，控制鬆緊</li>
+<li>挑線彈簧：吸收一瞬間的拉扯</li>
+<li><b class="t">挑線桿</b>：上下擺動，放線、收線</li>
+<li>針桿上的過線鉤</li>
+<li>針眼</li>
+</ol>
+<p><b class="t">底線</b>則是先在繞線器上繞滿<b class="t">梭心</b>，放進<b class="t">梭殼</b>，再裝到台面下的<b class="t">旋梭</b>裡。</p>
+<div class="ex"><b>舉個例子</b>面線像從水塔流下來的水，要經過好幾個水龍頭（夾線器、挑線桿）控制流量，最後從針眼這個出水口出去。中間任何一處沒穿好，線就會亂掉或斷掉。</div>
+<h2>工業平車的操作手感</h2>
+<ul>
+<li>腳踏板往前踩是車，踩得越深越快；腳跟往後踩是抬<b class="t">壓腳</b>，電腦車還會自動剪線。</li>
+<li>用膝蓋往右頂<b class="t">膝抬</b>，壓腳就抬起來，雙手不用離開布。</li>
+<li><b class="t">手輪</b>只能朝自己的方向轉，反轉可能讓線纏進旋梭。</li>
+<li>布是被<b class="t">送布牙</b>送走的，手只負責引導方向，不要用力推或拉。</li>
+</ul>
+`,
+quiz:[
+ ['「平車」的「平」指的是？',['價格很平價','只能車平面的布','機台的車床面是平的','平均速度很穩定'],2,'平車的車床面是平的（flatbed），所以叫平車；還有筒車、高車等不同造型。'],
+ ['負責把布一格一格往後送的零件是？',['送布牙','壓腳','挑線桿','手輪'],0,'送布牙藏在針板的槽裡，每一針都把布往後推一個針距。'],
+ ['旋梭和梭心裝在哪裡？',['機頭上方','手輪裡面','馬達旁邊','台面下方、針的正下方'],3,'旋梭在台面下、針的正下方，負責勾住面線繞過梭心。']
+]},
+
+/* ---------------- 第 5 課 ---------------- */
+{id:'l5', lv:2, title:'兩條線怎麼鎖在一起', sub:'放慢看鎖式與鏈式線跡',
+goal:'能一步一步說出鎖式線跡怎麼形成，並比較鎖式和鏈式的優缺點。',
+html:`
+<p>縫紉機一秒鐘車好幾十針，快到看不清楚。這一課把它放慢，一格一格看兩條線是怎麼「鎖」在一起的。</p>
+<h2>兩條線：面線和底線</h2>
+<p>平車用兩條線：從上方來的<b class="t">面線</b>，和從下方梭心來的<b class="t">底線</b>。它們在布的中間交叉扣住，所以叫<b class="t">鎖式線跡</b>（lockstitch）。</p>
+<div class="lab" data-lab="lockstitch"></div>
+<h2>為什麼針往上抬，才會有線環？</h2>
+<p>針往下刺穿布時，面線被布緊緊夾住。針到最低點後開始往上走，針眼附近的線被布的摩擦力卡住、跟不上針，就在針旁邊鼓出一個小圈，這就是「線環」。工業車針的側面有一個小凹口，叫針缺口，就是讓旋梭尖能貼著針擠進去、準確勾到線環。</p>
+<div class="ex"><b>舉個例子</b>把一條繩子穿過毛巾往下拉，再慢慢往上提，毛巾下面的繩子會先「鼓」出一個小圈。旋梭要勾的，就是這個小圈。</div>
+<h2>旋梭一針轉兩圈</h2>
+<p>工業平車的旋梭和針的速度比是 2 比 1：針上下一次，旋梭轉兩圈。當機台每分鐘車 5,000 針時，旋梭一分鐘要轉一萬圈，所以這裡要靠油來潤滑、降溫。旋梭尖到達針旁的時機叫「勾線時間」，差一點點就會跳針，是機修師傅最常調整的地方之一。</p>
+<h2>另一種做法：鏈式線跡</h2>
+<p>鎖式線跡有個麻煩：梭心很小，底線車一陣子就用完，要停下來換。<b class="t">鏈式線跡</b>換了一種做法：下面不用梭心，改用一支會擺動的<b class="t">彎針</b>，彎針上的線直接從大線筒供應。線圈一個套一個，像鎖鏈一樣連下去。</p>
+<div class="tbl"><table>
+<tr><th></th><th>鎖式線跡（300 家族）</th><th>鏈式線跡（100、400 家族）</th></tr>
+<tr><td>下方零件</td><td>旋梭＋梭心</td><td>彎針</td></tr>
+<tr><td>下方的線</td><td>梭心容量小，要常換</td><td>大線筒供應，幾乎不用換</td></tr>
+<tr><td>彈性</td><td>低</td><td>較高</td></tr>
+<tr><td>正反面</td><td>看起來一樣</td><td>正面直線，反面是一串鏈子</td></tr>
+<tr><td>會不會散</td><td>不容易</td><td>抓到對的線頭一拉，可能整條拆開</td></tr>
+</table></div>
+<div class="ex"><b>舉個例子</b>米袋、麵粉袋的封口線，找到線頭一拉，整條就拆開了，那就是單線鏈式線跡。方便拆是它的優點，也是缺點。</div>
+`,
+quiz:[
+ ['平車的面線是從哪裡來的？',['梭心','機頭上方的線筒，經過夾線器、挑線桿再到針眼','彎針','送布牙'],1,'面線從上方線筒出發，經夾線器、挑線桿，最後穿過針眼。'],
+ ['標準的鎖式線跡，兩條線應該在哪裡交鎖？',['布的正面','布的反面','布的邊緣','兩層布的中間'],3,'交鎖點藏在布中間，正反面才都只看到自己那條線，又平又牢。'],
+ ['鏈式線跡的缺點是什麼？',['抓到對的線頭一拉，容易整條拆開','不能車直線','一定要用梭心','速度很慢'],0,'鏈式線跡的線圈互相套住，從收尾那端拉，可能一路拆開。']
+]},
+
+/* ---------------- 第 6 課 ---------------- */
+{id:'l6', lv:2, title:'線跡家族', sub:'ISO 4915 的號碼密碼',
+goal:'看得懂 301、401、504、514、516、406、607 這些號碼，知道各自的特色和用途。',
+html:`
+<p>全世界成衣廠用的線跡有好幾十種。為了讓客戶、工廠、機台廠講同一種語言，國際標準 <b class="t">ISO 4915</b> 給每種<b class="t">線跡</b>一個三位數號碼。</p>
+<div class="ex"><b>舉個例子</b>號碼就像學號：第一個數字是「年級」（家族），後兩個數字是「座號」（家族裡的第幾種）。301 就是 300 家族（鎖式）的 1 號。</div>
+<div class="tbl"><table>
+<tr><th>家族</th><th>名稱</th><th>特色</th><th>代表</th></tr>
+<tr><td>100</td><td>單線鏈式</td><td>一條線自己成圈，好拆</td><td>101 封口、103 撬邊</td></tr>
+<tr><td>200</td><td>手縫類</td><td>模仿手縫，工廠很少用</td><td>手縫式裝飾線</td></tr>
+<tr><td>300</td><td>鎖式</td><td>牢固、正反一樣、彈性低</td><td>301 平車、304 人字</td></tr>
+<tr><td>400</td><td>多線鏈式</td><td>有彈性、不用換底線</td><td>401 埋夾、腰頭；406 三本車</td></tr>
+<tr><td>500</td><td>包縫</td><td>把布邊包起來</td><td>504 三線拷克、514 四線拷克</td></tr>
+<tr><td>600</td><td>覆蓋縫</td><td>正反兩面都有覆蓋線</td><td>602 雙針覆蓋、607 扁車</td></tr>
+</table></div>
+<p>要特別注意兩件事：T恤下擺常見的 406 雖然工廠叫「爬網」，在 ISO 裡屬於 400 家族；而 516 五線拷克其實是兩種線跡並排：一條 401 加一條 504。</p>
+<div class="lab" data-lab="stitches"></div>
+<h2>怎麼選線跡？問三個問題</h2>
+<ol>
+<li><strong>布會不會伸縮？</strong>會的話，選 400、500、600 家族這些有彈性的線跡。</li>
+<li><strong>布邊要不要包起來？</strong>要的話，用 500 家族，或用包邊的縫型。</li>
+<li><strong>正面要不要好看、要不要蓋住毛邊？</strong>要的話，用 600 家族、406，或雙針明線。</li>
+</ol>
+<div class="think"><b>想一想</b><p>運動緊身褲的接縫，要又平、又有彈性、貼身不磨皮膚，你會選哪一個號碼？</p>
+<details><summary>看答案</summary><p>607（四針六線扁車）。它把兩片布邊對邊平接，正反兩面都有網狀線，扁平又有彈性。</p></details></div>
+`,
+quiz:[
+ ['ISO 4915 的 300 家族是哪一種線跡？',['鎖式','鏈式','包縫','覆蓋縫'],0,'300 家族是鎖式，平車的 301 就是代表。'],
+ ['五線拷克 516 是由哪兩種線跡並排組成的？',['301＋504','406＋602','401＋504','101＋301'],2,'516＝401（雙線鏈式，負責合縫）＋504（三線包縫，負責包邊）。'],
+ ['T恤下擺常見的 406 線跡，通常用哪一種機台車？',['平車','打結車','釘扣車','三本車（爬網車）'],3,'406 是雙針底覆蓋，就是二本、三本車車的「爬網」。']
+]},
+
+/* ---------------- 第 7 課 ---------------- */
+{id:'l7', lv:2, title:'針與線', sub:'針號、針尖、線的粗細',
+goal:'看得懂針號 90/14 和針尖代號，知道針織和梭織為什麼要用不同的針，會替布料挑針挑線。',
+html:`
+<p>針和線是車縫的「筆和墨」。選錯了，機台再好也車不出好東西。</p>
+<h2>一支工業車針的構造</h2>
+<div class="lab" data-lab="needle"></div>
+<div class="ex"><b>舉個例子</b>針往下刺得非常快，線如果露在外面，會被布磨斷。針身上的長槽就像線的「防護溝」，線躲在溝裡跟著針一起穿過布。</div>
+<h2>針號：數字就是粗細</h2>
+<p><b class="t">針號</b>常寫成 90/14：前面的 Nm 90 是公制，表示針桿直徑約 0.90 mm；後面的 14 是美式 Singer 號碼。兩個數字都是越大越粗。</p>
+<div class="tbl"><table>
+<tr><th>針號</th><th>粗細</th><th>常見用途</th></tr>
+<tr><td>60/8、65/9</td><td>很細</td><td>雪紡、薄紗、絲</td></tr>
+<tr><td>70/10、75/11</td><td>細</td><td>襯衫、細密的T恤汗布</td></tr>
+<tr><td>80/12</td><td>中</td><td>一般布料、一般針織</td></tr>
+<tr><td>90/14</td><td>中粗</td><td>厚棉布、斜紋、刷毛布</td></tr>
+<tr><td>100/16、110/18</td><td>粗</td><td>牛仔布、帆布</td></tr>
+<tr><td>120/19 以上</td><td>很粗</td><td>多層厚布、帶子、重型材料</td></tr>
+</table></div>
+<h2>針尖：刺進去，還是推開？</h2>
+<ul>
+<li><strong>R（一般尖頭）</strong>：梭織布用，乾淨俐落地刺穿。</li>
+<li><strong>SES（小圓頭）</strong>：細密的針織布。</li>
+<li><strong>SUK（中圓頭）</strong>：一般到較粗的針織布、彈性萊卡布。</li>
+<li><strong>刀頭（例如 LR）</strong>：真皮，像小刀一樣切開一道口子。</li>
+</ul>
+<div class="ex"><b>舉個例子</b>要穿過擁擠的人群，你可以用手肘硬撞過去，也可以用雙手輕輕撥開。尖針像硬撞，會把針織布的紗線撞斷，洗幾次就破洞；<b class="t">球針</b>像撥開，紗線被推到旁邊，針離開後又回到原位。</div>
+<h2>針系統：型號要對</h2>
+<p>不同機台要用不同針柄形狀、不同長度的針，叫「針系統」。裝錯的針可能裝不上，或位置不對而撞壞旋梭。常見的有：平車 DB×1、拷克車 DC×27（或 B27）、三本車 UY128GAS。看針包裝上的型號，再對照機台說明書就不會錯。</p>
+<h2>縫線</h2>
+<p>成衣廠最常用的是聚酯<b class="t">包芯線</b>：中間是強韌的長絲，外面包一層短纖維，又強又好車。拷克和三本車的彎針上常用<b class="t">膨體紗</b>，蓬鬆、柔軟、有伸縮，貼身穿不刺。</p>
+<p>線的粗細有兩種標法：<b class="t">Tex</b> 是「1000 公尺重幾公克」，數字越大越粗；Tkt（票號）則是數字越大越細。T恤、襯衫最常見的大約是 Tkt 120 左右的線，牛仔褲的明線會用粗得多的線。</p>
+<p>線還有「撚向」。大部分縫線是 Z 撚（扭轉的方向像字母 Z 的中間那一撇），這樣在平車上被旋梭勾來勾去時才不會越勾越鬆、散開。</p>
+<div class="lab" data-lab="picker"></div>
+<p class="note">以上是常見參考，實際仍要以客戶的工藝單（Tech Pack）和試車結果為準。</p>
+`,
+quiz:[
+ ['針號 Nm 90 代表什麼？',['針長 90 mm','針桿直徑約 0.9 mm','可以車 90 層布','每英寸 90 針'],1,'Nm 的數字是針桿直徑，單位 0.01 mm，所以 90 就是約 0.9 mm。'],
+ ['車針織T恤最適合哪一種針尖？',['一般尖頭 R','刀頭 LR','小圓頭或中圓頭的球針（SES、SUK）','哪一種都一樣'],2,'球針會把針織的紗線推開，不會刺斷，所以不容易破洞。'],
+ ['用 Tex 標示縫線時，數字越大代表？',['線越粗','線越細','越有彈性','越便宜'],0,'Tex 是 1000 公尺重幾公克，越重就越粗。Tkt 票號才是數字越大越細。']
+]},
+
+/* ---------------- 第 8 課 ---------------- */
+{id:'l8', lv:2, title:'送布與壓腳', sub:'布是怎麼走的',
+goal:'說得出送布牙的四步動作，認識各種送布方式，會用差動比解決針織布拉長和薄布起皺。',
+html:`
+<p>針負責「縫」，但布不會自己往前走，是<b class="t">送布牙</b>把它一格一格推過去的。送布做得好不好，決定線跡直不直、布有沒有被拉長或起皺。</p>
+<h2>送布牙的四步舞</h2>
+<div class="lab" data-lab="feed"></div>
+<p>每車一針，送布牙都走一個長方形：</p>
+<ol>
+<li>往上冒出針板，咬住布</li>
+<li>往後推（離開你的方向），把布送走一個針距</li>
+<li>往下沉到針板下面</li>
+<li>在下面回到原位，準備下一次</li>
+</ol>
+<p>而且它只在針<strong>離開布</strong>的時候推布。如果針還插在布裡就推，針會被布拉彎，甚至撞到針板而斷掉。</p>
+<div class="ex"><b>舉個例子</b>像划船：槳插進水裡（上升咬布）→ 往後划（送布）→ 把槳抬出水面（下降）→ 往前擺回去再划。</div>
+<h2>送布方式有好幾種</h2>
+<div class="tbl"><table>
+<tr><th>名稱</th><th>怎麼送</th><th>適合</th></tr>
+<tr><td>下送布</td><td>只有下面的送布牙推布</td><td>一般布料，最常見</td></tr>
+<tr><td><b class="t">差動送布</b></td><td>前後兩組送布牙速度可以不同</td><td>針織布、彈性布、薄布；拷克和三本車幾乎都有</td></tr>
+<tr><td>針送布</td><td>針插在布裡時也跟著往後走</td><td>容易滑動、需要對齊的多層布</td></tr>
+<tr><td>上下送布（綜合送布）</td><td>上面的壓腳也會「走路」，上下夾著布一起前進</td><td>厚布、多層、皮革、條格要對齊</td></tr>
+<tr><td>滾輪拉布</td><td>壓腳後面加一個滾輪往後拉</td><td>牛仔布、長接縫，送得更穩</td></tr>
+</table></div>
+<h2>差動送布：前後兩組速度不一樣</h2>
+<p>針織布很軟，壓腳一壓、送布牙一推，布就被拉長，車出來的邊會像荷葉一樣起波浪。<b class="t">差動送布</b>的做法是在前面多放一組送布牙，讓它比後面的主送布牙<strong>多送一點布</strong>，剛好抵銷被拉長的部分。反過來，薄的梭織布容易被擠皺，就讓前面<strong>少送一點</strong>，把布稍微拉平。前面和後面的比例，就叫差動比。</p>
+<div class="ex"><b>舉個例子</b>兩台手扶梯接在一起。前面那台比後面快，人和人之間就會被拉開；前面比後面慢，人就會擠在一起。調差動比，就是在調兩台手扶梯的速度比。</div>
+<div class="lab" data-lab="diff"></div>
+<h2>壓腳：換一隻腳，換一種功夫</h2>
+<ul>
+<li><strong>標準壓腳</strong>：一般車縫。</li>
+<li><strong>高低壓腳</strong>（左右兩邊高度不同）：沿著布邊壓 0.1 cm 的明線時，靠著邊走就能又直又準。</li>
+<li><strong>捲邊壓腳、拉筒</strong>：布一邊走一邊自動捲成邊或包成條，襯衫下擺、門襟、滾邊都靠它。</li>
+<li><strong>鐵氟龍壓腳</strong>：車 PU、皮革、塗層布時不會黏住。</li>
+<li><strong>拉鍊壓腳</strong>：只有半邊，可以貼著拉鍊齒車。</li>
+</ul>
+<p>在工廠裡，選對壓腳、拉筒和導規（幫布邊定位的小擋板），常常比苦練手速更能提升品質和速度。</p>
+`,
+quiz:[
+ ['送布牙的四步動作順序是？',['往後推 → 上升 → 回原位 → 下降','上升 → 往後推 → 下降 → 回到原位','下降 → 上升 → 往後推 → 回原位','只會前後移動，不會上下'],1,'送布牙每一針走一個長方形：上升咬布、往後送布、下降、在下面回到原位。'],
+ ['車針織布時布被拉長、邊緣呈波浪（荷葉邊），差動比應該？',['調小，小於 1','不用管它','把馬達關掉','調大，大於 1'],3,'前面的差動送布牙多送一點布，就能抵銷被拉長的部分。'],
+ ['車很厚、多層或容易滑動的布，常用哪一種送布？',['上下送布（綜合送布）','只靠下送布','不要送布，用手推','換一條更細的線'],0,'上下送布讓壓腳也一起「走路」，上下夾著布前進，各層才不會錯位。']
+]},
+
+/* ---------------- 第 9 課 ---------------- */
+{id:'l9', lv:3, title:'平車家族', sub:'單針、雙針、人字、電腦車',
+goal:'認識鎖式線跡家族的四種平車，會分辨它們的線跡，知道平車的基本功。',
+html:`
+<p>從這一課開始，我們一台一台認識工廠裡的車。每張卡片上都有線跡的正面和反面，金色是針的線，藍色是底下的線。先從最大的家族開始：鎖式線跡的平車家族。</p>
+${mc({n:'單針平車',en:'Single-needle lockstitch',code:'301',draw:'301',rows:[
+ ['做什麼','大部分梭織衣服的接縫、壓明線、上口袋、上領、做門襟。'],
+ ['常見在','襯衫領子、西裝褲、口袋、標籤。'],
+ ['重點','最基本也最重要。多數車工學的第一台車就是它。']]})}
+${mc({n:'雙針平車',en:'Double-needle lockstitch',code:'301 ×2',draw:'301x2',rows:[
+ ['做什麼','兩支針、兩個旋梭，一次車出兩條平行的鎖式線跡。'],
+ ['常見在','工作服、襯衫的明線、牛仔褲後口袋。'],
+ ['重點','有一種「分離式針桿」機型，轉角時可以停一支針，轉出漂亮的直角。']]})}
+${mc({n:'人字車',en:'Zigzag lockstitch',code:'304',draw:'304',rows:[
+ ['做什麼','針會左右擺動，車出 Z 字形的鋸齒線，有一點彈性。'],
+ ['常見在','內衣、泳衣、縫鬆緊帶、貼布繡。'],
+ ['由來','線跡像一連串「人」字，所以叫<b class="t">人字車</b>。']]})}
+${mc({n:'電腦平車',en:'Computerized lockstitch',code:'301',rows:[
+ ['做什麼','一樣是 301，但多了很多自動功能：自動剪線、自動倒縫（回針）、定針（停車時針停在上或下）、自動抬壓腳、計數。'],
+ ['常見在','現在新添購的平車大多是這種。'],
+ ['重點','每一件都省下拿剪刀、手動回針的幾秒鐘，一天累積起來非常可觀。']]})}
+<h2>平車的基本功</h2>
+<ul>
+<li><strong>回針（倒縫）</strong>：開頭和結尾各往回車幾針，把線頭鎖住，免得散開。</li>
+<li><strong>壓明線</strong>：在正面車一條離布邊固定距離（例如 0.1 cm 或 0.6 cm）的裝飾線，這是最能看出車工功力的地方。</li>
+<li><strong>對位</strong>：兩片布上的剪口（刀眼）要對齊，衣服才不會歪。</li>
+<li><strong>控速</strong>：直線可以踩快，轉角、弧線要慢，必要時用手輪一針一針轉。</li>
+</ul>
+<div class="ex"><b>舉個例子</b>新手練平車，常常先不穿線，在紙上車直線、車方形、車圓，練到針孔排得整整齊齊，再開始車布。這樣練手腳配合，又安全又省料。</div>
+`,
+quiz:[
+ ['雙針平車一次車出幾條線跡？',['1 條','3 條','2 條','5 條'],2,'雙針平車有兩支針、兩個旋梭，一次車出兩條平行的 301。'],
+ ['人字車（304）的線跡長什麼樣子？',['一條直線','左右來回的 Z 字鋸齒','一個個圓圈','一片網狀'],1,'人字車的針會左右擺動，線跡像連續的人字或 Z 字，有一點彈性。'],
+ ['電腦平車的「自動剪線」有什麼好處？',['車完自動剪斷面線和底線，省下拿剪刀的時間','會自動換針','會自動穿線','會自動設計衣服'],0,'每件省幾秒，一天幾千件下來就是很大的差別。']
+]},
+
+/* ---------------- 第 10 課 ---------------- */
+{id:'l10', lv:3, title:'拷克車', sub:'三線、四線、五線',
+goal:'知道拷克車一次做哪三件事，分得出三線、四線、五線拷克的差別和用途。',
+html:`
+<p><b class="t">拷克</b>車大概是成衣廠裡最有代表性的聲音：「嗡」一聲，布邊被切齊、包好，一氣呵成。英文叫 overlock，也叫 serger。</p>
+<h2>拷克一次做三件事</h2>
+<ol>
+<li>用上刀、下刀把布邊修齊。</li>
+<li>針把布縫住。</li>
+<li><b class="t">彎針</b>帶著線繞過布邊，把毛邊整個包起來。</li>
+</ol>
+<p>所以拷克車出來的布邊不會脫紗，線跡本身又有彈性，梭織和針織都用得到。</p>
+<h2>幾線拷克？</h2>
+<p>「幾線」就是總共用了幾條線。卡片上金色是針線，藍色和綠色是上、下彎針的線。</p>
+${mc({n:'三線拷克',en:'3-thread overlock',code:'504',draw:'504',rows:[
+ ['線的組成','1 支針 ＋ 上彎針 ＋ 下彎針。'],
+ ['做什麼','布邊收邊：梭織布常先拷邊，再用平車合縫；也可以做很輕薄的針織接縫。'],
+ ['常見在','裙子、褲子裁片的布邊、內裡。']]})}
+${mc({n:'四線拷克',en:'4-thread overlock',code:'514',draw:'514',rows:[
+ ['線的組成','2 支針 ＋ 上彎針 ＋ 下彎針。多一條針線，更牢。'],
+ ['做什麼','合縫加包邊一次完成，又有彈性。'],
+ ['常見在','T恤、帽T、運動服的合肩、上袖、合脅。針織衣的主力機台。']]})}
+${mc({n:'五線拷克（安全縫）',en:'5-thread safety stitch',code:'516 ＝ 401 ＋ 504',draw:'516',rows:[
+ ['線的組成','一條雙線鏈式 401 和一條三線包縫 504 並排，一次完成。'],
+ ['做什麼','401 負責承受拉力，504 負責包住布邊，兩個分工。'],
+ ['常見在','梭織褲、外套、牛仔褲側縫。又快又牢，所以叫「安全縫」（safety stitch）。']]})}
+<h2>拷克的重要設定</h2>
+<ul>
+<li><strong>寬度</strong>：包邊的寬度，常見 3～7 mm，由針和刀的位置決定。</li>
+<li><strong>針距</strong>：太疏會露出布邊、不牢；太密布邊會變硬、起波浪。</li>
+<li><strong>差動比</strong>：針織布通常要調大一點，避免荷葉邊。</li>
+<li><strong>刀片</strong>：上刀、下刀要鋒利，鈍了布邊會毛毛的、拉絲。</li>
+</ul>
+<div class="ex"><b>舉個例子</b>把你的T恤翻過來看側縫，數一數：兩條直直的針線，加上繞著布邊的網狀線，就是四線拷克。</div>
+<div class="think"><b>想一想</b><p>為什麼T恤用四線拷克，牛仔褲側縫卻常用五線？</p>
+<details><summary>看答案</summary><p>T恤是針織布，需要彈性，四線拷克本身有彈性又夠牢。牛仔布厚、不伸縮、受力大，五線裡的 401 鏈式專門承受拉力，504 專門包住容易脫紗的布邊，分工合作，一次完成。</p></details></div>
+`,
+quiz:[
+ ['拷克車上的刀片是做什麼用的？',['剪斷縫線','把布料裁成衣片形狀','開鈕門','把布邊修齊，再讓線包起來'],3,'拷克一邊切齊布邊，一邊用彎針的線把布邊包起來。'],
+ ['梭織褲的側縫要「合縫＋包邊」一次完成，常用？',['五線拷克 516','三線拷克 504','單針平車','釘扣車'],0,'516 由 401 合縫、504 包邊，一次完成，又叫安全縫。'],
+ ['T恤的合肩、合脅最常用哪一種？',['打結車','四線拷克 514','撬邊車','雙針平車'],1,'514 有彈性又牢，是針織衣接縫的主力。']
+]},
+
+/* ---------------- 第 11 課 ---------------- */
+{id:'l11', lv:3, title:'三本車與扁車', sub:'覆蓋縫的那一張網',
+goal:'認識覆蓋縫的原理，分得出二本、三本車和扁車，知道筒車用在哪裡。',
+html:`
+<p>把T恤的袖口和下擺翻過來看，正面是兩條平行線，反面是一片網狀的線。這是<b class="t">三本車</b>（或二本車）車的，工廠也常叫它<b class="t">爬網</b>車。</p>
+<h2>覆蓋縫：把毛邊「蓋」起來</h2>
+<p>覆蓋縫的英文是 coverstitch。它用 2～3 支針在正面車出平行直線，下面的彎針在這幾條線之間來回拉線，把布邊蓋在網裡面。不用先把布邊包好，一次就能完成漂亮又有彈性的折邊。</p>
+${mc({n:'二本車、三本車（底覆蓋）',en:'Bottom coverstitch',code:'406（二針）／407（三針）',draw:'406',rows:[
+ ['外觀','正面 2～3 條平行直線，反面是網狀的彎針線。'],
+ ['做什麼','針織衣的折邊、滾邊，彈性好、不必先拷邊。'],
+ ['常見在','T恤下擺、袖口、運動褲褲腳、後領貼條。']]})}
+${mc({n:'雙面覆蓋縫',en:'Top and bottom coverstitch',code:'602／605',draw:'602',rows:[
+ ['外觀','比 406 多一條「上飾線」，由上方的撥線器帶著在正面也來回交錯，正反兩面都有網。'],
+ ['做什麼','滾邊、拼縫，同時有裝飾效果。'],
+ ['常見在','內衣、童裝、領口滾邊、裝飾拼接。']]})}
+${mc({n:'扁車（四針六線）',en:'Flatlock / flatseamer',code:'607',draw:'607',rows:[
+ ['外觀','4 支針 ＋ 下彎針 ＋ 上飾線，共 6 條線。兩片布邊對邊平接，正反兩面都被網蓋住。'],
+ ['做什麼','接縫又扁又平，沒有凸起的縫份，貼身穿不磨皮膚。'],
+ ['常見在','運動服、瑜珈服、內衣、自行車衣。']]})}
+<h2>車床的造型：平台式和筒式</h2>
+<p>三本車常見兩種車床。平台式用來車攤平的布；<b class="t">筒車</b>的車床是一支細長的圓筒，可以把已經接成一圈的袖口、褲腳套上去，一邊轉一邊車。</p>
+<div class="ex"><b>舉個例子</b>T恤如果先合脅（側縫接好）再車下擺，下擺就變成一個大圓圈，只能用筒車；有些工廠改成先車下擺再合脅，就能用平台式。工序的順序不同，選用的機台也跟著不同。</div>
+<p>工廠說「三本」，是沿用日文的說法：「本」是日文數長條物品的量詞，三本針就是三支針。</p>
+`,
+quiz:[
+ ['「三本車」的「本」是什麼意思？',['日文數長條物品的量詞，三本就是三支針','三本書','本錢','基本款'],0,'台灣工廠沿用日文，三本針就是三支針，二本就是兩支針。'],
+ ['運動衣的接縫要扁平、不磨皮膚，常用？',['五線拷克','平車','扁車（四針六線 607）','打結車'],2,'607 把布邊對邊平接，正反兩面都有覆蓋，接縫扁平。'],
+ ['車袖口這種已經接成圓筒的部位，常用哪一種車床造型？',['平台式','筒式（筒車）','高柱式','桌上型'],1,'筒車的車床是細長圓筒，袖口、褲腳可以套上去轉著車。']
+]},
+
+/* ---------------- 第 12 課 ---------------- */
+{id:'l12', lv:3, title:'特種車', sub:'打結、鈕門、釘扣、撬邊、埋夾、多針',
+goal:'認識成衣廠常見的特種機台，知道各自負責衣服的哪個部位。',
+html:`
+<p>除了平車、拷克、三本這三大主力，成衣廠還有很多「只做一件事，但做得又快又好」的特種車。很多是電腦控制，放上布、踩一下，就自動車完一個固定的圖形。</p>
+${mc({n:'打結車',en:'Bartack machine',code:'304（高密度）',draw:'bt',rows:[
+ ['做什麼','在一小段範圍內來回車幾十針密集的鋸齒，把受力點釘牢。'],
+ ['常見在','牛仔褲口袋角、褲耳兩端、門襟底部、背包帶。'],
+ ['由來','效果就像在那裡「打一個結」，所以叫<b class="t">打結車</b>。']]})}
+${mc({n:'平頭鈕門車',en:'Straight buttonhole machine',code:'鎖式',draw:'bh',rows:[
+ ['做什麼','先把開口兩側和兩端車好，再用刀把中間切開，做出<b class="t">鈕門</b>。'],
+ ['常見在','襯衫、Polo 衫、薄外套。']]})}
+${mc({n:'圓頭鈕門車',en:'Eyelet (keyhole) buttonhole machine',code:'鏈式',draw:'kh',rows:[
+ ['做什麼','鈕門一端是圓孔，像鑰匙孔。'],
+ ['常見在','牛仔褲腰頭、西裝外套、大衣。'],
+ ['為什麼有圓頭','較厚的鈕扣有「腳」，圓孔讓它有位置站，比較不會把布撐開。']]})}
+${mc({n:'釘扣車',en:'Button sewing machine',code:'單線鏈式或鎖式',draw:'bs',rows:[
+ ['做什麼','自動把二孔或四孔鈕扣縫上去，針數固定、每顆都一樣牢。'],
+ ['常見在','襯衫、Polo 衫、童裝。']]})}
+${mc({n:'撬邊車',en:'Blind stitch machine',code:'103',draw:'103',rows:[
+ ['做什麼','彎曲的針每一針只挑起表布幾根紗，正面幾乎看不到線跡。'],
+ ['常見在','西褲褲腳、裙擺、西裝袖口。'],
+ ['由來','「撬」是挑起來的意思，所以叫<b class="t">撬邊</b>。']]})}
+${mc({n:'埋夾車',en:'Feed-off-the-arm machine',code:'401 雙針或三針',draw:'foa',rows:[
+ ['做什麼','兩片布邊互相包住，把毛邊埋在裡面，再用兩三條鏈式線跡壓住，又牢又整齊。'],
+ ['常見在','牛仔褲後襠、內長縫、襯衫側縫、工作服。'],
+ ['英文由來','車好的布從機台細長的「手臂」上滑下去，所以叫 feed-off-the-arm。']]})}
+${mc({n:'多針車',en:'Multi-needle machine',code:'406 或多條 401',draw:'mn',rows:[
+ ['做什麼','4 支、8 支甚至更多針並排一起車。'],
+ ['常見在','鬆緊帶腰頭、褲耳帶、打褶裝飾。'],
+ ['由來','日本 Kansai Special 這個品牌非常有名，工廠常直接叫它「Kansai」。']]})}
+${mc({n:'自動模板機',en:'Automatic pattern sewer',code:'301',draw:'tp',rows:[
+ ['做什麼','把布夾在塑膠模板裡，機台照程式自動走出圖形。'],
+ ['常見在','口袋、門襟、商標、複雜的裝飾圖形。'],
+ ['重點','降低對車工手藝的依賴，新手也能車出一致的品質。']]})}
+<div class="ex"><b>舉個例子</b>拿出一條牛仔褲，你至少能找到六種機台的痕跡：口袋角的打結、腰頭的圓頭鈕門、內側長縫的埋夾、側縫的五線拷克、腰頭的多針車、褲耳兩端的打結。</div>
+`,
+quiz:[
+ ['牛仔褲口袋角、褲耳兩端那一小段密集的鋸齒線是？',['撬邊','打結車','鈕門','拷克'],1,'打結車在受力點來回車密集的鋸齒，把它釘牢。'],
+ ['西褲褲腳正面幾乎看不到線跡，是用哪一種車？',['三本車','雙針車','人字車','撬邊車'],3,'撬邊車每一針只挑起表布幾根紗，正面幾乎看不到。'],
+ ['牛仔褲內側長縫那種把毛邊埋起來的雙線縫，常用？',['埋夾車','釘扣車','三線拷克','手縫'],0,'埋夾車把兩片布邊互相包住，再用鏈式線跡壓住。']
+]},
+
+/* ---------------- 第 13 課 ---------------- */
+{id:'l13', lv:3, title:'從衣服看機台', sub:'T恤、Polo、牛仔褲、襯衫',
+goal:'能拆解一件衣服的工序，說出每一道用什麼機台，並比較針織線和梭織線的機台配置。',
+html:`
+<p>學了這麼多機台，現在把它們放回衣服上。選一件衣服，看看它從裁片到成品要經過哪些工序、用哪些車。有線跡號碼的可以點開看線跡。</p>
+<div class="lab" data-lab="garment"></div>
+<p class="note">工序順序和機台安排每家工廠、每個款式都不太一樣，這裡是常見的做法。</p>
+<h2>針織線 vs 梭織線：機台配置不一樣</h2>
+<div class="tbl"><table>
+<tr><th>機台</th><th>針織T恤線</th><th>梭織襯衫線</th><th>牛仔褲線</th></tr>
+<tr><td>平車（單針、雙針）</td><td>少量</td><td>最多</td><td>中量</td></tr>
+<tr><td>拷克</td><td>最多（四線）</td><td>少量</td><td>中量（五線）</td></tr>
+<tr><td>三本車</td><td>中量</td><td>幾乎沒有</td><td>少量</td></tr>
+<tr><td>埋夾車</td><td>沒有</td><td>有</td><td>有</td></tr>
+<tr><td>打結、鈕門、釘扣</td><td>很少</td><td>鈕門、釘扣</td><td>打結最多，還有圓頭鈕門</td></tr>
+<tr><td>多針車</td><td>視款式</td><td>很少</td><td>腰頭、褲耳</td></tr>
+</table></div>
+<div class="think"><b>想一想</b><p>如果客人把一張T恤訂單，改成「梭織布、有鈕扣門襟的襯衫」，生產線要多準備哪些機台？</p>
+<details><summary>看答案</summary><p>梭織布不伸縮、布邊會脫紗，需要更多平車來做領子、門襟和接縫；接縫可以改用埋夾車，或平車合縫後再拷邊；下擺改用平車配捲邊壓腳，不再用三本車；還要加上鈕門車和釘扣車。</p></details></div>
+`,
+quiz:[
+ ['一般來說，針織衣物的主力機台是？',['釘扣車和鈕門車','拷克車和三本車','撬邊車','只有平車'],1,'針織布需要彈性線跡，接縫靠四線拷克，折邊靠三本車。'],
+ ['梭織襯衫生產線上數量最多的是？',['平車（搭配各種壓腳）','扁車','多針橡筋車','三本車'],0,'襯衫的領、門襟、口袋、袖衩大多是平車配各種壓腳和拉筒完成的。'],
+ ['為什麼梭織衣服的布邊要先拷克，或用包住毛邊的縫法？',['為了讓布變有彈性','為了讓衣服變重','為了變色','梭織布的布邊會脫紗散開'],3,'梭織布剪開後紗線會一根根散開，所以布邊要包好。']
+]},
+
+/* ---------------- 第 14 課 ---------------- */
+{id:'l14', lv:4, title:'品質的四個關鍵', sub:'張力、針距、縫份、縫型',
+goal:'會判斷並調整張力，會換算針距和 SPI，理解縫份與縫型對品質的影響。',
+html:`
+<p>「會車」和「車得好」，差在「調」。這一課學專業車工和機修師傅每天在看的四件事：張力、針距、縫份、縫型。</p>
+<h2>張力：兩條線在拔河</h2>
+<p>鎖式線跡的面線和底線，就像兩隊在拔河。兩邊力氣一樣，交鎖點就停在布的正中間。面線太強，會把底線拉到正面，正面就看得到底線的小點；底線太強，面線就被拉到反面。</p>
+<div class="lab" data-lab="tension"></div>
+<h3>專業的調法：先底線、再面線</h3>
+<ol>
+<li><strong>先定好底線</strong>：捏住線頭把裝好梭心的梭殼吊起來，輕輕往上一抖，梭殼應該往下滑一小段就停住。完全不動是太緊，一路滑下去是太鬆。</li>
+<li><strong>再調面線</strong>：用實際要車的布試車，看正反兩面，轉夾線器，直到交鎖點藏在布中間。</li>
+<li><strong>拉一拉驗證</strong>：順著線跡方向拉一拉，線不能斷，布也不該起皺。</li>
+</ol>
+<p>拷克和三本車的張力也是同樣的道理，只是線比較多條：看包邊的交叉點是不是剛好落在布邊上，網狀線是否平整不鬆垮。</p>
+<h2>針距與 SPI</h2>
+<p><b class="t">針距</b>是兩針之間的距離；歐美客戶的工藝單常用 <b class="t">SPI</b>（每英寸有幾針）。針距太大，線跡不牢、縫份容易拉開；太密，布會被打得太多洞，起皺甚至裂開。</p>
+<div class="lab" data-lab="spi"></div>
+<h2>縫份</h2>
+<p><b class="t">縫份</b>是縫線到布邊之間留下的那一段布。太窄容易「爆口」（布邊從線跡中滑脫），太寬浪費布又厚重。針板上的刻度、磁鐵導規、壓腳上的導邊，都是幫你把縫份維持一致的工具。</p>
+<h2>縫型：布怎麼疊</h2>
+<p>線跡是「線怎麼走」，<b class="t">縫型</b>是「布怎麼放」。國際標準 ISO 4916 把縫型分成八大類，下面是最常見的四種剖面圖：</p>
+<div class="lab" data-lab="seams"></div>
+`,
+quiz:[
+ ['平車面線太緊，會看到什麼？',['面線跑到布的反面','線跡變長','底線被拉到布的正面，正面出現小點','沒有任何影響'],2,'面線贏了拔河，就把底線拉上來，正面看得到底線的小點。'],
+ ['針距 2.5 mm 大約等於每英寸幾針（SPI）？',['約 10','約 6','約 14','約 25'],0,'25.4 ÷ 2.5 ≈ 10，所以大約是 SPI 10。'],
+ ['縫份指的是？',['縫一件衣服需要的時間','縫線到布邊之間的那一段布','線的份量','線的粗細'],1,'縫份就是縫線外側預留的那一段布。']
+]},
+
+/* ---------------- 第 15 課 ---------------- */
+{id:'l15', lv:4, title:'車縫問題排除', sub:'看線跡找病因',
+goal:'看到常見的車縫問題時，能說出可能的原因，並照「由簡單到困難」的順序排除。',
+html:`
+<p>機台一天運轉好幾個小時，一定會出狀況。厲害的車工和機修師傅，看線跡就知道毛病在哪裡。選一個症狀，看看可能的原因和處理方式。</p>
+<div class="lab" data-lab="trouble"></div>
+<h2>排除問題的順序：由簡單到困難</h2>
+<ol>
+<li>換一支新針：最便宜，也最常解決問題。</li>
+<li>面線、底線全部重新穿一次。</li>
+<li>檢查針號、線、布是不是互相配合。</li>
+<li>清理針板下和旋梭附近的棉絮。</li>
+<li>調整張力、壓腳壓力、針距、差動比。</li>
+<li>以上都無效，再請機修師傅檢查勾線時間、送布牙高度等機械設定。</li>
+</ol>
+<div class="ex"><b>舉個例子</b>這跟看醫生很像：先量體溫、多喝水、好好休息，真的不行才做精密檢查。先從簡單的做，常常幾十秒就解決了，不必等機修師傅。</div>
+<div class="think"><b>想一想</b><p>一位車工說：「剛剛換了粗一點的線以後，就一直斷線。」你會先檢查什麼？</p>
+<details><summary>看答案</summary><p>先檢查針號是不是太細：線變粗了，針眼和長槽也要跟著變大，不然線在針眼裡被磨、被夾，很容易斷。換成合適的針，再重新調一下面線張力。</p></details></div>
+`,
+quiz:[
+ ['跳針最常見的原因之一是？',['布太漂亮','針裝反、沒插到底，或針彎了','燈太亮','線太新'],1,'針的方向或高度不對、針彎了，旋梭尖就勾不到線環，造成跳針。'],
+ ['針織布車出小破洞，最可能要怎麼改？',['加大面線張力','改用更粗的尖針','車快一點','改用較細的圓頭針'],3,'針太粗或是尖頭，都會把針織的紗線刺斷；換細一點的球針通常就改善了。'],
+ ['薄布車出來起皺（縫皺），可以怎麼改善？',['把張力放鬆、用較細的針和線、調整差動比或針距','把張力加大','換更粗的針','車快一點'],0,'縫皺多半是張力太緊、針線太粗或送布不順造成的。']
+]},
+
+/* ---------------- 第 16 課 ---------------- */
+{id:'l16', lv:4, title:'保養、安全與斷針管理', sub:'每個進車間的人都要會',
+goal:'知道車縫的個人安全規則、斷針管理的標準流程，以及每天的保養重點。',
+html:`
+<p>機台每分鐘幾千針，一點疏忽就可能傷到手指；而一截斷在衣服裡的針頭，可能傷到遠方的消費者。這一課是每個進車間的人都必須記住的。</p>
+<h2>個人安全</h2>
+<ul>
+<li>穿線、換針、換梭心、清潔之前，<strong>先關掉馬達電源</strong>，至少也要確認腳已離開踏板。伺服馬達很安靜，安靜不代表沒有通電。</li>
+<li>護指器、護眼罩、皮帶護蓋都不可以拆掉。</li>
+<li>長頭髮要綁起來，不戴會垂下來的飾品，袖口不要太寬鬆。</li>
+<li>不要用手硬拉布「幫忙」送布。讓送布牙做它的工作，硬拉會讓針撞到針板而斷掉。</li>
+</ul>
+<h2><b class="t">斷針管理</b></h2>
+<p>很多品牌客戶都要求工廠建立嚴格的斷針管理制度，常見的流程是：</p>
+<ol>
+<li><strong>以舊換新</strong>：換針時，要把舊針或斷針的全部碎片交給負責人，才能領新針。</li>
+<li><strong>找齊碎片</strong>：斷針後立刻停車，把所有碎片找出來，拼回一支完整的針。</li>
+<li><strong>登記</strong>：在斷針記錄表上寫下時間、機台、工序、車工，由主管簽名，碎片黏貼存查。</li>
+<li><strong>找不到碎片</strong>：那段時間車的衣片要全部隔離，用金屬探測器檢查，確認沒有才能放行。</li>
+<li><strong>出貨前驗針</strong>：成品要通過驗針機（金屬探測），才能包裝出貨。</li>
+</ol>
+<div class="ex"><b>舉個例子</b>一截只有幾毫米的斷針，如果留在嬰兒衣服裡，後果不堪設想。所以驗廠稽核時，斷針記錄幾乎一定會被檢查。</div>
+<h2>每天的保養</h2>
+<ul>
+<li><strong>開工前</strong>：看油窗有沒有油在噴，或照規定補油；空車試轉，聽聲音順不順。</li>
+<li><strong>工作中</strong>：針鈍了、彎了就換；很多工廠規定固定時間一定要換針。</li>
+<li><strong>收工前</strong>：用刷子清掉針板下、送布牙、旋梭附近的棉絮；拷克車要清刀片周圍；蓋上防塵罩、關電源。</li>
+<li><strong>定期</strong>：機修師傅檢查勾線時間、送布牙高度、皮帶和馬達。</li>
+</ul>
+<p>整理也是保養的一部分：剪刀、梭心、工具放在固定位置，地上沒有線頭布屑。這不只是整齊，還能減少絆倒，斷針碎片掉了也比較好找。</p>
+`,
+quiz:[
+ ['發生斷針時，正確的做法是？',['把找得到的碎片丟進垃圾桶','繼續車，下班再處理','找齊所有碎片、登記、交給主管換新針；找不到碎片就把衣片隔離檢查','自己去倉庫拿一支新針'],2,'斷針管理的重點是找齊碎片、登記、以舊換新，找不到就隔離並用金屬探測器檢查。'],
+ ['穿線、換針之前應該先？',['關掉馬達電源，或確認腳已離開踏板','把馬達開到最快','什麼都不用做','先加油'],0,'伺服馬達很安靜，但通電時一碰踏板就會動，先斷電最安全。'],
+ ['每天清理針板下方和旋梭附近的棉絮，主要是為了？',['讓機台變輕','讓顏色變亮','省電','避免卡線、跳針和零件磨損'],3,'棉絮會卡住送布牙和旋梭，造成跳針、斷線，也會加速磨損。']
+]},
+
+/* ---------------- 第 17 課 ---------------- */
+{id:'l17', lv:4, title:'專業視角', sub:'馬達、SMV、效率與選機',
+goal:'理解伺服馬達與電腦車的意義，會用 SMV 計算效率，懂得線平衡和選購機台的思考方式。',
+html:`
+<p>最後一課，從「一台機器」跳到「一整條生產線」，用管理者和工業工程師（IE）的眼睛看機台。</p>
+<h2>馬達：從離合器到伺服</h2>
+<p>早期的工業車用離合器馬達：馬達一整天高速空轉，腳一踩，離合器才接上帶動機頭，又吵又耗電。現在的<b class="t">伺服馬達</b>只有要車的時候才轉，還能精準控制停針位置、慢速起步，所以省電又安靜，也是自動剪線、自動回針這些電腦功能的基礎。</p>
+<h2>SMV：一道工序的「標準時間」</h2>
+<p><b class="t">SMV</b> 是標準分鐘值：一位受過訓練的作業員，用正常速度完成一道工序需要幾分鐘（已經包含合理的休息和寬放）。舉例來說，如果「上袖」的 SMV 是 0.6 分鐘，表示熟練車工大約 36 秒完成一件的上袖。一件衣服所有工序的 SMV 加起來，就是這件衣服的總 SMV。（這裡的數字只是舉例。）</p>
+<p>有了 SMV，就能算出：</p>
+<ul>
+<li><strong>100% 效率的目標產量</strong> ＝ 人數 × 工作分鐘 ÷ SMV</li>
+<li><strong>效率</strong> ＝ 產出件數 × SMV ÷（人數 × 工作分鐘）</li>
+</ul>
+<div class="lab" data-lab="eff"></div>
+<h2>線平衡：最慢的那一站決定速度</h2>
+<p>生產線像接力賽，整條線的產量是由最慢的那道工序決定的，這叫「瓶頸」。排線時要讓每個工位的工作時間盡量接近：太重的工序拆給兩個人，太輕的工序合併，機台也跟著人重新配置。</p>
+<div class="ex"><b>舉個例子</b>十個人排一條線，其他人每件只要 30 秒，只有「上領」要 60 秒，那整條線每分鐘只能出一件，其他人有一半的時間在等。把上領分給兩個人做，產量馬上接近翻倍。</div>
+<h2>選機台時要看什麼</h2>
+<ol>
+<li><strong>產品組合</strong>：做針織還是梭織？款式多變還是固定？</li>
+<li><strong>線跡需求</strong>：客戶工藝單要求的 ISO 線跡號碼和 SPI。</li>
+<li><strong>布料範圍</strong>：輕、中、重磅，決定要選輕料型還是重料型的機頭。</li>
+<li><strong>自動化程度</strong>：自動剪線、自動模板機能降低技術門檻，但投資較高。</li>
+<li><strong>維修與零件</strong>：機修師傅熟不熟、零件好不好買，常常比規格表更重要。</li>
+</ol>
+<h2>接下來的路</h2>
+<p>車工 → 多能工（會好幾種機台，哪裡缺人補哪裡）→ 組長 → 機修技術員；也可以走工業工程、品管、生產管理。懂機台的人，在成衣廠任何位置都用得上。</p>
+<p>走完十七課了！去挑戰<a href="#/exam">結業測驗</a>，八十分以上就能領結業證書。</p>
+`,
+quiz:[
+ ['SMV 指的是什麼？',['縫紉機馬達的型號','每分鐘的針數','完成一道工序的標準分鐘數','線的粗細'],2,'SMV 是標準分鐘值，是算產量、效率、工價的基礎。'],
+ ['一條線 10 人工作 480 分鐘，產出 800 件，每件 SMV 5 分鐘，效率大約是？',['約 50%','約 83%','100%','約 120%'],1,'800 × 5 ＝ 4,000 分鐘；10 × 480 ＝ 4,800 分鐘；4,000 ÷ 4,800 ≈ 83%。'],
+ ['伺服馬達比傳統離合器馬達好在哪裡？',['比較吵','比較重','一定比較便宜','不車時不空轉，省電、安靜，還能精準停針'],3,'伺服馬達只在需要時轉動，並能精準控制位置，是電腦車功能的基礎。']
+]}
+];
+
+/* ================= 互動實驗室 ================= */
+const RM = (()=>{ try{ return matchMedia('(prefers-reduced-motion: reduce)').matches }catch(e){ return false } })();
+const TC = {n:'#D99A2B', l:'#4F74B0', s:'#3C8C80'};
+const labs = {};
+function segH(opts, cur){
+  return `<div class="seg" role="group">${opts.map((o,i)=>`<button type="button" data-i="${i}" aria-pressed="${i===cur}">${o}</button>`).join('')}</div>`;
+}
+function bindSeg(box, cb){
+  const bs = box.querySelectorAll('button');
+  bs.forEach(b => b.addEventListener('click', () => {
+    bs.forEach(x => x.setAttribute('aria-pressed', x===b));
+    cb(+b.dataset.i);
+  }));
+}
+function anim(dur, fn, done){
+  if(RM){ fn(1); if(done) done(); return ()=>{}; }
+  let s = null, id, stop = false;
+  const f = ts => { if(stop) return; if(s===null) s = ts; const t = Math.min(1,(ts-s)/dur); fn(t); if(t<1) id = requestAnimationFrame(f); else if(done) done(); };
+  id = requestAnimationFrame(f);
+  return () => { stop = true; cancelAnimationFrame(id); };
+}
+const ease = t => t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
+
+/* ---------- l1 流程 ---------- */
+labs.flow = el => {
+  el.innerHTML = `<p class="lab-t">一件衣服的旅程：點一站看看</p>
+  <ol class="steps">${FLOW.map((f,i)=>`<li><button type="button" data-i="${i}" class="${i===6?'hot':''}" aria-pressed="${i===6}"><span>${i+1}</span>${f[0]}</button></li>`).join('')}</ol>
+  <div class="verdict ok"></div>`;
+  const v = el.querySelector('.verdict'), bs = el.querySelectorAll('.steps button');
+  const show = i => {
+    bs.forEach(b => b.setAttribute('aria-pressed', +b.dataset.i===i));
+    v.innerHTML = `<b>第 ${i+1} 站・${FLOW[i][0]}</b>　${FLOW[i][1]}${i===6?'<br><b style="color:var(--thread-d)">★ 我們要學的機台就在這一站。</b>':''}`;
+  };
+  bs.forEach(b => b.addEventListener('click', () => show(+b.dataset.i)));
+  show(6);
+};
+
+/* ---------- l2 梭織 ---------- */
+labs.weave = el => {
+  const N = 12, S = 20, PAT = [
+    ['平紋', (x,y)=>(x+y)%2===0, '平紋：經紗和緯紗「一上一下」輪流交錯，最簡單、最牢固。襯衫布、府綢、帆布都是平紋。'],
+    ['斜紋（丹寧）', (x,y)=>(x+y)%4!==0, '斜紋：經紗「三上一下」，交錯點一排一排錯開，就出現斜斜的紋路。牛仔布是藍色經紗配白色緯紗的斜紋，所以正面藍、反面偏白。'],
+    ['緞紋', (x,y)=>(2*x+y)%5!==0, '緞紋：經紗一次浮過好幾根緯紗才交錯一次，而且交錯點分散開，表面幾乎全是長長的浮線，所以特別光滑亮麗，但也比較容易勾紗。']
+  ];
+  let p = 0, stop = ()=>{}, stretched = false;
+  el.innerHTML = `<p class="lab-t">織布機：經紗（藍）× 緯紗（白）</p>${segH(PAT.map(a=>a[0]),0)}
+  <div class="svgbox"><svg style="max-width:380px;margin:0 auto" viewBox="-30 -10 ${N*S+60} ${N*S+40}" role="img" aria-label="梭織組織圖"><g class="wv" style="transition:transform .5s;transform-box:fill-box;transform-origin:center"></g><g class="sh"></g>
+  <text class="svt" x="${N*S/2}" y="${N*S+24}" text-anchor="middle">← 緯紗（橫向）　經紗（直向）↕</text></svg></div>
+  <div class="row"><button class="btn" data-a="go">開始織布</button><button class="btn ghost" data-a="pull">拉一拉</button></div>
+  <p class="cap"></p>`;
+  const g = el.querySelector('.wv'), sh = el.querySelector('.sh'), cap = el.querySelector('.cap');
+  const cell = (x,y,up) => up
+    ? `<rect x="${x*S+3}" y="${y*S}" width="${S-6}" height="${S}" rx="3" fill="#2C4A78"/><line x1="${x*S+S/2}" y1="${y*S+3}" x2="${x*S+S/2}" y2="${y*S+S-3}" stroke="#4F74B0" stroke-width="1.5"/>`
+    : `<rect x="${x*S}" y="${y*S+3}" width="${S}" height="${S-6}" rx="3" fill="#F4F1EA" stroke="#C9CED6" stroke-width=".8"/>`;
+  const rowH = y => { let s=''; for(let x=0;x<N;x++) s += cell(x,y,PAT[p][1](x,y)); return `<g data-r="${y}">${s}</g>`; };
+  const draw = rows => { let s=''; for(let y=0;y<rows;y++) s += rowH(y); g.innerHTML = s; cap.textContent = PAT[p][2]; };
+  draw(N);
+  bindSeg(el.querySelector('.seg'), i => { p = i; stop(); sh.innerHTML=''; draw(N); });
+  el.querySelector('[data-a=go]').onclick = () => {
+    stop(); draw(0);
+    stop = anim(N*520, t => {
+      const f = t*N, r = Math.min(N-1, Math.floor(f)), k = f - r;
+      const done = g.querySelectorAll('g[data-r]').length;
+      if(done < r) { let s=''; for(let y=done;y<r;y++) s += rowH(y); g.insertAdjacentHTML('beforeend', s); }
+      const dir = r%2===0 ? 1 : -1, sx = dir>0 ? -24 + k*(N*S+24) : N*S - k*(N*S+24);
+      sh.innerHTML = `<path d="M${sx-16} ${r*S+S/2} Q${sx} ${r*S+S/2-8} ${sx+16} ${r*S+S/2} Q${sx} ${r*S+S/2+8} ${sx-16} ${r*S+S/2}Z" fill="#D99A2B" stroke="#9A6510"/><line x1="${dir>0?-30:N*S+30}" y1="${r*S+S/2}" x2="${sx}" y2="${r*S+S/2}" stroke="#F4F1EA" stroke-width="3" opacity=".8"/>`;
+    }, () => { sh.innerHTML=''; draw(N); });
+  };
+  el.querySelector('[data-a=pull]').onclick = () => {
+    stretched = !stretched; g.style.transform = stretched ? 'scale(1.04,1)' : '';
+    cap.textContent = stretched ? '用力拉，梭織布幾乎拉不長（只多大約 4%）。經緯紗都是直直的，沒有地方可以伸展。再按一次放開。' : PAT[p][2];
+  };
+};
+
+/* ---------- l2 針織 ---------- */
+labs.knit = el => {
+  const C = 10, R = 8, W = 26, H = 20;
+  let stop = ()=>{}, pulled = false, run = -1, runRow = R;
+  el.innerHTML = `<p class="lab-t">針織：一條紗勾成一排排線圈</p>
+  <div class="svgbox"><svg style="max-width:420px;margin:0 auto" viewBox="-10 -14 ${C*W+20} ${R*H+40}" role="img" aria-label="針織線圈圖"><g class="kn" style="transition:transform .5s;transform-box:fill-box;transform-origin:center"></g></svg></div>
+  <div class="row"><button class="btn" data-a="go">開始編織</button><button class="btn ghost" data-a="pull">拉一拉</button><button class="btn ghost" data-a="run">勾破一個線圈</button></div>
+  <p class="cap">每一個 V 字形都是一個線圈，上一排的線圈穿過下一排的線圈，像手牽手連在一起。</p>`;
+  const g = el.querySelector('.kn'), cap = el.querySelector('.cap');
+  const loop = (c,r) => { const x = c*W + W/2, y = r*H;
+    return `<path d="M${x-10} ${y-6} C${x-9} ${y+6} ${x-4} ${y+12} ${x} ${y+14} M${x+10} ${y-6} C${x+9} ${y+6} ${x+4} ${y+12} ${x} ${y+14}" fill="none" stroke="#4F74B0" stroke-width="4.2" stroke-linecap="round"/>`; };
+  const draw = rows => {
+    let s = '';
+    for(let r=0;r<rows;r++) for(let c=0;c<C;c++){
+      if(c===run && r>=runRow){ s += `<line x1="${c*W+2}" y1="${r*H+4}" x2="${c*W+W-2}" y2="${r*H+4}" stroke="#4F74B0" stroke-width="2.4" stroke-linecap="round"/>`; }
+      else s += loop(c,r);
+    }
+    if(run>=0 && runRow<R) s += `<circle cx="${run*W+W/2}" cy="${runRow*H-2}" r="9" fill="none" stroke="#C2413A" stroke-width="2.5"/>`;
+    g.innerHTML = s;
+  };
+  draw(R);
+  el.querySelector('[data-a=go]').onclick = () => { stop(); run=-1; runRow=R; pulled=false; g.style.transform='';
+    stop = anim(R*420, t => draw(Math.max(1, Math.ceil(t*R))));
+    cap.textContent = '針織機的針一排一排勾線圈，每一排都穿過上一排。整塊布可以只用一條紗做出來。'; };
+  el.querySelector('[data-a=pull]').onclick = () => { pulled = !pulled; g.style.transform = pulled ? 'scale(1.35,.88)' : '';
+    cap.textContent = pulled ? '線圈會變形、被拉開，所以針織布很有彈性（橫向尤其明顯）。放開後會慢慢縮回去。再按一次放開。' : '每一個 V 字形都是一個線圈。'; };
+  el.querySelector('[data-a=run]').onclick = () => { stop(); pulled=false; g.style.transform=''; run = 4; runRow = R;
+    stop = anim(1800, t => { runRow = Math.round(R - t*(R-2)); draw(R); });
+    cap.textContent = '一個線圈斷掉，上面的線圈就一個接一個鬆脫，像梯子一樣往下「跑」，叫做脫散（抽絲）。所以車針織布時，針一定要避免割斷紗線。'; };
+};
+
+/* ---------- l3 速度 ---------- */
+labs.speed = el => {
+  const L = [['手縫',40],['1846 豪威',250],['家用縫紉機',800],['工業平車',5000]];
+  el.innerHTML = `<p class="lab-t">一分鐘可以縫幾針？</p><div class="lanes">${L.map(l=>`<div class="lane"><span>${l[0]}</span><div class="tr"><i></i></div><span class="c">0</span></div>`).join('')}</div>
+  <div class="row"><button class="btn">再比一次</button></div><p class="cap">工業平車每分鐘約 5,000 針，等於每秒超過 80 針，是手縫的一百倍以上。（數字為大約值）</p>`;
+  const lanes = el.querySelectorAll('.lane');
+  let stop = ()=>{};
+  const go = () => { stop(); stop = anim(2600, t => { const e = ease(t);
+    lanes.forEach((ln,i) => { const v = L[i][1]*e; ln.querySelector('i').style.width = (v/5000*100)+'%'; ln.querySelector('.c').textContent = Math.round(v).toLocaleString(); }); }); };
+  el.querySelector('.btn').onclick = go;
+  if('IntersectionObserver' in window){ const io = new IntersectionObserver(es => { if(es[0].isIntersecting){ go(); io.disconnect(); } }); io.observe(el); } else go();
+};
+
+/* ---------- l4 機床形狀 ---------- */
+labs.beds = el => {
+  const T = 'fill="var(--fabric)" stroke="var(--ink2)" stroke-width="2"';
+  const head = (x,y) => `<path d="M${x} ${y} h70 v58 h-16 v-38 h-40 v12 h-14 z" ${T}/><rect x="${x+6}" y="${y+32}" width="3" height="16" fill="var(--ink2)"/>`;
+  const B = [
+    ['平台式','Flatbed','最常見，平車、拷克都是。布平放在大桌面上。', `<rect x="10" y="80" width="140" height="14" ${T}/>${head(40,22)}`],
+    ['筒式','Cylinder bed','像一根手臂伸出來，袖口、褲口這種筒狀的部位可以套進去車。', `<rect x="10" y="98" width="140" height="10" ${T}/><rect x="96" y="70" width="44" height="28" ${T}/><rect x="20" y="70" width="80" height="18" rx="9" ${T}/>${head(26,12)}`],
+    ['高柱式','Post bed','縫的位置在一根柱子頂端，適合立體的東西：鞋子、包包、帽子。', `<rect x="10" y="98" width="140" height="10" ${T}/><rect x="36" y="56" width="18" height="42" rx="3" ${T}/><rect x="100" y="60" width="40" height="38" ${T}/>${head(34,6)}`],
+    ['埋夾式','Feed-off-the-arm','布沿著伸出來的手臂往外送，車牛仔褲側縫、襯衫合脅這種長長的筒狀接縫。', `<rect x="10" y="98" width="140" height="10" ${T}/><rect x="80" y="60" width="60" height="38" ${T}/><path d="M24 64 h60 v20 h-60 a10 10 0 0 1 0-20z" ${T}/>${head(26,6)}`]
+  ];
+  el.innerHTML = `<p class="lab-t">機床（Bed）四種形狀</p><div class="cards2">${B.map(b=>`<figure><svg viewBox="0 0 160 112" aria-hidden="true">${b[3]}</svg><figcaption><b>${b[0]}</b><span class="note">${b[1]}</span><br>${b[2]}</figcaption></figure>`).join('')}</div>`;
+};
+
+/* ---------- l4 平車零件 ---------- */
+labs.parts = el => {
+  const P = [
+    ['手輪',548,128,592,70,'機頭右邊的大圓輪，和主軸連在一起。用手慢慢轉，針就會上下動，用來穿線、調機、對針位。規矩：永遠朝自己（操作者）的方向轉，反轉可能讓線纏進旋梭。'],
+    ['挑線桿',160,96,120,40,'在機頭前面上下擺動的桿子，面線要穿過它的小孔。它在每一針的最後把線往上拉緊，把兩條線的交鎖點拉進布的中間，同時從線軸拉出下一針要用的線。穿線漏掉它，第一針就會亂成一團。'],
+    ['夾線器',186,140,244,152,'兩片圓盤夾住面線，旋鈕轉緊夾得越緊，面線張力越大。它要和底線的張力互相平衡（第 14 課會做實驗）。'],
+    ['針桿與針',150,236,98,210,'針桿帶著針上下運動，針用螺絲鎖在針桿下端。裝針要插到底，長槽的方向要照機台規定（很多工業平車是長槽朝左），裝反就會跳針。'],
+    ['壓腳',150,258,96,290,'把布壓在送布牙上，讓送布牙抓得住布。有各種專用壓腳：單邊壓腳、捲邊壓腳、鐵氟龍壓腳……換一個壓腳，平車就能做不同的事。'],
+    ['送布牙',184,272,248,238,'藏在針板長槽下面、有鋸齒的小鐵片。它一上、一後、一下、一前地繞圈，把布一針一針往後送（第 8 課）。'],
+    ['針板',210,269,290,210,'蓋在送布牙上面的鋼板，有讓針穿過的針孔、讓送布牙冒出來的長槽，上面的刻度線可以用來對齊縫份。'],
+    ['旋梭與梭心',150,326,96,356,'藏在針板下面。旋梭高速旋轉，用梭尖勾住面線的線環，讓線環繞過裝著底線的梭心（梭心裝在梭殼裡），兩條線就鎖在一起（第 5 課）。工業平車的旋梭每一針轉兩圈。'],
+    ['針距調節盤',466,176,410,120,'轉動它可以改變送布牙每次送多遠，也就是一針的長度（針距），刻度通常是 mm。'],
+    ['倒縫扳手',478,222,420,190,'壓下去，送布牙就反方向送布，用來在開頭和結尾「回針」，把線跡鎖住不脫線。電腦車可以按鈕或自動回針。'],
+    ['繞線器',510,262,560,238,'裝在機台檯面上的小輪子，一邊車縫、一邊把底線繞到空梭心上，不用另外停機繞線。'],
+    ['膝抬',262,352,318,368,'桌子下方的小板子，用膝蓋往右一推，壓腳就抬起來。兩隻手可以一直扶著布，不用放開去扳。'],
+    ['伺服馬達',450,340,520,368,'掛在桌子底下，用腳踏板控制快慢。不踩就不轉，省電又安靜，還能設定停針位置（針停在上或下）。'],
+    ['線架',470,22,540,18,'插線軸（寶塔線）的架子。線從上方的導線鉤往下拉，才不會纏繞、打結。']
+  ];
+  const T = 'fill="var(--fabric)" stroke="var(--ink2)" stroke-width="2"';
+  const mach = `
+  <rect x="20" y="284" width="580" height="16" rx="3" fill="#C9A77A" stroke="#9A7A50"/>
+  <line x1="60" y1="300" x2="60" y2="380" stroke="var(--ink2)" stroke-width="5"/><line x1="560" y1="300" x2="560" y2="380" stroke="var(--ink2)" stroke-width="5"/>
+  <path d="M100 250 H540 V284 H100 Z" ${T}/>
+  <path d="M120 60 H520 Q540 60 540 80 V250 H430 V118 H206 V236 H120 Z" ${T}/>
+  <rect x="120" y="60" width="86" height="176" rx="6" ${T}/>
+  <circle cx="548" cy="128" r="44" fill="var(--paper)" stroke="var(--ink2)" stroke-width="3"/><circle cx="548" cy="128" r="10" fill="var(--ink2)"/>
+  <line x1="470" y1="60" x2="470" y2="14" stroke="var(--ink2)" stroke-width="3"/><path d="M458 14 h24" stroke="var(--ink2)" stroke-width="3"/>
+  <rect x="440" y="258" width="0" height="0"/>
+  <path d="M150 90 L176 98" stroke="var(--ink2)" stroke-width="5" stroke-linecap="round"/><circle cx="160" cy="96" r="4" fill="#D99A2B"/>
+  <circle cx="186" cy="140" r="11" fill="var(--paper)" stroke="var(--ink2)" stroke-width="2.5"/>
+  <rect x="146" y="200" width="8" height="46" fill="var(--ink2)"/><rect x="148.5" y="236" width="3" height="22" fill="var(--ink)"/>
+  <path d="M136 256 H170 V262 H136 Z" fill="var(--ink2)"/>
+  <rect x="130" y="266" width="120" height="4" fill="var(--muted)"/>
+  <path d="M168 272 l4-3 l4 3 l4-3 l4 3 l4-3 l4 3" fill="none" stroke="var(--bad)" stroke-width="2"/>
+  <circle cx="150" cy="326" r="18" fill="none" stroke="var(--ink2)" stroke-width="2" stroke-dasharray="4 3"/><circle cx="150" cy="326" r="8" fill="#4F74B0"/>
+  <rect x="120" y="300" width="80" height="0"/>
+  <circle cx="466" cy="176" r="12" fill="var(--paper)" stroke="var(--ink2)" stroke-width="2.5"/><path d="M466 166 v8" stroke="var(--ink2)" stroke-width="2"/>
+  <path d="M470 212 L494 232" stroke="var(--ink2)" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="510" cy="262" r="7" fill="var(--paper)" stroke="var(--ink2)" stroke-width="2"/>
+  <path d="M250 300 V340 L276 360" fill="none" stroke="var(--ink2)" stroke-width="4"/><rect x="266" y="352" width="18" height="12" rx="3" fill="var(--ink2)"/>
+  <rect x="410" y="316" width="80" height="44" rx="8" fill="var(--ink2)"/><text x="450" y="343" text-anchor="middle" fill="#fff" font-size="12" font-family="var(--sans)">馬達</text>
+  <path d="M470 22 Q498 40 520 60 Q470 80 176 98" fill="none" stroke="#D99A2B" stroke-width="1.6" stroke-dasharray="3 3"/>
+  <rect x="462" y="0" width="16" height="14" rx="3" fill="#D99A2B"/>`;
+  el.innerHTML = `<p class="lab-t">工業平車零件圖：點編號或下方按鈕</p>
+  <div class="svgbox"><svg viewBox="0 -8 620 392" role="img" aria-label="工業平車側面圖">${mach}
+  ${P.map((p,i)=>`<g class="hs" data-i="${i}" tabindex="0" role="button" aria-label="${p[0]}"><line x1="${p[1]}" y1="${p[2]}" x2="${p[3]}" y2="${p[4]}" stroke="var(--thread-d)" stroke-width="1.2"/><circle cx="${p[3]}" cy="${p[4]}" r="11"/><text x="${p[3]}" y="${p[4]+4}" text-anchor="middle">${i+1}</text></g>`).join('')}
+  </svg></div>
+  <div class="hot-list">${P.map((p,i)=>`<button type="button" data-i="${i}" aria-pressed="false">${i+1}. ${p[0]}</button>`).join('')}</div>
+  <div class="verdict">點一個零件看看它是做什麼的。</div>`;
+  const v = el.querySelector('.verdict');
+  const pick = i => {
+    el.querySelectorAll('.hs').forEach(h => h.classList.toggle('on', +h.dataset.i===i));
+    el.querySelectorAll('.hot-list button').forEach(b => b.setAttribute('aria-pressed', +b.dataset.i===i));
+    v.className = 'verdict ok'; v.innerHTML = `<b>${i+1}. ${P[i][0]}</b>　${P[i][5]}`;
+  };
+  el.querySelectorAll('.hs, .hot-list button').forEach(b => {
+    b.addEventListener('click', () => pick(+b.dataset.i));
+    b.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(+b.dataset.i); } });
+  });
+};
+
+/* ---------- l5 鎖式線跡慢動作 ---------- */
+labs.lockstitch = el => {
+  const HX = 200, HY = 268, HR = 38, G = '#D99A2B', B = '#4F74B0';
+  const CAP = [
+    '準備：針在最高點，上一針已經鎖好。金色是面線，藍色是底線（藏在下面的梭心裡）。',
+    '針往下：針帶著面線穿過布，一直往下到旋梭旁邊。',
+    '形成線環：針開始往上升大約 2 mm，面線因為和布摩擦而留在下面，在針的缺口那一側鼓成一個小線環。',
+    '旋梭勾住：旋梭的梭尖剛好在這一刻經過，鑽進線環把它勾走。這個時間點叫「勾線時間」，差一點點就會跳針。',
+    '繞過梭心：旋梭繼續轉，把面線線環撐大，整個繞過裝著底線的梭心。',
+    '收緊：挑線桿往上拉，把線環拉回布裡，面線和底線就在兩層布的中間鎖在一起。',
+    '送布：針離開布以後，送布牙把布往後送一個針距，準備下一針。重複這 7 步，一分鐘可以做幾千次！'
+  ];
+  const TIP = [96,258,250,232,112,60,60], LEV = [30,70,74,62,92,22,30], BK = [-10,-35,-30,-96,180,60,60];
+  const ln = (d,c,w=3) => `<path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const beak = a => { const r = Math.PI/180, t = a*r, t2 = (a-22)*r;
+    return `<path d="M${HX+(HR+6)*Math.cos(t)} ${HY+(HR+6)*Math.sin(t)} L${HX+(HR+3)*Math.cos(t2)} ${HY+(HR+3)*Math.sin(t2)} L${HX+(HR-5)*Math.cos(t)} ${HY+(HR-5)*Math.sin(t)}Z" fill="var(--ink2)"/>`; };
+  const prev = () => { let s = ln('M20 118 H160', G) + ln('M20 144 H160', B);
+    [40,80,120,160].forEach(k => { s += ln(`M${k} 118 L${k} 131`, G, 2.5) + ln(`M${k} 144 L${k} 131`, B, 2.5); }); return s; };
+  const frame = i => {
+    const tip = TIP[i], eye = tip - 14, k = i>=5;
+    let st = `<rect class="fab" x="0" y="120" width="440" height="22"/><line x1="0" y1="131" x2="440" y2="131" stroke="var(--line)" stroke-dasharray="4 3"/>` + prev();
+    let th = '';
+    if(i===0){ th = ln(`M200 ${eye} Q180 100 164 118 L160 118`, G); }
+    else if(i<=3){ th = ln(`M164 118 H196 V${eye}`, G);
+      if(i===2) th += ln(`M203 ${eye} C226 ${eye+4} 226 ${eye-26} 204 ${eye-34}`, G);
+      if(i===3) th += ln(`M203 ${eye} C232 ${eye+10} 222 ${eye+30} 192 ${eye+18} C182 ${eye+12} 186 ${eye-6} 199 ${eye-12}`, G); }
+    else if(i===4){ th = ln('M164 118 H197 V142 L160 250 A46 46 0 1 0 241 250 L203 142 L201 '+eye, G); }
+    if(k){ st += ln('M160 118 H196 L200 131', G) + ln('M160 144 H196 L200 131', B, 3); }
+    const blue = i===6 ? ln('M164 144 L199 250', B) : k ? ln('M204 144 L201 250', B) : ln('M160 144 H194 L199 250', B);
+    const supply = ln(`M206 -10 L203 ${eye}`, G, 2);
+    const needle = `<rect x="193" y="-10" width="14" height="${Math.max(0,tip-100)}" fill="var(--ink2)" opacity=".5"/><path d="M197 -10 V${tip-10} L200 ${tip} L203 ${tip-10} V-10Z" fill="#9AA6B6" stroke="var(--ink2)"/><ellipse cx="200" cy="${eye}" rx="1.6" ry="4" fill="var(--paper)"/>`;
+    const hook = `<circle cx="${HX}" cy="${HY}" r="${HR}" fill="none" stroke="var(--ink2)" stroke-width="3"/><circle cx="${HX}" cy="${HY}" r="24" fill="none" stroke="var(--muted)" stroke-width="1.5"/><circle cx="${HX}" cy="${HY}" r="17" fill="${B}" opacity=".35"/><circle cx="${HX}" cy="${HY}" r="5" fill="${B}"/>${beak(BK[i])}`;
+    const gauge = `<text class="svt" x="352" y="14" text-anchor="middle">挑線桿</text><line x1="352" y1="22" x2="352" y2="100" stroke="var(--line)" stroke-width="6" stroke-linecap="round"/><circle cx="352" cy="${LEV[i]}" r="8" fill="${G}" stroke="var(--thread-d)" stroke-width="2"/>`;
+    const lab = `<text class="svt" x="26" y="112">布（兩層）</text><text class="svt" x="252" y="${HY+4}">旋梭</text><text class="svt" x="${HX}" y="${HY+60}" text-anchor="middle">梭心（底線）</text>`;
+    return `<g class="stg" style="transition:transform .9s ease">${st}${th}</g>${blue}${supply}${needle}${hook}${gauge}${lab}${i===6?`<text class="svt-b" x="120" y="172" text-anchor="middle">← 送布一個針距</text>`:''}`;
+  };
+  el.innerHTML = `<p class="lab-t">慢動作：鎖式線跡（301）的一針</p>
+  <div class="svgbox"><svg style="max-width:480px;margin:0 auto" viewBox="0 -12 400 340" role="img" aria-label="鎖式線跡形成剖面圖"></svg></div>
+  <p class="cap" aria-live="polite"></p>
+  <div class="row"><button class="btn ghost" data-a="p">◀ 上一步</button><button class="btn" data-a="n">下一步 ▶</button><button class="btn ghost" data-a="auto">自動播放</button></div>`;
+  const svg = el.querySelector('svg'), cap = el.querySelector('.cap'), ab = el.querySelector('[data-a=auto]');
+  let f = 0, timer = null;
+  const show = i => { f = (i+7)%7; svg.innerHTML = frame(f); cap.innerHTML = `<b>第 ${f+1}／7 步</b>　${CAP[f]}`;
+    if(f===6){ const g = svg.querySelector('.stg'); requestAnimationFrame(()=>requestAnimationFrame(()=>{ g.style.transform = 'translateX(-40px)'; })); } };
+  const halt = () => { clearInterval(timer); timer = null; ab.textContent = '自動播放'; };
+  el.querySelector('[data-a=p]').onclick = () => { halt(); show(f-1); };
+  el.querySelector('[data-a=n]').onclick = () => { halt(); show(f+1); };
+  ab.onclick = () => { if(timer){ halt(); return; } ab.textContent = '暫停';
+    timer = setInterval(() => { if(!el.isConnected){ halt(); return; } show(f+1); }, 2200); };
+  show(0);
+};
+
+/* ---------- 線跡繪圖工具 ---------- */
+const SW = {
+  L:(x1,y1,x2,y2,c,w=2.6)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}" stroke-width="${w}" stroke-linecap="round"/>`,
+  dash(y,c,len=13,gap=6,w){ let s=''; for(let x=12;x+len<=250;x+=len+gap) s+=SW.L(x,y,x+len,y,c,w); return s; },
+  dots(y,c){ let s=''; for(let x=16;x<=246;x+=19) s+=`<circle cx="${x}" cy="${y}" r="2.2" fill="${c}"/>`; return s; },
+  chain(y,c){ let s=''; for(let x=12;x+19<=252;x+=19) s+=`<ellipse cx="${x+10}" cy="${y}" rx="11.5" ry="4.6" fill="none" stroke="${c}" stroke-width="2.1"/>`; return s; },
+  zig(y1,y2,c,p=19,w=2.3){ let pts=[]; for(let x=12,i=0;x<=250;x+=p/2,i++) pts.push(`${x},${i%2?y2:y1}`); return `<polyline points="${pts.join(' ')}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linejoin="round"/>`; },
+  fab(edge){ return edge
+    ? `<rect class="fab" x="4" y="8" width="252" height="66"/>${[...Array(26)].map((_,i)=>SW.L(8+i*9.6,74,6+i*9.6,80,'var(--muted)',1)).join('')}`
+    : `<rect class="fab" x="4" y="8" width="252" height="74" rx="4"/>`; }
+};
+const STITCH = {
+  '101':{n:'單線鏈式',th:'1 條（面線自己勾成鏈）',st:'中',use:'臨時假縫、麵粉袋封口。拉住線尾一扯就整條拆開。',f:()=>SW.dash(45,TC.n),b:()=>SW.chain(45,TC.n)},
+  '301':{n:'鎖式（平車）',th:'2 條（面線＋底線）',st:'低',use:'梭織衣服大部分的接縫、明線、口袋、領子。正反面長得一樣。',f:()=>SW.dash(45,TC.n),b:()=>SW.dash(45,TC.l)},
+  '304':{n:'人字鎖式',th:'2 條（面線＋底線）',st:'中',use:'內衣、泳衣上鬆緊帶、貼布繡、打結。',f:()=>SW.zig(34,56,TC.n),b:()=>SW.zig(34,56,TC.l)},
+  '401':{n:'雙線鏈式',th:'2 條（針線＋彎針線）',st:'中高',use:'牛仔褲後襠、腰頭、埋夾縫；也是五線拷克的一部分。線不用梭心，可以用大線筒連續車。',f:()=>SW.dash(45,TC.n),b:()=>SW.chain(45,TC.l)},
+  '406':{n:'二針三線底覆蓋（三本車）',th:'3 條（2 針線＋1 彎針線）',st:'高',use:'T恤下擺、袖口、領口滾邊。正面兩條平行線，反面一張網蓋住布邊。',f:()=>SW.dash(34,TC.n)+SW.dash(56,TC.n),b:()=>SW.dash(34,TC.n,13,6,1.4)+SW.dash(56,TC.n,13,6,1.4)+SW.zig(34,56,TC.l)},
+  '504':{n:'三線拷克',th:'3 條（1 針線＋上彎針＋下彎針）',st:'高',edge:1,use:'把布邊包起來防止脫紗，也可以做輕薄針織布的接縫。',f:()=>SW.dash(32,TC.n)+SW.zig(32,77,TC.l),b:()=>SW.dots(32,TC.n)+SW.zig(32,77,TC.s)},
+  '514':{n:'四線拷克',th:'4 條（2 針線＋上下彎針）',st:'高',edge:1,use:'針織衣服的主力接縫：合肩、上袖、合脅，一次完成縫合＋包邊。',f:()=>SW.dash(24,TC.n)+SW.dash(36,TC.n)+SW.zig(24,77,TC.l),b:()=>SW.dots(24,TC.n)+SW.dots(36,TC.n)+SW.zig(24,77,TC.s)},
+  '516':{n:'五線安全縫（401＋504）',th:'5 條',st:'中',edge:1,use:'梭織接縫一次完成：一條 401 鏈式負責牢固，旁邊的三線拷克負責包邊。牛仔褲側縫、梭織褲常用。',f:()=>SW.dash(20,TC.n)+SW.dash(44,TC.n)+SW.zig(44,77,TC.l),b:()=>SW.chain(20,TC.l)+SW.dots(44,TC.n)+SW.zig(44,77,TC.s)},
+  '602':{n:'二針四線雙面覆蓋',th:'4 條（2 針線＋彎針線＋覆蓋線）',st:'高',use:'滾邊、內褲、運動服的裝飾縫。正面多了一條「覆蓋線」在兩條針線上來回。',f:()=>SW.dash(34,TC.n)+SW.dash(56,TC.n)+SW.zig(32,58,TC.s),b:()=>SW.zig(34,56,TC.l)},
+  '607':{n:'四針六線扁車（對接）',th:'6 條（4 針線＋彎針線＋覆蓋線）',st:'高',use:'兩片布邊對邊接起來，接縫又平又薄，不磨皮膚。運動服、內衣、緊身衣。',f:()=>SW.L(4,45,256,45,'var(--muted)',1)+[26,38,52,64].map(y=>SW.dash(y,TC.n)).join('')+SW.zig(24,66,TC.s),b:()=>SW.L(4,45,256,45,'var(--muted)',1)+SW.zig(26,64,TC.l)},
+  '103':{n:'單線撬邊（盲縫）',th:'1 條',st:'中',use:'西裝褲腳、裙擺：正面幾乎看不到線。',f:()=>SW.L(4,62,256,62,'var(--muted)',1)+[...Array(7)].map((_,i)=>`<circle cx="${24+i*34}" cy="30" r="1.3" fill="${TC.n}"/>`).join(''),b:()=>SW.L(4,62,256,62,'var(--muted)',1)+SW.zig(30,62,TC.n,34,1.8)},
+  '301x2':{f:()=>SW.dash(34,TC.n)+SW.dash(54,TC.n),b:()=>SW.dash(34,TC.l)+SW.dash(54,TC.l)},
+  'foa':{f:()=>SW.L(4,44,256,44,'var(--muted)',1)+SW.dash(32,TC.n)+SW.dash(56,TC.n),b:()=>SW.L(4,44,256,44,'var(--muted)',1)+SW.chain(32,TC.l)+SW.chain(56,TC.l)},
+  'mn':{f:()=>[18,34,50,66].map(y=>SW.dash(y,TC.n)).join('')+[...Array(20)].map((_,i)=>SW.L(14+i*12,12,16+i*12,78,'var(--muted)',.8)).join(''),b:()=>[18,34,50,66].map(y=>SW.chain(y,TC.l)).join('')}
+};
+const SPECIAL = {
+  bt:()=>SW.L(4,52,256,52,'var(--muted)',1.2)+SW.dash(58,TC.n)+`<path d="M100 40 ${[...Array(24)].map((_,i)=>`L${100+i*2.5} ${i%2?64:40}`).join(' ')}" fill="none" stroke="${TC.n}" stroke-width="1.6"/>`,
+  bh:()=>`<line x1="70" y1="45" x2="190" y2="45" stroke="var(--ink2)" stroke-width="1.2"/>`+`<path d="M70 32 ${[...Array(49)].map((_,i)=>`L${70+i*2.5} ${i%2?42:32}`).join(' ')} M70 48 ${[...Array(49)].map((_,i)=>`L${70+i*2.5} ${i%2?58:48}`).join(' ')}" fill="none" stroke="${TC.n}" stroke-width="1.4"/><rect x="62" y="30" width="8" height="30" fill="${TC.n}"/><rect x="190" y="30" width="8" height="30" fill="${TC.n}"/>`,
+  kh:()=>`<path d="M100 33 H196 V57 H100 A18 18 0 1 1 100 33Z" fill="none" stroke="${TC.n}" stroke-width="9" stroke-dasharray="1.6 1.6"/><circle cx="84" cy="45" r="6" fill="none" stroke="var(--ink2)"/><path d="M90 45 H188" stroke="var(--ink2)" stroke-width="1"/>`,
+  bs:()=>`<circle cx="130" cy="45" r="26" fill="#F4F1EA" stroke="var(--ink2)" stroke-width="2"/>${[[120,35],[140,35],[120,55],[140,55]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="var(--ink2)"/>`).join('')}${SW.L(120,35,140,55,TC.n,3)}${SW.L(140,35,120,55,TC.n,3)}`,
+  tp:()=>`<path d="M40 14 H220 V60 L130 80 L40 60Z" fill="none" stroke="${TC.n}" stroke-width="2.4" stroke-dasharray="10 5"/><path d="M60 40 Q95 18 130 40 Q165 62 200 40" fill="none" stroke="${TC.n}" stroke-width="2.4" stroke-dasharray="10 5"/>`
+};
+function stitchFig(code, small){
+  const s = STITCH[code], fig = (lab, inner, edge) => `<figure><svg viewBox="0 0 260 90" aria-hidden="true">${SW.fab(edge)}${inner}</svg><figcaption>${lab}</figcaption></figure>`;
+  if(SPECIAL[code]) return `<div class="mini-row one">${fig('外觀', SPECIAL[code](), 0)}</div>`;
+  if(!s) return '';
+  return `<div class="mini-row">${fig('正面', s.f(), s.edge)}${fig('反面', s.b(), s.edge)}</div>`;
+}
+const LEGEND = `<p class="cap"><span style="color:${TC.n}">━</span> 針線（面線）　<span style="color:${TC.l}">━</span> 底線／彎針線　<span style="color:${TC.s}">━</span> 下彎針線／覆蓋線</p>`;
+labs.mini = el => { el.innerHTML = stitchFig(el.dataset.code); };
+
+/* ---------- l6 線跡家族 ---------- */
+labs.stitches = el => {
+  const codes = ['101','301','304','401','406','504','514','516','602','607'];
+  el.innerHTML = `<p class="lab-t">線跡圖鑑：點號碼看正反面</p>${segH(codes,1)}<div class="st-box"></div>${LEGEND}`;
+  const box = el.querySelector('.st-box');
+  const show = i => { const c = codes[i], s = STITCH[c];
+    box.innerHTML = `<h3 style="margin:.4em 0 .2em!important">${c}　${s.n}</h3>${stitchFig(c)}<dl class="kv"><dt>用幾條線</dt><dd>${s.th}</dd><dt>彈性</dt><dd>${s.st}</dd><dt>常見用途</dt><dd>${s.use}</dd><dt>家族</dt><dd>${c[0]}00 類：${({1:'單線鏈式',3:'鎖式',4:'多線鏈式',5:'包邊（拷克）',6:'覆蓋（扁車）'})[c[0]]}</dd></dl>`; };
+  bindSeg(el.querySelector('.seg'), show); show(1);
+};
+
+/* ---------- l7 針的構造 ---------- */
+labs.needle = el => {
+  const P = [['針柄',100,64,'Shank','插進針桿、被螺絲鎖住的粗段。工業針多是圓柄，家用針是一邊削平的平柄，所以兩種針不能混用。'],
+    ['針肩',192,64,'Shoulder','由粗變細的斜面，讓針穿布時不會突然卡住。'],
+    ['針桿',300,64,'Blade','針最長的一段，它的粗細就是「針號」。越粗越硬，適合越厚的布。'],
+    ['長槽',400,122,'Long groove','針身一側的長溝，面線藏在裡面跟著針穿過布，減少摩擦、不容易斷線。'],
+    ['針缺口',498,122,'Scarf','針眼上方被削掉的凹口，讓旋梭或彎針的尖端能貼著針經過，勾到線環。'],
+    ['針眼',532,64,'Eye','穿線的孔。線的粗細大約要佔針眼的四成，太粗會斷線、太細會跳針。'],
+    ['針尖',578,122,'Point','針最前端。圓尖用在梭織布，球尖把針織紗推開不割斷，刀尖用在真皮。']];
+  el.innerHTML = `<p class="lab-t">一根工業針的構造</p><div class="svgbox"><svg viewBox="0 0 620 150" role="img" aria-label="縫紉針構造圖">
+  <rect x="30" y="80" width="150" height="26" rx="4" fill="#9AA6B6" stroke="var(--ink2)"/><path d="M180 80 L206 88 V98 L180 106Z" fill="#9AA6B6" stroke="var(--ink2)"/>
+  <rect x="206" y="88" width="340" height="10" fill="#B8C2CF" stroke="var(--ink2)"/><line x1="214" y1="94" x2="524" y2="94" stroke="var(--ink2)" stroke-width="2"/>
+  <path d="M486 98 Q498 92 510 98" fill="var(--paper)" stroke="var(--ink2)"/><ellipse cx="532" cy="93" rx="8" ry="2.6" fill="var(--paper)" stroke="var(--ink2)"/>
+  <path d="M546 88 L590 93 L546 98Z" fill="#B8C2CF" stroke="var(--ink2)"/>
+  ${P.map((p,i)=>{const tx=p[1],ty=p[2],py=ty<80?(i<2?80:88):98; const px=i===3?400:i===4?498:i===6?572:tx;
+    return `<line x1="${px}" y1="${py}" x2="${tx}" y2="${ty<80?ty+6:ty-14}" stroke="var(--thread-d)"/><text class="svt-b" x="${tx}" y="${ty}" text-anchor="middle">${i+1}. ${p[0]}</text>`;}).join('')}
+  </svg></div><dl class="kv">${P.map((p,i)=>`<dt>${i+1}. ${p[0]}</dt><dd><span class="note">${p[3]}</span>　${p[4]}</dd>`).join('')}</dl>`;
+};
+
+/* ---------- l7 針線挑選器 ---------- */
+labs.picker = el => {
+  const F = [
+    ['雪紡、薄紗','Nm 60–70（#8–10）','細圓尖','細聚酯線（約 Tex 18–24）','SPI 14–16（約 1.6–1.8 mm）','平車（細針孔針板、細齒送布牙）、捲邊壓腳','非常容易縫皺：張力要輕，壓腳壓力調小。'],
+    ['襯衫府綢','Nm 70–80（#10–12）','標準圓尖','聚酯包芯線（約 Tex 24–30）','SPI 12–16（約 1.6–2.1 mm）','平車、埋夾車、鈕門車、釘扣車','領子和門襟的明線要直、針距要一致。'],
+    ['牛仔布','Nm 100–120（#16–19）','加強圓尖（厚布用）','包芯線 Tex 40–60；裝飾明線用更粗的線','明線 SPI 7–10（約 2.5–3.6 mm）','雙針平車、埋夾車、五線拷克、打結車、圓頭鈕門車','多層重疊處（像褲耳、後襠）最容易斷針，車速要放慢。'],
+    ['汗布（T恤）','Nm 70–80（#10–12）','輕球尖','聚酯線；彎針用膨體線（毛毛線）','SPI 12–14','四線拷克、三本車、平車（上領標）','用尖針容易割斷紗線，洗後出現小破洞。'],
+    ['萊卡彈性布','Nm 65–75（#9–11）','中球尖','膨體尼龍或聚酯線，線跡要能拉長','SPI 12–16','扁車、拷克、人字車','差動送布調大，避免車出荷葉邊。'],
+    ['厚羅紋、毛衣布','Nm 90–100（#14–16）','大球尖','膨體線','SPI 8–10','拷克（開幅寬一點）、三本車、平車','布很鬆，壓腳壓力和差動都要試車確認。'],
+    ['皮革、PU 人造皮','Nm 100–110（#16–18）','真皮用刀尖；PU 多用細圓尖','尼龍或聚酯粗線（約 Tex 40–70）','SPI 6–9（針孔太密會撕裂）','平車配滾輪或鐵氟龍壓腳、綜合送布平車','針孔不會消失，車錯很難補救，先在碎料上試車。']
+  ];
+  el.innerHTML = `<p class="lab-t">針線挑選器：選一種布</p><select aria-label="選擇布料">${F.map((f,i)=>`<option value="${i}">${f[0]}</option>`).join('')}</select><div class="pk"></div><p class="note">數值是常見的起點，實際以客戶工藝單和試車結果為準。</p>`;
+  const s = el.querySelector('select'), box = el.querySelector('.pk');
+  const show = () => { const f = F[+s.value]; box.innerHTML = `<dl class="kv"><dt>針號</dt><dd>${f[1]}</dd><dt>針尖</dt><dd>${f[2]}</dd><dt>線</dt><dd>${f[3]}</dd><dt>針距</dt><dd>${f[4]}</dd><dt>常用機台</dt><dd>${f[5]}</dd></dl><div class="verdict">⚠ ${f[6]}</div>`; };
+  s.onchange = show; show();
+};
+
+/* ---------- l8 送布動畫 ---------- */
+labs.feed = el => {
+  const id = 'fd' + Math.random().toString(36).slice(2,7);
+  let dashes = ''; for(let x=-40;x<=440;x+=40) dashes += `<line x1="${x}" y1="96" x2="${x+26}" y2="96" stroke="#D99A2B" stroke-width="3" stroke-linecap="round"/>`;
+  el.innerHTML = `<style>
+  #${id} .fb{animation:${id}f 2.4s linear infinite}
+  #${id} .fd{animation:${id}d 2.4s linear infinite}
+  #${id} .nd{animation:${id}n 2.4s linear infinite}
+  #${id}.slow .fb,#${id}.slow .fd,#${id}.slow .nd{animation-duration:6s}
+  #${id}.paused .fb,#${id}.paused .fd,#${id}.paused .nd{animation-play-state:paused}
+  @keyframes ${id}f{0%,25%{transform:translateX(0)}50%,100%{transform:translateX(40px)}}
+  @keyframes ${id}d{0%{transform:translate(0,14px)}25%{transform:translate(0,0)}50%{transform:translate(40px,0)}75%{transform:translate(40px,14px)}100%{transform:translate(0,14px)}}
+  @keyframes ${id}n{0%,50%{transform:translateY(-70px)}68%,78%{transform:translateY(0)}100%{transform:translateY(-70px)}}
+  </style>
+  <p class="lab-t">送布牙怎麼把布送走</p>
+  <div class="svgbox" id="${id}"><svg viewBox="0 0 400 200" role="img" aria-label="送布動畫" style="overflow:hidden">
+    <g class="fb"><rect class="fab" x="-60" y="90" width="520" height="14"/>${dashes}</g>
+    <rect x="160" y="62" width="80" height="26" rx="4" fill="var(--ink2)" opacity=".85"/><text x="200" y="80" text-anchor="middle" fill="#fff" font-size="12" font-family="var(--sans)">壓腳</text>
+    <g class="nd"><rect x="197" y="-20" width="6" height="128" fill="#9AA6B6" stroke="var(--ink2)"/><path d="M197 108 L200 118 L203 108Z" fill="#9AA6B6"/></g>
+    <rect x="20" y="104" width="360" height="10" fill="var(--muted)"/><rect x="140" y="104" width="140" height="10" fill="var(--paper)" opacity=".7"/>
+    <g class="fd"><path d="M150 112 h96 v16 h-96z" fill="var(--bad)"/><path d="M150 112 ${[...Array(12)].map((_,i)=>`l4 -6 l4 6`).join(' ')}" fill="var(--bad)"/></g>
+    <text class="svt" x="30" y="130">針板</text><text class="svt" x="150" y="160">送布牙（上→後→下→前 繞圈）</text>
+    <text class="svt-b" x="300" y="40">送布方向 →</text>
+  </svg></div>
+  <div class="row"><button class="btn" data-a="p">暫停</button><button class="btn ghost" data-a="s">慢動作</button></div>
+  <p class="cap">注意兩件事：送布牙冒出針板往前推的時候，針一定在布的上面；針往下刺進布的時候，送布牙已經躲到針板下面。兩個動作輪流，布才不會被扯歪、針也不會斷。</p>`;
+  const box = el.querySelector('#'+id);
+  el.querySelector('[data-a=p]').onclick = e => { const p = box.classList.toggle('paused'); e.target.textContent = p ? '繼續' : '暫停'; };
+  el.querySelector('[data-a=s]').onclick = e => { const s = box.classList.toggle('slow'); e.target.textContent = s ? '正常速度' : '慢動作'; };
+};
+
+/* ---------- l8 差動送布 ---------- */
+labs.diff = el => {
+  const F = [['針織汗布',1.3,'針織布一被拉就變長，前面要多送一點布把它「餵」進去。'],['薄梭織布',0.85,'薄梭織布容易被擠皺，前面要少送一點，讓布稍微被拉平。']];
+  let f = 0;
+  el.innerHTML = `<p class="lab-t">差動送布：前後兩個送布牙的比例</p>${segH(F.map(a=>a[0]),0)}
+  <label class="rl">差動比 <b class="rv">1.00</b>（前送布 ÷ 主送布）<input type="range" min="0.6" max="2" step="0.05" value="1"></label>
+  <div class="svgbox"><svg viewBox="0 0 400 190" role="img" aria-label="差動送布示意圖"></svg></div><div class="verdict"></div>`;
+  const svg = el.querySelector('svg'), r = el.querySelector('input'), rv = el.querySelector('.rv'), v = el.querySelector('.verdict');
+  const draw = () => {
+    const x = +r.value, d = x - F[f][1]; rv.textContent = x.toFixed(2);
+    let edge = 'M20 60';
+    if(Math.abs(d) <= 0.1) edge += ' L380 60';
+    else if(d < 0){ const a = Math.min(22, -d*40); for(let i=0;i<9;i++) edge += ` Q${40+i*40} ${60 + (i%2?a:-a)} ${60+i*40} 60`; edge += ' L380 60'; }
+    else { const a = Math.min(10, d*16); for(let i=0;i<30;i++) edge += ` L${26+i*12} ${60+(i%2?a:-a)}`; edge += ' L380 60'; }
+    const bar = (cx,len,lab,c) => `<line x1="${cx-len/2}" y1="150" x2="${cx+len/2}" y2="150" stroke="${c}" stroke-width="10" stroke-linecap="round"/><path d="M${cx+len/2+6} 150 l-8 -7 v14z" fill="${c}"/><text class="svt" x="${cx}" y="178" text-anchor="middle">${lab}</text>`;
+    svg.innerHTML = `<path d="${edge} V110 H20Z" class="fab" style="stroke:var(--ink2);stroke-width:1.5"/><line x1="20" y1="96" x2="380" y2="96" stroke="#D99A2B" stroke-width="2.5" stroke-dasharray="12 6"/>
+      <text class="svt" x="20" y="30">縫出來的布邊</text>${bar(110,60*x,'前：差動送布牙','var(--bad)')}${bar(290,60,'後：主送布牙','var(--denim)')}`;
+    if(Math.abs(d) <= 0.1){ v.className='verdict ok'; v.innerHTML = `<b>剛好！</b>前後送布配合${F[f][0]}的特性，縫出來平平的。${F[f][2]}`; }
+    else if(d < 0){ v.className='verdict bad'; v.innerHTML = '<b>布被拉長了：</b>前面送得太少，布被後面拉長，縫邊變成波浪（荷葉邊）。把差動比調大。'; }
+    else { v.className='verdict bad'; v.innerHTML = '<b>布被擠皺了：</b>前面送得太多，布被擠進去，縫邊起皺縮縐。把差動比調小。（故意調很大，就能做出抽縐效果！）'; }
+  };
+  r.oninput = draw;
+  bindSeg(el.querySelector('.seg'), i => { f = i; draw(); });
+  draw();
+};
+
+/* ---------- l13 從衣服看機台 ---------- */
+labs.garment = el => {
+  const GA = [
+    ['T恤', [['合肩（加肩條防拉長）','四線拷克','514'],['上領（羅紋領）','四線拷克','514'],['壓後領貼條、車領標','平車','301'],['領口壓明線','三本車','406'],['上袖','四線拷克','514'],['合脅與袖底（夾洗標）','四線拷克','514'],['車袖口','三本車','406'],['車下擺','三本車','406'],['剪線頭、檢驗','手工',null]]],
+    ['Polo', [['做前門襟','平車','301'],['合肩','四線拷克','514'],['上領（平織羅紋領）','四線拷克','514'],['上袖','四線拷克','514'],['合脅（留側衩）','四線拷克','514'],['上羅紋袖口','四線拷克','514'],['側衩與下擺','平車／三本車','406'],['門襟開鈕門','平頭鈕門車','bh'],['釘扣','釘扣車','bs'],['門襟底打結','打結車','bt']]],
+    ['牛仔褲', [['後袋車花','自動模板機','tp'],['上後袋','雙針平車','301x2'],['接育克、合後襠','埋夾車','foa'],['做前袋、拉鍊門襟','平車＋拷克','301'],['合側縫','五線拷克','516'],['合內長縫','埋夾車','foa'],['上腰頭','多針車','mn'],['做褲耳','多針車','mn'],['釘褲耳、口袋角打結','打結車','bt'],['腰頭鈕門','圓頭鈕門車','kh'],['褲口捲邊','平車','301'],['釘工字扣、撞釘','撞釘機',null]]],
+    ['襯衫', [['做領（車領、翻領、壓明線）','平車','301'],['做門襟（配拉筒）','平車','301'],['上胸袋','平車','301'],['做袖衩','平車','301'],['上領','平車','301'],['上袖','埋夾車','foa'],['合脅與袖底','埋夾車','foa'],['上袖口','平車','301'],['下擺捲邊','平車（捲邊壓腳）','301'],['開鈕門','平頭鈕門車','bh'],['釘扣','釘扣車','bs']]]
+  ];
+  el.innerHTML = `<p class="lab-t">選一件衣服，拆開它的工序</p>${segH(GA.map(g=>g[0]),0)}<ol class="gsteps"></ol>`;
+  const ol = el.querySelector('.gsteps');
+  const show = i => {
+    ol.innerHTML = GA[i][1].map(s => `<li><div><b>${s[0]}</b><br><span class="m">${s[1]}</span>${s[2]?`<button type="button" class="m" data-c="${s[2]}" aria-expanded="false">${/^\d/.test(s[2])?s[2].replace('x2',' ×2'):'看線跡'} ▾</button>`:''}<div class="gmini" hidden></div></div></li>`).join('');
+    ol.querySelectorAll('button.m').forEach(b => b.onclick = () => {
+      const box = b.parentNode.querySelector('.gmini'), open = box.hidden;
+      if(open && !box.innerHTML) box.innerHTML = stitchFig(b.dataset.c);
+      box.hidden = !open; b.setAttribute('aria-expanded', open);
+    });
+  };
+  bindSeg(el.querySelector('.seg'), show); show(0);
+};
+
+/* ---------- l14 張力拔河 ---------- */
+labs.tension = el => {
+  el.innerHTML = `<p class="lab-t">張力拔河：調兩個旋鈕，看剖面</p>
+  <label class="rl">面線張力（夾線器） <b class="tv">5</b><input type="range" min="1" max="9" value="5" data-k="t"></label>
+  <label class="rl">底線張力（梭殼螺絲） <b class="bv">5</b><input type="range" min="1" max="9" value="5" data-k="b"></label>
+  <div class="svgbox"><svg viewBox="0 0 400 170" role="img" aria-label="鎖式線跡剖面圖"></svg></div>
+  <div class="verdict"></div><div class="row"><button class="btn ghost">回到平衡</button></div>`;
+  const svg = el.querySelector('svg'), v = el.querySelector('.verdict'), [rt, rb] = el.querySelectorAll('input');
+  const draw = () => {
+    const t = +rt.value, b = +rb.value, d = t - b, sum = t + b;
+    el.querySelector('.tv').textContent = t; el.querySelector('.bv').textContent = b;
+    const ky = Math.max(60, Math.min(120, 90 - d*6.5));
+    const pk = sum > 12 ? (sum-12)*2.2 : 0, loose = sum < 7 ? (7-sum)*3 : 0;
+    const wave = (y) => { let p = `M20 ${y}`; for(let i=0;i<12;i++) p += ` Q${35+i*30} ${y+(i%2?pk:-pk)} ${50+i*30} ${y}`; return p; };
+    const X = [55,110,165,220,275,330];
+    let top = `M20 ${68-loose/2}`, bot = `M20 ${112+loose/2}`;
+    X.forEach((x,i) => { const px = i ? X[i-1] : 20, mx = (px+x)/2;
+      top += ` Q${mx} ${68-loose*2} ${x-2} ${Math.min(ky,68)} L${x} ${ky} L${x+2} ${Math.min(ky,68)}`;
+      bot += ` Q${mx} ${112+loose*2} ${x-2} ${Math.max(ky,112)} L${x} ${ky} L${x+2} ${Math.max(ky,112)}`; });
+    top += ' L380 68'; bot += ' L380 112';
+    svg.innerHTML = `<path d="${wave(70)} L380 90 L20 90Z" class="fab" style="stroke:var(--ink2)"/><path d="${wave(90)} L380 110 L20 110Z" class="fab" style="stroke:var(--ink2);opacity:.85"/>
+      <path d="${top}" fill="none" stroke="${TC.n}" stroke-width="3" stroke-linejoin="round"/><path d="${bot}" fill="none" stroke="${TC.l}" stroke-width="3" stroke-linejoin="round"/>
+      ${X.map(x=>`<circle cx="${x}" cy="${ky}" r="4" fill="${ky<70?TC.l:ky>110?TC.n:'var(--ink)'}"/>`).join('')}
+      <text class="svt" x="20" y="40">正面（面線）</text><text class="svt" x="20" y="150">反面（底線）</text><text class="svt" x="380" y="40" text-anchor="end">● 交鎖點</text>`;
+    let c = 'ok', m;
+    if(Math.abs(d) <= 1 && sum < 7){ c='bad'; m = '<b>兩條都太鬆：</b>線跡鬆垮、浮浮的，一拉就開。兩邊一起調緊。'; }
+    else if(Math.abs(d) <= 1 && sum > 12){ c='bad'; m = '<b>兩條都太緊：</b>線把布拉縮，出現縫皺，一拉還容易斷線。兩邊一起放鬆。'; }
+    else if(Math.abs(d) <= 1){ m = '<b>平衡！</b>交鎖點藏在兩層布中間，正面只看到面線、反面只看到底線。'; }
+    else if(d > 1){ c='bad'; m = '<b>面線太緊（或底線太鬆）：</b>底線被拉到正面，正面看得到藍色小點。先確認底線張力，再把面線夾線器轉鬆。'; }
+    else { c='bad'; m = '<b>底線太緊（或面線太鬆）：</b>面線被拉到反面，反面出現金色線圈。把面線調緊，或把梭殼螺絲轉鬆一點。'; }
+    if(Math.abs(d) > 1 && sum > 12) m += '　另外兩條加起來也太緊，布已經開始起皺。';
+    v.className = 'verdict ' + c; v.innerHTML = m;
+  };
+  rt.oninput = rb.oninput = draw;
+  el.querySelector('.btn').onclick = () => { rt.value = rb.value = 5; draw(); };
+  draw();
+};
+
+/* ---------- l14 針距換算 ---------- */
+labs.spi = el => {
+  el.innerHTML = `<p class="lab-t">針距 ↔ SPI 換算器</p>
+  <div class="row"><label>針距 <input type="number" min="0.5" max="12" step="0.1" value="2.5" data-k="mm" style="width:6em"> mm</label><span>＝</span><label>SPI <input type="number" min="2" max="40" step="0.5" value="10.2" data-k="spi" style="width:6em"></label></div>
+  <div class="svgbox"><svg viewBox="0 0 400 70" role="img" aria-label="一英寸長的線跡"></svg></div>
+  <div class="verdict"></div>
+  <p class="note">常見參考：襯衫 12–16、T恤拷克 12–14、牛仔明線 7–10、精緻梭織 12–16。實際以客戶工藝單為準。</p>`;
+  const [im, is] = el.querySelectorAll('input'), svg = el.querySelector('svg'), v = el.querySelector('.verdict');
+  const draw = mm => {
+    const px = 300/25.4; let s = `<rect class="fab" x="50" y="18" width="300" height="24"/><line x1="50" y1="50" x2="350" y2="50" stroke="var(--ink2)"/><line x1="50" y1="46" x2="50" y2="54" stroke="var(--ink2)"/><line x1="350" y1="46" x2="350" y2="54" stroke="var(--ink2)"/><text class="svt" x="200" y="66" text-anchor="middle">1 英寸 ＝ 25.4 mm</text>`;
+    const L = mm*px; for(let x=50; x+L<=350.5; x+=L) s += `<line x1="${x+2}" y1="30" x2="${x+L-2}" y2="30" stroke="#D99A2B" stroke-width="3" stroke-linecap="round"/>`;
+    svg.innerHTML = s;
+    v.innerHTML = `每 1 英寸約 <b>${(25.4/mm).toFixed(1)}</b> 針　・　每 3 cm 約 <b>${(30/mm).toFixed(1)}</b> 針　・　每 10 cm 約 <b>${Math.round(100/mm)}</b> 針`;
+  };
+  im.oninput = () => { const mm = +im.value; if(mm > 0){ is.value = (25.4/mm).toFixed(1); draw(mm); } };
+  is.oninput = () => { const s = +is.value; if(s > 0){ im.value = (25.4/s).toFixed(2); draw(25.4/s); } };
+  draw(2.5);
+};
+
+/* ---------- l14 縫型剖面 ---------- */
+labs.seams = el => {
+  const A = 'fill="#2C4A78"', Bc = 'fill="#8FA9CF"', st = x => `<line x1="${x}" y1="18" x2="${x}" y2="92" stroke="#D99A2B" stroke-width="2.5" stroke-dasharray="5 3"/>`;
+  const S = [
+    ['疊縫（第 1 類）','Superimposed seam','兩片布正面相對、邊緣疊齊再車。最常見：平車合縫、拷克合縫都是。', `<rect x="20" y="44" width="150" height="8" rx="3" ${A}/><rect x="20" y="56" width="150" height="8" rx="3" ${Bc}/>${st(140)}`],
+    ['搭接縫・埋夾（第 2 類）','Lapped seam','兩片布互相搭疊、包夾，布邊藏在裡面，又牢又平整。牛仔褲、襯衫的埋夾縫。', `<path d="M10 42 H130 a8 8 0 0 1 0 16 H90" fill="none" stroke="#2C4A78" stroke-width="7" stroke-linecap="round"/><path d="M190 64 H70 a8 8 0 0 1 0-16 H110" fill="none" stroke="#8FA9CF" stroke-width="7" stroke-linecap="round"/>${st(82)}${st(122)}`],
+    ['包邊縫（第 3 類）','Bound seam','用一條布把邊緣包起來。T恤領口滾邊、包邊條。', `<rect x="10" y="50" width="140" height="8" rx="3" ${A}/><path d="M160 40 H118 a14 14 0 0 0 0 28 H160" fill="none" stroke="#D99A2B" stroke-width="7" opacity=".75" stroke-linecap="round"/>${st(134)}`],
+    ['對接縫・扁車（第 4 類）','Flat seam','兩片布邊對邊、不重疊，用扁車線跡跨過去連起來。接縫最平，不磨皮膚。運動服、內衣。', `<rect x="10" y="50" width="88" height="8" rx="3" ${A}/><rect x="102" y="50" width="88" height="8" rx="3" ${Bc}/><polyline points="70,42 82,66 94,42 106,66 118,42 130,66" fill="none" stroke="#3C8C80" stroke-width="2.5"/>`]
+  ];
+  el.innerHTML = `<p class="lab-t">四種常見縫型（剖面圖）</p><div class="cards2">${S.map(s=>`<figure><svg viewBox="0 0 200 100" aria-hidden="true">${s[3]}</svg><figcaption><b>${s[0]}</b><span class="note">${s[1]}</span><br>${s[2]}</figcaption></figure>`).join('')}</div><p class="cap">深藍、淺藍是兩片布；金色虛線是車縫的位置。</p>`;
+};
+
+/* ---------- l15 問題排除 ---------- */
+labs.trouble = el => {
+  const T = [
+    ['跳針',['針裝反、沒插到底','針彎了或針尖鈍了','針號和線不配合','針織布用了尖針（該用球尖）','壓腳壓力不足，布跟著針上下跳','勾線時間或針與旋梭的間隙跑掉'],'先換一根新針、確認方向和深度 → 檢查針線搭配 → 調壓腳壓力 → 仍然跳針才請機修調勾線時間。'],
+    ['斷面線',['穿線漏掉挑線桿或導線器','面線太緊','針眼、針板孔、旋梭有毛刺','線品質差或太細','針太細、線太粗','車速太快，針過熱'],'照順序重新穿線 → 放鬆面線 → 換針 → 檢查毛刺（請機修拋光）→ 換線或降速。'],
+    ['斷針',['用手拉布，針被拉彎撞到針板','針已經彎了','布太厚、針太細','壓腳或針板裝歪','碰到拉鍊、金屬扣'],'不要拉布，讓送布牙送、手只引導方向 → 換粗一號的針 → 檢查壓腳針板對正 → 依斷針管理找齊碎片並登記。'],
+    ['浮線／線圈',['反面有線圈：面線太鬆','正面浮出底線：底線太鬆','面線沒有夾進夾線器的兩片圓盤中間','夾線器卡了線屑、挑線彈簧失效'],'壓腳抬起來重新穿面線 → 調張力（先底線、再面線）→ 清潔夾線器。'],
+    ['縫皺',['張力太緊','針距太密','針或線太粗','壓腳壓力太大','上下層布送得不一樣多','線和布的縮水率不同'],'放鬆張力 → 針距放大一點 → 換細針細線 → 調輕壓腳 → 改用綜合送布或調差動。'],
+    ['針織破洞',['針太粗或用了尖針，割斷紗線','針尖受傷有毛刺','布太乾，缺少柔軟處理','車速太快'],'換球尖、細一號的針 → 每天檢查針尖 → 請布廠確認柔軟處理 → 降低車速。'],
+    ['線跡不直',['車工推拉布','送布牙磨損或高度不對','壓腳沒裝正','針板與送布牙沒對好'],'讓布自然送、手只引導 → 加導規或用有導邊的壓腳 → 請機修檢查送布機構。'],
+    ['拷克邊不齊',['刀片鈍了或上下刀沒對好','布邊餵入不穩','開幅（包邊寬度）設定不對','差動設定錯，布被拉長或擠皺'],'換刀或磨刀 → 對好刀位 → 調整開幅 → 調差動比。']
+  ];
+  el.innerHTML = `<p class="lab-t">問題排除：選一個症狀</p>${segH(T.map(t=>t[0]),0)}<div class="tb"></div>`;
+  const box = el.querySelector('.tb');
+  const show = i => { const t = T[i]; box.innerHTML = `<h3 style="margin:.5em 0 .2em!important">${t[0]}：可能的原因</h3><ul>${t[1].map(x=>`<li>${x}</li>`).join('')}</ul><div class="verdict ok"><b>處理順序（由簡單到困難）：</b>${t[2]}</div>`; };
+  bindSeg(el.querySelector('.seg'), show); show(0);
+};
+
+/* ---------- l17 效率計算 ---------- */
+labs.eff = el => {
+  const F = [['人數','n',10,'人'],['工作分鐘','m',480,'分鐘'],['實際產量','q',800,'件'],['每件 SMV','s',5,'分鐘']];
+  el.innerHTML = `<p class="lab-t">生產線效率計算機</p><div class="kv" style="grid-template-columns:7em 1fr;align-items:center">${F.map(f=>`<label for="ef${f[1]}">${f[0]}</label><span><input id="ef${f[1]}" type="number" min="0" step="any" value="${f[2]}" data-k="${f[1]}" style="width:7em"> ${f[3]}</span>`).join('')}</div><div class="verdict"></div>
+  <p class="cap">效率 ＝ 產出的標準分鐘（產量 × SMV）÷ 投入的分鐘（人數 × 工作分鐘）</p>`;
+  const v = el.querySelector('.verdict'), get = k => +el.querySelector(`[data-k=${k}]`).value || 0;
+  const calc = () => {
+    const n = get('n'), m = get('m'), q = get('q'), s = get('s'), inp = n*m, out = q*s;
+    if(!inp || !s){ v.className='verdict'; v.textContent = '請輸入大於 0 的數字。'; return; }
+    const e = out/inp*100, full = inp/s, hr = full/(m/60);
+    v.className = 'verdict ' + (e>=70 ? 'ok' : 'bad');
+    v.innerHTML = `效率 <b style="font-size:1.4em">${e.toFixed(1)}%</b><br>產出 ${out.toLocaleString()} 標準分鐘 ÷ 投入 ${inp.toLocaleString()} 分鐘<br>100% 效率的目標產量：<b>${Math.round(full).toLocaleString()}</b> 件（每小時 ${Math.round(hr)} 件）${e>100?'<br>超過 100%：可能 SMV 訂得太寬，或產量有算錯，值得查一查。':''}`;
+  };
+  el.querySelectorAll('input').forEach(i => i.oninput = calc); calc();
+};
+
+/* ================= 主程式 ================= */
+const STORE = 'sewing-course-v1';
+let P = {done:[], last:null, name:''};
+try { const s = JSON.parse(localStorage.getItem(STORE)); if(s && Array.isArray(s.done)) P = Object.assign(P, s); } catch(e) {}
+const save = () => { try { localStorage.setItem(STORE, JSON.stringify(P)); } catch(e) {} };
+const IDX = {}; LESSONS.forEach((l,i) => IDX[l.id] = i);
+const $ = (s, r=document) => r.querySelector(s);
+const view = $('#view'), nav = $('#nav'), pop = $('#pop'), scrim = $('#scrim'), menuBtn = $('#menuBtn');
+const num = i => String(i+1).padStart(2,'0');
+let cur = 'home';
+
+function buildNav(){
+  const n = P.done.length, T = LESSONS.length;
+  let h = `<a class="brand" href="#/home">從一根針開始<small>成衣機台學習課程・針織與梭織</small></a>
+  <div class="navprog">已完成 ${n} / ${T} 課<div class="bar"><i style="width:${n/T*100}%"></i></div></div>`;
+  [1,2,3,4].forEach(lv => {
+    h += `<h3>${LV[lv].name}</h3><ul class="seam">` + LESSONS.map((l,i)=>[l,i]).filter(a=>a[0].lv===lv).map(([l,i]) =>
+      `<li class="${P.done.includes(l.id)?'done':''} ${cur===l.id?'cur':''}"><a href="#/${l.id}"${cur===l.id?' aria-current="page"':''}><span class="n">${num(i)}</span>${l.title}</a></li>`).join('') + '</ul>';
+  });
+  h += `<div class="navx"><a href="#/glossary">📖 名詞辭典</a><a href="#/exam">🎓 結業測驗</a></div>`;
+  nav.innerHTML = h;
+  $('#tbProg').textContent = `${n}/${T}`;
+}
+function markDone(id){ if(!P.done.includes(id)){ P.done.push(id); save(); buildNav(); } }
+
+/* ---- 手機選單 ---- */
+const closeMenu = () => { nav.classList.remove('open'); scrim.classList.remove('show'); menuBtn.setAttribute('aria-expanded','false'); };
+menuBtn.addEventListener('click', () => { const o = nav.classList.toggle('open'); scrim.classList.toggle('show', o); menuBtn.setAttribute('aria-expanded', o); });
+scrim.addEventListener('click', closeMenu);
+nav.addEventListener('click', e => { if(e.target.closest('a')) closeMenu(); });
+
+/* ---- 首頁 ---- */
+function heroSVG(){
+  let tw = ''; for(let x=-60;x<800;x+=14) tw += `<line x1="${x}" y1="40" x2="${x+50}" y2="140" stroke="#3A5D92" stroke-width="3"/>`;
+  return `<svg id="hero" viewBox="0 0 760 170" role="img" aria-label="縫紉針在丹寧布上車出一條金色線跡（點一下重播）">
+  <defs><clipPath id="hc"><rect x="0" y="0" width="760" height="170"/></clipPath><clipPath id="hs"><rect id="hsr" x="0" y="0" width="0" height="170"/></clipPath></defs>
+  <rect x="0" y="40" width="760" height="100" rx="10" fill="#2C4A78"/><g clip-path="url(#hc)" opacity=".55"><g clip-path="url(#hsr0)">${tw}</g></g>
+  <line x1="0" y1="52" x2="760" y2="52" stroke="#4F74B0" stroke-width="2" stroke-dasharray="3 5"/><line x1="0" y1="128" x2="760" y2="128" stroke="#4F74B0" stroke-width="2" stroke-dasharray="3 5"/>
+  <g clip-path="url(#hs)"><line x1="30" y1="90" x2="740" y2="90" stroke="#D99A2B" stroke-width="5" stroke-dasharray="18 8" stroke-linecap="round"/></g>
+  <g id="hn"><rect x="-4" y="-40" width="8" height="118" fill="#C9D2DE" stroke="#1E3354" stroke-width="1.5"/><path d="M-4 78 L0 96 L4 78Z" fill="#C9D2DE" stroke="#1E3354" stroke-width="1.5"/><ellipse cx="0" cy="66" rx="1.8" ry="5" fill="#2C4A78"/><path d="M0 -40 V66" stroke="#D99A2B" stroke-width="1.5"/></g>
+  </svg>`;
+}
+function heroAnim(){
+  const r = $('#hsr'), n = $('#hn'); if(!r) return;
+  const set = t => { const x = 30 + t*710; r.setAttribute('width', x); n.setAttribute('transform', `translate(${x},${-12 + Math.abs(Math.sin(t*Math.PI*28))*24})`); };
+  if(RM){ set(1); return; }
+  anim(3600, set);
+}
+function renderHome(){
+  const next = P.last && IDX[P.last]!==undefined ? P.last : (LESSONS.find(l=>!P.done.includes(l.id))||LESSONS[0]).id;
+  const started = P.done.length || P.last;
+  view.innerHTML = `<section class="hero">
+    <p class="kicker">成衣機台學習課程・針織與梭織・從入門到專業</p>
+    <h1>從一根針開始</h1>
+    <p class="sub">布是怎麼來的？縫紉機怎麼把兩條線鎖在一起？拷克、三本車、扁車差在哪？從一件衣服的旅程出發，一路學到工廠裡的調機、品質、保養與效率。國中生看得懂，專業人員也用得上。</p>
+    ${heroSVG()}
+    <p class="note">▲ 點一下圖可以重播</p>
+    <div class="row"><a class="btn" style="text-decoration:none" href="#/${next}">${started?'繼續上課':'開始上課'} →</a><a class="btn ghost" style="text-decoration:none" href="#/glossary">名詞辭典</a></div>
+  </section>
+  <div class="map">
+  ${[1,2,3,4].map(lv => `<section class="lvl"><h2>${LV[lv].name}</h2><p>${LV[lv].desc}</p><ul class="lessons">${LESSONS.map((l,i)=>[l,i]).filter(a=>a[0].lv===lv).map(([l,i]) => {
+    const d = P.done.includes(l.id);
+    return `<li class="${d?'done':''}"><a href="#/${l.id}"><span class="no">${num(i)}</span><span class="ttl">${l.title}<small>${l.sub}</small></span><span class="st">${d?'✓ 已完成':'未完成'}</span></a></li>`; }).join('')}</ul></section>`).join('')}
+  </div>
+  <h2>工具</h2>
+  <div class="tools"><a href="#/glossary">名詞辭典<small>${G.length} 個專有名詞的意思與名稱由來</small></a><a href="#/exam">結業測驗<small>隨機 20 題，80 分以上可以列印結業證書</small></a></div>
+  <p class="note" style="margin-top:2em">學習進度只存在這台裝置的瀏覽器裡。檔案可以直接下載、離線打開，也可以傳給同事或學生。</p>`;
+  $('#hero').addEventListener('click', heroAnim);
+  heroAnim();
+}
+
+/* ---- 課程頁 ---- */
+function renderLesson(id){window.AC_COURSE_GO=function(v){renderLesson(v)};window.AC_COURSE_POSITION=id;
+  const i = IDX[id], l = LESSONS[i], p = LESSONS[i-1], n = LESSONS[i+1];
+  P.last = id; save();
+  view.innerHTML = `<header class="lesson-h"><p class="kicker">${LV[l.lv].name}　第 ${i+1} 課</p><h1>${l.title}</h1><p class="goal"><b>學完這一課：</b>${l.goal}</p></header>
+  <article class="lesson">${l.html}</article>
+  <section class="quiz" aria-label="小測驗"><h2>小測驗</h2><p class="note">三題答對兩題，就算完成這一課。${P.done.includes(id)?'<b class="okc">（這一課已完成 ✓）</b>':''}</p><div class="qs"></div><div class="qres" aria-live="polite"></div></section>
+  <nav class="pager">${p?`<a href="#/${p.id}"><small>← 上一課</small>${p.title}</a>`:'<span></span>'}${n?`<a class="next" href="#/${n.id}"><small>下一課 →</small>${n.title}</a>`:`<a class="next" href="#/exam"><small>全部上完了 →</small>結業測驗</a>`}</nav>`;
+  view.querySelectorAll('[data-lab]').forEach(el => { const f = labs[el.dataset.lab]; if(f) try { f(el); } catch(e) { console.error(el.dataset.lab, e); } });
+  buildQuiz(l);
+}
+function buildQuiz(l){
+  const box = $('.qs', view), res = $('.qres', view);
+  let answered = 0, right = 0;
+  box.innerHTML = l.quiz.map((q,k) => `<div class="q"><div class="qt">${k+1}. ${q[0]}</div><div class="opts">${q[1].map((o,j)=>`<button type="button" data-j="${j}">${'ABCD'[j]}. ${o}</button>`).join('')}</div><div class="ex-ans" hidden></div></div>`).join('');
+  box.querySelectorAll('.q').forEach((qd,k) => {
+    const q = l.quiz[k], bs = qd.querySelectorAll('button');
+    bs.forEach(b => b.addEventListener('click', () => {
+      const j = +b.dataset.j, ok = j === q[2];
+      bs.forEach(x => { x.disabled = true; if(+x.dataset.j === q[2]) x.classList.add('right'); });
+      if(!ok) b.classList.add('wrong');
+      const ex = qd.querySelector('.ex-ans'); ex.hidden = false;
+      ex.innerHTML = `<b class="${ok?'okc':'badc'}">${ok?'答對了！':'差一點。'}</b>${q[3]}`;
+      answered++; if(ok) right++;
+      if(answered === l.quiz.length){
+        if(right >= 2){ markDone(l.id); res.innerHTML = `<div class="verdict ok"><b>答對 ${right} / ${l.quiz.length} 題，完成這一課！</b> 左邊課程地圖上的線跡又多了一針。</div>`; }
+        else res.innerHTML = `<div class="verdict bad"><b>答對 ${right} / ${l.quiz.length} 題。</b>回頭看看上面的內容，再試一次。</div><div class="row" style="margin-top:8px"><button class="btn" type="button">重新作答</button></div>`;
+        const rb = res.querySelector('button'); if(rb) rb.onclick = () => { res.innerHTML=''; buildQuiz(l); };
+      }
+    }));
+  });
+}
+
+/* ---- 名詞小視窗 ---- */
+function findTerm(el){
+  const k = (el.dataset.g || el.textContent).trim();
+  if(GM[k]) return GM[k];
+  return G.find(g => k.includes(g[0])) || G.find(g => g[0].includes(k)) || null;
+}
+let popFrom = null;
+function openPop(el){
+  const g = findTerm(el); if(!g) return;
+  popFrom = el;
+  const li = IDX[g[3]], link = li!==undefined && cur !== g[3] ? `<p><a href="#/${g[3]}">在第 ${li+1} 課「${LESSONS[li].title}」學到 →</a></p>` : '';
+  pop.innerHTML = `<button class="x" type="button" aria-label="關閉">×</button><h4>${g[0]}</h4><div class="en">${g[1]}</div><p>${g[2]}</p>${link}`;
+  pop.hidden = false; pop.querySelector('.x').focus();
+}
+function closePop(){ if(pop.hidden) return; pop.hidden = true; if(popFrom && popFrom.isConnected) popFrom.focus(); popFrom = null; }
+document.addEventListener('click', e => {
+  const t = e.target.closest('.t');
+  if(t && view.contains(t)){ openPop(t); return; }
+  if(e.target.closest('.x') && pop.contains(e.target)){ closePop(); return; }
+  if(!pop.hidden && !pop.contains(e.target)) closePop();
+  if(pop.contains(e.target) && e.target.closest('a')) closePop();
+});
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape'){ closePop(); closeMenu(); }
+  const t = e.target.closest && e.target.closest('.t');
+  if(t && (e.key === 'Enter' || e.key === ' ')){ e.preventDefault(); openPop(t); }
+});
+
+/* ---- 名詞辭典 ---- */
+function renderGlossary(){
+  const list = G.slice().sort((a,b) => (IDX[a[3]]??99) - (IDX[b[3]]??99));
+  view.innerHTML = `<header class="lesson-h"><p class="kicker">工具</p><h1>名詞辭典</h1><p class="goal">${G.length} 個成衣廠常用的專有名詞：意思、英文，以及名稱是怎麼來的。</p></header>
+  <input type="search" placeholder="搜尋名詞、英文或解釋，例如：拷克、SPI、shuttle" aria-label="搜尋名詞" style="width:100%">
+  <p class="note gl-n"></p><div class="gl"></div>`;
+  const inp = $('input', view), box = $('.gl', view), cnt = $('.gl-n', view);
+  const draw = () => {
+    const q = inp.value.trim().toLowerCase();
+    const r = list.filter(g => !q || (g[0]+g[1]+g[2]).toLowerCase().includes(q));
+    cnt.textContent = q ? `找到 ${r.length} 個` : '依課程順序排列';
+    box.innerHTML = r.map(g => { const li = IDX[g[3]];
+      return `<div class="gl-item"><h3>${g[0]}<span class="en">${g[1]}</span></h3><p>${g[2]}</p>${li!==undefined?`<a href="#/${g[3]}">第 ${li+1} 課・${LESSONS[li].title}</a>`:''}</div>`; }).join('') || '<p>找不到，換個關鍵字試試。</p>';
+  };
+  inp.addEventListener('input', draw); draw();
+}
+
+/* ---- 結業測驗 ---- */
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
+function renderExam(){
+  view.innerHTML = `<header class="lesson-h"><p class="kicker">結業</p><h1>結業測驗</h1><p class="goal">從 17 課的題目中隨機抽 20 題，每題 5 分，80 分以上就能列印結業證書。目前已完成 ${P.done.length} / ${LESSONS.length} 課。</p></header>
+  <div class="row"><button class="btn" type="button">開始測驗</button></div>`;
+  $('.btn', view).onclick = startExam;
+}
+function startExam(){
+  const pool = []; LESSONS.forEach((l,i) => l.quiz.forEach(q => pool.push({q, i})));
+  const qs = shuffle(pool).slice(0,20).map(({q,i}) => { const o = shuffle(q[1].map((t,j)=>({t, ok: j===q[2]}))); return {t:q[0], o, a:o.findIndex(x=>x.ok), ex:q[3], i}; });
+  view.innerHTML = `<header class="lesson-h"><p class="kicker">結業</p><h1>結業測驗</h1><p class="goal">共 20 題，全部作答後按「交卷」。</p></header>
+  <form class="exam" onsubmit="return false">${qs.map((q,k) => `<fieldset class="eq"><legend>${k+1}. ${q.t}</legend>${q.o.map((o,j)=>`<label><input type="radio" name="q${k}" value="${j}"><span>${'ABCD'[j]}. ${o.t}</span></label>`).join('')}<div class="ex-ans" hidden></div></fieldset>`).join('')}
+  <p class="er note" aria-live="polite"></p><div class="row"><button class="btn" type="button">交卷</button></div></form><div class="result"></div>`;
+  window.scrollTo(0,0);
+  const form = $('.exam', view);
+  $('.btn', form).onclick = () => {
+    const ans = qs.map((q,k) => { const c = form.querySelector(`input[name=q${k}]:checked`); return c ? +c.value : -1; });
+    const miss = ans.filter(a => a<0).length;
+    if(miss){ $('.er', form).textContent = `還有 ${miss} 題沒有作答。`; return; }
+    let right = 0;
+    form.querySelectorAll('.eq').forEach((fs,k) => { const q = qs[k], ok = ans[k] === q.a; if(ok) right++;
+      fs.classList.add(ok ? 'r' : 'w'); fs.querySelectorAll('input').forEach(x => x.disabled = true);
+      const ex = fs.querySelector('.ex-ans'); ex.hidden = false;
+      ex.innerHTML = `<b class="${ok?'okc':'badc'}">${ok?'正確':'正確答案：'+'ABCD'[q.a]}</b>　${q.ex}　<a href="#/${LESSONS[q.i].id}">（第 ${q.i+1} 課）</a>`; });
+    $('.row', form).remove(); $('.er', form).remove();
+    showResult(right*5);
+  };
+}
+function showResult(score){
+  const box = $('.result', view), pass = score >= 80;
+  const d = new Date(), ds = `${d.getFullYear()} 年 ${d.getMonth()+1} 月 ${d.getDate()} 日`;
+  box.innerHTML = `<h2>你的成績</h2><div class="score">${score}<small style="font-size:.4em"> 分</small></div>
+  ${pass ? `<p class="okc"><b>恭喜通過！</b>輸入你的名字，就能列印結業證書。</p>
+    <div class="row"><input type="text" maxlength="20" placeholder="你的名字" aria-label="證書上的名字" value="${(P.name||'').replace(/"/g,'&quot;')}"><button class="btn" type="button" data-a="print">列印證書</button><button class="btn ghost" type="button" data-a="again">再考一次</button></div>
+    <div class="cert" id="cert"><div class="cert-in"><p class="c1">結 業 證 書</p><p>茲證明</p><h2 class="cn">　</h2>
+    <p>已完成「從一根針開始：成衣機台學習課程（針織與梭織）」<br>全部 ${LESSONS.length} 課，並以 <b>${score}</b> 分通過結業測驗。</p>
+    <svg viewBox="0 0 300 14" style="width:60%;margin:10px auto;display:block" aria-hidden="true"><line x1="4" y1="7" x2="296" y2="7" stroke="#D99A2B" stroke-width="3" stroke-dasharray="12 6" stroke-linecap="round"/></svg>
+    <p class="c-date">${ds}</p></div></div>`
+  : `<p class="badc"><b>還差一點！</b>80 分以上才能拿證書。看看上面答錯的題目，回到那一課複習後再試一次。</p><div class="row"><button class="btn" type="button" data-a="again">再考一次</button></div>`}`;
+  const again = $('[data-a=again]', box); again.onclick = () => startExam();
+  if(pass){
+    const inp = $('input', box), cn = $('.cn', box);
+    const upd = () => { cn.textContent = inp.value.trim() || '　'; P.name = inp.value.trim(); save(); };
+    inp.oninput = upd; upd();
+    $('[data-a=print]', box).onclick = () => { if(!inp.value.trim()){ inp.focus(); return; } window.print(); };
+  }
+  box.scrollIntoView({behavior: RM ? 'auto' : 'smooth'});
+}
+
+/* ---- 路由 ---- */
+function route(){
+  closePop(); closeMenu();
+  const h = (location.hash || '').replace(/^#\/?/, '') || 'home';
+  cur = IDX[h] !== undefined || h === 'glossary' || h === 'exam' ? h : 'home';
+  if(IDX[cur] !== undefined) renderLesson(cur);
+  else if(cur === 'glossary') renderGlossary();
+  else if(cur === 'exam') renderExam();
+  else renderHome();
+  view.querySelectorAll('.t').forEach(t => { t.tabIndex = 0; t.setAttribute('role','button'); });
+  const l = LESSONS[IDX[cur]];
+  document.title = (l ? l.title + '｜' : cur==='glossary' ? '名詞辭典｜' : cur==='exam' ? '結業測驗｜' : '') + '從一根針開始：成衣機台學習課程';
+  buildNav(); window.scrollTo(0,0);
+}
+window.addEventListener('hashchange', route);
+route();
+
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-330fb483ea" data-category="garment"></script></body>
+</html>

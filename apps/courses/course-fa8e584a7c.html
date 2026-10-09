@@ -1,0 +1,2263 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>土木工程從零開始：從入門到專業的完整課程</title>
+<style>
+:root{
+  --paper:#ffffff; --grid-bg:#f5f8fb; --gridline:#dde7f0; --ink:#1b2733; --muted:#566573; --line:#d5dde5;
+  --bp:#0f2d4d; --bp2:#1c4a78; --bp-soft:#e8f0f8;
+  --yellow:#f2b705; --yellow-soft:#fff6d6;
+  --green:#2e7d4f; --green-soft:#e6f4ec; --red:#b3362b; --red-soft:#fbe8e6;
+  --violet:#5b4bb0; --violet-soft:#eeebfa; --amber:#9a6a00; --amber-soft:#fff3d9;
+  --steel:#5d6b78; --concrete:#b8b3a8; --soil:#9b6b43; --water:#3b8fd9;
+  --serif:"Noto Serif TC","Songti TC","PMingLiU","MingLiU",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;font-family:var(--sans);color:var(--ink);font-size:17px;line-height:1.85;
+  background-color:var(--grid-bg);
+  background-image:linear-gradient(var(--gridline) 1px,transparent 1px),linear-gradient(90deg,var(--gridline) 1px,transparent 1px);
+  background-size:24px 24px;padding-bottom:env(safe-area-inset-bottom,0px)}
+/* ---------- 側欄 ---------- */
+#sidebar{position:fixed;top:0;left:0;bottom:0;width:300px;background:var(--bp);color:#d6e3f0;overflow-y:auto;z-index:30;
+  background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+  background-size:16px 16px;transition:transform .3s;padding-top:env(safe-area-inset-top,0px)}
+.brand{padding:22px 20px 16px;border-bottom:1px solid rgba(255,255,255,.12)}
+.brand .t1{font-family:var(--serif);font-size:22px;color:#fff;font-weight:700;letter-spacing:.06em}
+.brand .t2{font-size:13px;color:#9fb6cc;margin-top:2px}
+.pbar{margin-top:14px;height:8px;border-radius:4px;background:rgba(255,255,255,.14);overflow:hidden}
+#progressBar{height:100%;width:0;background:var(--yellow);transition:width .5s}
+#progressText{font-size:12.5px;color:#9fb6cc;margin-top:6px}
+nav .part{font-size:13px;color:var(--yellow);padding:18px 20px 6px;font-weight:700;letter-spacing:.04em}
+nav a{display:flex;gap:8px;align-items:baseline;padding:6px 18px 6px 17px;color:#c7d6e6;text-decoration:none;font-size:14.5px;line-height:1.55;border-left:3px solid transparent}
+nav a:hover{background:rgba(255,255,255,.07);color:#fff}
+nav a.active{background:rgba(242,183,5,.15);color:#fff;border-left-color:var(--yellow)}
+nav a .n{color:#7f9ab4;min-width:2.1em;font-size:12.5px;font-variant-numeric:tabular-nums}
+nav a.done .n{color:#7fd6a0}
+nav a.done::after{content:"✓";margin-left:auto;color:#7fd6a0;font-size:13px}
+.side-tools{padding:14px 20px 28px;display:flex;flex-direction:column;gap:8px}
+.side-tools button{background:transparent;border:1px solid rgba(255,255,255,.25);color:#c7d6e6;border-radius:6px;padding:7px;font:inherit;font-size:13px;cursor:pointer}
+.side-tools button:hover{border-color:var(--yellow);color:#fff}
+#menuBtn{display:none;position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:10px;z-index:40;background:var(--bp);color:#fff;border:0;border-radius:8px;padding:8px 14px;font:inherit;font-size:15px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+#scrim{display:none;position:fixed;inset:0;background:rgba(10,25,40,.45);z-index:25}
+/* ---------- 主內容 ---------- */
+main{margin-left:300px;padding:0 28px 90px}
+.lesson{display:none;max-width:820px;margin:0 auto;padding-top:34px}
+.lesson.show{display:block}
+.sheet{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:34px 40px 30px;box-shadow:0 1px 0 var(--line)}
+/* 標題欄：仿工程圖的圖框 */
+.titleblock{display:grid;grid-template-columns:auto auto 1fr;border:2px solid var(--bp);margin:-6px 0 22px;font-size:13px;color:var(--bp)}
+.titleblock div{padding:4px 12px;border-right:1px solid var(--bp)}
+.titleblock div:last-child{border-right:0}
+.titleblock b{display:block;font-size:11px;color:var(--muted);font-weight:400}
+.titleblock .no{font-family:var(--mono);font-size:15px;font-weight:700}
+h2{font-family:var(--serif);font-size:34px;line-height:1.3;margin:0 0 18px;color:var(--bp);letter-spacing:.02em}
+h3{font-family:var(--serif);font-size:23px;margin:36px 0 10px;color:var(--bp);padding-bottom:4px;border-bottom:2px solid var(--bp-soft)}
+h4{font-size:18px;margin:22px 0 6px}
+p{margin:.7em 0}
+strong{color:#0d2a47}
+.goal{border:1px dashed var(--bp2);border-radius:6px;padding:10px 16px;background:var(--bp-soft);font-size:15.5px}
+.goal b{color:var(--bp)}
+.goal ul{margin:4px 0 0;padding-left:1.3em}
+.box{border-radius:6px;padding:12px 16px;margin:18px 0;border-left:5px solid;font-size:16px}
+.box>.t{font-weight:700;display:block;margin-bottom:2px}
+.origin{background:var(--amber-soft);border-color:var(--amber)} .origin>.t::before{content:"📜 名詞由來｜"}
+.eg{background:var(--green-soft);border-color:var(--green)} .eg>.t::before{content:"🏠 生活例子｜"}
+.key{background:var(--bp-soft);border-color:var(--bp2)} .key>.t::before{content:"💡 重點｜"}
+.warn{background:var(--red-soft);border-color:var(--red)} .warn>.t::before{content:"⚠️ 常見誤解｜"}
+.pro{background:var(--violet-soft);border-color:var(--violet)} .pro>.t::before{content:"🎓 專業延伸｜"}
+.try{background:var(--yellow-soft);border-color:var(--yellow)} .try>.t::before{content:"🔬 動手試試｜"}
+.fig{border:1px solid var(--line);border-radius:6px;padding:14px;margin:22px 0;text-align:center;background:#fcfdfe}
+.fig svg{max-width:100%;height:auto;display:block;margin:0 auto}
+.cap{font-size:14px;color:var(--muted);margin-top:8px;line-height:1.6}
+.ctrl{display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:center;margin:12px 0 6px;font-size:15px}
+.ctrl label{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.ctrl input[type=range]{accent-color:var(--bp2);width:150px}
+.ctrl select,.ctrl input[type=number]{font:inherit;font-size:15px;padding:3px 6px;border:1px solid var(--line);border-radius:4px;width:auto}
+.ctrl input[type=number]{width:90px}
+.btn{font:inherit;font-size:15px;background:var(--bp);color:#fff;border:0;border-radius:6px;padding:7px 16px;cursor:pointer}
+.btn:hover{background:var(--bp2)}
+.btn.alt{background:#fff;color:var(--bp);border:1px solid var(--bp)}
+.readout{font-family:var(--mono);background:var(--bp);color:#ffe28a;border-radius:6px;padding:10px 16px;display:inline-block;text-align:left;font-size:14.5px;line-height:1.75;margin-top:6px}
+.formula{font-family:"Times New Roman",var(--serif);font-size:23px;text-align:center;border:1px solid var(--line);border-radius:6px;padding:10px;margin:16px 0;background:#fcfdfe}
+.formula small{display:block;font-family:var(--sans);font-size:14px;color:var(--muted)}
+.tw{overflow-x:auto;margin:16px 0}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:460px}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--bp-soft);color:var(--bp)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px;margin:16px 0}
+.card{border:1px solid var(--line);border-radius:6px;padding:12px 14px;background:#fff;font-size:15.5px;line-height:1.7}
+.card .ic{font-size:26px;line-height:1}
+.card h4{margin:6px 0 4px;color:var(--bp)}
+.tl{border-left:3px solid var(--bp2);margin:18px 0 18px 8px;padding-left:20px}
+.tl .it{position:relative;margin:0 0 14px}
+.tl .it::before{content:"";position:absolute;left:-28px;top:9px;width:13px;height:13px;border-radius:50%;background:var(--yellow);border:2px solid var(--bp)}
+.tl .yr{font-family:var(--mono);font-weight:700;color:var(--bp2);font-size:14px}
+.quiz{border:2px solid var(--bp);border-radius:6px;padding:14px 18px;margin:26px 0;background:#fff}
+.quiz .q{font-weight:700;margin:0 0 6px}
+.quiz .q::before{content:"✏️ 小測驗　";color:var(--bp2)}
+.opt{display:block;width:100%;text-align:left;margin:7px 0;padding:9px 14px;border-radius:6px;border:1px solid var(--line);background:#fff;font:inherit;font-size:16px;cursor:pointer;color:var(--ink)}
+.opt:hover{border-color:var(--bp2);background:var(--bp-soft)}
+.opt.right{background:var(--green-soft);border-color:var(--green);font-weight:700}
+.opt.right::after{content:"　✔ 答對了"}
+.opt.wrong{background:var(--red-soft);border-color:var(--red)}
+.opt.wrong::after{content:"　✘"}
+.explain{display:none;margin-top:8px;font-size:15.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px}
+.quiz.answered .explain{display:block}
+.summary{background:var(--bp);color:#eaf2fa;border-radius:6px;padding:16px 22px;margin-top:30px;font-size:16px}
+.summary .h{font-family:var(--serif);font-size:19px;color:var(--yellow);font-weight:700}
+.summary ul{margin:6px 0 0;padding-left:1.2em}
+.summary strong{color:#fff}
+.pager{display:flex;justify-content:space-between;gap:12px;margin:22px 0 10px}
+.pager button{flex:1;font:inherit;font-size:15px;padding:12px 14px;border-radius:6px;cursor:pointer;border:1px solid var(--bp);background:#fff;color:var(--bp);text-align:left;line-height:1.5}
+.pager button.next{background:var(--bp);color:#fff;text-align:right}
+.pager button:hover{filter:brightness(1.08)}
+.pager button[disabled]{visibility:hidden}
+.pager small{display:block;font-size:12px;opacity:.75}
+.map{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:14px 0}
+.map div{border:1px solid var(--line);border-left:5px solid var(--yellow);padding:10px 14px;border-radius:4px;background:#fff;font-size:15px;line-height:1.6}
+.map b{color:var(--bp);display:block;font-family:var(--serif);font-size:17px}
+.hl{background:linear-gradient(transparent 60%,#ffe58a 60%)}
+.tag{display:inline-block;font-size:12.5px;padding:0 8px;border-radius:10px;background:var(--bp-soft);color:var(--bp);margin-right:4px}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+/* SVG 動畫 */
+@keyframes dash{to{stroke-dashoffset:-40}}
+.flow{stroke-dasharray:8 12;animation:dash 1s linear infinite}
+.flow.slow{animation-duration:2s}
+.flow.fast{animation-duration:.45s}
+@keyframes draw{from{stroke-dashoffset:1200}to{stroke-dashoffset:0}}
+.drawline{stroke-dasharray:1200;animation:draw 3.5s ease-out forwards}
+@media (max-width:900px){
+  #sidebar{transform:translateX(-100%);width:290px}
+  #sidebar.open{transform:none}
+  #sidebar.open~#scrim{display:block}
+  #menuBtn{display:block}
+  main{margin-left:0;padding:0 10px 80px}
+  .lesson{padding-top:calc(60px + env(safe-area-inset-top,0px))}
+  .sheet{padding:22px 18px 22px}
+  h2{font-size:27px}
+  body{font-size:16.5px}
+  .titleblock{grid-template-columns:auto 1fr}
+  .titleblock div:nth-child(3){grid-column:1/-1;border-right:0;border-top:1px solid var(--bp)}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001s!important;animation-iteration-count:1!important;transition:none!important}}
+@media print{
+  #sidebar,#menuBtn,.pager,#scrim{display:none!important}
+  main{margin:0;padding:0} body{background:#fff}
+  .lesson{display:block!important;page-break-after:always;max-width:none;padding-top:0}
+  .sheet{border:0;box-shadow:none;padding:0}
+  .explain{display:block}
+}
+</style>
+</head>
+<body>
+<button id="menuBtn" aria-label="開啟課程目錄">☰ 目錄</button>
+<aside id="sidebar">
+  <div class="brand">
+    <div class="t1">土木工程從零開始</div>
+    <div class="t2">從國中程度一路到專業入門・共 9 篇</div>
+    <div class="pbar"><div id="progressBar"></div></div>
+    <div id="progressText">學習進度 0%</div>
+  </div>
+  <nav id="toc"></nav>
+  <div class="side-tools">
+    <button id="printBtn">🖨️ 列印／存成 PDF（全部課程）</button>
+    <button id="resetBtn">↺ 清除學習進度</button>
+  </div>
+</aside>
+<div id="scrim"></div>
+<main id="content">
+
+<!-- ================= 開始之前 ================= -->
+<section class="lesson" data-part="開始之前" data-title="課程導覽">
+<div class="sheet">
+<h2>歡迎來到土木工程的世界</h2>
+<div class="fig" style="padding:0;overflow:hidden;border:0">
+<svg viewBox="0 0 800 320" role="img" aria-label="一座城市：懸索橋上有車子經過，河水流動，旁邊有大樓和水壩">
+  <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfe4f7"/><stop offset="1" stop-color="#f3f8fc"/></linearGradient></defs>
+  <rect width="800" height="320" fill="url(#sky)"/>
+  <circle cx="690" cy="60" r="28" fill="#f7d35c"/>
+  <path d="M0 210 Q120 150 240 200 T520 190 T800 205 V320 H0Z" fill="#b9d3a4"/>
+  <!-- 大樓 -->
+  <g fill="#8fa3b6"><rect x="600" y="110" width="46" height="110"/><rect x="652" y="80" width="40" height="140" fill="#6f859b"/><rect x="698" y="130" width="50" height="90"/></g>
+  <g fill="#e9f1f8" opacity=".9"><rect x="608" y="120" width="8" height="8"/><rect x="624" y="120" width="8" height="8"/><rect x="608" y="138" width="8" height="8"/><rect x="624" y="156" width="8" height="8"/><rect x="660" y="92" width="7" height="7"/><rect x="676" y="110" width="7" height="7"/><rect x="660" y="128" width="7" height="7"/><rect x="706" y="142" width="9" height="9"/><rect x="726" y="160" width="9" height="9"/></g>
+  <!-- 河 -->
+  <rect x="0" y="238" width="800" height="82" fill="#5aa2e0"/>
+  <path d="M0 256 q20 -6 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0" stroke="#d6ecff" stroke-width="2" fill="none">
+    <animateTransform attributeName="transform" type="translate" from="0 0" to="-40 0" dur="2s" repeatCount="indefinite"/></path>
+  <path d="M0 290 q20 -6 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0" stroke="#d6ecff" stroke-width="2" fill="none" opacity=".7">
+    <animateTransform attributeName="transform" type="translate" from="-40 0" to="0 0" dur="3s" repeatCount="indefinite"/></path>
+  <!-- 懸索橋 -->
+  <g stroke="#0f2d4d" fill="none">
+    <rect x="148" y="90" width="12" height="160" fill="#0f2d4d"/><rect x="438" y="90" width="12" height="160" fill="#0f2d4d"/>
+    <path d="M30 222 Q92 200 154 94 Q299 212 444 94 Q506 200 568 222" stroke-width="3"/>
+    <g stroke-width="1.2">
+      <line x1="190" y1="128" x2="190" y2="222"/><line x1="225" y1="153" x2="225" y2="222"/><line x1="260" y1="171" x2="260" y2="222"/><line x1="299" y1="177" x2="299" y2="222"/><line x1="338" y1="171" x2="338" y2="222"/><line x1="373" y1="153" x2="373" y2="222"/><line x1="408" y1="128" x2="408" y2="222"/>
+      <line x1="95" y1="190" x2="95" y2="222"/><line x1="505" y1="190" x2="505" y2="222"/>
+    </g>
+  </g>
+  <rect x="20" y="222" width="560" height="9" fill="#34495e"/>
+  <g><rect x="0" y="210" width="26" height="12" rx="3" fill="#f2b705"/><circle cx="6" cy="222" r="3" fill="#222"/><circle cx="20" cy="222" r="3" fill="#222"/>
+    <animateTransform attributeName="transform" type="translate" from="0 0" to="570 0" dur="7s" repeatCount="indefinite"/></g>
+  <g><rect x="0" y="212" width="20" height="10" rx="3" fill="#c0392b"/><circle cx="5" cy="222" r="2.6" fill="#222"/><circle cx="15" cy="222" r="2.6" fill="#222"/>
+    <animateTransform attributeName="transform" type="translate" from="560 0" to="0 0" dur="9s" repeatCount="indefinite"/></g>
+  <text x="400" y="310" text-anchor="middle" font-size="14" fill="#0f2d4d" font-family="sans-serif">橋、道路、大樓、河川──你每天看到的東西，都是土木工程師的作品</text>
+</svg></div>
+
+<p>你每天打開水龍頭有乾淨的水、走在平坦的馬路上、坐在不會倒塌的教室裡、搭車過橋過隧道⋯⋯這些理所當然的事情背後，都有<strong>土木工程師</strong>在默默工作。</p>
+<p>這套課程會帶你<strong>從最基本的「力」開始</strong>，一步一步走到專業工程師在做的事。每一課都建立在前一課的基礎上，所以請<strong>按照順序</strong>學習，不要跳著看。</p>
+
+<h3>每一課裡會出現的小方塊</h3>
+<div class="box origin"><span class="t">專有名詞是怎麼來的</span>讓你知道一個詞「為什麼叫這個名字」，記起來更容易。</div>
+<div class="box eg"><span class="t">生活中的例子</span>用你身邊看得到、摸得到的東西來解釋。</div>
+<div class="box key"><span class="t">這一段一定要記住的觀念</span>考試和實務都會用到。</div>
+<div class="box warn"><span class="t">很多人會搞錯的地方</span>幫你避開陷阱。</div>
+<div class="box try"><span class="t">在家就能做的小實驗</span>親手做一次，比讀十遍還有用。</div>
+<div class="box pro"><span class="t">給想再深入一點的你</span>第一次讀可以跳過，學完整套再回來看。</div>
+<p>另外，每課都有<strong>可以拉動的互動圖</strong>和<strong>小測驗</strong>，點選答案就會看到解說。</p>
+
+<h3>學習地圖</h3>
+<div class="map">
+  <div><b>第一篇　入門</b>土木工程是什麼、歷史、有哪些領域</div>
+  <div><b>第二篇　力學基礎</b>力、平衡、內力、應力、材料強度</div>
+  <div><b>第三篇　土木材料</b>混凝土、鋼材、鋼筋混凝土、其他材料</div>
+  <div><b>第四篇　結構工程</b>梁、柱、桁架、拱與索、載重、地震</div>
+  <div><b>第五篇　大地工程</b>土壤、承載力、基礎、擋土與液化</div>
+  <div><b>第六篇　水利與環境</b>水的力學、水壩防洪、淨水與污水</div>
+  <div><b>第七篇　交通工程</b>道路、橋梁、隧道與鐵路</div>
+  <div><b>第八篇　測量與圖說</b>怎麼量地形、怎麼看工程圖</div>
+  <div><b>第九篇　專業實務</b>工程流程、施工品管、工安、設計規範、數位工具、職涯</div>
+</div>
+<div class="box key"><span class="t">需要的程度</span>只要會國中的加減乘除和簡單的分數就可以開始。遇到公式時，我們一定會先用生活例子說明它的意思，再用數字實際算一次。</div>
+<p>你的學習進度會自動記在這台電腦的瀏覽器裡。準備好了嗎？按下面的按鈕開始第一課！</p>
+</div>
+</section>
+<!-- ================= 第一篇 入門 ================= -->
+<section class="lesson" data-part="第一篇　入門" data-title="什麼是土木工程？">
+<div class="sheet">
+<h2>什麼是土木工程？</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>土木工程在做什麼</li><li>「土木」和「Civil Engineering」這兩個名字的由來</li><li>土木工程師和建築師有什麼不同</li></ul></div>
+
+<h3>從你的一天說起</h3>
+<p>想像一下你早上起床後的每一件事：</p>
+<div class="tw"><table>
+<tr><th>你做的事</th><th>背後的土木工程</th></tr>
+<tr><td>刷牙洗臉，水龍頭流出乾淨的水</td><td>水庫、自來水廠、埋在地下的水管（水利與環境工程）</td></tr>
+<tr><td>沖馬桶</td><td>污水下水道、污水處理廠（環境工程）</td></tr>
+<tr><td>走路或坐車去學校</td><td>道路、人行道、紅綠燈的配置（交通工程）</td></tr>
+<tr><td>車子過河</td><td>橋梁（結構工程）</td></tr>
+<tr><td>坐在教室裡，地震來了房子沒倒</td><td>建築物的梁柱設計、地基（結構與大地工程）</td></tr>
+<tr><td>下大雨，街道沒有淹水</td><td>排水溝、抽水站、堤防（水利工程）</td></tr>
+</table></div>
+<p>所以簡單說：</p>
+<div class="box key"><span class="t">土木工程的定義</span><strong>土木工程</strong>就是「規劃、設計、建造、維護大家共同使用的<span class="hl">基礎設施</span>」的工程。基礎設施是指讓社會能正常運作的「底層設備」，像道路、橋梁、隧道、鐵路、機場、港口、水庫、自來水、下水道、大樓的骨架等等。</div>
+
+<h3>「土木」這個名字怎麼來的？</h3>
+<div class="box origin"><span class="t">土木</span>古代人蓋房子、築城牆，最主要的材料就是<strong>泥土</strong>和<strong>木頭</strong>。西漢的《淮南子》描述古代聖人教人們「築土構木，以為宮室」，意思是把土堆起來、把木頭架起來，做成房子。所以後來把一切營造建設的事都叫做「土木」，成語「<strong>大興土木</strong>」就是大規模蓋房子、做建設的意思。<br>到了日本明治時代，日本人翻譯西方的 Civil Engineering 時，選用了「土木工學」這個詞，後來中文也沿用成「土木工程」。</div>
+<div class="box origin"><span class="t">Civil Engineering</span>英文的 civil 來自拉丁文 <em>civilis</em>，意思是「市民的、民間的」。<br>在 1700 年代以前，「工程師（engineer）」幾乎都是替軍隊工作的人：造攻城器械、築砲台、架軍用橋。engineer 這個字源自拉丁文 <em>ingenium</em>（聰明才智），後來指「操作機械（engine）的人」。<br>大約 1760 年代，英國工程師<strong>約翰‧斯米頓（John Smeaton）</strong>開始自稱「civil engineer」，用來表示「我做的是給一般民眾用的工程（運河、燈塔、橋），不是軍事工程」。他因此被稱為<strong>「土木工程之父」</strong>。</div>
+<p>所以土木工程其實是<strong>最古老的工程學科之一</strong>，機械、電機等工程都是後來才分出來的。</p>
+
+<h3>土木工程師 vs 建築師</h3>
+<div class="box warn"><span class="t">「蓋房子不是建築師在做嗎？」</span>建築師和土木工程師常常一起合作，但工作重點不同：<br>・<strong>建築師</strong>決定房子的<strong>外觀、空間怎麼安排、住起來舒不舒服</strong>。<br>・<strong>土木（結構）工程師</strong>負責<strong>讓房子站得住</strong>：梁要多大、柱子要多粗、要放多少鋼筋、地基要打多深，地震和颱風來時才不會倒。<br>用人來比喻：建築師設計的是「長相和穿搭」，結構工程師設計的是「骨骼」。而且土木工程的範圍比房子大得多，橋、路、隧道、水庫、下水道大多數都沒有建築師參與。</div>
+
+<h3>土木工程師要具備什麼？</h3>
+<div class="grid">
+<div class="card"><div class="ic">🧮</div><h4>數學與物理</h4>計算力量、材料會不會壞。這就是本課程第二篇的內容。</div>
+<div class="card"><div class="ic">🧱</div><h4>了解材料</h4>混凝土、鋼、土壤、水的特性各不相同。</div>
+<div class="card"><div class="ic">🛡️</div><h4>責任感</h4>一座橋可能用上一百年、每天幾萬人經過，一個計算錯誤就可能出人命。</div>
+<div class="card"><div class="ic">🤝</div><h4>溝通與管理</h4>一個工程往往要協調上百個人、好幾億元的預算。</div>
+</div>
+
+<div class="quiz" data-ans="1"><p class="q">下列哪一項「不」屬於土木工程的範圍？</p>
+<button class="opt">A. 設計一座跨河的大橋</button><button class="opt">B. 設計手機裡的晶片電路</button><button class="opt">C. 規劃城市的下水道</button><button class="opt">D. 計算大樓地基要多深</button>
+<div class="explain">晶片電路屬於電機／電子工程。其他三個都是土木工程：橋梁（結構）、下水道（環境）、地基（大地）。</div></div>
+<div class="quiz" data-ans="2"><p class="q">Civil Engineering 的 civil 原本是要和什麼區分？</p>
+<button class="opt">A. 機械工程</button><button class="opt">B. 建築設計</button><button class="opt">C. 軍事工程</button><button class="opt">D. 化學工程</button>
+<div class="explain">早期的工程師多半在替軍隊工作，斯米頓自稱 civil engineer，強調自己做的是為民眾服務的工程。</div></div>
+
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>土木工程＝規劃、設計、建造、維護<strong>基礎設施</strong>。</li>
+<li>「土木」來自古代用<strong>土與木</strong>蓋房子；civil 是「民間的」，相對於軍事工程。</li>
+<li>建築師管外觀與空間，<strong>結構工程師管房子站不站得住</strong>。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第一篇　入門" data-title="土木工程的歷史">
+<div class="sheet">
+<h2>土木工程的歷史：人類怎麼越蓋越大</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>古今中外的代表性工程</li><li>為什麼「材料的進步」決定了我們能蓋多大多高</li></ul></div>
+<p>土木工程的歷史，幾乎就是人類文明的歷史。我們照時間順序來看幾個重要的里程碑，注意看<strong>每一次突破背後都是新材料或新觀念</strong>。</p>
+<div class="tl">
+<div class="it"><span class="yr">約西元前 2560 年</span><br><strong>埃及吉薩大金字塔</strong>：用約 230 萬塊石灰岩堆成。金字塔是「上小下大」的形狀，重量一層層往下傳，非常穩定──這是最直覺的結構。</div>
+<div class="it"><span class="yr">約西元前 256 年</span><br><strong>中國都江堰</strong>：秦國的李冰父子在四川修建。它不用高大的水壩擋住河流，而是巧妙地把河水分流，既能防洪又能灌溉，<strong>兩千多年後的今天仍在使用</strong>。我們在第六篇會詳細介紹。</div>
+<div class="it"><span class="yr">西元前 1 世紀～西元 2 世紀</span><br><strong>羅馬的水道橋與萬神殿</strong>：羅馬人大量使用<strong>拱</strong>和一種加了火山灰的<strong>混凝土</strong>。萬神殿的圓頂直徑 43 公尺，將近兩千年後，仍是世界上最大的「沒有鋼筋」的混凝土圓頂。</div>
+<div class="it"><span class="yr">約西元 605 年</span><br><strong>中國趙州橋</strong>：隋朝工匠李春建造的石拱橋。他在大拱的兩肩開了四個小拱（叫做<strong>敞肩拱</strong>），既減輕重量又讓洪水能從小拱流過，是世界上現存最古老的敞肩石拱橋之一。</div>
+<div class="it"><span class="yr">12 世紀</span><br><strong>柬埔寨吳哥</strong>：高棉帝國在吳哥建造了巨大的人工蓄水池和運河系統，支撐龐大的城市人口，是古代水利工程的傑作。</div>
+<div class="it"><span class="yr">1779 年</span><br><strong>英國鐵橋（Iron Bridge）</strong>：世界第一座主要用鑄鐵建造的大橋，工業革命帶來新材料。</div>
+<div class="it"><span class="yr">1824 年</span><br><strong>波特蘭水泥發明</strong>：現代混凝土的關鍵材料（第三篇會講）。</div>
+<div class="it"><span class="yr">1867 年</span><br><strong>鋼筋混凝土取得專利</strong>：把鋼筋放進混凝土裡，從此可以蓋高樓、長橋。</div>
+<div class="it"><span class="yr">1889 年</span><br><strong>巴黎艾菲爾鐵塔</strong>：高 300 公尺的鐵造桁架結構（第四篇會學桁架）。</div>
+<div class="it"><span class="yr">1937 年</span><br><strong>美國金門大橋</strong>：主跨 1280 公尺的懸索橋，當時世界最長。</div>
+<div class="it"><span class="yr">2004 年</span><br><strong>台北 101</strong>：高 508 公尺，裡面掛了一顆 660 公噸的大鋼球來減少搖晃（第四篇地震課會講）。</div>
+<div class="it"><span class="yr">2010 年</span><br><strong>杜拜哈里發塔</strong>：高 828 公尺，目前世界最高建築之一。</div>
+</div>
+<div class="box key"><span class="t">歷史告訴我們的事</span>
+石頭只能「壓」不能「拉」，所以古人只能蓋金字塔和拱。<br>
+有了<strong>鐵和鋼</strong>（能拉），才能蓋出鐵塔和懸索橋。<br>
+有了<strong>鋼筋混凝土</strong>（又能壓又能拉，還很便宜），才有今天到處都是的高樓大廈。<br>
+<strong>材料的進步＋力學的理解＝工程的突破。</strong>這就是為什麼接下來我們要先學「力」，再學「材料」。</div>
+<div class="box eg"><span class="t">失敗也是老師</span>土木工程的歷史上也有很多倒塌事故。每一次事故都讓工程師學到新知識，並寫進設計規範裡。這就是為什麼現代工程越來越安全。第九篇我們會談到規範的由來。</div>
+
+<div class="quiz" data-ans="3"><p class="q">古代的石造建築多半做成金字塔或拱的形狀，最主要的原因是什麼？</p>
+<button class="opt">A. 比較好看</button><button class="opt">B. 宗教規定</button><button class="opt">C. 石頭太輕</button><button class="opt">D. 石頭很能承受壓，但幾乎承受不了拉</button>
+<div class="explain">金字塔和拱都能讓石頭「只受壓」。要蓋需要承受拉力的結構，就要等到鐵、鋼和鋼筋混凝土出現。</div></div>
+
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>古代：金字塔、都江堰、羅馬拱與混凝土、趙州橋、吳哥水利。</li>
+<li>近代：鑄鐵→鋼→水泥→<strong>鋼筋混凝土</strong>，讓建築越來越高、橋越來越長。</li>
+<li>工程進步靠兩件事：<strong>更好的材料</strong>和<strong>更深的力學知識</strong>。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第一篇　入門" data-title="土木工程的七大領域">
+<div class="sheet">
+<h2>土木工程的七大領域</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>土木工程分成哪些專業</li><li>一個工程如何需要各領域合作</li></ul></div>
+<p>土木工程的範圍很大，所以大學和業界通常把它分成幾個領域。我們把一座城市想成一個人的身體，會比較好記：</p>
+<div class="grid">
+<div class="card"><div class="ic">🦴</div><h4>結構工程</h4>像<strong>骨骼</strong>。設計建築物、橋梁的梁柱，讓它們承受重量、風和地震。</div>
+<div class="card"><div class="ic">🦶</div><h4>大地工程</h4>像<strong>腳和腳下的地面</strong>。研究土壤和岩石，設計地基、擋土牆、隧道、邊坡。</div>
+<div class="card"><div class="ic">💧</div><h4>水利工程</h4>像<strong>血液循環</strong>。處理河川、水庫、排水、防洪、灌溉。</div>
+<div class="card"><div class="ic">🧪</div><h4>環境工程</h4>像<strong>腎臟和肺</strong>。淨化自來水、處理污水、垃圾與空氣污染。</div>
+<div class="card"><div class="ic">🚗</div><h4>交通工程</h4>像<strong>血管網路</strong>。規劃道路、鐵路、機場、港口，讓人和貨物順暢移動。</div>
+<div class="card"><div class="ic">📐</div><h4>測量工程</h4>像<strong>眼睛</strong>。精確量出地形、位置、高低，所有工程都要先測量。</div>
+<div class="card"><div class="ic">🧠</div><h4>營建管理</h4>像<strong>大腦</strong>。管理工程的預算、進度、品質、安全與人員。</div>
+</div>
+
+<h3>例子：蓋一座跨河大橋需要誰？</h3>
+<div class="fig">
+<svg viewBox="0 0 640 250" role="img" aria-label="一座橋的各部分分別由哪個領域負責">
+  <rect x="0" y="0" width="640" height="250" fill="#f7fbff"/>
+  <rect x="0" y="170" width="640" height="80" fill="#a98463"/>
+  <rect x="160" y="150" width="320" height="40" fill="#5aa2e0"/>
+  <path d="M0 150 H160 V190 H480 V150 H640" fill="none" stroke="#7a5a3c" stroke-width="2"/>
+  <rect x="20" y="110" width="600" height="14" fill="#34495e"/>
+  <rect x="235" y="124" width="20" height="60" fill="#8a9aa9"/><rect x="385" y="124" width="20" height="60" fill="#8a9aa9"/>
+  <g fill="#6b5645"><rect x="232" y="184" width="6" height="55"/><rect x="243" y="184" width="6" height="55"/><rect x="252" y="184" width="6" height="55"/><rect x="382" y="184" width="6" height="55"/><rect x="393" y="184" width="6" height="55"/><rect x="402" y="184" width="6" height="55"/></g>
+  <g font-size="13" font-family="sans-serif">
+    <text x="30" y="100" fill="#0f2d4d">🦴 結構：橋面和橋墩</text>
+    <text x="420" y="240" fill="#fff">🦶 大地：樁基礎</text>
+    <text x="270" y="175" fill="#fff">💧 水利：洪水多高？</text>
+    <text x="440" y="100" fill="#0f2d4d">🚗 交通：幾線道？</text>
+    <text x="20" y="30" fill="#0f2d4d">📐 測量：兩岸距離、高程</text>
+    <text x="330" y="30" fill="#0f2d4d">🧪 環境：施工不能污染河川</text>
+    <text x="180" y="62" fill="#0f2d4d">🧠 營建管理：預算、工期、安全</text>
+  </g>
+</svg>
+<div class="cap">同一座橋，七個領域都要參與。</div></div>
+<p>所以土木工程師雖然會專精一個領域，但<strong>一定要懂其他領域的基本觀念</strong>，才能互相合作。這也是這門課要帶你全部走過一遍的原因。</p>
+<div class="box key"><span class="t">學習順序</span>所有領域都建立在「<strong>力學</strong>」和「<strong>材料</strong>」之上。橋會不會斷、土會不會滑、水壩會不會被推倒，說穿了都是「力」的問題。所以下一篇我們就從最基本的「力」開始。</div>
+
+<div class="quiz" data-ans="0"><p class="q">要判斷一塊地的土壤能不能承受一棟大樓，主要是哪個領域的工作？</p>
+<button class="opt">A. 大地工程</button><button class="opt">B. 交通工程</button><button class="opt">C. 環境工程</button><button class="opt">D. 測量工程</button>
+<div class="explain">大地工程專門研究土壤和岩石的性質，以及地基要怎麼設計。</div></div>
+
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>七大領域：<strong>結構、大地、水利、環境、交通、測量、營建管理</strong>。</li>
+<li>真實工程需要各領域合作。</li>
+<li>所有領域的共同基礎是<strong>力學與材料</strong>。</li></ul></div>
+</div></section>
+<!-- ================= 第二篇 力學基礎 ================= -->
+<section class="lesson" data-part="第二篇　力學基礎" data-title="力是什麼？">
+<div class="sheet">
+<h2>力是什麼？質量和重量不一樣！</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>力的三要素</li><li>質量（公斤）和重量（牛頓）的差別</li><li>工程師常用的力的單位 kN</li></ul></div>
+<h3>力就是「推」或「拉」</h3>
+<p>你推門、拉抽屜、提書包，都是在施「力」。地球把你往下吸，也是一種力，叫做<strong>重力</strong>。土木工程師的工作，說穿了就是<strong>搞清楚結構上有哪些力、這些力往哪裡跑、材料撐不撐得住</strong>。</p>
+<div class="box key"><span class="t">力的三要素</span>描述一個力，要說清楚三件事：<br>① <strong>大小</strong>：多用力？<br>② <strong>方向</strong>：往哪裡推或拉？<br>③ <strong>作用點</strong>：施力在哪個位置？<br>所以工程圖上都用<strong>箭頭</strong>畫力：箭頭長短代表大小、指向代表方向、箭頭的位置代表作用點。</div>
+<div class="box eg"><span class="t">作用點很重要</span>推門時，推靠近門把的地方很輕鬆，推靠近門軸（鉸鏈）的地方卻很吃力。力的大小一樣，作用點不同，效果就不同。下一課會解釋原因。</div>
+
+<h3>質量 vs 重量</h3>
+<p>日常生活我們說「我 50 公斤重」，但在科學和工程上，這句話其實不太精確：</p>
+<div class="tw"><table><tr><th></th><th>質量</th><th>重量</th></tr>
+<tr><td>意思</td><td>物體裡面有「多少東西」</td><td>地球吸引這個物體的<strong>力</strong></td></tr>
+<tr><td>單位</td><td>公斤（kg）</td><td>牛頓（N）</td></tr>
+<tr><td>到月球上</td><td>不變</td><td>變成約 1/6</td></tr></table></div>
+<div class="formula">重量 W ＝ 質量 m × 重力加速度 g<small>地球上 g ≈ 9.81 m/s²，工程上心算常取 ≈ 10</small></div>
+<div class="box origin"><span class="t">牛頓（N）</span>力的單位用英國科學家<strong>艾薩克‧牛頓</strong>的名字命名，因為他在 1687 年提出了運動定律和萬有引力，第一次把「力」說清楚。<br>有趣的是，<strong>1 牛頓大約等於一顆小蘋果（約 100 公克）的重量</strong>，剛好呼應牛頓被蘋果打到的傳說。</div>
+<p>牛頓這個單位太小了，一棟大樓的柱子可能要扛幾百萬牛頓。所以工程師最常用的是<strong>千牛頓（kN）</strong>：</p>
+<div class="formula">1 kN ＝ 1000 N ≈ 100 公斤物體的重量</div>
+
+<div class="fig" id="wt">
+<div class="ctrl"><label>物體質量 <input type="range" id="wtM" min="1" max="20000" step="1" value="50"> <span id="wtMv">50</span> kg</label></div>
+<div class="readout" id="wtOut"></div>
+<div class="cap">拉拉看：一台小客車約 1500 kg，一台大卡車可到 20000 kg。</div></div>
+
+<h3>力的合成</h3>
+<p>兩個力作用在同一個東西上，效果可以「加起來」：</p>
+<div class="fig"><svg viewBox="0 0 600 150" role="img" aria-label="同方向的力相加，反方向的力相減">
+<g font-family="sans-serif" font-size="13">
+<rect x="60" y="45" width="60" height="40" fill="#b8b3a8"/><line x1="120" y1="65" x2="200" y2="65" stroke="#b3362b" stroke-width="4" marker-end="url(#ar)"/><line x1="120" y1="75" x2="170" y2="75" stroke="#1c4a78" stroke-width="4" marker-end="url(#ar2)"/>
+<text x="40" y="115">同方向：30 N ＋ 20 N ＝ 50 N</text>
+<rect x="380" y="45" width="60" height="40" fill="#b8b3a8"/><line x1="440" y1="65" x2="520" y2="65" stroke="#b3362b" stroke-width="4" marker-end="url(#ar)"/><line x1="380" y1="65" x2="330" y2="65" stroke="#1c4a78" stroke-width="4" marker-end="url(#ar2)"/>
+<text x="330" y="115">反方向：30 N － 20 N ＝ 往右 10 N</text></g>
+
+</svg></div>
+<div class="box pro"><span class="t">不同方向的力</span>如果兩個力有夾角，就要用「<strong>平行四邊形法則</strong>」：把兩個力畫成平行四邊形的兩個邊，對角線就是合力。工程上更常把每個力拆成「水平分量」和「垂直分量」分開相加，高中物理會學到用三角函數來拆。</div>
+
+<div class="quiz" data-ans="2"><p class="q">一台 1500 kg 的汽車，重量大約是多少？</p>
+<button class="opt">A. 1.5 N</button><button class="opt">B. 150 N</button><button class="opt">C. 約 15 kN（15000 N）</button><button class="opt">D. 1500 kN</button>
+<div class="explain">W＝1500 kg × 9.81 ≈ 14715 N ≈ 15 kN。記住「100 公斤 ≈ 1 kN」就能快速心算。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>力有<strong>大小、方向、作用點</strong>，用箭頭表示。</li>
+<li>質量（kg）≠ 重量（N）；<strong>W＝m×g</strong>。</li>
+<li>工程常用 kN，<strong>1 kN ≈ 100 kg 的重量</strong>。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第二篇　力學基礎" data-title="力的平衡與力矩">
+<div class="sheet">
+<h2>力的平衡與力矩：蹺蹺板的祕密</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>東西「靜止不動」的條件</li><li>力矩＝力×力臂</li><li>用蹺蹺板實際計算</li></ul></div>
+<h3>靜止不動，代表力「互相抵消」</h3>
+<p>一棟大樓、一座橋，最重要的就是<strong>不要動</strong>（不要倒、不要滑、不要轉）。物理上叫做<strong>平衡</strong>。一個東西要平衡，需要滿足兩個條件：</p>
+<div class="box key"><span class="t">平衡的兩個條件</span>
+① <strong>所有的力加起來等於零</strong>：往上的力＝往下的力，往左的力＝往右的力 → 才不會移動。<br>
+② <strong>所有的力矩加起來等於零</strong>：讓它順時針轉的＝讓它逆時針轉的 → 才不會轉動。</div>
+<p>第一個條件很直覺。第二個條件裡的「力矩」是什麼呢？</p>
+<h3>力矩：讓東西「轉動」的效果</h3>
+<div class="formula">力矩 M ＝ 力 F × 力臂 d<small>力臂 d ＝ 從轉軸到力的作用線的「垂直距離」；單位是 kN·m（千牛頓‧公尺）</small></div>
+<p>這就解釋了上一課的推門問題：推門把（離門軸遠，力臂大）只要一點點力就能產生足夠的力矩；推門軸附近（力臂小）就要很大的力。</p>
+<div class="box origin"><span class="t">力矩（Moment）</span>英文 moment 來自拉丁文 <em>momentum</em>，原意是「推動、使之運動的東西」。中文「矩」字原本是指木工畫直角用的曲尺（「規矩」的「矩」）。力矩的力臂必須量「垂直」距離，用「矩」字來記，就很好懂。</div>
+<div class="box eg"><span class="t">到處都是力矩</span>扳手越長越好轉螺絲、剪刀剪硬東西時要放在靠近轉軸的地方、開瓶器、老式天秤⋯⋯都是在利用力矩。</div>
+
+<h3>互動：蹺蹺板</h3>
+<p>左右兩邊各坐一個人。調整體重和坐的位置，看看什麼時候會平衡。</p>
+<div class="fig" id="ss">
+<svg viewBox="0 0 600 230" role="img" aria-label="可調整的蹺蹺板">
+  <polygon points="300,160 275,205 325,205" fill="#5d6b78"/>
+  <rect x="0" y="205" width="600" height="6" fill="#9b6b43"/>
+  <g id="ssBeam">
+    <rect x="95" y="152" width="410" height="8" rx="3" fill="#0f2d4d"/>
+    <g id="ssL"><circle cx="0" cy="-22" r="14" fill="#f2b705"/><rect x="-12" y="-10" width="24" height="12" fill="#f2b705"/><text id="ssLt" x="0" y="-42" text-anchor="middle" font-size="13" font-family="sans-serif" fill="#0f2d4d"></text></g>
+    <g id="ssR"><circle cx="0" cy="-22" r="14" fill="#1c4a78"/><rect x="-12" y="-10" width="24" height="12" fill="#1c4a78"/><text id="ssRt" x="0" y="-42" text-anchor="middle" font-size="13" font-family="sans-serif" fill="#0f2d4d"></text></g>
+  </g>
+</svg>
+<div class="ctrl">
+<label>左邊體重 <input type="range" id="ssM1" min="20" max="80" value="30"> <span id="ssM1v"></span> kg</label>
+<label>左邊距離 <input type="range" id="ssD1" min="0.5" max="4" step="0.1" value="2"> <span id="ssD1v"></span> m</label>
+</div><div class="ctrl">
+<label>右邊體重 <input type="range" id="ssM2" min="20" max="80" value="40"> <span id="ssM2v"></span> kg</label>
+<label>右邊距離 <input type="range" id="ssD2" min="0.5" max="4" step="0.1" value="1"> <span id="ssD2v"></span> m</label>
+</div>
+<div class="readout" id="ssOut"></div>
+<div class="cap">挑戰：左邊 30 kg 坐 2 m，右邊 40 kg 要坐多遠才會平衡？</div></div>
+<p><strong>計算一次：</strong>左邊力矩＝30 kg × 2 m＝60（為了簡單，我們先不乘 g，因為兩邊都要乘，會互相抵消）。右邊 40 kg 要產生同樣 60 的力矩，距離＝60 ÷ 40＝<strong>1.5 m</strong>。</p>
+<div class="box key"><span class="t">為什麼土木工程師那麼在意力矩？</span>一根梁、一棟大樓會不會斷、會不會倒，很多時候是「力矩」決定的，而不是力的大小。颱風吹大樓，大樓越高，風力的力臂越長，地面處承受的力矩就越大。我們在第四篇會一直用到這個觀念。</div>
+
+<div class="quiz" data-ans="1"><p class="q">用 20 cm 長的扳手轉螺絲需要 100 N 的力，如果換成 40 cm 長的扳手，大約需要多少力？</p>
+<button class="opt">A. 200 N</button><button class="opt">B. 50 N</button><button class="opt">C. 100 N</button><button class="opt">D. 25 N</button>
+<div class="explain">轉螺絲需要的力矩固定：100 N × 0.2 m ＝ 20 N·m。力臂變 0.4 m，力＝20 ÷ 0.4 ＝ 50 N。力臂加倍，力減半。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>平衡＝<strong>合力為零</strong>（不移動）＋<strong>合力矩為零</strong>（不轉動）。</li>
+<li><strong>力矩＝力×垂直距離</strong>，單位 kN·m。</li>
+<li>力臂越長，同樣的力造成的轉動效果越大。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第二篇　力學基礎" data-title="支承與反力">
+<div class="sheet">
+<h2>支承與反力：地面會「推回來」</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>什麼是反力</li><li>三種常見的支承</li><li>用平衡條件算出反力</li></ul></div>
+<h3>你站著的時候，地板在推你</h3>
+<p>你站在地上沒有掉下去，是因為地板用一個<strong>往上的力</strong>頂著你，大小剛好等於你的重量。這就是牛頓第三定律：<strong>你壓地板多大力，地板就推你多大力</strong>。</p>
+<div class="box origin"><span class="t">反力（Reaction）</span>「反」是「反作用」的意思。結構把重量壓在支撐點上，支撐點就「反過來」推結構，這個力叫<strong>支承反力</strong>，簡稱反力。英文 reaction 就是 re-（回來）＋action（作用）。</div>
+<h3>三種支承</h3>
+<p>把梁或橋放在支撐上，支撐的方式不同，能提供的反力也不同：</p>
+<div class="fig"><svg viewBox="0 0 640 190" role="img" aria-label="滾支承、鉸支承、固定端三種支承的符號">
+<g font-family="sans-serif" font-size="14" fill="#1b2733">
+<rect x="40" y="50" width="130" height="10" fill="#0f2d4d"/><polygon points="105,60 90,85 120,85" fill="none" stroke="#1b2733" stroke-width="2"/><circle cx="95" cy="91" r="5" fill="none" stroke="#1b2733" stroke-width="2"/><circle cx="115" cy="91" r="5" fill="none" stroke="#1b2733" stroke-width="2"/><line x1="80" y1="97" x2="130" y2="97" stroke="#1b2733" stroke-width="2"/>
+<line x1="105" y1="150" x2="105" y2="112" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/>
+<text x="60" y="30" font-weight="700">① 滾支承</text><text x="30" y="175">只擋「上下」，可左右滑、可轉</text>
+<rect x="250" y="50" width="130" height="10" fill="#0f2d4d"/><polygon points="315,60 300,90 330,90" fill="none" stroke="#1b2733" stroke-width="2"/><line x1="290" y1="90" x2="340" y2="90" stroke="#1b2733" stroke-width="2"/>
+<line x1="315" y1="150" x2="315" y2="105" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/><line x1="270" y1="120" x2="303" y2="120" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/>
+<text x="270" y="30" font-weight="700">② 鉸支承</text><text x="240" y="175">擋「上下＋左右」，可以轉</text>
+<rect x="470" y="50" width="120" height="10" fill="#0f2d4d"/><rect x="455" y="30" width="15" height="50" fill="#c9c5bc" stroke="#1b2733"/><g stroke="#1b2733"><line x1="455" y1="35" x2="445" y2="45"/><line x1="455" y1="50" x2="445" y2="60"/><line x1="455" y1="65" x2="445" y2="75"/></g>
+<path d="M500 110 a18 18 0 1 1 -2 -1" fill="none" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/>
+<text x="480" y="30" font-weight="700">③ 固定端</text><text x="440" y="175">上下、左右、轉動全部擋住</text>
+</g></svg><div class="cap">紅色箭頭是支承能提供的反力（第三種還能提供「反力矩」）。</div></div>
+<div class="box eg"><span class="t">為什麼橋的一端要能滑動？</span>鋼和混凝土會<strong>熱脹冷縮</strong>。一座 100 公尺的橋，夏天和冬天的長度可能差好幾公分。如果兩端都卡死，橋就會被自己擠壞或拉壞。所以橋常常一端用鉸支承、另一端用滾支承，並在橋面留<strong>伸縮縫</strong>。你坐車過橋時聽到「咚、咚」的聲音，就是輪子壓過伸縮縫。</div>
+<div class="box eg"><span class="t">固定端的例子</span>陽台、跳水板、路燈桿，一端牢牢固定在牆裡或地裡，另一端懸空。這種結構叫<strong>懸臂</strong>（像一隻手臂懸在空中）。</div>
+
+<h3>算算看：反力是多少？</h3>
+<p>一根 10 m 長的梁，兩端擱在支承 A 和 B 上（這種梁叫<strong>簡支梁</strong>，「簡單支撐」的意思）。在距離 A 點 2 m 的地方放一個 100 kN 的重物。</p>
+<div class="fig"><svg viewBox="0 0 600 170" role="img" aria-label="簡支梁受集中載重">
+<g font-family="sans-serif" font-size="14">
+<rect x="80" y="70" width="440" height="10" fill="#0f2d4d"/>
+<polygon points="80,80 66,105 94,105" fill="none" stroke="#1b2733" stroke-width="2"/>
+<polygon points="520,80 506,100 534,100" fill="none" stroke="#1b2733" stroke-width="2"/><circle cx="512" cy="105" r="4" fill="none" stroke="#1b2733" stroke-width="2"/><circle cx="528" cy="105" r="4" fill="none" stroke="#1b2733" stroke-width="2"/>
+<line x1="168" y1="15" x2="168" y2="66" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/><text x="176" y="30" fill="#b3362b">100 kN</text>
+<line x1="80" y1="155" x2="80" y2="112" stroke="#1c4a78" stroke-width="3" marker-end="url(#ar2)"/><text x="30" y="150" fill="#1c4a78">R_A＝?</text>
+<line x1="520" y1="155" x2="520" y2="115" stroke="#1c4a78" stroke-width="3" marker-end="url(#ar2)"/><text x="530" y="150" fill="#1c4a78">R_B＝?</text>
+<text x="70" y="62">A</text><text x="523" y="62">B</text>
+<line x1="80" y1="130" x2="168" y2="130" stroke="#566573"/><text x="108" y="126" fill="#566573">2 m</text>
+<text x="300" y="126" fill="#566573">全長 10 m</text></g></svg></div>
+<p><strong>步驟 1　以 A 為轉軸，力矩平衡：</strong>重物讓梁繞 A 順時針轉：100 × 2 ＝ 200；R_B 讓梁逆時針轉：R_B × 10。兩者相等 → <strong>R_B ＝ 20 kN</strong>。</p>
+<p><strong>步驟 2　上下力平衡：</strong>R_A ＋ R_B ＝ 100 → <strong>R_A ＝ 80 kN</strong>。</p>
+<div class="box key"><span class="t">直覺檢查</span>重物比較靠近 A，所以 A 分擔比較多（80 kN），很合理。就像兩個人抬一根扁擔，東西掛得離誰近，誰就比較累。工程師算完一定會做這種「直覺檢查」。</div>
+<div class="quiz" data-ans="2"><p class="q">同一根 10 m 簡支梁，把 100 kN 的重物放在正中央，兩端反力各是多少？</p>
+<button class="opt">A. A＝100、B＝0</button><button class="opt">B. A＝80、B＝20</button><button class="opt">C. A＝50、B＝50</button><button class="opt">D. A＝100、B＝100</button>
+<div class="explain">放在正中央是對稱的，兩邊平分：100 × 5 ÷ 10 ＝ 50 kN。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>支撐點推回結構的力叫<strong>反力</strong>。</li>
+<li>三種支承：<strong>滾支承</strong>（擋上下）、<strong>鉸支承</strong>（擋上下左右）、<strong>固定端</strong>（全擋含轉動）。</li>
+<li>用<strong>力矩平衡＋力平衡</strong>就能算出反力。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第二篇　力學基礎" data-title="內力：拉、壓、剪、彎、扭">
+<div class="sheet">
+<h2>內力：材料裡面在發生什麼事？</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>外力和內力的差別</li><li>五種基本的受力方式</li><li>梁彎曲時「上壓下拉」</li></ul></div>
+<p>前面講的力都作用在物體<strong>外面</strong>（重物、反力），叫<strong>外力</strong>。但真正決定材料會不會壞的，是材料<strong>裡面</strong>的力，叫<strong>內力</strong>。</p>
+<div class="box eg"><span class="t">想像把東西切開</span>兩隊拔河，繩子沒有斷。如果你想像在繩子中間切一刀，左半段要被右隊拉、右半段要被左隊拉──繩子內部的每一小段都在「互相拉住」。這個互相拉住的力，就是內力。</div>
+<h3>五種基本受力方式</h3>
+<div class="grid" id="ifx">
+<div class="card"><svg viewBox="0 0 200 90" aria-label="拉力動畫"><rect class="ani-t" x="50" y="35" width="100" height="20" fill="#b8b3a8" stroke="#1b2733"/><line x1="40" y1="45" x2="5" y2="45" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/><line x1="160" y1="45" x2="195" y2="45" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/></svg><h4>① 拉力（張力）</h4>往兩邊拉，材料會<strong>變長變細</strong>。例：拔河的繩子、吊橋的鋼纜。</div>
+<div class="card"><svg viewBox="0 0 200 90" aria-label="壓力動畫"><rect class="ani-c" x="50" y="35" width="100" height="20" fill="#b8b3a8" stroke="#1b2733"/><line x1="5" y1="45" x2="40" y2="45" stroke="#1c4a78" stroke-width="3" marker-end="url(#ar2)"/><line x1="195" y1="45" x2="160" y2="45" stroke="#1c4a78" stroke-width="3" marker-end="url(#ar2)"/></svg><h4>② 壓力</h4>往中間擠，材料會<strong>變短變粗</strong>。例：柱子、桌腳、你的腿。</div>
+<div class="card"><svg viewBox="0 0 200 90" aria-label="剪力動畫"><g class="ani-s"><rect x="40" y="25" width="60" height="40" fill="#b8b3a8" stroke="#1b2733"/></g><rect x="100" y="25" width="60" height="40" fill="#c9c5bc" stroke="#1b2733"/><line x1="70" y1="5" x2="70" y2="20" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/><line x1="130" y1="85" x2="130" y2="70" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/></svg><h4>③ 剪力</h4>兩個相鄰的面往<strong>相反方向錯開</strong>。例：剪刀剪紙、打孔機。</div>
+<div class="card"><svg viewBox="0 0 200 90" aria-label="彎曲動畫"><path class="ani-b" d="M20 45 Q100 45 180 45" stroke="#0f2d4d" stroke-width="14" fill="none"/><line x1="100" y1="5" x2="100" y2="30" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/><polygon points="20,55 12,70 28,70" fill="#5d6b78"/><polygon points="180,55 172,70 188,70" fill="#5d6b78"/></svg><h4>④ 彎曲</h4>中間往下壓，材料會<strong>彎成弧形</strong>。例：梁、書架的層板。</div>
+<div class="card"><svg viewBox="0 0 200 90" aria-label="扭轉示意"><rect x="30" y="35" width="140" height="20" fill="#b8b3a8" stroke="#1b2733"/><g stroke="#1b2733"><line class="ani-tw" x1="60" y1="35" x2="80" y2="55"/><line class="ani-tw" x1="90" y1="35" x2="110" y2="55"/><line class="ani-tw" x1="120" y1="35" x2="140" y2="55"/></g><path d="M25 25 a12 20 0 1 0 0 40" fill="none" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/><path d="M175 65 a12 20 0 1 0 0 -40" fill="none" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/></svg><h4>⑤ 扭轉</h4>兩端往相反方向<strong>轉</strong>。例：擰毛巾、汽車傳動軸。</div>
+</div>
+<style>
+@keyframes aT{0%,100%{transform:scaleX(1) scaleY(1)}50%{transform:scaleX(1.18) scaleY(.8)}}
+@keyframes aC{0%,100%{transform:scaleX(1) scaleY(1)}50%{transform:scaleX(.82) scaleY(1.25)}}
+@keyframes aS{0%,100%{transform:translateY(0)}50%{transform:translateY(12px)}}
+@keyframes aB{0%,100%{d:path("M20 45 Q100 45 180 45")}50%{d:path("M20 45 Q100 85 180 45")}}
+@keyframes aTw{0%,100%{transform:skewX(0)}50%{transform:skewX(35deg)}}
+.ani-t{animation:aT 2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.ani-c{animation:aC 2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.ani-s{animation:aS 2s ease-in-out infinite}
+.ani-b{animation:aB 2s ease-in-out infinite}
+.ani-tw{animation:aTw 2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+</style>
+<div class="box origin"><span class="t">剪力（Shear）</span>英文 shear 和 shears（大剪刀）是同一個字。剪刀的兩片刀刃往相反方向錯過去，紙就被「剪」斷了。中文直接翻成「剪力」，非常傳神。</div>
+
+<h3>最重要的：彎曲時「上壓下拉」</h3>
+<p>一根兩端支撐的梁，中間往下彎的時候，<strong>上半部被擠壓（受壓）、下半部被拉長（受拉）</strong>，正中間有一條線既不壓也不拉，叫<strong>中性軸</strong>。</p>
+<div class="fig"><svg viewBox="0 0 600 190" role="img" aria-label="梁彎曲時上方受壓、下方受拉">
+<g font-family="sans-serif" font-size="14">
+<path d="M60 70 Q300 130 540 70 L540 120 Q300 180 60 120Z" fill="#dfe8f1" stroke="#0f2d4d" stroke-width="2"/>
+<path d="M60 95 Q300 155 540 95" stroke="#566573" stroke-dasharray="6 5" fill="none"/>
+<g stroke="#1c4a78" stroke-width="2"><line x1="160" y1="92" x2="175" y2="95" marker-end="url(#ar2)"/><line x1="190" y1="97" x2="175" y2="95"/><line x1="290" y1="102" x2="280" y2="101" marker-end="url(#ar2)"/><line x1="310" y1="102" x2="320" y2="101" marker-end="url(#ar2)"/></g>
+<text x="250" y="88" fill="#1c4a78">上緣：受壓（擠在一起）</text>
+<text x="250" y="178" fill="#b3362b">下緣：受拉（被拉開）</text>
+<text x="400" y="125" fill="#566573">中性軸</text>
+<polygon points="60,122 48,142 72,142" fill="#5d6b78"/><polygon points="540,122 528,142 552,142" fill="#5d6b78"/>
+<line x1="300" y1="20" x2="300" y2="92" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/></g></svg></div>
+<div class="try"><span class="t">海綿實驗</span>拿一塊長條海綿（或橡皮擦），在側面用筆畫幾條<strong>等距的直線</strong>。把海綿兩端放在兩本書上，中間往下壓：你會看到<strong>上面的線擠在一起、下面的線分得更開</strong>。這就是上壓下拉！</div>
+<div class="box key"><span class="t">為什麼這很重要？</span>記住「上壓下拉」，到了第三篇你就會明白：為什麼<strong>鋼筋要放在梁的下面</strong>。這是整個鋼筋混凝土設計最核心的觀念。</div>
+<div class="quiz" data-ans="3"><p class="q">一塊書架的層板放了很多書而往下彎，層板的「下表面」受到什麼力？</p>
+<button class="opt">A. 壓力</button><button class="opt">B. 扭轉</button><button class="opt">C. 完全不受力</button><button class="opt">D. 拉力</button>
+<div class="explain">兩端支撐、中間往下彎的構件：上壓下拉。所以下表面受拉。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>材料內部互相牽制的力叫<strong>內力</strong>。</li>
+<li>五種基本受力：<strong>拉、壓、剪、彎、扭</strong>。</li>
+<li>簡支梁向下彎時<strong>上壓下拉</strong>，中間是中性軸。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第二篇　力學基礎" data-title="應力與應變">
+<div class="sheet">
+<h2>應力與應變：為什麼高跟鞋比大象還「兇」？</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>應力＝力÷面積</li><li>應變＝變形÷原長</li><li>虎克定律和彈性模數</li></ul></div>
+<h3>光知道力還不夠</h3>
+<p>用 100 N 拉一條細棉線，線會斷；用 100 N 拉一條粗麻繩，一點事都沒有。力一樣，差在哪裡？差在<strong>承受力的面積</strong>。所以工程師要看的是「每單位面積分到多少力」：</p>
+<div class="formula">應力 σ ＝ 力 F ÷ 面積 A<small>單位：Pa（帕斯卡）＝ N/m²；工程上常用 MPa ＝ N/mm²（每平方毫米幾牛頓）</small></div>
+<div class="box origin"><span class="t">應力（Stress）</span>「應」是「回應、反應」的意思。材料被外力推拉時，內部會產生一股<strong>回應的力</strong>去抵抗，這就是「應力」。σ 是希臘字母 sigma。<br>單位「帕斯卡（Pa）」紀念法國科學家<strong>布萊茲‧帕斯卡</strong>，他研究過壓力和液體（第六篇還會見到他）。</div>
+<h3>互動：大象 vs 高跟鞋</h3>
+<div class="fig" id="st">
+<div class="ctrl"><button class="btn alt" data-p="5000,1600">🐘 大象（5 噸，4 隻腳約 1600 cm²）</button><button class="btn alt" data-p="50,1">👠 高跟鞋（50 kg 站在 1 cm² 鞋跟）</button><button class="btn alt" data-p="50,300">👟 運動鞋（50 kg，300 cm²）</button><button class="btn alt" data-p="80,2500">🎿 雪鞋（80 kg，2500 cm²）</button></div>
+<div class="ctrl"><label>質量 <input type="range" id="stM" min="1" max="6000" value="5000"> <span id="stMv"></span> kg</label>
+<label>接觸面積 <input type="range" id="stA" min="1" max="3000" value="1600"> <span id="stAv"></span> cm²</label></div>
+<div class="readout" id="stOut"></div>
+<div class="cap">1 cm² ＝ 0.0001 m²。試著比較大象和高跟鞋！</div></div>
+<p>算算看：大象約 50000 N 分散在 0.16 m² 上 → 約 <strong>0.31 MPa</strong>。50 kg 的人把重量全壓在 1 cm² 鞋跟上 → 490 N ÷ 0.0001 m² → 約 <strong>4.9 MPa</strong>，是大象的 15 倍以上！這就是為什麼很多地板和古蹟會禁止細高跟鞋。</p>
+<div class="box eg"><span class="t">應力的生活例子</span>刀子磨利（面積變小→應力變大，容易切開）、雪鞋和雪橇（面積變大→應力變小，不會陷進雪裡）、坦克用履帶而不用輪子、背包的背帶做得很寬。</div>
+
+<h3>應變：變形了多少「比例」</h3>
+<p>材料受力會變形。一條 1 m 的橡皮筋拉長 1 cm，和一條 10 m 的橡皮筋拉長 1 cm，程度顯然不同。所以要用「比例」來比較：</p>
+<div class="formula">應變 ε ＝ 伸長量 ΔL ÷ 原長 L<small>長度除以長度，所以應變<strong>沒有單位</strong>；ε 是希臘字母 epsilon</small></div>
+<div class="box origin"><span class="t">應變（Strain）</span>「應」一樣是回應，「變」是變形：材料回應外力而產生的變形程度。英文 strain 原意是「拉緊、繃緊」。</div>
+
+<h3>虎克定律：力越大，變形越大</h3>
+<p>1678 年，英國科學家<strong>羅伯特‧虎克</strong>發現：在一定範圍內，彈簧伸長的量和拉力成正比。套用到材料上：</p>
+<div class="formula">σ ＝ E × ε<small>E 叫做<strong>彈性模數</strong>（又稱楊氏模數），代表材料有多「硬」、多難被拉長</small></div>
+<div class="box origin"><span class="t">虎克的字謎</span>虎克在 1676 年先發表了一串亂碼「ceiiinosssttuv」，怕別人偷他的發現。兩年後才公布答案：把字母重新排列成拉丁文 <em>ut tensio, sic vis</em>，意思是「伸長多少，力就多少」。<br><strong>楊氏模數</strong>則是紀念英國科學家<strong>湯瑪斯‧楊</strong>（Thomas Young），他在 1807 年把這個概念整理清楚。他也是做出著名「雙狹縫實驗」、證明光是波的人。</div>
+<div class="tw"><table><tr><th>材料</th><th>彈性模數 E（大約）</th><th>感覺</th></tr>
+<tr><td>橡膠</td><td>0.01～0.1 GPa</td><td>很軟，輕輕一拉就長</td></tr>
+<tr><td>木材（順紋）</td><td>約 10 GPa</td><td>中等</td></tr>
+<tr><td>混凝土</td><td>約 25～30 GPa</td><td>硬</td></tr>
+<tr><td>鋁</td><td>約 70 GPa</td><td>更硬</td></tr>
+<tr><td>鋼</td><td>約 200 GPa</td><td>非常硬</td></tr></table></div>
+<p style="font-size:15px;color:var(--muted)">1 GPa ＝ 1000 MPa。</p>
+<p><strong>算一次：</strong>一根 2 m 長的鋼棒，受到 100 MPa 的拉應力，會伸長多少？<br>ε ＝ σ ÷ E ＝ 100 ÷ 200000 ＝ 0.0005 → ΔL ＝ 0.0005 × 2000 mm ＝ <strong>1 mm</strong>。<br>鋼真的很硬，用這麼大的力也只伸長 1 毫米。</p>
+<div class="warn box"><span class="t">「硬」和「強」不一樣</span><strong>硬（剛度）</strong>是「難不難變形」，由 E 決定；<strong>強（強度）</strong>是「多大應力才會壞」。玻璃很硬但一摔就碎；有些塑膠很軟卻很難拉斷。下一課我們就來看「強度」。</div>
+<div class="quiz" data-ans="0"><p class="q">為什麼雪鞋能讓人走在雪上不會陷下去？</p>
+<button class="opt">A. 接觸面積變大，雪承受的應力變小</button><button class="opt">B. 雪鞋讓人變輕</button><button class="opt">C. 雪鞋讓雪變硬</button><button class="opt">D. 雪鞋增加彈性模數</button>
+<div class="explain">重量不變，面積變大，σ＝F÷A 就變小，雪承受得住。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li><strong>應力 σ＝F÷A</strong>（MPa），看的是「每單位面積」的力。</li>
+<li><strong>應變 ε＝ΔL÷L</strong>，沒有單位。</li>
+<li><strong>虎克定律 σ＝Eε</strong>；鋼的 E 約 200 GPa，混凝土約 25～30 GPa。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第二篇　力學基礎" data-title="材料的強度與安全係數">
+<div class="sheet">
+<h2>材料的強度、破壞與安全係數</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>應力－應變曲線怎麼看</li><li>延性與脆性</li><li>工程師為什麼要「多留一手」</li></ul></div>
+<h3>把材料拉到斷，會發生什麼事？</h3>
+<p>工程師會把材料做成試片，放進試驗機裡慢慢拉，一邊記錄應力、一邊記錄應變，畫成一張圖，叫<strong>應力－應變曲線</strong>。這張圖就像材料的「身分證」。</p>
+<div class="fig"><svg viewBox="0 0 620 330" role="img" aria-label="鋼材與混凝土的應力應變曲線">
+<g font-family="sans-serif" font-size="13">
+<line x1="60" y1="290" x2="600" y2="290" stroke="#1b2733" marker-end="url(#arK)"/><line x1="60" y1="290" x2="60" y2="20" stroke="#1b2733" marker-end="url(#arK)"/>
+<text x="560" y="312">應變 ε</text><text x="10" y="30">應力 σ</text>
+<path class="drawline" d="M60 290 L95 120 L105 118 L200 120 C 280 70 380 55 440 62 C 480 70 500 95 520 130" fill="none" stroke="#1c4a78" stroke-width="3.5"/>
+<circle cx="520" cy="130" r="5" fill="#b3362b"/>
+<path class="drawline" d="M60 290 C 70 250 80 215 88 205 L 92 215" fill="none" stroke="#9b6b43" stroke-width="3.5"/>
+<circle cx="92" cy="215" r="5" fill="#b3362b"/>
+<text x="102" y="210" fill="#9b6b43">混凝土（受拉很快就斷）</text>
+<text x="70" y="160" fill="#1c4a78">①彈性段</text>
+<text x="112" y="108" fill="#1c4a78">②降伏</text>
+<text x="250" y="72" fill="#1c4a78">③應變硬化</text>
+<text x="380" y="45" fill="#1c4a78">④最大強度</text>
+<text x="470" y="160" fill="#1c4a78">⑤頸縮、斷裂</text>
+<text x="330" y="250" fill="#1c4a78" font-size="15">鋼材：斷之前可以伸長很多</text>
+</g></svg><div class="cap">每次打開這一課，曲線會重新畫一次。示意圖，比例已簡化。</div></div>
+<h4>鋼材的五個階段</h4>
+<p><strong>① 彈性段</strong>：直線，符合虎克定律。放手會回到原狀，像彈簧。<br>
+<strong>② 降伏</strong>：到某個應力時，材料突然「投降」，力不太增加卻一直伸長。放手後<strong>回不去了</strong>，留下永久變形。這個應力叫<strong>降伏強度</strong>，是鋼材設計最重要的數字。<br>
+<strong>③ 應變硬化</strong>：繼續拉，材料又變得比較能抵抗。<br>
+<strong>④ 最大強度</strong>：曲線最高點，材料能承受的最大應力。<br>
+<strong>⑤ 頸縮與斷裂</strong>：試片中間某一段開始變細（像脖子），最後斷掉。</p>
+<div class="box origin"><span class="t">降伏（Yield）</span>英文 yield 有「讓步、屈服」的意思。材料到了這個應力就「讓步」了，不再能彈回原狀。中文翻成「降伏」，就是「投降、屈服」的意思。</div>
+
+<h3>延性 vs 脆性</h3>
+<div class="grid">
+<div class="card"><div class="ic">📎</div><h4>延性材料</h4>斷之前會<strong>大量變形</strong>。例：鋼、銅、迴紋針。迴紋針可以被你彎來彎去很多次。</div>
+<div class="card"><div class="ic">🖍️</div><h4>脆性材料</h4>幾乎<strong>不變形就突然斷掉</strong>。例：粉筆、玻璃、陶瓷、沒有鋼筋的混凝土。</div>
+</div>
+<div class="box key"><span class="t">為什麼工程師喜歡延性？</span>延性材料在壞掉之前會<strong>大幅彎曲、出現裂縫</strong>，等於是在「大聲警告」，讓人有時間逃生或補強。脆性材料則是毫無預警地突然崩塌，非常危險。所以現代的耐震設計，最重要的目標之一就是讓建築物<strong>「壞的時候慢慢壞」</strong>。</div>
+<div class="try"><span class="t">疲勞實驗</span>拿一根迴紋針，把它反覆折來折去，大概十幾二十次就會斷。雖然每次用的力都不大，但反覆受力會讓材料慢慢累積損傷，這叫<strong>疲勞</strong>。橋梁每天被車子壓幾萬次，所以設計時也要考慮疲勞。</div>
+
+<h3>安全係數：永遠多留一手</h3>
+<p>如果一根鋼索算出來剛好能吊 1000 kg，你敢讓它吊 1000 kg 嗎？不敢吧！因為：材料品質有誤差、施工可能不完美、實際載重可能比預估大、計算方法也有簡化⋯⋯</p>
+<div class="formula">安全係數 ＝ 材料能承受的強度 ÷ 實際的應力<small>一定要大於 1，而且通常大很多</small></div>
+<div class="box eg"><span class="t">電梯</span>電梯的鋼纜設計時會用很高的安全係數，而且通常不只一條。就算其中一條斷了，其他的也足以撐住電梯。「多一條備援」也是工程安全的重要觀念，叫做<strong>贅餘度</strong>（多出來、看似多餘的保險）。</div>
+<div class="box pro"><span class="t">現代的做法</span>早期工程師用一個大大的安全係數；現代規範改成「把載重放大一點、把材料強度打一點折扣」，分開處理不確定性，更合理也更經濟。第九篇「設計方法與規範」會詳細說明。</div>
+<div class="quiz" data-ans="1"><p class="q">為什麼耐震設計希望建築物是「延性」的？</p>
+<button class="opt">A. 延性材料比較便宜</button><button class="opt">B. 壞掉前會大量變形，給人預警和逃生時間</button><button class="opt">C. 延性材料不會變形</button><button class="opt">D. 延性材料比較輕</button>
+<div class="explain">延性破壞會先出現明顯的彎曲和裂縫，而不是突然崩塌，能保住人命。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>鋼材曲線：<strong>彈性→降伏→硬化→最大強度→斷裂</strong>。</li>
+<li><strong>降伏強度</strong>之後會留下永久變形。</li>
+<li>延性（有預警）優於脆性（突然斷）。</li>
+<li><strong>安全係數</strong>＞1，並用備援（贅餘度）提高安全。</li></ul></div>
+</div></section>
+<!-- ================= 第三篇 材料 ================= -->
+<section class="lesson" data-part="第三篇　土木材料" data-title="水泥與混凝土">
+<div class="sheet">
+<h2>水泥與混凝土：地球上用量最大的人造材料</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>水泥、混凝土的差別和名字由來</li><li>混凝土為什麼會變硬（不是因為乾掉！）</li><li>水灰比：加越多水越好做，但越不強</li></ul></div>
+<h3>先分清楚三個詞</h3>
+<div class="tw"><table><tr><th>名稱</th><th>組成</th><th>比喻</th></tr>
+<tr><td><strong>水泥</strong></td><td>灰色粉末（石灰石和黏土燒過再磨碎）</td><td>「膠水」</td></tr>
+<tr><td><strong>砂漿</strong></td><td>水泥＋水＋砂</td><td>貼磁磚、砌磚用</td></tr>
+<tr><td><strong>混凝土</strong></td><td>水泥＋水＋砂＋石頭（粒料）</td><td>用膠水把砂石黏成人造石頭</td></tr></table></div>
+<div class="fig"><svg viewBox="0 0 600 110" role="img" aria-label="混凝土的體積組成比例">
+<g font-family="sans-serif" font-size="13" fill="#fff">
+<rect x="20" y="20" width="72" height="50" fill="#5d6b78"/><text x="28" y="50">水泥 12%</text>
+<rect x="92" y="20" width="102" height="50" fill="#3b8fd9"/><text x="110" y="50">水 17%</text>
+<rect x="194" y="20" width="168" height="50" fill="#c8a165"/><text x="240" y="50">砂 28%</text>
+<rect x="362" y="20" width="200" height="50" fill="#7d7369"/><text x="410" y="50">石頭 40%</text>
+<rect x="562" y="20" width="18" height="50" fill="#dfe8f1"/>
+</g><text x="20" y="95" font-family="sans-serif" font-size="13" fill="#566573">體積比例的大概樣子（依配比不同而異），最右邊淺色是約 3% 的空氣。</text></svg></div>
+<div class="box origin"><span class="t">水泥（Cement）</span>來自拉丁文 <em>caementum</em>，原意是「切下來的碎石塊」（動詞 caedere＝切）。羅馬人把碎石和石灰混在一起砌牆，後來這個字就轉指把東西黏在一起的「膠結材料」。</div>
+<div class="box origin"><span class="t">混凝土（Concrete）</span>來自拉丁文 <em>concretus</em>，由 con-（一起）＋ crescere（生長）組成，意思是「<strong>長在一起、凝結成一塊</strong>」。中文「混凝土」三個字也很好懂：<strong>混</strong>合後<strong>凝</strong>固成像<strong>土</strong>石一樣的東西。在台灣俗稱「紅毛土」，因為最早是西洋人（當時稱紅毛）帶來的。</div>
+<div class="box origin"><span class="t">波特蘭水泥（Portland Cement）</span>1824 年，英國人<strong>約瑟夫‧阿斯普丁</strong>取得一種水泥的專利。他說這種水泥硬化後的顏色，很像英國波特蘭島出產的一種高級建築石材，就取名「波特蘭水泥」。今天全世界最常用的水泥還是叫這個名字，但和波特蘭島已經沒有關係了。</div>
+
+<h3>混凝土為什麼會變硬？</h3>
+<div class="box warn"><span class="t">混凝土不是「乾掉」才變硬的！</span>很多人以為混凝土像泥巴一樣，水分蒸發就變硬。其實是水泥和水發生了<strong>化學反應</strong>，叫做<strong>水化作用</strong>，長出許多細小的結晶，把砂石緊緊抓在一起。<br>證據：混凝土<strong>在水裡面也會硬化</strong>，所以能用來蓋橋墩和水壩。反過來說，如果混凝土太早乾掉，反應就停了，強度反而不夠。</div>
+<div class="box key"><span class="t">養護</span>所以混凝土澆好之後，工地會用水澆、蓋濕布或塑膠布，保持濕潤至少好幾天，這叫<strong>養護</strong>。就像幫小孩好好「養」大一樣，養護做得好，混凝土才會強壯。</div>
+
+<h3>水灰比：最重要的一個數字</h3>
+<p>水泥只需要一部分水就能完成反應，但工人會想多加水，因為比較稀、比較好倒。問題是：<strong>多出來的水最後會蒸發，留下一堆小孔洞</strong>，混凝土就變弱了。</p>
+<div class="formula">水灰比 ＝ 水的重量 ÷ 水泥的重量<small>「灰」指水泥（灰色粉末）。一般結構用約 0.4～0.6</small></div>
+<div class="fig" id="wc">
+<div class="ctrl"><label>水灰比 <input type="range" id="wcR" min="0.3" max="0.8" step="0.01" value="0.5"> <span id="wcRv"></span></label></div>
+<svg viewBox="0 0 600 150" role="img" aria-label="水灰比與混凝土強度、孔隙示意">
+<rect x="30" y="20" width="200" height="110" fill="#b8b3a8" stroke="#1b2733"/><g id="wcPores"></g>
+<text x="130" y="145" text-anchor="middle" font-size="13" font-family="sans-serif" fill="#566573">混凝土切面（白點＝孔隙）</text>
+<rect x="290" y="30" width="280" height="24" fill="#e8f0f8" stroke="#1c4a78"/><rect id="wcBar" x="290" y="30" width="100" height="24" fill="#1c4a78"/>
+<text x="290" y="22" font-size="13" font-family="sans-serif" fill="#1b2733">估計 28 天抗壓強度</text>
+<rect x="290" y="95" width="280" height="24" fill="#fff6d6" stroke="#9a6a00"/><rect id="wcBar2" x="290" y="95" width="100" height="24" fill="#f2b705"/>
+<text x="290" y="87" font-size="13" font-family="sans-serif" fill="#1b2733">施工容易度（流動性）</text>
+</svg>
+<div class="readout" id="wcOut"></div>
+<div class="cap">強度用 1918 年 Abrams 提出的經驗公式示意（實際數值依材料而定）。</div></div>
+<div class="box origin"><span class="t">Abrams 定律</span>1918 年，美國學者<strong>達夫‧艾布拉姆斯（Duff Abrams）</strong>做了上千組實驗，發現「混凝土強度主要由水灰比決定，水灰比越高強度越低」。這個發現一百多年來一直是混凝土配比設計的基礎。</div>
+<div class="box eg"><span class="t">工地的偷偷加水</span>在工地，把預拌混凝土車裡偷偷加水讓它更好灌，是嚴重的違規行為，會讓結構強度不足。所以工地會做「坍度試驗」來檢查（第九篇會介紹）。</div>
+
+<h3>混凝土的強度與「28 天」</h3>
+<p>混凝土的強度會隨時間慢慢增加：大約 7 天可以到最終強度的六、七成，<strong>28 天</strong>大致達到設計強度，之後還會再緩慢成長。所以全世界都約定用「<strong>28 天抗壓強度</strong>」來代表混凝土的等級。台灣常見的是 280 kgf/cm²（約 28 MPa）左右。</p>
+<div class="box key"><span class="t">混凝土的最大弱點</span>混凝土的<strong>抗壓強度很高，但抗拉強度只有抗壓的大約十分之一</strong>。還記得梁「上壓下拉」嗎？只用混凝土做梁，下面一拉就裂。怎麼辦？我們在兩課之後解答。</div>
+<div class="box pro"><span class="t">羅馬混凝土為什麼那麼耐久？</span>研究發現，羅馬混凝土用了火山灰，還含有一些沒完全拌勻的石灰小顆粒。當混凝土出現裂縫、水滲進去時，這些石灰會溶解並重新結晶把裂縫填起來，有點像「自我修復」。現代科學家正在研究怎麼把這個原理用在新材料上。</div>
+<div class="quiz" data-ans="2"><p class="q">為什麼剛澆好的混凝土要持續灑水保持濕潤？</p>
+<button class="opt">A. 讓它比較快乾</button><button class="opt">B. 讓顏色比較好看</button><button class="opt">C. 水泥需要水進行水化反應，太早乾掉強度會不足</button><button class="opt">D. 防止螞蟻</button>
+<div class="explain">混凝土是靠水化作用（化學反應）變硬，需要水分。這個動作叫養護。</div></div>
+<div class="quiz" data-ans="0"><p class="q">其他條件不變，水灰比從 0.4 提高到 0.7，混凝土會怎樣？</p>
+<button class="opt">A. 比較好施工，但強度下降</button><button class="opt">B. 強度提高</button><button class="opt">C. 完全不會變硬</button><button class="opt">D. 沒有差別</button>
+<div class="explain">多餘的水蒸發後留下孔隙，強度下降。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>混凝土＝<strong>水泥＋水＋砂＋石</strong>；名字意思是「長在一起」。</li>
+<li>變硬靠<strong>水化作用</strong>（化學反應），所以要<strong>養護</strong>。</li>
+<li><strong>水灰比越高，強度越低</strong>。</li>
+<li>以 <strong>28 天抗壓強度</strong>分級；<strong>抗拉只有抗壓的約 1/10</strong>。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第三篇　土木材料" data-title="鋼材">
+<div class="sheet">
+<h2>鋼材：又強又韌的骨架</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>鐵和鋼的差別</li><li>鋼的優點和兩大弱點</li><li>鋼筋和型鋼</li></ul></div>
+<h3>鐵和鋼差在哪裡？</h3>
+<p>鋼其實就是<strong>含有少量碳的鐵</strong>。碳的多寡改變了性質：</p>
+<div class="tw"><table><tr><th>種類</th><th>含碳量</th><th>特性</th></tr>
+<tr><td>純鐵（熟鐵）</td><td>非常少</td><td>軟，容易彎</td></tr>
+<tr><td><strong>鋼</strong></td><td>約 0.05%～2%（結構鋼多在 0.3% 以下）</td><td><strong>強而且有延性</strong>，最適合結構</td></tr>
+<tr><td>鑄鐵</td><td>約 2%～4%</td><td>硬但脆，能壓不能拉，適合鑄造</td></tr></table></div>
+<div class="box origin"><span class="t">鋼為什麼突然便宜了？</span>以前煉鋼很貴，只能用來做刀劍。1856 年英國人<strong>亨利‧貝塞麥</strong>發明「轉爐煉鋼法」，把空氣吹進熔化的鐵水裡燒掉多餘的碳，鋼的價格大幅下降，才有能力大量用來蓋橋、鋪鐵軌、蓋摩天大樓。</div>
+<h3>鋼的優點</h3>
+<div class="grid">
+<div class="card"><div class="ic">💪</div><h4>強</h4>抗拉、抗壓都很強，結構鋼的降伏強度約 250～450 MPa，是混凝土抗壓強度的十倍以上。</div>
+<div class="card"><div class="ic">🌀</div><h4>延性好</h4>壞掉前會大量變形，地震時很有利（上一篇講過）。</div>
+<div class="card"><div class="ic">🏭</div><h4>工廠製造</h4>品質穩定，運到工地組裝，施工快。</div>
+<div class="card"><div class="ic">♻️</div><h4>可回收</h4>舊鋼材可以熔化再利用。</div>
+</div>
+<h3>鋼的兩大弱點</h3>
+<div class="box warn"><span class="t">① 會生鏽</span>鐵遇到水和氧氣會氧化成鐵鏽，體積膨脹、強度下降。對策：油漆塗裝、<strong>熱浸鍍鋅</strong>（在鋼外面鍍一層鋅，鋅會先犧牲自己被腐蝕）、使用耐候鋼，或把鋼包在混凝土裡。</div>
+<div class="box warn"><span class="t">② 怕火</span>鋼本身不會燒，但溫度升到約 550～600°C 時，強度會掉到常溫的一半左右，結構可能垮下來。所以鋼構大樓的梁柱外面都要噴一層<strong>防火被覆</strong>（看起來像灰色棉花糖的材料），爭取逃生和救火時間。</div>
+<h3>土木工程用的鋼材</h3>
+<div class="fig"><svg viewBox="0 0 620 170" role="img" aria-label="鋼筋、H型鋼、角鋼、槽鋼的斷面">
+<g font-family="sans-serif" font-size="13" fill="#1b2733">
+<rect x="30" y="60" width="120" height="16" rx="8" fill="#5d6b78"/><g stroke="#2c3844" stroke-width="3"><line x1="45" y1="58" x2="52" y2="78"/><line x1="65" y1="58" x2="72" y2="78"/><line x1="85" y1="58" x2="92" y2="78"/><line x1="105" y1="58" x2="112" y2="78"/><line x1="125" y1="58" x2="132" y2="78"/></g>
+<text x="45" y="120">竹節鋼筋</text>
+<path d="M200 40 h90 v12 h-39 v66 h39 v12 h-90 v-12 h39 v-66 h-39z" fill="#5d6b78"/><text x="210" y="160">H 型鋼（斷面）</text>
+<path d="M340 40 h14 v76 h62 v14 h-76z" fill="#5d6b78"/><text x="350" y="160">角鋼</text>
+<path d="M470 40 h70 v12 h-56 v66 h56 v12 h-70z" fill="#5d6b78"/><text x="480" y="160">槽鋼</text></g></svg></div>
+<div class="box eg"><span class="t">鋼筋為什麼有一圈圈的紋路？</span>那些凸起叫做<strong>竹節</strong>或肋紋，就像輪胎的花紋一樣，讓鋼筋和混凝土咬得更緊、不會被拔出來。這種「咬合力」叫<strong>握裹力</strong>，下一課會用到。</div>
+<div class="box key"><span class="t">看懂鋼筋的名字</span>台灣常見的鋼筋標示像 <strong>SD420</strong>：S 是鋼（Steel），D 是竹節（Deformed，異形），<strong>420 表示降伏強度 420 MPa</strong>。所以看到名字就知道它的強度。</div>
+<div class="quiz" data-ans="3"><p class="q">鋼構大樓的鋼梁外面噴一層灰色的材料，主要目的是什麼？</p>
+<button class="opt">A. 讓它更好看</button><button class="opt">B. 增加重量讓大樓更穩</button><button class="opt">C. 隔音</button><button class="opt">D. 防火，避免高溫讓鋼材強度大降</button>
+<div class="explain">鋼在高溫下強度會大幅下降，防火被覆能延緩鋼材升溫。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>鋼＝含少量碳的鐵，<strong>強又有延性</strong>。</li>
+<li>弱點：<strong>生鏽</strong>和<strong>怕火</strong>，要做防鏽與防火被覆。</li>
+<li>鋼筋有<strong>竹節</strong>增加握裹力；SD420 的 420 是降伏強度。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第三篇　土木材料" data-title="鋼筋混凝土">
+<div class="sheet">
+<h2>鋼筋混凝土：史上最成功的搭檔</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>為什麼鋼筋要放在梁的下面</li><li>鋼筋和混凝土能合作的三個原因</li><li>預力混凝土的巧思</li></ul></div>
+<h3>各取所長</h3>
+<p>回顧一下：<strong>混凝土</strong>抗壓強、抗拉弱、便宜、可以做成任何形狀、不怕火；<strong>鋼</strong>抗拉強、有延性，但比較貴、怕火怕鏽。把它們合在一起呢？</p>
+<div class="box key"><span class="t">分工合作</span><strong>混凝土負責受壓，鋼筋負責受拉。</strong>梁是上壓下拉，所以<span class="hl">主要的鋼筋放在梁的下方</span>。</div>
+<div class="fig" id="rc">
+<svg viewBox="0 0 620 250" role="img" aria-label="純混凝土梁與鋼筋混凝土梁受載比較">
+<g font-family="sans-serif" font-size="14">
+<text x="20" y="22" fill="#1b2733" font-weight="700">純混凝土梁</text>
+<g id="rcPlain"><rect x="40" y="40" width="240" height="40" fill="#b8b3a8" stroke="#1b2733"/></g>
+<path id="rcCrack" d="M160 80 L155 70 L163 60 L157 48" stroke="#b3362b" stroke-width="3" fill="none" opacity="0"/>
+<polygon points="40,80 30,98 50,98" fill="#5d6b78"/><polygon points="280,80 270,98 290,98" fill="#5d6b78"/>
+<text id="rcT1" x="40" y="125" fill="#566573">加載前</text>
+<text x="330" y="22" fill="#1b2733" font-weight="700">鋼筋混凝土梁</text>
+<path id="rcRC" d="M350 40 Q470 40 590 40 L590 80 Q470 80 350 80Z" fill="#b8b3a8" stroke="#1b2733"/>
+<path id="rcBar" d="M355 72 Q470 72 585 72" stroke="#1c4a78" stroke-width="4" fill="none"/>
+<polygon points="350,80 340,98 360,98" fill="#5d6b78"/><polygon points="590,80 580,98 600,98" fill="#5d6b78"/>
+<g id="rcCracks2" opacity="0" stroke="#b3362b" stroke-width="1.5"><line x1="440" y1="92" x2="442" y2="82"/><line x1="470" y1="96" x2="470" y2="84"/><line x1="500" y1="92" x2="498" y2="82"/></g>
+<text id="rcT2" x="350" y="125" fill="#566573">藍線是鋼筋，放在下方</text>
+<line id="rcLoad1" x1="160" y1="0" x2="160" y2="36" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)" opacity="0"/>
+<line id="rcLoad2" x1="470" y1="0" x2="470" y2="36" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)" opacity="0"/>
+<rect x="20" y="150" width="580" height="90" fill="#f5f8fb" stroke="#d5dde5"/>
+<text x="36" y="176" fill="#1b2733">梁的斷面：</text>
+<rect x="150" y="160" width="50" height="72" fill="#b8b3a8" stroke="#1b2733"/><circle cx="162" cy="220" r="4" fill="#1c4a78"/><circle cx="175" cy="220" r="4" fill="#1c4a78"/><circle cx="188" cy="220" r="4" fill="#1c4a78"/><circle cx="162" cy="172" r="2.5" fill="#1c4a78"/><circle cx="188" cy="172" r="2.5" fill="#1c4a78"/>
+<rect x="155" y="165" width="40" height="62" fill="none" stroke="#1c4a78" stroke-dasharray="3 2"/>
+<text x="215" y="200" fill="#566573" font-size="13">下方粗的是主筋（抗拉），虛線框是箍筋（抗剪、綁住主筋），</text>
+<text x="215" y="220" fill="#566573" font-size="13">主筋外面留一層混凝土叫「保護層」。</text>
+</g></svg>
+<div class="ctrl"><button class="btn" id="rcBtn">加上重量</button><button class="btn alt" id="rcReset">重來</button></div></div>
+<p>按下「加上重量」你會看到：純混凝土梁下方一受拉就<strong>突然斷成兩截</strong>（脆性破壞）；鋼筋混凝土梁雖然下方也出現細小裂縫，但鋼筋把它拉住了，梁只是彎曲，沒有斷。</p>
+<div class="box warn"><span class="t">混凝土有裂縫就是壞了嗎？</span>不一定！鋼筋混凝土梁的受拉區本來就允許出現<strong>很細的裂縫</strong>，因為拉力本來就是交給鋼筋去扛的。但如果裂縫太寬、出現斜向裂縫、或有鏽水流出來，就要請專業技師檢查。</div>
+<div class="box origin"><span class="t">一個園丁的發明</span>1867 年，法國園丁<strong>約瑟夫‧莫尼耶（Joseph Monier）</strong>覺得陶土花盆太容易破，就試著用混凝土做花盆，裡面再放鐵絲網加強，結果又輕又耐用。他為此申請了專利，後來又擴大應用到水槽、樓板和橋。一個園丁的點子，改變了全世界的建築。</div>
+<h3>為什麼鋼和混凝土合作得這麼好？</h3>
+<div class="grid">
+<div class="card"><h4>① 握裹力</h4>混凝土硬化後把竹節鋼筋緊緊咬住，兩者一起變形，不會互相滑動。</div>
+<div class="card"><h4>② 熱脹冷縮差不多</h4>鋼和混凝土的熱膨脹係數非常接近（每度約百萬分之 10～12），天氣冷熱變化時不會互相撕裂。這真的是大自然的巧合！</div>
+<div class="card"><h4>③ 混凝土保護鋼筋</h4>混凝土是鹼性的，能讓鋼筋表面形成保護膜不易生鏽；外面那層混凝土（保護層）也能隔絕火和水。</div>
+</div>
+<h3>預力混凝土：先「壓」好再用</h3>
+<div class="box eg"><span class="t">拿起一整排書</span>桌上有一排十本書，你只用兩手壓住最左和最右兩本、用力往中間夾，就可以把整排書「懸空」拿起來。因為你先給了它們<strong>壓力</strong>，書和書之間就不會滑落。</div>
+<p><strong>預力混凝土</strong>就是這個道理：先在混凝土裡用高強度鋼腱<strong>拉緊</strong>，讓混凝土預先處在<strong>受壓</strong>狀態。之後載重造成的拉力，要先抵銷掉預壓力，混凝土才會開始受拉，所以不容易裂。這讓梁可以做得更細、跨得更長，高架橋和捷運的梁大多是預力混凝土。</p>
+<div class="box origin"><span class="t">預力</span>「預」是「預先」，「預力」就是預先施加的力。法國工程師<strong>尤金‧弗雷西內（Eugène Freyssinet）</strong>在 1920～30 年代把它發展成實用技術，被稱為預力混凝土之父。</div>
+<div class="box pro"><span class="t">懸臂的鋼筋在上面！</span>陽台這種懸臂構件，受力方式和簡支梁相反：它是<strong>上拉下壓</strong>（想像一根竹竿插在牆上，末端掛重物，竹竿上緣被拉長）。所以<strong>懸臂的主筋要放在上方</strong>。施工時如果把陽台鋼筋放錯位置、或被工人踩下去，陽台就可能斷裂。這是真實發生過的事故原因。</div>
+<div class="quiz" data-ans="1"><p class="q">一般兩端支撐的樓板梁，主要的抗拉鋼筋應該放在哪裡？</p>
+<button class="opt">A. 上方</button><button class="opt">B. 下方</button><button class="opt">C. 正中央</button><button class="opt">D. 放哪裡都一樣</button>
+<div class="explain">簡支梁上壓下拉，拉力在下方，所以抗拉鋼筋放下方。（懸臂則相反，放上方。）</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li><strong>混凝土扛壓、鋼筋扛拉</strong>；梁的主筋放在受拉側。</li>
+<li>合作三原因：<strong>握裹力、熱脹冷縮相近、混凝土保護鋼筋</strong>。</li>
+<li><strong>預力混凝土</strong>：先施加壓力，讓構件不易開裂、跨度更長。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第三篇　土木材料" data-title="木材、磚石、瀝青與新材料">
+<div class="sheet">
+<h2>木材、磚石、瀝青與新材料</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>其他常用材料的特性</li><li>工程師怎麼「選材料」</li></ul></div>
+<h3>木材</h3>
+<p>木材是最古老的建材，輕、好加工、是可再生資源。但它有個特性叫<strong>異向性</strong>：不同方向強度不同。</p>
+<div class="box eg"><span class="t">劈柴</span>劈柴時斧頭順著木紋砍下去，一下就裂開；橫著木紋砍卻很難砍斷。因為木材是由一根根長長的纖維組成，<strong>順著纖維方向（順紋）很強，垂直纖維（橫紋）很弱</strong>。</div>
+<p>現代有一種新木材叫 <strong>CLT（直交集成板）</strong>：把木板一層橫、一層直地交錯膠合，克服了異向性，現在已經可以用來蓋十幾層以上的木造大樓，而且木材在生長時吸收二氧化碳，很環保。</p>
+<h3>磚與石</h3>
+<p>磚石的特性和混凝土類似：<strong>很能受壓，幾乎不能受拉</strong>。所以古代磚石建築都用拱和厚牆。</p>
+<div class="box warn"><span class="t">老舊磚造房子在地震中很危險</span>沒有鋼筋的磚牆，地震時左右搖晃會產生拉力，很容易整片倒下。所以現代規範要求磚牆必須和鋼筋混凝土梁柱結合（叫<strong>加強磚造</strong>），或只當作隔間牆使用。</div>
+<h3>瀝青</h3>
+<p>道路上黑色的路面就是<strong>瀝青混凝土</strong>：用瀝青當「膠水」取代水泥，把砂石黏起來。瀝青是原油提煉後剩下的黏稠物質，特性是<strong>熱的時候軟、冷的時候硬</strong>。</p>
+<div class="box eg"><span class="t">夏天的柏油路</span>炎熱的夏天，柏油路面被大卡車壓出一條條凹槽（叫<strong>車轍</strong>），就是因為瀝青受熱變軟了。所以高溫地區要用比較耐熱的改質瀝青。</div>
+<div class="box origin"><span class="t">瀝青（Asphalt）</span>英文 asphalt 來自希臘文 <em>ásphaltos</em>，一般認為由 a-（不）＋ sphallein（使倒下）組成，意思是「穩固、不會倒」，因為古人用天然瀝青來黏合、防水，讓東西牢固。古巴比倫人就已經用天然瀝青砌磚和防水了。台灣口語把瀝青路面叫「柏油路」，專業上的名稱是「瀝青混凝土路面」。</div>
+<h3>新材料</h3>
+<div class="grid">
+<div class="card"><h4>纖維強化複合材料（FRP）</h4>用碳纖維或玻璃纖維做成的布或板，又輕又強不生鏽。常用來<strong>補強老舊的柱和梁</strong>，就像幫柱子貼上超強的「繃帶」。</div>
+<div class="card"><h4>高性能混凝土</h4>強度可達一般混凝土的數倍，用在超高層大樓的下層柱。</div>
+<div class="card"><h4>自癒混凝土</h4>在混凝土裡放入特殊細菌或膠囊，裂縫出現時自動產生物質把它填起來。</div>
+</div>
+<h3>工程師怎麼選材料？</h3>
+<div class="tw"><table><tr><th>材料</th><th>抗壓</th><th>抗拉</th><th>價格</th><th>耐火</th><th>常見用途</th></tr>
+<tr><td>混凝土</td><td>強</td><td>弱</td><td>便宜</td><td>好</td><td>基礎、牆、樓板</td></tr>
+<tr><td>鋼</td><td>強</td><td>強</td><td>較貴</td><td>差（需被覆）</td><td>高樓、大跨度、橋</td></tr>
+<tr><td>鋼筋混凝土</td><td>強</td><td>強（靠鋼筋）</td><td>中等</td><td>好</td><td>大部分建築與橋</td></tr>
+<tr><td>木材</td><td>中</td><td>中</td><td>中</td><td>會燃燒</td><td>住宅、屋頂</td></tr>
+<tr><td>磚石</td><td>中</td><td>極弱</td><td>便宜</td><td>好</td><td>隔間牆、古建築</td></tr></table></div>
+<div class="box key"><span class="t">選材的思考</span>沒有「最好」的材料，只有「最適合」的材料。工程師會考慮：受力方式、預算、施工速度、當地能買到什麼、耐久性、環保，甚至美觀。</div>
+<div class="quiz" data-ans="0"><p class="q">要補強一根老舊但沒有要拆除的混凝土柱，下列哪個材料最常被使用？</p>
+<button class="opt">A. 碳纖維布（FRP）</button><button class="opt">B. 磚塊</button><button class="opt">C. 瀝青</button><button class="opt">D. 木板</button>
+<div class="explain">FRP 輕、強、不生鏽、施工快，很適合包覆補強既有的柱子。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>木材<strong>順紋強、橫紋弱</strong>；CLT 讓木造高樓成為可能。</li>
+<li>磚石只能受壓，無筋磚牆耐震差。</li>
+<li>瀝青<strong>熱軟冷硬</strong>，用於道路。</li>
+<li>選材看受力、成本、施工、耐久、環境。</li></ul></div>
+</div></section>
+<!-- ================= 第四篇 結構 ================= -->
+<section class="lesson" data-part="第四篇　結構工程" data-title="梁：剪力與彎矩">
+<div class="sheet">
+<h2>梁：剪力圖與彎矩圖</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>梁的每個位置受力都不一樣</li><li>剪力圖、彎矩圖怎麼看</li><li>簡支梁和懸臂梁的差別</li></ul></div>
+<div class="box origin"><span class="t">梁</span>東漢《說文解字》說：「梁，水橋也。」「梁」最早的意思其實是<strong>架在水上的橋</strong>（所以橋梁的「梁」是這個字），後來才延伸為屋頂下橫放的大木頭。英文 beam 來自古英文 <em>bēam</em>，原意是「樹」，因為最早的梁就是一整根樹幹。</div>
+<p>梁是橫著放、承受垂直重量的構件。在第二篇我們算過反力；現在要更進一步：<strong>梁的每一個位置，內部承受的剪力和彎矩都不一樣</strong>，工程師要找出「最危險的地方」。</p>
+<h3>互動：移動重物，看梁的受力變化</h3>
+<div class="fig" id="bm">
+<svg viewBox="0 0 620 370" role="img" aria-label="簡支梁受集中載重的剪力圖與彎矩圖">
+<g font-family="sans-serif" font-size="13">
+<text x="10" y="18" fill="#1b2733" font-weight="700">① 梁與載重（10 m 長，100 kN）</text>
+<path id="bmDef" d="" fill="none" stroke="#b3362b" stroke-dasharray="5 4" stroke-width="2"/>
+<rect x="60" y="76" width="500" height="10" fill="#0f2d4d"/>
+<polygon points="60,86 48,106 72,106" fill="#5d6b78"/><polygon points="560,86 548,104 572,104" fill="#5d6b78"/><circle cx="552" cy="108" r="4" fill="#5d6b78"/><circle cx="568" cy="108" r="4" fill="#5d6b78"/>
+<g id="bmLoad"><line x1="0" y1="28" x2="0" y2="72" stroke="#b3362b" stroke-width="3.5" marker-end="url(#ar)"/><text x="6" y="40" fill="#b3362b">100 kN</text></g>
+<text id="bmRA" x="30" y="130" fill="#1c4a78"></text><text id="bmRB" x="500" y="130" fill="#1c4a78"></text>
+<text x="10" y="160" fill="#1b2733" font-weight="700">② 剪力圖（V）</text>
+<line x1="60" y1="210" x2="560" y2="210" stroke="#566573"/>
+<path id="bmV" d="" fill="#dfe8f1" stroke="#1c4a78" stroke-width="2"/>
+<text x="10" y="255" fill="#1b2733" font-weight="700">③ 彎矩圖（M，畫在受拉的下方）</text>
+<line x1="60" y1="270" x2="560" y2="270" stroke="#566573"/>
+<path id="bmM" d="" fill="#fff0c2" stroke="#9a6a00" stroke-width="2"/>
+<text id="bmMt" x="0" y="0" fill="#9a6a00" font-weight="700"></text>
+</g></svg>
+<div class="ctrl"><label>重物距離左端 <input type="range" id="bmA" min="0.5" max="9.5" step="0.1" value="5"> <span id="bmAv"></span> m</label></div>
+<div class="readout" id="bmOut"></div>
+<div class="cap">紅色虛線是梁彎曲的樣子（為了看清楚，變形放大了很多倍）。</div></div>
+<h4>怎麼看剪力圖？</h4>
+<p>剪力 V 是「某個位置左右兩邊互相錯開的力」。從左端開始，往上的反力 R_A 讓剪力變成正的；一直到重物的位置，被往下的 100 kN 一口氣拉下來，變成負的；最後遇到右端反力 R_B，回到零。<strong>集中力的地方，剪力圖會「跳」一下。</strong></p>
+<h4>怎麼看彎矩圖？</h4>
+<p>彎矩 M 是「某個位置被彎曲的程度」，也就是那個位置以左所有力產生的力矩總和。對一個集中載重，彎矩圖是一個<strong>三角形，最高點就在重物下方</strong>：</p>
+<div class="formula">M_max ＝ P × a × b ÷ L<small>P＝載重，a、b＝重物到左右兩端的距離，L＝梁長。放在正中央時 M_max＝PL/4</small></div>
+<p>把重物移到正中央，彎矩最大：100×5×5÷10＝<strong>250 kN·m</strong>。這就是為什麼同樣一個重物，放在梁中間比放在靠近柱子的地方危險得多。</p>
+<div class="box key"><span class="t">剪力和彎矩的關係</span>仔細看：<strong>剪力圖從正變負（等於零）的那一點，就是彎矩最大的地方。</strong>這個規律在所有梁都成立，工程師用它快速找出最危險的位置。</div>
+<div class="box eg"><span class="t">均勻分布的重量</span>如果重量不是集中一點，而是平均鋪在整根梁上（像樓板的重量、一整排書），彎矩圖會變成一條<strong>拋物線</strong>，最大值在中央：M_max＝wL²/8（w 是每公尺的重量）。注意 L 是平方：<strong>梁長加倍，彎矩變四倍</strong>！所以跨度很大的梁要做得特別深。</div>
+<h3>懸臂梁：危險點在根部</h3>
+<div class="fig"><svg viewBox="0 0 600 200" role="img" aria-label="懸臂梁受力與彎矩圖">
+<g font-family="sans-serif" font-size="13">
+<rect x="40" y="30" width="20" height="90" fill="#c9c5bc" stroke="#1b2733"/>
+<path d="M60 55 Q250 58 440 78 L440 88 Q250 68 60 65Z" fill="#0f2d4d"/>
+<line x1="440" y1="10" x2="440" y2="72" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/><text x="448" y="25" fill="#b3362b">P</text>
+<text x="70" y="48" fill="#b3362b">上緣受拉</text><text x="70" y="85" fill="#1c4a78">下緣受壓</text>
+<line x1="60" y1="140" x2="440" y2="140" stroke="#566573"/><path d="M60 140 L60 190 L440 140Z" fill="#fff0c2" stroke="#9a6a00" stroke-width="2"/>
+<text x="68" y="185" fill="#9a6a00">M_max＝P×L（在牆邊）</text></g></svg></div>
+<p>懸臂梁（像陽台、跳水板）的最大彎矩在<strong>固定端（牆邊）</strong>，大小是 P×L。而且它是<strong>上拉下壓</strong>，和簡支梁相反。這就是上一課說「陽台鋼筋要放上面」的原因。</p>
+<div class="try"><span class="t">用尺感受</span>把一把塑膠尺的一端壓在桌邊，另一端懸空，用手指按末端。你會感覺到靠近桌邊的地方「最吃力」，如果尺要斷，也會斷在桌邊。</div>
+<div class="quiz" data-ans="2"><p class="q">一根 6 m 的簡支梁，在正中央放 40 kN，最大彎矩是多少？</p>
+<button class="opt">A. 40 kN·m</button><button class="opt">B. 240 kN·m</button><button class="opt">C. 60 kN·m</button><button class="opt">D. 20 kN·m</button>
+<div class="explain">M＝PL/4＝40×6÷4＝60 kN·m。</div></div>
+<div class="quiz" data-ans="0"><p class="q">均布載重的簡支梁，跨度從 4 m 變成 8 m（每公尺重量不變），最大彎矩變成幾倍？</p>
+<button class="opt">A. 4 倍</button><button class="opt">B. 2 倍</button><button class="opt">C. 8 倍</button><button class="opt">D. 不變</button>
+<div class="explain">M＝wL²/8，L 加倍 → L² 變 4 倍。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>梁各處的<strong>剪力 V、彎矩 M</strong>不同，要畫圖找最大值。</li>
+<li>集中載重：M_max＝Pab/L，中央為 <strong>PL/4</strong>；均布載重：<strong>wL²/8</strong>。</li>
+<li><strong>剪力為零處＝彎矩最大處</strong>。</li>
+<li>懸臂梁最危險在<strong>固定端</strong>，且上拉下壓。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第四篇　結構工程" data-title="截面的祕密：為什麼是 I 字形">
+<div class="sheet">
+<h2>截面的祕密：為什麼鋼梁是 I 字形？</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>同樣的材料，「形狀」決定了多難彎</li><li>慣性矩：梁的高度影響是三次方</li><li>I 型鋼、骨頭、竹子的共同智慧</li></ul></div>
+<div class="try"><span class="t">一把尺的兩種放法</span>拿一把塑膠直尺，兩端架在兩本書上：<br>① <strong>平放</strong>：用手指輕輕一壓，中間就彎下去。<br>② <strong>立起來（側放）</strong>：怎麼壓都很難彎。<br>同一把尺，材料一樣、重量一樣，為什麼差這麼多？</div>
+<h3>關鍵：材料離中性軸越遠越有用</h3>
+<p>還記得梁彎曲時「上壓下拉、中間不受力」嗎？越靠近上下邊緣的材料，被擠壓或拉長得越厲害，<strong>抵抗彎曲的貢獻也越大</strong>；靠近中性軸的材料幾乎沒在出力。</p>
+<p>描述這個「抵抗彎曲能力」的數字叫做<strong>慣性矩 I</strong>。對長方形斷面：</p>
+<div class="formula">I ＝ b × h³ ÷ 12<small>b＝寬度，h＝高度（彎曲方向的厚度）</small></div>
+<p>注意 h 是<strong>三次方</strong>！尺寬 3 cm、厚 0.3 cm：平放時 h＝0.3，立起來時 h＝3，高度變 10 倍，I 就變成 10³÷10＝<strong>100 倍</strong>（寬度同時變成原來的 1/10）。所以立起來的尺硬了一百倍。</p>
+<div class="box origin"><span class="t">慣性矩</span>這個名稱借自物理學的「轉動慣量」，因為兩者的數學形式很像（都是「面積或質量 × 距離的平方」再加總）。「慣性」表示抵抗改變的能力，所以慣性矩越大，梁越不容易被彎曲。</div>
+<div class="fig" id="sec">
+<svg viewBox="0 0 620 200" role="img" aria-label="斷面高度與梁撓度的關係">
+<g font-family="sans-serif" font-size="13">
+<text x="20" y="20" fill="#1b2733">斷面</text>
+<rect id="secR" x="60" y="60" width="60" height="20" fill="#b8b3a8" stroke="#1b2733"/>
+<text x="220" y="20" fill="#1b2733">受相同重量時的彎曲程度</text>
+<line x1="220" y1="60" x2="600" y2="60" stroke="#d5dde5" stroke-dasharray="4 3"/>
+<path id="secB" d="" stroke="#0f2d4d" stroke-width="6" fill="none"/>
+<polygon points="220,66 210,84 230,84" fill="#5d6b78"/><polygon points="600,66 590,84 610,84" fill="#5d6b78"/>
+</g></svg>
+<div class="ctrl"><label>斷面高度 h（固定寬度） <input type="range" id="secH" min="1" max="4" step="0.1" value="1"> <span id="secHv"></span> 倍</label></div>
+<div class="readout" id="secOut"></div></div>
+<h3>I 型鋼：把材料放在最有用的地方</h3>
+<div class="fig"><svg viewBox="0 0 620 190" role="img" aria-label="I型鋼斷面的翼板與腹板">
+<g font-family="sans-serif" font-size="13">
+<path d="M200 20 h120 v18 h-51 v114 h51 v18 h-120 v-18 h51 v-114 h-51z" fill="#5d6b78"/>
+<line x1="170" y1="95" x2="350" y2="95" stroke="#b3362b" stroke-dasharray="5 4"/><text x="360" y="99" fill="#b3362b">中性軸（幾乎不受力）</text>
+<text x="330" y="33" fill="#1b2733">上翼板：承受壓力</text><text x="330" y="165" fill="#1b2733">下翼板：承受拉力</text>
+<text x="20" y="99" fill="#1b2733">腹板：連接上下，抵抗剪力</text>
+</g></svg></div>
+<p>既然中間的材料沒什麼用，那就把它<strong>挖掉</strong>，只留一片薄薄的板子連接上下，把大部分材料集中在最上面和最下面。這就是 I 型鋼（或 H 型鋼）：</p>
+<ul><li><strong>翼板</strong>（上下兩片）：像鳥的翅膀往兩邊展開，負責抵抗彎曲。</li><li><strong>腹板</strong>（中間那片）：像人的肚子在中間，負責連接上下、抵抗剪力。</li></ul>
+<div class="box eg"><span class="t">大自然早就知道了</span>人類的大腿骨是<strong>中空的管子</strong>、竹子是中空的、鳥的骨頭也是中空的。它們都把材料放在外圈，<strong>用最少的材料得到最大的抗彎能力</strong>，又能減輕重量。瓦楞紙箱的波浪紙板、把一張紙摺成扇子形狀就能立起來，都是同樣的原理。</div>
+<div class="box warn"><span class="t">梁要「站著」放</span>所以建築物的梁幾乎都是「高大於寬」的長方形（例如寬 40 cm、高 70 cm），而不是扁平的。如果把梁「躺著」放，會浪費很多材料。</div>
+<div class="quiz" data-ans="3"><p class="q">一根長方形木梁，寬度不變、高度變成 2 倍，抵抗彎曲的能力（慣性矩）變成幾倍？</p>
+<button class="opt">A. 2 倍</button><button class="opt">B. 4 倍</button><button class="opt">C. 不變</button><button class="opt">D. 8 倍</button>
+<div class="explain">I＝bh³/12，h 變 2 倍 → 2³＝8 倍。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>抗彎能力看<strong>慣性矩 I＝bh³/12</strong>，高度影響是<strong>三次方</strong>。</li>
+<li>材料離中性軸越遠越有效 → <strong>I 型鋼、中空管</strong>。</li>
+<li>翼板抗彎、腹板抗剪；梁要<strong>高大於寬</strong>。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第四篇　結構工程" data-title="柱與挫屈">
+<div class="sheet">
+<h2>柱與挫屈：細長的柱子會「突然彎掉」</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>柱子的兩種破壞方式</li><li>歐拉挫屈公式的意思</li><li>柱子兩端怎麼固定影響很大</li></ul></div>
+<p>柱子是直立的構件，把上面梁和樓板的重量<strong>往下傳到基礎</strong>，主要承受<strong>壓力</strong>。你可能以為：柱子只要材料夠強、不被壓碎就好。其實還有一個更狡猾的敵人。</p>
+<div class="try"><span class="t">義大利麵實驗</span>拿一根沒煮過的義大利麵（或吸管），直立在桌上，從上面往下壓：<br>・<strong>很短的一小段</strong>：壓到最後是被「壓碎」。<br>・<strong>一整根長的</strong>：輕輕一壓，它就往旁邊<strong>彎成弓形</strong>然後折斷。<br>長的那根並不是材料不夠強，而是它「站不穩」了。</div>
+<div class="box origin"><span class="t">挫屈（Buckling）</span>英文 buckle 的意思是「（受壓而）彎曲、變形、扣起來」。中文的「挫」是受到挫折而彎折，「屈」是彎曲。長柱受壓時突然側向彎曲失去承載力的現象就叫<strong>挫屈</strong>，也有人翻成「屈曲」。</div>
+<h3>歐拉公式：柱子越長越危險</h3>
+<p>1757 年，瑞士數學家<strong>萊昂哈德‧歐拉（Leonhard Euler）</strong>算出了細長柱子開始挫屈的載重：</p>
+<div class="formula">P_cr ＝ π² × E × I ÷ (K × L)²<small>E＝彈性模數，I＝慣性矩，L＝柱長，K＝端部條件係數</small></div>
+<p>不用被公式嚇到，重點看三件事：</p>
+<ul>
+<li><strong>L 在分母而且平方</strong>：柱子長度變 2 倍，能承受的挫屈載重只剩 <strong>1/4</strong>！</li>
+<li><strong>I 在分子</strong>：斷面越「胖」（慣性矩越大），越不容易挫屈。這就是鋼柱常用中空方管或 H 型的原因。</li>
+<li><strong>K 看兩端怎麼固定</strong>：兩端牢牢固定的柱子，比兩端可以轉動的柱子穩得多。</li>
+</ul>
+<div class="fig" id="bk">
+<svg viewBox="0 0 620 320" role="img" aria-label="柱子挫屈形狀與承載力">
+<g font-family="sans-serif" font-size="13">
+<rect x="0" y="290" width="300" height="10" fill="#9b6b43"/>
+<line id="bkStraight" x1="150" y1="290" x2="150" y2="60" stroke="#d5dde5" stroke-width="10"/>
+<path id="bkPath" d="" stroke="#0f2d4d" stroke-width="10" fill="none" stroke-linecap="round"/>
+<line id="bkArrow" x1="150" y1="10" x2="150" y2="50" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/>
+<text x="340" y="50" fill="#1b2733" font-weight="700">挫屈載重（相對值）</text>
+<rect x="340" y="62" width="250" height="26" fill="#e8f0f8" stroke="#1c4a78"/><rect id="bkBar" x="340" y="62" width="100" height="26" fill="#1c4a78"/>
+<text id="bkTxt" x="340" y="115" fill="#1b2733"></text>
+<text x="340" y="150" fill="#566573">基準：2 m 長、兩端鉸接＝1.00</text>
+</g></svg>
+<div class="ctrl"><label>柱長 <input type="range" id="bkL" min="1" max="4" step="0.1" value="2"> <span id="bkLv"></span> m</label>
+<label>兩端條件 <select id="bkK"><option value="1">兩端鉸接（K＝1.0）</option><option value="0.7">一端固定一端鉸接（K＝0.7）</option><option value="0.5">兩端固定（K＝0.5）</option><option value="2">一端固定一端自由（K＝2.0）</option></select></label></div>
+<div class="cap">灰色是原本的柱子，深藍色是挫屈時彎曲的樣子（放大表示）。</div></div>
+<div class="box eg"><span class="t">為什麼鷹架要加斜撐和橫桿？</span>工地的鷹架（施工架）用很細的鋼管，如果沒有橫桿和斜撐，每根鋼管就是一根很長的細柱，很容易挫屈。加上橫桿等於把長柱「切成好幾段短柱」，L 變小，承載力就大增。這也是很多鷹架倒塌事故的原因：有人為了方便把橫桿拆掉了。</div>
+<div class="box pro"><span class="t">強柱弱梁</span>在耐震設計中，工程師刻意讓<strong>柱子比梁強</strong>。地震太大時，讓梁先彎曲降伏（吸收能量），柱子保持完好。因為梁壞了只是局部樓板下陷，柱子壞了卻會讓整層樓垮下來。這個觀念叫「強柱弱梁」，是現代耐震設計的核心原則。</div>
+<div class="quiz" data-ans="1"><p class="q">一根細長柱，長度從 3 m 增加到 6 m（其他不變），挫屈載重約變成原來的多少？</p>
+<button class="opt">A. 1/2</button><button class="opt">B. 1/4</button><button class="opt">C. 2 倍</button><button class="opt">D. 不變</button>
+<div class="explain">P_cr 與 L² 成反比，L 變 2 倍 → 變成 1/4。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>短柱會<strong>壓碎</strong>，長柱會<strong>挫屈</strong>（側向彎曲）。</li>
+<li>歐拉公式：P_cr ∝ EI/(KL)²，<strong>長度加倍承載剩 1/4</strong>。</li>
+<li>加橫撐、固定端部、用中空斷面都能防挫屈。</li>
+<li>耐震原則：<strong>強柱弱梁</strong>。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第四篇　結構工程" data-title="桁架：三角形的力量">
+<div class="sheet">
+<h2>桁架：三角形是最穩定的形狀</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>為什麼三角形不會變形</li><li>桁架的桿件只受拉或受壓</li><li>生活中哪裡有桁架</li></ul></div>
+<h3>四邊形 vs 三角形</h3>
+<div class="fig"><svg viewBox="0 0 600 190" role="img" aria-label="四邊形框架受力會變形，三角形不會">
+<style>@keyframes sq{0%,20%{transform:skewX(0)}50%,70%{transform:skewX(-25deg)}100%{transform:skewX(0)}}#sqF{animation:sq 3.5s ease-in-out infinite;transform-box:fill-box;transform-origin:bottom}</style>
+<g font-family="sans-serif" font-size="14">
+<g id="sqF"><rect x="80" y="40" width="120" height="110" fill="none" stroke="#0f2d4d" stroke-width="7"/><g fill="#f2b705"><circle cx="80" cy="40" r="6"/><circle cx="200" cy="40" r="6"/><circle cx="80" cy="150" r="6"/><circle cx="200" cy="150" r="6"/></g></g>
+<line x1="20" y1="45" x2="70" y2="45" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/>
+<text x="70" y="180" fill="#b3362b">四邊形：一推就歪</text>
+<polygon points="400,150 460,40 520,150" fill="none" stroke="#0f2d4d" stroke-width="7" stroke-linejoin="round"/><g fill="#f2b705"><circle cx="400" cy="150" r="6"/><circle cx="460" cy="40" r="6"/><circle cx="520" cy="150" r="6"/></g>
+<line x1="390" y1="45" x2="450" y2="45" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/>
+<text x="395" y="180" fill="#2e7d4f">三角形：推不動</text></g></svg><div class="cap">黃點是可以轉動的接頭。</div></div>
+<p>用四根筷子和橡皮筋（接頭可以轉）做一個正方形，輕輕一推就變成菱形；但用三根做成三角形，怎麼推都不會變形。因為<strong>三條邊的長度一旦決定，三角形的形狀就只有一種</strong>（這就是數學課的 SSS 全等性質）。</p>
+<p>把許多三角形組合起來，就成了<strong>桁架</strong>。</p>
+<div class="box origin"><span class="t">桁架（Truss）</span>「桁」是屋頂上橫架的木條（例如「桁條」），「架」是架子，桁架就是由許多桿件搭成的架子。英文 truss 來自古法文 <em>trousse</em>，意思是「捆起來的一束東西」，也就是把桿件綁成一組的意思。</div>
+<h3>桁架的厲害之處：只有拉和壓</h3>
+<p>在理想的桁架裡，重量只加在接頭（節點）上，每根桿件就<strong>只會受到拉力或壓力</strong>，不會被彎曲。而材料受拉受壓的效率，遠高於受彎（回想 I 型鋼那課：受彎時中間的材料都在偷懶）。所以桁架能用<strong>很少的材料跨越很長的距離</strong>。</p>
+<div class="fig"><svg viewBox="0 0 620 210" role="img" aria-label="桁架橋受力，紅色受拉，藍色受壓">
+<g font-family="sans-serif" font-size="13">
+<g stroke-width="6" stroke-linecap="round">
+<line x1="130" y1="50" x2="490" y2="50" stroke="#1c4a78"/>
+<line x1="70" y1="150" x2="550" y2="150" stroke="#b3362b"/>
+<line x1="70" y1="150" x2="130" y2="50" stroke="#1c4a78"/><line x1="550" y1="150" x2="490" y2="50" stroke="#1c4a78"/>
+<line x1="130" y1="50" x2="190" y2="150" stroke="#b3362b"/><line x1="190" y1="150" x2="250" y2="50" stroke="#1c4a78"/><line x1="250" y1="50" x2="310" y2="150" stroke="#b3362b"/>
+<line x1="490" y1="50" x2="430" y2="150" stroke="#b3362b"/><line x1="430" y1="150" x2="370" y2="50" stroke="#1c4a78"/><line x1="370" y1="50" x2="310" y2="150" stroke="#b3362b"/>
+</g>
+<g fill="#f2b705" stroke="#0f2d4d"><circle cx="70" cy="150" r="6"/><circle cx="190" cy="150" r="6"/><circle cx="310" cy="150" r="6"/><circle cx="430" cy="150" r="6"/><circle cx="550" cy="150" r="6"/><circle cx="130" cy="50" r="6"/><circle cx="250" cy="50" r="6"/><circle cx="370" cy="50" r="6"/><circle cx="490" cy="50" r="6"/></g>
+<polygon points="70,158 58,176 82,176" fill="#5d6b78"/><polygon points="550,158 538,176 562,176" fill="#5d6b78"/>
+<g><rect x="0" y="130" width="36" height="16" rx="3" fill="#f2b705"/><animateTransform attributeName="transform" type="translate" from="60 0" to="520 0" dur="6s" repeatCount="indefinite"/></g>
+<text x="130" y="200" fill="#1c4a78">■ 藍：受壓（上弦、部分斜桿）</text><text x="360" y="200" fill="#b3362b">■ 紅：受拉（下弦、部分斜桿）</text></g></svg>
+<div class="cap">一座簡單的桁架橋。整體就像一根大梁：上面受壓、下面受拉。</div></div>
+<div class="box key"><span class="t">和梁的觀念連起來</span>把整座桁架看成一根「很高、中間挖空」的大梁：上弦桿（上緣）受壓、下弦桿（下緣）受拉，斜桿負責傳遞剪力。這和 I 型鋼的翼板、腹板完全對應！</div>
+<div class="box eg"><span class="t">桁架在哪裡？</span>高壓電塔、艾菲爾鐵塔、體育館和工廠的大屋頂、工地的塔式起重機、舊式鐵橋、腳踏車車架（兩個三角形！）。</div>
+<div class="box pro"><span class="t">節點法</span>工程師計算桁架的方法之一叫「<strong>節點法</strong>」：每個節點都必須平衡（上下合力為零、左右合力為零），從只有兩根未知桿件的節點開始，一個一個解出每根桿件的力。用的就是第二篇學的平衡條件。</div>
+<div class="quiz" data-ans="2"><p class="q">理想桁架的桿件主要承受哪種力？</p>
+<button class="opt">A. 彎曲</button><button class="opt">B. 扭轉</button><button class="opt">C. 只有拉力或壓力</button><button class="opt">D. 只有剪力</button>
+<div class="explain">載重作用在節點上時，桁架桿件只受軸向的拉或壓，材料效率很高。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li><strong>三角形是穩定的</strong>，四邊形需要斜撐。</li>
+<li>桁架桿件<strong>只受拉或壓</strong>，省材料、跨度大。</li>
+<li>整體行為像梁：<strong>上弦受壓、下弦受拉</strong>。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第四篇　結構工程" data-title="拱、懸索與斜張">
+<div class="sheet">
+<h2>拱、懸索與斜張：讓力「流」得漂亮</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>拱只受壓，懸索只受拉</li><li>懸鏈線：倒過來的鐵鍊就是最好的拱</li><li>各種橋型的跨度</li></ul></div>
+<h3>拱：把重量轉成壓力</h3>
+<p>石頭不能受拉，那古人怎麼用石頭跨過一條河？答案是<strong>拱</strong>。拱把往下的重量，<strong>沿著弧形轉成壓力</strong>，一路傳到兩端的地面。每一塊石頭都被旁邊的石頭「擠住」，所以不需要膠水也不會掉。</p>
+<div class="fig"><svg viewBox="0 0 620 230" role="img" aria-label="拱的力流與推力">
+<g font-family="sans-serif" font-size="13">
+<rect x="0" y="190" width="620" height="40" fill="#9b6b43"/>
+<path d="M110 190 A200 160 0 0 1 510 190 L470 190 A160 125 0 0 0 150 190Z" fill="#c9c5bc" stroke="#1b2733"/>
+<path d="M290 40 L330 40 L324 72 L296 72Z" fill="#f2b705" stroke="#1b2733"/><text x="340" y="55" fill="#9a6a00">拱心石</text>
+<path class="flow" d="M310 50 A180 142 0 0 0 130 190" fill="none" stroke="#1c4a78" stroke-width="3"/>
+<path class="flow" d="M310 50 A180 142 0 0 1 490 190" fill="none" stroke="#1c4a78" stroke-width="3"/>
+<line x1="310" y1="0" x2="310" y2="36" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/>
+<line x1="80" y1="175" x2="30" y2="175" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/><line x1="540" y1="175" x2="590" y2="175" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/>
+<text x="10" y="165" fill="#b3362b">往外推</text><text x="545" y="165" fill="#b3362b">往外推</text>
+<text x="200" y="215" fill="#fff">藍色虛線：壓力沿拱流向地面</text></g></svg></div>
+<div class="box origin"><span class="t">拱心石（Keystone）</span>拱最頂端的那塊石頭，通常最後才放進去，放進去之後整個拱才「鎖住」能自己站立。英文 keystone 也引申為「關鍵、核心」的意思。</div>
+<div class="box key"><span class="t">拱的代價：推力</span>拱在兩端不只往下壓，還會<strong>往外推</strong>。所以拱的兩端一定要有很穩固的岩盤或厚重的橋台頂住。歐洲哥德式大教堂外面那些像手臂一樣的「飛扶壁」，就是用來頂住拱頂的推力。</div>
+<h3>懸索：只受拉</h3>
+<p>把一條鐵鍊兩端提著，讓它自然下垂，會形成一條優美的曲線。鐵鍊不能受壓也不能彎，它<strong>只能受拉</strong>，所以自然形成的形狀，就是「純受拉」的形狀。</p>
+<div class="box origin"><span class="t">懸鏈線（Catenary）</span>catena 是拉丁文的「鎖鍊」。1675 年，<strong>虎克</strong>（就是虎克定律那位）用字謎寫下一句話：「<strong>柔軟的繩子怎麼垂下，倒過來就是剛硬的拱該有的樣子</strong>。」意思是把懸鏈線上下翻轉，拉力就全變成壓力，得到一個<strong>只受壓的完美拱</strong>。西班牙建築師高第設計聖家堂時，就用倒吊繩子掛沙袋的模型來找拱的形狀。</div>
+<div class="try"><span class="t">找出最好的拱</span>拿一條項鍊或細鍊子，兩手提著讓它下垂，拍一張照片，把照片上下翻轉──你就得到了一個結構上最理想的拱形。</div>
+<h3>懸索橋與斜張橋</h3>
+<div class="fig"><svg viewBox="0 0 620 300" role="img" aria-label="懸索橋與斜張橋的受力">
+<g font-family="sans-serif" font-size="13">
+<text x="10" y="20" font-weight="700" fill="#1b2733">懸索橋</text>
+<rect x="0" y="120" width="620" height="18" fill="#5aa2e0" opacity=".5"/>
+<rect x="150" y="30" width="10" height="110" fill="#1c4a78"/><rect x="460" y="30" width="10" height="110" fill="#1c4a78"/>
+<path class="flow" d="M20 110 Q90 90 155 32 Q310 150 465 32 Q530 90 600 110" fill="none" stroke="#b3362b" stroke-width="3"/>
+<g stroke="#b3362b" stroke-width="1"><line x1="200" y1="62" x2="200" y2="100"/><line x1="250" y1="84" x2="250" y2="100"/><line x1="310" y1="91" x2="310" y2="100"/><line x1="370" y1="84" x2="370" y2="100"/><line x1="420" y1="62" x2="420" y2="100"/></g>
+<rect x="20" y="100" width="580" height="6" fill="#0f2d4d"/>
+<rect x="5" y="104" width="22" height="22" fill="#5d6b78"/><rect x="593" y="104" width="22" height="22" fill="#5d6b78"/>
+<text x="0" y="148" fill="#566573">錨碇</text><text x="560" y="148" fill="#566573">錨碇</text>
+<text x="200" y="148" fill="#b3362b">紅＝主纜受拉　藍＝橋塔受壓</text>
+<text x="10" y="180" font-weight="700" fill="#1b2733">斜張橋</text>
+<rect x="0" y="270" width="620" height="18" fill="#5aa2e0" opacity=".5"/>
+<rect x="305" y="180" width="10" height="110" fill="#1c4a78"/>
+<g class="flow" stroke="#b3362b" stroke-width="1.8"><line x1="310" y1="185" x2="80" y2="250"/><line x1="310" y1="195" x2="140" y2="250"/><line x1="310" y1="205" x2="200" y2="250"/><line x1="310" y1="215" x2="255" y2="250"/><line x1="310" y1="185" x2="540" y2="250"/><line x1="310" y1="195" x2="480" y2="250"/><line x1="310" y1="205" x2="420" y2="250"/><line x1="310" y1="215" x2="365" y2="250"/></g>
+<rect x="40" y="250" width="540" height="6" fill="#0f2d4d"/>
+<text x="360" y="192" fill="#566573">鋼纜直接從塔拉住橋面</text></g></svg></div>
+<p><strong>懸索橋</strong>：兩條巨大的主纜掛在橋塔上，兩端牢牢綁在叫做<strong>錨碇</strong>的巨大混凝土塊裡，橋面用吊索掛在主纜下面。<br><strong>斜張橋</strong>：沒有主纜，一根根斜拉的鋼纜直接從橋塔拉住橋面，像一把張開的扇子或豎琴。</p>
+<div class="tw"><table><tr><th>橋型</th><th>主要受力</th><th>適用跨度（大約）</th><th>世界紀錄級例子</th></tr>
+<tr><td>梁橋</td><td>彎曲</td><td>數十～約 300 m</td><td>一般高架橋</td></tr>
+<tr><td>拱橋</td><td>壓力</td><td>可達 500 m 以上</td><td>中國的大跨度鋼拱橋</td></tr>
+<tr><td>斜張橋</td><td>纜受拉、塔受壓</td><td>200～1100 m</td><td>俄羅斯島大橋（主跨約 1104 m）</td></tr>
+<tr><td>懸索橋</td><td>主纜受拉、塔受壓</td><td>可超過 2000 m</td><td>土耳其恰納卡萊 1915 大橋（主跨 2023 m）</td></tr></table></div>
+<div class="box key"><span class="t">結構設計的美學</span>好的結構，形狀會順著力的方向走。拱順著壓力、懸索順著拉力、桁架用三角形把力拆成拉和壓。所以很多漂亮的橋，漂亮的原因正是因為「力流得很順」。</div>
+<div class="quiz" data-ans="0"><p class="q">懸索橋的主纜主要承受什麼力？</p>
+<button class="opt">A. 拉力</button><button class="opt">B. 壓力</button><button class="opt">C. 扭轉</button><button class="opt">D. 不受力</button>
+<div class="explain">纜索只能受拉，就像下垂的鐵鍊。橋塔則承受壓力。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li><strong>拱只受壓</strong>，但兩端會產生<strong>往外的推力</strong>。</li>
+<li><strong>懸索只受拉</strong>；倒過來的懸鏈線是理想的拱。</li>
+<li>跨度：梁橋＜拱橋＜斜張橋＜<strong>懸索橋</strong>。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第四篇　結構工程" data-title="載重：結構要扛什麼">
+<div class="sheet">
+<h2>載重：結構到底要扛哪些東西？</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>靜載重、活載重和環境載重</li><li>力如何從樓板一路傳到土壤（載重路徑）</li></ul></div>
+<p>設計之前，工程師要先列出「這個結構一輩子可能遇到的所有力」，叫做<strong>載重</strong>。算少了會倒，算多了會浪費錢。</p>
+<div class="grid">
+<div class="card"><div class="ic">🧱</div><h4>靜載重（D）</h4>結構<strong>自己的重量</strong>和永久固定的東西：梁、柱、樓板、牆、地磚、天花板。鋼筋混凝土每立方公尺約 24 kN（約 2.4 噸）。</div>
+<div class="card"><div class="ic">👨‍👩‍👧</div><h4>活載重（L）</h4>會<strong>移動或改變</strong>的東西：人、家具、書、車子。規範會依用途規定，例如住宅樓板約每平方公尺 2 kN，圖書館書庫、停車場就要更大。</div>
+<div class="card"><div class="ic">🌬️</div><h4>風載重（W）</h4>颱風吹在建築物側面。越高的建築風越大。</div>
+<div class="card"><div class="ic">🌏</div><h4>地震力（E）</h4>地面搖晃讓建築物產生慣性力（下一課詳談）。</div>
+<div class="card"><div class="ic">🌡️</div><h4>其他</h4>溫度變化、土壤壓力、水壓力、雪、施工時的臨時載重。</div>
+</div>
+<div class="box origin"><span class="t">Dead load 與 Live load</span>英文用「死」和「活」來形容：dead load 是「不會動的」重量，live load 是「會動的、活的」重量。中文譯成「靜載重」和「活載重」。工程計算中常用它們的第一個英文字母 D 和 L 來代表。</div>
+<div class="box warn"><span class="t">靜載重往往比活載重大</span>很多人以為一間教室裡擠滿學生是最重的，其實教室樓板本身的重量就比滿教室的學生還重。所以在頂樓加蓋、增加厚重的裝潢或大型水塔，都可能讓原本的結構超載。</div>
+<h3>載重路徑：力的旅程</h3>
+<div class="fig"><svg viewBox="0 0 620 320" role="img" aria-label="載重從樓板傳到梁、柱、基礎、土壤">
+<g font-family="sans-serif" font-size="14">
+<rect x="0" y="250" width="620" height="70" fill="#9b6b43"/>
+<rect x="100" y="60" width="300" height="14" fill="#b8b3a8" stroke="#1b2733"/>
+<rect x="100" y="74" width="300" height="20" fill="#8a9aa9"/>
+<rect x="110" y="94" width="24" height="150" fill="#6f7f8e"/><rect x="366" y="94" width="24" height="150" fill="#6f7f8e"/>
+<rect x="90" y="244" width="64" height="20" fill="#5d6b78"/><rect x="346" y="244" width="64" height="20" fill="#5d6b78"/>
+<g fill="#b3362b"><circle cx="160" cy="45" r="5"/><circle cx="250" cy="45" r="5"/><circle cx="340" cy="45" r="5"/></g>
+<path class="flow" d="M250 50 V84 H122 V250 V300" fill="none" stroke="#b3362b" stroke-width="3.5"/>
+<path class="flow" d="M250 50 V84 H378 V250 V300" fill="none" stroke="#b3362b" stroke-width="3.5"/>
+<g fill="#1b2733"><text x="430" y="70">① 樓板：人和家具</text><text x="430" y="92">② 梁</text><text x="430" y="170">③ 柱</text><text x="430" y="258">④ 基礎</text><text x="430" y="300" fill="#fff">⑤ 土壤、岩盤</text></g></g></svg></div>
+<p>每一個重量都有一條「回家的路」：<strong>樓板 → 梁 → 柱 → 基礎 → 土壤</strong>。這條路叫<strong>載重路徑</strong>。好的設計要讓這條路<strong>清楚、直接、不中斷</strong>。</p>
+<div class="box eg"><span class="t">敲掉一面牆可以嗎？</span>裝潢時如果把一面承重牆或柱子敲掉，等於把載重路徑切斷了，上面的力找不到路回到地面，就會讓其他構件超載。所以<strong>任何拆除梁、柱、牆的裝修，都應該先請結構技師評估</strong>。</div>
+<div class="quiz" data-ans="3"><p class="q">下列哪一項屬於「活載重」？</p>
+<button class="opt">A. 樓板本身的重量</button><button class="opt">B. 固定的外牆</button><button class="opt">C. 梁的重量</button><button class="opt">D. 教室裡的學生和桌椅</button>
+<div class="explain">活載重是會移動或改變的重量，如人和家具。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li><strong>靜載重 D</strong>（自重）、<strong>活載重 L</strong>（人、物）、風、地震、溫度、土壓、水壓。</li>
+<li>載重路徑：<strong>樓板→梁→柱→基礎→土壤</strong>，不可隨意切斷。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第四篇　結構工程" data-title="地震與耐震設計">
+<div class="sheet">
+<h2>地震與耐震設計：跟大地一起跳舞</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>規模和震度的差別</li><li>共振：為什麼有些樓搖得特別厲害</li><li>耐震、隔震、制震三種策略</li></ul></div>
+<h3>地震是怎麼「推」建築物的？</h3>
+<p>地震時，地面突然左右（和上下）移動。建築物的基礎跟著地面動，但上面的樓層因為<strong>慣性</strong>想留在原地，於是整棟樓被扭來扭去。就像你站在公車上，公車突然開動，你的腳跟著車走，身體卻往後倒。</p>
+<div class="box key"><span class="t">越重，地震力越大</span>地震力 ≈ 質量 × 加速度。建築物越重，地震時受的力就越大。這也是為什麼頂樓違建、重型水塔在地震中特別危險。</div>
+<h3>規模 vs 震度</h3>
+<div class="tw"><table><tr><th></th><th>規模（Magnitude）</th><th>震度（Intensity）</th></tr>
+<tr><td>描述</td><td>地震本身釋放了多少<strong>能量</strong></td><td>某個地點<strong>搖得多厲害</strong></td></tr>
+<tr><td>一次地震有幾個？</td><td>只有一個</td><td>每個地方都不同</td></tr>
+<tr><td>比喻</td><td>燈泡有幾瓦</td><td>你那裡有多亮</td></tr></table></div>
+<div class="box origin"><span class="t">芮氏規模</span>1935 年，美國地震學家<strong>查爾斯‧芮克特（Charles Richter）</strong>提出用地震儀的振幅來計算地震大小，中文音譯為「芮氏」。規模每增加 1，釋放的能量約增加 <strong>32 倍</strong>；增加 2，就約 1000 倍。現在科學界多改用「地震矩規模」，但數值大致相近。</div>
+<h3>共振：地面和大樓的「節奏」</h3>
+<p>每棟建築物都有自己喜歡的搖晃節奏，叫做<strong>自然週期</strong>（來回晃一次要幾秒）。大致上，樓層越多週期越長：粗估約「樓層數 × 0.1 秒」。</p>
+<div class="box eg"><span class="t">盪鞦韆</span>推鞦韆時，如果你配合鞦韆的節奏推，輕輕推就越盪越高；亂推則盪不起來。當地震搖晃的節奏<strong>剛好接近</strong>建築物的自然週期時，建築物就會越搖越厲害，這叫<strong>共振</strong>。</div>
+<div class="fig" id="eq">
+<svg viewBox="0 0 620 330" role="img" aria-label="地震中建築物搖晃的模擬">
+<g font-family="sans-serif" font-size="13">
+<rect id="eqGround" x="0" y="280" width="620" height="50" fill="#9b6b43"/>
+<g id="eqBld"></g>
+<text x="10" y="20" fill="#1b2733">建築自然週期約 1 秒（大約 10 層樓）</text>
+<text id="eqAmp" x="10" y="40" fill="#b3362b" font-weight="700"></text>
+</g></svg>
+<div class="ctrl"><label>地震搖晃週期 <input type="range" id="eqT" min="0.3" max="3" step="0.05" value="1"> <span id="eqTv"></span> 秒</label></div>
+<div class="ctrl"><label><input type="checkbox" id="eqD"> 加裝阻尼器（制震）</label><label><input type="checkbox" id="eqI"> 加裝隔震墊（隔震）</label><button class="btn alt" id="eqPause">暫停</button></div>
+<div class="cap">試試：把週期拉到 1 秒左右（共振），再打開阻尼器或隔震墊比較。這是簡化的示意模型。</div></div>
+<h3>對付地震的三種策略</h3>
+<div class="grid">
+<div class="card"><div class="ic">💪</div><h4>① 耐震：硬扛</h4>把梁柱做得夠強、夠有延性，靠結構本身吸收地震能量。最常見、最基本的做法。</div>
+<div class="card"><div class="ic">🛼</div><h4>② 隔震：躲開</h4>在建築物和基礎之間放<strong>隔震墊</strong>（多層橡膠和鋼板疊成），地面動，建築物卻不太跟著動。就像把房子放在很軟的滑板上。常用在醫院等地震後必須運作的建築。</div>
+<div class="card"><div class="ic">🧽</div><h4>③ 制震：消耗</h4>在建築裡加裝<strong>阻尼器</strong>，像汽車的避震器一樣把搖晃的能量吸收掉。</div>
+</div>
+<div class="box origin"><span class="t">阻尼（Damping）</span>「阻」是阻擋，「尼」在古文中有「阻止」的意思，阻尼就是阻止振動持續的作用。英文 damp 原意是「使潮濕、使減弱」，就像把一團火弄濕讓它變小。</div>
+<div class="box eg"><span class="t">台北 101 的大鋼球</span>台北 101 在 87～92 樓之間掛了一顆重約 <strong>660 公噸</strong>的鋼球，叫做「調諧質量阻尼器」。大樓往左晃時，鋼球因為慣性往右擺，把大樓拉回來，可以明顯減少颱風和地震時的搖晃。它還成為熱門觀光景點，甚至有吉祥物「阻尼器寶寶」。</div>
+<div class="box warn"><span class="t">軟弱層：一樓挑高的危險</span>很多街邊建築一樓是店面，為了大片玻璃櫥窗，一樓牆很少、柱子又細又高，上面幾層卻有很多牆。地震時，所有變形都集中在軟弱的一樓，一樓就被壓扁。1999 年台灣 921 集集大地震（規模 7.3），許多倒塌的大樓都有這個問題。這次地震之後，台灣大幅修訂了耐震規範。</div>
+<div class="quiz" data-ans="1"><p class="q">一次地震中，台北的「震度」和台南的「震度」可能不同，但「規模」呢？</p>
+<button class="opt">A. 也不同</button><button class="opt">B. 相同，一次地震只有一個規模</button><button class="opt">C. 規模只在震央測量不到</button><button class="opt">D. 規模是震度的兩倍</button>
+<div class="explain">規模代表地震釋放的能量，只有一個；震度是各地搖晃的程度，各地不同。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>地震力 ≈ 質量 × 加速度，<strong>越重越危險</strong>。</li>
+<li><strong>規模</strong>是能量（一個），<strong>震度</strong>是各地搖晃程度（很多個）。</li>
+<li>週期接近時會<strong>共振</strong>。</li>
+<li>三策略：<strong>耐震（扛）、隔震（躲）、制震（消耗）</strong>；避免軟弱層。</li></ul></div>
+</div></section>
+<!-- ================= 第五篇 大地 ================= -->
+<section class="lesson" data-part="第五篇　大地工程" data-title="土壤是什麼？">
+<div class="sheet">
+<h2>土壤是什麼？腳下的複雜世界</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>土壤的三相：顆粒、水、空氣</li><li>礫、砂、粉土、黏土的差別</li><li>工程師怎麼調查地下的土</li></ul></div>
+<p>所有的結構最後都站在土壤或岩石上。可是土壤和鋼、混凝土很不一樣：它不是工廠做的，<strong>每個地方都不同，而且藏在地下看不到</strong>。這讓大地工程成為土木工程裡最需要經驗和判斷的領域。</p>
+<h3>土壤的三相</h3>
+<div class="fig"><svg viewBox="0 0 620 200" role="img" aria-label="土壤由顆粒、水、空氣組成">
+<g font-family="sans-serif" font-size="14">
+<rect x="30" y="20" width="220" height="160" fill="#dff0ff" stroke="#1b2733"/>
+<g fill="#b58a5e" stroke="#7a5a3c"><circle cx="70" cy="60" r="26"/><circle cx="125" cy="48" r="20"/><circle cx="180" cy="65" r="28"/><circle cx="225" cy="45" r="16"/><circle cx="60" cy="125" r="22"/><circle cx="110" cy="105" r="18"/><circle cx="160" cy="130" r="26"/><circle cx="215" cy="115" r="22"/><circle cx="95" cy="160" r="16"/><circle cx="215" cy="163" r="15"/></g>
+<g fill="#3b8fd9" opacity=".7"><circle cx="100" cy="80" r="6"/><circle cx="140" cy="95" r="5"/><circle cx="195" cy="100" r="6"/><circle cx="130" cy="150" r="7"/></g>
+<rect x="340" y="20" width="160" height="30" fill="#fff" stroke="#1b2733"/><text x="390" y="40">空氣</text>
+<rect x="340" y="50" width="160" height="40" fill="#3b8fd9" stroke="#1b2733"/><text x="400" y="75" fill="#fff">水</text>
+<rect x="340" y="90" width="160" height="90" fill="#b58a5e" stroke="#1b2733"/><text x="385" y="140" fill="#fff">土壤顆粒</text>
+<text x="515" y="75">孔隙</text><path d="M512 40 h-6 v45 h6" fill="none" stroke="#1b2733"/></g></svg></div>
+<p>土壤＝<strong>固體顆粒＋水＋空氣</strong>。顆粒之間的空間叫<strong>孔隙</strong>，裡面裝著水或空氣。孔隙裡的水多或少，會讓同一種土的性質差很多：乾的沙灘可以走，泡水的泥巴卻會陷下去。</p>
+<h3>依顆粒大小分類</h3>
+<div class="tw"><table><tr><th>名稱</th><th>粒徑（大約）</th><th>摸起來</th><th>特性</th></tr>
+<tr><td>礫石</td><td>大於 4.75 mm</td><td>一顆顆小石頭</td><td>排水好、強度高</td></tr>
+<tr><td>砂</td><td>0.075～4.75 mm</td><td>粗粗沙沙的，看得到顆粒</td><td>排水好、沒有黏性</td></tr>
+<tr><td>粉土</td><td>0.002～0.075 mm</td><td>像麵粉，乾了會飛</td><td>介於砂和黏土之間</td></tr>
+<tr><td>黏土</td><td>小於 0.002 mm</td><td>濕時黏手、可以捏成形</td><td>排水很慢、會壓縮、會膨脹收縮</td></tr></table></div>
+<div class="box eg"><span class="t">大小差多少？</span>如果把一顆 1 mm 的砂粒放大成一顆<strong>籃球</strong>，那麼一顆黏土顆粒（約 0.001 mm）只有<strong>芝麻的一半大小</strong>。而且黏土顆粒不是圓的，是一片片像撲克牌一樣的薄片，所以會吸住水、黏在一起。</div>
+<div class="try"><span class="t">罐子沉澱實驗</span>挖一把庭院的土放進透明寶特瓶，加水到八分滿，加一點點洗碗精，用力搖一分鐘後放著。幾分鐘內砂會先沉到底，粉土在幾小時內沉澱，黏土可能要一兩天。最後你會看到分層，就能估計這些土裡各種顆粒的比例。</div>
+<div class="box origin"><span class="t">土壤力學之父：泰爾札吉</span>以前的人蓋房子靠經驗猜土壤夠不夠硬。奧地利工程師<strong>卡爾‧泰爾札吉（Karl Terzaghi）</strong>在 1925 年出版了《土壤力學》，第一次用科學方法解釋土壤的行為，特別是「<strong>有效應力</strong>」的觀念：土壤的強度來自顆粒之間互相擠壓的力，而孔隙裡的水壓會把顆粒「撐開」、減少這個力。這個觀念我們在「液化」那課會再用到。</div>
+<h3>怎麼知道地下有什麼？</h3>
+<p>蓋大樓或橋之前，一定要先做<strong>地質調查</strong>：</p>
+<ul><li><strong>鑽探</strong>：用鑽機往下鑽孔，把不同深度的土取出來看、帶回實驗室測試。</li>
+<li><strong>標準貫入試驗（SPT）</strong>：在鑽孔裡用 63.5 kg 的鐵錘、從 76 cm 高落下，把取樣管打進土裡，記錄打入 30 cm 需要敲幾下，這個數字叫 <strong>N 值</strong>。N 值越大，土越緊密堅硬。</li>
+<li><strong>地球物理探測</strong>：用震波、電阻等方法，不必鑽孔就能大概知道地下的分層。</li></ul>
+<div class="box origin"><span class="t">為什麼是 63.5 kg 和 76 cm 這麼奇怪的數字？</span>因為這個試驗是美國發展的，原本的規格是 <strong>140 磅</strong>的錘、落下 <strong>30 英寸</strong>、打入 <strong>1 英尺</strong>。換成公制就變成這些不整齊的數字了。</div>
+<div class="quiz" data-ans="2"><p class="q">下列哪一種土壤排水最慢、而且受壓後會慢慢壓縮很久？</p>
+<button class="opt">A. 礫石</button><button class="opt">B. 砂</button><button class="opt">C. 黏土</button><button class="opt">D. 都一樣</button>
+<div class="explain">黏土顆粒極細，孔隙非常小，水很難流出，所以排水慢、壓縮也慢。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>土壤＝<strong>顆粒＋水＋空氣</strong>。</li>
+<li>依大小：<strong>礫＞砂＞粉土＞黏土</strong>。</li>
+<li>泰爾札吉提出<strong>有效應力</strong>，開創土壤力學。</li>
+<li>設計前要<strong>鑽探調查</strong>，SPT 的 N 值代表土的緊密程度。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第五篇　大地工程" data-title="承載力與沉陷">
+<div class="sheet">
+<h2>承載力與沉陷：比薩斜塔為什麼會斜？</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>土壤的兩個問題：撐不撐得住、會沉多少</li><li>不均勻沉陷的危險</li><li>黏土的壓密</li></ul></div>
+<p>一棟建築壓在土上，工程師要檢查兩件事：</p>
+<div class="grid">
+<div class="card"><h4>① 承載力：會不會「陷下去」？</h4>土壤能承受的最大壓力。如果超過，土壤會被剪壞，建築物會突然下陷或翻倒。</div>
+<div class="card"><h4>② 沉陷：會不會「沉太多」？</h4>就算土壤沒壞，也會被壓縮而慢慢往下沉。沉太多，管線會斷、門窗會卡。</div>
+</div>
+<div class="box eg"><span class="t">沙灘上的腳印</span>在沙灘上用一隻腳站，腳會陷得比較深；雙腳站，陷得比較淺；躺下來，幾乎不陷。重量一樣，面積越大，壓力越小。這就是第二篇「應力」的觀念用在土壤上。</div>
+<h3>最可怕的是「不均勻」</h3>
+<p>如果整棟建築平均往下沉 5 公分，通常問題不大。但如果<strong>一邊沉 2 公分、另一邊沉 10 公分</strong>，建築物就會傾斜、牆壁出現斜向裂縫。這叫<strong>不均勻沉陷</strong>（或差異沉陷）。</p>
+<div class="fig"><svg viewBox="0 0 620 300" role="img" aria-label="比薩斜塔與底下不均勻的土層">
+<g font-family="sans-serif" font-size="13">
+<rect x="0" y="210" width="620" height="90" fill="#c8a165"/>
+<path d="M0 210 H620 V240 Q400 250 300 290 H0Z" fill="#8e6f55"/>
+<text x="20" y="265" fill="#fff">南側：較軟的黏土層</text><text x="440" y="235" fill="#1b2733">北側：稍硬</text>
+<g transform="rotate(4 300 210)">
+<rect x="270" y="40" width="60" height="170" fill="#f3efe6" stroke="#1b2733"/>
+<g stroke="#b8b3a8"><line x1="270" y1="70" x2="330" y2="70"/><line x1="270" y1="100" x2="330" y2="100"/><line x1="270" y1="130" x2="330" y2="130"/><line x1="270" y1="160" x2="330" y2="160"/><line x1="270" y1="190" x2="330" y2="190"/></g>
+<rect x="278" y="20" width="44" height="20" fill="#f3efe6" stroke="#1b2733"/>
+</g>
+<line x1="300" y1="20" x2="300" y2="210" stroke="#b3362b" stroke-dasharray="5 4"/><text x="200" y="30" fill="#b3362b">原本的垂直線</text>
+</g></svg><div class="cap">示意圖，傾斜角度為示意。</div></div>
+<div class="box eg"><span class="t">比薩斜塔的故事</span>義大利的比薩斜塔在 1173 年開工。蓋到第三層時，就因為地基底下<strong>南側的土比較軟</strong>而開始傾斜。後來因為戰爭停工將近一百年，這段時間土壤被慢慢壓密變硬，反而讓塔沒有倒下。工匠後來把上面的樓層故意蓋得往反方向「彎回來」，所以仔細看，斜塔其實有點像香蕉。<br>到 1990 年，塔的傾斜已經很危險，於是關閉整修。工程師在<strong>北側的地基底下小心地挖出一些土</strong>，讓北側也沉下去一點，把塔「拉回來」一些。2001 年重新開放時，傾斜已經減少，預計能再穩定兩三百年。</div>
+<h3>黏土的壓密：擠海綿</h3>
+<p>砂土受壓時，水很快就排出，沉陷幾乎馬上完成。但黏土的孔隙非常小，水要花很長時間才能擠出去，所以沉陷會<strong>持續很多年甚至幾十年</strong>，這叫<strong>壓密</strong>。</p>
+<div class="box eg"><span class="t">泡水的海綿</span>把一塊吸飽水的海綿放在桌上，上面壓一本書。海綿不會一下子扁掉，而是隨著水慢慢流出，一點一點變薄。黏土的壓密就是這樣。</div>
+<div class="box warn"><span class="t">抽地下水會讓地面下沉</span>地下水在土壤孔隙裡也幫忙「撐著」地層。如果大量抽取地下水，土壤被壓密，整片地面就會下沉，叫<strong>地層下陷</strong>。墨西哥城、雅加達等許多城市都有嚴重的地層下陷，有些地方每年下沉超過 10 公分。</div>
+<div class="quiz" data-ans="0"><p class="q">下列哪種情況對建築物最危險？</p>
+<button class="opt">A. 一側沉陷 2 cm，另一側沉陷 12 cm</button><button class="opt">B. 整棟均勻沉陷 5 cm</button><button class="opt">C. 整棟均勻沉陷 3 cm</button><button class="opt">D. 完全沒有沉陷</button>
+<div class="explain">不均勻沉陷會讓建築傾斜和開裂，比均勻沉陷危險得多。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>土壤要檢查<strong>承載力</strong>（會不會壞）和<strong>沉陷</strong>（沉多少）。</li>
+<li><strong>不均勻沉陷</strong>最危險；比薩斜塔就是例子。</li>
+<li>黏土的<strong>壓密</strong>很慢；抽地下水會造成<strong>地層下陷</strong>。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第五篇　大地工程" data-title="基礎工程">
+<div class="sheet">
+<h2>基礎工程：建築物的「腳」</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>淺基礎和深基礎</li><li>端承樁和摩擦樁</li><li>什麼時候用哪一種</li></ul></div>
+<p>基礎是結構和土壤之間的「轉接頭」：把柱子傳下來的集中力量，<strong>分散</strong>到土壤能承受的程度，或者<strong>傳到更深、更硬的地層</strong>。</p>
+<div class="fig"><svg viewBox="0 0 620 320" role="img" aria-label="各種基礎型式">
+<g font-family="sans-serif" font-size="13">
+<rect x="0" y="80" width="620" height="140" fill="#c8a165"/><rect x="0" y="220" width="620" height="100" fill="#7d7369"/>
+<text x="520" y="100" fill="#1b2733">軟弱土層</text><text x="520" y="270" fill="#fff">堅硬岩盤</text>
+<rect x="60" y="20" width="16" height="70" fill="#6f7f8e"/><rect x="36" y="90" width="64" height="18" fill="#5d6b78"/>
+<text x="20" y="135" fill="#1b2733">① 獨立基腳</text>
+<rect x="165" y="20" width="14" height="70" fill="#6f7f8e"/><rect x="235" y="20" width="14" height="70" fill="#6f7f8e"/><rect x="150" y="90" width="115" height="22" fill="#5d6b78"/>
+<text x="150" y="135" fill="#1b2733">② 筏式基礎（整片）</text>
+<rect x="340" y="20" width="16" height="70" fill="#6f7f8e"/><rect x="320" y="90" width="56" height="16" fill="#5d6b78"/><rect x="326" y="106" width="10" height="150" fill="#4d5a66"/><rect x="360" y="106" width="10" height="150" fill="#4d5a66"/>
+<text x="300" y="300" fill="#fff">③ 端承樁：站在岩盤上</text>
+<rect x="450" y="20" width="16" height="70" fill="#6f7f8e"/><rect x="430" y="90" width="56" height="16" fill="#5d6b78"/><rect x="436" y="106" width="10" height="100" fill="#4d5a66"/><rect x="470" y="106" width="10" height="100" fill="#4d5a66"/>
+<g stroke="#b3362b" stroke-width="2"><line x1="432" y1="130" x2="432" y2="120" marker-end="url(#ar)"/><line x1="432" y1="170" x2="432" y2="160" marker-end="url(#ar)"/><line x1="484" y1="130" x2="484" y2="120" marker-end="url(#ar)"/><line x1="484" y1="170" x2="484" y2="160" marker-end="url(#ar)"/></g>
+<text x="410" y="240" fill="#fff">④ 摩擦樁：靠側面摩擦</text>
+<line x1="0" y1="80" x2="620" y2="80" stroke="#7a5a3c" stroke-width="2"/><text x="10" y="74" fill="#566573">地面</text></g></svg></div>
+<h3>淺基礎：好土就在附近</h3>
+<p>如果地表附近的土就夠硬，只要把柱子底部<strong>擴大成一塊厚板</strong>，把力量分散開來就好。</p>
+<ul><li><strong>獨立基腳</strong>：每根柱子底下一塊，最常見、最便宜。</li>
+<li><strong>聯合基腳／連續基腳</strong>：幾根柱子或一整排牆共用一條。</li>
+<li><strong>筏式基礎</strong>：整棟建築底下鋪一整片厚厚的混凝土板，像一艘船「浮」在土上，適合土比較軟、柱子很密的情況。很多有地下室的大樓也用這種。</li></ul>
+<h3>深基礎：打「樁」下去</h3>
+<p>如果地表的土太軟，就要用<strong>樁</strong>把力量傳到深處。</p>
+<div class="box origin"><span class="t">樁（Pile）</span>「樁」原本指打進土裡的木頭柱子，像「木樁」、「拴馬樁」。古代威尼斯整座城市就是蓋在打進泥灘裡的大量木樁上，因為木樁一直泡在沒有氧氣的水和泥裡，不容易腐爛，有些用了好幾百年。</div>
+<div class="grid">
+<div class="card"><h4>端承樁</h4>樁一路打到堅硬的岩盤或緊密的礫石層，像<strong>用高蹺站在硬地上</strong>，力量主要從樁底傳下去。</div>
+<div class="card"><h4>摩擦樁</h4>找不到硬層時，靠<strong>樁身和土壤之間的摩擦力</strong>撐住。就像把一根筷子插進一碗沙裡，插得越深越難拔出來，也越難再壓下去。</div>
+</div>
+<div class="box eg"><span class="t">台北 101 的腳</span>台北盆地地表下有很厚的軟弱土層。台北 101 的基礎用了約 <strong>380 支</strong>大型基樁，深入地下約 80 公尺，一直插到堅硬的岩盤裡，上面再蓋一片巨大的筏式基礎。</div>
+<div class="box key"><span class="t">怎麼選？</span>① 好土淺 → 淺基礎（便宜）。② 好土深、結構很重 → 樁基礎。③ 還要考慮：地下水位、旁邊的房子（打樁的震動和噪音）、預算、工期。選擇的依據，就是上一課講的地質調查結果。</div>
+<div class="quiz" data-ans="1"><p class="q">地表 30 公尺都是軟弱黏土，下面才是岩盤，要蓋一棟 30 層大樓，較適合哪種基礎？</p>
+<button class="opt">A. 獨立基腳</button><button class="opt">B. 打到岩盤的端承樁</button><button class="opt">C. 不需要基礎</button><button class="opt">D. 直接把柱子插在土上</button>
+<div class="explain">上部很重、表土軟弱，要用樁把力傳到深處的岩盤。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li><strong>淺基礎</strong>：獨立基腳、連續基腳、筏式基礎。</li>
+<li><strong>深基礎</strong>：端承樁（站在硬層）、摩擦樁（靠側面摩擦）。</li>
+<li>選擇依據：<strong>地質調查＋載重＋環境＋成本</strong>。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第五篇　大地工程" data-title="擋土牆、邊坡與土壤液化">
+<div class="sheet">
+<h2>擋土牆、邊坡與土壤液化</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>為什麼擋土牆要有排水孔</li><li>下雨為什麼會山崩</li><li>地震時地面為什麼會變成「泥漿」</li></ul></div>
+<h3>擋土牆：土會「推」</h3>
+<p>在山坡上開一條路，或挖一個地下室，旁邊的土就會想往下、往外滑。擋住它的牆叫<strong>擋土牆</strong>。土對牆的推力叫<strong>土壓力</strong>，越深的地方推得越大（就像水越深壓力越大）。</p>
+<div class="fig"><svg viewBox="0 0 620 250" role="img" aria-label="懸臂式擋土牆與排水孔">
+<g font-family="sans-serif" font-size="13">
+<path d="M250 30 L620 30 L620 230 L250 230Z" fill="#c8a165"/>
+<rect x="0" y="200" width="250" height="30" fill="#c8a165"/>
+<path d="M230 30 h26 v160 h110 v26 h-200 v-26 h64z" fill="#b8b3a8" stroke="#1b2733"/>
+<g stroke="#1c4a78" stroke-width="3"><line x1="260" y1="90" x2="224" y2="98"/><line x1="260" y1="150" x2="224" y2="158"/></g>
+<g fill="#3b8fd9"><circle cx="210" cy="102" r="3"><animate attributeName="cy" values="100;190" dur="1.4s" repeatCount="indefinite"/></circle><circle cx="210" cy="162" r="3"><animate attributeName="cy" values="160;195" dur="1s" repeatCount="indefinite"/></circle></g>
+<g stroke="#b3362b" stroke-width="3"><line x1="330" y1="60" x2="275" y2="60" marker-end="url(#ar)"/><line x1="360" y1="110" x2="275" y2="110" marker-end="url(#ar)"/><line x1="390" y1="160" x2="275" y2="160" marker-end="url(#ar)"/></g>
+<text x="400" y="110" fill="#b3362b">土壓力：越深越大</text>
+<text x="20" y="100" fill="#1c4a78">排水孔：把牆後的水放出來</text>
+<text x="300" y="235" fill="#1b2733">底板：用上面的土重量壓住牆</text></g></svg></div>
+<div class="box key"><span class="t">排水孔很重要</span>下大雨時，水滲進牆後的土裡，除了土壓力，還多了<strong>水壓力</strong>，推力可能增加一倍。很多擋土牆倒塌，原因就是排水孔堵塞。所以你在路邊擋土牆上看到的一排小圓洞，千萬不能塞住。</div>
+<h3>邊坡：山為什麼會崩？</h3>
+<p>一個斜坡上的土，靠<strong>顆粒間的摩擦和黏結</strong>抵抗往下滑（這叫<strong>抗剪強度</strong>）。下大雨時：① 土吸飽水變重，往下滑的力變大；② 孔隙裡的水壓升高，把顆粒撐開，摩擦力變小（泰爾札吉的有效應力觀念）。兩個一起發生，就會崩塌。</p>
+<div class="box eg"><span class="t">順向坡</span>如果岩層的層面和山坡的方向一致（像一疊斜斜的書），上層岩塊就容易沿著層面整片滑下來，這種坡叫<strong>順向坡</strong>，開發時要特別小心。對策包括：<strong>排水</strong>（最重要）、打<strong>地錨</strong>把上層岩塊綁在深處的穩定岩層上、減緩坡度、植生。</div>
+<h3>土壤液化：地面變成流沙</h3>
+<p>地震時，有些地方的地面會冒出泥水、房子整棟下陷或傾斜，這叫<strong>土壤液化</strong>。</p>
+<div class="fig" id="lq">
+<svg viewBox="0 0 620 295" role="img" aria-label="土壤液化動畫">
+<rect x="0" y="0" width="620" height="295" fill="#f7fbff"/>
+<rect x="40" y="90" width="540" height="175" fill="#bfe0ff"/>
+<g id="lqGrains"></g>
+<g id="lqHouse"><rect x="240" y="30" width="140" height="62" fill="#e8ecf0" stroke="#1b2733" stroke-width="2"/><polygon points="230,32 310,0 390,32" fill="#b3362b"/><rect x="295" y="58" width="26" height="34" fill="#8a9aa9"/></g>
+<text id="lqTxt" x="310" y="286" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#0f2d4d">地震前：砂粒互相接觸，撐住房子</text>
+</svg>
+<div class="ctrl"><button class="btn" id="lqBtn">開始搖晃</button><button class="btn alt" id="lqReset">重來</button></div></div>
+<p><strong>發生條件</strong>：① <strong>鬆散的砂土</strong>（細砂、粉土質砂）；② <strong>地下水位很高</strong>（孔隙裡全是水）；③ <strong>強烈地震</strong>。</p>
+<p><strong>原理</strong>：平常砂粒一顆顆互相頂住（有效應力），撐住上面的房子。地震一搖，鬆散的砂粒想要往下擠緊，但孔隙裡的水來不及排出去，<strong>水壓突然升高</strong>，把砂粒撐開。砂粒之間不再互相接觸，整片砂土就像液體一樣失去支撐力，房子就沉下去了。</p>
+<div class="try"><span class="t">沙灘上的液化</span>在沙灘靠近海水的濕沙上站著，雙腳快速上下踩踏，你會發現腳慢慢陷進去，周圍的沙也變得濕軟發亮。這就是一個小型的液化現象。</div>
+<div class="box eg"><span class="t">真實案例</span>1964 年日本新潟地震，幾棟公寓大樓整棟傾倒但結構幾乎完好，讓全世界開始重視液化。2016 年台灣美濃地震，台南部分地區也發生了液化造成房屋下陷。</div>
+<div class="box key"><span class="t">對策</span>① 把鬆砂弄緊密（振動夯實）；② 在地下灌漿，把砂粒「黏」住；③ 設置排水，讓水壓能快速消散；④ 用樁穿過液化層，把房子撐在下面的穩定地層上。</div>
+<div class="quiz" data-ans="3"><p class="q">下列哪種地方最容易發生土壤液化？</p>
+<button class="opt">A. 堅硬的岩盤</button><button class="opt">B. 乾燥的山頂黏土</button><button class="opt">C. 緊密的礫石層</button><button class="opt">D. 地下水位很高的鬆散細砂地區</button>
+<div class="explain">液化需要鬆散砂土、高地下水位和強震三個條件。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>擋土牆承受<strong>土壓力</strong>，<strong>排水孔</strong>不可堵。</li>
+<li>下雨→土變重＋水壓升高→摩擦力下降→<strong>邊坡崩塌</strong>。</li>
+<li><strong>液化</strong>＝鬆砂＋高水位＋強震，水壓撐開砂粒，地面失去支撐。</li></ul></div>
+</div></section>
+
+<!-- ================= 第六篇 水利環境 ================= -->
+<section class="lesson" data-part="第六篇　水利與環境" data-title="水的力學">
+<div class="sheet">
+<h2>水的力學：為什麼水壩下面比較厚？</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>水壓隨深度增加</li><li>流量＝面積×流速</li><li>白努利定理的直覺</li></ul></div>
+<h3>靜水壓：越深越大</h3>
+<p>潛水時越往下潛，耳朵越痛，因為上面壓著的水越來越多。水的壓力只和<strong>深度</strong>有關：</p>
+<div class="formula">水壓 p ＝ ρ × g × h<small>ρ＝水的密度（1000 kg/m³），g＝9.81，h＝深度；大約<strong>每深 1 公尺增加 10 kPa</strong></small></div>
+<div class="fig" id="dam">
+<svg viewBox="0 0 620 300" role="img" aria-label="水壩斷面與水壓分布">
+<g font-family="sans-serif" font-size="13">
+<rect x="0" y="270" width="620" height="30" fill="#7d7369"/>
+<rect x="20" y="40" width="320" height="230" fill="#bfe0ff"/>
+<polygon points="340,40 380,40 500,270 340,270" fill="#b8b3a8" stroke="#1b2733"/>
+<polygon id="damTri" points="340,40 340,270 250,270" fill="#3b8fd9" opacity=".35"/>
+<g stroke="#1c4a78" stroke-width="2">
+<line x1="315" y1="80" x2="336" y2="80" marker-end="url(#ar2)"/><line x1="298" y1="130" x2="336" y2="130" marker-end="url(#ar2)"/><line x1="278" y1="180" x2="336" y2="180" marker-end="url(#ar2)"/><line x1="260" y1="230" x2="336" y2="230" marker-end="url(#ar2)"/></g>
+<line id="damLine" x1="20" y1="140" x2="340" y2="140" stroke="#b3362b" stroke-dasharray="6 4" stroke-width="2"/>
+<circle id="damDot" cx="330" cy="140" r="6" fill="#b3362b"/>
+<text x="400" y="100" fill="#1b2733">水壩斷面：上窄下寬</text>
+<text x="30" y="32" fill="#566573">水面（水深 23 m）</text></g></svg>
+<div class="ctrl"><label>測量深度 <input type="range" id="damH" min="0" max="23" step="0.5" value="10"> <span id="damHv"></span> m</label></div>
+<div class="readout" id="damOut"></div></div>
+<p>水壓從水面的 0，<strong>直線增加到底部最大</strong>，畫出來是一個三角形。所以水壩要做成<strong>上窄下寬</strong>，底部最厚，才擋得住最大的壓力。</p>
+<div class="box origin"><span class="t">帕斯卡的木桶</span>相傳帕斯卡做過一個實驗：在一個裝滿水的密封木桶上，插一根很細很高的管子，只往管子裡倒了幾杯水，木桶就被撐裂了。因為水壓只看<strong>高度</strong>，不看水量有多少。雖然這個故事的細節可能被誇大，但原理是對的。</div>
+<div class="box eg"><span class="t">水塔為什麼放在屋頂？</span>把水放在高處，就能靠高度產生水壓，讓水從水龍頭流出來，不用一直開抽水馬達。自來水公司的配水池也都蓋在山坡高處。</div>
+<h3>流動的水：流量＝面積×流速</h3>
+<div class="formula">Q ＝ A × V<small>Q＝流量（每秒流過多少立方公尺），A＝斷面積，V＝流速</small></div>
+<div class="box eg"><span class="t">捏水管</span>用水管澆花時，用手指捏住出水口，水會噴得又快又遠。因為每秒流出的水量 Q 差不多不變，出口面積 A 變小，流速 V 就必須變大。河流也一樣：河道變窄的地方，水流特別湍急。</div>
+<h3>白努利定理：流得快，壓力小</h3>
+<div class="fig"><svg viewBox="0 0 620 170" role="img" aria-label="水管變窄處流速變快、壓力變小">
+<g font-family="sans-serif" font-size="13">
+<path d="M20 40 H200 L260 70 H360 L420 40 H600 V130 H420 L360 100 H260 L200 130 H20Z" fill="#bfe0ff" stroke="#1b2733" stroke-width="2"/>
+<g stroke="#1c4a78" stroke-width="3" fill="none">
+<line class="flow slow" x1="20" y1="85" x2="200" y2="85"/><line class="flow fast" x1="260" y1="85" x2="360" y2="85"/><line class="flow slow" x1="420" y1="85" x2="600" y2="85"/>
+<line class="flow slow" x1="20" y1="60" x2="200" y2="60"/><line class="flow slow" x1="20" y1="110" x2="200" y2="110"/><line class="flow slow" x1="420" y1="60" x2="600" y2="60"/><line class="flow slow" x1="420" y1="110" x2="600" y2="110"/></g>
+<rect x="100" y="0" width="10" height="40" fill="#fff" stroke="#1b2733"/><rect x="101" y="8" width="8" height="32" fill="#3b8fd9"/>
+<rect x="305" y="0" width="10" height="70" fill="#fff" stroke="#1b2733"/><rect x="306" y="45" width="8" height="25" fill="#3b8fd9"/>
+<text x="120" y="155">寬：流速慢，壓力高</text><text x="270" y="155" fill="#b3362b">窄：流速快，壓力低</text></g></svg></div>
+<p>1738 年，瑞士科學家<strong>丹尼爾‧白努利</strong>發現：在同一條流線上，<strong>流速越快的地方，壓力越小</strong>。上圖中細管子裡的水柱高度，就代表那裡的壓力。</p>
+<div class="box eg"><span class="t">生活中的白努利</span>對著兩張垂下的紙中間吹氣，紙會「吸」在一起；颱風時強風吹過屋頂上方，屋頂上方壓力變小，屋內壓力較大，屋頂可能被「掀」起來。</div>
+<div class="quiz" data-ans="2"><p class="q">水深 30 公尺處的水壓大約是多少？</p>
+<button class="opt">A. 30 Pa</button><button class="opt">B. 3 kPa</button><button class="opt">C. 約 300 kPa</button><button class="opt">D. 30 MPa</button>
+<div class="explain">每公尺約 10 kPa，30 m ≈ 300 kPa（約 3 倍大氣壓）。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>靜水壓 <strong>p＝ρgh</strong>，每公尺約 10 kPa，只看深度。</li>
+<li>水壩上窄下寬，因為<strong>底部水壓最大</strong>。</li>
+<li><strong>Q＝A×V</strong>：面積變小，流速變大。</li>
+<li>白努利：<strong>流速快，壓力小</strong>。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第六篇　水利與環境" data-title="水壩、河川與防洪">
+<div class="sheet">
+<h2>水壩、河川與防洪</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>三種水壩的原理</li><li>都江堰的智慧</li><li>「百年一次的洪水」真正的意思</li></ul></div>
+<h3>水壩的三種類型</h3>
+<div class="fig"><svg viewBox="0 0 620 190" role="img" aria-label="重力壩、拱壩、土石壩的斷面">
+<g font-family="sans-serif" font-size="13">
+<rect x="10" y="60" width="90" height="100" fill="#bfe0ff"/><polygon points="100,40 120,40 190,160 100,160" fill="#b8b3a8" stroke="#1b2733"/>
+<text x="40" y="180">① 重力壩（斷面）</text>
+<path d="M260 150 Q330 40 400 150" fill="none" stroke="#b8b3a8" stroke-width="14"/><path d="M270 150 Q330 60 390 150 Z" fill="#bfe0ff" opacity=".7"/>
+<polygon points="240,160 255,120 270,160" fill="#7d7369"/><polygon points="390,160 405,120 420,160" fill="#7d7369"/>
+<text x="265" y="180">② 拱壩（從上往下看）</text>
+<rect x="440" y="80" width="40" height="80" fill="#bfe0ff"/><polygon points="460,160 520,60 540,60 610,160" fill="#c8a165" stroke="#1b2733"/><polygon points="515,160 528,70 532,70 545,160" fill="#8e6f55"/>
+<text x="460" y="180">③ 土石壩（斷面）</text></g></svg></div>
+<div class="grid">
+<div class="card"><h4>① 重力壩</h4>靠<strong>自己的重量</strong>擋住水，不被推倒也不被推滑。像一個超重的大三角形混凝土塊。中國三峽大壩就是重力壩。</div>
+<div class="card"><h4>② 拱壩</h4>從上面看是一個<strong>彎向水庫的拱</strong>，把水壓轉成壓力傳到兩岸的岩壁。第四篇學的拱！用料少，但兩岸要有非常堅硬的岩盤。</div>
+<div class="card"><h4>③ 土石壩</h4>用土和石頭堆成，中間有一層不透水的黏土心層。可以就地取材，適合寬闊的河谷。台灣的石門水庫大壩就是土石壩。</div>
+</div>
+<div class="box warn"><span class="t">溢洪道</span>每座水壩都有<strong>溢洪道</strong>：當水庫快滿時，讓多餘的水安全地流走。如果水從壩頂漫過去（溢頂），特別是土石壩，會把壩體沖垮，非常危險。</div>
+<h3>都江堰：兩千年的智慧</h3>
+<div class="fig"><svg viewBox="0 0 620 260" role="img" aria-label="都江堰的魚嘴、飛沙堰與寶瓶口">
+<g font-family="sans-serif" font-size="13">
+<rect width="620" height="260" fill="#e7f0dd"/>
+<path d="M300 0 C300 60 290 90 280 120 C260 170 180 210 120 260 L220 260 C260 220 310 180 330 130 C345 95 350 60 350 0Z" fill="#5aa2e0"/>
+<path d="M330 130 C360 170 420 210 470 260 L560 260 C500 210 430 160 380 120 C365 100 360 80 350 60Z" fill="#8fc3ef"/>
+<path class="flow slow" d="M325 10 C322 60 305 110 280 150 C240 200 190 230 160 260" fill="none" stroke="#fff" stroke-width="2"/>
+<path class="flow" d="M340 60 C360 110 400 170 460 230" fill="none" stroke="#fff" stroke-width="2"/>
+<polygon points="330,120 340,70 352,120" fill="#7d7369"/><text x="360" y="100" fill="#1b2733">① 魚嘴：分成內外兩江</text>
+<rect x="385" y="165" width="50" height="10" fill="#7d7369" transform="rotate(35 410 170)"/><text x="440" y="165" fill="#1b2733">② 飛沙堰：溢洪排沙</text>
+<circle cx="260" cy="165" r="10" fill="none" stroke="#b3362b" stroke-width="3"/><text x="90" y="160" fill="#1b2733">③ 寶瓶口：控制進水量</text>
+<text x="80" y="245" fill="#fff">外江（排洪）</text><text x="470" y="250" fill="#1b2733">內江（灌溉）</text></g></svg><div class="cap">簡化示意圖，實際地形更複雜。</div></div>
+<p>秦國蜀郡太守<strong>李冰</strong>約在西元前 256 年主持修建。它沒有築高壩，而是用三個巧妙的部分：</p>
+<ul><li><strong>魚嘴</strong>：形狀像魚嘴的分水堤，把岷江分成內江和外江。枯水期大部分水流入內江灌溉；洪水期大部分水從外江排走（俗稱「分四六」）。</li>
+<li><strong>飛沙堰</strong>：內江的水太多時，從這裡溢回外江，同時利用漩渦把泥沙甩出去。</li>
+<li><strong>寶瓶口</strong>：在山上鑿開的窄口，像瓶口一樣限制進入平原的水量。</li></ul>
+<div class="box key"><span class="t">順應自然</span>都江堰的精神是「<strong>順應水的性質</strong>」而不是硬擋，所以兩千多年來仍在運作，讓成都平原成為「天府之國」。這對現代的防洪觀念也有很大啟發。</div>
+<h3>「百年洪水」不是一百年才來一次</h3>
+<div class="box warn"><span class="t">迴歸期的真正意思</span>工程師說「這條堤防能抵抗 <strong>100 年迴歸期</strong>的洪水」，意思是：這種大小的洪水<strong>每一年發生的機率是 1%</strong>。它不代表一百年才發生一次，可能連續兩年都發生！<br>算算看：在 30 年內至少遇到一次的機率 ＝ 1 − 0.99³⁰ ≈ <strong>26%</strong>，大約四分之一，並不小。</div>
+<h3>城市防洪</h3>
+<div class="grid">
+<div class="card"><h4>堤防</h4>沿河岸築高，擋住河水溢出。</div>
+<div class="card"><h4>抽水站</h4>堤防內的雨水排不出去時，用大型抽水機把水抽到河裡。</div>
+<div class="card"><h4>滯洪池</h4>暴雨時先把水暫存起來，等雨停再慢慢排出，像城市的「水庫」。</div>
+<div class="card"><h4>海綿城市</h4>用透水鋪面、綠地、雨水花園讓雨水滲入地下，減少地表逕流。</div>
+</div>
+<div class="quiz" data-ans="1"><p class="q">「100 年迴歸期洪水」代表什麼？</p>
+<button class="opt">A. 每 100 年一定會發生一次</button><button class="opt">B. 每一年發生的機率約 1%</button><button class="opt">C. 100 年內不會發生</button><button class="opt">D. 洪水會持續 100 天</button>
+<div class="explain">迴歸期是機率的概念：100 年迴歸期＝每年 1% 的發生機率。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>水壩：<strong>重力壩</strong>（靠重量）、<strong>拱壩</strong>（靠拱與岩壁）、<strong>土石壩</strong>（就地取材）。</li>
+<li>都江堰：魚嘴、飛沙堰、寶瓶口，<strong>順應自然</strong>。</li>
+<li>迴歸期 T 年＝<strong>每年機率 1/T</strong>。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第六篇　水利與環境" data-title="淨水與污水處理">
+<div class="sheet">
+<h2>環境工程：從河水到自來水，從馬桶到大海</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>自來水廠的淨水流程</li><li>污水處理的三個階段</li></ul></div>
+<p>人類平均壽命在過去一百多年大幅延長，很重要的原因之一就是<strong>乾淨的自來水和污水下水道</strong>，它們讓霍亂、傷寒等傳染病大大減少。這些都是土木工程師的貢獻。</p>
+<h3>淨水流程</h3>
+<div class="fig" id="wtp">
+<svg viewBox="0 0 620 150" role="img" aria-label="淨水廠流程">
+<g font-family="sans-serif" font-size="13" id="wtpSteps"></g></svg>
+<div class="readout" id="wtpOut" style="max-width:560px"></div>
+<div class="ctrl"><button class="btn alt" id="wtpPrev">◀ 上一步</button><button class="btn" id="wtpNext">下一步 ▶</button></div></div>
+<div class="box origin"><span class="t">混凝與膠凝</span>這裡的「混凝」不是混凝土！「混」是混合，「凝」是凝聚：加入藥劑（常用明礬或多元氯化鋁），讓水中帶電的微小顆粒失去互相排斥的力量而聚集。「膠凝」是讓這些小團塊像膠一樣黏成大團，叫做「膠羽」或「礬花」，大到可以沉下去。</div>
+<div class="try"><span class="t">明礬淨水</span>在一杯混濁的泥水裡加入少量明礬（中藥店或化工行買得到），攪拌一下後靜置，你會看到泥沙結成一團團慢慢沉到杯底，上面的水變清了。這就是混凝和沉澱。（實驗後的水不可以喝！）</div>
+<h3>污水處理</h3>
+<div class="tw"><table><tr><th>階段</th><th>做什麼</th><th>比喻</th></tr>
+<tr><td>初級處理（物理）</td><td>攔污柵擋住大垃圾，沉砂池、初沉池讓砂和固體沉下去</td><td>用篩子和沉澱</td></tr>
+<tr><td>二級處理（生物）</td><td>在曝氣池打入空氣，讓大量<strong>微生物吃掉</strong>水中的有機污染物，再沉澱分離</td><td>請細菌幫忙吃垃圾</td></tr>
+<tr><td>三級處理（進階）</td><td>去除氮、磷等營養鹽，或過濾消毒後再利用</td><td>精細加工</td></tr></table></div>
+<div class="box key"><span class="t">為什麼要去除氮和磷？</span>氮、磷是植物的肥料。如果直接排進河川湖泊，藻類會大量繁殖（叫<strong>優養化</strong>），藻類死後分解耗盡水中的氧氣，魚就死了。</div>
+<div class="box eg"><span class="t">不要把油倒進水槽</span>廚房的油倒進排水管，冷卻後會凝固，和其他垃圾結成大塊「油脂塊」，堵塞下水道。倫敦曾在下水道挖出重達上百噸的油脂塊。</div>
+<div class="quiz" data-ans="0"><p class="q">污水處理的「二級處理」主要是靠什麼去除污染物？</p>
+<button class="opt">A. 微生物分解有機物</button><button class="opt">B. 加熱煮沸</button><button class="opt">C. 用篩子過濾</button><button class="opt">D. 加入混凝土</button>
+<div class="explain">二級處理是生物處理，利用微生物吃掉有機污染物。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>淨水：<strong>取水→混凝→膠凝→沉澱→過濾→消毒→配水</strong>。</li>
+<li>污水：<strong>初級（物理）→二級（生物）→三級（進階）</strong>。</li>
+<li>氮磷過多會造成<strong>優養化</strong>。</li></ul></div>
+</div></section>
+<!-- ================= 第七篇 交通 ================= -->
+<section class="lesson" data-part="第七篇　交通工程" data-title="道路工程">
+<div class="sheet">
+<h2>道路工程：馬路底下藏了什麼？</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>路面的層次結構</li><li>柔性路面與剛性路面</li><li>路拱、超高：讓車子安全的設計</li></ul></div>
+<h3>馬路是一層一層的「千層蛋糕」</h3>
+<div class="fig"><svg viewBox="0 0 620 230" role="img" aria-label="道路路面的層次">
+<g font-family="sans-serif" font-size="14">
+<rect x="40" y="30" width="360" height="22" fill="#2f3438"/><text x="420" y="46">面層：瀝青混凝土</text>
+<rect x="40" y="52" width="360" height="40" fill="#8a8178"/><g fill="#6d655d"><circle cx="70" cy="70" r="5"/><circle cx="120" cy="80" r="6"/><circle cx="180" cy="66" r="5"/><circle cx="240" cy="78" r="6"/><circle cx="300" cy="68" r="5"/><circle cx="360" cy="80" r="6"/></g><text x="420" y="77">基層：級配碎石</text>
+<rect x="40" y="92" width="360" height="45" fill="#b39a7c"/><text x="420" y="119">底層：較便宜的粒料</text>
+<rect x="40" y="137" width="360" height="70" fill="#9b6b43"/><text x="420" y="176">路基：夯實的原地土</text>
+<g stroke="#b3362b" stroke-width="2" fill="none"><path d="M220 20 L220 28" marker-end="url(#ar)"/><path class="flow" d="M220 30 L150 200 M220 30 L290 200"/></g>
+<text x="40" y="225" fill="#566573">輪子的壓力往下擴散，越往下越分散，所以下層可以用比較便宜的材料。</text></g></svg></div>
+<p>車輪壓在路面上的壓力很集中，但每往下一層就擴散得更開。所以路面設計成<strong>上層最強最貴、下層較便宜</strong>，每一層剛好承受得住傳到它那裡的壓力，最經濟。</p>
+<h3>柔性路面 vs 剛性路面</h3>
+<div class="tw"><table><tr><th></th><th>柔性路面（瀝青）</th><th>剛性路面（混凝土）</th></tr>
+<tr><td>顏色</td><td>黑色</td><td>灰白色</td></tr>
+<tr><td>受力方式</td><td>一層層往下分散</td><td>整塊混凝土板像梁一樣分擔</td></tr>
+<tr><td>優點</td><td>施工快、行車舒適、容易修補</td><td>耐久、維修少、耐重車</td></tr>
+<tr><td>缺點</td><td>夏天易車轍、要常重鋪</td><td>貴、需切伸縮縫、修補較麻煩</td></tr>
+<tr><td>常見地點</td><td>一般道路、高速公路</td><td>機場跑道、收費站、貨櫃場</td></tr></table></div>
+<div class="box origin"><span class="t">馬克當路與 Tarmac</span>1820 年左右，蘇格蘭工程師<strong>約翰‧麥克亞當（John McAdam）</strong>發明了一種築路法：用大小分級的碎石層層壓實，並把路面做成中間高、兩邊低以利排水。這種路叫「macadam（馬克當路）」。後來有人在碎石上澆焦油（tar）黏結，就成了 <strong>tarmac</strong>（tar ＋ macadam），這個字到今天還用來稱呼機場的停機坪。</div>
+<div class="box eg"><span class="t">坑洞是怎麼來的？</span>雨水從路面的細小裂縫滲下去，把下面的基層泡軟；車子一壓，泡軟的材料被擠出，路面失去支撐就破成一個洞。所以<strong>排水</strong>對道路極度重要，路面做成中間高兩側低（叫<strong>路拱</strong>，通常約 2% 的坡度），兩旁要有排水溝。</div>
+<h3>彎道的設計：超高</h3>
+<div class="fig"><svg viewBox="0 0 620 170" role="img" aria-label="彎道超高：路面向彎道內側傾斜">
+<g font-family="sans-serif" font-size="13">
+<polygon points="100,130 420,90 420,110 100,150" fill="#2f3438"/>
+<rect x="230" y="75" width="60" height="32" rx="6" fill="#f2b705" transform="rotate(-7 260 105)"/>
+<line x1="260" y1="95" x2="400" y2="95" stroke="#b3362b" stroke-width="3" marker-end="url(#ar)"/><text x="330" y="85" fill="#b3362b">離心的感覺</text>
+<text x="60" y="160" fill="#1b2733">彎道內側</text><text x="400" y="135" fill="#1b2733">外側較高</text></g></svg></div>
+<p>車子轉彎時，會有一股「被甩出去」的感覺。如果彎道路面是平的，全靠輪胎的摩擦力抵抗，下雨路滑時就容易打滑。所以彎道會把<strong>外側墊高</strong>，讓路面往內傾斜，這叫<strong>超高</strong>。賽車場和自行車場的彎道傾斜得特別厲害，就是這個道理。</p>
+<div class="box key"><span class="t">交通工程不只是鋪路</span>交通工程師還要設計：<strong>視距</strong>（駕駛能看多遠，才來得及煞車）、坡度、車道寬度、交叉路口、號誌時間、公車路線、停車需求，甚至用電腦模擬整個城市的車流。</div>
+<div class="quiz" data-ans="2"><p class="q">為什麼路面要做成中間稍高、兩側稍低？</p>
+<button class="opt">A. 比較好看</button><button class="opt">B. 讓車子開更快</button><button class="opt">C. 讓雨水快速排到兩側，避免滲入破壞路面</button><button class="opt">D. 節省材料</button>
+<div class="explain">這叫路拱。排水不良是道路損壞的主要原因之一。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>路面由上而下：<strong>面層→基層→底層→路基</strong>。</li>
+<li><strong>柔性</strong>（瀝青）vs <strong>剛性</strong>（混凝土）路面。</li>
+<li><strong>排水</strong>最重要；彎道用<strong>超高</strong>提高安全。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第七篇　交通工程" data-title="橋梁工程">
+<div class="sheet">
+<h2>橋梁工程：把學過的全部用上</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>一座橋的各部位名稱</li><li>塔科馬海峽橋的教訓</li><li>橋是怎麼蓋出來的</li></ul></div>
+<p>橋梁可以說是土木工程的「集大成」：結構（梁、拱、索）、材料（預力混凝土、鋼）、大地（基礎）、水利（河流沖刷）、交通（車道），全部都要用上。</p>
+<h3>橋的各部位</h3>
+<div class="fig"><svg viewBox="0 0 620 260" role="img" aria-label="橋梁各部位名稱">
+<g font-family="sans-serif" font-size="13">
+<rect x="0" y="170" width="620" height="90" fill="#c8a165"/><rect x="170" y="150" width="280" height="30" fill="#5aa2e0"/>
+<path d="M0 130 H80 L170 150 V170 H450 V150 L540 130 H620 V170 H0Z" fill="#c8a165"/>
+<rect x="30" y="92" width="560" height="16" fill="#8a9aa9" stroke="#1b2733"/>
+<rect x="40" y="108" width="40" height="30" fill="#6f7f8e"/><rect x="540" y="108" width="40" height="30" fill="#6f7f8e"/>
+<rect x="298" y="108" width="24" height="70" fill="#6f7f8e"/><rect x="286" y="178" width="48" height="16" fill="#5d6b78"/>
+<g fill="#4d5a66"><rect x="290" y="194" width="7" height="55"/><rect x="306" y="194" width="7" height="55"/><rect x="322" y="194" width="7" height="55"/></g>
+<rect x="302" y="104" width="16" height="5" fill="#f2b705"/>
+<line x1="80" y1="92" x2="80" y2="108" stroke="#b3362b" stroke-width="3"/>
+<g fill="#1b2733"><text x="200" y="85">上部結構：橋面、主梁</text><text x="340" y="140">橋墩</text><text x="10" y="155">橋台</text><text x="340" y="225">樁基礎</text><text x="330" y="102" fill="#9a6a00">支承</text><text x="86" y="85" fill="#b3362b">伸縮縫</text></g>
+<text x="190" y="165" fill="#fff">河水（注意沖刷）</text></g></svg></div>
+<ul><li><strong>上部結構</strong>：橋面和主梁，直接承受車輛。</li>
+<li><strong>下部結構</strong>：<strong>橋墩</strong>（中間的柱子）、<strong>橋台</strong>（兩端和路堤銜接的部分，同時也是擋土牆）、<strong>基礎</strong>。</li>
+<li><strong>支承</strong>：在上下部結構之間，讓橋面可以微微轉動或滑動（第二篇的滾支承、鉸支承）。</li>
+<li><strong>伸縮縫</strong>：吸收熱脹冷縮。</li></ul>
+<div class="box warn"><span class="t">沖刷：橋梁的隱形殺手</span>洪水來時，湍急的水流會把橋墩周圍的砂石掏空（叫<strong>沖刷</strong>），基礎失去支撐，橋就可能斷掉。很多橋梁斷裂事故都不是結構本身不夠強，而是基礎被洪水掏空。所以跨河橋梁的基礎要打得夠深，並且定期檢查。</div>
+<h3>塔科馬海峽橋：被風吹垮的橋</h3>
+<p>1940 年，美國華盛頓州新建的塔科馬海峽橋，是當時世界第三長的懸索橋。它的橋面設計得非常<strong>細長輕薄</strong>，通車後只要一有風就上下起伏，被當地人暱稱為「舞動的格蒂」。通車才四個月，在一陣風速並不算特別強的風中，橋面開始劇烈<strong>扭轉</strong>，最後整段斷裂掉進海裡。</p>
+<div class="box key"><span class="t">教訓</span>原因是一種叫「<strong>顫振</strong>」的空氣動力現象：風吹過扁平的橋面產生渦流，橋面的扭動又讓渦流變得更強，能量越積越多，像自己在推自己的鞦韆。從此以後，<strong>所有大型橋梁都要做風洞試驗</strong>，橋面也改成流線形或桁架形，讓風能順利通過。</div>
+<h3>橋怎麼蓋？</h3>
+<div class="grid">
+<div class="card"><h4>支撐架工法</h4>在橋下搭滿支架，在上面澆混凝土。簡單，但河流深或橋很高時不適用。</div>
+<div class="card"><h4>預鑄吊裝</h4>在工廠或工地旁先做好一段段的梁，再用大吊車吊上去。捷運高架橋常用。</div>
+<div class="card"><h4>平衡懸臂工法</h4>從橋墩開始，<strong>左右對稱地一段一段往外長</strong>，像天秤兩邊一直保持平衡，最後和隔壁橋墩長過來的部分在中間接起來。適合跨越深谷和河流。</div>
+<div class="card"><h4>頂推工法</h4>在橋的一端做好一段，用千斤頂往前推，再接下一段、再推，像擠牙膏一樣把整座橋推過去。</div>
+</div>
+<div class="quiz" data-ans="3"><p class="q">塔科馬海峽橋倒塌之後，大型橋梁設計多了哪一項必做的工作？</p>
+<button class="opt">A. 加厚鋼筋保護層</button><button class="opt">B. 改用木材</button><button class="opt">C. 不再興建懸索橋</button><button class="opt">D. 風洞試驗，檢查空氣動力穩定性</button>
+<div class="explain">塔科馬海峽橋是空氣動力不穩定造成的，之後大型橋梁都要做風洞試驗。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>橋＝<strong>上部結構＋下部結構（橋墩、橋台、基礎）＋支承＋伸縮縫</strong>。</li>
+<li>要注意<strong>河流沖刷</strong>和<strong>風的空氣動力效應</strong>。</li>
+<li>工法：支撐架、預鑄吊裝、<strong>平衡懸臂</strong>、頂推。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第七篇　交通工程" data-title="隧道與鐵路">
+<div class="sheet">
+<h2>隧道與鐵路：地底下和軌道上</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>三種隧道工法</li><li>隧道鑽掘機的由來</li><li>鐵軌下面為什麼鋪碎石</li></ul></div>
+<h3>挖隧道最怕的是什麼？</h3>
+<p>在地底挖洞，最大的危險是<strong>還沒撐住，周圍的土石就先塌下來</strong>，以及<strong>地下水湧進來</strong>。所以隧道工程的關鍵是「一邊挖、一邊撐」。</p>
+<div class="grid">
+<div class="card"><div class="ic">🚇</div><h4>明挖覆蓋法</h4>從地面往下挖一條大溝，在溝裡蓋好隧道，再把土填回去、恢復路面。適合淺的地下道、捷運車站。缺點是施工期間地面交通會受影響。</div>
+<div class="card"><div class="ic">⛰️</div><h4>新奧工法（NATM）</h4>適合山岳隧道。用炸藥或機械開挖後，立刻噴上一層混凝土、打入<strong>岩栓</strong>，讓周圍的岩盤變成「自己撐住自己」的拱圈。</div>
+<div class="card"><div class="ic">🐛</div><h4>隧道鑽掘機（TBM）／潛盾</h4>一台巨大的圓筒形機器，前面有旋轉的刀盤一邊挖，後面一邊組裝預鑄的環片，像一條會自己鋪管子的巨型蚯蚓。城市捷運最常用。</div>
+</div>
+<div class="fig"><svg viewBox="0 0 620 190" role="img" aria-label="隧道鑽掘機動畫">
+<style>@keyframes spin{to{transform:rotate(360deg)}}#tbmHead{animation:spin 3s linear infinite;transform-box:fill-box;transform-origin:center}</style>
+<g font-family="sans-serif" font-size="13">
+<rect width="620" height="190" fill="#9b6b43"/>
+<rect x="60" y="55" width="360" height="80" fill="#5d6b78"/>
+<g fill="#b8b3a8" stroke="#1b2733"><rect x="60" y="55" width="50" height="80"/><rect x="110" y="55" width="50" height="80"/><rect x="160" y="55" width="50" height="80"/></g>
+<text x="75" y="150" fill="#fff">預鑄環片（隧道的牆）</text>
+<g id="tbmHead"><circle cx="440" cy="95" r="48" fill="#f2b705" stroke="#1b2733" stroke-width="2"/><g stroke="#1b2733" stroke-width="5"><line x1="392" y1="95" x2="488" y2="95"/><line x1="440" y1="47" x2="440" y2="143"/><line x1="406" y1="61" x2="474" y2="129"/><line x1="474" y1="61" x2="406" y2="129"/></g></g>
+<text x="400" y="170" fill="#fff">旋轉刀盤</text><text x="250" y="30" fill="#fff">前進方向 →</text></g></svg></div>
+<div class="box origin"><span class="t">NATM（新奧地利隧道工法）</span>全名 New Austrian Tunnelling Method，1960 年代由奧地利工程師 <strong>拉布塞維奇（Rabcewicz）</strong>等人整理提出。「新」是相對於舊式用大量木頭或鋼架硬撐的方法。它的核心觀念是：<strong>岩盤本身就是支撐結構的一部分</strong>，工程師只是「幫它一把」。</div>
+<div class="box origin"><span class="t">從船蛆學來的潛盾</span>1818 年，工程師<strong>馬克‧布魯內爾（Marc Brunel）</strong>觀察到一種會在木船上鑽洞的「船蛆」：它的頭部有堅硬的殼可以鑽木頭，身體後面會分泌物質把洞壁包起來。他因此發明了<strong>潛盾（Shield）</strong>：工人在一個鋼鐵框架的保護下挖土，後面立刻砌上磚牆。他用這個方法建造了倫敦泰晤士河底的隧道（1843 年完工），是世界上第一條成功穿越可航行河流底下的隧道。現代的潛盾機和 TBM 都源自這個概念。</div>
+<h3>鐵路：軌道為什麼那樣鋪？</h3>
+<div class="fig"><svg viewBox="0 0 620 160" role="img" aria-label="鐵路軌道斷面：鋼軌、枕木、道碴">
+<g font-family="sans-serif" font-size="13">
+<polygon points="60,130 150,70 470,70 560,130" fill="#8a8178"/>
+<g fill="#6d655d"><circle cx="160" cy="100" r="5"/><circle cx="220" cy="115" r="6"/><circle cx="300" cy="105" r="5"/><circle cx="380" cy="118" r="6"/><circle cx="450" cy="100" r="5"/><circle cx="120" cy="120" r="5"/><circle cx="500" cy="120" r="5"/></g>
+<rect x="150" y="60" width="320" height="16" fill="#7a5a3c"/>
+<path d="M200 60 h24 v-6 h-8 v-20 h8 v-6 h-24 v6 h8 v20 h-8z" fill="#5d6b78"/><path d="M396 60 h24 v-6 h-8 v-20 h8 v-6 h-24 v6 h8 v20 h-8z" fill="#5d6b78"/>
+<rect x="0" y="130" width="620" height="30" fill="#9b6b43"/>
+<g fill="#1b2733"><text x="240" y="40">鋼軌</text><text x="480" y="70">枕木</text><text x="500" y="110">道碴（碎石）</text><text x="20" y="150" fill="#fff">路基</text></g></g></svg></div>
+<ul><li><strong>鋼軌</strong>：斷面像「工」字，第四篇學的 I 型斷面，抗彎效率高。</li>
+<li><strong>枕木</strong>：把兩條鋼軌固定在正確距離（軌距），並把力分散。</li>
+<li><strong>道碴</strong>：尖銳的碎石互相卡住，把枕木固定不亂跑；又能排水、吸收振動、方便調整軌道高低。</li></ul>
+<div class="box eg"><span class="t">為什麼用尖尖的碎石，不用圓的鵝卵石？</span>圓石頭會像彈珠一樣滾來滾去，鎖不住枕木；有稜角的碎石能互相咬合。高鐵等高速鐵路則常改用整片混凝土的<strong>版式軌道</strong>，更平順、維修更少。</div>
+<div class="quiz" data-ans="0"><p class="q">城市裡要在熱鬧街道底下挖捷運隧道，又不想挖開路面，最常用哪種方法？</p>
+<button class="opt">A. 潛盾機（TBM）</button><button class="opt">B. 明挖覆蓋法</button><button class="opt">C. 從地面放炸藥</button><button class="opt">D. 挖一條露天大溝</button>
+<div class="explain">潛盾機在地下推進，地面交通幾乎不受影響，是城市捷運的主要工法。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>隧道：<strong>明挖覆蓋、新奧工法（NATM）、潛盾／TBM</strong>。</li>
+<li>潛盾的靈感來自<strong>船蛆</strong>。</li>
+<li>軌道：<strong>鋼軌（I 形）→枕木→道碴→路基</strong>。</li></ul></div>
+</div></section>
+
+<!-- ================= 第八篇 測量與圖說 ================= -->
+<section class="lesson" data-part="第八篇　測量與圖說" data-title="測量">
+<div class="sheet">
+<h2>測量：工程的眼睛</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>水準測量怎麼算高低差</li><li>等高線怎麼看</li><li>現代測量工具</li></ul></div>
+<p>在任何工程動工之前，第一件事就是<strong>測量</strong>：這塊地多大？哪裡高哪裡低？柱子要準確地立在哪一點？一座橋從兩岸同時蓋過來，中間要剛好接上，差幾公分都不行。</p>
+<h3>水準測量：量高低</h3>
+<p>工具是一台會自動保持水平的望遠鏡（<strong>水準儀</strong>），和一根有刻度的長尺（<strong>標尺</strong>）。</p>
+<div class="fig" id="lv">
+<svg viewBox="0 0 620 250" role="img" aria-label="水準測量示意圖">
+<g font-family="sans-serif" font-size="13">
+<path id="lvGround" d="" fill="#c8a165"/>
+<line x1="290" y1="60" x2="290" y2="170" stroke="#1b2733" stroke-width="2"/><rect x="270" y="48" width="40" height="16" fill="#0f2d4d"/>
+<line x1="80" y1="56" x2="540" y2="56" stroke="#b3362b" stroke-dasharray="6 4"/><text x="200" y="48" fill="#b3362b">水平視線</text>
+<rect id="lvRodA" x="75" y="0" width="10" height="0" fill="#fff6d6" stroke="#9a6a00"/>
+<rect id="lvRodB" x="525" y="0" width="10" height="0" fill="#fff6d6" stroke="#9a6a00"/>
+<text id="lvTA" x="20" y="0" fill="#1b2733"></text><text id="lvTB" x="450" y="0" fill="#1b2733"></text>
+<text x="60" y="240" fill="#1b2733">A 點（已知高程）</text><text x="480" y="240" fill="#1b2733">B 點（要求的）</text></g></svg>
+<div class="ctrl"><label>A 點高程 <input type="number" id="lvH" value="100.000" step="0.001"> m</label><label>後視讀數（看 A）<input type="number" id="lvBS" value="1.500" step="0.001"> m</label><label>前視讀數（看 B）<input type="number" id="lvFS" value="0.800" step="0.001"> m</label></div>
+<div class="readout" id="lvOut"></div></div>
+<p><strong>原理很簡單</strong>：望遠鏡的視線是水平的，看 A 點的尺讀到 1.500 m，表示視線比 A 高 1.5 m；看 B 點的尺讀到 0.800 m，表示視線比 B 高 0.8 m。所以 B 比 A 高 1.5 − 0.8 ＝ 0.7 m。</p>
+<div class="formula">B 點高程 ＝ A 點高程 ＋ 後視 − 前視</div>
+<div class="box origin"><span class="t">高程與水準點</span><strong>高程</strong>是指某一點比「平均海平面」高多少。「水準」原意就是「水平的標準」，古代用一盆水的水面來找水平。各地政府會設置已知高程的<strong>水準點</strong>（英文 benchmark），通常是埋在地上的金屬標誌，測量從這裡開始。英文 benchmark 據說來自早期測量員在石頭上刻記號，並在上面架一個小托架（bench）來放標尺；後來這個字也被借用成「比較的標準」。</div>
+<h3>等高線：把山畫在紙上</h3>
+<div class="fig"><svg viewBox="0 0 620 220" role="img" aria-label="山丘與等高線的對應">
+<g font-family="sans-serif" font-size="12">
+<path d="M20 200 Q90 180 130 110 Q160 60 190 55 Q220 60 250 120 Q280 185 300 200Z" fill="#b9d3a4" stroke="#2e7d4f"/>
+<g stroke="#9a6a00" stroke-dasharray="4 3"><line x1="20" y1="170" x2="300" y2="170"/><line x1="20" y1="130" x2="300" y2="130"/><line x1="20" y1="90" x2="300" y2="90"/></g>
+<text x="20" y="215">側面看山：虛線是等高切面</text>
+<g fill="none" stroke="#2e7d4f" stroke-width="2"><ellipse cx="460" cy="115" rx="130" ry="85"/><ellipse cx="480" cy="112" rx="85" ry="60"/><ellipse cx="495" cy="108" rx="42" ry="32"/></g>
+<text x="360" y="210">從上往下看：等高線</text><text x="490" y="113">▲</text>
+<text x="405" y="120" fill="#9a6a00">線很密</text><text x="540" y="70" fill="#9a6a00">線很疏</text></g></svg></div>
+<p>把一座山用好幾個水平面「切片」，每一片的邊緣畫到地圖上，就是<strong>等高線</strong>。<strong>線越密的地方坡越陡，線越疏的地方越平緩</strong>。工程師看等高線圖，就能決定道路要怎麼繞、哪裡要挖、哪裡要填。</p>
+<h3>現代測量工具</h3>
+<div class="grid">
+<div class="card"><h4>全站儀</h4>同時量角度和距離的電子儀器，工地放樣最常用。</div>
+<div class="card"><h4>衛星定位（GNSS）</h4>接收 GPS 等衛星訊號，精密測量可達公分等級。</div>
+<div class="card"><h4>空拍機測量</h4>拍攝大量照片，用電腦算出 3D 地形模型。</div>
+<div class="card"><h4>光達（LiDAR）</h4>發射雷射並計算反射時間，每秒可量幾十萬個點，連樹林底下的地面都能掃描。</div>
+</div>
+<div class="quiz" data-ans="1"><p class="q">A 點高程 50.000 m，後視讀 1.200 m，前視 B 點讀 2.000 m，B 點高程是多少？</p>
+<button class="opt">A. 50.800 m</button><button class="opt">B. 49.200 m</button><button class="opt">C. 53.200 m</button><button class="opt">D. 48.800 m</button>
+<div class="explain">50.000 ＋ 1.200 − 2.000 ＝ 49.200 m。前視讀數比較大，代表 B 比較低。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>水準測量：<strong>B 高程＝A 高程＋後視−前視</strong>。</li>
+<li>等高線<strong>密＝陡、疏＝緩</strong>。</li>
+<li>現代工具：全站儀、GNSS、空拍、光達。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第八篇　測量與圖說" data-title="讀懂工程圖">
+<div class="sheet">
+<h2>讀懂工程圖：工程師的共同語言</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>比例尺</li><li>平面圖、立面圖、剖面圖</li><li>看懂結構圖上的代號</li></ul></div>
+<p>一個工程可能有幾百張圖，設計的人、蓋的人、檢查的人都要看同樣的圖。所以工程圖有嚴格的規則，就像一種共同語言。</p>
+<h3>比例尺</h3>
+<p>圖上標「<strong>1:100</strong>」，表示圖上 1 公分代表實際 100 公分（1 公尺）。圖上量到一面牆長 8 cm，實際就是 8 m。工程圖的尺寸通常以<strong>公釐（mm）</strong>標示，而且<strong>一定要看圖上寫的數字，不要直接拿尺在圖上量</strong>，因為列印時可能被縮放。</p>
+<h3>三種基本視圖</h3>
+<div class="fig"><svg viewBox="0 0 620 260" role="img" aria-label="一間小屋的平面圖、立面圖、剖面圖">
+<g font-family="sans-serif" font-size="13">
+<text x="20" y="20" font-weight="700" fill="#0f2d4d">平面圖（從上往下看，切在窗戶高度）</text>
+<rect x="30" y="35" width="170" height="120" fill="none" stroke="#1b2733" stroke-width="6"/>
+<line x1="115" y1="35" x2="115" y2="155" stroke="#1b2733" stroke-width="3"/>
+<rect x="60" y="150" width="30" height="10" fill="#fff"/><path d="M60 155 A30 30 0 0 1 90 125" fill="none" stroke="#1b2733"/>
+<rect x="140" y="30" width="40" height="10" fill="#bfe0ff" stroke="#1b2733"/>
+<text x="55" y="100">客廳</text><text x="140" y="100">臥室</text>
+<line x1="30" y1="175" x2="200" y2="175" stroke="#566573"/><text x="90" y="192" fill="#566573">6000</text>
+<line x1="72" y1="30" x2="72" y2="170" stroke="#b3362b" stroke-dasharray="8 3 2 3"/><text x="64" y="215" fill="#b3362b">剖面線 A</text>
+<text x="240" y="20" font-weight="700" fill="#0f2d4d">立面圖（從外面看）</text>
+<polygon points="240,90 320,40 400,90" fill="#dfe8f1" stroke="#1b2733"/><rect x="250" y="90" width="140" height="80" fill="#fff" stroke="#1b2733"/>
+<rect x="270" y="120" width="30" height="50" fill="#c9c5bc" stroke="#1b2733"/><rect x="330" y="110" width="40" height="30" fill="#bfe0ff" stroke="#1b2733"/>
+<text x="440" y="20" font-weight="700" fill="#0f2d4d">剖面圖 A（切開看裡面）</text>
+<polygon points="440,90 520,40 600,90" fill="none" stroke="#1b2733" stroke-width="2"/>
+<rect x="450" y="90" width="10" height="80" fill="#b8b3a8" stroke="#1b2733"/><rect x="580" y="90" width="10" height="80" fill="#b8b3a8" stroke="#1b2733"/>
+<rect x="450" y="86" width="140" height="8" fill="#8a9aa9" stroke="#1b2733"/>
+<rect x="440" y="170" width="160" height="12" fill="#8a9aa9" stroke="#1b2733"/><rect x="445" y="182" width="20" height="20" fill="#5d6b78"/><rect x="575" y="182" width="20" height="20" fill="#5d6b78"/>
+<text x="470" y="140" fill="#566573">看得到牆厚、</text><text x="470" y="158" fill="#566573">樓板、基礎</text>
+<rect x="0" y="202" width="620" height="2" fill="#9b6b43"/><text x="20" y="245" fill="#566573">三張圖合起來，才能完整描述一個立體的東西。</text></g></svg></div>
+<ul><li><strong>平面圖</strong>：想像在窗戶高度把房子水平切開、從上往下看。看得到房間配置、牆、門窗位置。</li>
+<li><strong>立面圖</strong>：從外面正對著看建築的某一面，看得到外觀、高度、窗戶樣式。</li>
+<li><strong>剖面圖</strong>：沿著一條線垂直切開，看得到內部：樓板厚度、梁、基礎、樓層高度。</li></ul>
+<div class="box eg"><span class="t">切蛋糕</span>剖面圖就像把一個多層蛋糕切開，你才看得到裡面有幾層、每層夾了什麼。平面圖上會畫一條「剖面線」並標上代號（如 A），告訴你是從哪裡切的。</div>
+<h3>結構圖上的代號</h3>
+<div class="tw"><table><tr><th>代號</th><th>意思</th></tr>
+<tr><td>C1、C2</td><td>柱（Column）第 1 型、第 2 型</td></tr>
+<tr><td>B1、G1</td><td>梁（Beam）、大梁（Girder）</td></tr>
+<tr><td>S1</td><td>樓板（Slab）</td></tr>
+<tr><td>F1</td><td>基礎（Footing）</td></tr>
+<tr><td>4-#8</td><td>4 支 8 號鋼筋（台灣常用的號數，#8 直徑約 25 mm）</td></tr>
+<tr><td>#3@150</td><td>3 號鋼筋，每 150 mm 放一支（常用在箍筋）</td></tr></table></div>
+<div class="box key"><span class="t">為什麼用英文字母？</span>因為現代結構工程從歐美發展而來，用英文字首最簡潔，全世界的工程師也都看得懂。「@」讀作 at，表示「間距」。</div>
+<div class="quiz" data-ans="2"><p class="q">比例尺 1:50 的圖上，一根梁畫了 12 cm 長，實際長度是多少？</p>
+<button class="opt">A. 60 cm</button><button class="opt">B. 12 m</button><button class="opt">C. 6 m</button><button class="opt">D. 50 cm</button>
+<div class="explain">12 cm × 50 ＝ 600 cm ＝ 6 m。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>比例尺 1:100＝圖上 1 cm 代表實際 1 m；<strong>以標示數字為準</strong>。</li>
+<li><strong>平面圖、立面圖、剖面圖</strong>一起描述立體。</li>
+<li>結構代號：<strong>C 柱、B 梁、S 板、F 基礎</strong>；4-#8、#3@150 表示鋼筋。</li></ul></div>
+</div></section>
+<!-- ================= 第九篇 專業實務 ================= -->
+<section class="lesson" data-part="第九篇　專業實務" data-title="工程的生命週期">
+<div class="sheet">
+<h2>工程的生命週期：從一個想法到一座橋</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>工程從規劃到拆除的各階段</li><li>業主、設計、監造、營造各是誰</li><li>要徑：決定工期的那條路</li></ul></div>
+<h3>一個工程的一生</h3>
+<div class="tl">
+<div class="it"><span class="yr">① 規劃</span><br>為什麼要做？需要一座橋還是一條隧道？預算大概多少？</div>
+<div class="it"><span class="yr">② 可行性研究</span><br>技術做得到嗎？對環境有什麼影響？花的錢值得嗎？（環境影響評估常在這個階段）</div>
+<div class="it"><span class="yr">③ 設計</span><br>先做<strong>基本設計</strong>（決定型式、大小），再做<strong>細部設計</strong>（每根鋼筋、每個螺栓都畫清楚），並計算預算。</div>
+<div class="it"><span class="yr">④ 招標發包</span><br>公開讓營造廠競標，選出價格合理、能力足夠的廠商。</div>
+<div class="it"><span class="yr">⑤ 施工</span><br>照圖施工，同時控制品質、進度、成本、安全。</div>
+<div class="it"><span class="yr">⑥ 驗收</span><br>檢查是否符合設計，合格才交給業主使用。</div>
+<div class="it"><span class="yr">⑦ 營運維護</span><br>往往長達 50～100 年：定期檢測、修補、補強。</div>
+<div class="it"><span class="yr">⑧ 拆除或再利用</span><br>到了使用年限，拆除或改建，材料盡量回收。</div>
+</div>
+<div class="box key"><span class="t">改變越早越便宜</span>在規劃階段改一條線只要動動筆；到了施工階段才改，可能要拆掉已經蓋好的東西。所以工程師會在前期花很多時間仔細思考。</div>
+<h3>工程裡的四種角色</h3>
+<div class="grid">
+<div class="card"><div class="ic">🏛️</div><h4>業主</h4>出錢、提出需求的一方。例如政府、開發商。</div>
+<div class="card"><div class="ic">✏️</div><h4>設計單位</h4>工程顧問公司、建築師事務所，負責畫圖和計算。</div>
+<div class="card"><div class="ic">🔍</div><h4>監造單位</h4>代表業主在工地監督，確認營造廠照圖施工。</div>
+<div class="card"><div class="ic">👷</div><h4>營造廠（承包商）</h4>實際蓋出來的公司，再把部分工作分包給專業廠商。</div>
+</div>
+<div class="box eg"><span class="t">品質、成本、時間的三角形</span>業主通常希望「又好、又便宜、又快」，但三者互相牽制：要更快就要多請人（變貴）；要更便宜可能要犧牲時間或品質。營建管理就是在這三者之間找平衡，而<strong>安全永遠不能拿來交換</strong>。</div>
+<h3>要徑：哪些工作不能拖？</h3>
+<p>一個工程有很多工作，有些必須依序做（基礎做完才能立柱），有些可以同時做。把這些工作排成時程表（叫<strong>甘特圖</strong>），就能找出決定總工期的那一條最長的路，叫<strong>要徑</strong>。</p>
+<div class="fig"><svg viewBox="0 0 620 230" role="img" aria-label="簡單的甘特圖與要徑">
+<g font-family="sans-serif" font-size="13">
+<g stroke="#e3e9ef">
+<line x1="130" y1="20" x2="130" y2="200"/><line x1="200" y1="20" x2="200" y2="200"/><line x1="270" y1="20" x2="270" y2="200"/><line x1="340" y1="20" x2="340" y2="200"/><line x1="410" y1="20" x2="410" y2="200"/><line x1="480" y1="20" x2="480" y2="200"/><line x1="550" y1="20" x2="550" y2="200"/></g>
+<text x="10" y="45">整地</text><rect x="130" y="32" width="70" height="18" fill="#b3362b"/>
+<text x="10" y="75">基礎</text><rect x="200" y="62" width="140" height="18" fill="#b3362b"/>
+<text x="10" y="105">訂購鋼材</text><rect x="130" y="92" width="140" height="18" fill="#1c4a78"/><rect x="270" y="92" width="70" height="18" fill="none" stroke="#1c4a78" stroke-dasharray="4 3"/>
+<text x="10" y="135">主體結構</text><rect x="340" y="122" width="140" height="18" fill="#b3362b"/>
+<text x="10" y="165">水電管線</text><rect x="410" y="152" width="70" height="18" fill="#1c4a78"/>
+<text x="10" y="195">裝修完工</text><rect x="480" y="182" width="70" height="18" fill="#b3362b"/>
+<text x="130" y="220" fill="#566573">每格＝1 個月　紅色＝要徑（任何一項延誤，總工期就延誤）　虛線＝可延誤的寬裕時間</text></g></svg></div>
+<div class="box origin"><span class="t">甘特圖</span>由美國工程師<strong>亨利‧甘特（Henry Gantt）</strong>在 1910 年代推廣，用橫條表示每項工作的開始與結束。1950 年代又發展出「要徑法（CPM）」，最早用在大型化工廠和軍事計畫的管理上。</div>
+<div class="quiz" data-ans="1"><p class="q">在工地代表業主、監督營造廠是否照圖施工的是？</p>
+<button class="opt">A. 營造廠</button><button class="opt">B. 監造單位</button><button class="opt">C. 材料供應商</button><button class="opt">D. 路過的民眾</button>
+<div class="explain">監造單位代表業主把關施工品質。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li><strong>規劃→可行性→設計→招標→施工→驗收→維護→拆除</strong>。</li>
+<li>四角色：<strong>業主、設計、監造、營造</strong>。</li>
+<li>甘特圖上的<strong>要徑</strong>決定總工期。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第九篇　專業實務" data-title="施工與品質管制">
+<div class="sheet">
+<h2>施工與品質管制：圖紙變成真實</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>鋼筋混凝土構件的施工步驟</li><li>坍度試驗和圓柱試體</li><li>常見的施工缺失</li></ul></div>
+<h3>鋼筋混凝土怎麼蓋？（按步驟看）</h3>
+<div class="fig" id="cs">
+<div class="ctrl" id="csBtns"></div>
+<div id="csCard" style="text-align:left;max-width:600px;margin:0 auto;font-size:16px"></div></div>
+<h3>品質管制：怎麼確定混凝土合格？</h3>
+<h4>① 坍度試驗：看稠度</h4>
+<div class="fig" id="sl">
+<svg viewBox="0 0 620 220" role="img" aria-label="坍度試驗動畫">
+<style>
+@keyframes slCone{0%,25%{transform:translateY(0)}55%,100%{transform:translateY(-110px)}}
+@keyframes slBody{0%,40%{transform:scaleY(1) scaleX(1)}70%,100%{transform:scaleY(.72) scaleX(1.18)}}
+#slCone.go{animation:slCone 3s ease forwards}
+#slBody.go{animation:slBody 3s ease forwards;transform-box:fill-box;transform-origin:bottom}
+</style>
+<g font-family="sans-serif" font-size="13">
+<rect x="100" y="190" width="420" height="8" fill="#5d6b78"/>
+<polygon id="slBody" points="270,70 350,70 380,190 240,190" fill="#9c958a"/>
+<g id="slCone"><polygon points="265,62 355,62 388,190 232,190" fill="none" stroke="#1c4a78" stroke-width="4"/><line x1="245" y1="140" x2="225" y2="140" stroke="#1c4a78" stroke-width="4"/><line x1="375" y1="140" x2="395" y2="140" stroke="#1c4a78" stroke-width="4"/></g>
+<line x1="440" y1="70" x2="440" y2="104" stroke="#b3362b" stroke-width="2"/><line x1="430" y1="70" x2="450" y2="70" stroke="#b3362b"/><line x1="430" y1="104" x2="450" y2="104" stroke="#b3362b"/>
+<text x="455" y="92" fill="#b3362b">坍度（下降量）</text>
+<text x="100" y="40" fill="#566573">圓錐高 30 cm</text></g></svg>
+<div class="ctrl"><button class="btn" id="slBtn">提起圓錐</button></div></div>
+<p>把新拌混凝土裝進一個<strong>高 30 cm 的圓錐筒</strong>，分層搗實後，垂直把圓錐提起來。混凝土會「塌」下去一點，量它下降了幾公分，就是<strong>坍度</strong>。坍度太大，代表水加太多了。</p>
+<div class="box origin"><span class="t">坍度（Slump）</span>英文 slump 就是「癱倒、垮下來」的意思；中文「坍」是倒塌，「度」是程度。這個試驗在 20 世紀初發展出來，因為簡單快速，現在全世界工地每天都在做。</div>
+<h4>② 圓柱試體：看強度</h4>
+<p>在澆置時取樣，做成直徑 15 cm、高 30 cm 的圓柱（或其他標準尺寸），在實驗室養護 <strong>28 天</strong>後放進壓力機壓到破壞，量出抗壓強度。這就是第三篇提到的「28 天強度」的由來。</p>
+<div class="box warn"><span class="t">常見的施工缺失</span>
+・<strong>蜂窩</strong>：混凝土沒搗實，表面出現一個個像蜂巢的孔洞。<br>
+・<strong>冷縫</strong>：前一批混凝土已經硬化，後一批才接著澆，兩者之間形成弱面。<br>
+・<strong>保護層不足</strong>：鋼筋太靠近表面，幾年後生鏽膨脹，把混凝土撐裂剝落（常見於老舊建築的「鋼筋外露」）。<br>
+・<strong>加水</strong>：為了好施工偷偷加水，強度不足。</div>
+<div class="box key"><span class="t">品質是「做出來」的，不是「驗出來」的</span>試驗只能抽查一小部分。真正的品質靠每一個步驟都確實做好：鋼筋綁好、模板穩固、搗實充分、養護足夠。所以工地有「自主檢查表」，每個步驟完成都要檢查、拍照、簽名，這就是<strong>三級品管</strong>的精神。</div>
+<div class="quiz" data-ans="0"><p class="q">坍度試驗主要在檢查新拌混凝土的什麼？</p>
+<button class="opt">A. 稠度（工作性），間接反映用水量</button><button class="opt">B. 28 天抗壓強度</button><button class="opt">C. 鋼筋間距</button><button class="opt">D. 顏色</button>
+<div class="explain">坍度反映混凝土的稀稠；強度則要靠圓柱試體試驗。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>步驟：<strong>放樣→鋼筋→模板→澆置→搗實→養護→拆模</strong>。</li>
+<li><strong>坍度試驗</strong>看稠度；<strong>圓柱試體</strong>看 28 天強度。</li>
+<li>避免蜂窩、冷縫、保護層不足、加水。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第九篇　專業實務" data-title="工地安全">
+<div class="sheet">
+<h2>工地安全：每個人都要平安回家</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>營造業最常見的職業災害</li><li>個人防護具</li><li>工程師在安全上的責任</li></ul></div>
+<p>營造業一直是職業災害最多的行業之一。一個好的土木工程師，不只要讓結構安全，也要讓<strong>蓋它的人安全</strong>。</p>
+<h3>營造業常見的五大災害</h3>
+<div class="grid">
+<div class="card"><div class="ic">🪜</div><h4>墜落</h4>從鷹架、屋頂、開口掉下去。最常見也最致命。</div>
+<div class="card"><div class="ic">⚡</div><h4>感電</h4>碰到電線、漏電的機具，或吊車碰到高壓電線。</div>
+<div class="card"><div class="ic">🧱</div><h4>倒塌、崩塌</h4>鷹架倒塌、開挖的土壁崩落、模板支撐垮下。</div>
+<div class="card"><div class="ic">🔨</div><h4>物體飛落</h4>高處的工具或材料掉下來打到人。</div>
+<div class="card"><div class="ic">⚙️</div><h4>被夾、被捲</h4>被機械夾住或捲入。</div>
+</div>
+<h3>個人防護具</h3>
+<div class="tw"><table><tr><th>防護具</th><th>防什麼</th><th>注意</th></tr>
+<tr><td>安全帽</td><td>物體飛落、撞頭</td><td><strong>一定要扣好下巴帶</strong>，不然跌倒時會先飛出去</td></tr>
+<tr><td>全身背負式安全帶</td><td>墜落</td><td>要「勾在牢固的地方」才有用</td></tr>
+<tr><td>安全鞋</td><td>砸腳、踩到釘子</td><td>鞋頭有鋼片、鞋底防穿刺</td></tr>
+<tr><td>反光背心</td><td>被車輛撞到</td><td>讓機具操作手和駕駛看得見你</td></tr>
+<tr><td>護目鏡、耳塞、口罩</td><td>粉塵、噪音、飛屑</td><td>依作業種類選用</td></tr></table></div>
+<div class="box key"><span class="t">防護具是最後一道防線</span>安全管理的順序是：① 先想辦法<strong>消除危險</strong>（例如在地面先組好再吊上去，就不用高處作業）；② <strong>工程控制</strong>（護欄、安全網、開口加蓋）；③ <strong>管理控制</strong>（教育訓練、作業許可、每日危害告知）；④ 最後才是<strong>個人防護具</strong>。</div>
+<div class="box origin"><span class="t">Safety First（安全第一）</span>這句標語一般認為是 20 世紀初美國鋼鐵公司推行的。當時工廠事故非常多，公司發現把安全放在生產之前，不但事故減少，生產效率反而提高了。後來這個口號傳遍全世界的工地。</div>
+<div class="box eg"><span class="t">工程師的安全責任</span>設計時就要想到施工安全：例如預留吊裝點、讓構件能在地面組裝、避免危險的施工順序。開挖深的基坑要設計擋土支撐；鷹架、模板支撐也都要經過計算，不能「憑感覺」。</div>
+<div class="quiz" data-ans="3"><p class="q">戴安全帽最容易被忽略、卻很重要的一件事是？</p>
+<button class="opt">A. 選好看的顏色</button><button class="opt">B. 戴歪一點比較通風</button><button class="opt">C. 只在下雨天戴</button><button class="opt">D. 扣好下巴帶</button>
+<div class="explain">不扣下巴帶，跌倒或墜落時安全帽會脫落，完全失去保護作用。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>五大災害：<strong>墜落、感電、倒塌崩塌、物體飛落、被夾被捲</strong>。</li>
+<li>控制順序：<strong>消除→工程控制→管理→防護具</strong>。</li>
+<li>安全從<strong>設計</strong>就開始。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第九篇　專業實務" data-title="設計方法與規範">
+<div class="sheet">
+<h2>設計方法與規範：把經驗寫成規則</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>為什麼要有規範</li><li>容許應力設計與極限強度設計</li><li>用載重組合做一次設計檢核</li></ul></div>
+<h3>最古老的建築法規</h3>
+<div class="box origin"><span class="t">漢摩拉比法典</span>約 3700 多年前，古巴比倫的<strong>漢摩拉比法典</strong>中就有關於建築的條文，大意是：如果建築師蓋的房子倒塌，壓死了屋主，建築師要被處死。非常嚴厲，但說明了從古至今，人們都認為<strong>蓋房子的人要對安全負責</strong>。</div>
+<p>現代的<strong>設計規範</strong>是由專家把一百多年來的研究、實驗和事故教訓整理成條文，規定載重要算多少、材料強度怎麼取、構件最小尺寸、鋼筋怎麼配置等等。工程師依規範設計，社會大眾才能有一致的安全保障。</p>
+<h3>兩種設計哲學</h3>
+<div class="grid">
+<div class="card"><h4>容許應力設計（ASD）</h4>比較傳統的方法。材料強度除以一個安全係數，得到「容許應力」，確認實際應力不超過它。<br><strong>一句話：打折材料強度。</strong></div>
+<div class="card"><h4>強度設計（LRFD／極限設計）</h4>現代主流。<strong>把載重放大</strong>（載重係數），<strong>把強度打折</strong>（強度折減係數 φ），分開處理不確定性。<br><strong>一句話：載重放大、強度打折。</strong></div>
+</div>
+<p>為什麼靜載重和活載重要乘不同的係數？因為<strong>靜載重比較能準確估算</strong>（混凝土的密度大家都知道），<strong>活載重的變化比較大</strong>（誰知道哪天會不會擠滿人）。所以活載重乘比較大的係數。常見的組合是：</p>
+<div class="formula">U ＝ 1.2 D ＋ 1.6 L<small>U＝設計用的放大載重；另外還有包含風、地震的其他組合，要取最不利的</small></div>
+<div class="formula">φ × 構件強度 ≥ U 產生的內力<small>例如梁的彎曲強度 φ 常取 0.9</small></div>
+<h3>互動：檢核一根梁</h3>
+<div class="fig" id="lr">
+<p style="margin:0 0 6px">一根 6 m 簡支梁，承受均布載重。它的標稱彎曲強度 Mn（依斷面和配筋算出）如下：</p>
+<div class="ctrl"><label>靜載重 D <input type="range" id="lrD" min="5" max="40" value="20"> <span id="lrDv"></span> kN/m</label>
+<label>活載重 L <input type="range" id="lrL" min="0" max="40" value="10"> <span id="lrLv"></span> kN/m</label></div>
+<div class="ctrl"><label>標稱強度 Mn <input type="range" id="lrM" min="100" max="500" step="10" value="250"> <span id="lrMv"></span> kN·m</label></div>
+<div class="readout" id="lrOut"></div></div>
+<div class="box key"><span class="t">設計的流程</span>① 決定載重 → ② 結構分析（算出內力：剪力、彎矩、軸力）→ ③ 選擇尺寸和配筋 → ④ 檢核強度、變形、裂縫 → ⑤ 不夠就修改再算 → ⑥ 繪製施工圖。這是一個反覆修正的過程。</div>
+<div class="box pro"><span class="t">不只要強，還要好用</span>規範除了「強度」（會不會壞），還要檢查「使用性」：梁彎得太多，天花板會裂、門會卡；樓板太有彈性，走路會晃，人會不舒服。所以還有<strong>撓度限制</strong>、<strong>振動</strong>、<strong>裂縫寬度</strong>等規定。</div>
+<div class="quiz" data-ans="2"><p class="q">強度設計法中，為什麼活載重的係數（1.6）比靜載重（1.2）大？</p>
+<button class="opt">A. 活載重比較重</button><button class="opt">B. 規範隨便訂的</button><button class="opt">C. 活載重的不確定性比較大</button><button class="opt">D. 靜載重不重要</button>
+<div class="explain">靜載重可以較準確估算，活載重變化大、較難預測，所以用較大的係數。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>規範是<strong>經驗與教訓的累積</strong>。</li>
+<li>強度設計：<strong>U＝1.2D＋1.6L</strong>，<strong>φ×強度 ≥ 需求</strong>。</li>
+<li>除了強度，還要檢查<strong>使用性</strong>（撓度、振動、裂縫）。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第九篇　專業實務" data-title="數位工具：CAD、BIM 與有限元素">
+<div class="sheet">
+<h2>數位工具：CAD、BIM 與有限元素</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>從手繪到 BIM 的演進</li><li>有限元素法的直覺</li><li>未來的土木工程</li></ul></div>
+<h3>從手繪到 3D 資訊模型</h3>
+<div class="tl">
+<div class="it"><span class="yr">手繪時代</span><br>工程師用丁字尺、三角板和鉛筆在描圖紙上畫圖，改一個地方可能要重畫好幾張。</div>
+<div class="it"><span class="yr">CAD（電腦輔助繪圖）</span><br>1980 年代起普及。把圖畫在電腦裡，修改、複製、列印都變容易，但本質上還是「一條條線」。</div>
+<div class="it"><span class="yr">BIM（建築資訊模型）</span><br>2000 年代開始推廣。不只是畫 3D，而是建立「有資訊的虛擬建築」：每根柱子都知道自己是什麼材料、多大、多少錢、什麼時候要施工。</div>
+</div>
+<div class="box origin"><span class="t">BIM</span>Building Information Modeling 的縮寫。這個概念可追溯到 1970 年代美國學者<strong>查克‧伊斯曼（Chuck Eastman）</strong>的研究，2000 年代初由軟體公司推廣這個名稱後普及。重點在 I（Information，資訊）：模型裡的每個物件都帶著資料。</div>
+<div class="box eg"><span class="t">BIM 的碰撞檢查</span>以前常發生：結構圖上有一根梁，水電圖上剛好有一根大水管要從同一個位置穿過，到了工地才發現「撞在一起」，只好敲掉重做。BIM 把所有專業放在同一個 3D 模型裡，電腦會<strong>自動找出所有衝突</strong>，在施工前就解決。</div>
+<h3>有限元素法：把大問題切成小塊</h3>
+<p>簡單的梁可以用公式算；但一座形狀複雜的大壩、一棟奇形怪狀的建築，就沒有現成公式了。怎麼辦？</p>
+<div class="fig"><svg viewBox="0 0 620 200" role="img" aria-label="用小方格近似圓形，說明有限元素的概念">
+<g font-family="sans-serif" font-size="13">
+<circle cx="120" cy="95" r="70" fill="#dfe8f1" stroke="#0f2d4d" stroke-width="2"/>
+<text x="60" y="190">複雜的形狀</text>
+<g id="femGrid"></g>
+<text x="360" y="190">切成很多小方塊（元素）</text>
+<text x="250" y="100" font-size="26" fill="#566573">→</text></g></svg></div>
+<div class="box eg"><span class="t">用磁磚拼圓</span>要算一個不規則形狀的面積，可以把它切成許多小方格，數一數有幾格。格子越小，結果越準確。<strong>有限元素法</strong>就是把結構切成成千上萬個小「元素」，每個小元素的行為很簡單，電腦把它們全部連起來一起解，就能算出整個結構的應力和變形。</div>
+<div class="box origin"><span class="t">有限元素（Finite Element）</span>「有限」是相對於數學上「無限小」的微積分：我們不切到無限小，只切成「有限」個小塊，讓電腦算得出來。這個方法在 1940～50 年代發展（飛機結構分析是早期的重要應用），「有限元素」這個名稱是美國柏克萊大學教授<strong>雷‧克拉夫（Ray Clough）</strong>在 1960 年取的。</div>
+<div class="box warn"><span class="t">電腦算出來的不一定對</span>軟體只會照你輸入的資料算。輸入錯一個單位（例如把 kN 打成 N），結果就差一千倍。所以工程師一定要用<strong>手算估計</strong>來檢查電腦結果合不合理，這就是為什麼前面學的基本觀念那麼重要。俗話說：「垃圾進，垃圾出。」</div>
+<h3>未來的土木工程</h3>
+<div class="grid">
+<div class="card"><h4>數位孿生</h4>在電腦裡建立一座和真實橋梁同步的虛擬橋，靠感測器即時監測健康狀況。</div>
+<div class="card"><h4>人工智慧</h4>協助設計最佳化、從影像自動找出裂縫、預測維修時機。</div>
+<div class="card"><h4>3D 列印建築</h4>用機器直接「列印」混凝土牆。</div>
+<div class="card"><h4>低碳與韌性</h4>水泥生產排放大量二氧化碳，發展低碳材料、延長結構壽命、應對氣候變遷，是新一代工程師的重要任務。</div>
+</div>
+<div class="quiz" data-ans="1"><p class="q">BIM 相對於傳統 2D CAD，最大的特點是什麼？</p>
+<button class="opt">A. 畫出來的線比較細</button><button class="opt">B. 3D 模型中的每個物件都帶有資訊，還能做碰撞檢查</button><button class="opt">C. 不需要工程師</button><button class="opt">D. 只能畫房子</button>
+<div class="explain">BIM 的核心是「資訊」，各專業整合在同一模型中，可以自動找出衝突、估算數量。</div></div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li><strong>手繪→CAD→BIM</strong>；BIM 的重點是<strong>資訊</strong>與整合。</li>
+<li><strong>有限元素法</strong>：切成小塊，讓電腦一起解。</li>
+<li>電腦結果一定要用<strong>手算判斷</strong>檢查。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="第九篇　專業實務" data-title="成為土木工程師">
+<div class="sheet">
+<h2>成為土木工程師：你的下一步</h2>
+<div class="goal"><b>這一課你會學到：</b><ul><li>大學土木系學什麼</li><li>專業證照與職涯</li><li>現在就可以開始的事</li></ul></div>
+<h3>大學四年學什麼？</h3>
+<p>你會發現，這套課程的每一篇，都對應大學的一門或幾門課：</p>
+<div class="tw"><table><tr><th>年級</th><th>主要課程</th><th>對應本課程</th></tr>
+<tr><td>大一</td><td>微積分、普通物理、工程圖學、計算機程式</td><td>第八篇（讀圖）</td></tr>
+<tr><td>大二</td><td>靜力學、材料力學、測量學、工程材料、流體力學</td><td>第二、三、八篇</td></tr>
+<tr><td>大三</td><td>結構學、土壤力學、鋼筋混凝土、水文學、交通工程</td><td>第四、五、六、七篇</td></tr>
+<tr><td>大四</td><td>鋼結構、基礎工程、營建管理、專題實作、各種選修</td><td>第四、五、九篇</td></tr></table></div>
+<div class="box key"><span class="t">數學和物理是地基</span>就像建築物需要地基，土木工程需要數學和物理當地基。國中的數學（比例、方程式、幾何）和理化（力、壓力、密度）都是在為這些課程打底。</div>
+<h3>專業證照</h3>
+<p>因為土木工程攸關公共安全，大多數國家都規定：要在設計圖上簽名負責，必須通過國家考試取得執照。例如台灣的<strong>土木技師、結構技師、大地技師、水利技師</strong>；美國的 <strong>PE（Professional Engineer）</strong>；英國的 <strong>Chartered Engineer</strong>。通常需要大學學歷加上幾年的實務經驗。</p>
+<div class="box origin"><span class="t">技師</span>「技」是技術，「師」是專家。技師是依法取得執照、可以對工程簽證負責的專業工程師。簽證的意思是：「我用我的專業和名譽保證這份設計是安全的」。</div>
+<h3>土木工程師在哪裡工作？</h3>
+<div class="grid">
+<div class="card"><div class="ic">📐</div><h4>工程顧問公司</h4>做規劃和設計，大部分時間在辦公室計算、畫圖。</div>
+<div class="card"><div class="ic">🏗️</div><h4>營造公司</h4>在工地把工程蓋出來，管理人員、機具、進度。</div>
+<div class="card"><div class="ic">🏛️</div><h4>政府機關</h4>規劃公共建設、審查設計、管理道路橋梁的維護。</div>
+<div class="card"><div class="ic">🔬</div><h4>學術研究</h4>在大學或研究機構開發新材料、新技術、新規範。</div>
+<div class="card"><div class="ic">🏢</div><h4>其他</h4>不動產開發、工程保險、防災、國際援助工程、科技公司。</div>
+</div>
+<h3>現在就能開始的事</h3>
+<div class="try"><span class="t">給國中生的五個建議</span>
+① <strong>觀察</strong>：走在路上看看橋是什麼型式、柱子多粗、擋土牆有沒有排水孔。你會發現到處都是今天學過的東西。<br>
+② <strong>動手</strong>：用義大利麵和膠帶做一座橋，看它能撐多重；很多學校和大學都有「義大利麵橋比賽」或「紙橋比賽」。<br>
+③ <strong>把數學和理化學好</strong>：特別是比例、幾何、力與壓力。<br>
+④ <strong>玩建造類遊戲和積木</strong>：像橋梁模擬遊戲、樂高，都在訓練結構直覺。<br>
+⑤ <strong>保持好奇</strong>：遇到一個建築，就問「它為什麼不會倒？」</div>
+<div class="box key"><span class="t">恭喜你完成全部課程！</span>你已經走過了土木工程的完整地圖：從「力」是什麼，到材料、結構、土壤、水、交通、測量，再到專業實務。每一個大工程，都是由這些基本觀念一塊塊堆起來的，就像一棟大樓是由一根根鋼筋、一桶桶混凝土蓋起來的。<br>建議你之後<strong>再從頭複習一次</strong>，這次可以打開所有「🎓 專業延伸」的方塊，你會有更多收穫。最後一頁還有一份<strong>名詞辭典</strong>，方便你隨時查詢。</div>
+<div class="summary"><div class="h">本課重點整理</div><ul>
+<li>大學課程和本課程九篇一一對應，<strong>數學物理是地基</strong>。</li>
+<li>簽證需要<strong>技師／PE</strong>等專業執照。</li>
+<li>多觀察、多動手、多問「為什麼不會倒」。</li></ul></div>
+</div></section>
+
+<section class="lesson" data-part="附錄" data-title="名詞辭典">
+<div class="sheet">
+<h2>名詞辭典</h2>
+<p>依照課程出現的順序整理。可以用瀏覽器的「尋找」（Ctrl＋F 或 ⌘＋F）快速查詢。</p>
+<div class="tw"><table>
+<tr><th>名詞</th><th>意思</th><th>由來／記憶法</th></tr>
+<tr><td>土木工程</td><td>規劃、設計、建造、維護基礎設施的工程</td><td>古代「築土構木」；civil＝民間的，相對於軍事</td></tr>
+<tr><td>牛頓（N）</td><td>力的單位；1 kN ≈ 100 kg 物體的重量</td><td>紀念牛頓；1 N ≈ 一顆小蘋果的重量</td></tr>
+<tr><td>力矩</td><td>力 × 垂直距離，讓物體轉動的效果</td><td>moment 源自拉丁文 momentum（推動）</td></tr>
+<tr><td>反力</td><td>支承推回結構的力</td><td>re-（回）＋action（作用）</td></tr>
+<tr><td>簡支梁</td><td>兩端簡單支撐（一鉸一滾）的梁</td><td>「簡單支撐」</td></tr>
+<tr><td>懸臂</td><td>一端固定、一端懸空的構件</td><td>像懸在空中的手臂</td></tr>
+<tr><td>剪力</td><td>使相鄰斷面錯開的內力</td><td>shear 與 shears（剪刀）同源</td></tr>
+<tr><td>彎矩</td><td>使構件彎曲的內力矩</td><td>彎曲＋力矩</td></tr>
+<tr><td>中性軸</td><td>彎曲時不拉不壓的那條線</td><td>「中性」＝兩邊都不是</td></tr>
+<tr><td>應力 σ</td><td>單位面積上的內力，F/A</td><td>「應」＝材料回應外力</td></tr>
+<tr><td>應變 ε</td><td>變形量除以原長，無單位</td><td>回應而產生的變形</td></tr>
+<tr><td>彈性模數 E</td><td>材料抵抗變形的「硬度」</td><td>又稱楊氏模數，紀念 Thomas Young</td></tr>
+<tr><td>虎克定律</td><td>σ＝Eε，彈性範圍內應力與應變成正比</td><td>虎克的字謎 ut tensio, sic vis</td></tr>
+<tr><td>降伏</td><td>材料開始產生永久變形的點</td><td>yield＝讓步、屈服</td></tr>
+<tr><td>延性／脆性</td><td>斷前大量變形／幾乎不變形就斷</td><td>迴紋針 vs 粉筆</td></tr>
+<tr><td>安全係數</td><td>強度 ÷ 實際應力，需大於 1</td><td>多留一手</td></tr>
+<tr><td>疲勞</td><td>反覆受力累積損傷而破壞</td><td>反覆折迴紋針</td></tr>
+<tr><td>水泥</td><td>與水反應硬化的膠結粉末</td><td>拉丁 caementum（碎石塊）</td></tr>
+<tr><td>混凝土</td><td>水泥＋水＋砂＋石</td><td>拉丁 concretus（長在一起）</td></tr>
+<tr><td>波特蘭水泥</td><td>現代最常用的水泥</td><td>顏色像英國波特蘭石（1824）</td></tr>
+<tr><td>水化作用</td><td>水泥與水的化學反應</td><td>不是「乾掉」</td></tr>
+<tr><td>養護</td><td>澆置後保持濕潤與適當溫度</td><td>像「養」小孩</td></tr>
+<tr><td>水灰比</td><td>水重 ÷ 水泥重</td><td>「灰」指水泥；Abrams 定律</td></tr>
+<tr><td>握裹力</td><td>鋼筋與混凝土之間的咬合力</td><td>竹節增加握裹</td></tr>
+<tr><td>保護層</td><td>鋼筋外側的混凝土厚度</td><td>保護鋼筋不鏽、耐火</td></tr>
+<tr><td>預力混凝土</td><td>預先施加壓力的混凝土</td><td>用手夾住一整排書</td></tr>
+<tr><td>慣性矩 I</td><td>斷面抵抗彎曲的能力，bh³/12</td><td>借自物理的「轉動慣量」</td></tr>
+<tr><td>翼板／腹板</td><td>I 型鋼上下兩片／中間一片</td><td>翅膀／肚子</td></tr>
+<tr><td>挫屈</td><td>細長受壓構件突然側向彎曲</td><td>buckle＝彎曲扣起</td></tr>
+<tr><td>桁架</td><td>由三角形組成、桿件只受拉壓的結構</td><td>truss 源自古法文 trousse（一束）</td></tr>
+<tr><td>拱心石</td><td>拱頂最後放入的石塊</td><td>keystone，引申為關鍵</td></tr>
+<tr><td>懸鏈線</td><td>鏈條自然下垂的曲線</td><td>拉丁 catena（鏈）</td></tr>
+<tr><td>錨碇</td><td>固定懸索橋主纜的巨大基座</td><td>像船錨</td></tr>
+<tr><td>靜載重／活載重</td><td>固定的自重／會變動的載重</td><td>dead load／live load</td></tr>
+<tr><td>載重路徑</td><td>力從樓板傳到土壤的路線</td><td>力的「回家之路」</td></tr>
+<tr><td>規模／震度</td><td>地震能量／各地搖晃程度</td><td>燈泡瓦數／你那裡多亮</td></tr>
+<tr><td>共振</td><td>外力週期接近自然週期時振動放大</td><td>配合節奏推鞦韆</td></tr>
+<tr><td>隔震／制震</td><td>隔開地面振動／消耗振動能量</td><td>躲開／吸收</td></tr>
+<tr><td>阻尼</td><td>使振動減弱的作用</td><td>「尼」古義為止</td></tr>
+<tr><td>軟弱層</td><td>比其他樓層明顯柔弱的樓層</td><td>常見於一樓挑高店面</td></tr>
+<tr><td>有效應力</td><td>土壤顆粒之間真正互相擠壓的應力</td><td>泰爾札吉（土壤力學之父）</td></tr>
+<tr><td>N 值</td><td>標準貫入試驗的打擊數</td><td>63.5 kg 錘、76 cm 落距（英制換算）</td></tr>
+<tr><td>壓密</td><td>黏土排水而緩慢壓縮</td><td>擠吸水的海綿</td></tr>
+<tr><td>不均勻沉陷</td><td>各處沉陷量不同</td><td>比薩斜塔</td></tr>
+<tr><td>筏式基礎</td><td>整片的厚板基礎</td><td>像船「浮」在土上</td></tr>
+<tr><td>端承樁／摩擦樁</td><td>靠樁底／靠樁側摩擦承載</td><td>踩高蹺／筷子插沙</td></tr>
+<tr><td>土壤液化</td><td>飽和鬆砂在地震中失去強度</td><td>水壓撐開砂粒</td></tr>
+<tr><td>順向坡</td><td>岩層面與坡面同方向的邊坡</td><td>斜放的一疊書</td></tr>
+<tr><td>靜水壓</td><td>ρgh，每公尺約 10 kPa</td><td>帕斯卡的木桶</td></tr>
+<tr><td>白努利定理</td><td>流速快處壓力小</td><td>丹尼爾‧白努利（1738）</td></tr>
+<tr><td>溢洪道</td><td>水壩排放多餘洪水的通道</td><td>讓水「溢」出的「道」</td></tr>
+<tr><td>迴歸期</td><td>T 年迴歸期＝每年機率 1/T</td><td>不是 T 年才一次</td></tr>
+<tr><td>混凝／膠凝</td><td>加藥使微粒凝聚／結成大團</td><td>不是混凝土</td></tr>
+<tr><td>優養化</td><td>營養鹽過多使藻類暴增</td><td>水太「營養」了</td></tr>
+<tr><td>柔性／剛性路面</td><td>瀝青／混凝土路面</td><td>一層層分散／整塊板承受</td></tr>
+<tr><td>路拱／超高</td><td>路面中間高／彎道外側高</td><td>排水／抵抗離心</td></tr>
+<tr><td>Tarmac</td><td>瀝青碎石路面</td><td>tar＋macadam（McAdam）</td></tr>
+<tr><td>沖刷</td><td>水流掏空橋墩周圍砂石</td><td>橋梁的隱形殺手</td></tr>
+<tr><td>顫振</td><td>風引起結構自我放大的振動</td><td>塔科馬海峽橋（1940）</td></tr>
+<tr><td>平衡懸臂工法</td><td>從橋墩兩側對稱向外施工</td><td>像天秤</td></tr>
+<tr><td>NATM</td><td>新奧地利隧道工法</td><td>讓岩盤自己撐住自己</td></tr>
+<tr><td>潛盾／TBM</td><td>圓筒形隧道掘進機</td><td>靈感來自船蛆</td></tr>
+<tr><td>道碴</td><td>鐵軌下的碎石</td><td>有稜角才能互鎖</td></tr>
+<tr><td>高程／水準點</td><td>相對平均海平面的高度／已知高程的標誌</td><td>benchmark</td></tr>
+<tr><td>後視／前視</td><td>看已知點／看未知點的標尺讀數</td><td>B＝A＋後視−前視</td></tr>
+<tr><td>等高線</td><td>地圖上等高點連成的線</td><td>密陡疏緩</td></tr>
+<tr><td>比例尺</td><td>圖上長度與實際長度之比</td><td>1:100＝1 cm 代表 1 m</td></tr>
+<tr><td>剖面圖</td><td>切開後看到的內部圖</td><td>切蛋糕</td></tr>
+<tr><td>要徑</td><td>決定總工期的工作路線</td><td>Critical Path</td></tr>
+<tr><td>坍度</td><td>新拌混凝土的稠度指標</td><td>slump＝癱倒</td></tr>
+<tr><td>蜂窩／冷縫</td><td>未搗實的孔洞／先後澆置的弱面</td><td>常見施工缺失</td></tr>
+<tr><td>載重係數／強度折減係數 φ</td><td>放大載重／打折強度</td><td>U＝1.2D＋1.6L</td></tr>
+<tr><td>BIM</td><td>建築資訊模型</td><td>Building Information Modeling</td></tr>
+<tr><td>有限元素法</td><td>切成小元素用電腦求解</td><td>「有限」相對於「無限小」；Clough 1960 命名</td></tr>
+<tr><td>技師／PE</td><td>可簽證負責的專業工程師</td><td>用專業與名譽保證</td></tr>
+</table></div>
+</div></section>
+</main>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#b3362b"/></marker>
+<marker id="ar2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#1c4a78"/></marker>
+<marker id="arK" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#1b2733"/></marker>
+</defs></svg>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const lessons=[...document.querySelectorAll('.lesson')];
+const KEY='ce-course-v1';
+let state={done:[],last:0};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&Array.isArray(s.done))state=s;}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+
+/* ---------- 編號、標題欄、目錄、上下頁 ---------- */
+let num=0;const toc=$('toc');let lastPart='';
+lessons.forEach((sec,i)=>{
+  const part=sec.dataset.part,title=sec.dataset.title;
+  let code='導覽';
+  if(part.startsWith('第')){num++;code='L-'+String(num).padStart(2,'0');}
+  else if(part==='附錄')code='附錄';
+  sec.dataset.code=code;
+  const sheet=sec.querySelector('.sheet');
+  const tb=document.createElement('div');tb.className='titleblock';
+  tb.innerHTML='<div><b>圖號</b><span class="no">'+code+'</span></div><div><b>篇別</b>'+part+'</div><div><b>課名</b>'+title+'</div>';
+  sheet.insertBefore(tb,sheet.firstChild);
+  if(part!==lastPart){const p=document.createElement('div');p.className='part';p.textContent=part;toc.appendChild(p);lastPart=part;}
+  const a=document.createElement('a');a.href='#L'+i;a.dataset.i=i;
+  a.innerHTML='<span class="n">'+(code.startsWith('L-')?num:'·')+'</span><span>'+title+'</span>';
+  a.addEventListener('click',e=>{e.preventDefault();show(i);closeMenu();});
+  toc.appendChild(a);
+  const pg=document.createElement('div');pg.className='pager';
+  const pv=lessons[i-1],nx=lessons[i+1];
+  pg.innerHTML='<button class="prev" '+(pv?'':'disabled')+'><small>上一課</small>◀ '+(pv?pv.dataset.title:'')+'</button>'+
+    '<button class="next" '+(nx?'':'disabled')+'><small>下一課</small>'+(nx?nx.dataset.title:'')+' ▶</button>';
+  pg.querySelector('.prev').onclick=()=>show(i-1);
+  pg.querySelector('.next').onclick=()=>{markDone(i);show(i+1);};
+  sec.appendChild(pg);
+});
+const links=[...toc.querySelectorAll('a')];
+function markDone(i){if(!state.done.includes(i))state.done.push(i);save();refresh();}
+function refresh(){
+  links.forEach(a=>a.classList.toggle('done',state.done.includes(+a.dataset.i)));
+  const pct=Math.round(state.done.length/lessons.length*100);
+  $('progressBar').style.width=pct+'%';$('progressText').textContent='學習進度 '+pct+'%（已完成 '+state.done.length+'／'+lessons.length+' 課）';
+}
+function show(i){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=i;
+  i=Math.max(0,Math.min(lessons.length-1,i));
+  lessons.forEach((s,k)=>s.classList.toggle('show',k===i));
+  links.forEach(a=>a.classList.toggle('active',+a.dataset.i===i));
+  state.last=i;if(i===lessons.length-1)markDone(i);save();
+  history.replaceState(null,'','#L'+i);window.scrollTo(0,0);
+  const act=toc.querySelector('a.active');if(act&&act.scrollIntoView)act.scrollIntoView({block:'nearest'});
+  lessons[i].querySelectorAll('.drawline').forEach(p=>{p.style.animation='none';p.getBBox&&p.getBBox();p.style.animation='';});
+}
+const h=location.hash.match(/^#L(\d+)$/);
+show(h?+h[1]:state.last||0);refresh();
+
+/* ---------- 選單、列印、重置 ---------- */
+const sb=$('sidebar');
+function closeMenu(){sb.classList.remove('open');}
+$('menuBtn').onclick=()=>sb.classList.toggle('open');
+$('scrim').onclick=closeMenu;
+$('printBtn').onclick=()=>window.print();
+$('resetBtn').onclick=()=>{if(confirm('確定要清除所有學習進度嗎？')){state={done:[],last:0};save();refresh();show(0);}};
+
+/* ---------- 小測驗 ---------- */
+document.querySelectorAll('.quiz').forEach(q=>{
+  const ans=+q.dataset.ans;const opts=[...q.querySelectorAll('.opt')];
+  opts.forEach((b,k)=>b.onclick=()=>{
+    if(q.classList.contains('answered')&&q.dataset.ok)return;
+    if(k===ans){b.classList.add('right');q.dataset.ok=1;}else b.classList.add('wrong');
+    q.classList.add('answered');
+  });
+});
+
+const fmt=(x,d)=>Number(x).toLocaleString('zh-TW',{maximumFractionDigits:d==null?1:d,minimumFractionDigits:d==null?0:d});
+const vis=el=>el&&el.offsetParent!==null;
+
+/* ---------- 重量 ---------- */
+if($('wt')){const m=$('wtM');const up=()=>{const kg=+m.value,N=kg*9.81;$('wtMv').textContent=fmt(kg,0);
+  let cmp=kg<5?'差不多一袋米':kg<80?'差不多一個人':kg<300?'差不多一台機車':kg<3000?'差不多一台汽車':'差不多一台卡車';
+  $('wtOut').innerHTML='重量 W ＝ '+fmt(kg,0)+' kg × 9.81 ＝ '+fmt(N,0)+' N<br>＝ '+fmt(N/1000,2)+' kN　（'+cmp+'）';};m.oninput=up;up();}
+
+/* ---------- 蹺蹺板 ---------- */
+if($('ss')){const ids=['ssM1','ssD1','ssM2','ssD2'];const up=()=>{
+  const m1=+$('ssM1').value,d1=+$('ssD1').value,m2=+$('ssM2').value,d2=+$('ssD2').value;
+  $('ssM1v').textContent=m1;$('ssD1v').textContent=d1.toFixed(1);$('ssM2v').textContent=m2;$('ssD2v').textContent=d2.toFixed(1);
+  $('ssL').setAttribute('transform','translate('+(300-d1*50)+',152)');$('ssR').setAttribute('transform','translate('+(300+d2*50)+',152)');
+  $('ssLt').textContent=m1+'kg';$('ssRt').textContent=m2+'kg';
+  const M1=m1*d1,M2=m2*d2,diff=M2-M1;let ang=Math.abs(diff)<1?0:Math.max(-12,Math.min(12,diff*0.12));
+  $('ssBeam').setAttribute('transform','rotate('+ang+' 300 156)');
+  const st=Math.abs(diff)<1?'⚖️ 平衡了！':(diff>0?'右邊往下':'左邊往下');
+  $('ssOut').innerHTML='左邊力矩 ＝ '+m1+' × '+d1.toFixed(1)+' ＝ '+fmt(M1)+'<br>右邊力矩 ＝ '+m2+' × '+d2.toFixed(1)+' ＝ '+fmt(M2)+'<br>結果：'+st;};
+  ids.forEach(i=>$(i).oninput=up);up();}
+
+/* ---------- 應力 ---------- */
+if($('st')){const m=$('stM'),a=$('stA');const up=()=>{const kg=+m.value,cm2=+a.value;$('stMv').textContent=kg;$('stAv').textContent=cm2;
+  const s=kg*9.81/(cm2*1e-4);const ele=5000*9.81/0.16;
+  $('stOut').innerHTML='力 F ＝ '+fmt(kg*9.81,0)+' N　面積 A ＝ '+fmt(cm2*1e-4,4)+' m²<br>應力 σ ＝ F ÷ A ＝ '+fmt(s/1000,1)+' kPa ＝ '+fmt(s/1e6,3)+' MPa<br>是大象腳底的 '+fmt(s/ele,2)+' 倍';};
+  m.oninput=up;a.oninput=up;$('st').querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const [x,y]=b.dataset.p.split(',');m.value=x;a.value=y;up();});up();}
+
+/* ---------- 水灰比 ---------- */
+if($('wc')){const r=$('wcR');let seed=7;const rnd=()=>{seed=(seed*9301+49297)%233280;return seed/233280;};
+  const pts=[];for(let k=0;k<40;k++)pts.push([40+rnd()*180,28+rnd()*94,1+rnd()*2.5]);
+  const up=()=>{const w=+r.value;$('wcRv').textContent=w.toFixed(2);const f=96.5/Math.pow(7,w);
+    $('wcBar').setAttribute('width',Math.min(280,f/50*280));$('wcBar2').setAttribute('width',(w-0.3)/0.5*280);
+    const n=Math.round((w-0.3)*70)+2;$('wcPores').innerHTML=pts.slice(0,n).map(p=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+p[2]+'" fill="#fff"/>').join('');
+    $('wcOut').innerHTML='水灰比 '+w.toFixed(2)+' → 估計 28 天抗壓強度約 '+fmt(f,0)+' MPa<br>'+(w<0.4?'很強，但很乾硬，不好施工':w<=0.6?'一般結構常用範圍':'好灌，但強度偏低、孔隙多、不耐久');};
+  r.oninput=up;up();}
+
+/* ---------- 鋼筋混凝土梁 ---------- */
+if($('rc')){const plain=$('rcPlain').innerHTML;
+  $('rcBtn').onclick=()=>{
+    $('rcLoad1').setAttribute('opacity',1);$('rcLoad2').setAttribute('opacity',1);
+    $('rcPlain').innerHTML='<polygon points="40,40 158,56 158,96 40,80" fill="#b8b3a8" stroke="#1b2733"/><polygon points="162,56 280,40 280,80 162,96" fill="#b8b3a8" stroke="#1b2733"/>';
+    $('rcT1').textContent='💥 下方一受拉就斷成兩截！';$('rcT1').setAttribute('fill','#b3362b');
+    $('rcRC').setAttribute('d','M350 40 Q470 70 590 40 L590 80 Q470 110 350 80Z');$('rcBar').setAttribute('d','M355 72 Q470 102 585 72');
+    $('rcCracks2').setAttribute('opacity',1);$('rcT2').textContent='✅ 有細小裂縫，但鋼筋拉住了，梁沒斷';$('rcT2').setAttribute('fill','#2e7d4f');};
+  $('rcReset').onclick=()=>{$('rcPlain').innerHTML=plain;$('rcLoad1').setAttribute('opacity',0);$('rcLoad2').setAttribute('opacity',0);
+    $('rcT1').textContent='加載前';$('rcT1').setAttribute('fill','#566573');$('rcRC').setAttribute('d','M350 40 Q470 40 590 40 L590 80 Q470 80 350 80Z');
+    $('rcBar').setAttribute('d','M355 72 Q470 72 585 72');$('rcCracks2').setAttribute('opacity',0);$('rcT2').textContent='藍線是鋼筋，放在下方';$('rcT2').setAttribute('fill','#566573');};}
+
+/* ---------- 梁：剪力彎矩 ---------- */
+if($('bm')){const A=$('bmA'),L=10,P=100;const X=x=>60+50*x;
+  const defl=(x,a)=>{const b=L-a;return x<=a? P*b*x*(L*L-b*b-x*x)/(6*L): P*a*(L-x)*(L*L-a*a-(L-x)*(L-x))/(6*L);};
+  const ref=P*L*L*L/48;
+  const up=()=>{const a=+A.value,b=L-a,RA=P*b/L,RB=P*a/L,M=P*a*b/L,xa=X(a);$('bmAv').textContent=a.toFixed(1);
+    $('bmLoad').setAttribute('transform','translate('+xa+',0)');
+    $('bmRA').textContent='R_A＝'+RA.toFixed(1)+' kN';$('bmRB').textContent='R_B＝'+RB.toFixed(1)+' kN';
+    const s=0.4;$('bmV').setAttribute('d','M60 210 L60 '+(210-RA*s)+' L'+xa+' '+(210-RA*s)+' L'+xa+' '+(210+RB*s)+' L560 '+(210+RB*s)+' L560 210Z');
+    const ms=0.28;$('bmM').setAttribute('d','M60 270 L'+xa+' '+(270+M*ms)+' L560 270Z');
+    const t=$('bmMt');t.setAttribute('x',Math.min(500,Math.max(62,xa-40)));t.setAttribute('y',270+M*ms+16);t.textContent='M_max＝'+M.toFixed(1)+' kN·m';
+    let d='';for(let k=0;k<=50;k++){const x=L*k/50;d+=(k?'L':'M')+X(x).toFixed(1)+' '+(81+defl(x,a)/ref*28).toFixed(1);}$('bmDef').setAttribute('d',d);
+    $('bmOut').innerHTML='a＝'+a.toFixed(1)+' m，b＝'+b.toFixed(1)+' m<br>R_A＝P×b÷L＝'+RA.toFixed(1)+' kN，R_B＝P×a÷L＝'+RB.toFixed(1)+' kN<br>M_max＝P×a×b÷L＝'+M.toFixed(1)+' kN·m';};
+  A.oninput=up;up();}
+
+/* ---------- 截面高度 ---------- */
+if($('sec')){const hh=$('secH');const up=()=>{const k=+hh.value;$('secHv').textContent=k.toFixed(1);
+  const r=$('secR');r.setAttribute('height',20*k);r.setAttribute('y',70-10*k);
+  const dl=60/Math.pow(k,3);$('secB').setAttribute('d','M220 60 Q410 '+(60+2*dl)+' 600 60');
+  $('secOut').innerHTML='抗彎能力（慣性矩）＝ '+fmt(Math.pow(k,3),1)+' 倍<br>中央撓度（彎曲量）＝ 原來的 '+fmt(1/Math.pow(k,3),3)+' 倍';};hh.oninput=up;up();}
+
+/* ---------- 挫屈 ---------- */
+if($('bk')){const Ls=$('bkL'),Ks=$('bkK');const up=()=>{const Lv=+Ls.value,K=+Ks.value;$('bkLv').textContent=Lv.toFixed(1);
+  const rel=4/((K*Lv)*(K*Lv));$('bkBar').setAttribute('width',Math.min(250,rel/4*250));
+  $('bkTxt').textContent='相對值 ＝ '+rel.toFixed(2)+'（有效長度 KL ＝ '+(K*Lv).toFixed(2)+' m）';
+  const H=Lv*55,top=290-H;$('bkStraight').setAttribute('y2',top);$('bkArrow').setAttribute('y1',top-48);$('bkArrow').setAttribute('y2',top-8);
+  const f=t=>K===1?Math.sin(Math.PI*t):K===0.5?(1-Math.cos(2*Math.PI*t))/2:K===2?1-Math.cos(Math.PI*t/2):Math.sin(Math.PI*t)*t/0.58;
+  let d='';for(let k=0;k<=40;k++){const t=k/40;d+=(k?'L':'M')+(150+22*f(t)).toFixed(1)+' '+(290-H*t).toFixed(1);}$('bkPath').setAttribute('d',d);};
+  Ls.oninput=up;Ks.onchange=up;up();}
+
+/* ---------- 地震 ---------- */
+if($('eq')){const T=$('eqT');let paused=false,t0=performance.now();
+  T.oninput=()=>$('eqTv').textContent=(+T.value).toFixed(2);T.oninput();
+  $('eqPause').onclick=()=>{paused=!paused;$('eqPause').textContent=paused?'繼續':'暫停';};
+  const n=6,fh=34,w=120,cx=310,base=280,G=12;
+  function frame(now){requestAnimationFrame(frame);if(paused||!vis($('eq')))return;
+    const t=(now-t0)/1000,Tg=+T.value,iso=$('eqI').checked,dmp=$('eqD').checked;
+    const Tn=iso?2.5:1,z=iso?0.15:(dmp?0.18:0.03),r=Tn/Tg,Hf=1/Math.sqrt(Math.pow(1-r*r,2)+Math.pow(2*z*r,2));
+    let amp=G*r*r*Hf;const cap=70;const shown=Math.min(amp,cap);const ph=Math.atan2(2*z*r,1-r*r);const w0=2*Math.PI/Tg;
+    const xg=G*Math.sin(w0*t),rel=shown*Math.sin(w0*t-ph);
+    $('eqGround').setAttribute('x',xg-20);$('eqGround').setAttribute('width',660);
+    let s='';const lift=iso?10:0;
+    if(iso)s+='<rect x="'+(cx-w/2+xg)+'" y="'+(base-10)+'" width="'+w+'" height="10" fill="#f2b705" stroke="#1b2733"/>';
+    for(let i=0;i<n;i++){const sh0=iso?1:i/n,sh1=iso?1:(i+1)/n;const x0=cx+xg+rel*sh0,x1=cx+xg+rel*sh1,y0=base-lift-i*fh,y1=y0-fh;
+      s+='<polygon points="'+(x0-w/2)+','+y0+' '+(x0+w/2)+','+y0+' '+(x1+w/2)+','+y1+' '+(x1-w/2)+','+y1+'" fill="'+(i%2?'#dfe8f1':'#cfdbe7')+'" stroke="#0f2d4d" stroke-width="2"/>';
+      s+='<rect x="'+((x0+x1)/2-12)+'" y="'+(y1+10)+'" width="24" height="12" fill="#bfe0ff"/>';}
+    if(dmp){const xt=cx+xg+rel,yt=base-lift-n*fh;s+='<line x1="'+xt+'" y1="'+(yt+4)+'" x2="'+(xt-rel*0.5)+'" y2="'+(yt+26)+'" stroke="#1b2733"/><circle cx="'+(xt-rel*0.5)+'" cy="'+(yt+26)+'" r="8" fill="#b3362b"/>';}
+    $('eqBld').innerHTML=s;
+    $('eqAmp').textContent='頂樓相對搖晃放大倍數 ≈ '+(amp/G).toFixed(2)+(amp>cap?'（畫面已限制幅度）':'')+(Math.abs(r-1)<0.15&&!iso&&!dmp?'　⚠️ 共振！':'');}
+  requestAnimationFrame(frame);}
+
+/* ---------- 液化 ---------- */
+if($('lq')){const g=$('lqGrains');const pts=[];for(let y=100;y<=240;y+=18)for(let x=52;x<=570;x+=18)pts.push([x,y]);
+  let seed=3;const rnd=()=>{seed=(seed*9301+49297)%233280;return seed/233280;};
+  const draw=(p,shake)=>{g.innerHTML=pts.map(([x,y])=>{const dx=shake?(rnd()-0.5)*6*p:0,dy=shake?(rnd()-0.5)*6*p:0;const yy=y+(shake?0:p*8*(y-100)/140);
+    return '<circle cx="'+(x+dx).toFixed(1)+'" cy="'+(yy+dy).toFixed(1)+'" r="'+(9-2.2*(shake?p:0)).toFixed(1)+'" fill="#c8a165" stroke="#9b6b43"/>';}).join('');};
+  draw(0,false);let run=false;
+  $('lqBtn').onclick=()=>{if(run)return;run=true;const t0=performance.now();$('lqTxt').textContent='地震中：水壓升高，砂粒被撐開，失去接觸⋯⋯';
+    const step=now=>{const p=Math.min(1,(now-t0)/3500);draw(p,p<1);const hx=p<1?(Math.random()-0.5)*6:0;
+      $('lqHouse').setAttribute('transform','translate('+hx+','+(p*55)+') rotate('+(p*5)+' 310 90)');
+      if(p<1)requestAnimationFrame(step);else{draw(1,false);$('lqTxt').textContent='地震後：房子下陷傾斜，砂土重新沉積變密';run=false;}};requestAnimationFrame(step);};
+  $('lqReset').onclick=()=>{if(run)return;draw(0,false);$('lqHouse').removeAttribute('transform');$('lqTxt').textContent='地震前：砂粒互相接觸，撐住房子';};}
+
+/* ---------- 水壩水壓 ---------- */
+if($('dam')){const H=$('damH');const up=()=>{const h=+H.value,y=40+h*10;$('damHv').textContent=h;
+  $('damLine').setAttribute('y1',y);$('damLine').setAttribute('y2',y);$('damDot').setAttribute('cy',y);
+  const p=9.81*h;$('damOut').innerHTML='深度 '+h+' m 的水壓 ＝ 1000 × 9.81 × '+h+' ＝ '+fmt(p,1)+' kPa<br>相當於每平方公尺承受約 '+fmt(p/9.81,1)+' 公噸的重量';};H.oninput=up;up();}
+
+/* ---------- 淨水流程 ---------- */
+if($('wtp')){const S=[['取水','💧','從河川或水庫把原水引進水廠，先用攔污柵擋住樹枝、垃圾。'],['混凝','🧪','加入混凝劑（例如多元氯化鋁），快速攪拌，讓水中細小的泥沙和雜質失去互相排斥的電荷。'],['膠凝','🫧','緩慢攪拌，讓小顆粒互相碰撞黏成較大的「膠羽」（礬花）。'],['沉澱','⬇️','水流進大水池慢慢流動，膠羽因為夠重而沉到池底。'],['過濾','🏖️','水通過砂和無煙煤組成的濾床，把剩下的細小顆粒擋住。'],['消毒','🧴','加入氯等消毒劑殺死細菌和病毒，並維持一點餘氯，讓水在管線中也保持乾淨。'],['配水','🏙️','乾淨的水送到高處的配水池，再靠重力和加壓站，經由地下管網送到每一戶。']];
+  let cur=0;const draw=()=>{let s='';S.forEach((st,i)=>{const x=8+i*87,on=i===cur,past=i<cur;
+    s+='<rect x="'+x+'" y="30" width="78" height="70" rx="6" fill="'+(on?'#0f2d4d':past?'#dfe8f1':'#fff')+'" stroke="#1c4a78"/>';
+    s+='<text x="'+(x+39)+'" y="60" text-anchor="middle" font-size="22">'+st[1]+'</text><text x="'+(x+39)+'" y="88" text-anchor="middle" fill="'+(on?'#ffe28a':'#1b2733')+'">'+(i+1)+'. '+st[0]+'</text>';
+    if(i<S.length-1)s+='<text x="'+(x+80)+'" y="70" fill="#566573">›</text>';});
+    s+='<text x="10" y="130" fill="#566573">原水 → → → 自來水</text>';$('wtpSteps').innerHTML=s;
+    $('wtpOut').innerHTML='第 '+(cur+1)+' 步：'+S[cur][0]+'<br>'+S[cur][2];};
+  $('wtpPrev').onclick=()=>{cur=Math.max(0,cur-1);draw();};$('wtpNext').onclick=()=>{cur=(cur+1)%S.length;draw();};draw();}
+
+/* ---------- 水準測量 ---------- */
+if($('lv')){const up=()=>{const Ha=+$('lvH').value||0;let bs=Math.max(0,Math.min(3,+$('lvBS').value||0)),fs=Math.max(0,Math.min(3,+$('lvFS').value||0));
+  const ya=56+bs*55,yb=56+fs*55,ym=(ya+yb)/2+10;
+  $('lvGround').setAttribute('d','M0 '+ya+' L80 '+ya+' Q290 '+ym+' 530 '+yb+' L620 '+yb+' L620 250 L0 250Z');
+  $('lvRodA').setAttribute('y',36);$('lvRodA').setAttribute('height',ya-36);$('lvRodB').setAttribute('y',36);$('lvRodB').setAttribute('height',yb-36);
+  $('lvTA').setAttribute('y',(56+ya)/2);$('lvTA').textContent=bs.toFixed(3);$('lvTB').setAttribute('y',(56+yb)/2);$('lvTB').textContent=fs.toFixed(3);$('lvTB').setAttribute('x',470);
+  const Hb=Ha+bs-fs;$('lvOut').innerHTML='B 高程 ＝ '+Ha.toFixed(3)+' ＋ '+bs.toFixed(3)+' − '+fs.toFixed(3)+' ＝ '+Hb.toFixed(3)+' m<br>B 比 A '+(bs-fs>=0?'高 ':'低 ')+Math.abs(bs-fs).toFixed(3)+' m';};
+  ['lvH','lvBS','lvFS'].forEach(i=>$(i).oninput=up);up();}
+
+/* ---------- 施工步驟 ---------- */
+if($('cs')){const S=[['📍 放樣','測量人員依照圖面，用全站儀在地上或樓板上標出柱、梁、牆的準確位置，彈上墨線。'],['🔩 鋼筋綁紮','依照結構圖把主筋和箍筋綁好，用墊塊撐起鋼筋，確保保護層厚度。監造要檢查鋼筋號數、支數、間距。'],['🪵 模板組立','用木板或鋼模圍出構件的形狀，並用支撐撐穩。模板就像「蛋糕模具」，必須能承受濕混凝土的重量和側壓力。'],['🚚 澆置','預拌混凝土車運來混凝土（先做坍度試驗、取圓柱試體），用泵浦車打進模板裡，分層澆置。'],['〰️ 搗實','用振動棒插進混凝土裡振動，把裡面的空氣泡趕出來，讓混凝土填滿每個角落、包緊鋼筋。沒搗實就會產生「蜂窩」。'],['💦 養護','澆水、覆蓋濕布或噴養護劑，保持濕潤，讓水化作用充分進行。'],['📦 拆模','混凝土達到足夠強度後才能拆模板。樓板和梁底的支撐要等更久，太早拆可能會讓構件下垂甚至倒塌。']];
+  let cur=0;const bt=$('csBtns');S.forEach((s,i)=>{const b=document.createElement('button');b.className='btn alt';b.textContent=(i+1)+'';b.onclick=()=>{cur=i;draw();};bt.appendChild(b);});
+  const draw=()=>{[...bt.children].forEach((b,i)=>b.className=i===cur?'btn':'btn alt');$('csCard').innerHTML='<div class="card"><h4>步驟 '+(cur+1)+'／7　'+S[cur][0]+'</h4>'+S[cur][1]+'</div>';};draw();}
+
+/* ---------- 坍度 ---------- */
+if($('sl')){$('slBtn').onclick=()=>{['slCone','slBody'].forEach(id=>{const e=$(id);e.classList.remove('go');void e.getBoundingClientRect();e.classList.add('go');});};}
+
+/* ---------- LRFD ---------- */
+if($('lr')){const up=()=>{const D=+$('lrD').value,L=+$('lrL').value,Mn=+$('lrM').value;$('lrDv').textContent=D;$('lrLv').textContent=L;$('lrMv').textContent=Mn;
+  const wu=1.2*D+1.6*L,Mu=wu*36/8,pM=0.9*Mn,ok=pM>=Mu;
+  $('lrOut').innerHTML='① 放大載重 wu ＝ 1.2×'+D+' ＋ 1.6×'+L+' ＝ '+wu.toFixed(1)+' kN/m<br>② 需求彎矩 Mu ＝ wu×L²÷8 ＝ '+wu.toFixed(1)+'×36÷8 ＝ '+Mu.toFixed(1)+' kN·m<br>③ 設計強度 φMn ＝ 0.9×'+Mn+' ＝ '+pM.toFixed(1)+' kN·m<br>'+(ok?'✅ 通過：φMn ≥ Mu（使用率 '+(Mu/pM*100).toFixed(0)+'%）':'❌ 不通過：需要加大斷面或增加鋼筋');};
+  ['lrD','lrL','lrM'].forEach(i=>$(i).oninput=up);up();}
+
+/* ---------- 有限元素格子 ---------- */
+if($('femGrid')){let s='';const cx=440,cy=95,R=70,sz=10;for(let x=cx-R;x<cx+R;x+=sz)for(let y=cy-R;y<cy+R;y+=sz){const mx=x+sz/2,my=y+sz/2;if((mx-cx)**2+(my-cy)**2<=R*R)s+='<rect x="'+x+'" y="'+y+'" width="'+sz+'" height="'+sz+'" fill="#dfe8f1" stroke="#1c4a78" stroke-width=".7"/>';}$('femGrid').innerHTML=s;}
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-fa8e584a7c" data-category="science"></script></body>
+</html>

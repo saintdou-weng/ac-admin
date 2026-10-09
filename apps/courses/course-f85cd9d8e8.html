@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>統計，從零開始｜給國中生的統計與機率完整課程</title>
+<style>
+:root{
+  --paper:#F8FBFC; --grid:#E2EAF0; --ink:#1D2842; --ink2:#4E5A75; --line:#C7D2DD;
+  --card:#FFFFFF; --soft:#EEF3F7; --hi:#FFE45C; --hi-soft:#FFF6C2;
+  --teal:#11806F; --blue:#3E54C8; --red:#C8324B; --amber:#D98B0B; --violet:#7A4CC2;
+  --serif:"Noto Serif TC","Source Han Serif TC","Songti TC","PMingLiU",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#131824; --grid:#1C2334; --ink:#E6EAF3; --ink2:#A4AEC4; --line:#2E3850;
+    --card:#1A2030; --soft:#222A3D; --hi:#7A6414; --hi-soft:#3A3318;
+    --teal:#3CC3AC; --blue:#8D9CFF; --red:#FF7088; --amber:#F2B84B; --violet:#B895F5;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131824; --grid:#1C2334; --ink:#E6EAF3; --ink2:#A4AEC4; --line:#2E3850;
+  --card:#1A2030; --soft:#222A3D; --hi:#7A6414; --hi-soft:#3A3318;
+  --teal:#3CC3AC; --blue:#8D9CFF; --red:#FF7088; --amber:#F2B84B; --violet:#B895F5;
+  color-scheme:dark;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px);-webkit-text-size-adjust:100%}
+body{
+  margin:0;font-family:var(--sans);color:var(--ink);font-size:17px;line-height:1.85;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:26px 26px;
+}
+img,svg,canvas{max-width:100%}
+a{color:var(--blue)}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+
+/* ---------- 頂部列 ---------- */
+.topbar{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:30;
+  display:flex;align-items:center;gap:12px;padding:10px 16px;
+  background:color-mix(in srgb,var(--paper) 92%,transparent);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  border-bottom:2px solid var(--ink);
+}
+.topbar .brand{font-family:var(--serif);font-weight:700;font-size:19px;letter-spacing:.04em;white-space:nowrap;cursor:pointer}
+.topbar .brand small{font-family:var(--sans);font-weight:400;font-size:13px;color:var(--ink2);margin-left:6px}
+.prog{flex:1;display:flex;align-items:center;gap:10px;min-width:0}
+.prog .bar{flex:1;height:8px;border:1.5px solid var(--ink);border-radius:5px;overflow:hidden;background:var(--card)}
+.prog .bar i{display:block;height:100%;width:0;background:var(--teal);transition:width .4s}
+.prog span{font-size:13px;color:var(--ink2);white-space:nowrap;font-variant-numeric:tabular-nums}
+.iconbtn{border:1.5px solid var(--ink);background:var(--card);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:15px;line-height:1.4}
+#menuBtn{display:none}
+
+/* ---------- 版面 ---------- */
+.layout{display:grid;grid-template-columns:290px minmax(0,1fr);max-width:1200px;margin:0 auto}
+nav.toc{
+  position:sticky;top:calc(env(safe-area-inset-top,0px) + 58px);align-self:start;
+  height:calc(100vh - 58px - env(safe-area-inset-top,0px));overflow-y:auto;padding:20px 14px 40px 20px;
+  border-right:1.5px dashed var(--line);
+}
+.toc h4{font-family:var(--serif);font-size:14px;margin:18px 0 6px;color:var(--ink2);font-weight:700}
+.toc h4:first-child{margin-top:0}
+.toc a{display:flex;gap:8px;align-items:baseline;text-decoration:none;color:var(--ink);padding:5px 8px;border-radius:6px;font-size:15px;line-height:1.5}
+.toc a:hover{background:var(--soft)}
+.toc a.active{background:var(--hi-soft);box-shadow:inset 3px 0 0 var(--ink)}
+.toc a .n{font-variant-numeric:tabular-nums;color:var(--ink2);min-width:22px;font-size:13px}
+.toc a.done .n::before{content:"✓";color:var(--teal);font-weight:700}
+.toc a.done .n span{display:none}
+main{padding:28px 28px 80px;min-width:0}
+.chapter{display:none;max-width:760px;margin:0 auto}
+.chapter.show{display:block;animation:enter .35s ease}
+@keyframes enter{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ---------- 文字 ---------- */
+.unit-tag{display:inline-block;font-size:13px;color:var(--ink2);border:1.5px solid var(--ink2);border-radius:20px;padding:0 10px;margin-bottom:6px}
+h1.ch-title{font-family:var(--serif);font-size:clamp(28px,5vw,40px);line-height:1.3;margin:4px 0 6px;letter-spacing:.02em}
+h1.ch-title .num{display:inline-block;font-family:var(--sans);font-weight:800;font-size:.6em;background:var(--ink);color:var(--paper);border-radius:8px;padding:0 10px;margin-right:12px;vertical-align:.25em}
+.lead{font-size:18.5px;color:var(--ink2);margin:0 0 26px}
+h2{font-family:var(--serif);font-size:24px;margin:40px 0 10px;line-height:1.4}
+h3{font-size:19px;margin:28px 0 6px}
+p{margin:0 0 14px}
+.mark{background:linear-gradient(transparent 58%,var(--hi) 58%);padding:0 2px}
+b,strong{font-weight:700}
+.en{font-family:Georgia,"Times New Roman",serif;font-style:italic;color:var(--ink2)}
+ul,ol{padding-left:1.4em;margin:0 0 14px}
+li{margin-bottom:4px}
+.muted{color:var(--ink2);font-size:15px}
+
+/* ---------- 方塊元件 ---------- */
+.box{border-radius:12px;padding:16px 18px;margin:20px 0;background:var(--card);border:1.5px solid var(--line)}
+.box>.lbl{display:block;font-weight:700;font-size:15px;margin-bottom:4px}
+.box p:last-child,.box ul:last-child{margin-bottom:0}
+.origin{background:var(--soft);border:none;border-left:5px solid var(--violet);border-radius:0 12px 12px 0}
+.origin>.lbl{color:var(--violet)}
+.origin>.lbl::before{content:"📜 "}
+.life{border-left:5px solid var(--amber);border-radius:0 12px 12px 0}
+.life>.lbl{color:var(--amber)}
+.life>.lbl::before{content:"🍜 "}
+.key{background:var(--hi-soft);border:2px solid var(--ink)}
+.key>.lbl::before{content:"⭐ "}
+.warn{border-left:5px solid var(--red);border-radius:0 12px 12px 0}
+.warn>.lbl{color:var(--red)}
+.warn>.lbl::before{content:"⚠️ "}
+.pro{border:1.5px dashed var(--blue)}
+.pro>.lbl{color:var(--blue)}
+.pro>.lbl::before{content:"🎓 "}
+.formula{font-family:var(--serif);font-size:21px;text-align:center;padding:14px 10px;margin:16px 0;background:var(--card);border:1.5px solid var(--ink);border-radius:10px;overflow-x:auto;line-height:1.7}
+.formula small{display:block;font-family:var(--sans);font-size:14px;color:var(--ink2)}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;line-height:1.25}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;padding:0 4px}
+.steps{counter-reset:s;list-style:none;padding:0}
+.steps li{counter-increment:s;position:relative;padding-left:40px;margin-bottom:12px}
+.steps li::before{content:counter(s);position:absolute;left:0;top:2px;width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--paper);font-weight:700;font-size:14px;display:grid;place-items:center}
+.tbl{overflow-x:auto;margin:16px 0}
+table{border-collapse:collapse;width:100%;font-size:15.5px;background:var(--card)}
+th,td{border:1.5px solid var(--line);padding:6px 10px;text-align:center}
+th{background:var(--soft)}
+td.l,th.l{text-align:left}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.two .box{margin:0}
+
+/* ---------- 互動區 ---------- */
+.demo{border:2px solid var(--ink);border-radius:14px;background:var(--card);margin:24px 0;overflow:hidden}
+.demo-h{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--ink);color:var(--paper);font-weight:700;font-size:15px}
+.demo-h::before{content:"▶";font-size:11px}
+.demo-b{padding:14px 16px}
+.demo canvas{display:block;width:100%;border-radius:8px;background:var(--paper);touch-action:manipulation}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin:12px 0 4px}
+.ctrl label{display:flex;align-items:center;gap:8px;font-size:15px;flex-wrap:wrap}
+.ctrl input[type=range]{width:160px;accent-color:var(--teal)}
+.ctrl select{border:1.5px solid var(--ink);border-radius:8px;padding:3px 6px;background:var(--card)}
+.ctrl input[type=number]{width:74px;border:1.5px solid var(--ink);border-radius:8px;padding:3px 6px;background:var(--card)}
+.btn{border:1.5px solid var(--ink);background:var(--card);border-radius:9px;padding:5px 14px;cursor:pointer;font-size:15px;font-weight:600;transition:transform .08s}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn.ok{background:var(--teal);color:#fff;border-color:var(--teal)}
+.readout{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.stat{border:1.5px solid var(--line);border-radius:10px;padding:4px 12px;font-size:14px;background:var(--paper)}
+.stat b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.tip{font-size:14px;color:var(--ink2);margin-top:8px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;margin-top:8px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+/* ---------- 測驗 ---------- */
+.quiz{border:2px dashed var(--ink);border-radius:14px;padding:16px 18px;margin:20px 0;background:var(--card)}
+.quiz .q{font-weight:700;margin-bottom:10px}
+.quiz .q::before{content:"✏️ 小測驗　";color:var(--teal)}
+.quiz .opts{display:grid;gap:8px}
+.quiz .opts button{text-align:left;border:1.5px solid var(--line);background:var(--paper);border-radius:9px;padding:8px 12px;cursor:pointer;font-size:15.5px;line-height:1.55}
+.quiz .opts button:hover{border-color:var(--ink)}
+.quiz .opts button.right{border-color:var(--teal);background:color-mix(in srgb,var(--teal) 14%,var(--card))}
+.quiz .opts button.wrong{border-color:var(--red);background:color-mix(in srgb,var(--red) 12%,var(--card))}
+.quiz .fb{display:none;margin-top:10px;font-size:15.5px;padding:8px 12px;border-radius:8px;background:var(--soft)}
+.quiz .fb.on{display:block}
+
+/* ---------- 章節底部 ---------- */
+.ch-foot{margin-top:48px;padding-top:18px;border-top:2px solid var(--ink);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.done-toggle{display:flex;align-items:center;gap:8px;font-weight:700;cursor:pointer;border:2px solid var(--teal);color:var(--teal);border-radius:10px;padding:6px 14px;background:var(--card)}
+.done-toggle.on{background:var(--teal);color:#fff}
+.pager{display:flex;gap:8px}
+
+/* ---------- 首頁 ---------- */
+.hero{margin:-4px 0 10px}
+.hero h1{font-family:var(--serif);font-size:clamp(32px,6.4vw,56px);line-height:1.2;margin:8px 0 12px;letter-spacing:.02em}
+.hero .sub{font-size:19px;color:var(--ink2);max-width:36em}
+.hero-board{border:2px solid var(--ink);border-radius:16px;background:var(--card);padding:10px;margin:22px 0 10px}
+.hero-board canvas{display:block;width:100%}
+.hero-cap{font-size:14px;color:var(--ink2);text-align:center;margin:6px 0 0}
+.map{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:18px 0}
+.map .u{border:1.5px solid var(--ink);border-radius:12px;padding:12px 14px;background:var(--card)}
+.map .u b{font-family:var(--serif);font-size:17px;display:block}
+.map .u span{font-size:14px;color:var(--ink2);line-height:1.6;display:block;margin-top:4px}
+.icons-legend{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.icons-legend .box{margin:0;padding:6px 12px;flex:1 1 150px}
+.icons-legend .box .lbl{margin:0}
+
+/* ---------- 辭典 ---------- */
+#glossSearch{width:100%;border:2px solid var(--ink);border-radius:10px;padding:8px 12px;background:var(--card);font-size:16px;margin:8px 0 16px}
+.gl{border-bottom:1.5px dashed var(--line);padding:10px 0}
+.gl .t{font-weight:700;font-size:17px}
+.gl .t .en{font-weight:400;margin-left:6px}
+.gl .d{margin:2px 0}
+.gl .o{font-size:14.5px;color:var(--violet)}
+
+/* ---------- RWD ---------- */
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr}
+  #menuBtn{display:inline-block}
+  nav.toc{position:fixed;top:0;left:0;bottom:0;width:min(86vw,320px);height:100%;z-index:50;background:var(--paper);
+    transform:translateX(-105%);transition:transform .25s;border-right:2px solid var(--ink);padding-top:calc(env(safe-area-inset-top,0px) + 20px)}
+  nav.toc.open{transform:none;box-shadow:0 0 0 100vmax rgba(0,0,0,.35)}
+  main{padding:20px 16px 70px}
+  .topbar .brand small{display:none}
+  .two{grid-template-columns:1fr}
+  body{font-size:16.5px}
+  .formula{font-size:18px}
+}
+@media (max-width:480px){.prog span{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{
+  .topbar,nav.toc,.ch-foot,.demo{display:none!important}
+  .chapter{display:block!important;page-break-after:always}
+  body{background:none}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <button class="iconbtn" id="menuBtn" aria-label="開啟目錄">☰ 目錄</button>
+  <div class="brand" data-go="ch0">統計，從零開始<small>國中生也看得懂</small></div>
+  <div class="prog" aria-label="學習進度"><div class="bar"><i id="progBar"></i></div><span id="progTxt">0 / 20 章</span></div>
+  <button class="iconbtn" id="themeBtn" aria-label="切換深淺色">◐</button>
+</header>
+
+<div class="layout">
+<nav class="toc" id="toc" aria-label="課程目錄"></nav>
+<main id="main">
+
+<!-- ================= 首頁 ================= -->
+<section class="chapter" id="ch0" data-title="課程首頁" data-unit="">
+  <div class="hero">
+    <h1>每一顆球都在亂跑，<br>可是它們一起畫出了一座山。</h1>
+    <p class="sub">下面這台機器，每顆小球碰到釘子時都是隨機往左或往右。單看一顆球，你永遠猜不到它掉哪裡；可是丟了幾百顆之後，形狀每次都差不多。<b>從「亂」裡面找出「規律」，就是統計學在做的事。</b></p>
+  </div>
+  <div class="hero-board">
+    <canvas id="heroCanvas" aria-label="高爾頓板動畫：小球隨機落下，累積成鐘形"></canvas>
+    <p class="hero-cap">這叫「高爾頓板」。第 12 章你會自己操作它，並且弄懂為什麼一定是這個形狀。</p>
+  </div>
+  <div class="ctrl" style="justify-content:center">
+    <button class="btn primary" data-go="ch1">從第 1 章開始上課</button>
+    <button class="btn" id="heroReset">再丟一次</button>
+  </div>
+
+  <h2>這門課會帶你走到哪裡</h2>
+  <p>課程一共 20 章，分成 6 個單元。前面的章節是後面的地基，建議按順序學；每章最後都有小測驗和「我學會了」的打勾，進度會記在這個瀏覽器裡。</p>
+  <div class="map" id="unitMap"></div>
+
+  <h2>課本裡的小方塊</h2>
+  <div class="icons-legend">
+    <div class="box origin"><span class="lbl">名詞由來</span></div>
+    <div class="box life"><span class="lbl">生活例子</span></div>
+    <div class="box key"><span class="lbl">重點</span></div>
+    <div class="box warn"><span class="lbl">常見陷阱</span></div>
+    <div class="box pro"><span class="lbl">進階補充</span></div>
+  </div>
+  <p class="muted">「進階補充」第一次讀跳過也沒關係，等整門課學完再回來看，會有不一樣的感覺。帶有 ▶ 黑色標題的區塊可以動手操作，請一定要玩玩看——統計是「玩」出直覺的。</p>
+
+  <h2>需要什麼基礎？</h2>
+  <p>會加減乘除、分數、小數、百分比就夠了。平方和開根號（√）第 5 章會再解釋一次。遇到看不懂的符號，可以隨時翻到最後的<a href="#gloss" data-go="gloss">名詞辭典與符號表</a>。</p>
+</section>
+
+<!-- ================= 第一單元 ================= -->
+<section class="chapter" id="ch1" data-title="統計是什麼？" data-unit="第一單元　認識統計">
+<p class="lead">你可能覺得統計很遙遠，其實你每天都在用它：段考平均幾分、手機說「今天降雨機率 70%」、YouTube 推薦你可能喜歡的影片，背後全都是統計。</p>
+
+<h2>一句話說清楚</h2>
+<p><span class="mark">統計學是一門「收集資料、整理資料、分析資料，然後在不確定的情況下做出合理判斷」的學問。</span></p>
+<p>注意最後那幾個字：<b>不確定的情況</b>。如果事情是百分之百確定的（例如 1+1=2），就不需要統計；統計厲害的地方，是在「沒辦法確定」的時候，仍然幫我們做出「最有道理」的決定。</p>
+
+<div class="box origin"><span class="lbl">名詞由來：統計 Statistics</span>
+<p>英文 <span class="en">statistics</span> 跟 <span class="en">state</span>（國家）是同一個字根，來自拉丁文 <span class="en">status</span>（狀態）和義大利文 <span class="en">statista</span>（政治家）。1749 年，德國學者阿亨瓦爾（Gottfried Achenwall）用德文 <span class="en">Statistik</span> 稱呼一門「研究國家狀況的學問」——國家有多少人、多少土地、多少稅收。所以統計一開始就是<b>「管理國家用的數字」</b>。</p>
+<p>中文「統計」是十九世紀後期日本學者翻譯定下、再傳入中文的：「統」是總括、合起來，「計」是計算。合起來就是「把所有東西合在一起算一算」，翻得很傳神。</p>
+</div>
+
+<h2>最早的「資料分析師」</h2>
+<p>1662 年，英國倫敦有位賣布的商人葛蘭特（John Graunt），拿教會每週公布的「死亡名單」來整理。他發現：男嬰出生數總是比女嬰多一點點、城市死亡率比鄉下高、某些疾病有季節性。這是人類第一次<b>從一大堆雜亂紀錄裡，找出穩定的規律</b>。一個布商做到了國王的大臣們做不到的事——這就是統計的威力。</p>
+
+<h2>統計的兩大家族</h2>
+<div class="two">
+  <div class="box"><span class="lbl">描述統計</span><p>把一大堆數字<b>說清楚</b>。例如：全班 30 人的數學成績，平均 72 分，最高 98、最低 35。用幾個數字或一張圖，就讓人一眼看懂。<br><span class="muted">→ 第二單元</span></p></div>
+  <div class="box"><span class="lbl">推論統計</span><p>用<b>一小部分</b>去猜<b>全部</b>。例如：只問 1000 個人，就推測全台灣 2300 萬人支持哪位候選人。<br><span class="muted">→ 第五單元</span></p></div>
+</div>
+
+<div class="box life"><span class="lbl">生活例子：喝一口湯</span>
+<p>媽媽煮了一大鍋湯，想知道鹹不鹹，會把整鍋喝完嗎？當然不會！她會<b>攪一攪，舀一小口</b>嚐。這一小口就是「樣本」，整鍋湯是「母體」。「攪一攪」很重要——如果沒攪，鹽都沉在底部，喝上面那口就會誤判。這就是後面會學到的「隨機抽樣」。</p>
+</div>
+
+<h2>做統計的五個步驟</h2>
+<ol class="steps">
+  <li><b>提出問題</b>：例如「我們班的同學一週花多少時間滑手機？」</li>
+  <li><b>收集資料</b>：發問卷、做實驗、查紀錄。</li>
+  <li><b>整理資料</b>：做成表格、畫成圖。</li>
+  <li><b>分析資料</b>：算平均、看分散程度、找關係。</li>
+  <li><b>下結論</b>：並且誠實說出「這個結論有多可靠」。</li>
+</ol>
+<p>第 5 步最常被忽略。好的統計不會只說「答案是 X」，而是會說「答案大概是 X，誤差大概多少」。</p>
+
+<div class="quiz" data-a="1"><div class="q">下面哪一件事「最需要」用到統計？</div><div class="opts">
+<button>計算 25 × 4 等於多少</button>
+<button>根據過去的資料，判斷明天會不會下雨</button>
+<button>背出九九乘法表</button></div>
+<div class="fb">統計專門處理「不確定」的問題。25×4 和九九乘法都有唯一確定的答案，明天會不會下雨卻無法確定，只能根據資料推測可能性。</div></div>
+
+<div class="quiz" data-a="0"><div class="q">民調公司只打電話問 1068 人，就推測全國的支持率。這屬於哪一種統計？</div><div class="opts">
+<button>推論統計</button><button>描述統計</button><button>都不是</button></div>
+<div class="fb">用一小部分（樣本）去推測全體（母體），就是推論統計。</div></div>
+</section>
+
+<section class="chapter" id="ch2" data-title="資料、母體與變數" data-unit="第一單元　認識統計">
+<p class="lead">做菜要先認識食材，做統計要先認識資料。這一章學會幾個「一定要會」的名詞，後面每一章都會用到。</p>
+
+<h2>資料（data）</h2>
+<p>資料就是我們觀察、測量、記錄下來的事實，可以是數字（身高 158 公分），也可以是文字（最喜歡的飲料：珍珠奶茶）。</p>
+<div class="box origin"><span class="lbl">名詞由來：Data</span>
+<p>拉丁文 <span class="en">datum</span> 意思是「被給予的東西」（來自動詞 <span class="en">dare</span>，給）。資料就是「世界給我們的線索」，複數寫成 <span class="en">data</span>。</p></div>
+
+<h2>母體與樣本</h2>
+<p><b>母體</b>（population）是你「真正想了解的全部對象」；<b>樣本</b>（sample）是你「實際拿到資料的那一部分」。</p>
+<div class="tbl"><table>
+<tr><th>想知道的問題</th><th>母體</th><th>樣本</th></tr>
+<tr><td class="l">全國國中生平均睡幾小時？</td><td>全國所有國中生</td><td>抽查的 2000 位國中生</td></tr>
+<tr><td class="l">這批 10 萬顆電池能用多久？</td><td>10 萬顆電池</td><td>拿去測試的 50 顆</td></tr>
+<tr><td class="l">我們班數學平均幾分？</td><td>全班 30 人</td><td>如果 30 人都算，樣本＝母體（這叫「普查」）</td></tr>
+</table></div>
+<div class="box origin"><span class="lbl">名詞由來：母體 Population</span>
+<p>英文 <span class="en">population</span> 本來是「人口」。因為統計最早就是在數人口（還記得國家學嗎？），後來「想研究的全體」不管是人、電池還是魚，都沿用這個字。中文翻成「母體」很巧妙：樣本是從它「生出來」的，就像孩子來自母親。<span class="en">Sample</span> 則和 <span class="en">example</span>（例子）同源，意思是「拿出來當代表的一小份」。</p></div>
+
+<h2>參數與統計量</h2>
+<p>描述<b>母體</b>的數字叫<b>參數</b>（parameter），例如「全國國中生真正的平均睡眠時間」——通常我們不知道它。描述<b>樣本</b>的數字叫<b>統計量</b>（statistic），例如「那 2000 人的平均睡眠時間」——這個我們算得出來。</p>
+<div class="box key"><span class="lbl">重點</span><p>推論統計的核心就是：<span class="mark">用算得出來的「統計量」，去猜算不出來的「參數」。</span>習慣上參數用希臘字母（μ、σ），統計量用英文字母（x̄、s）。</p></div>
+
+<h2>變數：資料的「欄位」</h2>
+<p>假設你調查了班上同學，做成下面這張表。每一「列」是一個人（叫做<b>觀察值</b>），每一「欄」是一種特徵（叫做<b>變數</b>）——因為它的值會隨人「變」來變去。</p>
+<div class="tbl"><table>
+<tr><th>座號</th><th>性別</th><th>最愛飲料</th><th>身高(cm)</th><th>兄弟姊妹數</th><th>滿意度</th></tr>
+<tr><td>1</td><td>女</td><td>珍奶</td><td>156.2</td><td>1</td><td>很滿意</td></tr>
+<tr><td>2</td><td>男</td><td>紅茶</td><td>162.8</td><td>0</td><td>普通</td></tr>
+<tr><td>3</td><td>女</td><td>綠茶</td><td>149.5</td><td>2</td><td>滿意</td></tr>
+</table></div>
+<h3>變數的種類</h3>
+<ul>
+<li><b>類別變數</b>：把東西「分類」，不能做加減。性別、最愛飲料都是。「珍奶 + 紅茶」沒有意義。</li>
+<li><b>數值變數</b>：真的是數量，可以加減平均。又分兩種：
+  <ul><li><b>離散</b>：一個一個數得出來，中間沒有值。兄弟姊妹數只能是 0、1、2……不會有 1.5 個。</li>
+  <li><b>連續</b>：可以無限細分。身高可以是 156.2、156.23、156.234……只看你的尺多準。</li></ul></li>
+</ul>
+<div class="box pro"><span class="lbl">進階補充：四種測量尺度</span>
+<p>1946 年心理學家史蒂文斯（S. S. Stevens）把變數分得更細：<b>名目尺度</b>（只能分類，如血型）、<b>順序尺度</b>（有大小順序但間距不一定相等，如「不滿意／普通／滿意」、名次）、<b>等距尺度</b>（間距相等但沒有真正的零，如攝氏溫度——0°C 不代表「沒有溫度」，20°C 也不是 10°C 的「兩倍熱」）、<b>比例尺度</b>（有真正的零，可以說幾倍，如身高、體重）。不同尺度能用的統計方法不一樣，這是專業分析的第一步。</p></div>
+
+<div class="quiz" data-a="2"><div class="q">「一天喝幾杯水」是哪一種變數？</div><div class="opts">
+<button>類別變數</button><button>連續的數值變數</button><button>離散的數值變數</button></div>
+<div class="fb">「幾杯」是一杯一杯數的，是離散的數值變數。但如果改成「一天喝幾毫升水」，就變成連續變數了——同一件事，量法不同，變數種類就不同。</div></div>
+<div class="quiz" data-a="1"><div class="q">研究者測試了 50 顆電池，算出平均壽命 12.3 小時。這個「12.3」是什麼？</div><div class="opts">
+<button>參數</button><button>統計量</button><button>母體</button></div>
+<div class="fb">它是從樣本（50 顆）算出來的，所以是統計量。那 10 萬顆電池「真正的」平均壽命才是參數，我們不知道，只能用 12.3 去估計。</div></div>
+</section>
+
+<section class="chapter" id="ch3" data-title="用圖說故事" data-unit="第一單元　認識統計">
+<p class="lead">一張好圖勝過一千個數字。但是圖也會說謊——這章教你畫對的圖，也教你看穿騙人的圖。</p>
+
+<h2>長條圖：比較「類別」</h2>
+<p>全班 30 人最喜歡的飲料：</p>
+<canvas class="mini" id="cvBar" height="220" aria-label="長條圖：珍奶12、紅茶7、綠茶5、奶綠4、其他2"></canvas>
+<p>每根柱子代表一個類別，柱子之間<b>有空隙</b>，因為類別之間本來就是分開的。柱子的順序可以任意排，通常由高排到低比較好讀。</p>
+
+<h2>直方圖：看「數值」的分布</h2>
+<p>全班身高，每 5 公分分一組：</p>
+<canvas class="mini" id="cvHist" height="220" aria-label="直方圖：身高分組人數"></canvas>
+<p>直方圖的柱子<b>緊緊相連</b>，因為身高是連續的，145 到 150 之後就接著 150 到 155，中間沒有空隙。直方圖讓我們一眼看出資料「長什麼形狀」：中間高兩邊低？還是歪一邊？</p>
+<div class="box origin"><span class="lbl">名詞由來：直方圖 Histogram</span>
+<p>1891 年英國統計學家皮爾森（Karl Pearson）在演講中創了 <span class="en">histogram</span> 這個字。來源有兩種說法：一說是希臘文 <span class="en">histos</span>（直立的桿子，像柱子）加 <span class="en">gramma</span>（畫、寫）；另一說是「歷史圖」（<span class="en">historical diagram</span>）的縮寫。中文「直方圖」則是照樣子翻：一根一根直立的方塊。</p></div>
+
+<h2>其他常見的圖</h2>
+<ul>
+<li><b>圓餅圖</b>：看「占全體的比例」。適合 2～5 個類別，太多片就看不清楚。</li>
+<li><b>折線圖</b>：看「隨時間的變化」，例如一年來每月的氣溫。</li>
+<li><b>散佈圖</b>：看「兩個數值變數有沒有關係」，例如讀書時間和成績。第 18 章會大量使用。</li>
+</ul>
+<div class="box origin"><span class="lbl">歷史小故事：發明圖表的人</span>
+<p>長條圖、折線圖和圓餅圖，都是蘇格蘭人普萊費爾（William Playfair）在 1786 年到 1801 年間發明的。他是工程師、也當過會計和記者，他發現國會議員看不懂一大堆貿易數字，就畫成圖給他們看。在他之前，人們只會用表格。</p></div>
+
+<h2>會說謊的圖</h2>
+<div class="demo"><div class="demo-h">動手玩：切掉 y 軸</div><div class="demo-b">
+<p style="margin-bottom:8px">A 牌手搖飲滿意度 82 分，B 牌 85 分。同樣的資料，按下按鈕看看：</p>
+<canvas id="cvTrunc" height="230"></canvas>
+<div class="ctrl"><button class="btn primary" id="truncBtn">把 y 軸從 80 開始</button></div>
+<p class="tip" id="truncTip">y 軸從 0 開始：兩家差不多。</p>
+</div></div>
+<div class="box warn"><span class="lbl">常見陷阱</span>
+<p>看到長條圖時，<b>先看 y 軸從幾開始</b>。廣告和新聞常把 y 軸截斷，讓一點點差距看起來像天差地遠。另外也要注意：柱子是不是用「立體圖案」誇大、兩張圖的刻度是否相同。</p></div>
+
+<div class="quiz" data-a="1"><div class="q">想呈現「全班 30 人每人的體重分布情形」，最適合用哪一種圖？</div><div class="opts">
+<button>圓餅圖</button><button>直方圖</button><button>折線圖</button></div>
+<div class="fb">體重是連續的數值變數，想看它的「分布形狀」，就用直方圖。圓餅圖用於類別比例，折線圖用於時間變化。</div></div>
+<div class="quiz" data-a="0"><div class="q">長條圖和直方圖最明顯的外觀差別是？</div><div class="opts">
+<button>長條圖柱子間有空隙，直方圖柱子相連</button><button>長條圖一定是橫的</button><button>直方圖不能有顏色</button></div>
+<div class="fb">長條圖處理分開的「類別」所以有空隙；直方圖處理連續的「數值區間」，所以柱子一個接一個。</div></div>
+</section>
+
+<!-- ================= 第二單元 ================= -->
+<section class="chapter" id="ch4" data-title="平均數、中位數、眾數" data-unit="第二單元　描述資料">
+<p class="lead">如果只能用「一個數字」代表一整群資料，你會選哪個數字？這一章的三個主角，各有各的本事，也各有各的弱點。</p>
+
+<h2>平均數：把東西平分</h2>
+<p>5 位同學這週的零用錢是 100、150、200、200、350 元。如果大家把錢放在一起再平分，每人拿多少？</p>
+<div class="formula">(100 + 150 + 200 + 200 + 350) ÷ 5 = 1000 ÷ 5 = 200 元</div>
+<p>這就是<b>平均數</b>：全部加起來，再除以個數。寫成公式是：</p>
+<div class="formula">x̄ = <span class="frac"><span>Σx</span><span>n</span></span>
+<small>x̄ 讀作「x bar」（x 上面一條線），Σ 讀作「sigma」表示「全部加起來」，n 是資料個數</small></div>
+<div class="box origin"><span class="lbl">名詞由來：Σ 和 μ</span>
+<p>Σ 是希臘字母的大寫 S，取「總和」<span class="en">Sum</span> 的第一個字母，1755 年由瑞士數學家歐拉（Leonhard Euler）開始使用。母體平均數常用 μ（讀作「謬」），它是希臘字母的 m，代表 <span class="en">mean</span>（平均）。<span class="en">Mean</span> 來自古法文 <span class="en">meien</span>，意思是「中間的」。</p></div>
+<p>平均數還有一個很美的意義：<span class="mark">它是資料的「平衡點」</span>。想像每個數字是放在蹺蹺板上的一塊積木，支點放在平均數的位置，蹺蹺板剛好平衡。</p>
+
+<h2>中位數：排隊站中間的人</h2>
+<p>把資料<b>由小排到大</b>，正中間那個就是中位數。100、150、<b>200</b>、200、350 的中位數是 200。</p>
+<p>如果資料有偶數個，就取中間兩個的平均。例如 3、5、<b>7、9</b>、11、20 的中位數是 (7+9)÷2 = 8。</p>
+<div class="box origin"><span class="lbl">名詞由來：中位數 Median</span>
+<p>拉丁文 <span class="en">medianus</span> 是「在中間的」，和 <span class="en">medium</span>（中等）同源。1880 年代英國學者高爾頓（Francis Galton）把它推廣成統計用語。對，就是首頁那台高爾頓板的發明者，他之後還會出現好幾次。</p></div>
+
+<h2>眾數：最受歡迎的那個</h2>
+<p>出現次數最多的值就是<b>眾數</b>。上面零用錢的眾數是 200（出現兩次）。眾數最大的好處是：<b>類別資料也能用</b>。「全班最愛飲料的眾數是珍奶」完全合理，但你沒辦法算「飲料的平均數」。</p>
+<div class="box origin"><span class="lbl">名詞由來：眾數 Mode</span>
+<p>1895 年皮爾森取自法文 <span class="en">à la mode</span>——「正在流行的」。眾數就是資料裡「最流行」的值。中文「眾數」則是「眾人（最多人）的那個數」。</p></div>
+
+<h2>極端值來搗亂</h2>
+<div class="demo"><div class="demo-h">動手玩：班上來了一位富二代</div><div class="demo-b">
+<p style="margin-bottom:8px">9 位同學的每週零用錢。拉動滑桿，改變第 9 位同學的零用錢，看看平均數（▲）和中位數（◆）誰比較穩。</p>
+<canvas id="cvMean" height="210"></canvas>
+<div class="ctrl"><label>第 9 位同學的零用錢：<input type="range" id="meanSlider" min="300" max="5000" step="50" value="300"><b id="meanVal">300</b> 元</label></div>
+<div class="readout"><div class="stat">平均數 ▲<b id="meanOut">-</b></div><div class="stat">中位數 ◆<b id="medOut">-</b></div><div class="stat">眾數<b>200</b></div></div>
+<p class="tip">試著拉到 5000：平均數被一個人拉走了，可是 9 個人裡有 8 個人的零用錢都比平均數少！</p>
+</div></div>
+<div class="box key"><span class="lbl">重點：什麼時候用哪一個？</span>
+<ul>
+<li>資料<b>沒有極端值</b>、形狀左右對稱 → 平均數最好，因為它用到了每一個數字。</li>
+<li>資料<b>有極端值</b>或歪一邊（像薪水、房價）→ 中位數比較能代表「一般人」。所以政府公布薪資時，常常同時公布平均數和中位數。</li>
+<li><b>類別資料</b>（最愛的顏色、飲料）→ 只能用眾數。</li>
+</ul></div>
+<div class="box life"><span class="lbl">生活例子</span><p>新聞說「某科技公司員工平均年薪 300 萬」，你進去就能領 300 萬嗎？不一定！如果老闆一個人年薪 1 億，就會把平均數拉得很高。這時要問：「那中位數是多少？」</p></div>
+
+<div class="quiz" data-a="2"><div class="q">資料 2、4、4、5、100 中，哪個數字最能代表「一般情況」？</div><div class="opts">
+<button>平均數 23</button><button>眾數 4 和中位數 4 一樣好，但平均數最好</button><button>中位數 4</button></div>
+<div class="fb">100 是極端值，把平均數拉到 23，可是 5 個數裡有 4 個都比 23 小很多。中位數 4 不受極端值影響，比較能代表一般情況。</div></div>
+<div class="quiz" data-a="0"><div class="q">小華前 4 次考試平均 80 分，第 5 次要考幾分，5 次平均才會變成 82 分？</div><div class="opts">
+<button>90 分</button><button>84 分</button><button>82 分</button></div>
+<div class="fb">5 次總分要是 82×5 = 410，前 4 次總分是 80×4 = 320，所以第 5 次要 410 − 320 = 90 分。用「總和」的角度想，平均數的題目都很好解。</div></div>
+</section>
+
+<section class="chapter" id="ch5" data-title="資料有多分散？標準差" data-unit="第二單元　描述資料">
+<p class="lead">只知道平均數是不夠的。這一章的「標準差」是整門課最重要的概念之一，請慢慢讀。</p>
+
+<h2>一樣的平均，不一樣的班級</h2>
+<p>A 班和 B 班數學平均都是 70 分。可是：</p>
+<ul><li>A 班：68、69、70、70、71、72……大家都差不多。</li>
+<li>B 班：30、45、70、95、100……有人超強、有人很需要幫忙。</li></ul>
+<p>老師如果只看平均數，會以為兩班一樣，教法也一樣——那就糟了。我們需要一個數字來描述<b>資料有多分散</b>。</p>
+
+<h2>方法一：全距</h2>
+<p>最簡單的方法：最大值減最小值。A 班全距 72−68 = 4 分，B 班 100−30 = 70 分。<br>缺點是只看兩個最極端的人，中間的人完全不管。只要有一個人特別怪，全距就失真。</p>
+
+<h2>方法二：標準差（一步一步來）</h2>
+<p>我們想知道「每個人平均離平均數多遠」。拿 5 個分數 60、65、70、75、80（平均 70）來算：</p>
+<div class="tbl"><table>
+<tr><th>分數 x</th><th>偏差 x − x̄</th><th>偏差的平方</th></tr>
+<tr><td>60</td><td>−10</td><td>100</td></tr><tr><td>65</td><td>−5</td><td>25</td></tr><tr><td>70</td><td>0</td><td>0</td></tr><tr><td>75</td><td>+5</td><td>25</td></tr><tr><td>80</td><td>+10</td><td>100</td></tr>
+<tr><th>合計</th><th>0（一定是 0！）</th><th>250</th></tr>
+</table></div>
+<ol class="steps">
+<li><b>算偏差</b>：每個數減掉平均數。但偏差有正有負，加起來<b>一定剛好是 0</b>（因為平均數就是平衡點），沒辦法直接平均。</li>
+<li><b>平方</b>：把偏差平方，負的就變正的了。平方還有一個效果：離得越遠的，被「懲罰」得越重。</li>
+<li><b>平均</b>：250 ÷ 5 = 50。這個數字叫<b>變異數</b>。</li>
+<li><b>開根號</b>：因為剛剛平方過，單位變成「分²」，很奇怪。開根號回來：√50 ≈ 7.07 分。這就是<b>標準差</b>。</li>
+</ol>
+<div class="formula">σ = √<span style="border-top:1.5px solid currentColor;padding-top:2px">&nbsp;<span class="frac"><span>Σ(x − μ)²</span><span>N</span></span>&nbsp;</span>
+<small>σ 讀作「sigma」（小寫），是希臘字母的 s，代表 standard deviation</small></div>
+<p>白話來說：<span class="mark">標準差大約就是「一般人離平均數有多遠」</span>。標準差 7 分，意思是大部分人的分數在平均的上下 7 分左右。</p>
+
+<div class="demo"><div class="demo-h">動手玩：看見「平方」</div><div class="demo-b">
+<p style="margin-bottom:8px">10 位同學的分數，平均一直是 70。拉動滑桿讓大家變分散，每個方塊的面積就是「偏差的平方」。</p>
+<canvas id="cvSD" height="260"></canvas>
+<div class="ctrl"><label>分散程度：<input type="range" id="sdSlider" min="0" max="100" value="35"></label></div>
+<div class="readout"><div class="stat">平均數<b>70</b></div><div class="stat">全距<b id="sdRange">-</b></div><div class="stat">變異數<b id="sdVar">-</b></div><div class="stat">標準差<b id="sdOut">-</b></div></div>
+<p class="tip">變異數就是「所有方塊面積的平均」，標準差就是「把平均面積變回一個正方形後，它的邊長」。</p>
+</div></div>
+
+<div class="box origin"><span class="lbl">名詞由來：變異數與標準差</span>
+<p><b>標準差</b>（<span class="en">standard deviation</span>）是 1893 年皮爾森取的名字：<span class="en">deviation</span> 是「偏離」，<span class="en">standard</span> 是「標準的、可作為尺度的」——它是衡量「偏離程度」的標準尺。<b>變異數</b>（<span class="en">variance</span>）是 1918 年英國統計學家費雪（Ronald Fisher）取的，來自 <span class="en">vary</span>（變化）。費雪是現代統計學最重要的人物之一，後面會常常見到他。</p></div>
+
+<div class="box pro"><span class="lbl">進階補充：為什麼樣本要除以 n − 1？</span>
+<p>用<b>樣本</b>去估計母體的標準差時，公式裡的分母要改成 n − 1，寫成 s（樣本標準差）。原因是：樣本平均數 x̄ 是「從這些樣本自己算出來的」，它一定特別靠近這些樣本，所以算出來的偏差會偏小。除以比較小的 n − 1，剛好把低估的部分補回來。這叫「貝索修正」（Bessel's correction）。</p>
+<p>n − 1 也叫<b>自由度</b>：5 個數字的平均已經固定後，你只能自由決定其中 4 個，第 5 個就被逼出來了。「自由度」這個說法是 1922 年由費雪普及的。</p></div>
+
+<div class="quiz" data-a="1"><div class="q">一組資料的每個數字都一樣（例如全班都考 80 分），標準差是多少？</div><div class="opts">
+<button>80</button><button>0</button><button>1</button></div>
+<div class="fb">每個人都等於平均數，偏差全是 0，所以標準差是 0。標準差 0 表示「完全沒有分散」。標準差不會是負的。</div></div>
+<div class="quiz" data-a="2"><div class="q">如果全班每個人的分數都加 10 分，標準差會怎樣？</div><div class="opts">
+<button>加 10</button><button>變成 10 倍</button><button>不變</button></div>
+<div class="fb">大家一起往上移，平均數也加 10，每個人離平均的距離完全沒變，所以標準差不變。但如果每個人分數都「乘以 2」，標準差就會變 2 倍。</div></div>
+</section>
+
+<section class="chapter" id="ch6" data-title="位置與形狀：PR 值、盒鬚圖、z 分數" data-unit="第二單元　描述資料">
+<p class="lead">「考 80 分」到底好不好？要看別人考幾分。這章學會描述「一個數字在一群資料中的位置」，以及「一群資料的整體形狀」。</p>
+
+<h2>百分位數與 PR 值</h2>
+<p>會考成績單上的 <b>PR 值</b>你一定聽過。PR 90 的意思是：<span class="mark">你的成績贏過大約 90% 的考生</span>。它不是「考了 90 分」，也不是「答對 90%」。</p>
+<p>把資料由小到大排好，切成 100 等份，第 p 個切點就叫<b>第 p 百分位數</b>。PR 是 <span class="en">percentile rank</span>（百分等級）的縮寫。</p>
+
+<h2>四分位數：切成四等份</h2>
+<p>只切成四份的話，三個切點就叫<b>四分位數</b>：</p>
+<ul><li><b>Q1</b>（第一四分位數）＝第 25 百分位數</li><li><b>Q2</b>＝第 50 百分位數＝<b>中位數</b></li><li><b>Q3</b>＝第 75 百分位數</li></ul>
+<p>Q3 − Q1 叫<b>四分位距</b>（IQR），代表「中間那一半的人」分散多廣。它和中位數一樣，不怕極端值。</p>
+
+<h2>盒鬚圖：五個數字畫一張圖</h2>
+<svg viewBox="0 0 640 170" width="100%" role="img" aria-label="盒鬚圖示意：最小值、Q1、中位數、Q3、最大值，以及一個離群值">
+  <g font-size="14" fill="currentColor" style="font-family:var(--sans)">
+  <line x1="40" y1="130" x2="600" y2="130" stroke="currentColor" stroke-width="1.5"/>
+  <g stroke="currentColor" stroke-width="1"><line x1="80" y1="126" x2="80" y2="134"/><line x1="180" y1="126" x2="180" y2="134"/><line x1="280" y1="126" x2="280" y2="134"/><line x1="380" y1="126" x2="380" y2="134"/><line x1="480" y1="126" x2="480" y2="134"/><line x1="580" y1="126" x2="580" y2="134"/></g>
+  <text x="80" y="152" text-anchor="middle">40</text><text x="180" y="152" text-anchor="middle">50</text><text x="280" y="152" text-anchor="middle">60</text><text x="380" y="152" text-anchor="middle">70</text><text x="480" y="152" text-anchor="middle">80</text><text x="580" y="152" text-anchor="middle">90</text>
+  <line x1="190" y1="70" x2="300" y2="70" stroke="currentColor" stroke-width="2"/>
+  <line x1="190" y1="55" x2="190" y2="85" stroke="currentColor" stroke-width="2"/>
+  <rect x="300" y="45" width="140" height="50" fill="var(--hi-soft)" stroke="currentColor" stroke-width="2"/>
+  <line x1="360" y1="45" x2="360" y2="95" stroke="var(--red)" stroke-width="3"/>
+  <line x1="440" y1="70" x2="510" y2="70" stroke="currentColor" stroke-width="2"/>
+  <line x1="510" y1="55" x2="510" y2="85" stroke="currentColor" stroke-width="2"/>
+  <circle cx="590" cy="70" r="6" fill="none" stroke="var(--red)" stroke-width="2"/>
+  <text x="190" y="36" text-anchor="middle">最小值</text><text x="300" y="36" text-anchor="middle">Q1</text><text x="360" y="22" text-anchor="middle" fill="var(--red)">中位數</text><text x="440" y="36" text-anchor="middle">Q3</text><text x="510" y="36" text-anchor="middle">最大值</text><text x="590" y="36" text-anchor="middle" fill="var(--red)">離群值</text>
+  </g>
+</svg>
+<p>中間的「盒子」裝著中間 50% 的人，兩邊伸出的線像「鬍鬚」。一般規定：離盒子超過 1.5 倍 IQR 的點，畫成單獨的小圈，叫做<b>離群值</b>（outlier），提醒你「這個點很特別，要檢查一下」。</p>
+<div class="box origin"><span class="lbl">名詞由來：盒鬚圖 Box plot</span>
+<p>美國統計學家塔基（John Tukey）在 1970 年代推廣，原名 <span class="en">box-and-whisker plot</span>，<span class="en">whisker</span> 就是貓的鬍鬚。塔基超會取名字，電腦的「位元」<span class="en">bit</span>（binary digit）也是他取的。</p></div>
+
+<h2>資料的形狀：對稱與偏態</h2>
+<canvas class="mini" id="cvSkew" height="200" aria-label="三種分布形狀：左偏、對稱、右偏"></canvas>
+<ul>
+<li><b>對稱</b>：左右差不多，平均數 ≈ 中位數。例如同年齡的身高。</li>
+<li><b>右偏</b>（尾巴拖在右邊）：大部分人少，少數人超多。例如零用錢、收入、YouTube 頻道訂閱數。這時<b>平均數 &gt; 中位數</b>，因為平均數被右邊的極端值拉走了。</li>
+<li><b>左偏</b>（尾巴拖在左邊）：大部分人高，少數人很低。例如很簡單的考試，大家都 90 幾，少數人沒寫完。這時<b>平均數 &lt; 中位數</b>。</li>
+</ul>
+<div class="box key"><span class="lbl">重點：偏態看「尾巴」</span><p>記法：<span class="mark">尾巴往哪邊拖，就叫哪邊偏</span>；平均數也會被尾巴拉向那一邊。</p></div>
+
+<h2>z 分數：跨科目比較的神器</h2>
+<p>小明國文 80 分、數學 80 分，哪一科比較厲害？光看分數分不出來。</p>
+<div class="tbl"><table><tr><th>科目</th><th>小明</th><th>全班平均</th><th>全班標準差</th></tr>
+<tr><td>國文</td><td>80</td><td>70</td><td>5</td></tr><tr><td>數學</td><td>80</td><td>60</td><td>20</td></tr></table></div>
+<div class="formula">z = <span class="frac"><span>x − 平均數</span><span>標準差</span></span>
+<small>意思：「我比平均高出幾個標準差？」</small></div>
+<p>國文 z = (80−70)÷5 = <b>2</b>；數學 z = (80−60)÷20 = <b>1</b>。國文雖然只比平均多 10 分，但全班分數很集中，多 10 分已經是「兩個標準差」，非常突出。所以<b>國文比較厲害</b>。</p>
+<div class="demo"><div class="demo-h">動手玩：z 分數計算機</div><div class="demo-b">
+<div class="ctrl"><label>我的分數 <input type="number" id="zX" value="80"></label><label>平均 <input type="number" id="zM" value="70"></label><label>標準差 <input type="number" id="zS" value="5" min="0.1" step="0.1"></label></div>
+<div class="readout"><div class="stat">z 分數<b id="zOut">-</b></div><div class="stat">大約贏過（若分布是鐘形）<b id="zPR">-</b></div></div>
+<p class="tip">z = 0 代表剛好平均；z 是負的代表低於平均。第 13 章會解釋「贏過幾 %」是怎麼算出來的。</p>
+</div></div>
+<div class="box origin"><span class="lbl">名詞由來：標準化</span><p>把原始分數換成 z 分數的動作叫<b>標準化</b>（<span class="en">standardization</span>）：不管原本單位是公分、元還是分，換完之後都用「幾個標準差」當單位，大家就可以放在一起比了。至於為什麼用字母 z，並沒有確切的典故，只是一個流傳下來的習慣。</p></div>
+
+<div class="quiz" data-a="0"><div class="q">某國家的家庭所得分布嚴重右偏。平均數和中位數哪個比較大？</div><div class="opts">
+<button>平均數比較大</button><button>中位數比較大</button><button>一樣大</button></div>
+<div class="fb">右偏代表右邊有少數非常有錢的家庭，他們把平均數往右（變大）拉，中位數不受影響，所以平均數 &gt; 中位數。</div></div>
+<div class="quiz" data-a="1"><div class="q">小美的身高 z 分數是 −1.5，代表什麼？</div><div class="opts">
+<button>她身高 1.5 公尺</button><button>她比平均矮 1.5 個標準差</button><button>她比平均矮 1.5 公分</button></div>
+<div class="fb">z 分數的單位是「標準差」。負號代表低於平均。如果標準差是 6 公分，她就比平均矮 9 公分。</div></div>
+</section>
+
+<!-- ================= 第三單元 ================= -->
+<section class="chapter" id="ch7" data-title="機率是什麼？" data-unit="第三單元　機率">
+<p class="lead">機率是統計的語言。沒有機率，我們就沒辦法說「這個結論有多可靠」。有趣的是，機率這門學問是從賭桌上誕生的。</p>
+
+<h2>一場沒賭完的賭局</h2>
+<p>1654 年，法國一位愛賭博的貴族德・梅雷（Chevalier de Méré）問數學家帕斯卡（Blaise Pascal）一個問題：兩個人約定先贏 3 局的人拿走全部賭金，可是比到 2 比 1 時被迫中斷，錢該怎麼分才公平？</p>
+<p>帕斯卡寫信和另一位數學家費馬（Pierre de Fermat）討論，兩人想出的方法是：<b>把「接下來所有可能發生的情況」列出來，看每個人贏的可能性有多大，照比例分錢</b>。這幾封信被認為是機率論的起點。</p>
+<div class="box pro"><span class="lbl">這題的答案</span><p>領先者只差 1 局、落後者差 2 局。假設再比最多兩局：落後者必須連贏兩局才能翻盤，機率是 ½ × ½ = ¼。所以賭金應該按 3 : 1 分給領先者和落後者。</p></div>
+
+<div class="box origin"><span class="lbl">名詞由來：機率 Probability</span>
+<p>英文 <span class="en">probability</span> 來自拉丁文 <span class="en">probabilis</span>，原意是「可以被證明的、值得相信的」（和 <span class="en">prove</span> 證明同源）。所以機率本來的意思是「一件事有多值得相信」。中文在台灣叫「機率」（機會的比率），在中國大陸叫「概率」（大概的比率），說的是同一件事。</p></div>
+
+<h2>基本名詞</h2>
+<ul>
+<li><b>試驗</b>：一次可以重複、但結果不確定的動作。例如擲一顆骰子。</li>
+<li><b>樣本空間</b>：所有可能結果的集合，常用 S 表示。擲骰子的 S = {1, 2, 3, 4, 5, 6}。</li>
+<li><b>事件</b>：你關心的結果組合。例如「擲出偶數」= {2, 4, 6}。</li>
+</ul>
+
+<h2>機率的尺：0 到 1</h2>
+<svg viewBox="0 0 640 110" width="100%" role="img" aria-label="機率從 0 到 1 的尺">
+<g font-size="14" fill="currentColor" style="font-family:var(--sans)">
+<defs><linearGradient id="pg" x1="0" x2="1"><stop offset="0" stop-color="var(--soft)"/><stop offset="1" stop-color="var(--teal)"/></linearGradient></defs>
+<rect x="30" y="40" width="580" height="16" rx="8" fill="url(#pg)" stroke="currentColor" stroke-width="1.5"/>
+<g text-anchor="middle"><text x="30" y="80">0</text><text x="175" y="80">0.25</text><text x="320" y="80">0.5</text><text x="465" y="80">0.75</text><text x="610" y="80">1</text>
+<text x="30" y="102" font-size="13">不可能</text><text x="320" y="102" font-size="13">一半一半</text><text x="610" y="102" font-size="13">一定會</text>
+<text x="30" y="28" font-size="13">太陽從西邊出來</text><text x="175" y="28" font-size="13">抽一張撲克牌是紅心</text><text x="320" y="28" font-size="13">硬幣正面</text><text x="480" y="28" font-size="13">擲骰子不是 6（5/6）</text></g>
+</g></svg>
+<p>機率一定介於 0 到 1 之間，也可以寫成百分比 0% 到 100%。</p>
+
+<h2>三種看待機率的方式</h2>
+<div class="box"><span class="lbl">① 古典機率：數數看</span>
+<p>如果每個結果發生的可能性<b>都一樣</b>，那麼：</p>
+<div class="formula">P(事件) = <span class="frac"><span>事件包含的結果數</span><span>所有可能的結果數</span></span></div>
+<p>擲骰子得到偶數：P = 3/6 = 1/2。P 是 <span class="en">Probability</span> 的第一個字母。</p></div>
+<div class="box"><span class="lbl">② 頻率機率：做很多次看看</span>
+<p>圖釘往上丟，落地時針尖朝上的機率是多少？沒辦法用數的，因為兩種結果不是「一樣容易」。那就丟 1000 次，數朝上幾次。<b>重複很多次後出現的比例</b>就是機率。</p></div>
+<div class="box"><span class="lbl">③ 主觀機率：你有多相信</span>
+<p>「我覺得這次段考數學有 80% 機會及格」——這件事只會發生一次，沒辦法重複。這時機率代表的是<b>你的信心程度</b>。第 10 章的貝氏定理就是從這個觀點出發。</p></div>
+
+<h2>大數法則：擲越多次，越接近真相</h2>
+<div class="demo"><div class="demo-h">動手玩：擲硬幣</div><div class="demo-b">
+<canvas id="cvCoin" height="240"></canvas>
+<div class="ctrl"><button class="btn primary" data-coin="1">擲 1 次</button><button class="btn" data-coin="10">擲 10 次</button><button class="btn" data-coin="100">擲 100 次</button><button class="btn" data-coin="1000">擲 1000 次</button><button class="btn" data-coin="0">重來</button></div>
+<div class="readout"><div class="stat">總次數<b id="coinN">0</b></div><div class="stat">正面<b id="coinH">0</b></div><div class="stat">正面比例<b id="coinP">-</b></div></div>
+<div id="coinLast" class="tip" style="letter-spacing:2px"></div>
+<p class="tip">一開始比例跳來跳去，可能是 0.2 或 0.8；擲到幾千次後，線會慢慢貼近 0.5。這條穩定下來的規律就叫「大數法則」。</p>
+</div></div>
+<div class="box origin"><span class="lbl">名詞由來：大數法則</span><p>瑞士數學家雅各布・白努利（Jacob Bernoulli）花了 20 年證明它，寫在 1713 年出版的《猜度術》（<span class="en">Ars Conjectandi</span>）。「大數法則」這個名字則是 1837 年法國數學家卜瓦松（Siméon Poisson）取的：只要次數（數目）夠大，規律就會出現。</p></div>
+
+<div class="box warn"><span class="lbl">常見陷阱：賭徒謬誤</span>
+<p>硬幣已經連續出現 5 次正面，下一次是不是「比較可能」出現反面？<b>不是！</b>硬幣沒有記憶，下一次仍然是 1/2。大數法則說的是「長期比例會接近 1/2」，不是「會主動補償」。它靠的是之後幾千次把前面的偏差<b>稀釋掉</b>，而不是把它「扳回來」。</p>
+<p>1913 年摩納哥的蒙地卡羅賭場，輪盤連續開出 26 次黑色。許多人一直押紅色，覺得「紅色一定快出了」，結果輸掉了大筆金錢。</p></div>
+
+<div class="quiz" data-a="1"><div class="q">一個盒子裡有 3 顆紅球、5 顆藍球、2 顆綠球，隨便抽一顆，抽到藍球的機率是？</div><div class="opts">
+<button>1/3</button><button>1/2</button><button>5/3</button></div>
+<div class="fb">共有 10 顆球，藍球 5 顆，機率 = 5/10 = 1/2。機率不會超過 1，所以 5/3 一定錯。</div></div>
+<div class="quiz" data-a="2"><div class="q">氣象局說「明天降雨機率 70%」，最正確的理解是？</div><div class="opts">
+<button>明天有 70% 的地區會下雨</button><button>明天會下 70% 的時間</button><button>在過去跟明天很像的天氣條件下，大約 10 次裡有 7 次下雨</button></div>
+<div class="fb">降雨機率屬於「頻率機率」的想法：在類似的天氣狀況下，下雨的比例大約是 70%。</div></div>
+</section>
+
+<section class="chapter" id="ch8" data-title="數數的藝術：排列與組合" data-unit="第三單元　機率">
+<p class="lead">古典機率要「數有幾種可能」。當可能性多到數不完時，就需要聰明的數法。</p>
+
+<h2>乘法原理</h2>
+<p>你有 3 件上衣、2 條褲子，有幾種穿搭？每件上衣都能配 2 條褲子，所以是 3 × 2 = 6 種。</p>
+<svg viewBox="0 0 520 200" width="100%" role="img" aria-label="樹狀圖：3 件上衣各配 2 條褲子共 6 種">
+<g font-size="15" fill="currentColor" style="font-family:var(--sans)" stroke-width="1.5">
+<circle cx="30" cy="100" r="6" fill="currentColor"/>
+<g stroke="currentColor"><line x1="36" y1="100" x2="160" y2="35"/><line x1="36" y1="100" x2="160" y2="100"/><line x1="36" y1="100" x2="160" y2="165"/>
+<line x1="210" y1="35" x2="320" y2="15"/><line x1="210" y1="35" x2="320" y2="55"/><line x1="210" y1="100" x2="320" y2="80"/><line x1="210" y1="100" x2="320" y2="120"/><line x1="210" y1="165" x2="320" y2="145"/><line x1="210" y1="165" x2="320" y2="185"/></g>
+<g text-anchor="middle"><text x="185" y="40">紅衣</text><text x="185" y="105">白衣</text><text x="185" y="170">黑衣</text></g>
+<g><text x="328" y="20">牛仔褲 → 紅＋牛仔</text><text x="328" y="60">短褲 → 紅＋短褲</text><text x="328" y="85">牛仔褲 → 白＋牛仔</text><text x="328" y="125">短褲 → 白＋短褲</text><text x="328" y="150">牛仔褲 → 黑＋牛仔</text><text x="328" y="190">短褲 → 黑＋短褲</text></g>
+</g></svg>
+<p>這種圖叫<b>樹狀圖</b>，每一層分支代表一個步驟。<span class="mark">做一件事分成好幾步，每一步的方法數相乘，就是總方法數。</span></p>
+
+<h2>排列：順序有關係</h2>
+<p>5 位候選人要選出<b>班長和副班長</b>各一位，有幾種結果？班長有 5 種選法，選完後副班長剩 4 種：5 × 4 = 20 種。「甲當班長、乙當副班長」和「乙當班長、甲當副班長」是<b>不同</b>的結果，因為職位不一樣——這就是<b>排列</b>。</p>
+<p>如果 5 個人全部排成一列，有 5 × 4 × 3 × 2 × 1 = 120 種排法。這種「從 n 一路乘到 1」的算式寫成 <b>n!</b>，讀作「n 階乘」。</p>
+<div class="formula">從 n 個中選 r 個排列：P(n, r) = <span class="frac"><span>n!</span><span>(n − r)!</span></span></div>
+<div class="box origin"><span class="lbl">名詞由來：階乘 n!</span><p>1808 年法國數學家克蘭普（Christian Kramp）開始用驚嘆號表示階乘，據說是因為這個數字長得「快得讓人驚嘆」——10! 就已經是 3,628,800。英文 <span class="en">factorial</span> 來自 <span class="en">factor</span>（因數），因為它是一連串因數相乘。<b>規定 0! = 1</b>（「從 0 個東西排列」只有一種方法：什麼都不做）。</p></div>
+
+<h2>組合：順序沒關係</h2>
+<p>5 個人選 2 個<b>值日生</b>，兩個人做一樣的事，「甲乙」和「乙甲」是同一組。所以把排列的 20 種除以 2（兩人內部的排法數 2!）= 10 種。</p>
+<div class="formula">從 n 個中選 r 個組合：C(n, r) = <span class="frac"><span>n!</span><span>r! (n − r)!</span></span>
+<small>也寫成 C<sup>n</sup><sub>r</sub> 或 (ⁿᵣ)，讀作「n 取 r」</small></div>
+<div class="box key"><span class="lbl">重點：怎麼判斷要用哪一個？</span><p>問自己：<span class="mark">「把選出來的人交換一下，結果有沒有變？」</span>有變（職位不同、名次不同）→ 排列；沒變（同一組、同一隊）→ 組合。</p></div>
+
+<div class="demo"><div class="demo-h">動手玩：排列組合計算機</div><div class="demo-b">
+<div class="ctrl"><label>n = <input type="number" id="pcN" value="49" min="0" max="170"></label><label>r = <input type="number" id="pcR" value="6" min="0" max="170"></label></div>
+<div class="readout"><div class="stat">排列 P(n, r)<b id="pcP">-</b></div><div class="stat">組合 C(n, r)<b id="pcC">-</b></div></div>
+<p class="tip">預設是台灣大樂透：從 1～49 中選 6 個號碼（不管順序），共有 13,983,816 種組合。買一注中頭獎的機率大約是一千四百萬分之一——比被雷打到還難。</p>
+</div></div>
+
+<div class="box pro"><span class="lbl">進階補充：楊輝三角</span><p>把 C(n, r) 排成三角形，每個數都等於上面兩個數相加。這個三角形在西方叫「帕斯卡三角」，但中國南宋數學家楊輝在 1261 年的書中就記載了，並註明來自更早的北宋數學家賈憲，所以華人稱為「楊輝三角」或「賈憲三角」。第 12 章的高爾頓板，每一格的路徑數正好就是楊輝三角。</p></div>
+
+<div class="quiz" data-a="0"><div class="q">8 位選手賽跑，前三名分別頒金、銀、銅牌，有幾種可能的頒獎結果？</div><div class="opts">
+<button>8 × 7 × 6 = 336</button><button>C(8, 3) = 56</button><button>8 × 3 = 24</button></div>
+<div class="fb">金銀銅牌不一樣，交換名次結果就不同，所以是排列：8 × 7 × 6 = 336。</div></div>
+<div class="quiz" data-a="1"><div class="q">6 個人互相握手，每兩個人握一次，總共握幾次？</div><div class="opts">
+<button>36 次</button><button>15 次</button><button>30 次</button></div>
+<div class="fb">「甲和乙握手」跟「乙和甲握手」是同一次，所以是組合：C(6, 2) = 6×5÷2 = 15。</div></div>
+</section>
+
+<section class="chapter" id="ch9" data-title="機率的規則與條件機率" data-unit="第三單元　機率">
+<p class="lead">機率可以加、可以乘，還可以「縮小範圍」。學會這幾條規則，大部分機率題都能拆解。</p>
+
+<h2>規則一：補集（反過來算）</h2>
+<div class="formula">P(A 不發生) = 1 − P(A)</div>
+<p>有時候「不發生」比較好算。</p>
+<div class="box life"><span class="lbl">生活例子：手遊抽卡</span>
+<p>某遊戲抽到限定角色的機率是 2%。抽 50 次，<b>至少抽中一次</b>的機率是多少？「至少一次」要算中 1 次、2 次、3 次……很麻煩。反過來算：</p>
+<p>每次沒中的機率 0.98，50 次都沒中 = 0.98<sup>50</sup> ≈ 0.364。所以至少中一次 = 1 − 0.364 ≈ <b>63.6%</b>。</p>
+<p>很多人以為「2% × 50 次 = 100%，一定會中」，其實有超過三分之一的人抽 50 次仍然什麼都沒有！</p></div>
+
+<h2>規則二：加法（或）</h2>
+<div class="formula">P(A 或 B) = P(A) + P(B) − P(A 且 B)</div>
+<p>為什麼要減掉 P(A 且 B)？因為兩個事件重疊的部分被算了兩次。抽一張撲克牌，是紅心<b>或</b>是 K 的機率：13/52 + 4/52 − 1/52（紅心 K 被算兩次）= 16/52。</p>
+<p>如果 A 和 B <b>不可能同時發生</b>（叫做<b>互斥</b>），重疊是 0，直接相加就好。</p>
+
+<h2>規則三：乘法（且）與獨立</h2>
+<p>如果 A 發不發生，完全不影響 B 的機率，就說 A 和 B <b>獨立</b>。這時：</p>
+<div class="formula">P(A 且 B) = P(A) × P(B)</div>
+<p>擲硬幣兩次都是正面：½ × ½ = ¼。硬幣沒有記憶，所以兩次是獨立的。</p>
+
+<h2>條件機率：縮小宇宙</h2>
+<p>「已知 B 發生了，A 發生的機率」寫成 <b>P(A | B)</b>，直線讀作「在……條件下」。</p>
+<div class="formula">P(A | B) = <span class="frac"><span>P(A 且 B)</span><span>P(B)</span></span></div>
+<p>想法很簡單：<span class="mark">既然知道 B 已經發生，整個世界就縮小成 B，只要看 B 裡面有多少是 A。</span></p>
+
+<div class="demo"><div class="demo-h">動手玩：兩顆骰子的 36 種結果</div><div class="demo-b">
+<div class="ctrl"><label>事件 A <select id="diceA"></select></label><label>事件 B <select id="diceB"></select></label></div>
+<canvas id="cvDice" height="330"></canvas>
+<div class="legend"><span><i style="background:var(--blue)"></i>只有 A</span><span><i style="background:var(--amber)"></i>只有 B</span><span><i style="background:var(--teal)"></i>A 且 B</span></div>
+<div class="readout" id="diceOut"></div>
+<p class="tip">試試 A＝「總和是 7」、B＝「第一顆是 6」：P(A)=6/36，P(A|B)=1/6，兩個一樣，所以它們獨立。再試 A＝「總和 ≥ 10」、B＝「至少一顆是 6」：知道有 6 之後，總和 ≥ 10 的機會大增，它們就不獨立。</p>
+</div></div>
+
+<h2>不放回抽籤</h2>
+<p>袋子裡 3 顆紅球、2 顆藍球，<b>不放回</b>連抽兩顆，都是紅球的機率？</p>
+<p>第一顆紅：3/5。第一顆拿走後剩 2 紅 2 藍，第二顆紅：2/4。所以 P = 3/5 × 2/4 = 6/20 = <b>3/10</b>。第二次的機率「受第一次影響」，這就是條件機率的應用。</p>
+
+<h2>生日問題：直覺大失敗</h2>
+<div class="demo"><div class="demo-h">動手玩：班上有人同一天生日嗎？</div><div class="demo-b">
+<div class="ctrl"><label>班上人數：<input type="range" id="bdSlider" min="2" max="70" value="23"><b id="bdN">23</b> 人</label></div>
+<canvas id="cvBday" height="200"></canvas>
+<div class="readout"><div class="stat">至少兩人同一天生日的機率<b id="bdP">-</b></div></div>
+<p class="tip">只要 23 個人，機率就超過 50%；一般 30 人的班級，機率約 70%！用補集算：第 2 人和第 1 人不同天的機率 364/365，第 3 人和前兩人都不同 363/365……全部乘起來就是「大家都不同天」，再用 1 去減。</p>
+</div></div>
+
+<div class="quiz" data-a="2"><div class="q">擲一顆骰子，已知結果是偶數，那它是 6 的機率是？</div><div class="opts">
+<button>1/6</button><button>1/2</button><button>1/3</button></div>
+<div class="fb">知道是偶數後，宇宙縮小成 {2, 4, 6}，其中只有一個 6，所以是 1/3。</div></div>
+<div class="quiz" data-a="0"><div class="q">一個射手每次命中機率 0.8，每次互相獨立。連射 3 次全部命中的機率是？</div><div class="opts">
+<button>0.512</button><button>2.4</button><button>0.8</button></div>
+<div class="fb">獨立事件用乘法：0.8 × 0.8 × 0.8 = 0.512。2.4 超過 1，不可能是機率。</div></div>
+</section>
+
+<section class="chapter" id="ch10" data-title="貝氏定理：用新證據更新想法" data-unit="第三單元　機率">
+<p class="lead">這一章的結果會讓很多大人都嚇一跳。它也是垃圾郵件過濾、醫學診斷、人工智慧背後的重要想法。</p>
+
+<h2>一個令人意外的問題</h2>
+<p>某種疾病，每 100 人中有 1 人得病。有一種快篩：</p>
+<ul><li>真的有病的人，90% 會驗出陽性。</li><li>沒有病的人，也有 9% 會被誤判成陽性。</li></ul>
+<p>小明驗出<b>陽性</b>。請問他真的有病的機率大約是多少？先在心裡猜一個數字再往下看。</p>
+<p>大部分人會猜 90% 左右。正確答案是……<b>大約 9%</b>。</p>
+
+<h2>用 1000 個人來想</h2>
+<ol class="steps">
+<li>1000 人中，有病的有 1000 × 1% = <b>10 人</b>，沒病的 990 人。</li>
+<li>有病的 10 人中，90% 驗出陽性 → <b>9 人</b>（真陽性）。</li>
+<li>沒病的 990 人中，9% 被誤判陽性 → 大約 <b>89 人</b>（偽陽性）。</li>
+<li>驗出陽性的總共 9 + 89 = 98 人，真正有病的只有 9 人：9 ÷ 98 ≈ <b>9.2%</b>。</li>
+</ol>
+<p><span class="mark">因為沒病的人太多了，就算只有一小部分被誤判，人數也遠遠超過真正的病人。</span>這就是為什麼醫生看到快篩陽性，通常還會要求做更準確的檢查。</p>
+
+<div class="demo"><div class="demo-h">動手玩：1000 個人的檢驗結果</div><div class="demo-b">
+<canvas id="cvBayes" height="300"></canvas>
+<div class="legend"><span><i style="background:var(--red)"></i>有病・陽性（真陽性）</span><span><i style="background:var(--amber)"></i>沒病・陽性（偽陽性）</span><span><i style="background:var(--violet)"></i>有病・陰性（偽陰性）</span><span><i style="background:var(--line)"></i>沒病・陰性</span></div>
+<div class="ctrl"><label>盛行率 <input type="range" id="byPrev" min="1" max="300" value="10"><b id="byPrevV"></b></label></div>
+<div class="ctrl"><label>敏感度 <input type="range" id="bySens" min="500" max="999" value="900"><b id="bySensV"></b></label></div>
+<div class="ctrl"><label>偽陽性率 <input type="range" id="byFP" min="1" max="300" value="90"><b id="byFPV"></b></label></div>
+<div class="readout"><div class="stat">驗出陽性的人<b id="byPos">-</b></div><div class="stat">陽性者真的有病的機率<b id="byOut">-</b></div></div>
+<p class="tip">試試把盛行率拉高到 20%（例如已經有症狀的人才去驗），陽性的可信度就大大提升。同一個檢驗，結果的意義取決於「誰去驗」。</p>
+</div></div>
+
+<h2>貝氏定理的公式</h2>
+<div class="formula">P(A | B) = <span class="frac"><span>P(B | A) × P(A)</span><span>P(B)</span></span></div>
+<p>套到剛剛的例子：A＝有病，B＝陽性。</p>
+<ul>
+<li><b>P(A)</b>＝1%，叫做<b>先驗機率</b>：看到證據「之前」的想法。</li>
+<li><b>P(B | A)</b>＝90%：有病的話驗出陽性的機率（叫敏感度）。</li>
+<li><b>P(A | B)</b>＝9.2%，叫做<b>後驗機率</b>：看到證據「之後」更新的想法。</li>
+</ul>
+<div class="box key"><span class="lbl">重點：貝氏思考</span><p>貝氏定理教我們：<span class="mark">不要只看新證據，也要考慮原本的可能性有多高。</span>「這個人很安靜、愛看書，他比較可能是圖書館員還是業務員？」很多人會猜圖書館員，但業務員的人數多太多了，所以答案其實是業務員比較可能。</p></div>
+<div class="box origin"><span class="lbl">名詞由來：貝氏 Bayes</span><p>英國牧師貝葉斯（Thomas Bayes，中文常譯「貝氏」）研究「如何從結果回推原因」。他生前沒有發表，1761 年過世後，朋友普萊斯（Richard Price）整理他的遺稿，在 1763 年發表。後來法國數學家拉普拉斯（Pierre-Simon Laplace）獨立發展出更完整的版本。「先驗」和「後驗」來自拉丁文 <span class="en">a priori</span>（從前面來的）和 <span class="en">a posteriori</span>（從後面來的）。</p></div>
+<div class="box pro"><span class="lbl">進階補充：垃圾郵件過濾器</span><p>一封信出現「免費」「中獎」這些字，是垃圾信的機率有多高？過濾器先知道「一般來說多少比例的信是垃圾信」（先驗），再根據每個字在垃圾信和正常信中出現的頻率更新判斷（後驗）。這叫「單純貝氏分類器」，是機器學習入門的經典方法。</p></div>
+
+<div class="quiz" data-a="1"><div class="q">在貝氏定理中，「看到證據之前的想法」叫做？</div><div class="opts">
+<button>後驗機率</button><button>先驗機率</button><button>條件機率</button></div>
+<div class="fb">先驗（prior）＝看到證據之前；後驗（posterior）＝看到證據之後更新的結果。</div></div>
+<div class="quiz" data-a="2"><div class="q">同一種快篩，下面哪種情況下「陽性」最可信？</div><div class="opts">
+<button>隨機找路上的人來驗</button><button>全國每個人都驗一次</button><button>只驗已經出現明顯症狀的人</button></div>
+<div class="fb">有症狀的人得病的「先驗機率」高很多，所以陽性結果真的是生病的機率也高很多。</div></div>
+</section>
+
+<section class="chapter" id="ch11" data-title="隨機變數與期望值" data-unit="第三單元　機率">
+<p class="lead">夜市的遊戲到底划不划算？買彩券長期來看會賺還是會賠？「期望值」可以回答這些問題。</p>
+
+<h2>隨機變數：把結果變成數字</h2>
+<p>擲兩顆骰子，我們常常不關心「第一顆 3、第二顆 4」，只關心「總和是 7」。<b>隨機變數</b>就是一個規則：把每一種隨機結果，對應到一個數字。通常用大寫字母 X 表示。</p>
+<div class="box origin"><span class="lbl">名詞由來：隨機變數 Random variable</span><p>這個名字其實有點誤導：它既不是「變數」，本身也不「隨機」——它是一個固定的<b>對應規則</b>（數學上叫函數），隨機的是被丟進去的結果。英文 <span class="en">random</span> 來自古法文 <span class="en">randon</span>，意思是「急衝、亂跑」，所以 <span class="en">at random</span> 就是「沒有方向地亂來」。</p></div>
+
+<h2>機率分配</h2>
+<p>把 X 的每一個可能值和它的機率列成表，就叫<b>機率分配</b>。擲一顆骰子：</p>
+<div class="tbl"><table><tr><th>X</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr><tr><th>P(X)</th><td>1/6</td><td>1/6</td><td>1/6</td><td>1/6</td><td>1/6</td><td>1/6</td></tr></table></div>
+<p>所有機率加起來一定等於 1，因為總會發生其中一種。</p>
+
+<h2>期望值：長期的平均</h2>
+<div class="formula">E(X) = Σ [ 每個值 × 它的機率 ]</div>
+<p>擲一顆骰子的期望值：1×⅙ + 2×⅙ + … + 6×⅙ = 21/6 = <b>3.5</b>。</p>
+<p>咦，骰子不可能擲出 3.5 啊？沒錯，<span class="mark">期望值不是「最可能出現的值」，而是「重複非常多次後的平均」</span>。擲一萬次骰子，把點數平均，會非常接近 3.5。</p>
+<div class="box origin"><span class="lbl">名詞由來：期望值 Expected value</span><p>1657 年荷蘭科學家惠更斯（Christiaan Huygens）寫了史上第一本機率教科書《論賭博中的計算》，裡面討論「一個賭局對玩家值多少錢」，這個概念在後來的翻譯中被稱為 <span class="en">expectatio</span>（期望）。惠更斯也是發明擺鐘、發現土星環的人。</p></div>
+
+<div class="box life"><span class="lbl">生活例子：夜市擲骰子遊戲</span>
+<p>老闆說：「付 50 元擲一顆骰子，擲到 6 就給你 200 元！」划算嗎？</p>
+<div class="tbl"><table><tr><th>結果</th><th>淨賺</th><th>機率</th></tr><tr><td>擲到 6</td><td>+150 元</td><td>1/6</td></tr><tr><td>沒擲到 6</td><td>−50 元</td><td>5/6</td></tr></table></div>
+<p>期望值 = 150 × ⅙ + (−50) × ⅚ = 25 − 41.7 ≈ <b>−16.7 元</b>。平均每玩一次賠 16.7 元。玩一兩次可能會贏，但老闆一個晚上讓幾百人玩，一定是賺的。<b>所有賭場和彩券的期望值，對玩家來說都是負的。</b></p></div>
+
+<h2>期望值會被「驗證」</h2>
+<div class="demo"><div class="demo-h">動手玩：擲兩顆骰子，看總和</div><div class="demo-b">
+<canvas id="cvSum" height="250"></canvas>
+<div class="ctrl"><button class="btn primary" data-sum="1">擲 1 次</button><button class="btn" data-sum="100">擲 100 次</button><button class="btn" data-sum="1000">擲 1000 次</button><button class="btn" data-sum="0">重來</button></div>
+<div class="readout"><div class="stat">擲了<b id="sumN">0</b></div><div class="stat">總和的平均<b id="sumAvg">-</b></div><div class="stat">理論期望值<b>7</b></div></div>
+<p class="tip">柱子是實際擲出的次數，虛線框是理論預測。總和 7 最常出現，因為有 6 種組合能湊出 7（1+6、2+5……），而 2 只有 1+1 一種。</p>
+</div></div>
+
+<div class="box pro"><span class="lbl">進階補充：期望值加上標準差才完整</span>
+<p>兩個投資方案期望值都是賺 100 元：A 方案一定賺 100；B 方案一半機會賺 1100、一半機會賠 900。期望值一樣，但風險天差地遠。隨機變數也有標準差，公式和第 5 章相同：Var(X) = E[(X − μ)²]。在金融領域，標準差就被當作「風險」的量度。</p></div>
+
+<div class="quiz" data-a="0"><div class="q">一張刮刮樂賣 100 元，有 1% 機會中 5000 元，其他什麼都沒有。期望的淨賺是？</div><div class="opts">
+<button>−50 元</button><button>+4900 元</button><button>0 元</button></div>
+<div class="fb">期望獎金 = 5000 × 0.01 = 50 元，扣掉成本 100 元，期望淨賺 = −50 元。每買一張平均賠 50 元。</div></div>
+<div class="quiz" data-a="1"><div class="q">「擲一顆骰子的期望值是 3.5」代表什麼？</div><div class="opts">
+<button>最常擲出 3 或 4</button><button>擲非常多次後，點數的平均會接近 3.5</button><button>擲一次有 50% 機會超過 3.5</button></div>
+<div class="fb">期望值是「長期平均」。每個點數機率一樣，沒有哪個最常出現。</div></div>
+</section>
+
+<!-- ================= 第四單元 ================= -->
+<section class="chapter" id="ch12" data-title="二項分配與高爾頓板" data-unit="第四單元　機率分配">
+<p class="lead">回到首頁那台機器。學完這章，你會知道球為什麼會堆成一座山，而且能算出每一格大概會有幾顆。</p>
+
+<h2>白努利試驗：只有兩種結果</h2>
+<p>很多事只有兩種結果：硬幣正或反、投籃進或不進、產品合格或不合格。如果一次試驗只有「成功」和「失敗」，成功機率是 p，就叫<b>白努利試驗</b>（以第 7 章的雅各布・白努利命名）。</p>
+
+<h2>二項分配：做 n 次，成功幾次？</h2>
+<p>把白努利試驗<b>獨立地</b>重複 n 次，數「成功了幾次」，這個次數的機率分配就叫<b>二項分配</b>。</p>
+<p>例：投籃命中率 p = 0.5，投 4 球，剛好進 2 球的機率？</p>
+<ul>
+<li>某一種特定順序（例如 進進不不）的機率：0.5 × 0.5 × 0.5 × 0.5 = 1/16。</li>
+<li>「4 球中選 2 球進」有幾種順序？C(4, 2) = 6 種。</li>
+<li>所以機率 = 6 × 1/16 = <b>6/16 = 37.5%</b>。</li>
+</ul>
+<div class="formula">P(X = k) = C(n, k) × p<sup>k</sup> × (1 − p)<sup>n − k</sup>
+<small>C(n, k)：有幾種順序　p<sup>k</sup>：k 次成功　(1−p)<sup>n−k</sup>：其他都失敗</small></div>
+<div class="box origin"><span class="lbl">名詞由來：二項 Binomial</span><p>拉丁文 <span class="en">bi</span>（兩個）＋ <span class="en">nomen</span>（名字、項），意思是「兩項」。因為每次只有「成功、失敗」兩種結果，而且這些機率正好是 (p + q)<sup>n</sup> 這個「二項式」展開後的每一項。「分配」（distribution）則是「機率怎麼分配給各個可能值」。</p></div>
+
+<h2>高爾頓板：二項分配的實體機器</h2>
+<p>每顆球每碰到一根釘子，往左或往右各 50%——這就是一次白努利試驗。碰了 n 排釘子，<b>往右了幾次</b>，就決定它掉進第幾格。所以每一格的球數，就是二項分配！</p>
+<div class="demo"><div class="demo-h">動手玩：高爾頓板</div><div class="demo-b">
+<canvas id="cvGalton" height="400"></canvas>
+<div class="ctrl"><label>釘子排數：<input type="range" id="gRows" min="3" max="14" value="10"><b id="gRowsV">10</b></label><label><input type="checkbox" id="gTheory" checked> 顯示理論值</label></div>
+<div class="ctrl"><button class="btn primary" data-g="1">丟 1 顆</button><button class="btn" data-g="50">丟 50 顆</button><button class="btn" data-g="500">丟 500 顆</button><button class="btn" data-g="0">清空</button></div>
+<p class="tip">中間的格子最多，因為到達中間的「路徑」最多；最邊邊的格子只有一條路（一直往右或一直往左），所以很少。每一格的路徑數，正好就是第 8 章的楊輝三角。</p>
+</div></div>
+<div class="box origin"><span class="lbl">歷史小故事：高爾頓板</span><p>英國學者高爾頓在 1873 年左右做出這台機器，並在 1889 年的書中介紹。他稱之為 <span class="en">quincunx</span>，這是拉丁文「五個一組」的排列方式，就像骰子上 5 點的形狀 ⁙——釘子正是這樣交錯排列的。</p></div>
+
+<h2>調整 n 和 p</h2>
+<div class="demo"><div class="demo-h">動手玩：二項分配長什麼樣子</div><div class="demo-b">
+<canvas id="cvBinom" height="240"></canvas>
+<div class="ctrl"><label>試驗次數 n：<input type="range" id="bnN" min="1" max="60" value="20"><b id="bnNV">20</b></label><label>成功機率 p：<input type="range" id="bnP" min="1" max="99" value="30"><b id="bnPV">0.30</b></label></div>
+<div class="readout"><div class="stat">平均 np<b id="bnMean">-</b></div><div class="stat">標準差 √(np(1−p))<b id="bnSD">-</b></div></div>
+<p class="tip">p 很小時分配往右偏（大部分時候成功很少次）；n 越大，形狀越接近左右對稱的鐘形。這個鐘形就是下一章的主角。</p>
+</div></div>
+<div class="box key"><span class="lbl">重點：二項分配的平均與標準差</span><p>平均（期望值）= <b>np</b>，標準差 = <b>√(np(1−p))</b>。例如投 100 球、命中率 0.5：平均進 50 球，標準差 √25 = 5 球。</p></div>
+
+<div class="quiz" data-a="1"><div class="q">是非題有 10 題，全部用猜的（每題答對機率 1/2），平均會答對幾題？</div><div class="opts">
+<button>10 題</button><button>5 題</button><button>2 題</button></div>
+<div class="fb">二項分配平均 = np = 10 × 0.5 = 5 題。</div></div>
+<div class="quiz" data-a="0"><div class="q">下面哪一個「不」符合二項分配的條件？</div><div class="opts">
+<button>從 5 人中「不放回」抽 3 人，數有幾個女生</button><button>擲硬幣 20 次，數正面次數</button><button>罰球 10 次（每次命中率一樣且互不影響），數進幾球</button></div>
+<div class="fb">不放回抽樣，每抽一次機率就會改變，不符合「每次 p 都一樣、互相獨立」的條件。（它屬於另一種叫「超幾何分配」的分配。）</div></div>
+</section>
+
+<section class="chapter" id="ch13" data-title="常態分配：大自然最愛的鐘" data-unit="第四單元　機率分配">
+<p class="lead">身高、考試成績、測量誤差、工廠產品的尺寸……好多東西畫成直方圖，都是同一種鐘的形狀。它是整個統計學最重要的分配。</p>
+
+<h2>常態分配的樣子</h2>
+<p><b>常態分配</b>是一條左右對稱、中間高、兩邊越來越低的平滑曲線，像一口鐘，所以也叫<b>鐘形曲線</b>。它的特性：</p>
+<ul>
+<li>平均數 = 中位數 = 眾數，都在正中間。</li>
+<li>完全由兩個數字決定：<b>平均數 μ</b>（鐘的位置）和<b>標準差 σ</b>（鐘的胖瘦）。</li>
+<li>曲線下的總面積是 1（也就是 100%），<b>某一段的面積＝落在那一段的機率</b>。</li>
+</ul>
+
+<div class="demo"><div class="demo-h">動手玩：國中男生的身高</div><div class="demo-b">
+<canvas id="cvNorm" height="260"></canvas>
+<div class="ctrl"><label>平均 μ：<input type="range" id="nmMu" min="150" max="180" value="165"><b id="nmMuV">165</b></label><label>標準差 σ：<input type="range" id="nmSd" min="3" max="15" value="7"><b id="nmSdV">7</b></label></div>
+<div class="ctrl"><button class="btn primary" data-nk="1">±1σ</button><button class="btn" data-nk="2">±2σ</button><button class="btn" data-nk="3">±3σ</button><label>或自訂：從 <input type="number" id="nmA" value="170"> 到 <input type="number" id="nmB" value="190"> 公分</label><button class="btn" data-nk="c">算面積</button></div>
+<div class="readout"><div class="stat">塗色區間<b id="nmRange">-</b></div><div class="stat">占全體的比例<b id="nmArea">-</b></div></div>
+</div></div>
+
+<h2>68–95–99.7 法則</h2>
+<p>不管 μ 和 σ 是多少，只要是常態分配：</p>
+<div class="tbl"><table><tr><th>範圍</th><th>約占多少人</th><th>以身高 μ=165、σ=7 為例</th></tr>
+<tr><td>平均 ± 1 個標準差</td><td><b>68%</b></td><td>158 ～ 172 公分</td></tr>
+<tr><td>平均 ± 2 個標準差</td><td><b>95%</b></td><td>151 ～ 179 公分</td></tr>
+<tr><td>平均 ± 3 個標準差</td><td><b>99.7%</b></td><td>144 ～ 186 公分</td></tr></table></div>
+<p>所以一個身高 190 公分的國中男生，已經超出平均 3.6 個標準差，是非常罕見的高。<span class="mark">「超過 2 個標準差」常被當作「不太尋常」的門檻，這個想法在假設檢定會再出現。</span></p>
+<div class="box key"><span class="lbl">重點：z 分數＋常態分配＝萬用查表</span><p>第 6 章的 z 分數，把任何常態分配都換成「平均 0、標準差 1」的<b>標準常態分配</b>。所以全世界只需要一張「標準常態分配表」，就能查出任何常態分配的機率。第 6 章 z 分數計算機裡的「贏過幾 %」，就是這樣查出來的。</p></div>
+
+<div class="box origin"><span class="lbl">名詞由來：常態 Normal、高斯分配</span>
+<p>1733 年，法國數學家棣美弗（Abraham de Moivre）為了計算擲很多次硬幣的機率，第一次找到這條曲線。1809 年德國數學家高斯（Carl Friedrich Gauss）用它描述天文觀測的「誤差」，所以也叫<b>高斯分配</b>。</p>
+<p>19 世紀末，高爾頓和皮爾森等人把它叫做 <span class="en">normal curve</span>，因為當時人們以為大自然中「正常」的東西都應該長這樣。後來皮爾森自己也承認這個名字不好，會讓人誤以為其他分配都是「不正常的」。中文翻成「常態」＝常見的狀態。</p></div>
+<div class="box life"><span class="lbl">生活例子：工廠的品質管制</span><p>飲料工廠把每瓶設定裝 600 毫升，但機器不可能每瓶都剛好，實際容量大約是平均 600、標準差 2 的常態分配。品管人員知道 99.7% 的瓶子應該在 594～606 之間，如果突然出現一瓶 590，就知道「機器可能出問題了」。這叫統計製程管制，工業界的「六標準差」（Six Sigma）管理法，名字就是從 σ 來的。</p></div>
+
+<div class="quiz" data-a="2"><div class="q">某次考試成績是常態分配，平均 60、標準差 10。大約有多少比例的人考超過 80 分？</div><div class="opts">
+<button>5%</button><button>16%</button><button>2.5%</button></div>
+<div class="fb">80 分是平均 + 2σ。±2σ 之間占 95%，外面剩 5%，左右各一半，所以超過 80 分約 2.5%。</div></div>
+<div class="quiz" data-a="0"><div class="q">兩個常態分配平均都是 50，A 的標準差 5、B 的標準差 15。哪一條曲線比較「矮胖」？</div><div class="opts">
+<button>B</button><button>A</button><button>一樣</button></div>
+<div class="fb">標準差大代表資料分散，鐘會變得又寬又矮（因為總面積都必須是 1）。</div></div>
+</section>
+
+<section class="chapter" id="ch14" data-title="抽樣與中央極限定理" data-unit="第四單元　機率分配">
+<p class="lead">這一章是描述統計通往推論統計的橋梁。中央極限定理被很多人稱為「統計學最美的定理」——它解釋了為什麼常態分配到處都是。</p>
+
+<h2>為什麼要抽樣？</h2>
+<ul><li><b>太多了</b>：不可能問全台 2300 萬人。</li><li><b>太貴、太慢</b>：普查要花大量人力和時間。</li><li><b>會破壞</b>：要測試燈泡能亮多久，全部測完就沒有燈泡可以賣了。</li></ul>
+
+<h2>好樣本的關鍵：隨機</h2>
+<p><b>簡單隨機抽樣</b>：每個人被抽中的機會都一樣，就像把全部的名字放進箱子裡抽。其他常見方法：</p>
+<ul>
+<li><b>分層抽樣</b>：先分組（如按年級），每組各抽一些，確保每組都有代表。</li>
+<li><b>系統抽樣</b>：每隔固定人數抽一個，例如座號尾數是 3 的。</li>
+<li><b>叢集抽樣</b>：隨機抽幾個「整班」，被抽到的班全部調查。</li>
+</ul>
+<div class="box warn"><span class="lbl">常見陷阱：樣本大不等於樣本好</span>
+<p>1936 年美國總統大選，《文學文摘》雜誌寄出一千萬份問卷，收回約 240 萬份，預測共和黨的蘭登會大勝。結果羅斯福以壓倒性勝利連任。原因是它的名單來自電話簿和汽車登記——在經濟大蕭條時期，有電話和汽車的人偏向有錢人。同一年，蓋洛普只調查了約五萬人，卻預測對了。</p>
+<p><span class="mark">樣本有偏誤時，數量再大也救不回來。</span>網路投票、「歡迎來電」的調查，都有「自願回應偏誤」：只有很有意見的人會回應。</p></div>
+
+<h2>抽樣分配：平均數也會「跳動」</h2>
+<p>從全校隨機抽 30 人算平均身高，得到 158.3；再抽另外 30 人，得到 159.1；再抽一次，157.8……每次抽樣的平均都不一樣。如果抽很多很多次，把這些「平均數」畫成直方圖，這就叫<b>樣本平均數的抽樣分配</b>。</p>
+
+<h2>中央極限定理</h2>
+<div class="box key"><span class="lbl">中央極限定理（CLT）</span>
+<p>不管母體原本長什麼形狀（歪的、平的、兩個山峰的都行），只要每次抽的樣本夠大（通常 n ≥ 30 就不錯），<span class="mark">樣本平均數的分配會接近常態分配</span>，而且：</p>
+<ul><li>它的平均 = 母體平均 μ</li><li>它的標準差 = σ / √n（叫做<b>標準誤</b>）</li></ul></div>
+<div class="demo"><div class="demo-h">動手玩：見證中央極限定理</div><div class="demo-b">
+<div class="ctrl"><label>母體形狀 <select id="cltPop"><option value="uniform">平平的（擲骰子）</option><option value="skew">右偏（零用錢）</option><option value="bimodal">雙峰（兩群人）</option><option value="coin">只有 0 和 1（擲硬幣）</option></select></label><label>每次抽 n = <input type="range" id="cltN" min="1" max="50" value="1"><b id="cltNV">1</b></label></div>
+<canvas id="cvCLT" height="360"></canvas>
+<div class="ctrl"><button class="btn primary" data-clt="1">抽 1 組</button><button class="btn" data-clt="100">抽 100 組</button><button class="btn" data-clt="1000">抽 1000 組</button><button class="btn" data-clt="0">清空</button></div>
+<div class="readout"><div class="stat">已抽組數<b id="cltK">0</b></div><div class="stat">平均數們的平均<b id="cltM">-</b></div><div class="stat">平均數們的標準差<b id="cltS">-</b></div><div class="stat">理論 σ/√n<b id="cltT">-</b></div></div>
+<p class="tip">先把 n 設成 1，抽 1000 組：下半部就只是在複製母體的形狀。再把 n 調到 30，清空後重抽：不管上面是什麼形狀，下面都會變成一口鐘，而且變得很窄。</p>
+</div></div>
+<div class="box origin"><span class="lbl">名詞由來：中央極限定理</span><p>拉普拉斯在 1810 年就證明了早期的版本，但名字是 1920 年匈牙利數學家波利亞（George Pólya）取的，德文是 <span class="en">zentraler Grenzwertsatz</span>。這裡的「中央」不是指「在中間」，而是指「<b>核心的、最重要的</b>」——它是機率論的中心定理。「極限」則是指「當 n 越來越大時會趨近的樣子」。</p></div>
+<div class="box key"><span class="lbl">重點：為什麼樣本越大越準？</span><p>標準誤 σ/√n 告訴我們：樣本變成 4 倍，誤差才縮小成一半（√4 = 2）。所以從 100 人加到 400 人很有感，但從 1 萬人加到 4 萬人，花的錢多很多，準確度卻只有一點點進步。這就是民調通常只問一千多人的原因。</p></div>
+
+<div class="quiz" data-a="1"><div class="q">母體標準差 σ = 20，每次抽 100 人，樣本平均數的標準誤是多少？</div><div class="opts">
+<button>20</button><button>2</button><button>0.2</button></div>
+<div class="fb">標準誤 = σ/√n = 20/√100 = 20/10 = 2。</div></div>
+<div class="quiz" data-a="2"><div class="q">某網站在首頁放一個投票：「你支持延長暑假嗎？」有 5 萬人投票，92% 支持。這個結果的主要問題是？</div><div class="opts">
+<button>樣本太小</button><button>沒有算標準差</button><button>自願回應造成偏誤，投票的人不代表全體</button></div>
+<div class="fb">會主動去投票的，多半是對這件事很有感的人（例如學生），不是隨機抽樣。5 萬人也救不回偏誤。</div></div>
+</section>
+
+<!-- ================= 第五單元 ================= -->
+<section class="chapter" id="ch15" data-title="信賴區間：誠實地猜" data-unit="第五單元　推論統計">
+<p class="lead">新聞常說「本次民調在 95% 信心水準下，抽樣誤差為正負 3 個百分點」。學完這章，你就知道每個字的意思。</p>
+
+<h2>點估計 vs. 區間估計</h2>
+<p>抽 100 人算出平均身高 160.4 公分，就說「全校平均是 160.4」——這叫<b>點估計</b>。但它幾乎一定不會剛好等於真正的答案。</p>
+<p>更誠實的說法是：「全校平均<b>大概在 158.8 到 162.0 之間</b>」——這叫<b>區間估計</b>。</p>
+<div class="box life"><span class="lbl">生活比喻：射飛鏢 vs. 撒網</span><p>點估計像用一根飛鏢去射一條看不見的魚，幾乎不可能正中。區間估計像撒一張網，網越大越可能網到魚，但網太大也沒有意義（「平均身高在 0 到 300 公分之間」一定對，但沒用）。統計學家要在「網子大小」和「網到的把握」之間取得平衡。</p></div>
+
+<h2>怎麼做出 95% 信賴區間</h2>
+<div class="formula">x̄ ± 1.96 × <span class="frac"><span>σ</span><span>√n</span></span>
+<small>樣本平均 ± 1.96 個標準誤。「±」後面那一段叫做誤差範圍（margin of error）</small></div>
+<p>為什麼是 1.96？因為第 14 章說樣本平均數是常態分配，而常態分配中，<b>平均 ± 1.96 個標準差剛好包住 95%</b>（第 13 章的「95% 在 ±2σ 內」，更精確的數字就是 1.96）。</p>
+<p>例：抽 100 人，平均身高 160.4，已知 σ = 8。誤差範圍 = 1.96 × 8/√100 = 1.57。95% 信賴區間 = <b>158.8 ～ 162.0 公分</b>。</p>
+
+<h2>「95%」到底是什麼的 95%？</h2>
+<div class="demo"><div class="demo-h">動手玩：抽 100 次，網住幾次？</div><div class="demo-b">
+<p style="margin-bottom:8px">真實的全校平均身高是 160 公分（藍色直線），但做調查的人不知道。每按一次，就是一位調查員抽 25 人、做出一個信賴區間。</p>
+<canvas id="cvCI" height="380"></canvas>
+<div class="ctrl"><label>信心水準 <select id="ciLevel"><option value="1.2816">80%</option><option value="1.6449">90%</option><option value="1.96" selected>95%</option><option value="2.5758">99%</option></select></label><button class="btn primary" data-ci="1">抽 1 次</button><button class="btn" data-ci="20">抽 20 次</button><button class="btn" data-ci="100">抽 100 次</button><button class="btn" data-ci="0">清空</button></div>
+<div class="readout"><div class="stat">做了幾個區間<b id="ciK">0</b></div><div class="stat">網住真值的比例<b id="ciHit">-</b></div></div>
+<p class="tip">紅色的區間就是「沒網到」的倒楣調查員。做很多次後，大約 95% 會網到。調高到 99%，網子變寬，沒網到的變少；調到 80%，網子變窄，但常常落空。</p>
+</div></div>
+<div class="box key"><span class="lbl">重點：95% 是「方法」的成功率</span><p>真值是固定的，不會跑來跑去；會變的是每次抽樣得到的區間。<span class="mark">95% 信賴區間的意思是：用這個方法做很多次，大約 95% 的區間會包住真值。</span>至於你手上這一個區間，它不是包住了、就是沒包住，只是你不知道。</p></div>
+<div class="box life"><span class="lbl">生活例子：民調的「正負 3 個百分點」</span><p>比例的標準誤是 √(p(1−p)/n)。問 1068 人、支持率大約一半時，誤差範圍 = 1.96 × √(0.5×0.5/1068) ≈ 0.030，也就是 ±3 個百分點。所以民調說「甲 45%、乙 43%」時，其實兩人的差距落在誤差範圍內，還不能說誰領先。</p></div>
+<div class="box origin"><span class="lbl">名詞由來：信賴區間 Confidence interval</span><p>波蘭裔統計學家奈曼（Jerzy Neyman）在 1937 年提出。<span class="en">Confidence</span> 是「信心」，他特別選這個字，而不是用 <span class="en">probability</span>，就是為了提醒大家：這是對「方法」的信心，不是「真值落在這裡的機率」。中文有「信賴區間」和「信心區間」兩種譯法。</p></div>
+
+<div class="quiz" data-a="0"><div class="q">其他條件不變，想讓信賴區間變窄（更精確），可以怎麼做？</div><div class="opts">
+<button>增加樣本數 n</button><button>把信心水準從 95% 提高到 99%</button><button>減少樣本數 n</button></div>
+<div class="fb">n 變大，標準誤 σ/√n 變小，區間就變窄。提高信心水準反而會讓區間變寬（網子要更大才更有把握）。</div></div>
+<div class="quiz" data-a="2"><div class="q">某研究算出平均睡眠時間的 95% 信賴區間是 7.1～7.9 小時。下面哪個說法最正確？</div><div class="opts">
+<button>95% 的學生睡 7.1～7.9 小時</button><button>真正的平均有 95% 機率在 7.1～7.9 之間</button><button>用這個方法做很多次，約 95% 的區間會包含真正的平均</button></div>
+<div class="fb">信賴區間是在估計「平均數」，不是描述個人（所以第一個錯）。第二個是常見的錯誤說法，嚴格來說 95% 描述的是方法的可靠度。</div></div>
+</section>
+
+<section class="chapter" id="ch16" data-title="假設檢定與 p 值" data-unit="第五單元　推論統計">
+<p class="lead">「這種新藥真的有效嗎？」「這枚硬幣是公平的嗎？」假設檢定就是用資料來判斷「這只是巧合，還是真的有事」。</p>
+
+<h2>一杯奶茶引發的實驗</h2>
+<p>1920 年代，英國一間農業研究所裡，一位女士說：她喝得出奶茶是「先倒茶再加奶」還是「先倒奶再加茶」。在場的統計學家費雪設計了一個實驗：準備 8 杯，4 杯先加奶、4 杯先加茶，隨機排列，讓她挑出哪 4 杯是先加奶的。</p>
+<p>如果她<b>完全是亂猜</b>，8 杯選 4 杯共有 C(8, 4) = 70 種選法，全猜對的機率只有 <b>1/70 ≈ 1.4%</b>。據說她全部答對了。1.4% 這麼小，我們很難相信她只是運氣好——於是認為她真的有這個能力。</p>
+<p>這就是假設檢定的全部精神。費雪在 1935 年的書《實驗設計》裡寫下了這個故事。</p>
+
+<h2>法庭的比喻</h2>
+<div class="tbl"><table><tr><th>法庭</th><th>假設檢定</th></tr>
+<tr><td class="l">無罪推定：先假設被告無罪</td><td class="l">先假設「沒有效果、只是巧合」，叫<b>虛無假設 H₀</b></td></tr>
+<tr><td class="l">檢察官想證明：被告有罪</td><td class="l">研究者想證明的，叫<b>對立假設 H₁</b></td></tr>
+<tr><td class="l">證據要強到「無合理懷疑」才定罪</td><td class="l">p 值要小於門檻 α（通常 0.05）才拒絕 H₀</td></tr>
+<tr><td class="l">證據不足 → 判「無罪」，不代表證明他清白</td><td class="l">p 值不夠小 → 「不拒絕 H₀」，不代表證明 H₀ 為真</td></tr></table></div>
+<div class="box origin"><span class="lbl">名詞由來：虛無假設 Null hypothesis</span><p><span class="en">Hypothesis</span> 來自希臘文 <span class="en">hypo</span>（在下面）＋ <span class="en">thesis</span>（放置），意思是「放在底下當基礎的想法」。費雪在 1935 年用了 <span class="en">null hypothesis</span>：<span class="en">null</span> 是「零、沒有」，代表「沒有差別、沒有效果」，也是「要被推翻（歸零）的假設」。中文譯為「虛無假設」。</p></div>
+
+<h2>p 值是什麼？</h2>
+<div class="box key"><span class="lbl">p 值的定義</span><p><span class="mark">假設 H₀ 是真的（只是巧合），那麼看到「跟實際資料一樣極端、或更極端」結果的機率。</span></p><p>p 值很小 → 「如果只是巧合，這種事幾乎不會發生」→ 懷疑巧合的說法 → 拒絕 H₀。</p></div>
+<div class="demo"><div class="demo-h">動手玩：這枚硬幣公平嗎？</div><div class="demo-b">
+<p style="margin-bottom:8px">H₀：硬幣是公平的（正面機率 0.5）。你擲了 n 次，得到 k 次正面，這有多「極端」？</p>
+<canvas id="cvTest" height="250"></canvas>
+<div class="ctrl"><label>擲 n 次：<input type="range" id="htN" min="5" max="100" value="20"><b id="htNV">20</b></label><label>正面 k 次：<input type="range" id="htK" min="0" max="20" value="15"><b id="htKV">15</b></label></div>
+<div class="readout"><div class="stat">p 值（雙尾）<b id="htP">-</b></div><div class="stat">α = 0.05 的判決<b id="htD">-</b></div></div>
+<p class="tip">長條是「如果硬幣公平」時各種正面次數的機率。紅色部分是「跟你的結果一樣極端或更極端」的情況，把紅色的機率加起來就是 p 值。試試看：擲 20 次得 14 次正面，和擲 100 次得 70 次正面，比例都是 70%，p 值卻差很多。</p>
+</div></div>
+<div class="box origin"><span class="lbl">名詞由來：p 值與 0.05</span><p>p 就是 <span class="en">probability</span>。費雪在 1925 年的書中寫到，約 1/20（0.05）是個方便的標準，之後這個數字就被廣泛沿用。他本人並不認為 0.05 是神聖不可改的線，但後來很多領域把它當成「過關分數」，也造成不少問題（第 19 章會談）。<span class="en">Significant</span>（顯著）原本的意思是「有所指示的、值得注意的」，不等於「重要」或「效果很大」。</p></div>
+
+<h2>兩種錯誤</h2>
+<div class="tbl"><table><tr><th></th><th>真相：H₀ 對（沒效果）</th><th>真相：H₀ 錯（有效果）</th></tr>
+<tr><th>拒絕 H₀</th><td style="color:var(--red)"><b>型一錯誤</b>（冤枉好人）<br>機率 = α</td><td>✓ 正確</td></tr>
+<tr><th>不拒絕 H₀</th><td>✓ 正確</td><td style="color:var(--red)"><b>型二錯誤</b>（放走壞人）<br>機率 = β</td></tr></table></div>
+<p>把 α 設小一點，比較不會冤枉好人，但會放走更多壞人；兩種錯誤互相拉扯。要同時減少兩種錯誤，唯一的辦法是<b>收集更多資料</b>。「1 − β」叫做<b>檢定力</b>，代表「真的有效果時，能抓到它的機率」。</p>
+
+<h2>假設檢定的步驟</h2>
+<ol class="steps">
+<li>寫下 H₀（沒效果）和 H₁（有效果）。</li>
+<li>決定顯著水準 α（常用 0.05）。<b>要在看資料之前決定。</b></li>
+<li>收集資料，算出檢定統計量（例如 z 或 t）。</li>
+<li>算出 p 值。</li>
+<li>p ≤ α → 拒絕 H₀，說「結果達到統計顯著」；p &gt; α → 不拒絕 H₀。</li>
+</ol>
+<div class="box warn"><span class="lbl">常見陷阱：p 值不是這些東西</span>
+<ul><li>p 值<b>不是</b>「H₀ 為真的機率」。</li><li>p 值<b>不是</b>「效果有多大」。樣本超大時，一點點微不足道的差異也會很顯著。</li><li>p = 0.06 和 p = 0.04 其實沒有天壤之別，不要把 0.05 當成懸崖。</li></ul></div>
+
+<div class="quiz" data-a="1"><div class="q">新藥試驗得到 p = 0.003。下面哪個解讀正確？</div><div class="opts">
+<button>新藥無效的機率是 0.3%</button><button>如果新藥其實無效，看到這麼好（或更好）的結果機率只有 0.3%</button><button>新藥的效果很大</button></div>
+<div class="fb">p 值是在「假設 H₀ 為真」的前提下算的條件機率，不是 H₀ 為真的機率，也不代表效果大小。</div></div>
+<div class="quiz" data-a="0"><div class="q">法官判一個無辜的人有罪，對應到哪一種錯誤？</div><div class="opts">
+<button>型一錯誤</button><button>型二錯誤</button><button>沒有錯誤</button></div>
+<div class="fb">H₀（無罪）其實是對的，卻被拒絕了，這是型一錯誤，機率由 α 控制。</div></div>
+</section>
+
+<section class="chapter" id="ch17" data-title="常用檢定：t 檢定與卡方檢定" data-unit="第五單元　推論統計">
+<p class="lead">上一章學會了檢定的「精神」，這一章介紹兩個最常用的工具。它們都有精采的誕生故事。</p>
+
+<h2>t 檢定：來自啤酒廠的發明</h2>
+<p>1900 年代初，愛爾蘭都柏林的健力士（Guinness）啤酒廠聘請了化學家戈塞（William Sealy Gosset）改善釀酒品質。問題是：每批大麥只能拿很少的樣本來測試，常常只有 4、5 個。</p>
+<p>樣本這麼小時，我們不知道母體的 σ，只能用樣本標準差 s 代替，而 s 本身也不準——這時用常態分配會太樂觀，誤判太多次。戈塞算出了一個新的分配，形狀像常態分配，但<b>兩邊的尾巴比較厚</b>，反映「樣本小，要更保守」。</p>
+<div class="box origin"><span class="lbl">名詞由來：Student's t</span><p>健力士公司怕對手知道他們用統計改良啤酒，不准員工發表論文。戈塞只好在 1908 年用筆名「<span class="en">Student</span>」（學生）發表，所以這個分配至今仍叫「Student's t 分配」。「t」這個字母是後來費雪在推廣時選用的。</p></div>
+<div class="formula">t = <span class="frac"><span>x̄ − μ₀</span><span>s / √n</span></span>
+<small>μ₀ 是 H₀ 宣稱的平均數。t 的意思：「樣本平均離宣稱值多遠，以標準誤為單位」</small></div>
+<div class="box life"><span class="lbl">生活例子：手搖飲料有沒有裝滿？</span>
+<p>某飲料店說大杯裝 700 毫升。你買了 10 杯量，平均 690 毫升，樣本標準差 12 毫升。店家有沒有偷工減料？</p>
+<ol class="steps">
+<li>H₀：μ = 700（有裝滿）；H₁：μ ≠ 700。α = 0.05。</li>
+<li>t = (690 − 700) ÷ (12 ÷ √10) = −10 ÷ 3.79 ≈ <b>−2.64</b>。</li>
+<li>自由度 = n − 1 = 9。查 t 分配表，自由度 9、雙尾 0.05 的臨界值是 <b>2.262</b>。</li>
+<li>|−2.64| &gt; 2.262 → 拒絕 H₀。資料顯示平均容量顯著少於 700 毫升（p 約 0.03）。</li>
+</ol></div>
+<canvas class="mini" id="cvT" height="210" aria-label="t 分配與常態分配比較"></canvas>
+<p class="muted" style="text-align:center">實線是標準常態分配，虛線是自由度 3 的 t 分配：中間比較矮、尾巴比較厚。自由度越大，t 分配越接近常態分配。</p>
+<div class="box pro"><span class="lbl">進階補充：兩樣本 t 檢定</span><p>更常見的問題是比較<b>兩組</b>：A 班用新教法、B 班用舊教法，平均分數差異是否顯著？做法類似：t = (兩組平均的差) ÷ (差的標準誤)。如果是同一群人「前測、後測」，則用<b>成對 t 檢定</b>，看每個人進步幾分。</p></div>
+
+<h2>卡方檢定：觀察和預期差多少</h2>
+<p>t 檢定比較「平均數」；如果資料是<b>類別次數</b>（例如骰子每一面出現幾次），就用卡方檢定。</p>
+<div class="formula">χ² = Σ <span class="frac"><span>(觀察次數 − 預期次數)²</span><span>預期次數</span></span>
+<small>χ 是希臘字母，讀作「kai」，中文稱「卡方」</small></div>
+<p>觀察和預期差越多，χ² 越大，就越不像「只是巧合」。</p>
+<div class="demo"><div class="demo-h">動手玩：這顆骰子有問題嗎？</div><div class="demo-b">
+<p style="margin-bottom:8px">擲了 60 次骰子，公平的話每一面預期 10 次。改改看觀察到的次數：</p>
+<div class="ctrl" id="chiInputs"></div>
+<canvas id="cvChi" height="200"></canvas>
+<div class="readout"><div class="stat">總次數<b id="chiTot">-</b></div><div class="stat">χ²（自由度 5）<b id="chiStat">-</b></div><div class="stat">p 值<b id="chiP">-</b></div><div class="stat">判決（α = 0.05）<b id="chiD">-</b></div></div>
+<p class="tip">預設的資料看起來「6 好像特別多」，但 p 值告訴你：這種程度的差異，公平骰子也很容易擲出來。把 6 改成 22、其他減少，看看 p 值怎麼變。</p>
+</div></div>
+<div class="box origin"><span class="lbl">名詞由來：卡方檢定</span><p>1900 年由皮爾森提出，是史上第一個現代的顯著性檢定。他用希臘字母 χ 代表這個統計量，平方是因為公式裡有平方。「自由度」這裡是 6 − 1 = 5：六個面的次數總和固定是 60，所以只有 5 個能自由變動。</p></div>
+<div class="box pro"><span class="lbl">進階補充：獨立性檢定</span><p>卡方檢定也可以檢查兩個類別變數有沒有關係，例如「性別」和「最愛的飲料」是否相關。把資料排成「列聯表」，算出如果兩者無關時每格的預期次數，再用同一個公式。</p></div>
+
+<div class="quiz" data-a="2"><div class="q">想知道「男生和女生的平均身高是否不同」，最適合用哪一種檢定？</div><div class="opts">
+<button>卡方適合度檢定</button><button>不用檢定，直接比較兩個平均數就好</button><button>兩樣本 t 檢定</button></div>
+<div class="fb">比較兩組的「平均數」用 t 檢定。直接比較平均數不夠，因為必須判斷差異是否大到不像巧合。</div></div>
+<div class="quiz" data-a="0"><div class="q">t 分配跟常態分配比起來，最大的差別是？</div><div class="opts">
+<button>尾巴比較厚，反映小樣本的不確定性</button><button>它是歪一邊的</button><button>它的平均不是 0</button></div>
+<div class="fb">t 分配也是左右對稱、平均 0，但尾巴較厚。樣本越大（自由度越大），它越接近常態分配。</div></div>
+</section>
+
+<section class="chapter" id="ch18" data-title="相關與迴歸" data-unit="第五單元　推論統計">
+<p class="lead">讀書時間越長，成績越好嗎？身高越高，體重越重嗎？這章學會用數字描述兩個變數的關係，甚至用一個去預測另一個。</p>
+
+<h2>散佈圖與相關係數 r</h2>
+<p>把每個人的兩個數值畫成一個點（x 是讀書時間、y 是成績），就是<b>散佈圖</b>。點的趨勢可以用<b>相關係數 r</b> 來描述：</p>
+<ul>
+<li>r 介於 <b>−1 到 +1</b> 之間。</li>
+<li>r 接近 +1：<b>正相關</b>，一個變大另一個也變大，點排成往右上的直線。</li>
+<li>r 接近 −1：<b>負相關</b>，一個變大另一個變小（例如：滑手機時間 vs. 睡眠時間）。</li>
+<li>r 接近 0：沒有<b>直線</b>關係。</li>
+</ul>
+<div class="box warn"><span class="lbl">注意</span><p>r 只能量「直線」關係。如果點排成一個 U 字形，兩者明明關係很強，r 卻可能接近 0。所以<b>一定要先畫散佈圖再算 r</b>。1973 年統計學家安斯庫姆（Francis Anscombe）設計了四組資料，r 和平均數都幾乎一模一樣，畫出來卻完全不同，叫做「安斯庫姆四重奏」。</p></div>
+
+<h2>迴歸直線：最適合的那條線</h2>
+<p>我們想畫一條直線 <b>ŷ = a + bx</b> 來預測 y（ŷ 讀作「y hat」，代表預測值）。怎樣才叫「最適合」？</p>
+<p>每個點到直線的垂直距離叫做<b>殘差</b>（預測錯多少）。<span class="mark">讓所有殘差的平方加起來最小的那條線，就是最佳直線。</span>這個方法叫<b>最小平方法</b>，1805 年由法國數學家勒讓德（Adrien-Marie Legendre）發表，高斯也說他更早就在用了。又看到「平方」了——就像標準差一樣。</p>
+<div class="demo"><div class="demo-h">動手玩：畫出你的迴歸線</div><div class="demo-b">
+<p style="margin-bottom:8px">點一下空白處新增一個點，點在已有的點上則刪除它。</p>
+<canvas id="cvReg" height="330"></canvas>
+<div class="ctrl"><button class="btn primary" data-reg="study">讀書 vs. 成績</button><button class="btn" data-reg="neg">滑手機 vs. 睡眠</button><button class="btn" data-reg="none">毫無關係</button><button class="btn" data-reg="curve">U 字形</button><button class="btn" data-reg="clear">清空</button><label><input type="checkbox" id="regRes"> 顯示殘差</label></div>
+<div class="readout"><div class="stat">相關係數 r<b id="regR">-</b></div><div class="stat">迴歸線<b id="regEq">-</b></div><div class="stat">R²<b id="regR2">-</b></div></div>
+<p class="tip">試試在「讀書 vs. 成績」的右下角加一個點（讀很久卻考很低），看一個極端值能把 r 和直線拉走多少。</p>
+</div></div>
+<p><b>R²</b>（判定係數）= r²，意思是「y 的變化中，有多少比例可以用 x 來解釋」。R² = 0.64 就是說成績的差異有 64% 可以用讀書時間解釋，剩下 36% 是其他原因（天分、睡眠、運氣……）。</p>
+
+<div class="box origin"><span class="lbl">名詞由來：迴歸 Regression</span><p>高爾頓研究父母和子女的身高時發現：非常高的父母，孩子通常也高，但<b>沒有父母那麼高</b>；非常矮的父母，孩子通常也矮，但沒那麼矮。孩子的身高有「退回平均」的傾向。1886 年他把論文題目取為「遺傳身高中向平庸的迴歸」。<span class="en">Regression</span> 是拉丁文「往回走」。後來這個分析方法就一直叫「迴歸」，即使大部分用途跟「往回走」已經沒什麼關係了。「相關」（<span class="en">co-relation</span>）也是高爾頓在 1888 年提出的，數學公式則由他的學生皮爾森完成，所以 r 也叫「皮爾森相關係數」。</p></div>
+<div class="box life"><span class="lbl">生活例子：趨中迴歸</span><p>某次考試考超好的同學，下一次常常「退步」；考超差的同學，下一次常常「進步」。這不一定是因為驕傲或努力——極端的成績通常包含了一部分運氣，下次運氣回到平常，成績自然往平均靠。運動界有個「封面魔咒」：登上雜誌封面的選手接著常常表現下滑，很大部分就是這個原因。</p></div>
+
+<h2>相關不等於因果</h2>
+<div class="box warn"><span class="lbl">統計學最重要的一句話之一</span>
+<p>冰淇淋賣越多的月份，溺水的人也越多，r 很高。所以吃冰淇淋會害人溺水嗎？當然不是！真正的原因是<b>天氣熱</b>：天熱時大家吃冰、也去游泳。像「天氣」這樣同時影響兩個變數的第三者，叫做<b>干擾變數</b>（混淆變數）。</p>
+<p>相關還可能是<b>因果倒過來</b>（是生病的人才吃比較多藥，不是吃藥讓人生病），或者純粹<b>巧合</b>：有人找到「尼可拉斯・凱吉每年的電影數量」和「美國每年掉進泳池溺死的人數」高度相關。要證明因果，通常需要第 20 章的<b>隨機實驗</b>。</p></div>
+
+<div class="quiz" data-a="1"><div class="q">研究發現「家裡書越多的孩子，成績越好」（r = 0.5）。下面哪個結論最恰當？</div><div class="opts">
+<button>多買書放在家裡就能提高孩子成績</button><button>兩者有中度正相關，但可能有其他因素（如父母教育程度）同時影響兩者</button><button>r = 0.5 代表有 50% 的孩子成績會變好</button></div>
+<div class="fb">相關不等於因果。重視教育的家庭可能既買很多書、也花很多心思陪孩子讀書。另外 r 不是百分比，R² = 0.25 才代表「25% 的變化可被解釋」。</div></div>
+<div class="quiz" data-a="2"><div class="q">相關係數 r = −0.9 代表什麼？</div><div class="opts">
+<button>幾乎沒有關係</button><button>關係很弱，因為是負數</button><button>很強的負相關</button></div>
+<div class="fb">正負號代表方向，絕對值代表強弱。|−0.9| = 0.9 非常接近 1，是很強的負相關。</div></div>
+</section>
+
+<!-- ================= 第六單元 ================= -->
+<section class="chapter" id="ch19" data-title="統計的陷阱" data-unit="第六單元　邁向專業">
+<p class="lead">「世上有三種謊言：謊言、該死的謊言，以及統計。」這句話在英國流傳了一百多年。統計本身不會說謊，但不懂統計的人很容易被騙。這章是你的防身術。</p>
+
+<h2>辛普森悖論：分開看和合起來看，結論相反</h2>
+<p>1986 年一份醫學研究比較兩種腎結石治療法的成功率：</p>
+<div class="tbl"><table>
+<tr><th></th><th>治療法 A</th><th>治療法 B</th></tr>
+<tr><td>小顆結石</td><td><b>93%</b>（81/87）</td><td>87%（234/270）</td></tr>
+<tr><td>大顆結石</td><td><b>73%</b>（192/263）</td><td>69%（55/80）</td></tr>
+<tr><th>全部合起來</th><th>78%（273/350）</th><th><b>83%</b>（289/350）</th></tr></table></div>
+<p>不管小顆還是大顆，A 都比較好；可是合起來，B 反而比較好！怎麼會這樣？</p>
+<p>關鍵是：<b>A 大多用來治困難的大顆結石</b>（263 人），B 大多用來治容易的小顆結石（270 人）。B 的「好成績」有一大部分是因為它接到比較簡單的病人。這又是一個干擾變數在搗亂。</p>
+<div class="box origin"><span class="lbl">名詞由來</span><p>以英國統計學家辛普森（Edward Simpson）命名，他在 1951 年描述了這個現象（其實更早就有人發現過）。<span class="en">Paradox</span>（悖論）來自希臘文 <span class="en">para</span>（違反）＋ <span class="en">doxa</span>（看法），意思是「違反一般看法的事」。</p></div>
+
+<h2>倖存者偏差：看不見的資料</h2>
+<svg viewBox="0 0 400 220" width="100%" style="max-width:420px;display:block;margin:0 auto" role="img" aria-label="飛機示意圖，機翼與機身有彈孔，引擎沒有">
+<g fill="var(--soft)" stroke="currentColor" stroke-width="2">
+<rect x="185" y="20" width="30" height="180" rx="15"/>
+<path d="M30 105 L185 85 L215 85 L370 105 L370 120 L215 115 L185 115 L30 120 Z"/>
+<path d="M140 185 L185 175 L215 175 L260 185 L260 195 L215 192 L185 192 L140 195 Z"/>
+<rect x="95" y="112" width="22" height="30" rx="6" fill="var(--hi-soft)"/><rect x="283" y="112" width="22" height="30" rx="6" fill="var(--hi-soft)"/>
+</g>
+<g fill="var(--red)"><circle cx="60" cy="110" r="3.5"/><circle cx="80" cy="113" r="3.5"/><circle cx="140" cy="104" r="3.5"/><circle cx="160" cy="110" r="3.5"/><circle cx="250" cy="100" r="3.5"/><circle cx="270" cy="108" r="3.5"/><circle cx="330" cy="110" r="3.5"/><circle cx="350" cy="113" r="3.5"/><circle cx="200" cy="140" r="3.5"/><circle cx="195" cy="160" r="3.5"/><circle cx="205" cy="60" r="3.5"/><circle cx="160" cy="186" r="3.5"/><circle cx="240" cy="188" r="3.5"/><circle cx="200" cy="120" r="3.5"/></g>
+<text x="200" y="215" text-anchor="middle" font-size="13" fill="currentColor" style="font-family:var(--sans)">紅點＝飛回來的飛機身上的彈孔；黃色引擎幾乎沒有</text>
+</svg>
+<p>二次世界大戰時，美軍統計飛回來的轟炸機，發現機翼和機身彈孔很多，引擎很少，於是想在機翼和機身加裝鋼板。統計學家沃德（Abraham Wald）指出：<b>應該加強引擎！</b></p>
+<p>因為這些是「飛得回來」的飛機。引擎中彈的飛機<b>根本飛不回來</b>，所以你看不到它們。看得到彈孔的地方，反而證明「那裡中彈也還飛得回來」。</p>
+<div class="box life"><span class="lbl">生活中的倖存者偏差</span><ul><li>「某某大老闆大學沒畢業也成功了」——但你沒看到成千上萬沒畢業也沒成功的人。</li><li>「以前的東西比較耐用，我阿嬤的電鍋用了 30 年」——壞掉的老電鍋早就被丟掉了。</li></ul></div>
+
+<h2>p 值駭客：一直試，總會中</h2>
+<div class="demo"><div class="demo-h">動手玩：軟糖會讓人長痘痘嗎？</div><div class="demo-b">
+<p style="margin-bottom:8px">假設軟糖<b>完全不會</b>造成痘痘。研究者不死心，把 20 種顏色的軟糖一個一個檢定（α = 0.05）。</p>
+<canvas id="cvHack" height="210"></canvas>
+<div class="ctrl"><button class="btn primary" id="hackBtn">做 20 個檢定</button></div>
+<div class="readout"><div class="stat">這次「顯著」的顏色數<b id="hackN">-</b></div><div class="stat">至少一個顯著的機率<b>1 − 0.95²⁰ ≈ 64%</b></div></div>
+<p class="tip">每次按下，都可能有某種顏色「p &lt; 0.05」。如果研究者只發表那一個：「綠色軟糖使痘痘增加，p &lt; 0.05！」新聞就出來了。這叫<b>多重比較問題</b>。</p>
+</div></div>
+<p>專業的補救方法之一是<b>邦費羅尼校正</b>（Bonferroni correction）：做 20 個檢定，每個的門檻就改成 0.05 ÷ 20 = 0.0025。更根本的方法是<b>事先公開研究計畫</b>，說好要檢定什麼，不能事後挑結果。</p>
+
+<h2>陷阱清單</h2>
+<div class="box warn"><span class="lbl">看到統計數字時，問自己這些問題</span>
+<ul>
+<li><b>樣本怎麼來的？</b>是隨機抽樣，還是自願回應、網路投票？</li>
+<li><b>樣本多大？</b>「10 個人裡有 8 個推薦」和「1 萬人裡有 8 千人推薦」可信度差很多。</li>
+<li><b>用的是平均數還是中位數？</b>有沒有極端值在拉？</li>
+<li><b>圖的 y 軸從幾開始？</b></li>
+<li><b>是相關還是因果？</b>有沒有干擾變數？</li>
+<li><b>比例的分母是什麼？</b>「車禍死者中有 30% 繫了安全帶」不代表安全帶沒用——路上本來就大部分人都繫了。</li>
+<li><b>他們做了幾次檢定，只報告了哪幾個？</b></li>
+</ul></div>
+<div class="box origin"><span class="lbl">推薦讀物</span><p>1954 年美國作家赫夫（Darrell Huff）寫的《別讓統計數字騙了你》（<span class="en">How to Lie with Statistics</span>），是史上最暢銷的統計書之一，很適合當這一章的延伸閱讀。</p></div>
+
+<div class="quiz" data-a="0"><div class="q">一篇報導說：「調查 100 家成功企業，發現它們的老闆都早上 5 點起床，所以早起能讓你成功。」最大的問題是？</div><div class="opts">
+<button>倖存者偏差：沒看失敗企業的老闆是不是也早起</button><button>樣本太大</button><button>應該用中位數</button></div>
+<div class="fb">只看成功者，看不到那些同樣早起卻失敗的人。而且就算有相關，也不代表是因果。</div></div>
+<div class="quiz" data-a="1"><div class="q">一位研究者檢定了 100 種食物和考試成績的關係（其實都無關），用 α = 0.05。大約會有幾種食物「顯著」？</div><div class="opts">
+<button>0 種</button><button>大約 5 種</button><button>大約 50 種</button></div>
+<div class="fb">每個檢定都有 5% 的機率犯型一錯誤，100 × 0.05 = 5 種會純屬巧合地「顯著」。</div></div>
+</section>
+
+<section class="chapter" id="ch20" data-title="實驗設計與專業之路" data-unit="第六單元　邁向專業">
+<p class="lead">恭喜你走到最後一章！這一章告訴你：要證明因果該怎麼做，以及統計學家的世界還有哪些風景。</p>
+
+<h2>觀察研究 vs. 實驗</h2>
+<p><b>觀察研究</b>：只是記錄，不介入。例如調查「喝咖啡的人和不喝的人，誰比較長壽」。缺點：喝咖啡的人可能在很多其他地方也不同（收入、工作、壓力），干擾變數太多，很難說是因果。</p>
+<p><b>實驗</b>：研究者主動決定誰接受處理。只要設計得好，就能證明因果。</p>
+
+<h2>費雪的實驗三原則</h2>
+<ol class="steps">
+<li><b>隨機分派</b>：用抽籤決定誰在實驗組、誰在對照組。這樣所有干擾變數（包括你想不到的）都會被平均分到兩組，兩組唯一有系統性差別的，就是你給的處理。這是證明因果的關鍵。</li>
+<li><b>重複</b>：每組要有足夠的人數，才能分辨效果和隨機誤差。</li>
+<li><b>區集</b>：如果知道某個因素影響很大（例如性別），先按它分組，組內再隨機分派，可以讓比較更精確。</li>
+</ol>
+<div class="box origin"><span class="lbl">名詞由來：安慰劑與雙盲</span><p>很多人吃了沒有藥效的糖錠，也會覺得身體變好，這叫<b>安慰劑效應</b>。<span class="en">Placebo</span> 是拉丁文「我會讓你高興」。所以對照組會拿到一模一樣的假藥。<b>雙盲</b>是指病人和醫生<b>都不知道</b>誰拿到真藥，避免醫生的期待影響判斷。「盲」是指「看不見分組」。</p></div>
+<div class="box life"><span class="lbl">生活例子：A/B 測試</span><p>你每天用的 App 和網站，其實一直在做實驗。例如：一半的使用者隨機看到綠色的「購買」按鈕，另一半看到橘色的，一週後比較兩組的購買率，再用假設檢定判斷差異是否顯著。這就是 A/B 測試，跟費雪 100 年前在農田裡比較肥料的方法，本質上一模一樣。</p></div>
+<div class="box origin"><span class="lbl">歷史小故事：農田裡誕生的統計</span><p>費雪 1919 年到英國羅森斯特德農業試驗站工作。為了比較不同肥料，他把農田切成許多小塊，隨機決定每塊用哪種肥料——隨機分派、變異數分析、實驗設計，很多現代統計工具都是從這片田裡長出來的。前面喝奶茶的故事，也發生在這裡。</p></div>
+
+<h2>專業統計的地圖</h2>
+<p>你已經學會了統計學的地基。以下是繼續往上蓋的樓層，每一個都建立在這門課的概念上：</p>
+<div class="tbl"><table>
+<tr><th class="l">方法</th><th class="l">用來做什麼</th><th class="l">建立在哪些概念上</th></tr>
+<tr><td class="l"><b>變異數分析 ANOVA</b></td><td class="l">一次比較 3 組以上的平均（例如 3 種肥料）</td><td class="l">變異數、假設檢定（費雪發明）</td></tr>
+<tr><td class="l"><b>多元迴歸</b></td><td class="l">用很多個 x 一起預測 y，並控制干擾變數</td><td class="l">迴歸、最小平方法</td></tr>
+<tr><td class="l"><b>邏輯斯迴歸</b></td><td class="l">預測「是或否」，例如會不會生病、會不會購買</td><td class="l">迴歸、機率</td></tr>
+<tr><td class="l"><b>時間序列</b></td><td class="l">分析隨時間變化的資料，預測股價、銷量、氣溫</td><td class="l">相關、迴歸</td></tr>
+<tr><td class="l"><b>無母數統計</b></td><td class="l">資料不是常態、樣本很小時的檢定方法</td><td class="l">中位數、排序</td></tr>
+<tr><td class="l"><b>貝氏統計</b></td><td class="l">把先驗知識和資料結合，持續更新判斷</td><td class="l">貝氏定理、條件機率</td></tr>
+<tr><td class="l"><b>統計製程管制</b></td><td class="l">工廠品管，及早發現機器異常</td><td class="l">常態分配、標準差（休哈特在 1924 年發明管制圖）</td></tr>
+<tr><td class="l"><b>機器學習</b></td><td class="l">讓電腦從大量資料中學會預測和分類</td><td class="l">幾乎全部：迴歸、機率、貝氏、抽樣、過度配適</td></tr>
+</table></div>
+<div class="box pro"><span class="lbl">進階補充：統計和人工智慧</span><p>現在很紅的 AI 聊天機器人，核心任務其實是一個機率問題：「根據前面的文字，下一個字最可能是什麼？」它回答你時，是從一個機率分配裡挑選字詞。訓練 AI 時常見的「損失函數」，很多也和第 18 章的「殘差平方和」是同一家族的想法。學好統計和機率，就是在學 AI 的母語。</p></div>
+
+<h2>學習路線圖</h2>
+<ol class="steps">
+<li><b>把這門課的互動區再玩一遍</b>，試著在不看說明的情況下預測結果。能預測，才是真的懂了。</li>
+<li><b>用試算表動手算</b>：Excel 或 Google 試算表的 AVERAGE、MEDIAN、STDEV、CORREL 函數，拿自己班上的資料來算。</li>
+<li><b>學一種程式語言</b>：Python（搭配 pandas、matplotlib）或 R，都是統計學家和資料科學家的主力工具，網路上有很多免費教材。</li>
+<li><b>讀一本入門教科書</b>：高中數學的「數據分析」與「機率」單元、大學的「統計學」課本，或上面提過的《別讓統計數字騙了你》。</li>
+<li><b>做一個自己的小研究</b>：提出問題、收集資料、分析、下結論，並寫下這個結論有多可靠——你就走完了第 1 章的五個步驟。</li>
+</ol>
+
+<div class="box key"><span class="lbl">整門課的一句話總結</span><p><span class="mark">世界充滿隨機，但隨機之中有規律；統計學教我們看見這些規律，並且誠實地說出我們有多確定。</span></p></div>
+
+<div class="quiz" data-a="1"><div class="q">想證明「新的教學 App 能提高成績」，下面哪種做法最能證明因果？</div><div class="opts">
+<button>比較「自己選擇用 App」和「沒用 App」的學生成績</button><button>用抽籤把學生分成兩組，一組用 App，一組不用，再比較成績</button><button>訪問用過 App 的學生覺得有沒有進步</button></div>
+<div class="fb">隨機分派才能讓兩組在其他條件上平均相同。自己選擇用 App 的學生，可能本來就比較認真，這是干擾變數。</div></div>
+<div class="quiz" data-a="2"><div class="q">雙盲實驗中，「雙」指的是哪兩方不知道分組？</div><div class="opts">
+<button>研究者和出錢的公司</button><button>實驗組和對照組</button><button>受試者和負責評估的醫生（研究人員）</button></div>
+<div class="fb">受試者不知道，避免安慰劑效應；評估的人不知道，避免期待影響判斷。</div></div>
+
+<div class="box" id="finishBox" style="text-align:center;border:2px solid var(--teal)"><p style="font-family:var(--serif);font-size:22px;margin:0">🎓 完成全部 20 章後，這裡會出現你的結業證明。</p><p class="muted" id="finishTxt" style="margin:6px 0 0"></p></div>
+</section>
+
+<!-- ================= 附錄 ================= -->
+<section class="chapter" id="gloss" data-title="名詞辭典與符號表" data-unit="附錄">
+<p class="lead">課程中出現的專有名詞都整理在這裡，附上意思和由來。可以用搜尋框找。</p>
+<input id="glossSearch" type="search" placeholder="搜尋名詞，例如：標準差、p 值、regression" aria-label="搜尋名詞">
+<div id="glossList"></div>
+
+<h2>符號表</h2>
+<div class="tbl"><table>
+<tr><th>符號</th><th>讀法</th><th class="l">意思</th></tr>
+<tr><td>x̄</td><td>x bar</td><td class="l">樣本平均數</td></tr>
+<tr><td>μ</td><td>mu（謬）</td><td class="l">母體平均數（希臘字母 m，mean）</td></tr>
+<tr><td>s</td><td>s</td><td class="l">樣本標準差</td></tr>
+<tr><td>σ</td><td>sigma（小寫）</td><td class="l">母體標準差（希臘字母 s，standard deviation）</td></tr>
+<tr><td>σ²、s²</td><td>sigma 平方</td><td class="l">變異數</td></tr>
+<tr><td>Σ</td><td>sigma（大寫）</td><td class="l">全部加起來（Sum）</td></tr>
+<tr><td>n、N</td><td>n</td><td class="l">樣本數、母體個數</td></tr>
+<tr><td>P(A)</td><td>P of A</td><td class="l">事件 A 的機率</td></tr>
+<tr><td>P(A | B)</td><td>P of A given B</td><td class="l">已知 B 發生時 A 的機率（條件機率）</td></tr>
+<tr><td>n!</td><td>n 階乘</td><td class="l">n × (n−1) × … × 1</td></tr>
+<tr><td>C(n, r)</td><td>n 取 r</td><td class="l">組合數</td></tr>
+<tr><td>E(X)</td><td>X 的期望值</td><td class="l">長期平均</td></tr>
+<tr><td>H₀、H₁</td><td>H zero、H one</td><td class="l">虛無假設、對立假設</td></tr>
+<tr><td>α</td><td>alpha</td><td class="l">顯著水準（犯型一錯誤的機率上限）</td></tr>
+<tr><td>β</td><td>beta</td><td class="l">犯型二錯誤的機率</td></tr>
+<tr><td>χ²</td><td>kai square（卡方）</td><td class="l">卡方統計量</td></tr>
+<tr><td>r</td><td>r</td><td class="l">相關係數</td></tr>
+<tr><td>ŷ</td><td>y hat</td><td class="l">迴歸的預測值</td></tr>
+</table></div>
+
+<h2>公式速查</h2>
+<div class="tbl"><table>
+<tr><th class="l">名稱</th><th class="l">公式</th><th>章</th></tr>
+<tr><td class="l">平均數</td><td class="l">x̄ = Σx / n</td><td>4</td></tr>
+<tr><td class="l">母體標準差</td><td class="l">σ = √[ Σ(x − μ)² / N ]</td><td>5</td></tr>
+<tr><td class="l">樣本標準差</td><td class="l">s = √[ Σ(x − x̄)² / (n − 1) ]</td><td>5</td></tr>
+<tr><td class="l">z 分數</td><td class="l">z = (x − μ) / σ</td><td>6</td></tr>
+<tr><td class="l">排列、組合</td><td class="l">P(n,r) = n!/(n−r)!　C(n,r) = n!/[r!(n−r)!]</td><td>8</td></tr>
+<tr><td class="l">加法規則</td><td class="l">P(A∪B) = P(A) + P(B) − P(A∩B)</td><td>9</td></tr>
+<tr><td class="l">條件機率</td><td class="l">P(A|B) = P(A∩B) / P(B)</td><td>9</td></tr>
+<tr><td class="l">貝氏定理</td><td class="l">P(A|B) = P(B|A)P(A) / P(B)</td><td>10</td></tr>
+<tr><td class="l">期望值</td><td class="l">E(X) = Σ x·P(x)</td><td>11</td></tr>
+<tr><td class="l">二項分配</td><td class="l">P(X=k) = C(n,k) pᵏ(1−p)ⁿ⁻ᵏ；平均 np，標準差 √(np(1−p))</td><td>12</td></tr>
+<tr><td class="l">標準誤</td><td class="l">σ / √n</td><td>14</td></tr>
+<tr><td class="l">95% 信賴區間</td><td class="l">x̄ ± 1.96 σ/√n</td><td>15</td></tr>
+<tr><td class="l">t 統計量</td><td class="l">t = (x̄ − μ₀) / (s/√n)</td><td>17</td></tr>
+<tr><td class="l">卡方統計量</td><td class="l">χ² = Σ (O − E)² / E</td><td>17</td></tr>
+<tr><td class="l">迴歸直線</td><td class="l">ŷ = a + bx，b = r · (s_y / s_x)，a = ȳ − b·x̄</td><td>18</td></tr>
+</table></div>
+</section>
+
+</main>
+</div>
+
+<style>
+canvas.mini{display:block;width:100%;margin:10px 0}
+.stat b{word-break:break-all}
+#finishBox.win{background:var(--hi-soft)}
+</style>
+<script>
+(function(){
+'use strict';
+const $=(s,r)=>(r||document).querySelector(s);
+const $$=(s,r)=>Array.from((r||document).querySelectorAll(s));
+const root=document.documentElement;
+const reduced=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
+const COL={};
+function readColors(){const cs=getComputedStyle(root);['ink','ink2','line','card','soft','paper','hi','hi-soft','teal','blue','red','amber','violet','grid'].forEach(k=>COL[k]=cs.getPropertyValue('--'+k).trim());COL.sans=cs.getPropertyValue('--sans').trim()||'sans-serif';}
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v);}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
+
+/* ---------- 主題 ---------- */
+const savedTheme=store.get('statTheme',null);
+if(savedTheme)root.setAttribute('data-theme',savedTheme);
+readColors();
+$('#themeBtn').addEventListener('click',()=>{
+  const dark=getComputedStyle(root).getPropertyValue('--paper').trim().toLowerCase()==='#131824';
+  const next=dark?'light':'dark';root.setAttribute('data-theme',next);store.set('statTheme',next);readColors();redrawCurrent();
+});
+
+/* ---------- 畫布工具 ---------- */
+function setup(cv){
+  if(!cv.dataset.h)cv.dataset.h=cv.getAttribute('height')||'240';
+  const h=+cv.dataset.h,w=Math.max(220,cv.clientWidth||600);
+  const dpr=Math.min(window.devicePixelRatio||1,2.5);
+  cv.style.height=h+'px';
+  const W=Math.round(w*dpr),H=Math.round(h*dpr);
+  if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H;}
+  const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+  return {ctx,w,h};
+}
+function T(ctx,s,x,y,o){o=o||{};ctx.fillStyle=o.c||COL.ink;ctx.font=(o.b?'700 ':'')+(o.s||12)+'px '+COL.sans;ctx.textAlign=o.a||'center';ctx.textBaseline=o.bl||'alphabetic';ctx.fillText(s,x,y);}
+function ln(ctx,x1,y1,x2,y2,c,w,d){ctx.beginPath();ctx.strokeStyle=c;ctx.lineWidth=w||1;ctx.setLineDash(d||[]);ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.setLineDash([]);}
+function A(c,a){if(c&&c[0]==='#'){let h=c.slice(1);if(h.length===3)h=h.split('').map(x=>x+x).join('');const n=parseInt(h,16);return 'rgba('+(n>>16&255)+','+(n>>8&255)+','+(n&255)+','+a+')';}return c;}
+function dot(ctx,x,y,r,f,s){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);if(f){ctx.fillStyle=f;ctx.fill();}if(s){ctx.strokeStyle=s;ctx.lineWidth=1.5;ctx.stroke();}}
+const fx=(x,d)=>Number(x).toLocaleString('zh-TW',{minimumFractionDigits:d,maximumFractionDigits:d});
+const pct=(x,d)=>fx(x*100,d==null?1:d)+'%';
+
+/* ---------- 數學工具 ---------- */
+function erf(x){const s=x<0?-1:1;x=Math.abs(x);const t=1/(1+0.3275911*x);const y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x);return s*y;}
+const Phi=z=>0.5*(1+erf(z/Math.SQRT2));
+const npdf=(x,m,s)=>Math.exp(-0.5*((x-m)/s)*((x-m)/s))/(s*Math.sqrt(2*Math.PI));
+function randn(){let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+function lgamma(x){const c=[0.99999999999980993,676.5203681218851,-1259.1392167224028,771.32342877765313,-176.61503916999185,12.507343278686905,-0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7];if(x<0.5)return Math.log(Math.PI/Math.sin(Math.PI*x))-lgamma(1-x);x-=1;let a=c[0];const t=x+7.5;for(let i=1;i<9;i++)a+=c[i]/(x+i);return 0.5*Math.log(2*Math.PI)+(x+0.5)*Math.log(t)-t+Math.log(a);}
+function gammaQ(a,x){if(x<=0)return 1;const lg=-x+a*Math.log(x)-lgamma(a);
+  if(x<a+1){let ap=a,sum=1/a,del=sum;for(let i=0;i<300;i++){ap++;del*=x/ap;sum+=del;if(Math.abs(del)<Math.abs(sum)*1e-13)break;}return Math.max(0,1-sum*Math.exp(lg));}
+  let b=x+1-a,c=1e300,d=1/b,h=d;for(let i=1;i<300;i++){const an=-i*(i-a);b+=2;d=an*d+b;if(Math.abs(d)<1e-300)d=1e-300;c=b+an/c;if(Math.abs(c)<1e-300)c=1e-300;d=1/d;const del=d*c;h*=del;if(Math.abs(del-1)<1e-13)break;}return Math.exp(lg)*h;}
+function binom(n,p){const o=[];for(let k=0;k<=n;k++){o.push(Math.exp(lgamma(n+1)-lgamma(k+1)-lgamma(n-k+1)+k*Math.log(p)+(n-k)*Math.log(1-p)));}return o;}
+function choose(n,k){let r=1;for(let i=1;i<=k;i++)r=r*(n-k+i)/i;return r;}
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function niceStep(span,max){return [0.1,0.2,0.25,0.5,1,2,5,10,20,25,50,100,200,500,1000].find(s=>span/s<=(max||6))||1000;}
+
+/* ---------- 通用長條圖 ---------- */
+function barChart(cv,labels,vals,o){o=o||{};const {ctx,w,h}=setup(cv);const L=40,R=10,Tp=20,B=28,pw=w-L-R,ph=h-Tp-B;
+  const ymin=o.ymin||0,ymax=o.ymax||Math.max.apply(null,vals)*1.2,span=ymax-ymin,st=niceStep(span,5);
+  for(let v=Math.ceil(ymin/st-1e-9)*st;v<=ymax+1e-9;v+=st){const y=Tp+ph-(v-ymin)/span*ph;ln(ctx,L,y,w-R,y,A(COL.ink2,.25),1);T(ctx,String(Math.round(v*100)/100),L-6,y+4,{a:'right',c:COL.ink2,s:11});}
+  const n=vals.length,slot=pw/n,gap=o.gap==null?.3:o.gap,bw=slot*(1-gap);
+  ctx.save();ctx.beginPath();ctx.rect(L,Tp-4,pw,ph+4);ctx.clip();
+  const tops=[];
+  vals.forEach((v,i)=>{const x=L+i*slot+(slot-bw)/2,y=Tp+ph-(v-ymin)/span*ph;const col=(o.colors&&o.colors[i%o.colors.length])||COL.blue;ctx.fillStyle=A(col,.75);ctx.fillRect(x,y,bw,Tp+ph-y);ctx.strokeStyle=COL.ink;ctx.lineWidth=1.5;ctx.strokeRect(x,y,bw,Tp+ph-y);tops.push([x+bw/2,Math.max(y,Tp)]);});
+  ctx.restore();
+  vals.forEach((v,i)=>T(ctx,String(v),tops[i][0],tops[i][1]-6,{b:true}));
+  ln(ctx,L,Tp+ph,w-R,Tp+ph,COL.ink,1.5);ln(ctx,L,Tp-4,L,Tp+ph,COL.ink,1.5);
+  if(o.edges)o.edges.forEach((e,i)=>T(ctx,e,L+i*slot,Tp+ph+17,{c:COL.ink2,s:11}));
+  else labels.forEach((l,i)=>T(ctx,l,L+i*slot+slot/2,Tp+ph+18,{s:13}));
+  if(o.ylab)T(ctx,o.ylab,L+4,12,{a:'left',c:COL.ink2,s:11});
+}
+
+/* ---------- 章節與導覽 ---------- */
+const secs=$$('section.chapter');
+const done=new Set(store.get('statCourseDone',[]));
+const numOf=id=>{const m=/^ch(\d+)$/.exec(id);return m?+m[1]:null;};
+const lessons=secs.filter(s=>numOf(s.id)>0);
+let tocHTML='',lastU=null;const units=[];
+secs.forEach((s,i)=>{
+  const id=s.id,t=s.dataset.title,u=s.dataset.unit,n=numOf(id);
+  if(u!==lastU){tocHTML+='<h4>'+(u||'開始')+'</h4>';lastU=u;if(u&&n)units.push({name:u,items:[]});}
+  if(u&&n)units[units.length-1].items.push(n+'. '+t);
+  const mark=n>0?n:(id==='ch0'?'◎':'附');
+  tocHTML+='<a href="#'+id+'" data-id="'+id+'"><span class="n"><span>'+mark+'</span></span><span>'+t+'</span></a>';
+  if(id!=='ch0')s.insertAdjacentHTML('afterbegin','<span class="unit-tag">'+u+'</span><h1 class="ch-title">'+(n?'<span class="num">'+n+'</span>':'')+t+'</h1>');
+  const prev=secs[i-1],next=secs[i+1];let foot='<div class="ch-foot">';
+  if(n>0)foot+='<button class="done-toggle" data-done="'+id+'"></button>';else foot+='<span></span>';
+  foot+='<div class="pager">';
+  if(prev)foot+='<button class="btn" data-go="'+prev.id+'">上一章</button>';
+  if(next)foot+='<button class="btn primary" data-go="'+next.id+'">下一章：'+next.dataset.title+'</button>';
+  foot+='</div></div>';
+  if(id!=='ch0')s.insertAdjacentHTML('beforeend',foot);
+});
+$('#toc').innerHTML=tocHTML;
+$('#unitMap').innerHTML=units.map(u=>'<div class="u"><b>'+u.name.replace(/\s+/,'　')+'</b><span>'+u.items.join('<br>')+'</span></div>').join('');
+
+function refreshDone(){
+  $$('.toc a').forEach(a=>a.classList.toggle('done',done.has(a.dataset.id)));
+  $$('.done-toggle').forEach(b=>{const on=done.has(b.dataset.done);b.classList.toggle('on',on);b.textContent=on?'✓ 已學會這一章':'我學會了這一章';});
+  const k=lessons.filter(s=>done.has(s.id)).length;
+  $('#progBar').style.width=(k/lessons.length*100)+'%';$('#progTxt').textContent=k+' / '+lessons.length+' 章';
+  const fb=$('#finishBox');
+  if(k===lessons.length){fb.classList.add('win');fb.innerHTML='<p style="font-family:var(--serif);font-size:26px;margin:0">🎓 結業證明</p><p style="margin:8px 0 0">恭喜你完成「統計，從零開始」全部 20 章！<br>從平均數一路走到假設檢定與迴歸，你已經具備看懂統計數字、看穿統計陷阱的能力。</p><p class="muted" style="margin:6px 0 0">完成日期：'+new Date().toLocaleDateString('zh-TW')+'</p>';}
+  else{fb.classList.remove('win');$('#finishTxt')&&($('#finishTxt').textContent='目前完成 '+k+' 章，還差 '+(lessons.length-k)+' 章。');}
+}
+
+const demos={};let current=null;
+function reg(id,d){(demos[id]=demos[id]||[]).push(d);}
+function go(id){window.AC_COURSE_GO=function(v){go(v)};window.AC_COURSE_POSITION=id;
+  if(!document.getElementById(id)||!$('#'+id).classList.contains('chapter'))id='ch0';
+  if(current&&demos[current])demos[current].forEach(d=>d.leave&&d.leave());
+  current=id;
+  secs.forEach(s=>s.classList.toggle('show',s.id===id));
+  $$('.toc a').forEach(a=>a.classList.toggle('active',a.dataset.id===id));
+  $('#toc').classList.remove('open');
+  window.scrollTo(0,0);
+  document.title=(id==='ch0'?'':$('#'+id).dataset.title+'｜')+'統計，從零開始';
+  requestAnimationFrame(()=>{(demos[id]||[]).forEach(d=>{if(!d._i){d._i=true;d.init&&d.init();}d.draw&&d.draw();d.enter&&d.enter();});});
+}
+function redrawCurrent(){(demos[current]||[]).forEach(d=>{if(d._i){d.resize?d.resize():(d.draw&&d.draw());}});}
+let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(redrawCurrent,120);});
+window.addEventListener('hashchange',()=>go(location.hash.slice(1)));
+if(window.matchMedia){const mq=matchMedia('(prefers-color-scheme: dark)');const f=()=>{readColors();redrawCurrent();};mq.addEventListener?mq.addEventListener('change',f):mq.addListener&&mq.addListener(f);}
+
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');
+  if(g){e.preventDefault();const id=g.dataset.go;if(location.hash==='#'+id)go(id);else location.hash=id;return;}
+  const d=e.target.closest('[data-done]');
+  if(d){const id=d.dataset.done;done.has(id)?done.delete(id):done.add(id);store.set('statCourseDone',Array.from(done));refreshDone();return;}
+  const q=e.target.closest('.quiz .opts button');
+  if(q){const qz=q.closest('.quiz'),bs=$$('.opts button',qz),i=bs.indexOf(q),a=+qz.dataset.a,fb=$('.fb',qz);
+    if(!fb.dataset.base)fb.dataset.base=fb.innerHTML;
+    bs.forEach(b=>b.classList.remove('right','wrong'));
+    if(i===a){q.classList.add('right');fb.innerHTML='<b style="color:var(--teal)">✅ 答對了！</b> '+fb.dataset.base;}
+    else{q.classList.add('wrong');bs[a].classList.add('right');fb.innerHTML='<b style="color:var(--red)">再想想：</b>正確答案是「'+bs[a].textContent+'」。'+fb.dataset.base;}
+    fb.classList.add('on');return;}
+  const toc=$('#toc');
+  if(toc.classList.contains('open')&&!e.target.closest('#toc')&&!e.target.closest('#menuBtn'))toc.classList.remove('open');
+});
+$('#menuBtn').addEventListener('click',()=>$('#toc').classList.toggle('open'));
+
+/* ================= 高爾頓板 ================= */
+function Galton(cv,o){this.cv=cv;this.rows=o.rows;this.speed=o.speed||10;this.theory=!!o.theory;this.reset();}
+Galton.prototype.reset=function(rows){if(rows)this.rows=rows;this.bins=new Array(this.rows+1).fill(0);this.balls=[];this.pending=0;this.total=0;this.acc=0;};
+Galton.prototype.resize=function(){const s=setup(this.cv);this.ctx=s.ctx;this.w=s.w;this.h=s.h;const R=this.rows;
+  this.binTop=this.h*0.56;this.bottom=this.h-8;this.dx=Math.min((this.w-20)/(R+1),64);this.dy=Math.min((this.binTop-24)/R,this.dx*0.95);
+  this.top=this.binTop-10-R*this.dy;this.cx=this.w/2;this.r=Math.max(2.4,Math.min(this.dx*0.2,5.5));this.draw();};
+Galton.prototype.x=function(Rn,L){return this.cx+(Rn-L/2)*this.dx;};
+Galton.prototype.drop=function(n){this.pending+=n;this.start();};
+Galton.prototype.fillInstant=function(n){for(let i=0;i<n;i++){let k=0;for(let j=0;j<this.rows;j++)k+=Math.random()<.5?1:0;this.bins[k]++;this.total++;}this.draw();};
+Galton.prototype.start=function(){if(this.running)return;this.running=true;this.last=performance.now();const loop=t=>{if(!this.running)return;const dt=Math.min(0.05,(t-this.last)/1000);this.last=t;this.step(dt);this.draw();if(this.balls.length||this.pending)requestAnimationFrame(loop);else this.running=false;};requestAnimationFrame(loop);};
+Galton.prototype.stop=function(){this.running=false;};
+Galton.prototype.step=function(dt){
+  const rate=this.pending>200?170:this.pending>30?70:28;this.acc+=dt*rate;
+  while(this.acc>=1&&this.pending>0){this.acc-=1;this.pending--;const p=[];let k=0;for(let i=0;i<this.rows;i++){k+=Math.random()<.5?1:0;p.push(k);}this.balls.push({p:p,t:0});}
+  if(!this.pending)this.acc=0;
+  const R=this.rows,keep=[];
+  for(const b of this.balls){b.t+=dt*this.speed;if(b.t>=R+1){this.bins[b.p[R-1]]++;this.total++;}else keep.push(b);}
+  this.balls=keep;};
+Galton.prototype.draw=function(){const c=this.ctx;if(!c)return;const R=this.rows,w=this.w,h=this.h;c.clearRect(0,0,w,h);
+  c.fillStyle=COL.ink2;for(let r=0;r<R;r++)for(let j=0;j<=r;j++){c.beginPath();c.arc(this.x(j,r),this.top+r*this.dy,Math.max(1.8,this.r*0.45),0,7);c.fill();}
+  const bx0=this.x(0,R)-this.dx/2;for(let k=0;k<=R+1;k++)ln(c,bx0+k*this.dx,this.binTop,bx0+k*this.dx,this.bottom,A(COL.ink2,.5),1);
+  ln(c,bx0,this.bottom,bx0+(R+1)*this.dx,this.bottom,COL.ink,2);
+  const th=this.theory&&this.total>0?this.bins.map((_,k)=>this.total*choose(R,k)/Math.pow(2,R)):null;
+  const mx=Math.max(8,Math.max.apply(null,this.bins),th?Math.max.apply(null,th):0);this.sc=(this.bottom-this.binTop-6)/mx;
+  for(let k=0;k<=R;k++){const hh=this.bins[k]*this.sc;if(hh>0){c.fillStyle=A(COL.teal,.35);c.fillRect(bx0+k*this.dx+1.5,this.bottom-hh,this.dx-3,hh);c.strokeStyle=COL.teal;c.lineWidth=1.5;c.strokeRect(bx0+k*this.dx+1.5,this.bottom-hh,this.dx-3,hh);}}
+  if(th){c.beginPath();c.strokeStyle=COL.red;c.lineWidth=2;th.forEach((v,k)=>{const X=this.x(k,R),Y=this.bottom-v*this.sc;k?c.lineTo(X,Y):c.moveTo(X,Y);});c.stroke();th.forEach((v,k)=>dot(c,this.x(k,R),this.bottom-v*this.sc,3,COL.red));}
+  for(const b of this.balls){const t=b.t;let X,Y;
+    if(t<R){const L=Math.floor(t),f=t-L,r0=L?b.p[L-1]:0,r1=b.p[L],x0=this.x(r0,L),x1=this.x(r1,L+1),y0=this.top+L*this.dy-this.r-2;X=x0+(x1-x0)*f;Y=y0+this.dy*f*f-Math.sin(Math.PI*f)*this.dy*0.3;}
+    else{const k=b.p[R-1],f=t-R,y0=this.top+R*this.dy-this.r-2,y1=this.bottom-this.bins[k]*this.sc-this.r;X=this.x(k,R);Y=y0+(y1-y0)*f*f;}
+    dot(c,X,Y,this.r,COL.blue);}
+  T(c,'已落下 '+this.total+' 顆',10,18,{a:'left',c:COL.ink2,s:13});
+  if(th)T(c,'紅線＝二項分配的理論值',w-10,18,{a:'right',c:COL.red,s:12});};
+
+/* ---------- 首頁 ---------- */
+const hero=$('#heroCanvas');hero.dataset.h=window.innerWidth<600?'300':'380';
+const heroG=new Galton(hero,{rows:12,speed:9});
+function heroRun(){heroG.stop();heroG.reset();heroG.resize();if(reduced)heroG.fillInstant(400);else heroG.drop(400);}
+reg('ch0',{init:heroRun,resize(){heroG.resize();},enter(){if(heroG.balls.length||heroG.pending)heroG.start();},leave(){heroG.stop();}});
+$('#heroReset').addEventListener('click',heroRun);
+
+/* ---------- 第 3 章 ---------- */
+reg('ch3',{draw(){
+  barChart($('#cvBar'),['珍奶','紅茶','綠茶','奶綠','其他'],[12,7,5,4,2],{colors:[COL.blue],gap:.4,ymax:14,ylab:'人數'});
+  barChart($('#cvHist'),[],[2,5,9,8,4,2],{colors:[COL.teal],gap:0,ymax:10,ylab:'人數',edges:['145','150','155','160','165','170','175 cm']});
+  drawTrunc();}});
+let tr={on:false,min:0,max:100};
+function drawTrunc(){barChart($('#cvTrunc'),['A 牌','B 牌'],[82,85],{colors:[COL.teal,COL.blue],gap:.45,ymin:tr.min,ymax:tr.max,ylab:'滿意度'});}
+$('#truncBtn').addEventListener('click',()=>{tr.on=!tr.on;const f0={min:tr.min,max:tr.max},f1=tr.on?{min:80,max:86}:{min:0,max:100};const t0=performance.now();
+  $('#truncBtn').textContent=tr.on?'讓 y 軸回到 0':'把 y 軸從 80 開始';
+  $('#truncTip').textContent=tr.on?'y 軸從 80 開始：B 的柱子看起來是 A 的兩倍多！其實只差 3 分。':'y 軸從 0 開始：兩家差不多。';
+  const an=t=>{const f=reduced?1:Math.min(1,(t-t0)/600),e=f<.5?2*f*f:1-Math.pow(-2*f+2,2)/2;tr.min=f0.min+(f1.min-f0.min)*e;tr.max=f0.max+(f1.max-f0.max)*e;drawTrunc();if(f<1)requestAnimationFrame(an);};requestAnimationFrame(an);});
+
+/* ---------- 第 4 章：平均 vs 中位 ---------- */
+const MB=[100,150,150,200,200,200,250,300];
+function drawMean(){const cv=$('#cvMean'),{ctx,w,h}=setup(cv),X=+$('#meanSlider').value;$('#meanVal').textContent=X;
+  const data=MB.concat([X]),mean=data.reduce((a,b)=>a+b,0)/9,sorted=data.slice().sort((a,b)=>a-b),med=sorted[4];
+  $('#meanOut').textContent=fx(mean,1)+' 元';$('#medOut').textContent=med+' 元';
+  const L=24,R=24,xmax=Math.max(400,X)*1.08,sx=v=>L+v/xmax*(w-L-R),beam=128;
+  const st=niceStep(xmax,w<500?5:8);for(let v=0;v<=xmax;v+=st){ln(ctx,sx(v),178,sx(v),184,COL.ink,1);T(ctx,String(v),sx(v),200,{c:COL.ink2,s:11});}
+  ln(ctx,L,181,w-R,181,COL.ink,1.5);
+  ln(ctx,sx(0),beam,sx(xmax),beam,COL.ink,3);
+  const cnt={};data.forEach((v,i)=>{cnt[v]=(cnt[v]||0)+1;const y=beam-9-(cnt[v]-1)*15;dot(ctx,sx(v),y,6.5,i===8?COL.red:COL.teal,COL.ink);});
+  const xm=sx(mean);ctx.beginPath();ctx.moveTo(xm,beam+2);ctx.lineTo(xm-13,beam+28);ctx.lineTo(xm+13,beam+28);ctx.closePath();ctx.fillStyle=COL.amber;ctx.fill();ctx.strokeStyle=COL.ink;ctx.lineWidth=1.5;ctx.stroke();
+  const ma=xm>w*0.7?'right':'left';T(ctx,'▲ 平均數 '+fx(mean,1)+'（平衡點）',xm+(ma==='left'?16:-16),beam+24,{a:ma,b:true,s:12});
+  const xd=sx(med);ln(ctx,xd,30,xd,beam-4,COL.blue,1.5,[4,4]);ctx.save();ctx.translate(xd,24);ctx.rotate(Math.PI/4);ctx.fillStyle=COL.blue;ctx.fillRect(-5,-5,10,10);ctx.restore();
+  T(ctx,'◆ 中位數 '+med,xd+10,20,{a:'left',c:COL.blue,b:true,s:12});
+  if(X>=1000)T(ctx,'富二代',sx(X),beam-26,{c:COL.red,s:11,b:true});}
+reg('ch4',{draw:drawMean});$('#meanSlider').addEventListener('input',drawMean);
+
+/* ---------- 第 5 章：標準差 ---------- */
+const SDB=[-1.6,-1.1,-0.8,-0.4,-0.1,0.1,0.4,0.8,1.1,1.6];
+function drawSD(){const cv=$('#cvSD'),{ctx,w,h}=setup(cv),k=+$('#sdSlider').value/100*18;
+  const dev=SDB.map(d=>Math.sign(d)*Math.round(Math.abs(d)*k)),xs=dev.map(d=>70+d);
+  const v=dev.reduce((a,d)=>a+d*d,0)/10,sd=Math.sqrt(v);
+  $('#sdRange').textContent=(Math.max.apply(null,xs)-Math.min.apply(null,xs))+' 分';$('#sdVar').textContent=fx(v,1)+' 分²';$('#sdOut').textContent=fx(sd,2)+' 分';
+  const L=16,R=16,pw=w-L-R,axisY=h-40,sq=Math.min(pw/72,(axisY-14)/30),range=pw/sq,x0=70-range/2,sx=x=>L+(x-x0)*sq;
+  const st=range>100?20:10;for(let t=Math.ceil(x0/st)*st;t<=x0+range;t+=st){ln(ctx,sx(t),axisY,sx(t),axisY+6,COL.ink,1);T(ctx,String(t),sx(t),axisY+22,{c:COL.ink2,s:11});}
+  ln(ctx,L,axisY,w-R,axisY,COL.ink,1.5);
+  dev.forEach((d,i)=>{if(!d)return;const s=Math.abs(d)*sq,x=d<0?sx(70+d):sx(70),col=d<0?COL.teal:COL.blue;ctx.fillStyle=A(col,.08);ctx.fillRect(x,axisY-s,s,s);ctx.strokeStyle=A(col,.8);ctx.lineWidth=1.2;ctx.strokeRect(x,axisY-s,s,s);});
+  ln(ctx,sx(70),10,sx(70),axisY,COL.red,2,[5,4]);T(ctx,'平均 70',sx(70)+6,20,{a:'left',c:COL.red,b:true});
+  const cnt={};xs.forEach((x,i)=>{cnt[x]=(cnt[x]||0)+1;dot(ctx,sx(x),axisY-(cnt[x]-1)*9,4.5,dev[i]<0?COL.teal:dev[i]>0?COL.blue:COL.ink,COL.ink);});
+  const s=sd*sq;ctx.strokeStyle=COL.amber;ctx.lineWidth=2.5;ctx.setLineDash([6,4]);ctx.strokeRect(w-R-s-2,axisY-s,s,s);ctx.setLineDash([]);
+  if(s>30)T(ctx,'平均的正方形',w-R-s/2-2,axisY-s-6,{c:COL.amber,s:11,b:true});}
+reg('ch5',{draw:drawSD});$('#sdSlider').addEventListener('input',drawSD);
+
+/* ---------- 第 6 章 ---------- */
+function drawSkew(){const cv=$('#cvSkew'),{ctx,w,h}=setup(cv);const pw=w/3,names=['左偏','對稱','右偏'];
+  const fs=[t=>Math.pow(1-t,1.8)*Math.exp(-(1-t)*8),t=>Math.exp(-0.5*Math.pow((t-.5)/.14,2)),t=>Math.pow(t,1.8)*Math.exp(-t*8)];
+  fs.forEach((f,i)=>{const N=200,ys=[],x0=i*pw+10,ww=pw-20,base=h-46;let mx=0,s=0,m=0;for(let j=0;j<=N;j++){const y=f(j/N);ys.push(y);mx=Math.max(mx,y);s+=y;m+=y*j/N;}m/=s;let c=0,med=0;for(let j=0;j<=N;j++){c+=ys[j];if(c>=s/2){med=j/N;break;}}
+    ctx.beginPath();ctx.moveTo(x0,base);ys.forEach((y,j)=>ctx.lineTo(x0+j/N*ww,base-y/mx*(base-30)));ctx.lineTo(x0+ww,base);ctx.closePath();ctx.fillStyle=A(COL.teal,.15);ctx.fill();ctx.strokeStyle=COL.teal;ctx.lineWidth=2;ctx.stroke();
+    ln(ctx,x0,base,x0+ww,base,COL.ink,1.5);
+    if(i!==1){ln(ctx,x0+med*ww,26,x0+med*ww,base,COL.blue,2);ln(ctx,x0+m*ww,26,x0+m*ww,base,COL.red,2,[4,3]);}else ln(ctx,x0+.5*ww,26,x0+.5*ww,base,COL.ink2,2);
+    T(ctx,names[i],x0+ww/2,base+20,{b:true,s:14});T(ctx,i===0?'平均 < 中位':i===1?'平均 = 中位':'平均 > 中位',x0+ww/2,base+38,{c:COL.ink2,s:11});});
+  T(ctx,'— 平均數',w-10,14,{a:'right',c:COL.red,s:11});T(ctx,'— 中位數',w-70,14,{a:'right',c:COL.blue,s:11});}
+function zcalc(){const x=+$('#zX').value,m=+$('#zM').value,s=+$('#zS').value;if(!(s>0)){$('#zOut').textContent='標準差要大於 0';$('#zPR').textContent='-';return;}const z=(x-m)/s;$('#zOut').textContent=fx(z,2);$('#zPR').textContent=pct(Phi(z),1)+' 的人';}
+reg('ch6',{draw(){drawSkew();zcalc();}});['#zX','#zM','#zS'].forEach(s=>$(s).addEventListener('input',zcalc));
+
+/* ---------- 第 7 章：擲硬幣 ---------- */
+let coin={n:0,h:0,hist:[],last:[]};
+function drawCoin(){const cv=$('#cvCoin'),{ctx,w,h}=setup(cv),L=40,R=14,Tp=14,B=36,pw=w-L-R,ph=h-Tp-B;
+  const N=Math.max(10,coin.n),lx=x=>L+Math.log10(x)/Math.log10(N)*pw,sy=p=>Tp+ph-p*ph;
+  [0,.25,.5,.75,1].forEach(p=>{ln(ctx,L,sy(p),w-R,sy(p),A(COL.ink2,p===.5?0:.2),1);T(ctx,String(p),L-6,sy(p)+4,{a:'right',c:COL.ink2,s:11});});
+  ln(ctx,L,sy(.5),w-R,sy(.5),COL.red,2,[6,4]);
+  for(let d=1;d<=N;d*=10){ln(ctx,lx(d),Tp+ph,lx(d),Tp+ph+5,COL.ink,1);T(ctx,d.toLocaleString(),lx(d),Tp+ph+18,{c:COL.ink2,s:11});}
+  T(ctx,'擲的次數（每一大格 ×10）',L+pw/2,h-4,{c:COL.ink2,s:11});
+  ln(ctx,L,Tp+ph,w-R,Tp+ph,COL.ink,1.5);ln(ctx,L,Tp,L,Tp+ph,COL.ink,1.5);
+  if(coin.n){ctx.beginPath();ctx.strokeStyle=COL.blue;ctx.lineWidth=2;const step=Math.max(1,Math.floor(coin.n/1500));for(let i=0;i<coin.n;i+=(i<100?1:step)){const X=lx(i+1),Y=sy(coin.hist[i]);i?ctx.lineTo(X,Y):ctx.moveTo(X,Y);}ctx.lineTo(lx(coin.n),sy(coin.hist[coin.n-1]));ctx.stroke();dot(ctx,lx(coin.n),sy(coin.hist[coin.n-1]),4,COL.blue);}
+  else T(ctx,'按下按鈕開始擲硬幣',L+pw/2,Tp+ph/2-20,{c:COL.ink2,s:14});
+  $('#coinN').textContent=coin.n.toLocaleString();$('#coinH').textContent=coin.h.toLocaleString();$('#coinP').textContent=coin.n?fx(coin.h/coin.n,3):'-';
+  $('#coinLast').textContent=coin.last.length?'最近幾次：'+coin.last.join(' '):'';}
+reg('ch7',{draw:drawCoin});
+$$('[data-coin]').forEach(b=>b.addEventListener('click',()=>{const k=+b.dataset.coin;if(!k)coin={n:0,h:0,hist:[],last:[]};else{if(coin.n+k>200000)coin={n:0,h:0,hist:[],last:[]};for(let i=0;i<k;i++){const hd=Math.random()<.5;coin.n++;if(hd)coin.h++;coin.hist.push(coin.h/coin.n);coin.last.push(hd?'正':'反');}coin.last=coin.last.slice(-24);}drawCoin();}));
+
+/* ---------- 第 8 章：排列組合 ---------- */
+function bigFmt(b){const s=b.toString();if(s.length<=16)return Number(s).toLocaleString();return s[0]+'.'+s.slice(1,4)+' × 10^'+(s.length-1);}
+function pcalc(){let n=Math.floor(+$('#pcN').value),r=Math.floor(+$('#pcR').value);if(!(n>=0)||!(r>=0)||n>170){$('#pcP').textContent=$('#pcC').textContent='請輸入 0～170 的整數';return;}if(r>n){$('#pcP').textContent=$('#pcC').textContent='0（r 不能大於 n）';return;}
+  let P=1n;for(let i=0;i<r;i++)P*=BigInt(n-i);let F=1n;for(let i=2;i<=r;i++)F*=BigInt(i);$('#pcP').textContent=bigFmt(P);$('#pcC').textContent=bigFmt(P/F);}
+reg('ch8',{draw:pcalc});['#pcN','#pcR'].forEach(s=>$(s).addEventListener('input',pcalc));
+
+/* ---------- 第 9 章：骰子格與生日問題 ---------- */
+const EV=[['總和是 7',(a,b)=>a+b===7],['總和 ≥ 10',(a,b)=>a+b>=10],['至少一顆是 6',(a,b)=>a===6||b===6],['兩顆點數相同',(a,b)=>a===b],['第一顆是 6',(a,b)=>a===6],['第一顆是偶數',(a,b)=>a%2===0],['總和是偶數',(a,b)=>(a+b)%2===0]];
+const sA=$('#diceA'),sB=$('#diceB');EV.forEach((e,i)=>{sA.add(new Option(e[0],i));sB.add(new Option(e[0],i));});sA.value='0';sB.value='4';
+function drawDice(){const cv=$('#cvDice'),{ctx,w,h}=setup(cv),fa=EV[+sA.value][1],fb=EV[+sB.value][1];
+  const side=Math.min(w-40,h-36),cell=side/6,x0=(w-side)/2+14,y0=28;let nA=0,nB=0,nAB=0;
+  T(ctx,'第二顆 →',x0+side/2,14,{c:COL.ink2,s:12});
+  for(let a=1;a<=6;a++){T(ctx,String(a),x0-12,y0+(a-.5)*cell+4,{c:COL.ink2,s:12});T(ctx,String(a),x0+(a-.5)*cell,y0-4,{c:COL.ink2,s:12});
+    for(let b=1;b<=6;b++){const ia=fa(a,b),ib=fb(a,b);if(ia)nA++;if(ib)nB++;if(ia&&ib)nAB++;const x=x0+(b-1)*cell,y=y0+(a-1)*cell;
+      ctx.fillStyle=ia&&ib?COL.teal:ia?COL.blue:ib?COL.amber:COL.paper;ctx.fillRect(x+2,y+2,cell-4,cell-4);ctx.strokeStyle=COL.line;ctx.lineWidth=1;ctx.strokeRect(x+2,y+2,cell-4,cell-4);
+      T(ctx,a+'+'+b,x+cell/2,y+cell/2+4,{c:(ia||ib)?'#fff':COL.ink2,s:Math.max(10,Math.min(13,cell/3.6)),b:ia||ib});}}
+  ctx.save();ctx.translate(x0-28,y0+side/2);ctx.rotate(-Math.PI/2);T(ctx,'第一顆 →',0,0,{c:COL.ink2,s:12});ctx.restore();
+  const f=(k,n)=>k+'/'+n+' ≈ '+fx(k/n,3),nU=nA+nB-nAB,ind=nAB*36===nA*nB;
+  $('#diceOut').innerHTML='<div class="stat">P(A)<b>'+f(nA,36)+'</b></div><div class="stat">P(B)<b>'+f(nB,36)+'</b></div><div class="stat">P(A 且 B)<b>'+f(nAB,36)+'</b></div><div class="stat">P(A 或 B)<b>'+f(nU,36)+'</b></div><div class="stat">P(A | B)<b>'+(nB?f(nAB,nB):'-')+'</b></div><div class="stat">A、B 獨立嗎？<b>'+(ind?'是':'否')+'</b></div>';}
+[sA,sB].forEach(s=>s.addEventListener('change',drawDice));
+function bday(n){let p=1;for(let i=0;i<n;i++)p*=(365-i)/365;return 1-p;}
+function drawBday(){const cv=$('#cvBday'),{ctx,w,h}=setup(cv),n=+$('#bdSlider').value,L=40,R=12,Tp=12,B=30,pw=w-L-R,ph=h-Tp-B;$('#bdN').textContent=n;$('#bdP').textContent=pct(bday(n),1);
+  const sx=k=>L+(k-1)/69*pw,sy=p=>Tp+ph-p*ph;[0,.5,1].forEach(p=>T(ctx,pct(p,0),L-6,sy(p)+4,{a:'right',c:COL.ink2,s:11}));ln(ctx,L,sy(.5),w-R,sy(.5),COL.red,1.5,[5,4]);
+  [1,10,23,30,40,50,60,70].forEach(k=>T(ctx,String(k),sx(k),h-10,{c:k===23?COL.red:COL.ink2,s:11,b:k===23}));
+  ln(ctx,L,Tp+ph,w-R,Tp+ph,COL.ink,1.5);ln(ctx,L,Tp,L,Tp+ph,COL.ink,1.5);
+  ctx.beginPath();ctx.strokeStyle=COL.blue;ctx.lineWidth=2.5;for(let k=1;k<=70;k++){const X=sx(k),Y=sy(bday(k));k>1?ctx.lineTo(X,Y):ctx.moveTo(X,Y);}ctx.stroke();
+  ln(ctx,sx(n),sy(bday(n)),sx(n),Tp+ph,COL.ink2,1,[3,3]);dot(ctx,sx(n),sy(bday(n)),6,COL.amber,COL.ink);}
+$('#bdSlider').addEventListener('input',drawBday);
+reg('ch9',{draw(){drawDice();drawBday();}});
+
+/* ---------- 第 10 章：貝氏 ---------- */
+function drawBayes(){const cv=$('#cvBayes'),{ctx,w,h}=setup(cv),pv=+$('#byPrev').value/1000,se=+$('#bySens').value/1000,fp=+$('#byFP').value/1000;
+  $('#byPrevV').textContent=pct(pv,1)+'（1000 人中約 '+fx(pv*1000,0)+' 人有病）';$('#bySensV').textContent=pct(se,1)+'（有病時驗出陽性）';$('#byFPV').textContent=pct(fp,1)+'（沒病卻驗出陽性）';
+  const sick=Math.round(pv*1000),tp=Math.round(sick*se),fn=sick-tp,fpn=Math.round((1000-sick)*fp),tn=1000-sick-fpn;
+  const cols=40,rows=25,cell=Math.min(w/cols,h/rows),x0=(w-cell*cols)/2,y0=(h-cell*rows)/2,arr=[];
+  for(let i=0;i<tp;i++)arr.push(COL.red);for(let i=0;i<fn;i++)arr.push(COL.violet);for(let i=0;i<fpn;i++)arr.push(COL.amber);for(let i=0;i<tn;i++)arr.push(COL.line);
+  arr.forEach((c,i)=>{const r=Math.floor(i/cols),q=i%cols;dot(ctx,x0+(q+.5)*cell,y0+(r+.5)*cell,cell*.36,c);});
+  const post=pv*se/(pv*se+(1-pv)*fp);$('#byPos').textContent='約 '+(tp+fpn)+' 人（真的有病 '+tp+' 人）';$('#byOut').textContent=pct(post,1);}
+['#byPrev','#bySens','#byFP'].forEach(s=>$(s).addEventListener('input',drawBayes));
+reg('ch10',{draw:drawBayes});
+
+/* ---------- 第 11 章：兩顆骰子總和 ---------- */
+let sums={n:0,c:new Array(13).fill(0),tot:0};const WAYS=[0,0,1,2,3,4,5,6,5,4,3,2,1];
+function drawSum(){const cv=$('#cvSum'),{ctx,w,h}=setup(cv),L=40,R=10,Tp=16,B=28,pw=w-L-R,ph=h-Tp-B,N=sums.n||36;
+  const exp=WAYS.map(k=>N*k/36),mx=Math.max(Math.max.apply(null,sums.c),Math.max.apply(null,exp))*1.12,slot=pw/11,st=niceStep(mx,5);
+  for(let v=0;v<=mx;v+=st){const y=Tp+ph-v/mx*ph;ln(ctx,L,y,w-R,y,A(COL.ink2,.2),1);T(ctx,String(v),L-6,y+4,{a:'right',c:COL.ink2,s:11});}
+  for(let s=2;s<=12;s++){const x=L+(s-2)*slot,bw=slot*.7,bx=x+(slot-bw)/2,hh=sums.c[s]/mx*ph,eh=exp[s]/mx*ph;
+    if(hh){ctx.fillStyle=A(s===7?COL.amber:COL.blue,.75);ctx.fillRect(bx,Tp+ph-hh,bw,hh);ctx.strokeStyle=COL.ink;ctx.lineWidth=1.2;ctx.strokeRect(bx,Tp+ph-hh,bw,hh);}
+    ctx.strokeStyle=COL.red;ctx.lineWidth=1.5;ctx.setLineDash([4,3]);ctx.strokeRect(bx-2,Tp+ph-eh,bw+4,eh);ctx.setLineDash([]);
+    T(ctx,String(s),x+slot/2,Tp+ph+18,{s:13,b:s===7});}
+  ln(ctx,L,Tp+ph,w-R,Tp+ph,COL.ink,1.5);T(ctx,sums.n?'次數':'（還沒擲：虛線是 36 次時的理論次數）',L+4,11,{a:'left',c:COL.ink2,s:11});
+  $('#sumN').textContent=sums.n.toLocaleString()+' 次';$('#sumAvg').textContent=sums.n?fx(sums.tot/sums.n,3):'-';}
+$$('[data-sum]').forEach(b=>b.addEventListener('click',()=>{const k=+b.dataset.sum;if(!k)sums={n:0,c:new Array(13).fill(0),tot:0};else for(let i=0;i<k;i++){const s=1+Math.floor(Math.random()*6)+1+Math.floor(Math.random()*6);sums.c[s]++;sums.n++;sums.tot+=s;}drawSum();}));
+reg('ch11',{draw:drawSum});
+
+/* ---------- 第 12 章：高爾頓板與二項分配 ---------- */
+const gal=new Galton($('#cvGalton'),{rows:10,speed:12,theory:true});
+reg('ch12',{init(){gal.resize();},resize(){gal.resize();drawBinom();},draw(){gal.resize();drawBinom();},enter(){if(gal.balls.length||gal.pending)gal.start();},leave(){gal.stop();}});
+$('#gRows').addEventListener('input',e=>{$('#gRowsV').textContent=e.target.value;gal.stop();gal.reset(+e.target.value);gal.resize();});
+$('#gTheory').addEventListener('change',e=>{gal.theory=e.target.checked;gal.draw();});
+$$('[data-g]').forEach(b=>b.addEventListener('click',()=>{const k=+b.dataset.g;if(!k){gal.stop();gal.reset();gal.resize();}else if(reduced)gal.fillInstant(k);else gal.drop(k);}));
+function drawBinom(){const cv=$('#cvBinom'),{ctx,w,h}=setup(cv),n=+$('#bnN').value,p=+$('#bnP').value/100;$('#bnNV').textContent=n;$('#bnPV').textContent=p.toFixed(2);
+  const pm=binom(n,p),L=40,R=10,Tp=14,B=28,pw=w-L-R,ph=h-Tp-B,mx=Math.max.apply(null,pm)*1.12,slot=pw/(n+1),st=niceStep(mx,4);
+  for(let v=0;v<=mx+1e-9;v+=st){const y=Tp+ph-v/mx*ph;ln(ctx,L,y,w-R,y,A(COL.ink2,.2),1);T(ctx,fx(v,st<.1?2:1),L-6,y+4,{a:'right',c:COL.ink2,s:11});}
+  pm.forEach((q,k)=>{const hh=q/mx*ph,bw=Math.max(1,slot*.8);ctx.fillStyle=A(COL.teal,.7);ctx.fillRect(L+k*slot+(slot-bw)/2,Tp+ph-hh,bw,hh);});
+  const lstep=n>40?10:n>15?5:n>8?2:1;for(let k=0;k<=n;k+=lstep)T(ctx,String(k),L+(k+.5)*slot,Tp+ph+17,{c:COL.ink2,s:11});
+  ln(ctx,L,Tp+ph,w-R,Tp+ph,COL.ink,1.5);const mxp=L+(n*p+.5)*slot;ln(ctx,mxp,Tp,mxp,Tp+ph,COL.red,2,[5,4]);T(ctx,'平均 np',mxp+4,Tp+10,{a:'left',c:COL.red,s:11,b:true});T(ctx,'機率',L+4,10,{a:'left',c:COL.ink2,s:11});
+  $('#bnMean').textContent=fx(n*p,2);$('#bnSD').textContent=fx(Math.sqrt(n*p*(1-p)),2);}
+['#bnN','#bnP'].forEach(s=>$(s).addEventListener('input',drawBinom));
+
+/* ---------- 第 13 章：常態分配 ---------- */
+let nm={a:158,b:172};
+function drawNorm(){const cv=$('#cvNorm'),{ctx,w,h}=setup(cv),mu=+$('#nmMu').value,sd=+$('#nmSd').value;$('#nmMuV').textContent=mu;$('#nmSdV').textContent=sd;
+  const L=14,R=14,Tp=14,B=34,pw=w-L-R,ph=h-Tp-B,x0=110,x1=220,sx=x=>L+(x-x0)/(x1-x0)*pw,ymax=npdf(0,0,3)*1.08,sy=y=>Tp+ph-y/ymax*ph;
+  for(let t=x0;t<=x1;t+=10){ln(ctx,sx(t),Tp+ph,sx(t),Tp+ph+5,COL.ink,1);if(w>480||t%20===0)T(ctx,String(t),sx(t),Tp+ph+18,{c:COL.ink2,s:11});}
+  T(ctx,'身高（公分）',w-R,h-2,{a:'right',c:COL.ink2,s:11});
+  const a=Math.max(x0,Math.min(nm.a,nm.b)),b=Math.min(x1,Math.max(nm.a,nm.b));
+  ctx.beginPath();ctx.moveTo(sx(a),sy(0));for(let x=a;x<=b;x+=0.25)ctx.lineTo(sx(x),sy(npdf(x,mu,sd)));ctx.lineTo(sx(b),sy(npdf(b,mu,sd)));ctx.lineTo(sx(b),sy(0));ctx.closePath();ctx.fillStyle=A(COL.amber,.45);ctx.fill();
+  ctx.beginPath();for(let x=x0;x<=x1;x+=0.25){const X=sx(x),Y=sy(npdf(x,mu,sd));x===x0?ctx.moveTo(X,Y):ctx.lineTo(X,Y);}ctx.strokeStyle=COL.blue;ctx.lineWidth=2.5;ctx.stroke();
+  ln(ctx,L,Tp+ph,w-R,Tp+ph,COL.ink,1.5);ln(ctx,sx(mu),sy(npdf(mu,mu,sd)),sx(mu),Tp+ph,COL.red,1.5,[5,4]);T(ctx,'μ',sx(mu)+5,sy(npdf(mu,mu,sd))+2,{a:'left',c:COL.red,b:true,s:14});
+  [-3,-2,-1,1,2,3].forEach(k=>{const x=mu+k*sd;if(x>x0&&x<x1){ln(ctx,sx(x),Tp+ph-6,sx(x),Tp+ph+2,COL.red,2);}});
+  const area=Phi((b-mu)/sd)-Phi((a-mu)/sd);$('#nmRange').textContent=fx(a,1)+' ～ '+fx(b,1)+' 公分';$('#nmArea').textContent=pct(area,1);}
+['#nmMu','#nmSd'].forEach(s=>$(s).addEventListener('input',()=>{if(nm.k){const mu=+$('#nmMu').value,sd=+$('#nmSd').value;nm.a=mu-nm.k*sd;nm.b=mu+nm.k*sd;}drawNorm();}));
+$$('[data-nk]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.nk;if(k==='c'){nm.k=0;nm.a=+$('#nmA').value;nm.b=+$('#nmB').value;}else{nm.k=+k;const mu=+$('#nmMu').value,sd=+$('#nmSd').value;nm.a=mu-nm.k*sd;nm.b=mu+nm.k*sd;$('#nmA').value=nm.a;$('#nmB').value=nm.b;}drawNorm();}));
+nm.k=1;nm.a=158;nm.b=172;
+reg('ch13',{draw:drawNorm});
+
+/* ---------- 第 14 章：中央極限定理 ---------- */
+function mkPop(v,wf){const p=v.map(wf),s=p.reduce((a,b)=>a+b,0);const q=p.map(x=>x/s);const mu=v.reduce((a,x,i)=>a+x*q[i],0),sd=Math.sqrt(v.reduce((a,x,i)=>a+(x-mu)*(x-mu)*q[i],0));const cdf=[];q.reduce((a,x,i)=>(cdf[i]=a+x),0);return {v,q,mu,sd,cdf};}
+const r13=Array.from({length:13},(_,i)=>i);
+const POPS={uniform:mkPop([1,2,3,4,5,6],()=>1),skew:mkPop(r13,x=>Math.exp(-x/2.2)),bimodal:mkPop(r13,x=>Math.exp(-Math.pow(x-2.5,2)/2)+Math.exp(-Math.pow(x-9.5,2)/2)),coin:mkPop([0,1],()=>1)};
+let clt={means:[]};
+function samp(P){const u=Math.random();for(let i=0;i<P.cdf.length;i++)if(u<=P.cdf[i])return P.v[i];return P.v[P.v.length-1];}
+function drawCLT(){const cv=$('#cvCLT'),{ctx,w,h}=setup(cv),P=POPS[$('#cltPop').value],n=+$('#cltN').value;$('#cltNV').textContent=n;
+  const vmin=P.v[0],vmax=P.v[P.v.length-1],d0=vmin-.6,d1=vmax+.6,L=12,R=12,sx=x=>L+(x-d0)/(d1-d0)*(w-L-R);
+  T(ctx,'母體（原本的形狀）',L,16,{a:'left',b:true,s:12});const pTop=26,pBot=112,qm=Math.max.apply(null,P.q);
+  P.v.forEach((x,i)=>{const bw=Math.max(3,Math.min(26,(w-L-R)/(vmax-vmin+1.2)*.6)),hh=P.q[i]/qm*(pBot-pTop);ctx.fillStyle=A(COL.violet,.6);ctx.fillRect(sx(x)-bw/2,pBot-hh,bw,hh);});
+  ln(ctx,L,pBot,w-R,pBot,COL.ink,1.2);ln(ctx,sx(P.mu),pTop,sx(P.mu),pBot,COL.red,1.5,[4,3]);
+  const hTop=156,hBot=h-30;T(ctx,'樣本平均數的分布（每組抽 '+n+' 個，算平均）',L,hTop-18,{a:'left',b:true,s:12});
+  const bw=Math.ceil(((vmax-vmin)/60)*n)/n||1/n,nb=Math.round((vmax-vmin)/bw)+1,c=new Array(nb).fill(0);
+  clt.means.forEach(m=>{const i=Math.round((m-vmin)/bw);if(i>=0&&i<nb)c[i]++;});
+  const K=clt.means.length,se=P.sd/Math.sqrt(n),ex=i=>K*bw*npdf(vmin+i*bw,P.mu,se),mx=Math.max(1,Math.max.apply(null,c),K>=30?ex(Math.round((P.mu-vmin)/bw)):0)*1.08;
+  const pxw=Math.max(1,(sx(vmin+bw)-sx(vmin))-1);
+  c.forEach((k,i)=>{if(!k)return;const x=sx(vmin+i*bw),hh=k/mx*(hBot-hTop);ctx.fillStyle=A(COL.teal,.75);ctx.fillRect(x-pxw/2,hBot-hh,pxw,hh);});
+  if(K>=30){ctx.beginPath();for(let x=d0;x<=d1;x+=(d1-d0)/300){const Y=hBot-K*bw*npdf(x,P.mu,se)/mx*(hBot-hTop);x===d0?ctx.moveTo(sx(x),Y):ctx.lineTo(sx(x),Math.max(hTop-6,Y));}ctx.strokeStyle=COL.red;ctx.lineWidth=2;ctx.stroke();T(ctx,'紅線＝常態曲線',w-R,hTop-18,{a:'right',c:COL.red,s:11});}
+  ln(ctx,L,hBot,w-R,hBot,COL.ink,1.5);
+  const st=vmax-vmin>6?2:vmax-vmin>1?1:.5;for(let x=vmin;x<=vmax+1e-9;x+=st){ln(ctx,sx(x),hBot,sx(x),hBot+5,COL.ink,1);T(ctx,String(x),sx(x),hBot+18,{c:COL.ink2,s:11});}
+  if(!K)T(ctx,'按「抽 1000 組」看看',w/2,(hTop+hBot)/2,{c:COL.ink2,s:14});
+  const m=K?clt.means.reduce((a,b)=>a+b,0)/K:0,s=K>1?Math.sqrt(clt.means.reduce((a,b)=>a+(b-m)*(b-m),0)/(K-1)):0;
+  $('#cltK').textContent=K.toLocaleString();$('#cltM').textContent=K?fx(m,3)+'（母體 μ = '+fx(P.mu,2)+'）':'-';$('#cltS').textContent=K>1?fx(s,3):'-';$('#cltT').textContent=fx(se,3);}
+$$('[data-clt]').forEach(b=>b.addEventListener('click',()=>{const k=+b.dataset.clt,P=POPS[$('#cltPop').value],n=+$('#cltN').value;if(!k)clt.means=[];else{if(clt.means.length+k>30000)clt.means=[];for(let j=0;j<k;j++){let s=0;for(let i=0;i<n;i++)s+=samp(P);clt.means.push(s/n);}}drawCLT();}));
+['#cltPop','#cltN'].forEach(s=>$(s).addEventListener('input',()=>{clt.means=[];drawCLT();}));
+reg('ch14',{draw:drawCLT});
+
+/* ---------- 第 15 章：信賴區間 ---------- */
+let ci={list:[],k:0,hit:0};const CI_MU=160,CI_SE=8/5;
+function drawCI(){const cv=$('#cvCI'),{ctx,w,h}=setup(cv),L=14,R=14,Tp=10,B=32,pw=w-L-R,ph=h-Tp-B,x0=153,x1=167,sx=x=>L+(x-x0)/(x1-x0)*pw;
+  for(let t=x0+1;t<x1;t+=2){ln(ctx,sx(t),Tp,sx(t),Tp+ph,A(COL.ink2,.15),1);T(ctx,String(t),sx(t),Tp+ph+18,{c:COL.ink2,s:11});}
+  ln(ctx,L,Tp+ph,w-R,Tp+ph,COL.ink,1.5);
+  const show=ci.list.slice(-100),rowH=Math.min(12,ph/Math.max(show.length,1));
+  show.forEach((c,i)=>{const y=Tp+(i+.5)*rowH,col=c.hit?COL.teal:COL.red;ln(ctx,sx(c.lo),y,sx(c.hi),y,col,Math.max(1.5,Math.min(4,rowH*.5)));dot(ctx,sx(c.m),y,Math.max(1.5,Math.min(3.5,rowH*.3)),col);});
+  ln(ctx,sx(CI_MU),Tp,sx(CI_MU),Tp+ph,COL.blue,2.5);T(ctx,'真值 160',sx(CI_MU)+5,Tp+ph-6,{a:'left',c:COL.blue,b:true,s:12});
+  if(!ci.k)T(ctx,'按下按鈕，讓調查員開始抽樣',w/2,Tp+ph/2,{c:COL.ink2,s:14});
+  $('#ciK').textContent=ci.k.toLocaleString();$('#ciHit').textContent=ci.k?ci.hit+' / '+ci.k+' = '+pct(ci.hit/ci.k,1):'-';}
+$$('[data-ci]').forEach(b=>b.addEventListener('click',()=>{const k=+b.dataset.ci,z=+$('#ciLevel').value;if(!k)ci={list:[],k:0,hit:0};else for(let i=0;i<k;i++){const m=CI_MU+CI_SE*randn(),lo=m-z*CI_SE,hi=m+z*CI_SE,hit=lo<=CI_MU&&CI_MU<=hi;ci.list.push({m,lo,hi,hit});ci.k++;if(hit)ci.hit++;}if(ci.list.length>100)ci.list=ci.list.slice(-100);drawCI();}));
+$('#ciLevel').addEventListener('change',()=>{ci={list:[],k:0,hit:0};drawCI();});
+reg('ch15',{draw:drawCI});
+
+/* ---------- 第 16 章：硬幣檢定 ---------- */
+let htPrevN=20;
+function drawTest(){const cv=$('#cvTest'),{ctx,w,h}=setup(cv),n=+$('#htN').value,kS=$('#htK');
+  if(n!==htPrevN){kS.max=n;kS.value=Math.round(+kS.value/htPrevN*n);htPrevN=n;}const k=Math.min(+kS.value,n);
+  $('#htNV').textContent=n;$('#htKV').textContent=k;
+  const pm=binom(n,.5),d=Math.abs(k-n/2);let p=0;const ext=pm.map((q,i)=>{const e=Math.abs(i-n/2)>=d-1e-9;if(e)p+=q;return e;});p=Math.min(1,p);
+  const L=40,R=10,Tp=16,B=28,pw=w-L-R,ph=h-Tp-B,mx=Math.max.apply(null,pm)*1.12,slot=pw/(n+1),st=niceStep(mx,4);
+  for(let v=0;v<=mx+1e-9;v+=st){const y=Tp+ph-v/mx*ph;ln(ctx,L,y,w-R,y,A(COL.ink2,.2),1);T(ctx,fx(v,2),L-6,y+4,{a:'right',c:COL.ink2,s:11});}
+  pm.forEach((q,i)=>{const hh=q/mx*ph,bw=Math.max(1,slot*.8);ctx.fillStyle=ext[i]?COL.red:A(COL.ink2,.45);ctx.fillRect(L+i*slot+(slot-bw)/2,Tp+ph-hh,bw,hh);});
+  const ls=n>50?10:n>20?5:2;for(let i=0;i<=n;i+=ls)T(ctx,String(i),L+(i+.5)*slot,Tp+ph+17,{c:COL.ink2,s:11});
+  ln(ctx,L,Tp+ph,w-R,Tp+ph,COL.ink,1.5);const xk=L+(k+.5)*slot;T(ctx,'你的結果 ▼',xk,Tp+6,{c:COL.red,b:true,s:12,a:xk>w-60?'right':xk<80?'left':'center'});
+  T(ctx,'如果硬幣公平，擲 '+n+' 次得到各種正面次數的機率',L+4,11,{a:'left',c:COL.ink2,s:11});
+  $('#htP').textContent=p<0.0001?'< 0.0001':fx(p,4);const rej=p<=0.05;const D=$('#htD');D.textContent=rej?'拒絕 H₀：硬幣可能不公平':'不拒絕 H₀：證據不足';D.style.color=rej?COL.red:COL.teal;}
+['#htN','#htK'].forEach(s=>$(s).addEventListener('input',drawTest));
+reg('ch16',{draw:drawTest});
+
+/* ---------- 第 17 章：t 分配與卡方 ---------- */
+function drawT(){const cv=$('#cvT'),{ctx,w,h}=setup(cv),L=14,R=14,Tp=14,B=30,pw=w-L-R,ph=h-Tp-B,sx=x=>L+(x+4)/8*pw,ym=0.42,sy=y=>Tp+ph-y/ym*ph;
+  const tp=x=>0.36755*Math.pow(1+x*x/3,-2);
+  ctx.beginPath();for(let x=-4;x<=4;x+=0.02){const X=sx(x),Y=sy(npdf(x,0,1));x===-4?ctx.moveTo(X,Y):ctx.lineTo(X,Y);}ctx.strokeStyle=COL.blue;ctx.lineWidth=2.5;ctx.stroke();
+  ctx.beginPath();for(let x=-4;x<=4;x+=0.02){const X=sx(x),Y=sy(tp(x));x===-4?ctx.moveTo(X,Y):ctx.lineTo(X,Y);}ctx.strokeStyle=COL.red;ctx.lineWidth=2.5;ctx.setLineDash([7,5]);ctx.stroke();ctx.setLineDash([]);
+  ln(ctx,L,Tp+ph,w-R,Tp+ph,COL.ink,1.5);for(let t=-4;t<=4;t++)T(ctx,String(t),sx(t),Tp+ph+18,{c:COL.ink2,s:11});
+  T(ctx,'— 標準常態',w-R,16,{a:'right',c:COL.blue,s:12,b:true});T(ctx,'- - t 分配（自由度 3）',w-R,34,{a:'right',c:COL.red,s:12,b:true});}
+const chiDef=[8,9,11,7,10,15];
+$('#chiInputs').innerHTML=chiDef.map((v,i)=>'<label>'+(i+1)+' 點 <input type="number" min="0" max="999" value="'+v+'" data-chi="'+i+'" style="width:62px"></label>').join('');
+function drawChi(){const O=$$('[data-chi]').map(x=>Math.max(0,Math.floor(+x.value||0))),N=O.reduce((a,b)=>a+b,0),E=N/6;
+  const cv=$('#cvChi'),{ctx,w,h}=setup(cv),L=40,R=10,Tp=16,B=28,pw=w-L-R,ph=h-Tp-B,mx=Math.max(E,Math.max.apply(null,O),1)*1.15,slot=pw/6,st=niceStep(mx,4);
+  for(let v=0;v<=mx;v+=st){const y=Tp+ph-v/mx*ph;ln(ctx,L,y,w-R,y,A(COL.ink2,.2),1);T(ctx,String(v),L-6,y+4,{a:'right',c:COL.ink2,s:11});}
+  O.forEach((o,i)=>{const bw=slot*.6,x=L+i*slot+(slot-bw)/2,hh=o/mx*ph;ctx.fillStyle=A(COL.blue,.7);ctx.fillRect(x,Tp+ph-hh,bw,hh);ctx.strokeStyle=COL.ink;ctx.lineWidth=1.2;ctx.strokeRect(x,Tp+ph-hh,bw,hh);T(ctx,(i+1)+' 點',L+(i+.5)*slot,Tp+ph+18,{s:12});T(ctx,String(o),L+(i+.5)*slot,Tp+ph-hh-5,{b:true,s:12});});
+  ln(ctx,L,Tp+ph-E/mx*ph,w-R,Tp+ph-E/mx*ph,COL.red,2,[6,4]);T(ctx,'預期 '+fx(E,1),w-R,Tp+ph-E/mx*ph-5,{a:'right',c:COL.red,s:11,b:true});ln(ctx,L,Tp+ph,w-R,Tp+ph,COL.ink,1.5);
+  $('#chiTot').textContent=N;const D=$('#chiD');
+  if(!N){$('#chiStat').textContent=$('#chiP').textContent='-';D.textContent='-';return;}
+  const chi=O.reduce((a,o)=>a+(o-E)*(o-E)/E,0),p=gammaQ(2.5,chi/2);
+  $('#chiStat').textContent=fx(chi,2);$('#chiP').textContent=p<0.0001?'< 0.0001':fx(p,4);D.textContent=p<=.05?'拒絕 H₀：骰子可能不公平':'不拒絕 H₀：看不出問題';D.style.color=p<=.05?COL.red:COL.teal;}
+$('#chiInputs').addEventListener('input',drawChi);
+reg('ch17',{draw(){drawT();drawChi();}});
+
+/* ---------- 第 18 章：迴歸 ---------- */
+const REG={
+  study:{xl:'每天讀書時間（小時）',yl:'成績',x0:0,x1:10,y0:0,y1:100,gen:r=>Array.from({length:16},()=>{const x=.4+r()*9.2;return [x,Math.max(3,Math.min(99,40+5.2*x+8*nr(r)))];})},
+  neg:{xl:'每天滑手機（小時）',yl:'睡眠（小時）',x0:0,x1:8,y0:4,y1:10,gen:r=>Array.from({length:16},()=>{const x=.3+r()*7.4;return [x,Math.max(4.2,Math.min(9.9,9.3-.45*x+.45*nr(r)))];})},
+  none:{xl:'x',yl:'y',x0:0,x1:10,y0:0,y1:100,gen:r=>Array.from({length:18},()=>[.4+r()*9.2,10+r()*80])},
+  curve:{xl:'x',yl:'y',x0:0,x1:10,y0:0,y1:100,gen:r=>Array.from({length:17},(_,i)=>{const x=.4+i*9.2/16;return [x,Math.max(2,Math.min(98,12+3*Math.pow(x-5,2)+5*nr(r)))];})}};
+function nr(r){let u=0,v=0;while(!u)u=r();while(!v)v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+let rg={key:'study',pts:REG.study.gen(rng(7))};
+const RM={L:44,R:12,Tp:12,B:40};
+function regMap(w,h){const c=REG[rg.key],pw=w-RM.L-RM.R,ph=h-RM.Tp-RM.B;return {c,sx:x=>RM.L+(x-c.x0)/(c.x1-c.x0)*pw,sy:y=>RM.Tp+ph-(y-c.y0)/(c.y1-c.y0)*ph,ix:X=>c.x0+(X-RM.L)/pw*(c.x1-c.x0),iy:Y=>c.y0+(RM.Tp+ph-Y)/ph*(c.y1-c.y0),pw,ph};}
+function drawReg(){const cv=$('#cvReg'),{ctx,w,h}=setup(cv),M=regMap(w,h),c=M.c;
+  const xs=niceStep(c.x1-c.x0,w<500?5:10),ys=niceStep(c.y1-c.y0,5);
+  for(let x=c.x0;x<=c.x1+1e-9;x+=xs){ln(ctx,M.sx(x),RM.Tp,M.sx(x),RM.Tp+M.ph,A(COL.ink2,.15),1);T(ctx,String(Math.round(x*10)/10),M.sx(x),RM.Tp+M.ph+16,{c:COL.ink2,s:11});}
+  for(let y=c.y0;y<=c.y1+1e-9;y+=ys){ln(ctx,RM.L,M.sy(y),w-RM.R,M.sy(y),A(COL.ink2,.15),1);T(ctx,String(Math.round(y*10)/10),RM.L-6,M.sy(y)+4,{a:'right',c:COL.ink2,s:11});}
+  ln(ctx,RM.L,RM.Tp+M.ph,w-RM.R,RM.Tp+M.ph,COL.ink,1.5);ln(ctx,RM.L,RM.Tp,RM.L,RM.Tp+M.ph,COL.ink,1.5);
+  T(ctx,c.xl,RM.L+M.pw/2,h-6,{c:COL.ink2,s:12});ctx.save();ctx.translate(12,RM.Tp+M.ph/2);ctx.rotate(-Math.PI/2);T(ctx,c.yl,0,0,{c:COL.ink2,s:12});ctx.restore();
+  const n=rg.pts.length;let st=null;
+  if(n>=2){const mx=rg.pts.reduce((a,p)=>a+p[0],0)/n,my=rg.pts.reduce((a,p)=>a+p[1],0)/n;let sxx=0,syy=0,sxy=0;rg.pts.forEach(p=>{sxx+=(p[0]-mx)*(p[0]-mx);syy+=(p[1]-my)*(p[1]-my);sxy+=(p[0]-mx)*(p[1]-my);});
+    if(sxx>1e-9){const b=sxy/sxx,a=my-b*mx,r=syy>1e-9?sxy/Math.sqrt(sxx*syy):0;st={a,b,r};
+      ctx.save();ctx.beginPath();ctx.rect(RM.L,RM.Tp,M.pw,M.ph);ctx.clip();
+      if($('#regRes').checked)rg.pts.forEach(p=>ln(ctx,M.sx(p[0]),M.sy(p[1]),M.sx(p[0]),M.sy(a+b*p[0]),COL.amber,1.5,[3,3]));
+      ln(ctx,M.sx(c.x0),M.sy(a+b*c.x0),M.sx(c.x1),M.sy(a+b*c.x1),COL.red,2.5);ctx.restore();}}
+  rg.pts.forEach(p=>dot(ctx,M.sx(p[0]),M.sy(p[1]),5.5,A(COL.blue,.85),COL.ink));
+  if(!n)T(ctx,'點一下圖上任何地方新增資料點',RM.L+M.pw/2,RM.Tp+M.ph/2,{c:COL.ink2,s:14});
+  const d=Math.abs(c.y1-c.y0)<20?2:1;
+  $('#regR').textContent=st?fx(st.r,3):'-';$('#regR2').textContent=st?fx(st.r*st.r,3):'-';$('#regEq').textContent=st?'ŷ = '+fx(st.a,d)+(st.b<0?' − ':' + ')+fx(Math.abs(st.b),d+1)+'x':'需要 2 個以上的點';}
+$('#cvReg').addEventListener('click',e=>{const cv=$('#cvReg'),rc=cv.getBoundingClientRect(),X=e.clientX-rc.left,Y=e.clientY-rc.top,M=regMap(rc.width,+cv.dataset.h);
+  const i=rg.pts.findIndex(p=>Math.hypot(M.sx(p[0])-X,M.sy(p[1])-Y)<13);
+  if(i>=0)rg.pts.splice(i,1);else if(X>=RM.L&&X<=rc.width-RM.R&&Y>=RM.Tp&&Y<=RM.Tp+M.ph)rg.pts.push([M.ix(X),M.iy(Y)]);drawReg();});
+$$('[data-reg]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.reg;if(k==='clear')rg.pts=[];else rg={key:k,pts:REG[k].gen(rng(Math.floor(Math.random()*1e6)))};drawReg();}));
+$('#regRes').addEventListener('change',drawReg);
+reg('ch18',{draw:drawReg});
+
+/* ---------- 第 19 章：p 值駭客 ---------- */
+let hack=[];
+function runHack(){hack=Array.from({length:20},()=>Math.random());drawHack();}
+function drawHack(){const cv=$('#cvHack'),{ctx,w,h}=setup(cv),cols=10,cw=w/cols,rh=(h-10)/2;let k=0;
+  hack.forEach((p,i)=>{const r=Math.floor(i/cols),q=i%cols,x=(q+.5)*cw,y=r*rh+rh*.42,sig=p<.05;if(sig)k++;
+    ctx.save();ctx.translate(x,y);ctx.rotate(-.35);ctx.beginPath();ctx.ellipse(0,0,Math.min(cw*.3,16),Math.min(cw*.2,11),0,0,Math.PI*2);ctx.fillStyle='hsl('+(i*18)+',72%,56%)';ctx.fill();ctx.strokeStyle=COL.ink;ctx.lineWidth=1;ctx.stroke();ctx.restore();
+    if(sig){dot(ctx,x,y,Math.min(cw*.42,22),null,COL.red);ctx.lineWidth=1;}
+    T(ctx,'p='+(p<.01?p.toFixed(3):p.toFixed(2)),x,y+rh*.42,{s:w<500?9.5:11.5,c:sig?COL.red:COL.ink2,b:sig});});
+  $('#hackN').textContent=k+' 種'+(k?'（全是巧合！）':'');}
+$('#hackBtn').addEventListener('click',runHack);
+reg('ch19',{init:()=>{hack=Array.from({length:20},()=>Math.random());},draw:drawHack});
+
+/* ---------- 名詞辭典 ---------- */
+const GL=[
+['統計學','Statistics','收集、整理、分析資料，在不確定中做判斷的學問。','源自拉丁文 status（狀態）、義大利文 statista（政治家）；1749 年阿亨瓦爾用德文 Statistik 稱「國家學」。中文譯名由日本定下。',1],
+['資料','Data','觀察、測量得到的事實。','拉丁文 datum「被給予的東西」。',2],
+['母體','Population','想研究的全部對象。','原意「人口」，因統計最早研究人口。中文「母體」取其「生出樣本」之意。',2],
+['樣本','Sample','實際取得資料的那一部分對象。','與 example（例子）同源，意為「拿出來當代表的一份」。',2],
+['參數／統計量','Parameter / Statistic','描述母體的數字／由樣本算出的數字。','parameter 來自希臘文 para（旁邊）＋ metron（測量）。',2],
+['變數','Variable','會隨對象而改變的特徵，例如身高、性別。','vary（變化）＋ -able（能夠）。',2],
+['直方圖','Histogram','把數值資料分組、柱子相連的圖。','1891 年皮爾森創造，可能取自希臘文 histos（直立的桿子）。',3],
+['平均數','Mean','總和除以個數，資料的平衡點。','古法文 meien「中間的」。符號 μ 是希臘字母 m。',4],
+['中位數','Median','排序後正中間的值。','拉丁文 medianus「在中間的」，1880 年代由高爾頓推廣。',4],
+['眾數','Mode','出現次數最多的值。','1895 年皮爾森取自法文 à la mode「流行的」。',4],
+['離群值','Outlier','和其他資料差很多的值。','out（外面）＋ lie（躺）：躺在群體外面的點。',4],
+['變異數','Variance','偏差平方的平均。','1918 年費雪命名，來自 vary（變化）。',5],
+['標準差','Standard deviation','變異數開根號，大約是「一般人離平均多遠」。','1893 年皮爾森命名；符號 σ 是希臘字母 s。',5],
+['自由度','Degrees of freedom','計算時可以自由變動的數值個數。','1922 年由費雪普及。',5],
+['百分位數／PR 值','Percentile / Percentile rank','贏過多少百分比的人。','拉丁文 per centum「每一百」。',6],
+['四分位數','Quartile','把排序資料切成四等份的三個切點。','拉丁文 quartus「第四」。',6],
+['盒鬚圖','Box plot','用最小值、Q1、中位數、Q3、最大值畫成的圖。','塔基在 1970 年代推廣，whisker 是貓的鬍鬚。',6],
+['偏態','Skewness','分布不對稱、尾巴拖向一邊。','skew 是「歪斜」。尾巴往哪邊，就叫哪邊偏。',6],
+['z 分數','z-score','比平均高出幾個標準差。','又稱標準分數；轉換的動作叫「標準化」。',6],
+['機率','Probability','某件事發生的可能性，介於 0 到 1。','拉丁文 probabilis「值得相信的」。1654 年帕斯卡與費馬的通信是機率論起點。',7],
+['樣本空間','Sample space','所有可能結果的集合。','把每次試驗「可能取得的樣本」全部放在一起。',7],
+['事件','Event','樣本空間中我們關心的結果組合。','拉丁文 eventus「結果、發生」。',7],
+['大數法則','Law of large numbers','試驗次數越多，結果的比例越接近真正的機率。','白努利 1713 年證明，卜瓦松 1837 年命名。',7],
+['賭徒謬誤','Gambler\'s fallacy','誤以為獨立事件會「補償」之前的結果。','1913 年蒙地卡羅賭場輪盤連開 26 次黑色。',7],
+['階乘','Factorial','n × (n−1) × … × 1，寫成 n!。','1808 年克蘭普使用驚嘆號。',8],
+['排列／組合','Permutation / Combination','順序有關／順序無關的選法數。','permute 拉丁文「徹底改變」；combine「兩兩結合」。',8],
+['獨立','Independence','一件事發不發生不影響另一件的機率。','P(A 且 B) = P(A)P(B)。',9],
+['互斥','Mutually exclusive','兩件事不可能同時發生。','mutual（互相）＋ exclusive（排除）。',9],
+['條件機率','Conditional probability','已知 B 發生時 A 的機率，寫成 P(A | B)。','想法：把世界縮小成 B。',9],
+['貝氏定理','Bayes\' theorem','用新證據更新原本機率的公式。','貝葉斯牧師的遺稿，1763 年由普萊斯發表。',10],
+['先驗／後驗機率','Prior / Posterior','看到證據前／後的機率。','拉丁文 a priori（從前面來）、a posteriori（從後面來）。',10],
+['敏感度／偽陽性','Sensitivity / False positive','有病驗出陽性的比例／沒病卻驗出陽性。','偽陽性率 = 1 − 特異度。',10],
+['隨機變數','Random variable','把隨機結果對應成數字的規則。','random 源自古法文 randon「急衝、亂跑」。',11],
+['期望值','Expected value','長期平均，Σ 值 × 機率。','1657 年惠更斯的機率書中出現「期望」的概念。',11],
+['白努利試驗','Bernoulli trial','只有成功、失敗兩種結果的試驗。','以雅各布・白努利命名。',12],
+['二項分配','Binomial distribution','n 次獨立白努利試驗中成功次數的分配。','拉丁文 bi（二）＋ nomen（項）。',12],
+['常態分配','Normal distribution','左右對稱的鐘形分配，由 μ 和 σ 決定。','棣美弗 1733 年發現，高斯用於誤差，又稱高斯分配；「normal」由高爾頓、皮爾森等人推廣。',13],
+['68–95–99.7 法則','Empirical rule','常態分配中 ±1、2、3 個標準差內約占 68%、95%、99.7%。','又稱經驗法則。',13],
+['抽樣偏誤','Sampling bias','樣本不能代表母體造成的系統性錯誤。','1936 年《文學文摘》民調失敗是經典案例。',14],
+['標準誤','Standard error','樣本統計量（如平均數）的標準差，σ/√n。','「誤」指估計的誤差。',14],
+['中央極限定理','Central limit theorem','樣本夠大時，樣本平均數接近常態分配。','波利亞 1920 年命名，「中央」指核心、最重要。',14],
+['信賴區間','Confidence interval','用樣本估計參數的一段範圍，附上可信程度。','1937 年奈曼提出。',15],
+['誤差範圍','Margin of error','信賴區間「±」後面的那一段。','民調常說的「抽樣誤差」。',15],
+['假設','Hypothesis','為了檢驗而先提出的說法。','希臘文 hypo（下面）＋ thesis（放置）。',16],
+['虛無假設／對立假設','Null / Alternative hypothesis','H₀：沒有效果；H₁：有效果。','null 是「零、沒有」，費雪 1935 年使用。',16],
+['p 值','p-value','若 H₀ 為真，看到同樣極端或更極端結果的機率。','p 即 probability；0.05 的習慣來自費雪 1925 年的書。',16],
+['顯著水準','Significance level (α)','拒絕 H₀ 的門檻，常用 0.05。','significant 原意「有所指示的」，不等於「重要」。',16],
+['型一／型二錯誤','Type I / Type II error','冤枉好人（錯誤拒絕 H₀）／放走壞人（沒拒絕錯的 H₀）。','由奈曼與皮爾森（艾貢）在 1930 年代提出。',16],
+['檢定力','Power','H₀ 錯誤時能正確拒絕它的機率，1 − β。','power：偵測效果的「力量」。',16],
+['t 檢定','t-test','小樣本、σ 未知時比較平均數的檢定。','戈塞 1908 年以筆名「Student」發表。',17],
+['卡方檢定','Chi-square test','比較觀察次數和預期次數的檢定。','皮爾森 1900 年提出，χ 是希臘字母。',17],
+['相關係數','Correlation coefficient (r)','兩變數直線關係的方向與強弱，介於 −1 到 1。','高爾頓 1888 年提出 co-relation，公式由皮爾森完成。',18],
+['迴歸','Regression','用一條線（或模型）以 x 預測 y。','高爾頓 1886 年發現子女身高「迴歸」平均。',18],
+['最小平方法','Least squares','使殘差平方和最小的配適方法。','勒讓德 1805 年發表。',18],
+['殘差','Residual','實際值減預測值。','拉丁文 residuum「剩下的」。',18],
+['干擾變數','Confounding variable','同時影響兩個變數、造成假相關的第三者。','confound 拉丁文「混在一起」，也譯混淆變數。',18],
+['辛普森悖論','Simpson\'s paradox','分組看和合起來看，結論相反。','辛普森 1951 年描述。',19],
+['倖存者偏差','Survivorship bias','只看到「存活下來」的資料而下錯結論。','二戰沃德分析轟炸機彈孔。',19],
+['多重比較','Multiple comparisons','檢定次數太多，總會有巧合的顯著結果。','常用邦費羅尼校正。',19],
+['隨機分派','Random assignment','用抽籤決定受試者分組，是證明因果的關鍵。','費雪在農業試驗中確立。',20],
+['安慰劑','Placebo','沒有真正藥效的假藥。','拉丁文「我會讓你高興」。',20],
+['雙盲','Double-blind','受試者和評估者都不知道分組。','「盲」指看不到分組。',20]];
+function renderGloss(){const q=($('#glossSearch').value||'').trim().toLowerCase();
+  $('#glossList').innerHTML=GL.filter(g=>!q||g.join(' ').toLowerCase().indexOf(q)>=0).map(g=>'<div class="gl"><div class="t">'+g[0]+'<span class="en">'+g[1]+'</span> <a href="#ch'+g[4]+'" style="font-size:13px">第 '+g[4]+' 章</a></div><div class="d">'+g[2]+'</div><div class="o">由來：'+g[3]+'</div></div>').join('')||'<p class="muted">找不到這個名詞，試試別的關鍵字。</p>';}
+$('#glossSearch').addEventListener('input',renderGloss);renderGloss();
+
+refreshDone();
+go(location.hash.slice(1)||'ch0');
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-f85cd9d8e8" data-category="general"></script></body>
+</html>

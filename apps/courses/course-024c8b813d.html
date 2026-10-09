@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>周天之路｜從零開始學氣功：任督二脈、小周天到大周天</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#e9eee7; --paper2:#dfe6dc; --card:#f4f7f2;
+  --ink:#1f2a28; --ink2:#4a5754; --line:#c3cec5;
+  --jade:#2f6f5e; --jade-soft:#d3e4dc;
+  --seal:#b3252f; --seal-soft:#f3d9d6;
+  --qi:#d99a27; --qi-glow:#f3c15a;
+  --indigo:#34426e; --indigo-soft:#dbe0ef;
+  --kai:"LXGW WenKai TC","BiauKai","DFKai-SB","KaiTi","STKaiti",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#121917; --paper2:#18211e; --card:#1c2623;
+    --ink:#e4ebe6; --ink2:#a9b8b2; --line:#2e3b37;
+    --jade:#6fb9a1; --jade-soft:#1f3830;
+    --seal:#e0626a; --seal-soft:#3a1d20;
+    --qi:#f0b440; --qi-glow:#ffd675;
+    --indigo:#9fb0e6; --indigo-soft:#232b45;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#121917; --paper2:#18211e; --card:#1c2623;
+  --ink:#e4ebe6; --ink2:#a9b8b2; --line:#2e3b37;
+  --jade:#6fb9a1; --jade-soft:#1f3830;
+  --seal:#e0626a; --seal-soft:#3a1d20;
+  --qi:#f0b440; --qi-glow:#ffd675;
+  --indigo:#9fb0e6; --indigo-soft:#232b45;
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-text-size-adjust:100%}
+img,svg{max-width:100%}
+a{color:var(--jade)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--qi);outline-offset:2px;border-radius:4px}
+
+/* 頂欄 */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:10px 16px}
+.topbar .brand{font-family:var(--kai);font-size:20px;font-weight:700;letter-spacing:.05em;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar .brand small{font-weight:400;font-size:14px;color:var(--ink2);margin-left:8px}
+.iconbtn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:6px 12px;cursor:pointer;font-size:15px}
+.progress{height:3px;background:var(--paper2);position:sticky;top:calc(env(safe-area-inset-top,0px) + 55px);z-index:19}
+.progress i{display:block;height:100%;background:var(--qi);width:0;transition:width .4s}
+
+/* 目錄抽屜 */
+.drawer{position:fixed;inset:0;z-index:40;display:none}
+.drawer.open{display:block}
+.drawer .mask{position:absolute;inset:0;background:rgba(0,0,0,.35)}
+.drawer nav{position:absolute;top:0;left:0;bottom:0;width:min(86vw,360px);background:var(--card);overflow-y:auto;padding:calc(env(safe-area-inset-top,0px) + 16px) 12px calc(env(safe-area-inset-bottom,0px) + 24px)}
+.drawer h3{font-family:var(--kai);font-size:17px;margin:18px 8px 6px;color:var(--jade)}
+.drawer button.item{display:flex;width:100%;text-align:left;gap:10px;align-items:baseline;border:0;background:none;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:15.5px;line-height:1.5}
+.drawer button.item:hover{background:var(--paper2)}
+.drawer button.item.cur{background:var(--jade-soft);font-weight:700}
+.drawer .num{font-family:var(--kai);color:var(--ink2);min-width:2.2em}
+.drawer .done{margin-left:auto;color:var(--jade);font-size:13px}
+
+/* 主體 */
+main{max-width:46rem;margin:0 auto;padding:12px 20px 40px}
+.chapter{display:none}
+.chapter.show{display:block}
+.part-label{font-family:var(--kai);color:var(--jade);font-size:17px;margin:28px 0 0}
+h1,h2,h3{font-family:var(--kai);line-height:1.35;font-weight:700}
+.chapter>h2{font-size:clamp(28px,6vw,38px);margin:4px 0 18px;display:flex;gap:14px;align-items:center}
+.seal{flex:none;display:inline-grid;place-items:center;width:1.45em;height:1.45em;border:2px solid var(--seal);color:var(--seal);border-radius:6px;font-size:.62em;transform:rotate(-4deg)}
+h3{font-size:23px;margin:34px 0 8px;padding-bottom:4px;border-bottom:1px dashed var(--line)}
+h4{font-size:18px;margin:22px 0 4px;color:var(--indigo)}
+p{margin:.6em 0}
+.lead{font-size:18.5px;color:var(--ink2)}
+b,strong{color:var(--ink)}
+.term{color:var(--seal);font-weight:700}
+
+/* 提示框：用途不同、外觀不同 */
+.box{margin:18px 0;padding:14px 16px;border-radius:12px;background:var(--card);border:1px solid var(--line)}
+.box .t{font-family:var(--kai);font-weight:700;font-size:17.5px;margin-bottom:2px;display:block}
+.box.analogy{border-left:5px solid var(--indigo);background:var(--indigo-soft)}
+.box.analogy .t{color:var(--indigo)}
+.box.origin{border:1.5px solid var(--seal);background:var(--card);position:relative}
+.box.origin .t{color:var(--seal)}
+.box.warn{background:var(--seal-soft);border-color:transparent}
+.box.warn .t{color:var(--seal)}
+.box.try{background:var(--jade-soft);border-color:transparent}
+.box.try .t{color:var(--jade)}
+.box ol,.box ul{margin:.4em 0;padding-left:1.4em}
+
+ol.steps{counter-reset:s;list-style:none;padding:0}
+ol.steps>li{counter-increment:s;position:relative;padding:4px 0 10px 48px}
+ol.steps>li::before{content:counter(s);position:absolute;left:0;top:4px;width:32px;height:32px;border-radius:50%;background:var(--jade);color:#fff;display:grid;place-items:center;font-weight:700;font-size:15px}
+ul{padding-left:1.3em}
+li{margin:.25em 0}
+
+.tablewrap{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:15.5px;line-height:1.6}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--paper2);font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+
+/* 圖 */
+figure{margin:20px 0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+figcaption{font-size:14.5px;color:var(--ink2);text-align:center;margin-top:6px;line-height:1.6}
+.fig-body{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;align-items:start}
+@media (min-width:720px){.fig-body.side{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}}
+.infopanel{background:var(--paper);border-radius:10px;padding:12px 14px;min-height:120px;font-size:15.5px;line-height:1.7}
+.infopanel h5{font-family:var(--kai);font-size:19px;margin:0 0 4px;color:var(--seal)}
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px}
+.pill{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:5px 14px;cursor:pointer;font-size:14.5px}
+.pill.on{background:var(--jade);color:#fff;border-color:var(--jade)}
+
+.fig-svg .skin{fill:var(--paper2);stroke:var(--ink2);stroke-width:1.6}
+.fig-svg .limb{stroke:var(--paper2);stroke-linecap:round;fill:none}
+.fig-svg .limb-o{stroke:var(--ink2);stroke-linecap:round;fill:none}
+.fig-svg .route{fill:none;stroke:var(--qi);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:.35}
+.fig-svg .route-anim{fill:none;stroke:var(--qi);stroke-width:3.5;stroke-linecap:round;stroke-dasharray:6 10;animation:flow 1.2s linear infinite}
+.fig-svg .ren{stroke:var(--indigo)}
+.fig-svg .du{stroke:var(--seal)}
+@keyframes flow{to{stroke-dashoffset:-32}}
+.fig-svg .pt{cursor:pointer}
+.fig-svg .pt .dot{fill:var(--card);stroke:var(--ink);stroke-width:1.5}
+.fig-svg .pt .hit{fill:transparent;stroke:none}
+.fig-svg .pt.sel .dot,.fig-svg .pt:hover .dot{fill:var(--qi-glow);stroke:var(--seal)}
+.fig-svg .pt text{font-size:10.5px;fill:var(--ink);font-family:var(--sans)}
+.fig-svg .pt.sel text{font-weight:700;fill:var(--seal)}
+.fig-svg .ball{fill:var(--qi-glow);filter:drop-shadow(0 0 5px var(--qi))}
+.fig-svg .gate{fill:none;stroke:var(--seal);stroke-width:2;stroke-dasharray:3 3}
+.fig-svg .lbl{font-size:11px;fill:var(--ink2);font-family:var(--sans)}
+.fig-svg .dantian{fill:var(--qi-glow);opacity:.55}
+@media (prefers-reduced-motion: reduce){
+  .fig-svg .route-anim{animation:none}
+  .breath-orb{transition:none!important}
+}
+
+/* 首頁 */
+.hero{display:grid;gap:10px;margin-top:10px}
+.hero h1{font-size:clamp(40px,11vw,68px);margin:6px 0 0;letter-spacing:.08em;line-height:1.15}
+.hero .sub{font-family:var(--kai);font-size:clamp(18px,4.5vw,22px);color:var(--jade);margin:0}
+.hero figure{background:transparent;border:0;padding:0;margin:6px 0}
+.map{display:grid;gap:10px;margin:16px 0}
+.map .stage{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:12px}
+.map .stage .k{font-family:var(--kai);font-size:22px;color:var(--seal);line-height:1.2;min-width:2.6em}
+.map .stage b{font-family:var(--kai);font-size:18px}
+.map .stage div{font-size:15.5px;line-height:1.6}
+
+/* 呼吸引導 */
+.breath{display:grid;justify-items:center;gap:10px;padding:10px 0}
+.breath-stage{width:220px;height:220px;display:grid;place-items:center;position:relative}
+.breath-orb{width:80px;height:80px;border-radius:50%;background:radial-gradient(circle at 40% 35%,var(--qi-glow),var(--qi));box-shadow:0 0 30px var(--qi);transition-property:width,height;transition-timing-function:ease-in-out}
+.breath-ring{position:absolute;width:210px;height:210px;border-radius:50%;border:2px dashed var(--line)}
+.breath-word{font-family:var(--kai);font-size:26px;min-height:1.4em}
+.breath-count{font-size:14px;color:var(--ink2)}
+.btn{border:0;background:var(--jade);color:#fff;border-radius:10px;padding:10px 20px;font-weight:700;cursor:pointer;font-size:16px}
+.btn.ghost{background:transparent;color:var(--jade);border:1.5px solid var(--jade)}
+.btn:disabled{opacity:.5;cursor:default}
+
+/* 計時器 */
+.timer{text-align:center;padding:10px 0}
+.timer .clock{font-family:var(--kai);font-size:56px;letter-spacing:.05em}
+.timer .msg{color:var(--ink2);font-size:15px;min-height:1.6em}
+
+/* 測驗 */
+.quiz .q{margin:18px 0;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.quiz .q p{font-weight:700;margin:0 0 8px}
+.quiz .opt{display:block;width:100%;text-align:left;margin:6px 0;padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:var(--paper);cursor:pointer;font-size:15.5px;line-height:1.5}
+.quiz .opt.right{background:var(--jade-soft);border-color:var(--jade);font-weight:700}
+.quiz .opt.wrong{background:var(--seal-soft);border-color:var(--seal)}
+.quiz .ex{display:none;font-size:15px;color:var(--ink2);margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
+.quiz .q.answered .ex{display:block}
+.quiz .score{font-family:var(--kai);font-size:20px;text-align:center;color:var(--jade)}
+
+/* 時間軸 */
+.timeline{position:relative;margin:16px 0 16px 8px;padding-left:22px;border-left:2px solid var(--line)}
+.timeline .ev{position:relative;margin-bottom:14px}
+.timeline .ev::before{content:"";position:absolute;left:-29px;top:9px;width:12px;height:12px;border-radius:50%;background:var(--qi);border:2px solid var(--paper)}
+.timeline .when{font-family:var(--kai);color:var(--seal);font-weight:700}
+
+/* 階梯圖 */
+.ladder{display:grid;gap:8px;margin:14px 0}
+.ladder .rung{display:grid;grid-template-columns:7.5em 1fr;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;align-items:center}
+.ladder .rung .n{font-family:var(--kai);font-weight:700;font-size:18px;color:var(--jade)}
+.ladder .rung div{font-size:15.5px;line-height:1.6}
+
+/* 辭典 */
+.dict-search{width:100%;padding:10px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit}
+dl.dict dt{font-family:var(--kai);font-weight:700;font-size:19px;color:var(--seal);margin-top:14px}
+dl.dict dd{margin:2px 0 0;font-size:15.5px;line-height:1.7}
+
+/* 章末 */
+.pager{display:flex;justify-content:space-between;gap:10px;margin:40px 0 10px;padding-top:18px;border-top:1px solid var(--line)}
+.pager button{flex:1;max-width:48%}
+.pager .next{margin-left:auto}
+.donebar{display:flex;align-items:center;gap:10px;justify-content:center;margin-top:26px;font-size:15px;color:var(--ink2)}
+.donebar input{width:20px;height:20px;accent-color:var(--jade)}
+footer{text-align:center;font-size:13px;color:var(--ink2);padding:20px 16px 40px}
+@media print{.topbar,.progress,.pager,.drawer,.donebar{display:none!important}.chapter{display:block!important;page-break-after:always}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <button class="iconbtn" id="menuBtn" aria-label="開啟課程目錄">☰ 目錄</button>
+  <div class="brand">周天之路<small>氣功入門到專業</small></div>
+  <button class="iconbtn" id="themeBtn" aria-label="切換深淺色">深淺</button>
+</header>
+<div class="progress"><i id="progBar"></i></div>
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="mask" id="drawerMask"></div>
+  <nav id="toc" aria-label="課程目錄"></nav>
+</div>
+<main id="main">
+<!-- ============ 導覽 ============ -->
+<section class="chapter" data-part="開始之前" data-num="序" data-title="課程導覽與安全三原則">
+  <div class="hero">
+    <p class="sub">從呼吸開始，一步一步走完任督二脈</p>
+    <h1>周天之路</h1>
+    <figure><div data-fig="hero"></div>
+      <figcaption>金色的光點正沿著「小周天」路線運行：從肚臍下方出發，往下繞過會陰，沿背脊往上到頭頂，再從臉前方往下回到原點。這一整門課，就是在教你怎麼走完這一圈，以及再往後的路。</figcaption>
+    </figure>
+  </div>
+
+  <p class="lead">武俠小說裡常說「打通任督二脈，功力大增」。那到底什麼是任督二脈？什麼是小周天、大周天？這門課會像帶你爬一座山一樣，從山腳開始，一個台階一個台階往上走，不跳步。</p>
+
+  <h3>這門課怎麼走</h3>
+  <div class="map">
+    <div class="stage"><span class="k">第一篇</span><div><b>認識篇</b>：先搞懂「氣」「經絡」「穴位」「任督二脈」「丹田」這些名詞是什麼、從哪裡來。就像出門前先看地圖。</div></div>
+    <div class="stage"><span class="k">第二篇</span><div><b>築基篇</b>：練好三件基本功——姿勢（調身）、呼吸（調息）、心情（調心）。古人叫「築基」，就是蓋房子前先打地基。</div></div>
+    <div class="stage"><span class="k">第三篇</span><div><b>小周天篇</b>：讓氣沿著任脈、督脈繞一圈。會教你路線、關卡、步驟，以及練習中身體會有哪些反應。</div></div>
+    <div class="stage"><span class="k">第四篇</span><div><b>大周天篇</b>：從「繞一圈」擴大到「走遍全身」，並把練功帶進日常生活。</div></div>
+    <div class="stage"><span class="k">第五篇</span><div><b>專業篇</b>：進入傳統「內丹學」的完整體系、古書術語解碼、用科學眼光檢視氣功，最後給你一份半年修煉計畫表。</div></div>
+  </div>
+  <p>每一篇結束都有小測驗，答錯也沒關係，會告訴你為什麼。每章最下方可以勾選「已讀完」，進度會記在這台裝置的瀏覽器裡。</p>
+
+  <h3>開始前一定要記住的三個原則</h3>
+  <div class="box warn">
+    <span class="t">安全三原則</span>
+    <ol>
+      <li><b>自然第一，不可勉強。</b>呼吸不憋、意念不硬推。所有的「氣感」都是練到了自然出現，不是用力逼出來的。</li>
+      <li><b>循序漸進，不可跳級。</b>地基沒打好就去「衝關」，是古人說最容易出問題的做法。這門課的順序本身就是安全設計。</li>
+      <li><b>身體不舒服就停。</b>頭痛、胸悶、心慌、看到奇怪景象而害怕——停下來、收功、走一走。有疾病的人（特別是高血壓、心臟病、癲癇、精神疾病病史）以及孕婦，練習前先問醫生。</li>
+    </ol>
+  </div>
+  <div class="box">
+    <span class="t">給國中生讀者的一句話</span>
+    這門課你可以全部讀完、了解整個體系，但實際練習請以<b>第二篇的基本功</b>（放鬆、呼吸、站樁、八段錦）為主。第三篇以後的內容，傳統上本來就是給身體發育完成的成年人練的。先把知識學起來，等長大了再深入，一點都不晚。
+  </div>
+  <div class="box">
+    <span class="t">關於這門課的立場</span>
+    氣功是中國流傳兩千多年的養生傳統，裡面有很多寶貴的經驗；但「經絡」「氣」目前還沒有被現代解剖學找到實體。這門課會忠實介紹傳統說法，也會在第17章告訴你科學目前知道什麼、不知道什麼。學習時保持好奇，也保持清醒。
+  </div>
+</section>
+
+<!-- ============ 第一篇 認識篇 ============ -->
+<section class="chapter" data-part="第一篇　認識篇" data-num="1" data-title="氣功是什麼？">
+  <p class="part-label">第一篇　認識篇</p>
+  <h2><span class="seal">一</span>氣功是什麼？</h2>
+  <p class="lead">一句話說完：<b>氣功就是透過調整姿勢、呼吸和心念，來鍛鍊身心的方法。</b>下面把這兩個字拆開來看。</p>
+
+  <h3>「氣」這個字怎麼來的</h3>
+  <div class="box origin">
+    <span class="t">名詞由來｜氣</span>
+    最古老的甲骨文裡，有一個字寫成「<b>三條橫線</b>」，像天空裡一層一層飄動的雲氣，這就是「气」。東漢的字典《說文解字》解釋：「气，雲气也。」後來又出現加了「米」的「氣」，本來的意思是送給客人的糧食，後來兩個字混用，「氣」就成了正式寫法。<br>
+    有趣的是，這兩個部件剛好說出古人對「氣」的兩種理解：<b>看不見、會流動</b>（像雲、像呼吸），以及<b>讓人有力氣的能量</b>（像糧食）。
+  </div>
+  <p>在中醫和氣功裡，「氣」指的是讓身體<b>活著、會動、會溫暖</b>的那股能量。人活著叫「有氣」，死了叫「斷氣」；精神好叫「氣色好」，累了叫「沒力氣」。你每天其實都在用這個字。</p>
+  <div class="box analogy">
+    <span class="t">打個比方</span>
+    把身體想成一支手機。骨頭肌肉是<b>機身</b>，血液是在裡面跑的<b>電路</b>，而「氣」比較像是讓整支手機能運作的<b>電</b>。手機沒電，機身再新也沒用；人沒有氣，身體就不會動。氣功，就像是學習怎麼<b>省電、充電、讓電流順暢</b>。
+  </div>
+
+  <h3>「功」又是什麼</h3>
+  <div class="box origin">
+    <span class="t">名詞由來｜功</span>
+    「功」由「工」和「力」組成：用力去做工。引申為<b>花時間、下力氣累積出來的成果</b>，所以有「功夫」「用功」「功力」這些詞。
+  </div>
+  <p>所以「氣功」＝<b>練「氣」的功夫</b>。重點在「功夫」兩個字：它不是一次見效的魔法，而是像學樂器、練投籃一樣，每天累積。</p>
+
+  <h3>三個要調的東西</h3>
+  <p>各家氣功門派非常多，但幾乎都離不開「<span class="term">三調</span>」：</p>
+  <div class="tablewrap"><table>
+    <tr><th>三調</th><th>調什麼</th><th>生活比喻</th></tr>
+    <tr><td>調身</td><td>姿勢、放鬆</td><td>把水管擺直、別打結，水才流得過去</td></tr>
+    <tr><td>調息</td><td>呼吸</td><td>控制水龍頭，不忽大忽小</td></tr>
+    <tr><td>調心</td><td>念頭、情緒</td><td>讓水面平靜，才看得見水底</td></tr>
+  </table></div>
+  <p>第二篇會一個一個教。這裡先記住：<b>三調是所有功法的地基</b>，包括後面的小周天、大周天。</p>
+
+  <h3>氣功的歷史：兩千多年的接力</h3>
+  <div class="timeline">
+    <div class="ev"><span class="when">戰國時代（約西元前4世紀）</span><br>一塊叫做「<b>行氣玉佩銘</b>」的玉器上刻了約45個字，描述氣怎樣吸進來、往下沉、再往上走。這是目前已知最早的「行氣」文字紀錄。</div>
+    <div class="ev"><span class="when">戰國～先秦</span><br>《莊子》裡提到「吹呴呼吸，吐故納新，熊經鳥申」——吐出舊氣、吸入新氣，模仿熊和鳥的動作。這就是成語「<b>吐故納新</b>」的出處。</div>
+    <div class="ev"><span class="when">西漢</span><br>1973年湖南長沙馬王堆漢墓出土一幅《<b>導引圖</b>》，畫了四十多個人在做各種伸展動作，像一張古代的健身海報。</div>
+    <div class="ev"><span class="when">東漢末年</span><br>名醫華佗模仿虎、鹿、熊、猿、鳥五種動物，編出「<b>五禽戲</b>」。同時期魏伯陽寫《周易參同契》，被後人稱為「萬古丹經王」，是內丹修煉最早的經典之一。</div>
+    <div class="ev"><span class="when">宋代～明清</span><br>「<b>八段錦</b>」流行（第8章會教）。張伯端寫《悟真篇》，內丹學大成；明末清初伍沖虛、柳華陽（合稱「伍柳派」）把小周天、大周天的練法寫得最詳細。</div>
+    <div class="ev"><span class="when">1950年代</span><br>古人原本叫「導引」「吐納」「行氣」「內丹」，而「<b>氣功</b>」這個統稱，是在1950年代因醫生劉貴珍推廣「氣功療法」而普及的。所以這個名字其實很年輕。</div>
+  </div>
+
+  <div class="box origin">
+    <span class="t">名詞由來｜導引、吐納</span>
+    <b>導引</b>：「導氣令和，引體令柔」——引導氣變得平和，伸展身體變得柔軟，偏重<b>動作</b>。<br>
+    <b>吐納</b>：吐出濁氣、納入清氣，偏重<b>呼吸</b>。<br>
+    今天說的「動功」大致就是導引，「靜功」則包含吐納和靜坐。
+  </div>
+
+  <h3>動功與靜功</h3>
+  <div class="tablewrap"><table>
+    <tr><th></th><th>動功</th><th>靜功</th></tr>
+    <tr><td>外表</td><td>身體在動</td><td>身體不動（站、坐、躺）</td></tr>
+    <tr><td>例子</td><td>八段錦、五禽戲、太極拳</td><td>站樁、靜坐、小周天</td></tr>
+    <tr><td>適合</td><td>初學者、年輕人、想活動筋骨的人</td><td>基本功穩了之後，往內在深入</td></tr>
+    <tr><td>古話</td><td colspan="2">「外動內靜，內動外靜」——動功要練到身體動、心很靜；靜功要練到身體不動、內在的氣在動。</td></tr>
+  </table></div>
+
+  <div class="box try">
+    <span class="t">動手試試（1分鐘）</span>
+    把手掌搓熱，然後兩手掌心相對，相隔約10公分，慢慢拉開、靠近、拉開、靠近。很多人會感覺掌心之間有一點「熱熱的」「像磁鐵」的感覺。這就是練氣功的人常說的「<b>氣感</b>」最簡單的一種。沒感覺也完全正常，它和天分無關，練久自然會有。
+  </div>
+</section>
+
+<section class="chapter" data-part="第一篇　認識篇" data-num="2" data-title="身體的地圖：經絡與穴位">
+  <p class="part-label">第一篇　認識篇</p>
+  <h2><span class="seal">二</span>身體的地圖：經絡與穴位</h2>
+  <p class="lead">如果「氣」是電，那它要沿著什麼跑？傳統醫學說：沿著「經絡」跑。</p>
+
+  <div class="box analogy">
+    <span class="t">打個比方｜捷運地圖</span>
+    把身體想成一座城市：
+    <ul>
+      <li><b>經脈</b>＝捷運的主要路線（紅線、藍線…），又長又直，貫穿全身。</li>
+      <li><b>絡脈</b>＝從主線分出去的小巷、公車支線，像網一樣連結各處。</li>
+      <li><b>穴位</b>＝路線上的車站，是氣聚集、出入的地方，也是按摩、針灸下手的地方。</li>
+    </ul>
+    路線通暢，城市就運作良好；某一段塞車，那一區就出問題。中醫說「<b>通則不痛，痛則不通</b>」，就是這個意思。
+  </div>
+
+  <div class="box origin">
+    <span class="t">名詞由來｜經、絡、穴</span>
+    <b>經</b>：本義是織布機上<b>直的</b>那些線（對比橫的叫「緯」），所以經脈是身體裡直行的主幹道。「經度」「經典」都從這裡延伸。<br>
+    <b>絡</b>：本義是纏繞、網住，像「網絡」「聯絡」，指橫向交錯的分支。<br>
+    <b>穴</b>：洞、孔。古人覺得這些點像身體表面的小洞，氣從這裡進出，所以又叫「<b>腧穴</b>」（腧＝輸送）。
+  </div>
+
+  <h3>十二正經：十二條主線</h3>
+  <p>人體左右各有十二條主要經脈，叫「<span class="term">十二正經</span>」。每條都連著一個臟腑，名字看起來很長，但規則很簡單：</p>
+  <div class="box">
+    <span class="t">名字拆解公式</span>
+    <b>手／足</b>（在手還是在腳）＋ <b>陰陽程度</b>（太陰、少陰、厥陰、太陽、陽明、少陽）＋ <b>連接的臟腑</b> ＋「經」<br>
+    例：「手太陰肺經」＝ 走在手上、屬陰（在手臂內側）、連接肺的經脈。
+  </div>
+  <div class="tablewrap"><table>
+    <tr><th>手三陰</th><th>手三陽</th><th>足三陽</th><th>足三陰</th></tr>
+    <tr><td>手太陰肺經</td><td>手陽明大腸經</td><td>足陽明胃經</td><td>足太陰脾經</td></tr>
+    <tr><td>手少陰心經</td><td>手太陽小腸經</td><td>足太陽膀胱經</td><td>足少陰腎經</td></tr>
+    <tr><td>手厥陰心包經</td><td>手少陽三焦經</td><td>足少陽膽經</td><td>足厥陰肝經</td></tr>
+  </table></div>
+  <p>不用背。你只要知道：<b>陰經大多走身體內側、前面；陽經大多走外側、背面</b>。像你手臂靠身體那面（曬不到太陽）是陰，手背那面（曬得到太陽）是陽。</p>
+
+  <div class="box origin">
+    <span class="t">名詞由來｜陰與陽</span>
+    「陰」「陽」最早的意思很生活：山的<b>北面、背光處</b>叫陰，<b>南面、向陽處</b>叫陽。後來延伸成一對相反又互補的概念：暗與亮、冷與熱、靜與動、內與外。所以身體背部、外側屬陽，腹部、內側屬陰。
+  </div>
+
+  <h3>奇經八脈：八條特殊路線</h3>
+  <p>除了十二正經，還有八條「<span class="term">奇經八脈</span>」：任脈、督脈、衝脈、帶脈、陰蹺脈、陽蹺脈、陰維脈、陽維脈。</p>
+  <div class="box origin">
+    <span class="t">名詞由來｜為什麼叫「奇」</span>
+    這裡的「奇」讀 <b>ㄐㄧ</b>（和「奇數」的奇同音），意思是「單獨、不成對、不尋常」。十二正經都直接連到臟腑、左右成對；這八條不直接屬於某個臟腑，而且任脈、督脈、衝脈、帶脈都只有一條，所以叫「奇經」。
+  </div>
+  <div class="box analogy">
+    <span class="t">打個比方｜河流與湖泊</span>
+    古書說十二正經像<b>江河</b>，奇經八脈像<b>湖泊、水庫</b>。江河的水太多時流進湖泊存起來，江河水少時湖泊再放出來補充。奇經八脈就是身體的「調節水庫」。
+  </div>
+  <p>八條之中，<b>任脈和督脈最重要</b>，因為它們是唯二有自己穴位的奇經，而且一條管前面、一條管後面，合起來剛好繞身體一圈——這就是下一章的主角。</p>
+
+  <div class="box try">
+    <span class="t">動手試試｜找第一個穴位：合谷</span>
+    張開左手，大拇指和食指之間的虎口肉最高處，用右手大拇指按下去，會有明顯的痠脹感。這個「車站」叫<b>合谷穴</b>（兩根骨頭會合的山谷），屬於手陽明大腸經。你剛剛完成了人生第一次「找穴」。
+  </div>
+</section>
+
+<section class="chapter" data-part="第一篇　認識篇" data-num="3" data-title="任脈與督脈">
+  <p class="part-label">第一篇　認識篇</p>
+  <h2><span class="seal">三</span>任脈與督脈</h2>
+  <p class="lead">「打通任督二脈」這句話，終於要講到了。先記住一句口訣：<b>督脈走背後往上，任脈走前面往下</b>（以練功時氣的流向來說）。</p>
+
+  <h3>名字的由來</h3>
+  <div class="box origin">
+    <span class="t">名詞由來｜督脈</span>
+    「督」就是督導、總督、監督，是<b>總管</b>的意思。督脈走在背部正中線，而全身的陽經都在背上跟它交會，所以古人說督脈「<b>總督一身之陽</b>」，稱它為「<b>陽脈之海</b>」。就像一位管理所有陽經的總司令。
+  </div>
+  <div class="box origin">
+    <span class="t">名詞由來｜任脈</span>
+    「任」有兩層意思：一是<b>擔任、承擔</b>；二是通「<b>妊</b>」，也就是懷孕、養育。任脈走在身體前方正中線，全身陰經都跟它交會，所以說它「<b>總任一身之陰</b>」，稱為「<b>陰脈之海</b>」。古人也認為它和懷孕生育有關，所以說「任主胞胎」。
+  </div>
+
+  <h3>路線圖（點穴位看說明）</h3>
+  <figure>
+    <div class="fig-body side">
+      <div data-fig="rendu"></div>
+      <div class="infopanel" id="acuInfo"><h5>點一下圖上的圓點</h5>紅色線是督脈，藍色線是任脈。每個圓點都是這條路上重要的「車站」，點了之後這裡會顯示它的名字由來和位置。</div>
+    </div>
+    <figcaption>側面圖：人面向右方盤腿而坐。紅＝督脈（背後），藍＝任脈（前方）。</figcaption>
+  </figure>
+
+  <h4>督脈怎麼走</h4>
+  <p>傳統說法：督脈起於小腹深處，從<b>會陰</b>出來，往後到尾椎的<b>長強</b>，沿著脊椎正中往上，經過腰部的<b>命門</b>、背部、頸後的<b>大椎</b>，進到後腦（<b>風府</b>、<b>玉枕</b>一帶），翻過頭頂<b>百會</b>，沿額頭正中往下，經過眉心<b>印堂</b>、鼻尖，最後停在<b>上排牙齦</b>的齦交穴。督脈約有28個穴位（新版中國國家標準把印堂也歸進督脈，變成29個）。</p>
+  <h4>任脈怎麼走</h4>
+  <p>任脈同樣起於小腹深處、從會陰出來，但是往<b>前面</b>走：沿著肚子正中往上，經過<b>關元、氣海</b>（下丹田一帶）、肚臍、胸口正中的<b>膻中</b>，到喉嚨，最後停在<b>下唇下方</b>的承漿穴。任脈有24個穴位。</p>
+
+  <div class="box analogy">
+    <span class="t">打個比方｜差兩座橋的環狀線</span>
+    你會發現：督脈停在<b>上牙齦</b>，任脈停在<b>下唇下方</b>，嘴巴這裡斷開了；兩條在下面雖然都經過會陰，但中間是身體的「出口」區，也需要收攝。<br>
+    所以任督二脈就像一條<b>環狀捷運線</b>，但有兩個地方沒接上。練功時用「<b>舌頭頂住上顎</b>」把上面接起來，用「<b>輕輕收提會陰</b>」把下面接起來，環狀線就通車了。這兩個接點，古人叫做「<span class="term">上鵲橋</span>」和「<span class="term">下鵲橋</span>」（第5章、第10章會詳細說）。
+  </div>
+
+  <h3>「打通任督二脈」到底是什麼意思？</h3>
+  <p>在武俠小說裡，打通任督二脈好像會瞬間變成高手。但在傳統修煉裡，它的意思比較樸實：</p>
+  <ul>
+    <li>從經絡學說來看，一般健康的人任督本來就是<b>通的</b>，不然人就不能活。</li>
+    <li>修煉說的「通」，指的是透過長時間練習，能<b>清楚感覺到</b>一股溫暖的氣沿著這條路線<b>自然運行</b>，而且身心因此變得穩定、有精神。這個過程就叫「<b>通小周天</b>」。</li>
+    <li>它是修煉的<b>一個階段</b>，不是終點，更不會讓人飛簷走壁。</li>
+  </ul>
+  <div class="box warn">
+    <span class="t">小心</span>
+    網路上若有人說「幾天幫你打通任督二脈」「灌頂發功，收費通脈」，請保持警覺。傳統說法是「<b>百日築基</b>」——光打地基就要一百天左右，沒有捷徑。
+  </div>
+</section>
+
+<section class="chapter" data-part="第一篇　認識篇" data-num="4" data-title="丹田與精氣神">
+  <p class="part-label">第一篇　認識篇</p>
+  <h2><span class="seal">四</span>丹田與精氣神</h2>
+  <p class="lead">任督是「路」，那氣從哪裡出發、存在哪裡？答案是「丹田」。</p>
+
+  <div class="box origin">
+    <span class="t">名詞由來｜丹田</span>
+    <b>丹</b>：原本指紅色的礦物「丹砂」（朱砂），古代方士用它煉製想讓人長生的「丹藥」。後來發展出「不用外面的藥，在身體裡面煉」的想法，叫做「<b>內丹</b>」。<br>
+    <b>田</b>：種植作物的地方。<br>
+    合起來，丹田就是<b>在身體裡種植、培養「丹」的田地</b>。就像農夫在田裡種稻子，修煉的人在丹田裡「種」氣。
+  </div>
+
+  <h3>三個丹田</h3>
+  <figure>
+    <div class="fig-body side">
+      <div data-fig="dantian"></div>
+      <div>
+        <div class="tablewrap" style="margin-top:0"><table style="min-width:0">
+          <tr><th>丹田</th><th>大約位置</th><th>對應</th></tr>
+          <tr><td>上丹田</td><td>兩眉中間往腦內</td><td>神（精神、意識）</td></tr>
+          <tr><td>中丹田</td><td>胸口正中（膻中）一帶</td><td>氣（呼吸、情緒）</td></tr>
+          <tr><td>下丹田</td><td>肚臍下方約三指寬，往身體裡面</td><td>精（身體根本能量）</td></tr>
+        </table></div>
+      </div>
+    </div>
+    <figcaption>三個金色光團：上、中、下丹田。一般說「丹田」若沒特別講，指的就是下丹田。</figcaption>
+  </figure>
+  <p>下丹田的位置，各派說法有點差別：有說臍下一寸三分，有說臍下三寸（大約是氣海穴到關元穴之間）。不用執著精確位置，<b>記住「肚臍下方、身體裡面、大概在肚子的中心」就夠了</b>。</p>
+  <div class="box try">
+    <span class="t">動手試試｜找到你的下丹田</span>
+    把右手四根手指併攏，食指放在肚臍下緣，小指那邊就是大約臍下三寸的位置。然後想像從這裡往身體裡面走進去三分之一，大概就在那裡。深呼吸時，讓這個地方隨呼吸輕輕起伏。
+  </div>
+
+  <h3>精、氣、神：人身三寶</h3>
+  <p>古人把人的生命分成三個層次，叫「<span class="term">三寶</span>」：</p>
+  <div class="tablewrap"><table>
+    <tr><th>三寶</th><th>是什麼</th><th>比喻（蠟燭）</th></tr>
+    <tr><td>精</td><td>身體最根本的物質基礎，像體力的「本錢」</td><td>蠟</td></tr>
+    <tr><td>氣</td><td>讓身體運作的能量</td><td>火焰燃燒的熱</td></tr>
+    <tr><td>神</td><td>精神、意識、注意力</td><td>燭光</td></tr>
+  </table></div>
+  <div class="box analogy">
+    <span class="t">打個比方｜蠟燭</span>
+    蠟多（精足），火才燒得久、燒得穩（氣足），光才亮（神足）。熬夜、過勞、壞情緒，就像把蠟燭兩頭一起燒。傳統修煉的整條路，就是<b>「煉精化氣、煉氣化神、煉神還虛」</b>——把蠟慢慢轉成穩定的光。這句話第15章會完整拆解。
+  </div>
+
+  <h3>三個字也藏在日常用語裡</h3>
+  <ul>
+    <li>「<b>精</b>疲力盡」「沒<b>精</b>打采」——精不足。</li>
+    <li>「上<b>氣</b>不接下<b>氣</b>」「<b>氣</b>喘吁吁」——氣不足。</li>
+    <li>「<b>神</b>采奕奕」「聚精會<b>神</b>」「<b>神</b>不守舍」——神的狀態。</li>
+  </ul>
+  <p>你會發現，古人其實一直用這套觀念在描述人的狀態。</p>
+</section>
+
+<section class="chapter quiz" data-part="第一篇　認識篇" data-num="測" data-title="第一篇小測驗">
+  <p class="part-label">第一篇　認識篇</p>
+  <h2><span class="seal">測</span>第一篇小測驗</h2>
+  <p>點選你覺得對的答案，會馬上告訴你對錯和原因。</p>
+  <div data-quiz="1"></div>
+</section>
+<!-- ============ 第二篇 築基篇 ============ -->
+<section class="chapter" data-part="第二篇　築基篇" data-num="5" data-title="調身：姿勢與放鬆">
+  <p class="part-label">第二篇　築基篇</p>
+  <h2><span class="seal">五</span>調身：姿勢與放鬆</h2>
+  <div class="box origin">
+    <span class="t">名詞由來｜築基</span>
+    「築」是用夯土一層一層敲打蓋牆；「基」是地基。古書說「<b>百日築基</b>」：在往上蓋之前，先花大約一百天把身體和心打穩。這一篇的五章，就是你的地基。
+  </div>
+  <p class="lead">調身的目的只有一個：<b>讓身體又正又鬆</b>。正，氣才走得直；鬆，氣才走得過。</p>
+
+  <h3>全身放鬆的五句口訣</h3>
+  <p>這些是太極拳、氣功共通的身體要領，每一句都有畫面：</p>
+  <div class="tablewrap"><table>
+    <tr><th>口訣</th><th>白話</th><th>想像畫面</th></tr>
+    <tr><td>虛靈頂勁</td><td>頭頂輕輕往上領，脖子自然伸直</td><td>頭頂有一根細線把你輕輕吊起來</td></tr>
+    <tr><td>含胸拔背</td><td>胸口不挺，背部自然舒展</td><td>胸前抱著一顆大氣球</td></tr>
+    <tr><td>沉肩墜肘</td><td>肩膀放下，手肘往下垂</td><td>肩膀上掛了兩袋米</td></tr>
+    <tr><td>鬆腰坐胯</td><td>腰不僵硬，屁股像坐在高腳椅上</td><td>準備要坐下但還沒坐到</td></tr>
+    <tr><td>膝微屈</td><td>膝蓋不鎖死，稍微彎曲</td><td>像彈簧一樣隨時可以動</td></tr>
+  </table></div>
+
+  <h3>站姿：站樁</h3>
+  <div class="box origin">
+    <span class="t">名詞由來｜站樁</span>
+    「樁」是打進土裡的木柱，要又穩又直。站樁就是<b>像一根木樁一樣站著不動</b>。看起來什麼都沒做，但全身都在學習放鬆和平衡，是武術和氣功最重要的基本功之一。
+  </div>
+  <h4>第一式：無極樁（最基本）</h4>
+  <ol class="steps">
+    <li>兩腳平行，與肩同寬，腳尖朝前。</li>
+    <li>膝蓋微彎（從上往下看，膝蓋不要超過腳尖）。</li>
+    <li>兩手自然垂在身體兩側，手指微微張開，像手心握著一顆雞蛋。</li>
+    <li>套用上面五句口訣，從頭到腳檢查一遍。</li>
+    <li>眼睛輕閉或看著前下方，自然呼吸。</li>
+  </ol>
+  <div class="box origin">
+    <span class="t">名詞由來｜無極</span>
+    道家說宇宙最初是一片沒有分別的狀態，叫「無極」；後來分出陰陽，叫「太極」。無極樁就是讓自己回到<b>什麼都不做、最原始的安靜</b>。
+  </div>
+  <h4>第二式：抱球樁（又叫渾圓樁）</h4>
+  <ol class="steps">
+    <li>從無極樁開始。</li>
+    <li>兩手慢慢抬到胸前，像抱著一顆大球，手心朝自己，兩手指尖相距約一個拳頭。</li>
+    <li>手肘略低於手腕，肩膀依然下沉。</li>
+    <li>想像手臂和球之間是軟的，不要用力夾。</li>
+  </ol>
+  <div class="box try">
+    <span class="t">練習份量</span>
+    第一週每次 <b>3分鐘</b>，之後每週加1～2分鐘，慢慢到 <b>10～20分鐘</b>。手臂痠、腿抖是正常的，代表肌肉在學習；但如果覺得頭暈就停下來坐著休息。
+  </div>
+
+  <h3>坐姿：四種選擇</h3>
+  <div class="tablewrap"><table>
+    <tr><th>坐法</th><th>怎麼坐</th><th>適合誰</th></tr>
+    <tr><td>坐椅子</td><td>坐椅子前三分之一，兩腳平放地面，大腿與地面平行，背不靠椅背</td><td><b>最推薦初學者</b>，也最適合國中生</td></tr>
+    <tr><td>散盤</td><td>兩腿交叉盤坐（就是一般的「盤腿」）</td><td>多數人都能做</td></tr>
+    <tr><td>單盤</td><td>一隻腳放在另一條大腿上</td><td>筋比較軟的人</td></tr>
+    <tr><td>雙盤</td><td>兩隻腳都放在對側大腿上（蓮花坐）</td><td>練很久的人，<b>千萬不要硬拗</b>，很容易傷膝蓋</td></tr>
+  </table></div>
+  <p>盤坐時可以在屁股下墊一個比較厚的坐墊，讓膝蓋比屁股低，腰才會自然挺直。<b>姿勢坐得舒服比坐得漂亮重要一百倍。</b></p>
+
+  <h3>三個細節：舌、眼、下方</h3>
+  <h4>舌抵上顎｜搭上鵲橋</h4>
+  <p>舌尖輕輕碰在<b>上排門牙後面、牙齦和上顎交界的地方</b>，像要發「ㄌ」的音那個位置。不要用力頂，碰著就好。</p>
+  <div class="box origin">
+    <span class="t">名詞由來｜鵲橋</span>
+    民間故事裡，牛郎和織女被銀河分開，每年七夕喜鵲會飛來搭成一座橋讓他們相會。第3章說過，督脈停在上牙齦、任脈停在下唇下，兩條在口腔這裡斷開，<b>舌頭就像那座鵲橋</b>，把兩條經脈接起來。
+  </div>
+  <p>這樣做一陣子，口水會變多。古人叫它「<b>金津玉液</b>」，認為很珍貴，建議<b>分幾小口慢慢吞下</b>，想像它流到丹田。不想吞也沒關係，不要憋著就好。</p>
+  <h4>眼睛｜垂簾</h4>
+  <p>眼睛不用緊閉，<b>微微閉上、留一線光</b>，像把窗簾放下但沒拉緊，所以叫「<span class="term">垂簾</span>」。完全閉眼容易想睡，睜太大容易分心。</p>
+  <h4>下方｜輕收會陰</h4>
+  <p>會陰是兩腿之間、身體最下方的中點。練習時可以<b>輕輕往上收一下</b>（像忍住不上廁所的感覺的十分之一力氣），然後放鬆，不需要一直用力。這是「<b>下鵲橋</b>」的基本做法，初學時知道就好，不必刻意。</p>
+</section>
+
+<section class="chapter" data-part="第二篇　築基篇" data-num="6" data-title="調息：學會呼吸">
+  <p class="part-label">第二篇　築基篇</p>
+  <h2><span class="seal">六</span>調息：學會呼吸</h2>
+  <p class="lead">你每天呼吸大約兩萬次，但幾乎從來沒注意過它。調息，就是把這件最平常的事，變成一門功夫。</p>
+  <div class="box origin">
+    <span class="t">名詞由來｜息</span>
+    「息」上面是「自」，下面是「心」。「自」在甲骨文裡畫的是<b>鼻子</b>（所以我們指自己時會指鼻子）。《說文解字》說息是「從心從自」：氣從心中出發，經過鼻子出入。古人把<b>一呼一吸叫做「一息」</b>。「休息」的意思，本來就是讓呼吸平緩下來。
+  </div>
+
+  <h3>呼吸的四個層次</h3>
+  <div class="ladder">
+    <div class="rung"><span class="n">① 自然呼吸</span><div>不控制，只是「看著」自己呼吸。這是一切的起點。</div></div>
+    <div class="rung"><span class="n">② 腹式呼吸</span><div>吸氣時肚子自然鼓起，呼氣時肚子自然收回。胸部幾乎不動。<b>本課程的主要練習。</b></div></div>
+    <div class="rung"><span class="n">③ 逆腹式呼吸</span><div>吸氣時肚子微收、呼氣時肚子放鬆。許多內丹門派使用，屬於進階，<b>基本功沒穩前不要練</b>。</div></div>
+    <div class="rung"><span class="n">④ 胎息</span><div>呼吸細到幾乎感覺不到，像嬰兒在媽媽肚子裡不用鼻子呼吸一樣，所以叫「胎息」。這是練到很深才<b>自然出現</b>的狀態，不能刻意去憋。</div></div>
+  </div>
+
+  <h3>好呼吸的四個字：細、長、勻、緩</h3>
+  <ul>
+    <li><b>細</b>：細到拿一根羽毛放在鼻子前面，羽毛都不太會動。</li>
+    <li><b>長</b>：每一口都比平常長一點，但<b>絕不勉強</b>。</li>
+    <li><b>勻</b>：從頭到尾速度一樣，不要一開始大口、後面沒氣。</li>
+    <li><b>緩</b>：慢慢的，不急。</li>
+  </ul>
+  <div class="box analogy">
+    <span class="t">打個比方｜倒茶</span>
+    好的呼吸像把茶慢慢倒進杯子：水流細細的、穩穩的、不中斷，也不會濺出來。壞的呼吸像把一桶水整個倒下去。
+  </div>
+
+  <h3>跟著光球練呼吸</h3>
+  <figure>
+    <div class="breath">
+      <div class="breath-stage"><div class="breath-ring"></div><div class="breath-orb" id="orb"></div></div>
+      <div class="breath-word" id="bWord">準備好了嗎？</div>
+      <div class="breath-count" id="bCount">選一種節奏，按開始</div>
+      <div class="pill-row" id="bModes">
+        <button class="pill on" data-mode="4,0,4">自然 吸4 呼4</button>
+        <button class="pill" data-mode="4,2,6">腹式 吸4 停2 呼6</button>
+        <button class="pill" data-mode="5,0,7">加長 吸5 呼7</button>
+      </div>
+      <div class="pill-row"><button class="btn" id="bStart">開始</button><button class="btn ghost" id="bStop">停止</button></div>
+    </div>
+    <figcaption>光球變大時吸氣、讓肚子鼓起；變小時呼氣、讓肚子收回。「停」是吸飽後自然的小停頓，不是憋氣。任何時候覺得喘，就回到自然呼吸。</figcaption>
+  </figure>
+
+  <h3>腹式呼吸練習步驟</h3>
+  <ol class="steps">
+    <li>坐好或躺下，一手放胸口、一手放肚臍下方。</li>
+    <li>用鼻子慢慢吸氣，想像空氣一路往下流到下丹田，<b>下面那隻手被推起來</b>，上面那隻手幾乎不動。</li>
+    <li>用鼻子（或嘴巴微張）慢慢呼氣，肚子自然收回。</li>
+    <li>呼氣可以比吸氣長一點點，會更放鬆。</li>
+    <li>每天練5～10分鐘，大約兩到四週，會變成不用想就能做到。</li>
+  </ol>
+  <div class="box warn">
+    <span class="t">不要憋氣</span>
+    初學最常見的錯誤就是「為了呼吸長而憋氣」，結果頭脹、胸悶。記住：<b>寧可短而順，不要長而憋</b>。呼吸變長是練出來的結果，不是逼出來的。
+  </div>
+
+  <h3>數息法：給腦袋一個工作</h3>
+  <p>一邊呼吸一邊數數：吸、呼算一次，心裡默數「一」；再一次數「二」…數到十再從一開始。數亂了、忘了，就從一重新來。</p>
+  <div class="box origin">
+    <span class="t">名詞由來｜數息</span>
+    這個方法來自佛教的禪修，叫「<b>數息觀</b>」，是最古老、最簡單的專注練習之一。後來道家和氣功都吸收了它。
+  </div>
+
+  <h3>進階選修：六字訣</h3>
+  <p>六字訣是一種「用呼氣時發出不同聲音」來調養臟腑的功法，南北朝的陶弘景就有記載。呼氣時輕輕發音（初學可以出聲，熟了之後只做口型不出聲），吸氣時用鼻子自然吸。</p>
+  <div class="tablewrap"><table>
+    <tr><th>字</th><th>讀音</th><th>傳統對應</th></tr>
+    <tr><td>噓</td><td>ㄒㄩ</td><td>肝</td></tr>
+    <tr><td>呵</td><td>ㄏㄜ</td><td>心</td></tr>
+    <tr><td>呼</td><td>ㄏㄨ</td><td>脾</td></tr>
+    <tr><td>呬</td><td>ㄙ</td><td>肺</td></tr>
+    <tr><td>吹</td><td>ㄔㄨㄟ</td><td>腎</td></tr>
+    <tr><td>嘻</td><td>ㄒㄧ</td><td>三焦</td></tr>
+  </table></div>
+  <p>每個字連做6次，順序照表格由上往下。它最大的好處其實很實際：<b>發音會自然讓呼氣變長</b>，是訓練長呼氣的好方法。</p>
+</section>
+
+<section class="chapter" data-part="第二篇　築基篇" data-num="7" data-title="調心：讓心安靜下來">
+  <p class="part-label">第二篇　築基篇</p>
+  <h2><span class="seal">七</span>調心：讓心安靜下來</h2>
+  <p class="lead">三調裡，調身最容易，調息次之，<b>調心最難</b>。古人說「調心是三調之帥」——心安定了，身和息自然跟著安定。</p>
+
+  <h3>入靜是什麼</h3>
+  <div class="box origin">
+    <span class="t">名詞由來｜入靜</span>
+    「入」是進入，「靜」是安靜。入靜不是「腦袋一片空白」，而是<b>念頭變少、變慢、不被念頭拉著跑</b>的狀態。就像從熱鬧的夜市慢慢走進一間安靜的圖書館。
+  </div>
+  <div class="box analogy">
+    <span class="t">打個比方｜天空與雲</span>
+    你的心像天空，念頭像雲。雲會飄來飄去，這很正常，天空不會因為有雲就消失。練調心不是要把雲趕走（越趕越多），而是<b>當天空，看著雲飄過去</b>。發現自己在想事情時，心裡說一聲「喔，有雲」，然後回到呼吸上。
+  </div>
+
+  <h3>由淺到深的四種方法</h3>
+  <ol class="steps">
+    <li><b>數息</b>：上一章教過，數呼吸次數。最適合雜念很多的時候。</li>
+    <li><b>隨息</b>：不數了，只是「跟著」呼吸，感覺空氣進來、出去，像看著海浪。</li>
+    <li><b>聽息</b>：把注意力放在呼吸的聲音上，越聽越細，細到幾乎聽不到。</li>
+    <li><b>意守丹田</b>：把注意力輕輕放在下丹田。這是通往小周天的關鍵練習，下面仔細說。</li>
+  </ol>
+
+  <h3>意守丹田：最重要的一項基本功</h3>
+  <div class="box origin">
+    <span class="t">名詞由來｜意守</span>
+    「意」是心裡的念頭、注意力；「守」是守護、守住。意守就是<b>把注意力溫和地放在一個地方</b>，像媽媽看著睡著的嬰兒：不去搖他、不一直盯著，但心一直在那裡。
+  </div>
+  <ol class="steps">
+    <li>姿勢坐好，舌抵上顎，眼睛垂簾，做幾次腹式呼吸。</li>
+    <li>把注意力從頭頂開始，慢慢往下移到胸口，再到肚臍，再到肚臍下方的下丹田。</li>
+    <li>吸氣時感覺丹田微微鼓起，呼氣時感覺氣回到丹田、停留在那裡。</li>
+    <li>之後不用再特意配合呼吸，只是<b>輕輕地「知道」丹田在那裡</b>。</li>
+    <li>分心了就再回來。每次10～20分鐘。</li>
+  </ol>
+
+  <h3>最重要的四個字：勿忘勿助</h3>
+  <p>意守的力道要多大？古人的答案是：<span class="term">似守非守，若有若無</span>。這個道理，源自《孟子》裡一個你一定聽過的故事——</p>
+  <div class="box analogy">
+    <span class="t">揠苗助長</span>
+    宋國有個農夫嫌稻苗長太慢，就一株一株把苗往上拔高，回家還很得意說「今天我幫苗長高了！」隔天兒子跑去田裡一看，苗全部枯死了。<br>
+    孟子用這個故事說明：做事要「<b>勿忘</b>」（不能忘記、放著不管），也要「<b>勿助長</b>」（不能用力硬推）。
+  </div>
+  <p>意守丹田也一樣：</p>
+  <ul>
+    <li><b>忘了</b>＝注意力跑掉，一直想別的事 → 練不起來。</li>
+    <li><b>助長</b>＝死命盯著丹田、用力想像氣在動 → 頭脹、緊張，甚至出偏差。</li>
+    <li>剛剛好＝像看著窗外的風景一樣，<b>知道它在，但不抓它</b>。</li>
+  </ul>
+
+  <h3>初學常見狀況（全都是正常的）</h3>
+  <div class="tablewrap"><table>
+    <tr><th>狀況</th><th>怎麼辦</th></tr>
+    <tr><td>雜念一直來</td><td>正常到不能再正常。回到數息，數十次就好。</td></tr>
+    <tr><td>坐一坐就想睡</td><td>眼睛稍微張開一點、坐直一點；或改成站樁。累了就先去睡，睡飽再練。</td></tr>
+    <tr><td>坐不住、很煩躁</td><td>先練動功（下一章的八段錦）再靜坐，或把時間縮短成5分鐘。</td></tr>
+    <tr><td>什麼感覺都沒有</td><td>完全正常。感覺不是目標，放鬆和安靜才是。</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" data-part="第二篇　築基篇" data-num="8" data-title="動功入門：八段錦">
+  <p class="part-label">第二篇　築基篇</p>
+  <h2><span class="seal">八</span>動功入門：八段錦</h2>
+  <p class="lead">靜坐前先活動身體，氣血比較容易順。八段錦是最多人練、最安全、也最適合全家一起做的動功。</p>
+  <div class="box origin">
+    <span class="t">名詞由來｜八段錦</span>
+    「錦」是用彩色絲線織成、非常精美的布。古人覺得這八個動作組合起來又好看、又珍貴，就像<b>八段美麗的錦緞</b>，所以叫八段錦。它在宋代就已經有文字記載。每一式的名字都是一句七字口訣，<b>口訣本身就告訴你動作和功效</b>。
+  </div>
+
+  <p>通用要領：動作慢、呼吸自然、動作往上往外時吸氣，往下往內時呼氣。每一式做 <b>6～8次</b>。</p>
+
+  <h4>第一式　兩手托天理三焦</h4>
+  <p>兩手在腹前十指交叉，慢慢往上舉到頭頂，掌心翻向天空，像托著天；抬頭看手，停一下，再慢慢放下。<br><small>「三焦」是中醫把胸腔、上腹、下腹分成上中下三個區域的總稱。這一式把整個軀幹拉長，所以說「理三焦」。</small></p>
+  <h4>第二式　左右開弓似射鵰</h4>
+  <p>蹲成馬步，一手像拉弓弦往側邊拉，另一手食指中指伸直指向另一邊，眼睛看著伸直的手，像要射天上的大鵰。左右輪流。<br><small>擴展胸口，活動肩膀手臂。</small></p>
+  <h4>第三式　調理脾胃須單舉</h4>
+  <p>一手往上撐，掌心朝天；另一手往下按，掌心朝地，一上一下對拉。左右輪流。<br><small>上下對拉會牽動肚子兩側，傳統認為能調養脾胃消化。</small></p>
+  <h4>第四式　五勞七傷往後瞧</h4>
+  <p>兩手垂在身旁，身體不動，頭慢慢轉向左後方看，停一下，轉回；再轉向右後方。<br><small>「五勞七傷」是古人對各種勞累損傷的總稱。這一式活動頸部，對長時間低頭看手機的人特別好。</small></p>
+  <h4>第五式　搖頭擺尾去心火</h4>
+  <p>馬步，兩手扶在大腿上，上半身向左下方傾，再畫弧轉到右邊，頭和臀部像魚一樣反向擺動。<br><small>「心火」指煩躁、上火。這是八式裡動作最大的，<b>有頭暈或高血壓的人幅度要小</b>。</small></p>
+  <h4>第六式　兩手攀足固腎腰</h4>
+  <p>兩手沿著背後腰部往下摸，經過大腿後側，身體前彎，摸到腳（摸不到也沒關係），再沿腿前方慢慢起身。<br><small>伸展整個背部和腿後側。膝蓋可以微彎，<b>不要硬壓</b>。</small></p>
+  <h4>第七式　攢拳怒目增氣力</h4>
+  <p>馬步，兩手握拳放在腰間，一拳慢慢往前打出，同時眼睛睜大、看著拳頭，再收回。左右輪流。<br><small>「攢」是握緊。這一式讓全身筋肉有收有放。</small></p>
+  <h4>第八式　背後七顛百病消</h4>
+  <p>兩腳併攏，腳跟提起，停一下，然後腳跟輕輕落地，讓身體微微震一下。做七次。<br><small>「顛」是震動。落地的輕微震動像把全身輕輕抖一抖，是整套的收尾。</small></p>
+
+  <div class="box try">
+    <span class="t">練習建議</span>
+    整套大約 <b>10～12分鐘</b>。建議每天早上做一次，或在靜坐、站樁之前做。網路上可以搜尋「健身氣功 八段錦」找到國家體育總局推廣的標準示範影片，跟著影片學最準確。
+  </div>
+</section>
+
+<section class="chapter" data-part="第二篇　築基篇" data-num="9" data-title="一次完整的練習與收功">
+  <p class="part-label">第二篇　築基篇</p>
+  <h2><span class="seal">九</span>一次完整的練習與收功</h2>
+  <p class="lead">前面學了零件，這章把它們組裝成「一堂完整的練習」。最後一段「收功」，是很多人忽略、但非常重要的步驟。</p>
+
+  <h3>練習前：準備</h3>
+  <ul>
+    <li><b>時間</b>：飯後至少隔 <b>1小時</b>；太餓、太飽、剛運動完、喝酒後都不要練。早上起床後或睡前都很好。</li>
+    <li><b>環境</b>：安靜、空氣流通但<b>不要直接吹風</b>（冷氣、電風扇別對著身體）。手機靜音。</li>
+    <li><b>穿著</b>：寬鬆衣服，鬆開皮帶、拿掉眼鏡和手錶。</li>
+    <li><b>心情</b>：剛吵完架、非常生氣或非常難過時，先散步、先平復，不要硬坐下來練。</li>
+    <li>先上廁所。</li>
+  </ul>
+
+  <h3>一堂 25 分鐘的基礎練習</h3>
+  <div class="tablewrap"><table>
+    <tr><th>順序</th><th>內容</th><th>時間</th></tr>
+    <tr><td>1</td><td>八段錦（或簡單伸展）</td><td>8～10 分</td></tr>
+    <tr><td>2</td><td>無極樁或抱球樁</td><td>3～5 分</td></tr>
+    <tr><td>3</td><td>坐下：調身檢查 → 腹式呼吸 → 數息</td><td>5 分</td></tr>
+    <tr><td>4</td><td>意守丹田</td><td>5～10 分</td></tr>
+    <tr><td>5</td><td>收功</td><td>2～3 分</td></tr>
+  </table></div>
+
+  <h3>收功：為什麼不能直接站起來就走</h3>
+  <div class="box analogy">
+    <span class="t">打個比方｜電腦關機</span>
+    你一定知道電腦要按「關機」，而不是直接拔插頭。直接拔，下次開機可能出問題。<br>
+    練功時身體和心都進入了比較深的放鬆狀態，如果突然起身、立刻滑手機，就像直接拔插頭：可能頭暈、昏沉、整天恍神。<b>收功就是「正常關機」</b>，把狀態好好收回來。
+  </div>
+  <h4>收功六步驟</h4>
+  <ol class="steps">
+    <li><b>意歸丹田</b>：心裡想著「好，今天練到這裡」，把注意力收回下丹田，停留幾個呼吸。</li>
+    <li><b>搓手熨目</b>：兩手掌搓熱，蓋在閉著的眼睛上，感覺溫熱傳進眼睛。重複3次。</li>
+    <li><b>乾洗臉</b>：搓熱的手從額頭往下、繞到耳後、再回到額頭，像洗臉一樣，做10次左右。</li>
+    <li><b>叩齒</b>：上下牙齒輕輕互碰，大約36次。古人認為能固齒、提神。</li>
+    <li><b>鳴天鼓</b>：兩手掌蓋住耳朵，手指放在後腦，用食指壓在中指上再往下彈，敲後腦勺，耳裡會聽到「咚咚」像打鼓的聲音，所以叫<b>鳴天鼓</b>。做10～20下。</li>
+    <li><b>揉腹</b>：兩手疊放在肚臍，順時針慢慢揉圈36次，再逆時針24次。最後慢慢睜開眼睛，活動手腳，再起身。</li>
+  </ol>
+  <div class="box warn">
+    <span class="t">收功的鐵則</span>
+    練功中如果突然被嚇到（門被大力打開、有人叫你），不要慌，先深吸一口氣、慢慢吐出，把注意力拉回丹田，再做一次簡單收功。以後練習時記得先告訴家人「我要練20分鐘，別突然叫我」。
+  </div>
+
+  <h3>築基期的目標是什麼</h3>
+  <p>大約練 <b>三個月（百日）</b> 左右，如果你發現：</p>
+  <ul>
+    <li>坐下來10分鐘內就能安靜下來；</li>
+    <li>腹式呼吸已經不用想就會；</li>
+    <li>意守丹田時，小腹常常有<b>溫溫的、暖暖的</b>感覺；</li>
+    <li>睡得比較好、心情比較穩、比較不容易累——</li>
+  </ul>
+  <p>那就代表地基打穩了。古人把丹田出現穩定溫熱感，叫做「<span class="term">丹田氣足</span>」或「氣聚丹田」，這是進入小周天的前提。<b>沒有這個前提，就不要往下一篇練。</b></p>
+</section>
+
+<section class="chapter quiz" data-part="第二篇　築基篇" data-num="測" data-title="第二篇小測驗">
+  <p class="part-label">第二篇　築基篇</p>
+  <h2><span class="seal">測</span>第二篇小測驗</h2>
+  <div data-quiz="2"></div>
+</section>
+<!-- ============ 第三篇 小周天篇 ============ -->
+<section class="chapter" data-part="第三篇　小周天篇" data-num="10" data-title="小周天：路線、關卡與鵲橋">
+  <p class="part-label">第三篇　小周天篇</p>
+  <h2><span class="seal">十</span>小周天：路線、關卡與鵲橋</h2>
+  <p class="lead">地基打好了，現在正式認識修煉的第一座山：小周天。這一章只「認路」，下一章才教怎麼走。</p>
+
+  <h3>「周天」兩個字從天文學來</h3>
+  <div class="box origin">
+    <span class="t">名詞由來｜周天</span>
+    古代天文學家把天空繞一整圈叫做「<b>一周天</b>」，並把這一圈分成365又四分之一度（跟一年的天數對應）。太陽每天在天上繞一圈、一年在星空中走一圈，都是「周而復始」。<br>
+    修煉的人認為：<b>人體是一個小宇宙</b>。氣在身體裡繞行一圈，就像太陽在天上繞一圈，所以借用了「周天」這個詞。
+  </div>
+  <div class="box analogy">
+    <span class="t">打個比方｜自轉與公轉</span>
+    很多老師這樣解釋：<b>小周天</b>像地球<b>自轉</b>一圈（一天），範圍小、繞著身體中軸；<b>大周天</b>像地球繞太陽<b>公轉</b>一圈（一年），範圍大、走遍全身。這個比方不是古書原文，但很好記。
+  </div>
+  <div class="box origin">
+    <span class="t">名詞由來｜子午周天、河車</span>
+    <b>子午</b>：古人用十二地支表示方向和時間。「子」是正北、半夜十二點；「午」是正南、正中午。在身體上，<b>子代表最下方的會陰、午代表最上方的頭頂</b>，一條從下到上再回來的直線，所以小周天也叫「<b>子午周天</b>」。「子午線」這個地理名詞也是同一個來源。<br>
+    <b>河車</b>：古代用來把河水往上打的水車。氣沿著背脊由下往上運送，像水車把水從低處搬到高處，所以小周天又叫「<b>轉河車</b>」「<b>河車搬運</b>」。
+  </div>
+
+  <h3>路線全圖</h3>
+  <figure>
+    <div class="fig-body side">
+      <div data-fig="xzt"></div>
+      <div class="infopanel" id="xztInfo"><h5>小周天沿途各站</h5>按「逐站走一遍」，光點會一站一站走，右邊（手機在下方）會說明每一站。也可以直接點圖上的圓點。</div>
+    </div>
+    <div class="pill-row"><button class="btn" id="xztPlay">逐站走一遍</button><button class="btn ghost" id="xztStop">停止</button></div>
+    <figcaption>虛線圓圈是「三關」，是氣最容易卡住的地方。</figcaption>
+  </figure>
+
+  <p>把整條路簡化成一句話：</p>
+  <div class="box">
+    <span class="t">小周天路線口訣</span>
+    <b>丹田 → 會陰 → 尾閭 → 命門 → 夾脊 → 大椎 → 玉枕 → 百會 → 印堂 → 鵲橋 → 膻中 → 回丹田</b><br>
+    前半段（背後往上）走<b>督脈</b>，後半段（前面往下）走<b>任脈</b>。
+  </div>
+
+  <h3>後三關：三個收費站</h3>
+  <p>丹書說督脈這一段有三個比較窄、氣不容易通過的地方，叫做「<span class="term">三關</span>」：</p>
+  <div class="tablewrap"><table>
+    <tr><th>關名</th><th>位置</th><th>名稱由來</th></tr>
+    <tr><td>尾閭關</td><td>尾椎骨末端</td><td>《莊子》說海水最後流出去的地方叫「尾閭」。尾椎是脊椎的末尾，也是氣往上走的入口。</td></tr>
+    <tr><td>夾脊關</td><td>背部正中，大約兩片肩胛骨之間</td><td>脊椎在這裡被兩邊的肌肉「夾」住，所以叫夾脊。</td></tr>
+    <tr><td>玉枕關</td><td>後腦勺突起的骨頭（枕骨）</td><td>躺下時頭靠在枕頭上的地方；「玉」是古人對珍貴東西的美稱。</td></tr>
+  </table></div>
+  <div class="box analogy">
+    <span class="t">古書的比喻｜三輛車</span>
+    有些丹書用三種車來形容過三關的方式：過尾閭像<b>羊車</b>——羊力小、步子輕，要慢慢來；過夾脊像<b>鹿車</b>——鹿跑得快，一鼓作氣；過玉枕像<b>牛車</b>——牛力氣大，要穩穩地撐過去。<br>
+    重點不是真的有車，而是提醒你：<b>三關的性質不一樣，力道和節奏也不一樣</b>。但不管哪一關，都不能硬衝。
+  </div>
+
+  <h3>上下鵲橋</h3>
+  <ul>
+    <li><b>上鵲橋</b>：在口腔（有些書說在印堂到鼻子一帶）。做法：<b>舌抵上顎</b>。舌頭沒搭好，氣從頭部下來時會「斷橋」，容易頭脹。</li>
+    <li><b>下鵲橋</b>：在會陰到尾閭之間。做法：<b>輕提會陰</b>。這一段沒接好，氣容易往下洩散。</li>
+  </ul>
+
+  <h3>前三田</h3>
+  <p>後面有三關，前面則經過三個丹田（第4章學過）：上丹田（印堂內）、中丹田（膻中）、下丹田。古人說「<b>後有三關，前有三田</b>」，合起來就是小周天的六個重要地標。</p>
+
+  <h3>進陽火、退陰符</h3>
+  <p>背部是陽、腹部是陰。所以氣從督脈往上升叫「<span class="term">進陽火</span>」（陽氣往上推進），從任脈往下降叫「<span class="term">退陰符</span>」（陰柔地退回來）。「符」本來是古代兩半合在一起才能用的信物，這裡指陰陽相合、相應。看到這些詞，就知道在講小周天的上升段和下降段。</p>
+</section>
+
+<section class="chapter" data-part="第三篇　小周天篇" data-num="11" data-title="小周天練習步驟">
+  <p class="part-label">第三篇　小周天篇</p>
+  <h2><span class="seal">十一</span>小周天練習步驟</h2>
+  <div class="box warn">
+    <span class="t">開始前再確認一次</span>
+    這一章適合：<b>成年人</b>、已經完成約三個月築基、意守丹田時小腹常有穩定溫熱感、身心狀況良好。國中生讀者請把這章當成「知識」，實際只做下面的「認路練習」就好。
+  </div>
+
+  <h3>兩種主要思路</h3>
+  <div class="tablewrap"><table>
+    <tr><th></th><th>意隨氣行（自然派）</th><th>以意領氣（引導派）</th></tr>
+    <tr><td>做法</td><td>守住丹田，等氣自己動，意念只是輕輕跟著</td><td>用意念配合呼吸，主動帶著「感覺」沿路線走</td></tr>
+    <tr><td>速度</td><td>慢，可能要幾個月到一兩年</td><td>比較快學會路線</td></tr>
+    <tr><td>風險</td><td>低</td><td>意念太重容易頭脹、氣滯</td></tr>
+    <tr><td>建議</td><td colspan="2">以「意隨氣行」為主；「以意領氣」只用在<b>很輕的認路練習</b>。古人說「<b>意到氣到</b>」，但也說「<b>意重則滯</b>」——意念太用力，氣反而卡住。</td></tr>
+  </table></div>
+
+  <h3>第零步：認路練習（人人可做）</h3>
+  <p>這個練習<b>不追求任何氣感</b>，只是讓注意力沿路線散步，把地圖刻進腦子裡。</p>
+  <ol class="steps">
+    <li>坐好、舌抵上顎、腹式呼吸幾次。</li>
+    <li>吸氣時，注意力從丹田往下到會陰、再到尾椎，順著脊椎慢慢往上，到頭頂。</li>
+    <li>呼氣時，注意力從頭頂往前到眉心、經過舌頭、胸口，回到丹田。</li>
+    <li>一呼一吸走一圈，做 <b>9圈</b> 就好。最後注意力停在丹田，靜坐幾分鐘，收功。</li>
+  </ol>
+  <p>就像照著上一章的動畫在心裡「描」一遍。感覺不到任何東西完全沒關係。</p>
+
+  <h3>正式練習的六個階段（自然派）</h3>
+  <div class="ladder">
+    <div class="rung"><span class="n">階段一<br>聚氣</span><div>每天意守丹田20～30分鐘，直到丹田溫熱感穩定、每次坐下不久就會出現。這其實就是築基的延續。</div></div>
+    <div class="rung"><span class="n">階段二<br>氣足下行</span><div>溫熱感越來越充實，有時會自己往下，在會陰一帶出現溫熱、跳動或微微的鼓脹。這時輕提會陰（下鵲橋），但仍以守丹田為主。</div></div>
+    <div class="rung"><span class="n">階段三<br>過尾閭</span><div>熱感自然往後到尾椎、腰部（命門）。意念<b>輕輕跟著</b>，不推。有時會在尾椎停很多天，這很正常。停住時就回丹田守著，等它再累積。</div></div>
+    <div class="rung"><span class="n">階段四<br>過夾脊、玉枕</span><div>熱感沿背脊上升，可能在背中段、後腦卡住，感覺像有東西頂著、發脹。<b>玉枕關要特別小心</b>：頭脹時不要硬想著往上，把注意力移到眉心印堂或乾脆回丹田。</div></div>
+    <div class="rung"><span class="n">階段五<br>百會下降</span><div>過了頭頂，氣會往前經過印堂、鼻子到口中，這時舌頭一定要搭好。口水常會變多，分次吞下，意念隨著它經過喉嚨、膻中，<b>回到丹田</b>。</div></div>
+    <div class="rung"><span class="n">階段六<br>周天自轉</span><div>整圈連起來後，熟練了會變得自然：守著丹田，氣會自己一圈一圈轉。這時古人說「<b>通小周天</b>」了。</div></div>
+  </div>
+
+  <h3>每次練小周天的流程</h3>
+  <div class="tablewrap"><table>
+    <tr><th>順序</th><th>內容</th><th>時間</th></tr>
+    <tr><td>1</td><td>八段錦或站樁暖身</td><td>10 分</td></tr>
+    <tr><td>2</td><td>坐好、調身、調息、數息入靜</td><td>5 分</td></tr>
+    <tr><td>3</td><td>意守丹田，氣動則隨，不動則守</td><td>20～40 分</td></tr>
+    <tr><td>4</td><td><b>不論練到哪裡，最後都把意念收回丹田</b></td><td>3 分</td></tr>
+    <tr><td>5</td><td>收功六步驟</td><td>3 分</td></tr>
+  </table></div>
+
+  <div class="box warn">
+    <span class="t">最重要的一條規矩</span>
+    <b>氣不可停在頭部或胸口就結束練習。</b>每次練完，一定要把意念和感覺帶回下丹田。頭是「上面」，氣停在上面，容易頭脹、失眠、煩躁；丹田是「根」，回到根就穩了。古人說「<b>練功千日，收功一時</b>」，意思就是收回丹田這一步比什麼都重要。
+  </div>
+
+  <h3>古人怎麼看進度</h3>
+  <p>傳統說法：有人百日就通，有人三年才通，也有人一輩子沒有明顯感覺但身心一樣變好。<b>速度和天分、年紀、生活作息都有關，和人好不好、努不努力沒有直接關係。</b>丹書也一再強調「<b>不可求速</b>」——越急越慢。</p>
+</section>
+
+<section class="chapter" data-part="第三篇　小周天篇" data-num="12" data-title="身體反應與偏差處理">
+  <p class="part-label">第三篇　小周天篇</p>
+  <h2><span class="seal">十二</span>身體反應與偏差處理</h2>
+  <p class="lead">練氣功時，身體可能出現各種奇怪的感覺。這章教你分辨：哪些是正常的「路上風景」，哪些是要停下來的「警示燈」。</p>
+
+  <h3>正常反應：八觸</h3>
+  <div class="box origin">
+    <span class="t">名詞由來｜八觸</span>
+    佛教天台宗在教靜坐時，把入靜後常見的身體感覺整理成八種，叫「八觸」：<b>動、癢、涼、暖、輕、重、澀、滑</b>。「觸」就是觸覺、身體的感受。後來氣功界也常借用這個說法。
+  </div>
+  <div class="tablewrap"><table>
+    <tr><th>感覺</th><th>常見描述</th><th>態度</th></tr>
+    <tr><td>暖</td><td>丹田、手心、背脊溫熱</td><td>最常見，好現象，但不追求</td></tr>
+    <tr><td>麻、癢</td><td>像有螞蟻在皮膚上爬（古人叫「蟻行感」）</td><td>不抓，不理它</td></tr>
+    <tr><td>動</td><td>肌肉跳動，身體輕微搖晃</td><td>幅度小就不理；越動越大時，意念守住丹田，想「靜」，它就會停</td></tr>
+    <tr><td>輕、重</td><td>身體好像變輕飄起來，或變重沉下去</td><td>只是感覺，不是真的</td></tr>
+    <tr><td>涼</td><td>某處發涼、有風吹感</td><td>正常；但要確認不是真的在吹冷氣</td></tr>
+    <tr><td>光、聲</td><td>閉眼看到光點、聽到聲音</td><td>見到也當沒見到，<b>絕不追著看</b></td></tr>
+  </table></div>
+  <div class="box analogy">
+    <span class="t">打個比方｜坐火車看窗外</span>
+    這些感覺就像坐火車時窗外的風景：看到了很好，但你的目的地不是那片風景。如果你因為風景很美就跳下車，就到不了終點。古人有一句很有智慧的話：「<b>見怪不怪，其怪自敗</b>」——你不理它，怪現象自己就消失了。
+  </div>
+
+  <h3>警示燈：出現就要處理</h3>
+  <div class="box warn">
+    <span class="t">出現以下情況，請停止練習</span>
+    <ul>
+      <li>練完後<b>頭痛、頭脹</b>持續不退，或頭頂像有東西壓著。</li>
+      <li><b>胸悶、心跳很快、喘不過氣</b>。</li>
+      <li>氣感<b>停在某個地方不散</b>，脹痛越來越明顯。</li>
+      <li>晚上<b>失眠</b>、白天煩躁，持續好幾天。</li>
+      <li>聽到或看到不存在的東西，而且<b>開始相信它是真的</b>、感到害怕或被控制。</li>
+      <li>身體<b>自己大幅度亂動、停不下來</b>。</li>
+      <li>情緒突然大起大落、容易哭或發怒。</li>
+    </ul>
+    以上情況若停練幾天仍沒改善，或一開始就很嚴重，<b>請直接就醫</b>（家醫科、身心科都可以），並老實告訴醫生你在練什麼。這不丟臉，是負責任。
+  </div>
+
+  <h3>輕微狀況的自我處理</h3>
+  <ol class="steps">
+    <li><b>停止意守</b>：不要再想著經絡、氣、路線。</li>
+    <li><b>引氣下行</b>：把注意力放到<b>腳底的湧泉穴</b>（腳掌前三分之一中間凹陷處）。頭上的問題，往腳下帶。</li>
+    <li><b>動起來</b>：散步15分鐘、做八段錦、拍打全身（從手臂、肩膀、胸、腹、腿，由上往下拍）。</li>
+    <li><b>揉腹收功</b>：做一次完整收功。</li>
+    <li><b>休息幾天</b>，之後只練動功和自然呼吸，等恢復再慢慢來。</li>
+  </ol>
+
+  <h3>什麼是「走火入魔」？</h3>
+  <div class="box origin">
+    <span class="t">名詞由來｜走火入魔</span>
+    這是真的丹道用語，不是小說發明的。<br>
+    <b>走火</b>：「火」指的是<b>火候</b>——練功時意念和呼吸的強弱（第16章會講）。火候太大太急，就叫走火，結果是身體出現頭脹、氣亂、發熱難受等問題。<br>
+    <b>入魔</b>：「魔」指的是練功時出現的<b>幻覺、雜念、欲望</b>。把幻覺當真、執著追求神奇體驗，心被它帶走，就叫入魔。<br>
+    所以走火入魔的真正原因只有兩個：<b>太急（火候錯）＋太貪（心被帶走）</b>。
+  </div>
+  <p>對照一下你會發現：這門課從第一章就不斷提醒的「自然、不勉強、不追求感覺、一定要收功」，全部都是在預防這兩件事。</p>
+
+  <h3>其他實用守則</h3>
+  <ul>
+    <li><b>不要同時練好幾種不同門派的靜功</b>。每家的路線、意守點不同，混著練容易亂。動功（如八段錦）可以搭配。</li>
+    <li><b>不要找「發功」「灌氣」的大師</b>，尤其是要收高額費用、要求你斷絕家人、宣稱能取代醫療的。</li>
+    <li><b>生病就去看醫生</b>。氣功可以是很好的輔助，但不能代替治療，也不要自行停藥。</li>
+  </ul>
+</section>
+
+<section class="chapter quiz" data-part="第三篇　小周天篇" data-num="測" data-title="第三篇小測驗">
+  <p class="part-label">第三篇　小周天篇</p>
+  <h2><span class="seal">測</span>第三篇小測驗</h2>
+  <div data-quiz="3"></div>
+</section>
+<!-- ============ 第四篇 大周天篇 ============ -->
+<section class="chapter" data-part="第四篇　大周天篇" data-num="13" data-title="大周天是什麼">
+  <p class="part-label">第四篇　大周天篇</p>
+  <h2><span class="seal">十三</span>大周天是什麼</h2>
+  <p class="lead">小周天是繞身體中軸一圈，大周天則是讓氣「走遍全身」。但「大周天」這個詞，其實有兩種不同的意思，先分清楚才不會搞混。</p>
+
+  <h3>兩種「大周天」</h3>
+  <div class="tablewrap"><table>
+    <tr><th></th><th>意思一：全身周天（一般氣功）</th><th>意思二：丹道大周天（內丹學）</th></tr>
+    <tr><td>內容</td><td>氣除了任督，還通到<b>四肢和十二正經</b>，手到手心、腳到腳底，走遍全身</td><td>小周天完成「煉精化氣」後，進入「<b>煉氣化神</b>」的階段</td></tr>
+    <tr><td>有沒有路線</td><td>有，而且比小周天長</td><td>越練越<b>沒有固定路線</b>，強調自然、不刻意</td></tr>
+    <tr><td>誰在用這個說法</td><td>現代多數氣功書、健身氣功</td><td>伍柳派等傳統丹書</td></tr>
+  </table></div>
+  <p>本章和下一章前半，講的是<b>意思一</b>；意思二會在第五篇的內丹學完整說明。還有一些門派把「<b>卯酉周天</b>」（卯＝東、酉＝西，氣沿身體左右兩側繞行）也算進大周天的範圍——這就是為什麼你在不同書上看到的大周天都不太一樣，<b>不是誰錯，是定義不同</b>。</p>
+
+  <h3>全身周天示意圖</h3>
+  <figure>
+    <div data-fig="dzt"></div>
+    <figcaption>正面示意：氣從下丹田出發，下行兩腿到腳底湧泉，上行軀幹，分到兩手手心勞宮，上到頭頂百會，最後回丹田。各門派實際路線不同，這張圖只表現「走遍全身」的概念。</figcaption>
+  </figure>
+
+  <h3>大周天的兩個新地標</h3>
+  <div class="box origin">
+    <span class="t">名詞由來｜湧泉</span>
+    位在腳底，把腳趾往下彎時，腳掌前三分之一出現的凹陷處。它是足少陰腎經的<b>第一個穴位</b>，古人想像腎經的氣像<b>泉水從地底湧出來</b>一樣，從這裡開始往上流，所以叫湧泉。人站在大地上，湧泉就是和地面接觸的「根」。
+  </div>
+  <div class="box origin">
+    <span class="t">名詞由來｜勞宮</span>
+    位在手掌心，握拳時中指指尖碰到的地方。手是人「勞動」最多的部位，「宮」是重要的房間，所以叫勞宮——<b>勞動之手的中心宮殿</b>。第1章你搓手感覺到的熱，最明顯的就是這裡。
+  </div>
+  <div class="box try">
+    <span class="t">動手試試｜找到湧泉和勞宮</span>
+    坐著把一隻腳放到另一條腿上，腳趾往下彎，找到腳掌那個凹下去的小窩，用大拇指按揉一分鐘——這是湧泉。然後握拳，看中指尖碰到掌心哪裡——這是勞宮。兩個穴位記住了，下一章的練習就能用上。
+  </div>
+
+  <h3>小周天和大周天比一比</h3>
+  <div class="tablewrap"><table>
+    <tr><th></th><th>小周天</th><th>大周天（全身周天）</th></tr>
+    <tr><td>範圍</td><td>任督二脈，身體中軸</td><td>加上四肢、全身經脈</td></tr>
+    <tr><td>比喻</td><td>地球自轉</td><td>地球公轉</td></tr>
+    <tr><td>重點穴位</td><td>丹田、會陰、三關、百會、鵲橋</td><td>再加上湧泉、勞宮</td></tr>
+    <tr><td>丹道階段</td><td>煉精化氣（初關）</td><td>煉氣化神（中關）</td></tr>
+    <tr><td>前提</td><td>丹田氣足</td><td>小周天已經自然運轉、穩定</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" data-part="第四篇　大周天篇" data-num="14" data-title="大周天練法與生活化">
+  <p class="part-label">第四篇　大周天篇</p>
+  <h2><span class="seal">十四</span>大周天練法與生活化</h2>
+  <div class="box warn">
+    <span class="t">前提</span>
+    本章的正式練法，適合<b>小周天已經穩定運轉一段時間</b>的成年人。其中「湧泉呼吸」和「行住坐臥」的部分很溫和，一般人（包括青少年）都可以練。
+  </div>
+
+  <h3>練法一：湧泉呼吸（人人可練）</h3>
+  <p>這是讓氣「有根」的練習，也是處理頭脹最好用的方法。</p>
+  <ol class="steps">
+    <li>站無極樁，或坐在椅子上兩腳踩穩地面。</li>
+    <li>吸氣時，想像從<b>腳底湧泉</b>吸進大地溫和的氣，沿著兩腿內側往上，到下丹田。</li>
+    <li>呼氣時，想像氣從丹田沿兩腿往下，從湧泉慢慢送回大地。</li>
+    <li>做5～10分鐘。重點是<b>感覺腳底很穩、很重、很踏實</b>。</li>
+  </ol>
+  <div class="box analogy">
+    <span class="t">打個比方｜大樹</span>
+    小周天像樹幹裡的水往上送、再回到根部；湧泉呼吸則是讓根<b>往土裡長</b>。樹根越深，樹幹越高都不怕倒。所以練大周天，先往下紮根，再往外伸展。
+  </div>
+
+  <h3>練法二：全身周天（進階）</h3>
+  <ol class="steps">
+    <li>先練一次小周天，讓氣在任督運轉幾圈，回到丹田。</li>
+    <li>守丹田，等溫熱感充足後，意念輕輕隨它<b>往下分到兩腿</b>，經過膝蓋、小腿，到腳底湧泉。</li>
+    <li>從腳底沿腿後側往上，到尾閭，接上督脈往上。</li>
+    <li>到了肩膀附近（大椎），分往<b>兩條手臂</b>，到手心勞宮、手指尖，再沿手臂回到胸口。</li>
+    <li>上到頭頂百會，從臉前方下降，經過膻中，<b>回到下丹田</b>。</li>
+    <li>熟練後不再一段一段想，只是守著丹田，感覺溫暖像水波一樣<b>擴散到全身</b>。</li>
+  </ol>
+  <p>和小周天一樣：<b>氣到哪算哪，不硬推；結束一定回丹田。</b></p>
+
+  <h3>練法三：體呼吸</h3>
+  <p>傳統說「<b>毛孔呼吸</b>」或「<b>體呼吸</b>」：吸氣時想像全身皮膚的毛孔一起把清新的氣吸進來、收到丹田；呼氣時從丹田散到全身、再從毛孔送出去。整個人像一顆<b>輕輕膨脹、收縮的氣球</b>。這是大周天階段常用的練習，會讓人有全身被溫暖包圍的感覺。</p>
+
+  <h3>天人合一：練功不只在墊子上</h3>
+  <div class="box origin">
+    <span class="t">名詞由來｜天人合一</span>
+    這是中國哲學最重要的觀念之一：人和天地是一個整體，人體是一個小宇宙，要順應自然的規律生活。「周天」這個詞本身就是天人合一的例子——把天上的運行，用來形容身體裡的運行。
+  </div>
+  <p>所以到了大周天階段，古人強調練功要<b>融入生活</b>，叫「<span class="term">行住坐臥，不離這個</span>」（走路、站著、坐著、躺著，都不離開那份安定）：</p>
+  <div class="tablewrap"><table>
+    <tr><th>時機</th><th>怎麼練</th></tr>
+    <tr><td>走路</td><td>配合步伐做腹式呼吸，感覺每一步湧泉踩穩大地</td></tr>
+    <tr><td>等車、排隊</td><td>膝蓋微彎、肩膀下沉，悄悄站個小樁</td></tr>
+    <tr><td>上課、工作</td><td>坐直、舌抵上顎、偶爾做三次深長的呼吸</td></tr>
+    <tr><td>睡前</td><td>躺著，兩手疊放丹田，做腹式呼吸直到睡著</td></tr>
+    <tr><td>生氣時</td><td>先不說話，吸氣到丹田、慢慢吐出三次。這就是最實用的「調心」</td></tr>
+  </table></div>
+  <div class="box">
+    <span class="t">順應四季</span>
+    傳統養生也講季節：春天早起散步、舒展；夏天不貪涼、不在大太陽下練；秋天收斂、多做呼吸；冬天早睡晚起、注意保暖，練功重在「藏」。這些建議很生活，也很合理。
+  </div>
+</section>
+
+<section class="chapter quiz" data-part="第四篇　大周天篇" data-num="測" data-title="第四篇小測驗">
+  <p class="part-label">第四篇　大周天篇</p>
+  <h2><span class="seal">測</span>第四篇小測驗</h2>
+  <div data-quiz="4"></div>
+</section>
+
+<!-- ============ 第五篇 專業篇 ============ -->
+<section class="chapter" data-part="第五篇　專業篇" data-num="15" data-title="內丹學：修煉的完整地圖">
+  <p class="part-label">第五篇　專業篇</p>
+  <h2><span class="seal">十五</span>內丹學：修煉的完整地圖</h2>
+  <p class="lead">你已經學完小周天、大周天。這一章把鏡頭拉遠，看整座山的全貌：傳統「內丹學」認為修煉總共有哪些階段。</p>
+
+  <h3>從外丹到內丹：一段慘痛的歷史</h3>
+  <p>秦漢到唐代，很多帝王和道士想靠吃「丹藥」長生不老。這些丹藥用朱砂（含汞）、鉛等礦物煉成，叫做「<span class="term">外丹</span>」。結果許多人吃了反而中毒，歷史上好幾位唐朝皇帝都被認為死於服食丹藥。</p>
+  <p>於是修煉者慢慢轉向：<b>不在爐子裡煉，而在自己身體裡煉</b>。把身體當成爐鼎，把精氣神當成藥材，這就是「<span class="term">內丹</span>」。外丹的術語（鼎爐、火候、鉛汞、藥物）也被整套借了過來，變成比喻——這就是丹書看起來像化學實驗手冊的原因。</p>
+
+  <h3>四個階段</h3>
+  <div class="ladder">
+    <div class="rung"><span class="n">築基</span><div>補足身體的虧損，讓精氣充足。俗稱「<b>百日築基</b>」。本課程第二篇。</div></div>
+    <div class="rung"><span class="n">煉精化氣</span><div>又叫「初關」。把精轉化成氣，方法就是<b>小周天</b>。傳統說法約需百日。本課程第三篇。</div></div>
+    <div class="rung"><span class="n">煉氣化神</span><div>又叫「中關」。氣與神結合，對應丹道的<b>大周天</b>。比喻為「<b>十月懷胎</b>」——像懷孕一樣，在丹田溫養一個新的生命（丹道叫「聖胎」「嬰兒」，都是比喻）。</div></div>
+    <div class="rung"><span class="n">煉神還虛</span><div>又叫「上關」。連「我在練功」的念頭都放下，心回到空靈、寬廣的狀態。比喻為「<b>三年哺乳、九年面壁</b>」。</div></div>
+    <div class="rung"><span class="n">煉虛合道</span><div>有些丹書再加這一層：與「道」完全合一，是傳統修煉的最高理想。</div></div>
+  </div>
+  <div class="box analogy">
+    <span class="t">打個比方｜冰、水、蒸氣</span>
+    煉精化氣、煉氣化神、煉神還虛，很像冰→水→水蒸氣：東西還是同一個，只是越來越<b>輕、細、能流動、能擴散</b>。從有形的身體，走向無形的心靈。
+  </div>
+  <div class="box">
+    <span class="t">「百日、十月、三年、九年」要照字面算嗎？</span>
+    不用。這些數字是<b>比喻加上傳統</b>，說明每一階段都需要長時間累積，而且越往上越久。現代人工作生活忙碌，更不可能照表操課。把它當成「方向」而不是「時刻表」。
+  </div>
+
+  <h3>性命雙修</h3>
+  <div class="box origin">
+    <span class="t">名詞由來｜性、命</span>
+    <b>性</b>：心性、精神、意識。<b>命</b>：身體、生命能量。<br>
+    內丹學主張兩者都要練，叫「<b>性命雙修</b>」。只練身體不修心，容易變成追求神奇感覺；只修心不練身，身體撐不住。北宋張伯端開創的<b>南宗</b>主張「先命後性」（先練身體），金代王重陽創立的<b>全真教（北宗）</b>主張「先性後命」（先修心性），兩派殊途同歸。
+  </div>
+
+  <h3>必讀經典（認識書名即可）</h3>
+  <div class="tablewrap"><table>
+    <tr><th>書名</th><th>時代／作者</th><th>地位</th></tr>
+    <tr><td>周易參同契</td><td>東漢　魏伯陽</td><td>用易經和煉丹比喻修煉，稱「萬古丹經王」</td></tr>
+    <tr><td>黃庭經</td><td>魏晉</td><td>描述身體內的各種「神」與存思方法，影響深遠</td></tr>
+    <tr><td>悟真篇</td><td>北宋　張伯端</td><td>以詩詞講內丹，南宗根本經典</td></tr>
+    <tr><td>性命圭旨</td><td>明代</td><td>附大量圖解，是「看圖學內丹」的名著</td></tr>
+    <tr><td>天仙正理／仙佛合宗</td><td>明末　伍沖虛</td><td>伍柳派經典，對小周天步驟、火候講得最具體</td></tr>
+    <tr><td>慧命經</td><td>清代　柳華陽</td><td>伍柳派經典，結合佛道，有插圖</td></tr>
+    <tr><td>太乙金華宗旨</td><td>清代（託名呂洞賓）</td><td>1929年由德國漢學家衛禮賢譯成德文，心理學家榮格寫評論，成為西方最知名的內丹書</td></tr>
+  </table></div>
+  <div class="box warn">
+    <span class="t">讀丹書的提醒</span>
+    丹書大量使用隱語、比喻，而且<b>同一個詞在不同書裡指的東西不一樣</b>（例如「鉛」「汞」「龍」「虎」）。古人自己也說「<b>讀丹經須得真師口訣</b>」。自己讀可以增長見識，但不要照著書上冷門、激烈的方法硬練。
+  </div>
+</section>
+
+<section class="chapter" data-part="第五篇　專業篇" data-num="16" data-title="丹道術語解碼">
+  <p class="part-label">第五篇　專業篇</p>
+  <h2><span class="seal">十六</span>丹道術語解碼</h2>
+  <p class="lead">打開任何一本丹書，都會看到滿滿的「鼎爐」「火候」「坎離」。上一章說了，這些都是從外丹借來的比喻。這一章幫你把最常見的密碼一次解開。</p>
+
+  <h3>煉丹三件套：鼎爐、藥物、火候</h3>
+  <div class="box analogy">
+    <span class="t">把它想成煮一鍋湯</span>
+    煮湯需要<b>鍋子和爐子</b>、需要<b>食材</b>、需要<b>控制火力</b>。煉內丹一樣：
+    <ul>
+      <li><b>鼎爐</b>＝鍋和爐：鼎通常指上丹田（頭），爐指下丹田（腹）。也有書把整個身體叫做鼎爐。</li>
+      <li><b>藥物</b>＝食材：就是精、氣、神。</li>
+      <li><b>火候</b>＝火力：也就是<b>意念和呼吸的強弱快慢</b>。</li>
+    </ul>
+  </div>
+  <h4>火候：文火與武火</h4>
+  <div class="tablewrap"><table>
+    <tr><th></th><th>文火</th><th>武火</th></tr>
+    <tr><td>像什麼</td><td>小火慢燉</td><td>大火快炒</td></tr>
+    <tr><td>練功上</td><td>意念輕、呼吸自然柔和</td><td>意念比較集中、呼吸比較深長有力</td></tr>
+    <tr><td>用在</td><td>大部分時間、溫養階段</td><td>短暫的「採藥」「衝關」時刻</td></tr>
+  </table></div>
+  <p>丹書說「<b>火候是修煉最大的祕密</b>」。對一般人最安全的做法只有一個：<b>幾乎全部用文火</b>。記得第12章嗎？「走火」就是火候錯了。</p>
+
+  <h3>小周天的四個動作</h3>
+  <div class="ladder">
+    <div class="rung"><span class="n">採藥</span><div>當丹田溫熱、精神特別飽滿時，把這份能量「收」起來，像把成熟的果實摘下。</div></div>
+    <div class="rung"><span class="n">封固</span><div>收好之後，靜靜守在丹田，不讓它散掉，像把食材放進鍋裡蓋上蓋子。</div></div>
+    <div class="rung"><span class="n">烹煉</span><div>讓它沿小周天運轉，進陽火、退陰符，一圈一圈地「煮」。</div></div>
+    <div class="rung"><span class="n">沐浴</span><div>運轉途中在某些位置<b>暫停、不加火</b>，靜靜溫養。這不是真的洗澡，而是「休息一下、讓它自己熟」。傳統說在卯、酉兩個位置沐浴，所以叫「<b>卯酉沐浴</b>」。</div></div>
+  </div>
+
+  <h3>活子時</h3>
+  <div class="box origin">
+    <span class="t">名詞由來｜活子時</span>
+    「子時」是晚上11點到凌晨1點，古人認為這時一天的陽氣開始萌生，最適合練功。但後來的丹家說：<b>不必死守時鐘上的子時</b>，只要身體裡的陽氣自然發動、精神突然特別清明飽滿的那一刻，就是你的「子時」。因為它是活的、不固定的，所以叫「活子時」。這是一個很有智慧的轉變：<b>重視身體的真實狀態，勝過死板的規定</b>。
+  </div>
+
+  <h3>坎離：用八卦說身體</h3>
+  <figure>
+    <div data-fig="kanli"></div>
+    <figcaption>長橫線「⚊」是陽爻，中間斷開的「⚋」是陰爻。坎卦外陰內陽，離卦外陽內陰。</figcaption>
+  </figure>
+  <ul>
+    <li><b>坎卦 ☵</b>：代表<b>水</b>，對應<b>腎</b>。外面兩條陰爻、中間一條陽爻——水外表柔軟，裡面藏著一點陽氣。</li>
+    <li><b>離卦 ☲</b>：代表<b>火</b>，對應<b>心</b>。外面兩條陽爻、中間一條陰爻——火外表明亮，中心卻是虛的。</li>
+  </ul>
+  <p>丹道的核心口訣之一叫「<span class="term">取坎填離</span>」：把坎卦中間那條陽爻取出來，填到離卦中間，離卦就變成三條全陽的<b>乾卦 ☰</b>，象徵回到純陽、完整的狀態。翻成白話：<b>讓腎裡的生命力往上滋養心，讓心的火往下溫暖腎，水火互相交流</b>，中醫叫「心腎相交」「水火既濟」。你會發現，這不就是小周天「下面的往上走、上面的往下走」嗎？</p>
+
+  <h3>其他常見隱語</h3>
+  <div class="tablewrap"><table>
+    <tr><th>術語</th><th>常見指涉（各書不一）</th></tr>
+    <tr><td>龍、虎</td><td>龍多指心、神、屬火；虎多指腎、精、屬水。「降龍伏虎」即調伏心神與精氣</td></tr>
+    <tr><td>鉛、汞</td><td>來自外丹原料。鉛多指腎中之氣（真陽），汞多指心中之神</td></tr>
+    <tr><td>黃婆</td><td>「真意」，也就是專注平和的意念。它像媒人一樣撮合龍虎、坎離，黃色屬土、居中</td></tr>
+    <tr><td>玄關一竅</td><td>修煉中最關鍵的一個「竅」，各家位置說法差異極大，許多丹書認為它不在固定部位，而是入靜到某種程度才顯現</td></tr>
+    <tr><td>聖胎、嬰兒</td><td>煉氣化神階段在丹田溫養的成果，是比喻，不是真的懷孕</td></tr>
+    <tr><td>金丹</td><td>修煉的成果，「金」代表永不變壞</td></tr>
+  </table></div>
+</section>
+
+<section class="chapter" data-part="第五篇　專業篇" data-num="17" data-title="用科學眼光看氣功">
+  <p class="part-label">第五篇　專業篇</p>
+  <h2><span class="seal">十七</span>用科學眼光看氣功</h2>
+  <p class="lead">真正的專業，不只是懂很多術語，還包括知道<b>哪些已經被證實、哪些還不知道、哪些是誇大</b>。</p>
+
+  <h3>目前研究比較支持的</h3>
+  <p>近幾十年有不少關於太極拳、八段錦、各種氣功的臨床研究和綜合分析。整體來說，它們對以下幾方面<b>有中小程度的幫助</b>：</p>
+  <ul>
+    <li>降低壓力、焦慮，改善情緒和<b>睡眠品質</b>。</li>
+    <li>改善<b>平衡感</b>，減少長者跌倒。</li>
+    <li>對<b>血壓</b>、慢性疼痛、心肺功能有輔助效果。</li>
+  </ul>
+  <p>不過研究品質參差不齊，很多研究人數少、時間短，所以科學家的態度是：<b>「有希望、值得練，但不是萬靈丹。」</b></p>
+
+  <h3>可能的原理</h3>
+  <div class="tablewrap"><table>
+    <tr><th>氣功做法</th><th>可能的科學解釋</th></tr>
+    <tr><td>放鬆、入靜</td><td>1970年代美國哈佛醫師班森（Herbert Benson）提出「<b>放鬆反應</b>」：安靜、專注、重複的練習能降低心跳、血壓和壓力荷爾蒙</td></tr>
+    <tr><td>腹式、緩慢呼吸</td><td>慢呼吸（尤其呼氣較長）會啟動<b>副交感神經</b>，讓身體從「戰鬥模式」切換到「休息模式」</td></tr>
+    <tr><td>丹田溫熱、手心發熱</td><td>放鬆時末梢血管擴張、局部血流增加，皮膚溫度確實可能上升；專注也會放大原本就有的身體感覺</td></tr>
+    <tr><td>站樁、動功</td><td>低強度的肌力訓練與平衡訓練</td></tr>
+  </table></div>
+
+  <h3>目前還不知道、或沒被證實的</h3>
+  <ul>
+    <li><b>經絡</b>：至今在解剖上沒有找到獨立的「管道」實體。有研究者提出和筋膜、神經、結締組織有關的假說，但都還沒有定論。比較中肯的看法是：經絡是古人整理身體經驗的一套<b>地圖系統</b>，它有用的部分可以被研究，但不等於身體裡真有一條管子。</li>
+    <li><b>外氣治病、隔空發功</b>：在嚴格的對照實驗（例如讓發功者不知道對象在哪裡）下，大多<b>無法重現</b>。</li>
+    <li><b>特異功能</b>：1980年代中國曾掀起「氣功熱」，出現大量「透視」「隔空移物」之類的宣稱，後來許多被揭穿是魔術或騙局。</li>
+  </ul>
+
+  <h3>判斷一個氣功老師或課程的五個問題</h3>
+  <ol class="steps">
+    <li>他是不是宣稱能<b>治好</b>癌症或重大疾病、或叫你<b>停藥</b>？→ 立刻離開。</li>
+    <li>收費是不是越往上越貴，還說「不繳錢就練不上去」？→ 危險。</li>
+    <li>是不是要你<b>切斷和家人朋友的聯繫</b>、只相信他？→ 危險。</li>
+    <li>是不是鼓勵你<b>追求神奇感覺</b>，而不是強調放鬆、自然、收功？→ 不專業。</li>
+    <li>你練了之後，是<b>睡得更好、心情更穩、生活更好</b>，還是越來越焦慮？→ 這是最好的檢驗。</li>
+  </ol>
+  <div class="box analogy">
+    <span class="t">打個比方｜地圖和土地</span>
+    經絡學說像一張古老的地圖。地圖不等於土地本身，有些地方畫得很準、有些地方可能畫錯。但如果照著這張地圖走，很多人確實走到了「更健康、更安定」這個地方——那這張地圖就值得我們認真看，同時也繼續用新工具去檢驗它。
+  </div>
+</section>
+
+<section class="chapter" data-part="第五篇　專業篇" data-num="18" data-title="修煉計畫表與練習計時器">
+  <p class="part-label">第五篇　專業篇</p>
+  <h2><span class="seal">十八</span>修煉計畫表與練習計時器</h2>
+  <p class="lead">學完了整座山的地圖，最後給你一份可以真正拿來用的時間表。</p>
+
+  <h3>青少年版：每天 15 分鐘</h3>
+  <div class="tablewrap"><table>
+    <tr><th>時期</th><th>內容</th><th>目標</th></tr>
+    <tr><td>第1～2週</td><td>八段錦（跟影片）＋ 自然呼吸 3 分鐘</td><td>記住八個動作</td></tr>
+    <tr><td>第3～4週</td><td>八段錦 ＋ 腹式呼吸 5 分鐘</td><td>腹式呼吸不用想就會</td></tr>
+    <tr><td>第2個月</td><td>八段錦 ＋ 無極樁 3～5 分鐘 ＋ 數息 5 分鐘</td><td>站得穩、心能靜</td></tr>
+    <tr><td>第3個月以後</td><td>以上 ＋ 睡前躺著腹式呼吸；每週做一兩次小周天「認路練習」</td><td>養成習慣，睡得好、專注力提升</td></tr>
+  </table></div>
+
+  <h3>成人版：半年計畫</h3>
+  <div class="tablewrap"><table>
+    <tr><th>時期</th><th>內容</th><th>每天</th><th>過關指標</th></tr>
+    <tr><td>第1個月</td><td>八段錦、無極樁、腹式呼吸、數息</td><td>20 分</td><td>能安靜坐 10 分鐘</td></tr>
+    <tr><td>第2個月</td><td>加抱球樁、意守丹田</td><td>30 分</td><td>意守時常有溫暖感</td></tr>
+    <tr><td>第3個月</td><td>意守丹田延長到 20～30 分；每週 2 次認路練習</td><td>40 分</td><td>丹田溫熱穩定（築基完成）</td></tr>
+    <tr><td>第4～5個月</td><td>小周天自然派練習，意隨氣行</td><td>40～60 分</td><td>氣感逐步過三關</td></tr>
+    <tr><td>第6個月以後</td><td>小周天穩定後，加湧泉呼吸、全身周天、行住坐臥</td><td>依生活安排</td><td>身心穩定、融入生活</td></tr>
+  </table></div>
+  <p>這是參考，不是考試。<b>進度慢完全沒問題，出現不適就退回上一階段。</b>比起一天練兩小時、三天打魚兩天曬網，每天15分鐘持續一年的效果好得多。</p>
+
+  <h3>練習計時器</h3>
+  <figure>
+    <div class="timer">
+      <div class="clock" id="tClock">10:00</div>
+      <div class="pill-row" id="tMins">
+        <button class="pill" data-min="5">5 分</button>
+        <button class="pill on" data-min="10">10 分</button>
+        <button class="pill" data-min="15">15 分</button>
+        <button class="pill" data-min="20">20 分</button>
+        <button class="pill" data-min="30">30 分</button>
+      </div>
+      <div class="pill-row"><button class="btn" id="tStart">開始</button><button class="btn ghost" id="tReset">重設</button></div>
+      <div class="msg" id="tMsg">開始和結束時會響一聲輕柔的鐘聲。結束後別急著起身，記得收功。</div>
+    </div>
+  </figure>
+
+  <h3>整門課的一句話總結</h3>
+  <div class="box">
+    <span class="t">周天之路</span>
+    身要<b>鬆</b>、息要<b>勻</b>、心要<b>靜</b>；<br>
+    意要<b>輕</b>、功要<b>恆</b>、收要<b>歸丹田</b>。<br>
+    不求神奇，只求每天比昨天更安定一點。
+  </div>
+</section>
+
+<section class="chapter quiz" data-part="第五篇　專業篇" data-num="測" data-title="第五篇總測驗">
+  <p class="part-label">第五篇　專業篇</p>
+  <h2><span class="seal">測</span>第五篇總測驗</h2>
+  <div data-quiz="5"></div>
+</section>
+
+<section class="chapter" data-part="附錄" data-num="典" data-title="名詞小辭典">
+  <p class="part-label">附錄</p>
+  <h2><span class="seal">典</span>名詞小辭典</h2>
+  <p>忘了某個詞是什麼意思？在這裡搜尋。括號內是它在課程中第一次出現的章節。</p>
+  <input class="dict-search" id="dictQ" type="search" placeholder="輸入關鍵字，例如：鵲橋、火候" aria-label="搜尋名詞">
+  <dl class="dict" id="dict"></dl>
+</section>
+</main>
+<footer>本課程為傳統養生文化與身心練習的教育資料，不能取代醫療診斷與治療。身體不適請就醫。</footer>
+<script>
+(function(){
+"use strict";
+var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var NS = 'http://www.w3.org/2000/svg';
+
+/* ---------- 儲存（本機瀏覽器） ---------- */
+var store = {
+  get:function(k,d){try{var v=localStorage.getItem('zhoutian_'+k);return v===null?d:JSON.parse(v);}catch(e){return d;}},
+  set:function(k,v){try{localStorage.setItem('zhoutian_'+k,JSON.stringify(v));}catch(e){}}
+};
+
+/* ---------- 側面人形 ---------- */
+function profileBase(){
+  return ''+
+  '<path class="skin" d="M150 108 C135 140 128 200 132 270 L128 285 C150 300 200 305 262 300 C274 298 274 280 258 275 C230 270 205 265 195 255 C200 220 198 170 185 125 C180 115 172 108 168 105 Z"/>'+
+  '<circle class="skin" cx="160" cy="70" r="36"/>'+
+  '<path class="skin" d="M186 42 Q197 56 196 66 L202 77 L195 80 Q196 88 192 92 Q192 99 186 102 Q178 106 166 106 L170 96 Z" style="stroke:none"/>'+
+  '<path d="M186 42 Q197 56 196 66 L202 77 L195 80 Q196 88 192 92 Q192 99 186 102 Q178 106 168 105" fill="none" stroke="var(--ink2)" stroke-width="1.6"/>'+
+  '<path d="M178 62 q6 -3 11 0" fill="none" stroke="var(--ink2)" stroke-width="1.4"/>'+
+  '<path d="M160 128 C172 172 186 214 226 262" class="limb-o" stroke-width="16" opacity=".9"/>'+
+  '<path d="M160 128 C172 172 186 214 226 262" class="limb" stroke-width="13" opacity=".9"/>'+
+  '<ellipse cx="229" cy="265" rx="10" ry="7" class="skin" opacity=".9"/>';
+}
+var LOOP = 'M172 242 Q160 280 145 284 Q134 282 133 272 L136 230 L139 178 L146 122 Q128 102 131 82 Q136 42 160 36 Q186 40 191 60 L193 84 Q190 92 189 95 L182 115 L186 152 L193 215 Q192 232 172 242 Z';
+var DU = 'M145 284 Q134 282 133 272 L136 230 L139 178 L146 122 Q128 102 131 82 Q136 42 160 36 Q186 40 191 60 L193 84';
+var REN = 'M145 284 Q175 280 188 240 L193 215 L189 180 L186 152 L182 115 Q186 104 189 95';
+
+function ball(pathId,dur,begin){
+  if(reduce) return '<circle class="ball" r="6" cx="172" cy="242"/>';
+  var s = '<circle class="ball" r="6" opacity="'+(begin?0:1)+'">';
+  if(begin) s += '<set attributeName="opacity" to="1" begin="'+begin+'"/>';
+  s += '<animateMotion dur="'+dur+'" repeatCount="indefinite"'+(begin?' begin="'+begin+'"':'')+'><mpath href="#'+pathId+'"/></animateMotion></circle>';
+  return s;
+}
+function gates(){
+  return '<circle class="gate" cx="133" cy="272" r="11"/><circle class="gate" cx="139" cy="178" r="11"/><circle class="gate" cx="131" cy="82" r="11"/>';
+}
+function pt(p,side){
+  var tx = side==='L' ? p.x-10 : side==='T' ? p.x : p.x+10;
+  var ty = (side==='T' ? p.y-10 : p.y+4) + (p.dy||0);
+  var anchor = side==='L'?'end':side==='T'?'middle':'start';
+  return '<g class="pt" tabindex="0" role="button" aria-label="'+p.n+'" data-id="'+p.id+'"><circle class="hit" cx="'+p.x+'" cy="'+p.y+'" r="13"/><circle class="dot" cx="'+p.x+'" cy="'+p.y+'" r="5.5"/><text x="'+tx+'" y="'+ty+'" text-anchor="'+anchor+'">'+p.n+'</text></g>';
+}
+
+/* 任督穴位 */
+var ACU = [
+ {id:'huiyin',n:'會陰',x:145,y:284,s:'B',t:'任脈、督脈、衝脈都從這裡出發，是「一源三歧」的起點。位在兩腿之間、身體最下方的中點。「會」是交會，「陰」指身體下方陰的部位。'},
+ {id:'changqiang',n:'長強',x:133,y:272,s:'L',t:'督脈第一穴，在尾椎骨尖端下方。督脈是陽脈之海，從這裡開始「長而強」地往上走，所以叫長強。這一帶就是「尾閭關」。'},
+ {id:'mingmen',n:'命門',x:136,y:230,s:'L',t:'在腰部，約與肚臍同高的背後正中。古人認為這裡是「生命之門」，關係人的元氣根本。腰痠怕冷的人常按揉這裡保暖。'},
+ {id:'jiaji',n:'夾脊',x:139,y:178,s:'L',t:'背部兩片肩胛骨之間的脊椎一帶。這裡是「夾脊關」，久坐駝背的人常覺得這裡僵硬，氣也最容易在這裡卡住。'},
+ {id:'dazhui',n:'大椎',x:146,y:122,s:'L',t:'低頭時脖子後面最突出的那塊骨頭（第七頸椎）下方。「椎」是脊椎骨，這塊最大、最明顯，所以叫大椎。手足陽經都在這裡交會。'},
+ {id:'yuzhen',n:'玉枕',x:131,y:82,s:'L',t:'後腦勺突起的枕骨一帶，躺下時靠在枕頭上的位置。這裡是「玉枕關」，三關中最需要小心的一關，頭脹時不可硬衝。（嚴格說玉枕穴屬膀胱經，在督脈兩側，丹道借它的名字稱呼這一關。）'},
+ {id:'baihui',n:'百會',x:160,y:36,s:'T',t:'頭頂正中，兩耳尖連線和鼻子到後腦正中線的交叉點。「百」是很多，全身很多經脈在這裡交會，所以叫百會。是人體最高的穴位。'},
+ {id:'yintang',n:'印堂',x:191,y:60,s:'R',t:'兩眉中間。古代相面的人叫這裡「印堂」，像蓋印章的地方，說「印堂發亮」代表氣色好。往腦內一點點，就是上丹田。'},
+ {id:'yinjiao',n:'齦交',x:193,y:84,s:'R',dy:-3,t:'在上唇內側、上排門牙牙齦正中。督脈在這裡結束。「齦」是牙齦，「交」是交會——這裡也是舌抵上顎時搭上「鵲橋」的地方。'},
+ {id:'chengjiang',n:'承漿',x:189,y:95,s:'R',dy:7,t:'下唇下方的凹陷處。「承」是承接，「漿」是口水——就是會接住流下口水的地方。任脈在這裡結束。'},
+ {id:'danzhong',n:'膻中',x:186,y:152,s:'R',t:'胸口正中，兩乳頭連線的中點（女性以胸骨上的相應位置為準）。這裡是中丹田，古人稱「氣會」，全身之氣在此聚會。心情鬱悶時人會不自覺拍這裡。'},
+ {id:'shenque',n:'神闕',x:193,y:215,s:'R',t:'就是肚臍。「闕」是宮殿大門兩旁的高台。在媽媽肚子裡時，養分從臍帶進來，古人把它看成「神氣出入的宮門」。'},
+ {id:'guanyuan',n:'關元',x:188,y:240,s:'R',t:'肚臍下方約四指寬（三寸）。「關」是關藏，「元」是元氣，意思是元氣收藏的地方。它的上方一點是氣海穴，這一帶就是下丹田的體表位置。'}
+];
+function figRendu(){
+  var s = '<svg class="fig-svg" viewBox="40 8 262 306" role="img" aria-label="任脈與督脈側面路線圖">'+profileBase()+
+  '<path class="route-anim du" d="'+DU+'"/><path class="route-anim ren" d="'+REN+'"/>';
+  ACU.forEach(function(p){ s += pt(p,p.s); });
+  s += '<text class="lbl" x="60" y="200" fill="var(--seal)" style="fill:var(--seal)">督脈 ↑</text><text class="lbl" x="232" y="190" style="fill:var(--indigo)">任脈 ↓</text></svg>';
+  return s;
+}
+
+/* 小周天各站 */
+var STN = [
+ {n:'下丹田',x:172,y:242,s:'R',t:'起點。先在這裡把氣「聚」起來，直到溫熱穩定。沒有這一步，後面都不用談。'},
+ {n:'會陰',x:145,y:284,s:'R',t:'氣足之後自然往下到這裡。輕提會陰，搭上「下鵲橋」，不讓氣往下散掉。'},
+ {n:'尾閭關',x:133,y:272,s:'L',t:'第一關：尾閭關。氣從這裡轉彎往上，像羊車一樣，輕輕慢慢地過。'},
+ {n:'命門',x:136,y:230,s:'L',t:'腰部正中，與肚臍前後相對。常會感到腰部一片溫暖。'},
+ {n:'夾脊關',x:139,y:178,s:'L',t:'第二關：夾脊關。背中間發熱、發脹是常見感受，放鬆肩背，讓它自然通過。'},
+ {n:'大椎',x:146,y:122,s:'L',t:'脖子後面最突出的骨頭下方。肩膀放鬆、下巴微收，這一段會比較好走。'},
+ {n:'玉枕關',x:131,y:82,s:'L',t:'第三關：玉枕關。最容易頭脹的地方。如果脹，就把注意力移到眉心或回丹田，下次再來。'},
+ {n:'百會',x:160,y:36,s:'T',t:'頭頂最高點，進陽火到此為止。接下來開始「退陰符」往下走。'},
+ {n:'印堂',x:191,y:60,s:'R',t:'兩眉之間，上丹田的入口。氣從頭頂往前往下經過這裡。'},
+ {n:'鵲橋',x:193,y:84,s:'R',t:'上鵲橋：舌抵上顎。督脈和任脈在這裡接起來。口水變多，分次慢慢嚥下。'},
+ {n:'膻中',x:186,y:152,s:'R',t:'胸口正中，中丹田。胸口放鬆、不憋氣，讓氣像水一樣往下流。'},
+ {n:'回丹田',x:172,y:242,s:'B',t:'回到起點，完成一圈。每次練習的最後，都一定要回到這裡。'}
+];
+function figXzt(){
+  var s = '<svg class="fig-svg" viewBox="40 8 262 306" role="img" aria-label="小周天路線圖">'+profileBase()+
+  '<path id="xztLoop" class="route" d="'+LOOP+'"/><path class="route-anim" d="'+LOOP+'"/>'+gates();
+  STN.forEach(function(p,i){ if(i<STN.length-1){ var q={id:'s'+i,n:p.n,x:p.x,y:p.y,dy:(p.n==='鵲橋'?-2:0)}; s += pt(q,p.s==='B'?'R':p.s);} });
+  s += '<g id="xztHalo" style="transition:transform .9s ease-in-out;transform:translate(172px,242px)"><circle r="12" fill="none" stroke="var(--seal)" stroke-width="2.5"/><circle r="6" class="ball"/></g>';
+  s += '</svg>';
+  return s;
+}
+function figHero(){
+  return '<svg class="fig-svg" viewBox="40 8 262 306" role="img" aria-label="小周天光點運行動畫" style="max-height:52vh;display:block;margin:0 auto">'+profileBase()+
+  '<path id="heroLoop" class="route" d="'+LOOP+'"/><path class="route-anim" d="'+LOOP+'"/>'+
+  '<circle class="dantian" cx="172" cy="242" r="12"/>'+ball('heroLoop','9s')+ball('heroLoop','9s','3s')+ball('heroLoop','9s','6s')+
+  '<text class="lbl" x="124" y="205" text-anchor="end">督脈上升</text><text class="lbl" x="206" y="150">任脈下降</text><text class="lbl" x="172" y="268" text-anchor="middle">丹田</text></svg>';
+}
+function figDantian(){
+  var g = '<defs><radialGradient id="dtg"><stop offset="0" stop-color="var(--qi-glow)" stop-opacity=".95"/><stop offset="1" stop-color="var(--qi)" stop-opacity="0"/></radialGradient></defs>';
+  var s = '<svg class="fig-svg" viewBox="40 8 262 306" role="img" aria-label="三丹田位置圖">'+g+profileBase();
+  [[176,62,'上丹田'],[178,150,'中丹田'],[170,240,'下丹田']].forEach(function(d){
+    s += '<circle cx="'+d[0]+'" cy="'+d[1]+'" r="22" fill="url(#dtg)"><animate attributeName="r" values="18;24;18" dur="4s" repeatCount="'+(reduce?'0':'indefinite')+'"/></circle>';
+    s += '<text class="lbl" x="'+(d[0]-68)+'" y="'+(d[1]+4)+'" style="font-size:12px;fill:var(--ink);font-weight:700">'+d[2]+'</text>';
+  });
+  return s+'</svg>';
+}
+
+/* 正面人形・全身周天 */
+function figDzt(){
+  var P = 'M150 215 L134 256 L130 430 L120 438 L118 430 L120 256 L113 225 L112 125 L96 180 L80 252 L74 250 L92 170 L104 112 L138 96 L145 70 L150 28 L155 70 L162 96 L196 112 L208 170 L226 250 L220 256 L204 180 L188 125 L187 225 L180 256 L178 430 L180 438 L168 430 L166 256 Z';
+  var s = '<svg class="fig-svg" viewBox="30 10 240 450" role="img" aria-label="全身周天正面示意圖" style="max-height:70vh;display:block;margin:0 auto">';
+  s += '<line x1="108" y1="110" x2="80" y2="250" class="limb-o" stroke-width="21"/><line x1="192" y1="110" x2="220" y2="250" class="limb-o" stroke-width="21"/>';
+  s += '<line x1="128" y1="248" x2="124" y2="428" class="limb-o" stroke-width="29"/><line x1="172" y1="248" x2="176" y2="428" class="limb-o" stroke-width="29"/>';
+  s += '<line x1="108" y1="110" x2="80" y2="250" class="limb" stroke-width="18"/><line x1="192" y1="110" x2="220" y2="250" class="limb" stroke-width="18"/>';
+  s += '<line x1="128" y1="248" x2="124" y2="428" class="limb" stroke-width="26"/><line x1="172" y1="248" x2="176" y2="428" class="limb" stroke-width="26"/>';
+  s += '<ellipse class="skin" cx="78" cy="258" rx="9" ry="12"/><ellipse class="skin" cx="222" cy="258" rx="9" ry="12"/>';
+  s += '<ellipse class="skin" cx="120" cy="440" rx="15" ry="7"/><ellipse class="skin" cx="180" cy="440" rx="15" ry="7"/>';
+  s += '<path class="skin" d="M112 100 L188 100 Q198 104 193 130 L186 250 L114 250 L107 130 Q102 104 112 100 Z"/>';
+  s += '<rect class="skin" x="140" y="74" width="20" height="30" style="stroke:none"/><circle class="skin" cx="150" cy="52" r="26"/>';
+  s += '<path id="dztLoop" class="route" d="'+P+'"/><path class="route-anim" d="'+P+'"/>';
+  s += '<circle class="dantian" cx="150" cy="215" r="13"/>';
+  s += ball('dztLoop','14s')+ball('dztLoop','14s','3.5s')+ball('dztLoop','14s','7s')+ball('dztLoop','14s','10.5s');
+  var L=[['百會',150,20,'middle'],['勞宮',66,262,'end'],['勞宮',234,262,'start'],['湧泉',100,452,'end'],['湧泉',200,452,'start'],['丹田',172,219,'start']];
+  L.forEach(function(l){ s += '<text class="lbl" x="'+l[1]+'" y="'+l[2]+'" text-anchor="'+l[3]+'" style="font-size:12px;font-weight:700;fill:var(--ink)">'+l[0]+'</text>'; });
+  return s+'</svg>';
+}
+
+/* 坎離乾 */
+function trigram(x,lines,label,sub,hi){
+  var s='';
+  for(var i=0;i<3;i++){
+    var y = 90 - i*22, yang = lines[i]===1, col = (i===1 && hi) ? 'var(--qi)' : 'var(--ink)';
+    if(yang) s += '<rect x="'+x+'" y="'+y+'" width="70" height="11" rx="2" fill="'+col+'"/>';
+    else s += '<rect x="'+x+'" y="'+y+'" width="30" height="11" rx="2" fill="'+col+'"/><rect x="'+(x+40)+'" y="'+y+'" width="30" height="11" rx="2" fill="'+col+'"/>';
+  }
+  s += '<text x="'+(x+35)+'" y="126" text-anchor="middle" style="font-family:var(--kai);font-size:19px;font-weight:700;fill:var(--ink)">'+label+'</text>';
+  s += '<text x="'+(x+35)+'" y="146" text-anchor="middle" class="lbl" style="font-size:12.5px">'+sub+'</text>';
+  return s;
+}
+function figKanli(){
+  var s = '<svg class="fig-svg" viewBox="0 20 360 140" role="img" aria-label="取坎填離示意圖">';
+  s += trigram(10,[0,1,0],'坎','水・腎',true);
+  s += trigram(120,[1,0,1],'離','火・心',true);
+  s += '<path d="M200 80 L240 80" stroke="var(--seal)" stroke-width="2.5" marker-end="url(#arr)"/>';
+  s += '<defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="var(--seal)"/></marker></defs>';
+  s += '<text x="220" y="66" text-anchor="middle" class="lbl" style="font-size:11px">取坎填離</text>';
+  s += trigram(262,[1,1,1],'乾','純陽',false);
+  return s+'</svg>';
+}
+
+var FIGS = {hero:figHero, rendu:figRendu, xzt:figXzt, dantian:figDantian, dzt:figDzt, kanli:figKanli};
+Array.prototype.forEach.call(document.querySelectorAll('[data-fig]'),function(el){
+  var f = FIGS[el.getAttribute('data-fig')]; if(f) el.innerHTML = f();
+});
+
+/* 任督點選 */
+function bindPoints(root, getInfo, panel){
+  Array.prototype.forEach.call(root.querySelectorAll('.pt'),function(g){
+    function act(){
+      Array.prototype.forEach.call(root.querySelectorAll('.pt'),function(x){x.classList.remove('sel');});
+      g.classList.add('sel');
+      var info = getInfo(g.getAttribute('data-id'));
+      panel.innerHTML = '<h5>'+info.n+'</h5>'+info.t;
+    }
+    g.addEventListener('click',act);
+    g.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){e.preventDefault();act();} });
+  });
+}
+var rd = document.querySelector('[data-fig="rendu"]');
+if(rd) bindPoints(rd,function(id){ for(var i=0;i<ACU.length;i++) if(ACU[i].id===id) return ACU[i]; },document.getElementById('acuInfo'));
+
+/* 小周天逐站 */
+var xz = document.querySelector('[data-fig="xzt"]'), xzInfo = document.getElementById('xztInfo'), xzTimer=null, xzIdx=0;
+function xzGo(i){
+  var p = STN[i], halo = document.getElementById('xztHalo');
+  if(halo){ halo.style.transform = 'translate('+p.x+'px,'+p.y+'px)'; }
+  xzInfo.innerHTML = '<h5>第 '+(i+1)+' 站｜'+p.n+'</h5>'+p.t;
+  Array.prototype.forEach.call(xz.querySelectorAll('.pt'),function(x){ x.classList.toggle('sel', x.getAttribute('data-id')==='s'+i); });
+}
+if(xz){
+  bindPoints(xz,function(id){ var i=+id.slice(1); xzIdx=i; var h=document.getElementById('xztHalo'); if(h) h.style.transform='translate('+STN[i].x+'px,'+STN[i].y+'px)'; return {n:'第 '+(i+1)+' 站｜'+STN[i].n,t:STN[i].t}; },xzInfo);
+  document.getElementById('xztPlay').addEventListener('click',function(){
+    clearInterval(xzTimer); xzIdx=0; xzGo(0);
+    xzTimer = setInterval(function(){ xzIdx++; if(xzIdx>=STN.length){clearInterval(xzTimer);return;} xzGo(xzIdx); },3200);
+  });
+  document.getElementById('xztStop').addEventListener('click',function(){ clearInterval(xzTimer); });
+}
+
+/* ---------- 測驗 ---------- */
+var QUIZ = {
+ 1:[
+  ['「氣功」這個統稱，是在什麼時候普及的？',['戰國時代','東漢華佗的時代','1950年代','2000年以後'],2,'古人說導引、吐納、行氣、內丹；「氣功」一詞是1950年代因劉貴珍推廣氣功療法才普及。'],
+  ['「奇經八脈」的「奇」是什麼意思？',['神奇、奇怪','單獨、不成對','奇蹟','最重要的'],1,'讀ㄐㄧ，和奇數同音。這八條不直接連臟腑，且任、督等只有一條，不成對。'],
+  ['督脈被稱為什麼？',['陰脈之海','陽脈之海','十二正經之首','下丹田'],1,'督＝總督。督脈在背部，全身陽經都和它交會，所以是「陽脈之海」；任脈才是「陰脈之海」。'],
+  ['任督二脈在哪裡「沒接上」，需要搭鵲橋？',['手心和腳底','口腔，以及會陰一帶','肚臍和腰','兩邊耳朵'],1,'督脈止於上牙齦、任脈止於下唇下方，用舌抵上顎接上；下方則輕提會陰。'],
+  ['下丹田大約在哪裡？',['兩眉之間','胸口正中','肚臍下方、身體裡面','腳底'],2,'肚臍下方約三指寬、往身體裡面。兩眉之間是上丹田，胸口正中是中丹田。']
+ ],
+ 2:[
+  ['「舌抵上顎」的正確位置是？',['舌尖頂住下排牙齒','舌尖輕碰上排門牙後方、牙齦與上顎交界','舌頭往後捲到喉嚨','舌頭伸出嘴外'],1,'輕輕碰著就好，像發「ㄌ」音的位置，不需要用力頂。'],
+  ['腹式呼吸在吸氣的時候，肚子會怎樣？',['自然鼓起','用力縮進去','完全不動','肩膀跟著抬高'],0,'吸氣肚子鼓起、呼氣肚子收回，胸部幾乎不動。吸氣時肚子收的是「逆腹式」，屬進階。'],
+  ['意守丹田「勿忘勿助」的道理，出自哪個故事？',['守株待兔','揠苗助長','愚公移山','畫蛇添足'],1,'《孟子》：不能忘了照顧稻苗（勿忘），也不能把苗往上拔（勿助長）。'],
+  ['練完功為什麼一定要收功？',['因為古人規定的，沒有理由','像電腦正常關機，把深度放鬆的狀態好好收回，避免頭暈昏沉','為了讓氣留在頭頂','為了消耗剩下的力氣'],1,'收功是「正常關機」。直接起身就像拔插頭，容易頭暈、恍神。'],
+  ['下列哪個時間最不適合練功？',['早上起床後','睡前','剛吃飽飯','下午散步之後'],2,'飯後至少隔一小時。太飽、太餓、酒後、剛劇烈運動都不適合。']
+ ],
+ 3:[
+  ['「周天」這個詞原本來自哪個領域？',['醫學','天文學','武術','佛經'],1,'古代天文把天空繞一圈叫一周天，修煉者把人體看成小宇宙，借用這個詞。'],
+  ['後三關由下往上的順序是？',['夾脊 → 尾閭 → 玉枕','尾閭 → 夾脊 → 玉枕','玉枕 → 夾脊 → 尾閭','百會 → 印堂 → 膻中'],1,'尾椎的尾閭關、背中的夾脊關、後腦的玉枕關。'],
+  ['練小周天時，最重要的一條規矩是？',['讓氣停在頭頂越久越好','結束時一定把意念和氣收回下丹田','練完立刻站起來跑步','盡量憋氣越久越好'],1,'「練功千日，收功一時」。氣停在頭部或胸口容易頭脹、失眠。'],
+  ['練功時閉著眼看到光點，正確的態度是？',['追著看，越久越好','見怪不怪，不理它','相信自己開了天眼','加大意念讓它更亮'],1,'「見怪不怪，其怪自敗」。追求景象正是「入魔」的開始。'],
+  ['「走火入魔」真正的原因是什麼？',['吃錯食物','太急（火候錯）加上太貪（被幻覺和欲望帶走）','練得太少','在晚上練功'],1,'走火＝火候太大太急；入魔＝把幻覺當真、執著追求。預防方法就是自然、不求、收功。']
+ ],
+ 4:[
+  ['湧泉穴在哪裡？',['手掌心','腳底前三分之一的凹陷處','頭頂','肚臍'],1,'腎經第一穴，像泉水從地底湧出。手掌心是勞宮穴。'],
+  ['在丹道（內丹學）裡，大周天對應哪一個階段？',['築基','煉精化氣','煉氣化神','煉虛合道'],2,'小周天是煉精化氣（初關），大周天是煉氣化神（中關）。'],
+  ['練功後覺得頭脹，最好把注意力放在哪裡？',['頭頂百會','眉心','腳底湧泉','胸口膻中'],2,'頭上的問題往腳下帶。湧泉呼吸也是讓氣「有根」的練習。'],
+  ['「行住坐臥，不離這個」是什麼意思？',['一天二十四小時都要打坐','把練功時的安定帶進日常生活的每一刻','從此不能走路','只能躺著練'],1,'走路、排隊、上課、睡前都能練，這是大周天階段強調的生活化。']
+ ],
+ 5:[
+  ['內丹修煉的階段順序，哪一個正確？',['築基 → 煉精化氣 → 煉氣化神 → 煉神還虛','煉神還虛 → 煉氣化神 → 煉精化氣 → 築基','煉氣化神 → 築基 → 煉神還虛 → 煉精化氣','煉精化氣 → 築基 → 煉神還虛 → 煉氣化神'],0,'像冰→水→蒸氣，由有形往無形，一層一層往上。'],
+  ['丹書裡的「火候」指的是什麼？',['真的火','意念和呼吸的強弱快慢','練功的時辰','身體的溫度'],1,'文火＝意念輕、呼吸柔；武火＝意念集中、呼吸較深。一般人以文火為主。'],
+  ['「取坎填離」之後，離卦會變成哪一卦？',['坤卦 ☷','坎卦 ☵','乾卦 ☰','震卦 ☳'],2,'把坎中間的陽爻填進離中間的陰爻，三條都變陽，就是乾卦，象徵純陽。'],
+  ['「活子時」是什麼意思？',['一定要晚上11點到1點練','身體陽氣自然發動、精神特別飽滿的那一刻','一天要練十二次','要站在子午線上練'],1,'不死守時鐘，而是看身體真實狀態。'],
+  ['下列哪一個說法，最符合目前的科學研究？',['經絡已經被解剖證實是一條管道','氣功可以取代藥物治療癌症','氣功類練習對壓力、睡眠、平衡等有中小程度的幫助','隔空發功已被嚴格實驗證實'],2,'有希望、值得練，但不是萬靈丹；經絡實體和外氣都尚未被證實。'],
+  ['遇到哪一種老師或課程最需要警惕？',['強調放鬆和收功','要你停藥，而且收費越來越高','教八段錦','提醒你循序漸進'],1,'宣稱治百病、叫人停藥、收高額費用、要你切斷親友聯繫，都是危險信號。']
+ ]
+};
+Array.prototype.forEach.call(document.querySelectorAll('[data-quiz]'),function(box){
+  var set = QUIZ[box.getAttribute('data-quiz')], got=0, done=0;
+  var score = document.createElement('div'); score.className='score';
+  set.forEach(function(q,qi){
+    var d = document.createElement('div'); d.className='q';
+    d.innerHTML = '<p>'+(qi+1)+'. '+q[0]+'</p>';
+    q[1].forEach(function(o,oi){
+      var b = document.createElement('button'); b.className='opt'; b.type='button'; b.textContent=o;
+      b.addEventListener('click',function(){
+        if(d.classList.contains('answered')) return;
+        d.classList.add('answered'); done++;
+        if(oi===q[2]){ b.classList.add('right'); got++; b.textContent='✓ '+o; }
+        else { b.classList.add('wrong'); b.textContent='✗ '+o; var r=d.querySelectorAll('.opt')[q[2]]; r.classList.add('right'); r.textContent='✓ '+r.textContent; }
+        if(done===set.length){ score.textContent = '答對 '+got+' / '+set.length+(got===set.length?'　全對，可以往下一篇走了！':'　答錯的地方回去看看再往下走。'); }
+      });
+      d.appendChild(b);
+    });
+    var ex = document.createElement('div'); ex.className='ex'; ex.textContent = q[3]; d.appendChild(ex);
+    box.appendChild(d);
+  });
+  box.appendChild(score);
+});
+
+/* ---------- 辭典 ---------- */
+var DICT = [
+ ['氣','讓身體活著、會動、會溫暖的能量。甲骨文像雲氣流動。','第1章'],
+ ['氣功','透過調身、調息、調心鍛鍊身心的方法。1950年代普及的統稱。','第1章'],
+ ['導引','導氣令和、引體令柔，偏重動作。今天的動功。','第1章'],
+ ['吐納','吐故納新，偏重呼吸的練習。','第1章'],
+ ['三調','調身（姿勢）、調息（呼吸）、調心（念頭），所有功法的地基。','第1章'],
+ ['經脈','身體裡直行的主要通道，像捷運主線。','第2章'],
+ ['絡脈','從經脈分出的網狀分支。','第2章'],
+ ['穴位','經絡上氣聚集出入的點，又叫腧穴，像捷運車站。','第2章'],
+ ['十二正經','連接臟腑、左右成對的十二條主要經脈。','第2章'],
+ ['奇經八脈','任、督、衝、帶、陰蹺、陽蹺、陰維、陽維。奇讀ㄐㄧ，意思是不成對。','第2章'],
+ ['督脈','背部正中線，總督一身之陽，陽脈之海。','第3章'],
+ ['任脈','身體前方正中線，總任一身之陰，陰脈之海。','第3章'],
+ ['丹田','身體裡培養「丹」的田地。分上中下三處，一般指下丹田。','第4章'],
+ ['精氣神','人身三寶：身體根本、運作能量、精神意識。像蠟燭的蠟、熱、光。','第4章'],
+ ['築基','打地基。百日左右把身心打穩，是修煉的第一階段。','第5章'],
+ ['站樁','像木樁一樣站著不動的基本功，如無極樁、抱球樁。','第5章'],
+ ['鵲橋','接通任督的兩個接點。上鵲橋靠舌抵上顎，下鵲橋靠輕提會陰。','第5、10章'],
+ ['垂簾','眼睛微閉、留一線光。','第5章'],
+ ['金津玉液','練功時增多的口水，建議分次慢慢嚥下。','第5章'],
+ ['息','一呼一吸為一息。字形是「自（鼻子）＋心」。','第6章'],
+ ['胎息','呼吸細到幾乎感覺不到，是練深後自然出現的狀態，不可憋出來。','第6章'],
+ ['數息','數呼吸次數來專注，源自佛教數息觀。','第6章'],
+ ['六字訣','噓呵呼呬吹嘻，用呼氣發音調養臟腑。','第6章'],
+ ['入靜','念頭變少變慢、不被念頭牽著走的狀態，不是腦袋空白。','第7章'],
+ ['意守','把注意力溫和地放在一處。','第7章'],
+ ['勿忘勿助','出自《孟子》揠苗助長：不可忘記，也不可硬推。','第7章'],
+ ['八段錦','宋代已有的八式動功，像八段精美錦緞。','第8章'],
+ ['收功','練習結束時把狀態收回丹田的步驟，像電腦正常關機。','第9章'],
+ ['鳴天鼓','手掌蓋耳、手指彈後腦，耳內咚咚作響的收功動作。','第9章'],
+ ['周天','天文學上天空繞一圈。借指氣在體內循環一圈。','第10章'],
+ ['小周天','氣沿督脈上、任脈下，繞身體中軸一圈。又叫子午周天、轉河車。','第10章'],
+ ['河車','往上打水的水車，比喻氣沿背脊上行。','第10章'],
+ ['三關','尾閭關、夾脊關、玉枕關，督脈上氣最易卡住的三處。','第10章'],
+ ['進陽火、退陰符','小周天沿督脈上升與沿任脈下降的兩段。','第10章'],
+ ['意隨氣行','氣自己動，意念只輕輕跟隨。比「以意領氣」安全。','第11章'],
+ ['八觸','動、癢、涼、暖、輕、重、澀、滑，入靜後常見的身體感受。','第12章'],
+ ['走火入魔','走火＝火候太急；入魔＝被幻覺欲望帶走。','第12章'],
+ ['大周天','一指氣走遍全身四肢；一指丹道的煉氣化神階段。','第13章'],
+ ['卯酉周天','卯東酉西，氣沿身體左右兩側運行，部分門派的說法。','第13章'],
+ ['湧泉','腳底的穴位，腎經第一穴，像泉水湧出。','第13章'],
+ ['勞宮','手掌心的穴位，勞動之手的中心宮殿。','第13章'],
+ ['天人合一','人與天地為一整體，順應自然規律。','第14章'],
+ ['外丹／內丹','外丹是用礦物煉的丹藥；內丹是以身體為爐、精氣神為藥的修煉。','第15章'],
+ ['性命雙修','性＝心性精神，命＝身體生命，兩者都要練。','第15章'],
+ ['煉精化氣','內丹初關，對應小周天。','第15章'],
+ ['煉氣化神','內丹中關，對應丹道大周天，比喻十月懷胎。','第15章'],
+ ['煉神還虛','內丹上關，放下一切執著，心回到空靈寬廣。','第15章'],
+ ['鼎爐','煉丹的鍋與爐。鼎多指頭部，爐多指下丹田。','第16章'],
+ ['火候','意念與呼吸的強弱快慢。文火溫和，武火較強。','第16章'],
+ ['沐浴','運轉中暫停不加火、靜靜溫養。','第16章'],
+ ['活子時','身體陽氣自然發動、精神飽滿的時刻，不拘時鐘。','第16章'],
+ ['取坎填離','取坎卦中陽填入離卦，成純陽乾卦。比喻心腎相交、水火既濟。','第16章'],
+ ['黃婆','真意，專注平和的意念，像媒人撮合陰陽。','第16章'],
+ ['放鬆反應','班森提出，安靜專注的練習能降低心跳血壓與壓力荷爾蒙。','第17章']
+];
+var dl = document.getElementById('dict'), dq = document.getElementById('dictQ');
+function renderDict(k){
+  k = (k||'').trim();
+  var h='';
+  DICT.forEach(function(d){ if(!k || (d[0]+d[1]).indexOf(k)>-1) h += '<dt>'+d[0]+'</dt><dd>'+d[1]+'<br><small style="color:var(--ink2)">（'+d[2]+'）</small></dd>'; });
+  dl.innerHTML = h || '<dd>找不到「'+k.replace(/[<>&]/g,'')+'」。試試更短的關鍵字，例如只輸入一個字。</dd>';
+}
+if(dl){ renderDict(''); dq.addEventListener('input',function(){renderDict(dq.value);}); }
+
+/* ---------- 呼吸引導 ---------- */
+var orb=document.getElementById('orb'), bWord=document.getElementById('bWord'), bCount=document.getElementById('bCount');
+var bMode=[4,0,4], bT=null, bRunning=false, bCycles=0, bTick=null;
+Array.prototype.forEach.call(document.querySelectorAll('#bModes .pill'),function(p){
+  p.addEventListener('click',function(){
+    Array.prototype.forEach.call(document.querySelectorAll('#bModes .pill'),function(x){x.classList.remove('on');});
+    p.classList.add('on'); bMode = p.getAttribute('data-mode').split(',').map(Number);
+    if(bRunning){ stopBreath(); startBreath(); }
+  });
+});
+function setOrb(size,sec){ orb.style.transitionDuration = sec+'s'; orb.style.width=size+'px'; orb.style.height=size+'px'; }
+function countdown(label,sec){
+  clearInterval(bTick); var n=sec; bWord.textContent=label+'　'+n;
+  bTick = setInterval(function(){ n--; if(n>0) bWord.textContent=label+'　'+n; else clearInterval(bTick); },1000);
+}
+function phaseIn(){
+  if(!bRunning) return;
+  setOrb(190,bMode[0]); countdown('吸…肚子鼓起',bMode[0]);
+  bT = setTimeout(bMode[1]>0?phaseHold:phaseOut, bMode[0]*1000);
+}
+function phaseHold(){ if(!bRunning) return; countdown('自然停一下',bMode[1]); bT=setTimeout(phaseOut,bMode[1]*1000); }
+function phaseOut(){
+  if(!bRunning) return;
+  setOrb(70,bMode[2]); countdown('呼…肚子收回',bMode[2]);
+  bT = setTimeout(function(){ bCycles++; bCount.textContent='已完成 '+bCycles+' 次呼吸'; phaseIn(); }, bMode[2]*1000);
+}
+function startBreath(){ if(bRunning) return; bRunning=true; bCycles=0; bCount.textContent='已完成 0 次呼吸'; phaseIn(); }
+function stopBreath(){ bRunning=false; clearTimeout(bT); clearInterval(bTick); setOrb(80,1); bWord.textContent='休息一下'; }
+if(orb){
+  document.getElementById('bStart').addEventListener('click',startBreath);
+  document.getElementById('bStop').addEventListener('click',stopBreath);
+}
+
+/* ---------- 計時器 ---------- */
+var AC=null;
+function bell(){
+  try{
+    AC = AC || new (window.AudioContext||window.webkitAudioContext)();
+    var t=AC.currentTime;
+    [[432,.35],[864,.12],[1296,.06]].forEach(function(f){
+      var o=AC.createOscillator(), g=AC.createGain();
+      o.type='sine'; o.frequency.value=f[0];
+      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(f[1],t+.02); g.gain.exponentialRampToValueAtTime(.0001,t+4);
+      o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t+4.1);
+    });
+  }catch(e){}
+}
+var tMin=10, tLeft=600, tI=null, tRun=false;
+var tClock=document.getElementById('tClock'), tMsg=document.getElementById('tMsg'), tStart=document.getElementById('tStart');
+function fmt(s){ var m=Math.floor(s/60), r=s%60; return (m<10?'0':'')+m+':'+(r<10?'0':'')+r; }
+if(tClock){
+  Array.prototype.forEach.call(document.querySelectorAll('#tMins .pill'),function(p){
+    p.addEventListener('click',function(){
+      if(tRun) return;
+      Array.prototype.forEach.call(document.querySelectorAll('#tMins .pill'),function(x){x.classList.remove('on');});
+      p.classList.add('on'); tMin=+p.getAttribute('data-min'); tLeft=tMin*60; tClock.textContent=fmt(tLeft);
+    });
+  });
+  tStart.addEventListener('click',function(){
+    if(tRun){ clearInterval(tI); tRun=false; tStart.textContent='繼續'; tMsg.textContent='已暫停。'; return; }
+    if(tLeft<=0) tLeft=tMin*60;
+    tRun=true; tStart.textContent='暫停'; bell(); tMsg.textContent='練習中。放鬆、自然呼吸。';
+    tI=setInterval(function(){
+      tLeft--; tClock.textContent=fmt(tLeft);
+      if(tLeft<=0){ clearInterval(tI); tRun=false; tStart.textContent='開始'; bell(); tMsg.textContent='時間到。意念收回丹田，做完收功六步驟再起身。'; }
+    },1000);
+  });
+  document.getElementById('tReset').addEventListener('click',function(){ clearInterval(tI); tRun=false; tLeft=tMin*60; tClock.textContent=fmt(tLeft); tStart.textContent='開始'; tMsg.textContent='已重設。'; });
+}
+
+/* ---------- 章節導覽 ---------- */
+var chapters = Array.prototype.slice.call(document.querySelectorAll('.chapter'));
+var doneMap = store.get('done',{});
+var toc = document.getElementById('toc'), drawer=document.getElementById('drawer');
+var cur = 0;
+function buildToc(){
+  var h='', part='';
+  chapters.forEach(function(c,i){
+    var p=c.getAttribute('data-part');
+    if(p!==part){ h+='<h3>'+p+'</h3>'; part=p; }
+    h+='<button class="item'+(i===cur?' cur':'')+'" data-i="'+i+'"><span class="num">'+c.getAttribute('data-num')+'</span><span>'+c.getAttribute('data-title')+'</span>'+(doneMap[i]?'<span class="done">✓</span>':'')+'</button>';
+  });
+  toc.innerHTML=h;
+  Array.prototype.forEach.call(toc.querySelectorAll('.item'),function(b){ b.addEventListener('click',function(){ go(+b.getAttribute('data-i')); closeDrawer(); }); });
+}
+function updateProg(){
+  var n=0; for(var k in doneMap) if(doneMap[k]) n++;
+  document.getElementById('progBar').style.width = (n/chapters.length*100)+'%';
+}
+chapters.forEach(function(c,i){
+  var bar=document.createElement('label'); bar.className='donebar';
+  bar.innerHTML='<input type="checkbox"'+(doneMap[i]?' checked':'')+'> 我已讀完這一章';
+  bar.querySelector('input').addEventListener('change',function(e){ doneMap[i]=e.target.checked; store.set('done',doneMap); updateProg(); buildToc(); });
+  c.appendChild(bar);
+  var pg=document.createElement('div'); pg.className='pager';
+  if(i>0){ var pb=document.createElement('button'); pb.className='btn ghost'; pb.textContent='上一章：'+chapters[i-1].getAttribute('data-title'); pb.addEventListener('click',function(){go(i-1);}); pg.appendChild(pb); }
+  if(i<chapters.length-1){ var nb=document.createElement('button'); nb.className='btn next'; nb.textContent='下一章：'+chapters[i+1].getAttribute('data-title'); nb.addEventListener('click',function(){ if(!doneMap[i]){doneMap[i]=true; store.set('done',doneMap); updateProg(); c.querySelector('.donebar input').checked=true;} go(i+1);}); pg.appendChild(nb); }
+  c.appendChild(pg);
+});
+function go(i){window.AC_COURSE_GO=function(v){go(v)};window.AC_COURSE_POSITION=i;
+  if(i<0||i>=chapters.length) return;
+  chapters[cur].classList.remove('show'); cur=i; chapters[cur].classList.add('show');
+  store.set('cur',cur); buildToc();
+  if(bRunning) stopBreath();
+  window.scrollTo(0,0);
+}
+function openDrawer(){ drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false'); var c=toc.querySelector('.cur'); if(c) c.focus(); }
+function closeDrawer(){ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); }
+document.getElementById('menuBtn').addEventListener('click',openDrawer);
+document.getElementById('drawerMask').addEventListener('click',closeDrawer);
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeDrawer(); });
+
+cur = Math.min(Math.max(+store.get('cur',0)||0,0),chapters.length-1);
+chapters[cur].classList.add('show'); buildToc(); updateProg();
+
+/* ---------- 深淺色 ---------- */
+var root=document.documentElement;
+var savedTheme = store.get('theme',null); if(savedTheme) root.setAttribute('data-theme',savedTheme);
+document.getElementById('themeBtn').addEventListener('click',function(){
+  var dark = root.getAttribute('data-theme') ? root.getAttribute('data-theme')==='dark' : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  var next = dark?'light':'dark'; root.setAttribute('data-theme',next); store.set('theme',next);
+});
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-024c8b813d" data-category="personal"></script></body>
+</html>
