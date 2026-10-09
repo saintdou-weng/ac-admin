@@ -1,6 +1,6 @@
 window.AC_CONFIG = {
   "appName": "AC Admin Center",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "repo": "ac-admin",
   "gasProject": "AC_ADMIN_CENTER",
   "telegramBot": "ac_admin_center_bot",
