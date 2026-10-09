@@ -608,3 +608,5 @@ window.AC_CATALOG = [
     "search": "個人工具中心 Personal tools"
   }
 ];
+
+AC_CATALOG.forEach(c=>{if(c.group==="learning"&&!c.category)c.category=/garment|woven|material|fabric|成衣|布料/.test(c.search||"")?"garment":/accounting|trade|會計|貿易/.test(c.search||"")?"business":"general";});
