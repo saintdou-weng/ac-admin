@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>從零開始做生意｜小公司創業課（入門到專業）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#eceee6; --paper:#fbfbf7; --ink:#1b2540; --muted:#59627a; --line:#d5d9cc;
+  --indigo:#2f4b9a; --indigo-soft:#e3e8f5; --tape:#f2b705; --tape-soft:#fdf3cf;
+  --chalk:#b8322a; --chalk-soft:#f8e3e0; --green:#2e7d5b; --green-soft:#dff0e7;
+  --head:"LXGW WenKai TC","Kaiti TC","STKaiti","DFKai-SB","Noto Sans TC",serif;
+  --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#151a26;--paper:#1d2333;--ink:#e8ebf2;--muted:#a3abc0;--line:#323a4f;
+  --indigo:#8ea6ea;--indigo-soft:#27304a;--tape:#f2b705;--tape-soft:#3a331a;
+  --chalk:#f08a7e;--chalk-soft:#3d2524;--green:#6cc79c;--green-soft:#1f3a2f}
+}
+*{box-sizing:border-box}
+
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.8 var(--body)}
+h1,h2,h3,h4{font-family:var(--head);line-height:1.35;margin:1.6em 0 .5em}
+h2{font-size:2rem;margin-top:.2em}
+h3{font-size:1.35rem;padding-bottom:.3em;border-bottom:2px dashed var(--line)}
+h4{font-size:1.1rem;margin:.2em 0 .4em}
+p{margin:.6em 0}
+b,strong{color:var(--indigo)}
+em{font-style:normal;background:linear-gradient(transparent 60%,var(--tape-soft) 60%)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--tape);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* top bar with measuring-tape progress */
+.top{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;display:flex;align-items:center;gap:14px;padding:10px 16px}
+.top .brand{display:flex;align-items:center;gap:10px;min-width:0}
+.top .brand b{color:#fff;font-family:var(--head);font-size:1.15rem;display:block;line-height:1.2}
+.top .brand small{opacity:.7;font-size:.78rem;display:block}
+#menuBtn{display:none;white-space:nowrap;flex:none;background:none;border:1px solid #ffffff55;color:#fff;border-radius:6px;padding:4px 10px;cursor:pointer}
+.tape{margin-left:auto;flex:0 1 340px;display:flex;align-items:center;gap:8px}
+.tape .bar{flex:1;height:22px;border-radius:3px;position:relative;overflow:hidden;
+  background:#e9e3cc repeating-linear-gradient(90deg,#0000 0 9px,#1b254055 9px 10px)}
+.tape .bar i{position:absolute;inset:0 auto 0 0;width:0;background:var(--tape) repeating-linear-gradient(90deg,#0000 0 9px,#1b254088 9px 10px);transition:width .6s}
+.tape span{font-size:.8rem;white-space:nowrap}
+
+.layout{display:flex;max-width:1180px;margin:0 auto}
+nav#nav{width:270px;flex:none;padding:18px 10px 60px 16px;position:sticky;top:52px;height:calc(100vh - 52px);overflow:auto}
+nav .lv{font-family:var(--head);font-size:.95rem;color:var(--muted);margin:16px 8px 4px}
+nav a{display:flex;gap:8px;align-items:flex-start;padding:6px 10px;border-radius:6px;color:var(--ink);text-decoration:none;font-size:.93rem;line-height:1.45}
+nav a:hover{background:var(--indigo-soft)}
+nav a.on{background:var(--indigo);color:#fff}
+nav a .ck{width:18px;flex:none;text-align:center;opacity:.5}
+nav a.done .ck{opacity:1;color:var(--green)}
+nav a.on .ck{color:#fff}
+main{flex:1;min-width:0;padding:22px 22px 120px}
+.lesson{display:none;background:var(--paper);border-radius:4px;padding:34px clamp(18px,4vw,48px);max-width:820px;box-shadow:0 1px 0 var(--line)}
+.lesson.active{display:block;animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.lh .tag{display:inline-block;font-size:.8rem;color:var(--muted);border:1px dashed var(--muted);padding:1px 10px;border-radius:99px}
+.goal{background:var(--indigo-soft);padding:10px 14px;border-radius:6px;font-size:.95rem}
+
+/* content blocks */
+.box{border-radius:6px;padding:14px 18px;margin:18px 0;border-left:5px solid}
+.box.ex{background:var(--tape-soft);border-color:var(--tape)}
+.box.tip{background:var(--green-soft);border-color:var(--green)}
+.box.warn{background:var(--chalk-soft);border-color:var(--chalk)}
+.term{background:var(--paper);border:1.5px dashed var(--indigo);border-left:5px solid var(--indigo);border-radius:6px;padding:12px 16px;margin:16px 0;font-size:.95rem}
+.term .tn{font-family:var(--head);font-size:1.12rem;color:var(--indigo)}
+.term .en{color:var(--muted);font-size:.85rem;margin-left:6px}
+.term .org{display:block;margin-top:6px;padding-top:6px;border-top:1px dotted var(--line);color:var(--muted)}
+.term .org::before{content:"📜 由來：";color:var(--ink)}
+.big{font-family:var(--head);font-size:1.3rem;text-align:center;padding:18px;border:2px solid var(--ink);border-radius:6px;margin:18px 0}
+.formula{font-family:var(--head);font-size:1.4rem;text-align:center;background:var(--ink);color:#fff;border-radius:6px;padding:14px;margin:16px 0}
+table{border-collapse:collapse;width:100%;font-size:.93rem;margin:10px 0}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--indigo-soft);font-weight:500}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+.scroll{overflow-x:auto}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin:14px 0}
+.card{border:1px solid var(--line);border-radius:6px;padding:12px 14px;background:var(--paper)}
+.card h4{margin-top:0}
+.card small{color:var(--muted)}
+.pill{display:inline-block;font-size:.75rem;padding:0 8px;border-radius:99px;background:var(--indigo-soft);color:var(--indigo);margin-right:4px}
+.pill.g{background:var(--green-soft);color:var(--green)}
+ol.steps{counter-reset:s;list-style:none;padding:0}
+ol.steps>li{counter-increment:s;position:relative;padding:4px 0 10px 44px}
+ol.steps>li::before{content:counter(s);position:absolute;left:0;top:4px;width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:.9rem}
+
+/* widgets */
+.widget{border:2px solid var(--ink);border-radius:8px;margin:22px 0;overflow:hidden}
+.widget>.wt{background:var(--ink);color:#fff;padding:8px 14px;font-family:var(--head);font-size:1.05rem}
+.widget>.wb{padding:14px 16px}
+.row{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin:8px 0}
+.row label{flex:1 1 150px;font-size:.92rem}
+.row input[type=number],.row select{width:110px;padding:5px 8px;border:1px solid var(--line);border-radius:5px;background:var(--bg)}
+.row input[type=range]{flex:2 1 160px;accent-color:var(--indigo)}
+.row output{min-width:64px;text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
+.result{background:var(--bg);border-radius:6px;padding:12px 14px;margin-top:10px}
+.result .k{font-size:1.5rem;font-family:var(--head);color:var(--indigo)}
+.btn{background:var(--indigo);color:#fff;border:0;border-radius:6px;padding:8px 16px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--indigo);border:1.5px solid var(--indigo)}
+.btn.sm{padding:4px 10px;font-size:.88rem}
+.stack{display:flex;height:34px;border-radius:5px;overflow:hidden;margin:10px 0}
+.stack div{display:grid;place-items:center;font-size:.72rem;color:#fff;transition:flex .4s;min-width:0;overflow:hidden;white-space:nowrap}
+.hbar{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:.9rem}
+.hbar .l{width:118px;flex:none}
+.hbar .t{flex:1;background:var(--bg);border-radius:4px;height:22px;position:relative;overflow:hidden}
+.hbar .t i{position:absolute;top:0;bottom:0;border-radius:4px;transition:all .6s}
+.hbar .v{width:84px;text-align:right;font-variant-numeric:tabular-nums;flex:none}
+svg text{font-family:var(--body)}
+
+/* quiz */
+.quiz{border:1.5px solid var(--line);border-radius:8px;padding:14px 16px;margin:18px 0;background:var(--bg)}
+.quiz .q{font-weight:500;margin-top:0}
+.quiz .q::before{content:"✏️ ";}
+.quiz button{display:block;width:100%;text-align:left;margin:6px 0;padding:8px 12px;border:1.5px solid var(--line);background:var(--paper);border-radius:6px;cursor:pointer}
+.quiz button:hover{border-color:var(--indigo)}
+.quiz button.ok{border-color:var(--green);background:var(--green-soft)}
+.quiz button.no{border-color:var(--chalk);background:var(--chalk-soft)}
+.quiz .fb{font-size:.92rem;margin:6px 0 0}
+.donebar{margin-top:34px;padding-top:18px;border-top:2px dashed var(--line);display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center}
+.donebar .btn.is-done{background:var(--green)}
+
+/* home */
+.hero{position:relative;padding:8px 0 10px}
+.hero h1{font-size:clamp(2rem,5vw,3rem);margin:.1em 0 .2em}
+.hero .sub{font-size:1.08rem;color:var(--muted);max-width:36em}
+.seam{height:10px;margin:18px 0;background:repeating-linear-gradient(90deg,var(--ink) 0 14px,transparent 14px 22px);height:2px}
+.route{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0;margin:20px 0;border:2px solid var(--ink);border-radius:8px;overflow:hidden}
+.route button{border:0;border-right:2px dashed var(--line);background:var(--paper);padding:14px;text-align:left;cursor:pointer}
+.route button:last-child{border-right:0}
+.route button:hover{background:var(--tape-soft)}
+.route .e{font-size:1.8rem}
+.route b{display:block;font-family:var(--head);font-size:1.1rem}
+.route small{color:var(--muted);line-height:1.5;display:block}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px 14px;font-size:.92rem}
+
+.pager{position:fixed;bottom:0;left:0;right:0;background:var(--paper);border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;padding:8px 14px;z-index:15}
+.pager button{max-width:48%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* glossary */
+#gloss .term{margin:10px 0}
+#gloss .from{font-size:.8rem;color:var(--muted);cursor:pointer;text-decoration:underline}
+#gq{width:100%;padding:10px 14px;border:2px solid var(--ink);border-radius:6px;background:var(--paper);margin:8px 0}
+textarea{width:100%;min-height:70px;border:1px solid var(--line);border-radius:6px;padding:8px;background:var(--bg);resize:vertical}
+.bmc{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.bmc .card b{font-family:var(--head)}
+
+@media (max-width:860px){
+  #menuBtn{display:block}
+  nav#nav{position:fixed;left:0;top:52px;bottom:0;height:auto;background:var(--paper);z-index:30;transform:translateX(-105%);transition:transform .25s;box-shadow:4px 0 20px #0003;width:min(300px,86vw)}
+  nav#nav.open{transform:none}
+  main{padding:10px 8px 110px}
+  .lesson{padding:24px 16px}
+  h2{font-size:1.6rem}
+  .tape{flex-basis:130px}
+  .top .brand small{display:none}
+  .top .brand b{white-space:nowrap;font-size:1rem}
+  .top{gap:10px;padding:8px 10px}
+  .row input[type=number],.row select{width:96px}
+  .hbar .l{width:84px;font-size:.82rem}
+  #incoSteps{grid-template-columns:repeat(3,1fr)!important}
+}
+@media print{
+  .top,nav,.pager,.donebar,.widget .row{display:none!important}
+  .lesson{display:block!important;box-shadow:none;page-break-after:always}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <button id="menuBtn" aria-label="打開目錄">☰ 目錄</button>
+  <div class="brand"><span style="font-size:1.6rem">🧵</span><div><b>從零開始做生意</b><small>小公司創業課・入門到專業</small></div></div>
+  <div class="tape" title="學習進度"><div class="bar"><i id="progBar"></i></div><span id="progTxt">0/16 課</span></div>
+</header>
+<div class="layout">
+<nav id="nav" aria-label="課程目錄"></nav>
+<main id="main">
+
+<!-- ================= 首頁 ================= -->
+<section class="lesson" id="home" data-level="0" data-title="開始之前：怎麼上這門課">
+  <div class="hero">
+    <p class="lh"><span class="tag">一門讓國中生也看得懂的創業課</span></p>
+    <h1>從一個甘蔗汁攤，<br>到一間會賺錢的小公司</h1>
+    <p class="sub">不需要先有很多錢，也不需要讀過商學院。這門課用 16 堂課，帶你從「生意是什麼」一路學到「怎麼算現金流、怎麼接國際訂單」。每個專有名詞都會告訴你它是什麼意思、從哪裡來。</p>
+  </div>
+  <div class="seam"></div>
+  <h3>四段路，一段一段走</h3>
+  <div class="route">
+    <button data-go="c1"><span class="e">🌱</span><b>入門</b><small>第 1–3 課<br>生意是什麼、老闆的腦袋、找點子</small></button>
+    <button data-go="c4"><span class="e">🌿</span><b>基礎</b><small>第 4–8 課<br>資金、技能、商品、市場、定價</small></button>
+    <button data-go="c9"><span class="e">🌳</span><b>進階</b><small>第 9–12 課<br>客源、現金流、損益、記帳</small></button>
+    <button data-go="c13"><span class="e">🏭</span><b>專業</b><small>第 13–16 課<br>登記與稅、供應鏈與外貿、團隊、實戰案例</small></button>
+  </div>
+  <p>最後的 <b>🎓 畢業區</b> 有：寫你自己的商業計畫書（可下載）、名詞總表、期末測驗。</p>
+
+  <h3>課本裡的記號</h3>
+  <div class="legend">
+    <div>📖 <b>名詞小辭典</b>：意思＋由來</div>
+    <div>🧃 <b>例子</b>：用真實情境講</div>
+    <div>🎮 <b>動手玩</b>：可以拉、可以按</div>
+    <div>💡 <b>小撇步</b>：老手才知道的事</div>
+    <div>⚠️ <b>注意</b>：新手最常踩的坑</div>
+    <div>✏️ <b>小測驗</b>：按下去馬上知道對錯</div>
+  </div>
+
+  <div class="box tip"><h4>💡 關於課本裡的數字</h4>
+  <p>課本用<b>美元（$）</b>計算，因為在柬埔寨美元和瑞爾（KHR）通常一起用，大約 4,000 瑞爾 ≈ 1 美元（僅供估算）。所有價格、成本都是<b>教學用的假設數字</b>，真的要做生意時，一定要自己去市場問價、查最新規定。</p></div>
+
+  <p>進度會自動記在這台裝置的瀏覽器裡。每學完一課，按最下面的「完成本課」，上方的<b>黃色皮尺</b>就會往前量一格。</p>
+  <p style="text-align:center;margin-top:24px"><button class="btn" data-go="c1">從第 1 課開始</button></p>
+</section>
+
+<!-- ================= 第1課 ================= -->
+<section class="lesson" id="c1" data-num="1" data-level="1" data-title="生意到底是什麼？">
+  <div class="lh"><span class="tag">第 1 課・入門</span><h2>生意到底是什麼？</h2>
+  <p class="goal">🎯 學完你會知道：生意的本質、最重要的賺錢公式、錢是怎麼「轉」起來的。</p></div>
+
+  <p>很多人以為做生意很難、一定要很有錢。其實最簡單的生意，你在路邊就看得到——<b>甘蔗汁攤</b>。</p>
+
+  <div class="box ex"><h4>🧃 例子：阿明的甘蔗汁攤</h4>
+  <p>阿明在海邊擺攤。一捆甘蔗 $2，可以榨 20 杯；冰塊、杯子、吸管每杯大約 $0.10。一杯賣 $0.50（約 2,000 瑞爾）。</p>
+  <div class="scroll"><table>
+    <tr><th>項目</th><th>每杯</th></tr>
+    <tr><td>甘蔗（$2 ÷ 20 杯）</td><td class="n">$0.10</td></tr>
+    <tr><td>冰塊＋杯子＋吸管</td><td class="n">$0.10</td></tr>
+    <tr><th>成本合計</th><th class="n">$0.20</th></tr>
+    <tr><td>賣價</td><td class="n">$0.50</td></tr>
+    <tr><th>每杯賺</th><th class="n">$0.30</th></tr>
+  </table></div>
+  <p>一天賣 100 杯就賺 $30……嗎？先別急著高興。攤位租金、榨汁機的錢還沒算。第 11 課我們會把這筆帳算清楚。</p></div>
+
+  <h3>一句話說清楚「生意」</h3>
+  <div class="big">生意＝幫別人解決一個問題，換到錢；<br>而且收進來的錢，比花出去的多。</div>
+  <p>客人願意付 $0.50，不是因為甘蔗很稀有，而是因為「天氣很熱、口很渴、你剛好在這裡」。你真正賣的是<b>方便和清涼</b>。客人心裡覺得「這樣花錢值得」的那個感覺，就叫做<b>價值</b>。</p>
+  <div class="box tip"><h4>💡 記住這個問題</h4><p>以後每想到一個生意點子，先問自己：「<em>我幫客人解決了什麼問題？</em>」答不出來的點子，通常賣不動。</p></div>
+
+  <h3>🎮 動畫：錢是怎麼「轉」起來的</h3>
+  <div class="widget"><div class="wt">生意的轉輪</div><div class="wb" style="text-align:center">
+    <svg viewBox="0 0 340 340" width="100%" style="max-width:360px" role="img" aria-label="錢、進貨、賣出、收回更多錢的循環">
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
+      <circle cx="170" cy="170" r="115" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-width="14"/>
+      <circle cx="170" cy="170" r="115" fill="none" stroke="#f2b705" stroke-width="3" stroke-dasharray="8 8"/>
+      <g font-size="30" text-anchor="middle">
+        <text x="170" y="66">💵</text><text x="285" y="180">🛒</text><text x="170" y="296">🏪</text><text x="55" y="180">💰</text>
+      </g>
+      <g font-size="13" text-anchor="middle" fill="currentColor">
+        <text x="170" y="30">① 本錢</text><text x="296" y="215">② 進貨</text><text x="170" y="330">③ 賣給客人</text><text x="46" y="215">④ 收回更多</text>
+      </g>
+      <text x="170" y="165" text-anchor="middle" font-size="15" fill="currentColor">每轉一圈</text>
+      <text x="170" y="188" text-anchor="middle" font-size="15" fill="currentColor">錢變多＝賺錢</text>
+      <circle r="11" fill="#f2b705" stroke="#1b2540" stroke-width="2">
+        <animateMotion dur="6s" repeatCount="indefinite" path="M170,55 A115,115 0 1,1 169.9,55"/>
+        <animate attributeName="r" values="9;9;13;9" keyTimes="0;.7;.97;1" dur="6s" repeatCount="indefinite"/>
+      </circle>
+    </svg>
+    <p style="text-align:left">做生意就像騎腳踏車：錢 → 買貨 → 賣給客人 → 收回更多的錢 → 再買更多貨。黃色硬幣每轉一圈變大一點，代表賺到了。<b>轉得越順、越快，生意就越好</b>；卡在哪一格（貨賣不掉、錢收不回來），生意就會停下來。</p>
+  </div></div>
+
+  <h3>最重要的公式（請背起來）</h3>
+  <div class="formula">利潤 ＝ 收入 − 成本</div>
+  <p><b>收入</b>是賣東西收到的錢；<b>成本</b>是為了賣這個東西花掉的錢；<b>利潤</b>就是剩下來、真正屬於你的錢。這門課後面所有的內容，其實都是在教你怎麼讓收入變多、成本變少。</p>
+
+  <div class="term" data-t="利潤"><span class="tn">📖 利潤</span><span class="en">Profit</span><br>收入扣掉所有成本之後，剩下的錢。
+  <span class="org">英文 profit 來自拉丁文 <i>proficere</i>，意思是「往前進步、有進展」。古人覺得：生意有賺，就是往前走了一步。</span></div>
+  <div class="term" data-t="經濟"><span class="tn">📖 經濟</span><span class="en">Economy</span><br>一群人怎麼生產、交換、使用東西的整套活動。
+  <span class="org">中文「經濟」原本出自「經世濟民」，意思是治理天下、救助百姓。清末日本學者借這兩個字翻譯英文 economy，後來傳回中文。英文 economy 來自希臘文 <i>oikonomia</i>，意思是「管理一個家」。所以做生意，本來就是從管好一個家的帳開始。</span></div>
+  <div class="term" data-t="創業家"><span class="tn">📖 創業家</span><span class="en">Entrepreneur</span><br>自己找機會、出錢或出力、承擔風險去開創事業的人。
+  <span class="org">來自法文 <i>entreprendre</i>，「動手去做、承擔下來」。18 世紀經濟學家康蒂永（Richard Cantillon）用這個詞形容「用確定的價格買進、用不確定的價格賣出、自己承擔風險的人」。</span></div>
+
+  <h3>生意的三種基本樣子</h3>
+  <div class="grid">
+    <div class="card"><h4>🛒 買進賣出</h4><p>低價買、高價賣，賺中間的差價。<br><small>例：雜貨店、成衣批發、手機配件攤</small></p></div>
+    <div class="card"><h4>🏭 自己做</h4><p>把原料變成新東西再賣。<br><small>例：成衣廠、麵包店、手工包</small></p></div>
+    <div class="card"><h4>🧑‍🔧 賣服務</h4><p>賣你的技術和時間。<br><small>例：改衣服、修手機、設計印花圖</small></p></div>
+  </div>
+  <p>成衣業三種都有：<b>賣布料</b>是買進賣出，<b>車縫工廠</b>是自己做，<b>幫客人設計 T 恤圖案</b>是賣服務。很多小公司一開始只做一種，慢慢才加上另一種。</p>
+
+  <div class="quiz" data-a="1" data-exp="$0.50 − $0.20 = $0.30。利潤＝收入−成本。"><p class="q">甘蔗汁每杯成本 $0.20、賣 $0.50，每杯利潤是多少？</p><button>$0.20</button><button>$0.30</button><button>$0.50</button></div>
+  <div class="quiz" data-a="2" data-exp="客人買的是「解決問題」：口渴、方便、清涼。這就是價值。"><p class="q">客人為什麼願意花錢買甘蔗汁？</p><button>因為甘蔗很稀有</button><button>因為老闆很辛苦</button><button>因為對口渴的他來說，這樣花錢值得</button></div>
+</section>
+
+<!-- ================= 第2課 ================= -->
+<section class="lesson" id="c2" data-num="2" data-level="1" data-title="老闆的腦袋：創業心態">
+  <div class="lh"><span class="tag">第 2 課・入門</span><h2>老闆的腦袋：創業心態</h2>
+  <p class="goal">🎯 學完你會知道：當老闆和當員工差在哪、為什麼要「先小後大」、怎麼面對風險。</p></div>
+
+  <h3>當老闆和當員工，差在哪？</h3>
+  <div class="scroll"><table>
+    <tr><th></th><th>👷 員工</th><th>🧑‍💼 老闆</th></tr>
+    <tr><td>收入</td><td>每月固定薪水</td><td>不固定：可能賺很多，也可能賠錢</td></tr>
+    <tr><td>責任</td><td>做好自己的工作</td><td>所有事最後都是你的事</td></tr>
+    <tr><td>時間</td><td>下班就下班</td><td>常常最早到、最晚走</td></tr>
+    <tr><td>學習</td><td>學一個專業</td><td>什麼都要懂一點</td></tr>
+  </table></div>
+  <p>沒有哪一個比較好。但你要知道：當老闆<b>換到的是機會，付出的是不確定</b>。</p>
+
+  <h3>創業家的三個好習慣</h3>
+  <ol class="steps">
+    <li><b>先找問題，再找商品。</b>不是「我想賣什麼」，而是「大家缺什麼」。</li>
+    <li><b>先小後大，先試再衝。</b>先用很少的錢試賣，確定有人買，才加大投入。</li>
+    <li><b>只拿「輸得起」的錢。</b>不要拿房子、拿全家的生活費去賭。</li>
+  </ol>
+
+  <div class="box ex"><h4>🧃 例子：想做自己的 T 恤品牌</h4>
+  <p><b>錯誤做法：</b>直接租店面、買 5 台車縫機、一次做 2,000 件。花了 $10,000，才發現大家不喜歡你的設計。</p>
+  <p><b>聰明做法：</b>先設計 3 款圖案，每款找印花店印 10 件，拍照放到 Facebook 和 Telegram 賣。花大約 $300，兩週就知道哪一款最受歡迎。賣得好的那款再加印 100 件。</p>
+  <p>用 $300 學到的事，比用 $10,000 學到的便宜太多了。</p></div>
+
+  <div class="term" data-t="MVP 最小可行產品"><span class="tn">📖 MVP 最小可行產品</span><span class="en">Minimum Viable Product</span><br>「剛好可以拿去給客人試用」的最簡單版本。目的不是賺大錢，而是<b>用最少的錢，最快知道客人要不要</b>。
+  <span class="org">2001 年由美國創業家 Frank Robinson 提出這個詞，後來因為 Eric Ries 在 2011 年出版的《精實創業》（The Lean Startup）而流行全世界。</span></div>
+  <div class="term" data-t="風險"><span class="tn">📖 風險</span><span class="en">Risk</span><br>事情可能不照你想的發展，而讓你損失的機會。
+  <span class="org">英文 risk 來自義大利文 <i>risco</i>。一說它和古代航海有關：船要繞過海裡的暗礁，就是在冒險。中文「險」本來就是地勢危險難走的意思。</span></div>
+
+  <h3>破除新手的四個迷思</h3>
+  <div class="scroll"><table>
+    <tr><th>❌ 迷思</th><th>✅ 真相</th></tr>
+    <tr><td>一定要很多錢才能創業</td><td>很多生意可以先接訂單、收訂金再做，幾百美元就能起步</td></tr>
+    <tr><td>點子夠好就會成功</td><td>點子只佔一小部分，「做出來、賣出去、收到錢」才是關鍵</td></tr>
+    <tr><td>當老闆很自由</td><td>老闆是被客人、員工、帳單追著跑的人</td></tr>
+    <tr><td>失敗很丟臉</td><td>小失敗是學費。怕的是一次就把全部的錢輸光</td></tr>
+  </table></div>
+
+  <div class="box warn"><h4>⚠️ 一條紅線</h4><p>不要借高利貸創業，也不要拿家人的生活費、看病的錢去投資。生意失敗了還能重來，家裡的生活垮了就很難回頭。</p></div>
+
+  <div class="quiz" data-a="0" data-exp="MVP 就是用最少的錢先試，確定有人要再加大。"><p class="q">想賣自己設計的 T 恤，最好的第一步是？</p><button>先印少量試賣，看客人反應</button><button>先租店面，氣勢要夠</button><button>一次做 2,000 件，單價比較便宜</button></div>
+  <div class="quiz" data-a="2" data-exp="創業資金應該是「就算全輸光，生活也不會垮」的錢。"><p class="q">創業最適合用哪一種錢？</p><button>家裡下個月的房租</button><button>跟地下錢莊借的錢</button><button>就算全部賠掉，生活也不會出問題的錢</button></div>
+</section>
+
+<!-- ================= 第3課 ================= -->
+<section class="lesson" id="c3" data-num="3" data-level="1" data-title="找點子：什麼生意有機會賺錢？">
+  <div class="lh"><span class="tag">第 3 課・入門</span><h2>找點子：什麼生意有機會賺錢？</h2>
+  <p class="goal">🎯 學完你會知道：點子從哪來、成衣和小買賣有哪些入門選擇、怎麼替點子打分數。</p></div>
+
+  <h3>好點子的四個來源</h3>
+  <div class="grid">
+    <div class="card"><h4>😣 大家的抱怨</h4><p>「工廠制服好難訂」「這裡買不到大尺碼」——抱怨就是需求。</p></div>
+    <div class="card"><h4>💪 你會的事</h4><p>會車縫、會設計、會說三種語言、會拍照，都是本錢。</p></div>
+    <div class="card"><h4>🤝 你身邊的資源</h4><p>認識布商、家裡有空間、朋友在學校或工廠當主管。</p></div>
+    <div class="card"><h4>📈 正在變大的趨勢</h4><p>觀光客變多、網購變普遍、大家開始用手機付款。</p></div>
+  </div>
+  <div class="box tip"><h4>💡 你的「不公平優勢」</h4><p>如果你在成衣廠工作過，你懂布料、懂車縫工時、認識輔料供應商、知道品質怎麼檢查——這些是外行人花好幾年都學不到的。從你已經懂的行業開始，成功機會最大。</p></div>
+
+  <div class="term" data-t="痛點"><span class="tn">📖 痛點</span><span class="en">Pain point</span><br>客人覺得麻煩、不滿意、想被解決的地方。
+  <span class="org">借用醫學的說法：身體哪裡痛，病人就最願意花錢治療哪裡。商業上用它比喻「客人最願意付錢解決的問題」。</span></div>
+  <div class="term" data-t="利基市場"><span class="tn">📖 利基市場</span><span class="en">Niche market</span><br>一小群有特別需求、大公司懶得照顧的客人。例如「大尺碼女裝」「工廠團體制服」。
+  <span class="org">niche 是法文，原本指牆壁上用來放雕像的小凹槽。小凹槽很小，但剛好放得下你——小生意最適合先找這種位置。中文「利基」是音譯，也帶有「有利的基地」的意思。</span></div>
+
+  <h3>🎮 點子卡：在地 or 國際</h3>
+  <p><button class="btn sm" data-filter="all">全部</button> <button class="btn sm ghost" data-filter="local">📍 在地</button> <button class="btn sm ghost" data-filter="intl">🌏 國際</button></p>
+  <div class="grid" id="ideas">
+    <div class="card" data-k="local"><h4>👕 客製團體 T 恤／制服</h4><p>接公司、學校、工廠、婚禮、活動的團體單，外包給印花店或小車縫坊。</p><small>起步資金（估）：$300–1,500<br>難度：★★☆　適合：會接洽、懂布料的人</small></div>
+    <div class="card" data-k="local"><h4>♻️ 二手衣挑選轉賣</h4><p>批進整包二手衣，挑出好的整理、拍照，在網路或市集賣。</p><small>起步資金（估）：$100–500<br>難度：★☆☆　適合：眼光好、會拍照的人</small></div>
+    <div class="card" data-k="local intl"><h4>🧣 水布（Krama）設計商品</h4><p>把傳統水布做成包包、抱枕、圍巾，賣給觀光客，或放上國際網路平台。</p><small>起步資金（估）：$200–1,000<br>難度：★★☆　適合：有設計感的人</small></div>
+    <div class="card" data-k="local"><h4>🥤 飲料／小吃攤</h4><p>靠人潮賺錢，現金收入快，但很累、要顧衛生和位置。</p><small>起步資金（估）：$300–2,000<br>難度：★★☆　適合：能早起、手腳快的人</small></div>
+    <div class="card" data-k="local"><h4>📱 手機配件、小百貨</h4><p>從批發市場進貨，擺攤或開小店零售。</p><small>起步資金（估）：$500–3,000<br>難度：★★☆　適合：會殺價、會選貨的人</small></div>
+    <div class="card" data-k="intl"><h4>🖨️ 按需印刷（POD）</h4><p>你只負責設計圖，客人下單後由平台印製寄出，不用囤貨。</p><small>起步資金（估）：$0–200<br>難度：★★☆　適合：會設計、會網路行銷的人</small></div>
+    <div class="card" data-k="intl"><h4>🌏 跨境電商賣手工品</h4><p>把本地手工布品、藤編、香料放到國際網路平台賣。</p><small>起步資金（估）：$200–1,000<br>難度：★★★　注意：先確認平台是否開放你所在國家開店、國際運費多少</small></div>
+    <div class="card" data-k="intl"><h4>🏭 小型車縫代工坊</h4><p>租小廠房、10–20 台機器，接國外小品牌的少量訂單。</p><small>起步資金（估）：$5,000–30,000<br>難度：★★★★　適合：有工廠管理經驗的人</small></div>
+  </div>
+  <p><small>※ 以上金額只是粗估範圍，實際要看地點、規模和當時物價。</small></p>
+
+  <h3>三個問題，快速檢查點子</h3>
+  <ol class="steps">
+    <li><b>有人願意付錢嗎？</b>不是「大家說不錯」，而是「有人真的掏錢」。</li>
+    <li><b>我做得出來嗎？</b>技術、時間、本錢、供應商，缺哪一個？</li>
+    <li><b>做完有賺嗎？</b>賣價扣掉所有成本，還剩多少？</li>
+  </ol>
+
+  <div class="widget" id="idea"><div class="wt">🎮 點子打分器</div><div class="wb">
+    <p>想一個你的點子，每一項給 1–5 分（5 分最好）。</p>
+    <div class="row"><label>我對它有興趣，做得下去</label><input type="range" min="1" max="5" value="3" data-n="興趣"><output></output></div>
+    <div class="row"><label>我有相關的技能或經驗</label><input type="range" min="1" max="5" value="3" data-n="技能"><output></output></div>
+    <div class="row"><label>客人真的需要（有人抱怨、有人在買）</label><input type="range" min="1" max="5" value="3" data-n="需求"><output></output></div>
+    <div class="row"><label>我的本錢做得起</label><input type="range" min="1" max="5" value="3" data-n="本錢"><output></output></div>
+    <div class="row"><label>賣價扣掉成本後，利潤夠多</label><input type="range" min="1" max="5" value="3" data-n="利潤"><output></output></div>
+    <div class="result" id="ideaOut"></div>
+  </div></div>
+
+  <div class="quiz" data-a="1" data-exp="有人付錢才是真的需求。朋友說好話不花錢。"><p class="q">下面哪一個最能證明「真的有人需要」？</p><button>十個朋友都說點子很棒</button><button>已經有三個客人先付了訂金</button><button>我自己很喜歡</button></div>
+  <div class="quiz" data-a="0" data-exp="利基市場就是一小群大公司沒照顧好、但需求很清楚的客人。"><p class="q">「專門做工廠團體制服」比較像是？</p><button>利基市場</button><button>什麼人都賣的大眾市場</button><button>沒有市場</button></div>
+</section>
+
+<!-- ================= 第4課 ================= -->
+<section class="lesson" id="c4" data-num="4" data-level="2" data-title="資金：本錢要多少、從哪來？">
+  <div class="lh"><span class="tag">第 4 課・基礎</span><h2>資金：本錢要多少、從哪來？</h2>
+  <p class="goal">🎯 學完你會知道：開辦費和營運資金的差別、為什麼一定要留預備金、錢可以從哪裡來。</p></div>
+
+  <h3>錢要分成三個口袋</h3>
+  <div class="grid">
+    <div class="card"><h4>① 開辦費</h4><p>開張前「只花一次」的錢：機器、裝潢、押金、第一批貨、登記費。</p></div>
+    <div class="card"><h4>② 每月固定開銷</h4><p>不管有沒有賣出東西，每個月都要付：租金、薪水、水電、網路。</p></div>
+    <div class="card"><h4>③ 預備金</h4><p>生意剛開始通常不賺錢。這筆錢讓你撐過前幾個月，建議至少 3–6 個月的固定開銷。</p></div>
+  </div>
+  <div class="box warn"><h4>⚠️ 最常見的錯誤</h4><p>把錢全部花在裝潢和進貨，開張後第二個月就付不出房租。很多店不是因為東西不好而倒，是因為<b>還沒等到客人變多，錢就先用完了</b>。</p></div>
+
+  <div class="widget" id="fund"><div class="wt">🎮 我的起步資金計算器</div><div class="wb">
+    <p><b>① 開辦費（一次性）</b></p>
+    <div class="row"><label>機器設備</label><input type="number" id="fd1" value="600" min="0"></div>
+    <div class="row"><label>第一批貨／原料</label><input type="number" id="fd2" value="750" min="0"></div>
+    <div class="row"><label>裝潢、招牌、樣品</label><input type="number" id="fd3" value="150" min="0"></div>
+    <div class="row"><label>店面押金</label><input type="number" id="fd4" value="300" min="0"></div>
+    <div class="row"><label>登記與其他雜費</label><input type="number" id="fd5" value="100" min="0"></div>
+    <p><b>② 每月固定開銷</b></p>
+    <div class="row"><label>租金</label><input type="number" id="fd6" value="150" min="0"></div>
+    <div class="row"><label>薪水（包含你自己的生活費！）</label><input type="number" id="fd7" value="300" min="0"></div>
+    <div class="row"><label>水電、網路、電話</label><input type="number" id="fd8" value="40" min="0"></div>
+    <div class="row"><label>行銷廣告</label><input type="number" id="fd9" value="50" min="0"></div>
+    <p><b>③ 預備金要撐幾個月？</b></p>
+    <div class="row"><label>月數</label><input type="range" id="fd10" min="1" max="12" value="3"><output id="fd10o"></output></div>
+    <div class="stack" id="fdStack"></div>
+    <div class="result" id="fdOut"></div>
+  </div></div>
+
+  <h3>錢可以從哪裡來？</h3>
+  <div class="scroll"><table>
+    <tr><th>來源</th><th>好處</th><th>要小心</th></tr>
+    <tr><td>💰 自己存的錢</td><td>沒壓力、不用還、全部自己決定</td><td>存得慢</td></tr>
+    <tr><td>👪 家人朋友</td><td>通常利息低或不用利息</td><td>賠了會傷感情，一定要寫清楚借多少、怎麼還</td></tr>
+    <tr><td>🏦 銀行或微型貸款</td><td>金額較大、正式</td><td>每月要還本金＋利息，生意不好也要還；先算清楚總利息</td></tr>
+    <tr><td>🤝 合夥人／投資人</td><td>錢和能力都可能變多</td><td>要分利潤、分決定權；先講好誰做什麼、怎麼分</td></tr>
+    <tr><td>🧾 客人的訂金</td><td>用客人的錢做客人的貨，最安全</td><td>要準時交貨，信用最重要</td></tr>
+  </table></div>
+  <div class="box tip"><h4>💡 成衣業的老方法</h4><p>接團體單時先收 30%–50% 訂金，拿訂金去買布、付加工費，交貨時收尾款。這樣你幾乎不用自己墊錢。</p></div>
+
+  <div class="term" data-t="資本"><span class="tn">📖 資本</span><span class="en">Capital</span><br>拿來做生意、能生出更多錢的錢或財產（包括機器、店面）。
+  <span class="org">capital 來自拉丁文 <i>caput</i>，意思是「頭」。古代人用「幾頭牛、幾頭羊」計算財富，牲口會生小牲口，就像本錢會生利潤。</span></div>
+  <div class="term" data-t="預算"><span class="tn">📖 預算</span><span class="en">Budget</span><br>事先計畫好：錢要花在哪裡、各花多少。
+  <span class="org">來自古法文 <i>bougette</i>，意思是「小皮包」。後來英國財政大臣在國會「打開皮包」公布國家收支計畫，budget 就變成「花錢計畫」的意思。</span></div>
+  <div class="term" data-t="銀行"><span class="tn">📖 銀行</span><span class="en">Bank</span><br>替人保管錢、借錢給別人並收利息的機構。
+  <span class="org">來自義大利文 <i>banco</i>，意思是「長板凳」。中世紀的換錢商人坐在市場的長凳上做生意。中文用「銀行」，是因為中國古代用銀子當錢，「行」是商號的意思。</span></div>
+  <div class="term" data-t="破產"><span class="tn">📖 破產</span><span class="en">Bankrupt</span><br>欠的錢還不出來，依法律程序清算財產。
+  <span class="org">常見說法來自義大利文 <i>banca rotta</i>——「被打斷的板凳」。據說換錢商人還不出錢時，他的板凳會被當眾打斷，表示不能再做生意。</span></div>
+  <div class="term" data-t="利息"><span class="tn">📖 利息</span><span class="en">Interest</span><br>借錢的代價。借 $1,000、年利率 12%，一年要多付 $120。
+  <span class="org">英文 interest 來自拉丁文 <i>interesse</i>，「在中間、有關係」——指借出錢後，錢主人損失的那部分要補回來。中文「息」有「生出、增長」的意思，像「生生不息」。</span></div>
+
+  <div class="quiz" data-a="1" data-exp="預備金讓你撐過還沒賺錢的前幾個月。"><p class="q">為什麼除了開辦費，還要準備「預備金」？</p><button>因為錢越多越有面子</button><button>因為剛開張通常還不賺錢，要撐到客人變多</button><button>因為銀行規定</button></div>
+  <div class="quiz" data-a="2" data-exp="先收訂金，是用客人的錢做客人的貨，最不需要自己墊錢。"><p class="q">接到 500 件制服訂單，哪一種方式最不用自己墊錢？</p><button>全部做完再收錢</button><button>跟地下錢莊借錢買布</button><button>先收 50% 訂金買布，交貨再收尾款</button></div>
+</section>
+
+<!-- ================= 第5課 ================= -->
+<section class="lesson" id="c5" data-num="5" data-level="2" data-title="技能：老闆要會的 8 件事">
+  <div class="lh"><span class="tag">第 5 課・基礎</span><h2>技能：老闆要會的 8 件事</h2>
+  <p class="goal">🎯 學完你會知道：小老闆最需要哪些能力、怎麼找到自己的弱項、弱項可以怎麼補。</p></div>
+
+  <p>你不用一開始就樣樣精通。但你要知道自己<b>哪裡強、哪裡弱</b>，弱的地方找人幫忙、外包、或慢慢學。</p>
+  <div class="grid">
+    <div class="card"><h4>🧮 算數與記帳</h4><p>知道每一筆錢從哪來、到哪去。<br><small>怎麼學：每天記帳，一個月就上手（第 12 課）</small></p></div>
+    <div class="card"><h4>🛒 採購與殺價</h4><p>找到好又便宜的貨源，比較 3 家以上。<br><small>怎麼學：多跑批發市場，問價、記價</small></p></div>
+    <div class="card"><h4>🗣️ 銷售與溝通</h4><p>聽懂客人要什麼，說清楚你能給什麼。<br><small>怎麼學：每天主動跟 3 個潛在客人聊</small></p></div>
+    <div class="card"><h4>📸 行銷</h4><p>拍好看的照片、寫簡單清楚的文字。<br><small>怎麼學：模仿做得好的同業，拍 100 張練習</small></p></div>
+    <div class="card"><h4>🧵 產品知識</h4><p>懂你賣的東西：布料成分、尺碼、品質好壞。<br><small>怎麼學：去工廠、問師傅、摸樣品</small></p></div>
+    <div class="card"><h4>⏰ 時間管理</h4><p>知道哪件事最重要，先做最重要的。<br><small>怎麼學：每天早上寫 3 件今天必做的事</small></p></div>
+    <div class="card"><h4>👥 帶人</h4><p>教會別人、講清楚標準、給公平的回饋。<br><small>怎麼學：把自己的做法寫成步驟（第 15 課 SOP）</small></p></div>
+    <div class="card"><h4>💻 會用工具</h4><p>手機付款、試算表、社群軟體、AI 助手。<br><small>怎麼學：遇到重複的工作，就問「能不能讓工具做」</small></p></div>
+  </div>
+
+  <div class="widget" id="skills"><div class="wt">🎮 技能自我體檢</div><div class="wb">
+    <p>誠實替自己打分數（1＝完全不會，5＝很厲害）：</p>
+    <div id="skRows"></div>
+    <div class="result" id="skOut"></div>
+  </div></div>
+
+  <div class="term" data-t="外包"><span class="tn">📖 外包</span><span class="en">Outsourcing</span><br>把一部分工作交給外面的人或公司做，你付錢給他們。例如你只負責接單和設計，車縫交給代工坊。
+  <span class="org">英文由 outside＋resourcing 組成，1980 年代開始在企業界流行。成衣業其實很早就在外包：品牌公司設計，代工廠生產。</span></div>
+  <div class="term" data-t="合夥"><span class="tn">📖 合夥</span><span class="en">Partnership</span><br>兩個以上的人一起出錢或出力做生意，一起分賺的錢、一起承擔虧損。
+  <span class="org">中文「夥」原本指一起吃飯的一群人（「伙食」的伙），一起吃飯的人就是同一隊。</span></div>
+  <div class="box tip"><h4>💡 找合夥人的訣竅</h4><p>找<b>能力跟你互補</b>的人，不是找跟你一模一樣的好朋友。你會做、他會賣；你懂生產、他懂網路。而且一開始就要把「誰出多少、誰做什麼、怎麼分錢、想退出怎麼辦」寫下來，雙方簽名。</p></div>
+
+  <div class="quiz" data-a="2" data-exp="弱項不一定要自己補，可以找互補的夥伴或外包。"><p class="q">你很會車縫，但完全不會拍照和網路行銷，最好的做法是？</p><button>不管它，東西好自然會賣</button><button>等學會行銷再開始</button><button>找一個會行銷的夥伴，或付錢請人幫忙，同時自己慢慢學</button></div>
+</section>
+
+<!-- ================= 第6課 ================= -->
+<section class="lesson" id="c6" data-num="6" data-level="2" data-title="商品：選對東西、算清成本">
+  <div class="lh"><span class="tag">第 6 課・基礎</span><h2>商品：選對東西、算清成本</h2>
+  <p class="goal">🎯 學完你會知道：好商品的條件、一件 T 恤的成本怎麼拆、成衣業常聽到的行話。</p></div>
+
+  <h3>好商品的五個條件</h3>
+  <ol class="steps">
+    <li><b>有人要：</b>有明確的客人和需求。</li>
+    <li><b>做得出、進得到：</b>貨源穩定，品質控制得住。</li>
+    <li><b>利潤夠：</b>賣價至少是成本的 1.5–2 倍以上，才夠付租金薪水。</li>
+    <li><b>好保存、好運送：</b>不容易壞、不佔太多空間。衣服比水果好做，因為不會腐爛。</li>
+    <li><b>會回購：</b>客人買了還會再買，或會介紹朋友來買。</li>
+  </ol>
+
+  <h3>一件 T 恤的成本，拆開來看</h3>
+  <p>很多人只算「布多少錢」，結果賣越多賠越多。一件衣服的成本其實是很多小項目加起來的：</p>
+  <div class="widget" id="tee"><div class="wt">🎮 T 恤成本拆解器</div><div class="wb">
+    <div class="row"><label>🟦 布料（每件用量 × 單價）</label><input type="number" id="t1" value="1.20" step="0.05" min="0"></div>
+    <div class="row"><label>🟩 輔料（線、領標、洗標）</label><input type="number" id="t2" value="0.15" step="0.05" min="0"></div>
+    <div class="row"><label>🟨 裁剪＋車縫（CMT 加工費）</label><input type="number" id="t3" value="0.80" step="0.05" min="0"></div>
+    <div class="row"><label>🟧 印花</label><input type="number" id="t4" value="0.50" step="0.05" min="0"></div>
+    <div class="row"><label>🟪 包裝（袋子、吊牌）</label><input type="number" id="t5" value="0.15" step="0.05" min="0"></div>
+    <div class="row"><label>🟥 損耗率（做壞、布頭浪費）%</label><input type="range" id="t6" min="0" max="15" value="5"><output id="t6o"></output></div>
+    <div class="row"><label>賣價（每件）</label><input type="number" id="t7" value="6" step="0.5" min="0"></div>
+    <div class="row"><label>這一批做幾件</label><input type="number" id="t8" value="300" step="10" min="1"></div>
+    <div class="stack" id="teeStack"></div>
+    <div class="result" id="teeOut"></div>
+  </div></div>
+
+  <h3>成衣業行話小辭典</h3>
+  <div class="term" data-t="BOM 物料清單"><span class="tn">📖 BOM 物料清單</span><span class="en">Bill of Materials</span><br>做一件產品需要的所有材料清單：用什麼布、用多少、什麼扣子、幾公尺線。
+  <span class="org">來自製造業。bill 在英文有「清單、帳單」的意思，這張單就像產品的「食譜材料表」。</span></div>
+  <div class="term" data-t="CMT 加工"><span class="tn">📖 CMT 加工</span><span class="en">Cut, Make, Trim</span><br>工廠只負責<b>裁剪、車縫、整燙包裝</b>，布料由客人提供。工廠只賺「工錢」。
+  <span class="org">三個英文字的第一個字母。Cut＝裁、Make＝縫、Trim＝修線頭與整理。這是成衣代工最基本的合作方式。</span></div>
+  <div class="term" data-t="FOB 價"><span class="tn">📖 FOB 價</span><span class="en">Free On Board</span><br>工廠自己買布、做好衣服、送到出口港「裝上船」為止的價格。之後的海運、保險由買家負責。
+  <span class="org">來自國際貿易規則 Incoterms（第 14 課會詳細介紹）。Free On Board 意思是「在船上交貨」。在成衣業，FOB 常被用來指「工廠包料包工」的報價方式。</span></div>
+  <div class="term" data-t="MOQ 最小訂購量"><span class="tn">📖 MOQ 最小訂購量</span><span class="en">Minimum Order Quantity</span><br>供應商願意接的最少數量。例如布廠說「每色最少 500 碼」。
+  <span class="org">因為工廠每換一次顏色、款式，機器要重新調整，量太少就不划算，所以會訂一個下限。小生意常卡在這裡，要學會找願意接小量的供應商。</span></div>
+  <div class="term" data-t="樣衣"><span class="tn">📖 樣衣</span><span class="en">Sample</span><br>正式大量生產前，先做一件給客人確認的樣品。確認了才開始做「大貨」（正式訂單的量）。
+  <span class="org">sample 來自古法文 <i>essample</i>，也就是 example（例子）。先給「例子」，再做「大量」。</span></div>
+  <div class="term" data-t="批發與零售"><span class="tn">📖 批發與零售</span><span class="en">Wholesale / Retail</span><br>批發：大量、便宜地賣給商人。零售：一件一件賣給最後使用的人。
+  <span class="org">wholesale 是「整批（whole）地賣」。retail 來自古法文 <i>retaillier</i>，意思是「切成小塊」——把大塊的貨切小分開賣。中文「批」是成批、成疊的意思。</span></div>
+
+  <div class="quiz" data-a="1" data-exp="只算布料會漏掉輔料、加工、印花、包裝和損耗，實際成本會高很多。"><p class="q">一件 T 恤的成本，只算布料對嗎？</p><button>對，布料最貴就夠了</button><button>不對，還要加輔料、加工、印花、包裝和損耗</button></div>
+  <div class="quiz" data-a="0" data-exp="CMT＝Cut, Make, Trim，工廠只收工錢，布由客人提供。"><p class="q">「CMT 報價」的意思是？</p><button>工廠只收裁剪和車縫的工錢，布料客人自己出</button><button>工廠包布料、包運費到客人家</button><button>一種布料的名字</button></div>
+</section>
+
+<!-- ================= 第7課 ================= -->
+<section class="lesson" id="c7" data-num="7" data-level="2" data-title="市場：誰會買？有多少人買？">
+  <div class="lh"><span class="tag">第 7 課・基礎</span><h2>市場：誰會買？有多少人買？</h2>
+  <p class="goal">🎯 學完你會知道：什麼叫市場、怎麼估市場大小、怎麼做市場調查、怎麼看懂競爭對手。</p></div>
+
+  <div class="big">市場＝一群「需要你的東西」而且「付得起錢」的人。</div>
+  <p>全城的人都需要衣服，但不是全城的人都是你的客人。你要一層一層地縮小範圍。</p>
+
+  <div class="widget" id="tam"><div class="wt">🎮 市場的三個圈圈（點點看）</div><div class="wb" style="text-align:center">
+    <svg viewBox="0 0 320 250" width="100%" style="max-width:420px;cursor:pointer" role="img" aria-label="TAM SAM SOM 三個同心圓">
+      <circle data-z="0" cx="160" cy="130" r="115" fill="#2f4b9a" fill-opacity=".15" stroke="#2f4b9a" stroke-width="2"/>
+      <circle data-z="1" cx="160" cy="165" r="78" fill="#2f4b9a" fill-opacity=".25" stroke="#2f4b9a" stroke-width="2"/>
+      <circle data-z="2" cx="160" cy="200" r="40" fill="#f2b705" stroke="#1b2540" stroke-width="2"/>
+      <text x="160" y="40" text-anchor="middle" font-size="15" fill="currentColor" pointer-events="none">TAM 全部市場</text>
+      <text x="160" y="112" text-anchor="middle" font-size="14" fill="currentColor" pointer-events="none">SAM 你服務得到的</text>
+      <text x="160" y="205" text-anchor="middle" font-size="13" fill="#1b2540" pointer-events="none">SOM 你拿得到</text>
+    </svg>
+    <div class="result" id="tamOut" style="text-align:left">👆 點任何一個圈圈看說明。</div>
+  </div></div>
+
+  <div class="term" data-t="TAM／SAM／SOM"><span class="tn">📖 TAM／SAM／SOM</span><span class="en">Total / Serviceable Available / Serviceable Obtainable Market</span><br>估市場大小的三個圈：理論上全部的市場 → 你的商品和地區服務得到的 → 你第一年實際能搶到的。
+  <span class="org">這是創業投資圈常用的說法，投資人看商業計畫書時一定會問。重點是最小的 SOM：不要跟投資人說「全國都是我的客人」，要說「第一年我能拿到多少」。</span></div>
+  <div class="term" data-t="市場"><span class="tn">📖 市場</span><span class="en">Market</span><br>買方和賣方交換東西的地方，後來也指「一群潛在的買家」。
+  <span class="org">英文 market 來自拉丁文 <i>mercatus</i>（交易），和 merchant（商人）同源。中文「市」在古代就是指買賣的地方，《易經》說「日中為市」——中午大家聚在一起交易。</span></div>
+
+  <h3>不花大錢的市場調查：五招</h3>
+  <ol class="steps">
+    <li><b>去看對手：</b>他們賣什麼、多少錢、客人多不多、客人在抱怨什麼。</li>
+    <li><b>問 20 個可能的客人：</b>問「你上次買是什麼時候、花多少、有什麼不滿意」，不要問「你會不會買」（大家都會客氣說會）。</li>
+    <li><b>看社群：</b>Facebook 社團、Telegram 群組、TikTok 上大家在討論和抱怨什麼。</li>
+    <li><b>記價格：</b>到市場把同類商品的價格抄下來，做成一張表。</li>
+    <li><b>小量試賣：</b>最真實的調查就是「真的賣賣看」。</li>
+  </ol>
+
+  <h3>SWOT：替自己做一次健康檢查</h3>
+  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+    <div class="card" style="border-top:4px solid var(--green)"><h4>S 優勢（內部）</h4><small>例：懂成衣品質、認識布商、會說中文、英文、高棉文</small></div>
+    <div class="card" style="border-top:4px solid var(--chalk)"><h4>W 劣勢（內部）</h4><small>例：本錢少、沒有店面、不會拍照</small></div>
+    <div class="card" style="border-top:4px solid var(--indigo)"><h4>O 機會（外部）</h4><small>例：附近工廠多，每年都要訂制服；觀光客增加</small></div>
+    <div class="card" style="border-top:4px solid var(--tape)"><h4>T 威脅（外部）</h4><small>例：網路上有更便宜的貨；布料漲價</small></div>
+  </div>
+  <div class="term" data-t="SWOT 分析"><span class="tn">📖 SWOT 分析</span><span class="en">Strengths, Weaknesses, Opportunities, Threats</span><br>把自己的優勢、劣勢，和外面的機會、威脅，寫在四個格子裡一起看。
+  <span class="org">一般認為來自 1960 年代美國史丹佛研究所的企業規劃研究，確切發明人說法不一。因為簡單好用，現在從大企業到小攤販都在用。</span></div>
+
+  <h3>競爭對手比較表（範例）</h3>
+  <div class="scroll"><table>
+    <tr><th></th><th>對手 A 印花店</th><th>對手 B 網路賣家</th><th>我</th></tr>
+    <tr><td>價格</td><td>$7／件</td><td>$5／件</td><td>$6／件</td></tr>
+    <tr><td>交貨速度</td><td>10 天</td><td>3 週</td><td>7 天</td></tr>
+    <tr><td>最少件數</td><td>50 件</td><td>100 件</td><td>20 件</td></tr>
+    <tr><td>客人抱怨</td><td>態度不好</td><td>尺寸不準</td><td>？</td></tr>
+  </table></div>
+  <p>看出來了嗎？你不一定要最便宜，只要在某一點<b>明顯比別人好</b>（例如「20 件就能做、7 天交貨」），就有客人會選你。</p>
+
+  <div class="quiz" data-a="2" data-exp="問過去的真實行為比問「會不會買」準確得多。"><p class="q">做市場調查時，哪一個問題最有用？</p><button>「你覺得我的點子好不好？」</button><button>「如果我開店你會不會來買？」</button><button>「你上次買工作服是什麼時候？花了多少？有什麼不滿意？」</button></div>
+  <div class="quiz" data-a="1" data-exp="SOM 是你實際拿得到的市場，最小也最實在。"><p class="q">跟投資人說明時，最該強調哪一個？</p><button>TAM：全國都是我的客人</button><button>SOM：第一年我實際能拿到多少客人</button></div>
+</section>
+
+<!-- ================= 第8課 ================= -->
+<section class="lesson" id="c8" data-num="8" data-level="2" data-title="定價：怎麼訂價才不會虧">
+  <div class="lh"><span class="tag">第 8 課・基礎</span><h2>定價：怎麼訂價才不會虧</h2>
+  <p class="goal">🎯 學完你會知道：三種定價方法、「加價率」和「毛利率」為什麼不一樣、為什麼不要削價競爭。</p></div>
+
+  <h3>三種定價方法</h3>
+  <div class="grid">
+    <div class="card"><h4>① 成本加成法</h4><p>成本 × 倍數。成本 $3，乘 2 倍，賣 $6。<br><small>好處：簡單、不會賠。缺點：可能賣太便宜。</small></p></div>
+    <div class="card"><h4>② 看對手定價</h4><p>對手賣 $7，你賣 $6.5 或 $7。<br><small>好處：客人容易接受。缺點：要確定你的成本撐得住。</small></p></div>
+    <div class="card"><h4>③ 看價值定價</h4><p>客人覺得值多少，就賣多少。急件、客製、品質特別好，可以賣更貴。<br><small>最賺，但要真的做到比別人好。</small></p></div>
+  </div>
+  <div class="box tip"><h4>💡 聰明的做法</h4><p>用 ① 算出「最低不能低於多少」，用 ② 看市場行情，用 ③ 找出能多賣一點的理由。三個一起用。</p></div>
+
+  <h3>最容易搞混的兩個數字</h3>
+  <p>成本 $3、賣 $6，你賺多少「%」？答案有兩個，而且<b>兩個都對</b>：</p>
+  <div class="scroll"><table>
+    <tr><th>名稱</th><th>公式</th><th>這個例子</th></tr>
+    <tr><td>加價率（Markup）</td><td>（賣價 − 成本）÷ <b>成本</b></td><td>$3 ÷ $3 ＝ <b>100%</b></td></tr>
+    <tr><td>毛利率（Margin）</td><td>（賣價 − 成本）÷ <b>賣價</b></td><td>$3 ÷ $6 ＝ <b>50%</b></td></tr>
+  </table></div>
+  <p>差別只在「除以誰」。會計和銀行看的是<b>毛利率</b>。如果你以為「我加價 50% 就等於毛利 50%」，其實毛利率只有 33%，錢會不夠用。</p>
+
+  <div class="widget" id="price"><div class="wt">🎮 定價拉桿</div><div class="wb">
+    <div class="row"><label>成本（每件）</label><input type="range" id="pc" min="0.5" max="20" step="0.5" value="3"><output id="pco"></output></div>
+    <div class="row"><label>賣價（每件）</label><input type="range" id="pp" min="0.5" max="40" step="0.5" value="6"><output id="ppo"></output></div>
+    <div class="stack" id="pStack"></div>
+    <div class="result" id="pOut"></div>
+  </div></div>
+
+  <div class="term" data-t="毛利"><span class="tn">📖 毛利</span><span class="en">Gross profit</span><br>賣價減掉商品本身的成本。還<b>沒</b>扣租金、薪水等費用，所以叫「毛」的。
+  <span class="org">中文「毛」有「粗略、還沒處理過」的意思，像「毛坯」「毛重」（連包裝一起秤的重量）。毛利就是「還沒扣乾淨的利潤」，扣完所有費用後才叫「淨利」。</span></div>
+  <div class="term" data-t="加價率"><span class="tn">📖 加價率</span><span class="en">Markup</span><br>在成本上面「加上去」多少比例。
+  <span class="org">英文 mark up 原意是「把標價往上寫」。商店店員把進貨價改寫成更高的售價標籤，就是 markup。</span></div>
+
+  <h3>其他實用的定價技巧</h3>
+  <ul>
+    <li><b>數量折扣：</b>100 件以上每件便宜 $0.5，客人會多訂，你的單位成本也會降。</li>
+    <li><b>組合價：</b>T 恤＋帽子一起買比分開買便宜，客單價變高。</li>
+    <li><b>急件加價：</b>3 天內要貨，加收 20%。你要加班，這是合理的。</li>
+    <li><b>尾數定價：</b>$9.9 看起來比 $10 便宜很多，零售常用。團體訂單則用整數比較專業。</li>
+  </ul>
+  <div class="box warn"><h4>⚠️ 削價競爭是死路</h4><p>對手賣 $6，你賣 $5，他賣 $4.5……最後大家都在做白工。小公司拼價格，一定拼不過大工廠。要拼的是：<b>速度、彈性、服務、小量也接</b>。</p></div>
+
+  <div class="quiz" data-a="0" data-exp="毛利率＝（10−8）÷10＝20%。加價率才是 2÷8＝25%。"><p class="q">成本 $8、賣 $10，毛利率是多少？</p><button>20%</button><button>25%</button><button>80%</button></div>
+  <div class="quiz" data-a="2" data-exp="小公司的優勢是彈性與速度，不是價格。"><p class="q">對手一直降價，小公司最好的對策是？</p><button>降得比他更低</button><button>關門不做了</button><button>強調自己的不同：交貨快、小量也接、服務好</button></div>
+</section>
+
+<!-- ================= 第9課 ================= -->
+<section class="lesson" id="c9" data-num="9" data-level="3" data-title="客源：找到客人、留住客人">
+  <div class="lh"><span class="tag">第 9 課・進階</span><h2>客源：找到客人、留住客人</h2>
+  <p class="goal">🎯 學完你會知道：怎麼描述你的目標客人、行銷 4P、銷售漏斗、在地和國際各有哪些通路。</p></div>
+
+  <h3>先畫出「一個」客人</h3>
+  <p>「大家都是我的客人」＝沒有客人。先把你最理想的客人想像成一個真實的人：</p>
+  <div class="box ex"><h4>🧃 例子：客人人物誌</h4>
+  <p><b>索卡（Sokha），28 歲</b>，在一家 300 人的工廠做人事。每年要替員工訂兩次工作服，每次 300–600 件。</p>
+  <p><b>他在意：</b>準時交貨、尺寸準、價格在預算內、老闆不要罵他。<br><b>他討厭：</b>廠商拖延、做錯要重做、找不到人。<br><b>他在哪裡：</b>Telegram、Facebook、同業人事的聚會。</p>
+  <p>知道這些，你就知道該去哪裡找他、該說什麼話：「保證準時，遲交一天打九五折」。</p></div>
+  <div class="term" data-t="人物誌"><span class="tn">📖 人物誌</span><span class="en">Persona</span><br>把目標客人想像成一個具體的人，寫下他的年紀、工作、煩惱和習慣。
+  <span class="org">persona 是拉丁文，原本指古羅馬戲劇演員戴的面具。1990 年代軟體設計師 Alan Cooper 用它來代表「典型使用者」，後來行銷界也跟著用。</span></div>
+
+  <h3>行銷 4P：四個要一起想的東西</h3>
+  <div class="grid">
+    <div class="card"><h4>Product 產品</h4><p>賣什麼？品質、款式、尺碼、包裝。</p></div>
+    <div class="card"><h4>Price 價格</h4><p>賣多少？折扣、付款方式（第 8 課）。</p></div>
+    <div class="card"><h4>Place 通路</h4><p>在哪裡賣？店面、網路、上門拜訪。</p></div>
+    <div class="card"><h4>Promotion 推廣</h4><p>怎麼讓人知道？貼文、廣告、口碑、試穿。</p></div>
+  </div>
+  <div class="term" data-t="行銷 4P"><span class="tn">📖 行銷 4P</span><span class="en">Marketing Mix</span><br>產品、價格、通路、推廣，四個英文都是 P 開頭。
+  <span class="org">1960 年由美國教授 E. Jerome McCarthy 在他的行銷教科書中提出，到今天仍是最基本的行銷架構。</span></div>
+
+  <h3>🎮 銷售漏斗：從 1,000 人看到，到幾個人買</h3>
+  <div class="widget" id="funnel"><div class="wt">🎮 銷售漏斗模擬</div><div class="wb">
+    <div class="row"><label>看到你的貼文／店面的人</label><input type="number" id="fn0" value="1000" step="100" min="0"></div>
+    <div class="row"><label>看到 → 有興趣 %</label><input type="range" id="fn1" min="1" max="60" value="20"><output id="fn1o"></output></div>
+    <div class="row"><label>有興趣 → 來詢問 %</label><input type="range" id="fn2" min="1" max="80" value="25"><output id="fn2o"></output></div>
+    <div class="row"><label>詢問 → 下單 %</label><input type="range" id="fn3" min="1" max="80" value="20"><output id="fn3o"></output></div>
+    <div class="row"><label>下單 → 再回來買 %</label><input type="range" id="fn4" min="0" max="90" value="40"><output id="fn4o"></output></div>
+    <div class="row"><label>每筆訂單平均金額 $</label><input type="number" id="fn5" value="30" min="0"></div>
+    <div id="fnBars" style="margin-top:10px"></div>
+    <div class="result" id="fnOut"></div>
+    <p style="margin:10px 0 0"><button class="btn sm" id="fnPlay">▶ 播放漏斗動畫</button></p>
+  </div></div>
+  <p>漏斗的每一層都會漏掉人。<b>想多賺錢，不一定要讓更多人看到</b>，把「詢問→下單」從 20% 提高到 30%，營收就多 50%——方法是回覆更快、報價更清楚、給樣品看。</p>
+  <div class="term" data-t="銷售漏斗"><span class="tn">📖 銷售漏斗</span><span class="en">Sales funnel</span><br>把客人從「看到」到「購買」的過程畫成上寬下窄的漏斗，每一層都有人流失。
+  <span class="org">源頭是 1898 年美國廣告人 E. St. Elmo Lewis 提出的 AIDA 模型：注意（Attention）→ 興趣（Interest）→ 慾望（Desire）→ 行動（Action）。後來的人把它畫成漏斗形狀。</span></div>
+
+  <h3>去哪裡找客人？</h3>
+  <div class="scroll"><table>
+    <tr><th></th><th>📍 在地</th><th>🌏 國際</th></tr>
+    <tr><td>網路</td><td>Facebook 粉專與社團、Telegram 群組、TikTok 短影片</td><td>國際電商平台、自己的網站、Instagram</td></tr>
+    <tr><td>實體</td><td>市場攤位、店面、上門拜訪工廠和學校</td><td>國際展覽會、商會活動</td></tr>
+    <tr><td>人脈</td><td>老客人介紹、同業合作</td><td>貿易商、採購代理、LinkedIn</td></tr>
+  </table></div>
+  <div class="term" data-t="B2B 與 B2C"><span class="tn">📖 B2B 與 B2C</span><span class="en">Business-to-Business / Business-to-Consumer</span><br>B2B：公司賣給公司（例如接工廠的制服單），量大、要談判、常有付款期。B2C：公司賣給一般消費者（例如擺攤賣 T 恤），量小、收現金快。
+  <span class="org">「2」是英文 to 的諧音簡寫。1990 年代網路商業興起時開始流行的說法。</span></div>
+  <div class="term" data-t="品牌"><span class="tn">📖 品牌</span><span class="en">Brand</span><br>客人一想到你，心裡浮現的印象和信任感。不只是 logo，而是「這家做的衣服不會縮水」的那種感覺。
+  <span class="org">來自古北歐語 <i>brandr</i>，意思是「燃燒」。古時牧場主人用燒紅的鐵在牛身上烙印，證明「這是我的牛」。後來商人在木桶、貨物上烙印記號，品牌就是「讓人一眼認出是誰的」。</span></div>
+
+  <h3>留住老客人，比找新客人划算</h3>
+  <p>找一個新客人要花廣告、花時間解釋、還要讓他信任你；老客人已經信任你了。一般認為，<b>找新客人的成本常常是留住老客人的好幾倍</b>。</p>
+  <ul>
+    <li>準時交貨，比什麼廣告都有效。</li>
+    <li>做錯了主動認錯、馬上補救。</li>
+    <li>記住客人：上次訂什麼尺寸、什麼顏色。</li>
+    <li>老客人介紹新客人，給雙方一點優惠。</li>
+  </ul>
+
+  <div class="quiz" data-a="1" data-exp="提高詢問轉成下單的比例，不用多花廣告費也能多賺。"><p class="q">1,000 人看到、10 人下單。哪個方法通常最省錢又有效？</p><button>花更多錢打廣告</button><button>回覆更快、報價更清楚，讓詢問的人更多人下單</button><button>把價格降一半</button></div>
+  <div class="quiz" data-a="0" data-exp="公司賣給公司就是 B2B。"><p class="q">接工廠 500 件工作服的訂單，是哪一種生意？</p><button>B2B</button><button>B2C</button></div>
+</section>
+
+<!-- ================= 第10課 ================= -->
+<section class="lesson" id="c10" data-num="10" data-level="3" data-title="現金流：生意的血液">
+  <div class="lh"><span class="tag">第 10 課・進階</span><h2>現金流：生意的血液</h2>
+  <p class="goal">🎯 學完你會知道：為什麼「有賺錢」也會倒閉、應收和應付是什麼、怎麼讓現金轉得更快。</p></div>
+
+  <div class="big">把公司想成一個水塔：<br>收到錢＝進水，付出錢＝出水。<br>水塔一乾，公司就停了。</div>
+  <p>最可怕的是：帳面上明明有賺錢，但錢還沒收回來、倉庫堆滿貨，手上沒有現金付薪水。這叫做<b>黑字倒閉</b>。</p>
+  <div class="term" data-t="黑字倒閉"><span class="tn">📖 黑字倒閉</span><span class="en">Profitable but insolvent</span><br>帳面上有利潤（黑字），卻因為沒有現金周轉而倒閉。
+  <span class="org">來自日文「黒字倒産」。以前記帳用黑墨水寫賺錢、紅墨水寫虧損，所以「黑字」＝賺錢、「赤字」＝虧損。「赤字」這個詞中文也常用。</span></div>
+
+  <h3>三個讓水塔漏水的地方</h3>
+  <div class="grid">
+    <div class="card"><h4>🧊 庫存</h4><p>貨還沒賣掉，錢就像「結冰」一樣卡在倉庫裡，不能拿來用。</p></div>
+    <div class="card"><h4>⏳ 應收帳款</h4><p>貨交了，客人說「30 天後再付」。這段時間錢在客人那裡。</p></div>
+    <div class="card"><h4>📈 成長太快</h4><p>訂單突然變很多，要先買很多布、付很多工錢，錢卻還沒收回來。</p></div>
+  </div>
+  <div class="term" data-t="應收帳款"><span class="tn">📖 應收帳款</span><span class="en">Accounts receivable</span><br>客人已經買了、但還沒付給你的錢。
+  <span class="org">receivable 來自 receive（收到）。中文「應收」就是「應該要收、還沒收」。</span></div>
+  <div class="term" data-t="應付帳款"><span class="tn">📖 應付帳款</span><span class="en">Accounts payable</span><br>你已經拿到貨、但還沒付給供應商的錢。
+  <span class="org">payable 來自 pay（付）。能晚點付款，等於供應商借錢給你，對現金流有幫助。</span></div>
+  <div class="term" data-t="信用"><span class="tn">📖 信用</span><span class="en">Credit</span><br>別人相信你會還錢，願意先把貨或錢給你。
+  <span class="org">來自拉丁文 <i>credere</i>，意思是「相信」。「賒帳」其實就是「我相信你」。在商場上，準時付款累積起來的信用，比現金還值錢。</span></div>
+
+  <div class="widget" id="cash"><div class="wt">🎮 現金流模擬器：6 個月的水塔</div><div class="wb">
+    <div class="row"><label>一開始的現金 $</label><input type="number" id="cs0" value="2000" step="100"></div>
+    <div class="row"><label>第 1 個月營收 $</label><input type="number" id="cs1" value="1500" step="100"></div>
+    <div class="row"><label>每月營收成長 %</label><input type="range" id="cs2" min="0" max="60" value="25"><output id="cs2o"></output></div>
+    <div class="row"><label>商品成本佔營收 %</label><input type="range" id="cs3" min="20" max="90" value="60"><output id="cs3o"></output></div>
+    <div class="row"><label>每月固定開銷 $</label><input type="number" id="cs4" value="450" step="50"></div>
+    <div class="row"><label>客人什麼時候付錢？</label><select id="cs5"><option value="0">當月付現</option><option value="1" selected>30 天後</option><option value="2">60 天後</option></select></div>
+    <div class="row"><label>你什麼時候付貨款？</label><select id="cs6"><option value="1">先付（預付貨款）</option><option value="0" selected>當月付</option><option value="-1">30 天後付</option></select></div>
+    <div style="display:flex;gap:16px;align-items:flex-end;margin-top:12px;flex-wrap:wrap">
+      <div style="flex:1;min-width:230px">
+        <div style="font-size:.82rem;color:var(--muted)">■ <span style="color:var(--indigo)">藍＝手上的現金</span>　■ <span style="color:var(--green)">綠＝帳面累計利潤</span></div>
+        <div id="csChart" style="display:flex;align-items:flex-end;gap:6px;height:180px;border-bottom:2px solid var(--ink);position:relative;margin-top:6px"></div>
+        <div id="csLbl" style="display:flex;gap:6px;font-size:.78rem;text-align:center"></div>
+      </div>
+      <div style="width:90px;text-align:center">
+        <div style="font-size:.8rem;color:var(--muted)">最低水位</div>
+        <div style="height:150px;border:3px solid var(--ink);border-top:0;border-radius:0 0 10px 10px;position:relative;overflow:hidden;background:var(--bg)">
+          <div id="csWater" style="position:absolute;left:0;right:0;bottom:0;background:#4a90d9;transition:height .6s"></div>
+        </div>
+      </div>
+    </div>
+    <div class="result" id="csOut"></div>
+    <p style="font-size:.9rem;margin-bottom:0">試試看：把「客人付錢」改成 60 天後、成長率拉到 50%——生意越好，錢卻越缺！再把「你付貨款」改成 30 天後，看看水塔有沒有救回來。</p>
+  </div></div>
+
+  <h3>現金循環週期：錢轉一圈要幾天？</h3>
+  <div class="formula">現金循環天數＝庫存天數＋收款天數−付款天數</div>
+  <div class="box ex"><h4>🧃 例子</h4><p>布料買進後平均放 20 天才做完賣出；客人 30 天後付款；你對布商 15 天後付款。<br>20 ＋ 30 − 15 ＝ <b>35 天</b>。也就是說，你每花出去 $1，要 35 天後才回到手上。這段時間你要有足夠的錢撐住。</p></div>
+  <div class="box tip"><h4>💡 讓錢轉得更快的方法</h4>
+  <ul><li><b>收款要快：</b>收訂金、交貨收現、提早付款給小折扣。</li>
+  <li><b>庫存要少：</b>接單後再生產，不要憑感覺囤貨。</li>
+  <li><b>付款可以慢一點（但要守信用）：</b>跟供應商談 15–30 天付款期。</li>
+  <li><b>每週看一次現金：</b>預測未來 4–8 週會進多少錢、出多少錢。</li></ul></div>
+
+  <div class="quiz" data-a="2" data-exp="有利潤卻沒現金，因為錢卡在應收帳款和庫存裡。"><p class="q">「黑字倒閉」是什麼意思？</p><button>公司一直虧錢所以倒閉</button><button>老闆寫字用黑色筆</button><button>帳面有賺錢，但手上沒現金付帳而倒閉</button></div>
+  <div class="quiz" data-a="0" data-exp="10＋45−30＝25 天。"><p class="q">庫存 10 天、客人 45 天付款、你 30 天付款給供應商，現金循環幾天？</p><button>25 天</button><button>85 天</button><button>65 天</button></div>
+</section>
+
+<!-- ================= 第11課 ================= -->
+<section class="lesson" id="c11" data-num="11" data-level="3" data-title="損益：到底賺還是賠？">
+  <div class="lh"><span class="tag">第 11 課・進階</span><h2>損益：到底賺還是賠？</h2>
+  <p class="goal">🎯 學完你會知道：損益表一層一層怎麼算、固定成本和變動成本、損益兩平點。</p></div>
+
+  <div class="term" data-t="損益"><span class="tn">📖 損益</span><span class="en">Profit and Loss（P&amp;L）</span><br>一段時間內，生意是賺（益）還是賠（損）。
+  <span class="org">「損」和「益」是《易經》裡相鄰的兩個卦名：損卦（第 41 卦）講減少，益卦（第 42 卦）講增加。古人就知道，有減有增，要一起看才看得清楚。</span></div>
+
+  <h3>損益表：像剝洋蔥一樣一層一層扣</h3>
+  <div class="widget" id="pl"><div class="wt">🎮 一個月的損益表</div><div class="wb">
+    <div class="row"><label>營收（賣出的總金額）</label><input type="number" id="pl1" value="3000" step="100" min="0"></div>
+    <div class="row"><label>銷貨成本（賣出商品的成本）</label><input type="number" id="pl2" value="1600" step="50" min="0"></div>
+    <div class="row"><label>租金</label><input type="number" id="pl3" value="150" step="10" min="0"></div>
+    <div class="row"><label>薪水</label><input type="number" id="pl4" value="450" step="10" min="0"></div>
+    <div class="row"><label>水電、行銷、雜支</label><input type="number" id="pl5" value="150" step="10" min="0"></div>
+    <div class="row"><label>設備折舊</label><input type="number" id="pl6" value="17" step="1" min="0"></div>
+    <div class="row"><label>利息</label><input type="number" id="pl7" value="20" step="5" min="0"></div>
+    <div class="row"><label>稅</label><input type="number" id="pl8" value="60" step="5" min="0"></div>
+    <div id="plBars" style="margin-top:10px"></div>
+    <div class="result" id="plOut"></div>
+  </div></div>
+  <div class="term" data-t="營收"><span class="tn">📖 營收</span><span class="en">Revenue</span><br>賣東西收到（或應該收到）的總金額，還沒扣任何成本。
+  <span class="org">來自古法文 <i>revenue</i>，「回來的東西」。你把貨送出去，錢「回來」了。</span></div>
+  <div class="term" data-t="淨利"><span class="tn">📖 淨利</span><span class="en">Net profit</span><br>所有成本、費用、利息、稅都扣完之後，真正剩下的錢。
+  <span class="org">「淨」就是乾淨、扣乾淨了。和「毛利」相對：毛利是還沒扣完的，淨利是扣完的。英文 net 原意也是「乾淨的、扣除後的」。</span></div>
+  <div class="term" data-t="折舊"><span class="tn">📖 折舊</span><span class="en">Depreciation</span><br>機器會越用越舊、越不值錢。把買機器的錢平均分攤到它能用的每一年、每一個月。例如 $600 的機器用 3 年，每月折舊約 $17。
+  <span class="org">英文來自拉丁文 <i>de</i>（往下）＋ <i>pretium</i>（價格）＝價格往下掉。中文「折」有打折、減少的意思，「舊」就是用舊了。</span></div>
+
+  <h3>固定成本 vs 變動成本</h3>
+  <div class="grid">
+    <div class="card"><h4>🏠 固定成本</h4><p>賣 0 件、賣 1,000 件都一樣要付：租金、固定薪水、網路費、折舊。</p></div>
+    <div class="card"><h4>🧵 變動成本</h4><p>每多做一件就多花一份：布料、印花、包裝、按件計酬的工錢。</p></div>
+  </div>
+
+  <h3>損益兩平：賣幾件才開始賺？</h3>
+  <div class="formula">損益兩平件數＝固定成本 ÷（售價 − 每件變動成本）</div>
+  <p>「售價 − 每件變動成本」叫做<b>邊際貢獻</b>：每賣一件，能拿多少錢去「還」固定成本。還完了，之後賣的每一件才是真正的利潤。</p>
+  <div class="widget" id="be"><div class="wt">🎮 損益兩平計算機＋圖</div><div class="wb">
+    <div class="row"><label>每月固定成本 $</label><input type="number" id="be1" value="390" step="10" min="0"></div>
+    <div class="row"><label>售價（每件）$</label><input type="number" id="be2" value="6" step="0.1" min="0"></div>
+    <div class="row"><label>變動成本（每件）$</label><input type="number" id="be3" value="3.2" step="0.1" min="0"></div>
+    <div class="row"><label>你預計每月賣幾件</label><input type="range" id="be4" min="0" max="600" step="10" value="200"><output id="be4o"></output></div>
+    <svg id="beSvg" viewBox="0 0 360 230" width="100%" style="max-width:520px;display:block;margin:8px auto"></svg>
+    <div class="result" id="beOut"></div>
+  </div></div>
+  <div class="term" data-t="損益兩平點"><span class="tn">📖 損益兩平點</span><span class="en">Break-even point</span><br>不賺也不賠的那個銷量。超過它就賺，低於它就賠。
+  <span class="org">英文 break even 原本是賭博和打牌的說法：「剛好打平，沒輸沒贏」。中文「兩平」是「損」和「益」剛好相等。</span></div>
+
+  <div class="box ex"><h4>🧃 回到阿明的甘蔗汁攤</h4><p>攤位費加上榨汁機分攤，每天固定成本約 $12，每杯賺 $0.30（售價 $0.50 − 變動成本 $0.20）。<br>$12 ÷ $0.30 ＝ <b>40 杯</b>。每天前 40 杯是在「還」固定成本，第 41 杯開始才真正賺錢。賣 100 杯，真正的利潤是 60 × $0.30 ＝ $18，不是 $30。</p></div>
+
+  <div class="quiz" data-a="1" data-exp="1,000 ÷（10 − 6）＝ 250 件。"><p class="q">固定成本 $1,000，售價 $10，變動成本 $6，損益兩平要賣幾件？</p><button>100 件</button><button>250 件</button><button>167 件</button></div>
+  <div class="quiz" data-a="0" data-exp="租金不管賣多少都要付，是固定成本。"><p class="q">店面租金是哪一種成本？</p><button>固定成本</button><button>變動成本</button></div>
+</section>
+
+<!-- ================= 第12課 ================= -->
+<section class="lesson" id="c12" data-num="12" data-level="3" data-title="記帳與三大報表">
+  <div class="lh"><span class="tag">第 12 課・進階</span><h2>記帳與三大報表</h2>
+  <p class="goal">🎯 學完你會知道：為什麼一定要記帳、會計最重要的一條等式、三大報表各看什麼。</p></div>
+
+  <h3>為什麼要記帳？</h3>
+  <ul>
+    <li><b>知道錢去哪了：</b>很多老闆月底才發現「怎麼錢不見了」。</li>
+    <li><b>知道哪個商品最賺：</b>才能多做賺的、少做賠的。</li>
+    <li><b>報稅要用：</b>政府要看你的收入和支出。</li>
+    <li><b>借錢要用：</b>銀行和投資人一定會看你的帳。</li>
+  </ul>
+  <div class="box tip"><h4>💡 第一條規矩：公司的錢和自己的錢分開</h4><p>開一個專門給生意用的銀行帳戶或手機錢包。自己要用錢，就從公司「領薪水」出來，不要直接從收銀台拿。不分開，你永遠算不清楚到底有沒有賺。</p></div>
+  <div class="term" data-t="會計"><span class="tn">📖 會計</span><span class="en">Accounting</span><br>把錢的進出記錄下來、整理成報表的工作。
+  <span class="org">《孟子》記載，孔子年輕時做過管理倉庫的小官，他說：「會計當而已矣」——帳目算對就行了。古時候「會」指年終總結算，「計」指平時零星計算。英文 account 來自古法文 <i>aconter</i>，「數一數」。</span></div>
+
+  <h3>會計最重要的一條等式</h3>
+  <div class="formula">資產 ＝ 負債 ＋ 權益</div>
+  <p><b>資產</b>：公司擁有的東西（現金、存貨、機器）。<br><b>負債</b>：欠別人的（借款、應付帳款）。<br><b>權益</b>：真正屬於老闆的部分（投入的本錢＋賺到的錢）。</p>
+  <p>換句話說：公司的每一樣東西，不是用<b>借來的錢</b>買的，就是用<b>老闆自己的錢</b>買的。所以兩邊永遠相等，像天平一樣。</p>
+
+  <div class="widget" id="acc"><div class="wt">🎮 會計天平：按按看每一筆交易</div><div class="wb">
+    <div id="accBtns" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+    <svg id="accSvg" viewBox="0 0 340 150" width="100%" style="max-width:460px;display:block;margin:12px auto 0"></svg>
+    <div class="scroll"><table id="accTbl"></table></div>
+    <div class="result" id="accLog">👆 從第一筆「老闆投入本錢」開始按，照順序按最好懂。</div>
+    <p style="margin:8px 0 0"><button class="btn sm ghost" id="accReset">重來</button></p>
+  </div></div>
+  <div class="term" data-t="複式簿記"><span class="tn">📖 複式簿記</span><span class="en">Double-entry bookkeeping</span><br>每一筆交易都至少記在兩個地方，一邊增加、另一邊也變動，所以帳永遠平衡，記錯很容易被發現。
+  <span class="org">這方法在中世紀義大利商人間已經在用。1494 年，義大利數學家帕喬利（Luca Pacioli）在他的數學書裡第一次把它完整寫出來出版，所以被稱為「會計之父」。中國明清時期的商人也發展出「龍門帳」「四腳帳」，同樣是兩邊對應的記法。</span></div>
+  <div class="term" data-t="資產／負債／權益"><span class="tn">📖 資產／負債／權益</span><span class="en">Assets / Liabilities / Equity</span><br>擁有的／欠別人的／屬於老闆的。
+  <span class="org">asset 來自古法文 <i>asez</i>「足夠」——擁有足夠的東西可以還債。liability 來自 liable「負有責任的」。equity 來自拉丁文 <i>aequitas</i>「公平、相等」——扣完欠別人的，公平地屬於你的那一份。</span></div>
+
+  <h3>三大報表，一次看懂</h3>
+  <div class="grid">
+    <div class="card"><h4>📊 損益表</h4><p>像一部<b>影片</b>：記錄這個月（或今年）賺了還是賠了。<br><small>回答：「我這段時間有沒有賺？」</small></p></div>
+    <div class="card"><h4>📷 資產負債表</h4><p>像一張<b>照片</b>：某一天，公司擁有什麼、欠什麼。<br><small>回答：「我現在的家底有多厚？」</small></p></div>
+    <div class="card"><h4>🚰 現金流量表</h4><p>像<b>水錶</b>：現金實際流進、流出多少。<br><small>回答：「錢從哪來、跑去哪了？」</small></p></div>
+  </div>
+  <p>三張表要一起看：損益表說你有賺，現金流量表卻說現金一直減少——那就是錢卡在應收帳款或庫存了（第 10 課）。</p>
+
+  <h3>小老闆的簡易記帳表</h3>
+  <div class="scroll"><table>
+    <tr><th>日期</th><th>項目</th><th>分類</th><th>收入</th><th>支出</th><th>付款方式</th><th>備註</th></tr>
+    <tr><td>3/1</td><td>買白 T 恤 100 件</td><td>進貨</td><td></td><td class="n">250.00</td><td>手機轉帳</td><td>A 布行</td></tr>
+    <tr><td>3/3</td><td>工廠團體服訂金</td><td>銷售</td><td class="n">300.00</td><td></td><td>手機轉帳</td><td>共 200 件，尾款 3/20</td></tr>
+    <tr><td>3/5</td><td>3 月房租</td><td>租金</td><td></td><td class="n">150.00</td><td>現金</td><td></td></tr>
+  </table></div>
+  <p>用手機試算表就可以做。每天花 5 分鐘記，月底加總，就能做出簡單的損益表。</p>
+
+  <div class="quiz" data-a="2" data-exp="借錢：現金（資產）增加，借款（負債）也增加，兩邊一起變，保持平衡。"><p class="q">向家人借 $500 放進公司帳戶，哪兩個東西會變？</p><button>現金增加、權益增加</button><button>只有現金增加</button><button>現金（資產）增加、負債增加</button></div>
+  <div class="quiz" data-a="1" data-exp="資產負債表是某一天的「照片」。"><p class="q">哪一張報表像是「某一天的照片」？</p><button>損益表</button><button>資產負債表</button><button>現金流量表</button></div>
+</section>
+
+<!-- ================= 第13課 ================= -->
+<section class="lesson" id="c13" data-num="13" data-level="4" data-title="公司登記、稅和法律">
+  <div class="lh"><span class="tag">第 13 課・專業</span><h2>公司登記、稅和法律</h2>
+  <p class="goal">🎯 學完你會知道：公司有哪幾種、「有限責任」保護你什麼、登記和稅的基本觀念、合約要寫什麼。</p></div>
+
+  <h3>三種常見的公司樣子</h3>
+  <div class="scroll"><table>
+    <tr><th></th><th>個人獨資</th><th>合夥</th><th>有限公司</th></tr>
+    <tr><td>老闆</td><td>一個人</td><td>兩人以上</td><td>一個或多個股東</td></tr>
+    <tr><td>賠錢時要負責到</td><td>老闆個人全部財產</td><td>合夥人個人財產（常常是連帶負責）</td><td>通常只到投入的錢為止</td></tr>
+    <tr><td>手續和成本</td><td>最簡單</td><td>中等，要寫合夥契約</td><td>最多，要做帳、要申報</td></tr>
+    <tr><td>適合</td><td>擺攤、剛起步的小生意</td><td>兩三個朋友一起做</td><td>要請員工、接大客戶、接國際訂單、找投資人</td></tr>
+  </table></div>
+  <div class="term" data-t="公司"><span class="tn">📖 公司</span><span class="en">Company</span><br>一群人為了做生意組成的團體，在法律上被當成一個「人」，可以簽約、擁有財產、被告。
+  <span class="org">英文 company 來自拉丁文 <i>com</i>（一起）＋ <i>panis</i>（麵包）＝「一起吃麵包的人」，也就是夥伴。中文「公司」一詞在清代就出現，指大家共同經營的組織。</span></div>
+  <div class="term" data-t="有限責任"><span class="tn">📖 有限責任</span><span class="en">Limited liability</span><br>公司欠的債，股東最多只賠掉自己投進公司的錢，不用拿自己的房子去還。
+  <span class="org">英國在 1855 年通過《有限責任法》（Limited Liability Act），讓一般人也能安心投資公司，不怕一次賠掉全部家產。這被認為是現代公司快速發展的關鍵之一。</span></div>
+
+  <h3>要去哪裡登記？（以柬埔寨為例）</h3>
+  <ol class="steps">
+    <li><b>商業登記：</b>向商業部（Ministry of Commerce）登記公司名稱和公司資料，現在多數可以線上辦理。</li>
+    <li><b>稅務登記：</b>向稅務總局（General Department of Taxation, GDT）登記，拿到稅號，之後定期申報。</li>
+    <li><b>請員工時：</b>要依勞動法規辦理登記，並替員工加入國家社會保障基金（NSSF）。</li>
+    <li><b>特殊行業：</b>食品、進出口等可能需要額外的許可證。</li>
+  </ol>
+  <div class="box warn"><h4>⚠️ 一定要自己再確認</h4><p>各國的登記方式、費用、稅率常常調整。這一課只教觀念，實際辦理前，請查官方網站或請教合格的會計師、律師。這筆顧問費通常能幫你省下更多麻煩。</p></div>
+
+  <h3>稅的兩個基本觀念</h3>
+  <div class="grid">
+    <div class="card"><h4>🧾 消費時的稅（例：增值稅）</h4><p>客人買東西時多付的一部分，由你代收、再交給政府。這筆錢<b>不是你的收入</b>，不要花掉。</p></div>
+    <div class="card"><h4>💼 賺錢後的稅（所得稅）</h4><p>依照你賺的利潤繳稅。帳記得清楚，才能合法、正確地算稅。</p></div>
+  </div>
+  <div class="term" data-t="稅"><span class="tn">📖 稅</span><span class="en">Tax</span><br>人民和企業依法交給政府的錢，用來修路、辦學校、維持治安。
+  <span class="org">英文 tax 來自拉丁文 <i>taxare</i>，「估價、評定」。中文「稅」是「禾」＋「兌」：古代人用收成的穀物（禾）兌換、繳交給官府。</span></div>
+  <div class="term" data-t="增值稅"><span class="tn">📖 增值稅</span><span class="en">VAT, Value-Added Tax</span><br>商品每經過一手、增加了多少價值，就對那部分收稅。
+  <span class="org">一般認為由法國稅務官員莫里斯・洛雷（Maurice Lauré）在 1954 年設計推行，後來被世界上大多數國家採用。</span></div>
+
+  <h3>合約：把話寫清楚，是保護彼此</h3>
+  <p>接訂單、找合夥、租店面，都要有書面合約。最少要寫清楚：</p>
+  <ul>
+    <li>誰和誰（雙方名稱、聯絡方式）</li>
+    <li>做什麼（款式、數量、尺碼、品質標準、附上樣衣照片）</li>
+    <li>多少錢、怎麼付（訂金幾 %、尾款什麼時候付）</li>
+    <li>什麼時候交、交到哪裡</li>
+    <li>出問題怎麼辦（遲交、瑕疵、退貨、取消訂單）</li>
+  </ul>
+  <div class="term" data-t="合約"><span class="tn">📖 合約</span><span class="en">Contract</span><br>雙方約定好、都同意遵守的事情，寫下來並簽名。
+  <span class="org">英文 contract 來自拉丁文 <i>contractus</i>，「拉在一起」——把兩個人的意願拉到同一點。</span></div>
+  <div class="term" data-t="商標"><span class="tn">📖 商標</span><span class="en">Trademark</span><br>代表你品牌的名稱、圖案。登記之後別人不能隨便用。
+  <span class="org">古代工匠在陶器、磚頭上刻自己的記號，證明是誰做的，這就是最早的商標。做自有品牌前，先查有沒有人登記過同樣的名字。</span></div>
+
+  <div class="quiz" data-a="2" data-exp="有限公司的股東通常只負責到投入的資本。"><p class="q">哪一種公司，老闆賠錢時通常「只賠投入的錢」？</p><button>個人獨資</button><button>合夥</button><button>有限公司</button></div>
+  <div class="quiz" data-a="0" data-exp="代收的增值稅是要交給政府的錢，不是你的收入。"><p class="q">向客人代收的增值稅，可以拿來付房租嗎？</p><button>不行，那是要交給政府的錢</button><button>可以，收到就是我的</button></div>
+</section>
+
+<!-- ================= 第14課 ================= -->
+<section class="lesson" id="c14" data-num="14" data-level="4" data-title="供應鏈、庫存與國際貿易">
+  <div class="lh"><span class="tag">第 14 課・專業</span><h2>供應鏈、庫存與國際貿易</h2>
+  <p class="goal">🎯 學完你會知道：一件衣服從棉花到客人手上的旅程、什麼時候該補貨、國際貿易條件和付款方式。</p></div>
+
+  <h3>一件衣服的旅程</h3>
+  <div class="widget"><div class="wt">🎮 成衣供應鏈（動畫）</div><div class="wb">
+    <svg viewBox="0 0 360 140" width="100%" role="img" aria-label="從棉花到顧客的供應鏈">
+      <line x1="25" y1="60" x2="335" y2="60" stroke="currentColor" stroke-opacity=".3" stroke-width="6" stroke-linecap="round"/>
+      <line x1="25" y1="60" x2="335" y2="60" stroke="#f2b705" stroke-width="3" stroke-dasharray="6 8"><animate attributeName="stroke-dashoffset" from="28" to="0" dur="1s" repeatCount="indefinite"/></line>
+      <g font-size="24" text-anchor="middle">
+        <text x="25" y="45">🌱</text><text x="87" y="45">🧶</text><text x="149" y="45">🧵</text><text x="211" y="45">🏭</text><text x="273" y="45">🚢</text><text x="335" y="45">🛍️</text>
+      </g>
+      <g font-size="11" text-anchor="middle" fill="currentColor">
+        <text x="25" y="85">棉花</text><text x="87" y="85">紡紗</text><text x="149" y="85">織布染色</text><text x="211" y="85">成衣廠</text><text x="273" y="85">運輸</text><text x="335" y="85">品牌零售</text>
+      </g>
+      <text x="180" y="125" text-anchor="middle" font-size="12" fill="currentColor" opacity=".75">每一站都可以是一門生意，也都可能出狀況</text>
+    </svg>
+  </div></div>
+  <p>小公司不用全部都做，但要知道自己在哪一站、上一站和下一站是誰。上一站（供應商）延遲，你就會延遲；下一站（客人）改單，你就要跟著改。</p>
+  <div class="term" data-t="供應鏈"><span class="tn">📖 供應鏈</span><span class="en">Supply chain</span><br>從原料到把商品交給最後客人，中間所有的公司和步驟串起來的「鏈子」。
+  <span class="org">一般認為是顧問 Keith Oliver 在 1982 年的一次訪談中讓這個詞流行起來。像鐵鍊一樣，任何一環斷了，整條就斷了。</span></div>
+
+  <h3>庫存：多了卡錢，少了斷貨</h3>
+  <div class="term" data-t="庫存"><span class="tn">📖 庫存</span><span class="en">Inventory</span><br>放在倉庫裡、還沒賣掉的原料和商品。
+  <span class="org">英文 inventory 來自拉丁文 <i>inventarium</i>，「找到的東西的清單」。古時候清點遺產時，要把找到的每一樣東西都列成清單。</span></div>
+  <div class="formula">再訂購點＝每天用量 × 交貨天數 ＋ 安全庫存</div>
+  <div class="widget" id="rop"><div class="wt">🎮 什麼時候該補貨？</div><div class="wb">
+    <div class="row"><label>每天賣出（或用掉）幾件</label><input type="number" id="r1" value="20" min="0"></div>
+    <div class="row"><label>從下單到到貨要幾天</label><input type="number" id="r2" value="14" min="0"></div>
+    <div class="row"><label>安全庫存（怕意外多留的量）</label><input type="number" id="r3" value="100" min="0"></div>
+    <div class="result" id="rOut"></div>
+  </div></div>
+  <div class="term" data-t="80/20 法則"><span class="tn">📖 80/20 法則</span><span class="en">Pareto principle</span><br>常常 20% 的商品帶來 80% 的營收。把力氣花在那 20% 上。
+  <span class="org">義大利經濟學家帕雷托（Vilfredo Pareto）在 1890 年代發現，義大利約 80% 的土地由約 20% 的人擁有。後來品質管理專家朱蘭（Joseph Juran）把它推廣成一般的管理原則。</span></div>
+
+  <h3>國際貿易：責任到哪裡為止？</h3>
+  <p>貨要從柬埔寨運到國外，路上誰付運費、誰買保險、誰辦報關、在哪裡算「交貨了」？世界通用一套規則，叫 <b>Incoterms 國際貿易條件</b>。</p>
+  <div class="widget" id="inco"><div class="wt">🎮 選一個條件，看賣方和買方各負責哪一段</div><div class="wb">
+    <div id="incoBtns" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+    <div id="incoSteps" style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin:12px 0"></div>
+    <div style="font-size:.82rem"><span style="display:inline-block;width:12px;height:12px;background:var(--indigo);border-radius:2px"></span> 賣方（你）負責　<span style="display:inline-block;width:12px;height:12px;background:var(--tape);border-radius:2px"></span> 買方負責</div>
+    <div class="result" id="incoOut"></div>
+  </div></div>
+  <div class="term" data-t="Incoterms 國際貿易條件"><span class="tn">📖 Incoterms 國際貿易條件</span><span class="en">International Commercial Terms</span><br>一套全世界通用的三個字母代號，說清楚運費、保險、風險在哪裡從賣方轉到買方。
+  <span class="org">國際商會（ICC）在 1936 年第一次公布，之後大約每十年更新一次，目前常用的是 2020 年版。有了它，說不同語言的人只要寫「FOB」，就知道責任怎麼分。</span></div>
+  <div class="term" data-t="貨櫃"><span class="tn">📖 貨櫃</span><span class="en">Shipping container</span><br>標準尺寸的大鐵箱，可以直接從卡車吊上船、再吊上火車。常見的有 20 呎和 40 呎。
+  <span class="org">美國卡車運輸業者麥克林（Malcolm McLean）在 1956 年用改裝的船第一次大量運送貨櫃。以前一件一件搬貨要好幾天，貨櫃讓國際運輸變得又快又便宜，也讓全球成衣貿易變得可能。</span></div>
+
+  <h3>國際生意怎麼收錢？</h3>
+  <div class="scroll"><table>
+    <tr><th>方式</th><th>怎麼做</th><th>對賣方的風險</th></tr>
+    <tr><td>預付全額</td><td>買方先付清才生產</td><td>最低，但買方通常不願意</td></tr>
+    <tr><td>訂金＋尾款</td><td>先付 30%，出貨前或看到提單影本付 70%</td><td>中低，成衣業最常見</td></tr>
+    <tr><td>信用狀 L/C</td><td>銀行保證：你交出符合規定的文件，銀行就付錢</td><td>低，但文件一個字錯就可能被拒付，手續費較高</td></tr>
+    <tr><td>貨到付款／放帳</td><td>收到貨後 30–90 天再付</td><td>最高，只給很信任的老客戶</td></tr>
+  </table></div>
+  <div class="term" data-t="電匯 T/T"><span class="tn">📖 電匯 T/T</span><span class="en">Telegraphic Transfer</span><br>透過銀行把錢直接轉到國外帳戶。
+  <span class="org">名字來自電報時代：以前銀行之間用電報傳送付款指示。現在早就不用電報了，但名字一直沿用。</span></div>
+  <div class="term" data-t="信用狀 L/C"><span class="tn">📖 信用狀 L/C</span><span class="en">Letter of Credit</span><br>買方的銀行開出的「保證付款信」。賣方只要按時交出規定的文件（提單、發票、裝箱單等），銀行就付錢。
+  <span class="org">「用信保證付款」的做法在中世紀歐洲的跨國商人之間就已經出現。現在大多依照國際商會的統一規則（UCP 600）處理。</span></div>
+  <div class="box warn"><h4>⚠️ 匯率風險</h4><p>如果你收的是外幣，付的是本地錢（或相反），匯率一變，利潤可能就不見了。報價時寫清楚幣別，並且別把利潤算得剛剛好。</p></div>
+
+  <div class="quiz" data-a="1" data-exp="20×10＋50＝250 件。"><p class="q">每天賣 20 件、到貨要 10 天、安全庫存 50 件，庫存剩多少件時要補貨？</p><button>200 件</button><button>250 件</button><button>70 件</button></div>
+  <div class="quiz" data-a="0" data-exp="FOB：賣方把貨送到出口港、裝上船，之後海運與保險由買方負責。"><p class="q">用 FOB 條件出口，賣方的責任到哪裡？</p><button>貨物在出口港裝上船</button><button>送到買方的倉庫</button><button>只要在工廠門口準備好</button></div>
+</section>
+
+<!-- ================= 第15課 ================= -->
+<section class="lesson" id="c15" data-num="15" data-level="4" data-title="團隊、SOP 與成長">
+  <div class="lh"><span class="tag">第 15 課・專業</span><h2>團隊、SOP 與成長</h2>
+  <p class="goal">🎯 學完你會知道：什麼時候該請人、怎麼把做法變成標準、怎麼用數字管理、生意怎麼長大。</p></div>
+
+  <h3>什麼時候該請第一個人？</h3>
+  <ul>
+    <li>你每天都在做一件「別人也做得來」的事，而且佔掉你一半以上的時間。</li>
+    <li>因為忙不過來，已經開始推掉訂單或延遲交貨。</li>
+    <li>請人的薪水，你已經算過付得起（加進第 11 課的固定成本）。</li>
+  </ul>
+  <div class="box tip"><h4>💡 老闆的角色會改變</h4><p>一開始，老闆是「最會做事的人」。公司變大後，老闆要變成「<b>建立系統的人</b>」：讓沒有你在場，事情也能照標準做好。</p></div>
+
+  <h3>SOP：把腦袋裡的做法寫下來</h3>
+  <div class="box ex"><h4>🧃 例子：「接團體服訂單」SOP</h4>
+  <ol class="steps">
+    <li>收到詢問，2 小時內回覆，問清楚：款式、數量、尺碼分配、顏色、交期、預算。</li>
+    <li>24 小時內給報價單（寫清楚訂金比例與交期）。</li>
+    <li>客人確認 → 收訂金 → 打樣衣，拍照給客人確認。</li>
+    <li>樣衣確認後，填生產單，交給生產，約定每天回報進度。</li>
+    <li>出貨前抽檢（尺寸、印花、線頭），拍照留紀錄。</li>
+    <li>交貨收尾款，3 天後回訪客人滿不滿意。</li>
+  </ol></div>
+  <div class="term" data-t="SOP 標準作業程序"><span class="tn">📖 SOP 標準作業程序</span><span class="en">Standard Operating Procedure</span><br>把一件工作的步驟、標準寫清楚，讓每個人做出來都一樣好。
+  <span class="org">最早大量用在軍隊和工廠：同一件事，不管誰來做都要照同樣步驟，才不會出錯。20 世紀初泰勒（Frederick Taylor）的「科學管理」大力推動把工作標準化。</span></div>
+  <div class="term" data-t="分工"><span class="tn">📖 分工</span><span class="en">Division of labour</span><br>把一件大工作拆成小步驟，每個人專做一步，速度會快很多。成衣廠的生產線就是分工。
+  <span class="org">1776 年亞當・斯密（Adam Smith）在《國富論》中舉了做別針的例子：一個人從頭做到尾，一天做不了幾根；十個人分工，一天可以做好幾萬根。</span></div>
+
+  <h3>KPI：用數字看好壞</h3>
+  <p>「今天做得不錯」太模糊。用幾個固定的數字，每天、每週看：</p>
+  <div class="scroll"><table>
+    <tr><th>KPI</th><th>怎麼算</th><th>告訴你什麼</th></tr>
+    <tr><td>準時交貨率</td><td>準時交的訂單 ÷ 全部訂單</td><td>客人會不會再來</td></tr>
+    <tr><td>返修率</td><td>要返工的件數 ÷ 總件數</td><td>品質好不好</td></tr>
+    <tr><td>生產效率</td><td>產出的標準工時 ÷ 投入的工時</td><td>人和機器有沒有被好好利用</td></tr>
+    <tr><td>毛利率</td><td>毛利 ÷ 營收</td><td>價格和成本控制得好不好</td></tr>
+    <tr><td>現金可撐月數</td><td>現金 ÷ 每月固定開銷</td><td>危不危險</td></tr>
+  </table></div>
+  <div class="term" data-t="KPI 關鍵績效指標"><span class="tn">📖 KPI 關鍵績效指標</span><span class="en">Key Performance Indicator</span><br>幾個最能代表「做得好不好」的數字。
+  <span class="org">觀念可以追到管理學大師杜拉克（Peter Drucker）1954 年在《管理的實踐》中提出的「目標管理」：先訂好目標，再用數字檢查有沒有達到。</span></div>
+
+  <div class="widget" id="eff"><div class="wt">🎮 車縫小組效率計算</div><div class="wb">
+    <div class="row"><label>今天做好幾件</label><input type="number" id="e1" value="600" min="0"></div>
+    <div class="row"><label>每件標準工時 SAM（分鐘）</label><input type="number" id="e2" value="12" step="0.5" min="0"></div>
+    <div class="row"><label>上線人數</label><input type="number" id="e3" value="25" min="1"></div>
+    <div class="row"><label>每人工作幾小時</label><input type="number" id="e4" value="8" step="0.5" min="0.5"></div>
+    <div class="result" id="eOut"></div>
+  </div></div>
+  <div class="term" data-t="SAM 標準工時"><span class="tn">📖 SAM 標準工時</span><span class="en">Standard Allowed Minute</span><br>一個熟練工人用正常速度做完一件衣服（或一個工序）需要的分鐘數，包含合理的休息和寬放時間。
+  <span class="org">來自工業工程的「時間研究」與「動作研究」，由泰勒和吉爾布雷斯夫婦（Gilbreth）在 20 世紀初發展。成衣業用它來報價、排生產、算效率。</span></div>
+
+  <h3>生意長大的幾條路</h3>
+  <ol class="steps">
+    <li><b>同一個客人賣更多：</b>本來只做 T 恤，加做外套、帽子。</li>
+    <li><b>同一個商品賣更多客人：</b>從一個城市擴展到另一個城市、上網路、做出口。</li>
+    <li><b>往上游或下游走：</b>從接單外包 → 自己開小車縫坊；從代工 → 做自己的品牌。</li>
+    <li><b>複製：</b>一家店的 SOP 寫好了，開第二家、第三家。</li>
+  </ol>
+  <div class="term" data-t="規模經濟"><span class="tn">📖 規模經濟</span><span class="en">Economies of scale</span><br>做得越多，每一件的成本越低。因為機器、租金、設計費被更多件數分攤，大量買布也比較便宜。
+  <span class="org">這個想法和亞當・斯密的分工理論有關，到了 20 世紀經濟學家把它整理成正式的概念。但注意：規模變大，管理也變難，成本不一定會一直降。</span></div>
+
+  <div class="quiz" data-a="1" data-exp="500 × 10 ＝ 5,000 分鐘；20 × 8 × 60 ＝ 9,600 分鐘；5,000 ÷ 9,600 ≈ 52%。"><p class="q">20 人工作 8 小時，做了 500 件，每件 SAM 10 分鐘，效率約多少？</p><button>約 31%</button><button>約 52%</button><button>約 96%</button></div>
+  <div class="quiz" data-a="2" data-exp="老闆要從「做事的人」變成「建系統的人」。"><p class="q">公司變大後，老闆最重要的工作是？</p><button>每一件事都自己做才放心</button><button>一直待在生產線上車衣服</button><button>建立 SOP 和數字管理，讓團隊不靠老闆也能做好</button></div>
+</section>
+
+<!-- ================= 第16課 ================= -->
+<section class="lesson" id="c16" data-num="16" data-level="4" data-title="風險管理與完整實戰案例">
+  <div class="lh"><span class="tag">第 16 課・專業</span><h2>風險管理與完整實戰案例</h2>
+  <p class="goal">🎯 學完你會知道：小生意最常見的失敗原因、怎麼預防，並跟著一個完整案例把前 15 課串起來。</p></div>
+
+  <h3>小生意最常見的 6 個失敗原因</h3>
+  <div class="scroll"><table>
+    <tr><th>失敗原因</th><th>怎麼預防</th><th>回去看</th></tr>
+    <tr><td>做了沒人要的東西</td><td>先 MVP 試賣，有人付錢再做大</td><td>第 2、3 課</td></tr>
+    <tr><td>錢用完了</td><td>留 3–6 個月預備金，每週看現金</td><td>第 4、10 課</td></tr>
+    <tr><td>價格訂太低</td><td>算清楚全部成本、毛利率</td><td>第 6、8 課</td></tr>
+    <tr><td>沒記帳，不知道賺賠</td><td>公私分開、每天記帳</td><td>第 12 課</td></tr>
+    <tr><td>合夥人吵架</td><td>一開始就把分工和分錢寫下來</td><td>第 5、13 課</td></tr>
+    <tr><td>擴張太快</td><td>一步一步來，先把 SOP 和現金準備好</td><td>第 10、15 課</td></tr>
+  </table></div>
+  <div class="box tip"><h4>💡 不要把雞蛋放在同一個籃子</h4><p>如果 80% 的營收來自同一個客人，那個客人一走，你就危險了。慢慢把客人分散，最大的客人最好不要超過三到四成。</p></div>
+
+  <h3>完整案例：達拉（Dara）的團體 T 恤工作室</h3>
+  <p><small>※ 人物與數字為教學虛構，用來把前面學的東西串起來。</small></p>
+  <div class="box ex">
+  <h4>🧃 第 0 個月：準備（第 1–8 課）</h4>
+  <p>達拉在成衣廠做過 5 年組長，懂布料和品質，發現附近很多工廠、學校每年都要訂團體服，但常抱怨「最少要 100 件、要等 3 週」。他決定做<b>「20 件起做、7 天交貨」</b>的團體 T 恤（利基市場＋痛點）。</p>
+  <p><b>資金 $2,000：</b>自己存 $1,200，媽媽借 $800（寫了借據，一年內還）。<br>
+  <b>開辦費 $1,600：</b>印花設備 $600、第一批空白 T 恤 300 件 $750、招牌和樣品 $150、登記雜費 $100。剩 $400 當預備金。<br>
+  <b>每月固定開銷 $390：</b>小店租金 $150、水電網路 $40、廣告 $50、兼職助手 $150。<br>
+  <b>每件變動成本 $3.20</b>（空白 T 恤 $2.50＋印花材料 $0.60＋包裝 $0.10），<b>團體價 $6</b>。<br>
+  <b>損益兩平：</b>$390 ÷（$6 − $3.20）≈ <b>140 件／月</b>。</p>
+  </div>
+  <div class="box ex">
+  <h4>🧃 第 1–3 個月：起步和危機（第 9–11 課）</h4>
+  <p>第 1 個月只賣 60 件，虧 $222；第 2 個月靠老客人介紹賣 120 件，還是小虧 $54。</p>
+  <p>第 3 個月接到一家工廠 300 件大單，加上零星訂單共 380 件，帳面賺 $674！但工廠說「月結 30 天」，達拉又要先付 $960 買空白 T 恤和材料。<b>手上現金一度剩不到 $100</b>，差點付不出房租——這就是第 10 課的現金流危機。</p>
+  <p><b>他學到的：</b>從此所有團體單都收 50% 訂金，新客人不給月結。</p>
+  </div>
+  <div class="widget" id="caseW"><div class="wt">📊 達拉一年的每月利潤（件數 × $2.80 − $390）</div><div class="wb">
+    <div id="caseChart" style="display:flex;align-items:flex-end;gap:4px;height:170px;position:relative"></div>
+    <div id="caseLbl" style="display:flex;gap:4px;font-size:.72rem;text-align:center;margin-top:4px"></div>
+    <div class="result" id="caseOut"></div>
+  </div></div>
+  <div class="box ex">
+  <h4>🧃 第 4–12 個月：穩定和反省（第 12–15 課）</h4>
+  <p>達拉開始每天記帳、寫了接單 SOP，每週看三個數字：<b>準時交貨率、毛利率、現金可撐月數</b>。一年下來賣了 3,170 件。</p>
+  <p>一年總利潤約 <b>$4,196</b>，再扣設備折舊約 $200，大約 <b>$4,000</b>。但注意：<b>達拉沒有付自己薪水</b>！平均每月約 $330，差不多等於一份普通工作的薪水。</p>
+  <p><b>第二年計畫：</b>① 替自己訂薪水，放進固定成本；② 經營 Facebook 和 Telegram 讓客人分散；③ 最大客人的營收不超過三成；④ 考慮登記成有限公司，接更大的客戶。</p>
+  </div>
+  <div class="box warn"><h4>⚠️ 這個案例最重要的一課</h4><p>當老闆的第一年，通常<b>不會比上班賺得多</b>。你換到的是經驗、客人、信用和一套會長大的系統。只要現金不斷、每年進步，第二年、第三年才是真正開始賺錢的時候。</p></div>
+
+  <div class="quiz" data-a="0" data-exp="帳面賺錢但錢還在客人那裡，還要先墊材料費——典型現金流危機。"><p class="q">達拉第 3 個月帳面賺最多，為什麼反而差點付不出房租？</p><button>大單月結 30 天，錢還沒收回來，卻要先付材料費</button><button>因為他算錯售價</button><button>因為房東漲租金</button></div>
+  <div class="quiz" data-a="2" data-exp="沒有替自己算薪水，會高估生意的真實獲利。"><p class="q">為什麼說達拉一年約 $4,000 的利潤「要打折看」？</p><button>因為要全部繳稅</button><button>因為設備壞了</button><button>因為他沒有付自己薪水，這筆利潤其實包含了他的工資</button></div>
+</section>
+
+<!-- ================= 畢業：商業計畫 ================= -->
+<section class="lesson" id="g1" data-level="5" data-title="我的商業計畫書">
+  <div class="lh"><span class="tag">畢業區</span><h2>寫出你的商業計畫書</h2>
+  <p class="goal">🎯 用一張「商業模式圖」，把你的生意一次寫清楚。寫的內容會自動存在這台裝置上，也可以下載或列印。</p></div>
+  <div class="term" data-t="商業模式圖"><span class="tn">📖 商業模式圖</span><span class="en">Business Model Canvas</span><br>把一門生意拆成九個格子，一頁紙就看懂這門生意怎麼賺錢。
+  <span class="org">瑞士學者奧斯特瓦德（Alexander Osterwalder）在 2005 年左右的博士研究中提出，2010 年出版《獲利世代》（Business Model Generation）後在全世界流行。</span></div>
+  <div class="bmc" id="bmc"></div>
+  <p style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn" id="bmcDl">下載我的計畫書（.txt）</button>
+    <button class="btn ghost" id="bmcPrint">列印／存成 PDF</button>
+    <button class="btn ghost" id="bmcClear">清空重寫</button>
+  </p>
+  <div class="box tip"><h4>💡 寫完後，檢查這五個數字</h4><p>① 起步資金總共要多少（第 4 課）② 每件成本和毛利率（第 6、8 課）③ 每月固定開銷 ④ 損益兩平件數（第 11 課）⑤ 預備金可以撐幾個月。五個都算得出來，你的計畫就及格了。</p></div>
+</section>
+
+<!-- ================= 畢業：名詞總表 ================= -->
+<section class="lesson" id="g2" data-level="5" data-title="名詞總表">
+  <div class="lh"><span class="tag">畢業區</span><h2>名詞總表</h2>
+  <p class="goal">🎯 全部課程的專有名詞都在這裡，可以搜尋。點「出自第 X 課」可以回到那一課。</p></div>
+  <input id="gq" type="search" placeholder="搜尋名詞，例如：現金、FOB、毛利">
+  <div id="gloss"></div>
+</section>
+
+<!-- ================= 畢業：期末測驗 ================= -->
+<section class="lesson" id="g3" data-level="5" data-title="期末測驗">
+  <div class="lh"><span class="tag">畢業區</span><h2>期末測驗：10 題</h2>
+  <p class="goal">🎯 每題只能答一次。答完 10 題會顯示你的成績。</p></div>
+  <div id="final">
+  <div class="quiz" data-a="1" data-exp="利潤＝收入−成本（第 1 課）。"><p class="q">1. 最重要的賺錢公式是？</p><button>利潤＝收入＋成本</button><button>利潤＝收入−成本</button><button>利潤＝成本−收入</button></div>
+  <div class="quiz" data-a="2" data-exp="建議至少 3–6 個月的固定開銷（第 4 課）。"><p class="q">2. 預備金建議至少準備幾個月的固定開銷？</p><button>不用準備</button><button>1 個禮拜</button><button>3–6 個月</button></div>
+  <div class="quiz" data-a="0" data-exp="（5−4）÷ 5 ＝ 20%（第 8 課）。"><p class="q">3. 成本 $4、賣 $5，毛利率是？</p><button>20%</button><button>25%</button><button>80%</button></div>
+  <div class="quiz" data-a="1" data-exp="600 ÷（5−2）＝ 200 件（第 11 課）。"><p class="q">4. 固定成本 $600、售價 $5、變動成本 $2，損益兩平是幾件？</p><button>120 件</button><button>200 件</button><button>300 件</button></div>
+  <div class="quiz" data-a="2" data-exp="先收訂金讓錢更早進來（第 4、10 課）。"><p class="q">5. 哪一個做法最能改善現金流？</p><button>多囤一些貨比較安心</button><button>讓所有客人 90 天後再付款</button><button>接單先收訂金</button></div>
+  <div class="quiz" data-a="0" data-exp="現金減少、設備增加，都是資產，總數不變（第 12 課）。"><p class="q">6. 用現金 $600 買一台機器，資產總數會？</p><button>不變：現金少了、設備多了</button><button>增加 $600</button><button>減少 $600</button></div>
+  <div class="quiz" data-a="1" data-exp="FOB＝在出口港裝上船交貨（第 14 課）。"><p class="q">7. FOB 條件下，賣方負責到哪裡？</p><button>工廠門口</button><button>出口港裝上船</button><button>買方倉庫</button></div>
+  <div class="quiz" data-a="2" data-exp="MVP：用最少的錢最快知道客人要不要（第 2 課）。"><p class="q">8. MVP 最主要的目的是？</p><button>一次做到最完美</button><button>讓產品看起來很貴</button><button>用最少的錢，最快知道客人要不要</button></div>
+  <div class="quiz" data-a="0" data-exp="400×15＝6,000；20×8×60＝9,600；6,000÷9,600≈62.5%（第 15 課）。"><p class="q">9. 20 人做 8 小時，產出 400 件，SAM 15 分鐘，效率約？</p><button>約 62.5%</button><button>約 40%</button><button>約 160%</button></div>
+  <div class="quiz" data-a="1" data-exp="老客人已經信任你，留住他們通常比找新客人便宜（第 9 課）。"><p class="q">10. 為什麼要重視老客人？</p><button>因為他們比較會殺價</button><button>因為留住老客人通常比找新客人省錢，還會幫你介紹</button><button>因為法律規定</button></div>
+  </div>
+  <div class="result" id="finalOut">還沒開始作答。</div>
+  <p><button class="btn ghost sm" id="finalReset">重新測驗</button></p>
+</section>
+
+</main>
+</div>
+<div class="pager"><button class="btn ghost sm" id="prevBtn">← 上一課</button><button class="btn sm" id="nextBtn">下一課 →</button></div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const num=id=>{const v=parseFloat(document.getElementById(id).value);return isNaN(v)?0:v};
+const money=(n,d=2)=>(n<0?'−':'')+'$'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+const pct=n=>(isFinite(n)?(n*100).toFixed(1):'—')+'%';
+const store={get(k,d){try{const v=localStorage.getItem('bizcourse:'+k);return v?JSON.parse(v):d}catch(e){return d}},
+             set(k,v){try{localStorage.setItem('bizcourse:'+k,JSON.stringify(v))}catch(e){}}};
+const bind=(ids,fn)=>{ids.forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('input',fn)});fn()};
+
+/* ---------- navigation & progress ---------- */
+const secs=$$('.lesson'), lessons=secs.filter(s=>s.dataset.num);
+const LV={0:'開始',1:'🌱 入門',2:'🌿 基礎',3:'🌳 進階',4:'🏭 專業',5:'🎓 畢業區'};
+let done=new Set(store.get('done',[]));
+const nav=$('#nav'); let lastLv=-1;
+secs.forEach(s=>{
+  const lv=+s.dataset.level;
+  if(lv!==lastLv){const d=document.createElement('div');d.className='lv';d.textContent=LV[lv];nav.appendChild(d);lastLv=lv}
+  const a=document.createElement('a');a.href='#'+s.id;a.dataset.id=s.id;
+  a.innerHTML='<span class="ck">'+(s.dataset.num?'○':'•')+'</span><span>'+(s.dataset.num?s.dataset.num+'. ':'')+s.dataset.title+'</span>';
+  a.onclick=e=>{e.preventDefault();show(s.id)};nav.appendChild(a);
+  if(s.dataset.num){
+    const bar=document.createElement('div');bar.className='donebar';
+    bar.innerHTML='<span style="color:var(--muted);font-size:.9rem">學會了嗎？</span><button class="btn">完成本課</button>';
+    const b=bar.querySelector('button');
+    b.onclick=()=>{done.has(s.id)?done.delete(s.id):done.add(s.id);store.set('done',[...done]);refresh();
+      if(done.has(s.id)){const i=secs.indexOf(s);if(i<secs.length-1)setTimeout(()=>show(secs[i+1].id),350)}};
+    s.appendChild(bar);
+  }
+});
+function refresh(){
+  $$('#nav a').forEach(a=>{const d=done.has(a.dataset.id);a.classList.toggle('done',d);
+    if(document.getElementById(a.dataset.id).dataset.num)a.querySelector('.ck').textContent=d?'✓':'○'});
+  lessons.forEach(s=>{const b=s.querySelector('.donebar .btn');const d=done.has(s.id);b.textContent=d?'✓ 已完成（再按一次取消）':'完成本課';b.classList.toggle('is-done',d)});
+  const n=lessons.filter(s=>done.has(s.id)).length;
+  $('#progBar').style.width=(n/lessons.length*100)+'%';$('#progTxt').textContent=n+'/'+lessons.length+' 課';
+}
+function show(id){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=id;
+  const s=document.getElementById(id)||secs[0];
+  secs.forEach(x=>x.classList.toggle('active',x===s));
+  $$('#nav a').forEach(a=>a.classList.toggle('on',a.dataset.id===s.id));
+  nav.classList.remove('open');
+  const i=secs.indexOf(s);
+  const pv=$('#prevBtn'),nx=$('#nextBtn');
+  pv.disabled=i===0; nx.disabled=i===secs.length-1;
+  pv.style.visibility=i===0?'hidden':'visible'; nx.style.visibility=i===secs.length-1?'hidden':'visible';
+  if(i>0)pv.textContent='← '+secs[i-1].dataset.title;
+  if(i<secs.length-1)nx.textContent=secs[i+1].dataset.title+' →';
+  window.scrollTo(0,0);
+  try{history.replaceState(null,'','#'+s.id)}catch(e){}
+  store.set('last',s.id);
+  if(s.id==='c11'){drawPL()} if(s.id==='c16'){drawCase()}
+}
+$('#prevBtn').onclick=()=>{const i=secs.findIndex(s=>s.classList.contains('active'));if(i>0)show(secs[i-1].id)};
+$('#nextBtn').onclick=()=>{const i=secs.findIndex(s=>s.classList.contains('active'));if(i<secs.length-1)show(secs[i+1].id)};
+$('#menuBtn').onclick=()=>nav.classList.toggle('open');
+$$('[data-go]').forEach(b=>b.onclick=()=>show(b.dataset.go));
+
+/* ---------- quizzes ---------- */
+function setupQuiz(q){
+  const btns=[...q.querySelectorAll('button')];
+  let fb=q.querySelector('.fb'); if(!fb){fb=document.createElement('p');fb.className='fb';q.appendChild(fb)}
+  btns.forEach((b,i)=>b.onclick=()=>{
+    if(q.dataset.done!==undefined)return;
+    const a=+q.dataset.a, ok=i===a;
+    b.classList.add(ok?'ok':'no'); if(!ok)btns[a].classList.add('ok');
+    q.dataset.done=ok?'1':'0';
+    fb.textContent=(ok?'✅ 答對了！':'❌ 差一點！')+' '+(q.dataset.exp||'');
+    q.dispatchEvent(new CustomEvent('answered',{bubbles:true}));
+  });
+}
+$$('.quiz').forEach(setupQuiz);
+const fin=$('#final');
+fin.addEventListener('answered',()=>{
+  const qs=[...fin.querySelectorAll('.quiz')], ans=qs.filter(q=>q.dataset.done!==undefined), ok=qs.filter(q=>q.dataset.done==='1').length;
+  if(ans.length<qs.length){$('#finalOut').textContent='已作答 '+ans.length+'/'+qs.length+' 題，目前答對 '+ok+' 題。';return}
+  const msg=ok>=9?'🏆 太厲害了！你已經有小老闆的腦袋了。':ok>=7?'🎉 及格了！錯的題目回去那一課再看一次。':'📚 再複習一下，錯的題目後面都有標出第幾課。';
+  $('#finalOut').innerHTML='<span class="k">'+ok+' / '+qs.length+'</span><br>'+msg;
+});
+$('#finalReset').onclick=()=>{fin.querySelectorAll('.quiz').forEach(q=>{delete q.dataset.done;q.querySelectorAll('button').forEach(b=>b.classList.remove('ok','no'));q.querySelector('.fb').textContent=''});$('#finalOut').textContent='還沒開始作答。'};
+
+/* ---------- glossary ---------- */
+const gl=$('#gloss');
+$$('.lesson[data-num] .term, #g1 .term').forEach(t=>{
+  const c=t.cloneNode(true); const s=t.closest('.lesson');
+  const f=document.createElement('div');f.className='from';f.textContent=s.dataset.num?'出自第 '+s.dataset.num+' 課：'+s.dataset.title:'出自：'+s.dataset.title;
+  f.onclick=()=>show(s.id); c.appendChild(f); gl.appendChild(c);
+});
+$('#gq').addEventListener('input',e=>{const k=e.target.value.trim().toLowerCase();gl.querySelectorAll('.term').forEach(t=>t.style.display=!k||t.textContent.toLowerCase().includes(k)?'':'none')});
+
+/* ---------- L3 idea scorer ---------- */
+(function(){const w=$('#idea'),rs=[...w.querySelectorAll('input')];
+ const f=()=>{let sum=0,min=6,minN='';rs.forEach(r=>{r.nextElementSibling.textContent=r.value+' 分';sum+=+r.value;if(+r.value<min){min=+r.value;minN=r.dataset.n}});
+  const m=sum>=20?'🔥 很有潛力！下一步：用最少的錢做一次 MVP 試賣。':sum>=14?'🙂 可以試試，但先想辦法補強最弱的那一項。':'🤔 先別急著投錢，多做調查，或換一個更適合你的點子。';
+  $('#ideaOut').innerHTML='<span class="k">'+sum+' / 25</span><br>'+m+'<br><small>最弱的一項：'+minN+'（'+min+' 分）</small>'};
+ rs.forEach(r=>r.addEventListener('input',f));f()})();
+$$('[data-filter]').forEach(b=>b.onclick=()=>{const k=b.dataset.filter;
+  $$('[data-filter]').forEach(x=>x.classList.toggle('ghost',x!==b));
+  $$('#ideas .card').forEach(c=>c.style.display=k==='all'||c.dataset.k.includes(k)?'':'none')});
+
+/* ---------- L4 fund ---------- */
+bind(['fd1','fd2','fd3','fd4','fd5','fd6','fd7','fd8','fd9','fd10'],()=>{
+  const one=num('fd1')+num('fd2')+num('fd3')+num('fd4')+num('fd5'), mon=num('fd6')+num('fd7')+num('fd8')+num('fd9'), m=num('fd10');
+  $('#fd10o').textContent=m+' 個月'; const res=mon*m, tot=one+res||1;
+  $('#fdStack').innerHTML='<div style="flex:'+one+';background:var(--indigo)">開辦費</div><div style="flex:'+res+';background:var(--green)">預備金</div>';
+  $('#fdOut').innerHTML='開辦費 <b>'+money(one,0)+'</b>＋預備金 '+money(mon,0)+' × '+m+' 個月＝<b>'+money(res,0)+'</b><br>你總共需要準備：<span class="k">'+money(one+res,0)+'</span>'+
+   (m<3?'<br>⚠️ 預備金少於 3 個月，風險很高。':'');
+});
+
+/* ---------- L5 skills ---------- */
+(function(){const names=['算數與記帳','採購與殺價','銷售與溝通','行銷','產品知識','時間管理','帶人','會用工具'];
+ const tips={'算數與記帳':'從今天起每天記帳，或請會計兼職幫忙','採購與殺價':'每週跑一次批發市場，每樣東西問 3 家價格','銷售與溝通':'每天主動和 3 個潛在客人聊天，記下他們的問題','行銷':'找一個會拍照剪片的夥伴，或學手機拍照','產品知識':'去工廠請教師傅，把樣品拆開研究','時間管理':'每天早上寫下 3 件必做的事','帶人':'把你的做法寫成步驟清單（SOP）','會用工具':'每週學一個新工具：試算表、社群排程、AI 助手'};
+ const box=$('#skRows');names.forEach((n,i)=>{box.insertAdjacentHTML('beforeend','<div class="hbar"><span class="l">'+n+'</span><input type="range" min="1" max="5" value="3" id="sk'+i+'" style="flex:1;accent-color:var(--indigo)"><span class="v" id="skv'+i+'"></span></div>')});
+ bind(names.map((_,i)=>'sk'+i),()=>{const v=names.map((n,i)=>({n,s:num('sk'+i)}));v.forEach((x,i)=>$('#skv'+i).textContent='★'.repeat(x.s)+'☆'.repeat(5-x.s));
+  const w=[...v].sort((a,b)=>a.s-b.s).slice(0,2);const avg=v.reduce((a,b)=>a+b.s,0)/v.length;
+  $('#skOut').innerHTML='平均 <span class="k">'+avg.toFixed(1)+'</span> 分<br>最需要補強：<br>'+w.map(x=>'• <b>'+x.n+'</b>：'+tips[x.n]).join('<br>')});
+})();
+
+/* ---------- L6 tee ---------- */
+bind(['t1','t2','t3','t4','t5','t6','t7','t8'],()=>{
+  const p=[num('t1'),num('t2'),num('t3'),num('t4'),num('t5')], w=num('t6')/100, base=p.reduce((a,b)=>a+b,0), waste=base*w, unit=base+waste;
+  const price=num('t7'), q=num('t8'); $('#t6o').textContent=(w*100).toFixed(0)+'%';
+  const col=['#2f4b9a','#2e7d5b','#c98a1b','#d8702a','#7a4ea3','#b8322a'], lab=['布料','輔料','加工','印花','包裝','損耗'];
+  $('#teeStack').innerHTML=[...p,waste].map((v,i)=>'<div style="flex:'+(v||0.0001)+';background:'+col[i]+'" title="'+lab[i]+' '+money(v)+'">'+(v/unit>.09?lab[i]:'')+'</div>').join('');
+  const gp=price-unit;
+  $('#teeOut').innerHTML='每件真正成本：<span class="k">'+money(unit)+'</span>（只算布料的話會以為是 '+money(p[0])+'）<br>'+
+   '每件毛利：<b>'+money(gp)+'</b>　毛利率：<b>'+pct(price?gp/price:NaN)+'</b><br>這批 '+q+' 件的總毛利：<b>'+money(gp*q)+'</b>'+
+   (gp<=0?'<br>⚠️ 賣價低於成本，每做一件就賠一件！':(price&&gp/price<.3?'<br>⚠️ 毛利率低於 30%，扣掉租金薪水可能就沒了。':''));
+});
+
+/* ---------- L7 TAM ---------- */
+(function(){const t=['<b>TAM 全部市場</b>：假設全國的工廠、學校、公司每年需要的團體服，加起來可能有好幾十萬件。這是「理論上最大」的市場。','<b>SAM 你服務得到的</b>：你在這個城市，只能照顧附近 30 公里內的工廠、學校和公司——可能一年幾萬件。','<b>SOM 你實際拿得到的</b>：你第一年人手和資金有限，一個月能做 200–400 件，一年大約 3,000 件。這才是你做計畫時要用的數字。'];
+ $$('#tam circle').forEach(c=>c.addEventListener('click',()=>{$('#tamOut').innerHTML=t[+c.dataset.z]+'<br><small>※ 數字為教學假設</small>';$$('#tam circle').forEach(x=>x.setAttribute('stroke-width',x===c?5:2))}))})();
+
+/* ---------- L8 price ---------- */
+bind(['pc','pp'],()=>{const c=num('pc'),p=num('pp');$('#pco').textContent=money(c);$('#ppo').textContent=money(p);
+  const g=p-c;
+  $('#pStack').innerHTML=g>0?'<div style="flex:'+c+';background:#59627a">成本 '+money(c)+'</div><div style="flex:'+g+';background:var(--green)">毛利 '+money(g)+'</div>':'<div style="flex:1;background:var(--chalk)">賣價低於成本：每賣一件賠 '+money(-g)+'</div>';
+  $('#pOut').innerHTML='加價率（÷成本）：<span class="k">'+pct(g/c)+'</span>　　毛利率（÷賣價）：<span class="k">'+pct(g/p)+'</span><br><small>同一筆生意，兩個百分比不一樣，因為「除以」的東西不同。</small>'});
+
+/* ---------- L9 funnel ---------- */
+function funnel(anim){
+  const v0=num('fn0'),r=[num('fn1'),num('fn2'),num('fn3'),num('fn4')].map(x=>x/100);
+  ['fn1','fn2','fn3','fn4'].forEach((id,i)=>$('#'+id+'o').textContent=(r[i]*100).toFixed(0)+'%');
+  const v=[v0];r.forEach(x=>v.push(v[v.length-1]*x));
+  const lab=['👀 看到','🤔 有興趣','💬 詢問','🛒 下單','🔁 回購'],col=['#9fb0d9','#6f88c6','#2f4b9a','#2e7d5b','#c98a1b'];
+  $('#fnBars').innerHTML=v.map((x,i)=>'<div class="hbar"><span class="l">'+lab[i]+'</span><span class="t" style="display:flex;justify-content:center;background:none"><i style="position:static;display:block;height:100%;width:'+(anim?0:Math.max(v0?x/v0*100:0,1.5))+'%;background:'+col[i]+'" data-w="'+Math.max(v0?x/v0*100:0,1.5)+'"></i></span><span class="v">'+Math.round(x).toLocaleString()+' 人</span></div>').join('');
+  const aov=num('fn5');
+  $('#fnOut').innerHTML='新訂單約 <b>'+Math.round(v[3])+'</b> 筆，回購約 <b>'+Math.round(v[4])+'</b> 筆<br>預估營收：<span class="k">'+money((v[3]+v[4])*aov,0)+'</span>';
+  if(anim){[...$('#fnBars').querySelectorAll('i')].forEach((b,i)=>setTimeout(()=>{b.style.width=b.dataset.w+'%'},200+i*350))}
+}
+bind(['fn0','fn1','fn2','fn3','fn4','fn5'],()=>funnel(false));
+$('#fnPlay').onclick=()=>funnel(true);
+
+/* ---------- L10 cash ---------- */
+function cash(){
+  const start=num('cs0'),S=num('cs1'),g=num('cs2')/100,c=num('cs3')/100,F=num('cs4'),lagIn=+$('#cs5').value,adv=+$('#cs6').value;
+  $('#cs2o').textContent=(g*100).toFixed(0)+'%';$('#cs3o').textContent=(c*100).toFixed(0)+'%';
+  const N=6,sales=[],cogs=[];for(let m=0;m<=N;m++){sales[m]=S*Math.pow(1+g,m);cogs[m]=sales[m]*c}
+  let bal=start-(adv===1?cogs[0]:0),acc=0,minB=Infinity,minM=-1;const B=[],P=[];
+  for(let m=0;m<N;m++){
+    const inn=m-lagIn>=0?sales[m-lagIn]:0; const t=m+adv; const out=F+(t>=0?cogs[t]:0);
+    bal+=inn-out; acc+=sales[m]-cogs[m]-F; B.push(bal);P.push(acc);
+    if(bal<minB){minB=bal;minM=m}
+  }
+  const mx=Math.max(...B.map(Math.abs),...P.map(Math.abs),1), neg=Math.min(0,...B,...P), pos=Math.max(0,...B,...P), span=(pos-neg)||1, H=180, zero=(-neg)/span*H;
+  const ch=$('#csChart');ch.innerHTML='<div style="position:absolute;left:0;right:0;bottom:'+zero+'px;border-top:1px dashed var(--muted)"></div>';
+  ch.style.borderBottom='0';
+  B.forEach((b,i)=>{const p=P[i];const col=document.createElement('div');col.style.cssText='flex:1;position:relative;height:100%';
+    const bar=(v,l,colr)=>'<div style="position:absolute;'+l+';width:44%;bottom:'+(v>=0?zero:zero+v/span*H)+'px;height:'+Math.max(Math.abs(v)/span*H,1)+'px;background:'+colr+';border-radius:2px;transition:all .5s"></div>';
+    col.innerHTML=bar(b,'left:4%',b<0?'var(--chalk)':'var(--indigo)')+bar(p,'right:4%','var(--green)');ch.appendChild(col)});
+  $('#csLbl').innerHTML=B.map((_,i)=>'<div style="flex:1">'+(i+1)+'月</div>').join('');
+  const lvl=Math.max(0,Math.min(1,minB/Math.max(start,1)));
+  $('#csWater').style.height=(lvl*100)+'%';$('#csWater').style.background=minB<0?'var(--chalk)':'#4a90d9';
+  $('#csOut').innerHTML='6 個月後帳面累計利潤：<b style="color:var(--green)">'+money(P[N-1],0)+'</b>　手上現金：<b>'+money(B[N-1],0)+'</b><br>'+
+   (minB<0?'💀 第 '+(minM+1)+' 個月現金變成 <b style="color:var(--chalk)">'+money(minB,0)+'</b>：帳面在賺，但你已經付不出錢了——這就是<b>黑字倒閉</b>。'
+          :'✅ 現金最低的時候還有 '+money(minB,0)+'（第 '+(minM+1)+' 個月），撐得住。');
+}
+bind(['cs0','cs1','cs2','cs3','cs4'],cash);$('#cs5').addEventListener('change',cash);$('#cs6').addEventListener('change',cash);
+
+/* ---------- L11 P&L ---------- */
+function drawPL(){
+  const R=num('pl1'),C=num('pl2'),rent=num('pl3'),sal=num('pl4'),oth=num('pl5'),dep=num('pl6'),int=num('pl7'),tax=num('pl8');
+  const GP=R-C,OP=GP-rent-sal-oth-dep,NP=OP-int-tax,max=Math.max(R,1);
+  const rows=[['營收',R,'var(--indigo)',0],['− 銷貨成本',-C,'#59627a',0],['＝ 毛利',GP,'var(--green)',1],['− 租金',-rent,'#59627a',0],['− 薪水',-sal,'#59627a',0],['− 水電行銷雜支',-oth,'#59627a',0],['− 折舊',-dep,'#59627a',0],['＝ 營業利益',OP,'var(--green)',1],['− 利息',-int,'#59627a',0],['− 稅',-tax,'#59627a',0],['＝ 淨利',NP,NP<0?'var(--chalk)':'var(--tape)',1]];
+  let level=R;const box=$('#plBars');box.innerHTML='';
+  rows.forEach((r,i)=>{let left,w;
+    if(i===0){left=0;w=R}else if(r[3]){left=Math.min(0,r[1]);w=Math.abs(r[1]);level=r[1]}else{w=Math.abs(r[1]);left=level-w;level-=w}
+    const L=Math.max(0,left)/max*100,W=w/max*100;
+    box.insertAdjacentHTML('beforeend','<div class="hbar" style="'+(r[3]?'font-weight:700':'')+'"><span class="l">'+r[0]+'</span><span class="t"><i style="left:'+L+'%;width:0;background:'+r[2]+'" data-w="'+W+'"></i></span><span class="v">'+money(r[1],0)+'</span></div>')});
+  requestAnimationFrame(()=>setTimeout(()=>box.querySelectorAll('i').forEach(b=>b.style.width=b.dataset.w+'%'),60));
+  $('#plOut').innerHTML='毛利率 <b>'+pct(GP/R)+'</b>　淨利率 <b>'+pct(NP/R)+'</b><br>'+(NP<0?'⚠️ 這個月虧錢。先看毛利夠不夠，再看哪一項費用太重。':'每賣 $100，最後真正留下 <span class="k">'+money(NP/R*100)+'</span>');
+}
+bind(['pl1','pl2','pl3','pl4','pl5','pl6','pl7','pl8'],drawPL);
+
+/* ---------- L11 break-even ---------- */
+bind(['be1','be2','be3','be4'],()=>{
+  const F=num('be1'),p=num('be2'),v=num('be3'),q=num('be4');$('#be4o').textContent=q+' 件';
+  const svg=$('#beSvg'),cm=p-v;
+  if(cm<=0){svg.innerHTML='<text x="180" y="115" text-anchor="middle" fill="currentColor" font-size="14">售價不高於變動成本：永遠不會打平</text>';$('#beOut').innerHTML='⚠️ 每賣一件都在賠，要先提高售價或降低成本。';return}
+  const be=F/cm,X=Math.max(be*2,q*1.2,10),Y=Math.max(p*X,F+v*X),x0=44,y0=196,w=300,h=176;
+  const sx=x=>x0+x/X*w,sy=y=>y0-y/Y*h;
+  let s='<line x1="'+x0+'" y1="'+y0+'" x2="'+(x0+w)+'" y2="'+y0+'" stroke="currentColor"/><line x1="'+x0+'" y1="'+y0+'" x2="'+x0+'" y2="'+(y0-h)+'" stroke="currentColor"/>';
+  s+='<polygon points="'+sx(be)+','+sy(p*be)+' '+sx(X)+','+sy(p*X)+' '+sx(X)+','+sy(F+v*X)+'" fill="#2e7d5b" fill-opacity=".18"/>';
+  s+='<polygon points="'+sx(0)+','+sy(0)+' '+sx(be)+','+sy(p*be)+' '+sx(0)+','+sy(F)+'" fill="#b8322a" fill-opacity=".15"/>';
+  s+='<line x1="'+sx(0)+'" y1="'+sy(F)+'" x2="'+sx(X)+'" y2="'+sy(F)+'" stroke="#59627a" stroke-dasharray="4 4"/>';
+  s+='<line x1="'+sx(0)+'" y1="'+sy(F)+'" x2="'+sx(X)+'" y2="'+sy(F+v*X)+'" stroke="#b8322a" stroke-width="2.5"/>';
+  s+='<line x1="'+sx(0)+'" y1="'+sy(0)+'" x2="'+sx(X)+'" y2="'+sy(p*X)+'" stroke="#2f4b9a" stroke-width="2.5"/>';
+  s+='<circle cx="'+sx(be)+'" cy="'+sy(p*be)+'" r="6" fill="#f2b705" stroke="#1b2540" stroke-width="2"/>';
+  s+='<line x1="'+sx(q)+'" y1="'+y0+'" x2="'+sx(q)+'" y2="'+(y0-h)+'" stroke="#f2b705" stroke-width="2" stroke-dasharray="3 3"/>';
+  s+='<g font-size="11" fill="currentColor"><text x="'+(x0+w)+'" y="'+(sy(p*X)-4)+'" text-anchor="end" fill="#2f4b9a">收入線</text><text x="'+(x0+w)+'" y="'+(sy(F+v*X)+14)+'" text-anchor="end" fill="#b8322a">總成本線</text><text x="'+(x0+4)+'" y="'+(sy(F)-4)+'">固定成本</text><text x="'+sx(be)+'" y="'+(sy(p*be)-10)+'" text-anchor="middle" font-weight="700">打平 '+Math.ceil(be)+' 件</text><text x="'+(x0+w)+'" y="'+(y0+16)+'" text-anchor="end">件數 →</text><text x="'+x0+'" y="'+(y0-h-6)+'">$</text><text x="'+(x0+30)+'" y="'+(y0-16)+'" fill="#b8322a">虧損區</text><text x="'+(x0+w-8)+'" y="'+(sy((p*X+F+v*X)/2)+4)+'" text-anchor="end" fill="#2e7d5b">獲利區</text></g>';
+  svg.innerHTML=s;
+  const prof=cm*q-F;
+  $('#beOut').innerHTML='每件邊際貢獻 '+money(cm)+'，損益兩平：<span class="k">'+Math.ceil(be)+' 件</span>（營收 '+money(be*p,0)+'）<br>賣 '+q+' 件時：'+(prof>=0?'賺 <b style="color:var(--green)">'+money(prof,0)+'</b>':'賠 <b style="color:var(--chalk)">'+money(-prof,0)+'</b>');
+});
+
+/* ---------- L12 accounting ---------- */
+(function(){
+  const TX=[
+    ['老闆投入本錢 $1,000',{cash:1000,eq:1000},'現金（資產）+1,000；權益 +1,000。老闆的錢變成公司的錢。'],
+    ['向家人借 $500',{cash:500,liab:500},'現金（資產）+500；負債 +500。錢多了，但欠的也多了。'],
+    ['買縫紉機 $600',{cash:-600,equip:600},'現金 −600；設備 +600。都是資產，只是換了樣子，總數不變。'],
+    ['買布料 $200',{cash:-200,inv:200},'現金 −200；存貨 +200。錢變成了布。'],
+    ['賣出衣服收 $300（成本 $150）',{cash:300,inv:-150,eq:150},'現金 +300、存貨 −150，資產淨增 150；賺到的 150 屬於老闆，權益 +150。'],
+    ['付房租 $100',{cash:-100,eq:-100},'現金 −100；房租是費用，讓利潤減少，權益 −100。'],
+    ['還家人 $200',{cash:-200,liab:-200},'現金 −200；負債 −200。還錢不是費用，不影響利潤。']
+  ];
+  let st;const reset=()=>{st={cash:0,inv:0,equip:0,liab:0,eq:0};$('#accLog').innerHTML='👆 從第一筆「老闆投入本錢」開始按，照順序按最好懂。';render()};
+  const bx=$('#accBtns');TX.forEach((t,i)=>{const b=document.createElement('button');b.className='btn sm ghost';b.textContent=(i+1)+'. '+t[0];
+    b.onclick=()=>{for(const k in t[1])st[k]+=t[1][k];$('#accLog').innerHTML='<b>'+t[0]+'</b><br>'+t[2];render()};bx.appendChild(b)});
+  function render(){
+    const A=st.cash+st.inv+st.equip,R=st.liab+st.eq;
+    $('#accTbl').innerHTML='<tr><th colspan="2">資產（擁有的）</th><th colspan="2">負債＋權益（錢從哪來）</th></tr>'+
+     '<tr><td>現金</td><td class="n">'+money(st.cash,0)+'</td><td>負債</td><td class="n">'+money(st.liab,0)+'</td></tr>'+
+     '<tr><td>存貨</td><td class="n">'+money(st.inv,0)+'</td><td>權益</td><td class="n">'+money(st.eq,0)+'</td></tr>'+
+     '<tr><td>設備</td><td class="n">'+money(st.equip,0)+'</td><td></td><td></td></tr>'+
+     '<tr><th>合計</th><th class="n">'+money(A,0)+'</th><th>合計</th><th class="n">'+money(R,0)+'</th></tr>';
+    const tilt=Math.max(-12,Math.min(12,(R-A)/50));
+    $('#accSvg').innerHTML='<polygon points="160,140 180,140 170,50" fill="currentColor" opacity=".7"/>'+
+     '<g transform="rotate('+tilt+' 170 50)" style="transition:transform .5s"><line x1="40" y1="50" x2="300" y2="50" stroke="currentColor" stroke-width="4"/>'+
+     '<line x1="60" y1="50" x2="60" y2="80" stroke="currentColor"/><line x1="280" y1="50" x2="280" y2="80" stroke="currentColor"/>'+
+     '<rect x="15" y="80" width="90" height="34" rx="4" fill="#2f4b9a"/><rect x="235" y="80" width="90" height="34" rx="4" fill="#2e7d5b"/>'+
+     '<text x="60" y="95" text-anchor="middle" fill="#fff" font-size="11">資產</text><text x="60" y="109" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">'+money(A,0)+'</text>'+
+     '<text x="280" y="95" text-anchor="middle" fill="#fff" font-size="11">負債＋權益</text><text x="280" y="109" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">'+money(R,0)+'</text></g>'+
+     '<text x="170" y="30" text-anchor="middle" font-size="13" fill="currentColor">'+(A===R?'⚖️ 永遠平衡':'不平衡')+'</text>';
+  }
+  $('#accReset').onclick=reset;reset();
+})();
+
+/* ---------- L14 ROP & Incoterms ---------- */
+bind(['r1','r2','r3'],()=>{const d=num('r1'),l=num('r2'),s=num('r3'),rop=d*l+s;
+  $('#rOut').innerHTML='當庫存剩下 <span class="k">'+rop.toLocaleString()+' 件</span> 時就要下單補貨。<br><small>'+d+' 件 × '+l+' 天 ＝ '+(d*l)+' 件（等貨這段時間會賣掉的量）＋ 安全庫存 '+s+' 件</small>'});
+(function(){
+  const steps=['🏭 工廠備貨','🚚 送到出口港','📄 出口報關裝船','🚢 海運＋保險','🛃 進口報關','📦 送到買方倉庫'];
+  const T={EXW:[0,'工廠交貨（Ex Works）：你只要在工廠準備好貨，買方自己來載，後面全部由買方負責。對賣方最輕鬆，但買方通常要付較多運費與手續。'],
+   FOB:[3,'船上交貨（Free On Board）：你負責把貨送到出口港、辦出口報關、裝上船。貨一上船，風險就轉給買方。成衣出口最常見。'],
+   CIF:[4,'成本＋保險＋運費（Cost, Insurance and Freight）：你還要付海運費和保險費到目的港。但要注意：貨物在出口港裝上船時，風險就已經轉給買方了。'],
+   DDP:[6,'完稅後交貨（Delivered Duty Paid）：你負責到底，連進口關稅都幫買方付，直接送到他倉庫。對賣方責任最重，新手不建議。']};
+  const bx=$('#incoBtns'),st=$('#incoSteps');
+  const pick=k=>{const n=T[k][0];bx.querySelectorAll('button').forEach(b=>b.classList.toggle('ghost',b.dataset.k!==k));
+    st.innerHTML=steps.map((s,i)=>'<div style="padding:8px 4px;border-radius:4px;font-size:.78rem;text-align:center;line-height:1.35;transition:background .4s;background:'+(i<n?'var(--indigo)':'var(--tape)')+';color:'+(i<n?'#fff':'#1b2540')+'">'+s+'</div>').join('');
+    $('#incoOut').innerHTML='<b>'+k+'</b>　'+T[k][1]};
+  Object.keys(T).forEach(k=>{const b=document.createElement('button');b.className='btn sm ghost';b.dataset.k=k;b.textContent=k;b.onclick=()=>pick(k);bx.appendChild(b)});
+  pick('FOB');
+})();
+
+/* ---------- L15 efficiency ---------- */
+bind(['e1','e2','e3','e4'],()=>{const out=num('e1')*num('e2'),inp=num('e3')*num('e4')*60,e=inp?out/inp:0;
+  $('#eOut').innerHTML='產出 '+out.toLocaleString()+' 標準分鐘 ÷ 投入 '+inp.toLocaleString()+' 分鐘＝<span class="k">'+pct(e)+'</span><br>'+
+   (e>1?'⚠️ 超過 100%，通常代表 SAM 訂得太寬鬆或件數算錯。':e>=.65?'👍 表現不錯，可以找出最慢的工序再優化。':e>=.45?'🙂 還有進步空間：檢查瓶頸工序、換款時間、等料時間。':'⚠️ 效率偏低：先查是不是在等布、等裁片，或機器常壞。')});
+
+/* ---------- L16 case chart ---------- */
+function drawCase(){
+  const q=[60,120,380,180,220,260,300,280,320,350,300,400],P=q.map(x=>x*2.8-390),mx=Math.max(...P),mn=Math.min(...P),span=mx-mn,H=170,zero=(-mn)/span*H;
+  const ch=$('#caseChart');ch.innerHTML='<div style="position:absolute;left:0;right:0;bottom:'+zero+'px;border-top:1px solid var(--muted)"></div>';
+  P.forEach((p,i)=>{const d=document.createElement('div');d.style.cssText='flex:1;position:relative;height:100%';
+    d.innerHTML='<div title="第'+(i+1)+'月：'+q[i]+' 件，'+money(p,0)+'" style="position:absolute;left:10%;right:10%;bottom:'+(p>=0?zero:zero+p/span*H)+'px;height:0;background:'+(p<0?'var(--chalk)':i===2?'var(--tape)':'var(--green)')+';border-radius:2px;transition:height .5s '+(i*60)+'ms" data-h="'+Math.abs(p)/span*H+'"></div>';ch.appendChild(d)});
+  $('#caseLbl').innerHTML=q.map((_,i)=>'<div style="flex:1">'+(i+1)+'</div>').join('');
+  setTimeout(()=>ch.querySelectorAll('[data-h]').forEach(b=>b.style.height=Math.max(+b.dataset.h,1)+'px'),80);
+  const tot=P.reduce((a,b)=>a+b,0);
+  $('#caseOut').innerHTML='一年合計：<span class="k">'+money(tot,0)+'</span>　<small>紅＝虧損月　黃＝第 3 個月（大單＋現金危機）</small>';
+}
+
+/* ---------- BMC ---------- */
+(function(){
+  const F=[['k1','🎯 目標客人','誰會買？寫出一個具體的人（第 9 課）'],['k2','💎 價值主張','你幫客人解決什麼問題？為什麼選你不選別人？'],['k3','📣 通路','客人在哪裡看到你、在哪裡買？'],['k4','🤝 客戶關係','怎麼讓客人回來買、幫你介紹？'],['k5','💵 收入來源','賣什麼、多少錢、怎麼收款？'],['k6','🧰 關鍵資源','你需要什麼：設備、技能、人、資金？'],['k7','⚙️ 關鍵活動','每天最重要的工作是什麼？'],['k8','🏭 關鍵夥伴','供應商、代工坊、合夥人是誰？'],['k9','🧾 成本結構','固定成本、變動成本各多少？損益兩平幾件？']];
+  const data=store.get('bmc',{}),box=$('#bmc');
+  F.forEach(f=>{box.insertAdjacentHTML('beforeend','<div class="card"><b>'+f[1]+'</b><br><small>'+f[2]+'</small><textarea data-k="'+f[0]+'" aria-label="'+f[1]+'"></textarea></div>')});
+  box.querySelectorAll('textarea').forEach(t=>{t.value=data[t.dataset.k]||'';t.addEventListener('input',()=>{data[t.dataset.k]=t.value;store.set('bmc',data)})});
+  $('#bmcDl').onclick=()=>{
+    const txt='我的商業計畫書（商業模式圖）\n'+'='.repeat(24)+'\n\n'+F.map(f=>f[1]+'\n'+(data[f[0]]||'（尚未填寫）')+'\n').join('\n');
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+txt],{type:'text/plain;charset=utf-8'}));a.download='我的商業計畫書.txt';document.body.appendChild(a);a.click();a.remove();
+  };
+  $('#bmcPrint').onclick=()=>window.print();
+  $('#bmcClear').onclick=()=>{if(confirm('確定要清空全部內容嗎？')){for(const k in data)delete data[k];store.set('bmc',data);box.querySelectorAll('textarea').forEach(t=>t.value='')}};
+})();
+
+/* ---------- start ---------- */
+refresh();
+const h=location.hash.slice(1);show(document.getElementById(h)?h:store.get('last','home'));
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-b947b8d1d5" data-category="business"></script></body>
+</html>

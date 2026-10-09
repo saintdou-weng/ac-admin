@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>房地產學堂｜從一塊空地開始</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2F5F7; --card:#FFFFFF; --ink:#16324F; --ink2:#4B6279; --rule:#C8D5E1;
+  --grid:rgba(22,50,79,.055); --seal:#B3302A; --land:#3F7F52; --zone:#E6B84A; --hl:#FFF0B3;
+  --lot:#E4EBE2; --road:#D5DCE3;
+  --serif:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0E1A26; --card:#142433; --ink:#E2EBF3; --ink2:#9CB0C4; --rule:#2A3F55;
+    --grid:rgba(226,235,243,.045); --seal:#E0645B; --land:#79BD89; --zone:#E6B84A; --hl:#4A3F1A;
+    --lot:#1B3040; --road:#22364A;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0E1A26; --card:#142433; --ink:#E2EBF3; --ink2:#9CB0C4; --rule:#2A3F55;
+  --grid:rgba(226,235,243,.045); --seal:#E0645B; --land:#79BD89; --zone:#E6B84A; --hl:#4A3F1A;
+  --lot:#1B3040; --road:#22364A;
+}
+*,*::before,*::after{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{
+  margin:0;background-color:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:17px;line-height:1.85;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--zone);outline-offset:2px}
+img,svg{max-width:100%}
+
+/* ---------- 版面 ---------- */
+.layout{display:grid;grid-template-columns:280px minmax(0,1fr);min-height:100vh}
+aside.toc{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--rule);background:var(--paper);padding:28px 20px 40px}
+.toc .brand{font-family:var(--serif);font-weight:900;font-size:1.35rem;line-height:1.3;margin:0 0 4px}
+.toc .sub{color:var(--ink2);font-size:.85rem;margin:0 0 20px}
+.toc h4{font-family:var(--serif);font-size:.95rem;margin:22px 0 6px;color:var(--ink2);font-weight:600}
+.toc ol{list-style:none;margin:0;padding:0}
+.toc li a{display:flex;gap:10px;align-items:baseline;text-decoration:none;padding:5px 8px;border-radius:6px;font-size:.93rem;line-height:1.5}
+.toc li a:hover{background:var(--card)}
+.toc li a .n{font-variant-numeric:tabular-nums;color:var(--ink2);min-width:1.6em;font-size:.82rem}
+.toc li a.done .n{color:var(--seal);font-weight:700}
+.toc li a.done::after{content:"✓";margin-left:auto;color:var(--seal);font-weight:700}
+.progress{height:6px;background:var(--rule);border-radius:3px;overflow:hidden;margin-top:6px}
+.progress i{display:block;height:100%;width:0;background:var(--seal);transition:width .5s}
+.progress-txt{font-size:.82rem;color:var(--ink2);margin-top:4px}
+.theme-btn{margin-top:24px;font:inherit;font-size:.85rem;background:none;border:1px solid var(--rule);color:var(--ink2);border-radius:6px;padding:4px 10px;cursor:pointer}
+
+.topbar{display:none}
+main{padding:0 clamp(18px,4vw,56px) 80px;min-width:0}
+.col{max-width:760px;margin:0 auto}
+
+/* ---------- 開場 ---------- */
+.hero{max-width:980px;margin:0 auto;padding:56px 0 40px}
+.hero h1{font-family:var(--serif);font-weight:900;font-size:clamp(2.2rem,6vw,4.2rem);line-height:1.15;margin:0 0 16px;letter-spacing:.02em}
+.hero p.lead{font-size:1.1rem;color:var(--ink2);max-width:36em;margin:0 0 28px}
+.street{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:14px;overflow-x:auto}
+.street svg{display:block;width:100%;height:auto;max-height:80vh}
+.street .cap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:.85rem;color:var(--ink2);padding:8px 4px 0}
+.lot{cursor:pointer}
+.lot:hover .lotbg{stroke:var(--seal)}
+.lot .build{transform-origin:center bottom;transform-box:fill-box}
+.lot.new .build{animation:rise .7s cubic-bezier(.2,.8,.3,1.2)}
+@keyframes rise{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.howto{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:22px}
+.howto div{border-left:3px solid var(--zone);padding:4px 0 4px 14px;font-size:.95rem}
+.howto b{display:block;font-family:var(--serif)}
+
+/* ---------- 篇章 ---------- */
+.part{max-width:760px;margin:70px auto 10px;padding-top:30px;border-top:2px solid var(--ink)}
+.part .pn{font-family:var(--serif);font-size:1rem;color:var(--ink2)}
+.part h2{font-family:var(--serif);font-weight:900;font-size:clamp(1.8rem,4.5vw,2.6rem);margin:4px 0 8px;line-height:1.25}
+.part p{color:var(--ink2);margin:0}
+
+section.lesson{max-width:760px;margin:0 auto;padding-top:48px}
+.lesson header{display:flex;align-items:baseline;gap:14px;margin-bottom:8px}
+.lesson header .num{font-family:var(--serif);font-weight:900;font-size:2.6rem;line-height:1;color:var(--rule);-webkit-text-stroke:1.2px var(--ink2)}
+.lesson h3{font-family:var(--serif);font-size:clamp(1.45rem,3.6vw,1.9rem);margin:0;line-height:1.35}
+.lesson .goal{color:var(--ink2);font-size:.95rem;margin:0 0 18px}
+.lesson h5{font-family:var(--serif);font-size:1.15rem;margin:30px 0 6px}
+.lesson p{margin:0 0 14px}
+mark{background:var(--hl);color:inherit;padding:0 2px}
+.term{font-weight:700;border-bottom:2px dotted var(--seal)}
+
+/* 名詞由來：印章 */
+.origin{position:relative;background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:16px 18px 14px 74px;margin:18px 0}
+.origin::before{content:attr(data-seal);position:absolute;left:16px;top:16px;width:42px;height:42px;display:grid;place-items:center;border:2.5px solid var(--seal);color:var(--seal);font-family:var(--serif);font-weight:900;font-size:1.05rem;border-radius:5px;transform:rotate(-6deg);line-height:1}
+.origin b.w{font-family:var(--serif);font-size:1.05rem}
+.origin p{margin:4px 0 0;font-size:.95rem}
+.origin p:first-child{margin-top:0}
+
+/* 舉例 */
+.eg{border-left:4px solid var(--land);background:color-mix(in srgb,var(--land) 8%,transparent);padding:12px 16px;margin:18px 0;border-radius:0 8px 8px 0}
+.eg .t{font-weight:700;color:var(--land);font-size:.92rem}
+.eg p{margin:4px 0}
+.warn{border-left:4px solid var(--seal);background:color-mix(in srgb,var(--seal) 7%,transparent);padding:12px 16px;margin:18px 0;border-radius:0 8px 8px 0;font-size:.95rem}
+.warn .t{font-weight:700;color:var(--seal)}
+
+/* 互動工具 */
+.widget{background:var(--card);border:1.5px solid var(--ink);border-radius:10px;padding:18px;margin:22px 0}
+.widget .wt{font-family:var(--serif);font-weight:900;font-size:1.05rem;margin:0 0 2px}
+.widget .wd{font-size:.9rem;color:var(--ink2);margin:0 0 12px}
+.ctl{display:grid;grid-template-columns:8.5em 1fr 5.5em;gap:8px 12px;align-items:center;margin:8px 0;font-size:.93rem}
+.ctl output{font-variant-numeric:tabular-nums;font-weight:700;text-align:right}
+input[type=range]{width:100%;accent-color:var(--seal)}
+input[type=number],input[type=text]{font:inherit;width:100%;padding:6px 10px;border:1px solid var(--rule);border-radius:6px;background:var(--paper);color:var(--ink)}
+.res{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}
+.res div{border-top:2px solid var(--rule);padding-top:6px}
+.res span{display:block;font-size:.8rem;color:var(--ink2)}
+.res strong{font-size:1.2rem;font-variant-numeric:tabular-nums}
+.btn{font:inherit;font-size:.93rem;border:1.5px solid var(--ink);background:var(--card);color:var(--ink);border-radius:7px;padding:6px 14px;cursor:pointer}
+.btn:hover{background:var(--ink);color:var(--card)}
+.btn.primary{background:var(--ink);color:var(--card)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.svgbox{overflow-x:auto}
+.svgbox svg{display:block;width:100%;height:auto}
+
+/* 表格 */
+.tbl{overflow-x:auto;margin:16px 0}
+table{border-collapse:collapse;width:100%;font-size:.92rem;min-width:480px}
+th,td{border-bottom:1px solid var(--rule);padding:8px 10px;text-align:left;vertical-align:top}
+th{font-family:var(--serif);background:color-mix(in srgb,var(--ink) 6%,transparent)}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+
+/* 步驟 */
+.steps{list-style:none;padding:0;margin:16px 0;counter-reset:s}
+.steps li{position:relative;padding:0 0 18px 48px;counter-increment:s}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--card);display:grid;place-items:center;font-weight:700;font-size:.9rem}
+.steps li::after{content:"";position:absolute;left:15px;top:34px;bottom:2px;width:2px;background:var(--rule)}
+.steps li:last-child::after{display:none}
+.steps li b{font-family:var(--serif)}
+.steps li details{margin-top:2px}
+.steps summary{cursor:pointer;color:var(--ink2);font-size:.9rem}
+
+/* 測驗 */
+.quiz{border:1px dashed var(--ink2);border-radius:10px;padding:14px 16px;margin:24px 0}
+.quiz .qh{font-size:.82rem;color:var(--seal);font-weight:700}
+.quiz .q{font-weight:700;margin:2px 0 10px}
+.quiz .opts{display:grid;gap:8px}
+.quiz .opts button{font:inherit;text-align:left;padding:8px 12px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:7px;cursor:pointer}
+.quiz .opts button:hover{border-color:var(--ink)}
+.quiz .opts button.ok{border-color:var(--land);background:color-mix(in srgb,var(--land) 15%,transparent)}
+.quiz .opts button.no{border-color:var(--seal);background:color-mix(in srgb,var(--seal) 10%,transparent)}
+.quiz .fb{margin:10px 0 0;font-size:.93rem;min-height:1em}
+
+/* 完成本課：蓋章 */
+.finish{display:flex;align-items:center;gap:18px;margin:34px 0 10px;padding:16px;border-top:1px solid var(--rule)}
+.finish p{margin:0;font-size:.92rem;color:var(--ink2)}
+.stamp{width:78px;height:78px;flex:none;border:3px solid var(--seal);border-radius:50%;color:var(--seal);display:grid;place-items:center;font-family:var(--serif);font-weight:900;font-size:.85rem;line-height:1.25;text-align:center;transform:rotate(-12deg) scale(0);opacity:0}
+.stamp.on{transform:rotate(-12deg) scale(1);opacity:.9;transition:transform .35s cubic-bezier(.3,1.6,.5,1),opacity .2s}
+
+/* 名詞表 */
+.gloss{display:grid;gap:0;margin-top:12px}
+.gloss div{padding:10px 0;border-bottom:1px solid var(--rule)}
+.gloss dt{font-weight:700;font-family:var(--serif)}
+.gloss dd{margin:2px 0 0;font-size:.93rem;color:var(--ink2)}
+.gloss .lk{font-size:.8rem;color:var(--seal);text-decoration:none;margin-left:8px}
+
+.small{font-size:.85rem;color:var(--ink2)}
+footer{max-width:760px;margin:80px auto 0;padding-top:20px;border-top:1px solid var(--rule);font-size:.85rem;color:var(--ink2)}
+
+/* 手機 */
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .topbar{display:flex;position:sticky;top:0;z-index:20;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top,0px));margin-top:calc(-1 * env(safe-area-inset-top,0px));background:var(--paper);border-bottom:1px solid var(--rule)}
+  .topbar b{font-family:var(--serif)}
+  .topbar .mini{flex:1;max-width:160px}
+  aside.toc{position:fixed;inset:0 25% 0 0;z-index:30;transform:translateX(-105%);transition:transform .3s;height:100%;padding-top:calc(28px + env(safe-area-inset-top,0px));box-shadow:0 0 40px rgba(0,0,0,.25)}
+  aside.toc.open{transform:none}
+  .scrim{position:fixed;inset:0;z-index:25;background:rgba(0,0,0,.35);display:none}
+  .scrim.open{display:block}
+  .hero{padding-top:28px}
+  .ctl{grid-template-columns:1fr 4.8em}
+  .ctl label{grid-column:1/-1;margin-bottom:-6px}
+  .origin{padding-left:18px;padding-top:66px}
+}
+@media print{aside.toc,.topbar,.widget,.quiz,.finish{display:none}.layout{display:block}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <button class="btn" id="menuBtn" aria-label="開啟目錄">☰ 目錄</button>
+  <b>房地產學堂</b>
+  <div class="mini"><div class="progress"><i class="pbar"></i></div></div>
+</div>
+<div class="scrim" id="scrim"></div>
+<div class="layout">
+<aside class="toc" id="toc" aria-label="課程目錄">
+  <p class="brand">房地產學堂</p>
+  <p class="sub">16 堂課，從入門到專業</p>
+  <div class="progress"><i class="pbar"></i></div>
+  <div class="progress-txt" id="ptxt">已完成 0 / 16 課</div>
+  <h4>第一篇　入門</h4>
+  <ol>
+    <li><a href="#l1"><span class="n">1</span>房地產是什麼？</a></li>
+    <li><a href="#l2"><span class="n">2</span>房子為什麼值錢？</a></li>
+    <li><a href="#l3"><span class="n">3</span>房子的種類與「坪」</a></li>
+    <li><a href="#l4"><span class="n">4</span>租房還是買房？</a></li>
+  </ol>
+  <h4>第二篇　基礎</h4>
+  <ol>
+    <li><a href="#l5"><span class="n">5</span>房貸：跟銀行借錢</a></li>
+    <li><a href="#l6"><span class="n">6</span>買房流程</a></li>
+    <li><a href="#l7"><span class="n">7</span>產權：證明房子是你的</a></li>
+    <li><a href="#l8"><span class="n">8</span>買賣房子的稅與費</a></li>
+  </ol>
+  <h4>第三篇　進階</h4>
+  <ol>
+    <li><a href="#l9"><span class="n">9</span>估價三大方法</a></li>
+    <li><a href="#l10"><span class="n">10</span>投資報酬率與槓桿</a></li>
+    <li><a href="#l11"><span class="n">11</span>看不見的風險</a></li>
+  </ol>
+  <h4>第四篇　專業</h4>
+  <ol>
+    <li><a href="#l12"><span class="n">12</span>都市計畫：建蔽率與容積率</a></li>
+    <li><a href="#l13"><span class="n">13</span>預售屋、建商與都更</a></li>
+    <li><a href="#l14"><span class="n">14</span>房地產金融</a></li>
+    <li><a href="#l15"><span class="n">15</span>房地產景氣循環</a></li>
+    <li><a href="#l16"><span class="n">16</span>房地產職業與證照</a></li>
+  </ol>
+  <h4>附錄</h4>
+  <ol>
+    <li><a href="#glossary"><span class="n">A</span>名詞總表</a></li>
+    <li><a href="#final"><span class="n">B</span>結業測驗</a></li>
+  </ol>
+  <button class="theme-btn" id="themeBtn">切換深色／淺色</button>
+</aside>
+
+<main>
+<div class="hero">
+  <h1>從一塊空地開始，<br>學懂房地產。</h1>
+  <p class="lead">房子是大多數人一輩子最貴的東西，但學校很少教。這套課程從「什麼是不動產」講起，一路到估價、投資、都市計畫與房地產金融。每學完一課，你的街區就會多蓋一棟房子。</p>
+  <div class="street">
+    <svg id="streetSvg" viewBox="0 0 900 300" role="img" aria-label="學習進度街區：16 塊地，每完成一課蓋一棟房子"></svg>
+    <div class="cap"><span>空地＝還沒學　點一下地塊可以直接跳到那一課</span><span id="streetTxt">目前是一片空地</span></div>
+  </div>
+  <div class="howto">
+    <div><b>讀</b>每課先讀觀念，紅色印章框是「名詞由來」，綠色框是生活例子。</div>
+    <div><b>玩</b>黑框是互動工具，拉一拉滑桿，看數字怎麼變。</div>
+    <div><b>考</b>課末有小測驗，答完按「完成本課」蓋章，房子就蓋好了。</div>
+  </div>
+</div>
+
+<!-- ================= 第一篇 ================= -->
+<div class="part" id="part1">
+  <div class="pn">第一篇</div>
+  <h2>入門：認識房子的世界</h2>
+  <p>先搞懂房地產到底是什麼、為什麼這麼貴、怎麼量大小，以及要租還是要買。</p>
+</div>
+
+<!-- 第1課 -->
+<section class="lesson" id="l1" data-ch="1">
+  <header><span class="num">1</span><h3>房地產是什麼？</h3></header>
+  <p class="goal">學完你會知道：什麼是不動產、動產，以及「房地產」這三個字怎麼來的。</p>
+
+  <p>想像你有一支手機、一台腳踏車，還有一棟房子。手機和腳踏車都可以帶著走，但房子呢？你搬家時，房子會留在原地。這就是房地產最基本的特性：<mark>搬不走</mark>。</p>
+  <p>所以法律把財產分成兩大類：</p>
+  <div class="tbl"><table>
+    <tr><th>類別</th><th>意思</th><th>例子</th></tr>
+    <tr><td><span class="term">不動產</span></td><td>土地，以及牢牢「長」在土地上、搬不走的東西</td><td>土地、房屋、橋、圍牆</td></tr>
+    <tr><td><span class="term">動產</span></td><td>不動產以外的東西，大多可以移動</td><td>手機、汽車、書、金子</td></tr>
+  </table></div>
+  <p>台灣《民法》第 66 條寫得很簡單：<b>不動產就是「土地及其定著物」</b>。「定著」就是「固定、附著」，所以房屋就是最常見的定著物。房地產，就是「房屋」加上「土地」。</p>
+
+  <div class="origin" data-seal="源">
+    <p><b class="w">房地產／不動產／Real Estate</b></p>
+    <p>「不動產」這個詞是清末民初從日本翻譯過來的，日本人把歐洲法律裡「不能移動的財產」譯成「不動產」。台灣的法律正式用語是「不動產」，「房地產」則是日常口語，意思就是「房屋＋土地的財產」。</p>
+    <p>英文 Real Estate 的 real 來自拉丁文 <i>res</i>，意思是「東西、實物」，強調這是摸得到的實體財產；estate 來自拉丁文 <i>status</i>（狀態、身分），後來引申為「擁有的財產」。有人說 real 是西班牙文「皇家的」，那是流傳很廣但比較不可靠的說法。</p>
+  </div>
+
+  <h5>房地產有哪些特別的地方？</h5>
+  <p>和其他商品比起來，房地產有幾個很特別的個性，後面每一課都會用到：</p>
+  <div class="tbl"><table>
+    <tr><th>特性</th><th>白話解釋</th></tr>
+    <tr><td>不可移動</td><td>房子蓋在哪就在哪，所以「地點」決定了大部分價值。</td></tr>
+    <tr><td>獨一無二</td><td>世界上沒有兩間完全相同的房子，就算同一棟，樓層和方向也不同。</td></tr>
+    <tr><td>很貴</td><td>一般人要存很多年，還要跟銀行借錢才買得起。</td></tr>
+    <tr><td>用很久</td><td>房子可以住幾十年，土地更是永遠都在。</td></tr>
+    <tr><td>不好變現</td><td>賣房子通常要好幾個月，不像股票按一下就賣掉。這叫「流動性低」。</td></tr>
+  </table></div>
+
+  <div class="widget" id="w1">
+    <p class="wt">小遊戲：動產還是不動產？</p>
+    <p class="wd">點每個物品，猜猜它屬於哪一類。</p>
+    <div class="chips" id="sortChips"></div>
+    <p class="fb" id="sortFb" style="margin:12px 0 0;font-size:.93rem"></p>
+  </div>
+
+  <div class="quiz" data-answer="2">
+    <div class="qh">隨堂小測驗</div>
+    <p class="q">下列哪一個是「不動產」？</p>
+    <div class="opts"><button>停在路邊的汽車</button><button>一條金項鍊</button><button>蓋在地上的倉庫</button><button>一台冰箱</button></div>
+    <p class="fb" data-ok="答對了！倉庫固定在土地上，是定著物，屬於不動產。" data-no="再想想：哪一個是固定在土地上、搬不走的？"></p>
+  </div>
+  <div class="finish"><button class="btn primary done-btn">完成本課</button><div class="stamp">第1課<br>已完成</div><p>完成後，第 1 塊地會蓋起房子。</p></div>
+</section>
+
+<!-- 第2課 -->
+<section class="lesson" id="l2" data-ch="2">
+  <header><span class="num">2</span><h3>房子為什麼值錢？</h3></header>
+  <p class="goal">學完你會知道：供給與需求怎麼決定房價，以及為什麼大家都說「地段、地段、還是地段」。</p>
+
+  <p>一杯珍珠奶茶 60 元，一間台北的小套房卻可能要 1,000 萬元。為什麼房子這麼貴？答案藏在兩個字裡：<span class="term">供給</span>和<span class="term">需求</span>。</p>
+  <ul>
+    <li><b>需求</b>：有多少人想買（或想租）房子。</li>
+    <li><b>供給</b>：市場上有多少房子可以買。</li>
+  </ul>
+  <p>想要的人多、房子少，大家就會搶，價格就上漲；房子多、想要的人少，屋主只好降價。這跟演唱會門票一樣：熱門歌手的票秒殺，黃牛票就會變很貴。</p>
+
+  <div class="origin" data-seal="源">
+    <p><b class="w">供給與需求（Supply and Demand）</b></p>
+    <p>這是經濟學最核心的觀念。英國經濟學家馬歇爾（Alfred Marshall）在 1890 年的書裡，把供給和需求畫成兩條交叉的線，交叉點就是市場價格。後人把這張圖叫做「馬歇爾剪刀」，因為兩條線像剪刀的兩片刀刃，少了哪一片都剪不動。</p>
+  </div>
+
+  <div class="widget" id="w2">
+    <p class="wt">動手看：供需怎麼推動房價</p>
+    <p class="wd">拉動滑桿，看交叉點（市場價格）怎麼移動。</p>
+    <div class="ctl"><label for="sdD">想住這裡的人</label><input type="range" id="sdD" min="-40" max="40" value="0"><output id="sdDo">普通</output></div>
+    <div class="ctl"><label for="sdS">新蓋的房子</label><input type="range" id="sdS" min="-40" max="40" value="0"><output id="sdSo">普通</output></div>
+    <div class="svgbox"><svg id="sdSvg" viewBox="0 0 420 260"></svg></div>
+    <p class="small" id="sdTxt">價格在平衡點。</p>
+  </div>
+
+  <h5>什麼會讓想住的人變多？</h5>
+  <p>人口移入、附近開了捷運站、新蓋了好學校、大公司設廠帶來工作機會、銀行利息變低讓大家更容易借錢……這些都會增加需求。反過來，人口外流、工廠關閉、利率上升，需求就會下降。</p>
+
+  <h5>地段、地段、還是地段</h5>
+  <p>房子搬不走，所以它周圍的環境就決定了它的價值。同樣 30 坪的房子，蓋在台北市信義區和蓋在偏遠山區，價格可能差十倍。房子本身的建材差不多，差的是<mark>土地的位置</mark>。</p>
+  <div class="origin" data-seal="源">
+    <p><b class="w">Location, location, location</b></p>
+    <p>這句房地產名言常被說是英國地產大亨哈羅德·薩繆爾（Harold Samuel）講的，但其實早在 1926 年美國芝加哥的報紙房屋廣告就出現過類似說法。重複三次，是為了強調「決定房價最重要的三件事，第一是地點，第二還是地點，第三也是地點」。</p>
+  </div>
+  <div class="eg">
+    <div class="t">舉個例子</div>
+    <p>小明家附近原本只有稻田。後來政府宣布要在旁邊蓋捷運站，還沒開始蓋，附近房價就先漲了兩成。因為大家預期「以後交通方便，想住這裡的人會變多」。房地產的價格，很多時候反映的是對<b>未來</b>的期待。</p>
+  </div>
+  <p>好地段通常具備這些條件：交通方便（捷運、公車、高速公路）、生活機能好（市場、超商、醫院）、學區好、環境安靜安全、有公園綠地，以及未來有發展計畫。</p>
+
+  <div class="quiz" data-answer="1">
+    <div class="qh">隨堂小測驗</div>
+    <p class="q">某個城市一年內搬進了好幾萬人，但新蓋的房子很少。房價最可能怎麼變？</p>
+    <div class="opts"><button>下跌</button><button>上漲</button><button>完全不變</button></div>
+    <p class="fb" data-ok="正確！需求增加、供給沒跟上，價格就會被推高。" data-no="提示：想買的人變多了，房子卻沒變多，會發生什麼事？"></p>
+  </div>
+  <div class="finish"><button class="btn primary done-btn">完成本課</button><div class="stamp">第2課<br>已完成</div><p>完成後，第 2 塊地會蓋起房子。</p></div>
+</section>
+
+<!-- 第3課 -->
+<section class="lesson" id="l3" data-ch="3">
+  <header><span class="num">3</span><h3>房子的種類與「坪」</h3></header>
+  <p class="goal">學完你會知道：公寓、華廈、大樓、透天厝的差別，坪是怎麼來的，以及「公設比」為什麼讓買的坪數比住的多。</p>
+
+  <h5>常見的房屋種類（以台灣為例）</h5>
+  <svg viewBox="0 0 640 200" style="width:100%;height:auto;margin:6px 0" role="img" aria-label="四種房屋的高度比較">
+    <g fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="10" y1="170" x2="630" y2="170"/>
+      <!-- 透天 -->
+      <path d="M40 170 V120 L75 95 L110 120 V170"/><rect x="65" y="145" width="20" height="25"/>
+      <!-- 公寓 5F -->
+      <rect x="170" y="95" width="70" height="75"/>
+      <g stroke-width="1"><line x1="170" y1="110" x2="240" y2="110"/><line x1="170" y1="125" x2="240" y2="125"/><line x1="170" y1="140" x2="240" y2="140"/><line x1="170" y1="155" x2="240" y2="155"/></g>
+      <!-- 華廈 9F -->
+      <rect x="310" y="55" width="80" height="115"/>
+      <g stroke-width="1"><line x1="310" y1="68" x2="390" y2="68"/><line x1="310" y1="81" x2="390" y2="81"/><line x1="310" y1="94" x2="390" y2="94"/><line x1="310" y1="107" x2="390" y2="107"/><line x1="310" y1="120" x2="390" y2="120"/><line x1="310" y1="133" x2="390" y2="133"/><line x1="310" y1="146" x2="390" y2="146"/><line x1="310" y1="159" x2="390" y2="159"/></g>
+      <rect x="360" y="60" width="12" height="105" stroke-dasharray="3 3"/>
+      <!-- 大樓 -->
+      <rect x="470" y="12" width="90" height="158"/>
+      <g stroke-width="1"><line x1="470" y1="30" x2="560" y2="30"/><line x1="470" y1="48" x2="560" y2="48"/><line x1="470" y1="66" x2="560" y2="66"/><line x1="470" y1="84" x2="560" y2="84"/><line x1="470" y1="102" x2="560" y2="102"/><line x1="470" y1="120" x2="560" y2="120"/><line x1="470" y1="138" x2="560" y2="138"/><line x1="470" y1="156" x2="560" y2="156"/></g>
+      <rect x="530" y="18" width="14" height="148" stroke-dasharray="3 3"/>
+    </g>
+    <g font-size="13" fill="currentColor" text-anchor="middle">
+      <text x="75" y="190">透天厝</text><text x="205" y="190">公寓（≤5樓）</text><text x="350" y="190">華廈（6～10樓）</text><text x="515" y="190">電梯大樓（11樓↑）</text>
+      <text x="566" y="100" text-anchor="start" font-size="11">虛線＝電梯</text>
+    </g>
+  </svg>
+  <div class="tbl"><table>
+    <tr><th>種類</th><th>特色</th><th>優點</th><th>缺點</th></tr>
+    <tr><td>透天厝</td><td>從一樓到頂樓整棟都是你的，連土地一起</td><td>空間大、土地持分多、自由</td><td>總價高、樓梯多、要自己維護</td></tr>
+    <tr><td>公寓</td><td>通常 5 樓以下、沒有電梯</td><td>公設少、單價較低</td><td>爬樓梯辛苦、屋齡多半較老</td></tr>
+    <tr><td>華廈</td><td>約 6～10 樓，有電梯</td><td>有電梯、公設比適中</td><td>管理品質差異大</td></tr>
+    <tr><td>電梯大樓</td><td>11 樓以上，常有管理員、中庭</td><td>安全、設施多、管理好</td><td>公設比高、每月管理費較高</td></tr>
+    <tr><td>套房</td><td>臥室、衛浴在同一空間</td><td>總價低，適合單身</td><td>空間小，轉手較難</td></tr>
+  </table></div>
+  <div class="origin" data-seal="源">
+    <p><b class="w">透天厝</b></p>
+    <p>「透天」是台語，意思是「通到天」。從地面一路通到屋頂、整棟獨立，頭上沒有別人家，所以叫透天厝（「厝」是台語的房子）。</p>
+  </div>
+
+  <h5>「坪」到底是多大？</h5>
+  <p>在台灣買房，大家不說幾平方公尺，而是說「幾坪」。</p>
+  <div class="origin" data-seal="源">
+    <p><b class="w">坪（つぼ，tsubo）</b></p>
+    <p>坪是日本的傳統面積單位。日本古代用「間」量長度，一間大約 1.82 公尺；長寬各一間的正方形就是一坪。剛好差不多是<b>兩張榻榻米</b>的大小。日治時期這個單位傳進台灣，一直用到今天。</p>
+    <p><b>1 坪 ≈ 3.3058 平方公尺</b>；反過來，1 平方公尺 ≈ 0.3025 坪。</p>
+  </div>
+  <svg viewBox="0 0 520 170" style="width:100%;max-width:520px;height:auto" role="img" aria-label="一坪約等於兩張榻榻米">
+    <g stroke="currentColor" fill="none" stroke-width="2">
+      <rect x="20" y="20" width="130" height="130" fill="color-mix(in srgb,var(--zone) 35%,transparent)"/>
+      <line x1="85" y1="20" x2="85" y2="150" stroke-dasharray="5 4"/>
+    </g>
+    <g font-size="13" fill="currentColor">
+      <text x="30" y="90">榻榻米</text><text x="95" y="90">榻榻米</text>
+      <text x="40" y="168">1 坪 ≈ 1.82m × 1.82m</text>
+      <text x="190" y="50">一間 10 坪的房間 ≈ 33 平方公尺</text>
+      <text x="190" y="80">不到一間普通教室的一半</text>
+      <text x="190" y="110">一個標準籃球場 ≈ 127 坪</text>
+      <text x="190" y="140">一個汽車停車格 ≈ 4 坪</text>
+    </g>
+  </svg>
+
+  <h5>公設比：為什麼買 30 坪，只住 20 坪？</h5>
+  <p>電梯大樓裡有大廳、電梯、樓梯、走廊、健身房……這些大家一起用的空間叫<span class="term">公共設施</span>（簡稱公設）。它們的面積會依比例分攤給每一戶，算在你買的坪數裡。</p>
+  <p><span class="term">公設比</span> ＝ 公設坪數 ÷ 權狀總坪數。公設比 30%，代表你買的坪數裡，有三成是和鄰居共用的空間。</p>
+  <div class="widget" id="w3">
+    <p class="wt">公設比計算機</p>
+    <p class="wd">權狀上寫的坪數，扣掉公設，才是你家門內真正的空間（還要再扣陽台、雨遮等附屬建物，這裡先簡化）。</p>
+    <div class="ctl"><label for="gsTotal">權狀坪數</label><input type="range" id="gsTotal" min="10" max="80" value="30"><output id="gsTotalo">30 坪</output></div>
+    <div class="ctl"><label for="gsRatio">公設比</label><input type="range" id="gsRatio" min="0" max="45" value="32"><output id="gsRatioo">32%</output></div>
+    <div class="svgbox"><svg id="gsSvg" viewBox="0 0 420 70"></svg></div>
+    <div class="res"><div><span>室內實際坪數</span><strong id="gsIn">20.4 坪</strong></div><div><span>公設坪數</span><strong id="gsPub">9.6 坪</strong></div><div><span>換算平方公尺（室內）</span><strong id="gsM2">67.4 m²</strong></div></div>
+  </div>
+  <p class="small">一般來說：老公寓公設比約 0～10%，華廈約 20～30%，新電梯大樓常在 30～35% 甚至更高。</p>
+
+  <div class="quiz" data-answer="0">
+    <div class="qh">隨堂小測驗</div>
+    <p class="q">權狀 40 坪、公設比 25%，室內大約有幾坪？</p>
+    <div class="opts"><button>30 坪</button><button>40 坪</button><button>25 坪</button><button>10 坪</button></div>
+    <p class="fb" data-ok="對！40 × 25% ＝ 10 坪是公設，40 − 10 ＝ 30 坪。" data-no="提示：先算公設坪數＝40 × 25%，再用總坪數減掉。"></p>
+  </div>
+  <div class="finish"><button class="btn primary done-btn">完成本課</button><div class="stamp">第3課<br>已完成</div><p>完成後，第 3 塊地會蓋起房子。</p></div>
+</section>
+
+<!-- 第4課 -->
+<section class="lesson" id="l4" data-ch="4">
+  <header><span class="num">4</span><h3>租房還是買房？</h3></header>
+  <p class="goal">學完你會知道：租和買各自的優缺點，以及用「房價所得比」判斷房子貴不貴。</p>
+
+  <p>住的地方只有兩種來源：租別人的，或買自己的。沒有哪一種一定比較好，要看你的人生階段和錢包。</p>
+  <div class="tbl"><table>
+    <tr><th></th><th>租房</th><th>買房</th></tr>
+    <tr><td>一開始要多少錢</td><td>押金（通常 2 個月租金）＋第一個月房租</td><td>頭期款（通常房價的 2～3 成）＋稅費</td></tr>
+    <tr><td>每個月付的錢</td><td>房租，付完就沒了</td><td>房貸，一部分是還本金，等於在「存」房子</td></tr>
+    <tr><td>彈性</td><td>換工作、換城市很方便</td><td>要搬家就得賣房或出租，比較麻煩</td></tr>
+    <tr><td>房價漲跌</td><td>和你無關</td><td>漲了你賺，跌了你賠</td></tr>
+    <tr><td>裝潢、自由度</td><td>要房東同意</td><td>自己決定</td></tr>
+    <tr><td>修繕責任</td><td>多半是房東負責</td><td>全部自己來</td></tr>
+  </table></div>
+  <div class="eg">
+    <div class="t">舉個例子</div>
+    <p>阿華剛出社會，工作可能三年內換兩次城市。他選擇租房，因為彈性比較重要。阿美結婚生子，打算在同一個學區住十年以上，她選擇存頭期款買房，讓每月付出去的錢慢慢變成自己的資產。</p>
+  </div>
+
+  <h5>房子貴不貴？看「房價所得比」</h5>
+  <p><span class="term">房價所得比</span> ＝ 房屋總價 ÷ 家庭一年的收入。意思是：「全家不吃不喝，要幾年才買得起這間房子？」</p>
+  <div class="origin" data-seal="源">
+    <p><b class="w">房價所得比（Price-to-Income Ratio）</b></p>
+    <p>這個指標在國際上被廣泛用來比較各城市的購屋壓力，例如 Demographia 國際房價負擔調查。一般認為 3 倍以下算「負擔得起」，超過 5 倍就算「嚴重負擔不起」。台北市的房價所得比多年來都在 15 倍上下，是全世界數一數二難買房的城市。</p>
+  </div>
+  <div class="widget" id="w4">
+    <p class="wt">算算看：要不吃不喝幾年？</p>
+    <div class="ctl"><label for="piP">房屋總價</label><input type="range" id="piP" min="300" max="4000" step="50" value="1500"><output id="piPo">1,500 萬</output></div>
+    <div class="ctl"><label for="piI">家庭年收入</label><input type="range" id="piI" min="40" max="400" step="5" value="120"><output id="piIo">120 萬</output></div>
+    <div class="res"><div><span>房價所得比</span><strong id="piR">12.5 倍</strong></div><div><span>負擔程度</span><strong id="piL">嚴重負擔不起</strong></div></div>
+  </div>
+  <p>另一個常用指標是<span class="term">房貸負擔率</span>：每月房貸 ÷ 每月家庭收入。一般建議不要超過 30～35%，否則生活會很緊繃。第 5 課會教你怎麼算每月房貸。</p>
+
+  <div class="quiz" data-answer="2">
+    <div class="qh">隨堂小測驗</div>
+    <p class="q">房價所得比 10 倍是什麼意思？</p>
+    <div class="opts"><button>房子比去年貴 10 倍</button><button>房貸要繳 10 年</button><button>全家不吃不喝 10 年才買得起</button><button>房子可以住 10 年</button></div>
+    <p class="fb" data-ok="正確！房價是家庭年收入的 10 倍。" data-no="再看一次公式：房屋總價 ÷ 家庭年收入。"></p>
+  </div>
+  <div class="finish"><button class="btn primary done-btn">完成本課</button><div class="stamp">第4課<br>已完成</div><p>第一篇完成！你已經有了房地產的基本觀念。</p></div>
+</section>
+<!-- ================= 第二篇 ================= -->
+<div class="part" id="part2">
+  <div class="pn">第二篇</div>
+  <h2>基礎：買一間房子要知道的事</h2>
+  <p>錢從哪裡來、手續怎麼跑、怎麼證明房子是你的，以及要繳哪些稅。</p>
+</div>
+
+<!-- 第5課 -->
+<section class="lesson" id="l5" data-ch="5">
+  <header><span class="num">5</span><h3>房貸：跟銀行借錢買房</h3></header>
+  <p class="goal">學完你會知道：頭期款、成數、利率、寬限期是什麼，兩種還款方式差在哪，並能自己算每月房貸。</p>
+
+  <p>一間 1,000 萬的房子，很少人能一次拿出全部現金。通常的做法是：自己先付一部分，剩下的跟銀行借，然後花 20～30 年慢慢還。這筆錢就叫<span class="term">房屋貸款</span>，簡稱房貸。</p>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>意思</th><th>例子（1,000 萬的房子）</th></tr>
+    <tr><td><span class="term">頭期款</span></td><td>自己先付的錢</td><td>200 萬</td></tr>
+    <tr><td><span class="term">貸款成數</span></td><td>銀行借你的錢佔房價幾成</td><td>8 成＝800 萬</td></tr>
+    <tr><td><span class="term">利率</span></td><td>借錢的「租金」，每年要付借款的百分之幾</td><td>年利率 2.1%</td></tr>
+    <tr><td><span class="term">貸款年限</span></td><td>要花幾年還完</td><td>30 年＝360 個月</td></tr>
+    <tr><td><span class="term">寬限期</span></td><td>前幾年只付利息、先不還本金</td><td>前 3 年每月只付約 1.4 萬利息</td></tr>
+  </table></div>
+  <div class="origin" data-seal="源">
+    <p><b class="w">成數</b>：「成」是十分之一。八成就是 80%，所以「貸款八成」就是借到房價的 80%。</p>
+    <p><b class="w">頭期款</b>：分好幾期付錢時的「第一期」，也就是一開始要先付的那筆錢。</p>
+  </div>
+  <div class="origin" data-seal="源">
+    <p><b class="w">Mortgage（房貸）與「按揭」</b></p>
+    <p>英文 mortgage 來自古法文 <i>mort</i>（死亡）＋ <i>gage</i>（誓約、抵押品），字面意思是「會死掉的誓約」。因為這個約定有兩種結局：你把錢還清，誓約就「死」了；或是你還不出錢，房子被拿走，誓約也「死」了。香港和廣東說的「按揭」，就是 mortgage 的粵語音譯。</p>
+  </div>
+
+  <h5>銀行為什麼敢借你這麼多錢？</h5>
+  <p>因為銀行會在你的房子上設定<span class="term">抵押權</span>。意思是：房子雖然登記在你名下，但如果你不還錢，銀行可以請法院把房子拍賣，拿賣到的錢來抵債。房子就是你借錢的「擔保品」。</p>
+
+  <h5>兩種還款方式</h5>
+  <div class="tbl"><table>
+    <tr><th></th><th>本息平均攤還</th><th>本金平均攤還</th></tr>
+    <tr><td>怎麼還</td><td>每個月付的<b>總金額一樣</b></td><td>每個月還的<b>本金一樣</b>，利息越來越少</td></tr>
+    <tr><td>月付金</td><td>固定，好規劃</td><td>一開始很高，之後越來越低</td></tr>
+    <tr><td>總利息</td><td>比較多</td><td>比較少</td></tr>
+    <tr><td>適合誰</td><td>大多數上班族</td><td>現在收入高、想少付利息的人</td></tr>
+  </table></div>
+  <p>用本息平均攤還時，前幾年你付的錢大部分都是利息，本金還得很慢；越到後面，本金的比例才越高。下面的圖可以看得很清楚。</p>
+
+  <div class="widget" id="w5">
+    <p class="wt">房貸計算機</p>
+    <p class="wd">調整條件，看看每月要付多少、總共付多少利息。</p>
+    <div class="ctl"><label for="mgP">房屋總價</label><input type="range" id="mgP" min="300" max="5000" step="50" value="1000"><output id="mgPo">1,000 萬</output></div>
+    <div class="ctl"><label for="mgL">貸款成數</label><input type="range" id="mgL" min="5" max="8" step="0.5" value="8"><output id="mgLo">8 成</output></div>
+    <div class="ctl"><label for="mgR">年利率</label><input type="range" id="mgR" min="1" max="6" step="0.05" value="2.1"><output id="mgRo">2.10%</output></div>
+    <div class="ctl"><label for="mgY">貸款年限</label><input type="range" id="mgY" min="10" max="40" step="1" value="30"><output id="mgYo">30 年</output></div>
+    <div class="res">
+      <div><span>頭期款</span><strong id="mgDown"></strong></div>
+      <div><span>本息平均：每月</span><strong id="mgA"></strong></div>
+      <div><span>本息平均：總利息</span><strong id="mgAI"></strong></div>
+      <div><span>本金平均：第一個月</span><strong id="mgB"></strong></div>
+      <div><span>本金平均：總利息</span><strong id="mgBI"></strong></div>
+    </div>
+    <p class="small" style="margin-top:12px">本息平均攤還：每年繳的錢裡，本金（深色）和利息（淺色）各佔多少</p>
+    <div class="svgbox"><svg id="mgSvg" viewBox="0 0 420 180"></svg></div>
+  </div>
+  <div class="warn"><div class="t">注意</div>台灣房貸多半是<b>機動利率</b>，會跟著中央銀行升息、降息而改變。利率從 2% 升到 3%，看起來只多 1%，但 800 萬貸 30 年，每月會多付約 4,000 元。買房時要預留利率上升的空間。</div>
+
+  <div class="quiz" data-answer="1">
+    <div class="qh">隨堂小測驗</div>
+    <p class="q">選擇「寬限期」代表什麼？</p>
+    <div class="opts"><button>銀行免收利息</button><button>前幾年只付利息，本金延後還</button><button>可以晚幾年才開始付錢</button><button>貸款利率固定不變</button></div>
+    <p class="fb" data-ok="正確！寬限期只是把本金延後，之後每月要還的會變多，總利息也會增加。" data-no="提示：寬限期不是免費，利息還是要付的。"></p>
+  </div>
+  <div class="finish"><button class="btn primary done-btn">完成本課</button><div class="stamp">第5課<br>已完成</div><p>完成後，第 5 塊地會蓋起房子。</p></div>
+</section>
+
+<!-- 第6課 -->
+<section class="lesson" id="l6" data-ch="6">
+  <header><span class="num">6</span><h3>買房流程：從看屋到拿鑰匙</h3></header>
+  <p class="goal">學完你會知道：在台灣買一間中古屋的完整步驟，以及每一步要付多少錢、注意什麼。</p>
+  <p>買房子不像去超商付錢拿東西。因為金額大、手續多，通常需要<span class="term">房仲</span>（房屋仲介）幫忙找房和談價格，<span class="term">地政士</span>負責辦理過戶登記。整個流程大約 1～2 個月。點開每一步可以看細節：</p>
+  <ol class="steps">
+    <li><b>評估預算</b><details><summary>要準備什麼？</summary>先算清楚手上有多少頭期款，再請銀行試算能貸多少。記得預留稅費、仲介費、裝潢和搬家費，大約是房價的 5～10%。</details></li>
+    <li><b>找房、看屋</b><details><summary>看屋重點</summary>白天看採光、晚上看治安和噪音、下雨天看漏水。查實價登錄了解附近成交價，並向屋主索取「不動產說明書」。</details></li>
+    <li><b>出價：斡旋金或要約書</b><details><summary>兩者差在哪？</summary>斡旋金是付一筆錢（通常 5～20 萬）給仲介，表示你是認真的；屋主同意後，這筆錢直接轉為定金，若你反悔就會被沒收。要約書則不必付錢，只要簽名表達出價意願，是內政部規定仲介必須告知的另一個選項。</details></li>
+    <li><b>簽約</b><details><summary>付多少？</summary>雙方簽下買賣契約，通常付「簽約款」約房價 10%。建議使用「履約保證」，錢先存到第三方專戶，交屋無誤才撥給賣方。</details></li>
+    <li><b>用印</b><details><summary>是什麼？</summary>雙方把印鑑章、印鑑證明等過戶文件交給地政士，付「用印款」約 10%。</details></li>
+    <li><b>完稅</b><details><summary>是什麼？</summary>地政士向稅捐機關申報契稅、土地增值稅等，雙方繳完各自該繳的稅，買方付「完稅款」約 10%。</details></li>
+    <li><b>過戶</b><details><summary>是什麼？</summary>地政士到地政事務所辦理登記，把所有權人改成你的名字，同時幫銀行設定抵押權。從這一刻起，法律上房子就是你的了。</details></li>
+    <li><b>交屋</b><details><summary>付多少？</summary>銀行撥款付清「尾款」（通常約 70%，大部分來自房貸），賣方交出鑰匙。交屋前要實地點交，確認設備、漏水、欠繳費用都處理好了。</details></li>
+  </ol>
+  <div class="origin" data-seal="源">
+    <p><b class="w">仲介</b>：「仲」是居中，「介」是介紹，意思是站在買賣雙方中間牽線的人。</p>
+    <p><b class="w">斡旋</b>：「斡」是轉動、調解的意思，「斡旋」就是在兩方之間來回溝通、協調。</p>
+    <p><b class="w">過戶</b>：「戶」指登記的戶名，把財產登記的名字從賣方「過」到買方身上。</p>
+    <p><b class="w">地政士</b>：以前叫「代書」，就是古時候「代人書寫文書」的人。2001 年《地政士法》通過後，正式名稱改為地政士，要考國家考試才能執業。</p>
+  </div>
+  <div class="origin" data-seal="源">
+    <p><b class="w">履約保證</b></p>
+    <p>「履」是實踐，「履約」就是實現契約的承諾。以前曾發生買方付了錢、賣方卻把房子又賣給別人，或賣方過戶了、買方卻付不出尾款的糾紛。履約保證就是找一個中立的第三方（通常是銀行或建經公司）先保管價金，雙方都做到了，才把錢撥出去。</p>
+  </div>
+  <div class="eg">
+    <div class="t">舉個例子：1,000 萬的房子，錢怎麼付？</div>
+    <p>假設貸款 7 成：簽約付 100 萬，用印付 100 萬，完稅付 100 萬，這 300 萬是自備款；交屋時銀行撥款 700 萬付清尾款。實際比例依契約約定。</p>
+  </div>
+
+  <div class="quiz" data-answer="3">
+    <div class="qh">隨堂小測驗</div>
+    <p class="q">下列哪一步完成後，房子在法律上才正式變成你的？</p>
+    <div class="opts"><button>看屋</button><button>付斡旋金</button><button>簽約</button><button>在地政事務所過戶登記</button></div>
+    <p class="fb" data-ok="正確！不動產以「登記」為準，完成所有權移轉登記才算數。" data-no="提示：不動產的所有權，要看地政事務所的登記。"></p>
+  </div>
+  <div class="finish"><button class="btn primary done-btn">完成本課</button><div class="stamp">第6課<br>已完成</div><p>完成後，第 6 塊地會蓋起房子。</p></div>
+</section>
+
+<!-- 第7課 -->
+<section class="lesson" id="l7" data-ch="7">
+  <header><span class="num">7</span><h3>產權：怎麼證明房子是你的</h3></header>
+  <p class="goal">學完你會知道：權狀和謄本是什麼、謄本的三個部分怎麼看，以及「持分」的意思。</p>
+  <p>手機可以放在口袋證明是你的，但房子搬不走，要怎麼證明？答案是<mark>登記</mark>。台灣的不動產都登記在各地的<b>地政事務所</b>，就像全國共用的一本大帳簿，記錄每一塊地、每一棟房子屬於誰。</p>
+  <div class="tbl"><table>
+    <tr><th>文件</th><th>是什麼</th><th>比喻</th></tr>
+    <tr><td><span class="term">所有權狀</span></td><td>地政事務所發給所有人的證明文件，土地和建物各一張</td><td>像畢業證書，發給你的那一份</td></tr>
+    <tr><td><span class="term">登記謄本</span></td><td>地政事務所資料庫裡「最新狀態」的抄本，任何人都能申請</td><td>像學校的成績系統，隨時查得到最新資料</td></tr>
+  </table></div>
+  <p>權狀是過去某一天發的，之後如果房子被抵押、被查封，權狀上不會顯示。所以<mark>買房一定要看最新的謄本</mark>，不能只看權狀。</p>
+  <div class="origin" data-seal="源">
+    <p><b class="w">謄本</b>：「謄」是照著原稿抄寫一份。古時候沒有影印機，要一字一字抄；謄本就是從地政機關的登記簿抄出來的副本。</p>
+    <p><b class="w">權狀</b>：「證明權利的文狀」，是國家發給你、證明你擁有這項權利的文件。</p>
+  </div>
+
+  <div class="widget" id="w7">
+    <p class="wt">謄本長什麼樣子？點點看</p>
+    <p class="wd">一份建物（或土地）登記謄本分成三個部分，點一下看說明。以下為示意，非真實資料。</p>
+    <div class="svgbox"><svg id="dbSvg" viewBox="0 0 420 250" style="max-width:520px"></svg></div>
+    <p id="dbTxt" style="margin:10px 0 0;font-size:.95rem">請點選上方任一區塊。</p>
+  </div>
+
+  <h5>持分：大樓的土地是誰的？</h5>
+  <p>透天厝的土地通常整塊都是你的。但一棟 100 戶的大樓蓋在同一塊地上，土地怎麼分？答案是大家<span class="term">共有</span>，每一戶擁有其中一個比例，叫做<span class="term">持分</span>（謄本上寫「權利範圍」）。</p>
+  <div class="eg">
+    <div class="t">舉個例子</div>
+    <p>一塊 500 坪的地蓋了 100 戶，你的權利範圍是 1/100，你的土地持分就是 5 坪。雖然你不能說「這 5 坪在哪個角落」，但將來大樓老舊要拆掉重建（都市更新），每戶能分回多少，就和持分大小有關。所以<b>土地持分越多，房子長期越保值</b>。</p>
+  </div>
+  <div class="origin" data-seal="源">
+    <p><b class="w">他項權利</b>：所有權「以外」的其他權利，例如銀行的抵押權、別人在你土地上蓋房子的地上權。「他項」就是「其他項目」。</p>
+  </div>
+
+  <div class="quiz" data-answer="2">
+    <div class="qh">隨堂小測驗</div>
+    <p class="q">想知道一間房子有沒有被銀行設定抵押，應該看謄本的哪個部分？</p>
+    <div class="opts"><button>標示部</button><button>所有權部</button><button>他項權利部</button><button>權狀的封面</button></div>
+    <p class="fb" data-ok="正確！抵押權屬於所有權以外的權利，記載在他項權利部。" data-no="提示：抵押權是「所有權以外的其他權利」。"></p>
+  </div>
+  <div class="finish"><button class="btn primary done-btn">完成本課</button><div class="stamp">第7課<br>已完成</div><p>完成後，第 7 塊地會蓋起房子。</p></div>
+</section>
+
+<!-- 第8課 -->
+<section class="lesson" id="l8" data-ch="8">
+  <header><span class="num">8</span><h3>買賣房子的稅與費</h3></header>
+  <p class="goal">學完你會知道：買房、持有、賣房三個階段各要繳哪些稅，以及房地合一稅為什麼持有越久越少。</p>
+  <div class="warn"><div class="t">先說清楚</div>本課以台灣現行制度為例幫助理解，稅率和規定經常調整，實際交易請以財政部最新法規或專業人士意見為準。</div>
+  <p>房子的稅可以用「三個階段」來記：<b>買的時候、住著的時候、賣的時候</b>。</p>
+  <div class="tbl"><table>
+    <tr><th>階段</th><th>稅費名稱</th><th>誰繳</th><th>大概怎麼算</th></tr>
+    <tr><td rowspan="3">買的時候</td><td><span class="term">契稅</span></td><td>買方</td><td>房屋評定現值 × 6%</td></tr>
+    <tr><td><span class="term">印花稅</span></td><td>買方（公契）</td><td>契約上的房屋與土地價值 × 0.1%</td></tr>
+    <tr><td>登記規費、代書費、仲介費</td><td>雙方</td><td>仲介費法定上限合計成交價 6%，常見買方 1～2%、賣方約 4%</td></tr>
+    <tr><td rowspan="2">住著的時候</td><td><span class="term">房屋稅</span></td><td>屋主</td><td>每年 5 月繳，自住稅率最低</td></tr>
+    <tr><td><span class="term">地價稅</span></td><td>地主</td><td>每年 11 月繳，自用住宅用地 0.2%</td></tr>
+    <tr><td rowspan="2">賣的時候</td><td><span class="term">土地增值稅</span></td><td>賣方</td><td>依土地公告現值的漲幅，一般 20～40%，自用住宅優惠 10%</td></tr>
+    <tr><td><span class="term">房地合一稅</span></td><td>賣方</td><td>依實際賺到的錢，按持有年數課稅（見下方工具）</td></tr>
+  </table></div>
+  <div class="origin" data-seal="源">
+    <p><b class="w">印花稅</b>：1624 年荷蘭政府想增加稅收又怕人民反彈，懸賞徵求好點子，最後選中「在契約文件上貼印花票證」的方法。因為只是貼一張小票，大家比較不會抗拒。現在台灣已不用貼票，但名稱保留下來。</p>
+    <p><b class="w">契稅</b>：「契」就是契約。買賣、贈與房屋時，依契約向政府繳的稅。</p>
+  </div>
+  <div class="origin" data-seal="源">
+    <p><b class="w">土地增值稅與「漲價歸公」</b></p>
+    <p>孫中山提出「平均地權」的主張，認為土地漲價常常是因為政府建設、城市發展，不是地主自己努力的結果，所以漲價的利益應該有一部分還給社會，這叫「漲價歸公」。土地增值稅就是依照這個想法設計的。</p>
+  </div>
+
+  <h5>房地合一稅：為什麼要持有久一點？</h5>
+  <p>以前賣房子時，土地只依政府公告的價格課稅，而公告價格常遠低於市價，所以短期買賣賺很多卻繳很少稅。2016 年起改成<span class="term">房地合一</span>：房子和土地合在一起，<b>用實際賣價減買價的獲利</b>來課稅。2021 年再修正（俗稱房地合一 2.0），短期炒作課重稅。</p>
+  <div class="widget" id="w8">
+    <p class="wt">持有越久，稅率越低</p>
+    <p class="wd">以境內個人、非自住為例。拉動持有年數與獲利，看看要繳多少稅（簡化計算，未扣除相關費用與土地漲價總數額）。</p>
+    <div class="ctl"><label for="hgY">持有年數</label><input type="range" id="hgY" min="0.5" max="12" step="0.5" value="1.5"><output id="hgYo">1.5 年</output></div>
+    <div class="ctl"><label for="hgG">賣出獲利</label><input type="range" id="hgG" min="50" max="1000" step="10" value="200"><output id="hgGo">200 萬</output></div>
+    <div class="svgbox"><svg id="hgSvg" viewBox="0 0 420 120"></svg></div>
+    <div class="res"><div><span>適用稅率</span><strong id="hgR"></strong></div><div><span>應繳稅額</span><strong id="hgT"></strong></div><div><span>稅後獲利</span><strong id="hgN"></strong></div></div>
+    <p class="small" style="margin-top:8px">若是符合條件的自住房地（設籍並持有滿 6 年等），獲利 400 萬以內免稅，超過部分稅率 10%。</p>
+  </div>
+
+  <div class="quiz" data-answer="0">
+    <div class="qh">隨堂小測驗</div>
+    <p class="q">房地合一稅設計成「持有越短，稅率越高」，主要目的是什麼？</p>
+    <div class="opts"><button>抑制短期炒房</button><button>鼓勵大家多買房</button><button>讓房價一定下跌</button><button>減少地政士的工作</button></div>
+    <p class="fb" data-ok="正確！短期買賣要繳重稅，炒作的利潤就變少了。" data-no="提示：想一想，誰最常在一兩年內就把房子轉賣？"></p>
+  </div>
+  <div class="finish"><button class="btn primary done-btn">完成本課</button><div class="stamp">第8課<br>已完成</div><p>第二篇完成！你已經知道買一間房子的完整過程。</p></div>
+</section>
+<!-- ================= 第三篇 ================= -->
+<div class="part" id="part3">
+  <div class="pn">第三篇</div>
+  <h2>進階：用投資人的眼睛看房子</h2>
+  <p>專業的人怎麼判斷一間房子值多少、能賺多少、可能賠在哪裡。</p>
+</div>
+
+<!-- 第9課 -->
+<section class="lesson" id="l9" data-ch="9">
+  <header><span class="num">9</span><h3>房子值多少錢？估價三大方法</h3></header>
+  <p class="goal">學完你會知道：市價和政府價格的差別、實價登錄怎麼用，以及專業估價師用的比較法、成本法、收益法。</p>
+
+  <h5>一間房子，好幾種「價格」</h5>
+  <div class="tbl"><table>
+    <tr><th>價格</th><th>誰定的</th><th>用途</th></tr>
+    <tr><td><span class="term">市價</span></td><td>市場上買賣雙方談出來的</td><td>真正的交易價格</td></tr>
+    <tr><td><span class="term">公告現值</span>（土地）</td><td>政府每年公告</td><td>計算土地增值稅</td></tr>
+    <tr><td><span class="term">評定現值</span>（房屋）</td><td>政府評定</td><td>計算房屋稅、契稅</td></tr>
+  </table></div>
+  <p>政府的價格通常比市價低很多，所以不能拿來當買賣參考。要知道真正的行情，要查<span class="term">實價登錄</span>。</p>
+  <div class="origin" data-seal="源">
+    <p><b class="w">實價登錄</b></p>
+    <p>2012 年 8 月以前，台灣的房屋成交價是「秘密」，只有仲介知道，買方常常不知道自己有沒有買貴。2012 年起規定買賣成交後要向政府申報「實際價格」並公開，所以叫「實價」登錄。2021 年再升級為「實價登錄 2.0」，門牌完整公開、預售屋也要即時申報。現在在內政部網站就能免費查詢。</p>
+  </div>
+
+  <h5>方法一：比較法（看鄰居賣多少）</h5>
+  <p>找附近條件相似、最近成交的房子當「比較標的」，再依照差異加減調整。這是住宅最常用的方法。</p>
+  <div class="eg">
+    <div class="t">舉個例子</div>
+    <p>隔壁棟同樣屋齡的房子，上個月成交單價每坪 50 萬。但你要估的那間：樓層比較高、景觀好（＋3%），屋況比較差需要整修（－5%）。調整後：50 萬 × (1 ＋ 3% － 5%) ＝ 每坪 49 萬。</p>
+  </div>
+
+  <h5>方法二：成本法（重新蓋一間要多少錢）</h5>
+  <p>價值 ＝ 土地價值 ＋ 重新蓋一棟同樣房子的成本 － <span class="term">折舊</span>。房子會隨時間變舊，價值會減少，這就是折舊；但土地不會變舊。這個方法常用在新房子、廠房、學校這類比較少買賣的建物。</p>
+  <div class="origin" data-seal="源">
+    <p><b class="w">折舊</b>：「折」是打折、減少，「舊」是變舊。東西因為使用和時間變舊而減少的價值。鋼筋混凝土房屋在估價上的經濟耐用年數通常約 50 年，意思是大約每年減少一部分建物價值。</p>
+  </div>
+
+  <h5>方法三：收益法（它能賺多少錢）</h5>
+  <p>如果一間店面每年能收 60 萬租金，它值多少？收益法的想法是：<b>一項資產的價值，等於它未來能帶來的收入</b>。</p>
+  <p>最簡單的公式是：<b>價值 ＝ 每年淨收益 ÷ <span class="term">資本化率</span></b>。</p>
+  <div class="origin" data-seal="源">
+    <p><b class="w">資本化率（Capitalization Rate，Cap Rate）</b></p>
+    <p>「資本化」就是把一年一年的收入，換算成今天一筆「本金」的價值。資本化率是投資人要求的年報酬率，市場越搶手、風險越低，資本化率就越低，換算出來的價值就越高。</p>
+  </div>
+  <div class="widget" id="w9">
+    <p class="wt">收益法計算機</p>
+    <p class="wd">資本化率只要變動一點點，估出來的價值就差很多。</p>
+    <div class="ctl"><label for="caN">每年淨收益</label><input type="range" id="caN" min="10" max="200" step="1" value="30"><output id="caNo">30 萬</output></div>
+    <div class="ctl"><label for="caR">資本化率</label><input type="range" id="caR" min="1.5" max="8" step="0.1" value="2.5"><output id="caRo">2.5%</output></div>
+    <div class="res"><div><span>估計價值</span><strong id="caV"></strong></div><div><span>換算：幾年的收益</span><strong id="caY"></strong></div></div>
+  </div>
+  <p>專業估價師會同時用兩到三種方法，互相對照，最後決定一個合理價格。</p>
+
+  <div class="quiz" data-answer="1">
+    <div class="qh">隨堂小測驗</div>
+    <p class="q">估價一間出租中的辦公大樓，最適合的主要方法是？</p>
+    <div class="opts"><button>成本法</button><button>收益法</button><button>看政府公告現值</button><button>問屋主想賣多少</button></div>
+    <p class="fb" data-ok="正確！會收租的房地產，用它產生的收益來估價最合理。" data-no="提示：這棟大樓的主要價值，來自它每年收到的租金。"></p>
+  </div>
+  <div class="finish"><button class="btn primary done-btn">完成本課</button><div class="stamp">第9課<br>已完成</div><p>完成後，第 9 塊地會蓋起房子。</p></div>
+</section>
+
+<!-- 第10課 -->
+<section class="lesson" id="l10" data-ch="10">
+  <header><span class="num">10</span><h3>投資報酬率與槓桿</h3></header>
+  <p class="goal">學完你會知道：房地產投資的兩種獲利來源、投報率怎麼算，以及槓桿為什麼能放大獲利，也能放大虧損。</p>
+
+  <p>投資房地產賺錢的方式只有兩種：</p>
+  <div class="tbl"><table>
+    <tr><th>方式</th><th>意思</th><th>比喻</th></tr>
+    <tr><td><span class="term">租金收入</span></td><td>把房子租出去，每月收租</td><td>像種一棵果樹，每年收果子</td></tr>
+    <tr><td><span class="term">資本利得</span></td><td>賣出價比買進價高，賺到價差</td><td>把果樹整棵賣掉，賣得比買的貴</td></tr>
+  </table></div>
+  <div class="origin" data-seal="源">
+    <p><b class="w">資本利得（Capital Gain）</b>：「資本」指你投入的財產本身，「利得」是獲利。因為資產本身增值而賺到的錢，和每月收租的「收益」不一樣。</p>
+    <p><b class="w">現金流（Cash Flow）</b>：錢像水一樣流進流出。每月租金流進來，房貸、管理費流出去，剩下的就是淨現金流。流進比流出多叫「正現金流」。</p>
+  </div>
+
+  <h5>投報率怎麼算？</h5>
+  <p><b>毛投報率</b> ＝ 一年租金 ÷ 房屋總價。<b>淨投報率</b>則要先扣掉管理費、稅、修繕、空租期間等費用，更接近真實。</p>
+  <div class="widget" id="w10a">
+    <p class="wt">投報率計算機</p>
+    <div class="ctl"><label for="yrP">房屋總價</label><input type="range" id="yrP" min="300" max="3000" step="50" value="1000"><output id="yrPo">1,000 萬</output></div>
+    <div class="ctl"><label for="yrR">每月租金</label><input type="range" id="yrR" min="0.5" max="10" step="0.1" value="2.5"><output id="yrRo">2.5 萬</output></div>
+    <div class="ctl"><label for="yrC">每年支出</label><input type="range" id="yrC" min="0" max="15" step="0.5" value="4"><output id="yrCo">4 萬</output></div>
+    <div class="ctl"><label for="yrV">空租月數／年</label><input type="range" id="yrV" min="0" max="4" step="1" value="1"><output id="yrVo">1 個月</output></div>
+    <div class="res"><div><span>毛投報率</span><strong id="yrG"></strong></div><div><span>淨投報率</span><strong id="yrN"></strong></div><div><span>每年淨收入</span><strong id="yrI"></strong></div></div>
+  </div>
+  <p>台北市住宅的毛投報率常只有 2% 左右，比銀行定存高不了多少。所以很多人買房投資，其實是期待資本利得，而不是租金。</p>
+
+  <h5>槓桿：用小力氣舉起大東西</h5>
+  <div class="origin" data-seal="源">
+    <p><b class="w">槓桿（Leverage）</b></p>
+    <p>古希臘科學家阿基米德說過：「給我一個支點，我就能舉起地球。」槓桿讓小小的力量移動很重的東西。在金融上，<b>借錢投資</b>就是槓桿：用少少的自己的錢，控制很大的資產。</p>
+  </div>
+  <p>假設你用 200 萬自備款，加上借來的 800 萬，買下 1,000 萬的房子。房價漲 10% 變成 1,100 萬，你賺了 100 萬，但對你自己的 200 萬來說，報酬率是 50%！可是反過來，房價跌 10%，你就賠掉自己一半的錢。</p>
+  <div class="widget" id="w10b">
+    <p class="wt">槓桿模擬器</p>
+    <p class="wd">1,000 萬的房子。改變貸款成數與房價漲跌，看看「自己的錢」賺賠多少（已扣一年房貸利息 2%，未計其他費用）。</p>
+    <div class="ctl"><label for="lvL">貸款成數</label><input type="range" id="lvL" min="0" max="9" step="1" value="8"><output id="lvLo">8 成</output></div>
+    <div class="ctl"><label for="lvC">房價漲跌</label><input type="range" id="lvC" min="-30" max="30" step="1" value="10"><output id="lvCo">+10%</output></div>
+    <div class="svgbox"><svg id="lvSvg" viewBox="0 0 420 150"></svg></div>
+    <div class="res"><div><span>自己出的錢</span><strong id="lvE"></strong></div><div><span>賺賠金額</span><strong id="lvG"></strong></div><div><span>自有資金報酬率</span><strong id="lvR"></strong></div></div>
+  </div>
+  <div class="warn"><div class="t">重點</div>槓桿是雙面刃。借越多，漲的時候賺越多，跌的時候也賠越多。如果房價跌到比貸款還低，賣掉房子都不夠還銀行，這叫「<b>資不抵債</b>」或「套牢」。</div>
+
+  <div class="quiz" data-answer="2">
+    <div class="qh">隨堂小測驗</div>
+    <p class="q">一間 500 萬的房子，每月租金 1.5 萬，毛投報率是多少？</p>
+    <div class="opts"><button>1.5%</button><button>3%</button><button>3.6%</button><button>18%</button></div>
+    <p class="fb" data-ok="正確！1.5 萬 × 12 ＝ 18 萬，18 ÷ 500 ＝ 3.6%。" data-no="提示：先把月租乘以 12 變成年租金，再除以總價。"></p>
+  </div>
+  <div class="finish"><button class="btn primary done-btn">完成本課</button><div class="stamp">第10課<br>已完成</div><p>完成後，第 10 塊地會蓋起房子。</p></div>
+</section>
+
+<!-- 第11課 -->
+<section class="lesson" id="l11" data-ch="11">
+  <header><span class="num">11</span><h3>看不見的風險</h3></header>
+  <p class="goal">學完你會知道：房地產投資的五大風險、房屋本身的常見問題，以及看屋時怎麼檢查。</p>
+  <p>有人說「房地產只漲不跌」，這句話很危險。歷史上，1990 年代日本泡沫破裂後，許多地區的房價、地價腰斬甚至跌掉一大半，二、三十年都沒回到高點；2008 年美國的次級房貸風暴，更讓幾百萬個家庭失去房子。</p>
+  <div class="tbl"><table>
+    <tr><th>風險</th><th>意思</th><th>怎麼降低</th></tr>
+    <tr><td>市場風險</td><td>房價下跌</td><td>不追高、選好地段、長期持有</td></tr>
+    <tr><td>利率風險</td><td>利率上升，房貸變重</td><td>房貸負擔率別太高，預留緩衝</td></tr>
+    <tr><td>流動性風險</td><td>急需用錢卻賣不掉</td><td>保留緊急預備金，不要把錢全押在房子</td></tr>
+    <tr><td>空租風險</td><td>房子租不出去，沒收入還要繳貸款</td><td>選容易出租的地段與坪數</td></tr>
+    <tr><td>政策風險</td><td>政府打房、加稅、限貸</td><td>關注政策，不過度槓桿</td></tr>
+  </table></div>
+  <div class="origin" data-seal="源">
+    <p><b class="w">泡沫（Bubble）</b></p>
+    <p>價格漲得遠超過真正價值，像吹泡泡一樣越吹越大，最後一戳就破。這個說法來自 1720 年英國的「南海泡沫事件」，當時南海公司股價被炒上天後崩盤，連科學家牛頓都賠了一大筆錢。據說他感嘆：「我能算出天體的運行，卻算不出人類的瘋狂。」</p>
+  </div>
+
+  <h5>房子本身的問題</h5>
+  <div class="tbl"><table>
+    <tr><th>名稱</th><th>是什麼、怎麼來的</th></tr>
+    <tr><td><span class="term">海砂屋</span></td><td>蓋房子時用了沒洗乾淨的海砂拌混凝土。海砂裡的鹽分（氯離子）會讓鋼筋生鏽膨脹，混凝土剝落，嚴重時結構不安全。可以做「氯離子含量檢測」。</td></tr>
+    <tr><td><span class="term">輻射屋</span></td><td>1980 年代初期，部分建築用到受放射性物質（鈷-60）污染的鋼筋。政府有公開輻射屋清單可查詢。</td></tr>
+    <tr><td><span class="term">凶宅</span></td><td>曾經發生非自然死亡（如命案、自殺）的房子。民間忌諱，價格通常比行情低兩到三成。賣方有告知義務。</td></tr>
+    <tr><td>漏水、壁癌</td><td>最常見的糾紛。牆面出現白色粉末結晶（壁癌）通常代表長期潮濕。</td></tr>
+    <tr><td>違章建築</td><td>沒有申請建照就蓋的部分，例如頂樓加蓋。隨時可能被拆，也不在權狀坪數裡。</td></tr>
+    <tr><td>土壤液化、斷層帶</td><td>地震時，飽含水的砂土會像液體一樣失去支撐力，讓房子傾斜下陷。政府有「土壤液化潛勢」地圖可查。</td></tr>
+  </table></div>
+
+  <div class="widget" id="w11">
+    <p class="wt">看屋檢查清單</p>
+    <p class="wd">下次跟家人去看房子，可以帶著這張清單。打勾看看檢查了幾項。</p>
+    <div id="ckList" style="display:grid;gap:6px;font-size:.95rem"></div>
+    <p class="small" id="ckTxt" style="margin-top:10px"></p>
+  </div>
+
+  <div class="quiz" data-answer="3">
+    <div class="qh">隨堂小測驗</div>
+    <p class="q">海砂屋最主要的危險是什麼？</p>
+    <div class="opts"><button>房子會有海水味</button><button>容易招來螃蟹</button><button>房價一定會上漲</button><button>鹽分讓鋼筋生鏽，影響結構安全</button></div>
+    <p class="fb" data-ok="正確！氯離子會腐蝕鋼筋，是結構問題。" data-no="提示：想想鹽分和鐵放在一起會怎樣。"></p>
+  </div>
+  <div class="finish"><button class="btn primary done-btn">完成本課</button><div class="stamp">第11課<br>已完成</div><p>第三篇完成！你已經能用投資人的角度看房子。</p></div>
+</section>
+<!-- ================= 第四篇 ================= -->
+<div class="part" id="part4">
+  <div class="pn">第四篇</div>
+  <h2>專業：看懂整座城市</h2>
+  <p>從一間房子放大到一座城市：土地能蓋多高、建商怎麼賺錢、金融怎麼影響房市，以及房市的漲跌週期。</p>
+</div>
+
+<!-- 第12課 -->
+<section class="lesson" id="l12" data-ch="12">
+  <header><span class="num">12</span><h3>都市計畫：建蔽率與容積率</h3></header>
+  <p class="goal">學完你會知道：土地使用分區、建蔽率、容積率的意思，以及為什麼同樣大小的地，價值可以差很多。</p>
+  <p>如果每個人都能在自己的地上隨便蓋，工廠可能蓋在小學旁邊、夜店開在醫院對面、大樓蓋到遮住所有人的陽光。為了避免這種混亂，政府會事先規劃每塊地的用途和能蓋多大，這就是<span class="term">都市計畫</span>。</p>
+
+  <h5>土地使用分區：每塊地都有顏色</h5>
+  <p>打開都市計畫圖，會看到不同顏色的區塊，每種顏色代表一種用途：</p>
+  <svg viewBox="0 0 520 190" style="width:100%;max-width:560px;height:auto" role="img" aria-label="都市計畫分區示意圖">
+    <rect x="10" y="10" width="300" height="170" fill="var(--road)"/>
+    <rect x="18" y="18" width="130" height="75" fill="#F2D06B"/><rect x="156" y="18" width="146" height="75" fill="#F2D06B"/>
+    <rect x="18" y="101" width="80" height="71" fill="#E0726A"/><rect x="106" y="101" width="90" height="71" fill="#8FC98F"/>
+    <rect x="204" y="101" width="98" height="71" fill="#B9A0D8"/>
+    <circle cx="151" cy="137" r="10" fill="none" stroke="#2b6" stroke-width="0"/>
+    <g font-size="13" fill="#1d2b36" text-anchor="middle"><text x="83" y="60">住宅區</text><text x="229" y="60">住宅區</text><text x="58" y="141">商業區</text><text x="151" y="141">公園</text><text x="253" y="141">工業區</text></g>
+    <g font-size="13" fill="currentColor">
+      <rect x="330" y="20" width="16" height="16" fill="#F2D06B"/><text x="354" y="33">住宅區：黃色</text>
+      <rect x="330" y="50" width="16" height="16" fill="#E0726A"/><text x="354" y="63">商業區：紅色</text>
+      <rect x="330" y="80" width="16" height="16" fill="#B9A0D8"/><text x="354" y="93">工業區：紫色</text>
+      <rect x="330" y="110" width="16" height="16" fill="#8FC98F"/><text x="354" y="123">公園、農業區：綠色</text>
+      <rect x="330" y="140" width="16" height="16" fill="var(--road)"/><text x="354" y="153">道路：灰白</text>
+    </g>
+  </svg>
+  <p class="small">各縣市圖例略有差異，以上為常見配色。</p>
+
+  <h5>建蔽率與容積率</h5>
+  <p>知道一塊地能「做什麼」之後，還要知道能「蓋多大」。這由兩個數字決定：</p>
+  <div class="tbl"><table>
+    <tr><th>名詞</th><th>公式</th><th>白話</th></tr>
+    <tr><td><span class="term">建蔽率</span></td><td>建築物投影面積 ÷ 基地面積</td><td>房子可以「蓋住」多少比例的地面</td></tr>
+    <tr><td><span class="term">容積率</span></td><td>總樓地板面積 ÷ 基地面積</td><td>所有樓層加起來，最多可以蓋幾倍的土地面積</td></tr>
+  </table></div>
+  <div class="origin" data-seal="源">
+    <p><b class="w">建蔽率（Building Coverage Ratio）</b>：「蔽」是遮蓋。從天空往下看，建築物遮住了多少土地。建蔽率限制的目的，是讓每塊地都留下空地，保持通風、採光和防火距離。</p>
+    <p><b class="w">容積率（Floor Area Ratio，FAR）</b>：「容積」原意是能容納的量，在這裡指能容納的「樓地板總面積」。1916 年美國紐約訂出第一部全面的分區管制法規，就是因為摩天大樓越蓋越高，擋住了街道的陽光和空氣。</p>
+  </div>
+  <div class="widget" id="w12">
+    <p class="wt">動手蓋蓋看</p>
+    <p class="wd">一塊 100 坪的地。調整建蔽率與容積率，看房子能蓋多寬、多高（假設每層蓋滿、每層高 3 公尺）。</p>
+    <div class="ctl"><label for="bcR">建蔽率</label><input type="range" id="bcR" min="20" max="80" step="5" value="50"><output id="bcRo">50%</output></div>
+    <div class="ctl"><label for="farR">容積率</label><input type="range" id="farR" min="60" max="800" step="20" value="300"><output id="farRo">300%</output></div>
+    <div class="svgbox"><svg id="bdSvg" viewBox="0 0 420 260"></svg></div>
+    <div class="res"><div><span>每層最大面積</span><strong id="bdF"></strong></div><div><span>總樓地板面積</span><strong id="bdT"></strong></div><div><span>可蓋樓層</span><strong id="bdN"></strong></div></div>
+  </div>
+  <div class="eg">
+    <div class="t">為什麼這很重要？</div>
+    <p>兩塊一樣 100 坪的地，一塊容積率 225%（例如台北市第三種住宅區），一塊 560%（例如台北市第三種商業區）。前者總共能蓋 225 坪，後者能蓋 560 坪。建商能賣的坪數差了一倍多，<b>土地的價值自然也差很多</b>。所以專業的人看土地，第一件事就是查使用分區和容積率。</p>
+  </div>
+  <p>另外還有<span class="term">容積獎勵</span>（例如提供公共空間、做綠建築，政府多給容積）與<span class="term">容積移轉</span>（把保留古蹟、公共設施用地上不能用的容積，轉到別的土地使用）。</p>
+
+  <div class="quiz" data-answer="1">
+    <div class="qh">隨堂小測驗</div>
+    <p class="q">200 坪的地，建蔽率 50%、容積率 400%，如果每層都蓋滿，大約能蓋幾層？</p>
+    <div class="opts"><button>4 層</button><button>8 層</button><button>2 層</button><button>20 層</button></div>
+    <p class="fb" data-ok="正確！每層 200 × 50% ＝ 100 坪，總共 200 × 400% ＝ 800 坪，800 ÷ 100 ＝ 8 層。" data-no="提示：先算每層面積，再算總樓地板面積，兩個相除。"></p>
+  </div>
+  <div class="finish"><button class="btn primary done-btn">完成本課</button><div class="stamp">第12課<br>已完成</div><p>完成後，第 12 塊地會蓋起房子。</p></div>
+</section>
+
+<!-- 第13課 -->
+<section class="lesson" id="l13" data-ch="13">
+  <header><span class="num">13</span><h3>預售屋、建商與都市更新</h3></header>
+  <p class="goal">學完你會知道：預售屋和成屋的差別、建商從買地到交屋的流程，以及都更與危老重建是什麼。</p>
+  <div class="tbl"><table>
+    <tr><th>種類</th><th>意思</th><th>優點</th><th>缺點</th></tr>
+    <tr><td><span class="term">預售屋</span></td><td>房子還沒蓋好（甚至還沒動工）就先賣</td><td>付款分期、可客製變更格局</td><td>看不到實體、要等 2～4 年、有建商風險</td></tr>
+    <tr><td>新成屋</td><td>剛蓋好、沒人住過</td><td>看得到實品、馬上可住</td><td>價格通常較高</td></tr>
+    <tr><td>中古屋</td><td>有人住過的房子</td><td>選擇多、看得到周邊實況</td><td>屋況要仔細檢查</td></tr>
+  </table></div>
+  <div class="origin" data-seal="源">
+    <p><b class="w">預售屋與「樓花」</b>：「預」是事先。房子還沒蓋好就先賣，所以叫預售。香港把預售屋叫「樓花」，就像花開了還沒結果，要等一段時間才能收成。</p>
+    <p><b class="w">建照與使照</b>：「建造執照」是政府准許你開始蓋的許可；「使用執照」是蓋好後檢查合格、准許使用的許可。預售屋一定要先拿到建照才能賣。</p>
+  </div>
+
+  <h5>建商怎麼蓋一棟大樓？</h5>
+  <ol class="steps">
+    <li><b>找地、買地</b><details><summary>細節</summary>評估地段、使用分區、容積率，計算能蓋多少坪、能賣多少錢。土地成本常佔總成本的一半以上。</details></li>
+    <li><b>規劃設計、申請建照</b><details><summary>細節</summary>委託建築師設計，向政府申請建造執照。</details></li>
+    <li><b>公開銷售（預售）</b><details><summary>細節</summary>蓋接待中心和樣品屋，常委託「代銷公司」負責銷售。預售屋契約必須有「價金履約保證」機制。</details></li>
+    <li><b>施工興建</b><details><summary>細節</summary>營造廠依工程進度施工，買方依進度繳「工程款」。</details></li>
+    <li><b>取得使照、交屋</b><details><summary>細節</summary>完工驗收拿到使用執照，買方辦理房貸付尾款，拿到鑰匙。</details></li>
+  </ol>
+  <div class="origin" data-seal="源">
+    <p><b class="w">代銷</b>：「代理銷售」的簡稱，專門幫建商賣預售屋和新成屋的公司。和賣中古屋的「仲介」不同。</p>
+  </div>
+  <div class="warn"><div class="t">防止炒作</div>過去有人付一點訂金拿到預售屋的「紅單」（購買權），轉手加價賣給別人賺價差，推高房價。2023 年起修正的《平均地權條例》規定，預售屋和新建成屋的買賣契約原則上不得讓與或轉售。</div>
+
+  <h5>都市更新與危老重建</h5>
+  <p>台灣很多房子都超過 30、40 年，老舊、沒電梯、不耐震。把一個老舊街區整合起來拆掉重建，叫做<span class="term">都市更新</span>（簡稱都更）；只針對單棟危險或老舊建物重建的，叫<span class="term">危老重建</span>。</p>
+  <div class="origin" data-seal="源">
+    <p><b class="w">危老</b>：《都市危險及老舊建築物加速重建條例》的簡稱，2017 年公布。「危」指耐震評估不合格的危險建築，「老」指屋齡 30 年以上的老舊建築。因為門檻比都更低（需全體所有人同意，但基地可以很小），推動速度比較快。</p>
+  </div>
+  <div class="eg">
+    <div class="t">舉個例子：合建分屋</div>
+    <p>一棟老公寓的住戶提供土地，建商出錢拆掉重蓋。蓋好後，原本的住戶按比例分回新房子，建商拿剩下的房子去賣回收成本和利潤。這叫「合建分屋」。因為重建時常有容積獎勵，新大樓能蓋得比原本大，雙方都有利可圖。這也是第 7 課說「土地持分越多越保值」的原因。</p>
+  </div>
+
+  <div class="quiz" data-answer="0">
+    <div class="qh">隨堂小測驗</div>
+    <p class="q">買預售屋最主要的風險是什麼？</p>
+    <div class="opts"><button>房子還沒蓋好，要承擔建商和完工的不確定性</button><button>一定比中古屋便宜</button><button>不用繳任何稅</button><button>不能申請房貸</button></div>
+    <p class="fb" data-ok="正確！所以要選信用好的建商，並確認有履約保證。" data-no="提示：買預售屋時，你看到的只是樣品屋和圖面。"></p>
+  </div>
+  <div class="finish"><button class="btn primary done-btn">完成本課</button><div class="stamp">第13課<br>已完成</div><p>完成後，第 13 塊地會蓋起房子。</p></div>
+</section>
+
+<!-- 第14課 -->
+<section class="lesson" id="l14" data-ch="14">
+  <header><span class="num">14</span><h3>房地產金融：利率、信用管制與 REITs</h3></header>
+  <p class="goal">學完你會知道：中央銀行怎麼影響房市、什麼是選擇性信用管制、REITs 如何讓小錢也能投資大樓，以及次貸危機的教訓。</p>
+  <p>房地產和金融像一對連體嬰。大多數人買房都要貸款，所以<mark>錢好不好借、利息高不高</mark>，直接決定有多少人買得起房。</p>
+
+  <h5>中央銀行的兩把工具</h5>
+  <div class="tbl"><table>
+    <tr><th>工具</th><th>做法</th><th>影響範圍</th></tr>
+    <tr><td>調整利率</td><td>升息讓借錢變貴，降息讓借錢變便宜</td><td>全面：房貸、車貸、企業借款都受影響</td></tr>
+    <tr><td><span class="term">選擇性信用管制</span></td><td>只針對特定對象限制貸款，例如第二戶房貸成數降低、豪宅貸款上限、公司法人購屋</td><td>精準：只打投資炒作，不影響一般首購族</td></tr>
+  </table></div>
+  <div class="origin" data-seal="源">
+    <p><b class="w">選擇性信用管制</b>：「信用」在金融上指借錢的能力；「選擇性」表示只挑特定對象管，不是全面性。媒體常稱為「限貸令」。台灣央行自 2020 年底起多次祭出，限制多戶持有者的貸款成數。</p>
+  </div>
+
+  <h5>REITs：用一張股票當大樓房東</h5>
+  <p>一棟商辦大樓動輒幾十億，一般人買不起。但如果把它切成很多小份賣給大眾呢？這就是<span class="term">REITs</span>（不動產投資信託）。</p>
+  <div class="svgbox"><svg viewBox="0 0 560 170" style="max-width:600px" role="img" aria-label="REITs 資金流向圖">
+    <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
+    <g fill="none" stroke="currentColor" stroke-width="1.8">
+      <rect x="10" y="55" width="120" height="56" rx="8"/><rect x="220" y="55" width="120" height="56" rx="8"/><rect x="430" y="55" width="120" height="56" rx="8"/>
+      <path d="M130 70 H218" marker-end="url(#ar)"/><path d="M340 70 H428" marker-end="url(#ar)"/>
+      <path d="M428 98 H342" marker-end="url(#ar)" stroke-dasharray="5 4"/><path d="M218 98 H132" marker-end="url(#ar)" stroke-dasharray="5 4"/>
+    </g>
+    <g font-size="14" fill="currentColor" text-anchor="middle">
+      <text x="70" y="88">投資人</text><text x="280" y="88">REITs</text><text x="490" y="88">大樓、商場</text>
+      <text x="174" y="62" font-size="12">出錢買受益證券</text><text x="385" y="62" font-size="12">買下不動產</text>
+      <text x="385" y="124" font-size="12">租金收入</text><text x="174" y="124" font-size="12">定期配息</text>
+      <text x="280" y="160" font-size="12">實線：錢流進去　虛線：收益流回來</text>
+    </g>
+  </svg></div>
+  <div class="origin" data-seal="源">
+    <p><b class="w">REITs（Real Estate Investment Trusts）</b></p>
+    <p>1960 年美國艾森豪總統簽署法案，創造了 REITs，目的是讓一般小老百姓也能像大富豪一樣投資大型不動產、分享租金收入。「信託」是把財產交給專業機構代為管理。台灣在 2003 年通過《不動產證券化條例》，2005 年推出第一檔 REIT。</p>
+    <p><b class="w">證券化</b>：把一大塊不容易買賣的資產，切成很多小份、可以在市場上交易的「證券」。</p>
+  </div>
+
+  <h5>2008 年次貸危機：金融與房市一起崩潰</h5>
+  <p>2000 年代，美國銀行大量借錢給信用不好、收入不穩的人買房，這叫<span class="term">次級房貸</span>（「次級」就是信用等級比較低）。銀行再把這些房貸包裝成複雜的金融商品，賣給全世界的投資人。後來利率上升、房價下跌，大量借款人還不出錢，這些金融商品價值崩潰，連美國第四大投資銀行雷曼兄弟都倒閉，引發全球金融海嘯。</p>
+  <div class="eg">
+    <div class="t">教訓</div>
+    <p>房貸借得太鬆、槓桿太高，平時看起來大家都賺錢，一旦反轉就會連鎖倒下。這也是為什麼各國央行會用信用管制來「踩煞車」。</p>
+  </div>
+
+  <div class="quiz" data-answer="3">
+    <div class="qh">隨堂小測驗</div>
+    <p class="q">REITs 最主要讓投資人得到什麼好處？</p>
+    <div class="opts"><button>保證不會虧錢</button><button>可以住進那棟大樓</button><button>不用繳任何稅</button><button>用小錢參與大型不動產，分享租金收益</button></div>
+    <p class="fb" data-ok="正確！REITs 把大樓切成小份，讓一般人也能投資。但價格仍會漲跌，不保證獲利。" data-no="提示：REITs 的由來，就是讓小老百姓也能投資大型不動產。"></p>
+  </div>
+  <div class="finish"><button class="btn primary done-btn">完成本課</button><div class="stamp">第14課<br>已完成</div><p>完成後，第 14 塊地會蓋起房子。</p></div>
+</section>
+
+<!-- 第15課 -->
+<section class="lesson" id="l15" data-ch="15">
+  <header><span class="num">15</span><h3>房地產景氣循環</h3></header>
+  <p class="goal">學完你會知道：房市的四個階段、每個階段有什麼徵兆，以及「量先價行」的意思。</p>
+  <p>房市不會一直漲，也不會一直跌，而是像四季一樣循環。了解自己站在哪個季節，就能做出比較好的決定。</p>
+  <div class="widget" id="w15">
+    <p class="wt">房市四季輪盤</p>
+    <p class="wd">點選階段，看看每個時期的特徵。</p>
+    <div class="svgbox"><svg id="cySvg" viewBox="0 0 300 300" style="max-width:300px;margin:0 auto"></svg></div>
+    <div class="chips" id="cyBtns" style="justify-content:center;margin-top:8px"></div>
+    <div id="cyTxt" style="margin-top:12px;font-size:.95rem"></div>
+  </div>
+  <div class="origin" data-seal="源">
+    <p><b class="w">景氣循環（Business Cycle）</b>：「景氣」原本是日文用語，指經濟活動的熱絡程度。經濟會在繁榮和衰退之間反覆循環。</p>
+    <p><b class="w">房地產 18 年週期</b>：1933 年，美國經濟學家霍伊特（Homer Hoyt）研究芝加哥一百年的土地價格，發現大約每 18 年會出現一次大循環。這個數字不一定精準，但提醒我們：房市循環的週期很長，比股市慢得多。</p>
+    <p><b class="w">量先價行</b>：原本是股市的說法，意思是「成交量先動，價格才跟著動」。房市轉好時，通常先看到買賣的人變多，房價之後才上漲；房市轉差時，成交量會先萎縮，屋主撐一陣子才降價。</p>
+  </div>
+  <h5>影響房市的五大力量</h5>
+  <div class="tbl"><table>
+    <tr><th>力量</th><th>對房市的影響</th></tr>
+    <tr><td>利率</td><td>利率低，借錢便宜，買房的人多</td></tr>
+    <tr><td>人口與家戶數</td><td>人口增加、小家庭變多，需要的房子就多；少子化、高齡化則是長期壓力</td></tr>
+    <tr><td>經濟與所得</td><td>薪水漲、工作穩，大家敢買房</td></tr>
+    <tr><td>政府政策</td><td>稅制、限貸、社會住宅、公共建設</td></tr>
+    <tr><td>預期心理</td><td>大家都覺得會漲就搶買，覺得會跌就觀望，常讓漲跌更劇烈</td></tr>
+  </table></div>
+  <p>專業人士常追蹤的數據包括：每月<b>買賣移轉棟數</b>（成交量）、各種<b>房價指數</b>、<b>建照與開工量</b>（未來供給）、<b>餘屋量</b>（蓋好沒賣掉的房子），以及<b>房貸利率</b>。</p>
+
+  <div class="quiz" data-answer="2">
+    <div class="qh">隨堂小測驗</div>
+    <p class="q">「量先價行」是指什麼？</p>
+    <div class="opts"><button>房子越大價格越高</button><button>先量坪數再談價格</button><button>成交量的變化通常比房價更早出現</button><button>價格永遠領先成交量</button></div>
+    <p class="fb" data-ok="正確！觀察成交量，可以比較早察覺房市轉向。" data-no="提示：「量」指成交量，「價」指價格，「先」和「行」代表順序。"></p>
+  </div>
+  <div class="finish"><button class="btn primary done-btn">完成本課</button><div class="stamp">第15課<br>已完成</div><p>完成後，第 15 塊地會蓋起房子。</p></div>
+</section>
+
+<!-- 第16課 -->
+<section class="lesson" id="l16" data-ch="16">
+  <header><span class="num">16</span><h3>房地產職業與證照</h3></header>
+  <p class="goal">學完你會知道：房地產產業裡有哪些工作、需要什麼證照，以及想往這條路走可以怎麼準備。</p>
+  <p>一間房子從一塊空地到有人入住，背後有一整條產業鏈。以下是台灣常見的職業：</p>
+  <div class="tbl"><table>
+    <tr><th>階段</th><th>職業</th><th>做什麼</th></tr>
+    <tr><td rowspan="3">開發興建</td><td>土地開發</td><td>找地、評估、談判買地</td></tr>
+    <tr><td>建築師</td><td>設計建築、申請建照</td></tr>
+    <tr><td>營造工程</td><td>實際施工，把圖變成房子</td></tr>
+    <tr><td rowspan="3">銷售交易</td><td>代銷</td><td>銷售預售屋與新成屋</td></tr>
+    <tr><td>仲介經紀人、營業員</td><td>協助中古屋買賣與租賃</td></tr>
+    <tr><td>地政士</td><td>辦理登記、過戶、稅務申報</td></tr>
+    <tr><td rowspan="2">金融估價</td><td>不動產估價師</td><td>出具專業估價報告</td></tr>
+    <tr><td>銀行鑑價、授信</td><td>評估房貸能借多少</td></tr>
+    <tr><td rowspan="2">經營管理</td><td>物業管理</td><td>大樓管理、維修、保全</td></tr>
+    <tr><td>資產管理</td><td>管理 REITs、商辦、商場，讓租金收益最大化</td></tr>
+  </table></div>
+
+  <h5>重要證照</h5>
+  <div class="tbl"><table>
+    <tr><th>證照</th><th>怎麼取得</th><th>可以做什麼</th></tr>
+    <tr><td>不動產經紀營業員</td><td>完成專業訓練並通過測驗</td><td>在仲介公司從事業務</td></tr>
+    <tr><td>不動產經紀人</td><td>國家考試（普考等級）</td><td>簽署不動產說明書、契約等重要文件</td></tr>
+    <tr><td>地政士</td><td>國家考試（普考等級）</td><td>代理辦理土地登記等業務</td></tr>
+    <tr><td>不動產估價師</td><td>國家考試（高考等級）</td><td>出具具法律效力的估價報告</td></tr>
+  </table></div>
+  <div class="origin" data-seal="源">
+    <p><b class="w">經紀人</b>：「經紀」原本是經營、料理的意思，後來指居中撮合交易、收取報酬的人。1999 年《不動產經紀業管理條例》公布後，不動產經紀人成為國家認證的專業。</p>
+  </div>
+
+  <h5>如果你對這行有興趣</h5>
+  <p>國中、高中時可以先把數學（尤其比例、百分比、複利）和公民（法律、經濟）學好，這兩科就是房地產的基本功。大學可以考慮地政、土地管理、不動產、都市計畫、建築、財務金融等科系。平常也可以練習：查實價登錄、看新聞裡的房市消息、跟家人一起看房子，把這 16 課學到的東西用在真實世界裡。</p>
+  <div class="eg">
+    <div class="t">給你的一句話</div>
+    <p>房地產不是只有「買低賣高」。它關係到每個人住在哪裡、城市長什麼樣子、社會公不公平。懂房地產，就是懂得一座城市怎麼運作。</p>
+  </div>
+
+  <div class="quiz" data-answer="1">
+    <div class="qh">隨堂小測驗</div>
+    <p class="q">幫買賣雙方到地政事務所辦理過戶登記的專業人員是？</p>
+    <div class="opts"><button>建築師</button><button>地政士</button><button>代銷</button><button>物業管理員</button></div>
+    <p class="fb" data-ok="正確！地政士就是以前的代書。" data-no="提示：第 6 課有提到，以前叫做「代書」。"></p>
+  </div>
+  <div class="finish"><button class="btn primary done-btn">完成本課</button><div class="stamp">第16課<br>已完成</div><p>全部完成！去附錄 B 做結業測驗吧。</p></div>
+</section>
+<!-- ================= 附錄 ================= -->
+<div class="part" id="appendix">
+  <div class="pn">附錄</div>
+  <h2>複習與測驗</h2>
+  <p>查名詞、做總複習。</p>
+</div>
+
+<section class="lesson" id="glossary">
+  <header><span class="num">A</span><h3>名詞總表</h3></header>
+  <p class="goal">輸入關鍵字搜尋，點「第 N 課」可以回到那一課複習。</p>
+  <input type="text" id="glSearch" placeholder="搜尋名詞，例如：容積率" aria-label="搜尋名詞">
+  <p class="small" id="glCount" style="margin-top:6px"></p>
+  <dl class="gloss" id="glList"></dl>
+</section>
+
+<section class="lesson" id="final">
+  <header><span class="num">B</span><h3>結業測驗</h3></header>
+  <p class="goal">共 12 題，涵蓋四篇內容。每題第一次就答對才算分。</p>
+  <div id="finalQuiz"></div>
+  <div class="widget" id="finalScore" style="display:none">
+    <p class="wt" id="fsTitle"></p>
+    <p id="fsTxt" style="margin:0"></p>
+    <button class="btn" id="fsRetry" style="margin-top:10px">重新測驗</button>
+  </div>
+</section>
+
+<footer>
+  <p>本教材以台灣制度為主要例子，數字與法規僅供學習理解，會隨時間調整；實際買賣、貸款、報稅前，請查詢內政部、財政部、中央銀行等官方最新資訊，或諮詢專業人士。</p>
+  <p>學習進度只存在你自己的瀏覽器裡。</p>
+</footer>
+</main>
+</div>
+
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const num=(n,d=0)=>Number(n).toLocaleString('zh-TW',{minimumFractionDigits:d,maximumFractionDigits:d});
+const wan=v=>{ if(Math.abs(v)>=10000){return num(v/10000,2)+' 億';} return num(v, Math.abs(v)<100 && v%1!==0 ?1:0)+' 萬'; };
+const TOTAL=16;
+
+/* ---------- 主題 ---------- */
+const root=document.documentElement;
+try{const t=localStorage.getItem('re-theme'); if(t) root.setAttribute('data-theme',t);}catch(e){}
+$('#themeBtn').addEventListener('click',()=>{
+  const dark = root.getAttribute('data-theme') ? root.getAttribute('data-theme')==='dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  const next = dark?'light':'dark'; root.setAttribute('data-theme',next);
+  try{localStorage.setItem('re-theme',next)}catch(e){}
+});
+
+/* ---------- 手機選單 ---------- */
+const toc=$('#toc'), scrim=$('#scrim');
+const closeMenu=()=>{toc.classList.remove('open');scrim.classList.remove('open')};
+$('#menuBtn').addEventListener('click',()=>{toc.classList.add('open');scrim.classList.add('open')});
+scrim.addEventListener('click',closeMenu);
+$$('#toc a').forEach(a=>a.addEventListener('click',closeMenu));
+
+/* ---------- 進度與街區 ---------- */
+const done=new Set();
+try{const v=localStorage.getItem('re-done'); if(v) JSON.parse(v).forEach(n=>done.add(n));}catch(e){}
+const save=()=>{try{localStorage.setItem('re-done',JSON.stringify([...done]))}catch(e){}};
+
+function building(n,x,g){
+  const part=n<=4?1:n<=8?2:n<=11?3:4, S='stroke="var(--ink)" stroke-width="1.6"';
+  let s='';
+  if(part===1){
+    const bx=x+22,bw=56,bh=40;
+    s+=`<rect x="${bx}" y="${g-bh}" width="${bw}" height="${bh}" fill="var(--card)" ${S}/>`;
+    s+=`<path d="M${bx-7} ${g-bh}L${bx+bw/2} ${g-bh-26}L${bx+bw+7} ${g-bh}Z" fill="var(--seal)" ${S}/>`;
+    s+=`<rect x="${bx+22}" y="${g-20}" width="12" height="20" fill="var(--ink)"/>`;
+    s+=`<rect x="${bx+6}" y="${g-33}" width="11" height="11" fill="var(--zone)" ${S}/><rect x="${bx+39}" y="${g-33}" width="11" height="11" fill="var(--zone)" ${S}/>`;
+  }else{
+    const floors=part===2?3:part===3?6:10, fh=part===4?9.6:12, bw=part===2?48:part===3?62:52, bx=x+(100-bw)/2, bh=floors*fh, cols=part===2?2:3;
+    s+=`<rect x="${bx}" y="${g-bh}" width="${bw}" height="${bh}" fill="var(--card)" ${S}/>`;
+    for(let f=0;f<floors;f++){for(let c=0;c<cols;c++){
+      const ww=bw/(cols*2), wx=bx+ww/2+c*(bw/cols), wy=g-(f+1)*fh+fh*.28;
+      const lit=(n*7+f*3+c*5)%4!==0;
+      s+=`<rect x="${wx.toFixed(1)}" y="${wy.toFixed(1)}" width="${ww.toFixed(1)}" height="${(fh*.45).toFixed(1)}" fill="${lit?'var(--zone)':'var(--rule)'}"/>`;
+    }}
+    if(part===2) s+=`<path d="M${bx-3} ${g-bh}H${bx+bw+3}" ${S}/>`;
+    if(part===4) s+=`<path d="M${bx+bw/2} ${g-bh}V${g-bh-10}" ${S}/><circle cx="${bx+bw/2}" cy="${g-bh-11}" r="2" fill="var(--seal)"/>`;
+  }
+  return `<g class="build">${s}</g>`;
+}
+function drawStreet(newN){
+  const svg=$('#streetSvg'), cols=window.innerWidth<640?4:8, rows=TOTAL/cols, W=36+cols*108-8;
+  const rowY=[]; let y=12, s='';
+  for(let r=0;r<rows;r++){ rowY.push(y); y+=128; if(r%2===0 && r<rows-1){ s+=`<rect x="0" y="${y-2}" width="${W}" height="26" fill="var(--road)"/><path d="M0 ${y+11}H${W}" stroke="var(--card)" stroke-width="2" stroke-dasharray="14 12"/>`; y+=28;} else if(r<rows-1){y+=14;} }
+  svg.setAttribute('viewBox',`0 0 ${W} ${y}`);
+  for(let n=1;n<=TOTAL;n++){
+    const i=(n-1)%cols, row=Math.floor((n-1)/cols), x=18+i*108, yy=rowY[row], g=yy+126, d=done.has(n);
+    s+=`<g class="lot${n===newN?' new':''}" data-n="${n}" tabindex="0" role="link" aria-label="第${n}課${d?'（已完成）':'（未完成）'}">`;
+    s+=`<rect class="lotbg" x="${x}" y="${yy}" width="100" height="126" rx="4" fill="var(--lot)" stroke="var(--rule)" stroke-width="1.5" ${d?'':'stroke-dasharray="5 4"'}/>`;
+    s+=`<text x="${x+7}" y="${yy+16}" font-size="12" font-weight="700" fill="${d?'var(--seal)':'var(--ink2)'}">${n}</text>`;
+    if(d) s+=building(n,x,g);
+    else s+=`<text x="${x+50}" y="${g-12}" font-size="11" fill="var(--ink2)" text-anchor="middle">空地</text><path d="M${x+40} ${g-30}l3 -7l3 7M${x+54} ${g-28}l3 -6l3 6" stroke="var(--land)" stroke-width="1.5" fill="none"/>`;
+    s+=`</g>`;
+  }
+  svg.innerHTML=s;
+  $$('#streetSvg .lot').forEach(l=>{
+    const go=()=>{location.hash='#l'+l.dataset.n};
+    l.addEventListener('click',go); l.addEventListener('keydown',e=>{if(e.key==='Enter')go()});
+  });
+}
+let lastCols=window.innerWidth<640?4:8;
+window.addEventListener('resize',()=>{const c=window.innerWidth<640?4:8; if(c!==lastCols){lastCols=c;drawStreet();}});
+function refresh(newN){
+  const c=done.size;
+  $$('.pbar').forEach(b=>b.style.width=(c/TOTAL*100)+'%');
+  $('#ptxt').textContent=`已完成 ${c} / ${TOTAL} 課`;
+  $('#streetTxt').textContent = c===0?'目前是一片空地':c===TOTAL?'整個街區都蓋好了！':`已蓋好 ${c} 棟房子`;
+  $$('#toc a').forEach(a=>{const m=a.getAttribute('href').match(/^#l(\d+)$/); if(m) a.classList.toggle('done',done.has(+m[1]))});
+  $$('section.lesson[data-ch]').forEach(sec=>{
+    const n=+sec.dataset.ch, d=done.has(n), b=sec.querySelector('.done-btn'), st=sec.querySelector('.stamp');
+    b.textContent=d?'已完成（再按一次可取消）':'完成本課'; b.classList.toggle('primary',!d); st.classList.toggle('on',d);
+  });
+  drawStreet(newN);
+}
+$$('section.lesson[data-ch]').forEach(sec=>{
+  const n=+sec.dataset.ch;
+  sec.querySelector('.done-btn').addEventListener('click',()=>{
+    if(done.has(n)){done.delete(n);save();refresh();}
+    else{done.add(n);save();refresh(n);}
+  });
+});
+
+/* ---------- 隨堂測驗 ---------- */
+function bindQuiz(q,onFirst){
+  const ans=+q.dataset.answer, fb=q.querySelector('.fb'); let first=true;
+  q.querySelectorAll('.opts button').forEach((b,i)=>b.addEventListener('click',()=>{
+    q.querySelectorAll('.opts button').forEach(x=>x.classList.remove('no'));
+    if(i===ans){b.classList.add('ok');fb.textContent='✓ '+fb.dataset.ok;}
+    else{b.classList.add('no');fb.textContent='✗ '+fb.dataset.no;}
+    if(first&&onFirst){onFirst(i===ans);} first=false;
+  }));
+}
+$$('.lesson .quiz').forEach(q=>{ if(!q.closest('#final')) bindQuiz(q); });
+
+/* ---------- 第1課：分類遊戲 ---------- */
+const items=[['手機',0,'可以隨身帶走，是動產。'],['土地',1,'土地本身就是不動產。'],['腳踏車',0,'可以騎走，是動產。'],['房屋',1,'房屋固定在土地上，是定著物。'],['長在地上的大樹',1,'還沒砍下來的樹，是土地的一部分，屬於不動產；砍下來變成木材後就是動產。'],['陽台上的盆栽',0,'盆栽可以搬走，是動產。'],['水泥圍牆',1,'固定在土地上，是定著物。'],['沒有固定、隨時能吊走的貨櫃屋',0,'沒有牢固附著在土地上，一般認定是動產。']];
+const chipBox=$('#sortChips');
+items.forEach(([name,ans,why])=>{
+  const w=document.createElement('div');
+  w.style.cssText='border:1px solid var(--rule);border-radius:8px;padding:8px 10px;background:var(--paper);display:flex;align-items:center;gap:8px;flex-wrap:wrap';
+  w.innerHTML=`<span style="font-weight:700;margin-right:auto">${name}</span><button class="btn" data-v="0">動產</button><button class="btn" data-v="1">不動產</button>`;
+  w.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+    const ok=+b.dataset.v===ans;
+    w.style.borderColor=ok?'var(--land)':'var(--seal)';
+    $('#sortFb').textContent=(ok?'✓ 答對：':'✗ 再想想：')+name+'。'+(ok?why:'');
+  }));
+  chipBox.appendChild(w);
+});
+chipBox.style.display='grid';chipBox.style.gridTemplateColumns='repeat(auto-fit,minmax(230px,1fr))';
+
+/* ---------- 第2課：供需 ---------- */
+const lvl=v=>v<-25?'很少':v<-8?'較少':v<=8?'普通':v<=25?'較多':'很多';
+function sd(){
+  const d=+$('#sdD').value*0.6, s=+$('#sdS').value*0.6;
+  $('#sdDo').textContent=lvl(+$('#sdD').value); $('#sdSo').textContent=lvl(+$('#sdS').value);
+  const X=q=>50+q*3.4, Y=p=>225-p*2;
+  const q=(80+d+s)/1.6, p=10+0.8*q-s;
+  const line=(f)=>{const pts=[];for(let qq=0;qq<=100;qq+=5){const pp=f(qq);if(pp>=0&&pp<=105)pts.push(X(qq).toFixed(1)+','+Y(pp).toFixed(1));}return pts.join(' ');};
+  let g=`<g stroke="currentColor" fill="none"><path d="M50 10V225H400" stroke-width="1.5"/></g>`;
+  g+=`<text x="16" y="20" font-size="12" fill="currentColor">價格</text><text x="370" y="245" font-size="12" fill="currentColor">數量</text>`;
+  g+=`<circle cx="${X(50)}" cy="${Y(50)}" r="4" fill="none" stroke="var(--ink2)" stroke-dasharray="2 2"/>`;
+  g+=`<polyline points="${line(qq=>90-0.8*qq+d)}" fill="none" stroke="var(--seal)" stroke-width="2.5"/>`;
+  g+=`<polyline points="${line(qq=>10+0.8*qq-s)}" fill="none" stroke="var(--land)" stroke-width="2.5"/>`;
+  g+=`<text x="${X(8)}" y="${Y(90-0.8*8+d)-8}" font-size="13" fill="var(--seal)" font-weight="700">需求（想買的人）</text>`;
+  g+=`<text x="${X(78)}" y="${Y(10+0.8*92-s)+2}" font-size="13" fill="var(--land)" font-weight="700" text-anchor="end">供給（房子）</text>`;
+  g+=`<path d="M50 ${Y(p)}H${X(q)}V225" stroke="var(--ink2)" stroke-dasharray="4 3" fill="none"/>`;
+  g+=`<circle cx="${X(q)}" cy="${Y(p)}" r="6" fill="var(--zone)" stroke="var(--ink)" stroke-width="1.5"/>`;
+  g+=`<text x="46" y="${Y(p)+4}" font-size="11" fill="currentColor" text-anchor="end">房價</text>`;
+  $('#sdSvg').innerHTML=g;
+  const ch=Math.round((p-50)/50*100);
+  $('#sdTxt').textContent= ch===0?'房價在原本的平衡點（虛線小圈）。':(ch>0?`房價比原本上漲約 ${ch}%。`:`房價比原本下跌約 ${-ch}%。`)+(Math.abs(ch)>0?'黃點就是新的市場價格。':'');
+}
+['#sdD','#sdS'].forEach(i=>$(i).addEventListener('input',sd)); sd();
+
+/* ---------- 第3課：公設比 ---------- */
+function gs(){
+  const t=+$('#gsTotal').value, r=+$('#gsRatio').value/100, pub=t*r, inn=t-pub;
+  $('#gsTotalo').textContent=t+' 坪'; $('#gsRatioo').textContent=Math.round(r*100)+'%';
+  $('#gsIn').textContent=num(inn,1)+' 坪'; $('#gsPub').textContent=num(pub,1)+' 坪'; $('#gsM2').textContent=num(inn*3.3058,1)+' m²';
+  const w=400*(1-r);
+  $('#gsSvg').innerHTML=`<rect x="10" y="10" width="${w}" height="34" fill="var(--zone)"/><rect x="${10+w}" y="10" width="${400-w}" height="34" fill="var(--rule)"/><rect x="10" y="10" width="400" height="34" fill="none" stroke="currentColor"/>`+
+   (w>60?`<text x="18" y="32" font-size="13" fill="#1d2b36">你家室內</text>`:'')+(400-w>50?`<text x="${18+w}" y="32" font-size="13" fill="currentColor">公設</text>`:'')+`<text x="10" y="64" font-size="11" fill="var(--ink2)">整條＝權狀上的 ${t} 坪</text>`;
+}
+['#gsTotal','#gsRatio'].forEach(i=>$(i).addEventListener('input',gs)); gs();
+
+/* ---------- 第4課：房價所得比 ---------- */
+function pi(){
+  const p=+$('#piP').value, i=+$('#piI').value, r=p/i;
+  $('#piPo').textContent=wan(p); $('#piIo').textContent=wan(i);
+  $('#piR').textContent=num(r,1)+' 倍';
+  $('#piL').textContent= r<=3?'負擔得起':r<=4?'稍有負擔':r<=5?'嚴重負擔':'嚴重負擔不起';
+}
+['#piP','#piI'].forEach(i=>$(i).addEventListener('input',pi)); pi();
+
+/* ---------- 第5課：房貸 ---------- */
+function mg(){
+  const P=+$('#mgP').value, L=+$('#mgL').value, R=+$('#mgR').value, Y=+$('#mgY').value;
+  $('#mgPo').textContent=wan(P); $('#mgLo').textContent=L+' 成'; $('#mgRo').textContent=R.toFixed(2)+'%'; $('#mgYo').textContent=Y+' 年';
+  const loan=P*L/10*10000, r=R/100/12, n=Y*12;
+  const pm=loan*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+  const aI=pm*n-loan, b1=loan/n+loan*r, bI=r*loan*(n+1)/2;
+  $('#mgDown').textContent=wan(P*(1-L/10));
+  $('#mgA').textContent=num(pm)+' 元'; $('#mgAI').textContent=wan(aI/10000);
+  $('#mgB').textContent=num(b1)+' 元'; $('#mgBI').textContent=wan(bI/10000);
+  let bal=loan, s='', bw=380/Y;
+  for(let y=0;y<Y;y++){
+    let ip=0,pp=0; for(let m=0;m<12;m++){const it=bal*r; ip+=it; pp+=pm-it; bal-=pm-it;}
+    const H=130, hp=H*pp/(pm*12), x=30+y*bw;
+    s+=`<rect x="${x.toFixed(1)}" y="${(140-H).toFixed(1)}" width="${(bw*.8).toFixed(1)}" height="${(H-hp).toFixed(1)}" fill="color-mix(in srgb,var(--seal) 35%,transparent)"/>`;
+    s+=`<rect x="${x.toFixed(1)}" y="${(140-hp).toFixed(1)}" width="${(bw*.8).toFixed(1)}" height="${hp.toFixed(1)}" fill="var(--ink)"/>`;
+  }
+  s+=`<text x="30" y="158" font-size="11" fill="currentColor">第 1 年</text><text x="410" y="158" font-size="11" fill="currentColor" text-anchor="end">第 ${Y} 年</text>`;
+  s+=`<rect x="30" y="164" width="10" height="10" fill="var(--ink)"/><text x="44" y="173" font-size="11" fill="currentColor">還本金</text><rect x="100" y="164" width="10" height="10" fill="color-mix(in srgb,var(--seal) 35%,transparent)"/><text x="114" y="173" font-size="11" fill="currentColor">付利息</text>`;
+  $('#mgSvg').innerHTML=s;
+}
+['#mgP','#mgL','#mgR','#mgY'].forEach(i=>$(i).addEventListener('input',mg)); mg();
+
+/* ---------- 第7課：謄本 ---------- */
+const db=[
+  {y:34,h:62,t:'標示部',lines:['建物門牌：○○市○○路 1 號 5 樓','總面積：85.20 平方公尺　層次：五層','主要用途：住家　建築完成日期：民國 90 年'],d:'「標示部」描述這個不動產本身：在哪裡、多大、做什麼用、什麼時候蓋好。就像房子的身分證基本資料。'},
+  {y:104,h:62,t:'所有權部',lines:['所有權人：王小明','權利範圍：全部','登記原因：買賣　登記日期：民國 112 年'],d:'「所有權部」告訴你房子屬於誰、擁有多少比例（權利範圍），以及怎麼得到的（買賣、繼承、贈與）。買房時要確認賣方就是這裡的所有權人。'},
+  {y:174,h:62,t:'他項權利部',lines:['權利種類：抵押權','權利人：○○商業銀行','擔保債權總金額：新臺幣 960 萬元'],d:'「他項權利部」記錄所有權以外的權利，最常見是銀行的抵押權。銀行通常設定貸款金額的 1.2 倍，所以這裡 960 萬代表大約借了 800 萬。如果有查封、假扣押等限制，也要特別注意。'}
+];
+function drawDb(active){
+  let s=`<rect x="6" y="4" width="408" height="240" fill="var(--paper)" stroke="currentColor"/><text x="210" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">建物登記第二類謄本（示意）</text>`;
+  db.forEach((b,i)=>{
+    const on=i===active;
+    s+=`<g class="dbp" data-i="${i}" style="cursor:pointer" tabindex="0" role="button" aria-label="${b.t}"><rect x="14" y="${b.y}" width="392" height="${b.h}" rx="4" fill="${on?'var(--hl)':'var(--card)'}" stroke="${on?'var(--seal)':'var(--rule)'}" stroke-width="${on?2:1}"/>`;
+    s+=`<text x="24" y="${b.y+18}" font-size="12.5" font-weight="700" fill="${on?'var(--seal)':'currentColor'}">${b.t}</text>`;
+    b.lines.forEach((l,j)=>s+=`<text x="24" y="${b.y+34+j*13}" font-size="10.5" fill="var(--ink2)">${l}</text>`);
+    s+=`</g>`;
+  });
+  $('#dbSvg').innerHTML=s;
+  $$('#dbSvg .dbp').forEach(g=>{const f=()=>{const i=+g.dataset.i;drawDb(i);$('#dbTxt').innerHTML=`<b>${db[i].t}</b>：${db[i].d}`};g.addEventListener('click',f);g.addEventListener('keydown',e=>{if(e.key==='Enter')f()});});
+}
+drawDb(-1);
+
+/* ---------- 第8課：房地合一 ---------- */
+const hgRate=y=>y<=2?45:y<=5?35:y<=10?20:15;
+function hg(){
+  const Y=+$('#hgY').value, G=+$('#hgG').value, r=hgRate(Y);
+  $('#hgYo').textContent=Y+' 年'; $('#hgGo').textContent=wan(G);
+  $('#hgR').textContent=r+'%'; $('#hgT').textContent=wan(G*r/100); $('#hgN').textContent=wan(G*(1-r/100));
+  const X=y=>20+y*(380/12), segs=[[0,2,45],[2,5,35],[5,10,20],[10,12,15]];
+  let s='';
+  segs.forEach(([a,b,rr])=>{const h=rr*1.6, on=r===rr;
+    s+=`<rect x="${X(a)}" y="${90-h}" width="${X(b)-X(a)-2}" height="${h}" fill="${on?'var(--seal)':'var(--rule)'}"/>`;
+    s+=`<text x="${(X(a)+X(b))/2}" y="${84-h}" font-size="12" text-anchor="middle" fill="currentColor" font-weight="${on?700:400}">${rr}%</text>`;});
+  s+=`<path d="M20 90H400" stroke="currentColor"/>`;
+  [0,2,5,10].forEach(t=>s+=`<text x="${X(t)}" y="106" font-size="11" fill="currentColor">${t}年</text>`);
+  s+=`<path d="M${X(Y)} 92l-5 10h10z" fill="var(--ink)"/>`;
+  $('#hgSvg').innerHTML=s;
+}
+['#hgY','#hgG'].forEach(i=>$(i).addEventListener('input',hg)); hg();
+
+/* ---------- 第9課：收益法 ---------- */
+function ca(){
+  const N=+$('#caN').value, R=+$('#caR').value;
+  $('#caNo').textContent=wan(N); $('#caRo').textContent=R.toFixed(1)+'%';
+  $('#caV').textContent=wan(N/(R/100)); $('#caY').textContent=num(100/R,1)+' 年';
+}
+['#caN','#caR'].forEach(i=>$(i).addEventListener('input',ca)); ca();
+
+/* ---------- 第10課：投報率 ---------- */
+function yr(){
+  const P=+$('#yrP').value, R=+$('#yrR').value, C=+$('#yrC').value, V=+$('#yrV').value;
+  $('#yrPo').textContent=wan(P); $('#yrRo').textContent=num(R,1)+' 萬'; $('#yrCo').textContent=num(C,1)+' 萬'; $('#yrVo').textContent=V+' 個月';
+  const net=R*(12-V)-C;
+  $('#yrG').textContent=num(R*12/P*100,2)+'%'; $('#yrN').textContent=num(net/P*100,2)+'%'; $('#yrI').textContent=num(net,1)+' 萬';
+}
+['#yrP','#yrR','#yrC','#yrV'].forEach(i=>$(i).addEventListener('input',yr)); yr();
+
+/* ---------- 第10課：槓桿 ---------- */
+function lv(){
+  const L=+$('#lvL').value, c=+$('#lvC').value, P=1000, E=P*(1-L/10), loan=P-E;
+  $('#lvLo').textContent=L===0?'不貸款':L+' 成'; $('#lvCo').textContent=(c>0?'+':'')+c+'%';
+  const newP=P*(1+c/100), gain=newP-P-loan*0.02, roe=gain/E*100;
+  $('#lvE').textContent=wan(E); $('#lvG').textContent=(gain>=0?'+':'')+wan(gain);
+  $('#lvR').textContent=(roe>=0?'+':'')+num(roe,1)+'%'; $('#lvR').style.color=roe>=0?'var(--land)':'var(--seal)';
+  const k=110/1300, base=130;
+  const bar=(x,label,total)=>{
+    let s=''; const hl=loan*k, he=(total-loan)*k;
+    s+=`<rect x="${x}" y="${base-hl}" width="70" height="${hl}" fill="var(--rule)"/>`;
+    if(he>=0) s+=`<rect x="${x}" y="${base-hl-he}" width="70" height="${he}" fill="${total>=P?'var(--land)':'var(--zone)'}"/>`;
+    else s+=`<rect x="${x}" y="${base-hl}" width="70" height="${-he}" fill="none" stroke="var(--seal)" stroke-width="2" stroke-dasharray="4 3"/>`;
+    s+=`<text x="${x+35}" y="${base+15}" font-size="12" text-anchor="middle" fill="currentColor">${label}</text>`;
+    return s;
+  };
+  let s=bar(60,'買的時候',P)+bar(200,'價格變動後',newP);
+  s+=`<rect x="300" y="20" width="10" height="10" fill="var(--rule)"/><text x="314" y="29" font-size="11" fill="currentColor">銀行的錢</text>`;
+  s+=`<rect x="300" y="38" width="10" height="10" fill="var(--land)"/><text x="314" y="47" font-size="11" fill="currentColor">自己的錢</text>`;
+  if(newP<loan) s+=`<text x="300" y="70" font-size="11" fill="var(--seal)" font-weight="700">房價低於貸款：</text><text x="300" y="85" font-size="11" fill="var(--seal)" font-weight="700">資不抵債！</text>`;
+  $('#lvSvg').innerHTML=s;
+}
+['#lvL','#lvC'].forEach(i=>$(i).addEventListener('input',lv)); lv();
+
+/* ---------- 第11課：檢查清單 ---------- */
+const cks=['白天看採光、通風','晚上再去一次，看治安和噪音','下雨後看天花板、牆角有沒有漏水或壁癌','打開水龍頭、沖馬桶，確認水壓和排水','查實價登錄，了解附近成交價','調閱最新謄本，確認所有權人和抵押','查是否為海砂屋、輻射屋、凶宅','確認有沒有違建或頂樓加蓋','了解管理費、公設和管委會運作','查土壤液化和淹水潛勢'];
+function ckTxt(){const c=$$('#ckList input:checked').length;$('#ckTxt').textContent=`已檢查 ${c} / ${cks.length} 項`+(c===cks.length?'，很完整！':'');}
+cks.forEach((t,i)=>{const l=document.createElement('label');l.style.cssText='display:flex;gap:10px;align-items:flex-start;cursor:pointer';l.innerHTML=`<input type="checkbox" style="margin-top:.45em;accent-color:var(--seal)"><span>${t}</span>`;l.querySelector('input').addEventListener('change',ckTxt);$('#ckList').appendChild(l);});
+ckTxt();
+
+/* ---------- 第12課：建蔽率容積率 ---------- */
+function bd(){
+  const bc=+$('#bcR').value/100, far=+$('#farR').value/100;
+  $('#bcRo').textContent=Math.round(bc*100)+'%'; $('#farRo').textContent=Math.round(far*100)+'%';
+  const F=100*bc, T=100*far, fl=T/F, full=Math.floor(fl+1e-9), rem=fl-full;
+  $('#bdF').textContent=num(F)+' 坪'; $('#bdT').textContent=num(T)+' 坪';
+  $('#bdN').textContent=rem<0.01?full+' 層':`${full} 層多一點`;
+  const side=120, fs=side*Math.sqrt(bc);
+  let s=`<text x="20" y="18" font-size="12" fill="currentColor">從天空往下看</text>`;
+  s+=`<rect x="20" y="30" width="${side}" height="${side}" fill="color-mix(in srgb,var(--land) 25%,transparent)" stroke="currentColor"/>`;
+  s+=`<rect x="${20+(side-fs)/2}" y="${30+(side-fs)/2}" width="${fs}" height="${fs}" fill="var(--zone)" stroke="var(--ink)"/>`;
+  s+=`<text x="80" y="170" font-size="11" text-anchor="middle" fill="currentColor">綠＝空地　黃＝房子</text>`;
+  const n=Math.ceil(fl-1e-9), fh=Math.min(18,205/n), gx=190, ground=240, bw=Math.max(40,fs*1.3), bx=gx+(210-bw)/2;
+  s+=`<text x="${gx}" y="18" font-size="12" fill="currentColor">從側面看</text>`;
+  s+=`<path d="M${gx} ${ground}H410" stroke="currentColor" stroke-width="2"/>`;
+  for(let i=0;i<n;i++){
+    const w = (i===n-1 && rem>=0.01)? bw*rem : bw;
+    s+=`<rect x="${bx}" y="${ground-(i+1)*fh}" width="${w}" height="${fh}" fill="var(--card)" stroke="var(--ink)" stroke-width="1.2"/>`;
+  }
+  s+=`<text x="${bx+bw+6}" y="${ground-n*fh+10}" font-size="11" fill="currentColor">約 ${num(fl*3)} 公尺</text>`;
+  $('#bdSvg').innerHTML=s;
+}
+['#bcR','#farR'].forEach(i=>$(i).addEventListener('input',bd)); bd();
+
+/* ---------- 第15課：景氣輪盤 ---------- */
+const cy=[
+  {n:'復甦',s:'像春天',c:'var(--land)',d:'成交量開始回升，房價持平或小漲；建商小心試探推案；新聞開始出現「止跌」字眼。<br><b>策略：</b>自住的人可以開始認真看房，好地段還有議價空間。'},
+  {n:'繁榮',s:'像夏天',c:'var(--seal)',d:'成交量和房價一起上漲；建商大量推案，預售屋排隊搶購；新聞說「再不買就買不起」。<br><b>策略：</b>最容易衝動追高的時期，小心過度貸款。'},
+  {n:'衰退',s:'像秋天',c:'var(--zone)',d:'成交量先萎縮，但屋主還不願降價，市場僵持；建商推案變少，開始送裝潢、送車位促銷。<br><b>策略：</b>不急著出手，觀察成交量和議價空間。'},
+  {n:'蕭條',s:'像冬天',c:'var(--ink2)',d:'房價明顯下跌，餘屋和法拍屋增加，市場氣氛悲觀。<br><b>策略：</b>收入穩定、資金充足的人可能找到好價格，但要撐得住心理壓力。之後又會慢慢進入復甦。'}
+];
+let cyAngle=45, cyIdx=0, cyTimer=null;
+function arc(a0,a1,r0,r1){const p=(a,r)=>[150+r*Math.sin(a*Math.PI/180),150-r*Math.cos(a*Math.PI/180)];const [x0,y0]=p(a0,r1),[x1,y1]=p(a1,r1),[x2,y2]=p(a1,r0),[x3,y3]=p(a0,r0);return `M${x0} ${y0}A${r1} ${r1} 0 0 1 ${x1} ${y1}L${x2} ${y2}A${r0} ${r0} 0 0 0 ${x3} ${y3}Z`;}
+function drawCy(){
+  let s='';
+  cy.forEach((c,i)=>{const a0=i*90,a1=a0+90,mid=(a0+45)*Math.PI/180;
+    s+=`<path d="${arc(a0+1,a1-1,62,130)}" fill="${c.c}" opacity="${i===cyIdx?1:.35}" style="cursor:pointer" data-i="${i}" class="cyp"/>`;
+    s+=`<text x="${150+96*Math.sin(mid)}" y="${150-96*Math.cos(mid)+5}" text-anchor="middle" font-size="16" font-weight="700" fill="${i===cyIdx?'#fff':'currentColor'}" style="pointer-events:none">${c.n}</text>`;});
+  s+=`<circle cx="150" cy="150" r="54" fill="var(--card)" stroke="var(--rule)"/>`;
+  s+=`<g id="cyNeedle" style="transform-origin:150px 150px;transition:transform .8s cubic-bezier(.3,1.3,.5,1);transform:rotate(${cyAngle}deg)"><path d="M150 150L144 146L150 92L156 146Z" fill="var(--ink)"/></g><circle cx="150" cy="150" r="7" fill="var(--ink)"/>`;
+  $('#cySvg').innerHTML=s;
+  $$('#cySvg .cyp').forEach(p=>p.addEventListener('click',()=>pick(+p.dataset.i)));
+  $$('#cyBtns button').forEach((b,i)=>b.classList.toggle('primary',i===cyIdx));
+  $('#cyTxt').innerHTML=`<b>${cy[cyIdx].n}（${cy[cyIdx].s}）</b><br>${cy[cyIdx].d}`;
+}
+function pick(i){const target=i*90+45; let diff=((target-cyAngle)%360+360)%360; cyAngle+=diff===0?0:diff; cyIdx=i; drawCy();}
+cy.forEach((c,i)=>{const b=document.createElement('button');b.className='btn';b.textContent=c.n;b.addEventListener('click',()=>{stopAuto();pick(i)});$('#cyBtns').appendChild(b);});
+const auto=document.createElement('button');auto.className='btn';auto.textContent='自動轉一圈';
+function stopAuto(){if(cyTimer){clearInterval(cyTimer);cyTimer=null;auto.textContent='自動轉一圈';}}
+auto.addEventListener('click',()=>{ if(cyTimer){stopAuto();return;} let k=0; auto.textContent='停止'; pick((cyIdx+1)%4); cyTimer=setInterval(()=>{k++; if(k>=4){stopAuto();return;} pick((cyIdx+1)%4);},2200);});
+$('#cyBtns').appendChild(auto);
+drawCy();
+
+/* ---------- 名詞總表 ---------- */
+const G=[
+['不動產',1,'土地及其定著物，也就是搬不走的財產。'],['動產',1,'不動產以外的財產，大多可以移動。'],['定著物',1,'固定、附著在土地上的東西，例如房屋。'],['流動性',1,'資產換成現金的難易程度。房地產流動性低。'],
+['供給與需求',2,'市場上可買的數量與想買的人數，兩者決定價格。'],['地段',2,'房子所在的位置與周邊環境，是決定房價最重要的因素。'],
+['坪',3,'源自日本的面積單位，約 3.3058 平方公尺，約兩張榻榻米。'],['公設比',3,'公共設施坪數佔權狀總坪數的比例。'],['透天厝',3,'台語「通到天」，從地面到屋頂整棟獨立的房子。'],
+['房價所得比',4,'房屋總價除以家庭年收入，代表不吃不喝幾年才買得起。'],['房貸負擔率',4,'每月房貸佔每月家庭收入的比例，建議不超過三成多。'],
+['頭期款',5,'買房時自己先付的錢。'],['貸款成數',5,'銀行借款佔房價的比例，一成是 10%。'],['寬限期',5,'前幾年只繳利息、延後償還本金。'],['抵押權',5,'借款人不還錢時，銀行可以拍賣房子抵債的權利。'],['本息平均攤還',5,'每月繳款金額固定的還款方式。'],['本金平均攤還',5,'每月償還本金固定、利息遞減的還款方式。'],['機動利率',5,'會隨市場與央行政策調整的利率。'],
+['斡旋金',6,'出價時交給仲介的錢，屋主同意後轉為定金。'],['要約書',6,'不需付錢、以書面表達購買條件的出價方式。'],['履約保證',6,'由第三方保管價金，雙方履約後才撥款。'],['地政士',6,'舊稱代書，代理辦理不動產登記的專業人員。'],['過戶',6,'把不動產登記的所有權人從賣方改成買方。'],
+['所有權狀',7,'地政機關發給所有人的權利證明文件。'],['謄本',7,'從地政機關登記資料抄錄出的最新狀態副本。'],['持分',7,'共有時每個人擁有的比例，謄本上寫作權利範圍。'],['他項權利',7,'所有權以外的權利，如抵押權、地上權。'],
+['契稅',8,'買受房屋時依契約繳納的稅。'],['印花稅',8,'對契約憑證課的稅，源自 1624 年荷蘭。'],['土地增值稅',8,'依土地漲價幅度課的稅，源自「漲價歸公」理念。'],['房地合一稅',8,'出售房地時依實際獲利課稅，持有越久稅率越低。'],
+['實價登錄',9,'不動產實際成交價格公開申報制度，2012 年上路。'],['公告現值',9,'政府公告的土地價格，用於計算土地增值稅。'],['比較法',9,'參考附近類似成交案例並調整差異來估價。'],['成本法',9,'以重建成本減折舊再加土地價值來估價。'],['收益法',9,'以未來收益換算現在價值來估價。'],['資本化率',9,'把每年收益換算成資產價值時使用的報酬率。'],['折舊',9,'資產因使用和時間而減少的價值。'],
+['投報率',10,'投資每年帶來的收入佔投入金額的比例。'],['資本利得',10,'資產增值、賣出時賺到的價差。'],['現金流',10,'流入與流出的錢，相減為淨現金流。'],['槓桿',10,'借錢投資，放大獲利也放大虧損。'],
+['泡沫',11,'價格遠高於真實價值，最終破裂的現象，源自 1720 年南海泡沫。'],['海砂屋',11,'混凝土使用未淡化海砂，氯離子使鋼筋鏽蝕的房屋。'],['輻射屋',11,'使用受放射性污染鋼筋建造的房屋。'],['凶宅',11,'曾發生非自然死亡事件的房屋。'],['土壤液化',11,'地震時飽和砂土失去支撐力，像液體一樣。'],
+['都市計畫',12,'政府事先規劃城市土地用途與開發強度。'],['使用分區',12,'把土地分成住宅、商業、工業等不同用途。'],['建蔽率',12,'建築物投影面積佔基地面積的比例。'],['容積率',12,'總樓地板面積佔基地面積的比例。'],['容積獎勵',12,'符合特定條件時，政府額外給予的容積。'],
+['預售屋',13,'尚未完工就先銷售的房屋，香港稱樓花。'],['建照與使照',13,'建造執照准許開工，使用執照准許使用。'],['代銷',13,'代理建商銷售新建案的公司。'],['都市更新',13,'整合老舊街區拆除重建或整建。'],['危老重建',13,'依危老條例，針對危險或 30 年以上老舊建物重建。'],['合建分屋',13,'地主出地、建商出資興建，完工後依比例分配房屋。'],
+['選擇性信用管制',14,'央行只針對特定對象限制貸款，俗稱限貸令。'],['REITs',14,'不動產投資信託，讓大眾以小額投資大型不動產。'],['證券化',14,'把大型資產切成可交易的小單位證券。'],['次級房貸',14,'借給信用較差者的房貸，2008 年金融海嘯的源頭。'],
+['景氣循環',15,'經濟在繁榮與衰退間反覆循環。'],['量先價行',15,'成交量的變化通常比價格更早出現。'],
+['不動產經紀人',16,'通過國家考試，可簽署不動產說明書等文件的專業人員。'],['不動產估價師',16,'通過國家考試，可出具專業估價報告的人員。']
+];
+function gl(){
+  const q=$('#glSearch').value.trim(); const list=G.filter(g=>!q||g[0].includes(q)||g[2].includes(q)||g[0].toLowerCase().includes(q.toLowerCase()));
+  $('#glList').innerHTML=list.map(g=>`<div><dt>${g[0]}<a class="lk" href="#l${g[1]}">第 ${g[1]} 課</a></dt><dd>${g[2]}</dd></div>`).join('');
+  $('#glCount').textContent=q?`找到 ${list.length} 個名詞`:`共 ${G.length} 個名詞`;
+}
+$('#glSearch').addEventListener('input',gl); gl();
+
+/* ---------- 結業測驗 ---------- */
+const FQ=[
+['《民法》規定的不動產是指？',['房屋和汽車','土地及其定著物','所有很貴的東西','銀行存款'],1,'不動產＝土地及其定著物。'],
+['「坪」這個面積單位原本來自哪裡？',['英國','中國唐朝','日本','美國'],2,'坪源自日本，約兩張榻榻米。'],
+['公設比越高，代表？',['室內空間佔權狀坪數的比例越小','房子越便宜','一定越保值','土地持分越多'],0,'公設比高，你買的坪數裡共用空間比較多。'],
+['用本息平均攤還，前幾年每月繳的錢主要是？',['本金','利息','稅金','管理費'],1,'前期大部分是利息，本金還得慢。'],
+['買房一定要看最新的「謄本」而不是只看權狀，因為？',['謄本比較漂亮','權狀是假的','謄本反映最新狀態，如抵押、查封','謄本免費'],2,'權狀是發證當時的狀態，謄本才是最新資料。'],
+['下列哪一個稅是「賣方」在賣房時繳的？',['契稅','印花稅','土地增值稅','房屋稅'],2,'土地增值稅由賣方繳納。'],
+['想查附近房屋真實成交價，應該用？',['公告現值','實價登錄','評定現值','房屋稅單'],1,'實價登錄公開實際成交價。'],
+['每年淨收益 40 萬、資本化率 2%，用收益法估計價值約？',['80 萬','800 萬','2,000 萬','4,000 萬'],2,'40 ÷ 2% ＝ 2,000 萬。'],
+['自備 200 萬、貸款 800 萬買 1,000 萬的房子，房價跌 20%，自己的錢大約？',['賠光','賠 20%','賺 20%','不賺不賠'],0,'跌 200 萬，剛好把自備的 200 萬賠光。'],
+['容積率越高的土地，通常？',['能蓋的總樓地板越多，地價越高','一定要蓋平房','不能蓋住宅','稅金一定越低'],0,'能蓋越多坪，土地價值越高。'],
+['央行只針對多屋族、豪宅限制貸款，這叫？',['升息','選擇性信用管制','實價登錄','房地合一'],1,'只挑特定對象管，就是「選擇性」。'],
+['房市轉向時，通常哪個指標會先出現變化？',['房價','成交量','屋齡','公設比'],1,'量先價行，成交量先動。']
+];
+function buildFinal(){
+  const box=$('#finalQuiz'); box.innerHTML=''; let answered=0, score=0;
+  $('#finalScore').style.display='none';
+  FQ.forEach((f,k)=>{
+    const d=document.createElement('div'); d.className='quiz'; d.dataset.answer=f[2];
+    d.innerHTML=`<div class="qh">第 ${k+1} 題</div><p class="q">${f[0]}</p><div class="opts">${f[1].map(o=>`<button>${o}</button>`).join('')}</div><p class="fb" data-ok="${f[3]}" data-no="不對喔，再選一次。"></p>`;
+    box.appendChild(d);
+    bindQuiz(d,(ok)=>{answered++; if(ok)score++; if(answered===FQ.length) showScore(score);});
+  });
+}
+function showScore(s){
+  const w=$('#finalScore'); w.style.display='block';
+  $('#fsTitle').textContent=`你的成績：${s} / ${FQ.length}`;
+  $('#fsTxt').textContent= s===FQ.length?'滿分！你已經具備扎實的房地產知識。': s>=9?'很棒！回頭看看答錯的題目所在的課程，就更完整了。': s>=6?'不錯的開始，建議用名詞總表複習一次。':'建議從第一篇開始再讀一遍，搭配互動工具多試幾次。';
+  w.scrollIntoView({behavior:'smooth',block:'center'});
+}
+$('#fsRetry').addEventListener('click',()=>{buildFinal();$('#final').scrollIntoView({behavior:'smooth'});});
+buildFinal();
+
+refresh();
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-c4f013a0fa" data-category="business"></script></body>
+</html>

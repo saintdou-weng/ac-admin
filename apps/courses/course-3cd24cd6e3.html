@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>撲克找牌術互動教室 — 洗牌切牌後,馬上找到那張牌</title>
+<style>
+:root{
+  --linen:#FAF6EF;
+  --paper:#FFFFFF;
+  --khaki:#A8946A;
+  --khaki-dark:#8A774E;
+  --ink:#1F1D1A;
+  --gray:#6E6A63;
+  --line:#E6DFD2;
+  --blue:#2E5E7E;
+  --red:#B03A2E;
+  --ok:#3E6B4F;
+  --bad:#A24936;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
+  background:var(--linen);color:var(--ink);line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+.num{font-family:Georgia,"Times New Roman",serif;font-variant-numeric:tabular-nums;}
+
+header{background:var(--ink);color:var(--linen);padding:28px 20px 22px;text-align:center;}
+header .eyebrow{font-size:12px;letter-spacing:4px;color:var(--khaki);margin-bottom:8px;}
+header h1{font-size:24px;font-weight:700;letter-spacing:2px;}
+header p{font-size:13px;color:#B8B2A6;margin-top:6px;}
+
+nav{position:sticky;top:0;z-index:50;background:var(--paper);border-bottom:1px solid var(--line);
+  display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+nav::-webkit-scrollbar{display:none;}
+nav button{flex:0 0 auto;background:none;border:none;padding:14px 13px;font-size:13px;color:var(--gray);
+  border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;font-family:inherit;}
+nav button.active{color:var(--ink);border-bottom-color:var(--khaki);font-weight:700;}
+.progress-wrap{height:3px;background:var(--line);}
+.progress-bar{height:3px;background:var(--khaki);width:0;transition:width .4s;}
+
+main{max-width:760px;margin:0 auto;padding:24px 18px 80px;}
+section.chapter{display:none;animation:fadein .35s ease;}
+section.chapter.show{display:block;}
+@keyframes fadein{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+.ch-label{font-size:12px;letter-spacing:3px;color:var(--khaki-dark);margin-bottom:4px;}
+h2{font-size:22px;margin-bottom:16px;}
+h3{font-size:17px;margin:28px 0 10px;padding-left:10px;border-left:4px solid var(--khaki);}
+p{margin-bottom:12px;font-size:15px;}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px;margin:14px 0;}
+.story{background:#F3EDDF;border-left:4px solid var(--khaki);border-radius:0 10px 10px 0;
+  padding:16px 18px;margin:14px 0;font-size:15px;}
+.story b{color:var(--khaki-dark);}
+.tip{background:var(--paper);border:1px dashed var(--khaki);border-radius:10px;padding:14px 16px;margin:14px 0;font-size:14px;}
+.tip::before{content:"💡 小重點";display:block;font-weight:700;color:var(--khaki-dark);margin-bottom:6px;font-size:13px;letter-spacing:1px;}
+.origin{background:#EFF3F5;border-left:4px solid var(--blue);border-radius:0 10px 10px 0;
+  padding:12px 16px;margin:14px 0;font-size:14px;}
+.origin::before{content:"📖 名詞的由來";display:block;font-weight:700;color:var(--blue);margin-bottom:4px;font-size:13px;letter-spacing:1px;}
+.steps{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;font-size:15px;counter-reset:st;}
+.steps .st{position:relative;padding:6px 0 6px 40px;counter-increment:st;}
+.steps .st::before{content:counter(st);position:absolute;left:0;top:8px;width:26px;height:26px;
+  background:var(--khaki-dark);color:#fff;border-radius:50%;text-align:center;line-height:26px;font-size:13px;font-weight:700;}
+
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;background:var(--paper);}
+th{background:var(--ink);color:var(--linen);padding:9px 10px;text-align:left;font-weight:600;}
+td{border:1px solid var(--line);padding:9px 10px;vertical-align:top;}
+tr:nth-child(even) td{background:#FBF8F1;}
+
+.btn{display:inline-block;background:var(--ink);color:var(--linen);border:none;border-radius:8px;
+  padding:10px 18px;font-size:14px;cursor:pointer;font-family:inherit;transition:opacity .15s;}
+.btn:active{opacity:.75;}
+.btn.ghost{background:var(--paper);color:var(--ink);border:1px solid var(--ink);}
+.btn.small{padding:8px 14px;font-size:13px;}
+.btn.khaki{background:var(--khaki-dark);}
+.btn[disabled]{opacity:.35;cursor:default;}
+
+.lab{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:16px 0;}
+.lab .lab-title{font-weight:700;margin-bottom:10px;font-size:15px;}
+.lab .lab-title::before{content:"🔬 ";}
+.lab .result{background:var(--linen);border-radius:8px;padding:12px 14px;margin-top:10px;font-size:14px;}
+.lab .result b{color:var(--khaki-dark);}
+
+/* 撲克牌籌片 */
+.deckrow{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0;}
+.pc{width:44px;height:60px;border-radius:6px;border:1.5px solid #C9BFA8;background:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700;font-family:Georgia,serif;position:relative;flex:0 0 auto;}
+.pc .s{font-size:16px;line-height:1;}
+.pc.red{color:var(--red);}
+.pc.black{color:var(--ink);}
+.pc.back{background:repeating-linear-gradient(45deg,#8A774E,#8A774E 4px,#A8946A 4px,#A8946A 8px);
+  border-color:#6E5C39;color:transparent;}
+.pc.back .s{color:transparent;}
+.pc.key{box-shadow:0 0 0 3px var(--blue);}
+.pc.chosen{box-shadow:0 0 0 3px var(--red);}
+.pc.key.chosen{box-shadow:0 0 0 3px var(--blue),0 0 0 6px var(--red);}
+.pc .tag{position:absolute;top:-10px;left:50%;transform:translateX(-50%);
+  font-size:9px;background:var(--blue);color:#fff;border-radius:4px;padding:0 4px;white-space:nowrap;font-family:inherit;}
+.pc .tag.r{background:var(--red);}
+.legend{font-size:12px;color:var(--gray);margin-top:6px;}
+.legend .dotb{display:inline-block;width:10px;height:10px;border-radius:2px;box-shadow:0 0 0 2px var(--blue);margin:0 4px;}
+.legend .dotr{display:inline-block;width:10px;height:10px;border-radius:2px;box-shadow:0 0 0 2px var(--red);margin:0 4px;}
+
+.narr{background:#F3EDDF;border-radius:8px;padding:10px 14px;margin:10px 0;font-size:14px;min-height:52px;}
+.narr b{color:var(--khaki-dark);}
+
+/* 測驗 */
+.quiz{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;}
+.quiz .q-text{font-weight:700;margin-bottom:10px;font-size:15px;}
+.quiz .opts{display:flex;flex-direction:column;gap:8px;}
+.quiz .opt{text-align:left;background:var(--linen);border:1px solid var(--line);border-radius:8px;
+  padding:10px 12px;font-size:14px;cursor:pointer;font-family:inherit;}
+.quiz .opt.correct{background:#E7F0E9;border-color:var(--ok);color:var(--ok);font-weight:700;}
+.quiz .opt.wrong{background:#F6E7E2;border-color:var(--bad);color:var(--bad);}
+.quiz .fb{margin-top:10px;font-size:14px;display:none;}
+.quiz .fb.show{display:block;}
+.quiz .fb.good{color:var(--ok);}
+.quiz .fb.no{color:var(--bad);}
+
+.pager{display:flex;justify-content:space-between;margin-top:32px;gap:10px;}
+.pager .btn{flex:1;text-align:center;}
+
+#finalScore{display:none;text-align:center;padding:20px;}
+#finalScore .big{font-size:40px;font-weight:700;color:var(--khaki-dark);}
+
+@media (max-width:480px){
+  h2{font-size:20px;}
+  .pc{width:38px;height:54px;font-size:12px;}
+  .pc .s{font-size:14px;}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important;transition:none !important;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">CARD MAGIC · FROM ZERO</div>
+  <h1>撲克找牌術互動教室</h1>
+  <p>洗牌、切牌之後,馬上找出那張牌——紙牌魔術的完整入門課</p>
+</header>
+
+<nav id="nav"></nav>
+<div class="progress-wrap"><div class="progress-bar" id="pbar"></div></div>
+
+<main>
+
+<!-- ======== 序章 ======== -->
+<section class="chapter" data-title="開場">
+  <div class="ch-label">序章</div>
+  <h2>魔術師到底是怎麼找到那張牌的?</h2>
+
+  <div class="story">
+    你一定看過這個表演:魔術師請你<b>隨便抽一張牌</b>、記住、放回去。他洗牌、切牌,牌疊看起來已經天下大亂——然後他一翻,<b>正是你那張</b>。<br><br>
+    先說結論,免得你走冤枉路:這<b>不是記憶力、不是超能力、更不是機率</b>。全世界的找牌魔術,骨子裡只靠三大原理的其中一種(或組合):
+  </div>
+
+  <div class="card">
+    <table>
+      <tr><th>原理</th><th>一句話說穿</th><th>在哪章學</th></tr>
+      <tr><td>① <b>關鍵牌(Key Card)</b></td><td>我不知道你的牌,但我知道<b>它旁邊那張</b>是誰</td><td>第 3、4 章</td></tr>
+      <tr><td>② <b>控牌(Control)</b></td><td>你的牌看似放回牌堆深處,其實<b>一直被我控制在固定位置</b></td><td>第 5~7 章</td></tr>
+      <tr><td>③ <b>迫牌(Force)</b></td><td>你以為是自由選的,其實<b>你選的就是我要你選的那張</b></td><td>第 8 章</td></tr>
+    </table>
+  </div>
+
+  <p>這堂課保證<b>不跳步</b>:先認識牌、練好洗牌切牌的基本功,再一個原理一個原理往上蓋,每學一招就給你一套<b>完整可上場的表演流程</b>(含台詞)。</p>
+
+  <h3>學習地圖(請照順序走)</h3>
+  <div class="card">
+    <table>
+      <tr><th style="width:64px;">章節</th><th>你會學到</th><th style="width:88px;">地基</th></tr>
+      <tr><td>第 1 章</td><td>認識撲克牌:花色、牌位名稱、行話</td><td>—</td></tr>
+      <tr><td>第 2 章</td><td>基本功:握牌、三種洗牌、切牌</td><td>第 1 章</td></tr>
+      <tr><td>第 3 章</td><td>核心祕密:切牌只是「轉圈圈」(互動模擬器)</td><td>第 2 章</td></tr>
+      <tr><td>第 4 章</td><td>第一套完整表演:關鍵牌找牌法(互動排練)</td><td>第 3 章</td></tr>
+      <tr><td>第 5 章</td><td>升級武器:扣牌縫(Break)與雙切控牌</td><td>第 4 章</td></tr>
+      <tr><td>第 6 章</td><td>偷看(Glimpse):三個自然的瞄牌時機</td><td>第 5 章</td></tr>
+      <tr><td>第 7 章</td><td>假洗牌:洗得震天響,你的牌動都沒動</td><td>第 5 章</td></tr>
+      <tr><td>第 8 章</td><td>迫牌:十字切迫牌與時間誤導</td><td>第 2 章</td></tr>
+      <tr><td>第 9 章</td><td>表演學:誤導、台詞、練習法、魔術師三守則</td><td>全部</td></tr>
+      <tr><td>第 10 章</td><td>整套流程串連:初/中/高三條表演路線</td><td>全部</td></tr>
+      <tr><td>第 11 章</td><td>總測驗 + 畢業備忘卡</td><td>全部</td></tr>
+    </table>
+  </div>
+
+  <div class="tip">
+    先立一個規矩(第 9 章會正式講):這些手法是<b>表演藝術</b>,拿來娛樂朋友、訓練手腦。<b>絕對不可用在賭博或任何騙錢場合</b>——那是違法的,也毀掉魔術最珍貴的東西:觀眾的信任與驚奇。
+  </div>
+</section>
+
+<!-- ======== 第1章 ======== -->
+<section class="chapter" data-title="1·認識撲克牌">
+  <div class="ch-label">第 1 章</div>
+  <h2>認識撲克牌:先學會叫名字</h2>
+
+  <p>一副標準撲克牌 = <b>52 張</b> + 鬼牌:4 種花色 × 13 個點數(A、2~10、J、Q、K)。</p>
+
+  <div class="origin">
+    <b>撲克(Poker)</b>是英文音譯;紙牌遊戲的老祖宗一般追溯到<b>中國唐代的「葉子戲」</b>,隨貿易西傳,經波斯、埃及到歐洲,15 世紀在法國定型成今天的四花色:<br>
+    ♠ <b>黑桃</b>:法文 pique = <b>長矛</b>(貴族武力)<br>
+    ♥ <b>紅心</b>:法文 cœur = <b>心</b>(教會/仁愛)<br>
+    ♦ <b>方塊</b>:法文 carreau = <b>磚瓦</b>(商人財富)<br>
+    ♣ <b>梅花</b>:法文 trèfle = <b>三葉草</b>(農民土地)<br>
+    J/Q/K 合稱<b>宮廷牌</b>(court cards);<b>鬼牌 Joker</b> 最年輕——1860 年代美國人玩 Euchre 牌戲需要一張「最大王牌」才發明的。
+  </div>
+
+  <div class="card">
+    有趣的巧合(表演時是很好的台詞):52 張 ≈ 一年 <b>52 週</b>;4 花色 ≈ <b>4 季</b>;每花色 13 張 ≈ 每季 <b>13 週</b>;全部點數加總(A=1…K=13)= 364,加一張鬼牌 = <b>365 天</b>。一副牌,就是一本月曆。
+  </div>
+
+  <h3>牌疊的部位:行話要說對</h3>
+  <div class="card">
+    <table>
+      <tr><th>行話</th><th>意思</th></tr>
+      <tr><td><b>牌頂(Top)</b></td><td>牌疊<b>最上面</b>那張(牌背朝上時)。魔術師最愛的位置!</td></tr>
+      <tr><td><b>牌底(Bottom)</b></td><td>牌疊<b>最下面</b>那張——第 3 章的主角「關鍵牌」就住這裡</td></tr>
+      <tr><td><b>牌面(Face)</b></td><td>有點數花色的那一面</td></tr>
+      <tr><td><b>牌背(Back)</b></td><td>印花紋的那一面</td></tr>
+      <tr><td><b>攤牌(Spread)</b></td><td>把牌在桌上或手中攤成一條扇形/長龍</td></tr>
+    </table>
+  </div>
+
+  <div class="tip">
+    本章只要帶走一件事:<b>「牌頂」和「牌底」這兩個位置,是整堂課所有祕密發生的地方。</b>從現在起,拿到一副牌先在心裡默唸:哪張在頂?哪張在底?
+  </div>
+
+  <div id="q1"></div>
+</section>
+
+<!-- ======== 第2章 ======== -->
+<section class="chapter" data-title="2·基本功">
+  <div class="ch-label">第 2 章</div>
+  <h2>基本功:握牌、洗牌、切牌</h2>
+
+  <p>魔術的說服力來自「看起來很平常」。所以第一步是把<b>平常人怎麼拿牌、洗牌</b>練到自然——觀眾覺得你普通,才不會提防。</p>
+
+  <h3>握牌:發牌手勢</h3>
+  <div class="origin">
+    標準握法叫 <b>Mechanic's Grip(機械師握法)</b>:牌放左手掌,食指抵住牌前緣、拇指在上、其餘三指扶側邊。名字的由來很妙:賭場行話把<b>手法精準得像機器的老千</b>稱為 mechanic(機械師),這個握法因為最方便做各種手法而得名——我們拿來表演,不拿來做壞事。
+  </div>
+
+  <h3>三種洗牌,先會兩種</h3>
+  <div class="card">
+    <table>
+      <tr><th>洗法</th><th>怎麼做</th><th>備註</th></tr>
+      <tr><td>① <b>疊洗(Overhand)</b></td><td>右手持牌,左手拇指一小疊一小疊往下撥</td><td>最多人用、最好練,第 7 章的假洗就用它變形</td></tr>
+      <tr><td>② <b>鴿尾洗(Riffle)</b></td><td>牌分兩半,拇指讓兩疊交錯彈落再推合</td><td>英文又叫 dovetail(鴿尾),因為交錯的牌像<b>鴿子尾羽</b>;也像木工的鳩尾榫</td></tr>
+      <tr><td>③ 印度洗(Hindu)</td><td>從牌疊上方一疊疊抽走</td><td>亞洲常見;行有餘力再練</td></tr>
+    </table>
+  </div>
+
+  <h3>切牌(Cut):最重要的一個動作</h3>
+  <div class="steps">
+    <div class="st">把牌疊<b>上半部</b>拿起來,放到旁邊。</div>
+    <div class="st">把原本的<b>下半部</b>疊到它上面。</div>
+    <div class="st">完成!這叫「<b>完整切牌</b>(complete cut)」——上下互換了位置。</div>
+  </div>
+
+  <div class="tip">
+    每天練習菜單(各 5 分鐘,兩週見效):疊洗 50 次、切牌 50 次、把牌<b>攤成漂亮的扇形長龍</b> 20 次。目標不是快,是<b>穩、順、不掉牌</b>——手穩了,第 3 章的祕密才藏得住。
+  </div>
+
+  <div id="q2"></div>
+</section>
+
+<!-- ======== 第3章 ======== -->
+<section class="chapter" data-title="3·切牌的祕密">
+  <div class="ch-label">第 3 章</div>
+  <h2>核心祕密:切牌只是「轉圈圈」</h2>
+
+  <p>整堂課最重要的一章來了。請先記住這句話,它是所有找牌魔術的地基:</p>
+
+  <div class="card" style="text-align:center;font-size:17px;font-weight:700;">
+    切牌<b>不會打亂</b>牌的順序,只是讓整個「圓圈」轉了一個角度。
+  </div>
+
+  <div class="story">
+    把牌疊想像成<b>一串圍成圓圈的人</b>:切牌只是換一個人當「排頭」,<b>每個人左右鄰居完全沒變</b>。<br>
+    所以——如果我知道「B 排在 A 的後面」,那不管你切幾次牌,<b>B 永遠緊跟著 A</b>。魔術師靠的就是這個:他不用知道整副牌,只要知道<b>一對鄰居</b>。
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">互動模擬器:切給你看!切幾次都不會拆散鄰居</div>
+    <p style="font-size:14px;margin-bottom:6px;">下面 8 張牌(牌頂→牌底)。注意 <span style="color:var(--blue);font-weight:700;">藍框 7♦</span> 和 <span style="color:var(--red);font-weight:700;">紅框 Q♠</span> 這對鄰居:</p>
+    <div class="deckrow" id="cutRow"></div>
+    <div class="legend"><span class="dotb"></span>關鍵牌 7♦  <span class="dotr"></span>目標牌 Q♠(7♦ 的下一張)</div>
+    <div class="narr" id="cutNarr">按「切牌」試試——隨機找個位置切一刀。</div>
+    <div style="text-align:center;">
+      <button class="btn small" onclick="doCut()">✂️ 切牌一次</button>
+      <button class="btn small ghost" onclick="cutReset()">重來</button>
+    </div>
+  </div>
+
+  <p>多切幾次你會發現:兩張牌有時分開站在頭尾——那也沒關係,因為牌其實是圓圈,<b>尾巴接回頭</b>,7♦ 的「下一張」繞回去還是 Q♠。只有一種東西會真的拆散鄰居:<b>洗牌</b>。所以魔術師的順序永遠是「<b>先洗牌,再動手腳,之後只准切牌</b>」。</p>
+
+  <div class="origin">
+    這個原理在魔術書裡叫<b>循環不變性</b>,而利用它的第一號武器叫 <b>Key Card(關鍵牌)</b>——key = 鑰匙:那張牌本身不是答案,但它是<b>打開答案的鑰匙</b>,因為答案永遠躺在它隔壁。這是紙牌魔術史上最古老的原理之一,幾百年前的魔術文獻就有記載,至今職業魔術師仍在用——老,但殺傷力十足。
+  </div>
+
+  <div id="q3"></div>
+</section>
+
+<!-- ======== 第4章 ======== -->
+<section class="chapter" data-title="4·第一套表演">
+  <div class="ch-label">第 4 章</div>
+  <h2>第一套完整表演:關鍵牌找牌法</h2>
+
+  <p>把第 3 章的原理裝上台詞,就是你的第一個魔術。先看流程,再用模擬器排練:</p>
+
+  <div class="steps">
+    <div class="st"><b>讓觀眾洗牌</b>(真的洗!這是最強的說服力)。收回牌時,<b>順勢偷看牌底那張</b>——它就是你的「關鍵牌」。(怎麼偷看才自然?第 6 章專門教。)</div>
+    <div class="st">攤開牌,請觀眾<b>隨便抽一張、記住</b>,不要給你看。</div>
+    <div class="st">把牌合疊,請觀眾把牌<b>放回牌頂</b>。(台詞:「放在最上面,大家都看得到,我不碰。」)</div>
+    <div class="st">請觀眾<b>切牌一次</b>(完整切牌)。這一刀就是魔術發生的瞬間:<b>原本在牌底的關鍵牌,正好蓋到觀眾的牌上面</b>,從此變成緊鄰的一對。愛切幾次都行!</div>
+    <div class="st">把牌<b>面朝上攤開</b>,眼睛找你的關鍵牌——<b>它的下一張(往牌頂方向)就是觀眾的牌</b>。</div>
+    <div class="st">別急著抽出來!先醞釀:「我感應到……你的牌是紅色的……是張人頭牌……」最後才翻出——<b>揭示越慢,驚奇越大</b>。</div>
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">互動排練:一步一步看祕密怎麼運作(16 張牌示範)</div>
+    <div class="narr" id="simNarr">按「開始表演」,跟著每一步走。可隨時切換視角,看觀眾眼中 vs 你眼中的牌。</div>
+    <div class="deckrow" id="simRow"></div>
+    <div class="legend">左=牌頂,右=牌底 | <span class="dotb"></span>關鍵牌  <span class="dotr"></span>觀眾的牌</div>
+    <div style="text-align:center;margin-top:8px;">
+      <button class="btn small" id="simNextBtn" onclick="simNext()">▶ 開始表演</button>
+      <button class="btn small khaki" id="simViewBtn" onclick="simView()">👁 切換魔術師視角</button>
+      <button class="btn small ghost" onclick="simReset()">重來</button>
+    </div>
+  </div>
+
+  <div class="tip">
+    新手最常犯的三個錯:①偷看關鍵牌時<b>眼神鬼祟</b>(第 6 章教你自然的時機);②觀眾放牌後你又<b>自己亂洗</b>(把鄰居拆散,魔術當場報廢——切牌可以,洗牌不行!);③找到牌就急著喊出來(少了醞釀,驚奇打三折)。
+  </div>
+
+  <div id="q4"></div>
+</section>
+
+<!-- ======== 第5章 ======== -->
+<section class="chapter" data-title="5·控牌">
+  <div class="ch-label">第 5 章</div>
+  <h2>升級武器:扣牌縫與雙切控牌</h2>
+
+  <p>關鍵牌法很強,但有個限制:你要<b>事後攤牌尋找</b>。更高一級的玩法是——觀眾的牌從放回去那一刻,就<b>一直被你控制在牌頂</b>,你隨時能「啪」一聲翻出來。這叫<b>控牌(Control)</b>。</p>
+
+  <h3>第一步:學會「扣牌縫」</h3>
+  <div class="origin">
+    <b>Break(扣牌縫)</b>:觀眾把牌放回牌疊中間時,你用左手<b>小指的指尖肉,偷偷夾在他的牌上方</b>,牌疊正面看毫無異狀,但你的小指「記住」了位置——像在書裡夾了一根隱形書籤。break 原意是「裂縫」,行話直譯就是「留一道縫」。<b>它是一切控牌手法的第一塊積木。</b>
+  </div>
+
+  <h3>第二步:雙切法(Double Undercut)把牌送上牌頂</h3>
+  <div class="steps">
+    <div class="st">觀眾的牌插回牌疊中間,你的小指在它<b>上方</b>扣住縫。</div>
+    <div class="st">右手從上方接管牌疊(拇指順勢接住那道縫)。</div>
+    <div class="st">左手抽走<b>縫以下的下半疊的一半</b>,疊到牌頂——看起來只是隨手切牌。</div>
+    <div class="st">再把<b>縫以下剩餘的牌</b>也切到牌頂。兩刀切完,縫消失了——<b>觀眾的牌正好落在牌頂!</b></div>
+  </div>
+  <p style="font-size:14px;color:var(--gray);">為什麼行得通?回想第 3 章:切牌只是轉圈圈——這兩刀「轉」的角度,是你用小指precisely量好的:剛好轉到讓他的牌當排頭。</p>
+
+  <div class="story">
+    控到牌頂之後,你就是牌疊的主人:想「從口袋變出來」?先把牌頂那張偷到手心(進階手法);想「第 10 張出現」?數 9 張蓋上去;想最保險?直接接第 7 章的<b>假洗牌</b>,洗得天花亂墜,牌還在頂上。
+  </div>
+
+  <div class="tip">
+    練習訣竅:先<b>不藏縫</b>,光明正大夾著小指練雙切 50 次,把兩刀切順;再對著鏡子把縫縮小到「自己都快看不見」。魔術手法沒有捷徑,只有<b>把一個動作重複到變成本能</b>。
+  </div>
+
+  <div id="q5"></div>
+</section>
+
+<!-- ======== 第6章 ======== -->
+<section class="chapter" data-title="6·偷看">
+  <div class="ch-label">第 6 章</div>
+  <h2>偷看(Glimpse):三個自然的瞄牌時機</h2>
+
+  <div class="origin">
+    <b>Glimpse</b> = 英文「一瞥、匆匆一眼」。魔術行話專指<b>神不知鬼不覺地看到某張牌</b>——通常是牌底(為了關鍵牌法)或牌頂(為了控牌後確認)。重點從來不是「看」,而是<b>「看的那一刻,觀眾的注意力在別的地方」</b>。
+  </div>
+
+  <h3>三個經典時機(從易到難)</h3>
+  <div class="card">
+    <table>
+      <tr><th>時機</th><th>怎麼做</th><th>為什麼自然</th></tr>
+      <tr><td>① <b>整理牌時</b></td><td>觀眾洗完把牌還你,你把牌「敲齊、對正」,牌面短暫朝向自己——瞄一眼牌底</td><td>整理牌是每個人的本能動作,零嫌疑</td></tr>
+      <tr><td>② <b>攤扇請人抽牌時</b></td><td>把牌攤成扇形遞出去的瞬間,牌底那張自然微微朝你</td><td>所有人的目光都在「要抽哪張」,沒人看你的眼睛</td></tr>
+      <tr><td>③ <b>講話的瞬間</b></td><td>一邊說「等一下請你切牌」一邊比手勢,牌隨手一傾——瞄</td><td>人的注意力跟著<b>聲音和大動作</b>走(下一章的誤導原理)</td></tr>
+    </table>
+  </div>
+
+  <div class="tip">
+    瞄牌鐵律:<b>只瞄 0.5 秒,瞄完立刻繼續原本的動作和講話</b>。停頓才是破綻——觀眾不會發現你看了牌,只會發現你「突然怪怪的」。
+  </div>
+
+  <div id="q6"></div>
+</section>
+
+<!-- ======== 第7章 ======== -->
+<section class="chapter" data-title="7·假洗牌">
+  <div class="ch-label">第 7 章</div>
+  <h2>假洗牌:洗得震天響,那張牌動都沒動</h2>
+
+  <p>控牌到牌頂之後(第 5 章),最怕觀眾說:「洗一下牌吧?」——這時你需要<b>假洗牌(False Shuffle)</b>:看起來洗得徹底,實際上<b>牌頂那張(或那一小疊)全程沒動</b>。</p>
+
+  <h3>入門款:保頂疊洗(最實用的一招)</h3>
+  <div class="steps">
+    <div class="st">用第 2 章的疊洗姿勢持牌,觀眾的牌在<b>牌頂</b>。</div>
+    <div class="st">第一把:左手拇指<b>只撥下最上面那一張</b>(觀眾的牌)到左手——這叫「run 一張」。</div>
+    <div class="st">接著正常大把大把疊洗,把其餘的牌全部洗到它<b>上面</b>。現在他的牌跑到<b>牌底</b>了。</div>
+    <div class="st">馬上再洗一輪:一樣先 run 若干張,最後把含他牌的底疊<b>整把甩回牌頂</b>。兩輪洗完——牌回到牌頂,而你剛剛「認真洗了兩次牌」。</div>
+  </div>
+  <p style="font-size:14px;color:var(--gray);">聽起來複雜?拿實體牌照步驟走一次,30 秒就懂——這招的美在於<b>動作和真洗牌 100% 一樣</b>,差別只在你拇指撥牌的張數。</p>
+
+  <div class="origin">
+    這類「洗牌時精準控制某幾張去向」的技術,行話叫 <b>Jog Shuffle</b>:jog 原意是「輕推、突出一小截」——洗牌過程中讓某張牌<b>悄悄突出一角</b>當記號,之後照著記號分疊。你剛學的保頂洗法是它最簡化的親戚。
+  </div>
+
+  <div class="tip">
+    心理學加分:假洗完,把牌<b>推給觀眾切一次牌</b>。「連切牌都讓你切」的公平感是致命說服力——而你在第 3 章早就知道:<b>切牌拆不散任何祕密</b>。這就是原理疊原理的威力。
+  </div>
+
+  <div id="q7"></div>
+</section>
+
+<!-- ======== 第8章 ======== -->
+<section class="chapter" data-title="8·迫牌">
+  <div class="ch-label">第 8 章</div>
+  <h2>迫牌(Force):你選的,其實是我要你選的</h2>
+
+  <div class="origin">
+    <b>Force(迫牌)</b>= 英文「強迫」:讓觀眾在<b>感覺完全自由</b>的情況下,選中你早已知道(甚至早已寫好預言)的那張牌。它是第三大原理,也是「預言系魔術」的心臟——因為你連找都不用找:<b>答案從頭到尾在你口袋裡</b>。
+  </div>
+
+  <h3>入門款:十字切迫牌(Cross-Cut Force)</h3>
+  <p>公認最簡單、成功率近乎 100% 的迫牌,老魔術師人手一招:</p>
+  <div class="steps">
+    <div class="st">事先知道<b>牌頂第一張</b>是什麼(例:紅心 Q——可以先寫進預言紙條)。</div>
+    <div class="st">把牌放桌上,請觀眾<b>「隨意切一疊下來,放旁邊」</b>。</div>
+    <div class="st">你拿起<b>原本的下半疊,橫著(十字型)壓在他切下的那疊上</b>。台詞:「壓住,標記你切的位置。」</div>
+    <div class="st"><b>關鍵一步:聊天 10~20 秒</b>。「你剛剛完全可以切任何位置對吧?沒人碰過牌對吧?」——這叫<b>時間誤導</b>:讓觀眾忘記兩疊誰上誰下。</div>
+    <div class="st">回到牌前,拿開上面橫壓的牌,指著下面那疊的第一張:「看看<b>你切到的牌</b>。」——他翻開的,其實是<b>原本的牌頂</b>:紅心 Q。預言紙條打開,全場尖叫。</div>
+  </div>
+
+  <div class="origin">
+    <b>時間誤導(Time Misdirection)</b>:人的短期記憶很脆弱,<b>隔 15 秒 + 一段對話</b>,觀眾就會把「切牌的動作」和「翻牌的位置」在腦中接錯線。魔術理論大師常說:祕密不是藏在手裡,是<b>藏在時間裡</b>。這個觀念是 20 世紀初魔術師從心理學借來的,如今是所有職業表演的底層武器。
+  </div>
+
+  <div class="tip">
+    迫牌成功後的表演空間比找牌更大:預言信封、寫在窗戶上的字、你手機裡早就存好的照片……<b>觀眾以為的自由意志,是你劇本的第一行</b>。也因此更要記住序章的規矩:只用於表演。
+  </div>
+
+  <div id="q8"></div>
+</section>
+
+<!-- ======== 第9章 ======== -->
+<section class="chapter" data-title="9·表演學">
+  <div class="ch-label">第 9 章</div>
+  <h2>表演學:手法只占三成,七成在這章</h2>
+
+  <h3>誤導:魔術的第一心理學</h3>
+  <div class="origin">
+    <b>Misdirection(誤導)</b>= mis(錯)+ direction(方向):把觀眾的<b>注意力</b>引去錯的方向。要訣只有三條:<br>
+    ① <b>眼睛</b>:觀眾永遠看你眼睛看的地方——祕密動作時,你要看著觀眾或另一隻手。<br>
+    ② <b>大動作蓋小動作</b>:右手大幅度比劃,左手的小指扣縫就隱形了。<br>
+    ③ <b>問題抓走大腦</b>:「你的牌是紅的還是黑的?」——觀眾一思考,眼睛就失焦。
+  </div>
+
+  <h3>台詞(Patter):魔術的配樂</h3>
+  <div class="origin">
+    魔術台詞的行話叫 <b>Patter</b>,由來很有趣:源自中世紀拉丁禱文 <b>Pater Noster(我們的天父)</b>——僧侶唸得飛快、含糊不清,英文就把「連珠炮式的講話」叫 patter,後來成了街頭藝人與魔術師「邊講邊演」話術的專名。好台詞的功能:給動作合理的理由(「我壓住標記位置」)、控制節奏、以及——執行時間誤導。
+  </div>
+
+  <h3>練習的正確姿勢</h3>
+  <div class="card">
+    ① <b>分解練</b>:一個手法拆成 3~4 個小動作,單個練熟再串接。<br>
+    ② <b>鏡子 → 錄影 → 真人</b>:鏡子看角度、錄影抓破綻(你會嚇到自己)、最後找最寬容的家人首演。<br>
+    ③ <b>一招練 100 次才上場</b>:魔術界的老話——「業餘練到會,職業練到<b>不可能錯</b>。」<br>
+    ④ 每招先用「慢動作+看得到祕密」練順,再逐步加速藏祕密——和你在模擬器裡切視角是同一個道理。
+  </div>
+
+  <h3>魔術師三守則(全球通用的行規)</h3>
+  <div class="card">
+    ① <b>不說破</b>:揭密的那一刻,驚奇死亡,你也失去下一次表演的資格。被追問就笑著說:「練了很久。」(這是實話!)<br>
+    ② <b>不重演</b>:同一招對同一批人只演一次——第二次觀眾知道要看哪裡,破綻放大十倍。<br>
+    ③ <b>不用於欺騙</b>:表演娛樂 OK;賭博、騙財違法且毀掉整個行業的信任。
+  </div>
+
+  <div id="q9"></div>
+</section>
+
+<!-- ======== 第10章 ======== -->
+<section class="chapter" data-title="10·全流程串連">
+  <div class="ch-label">第 10 章</div>
+  <h2>串起來:三條完整表演路線</h2>
+
+  <p>把整堂課的積木組裝成三套「從洗牌到揭示」的完整流程,照你的熟練度選一條:</p>
+
+  <div class="card">
+    <table>
+      <tr><th>路線</th><th>流程(對照章節)</th><th>特色</th></tr>
+      <tr><td>🥉 <b>初階:關鍵牌路線</b></td><td>觀眾洗牌 → 收牌瞄底牌(6)→ 抽牌記牌 → 放回牌頂(4)→ 觀眾切牌任意次(3)→ 攤牌找 key 的下一張 → 慢慢揭示</td><td>零手法門檻,原理 100% 保護你,<b>今天就能演</b></td></tr>
+      <tr><td>🥈 <b>中階:控牌路線</b></td><td>觀眾抽牌 → 插回中間+小指扣縫(5)→ 雙切控上牌頂(5)→ 保頂假洗兩輪(7)→ 請觀眾切牌(3)→ 「啪」翻牌頂旁揭示</td><td>牌看似插進深處還洗過,衝擊力大增</td></tr>
+      <tr><td>🥇 <b>高階:迫牌預言路線</b></td><td>事先寫預言、記牌頂(8)→ 十字切迫牌 → 時間誤導閒聊(8、9)→ 觀眾「自由」翻牌 → 打開預言,完全命中</td><td>你甚至不用碰牌找牌——<b>答案早在口袋</b></td></tr>
+    </table>
+  </div>
+
+  <h3>萬一失手怎麼辦?(救場包)</h3>
+  <div class="card">
+    ① <b>關鍵牌不見了?</b>攤牌時多攤幾秒,說「我再感應一下」——通常是看漏,再掃一次。<br>
+    ② <b>真的找錯牌?</b>笑著說「暖身而已」,把牌收回<b>換演另一條路線</b>(所以至少要會兩套!)。觀眾記得的是你的從容,不是失誤。<br>
+    ③ <b>觀眾堅持要自己洗牌打亂?</b>大方讓他洗——然後演初階路線(它本來就從觀眾洗牌開始,毫髮無傷)。<b>每條路線的第一步,就是為對方的懷疑而設計的。</b>
+  </div>
+
+  <div class="tip">
+    發現了嗎?三大原理對應三種「祕密發生的時間點」:關鍵牌在<b>收牌時</b>、控牌在<b>放回時</b>、迫牌在<b>選牌前</b>。觀眾拚命盯著「洗牌切牌」找破綻——而那段時間,恰恰<b>什麼祕密都沒發生</b>。這就是流程設計的藝術:把祕密放在沒人看的時刻。
+  </div>
+
+  <div id="q10"></div>
+</section>
+
+<!-- ======== 第11章 ======== -->
+<section class="chapter" data-title="11·總測驗">
+  <div class="ch-label">第 11 章</div>
+  <h2>總測驗:你會了嗎?</h2>
+  <p>12 題,涵蓋整堂課。答完自動計分,錯的題目會告訴你為什麼。</p>
+  <div id="finalQuiz"></div>
+  <div style="text-align:center;margin-top:16px;">
+    <button class="btn" onclick="gradeFinal()">交卷計分</button>
+    <button class="btn ghost" onclick="resetFinal()" style="margin-left:8px;">重新作答</button>
+  </div>
+  <div id="finalScore" class="card"></div>
+
+  <h3>畢業備忘卡 🎓</h3>
+  <div class="card">
+    <table>
+      <tr><td><b>三大原理</b></td><td>關鍵牌(知道鄰居)、控牌(位置在我手上)、迫牌(選擇是我安排的)</td></tr>
+      <tr><td><b>核心定律</b></td><td>切牌只是轉圈圈,拆不散鄰居;會拆散的只有洗牌</td></tr>
+      <tr><td><b>關鍵牌流程</b></td><td>瞄底牌 → 觀眾牌放牌頂 → 切牌 → key 的下一張就是答案</td></tr>
+      <tr><td><b>控牌積木</b></td><td>小指扣縫(break)→ 雙切送上牌頂 → 保頂假洗保護它</td></tr>
+      <tr><td><b>迫牌</b></td><td>十字切 + 時間誤導:祕密藏在時間裡</td></tr>
+      <tr><td><b>誤導三訣</b></td><td>眼睛帶方向、大動作蓋小動作、問題抓走大腦</td></tr>
+      <tr><td><b>練習</b></td><td>分解練 → 鏡子 → 錄影 → 真人;練 100 次才上場</td></tr>
+      <tr><td><b>三守則</b></td><td>不說破、不重演、不用於欺騙</td></tr>
+      <tr><td><b>流程心法</b></td><td>把祕密放在沒人看的時刻;每條路線第一步就為懷疑而設計</td></tr>
+    </table>
+  </div>
+</section>
+
+<div class="pager">
+  <button class="btn ghost" id="prevBtn" onclick="go(-1)">← 上一章</button>
+  <button class="btn" id="nextBtn" onclick="go(1)">下一章 →</button>
+</div>
+
+</main>
+
+<script>
+/* ===== 章節導覽 ===== */
+const chapters=[...document.querySelectorAll('section.chapter')];
+const nav=document.getElementById('nav');
+let cur=0;
+chapters.forEach((c,i)=>{
+  const b=document.createElement('button');
+  b.textContent=c.dataset.title;
+  b.onclick=()=>show(i);
+  nav.appendChild(b);
+});
+function show(i){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=i;
+  cur=i;
+  chapters.forEach((c,j)=>c.classList.toggle('show',j===i));
+  [...nav.children].forEach((b,j)=>b.classList.toggle('active',j===i));
+  document.getElementById('pbar').style.width=((i+1)/chapters.length*100)+'%';
+  document.getElementById('prevBtn').style.visibility=i===0?'hidden':'visible';
+  document.getElementById('nextBtn').textContent=i===chapters.length-1?'完成 🎉':'下一章 →';
+  nav.children[i].scrollIntoView({inline:'center',block:'nearest'});
+  window.scrollTo({top:0});
+}
+function go(d){
+  const n=cur+d;
+  if(n<0)return;
+  if(n>=chapters.length){alert('恭喜完成整堂課!🎓 記得回第 11 章交卷看分數,然後拿一副真牌開始練!');return;}
+  show(n);
+}
+show(0);
+
+/* ===== 牌籌片工具 ===== */
+function isRed(c){return c.includes('♥')||c.includes('♦');}
+function chip(c,opt={}){
+  const r=c.slice(0,-1),s=c.slice(-1);
+  return `<div class="pc ${isRed(c)?'red':'black'} ${opt.back?'back':''} ${opt.key?'key':''} ${opt.chosen?'chosen':''}">
+    ${opt.tag?`<div class="tag ${opt.tagR?'r':''}">${opt.tag}</div>`:''}
+    <span>${r}</span><span class="s">${s}</span></div>`;
+}
+
+/* ===== 第3章 切牌循環模擬器 ===== */
+const CUT0=['A♠','3♥','7♦','Q♠','9♣','5♥','K♦','2♣'];
+let cutArr=[...CUT0],cutN=0;
+function cutRender(msg){
+  document.getElementById('cutRow').innerHTML=cutArr.map(c=>
+    chip(c,{key:c==='7♦',chosen:c==='Q♠'})).join('');
+  if(msg)document.getElementById('cutNarr').innerHTML=msg;
+}
+function doCut(){
+  const k=1+Math.floor(Math.random()*(cutArr.length-1));
+  cutArr=cutArr.slice(k).concat(cutArr.slice(0,k));
+  cutN++;
+  const i7=cutArr.indexOf('7♦');
+  const adjacent=(i7+1)%cutArr.length===cutArr.indexOf('Q♠');
+  const wrap=i7===cutArr.length-1;
+  cutRender(`第 <b>${cutN}</b> 刀:從第 ${k+1} 張切開。${adjacent?(wrap?'7♦ 跑到最後一張了?別忘了牌是<b>圓圈</b>——繞回開頭,Q♠ 還是它的下一張!':'看!<b>Q♠ 依然緊跟在 7♦ 後面</b>。')||'':''} 切幾刀都拆不散這對鄰居。`);
+}
+function cutReset(){cutArr=[...CUT0];cutN=0;cutRender('已重置。按「切牌」試試——隨機找個位置切一刀。');}
+cutRender();
+
+/* ===== 第4章 關鍵牌表演模擬器 ===== */
+const SIMCARDS=['A♠','2♥','3♦','4♣','5♠','6♥','7♦','8♣','9♠','10♥','J♦','Q♣','K♠','A♥','2♦','3♣'];
+let sim={deck:[],step:0,key:null,chosen:null,magician:false};
+function simRender(){
+  const row=document.getElementById('simRow');
+  row.innerHTML=sim.deck.map((c,i)=>{
+    const showFace=sim.magician||sim.step>=5;
+    const isKey=c===sim.key&&sim.step>=2;
+    const isCh=c===sim.chosen&&sim.step>=3;
+    return chip(c,{
+      back:!showFace,
+      key:isKey&&(sim.magician||sim.step>=5),
+      chosen:isCh&&(sim.magician||sim.step>=5),
+      tag:(sim.magician&&isKey)?'關鍵牌':(sim.magician&&isCh)?'觀眾牌':'',
+      tagR:isCh
+    });
+  }).join('');
+}
+const simSteps=[
+  null,
+  ()=>{ sim.deck=[...SIMCARDS].sort(()=>Math.random()-.5);
+    return '① <b>觀眾洗牌</b>(真的洗,順序全亂)。牌交還給你——';},
+  ()=>{ sim.key=sim.deck[sim.deck.length-1];
+    return `② 你把牌敲齊,<b>順勢瞄了一眼牌底</b>:關鍵牌是 <b>${sim.key}</b>(切到魔術師視角看看藍框)。觀眾毫無感覺。`;},
+  ()=>{ const i=2+Math.floor(Math.random()*(sim.deck.length-4));
+    sim.chosen=sim.deck[i];sim.deck.splice(i,1);
+    return `③ 觀眾從牌中抽走一張,記住了——是 <b>${sim.chosen}</b>(只有觀眾和上帝視角知道)。`;},
+  ()=>{ sim.deck.unshift(sim.chosen);
+    return '④ 觀眾把牌<b>放回牌頂</b>(最左邊)。你一根手指都沒碰。';},
+  ()=>{ const k=3+Math.floor(Math.random()*(sim.deck.length-6));
+    sim.deck=sim.deck.slice(k).concat(sim.deck.slice(0,k));
+    return `⑤ 觀眾<b>切牌一次</b>!魔法瞬間:原本在牌底的關鍵牌 ${sim.key},<b>正好蓋在 ${sim.chosen} 的左邊(上面)</b>——切到魔術師視角看那對鄰居。`;},
+  ()=>{ sim.magician=true;
+    return `⑥ 攤牌(牌面全開)!你不動聲色掃過去……找到 <b>${sim.key}</b>(藍框)——它的<b>下一張(右邊)</b>就是 <b class="num">${sim.chosen}</b>(紅框)!🎉 現在開始醞釀台詞:「我感應到,你的牌是……」`;},
+];
+function simNext(){
+  if(sim.step>=simSteps.length-1)return;
+  sim.step++;
+  document.getElementById('simNarr').innerHTML=simSteps[sim.step]();
+  document.getElementById('simNextBtn').textContent=sim.step>=simSteps.length-1?'✅ 表演完成':'▶ 下一步';
+  if(sim.step>=simSteps.length-1)document.getElementById('simNextBtn').disabled=true;
+  simRender();
+}
+function simView(){
+  sim.magician=!sim.magician;
+  document.getElementById('simViewBtn').textContent=sim.magician?'👁 切回觀眾視角':'👁 切換魔術師視角';
+  simRender();
+}
+function simReset(){
+  sim={deck:[],step:0,key:null,chosen:null,magician:false};
+  document.getElementById('simNarr').innerHTML='按「開始表演」,跟著每一步走。可隨時切換視角,看觀眾眼中 vs 你眼中的牌。';
+  const b=document.getElementById('simNextBtn');b.disabled=false;b.textContent='▶ 開始表演';
+  document.getElementById('simViewBtn').textContent='👁 切換魔術師視角';
+  document.getElementById('simRow').innerHTML='';
+}
+simReset();
+
+/* ===== 各章小測 ===== */
+function makeQuiz(elId,qs){
+  const box=document.getElementById(elId);
+  if(!box)return;
+  const h=document.createElement('h3');h.textContent='✏️ 隨堂小測';box.appendChild(h);
+  qs.forEach((q,i)=>{
+    const opts=q[1].map((t,j)=>({t,ok:j===q[2]})).sort(()=>Math.random()-.5);
+    const div=document.createElement('div');
+    div.className='quiz';
+    div.innerHTML=`<div class="q-text">Q${i+1}. ${q[0]}</div>
+      <div class="opts">${opts.map(o=>`<button class="opt" data-ok="${o.ok}">${o.t}</button>`).join('')}</div>
+      <div class="fb"></div>`;
+    div.querySelectorAll('.opt').forEach(btn=>{
+      btn.onclick=()=>{
+        if(div.dataset.done)return;
+        div.dataset.done='1';
+        const ok=btn.dataset.ok==='true';
+        btn.classList.add(ok?'correct':'wrong');
+        if(!ok)div.querySelector('[data-ok="true"]').classList.add('correct');
+        const fb=div.querySelector('.fb');
+        fb.className='fb show '+(ok?'good':'no');
+        fb.textContent=(ok?'✓ 答對!':'✗ ')+q[3];
+      };
+    });
+    box.appendChild(div);
+  });
+}
+makeQuiz('q1',[
+  ['♣ 梅花在法文原意是?',['三葉草','梅子','鐵鎚'],0,'trèfle=三葉草,代表農民與土地;♠長矛、♥心、♦磚瓦。'],
+  ['魔術師最常動手腳的兩個位置是?',['牌頂與牌底','第 7 張與第 8 張','鬼牌旁邊'],0,'整堂課的祕密幾乎都發生在 Top 和 Bottom。'],
+]);
+makeQuiz('q2',[
+  ['「機械師握法」名字的由來是?',['發明者是修車工','賭場行話稱手法精準的老千為 mechanic','要用機器輔助'],1,'手法精準如機械——我們拿來表演,不做壞事。'],
+  ['鴿尾洗(riffle)的別名 dovetail 是因為?',['交錯的牌像鴿子尾羽','發明者養鴿子','洗牌聲像鳥叫'],0,'也像木工的鳩尾榫,交錯咬合。'],
+]);
+makeQuiz('q3',[
+  ['切牌對牌序的影響是?',['徹底打亂','只是讓「圓圈」轉一個角度,鄰居不變','會讓牌變少'],1,'這是全課地基:切牌拆不散鄰居,洗牌才會。'],
+  ['關鍵牌(Key Card)的作用是?',['它本身就是觀眾的牌','它是鑰匙:答案永遠在它隔壁','它能發光'],1,'我不知道你的牌,但我知道它旁邊那張是誰。'],
+]);
+makeQuiz('q4',[
+  ['關鍵牌法中,觀眾切牌那一刀造成什麼?',['牌底的關鍵牌正好蓋到觀眾牌上面,變成鄰居','牌全亂了','觀眾牌跑到牌底'],0,'切牌=下半疊上桌頂,底牌正好壓住頂牌。'],
+  ['觀眾放回牌之後,魔術師絕對不能做的是?',['切牌','洗牌','講話'],1,'洗牌會拆散鄰居,魔術當場報廢;切牌隨便切。'],
+]);
+makeQuiz('q5',[
+  ['「扣牌縫(break)」是?',['把牌折彎','用小指在特定位置偷偷留一道縫當隱形書籤','休息時間'],1,'它是一切控牌手法的第一塊積木。'],
+  ['雙切法(double undercut)的目的通常是?',['把觀眾的牌送到牌頂','把牌切成四疊','讓牌變新'],0,'兩刀「轉圈」的角度是小指量好的,轉完他的牌當排頭。'],
+]);
+makeQuiz('q6',[
+  ['瞄牌(glimpse)成功的關鍵是?',['看得越久越清楚','只瞄 0.5 秒且不中斷原本的動作與講話','戴墨鏡'],1,'停頓才是破綻——觀眾發現的不是你看牌,是你「怪怪的」。'],
+  ['最自然的瞄底牌時機是?',['觀眾直視你時','把牌敲齊整理的瞬間','宣布「我要偷看了」'],1,'整理牌是人人都有的本能動作,零嫌疑。'],
+]);
+makeQuiz('q7',[
+  ['保頂疊洗第一輪先「run 一張」會讓觀眾的牌?',['留在牌頂','跑到牌底(第二輪再洗回頂)','消失'],1,'兩輪一來一回,牌回牌頂,而你「認真洗了兩次」。'],
+  ['假洗完再請觀眾切一次牌,為什麼敢?',['因為切牌拆不散順序(第 3 章)','因為觀眾不會切','因為牌有做記號'],0,'原理疊原理:公平感拉滿,祕密毫髮無傷。'],
+]);
+makeQuiz('q8',[
+  ['十字切迫牌中,聊天 10~20 秒的目的是?',['拖時間下班','時間誤導:讓觀眾忘記兩疊誰上誰下','等膠水乾'],1,'祕密不是藏在手裡,是藏在時間裡。'],
+  ['迫牌(force)的本質是?',['觀眾自由選,魔術師猜','觀眾感覺自由,實際選中魔術師安排的牌','用力發牌'],1,'所以預言可以事先寫好——答案從頭到尾在口袋裡。'],
+]);
+makeQuiz('q9',[
+  ['誤導的第一訣「眼睛」是指?',['閉眼表演','觀眾永遠看你眼睛看的地方','戴假睫毛'],1,'祕密動作時,你的視線要在別處,觀眾就跟著去別處。'],
+  ['魔術師三守則是?',['不說破、不重演、不用於欺騙','快、狠、準','多練、多演、多收費'],0,'說破=驚奇死亡;重演=破綻放大;欺騙=違法且毀行業。'],
+]);
+makeQuiz('q10',[
+  ['三大原理各自「動手腳」的時間點是?',['收牌時/放回時/選牌前','洗牌時/洗牌時/洗牌時','揭示時'],0,'觀眾盯著洗牌切牌找破綻——那段時間什麼都沒發生。'],
+  ['表演失手找錯牌,最好的處理是?',['道歉走人','笑說「暖身而已」,換演另一條路線','堅持那就是對的牌'],1,'所以至少要會兩套;觀眾記得你的從容,不是失誤。'],
+]);
+
+/* ===== 總測驗 ===== */
+const finalQs=[
+  ['找牌魔術的三大原理是?',['關鍵牌、控牌、迫牌','記憶力、視力、運氣','催眠、心電感應、魔法'],0,'全世界的找牌魔術都逃不出這三種(或其組合)。'],
+  ['一副牌 52 張常被比喻成?',['一年 52 週','52 個省份','52 個英文字母'],0,'4 花色=4 季、每花色 13 張=每季 13 週,點數總和+鬼牌=365。'],
+  ['會真正拆散牌序鄰居關係的動作是?',['切牌','洗牌','攤牌'],1,'切牌只是轉圈圈;洗牌才會重排。'],
+  ['關鍵牌法中,關鍵牌一開始藏在哪?',['牌頂','牌底','觀眾手上'],1,'收牌整理時瞄一眼牌底,它就是你的鑰匙。'],
+  ['觀眾把牌放回牌頂後切一刀,結果是?',['關鍵牌正好蓋在觀眾牌上面','觀眾牌消失','牌序大亂'],0,'完整切牌=下半疊放上面,底牌壓住頂牌成鄰居。'],
+  ['小指「扣牌縫」的行話是?',['Break','Cut','Deal'],0,'break=裂縫,像夾一根隱形書籤,是控牌的第一塊積木。'],
+  ['保頂假洗的祕密在於?',['牌有磁鐵','拇指撥牌張數的控制,動作與真洗完全相同','速度快到看不見'],1,'第一輪 run 一張到底、第二輪整把甩回頂。'],
+  ['十字切迫牌翻開的那張,其實是?',['觀眾切到的位置','原本的牌頂第一張','鬼牌'],1,'時間誤導讓觀眾把動作和位置接錯線。'],
+  ['Patter(台詞)一詞源自?',['拉丁禱文 Pater Noster 唸得飛快','一種義大利麵','打字機聲音'],0,'僧侶快速含糊的禱文→連珠炮講話→魔術師話術專名。'],
+  ['「大動作蓋小動作」屬於哪個技術?',['誤導 misdirection','洗牌','計分'],0,'右手大幅比劃,左手的小動作就隱形了。'],
+  ['同一招魔術對同一批觀眾應該?',['只演一次','至少演三次','每天演'],0,'第二次觀眾知道看哪裡,破綻放大十倍——三守則之一。'],
+  ['流程設計的最高心法是?',['把祕密放在沒人看的時刻','把祕密放在高潮那一刻','沒有祕密'],0,'關鍵牌在收牌時、控牌在放回時、迫牌在選牌前——洗牌切牌時反而最乾淨。'],
+];
+const fq=document.getElementById('finalQuiz');
+function buildFinal(){
+  fq.innerHTML='';
+  finalQs.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='quiz';d.dataset.q=i;
+    d.innerHTML=`<div class="q-text">Q${i+1}. ${q[0]}</div>
+      <div class="opts">${q[1].map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join('')}</div>
+      <div class="fb"></div>`;
+    d.querySelectorAll('.opt').forEach(btn=>{
+      btn.onclick=()=>{
+        d.querySelectorAll('.opt').forEach(b=>b.style.outline='');
+        btn.style.outline='2px solid var(--khaki-dark)';
+        d.dataset.sel=btn.dataset.j;
+      };
+    });
+    fq.appendChild(d);
+  });
+  document.getElementById('finalScore').style.display='none';
+}
+function gradeFinal(){
+  let right=0,unanswered=0;
+  fq.querySelectorAll('.quiz').forEach(d=>{
+    const q=finalQs[d.dataset.q];
+    const sel=d.dataset.sel;
+    const fb=d.querySelector('.fb');
+    d.querySelectorAll('.opt').forEach((b,j)=>{
+      b.classList.remove('correct','wrong');
+      if(j===q[2])b.classList.add('correct');
+    });
+    if(sel===undefined){unanswered++;fb.className='fb show no';fb.textContent='(未作答)'+q[3];return;}
+    if(+sel===q[2]){right++;fb.className='fb show good';fb.textContent='✓ '+q[3];}
+    else{d.querySelectorAll('.opt')[+sel].classList.add('wrong');fb.className='fb show no';fb.textContent='✗ '+q[3];}
+  });
+  const box=document.getElementById('finalScore');
+  box.style.display='block';
+  let cmt;
+  if(right===12)cmt='滿分!三大原理已在你腦中打通——拿起真牌,兩週後你就能讓朋友尖叫 🏆';
+  else if(right>=9)cmt='很棒!觀念很扎實,把錯的題目看一下解析,然後去第 4 章模擬器再排練一次 🎉';
+  else if(right>=6)cmt='有基礎了!建議回第 3、4 章把「切牌轉圈圈」和關鍵牌流程再走一遍 💪';
+  else cmt='別氣餒,照學習地圖從第 1 章重新走,配著模擬器多按幾次就會通 🌱';
+  box.innerHTML=`<div class="big num">${right} / 12</div><p>${cmt}</p>${unanswered?`<p style="color:var(--gray);font-size:13px;">(有 ${unanswered} 題未作答)</p>`:''}`;
+  box.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function resetFinal(){buildFinal();window.scrollTo({top:0});}
+buildFinal();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-3cd24cd6e3" data-category="personal"></script></body>
+</html>

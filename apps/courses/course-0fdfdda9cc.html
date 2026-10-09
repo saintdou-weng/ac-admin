@@ -1,0 +1,2263 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>寶石學堂｜從一顆石頭開始的珠寶鑑定課</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EEF1F4; --surface:#FFFFFF; --sunk:#E3E8EE; --ink:#1C2433; --muted:#566074; --line:#D2D9E2;
+  --u1:#7B4FA0; --u2:#1F4FA8; --u3:#0F7A5A; --u4:#2A7A94; --u5:#B01E45; --u6:#94690F;
+  --ok:#0F7A5A; --bad:#B01E45;
+  --accent:var(--u1);
+  --serif:"Noto Serif TC","Songti TC","PMingLiU","MingLiU",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#141A26; --surface:#1C2434; --sunk:#232D40; --ink:#E4E8EF; --muted:#9AA5B8; --line:#2E3A50;
+    --u1:#B38EDB; --u2:#76A0EC; --u3:#45C298; --u4:#62BCD9; --u5:#E8637F; --u6:#D9AE4C; --ok:#45C298; --bad:#E8637F;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141A26; --surface:#1C2434; --sunk:#232D40; --ink:#E4E8EF; --muted:#9AA5B8; --line:#2E3A50;
+  --u1:#B38EDB; --u2:#76A0EC; --u3:#45C298; --u4:#62BCD9; --u5:#E8637F; --u6:#D9AE4C; --ok:#45C298; --bad:#E8637F;
+}
+*{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-text-size-adjust:100%}
+img,svg{max-width:100%}
+a{color:var(--accent)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+/* ---------- 版面 ---------- */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;display:flex;align-items:center;gap:12px;padding:10px 16px;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar .brand{font-family:var(--serif);font-weight:900;font-size:19px;letter-spacing:.06em;cursor:pointer;white-space:nowrap}
+.topbar .where{flex:1;min-width:0;font-size:14px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iconbtn{border:1px solid var(--line);background:var(--surface);border-radius:10px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;flex:none}
+.progress{position:absolute;left:0;bottom:-1px;height:3px;background:var(--accent);transition:width .4s}
+.layout{display:grid;grid-template-columns:300px minmax(0,1fr);max-width:1240px;margin:0 auto}
+.side{position:sticky;top:61px;height:calc(100vh - 61px);overflow:auto;padding:20px 14px 40px;border-right:1px solid var(--line)}
+.side h3{font-family:var(--serif);font-size:15px;margin:18px 8px 6px;display:flex;align-items:center;gap:8px}
+.side h3 i{width:12px;height:12px;transform:rotate(45deg);display:inline-block;border-radius:2px}
+.side button{display:flex;gap:8px;width:100%;text-align:left;border:0;background:none;padding:7px 10px;border-radius:8px;cursor:pointer;font-size:14.5px;line-height:1.5;color:var(--muted)}
+.side button:hover{background:var(--sunk);color:var(--ink)}
+.side button.on{background:var(--surface);color:var(--ink);font-weight:700;box-shadow:inset 3px 0 0 var(--accent)}
+.side button .n{flex:none;width:2.2em;font-variant-numeric:tabular-nums}
+.side button.done .n::after{content:"✓";color:var(--ok);margin-left:2px}
+main{padding:28px 22px 80px;min-width:0}
+.lesson{display:none;max-width:760px;margin:0 auto}
+.lesson.show{display:block;animation:enter .35s ease}
+@keyframes enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (max-width:920px){
+  .layout{grid-template-columns:1fr}
+  .side{position:fixed;inset:0 auto 0 0;width:min(86vw,330px);height:100%;top:0;background:var(--paper);z-index:50;transform:translateX(-105%);transition:transform .3s;padding-top:calc(env(safe-area-inset-top,0px) + 20px);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 40px);box-shadow:0 0 40px rgba(0,0,0,.25)}
+  .side.open{transform:none}
+  .scrim{position:fixed;inset:0;background:rgba(10,14,24,.45);z-index:40;display:none}
+  .scrim.open{display:block}
+  main{padding:20px 16px 80px}
+  body{font-size:16.5px}
+}
+@media (min-width:921px){#menuBtn{display:none}}
+
+/* ---------- 課程標頭 ---------- */
+.lh{margin:8px 0 28px;padding-bottom:22px;border-bottom:2px solid var(--accent)}
+.lh .lnum{margin:0;font-family:var(--serif);font-weight:700;color:var(--accent);font-size:15px}
+.lh h2{font-family:var(--serif);font-weight:900;font-size:clamp(28px,6vw,40px);line-height:1.3;margin:4px 0 12px;letter-spacing:.02em}
+.lh .goal{margin:0;color:var(--muted);font-size:15.5px}
+h3.sec{font-family:var(--serif);font-size:23px;margin:40px 0 10px;line-height:1.45}
+h4{font-size:18px;margin:26px 0 6px}
+p{margin:0 0 14px}
+.lead{font-size:18.5px}
+strong{color:var(--ink)}
+.en{font-size:.86em;color:var(--muted);font-weight:400}
+ul.plain,ol.plain{padding-left:1.3em;margin:0 0 14px}
+ul.plain li,ol.plain li{margin:4px 0}
+
+/* 名詞盒：專有名詞 + 由來 */
+.term{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px 12px;margin:18px 0}
+.term .tt{font-family:var(--serif);font-weight:700;font-size:17.5px;margin-bottom:4px}
+.term .tt .en{margin-left:6px}
+.term p{margin:0 0 6px}
+.term .origin{font-size:15px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px;margin-top:8px}
+.term .origin b{color:var(--accent);font-weight:700}
+/* 生活比喻 */
+.analogy{border-left:4px solid var(--u6);background:color-mix(in srgb,var(--u6) 8%,var(--surface));padding:12px 16px;border-radius:0 12px 12px 0;margin:18px 0}
+.analogy b:first-child{color:var(--u6)}
+.warn{border-left:4px solid var(--bad);background:color-mix(in srgb,var(--bad) 7%,var(--surface));padding:12px 16px;border-radius:0 12px 12px 0;margin:18px 0}
+.story{background:var(--sunk);border-radius:14px;padding:16px 18px;margin:18px 0;font-size:16px}
+.story .who{font-family:var(--serif);font-weight:700;margin-bottom:4px}
+
+/* 表格 */
+.tw{overflow-x:auto;margin:16px 0 20px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;line-height:1.55;min-width:520px}
+th,td{padding:9px 11px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--sunk);font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* 圖與互動 */
+figure{margin:20px 0;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px}
+figure svg{display:block;margin:0 auto;width:100%;height:auto}
+figcaption{font-size:14px;color:var(--muted);margin-top:8px;line-height:1.6}
+.lab{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin:22px 0}
+.lab .lab-t{font-family:var(--serif);font-weight:700;font-size:17px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.lab .lab-t::before{content:"";width:10px;height:10px;transform:rotate(45deg);background:var(--accent);border-radius:2px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{border:1px solid var(--line);background:var(--paper);padding:6px 12px;border-radius:999px;cursor:pointer;font-size:14.5px;line-height:1.4}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn{border:0;background:var(--accent);color:#fff;padding:10px 18px;border-radius:12px;cursor:pointer;font-weight:700;font-size:15.5px}
+.btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+input[type=number],input[type=search]{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);width:100%}
+.out{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--sunk);font-size:15.5px;min-height:1.6em}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:16px 0}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:16px 0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:15px;line-height:1.65}
+.card h5{margin:0 0 4px;font-size:16px;font-family:var(--serif)}
+.card svg{display:block;margin:0 auto 6px}
+.dot{display:inline-block;width:.8em;height:.8em;border-radius:50%;vertical-align:-.05em;margin-right:4px;border:1px solid rgba(0,0,0,.15)}
+
+/* 重點回顧、測驗、翻頁 */
+.recap{margin:36px 0 18px;padding:16px 18px;border-radius:16px;background:color-mix(in srgb,var(--accent) 9%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 30%,var(--line))}
+.recap h4{margin:0 0 6px;font-family:var(--serif)}
+.recap ul{margin:0;padding-left:1.2em}
+.quiz{margin:18px 0}
+.quiz .qh{font-family:var(--serif);font-weight:700;font-size:18px;margin:0 0 8px}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:10px 0}
+.q p{margin:0 0 8px;font-weight:500}
+.q button.opt{display:block;width:100%;text-align:left;margin:6px 0;padding:9px 12px;border:1px solid var(--line);background:var(--paper);border-radius:10px;cursor:pointer;font-size:15px;line-height:1.5}
+.q button.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,var(--paper))}
+.q button.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,var(--paper))}
+.q .why{font-size:14.5px;color:var(--muted);margin-top:6px;display:none}
+.q.answered .why{display:block}
+.pager{display:flex;justify-content:space-between;gap:10px;margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}
+.pager button{flex:1;max-width:48%;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:12px 14px;cursor:pointer;line-height:1.45}
+.pager button small{display:block;color:var(--muted);font-size:13px}
+.pager button.next{text-align:right;margin-left:auto;border-color:var(--accent)}
+.pager button:disabled{visibility:hidden}
+
+/* ---------- 封面 ---------- */
+.cover{max-width:980px}
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:28px;align-items:center;padding:16px 0 26px}
+.hero h1{font-family:var(--serif);font-weight:900;font-size:clamp(38px,8vw,66px);line-height:1.12;margin:0 0 14px;letter-spacing:.03em}
+.hero p{font-size:17.5px;color:var(--muted);max-width:30em}
+.hero .gembox{position:relative}
+#heroGem{width:100%;max-width:420px;display:block;margin:0 auto;filter:drop-shadow(0 18px 30px rgba(20,30,60,.25))}
+.gemname{text-align:center;font-family:var(--serif);font-size:15px;color:var(--muted);margin-top:6px;min-height:1.6em}
+.tray{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin:20px 0}
+.tray button{background:var(--surface);border:0;padding:16px 16px 14px;text-align:left;cursor:pointer;line-height:1.55}
+.tray button:hover{background:var(--sunk)}
+.tray .facet{width:30px;height:30px;margin-bottom:8px}
+.tray b{font-family:var(--serif);font-size:17px;display:block}
+.tray span{font-size:14px;color:var(--muted)}
+@media (max-width:720px){.hero{grid-template-columns:1fr}.hero .gembox{order:-1}#heroGem{max-width:260px}.tray{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.howto{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:10px 0 26px}
+.howto div{padding:12px 14px;border-radius:14px;background:var(--surface);border:1px solid var(--line);font-size:15px}
+.howto b{display:block;font-family:var(--serif)}
+
+/* 光學效果動畫 */
+.fx{width:130px;height:100px;margin:0 auto 8px;border-radius:50%;position:relative;overflow:hidden}
+.fx.cat{background:radial-gradient(ellipse at 50% 40%,#d9c46a,#8a7422 70%,#4d400f)}
+.fx.cat::after{content:"";position:absolute;top:0;bottom:0;width:10px;left:50%;margin-left:-5px;background:linear-gradient(90deg,transparent,rgba(255,255,230,.95),transparent);animation:catline 3.2s ease-in-out infinite}
+@keyframes catline{0%,100%{transform:translateX(-26px)}50%{transform:translateX(26px)}}
+.fx.star{background:radial-gradient(circle at 50% 45%,#6f7fcf,#27327a 70%,#141a45)}
+.fx.star i{position:absolute;left:50%;top:50%;width:140px;height:3px;margin:-1.5px 0 0 -70px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.9),transparent);animation:starshift 4s ease-in-out infinite}
+.fx.star i:nth-child(2){transform:rotate(60deg)}.fx.star i:nth-child(3){transform:rotate(120deg)}
+@keyframes starshift{0%,100%{translate:-6px -4px}50%{translate:6px 4px}}
+.fx.opal{background:#e9ece8}
+.fx.opal::before{content:"";position:absolute;inset:-40%;background:conic-gradient(from 0deg,#2bd6a0,#3b7bff,#b04bff,#ff4b7d,#ffb13b,#2bd6a0);filter:blur(6px);opacity:.8;animation:opal 6s linear infinite;mask:radial-gradient(circle at 30% 30%,#000 10%,transparent 11%) 0 0/28px 22px,radial-gradient(circle at 70% 60%,#000 12%,transparent 13%) 0 0/34px 26px}
+.fx.opal::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.6),transparent 45%)}
+@keyframes opal{to{transform:rotate(360deg)}}
+.fx.moon{background:radial-gradient(circle at 50% 50%,#eef0f2,#c9ccd2 75%)}
+.fx.moon::after{content:"";position:absolute;width:80px;height:60px;left:25px;top:20px;border-radius:50%;background:radial-gradient(rgba(120,170,255,.85),transparent 70%);animation:moon 4s ease-in-out infinite}
+@keyframes moon{0%,100%{transform:translate(-18px,-6px);opacity:.5}50%{transform:translate(18px,8px);opacity:1}}
+.fx.labra{background:#3a3f45}
+.fx.labra::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 20%,#2de3ff 40%,#3a7dff 50%,#ffcf3a 58%,transparent 75%);opacity:.0;animation:labra 3.6s ease-in-out infinite}
+@keyframes labra{0%,100%{opacity:.05}50%{opacity:.85}}
+.fx.sun{background:radial-gradient(circle,#e9913d,#b5551c)}
+.fx.sun::after{content:"";position:absolute;inset:0;background-image:radial-gradient(#fff6c8 1px,transparent 1.6px),radial-gradient(#ffd98a 1px,transparent 1.6px);background-size:13px 11px,17px 15px;background-position:0 0,6px 5px;animation:twinkle 2s steps(2) infinite}
+@keyframes twinkle{50%{opacity:.35}}
+.fx.alex{transition:background .8s;background:radial-gradient(circle at 40% 35%,#6fbf8f,#1f6b4a 70%)}
+.fx.alex.night{background:radial-gradient(circle at 40% 35%,#d0667f,#6b1f3c 70%)}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.gl-item{padding:10px 0;border-bottom:1px solid var(--line)}
+.gl-item b{font-family:var(--serif)}
+.gl-item .o{font-size:14.5px;color:var(--muted)}
+.cert{border:2px solid var(--ink);border-radius:6px;padding:16px;background:var(--surface);font-size:14px;line-height:1.6;margin:18px 0}
+.cert .ch{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;border-bottom:1px solid var(--ink);padding-bottom:8px;margin-bottom:10px}
+.cert .ch b{font-family:var(--serif);font-size:18px}
+.cert dl{display:grid;grid-template-columns:8.5em 1fr;gap:4px 10px;margin:0}
+.cert dt{color:var(--muted)}
+.cert dd{margin:0;font-weight:500}
+.cert .pin{display:inline-block;background:var(--u6);color:#fff;border-radius:50%;width:1.5em;height:1.5em;text-align:center;font-size:12px;line-height:1.5em;margin-left:4px;font-weight:700}
+.steps{counter-reset:s;list-style:none;padding:0;margin:16px 0}
+.steps li{counter-increment:s;position:relative;padding:10px 12px 10px 52px;margin:8px 0;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.steps li::before{content:counter(s);position:absolute;left:12px;top:10px;width:28px;height:28px;border-radius:8px;background:var(--accent);color:#fff;font-weight:700;display:grid;place-items:center;font-size:14px}
+.sim-log{font-size:15px;line-height:1.7}
+.sim-log div{padding:6px 0;border-bottom:1px dashed var(--line)}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <button class="iconbtn" id="menuBtn" aria-label="開啟目錄"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+  <div class="brand" id="homeBtn">寶石學堂</div>
+  <div class="where" id="where"></div>
+  <button class="iconbtn" id="themeBtn" aria-label="切換深淺色"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M10 3a7 7 0 1 0 0 14V3z" fill="currentColor"/><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+  <div class="progress" id="prog"></div>
+</header>
+<div class="scrim" id="scrim"></div>
+<div class="layout">
+<nav class="side" id="side" aria-label="課程目錄"></nav>
+<main id="main">
+<!-- ================= 封面 ================= -->
+<section class="lesson cover" id="L0" data-unit="0" data-title="課程首頁">
+  <div class="hero">
+    <div>
+      <h1>寶石學堂</h1>
+      <p>從「這顆石頭會發光」開始，一步一步學會看懂寶石：它是什麼、好不好、從哪裡來、有沒有被動過手腳。22 堂課，國中程度就能讀懂，讀完你會具備專業鑑定師的基本功。</p>
+      <div class="row" style="margin-top:18px">
+        <button class="btn" data-go="L1">從第 1 課開始</button>
+        <button class="btn ghost" id="resumeBtn" hidden>繼續上次的進度</button>
+      </div>
+    </div>
+    <div class="gembox">
+      <svg id="heroGem" viewBox="-110 -110 220 220" role="img" aria-label="一顆會閃光的明亮式切割寶石"></svg>
+      <div class="gemname" id="gemName">點一下寶石，換一種顏色</div>
+    </div>
+  </div>
+
+  <h3 class="sec" style="margin-top:6px">課程地圖：六個單元，由淺到深</h3>
+  <p>每一課都用到前一課的知識，請照順序讀。每課最後有重點回顧和小測驗，答對了再往下走。</p>
+  <div class="tray" id="tray"></div>
+
+  <h3 class="sec">怎麼讀這套課程</h3>
+  <div class="howto">
+    <div><b>名詞盒</b>每個專有名詞都附上「由來」：這個字從哪個語言、為什麼這樣叫。知道由來，就不用死背。</div>
+    <div><b>生活比喻</b>金色框裡是用日常東西打比方，先懂概念，再學數字。</div>
+    <div><b>動手實驗</b>有菱形標記的區塊可以點、可以拖，親手試一次比看十遍更記得住。</div>
+    <div><b>自動存進度</b>讀完一課按「下一課」就會記錄。下次打開會出現「繼續上次的進度」。</div>
+  </div>
+</section>
+
+<!-- ================= 第一單元 ================= -->
+<section class="lesson" id="L1" data-unit="1" data-title="什麼是寶石？">
+  <header class="lh"><p class="lnum">第 1 課</p><h2>什麼是寶石？</h2>
+  <p class="goal">學完這課你會知道：一顆石頭要符合哪些條件才叫寶石；礦物、岩石、有機寶石有什麼不同。</p></header>
+
+  <div class="story"><div class="who">先想一個問題</div>你在河邊撿到一顆亮晶晶、紅紅的小石頭。它是寶石嗎？還是只是一塊漂亮的碎玻璃？這整套課程，就是要教你回答這種問題。</div>
+
+  <h3 class="sec">寶石的三個條件</h3>
+  <p class="lead">不是所有漂亮的石頭都叫寶石。傳統上，一顆石頭要同時符合三個條件：</p>
+  <ol class="plain">
+    <li><strong>美麗</strong>：顏色好看、夠透明、會閃光，或有特別的光學效果（例如像貓眼一樣的一條光）。</li>
+    <li><strong>耐久</strong>：夠硬、不容易刮花、不容易裂開，也不會隨時間褪色或溶解。戴一輩子還能傳給下一代。</li>
+    <li><strong>稀有</strong>：不容易找到。如果河邊到處都是，就算再漂亮也不值錢。</li>
+  </ol>
+  <div class="analogy"><b>生活比喻：</b>就像一位受歡迎的偶像，要長得好看（美麗），身體健康能長期表演（耐久），而且獨一無二、不是誰都能取代（稀有）。三樣少一樣，價值就差很多。</div>
+
+  <div class="term"><div class="tt">寶石 <span class="en">Gem / Gemstone</span></div>
+  <p>符合美麗、耐久、稀有，並且經過切磨或加工、可以做成飾品的天然材料。</p>
+  <p class="origin"><b>由來：</b>英文 gem 來自拉丁文 <i>gemma</i>，原本的意思是植物的「嫩芽、花苞」。古羅馬人覺得寶石像植物新冒出來、閃閃發亮的芽，所以用同一個字。</p></div>
+
+  <div class="term"><div class="tt">寶石學 <span class="en">Gemology</span></div>
+  <p>研究寶石的形成、性質、鑑定和評價的學問。本課程教的就是寶石學。</p>
+  <p class="origin"><b>由來：</b>gem（寶石）＋ -ology（學問，來自希臘文 <i>logos</i>「道理、說話」）。生物學 biology、地質學 geology 也是同樣的構造。</p></div>
+
+  <h3 class="sec">寶石是用什麼做的？四大類</h3>
+  <div class="term"><div class="tt">礦物 <span class="en">Mineral</span></div>
+  <p>在大自然中形成、不是生物做出來的、有固定化學成分、原子排得整整齊齊的固體。大部分寶石都是礦物，例如鑽石、紅寶石、祖母綠。</p>
+  <p class="origin"><b>由來：</b>來自中世紀拉丁文 <i>minera</i>，意思是「礦坑、礦石」，也就是從地底挖出來的東西。中文「礦」字的石字旁也提醒你：它來自石頭。</p></div>
+  <p><strong>岩石</strong>則是「很多種礦物混在一起」。例如青金石其實是岩石，裡面有藍色的青金岩、白色的方解石、金色的黃鐵礦。</p>
+  <p><strong>有機寶石</strong>是生物做出來的：珍珠（貝類分泌）、琥珀（古代樹脂變成的化石）、珊瑚（珊瑚蟲的骨骼）。它們通常比較軟，需要細心保養。</p>
+  <p><strong>人造材料</strong>則是在工廠或實驗室做的，我們會在第 12 課詳細分辨。</p>
+
+  <div class="tw"><table>
+    <tr><th>類別</th><th>簡單說</th><th>例子</th></tr>
+    <tr><td>礦物</td><td>單一種礦物，成分固定</td><td>鑽石、紅寶石、藍寶石、祖母綠、碧璽、石榴石</td></tr>
+    <tr><td>岩石</td><td>多種礦物混合</td><td>青金石、部分玉石</td></tr>
+    <tr><td>有機寶石</td><td>生物製造</td><td>珍珠、琥珀、珊瑚、象牙（多數國家禁賣）</td></tr>
+    <tr><td>人造材料</td><td>人工製造</td><td>玻璃、立方氧化鋯（俗稱蘇聯鑽）、合成寶石</td></tr>
+  </table></div>
+
+  <div class="term"><div class="tt">珠寶 <span class="en">Jewelry</span></div>
+  <p>寶石和貴金屬（金、鉑等）做成、可以戴的成品，例如戒指、項鍊。寶石是「材料」，珠寶是「作品」。</p>
+  <p class="origin"><b>由來：</b>中文「珠」原本專指珍珠，「寶」指玉和其他珍貴的東西，合起來泛指所有貴重飾品。英文 jewel 來自古法文 <i>jouel</i>，和拉丁文 <i>jocus</i>（玩笑、樂趣）有關，意思是「讓人開心的小東西」。</p></div>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>寶石三條件：美麗、耐久、稀有。</li>
+    <li>大部分寶石是礦物；岩石是多種礦物混合；珍珠、琥珀、珊瑚是有機寶石。</li>
+    <li>寶石是材料，珠寶是鑲好可以戴的成品。</li>
+  </ul></div>
+  <div class="quiz" data-q="L1"></div>
+</section>
+
+<section class="lesson" id="L2" data-unit="1" data-title="寶石是怎麼長出來的？">
+  <header class="lh"><p class="lnum">第 2 課</p><h2>寶石是怎麼長出來的？</h2>
+  <p class="goal">學完這課你會知道：什麼叫「晶體」；為什麼玻璃不是晶體；地球上哪些地方會長出寶石。</p></header>
+
+  <h3 class="sec">從原子排隊開始</h3>
+  <p class="lead">所有東西都是由非常非常小的「原子」組成的。當原子排得整整齊齊、一再重複同一個圖案時，就形成了<strong>晶體</strong>。</p>
+  <div class="analogy"><b>生活比喻：</b>想像一班同學在操場集合。老師慢慢吹哨、大家有時間找位置，就會排成整齊的方陣（晶體）。如果突然下大雨、大家衝進教室，就會亂成一團停在原地（非晶質，像玻璃）。</div>
+
+  <div class="term"><div class="tt">晶體 <span class="en">Crystal</span></div>
+  <p>原子按照固定規律、在立體空間中重複排列的固體。</p>
+  <p class="origin"><b>由來：</b>希臘文 <i>krystallos</i> 的意思是「冰」。古希臘人在高山上找到透明的石英，以為那是冷到永遠不會融化的冰，就這樣叫它。後來這個字變成所有晶體的名稱。</p></div>
+  <div class="term"><div class="tt">非晶質 <span class="en">Amorphous</span></div>
+  <p>原子沒有規律排列的固體，例如玻璃、蛋白石、琥珀。</p>
+  <p class="origin"><b>由來：</b>希臘文 a-（沒有）＋ <i>morphē</i>（形狀）＝「沒有固定形狀」。</p></div>
+
+  <div class="lab"><div class="lab-t">動手實驗：讓原子排隊</div>
+    <p style="font-size:15px;margin-bottom:8px">下面是一鍋熱熱的「岩漿」，原子到處亂跑。試試兩種冷卻方式：</p>
+    <canvas id="cgCanvas" width="600" height="300" style="width:100%;height:auto;border-radius:12px;background:var(--sunk);display:block"></canvas>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" id="cgSlow">慢慢冷卻（幾萬年）</button>
+      <button class="btn ghost" id="cgFast">急速冷卻（幾秒鐘）</button>
+      <button class="btn ghost" id="cgReset">重新加熱</button>
+    </div>
+    <div class="out" id="cgOut">原子正在自由移動，這是液體狀態。</div>
+  </div>
+
+  <h3 class="sec">地球上的五個「寶石工廠」</h3>
+  <p>寶石需要四樣東西：<strong>對的原料、夠高的溫度或壓力、足夠的空間、很長的時間</strong>。地球上有幾種環境剛好提供這些條件：</p>
+  <figure>
+    <svg viewBox="0 0 640 340" role="img" aria-label="地殼剖面圖，標示寶石的形成環境">
+      <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfd8ef"/><stop offset="1" stop-color="#e8f1f8"/></linearGradient></defs>
+      <rect width="640" height="80" fill="url(#sky)"/>
+      <path d="M0 80 Q80 60 160 78 L230 40 L260 40 L300 80 Q420 70 520 88 L640 82 L640 340 L0 340Z" fill="#c9a77a"/>
+      <path d="M0 150 Q160 140 320 160 T640 150 L640 340 L0 340Z" fill="#a8845a"/>
+      <path d="M0 240 Q200 230 320 250 T640 240 L640 340 L0 340Z" fill="#7d5c3e"/>
+      <path d="M0 300 L640 300 L640 340 L0 340Z" fill="#c2452d"/>
+      <path d="M244 40 C250 120 230 200 250 300 L262 300 C248 200 268 120 256 40Z" fill="#6d4a3a"/>
+      <path d="M520 88 C560 120 600 110 640 115 L640 125 C600 122 560 132 520 100Z" fill="#6b8fb3"/>
+      <ellipse cx="120" cy="260" rx="70" ry="28" fill="#e0612f" opacity=".9"/>
+      <path d="M120 232 L150 170 M130 235 L180 190" stroke="#f3e6c8" stroke-width="5"/>
+      <path d="M380 180 q30 -20 60 0 q30 20 60 0" stroke="#e8e1d4" stroke-width="10" fill="none" opacity=".75"/>
+      <path d="M430 120 L445 150 L460 118" stroke="#8fd3ff" stroke-width="3" fill="none"/>
+      <g font-size="14" font-family="sans-serif" fill="#1c2433" font-weight="700">
+        <text x="40" y="310" fill="#fff">① 岩漿</text>
+        <text x="160" y="160">② 偉晶岩</text>
+        <text x="385" y="215" fill="#fff">③ 變質岩</text>
+        <text x="470" y="135">④ 熱液</text>
+        <text x="520" y="75">⑤ 河床砂礦</text>
+        <text x="272" y="280" fill="#fff">金伯利岩管</text>
+        <text x="272" y="296" fill="#fff" font-weight="400" font-size="12">（鑽石電梯）</text>
+      </g>
+      <text x="10" y="334" font-size="12" fill="#fff" font-family="sans-serif">地函（約150公里深以下）</text>
+    </svg>
+    <figcaption>示意圖，比例不準確。越往下越熱、壓力越大。</figcaption>
+  </figure>
+
+  <div class="term"><div class="tt">① 岩漿 <span class="en">Magma</span></div>
+  <p>地底融化的岩石。岩漿慢慢冷卻時，礦物一顆顆結晶出來。藍寶石、鋯石、橄欖石常和岩漿有關。</p>
+  <p class="origin"><b>由來：</b>希臘文 <i>magma</i> 原意是「揉過的麵團、糊狀物」，形容岩漿黏稠的樣子。</p></div>
+  <div class="term"><div class="tt">② 偉晶岩 <span class="en">Pegmatite</span></div>
+  <p>岩漿最後剩下、含很多水和稀有元素的液體，在空洞裡慢慢冷卻，能長出超大晶體。碧璽、海藍寶、拓帕石、摩根石常出自偉晶岩。</p>
+  <p class="origin"><b>由來：</b>希臘文 <i>pēgma</i>「結合、固定在一起的東西」，形容大晶體互相卡在一起。中文「偉」就是強調晶體「巨大」。</p></div>
+  <div class="term"><div class="tt">③ 變質作用 <span class="en">Metamorphism</span></div>
+  <p>原本的岩石被埋到深處，受到高溫高壓「重新烤過」，原子重新排列成新的礦物。緬甸紅寶石、很多石榴石、翡翠都是變質作用的產物。</p>
+  <p class="origin"><b>由來：</b>希臘文 meta（改變）＋ <i>morphē</i>（形狀），就是「改變形態」。蝴蝶的「變態」英文 metamorphosis 也是同一個字根。</p></div>
+  <div class="term"><div class="tt">④ 熱液 <span class="en">Hydrothermal</span></div>
+  <p>地底的熱水溶解了礦物成分，流進岩石裂縫後冷卻，礦物就在裂縫裡結晶。哥倫比亞祖母綠、紫水晶晶洞就是這樣長的。</p>
+  <p class="origin"><b>由來：</b>希臘文 <i>hydro</i>（水）＋ <i>thermos</i>（熱）。保溫瓶 thermos 也是這個字。</p></div>
+  <div class="term"><div class="tt">⑤ 次生砂礦 <span class="en">Alluvial / Secondary deposit</span></div>
+  <p>寶石原本長在山裡的岩石中（原生礦），岩石被風雨侵蝕後，寶石被河水沖到下游堆積。又硬又重的寶石留下來，軟的東西被磨掉沖走，所以河床砂礦常常「品質精選」。斯里蘭卡、柬埔寨拜林的藍寶石主要來自砂礦。</p>
+  <p class="origin"><b>由來：</b>alluvial 來自拉丁文 <i>alluere</i>「沖刷過來」。中文「次生」指第二次形成的地方，相對於「原生」第一個出生地。</p></div>
+
+  <h4>特別介紹：鑽石的「電梯」</h4>
+  <p>鑽石需要極高的壓力，只能在地底約 150 公里以下的地函裡形成。它們能來到地表，是因為一種特殊的火山爆發：岩漿以非常快的速度往上衝，把鑽石像坐電梯一樣帶上來，冷卻後留下胡蘿蔔形狀的岩石管道，叫<strong>金伯利岩管</strong>。如果上升太慢，鑽石會在路上變成石墨。大部分鑽石的年齡有 10 億到 30 多億年，比恐龍還老得多。</p>
+  <div class="term"><div class="tt">金伯利岩 <span class="en">Kimberlite</span></div>
+  <p>把鑽石從地函帶到地表的火山岩。</p>
+  <p class="origin"><b>由來：</b>以南非城市金伯利（Kimberley）命名。1871 年那裡發現大量鑽石，人們挖出一個深達兩百多公尺的「大洞」（Big Hole），這種岩石就用城市的名字命名。</p></div>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>原子整齊排列＝晶體；亂排＝非晶質（玻璃、蛋白石、琥珀）。</li>
+    <li>慢慢冷卻長出大晶體，快速冷卻變成玻璃。</li>
+    <li>五大寶石工廠：岩漿、偉晶岩、變質、熱液、河床砂礦。鑽石靠金伯利岩從地函搭「電梯」上來。</li>
+  </ul></div>
+  <div class="quiz" data-q="L2"></div>
+</section>
+
+<section class="lesson" id="L3" data-unit="1" data-title="化學成分與寶石家族">
+  <header class="lh"><p class="lnum">第 3 課</p><h2>化學成分與寶石家族</h2>
+  <p class="goal">學完這課你會知道：為什麼紅寶石和藍寶石其實是同一種礦物；一點點雜質怎麼改變寶石的顏色；「礦物種」和「變種」的差別。</p></header>
+
+  <h3 class="sec">化學式就是寶石的食譜</h3>
+  <p class="lead">每種礦物都有一個化學式，告訴你它由哪些元素、用什麼比例組成。</p>
+  <div class="tw"><table>
+    <tr><th>礦物</th><th>化學式</th><th>白話翻譯</th></tr>
+    <tr><td>鑽石</td><td>C</td><td>只有碳，一種元素</td></tr>
+    <tr><td>石英</td><td>SiO₂</td><td>1 個矽配 2 個氧（跟沙子同成分）</td></tr>
+    <tr><td>剛玉</td><td>Al₂O₃</td><td>2 個鋁配 3 個氧</td></tr>
+    <tr><td>綠柱石</td><td>Be₃Al₂Si₆O₁₈</td><td>鈹、鋁、矽、氧，比較複雜的食譜</td></tr>
+  </table></div>
+
+  <h3 class="sec">同一個家族，不同名字</h3>
+  <p>寶石界最容易搞混、也最重要的觀念是：<strong>礦物種</strong>和<strong>變種</strong>。</p>
+  <div class="term"><div class="tt">礦物種 <span class="en">Species</span>　與　變種 <span class="en">Variety</span></div>
+  <p>礦物種是按照化學成分和晶體結構分的「家族」。同一家族裡，因為顏色或外觀不同而取的不同名字叫變種。</p>
+  <p class="origin"><b>由來：</b>借用生物分類的觀念。species 拉丁文意思是「外觀、種類」，variety 來自 <i>varius</i>「多樣的」。就像「狗」是一個物種，柴犬、黃金獵犬是不同品種。</p></div>
+
+  <div class="grid2">
+    <div class="card"><h5>剛玉家族</h5>
+      <span class="dot" style="background:#c8102e"></span>紅色 → <b>紅寶石</b><br>
+      <span class="dot" style="background:#1e40af"></span>藍色 → <b>藍寶石</b><br>
+      <span class="dot" style="background:#f4a0b5"></span><span class="dot" style="background:#f2c230"></span>粉、黃、紫等其他顏色 → 也叫藍寶石，前面加顏色，如「黃色藍寶石」<br>
+      <span style="color:var(--muted)">所以「粉紅色藍寶石」不是矛盾的說法！</span></div>
+    <div class="card"><h5>綠柱石家族</h5>
+      <span class="dot" style="background:#0f8a55"></span>濃綠 → <b>祖母綠</b><br>
+      <span class="dot" style="background:#8fd3e8"></span>海水藍 → <b>海藍寶</b><br>
+      <span class="dot" style="background:#f3b9b0"></span>桃粉 → <b>摩根石</b><br>
+      <span class="dot" style="background:#e9d36b"></span>金黃 → <b>金綠柱石</b></div>
+    <div class="card"><h5>石英家族</h5>
+      <span class="dot" style="background:#8a4fbf"></span>紫 → <b>紫水晶</b><br>
+      <span class="dot" style="background:#e8b13a"></span>黃 → <b>黃水晶</b><br>
+      <span class="dot" style="background:#f2c6d0"></span>粉 → <b>粉晶</b><br>
+      <span class="dot" style="background:#6b5a4a"></span>茶色 → <b>煙晶</b><br>
+      <span class="dot" style="background:#f4f6f8"></span>無色 → <b>白水晶</b></div>
+    <div class="card"><h5>碳：同成分、不同結構</h5>
+      鑽石和石墨（鉛筆芯）都是純碳。<br>鑽石的碳原子排成最堅固的立體網；石墨的碳排成一層一層的薄片，一刮就掉。<br><span style="color:var(--muted)">同樣的積木，蓋法不同，一個是城堡、一個是撲克牌。</span></div>
+  </div>
+
+  <div class="term"><div class="tt">剛玉 <span class="en">Corundum</span></div>
+  <p>紅寶石和藍寶石的礦物名稱，硬度僅次於鑽石。</p>
+  <p class="origin"><b>由來：</b>來自南印度的坦米爾語 <i>kuruntam</i>（紅寶石）。中文「剛」表示堅硬，「玉」表示美石。紅寶石 ruby 來自拉丁文 <i>ruber</i>「紅」；藍寶石 sapphire 來自希臘文 <i>sappheiros</i>「藍色的石頭」。</p></div>
+  <div class="term"><div class="tt">鑽石 <span class="en">Diamond</span></div>
+  <p>純碳組成，自然界最硬的物質。中文又叫金剛石。</p>
+  <p class="origin"><b>由來：</b>希臘文 <i>adamas</i>，意思是「無法征服、無法馴服的」，形容它堅硬到什麼都磨不動。中文「金剛」借自佛教用語，指最堅固、不能摧毀的東西。</p></div>
+  <div class="term"><div class="tt">祖母綠 <span class="en">Emerald</span>　／　海藍寶 <span class="en">Aquamarine</span></div>
+  <p>綠柱石家族裡最有名的兩個變種。</p>
+  <p class="origin"><b>由來：</b>emerald 來自希臘文 <i>smaragdos</i>「綠色的寶石」，經波斯語、阿拉伯語傳入中國時音譯成「助木剌」「祖母綠」，跟祖母沒有關係。aquamarine 是拉丁文 <i>aqua marina</i>「海水」。</p></div>
+
+  <h3 class="sec">一點點雜質，決定一切顏色</h3>
+  <p>純的剛玉是<strong>無色</strong>的。只要混進百分之一左右甚至更少的<strong>鉻</strong>，它就變成紅寶石；混進一點<strong>鐵和鈦</strong>，就變成藍寶石。這些微量的雜質叫<strong>致色元素</strong>。</p>
+  <div class="analogy"><b>生活比喻：</b>一大杯清水（剛玉），滴一滴紅墨水（鉻）就變紅色，滴一滴藍墨水（鐵＋鈦）就變藍色。杯子裡幾乎都是水，但我們看到的是墨水的顏色。</div>
+  <div class="tw"><table>
+    <tr><th>致色元素</th><th>常造成的顏色</th><th>例子</th><th>名字由來</th></tr>
+    <tr><td>鉻 Cr</td><td>紅、濃綠</td><td>紅寶石、祖母綠、變石</td><td>希臘文 <i>chroma</i>「顏色」，因為它的化合物五顏六色</td></tr>
+    <tr><td>鐵 Fe</td><td>藍、綠、黃</td><td>藍寶石、海藍寶、橄欖石</td><td>拉丁文 <i>ferrum</i>，所以符號是 Fe</td></tr>
+    <tr><td>鈦 Ti</td><td>和鐵一起產生藍</td><td>藍寶石</td><td>希臘神話的泰坦巨人 Titan</td></tr>
+    <tr><td>釩 V</td><td>綠</td><td>部分祖母綠、沙弗萊石</td><td>北歐女神 Vanadís，因為它的化合物色彩美麗</td></tr>
+    <tr><td>錳 Mn</td><td>粉紅、橘</td><td>摩根石、錳鋁榴石</td><td>希臘地名 Magnesia</td></tr>
+    <tr><td>銅 Cu</td><td>藍綠、霓虹藍</td><td>綠松石、帕拉伊巴碧璽</td><td>拉丁文 <i>cuprum</i>，來自盛產銅的賽普勒斯島</td></tr>
+  </table></div>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>礦物種是家族，變種是家族裡依顏色取的名字。紅寶石和藍寶石都是剛玉。</li>
+    <li>鑽石和石墨成分一樣，結構不同，性質天差地遠。</li>
+    <li>極少量的致色元素（鉻、鐵、鈦、銅等）就能決定寶石顏色。</li>
+  </ul></div>
+  <div class="quiz" data-q="L3"></div>
+</section>
+
+<section class="lesson" id="L4" data-unit="1" data-title="晶系：寶石的骨架">
+  <header class="lh"><p class="lnum">第 4 課</p><h2>晶系：寶石的骨架</h2>
+  <p class="goal">學完這課你會知道：七大晶系是什麼；怎麼從原石形狀猜出它是哪種寶石；晶系和之後要學的「光」有什麼關係。</p></header>
+
+  <p class="lead">第 2 課說過，晶體裡的原子會重複排列。那個不斷重複的最小「盒子」叫<strong>晶胞</strong>。盒子的形狀有七種，叫做<strong>七大晶系</strong>。</p>
+  <div class="analogy"><b>生活比喻：</b>晶胞像是一塊磁磚，整面牆（晶體）都是用同一塊磁磚貼出來的。磁磚是正方形、長方形還是菱形，決定了整面牆的樣子。</div>
+  <div class="term"><div class="tt">晶系 <span class="en">Crystal system</span></div>
+  <p>依照晶胞的三條邊長是否相等、彼此的夾角是否為 90°，把所有晶體分成七類。</p>
+  <p class="origin"><b>由來：</b>19 世紀初德國和法國的礦物學家量測大量晶體的角度後發現，所有晶體都能歸進這幾種對稱方式。「系」就是「系統、類別」的意思。</p></div>
+
+  <div class="grid3" id="xtalGrid"></div>
+  <p style="font-size:14px;color:var(--muted)">圖形會慢慢轉動，方便看立體感。「對稱度」從高排到低。</p>
+
+  <h3 class="sec">晶體習性：原石的「長相」</h3>
+  <p>同一種寶石在自然中常長成固定的形狀，叫<strong>晶體習性</strong>。鑑定師看到原石就能先猜個大概：</p>
+  <ul class="plain">
+    <li><strong>鑽石</strong>：常是八面體，像兩座金字塔底部黏在一起。</li>
+    <li><strong>剛玉</strong>：六方的桶狀或扁平六角板狀。</li>
+    <li><strong>祖母綠、海藍寶</strong>：六角柱，像鉛筆。</li>
+    <li><strong>碧璽</strong>：長柱狀，表面有很多直條紋，橫切面像圓角三角形。</li>
+    <li><strong>石榴石</strong>：像足球一樣的十二面體。</li>
+  </ul>
+  <div class="term"><div class="tt">晶體習性 <span class="en">Crystal habit</span></div>
+  <p>某種礦物在自然狀態下最常長成的外形。</p>
+  <p class="origin"><b>由來：</b>habit 來自拉丁文 <i>habitus</i>「外表、習慣」。就像人有習慣的穿著，礦物也有習慣的長相。</p></div>
+
+  <h3 class="sec">為什麼要學晶系？先埋一個伏筆</h3>
+  <p>晶系不只是形狀而已。在第 8 課你會學到：光進入<strong>等軸晶系</strong>或<strong>非晶質</strong>的寶石時只走一條路（單折射）；進入<strong>其他六種晶系</strong>時會被分成兩條路（雙折射）。這個差別是鑑定師用儀器分辨寶石的關鍵之一。</p>
+  <div class="tw"><table>
+    <tr><th>光的行為</th><th>晶系</th><th>常見寶石</th></tr>
+    <tr><td>單折射</td><td>等軸晶系、非晶質</td><td>鑽石、尖晶石、石榴石、玻璃、蛋白石</td></tr>
+    <tr><td>雙折射</td><td>四方、六方、三方、斜方、單斜、三斜</td><td>剛玉、祖母綠、石英、碧璽、拓帕石、橄欖石</td></tr>
+  </table></div>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>晶胞是晶體的最小重複單位，依形狀分成七大晶系。</li>
+    <li>每種寶石有常見的晶體習性，可以用來初步判斷原石。</li>
+    <li>等軸晶系與非晶質是單折射，其他晶系是雙折射（第 8 課詳解）。</li>
+  </ul></div>
+  <div class="quiz" data-q="L4"></div>
+</section>
+<!-- ================= 第二單元 ================= -->
+<section class="lesson" id="L5" data-unit="2" data-title="硬度與韌性">
+  <header class="lh"><p class="lnum">第 5 課</p><h2>硬度與韌性：寶石耐不耐用</h2>
+  <p class="goal">學完這課你會知道：莫氏硬度怎麼來的；為什麼「硬」不等於「摔不破」；日常灰塵為什麼會磨花寶石。</p></header>
+
+  <h3 class="sec">誰刮得動誰？</h3>
+  <p class="lead">1812 年，德國礦物學家<strong>腓特烈·莫斯</strong>想出一個簡單的比較方法：拿兩種礦物互相刮，能刮出痕跡的那個比較硬。他挑了十種常見礦物當「標準尺」，從 1 排到 10。</p>
+  <div class="term"><div class="tt">莫氏硬度 <span class="en">Mohs hardness scale</span></div>
+  <p>用「互相刻劃」比較礦物抵抗刮傷能力的相對等級，1 最軟、10 最硬。</p>
+  <p class="origin"><b>由來：</b>以發明人 Friedrich Mohs 的姓氏命名。「莫氏」就是「莫斯先生的」。</p></div>
+
+  <div class="tw"><table>
+    <tr><th>硬度</th><th>標準礦物</th><th>生活中的參考</th></tr>
+    <tr><td class="num">1</td><td>滑石</td><td>用指甲就能刮成粉（爽身粉原料）</td></tr>
+    <tr><td class="num">2</td><td>石膏</td><td>指甲約 2.5，勉強刮得動</td></tr>
+    <tr><td class="num">3</td><td>方解石</td><td>銅幣約 3.5 可以刮傷；珍珠、珊瑚約在這附近</td></tr>
+    <tr><td class="num">4</td><td>螢石</td><td>鐵釘刮得動</td></tr>
+    <tr><td class="num">5</td><td>磷灰石</td><td>窗戶玻璃約 5.5</td></tr>
+    <tr><td class="num">6</td><td>正長石</td><td>鋼刀約 6，月光石屬於長石家族</td></tr>
+    <tr><td class="num">7</td><td>石英</td><td>空氣中的灰塵常含石英細砂</td></tr>
+    <tr><td class="num">8</td><td>黃玉（拓帕石）</td><td>尖晶石也是 8</td></tr>
+    <tr><td class="num">9</td><td>剛玉</td><td>紅寶石、藍寶石</td></tr>
+    <tr><td class="num">10</td><td>鑽石</td><td>只有鑽石能刮鑽石</td></tr>
+  </table></div>
+
+  <div class="lab"><div class="lab-t">動手實驗：刮刮看</div>
+    <p style="font-size:15px;margin-bottom:6px">選一個「拿來刮的東西」和一個「被刮的寶石」：</p>
+    <div style="font-size:14px;color:var(--muted)">拿來刮的</div><div class="row" id="scA"></div>
+    <div style="font-size:14px;color:var(--muted);margin-top:8px">被刮的</div><div class="row" id="scB"></div>
+    <div class="out" id="scOut">請各選一個。</div>
+  </div>
+
+  <h3 class="sec">莫氏硬度不是等距的</h3>
+  <p>莫氏硬度只是「排名」，不是「分數」。從 9 到 10 的差距，比從 1 到 9 全部加起來還大。下圖是用精密儀器量出來的「絕對硬度」，以石英為 100：</p>
+  <figure><svg id="hardChart" viewBox="0 0 600 300" role="img" aria-label="莫氏硬度與絕對硬度對照長條圖"></svg>
+  <figcaption>鑽石的絕對硬度大約是剛玉的 4 倍，是石英的 16 倍。</figcaption></figure>
+
+  <div class="warn"><b>為什麼 7 是一條重要的線？</b>空氣中的灰塵含有石英細砂（硬度 7）。硬度低於 7 的寶石（例如蛋白石、珍珠、坦桑石）每天被灰塵摩擦，表面會慢慢變霧、失去光澤。所以擦拭這類寶石要用軟布、清水，不能乾擦。</div>
+
+  <h3 class="sec">硬度不等於韌性</h3>
+  <p><strong>硬度</strong>是抵抗「刮傷」的能力；<strong>韌性</strong>是抵抗「敲碎、摔裂」的能力。兩者完全不同。</p>
+  <div class="analogy"><b>生活比喻：</b>玻璃杯很硬，鋼刀刮不太動，但一摔就碎（硬但脆）。橡皮擦很軟，指甲就能壓出痕跡，但你怎麼摔都摔不破（軟但韌）。</div>
+  <p>鑽石是最硬的，但如果用力敲在特定方向，它會裂開（下一課學「解理」）。反過來，軟玉和翡翠的硬度只有 6 到 7，卻是韌性最好的寶石之一，因為它們裡面有無數細小的纖維或顆粒像毛衣一樣交織在一起，裂縫很難穿過去。所以古代人能把玉雕成非常薄的器物。</p>
+  <div class="term"><div class="tt">韌性 <span class="en">Toughness</span></div>
+  <p>材料抵抗破裂、碎裂的能力。</p>
+  <p class="origin"><b>由來：</b>中文「韌」是革字旁，指像皮革一樣柔軟卻扯不斷。英文 tough 來自古英文 <i>tōh</i>，形容「黏稠、不容易扯開」。</p></div>
+  <div class="term"><div class="tt">穩定性 <span class="en">Stability</span></div>
+  <p>寶石耐不耐熱、耐不耐酸鹼、會不會因為光照而褪色。例如珍珠怕汗水和香水裡的酸，某些紫鋰輝石曬太陽會褪色。</p>
+  <p class="origin"><b>由來：</b>拉丁文 <i>stabilis</i>「站得穩的」。耐久性＝硬度＋韌性＋穩定性。</p></div>
+  <div class="warn"><b>鑑定師守則：</b>刮痕測試會在寶石上留下永久傷痕，<strong>專業鑑定絕不對成品做刮痕測試</strong>。這一課是讓你理解耐久性，實際鑑定要用後面教的無損方法。</div>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>莫氏硬度是 1–10 的相對排名，不是等距分數；鑽石遠比剛玉硬。</li>
+    <li>硬度 7 以下的寶石容易被灰塵磨花。</li>
+    <li>硬度（抗刮）≠ 韌性（抗碎）。玉的韌性極佳，鑽石雖硬卻怕猛力敲擊。</li>
+  </ul></div>
+  <div class="quiz" data-q="L5"></div>
+</section>
+
+<section class="lesson" id="L6" data-unit="2" data-title="解理、斷口與比重">
+  <header class="lh"><p class="lnum">第 6 課</p><h2>解理、斷口與比重</h2>
+  <p class="goal">學完這課你會知道：寶石怎麼裂開、裂開的樣子能透露什麼；阿基米德的方法怎麼用來分辨真假。</p></header>
+
+  <h3 class="sec">寶石的「紋理」：解理</h3>
+  <p class="lead">劈木頭時，順著木紋很容易劈開，逆著紋就很難。晶體也一樣：原子之間有些方向連結比較弱，受力時就會沿著這些方向裂成平整的面，這叫<strong>解理</strong>。</p>
+  <div class="term"><div class="tt">解理 <span class="en">Cleavage</span></div>
+  <p>晶體沿著特定方向裂開、形成平滑面的性質。依容易程度分為極完全、完全、中等、不完全。</p>
+  <p class="origin"><b>由來：</b>英文 cleave 來自古英文 <i>clēofan</i>「劈開」。中文「解」是分開，「理」是紋理，合起來就是「順著紋理分開」。</p></div>
+  <ul class="plain">
+    <li><strong>鑽石</strong>：有 4 個方向的完全解理。古代切磨師會利用解理先「劈」開大鑽石原石。</li>
+    <li><strong>拓帕石</strong>：1 個方向極完全解理，掉在地上可能整齊裂成兩半。</li>
+    <li><strong>剛玉、石英</strong>：幾乎沒有解理，所以比較耐摔。</li>
+  </ul>
+
+  <div class="term"><div class="tt">斷口 <span class="en">Fracture</span></div>
+  <p>不沿解理方向、隨意破裂留下的表面。石英和玻璃的斷口像貝殼內側一圈圈的弧紋，叫<strong>貝殼狀斷口</strong>。</p>
+  <p class="origin"><b>由來：</b>貝殼狀 conchoidal 來自希臘文 <i>konchē</i>「貝殼」。鑑定時在寶石邊緣看到小小的貝殼狀缺口，常常是玻璃或石英類的線索。</p></div>
+
+  <h3 class="sec">一樣大小，重量不同：比重</h3>
+  <p>拿兩顆一樣大的球，一顆塑膠、一顆鐵，鐵的一定比較重。每種寶石都有自己「多重」的特性，叫<strong>比重</strong>。</p>
+  <div class="term"><div class="tt">比重 <span class="en">Specific Gravity，簡稱 SG</span></div>
+  <p>一個物體的重量，是「同體積的水」重量的幾倍。水＝1，鑽石＝3.52，代表同體積的鑽石比水重 3.52 倍。</p>
+  <p class="origin"><b>由來：</b>specific 是「特定的」，gravity 是拉丁文 <i>gravis</i>「重」。「比重」＝拿來跟水「比」的「重」。</p></div>
+
+  <div class="story"><div class="who">阿基米德與王冠</div>傳說兩千多年前，古希臘國王懷疑工匠在純金王冠裡偷摻了銀，請阿基米德在不破壞王冠的情況下查清楚。阿基米德在泡澡時發現，身體泡進水裡，水面會升高：物體排開的水，體積等於物體的體積。他興奮得大喊「Eureka！（我找到了！）」。只要量出王冠的體積和重量，就能算出它是不是純金。今天鑑定師用的是同樣的原理。</div>
+
+  <h4>靜水稱重法：鑑定師怎麼量比重</h4>
+  <ol class="plain">
+    <li>先在空氣中秤寶石的重量。</li>
+    <li>再把寶石吊在水裡秤。因為水往上推（浮力），會變輕。</li>
+    <li>比重 = 空氣中重量 ÷ (空氣中重量 − 水中重量)</li>
+  </ol>
+  <div class="lab"><div class="lab-t">動手實驗：比重計算機</div>
+    <div class="grid2" style="margin:0 0 6px">
+      <label>空氣中重量（克拉）<input type="number" id="sgA" value="2.00" step="0.01" min="0"></label>
+      <label>水中重量（克拉）<input type="number" id="sgW" value="1.50" step="0.01" min="0"></label>
+    </div>
+    <div class="row"><button class="btn" id="sgCalc">計算比重</button><span style="font-size:14px;color:var(--muted)">試試 2.00 / 1.43，或 3.00 / 1.93</span></div>
+    <div class="out" id="sgOut">輸入數字後按「計算比重」。</div>
+  </div>
+  <div class="tw"><table>
+    <tr><th>寶石</th><th>比重</th><th>寶石</th><th>比重</th></tr>
+    <tr><td>琥珀</td><td class="num">1.08</td><td>尖晶石</td><td class="num">3.60</td></tr>
+    <tr><td>蛋白石</td><td class="num">2.15</td><td>拓帕石</td><td class="num">3.53</td></tr>
+    <tr><td>石英（水晶）</td><td class="num">2.65</td><td>鑽石</td><td class="num">3.52</td></tr>
+    <tr><td>祖母綠</td><td class="num">2.72</td><td>金綠寶石</td><td class="num">3.73</td></tr>
+    <tr><td>碧璽</td><td class="num">3.06</td><td>剛玉（紅藍寶）</td><td class="num">4.00</td></tr>
+    <tr><td>翡翠（硬玉）</td><td class="num">3.33</td><td>鋯石</td><td class="num">4.6–4.7</td></tr>
+    <tr><td>橄欖石</td><td class="num">3.34</td><td>立方氧化鋯（仿鑽）</td><td class="num">5.6–6.0</td></tr>
+  </table></div>
+  <div class="analogy"><b>生活應用：</b>琥珀的比重只有 1.08，放進飽和鹽水（比重約 1.13）會浮起來；很多塑膠仿品則會沉下去。又例如同樣 1 克拉，仿鑽「立方氧化鋯」因為比較重，看起來會比真鑽小一圈，這是珠寶商的經驗判斷之一。</div>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>解理＝沿特定方向整齊裂開；斷口＝隨意破裂，玻璃和石英是貝殼狀斷口。</li>
+    <li>比重＝和同體積水相比的重量，用靜水稱重法量測。</li>
+    <li>比重是分辨外觀相似寶石的重要數據。</li>
+  </ul></div>
+  <div class="quiz" data-q="L6"></div>
+</section>
+
+<section class="lesson" id="L7" data-unit="2" data-title="顏色從哪裡來？">
+  <header class="lh"><p class="lnum">第 7 課</p><h2>顏色從哪裡來？</h2>
+  <p class="goal">學完這課你會知道：白光是什麼組成的；寶石為什麼會有顏色；自色、他色、假色的差別；什麼是多色性和變色效應。</p></header>
+
+  <h3 class="sec">白光裡藏著彩虹</h3>
+  <p class="lead">1666 年，牛頓用三稜鏡把陽光分成紅、橙、黃、綠、藍、靛、紫。原來白光是所有顏色混在一起。寶石之所以有顏色，是因為它<strong>吃掉（吸收）</strong>了一部分顏色的光，剩下沒被吃掉的光跑進我們眼睛。</p>
+  <div class="analogy"><b>生活比喻：</b>寶石像一個篩子。白光是一把混了各色珠子的豆子，篩子把某些顏色攔下來，漏下去的豆子是什麼顏色，你就看到什麼顏色。</div>
+
+  <div class="lab"><div class="lab-t">動手實驗：寶石吃掉了哪些光？</div>
+    <div class="row" id="absBtns"></div>
+    <svg id="absSvg" viewBox="0 0 600 170" style="width:100%;height:auto;margin-top:10px" role="img" aria-label="光譜吸收示意"></svg>
+    <div class="out" id="absOut"></div>
+  </div>
+
+  <div class="term"><div class="tt">吸收 <span class="en">Absorption</span></div>
+  <p>寶石裡的某些原子（通常就是第 3 課的致色元素）會把特定顏色的光能量吸走。</p>
+  <p class="origin"><b>由來：</b>拉丁文 <i>absorbere</i>「吞下去」，ab（離開）＋ sorbere（吸）。</p></div>
+
+  <h3 class="sec">顏色的三種來源</h3>
+  <div class="term"><div class="tt">自色寶石 <span class="en">Idiochromatic</span></div>
+  <p>致色元素是寶石本身的主要成分，所以顏色很固定。例如橄欖石的綠來自本身含的鐵、綠松石的藍綠來自本身的銅、孔雀石的綠來自銅。</p>
+  <p class="origin"><b>由來：</b>希臘文 <i>idios</i>「自己的」＋ <i>chroma</i>「顏色」＝自己帶的顏色。</p></div>
+  <div class="term"><div class="tt">他色寶石 <span class="en">Allochromatic</span></div>
+  <p>純的時候是無色，因為混進微量雜質才有顏色，所以同一種礦物能有很多顏色。剛玉、綠柱石、石英、碧璽、鑽石都是。</p>
+  <p class="origin"><b>由來：</b>希臘文 <i>allos</i>「別的、他人的」，顏色是別人（雜質）給的。</p></div>
+  <div class="term"><div class="tt">假色 <span class="en">Pseudochromatic</span></div>
+  <p>顏色不是吸收造成，而是光在寶石內部的特殊結構裡反射、干涉、繞射產生的，例如蛋白石的彩虹光、拉長石的藍光（第 9 課詳解）。</p>
+  <p class="origin"><b>由來：</b>希臘文 <i>pseudo</i>「假的」。顏色不是寶石「染」出來的，而是光學結構「變」出來的。</p></div>
+
+  <div class="term"><div class="tt">色心 <span class="en">Color center</span></div>
+  <p>晶體結構裡少了一個原子或多了一個電子，形成的小「缺陷」也能吸收光。紫水晶的紫、煙晶的茶色、許多藍色拓帕石的藍，都和色心有關。天然輻射或人工照射都能產生色心。</p>
+  <p class="origin"><b>由來：</b>「色」＋「中心」，指晶體中負責產生顏色的一個小點。</p></div>
+
+  <h3 class="sec">轉個方向，顏色就變：多色性</h3>
+  <p>第 4 課說過，有些晶系會把光分成兩條路。這兩條路上的光被吸收的程度不同，所以<strong>從不同方向看，同一顆寶石的顏色會不一樣</strong>，這叫多色性。</p>
+  <ul class="plain">
+    <li><strong>坦桑石</strong>：可以看到藍、紫、棕黃三種色，切磨師要選對方向才能切出最美的藍紫色。</li>
+    <li><strong>堇青石</strong>：從一個方向看是藍紫色，轉 90° 變成淡黃灰色。傳說維京人曾把它當「太陽石」在陰天判斷太陽方向。</li>
+    <li><strong>紅寶石</strong>：可以看到偏紫紅和偏橘紅兩種紅。</li>
+  </ul>
+  <div class="term"><div class="tt">多色性 <span class="en">Pleochroism</span>　／　二色性 <span class="en">Dichroism</span></div>
+  <p>寶石從不同方向觀察呈現不同顏色的性質。能看到兩種顏色叫二色性，三種叫三色性。</p>
+  <p class="origin"><b>由來：</b>希臘文 <i>pleion</i>「更多」＋ <i>chroma</i>「顏色」；di- 是「二」。等軸晶系和非晶質（例如鑽石、尖晶石、石榴石、玻璃）只有一條光路，所以<strong>沒有多色性</strong>，這是很重要的鑑定線索。</p></div>
+
+  <h3 class="sec">白天是祖母綠，晚上是紅寶石：變色效應</h3>
+  <div class="lab"><div class="lab-t">動手實驗：換一盞燈</div>
+    <div class="fx alex" id="alexGem" style="width:150px;height:110px"></div>
+    <div class="row" style="justify-content:center"><button class="chip on" id="alexDay">日光</button><button class="chip" id="alexNight">燭光／白熾燈</button></div>
+    <div class="out" id="alexOut">在日光下，變石偏藍綠色。</div>
+  </div>
+  <p>變石（亞歷山大石）是金綠寶石家族的一員，含有鉻。它剛好同時讓綠光和紅光通過。日光裡藍綠光比較多，它就顯綠；燭光、白熾燈裡紅黃光比較多，它就顯紅。</p>
+  <div class="term"><div class="tt">變石 <span class="en">Alexandrite</span></div>
+  <p>會隨光源改變顏色的金綠寶石變種。</p>
+  <p class="origin"><b>由來：</b>1830 年代在俄羅斯烏拉爾山脈發現，以當時的皇太子、後來的沙皇亞歷山大二世命名。它的紅綠兩色又剛好是俄羅斯帝國軍隊的代表色，因此大受歡迎。</p></div>
+
+  <div class="warn"><b>鑑定師守則：</b>顏色會受光源影響，所以專業評色要在固定的標準光源下（接近中午日光的白光，色溫約 5500–6500K），背景用白色或中性灰，避免被彩色衣服或桌面干擾。</div>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>寶石吸收部分顏色的光，剩下的光就是我們看到的顏色。</li>
+    <li>自色（本身成分致色）、他色（雜質致色）、假色（光學結構造成）。</li>
+    <li>多色性只出現在雙折射寶石；變色效應是光源改變造成的。</li>
+  </ul></div>
+  <div class="quiz" data-q="L7"></div>
+</section>
+
+<section class="lesson" id="L8" data-unit="2" data-title="光的魔術：折射與色散">
+  <header class="lh"><p class="lnum">第 8 課</p><h2>光的魔術：折射、雙折射、色散</h2>
+  <p class="goal">學完這課你會知道：什麼是折射率；鑽石為什麼特別閃；什麼是雙折射；「火彩」從哪裡來。這課是鑑定儀器的理論基礎，請慢慢讀。</p></header>
+
+  <h3 class="sec">筷子在水裡為什麼會「斷掉」？</h3>
+  <p class="lead">把筷子斜插進一杯水，從側面看，筷子好像在水面折斷了。這是因為光從空氣進入水時<strong>速度變慢</strong>，方向也跟著轉彎。這個現象叫<strong>折射</strong>。</p>
+  <div class="analogy"><b>生活比喻：</b>一台推車斜斜地從柏油路推進沙地。先碰到沙地的那個輪子先變慢，另一個輪子還在快速前進，推車就會轉向。光進入寶石也是這樣轉彎的。</div>
+  <div class="term"><div class="tt">折射率 <span class="en">Refractive Index，簡稱 RI</span></div>
+  <p>光在真空中的速度，是在寶石裡速度的幾倍。數字越大，光在裡面跑得越慢、轉彎越厲害。每種寶石都有自己的折射率，是鑑定最重要的數據之一。</p>
+  <p class="origin"><b>由來：</b>refract 來自拉丁文 <i>refringere</i>「折回、折斷」，正好就是筷子「折斷」的樣子。index 是「指標」。</p></div>
+  <div class="tw"><table>
+    <tr><th>物質</th><th>折射率</th><th>光速變成原本的</th></tr>
+    <tr><td>水</td><td class="num">1.33</td><td>約 75%</td></tr>
+    <tr><td>蛋白石</td><td class="num">1.45</td><td>約 69%</td></tr>
+    <tr><td>石英</td><td class="num">1.54–1.55</td><td>約 65%</td></tr>
+    <tr><td>祖母綠</td><td class="num">1.57–1.58</td><td>約 63%</td></tr>
+    <tr><td>尖晶石</td><td class="num">1.72</td><td>約 58%</td></tr>
+    <tr><td>剛玉</td><td class="num">1.76–1.77</td><td>約 57%</td></tr>
+    <tr><td>立方氧化鋯</td><td class="num">2.15</td><td>約 47%</td></tr>
+    <tr><td>鑽石</td><td class="num">2.42</td><td>約 41%</td></tr>
+  </table></div>
+
+  <h3 class="sec">把光困住：全反射</h3>
+  <p>光從寶石裡面想跑出去時，如果角度太斜，就出不去，會被整個反射回來，像鏡子一樣。這叫<strong>全反射</strong>。能不能跑出去的分界角度叫<strong>臨界角</strong>。折射率越高，臨界角越小，光越容易被困在裡面來回反射，最後從上方射出，寶石看起來就越亮。</p>
+  <div class="lab"><div class="lab-t">動手實驗：光能跑出去嗎？</div>
+    <div class="row" id="tirMat"></div>
+    <svg id="tirSvg" viewBox="0 0 600 300" style="width:100%;height:auto;margin:10px 0" role="img" aria-label="光線從寶石射向空氣的折射與全反射模擬"></svg>
+    <label style="font-size:15px">光線的傾斜角度：<b id="tirVal">20°</b><input type="range" id="tirAng" min="0" max="80" value="20"></label>
+    <div class="out" id="tirOut"></div>
+  </div>
+  <div class="term"><div class="tt">全反射 <span class="en">Total Internal Reflection</span>　／　臨界角 <span class="en">Critical angle</span></div>
+  <p>光從高折射率進入低折射率物質時，入射角超過臨界角就會 100% 反射回去。鑽石的臨界角只有約 24.4°，玻璃約 41°。</p>
+  <p class="origin"><b>由來：</b>critical 來自希臘文 <i>krinein</i>「判斷、決定」，臨界角就是「決定光命運的那個角度」。光纖網路也是用全反射把光困在細線裡傳送。</p></div>
+
+  <h3 class="sec">光澤：寶石表面的反光</h3>
+  <p>折射率越高，表面反射的光越多，看起來越「亮」。這種表面反光的質感叫<strong>光澤</strong>，是經驗豐富的鑑定師第一眼就會注意的地方。</p>
+  <div class="tw"><table>
+    <tr><th>光澤</th><th>感覺</th><th>例子</th><th>名稱由來</th></tr>
+    <tr><td>金剛光澤</td><td>銳利、像鏡子</td><td>鑽石</td><td>「金剛」即鑽石</td></tr>
+    <tr><td>亞金剛光澤</td><td>比玻璃亮很多</td><td>鋯石、立方氧化鋯</td><td>「亞」＝次一等</td></tr>
+    <tr><td>玻璃光澤</td><td>像窗戶玻璃</td><td>大部分寶石</td><td>英文 vitreous 來自拉丁文 <i>vitrum</i>「玻璃」</td></tr>
+    <tr><td>油脂／蠟狀光澤</td><td>柔和、像抹了油</td><td>軟玉、部分翡翠</td><td>形容像油或蠟</td></tr>
+    <tr><td>珍珠光澤</td><td>柔和有深度的暈光</td><td>珍珠</td><td>以珍珠命名</td></tr>
+    <tr><td>絲絹光澤</td><td>像絲綢</td><td>虎眼石</td><td>內部纖維造成</td></tr>
+  </table></div>
+  <div class="term"><div class="tt">光澤 <span class="en">Luster</span></div>
+  <p>寶石表面反射光的強弱與質感。</p>
+  <p class="origin"><b>由來：</b>拉丁文 <i>lustrare</i>「照亮」。水晶吊燈的 lustre 也是同一個字。</p></div>
+
+  <h3 class="sec">一變二：雙折射</h3>
+  <p>還記得第 4 課的伏筆嗎？在非等軸晶系的寶石裡，光一進去就分成<strong>兩道</strong>，各走各的速度，所以有兩個折射率。兩個折射率相減的差叫<strong>雙折射率</strong>。</p>
+  <div class="lab"><div class="lab-t">看看冰洲石的魔術</div>
+    <div style="position:relative;height:90px;border-radius:12px;background:var(--sunk);overflow:hidden;display:grid;place-items:center">
+      <div id="dblBox" style="position:relative;font-family:var(--serif);font-size:34px;font-weight:900">寶石
+        <span id="dblGhost" style="position:absolute;left:0;top:0;opacity:.55;transform:translate(0,0);transition:transform .6s">寶石</span></div>
+    </div>
+    <div class="row" style="margin-top:8px"><button class="chip on" id="dblOff">普通玻璃</button><button class="chip" id="dblOn">放上方解石</button></div>
+    <p style="font-size:14.5px;color:var(--muted);margin:8px 0 0">透明的方解石（冰洲石）雙折射率非常大（0.172），放在字上，字會變成兩個。1669 年丹麥科學家巴托林首次描述這個現象。</p>
+  </div>
+  <div class="term"><div class="tt">雙折射 <span class="en">Double refraction</span>　／　雙折射率 <span class="en">Birefringence</span></div>
+  <p>光進入寶石後分成兩道、速度不同的現象；兩個折射率的差值就是雙折射率。雙折射率大的寶石（鋯石 0.059、橄欖石 0.036），用放大鏡從寶石頂部往下看，底部的刻面邊緣會出現<strong>重影</strong>。</p>
+  <p class="origin"><b>由來：</b>bi- 是「二」＋ refringence「折射」。冰洲石的名字則是因為最早的優質方解石產自冰島。</p></div>
+
+  <h3 class="sec">火彩：寶石裡的小彩虹</h3>
+  <p>不同顏色的光折射程度不一樣：紫光轉彎最多，紅光轉彎最少。所以白光穿過寶石的刻面時，會被分成彩虹色，這叫<strong>色散</strong>。從寶石裡射出的彩色閃光，珠寶界叫<strong>火彩</strong>。</p>
+  <figure><svg viewBox="0 0 600 220" role="img" aria-label="三稜鏡分光示意">
+    <path d="M40 120 L240 110" stroke="#fff" stroke-width="6" style="stroke:var(--ink)"/>
+    <polygon points="230,190 320,30 410,190" fill="#9ec9e8" opacity=".55" stroke="#6b93b5" stroke-width="2"/>
+    <g stroke-width="5" fill="none">
+      <path d="M300 112 L580 50" stroke="#e53935"/><path d="M300 114 L580 72" stroke="#fb8c00"/><path d="M300 116 L580 94" stroke="#fdd835"/>
+      <path d="M300 118 L580 116" stroke="#43a047"/><path d="M300 120 L580 138" stroke="#1e88e5"/><path d="M300 122 L580 160" stroke="#5e35b1"/>
+    </g>
+    <text x="40" y="105" font-size="15" style="fill:var(--ink)">白光</text>
+    <text x="520" y="40" font-size="14" style="fill:var(--muted)">紅光轉彎少</text>
+    <text x="500" y="186" font-size="14" style="fill:var(--muted)">紫光轉彎多</text>
+  </svg><figcaption>色散示意：白光經過稜鏡被分成彩虹。</figcaption></figure>
+  <div class="tw"><table>
+    <tr><th>寶石</th><th>色散值</th><th>火彩表現</th></tr>
+    <tr><td>石英</td><td class="num">0.013</td><td>幾乎看不到</td></tr>
+    <tr><td>剛玉</td><td class="num">0.018</td><td>弱</td></tr>
+    <tr><td>鑽石</td><td class="num">0.044</td><td>明顯、均衡</td></tr>
+    <tr><td>立方氧化鋯</td><td class="num">0.060</td><td>比鑽石更多彩</td></tr>
+    <tr><td>莫桑石</td><td class="num">0.104</td><td>非常強，像彩色燈泡</td></tr>
+  </table></div>
+  <p>有趣的是：火彩「太多」反而是仿鑽的線索之一。真鑽的白光和彩光比例均衡，莫桑石的彩光則常常多到不自然。</p>
+  <div class="term"><div class="tt">色散 <span class="en">Dispersion</span></div>
+  <p>白光被分解成各色光的現象，用紅光和紫光折射率的差來表示大小。</p>
+  <p class="origin"><b>由來：</b>拉丁文 <i>dispergere</i>「撒開、散開」，把光撒成一片彩虹。</p></div>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>折射率（RI）＝光速變慢的倍數，每種寶石都不同，是鑑定核心數據。</li>
+    <li>折射率越高，臨界角越小，越容易全反射，寶石越亮。</li>
+    <li>非等軸晶系有雙折射，雙折射率大的寶石會看到刻面重影。</li>
+    <li>色散產生火彩；鑽石 0.044，仿鑽常常更高。</li>
+  </ul></div>
+  <div class="quiz" data-q="L8"></div>
+</section>
+
+<section class="lesson" id="L9" data-unit="2" data-title="特殊光學效應">
+  <header class="lh"><p class="lnum">第 9 課</p><h2>特殊光學效應</h2>
+  <p class="goal">學完這課你會知道：貓眼、星光、變彩、月光、暈彩、砂金效應各是怎麼產生的，以及它們的名字由來。</p></header>
+
+  <p class="lead">有些寶石除了顏色之外，還會出現特別的光：一條會移動的亮線、一顆六芒星、一片流動的彩虹。這些是寶石內部的微小結構和光「合作」產生的。大多數這類寶石都磨成圓頂的<strong>弧面型</strong>，才能把效果集中顯現出來。</p>
+
+  <div class="grid3">
+    <div class="card"><div class="fx cat"></div><h5>貓眼效應</h5>內部有大量平行排列的細針狀包體，光在針上反射，匯聚成一條亮線，轉動寶石時亮線會開合移動，像貓的瞳孔。</div>
+    <div class="card"><div class="fx star"><i></i><i></i><i></i></div><h5>星光效應</h5>內部有三組互相交叉 60° 的細針（多半是金紅石），各自產生一條亮線，交疊成六道星芒。星光紅寶石、星光藍寶石最有名。</div>
+    <div class="card"><div class="fx opal"></div><h5>變彩</h5>蛋白石由無數細小的二氧化矽圓球整齊堆疊，像光碟片表面一樣把白光分成彩色，轉動時顏色塊跳動變化。</div>
+    <div class="card"><div class="fx moon"></div><h5>月光效應</h5>月光石裡有兩種長石一層層交錯，極薄的層散射藍白光，像月光在寶石表面浮動。</div>
+    <div class="card"><div class="fx labra"></div><h5>暈彩</h5>拉長石內部層狀結構使光互相干涉，特定角度會突然閃出藍、綠、金色的金屬光。</div>
+    <div class="card"><div class="fx sun"></div><h5>砂金效應</h5>寶石裡有許多片狀的小晶體（如赤鐵礦、銅片），像撒了一把亮片，閃閃發光。日光石是代表。</div>
+  </div>
+
+  <div class="term"><div class="tt">弧面型 <span class="en">Cabochon</span></div>
+  <p>表面磨成圓滑拱頂、沒有刻面的切磨方式。</p>
+  <p class="origin"><b>由來：</b>古法文 <i>caboche</i>「頭」，形狀圓圓的像頭頂。中國人稱「素面」或「蛋面」。</p></div>
+  <div class="term"><div class="tt">貓眼效應 <span class="en">Chatoyancy</span></div>
+  <p>弧面寶石表面出現一條明亮光帶的現象。珠寶界單說「貓眼」時，專指<strong>金綠寶石貓眼</strong>；其他寶石有貓眼要寫成「碧璽貓眼」「石英貓眼」等。</p>
+  <p class="origin"><b>由來：</b>法文 <i>chatoyer</i>「像貓的眼睛一樣閃光」，chat 就是法文的「貓」。</p></div>
+  <div class="term"><div class="tt">星光效應 <span class="en">Asterism</span></div>
+  <p>弧面寶石表面出現四道或六道星芒的現象。</p>
+  <p class="origin"><b>由來：</b>希臘文 <i>astēr</i>「星星」。太空人 astronaut、小行星 asteroid、星號 * （asterisk）都是同一個字根。</p></div>
+  <div class="term"><div class="tt">變彩 <span class="en">Play-of-color</span></div>
+  <p>轉動寶石時，出現一塊塊顏色會變化的光斑，是蛋白石的招牌。</p>
+  <p class="origin"><b>由來：</b>英文直譯「顏色的遊戲」。蛋白石 opal 可能來自梵文 <i>upala</i>「珍貴的石頭」，經拉丁文 <i>opalus</i> 流傳。中文叫「蛋白」是因為常見的白色蛋白石像煮熟的蛋白。</p></div>
+  <div class="term"><div class="tt">月光效應 <span class="en">Adularescence</span></div>
+  <p>寶石表面浮現一層朦朧、會移動的藍白色光暈。</p>
+  <p class="origin"><b>由來：</b>來自瑞士的阿杜拉山（Adula），那裡出產一種長石叫冰長石 adularia，這種光就用它命名。</p></div>
+  <div class="term"><div class="tt">暈彩 <span class="en">Labradorescence</span></div>
+  <p>拉長石特有的金屬感彩色閃光。</p>
+  <p class="origin"><b>由來：</b>以加拿大拉布拉多（Labrador）地區命名，18 世紀傳教士在那裡首次向歐洲介紹這種石頭。</p></div>
+  <div class="term"><div class="tt">砂金效應 <span class="en">Aventurescence</span></div>
+  <p>寶石內部片狀包體反光，產生閃爍亮點的效果。</p>
+  <p class="origin"><b>由來：</b>義大利文 <i>a ventura</i>「偶然地」。傳說 18 世紀威尼斯玻璃工匠不小心把銅屑掉進玻璃裡，做出了閃亮的「砂金玻璃」（金星石），後來天然寶石的類似效果也借用這個名字。</p></div>
+
+  <h3 class="sec">複習：第 7 課的變色效應</h3>
+  <p>變色效應也是一種特殊光學效應，但原因不同：不是內部結構，而是光源改變造成的顏色轉變。記住分類：<strong>內含物排列造成</strong>（貓眼、星光、砂金）、<strong>微結構造成</strong>（變彩、月光、暈彩）、<strong>光源造成</strong>（變色）。</p>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>貓眼＝一組平行針狀包體；星光＝三組交叉針狀包體。</li>
+    <li>變彩（蛋白石）、月光（月光石）、暈彩（拉長石）來自微細的規則結構。</li>
+    <li>這類寶石多磨成弧面型，才能展現效果。</li>
+  </ul></div>
+  <div class="quiz" data-q="L9"></div>
+</section>
+<!-- ================= 第三單元 ================= -->
+<section class="lesson" id="L10" data-unit="3" data-title="放大鏡與內含物">
+  <header class="lh"><p class="lnum">第 10 課</p><h2>放大鏡與內含物：寶石的指紋</h2>
+  <p class="goal">學完這課你會知道：10 倍放大鏡怎麼用；內含物有哪些種類；怎麼從內含物分辨天然、合成和玻璃。</p></header>
+
+  <h3 class="sec">鑑定師的第一把工具</h3>
+  <p class="lead">鑑定師口袋裡一定有一支<strong>10 倍放大鏡</strong>。為什麼是 10 倍？因為國際上鑽石淨度就是用 10 倍放大來判定的：10 倍下看不到瑕疵，就算「無瑕」。倍率再高，視野會太小、手也容易晃。</p>
+  <div class="term"><div class="tt">放大鏡 <span class="en">Loupe</span></div>
+  <p>專業用的 10 倍放大鏡通常是<strong>三合鏡</strong>：三片鏡片黏在一起，消除影像邊緣的彩色光暈和變形。</p>
+  <p class="origin"><b>由來：</b>loupe 是法文「放大鏡」，歐洲寶石業長期以法國、比利時為中心，所以沿用法文。</p></div>
+  <h4>正確的使用姿勢</h4>
+  <ol class="steps">
+    <li>放大鏡<strong>貼近眼睛</strong>（約 1–2 公分），不要伸長手臂拿遠。</li>
+    <li>用鑷子夾住寶石，<strong>移動寶石</strong>靠近放大鏡，直到清楚（約 2.5 公分）。</li>
+    <li>拿放大鏡和拿鑷子的兩隻手靠在一起、手肘撐在桌上，減少晃動。</li>
+    <li>光從側面照進寶石，不要直接照你的眼睛，這樣內含物會像黑夜裡的星星一樣亮起來。</li>
+    <li>兩眼都睜開，比較不累。</li>
+  </ol>
+  <div class="term"><div class="tt">暗視野照明 <span class="en">Darkfield illumination</span></div>
+  <p>寶石顯微鏡常用的照明法：光從旁邊斜照，背景是黑的，內含物會發亮浮現。</p>
+  <p class="origin"><b>由來：</b>直譯「暗的視野」，因為背景暗、主角亮。</p></div>
+
+  <h3 class="sec">內含物：寶石的出生證明</h3>
+  <p>寶石在地底長大時，會把周圍的小晶體、液體、氣泡包進身體裡，或留下生長的痕跡。這些叫<strong>內含物</strong>。它們像人的指紋，幾乎每顆寶石都不一樣，還能透露寶石的出生環境。</p>
+  <div class="term"><div class="tt">內含物 <span class="en">Inclusion</span></div>
+  <p>寶石內部的其他物質或結構特徵，包括晶體、液體、氣體、裂隙、生長紋等。</p>
+  <p class="origin"><b>由來：</b>拉丁文 <i>includere</i>「關在裡面」。祖母綠的內含物又被法國人浪漫地叫做 <i>jardin</i>「花園」，因為看起來像一座綠色花園。</p></div>
+
+  <div class="tw"><table>
+    <tr><th>種類</th><th>樣子</th><th>常見於</th></tr>
+    <tr><td>礦物包體（固態）</td><td>小晶體，有稜有角</td><td>鑽石中的石榴石、紅寶中的金紅石</td></tr>
+    <tr><td>針狀／絲狀包體</td><td>細長的針，常一束一束交叉，業界叫「絲」</td><td>紅藍寶石</td></tr>
+    <tr><td>兩相包體</td><td>液體裡有一個氣泡</td><td>很多天然寶石</td></tr>
+    <tr><td>三相包體</td><td>液體＋氣泡＋一顆鹽晶體，呈鋸齒狀空腔</td><td>哥倫比亞祖母綠的招牌</td></tr>
+    <tr><td>指紋狀包體</td><td>裂縫癒合時留下的小液滴，排成像指紋的圖案</td><td>剛玉、拓帕石、合成寶石也有</td></tr>
+    <tr><td>羽狀裂隙</td><td>像羽毛的小裂縫</td><td>鑽石等</td></tr>
+    <tr><td>生長紋／色帶</td><td>一層層的生長痕跡或顏色深淺條帶</td><td>剛玉（天然是直的）</td></tr>
+  </table></div>
+
+  <div class="lab"><div class="lab-t">動手觀察：放大鏡下的世界</div>
+    <div class="row" id="incBtns"></div>
+    <svg id="incSvg" viewBox="0 0 300 300" style="width:100%;max-width:320px;display:block;margin:12px auto;height:auto" role="img" aria-label="放大鏡下看到的內含物示意"></svg>
+    <div class="out" id="incOut"></div>
+  </div>
+
+  <div class="warn"><b>重要觀念：</b>「完全乾淨、一點內含物都沒有」的彩色寶石，不一定是好事，有時反而要懷疑是合成或玻璃。天然紅寶石、祖母綠幾乎都會有內含物。鑑定師看內含物，不只是找瑕疵，更是找「身分證據」。</div>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>10 倍放大鏡貼眼、移動寶石、手肘撐穩、側光照明。</li>
+    <li>內含物是寶石的指紋，能判斷天然或合成，甚至推測產地。</li>
+    <li>天然剛玉生長紋是直的；焰熔法合成是弧形的；玻璃有圓氣泡和流紋。</li>
+  </ul></div>
+  <div class="quiz" data-q="L10"></div>
+</section>
+
+<section class="lesson" id="L11" data-unit="3" data-title="常用鑑定儀器">
+  <header class="lh"><p class="lnum">第 11 課</p><h2>常用鑑定儀器</h2>
+  <p class="goal">學完這課你會知道：折射儀、偏光鏡、二色鏡、濾色鏡、分光鏡、紫外燈、鑽石測試筆各在測什麼，以及它們的限制。</p></header>
+
+  <p class="lead">前面學的每一種性質，都有對應的儀器可以量。鑑定的原則是：<strong>不只看一種數據，要多種證據互相印證</strong>。</p>
+
+  <h3 class="sec">折射儀：量折射率</h3>
+  <p>把寶石平坦的桌面放在儀器的高折射率玻璃上，中間滴一滴<strong>接觸液</strong>讓兩者緊密接觸。從目鏡看進去，會看到一條明暗分界線，分界線落在刻度上的位置就是折射率。</p>
+  <ul class="plain">
+    <li>雙折射寶石轉動時會看到<strong>兩條線</strong>，最高值減最低值就是雙折射率。</li>
+    <li>接觸液本身折射率約 1.79–1.81，所以超過這個數字的寶石（鑽石、立方氧化鋯、鋯石）讀不到，只會記錄為「超出範圍」。這本身也是一條線索。</li>
+  </ul>
+  <div class="term"><div class="tt">折射儀 <span class="en">Refractometer</span></div>
+  <p class="origin"><b>由來：</b>refract（折射）＋ -meter（測量器，希臘文 <i>metron</i>「尺度」）。溫度計 thermometer、公尺 meter 都是同源。</p></div>
+
+  <h3 class="sec">偏光鏡：分辨單折射和雙折射</h3>
+  <p>偏光鏡有上下兩片偏光片，調到互相垂直時，光被完全擋住，視野全黑。把寶石放在中間轉一圈：</p>
+  <div class="lab"><div class="lab-t">動手實驗：偏光鏡下轉寶石</div>
+    <div class="row" id="polBtns"></div>
+    <div style="display:flex;justify-content:center;margin:12px 0"><svg id="polSvg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="偏光鏡視野"></svg></div>
+    <label style="font-size:15px">轉動寶石：<b id="polVal">0°</b><input type="range" id="polAng" min="0" max="360" value="0"></label>
+    <div class="out" id="polOut"></div>
+  </div>
+  <div class="tw"><table>
+    <tr><th>轉一圈看到</th><th>意思</th><th>例子</th></tr>
+    <tr><td>一直暗</td><td>單折射</td><td>鑽石、尖晶石、石榴石、玻璃</td></tr>
+    <tr><td>亮暗交替四次</td><td>雙折射</td><td>紅藍寶、祖母綠、碧璽</td></tr>
+    <tr><td>一直亮</td><td>由很多小晶體組成的集合體</td><td>翡翠、瑪瑙、軟玉</td></tr>
+    <tr><td>暗中帶不規則扭曲光斑</td><td>單折射但內部有應力（異常消光）</td><td>玻璃、合成尖晶石</td></tr>
+  </table></div>
+  <div class="term"><div class="tt">偏光 <span class="en">Polarized light</span></div>
+  <p>普通光在各個方向振動，偏光片只讓一個方向振動的光通過。偏光太陽眼鏡就是利用這個原理擋掉路面反光。</p>
+  <p class="origin"><b>由來：</b>polar「極」，19 世紀初法國科學家馬呂斯發現反射光有「方向性」，像磁鐵有兩極，於是這樣命名。</p></div>
+
+  <h3 class="sec">二色鏡：一眼看到兩種顏色</h3>
+  <p>第 7 課學的多色性，平常要轉來轉去才看得到。二色鏡能把兩道光<strong>並排</strong>顯示成兩個小窗。兩窗顏色不同，就代表是雙折射寶石；顏色一樣，可能是單折射（或剛好沿著光軸看，需換方向再確認）。</p>
+  <div class="term"><div class="tt">二色鏡 <span class="en">Dichroscope</span></div>
+  <p class="origin"><b>由來：</b>di-（二）＋ chroma（顏色）＋ -scope（觀看的器具，希臘文 <i>skopein</i>「看」）。望遠鏡 telescope、顯微鏡 microscope 同一個字尾。</p></div>
+
+  <h3 class="sec">查爾斯濾色鏡：祖母綠的快篩</h3>
+  <p>這片濾鏡只讓<strong>深紅光和黃綠光</strong>通過。含鉻的祖母綠會吸收掉黃綠光、只剩紅光，所以透過濾鏡看會<strong>變紅</strong>；很多綠色仿品（玻璃、綠色石榴石等）則仍然是綠色。</p>
+  <div class="warn">它只是「快篩」，不是定論。有些祖母綠（含鐵較多的產地）不會變紅，有些合成祖母綠反而紅得特別明顯。一定要搭配其他測試。</div>
+  <div class="term"><div class="tt">查爾斯濾色鏡 <span class="en">Chelsea filter</span></div>
+  <p class="origin"><b>由來：</b>1930 年代由倫敦的切爾西理工學院（Chelsea College）與寶石學家共同開發，用學校名字命名。中文音譯為「查爾斯」。</p></div>
+
+  <h3 class="sec">分光鏡：看寶石吃掉了哪些光</h3>
+  <p>把第 7 課的「吸收」實際看出來。透過分光鏡，會看到一條彩虹，上面有一些黑線或黑帶，就是被吸收掉的顏色。不同致色元素會留下不同的「條碼」：</p>
+  <ul class="plain">
+    <li><strong>鉻</strong>：紅色區域有幾條細而清楚的線（紅寶石、祖母綠、變石）。</li>
+    <li><strong>鐵</strong>：藍紫區常有吸收帶（藍寶石、橄欖石）。</li>
+    <li><strong>鋯石</strong>：常看到許多平均分布的細線，是非常好認的特徵。</li>
+  </ul>
+  <div class="term"><div class="tt">分光鏡 <span class="en">Spectroscope</span>　／　光譜 <span class="en">Spectrum</span></div>
+  <p class="origin"><b>由來：</b>拉丁文 <i>spectrum</i>「影像、幽靈」，牛頓用它稱呼稜鏡投出的彩色光帶，因為看得到卻摸不到。</p></div>
+
+  <h3 class="sec">紫外燈：看寶石會不會發光</h3>
+  <p>在暗處用紫外燈照寶石，有些寶石會發出看得見的光，叫<strong>螢光</strong>。紫外燈有兩種：<strong>長波</strong>（365 奈米）和<strong>短波</strong>（254 奈米）。</p>
+  <ul class="plain">
+    <li>低鐵的紅寶石（例如緬甸產）螢光是鮮紅色，高鐵的（例如泰國、柬埔寨產）很弱。</li>
+    <li>約三分之一的鑽石在長波下發藍色螢光。</li>
+    <li>被注膠處理的翡翠（B 貨）常有藍白色螢光。</li>
+  </ul>
+  <div class="warn">短波紫外線會傷害眼睛和皮膚，絕對不可以直視燈管，操作時要戴防護眼鏡或使用有觀察窗的暗箱。</div>
+  <div class="term"><div class="tt">螢光 <span class="en">Fluorescence</span></div>
+  <p>物質吸收紫外線等看不見的光，再放出看得見的光。關掉燈光就停止的叫螢光，關燈後還會繼續發光一段時間的叫<strong>磷光</strong>。</p>
+  <p class="origin"><b>由來：</b>以<strong>螢石</strong>（fluorite）命名，因為 1852 年英國科學家斯托克斯研究螢石時描述了這個現象。螢石的英文又來自拉丁文 <i>fluere</i>「流動」，因為它在煉鐵時能讓礦渣變得容易流動。一個字串起三個故事。</p></div>
+
+  <h3 class="sec">鑽石測試筆：量導熱</h3>
+  <p>鑽石是極好的熱導體。測試筆的探頭先加熱，碰到鑽石時熱量會被迅速帶走，儀器就會發出聲響。玻璃、立方氧化鋯導熱差，不會響。</p>
+  <div class="warn">但是<strong>莫桑石</strong>的導熱也很好，會騙過只量導熱的測試筆。所以現在要用「導熱＋導電」的多功能測試儀（大多數莫桑石會導電，鑽石通常不會），並用放大鏡找莫桑石的雙折射重影。</div>
+
+  <h3 class="sec">小整理</h3>
+  <div class="tw"><table>
+    <tr><th>儀器</th><th>測什麼</th><th>最常用來</th></tr>
+    <tr><td>10 倍放大鏡／顯微鏡</td><td>內含物、表面、重影</td><td>天然或合成、處理痕跡</td></tr>
+    <tr><td>折射儀</td><td>折射率、雙折射率</td><td>決定寶石種類</td></tr>
+    <tr><td>偏光鏡</td><td>單／雙折射、集合體</td><td>快速分組</td></tr>
+    <tr><td>二色鏡</td><td>多色性</td><td>區分單雙折射、相似色寶石</td></tr>
+    <tr><td>比重秤</td><td>比重</td><td>佐證種類</td></tr>
+    <tr><td>查爾斯濾色鏡</td><td>紅光／黃綠光比例</td><td>祖母綠等快篩</td></tr>
+    <tr><td>分光鏡</td><td>吸收光譜</td><td>致色元素、部分處理</td></tr>
+    <tr><td>紫外燈</td><td>螢光</td><td>產地線索、處理、分辨仿品</td></tr>
+    <tr><td>熱導／電導測試儀</td><td>導熱、導電</td><td>鑽石與仿鑽</td></tr>
+  </table></div>
+  <p>這些都是「基礎儀器」，一般寶石店或學校就有。更精密的實驗室儀器（紅外光譜、拉曼光譜、質譜儀等）會在第 19 課介紹。</p>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>折射儀量折射率，是判斷寶石種類的主力；上限約 1.81。</li>
+    <li>偏光鏡四種反應：一直暗、四明四暗、一直亮、異常消光。</li>
+    <li>濾色鏡、測試筆都只能當快篩，必須搭配其他證據。</li>
+  </ul></div>
+  <div class="quiz" data-q="L11"></div>
+</section>
+
+<section class="lesson" id="L12" data-unit="3" data-title="天然、合成、仿品與處理">
+  <header class="lh"><p class="lnum">第 12 課</p><h2>天然、合成、仿品與處理</h2>
+  <p class="goal">學完這課你會知道：「合成」和「仿品」差在哪；常見的寶石處理方法和辨認線索；為什麼誠實揭露是這一行最重要的規則。</p></header>
+
+  <h3 class="sec">四種身分，一定要分清楚</h3>
+  <div class="grid2">
+    <div class="card"><h5>天然寶石</h5>大自然形成，人只做了切磨。</div>
+    <div class="card"><h5>合成寶石</h5>在實驗室做出來，但成分、結構、性質<strong>和天然的一樣</strong>。例如合成紅寶石真的就是剛玉。</div>
+    <div class="card"><h5>仿製品</h5><strong>長得像</strong>，但成分完全不同。例如用紅玻璃假裝紅寶石、用立方氧化鋯假裝鑽石。</div>
+    <div class="card"><h5>拼合石</h5>用兩層或三層材料黏在一起，例如薄薄一片蛋白石黏在黑色底座上、上面再加一層透明水晶保護。</div>
+  </div>
+  <div class="analogy"><b>生活比喻：</b>天然寶石像野生的鮭魚；合成寶石像養殖的鮭魚，一樣是鮭魚，但來源不同，價格也不同；仿製品像用魚漿做成鮭魚形狀的魚板，外表像，本質完全不同。</div>
+  <div class="term"><div class="tt">合成 <span class="en">Synthetic</span></div>
+  <p>用人工方法製造、與天然對應寶石具有相同化學成分和晶體結構的產品。</p>
+  <p class="origin"><b>由來：</b>希臘文 <i>synthesis</i>「放在一起、組合」，syn（一起）＋ thesis（放置）。</p></div>
+  <div class="term"><div class="tt">仿製品 <span class="en">Imitation / Simulant</span></div>
+  <p>模仿某種寶石外觀、但本質不同的材料。</p>
+  <p class="origin"><b>由來：</b>simulant 來自拉丁文 <i>simulare</i>「假裝、模仿」，模擬 simulation 同源。</p></div>
+
+  <h3 class="sec">合成寶石是怎麼做的？</h3>
+  <div class="tw"><table>
+    <tr><th>方法</th><th>怎麼做</th><th>常做什麼</th><th>放大鏡下線索</th></tr>
+    <tr><td>焰熔法</td><td>1902 年法國化學家維爾納伊發明。把原料粉末撒進火焰融化，一滴滴落下堆成梨形晶體</td><td>紅藍寶石、尖晶石</td><td>弧形生長紋、圓形氣泡</td></tr>
+    <tr><td>助熔劑法</td><td>把原料溶在高溫的「助熔劑」裡，慢慢冷卻結晶，像糖水結出冰糖</td><td>紅寶石、祖母綠</td><td>助熔劑殘留，像指紋或麵包屑</td></tr>
+    <tr><td>水熱法</td><td>模仿地底熱水，在高壓鍋裡長晶體</td><td>祖母綠、水晶</td><td>鋸齒狀或 V 形生長紋、種晶片</td></tr>
+    <tr><td>提拉法</td><td>把種晶浸入熔液，一邊旋轉一邊慢慢往上拉</td><td>變石、雷射用晶體</td><td>非常乾淨，偶有弧紋或氣泡</td></tr>
+    <tr><td>高溫高壓法（HPHT）</td><td>模仿地函的壓力和溫度</td><td>鑽石</td><td>金屬包體、特殊生長圖案</td></tr>
+    <tr><td>化學氣相沉積法（CVD）</td><td>讓含碳氣體中的碳原子一層層沉積在基板上</td><td>鑽石</td><td>層狀生長，需精密儀器</td></tr>
+  </table></div>
+  <div class="term"><div class="tt">焰熔法 <span class="en">Verneuil process</span></div>
+  <p class="origin"><b>由來：</b>以發明人 Auguste Verneuil 命名。這是史上第一個大量生產的合成寶石方法，至今手錶的藍寶石鏡面大多還是這樣做的。</p></div>
+
+  <h3 class="sec">優化處理：讓寶石變漂亮的人工手段</h3>
+  <p>大自然長出的寶石，很多顏色不夠好、裂縫太多。人類發展出各種方法改善外觀。有些方法幾千年來都在用、被市場普遍接受；有些則會大幅影響價值，一定要告知買家。</p>
+  <div class="term"><div class="tt">優化 <span class="en">Enhancement</span>　與　處理 <span class="en">Treatment</span></div>
+  <p>華人地區的國家標準常把處理分成兩類：<strong>優化</strong>是傳統、穩定、被廣泛接受的方法（例如加熱、祖母綠浸無色油）；<strong>處理</strong>是非傳統或影響較大的方法（例如染色、充填、擴散、輻照），證書上必須註明。國際上（如 CIBJO 和美國 FTC 的規範）則要求：凡是影響價值的處理，都應告知消費者。</p>
+  <p class="origin"><b>由來：</b>enhance 來自古法文 <i>enhauncer</i>「提高」；treat 來自拉丁文 <i>tractare</i>「處理、對待」。</p></div>
+
+  <div class="tw"><table>
+    <tr><th>方法</th><th>做法</th><th>常見寶石</th><th>辨認線索</th></tr>
+    <tr><td>加熱</td><td>高溫改善顏色、淨度</td><td>紅藍寶石（極常見）、坦桑石、海藍寶</td><td>針狀包體斷成點狀、包體周圍出現「爆裂圈」</td></tr>
+    <tr><td>注油／注樹脂</td><td>把無色油或樹脂填進裂縫，讓裂縫變不明顯</td><td>祖母綠（非常普遍）</td><td>裂縫中有閃光、小氣泡；乾掉後可能變白</td></tr>
+    <tr><td>玻璃充填</td><td>把含鉛玻璃大量灌進裂縫多的低檔紅寶</td><td>紅寶石</td><td>裂縫中藍色或橘色閃光、扁平氣泡；遇酸或高溫會損壞</td></tr>
+    <tr><td>擴散</td><td>高溫下讓致色元素（如鈹、鈦）滲入寶石</td><td>藍寶石、橘色藍寶</td><td>顏色集中在表層或邊緣，泡在液體中可見</td></tr>
+    <tr><td>輻照</td><td>用射線產生色心</td><td>藍色拓帕石、彩色鑽石</td><td>多數需儀器判斷</td></tr>
+    <tr><td>染色</td><td>讓顏料滲入裂縫或顆粒間</td><td>翡翠 C 貨、瑪瑙、珍珠</td><td>顏色沿裂縫聚集呈網狀</td></tr>
+    <tr><td>漂白＋注膠</td><td>用酸洗掉雜質，再用樹脂填補</td><td>翡翠 B 貨</td><td>表面溝渠狀網紋、螢光、紅外光譜</td></tr>
+    <tr><td>鍍膜</td><td>表面塗一層薄膜</td><td>拓帕石、鑽石</td><td>刮痕處露出不同色、表面有彩虹色</td></tr>
+    <tr><td>雷射鑽孔、裂隙充填</td><td>燒掉黑色內含物、填玻璃遮裂</td><td>鑽石</td><td>細長通道；充填處有閃光</td></tr>
+    <tr><td>高溫高壓改色</td><td>改善鑽石顏色</td><td>鑽石</td><td>需實驗室光譜</td></tr>
+  </table></div>
+
+  <h3 class="sec">拼合石：黏起來的寶石</h3>
+  <div class="term"><div class="tt">二層石 <span class="en">Doublet</span>　／　三層石 <span class="en">Triplet</span></div>
+  <p>兩層或三層材料黏合成一顆寶石。最有名的是「石榴石頂二層石」：薄薄一片紅石榴石黏在彩色玻璃上，頂部硬度和光澤很像真寶石。側面平視時，常能看到一條黏合線，或上下光澤不同；泡在液體中觀察更清楚。</p>
+  <p class="origin"><b>由來：</b>double（雙）、triple（三）加上 -let（小東西），就是「雙片的小東西」。</p></div>
+
+  <div class="warn"><b>職業道德：</b>處理本身不是「造假」，隱瞞處理才是。專業鑑定師和誠實的商人都會清楚說明：這顆寶石是天然、合成還是仿品？有沒有處理？處理方法是什麼？這是整個產業的信任基礎。</div>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>合成＝成分結構與天然相同，人工長出；仿品＝只是外觀相似。</li>
+    <li>焰熔法合成常見弧形生長紋與圓氣泡。</li>
+    <li>加熱、注油普遍被接受；玻璃充填、擴散、染色、B 貨必須揭露。</li>
+    <li>有處理不是問題，不揭露才是問題。</li>
+  </ul></div>
+  <div class="quiz" data-q="L12"></div>
+</section>
+
+<section class="lesson" id="L13" data-unit="3" data-title="玉石與有機寶石">
+  <header class="lh"><p class="lnum">第 13 課</p><h2>玉石與有機寶石</h2>
+  <p class="goal">學完這課你會知道：翡翠和和田玉的差別；翡翠的「種水色」和 A、B、C 貨；珍珠、琥珀、珊瑚的鑑別重點。</p></header>
+
+  <h3 class="sec">「玉」其實是兩種礦物</h3>
+  <p class="lead">東漢《說文解字》把玉解釋為「石之美者」，也就是美麗的石頭。一千多年來，中文的「玉」包含很多種石頭。直到 1863 年，法國礦物學家達穆爾才證明：西方叫 jade 的東西其實是兩種完全不同的礦物。</p>
+  <div class="grid2">
+    <div class="card"><h5>翡翠（硬玉）</h5>輝石族，主要成分是硬玉礦物。<br>比重約 3.33，折射率約 1.66。<br>顆粒狀結構，拋光後光澤較亮。<br>商業上幾乎都產自緬甸。</div>
+    <div class="card"><h5>和田玉（軟玉）</h5>角閃石族的透閃石、陽起石。<br>比重約 2.95，折射率約 1.61。<br>纖維交織結構，韌性極佳，油脂光澤。<br>產地有新疆和田、青海、俄羅斯、加拿大，台灣花蓮豐田也產（台灣玉）。</div>
+  </div>
+  <div class="term"><div class="tt">玉 <span class="en">Jade</span></div>
+  <p class="origin"><b>由來：</b>西班牙文 <i>piedra de ijada</i>「腰側之石」。16 世紀西班牙人在美洲看到當地人把玉石貼在腰側治療腰痛與腎病，就這樣命名，後來縮成 jade。軟玉 nephrite 來自希臘文 <i>nephros</i>「腎臟」，也是同一個傳說。所謂「軟」玉其實硬度有 6–6.5，只是比硬玉（6.5–7）稍軟。</p></div>
+  <div class="term"><div class="tt">翡翠 <span class="en">Jadeite jade</span></div>
+  <p class="origin"><b>由來：</b>原本是一種鳥的名字：翠鳥。古人說雄鳥羽毛紅色叫「翡」，雌鳥羽毛綠色叫「翠」。後來用來形容紅色與綠色的美玉，清代以後專指緬甸來的硬玉。</p></div>
+
+  <h3 class="sec">翡翠怎麼看好壞？</h3>
+  <div class="tw"><table>
+    <tr><th>行話</th><th>意思</th><th>好的樣子</th></tr>
+    <tr><td>種</td><td>內部顆粒的粗細與緊密度（結構）</td><td>顆粒越細越密越好，「老種」優於「新種」</td></tr>
+    <tr><td>水</td><td>透明度</td><td>由高到低：玻璃種、冰種、糯種、豆種</td></tr>
+    <tr><td>色</td><td>顏色</td><td>口訣「正、陽、濃、勻」：色相純正、鮮明亮麗、濃郁飽滿、分布均勻。最高級的濃豔綠叫「帝王綠」</td></tr>
+    <tr><td>地（底）</td><td>顏色以外的底子乾不乾淨</td><td>乾淨、無黑點雜質</td></tr>
+    <tr><td>裂、綹</td><td>裂縫</td><td>越少越好，裂影響價值和耐久</td></tr>
+    <tr><td>工</td><td>雕工、比例</td><td>線條流暢、設計配合玉料</td></tr>
+  </table></div>
+  <p>翡翠表面在反光下偶爾會看到一點一點像蒼蠅翅膀的閃光，行話叫<strong>翠性</strong>或「蒼蠅翅」，是硬玉晶體解理面的反光，也是分辨翡翠的一個小線索。</p>
+
+  <h3 class="sec">A 貨、B 貨、C 貨</h3>
+  <div class="tw"><table>
+    <tr><th>名稱</th><th>意思</th><th>辨認線索</th></tr>
+    <tr><td>A 貨</td><td>天然翡翠，只做過切磨、傳統浸蠟</td><td>結構自然，敲擊手鐲聲音清脆</td></tr>
+    <tr><td>B 貨</td><td>強酸漂白去除雜質，再灌樹脂填補</td><td>表面溝渠狀網紋（酸蝕紋）、光澤較樹脂感、常有藍白螢光、紅外光譜可見樹脂訊號；時間久會變黃、變脆</td></tr>
+    <tr><td>C 貨</td><td>人工染色</td><td>顏色沿顆粒邊界和裂縫呈網狀分布，分光鏡下無天然鉻線特徵</td></tr>
+    <tr><td>B+C 貨</td><td>漂白注膠又染色</td><td>兩者特徵都有</td></tr>
+  </table></div>
+  <p>用來仿翡翠的常見材料有：綠色玻璃、染色石英岩、澳洲玉（綠玉髓）、水沫子（鈉長石玉）等，靠折射率和比重就能分出大部分。</p>
+
+  <h3 class="sec">珍珠：唯一不用切磨就漂亮的寶石</h3>
+  <p>砂粒或寄生蟲進入貝殼，貝類會一層層分泌<strong>珍珠層</strong>把它包起來，形成天然珍珠。1893 年日本的御木本幸吉成功讓貝類在人為放入的核上長出珍珠，養殖珍珠從此普及。今天市場上絕大部分都是養殖珍珠。</p>
+  <div class="tw"><table>
+    <tr><th>種類</th><th>特色</th></tr>
+    <tr><td>Akoya 珍珠</td><td>日本、中國海水養殖，圓、亮，常見 6–9 毫米</td></tr>
+    <tr><td>南洋珍珠</td><td>澳洲、印尼、菲律賓，白色或金色，大顆 10–15 毫米以上</td></tr>
+    <tr><td>大溪地珍珠</td><td>法屬玻里尼西亞，天然深色，常帶孔雀綠光</td></tr>
+    <tr><td>淡水珍珠</td><td>中國為最大產地，多為無核，形狀色彩多樣、價格親民</td></tr>
+  </table></div>
+  <p><strong>評價七要素</strong>：大小、形狀、顏色、光澤、表面乾淨度、珠層品質、配對一致度（整串時）。其中光澤最重要：好的珍珠能清楚映出你的臉。</p>
+  <p><strong>真假辨別</strong>：把珍珠輕輕在門牙邊緣摩擦，真珍珠有細細的砂感（珍珠層的微小結晶），塑膠或玻璃仿珍珠通常光滑。要分辨天然還是養殖，則需要實驗室用 X 光看內部有沒有人工珠核。</p>
+  <div class="term"><div class="tt">珍珠層 <span class="en">Nacre</span></div>
+  <p>由極薄的碳酸鈣片和有機質一層層堆疊而成，光在層與層之間反射干涉，產生珍珠特有的柔和光澤與暈彩。</p>
+  <p class="origin"><b>由來：</b>英文 pearl 可能源自拉丁文 <i>perna</i>，是一種貝類的名字；nacre 經由法文、義大利文傳入，源頭與阿拉伯文有關。</p></div>
+
+  <h3 class="sec">琥珀、珊瑚和其他</h3>
+  <ul class="plain">
+    <li><strong>琥珀</strong>：數千萬年前的樹脂變成的化石，常包著古代昆蟲。很輕（比重 1.08），摸起來溫暖；在飽和鹽水中會浮起。仿品有塑膠（多數會沉）和年輕的「柯巴樹脂」（只有幾千到幾百萬年，還沒完全變成化石）。英文 amber 來自阿拉伯文 <i>anbar</i>，原本是指龍涎香，後來才轉指琥珀。</li>
+    <li><strong>珊瑚</strong>：珊瑚蟲分泌的碳酸鈣骨骼，表面有平行的生長紋路，遇酸會起泡（鑑定上不建議做，會損傷）。台灣宜蘭南方澳曾是世界著名的紅珊瑚集散地。部分珊瑚受保育公約管制，買賣要注意合法來源。</li>
+    <li><strong>綠松石</strong>：英文 turquoise 是法文「土耳其的石頭」，因為中世紀它經由土耳其傳入歐洲。常見注膠、染色處理。</li>
+    <li><strong>青金石</strong>：英文 lapis lazuli，拉丁文 lapis「石頭」＋ 波斯文 lāzhward「藍色」。「天空藍」azure 也來自同一個波斯字。</li>
+  </ul>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>玉分為翡翠（硬玉）和軟玉（和田玉），礦物完全不同。</li>
+    <li>翡翠看種、水、色、地、裂、工；A 貨天然，B 貨漂白注膠，C 貨染色。</li>
+    <li>珍珠以光澤最重要；琥珀輕、能浮在飽和鹽水上。</li>
+  </ul></div>
+  <div class="quiz" data-q="L13"></div>
+</section>
+<!-- ================= 第四單元 ================= -->
+<section class="lesson" id="L14" data-unit="4" data-title="鑽石 4C（上）：克拉與顏色">
+  <header class="lh"><p class="lnum">第 14 課</p><h2>鑽石 4C（上）：克拉與顏色</h2>
+  <p class="goal">學完這課你會知道：4C 是什麼；克拉和 K 金的差別；鑽石顏色為什麼從 D 開始排。</p></header>
+
+  <p class="lead">過去每家珠寶商都用自己的方法描述鑽石，買家很難比較。1950 年代，美國寶石學院（GIA）推出一套統一的評級語言，用四個 C 開頭的英文字描述鑽石品質，就是<strong>4C</strong>：克拉 Carat、顏色 Color、淨度 Clarity、切工 Cut。</p>
+  <div class="term"><div class="tt">美國寶石學院 <span class="en">GIA, Gemological Institute of America</span></div>
+  <p>1931 年由羅伯特·希普利創立的非營利教育與研究機構，4C 系統和 D–Z 顏色等級都由它推廣到全世界。</p>
+  <p class="origin"><b>由來：</b>名稱就是英文全名的縮寫。</p></div>
+
+  <h3 class="sec">第一個 C：克拉（重量）</h3>
+  <div class="term"><div class="tt">克拉 <span class="en">Carat，縮寫 ct</span></div>
+  <p>寶石的重量單位。<strong>1 克拉 = 0.2 公克</strong>。1 克拉又分成 100「分」，所以 0.50 克拉也叫「50 分」。</p>
+  <p class="origin"><b>由來：</b>希臘文 <i>keration</i>「角豆樹的種子」。古代商人用這種大小很平均的種子當秤砣來秤寶石。1907 年起國際逐步統一為「公制克拉」＝ 200 毫克。</p></div>
+  <div class="warn"><b>別搞混：</b>黃金的「K」（karat，例如 18K）表示的是<strong>純度</strong>：24K 是純金，18K 是 24 份裡有 18 份金。和寶石重量的克拉 carat 發音相同、來源相同，意思卻完全不同。</div>
+  <p>克拉是重量不是大小。下圖是標準圓形明亮式鑽石的大約直徑，按真實比例縮放：</p>
+  <figure><svg id="caratSvg" viewBox="0 0 600 170" role="img" aria-label="不同克拉數圓鑽的直徑比較"></svg>
+  <figcaption>1 克拉的直徑約 6.5 毫米。重量變 2 倍，直徑只增加約 26%，因為重量跟體積（立體）成正比。</figcaption></figure>
+  <p><strong>價格秘密</strong>：鑽石價格不是跟重量成正比，而是越大越稀有、每克拉單價跳得越高。0.99 克拉和 1.00 克拉看起來幾乎一樣，價格卻可能差一截，因為 1.00 是市場上的「心理整數」，業界叫<strong>魔術尺寸</strong>。</p>
+
+  <h3 class="sec">第二個 C：顏色</h3>
+  <p>大部分鑽石都帶一點點黃色或棕色，主要來自混進晶體的<strong>氮</strong>原子。對一般白鑽來說，<strong>越接近完全無色越稀有</strong>。GIA 用英文字母從 D 排到 Z：</p>
+  <div class="lab"><div class="lab-t">動手實驗：拖動看顏色變化</div>
+    <div style="display:flex;justify-content:center"><svg id="colorGem" viewBox="-60 -60 120 120" width="180" height="180" role="img" aria-label="依等級變色的鑽石示意"></svg></div>
+    <label style="font-size:15px">顏色等級：<b id="colorVal">D</b><input type="range" id="colorRange" min="0" max="22" value="0"></label>
+    <div class="out" id="colorOut"></div>
+    <p style="font-size:13.5px;color:var(--muted);margin:8px 0 0">螢幕示意會刻意放大差異。真實鑽石相鄰等級的差別，要受過訓練的人在標準光源下並排比較才看得出。</p>
+  </div>
+  <div class="tw"><table>
+    <tr><th>等級</th><th>分類</th><th>說明</th></tr>
+    <tr><td>D、E、F</td><td>無色</td><td>最高等級，極稀有</td></tr>
+    <tr><td>G、H、I、J</td><td>接近無色</td><td>鑲嵌後肉眼幾乎看不出顏色，CP 值高</td></tr>
+    <tr><td>K、L、M</td><td>微黃</td><td>仔細看有淡淡暖色</td></tr>
+    <tr><td>N–R</td><td>很淡的黃</td><td>明顯可見</td></tr>
+    <tr><td>S–Z</td><td>淡黃</td><td>超過 Z 且顏色夠濃，就進入「彩鑽」</td></tr>
+  </table></div>
+  <div class="story"><div class="who">為什麼從 D 開始，不是 A？</div>在 GIA 之前，市場上已經有很多混亂的分級法：A、AA、AAA、1、2、3、「藍白」等等。為了避免跟舊系統混淆、讓大家重新開始，GIA 乾脆從 D 開始排。</div>
+  <h4>專業評色怎麼做？</h4>
+  <p>鑽石要<strong>倒過來放</strong>（桌面朝下）在白色 V 形紙槽裡，從側面看，這樣可以避開火彩干擾，只看本身的顏色。再和一組已知等級的<strong>比色石</strong>並排比較。</p>
+  <div class="term"><div class="tt">比色石 <span class="en">Master stones</span></div>
+  <p>一組顏色等級已經被精確確認的標準鑽石，用來當比對尺。</p>
+  <p class="origin"><b>由來：</b>master 是「主人、標準」的意思，就是「標準石」。</p></div>
+  <h4>彩色鑽石</h4>
+  <p>鑽石也有粉紅、藍、綠、黃、橘等鮮豔顏色，叫<strong>彩鑽</strong>。黃色來自氮、藍色來自<strong>硼</strong>、綠色來自天然輻射、粉紅色和晶體結構扭曲有關。彩鑽的評級邏輯和白鑽相反：<strong>顏色越濃豔越值錢</strong>，由淡到濃分為 Fancy Light、Fancy、Fancy Intense、Fancy Vivid 等。</p>
+  <p><strong>螢光</strong>：第 11 課說過有些鑽石會發藍色螢光。多數情況影響不大，微弱的藍色螢光甚至能讓略帶黃的鑽石看起來更白；只有極少數強螢光的鑽石在陽光下會顯得霧霧的。</p>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>1 克拉 = 0.2 克；克拉是重量，不是大小。K 金的 K 是純度。</li>
+    <li>白鑽顏色 D（無色）到 Z（淡黃），越無色越稀有；從 D 開始是為了避開舊系統。</li>
+    <li>彩鑽相反，顏色越濃豔越貴。</li>
+  </ul></div>
+  <div class="quiz" data-q="L14"></div>
+</section>
+
+<section class="lesson" id="L15" data-unit="4" data-title="鑽石 4C（下）：淨度與切工">
+  <header class="lh"><p class="lnum">第 15 課</p><h2>鑽石 4C（下）：淨度與切工</h2>
+  <p class="goal">學完這課你會知道：淨度等級代號的意思；鑽石各部位的名稱；為什麼切工是唯一「人決定」的 C；常見的切割形狀。</p></header>
+
+  <h3 class="sec">第三個 C：淨度</h3>
+  <p class="lead">淨度評的是鑽石的<strong>內含物</strong>（在裡面）和<strong>表面特徵</strong>（在外面），全部用 <strong>10 倍放大</strong>來判斷。</p>
+  <div class="lab"><div class="lab-t">動手實驗：10 倍放大鏡下的淨度</div>
+    <div class="row" id="clBtns"></div>
+    <div style="display:flex;justify-content:center;margin:10px 0"><svg id="clSvg" viewBox="-110 -110 220 220" width="220" height="220" role="img" aria-label="不同淨度等級的鑽石俯視示意"></svg></div>
+    <div class="out" id="clOut"></div>
+  </div>
+  <div class="tw"><table>
+    <tr><th>代號</th><th>英文全名</th><th>中文意思</th></tr>
+    <tr><td>FL</td><td>Flawless</td><td>無瑕：10 倍下內外都看不到</td></tr>
+    <tr><td>IF</td><td>Internally Flawless</td><td>內部無瑕：只有極輕微表面特徵</td></tr>
+    <tr><td>VVS1、VVS2</td><td>Very Very Slightly Included</td><td>極極微瑕：專家在 10 倍下都很難找到</td></tr>
+    <tr><td>VS1、VS2</td><td>Very Slightly Included</td><td>極微瑕：10 倍下仔細找才看得到</td></tr>
+    <tr><td>SI1、SI2</td><td>Slightly Included</td><td>微瑕：10 倍下容易看到</td></tr>
+    <tr><td>I1、I2、I3</td><td>Included</td><td>有瑕：肉眼可見，可能影響亮度或耐久</td></tr>
+  </table></div>
+  <div class="term"><div class="tt">淨度 <span class="en">Clarity</span></div>
+  <p>鑽石內外特徵的多寡與明顯程度。評級考慮五件事：<strong>大小、數量、位置、性質、顏色對比</strong>。同樣一個小黑點，在正中間桌面下比在邊緣腰圍附近嚴重得多。</p>
+  <p class="origin"><b>由來：</b>拉丁文 <i>clarus</i>「清楚、明亮」。英文 clear 同源。include 則是第 10 課學過的「包在裡面」。</p></div>
+  <p><strong>實用建議</strong>：VS2 或 SI1 的鑽石，多數肉眼看不到瑕疵（業界說「肉眼乾淨」），價格卻比 VVS 親民許多，是很多人的聰明選擇。</p>
+
+  <h3 class="sec">鑽石的身體部位</h3>
+  <figure><svg viewBox="0 0 600 330" role="img" aria-label="圓形明亮式鑽石側面結構圖">
+    <g fill="none" stroke-width="2" style="stroke:var(--ink)">
+      <path d="M220 70 L380 70 L470 128 L470 138 L300 300 L130 138 L130 128 Z" style="fill:color-mix(in srgb,var(--u4) 14%,transparent)"/>
+      <path d="M130 128 L470 128 M130 138 L470 138" />
+      <path d="M220 70 L250 128 M380 70 L350 128 M300 138 L300 300" stroke-dasharray="4 4" opacity=".5"/>
+    </g>
+    <g font-size="15" style="fill:var(--ink)" font-family="sans-serif">
+      <text x="266" y="58">桌面 Table</text>
+      <text x="480" y="100">冠部 Crown</text>
+      <text x="480" y="140">腰圍 Girdle</text>
+      <text x="400" y="230">亭部 Pavilion</text>
+      <text x="310" y="322">底尖 Culet</text>
+      <text x="20" y="100">冠角約 34.5°</text>
+      <text x="20" y="200">亭角約 40.75°</text>
+    </g>
+    <path d="M130 128 A40 40 0 0 1 160 108" fill="none" stroke-width="2" style="stroke:var(--u5)"/>
+    <path d="M130 138 A40 40 0 0 0 162 158" fill="none" stroke-width="2" style="stroke:var(--u5)"/>
+    <path d="M470 110 L452 116 M470 132 L472 133 M395 222 L382 212" stroke-width="1.5" style="stroke:var(--muted)"/>
+  </svg><figcaption>圓形明亮式切割的側面。冠部 33 個刻面＋亭部 24 個刻面＝57 面，若磨出底尖小面就是 58 面。</figcaption></figure>
+  <div class="term"><div class="tt">刻面 <span class="en">Facet</span></div>
+  <p>寶石表面磨出的每一個平面小鏡子。</p>
+  <p class="origin"><b>由來：</b>法文 <i>facette</i>「小臉」。每一個刻面就是寶石的一張小臉。其他部位名稱也很形象：冠部 crown 像皇冠、腰圍 girdle 原意是腰帶、亭部 pavilion 原指尖頂的帳篷、底尖 culet 來自法文「底部」。</p></div>
+
+  <h3 class="sec">第四個 C：切工</h3>
+  <p>克拉、顏色、淨度都是大自然決定的，只有<strong>切工是人決定的</strong>。同一顆原石，切得好會光芒四射，切不好會暗淡無光。1919 年，出身比利時鑽石世家的工程師托爾科夫斯基用光學計算，提出了讓鑽石最亮的理想比例，成為現代明亮式切割的基礎。</p>
+  <div class="lab"><div class="lab-t">動手實驗：亭部深淺怎麼影響光</div>
+    <div class="row" id="cutBtns"></div>
+    <svg id="cutSvg" viewBox="0 0 600 340" style="width:100%;height:auto;margin-top:10px" role="img" aria-label="鑽石切工深淺與光線路徑示意"></svg>
+    <div class="out" id="cutOut"></div>
+  </div>
+  <p>好的切工創造三種美：</p>
+  <ul class="plain">
+    <li><strong>亮光</strong>（Brilliance）：從上方反射回來的白光，讓鑽石明亮。</li>
+    <li><strong>火彩</strong>（Fire）：第 8 課的色散，彩色閃光。</li>
+    <li><strong>閃爍</strong>（Scintillation）：鑽石或你移動時，明暗交錯閃動的效果。</li>
+  </ul>
+  <p>GIA 的切工等級由高到低為 Excellent、Very Good、Good、Fair、Poor，同時另外評「拋光」和「對稱」。三項都是 Excellent 的，市場俗稱 <strong>3EX</strong>。有些對稱性極高的鑽石，用特殊觀察鏡從底部看有八顆心、從頂部看有八支箭，叫<strong>八心八箭</strong>。</p>
+
+  <h3 class="sec">切割形狀：明亮式、階梯式、弧面型</h3>
+  <div class="grid3" id="shapeGrid"></div>
+  <div class="term"><div class="tt">明亮式 <span class="en">Brilliant cut</span>　／　階梯式 <span class="en">Step cut</span></div>
+  <p>明亮式用很多三角形和風箏形刻面，追求閃爍和火彩；階梯式用平行的長條刻面，像樓梯一層層，追求清澈、優雅的「鏡廳」效果。</p>
+  <p class="origin"><b>由來：</b>brilliant 來自法文 <i>briller</i>「發光」。階梯式最常用在祖母綠上：祖母綠裂縫多、比較脆，四角切掉的長方階梯形能減少受力、保護寶石，所以又直接叫「祖母綠切割」。</p></div>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>淨度以 10 倍為準：FL、IF、VVS、VS、SI、I。</li>
+    <li>鑽石部位：桌面、冠部、腰圍、亭部、底尖。</li>
+    <li>切工是唯一人為決定的 C；太淺或太深都會讓光漏掉。</li>
+  </ul></div>
+  <div class="quiz" data-q="L15"></div>
+</section>
+
+<section class="lesson" id="L16" data-unit="4" data-title="有色寶石的分級">
+  <header class="lh"><p class="lnum">第 16 課</p><h2>有色寶石的分級</h2>
+  <p class="goal">學完這課你會知道：評價有色寶石最重要的是什麼；色相、色調、飽和度三要素；「鴿血紅」「矢車菊藍」等商業名稱的由來。</p></header>
+
+  <p class="lead">鑽石有 4C，那紅寶石、藍寶石、祖母綠呢？有色寶石沒有全世界統一的分級表，但專業人士有共同的評價邏輯。最大的差別是：<strong>顏色的重要性遠遠超過其他因素</strong>，常常佔價值的一半以上。</p>
+
+  <h3 class="sec">顏色三要素</h3>
+  <div class="term"><div class="tt">色相 <span class="en">Hue</span>　色調 <span class="en">Tone</span>　飽和度 <span class="en">Saturation</span></div>
+  <p><strong>色相</strong>是「什麼顏色」，例如紅、帶紫的紅、帶橘的紅。<strong>色調</strong>是「多深多淺」，從很淡到很暗。<strong>飽和度</strong>是「多鮮豔」，從灰灰的到濃豔。</p>
+  <p class="origin"><b>由來：</b>hue 來自古英文 <i>hīw</i>「外貌、顏色」；tone 來自希臘文 <i>tonos</i>「拉緊、音調」，借來形容顏色的明暗層次；saturation 來自拉丁文 <i>satur</i>「吃飽的」，顏色「吃飽了」就是飽和。</p></div>
+  <div class="lab"><div class="lab-t">動手實驗：調出一顆好紅寶</div>
+    <div style="display:flex;justify-content:center"><svg id="hslGem" viewBox="-60 -60 120 120" width="170" height="170" role="img" aria-label="依色相色調飽和度變化的寶石"></svg></div>
+    <label style="font-size:15px">色相（偏紫 ← 紅 → 偏橘）：<b id="hVal"></b><input type="range" id="hR" min="-30" max="30" value="0"></label>
+    <label style="font-size:15px">色調（淺 ← → 深）：<b id="tVal"></b><input type="range" id="tR" min="20" max="90" value="55"></label>
+    <label style="font-size:15px">飽和度（灰 ← → 豔）：<b id="sVal"></b><input type="range" id="sR" min="5" max="100" value="85"></label>
+    <div class="out" id="hslOut"></div>
+  </div>
+  <p>一般來說，最受歡迎的是：<strong>色相純正、色調中等偏深（大約 70%–85% 深度）、飽和度越高越好</strong>。太淺顯得沒力，太深會發黑；灰灰的則毫無生氣。</p>
+
+  <h3 class="sec">傳奇商業顏色名稱</h3>
+  <div class="tw"><table>
+    <tr><th>名稱</th><th>寶石</th><th>描述</th><th>由來</th></tr>
+    <tr><td>鴿血紅</td><td>紅寶石</td><td>濃郁純正、帶螢光的紅</td><td>緬甸傳統說法，形容像鴿子鮮血最初滴下的顏色</td></tr>
+    <tr><td>皇家藍</td><td>藍寶石</td><td>濃郁、略帶紫的深藍</td><td>形容王室般尊貴的藍</td></tr>
+    <tr><td>矢車菊藍</td><td>藍寶石</td><td>柔和如天鵝絨的藍</td><td>歐洲一種藍色野花矢車菊，常用來形容喀什米爾藍寶</td></tr>
+    <tr><td>帕帕拉恰</td><td>藍寶石</td><td>粉紅與橘色之間，像夕陽</td><td>斯里蘭卡僧伽羅語「蓮花」</td></tr>
+    <tr><td>帕拉伊巴</td><td>碧璽</td><td>霓虹般發光的藍綠</td><td>巴西帕拉伊巴州，1980 年代發現，顏色來自銅</td></tr>
+    <tr><td>帝王綠</td><td>翡翠</td><td>濃豔、透亮、均勻的綠</td><td>形容帝王才配擁有</td></tr>
+  </table></div>
+  <div class="warn">這些是商業名稱，不是科學分類。不同實驗室對「鴿血紅」「皇家藍」的標準不一樣，有些實驗室完全不使用。看到這些字眼時，要看是哪家實驗室發的證書、他們的定義是什麼。</div>
+
+  <h3 class="sec">淨度：依寶石種類而不同</h3>
+  <p>有色寶石的淨度不用鑽石那種 10 倍標準，而是以<strong>肉眼</strong>為主，並考慮每種寶石「天生」的乾淨程度。GIA 把有色寶石分三類：</p>
+  <div class="tw"><table>
+    <tr><th>類型</th><th>特點</th><th>例子</th></tr>
+    <tr><td>第一類</td><td>通常很乾淨，有明顯內含物就扣分很多</td><td>海藍寶、拓帕石、坦桑石</td></tr>
+    <tr><td>第二類</td><td>通常有一些內含物，可接受</td><td>紅藍寶石、石榴石、橄欖石</td></tr>
+    <tr><td>第三類</td><td>幾乎都有明顯內含物，乾淨的極罕見</td><td>祖母綠、紅色碧璽</td></tr>
+  </table></div>
+
+  <h3 class="sec">切工、大小與其他</h3>
+  <ul class="plain">
+    <li><strong>切工</strong>：有色寶石常為了「保重量」而犧牲比例。從上往下看，中間像透明窗戶一樣透光的區域叫<strong>開窗</strong>（亭部太淺）；中間黑黑的叫<strong>死區</strong>（亭部太深或太厚）。好的切工讓顏色均勻布滿整面。</li>
+    <li><strong>大小</strong>：大顆優質有色寶石比鑽石更稀有，例如 5 克拉以上的頂級紅寶石，價格可能遠超同重量的鑽石。</li>
+    <li><strong>處理</strong>：同樣品質，未經加熱的紅藍寶石價格常明顯高於加熱的。</li>
+    <li><strong>產地</strong>：某些產地有歷史名聲（緬甸紅寶、喀什米爾藍寶、哥倫比亞祖母綠），市場願意付溢價。產地怎麼判斷，是下一單元的主題。</li>
+  </ul>
+
+  <div class="story"><div class="who">練習：兩顆藍寶石選哪顆？</div>A：2 克拉，淺藍、很乾淨、切工完美、加熱。<br>B：1.5 克拉，濃郁的皇家藍、肉眼有一點點絲狀包體、切工良好、未加熱。<br><br><b>專業判斷：</b>多數情況下 B 更值錢。顏色是有色寶石的第一要素，加上未加熱更稀有，少 0.5 克拉的影響遠不及顏色差距。</div>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>有色寶石顏色最重要：色相純、色調中深、飽和度高。</li>
+    <li>鴿血紅、矢車菊藍等是商業名稱，標準依實驗室而異。</li>
+    <li>淨度依寶石類型調整期待；未處理與知名產地會提高價值。</li>
+  </ul></div>
+  <div class="quiz" data-q="L16"></div>
+</section>
+<!-- ================= 第五單元 ================= -->
+<section class="lesson" id="L17" data-unit="5" data-title="地質決定產地特徵">
+  <header class="lh"><p class="lnum">第 17 課</p><h2>地質決定產地特徵</h2>
+  <p class="goal">學完這課你會知道：為什麼不同產地的同一種寶石會長得不一樣；紅寶石、藍寶石、祖母綠、鑽石的主要「出生類型」。</p></header>
+
+  <p class="lead">同一種寶石，在不同地方長大，就像同一種語言在不同地方有不同<strong>口音</strong>。口音來自地質環境：周圍岩石含什麼元素、溫度壓力多高、有沒有水。這些條件會留在寶石的<strong>顏色、螢光、內含物、微量元素</strong>上。</p>
+  <div class="analogy"><b>生活比喻：</b>同樣是茶葉，高山茶和平地茶的香氣不同，因為土壤、海拔、氣候不同。老茶師喝一口就能猜出大概產區。寶石鑑定師看產地也是同樣的道理，只是要用顯微鏡和儀器來「品嚐」。</div>
+
+  <h3 class="sec">原生礦與次生礦</h3>
+  <p>複習第 2 課：<strong>原生礦</strong>是寶石當初長出來的岩石；<strong>次生礦</strong>是岩石風化後，寶石被河水搬到別處堆積的砂礦。次生礦裡的寶石可能來自上游好幾種岩石，所以同一條河的寶石有時「口音」會混在一起，這讓判斷產地更困難。</p>
+
+  <h3 class="sec">紅寶石的兩大類型</h3>
+  <div class="grid2">
+    <div class="card"><h5>大理岩型</h5>在石灰岩變質成的大理岩中形成。大理岩幾乎不含鐵，所以寶石<strong>低鐵</strong>，紫外燈下<strong>強烈紅色螢光</strong>，在陽光下看起來像會自己發光。<br><span style="color:var(--muted)">代表：緬甸抹谷、越南、阿富汗、塔吉克</span></div>
+    <div class="card"><h5>玄武岩相關型</h5>由玄武岩火山從深處帶上來。周圍岩石含鐵多，寶石<strong>高鐵</strong>，螢光弱，顏色偏暗、偏紫或偏棕紅，缺少絲狀包體。<br><span style="color:var(--muted)">代表：泰國尖竹汶、柬埔寨拜林</span></div>
+  </div>
+  <p>另外，2009 年後非洲莫三比克的紅寶石大量進入市場，屬於「角閃岩型」，鐵含量介於兩者之間，現在是全球最重要的紅寶石來源之一。</p>
+
+  <h3 class="sec">藍寶石：變質型與玄武岩型</h3>
+  <div class="grid2">
+    <div class="card"><h5>變質型</h5>顏色明亮、藍中帶紫或純藍，常有細緻的絲狀包體。<br><span style="color:var(--muted)">代表：斯里蘭卡、緬甸、喀什米爾、馬達加斯加</span></div>
+    <div class="card"><h5>玄武岩型</h5>高鐵，顏色深藍甚至接近墨黑、帶綠色調，色帶明顯。<br><span style="color:var(--muted)">代表：澳洲、泰國、柬埔寨拜林、奈及利亞</span></div>
+  </div>
+  <p>喀什米爾藍寶石內部有極細微的顆粒，讓光線柔和散射，產生傳說中「天鵝絨般」的朦朧藍，這也是它最重要的產地特徵之一。</p>
+
+  <h3 class="sec">祖母綠：哥倫比亞 vs 其他</h3>
+  <div class="grid2">
+    <div class="card"><h5>哥倫比亞型</h5>在黑色頁岩中由熱液形成，沒有花崗岩參與，所以<strong>鐵少</strong>，顏色純正鮮綠。招牌內含物是鋸齒狀的<strong>三相包體</strong>。<br><span style="color:var(--muted)">代表礦區：木佐、契沃爾</span></div>
+    <div class="card"><h5>片岩型</h5>花崗岩的熱液和含鉻的超基性岩相遇形成，<strong>鐵較多</strong>，顏色常略帶藍調，常見雲母片包體。<br><span style="color:var(--muted)">代表：尚比亞、巴西、辛巴威、俄羅斯</span></div>
+  </div>
+
+  <h3 class="sec">鑽石：兩種火山電梯</h3>
+  <p>鑽石的原生礦主要是<strong>金伯利岩</strong>（第 2 課學過），少數來自<strong>鉀鎂煌斑岩</strong>。澳洲的阿蓋爾礦就是鉀鎂煌斑岩，以粉紅鑽聞名，已在 2020 年停止開採。非洲納米比亞則有大量次生礦：鑽石被河流帶進海裡，沿著海岸堆積，人們甚至要從海底把它們挖上來。</p>
+  <div class="term"><div class="tt">鉀鎂煌斑岩 <span class="en">Lamproite</span></div>
+  <p class="origin"><b>由來：</b>希臘文 <i>lampros</i>「閃亮的」，因為岩石中的雲母片閃閃發亮。中文名直接描述成分（鉀、鎂）與外觀（煌斑＝閃亮的斑點）。</p></div>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>地質環境在寶石上留下「口音」：顏色、螢光、內含物、微量元素。</li>
+    <li>大理岩型紅寶低鐵、螢光強；玄武岩型高鐵、偏暗、螢光弱。</li>
+    <li>哥倫比亞祖母綠低鐵、有三相包體；片岩型鐵較多、有雲母。</li>
+  </ul></div>
+  <div class="quiz" data-q="L17"></div>
+</section>
+
+<section class="lesson" id="L18" data-unit="5" data-title="世界重要產地巡禮">
+  <header class="lh"><p class="lnum">第 18 課</p><h2>世界重要產地巡禮</h2>
+  <p class="goal">學完這課你會知道：世界上最有名的寶石產地在哪裡，以及它們的特色和故事。</p></header>
+
+  <p class="lead">點選上方的寶石，只顯示那種寶石的產地；選「全部」看整體。每張卡片是一個國家或地區。</p>
+  <div class="lab" style="padding-bottom:6px"><div class="lab-t">依寶石篩選</div>
+    <div class="row" id="orgFilter"></div>
+  </div>
+  <div id="orgList"></div>
+
+  <div class="term"><div class="tt">拉特納普勒 <span class="en">Ratnapura</span></div>
+  <p>斯里蘭卡最著名的寶石集散城市。</p>
+  <p class="origin"><b>由來：</b>梵文 <i>ratna</i>「寶石」＋ <i>pura</i>「城市」＝寶石之城。斯里蘭卡古名「錫蘭」，所以「錫蘭藍寶」就是斯里蘭卡藍寶石。</p></div>
+  <div class="term"><div class="tt">抹谷 <span class="en">Mogok</span></div>
+  <p>緬甸中北部山谷，數百年來出產世界最高品質的紅寶石，也產藍寶石、尖晶石、月光石等數十種寶石，被稱為「紅寶石之谷」。</p>
+  <p class="origin"><b>由來：</b>地名音譯。緬甸也是翡翠的最主要產地，礦區在北部克欽邦的帕敢一帶。</p></div>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>亞洲：緬甸（紅寶、翡翠）、斯里蘭卡（藍寶）、泰柬（玄武岩型剛玉、交易與加熱中心）。</li>
+    <li>非洲：坦尚尼亞（坦桑石唯一產地）、莫三比克（紅寶、帕拉伊巴碧璽）、南非與波札那（鑽石）。</li>
+    <li>美洲：哥倫比亞（祖母綠）、巴西（碧璽、海藍寶、拓帕石）；澳洲：蛋白石。</li>
+  </ul></div>
+  <div class="quiz" data-q="L18"></div>
+</section>
+
+<section class="lesson" id="L19" data-unit="5" data-title="實驗室產地鑑定與證書">
+  <header class="lh"><p class="lnum">第 19 課</p><h2>實驗室如何判斷產地，以及怎麼看懂證書</h2>
+  <p class="goal">學完這課你會知道：頂尖實驗室用哪些儀器判斷產地；產地判斷的限制；一張鑑定證書每一欄的意思。</p></header>
+
+  <h3 class="sec">產地鑑定的四個步驟</h3>
+  <ol class="steps">
+    <li><strong>顯微鏡看內含物</strong>：找出產地特有的包體。例如哥倫比亞祖母綠的三相包體、喀什米爾藍寶的天鵝絨微粒。</li>
+    <li><strong>量微量元素</strong>：測鐵、鎵、鉻、釩、鈦等含量，像驗 DNA。</li>
+    <li><strong>測光譜</strong>：看寶石對各種光的吸收曲線。</li>
+    <li><strong>資料庫比對</strong>：實驗室收藏了上萬顆「來源確定」的參考樣本（很多是研究員親自到礦區取得），把數據放進去比對，找最接近的產地群。</li>
+  </ol>
+
+  <h3 class="sec">實驗室的高階儀器</h3>
+  <div class="term"><div class="tt">紅外光譜儀 <span class="en">FTIR，傅立葉轉換紅外光譜</span></div>
+  <p>用紅外線照寶石，看哪些波長被吸收。能找出填充的樹脂、油、判斷寶石有沒有被加熱，也能區分鑽石的類型。</p>
+  <p class="origin"><b>由來：</b>傅立葉是 19 世紀法國數學家，他發明的數學方法能快速把混合訊號拆解成各個波長。「紅外」是比紅光波長更長、眼睛看不見的光。</p></div>
+  <div class="term"><div class="tt">拉曼光譜儀 <span class="en">Raman spectrometer</span></div>
+  <p>用雷射照射，看散射光的微小變化，就能辨認物質，甚至辨認寶石「裡面」的小內含物是什麼礦物，完全不傷寶石。</p>
+  <p class="origin"><b>由來：</b>以印度物理學家拉曼命名，他在 1928 年發現這種散射現象，1930 年獲得諾貝爾物理學獎，是第一位獲得諾貝爾科學獎的亞洲人。</p></div>
+  <div class="term"><div class="tt">紫外－可見－近紅外光譜 <span class="en">UV-Vis-NIR</span></div>
+  <p>把第 11 課的「分光鏡」變成精密的曲線圖，精確看出致色元素，也是區分產地和處理的重要依據。</p>
+  <p class="origin"><b>由來：</b>三段光的英文縮寫：Ultraviolet（紫外）、Visible（可見）、Near-Infrared（近紅外）。</p></div>
+  <div class="term"><div class="tt">雷射剝蝕質譜儀 <span class="en">LA-ICP-MS</span></div>
+  <p>用極細的雷射在寶石腰圍打一個肉眼看不見的小洞，吸走一點點粉末，送進上萬度的電漿中變成離子，再秤出每種元素的量。能測到百萬分之一甚至更低的含量，是產地鑑定的利器。</p>
+  <p class="origin"><b>由來：</b>Laser Ablation（雷射剝蝕）- Inductively Coupled Plasma（感應耦合電漿）- Mass Spectrometry（質譜）。ablation 拉丁文意思是「帶走」。這是「幾乎無損」，不是完全無損。</p></div>
+  <div class="term"><div class="tt">X 射線螢光光譜 <span class="en">EDXRF</span></div>
+  <p>用 X 射線照寶石，每種元素會回送自己特有的訊號，能快速、無損地得到大略成分。</p>
+  <p class="origin"><b>由來：</b>Energy Dispersive X-Ray Fluorescence，依能量把 X 射線螢光分開來分析。</p></div>
+  <div class="term"><div class="tt">鑽石發光成像 <span class="en">DiamondView 等</span></div>
+  <p>用強烈短波紫外線照鑽石，拍下它發光的圖案。天然鑽石、HPHT 合成、CVD 合成的生長圖案完全不同，是分辨實驗室培育鑽石的關鍵。</p>
+  <p class="origin"><b>由來：</b>由戴比爾斯研究部門開發的商品名稱，現在泛指這類成像技術。</p></div>
+
+  <div class="warn"><b>產地的限制：</b>產地報告是實驗室的「專業意見」，不是百分之百的事實。不同產地的寶石有時特徵重疊，例如馬達加斯加的某些藍寶石和斯里蘭卡、甚至喀什米爾的很像；新礦區出現時，資料庫需要時間更新。所以兩家實驗室偶爾會給出不同的產地結論，這是正常的科學限制。</div>
+
+  <h3 class="sec">知名的鑑定實驗室</h3>
+  <div class="tw"><table>
+    <tr><th>名稱</th><th>所在地</th><th>特色</th></tr>
+    <tr><td>GIA 美國寶石學院</td><td>美國，全球多處分部</td><td>鑽石分級的國際標準</td></tr>
+    <tr><td>SSEF 瑞士寶石研究基金會</td><td>瑞士巴塞爾</td><td>高端有色寶石、珍珠、產地鑑定</td></tr>
+    <tr><td>Gübelin 古柏林寶石實驗室</td><td>瑞士琉森</td><td>高端有色寶石、產地</td></tr>
+    <tr><td>AGL 美國寶石實驗室</td><td>美國紐約</td><td>有色寶石</td></tr>
+    <tr><td>HRD</td><td>比利時安特衛普</td><td>鑽石</td></tr>
+    <tr><td>NGTC 國家珠寶玉石質量監督檢驗中心</td><td>中國</td><td>華人市場常見，含翡翠、軟玉</td></tr>
+  </table></div>
+
+  <h3 class="sec">看懂一張鑑定證書</h3>
+  <p>下面是一張<strong>示範用的虛構證書</strong>，編號旁的數字對應下方說明：</p>
+  <div class="cert">
+    <div class="ch"><div><b>寶石鑑定報告（示範）</b><div style="font-size:12.5px;color:var(--muted)">虛構實驗室・僅供教學</div></div><div style="text-align:right;font-size:13px">報告編號 GX-2026-0815<span class="pin">1</span><br>日期 2026-08-15</div></div>
+    <dl>
+      <dt>鑑定結果</dt><dd>天然剛玉<span class="pin">2</span></dd>
+      <dt>品種</dt><dd>紅寶石</dd>
+      <dt>重量</dt><dd>2.03 ct<span class="pin">3</span></dd>
+      <dt>形狀與切工</dt><dd>橢圓形，混合式切割</dd>
+      <dt>尺寸</dt><dd>8.12 × 6.45 × 4.30 mm</dd>
+      <dt>顏色</dt><dd>紅色（商業色：鴿血紅）<span class="pin">4</span></dd>
+      <dt>透明度</dt><dd>透明</dd>
+      <dt>處理</dt><dd>無加熱跡象<span class="pin">5</span></dd>
+      <dt>產地意見</dt><dd>緬甸<span class="pin">6</span></dd>
+      <dt>備註</dt><dd>包含絲狀包體與晶體包體</dd>
+    </dl>
+  </div>
+  <ol class="plain">
+    <li><strong>報告編號</strong>：大部分正規實驗室都能在官網輸入編號查驗。查不到、或資料不符，就要非常小心。</li>
+    <li><strong>鑑定結果</strong>：先寫礦物種（剛玉），再寫品種（紅寶石）。「天然」代表不是合成，但<strong>不代表沒處理</strong>，一定要看處理欄。</li>
+    <li><strong>重量和尺寸</strong>：可以用來核對手上的寶石是不是證書上那顆。</li>
+    <li><strong>商業色名</strong>：依實驗室自訂標準，不同實驗室不能直接比較。</li>
+    <li><strong>處理</strong>：最影響價值的一欄。常見寫法有「無加熱跡象」「有加熱跡象」「加熱，裂隙中有少量殘留物」「玻璃充填」等。</li>
+    <li><strong>產地</strong>：是意見，會寫「依據目前資料，研究結果顯示……」之類的措辭。</li>
+  </ol>
+  <p><strong>鑽石證書</strong>多了這些欄位：4C 等級、拋光、對稱、螢光、比例圖、淨度圖（標出內含物位置），以及<strong>腰圍雷射刻字</strong>：在鑽石腰圍刻上肉眼看不見的報告編號，用放大鏡就能核對鑽石和證書是否相符。</p>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>產地鑑定＝內含物＋微量元素＋光譜＋資料庫比對。</li>
+    <li>產地是專業意見，有科學限制，不同實驗室可能不同。</li>
+    <li>看證書：先查編號，再看「天然」和「處理」兩欄，核對重量尺寸。</li>
+  </ul></div>
+  <div class="quiz" data-q="L19"></div>
+</section>
+<!-- ================= 第六單元 ================= -->
+<section class="lesson" id="L20" data-unit="6" data-title="完整鑑定流程與實戰模擬">
+  <header class="lh"><p class="lnum">第 20 課</p><h2>完整鑑定流程與實戰模擬</h2>
+  <p class="goal">學完這課你會知道：專業鑑定師的標準步驟；怎麼把前面 19 課的知識組合起來，實際判斷一顆未知的寶石。</p></header>
+
+  <h3 class="sec">三個原則</h3>
+  <ul class="plain">
+    <li><strong>先無損，後有損</strong>：能用看的就不要刮，能不打洞就不打洞。</li>
+    <li><strong>多證據交叉</strong>：一個數據可能巧合，三個數據互相吻合才可靠。</li>
+    <li><strong>做紀錄</strong>：每一步的結果寫下來，最後才下結論，不要邊看邊猜。</li>
+  </ul>
+
+  <h3 class="sec">標準鑑定步驟</h3>
+  <ol class="steps">
+    <li><strong>肉眼觀察</strong>：顏色、光澤、透明度、切工、有沒有特殊光學效應。先猜幾個可能的候選。</li>
+    <li><strong>10 倍放大檢查</strong>：內含物、表面刮痕、刻面稜線是否銳利、有沒有重影、黏合線、充填痕跡。</li>
+    <li><strong>折射儀</strong>：量折射率和雙折射率，通常能縮小到一兩種寶石。</li>
+    <li><strong>偏光鏡</strong>：確認單折射、雙折射或集合體。</li>
+    <li><strong>二色鏡</strong>：確認多色性。</li>
+    <li><strong>比重</strong>：佐證寶石種類（未鑲嵌時）。</li>
+    <li><strong>紫外燈、分光鏡、濾色鏡</strong>：補充證據，協助判斷產地類型與處理。</li>
+    <li><strong>綜合判斷</strong>：確認礦物種與品種、天然或合成、有無處理。</li>
+    <li><strong>必要時送實驗室</strong>：產地、細微處理、實驗室培育鑽石等需要高階儀器。</li>
+  </ol>
+
+  <h3 class="sec">實戰模擬器</h3>
+  <p>選一顆未知的寶石，依序點選測試按鈕，把結果記下來，再選出你的判斷。</p>
+  <div class="lab"><div class="lab-t">鑑定練習台</div>
+    <div class="row" id="simCases"></div>
+    <div class="story" id="simIntro" style="margin:12px 0 8px"></div>
+    <div class="row" id="simTests"></div>
+    <div class="sim-log out" id="simLog"></div>
+    <p style="margin:12px 0 6px;font-weight:700">你的判斷是：</p>
+    <div id="simAns"></div>
+    <div class="out" id="simResult" style="display:none"></div>
+  </div>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>先無損、多證據、做紀錄。</li>
+    <li>折射率決定候選，放大檢查決定天然或合成，其他測試補強。</li>
+    <li>產地、細微處理、培育鑽石需要實驗室。</li>
+  </ul></div>
+  <div class="quiz" data-q="L20"></div>
+</section>
+
+<section class="lesson" id="L21" data-unit="6" data-title="市場、道德與職業之路">
+  <header class="lh"><p class="lnum">第 21 課</p><h2>市場、道德與職業之路</h2>
+  <p class="goal">學完這課你會知道：寶石價格怎麼決定；實驗室培育鑽石是什麼；衝突鑽石與金伯利進程；如何保養寶石；想成為專業鑑定師可以怎麼走。</p></header>
+
+  <h3 class="sec">價格由哪些因素決定？</h3>
+  <p>把前面所學整理起來，影響價格的因素大致依重要性排列：</p>
+  <ol class="steps">
+    <li><strong>品種</strong>：紅寶石和紅色石榴石，同樣大小價格可差百倍。</li>
+    <li><strong>品質</strong>：顏色（有色寶石最關鍵）、淨度、切工。</li>
+    <li><strong>重量</strong>：越大越稀有，單價跳升。</li>
+    <li><strong>處理</strong>：未處理的溢價，嚴重處理大幅貶值。</li>
+    <li><strong>產地</strong>：傳奇產地有溢價。</li>
+    <li><strong>證書</strong>：知名實驗室證書提高流通性與信任度。</li>
+    <li><strong>市場</strong>：流行趨勢、供需、匯率、新礦區的發現或關閉。</li>
+  </ol>
+  <p>要注意：寶石不像黃金有每天公開的報價，<strong>買價和賣價常常差很多</strong>。零售買入的寶石，短期內賣回給商家通常只能拿回一部分，不適合當成保證賺錢的投資工具。</p>
+
+  <h3 class="sec">實驗室培育鑽石</h3>
+  <p>1954 年，美國奇異公司（GE）首次用高溫高壓法做出鑽石。今天用 HPHT 和 CVD（第 12 課）做出的鑽石，化學成分、晶體結構、硬度、折射率都和天然鑽石相同，<strong>它們是真的鑽石，只是出生在實驗室</strong>。</p>
+  <ul class="plain">
+    <li><strong>怎麼分辨</strong>：放大鏡和基本儀器幾乎無法分辨，要靠實驗室的光譜和發光成像。大部分正規培育鑽石會在腰圍刻上「LAB GROWN」等字樣，並附證書。</li>
+    <li><strong>價格</strong>：近年價格大幅下降，與天然鑽石的差距越來越大，轉售價值也很低。</li>
+    <li><strong>標示</strong>：各國規範要求清楚標示為「實驗室培育」「合成」等，不能讓消費者誤以為是天然。</li>
+  </ul>
+  <p>選天然還是培育，各有支持者：有人重視天然鑽石的稀有與數十億年的故事，有人偏好培育鑽石的價格與來源透明度。重點是<strong>在清楚知情的情況下自己選擇</strong>。</p>
+
+  <h3 class="sec">道德與責任</h3>
+  <div class="term"><div class="tt">衝突鑽石 <span class="en">Conflict diamonds</span>　／　金伯利進程 <span class="en">Kimberley Process</span></div>
+  <p>1990 年代，部分非洲國家的武裝團體靠開採、走私鑽石購買武器，造成嚴重的人道災難，這類鑽石被稱為衝突鑽石或「血鑽」。2003 年，各國政府、業界和民間團體共同建立「金伯利進程證書制度」，要求毛坯鑽石出口時附上來源證明。</p>
+  <p class="origin"><b>由來：</b>2000 年第一次協商會議在南非金伯利市舉行，就是第 2 課那座挖出「大洞」的城市。這個制度也有批評，例如定義範圍窄、難以完全防堵走私，因此業界持續發展更完整的追溯系統。</p></div>
+  <ul class="plain">
+    <li><strong>手工採礦</strong>：許多有色寶石來自小規模手工礦工，工作環境與收入是重要的社會議題。</li>
+    <li><strong>保育</strong>：珊瑚、象牙、玳瑁等受國際保育公約管制，不可隨意買賣或攜帶出入境。</li>
+    <li><strong>誠實揭露</strong>：第 12 課說過，這是鑑定師最核心的職業道德。</li>
+  </ul>
+
+  <h3 class="sec">寶石保養</h3>
+  <div class="tw"><table>
+    <tr><th>原則</th><th>為什麼</th></tr>
+    <tr><td>每件分開收納</td><td>硬的寶石會刮傷軟的，鑽石會刮傷所有寶石</td></tr>
+    <tr><td>珍珠「最後戴上、最先取下」</td><td>避開香水、髮膠、化妝品裡的化學物質，汗水也要擦乾</td></tr>
+    <tr><td>祖母綠、蛋白石、珍珠、有裂隙或充填的寶石，不用超音波或蒸氣清洗</td><td>會讓油脂流失、裂縫擴大、充填物損壞</td></tr>
+    <tr><td>避免劇烈溫差與敲擊</td><td>解理明顯的拓帕石、坦桑石、蛋白石容易裂</td></tr>
+    <tr><td>定期檢查爪鑲</td><td>爪子鬆了寶石容易掉</td></tr>
+    <tr><td>一般清潔：溫水＋中性清潔劑＋軟毛刷</td><td>適用於鑽石、紅藍寶等穩定寶石</td></tr>
+  </table></div>
+
+  <h3 class="sec">購買時的自我保護</h3>
+  <ul class="plain">
+    <li>高價寶石要求附上<strong>知名實驗室證書</strong>，並自己上網查驗編號。</li>
+    <li>小心「產地直購特價」「私人收藏急售」「只賣給有緣人」這類說法。旅遊景點的寶石店是常見的糾紛來源。</li>
+    <li>問清楚三件事：是天然、合成還是仿品？有沒有處理？能不能退換？並請對方寫在收據上。</li>
+  </ul>
+
+  <h3 class="sec">成為專業鑑定師的路</h3>
+  <div class="tw"><table>
+    <tr><th>階段</th><th>學什麼</th><th>怎麼練</th></tr>
+    <tr><td>入門（你現在）</td><td>本課程的基本觀念與名詞</td><td>逛博物館礦物展、用放大鏡觀察身邊的石頭</td></tr>
+    <tr><td>進階</td><td>系統的寶石學課程、儀器實作</td><td>參加寶石協會或大學推廣課程，大量看真實樣本</td></tr>
+    <tr><td>專業</td><td>國際認證文憑</td><td>例如英國寶石協會 FGA、美國寶石學院 GG、中國地質大學等的專業課程</td></tr>
+    <tr><td>專家</td><td>專精某一領域</td><td>鑽石分級、有色寶石產地、翡翠、珍珠、拍賣估價、切磨設計</td></tr>
+  </table></div>
+  <div class="term"><div class="tt">FGA 與 GG</div>
+  <p>寶石學界最知名的兩個專業文憑。</p>
+  <p class="origin"><b>由來：</b>FGA 是 Fellow of the Gemmological Association（英國寶石協會會員），英國寶石協會的教育歷史可以追溯到 1908 年，是世界最早的寶石學教育體系之一；GG 是 Graduate Gemologist（寶石學畢業生），由 GIA 頒發。</p></div>
+  <p>相關職業還有：鑑定實驗室研究員、珠寶採購、切磨師、珠寶設計師、拍賣行專家、博物館典藏人員、寶石礦業與貿易。最重要的能力不是背資料，而是<strong>看過夠多的真實寶石</strong>。老師傅常說：「多看、多比、多問。」</p>
+
+  <div class="recap"><h4>重點回顧</h4><ul>
+    <li>價格：品種、品質、重量、處理、產地、證書、市場。</li>
+    <li>培育鑽石是真鑽石，但必須清楚標示；價格與轉售價值和天然鑽石差距大。</li>
+    <li>金伯利進程處理衝突鑽石問題；誠實揭露是職業道德核心。</li>
+    <li>專業之路：系統課程＋大量實物＋國際文憑。</li>
+  </ul></div>
+  <div class="quiz" data-q="L21"></div>
+</section>
+
+<section class="lesson" id="L22" data-unit="6" data-title="名詞總索引">
+  <header class="lh"><p class="lnum">第 22 課</p><h2>名詞總索引</h2>
+  <p class="goal">整套課程出現過的重要名詞與由來，可以用來複習或查詢。點名詞可跳回首次介紹它的那一課。</p></header>
+  <input type="search" id="glSearch" placeholder="搜尋名詞，例如：折射、貓眼、克拉" aria-label="搜尋名詞">
+  <div id="glList" style="margin-top:12px"></div>
+  <div class="recap"><h4>恭喜完成全部課程</h4>
+    <p style="margin:0">你已經從「什麼是寶石」一路學到實驗室產地鑑定和職業道德。接下來最好的老師是真實的寶石：帶著放大鏡去博物館、寶石展，把每一課學到的東西親眼看一次。</p></div>
+</section>
+<div class="pager" id="pager"><button id="prevBtn"><small>上一課</small><span></span></button><button class="next" id="nextBtn"><small>下一課</small><span></span></button></div>
+</main>
+</div>
+<style>
+.sp{fill:#fff;opacity:0;animation:sp 3.6s infinite}
+@keyframes sp{0%,78%,100%{opacity:0}86%{opacity:.9}}
+.raypath{fill:none;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
+.xtal{animation:none}
+</style>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const NS="http://www.w3.org/2000/svg";
+const el=(tag,attrs={},parent)=>{const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;};
+const cssVar=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const store={get(k,d){try{const v=localStorage.getItem("gemcourse:"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("gemcourse:"+k,JSON.stringify(v))}catch(e){}}};
+window.__gem={$,$$,el,NS,cssVar,store};
+
+/* ---------------- 單元與導覽 ---------------- */
+const UNITS=[
+ {n:1,name:"認識寶石的世界",sub:"寶石是什麼、怎麼長出來"},
+ {n:2,name:"寶石的物理性質",sub:"硬度、比重、顏色與光"},
+ {n:3,name:"鑑定工具與方法",sub:"放大鏡、儀器、真假與處理"},
+ {n:4,name:"品質分級",sub:"鑽石 4C 與有色寶石"},
+ {n:5,name:"產地與由來",sub:"地質、世界產地、實驗室"},
+ {n:6,name:"專業之路",sub:"鑑定流程、市場與職業"}];
+const lessons=$$(".lesson");
+const courseLessons=lessons.filter(s=>s.id!=="L0");
+let done=new Set(store.get("done",[]));
+let current=null;
+
+function buildSide(){
+  const side=$("#side");side.innerHTML="";
+  const home=document.createElement("button");home.innerHTML='<span class="n">⌂</span><span>課程首頁</span>';home.dataset.go="L0";side.appendChild(home);
+  UNITS.forEach(u=>{
+    const h=document.createElement("h3");h.innerHTML=`<i style="background:var(--u${u.n})"></i>第${"一二三四五六"[u.n-1]}單元 ${u.name}`;side.appendChild(h);
+    courseLessons.filter(s=>s.dataset.unit==u.n).forEach(s=>{
+      const b=document.createElement("button");b.dataset.go=s.id;
+      b.innerHTML=`<span class="n">${s.id.slice(1)}</span><span>${s.dataset.title}</span>`;side.appendChild(b);
+    });
+  });
+}
+function refreshSide(){
+  $$("#side button").forEach(b=>{b.classList.toggle("on",b.dataset.go===current);b.classList.toggle("done",done.has(b.dataset.go));});
+  $("#prog").style.width=(done.size/courseLessons.length*100)+"%";
+}
+function go(id,{scroll=true}={}){window.AC_COURSE_GO=function(v){go(v)};window.AC_COURSE_POSITION=id;
+  const sec=document.getElementById(id);if(!sec)return;
+  if(current&&current!=="L0"&&id!==current){const ci=courseLessons.findIndex(s=>s.id===current),ni=courseLessons.findIndex(s=>s.id===id);if(ni===ci+1){done.add(current);store.set("done",[...done]);}}
+  lessons.forEach(s=>s.classList.toggle("show",s===sec));
+  current=id;
+  const unit=+sec.dataset.unit||1;
+  document.documentElement.style.setProperty("--accent",`var(--u${unit})`);
+  $("#where").textContent=id==="L0"?"":`第 ${id.slice(1)} 課 ${sec.dataset.title}`;
+  const i=courseLessons.indexOf(sec);
+  const prev=id==="L0"?null:(i>0?courseLessons[i-1]:lessons[0]);
+  const next=id==="L0"?courseLessons[0]:courseLessons[i+1];
+  const pb=$("#prevBtn"),nb=$("#nextBtn");
+  pb.disabled=!prev;nb.disabled=!next;
+  if(prev){pb.dataset.go=prev.id;pb.querySelector("span").textContent=prev.id==="L0"?"課程首頁":`第 ${prev.id.slice(1)} 課 ${prev.dataset.title}`;}
+  if(next){nb.dataset.go=next.id;nb.querySelector("span").textContent=`第 ${next.id.slice(1)} 課 ${next.dataset.title}`;}
+  $("#pager").style.display=id==="L0"?"none":"flex";
+  if(id!=="L0")store.set("last",id);
+  refreshSide();closeSide();
+  if(scroll)window.scrollTo({top:0,behavior:"instant"in window?"instant":"auto"});
+  document.dispatchEvent(new CustomEvent("lesson:show",{detail:id}));
+  if(location.hash!=="#"+id)history.replaceState(null,"","#"+id);
+}
+window.__gem.go=go;
+document.addEventListener("click",e=>{const t=e.target.closest("[data-go]");if(t){e.preventDefault();go(t.dataset.go);}});
+const side=$("#side"),scrim=$("#scrim");
+function closeSide(){side.classList.remove("open");scrim.classList.remove("open");}
+$("#menuBtn").onclick=()=>{side.classList.add("open");scrim.classList.add("open");};
+scrim.onclick=closeSide;
+$("#homeBtn").onclick=()=>go("L0");
+$("#themeBtn").onclick=()=>{
+  const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;
+  r.dataset.theme=dark?"light":"dark";store.set("theme",r.dataset.theme);document.dispatchEvent(new Event("theme:change"));
+};
+const savedTheme=store.get("theme",null);if(savedTheme)document.documentElement.dataset.theme=savedTheme;
+
+/* ---------------- 明亮式寶石繪製 ---------------- */
+function rnd(seed){let s=seed;return()=>{s=(s*9301+49297)%233280;return s/233280;};}
+function drawGem(svg,col,R=100,sparkle=false,seed=7){
+  svg.innerHTML="";
+  const P=(r,a)=>[r*Math.cos(a*Math.PI/180),r*Math.sin(a*Math.PI/180)];
+  const T=k=>P(.5*R,45*k+22.5),S=k=>P(.76*R,45*k),G=a=>P(R,a);
+  const polys=[];
+  const table=[];for(let k=0;k<8;k++)table.push(T(k));polys.push({p:table,t:1});
+  for(let k=0;k<8;k++){
+    polys.push({p:[T(k-1),T(k),S(k)]});
+    polys.push({p:[T(k),S(k),G(45*k+22.5),S(k+1)]});
+    polys.push({p:[S(k),G(45*k),G(45*k+22.5)]});
+    polys.push({p:[S(k),G(45*k-22.5),G(45*k)]});
+  }
+  const r=rnd(seed);
+  el("circle",{cx:0,cy:0,r:R+1.5,fill:`hsl(${col.h} ${col.s}% ${Math.max(col.l-18,5)}%)`},svg);
+  const g=el("g",{},svg);
+  polys.forEach((f,i)=>{
+    const cx=f.p.reduce((a,b)=>a+b[0],0)/f.p.length,cy=f.p.reduce((a,b)=>a+b[1],0)/f.p.length;
+    const ang=Math.atan2(cy,cx);
+    let l=f.t?col.l+10:col.l+15*Math.cos(ang+2.2)+(r()-.5)*16;
+    if(i%5===2)l-=10;
+    l=Math.min(95,Math.max(4,l));
+    const pts=f.p.map(q=>q.map(v=>v.toFixed(2)).join(",")).join(" ");
+    el("polygon",{points:pts,fill:`hsl(${col.h} ${col.s}% ${l}%)`,stroke:"rgba(255,255,255,.38)","stroke-width":R/160},g);
+    if(sparkle&&!f.t&&r()<.28){const sp=el("polygon",{points:pts,class:"sp"},g);sp.style.animationDelay=(r()*3.6).toFixed(2)+"s";}
+  });
+  return g;
+}
+window.__gem.drawGem=drawGem;
+
+/* 封面 */
+const HERO=[{n:"紅寶石",h:350,s:78,l:40},{n:"藍寶石",h:222,s:70,l:38},{n:"祖母綠",h:152,s:62,l:32},{n:"鑽石",h:205,s:14,l:80},{n:"紫水晶",h:280,s:48,l:46},{n:"黃色藍寶石",h:44,s:85,l:52}];
+let heroI=0;
+function paintHero(){drawGem($("#heroGem"),HERO[heroI],100,true,11+heroI);$("#gemName").textContent=HERO[heroI].n+"（點一下換一種）";}
+$("#heroGem").addEventListener("click",()=>{heroI=(heroI+1)%HERO.length;paintHero();});
+paintHero();
+const tray=$("#tray");
+UNITS.forEach(u=>{
+  const first=courseLessons.find(s=>s.dataset.unit==u.n);const cnt=courseLessons.filter(s=>s.dataset.unit==u.n).length;
+  const b=document.createElement("button");b.dataset.go=first.id;
+  b.innerHTML=`<svg class="facet" viewBox="-12 -12 24 24"><polygon points="0,-11 10,-3 6,10 -6,10 -10,-3" style="fill:var(--u${u.n})"/><polygon points="0,-11 4,-3 0,3 -4,-3" fill="rgba(255,255,255,.35)"/></svg><b>第${"一二三四五六"[u.n-1]}單元 ${u.name}</b><span>${u.sub}，第 ${first.id.slice(1)}–${+first.id.slice(1)+cnt-1} 課</span>`;
+  tray.appendChild(b);
+});
+const last=store.get("last",null);
+if(last&&document.getElementById(last)){const rb=$("#resumeBtn");rb.hidden=false;rb.dataset.go=last;rb.textContent=`繼續：第 ${last.slice(1)} 課`;}
+
+/* ---------------- L2 晶體成長 ---------------- */
+(function(){
+  const cv=$("#cgCanvas"),ctx=cv.getContext("2d"),W=600,H=300;
+  const sites=[];for(let r=0;r<6;r++)for(let c=0;c<12;c++)sites.push({x:80+c*40,y:50+r*40,r,c});
+  const seed={x:320,y:150};sites.sort((a,b)=>Math.hypot(a.x-seed.x,a.y-seed.y)-Math.hypot(b.x-seed.x,b.y-seed.y));
+  let parts,mode="liquid",tick=0,raf=null;
+  function reset(){parts=sites.map(s=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*4,vy:(Math.random()-.5)*4,site:s,fixed:false,t:0}));mode="liquid";tick=0;$("#cgOut").textContent="原子正在自由移動，這是液體狀態。";}
+  function step(){
+    tick++;
+    const acc=cssVar("--accent")||"#7B4FA0",ink=cssVar("--muted")||"#555";
+    ctx.clearRect(0,0,W,H);
+    if(mode==="slow"){const n=Math.min(parts.length,Math.floor(tick/2));for(let i=0;i<n;i++)parts[i].fixed=true;if(n>=parts.length&&!parts.doneMsg){parts.doneMsg=1;$("#cgOut").textContent="完成！原子有足夠時間找到位置，排成整齊的晶體。天然寶石就是這樣在地底花上千年、萬年慢慢長大。";}}
+    parts.forEach(p=>{
+      if(p.fixed){p.x+=(p.site.x-p.x)*.12;p.y+=(p.site.y-p.y)*.12;}
+      else if(mode!=="fast"){p.x+=p.vx;p.y+=p.vy;if(p.x<8||p.x>W-8)p.vx*=-1;if(p.y<8||p.y>H-8)p.vy*=-1;p.vx+=(Math.random()-.5)*.6;p.vy+=(Math.random()-.5)*.6;p.vx=Math.max(-4,Math.min(4,p.vx));p.vy=Math.max(-4,Math.min(4,p.vy));}
+    });
+    if(mode==="slow"){ctx.strokeStyle=acc;ctx.globalAlpha=.5;ctx.lineWidth=2;
+      const fixed=parts.filter(p=>p.fixed&&Math.hypot(p.site.x-p.x,p.site.y-p.y)<2);
+      const key=new Map(fixed.map(p=>[p.site.r+","+p.site.c,p]));
+      fixed.forEach(p=>{[[0,1],[1,0]].forEach(([dr,dc])=>{const q=key.get((p.site.r+dr)+","+(p.site.c+dc));if(q){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke();}});});
+      ctx.globalAlpha=1;}
+    parts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,8,0,7);ctx.fillStyle=p.fixed?acc:ink;ctx.fill();});
+    raf=requestAnimationFrame(step);
+  }
+  function start(){if(!raf)raf=requestAnimationFrame(step);}
+  function stop(){if(raf){cancelAnimationFrame(raf);raf=null;}}
+  reset();
+  $("#cgSlow").onclick=()=>{reset();mode="slow";tick=0;$("#cgOut").textContent="慢慢冷卻中……原子一個接一個找到自己的位置。";};
+  $("#cgFast").onclick=()=>{mode="fast";$("#cgOut").textContent="瞬間冷卻！原子來不及排隊就被「凍」在原地，變成亂七八糟的非晶質，這就是玻璃。火山噴出的岩漿急速冷卻，會形成天然玻璃「黑曜石」。";};
+  $("#cgReset").onclick=reset;
+  document.addEventListener("lesson:show",e=>{e.detail==="L2"?start():stop();});
+})();
+
+/* ---------------- L4 晶系 ---------------- */
+(function(){
+  const V=(x,y,z)=>[x,y,z];
+  const para=(A,B,C)=>{const vs=[];for(let i=0;i<2;i++)for(let j=0;j<2;j++)for(let k=0;k<2;k++)vs.push([i*A[0]+j*B[0]+k*C[0],i*A[1]+j*B[1]+k*C[1],i*A[2]+j*B[2]+k*C[2]]);
+    const cx=vs.reduce((a,v)=>a+v[0],0)/8,cy=vs.reduce((a,v)=>a+v[1],0)/8,cz=vs.reduce((a,v)=>a+v[2],0)/8;const cv=vs.map(v=>[v[0]-cx,v[1]-cy,v[2]-cz]);
+    const ed=[];for(let a=0;a<8;a++)for(let b=a+1;b<8;b++){const d=a^b;if(d===1||d===2||d===4)ed.push([a,b]);}return{v:cv,e:ed};};
+  const hex=()=>{const v=[];for(let z of[-.85,.85])for(let k=0;k<6;k++)v.push([Math.cos(k*Math.PI/3),Math.sin(k*Math.PI/3),z]);const e=[];for(let k=0;k<6;k++){e.push([k,(k+1)%6]);e.push([6+k,6+(k+1)%6]);e.push([k,6+k]);}return{v,e};};
+  const rh=()=>{const a=75*Math.PI/180;const A=V(1,0,0),B=V(Math.cos(a),Math.sin(a),0);const cx=Math.cos(a),cy=(Math.cos(a)-Math.cos(a)*Math.cos(a))/Math.sin(a);const C=V(cx,cy,Math.sqrt(Math.max(0,1-cx*cx-cy*cy)));return para(A,B,C);};
+  const S=[
+    {n:"等軸晶系",d:"三軸等長、互相垂直，像骰子",ex:"鑽石、尖晶石、石榴石、螢石",g:para(V(1.2,0,0),V(0,1.2,0),V(0,0,1.2))},
+    {n:"四方晶系",d:"兩軸等長，第三軸較長或較短，都垂直",ex:"鋯石、金紅石",g:para(V(1,0,0),V(0,1,0),V(0,0,1.8))},
+    {n:"六方晶系",d:"三條水平軸夾 120°，加一條垂直軸",ex:"綠柱石（祖母綠、海藍寶）、磷灰石",g:hex()},
+    {n:"三方晶系",d:"像被斜壓的立方體（菱面體），有時歸入六方晶族",ex:"剛玉、石英、碧璽",g:rh()},
+    {n:"斜方晶系",d:"三軸都不等長，但都互相垂直，像火柴盒",ex:"拓帕石、橄欖石、金綠寶石",g:para(V(1.5,0,0),V(0,.9,0),V(0,0,1.4))},
+    {n:"單斜晶系",d:"三軸不等長，其中一軸傾斜",ex:"翡翠（硬玉）、月光石、孔雀石",g:para(V(1.3,0,0),V(0,.9,0),V(.6,0,1.4))},
+    {n:"三斜晶系",d:"三軸不等長、全都傾斜，對稱最低",ex:"綠松石、天河石、拉長石",g:para(V(1.3,0,0),V(.35,.95,0),V(.45,.3,1.4))},
+    {n:"非晶質",d:"原子沒有規則排列，沒有晶系",ex:"蛋白石、玻璃、琥珀",g:null}];
+  const grid=$("#xtalGrid");const items=[];
+  S.forEach((s,i)=>{const c=document.createElement("div");c.className="card";
+    const svg=el("svg",{viewBox:"-60 -60 120 120",width:110,height:110,role:"img","aria-label":s.n+"示意"});c.appendChild(svg);
+    c.insertAdjacentHTML("beforeend",`<h5>${s.n}</h5><div>${s.d}</div><div style="color:var(--muted);margin-top:4px">例：${s.ex}</div>`);grid.appendChild(c);items.push({svg,s});
+    if(!s.g){const r=rnd(5);let d="M";for(let k=0;k<=24;k++){const a=k/24*Math.PI*2,rr=38+Math.sin(k*1.7)*6;d+=`${(Math.cos(a)*rr).toFixed(1)} ${(Math.sin(a)*rr*.8).toFixed(1)} ${k<24?"L":"Z"}`;}
+      el("path",{d,style:"fill:color-mix(in srgb,var(--accent) 18%,transparent);stroke:var(--accent)","stroke-width":2},svg);
+      for(let k=0;k<26;k++)el("circle",{cx:(r()-.5)*60,cy:(r()-.5)*44,r:2.4,style:"fill:var(--muted)"},svg);}
+  });
+  let t=0,raf=null;
+  function frame(){t+=.012;items.forEach(({svg,s},i)=>{if(!s.g)return;svg.innerHTML="";const th=t+i*.5,tl=.45;
+    const pr=v=>{const x=v[0]*Math.cos(th)-v[1]*Math.sin(th),y=v[0]*Math.sin(th)+v[1]*Math.cos(th);return[x*30,(-v[2]*Math.cos(tl)+y*Math.sin(tl))*30];};
+    const pts=s.g.v.map(pr);
+    s.g.e.forEach(([a,b])=>el("line",{x1:pts[a][0],y1:pts[a][1],x2:pts[b][0],y2:pts[b][1],style:"stroke:var(--accent)","stroke-width":2.2,"stroke-linecap":"round"},svg));
+    pts.forEach(p=>el("circle",{cx:p[0],cy:p[1],r:2.6,style:"fill:var(--accent)"},svg));});
+    if(!matchMedia("(prefers-reduced-motion: reduce)").matches)raf=requestAnimationFrame(frame);}
+  document.addEventListener("lesson:show",e=>{if(e.detail==="L4"){if(!raf)frame();}else if(raf){cancelAnimationFrame(raf);raf=null;}});
+})();
+
+/* ---------------- L5 刮刮看、硬度圖 ---------------- */
+(function(){
+  const tools=[["指甲",2.5],["銅幣",3.5],["窗戶玻璃",5.5],["鋼刀",6],["石英",7],["黃玉",8],["剛玉",9],["鑽石",10]];
+  const gems=[["琥珀",2.25],["珍珠",3],["蛋白石",6],["翡翠",7],["祖母綠",7.75],["尖晶石",8],["紅寶石",9],["鑽石",10]];
+  let A=null,B=null;
+  const mk=(box,list,set)=>list.forEach(([n,h])=>{const b=document.createElement("button");b.className="chip";b.textContent=`${n} ${h}`;b.onclick=()=>{[...box.children].forEach(x=>x.classList.remove("on"));b.classList.add("on");set([n,h]);upd();};box.appendChild(b);});
+  mk($("#scA"),tools,v=>A=v);mk($("#scB"),gems,v=>B=v);
+  function upd(){if(!A||!B)return;const d=A[1]-B[1];let t;
+    if(d>=.5)t=`✅ ${A[0]}（${A[1]}）比${B[0]}（${B[1]}）硬，<b>刮得出痕跡</b>。${B[1]<7?"這也提醒我們："+B[0]+"要小心收納。":""}`;
+    else if(d>-.5)t=`⚖️ 兩者硬度差不多，互相可能留下輕微痕跡，但不明顯。`;
+    else t=`❌ ${A[0]}比較軟，<b>刮不動</b>${B[0]}，反而是${A[0]}自己可能被磨損。`;
+    $("#scOut").innerHTML=t;}
+  const svg=$("#hardChart");const data=[["滑石",1],["石膏",3],["方解石",9],["螢石",21],["磷灰石",48],["正長石",72],["石英",100],["黃玉",200],["剛玉",400],["鑽石",1600]];
+  const x0=40,w=52,base=250;
+  el("line",{x1:30,y1:base,x2:590,y2:base,style:"stroke:var(--line)","stroke-width":1},svg);
+  data.forEach(([n,v],i)=>{const h=Math.max(1.5,v/1600*210);const x=x0+i*w;
+    el("rect",{x:x,y:base-h,width:34,height:h,rx:3,style:`fill:var(${i===9?"--u5":"--accent"})`},svg);
+    const t1=el("text",{x:x+17,y:base-h-6,"text-anchor":"middle","font-size":13,style:"fill:var(--ink)"},svg);t1.textContent=v;
+    const t2=el("text",{x:x+17,y:base+18,"text-anchor":"middle","font-size":12.5,style:"fill:var(--muted)"},svg);t2.textContent=n;
+    const t3=el("text",{x:x+17,y:base+34,"text-anchor":"middle","font-size":12,style:"fill:var(--muted)"},svg);t3.textContent="莫氏 "+(i+1);});
+})();
+
+/* ---------------- L6 比重 ---------------- */
+(function(){
+  const ref=[["琥珀",1.08],["蛋白石",2.15],["玻璃（常見）",2.5],["石英",2.65],["祖母綠",2.72],["軟玉",2.95],["碧璽",3.06],["莫桑石",3.22],["翡翠",3.33],["橄欖石",3.34],["鑽石",3.52],["拓帕石",3.53],["尖晶石",3.60],["金綠寶石",3.73],["剛玉",4.00],["鋯石",4.65],["立方氧化鋯",5.8]];
+  $("#sgCalc").onclick=()=>{const a=parseFloat($("#sgA").value),w=parseFloat($("#sgW").value);
+    if(!(a>0)||!(w>=0)){$("#sgOut").textContent="請輸入大於 0 的空氣中重量，以及 0 以上的水中重量。";return;}
+    if(w>=a){$("#sgOut").textContent="水中重量必須比空氣中輕（因為有浮力）。請檢查數字。";return;}
+    const sg=a/(a-w);const near=ref.map(r=>[r[0],r[1],Math.abs(r[1]-sg)]).sort((x,y)=>x[2]-y[2]).slice(0,3);
+    $("#sgOut").innerHTML=`比重 = ${a} ÷ (${a} − ${w}) = <b>${sg.toFixed(2)}</b><br>最接近的寶石：${near.map(n=>`${n[0]}（${n[1]}）`).join("、")}<br><span style="color:var(--muted);font-size:14px">實際鑑定時，比重只是證據之一，要配合折射率等其他數據。</span>`;};
+})();
+
+/* ---------------- L7 吸收光譜、變石 ---------------- */
+(function(){
+  const G={"紅寶石":{abs:[[390,440],[500,600]],res:"#c8163e",t:"吃掉了黃綠光和部分紫光，剩下紅光（和一點藍光），所以是帶一點紫調的紅色。吃掉黃綠光的主角是鉻。"},
+    "藍寶石":{abs:[[555,700]],res:"#1d3fa6",t:"鐵和鈦一起吃掉了黃、橙、紅光，剩下藍光。"},
+    "祖母綠":{abs:[[390,470],[580,650]],res:"#0f8a55",t:"吃掉藍紫光和橙紅光，綠光通過最多。注意深紅光（660 以上）也能通過一些，這就是第 11 課濾色鏡的秘密。"},
+    "黃水晶":{abs:[[390,490]],res:"#e5b02a",t:"吃掉藍紫光，剩下紅、橙、黃、綠混合起來，看起來是黃色。"},
+    "紫水晶":{abs:[[500,590]],res:"#8a4fbf",t:"吃掉黃綠光，剩下紅光和藍紫光混合成紫色。"},
+    "無色鑽石":{abs:[],res:"#eef3f6",t:"幾乎什麼都不吃，所有顏色一起通過，看起來無色透明。"}};
+  const box=$("#absBtns"),svg=$("#absSvg");
+  const X=nm=>30+(nm-380)/(700-380)*540;
+  function draw(name){svg.innerHTML="";const d=G[name];
+    const defs=el("defs",{},svg);const lg=el("linearGradient",{id:"specG",x1:0,x2:1,y1:0,y2:0},defs);
+    [["0","#7b2cbf"],[".17","#3a56d4"],[".33","#1fa3c7"],[".45","#2fb34a"],[".6","#e8e02a"],[".75","#f28c28"],["1","#d7263d"]].forEach(([o,c])=>el("stop",{offset:o,"stop-color":c},lg));
+    el("text",{x:30,y:18,"font-size":13,style:"fill:var(--muted)"},svg).textContent="進入的白光";
+    el("rect",{x:30,y:24,width:540,height:30,rx:6,fill:"url(#specG)"},svg);
+    el("text",{x:30,y:84,"font-size":13,style:"fill:var(--muted)"},svg).textContent="穿過寶石後剩下的光（黑色＝被吃掉）";
+    el("rect",{x:30,y:90,width:540,height:30,rx:6,fill:"url(#specG)"},svg);
+    d.abs.forEach(([a,b])=>{const r=el("rect",{x:X(a),y:90,width:X(b)-X(a),height:30,fill:"#0c0f16",opacity:0},svg);r.innerHTML='<animate attributeName="opacity" from="0" to=".92" dur=".6s" fill="freeze"/>';});
+    [400,500,600,700].forEach(n=>el("text",{x:X(n),y:140,"font-size":12,"text-anchor":"middle",style:"fill:var(--muted)"},svg).textContent=n+" nm");
+    el("text",{x:452,y:162,"font-size":13,style:"fill:var(--ink)"},svg).textContent="看到的顏色";
+    el("circle",{cx:552,cy:157,r:12,fill:d.res,stroke:"rgba(0,0,0,.2)"},svg);
+    $("#absOut").textContent=d.t;}
+  Object.keys(G).forEach((n,i)=>{const b=document.createElement("button");b.className="chip"+(i?"":" on");b.textContent=n;b.onclick=()=>{[...box.children].forEach(x=>x.classList.remove("on"));b.classList.add("on");draw(n);};box.appendChild(b);});
+  draw("紅寶石");
+  const gem=$("#alexGem");
+  $("#alexDay").onclick=()=>{gem.classList.remove("night");$("#alexDay").classList.add("on");$("#alexNight").classList.remove("on");$("#alexOut").textContent="在日光下，變石偏藍綠色。";};
+  $("#alexNight").onclick=()=>{gem.classList.add("night");$("#alexNight").classList.add("on");$("#alexDay").classList.remove("on");$("#alexOut").textContent="在燭光或白熾燈下，變成紫紅色。所以有人說它「白天是祖母綠，晚上是紅寶石」。";};
+})();
+
+/* ---------------- L8 全反射、雙折射 ---------------- */
+(function(){
+  const M=[["玻璃",1.50],["石英",1.54],["剛玉",1.77],["立方氧化鋯",2.15],["鑽石",2.42]];let n=2.42;
+  const box=$("#tirMat");
+  M.forEach(([nm,v])=>{const b=document.createElement("button");b.className="chip"+(v===2.42?" on":"");b.textContent=`${nm} ${v}`;b.onclick=()=>{[...box.children].forEach(x=>x.classList.remove("on"));b.classList.add("on");n=v;draw();};box.appendChild(b);});
+  const svg=$("#tirSvg"),rng=$("#tirAng");
+  function draw(){const th=+rng.value,rad=th*Math.PI/180;$("#tirVal").textContent=th+"°";svg.innerHTML="";
+    const cx=300,cy=150,L=150;
+    el("rect",{x:0,y:0,width:600,height:150,style:"fill:color-mix(in srgb,var(--u2) 6%,transparent)"},svg);
+    el("rect",{x:0,y:150,width:600,height:150,style:"fill:color-mix(in srgb,var(--u4) 22%,transparent)"},svg);
+    el("line",{x1:0,y1:150,x2:600,y2:150,style:"stroke:var(--muted)","stroke-width":1.5},svg);
+    el("line",{x1:cx,y1:10,x2:cx,y2:290,style:"stroke:var(--muted)","stroke-dasharray":"5 5"},svg);
+    el("text",{x:14,y:26,"font-size":14,style:"fill:var(--muted)"},svg).textContent="空氣（折射率 1.00）";
+    el("text",{x:14,y:284,"font-size":14,style:"fill:var(--muted)"},svg).textContent=`寶石內部（折射率 ${n}）`;
+    const crit=Math.asin(1/n)*180/Math.PI;
+    const ca=crit*Math.PI/180;el("line",{x1:cx,y1:cy,x2:cx-Math.sin(ca)*L*1.2,y2:cy+Math.cos(ca)*L*1.2,style:"stroke:var(--u6)","stroke-dasharray":"2 4","stroke-width":2},svg);
+    el("text",{x:cx-Math.sin(ca)*L*1.25-6,y:cy+Math.cos(ca)*L*1.25+4,"font-size":12,"text-anchor":"end",style:"fill:var(--u6)"},svg).textContent=`臨界角 ${crit.toFixed(1)}°`;
+    const sx=cx-Math.sin(rad)*L,sy=cy+Math.cos(rad)*L;
+    el("line",{x1:sx,y1:sy,x2:cx,y2:cy,stroke:"#f5b700","stroke-width":5,"stroke-linecap":"round"},svg);
+    const s=n*Math.sin(rad);let msg;
+    if(s<1){const out=Math.asin(s);
+      el("line",{x1:cx,y1:cy,x2:cx+Math.sin(out)*L,y2:cy-Math.cos(out)*L,stroke:"#f5b700","stroke-width":5,"stroke-linecap":"round"},svg);
+      el("line",{x1:cx,y1:cy,x2:cx+Math.sin(rad)*L*.8,y2:cy+Math.cos(rad)*L*.8,stroke:"#f5b700","stroke-width":2,opacity:.35},svg);
+      msg=`光從寶石射向空氣時偏折到 ${(out*180/Math.PI).toFixed(1)}°，<b>成功跑出去</b>（只有少部分反射回來）。`;}
+    else{el("line",{x1:cx,y1:cy,x2:cx+Math.sin(rad)*L,y2:cy+Math.cos(rad)*L,stroke:"#f5b700","stroke-width":5,"stroke-linecap":"round"},svg);
+      msg=`超過臨界角 ${crit.toFixed(1)}°，<b>全反射！</b>光被整個彈回寶石裡，繼續在裡面反射。`;}
+    $("#tirOut").innerHTML=msg+`<br><span style="color:var(--muted);font-size:14px">試試把角度固定在 30°，再切換玻璃和鑽石，看看哪一個能把光困住。</span>`;}
+  rng.oninput=draw;draw();
+  $("#dblOn").onclick=()=>{$("#dblGhost").style.transform="translate(7px,9px)";$("#dblOn").classList.add("on");$("#dblOff").classList.remove("on");};
+  $("#dblOff").onclick=()=>{$("#dblGhost").style.transform="translate(0,0)";$("#dblOff").classList.add("on");$("#dblOn").classList.remove("on");};
+})();
+
+/* ---------------- 共用：按鈕列 ---------------- */
+function chips(box,items,onPick,first=0){
+  box.innerHTML="";
+  items.forEach((it,i)=>{const b=document.createElement("button");b.className="chip"+(i===first?" on":"");b.textContent=it;
+    b.onclick=()=>{[...box.children].forEach(x=>x.classList.remove("on"));b.classList.add("on");onPick(i,it);};box.appendChild(b);});
+  onPick(first,items[first]);
+}
+function nested(parent,cx,cy,R){const s=el("svg",{x:cx-R-3,y:cy-R-3,width:2*R+6,height:2*R+6,viewBox:`${-R-3} ${-R-3} ${2*R+6} ${2*R+6}`},parent);return s;}
+
+/* ---------------- L10 放大鏡下的內含物 ---------------- */
+(function(){
+  const svg=$("#incSvg");if(!svg)return;
+  const T={
+    "天然剛玉":{bg:["#e0405f","#6d0f24"],d:"<b>絲狀包體＋直線色帶</b>：細細的金紅石針，三組互相交叉成 60°，像撒在寶石裡的銀色細絲；色帶是筆直、會轉角的平行條紋。這兩種都是天然剛玉的典型指紋。",f:g=>{
+      const r=rnd(3);for(let i=0;i<46;i++){const a=[0,60,120][i%3]*Math.PI/180,x=60+r()*180,y=60+r()*180,L=10+r()*18;
+        el("line",{x1:x,y1:y,x2:x+Math.cos(a)*L,y2:y+Math.sin(a)*L,stroke:"rgba(255,255,255,.75)","stroke-width":1.1},g);}
+      [0,1,2,3].forEach(k=>el("path",{d:`M${40+k*26},250 L${95+k*26},155 L${95+k*26},40`,fill:"none",stroke:"rgba(255,190,205,.35)","stroke-width":9},g));}},
+    "焰熔法合成":{bg:["#e8435f","#700f25"],d:"<b>弧形生長紋＋圓形氣泡</b>：焰熔法是把粉末一層層熔化堆積，所以生長紋像唱片溝紋一樣是<b>彎的</b>；快速冷卻還會困住圓滾滾的氣泡。看到這兩樣，幾乎可以確定是合成。",f:g=>{
+      for(let k=0;k<9;k++)el("path",{d:`M-20,${320-k*28} A260,260 0 0 1 320,${320-k*28}`,fill:"none",stroke:"rgba(255,220,228,.28)","stroke-width":2},g);
+      const r=rnd(5);for(let i=0;i<9;i++){const x=70+r()*160,y=70+r()*160,rr=2+r()*6;
+        el("circle",{cx:x,cy:y,r:rr,fill:"rgba(255,255,255,.12)",stroke:"rgba(20,0,5,.85)","stroke-width":1.4},g);
+        el("circle",{cx:x-rr*.3,cy:y-rr*.3,r:rr*.3,fill:"rgba(255,255,255,.9)"},g);}}},
+    "玻璃":{bg:["#d8506a","#5a1426"],d:"<b>圓氣泡＋旋渦狀流紋</b>：玻璃是熔化後攪拌、倒模的，所以裡面有像糖漿攪拌過的<b>流紋</b>，還有大小不一的圓氣泡。另外刻面稜線常常圓鈍、表面容易磨損。",f:g=>{
+      for(let k=0;k<5;k++)el("path",{d:`M${40+k*12},${80+k*30} C120,${20+k*40} 180,${200-k*20} 260,${110+k*25}`,fill:"none",stroke:"rgba(255,230,236,.3)","stroke-width":3},g);
+      const r=rnd(9);for(let i=0;i<14;i++){const x=60+r()*180,y=60+r()*180,rr=1.5+r()*9;
+        el("circle",{cx:x,cy:y,r:rr,fill:"rgba(255,255,255,.08)",stroke:"rgba(15,0,5,.8)","stroke-width":1.3},g);
+        el("circle",{cx:x-rr*.3,cy:y-rr*.3,r:rr*.28,fill:"rgba(255,255,255,.85)"},g);}}},
+    "祖母綠三相":{bg:["#2fb37d","#0b4a32"],d:"<b>三相包體</b>：一個鋸齒狀的小空腔，裡面同時有<b>液體</b>、<b>氣泡</b>（氣體）和<b>立方體的鹽晶體</b>（固體），固、液、氣三相都在。它是哥倫比亞祖母綠最有名的指紋，因為那裡的寶石是在很鹹的熱液中長出來的。",f:g=>{
+      const cav=[[110,130],[135,118],[150,124],[178,112],[196,128],[214,126],[206,148],[220,166],[190,172],[170,184],[140,176],[118,180],[104,160]];
+      el("polygon",{points:cav.map(p=>p.join(",")).join(" "),fill:"rgba(200,245,225,.28)",stroke:"rgba(0,20,10,.85)","stroke-width":2},g);
+      el("circle",{cx:185,cy:146,r:10,fill:"rgba(255,255,255,.15)",stroke:"rgba(0,15,8,.9)","stroke-width":1.6},g);
+      el("circle",{cx:182,cy:143,r:3,fill:"rgba(255,255,255,.9)"},g);
+      el("rect",{x:128,y:140,width:16,height:16,transform:"rotate(12 136 148)",fill:"rgba(255,255,255,.75)",stroke:"rgba(0,15,8,.7)"},g);
+      el("text",{x:150,y:215,"text-anchor":"middle","font-size":12,fill:"rgba(255,255,255,.85)"},g).textContent="液體・氣泡・鹽晶體";}},
+    "指紋狀包體":{bg:["#3a6ad6","#0d2463"],d:"<b>指紋狀包體</b>：寶石內部的裂縫在高溫下「癒合」，留下一排排細小液滴，排列起來像手指的指紋。常見於藍寶石、紅寶石、托帕石等天然寶石。",f:g=>{
+      for(let k=0;k<8;k++){const pts=[];for(let x=70;x<=230;x+=7){const y=90+k*16+Math.sin(x/22+k*.6)*10;pts.push([x,y]);}
+        pts.forEach(([x,y],i)=>{if((i+k)%5!==0)el("ellipse",{cx:x,cy:y,rx:2.2,ry:1.3,fill:"rgba(235,245,255,.75)"},g);});}}},
+    "鑽石羽裂與晶體":{bg:["#e9eef3","#7c8795"],d:"<b>羽裂＋內含晶體</b>：羽裂是鑽石內部的小裂縫，轉動時會反光，形狀像一根白色羽毛；內含晶體是被鑽石包進去的其他礦物（常見石榴石、橄欖石），也可能是小鑽石。它們是淨度分級的主角。",f:g=>{
+      el("path",{d:"M95,190 C120,160 150,150 185,120",fill:"none",stroke:"rgba(255,255,255,.95)","stroke-width":3},g);
+      for(let i=0;i<9;i++){const x=100+i*10,y=184-i*8;el("path",{d:`M${x},${y} q${6+i%3*3},-14 ${14+i%2*6},-12`,fill:"none",stroke:"rgba(255,255,255,.8)","stroke-width":1.2},g);
+        el("path",{d:`M${x},${y} q14,4 18,14`,fill:"none",stroke:"rgba(255,255,255,.6)","stroke-width":1},g);}
+      el("polygon",{points:"200,190 214,182 222,196 210,206 198,200",fill:"#1b1f26",stroke:"#000"},g);
+      el("polygon",{points:"120,95 128,90 132,99 124,104",fill:"#6b1d2a",stroke:"#000"},g);}}};
+  const names=Object.keys(T);
+  function draw(i){const t=T[names[i]];svg.innerHTML="";
+    const defs=el("defs",{},svg),rg=el("radialGradient",{id:"incBg",cx:"45%",cy:"40%",r:"70%"},defs);
+    el("stop",{offset:"0%","stop-color":t.bg[0]},rg);el("stop",{offset:"100%","stop-color":t.bg[1]},rg);
+    const cp=el("clipPath",{id:"incClip"},defs);el("circle",{cx:150,cy:150,r:138},cp);
+    el("circle",{cx:150,cy:150,r:146,fill:"#0c0f14"},svg);
+    const g=el("g",{"clip-path":"url(#incClip)"},svg);
+    el("rect",{x:0,y:0,width:300,height:300,fill:"url(#incBg)"},g);
+    t.f(g);
+    el("circle",{cx:150,cy:150,r:138,fill:"none",stroke:"rgba(0,0,0,.55)","stroke-width":16},svg);
+    el("text",{x:150,y:291,"text-anchor":"middle","font-size":11,fill:"rgba(255,255,255,.7)"},svg).textContent="10× 放大視野（示意）";
+    $("#incOut").innerHTML=t.d;}
+  chips($("#incBtns"),names,draw);
+})();
+
+/* ---------------- L11 偏光鏡 ---------------- */
+(function(){
+  const svg=$("#polSvg");if(!svg)return;
+  const K=[
+    {n:"單折射（鑽石、尖晶石）",d:"不管怎麼轉，<b>一直是暗的</b>。光通過單折射寶石時不會被「扭轉」方向，所以上下兩片偏光片仍然把光擋住。"},
+    {n:"雙折射（紅寶石）",d:"轉一圈會出現<b>四次亮、四次暗</b>，每 90° 暗一次。這是雙折射寶石的招牌反應。"},
+    {n:"集合體（翡翠）",d:"轉到哪裡都<b>一直是亮的</b>，而且亮得不均勻。因為它由無數小晶體組成，方向亂七八糟，總有一部分在「放光」。"},
+    {n:"異常消光（玻璃）",d:"大致是暗的，但轉動時有<b>扭來扭去的明暗斑塊</b>。這是玻璃冷卻時內部受力不均造成的，也常見於合成尖晶石。叫「異常」就是因為它不是正常的四明四暗。"}];
+  let k=0;const rng=$("#polAng");
+  function draw(){const th=+rng.value;$("#polVal").textContent=th+"°";svg.innerHTML="";
+    el("circle",{cx:100,cy:100,r:96,fill:"#101318",stroke:"#555","stroke-width":3},svg);
+    const g=el("g",{transform:`rotate(${th} 100 100)`},svg);
+    let b;const rad=th*Math.PI/180;
+    if(k===0)b=.04;else if(k===1)b=Math.pow(Math.sin(2*rad),2);else if(k===2)b=.72;else b=.08;
+    const base=k===2?"#6fb07a":"#e3e8ee";
+    el("rect",{x:55,y:62,width:90,height:76,rx:16,fill:"#202630",stroke:"rgba(255,255,255,.25)"},g);
+    el("rect",{x:55,y:62,width:90,height:76,rx:16,fill:base,opacity:b.toFixed(3)},g);
+    if(k===2){const r=rnd(4);for(let i=0;i<40;i++)el("circle",{cx:60+r()*80,cy:66+r()*68,r:2+r()*4,fill:r()<.5?"#e9f7ea":"#2c5a35",opacity:.55},g);}
+    if(k===3){for(let i=0;i<3;i++){const ph=rad*2+i*2.1;el("path",{d:`M${62+i*28},66 q${14*Math.sin(ph)},34 ${6*Math.cos(ph)},68`,fill:"none",stroke:"#e3e8ee","stroke-width":9,"stroke-linecap":"round",opacity:(.18+.22*Math.abs(Math.sin(ph))).toFixed(2)},g);}}
+    const st=k===1?(b>.7?"亮":b<.1?"暗":"漸變中"):(k===2?"亮":"暗");
+    $("#polOut").innerHTML=`${K[k].d}<br><span style="color:var(--muted);font-size:14px">目前：${st}（亮度 ${(b*100).toFixed(0)}%）。慢慢拖動滑桿轉一整圈看看。</span>`;}
+  rng.oninput=draw;
+  chips($("#polBtns"),K.map(x=>x.n),i=>{k=i;draw();});
+})();
+
+/* ---------------- L14 克拉大小比較 ---------------- */
+(function(){
+  const svg=$("#caratSvg");if(!svg)return;
+  const C=[[.25,4.1],[.5,5.2],[.75,5.8],[1,6.5],[1.5,7.4],[2,8.2],[3,9.3]];
+  const px=7;let x=20;
+  C.forEach(([ct,mm],i)=>{const R=mm*px/2;x+=R;const cy=75;
+    drawGem(nested(svg,x,cy,R),{h:205,s:10,l:82},R,false,20+i);
+    el("text",{x,y:140,"text-anchor":"middle","font-size":14,"font-weight":700,style:"fill:var(--ink)"},svg).textContent=ct+" ct";
+    el("text",{x,y:158,"text-anchor":"middle","font-size":12,style:"fill:var(--muted)"},svg).textContent=mm+" mm";
+    x+=R+22;});
+})();
+
+/* ---------------- L14 顏色等級 D–Z ---------------- */
+(function(){
+  const svg=$("#colorGem");if(!svg)return;
+  const L="DEFGHIJKLMNOPQRSTUVWXYZ",rng=$("#colorRange");
+  const grp=i=>i<=2?["無色","D、E、F：完全看不到顏色，最稀有、最貴。"]:i<=6?["接近無色","G–J：鑲上戒指後肉眼幾乎看不出顏色，是性價比很高的區間。"]:i<=9?["微黃","K–M：仔細看能發現一點點黃，常搭配黃金戒台。"]:i<=14?["很淡的黃","N–R：一般人也看得出淡淡的黃色。"]:["淡黃","S–Z：黃色明顯。再更黃就進入「彩鑽」的領域，反而可能變貴。"];
+  function draw(){const i=+rng.value;$("#colorVal").textContent=L[i];
+    drawGem(svg,{h:48,s:Math.min(4+i*3.4,80),l:84-i*.7},55,false,5);
+    const [g,d]=grp(i);$("#colorOut").innerHTML=`<b>${L[i]} 級・${g}</b>：${d}<br><span style="color:var(--muted);font-size:14px">真實的差距比畫面更細微，鑑定師要把鑽石倒放在白色紙槽上，和標準比色石並排比較。</span>`;}
+  rng.oninput=draw;draw();
+})();
+
+/* ---------------- L15 淨度 ---------------- */
+(function(){
+  const svg=$("#clSvg");if(!svg)return;
+  const C=[
+    ["FL","無瑕（Flawless）","10 倍放大下，內部和表面都找不到任何瑕疵。極度稀有。",[]],
+    ["IF","內部無瑕（Internally Flawless）","內部乾淨，只有極輕微的表面拋光痕，重新拋光就能去掉。",[["s",-30,-40]]],
+    ["VVS","極極微瑕（Very Very Slightly Included）","有瑕疵，但連專業鑑定師用 10 倍放大鏡都<b>很難</b>找到。分 VVS1、VVS2。",[["d",22,30,1]]],
+    ["VS","極微瑕（Very Slightly Included）","10 倍放大下看得到，但要花點力氣找。肉眼看不到，是很受歡迎的等級。分 VS1、VS2。",[["d",22,30,1.8],["d",-40,10,1.4],["f",30,-35,.4]]],
+    ["SI","微瑕（Slightly Included）","10 倍放大下很容易看到；SI2 有時肉眼從底部能看見。分 SI1、SI2。",[["d",22,30,3],["d",-40,10,2.4],["f",30,-35,.8],["d",-10,-50,2.5]]],
+    ["I1","內含瑕疵（Included）1","肉眼就看得到瑕疵，會影響美觀。",[["x",20,25,7],["f",30,-35,1.4],["d",-40,10,3.5],["d",-10,-50,3]]],
+    ["I3","內含瑕疵 3","瑕疵大又多，可能影響亮度，甚至影響耐久（容易從裂處破開）。",[["x",20,25,10],["x",-45,-10,8],["f",30,-35,2.2],["f",-35,40,1.8],["d",-10,-50,4],["d",50,10,3.5]]]];
+  function draw(i){const [code,name,desc,inc]=C[i];
+    const g=drawGem(svg,{h:210,s:8,l:80},100,false,3);
+    inc.forEach(([t,x,y,s])=>{
+      if(t==="d")el("circle",{cx:x,cy:y,r:s,fill:"#2a2f36",opacity:.85},g);
+      else if(t==="x")el("polygon",{points:`${x},${y-s} ${x+s},${y-s*.2} ${x+s*.5},${y+s} ${x-s*.6},${y+s*.8} ${x-s},${y-s*.1}`,fill:"#1b1f26",stroke:"#000"},g);
+      else if(t==="f"){const p=el("g",{transform:`translate(${x} ${y}) scale(${s})`},g);
+        el("path",{d:"M-14,8 C-6,0 4,-4 14,-10",fill:"none",stroke:"#fff","stroke-width":2.2/s+.8},p);
+        for(let j=0;j<5;j++)el("path",{d:`M${-12+j*6},${6-j*3.5} q3,-7 8,-6`,fill:"none",stroke:"#fff","stroke-width":1.2/s+.4},p);}
+      else if(t==="s")el("line",{x1:x,y1:y,x2:x+22,y2:y+6,stroke:"rgba(255,255,255,.8)","stroke-width":.8},g);});
+    $("#clOut").innerHTML=`<b>${code}・${name}</b>：${desc}`+(i===2?`<br><span style="color:var(--muted);font-size:14px">提示：右下方有一個極小的點，你找到了嗎？</span>`:"");}
+  chips($("#clBtns"),C.map(c=>c[0]),draw);
+})();
+
+/* ---------------- L15 切工深淺與光路（示意圖） ---------------- */
+(function(){
+  const svg=$("#cutSvg");if(!svg)return;
+  const cul={"太淺":244,"理想":276.5,"太深":312};
+  const info={
+    "太淺":["亭部太淺，光打到底部時角度不夠斜，<b>直接從底部漏出去</b>。正面看中間會出現一圈灰暗、像玻璃窗的區域，叫「魚眼」。","bad"],
+    "理想":["角度剛好，光在底部<b>兩次全反射</b>後，從上方回到你的眼睛。這就是鑽石又亮又閃的秘密。","ok"],
+    "太深":["亭部太深，光第二次打到底部時角度又不對，<b>從另一側漏出去</b>。正面看中間會暗暗的，而且同樣重量看起來比較小，因為重量都藏在底部。","bad"]};
+  const ly=(x,cy)=>130+(x-130)/170*(cy-130),ry=(x,cy)=>130+(470-x)/170*(cy-130);
+  function path(d,col,delay,parent){const p=el("path",{d,class:"raypath",style:`stroke:${col}`},parent);
+    const L=p.getTotalLength?p.getTotalLength():600;p.style.strokeDasharray=L;p.style.strokeDashoffset=L;
+    p.style.transition=`stroke-dashoffset .9s linear ${delay}s`;requestAnimationFrame(()=>requestAnimationFrame(()=>{p.style.strokeDashoffset=0;}));return p;}
+  function draw(i,name){svg.innerHTML="";const cy=cul[name];
+    const body=`M130,130 L220,70 L380,70 L470,130 L300,${cy} Z`;
+    el("path",{d:body,style:"fill:color-mix(in srgb,var(--u4) 16%,var(--surface));stroke:var(--ink)","stroke-width":2,"stroke-linejoin":"round"},svg);
+    el("line",{x1:130,y1:130,x2:470,y2:130,style:"stroke:var(--muted)","stroke-width":1.2},svg);
+    [["桌面",300,62],["冠部",150,95],["腰圍",106,134],["亭部",175,cy-40]].forEach(([t,x,y])=>el("text",{x,y,"text-anchor":"middle","font-size":13,style:"fill:var(--muted)"},svg).textContent=t);
+    el("text",{x:300,y:cy+22,"text-anchor":"middle","font-size":13,style:"fill:var(--muted)"},svg).textContent="底尖";
+    el("text",{x:590,y:330,"text-anchor":"end","font-size":12,style:"fill:var(--muted)"},svg).textContent="示意圖，非精確比例";
+    const [txt,cls]=info[name];const outCol=cls==="ok"?"var(--ok)":"var(--bad)";
+    [1,-1].forEach((m,j)=>{const X=x=>m===1?x:600-x;const g=el("g",{},svg);
+      const x0=255,y1=m===1?ly(x0,cy):ly(x0,cy);
+      let d1,d2;
+      if(name==="理想"){const y2=ry(360,cy);d1=`M${X(x0)},0 L${X(x0)},${y1} L${X(360)},${y2} L${X(340)},70`;d2=`M${X(340)},70 L${X(330)},0`;}
+      else if(name==="太淺"){d1=`M${X(x0)},0 L${X(x0)},${y1}`;d2=`M${X(x0)},${y1} L${X(200)},300`;}
+      else{const y2=ry(350,cy);d1=`M${X(x0)},0 L${X(x0)},${y1} L${X(350)},${y2}`;d2=`M${X(350)},${y2} L${X(440)},330`;}
+      path(d1,"#f5b700",j*.25,g);path(d2,outCol,.9+j*.25,g);});
+    if(name==="理想")el("text",{x:300,y:22,"text-anchor":"middle","font-size":20},svg).textContent="👁";
+    $("#cutOut").innerHTML=txt;}
+  chips($("#cutBtns"),Object.keys(cul),draw,1);
+})();
+
+/* ---------------- L15 切割形狀 ---------------- */
+(function(){
+  const box=$("#shapeGrid");if(!box)return;
+  const S=[
+    ["圓形明亮式","最常見、最閃的形狀，57 或 58 個刻面。1919 年托考夫斯基（Tolkowsky）用數學算出經典比例。",s=>{el("circle",{cx:40,cy:40,r:32},s);el("polygon",{points:"40,22 53,27 58,40 53,53 40,58 27,53 22,40 27,27"},s);}],
+    ["公主方","正方形的明亮式，1960–80 年代發展出來。英文 Princess，公主的意思，是商業取的好聽名字。",s=>{el("rect",{x:10,y:10,width:60,height:60},s);el("path",{d:"M10,10 L70,70 M70,10 L10,70"},s);el("rect",{x:26,y:26,width:28,height:28},s);}],
+    ["祖母綠切","長方形、切掉四個角的階梯式。因為最常用在祖母綠上而得名，切掉角可以保護易碎的邊角。",s=>{el("polygon",{points:"20,8 60,8 70,18 70,62 60,72 20,72 10,62 10,18"},s);el("polygon",{points:"26,18 54,18 60,24 60,56 54,62 26,62 20,56 20,24"},s);el("polygon",{points:"31,27 49,27 51,29 51,51 49,53 31,53 29,51 29,29"},s);}],
+    ["阿斯切","正方形的階梯式，1902 年由荷蘭阿姆斯特丹的阿斯切（Asscher）兄弟設計，名字就是他們的姓。",s=>{el("polygon",{points:"24,8 56,8 72,24 72,56 56,72 24,72 8,56 8,24"},s);el("polygon",{points:"30,18 50,18 62,30 62,50 50,62 30,62 18,50 18,30"},s);el("polygon",{points:"34,27 46,27 53,34 53,46 46,53 34,53 27,46 27,34"},s);}],
+    ["橢圓形","拉長的明亮式，手指戴起來顯得修長，同樣重量看起來比圓形大一點。",s=>{el("ellipse",{cx:40,cy:40,rx:24,ry:34},s);el("ellipse",{cx:40,cy:40,rx:11,ry:17},s);}],
+    ["梨形","一頭圓一頭尖，像水滴，所以也叫水滴形。常做成墜子。",s=>{el("path",{d:"M40,6 C56,28 66,44 66,54 A26,20 0 0 1 14,54 C14,44 24,28 40,6 Z"},s);}],
+    ["馬眼形","兩頭尖的橄欖形，英文 Marquise（侯爵夫人）。傳說法王路易十五要求照著寵愛的龐巴度侯爵夫人的嘴唇形狀切割。",s=>{el("path",{d:"M40,4 C66,24 66,56 40,76 C14,56 14,24 40,4 Z"},s);el("path",{d:"M40,20 C50,32 50,48 40,60 C30,48 30,32 40,20 Z"},s);}],
+    ["心形","象徵愛情，切工難度高，兩邊要對稱、中間凹口要清楚。",s=>{el("path",{d:"M40,70 C10,48 6,30 16,18 C26,8 38,14 40,24 C42,14 54,8 64,18 C74,30 70,48 40,70 Z"},s);}],
+    ["墊形","方中帶圓，像一顆枕頭（cushion 就是靠墊）。古董鑽石常見，火彩溫潤。",s=>{el("rect",{x:10,y:10,width:60,height:60,rx:18},s);el("rect",{x:25,y:25,width:30,height:30,rx:8},s);}],
+    ["弧面型","不切刻面、磨成圓頂，英文 Cabochon 來自古法文 caboche「頭」。貓眼、星光、蛋白石、翡翠都用它。",s=>{el("path",{d:"M8,58 C8,20 72,20 72,58 Z"},s);el("line",{x1:8,y1:58,x2:72,y2:58},s);el("path",{d:"M24,34 C30,28 40,26 48,28",style:"stroke:#fff;opacity:.8"},s);}]];
+  S.forEach(([n,d,f])=>{const c=document.createElement("div");c.className="card";
+    const s=el("svg",{viewBox:"0 0 80 80",width:64,height:64,style:"fill:color-mix(in srgb,var(--u4) 18%,var(--surface));stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round"});
+    f(s);c.appendChild(s);const h=document.createElement("h5");h.textContent=n;c.appendChild(h);
+    const p=document.createElement("div");p.textContent=d;p.style.fontSize="14px";p.style.color="var(--muted)";c.appendChild(p);box.appendChild(c);});
+})();
+
+/* ---------------- L16 有色寶石：色相、色調、飽和度 ---------------- */
+(function(){
+  const svg=$("#hslGem");if(!svg)return;
+  const hR=$("#hR"),tR=$("#tR"),sR=$("#sR");
+  function draw(){const h=+hR.value,t=+tR.value,s=+sR.value;
+    const hue=(350+h+360)%360,l=Math.round(95-t);
+    drawGem(svg,{h:hue,s,l},55,false,8);
+    $("#hVal").textContent=h===0?"正紅":h<0?`偏紫 ${-h}`:`偏橘 ${h}`;
+    $("#tVal").textContent=t<45?`${t}（偏淺）`:t>85?`${t}（太深）`:`${t}`;
+    $("#sVal").textContent=s<45?`${s}（偏灰）`:`${s}`;
+    const bad=[];
+    if(t<45)bad.push("<b>太淺</b>：顏色像粉紅色，嚴格說可能只能叫「粉紅剛玉」，不算紅寶石。");
+    if(t>85)bad.push("<b>太暗發黑</b>：光線進不去，寶石看起來黑黑的，失去生命力。");
+    if(s<45)bad.push("<b>偏灰</b>：顏色被灰色「沖淡」，看起來髒髒的、不鮮豔。");
+    if(h<-15)bad.push("<b>偏紫太多</b>：已經有明顯的紫色調，價值下降。");
+    if(h>15)bad.push("<b>偏橘太多</b>：帶明顯的橘色調，不是純正的紅。");
+    let msg;
+    if(bad.length)msg=bad.join("<br>");
+    else if(t>=55&&t<=80&&s>=80&&Math.abs(h)<=8)msg="<b>頂級！</b>色相純正、色調中深、飽和度高。市場上有人會用「鴿血紅」這類商業名稱形容這種顏色（不同實驗室標準不一樣）。";
+    else msg="<b>不錯</b>：三項都在好的範圍內。再把飽和度拉高、色相調到正中間試試看，就能接近頂級。";
+    $("#hslOut").innerHTML=msg;}
+  [hR,tR,sR].forEach(r=>r.oninput=draw);draw();
+})();
+
+/* ---------------- L18 世界產地 ---------------- */
+(function(){
+  const list=$("#orgList");if(!list)return;
+  const O=[
+    ["亞洲","緬甸","紅寶石 藍寶石 翡翠玉 其他","抹谷（Mogok）的大理岩型紅寶石是「鴿血紅」的故鄉，紅色帶強烈螢光，像會自己發光；也產藍寶石和尖晶石。北部帕敢（Hpakant）是世界最重要的寶石級翡翠產地。"],
+    ["亞洲","斯里蘭卡","藍寶石 其他","古稱「寶石島」。拉特納普勒（Ratnapura）意思是「寶石之城」，河床砂礦產藍寶石、粉橘色的帕帕拉恰（Padparadscha，僧伽羅語「蓮花」）、金綠寶石貓眼、月光石。"],
+    ["亞洲","印度","鑽石 其他","18 世紀以前，戈爾康達（Golconda）一帶幾乎是全世界唯一的鑽石來源，著名的「光之山」（Koh-i-Noor）與「希望鑽石」都來自這裡。今天印度蘇拉特是全球最大的鑽石切磨中心。"],
+    ["亞洲","泰國","紅寶石 藍寶石","尖竹汶（Chanthaburi）是世界重要的有色寶石交易與加熱處理中心。本地玄武岩型紅寶石顏色偏暗、含鐵較多，礦區大多已開採殆盡。"],
+    ["亞洲","柬埔寨","紅寶石 藍寶石 其他","西部拜林（Pailin）產玄武岩型藍寶石與紅寶石；東北部拉達那基里（Ratanakiri）產鋯石，加熱後變成亮麗的藍色鋯石。"],
+    ["亞洲","越南","紅寶石 其他","北部陸安（Luc Yen）產大理岩型紅寶石和尖晶石，包括稀有的鈷藍色尖晶石。"],
+    ["亞洲","喀什米爾","藍寶石","1881 年左右一場山崩露出藍寶石，只開採了短短幾年就幾乎枯竭。天鵝絨般柔和的「矢車菊藍」成為傳奇，現在多半只在頂級拍賣會看得到。"],
+    ["亞洲","阿富汗","祖母綠 其他","巴達赫尚（Badakhshan）的青金石已經開採約 6000 年，古埃及人就拿它做首飾和顏料；潘傑希爾（Panjshir）山谷產祖母綠。"],
+    ["亞洲","中國","翡翠玉 其他","新疆和田是軟玉（和田玉）的代表產地，不過「和田玉」現在指的是礦物種類，不一定真的來自和田；江浙一帶的淡水養殖珍珠產量世界第一。"],
+    ["亞洲","台灣","翡翠玉 其他","花蓮豐田產軟玉（台灣玉），1960–70 年代曾大量出口；台東一帶產藍色玉髓，俗稱「台灣藍寶」，其實是玉髓，不是藍寶石。"],
+    ["亞洲","俄羅斯","祖母綠 鑽石 其他","烏拉爾山在 1830 年代發現變石（亞歷山大石，以後來的沙皇亞歷山大二世命名）和祖母綠；西伯利亞雅庫特是世界產量最大的鑽石產區之一。"],
+    ["非洲","坦尚尼亞","紅寶石 其他","梅雷拉尼（Merelani）山區是<b>坦桑石</b>唯一的商業產地，1967 年發現，珠寶商 Tiffany 用國名替它命名；也產紅寶石、尖晶石、綠色的沙弗萊石。"],
+    ["非洲","莫三比克","紅寶石 碧璽","2009 年在蒙特普埃斯（Montepuez）發現大型紅寶石礦，現在是世界主要的紅寶石供應地之一；也產含銅、霓虹藍綠的「帕拉伊巴型」碧璽。"],
+    ["非洲","馬達加斯加","紅寶石 藍寶石 其他","1998 年伊拉卡卡（Ilakaka）發現藍寶石，一個小村莊幾年內湧入數萬名淘寶的人；這座島幾乎什麼寶石都產。"],
+    ["非洲","尚比亞","祖母綠 其他","卡弗布（Kafubu）的片岩型祖母綠顏色偏藍綠、含鐵較多、透明度通常不錯；也是重要的紫水晶產地。"],
+    ["非洲","南非、波札那","鑽石","1867 年南非發現鑽石，金伯利（Kimberley）礦坑就是「金伯利岩」名字的由來。波札那的礦場是今天以價值計算全世界最重要的鑽石來源之一。"],
+    ["非洲","納米比亞","鑽石","鑽石被河流從內陸沖到海岸和海底。一路上有裂的都碎掉了，所以留下來的多半品質很好。"],
+    ["美洲","哥倫比亞","祖母綠","穆佐（Muzo）、契沃（Chivor）、科斯庫埃茲（Coscuez）出產世界最有名的祖母綠：熱液型、含鐵少、綠得透亮，常見三相包體；還有稀有的車輪狀「達碧茲（Trapiche）」祖母綠。"],
+    ["美洲","巴西","碧璽 祖母綠 其他","寶石種類最多的國家之一：碧璽、海藍寶、拓帕石（黃橘色的「帝王拓帕」產於歐魯普雷圖）、紫水晶、祖母綠。1980 年代末在帕拉伊巴州發現含銅的霓虹藍碧璽，轟動全球。"],
+    ["美洲","美國","藍寶石 碧璽 其他","蒙大拿州優果峽谷（Yogo）的藍寶石天生是漂亮的矢車菊藍，不需要加熱；亞利桑那州出產綠松石；加州聖地牙哥產碧璽。"],
+    ["美洲","墨西哥","其他","火蛋白石：橙紅色的底色，好的還帶變彩，像一團火焰。"],
+    ["大洋洲","澳洲","鑽石 藍寶石 其他","世界上絕大部分的貴蛋白石產自澳洲：庫伯佩迪（Coober Pedy）的白蛋白石、閃電嶺（Lightning Ridge）的黑蛋白石。阿蓋爾（Argyle）礦以粉紅鑽聞名，2020 年關閉。東部還有玄武岩型藍寶石。"],
+    ["大洋洲","法屬玻里尼西亞","其他","大溪地一帶用黑蝶貝養殖出「大溪地黑珍珠」，帶孔雀綠、茄子紫等暈彩。"],
+    ["歐洲","捷克","其他","波希米亞的紅色鎂鋁榴石（石榴石），是 19 世紀維多利亞時代珠寶的流行元素。"],
+    ["歐洲","波羅的海沿岸","其他","世界最大的琥珀產區，約 4000 萬年前的松柏類樹脂變成的化石，常包著古代昆蟲。"]];
+  const TAGS=["全部","紅寶石","藍寶石","祖母綠","鑽石","翡翠玉","碧璽","其他"];
+  function render(tag){list.innerHTML="";
+    ["亞洲","非洲","美洲","大洋洲","歐洲"].forEach(c=>{
+      const rows=O.filter(o=>o[0]===c&&(tag==="全部"||o[2].split(" ").includes(tag)));if(!rows.length)return;
+      const h=document.createElement("h3");h.className="sec";h.textContent=c;list.appendChild(h);
+      const g=document.createElement("div");g.className="grid3";
+      rows.forEach(([,n,t,d])=>{const card=document.createElement("div");card.className="card";
+        card.innerHTML=`<h5>${n}</h5><div style="margin-bottom:6px">${t.split(" ").map(x=>`<span style="display:inline-block;font-size:12px;padding:1px 8px;border-radius:999px;margin:0 4px 4px 0;background:color-mix(in srgb,var(--accent) 14%,var(--surface))">${x}</span>`).join("")}</div>${d}`;g.appendChild(card);});
+      list.appendChild(g);});}
+  chips($("#orgFilter"),TAGS,(i,t)=>render(t));
+})();
+
+/* ---------------- L20 實戰模擬器 ---------------- */
+(function(){
+  const box=$("#simCases");if(!box)return;
+  const TESTS=["肉眼觀察","10× 放大","折射儀","偏光鏡","二色鏡","比重","紫外螢光","其他測試"];
+  const CASES=[
+   {n:"案例一：祖傳紅寶石",intro:"客人拿來一顆 1.5 克拉的紅色刻面寶石，說是奶奶傳下來的紅寶石，想知道是不是真的。",
+    r:["鮮豔的紅色，光澤明亮；刻面稜線銳利。","看到三組互相交叉的細絲狀包體，還有筆直、會轉角的色帶。","1.762 – 1.770，雙折射率 0.008。","轉一圈：四明四暗 → 雙折射。","看到兩種不同的紅：一個偏紫紅、一個偏橘紅 → 二色性明顯。","4.00","長波紫外燈下發出紅色螢光。","分光鏡在紅光區看到細細的鉻吸收線。"],
+    opts:["紅色尖晶石","天然紅寶石","焰熔法合成紅寶石","紅色玻璃"],a:1,
+    why:"折射率 1.762–1.770、雙折射 0.008、比重 4.00，全部指向<b>剛玉</b>。放大後的絲狀包體和直線色帶是<b>天然</b>的指紋，所以結論是天然紅寶石。下一步可以送實驗室確認有沒有加熱、以及產地。"},
+   {n:"案例二：網拍便宜紅寶石",intro:"朋友在網路上用很便宜的價格買了一顆 3 克拉紅寶石，賣家說「天然、非常乾淨」。",
+    r:["顏色非常均勻，乾淨得不可思議。","看到彎彎的弧形生長紋，還有幾顆圓滾滾的氣泡。","1.762 – 1.770，雙折射率 0.008。","轉一圈：四明四暗 → 雙折射。","兩種紅色，二色性明顯。","4.00","長波紫外燈下紅色螢光<b>非常強</b>。","分光鏡看到鉻吸收線。"],
+    opts:["天然紅寶石","紅色尖晶石","焰熔法合成紅寶石","紅色玻璃"],a:2,
+    why:"數據和天然紅寶石<b>完全一樣</b>，因為合成紅寶石本來就是剛玉。能分辨的是放大檢查：<b>弧形生長紋＋圓氣泡</b>是焰熔法合成的典型特徵。這告訴我們：折射率決定「是什麼」，放大鏡決定「天然還是合成」。"},
+   {n:"案例三：古董胸針的紅色主石",intro:"一枚 19 世紀的古董胸針，主石是紅色，家族一直以為是紅寶石。",
+    r:["紅色帶一點粉，光澤很好。","看到一串排成一排的小八面體晶體。","只有一個讀數：1.718，沒有雙折射。","轉一圈一直暗（有一點點不規則明暗）→ 單折射。","只看到一種顏色 → 沒有二色性。","3.60","紅色螢光，中到強。","分光鏡也看到鉻線，但排列和紅寶石不一樣。"],
+    opts:["天然紅寶石","石榴石","紅色尖晶石","紅色玻璃"],a:2,
+    why:"單一折射率 1.718、單折射、沒有二色性、比重 3.60，是<b>尖晶石</b>。石榴石也是單折射，但折射率較高（約 1.74 以上）而且通常沒有螢光。有趣的是，英國王冠上的「黑王子紅寶石」幾百年後才被證實其實是紅色尖晶石！"},
+   {n:"案例四：夜市 100 元戒指",intro:"夜市攤販說這是「紅寶石戒指，特價 100 元」。",
+    r:["顏色很紅，但刻面稜線圓鈍，表面有不少磨損。拿在手上感覺比較溫。","看到大小不一的圓形氣泡和旋渦狀流紋；邊緣小缺口呈貝殼狀斷口。","1.52，只有一個讀數。","大致是暗的，但轉動時有扭來扭去的明暗斑塊 → 異常消光。","沒有二色性。","2.50","很弱或沒有螢光。","測試筆顯示熱傳導很差。"],
+    opts:["紅色玻璃","天然紅寶石","紅色尖晶石","焰熔法合成紅寶石"],a:0,
+    why:"折射率 1.52、比重 2.50、圓氣泡和流紋、異常消光，是典型的<b>玻璃</b>。稜線圓鈍也是線索：玻璃硬度只有約 5.5，戴久了就磨圓。100 元當然買不到紅寶石。"},
+   {n:"案例五：火彩特別強的「鑽石」",intro:"一顆 1 克拉的無色圓鑽，客人說火彩比朋友的鑽石還漂亮，而且鑽石測試筆會「嗶」。",
+    r:["無色，火彩非常強烈，彩光甚至比鑽石還多。","從側面斜看，刻面稜線有<b>重影</b>；有細長的針狀包體平行排列。","超出折射儀上限（OTL，大於 1.81）。","四明四暗 → 雙折射（鑽石是單折射）。","無色寶石，看不出二色性。","3.22（鑽石是 3.52）","無或很弱。","熱導測試：嗶（像鑽石）；<b>電導測試</b>：會導電。"],
+    opts:["天然鑽石","蘇聯鑽（立方氧化鋯）","無色藍寶石","莫桑石"],a:3,
+    why:"熱導筆會把<b>莫桑石</b>誤判成鑽石，這是它最有名的陷阱。關鍵證據是：<b>重影</b>（雙折射，鑽石沒有）、比重 3.22 比鑽石輕、會導電、火彩比鑽石更強。蘇聯鑽比重高達 5.6–6.0，無色藍寶石折射率只有 1.76 左右，都能排除。"},
+   {n:"案例六：只要三成價的翡翠手鐲",intro:"一只翠綠色手鐲，價格只有同樣外觀行情的三成左右，賣家說是「天然翡翠」。",
+    r:["綠色很鮮，但有點「浮」在表面；光澤偏弱，有點像樹脂。","表面有像乾裂橘子皮的<b>酸蝕網紋</b>，裂縫裡填著膠。","點測約 1.65 → 符合翡翠（硬玉）。","轉一圈一直亮 → 集合體。","集合體不適用。","約 3.00，比天然翡翠（約 3.33）偏低。","發出藍白色螢光。","輕敲聲音悶悶的；實驗室紅外光譜看到<b>膠（聚合物）</b>的吸收峰。"],
+    opts:["翡翠 A 貨","翡翠 B 貨","綠色玻璃","軟玉（和田玉）"],a:1,
+    why:"折射率和集合體反應說明它<b>是翡翠</b>，但酸蝕網紋、膠的螢光、偏低的比重、悶的敲擊聲，都說明它被<b>強酸漂白再注膠</b>，也就是 <b>B 貨</b>。B 貨的膠會老化變黃、結構變脆，價值遠低於 A 貨。確認要靠實驗室紅外光譜。"}];
+  let cur=null,done=new Set();
+  const intro=$("#simIntro"),tests=$("#simTests"),log=$("#simLog"),ans=$("#simAns"),res=$("#simResult");
+  function load(i){cur=CASES[i];done=new Set();intro.innerHTML=`<b>${cur.n}</b><br>${cur.intro}`;log.innerHTML='<span style="color:var(--muted)">點選上方的測試，結果會記錄在這裡。</span>';res.style.display="none";
+    tests.innerHTML="";TESTS.forEach((t,k)=>{const b=document.createElement("button");b.className="chip";b.textContent=t;
+      b.onclick=()=>{if(done.has(k))return;if(!done.size)log.innerHTML="";done.add(k);b.classList.add("on");
+        const d=document.createElement("div");d.innerHTML=`<b>${t}：</b>${cur.r[k]}`;log.appendChild(d);};tests.appendChild(b);});
+    ans.innerHTML="";cur.opts.forEach((o,k)=>{const b=document.createElement("button");b.className="chip";b.textContent=o;b.style.margin="0 6px 6px 0";
+      b.onclick=()=>{res.style.display="block";
+        if(done.size<3){res.innerHTML="先至少做<b>三項</b>測試再下結論喔！鑑定師的原則是「多證據交叉」。";return;}
+        [...ans.children].forEach((x,j)=>{x.classList.remove("on");x.style.borderColor=j===cur.a?"var(--ok)":"";});
+        res.innerHTML=(k===cur.a?`<b style="color:var(--ok)">✓ 判斷正確！</b> `:`<b style="color:var(--bad)">✗ 不對喔，答案是「${cur.opts[cur.a]}」。</b> `)+cur.why+`<br><span style="color:var(--muted);font-size:14px">你做了 ${done.size} 項測試。</span>`;};ans.appendChild(b);});}
+  chips(box,CASES.map((c,i)=>`案例${"一二三四五六"[i]}`),i=>load(i));
+})();
+
+/* ---------------- 課後小測驗 ---------------- */
+const Q={
+L1:[["一個材料要被稱為「寶石」，通常要符合哪三個條件？",["堅硬、透明、昂貴","美麗、耐久、稀有","閃亮、天然、很重","有顏色、有產地、有證書"],1,"美麗、耐久、稀有是寶石的三大條件。「昂貴」是結果，不是條件。"],
+ ["珍珠、琥珀、珊瑚屬於哪一類？",["礦物寶石","岩石","有機寶石","合成寶石"],2,"它們是生物製造出來的，所以叫有機寶石。"],
+ ["英文 gem 來自拉丁文 gemma，原本是什麼意思？",["閃光","石頭","嫩芽、花苞","國王"],2,"古羅馬人覺得寶石像植物新冒出的、閃閃發亮的芽。"]],
+L2:[["岩漿如果冷卻得非常快，最可能變成什麼？",["大顆晶體","玻璃（非晶質）","鑽石","珍珠"],1,"原子來不及排好隊就被「凍住」，變成亂排的玻璃。"],
+ ["鑽石是怎麼從地函來到地表附近的？",["被河流沖上來","隕石帶來","搭金伯利岩的「電梯」快速上來","在地表慢慢長出來"],2,"深處的金伯利岩漿快速上衝，把鑽石帶到地表附近。"],
+ ["下列哪一個是非晶質？",["石英","蛋白石","紅寶石","鑽石"],1,"蛋白石、玻璃、琥珀的原子沒有規律排列，是非晶質。"]],
+L3:[["紅寶石和藍寶石是同一種礦物，叫什麼？",["綠柱石","石英","剛玉","尖晶石"],2,"它們都是剛玉，紅色的叫紅寶石，其他顏色都叫藍寶石。"],
+ ["鑽石和石墨的關係是？",["成分不同、結構相同","成分相同、結構不同","完全一樣","沒有關係"],1,"都是碳，但原子排列方式不同，一個最硬、一個很軟。"],
+ ["紅寶石的紅色主要來自什麼？",["大量的鐵","微量的鉻","表面染色","內部的氣泡"],1,"極少量的鉻就能讓剛玉變成紅色。"]],
+L4:[["晶體中最小的重複單位叫什麼？",["晶胞","晶系","原子核","刻面"],0,"晶胞像一塊樂高，重複堆疊就成為整個晶體。"],
+ ["下列哪一組是單折射？",["六方晶系與三方晶系","等軸晶系與非晶質","所有晶體","斜方晶系"],1,"等軸晶系和非晶質在各方向都一樣，光只會被折射成一道。"],
+ ["crystal 的希臘文 krystallos 原意是？",["冰","光","鹽","星星"],0,"古希臘人以為透明石英是永不融化的冰。"]],
+L5:[["關於莫氏硬度，哪一句正確？",["數字間距都相等","是 1–10 的相對排名，鑽石比剛玉硬很多","數字越大越不容易碎","只適用於鑽石"],1,"它只是排名，9 到 10 之間的差距遠大於 1 到 9。"],
+ ["為什麼硬度 7 以下的寶石容易磨花？",["因為會被水溶解","因為灰塵裡有硬度約 7 的石英","因為光線會磨損","因為太輕"],1,"灰塵含石英，硬度約 7，比它軟的寶石就容易被刮。"],
+ ["玉（翡翠、軟玉）最大的優點是什麼？",["硬度最高","韌性極佳，不容易碎","火彩最強","比重最低"],1,"玉由無數纖維或顆粒交織，非常抗碎。"]],
+L6:[["一顆寶石在空氣中重 3.52 克，放進水中少了 1.00 克，比重是多少？",["1.00","2.52","3.52","4.52"],2,"比重 = 空氣中重量 ÷ 減少的重量 = 3.52 ÷ 1.00 = 3.52，正好是鑽石的比重。"],
+ ["把琥珀放進飽和鹽水中會怎樣？",["沉下去","浮起來","溶解","變色"],1,"琥珀比重約 1.08，比飽和鹽水輕，所以會浮。"],
+ ["玻璃和石英破裂時常見什麼樣的斷口？",["平整解理","貝殼狀斷口","纖維狀","階梯狀"],1,"貝殼狀斷口像一圈圈的貝殼紋路。"]],
+L7:[["下列哪一種寶石<b>不會</b>有多色性？",["紅寶石","碧璽","尖晶石","坦桑石"],2,"尖晶石屬等軸晶系，是單折射，所以沒有多色性。"],
+ ["變石白天綠、燈光下紅，原因是？",["溫度改變","光源改變","被染色","吸水"],1,"日光偏藍綠、燈光偏紅，寶石透過的顏色就跟著改變。"],
+ ["我們看到紅寶石是紅色，是因為？",["它會發出紅光","它吸收了其他顏色，剩下紅光","它表面塗紅漆","它反射所有光"],1,"寶石吸收部分顏色的光，剩下的就是我們看到的顏色。"]],
+L8:[["折射率越高的寶石會怎樣？",["臨界角越大，越暗","臨界角越小，越容易全反射，越亮","越輕","越軟"],1,"臨界角小，光更容易被困在寶石內反射，回到眼睛就更亮。"],
+ ["鑽石的「火彩」來自什麼？",["色散","螢光","硬度","比重"],0,"色散把白光分成彩虹色，就是火彩。"],
+ ["下列哪一種的火彩最強？",["玻璃","石英","鑽石","莫桑石"],3,"莫桑石色散約 0.104，是鑽石（0.044）的兩倍多。"]],
+L9:[["星光藍寶石的星線是怎麼來的？",["表面刻出來的","三組交叉的針狀包體","染色","氣泡"],1,"三組針狀包體互相交叉 60°，反射光形成六道星線。"],
+ ["貓眼效應需要什麼？",["一組平行的針狀或管狀包體","很多氣泡","很高的折射率","特殊的顏色"],0,"一組平行包體反射光，形成一條亮線。"],
+ ["有貓眼或星光的寶石通常磨成什麼形狀？",["明亮式","階梯式","弧面型","公主方"],2,"弧面型的圓頂才能把光線集中成亮線。"]],
+L10:[["寶石鑑定的標準放大倍數是？",["2 倍","5 倍","10 倍","100 倍"],2,"10 倍是國際標準，鑽石淨度也以 10 倍為準。"],
+ ["看到弧形生長紋和圓氣泡，最可能是？",["天然藍寶石","焰熔法合成剛玉","天然祖母綠","鑽石"],1,"焰熔法一層層熔化堆積，形成彎曲的生長紋。"],
+ ["三相包體最常用來辨認哪一種寶石？",["哥倫比亞祖母綠","翡翠","珍珠","蛋白石"],0,"液體、氣泡、鹽晶體同在一個空腔，是哥倫比亞祖母綠的指紋。"]],
+L11:[["一般折射儀能量到的折射率上限約是？",["1.54","1.81","2.42","3.00"],1,"超過約 1.81 就讀不到，記作 OTL（超出上限）。"],
+ ["在偏光鏡下轉一圈都一直亮，代表？",["單折射","雙折射","集合體（例如翡翠）","不透明"],2,"集合體由很多方向不同的小晶體組成，總有部分在發亮。"],
+ ["濾色鏡和測試筆應該怎麼使用？",["直接下結論","只能當快篩，要搭配其他證據","完全沒用","只用在鑽石"],1,"它們可能被騙，只能當第一步篩選。"]],
+L12:[["「合成」和「仿品」的差別是？",["沒有差別","合成是人工長出、成分結構與天然相同；仿品只是外觀像","仿品比較貴","合成一定是玻璃"],1,"合成紅寶石就是剛玉；紅玻璃只是看起來像紅寶石。"],
+ ["下列哪一種處理<b>必須</b>揭露，而且大幅影響價值？",["一般加熱","玻璃充填","清洗","拋光"],1,"玻璃充填會大幅改變耐久性與價值，一定要揭露。"],
+ ["關於寶石處理，最重要的原則是？",["處理過的都不值錢","有處理不是問題，不揭露才是問題","只能賣天然的","處理了就是假貨"],1,"很多處理被市場接受，關鍵在於誠實告知。"]],
+L13:[["翡翠和和田玉的關係是？",["同一種礦物","完全不同的礦物","翡翠是染色的和田玉","和田玉是合成翡翠"],1,"翡翠主要是硬玉，和田玉是軟玉（透閃石），礦物不同。"],
+ ["翡翠「B 貨」是指？",["天然未處理","強酸漂白再注膠","只染色","玻璃仿品"],1,"A 貨天然、B 貨漂白注膠、C 貨染色。"],
+ ["評價珍珠最重要的是？",["重量","光澤","產地","硬度"],1,"光澤是珍珠的靈魂，決定它看起來有沒有生命力。"]],
+L14:[["1 克拉等於多少？",["1 公克","0.2 公克","2 公克","0.02 公克"],1,"1 克拉 = 0.2 公克 = 200 毫克。"],
+ ["18K 金的「K」代表什麼？",["克拉重量","黃金的純度","顏色等級","切工"],1,"K 是純度，24K 是純金，18K 是 75% 的金。"],
+ ["GIA 鑽石顏色等級為什麼從 D 開始？",["因為 D 代表 Diamond","為了避開以前混亂的 A、B、C 舊系統","隨便選的","因為 A–C 是彩鑽"],1,"從 D 開始，就不會和舊的 A、AA、AAA 等說法混淆。"]],
+L15:[["VVS 的意思是？",["無瑕","極極微瑕","微瑕","內含瑕疵"],1,"Very Very Slightly Included，10 倍下都很難找到。"],
+ ["4C 之中，唯一由人決定的是？",["克拉","顏色","淨度","切工"],3,"其他三項是大自然給的，切工是切磨師傅的手藝。"],
+ ["刻面 facet 的法文原意是？",["小鏡子","小臉","小窗","小星星"],1,"facette 是「小臉」，每個刻面都是寶石的一張小臉。"]],
+L16:[["評價有色寶石時，最重要的通常是？",["淨度","顏色","重量","形狀"],1,"有色寶石以顏色為王：色相純、色調中深、飽和度高。"],
+ ["「鴿血紅」「矢車菊藍」這些名稱是？",["國際統一的科學標準","商業名稱，標準依實驗室而異","產地名稱","礦物名稱"],1,"它們是商業上的顏色描述，不同實驗室的標準不一定相同。"]],
+L17:[["大理岩型紅寶石通常有什麼特徵？",["含鐵高、偏暗","含鐵低、螢光強、顏色鮮亮","沒有螢光","是合成的"],1,"大理岩環境鐵少，所以螢光強、紅得發亮。"],
+ ["哥倫比亞祖母綠常見什麼包體？",["三相包體","絲狀包體","圓氣泡","羽裂"],0,"它在很鹹的熱液中形成，留下液、氣、鹽三相包體。"]],
+L18:[["坦桑石唯一的商業產地在哪個國家？",["巴西","斯里蘭卡","坦尚尼亞","緬甸"],2,"坦尚尼亞梅雷拉尼山區，名字就是用國名取的。"],
+ ["斯里蘭卡城市拉特納普勒（Ratnapura）的意思是？",["藍色之海","寶石之城","國王之山","大象之河"],1,"Ratna 是寶石，pura 是城市。"],
+ ["台灣花蓮豐田出產的是？",["翡翠","軟玉","鑽石","藍寶石"],1,"豐田產軟玉，也就是台灣玉。"]],
+L19:[["實驗室判斷產地主要靠什麼？",["看價格","內含物、微量元素、光譜與資料庫比對","問賣家","看形狀"],1,"多種數據綜合比對，才能給出產地意見。"],
+ ["拿到一張寶石證書，第一件事應該做什麼？",["看價格","到實驗室官網查證書編號","看照片漂不漂亮","直接相信"],1,"先確認證書是真的，再看「天然」和「處理」兩欄。"],
+ ["不同實驗室對同一顆寶石的產地結論可能不同，原因是？",["有人說謊","產地是專業意見，有科學限制","儀器壞了","寶石會變"],1,"產地鑑定是根據資料庫推論的專業意見，不是絕對事實。"]],
+L20:[["鑑定時的第一原則是？",["先切開看看","先無損，後有損","先看價格","先上網查"],1,"能用看的就不要刮，能不破壞就不破壞。"],
+ ["天然紅寶和合成紅寶的折射率一樣，要靠什麼分辨？",["比重","偏光鏡","放大檢查內含物","秤重量"],2,"成分結構相同，數據一樣；內含物才能說出它的「出身」。"]],
+L21:[["實驗室培育鑽石是？",["假鑽石","真正的鑽石，但必須清楚標示","玻璃","莫桑石"],1,"它的成分和結構都是鑽石，只是在實驗室長出來，必須揭露。"],
+ ["金伯利進程主要是為了防止什麼？",["鑽石太便宜","衝突鑽石流入市場","合成鑽石","鑽石被偷"],1,"防止出售鑽石的錢被用來資助戰爭。"],
+ ["清洗祖母綠首飾時應該避免什麼？",["清水","軟毛刷","超音波清洗","擦拭布"],2,"祖母綠常有裂隙並注油，超音波的震動可能讓它裂開或把油震出來。"]]};
+$$(".quiz[data-q]").forEach(box=>{const qs=Q[box.dataset.q];if(!qs)return;
+  box.innerHTML='<div class="qh">課後小測驗</div>';
+  qs.forEach(([q,opts,a,why],qi)=>{const d=document.createElement("div");d.className="q";
+    d.innerHTML=`<p>${qi+1}. ${q}</p>`;
+    opts.forEach((o,k)=>{const b=document.createElement("button");b.className="opt";b.innerHTML=`${"ABCD"[k]}. ${o}`;
+      b.onclick=()=>{if(d.classList.contains("answered"))return;d.classList.add("answered");
+        b.classList.add(k===a?"right":"wrong");d.querySelectorAll("button.opt")[a].classList.add("right");};d.appendChild(b);});
+    const w=document.createElement("div");w.className="why";w.innerHTML="解析："+why;d.appendChild(w);box.appendChild(d);});
+  const r=document.createElement("button");r.className="chip";r.textContent="重做這一課的測驗";r.style.marginTop="4px";
+  r.onclick=()=>box.querySelectorAll(".q").forEach(q=>{q.classList.remove("answered");q.querySelectorAll(".opt").forEach(b=>b.classList.remove("right","wrong"));});
+  box.appendChild(r);});
+
+/* ---------------- L22 名詞總索引 ---------------- */
+(function(){
+  const list=$("#glList");if(!list)return;
+  const items=[];
+  $$(".lesson .term").forEach((t,i)=>{const sec=t.closest(".lesson");if(!sec||sec.id==="L22")return;
+    const tt=t.querySelector(".tt"),o=t.querySelector(".origin"),p=t.querySelector("p");
+    if(!tt)return;t.id=t.id||"term"+i;
+    items.push({id:t.id,les:sec.id,title:sec.dataset.title,name:tt.textContent.trim().replace(/\s+/g," "),def:p?p.textContent.trim():"",org:o?o.textContent.trim().replace(/^由來[:：]\s*/,""):""});});
+  function render(q){list.innerHTML="";q=(q||"").trim().toLowerCase();
+    const rows=items.filter(x=>!q||(x.name+x.def+x.org).toLowerCase().includes(q));
+    if(!rows.length){list.innerHTML='<p style="color:var(--muted)">找不到符合的名詞，換個關鍵字試試。</p>';return;}
+    rows.forEach(x=>{const d=document.createElement("div");d.className="gl-item";
+      d.innerHTML=`<b>${x.name}</b> <button class="chip" style="font-size:12.5px;padding:2px 10px;margin-left:6px">第 ${x.les.slice(1)} 課</button><div>${x.def}</div>`+(x.org?`<div class="o">由來：${x.org}</div>`:"");
+      d.querySelector("button").onclick=()=>{go(x.les);const t=document.getElementById(x.id);
+        if(t){t.scrollIntoView({block:"center"});t.style.transition="box-shadow .3s";t.style.boxShadow="0 0 0 3px var(--accent)";setTimeout(()=>t.style.boxShadow="",1800);}};
+      list.appendChild(d);});
+    const c=document.createElement("p");c.style.cssText="color:var(--muted);font-size:14px";c.textContent=`共 ${rows.length} 個名詞`;list.prepend(c);}
+  $("#glSearch").oninput=e=>render(e.target.value);render("");
+})();
+
+/* ---------------- 啟動 ---------------- */
+buildSide();
+const startId=decodeURIComponent(location.hash.slice(1));
+go(document.getElementById(startId)&&/^L\d+$/.test(startId)?startId:"L0",{scroll:false});
+window.addEventListener("hashchange",()=>{const id=location.hash.slice(1);if(id!==current&&/^L\d+$/.test(id)&&document.getElementById(id))go(id);});
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-0fdfdda9cc" data-category="personal"></script></body>
+</html>

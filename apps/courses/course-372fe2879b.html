@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>食品加工・從零到專業</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1c1c1c; --gray:#6b6b6b; --paper:#faf8f3; --khaki:#b8a67a; --khaki-d:#8a7647;
+  --linen:#ede7da; --steel:#4a6fa5; --tomato:#c05a3c; --leaf:#7a8f5a; --card:#ffffff;
+  --serif:'Noto Serif TC','PMingLiU',serif;
+  --sans:'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);color:var(--ink);line-height:1.9;font-size:16px;
+  background:var(--paper);
+  background-image:radial-gradient(rgba(184,166,122,.13) 1.2px,transparent 1.2px);
+  background-size:26px 26px; /* 像實驗記錄紙的點格 */
+}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
+
+/* ---------- 封面 ---------- */
+header{background:var(--ink);color:var(--paper);padding:56px 0 44px;position:relative}
+header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;
+  background:repeating-linear-gradient(90deg,var(--tomato) 0 26px,var(--khaki) 26px 30px);} /* 輸送帶 */
+.eyebrow{color:var(--khaki);letter-spacing:.35em;font-size:12px;font-weight:700;margin-bottom:14px}
+h1.title{font-family:var(--serif);font-weight:900;font-size:clamp(30px,6vw,52px);line-height:1.28;margin-bottom:12px}
+.sub{color:#b9b3a6;font-size:15px;max-width:580px}
+.route{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.route span{font-size:13px;border:1px solid #4a4a4a;color:#cfc8b8;border-radius:999px;padding:5px 14px}
+.route span b{color:var(--khaki)}
+
+/* ---------- 導覽 ---------- */
+nav.toc{position:sticky;top:0;z-index:50;background:rgba(250,248,243,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--linen)}
+nav.toc .wrap{display:flex;gap:6px;overflow-x:auto;padding:10px 20px;scrollbar-width:none}
+nav.toc a{flex:0 0 auto;font-size:13px;font-weight:500;color:var(--gray);text-decoration:none;padding:6px 12px;border-radius:999px;border:1px solid transparent;white-space:nowrap}
+nav.toc a:hover,nav.toc a:focus-visible{color:var(--ink);border-color:var(--khaki);outline:none}
+
+/* ---------- 章節 ---------- */
+.part{margin-top:58px;padding:20px 22px;border-radius:16px;background:var(--ink);color:var(--paper)}
+.part .pno{color:var(--khaki);font-size:13px;letter-spacing:.25em;font-weight:700}
+.part h2{font-family:var(--serif);font-weight:900;font-size:clamp(22px,4.5vw,32px);margin-top:4px}
+.part p{color:#b9b3a6;font-size:14px;margin-top:6px}
+
+section.lesson{padding:46px 0 6px}
+.lesson-tag{display:flex;align-items:baseline;gap:14px;margin-bottom:12px}
+.lesson-tag .no{font-family:var(--serif);font-weight:900;font-size:15px;color:var(--khaki-d);letter-spacing:.12em;white-space:nowrap}
+.lesson-tag h3{font-family:var(--serif);font-weight:900;font-size:clamp(21px,4vw,28px)}
+.lesson p.lead{color:#444;margin-bottom:12px}
+
+.card{background:var(--card);border:1px solid var(--linen);border-radius:14px;padding:22px;margin:16px 0;box-shadow:0 1px 3px rgba(26,26,26,.05)}
+.tip{background:#faf6ea;border-left:4px solid var(--khaki);border-radius:0 10px 10px 0;padding:13px 16px;margin:14px 0;font-size:14.5px;color:#5a5a5a}
+.tip b{color:#7a6520}
+.key{background:#e9edf5;border-left:4px solid var(--steel);border-radius:0 10px 10px 0;padding:13px 16px;margin:14px 0;font-size:15px;font-weight:700;color:#2c4a75}
+.etym{background:#fdf1ec;border-left:4px solid var(--tomato);border-radius:0 10px 10px 0;padding:13px 16px;margin:14px 0;font-size:14.5px;color:#6a453a}
+.etym b{color:var(--tomato)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:10px 0}
+th{background:var(--ink);color:#fff;font-weight:700;padding:9px 10px;text-align:left}
+td{padding:9px 10px;border-bottom:1px solid var(--linen);vertical-align:top}
+tr:nth-child(even) td{background:#f6f4ee}
+.small{font-size:13px;color:var(--gray)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.two{grid-template-columns:1fr}}
+
+/* 流程膠囊 */
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+.flow span{background:var(--linen);border:1px solid #ddd3bd;border-radius:10px;padding:7px 12px;font-size:13.5px;font-weight:500}
+.flow i{color:var(--khaki-d);font-style:normal;font-weight:700}
+.flow em{color:var(--gray);font-style:normal}
+
+/* 三兇手卡 */
+.villains{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}
+.villain{border:1px solid var(--linen);border-radius:12px;padding:16px;background:#fff}
+.villain .vicon{font-size:30px}
+.villain b{font-size:15.5px;display:block;margin:6px 0 4px}
+.villain p{font-size:13.5px;color:var(--gray);line-height:1.75}
+
+/* 互動共用 */
+.stage{background:#22262b;border-radius:14px;padding:18px;color:#d8d2c4}
+.stage h4{font-family:var(--serif);color:var(--linen);font-size:18px;margin-bottom:8px}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+button.ui{font-family:var(--sans);font-size:14px;font-weight:700;padding:8px 18px;border-radius:999px;border:1px solid #555;background:transparent;color:#d8d2c4;cursor:pointer;transition:.15s}
+button.ui:hover{border-color:var(--khaki);color:var(--khaki)}
+button.ui.primary{background:var(--khaki);border-color:var(--khaki);color:#1a1a1a}
+button.ui:disabled{opacity:.35;cursor:default}
+.stageflex{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start}
+.stageinfo{flex:1;min-width:230px;font-size:14px;color:#b9b3a6}
+.stageinfo b{color:var(--linen)}
+.stageinfo .num{font-family:var(--serif);color:var(--khaki);font-size:15px;font-weight:900}
+input[type=range]{width:100%;accent-color:var(--khaki)}
+.microbe{display:flex;align-items:center;gap:8px;font-size:13.5px;padding:4px 0;transition:.2s}
+.microbe .dot{width:10px;height:10px;border-radius:50%;flex:0 0 auto}
+.microbe.off{opacity:.32;text-decoration:line-through}
+
+/* 成分表解讀器 */
+.ingline{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;background:var(--ink);border-radius:12px;padding:18px 14px;margin:14px 0 8px}
+.ingline span{font-family:var(--serif);font-weight:900;font-size:clamp(14px,3vw,19px);color:var(--linen);padding:4px 10px;border-radius:8px;cursor:pointer;transition:.15s}
+.ingline span:hover,.ingline span.on{background:var(--khaki);color:#1a1a1a}
+#ingExplain{min-height:56px;text-align:center;font-size:14.5px;color:#444;padding:10px 8px}
+#ingExplain b{color:#2c4a75}
+
+/* 測驗 */
+.q{border:1px solid var(--linen);border-radius:12px;padding:14px 16px;margin:10px 0;background:#fff}
+.q .qt{font-weight:700;margin-bottom:6px}
+.q button{font-family:var(--sans);font-size:13px;border:1px solid var(--khaki);background:transparent;color:var(--khaki-d);border-radius:999px;padding:4px 14px;cursor:pointer}
+.q .ans{display:none;margin-top:8px;font-size:14px;color:#2c4a75;background:#eef1f7;border-radius:8px;padding:9px 12px}
+.q.open .ans{display:block}
+
+footer{margin-top:64px;padding:34px 0;background:var(--ink);color:#9a948a;font-size:13px;text-align:center}
+footer b{color:var(--khaki)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+:focus-visible{outline:2px solid var(--steel);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Food Processing 101</div>
+    <h1 class="title">食品加工<br>從一顆番茄到一個罐頭</h1>
+    <p class="sub">罐頭為什麼可以放三年不壞?泡麵三分鐘就熟的秘密是什麼?洋芋片袋子裡為什麼一半是空氣?不需要任何基礎,從「食物為什麼會壞」講起,一步一步帶你走進食品工廠。</p>
+    <div class="route">
+      <span><b>第一部</b> 食物為什麼會壞</span>
+      <span><b>第二部</b> 五大加工家族拆解</span>
+      <span><b>第三部</b> 走向專業</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc"><div class="wrap">
+  <a href="#l1">1 為何加工</a><a href="#l2">2 腐敗三兇手</a><a href="#l3">3 保存原理</a>
+  <a href="#l4">4 罐頭</a><a href="#l5">5 泡麵</a><a href="#l6">6 零食</a><a href="#l7">7 乾燥</a><a href="#l8">8 低溫</a>
+  <a href="#l9">9 添加物</a><a href="#l10">10 包裝</a><a href="#l11">11 HACCP</a><a href="#l12">12 專業之路</a><a href="#quiz">總測驗</a>
+</div></nav>
+
+<main class="wrap">
+
+<div class="part">
+  <div class="pno">PART 1</div>
+  <h2>食物為什麼會壞?</h2>
+  <p>所有食品加工技術,都是在回答同一個問題:怎麼讓食物「慢一點壞」。所以第一部不講任何機器,先把「壞」這件事徹底搞懂——懂了敵人,武器才有意義。</p>
+</div>
+
+<!-- 第1課 -->
+<section class="lesson" id="l1">
+  <div class="lesson-tag"><span class="no">第 1 課</span><h3>人類為什麼要加工食物?</h3></div>
+  <p class="lead">想像沒有冰箱、沒有超商的一萬年前:打到一頭鹿,三天吃不完就臭了;秋天收成的穀物,要撐過整個冬天。<b>食品加工的起點,就是「跟腐敗賽跑」</b>。老祖先早就發明了四招:</p>
+  <div class="card">
+    <div class="flow">
+      <span><i>曬</i> 日曬乾燥<br><em>菜乾、魚乾、葡萄乾</em></span>
+      <span><i>鹽</i> 鹽漬<br><em>鹹魚、火腿、醬菜</em></span>
+      <span><i>燻</i> 煙燻<br><em>臘肉、燻鮭魚</em></span>
+      <span><i>釀</i> 發酵<br><em>酸菜、味噌、優格</em></span>
+    </div>
+    <p class="small">這四招沿用了幾千年,直到 19 世紀,科學才加入戰局(第 4 課的罐頭就是轉捩點)。而現代食品加工的目的,已經從單純的「保存」擴大成四個:</p>
+    <table>
+      <tr><th>目的</th><th>白話</th><th>例子</th></tr>
+      <tr><td>① 保存</td><td>放得久、不壞</td><td>罐頭、冷凍食品、乾貨</td></tr>
+      <tr><td>② 安全</td><td>殺掉會讓人生病的壞菌</td><td>牛奶殺菌、真空包裝</td></tr>
+      <tr><td>③ 方便</td><td>快速、好攜帶、好料理</td><td>泡麵、即食調理包</td></tr>
+      <tr><td>④ 美味與營養</td><td>更好吃、營養更好吸收</td><td>零食調味、豆漿、米變米粉</td></tr>
+    </table>
+  </div>
+  <div class="tip"><b>生活比喻:</b>食品加工像幫食物「按暫停鍵」。新鮮食物的生命倒數計時一直在跑,加工的本事,就是把倒數變慢、甚至暫停幾年——罐頭就是按了一顆超長的暫停鍵。</div>
+  <div class="etym"><b>詞源|「加工」:</b>「加」上人「工」——在大自然給的原料上,加入人類的手藝與技術。英文 processing 來自拉丁文 procedere(往前走):原料經過一站一站的處理「往前走」,走到最後變成產品,所以工廠的生產線也叫 process line(製程線)。</div>
+  <div class="key">記住這個定義:食品加工=用物理、化學或微生物的方法,把農漁牧原料變成更耐放、更安全、更方便、更好吃的食品。整套課程,就是把這句話一個字一個字打開。</div>
+</section>
+
+<!-- 第2課 -->
+<section class="lesson" id="l2">
+  <div class="lesson-tag"><span class="no">第 2 課</span><h3>腐敗三兇手:微生物、酵素、氧化</h3></div>
+  <p class="lead">食物放久了會發霉、變味、變色——兇手抓起來只有三個。認識他們的長相和作案手法,你就看懂了所有保存技術在防誰:</p>
+  <div class="card">
+    <div class="villains">
+      <div class="villain"><div class="vicon">🦠</div><b>一號兇手:微生物</b>
+        <p>細菌、黴菌、酵母菌,小到看不見、無所不在。它們把食物當自助餐,邊吃邊排出酸味、臭味、毒素。<b>麵包上的綠斑、湯放隔夜變酸</b>都是它們幹的。三兇手中最危險——有些會讓人食物中毒。</p></div>
+      <div class="villain"><div class="vicon">✂️</div><b>二號兇手:酵素</b>
+        <p>食物自己體內的「拆解工人」。生物活著時它們負責正常代謝,採收宰殺後卻繼續拆:<b>蘋果切開變褐色、香蕉放到軟爛</b>,都是酵素還在上班。它不是生物,煮熟(加熱)就能讓它罷工。</p></div>
+      <div class="villain"><div class="vicon">💨</div><b>三號兇手:氧化</b>
+        <p>空氣中的氧氣攻擊食物中的油脂與色素。<b>油放久了的「油耗味」、洋芋片受潮走味、肉變暗褐色</b>都是氧化。它不需要生命,純化學反應,連冷凍庫裡都躲不掉,只能靠隔絕氧氣對付。</p></div>
+    </div>
+    <table style="margin-top:14px">
+      <tr><th>兇手</th><th>怕什麼(=我們的武器)</th></tr>
+      <tr><td>微生物</td><td>高溫殺死、低溫凍僵、缺水渴死、太酸太鹹住不下去</td></tr>
+      <tr><td>酵素</td><td>加熱讓它失去活性(殺菁、煮熟)、低溫讓它變慢</td></tr>
+      <tr><td>氧化</td><td>隔絕氧氣(真空、充氮、脫氧劑)、加抗氧化劑擋刀</td></tr>
+    </table>
+  </div>
+  <div class="etym"><b>詞源|「酵素」與「酶」:</b>酵素的「酵」從「酉」部——「酉」在甲骨文是一個酒罈,所有跟發酵釀造有關的字(酒、醋、酵、酶)都帶著這個酒罈。因為人類最早就是在釀酒時發現這種神祕的「拆解力量」。英文 enzyme 來自希臘文 en-zyme「在酵母裡面」,同一個故事。</div>
+  <div class="tip"><b>生活比喻:</b>把食物想成一座城堡:微生物是攻城的敵軍、酵素是城裡的內鬼、氧化是日曬雨淋的風化。守城(保存)要三面都防——這就是為什麼一包餅乾又要密封、又要乾燥、還放脫氧劑。</div>
+</section>
+
+<!-- 第3課 -->
+<section class="lesson" id="l3">
+  <div class="lesson-tag"><span class="no">第 3 課</span><h3>保存的總開關:水活性</h3></div>
+  <p class="lead">三兇手裡最兇的微生物,有一個致命弱點:<b>沒有「可用的水」就活不下去</b>。注意,不是「含水量」,而是「水活性」——食物裡有多少水是自由的、微生物喝得到的。糖漬、鹽漬、曬乾,看起來是三種技術,其實都在做同一件事:把水綁住。</p>
+  <div class="card">
+    <div class="stage">
+      <h4>互動:水活性滑桿——拖拖看,誰活得下去?</h4>
+      <div class="stageflex">
+        <div style="flex:1;min-width:250px">
+          <input type="range" id="awR" min="0.20" max="1.00" step="0.01" value="0.99" aria-label="水活性">
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:#8d867a"><span>0.20(超乾)</span><span>1.00(純水)</span></div>
+          <div class="num" style="margin-top:8px">水活性 Aw = <span id="awV">0.99</span></div>
+          <div id="awFood" style="font-size:13.5px;margin-top:4px;color:#c9a86a"></div>
+          <div id="awVerdict" style="margin-top:8px;font-size:14px"></div>
+        </div>
+        <div style="flex:1;min-width:220px">
+          <div style="font-size:13px;color:#8d867a;margin-bottom:4px">這個水活性下,誰還能生長:</div>
+          <div class="microbe" id="mB"><span class="dot" style="background:#e07b6a"></span>多數細菌(需 Aw ≥ 0.91)</div>
+          <div class="microbe" id="mY"><span class="dot" style="background:#c9a86a"></span>多數酵母菌(需 Aw ≥ 0.88)</div>
+          <div class="microbe" id="mM"><span class="dot" style="background:#a9c48f"></span>多數黴菌(需 Aw ≥ 0.80)</div>
+          <div class="microbe" id="mX"><span class="dot" style="background:#8496b0"></span>耐旱黴菌(需 Aw ≥ 0.65)</div>
+        </div>
+      </div>
+    </div>
+    <p class="small" style="margin-top:10px">所以蜂蜜(Aw≈0.6)常溫放好幾年不壞、果醬(≈0.8)比新鮮草莓(≈0.99)耐放十倍、餅乾(≈0.3)只怕受潮不怕發霉。<b>Aw 低於 0.6,幾乎所有微生物都停工</b>——這是食品保存最重要的一條線。</p>
+  </div>
+  <div class="etym"><b>詞源|水活性 Water Activity(Aw):</b>「活性」= 可以活動、可以被利用的程度。糖和鹽像磁鐵一樣把水分子緊緊抓住,水雖然還在食物裡,微生物卻「看得到喝不到」。科學定義是食物的水蒸氣壓與純水之比,純水 = 1.0——數字越低,自由水越少。</div>
+  <div class="key">保存四大招,全部是在動這幾個開關:<b>溫度</b>(高溫殺、低溫凍)、<b>水</b>(降低 Aw)、<b>酸鹼</b>(pH 4.6 以下多數壞菌長不了,所以醋漬有效)、<b>氧氣</b>(抽掉、換掉)。多招齊下、每招不必做到極致,叫「柵欄技術」——像好幾道矮柵欄,單獨跳得過、連續跳不完。</div>
+</section>
+
+<div class="part">
+  <div class="pno">PART 2</div>
+  <h2>五大加工家族拆解</h2>
+  <p>武器庫認識完了,進工廠。用五種你最熟的食物——罐頭、泡麵、洋芋片、奶粉、冷凍水餃——把五大加工家族一個一個拆給你看。</p>
+</div>
+
+<!-- 第4課 -->
+<section class="lesson" id="l4">
+  <div class="lesson-tag"><span class="no">第 4 課</span><h3>罐頭:一場戰爭催生的發明</h3></div>
+  <p class="lead">1800 年前後,拿破崙的軍隊被食物拖垮——法國政府懸賞 12,000 法郎徵求「讓軍糧不腐壞的方法」。糕點師傅<b>阿佩爾(Nicolas Appert)</b>花了十幾年試出答案:把食物裝進玻璃瓶、密封、放進沸水裡煮。他不知道為什麼有效(當時還沒人知道細菌存在,巴斯德要再過 50 年才出場),但它就是有效。1810 年他領走獎金,罐頭誕生。</p>
+  <div class="card">
+    <div class="stage">
+      <h4>互動:罐頭產線一站一站走</h4>
+      <div class="stageflex">
+        <svg id="canSvg" width="300" height="210" viewBox="0 0 300 210" role="img" aria-label="罐頭產線步驟"></svg>
+        <div class="stageinfo">
+          <div class="num" id="canStep">站點 0 / 7</div>
+          <div id="canTxt" style="margin-top:6px">今天生產:番茄罐頭。按「下一站」,跟著一顆番茄走完產線。</div>
+          <div class="btnrow" style="margin-top:14px">
+            <button class="ui" id="canPrev">← 上一站</button>
+            <button class="ui primary" id="canNext">下一站 →</button>
+            <button class="ui" id="canReset">重來</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="small" style="margin-top:10px"><b>為什麼正規罐頭不需要防腐劑?</b>因為裡面的微生物已經被殺光,外面的又進不來(密封)——沒有兇手,就不需要保鑣。罐頭會壞,幾乎都是撞凹、生鏽讓密封破了功。膨起來的罐頭絕對不要吃:那是漏網細菌在裡面產氣。</p>
+  </div>
+  <div class="etym"><b>詞源|「馬口鐵」與「肉毒桿菌」:</b>罐頭用的鍍錫鐵皮叫馬口鐵,一說因清代這種鐵皮經澳門(舊稱「馬口」)進口而得名。罐頭殺菌的頭號目標<b>肉毒桿菌</b>,學名 Clostridium botulinum,botulus 是拉丁文「香腸」——因為 19 世紀德國最早的中毒案例來自香腸。它的孢子極耐熱,所以低酸性罐頭必須用 121°C 高壓蒸氣才殺得死;這種「殺到商業上安全」的標準,叫<b>商業滅菌</b>。</div>
+  <div class="key">罐頭三要素,缺一不可:<b>密封</b>(兇手進不來)+ <b>加熱殺菌</b>(裡面的殺光)+ <b>真空</b>(氧化最小)。順序也不能亂:一定是先封口、再殺菌——先殺再封,封口時又髒了。</div>
+</section>
+
+<!-- 第5課 -->
+<section class="lesson" id="l5">
+  <div class="lesson-tag"><span class="no">第 5 課</span><h3>泡麵:三分鐘的背後是兩個科學</h3></div>
+  <p class="lead">1958 年,日本的<b>安藤百福</b>在自家後院小屋反覆實驗,想做出「熱水一沖就能吃的麵」。某天看太太炸天婦羅,他盯著麵衣上的小孔恍然大悟——<b>油炸會把水分瞬間趕走,還留下無數小孔</b>。世界第一包泡麵「雞湯拉麵」就此誕生。泡麵的科學有兩層:</p>
+  <div class="card">
+    <div class="two">
+      <div>
+        <b>科學一:澱粉 α 化(糊化)</b>
+        <p style="font-size:14px;margin-top:6px">生澱粉排列緊密(β 狀態),人難消化、水也進不去。<b>煮熟或蒸熟後,澱粉吸水膨脹、結構打開(α 狀態)</b>——泡麵在工廠已經先蒸熟過了!之後迅速脫水,把澱粉「凍結」在打開的 α 狀態。你沖熱水不是在煮麵,只是讓水回到早已打開的結構裡。</p>
+      </div>
+      <div>
+        <b>科學二:油炸脫水+多孔結構</b>
+        <p style="font-size:14px;margin-top:6px">蒸熟的麵條丟進約 150–160°C 的油裡 1–2 分鐘,水分「轟」地變成水蒸氣衝出去,含水量從 30% 多掉到 5% 以下,同時在麵條裡炸出<b>無數細小孔道</b>。點下面按鈕看剖面:</p>
+      </div>
+    </div>
+    <div class="stage" style="margin-top:12px">
+      <h4>互動:麵條剖面——油炸前 vs 油炸後</h4>
+      <div class="stageflex">
+        <svg id="noodleSvg" width="270" height="150" viewBox="0 0 270 150" role="img" aria-label="麵條剖面比較"></svg>
+        <div class="stageinfo">
+          <div class="btnrow"><button class="ui primary" id="noodleBtn">▶ 下油鍋!</button></div>
+          <div id="noodleTxt"><b>左:</b>蒸熟的濕麵條,結構緻密、含水 30% 以上——這樣包裝三天就發霉。</div>
+        </div>
+      </div>
+    </div>
+    <p class="small" style="margin-top:10px">水分 5% 以下 → 水活性極低 → 微生物停工(第 3 課!),所以泡麵不放防腐劑也能放半年。沖泡時,熱水沿著千萬條小孔道同時鑽進去——這就是「三分鐘」的祕密:不是煮得快,是<b>水回去得快</b>。非油炸麵則改用熱風乾燥,少了油、孔洞較少,所以通常要泡久一點、口感也不同。</p>
+  </div>
+  <div class="etym"><b>詞源|α 化:</b>科學家用希臘字母幫澱粉的兩種狀態編號:生的緊密結晶叫 β(beta)澱粉,熟的鬆開狀態叫 α(alpha)澱粉。「α 化」= 把澱粉煮到打開。飯放冷會變硬難吃,就是 α 慢慢退回 β,叫「老化」——炒飯要用隔夜飯,正是利用微微老化的飯粒粒分明。</div>
+  <div class="key">泡麵=「預先煮熟(α 化)+ 急速脫水(鎖住 α)+ 多孔結構(讓水快速回家)」。一句話:你買的不是生麵,是一塊按了暫停鍵的熟麵。</div>
+</section>
+
+<!-- 第6課 -->
+<section class="lesson" id="l6">
+  <div class="lesson-tag"><span class="no">第 6 課</span><h3>零食:酥脆與香氣的工程學</h3></div>
+  <p class="lead">1853 年美國餐廳傳說:客人嫌薯條切太厚,廚師<b>克倫姆(George Crum)</b>賭氣把馬鈴薯切成紙一樣薄下鍋炸——客人卻愛翻了,洋芋片就此誕生。零食工廠靠三種「變酥脆」的技術:</p>
+  <div class="card">
+    <table>
+      <tr><th>技術</th><th>原理</th><th>代表零食</th></tr>
+      <tr><td><b>油炸</b></td><td>高溫逼水、炸出孔洞(同泡麵)</td><td>洋芋片、蝦味先類</td></tr>
+      <tr><td><b>烘烤</b></td><td>熱風慢慢烤乾,油少、較硬脆</td><td>蘇打餅、烤海苔、堅果</td></tr>
+      <tr><td><b>擠壓膨化</b></td><td>原料在高溫高壓管中被擠出瞬間,水分「啵」地汽化,把組織吹成泡泡</td><td>玉米棒、乖乖類、米果</td></tr>
+    </table>
+    <p class="small"><b>擠壓膨化就是工業版爆米花</b>:玉米粒受熱,殼內水蒸氣壓力越來越大,「砰」一聲殼破、澱粉瞬間膨成泡沫狀。膨化機把這個「砰」變成可以連續生產的隧道。</p>
+  </div>
+  <div class="etym"><b>詞源|梅納反應 Maillard Reaction:</b>零食的金黃色和香氣,大多來自這個反應——胺基酸+糖在高溫下產生上百種香氣分子,1912 年由法國化學家<b>梅納(Louis-Camille Maillard)</b>發現,就用他的姓氏命名。煎牛排的焦香、烤麵包的金黃、洋芋片的香味,全是梅納先生的功勞。它和「焦糖化」是兄弟:焦糖化只有糖參加,梅納反應是糖+蛋白質合演。</div>
+  <div class="tip"><b>生活比喻:</b>白吐司(沒烤)vs 烤吐司:同一片麵包,烤過的又香又金黃——你在家每天都在做梅納反應。工廠只是把火候變成可以精準複製一億次的參數。</div>
+  <div class="key">零食工程三件事:<b>脫水到酥脆</b>(物理)、<b>梅納反應出香氣顏色</b>(化學)、<b>調味粉均勻附著</b>(最後在滾筒裡邊滾邊撒,像幫零食裹雪)。</div>
+</section>
+
+<!-- 第7課 -->
+<section class="lesson" id="l7">
+  <div class="lesson-tag"><span class="no">第 7 課</span><h3>乾燥家族:從魚乾到太空草莓</h3></div>
+  <p class="lead">乾燥是人類最古老的保存術(第 1 課的「曬」),核心就是第 3 課的水活性:把水趕走,微生物就斷糧。現代工廠把「曬太陽」升級成四種武器:</p>
+  <div class="card">
+    <table>
+      <tr><th>方法</th><th>怎麼做</th><th>產品例子</th><th>特色</th></tr>
+      <tr><td><b>日曬</b></td><td>太陽+風,最古老</td><td>葡萄乾、柿餅、小魚乾</td><td>便宜,但看天吃飯、衛生難控</td></tr>
+      <tr><td><b>熱風乾燥</b></td><td>大型「吹風機隧道」持續吹熱風</td><td>泡麵蔬菜包、果乾、麵條</td><td>快又穩,但高溫會讓香氣、形狀打折</td></tr>
+      <tr><td><b>噴霧乾燥</b></td><td>把液體噴成細霧、掉進熱風塔,落地前已變粉末</td><td>奶粉、咖啡粉、湯粉</td><td>一秒成粉,專門對付液體</td></tr>
+      <tr><td><b>冷凍乾燥</b></td><td>先急凍,再抽真空讓冰「直接昇華成水蒸氣」,全程低溫</td><td>太空食品、草莓凍乾、高級即溶咖啡</td><td>形狀顏色營養幾乎全保留,最貴</td></tr>
+    </table>
+    <p class="small"><b>冷凍乾燥的魔法叫「昇華」</b>:冰不融化成水、直接變成氣體(像乾冰冒煙)。因為全程沒有液態水攪局、也沒有高溫,草莓乾下來還是原來的形狀和紅色,丟進水裡幾分鐘又「復活」——所以太空人和登山客最愛它。</p>
+  </div>
+  <div class="etym"><b>詞源|昇華 Sublimation:</b>中文「昇」=上升、「華」=精華,固體不經液體直接「升」成氣體。英文 sublime 原意是「崇高的」——煉金術士覺得物質跳過液態直接飛天,實在太神聖了,就用了這個詞。順帶一提,心理學借用同一個字表示「把衝動轉化為高尚行為」,同一個畫面。</div>
+  <div class="key">選乾燥法的邏輯:液體→噴霧;便宜大量→熱風;要保形保色保香→冷凍乾燥。成本大約也照這順序翻倍。</div>
+</section>
+
+<!-- 第8課 -->
+<section class="lesson" id="l8">
+  <div class="lesson-tag"><span class="no">第 8 課</span><h3>低溫家族:冷藏、冷凍與冰晶的祕密</h3></div>
+  <p class="lead">低溫不殺兇手,只讓兇手「動彈不得」:微生物繁殖變慢(冷藏)或停止(冷凍),酵素也跟著怠工。但冷凍有個大魔王——<b>冰晶</b>。點下面按鈕,看同一塊魚肉的兩種命運:</p>
+  <div class="card">
+    <div class="stage">
+      <h4>互動:慢速冷凍 vs 急速冷凍</h4>
+      <div class="stageflex">
+        <svg id="iceSvg" width="280" height="170" viewBox="0 0 280 170" role="img" aria-label="冰晶大小比較"></svg>
+        <div class="stageinfo">
+          <div class="btnrow">
+            <button class="ui primary" id="iceSlow">🐢 家用冰箱慢凍</button>
+            <button class="ui" id="iceFast">⚡ 工廠急速冷凍</button>
+          </div>
+          <div id="iceTxt"><b>慢凍:</b>溫度慢慢降,水分子有充分時間集合,長成又大又尖的冰晶——像千萬根冰刀,把細胞壁刺破。解凍時汁液流光,魚肉軟爛出水。</div>
+        </div>
+      </div>
+    </div>
+    <p class="small" style="margin-top:10px">關鍵在 <b>-1°C 到 -5°C 這段「最大冰晶生成帶」</b>:在這區間待越久,冰晶長越大。工廠用 -35°C 以下的急凍設備幾分鐘衝過去(IQF 個別急速冷凍),冰晶小到傷不了細胞——所以急凍的魚常比市場「現流但慢凍過」的更鮮。</p>
+  </div>
+  <div class="etym"><b>詞源|巴斯德殺菌法 Pasteurization:</b>低溫家族的好搭檔。1860 年代法國科學家<b>巴斯德</b>為了拯救變酸的葡萄酒,發明「加熱到 60 幾度、殺壞菌但不煮沸」的溫和殺菌法,後人以他的姓氏命名。今天你喝的鮮乳多數就是巴氏殺菌(例如 72°C 15 秒)——殺掉病原菌、保留風味,但沒有滅光所有菌,<b>所以鮮乳必須冷藏、只能放幾天</b>;常溫保久乳則是 135°C 以上超高溫瞬間滅菌(UHT)+無菌填充,兩者是不同武器。</div>
+  <div class="key">一句話分家:<b>冷藏(0~7°C)=按慢速鍵、冷凍(-18°C 以下)=按暫停鍵、加熱殺菌=直接消滅</b>。冷凍不殺菌——解凍後兇手會醒來,所以退冰的肉不要再冰回去。</div>
+</section>
+
+<div class="part">
+  <div class="pno">PART 3</div>
+  <h2>走向專業</h2>
+  <p>看得懂產品,還要看得懂「產品背後的規則」:成分表怎麼讀、包裝在防什麼、工廠怎麼保證一億包泡麵每包都安全。</p>
+</div>
+
+<!-- 第9課 -->
+<section class="lesson" id="l9">
+  <div class="lesson-tag"><span class="no">第 9 課</span><h3>食品添加物:先看懂,再評價</h3></div>
+  <p class="lead">「添加物」三個字常被當壞人,但它其實是一整個工具箱——有的防腐、有的防氧化、有的讓油水不分離。合法添加物都經過安全評估、有用量上限。<b>點下面這行洋芋片成分表,一項一項解讀:</b></p>
+  <div class="card">
+    <div class="ingline" id="ingline">
+      <span data-k="p">馬鈴薯</span><span data-k="o">棕櫚油</span><span data-k="s">食鹽</span><span data-k="g">糖</span><span data-k="m">L-麩胺酸鈉</span><span data-k="e">維生素E</span><span data-k="f">香料</span>
+    </div>
+    <div id="ingExplain">👆 點任一項開始</div>
+    <table style="margin-top:12px">
+      <tr><th>添加物家族</th><th>任務</th><th>常見成員</th></tr>
+      <tr><td>防腐劑</td><td>抑制微生物(一號兇手)</td><td>己二烯酸、苯甲酸</td></tr>
+      <tr><td>抗氧化劑</td><td>擋住氧化(三號兇手)</td><td>維生素 C、維生素 E</td></tr>
+      <tr><td>乳化劑</td><td>讓油和水手牽手不分離</td><td>卵磷脂(蛋黃裡就有)</td></tr>
+      <tr><td>膨鬆劑</td><td>產氣讓組織蓬鬆</td><td>小蘇打、酵母</td></tr>
+      <tr><td>調味劑/香料</td><td>味道與香氣</td><td>麩胺酸鈉、天然香料</td></tr>
+      <tr><td>著色劑</td><td>顏色</td><td>焦糖色素、胡蘿蔔素</td></tr>
+    </table>
+    <p class="small">閱讀成分表的規則:<b>成分照「含量多到少」排序</b>——排第一的就是主原料。看到一長串化學名不用慌,先問三個問題:它是哪一族?任務是什麼?有沒有在合法清單裡?</p>
+  </div>
+  <div class="etym"><b>詞源|E 編碼與「味精」:</b>歐洲把每種核可添加物編一個 E 開頭的號碼(E = Europe),例如維生素 C 是 E300——編號的本意是「審查通過的身分證」,不是警告標籤。<b>L-麩胺酸鈉(味精,MSG)</b>則是 1908 年日本化學家池田菊苗從昆布高湯裡分離出來的,他把這種說不出的好味道命名為「うま味(umami,鮮味)」——今天全世界科學界都直接用 umami 這個日文詞。</div>
+  <div class="key">專業的態度不是「零添加=好、有添加=壞」,而是:<b>這個添加物在防哪個兇手?劑量合法嗎?有沒有更好的替代?</b>——罐頭靠殺菌不靠防腐劑,就是用製程取代添加物的好例子。</div>
+</section>
+
+<!-- 第10課 -->
+<section class="lesson" id="l10">
+  <div class="lesson-tag"><span class="no">第 10 課</span><h3>包裝:食品的最後一道盔甲</h3></div>
+  <p class="lead">加工做得再好,包裝破功就前功盡棄。包裝的任務永遠對照三兇手+一個新敵人「碰撞」:</p>
+  <div class="card">
+    <table>
+      <tr><th>包裝技術</th><th>在防誰</th><th>日常例子</th></tr>
+      <tr><td><b>密封罐/瓶</b></td><td>微生物進不來、氧氣進不來</td><td>罐頭、玻璃瓶醬料</td></tr>
+      <tr><td><b>鋁箔積層袋</b></td><td>光、氧、水氣三重阻隔(鋁箔層是關鍵)</td><td>泡麵調味包、咖啡袋、洋芋片袋內側銀色</td></tr>
+      <tr><td><b>真空包裝</b></td><td>抽掉氧氣,餓死好氧菌、擋住氧化</td><td>香腸、火腿、真空米</td></tr>
+      <tr><td><b>充氮包裝</b></td><td>用惰性氮氣取代空氣:防氧化+當「安全氣囊」防壓碎</td><td>洋芋片(袋子鼓鼓的一半是氮氣!)</td></tr>
+      <tr><td><b>脫氧劑</b></td><td>包裝內的小鐵粉包,把殘餘氧氣「吃掉」(鐵生鏽原理)</td><td>海苔、糕點盒裡「不可食用」小包</td></tr>
+      <tr><td><b>無菌填充</b></td><td>食品與包材分別滅菌,在無菌室裡結合</td><td>保久乳、利樂包果汁</td></tr>
+    </table>
+    <p class="small">所以洋芋片袋不是偷工減料才半包空氣——那是<b>氮氣安全氣囊</b>:防氧化走味,也防你到手時已成一袋碎片。捏一下袋子還飽滿=密封完好;袋子扁掉的反而該懷疑。</p>
+  </div>
+  <div class="etym"><b>詞源|利樂包 Tetra Pak:</b>1950 年代瑞典公司發明的紙鋁塑積層包裝,最早是四面體形狀,Tetra 就是希臘文「四」。一張紙板其實有 6–7 層:紙提供硬度、鋁箔擋光氧、塑膠膜防水密封——一個包裝,三種材料各司其職。</div>
+  <div class="key">看包裝=看它在防哪個兇手。下次拿起任何食品,先翻過來想:光?氧?水氣?微生物?碰撞?——五秒鐘,你就比 99% 的消費者專業。</div>
+</section>
+
+<!-- 第11課 -->
+<section class="lesson" id="l11">
+  <div class="lesson-tag"><span class="no">第 11 課</span><h3>品質與安全:HACCP,從太空來的守門法</h3></div>
+  <p class="lead">工廠一天做一百萬包產品,不可能每包都拆開檢查。現代食品安全的答案是:<b>與其檢查成品,不如控制過程</b>。這套思想叫 HACCP,出身很傳奇——1960 年代 NASA 要送人上太空,太空人在太空食物中毒是災難,於是 NASA 與食品公司一起發明了它。</p>
+  <div class="card">
+    <b>HACCP 兩步驟,白話版:</b>
+    <div class="flow">
+      <span><i>HA</i> 危害分析<br><em>整條產線走一遍,找出所有可能出事的點</em></span>
+      <span><i>CCP</i> 重要管制點<br><em>挑出「這裡失守就完蛋」的關鍵站,定標準、盯緊它</em></span>
+    </div>
+    <table>
+      <tr><th>例:罐頭廠的 CCP</th><th>管制標準</th><th>失守會怎樣</th></tr>
+      <tr><td>殺菌釜溫度與時間</td><td>例:121°C × 規定分鐘數,全程記錄</td><td>肉毒桿菌孢子存活 → 重大食安事件</td></tr>
+      <tr><td>捲封密封度</td><td>定時抽檢切開量測</td><td>微生物滲入 → 整批膨罐</td></tr>
+      <tr><td>金屬檢出機</td><td>每包過機,測試片驗證靈敏度</td><td>金屬異物流入市面</td></tr>
+    </table>
+    <p class="small">配套的還有 <b>GMP</b>(良好作業規範:廠房、人員、衛生的基本功)與 <b>ISO 22000</b>(把 HACCP 裝進國際管理系統)。層級像這樣:GMP 是地基、HACCP 是保全系統、ISO 是整棟大樓的管理制度。加上「<b>追溯</b>」——每批原料進出都留紀錄,一出事,幾小時內就能回推是哪一批、下架哪些門市。</p>
+  </div>
+  <div class="etym"><b>詞源|HACCP:</b>Hazard Analysis and Critical Control Point,「危害分析與重要管制點」。Critical 來自希臘文 krinein(判斷、決定性的)——跟「危機 crisis」同字根:CCP 就是產線上的「決生死之點」。台灣的餐飲業、水產、肉品工廠都被法規要求導入。</div>
+  <div class="key">背下這句專業精神:<b>「品質不是檢驗出來的,是製造出來的。」</b>檢驗只能告訴你壞了,管好過程才能讓它不壞。</div>
+</section>
+
+<!-- 第12課 -->
+<section class="lesson" id="l12">
+  <div class="lesson-tag"><span class="no">第 12 課</span><h3>專業之路:職涯地圖與在家實驗</h3></div>
+  <p class="lead">恭喜,你已經有了完整的骨架:兇手(微生物/酵素/氧化)→ 武器(溫度/水活性/酸鹼/氧氣)→ 五大家族(殺菌密封/脫水/膨化/乾燥/低溫)→ 規則(添加物/包裝/HACCP)。接下來看這條路能走去哪:</p>
+  <div class="card">
+    <table>
+      <tr><th>職位</th><th>在做什麼</th><th>需要的功夫</th></tr>
+      <tr><td><b>研發(R&D)</b></td><td>開發新產品:配方、打樣、試吃、放大到量產</td><td>食品科學+一張敏銳的嘴</td></tr>
+      <tr><td><b>品保(QA)/品管(QC)</b></td><td>顧 HACCP、驗原料成品、查衛生</td><td>細心+微生物與法規知識</td></tr>
+      <tr><td><b>製程工程師</b></td><td>顧產線:溫度、速度、良率、設備</td><td>機械感+數據力</td></tr>
+      <tr><td><b>食品技師(國家考試)</b></td><td>台灣的專業證照,工廠法定編制需求</td><td>食品科系+考試</td></tr>
+      <tr><td><b>法規/稽核</b></td><td>看標示、查工廠、追溯管理</td><td>法規熟+溝通力</td></tr>
+    </table>
+    <p class="small">升學路線:高中(職)食品科 → 大學食品科學/營養/生技 → 食品技師或研究所。不走本科也行——採購、行銷、品牌,懂加工原理的人到哪都吃香。</p>
+  </div>
+  <div class="card">
+    <b>在家就能做的四個小實驗(安全、便宜、超有感)</b>
+    <div class="flow">
+      <span><i>①</i> 糖漬水活性<br><em>切兩份蘋果,一份裹厚糖,常溫放三天比較——糖把水綁住了(第3課)</em></span>
+      <span><i>②</i> 酵素褐變<br><em>蘋果切片,一半泡檸檬水:維生素C+酸讓酵素罷工(第2課)</em></span>
+      <span><i>③</i> 梅納反應<br><em>同一片吐司,一片烤一片不烤,聞香氣看顏色(第6課)</em></span>
+      <span><i>④</i> 泡麵孔洞<br><em>掰一小塊泡麵滴一滴醬油,看它沿孔道瞬間吸進去(第5課)</em></span>
+    </div>
+    <p class="small">每個實驗都對應一課的原理——做完回去重讀那一課,知識就長在你身上了。</p>
+  </div>
+  <div class="key">最後一句話:食品加工不是把天然變不天然,而是<b>用科學延續食物的生命,讓安全與美味走得更遠</b>。會分辨、會提問、會看標示——你已經在專業的路上。</div>
+</section>
+
+<!-- 總測驗 -->
+<section class="lesson" id="quiz">
+  <div class="lesson-tag"><span class="no">結業</span><h3>十題總測驗</h3></div>
+  <p class="lead">先自己想,再點「看答案」。十題全對,你已經可以跟食品廠的品保工程師聊上半小時。</p>
+  <div id="quizBox"></div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">食品加工・從零到專業|單檔離線教材<br><b>SAINTDOU</b> · Simply the Minimalist · 2026</div>
+</footer>
+
+<script>
+/* ---------- 第3課 水活性滑桿 ---------- */
+const awFoods=[
+ [0.99,'新鮮肉、鮮奶、蔬果'],[0.95,'麵包、香腸'],[0.90,'起司、火腿'],
+ [0.85,'甜煉乳、糖漬水果'],[0.80,'果醬、蜂蜜蛋糕'],[0.75,'鹹魚、果乾'],
+ [0.65,'耐放果乾、堅果'],[0.60,'蜂蜜、乾燥米麵'],[0.45,'香料粉'],[0.30,'餅乾、洋芋片'],[0.20,'奶粉、泡麵']
+];
+function awUpdate(){
+  const v=parseFloat(document.getElementById('awR').value);
+  document.getElementById('awV').textContent=v.toFixed(2);
+  let f=awFoods[0][1];
+  for(const [a,name] of awFoods){ if(v<=a) f=name; }
+  document.getElementById('awFood').textContent='這個水活性附近的食物:'+f;
+  const set=(id,on)=>document.getElementById(id).classList.toggle('off',!on);
+  set('mB',v>=0.91); set('mY',v>=0.88); set('mM',v>=0.80); set('mX',v>=0.65);
+  const t=document.getElementById('awVerdict');
+  if(v>=0.91) t.innerHTML='⚠️ <b>危險區:</b>細菌黴菌全員開工——這種食物必須冷藏或盡快吃完。';
+  else if(v>=0.80) t.innerHTML='🟡 <b>黴菌區:</b>細菌大多住不下,但黴菌還行——果醬開罐後仍要冰。';
+  else if(v>=0.65) t.innerHTML='🟠 <b>邊緣區:</b>只剩最耐旱的黴菌撐著,常溫可放頗久。';
+  else t.innerHTML='✅ <b>安全區(Aw&lt;0.6):</b>微生物全面停工——只剩氧化這個兇手要防(所以還要密封)。';
+}
+document.getElementById('awR').addEventListener('input',awUpdate);
+awUpdate();
+
+/* ---------- 第4課 罐頭產線播放器 ---------- */
+const canSteps=[
+ {t:'今天生產:番茄罐頭。按「下一站」,跟著一顆番茄走完產線。'},
+ {t:'<b>站 1|前處理+殺菁:</b>清洗、去皮切塊,再用熱水快速燙一下——這叫「殺菁」,目的是讓二號兇手<b>酵素</b>當場罷工,順便趕出組織裡的空氣。(法文 blanchir=使變白,所以殺菁英文叫 blanching)'},
+ {t:'<b>站 2|裝罐+注液:</b>番茄塊裝進罐,倒入熱的湯汁(鹽水或番茄汁),留一點頂隙不裝滿——等下抽真空要用。'},
+ {t:'<b>站 3|脫氣:</b>加熱讓罐內空氣膨脹跑掉。氧氣少=三號兇手<b>氧化</b>沒戲唱,罐內之後冷卻會形成微真空。'},
+ {t:'<b>站 4|捲封:</b>機器把罐蓋與罐身的邊緣互相捲、緊緊咬合成「二重捲封」——不用膠水不用焊接,純靠金屬互咬,滴水不漏。這一步是 CCP(第 11 課會講)。'},
+ {t:'<b>站 5|加壓殺菌:</b>密封罐進「殺菌釜」,121°C 高壓蒸氣按規定時間蒸——連最頑強的肉毒桿菌孢子都殺光,達成<b>商業滅菌</b>。番茄偏酸(pH 低),其實可用較低溫度;低酸的肉罐頭就非 121°C 不可。'},
+ {t:'<b>站 6|急速冷卻:</b>殺菌完馬上用冷水降溫——避免食物繼續被煮爛,也讓罐內蒸氣收縮、形成真空,罐蓋微微內凹。(所以正常罐頭蓋是「凹」的,「凸」的代表出事!)'},
+ {t:'<b>站 7|保溫檢查+貼標:</b>抽樣放進 37°C 保溫室觀察數天——如果有漏網細菌,它會產氣讓罐子膨起來自首。通過就貼標、裝箱。一顆番茄,從此常溫安坐三年。'}
+];
+let canI=0;
+const canSvg=document.getElementById('canSvg');
+const stations=['前處理','裝罐','脫氣','捲封','殺菌','冷卻','檢查'];
+function canDraw(){
+  let s='<line x1="15" y1="150" x2="285" y2="150" stroke="#555" stroke-width="4"/>';
+  for(let i=0;i<28;i++) s+=`<circle cx="${18+i*9.6}" cy="155" r="2.2" fill="#3a3f46"/>`;
+  stations.forEach((n,i)=>{
+    const x=32+i*39, on=canI===i+1, done=canI>i+1;
+    const col=on?'#c9a86a':(done?'#7a8f5a':'#555');
+    s+=`<g>
+      <rect x="${x-14}" y="${on?96:104}" width="28" height="${on?44:36}" rx="4" fill="${on?'#c9a86a':'#2c3138'}" stroke="${col}" stroke-width="1.6"/>
+      <rect x="${x-14}" y="${on?96:104}" width="28" height="6" fill="${col}"/>
+      <text x="${x}" y="${on?92:100}" font-size="10" fill="${on?'#c9a86a':'#8d867a'}" text-anchor="middle">${i+1} ${n}</text>
+      ${done?`<text x="${x}" y="128" font-size="11" fill="#a9c48f" text-anchor="middle">✓</text>`:''}
+    </g>`;
+  });
+  s+=`<text x="150" y="30" font-size="12" fill="#8d867a" text-anchor="middle">罐頭產線(左→右)・目前:${canI===0?'待機':'第 '+canI+' 站 '+stations[canI-1]}</text>`;
+  canSvg.innerHTML=s;
+  document.getElementById('canStep').textContent=`站點 ${canI} / ${canSteps.length-1}`;
+  document.getElementById('canTxt').innerHTML=canSteps[canI].t;
+  document.getElementById('canPrev').disabled=canI===0;
+  document.getElementById('canNext').disabled=canI===canSteps.length-1;
+}
+document.getElementById('canNext').onclick=()=>{if(canI<canSteps.length-1){canI++;canDraw();}};
+document.getElementById('canPrev').onclick=()=>{if(canI>0){canI--;canDraw();}};
+document.getElementById('canReset').onclick=()=>{canI=0;canDraw();};
+canDraw();
+
+/* ---------- 第5課 泡麵剖面 ---------- */
+let fried=false;
+const nSvg=document.getElementById('noodleSvg');
+function noodleDraw(){
+  let s='';
+  // 左:濕麵
+  s+='<circle cx="65" cy="70" r="46" fill="#e8dcae" stroke="#b8a67a" stroke-width="2"/>';
+  s+='<text x="65" y="135" font-size="11" fill="#8d867a" text-anchor="middle">蒸熟濕麵・水分 30%+</text>';
+  for(let i=0;i<40;i++){const a=Math.random()*6.28,r=Math.sqrt(Math.random())*40;
+    s+=`<circle cx="${65+Math.cos(a)*r}" cy="${70+Math.sin(a)*r}" r="1.4" fill="#5b79b4" opacity=".8"/>`;}
+  // 箭頭
+  s+='<path d="M120 70 h22 m0 0 l-7 -6 m7 6 l-7 6" stroke="#e07b6a" stroke-width="2.5" fill="none"/>';
+  s+='<text x="131" y="56" font-size="10" fill="#e07b6a" text-anchor="middle">油炸</text>';
+  // 右:油炸後
+  if(fried){
+    s+='<circle cx="205" cy="70" r="46" fill="#e5c988" stroke="#c9a86a" stroke-width="2"/>';
+    let seed=1;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+    for(let i=0;i<26;i++){const a=rnd()*6.28,r=Math.sqrt(rnd())*38;
+      s+=`<circle cx="${205+Math.cos(a)*r}" cy="${70+Math.sin(a)*r}" r="${2.5+rnd()*4}" fill="#22262b"/>`;}
+    s+='<text x="205" y="135" font-size="11" fill="#c9a86a" text-anchor="middle">油炸麵・水分 5% 以下,滿是孔道</text>';
+  }else{
+    s+='<circle cx="205" cy="70" r="46" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="6 5"/>';
+    s+='<text x="205" y="74" font-size="12" fill="#555" text-anchor="middle">?</text>';
+  }
+  nSvg.innerHTML=s;
+}
+document.getElementById('noodleBtn').addEventListener('click',()=>{
+  fried=!fried;noodleDraw();
+  document.getElementById('noodleBtn').textContent=fried?'↺ 回到油炸前':'▶ 下油鍋!';
+  document.getElementById('noodleTxt').innerHTML=fried
+   ?'<b>右:</b>水分瞬間汽化衝出,留下滿滿孔道(黑點)——水活性掉到安全區,常溫可放半年;沖泡時熱水沿孔道秒速回填,三分鐘搞定。'
+   :'<b>左:</b>蒸熟的濕麵條,結構緻密、含水 30% 以上——這樣包裝三天就發霉。';
+});
+noodleDraw();
+
+/* ---------- 第8課 冰晶對比 ---------- */
+const iceSvg=document.getElementById('iceSvg');
+function cellGrid(ox,mode){
+  let s='';
+  for(let r=0;r<3;r++)for(let c=0;c<3;c++){
+    const x=ox+c*40+22,y=r*44+26;
+    const broken=(mode==='slow')&&((r+c)%2===0);
+    s+=`<rect x="${x-17}" y="${y-18}" width="34" height="36" rx="8" fill="#3a3f46" stroke="${broken?'#e07b6a':'#8d867a'}" stroke-width="1.6" ${broken?'stroke-dasharray="5 3"':''}/>`;
+    if(mode==='slow'){
+      s+=`<path d="M ${x-9} ${y+9} L ${x} ${y-11} L ${x+9} ${y+9} Z" fill="#9fc2e8" opacity=".9"/>`;
+      if(broken) s+=`<path d="M ${x+9} ${y+9} l 8 7" stroke="#e07b6a" stroke-width="1.6"/>`;
+    }else{
+      for(let i=0;i<7;i++){const a=i*0.9,rr=4+((i*13)%9);
+        s+=`<circle cx="${x+Math.cos(a)*rr}" cy="${y+Math.sin(a)*rr}" r="1.6" fill="#9fc2e8"/>`;}
+    }
+  }
+  return s;
+}
+function iceDraw(mode){
+  let s=cellGrid(14,mode);
+  s+=`<text x="80" y="162" font-size="11" fill="#8d867a" text-anchor="middle">${mode==='slow'?'大冰晶刺破細胞(紅=破裂)':'小冰晶,細胞完好'}</text>`;
+  s+=`<text x="212" y="60" font-size="12" fill="#d8d2c4">${mode==='slow'?'🐢 慢凍':'⚡ 急凍'}</text>`;
+  s+=`<text x="212" y="82" font-size="11" fill="#8d867a">${mode==='slow'?'-1~-5°C':'幾分鐘'}</text>`;
+  s+=`<text x="212" y="100" font-size="11" fill="#8d867a">${mode==='slow'?'待很久':'衝過冰晶帶'}</text>`;
+  iceSvg.innerHTML=s;
+}
+document.getElementById('iceSlow').addEventListener('click',function(){
+  iceDraw('slow');this.classList.add('primary');document.getElementById('iceFast').classList.remove('primary');
+  document.getElementById('iceTxt').innerHTML='<b>慢凍:</b>溫度慢慢降,水分子有充分時間集合,長成又大又尖的冰晶——像千萬根冰刀,把細胞壁刺破。解凍時汁液流光,魚肉軟爛出水。';
+});
+document.getElementById('iceFast').addEventListener('click',function(){
+  iceDraw('fast');this.classList.add('primary');document.getElementById('iceSlow').classList.remove('primary');
+  document.getElementById('iceTxt').innerHTML='<b>急凍:</b>-35°C 以下幾分鐘衝過「最大冰晶生成帶」,水來不及集合,只長出無數微小冰晶——細胞完好,解凍後口感接近新鮮。這就是 IQF(個別急速冷凍)的價值。';
+});
+iceDraw('slow');
+
+/* ---------- 第9課 成分表解讀器 ---------- */
+const ings={
+ p:'<b>馬鈴薯 — 主原料:</b>排第一=含量最多。成分表永遠照含量由多到少排,這是法規規定。',
+ o:'<b>棕櫚油 — 油炸用油:</b>耐高溫、氧化穩定,是零食業主力。它也是「油耗味」的潛在來源,所以後面才需要抗氧化劑。',
+ s:'<b>食鹽 — 調味+降水活性:</b>一人分飾兩角:給味道,也把水綁住(第 3 課)幫忙保存。',
+ g:'<b>糖 — 調味+梅納原料:</b>甜味之外,它是梅納反應(第 6 課)的原料之一,金黃色和香氣有它一份。',
+ m:'<b>L-麩胺酸鈉 — 鮮味劑(味精):</b>1908 年池田菊苗從昆布分離,提供「umami 鮮味」。合法、常見,對多數人安全。',
+ e:'<b>維生素 E — 抗氧化劑:</b>不是給你補充營養的,是替油「擋刀」:氧氣來了先攻擊它、放過油脂——對付三號兇手的保鑣。',
+ f:'<b>香料 — 香氣:</b>「天然香料」萃取自動植物,「香料」可能含合成成分,都須符合法規。用量極少,通常排最後。'
+};
+document.querySelectorAll('#ingline span[data-k]').forEach(sp=>{
+  const act=()=>{document.querySelectorAll('#ingline span').forEach(x=>x.classList.remove('on'));sp.classList.add('on');
+    document.getElementById('ingExplain').innerHTML=ings[sp.dataset.k];};
+  sp.onclick=act; sp.onmouseenter=act;
+});
+
+/* ---------- 總測驗 ---------- */
+const QA=[
+ ['腐敗三兇手是哪三個?各舉一個生活例子。','微生物(湯放隔夜變酸)、酵素(蘋果切開變褐)、氧化(油放久有油耗味)。'],
+ ['「水活性」和「含水量」差在哪?','含水量=水有多少;水活性=水有多少是「自由的、微生物喝得到的」。糖鹽把水綁住,含水量沒變,水活性卻降了。'],
+ ['Aw 低於多少,幾乎所有微生物都停工?','0.6。蜂蜜、餅乾、泡麵都在這條線以下,所以常溫耐放。'],
+ ['罐頭為什麼可以不加防腐劑?','裡面的微生物被商業滅菌殺光,密封讓外面的進不來——沒有兇手就不需保鑣。'],
+ ['罐頭蓋應該是凹的還是凸的?為什麼?','凹的(內部真空把蓋吸進去)。凸起代表細菌在裡面產氣,絕對不能吃。'],
+ ['泡麵三分鐘就能吃的兩個科學原因?','①工廠已先蒸熟(澱粉α化);②油炸炸出多孔結構,熱水沿孔道快速回填。'],
+ ['煎牛排的焦香、烤吐司的金黃,來自哪個反應?','梅納反應(Maillard):胺基酸+糖在高溫下的反應,1912 年法國化學家梅納發現。'],
+ ['家用冰箱慢凍的魚為什麼解凍後軟爛出水?','慢凍在 -1~-5°C 冰晶帶待太久,長出大冰晶刺破細胞;急凍冰晶小、細胞完好。'],
+ ['洋芋片袋子裡一半是什麼氣體?兩個作用?','氮氣。①惰性防氧化走味;②當安全氣囊防壓碎。'],
+ ['HACCP 的核心精神一句話?它為誰而發明?','「品質不是檢驗出來的,是製造出來的」——控制過程重於檢查成品。1960 年代為 NASA 太空食品而生。']
+];
+document.getElementById('quizBox').innerHTML=QA.map((q,i)=>`
+ <div class="q" id="qq${i}">
+   <div class="qt">${i+1}. ${q[0]}</div>
+   <button onclick="document.getElementById('qq${i}').classList.toggle('open')">看答案</button>
+   <div class="ans">${q[1]}</div>
+ </div>`).join('');
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-372fe2879b" data-category="science"></script></body>
+</html>

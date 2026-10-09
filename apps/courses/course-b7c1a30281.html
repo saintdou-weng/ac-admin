@@ -1,0 +1,2373 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>從零開始的物理課｜30 堂課，從入門到專業</title>
+<style>
+:root{
+  --bg:#F4F7FA; --grid:rgba(52,104,168,.09); --card:#FFFFFF; --ink:#1B2A41; --muted:#56667C;
+  --line:#D3DCE6; --hl:#FFE14D; --hlm:rgba(255,225,77,.85); --red:#C4314B; --teal:#18806F;
+  --blue:#2A55BE; --orange:#C9731E; --rail:#EAF0F6;
+  --serif:"Noto Serif TC","Source Han Serif TC","Songti TC","PMingLiU","MingLiU",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC","Source Han Sans TC",system-ui,sans-serif;
+  --math:"Cambria Math","Times New Roman",Georgia,serif;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#1C2621; --grid:rgba(255,255,255,.035); --card:#243129; --ink:#E7ECE3; --muted:#A3B1A6;
+  --line:#3A4B41; --hl:#F2D95C; --hlm:rgba(242,217,92,.28); --red:#FF7F8A; --teal:#6CD3BD;
+  --blue:#95B7FF; --orange:#F2A65A; --rail:#18211D; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{height:100%;-webkit-text-size-adjust:100%}
+body{
+  margin:0;height:100%;color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;
+  background-color:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+a{color:var(--blue)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:4px}
+
+/* ---------- 外框 ---------- */
+.app{display:grid;grid-template-columns:310px 1fr;min-height:100%}
+.rail{
+  position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--rail);border-right:1px solid var(--line);
+  padding:calc(18px + env(safe-area-inset-top,0px)) 14px calc(24px + env(safe-area-inset-bottom,0px));
+}
+.brand{display:flex;align-items:center;gap:10px;margin:0 6px 4px;font-family:var(--serif);font-weight:700;font-size:1.2rem;text-decoration:none;color:var(--ink)}
+.brand svg{flex:none}
+.prog{margin:12px 6px 18px}
+.prog .bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.prog .bar i{display:block;height:100%;width:0;background:var(--teal);transition:width .4s}
+.prog small{color:var(--muted);font-size:.8rem}
+.toc h4{margin:18px 6px 6px;font-size:.82rem;color:var(--muted);font-weight:600;letter-spacing:.02em}
+.toc ol{list-style:none;margin:0;padding:0}
+.toc a{display:grid;grid-template-columns:2.2em 1fr 1.2em;align-items:baseline;gap:4px;padding:5px 8px;border-radius:6px;text-decoration:none;color:var(--ink);font-size:.93rem;line-height:1.45}
+.toc a .n{font-family:var(--math);color:var(--muted);font-variant-numeric:tabular-nums}
+.toc a .ok{color:var(--teal);font-size:.85rem}
+.toc a:hover{background:var(--card)}
+.toc a[aria-current="page"]{background:var(--card);box-shadow:inset 3px 0 0 var(--blue);font-weight:600}
+.toc .extra a{grid-template-columns:1fr}
+
+.main{min-width:0;padding:0 clamp(16px,4vw,56px) calc(60px + env(safe-area-inset-bottom,0px))}
+.topbar{
+  position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;justify-content:flex-end;
+  padding:calc(10px + env(safe-area-inset-top,0px)) 0 10px;background:linear-gradient(var(--bg) 70%,transparent);
+}
+.topbar .where{margin-right:auto;font-size:.88rem;color:var(--muted);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.iconbtn{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:.9rem;line-height:1.4}
+.menubtn{display:none}
+.scrim{display:none}
+
+.page{display:none;max-width:46rem;margin:0 auto}
+.page.on{display:block}
+
+/* ---------- 首頁 ---------- */
+.hero{margin:10px 0 28px}
+.hero canvas{display:block;width:100%;height:230px;border-radius:12px;border:1px solid var(--line);background:var(--card)}
+.hero h1{font-family:var(--serif);font-size:clamp(2.1rem,6vw,3.3rem);line-height:1.2;margin:26px 0 10px;font-weight:800;letter-spacing:.02em}
+.hero p.lead{font-size:1.12rem;color:var(--muted);max-width:36em;margin:0 0 20px}
+.cta{display:inline-block;background:var(--ink);color:var(--bg);border:0;border-radius:10px;padding:12px 22px;font-weight:700;cursor:pointer;text-decoration:none;font-size:1.02rem}
+.cta.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);margin-left:8px}
+.stages{list-style:none;padding:0;margin:8px 0 0;counter-reset:st}
+.stages li{counter-increment:st;display:grid;grid-template-columns:3rem 1fr;gap:6px 14px;padding:14px 0;border-top:1px solid var(--line)}
+.stages li::before{content:counter(st);font-family:var(--serif);font-size:2rem;font-weight:800;line-height:1;color:var(--blue);grid-row:span 2}
+.stages b{font-size:1.05rem}
+.stages span{color:var(--muted);font-size:.95rem;line-height:1.6}
+.how{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 20px;margin:28px 0}
+
+/* ---------- 課程內文 ---------- */
+.lhead{margin:12px 0 22px;display:grid;grid-template-columns:auto 1fr;gap:0 18px;align-items:end}
+.lhead .big{font-family:var(--serif);font-weight:800;font-size:clamp(3.4rem,11vw,5.2rem);line-height:.85;color:transparent;-webkit-text-stroke:2px var(--blue);grid-row:span 2}
+.lhead .stg{font-size:.88rem;color:var(--muted)}
+.lesson h2{font-family:var(--serif);font-size:clamp(1.6rem,4.6vw,2.2rem);line-height:1.3;margin:0;font-weight:800}
+.lesson h3{font-size:1.2rem;margin:34px 0 8px;padding-bottom:4px;border-bottom:2px solid var(--ink);display:inline-block}
+.lesson p{margin:0 0 14px}
+.lesson ul,.lesson ol{padding-left:1.4em;margin:0 0 14px}
+.lesson li{margin:4px 0}
+mark{background:linear-gradient(transparent 52%,var(--hlm) 52%);color:inherit;padding:0 1px}
+.hook{font-size:1.1rem;font-family:var(--serif);line-height:1.9;border-left:4px solid var(--hl);padding:4px 0 4px 16px;margin:0 0 18px}
+.box{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:14px 18px;margin:18px 0}
+.box>b:first-child{display:block;font-size:.95rem;margin-bottom:4px}
+.box p:last-child,.box ul:last-child{margin-bottom:0}
+.term{border-left:5px solid var(--blue)}
+.term>b:first-child{color:var(--blue)}
+.term .en{font-family:var(--math);font-style:italic;font-weight:400;color:var(--muted);margin-left:6px}
+.eg{border-left:5px solid var(--teal)}
+.eg>b:first-child{color:var(--teal)}
+.warn{border-left:5px solid var(--red)}
+.warn>b:first-child{color:var(--red)}
+.eq{font-family:var(--math);font-size:1.45rem;text-align:center;padding:16px 10px 12px;margin:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);line-height:1.6}
+.eq i{font-style:italic}
+.eq small{display:block;font-family:var(--sans);font-size:.88rem;color:var(--muted);margin-top:6px;line-height:1.6}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.2;margin:0 3px}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;padding:0 4px}
+.m{font-family:var(--math);font-style:italic}
+.recap{background:var(--ink);color:var(--bg);border-radius:12px;padding:16px 20px;margin:30px 0 10px}
+.recap b{display:block;margin-bottom:6px}
+.recap ul{margin:0;padding-left:1.2em}
+.table{overflow-x:auto;margin:14px 0}
+table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:420px}
+th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+th{font-weight:700;background:var(--card)}
+
+/* ---------- 互動動畫 ---------- */
+.sim{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:22px 0;overflow:hidden}
+.sim .cap{padding:10px 16px 0;font-weight:700;font-size:.98rem}
+.sim .cap small{display:block;font-weight:400;color:var(--muted);font-size:.86rem;line-height:1.5}
+.sim canvas{display:block;width:100%;touch-action:manipulation;cursor:default}
+.ctrl{display:flex;flex-wrap:wrap;gap:10px 18px;padding:12px 16px;border-top:1px solid var(--line);align-items:center}
+.ctrl label{display:flex;align-items:center;gap:8px;font-size:.9rem;flex:1 1 200px}
+.ctrl label.ck{flex:0 1 auto}
+.ctrl input[type=range]{flex:1;min-width:90px;accent-color:var(--blue)}
+.ctrl output{min-width:4.2em;text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.ctrl select{border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:3px 6px}
+.ctrl button{border:1px solid var(--ink);background:var(--ink);color:var(--card);border-radius:8px;padding:6px 14px;cursor:pointer;font-weight:600;font-size:.9rem}
+.ctrl button.alt{background:transparent;color:var(--ink)}
+.readout{padding:10px 16px 14px;border-top:1px dashed var(--line);font-size:.92rem;line-height:1.7;font-variant-numeric:tabular-nums;min-height:2.6em}
+
+/* ---------- 小測驗 ---------- */
+.quiz{border:2px solid var(--ink);border-radius:12px;padding:14px 18px;margin:18px 0;background:var(--card)}
+.quiz .q{font-weight:700;margin-bottom:10px}
+.quiz .opts{display:grid;gap:8px}
+.quiz button{text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:9px 12px;cursor:pointer;line-height:1.5}
+.quiz button:hover{border-color:var(--ink)}
+.quiz button.right{border-color:var(--teal);background:color-mix(in srgb,var(--teal) 15%,var(--card));font-weight:600}
+.quiz button.wrong{border-color:var(--red);background:color-mix(in srgb,var(--red) 12%,var(--card));text-decoration:line-through}
+.quiz .why{display:none;margin:10px 0 0;font-size:.95rem;color:var(--muted)}
+.quiz.done .why{display:block}
+
+/* ---------- 課程導覽 ---------- */
+.lnav{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin:34px 0 0;padding-top:18px;border-top:1px solid var(--line)}
+.lnav button{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 16px;cursor:pointer;line-height:1.4;max-width:48%;text-align:left}
+.lnav button small{display:block;color:var(--muted);font-size:.8rem}
+.lnav .next{text-align:right;margin-left:auto}
+.lnav .done{flex-basis:100%;background:var(--teal);color:#fff;border-color:var(--teal);font-weight:700;text-align:center;max-width:none}
+.lnav .done.is{background:transparent;color:var(--teal)}
+
+.gl{columns:2 18rem;column-gap:28px}
+.gl div{break-inside:avoid;padding:10px 0;border-bottom:1px solid var(--line)}
+.gl b{display:block}
+.gl a{font-size:.85rem}
+.gl p{margin:2px 0 0;font-size:.93rem;line-height:1.7;color:var(--muted)}
+
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .rail{position:fixed;left:0;top:0;bottom:0;width:min(86vw,330px);z-index:40;transform:translateX(-102%);transition:transform .25s ease;height:100%}
+  .rail.open{transform:none;box-shadow:0 0 40px rgba(0,0,0,.25)}
+  .scrim.open{display:block;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:30}
+  .menubtn{display:inline-block}
+  body{font-size:16.5px}
+}
+@media (prefers-reduced-motion:reduce){.rail{transition:none}.prog .bar i{transition:none}}
+@media print{.rail,.topbar,.lnav,.ctrl{display:none}.page{display:block!important}.app{display:block}}
+</style>
+</head>
+<body>
+<div class="app">
+<nav class="rail" id="rail" aria-label="課程目錄">
+  <a class="brand" href="#home">
+    <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M3 26 Q15 -8 27 26" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3"/><circle cx="21" cy="12" r="3.5" fill="#E0B400"/></svg>
+    從零開始的物理課
+  </a>
+  <div class="prog"><div class="bar"><i id="pbar"></i></div><small id="ptext">完成 0 / 30 課</small></div>
+  <div class="toc" id="toc"></div>
+  <div class="toc extra"><h4>工具</h4><ol><li><a href="#glossary">名詞由來總表</a></li><li><a href="#home">回到首頁</a></li></ol></div>
+</nav>
+<div class="scrim" id="scrim"></div>
+<main class="main">
+<div class="topbar">
+  <button class="iconbtn menubtn" id="menubtn" aria-label="打開課程目錄">☰ 目錄</button>
+  <span class="where" id="where"></span>
+  <button class="iconbtn" id="themebtn" aria-label="切換淺色或深色">黑板模式</button>
+</div>
+
+<!-- ================= 首頁 ================= -->
+<section class="page" id="home" data-title="首頁">
+  <div class="hero">
+    <canvas id="herocv" aria-label="一顆球被拋出的動畫，箭頭顯示速度"></canvas>
+    <h1>從零開始的物理課</h1>
+    <p class="lead">30 堂課，從「物理是什麼」一路走到量子與相對論。每一課都有生活例子、可以動手玩的動畫、小測驗，每個專有名詞都告訴你它從哪裡來。</p>
+    <a class="cta" href="#L1">從第 1 課開始</a><a class="cta ghost" id="resume" href="#L1">繼續上次進度</a>
+  </div>
+
+  <h3 style="font-family:var(--serif);font-size:1.4rem;margin:30px 0 4px">課程路線</h3>
+  <ol class="stages">
+    <li><b>起步：物理是什麼</b><span>第 1–2 課。科學方法、測量與單位。先學會「怎麼問問題」和「怎麼量東西」。</span></li>
+    <li><b>運動與力（力學）</b><span>第 3–14 課。速度、加速度、牛頓三大定律、能量、動量、萬有引力、壓力與浮力。整個物理的地基。</span></li>
+    <li><b>熱</b><span>第 15–16 課。溫度到底是什麼、熱力學定律，以及神秘的「熵」。</span></li>
+    <li><b>波、聲音與光</b><span>第 17–20 課。波的語言、聲音、光的反射折射、透鏡與眼睛。</span></li>
+    <li><b>電與磁</b><span>第 21–24 課。電荷、電路、電磁感應，最後發現光其實是電磁波。</span></li>
+    <li><b>近代物理</b><span>第 25–28 課。原子結構、量子、相對論、原子核。二十世紀改變世界的想法。</span></li>
+    <li><b>通往專業</b><span>第 29–30 課。物理學家的數學工具（向量、微積分），以及大學物理的全地圖與學習路線。</span></li>
+  </ol>
+
+  <div class="how">
+    <p><b>怎麼使用這份教材</b></p>
+    <ol>
+      <li>照順序讀。每一課只用到前面教過的東西，不會突然跳到沒學過的概念。</li>
+      <li>看到動畫就動手拉拉桿，先猜結果，再看答案。猜錯比猜對學得更多。</li>
+      <li>每課最後的小測驗點一下選項就會看到解說。</li>
+      <li>讀完按「完成本課」，進度會記在這台裝置的瀏覽器裡。</li>
+    </ol>
+    <p>這個檔案可以離線使用。存到電腦或手機後，用瀏覽器打開就能上課。</p>
+  </div>
+</section>
+
+<!-- ================= 第 1 課 ================= -->
+<section class="page lesson" id="L1" data-stage="0">
+<h2>物理是什麼？</h2>
+<p class="hook">蘋果為什麼往下掉，不往上飛？天空為什麼是藍的？手機怎麼從空氣中收到訊息？這些看起來毫不相干的問題，答案都藏在同一門學問裡。</p>
+
+<h3>一句話說清楚</h3>
+<p><mark>物理學研究的是：物質、能量、空間、時間，以及它們彼此之間如何互動。</mark>換句話說，物理想找出「大自然運作的規則」。</p>
+<p>這些規則有一個神奇的特點：它們到處都一樣。讓蘋果落地的規則，和讓月亮繞地球轉的規則，是同一條。你在台北做實驗，和在月球上做實驗，遵守的是同一套物理。</p>
+
+<aside class="box term"><b>名詞由來：物理<span class="en">Physics</span></b>
+<p>英文 physics 來自希臘文 <i>physis</i>，意思是「自然」。古希臘哲學家亞里斯多德寫過一本書叫《Physika》，意思就是「關於自然的學問」。</p>
+<p>中文「物理」原本的意思是「萬物的道理」。晉朝楊泉寫過《物理論》，明末方以智寫過《物理小識》。十九世紀日本學者用「物理學」來翻譯 physics，清末傳回中國，就一直沿用到今天。</p></aside>
+
+<h3>物理學家怎麼工作？像偵探一樣</h3>
+<p>物理學家不是靠「覺得」或「大家都這麼說」來判斷對錯，而是靠一套步驟，叫做<mark>科學方法</mark>：</p>
+<ol>
+<li><b>觀察</b>：注意到一個現象。例如：吊燈在風中擺來擺去。</li>
+<li><b>提出假說</b>：猜一個可能的解釋。例如：「擺得越大，擺一次花的時間越長？」</li>
+<li><b>實驗檢驗</b>：設計實驗，用測量來確認猜得對不對。</li>
+<li><b>修正</b>：如果實驗結果和猜的不一樣，就修改想法，再試一次。</li>
+</ol>
+
+<aside class="box term"><b>名詞由來：假說<span class="en">Hypothesis</span></b>
+<p>來自希臘文 <i>hypo</i>（在下面）＋ <i>thesis</i>（放置），意思是「放在底下當基礎的想法」。它是還沒被證明的猜測，要靠實驗來決定它能不能「升級」成可靠的理論。</p></aside>
+
+<aside class="box eg"><b>真實故事：伽利略和吊燈</b>
+<p>大約 1583 年，十九歲的伽利略在義大利比薩的教堂裡，看著天花板垂下的吊燈擺動。那時沒有手錶，他就用自己的脈搏計時，結果發現：<mark>不管吊燈擺得大還是小，來回一次的時間都差不多。</mark>這個發現後來被用來製造擺鐘，讓人類第一次能準確計時。</p></aside>
+
+<p>現在換你當伽利略。下面的單擺，你可以改變繩子長度和一開始拉起的角度。先猜猜看：哪一個會改變「來回擺一次的時間」？</p>
+
+<div class="sim" data-sim="pendulum" data-r="0.62">
+<div class="cap">實驗：什麼決定擺動的快慢？<small>拉動拉桿後，擺會重新開始。看下方量到的「週期」（來回一次的時間）。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>繩長 <input type="range" data-k="L" min="0.2" max="2" step="0.05" value="1" data-u=" m"><output></output></label>
+<label>起始角度 <input type="range" data-k="A" min="5" max="60" step="1" value="15" data-u="°"><output></output></label>
+</div>
+<div class="readout"></div>
+</div>
+
+<p>你應該發現了：<mark>角度改變時，週期幾乎不變；繩子越長，擺得越慢。</mark>這就是伽利略發現的「擺的等時性」。（角度很大時週期會稍微變長一點點，這是更細的物理，你眼睛很尖的話會看到！）</p>
+
+<aside class="box warn"><b>常見誤解：「科學理論只是猜猜看」</b>
+<p>日常生活中「理論」常指「還不確定的想法」。但在科學裡，理論是<b>經過大量實驗反覆檢驗、能解釋很多現象</b>的一整套說明，例如萬有引力理論。它可靠的程度遠超過「猜測」。</p></aside>
+
+<div class="quiz" data-ans="1"><p class="q">1. 提出假說之後，科學家下一步應該做什麼？</p><div class="opts"><button>直接把它當成真理</button><button>設計實驗來檢驗它</button><button>找很多人投票同意</button></div><p class="why">科學靠證據說話，不靠人數或權威。假說一定要經得起實驗檢驗。</p></div>
+<div class="quiz" data-ans="0"><p class="q">2. 想讓單擺擺得慢一點，應該怎麼做？</p><div class="opts"><button>把繩子加長</button><button>一開始拉得更高</button><button>換一顆比較重的球</button></div><p class="why">週期主要由繩長決定。拉高角度或換重球，週期幾乎不變。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>物理研究大自然運作的規則，這些規則到處都一樣。</li><li>科學方法：觀察 → 假說 → 實驗 → 修正。</li><li>單擺的週期由繩長決定，和擺幅大小幾乎無關。</li></ul></div>
+</section>
+
+<!-- ================= 第 2 課 ================= -->
+<section class="page lesson" id="L2" data-stage="0">
+<h2>測量與單位</h2>
+<p class="hook">如果朋友說「我走了 3」，你一定會問：3 什麼？3 步？3 公里？3 小時？數字沒有單位，就沒有意義。</p>
+
+<h3>物理量 ＝ 數字 × 單位</h3>
+<p>在物理裡，凡是可以測量的東西都叫<mark>物理量</mark>，例如長度、質量、時間、溫度。寫一個物理量時，一定要同時寫出<b>數字</b>和<b>單位</b>：「身高 160 公分」、「跑 100 公尺花了 15 秒」。</p>
+<p>古時候各地用的單位都不一樣：一「尺」在不同朝代長度不同，英國的「英尺」據說最早跟國王的腳長有關。這樣做生意、蓋房子都很麻煩。於是 1960 年，世界各國約定了一套共同的單位，叫做<mark>國際單位制（SI）</mark>。</p>
+
+<div class="table"><table>
+<tr><th>物理量</th><th>單位名稱</th><th>符號</th><th>生活感覺</th></tr>
+<tr><td>長度</td><td>公尺（米）</td><td>m</td><td>大人張開雙臂差不多 1.6 公尺</td></tr>
+<tr><td>質量</td><td>公斤（千克）</td><td>kg</td><td>一公升的水約 1 公斤</td></tr>
+<tr><td>時間</td><td>秒</td><td>s</td><td>心跳一下大約 1 秒</td></tr>
+<tr><td>電流</td><td>安培</td><td>A</td><td>第 22 課會學到</td></tr>
+<tr><td>溫度</td><td>克耳文</td><td>K</td><td>第 15 課會學到</td></tr>
+<tr><td>物質的量</td><td>莫耳</td><td>mol</td><td>化學課常用</td></tr>
+<tr><td>發光強度</td><td>燭光</td><td>cd</td><td>一支蠟燭大約 1 燭光</td></tr>
+</table></div>
+<p>這七個叫做<b>基本單位</b>。其他所有單位都能由它們組合出來，例如速度的單位「公尺每秒」（m/s）就是長度除以時間。</p>
+
+<aside class="box term"><b>名詞由來：公尺<span class="en">Meter</span></b>
+<p>來自希臘文 <i>metron</i>，意思是「量度」。1791 年法國科學家把公尺定義為「從北極到赤道距離的一千萬分之一」，還派人實地測量了好幾年。1983 年起，公尺改用光來定義：<b>光在真空中 1/299,792,458 秒走的距離</b>。中文的「公」代表「公制」，用來和「台尺」、「英尺」區分。</p></aside>
+
+<aside class="box term"><b>名詞由來：公斤<span class="en">Kilogram</span></b>
+<p><i>kilo</i> 來自希臘文「一千」，<i>gram</i>（公克）來自表示「小重量」的古字。1889 年起，全世界的 1 公斤以法國巴黎一塊鉑銥合金圓柱為準，叫「國際公斤原器」。但它會慢慢沾灰塵、微微變化，所以 2019 年改用一個大自然的常數（普朗克常數，第 26 課會遇到）來定義。</p></aside>
+
+<aside class="box term"><b>名詞由來：秒<span class="en">Second</span></b>
+<p>古人把一小時切成 60 份，拉丁文叫 <i>pars minuta prima</i>（第一次切出的小部分），就是 minute「分」；再切成 60 份，叫 <i>pars minuta secunda</i>（第二次切出的小部分），就是 second「秒」。中文「秒」原本指稻穗尖端細細的芒刺，引申為「極小」。</p></aside>
+
+<h3>很大和很小的數：前綴與科學記號</h3>
+<p>宇宙裡的東西有的超級大、有的超級小。為了方便，我們在單位前面加上<b>前綴</b>：</p>
+<div class="table"><table>
+<tr><th>前綴</th><th>符號</th><th>代表</th><th>例子</th></tr>
+<tr><td>千（kilo）</td><td>k</td><td>1,000</td><td>1 公里 km ＝ 1000 m</td></tr>
+<tr><td>厘（centi）</td><td>c</td><td>1/100</td><td>1 公分 cm ＝ 0.01 m</td></tr>
+<tr><td>毫（milli）</td><td>m</td><td>1/1,000</td><td>1 毫米 mm ＝ 0.001 m</td></tr>
+<tr><td>微（micro）</td><td>μ</td><td>1/1,000,000</td><td>細菌大約幾微米</td></tr>
+<tr><td>奈（nano）</td><td>n</td><td>1/1,000,000,000</td><td>晶片電路以奈米計</td></tr>
+</table></div>
+<p>更方便的寫法叫<mark>科學記號</mark>：把數字寫成「一個 1 到 10 之間的數 × 10 的幾次方」。例如光速 300,000,000 m/s 寫成 <span class="m">3 × 10<sup>8</sup></span> m/s（8 代表後面有 8 個位數），而 0.001 寫成 <span class="m">10<sup>−3</sup></span>（負號代表是「除以」）。</p>
+
+<div class="sim" data-sim="scale" data-r="0.62">
+<div class="cap">宇宙的尺度：拉動拉桿，每一格放大或縮小 10 倍<small>從原子一路到可觀測宇宙，只需要 37 個「10 倍」。</small></div>
+<canvas></canvas>
+<div class="ctrl"><label>10 的次方 <input type="range" data-k="n" min="-10" max="26" step="1" value="0"><output></output></label></div>
+<div class="readout"></div>
+</div>
+
+<aside class="box warn"><b>常見誤解：質量和重量是同一件事？</b>
+<p>日常說「我的體重 50 公斤」，其實說的是<b>質量</b>。質量是「物體含有多少物質」，到哪裡都不變；重量是「地球吸引你的力量」，到月球就會變小。第 9 課會詳細說明。</p></aside>
+
+<div class="quiz" data-ans="2"><p class="q">1. 2.5 公里等於多少公尺？</p><div class="opts"><button>25 公尺</button><button>250 公尺</button><button>2500 公尺</button></div><p class="why">「公里」的 k 代表 1000，所以 2.5 × 1000 ＝ 2500 公尺。</p></div>
+<div class="quiz" data-ans="1"><p class="q">2. 0.0005 公尺用科學記號怎麼寫？</p><div class="opts"><button>5 × 10<sup>4</sup> m</button><button>5 × 10<sup>−4</sup> m</button><button>0.5 × 10<sup>−3</sup> m</button></div><p class="why">小數點往右移 4 位得到 5，所以是 5 × 10<sup>−4</sup>。第三個雖然數值相同，但 0.5 不在 1 到 10 之間，不是標準寫法。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>物理量 ＝ 數字 × 單位，缺一不可。</li><li>國際單位制有 7 個基本單位：m、kg、s、A、K、mol、cd。</li><li>很大或很小的數用前綴或科學記號表示。</li></ul></div>
+</section>
+
+<!-- ================= 第 3 課 ================= -->
+<section class="page lesson" id="L3" data-stage="1">
+<h2>位置、位移與速度</h2>
+<p class="hook">你說「我家在學校 500 公尺遠」，朋友還是找不到你家，因為他不知道「往哪個方向」。描述運動，第一步就是說清楚「在哪裡」和「往哪裡」。</p>
+
+<h3>位置需要一個「參考點」</h3>
+<p>要說某個東西在哪裡，一定要先選一個起算點，叫<mark>原點</mark>，再說出「離原點多遠、在哪個方向」。在一條直線上，我們常把原點右邊記為正（+），左邊記為負（−）。</p>
+
+<h3>路程和位移不一樣</h3>
+<p>在學校 400 公尺的操場跑一圈，回到起點：</p>
+<ul><li><b>路程</b>是你實際走過的路線長度：400 公尺。</li><li><b>位移</b>是「從起點指向終點」的直線箭頭：因為回到原地，位移是 0。</li></ul>
+<p>位移不只有大小，還有方向。像這種<mark>有大小也有方向的量，叫做向量</mark>；只有大小、沒有方向的量（像路程、時間、溫度），叫做<mark>純量</mark>。</p>
+
+<aside class="box term"><b>名詞由來：向量與純量<span class="en">Vector &amp; Scalar</span></b>
+<p><i>vector</i> 來自拉丁文 <i>vehere</i>「攜帶、運送」，原意是「搬運者」，就像把一個點從這裡「搬」到那裡的箭頭。中文「向量」就是「有方向的量」，也譯作「矢量」（矢＝箭）。</p>
+<p><i>scalar</i> 來自拉丁文 <i>scala</i>「梯子」，後來引申為「刻度」：只要在刻度上讀出一個數字就夠了，不需要方向。</p></aside>
+
+<h3>速率與速度</h3>
+<p><b>速率</b>＝路程 ÷ 時間，只告訴你「多快」。<b>速度</b>＝位移 ÷ 時間，同時告訴你「多快」和「往哪裡」，是向量。</p>
+<div class="eq"><i>v</i> = <span class="frac"><span>Δ<i>x</i></span><span>Δ<i>t</i></span></span><small><i>v</i>：速度　Δ<i>x</i>：位移（位置的改變）　Δ<i>t</i>：花的時間　單位：公尺/秒（m/s）</small></div>
+
+<aside class="box term"><b>名詞由來：Δ 和 velocity</b>
+<p>Δ 是希臘字母 delta（大寫），相當於英文的 D，取自 difference「差」。物理裡 Δ 一律代表「變化量」：Δ<i>x</i> ＝ 後來的位置 − 原來的位置。</p>
+<p>速度的英文 <i>velocity</i> 來自拉丁文 <i>velox</i>「快速的」。</p></aside>
+
+<p>汽車儀表板上的速率表，顯示的是那一瞬間的快慢，叫<b>瞬時速率</b>；整趟路的「總路程 ÷ 總時間」叫<b>平均速率</b>。</p>
+
+<h3>用圖來看運動：位置－時間圖</h3>
+<p>物理學家很喜歡畫圖。把每一個時刻的位置畫成點，連起來就是<mark>位置－時間圖（x-t 圖）</mark>。圖線越陡，代表每秒移動越多，速度就越大；往下斜代表往負方向走；水平線代表停著不動。</p>
+
+<div class="sim" data-sim="xt" data-r="0.75">
+<div class="cap">邊開車邊畫圖<small>運行中也可以改變速度，看看圖線的斜度怎麼變。負的速度代表往左開。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>速度 <input type="range" data-k="v" min="-8" max="8" step="0.5" value="4" data-u=" m/s"><output></output></label>
+<button data-act="reset">重新開始</button>
+</div>
+<div class="readout"></div>
+</div>
+
+<aside class="box eg"><b>算算看</b>
+<p>小明騎腳踏車 10 分鐘（600 秒）向東騎了 3000 公尺。他的平均速度 ＝ 3000 ÷ 600 ＝ <b>5 m/s，向東</b>。換成比較熟悉的單位：5 m/s × 3.6 ＝ 18 km/h。（1 m/s ＝ 3.6 km/h，因為 1 小時有 3600 秒，1 公里有 1000 公尺。）</p></aside>
+
+<div class="quiz" data-ans="2"><p class="q">1. 在 400 公尺操場跑一圈回到起點，花了 100 秒。平均速率和平均速度分別是？</p><div class="opts"><button>都是 4 m/s</button><button>都是 0</button><button>平均速率 4 m/s，平均速度 0</button></div><p class="why">速率用路程 400 m ÷ 100 s ＝ 4 m/s；速度用位移，回到原點位移是 0，所以平均速度是 0。</p></div>
+<div class="quiz" data-ans="0"><p class="q">2. 在位置－時間圖上，圖線越陡代表？</p><div class="opts"><button>速度越大</button><button>離原點越遠</button><button>時間越長</button></div><p class="why">斜度 ＝ 位置的變化 ÷ 時間的變化 ＝ 速度。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>位置要有原點；位移是從起點指向終點的箭頭。</li><li>向量有大小和方向（位移、速度），純量只有大小（路程、速率）。</li><li><i>v</i> ＝ Δ<i>x</i> / Δ<i>t</i>；x-t 圖的斜度就是速度。</li></ul></div>
+</section>
+
+<!-- ================= 第 4 課 ================= -->
+<section class="page lesson" id="L4" data-stage="1">
+<h2>加速度</h2>
+<p class="hook">搭捷運時，車子剛啟動你會往後倒，快到站時你會往前傾。真正讓你「有感覺」的，不是速度本身，而是速度的<b>改變</b>。</p>
+
+<h3>速度改變得多快？</h3>
+<p><mark>加速度就是「速度每秒改變多少」。</mark></p>
+<div class="eq"><i>a</i> = <span class="frac"><span>Δ<i>v</i></span><span>Δ<i>t</i></span></span><small><i>a</i>：加速度　Δ<i>v</i>：速度的改變　Δ<i>t</i>：花的時間　單位：公尺/秒²（m/s²）</small></div>
+<p>單位 m/s² 讀作「公尺每秒平方」，意思其實是「(公尺/秒) 每秒」：每過一秒，速度改變幾公尺/秒。</p>
+
+<aside class="box eg"><b>算算看：跑車起步</b>
+<p>一輛跑車 5 秒內從靜止加速到 100 km/h（約 27.8 m/s）。加速度 ＝ 27.8 ÷ 5 ≈ <b>5.6 m/s²</b>。意思是：每過 1 秒，速度增加約 5.6 m/s。</p></aside>
+
+<aside class="box term"><b>名詞由來：加速度<span class="en">Acceleration</span></b>
+<p>來自拉丁文 <i>accelerare</i>：<i>ad</i>（朝向）＋ <i>celer</i>（快速）＝「使變快」。中文「加速度」的意思是「速度增加的程度」。但在物理裡，<mark>減速也是一種加速度</mark>，只是方向和運動方向相反（常寫成負值）。</p></aside>
+
+<aside class="box warn"><b>常見誤解：速度快＝加速度大？</b>
+<p>不一定！飛機以 900 km/h 平穩巡航時，速度非常快，但速度沒有改變，加速度是 0。反過來，剛起步的機車速度很慢，加速度卻可能很大。</p></aside>
+
+<h3>速度－時間圖：斜度與面積</h3>
+<p>把速度畫在縱軸、時間畫在橫軸，就得到<mark>速度－時間圖（v-t 圖）</mark>。它藏著兩個寶物：</p>
+<ul><li><b>圖線的斜度 ＝ 加速度</b>（速度每秒變多少）。</li><li><b>圖線下方的面積 ＝ 位移</b>（走了多遠）。</li></ul>
+<p>為什麼面積是位移？想想等速運動：速度 5 m/s 走 4 秒，走了 5 × 4 ＝ 20 公尺，剛好就是 v-t 圖上那個長方形「高 × 寬」的面積。速度會變時，面積一樣成立。這個想法在第 29 課會變成「積分」。</p>
+
+<div class="sim" data-sim="vt" data-r="0.75">
+<div class="cap">加速中的車與 v-t 圖<small>藍色面積就是走過的距離。試試負的加速度：車子會慢下來、停住，然後倒退。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>初速度 <input type="range" data-k="v0" min="0" max="10" step="0.5" value="2" data-u=" m/s"><output></output></label>
+<label>加速度 <input type="range" data-k="a" min="-3" max="3" step="0.25" value="1" data-u=" m/s²"><output></output></label>
+<button data-act="reset">重新開始</button>
+</div>
+<div class="readout"></div>
+</div>
+
+<h3>等加速度運動的公式</h3>
+<p>如果加速度固定不變，從上面的圖可以推出兩個好用的公式（<i>v</i><sub>0</sub> 是一開始的速度）：</p>
+<div class="eq"><i>v</i> = <i>v</i><sub>0</sub> + <i>a t</i><br><i>x</i> = <i>v</i><sub>0</sub><i>t</i> + ½ <i>a t</i>²<small>第一式：斜度的定義。第二式：v-t 圖下梯形的面積。</small></div>
+
+<div class="quiz" data-ans="1"><p class="q">1. 一輛車的速度在 5 秒內從 10 m/s 變成 20 m/s，加速度是？</p><div class="opts"><button>4 m/s²</button><button>2 m/s²</button><button>30 m/s²</button></div><p class="why">(20 − 10) ÷ 5 ＝ 2 m/s²。</p></div>
+<div class="quiz" data-ans="2"><p class="q">2. 在速度－時間圖中，圖線下方的面積代表什麼？</p><div class="opts"><button>加速度</button><button>速度</button><button>位移</button></div><p class="why">速度 × 時間 ＝ 位移，所以面積就是位移。斜度才是加速度。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>加速度 ＝ 速度的改變 ÷ 時間，單位 m/s²。</li><li>減速也是加速度，方向和運動方向相反。</li><li>v-t 圖：斜度＝加速度，面積＝位移。</li></ul></div>
+</section>
+
+<!-- ================= 第 5 課 ================= -->
+<section class="page lesson" id="L5" data-stage="1">
+<h2>自由落體</h2>
+<p class="hook">一顆鐵球和一根羽毛同時放手，哪個先落地？兩千年來，大多數人都答錯了。</p>
+
+<h3>亞里斯多德 vs. 伽利略</h3>
+<p>古希臘的亞里斯多德認為：<b>越重的東西掉得越快</b>。這聽起來很合理，而且被相信了將近兩千年。</p>
+<p>伽利略不相信「聽起來合理」，他做實驗。他讓球從斜面滾下（斜面能讓落下變慢，方便用水鐘計時），發現：<mark>如果沒有空氣阻力，所有物體落下時的加速度都一樣。</mark>羽毛落得慢，是因為空氣擋住了它，不是因為它比較輕。</p>
+<p>伽利略還想出一個漂亮的論證：假如重的真的掉比較快，那把一個重球和一個輕球綁在一起會怎樣？輕球會拖慢重球，所以應該比重球慢；可是綁在一起總重量變大，又應該比重球快。兩個結論互相矛盾，所以原本的假設錯了。</p>
+
+<aside class="box eg"><b>在月球上驗證</b>
+<p>1971 年阿波羅 15 號太空人史考特在沒有空氣的月球表面，同時放開一根鷹羽毛和一把鎚子，兩者同時落地。這段影片至今還能在網路上看到。</p></aside>
+
+<h3>重力加速度 g</h3>
+<p>只受重力作用、從靜止開始落下的運動叫做<mark>自由落體</mark>。在地球表面附近，它的加速度大約是：</p>
+<div class="eq"><i>g</i> ≈ 9.8 m/s²<small>每落下 1 秒，速度增加約 9.8 m/s。計算時常取 10 方便心算。</small></div>
+<p>套用第 4 課的公式（<i>v</i><sub>0</sub> ＝ 0、<i>a</i> ＝ <i>g</i>）：落下 <i>t</i> 秒後，速度 <i>v</i> ＝ <i>g t</i>，落下的距離 <i>h</i> ＝ ½<i>g t</i>²。</p>
+
+<aside class="box term"><b>名詞由來：重力<span class="en">Gravity</span></b>
+<p>來自拉丁文 <i>gravis</i>「沉重的」。英文 grave（嚴肅的、沉重的）也是同一個字根。符號 <i>g</i> 就是取 gravity 的第一個字母。</p></aside>
+
+<h3>空氣阻力與終端速度</h3>
+<p>在空氣中，物體掉得越快，空氣擋得越用力。當空氣阻力大到和重力一樣大時，物體就不再加速，以固定速度落下，這個速度叫<b>終端速度</b>。雨滴的終端速度只有每秒幾公尺，所以雨打在身上不會受傷；降落傘則是用大面積製造很大的阻力，把終端速度降到能安全落地。</p>
+
+<div class="sim" data-sim="fall" data-r="0.7">
+<div class="cap">鐵球與羽毛同時從 20 公尺落下<small>先勾選或取消「有空氣」，再按「放手」。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label class="ck"><input type="checkbox" data-k="air" checked> 有空氣</label>
+<button data-act="drop">放手</button>
+</div>
+<div class="readout"></div>
+</div>
+
+<div class="quiz" data-ans="1"><p class="q">1. 在真空管中同時放開鐵球和羽毛，結果？</p><div class="opts"><button>鐵球先落地</button><button>同時落地</button><button>羽毛先落地</button></div><p class="why">沒有空氣阻力時，所有物體的加速度都是 g，所以同時落地。</p></div>
+<div class="quiz" data-ans="0"><p class="q">2. 忽略空氣阻力，石頭從靜止落下 2 秒後的速度約是？</p><div class="opts"><button>19.6 m/s</button><button>9.8 m/s</button><button>4.9 m/s</button></div><p class="why"><i>v</i> ＝ <i>g t</i> ＝ 9.8 × 2 ＝ 19.6 m/s。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>沒有空氣阻力時，所有物體落下的加速度都相同。</li><li>地表附近 <i>g</i> ≈ 9.8 m/s²；<i>v</i> ＝ <i>gt</i>，<i>h</i> ＝ ½<i>gt</i>²。</li><li>空氣阻力會讓物體達到終端速度。</li></ul></div>
+</section>
+
+<!-- ================= 第 6 課 ================= -->
+<section class="page lesson" id="L6" data-stage="1">
+<h2>牛頓第一定律：慣性</h2>
+<p class="hook">推一下桌上的書，它滑一小段就停了。所以「東西要一直推才會動」嗎？這個錯覺，騙了人類兩千年。</p>
+
+<h3>停下來的原因是什麼？</h3>
+<p>亞里斯多德認為物體的「自然狀態」是靜止，要持續用力才能讓它一直動。伽利略又提出了不同看法：書會停下，是因為<b>摩擦力</b>在拖住它。桌面越光滑，書滑得越遠。那如果完全沒有摩擦呢？它會永遠滑下去。</p>
+<p>1687 年，英國科學家牛頓在《自然哲學的數學原理》中，把這個想法寫成第一條運動定律：</p>
+<div class="eq" style="font-family:var(--serif);font-size:1.15rem">物體若不受外力（或受到的合力為零），<br>靜止的會保持靜止，運動的會保持等速直線運動。</div>
+<p>物體這種<mark>「維持原本運動狀態」的傾向，叫做慣性。</mark>質量越大，慣性越大，越難改變它的運動。推空的購物車很輕鬆，推裝滿的購物車就很吃力，停下來也比較難。</p>
+
+<aside class="box term"><b>名詞由來：慣性<span class="en">Inertia</span></b>
+<p>來自拉丁文 <i>iners</i>「懶惰的、不活動的」。物體就像很懶的人：在沙發上就不想起來，已經在走路就不想停。中文「慣性」就是「保持習慣的性質」。</p></aside>
+
+<aside class="box term"><b>名詞由來：質量<span class="en">Mass</span></b>
+<p>來自希臘文 <i>maza</i>「一團麵團」。質量就是「這團東西有多少物質」，也是慣性大小的量度。</p></aside>
+
+<div class="sim" data-sim="inertia" data-r="0.5">
+<div class="cap">在不同地面上推一下冰球<small>把摩擦力調到 0，看看會發生什麼事。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>地面摩擦 <input type="range" data-k="mu" min="0" max="0.5" step="0.01" value="0.2"><output></output></label>
+<button data-act="push">推一下</button>
+</div>
+<div class="readout"></div>
+</div>
+
+<aside class="box eg"><b>生活中的慣性</b>
+<ul><li>公車急煞，乘客往前傾：車停了，你的身體還想保持往前的運動。所以要繫安全帶。</li><li>快速抽走桌巾，杯盤留在桌上：杯盤的慣性讓它們來不及跟著動。</li><li>甩乾溼手上的水：手停了，水滴繼續往前飛出去。</li></ul></aside>
+
+<aside class="box warn"><b>常見誤解：「動的東西一定有力在推」</b>
+<p>太空探測器「航海家 1 號」1977 年發射，早就關掉引擎，到現在仍以每秒十幾公里飛向星際空間，因為太空中幾乎沒有東西擋住它。<b>力是用來改變運動的，不是用來維持運動的。</b></p></aside>
+
+<div class="quiz" data-ans="1"><p class="q">1. 在遠離所有星球的太空中踢出一顆球，它會？</p><div class="opts"><button>慢慢停下來</button><button>一直以等速直線前進</button><button>繞圈圈</button></div><p class="why">不受外力時，運動中的物體保持等速直線運動。</p></div>
+<div class="quiz" data-ans="0"><p class="q">2. 公車突然起動時，站著的乘客往後倒，原因是？</p><div class="opts"><button>乘客的身體有慣性，想保持靜止</button><button>有一股力把乘客往後推</button><button>空氣把乘客往後吹</button></div><p class="why">腳跟著車往前，身體卻想保持原本的靜止，所以看起來往後倒。並沒有「往後推的力」。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>牛頓第一定律：合力為零時，靜者恆靜，動者恆做等速直線運動。</li><li>慣性是物體維持運動狀態的傾向，質量越大慣性越大。</li><li>力改變運動，不是維持運動。</li></ul></div>
+</section>
+
+<!-- ================= 第 7 課 ================= -->
+<section class="page lesson" id="L7" data-stage="1">
+<h2>牛頓第二定律：F ＝ ma</h2>
+<p class="hook">第一定律說「沒有力，運動就不變」。那有力的時候呢？運動會怎麼變、變多少？答案是整個物理學最有名的式子之一。</p>
+
+<h3>力、質量與加速度</h3>
+<p>用同樣的力氣推空購物車和滿購物車，空的加速得比較快。用更大的力推同一台車，它也加速得更快。牛頓把這兩件事合起來：</p>
+<div class="eq"><i>F</i> = <i>m a</i><small><i>F</i>：合力（牛頓，N）　<i>m</i>：質量（公斤，kg）　<i>a</i>：加速度（m/s²）<br>加速度的方向和合力的方向相同。</small></div>
+<p>也可以寫成 <i>a</i> ＝ <i>F</i> / <i>m</i>：<mark>力越大，加速度越大；質量越大，加速度越小。</mark></p>
+
+<aside class="box term"><b>名詞由來：力與牛頓<span class="en">Force &amp; Newton</span></b>
+<p><i>force</i> 來自拉丁文 <i>fortis</i>「強壯的」（fort 堡壘也是同源）。力的單位「牛頓」（N）紀念艾薩克‧牛頓：<b>1 N 就是讓 1 公斤的物體產生 1 m/s² 加速度的力</b>，所以 1 N ＝ 1 kg·m/s²。手上托著一顆約 100 公克的小蘋果，感受到的力大約就是 1 N。</p></aside>
+
+<h3>合力：力是向量，要考慮方向</h3>
+<p>力有大小也有方向，是向量。拔河時，兩隊都在用力，繩子往哪邊動，要看兩邊力量「相減」後的結果。所有力加起來（考慮方向）的總效果叫<mark>合力</mark>，第二定律裡的 <i>F</i> 指的就是合力。</p>
+<p>如果兩邊力量一樣大，合力是 0，加速度也是 0。這時繩子不動，或保持原本的等速運動，剛好回到第一定律。<b>第一定律其實是第二定律在 F ＝ 0 時的特例。</b></p>
+
+<div class="sim" data-sim="fma" data-r="0.5">
+<div class="cap">兩個人推同一個箱子（地面光滑）<small>改變兩邊的力和箱子的質量，觀察加速度。按「停住箱子」可重新開始。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>向右的力 <input type="range" data-k="F1" min="0" max="40" step="1" value="20" data-u=" N"><output></output></label>
+<label>向左的力 <input type="range" data-k="F2" min="0" max="40" step="1" value="10" data-u=" N"><output></output></label>
+<label>質量 <input type="range" data-k="m" min="1" max="20" step="1" value="5" data-u=" kg"><output></output></label>
+<button data-act="reset">停住箱子</button>
+</div>
+<div class="readout"></div>
+</div>
+
+<aside class="box eg"><b>算算看</b>
+<p>用 30 N 往右推一個 6 kg 的箱子，同時地面摩擦力 6 N 往左。合力 ＝ 30 − 6 ＝ 24 N 往右，加速度 ＝ 24 ÷ 6 ＝ <b>4 m/s² 往右</b>。</p></aside>
+
+<div class="quiz" data-ans="2"><p class="q">1. 用 10 N 的合力推一個 2 kg 的物體，加速度是？</p><div class="opts"><button>20 m/s²</button><button>0.2 m/s²</button><button>5 m/s²</button></div><p class="why"><i>a</i> ＝ <i>F</i>/<i>m</i> ＝ 10 ÷ 2 ＝ 5 m/s²。</p></div>
+<div class="quiz" data-ans="0"><p class="q">2. 用同樣大小的合力，去推質量變成兩倍的物體，加速度會？</p><div class="opts"><button>變成一半</button><button>變成兩倍</button><button>不變</button></div><p class="why">質量在分母，質量加倍，加速度就減半。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li><i>F</i> ＝ <i>ma</i>，<i>F</i> 是合力，加速度方向與合力相同。</li><li>1 N ＝ 1 kg·m/s²。</li><li>合力為零時就回到第一定律。</li></ul></div>
+</section>
+
+<!-- ================= 第 8 課 ================= -->
+<section class="page lesson" id="L8" data-stage="1">
+<h2>牛頓第三定律：作用與反作用</h2>
+<p class="hook">你走路時，腳向後蹬地面，為什麼身體卻往前走？火箭在沒有空氣的太空中，又是「推」什麼東西前進的？</p>
+
+<h3>力永遠成對出現</h3>
+<div class="eq" style="font-family:var(--serif);font-size:1.15rem">當 A 對 B 施一個力，B 也會同時對 A 施一個<br>大小相等、方向相反的力。</div>
+<p>這兩個力分別叫<mark>作用力</mark>與<mark>反作用力</mark>。它們有三個特點：</p>
+<ol><li><b>同時出現、同時消失</b>，沒有誰先誰後。</li><li><b>大小相等、方向相反。</b></li><li><b>作用在不同的物體上。</b>這一點最重要。</li></ol>
+
+<aside class="box eg"><b>生活中的作用與反作用</b>
+<ul><li><b>走路</b>：腳往後推地面，地面往前推你。你往前走，靠的是地面推你的那個力。在冰上很難走，就是因為腳推不動光滑的冰面。</li><li><b>游泳</b>：手把水往後划，水把你往前推。</li><li><b>火箭</b>：火箭把燃氣往後猛力噴出，燃氣也把火箭往前推。所以火箭在真空中照樣能加速，它不需要「推空氣」。</li></ul></aside>
+
+<aside class="box term"><b>名詞由來：反作用<span class="en">Reaction</span></b>
+<p>來自拉丁文 <i>re-</i>（回來）＋ <i>agere</i>（做）＝「做回去」。你對別人出力，別人一定「回你一個力」。</p></aside>
+
+<h3>既然大小相等方向相反，為什麼不會抵消？</h3>
+<p>這是最多人卡住的地方。<mark>會互相抵消的力，必須作用在「同一個」物體上。</mark>作用力和反作用力作用在兩個不同的物體上，各自改變各自的運動，所以不能相加抵消。</p>
+<p>那兩個物體的運動誰變得多？回想 <i>a</i> ＝ <i>F</i>/<i>m</i>：受力一樣大，<b>質量小的加速度大</b>。你推地球、地球推你，力一樣大，但地球質量太大，它的加速度小到完全感覺不到。</p>
+
+<div class="sim" data-sim="skaters" data-r="0.5">
+<div class="cap">兩位溜冰者在冰上互推<small>改變兩人質量，按「互推」。推的過程中兩人受到的力永遠一樣大。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>左邊的人 <input type="range" data-k="m1" min="20" max="100" step="5" value="60" data-u=" kg"><output></output></label>
+<label>右邊的人 <input type="range" data-k="m2" min="20" max="100" step="5" value="30" data-u=" kg"><output></output></label>
+<button data-act="push">互推</button>
+</div>
+<div class="readout"></div>
+</div>
+
+<aside class="box warn"><b>常見誤解：「馬拉車，車也拉馬，那車怎麼動得了？」</b>
+<p>馬和車之間的拉力確實大小相等。但判斷「車會不會動」，只要看<b>作用在車上</b>的力：馬往前拉車的力比地面對車輪的阻力大，車就加速。馬自己會前進，是因為馬蹄往後蹬地面、地面把馬往前推得夠用力。</p></aside>
+
+<div class="quiz" data-ans="1"><p class="q">1. 你用 50 N 推牆，牆對你的力是？</p><div class="opts"><button>0，牆不會出力</button><button>50 N，方向朝向你</button><button>比 50 N 小，因為牆沒動</button></div><p class="why">作用力與反作用力永遠大小相等、方向相反。牆沒動，是因為牆還受到地基等其他力。</p></div>
+<div class="quiz" data-ans="2"><p class="q">2. 60 kg 的大人和 30 kg 的小孩在冰上互推，分開後？</p><div class="opts"><button>兩人速度一樣</button><button>大人速度是小孩的兩倍</button><button>小孩速度是大人的兩倍</button></div><p class="why">兩人受力一樣大、推的時間一樣長，質量是一半的小孩，得到的速度是兩倍。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>力永遠成對：大小相等、方向相反、同時出現。</li><li>作用力和反作用力作用在不同物體上，不能互相抵消。</li><li>受力相同時，質量小的加速度大。</li></ul></div>
+</section>
+
+<!-- ================= 第 9 課 ================= -->
+<section class="page lesson" id="L9" data-stage="1">
+<h2>常見的力：重力、正向力、摩擦力</h2>
+<p class="hook">你現在坐在椅子上，看起來一動也不動。其實你身上至少有兩個力正在較勁，只是它們剛好打成平手。</p>
+
+<h3>重力與重量</h3>
+<p>地球吸引所有物體，這個力叫<b>重力</b>。物體受到的重力大小叫<mark>重量</mark>，等於質量乘以重力加速度：</p>
+<div class="eq"><i>W</i> = <i>m g</i><small><i>W</i>：重量（N）　<i>m</i>：質量（kg）　<i>g</i> ≈ 9.8 m/s²</small></div>
+<p>一個 50 kg 的人，在地球上的重量是 50 × 9.8 ＝ 490 N。到了月球，月球的重力加速度只有地球的約六分之一，重量變成約 82 N，<b>但質量仍是 50 kg</b>，因為身體裡的物質一點也沒少。</p>
+
+<h3>正向力：表面「推回來」的力</h3>
+<p>你坐在椅子上沒有掉下去，是因為椅面往上推著你。這種接觸面垂直推回來的力，叫<mark>正向力</mark>。椅子其實被你壓得微微變形，它像彈簧一樣推回來。</p>
+
+<aside class="box term"><b>名詞由來：正向力<span class="en">Normal force</span></b>
+<p><i>normal</i> 來自拉丁文 <i>norma</i>，是木匠用的「直角尺」。所以在數學和物理裡，normal 的意思是「垂直的」。正向力就是「垂直於接觸面的力」，和「正常」無關。第 19 課的「法線」也是同一個字。</p></aside>
+
+<h3>摩擦力：阻止滑動的力</h3>
+<p>兩個表面接觸時，會產生阻止它們互相滑動的力，叫<mark>摩擦力</mark>。表面看起來再光滑，放大來看都是凹凸不平的，會互相卡住。</p>
+<ul><li><b>靜摩擦力</b>：物體還沒動時，擋住它不讓它動。你輕推沉重的衣櫃推不動，就是靜摩擦力和你打成平手。它有一個最大值，超過就推得動了。</li><li><b>動摩擦力</b>：物體滑動時的摩擦力，通常比最大靜摩擦力小一些。所以衣櫃「一旦推動了，就比較好推」。</li></ul>
+<div class="eq"><i>f</i> = <i>μ N</i><small><i>f</i>：摩擦力　<i>μ</i>：摩擦係數（表面有多「澀」）　<i>N</i>：正向力</small></div>
+
+<aside class="box term"><b>名詞由來：摩擦<span class="en">Friction</span></b>
+<p>來自拉丁文 <i>fricare</i>「搓、揉」。符號 <i>μ</i> 是希臘字母 mu（讀作「謬」）。冰面的 <i>μ</i> 約 0.03，橡膠輪胎在乾柏油路上約 0.7 以上。</p></aside>
+
+<h3>斜面：把重力拆成兩半</h3>
+<p>放在斜面上的物體，重力是垂直往下的，但我們可以把它<b>拆成兩個分量</b>：一個沿著斜面往下（讓物體想滑），一個垂直壓向斜面（決定正向力的大小）。斜面越陡，沿斜面的分量越大，同時壓向斜面的分量越小，摩擦力也越小，物體就越容易滑下去。</p>
+
+<div class="sim" data-sim="incline" data-r="0.62">
+<div class="cap">斜面上的木塊：會不會滑下去？<small>黑：重力　藍：正向力　紅：摩擦力。調整角度和摩擦係數後按「重放」。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>斜面角度 <input type="range" data-k="th" min="0" max="60" step="1" value="25" data-u="°"><output></output></label>
+<label>摩擦係數 μ <input type="range" data-k="mu" min="0" max="1" step="0.02" value="0.4"><output></output></label>
+<button data-act="reset">重放</button>
+</div>
+<div class="readout"></div>
+</div>
+
+<div class="quiz" data-ans="0"><p class="q">1. 一位 50 kg 的太空人到了月球，他的質量是？</p><div class="opts"><button>仍然 50 kg</button><button>約 8 kg</button><button>0 kg</button></div><p class="why">質量是物體含有的物質量，到哪裡都不變；改變的是重量。</p></div>
+<div class="quiz" data-ans="1"><p class="q">2. 斜面越陡，木塊越容易滑下，主要因為？</p><div class="opts"><button>木塊變重了</button><button>重力沿斜面的分量變大，摩擦力卻變小</button><button>斜面變光滑了</button></div><p class="why">重量不變，但「拆法」變了：沿斜面的分量 mg sinθ 變大，壓向斜面的分量 mg cosθ 變小，最大摩擦力也跟著變小。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>重量 <i>W</i> ＝ <i>mg</i>，會隨星球改變；質量不會。</li><li>正向力垂直於接觸面；摩擦力 <i>f</i> ＝ <i>μN</i>，分靜摩擦和動摩擦。</li><li>力可以拆成分量來分析，這是解物理題的重要技巧。</li></ul></div>
+</section>
+
+<!-- ================= 第 10 課 ================= -->
+<section class="page lesson" id="L10" data-stage="1">
+<h2>拋體運動</h2>
+<p class="hook">投籃時，籃球畫出一道漂亮的弧線。這條弧線看起來複雜，但只要用一個聰明的想法，就能把它拆成兩個你已經會的運動。</p>
+
+<h3>關鍵想法：水平和垂直分開看</h3>
+<p>斜著丟出去的球，<mark>水平方向和垂直方向的運動互不干擾，可以分開計算：</mark></p>
+<ul><li><b>水平方向</b>：沒有力（忽略空氣阻力），所以根據第一定律，做<b>等速運動</b>。</li><li><b>垂直方向</b>：只受重力，就是第 5 課的<b>自由落體</b>（只是一開始有往上的速度）。</li></ul>
+<p>兩個運動合在一起，就畫出一條<b>拋物線</b>。</p>
+
+<aside class="box eg"><b>驚人的實驗</b>
+<p>在同一個高度，一顆球水平射出，另一顆球同時直接放手落下，<b>它們會同時落地</b>。因為水平速度完全不影響垂直方向的落下。你可以在家用兩枚硬幣試試：一枚從桌邊彈出去，一枚同時從桌邊滑落，聽聽看它們是不是「叮」一聲同時著地。</p></aside>
+
+<aside class="box term"><b>名詞由來：拋物線<span class="en">Parabola</span></b>
+<p>英文 <i>parabola</i> 是古希臘數學家阿波羅尼奧斯研究「切圓錐」時取的名字，希臘文原意是「並排放置、比較」，本來跟丟東西無關。中文翻成「拋物線」，反而直接說出了它的物理意義：<b>拋出去的物體所走的路線</b>。</p></aside>
+
+<h3>怎麼丟最遠？</h3>
+<p>在沒有空氣阻力、起點終點同高的情況下，<mark>以 45° 角拋出，飛得最遠。</mark>角度太小，球很快就落地；角度太大，球都往上跑了，水平走不遠。而且 30° 和 60° 這種「互補」的角度，飛行距離剛好一樣。</p>
+
+<div class="sim" data-sim="proj" data-r="0.62">
+<div class="cap">發射台：調整角度與速度<small>綠色箭頭是水平速度（永遠不變），紅色箭頭是垂直速度（一直在改變）。舊的軌跡會留下來方便比較。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>角度 <input type="range" data-k="ang" min="10" max="80" step="1" value="45" data-u="°"><output></output></label>
+<label>初速度 <input type="range" data-k="v" min="5" max="30" step="1" value="20" data-u=" m/s"><output></output></label>
+<button data-act="fire">發射</button><button class="alt" data-act="clear">清除軌跡</button>
+</div>
+<div class="readout"></div>
+</div>
+
+<div class="quiz" data-ans="0"><p class="q">1. 同一高度，一球水平射出、一球同時自由落下，何者先落地？</p><div class="opts"><button>同時落地</button><button>水平射出的先</button><button>自由落下的先</button></div><p class="why">垂直方向兩顆球都是從靜止開始自由落體，完全一樣。</p></div>
+<div class="quiz" data-ans="1"><p class="q">2. 球在拋物線最高點時，它的速度是？</p><div class="opts"><button>0</button><button>只剩水平速度</button><button>只剩垂直速度</button></div><p class="why">最高點垂直速度剛好變成 0，但水平速度從頭到尾都沒變，所以速度不是 0。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>拋體運動 ＝ 水平等速 ＋ 垂直自由落體，兩者互不干擾。</li><li>軌跡是拋物線。</li><li>無空氣阻力時，45° 射得最遠。</li></ul></div>
+</section>
+
+<!-- ================= 第 11 課 ================= -->
+<section class="page lesson" id="L11" data-stage="1">
+<h2>功與能量</h2>
+<p class="hook">吃飯、充電、加油、曬太陽。這些事情都在「補充」同一種東西。它看不見摸不著，卻是整個宇宙最重要的帳本：能量。</p>
+
+<h3>物理的「功」</h3>
+<p>日常說「做功課」很累，但物理的<mark>功</mark>有精確的定義：<b>力 × 沿著力的方向移動的距離</b>。</p>
+<div class="eq"><i>W</i> = <i>F d</i><small><i>W</i>：功（焦耳，J）　<i>F</i>：力（N）　<i>d</i>：沿力方向的位移（m）</small></div>
+<p>你用 10 N 把書包往上提 1 公尺，做了 10 J 的功。但如果你提著書包站著不動，就算手很痠，物理上的功是 0，因為沒有移動。提著書包水平走路，也幾乎不做功，因為力（往上）和移動（水平）互相垂直。</p>
+
+<aside class="box term"><b>名詞由來：功與焦耳<span class="en">Work &amp; Joule</span></b>
+<p>中文「功」有「功效、成果」的意思，要「有成果」才算。單位焦耳（J）紀念英國的焦耳。他是釀酒商的兒子，用極精密的實驗證明「做功可以變成熱，而且兩者可以換算」，為能量守恆打下基礎。1 J 大約是把一顆小蘋果從地上拿到桌上所需的能量。</p></aside>
+
+<h3>能量：做功的本事</h3>
+<p><mark>能量就是「能夠做功的本領」。</mark>它有很多形式：</p>
+<ul><li><b>動能</b>：因為「運動」而有的能量。越快、越重，動能越大。</li><li><b>重力位能</b>：因為「位置高」而有的能量。舉高的東西落下時能做功，例如水力發電。</li><li>還有熱能、化學能（食物、電池）、電能、核能……</li></ul>
+<div class="eq"><i>E</i><sub>動</sub> = ½ <i>m v</i>²　　<i>E</i><sub>位</sub> = <i>m g h</i><small>注意動能跟速度的「平方」成正比：速度變 2 倍，動能變 4 倍。所以車速稍微快一點，撞擊就危險很多。</small></div>
+
+<aside class="box term"><b>名詞由來：能量、動能、位能</b>
+<p><b>energy</b> 來自希臘文 <i>energeia</i>：<i>en</i>（在裡面）＋ <i>ergon</i>（工作），意思是「在做工的狀態」，是亞里斯多德造的字。1807 年英國科學家托馬斯‧楊第一次用它表示物理上的能量。</p>
+<p><b>動能 kinetic energy</b>：希臘文 <i>kinesis</i>「運動」，電影 cinema 也是同一個字根（會動的畫面）。</p>
+<p><b>位能 potential energy</b>：拉丁文 <i>potentia</i>「潛力」，1853 年蘇格蘭工程師蘭金提出。中文「位能」強調它和「位置」有關，也叫「勢能」。</p></aside>
+
+<h3>能量守恆：宇宙的帳本永遠平衡</h3>
+<p><mark>能量不會憑空產生，也不會憑空消失，只會從一種形式轉換成另一種形式。</mark>這叫<b>能量守恆定律</b>，是物理學最可靠的定律之一。</p>
+<p>溜滑板時，你從高處往下滑，位能變成動能；衝上另一邊，動能又變回位能。如果完全沒有摩擦，你可以永遠來回。實際上摩擦會把一部分能量變成熱，所以你每次都衝得低一點，但<b>總能量</b>（位能＋動能＋熱）一點也沒少。</p>
+
+<div class="sim" data-sim="energy" data-r="0.62">
+<div class="cap">滑板場的能量帳本<small>右邊的長條是能量的分配。總高度（總能量）永遠不變。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>出發高度 <input type="range" data-k="h" min="1" max="5" step="0.1" value="4" data-u=" m"><output></output></label>
+<label class="ck"><input type="checkbox" data-k="fr"> 有摩擦</label>
+<button data-act="reset">重新出發</button>
+</div>
+<div class="readout"></div>
+</div>
+
+<h3>功率：做功有多快</h3>
+<p>同樣爬上五樓，用跑的比用走的累，因為單位時間內做的功比較多。<b>功率 ＝ 功 ÷ 時間</b>，單位是瓦特（W）：1 W ＝ 每秒 1 J。燈泡上標的「10 W」就是每秒用掉 10 J 的電能。單位名稱紀念改良蒸汽機的瓦特。</p>
+
+<div class="quiz" data-ans="2"><p class="q">1. 一台車的速度變成原來的 2 倍，動能變成幾倍？</p><div class="opts"><button>2 倍</button><button>不變</button><button>4 倍</button></div><p class="why">動能 ½<i>mv</i>² 與速度平方成正比，2² ＝ 4。</p></div>
+<div class="quiz" data-ans="0"><p class="q">2. 無摩擦下，從 5 m 高滑下，到最低點的速度約是？（<i>g</i> 取 9.8）</p><div class="opts"><button>約 9.9 m/s</button><button>約 49 m/s</button><button>約 5 m/s</button></div><p class="why">位能全變動能：<i>mgh</i> ＝ ½<i>mv</i>²，所以 <i>v</i> ＝ √(2<i>gh</i>) ＝ √98 ≈ 9.9 m/s。質量剛好消掉了！</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>功 ＝ 力 × 沿力方向的位移，單位焦耳 J。</li><li>動能 ½<i>mv</i>²，重力位能 <i>mgh</i>。</li><li>能量守恆：能量只會轉換，總量不變。功率 ＝ 功 ÷ 時間。</li></ul></div>
+</section>
+
+<!-- ================= 第 12 課 ================= -->
+<section class="page lesson" id="L12" data-stage="1">
+<h2>動量與碰撞</h2>
+<p class="hook">一台慢慢滑動的大卡車和一顆高速飛來的子彈，哪個比較難擋住？要回答這個問題，我們需要一個新的物理量。</p>
+
+<h3>動量：運動的「衝勁」</h3>
+<div class="eq"><i>p</i> = <i>m v</i><small><i>p</i>：動量（kg·m/s）　<i>m</i>：質量　<i>v</i>：速度。動量是向量，方向和速度相同。</small></div>
+<p>質量大或速度快，動量都會大。慢慢滑的大卡車和高速子彈都有很大的動量，所以都很難擋住。</p>
+
+<aside class="box term"><b>名詞由來：動量<span class="en">Momentum</span></b>
+<p>來自拉丁文 <i>movere</i>「移動」，<i>momentum</i> 原意是「推動的力量」。英文說一件事 gaining momentum（聲勢越來越大），就是借用這個物理概念。</p></aside>
+
+<h3>衝量：改變動量需要「力 × 時間」</h3>
+<p>把 <i>F</i> ＝ <i>ma</i> 稍微改寫，會得到：</p>
+<div class="eq"><i>F</i> Δ<i>t</i> = Δ<i>p</i><small>力 × 作用時間 ＝ 動量的改變。左邊叫做「衝量」。</small></div>
+<p>這告訴我們：要讓同樣的動量變成 0，<mark>作用時間拉得越長，需要的力就越小。</mark></p>
+<aside class="box eg"><b>生活中的衝量</b>
+<ul><li>接棒球時手往後收，延長接球時間，手就不會那麼痛。</li><li>汽車安全氣囊讓頭撞上軟墊的時間變長，衝擊力就變小。</li><li>跳遠的沙坑、跳高的軟墊，都是同樣的道理。</li></ul></aside>
+
+<h3>動量守恆</h3>
+<p>兩個物體互撞時，根據第三定律，它們給對方的力一樣大、方向相反，作用時間也一樣長。所以一個得到多少動量，另一個就失去多少。結論是：</p>
+<div class="eq" style="font-family:var(--serif);font-size:1.15rem">一個系統若不受外力，碰撞前後的總動量不變。</div>
+<p>這就是<mark>動量守恆定律</mark>。開槍時槍往後彈（後座力）、撞球互撞、火箭噴氣前進，都可以用它來計算。</p>
+<p>碰撞有兩種極端：<b>彈性碰撞</b>像撞球，彈開後動能幾乎沒損失；<b>完全非彈性碰撞</b>像兩台車撞在一起黏住，損失最多動能（變成熱、聲音和變形）。<mark>但無論哪一種，動量都守恆。</mark></p>
+
+<div class="sim" data-sim="collide" data-r="0.45">
+<div class="cap">軌道上的兩台車<small>左車往右撞向靜止的右車。比較兩種碰撞前後的動量與動能。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>左車質量 <input type="range" data-k="m1" min="1" max="5" step="0.5" value="2" data-u=" kg"><output></output></label>
+<label>右車質量 <input type="range" data-k="m2" min="1" max="5" step="0.5" value="2" data-u=" kg"><output></output></label>
+<label>左車速度 <input type="range" data-k="v1" min="1" max="5" step="0.5" value="3" data-u=" m/s"><output></output></label>
+<label class="ck"><input type="checkbox" data-k="stick"> 撞了黏在一起</label>
+<button data-act="go">開始</button>
+</div>
+<div class="readout"></div>
+</div>
+
+<div class="quiz" data-ans="1"><p class="q">1. 接高速的棒球時，手要往後收，是為了？</p><div class="opts"><button>減少球的動量改變</button><button>延長作用時間，減小衝擊力</button><button>讓球的速度變快</button></div><p class="why">動量的改變量是固定的，時間拉長，力就變小。</p></div>
+<div class="quiz" data-ans="0"><p class="q">2. 2 kg 的車以 3 m/s 撞上靜止的 1 kg 車，兩車黏在一起，之後的速度是？</p><div class="opts"><button>2 m/s</button><button>3 m/s</button><button>1.5 m/s</button></div><p class="why">總動量 ＝ 2 × 3 ＝ 6 kg·m/s，黏在一起總質量 3 kg，速度 ＝ 6 ÷ 3 ＝ 2 m/s。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>動量 <i>p</i> ＝ <i>mv</i>，是向量。</li><li>衝量 <i>F</i>Δ<i>t</i> ＝ Δ<i>p</i>：時間越長，力越小。</li><li>不受外力時總動量守恆；彈性碰撞還保有動能，非彈性碰撞則會損失動能。</li></ul></div>
+</section>
+
+<!-- ================= 第 13 課 ================= -->
+<section class="page lesson" id="L13" data-stage="1">
+<h2>圓周運動與萬有引力</h2>
+<p class="hook">傳說牛頓看到蘋果落下時想到：讓蘋果掉下來的力，會不會一路延伸到月亮？如果是，月亮為什麼沒有掉下來？</p>
+
+<h3>繞圈圈也是加速度</h3>
+<p>一台車以固定的 50 km/h 繞圓環轉，速率沒變，但它的<b>方向一直在變</b>。速度是向量，方向改變就是速度改變，所以<mark>等速率圓周運動也有加速度，而且指向圓心</mark>，叫<b>向心加速度</b>：</p>
+<div class="eq"><i>a</i> = <span class="frac"><span><i>v</i>²</span><span><i>r</i></span></span><small><i>v</i>：速率　<i>r</i>：圓的半徑。轉得越快、彎得越急，需要的向心加速度越大。</small></div>
+<p>有加速度就需要力，這個指向圓心的合力叫<b>向心力</b>。它不是一種新的力，而是由別的力扮演：甩繩子轉球時是繩子的拉力，車子轉彎時是輪胎的摩擦力。如果繩子突然斷了，球會<b>沿著圓的切線直直飛出去</b>（第一定律），不是往外直直飛。</p>
+
+<aside class="box term"><b>名詞由來：向心與軌道<span class="en">Centripetal &amp; Orbit</span></b>
+<p><i>centripetal</i> 來自拉丁文 <i>centrum</i>（中心）＋ <i>petere</i>（尋求、前往）＝「尋找中心的」。<i>orbit</i> 來自拉丁文 <i>orbis</i>「圓圈、車輪」。</p></aside>
+
+<h3>萬有引力定律</h3>
+<p>牛頓提出：<mark>宇宙中任何兩個有質量的物體都會互相吸引</mark>，吸引力和兩者質量的乘積成正比，和距離的平方成反比：</p>
+<div class="eq"><i>F</i> = <i>G</i> <span class="frac"><span><i>m</i><sub>1</sub><i>m</i><sub>2</sub></span><span><i>r</i>²</span></span><small><i>G</i> ≈ 6.67 × 10<sup>−11</sup> N·m²/kg²，叫萬有引力常數。它非常小，所以你和同學之間的引力小到感覺不到。</small></div>
+<p>「平方反比」的意思是：距離變 2 倍，引力變成 1/4；距離變 3 倍，引力變成 1/9。</p>
+
+<aside class="box term"><b>名詞由來：萬有引力<span class="en">Universal gravitation</span></b>
+<p>「萬有」就是「宇宙萬物都有」。這個名字說出了牛頓最偉大的洞見：<b>天上和地上遵守同一套規則</b>。在牛頓之前，人們以為天體的運動和地上的運動是兩回事。</p></aside>
+
+<h3>牛頓的大砲：為什麼月亮不會掉下來</h3>
+<p>牛頓想像：在很高的山頂上水平發射砲彈。速度慢，砲彈很快落地；速度越快，落得越遠。因為地球是圓的，地面也會往下彎。如果速度快到<mark>砲彈往下掉的程度，剛好跟地面往下彎的程度一樣</mark>，砲彈就會一直掉、卻永遠掉不到地面，這就是<b>繞行軌道</b>。</p>
+<p>月亮其實一直在往地球「掉」，只是它同時以很快的速度往旁邊跑，所以一直繞著地球轉。國際太空站的太空人飄浮著，不是因為那裡沒有重力（那裡的重力還有地面的九成左右），而是因為<b>太空站和太空人一起在自由落下</b>。</p>
+
+<div class="sim" data-sim="cannon" data-r="0.75">
+<div class="cap">牛頓大砲<small>山的高度被誇大以便觀察。試試 7 km/s、7.6 km/s、9 km/s 和 11 km/s。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>發射速度 <input type="range" data-k="v" min="4" max="11.5" step="0.1" value="7.6" data-u=" km/s"><output></output></label>
+<button data-act="fire">發射</button><button class="alt" data-act="clear">清除</button>
+</div>
+<div class="readout"></div>
+</div>
+
+<div class="quiz" data-ans="2"><p class="q">1. 甩繩子轉動的球，繩子突然斷掉，球會？</p><div class="opts"><button>往圓心飛</button><button>沿半徑往外直直飛</button><button>沿著圓的切線方向飛出</button></div><p class="why">繩斷的瞬間向心力消失，球保持當下的速度，也就是切線方向。</p></div>
+<div class="quiz" data-ans="0"><p class="q">2. 兩個物體的距離變成 2 倍，萬有引力變成？</p><div class="opts"><button>1/4</button><button>1/2</button><button>2 倍</button></div><p class="why">引力與距離平方成反比：1 ÷ 2² ＝ 1/4。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>圓周運動的加速度指向圓心，<i>a</i> ＝ <i>v</i>²/<i>r</i>。</li><li>萬有引力 <i>F</i> ＝ <i>Gm</i><sub>1</sub><i>m</i><sub>2</sub>/<i>r</i>²，天上地上同一套規則。</li><li>軌道運動就是「一直在自由落下，卻一直掉不到地面」。</li></ul></div>
+</section>
+
+<!-- ================= 第 14 課 ================= -->
+<section class="page lesson" id="L14" data-stage="1">
+<h2>壓力與浮力</h2>
+<p class="hook">一艘幾萬噸的鋼鐵貨輪能浮在海上，一根小小的鐵釘卻會沉下去。重的反而會浮？這背後的道理，兩千多年前就被一位在澡堂裡大叫的人想通了。</p>
+
+<h3>壓力：力分攤在多大的面積上</h3>
+<p>穿高跟鞋踩到人比穿球鞋痛得多，雖然是同一個人的體重。差別在於<b>力集中在多小的面積上</b>。</p>
+<div class="eq"><i>P</i> = <span class="frac"><span><i>F</i></span><span><i>A</i></span></span><small><i>P</i>：壓力　<i>F</i>：垂直作用的力（N）　<i>A</i>：受力面積（m²）　單位：帕斯卡 Pa ＝ N/m²<br>（臺灣課本稱「壓力」，中國大陸稱「壓強」，指的是同一件事。）</small></div>
+<aside class="box eg"><b>生活中的壓力</b>
+<ul><li>針尖、刀刃、圖釘做得很尖，是為了用小力產生大壓力。</li><li>雪鞋、坦克的履帶、書包的寬背帶，是為了增加面積、減少壓力。</li></ul></aside>
+
+<h3>液體壓力與大氣壓力</h3>
+<p>液體也會壓東西，而且<mark>越深壓力越大</mark>，因為上面的液體越多。每往水下 10 公尺，壓力大約增加一個大氣壓。這就是潛水艇要做得很堅固、水壩底部要比頂部厚的原因。</p>
+<p>我們頭上也有一片「空氣海洋」。地表的大氣壓力約 101,325 Pa，大約等於每平方公分壓著 1 公斤重的東西。我們沒被壓扁，是因為身體內部也有向外的壓力，剛好平衡。用吸管喝飲料，其實是大氣壓力把飲料「壓」進你嘴裡。</p>
+
+<aside class="box term"><b>名詞由來：帕斯卡與密度<span class="en">Pascal &amp; Density</span></b>
+<p>壓力單位紀念法國的帕斯卡，他研究過大氣壓力，還請人把氣壓計帶上山，證明越高氣壓越低。<b>密度</b>（density）來自拉丁文 <i>densus</i>「濃密的」，就是「每單位體積有多少質量」：ρ ＝ <i>m</i>/<i>V</i>。符號 ρ 是希臘字母 rho。水的密度約 1000 kg/m³（1 g/cm³）。</p></aside>
+
+<h3>浮力與阿基米德原理</h3>
+<p>物體浸在液體中時，底部受到的壓力比頂部大（因為比較深），上下壓力的差形成一個往上的力，叫<mark>浮力</mark>。</p>
+<div class="eq" style="font-family:var(--serif);font-size:1.12rem">浮力 ＝ 物體排開的液體的重量</div>
+<p>這就是<b>阿基米德原理</b>。貨輪能浮起來，是因為它做成中空的碗狀，排開了非常多的水；同樣重量的鐵塊實心一團，排開的水很少，浮力不夠。</p>
+<p>簡單判斷法：<mark>物體的平均密度比液體小就浮起來，比液體大就沉下去。</mark>浮著的物體，沉入水中的比例剛好等於「物體密度 ÷ 液體密度」。</p>
+
+<aside class="box term"><b>名詞由來：Eureka！</b>
+<p>傳說國王請阿基米德檢查一頂王冠是不是純金打造。他在澡堂泡澡時，看到水溢出來，突然想到可以用「排開的水」來量王冠的體積，興奮得光著身子跑到街上大喊「Eureka！」（希臘文「我找到了！」）。浮力的英文 buoyancy 則和 buoy（浮標）同源。</p></aside>
+
+<div class="sim" data-sim="buoy" data-r="0.62">
+<div class="cap">把方塊丟進水槽<small>改變方塊的密度或液體種類，按「重新放入」。藍箭頭是浮力，黑箭頭是重力。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>方塊密度 <input type="range" data-k="rho" min="100" max="2000" step="10" value="600" data-u=" kg/m³"><output></output></label>
+<label>液體 <select data-k="fl"><option value="1000">清水 1000</option><option value="1025">海水 1025</option><option value="1240">死海鹹水 1240</option></select></label>
+<button data-act="reset">重新放入</button>
+</div>
+<div class="readout"></div>
+</div>
+
+<div class="quiz" data-ans="1"><p class="q">1. 冰的密度約 917 kg/m³。冰山浮在清水中，露出水面的部分大約是？</p><div class="opts"><button>一半</button><button>不到十分之一</button><button>九成</button></div><p class="why">沉入比例 ＝ 917 ÷ 1000 ≈ 92%，露出只有約 8%。這就是「冰山一角」這句話的由來。</p></div>
+<div class="quiz" data-ans="0"><p class="q">2. 穿雪鞋走在雪地上比較不會陷下去，因為？</p><div class="opts"><button>受力面積變大，壓力變小</button><button>體重變輕了</button><button>雪變硬了</button></div><p class="why">體重（力）不變，面積變大，壓力 <i>F</i>/<i>A</i> 就變小。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>壓力 <i>P</i> ＝ <i>F</i>/<i>A</i>，單位 Pa；液體越深壓力越大。</li><li>浮力 ＝ 排開液體的重量（阿基米德原理）。</li><li>平均密度小於液體就浮，大於液體就沉。</li></ul></div>
+</section>
+
+<!-- ================= 第 15 課 ================= -->
+<section class="page lesson" id="L15" data-stage="2">
+<h2>溫度與熱</h2>
+<p class="hook">摸一杯熱茶，你說它「很熱」。但「熱」到底是什麼？是一種藏在茶裡的東西嗎？過去的科學家真的這麼以為，而且以為了一百多年。</p>
+
+<h3>一切都在抖動</h3>
+<p>所有物質都是由非常非常小的粒子（原子、分子）組成的，而且這些粒子<mark>一直不停地在動</mark>：氣體分子到處亂飛，液體分子擠來擠去，固體分子在原地抖動。</p>
+<p><b>溫度</b>就是這些粒子「平均動得多激烈」的量度。溫度越高，粒子平均的動能越大。</p>
+
+<h3>溫度和熱不一樣</h3>
+<ul><li><b>溫度</b>：描述一個物體的狀態，粒子平均動得多快。</li><li><b>熱</b>：因為溫度不同，而從高溫物體<b>流向</b>低溫物體的能量。</li></ul>
+<p>所以嚴格來說，物體不會「含有熱」，只會「含有能量」。熱是「正在流動的能量」，就像「雨」是正在落下的水，你不會說池塘裡「含有雨」。</p>
+
+<aside class="box term"><b>名詞由來：溫度與卡路里<span class="en">Temperature &amp; Calorie</span></b>
+<p><i>temperature</i> 來自拉丁文 <i>temperare</i>「調和、適度地混合」，古時醫學認為冷與熱混合的比例決定身體狀態。</p>
+<p><i>calorie</i>（卡路里）來自拉丁文 <i>calor</i>「熱」。十八世紀的科學家以為熱是一種看不見的流體，叫「熱質」，會從熱的東西流進冷的東西。後來焦耳等人的實驗證明熱其實是能量的轉移，熱質說才被推翻，但「卡路里」這個單位留了下來，今天還印在食品包裝上。</p></aside>
+
+<h3>三種溫標</h3>
+<div class="table"><table>
+<tr><th>溫標</th><th>水結冰</th><th>水沸騰</th><th>名稱由來</th></tr>
+<tr><td>攝氏 °C</td><td>0</td><td>100</td><td>瑞典天文學家攝爾修斯（Celsius），1742 年提出。「攝」取自他名字的音譯。</td></tr>
+<tr><td>華氏 °F</td><td>32</td><td>212</td><td>德國物理學家華倫海特（Fahrenheit），美國至今仍常用。</td></tr>
+<tr><td>克耳文 K</td><td>273.15</td><td>373.15</td><td>英國物理學家湯姆森，他後來被封為「克耳文男爵」，封號取自格拉斯哥大學旁的克耳文河。</td></tr>
+</table></div>
+<p>溫度越低，粒子動得越慢。有沒有一個溫度，粒子幾乎完全靜止？有，叫<mark>絕對零度</mark>，等於 −273.15 °C，也就是 0 K。它是溫度的最低極限，永遠無法真正達到。克耳文溫標從絕對零度開始算，所以沒有負數，科學家最常用。</p>
+<div class="eq"><i>T</i>(K) = <i>t</i>(°C) + 273.15</div>
+
+<div class="sim" data-sim="gas" data-r="0.6">
+<div class="cap">盒子裡的氣體分子<small>顏色代表每個分子的速度：藍色慢、紅色快。調高溫度看看。</small></div>
+<canvas></canvas>
+<div class="ctrl"><label>溫度 <input type="range" data-k="T" min="20" max="800" step="10" value="300" data-u=" K"><output></output></label></div>
+<div class="readout"></div>
+</div>
+
+<h3>熱怎麼傳遞？三種方式</h3>
+<ul><li><b>傳導</b>：粒子一個撞一個，把能量傳過去。金屬湯匙放進熱湯，握柄變燙。金屬傳導快，木頭和空氣傳導慢，所以鍋柄用木頭或塑膠。</li><li><b>對流</b>：液體或氣體受熱變輕往上升，冷的往下沉，形成循環。燒開水、冷氣裝在高處、暖氣裝在低處都是利用它。</li><li><b>輻射</b>：以電磁波（第 24 課）傳遞，不需要任何物質。太陽的熱穿過真空的太空照到地球；站在營火旁臉會暖暖的。</li></ul>
+
+<aside class="box eg"><b>熱脹冷縮與比熱</b>
+<p>大多數物質受熱時粒子動得激烈、彼此推得更開，體積就變大，這叫<b>熱膨脹</b>。鐵軌之間要留縫、橋樑有伸縮縫，就是為了夏天膨脹時不會擠彎。</p>
+<p>不同物質升溫的難易不同。讓 1 公斤物質升高 1 °C 需要的熱叫<b>比熱</b>。水的比熱很大，所以夏天中午沙灘燙腳，海水卻還涼涼的；也因此海邊的氣溫變化比內陸溫和。</p></aside>
+
+<div class="quiz" data-ans="0"><p class="q">1. 0 K 等於幾度 °C？</p><div class="opts"><button>−273.15 °C</button><button>0 °C</button><button>−100 °C</button></div><p class="why">K ＝ °C ＋ 273.15，所以 0 K ＝ −273.15 °C，也就是絕對零度。</p></div>
+<div class="quiz" data-ans="2"><p class="q">2. 金屬湯匙放進熱湯，握柄慢慢變燙，這是哪一種熱傳遞？</p><div class="opts"><button>對流</button><button>輻射</button><button>傳導</button></div><p class="why">熱沿著固體的湯匙，由粒子一個個撞擊傳過去，是傳導。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>溫度是粒子平均動能的量度；熱是因溫差而流動的能量。</li><li>絕對零度 0 K ＝ −273.15 °C，是溫度的下限。</li><li>熱傳遞三方式：傳導、對流、輻射。</li></ul></div>
+</section>
+
+<!-- ================= 第 16 課 ================= -->
+<section class="page lesson" id="L16" data-stage="2">
+<h2>熱力學定律與熵</h2>
+<p class="hook">把一滴墨水滴進清水，它會慢慢散開。但你從來沒看過散開的墨水自己聚回一滴。為什麼時間好像只能往一個方向走？</p>
+
+<aside class="box term"><b>名詞由來：熱力學<span class="en">Thermodynamics</span></b>
+<p>希臘文 <i>thermē</i>「熱」＋ <i>dynamis</i>「力量」。這門學問誕生於十九世紀，當時工程師想知道：蒸汽機到底能把多少熱變成有用的功？結果回答這個問題的定律，最後變成了整個宇宙最普遍的規則之一。</p></aside>
+
+<h3>第零定律：熱平衡</h3>
+<p>把熱咖啡放在桌上，最後它會變得跟室溫一樣。<mark>溫度不同的物體接觸，熱會流動，直到溫度相同為止</mark>，這個狀態叫<b>熱平衡</b>。溫度計就是靠這個原理：它和你的身體達到熱平衡後，顯示的就是你的體溫。（這條定律比第一、二定律晚被提出，但因為更基本，被排在最前面，只好叫「第零」。）</p>
+
+<h3>第一定律：能量守恆</h3>
+<p>這就是第 11 課的能量守恆，只是加入了熱：<b>一個系統內部能量的增加 ＝ 吸收的熱 − 對外做的功</b>。你不可能造出一台「不用加燃料就能一直做功」的機器，這種夢想中的機器叫<b>第一類永動機</b>，它違反能量守恆。</p>
+
+<h3>第二定律：熱只會自然地從高溫流向低溫</h3>
+<p>熱咖啡會變涼，但室溫的咖啡永遠不會自己變熱、讓房間變冷。<mark>熱會自然地從高溫流向低溫，反過來則需要付出代價</mark>（冰箱和冷氣要插電才能把熱「搬」到外面）。</p>
+<p>一個重要的結論：<b>任何熱機都不可能把吸收的熱百分之百變成功</b>，一定有一部分熱要排到低溫處。汽車引擎大約只有三成的燃料能量變成推動車子的功，其他都變成了廢熱。</p>
+
+<div class="sim" data-sim="mix" data-r="0.6">
+<div class="cap">打開中間的隔板<small>左邊是高溫氣體（分子快），右邊是低溫氣體（分子慢）。分子會互相碰撞交換能量。打開隔板後，觀察兩邊的溫度。</small></div>
+<canvas></canvas>
+<div class="ctrl"><button data-act="open">打開隔板</button><button class="alt" data-act="reset">重來</button></div>
+<div class="readout"></div>
+</div>
+<p>你會看到兩邊的溫度慢慢接近，最後一樣。你等再久，也不會看到它們自己又分開成一邊熱一邊冷。</p>
+
+<h3>熵：亂度與時間的箭頭</h3>
+<p>為什麼事情只往一個方向發生？因為「亂」的排列方式遠遠多於「整齊」的排列方式。100 個分子全部擠在左半邊的機率，比連續丟 100 次硬幣全部正面還小，幾乎不可能發生。</p>
+<p>物理學家用<mark>熵</mark>來衡量一個系統的「亂度」，更精確地說，是「有多少種微觀排列方式看起來都一樣」。第二定律也可以這樣說：<b>孤立系統的熵只會增加，或維持不變，永遠不會自己減少。</b></p>
+<p>這就是為什麼時間有方向：墨水散開、冰塊融化、房間會變亂、雞蛋摔破不會復原。熵增加的方向，就是我們感覺到的「未來」。</p>
+
+<aside class="box term"><b>名詞由來：熵<span class="en">Entropy</span></b>
+<p>1865 年德國物理學家克勞修斯用希臘文 <i>tropē</i>「轉變」造出 entropy，故意讓它長得像 energy。</p>
+<p>中文「熵」是專門為它造的新字。1923 年一位德國學者在南京演講熱力學，物理學家胡剛復擔任翻譯。因為熵的變化在公式中等於「熱量除以溫度」，是一個<b>商</b>，又和<b>火</b>（熱）有關，他就把「火」和「商」合成了「熵」字，讀作「商」。</p></aside>
+
+<aside class="box warn"><b>常見誤解：「生命違反熵增加」</b>
+<p>生物能長出整齊的身體結構，看起來熵在減少。但生物不是孤立系統：我們吃進食物、排出廢熱，讓周圍環境的熵增加得更多。整體加起來，熵還是增加的。</p></aside>
+
+<div class="quiz" data-ans="1"><p class="q">1. 一杯熱咖啡放在室溫下很久，最後會？</p><div class="opts"><button>比室溫更冷</button><button>和室溫一樣</button><button>保持原本的溫度</button></div><p class="why">熱從高溫流向低溫，直到達成熱平衡。</p></div>
+<div class="quiz" data-ans="2"><p class="q">2. 「不可能造出效率 100% 的熱機」是哪一條定律的結論？</p><div class="opts"><button>第零定律</button><button>牛頓第一定律</button><button>熱力學第二定律</button></div><p class="why">第二定律規定熱機一定要把部分熱排到低溫處，不可能全部變成功。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>第零定律：熱平衡；第一定律：能量守恆。</li><li>第二定律：熱自然由高溫流向低溫，熱機效率不可能 100%。</li><li>熵是亂度的量度，孤立系統的熵不會減少，這給了時間方向。</li></ul></div>
+</section>
+
+<!-- ================= 第 17 課 ================= -->
+<section class="page lesson" id="L17" data-stage="3">
+<h2>波的基本語言</h2>
+<p class="hook">在球場看台上，觀眾依序站起又坐下，一道「人浪」繞著球場跑了一圈。可是每一個觀眾其實都沒離開自己的座位。那到底是什麼東西在「跑」？</p>
+
+<h3>波傳遞的是能量，不是物質</h3>
+<p>丟一顆石頭到池塘，水波一圈圈往外傳。但水面上的落葉只是上下晃動，並沒有被水波帶走。<mark>波是「振動」在傳遞，它把能量從一個地方帶到另一個地方，物質本身只在原地來回振動。</mark></p>
+<p>傳遞波的物質（水、繩子、空氣）叫做<b>介質</b>。</p>
+
+<h3>兩種波</h3>
+<ul><li><b>橫波</b>：介質振動的方向和波前進的方向<b>垂直</b>。例如抖動繩子、人浪。</li><li><b>縱波</b>：介質振動的方向和波前進的方向<b>平行</b>，形成一疏一密的區域。例如推拉彈簧（Slinky），以及下一課的聲音。</li></ul>
+
+<h3>描述波的四個量</h3>
+<ul><li><b>振幅</b>：振動離開平衡位置的最大距離。振幅越大，波帶的能量越多。</li><li><b>波長</b> λ：相鄰兩個波峰之間的距離。</li><li><b>週期</b> <i>T</i>：振動一次所需的時間。</li><li><b>頻率</b> <i>f</i>：每秒振動幾次，單位赫茲 Hz。<i>f</i> ＝ 1/<i>T</i>。</li></ul>
+<p>波每振動一次，就往前走一個波長，所以：</p>
+<div class="eq"><i>v</i> = <i>f</i> λ<small>波速 ＝ 頻率 × 波長。在同一種介質中波速固定，所以頻率越高，波長越短。</small></div>
+
+<aside class="box term"><b>名詞由來：頻率、振幅、赫茲、λ</b>
+<p><b>frequency</b> 來自拉丁文 <i>frequens</i>「頻繁的、擁擠的」。<b>amplitude</b> 來自拉丁文 <i>amplus</i>「寬大的」（amplifier 擴音器同源）。</p>
+<p>單位赫茲紀念德國物理學家赫茲，他在 1887 年首次用實驗製造並偵測到電磁波（第 24 課）。波長的符號 λ 是希臘字母 lambda，相當於英文的 L，取 length（長度）的意思。</p></aside>
+
+<div class="sim" data-sim="wave" data-r="0.55">
+<div class="cap">一條繩子上的波<small>紅色的點是介質中的一個粒子：它只在原地振動，不會跟著波跑走。切換縱波看看。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>振幅 <input type="range" data-k="A" min="0.05" max="0.4" step="0.01" value="0.25"><output></output></label>
+<label>頻率 <input type="range" data-k="f" min="0.2" max="2" step="0.05" value="0.5" data-u=" Hz"><output></output></label>
+<label class="ck"><input type="checkbox" data-k="lon"> 縱波</label>
+</div>
+<div class="readout"></div>
+</div>
+
+<h3>波的特殊行為</h3>
+<p>波碰到障礙物會<b>反射</b>（回音）；經過窄縫或繞過障礙物時會<b>繞射</b>（你在牆後還聽得到聲音）；兩道波相遇時會<b>干涉</b>：波峰遇波峰變得更大，波峰遇波谷互相抵消。降噪耳機就是製造一個「相反的波」去抵消噪音。這些行為是判斷「某個東西是不是波」的關鍵證據，第 26 課會用到。</p>
+
+<div class="quiz" data-ans="0"><p class="q">1. 波速 340 m/s、頻率 170 Hz 的聲波，波長是？</p><div class="opts"><button>2 m</button><button>0.5 m</button><button>57,800 m</button></div><p class="why">λ ＝ <i>v</i>/<i>f</i> ＝ 340 ÷ 170 ＝ 2 m。</p></div>
+<div class="quiz" data-ans="1"><p class="q">2. 人浪中，每位觀眾實際上的運動是？</p><div class="opts"><button>跟著人浪繞場跑</button><button>在原位站起又坐下</button><button>完全不動</button></div><p class="why">傳遞的是「站起坐下」這個振動，觀眾（介質）只在原位振動。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>波傳遞能量，介質只在原地振動。</li><li>橫波振動與前進方向垂直，縱波則平行。</li><li><i>v</i> ＝ <i>f</i>λ；波會反射、繞射、干涉。</li></ul></div>
+</section>
+
+<!-- ================= 第 18 課 ================= -->
+<section class="page lesson" id="L18" data-stage="3">
+<h2>聲音</h2>
+<p class="hook">科幻電影裡，太空戰艦爆炸時轟隆巨響。但如果你真的在太空中，你什麼也聽不到。</p>
+
+<h3>聲音是空氣的縱波</h3>
+<p>喇叭的紙盆往前推，把空氣擠密；往後退，讓空氣變疏。這一疏一密的振動一路傳到你的耳朵，推動耳膜振動，你就聽到了聲音。所以<mark>聲音是一種縱波，而且一定需要介質</mark>。太空幾乎是真空，沒有東西可以傳遞振動，所以聽不到聲音。</p>
+<div class="table"><table>
+<tr><th>介質</th><th>聲速（約）</th></tr>
+<tr><td>空氣（20 °C）</td><td>343 m/s</td></tr>
+<tr><td>水</td><td>1,480 m/s</td></tr>
+<tr><td>鋼鐵</td><td>5,900 m/s</td></tr>
+</table></div>
+<p>聲音在固體中傳得最快，因為粒子排得緊密。把耳朵貼在鐵軌上，能比空氣中更早聽到遠方的火車。</p>
+<aside class="box eg"><b>算算看：打雷有多遠？</b>
+<p>光每秒 30 萬公里，閃電的光幾乎一瞬間就到。聲音每秒約 343 公尺。看到閃電後數秒數，秒數 × 343 就是距離。數到 3 秒，雷大約在 1 公里外。</p></aside>
+
+<h3>聲音的三個特性</h3>
+<ul><li><b>音調</b>（高低）：由<b>頻率</b>決定。頻率高聲音尖，頻率低聲音沉。人耳大約聽得到 20 到 20,000 Hz。高於 20,000 Hz 叫<b>超聲波</b>（蝙蝠、醫療超音波），低於 20 Hz 叫<b>次聲波</b>（大象、地震）。</li><li><b>響度</b>（大小聲）：由<b>振幅</b>決定，常用分貝 dB 表示。每增加 10 dB，聲音的能量強度變成 10 倍。長時間聽 85 dB 以上的聲音會傷害聽力。</li><li><b>音色</b>：由<b>波形</b>決定。鋼琴和小提琴彈同一個音，頻率相同，但波形不同，所以你分得出來。</li></ul>
+
+<aside class="box term"><b>名詞由來：分貝與超聲波<span class="en">Decibel &amp; Ultrasound</span></b>
+<p><i>deci</i> 是「十分之一」，<i>bel</i>（貝爾）紀念發明電話的貝爾，所以 1 分貝 ＝ 1/10 貝爾。<i>ultra</i> 是拉丁文「超越」，超聲波就是超出人耳聽力範圍的聲音。</p></aside>
+
+<h3>都卜勒效應：救護車的聲音為什麼會變？</h3>
+<p>救護車朝你開來時，警笛聲比較尖；開走後，聲音突然變低沉。這是因為<mark>聲源往你移動時，它把聲波「擠」在前面，波長變短、你聽到的頻率變高；遠離時波長被拉長、頻率變低。</mark></p>
+<p>如果聲源跑得比聲音還快，所有的聲波會疊在一起形成一道「震波」，傳到地面時就是轟隆的<b>音爆</b>。</p>
+
+<aside class="box term"><b>名詞由來：都卜勒效應<span class="en">Doppler effect</span></b>
+<p>1842 年由奧地利物理學家都卜勒提出。1845 年荷蘭科學家請一群音樂家站在行駛中的火車上吹奏固定音高，月台上的人用耳朵確認音高真的變了。今天天文學家用同樣的原理（用光而不是聲音）測量星系是靠近還是遠離我們。</p></aside>
+
+<div class="sim" data-sim="doppler" data-r="0.62">
+<div class="cap">移動的聲源<small>每個圓圈是一個波峰。調整聲源速度（以聲速的倍數表示）。超過 1 就是超音速。</small></div>
+<canvas></canvas>
+<div class="ctrl"><label>聲源速度 <input type="range" data-k="M" min="0" max="1.5" step="0.05" value="0.5" data-u=" 倍聲速"><output></output></label></div>
+<div class="readout"></div>
+</div>
+
+<div class="quiz" data-ans="2"><p class="q">1. 在太空中看到遠處太空船爆炸，你會？</p><div class="opts"><button>聽到很大的爆炸聲</button><button>過幾秒才聽到聲音</button><button>聽不到聲音</button></div><p class="why">聲音需要介質才能傳遞，真空中無法傳播。</p></div>
+<div class="quiz" data-ans="0"><p class="q">2. 鋼琴的高音和低音，最主要的差別是？</p><div class="opts"><button>頻率</button><button>振幅</button><button>波速</button></div><p class="why">音調由頻率決定；振幅決定大小聲；同樣在空氣中，波速都一樣。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>聲音是縱波，需要介質，固體中最快。</li><li>音調－頻率、響度－振幅、音色－波形。</li><li>都卜勒效應：聲源靠近頻率變高，遠離變低。</li></ul></div>
+</section>
+
+<!-- ================= 第 19 課 ================= -->
+<section class="page lesson" id="L19" data-stage="3">
+<h2>光的反射與折射</h2>
+<p class="hook">把筷子斜斜插進一杯水，從旁邊看，筷子好像在水面「折斷」了。筷子當然沒斷。那是誰在騙你的眼睛？</p>
+
+<h3>光走直線，而且非常快</h3>
+<p>在同一種均勻的物質中，<mark>光沿直線前進</mark>。所以會有影子，也能用針孔在盒子裡投出倒立的影像（針孔成像，這就是最早的照相機原理）。</p>
+<p>光在真空中的速度約 <span class="m">3 × 10<sup>8</sup></span> m/s，一秒鐘可以繞地球七圈半。陽光從太陽到地球要走大約 8 分 20 秒，所以你看到的太陽，是它 8 分鐘前的樣子。</p>
+
+<h3>反射：入射角 ＝ 反射角</h3>
+<p>光碰到表面彈回來叫<b>反射</b>。先在碰撞點畫一條垂直於表面的線，叫做<mark>法線</mark>（就是第 9 課 normal 的那個「垂直」）。光和法線的夾角叫入射角，反射光和法線的夾角叫反射角：</p>
+<div class="eq" style="font-family:var(--serif);font-size:1.15rem">入射角 ＝ 反射角</div>
+<p>鏡子很平滑，光整齊地反射，所以能照出影像，叫<b>鏡面反射</b>。白紙表面凹凸不平，光往四面八方反射，叫<b>漫反射</b>。正因為有漫反射，你從各個角度都看得到物體。</p>
+
+<h3>折射：光換跑道時會轉彎</h3>
+<p>光從一種物質進入另一種物質（例如從空氣進入水），<b>速度會改變</b>，行進方向也跟著偏折，這叫<mark>折射</mark>。</p>
+<p>想像一排行進的士兵斜斜地從柏油路走進泥巴地：先踩進泥巴的那一端先慢下來，整排隊伍就會轉個角度。光也一樣。光在水中比在空氣中慢，所以從空氣進入水時會<b>偏向法線</b>；從水出來到空氣時則<b>偏離法線</b>。</p>
+<p>物質讓光變慢的程度叫<b>折射率</b> <i>n</i> ＝ 真空光速 ÷ 物質中光速。空氣約 1.00，水 1.33，玻璃約 1.5，鑽石 2.42。</p>
+<div class="eq"><i>n</i><sub>1</sub> sin θ<sub>1</sub> = <i>n</i><sub>2</sub> sin θ<sub>2</sub><small>司乃耳定律（Snell's law）。θ 是光與法線的夾角。sin 是三角函數，國中還沒學沒關係，記住「進入折射率大的物質，光會偏向法線」就夠了。</small></div>
+
+<aside class="box term"><b>名詞由來：反射與折射<span class="en">Reflection &amp; Refraction</span></b>
+<p><i>reflection</i>：拉丁文 <i>re-</i>（回）＋ <i>flectere</i>（彎曲）＝「彎回去」。<i>refraction</i>：拉丁文 <i>refringere</i>「打斷」。古人看到水中的筷子好像「斷掉」了，就用這個字。</p>
+<p>折射定律以荷蘭學者司乃耳（1621 年）命名，但其實早在西元 984 年，波斯學者伊本‧沙爾就已經寫下了同樣的規律。</p></aside>
+
+<div class="sim" data-sim="refract" data-r="0.7">
+<div class="cap">光的折射與全反射<small>黃色實線是入射光，綠色是折射光，淡黃是反射光。勾選「從介質射向空氣」，把角度調大，找找看全反射。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>入射角 <input type="range" data-k="ang" min="0" max="89" step="1" value="40" data-u="°"><output></output></label>
+<label>介質 <select data-k="n"><option value="1.33">水 1.33</option><option value="1.5">玻璃 1.5</option><option value="2.42">鑽石 2.42</option></select></label>
+<label class="ck"><input type="checkbox" data-k="rev"> 從介質射向空氣</label>
+</div>
+<div class="readout"></div>
+</div>
+
+<h3>全反射與色散</h3>
+<p>光從水或玻璃射向空氣時，如果入射角大到超過某個<b>臨界角</b>，光就完全出不去，全部反射回來，這叫<mark>全反射</mark>。光纖就是利用全反射，讓光在細玻璃絲裡一路彈跳好幾公里，帶著網路訊號跑遍全世界。鑽石切割成特定角度，讓光在裡面多次全反射，所以閃閃發亮。</p>
+<p>白光其實混合了各種顏色。不同顏色在玻璃中的折射率略有不同，紫光偏折最多、紅光最少，所以三稜鏡能把白光分成彩虹色，這叫<b>色散</b>。雨後的彩虹，就是陽光在無數小水滴中折射、反射、再折射的結果。</p>
+
+<div class="quiz" data-ans="0"><p class="q">1. 光以 30° 入射角照在平面鏡上，反射角是？</p><div class="opts"><button>30°</button><button>60°</button><button>90°</button></div><p class="why">反射定律：入射角 ＝ 反射角，兩者都從法線量起。</p></div>
+<div class="quiz" data-ans="1"><p class="q">2. 光從水中斜射進入空氣，會？</p><div class="opts"><button>偏向法線</button><button>偏離法線</button><button>不偏折</button></div><p class="why">從折射率大（慢）進入折射率小（快）的物質，光偏離法線。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>光在均勻介質中走直線，真空中約 3 × 10<sup>8</sup> m/s。</li><li>反射：入射角 ＝ 反射角（都從法線量）。</li><li>折射：速度改變導致偏折；全反射用於光纖；色散形成彩虹。</li></ul></div>
+</section>
+
+<!-- ================= 第 20 課 ================= -->
+<section class="page lesson" id="L20" data-stage="3">
+<h2>透鏡與成像</h2>
+<p class="hook">放大鏡能讓螞蟻變大，也能把陽光聚成一個小點，燒穿一張紙。相機、投影機、眼鏡，甚至你的眼睛，全都藏著同一個小小的玻璃魔法。</p>
+
+<h3>凸透鏡與凹透鏡</h3>
+<p>透鏡就是利用折射來控制光線的透明鏡片。</p>
+<ul><li><b>凸透鏡</b>：中間厚、邊緣薄。平行光通過後會<mark>會聚</mark>到一點，這點叫<b>焦點</b>。透鏡中心到焦點的距離叫<b>焦距</b> <i>f</i>。</li><li><b>凹透鏡</b>：中間薄、邊緣厚。平行光通過後會<mark>發散</mark>開來。</li></ul>
+
+<aside class="box term"><b>名詞由來：透鏡與焦點<span class="en">Lens &amp; Focus</span></b>
+<p><i>lens</i> 是拉丁文的「扁豆」，因為早期的凸透鏡形狀就像一顆扁扁的豆子。</p>
+<p><i>focus</i> 是拉丁文的「火爐、爐灶」。1604 年天文學家克卜勒用這個字，因為陽光聚在那一點可以生火。中文「焦點」的「焦」是「燒焦」，<b>東西方的命名想的是同一件事</b>。</p></aside>
+
+<h3>凸透鏡成像的規律</h3>
+<p>把物體放在凸透鏡前不同距離，會得到不同的像：</p>
+<div class="table"><table>
+<tr><th>物體位置</th><th>像的性質</th><th>應用</th></tr>
+<tr><td>兩倍焦距以外</td><td>倒立、縮小、實像</td><td>相機、眼睛</td></tr>
+<tr><td>一倍到兩倍焦距之間</td><td>倒立、放大、實像</td><td>投影機</td></tr>
+<tr><td>焦距以內</td><td>正立、放大、虛像</td><td>放大鏡</td></tr>
+</table></div>
+<p><b>實像</b>是光線真的會聚在那裡形成的像，可以投在屏幕上。<b>虛像</b>是光線「看起來」好像從那裡發出來，其實沒有光到那裡，只能用眼睛透過透鏡看到，屏幕接不到。</p>
+<div class="eq"><span class="frac"><span>1</span><span><i>f</i></span></span> = <span class="frac"><span>1</span><span><i>p</i></span></span> + <span class="frac"><span>1</span><span><i>q</i></span></span><small><i>p</i>：物距　<i>q</i>：像距（負值代表虛像，在透鏡同一側）　<i>f</i>：焦距。這叫透鏡公式。</small></div>
+
+<div class="sim" data-sim="lens" data-r="0.62">
+<div class="cap">凸透鏡成像<small>畫出三條特殊光線：平行軸入射→過焦點；過透鏡中心→直線前進；過前焦點→平行射出。虛像用虛線表示。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>物距（幾倍焦距） <input type="range" data-k="p" min="0.4" max="4" step="0.05" value="2.6" data-u=" f"><output></output></label>
+</div>
+<div class="readout"></div>
+</div>
+
+<h3>你的眼睛就是一台相機</h3>
+<p>眼睛的水晶體是一個凸透鏡，把外界的景物在視網膜上形成倒立縮小的實像，大腦再把它「翻正」。看遠看近時，眼睛周圍的肌肉會改變水晶體的厚度，調整焦距。</p>
+<ul><li><b>近視</b>：影像落在視網膜前方，用<b>凹透鏡</b>先把光稍微發散，矯正回來。</li><li><b>遠視、老花</b>：影像落在視網膜後方，用<b>凸透鏡</b>幫忙會聚。</li></ul>
+
+<div class="quiz" data-ans="2"><p class="q">1. 相機拍遠處的風景，在感光元件上形成的是？</p><div class="opts"><button>正立放大虛像</button><button>倒立放大實像</button><button>倒立縮小實像</button></div><p class="why">景物在兩倍焦距以外，成倒立縮小實像。</p></div>
+<div class="quiz" data-ans="0"><p class="q">2. 用凸透鏡當放大鏡時，物體要放在？</p><div class="opts"><button>焦距以內</button><button>兩倍焦距以外</button><button>剛好在焦點上</button></div><p class="why">物體在焦距以內，才會成正立放大的虛像。放在焦點上則不會成像。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>凸透鏡會聚光線，凹透鏡發散光線。</li><li>物距決定成像：2f 外縮小實像、f～2f 放大實像、f 內放大虛像。</li><li>近視用凹透鏡，遠視與老花用凸透鏡。</li></ul></div>
+</section>
+
+<!-- ================= 第 21 課 ================= -->
+<section class="page lesson" id="L21" data-stage="4">
+<h2>電荷與電力</h2>
+<p class="hook">冬天脫毛衣時劈啪作響，碰門把會被電一下，用梳過頭髮的梳子可以吸起小紙片。這些小小的「電擊」，和天空中的閃電，是同一回事。</p>
+
+<h3>原子裡的電</h3>
+<p>所有物質都由原子組成。原子中心有帶<b>正電</b>的<b>質子</b>和不帶電的<b>中子</b>，外圍有帶<b>負電</b>的<b>電子</b>。平常質子和電子數量一樣，正負抵消，物體不帶電。</p>
+<p>用毛衣摩擦氣球時，一些電子從毛衣跑到氣球上：氣球多了電子，帶負電；毛衣少了電子，帶正電。這叫<b>摩擦起電</b>。<mark>電荷不會憑空產生或消失，只會轉移</mark>，這叫<b>電荷守恆</b>。</p>
+
+<h3>同性相斥，異性相吸</h3>
+<p>帶同種電荷的物體互相排斥，帶不同種電荷的互相吸引。法國物理學家庫侖在 1785 年用精密的扭秤測量，發現電力的規則和萬有引力非常像：</p>
+<div class="eq"><i>F</i> = <i>k</i> <span class="frac"><span><i>q</i><sub>1</sub><i>q</i><sub>2</sub></span><span><i>r</i>²</span></span><small><i>q</i>：電量（庫侖，C）　<i>r</i>：距離　<i>k</i> ≈ 9 × 10<sup>9</sup> N·m²/C²<br>同樣是「平方反比」。不同的是電力可以吸引也可以排斥，而且比萬有引力強得多。</small></div>
+<p>電力到底有多強？兩個電子之間的電斥力，比它們之間的萬有引力大了大約 10<sup>42</sup> 倍。你能站在地板上而不穿過去，靠的就是地板原子和你腳底原子的電子互相排斥。</p>
+
+<aside class="box term"><b>名詞由來：電<span class="en">Electricity</span></b>
+<p>兩千多年前，古希臘人發現用布摩擦<b>琥珀</b>後，琥珀能吸起羽毛。琥珀的希臘文是 <i>ēlektron</i>。1600 年英國醫生吉爾伯特用它造出 <i>electricus</i>「像琥珀一樣的」，後來演變成 electricity。</p>
+<p>中文「電」原本就是「閃電」。古字「電」上面是雨，下面的「申」畫的是閃電彎彎曲曲的樣子。</p></aside>
+
+<aside class="box term"><b>名詞由來：正電與負電</b>
+<p>「正」和「負」是美國的富蘭克林在 1740 年代隨意取的名字。他猜想電是一種流體，多了叫正、少了叫負。那時還沒人知道電子存在，結果他猜反了：真正會移動的電子帶的是「負」電。這個歷史意外，讓後來電流的方向剛好和電子流動的方向相反（第 22 課）。</p>
+<p><b>電子 electron</b> 一詞由愛爾蘭物理學家斯托尼在 1891 年提出，1897 年英國的湯姆森用實驗證實了它的存在。</p></aside>
+
+<h3>電場：看不見的影響範圍</h3>
+<p>電荷不需要碰到彼此就能施力。英國科學家法拉第想像：每個電荷周圍都有一個看不見的「影響範圍」，叫做<mark>電場</mark>。其他電荷進入電場，就會受到力。他用一條條<b>電力線</b>來畫電場：從正電荷出發、指向負電荷，線越密的地方電場越強。</p>
+
+<div class="sim" data-sim="coulomb" data-r="0.62">
+<div class="cap">兩個點電荷的電場與電力<small>小箭頭顯示電場方向（正電荷在該處會被推往的方向），越亮代表越強。大箭頭是兩電荷受到的力。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>左電荷 <input type="range" data-k="q1" min="-3" max="3" step="1" value="2" data-u=" μC"><output></output></label>
+<label>右電荷 <input type="range" data-k="q2" min="-3" max="3" step="1" value="-2" data-u=" μC"><output></output></label>
+<label>距離 <input type="range" data-k="r" min="0.1" max="0.5" step="0.01" value="0.3" data-u=" m"><output></output></label>
+</div>
+<div class="readout"></div>
+</div>
+
+<h3>導體與絕緣體</h3>
+<p>金屬裡有很多能自由移動的電子，電荷容易流動，叫<b>導體</b>。塑膠、橡膠、玻璃、乾木頭的電子被原子抓得很緊，電荷不易流動，叫<b>絕緣體</b>。電線外面包塑膠，就是用絕緣體保護我們。</p>
+
+<div class="quiz" data-ans="1"><p class="q">1. 兩個都帶負電的物體靠近時會？</p><div class="opts"><button>互相吸引</button><button>互相排斥</button><button>沒有作用</button></div><p class="why">同性相斥。</p></div>
+<div class="quiz" data-ans="2"><p class="q">2. 兩電荷的距離變成原來的一半，電力變成？</p><div class="opts"><button>一半</button><button>2 倍</button><button>4 倍</button></div><p class="why">平方反比：距離變 1/2，力變 1 ÷ (1/2)² ＝ 4 倍。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>原子含質子（+）、電子（−）、中子；摩擦起電是電子轉移。</li><li>同性相斥、異性相吸；庫侖定律 <i>F</i> ＝ <i>kq</i><sub>1</sub><i>q</i><sub>2</sub>/<i>r</i>²。</li><li>電荷周圍有電場；導體讓電荷流動，絕緣體不行。</li></ul></div>
+</section>
+
+<!-- ================= 第 22 課 ================= -->
+<section class="page lesson" id="L22" data-stage="4">
+<h2>電流、電壓與電阻</h2>
+<p class="hook">按下開關，燈瞬間就亮了。電是從電廠「飛」過來的嗎？其實電線裡的電子慢得驚人，每秒只移動不到一毫米。那燈為什麼亮得這麼快？</p>
+
+<h3>用水管來想像電路</h3>
+<p>電路很像一套水管系統：</p>
+<div class="table"><table>
+<tr><th>電路</th><th>水管</th><th>單位</th></tr>
+<tr><td><b>電壓</b> <i>V</i>：推動電荷流動的「推力」</td><td>水位高低差（水壓）</td><td>伏特 V</td></tr>
+<tr><td><b>電流</b> <i>I</i>：每秒流過的電量</td><td>每秒流過的水量</td><td>安培 A</td></tr>
+<tr><td><b>電阻</b> <i>R</i>：阻礙電流的程度</td><td>水管的窄度</td><td>歐姆 Ω</td></tr>
+<tr><td>電池</td><td>把水抽到高處的幫浦</td><td></td></tr>
+</table></div>
+<p>回到開頭的問題：電線裡本來就充滿了電子，就像已經裝滿水的水管。開關一打開，「推力」以接近光速沿著電線傳開，整條線上的電子幾乎同時開始移動，所以燈立刻就亮了。</p>
+
+<h3>歐姆定律</h3>
+<p>德國物理學家歐姆在 1827 年發現：對很多導體來說，電流和電壓成正比。</p>
+<div class="eq"><i>V</i> = <i>I R</i><small>電壓 ＝ 電流 × 電阻。同樣的電壓下，電阻越大，電流越小。</small></div>
+<p>電流通過用電器時會做功，每秒消耗的電能叫<b>電功率</b>：<i>P</i> ＝ <i>V I</i>，單位瓦特 W（第 11 課）。</p>
+
+<aside class="box term"><b>名詞由來：伏特、安培、歐姆、電池</b>
+<p><b>伏特</b>紀念義大利的伏打，他在 1800 年用一疊銅片、鋅片和浸鹽水的紙板做出第一個能持續供電的電池，叫「伏打電堆」。<b>安培</b>紀念法國的安培，他研究電流和磁的關係。<b>歐姆</b>紀念德國的歐姆，他的定律發表時曾被批評為「不切實際的幻想」，後來才被肯定；符號 Ω 是希臘字母 omega，因為「O」容易和數字 0 混淆。</p>
+<p><b>電池 battery</b> 的原意是「一排火砲、砲兵連」。富蘭克林把一排串在一起的儲電瓶比喻成一排大砲，名字就這樣留了下來。</p></aside>
+
+<h3>電流的方向</h3>
+<p>還記得第 21 課富蘭克林猜反的故事嗎？科學家約定：<mark>電流的方向是從電池正極流出、經過電路、回到負極</mark>。但實際在金屬中移動的是帶負電的電子，它們的方向剛好相反，從負極流向正極。兩種說法都對，只是描述的角度不同。</p>
+
+<h3>串聯與並聯</h3>
+<ul><li><b>串聯</b>：用電器一個接一個連成一條路。電流只有一條路可走，總電阻變大、電流變小，燈變暗。只要一個壞掉，整條電路都斷了（老式聖誕燈串）。</li><li><b>並聯</b>：用電器分成好幾條路，各自接到電源兩端。每條路都得到完整的電壓，互不影響。<b>家裡的電器都是並聯</b>，所以關掉電視，電燈照樣亮。</li></ul>
+
+<div class="sim" data-sim="circuit" data-r="0.66">
+<div class="cap">電路實驗台<small>黃色小點是電子（往負方向跑的那群）。點越快，電流越大；燈越亮，功率越大。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>電壓 <input type="range" data-k="V" min="1.5" max="12" step="0.5" value="6" data-u=" V"><output></output></label>
+<label>每個燈泡電阻 <input type="range" data-k="R" min="2" max="30" step="1" value="6" data-u=" Ω"><output></output></label>
+<label>接法 <select data-k="mode"><option value="1">一個燈泡</option><option value="2">兩燈串聯</option><option value="3">兩燈並聯</option></select></label>
+</div>
+<div class="readout"></div>
+</div>
+
+<aside class="box warn"><b>用電安全</b>
+<p>人體也能導電，潮濕時電阻更小、電流更大，所以不要用濕手碰插頭。如果電流不經過用電器、直接從導線繞回電源，電阻極小、電流極大，導線會迅速發熱，這叫<b>短路</b>，可能引起火災。保險絲和斷路器會在電流過大時自動切斷電路。</p></aside>
+
+<div class="quiz" data-ans="0"><p class="q">1. 12 V 的電池接上 4 Ω 的電阻，電流是？</p><div class="opts"><button>3 A</button><button>48 A</button><button>0.33 A</button></div><p class="why"><i>I</i> ＝ <i>V</i>/<i>R</i> ＝ 12 ÷ 4 ＝ 3 A。</p></div>
+<div class="quiz" data-ans="1"><p class="q">2. 家裡的電燈、冰箱、電視是怎麼接的？</p><div class="opts"><button>串聯</button><button>並聯</button><button>各自接不同的電池</button></div><p class="why">並聯讓每個電器都得到完整的電壓（臺灣是 110 V），而且可以各自開關。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>電壓是推力（V），電流是流量（A），電阻是阻礙（Ω）。</li><li>歐姆定律 <i>V</i> ＝ <i>IR</i>；電功率 <i>P</i> ＝ <i>VI</i>。</li><li>串聯只有一條路；並聯各自獨立，家用電器都是並聯。</li></ul></div>
+</section>
+
+<!-- ================= 第 23 課 ================= -->
+<section class="page lesson" id="L23" data-stage="4">
+<h2>磁與電磁感應</h2>
+<p class="hook">1820 年，一位丹麥教授在上課時，把通電的導線放在指南針旁邊，指南針竟然轉動了。這個意外，讓人類發現電和磁原來是一家人，也讓我們後來有了發電機和馬達。</p>
+
+<h3>磁鐵的基本性質</h3>
+<p>磁鐵有兩個極：<b>N 極</b>（指北極）和 <b>S 極</b>（指南極）。<mark>同極相斥，異極相吸</mark>，和電荷很像。但有一點不同：把磁鐵切成兩半，每一半仍然有 N 和 S 兩極，你永遠切不出單獨一個 N 極。</p>
+<p>磁鐵周圍有<b>磁場</b>，可以用鐵粉灑出磁力線的形狀：從 N 極出發、回到 S 極。<b>地球本身就是一個大磁鐵</b>，所以指南針會指向南北。有趣的是，地理上的北極附近其實是地球磁場的 S 極，所以才能吸引指南針的 N 極。</p>
+
+<aside class="box term"><b>名詞由來：磁<span class="en">Magnet</span></b>
+<p>英文 <i>magnet</i> 來自古希臘的 Magnesia（馬格尼西亞）地區，那裡盛產天然磁石。</p>
+<p>中文「磁」原本寫作「慈」。《呂氏春秋》說「慈石召鐵，或引之也」：古人覺得磁石吸鐵，就像慈愛的母親吸引孩子靠過來。後來才加上石字旁寫成「磁」。中國很早就用磁石做成「司南」，後來發展成指南針。</p></aside>
+
+<h3>電生磁：奧斯特的發現</h3>
+<p>1820 年丹麥的奧斯特發現：<mark>電流會在周圍產生磁場。</mark>把導線繞成線圈、通上電，就變成一個可以開關的磁鐵，叫<b>電磁鐵</b>。廢鐵場吊車、電鈴、喇叭都用到它。</p>
+<p>反過來，磁場也會對電流施力。把通電線圈放在磁鐵之間，線圈就會轉動，這就是<b>馬達</b>的原理：<b>電能 → 動能</b>。電風扇、電動車、手機的震動都靠它。</p>
+
+<h3>磁生電：法拉第的電磁感應</h3>
+<p>既然電能生磁，磁能不能生電？英國的法拉第試了將近十年，終於在 1831 年發現：<mark>只有當穿過線圈的磁場「在改變」時，線圈中才會產生電流。</mark>磁鐵靜止放在線圈裡，一點電流也沒有；磁鐵一動，電流就出現了。這叫<b>電磁感應</b>。</p>
+
+<div class="sim" data-sim="induct" data-r="0.55">
+<div class="cap">把磁鐵推進、拉出線圈<small>手動拉桿移動磁鐵，或勾選「自動來回」。注意電流計的指針只有在磁鐵移動時才會偏轉，而且推入和拉出的方向相反。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>磁鐵位置 <input type="range" data-k="x" min="0" max="100" step="1" value="10"><output></output></label>
+<label class="ck"><input type="checkbox" data-k="auto"> 自動來回</label>
+<label>自動速度 <input type="range" data-k="sp" min="0.3" max="3" step="0.1" value="1"><output></output></label>
+</div>
+<div class="readout"></div>
+</div>
+
+<p>磁鐵動得越快，電流越大。這就是<b>發電機</b>的原理：用水力、風力、蒸汽推動渦輪，讓線圈在磁場中不停轉動，<b>動能 → 電能</b>。全世界幾乎所有電廠都是這樣發電的。</p>
+
+<aside class="box term"><b>名詞由來：感應<span class="en">Induction</span></b>
+<p>來自拉丁文 <i>inducere</i>「引入、引導」。電流是被變化的磁場「引」出來的。有人問法拉第：「這個發現有什麼用？」據說他回答：「一個剛出生的嬰兒有什麼用？」今天我們用的電幾乎全靠它。</p></aside>
+
+<div class="quiz" data-ans="2"><p class="q">1. 磁鐵靜止放在線圈中間，線圈會？</p><div class="opts"><button>產生很大的電流</button><button>產生穩定的小電流</button><button>沒有電流</button></div><p class="why">電磁感應需要「變化」的磁場。磁鐵不動，磁場不變，就沒有電流。</p></div>
+<div class="quiz" data-ans="0"><p class="q">2. 發電機的作用是把什麼能轉換成電能？</p><div class="opts"><button>動能（機械能）</button><button>光能</button><button>核能直接變成電能</button></div><p class="why">發電機讓線圈在磁場中轉動，把動能轉成電能。核電廠也是用核能燒水，再用蒸汽推渦輪。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>磁鐵有 N、S 兩極，同極相斥、異極相吸；地球是大磁鐵。</li><li>電流產生磁場（電磁鐵、馬達）。</li><li>變化的磁場產生電流（電磁感應、發電機）。</li></ul></div>
+</section>
+
+<!-- ================= 第 24 課 ================= -->
+<section class="page lesson" id="L24" data-stage="4">
+<h2>電磁波：光的真面目</h2>
+<p class="hook">手機訊號、微波爐、遙控器、陽光、X 光。它們看起來毫不相干，卻是同一種東西，只是「顏色」不同。</p>
+
+<h3>馬克士威的偉大預言</h3>
+<p>上一課學到：變化的磁場會產生電場（電流）。1865 年，蘇格蘭物理學家馬克士威把電和磁的所有規律整理成四條方程式，並且推論：<mark>變化的電場也會產生磁場。</mark></p>
+<p>那麼，一個變化的電場產生變化的磁場，變化的磁場又產生變化的電場……它們就會互相激發、一路往外傳播，形成一種波，叫<b>電磁波</b>。馬克士威算出這種波的速度，結果剛好等於已經量到的<b>光速</b>。他因此大膽推論：<b>光就是一種電磁波</b>。</p>
+<p>1887 年，德國的赫茲在實驗室裡用火花製造出電磁波，並在房間另一頭偵測到它，證實了馬克士威的預言。電磁波不需要介質，可以在真空中傳播，所以陽光能穿過太空來到地球。</p>
+
+<h3>電磁波譜</h3>
+<p>所有電磁波在真空中的速度都一樣是光速，差別只在<b>波長</b>（和頻率）。依波長由長到短排列，叫做<mark>電磁波譜</mark>：</p>
+<div class="table"><table>
+<tr><th>種類</th><th>波長大約</th><th>生活應用</th></tr>
+<tr><td>無線電波</td><td>公分到幾公里</td><td>廣播、電視、衛星通訊</td></tr>
+<tr><td>微波</td><td>1 毫米～30 公分</td><td>微波爐、手機、Wi-Fi、雷達</td></tr>
+<tr><td>紅外線</td><td>700 奈米～1 毫米</td><td>遙控器、熱像儀、暖爐</td></tr>
+<tr><td>可見光</td><td>約 380～750 奈米</td><td>眼睛看得到的彩虹七色</td></tr>
+<tr><td>紫外線</td><td>10～380 奈米</td><td>殺菌燈、會曬傷皮膚</td></tr>
+<tr><td>X 射線</td><td>0.01～10 奈米</td><td>醫學透視、機場安檢</td></tr>
+<tr><td>伽瑪射線</td><td>小於 0.01 奈米</td><td>放射治療、來自原子核</td></tr>
+</table></div>
+<p>我們眼睛能看到的可見光，只佔整個電磁波譜非常窄的一小段。波長越短、頻率越高的電磁波，能量越大（第 26 課會知道為什麼），所以紫外線、X 光、伽瑪射線對身體的傷害比較大。</p>
+
+<aside class="box term"><b>名詞由來：各種電磁波的名字</b>
+<p><b>紅外線 infrared</b>：拉丁文 <i>infra</i>「在下方」，指頻率低於紅光。1800 年天文學家赫歇爾用溫度計放在稜鏡分出的光譜紅色外側，發現那裡溫度更高，因而發現它。</p>
+<p><b>紫外線 ultraviolet</b>：<i>ultra</i>「超過」，頻率超過紫光。</p>
+<p><b>X 射線</b>：1895 年德國的倫琴發現一種能穿透人體的神秘射線，因為不知道它是什麼，就借用數學裡代表「未知數」的 X 來命名。他也因此獲得第一屆諾貝爾物理獎。</p>
+<p><b>伽瑪射線</b>：拉塞福把放射線依發現順序，用希臘字母 α、β、γ 命名，γ（伽瑪）是第三個（第 28 課）。</p></aside>
+
+<div class="sim" data-sim="spectrum" data-r="0.6">
+<div class="cap">電磁波譜探索器<small>拉動拉桿改變波長，從宇宙射線一路到無線電波。上方的波形長度按比例示意。</small></div>
+<canvas></canvas>
+<div class="ctrl"><label>波長（10 的次方，公尺） <input type="range" data-k="lg" min="-12" max="3" step="0.05" value="-6.26"><output></output></label></div>
+<div class="readout"></div>
+</div>
+
+<div class="quiz" data-ans="2"><p class="q">1. 下列哪一種電磁波的波長最短？</p><div class="opts"><button>無線電波</button><button>可見光</button><button>伽瑪射線</button></div><p class="why">伽瑪射線波長最短、頻率最高、能量最大。</p></div>
+<div class="quiz" data-ans="1"><p class="q">2. 微波和可見光在真空中的速度相比？</p><div class="opts"><button>微波比較快</button><button>一樣快</button><button>可見光比較快</button></div><p class="why">所有電磁波在真空中都以光速前進，差別只在波長和頻率。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>變化的電場和磁場互相激發，形成電磁波，速度等於光速。</li><li>光是電磁波；電磁波不需要介質。</li><li>電磁波譜依波長：無線電、微波、紅外線、可見光、紫外線、X 射線、伽瑪射線。</li></ul></div>
+</section>
+
+<!-- ================= 第 25 課 ================= -->
+<section class="page lesson" id="L25" data-stage="5">
+<h2>原子的結構</h2>
+<p class="hook">把一顆原子放大到一座足球場那麼大，它的原子核只有球場中央一顆小彈珠那麼大，其他地方幾乎全是空的。你、我、桌子、地球，原來大部分都是「空的」。</p>
+
+<h3>原子觀念的演進</h3>
+<p>兩千四百多年前，古希臘哲學家德謨克利特就猜想：物質一直切下去，最後會得到一種不能再切的小顆粒。這只是哲學猜想，直到十九世紀，科學家才用實驗一步步看清原子的樣貌：</p>
+<ol>
+<li><b>1803 年 道耳頓</b>：原子是實心的小球，不同元素的原子不同。</li>
+<li><b>1897 年 湯姆森</b>：發現電子，提出「葡萄乾布丁模型」，正電像布丁，電子像葡萄乾散布其中。</li>
+<li><b>1911 年 拉塞福</b>：用 α 粒子射向很薄的金箔，大多數直直穿過，但極少數竟然被大角度彈回。拉塞福說這就像「用大砲打一張衛生紙，砲彈卻反彈回來打到自己」。結論：<mark>原子的正電和幾乎所有質量，都集中在中心一個極小的原子核裡，其餘大部分是空的。</mark></li>
+<li><b>1913 年 波耳</b>：電子只能在某些特定的軌道上運行。</li>
+</ol>
+
+<aside class="box term"><b>名詞由來：原子<span class="en">Atom</span></b>
+<p>來自希臘文 <i>atomos</i>：<i>a-</i>（不）＋ <i>temnein</i>（切），意思是「不可分割的」。諷刺的是，後來科學家發現原子其實可以再分成電子、質子、中子，質子和中子還能再分成夸克。但名字已經改不掉了。</p>
+<p><b>原子核 nucleus</b>：拉丁文「堅果裡的果仁」。<b>質子 proton</b>：希臘文 <i>protos</i>「第一」，拉塞福 1920 年命名。<b>中子 neutron</b>：拉丁文 <i>neuter</i>「中性、兩者皆非」，1932 年英國的查兌克發現。</p></aside>
+
+<h3>波耳模型與能階</h3>
+<p>拉塞福的模型有一個問題：電子繞著原子核轉，理論上會不斷放出能量，幾乎瞬間就掉進原子核裡，原子應該不能穩定存在。丹麥的波耳提出大膽的假設：</p>
+<ul><li>電子只能待在某些特定的<b>能階</b>（像樓梯的一階一階，不能停在兩階之間）。</li><li>電子吸收能量會跳到高能階；從高能階<b>跳回</b>低能階時，會放出一個光子，光子的能量剛好等於兩個能階的差。</li></ul>
+<p>因為能階是固定的，每種元素放出的光只有特定幾種顏色，就像每種元素的「指紋」，叫做<mark>光譜</mark>。霓虹燈的紅光來自氖原子，煙火的各種顏色來自不同的金屬元素（鈉是黃色、銅是藍綠色、鍶是紅色）。天文學家分析星星的光譜，就知道遙遠恆星是由什麼元素組成的。</p>
+
+<div class="sim" data-sim="bohr" data-r="0.72">
+<div class="cap">氫原子的能階與光譜<small>按「給電子能量」讓電子跳上高能階，它會一階階跳回來並放出光子。下方記錄出現過的譜線。</small></div>
+<canvas></canvas>
+<div class="ctrl"><button data-act="excite">給電子能量</button><button class="alt" data-act="clear">清除光譜</button></div>
+<div class="readout"></div>
+</div>
+
+<p>波耳模型後來被更完整的量子力學取代：電子並不是真的在一條條軌道上繞圈，而是像一團「機率雲」分布在原子核周圍。但「能階」和「光譜」的想法完全正確，也是下一課量子世界的入口。</p>
+
+<div class="quiz" data-ans="0"><p class="q">1. 拉塞福的金箔實驗發現了什麼？</p><div class="opts"><button>原子中心有一個小而重的原子核</button><button>電子的存在</button><button>原子是實心小球</button></div><p class="why">少數 α 粒子大角度反彈，證明正電與質量集中在很小的原子核上。電子是湯姆森發現的。</p></div>
+<div class="quiz" data-ans="1"><p class="q">2. 電子從高能階跳到低能階時會？</p><div class="opts"><button>吸收光</button><button>放出特定能量的光</button><button>變成質子</button></div><p class="why">能量差以一個光子的形式放出，所以每種元素有特定顏色的光譜。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>原子由很小的原子核（質子＋中子）和外圍的電子組成，大部分是空的。</li><li>電子只能在特定能階，躍遷時吸收或放出特定能量的光。</li><li>每種元素的光譜獨一無二，可用來辨認物質。</li></ul></div>
+</section>
+
+<!-- ================= 第 26 課 ================= -->
+<section class="page lesson" id="L26" data-stage="5">
+<h2>量子：能量是一份一份的</h2>
+<p class="hook">把光開得再亮，都照不出某些金屬裡的電子；換成一點點微弱的紫外線，電子卻立刻跳了出來。這個「不合常理」的實驗，推開了量子世界的大門。</p>
+
+<h3>普朗克的「無奈之舉」</h3>
+<p>1900 年，德國物理學家普朗克研究高溫物體發出的光。為了讓計算結果符合實驗，他不得不做一個奇怪的假設：<mark>能量不是連續的，而是一份一份地放出和吸收。</mark>每一份的大小和頻率成正比：</p>
+<div class="eq"><i>E</i> = <i>h f</i><small><i>E</i>：一份的能量　<i>f</i>：頻率　<i>h</i> ≈ 6.626 × 10<sup>−34</sup> J·s，叫普朗克常數（第 2 課提過，現在的公斤就是用它定義的）。</small></div>
+<p>就像樓梯只能一階一階走，不能停在半階上。只是 <i>h</i> 非常非常小，所以日常生活中能量看起來像是連續的斜坡。普朗克自己一開始也覺得這只是數學技巧，沒想到它是真的。</p>
+
+<aside class="box term"><b>名詞由來：量子<span class="en">Quantum</span></b>
+<p>來自拉丁文 <i>quantus</i>「多少」，意思是「一定的量、一份」。英文 quantity（數量）同源。「量子」就是「最小的一份」。所以「量子力學」就是研究這些「一份一份」的世界的力學。</p></aside>
+
+<h3>光電效應與愛因斯坦的光子</h3>
+<p>光照在金屬上，有時會把電子打出來，叫<b>光電效應</b>。但實驗結果很奇怪：</p>
+<ul><li>紅光再亮（強度再大），也打不出電子。</li><li>紫外線就算很微弱，也能立刻打出電子。</li><li>決定能不能打出電子的，是光的<b>顏色（頻率）</b>，不是亮度。</li></ul>
+<p>如果光只是波，越亮的光能量越多，應該遲早能把電子打出來才對。1905 年，愛因斯坦提出解釋：<mark>光是由一顆顆「光子」組成的，每顆光子的能量是 <i>hf</i>。</mark>一個電子一次只能吸收一顆光子。如果一顆光子的能量不夠把電子拉出金屬，來再多顆也沒用。就像你要跳上一個 1 公尺高的台階，跳一萬次 50 公分都上不去。</p>
+<p>光越亮，只代表光子數量越多，打出的電子也越多，但每顆電子的能量只由頻率決定。愛因斯坦因為這個解釋獲得 1921 年諾貝爾物理獎（不是因為相對論）。</p>
+
+<div class="sim" data-sim="photo" data-r="0.62">
+<div class="cap">光電效應實驗<small>改變光的波長（顏色）和強度。電子被打出時，速度代表它的動能。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>波長 <input type="range" data-k="lam" min="200" max="700" step="5" value="550" data-u=" nm"><output></output></label>
+<label>強度 <input type="range" data-k="I" min="1" max="10" step="1" value="5"><output></output></label>
+<label>金屬 <select data-k="W"><option value="2.1">銫 Cs</option><option value="2.3" selected>鈉 Na</option><option value="4.3">鋅 Zn</option></select></label>
+</div>
+<div class="readout"></div>
+</div>
+
+<aside class="box term"><b>名詞由來：光子<span class="en">Photon</span></b>
+<p>希臘文 <i>phōs</i>「光」（photo 照片同源）。這個名字不是愛因斯坦取的，而是美國化學家路易斯在 1926 年提出的。</p></aside>
+
+<h3>波粒二象性：光到底是波還是粒子？</h3>
+<p>光會干涉、繞射（第 17 課），表現得像波；在光電效應中，又表現得像粒子。答案是：<mark>光兩者皆是，要看你怎麼觀察它。</mark>這叫<b>波粒二象性</b>。</p>
+<p>1924 年，法國的德布羅意更大膽地說：既然光波有粒子性，那電子這種粒子也應該有波動性。幾年後實驗真的看到電子的干涉圖案。在量子世界裡，所有東西都同時帶有波和粒子的特性，這是我們日常經驗完全沒有的現象。</p>
+
+<aside class="box eg"><b>量子就在你身邊</b>
+<p>量子力學聽起來很玄，但你每天都在用它的成果：手機和電腦裡的晶片（半導體）、LED 燈、雷射、太陽能板、醫院的 MRI 核磁共振，全都建立在量子力學之上。</p></aside>
+
+<div class="quiz" data-ans="1"><p class="q">1. 在光電效應中，決定電子能不能被打出來的是？</p><div class="opts"><button>光的亮度</button><button>光的頻率（顏色）</button><button>照射時間長短</button></div><p class="why">每顆光子的能量 <i>E</i> ＝ <i>hf</i> 只由頻率決定，能量不夠，再多光子也沒用。</p></div>
+<div class="quiz" data-ans="0"><p class="q">2. 為什麼紫外線比紅光容易曬傷皮膚？</p><div class="opts"><button>紫外線頻率高，每顆光子能量大</button><button>紫外線跑得比較快</button><button>紅光是波、紫外線是粒子</button></div><p class="why">紫外線頻率高，單一光子的能量足以破壞皮膚細胞中的分子。所有電磁波速度相同。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>能量是一份一份的（量子），<i>E</i> ＝ <i>hf</i>。</li><li>光由光子組成，光電效應由頻率決定，而非亮度。</li><li>光和物質都具有波粒二象性。</li></ul></div>
+</section>
+
+<!-- ================= 第 27 課 ================= -->
+<section class="page lesson" id="L27" data-stage="5">
+<h2>相對論：時間與空間會變</h2>
+<p class="hook">如果你搭上一艘接近光速的太空船旅行一年再回來，地球上可能已經過了好幾年。這不是科幻小說，而是被實驗反覆證實的物理。</p>
+
+<h3>一個奇怪的事實：光速對每個人都一樣</h3>
+<p>你在時速 100 公里的火車上往前丟一顆時速 20 公里的球，月台上的人看球的速度是 120 公里。這很直覺。</p>
+<p>但光不是這樣。十九世紀末的實驗發現，<mark>不管你怎麼移動，量到的光速永遠都是同一個值</mark>，約每秒 30 萬公里。追著光跑，光也不會變慢；迎著光跑，光也不會變快。</p>
+<p>1905 年，26 歲的愛因斯坦在瑞士專利局當職員。他決定認真接受這個事實，提出<b>狹義相對論</b>，只有兩個基本假設：</p>
+<ol><li>在所有等速運動的觀察者看來，物理定律都一樣。</li><li>真空中的光速對所有觀察者都一樣。</li></ol>
+<p>如果光速不能變，那麼要讓一切說得通，就只能讓<b>時間和空間</b>去變。</p>
+
+<h3>光鐘：運動的時鐘會變慢</h3>
+<p>想像一個「光鐘」：兩面鏡子上下相對，一顆光子在中間上下彈跳，每彈一次算「滴答」一下。</p>
+<p>把光鐘放在高速太空船上。太空船裡的人看，光子直直上下跳，一切正常。但地面上的人看，光子除了上下跳，還跟著太空船往前跑，走的是<b>斜斜的</b>路線，路程比較長。光速又不能變快，所以每「滴答」一下要花更長的時間。結論：<mark>在地面的人看來，高速運動的時鐘走得比較慢。</mark>這叫<b>時間膨脹</b>。</p>
+<div class="eq">Δ<i>t</i>′ = γ Δ<i>t</i>，　γ = <span class="frac"><span>1</span><span>√(1 − <i>v</i>²/<i>c</i>²)</span></span><small>γ 叫勞侖茲因子（Lorentz factor），永遠 ≥ 1。速度越接近光速 <i>c</i>，γ 越大。平常速度下 γ 幾乎就是 1，所以我們感覺不到。</small></div>
+
+<div class="sim" data-sim="lclock" data-r="0.66">
+<div class="cap">兩個光鐘比賽<small>上面的光鐘靜止，下面的光鐘高速移動。從你（地面觀察者）的角度看，誰滴答得比較慢？</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>速度 <input type="range" data-k="b" min="0" max="0.98" step="0.01" value="0.8" data-u=" c"><output></output></label>
+<button class="alt" data-act="reset">重新計數</button>
+</div>
+<div class="readout"></div>
+</div>
+
+<h3>更多驚人的結果</h3>
+<ul><li><b>長度收縮</b>：高速運動的物體，在運動方向上看起來會變短。</li><li><b>光速是極限</b>：有質量的物體越接近光速，需要的能量越多，永遠無法達到光速。</li><li><b>質能等價</b>：<b><i>E</i> ＝ <i>mc</i>²</b>，質量和能量可以互相轉換。因為 <i>c</i>² 是個超級大的數，一點點質量就能變出巨大的能量，這是原子彈、核電廠和太陽發光的原理（第 28 課）。</li></ul>
+
+<aside class="box eg"><b>證據：從宇宙射線到 GPS</b>
+<p>宇宙射線撞擊高空大氣會產生一種叫「μ 子」的粒子，它的壽命短到照理說還沒飛到地面就會衰變。但我們在地面偵測到大量 μ 子，因為它飛得接近光速，時間變慢了。</p>
+<p>GPS 衛星上的時鐘，因為高速運動（狹義相對論）和所在位置重力較弱（廣義相對論），每天和地面時鐘相差約 38 微秒。如果不修正，GPS 定位每天會累積約 10 公里的誤差。</p></aside>
+
+<h3>廣義相對論：重力是時空彎曲</h3>
+<p>1915 年，愛因斯坦進一步提出<b>廣義相對論</b>：<mark>重力不是一種「拉力」，而是質量讓時空彎曲，物體沿著彎曲的時空運動。</mark>想像在繃緊的床單中央放一顆保齡球，床單凹下去，旁邊滾過的彈珠就會繞著它轉。</p>
+<p>它預言了光經過太陽附近會彎曲（1919 年日全食時觀測證實）、黑洞的存在（2019 年第一次拍到黑洞影像），以及時空的漣漪「重力波」（2015 年首次偵測到）。</p>
+
+<aside class="box term"><b>名詞由來：相對論<span class="en">Relativity</span></b>
+<p>「相對論」這個名字主要是普朗克等人叫開來的。愛因斯坦自己曾說，叫「不變性理論」可能更恰當，因為這個理論的核心其實是<b>「光速和物理定律對每個人都不變」</b>。正因為這些東西不變，時間和空間才必須是相對的。</p></aside>
+
+<div class="quiz" data-ans="1"><p class="q">1. 從地球觀察一艘高速飛行的太空船，船上的時鐘？</p><div class="opts"><button>走得比較快</button><button>走得比較慢</button><button>和地球一樣</button></div><p class="why">時間膨脹：從你的角度看，運動中的時鐘變慢。</p></div>
+<div class="quiz" data-ans="2"><p class="q">2. 一個有質量的物體，能不能被加速到光速？</p><div class="opts"><button>可以，只要火箭夠強</button><button>可以，在沒有空氣的太空就行</button><button>不行，需要的能量會變成無限大</button></div><p class="why">越接近光速，γ 越大，需要的能量趨近無限大，所以永遠達不到。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>光速對所有觀察者都一樣，所以時間和空間必須會變。</li><li>運動的時鐘變慢、運動的物體變短，光速是極限，<i>E</i> ＝ <i>mc</i>²。</li><li>廣義相對論：重力是質量造成的時空彎曲。</li></ul></div>
+</section>
+
+<!-- ================= 第 28 課 ================= -->
+<section class="page lesson" id="L28" data-stage="5">
+<h2>原子核與放射性</h2>
+<p class="hook">考古學家怎麼知道一具木乃伊有幾千年歷史？太陽為什麼能燃燒 46 億年還沒燒完？答案都在原子核裡。</p>
+
+<h3>會自己放出射線的原子</h3>
+<p>1896 年，法國的貝克勒發現鈾礦石會自己發出看不見的射線，讓包在黑紙裡的照相底片感光。接著居禮夫婦發現了放射性更強的新元素釙和鐳。這種<mark>原子核自己放出射線、變成另一種原子核的現象</mark>，叫做<b>放射性</b>。</p>
+<div class="table"><table>
+<tr><th>射線</th><th>本質</th><th>穿透力</th><th>擋得住它的東西</th></tr>
+<tr><td>α（阿爾法）</td><td>氦原子核（2 質子＋2 中子）</td><td>最弱</td><td>一張紙、皮膚表層</td></tr>
+<tr><td>β（貝他）</td><td>高速電子</td><td>中等</td><td>幾毫米的鋁板</td></tr>
+<tr><td>γ（伽瑪）</td><td>高能電磁波</td><td>最強</td><td>厚鉛板或厚混凝土</td></tr>
+</table></div>
+
+<aside class="box term"><b>名詞由來：放射性<span class="en">Radioactivity</span></b>
+<p>由居禮夫人在 1898 年命名，來自拉丁文 <i>radius</i>「光線、車輪的輻條」，形容射線像輻條一樣向四面八方放出。居禮夫人是第一位獲得諾貝爾獎的女性，也是唯一在物理和化學兩個領域都得獎的人。她發現的新元素「釙」（Polonium），是以她的祖國波蘭命名的。</p></aside>
+
+<h3>半衰期：隨機中的規律</h3>
+<p>你無法預測<b>某一個</b>原子核什麼時候衰變，它完全是隨機的，就像丟硬幣。但如果有非常多個，就有很準的規律：<mark>每經過一段固定時間，剩下的原子核就會少掉一半，這段時間叫半衰期。</mark></p>
+<p>1000 個原子核，經過一個半衰期剩 500，兩個剩 250，三個剩 125……不同的放射性元素，半衰期可以從不到一秒到幾十億年。</p>
+
+<div class="sim" data-sim="decay" data-r="0.62">
+<div class="cap">放射性衰變模擬<small>400 個原子核，每一個都隨機衰變（變灰）。右邊的圖記錄剩餘數量，虛線是理論曲線。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label>半衰期 <input type="range" data-k="T" min="1" max="8" step="0.5" value="3" data-u=" 秒"><output></output></label>
+<button data-act="reset">重新開始</button>
+</div>
+<div class="readout"></div>
+</div>
+
+<aside class="box eg"><b>碳 14 定年法</b>
+<p>生物活著時，體內碳 14 的比例和大氣一樣。死後不再吸收新的碳，碳 14 就以約 5730 年的半衰期慢慢減少。測量一塊古木或骨頭中剩下多少碳 14，就能推算它死了多久。這個方法可以測到大約五萬年前。</p></aside>
+
+<h3>核分裂與核融合：E ＝ mc² 的威力</h3>
+<p>精確測量會發現，原子核的質量比組成它的質子和中子加起來還<b>小</b>一點點。少掉的質量，根據 <i>E</i> ＝ <i>mc</i>²，變成了把原子核綁在一起的巨大能量。</p>
+<ul><li><b>核分裂</b>：用中子撞擊鈾 235 這種很重的原子核，它會分裂成兩個較輕的原子核，同時放出能量和更多中子，再撞擊其他鈾核，形成<b>連鎖反應</b>。核電廠控制這個反應來發電；原子彈則是讓它失控。</li><li><b>核融合</b>：把氫這種很輕的原子核在極高溫下撞在一起，融合成氦，放出更大量的能量。<mark>太陽每秒把約 400 萬噸的質量轉換成能量</mark>，照亮了整個太陽系。科學家正努力在地球上實現可控的核融合發電。</li></ul>
+
+<aside class="box term"><b>名詞由來：分裂與融合<span class="en">Fission &amp; Fusion</span></b>
+<p><i>fission</i> 來自拉丁文 <i>findere</i>「劈開」。<i>fusion</i> 來自拉丁文 <i>fundere</i>「熔化、傾注」，和保險絲 fuse（會熔斷的線）同源。</p></aside>
+
+<aside class="box warn"><b>常見誤解：「輻射」全部都很危險</b>
+<p>我們周圍本來就有天然輻射：來自岩石、宇宙射線，甚至香蕉裡的鉀 40。危險與否取決於<b>劑量</b>。醫院的 X 光檢查劑量很低；需要避免的是長時間或高劑量的暴露。</p></aside>
+
+<div class="quiz" data-ans="2"><p class="q">1. 1000 個放射性原子核，經過 2 個半衰期後大約剩多少？</p><div class="opts"><button>0 個</button><button>500 個</button><button>250 個</button></div><p class="why">1000 → 500 → 250。不是「兩個半衰期就全部衰變完」。</p></div>
+<div class="quiz" data-ans="0"><p class="q">2. 太陽的能量主要來自？</p><div class="opts"><button>核融合</button><button>核分裂</button><button>燃燒煤炭</button></div><p class="why">太陽核心把氫融合成氦，質量減少轉換為能量。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>放射性：原子核自發放出 α、β、γ 射線，穿透力依序增強。</li><li>半衰期：每過一段固定時間剩下一半，可用來定年。</li><li>核分裂與核融合都把一部分質量轉成能量（<i>E</i> ＝ <i>mc</i>²）。</li></ul></div>
+</section>
+
+<!-- ================= 第 29 課 ================= -->
+<section class="page lesson" id="L29" data-stage="6">
+<h2>物理學家的工具：向量與微積分</h2>
+<p class="hook">伽利略說過：「自然這本大書，是用數學的語言寫成的。」你已經走過了整個物理的版圖。要從「懂」走到「專業」，下一步就是學會這門語言。</p>
+
+<h3>為什麼要用數學？</h3>
+<p>文字可以說「越重掉得越快」或「越重不會掉得比較快」，兩種說法聽起來都有道理。數學則強迫你說得<b>精確</b>，而且能<b>計算、預測</b>，再拿去和實驗比對。物理學家寫下的方程式，就是對大自然最精準的描述。高中和大學物理最重要的數學工具有三個：向量、三角函數、微積分。</p>
+
+<h3>向量的加法</h3>
+<p>第 3 課學過，向量有大小有方向。兩個向量相加，不能直接把數字相加。例如往東走 3 公尺、再往北走 4 公尺，你離起點不是 7 公尺，而是 5 公尺（畢氏定理：3² ＋ 4² ＝ 5²）。</p>
+<p>向量相加的方法是<b>「頭接尾」</b>：把第二個箭頭的尾巴接到第一個箭頭的頭，從起點指到終點的箭頭就是和。反過來，任何一個向量都可以<b>拆成</b>互相垂直的兩個分量，就像第 9 課拆斜面上的重力、第 10 課拆拋體的速度。拆分量的工具就是三角函數 sin 和 cos，這是高中會學到的。</p>
+
+<h3>微積分：研究「變化」的數學</h3>
+<p>物理處理的幾乎都是變化中的東西：位置在變、速度在變、溫度在變。17 世紀，牛頓和德國的萊布尼茲各自發明了處理變化的數學，叫<mark>微積分</mark>。其實它的兩個核心想法，你在前面已經看過了：</p>
+<ul><li><b>微分</b>：求「瞬間的變化率」。在 x-t 圖上，某一點的<b>切線斜率</b>就是那一瞬間的速度（第 3 課）。</li><li><b>積分</b>：求「累積的總量」。在 v-t 圖上，圖線下方的<b>面積</b>就是總位移（第 4 課）。</li></ul>
+<p>速度一直在變的時候，面積怎麼算？把時間切成很多很窄的小長條，每條當成長方形計算再加起來。切得越細，就越接近真正的答案。無限細地切下去，就是積分。</p>
+
+<div class="sim" data-sim="calc" data-r="0.66">
+<div class="cap">微分與積分的直覺<small>勾選「積分模式」後，增加長方形數量，看總面積怎麼逼近正確答案。取消勾選則是微分模式：移動時間點看切線斜率。</small></div>
+<canvas></canvas>
+<div class="ctrl">
+<label class="ck"><input type="checkbox" data-k="int" checked> 積分模式</label>
+<label>長方形數量 <input type="range" data-k="n" min="1" max="60" step="1" value="4"><output></output></label>
+<label>時間點 <input type="range" data-k="t" min="0" max="8" step="0.05" value="3"><output></output></label>
+</div>
+<div class="readout"></div>
+</div>
+
+<aside class="box term"><b>名詞由來：微積分與函數<span class="en">Calculus &amp; Function</span></b>
+<p><i>calculus</i> 是拉丁文的「小石子」。古羅馬人用小石子在算盤上計算，所以「計算」就叫 calculate。直到今天，醫學上的「結石」英文也叫 calculus。</p>
+<p>中文「微分」、「積分」、「函數」等名稱，是清朝數學家李善蘭在 1859 年和英國傳教士偉烈亞力合譯微積分教科書時創造的。「微分」取「無限微小的差」，「積分」取「一點一點累積」。他對「函數」的解釋是：一個變數中「函」（包含）著另一個變數，就是那個變數的函數。</p></aside>
+
+<h3>牛頓定律的真正樣子</h3>
+<p>學了微積分，你會發現 <i>F</i> ＝ <i>ma</i> 其實是在說：「位置的變化率的變化率，由力決定」。只要知道物體受什麼力、一開始在哪裡、速度多少，用微積分就能算出它未來每一刻的位置。行星軌道、火箭飛行、橋樑受力，都是這樣算出來的。本課程所有的動畫，也都是電腦把時間切成很小的片段，一步一步「積分」出來的。</p>
+
+<div class="quiz" data-ans="1"><p class="q">1. 往東走 6 m 再往北走 8 m，位移的大小是？</p><div class="opts"><button>14 m</button><button>10 m</button><button>2 m</button></div><p class="why">兩個垂直的向量相加用畢氏定理：√(6² ＋ 8²) ＝ √100 ＝ 10 m。</p></div>
+<div class="quiz" data-ans="0"><p class="q">2. 在位置－時間圖上，某一點切線的斜率代表？</p><div class="opts"><button>那一瞬間的速度</button><button>總位移</button><button>加速度</button></div><p class="why">切線斜率 ＝ 瞬時變化率，也就是「微分」，位置對時間的微分就是速度。</p></div>
+
+<div class="recap"><b>本課重點</b><ul><li>數學是物理的語言：精確、可計算、可檢驗。</li><li>向量用「頭接尾」相加，也能拆成分量。</li><li>微分＝瞬時變化率（切線斜率），積分＝累積量（曲線下面積）。</li></ul></div>
+</section>
+
+<!-- ================= 第 30 課 ================= -->
+<section class="page lesson" id="L30" data-stage="6">
+<h2>物理的全地圖與學習路線</h2>
+<p class="hook">恭喜你走到最後一課。你已經看過了物理世界的每一塊大陸。現在攤開地圖，看看專業的物理學家都在哪裡工作，以及你可以怎麼走下去。</p>
+
+<h3>物理學的兩大時代</h3>
+<p><b>古典物理</b>（大約到 1900 年）：牛頓力學、熱力學、電磁學、光學。它描述我們日常尺度的世界極為精準，今天的工程、建築、航太仍大量使用。</p>
+<p><b>近代物理</b>（1900 年以後）：當東西<b>非常快</b>（接近光速），要用相對論；當東西<b>非常小</b>（原子尺度），要用量子力學。它們並沒有推翻古典物理，而是告訴我們古典物理在哪個範圍內成立。</p>
+
+<div class="table"><table>
+<tr><th></th><th>一般速度</th><th>接近光速</th></tr>
+<tr><td><b>一般大小</b></td><td>牛頓力學（第 3–14 課）</td><td>狹義相對論（第 27 課）</td></tr>
+<tr><td><b>原子尺度</b></td><td>量子力學（第 25–26 課）</td><td>量子場論（大學以後）</td></tr>
+</table></div>
+
+<h3>現代物理的主要領域</h3>
+<ul>
+<li><b>凝體物理</b>：研究固體和液體中大量原子的集體行為。半導體、超導體、新材料都來自這裡，是人數最多的物理領域。</li>
+<li><b>粒子物理</b>：研究物質最基本的組成，如夸克、電子、希格斯玻色子。瑞士日內瓦的大型強子對撞機（LHC）周長 27 公里。</li>
+<li><b>天文物理與宇宙學</b>：研究恆星、黑洞、星系，以及宇宙的起源和命運。</li>
+<li><b>原子、分子與光學物理</b>：雷射、原子鐘、量子電腦。</li>
+<li><b>核物理</b>：原子核的結構、核能與醫學應用。</li>
+<li><b>生物物理、醫學物理</b>：用物理方法研究生命，以及發展醫學影像與放射治療。</li>
+<li><b>計算物理</b>：用電腦模擬複雜系統，從天氣預報到星系碰撞。</li>
+</ul>
+
+<h3>還沒解開的謎</h3>
+<p>物理遠遠沒有結束。以下這些問題，至今沒有人知道答案，也許將來會由你來回答：</p>
+<ul><li><b>暗物質</b>：星系轉得太快，需要比看得到的物質多好幾倍的「看不見的質量」。它是什麼？</li><li><b>暗能量</b>：宇宙正在加速膨脹，推動它的是什麼？</li><li><b>量子重力</b>：廣義相對論和量子力學各自都極為成功，卻無法合而為一。</li><li><b>時間為什麼有方向？</b>為什麼宇宙一開始的熵那麼低（第 16 課）？</li></ul>
+
+<h3>從國中到專業的學習路線</h3>
+<ol>
+<li><b>國中理化</b>：本課程的第 1–24 課大致涵蓋這個程度。重點是建立觀念，會用簡單公式計算。</li>
+<li><b>高中物理</b>：加入向量、三角函數，把本課程每一課都用更嚴謹的數學重新學一次，並開始學近代物理。</li>
+<li><b>大學「普通物理」</b>（大一）：用微積分重新推導所有內容，同時修微積分和線性代數。</li>
+<li><b>大學物理系核心課</b>：古典力學、電磁學、量子力學、熱力學與統計力學、數學物理方法，加上大量的實驗課。</li>
+<li><b>研究所</b>：選一個領域深入，開始做真正的研究，發表新發現。</li>
+</ol>
+
+<aside class="box eg"><b>學好物理的四個習慣</b>
+<ul><li><b>先猜再算</b>：做題目或看實驗之前，先用直覺猜答案。猜錯的地方，就是你的觀念需要修正的地方。</li><li><b>畫圖</b>：畫出物體和它受的每一個力、畫出運動圖。多數物理題畫對圖就解一半了。</li><li><b>用自己的話講給別人聽</b>：如果你能用簡單的話把一個觀念講清楚，才代表真的懂了。這叫做「費曼學習法」，以物理學家費曼命名。</li><li><b>檢查單位</b>：算出來的答案單位不對，一定是哪裡算錯了（第 2 課）。</li></ul></aside>
+
+<aside class="box term"><b>延伸學習資源</b>
+<ul><li><b>PhET 互動模擬</b>（美國科羅拉多大學製作，有中文版）：大量免費的物理動畫實驗，可以和本課程搭配使用。</li><li><b>費曼物理學講義</b>（The Feynman Lectures on Physics）：諾貝爾獎得主費曼在加州理工學院的講課內容，官方網站可免費線上閱讀英文版，適合高中以上。</li><li><b>可汗學院</b>（Khan Academy）：從基礎到大學程度的影片與練習題。</li><li>各大學的<b>開放式課程</b>（例如臺大、交大開放式課程、MIT OpenCourseWare）。</li></ul></aside>
+
+<div class="quiz" data-ans="2"><p class="q">最後一題：描述「重力是質量讓時空彎曲」的理論是？</p><div class="opts"><button>牛頓萬有引力定律</button><button>量子力學</button><button>廣義相對論</button></div><p class="why">愛因斯坦 1915 年的廣義相對論（第 27 課）。恭喜你完成全部 30 堂課！</p></div>
+
+<div class="recap"><b>本課程總回顧</b><ul><li>物理是用觀察、假說、實驗、修正來找出大自然的規則。</li><li>力學、熱學、波動、電磁學構成古典物理；相對論與量子力學構成近代物理。</li><li>下一步：數學（向量、三角、微積分）＋大量練習＋保持好奇心。</li></ul></div>
+</section>
+
+<!-- ================= 名詞總表 ================= -->
+<section class="page" id="glossary" data-title="名詞由來總表">
+<h2 style="font-family:var(--serif);font-size:2rem;margin:10px 0 6px">名詞由來總表</h2>
+<p style="color:var(--muted)">收錄所有課程中「名詞由來」的內容，點課號可以回到那一課。</p>
+<div class="gl" id="gl"></div>
+</section>
+</main>
+</div>
+
+<script>
+(function(){
+"use strict";
+var STAGES=["第一階段　起步","第二階段　運動與力","第三階段　熱","第四階段　波、聲音與光","第五階段　電與磁","第六階段　近代物理","第七階段　通往專業"];
+var $=function(s,r){return (r||document).querySelector(s)}, $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var store={get:function(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+var root=document.documentElement;
+var reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- 顏色與字型 ---------- */
+var C={}; var FONTS='"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif';
+function readColors(){var cs=getComputedStyle(root);["ink","muted","card","line","hl","red","teal","blue","orange","bg"].forEach(function(k){C[k]=cs.getPropertyValue("--"+k).trim()||"#888"});C.dark=root.dataset.theme==="dark";}
+var theme=store.get("phy-theme",null)||((window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light");
+var themebtn=$("#themebtn");
+function applyTheme(){root.dataset.theme=theme;themebtn.textContent=theme==="dark"?"方格紙模式":"黑板模式";readColors();}
+themebtn.addEventListener("click",function(){theme=theme==="dark"?"light":"dark";store.set("phy-theme",theme);applyTheme();});
+applyTheme();
+
+/* ---------- 課程結構 ---------- */
+var lessons=$$("section.lesson");
+function titleOf(s){return s.querySelector("h2").textContent}
+lessons.forEach(function(s,i){
+  var h2=s.querySelector("h2");
+  var head=document.createElement("div");head.className="lhead";
+  head.innerHTML='<span class="big" aria-hidden="true">'+(i+1)+'</span><span class="stg">第 '+(i+1)+' 課／'+STAGES[+s.dataset.stage]+'</span>';
+  s.insertBefore(head,h2);head.appendChild(h2);
+  var nav=document.createElement("div");nav.className="lnav";
+  var h='<button class="done" data-done="'+s.id+'">完成本課，前往下一課</button>';
+  if(i>0)h+='<button class="prev" data-go="'+lessons[i-1].id+'"><small>上一課</small>'+titleOf(lessons[i-1])+'</button>';
+  if(i<lessons.length-1)h+='<button class="next" data-go="'+lessons[i+1].id+'"><small>下一課</small>'+titleOf(lessons[i+1])+'</button>';
+  else h+='<button class="next" data-go="glossary"><small>全部完成後</small>名詞由來總表</button>';
+  nav.innerHTML=h;s.appendChild(nav);
+});
+var toc=$("#toc"),th="",cur=-1;
+lessons.forEach(function(s,i){
+  var st=+s.dataset.stage;
+  if(st!==cur){if(cur>=0)th+="</ol>";th+="<h4>"+STAGES[st]+"</h4><ol>";cur=st;}
+  th+='<li><a href="#'+s.id+'"><span class="n">'+(i+1)+'</span><span>'+titleOf(s)+'</span><span class="ok" data-ok="'+s.id+'"></span></a></li>';
+});
+toc.innerHTML=th+"</ol>";
+
+var done=store.get("phy-done",[]);
+function refreshDone(){
+  $$("[data-ok]").forEach(function(e){e.textContent=done.indexOf(e.dataset.ok)>=0?"✓":""});
+  $$("[data-done]").forEach(function(b){var d=done.indexOf(b.dataset.done)>=0;b.classList.toggle("is",d);b.textContent=d?"已完成 ✓（再按一次可取消）":"完成本課，前往下一課";});
+  var n=done.length;$("#pbar").style.width=(n/lessons.length*100)+"%";$("#ptext").textContent="完成 "+n+" / "+lessons.length+" 課";
+}
+refreshDone();
+
+document.addEventListener("click",function(e){
+  var b=e.target.closest("button");if(!b)return;
+  if(b.dataset.go){location.hash=b.dataset.go;return;}
+  if(b.dataset.done){
+    var id=b.dataset.done,k=done.indexOf(id);
+    if(k>=0){done.splice(k,1);store.set("phy-done",done);refreshDone();}
+    else{done.push(id);store.set("phy-done",done);refreshDone();var nx=b.parentElement.querySelector(".next");if(nx)location.hash=nx.dataset.go;}
+    return;
+  }
+  var q=b.closest(".quiz");
+  if(q&&b.parentElement.classList.contains("opts")){
+    if(q.classList.contains("done"))return;
+    var opts=$$("button",b.parentElement),ans=+q.dataset.ans,idx=opts.indexOf(b);
+    opts[ans].classList.add("right");if(idx!==ans)b.classList.add("wrong");
+    q.classList.add("done");
+  }
+});
+
+/* ---------- 名詞總表 ---------- */
+(function(){
+  var out="";
+  lessons.forEach(function(s,i){
+    $$(".term",s).forEach(function(t){
+      var b=t.querySelector("b");if(!b||b.textContent.indexOf("名詞由來")!==0)return;
+      var name=b.cloneNode(true);var body=$$("p",t).map(function(p){return p.textContent}).join(" ");
+      out+='<div><b>'+name.innerHTML.replace("名詞由來：","")+'</b><a href="#'+s.id+'">第 '+(i+1)+' 課　'+titleOf(s)+'</a><p>'+body+'</p></div>';
+    });
+  });
+  $("#gl").innerHTML=out;
+})();
+
+/* ---------- 抽屜目錄 ---------- */
+var rail=$("#rail"),scrim=$("#scrim");
+function drawer(o){rail.classList.toggle("open",o);scrim.classList.toggle("open",o);}
+$("#menubtn").addEventListener("click",function(){drawer(true)});
+scrim.addEventListener("click",function(){drawer(false)});
+
+/* ---------- 動畫框架 ---------- */
+var SIMS={},active=[];
+var io=("IntersectionObserver" in window)?new IntersectionObserver(function(es){es.forEach(function(e){if(e.target._m)e.target._m.vis=e.isIntersecting})}):null;
+function mount(el){
+  if(el._m)return el._m;
+  var cv=el.querySelector("canvas"),g=cv.getContext("2d"),ro=el.querySelector(".readout");
+  var p={},ins=$$("[data-k]",el);
+  function rd(i){p[i.dataset.k]=i.type==="checkbox"?i.checked:parseFloat(i.value)}
+  ins.forEach(rd);
+  var ui={out:function(h){if(ro&&ro._h!==h){ro.innerHTML=h;ro._h=h;}}};
+  var inst=SIMS[el.dataset.sim](p,ui);
+  function showOut(i){var o=i.parentElement.querySelector("output");if(!o)return;o.textContent=inst.fmt?inst.fmt(i.dataset.k,p[i.dataset.k]):(i.value+(i.dataset.u||""));}
+  ins.forEach(function(i){showOut(i);i.addEventListener(i.tagName==="SELECT"||i.type==="checkbox"?"change":"input",function(){rd(i);showOut(i);if(inst.change)inst.change(i.dataset.k);});});
+  $$("button[data-act]",el).forEach(function(b){b.addEventListener("click",function(){var f=inst[b.dataset.act];if(f)f();});});
+  var m={el:el,cv:cv,g:g,inst:inst,W:0,H:0,d:1,vis:true};
+  el._m=m;if(io)io.observe(el);return m;
+}
+function fit(m){
+  var w=m.cv.clientWidth;if(!w)return false;
+  var r=+(m.el.dataset.r||0.6);if(w<520)r=Math.min(r*1.35,1.05);
+  var h=Math.round(w*r);
+  if(w!==m.W||h!==m.H){m.W=w;m.H=h;var d=Math.min(window.devicePixelRatio||1,2);m.d=d;m.cv.width=Math.round(w*d);m.cv.height=Math.round(h*d);m.cv.style.height=h+"px";if(m.inst.resize)m.inst.resize(w,h);}
+  return true;
+}
+
+/* ---------- 繪圖小工具 ---------- */
+function txt(g,s,x,y,o){o=o||{};g.font=(o.w||"")+" "+(o.s||13)+"px "+FONTS;g.fillStyle=o.c||C.ink;g.textAlign=o.a||"left";g.textBaseline=o.b||"alphabetic";g.fillText(s,x,y);}
+function line(g,x1,y1,x2,y2,c,w,dash){g.strokeStyle=c;g.lineWidth=w||1.5;g.setLineDash(dash||[]);g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();g.setLineDash([]);}
+function arrow(g,x1,y1,x2,y2,c,w,label){
+  var dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy);if(L<3)return;var ux=dx/L,uy=dy/L,h=Math.min(11,L*0.6);w=w||2.5;
+  line(g,x1,y1,x2-ux*h*0.7,y2-uy*h*0.7,c,w);
+  g.fillStyle=c;g.beginPath();g.moveTo(x2,y2);g.lineTo(x2-ux*h-uy*h*0.5,y2-uy*h+ux*h*0.5);g.lineTo(x2-ux*h+uy*h*0.5,y2-uy*h-ux*h*0.5);g.closePath();g.fill();
+  if(label)txt(g,label,x2+ux*14,y2+uy*14,{c:c,s:12,a:"center",b:"middle",w:"600"});
+}
+function circ(g,x,y,r,f,s,lw){g.beginPath();g.arc(x,y,r,0,Math.PI*2);if(f){g.fillStyle=f;g.fill();}if(s){g.strokeStyle=s;g.lineWidth=lw||1.5;g.stroke();}}
+function box(g,x,y,w,h,f,s,lw){if(f){g.fillStyle=f;g.fillRect(x,y,w,h);}if(s){g.strokeStyle=s;g.lineWidth=lw||1.5;g.strokeRect(x,y,w,h);}}
+function alpha(g,a,fn){var o=g.globalAlpha;g.globalAlpha=a;fn();g.globalAlpha=o;}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function axes(g,x,y,w,h,xl,yl,xr,yr){
+  var X=function(v){return x+(v-xr[0])/(xr[1]-xr[0])*w},Y=function(v){return y+h-(v-yr[0])/(yr[1]-yr[0])*h};
+  var v;
+  for(v=xr[0];v<=xr[1]+1e-9;v+=xr[2]){line(g,X(v),y,X(v),y+h,C.line,1);txt(g,+v.toFixed(2)+"",X(v),y+h+13,{c:C.muted,s:10,a:"center"});}
+  for(v=yr[0];v<=yr[1]+1e-9;v+=yr[2]){line(g,x,Y(v),x+w,Y(v),C.line,1);txt(g,+v.toFixed(2)+"",x-5,Y(v),{c:C.muted,s:10,a:"right",b:"middle"});}
+  if(yr[0]<0&&yr[1]>0)line(g,x,Y(0),x+w,Y(0),C.muted,1.5);
+  line(g,x,y+h,x+w,y+h,C.muted,1.5);line(g,x,y,x,y+h,C.muted,1.5);
+  txt(g,xl,x+w,y+h+26,{c:C.muted,s:11,a:"right"});txt(g,yl,x+4,y-6,{c:C.muted,s:11});
+  return {X:X,Y:Y};
+}
+function niceStep(span){var s=Math.pow(10,Math.floor(Math.log10(span)));var n=span/s;return n>5?s*2:n>2?s:s/2;}
+function car(g,cx,gy,dir,col){
+  box(g,cx-18,gy-19,36,12,col,C.ink,1.2);
+  g.fillStyle=col;g.beginPath();g.moveTo(cx-9*dir,gy-19);g.lineTo(cx-4*dir,gy-27);g.lineTo(cx+7*dir,gy-27);g.lineTo(cx+12*dir,gy-19);g.closePath();g.fill();g.strokeStyle=C.ink;g.lineWidth=1.2;g.stroke();
+  circ(g,cx-10,gy-5,5,C.ink);circ(g,cx+10,gy-5,5,C.ink);
+}
+function sup(n){var m={"0":"⁰","1":"¹","2":"²","3":"³","4":"⁴","5":"⁵","6":"⁶","7":"⁷","8":"⁸","9":"⁹","-":"⁻"};return String(n).split("").map(function(c){return m[c]||c}).join("")}
+function sci(v,d){if(v===0)return "0";var e=Math.floor(Math.log10(Math.abs(v))),m=v/Math.pow(10,e);if(+m.toFixed(d)>=10){m/=10;e++;}return (e>=-2&&e<=4)?(+v.toPrecision(d+1)).toLocaleString("zh-TW"):m.toFixed(d)+" × 10"+sup(e);}
+function wlColor(nm){
+  var r=0,g=0,b=0;
+  if(nm>=380&&nm<440){r=-(nm-440)/60;b=1}else if(nm<490){g=(nm-440)/50;b=1}else if(nm<510){g=1;b=-(nm-510)/20}else if(nm<580){r=(nm-510)/70;g=1}else if(nm<645){r=1;g=-(nm-645)/65}else if(nm<=750){r=1}
+  var f=nm<420?0.3+0.7*(nm-380)/40:nm>700?0.3+0.7*(750-nm)/50:1;
+  return "rgb("+Math.round(255*Math.pow(r*f,0.8))+","+Math.round(255*Math.pow(g*f,0.8))+","+Math.round(255*Math.pow(b*f,0.8))+")";
+}
+function photonColor(nm){return nm<380?"#9b6bff":nm>750?"#b0413e":wlColor(nm)}
+
+/* =====================================================================
+   各課動畫
+   ===================================================================== */
+var G=9.8;
+function rr(g,x,y,w,h,r,f,s,lw){g.beginPath();if(g.roundRect)g.roundRect(x,y,w,h,r);else g.rect(x,y,w,h);if(f){g.fillStyle=f;g.fill();}if(s){g.strokeStyle=s;g.lineWidth=lw||1.5;g.stroke();}}
+function fx(v,d){return (+v).toFixed(d===undefined?1:d)}
+function spd(v){var t=clamp(v,0,1);return "hsl("+Math.round(220-220*t)+",75%,"+(C.dark?62:48)+"%)";}
+
+/* ---------- L2 單擺 ---------- */
+SIMS.pendulum=function(p,ui){
+  var th,om,t,cross,last,sw;
+  function reset(){th=p.A*Math.PI/180;om=0;t=0;cross=[];last=null;sw=0;}
+  reset();
+  return{change:reset,frame:function(g,W,H,dt){
+    var n=8,h=dt/n;
+    for(var i=0;i<n;i++){var pr=om;om+=-G/p.L*Math.sin(th)*h;th+=om*h;t+=h;
+      if(pr<0&&om>=0){cross.push(t);sw++;if(cross.length>6)cross.shift();}}
+    var px=W/2,py=18,sc=(H-60)/2.05,L=p.L*sc;
+    line(g,px-60,py,px+60,py,C.ink,3);
+    alpha(g,0.25,function(){g.strokeStyle=C.muted;g.setLineDash([4,4]);g.beginPath();g.arc(px,py,L,Math.PI/2-p.A*Math.PI/180,Math.PI/2+p.A*Math.PI/180);g.stroke();g.setLineDash([]);});
+    line(g,px,py,px,py+L+20,C.line,1,[3,4]);
+    var bx=px+L*Math.sin(th),by=py+L*Math.cos(th);
+    line(g,px,py,bx,by,C.ink,1.5);circ(g,bx,by,13,C.orange,C.ink,1.5);circ(g,px,py,3,C.ink);
+    txt(g,"L = "+fx(p.L,2)+" m",px+8,py+L/2,{c:C.muted,s:12});
+    var Tth=2*Math.PI*Math.sqrt(p.L/G),Tm=cross.length>1?(cross[cross.length-1]-cross[0])/(cross.length-1):null;
+    ui.out("理論週期（小角度公式 2π√(L/g)）：<b>"+fx(Tth,2)+" 秒</b>　｜　實際量到：<b>"+(Tm?fx(Tm,2)+" 秒":"量測中…")+"</b>　｜　已擺動 "+sw+" 次");
+  }};
+};
+
+/* ---------- L2 宇宙尺度 ---------- */
+SIMS.scale=function(p,ui){
+  var IT={"-10":["⚛️","一個原子","約 1 × 10⁻¹⁰ m，一千萬個排起來才 1 公釐"],"-9":["🧬","DNA 雙螺旋的寬度","約 2 奈米（2 × 10⁻⁹ m）"],"-8":["🦠","最小的病毒","約 20～30 奈米"],"-7":["🦠","流感病毒","約 100 奈米（10⁻⁷ m）"],"-6":["🧫","一隻細菌","大腸桿菌長約 2 微米"],"-5":["🩸","紅血球","直徑約 8 微米"],"-4":["💇","一根頭髮的粗細","約 0.08 公釐"],"-3":["🏖️","一粒沙","約 1 公釐"],"-2":["🐞","瓢蟲","約 1 公分"],"-1":["📱","手機","約 15 公分"],"0":["🧍","一個人","約 1.7 公尺"],"1":["🚌","公車","約 12 公尺"],"2":["⚽","足球場","約 100 公尺"],"3":["🏙️","台北 101","508 公尺"],"4":["🏔️","聖母峰","海拔約 8.8 公里"],"5":["🗺️","台灣南北長","約 394 公里"],"6":["🌙","月球直徑","約 3,474 公里"],"7":["🌍","地球直徑","約 12,742 公里"],"8":["🌗","地球到月球","約 38 萬公里"],"9":["☀️","太陽直徑","約 139 萬公里"],"10":["☄️","太陽到水星","約 5,800 萬公里"],"11":["🌞","地球到太陽","約 1.5 億公里（1 天文單位）"],"12":["🪐","太陽到土星","約 14 億公里"],"13":["🛰️","航海家一號飛到的距離","約 250 億公里，人類飛最遠的東西"],"14":["🔵","太陽系的邊疆（日鞘外）","約 10¹⁴ m"],"15":["☄️","彗星的故鄉「奧爾特雲」內緣","約 10¹⁵ m"],"16":["✨","一光年","光走一年：約 9.5 兆公里"],"17":["⭐","最近的恆星：比鄰星","4.2 光年"],"18":["✨","昴宿星團","約 440 光年"],"19":["🌫️","獵戶座大星雲","約 1,300 光年"],"20":["🎯","太陽到銀河系中心","約 2.6 萬光年"],"21":["🌌","銀河系直徑","約 10 萬光年"],"22":["🌀","仙女座星系","約 250 萬光年外"],"23":["🌌","本星系群","約 1,000 萬光年"],"24":["🕸️","室女座超星系團","約 1 億光年"],"25":["🕸️","宇宙大尺度的纖維結構","數億光年"],"26":["🔭","可觀測宇宙的直徑","約 930 億光年"]};
+  var z=p.n;
+  return{fmt:function(k,v){return "10"+sup(v)+" m"},frame:function(g,W,H,dt){
+    z+=(p.n-z)*Math.min(1,dt*5);
+    var cx=W/2,cy=H/2+4,S=Math.min(W,H)*0.62,f=Math.floor(z);
+    for(var k=f-2;k<=f+2;k++){
+      var s=S*Math.pow(10,k-z);if(s<6||s>W*3)continue;
+      var a=clamp(1-Math.abs(k-z)/2.2,0.12,1);
+      alpha(g,a,function(){box(g,cx-s/2,cy-s/2,s,s,null,k===Math.round(z)?C.blue:C.muted,k===Math.round(z)?2:1);
+        if(s>40)txt(g,"10"+sup(k)+" m",cx-s/2+4,cy-s/2-5,{c:C.muted,s:11});});
+    }
+    var r=Math.round(z),it=IT[r],s0=S*Math.pow(10,r-z);
+    if(it){var fs=clamp(s0*0.55,10,S*0.6);alpha(g,clamp(1-Math.abs(r-z)*1.6,0,1),function(){txt(g,it[0],cx,cy+fs*0.05,{s:fs,a:"center",b:"middle"});});}
+    ui.out(it?"這一格的大小：<b>10"+sup(r)+" 公尺</b>　→　"+it[0]+" <b>"+it[1]+"</b>：「"+it[2]+"」":"");
+  }};
+};
+
+/* ---------- L3 x-t 圖 ---------- */
+SIMS.xt=function(p,ui){
+  var t,x,pts,run;
+  function reset(){t=0;x=p.v<0?100:0;pts=[[0,x]];run=true;}
+  reset();
+  return{reset:reset,frame:function(g,W,H,dt){
+    if(run){t+=dt;x+=p.v*dt;if(x>100){x=100;run=false}if(x<0){x=0;run=false}if(t>=20){t=20;run=false}pts.push([t,x]);}
+    var m=34,rw=W-2*m,ry=62,X=function(v){return m+v/100*rw};
+    box(g,m,ry-8,rw,16,C.line);for(var i=0;i<=100;i+=10){line(g,X(i),ry+8,X(i),ry+14,C.muted,1);txt(g,i+"",X(i),ry+26,{c:C.muted,s:10,a:"center"});}
+    car(g,X(x),ry-6,p.v<0?-1:1,C.orange);
+    var gy=ry+42,gh=H-gy-36,A=axes(g,m+10,gy,rw-10,gh,"時間 t（秒）","位置 x（公尺）",[0,20,2],[0,100,20]);
+    g.strokeStyle=C.blue;g.lineWidth=2.5;g.beginPath();pts.forEach(function(q,i){var a=A.X(q[0]),b=A.Y(q[1]);i?g.lineTo(a,b):g.moveTo(a,b)});g.stroke();
+    circ(g,A.X(t),A.Y(x),4,C.red);
+    ui.out("時間 <b>"+fx(t)+" s</b>　位置 <b>"+fx(x)+" m</b>　速度 <b>"+fx(p.v)+" m/s</b>　→ 圖線的斜率＝速度"+(run?"":"　（已停止，按「重來」）"));
+  }};
+};
+
+/* ---------- L4 v-t 圖 ---------- */
+SIMS.vt=function(p,ui){
+  var t,x,v,off;
+  function reset(){t=0;x=0;v=p.v0;off=0;}
+  reset();
+  return{reset:reset,change:reset,frame:function(g,W,H,dt){
+    if(t<10){var h=Math.min(dt,10-t);x+=v*h+0.5*p.a*h*h;v+=p.a*h;t+=h;off+=v*h;}
+    var gy=70,m=40;
+    line(g,0,gy,W,gy,C.muted,2);
+    for(var k=-2;k<W/40+2;k++){var sx=((k*40-off*8)%(W+80)+W+80)%(W+80)-40;line(g,sx,gy+8,sx+18,gy+8,C.line,3);}
+    car(g,W/2,gy,v<0?-1:1,C.teal);
+    var v1=p.v0+10*p.a,lo=Math.min(0,p.v0,v1),hi=Math.max(1,p.v0,v1),st=niceStep(hi-lo);lo=Math.floor(lo/st)*st;hi=Math.ceil(hi/st)*st;
+    var A=axes(g,m,gy+34,W-m-18,H-gy-34-34,"時間 t（秒）","速度 v（m/s）",[0,10,1],[lo,hi,st]);
+    g.fillStyle=C.blue;alpha(g,0.22,function(){g.beginPath();g.moveTo(A.X(0),A.Y(0));for(var s=0;s<=t+1e-9;s+=0.05)g.lineTo(A.X(s),A.Y(p.v0+p.a*s));g.lineTo(A.X(t),A.Y(p.v0+p.a*t));g.lineTo(A.X(t),A.Y(0));g.closePath();g.fill();});
+    line(g,A.X(0),A.Y(p.v0),A.X(t),A.Y(v),C.blue,2.5);circ(g,A.X(t),A.Y(v),4,C.red);
+    ui.out("t = <b>"+fx(t)+" s</b>　速度 v = <b>"+fx(v)+" m/s</b>　位移（藍色面積）= <b>"+fx(x)+" m</b>");
+  }};
+};
+
+/* ---------- L5 自由落體 ---------- */
+SIMS.fall=function(p,ui){
+  var o,t,air;
+  function drop(){t=0;air=p.air;o=[{n:"鐵球",y:0,v:0,vt:40,r:11,c:C.muted,land:null},{n:"羽毛",y:0,v:0,vt:0.8,r:0,c:C.orange,land:null}];}
+  drop();
+  return{drop:drop,frame:function(g,W,H,dt){
+    t+=dt;
+    o.forEach(function(b){if(b.land!==null)return;var n=10,h=dt/n;for(var i=0;i<n;i++){var a=air?G*(1-b.v*b.v/(b.vt*b.vt)):G;b.v+=a*h;b.y+=b.v*h;if(b.y>=20){b.y=20;b.land=t;break;}}});
+    var top=24,bot=H-26,sc=(bot-top)/20;
+    line(g,20,bot,W-20,bot,C.ink,2);
+    for(var m=0;m<=20;m+=5){line(g,34,top+m*sc,40,top+m*sc,C.muted,1);txt(g,(20-m)+" m",30,top+m*sc,{c:C.muted,s:10,a:"right",b:"middle"});}
+    var x1=W*0.38,x2=W*0.66;
+    circ(g,x1,top+o[0].y*sc-11,11,C.dark?"#9aa4ad":"#6b7680",C.ink,1.5);
+    var fy=top+o[1].y*sc-6;g.save();g.translate(x2,fy);g.rotate(air&&o[1].land===null?Math.sin(t*4)*0.5:0.1);
+    g.strokeStyle=C.orange;g.lineWidth=1.5;g.beginPath();g.moveTo(-16,4);g.lineTo(16,-4);g.stroke();
+    for(var i=-12;i<=12;i+=3){line(g,i,-i/4,i-4,-i/4-7,C.orange,1);line(g,i,-i/4,i+2,-i/4+6,C.orange,1);}g.restore();
+    txt(g,"鐵球",x1,bot+18,{c:C.muted,s:12,a:"center"});txt(g,"羽毛",x2,bot+18,{c:C.muted,s:12,a:"center"});
+    txt(g,air?"有空氣":"真空（沒有空氣）",W-24,top+4,{c:air?C.blue:C.red,s:13,a:"right",w:"700"});
+    function s(b){return b.land!==null?"落地！用時 <b>"+fx(b.land,2)+" s</b>":"下落中，速度 "+fx(b.v)+" m/s";}
+    ui.out("鐵球："+s(o[0])+"　｜　羽毛："+s(o[1])+(!air?"　（真空中兩者同時落地，理論值 √(2h/g) = 2.02 s）":""));
+  }};
+};
+
+/* ---------- L6 慣性 ---------- */
+SIMS.inertia=function(p,ui){
+  var x=1,v=0,d=0;
+  function surf(mu){return mu===0?"理想的無摩擦表面（像外太空）":mu<0.05?"冰面":mu<0.15?"打蠟的光滑地板":mu<0.3?"木頭地板":"粗糙的地毯"}
+  return{push:function(){v=6;d=0;},frame:function(g,W,H,dt){
+    if(v>0){v=Math.max(0,v-p.mu*G*dt);x+=v*dt;d+=v*dt;}
+    var span=12;x=((x%span)+span)%span;
+    var gy=H*0.62,sc=W/span;
+    g.fillStyle=p.mu<0.05?(C.dark?"#27404f":"#dcecf6"):p.mu<0.3?(C.dark?"#4a3b2a":"#e8d7bd"):(C.dark?"#40384a":"#d6cde0");g.fillRect(0,gy,W,H-gy);
+    line(g,0,gy,W,gy,C.ink,2);
+    var px=x*sc;rr(g,px-22,gy-16,44,16,6,C.blue,C.ink,1.5);
+    if(v>0){for(var k=1;k<4;k++)alpha(g,0.2/k,function(){rr(g,px-22-k*v*4,gy-16,44,16,6,C.blue)});arrow(g,px,gy-34,px+10+v*8,gy-34,C.teal,2.5,"");}
+    txt(g,surf(p.mu),16,24,{c:C.ink,s:14,w:"700"});
+    txt(g,"摩擦係數 μ = "+fx(p.mu,2),16,44,{c:C.muted,s:12});
+    ui.out(v>0?"冰球滑行中：速度 <b>"+fx(v,2)+" m/s</b>，已滑 "+fx(d)+" m"+(p.mu===0?"　——沒有摩擦力，它會永遠滑下去（慣性！）":""):(d>0?"停下來了，共滑行 <b>"+fx(d)+" m</b>。是摩擦力讓它停下，不是「力用完了」。":"按「推一下」給冰球一個初速度 6 m/s。"));
+  }};
+};
+
+/* ---------- L7 F=ma ---------- */
+SIMS.fma=function(p,ui){
+  var x=0,v=0;
+  return{reset:function(){v=0;x=0},frame:function(g,W,H,dt){
+    var a=(p.F1-p.F2)/p.m;v=clamp(v+a*dt,-15,15);x+=v*dt;
+    var span=16,sc=W/span,gy=H*0.7;x=((x%span)+span)%span;
+    line(g,0,gy,W,gy,C.ink,2);
+    for(var k=0;k<span;k++){var tx=((k-x)%span+span)%span*sc;line(g,tx,gy+4,tx,gy+12,C.line,2);}
+    var s=24+p.m*2.2,cx=W/2;box(g,cx-s/2,gy-s,s,s,C.orange,C.ink,1.5);txt(g,p.m+" kg",cx,gy-s/2,{s:12,a:"center",b:"middle",c:"#fff",w:"700"});
+    if(p.F1>0)arrow(g,cx-s/2-10-p.F1*2.4,gy-s/2,cx-s/2-4,gy-s/2,C.blue,3);
+    if(p.F2>0)arrow(g,cx+s/2+10+p.F2*2.4,gy-s/2,cx+s/2+4,gy-s/2,C.red,3);
+    txt(g,"F₁ = "+p.F1+" N",cx-s/2-12,gy-s/2-14,{c:C.blue,s:12,a:"right",w:"600"});txt(g,"F₂ = "+p.F2+" N",cx+s/2+12,gy-s/2-14,{c:C.red,s:12,w:"600"});
+    if(Math.abs(a)>0.01)arrow(g,cx,gy-s-14,cx+clamp(a,-8,8)*9,gy-s-14,C.teal,2.5);
+    ui.out("合力 = "+p.F1+" − "+p.F2+" = <b>"+(p.F1-p.F2)+" N</b>　加速度 a = 合力 ÷ m = <b>"+fx(a,2)+" m/s²</b>　目前速度 "+fx(v)+" m/s"+(Math.abs(v)>=15?"（示範用上限）":""));
+  }};
+};
+
+/* ---------- L8 溜冰互推 ---------- */
+SIMS.skaters=function(p,ui){
+  var x1,x2,v1,v2,t,st;
+  function reset(){x1=-0.35;x2=0.35;v1=0;v2=0;t=-1;st=0;}
+  reset();
+  function man(g,x,y,m,col,flip){var s=0.6+m/100*0.6;circ(g,x,y-58*s,9*s,col,C.ink,1.2);line(g,x,y-49*s,x,y-22*s,col,5*s+1);line(g,x,y-22*s,x-8*s,y,col,4*s+1);line(g,x,y-22*s,x+8*s,y,col,4*s+1);line(g,x,y-42*s,x+flip*16*s,y-38*s,col,3.5*s+1);}
+  return{change:reset,push:function(){reset();t=0;},frame:function(g,W,H,dt){
+    if(t>=0){t+=dt;var F=t<0.3?200:0;if(t<0.3){v1-=F/p.m1*dt;v2+=F/p.m2*dt;}}
+    x1+=v1*dt;x2+=v2*dt;if(x1<-5){x1=-5;v1=0}if(x2>5){x2=5;v2=0}
+    var sc=W/11,cx=W/2,gy=H*0.8;
+    g.fillStyle=C.dark?"#27404f":"#e3f0f7";g.fillRect(0,gy,W,H-gy);line(g,0,gy,W,gy,C.ink,1.5);
+    man(g,cx+x1*sc,gy,p.m1,C.blue,1);man(g,cx+x2*sc,gy,p.m2,C.red,-1);
+    txt(g,p.m1+" kg",cx+x1*sc,gy+18,{c:C.blue,s:12,a:"center",w:"600"});txt(g,p.m2+" kg",cx+x2*sc,gy+18,{c:C.red,s:12,a:"center",w:"600"});
+    if(t>=0&&t<0.3){arrow(g,cx+x1*sc,gy-100,cx+x1*sc-50,gy-100,C.blue,3,"");arrow(g,cx+x2*sc,gy-100,cx+x2*sc+50,gy-100,C.red,3,"");txt(g,"各受 200 N",cx,gy-110,{s:13,a:"center",w:"700"});}
+    if(v1||v2)ui.out("左："+fx(v1,2)+" m/s　右：+"+fx(v2,2)+" m/s　｜　動量：左 "+fx(p.m1*v1)+"，右 +"+fx(p.m2*v2)+"，總和 = <b>"+fx(Math.abs(p.m1*v1+p.m2*v2)<1e-6?0:p.m1*v1+p.m2*v2)+" kg·m/s</b>　→ 質量小的跑得快");
+    else ui.out("按「互推」。兩人一開始都靜止，總動量是 0。");
+  }};
+};
+
+/* ---------- L9 斜面 ---------- */
+SIMS.incline=function(p,ui){
+  var s,v;
+  function reset(){s=0;v=0;}
+  reset();
+  return{reset:reset,change:reset,frame:function(g,W,H,dt){
+    var th=p.th*Math.PI/180,m=1,dn=m*G*Math.sin(th),fmax=p.mu*m*G*Math.cos(th),slides=Math.tan(th)>p.mu+1e-9;
+    var Lm=Math.min(W*0.8/Math.max(Math.cos(th),0.3),(H-60)/Math.max(Math.sin(th),0.01),W*0.8),x0=W*0.1,y0=H-30,top=[x0,y0-Lm*Math.sin(th)];
+    var len=Lm*0.85;
+    if(slides){var a=G*(Math.sin(th)-0.8*p.mu*Math.cos(th));v+=a*dt;s+=v*dt*60;if(s>len-30){s=len-30;v=0;}}
+    g.fillStyle=C.line;g.beginPath();g.moveTo(x0,y0);g.lineTo(x0+Lm*Math.cos(th),y0);g.lineTo(x0,y0-Lm*Math.sin(th));g.closePath();g.fill();
+    line(g,0,y0,W,y0,C.ink,2);
+    g.save();g.translate(top[0],top[1]);g.rotate(th);
+    var bx=20+s;box(g,bx,-28,36,28,C.orange,C.ink,1.5);
+    var cxb=bx+18,cyb=-14,k=4;
+    g.restore();
+    var ux=Math.cos(th),uy=Math.sin(th),px=top[0]+cxb*ux-cyb*uy,py=top[1]+cxb*uy+cyb*ux;
+    arrow(g,px,py,px,py+m*G*k,C.ink,2.5,"mg");
+    var nn=m*G*Math.cos(th)*k;arrow(g,px,py,px+uy*nn,py-ux*nn,C.blue,2.5,"N");
+    var fr=(slides?0.8*p.mu*m*G*Math.cos(th):dn)*k;if(fr>2)arrow(g,px,py,px-ux*fr,py-uy*fr,C.red,2.5,"f");
+    ui.out("沿斜面往下的分力 mg·sinθ = <b>"+fx(dn,2)+" N</b>　最大靜摩擦 μ·mg·cosθ = <b>"+fx(fmax,2)+" N</b>（m = 1 kg）　→ "+(slides?"<b style='color:var(--red)'>下滑力比較大，木塊滑下去！</b>":"<b style='color:var(--teal)'>摩擦力撐得住，木塊不動。</b>"));
+  }};
+};
+
+/* ---------- L10 拋體 ---------- */
+SIMS.proj=function(p,ui){
+  var shots=[],cur=null;
+  function fire(){var a=p.ang*Math.PI/180;cur={vx:p.v*Math.cos(a),vy0:p.v*Math.sin(a),t:0,pts:[],done:false};shots.push(cur);if(shots.length>8)shots.shift();}
+  fire();
+  return{fire:fire,clear:function(){shots=cur?[cur]:[];},frame:function(g,W,H,dt){
+    var m=34,sc=Math.min((W-m-20)/95,(H-m-20)/48),ox=m,oy=H-m;
+    axes(g,ox,oy-48*sc,95*sc,48*sc,"水平距離（m）","高度（m）",[0,90,10],[0,40,10]);
+    if(cur&&!cur.done){cur.t+=dt*1.2;var T=2*cur.vy0/G;if(cur.t>=T){cur.t=T;cur.done=true;}cur.pts.push([cur.vx*cur.t,cur.vy0*cur.t-0.5*G*cur.t*cur.t]);}
+    shots.forEach(function(s,i){var last=s===cur;alpha(g,last?1:0.35,function(){g.strokeStyle=last?C.blue:C.muted;g.lineWidth=2;g.setLineDash(last?[]:[4,3]);g.beginPath();s.pts.forEach(function(q,j){var a=ox+q[0]*sc,b=oy-q[1]*sc;j?g.lineTo(a,b):g.moveTo(a,b)});g.stroke();g.setLineDash([]);});});
+    if(cur&&cur.pts.length){var q=cur.pts[cur.pts.length-1],bx=ox+q[0]*sc,by=oy-q[1]*sc,vy=cur.vy0-G*cur.t;
+      circ(g,bx,by,6,C.orange,C.ink,1.2);
+      if(!cur.done){arrow(g,bx,by,bx+cur.vx*2.2,by,C.teal,2.5);arrow(g,bx,by,bx,by-vy*2.2,C.red,2.5);}}
+    var a=p.ang*Math.PI/180,R=p.v*p.v*Math.sin(2*a)/G,Hm=Math.pow(p.v*Math.sin(a),2)/(2*G),T=2*p.v*Math.sin(a)/G;
+    ui.out("目前設定的理論值：射程 R = <b>"+fx(R)+" m</b>　最大高度 = <b>"+fx(Hm)+" m</b>　飛行時間 = <b>"+fx(T,2)+" s</b>"+(p.ang===45?"　（45° 射程最遠！）":""));
+  }};
+};
+
+/* ---------- L11 能量守恆 ---------- */
+SIMS.energy=function(p,ui){
+  var k=5/9,m=50,x,xd,E0,heat;
+  function reset(){x=-Math.sqrt(p.h/k);xd=0;E0=m*G*p.h;heat=0;}
+  reset();
+  return{reset:reset,change:function(key){if(key==="h")reset();},frame:function(g,W,H,dt){
+    var n=20,h=dt/n;
+    for(var i=0;i<n;i++){var q=1+4*k*k*x*x,acc=-(4*k*k*x*xd*xd+2*G*k*x)/q;if(p.fr)acc-=0.25*xd;xd+=acc*h;x+=xd*h;}
+    var y=k*x*x,v2=xd*xd*(1+4*k*k*x*x),KE=0.5*m*v2,PE=m*G*y;heat=Math.max(0,E0-KE-PE);if(!p.fr&&heat<E0*0.02){heat=0;}
+    var gw=W*0.68,sc=Math.min(gw/7,(H-50)/5.6),ox=gw/2+8,oy=H-22;
+    g.strokeStyle=C.ink;g.lineWidth=3;g.beginPath();for(var s=-3.1;s<=3.1;s+=0.05){var a=ox+s*sc,b=oy-k*s*s*sc;s===-3.1?g.moveTo(a,b):g.lineTo(a,b);}g.stroke();
+    line(g,ox-3.2*sc,oy-p.h*sc,ox+3.2*sc,oy-p.h*sc,C.red,1,[5,5]);txt(g,"起始高度",ox+3.2*sc,oy-p.h*sc-5,{c:C.red,s:11,a:"right"});
+    var sl=2*k*x,nx=-sl/Math.sqrt(1+sl*sl),ny=1/Math.sqrt(1+sl*sl);
+    circ(g,ox+x*sc+nx*9,oy-y*sc-ny*9,9,C.orange,C.ink,1.5);
+    var bx=gw+30,bw=(W-bx-16)/3,bh=H-60,tot=E0||1;
+    [[PE,"位能",C.blue],[KE,"動能",C.teal],[heat,"熱",C.red]].forEach(function(e,i){var hh=e[0]/tot*bh,x0=bx+i*bw;box(g,x0+4,H-24-bh,bw-8,bh,null,C.line,1);box(g,x0+4,H-24-hh,bw-8,hh,e[2]);txt(g,e[1],x0+bw/2,H-8,{c:C.muted,s:11,a:"center"});});
+    ui.out("位能 <b>"+Math.round(PE)+" J</b> ＋ 動能 <b>"+Math.round(KE)+" J</b>"+(p.fr?" ＋ 熱 <b>"+Math.round(heat)+" J</b>":"")+" ＝ <b>"+Math.round(E0)+" J</b>（50 kg 的人）　速度 "+fx(Math.sqrt(v2))+" m/s");
+  }};
+};
+
+/* ---------- L12 碰撞 ---------- */
+SIMS.collide=function(p,ui){
+  var x1,x2,u1,u2,hit;
+  function go(){x1=-3;x2=0.8;u1=p.v1;u2=0;hit=false;}
+  go();
+  return{go:go,change:go,frame:function(g,W,H,dt){
+    var w1=0.3+p.m1*0.12,w2=0.3+p.m2*0.12;
+    x1+=u1*dt;x2+=u2*dt;
+    if(!hit&&x1+w1/2>=x2-w2/2){hit=true;var M=p.m1+p.m2;
+      if(p.stick){u1=u2=p.m1*p.v1/M;}else{u1=(p.m1-p.m2)/M*p.v1;u2=2*p.m1/M*p.v1;}x1=x2-w2/2-w1/2;}
+    var sc=W/9,cx=W/2-sc,gy=H*0.62;
+    line(g,0,gy,W,gy,C.ink,2);
+    function cart(x,w,m,c){var a=cx+(x-w/2)*sc,b=w*sc;rr(g,a,gy-34,b,26,5,c,C.ink,1.5);circ(g,a+10,gy-5,5,C.ink);circ(g,a+b-10,gy-5,5,C.ink);txt(g,m+" kg",a+b/2,gy-21,{c:"#fff",s:12,a:"center",b:"middle",w:"700"});}
+    cart(x1,w1,p.m1,C.blue);cart(x2,w2,p.m2,C.red);
+    var p0=p.m1*p.v1,K0=0.5*p.m1*p.v1*p.v1,p1=p.m1*u1+p.m2*u2,K1=0.5*p.m1*u1*u1+0.5*p.m2*u2*u2;
+    txt(g,hit?"碰撞後：左 "+fx(u1,2)+" m/s，右 "+fx(u2,2)+" m/s":"碰撞前：左車 "+fx(p.v1)+" m/s，右車靜止",16,26,{s:13,w:"600"});
+    ui.out("碰撞前：動量 <b>"+fx(p0,1)+"</b> kg·m/s，動能 <b>"+fx(K0,1)+"</b> J"+(hit?"　｜　碰撞後：動量 <b>"+fx(p1,1)+"</b>（不變！），動能 <b>"+fx(K1,1)+"</b> J"+(p.stick?"（少掉的變成熱和聲音）":"（彈性碰撞，動能也守恆）"):""));
+    if(x1>10&&x2>10)go();
+  }};
+};
+
+/* ---------- L13 牛頓大砲 ---------- */
+SIMS.cannon=function(p,ui){
+  var GM=398600,R=6371,r0=7071,shots=[],cur=null,cols=["blue","red","teal","orange"];
+  function fire(){cur={x:0,y:r0,vx:p.v,vy:0,ang:0,pts:[[0,r0]],st:"fly",v:p.v,c:cols[shots.length%4]};shots.push(cur);if(shots.length>6)shots.shift();}
+  fire();
+  return{fire:fire,clear:function(){shots=cur?[cur]:[];},frame:function(g,W,H,dt){
+    var s=cur;
+    if(s&&s.st==="fly"){var r=Math.hypot(s.x,s.y),warp=900*Math.pow(r/r0,1.5),T=dt*warp,hh=10*Math.pow(r/r0,1.5),n=Math.ceil(T/hh);hh=T/n;
+      for(var i=0;i<n;i++){var rr3=Math.pow(s.x*s.x+s.y*s.y,1.5),ax=-GM*s.x/rr3,ay=-GM*s.y/rr3;s.vx+=ax*hh/2;s.vy+=ay*hh/2;s.x+=s.vx*hh;s.y+=s.vy*hh;rr3=Math.pow(s.x*s.x+s.y*s.y,1.5);ax=-GM*s.x/rr3;ay=-GM*s.y/rr3;s.vx+=ax*hh/2;s.vy+=ay*hh/2;
+        var a2=Math.atan2(s.x,s.y);var d=a2-s.last;if(s.last!==undefined){if(d<-Math.PI)d+=2*Math.PI;s.ang+=d;}s.last=a2;
+        r=Math.hypot(s.x,s.y);if(r<R){s.st="crash";break;}if(s.ang>2*Math.PI){s.st="orbit";break;}if(r>12*R){s.st=(s.vx*s.vx+s.vy*s.vy)/2-GM/r>=0?"escape":"far";break;}}
+      s.pts.push([s.x,s.y]);if(s.pts.length>3000)s.pts.splice(1,1);}
+    var cx=W/2,cy=H/2,sc=Math.min(W,H)/2/(2.9*R);
+    circ(g,cx,cy,R*sc,C.dark?"#1f4d6b":"#bfd8ee",C.blue,1.5);
+    g.fillStyle=C.dark?"#2e6b45":"#9fcf9f";g.beginPath();g.moveTo(cx-20,cy-R*sc+2);g.lineTo(cx,cy-r0*sc);g.lineTo(cx+20,cy-R*sc+2);g.closePath();g.fill();
+    shots.forEach(function(q){var c=C[q.c];alpha(g,q===cur?1:0.45,function(){g.strokeStyle=c;g.lineWidth=2;g.beginPath();q.pts.forEach(function(t,j){var a=cx+t[0]*sc,b=cy-t[1]*sc;j?g.lineTo(a,b):g.moveTo(a,b)});g.stroke();});});
+    if(s){var bx=cx+s.x*sc,by=cy-s.y*sc;if(bx>-10&&bx<W+10&&by>-10&&by<H+10)circ(g,bx,by,4.5,C.ink);else txt(g,"（砲彈飛出畫面）",W-10,H-10,{c:C.muted,s:11,a:"right"});}
+    var res={fly:"飛行中…",crash:"掉回地面",orbit:"<b style='color:var(--teal)'>繞了地球一圈——進入軌道！</b>",escape:"<b style='color:var(--red)'>脫離地球引力，一去不回！</b>",far:"<b style='color:var(--orange)'>飛到極遠處的超大橢圓軌道——差一點就能脫離，但終究會被拉回來</b>"};
+    ui.out("發射速度 "+fx(s?s.v:p.v)+" km/s：<b>"+res[s?s.st:"fly"]+"</b>　｜　在這個高度：圓軌道約需 7.5 km/s，脫離速度約 10.6 km/s（時間已加速約 900 倍）");
+  }};
+};
+
+/* ---------- L14 浮力 ---------- */
+SIMS.buoy=function(p,ui){
+  var y,v,S=0.4,depth=1.1;
+  var MAT=[[160,"巴爾沙輕木"],[240,"軟木塞"],[500,"松木"],[700,"橡木"],[920,"冰塊"],[1000,"跟水差不多（像人體）"],[1180,"壓克力"],[1400,"PVC 塑膠"],[1600,"濕沙"],[1900,"磚塊"]];
+  function reset(){y=-0.25;v=0;}
+  reset();
+  return{reset:reset,change:reset,frame:function(g,W,H,dt){
+    var A=S*S,m=p.rho*A*S,sub=clamp(y,0,S),Fb=p.fl*G*A*sub,Fg=m*G,n=10,h=dt/n;
+    for(var i=0;i<n;i++){sub=clamp(y,0,S);Fb=p.fl*G*A*sub;var a=(Fg-Fb)/m-(sub>0?3*v:0);v+=a*h;y+=v*h;if(y>depth){y=depth;v=0;}}
+    var tw=W*0.5,tx=W*0.25,sc=(H-40)/1.6,wy=30+0.35*sc,by=wy+depth*sc;
+    g.fillStyle=p.fl>1100?(C.dark?"#3b4d6b":"#c9d8f0"):p.fl>1010?(C.dark?"#1e4a5a":"#bfe1ea"):(C.dark?"#1f3f5c":"#cfe6f7");g.fillRect(tx,wy,tw,by-wy+(S*sc));
+    line(g,tx,wy,tx+tw,wy,C.blue,2);
+    g.strokeStyle=C.ink;g.lineWidth=2.5;g.beginPath();g.moveTo(tx,20);g.lineTo(tx,by+S*sc);g.lineTo(tx+tw,by+S*sc);g.lineTo(tx+tw,20);g.stroke();
+    var s=S*sc,cx=W/2,top=wy+(y-S)*sc;box(g,cx-s/2,top,s,s,C.orange,C.ink,1.5);
+    var k=40/(1000*G*A*S);
+    arrow(g,cx-8,top+s/2,cx-8,top+s/2+Fg*k,C.ink,2.5);
+    if(Fb>1)arrow(g,cx+8,top+s/2,cx+8,top+s/2-Fb*k,C.blue,2.5);
+    var mat=MAT.reduce(function(a,b){return Math.abs(b[0]-p.rho)<Math.abs(a[0]-p.rho)?b:a});
+    var fr=p.rho/p.fl;
+    ui.out("方塊密度 "+p.rho+" kg/m³（接近"+mat[1]+"）　重力 <b>"+fx(Fg,0)+" N</b>　浮力 <b>"+fx(Fb,0)+" N</b>　泡在液體中 <b>"+Math.round(sub/S*100)+"%</b>　→ "+(fr<1?"會浮起來，平衡時約 "+Math.round(fr*100)+"% 在液面下":"比液體重，會沉到底"));
+  }};
+};
+
+/* ---------- L15 氣體分子 ---------- */
+SIMS.gas=function(p,ui){
+  var P=[],T0=p.T,N=70;
+  for(var i=0;i<N;i++){var a=Math.random()*Math.PI*2,s=0.4+Math.random()*0.9;P.push({x:Math.random(),y:Math.random(),vx:Math.cos(a)*s,vy:Math.sin(a)*s});}
+  function base(){return Math.sqrt(T0/300)*0.35}
+  return{change:function(){var f=Math.sqrt(p.T/T0);P.forEach(function(q){q.vx*=f;q.vy*=f});T0=p.T;},frame:function(g,W,H,dt){
+    var b=base(),bw=W-40,bh=H-30;
+    box(g,20,10,bw,bh,null,C.ink,2);
+    P.forEach(function(q){q.x+=q.vx*b*dt;q.y+=q.vy*b*dt*bw/bh;if(q.x<0){q.x=-q.x;q.vx=-q.vx}if(q.x>1){q.x=2-q.x;q.vx=-q.vx}if(q.y<0){q.y=-q.y;q.vy=-q.vy}if(q.y>1){q.y=2-q.y;q.vy=-q.vy}
+      var sp=Math.hypot(q.vx,q.vy)*Math.sqrt(T0/300);circ(g,20+q.x*bw,10+q.y*bh,4.5,spd(sp/2));});
+    var vavg=Math.sqrt(3*8.314*p.T/0.028);
+    ui.out("溫度 <b>"+p.T+" K</b>（＝ "+fx(p.T-273.15,0)+" °C）　空氣中氮分子的平均速率約 <b>"+Math.round(vavg)+" m/s</b>"+(p.T<=80?"　（這麼冷，氮氣早就變成液體了）":""));
+  }};
+};
+
+/* ---------- L16 熱平衡與熵 ---------- */
+SIMS.mix=function(p,ui){
+  var P,open,K=1111,r=0.022,Wd=1.6,Ts,eq;
+  function reset(){P=[];open=false;Ts=null;eq=false;for(var i=0;i<80;i++){var hot=i<40,s=hot?0.6:0.367,a=Math.random()*Math.PI*2;P.push({x:hot?0.05+Math.random()*0.7:0.85+Math.random()*0.7,y:0.05+Math.random()*0.9,vx:Math.cos(a)*s,vy:Math.sin(a)*s,h:hot});}}
+  reset();
+  function temps(){var L=[0,0],R=[0,0];P.forEach(function(q){var e=q.vx*q.vx+q.vy*q.vy;if(q.x<Wd/2){L[0]+=e;L[1]++}else{R[0]+=e;R[1]++}});return [L[1]?L[0]/L[1]*K:0,R[1]?R[0]/R[1]*K:0];}
+  return{open:function(){open=true},reset:reset,frame:function(g,W,H,dt){
+    var n=3,h=Math.min(dt,0.05)/n;
+    for(var s=0;s<n;s++){
+      P.forEach(function(q){q.x+=q.vx*h;q.y+=q.vy*h;
+        if(q.y<r){q.y=r;q.vy=Math.abs(q.vy)}if(q.y>1-r){q.y=1-r;q.vy=-Math.abs(q.vy)}
+        if(q.x<r){q.x=r;q.vx=Math.abs(q.vx)}if(q.x>Wd-r){q.x=Wd-r;q.vx=-Math.abs(q.vx)}
+        if(!open){var m=Wd/2;if(q.h&&q.x>m-r){q.x=m-r;q.vx=-Math.abs(q.vx)}if(!q.h&&q.x<m+r){q.x=m+r;q.vx=Math.abs(q.vx)}}});
+      for(var i=0;i<P.length;i++)for(var j=i+1;j<P.length;j++){var a=P[i],b=P[j],dx=b.x-a.x,dy=b.y-a.y,d2=dx*dx+dy*dy;
+        if(d2<4*r*r&&d2>1e-9){var d=Math.sqrt(d2),nx=dx/d,ny=dy/d,rv=(a.vx-b.vx)*nx+(a.vy-b.vy)*ny;if(rv>0){a.vx-=rv*nx;a.vy-=rv*ny;b.vx+=rv*nx;b.vy+=rv*ny;}var o=(2*r-d)/2;a.x-=nx*o;a.y-=ny*o;b.x+=nx*o;b.y+=ny*o;}}
+    }
+    var bw=W-40,sc=Math.min(bw/Wd,(H-40)),bh=sc,ox=(W-Wd*sc)/2,oy=10;
+    box(g,ox,oy,Wd*sc,bh,null,C.ink,2);
+    if(!open)line(g,ox+Wd*sc/2,oy,ox+Wd*sc/2,oy+bh,C.ink,4);else line(g,ox+Wd*sc/2,oy,ox+Wd*sc/2,oy+bh,C.line,1,[4,4]);
+    P.forEach(function(q){var e=Math.hypot(q.vx,q.vy);circ(g,ox+q.x*sc,oy+q.y*sc,Math.max(3,r*sc),spd((e-0.2)/0.7));});
+    var T0=temps();if(!Ts)Ts=T0.slice();var kk=Math.min(1,dt*0.8);Ts[0]+=(T0[0]-Ts[0])*kk;Ts[1]+=(T0[1]-Ts[1])*kk;var T=Ts;if(open&&Math.abs(T[0]-T[1])<30)eq=true;
+    txt(g,"左半邊 "+Math.round(T[0])+" K",ox+6,oy+bh+18,{c:C.red,s:12,w:"700"});txt(g,"右半邊 "+Math.round(T[1])+" K",ox+Wd*sc-6,oy+bh+18,{c:C.blue,s:12,a:"right",w:"700"});
+    ui.out(open?(eq?"兩邊溫度差不多了——<b>熱平衡</b>（數字的小小跳動是分子數量少造成的起伏）。分子不會自己再「分回」一邊熱一邊冷：這就是熵增加的方向。":"熱量正從左邊流向右邊……（快的分子撞慢的分子，把能量分給它們）"):"隔板關著。按「打開隔板」看看會發生什麼。");
+  }};
+};
+
+/* ---------- L17 波 ---------- */
+SIMS.wave=function(p,ui){
+  var t=0,ph=0;
+  return{frame:function(g,W,H,dt){
+    t+=dt;ph+=2*Math.PI*p.f*dt;
+    var v=2,lam=v/p.f,k=2*Math.PI/lam,m=20,sc=(W-2*m)/4,cy=H*0.5,A=p.A*sc;
+    line(g,m,cy,W-m,cy,C.line,1,[4,4]);
+    if(!p.lon){
+      g.strokeStyle=C.blue;g.lineWidth=2.5;g.beginPath();for(var x=0;x<=4;x+=0.02){var X=m+x*sc,Y=cy-A*Math.sin(ph-k*x);x?g.lineTo(X,Y):g.moveTo(X,Y);}g.stroke();
+      for(var x=0;x<=4;x+=0.1)circ(g,m+x*sc,cy-A*Math.sin(ph-k*x),3,C.blue);
+      circ(g,m+sc,cy-A*Math.sin(ph-k),7,C.red,C.ink,1.5);
+    }else{
+      for(var x=0;x<=4.001;x+=0.05){var dx=p.A*0.5*Math.sin(ph-k*x),X=m+(x+dx)*sc;line(g,X,cy-50,X,cy+50,Math.abs(x-1)<0.01?C.red:C.blue,Math.abs(x-1)<0.01?3:1.4);}
+    }
+    if(lam<=3.9){var a=m+(0.2)*sc,b=a+lam*sc,yy=H-24;line(g,a,yy,b,yy,C.orange,2);line(g,a,yy-6,a,yy+6,C.orange,2);line(g,b,yy-6,b,yy+6,C.orange,2);txt(g,"波長 λ = "+fx(lam,2)+" m",(a+b)/2,yy-8,{c:C.orange,s:12,a:"center",w:"600"});}
+    txt(g,"波速固定 2 m/s",W-m,22,{c:C.muted,s:12,a:"right"});
+    ui.out("頻率 f = "+fx(p.f,2)+" Hz → 週期 T = 1/f = <b>"+fx(1/p.f,2)+" s</b>　波長 λ = v ÷ f = 2 ÷ "+fx(p.f,2)+" = <b>"+fx(lam,2)+" m</b>　（頻率越高，波長越短）");
+  }};
+};
+
+/* ---------- L18 都卜勒 ---------- */
+SIMS.doppler=function(p,ui){
+  var fr=[],x=0.15,t=0,next=0;
+  return{frame:function(g,W,H,dt){
+    var cs=W*0.14,T=0.32;t+=dt;x+=p.M*cs*dt/W;if(x>1.1){x=-0.1;fr=[];}
+    if(t>=next){fr.push({x:x*W,t:t});next=t+T;}
+    fr=fr.filter(function(f){return (t-f.t)*cs<W*1.6});
+    var cy=H/2;
+    fr.forEach(function(f){var r=(t-f.t)*cs;alpha(g,clamp(1-r/(W*1.2),0.1,0.8),function(){circ(g,f.x,cy,r,null,C.blue,1.5)});});
+    if(p.M>=1&&fr.length>2){var ang=Math.asin(1/p.M),L=W;line(g,x*W,cy,x*W-L*Math.cos(ang),cy-L*Math.sin(ang),C.red,2.5);line(g,x*W,cy,x*W-L*Math.cos(ang),cy+L*Math.sin(ang),C.red,2.5);txt(g,"震波（音爆）",x*W-60,cy-40,{c:C.red,s:13,w:"700",a:"right"});}
+    circ(g,x*W,cy,8,C.orange,C.ink,1.5);
+    txt(g,"👂",W-18,cy+6,{s:22,a:"center",b:"middle"});txt(g,"👂",18,cy+6,{s:22,a:"center",b:"middle"});
+    var f0=440;
+    ui.out(p.M<1?"聲源本來發出 440 Hz。前方的人聽到 <b>"+Math.round(f0/(1-p.M))+" Hz</b>（變高），後方的人聽到 <b>"+Math.round(f0/(1+p.M))+" Hz</b>（變低）":"聲源比聲音還快！前方的人在它抵達之前完全聽不到，之後被一道<b>音爆</b>掃過。");
+  }};
+};
+
+/* ---------- L19 折射 ---------- */
+SIMS.refract=function(p,ui){
+  var off=0;
+  return{frame:function(g,W,H,dt){
+    off=(off+dt*30)%16;
+    var n1=p.rev?p.n:1,n2=p.rev?1:p.n,th=p.ang*Math.PI/180,cx=W/2,cy=H/2,L=Math.min(W,H)*0.46;
+    g.fillStyle=C.dark?"#1f3f5c":"#dcebf7";if(p.rev)g.fillRect(0,0,W,cy);else g.fillRect(0,cy,W,H-cy);
+    line(g,0,cy,W,cy,C.ink,1.5);line(g,cx,cy-L,cx,cy+L,C.muted,1,[4,4]);
+    txt(g,p.rev?"介質 n = "+p.n:"空氣 n = 1",12,20,{c:C.muted,s:12});txt(g,p.rev?"空氣 n = 1":"介質 n = "+p.n,12,H-10,{c:C.muted,s:12});
+    var Y="#E8B400";
+    function ray(x1,y1,x2,y2,c,w){g.strokeStyle=c;g.lineWidth=w;g.setLineDash([12,4]);g.lineDashOffset=-off;g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();g.setLineDash([]);g.lineDashOffset=0;}
+    ray(cx-L*Math.sin(th),cy-L*Math.cos(th),cx,cy,Y,3);
+    var s2=n1*Math.sin(th)/n2,tir=s2>1,R=Math.pow((n1-n2)/(n1+n2),2),ra=tir?1:clamp(R+(1-R)*Math.pow(1-Math.cos(th),5),0.1,1);
+    alpha(g,tir?1:0.3+ra*0.7,function(){ray(cx,cy,cx+L*Math.sin(th),cy-L*Math.cos(th),tir?Y:"#F3D77A",tir?3:2);});
+    if(!tir){var t2=Math.asin(s2);ray(cx,cy,cx+L*Math.sin(t2),cy+L*Math.cos(t2),C.teal,3);
+      g.strokeStyle=C.teal;g.lineWidth=1;g.beginPath();g.arc(cx,cy,34,Math.PI/2-t2,Math.PI/2);g.stroke();}
+    g.strokeStyle=Y;g.lineWidth=1;g.beginPath();g.arc(cx,cy,30,-Math.PI/2-th,-Math.PI/2);g.stroke();
+    var crit=n1>n2?Math.asin(n2/n1)*180/Math.PI:null;
+    ui.out("入射角 "+p.ang+"°　→　"+(tir?"<b style='color:var(--red)'>全反射！光完全出不去</b>":"折射角 <b>"+fx(Math.asin(s2)*180/Math.PI,1)+"°</b>")+"　（司乃耳定律 n₁ sin θ₁ = n₂ sin θ₂）"+(crit?"　臨界角 <b>"+fx(crit,1)+"°</b>":""));
+  }};
+};
+
+/* ---------- L20 透鏡 ---------- */
+SIMS.lens=function(p,ui){
+  return{fmt:function(k,v){return fx(v,2)+" 倍焦距"},frame:function(g,W,H,dt){
+    var cx=W*0.5,cy=H*0.55,f=W/10,po=p.p,x0=cx-po*f,ho=H*0.16;
+    line(g,0,cy,W,cy,C.muted,1);
+    g.strokeStyle=C.blue;g.lineWidth=2;g.beginPath();g.ellipse(cx,cy,7,H*0.42,0,0,Math.PI*2);g.stroke();
+    [-2,-1,1,2].forEach(function(k){circ(g,cx+k*f,cy,3,C.ink);txt(g,Math.abs(k)===1?"F":"2F",cx+k*f,cy+16,{c:C.muted,s:11,a:"center"});});
+    arrow(g,x0,cy,x0,cy-ho,C.orange,3);txt(g,"物體",x0,cy-ho-10,{c:C.orange,s:12,a:"center",w:"600"});
+    var near=Math.abs(po-1)<0.03,Y="#E8B400",tx=x0,ty=cy-ho;
+    function seg(x1,y1,x2,y2,d){g.save();g.beginPath();g.rect(0,0,W,H);g.clip();line(g,x1,y1,x2,y2,d?C.muted:Y,d?1.2:2,d?[5,4]:[]);g.restore();}
+    function ext(x1,y1,x2,y2){var dx=x2-x1,dy=y2-y1,k=3*W/Math.max(1,Math.hypot(dx,dy));return [x2+dx*k,y2+dy*k];}
+    // 1 平行→過焦點
+    seg(tx,ty,cx,ty);var e=ext(cx,ty,cx+f,cy);seg(cx,ty,e[0],e[1]);
+    // 2 過中心
+    e=ext(tx,ty,cx,cy);seg(tx,ty,e[0],e[1]);
+    // 3 過前焦點→平行
+    if(po>1.02){var sl=(cy-ty)/(cx-f-tx),yl=ty+sl*(cx-tx);seg(tx,ty,cx,yl);seg(cx,yl,W,yl);}
+    else if(po<0.98){var sl2=(ty-cy)/(tx-(cx-f)),yl2=cy+sl2*(cx-(cx-f));seg(cx-f,cy,tx,ty,true);seg(tx,ty,cx,yl2);seg(cx,yl2,W,yl2);}
+    var info;
+    if(near){info="物體剛好在焦點上：折射光彼此平行，<b>不成像</b>（這就是手電筒、探照燈的原理）。";}
+    else{var q=po/(po-1),mg=-q/po,ix=cx+q*f,ih=mg*ho,ok=Math.abs(ix-cx)<W*2;
+      if(q<0){seg(cx,ty,cx-2*W,ty-(cy-ty)/f*2*W,true);if(po<0.98){var yb=cy+(ty-cy)/(tx-(cx-f))*f;seg(cx,yb,0,yb,true);}var a2=ext(tx,ty,cx,cy);seg(cx,cy,cx-(a2[0]-cx),cy-(a2[1]-cy),true);}
+      if(ix>-50&&ix<W+50){g.save();if(q<0)g.setLineDash([5,4]);arrow(g,ix,cy,ix,cy-ih,C.red,3);g.restore();txt(g,q>0?"實像":"虛像",ix,cy-ih+(ih>0?-10:18),{c:C.red,s:12,a:"center",w:"600"});}
+      info="成像：<b>"+(q>0?"實像、倒立":"虛像、正立")+"</b>，"+(Math.abs(mg)>1.02?"放大":Math.abs(mg)<0.98?"縮小":"等大")+" "+fx(Math.abs(mg),2)+" 倍　像距 = "+fx(q,2)+" f"+(q<0?"（在透鏡同一側）":"")+"　"+(po>2.02?"→ 相機、眼睛":po>1.98?"→ 物在 2F：等大倒立":po>1?"→ 投影機、幻燈機":"→ 放大鏡");}
+    ui.out("物距 = "+fx(po,2)+" f　"+info);
+  }};
+};
+
+/* ---------- L21 庫侖定律 ---------- */
+SIMS.coulomb=function(p,ui){
+  return{frame:function(g,W,H,dt){
+    var cy=H/2,sc=W*0.7/0.5,x1=W/2-p.r*sc/2,x2=W/2+p.r*sc/2,Q=[[x1,p.q1],[x2,p.q2]],st=Math.max(22,W/22);
+    for(var gx=st/2;gx<W;gx+=st)for(var gy=st/2;gy<H;gy+=st){
+      var ex=0,ey=0;Q.forEach(function(q){var dx=gx-q[0],dy=gy-q[1],d2=dx*dx+dy*dy+80,d=Math.sqrt(d2);ex+=q[1]*dx/(d2*d);ey+=q[1]*dy/(d2*d);});
+      var m=Math.hypot(ex,ey);if(m<1e-9)continue;var a=clamp(Math.sqrt(m)*18,0.08,0.9),ux=ex/m*st*0.36,uy=ey/m*st*0.36;
+      alpha(g,a,function(){arrow(g,gx-ux,gy-uy,gx+ux,gy+uy,C.muted,1.2)});}
+    var F=9e9*p.q1*p.q2*1e-12/(p.r*p.r),L=clamp(Math.abs(F)*6,0,W*0.18),dir=F>0?1:-1;
+    Q.forEach(function(q,i){var s=i===0?-1:1;if(p.q1&&p.q2&&L>4)arrow(g,q[0],cy,q[0]+s*dir*(L+14),cy,C.orange,4);
+      circ(g,q[0],cy,15,q[1]>0?C.red:q[1]<0?C.blue:C.muted,C.ink,1.5);txt(g,q[1]>0?"+":q[1]<0?"−":"0",q[0],cy+1,{c:"#fff",s:18,a:"center",b:"middle",w:"700"});});
+    ui.out(p.q1&&p.q2?"F = k·q₁q₂/r² = 9×10⁹ × ("+p.q1+"μC) × ("+p.q2+"μC) ÷ ("+p.r+" m)² = <b>"+fx(Math.abs(F),2)+" N</b>　→ <b>"+(F>0?"同性相斥":"異性相吸")+"</b>　（距離減半，力變 4 倍）":"其中一個電荷是 0，沒有電力。");
+  }};
+};
+
+/* ---------- L22 電路 ---------- */
+SIMS.circuit=function(p,ui){
+  var ph=0;
+  function pts(W,H){var l=W*0.12,r=W*0.88,t=H*0.2,b=H*0.84;return{l:l,r:r,t:t,b:b};}
+  function plen(P){var s=0;for(var i=1;i<P.length;i++)s+=Math.hypot(P[i][0]-P[i-1][0],P[i][1]-P[i-1][1]);return s;}
+  function at(P,d){for(var i=1;i<P.length;i++){var L=Math.hypot(P[i][0]-P[i-1][0],P[i][1]-P[i-1][1]);if(d<=L){var k=d/L;return [P[i-1][0]+(P[i][0]-P[i-1][0])*k,P[i-1][1]+(P[i][1]-P[i-1][1])*k];}d-=L;}return P[P.length-1];}
+  function bulb(g,x,y,P,maxP){var b=clamp(Math.sqrt(P/maxP),0,1);
+    if(b>0.02){var gr=g.createRadialGradient(x,y,2,x,y,46*b+8);gr.addColorStop(0,"rgba(255,220,80,"+(0.85*b)+")");gr.addColorStop(1,"rgba(255,220,80,0)");g.fillStyle=gr;g.beginPath();g.arc(x,y,46*b+8,0,7);g.fill();}
+    circ(g,x,y,14,b>0.02?"rgba(255,"+Math.round(200+55*b)+","+Math.round(80*b+60)+",1)":C.card,C.ink,1.5);
+    g.strokeStyle=C.ink;g.lineWidth=1;g.beginPath();g.moveTo(x-6,y+6);g.lineTo(x-3,y-4);g.lineTo(x,y+3);g.lineTo(x+3,y-4);g.lineTo(x+6,y+6);g.stroke();}
+  return{frame:function(g,W,H,dt){
+    var q=pts(W,H),V=p.V,R=p.R,mode=p.mode,I,segs=[],bulbs=[],out;
+    var bt=q.t+(q.b-q.t)*0.38,bb=q.t+(q.b-q.t)*0.62;
+    if(mode===3){I=2*V/R;var mx=W*0.55;
+      segs=[[[q.l,bt],[q.l,q.t],[mx,q.t]],[[mx,q.t],[q.r,q.t],[q.r,q.b],[mx,q.b]],[[mx,q.t],[mx,q.b]],[[mx,q.b],[q.l,q.b],[q.l,bb]]];var cur=[I,I/2,I/2,I];
+      bulbs=[[q.r,(q.t+q.b)/2,V*V/R],[mx,(q.t+q.b)/2,V*V/R]];out="兩燈並聯：每顆燈都分到完整的 <b>"+V+" V</b>，各流過 "+fx(V/R,2)+" A，各消耗 <b>"+fx(V*V/R,1)+" W</b>　電池總電流 <b>"+fx(I,2)+" A</b>";
+      segs.forEach(function(s,i){s.I=cur[i]});}
+    else{var n=mode===2?2:1;I=V/(n*R);var s0=[[q.l,bt],[q.l,q.t],[q.r,q.t],[q.r,q.b],[q.l,q.b],[q.l,bb]];s0.I=I;segs=[s0];
+      if(n===1){bulbs=[[W/2,q.t,V*V/R]];out="一個燈泡：電流 I = V/R = "+V+"/"+R+" = <b>"+fx(I,2)+" A</b>　功率 P = V·I = <b>"+fx(V*I,1)+" W</b>";}
+      else{bulbs=[[W*0.38,q.t,V*V/(4*R)],[W*0.62,q.t,V*V/(4*R)]];out="兩燈串聯：電流只有 <b>"+fx(I,2)+" A</b>，每顆燈只分到 "+fx(V/2,2)+" V，各消耗 <b>"+fx(V*V/(4*R),1)+" W</b>（比單顆暗）";}}
+    segs.forEach(function(s){g.strokeStyle=C.ink;g.lineWidth=3;g.beginPath();s.forEach(function(pt,i){i?g.lineTo(pt[0],pt[1]):g.moveTo(pt[0],pt[1])});g.stroke();});
+    box(g,q.l-16,bt,32,bb-bt,C.card);line(g,q.l-16,bt+6,q.l+16,bt+6,C.ink,3);line(g,q.l-8,bb-6,q.l+8,bb-6,C.ink,5);
+    txt(g,"+",q.l+22,bt+8,{c:C.red,s:16,w:"700"});txt(g,"−",q.l+22,bb-2,{c:C.blue,s:16,w:"700"});txt(g,V+" V",q.l-22,(bt+bb)/2,{c:C.muted,s:12,a:"right",b:"middle"});
+    ph+=dt;
+    segs.forEach(function(s){var L=plen(s),gap=18,sp=s.I*22;for(var d=0;d<L;d+=gap){var dd=((d-ph*sp)%L+L)%L;var pt=at(s,dd);circ(g,pt[0],pt[1],2.8,"#E8B400");}});
+    bulbs.forEach(function(b){box(g,b[0]-16,b[1]-16,32,32,C.card);bulb(g,b[0],b[1],b[2],72);});
+    ui.out(out);
+  }};
+};
+
+/* ---------- L23 電磁感應 ---------- */
+SIMS.induct=function(p,ui){
+  var t=0,xm=p.x,prev=null,emf=0,needle=0;
+  function flux(x){var d=(x-62)/14;return 1/Math.pow(1+d*d,1.5);}
+  return{fmt:function(k,v){return k==="sp"?fx(v,1)+" 倍":v+""},frame:function(g,W,H,dt){
+    t+=dt;var target=p.auto?50+42*Math.sin(t*p.sp*1.6):p.x;xm+=(target-xm)*Math.min(1,dt*(p.auto?60:14));
+    var F=flux(xm);if(prev!==null&&dt>0){var e=-(F-prev)/dt;emf+=(e-emf)*Math.min(1,dt*12);}prev=F;
+    needle+=(clamp(emf*0.35,-1,1)-needle)*Math.min(1,dt*10);
+    var sc=W/130,cy=H*0.42,mx=10+xm*sc*0.95;
+    var cx0=W*0.52,cw=W*0.26;
+    for(var i=0;i<9;i++){var x=cx0+i*cw/8;g.strokeStyle=C.orange;g.lineWidth=3;g.beginPath();g.ellipse(x,cy,6,34,0,0,Math.PI*2);g.stroke();}
+    var mw=W*0.22;box(g,mx-mw,cy-13,mw/2,26,C.blue);box(g,mx-mw/2,cy-13,mw/2,26,C.red);box(g,mx-mw,cy-13,mw,26,null,C.ink,1.5);
+    txt(g,"S",mx-mw*0.75,cy+1,{c:"#fff",s:14,a:"center",b:"middle",w:"700"});txt(g,"N",mx-mw*0.25,cy+1,{c:"#fff",s:14,a:"center",b:"middle",w:"700"});
+    var gx=W*0.78,gy=H*0.86,gr=Math.min(W*0.14,H*0.22);
+    line(g,cx0,cy+34,cx0,gy,C.ink,1.5);line(g,cx0+cw,cy+34,cx0+cw,gy-gr*0.3,C.ink,1.5);line(g,cx0,gy,gx-gr,gy,C.ink,1.5);line(g,cx0+cw,gy-gr*0.3,gx-gr*0.9,gy-gr*0.3,C.ink,1.5);
+    g.fillStyle=C.card;g.beginPath();g.arc(gx,gy,gr,Math.PI,0);g.closePath();g.fill();g.strokeStyle=C.ink;g.lineWidth=1.5;g.stroke();
+    for(var k=-4;k<=4;k++){var a=-Math.PI/2+k*0.3;line(g,gx+Math.cos(a)*gr*0.8,gy+Math.sin(a)*gr*0.8,gx+Math.cos(a)*gr*0.92,gy+Math.sin(a)*gr*0.92,C.muted,1);}
+    var na=-Math.PI/2+needle*1.2;line(g,gx,gy,gx+Math.cos(na)*gr*0.85,gy+Math.sin(na)*gr*0.85,C.red,2.5);circ(g,gx,gy,4,C.ink);
+    txt(g,"電流計",gx,gy+16,{c:C.muted,s:11,a:"center"});
+    var a2=Math.abs(emf);
+    ui.out(a2<0.03?"磁鐵靜止（或離線圈很遠）：穿過線圈的磁場沒有變化 → <b>沒有感應電流</b>":"穿過線圈的磁場正在"+(emf<0?"<b>增加</b>":"<b>減少</b>")+" → 產生感應電流，指針偏向"+(emf<0?"左":"右")+"。動得越快，偏得越大！");
+  }};
+};
+
+/* ---------- L24 電磁波譜 ---------- */
+SIMS.spectrum=function(p,ui){
+  var ph=0,B=[[-11,"γ 射線","原子核衰變、宇宙中的超新星爆炸","#9b6bff"],[-8,"X 射線","醫院照 X 光、機場行李檢查","#6b8bff"],[-6.398,"紫外線","曬傷皮膚、殺菌燈、驗鈔燈","#9b6bff"],[-6.125,"可見光","彩虹的七種顏色——人眼唯一看得到的一小段",""],[-3,"紅外線","電視遙控器、熱像儀、暖暖的陽光","#b0413e"],[0,"微波","微波爐、Wi-Fi、手機 5G、雷達","#C9731E"],[99,"無線電波","FM／AM 廣播、無線電對講機","#8a6d3b"]];
+  function band(l){for(var i=0;i<B.length;i++)if(l<B[i][0])return B[i];return B[B.length-1];}
+  function nice(l){var m=Math.pow(10,l);if(m<1e-9)return fx(m*1e12,m<1e-11?2:1)+" pm";if(m<1e-6)return Math.round(m*1e9)+" nm";if(m<1e-3)return fx(m*1e6,m<1e-5?2:1)+" μm";if(m<1)return fx(m*1e3,m<1e-2?2:1)+" mm";if(m<1000)return fx(m,m<10?2:1)+" m";return fx(m/1000,1)+" km";}
+  return{fmt:function(k,v){return nice(v)},frame:function(g,W,H,dt){
+    var l=p.lg,bd=band(l),lam=Math.pow(10,l),nm=lam*1e9,vis=bd[1]==="可見光",col=vis?wlColor(nm):bd[3];
+    var vw=8+(l+12)/15*(W*0.7-8);ph+=dt*3;
+    var cy=H*0.34,A=H*0.16;
+    g.strokeStyle=col;g.lineWidth=2.5;g.beginPath();for(var x=10;x<=W-10;x+=1.5){var y=cy-A*Math.sin((x/vw)*Math.PI*2-ph);x===10?g.moveTo(x,y):g.lineTo(x,y);}g.stroke();
+    var by=H*0.72,bh=22,m=14,X=function(v){return m+(v+12)/15*(W-2*m)};
+    var prev=-12;B.forEach(function(b){var e=Math.min(b[0],3);if(b[1]==="可見光"){var gr=g.createLinearGradient(X(prev),0,X(e),0);[400,450,500,550,600,650,700].forEach(function(w,i){gr.addColorStop(i/6,wlColor(w))});g.fillStyle=gr;}else g.fillStyle=b[3];
+      alpha(g,b[1]==="可見光"?1:0.55,function(){g.fillRect(X(prev),by,X(e)-X(prev),bh)});
+      if(b[1]!=="可見光")txt(g,b[1],(X(prev)+X(e))/2,by+bh+14,{c:C.muted,s:W<520?9:11,a:"center"});prev=e;});
+    txt(g,"可見光",X(-6.26),by-6,{c:C.muted,s:10,a:"center"});
+    var mx=X(l);g.fillStyle=C.ink;g.beginPath();g.moveTo(mx,by-2);g.lineTo(mx-6,by-12);g.lineTo(mx+6,by-12);g.closePath();g.fill();
+    txt(g,"← 波長短、能量高",m,H-8,{c:C.muted,s:10});txt(g,"波長長、能量低 →",W-m,H-8,{c:C.muted,s:10,a:"right"});
+    var f=3e8/lam,E=1240/nm;
+    ui.out("<b>"+bd[1]+(vis?"（"+(nm<450?"紫":nm<495?"藍":nm<570?"綠":nm<590?"黃":nm<620?"橙":"紅")+"光）":"")+"</b>：波長 "+nice(l)+"　頻率 "+sci(f,2)+" Hz　光子能量 "+sci(E,2)+" eV<br>生活中：「"+bd[2]+"」");
+  }};
+};
+
+/* ---------- L25 波耳模型 ---------- */
+SIMS.bohr=function(p,ui){
+  var n=1,e={n:1,r:1},wait=0,ph=[],lines=[],last="",auto=1.2,ang=0;
+  function En(k){return -13.6/(k*k)}
+  function excite(){n=3+Math.floor(Math.random()*4);wait=1.2;last="電子吸收能量，跳到 n = "+n+"！";}
+  return{excite:excite,clear:function(){lines=[];},frame:function(g,W,H,dt){
+    if(auto>0){auto-=dt;if(auto<=0)excite();}
+    ang+=dt*2/Math.pow(e.r,1.2);e.r+=(n-e.r)*Math.min(1,dt*6);
+    if(n>1){wait-=dt;if(wait<=0){var to=1+Math.floor(Math.random()*(n-1));var dE=En(n)-En(to),lam=1240/dE;
+      ph.push({x:0,y:0,a:ang,lam:lam,t:0});lines.push(lam);if(lines.length>40)lines.shift();
+      last="n = "+n+" → "+to+"：放出 "+fx(dE,2)+" eV 的光子，波長 "+Math.round(lam)+" nm "+(lam<380?"（紫外線，萊曼系）":lam>750?"（紅外線）":"（可見光，巴耳末系）");n=to;wait=0.9;}}
+    var ax=W*0.3,ay=H*0.42,Rk=Math.min(W*0.28,H*0.4)/Math.pow(6,1.2);
+    for(var k=1;k<=6;k++)circ(g,ax,ay,Rk*Math.pow(k,1.2),null,C.line,1);
+    circ(g,ax,ay,6,C.red);var rr2=Rk*Math.pow(e.r,1.2);circ(g,ax+Math.cos(ang)*rr2,ay+Math.sin(ang)*rr2,5,C.blue);
+    ph=ph.filter(function(q){q.t+=dt;var d=rr2+q.t*140;if(d>W)return false;var c=photonColor(q.lam),x0=ax+Math.cos(q.a)*d,y0=ay+Math.sin(q.a)*d;
+      g.strokeStyle=c;g.lineWidth=2;g.beginPath();for(var s=0;s<30;s+=1){var px=x0-Math.cos(q.a)*s,py=y0-Math.sin(q.a)*s,o=Math.sin(s*0.8)*4;s?g.lineTo(px-Math.sin(q.a)*o,py+Math.cos(q.a)*o):g.moveTo(px,py);}g.stroke();return true;});
+    var dx=W*0.64,dw=W*0.3,top=16,bot=H*0.74,Y=function(E){return top+(E+13.6)/13.6*0}; 
+    Y=function(E){return bot-(E+13.6)/13.6*(bot-top);};
+    for(var k2=1;k2<=6;k2++){var yy=Y(En(k2));line(g,dx,yy,dx+dw,yy,k2===n?C.blue:C.muted,k2===n?2.5:1);if(k2<=3||k2===6)txt(g,"n="+k2+"  "+fx(En(k2),2)+" eV",dx+dw+4,yy,{c:C.muted,s:9,b:"middle"});}
+    circ(g,dx+dw/2,Y(En(Math.round(e.r))),4,C.blue);
+    var sy=H*0.84,sh=H*0.1,sx=16,sw=W-32,XL=function(l){return sx+(l-380)/(750-380)*sw};
+    box(g,sx,sy,sw,sh,"#111");
+    lines.forEach(function(l){if(l>=380&&l<=750){line(g,XL(l),sy,XL(l),sy+sh,wlColor(l),3);}});
+    txt(g,"可見光譜 380–750 nm",sx,sy-4,{c:C.muted,s:10});
+    var uv=lines.filter(function(l){return l<380}).length,ir=lines.filter(function(l){return l>750}).length;
+    txt(g,"紫外 "+uv+" 條（看不見）　紅外 "+ir+" 條（看不見）",sx+sw,sy-4,{c:C.muted,s:10,a:"right"});
+    ui.out(last||"電子在最低能階 n = 1（基態）。");
+  }};
+};
+
+/* ---------- L26 光電效應 ---------- */
+SIMS.photo=function(p,ui){
+  var P=[],E=[],acc=0,t=0,cnt=0,ct=0,rate=0;
+  return{frame:function(g,W,H,dt){
+    t+=dt;var Eph=1240/p.lam,KE=Eph-p.W,col=photonColor(p.lam),px=W*0.72;
+    acc+=p.I*3*dt;while(acc>=1){acc--;P.push({x:W*0.08,y:H*0.3+Math.random()*H*0.4,ph:Math.random()*6});}
+    g.fillStyle=C.muted;rr(g,W*0.02,H*0.35,W*0.07,H*0.3,6,C.muted);
+    alpha(g,0.15,function(){g.fillStyle=col;g.beginPath();g.moveTo(W*0.09,H*0.35);g.lineTo(px,H*0.2);g.lineTo(px,H*0.8);g.lineTo(W*0.09,H*0.65);g.closePath();g.fill();});
+    box(g,px,H*0.12,W*0.05,H*0.76,C.dark?"#8c96a0":"#aab3bc",C.ink,1.5);
+    P=P.filter(function(q){q.x+=W*0.5*dt;if(q.x>=px){if(KE>0){E.push({x:px+W*0.05,y:q.y,vx:Math.sqrt(KE)*W*0.18,vy:(Math.random()-0.5)*40});cnt++;}return false;}
+      g.strokeStyle=col;g.lineWidth=2;g.beginPath();for(var s=0;s<14;s++){var y=q.y+Math.sin(s*0.9+q.ph)*3;s?g.lineTo(q.x-s,y):g.moveTo(q.x,y);}g.stroke();return true;});
+    E=E.filter(function(e){e.x+=e.vx*dt;e.y+=e.vy*dt;circ(g,e.x,e.y,3.5,C.blue);return e.x<W+5;});
+    ct+=dt;if(ct>1){rate=cnt/ct;cnt=0;ct=0;}
+    txt(g,"金屬板",px+W*0.025,H*0.08,{c:C.muted,s:11,a:"center"});
+    ui.out("光子能量 E = 1240 ÷ "+p.lam+" = <b>"+fx(Eph,2)+" eV</b>　金屬功函數 "+p.W+" eV　→ "+(KE>0?"<b style='color:var(--teal)'>打出電子！</b>最大動能 "+fx(KE,2)+" eV，每秒約 "+Math.round(rate)+" 個（強度越大，電子越多；但速度只看顏色）":"<b style='color:var(--red)'>一個電子都打不出來</b>——光子能量不夠，光再強也沒用！"));
+  }};
+};
+
+/* ---------- L27 光鐘 ---------- */
+SIMS.lclock=function(p,ui){
+  var t,trail;
+  function reset(){t=0;trail=[];}
+  reset();
+  return{reset:reset,change:reset,frame:function(g,W,H,dt){
+    t+=dt;var b=p.b,gam=1/Math.sqrt(1-b*b),Lh=H*0.28,c=Lh*2.2,T0=2*Lh/c,T=gam*T0;
+    function clock(x,yTop,tt,per,col){line(g,x-18,yTop,x+18,yTop,C.ink,3);line(g,x-18,yTop+Lh,x+18,yTop+Lh,C.ink,3);
+      var ph=(tt%per)/per,y=ph<0.5?yTop+Lh-ph*2*Lh:yTop+(ph-0.5)*2*Lh;circ(g,x,y,5,col);return y;}
+    var y1=10;clock(W*0.14,y1,t,T0,"#E8B400");txt(g,"靜止的光鐘：已走 "+Math.floor(t/T0)+" 下",W*0.14+30,y1+Lh/2,{s:12,b:"middle"});
+    var y2=H*0.52,span=W*0.85,x=W*0.08+((b*c*t)%span),yy=clock(x,y2,t,T,"#E8B400");
+    trail.push([W*0.08+b*c*t,yy]);if(trail.length>400)trail.shift();
+    g.save();g.beginPath();g.rect(0,y2-4,W,Lh+8);g.clip();g.strokeStyle="#E8B400";g.lineWidth=1.2;alpha(g,0.6,function(){g.beginPath();trail.forEach(function(q,i){var X=q[0]-(W*0.08+b*c*t)+x;i?g.lineTo(X,q[1]):g.moveTo(X,q[1]);});g.stroke();});g.restore();
+    if(b>0)arrow(g,x+24,y2+Lh/2,x+24+b*60,y2+Lh/2,C.red,2.5);
+    txt(g,"移動的光鐘（"+fx(b,2)+" c）：已走 "+Math.floor(t/T)+" 下",12,H-10,{s:12});
+    ui.out("勞侖茲因子 γ = 1/√(1 − v²/c²) = <b>"+fx(gam,3)+"</b>　→ 從地面看，移動的鐘每走 1 下，靜止的鐘走了 "+fx(gam,2)+" 下。<b>移動的時鐘變慢了</b>（時間膨脹）");
+  }};
+};
+
+/* ---------- L28 放射性衰變 ---------- */
+SIMS.decay=function(p,ui){
+  var A,t,hist,N;
+  function reset(){A=[];for(var i=0;i<400;i++)A.push(1);t=0;N=400;hist=[[0,400]];}
+  reset();
+  return{reset:reset,change:reset,frame:function(g,W,H,dt){
+    var run=t<6*p.T;
+    if(run){var pr=1-Math.pow(2,-dt/p.T);for(var i=0;i<400;i++)if(A[i]&&Math.random()<pr){A[i]=0;N--;}t+=dt;hist.push([t,N]);}
+    var gs=Math.min(W*0.42,H-20),cs=gs/20,ox=10,oy=(H-gs)/2;
+    for(var j=0;j<400;j++)circ(g,ox+(j%20+0.5)*cs,oy+(Math.floor(j/20)+0.5)*cs,cs*0.36,A[j]?C.orange:C.line);
+    var gx=ox+gs+46,gw=W-gx-14,Ax=axes(g,gx,16,gw,H-58,"時間（半衰期）","剩餘",[0,6,1],[0,400,100]);
+    g.strokeStyle=C.muted;g.lineWidth=1.2;g.setLineDash([5,4]);g.beginPath();for(var s=0;s<=6;s+=0.05){var X=Ax.X(s),Y=Ax.Y(400*Math.pow(2,-s));s?g.lineTo(X,Y):g.moveTo(X,Y);}g.stroke();g.setLineDash([]);
+    g.strokeStyle=C.red;g.lineWidth=2;g.beginPath();hist.forEach(function(q,i){var X=Ax.X(q[0]/p.T),Y=Ax.Y(q[1]);i?g.lineTo(X,Y):g.moveTo(X,Y);});g.stroke();
+    ui.out("經過 <b>"+fx(t,1)+" 秒</b>（"+fx(t/p.T,2)+" 個半衰期）　剩下 <b>"+N+"</b> 個　理論值 "+Math.round(400*Math.pow(2,-t/p.T))+" 個"+(run?"":"　（已結束，按「重來」）"));
+  }};
+};
+
+/* ---------- L29 微積分 ---------- */
+SIMS.calc=function(p,ui){
+  function v(t){return 2+1.5*Math.sin(0.9*t)+0.25*t}
+  var exact=16+1.5*(1-Math.cos(7.2))/0.9+8;
+  return{fmt:function(k,val){return k==="t"?fx(val,2)+" s":val+" 個"},frame:function(g,W,H,dt){
+    var A=axes(g,40,20,W-60,H-60,"時間 t（秒）","速度 v（m/s）",[0,8,1],[0,6,1]);
+    if(p.int){var n=p.n,w=8/n,sum=0;for(var i=0;i<n;i++){var t0=i*w,h=v(t0);sum+=h*w;
+        alpha(g,0.28,function(){box(g,A.X(t0),A.Y(h),A.X(t0+w)-A.X(t0),A.Y(0)-A.Y(h),C.blue)});box(g,A.X(t0),A.Y(h),A.X(t0+w)-A.X(t0),A.Y(0)-A.Y(h),null,C.blue,1);}
+      ui.out(n+" 個長方形的總面積 ≈ <b>"+fx(sum,3)+" m</b>　真正的面積（積分）= <b>"+fx(exact,3)+" m</b>　誤差 "+fx(Math.abs(sum-exact),3)+"　→ 長方形越細，越接近正確答案");}
+    g.strokeStyle=C.ink;g.lineWidth=2.5;g.beginPath();for(var s=0;s<=8;s+=0.04){s?g.lineTo(A.X(s),A.Y(v(s))):g.moveTo(A.X(s),A.Y(v(s)));}g.stroke();
+    if(!p.int){var t=p.t,sl=1.35*Math.cos(0.9*t)+0.25,y=v(t);
+      g.save();g.beginPath();g.rect(40,20,W-60,H-60);g.clip();line(g,A.X(t-2),A.Y(y-2*sl),A.X(t+2),A.Y(y+2*sl),C.red,2);g.restore();
+      circ(g,A.X(t),A.Y(y),5,C.red,C.ink,1.2);
+      ui.out("在 t = "+fx(t,2)+" s：速度 v = <b>"+fx(y,2)+" m/s</b>　切線斜率（微分）＝ 加速度 a = <b>"+fx(sl,2)+" m/s²</b>　"+(sl>0.05?"（正在加速）":sl<-0.05?"（正在減速）":"（這一瞬間速度幾乎不變）"));}
+  }};
+};
+
+/* =====================================================================
+   首頁動畫、路由、主迴圈
+   ===================================================================== */
+var hero=$("#herocv"),hg=hero?hero.getContext("2d"):null,ht=0,hW=0,hH=0;
+function drawHero(dt){
+  if(!hg)return;var w=hero.clientWidth,h=hero.clientHeight;if(!w)return;
+  if(w!==hW||h!==hH){hW=w;hH=h;var d=Math.min(window.devicePixelRatio||1,2);hero.width=Math.round(w*d);hero.height=Math.round(h*d);hg._d=d;}
+  hg.setTransform(hg._d,0,0,hg._d,0,0);hg.clearRect(0,0,w,h);
+  var g=hg,T=3.2;ht=reduce?T*0.42:(ht+dt)%(T+0.8);
+  var vx=(w-80)/T,vy0=h*1.25/(T/2)*0.5*1.0,gg=2*vy0/T,ox=40,oy=h-28;
+  vy0=4*(h-60)/T;gg=2*vy0/T;
+  line(g,16,oy,w-16,oy,C.line,2);
+  var tc=Math.min(ht,T);
+  for(var s=0;s<=tc+1e-6;s+=T/12){var x=ox+vx*s,y=oy-(vy0*s-0.5*gg*s*s);alpha(g,0.22,function(){circ(g,x,y,8,C.blue)});}
+  g.strokeStyle=C.line;g.setLineDash([3,5]);g.lineWidth=1.2;g.beginPath();for(var s2=0;s2<=T;s2+=0.05){var X=ox+vx*s2,Y=oy-(vy0*s2-0.5*gg*s2*s2);s2?g.lineTo(X,Y):g.moveTo(X,Y);}g.stroke();g.setLineDash([]);
+  var bx=ox+vx*tc,by=oy-(vy0*tc-0.5*gg*tc*tc),vy=vy0-gg*tc,k=0.28;
+  circ(g,bx,by,9,C.orange,C.ink,1.5);
+  if(ht<T){arrow(g,bx,by,bx+vx*k,by,C.teal,2.5);arrow(g,bx,by,bx,by-vy*k,C.red,2.5);
+    txt(g,"水平速度不變",bx+vx*k+6,by+4,{c:C.teal,s:11});}
+  txt(g,"每隔相同時間拍一張：這就是物理——用數學描述世界",w-16,20,{c:C.muted,s:12,a:"right"});
+}
+
+var pages=$$(".page"),where=$("#where");
+function show(id){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=id;
+  var el=document.getElementById(id);if(!el||!el.classList.contains("page")){el=$("#home");id="home";}
+  pages.forEach(function(pg){pg.classList.toggle("on",pg===el)});
+  $$("#toc a").forEach(function(a){if(a.getAttribute("href")==="#"+id)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");});
+  var i=lessons.indexOf(el);where.textContent=i>=0?"第 "+(i+1)+" 課　"+titleOf(el):(el.dataset.title||"");
+  active=$$(".sim[data-sim]",el).filter(function(s){return SIMS[s.dataset.sim]}).map(mount);
+  if(i>=0)store.set("phy-last",id);
+  var r=$("#resume");if(r){var l=store.get("phy-last",null);if(l&&l!=="L1"){r.href="#"+l;r.style.display="";}else r.style.display="none";}
+  window.scrollTo(0,0);drawer(false);
+  document.title=(i>=0?"第 "+(i+1)+" 課 "+titleOf(el)+"｜":"")+"從零開始的物理課";
+}
+window.addEventListener("hashchange",function(){show(location.hash.slice(1))});
+show(location.hash.slice(1)||"home");
+
+var lastT=0;
+function tick(now){
+  var dt=lastT?Math.min((now-lastT)/1000,1/20):1/60;lastT=now;
+  active.forEach(function(m){
+    if(!m.vis||!fit(m))return;
+    m.g.setTransform(m.d,0,0,m.d,0,0);m.g.clearRect(0,0,m.W,m.H);
+    try{m.inst.frame(m.g,m.W,m.H,dt);}catch(e){if(!m.err){m.err=1;console.error(m.el.dataset.sim,e);}}
+  });
+  if($("#home").classList.contains("on"))drawHero(dt);
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+})();
+
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-b7c1a30281" data-category="science"></script></body>
+</html>

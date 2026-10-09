@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>經濟學筆記本｜從一杯珍奶到國家經濟</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBFCF8; --grid:#E3ECE6; --ink:#1D2B36; --mut:#5C6B74; --line:#D5DFD8;
+  --card:#FFFFFF; --pen:#2458C6; --red:#CF3F2B; --hl:#FFE36B; --hl2:rgba(255,227,107,.55);
+  --good:#23945A; --bad:#CF3F2B;
+  --u1:#2E9E62; --u2:#E27A12; --u3:#2B72CF; --u4:#8452CC;
+  --ac:var(--u1);
+  --hand:"LXGW WenKai TC","Kaiti TC","BiauKai","DFKai-SB","STKaiti",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#15191C; --grid:#1F262A; --ink:#E8ECE9; --mut:#9AA7AE; --line:#2E383D;
+  --card:#1B2125; --pen:#6E9BFF; --red:#FF7A66; --hl:#8A7420; --hl2:rgba(200,170,40,.35);
+  --good:#4CC784; --bad:#FF7A66; --u1:#4CC784; --u2:#FFA24A; --u3:#63A2FF; --u4:#B48CFF;}}
+:root[data-theme="dark"]{
+  --paper:#15191C; --grid:#1F262A; --ink:#E8ECE9; --mut:#9AA7AE; --line:#2E383D;
+  --card:#1B2125; --pen:#6E9BFF; --red:#FF7A66; --hl:#8A7420; --hl2:rgba(200,170,40,.35);
+  --good:#4CC784; --bad:#FF7A66; --u1:#4CC784; --u2:#FFA24A; --u3:#63A2FF; --u4:#B48CFF;}
+*{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+body{margin:0;font-family:var(--sans);color:var(--ink);font-size:17px;line-height:1.85;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;}
+button,input{font:inherit;color:inherit}
+a{color:var(--pen)}
+:focus-visible{outline:3px solid var(--pen);outline-offset:2px;border-radius:4px}
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;display:flex;align-items:center;gap:12px;
+  padding:10px 16px;background:var(--paper);border-bottom:2px solid var(--ink)}
+.top .brand{font-family:var(--hand);font-size:22px;font-weight:700;text-decoration:none;color:var(--ink);white-space:nowrap}
+.top .prog{flex:1;display:flex;align-items:center;gap:10px;min-width:0}
+.bar{flex:1;min-width:70px;height:10px;border:1.5px solid var(--ink);border-radius:6px;overflow:hidden;max-width:260px}
+.bar i{display:block;height:100%;width:0;background:var(--ac);transition:width .5s}
+.prog small{color:var(--mut);white-space:nowrap}
+.ib{border:1.5px solid var(--ink);background:var(--card);border-radius:8px;padding:4px 10px;cursor:pointer;line-height:1.4}
+#menuBtn{display:none}
+/* layout */
+.wrap{display:flex;max-width:1180px;margin:0 auto}
+aside{width:290px;flex:none;padding:18px 14px 60px;position:sticky;top:58px;height:calc(100vh - 58px);overflow-y:auto}
+.side-unit{margin-bottom:18px}
+.side-unit h3{font-family:var(--hand);font-size:18px;margin:0 0 6px;padding-left:10px;border-left:6px solid var(--c)}
+.side-unit a{display:flex;gap:8px;align-items:baseline;padding:4px 10px;border-radius:6px;text-decoration:none;color:var(--ink);font-size:15px;line-height:1.5}
+.side-unit a:hover{background:var(--hl2)}
+.side-unit a.on{background:var(--ink);color:var(--paper)}
+.side-unit a .n{color:var(--mut);font-size:12px;min-width:22px}
+.side-unit a.on .n{color:var(--paper)}
+.side-unit a .ck{margin-left:auto;color:var(--good);font-weight:700}
+.side-extra a{display:block;padding:6px 10px;font-weight:700;text-decoration:none;color:var(--ink);border:1.5px dashed var(--line);border-radius:8px;margin-bottom:8px}
+main{flex:1;min-width:0;padding:24px 20px 80px}
+.page{max-width:760px;margin:0 auto;background:var(--card);border:1.5px solid var(--line);border-radius:4px 14px 14px 4px;
+  padding:36px 40px 40px 54px;position:relative;box-shadow:4px 4px 0 var(--line)}
+.page::before{content:"";position:absolute;left:30px;top:0;bottom:0;width:2px;background:var(--red);opacity:.35}
+@media (max-width:900px){
+  #menuBtn{display:inline-block}
+  aside{position:fixed;left:0;top:0;bottom:0;height:100%;z-index:40;background:var(--paper);transform:translateX(-105%);transition:transform .25s;border-right:2px solid var(--ink);padding-top:calc(env(safe-area-inset-top,0px) + 18px)}
+  aside.open{transform:none}
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:35;display:none}
+  .scrim.show{display:block}
+  main{padding:14px 10px 60px}
+  .page{padding:24px 18px 28px 30px}
+  .page::before{left:14px}
+  .top .prog small{display:none}
+}
+/* typography */
+h1,h2,h3{font-family:var(--hand);line-height:1.35}
+.lhead h1{font-size:34px;margin:6px 0 4px;display:inline;background:linear-gradient(transparent 62%,var(--hl2) 62%)}
+.lhead .tag{display:inline-block;font-size:13px;color:#fff;background:var(--ac);padding:2px 10px;border-radius:20px}
+.lhead .sub{font-size:19px;color:var(--mut);margin:10px 0 0}
+.lhead .min{font-size:13px;color:var(--mut)}
+.body h2{font-size:25px;margin:34px 0 8px;padding-bottom:2px;border-bottom:2px solid var(--ac);display:inline-block}
+.body h3{font-size:20px;margin:22px 0 4px}
+.body p{margin:10px 0}
+.body ul,.body ol{padding-left:1.4em}
+.body li{margin:4px 0}
+mark{background:linear-gradient(transparent 55%,var(--hl) 55%);color:inherit;padding:0 2px}
+.en{font-size:.85em;color:var(--mut)}
+/* boxes */
+.box{border-radius:10px;padding:14px 18px;margin:18px 0;border:1.5px solid var(--line);position:relative}
+.box>b.h{display:block;font-family:var(--hand);font-size:18px;margin-bottom:4px}
+.story{background:rgba(46,158,98,.07);border-color:rgba(46,158,98,.4)}
+.origin{background:rgba(207,63,43,.06);border:1.5px dashed var(--red)}
+.origin>b.h{color:var(--red)}
+.key{background:var(--hl2);border:2px solid var(--ink)}
+.fun{background:rgba(43,114,207,.07);border-color:rgba(43,114,207,.35)}
+.formula{font-family:var(--hand);font-size:21px;text-align:center;padding:10px;margin:14px 0;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink)}
+table.t{border-collapse:collapse;width:100%;font-size:15px;margin:12px 0;display:block;overflow-x:auto}
+table.t th,table.t td{border:1.5px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+table.t th{background:var(--grid)}
+/* widgets */
+.w{border:2px solid var(--ink);border-radius:12px;padding:16px;margin:22px 0;background:var(--paper)}
+.wt{font-family:var(--hand);font-size:20px;font-weight:700}
+.wd{color:var(--mut);font-size:15px;margin:4px 0 10px}
+.ctl{display:block;margin:8px 0;font-size:15px}
+.ctl span{display:flex;justify-content:space-between}
+.ctl b{color:var(--pen)}
+input[type=range]{width:100%;accent-color:var(--pen);height:28px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.btns button,.wbtn{border:1.5px solid var(--ink);background:var(--card);border-radius:20px;padding:5px 14px;cursor:pointer;font-size:14px}
+.btns button:hover,.wbtn:hover{background:var(--hl2)}
+.btns button.on{background:var(--ink);color:var(--paper)}
+svg.plot{width:100%;max-width:520px;display:block;margin:6px auto;overflow:visible}
+.plot text{font-size:12px;fill:var(--mut);font-family:var(--sans)}
+.plot .lbl{font-size:13px;fill:var(--ink);font-weight:700}
+.ax{stroke:var(--ink);stroke-width:1.6;fill:none}
+.gd{stroke:var(--grid);stroke-width:1}
+.cd{stroke:var(--pen);stroke-width:3;fill:none}
+.cs{stroke:var(--red);stroke-width:3;fill:none}
+.cg{stroke:var(--mut);stroke-width:1.5;fill:none;stroke-dasharray:5 4}
+.cp{stroke:var(--u4);stroke-width:3;fill:none}
+.cy{stroke:var(--u2);stroke-width:3;fill:none}
+.dash{stroke:var(--mut);stroke-width:1.2;stroke-dasharray:4 4}
+.dot{fill:var(--ink);stroke:var(--card);stroke-width:2}
+.aCS{fill:rgba(36,88,198,.22)}.aPS{fill:rgba(207,63,43,.22)}.aTX{fill:rgba(46,158,98,.28)}.aDW{fill:rgba(40,40,40,.35)}
+.read{font-size:15px;background:var(--card);border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;margin-top:8px}
+.read .up{color:var(--good);font-weight:700}.read .dn{color:var(--bad);font-weight:700}
+.hbar{height:22px;border-radius:4px;transition:width .5s;display:flex;align-items:center;padding:0 6px;font-size:12px;color:#fff;white-space:nowrap;min-width:2px}
+.vbars{display:flex;align-items:flex-end;gap:4px;height:160px;border-bottom:1.6px solid var(--ink);padding:0 2px}
+.vbars div{flex:1;background:var(--pen);border-radius:3px 3px 0 0;transition:height .6s;position:relative}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:560px){.grid2{grid-template-columns:1fr}}
+.ninp{width:70px;padding:3px 6px;border:1.5px solid var(--ink);border-radius:6px;background:var(--card)}
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:10px 0}
+.chain .nd{border:2px solid var(--ink);border-radius:10px;padding:8px 10px;font-size:14px;background:var(--card);transition:background .3s,transform .3s}
+.chain .nd.lit{background:var(--hl);transform:translateY(-3px)}
+.chain .ar{font-size:20px;color:var(--mut)}
+.people{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:340px;margin:10px auto}
+.people span{aspect-ratio:1;border-radius:50% 50% 30% 30%;background:var(--line);transition:background .4s,opacity .4s}
+.matrix{border-collapse:collapse;margin:10px auto;font-size:14px}
+.matrix td,.matrix th{border:1.5px solid var(--ink);padding:8px 10px;text-align:center}
+.matrix td.hit{background:var(--hl)}
+.timeline{border-left:3px solid var(--ac);margin:16px 0 16px 8px;padding-left:18px}
+.timeline div{position:relative;margin:0 0 16px}
+.timeline div::before{content:"";position:absolute;left:-26px;top:8px;width:13px;height:13px;border-radius:50%;background:var(--card);border:3px solid var(--ac)}
+.timeline b{font-family:var(--hand);font-size:18px}
+/* terms & quiz */
+.terms,.quiz{margin-top:40px}
+.terms h2,.quiz h2{font-size:24px;margin:0 0 12px}
+.term{border-left:5px solid var(--ac);padding:8px 14px;margin:12px 0;background:var(--paper);border-radius:0 8px 8px 0}
+.term .tt{font-family:var(--hand);font-size:21px;font-weight:700}
+.term .tt span{font-family:var(--sans);font-size:13px;color:var(--mut);font-weight:400;margin-left:8px}
+.term p{margin:4px 0;font-size:15.5px}
+.term .og{color:var(--mut)}
+.qq{border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;margin:12px 0;background:var(--card)}
+.qq>p{margin:0 0 8px;font-weight:500}
+.opts{display:grid;gap:6px}
+.opts button{text-align:left;border:1.5px solid var(--line);background:var(--paper);border-radius:8px;padding:8px 12px;cursor:pointer;line-height:1.5}
+.opts button:hover:not(:disabled){border-color:var(--ink)}
+.opts button.ok{border-color:var(--good);background:rgba(35,148,90,.14);font-weight:700}
+.opts button.no{border-color:var(--bad);background:rgba(207,63,43,.12);text-decoration:line-through}
+.opts button:disabled{cursor:default}
+.why{font-size:15px;margin:8px 0 0;padding:8px 10px;border-radius:8px;background:var(--hl2)}
+.qdone{font-family:var(--hand);font-size:20px;text-align:center;margin:16px 0;padding:12px;border:2px dashed var(--good);border-radius:10px}
+.pn{display:flex;justify-content:space-between;gap:10px;margin-top:36px;flex-wrap:wrap}
+.pn a{border:2px solid var(--ink);border-radius:10px;padding:8px 16px;text-decoration:none;color:var(--ink);background:var(--paper);font-weight:700}
+.pn a:hover{background:var(--hl2)}
+/* home */
+.hero{text-align:left}
+.hero h1{font-size:40px;margin:0 0 6px}
+.hero p.lead{font-size:19px;color:var(--mut);margin:0 0 10px}
+.hero svg{width:100%;max-width:420px;display:block;margin:10px 0 0}
+.draw{stroke-dasharray:600;stroke-dashoffset:600;animation:draw 1.6s ease forwards}
+.draw.d2{animation-delay:.5s}
+.pop{opacity:0;animation:pop .4s 1.9s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes pop{to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.draw{animation:none;stroke-dashoffset:0}.pop{animation:none;opacity:1}*{transition:none!important}}
+.units{display:grid;gap:14px;margin-top:24px}
+.ucard{border:2px solid var(--ink);border-radius:12px;padding:14px 16px;border-left:10px solid var(--c)}
+.ucard h3{margin:0;font-size:22px}
+.ucard p{margin:4px 0 8px;color:var(--mut);font-size:15px}
+.ucard ol{margin:0;padding-left:1.4em;columns:2;column-gap:24px;font-size:15px}
+@media (max-width:560px){.ucard ol{columns:1}}
+.ucard li a{color:var(--ink)}
+.ucard li.dn a{color:var(--good)}
+.cta{display:inline-block;margin-top:14px;background:var(--ink);color:var(--paper);padding:10px 22px;border-radius:10px;text-decoration:none;font-weight:700}
+.search{width:100%;padding:10px 14px;border:2px solid var(--ink);border-radius:10px;background:var(--paper);margin:8px 0 14px}
+</style>
+</head>
+<body>
+<header class="top">
+  <button class="ib" id="menuBtn" aria-label="開啟目錄">☰ 目錄</button>
+  <a class="brand" href="#home">📒 經濟學筆記本</a>
+  <div class="prog"><div class="bar"><i id="pbar"></i></div><small id="ptxt"></small></div>
+  <button class="ib" id="themeBtn" aria-label="切換深淺色">🌓</button>
+</header>
+<div class="scrim" id="scrim"></div>
+<div class="wrap">
+  <aside id="side"></aside>
+  <main><div class="page" id="main"></div></main>
+</div>
+<script>
+const UNITS=[
+ {n:1,name:'入門：經濟學的思考方式',c:'var(--u1)',d:'什麼是稀少、選擇和交換？先學會用經濟學家的眼睛看世界。'},
+ {n:2,name:'個體經濟：市場怎麼運作',c:'var(--u2)',d:'從一杯珍奶的價格出發，看懂需求、供給、廠商和市場。'},
+ {n:3,name:'總體經濟：國家經濟的大局',c:'var(--u3)',d:'GDP、通膨、失業、銀行、央行、匯率：新聞裡的經濟詞一次搞懂。'},
+ {n:4,name:'專業：經濟學家的工具箱',c:'var(--u4)',d:'進入專業模型、人類的非理性，以及經濟思想的三百年歷史。'}
+];
+const LS=[]; const W={};
+</script>
+<script>
+(function(){
+const $=(s,r=document)=>r.querySelector(s);
+const f1=x=>Math.round(x*10)/10, f0=x=>Math.round(x);
+const nf=x=>Math.round(x).toLocaleString('zh-TW');
+function sl(id,lab,min,max,step,val){return `<label class="ctl"><span>${lab}<b id="${id}v"></b></span><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}"></label>`}
+function Plot(o){
+  const W=o.W||360,H=o.H||270,L=46,R=16,T=14,B=40;
+  const sx=q=>L+q/o.xmax*(W-L-R), sy=p=>H-B-p/o.ymax*(H-B-T);
+  const P={W,H,sx,sy,
+    frame(xt,yt){let s='';
+      (xt||[]).forEach(v=>{s+=`<line class="gd" x1="${sx(v)}" y1="${T}" x2="${sx(v)}" y2="${H-B}"/><text x="${sx(v)}" y="${H-B+15}" text-anchor="middle">${v}</text>`});
+      (yt||[]).forEach(v=>{s+=`<line class="gd" x1="${L}" y1="${sy(v)}" x2="${W-R}" y2="${sy(v)}"/><text x="${L-6}" y="${sy(v)+4}" text-anchor="end">${v}</text>`});
+      s+=`<line class="ax" x1="${L}" y1="${T}" x2="${L}" y2="${H-B}"/><line class="ax" x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}"/>`;
+      s+=`<text x="${W-R}" y="${H-6}" text-anchor="end">${o.xl}</text><text x="${L+4}" y="${T-2}">${o.yl}</text>`;return s},
+    path(pts,c){pts=pts.filter(p=>p[0]>=-1e-9&&p[0]<=o.xmax+1e-9&&p[1]>=-1e-9&&p[1]<=o.ymax+1e-9);if(pts.length<2)return'';
+      return `<path class="${c}" d="${pts.map((p,i)=>(i?'L':'M')+f1(sx(p[0]))+' '+f1(sy(p[1]))).join(' ')}"/>`},
+    fnQ(f,c,n){const a=[];n=n||80;for(let i=0;i<=n;i++){const q=o.xmax*i/n;a.push([q,f(q)])}return P.path(a,c)},
+    fnP(f,c,n){const a=[];n=n||80;for(let i=0;i<=n;i++){const p=o.ymax*i/n;a.push([f(p),p])}return P.path(a,c)},
+    poly(pts,c){return `<polygon class="${c}" points="${pts.map(p=>f1(sx(p[0]))+','+f1(sy(p[1]))).join(' ')}"/>`},
+    dot(q,p,r){return `<circle class="dot" cx="${sx(q)}" cy="${sy(p)}" r="${r||6}"/>`},
+    guide(q,p){return `<line class="dash" x1="${L}" y1="${sy(p)}" x2="${sx(q)}" y2="${sy(p)}"/><line class="dash" x1="${sx(q)}" y1="${sy(p)}" x2="${sx(q)}" y2="${H-B}"/>`},
+    lbl(q,p,t,col,anc){return `<text class="lbl" x="${sx(q)}" y="${sy(p)}" text-anchor="${anc||'start'}" style="${col?'fill:'+col:''}">${t}</text>`},
+    svg(inner){return `<svg class="plot" viewBox="0 0 ${W} ${H}">${inner}</svg>`}};
+  return P;
+}
+const arrow=(v,b,u)=>v>b+1e-6?`<span class="up">↑ ${u||'上升'}</span>`:v<b-1e-6?`<span class="dn">↓ ${u?u:'下降'}</span>`:'不變';
+
+/* ---- 生產可能曲線 ---- */
+W.ppf=el=>{
+  el.innerHTML=`<div class="wt">🎮 互動：小島上的生產選擇</div><p class="wd">小島上有 10 個人，每天只能去「捕魚」或「採椰子」。拖動滑桿，決定派幾個人去捕魚。</p>
+  ${sl('ppfS','去捕魚的人數',0,10,1,5)}<div class="btns"><button id="ppfT">🔧 發明新漁網（科技進步）</button><button id="ppfI">😴 一半的人在睡午覺（資源閒置）</button></div><div id="ppfG"></div><div class="read" id="ppfR"></div>`;
+  let tech=1,idle=false;
+  const fish=n=>30*tech*Math.sqrt(n/10), coco=n=>40*Math.sqrt((10-n)/10);
+  const P=Plot({xmax:50,ymax:45,xl:'魚（條）',yl:'椰子（顆）'});
+  const draw=()=>{const n=+$('#ppfS').value;$('#ppfSv').textContent=n+' 人';
+    let s=P.frame([0,10,20,30,40,50],[0,10,20,30,40]);
+    const c=[];for(let i=0;i<=60;i++){const a=i/60;c.push([30*Math.sqrt(a),40*Math.sqrt(1-a)])}
+    s+=P.path(c,tech>1?'cg':'cd');
+    if(tech>1){const c2=[];for(let i=0;i<=60;i++){const a=i/60;c2.push([30*tech*Math.sqrt(a),40*Math.sqrt(1-a)])}s+=P.path(c2,'cd')}
+    let x=fish(n),y=coco(n);if(idle){x*=.55;y*=.55}
+    s+=P.guide(x,y)+P.dot(x,y,7)+P.lbl(x+1,y+2,`(${f1(x)}, ${f1(y)})`);
+    $('#ppfG').innerHTML=P.svg(s);
+    let t=`現在：<b>${f1(x)} 條魚、${f1(y)} 顆椰子</b>。`;
+    if(idle)t+=`<br>😴 點落在曲線<b>裡面</b>：有人在閒著，明明可以生產更多卻沒有。這就是「浪費」或「失業」。`;
+    else if(n<10){const dx=fish(n+1)-fish(n),dy=coco(n)-coco(n+1);t+=`<br>如果再多派 1 人去捕魚：多 <b>${f1(dx)}</b> 條魚，但少 <b>${f1(dy)}</b> 顆椰子。<br>👉 多 1 條魚的機會成本 ≈ <b>${f1(dy/dx)}</b> 顆椰子。往右拉，你會發現這個數字越來越大！`}
+    else t+=`<br>全島都在捕魚，一顆椰子都沒有了。`;
+    if(tech>1)t+=`<br>🔧 新漁網讓曲線往外擴張：同樣的人力能生產更多。`;
+    $('#ppfR').innerHTML=t};
+  $('#ppfS').oninput=draw;
+  $('#ppfT').onclick=e=>{tech=tech>1?1:1.5;e.target.classList.toggle('on',tech>1);draw()};
+  $('#ppfI').onclick=e=>{idle=!idle;e.target.classList.toggle('on',idle);draw()};
+  draw();
+};
+
+/* ---- 比較利益 ---- */
+W.ca=el=>{
+  el.innerHTML=`<div class="wt">🎮 互動：小明和阿嬤的早餐店</div><p class="wd">每人每天工作 8 小時。填入「每小時能做多少」，看看分工能不能讓大家更有得吃。數字可以自己改。</p>
+  <table class="t"><tr><th></th><th>🍙 飯糰/小時</th><th>🧋 奶茶/小時</th></tr>
+  <tr><td>小明</td><td><input class="ninp" id="caA1" type="number" min="1" value="6"></td><td><input class="ninp" id="caA2" type="number" min="1" value="4"></td></tr>
+  <tr><td>阿嬤</td><td><input class="ninp" id="caB1" type="number" min="1" value="1"></td><td><input class="ninp" id="caB2" type="number" min="1" value="2"></td></tr></table>
+  <div id="caR" class="read"></div>`;
+  const run=()=>{const a1=+$('#caA1').value||1,a2=+$('#caA2').value||1,b1=+$('#caB1').value||1,b2=+$('#caB2').value||1;
+    const oA=a2/a1,oB=b2/b1;
+    const g1=4*a1+4*b1,g2=4*a2+4*b2;
+    let t=`<b>機會成本</b>（做 1 個飯糰要放棄幾杯奶茶）：小明 ${f1(oA)} 杯、阿嬤 ${f1(oB)} 杯。<br>`;
+    if(Math.abs(oA-oB)<1e-9){$('#caR').innerHTML=t+'兩人的機會成本一樣，分工也不會多生產，這時候比較利益不存在。';return}
+    const aF=oA<oB; // A 做飯糰較便宜
+    const S2=aF?[b1,b2]:[a1,a2], F=aF?[a1,a2]:[b1,b2];
+    let s1,s2,f1_,f2_;
+    if(8*S2[1]>=g2){const h=g2/S2[1];s2=g2;s1=(8-h)*S2[0];f1_=8*F[0];f2_=0}
+    else{s2=8*S2[1];s1=0;const h=(g2-s2)/F[1];f2_=g2-s2;f1_=(8-h)*F[0]}
+    const n1=s1+f1_,n2=s2+f2_;
+    t+=`👉 <b>${aF?'小明':'阿嬤'}</b>做飯糰的機會成本比較低，所以他有飯糰的<mark>比較利益</mark>；<b>${aF?'阿嬤':'小明'}</b>有奶茶的比較利益。${(a1>b1&&a2>b2)||(b1>a1&&b2>a2)?`（注意：${a1>b1?'小明':'阿嬤'}兩樣都做得比較快，但分工還是有好處！）`:''}
+    <div class="grid2" style="margin-top:8px"><div><b>各做各的（各花 4 小時做兩樣）</b><br>🍙 ${f1(g1)}　🧋 ${f1(g2)}</div><div><b>按比較利益分工</b><br>🍙 ${f1(n1)}　🧋 ${f1(n2)}</div></div>
+    <p style="margin:6px 0 0">奶茶數量一樣，飯糰卻多了 <b class="up">${f1(n1-g1)}</b> 個！多出來的就是分工與交換的好處。</p>`;
+    $('#caR').innerHTML=t};
+  el.querySelectorAll('input').forEach(i=>i.oninput=run);run();
+};
+
+/* ---- 以物易物 vs 貨幣 ---- */
+W.barter=el=>{
+  el.innerHTML=`<div class="wt">🎮 互動：沒有錢的市集</div><p class="wd">漁夫想要鞋子、鞋匠想要麵包、麵包師想要魚。在沒有錢的世界，他們要怎麼交易？</p>
+  <div class="btns"><button id="bA" class="on">以物易物</button><button id="bB">發明貨幣 🪙</button></div><div id="bG"></div><div class="read" id="bR"></div>`;
+  const st=m=>{
+    const pos=[[180,40,'🐟','漁夫'],[300,200,'👟','鞋匠'],[60,200,'🍞','麵包師']];
+    let s=`<svg class="plot" viewBox="0 0 360 250">`;
+    if(!m){s+=`<defs><marker id="ah" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10z" fill="var(--red)"/></marker></defs>
+      <path d="M205 60 Q300 90 290 170" class="cs" marker-end="url(#ah)" stroke-dasharray="6 5"/><path d="M270 212 Q180 250 95 212" class="cs" marker-end="url(#ah)" stroke-dasharray="6 5"/><path d="M68 170 Q70 90 150 55" class="cs" marker-end="url(#ah)" stroke-dasharray="6 5"/>
+      <text x="265" y="100" class="lbl">想要鞋</text><text x="160" y="248" class="lbl">想要麵包</text><text x="20" y="110" class="lbl">想要魚</text>`}
+    else{s+=`<circle cx="180" cy="145" r="30" fill="var(--hl)" stroke="var(--ink)" stroke-width="2"/><text x="180" y="155" text-anchor="middle" style="font-size:28px">🪙</text>`;
+      pos.forEach(p=>{s+=`<line x1="${p[0]}" y1="${p[1]+10}" x2="180" y2="145" class="cd"/>`})}
+    pos.forEach(p=>{s+=`<circle cx="${p[0]}" cy="${p[1]}" r="28" fill="var(--card)" stroke="var(--ink)" stroke-width="2"/><text x="${p[0]}" y="${p[1]+10}" text-anchor="middle" style="font-size:26px">${p[2]}</text><text x="${p[0]}" y="${p[1]+46}" text-anchor="middle" class="lbl">${p[3]}</text>`});
+    $('#bG').innerHTML=s+'</svg>';
+    $('#bR').innerHTML=m?'🪙 有了大家都接受的錢：漁夫把魚賣給麵包師換錢，再拿錢跟鞋匠買鞋。<b>任何兩個人都能直接交易</b>，不必湊齊三個人。':'🔄 漁夫拿魚找鞋匠，鞋匠說：「我不要魚，我要麵包。」三個人必須同時湊在一起才能交換。這就是「慾望的雙重巧合」問題：你要的剛好是對方有的，對方要的也剛好是你有的，機率很低。';
+    $('#bA').classList.toggle('on',!m);$('#bB').classList.toggle('on',!!m)};
+  $('#bA').onclick=()=>st(0);$('#bB').onclick=()=>st(1);st(0);
+};
+
+/* ---- 單一曲線（需求/供給） ---- */
+function curveW(el,c){
+  el.innerHTML=`<div class="wt">${c.title}</div><p class="wd">${c.desc}</p>${sl(c.id+'P','價格',c.pmin,c.pmax,c.pstep,c.p0)}
+  <div class="btns">${c.shifts.map((s,i)=>`<button data-i="${i}">${s[0]}</button>`).join('')}<button data-i="-1">↺ 重設</button></div><div id="${c.id}G"></div><div class="read" id="${c.id}R"></div>`;
+  let sh=0,msg='';const P=Plot({xmax:c.xmax,ymax:c.ymax,xl:c.xl,yl:'價格（元）'});
+  const draw=()=>{const p=+$('#'+c.id+'P').value;$('#'+c.id+'Pv').textContent=p+' 元';
+    let s=P.frame(c.xt,c.yt);
+    if(sh)s+=P.fnP(pp=>c.Q(pp,0),'cg');
+    s+=P.fnP(pp=>c.Q(pp,sh),c.cls);
+    const q=c.Q(p,sh);s+=P.guide(q,p)+P.dot(q,p,7);
+    const lp=c.cls==='cd'?c.ymax*.12:c.ymax*.9;s+=P.lbl(c.Q(lp,sh)+.2,lp,c.name,c.cls==='cd'?'var(--pen)':'var(--red)');
+    $('#'+c.id+'G').innerHTML=P.svg(s);
+    $('#'+c.id+'R').innerHTML=`價格 <b>${p}</b> 元時，${c.verb} <b>${f1(q)}</b> ${c.unit}。${msg}`};
+  $('#'+c.id+'P').oninput=()=>{msg=' <br>👉 只有價格改變時，點會<b>沿著同一條線</b>滑動，這叫「'+c.name+'量的變動」。';draw()};
+  el.querySelectorAll('.btns button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;
+    el.querySelectorAll('.btns button').forEach(x=>x.classList.remove('on'));
+    if(i<0){sh=0;msg=''}else{sh=c.shifts[i][1];b.classList.add('on');msg='<br>'+c.shifts[i][2]}draw()});
+  draw();
+}
+W.demand=el=>curveW(el,{id:'dm',title:'🎮 互動：你一個月會買幾杯珍奶？',desc:'拖動價格，看看購買量怎麼變；再按下面的情境按鈕，看整條線怎麼移動。',
+  pmin:20,pmax:100,pstep:5,p0:60,xmax:14,ymax:110,xl:'每月杯數',xt:[0,2,4,6,8,10,12,14],yt:[0,20,40,60,80,100],
+  Q:(p,s)=>(120-p)/10+s,cls:'cd',name:'需求',verb:'你願意買',unit:'杯',
+  shifts:[['📚 考試週壓力大',3,'📈 價格沒變，你卻想買更多：<b>整條需求線往右移</b>，這叫「需求增加」。'],['🩺 醫生說要少喝糖',-3,'📉 每個價格下都買得更少：<b>整條需求線往左移</b>，這叫「需求減少」。'],['💰 領到壓歲錢',2,'📈 收入增加，需求線往右移（珍奶是「正常財」）。']]});
+W.supply=el=>curveW(el,{id:'sp',title:'🎮 互動：飲料店願意賣多少杯？',desc:'價格越高，老闆越願意多做（甚至加開分店）。按情境按鈕看供給線怎麼移動。',
+  pmin:20,pmax:100,pstep:5,p0:60,xmax:14,ymax:110,xl:'每天杯數（百杯）',xt:[0,2,4,6,8,10,12,14],yt:[0,20,40,60,80,100],
+  Q:(p,s)=>Math.max(0,(p-10)/10+s),cls:'cs',name:'供給',verb:'老闆願意賣',unit:'百杯',
+  shifts:[['🥛 鮮奶漲價',-3,'📉 成本變高，每個價格下願意賣的變少：<b>供給線往左移</b>，叫「供給減少」。'],['🤖 買了自動封口機',3,'📈 效率變高、成本變低：<b>供給線往右移</b>，叫「供給增加」。'],['🏪 新店家加入',2,'📈 賣家變多，整個市場的供給線往右移。']]});
+
+/* ---- 市場均衡（也用在 AD-AS） ---- */
+function marketW(el,c){
+  el.innerHTML=`<div class="wt">${c.title}</div><p class="wd">${c.desc}</p><div class="btns">${c.sc.map((s,i)=>`<button data-i="${i}">${s[0]}</button>`).join('')}<button data-i="-1">↺ 重設</button></div>
+  ${sl(c.id+'D',c.dn+'移動',-3,3,.5,0)}${sl(c.id+'S',c.sn+'移動',-3,3,.5,0)}<div id="${c.id}G"></div><div class="read" id="${c.id}R"></div>`;
+  const P=Plot({xmax:12,ymax:120,xl:c.xl,yl:c.yl});let note='';
+  const draw=()=>{const ds=+$('#'+c.id+'D').value,ss=+$('#'+c.id+'S').value;
+    $('#'+c.id+'Dv').textContent=(ds>0?'+':'')+ds;$('#'+c.id+'Sv').textContent=(ss>0?'+':'')+ss;
+    const pe=10*(10+ds-ss)/2,qe=pe/10+ss;
+    let s=P.frame([0,2,4,6,8,10,12],[0,20,40,60,80,100,120]);
+    if(ds||ss){s+=P.fnP(p=>10-p/10,'cg')+P.fnP(p=>p/10,'cg')}
+    s+=P.fnP(p=>10+ds-p/10,'cd')+P.fnP(p=>p/10+ss,'cs');
+    s+=P.lbl(10+ds-1.1+.3,11,c.dn,'var(--pen)')+P.lbl(Math.min(11.2,10.6+ss),112,c.sn,'var(--red)','end');
+    s+=P.guide(qe,pe)+P.dot(qe,pe,8);
+    $('#'+c.id+'G').innerHTML=P.svg(s);
+    let t=`新的均衡：${c.pn} <b>${f0(pe)}</b>（${arrow(pe,50)}），${c.qn} <b>${f1(qe)}</b>（${arrow(qe,5,qe>5?'增加':'減少')}）`;
+    if(c.stag&&pe>50.1&&qe<4.99)t+='<br>⚠️ 物價上漲、產出卻下降：這就是可怕的<b>停滯性通膨</b>！';
+    $('#'+c.id+'R').innerHTML=t+(note?'<br>'+note:'')};
+  el.querySelectorAll('.btns button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;
+    el.querySelectorAll('.btns button').forEach(x=>x.classList.remove('on'));
+    if(i<0){$('#'+c.id+'D').value=0;$('#'+c.id+'S').value=0;note=''}else{b.classList.add('on');$('#'+c.id+'D').value=c.sc[i][1];$('#'+c.id+'S').value=c.sc[i][2];note=c.sc[i][3]}draw()});
+  $('#'+c.id+'D').oninput=$('#'+c.id+'S').oninput=()=>{note='';draw()};
+  draw();
+}
+W.market=el=>marketW(el,{id:'mk',title:'🎮 互動：芒果市場預言機',desc:'點選新聞事件，或自己拖動兩條線，看看芒果價格和數量會怎麼變。灰色虛線是原本的位置。',
+  dn:'需求',sn:'供給',xl:'數量（千箱）',yl:'價格（元/箱）',pn:'價格',qn:'成交量',
+  sc:[['☀️ 夏天到了人人想吃',2,0,'需求增加 → 價格上漲、數量增加。'],['🌀 颱風打落芒果',0,-2,'供給減少 → 價格上漲、數量減少。'],['🚜 大豐收',0,2,'供給增加 → 價格下跌、數量增加。'],['📰 新聞說吃芒果會胖',-2,0,'需求減少 → 價格下跌、數量減少。'],['🌀☀️ 夏天加颱風',2,-2,'需求增加又供給減少 → 價格大漲！數量可能不變。']]});
+W.adas=el=>marketW(el,{id:'ad',stag:1,title:'🎮 互動：AD-AS 國家經濟模擬器',desc:'把整個國家看成一個大市場：AD 是全國總需求，AS 是全國總供給。點事件看看物價和經濟產出如何變化。',
+  dn:'AD',sn:'AS',xl:'實質 GDP',yl:'物價水準',pn:'物價水準',qn:'實質 GDP',
+  sc:[['💸 政府發消費券',2,0,'總需求增加：經濟變熱、物價也上漲。'],['🛢️ 石油危機',0,-2,'總供給減少：生產成本暴增。'],['😨 消費者信心崩潰',-2,0,'大家不敢花錢：經濟衰退、物價下滑。'],['🤖 AI 讓生產力大增',0,2,'總供給增加：產出變多、物價反而下降，最理想的成長。']]});
+
+/* ---- 彈性 ---- */
+W.elastic=el=>{
+  el.innerHTML=`<div class="wt">🎮 互動：漲價到底賺更多還是更少？</div><p class="wd">兩家店同時漲價。鹽巴是生活必需品，某一家手搖飲卻有一堆替代品。</p>${sl('elP','漲價幅度',0,45,5,20)}<div id="elR"></div>`;
+  const items=[['🧂 鹽巴',0.1,'var(--u1)'],['🧋 某家手搖飲',2,'var(--u2)']];
+  const draw=()=>{const p=+$('#elP').value/100;$('#elPv').textContent='+'+f0(p*100)+'%';
+    let h='';items.forEach(it=>{const dq=-it[1]*p,rev=(1+p)*(1+dq);
+      h+=`<div class="read"><b>${it[0]}</b>（彈性 ≈ ${it[1]}）<br>銷量變化：<span class="dn">${f1(dq*100)}%</span>；營收變化：${rev>=1?'<span class="up">+':'<span class="dn">'}${f1((rev-1)*100)}%</span>
+      <div style="display:flex;gap:6px;align-items:center;margin-top:4px"><span style="width:42px;font-size:12px">原本</span><div class="hbar" style="width:50%;background:var(--mut)">100</div></div>
+      <div style="display:flex;gap:6px;align-items:center;margin-top:3px"><span style="width:42px;font-size:12px">漲價後</span><div class="hbar" style="width:${Math.max(1,rev*50)}%;background:${it[2]}">${f0(rev*100)}</div></div></div>`});
+    $('#elR').innerHTML=h+`<p style="font-size:15px">👉 需求<b>缺乏彈性</b>（鹽巴）：漲價後大家還是得買，營收增加。需求<b>富有彈性</b>（手搖飲）：客人跑去隔壁，營收反而下降。</p>`};
+  $('#elP').oninput=draw;draw();
+};
+
+/* ---- 邊際效用 ---- */
+W.mu=el=>{
+  const MU=[10,7,4,2,0,-2,-5];
+  el.innerHTML=`<div class="wt">🎮 互動：大熱天喝珍奶</div><p class="wd">剛打完球好渴，一杯一杯喝下去。每一杯帶來的「滿足分數」會一樣嗎？</p>
+  <div class="btns"><button id="muA">🧋 再喝一杯</button><button id="muR">↺ 重來</button></div><div id="muG"></div><div class="read" id="muT">還沒開始喝。</div>`;
+  let n=0;const msg=['第 1 杯：天啊太好喝了！','第 2 杯：還是很好喝。','第 3 杯：嗯，還可以。','第 4 杯：有點撐了……','第 5 杯：喝不喝都沒差。','第 6 杯：開始想吐。','第 7 杯：我到底為什麼要這樣做。'];
+  const draw=()=>{let s=`<svg class="plot" viewBox="0 0 360 230"><line class="ax" x1="40" y1="10" x2="40" y2="220"/><line class="ax" x1="40" y1="130" x2="350" y2="130"/><text x="44" y="20">滿足分數</text><text x="345" y="148" text-anchor="end">第幾杯</text>`;
+    s+=`<line x1="40" y1="${130-3*10}" x2="350" y2="${130-3*10}" style="stroke:var(--red);stroke-width:2;stroke-dasharray:6 4"/><text x="348" y="${124-30}" text-anchor="end" style="fill:var(--red)">一杯的價格感受 = 3 分</text>`;
+    let tu=0,pts=[];
+    for(let i=0;i<7;i++){const x=52+i*42;if(i<n){const v=MU[i];tu+=v;const y=v>=0?130-v*10:130;s+=`<rect x="${x}" y="${y}" width="30" height="${Math.abs(v)*10||2}" rx="3" style="fill:${v>0?'var(--pen)':v<0?'var(--red)':'var(--mut)'}"/><text x="${x+15}" y="${v>=0?y-4:y+Math.abs(v)*10+13}" text-anchor="middle">${v}</text>`}
+      s+=`<text x="${x+15}" y="${145}" text-anchor="middle">${i+1}</text>`}
+    s+='</svg>';$('#muG').innerHTML=s;
+    tu=MU.slice(0,n).reduce((a,b)=>a+b,0);
+    $('#muT').innerHTML=n?`${msg[n-1]}<br>這一杯的<b>邊際效用</b>：${MU[n-1]} 分｜累積<b>總效用</b>：${tu} 分${n>=3?'<br>👉 如果一杯的價格讓你覺得「值 3 分」，理性的你只會買到第 3 杯：之後每杯帶來的滿足都比付出的少。':''}`:'還沒開始喝。';
+    $('#muA').disabled=n>=7};
+  $('#muA').onclick=()=>{if(n<7)n++;draw()};$('#muR').onclick=()=>{n=0;draw()};draw();
+};
+
+/* ---- 剩餘、稅、價格上限 ---- */
+W.surplus=el=>{
+  el.innerHTML=`<div class="wt">🎮 互動：誰得到好處？誰受傷？</div><p class="wd">藍色 = 消費者剩餘，紅色 = 生產者剩餘，綠色 = 政府稅收，灰色 = 無謂損失（憑空消失的好處）。</p>
+  <div class="btns"><button id="suT" class="on">課稅</button><button id="suC">價格上限</button></div><div id="suS"></div><div id="suG"></div><div class="read" id="suR"></div>`;
+  let mode='t';const P=Plot({xmax:10,ymax:100,xl:'數量',yl:'價格（元）'});
+  const setM=m=>{mode=m;$('#suT').classList.toggle('on',m==='t');$('#suC').classList.toggle('on',m==='c');
+    $('#suS').innerHTML=m==='t'?sl('suX','每單位課稅',0,60,5,0):sl('suX','政府規定最高價格',10,60,5,60);$('#suX').oninput=draw;draw()};
+  const draw=()=>{const x=+$('#suX').value;$('#suXv').textContent=x+' 元';
+    let s=P.frame([0,2,4,6,8,10],[0,20,40,60,80,100]),cs,ps,tx=0,dw,t;
+    if(mode==='t'){const q=(100-x)/20,pb=100-10*q,psl=10*q;
+      s+=P.poly([[0,100],[0,pb],[q,pb]],'aCS')+P.poly([[0,0],[0,psl],[q,psl]],'aPS');
+      if(x){s+=P.poly([[0,psl],[0,pb],[q,pb],[q,psl]],'aTX')+P.poly([[q,pb],[q,psl],[5,50]],'aDW')}
+      cs=q*(100-pb)/2;ps=q*psl/2;tx=x*q;dw=x*(5-q)/2;
+      s+=P.fnQ(q=>100-10*q,'cd')+P.fnQ(q=>10*q,'cs')+P.dot(q,pb,5)+P.dot(q,psl,5);
+      t=x?`買家付 <b>${f0(pb)}</b> 元，賣家只拿到 <b>${f0(psl)}</b> 元，中間 ${x} 元給政府。成交量從 5 降到 <b>${f1(q)}</b>。`:'沒有課稅：市場在價格 50、數量 5 達到均衡，總剩餘最大。'}
+    else{const c=Math.min(x,50),qs=c/10,qd=(100-c)/10,pd=100-10*qs;
+      s+=P.poly([[0,c],[0,100],[qs,pd],[qs,c]],'aCS')+P.poly([[0,0],[0,c],[qs,c]],'aPS');
+      if(c<50)s+=P.poly([[qs,pd],[qs,c],[5,50]],'aDW');
+      s+=P.fnQ(q=>100-10*q,'cd')+P.fnQ(q=>10*q,'cs');
+      s+=`<line x1="${P.sx(0)}" y1="${P.sy(x)}" x2="${P.sx(10)}" y2="${P.sy(x)}" style="stroke:var(--u4);stroke-width:2.5"/>`+P.lbl(9.8,x+3,'價格上限','var(--u4)','end');
+      if(c<50)s+=`<line x1="${P.sx(qs)}" y1="${P.sy(c)-6}" x2="${P.sx(qd)}" y2="${P.sy(c)-6}" style="stroke:var(--bad);stroke-width:4"/>`+P.lbl((qs+qd)/2,c-9,'短缺','var(--bad)','middle');
+      cs=(100-pd)*qs/2+(pd-c)*qs;ps=c*qs/2;dw=(pd-c)*(5-qs)/2;
+      t=c<50?`價格被壓在 ${c} 元：想買的人有 <b>${f1(qd)}</b>，願意賣的只有 <b>${f1(qs)}</b>，<b style="color:var(--bad)">短缺 ${f1(qd-qs)}</b>！排隊、黑市、品質變差就會出現。`:'上限高於市場價格 50 元，這條規定沒有作用。'}
+    $('#suG').innerHTML=P.svg(s);
+    $('#suR').innerHTML=t+`<br>消費者剩餘 ${f0(cs)}｜生產者剩餘 ${f0(ps)}｜稅收 ${f0(tx)}｜<b>無謂損失 ${f0(dw)}</b>｜總和 ${f0(cs+ps+tx)}（最多 250）`};
+  $('#suT').onclick=()=>setM('t');$('#suC').onclick=()=>setM('c');setM('t');
+};
+
+/* ---- 成本曲線 ---- */
+W.cost=el=>{
+  el.innerHTML=`<div class="wt">🎮 互動：T 恤工廠的成本</div><p class="wd">工廠租金和機器每天固定花 100 元（固定成本）。每多做一批，要多付布料和工錢，而且越做越擠、越沒效率。</p>
+  ${sl('coQ','每天生產（批）',1,12,1,4)}${sl('coP','每批的市場售價',20,70,1,40)}<div id="coG"></div><div class="read" id="coR"></div>`;
+  const FC=100,VC=q=>10*q+2*q*q,MC=q=>10+4*q,ATC=q=>(FC+VC(q))/q,AVC=q=>10+2*q;
+  const P=Plot({xmax:12,ymax:80,xl:'產量（批）',yl:'元'});
+  const draw=()=>{const q=+$('#coQ').value,p=+$('#coP').value;$('#coQv').textContent=q+' 批';$('#coPv').textContent=p+' 元';
+    let s=P.frame([0,2,4,6,8,10,12],[0,20,40,60,80]);
+    const cur=(f,c,a)=>{const pts=[];for(let i=0;i<=80;i++){const x=a+(12-a)*i/80;pts.push([x,f(x)])}return P.path(pts,c)};
+    s+=cur(MC,'cs',0)+cur(ATC,'cd',1.7)+cur(AVC,'cg',0);
+    s+=`<line x1="${P.sx(0)}" y1="${P.sy(p)}" x2="${P.sx(12)}" y2="${P.sy(p)}" style="stroke:var(--u1);stroke-width:2.5"/>`;
+    s+=P.lbl(11.9,MC(11.9)+5,'邊際成本 MC','var(--red)','end')+P.lbl(2.4,68,'平均總成本 ATC','var(--pen)')+P.lbl(11.9,AVC(12)-6,'平均變動成本 AVC','var(--mut)','end')+P.lbl(.3,p+2,'售價','var(--u1)');
+    s+=P.dot(q,MC(q),5)+P.dot(q,ATC(q),5);
+    $('#coG').innerHTML=P.svg(s);
+    const tc=FC+VC(q),pr=p*q-tc,qb=(p-10)/4,mcd=VC(q)-VC(q-1);
+    $('#coR').innerHTML=`總成本 <b>${f0(tc)}</b>｜平均每批 <b>${f1(ATC(q))}</b>｜多做這一批的邊際成本 <b>${f0(mcd)}</b><br>收入 ${f0(p*q)} − 成本 ${f0(tc)} = 利潤 ${pr>=0?'<span class="up">':'<span class="dn">'}${f0(pr)}</span>
+    <br>👉 利潤最大的產量，大約在「售價 = 邊際成本」的地方：約 <b>${f1(qb)}</b> 批。${MC(q)<ATC(q)?'現在 MC 低於平均成本，多做會把平均拉低。':'現在 MC 高於平均成本，多做會把平均拉高。'}`};
+  $('#coQ').oninput=$('#coP').oninput=draw;draw();
+};
+
+/* ---- 囚犯困境 ---- */
+W.pd=el=>{
+  el.innerHTML=`<div class="wt">🎮 互動：兩家飲料店的價格戰</div><p class="wd">你和對面的店每天各自決定「維持原價」或「降價搶客」。表格是每天的利潤（你, 對手）。玩 8 天，看看誰賺得多。</p>
+  <table class="matrix" id="pdM"><tr><th></th><th>對手：維持原價</th><th>對手：降價</th></tr><tr><th>你：維持原價</th><td>5, 5</td><td>1, 8</td></tr><tr><th>你：降價</th><td>8, 1</td><td>2, 2</td></tr></table>
+  <div class="btns"><button id="pdC">🤝 維持原價</button><button id="pdD">⚔️ 降價搶客</button><button id="pdR">↺ 重新開始</button></div><div class="read" id="pdT">第 1 天：請出招。</div>`;
+  let day=0,me=0,op=0,last='C',log=[];const pay={CC:[5,5],CD:[1,8],DC:[8,1],DD:[2,2]};
+  const play=m=>{if(day>=8)return;const o=last;const k=m+o;me+=pay[k][0];op+=pay[k][1];day++;last=m;
+    el.querySelectorAll('#pdM td').forEach(td=>td.classList.remove('hit'));
+    const idx={CC:0,CD:1,DC:2,DD:3}[k];el.querySelectorAll('#pdM td')[idx].classList.add('hit');
+    log.push(`第${day}天：你${m==='C'?'🤝':'⚔️'} 對手${o==='C'?'🤝':'⚔️'}`);
+    let t=log.slice(-3).join('<br>')+`<br>累計利潤：你 <b>${me}</b>，對手 <b>${op}</b>`;
+    if(day>=8)t+=`<br><br>🏁 結束！對手用的策略叫「<b>以牙還牙</b>」：第一天合作，之後模仿你前一天的做法。${me>=36?'你們大多數時候都合作，雙方都賺。':'你一降價，對手就報復，最後兩敗俱傷。'}長期來看，互相合作（每天 5+5）比互相殺價（2+2）好得多。`;
+    $('#pdT').innerHTML=t};
+  $('#pdC').onclick=()=>play('C');$('#pdD').onclick=()=>play('D');
+  $('#pdR').onclick=()=>{day=0;me=0;op=0;last='C';log=[];el.querySelectorAll('#pdM td').forEach(td=>td.classList.remove('hit'));$('#pdT').innerHTML='第 1 天：請出招。'};
+};
+
+/* ---- 外部性 ---- */
+W.ext=el=>{
+  el.innerHTML=`<div class="wt">🎮 互動：染整廠的污染</div><p class="wd">工廠每生產 1 單位布，就讓河川下游的居民承受 30 元的損失，但工廠不用付錢。紫色虛線是「把污染算進去」的真實社會成本。</p>${sl('exT','政府課的污染稅（皮古稅）',0,50,5,0)}<div id="exG"></div><div class="read" id="exR"></div>`;
+  const P=Plot({xmax:10,ymax:100,xl:'產量',yl:'元'});
+  const draw=()=>{const t=+$('#exT').value;$('#exTv').textContent=t+' 元';const q=(100-t)/20;
+    let s=P.frame([0,2,4,6,8,10],[0,20,40,60,80,100]);
+    s+=P.fnQ(x=>100-10*x,'cd')+P.fnQ(x=>10*x,'cg')+`<g style="stroke-dasharray:7 4">${P.fnQ(x=>10*x+30,'cp')}</g>`;
+    if(t)s+=P.fnQ(x=>10*x+t,'cs');
+    s+=P.lbl(8.6,20,'需求','var(--pen)')+P.lbl(6.6,96,'社會成本','var(--u4)','end')+P.dot(3.5,65,5)+P.dot(q,100-10*q,7)+P.guide(q,100-10*q);
+    $('#exG').innerHTML=P.svg(s);
+    $('#exR').innerHTML=`市場產量：<b>${f1(q)}</b>｜社會最適產量：<b>3.5</b><br>`+(t<30?'😷 產量太多，污染超標：因為工廠只看自己的成本。':t===30?'✅ 稅剛好等於每單位造成的傷害：工廠自己把污染成本「內部化」了，產量回到社會最適！':'⚠️ 稅課太重，連該生產的布都做不出來了。')};
+  $('#exT').oninput=draw;draw();
+};
+
+/* ---- GDP 附加價值 ---- */
+W.gdp=el=>{
+  const st=[['🌾 農夫','種小麥，賣給麵粉廠',30,30],['🏭 麵粉廠','把小麥磨成麵粉，賣給麵包店',50,20],['🥐 麵包店','做成麵包，賣給你',100,50]];
+  el.innerHTML=`<div class="wt">🎮 互動：一個麵包的 GDP 是多少？</div><p class="wd">一步一步看麵包怎麼誕生。每一關「增加的價值」叫附加價值。</p><div class="btns"><button id="gdN">下一步 ▶</button><button id="gdR">↺ 重來</button></div><div id="gdG"></div><div class="read" id="gdT">按「下一步」開始。</div>`;
+  let k=0;const cols=['var(--u1)','var(--u2)','var(--u3)'];
+  const draw=()=>{let h='';st.slice(0,k).forEach((s,i)=>{h+=`<div style="display:flex;align-items:center;gap:8px;margin:6px 0"><span style="width:84px;font-size:14px">${s[0]}</span><div style="flex:1"><div class="hbar" style="width:${s[2]}%;background:${cols[i]}">賣 ${s[2]} 元（新增 ${s[3]} 元）</div></div></div>`});
+    $('#gdG').innerHTML=h;
+    if(!k){$('#gdT').innerHTML='按「下一步」開始。';return}
+    let t=`${st[k-1][0]}：${st[k-1][1]}，賣 ${st[k-1][2]} 元。`;
+    if(k===3)t+=`<br><br>❌ 錯誤算法：把每筆交易加起來 30 + 50 + 100 = <b class="dn">180 元</b>（小麥被重複算了三次！）<br>✅ 正確算法：只算<b>最終財</b>（你買的麵包）= <b class="up">100 元</b>，剛好等於每一關的附加價值加總 30 + 20 + 50 = 100。`;
+    $('#gdT').innerHTML=t;$('#gdN').disabled=k>=3};
+  $('#gdN').onclick=()=>{if(k<3)k++;draw()};$('#gdR').onclick=()=>{k=0;$('#gdN').disabled=false;draw()};draw();
+};
+
+/* ---- 通膨 ---- */
+W.infl=el=>{
+  el.innerHTML=`<div class="wt">🎮 互動：未來的珍奶要多少錢？</div><p class="wd">今天一杯珍奶 60 元。把 1,000 元藏在床底下，它還能買幾杯？</p>${sl('inR','每年通膨率',0,15,.5,3)}${sl('inY','經過幾年',0,40,1,20)}<div id="inG"></div><div class="read" id="inT"></div>`;
+  const draw=()=>{const r=+$('#inR').value/100,y=+$('#inY').value;$('#inRv').textContent=f1(r*100)+'%';$('#inYv').textContent=y+' 年';
+    const pr=60*Math.pow(1+r,y),ymax=Math.max(200,Math.ceil(pr/100)*100);
+    const P=Plot({xmax:40,ymax,xl:'年',yl:'珍奶價格（元）'});
+    let s=P.frame([0,10,20,30,40],[0,ymax/4,ymax/2,ymax*3/4,ymax].map(f0));
+    s+=P.fnQ(t=>60*Math.pow(1+r,t),'cs')+P.guide(y,pr)+P.dot(y,pr,7)+P.lbl(y,pr+ymax*.05,f0(pr)+' 元','var(--red)',y>30?'end':'start');
+    $('#inG').innerHTML=P.svg(s);
+    $('#inT').innerHTML=`${y} 年後一杯珍奶約 <b>${f0(pr)}</b> 元。<br>1,000 元今天能買 <b>${Math.floor(1000/60)}</b> 杯，${y} 年後只能買 <b class="dn">${Math.floor(1000/pr)}</b> 杯。${r>0?`<br>📏 70 法則：物價大約每 70 ÷ ${f1(r*100)} ≈ <b>${f1(70/(r*100))}</b> 年翻一倍。`:''}`};
+  $('#inR').oninput=$('#inY').oninput=draw;draw();
+};
+
+/* ---- 失業率 ---- */
+W.unemp=el=>{
+  el.innerHTML=`<div class="wt">🎮 互動：100 個人的小鎮</div><p class="wd">點選按鈕，看看每一群人在哪裡，以及失業率怎麼算。</p>
+  <div class="btns"><button data-g="kid">👶 未滿 15 歲</button><button data-g="nlf">📚 非勞動力</button><button data-g="emp">💼 就業者</button><button data-g="un">🔍 失業者</button><button id="unD">😞 有 2 人放棄找工作</button></div>
+  <div class="people" id="unP"></div><div class="read" id="unT"></div>`;
+  let g={kid:20,nlf:25,emp:52,un:3},hl=null;const col={kid:'#B9C2BD',nlf:'var(--u4)',emp:'var(--u1)',un:'var(--red)'};
+  const draw=()=>{let h='';['kid','nlf','emp','un'].forEach(k=>{for(let i=0;i<g[k];i++)h+=`<span style="background:${col[k]};opacity:${hl&&hl!==k?.2:1}"></span>`});$('#unP').innerHTML=h;
+    const lf=g.emp+g.un;$('#unT').innerHTML=`勞動力 = 就業 ${g.emp} + 失業 ${g.un} = <b>${lf}</b> 人<br>失業率 = 失業 ÷ 勞動力 = ${g.un} ÷ ${lf} = <b>${f1(g.un/lf*100)}%</b>`+(g.un<3?'<br>🤔 奇怪：沒有人找到工作，失業率卻「下降」了！因為放棄找工作的人被算成非勞動力（叫「怯志工作者」）。所以看失業率，也要看勞動參與率。':'')};
+  el.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{hl=hl===b.dataset.g?null:b.dataset.g;el.querySelectorAll('[data-g]').forEach(x=>x.classList.toggle('on',x.dataset.g===hl));draw()});
+  $('#unD').onclick=e=>{if(g.un===3){g.un=1;g.nlf=27;e.target.classList.add('on')}else{g.un=3;g.nlf=25;e.target.classList.remove('on')}draw()};draw();
+};
+
+/* ---- 複利 ---- */
+W.compound=el=>{
+  el.innerHTML=`<div class="wt">🎮 互動：錢滾錢的魔法</div><p class="wd">存 10,000 元進去，比較「單利」（只有本金生利息）和「複利」（利息也會再生利息）。</p>${sl('cpR','年利率',1,12,.5,6)}${sl('cpY','存幾年',1,50,1,30)}<div id="cpG"></div><div class="read" id="cpT"></div>`;
+  const draw=()=>{const r=+$('#cpR').value/100,y=+$('#cpY').value;$('#cpRv').textContent=f1(r*100)+'%';$('#cpYv').textContent=y+' 年';
+    const c=10000*Math.pow(1+r,y),si=10000*(1+r*y),ym=Math.max(20000,Math.ceil(c/20000)*20000);
+    const P=Plot({xmax:50,ymax:ym/1000,xl:'年',yl:'千元'});
+    let s=P.frame([0,10,20,30,40,50],[0,ym/4000,ym/2000,ym*3/4000,ym/1000].map(v=>f0(v)));
+    s+=P.fnQ(t=>10*(1+r*t),'cg')+P.fnQ(t=>10*Math.pow(1+r,t),'cy')+P.dot(y,c/1000,6)+P.dot(y,si/1000,5);
+    $('#cpG').innerHTML=P.svg(s);
+    $('#cpT').innerHTML=`${y} 年後：單利 <b>${nf(si)}</b> 元，複利 <b class="up">${nf(c)}</b> 元（差了 ${nf(c-si)} 元）。<br>📏 72 法則：本金約 72 ÷ ${f1(r*100)} ≈ <b>${f1(72/(r*100))}</b> 年翻一倍。`};
+  $('#cpR').oninput=$('#cpY').oninput=draw;draw();
+};
+
+/* ---- 等比數列回合（貨幣乘數、財政乘數） ---- */
+function roundsW(el,c){
+  el.innerHTML=`<div class="wt">${c.title}</div><p class="wd">${c.desc}</p>${sl(c.id+'S',c.sn,c.min,c.max,c.step,c.v0)}<div class="vbars" id="${c.id}B"></div><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--mut)"><span>第 1 輪</span><span>第 12 輪</span></div><div class="read" id="${c.id}T"></div>`;
+  let bars='';for(let i=0;i<12;i++)bars+='<div></div>';$('#'+c.id+'B').innerHTML=bars;
+  const draw=()=>{const v=+$('#'+c.id+'S').value;$('#'+c.id+'Sv').textContent=c.fmt(v);const k=c.ratio(v);
+    [...$('#'+c.id+'B').children].forEach((d,i)=>{d.style.height=(Math.pow(k,i)*100)+'%';d.style.background=i?'var(--pen)':'var(--u2)'});
+    $('#'+c.id+'T').innerHTML=c.text(v,k)};
+  $('#'+c.id+'S').oninput=draw;draw();
+}
+W.bank=el=>roundsW(el,{id:'bk',title:'🎮 互動：銀行怎麼「變」出錢？',desc:'你存 1,000 元進銀行。銀行只留一部分當準備金，其餘借出去；借到錢的人花掉後，錢又被存進另一家銀行……',
+  sn:'法定準備率',min:5,max:50,step:5,v0:10,fmt:v=>v+'%',ratio:v=>1-v/100,
+  text:(v,k)=>`每一輪能再借出的錢是上一輪的 ${f0(k*100)}%。<br>存款最終總共可以變成 1,000 × (1 ÷ ${v/100}) = <b class="up">${nf(1000/(v/100))}</b> 元，貨幣乘數 = <b>${f1(100/v)}</b> 倍。<br>👉 準備率越低，銀行能創造的錢越多。`});
+W.fiscal=el=>roundsW(el,{id:'fs',title:'🎮 互動：政府花 100 億，經濟會多出多少？',desc:'政府蓋橋付錢給工人，工人拿薪水去吃飯，餐廳老闆再拿去買東西……每個人會把收到的錢花掉一部分。',
+  sn:'邊際消費傾向（每多賺 1 元會花掉多少）',min:.5,max:.9,step:.05,v0:.8,fmt:v=>f1(v*100)+'%',ratio:v=>v,
+  text:(v,k)=>`乘數 = 1 ÷ (1 − ${f1(v*100)/100}) = <b>${f1(1/(1-v))}</b><br>政府花 100 億，最後整體經濟增加約 <b class="up">${f0(100/(1-v))} 億</b> 的支出。<br>👉 大家越愛花錢，乘數效果越大。`});
+
+/* ---- 貨幣政策傳導 ---- */
+W.mpol=el=>{
+  const A={up:['🏦 央行升息','💳 借錢變貴、存錢變香','🛍️ 大家少借少花、企業少投資','🌡️ 經濟降溫、物價漲勢趨緩'],dn:['🏦 央行降息','💳 借錢變便宜、存錢沒吸引力','🛍️ 大家多借多花、企業多投資','🔥 經濟升溫、就業增加（但物價可能上漲）']};
+  el.innerHTML=`<div class="wt">🎮 互動：央行的遙控器</div><p class="wd">央行調整利率後，影響會像骨牌一樣一路傳下去。</p><div class="btns"><button id="mpU">⬆️ 升息（對抗通膨）</button><button id="mpD">⬇️ 降息（刺激景氣）</button></div><div class="chain" id="mpC"></div>`;
+  let tm=[];const go=k=>{tm.forEach(clearTimeout);tm=[];$('#mpU').classList.toggle('on',k==='up');$('#mpD').classList.toggle('on',k==='dn');
+    $('#mpC').innerHTML=A[k].map((x,i)=>(i?'<span class="ar">➜</span>':'')+`<span class="nd">${x}</span>`).join('');
+    [...$('#mpC').querySelectorAll('.nd')].forEach((n,i)=>tm.push(setTimeout(()=>n.classList.add('lit'),300+i*600)))};
+  $('#mpU').onclick=()=>go('up');$('#mpD').onclick=()=>go('dn');go('up');
+};
+
+/* ---- 匯率 ---- */
+W.fx=el=>{
+  el.innerHTML=`<div class="wt">🎮 互動：匯率變化誰開心誰難過？</div><p class="wd">拖動匯率：1 美元可以換多少新台幣。數字變小 = 台幣升值；數字變大 = 台幣貶值。</p>${sl('fxR','1 美元 =',25,35,.5,30)}<div class="read" id="fxT"></div>`;
+  const draw=()=>{const r=+$('#fxR').value;$('#fxRv').textContent=r+' 台幣';
+    const shoe=100*r,cake=600/r;
+    $('#fxT').innerHTML=`👟 美國球鞋 100 美元，台灣人要付 <b>${nf(shoe)}</b> 台幣（${arrow(shoe,3000,'變貴')}）<br>🍍 台灣鳳梨酥 600 台幣，美國人要付 <b>${f1(cake)}</b> 美元（${arrow(cake,20,'變貴')}）<br>`+
+      (r<30?'💪 <b>台幣升值</b>：出國玩、買進口貨變便宜；但出口商賣到國外的東西變貴，比較難賣。':r>30?'📉 <b>台幣貶值</b>：出口商比較好賣、外國觀光客變多；但進口貨、出國旅遊變貴。':'這是基準匯率 30。')};
+  $('#fxR').oninput=draw;draw();
+};
+
+/* ---- 景氣循環動畫 ---- */
+W.cycle=el=>{
+  el.innerHTML=`<div class="wt">🎮 動畫：景氣的雲霄飛車</div><p class="wd">經濟不會一直往上衝，而是在長期成長的趨勢線（虛線）附近上下波動。</p><div class="btns"><button id="cyB">⏸ 暫停</button></div><div id="cyG"></div><div class="read" id="cyT"></div>`;
+  const W0=360,H0=220,f=x=>150-x*.22-38*Math.sin(x/38);let t=0,run=!matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let base=`<line class="ax" x1="20" y1="10" x2="20" y2="200"/><line class="ax" x1="20" y1="200" x2="350" y2="200"/><text x="24" y="20">經濟產出</text><text x="348" y="215" text-anchor="end">時間</text><line x1="20" y1="150" x2="350" y2="${150-330*.22}" class="dash"/>`;
+  let pts='';for(let x=0;x<=330;x+=3)pts+=(x?'L':'M')+(20+x)+' '+f1(f(x));base+=`<path d="${pts}" class="cd"/>`;
+  const ph=x=>{const c=Math.cos(x/38),s=Math.sin(x/38);if(Math.abs(c)<.25)return s>0?['📉 谷底','最壞的時候：失業多、生意差，但也在醞釀復甦。']:['🎢 高峰','景氣最熱：人人有工作，但物價上漲、泡沫可能出現。'];return c<0?['📈 擴張（復甦）','生意變好、工廠加班、失業率下降。']:['🥶 衰退','訂單減少、裁員增加、大家不敢花錢。']};
+  const frame=()=>{if(!el.isConnected)return;const x=t%330,y=f(x),p=ph(x);
+    $('#cyG').innerHTML=`<svg class="plot" viewBox="0 0 ${W0} ${H0}">${base}<circle class="dot" cx="${20+x}" cy="${y}" r="8"/><text class="lbl" x="${Math.min(20+x+10,260)}" y="${y-12}">${p[0]}</text></svg>`;
+    $('#cyT').innerHTML=`<b>${p[0]}</b>：${p[1]}`;if(run){t+=.7;requestAnimationFrame(frame)}};
+  $('#cyB').onclick=e=>{run=!run;e.target.textContent=run?'⏸ 暫停':'▶ 播放';if(run)frame()};
+  if(!run)$('#cyB').textContent='▶ 播放';t=60;frame();
+};
+
+/* ---- 損失規避 ---- */
+W.loss=el=>{
+  el.innerHTML=`<div class="wt">🎮 互動：你敢不敢擲這枚硬幣？</div><p class="wd">擲一次硬幣：反面你<b>輸 100 元</b>，正面你<b>贏 X 元</b>。拖動 X，找出你「剛好願意玩」的金額，然後按按鈕。</p>${sl('lsX','正面贏',50,400,10,120)}<div class="btns"><button id="lsY">👍 我願意玩</button><button id="lsN">🙅 我不玩</button></div><div class="read" id="lsT">先憑直覺決定，再看解析。</div>`;
+  const upd=()=>{$('#lsXv').textContent=$('#lsX').value+' 元'};$('#lsX').oninput=upd;upd();
+  const ans=y=>{const x=+$('#lsX').value,ev=(x-100)/2;
+    $('#lsT').innerHTML=`你選擇${y?'玩':'不玩'}，贏 ${x} 元的時候。這個賭局的<b>期望值</b> = ½×${x} − ½×100 = <b>${ev>=0?'+':''}${f1(ev)}</b> 元。<br>`+
+      (!y&&ev>0?'😮 期望值明明是正的，你還是拒絕了：這就是<b>損失規避</b>，輸錢的痛苦比贏錢的快樂強烈。':'')+
+      '<br>📊 研究發現，大多數人要正面贏到大約 <b>200 元</b>才願意玩。也就是說，損失的痛苦大約是同樣金額快樂的 2 倍。'};
+  $('#lsY').onclick=()=>ans(1);$('#lsN').onclick=()=>ans(0);
+};
+})();
+</script>
+<script>
+LS.push({id:'l1',u:1,t:'經濟學是什麼？',s:'稀少性：一切經濟問題的起點',min:10,body:`
+<div class="box story"><b class="h">🧋 先從你的零用錢說起</b>你這個月有 500 元零用錢。你想買新耳機（450 元）、想跟朋友去看電影（300 元）、還想每天喝一杯珍奶（每杯 60 元）。全部加起來遠遠超過 500 元。怎麼辦？你只能<b>選擇</b>。</div>
+<p>恭喜你，你剛剛遇到了經濟學最核心的問題。</p>
+<h2>想要的無限，擁有的有限</h2>
+<p>人的慾望幾乎沒有盡頭：有了手機想要更好的手機，吃飽了還想吃甜點。但世界上的資源是有限的：錢有限、時間有限（一天只有 24 小時）、土地有限、石油有限、能做事的人也有限。</p>
+<p>這種「<mark>資源不夠滿足所有慾望</mark>」的狀態，經濟學叫做<b>稀少性</b>。注意，稀少不等於「很少」。沙漠裡的沙子很多，但沒人搶，所以不稀少；你的時間看起來很多，但每一分鐘都要在寫作業、滑手機、睡覺之間做選擇，所以時間很稀少。</p>
+<div class="key"><b class="h">⭐ 重點</b>經濟學研究的是：<b>人們如何在資源有限的情況下做選擇</b>，以及這些選擇合起來對整個社會有什麼影響。</div>
+<h2>每個社會都要回答三個問題</h2>
+<p>因為資源稀少，不管是一個家庭、一家公司還是一個國家，都要決定：</p>
+<ol><li><b>生產什麼？</b>要多蓋學校還是多蓋醫院？多種稻米還是多種茶葉？</li>
+<li><b>怎麼生產？</b>用很多工人手工做，還是買機器自動化？</li>
+<li><b>為誰生產？</b>做出來的東西要分給誰？依照誰出錢、誰需要，還是誰有權力？</li></ol>
+<p>不同國家用不同方法回答：有的讓市場（買家和賣家）自由決定，有的讓政府規劃，大部分國家是兩者混合。這個我們之後會慢慢學。</p>
+<h2>經濟學分成兩大塊</h2>
+<table class="t"><tr><th>個體經濟學</th><th>總體經濟學</th></tr>
+<tr><td>看「一棵樹」：一個人、一個家庭、一家店怎麼做決定。例如：珍奶為什麼漲價？</td><td>看「整片森林」：整個國家的經濟。例如：為什麼全國物價都在漲？為什麼有人找不到工作？</td></tr></table>
+<p>這本筆記本第 2 單元講個體，第 3 單元講總體。</p>
+<div class="box origin"><b class="h">📜 「經濟」這個詞，其實是從日本「借」回來的</b>中文古書裡有「經世濟民」這句話，意思是「治理國家、救助百姓」，簡稱「經濟」，原本是在講政治。到了 1860 年代，日本學者要翻譯英文的 <i>economy</i>，就借用了這兩個字。清朝的嚴復曾經想把它翻成「計學」，梁啟超用過「生計學」，但最後日本的譯名勝出，傳回中文世界，一直用到今天。</div>`,
+terms:[['經濟學','Economics','研究人們如何分配有限資源、做出選擇的學問。','英文來自希臘文 oikonomia：oikos（家）+ nomos（規則、管理），原意是「管理家務的方法」。古希臘作家色諾芬寫過一本《經濟論》，講的就是怎麼管好一個莊園。中文「經濟」則來自「經世濟民」，由日本學者在明治時代前後拿來翻譯 economy。'],
+ ['稀少性','Scarcity','資源有限、不足以滿足所有人慾望的狀態。','英文 scarce 來自古法語 escars，意思是「不足、吝嗇」。1932 年英國經濟學家羅賓斯（Lionel Robbins）把經濟學定義為「研究稀少資源如何用在不同用途的科學」，從此稀少性成為經濟學的第一課。'],
+ ['個體經濟學','Microeconomics','研究個人、家庭、廠商等單一決策者行為的經濟學。','micro 來自希臘文 mikros，意思是「小」。挪威經濟學家弗里希（Ragnar Frisch）在 1930 年代開始區分「個體」和「總體」。他後來是史上第一位諾貝爾經濟學獎得主之一。'],
+ ['總體經濟學','Macroeconomics','研究整個國家或世界經濟的經濟學，例如 GDP、失業、通膨。','macro 來自希臘文 makros，意思是「大、長」。同樣由弗里希等人在 1930 年代提出，經濟大蕭條後變得非常重要。']],
+q:[['下列哪一個最符合經濟學說的「稀少性」？',['東西數量很少','資源不足以滿足所有想要的東西','東西很貴','只有有錢人才有的東西'],1,'稀少性是相對於慾望來說的。就算數量多，只要大家想要的比有的還多，它就是稀少的。'],
+ ['「為什麼這個月全國的物價都在上漲？」屬於哪一種經濟學的問題？',['個體經濟學','總體經濟學','心理學','會計學'],1,'「全國物價」是整體經濟的現象，屬於總體經濟學。'],
+ ['中文「經濟」一詞原本的意思是什麼？',['賺錢','節省','經世濟民，治理國家、救助百姓','做生意'],2,'「經濟」來自「經世濟民」，原本是政治用語，後來才被用來翻譯 economy。']]});
+
+LS.push({id:'l2',u:1,t:'機會成本',s:'天下沒有白吃的午餐',min:10,body:`
+<div class="box story"><b class="h">🎮 週六下午的選擇</b>週六下午你有 3 小時。你可以：打電動、去補習班、或去阿姨的店打工賺 450 元。你選了打電動。那麼，打電動的「成本」是多少？<br>你可能會說：「免費啊！」但經濟學家會說：<b>成本是你放棄的東西裡，價值最高的那一個</b>，也就是那 450 元（或是補習能學到的東西，看你覺得哪個更有價值）。</div>
+<h2>成本不只是錢</h2>
+<p>我們平常說的成本，通常指「付了多少錢」。但經濟學家看到的成本更廣：<mark>為了得到某樣東西，你必須放棄的最好的另一個選擇</mark>，叫做<b>機會成本</b>。</p>
+<div class="formula">機會成本 = 你放棄的選項中，價值最高的那一個</div>
+<p>注意是「最高的那一個」，不是全部加起來。因為你本來就只能選一個。</p>
+<h2>生活中到處都是機會成本</h2>
+<ul><li><b>念大學</b>的成本不只是學費，還有「4 年沒去工作少賺的薪水」。這就是為什麼有些超級天才（比如很會打球的運動員）選擇不念大學：他們的機會成本太高了。</li>
+<li><b>排隊</b>買限量商品，排 2 小時的機會成本，是這 2 小時可以做的其他事。</li>
+<li><b>政府</b>花 100 億蓋體育館，機會成本可能是 100 億可以蓋的學校或醫院。</li></ul>
+<h2>沉沒成本：已經回不來的錢</h2>
+<p>你花 300 元買了電影票，看了 20 分鐘發現超級難看。要不要繼續看？很多人會說：「票都買了，不看完太浪費！」但那 300 元<b>不管你走不走都拿不回來</b>，這叫做<b>沉沒成本</b>。</p>
+<div class="key"><b class="h">⭐ 重點</b>聰明的決定只看<b>未來</b>：繼續看下去，你會得到什麼、失去什麼（剩下 100 分鐘的時間）？已經花掉的沉沒成本，不應該影響你的決定。就像中文說的「覆水難收」。</div>
+<div class="box fun"><b class="h">💡 冷知識</b>很多人玩手遊時，已經課金很多就捨不得退坑，就是掉進了「沉沒成本謬誤」。協和號超音速客機因為已經投入太多錢，英法兩國明知虧錢還一直做下去，所以這個謬誤也被叫做「協和謬誤」。</div>`,
+terms:[['機會成本','Opportunity cost','為了做某個選擇，而必須放棄的最佳替代選項的價值。','1894 年美國學者格林（David L. Green）在論文中首先使用 opportunity cost 這個詞；奧地利經濟學家維塞爾（Friedrich von Wieser）在 1910 年代把它發展成完整的理論。opportunity 來自拉丁文 ob portum，意思是「朝向港口」：順風把船吹向港口，就是好「機會」。'],
+ ['天下沒有白吃的午餐','There ain’t no such thing as a free lunch','任何東西都有代價，就算看起來免費也一樣。','19 世紀美國的酒吧會打出「免費午餐」招牌，但你必須買飲料才能吃，而且食物通常很鹹，讓你一直點酒。1975 年經濟學家傅利曼用這句話當書名，讓它變成經濟學名言。'],
+ ['沉沒成本','Sunk cost','已經付出、無論如何都收不回來的成本。','sunk 是「沉下去」的意思：就像沉入海底的船，再也撈不回來。中文翻譯「沉沒」完全照字面直譯。'],
+ ['取捨','Trade-off','得到某樣東西，就必須放棄另一樣東西。','trade（交換）+ off（離開）：拿一樣東西換掉另一樣。經濟學十大原理的第一條就是「人們面臨取捨」。']],
+q:[['小華放棄打工（可賺 500 元）和補習，選擇去看電影（票價 250 元）。如果他覺得打工比補習更有價值，看電影的機會成本是？',['250 元','500 元','750 元','電影票 250 元 + 放棄的打工收入 500 元'],3,'機會成本包含實際付出的錢（250 元）加上放棄的最佳選擇（打工 500 元）。補習不用加，因為只能選一個。'],
+ ['以下哪一個是「沉沒成本」？',['下個月的房租','已經付款且不能退的演唱會門票','明天要買的午餐','還沒簽約的補習費'],1,'不能退的門票，不管去不去都拿不回來，是沉沒成本。'],
+ ['為什麼有些很會打球的年輕人選擇不念大學直接打職業？',['因為大學太難','因為他們念大學的機會成本（放棄的職業薪水）很高','因為大學學費太便宜','因為沒有機會成本'],1,'對他們來說，4 年念書就要放棄數千萬的職業收入，機會成本非常高。']]});
+
+LS.push({id:'l3',u:1,t:'生產可能曲線',s:'用一條線畫出「選擇」',min:12,body:`
+<p>上一課講的機會成本，可以畫成一張圖。經濟學家很愛畫圖，因為一張圖勝過千言萬語。</p>
+<div class="box story"><b class="h">🏝️ 想像一座小島</b>島上有 10 個人，只能做兩件事：捕魚或採椰子。如果全部人都去捕魚，一天可以抓 30 條魚，但一顆椰子都沒有；全部去採椰子，可以採 40 顆，但沒有魚吃。中間還有很多種分配方法。</div>
+<p>把所有「最多能生產的組合」連起來，就是<b>生產可能曲線</b>（PPF）。自己動手試試看：</p>
+<div class="w" data-w="ppf"></div>
+<h2>這條線告訴我們三件事</h2>
+<ol><li><b>線上的點</b>：資源全部用上、最有效率的生產方式。</li>
+<li><b>線裡面的點</b>：有資源在閒置或浪費（例如有人失業），明明可以生產更多。</li>
+<li><b>線外面的點</b>：以目前的資源和技術，不可能做到。除非科技進步或資源增加，讓整條線往外推。</li></ol>
+<h2>為什麼曲線是彎的？</h2>
+<p>你玩的時候會發現：越多人去捕魚，每多 1 條魚要放棄的椰子就越多。因為每個人擅長的事不同。一開始派去捕魚的，是最會捕魚的人；到最後被派去的，是超會爬樹卻不太會捕魚的人。這叫<mark>機會成本遞增</mark>，所以曲線向外凸出。</p>
+<div class="key"><b class="h">⭐ 重點</b>經濟成長 = 生產可能曲線往外移。方法有：更多資源（人口、土地）、更好的技術、更好的教育（讓人更會做事）。</div>
+<div class="box fun"><b class="h">💡 大砲與奶油</b>經濟學課本很愛用「大砲」和「奶油」代表軍事和民生兩種選擇。國家多花資源造武器，就少了生產食物的資源。這個說法據說跟 1930 年代德國納粹高官的口號有關：他們宣傳「要大砲，不要奶油」，後來果然讓人民生活變苦。</div>`,
+terms:[['生產可能曲線','Production Possibilities Frontier, PPF','在資源與技術固定下，一個經濟體最多能生產的各種商品組合所連成的線。','frontier 原意是「邊疆、國界」，意思是這條線是生產能力的「邊界」，跨不過去。這種圖在 20 世紀中期由美國經濟學家薩繆爾森（Paul Samuelson）的暢銷教科書推廣，成為經濟學第一張圖。'],
+ ['效率','Efficiency','用現有的資源，得到最多的產出，沒有浪費。','拉丁文 efficere，意思是「做成、完成」。經濟學常說的「柏瑞圖效率」來自義大利學者柏瑞圖（Vilfredo Pareto）：沒辦法在不讓任何人變差的情況下，讓某人變更好。'],
+ ['經濟成長','Economic growth','一個經濟體生產能力的長期增加，在圖上就是 PPF 往外移。','growth 來自古英文 grōwan，本來是描述植物長大。用植物成長來比喻經濟，表示經濟是會慢慢「長大」的。']],
+q:[['生產可能曲線「裡面」的點代表什麼？',['不可能達到','最有效率','資源被閒置或浪費','經濟成長'],2,'曲線內的點表示還有資源沒被充分利用，例如失業或工廠閒置。'],
+ ['下列哪一件事會讓生產可能曲線往外移？',['颱風摧毀工廠','發明更好的機器','更多人失業','把工人從農業調到工業'],1,'技術進步讓同樣的資源生產更多，曲線往外擴張。失業只是讓點跑進曲線內。'],
+ ['生產可能曲線向外凸出，是因為？',['機會成本遞增','東西越來越便宜','人越來越多','政府規定'],0,'每個資源擅長的事不同，越集中生產一樣東西，犧牲的就越多，這就是機會成本遞增。']]});
+
+LS.push({id:'l4',u:1,t:'分工與比較利益',s:'為什麼大家不自己做所有的事？',min:14,body:`
+<p>想像你要自己種米、自己織布、自己做手機……你大概連一支鉛筆都做不出來。現代社會的生活這麼豐富，秘密就在於<b>分工</b>和<b>交換</b>。</p>
+<h2>亞當斯密的別針工廠</h2>
+<div class="box story"><b class="h">📍 1776 年的觀察</b>「經濟學之父」亞當斯密在《國富論》裡描述了一間別針工廠：一個工人自己從頭做到尾，一天可能連 20 根別針都做不出來。但把工作拆成 18 個步驟（拉線、切斷、磨尖……），10 個工人分工合作，一天可以做出<b>48,000 根</b>！</div>
+<p>分工之所以有效，是因為：熟能生巧、不用一直切換工作、還能發明專用的工具和機器。</p>
+<h2>絕對利益 vs. 比較利益</h2>
+<p>如果某人做一件事比別人更快、更好，他就有<b>絕對利益</b>。但這裡有個反直覺的問題：<mark>如果一個人每件事都比別人強，還需要分工嗎？</mark></p>
+<p>答案是：需要！關鍵在於<b>比較利益</b>：誰做這件事的<b>機會成本比較低</b>，誰就應該做這件事。</p>
+<div class="box story"><b class="h">⚖️ 律師與助理</b>一位頂尖律師打字比她的助理還快。她應該自己打字嗎？不應該！她花 1 小時打字，就少了 1 小時接案子（可能價值上萬元）。助理打字雖然慢一點，但機會成本低很多。所以律師專心接案、助理負責打字，兩人都更好。</div>
+<p>自己改改數字，看看分工的魔法：</p>
+<div class="w" data-w="ca"></div>
+<div class="key"><b class="h">⭐ 重點</b>就算一方在每件事上都比較強，只要雙方的<b>機會成本不同</b>，專心做自己「相對擅長」的事再互相交換，就能讓雙方都得到更多。這是國際貿易最重要的理論基礎。</div>`,
+terms:[['分工','Division of labor','把一件工作拆成許多部分，由不同的人專門負責。','亞當斯密 1776 年在《國富論》第一章就用別針工廠說明分工。中文「分工」在古書裡就有，如《荀子》講「群居和一」的道理，強調人要分工合作才能生存。'],
+ ['絕對利益','Absolute advantage','用同樣的資源，能比別人生產更多某種商品的能力。','由亞當斯密提出，他用這個概念主張國家之間應該自由貿易。'],
+ ['比較利益','Comparative advantage','生產某種商品的機會成本比別人低的能力。','1817 年英國經濟學家李嘉圖（David Ricardo）在《政治經濟學及賦稅原理》中用「英國的布 vs. 葡萄牙的葡萄酒」舉例說明。有人說這是經濟學中「最美麗、也最不直覺」的想法。李嘉圖本人是股票交易員出身，26 歲讀了《國富論》才迷上經濟學。'],
+ ['專業化','Specialization','集中資源去做自己最擅長（機會成本最低）的事。','special 來自拉丁文 specialis「特別的、特定種類的」。專業化和交換是一對雙胞胎：專業化之後，一定要靠交換取得其他東西。']],
+q:[['小美 1 小時可以做 10 個蛋糕或 5 杯咖啡；小強 1 小時可以做 2 個蛋糕或 2 杯咖啡。誰做蛋糕有比較利益？',['小美','小強','兩人一樣','沒辦法判斷'],0,'小美做 1 個蛋糕的機會成本是 0.5 杯咖啡，小強是 1 杯咖啡。小美的機會成本較低，所以她做蛋糕有比較利益。'],
+ ['承上題，誰做咖啡有比較利益？',['小美','小強','兩人一樣','沒有人'],1,'小強做 1 杯咖啡的機會成本是 1 個蛋糕，小美是 2 個蛋糕。小強雖然做什麼都比較慢，但做咖啡的機會成本比較低。'],
+ ['「比較利益」這個理論是誰提出的？',['亞當斯密','李嘉圖','凱因斯','馬克思'],1,'李嘉圖在 1817 年提出比較利益，亞當斯密提出的是絕對利益。']]});
+
+LS.push({id:'l5',u:1,t:'貨幣的誕生',s:'錢是怎麼來的？為什麼一張紙會有價值？',min:12,body:`
+<p>分工之後大家要交換東西。但在還沒有錢的時代，交換可是非常麻煩的一件事。</p>
+<div class="w" data-w="barter"></div>
+<h2>什麼東西當過錢？</h2>
+<p>歷史上人類拿來當錢的東西千奇百怪：貝殼、鹽、牛、菸草、巨大的石頭輪子（太平洋的雅浦島），甚至二戰戰俘營裡的香菸。它們都有一個共同點：<mark>大家願意接受</mark>。</p>
+<div class="box origin"><b class="h">📜 漢字裡藏著貝殼錢</b>古代中國用海貝當錢。所以跟錢有關的字，很多都有「貝」字旁：財、貨、貴、賺、買、賣、資、費、貸、貧……下次看到這些字，你就知道祖先在想什麼了。<br>那「錢」字為什麼是「金」字旁？因為「錢」本來是一種像鏟子的青銅農具。後來人們鑄造的青銅錢幣（布幣）形狀就像這種農具，於是農具的名字變成了錢的名字。</div>
+<h2>好的貨幣要具備什麼條件？</h2>
+<table class="t"><tr><th>條件</th><th>為什麼</th><th>反例</th></tr>
+<tr><td>大家都接受</td><td>不然沒用</td><td>你家自己印的鈔票</td></tr>
+<tr><td>耐久</td><td>存久不壞</td><td>香蕉</td></tr>
+<tr><td>容易攜帶</td><td>方便交易</td><td>一頭牛</td></tr>
+<tr><td>容易分割</td><td>小額交易也能用</td><td>一顆鑽石</td></tr>
+<tr><td>數量穩定</td><td>不會突然變多變不值錢</td><td>地上的樹葉</td></tr></table>
+<h2>貨幣的三大功能</h2>
+<ol><li><b>交易媒介</b>：拿來買東西，解決以物易物的麻煩。</li>
+<li><b>計價單位</b>：用同一把「尺」衡量價值。一杯珍奶 60 元、一本書 300 元，一看就知道書等於 5 杯珍奶。</li>
+<li><b>價值儲存</b>：今天賺的錢，可以留到下個月再用（但要小心通貨膨脹，第 18 課會講）。</li></ol>
+<h2>為什麼一張紙會值錢？</h2>
+<p>現在的新台幣本身只是一張紙，印刷成本很低。它有價值，是因為<b>政府規定它是法定貨幣</b>，而且<b>大家相信別人也會接受它</b>。這種靠信任支撐的錢叫做「法定貨幣」。說穿了，錢的本質是<mark>信任</mark>。</p>
+<div class="box fun"><b class="h">💡 世界上最早的紙幣</b>北宋時期（約西元 1023 年），四川商人因為鐵錢太重不方便，發明了「交子」，後來由政府正式發行，是世界上最早的官方紙幣之一。</div>`,
+terms:[['貨幣','Money / Currency','被普遍接受、用來交換商品和服務的東西。','英文 money 來自拉丁文 Moneta，是羅馬女神朱諾的稱號。古羅馬的鑄幣廠就設在朱諾・莫內塔神廟旁邊，於是 moneta 變成「錢」的意思。currency 則來自拉丁文 currere「流動、奔跑」，表示錢是在社會中流動的東西。'],
+ ['以物易物','Barter','不用錢，直接用物品交換物品。','barter 來自古法語 barater，意思是「交換」，但也有「欺騙」的意思，因為以物易物很難判斷公不公平。'],
+ ['慾望的雙重巧合','Double coincidence of wants','以物易物時，雙方必須剛好都想要對方的東西，交易才能成立。','由英國經濟學家耶文斯（William Stanley Jevons）在 1875 年的《貨幣與交換機制》中提出，用來說明為什麼人類需要發明貨幣。'],
+ ['法定貨幣','Fiat money','本身沒有內在價值，靠政府法令與人民信任而流通的貨幣。','fiat 是拉丁文「就這樣吧、讓它成立」，就像《聖經》創世記的「要有光」（Fiat lux）。政府一聲令下「這張紙就是錢」，它就是錢。'],
+ ['薪水','Salary','固定發給工作者的報酬。','來自拉丁文 salarium，和 sal（鹽）有關。常見說法是古羅馬士兵用鹽當薪水，但歷史學家認為證據不足，比較可能是「買鹽的津貼」。']],
+q:[['以物易物最大的問題是什麼？',['東西太多','很難剛好找到「你要他的東西、他也要你的東西」的人','政府不允許','太便宜'],1,'這叫慾望的雙重巧合問題，是貨幣被發明的主要原因。'],
+ ['「一杯珍奶 60 元、一本書 300 元」，這是貨幣的哪個功能？',['交易媒介','計價單位','價值儲存','投資工具'],1,'用同一個單位（元）來衡量不同東西的價值，是計價單位的功能。'],
+ ['為什麼「財、貨、買、賣」都有「貝」？',['因為古人喜歡貝殼','因為古代中國用貝殼當錢','因為貝殼很貴','因為這些字跟海有關'],1,'古代中國曾以海貝作為貨幣，所以和錢財有關的字多帶有「貝」字旁。']]});
+
+LS.push({id:'l6',u:1,t:'誘因與理性選擇',s:'人會對獎勵和懲罰做出反應',min:11,body:`
+<div class="box story"><b class="h">🐍 眼鏡蛇效應</b>據說英國殖民印度時，德里的眼鏡蛇太多，政府宣布：「每交一條死眼鏡蛇，就發獎金！」一開始蛇真的變少了。但很快就有人開始<b>養</b>眼鏡蛇來領獎金。政府發現後取消獎金，養蛇的人就把蛇全部放掉……結果眼鏡蛇比以前更多。</div>
+<p>這個故事告訴我們經濟學的另一個核心想法：<mark>人們會對誘因做出反應</mark>，而且常常是用你想不到的方式。</p>
+<h2>什麼是誘因？</h2>
+<p><b>誘因</b>就是讓人想去做（或不做）某件事的理由。可以是獎勵，也可以是懲罰：</p>
+<ul><li>💰 金錢：打折會讓人多買；罰款會讓人少做。</li>
+<li>⏱ 時間：外送平台讓買東西「更省時間」，所以更多人叫外送。</li>
+<li>😊 感受：被稱讚、被尊重、不想丟臉，也是強大的誘因。</li></ul>
+<h2>經濟學家假設人是「理性」的</h2>
+<p>在經濟學裡，「理性」不是指冷冰冰、不講感情，而是指：<b>人會用自己的方式，衡量好處和壞處，選擇對自己最好的選項</b>。你覺得睡覺比打電動重要，那選擇睡覺對你就是理性的。</p>
+<h2>邊際思考：一次多一點點</h2>
+<p>我們很少面對「全有或全無」的選擇，通常是「要不要再多一點」。例如：不是「要不要讀書」，而是「要不要<b>再多</b>讀一小時」。</p>
+<p>經濟學把「多一單位」叫做<b>邊際</b>。理性的人會比較：</p>
+<div class="formula">多做一點的好處（邊際利益） vs. 多做一點的代價（邊際成本）</div>
+<p>只要好處大於代價，就繼續做；好處小於代價，就停下來。</p>
+<div class="box story"><b class="h">✈️ 航空公司的邊際思考</b>一架從台北飛東京的飛機，平均每個座位的成本是 8,000 元。起飛前還有 10 個空位，有人願意出 3,000 元買。要賣嗎？要！因為飛機反正要飛，多載一個人的<b>邊際成本</b>只有一份餐點和一點燃油，可能不到 500 元。這就是為什麼最後一刻的機票有時候特別便宜。</div>
+<div class="key"><b class="h">⭐ 重點</b>設計規則、政策或獎勵時，一定要問：「這會給人們什麼誘因？他們可能會怎麼鑽漏洞？」</div>`,
+terms:[['誘因','Incentive','促使人做出某種行為的獎勵或懲罰。','英文 incentive 來自拉丁文 incentivus，意思是「定調、引起」，原本是指吹起音樂的第一個音，帶動整首曲子。中文「誘」是引導，「因」是原因。'],
+ ['理性','Rationality','在經濟學中指人會根據自己的偏好，比較成本和好處，做出對自己最好的選擇。','ratio 在拉丁文是「計算、理由」。經濟學裡的「理性經濟人」（homo economicus）這個稱呼出現在 19 世紀末，一開始是批評者用來嘲諷經濟學家假設人像計算機一樣精明。'],
+ ['邊際','Marginal','「多一單位」或「少一單位」所帶來的變化。','來自拉丁文 margo，意思是「邊緣」，就像筆記本的頁邊空白（margin）。在經濟學裡指在「邊緣」上多加一點點。1870 年代有三位學者分別獨立提出以邊際思考分析價值，被稱為「邊際革命」。'],
+ ['眼鏡蛇效應','Cobra effect','一項措施本來想解決問題，卻因為錯誤的誘因讓問題更嚴重。','由德國經濟學家西伯特（Horst Siebert）在 2001 年的書中用這個故事命名。故事本身的歷史細節不一定可靠，但類似事件在越南河內的「抓老鼠獎金」確實有紀錄。']],
+q:[['學校規定「遲到一次罰掃地」，結果有同學乾脆整節課都不進教室。這說明了什麼？',['人們不會對誘因反應','誘因可能帶來意想不到的反應','懲罰一定有效','學生都不理性'],1,'人會對誘因做出反應，但反應不一定是設計者預期的。這就是眼鏡蛇效應的精神。'],
+ ['經濟學中的「邊際」是什麼意思？',['邊緣人','多一單位或少一單位的變化','最後的利潤','平均值'],1,'邊際指的是「再多一點」所帶來的額外好處或成本。'],
+ ['理性的人什麼時候應該「再多讀一小時書」？',['永遠要','當多讀一小時的好處大於它的代價','當別人都在讀','當考試很難'],1,'比較邊際利益和邊際成本，好處大於代價才繼續。']]});
+</script>
+<script>
+LS.push({id:'l7',u:2,t:'需求',s:'價格越高，買的越少',min:12,body:`
+<p>從這一課開始，我們進入經濟學最有名的兩個字：<b>供給</b>與<b>需求</b>。先從「買的人」這一邊看起。</p>
+<h2>需求法則</h2>
+<p>一杯珍奶 30 元時，你可能一週買好幾杯；漲到 100 元，你可能一個月才買一次。這個再平常不過的現象，經濟學叫做<b>需求法則</b>：</p>
+<div class="formula">其他條件不變時，價格上漲 → 需求量減少</div>
+<p>為什麼？因為變貴了，你會改買替代品（紅茶、自己泡），而且同樣的零用錢能買的東西變少了。</p>
+<div class="w" data-w="demand"></div>
+<h2>最容易搞混的一件事：「需求量」vs.「需求」</h2>
+<table class="t"><tr><th></th><th>需求量的變動</th><th>需求的變動</th></tr>
+<tr><td>原因</td><td>商品<b>自己的價格</b>改變</td><td>價格以外的因素改變</td></tr>
+<tr><td>圖上</td><td>沿著同一條線移動</td><td>整條線左右移動</td></tr>
+<tr><td>例子</td><td>珍奶漲價，你少買</td><td>天氣變熱，每個價格下你都想多買</td></tr></table>
+<h2>讓需求線移動的五大因素</h2>
+<ol><li><b>所得</b>：收入增加，大部分東西會買更多（叫「正常財」）；但有些東西反而少買，例如有錢後少吃泡麵（叫「劣等財」）。</li>
+<li><b>相關商品的價格</b>：可樂漲價，百事可樂的需求增加（<b>替代品</b>）；印表機變便宜，墨水的需求增加（<b>互補品</b>）。</li>
+<li><b>喜好</b>：網紅推薦、流行趨勢。</li>
+<li><b>預期</b>：聽說下個月要漲價，現在就先買。</li>
+<li><b>買家人數</b>：學校旁邊開了新補習班，附近飲料店的需求增加。</li></ol>
+<div class="box fun"><b class="h">💡 為什麼價格畫在直的那一軸？</b>數學課教你「原因」放橫軸、「結果」放直軸。但需求圖把原因（價格）放在直軸，跟數學習慣相反！這是因為英國經濟學家馬歇爾在 1890 年這樣畫，後來大家都照著畫，一畫就是一百多年。</div>`,
+terms:[['需求','Demand','在各種價格下，消費者願意而且有能力購買的數量。','拉丁文 demandare，意思是「交付、委託」，後來變成「要求」。注意「有能力」這三個字：你很想要跑車但買不起，經濟學不算你的需求。'],
+ ['需求法則','Law of demand','其他條件不變時，價格與需求量呈反方向變動。','這個規律很早就被觀察到，19 世紀的經濟學家把它正式寫成「法則」。'],
+ ['其他條件不變','Ceteris paribus','分析時假設除了要研究的因素外，其他因素都固定不變。','拉丁文，讀作「凱特里斯・帕里布斯」，意思是「其他東西都一樣」。經濟學家特別愛用這句拉丁文，因為真實世界太複雜，只能一次看一個變數。'],
+ ['替代品與互補品','Substitutes & Complements','可以互相取代的商品（可樂和汽水）；要一起使用的商品（遊戲機和遊戲片）。','substitute 來自拉丁文「放在下面、代替」；complement 來自拉丁文 complere「填滿」：互補品就是把彼此「補滿」的東西。'],
+ ['劣等財','Inferior good','收入增加時，需求反而減少的商品。','「劣等」不是說品質差，而是指人們有錢以後會「升級」離開它，例如公車票、泡麵。']],
+q:[['珍奶漲價，小明少買了兩杯。這是？',['需求減少','需求量減少','需求增加','供給減少'],1,'商品本身價格改變，是沿著需求線移動，叫「需求量」的變動。'],
+ ['遊戲機降價，會讓遊戲片的需求怎麼變？',['增加','減少','不變','先增後減'],0,'遊戲機和遊戲片是互補品，遊戲機便宜了買的人變多，遊戲片的需求跟著增加。'],
+ ['下列哪一項會讓雨傘的需求線往右移？',['雨傘降價','氣象局預報下週天天下雨','雨傘工廠增加','雨傘漲價'],1,'預期會下雨是價格以外的因素，讓每個價格下想買的人都變多，整條需求線右移。']]});
+
+LS.push({id:'l8',u:2,t:'供給',s:'價格越高，賣的越多',min:10,body:`
+<p>看完買家，現在換到「賣家」這一邊。</p>
+<h2>供給法則</h2>
+<p>如果珍奶可以賣到 100 元一杯，飲料店老闆會怎麼做？多請工讀生、延長營業時間、甚至開分店！也會有新的人跳進來開店。所以：</p>
+<div class="formula">其他條件不變時，價格上漲 → 供給量增加</div>
+<p>原因很簡單：價格越高，多生產一單位越有賺頭，也能負擔更高的生產成本。</p>
+<div class="w" data-w="supply"></div>
+<h2>讓供給線移動的因素</h2>
+<ol><li><b>生產成本</b>：原料（鮮奶、茶葉）、工資、租金上漲，供給減少。</li>
+<li><b>技術</b>：新機器讓生產更快更便宜，供給增加。</li>
+<li><b>賣家人數</b>：更多店家加入，市場供給增加。</li>
+<li><b>預期</b>：預期下個月價格會更高，現在可能先囤貨少賣。</li>
+<li><b>天災與政策</b>：颱風讓農產品減產；政府補貼讓供給增加，課稅則讓供給減少。</li></ol>
+<div class="key"><b class="h">⭐ 重點</b>跟需求一樣：<b>商品自己的價格</b>改變 → 沿著供給線移動（供給量變動）；<b>其他因素</b>改變 → 整條供給線移動（供給變動）。</div>
+<div class="box story"><b class="h">🥬 颱風菜價</b>每次颱風過後，高麗菜價格常常翻倍。因為菜園被風雨打壞，整個市場的供給線往左移。等到下一批菜長好，價格又慢慢回來。</div>`,
+terms:[['供給','Supply','在各種價格下，生產者願意而且有能力出售的數量。','拉丁文 supplere，意思是「填滿、補足」。賣家把市場上缺的東西「補上」。'],
+ ['供給法則','Law of supply','其他條件不變時，價格與供給量呈同方向變動。','和需求法則一起，在 19 世紀由古典經濟學家整理，馬歇爾把兩者畫在同一張圖上。'],
+ ['補貼','Subsidy','政府給生產者或消費者的金錢支持。','拉丁文 subsidium，原本是羅馬軍隊的「後備部隊」，在前線需要時上去支援，後來引申為「援助金」。']],
+q:[['鮮奶價格大漲，對珍奶的供給有什麼影響？',['供給增加','供給減少','供給量增加','沒有影響'],1,'原料成本上升，每個價格下店家願意賣的量都減少，供給線左移。'],
+ ['珍奶價格上漲，老闆多賣了 100 杯，這是？',['供給增加','供給量增加','需求增加','需求量減少'],1,'商品本身價格改變，沿著供給線移動，叫供給量的變動。'],
+ ['下列何者會讓手機供給增加？',['晶片價格上漲','發明更便宜的生產技術','工廠罷工','政府提高手機稅'],1,'技術進步降低生產成本，供給線右移。']]});
+
+LS.push({id:'l9',u:2,t:'市場均衡',s:'看不見的手如何決定價格',min:15,body:`
+<p>把需求線和供給線畫在一起，就得到經濟學最有名的圖。兩條線交叉的地方，就是<b>市場均衡</b>。</p>
+<h2>價格會自己找到平衡點</h2>
+<ul><li>如果價格<b>太高</b>：賣的人很多、買的人很少，東西賣不完（<b>過剩</b>）。店家只好降價求售。</li>
+<li>如果價格<b>太低</b>：想買的人很多、賣的人很少，大家搶不到（<b>短缺</b>）。店家發現可以漲價。</li>
+<li>價格就這樣一上一下，最後停在「想買的量 = 想賣的量」的地方。</li></ul>
+<p>沒有人下命令，市場自己就把價格調好了。亞當斯密把這種力量比喻成一隻<mark>看不見的手</mark>。</p>
+<div class="w" data-w="market"></div>
+<h2>預測價格的四個口訣</h2>
+<table class="t"><tr><th>發生什麼事</th><th>價格</th><th>數量</th></tr>
+<tr><td>需求增加（右移）</td><td>↑</td><td>↑</td></tr><tr><td>需求減少（左移）</td><td>↓</td><td>↓</td></tr>
+<tr><td>供給增加（右移）</td><td>↓</td><td>↑</td></tr><tr><td>供給減少（左移）</td><td>↑</td><td>↓</td></tr></table>
+<p>分析任何新聞事件，都用這三步驟：<b>①影響需求還是供給？②往哪邊移？③看新的交點。</b></p>
+<div class="box story"><b class="h">😷 2020 年的口罩</b>疫情爆發時，每個人都想買口罩（需求大增），工廠一時做不出來。價格如果自由漲，可能一片上百元。台灣政府選擇「口罩實名制」：限價、限量、排隊購買，同時請工廠日夜加開生產線，讓供給增加。這是市場與政府一起解決問題的例子。</div>
+<div class="box fun"><b class="h">💡 剪刀的兩片刀刃</b>有人爭論價格是由「成本」（供給）還是「喜好」（需求）決定的。馬歇爾說：這就像問剪刀是上面的刀片在剪，還是下面的刀片在剪。答案是：<b>兩片一起</b>。</div>`,
+terms:[['均衡','Equilibrium','需求量等於供給量、價格沒有變動壓力的狀態。','拉丁文 aequus（相等）+ libra（天平）：天平兩邊一樣重，就會停住不動。「libra」也是天秤座的名字。'],
+ ['看不見的手','Invisible hand','比喻市場中每個人追求自身利益，卻在無形中促進整體社會利益的機制。','出自亞當斯密。有趣的是，這個詞在整本《國富論》裡<b>只出現過一次</b>，是後來的經濟學家讓它變得超級有名。'],
+ ['短缺與過剩','Shortage & Surplus','需求量大於供給量（搶不到）；供給量大於需求量（賣不完）。','「短缺」是缺了一截；surplus 來自拉丁文 super（在上面）+ plus（更多），表示「多出來的」。'],
+ ['市場','Market','買家和賣家進行交易的地方或機制，不一定是實體的。','拉丁文 mercatus，和 merx（商品）有關，Mercury（墨丘利）就是羅馬的商業之神。中文「市」字很古老，《易經》說「日中為市」，中午大家聚集交易。']],
+q:[['如果珍奶價格高於均衡價格，會發生什麼？',['短缺','過剩','需求增加','供給減少'],1,'價格太高，想賣的比想買的多，就會賣不完（過剩），價格會被迫下降。'],
+ ['颱風過後，高麗菜的價格和數量會怎麼變？',['價格↑數量↑','價格↑數量↓','價格↓數量↑','價格↓數量↓'],1,'颱風讓供給減少（左移），均衡價格上升、數量下降。'],
+ ['「看不見的手」這個比喻是誰提出的？',['馬歇爾','凱因斯','亞當斯密','李嘉圖'],2,'出自亞當斯密，用來形容市場的自我調節力量。']]});
+
+LS.push({id:'l10',u:2,t:'彈性',s:'漲價之後，大家反應有多大？',min:12,body:`
+<p>需求法則告訴我們：漲價會讓人少買。但<b>少買多少</b>呢？藥品漲價，病人還是得買；某家飲料漲價，客人馬上跑去隔壁。這種「反應的敏感程度」叫做<b>彈性</b>。</p>
+<div class="formula">需求的價格彈性 = 需求量變動的 % ÷ 價格變動的 %</div>
+<p>例如價格漲 10%，需求量減少 20%，彈性就是 2。</p>
+<table class="t"><tr><th>彈性</th><th>名稱</th><th>意思</th><th>例子</th></tr>
+<tr><td>大於 1</td><td>富有彈性</td><td>反應很大</td><td>某品牌飲料、旅遊、名牌包</td></tr>
+<tr><td>小於 1</td><td>缺乏彈性</td><td>反應很小</td><td>鹽、藥品、汽油、電力</td></tr></table>
+<div class="w" data-w="elastic"></div>
+<h2>什麼東西比較有彈性？</h2>
+<ol><li><b>替代品多</b>：手搖飲店滿街都是，彈性大；胰島素沒有替代品，彈性小。</li>
+<li><b>是奢侈品還是必需品</b>：必需品缺乏彈性。</li>
+<li><b>佔收入比例</b>：鹽很便宜，漲一倍你也不在意；房租漲一倍你就會搬家。</li>
+<li><b>時間長短</b>：油價剛漲時你還是得開車，但幾年後可能換電動車。時間越長，彈性越大。</li></ol>
+<div class="key"><b class="h">⭐ 重點</b>彈性決定了「漲價能不能多賺」。商品缺乏彈性，漲價營收增加；商品富有彈性，漲價反而賺更少。這也是為什麼政府喜歡對菸、酒、汽油課稅：大家很難不買，稅收穩定。</div>
+<div class="box story"><b class="h">🌾 穀賤傷農</b>農民大豐收，應該很開心吧？但米是缺乏彈性的東西：米多了，大家也不會多吃好幾碗飯。結果價格大跌，農民總收入反而減少。這就是中國古話「穀賤傷農」，用彈性就能解釋。</div>`,
+terms:[['彈性','Elasticity','一個變數對另一個變數變動的敏感程度。','馬歇爾在 1890 年從物理學借來這個詞。物理學的彈性是「橡皮筋被拉時會伸長多少」；經濟學的彈性是「價格被拉動時，需求量會伸縮多少」。'],
+ ['富有彈性','Elastic','彈性大於 1，需求量變動的比例大於價格變動的比例。','像一條很鬆的橡皮筋，輕輕一拉就伸很長。'],
+ ['缺乏彈性','Inelastic','彈性小於 1，需求量變動的比例小於價格變動的比例。','in- 表示「不」，像一條很硬的繩子，怎麼拉都拉不太動。'],
+ ['穀賤傷農','—','豐收使農產品價格大跌，農民收入反而減少。','出自古代中國。《漢書・食貨志》記載戰國時代李悝的話：「糴甚貴傷民，甚賤傷農」，意思是米太貴傷害百姓，太便宜傷害農民。']],
+q:[['某商品漲價 10%，需求量減少 5%，它的需求彈性是？',['2','0.5','5','10'],1,'5% ÷ 10% = 0.5，小於 1，屬於缺乏彈性。'],
+ ['下列哪一種商品的需求最可能缺乏彈性？',['某品牌的洋芋片','出國旅遊','救命的藥品','電影票'],2,'救命藥品沒有替代品、是必需品，漲價大家還是得買。'],
+ ['如果商品富有彈性，店家漲價後營收會？',['增加','減少','不變','一定翻倍'],1,'富有彈性時，需求量減少的比例大於漲價比例，總營收下降。']]});
+
+LS.push({id:'l11',u:2,t:'邊際效用',s:'為什麼第一口最好吃？',min:12,body:`
+<p>經濟學家用<b>效用</b>來描述「滿足感」。你喝珍奶覺得很開心，就是得到了效用。</p>
+<h2>邊際效用遞減</h2>
+<p>還記得第 6 課的「邊際」嗎？<b>邊際效用</b>就是「多吃一單位，多得到的滿足」。來做個實驗：</p>
+<div class="w" data-w="mu"></div>
+<p>你會發現：第一杯最棒，之後每一杯帶來的滿足越來越少，最後甚至變成負的。這叫<mark>邊際效用遞減法則</mark>，幾乎適用於所有東西。</p>
+<h2>它解釋了很多事</h2>
+<ul><li><b>吃到飽餐廳敢開</b>：因為你吃到第五盤牛排，滿足感就大降，吃不了太多。</li>
+<li><b>需求線為什麼向下</b>：你越多杯，下一杯對你的價值越低，只有更便宜你才願意買。</li>
+<li><b>為什麼要「分散」</b>：零用錢不會全部拿去買同一樣東西，因為買很多同樣的東西，最後幾個的滿足很低，不如換買別的。</li></ul>
+<h2>鑽石與水的謎題</h2>
+<div class="box story"><b class="h">💎 亞當斯密想不通的問題</b>水是生命必需品，卻很便宜；鑽石沒什麼實際用途，卻超級貴。為什麼？<br>答案：價格由<b>邊際效用</b>決定，而不是總效用。水很多，你喝了一杯又一杯，<b>多一杯</b>水的邊際效用很低；鑽石很稀少，<b>多一顆</b>的邊際效用很高。但如果你在沙漠快渴死了，一杯水你願意用一整袋鑽石換！</div>
+<div class="key"><b class="h">⭐ 重點</b>理性的消費者會一直買，直到「多買一個帶來的滿足 = 付出的價格」為止。</div>`,
+terms:[['效用','Utility','消費商品或服務所得到的滿足程度。','拉丁文 utilis「有用的」。英國哲學家邊沁（Jeremy Bentham）的「功利主義」（utilitarianism）用這個字表示「快樂」，後來被經濟學家借用。'],
+ ['邊際效用遞減','Diminishing marginal utility','每多消費一單位，額外得到的滿足越來越少。','德國學者戈森（Hermann Gossen）1854 年最早提出，被稱為「戈森第一法則」。可惜他的書當時沒人理，他在失望中把書收回，直到他死後，才被耶文斯等人重新發現並大力稱讚。'],
+ ['價值的矛盾','Paradox of value','水比鑽石有用，卻比鑽石便宜的謎題，又稱「鑽石與水悖論」。','亞當斯密在《國富論》中提出這個問題，但沒有解開。一百年後的邊際革命才用「邊際效用」給出答案。']],
+q:[['吃第一片披薩覺得超好吃，吃到第六片覺得很撐。這描述了？',['需求法則','邊際效用遞減','機會成本','比較利益'],1,'每多吃一片，額外的滿足越來越少，就是邊際效用遞減。'],
+ ['為什麼水比鑽石便宜？',['水的總效用低','水多，多一單位的邊際效用低','鑽石比較好喝','政府規定'],1,'價格反映的是邊際效用。水很多，多一杯的價值很低；鑽石稀少，多一顆的價值很高。'],
+ ['提出「邊際效用遞減」的戈森，他的書一開始？',['大賣','幾乎沒人理','被禁','得到諾貝爾獎'],1,'戈森的書出版時幾乎沒人注意，直到他死後才被重新發現。']]});
+
+LS.push({id:'l12',u:2,t:'剩餘與政府干預',s:'市場的好處去了哪裡？',min:16,body:`
+<p>市場交易會讓買賣雙方都「賺到」。怎麼衡量賺了多少？經濟學家用<b>剩餘</b>這個概念。</p>
+<h2>消費者剩餘與生產者剩餘</h2>
+<div class="box story"><b class="h">🎟️ 演唱會門票</b>你超愛某個歌手，心裡覺得門票就算 3,000 元也值得。結果票價只要 2,000 元，你心裡「賺到」1,000 元，這就是<b>消費者剩餘</b>。<br>另一邊，主辦單位每張票成本 1,200 元，賣 2,000 元，賺了 800 元，這是<b>生產者剩餘</b>。</div>
+<div class="formula">消費者剩餘 = 願意付的最高價 − 實際付的價格<br>生產者剩餘 = 實際賣的價格 − 願意賣的最低價</div>
+<p>在供需圖上，消費者剩餘是需求線和價格之間的三角形，生產者剩餘是價格和供給線之間的三角形。市場均衡時，這兩塊加起來<b>最大</b>，所以經濟學家說自由市場「有效率」。</p>
+<h2>政府介入會怎樣？</h2>
+<p>政府常常因為公平或其他理由介入市場，例如課稅、限制價格。來看看會發生什麼：</p>
+<div class="w" data-w="surplus"></div>
+<h3>課稅</h3>
+<p>課稅後，買家付得更多、賣家拿得更少，成交量變少。有一部分剩餘變成政府的稅收（可以拿去蓋學校），但還有一塊灰色的三角形<b>憑空消失</b>了：那些本來會發生、對雙方都有好處的交易，因為稅而沒發生。這叫<mark>無謂損失</mark>。</p>
+<h3>價格上限</h3>
+<p>政府為了保護消費者，規定「最高只能賣多少錢」，例如限制房租。聽起來很好，但價格被壓低後，願意賣的人變少、想買的人變多，就會出現<b>短缺</b>：排隊、黑市、房東不修房子。</p>
+<h3>價格下限</h3>
+<p>反過來，政府規定「最低不能低於多少錢」，例如<b>基本工資</b>。它能保障勞工收入，但如果訂得太高，可能讓部分企業少請人。基本工資到底會不會增加失業，是經濟學家爭論了幾十年的題目，研究結果並不一致。</p>
+<div class="key"><b class="h">⭐ 重點</b>政府介入不一定是壞事，但幾乎總有代價。好的政策，要比較「帶來的公平或好處」和「造成的無謂損失」。</div>`,
+terms:[['消費者剩餘','Consumer surplus','消費者願意支付的最高價格減去實際支付價格的差額。','法國工程師杜普伊（Jules Dupuit）在 1844 年研究「造橋值不值得」時最早提出，後來馬歇爾把它發揚光大。'],
+ ['生產者剩餘','Producer surplus','生產者實際得到的價格減去願意接受的最低價格的差額。','跟消費者剩餘成對出現，一起用來衡量市場帶給社會的總福利。'],
+ ['無謂損失','Deadweight loss','因為市場扭曲（例如課稅），本來會發生的互利交易沒有發生，所造成的總剩餘損失。','deadweight 原本指船上「完全沒有用、只佔重量」的貨物。在圖上這塊三角形也叫「哈伯格三角形」，以美國經濟學家哈伯格（Arnold Harberger）命名。'],
+ ['價格上限／下限','Price ceiling / Price floor','政府規定的最高價格／最低價格。','ceiling 是天花板，價格不能往上超過它；floor 是地板，價格不能往下低於它。非常直觀的命名。'],
+ ['基本工資','Minimum wage','法律規定雇主必須支付的最低工資。','世界上第一個全國性最低工資法在 1894 年的紐西蘭通過。台灣在 1956 年開始實施基本工資，2024 年起有《最低工資法》。']],
+q:[['你願意花 500 元買一本書，實際只花了 350 元，消費者剩餘是？',['350 元','500 元','150 元','850 元'],2,'500 − 350 = 150 元。'],
+ ['政府把房租上限訂在市場價格以下，最可能發生什麼？',['房子過剩','租屋短缺','房租上漲','沒有影響'],1,'價格被壓低，想租的人增加、願意出租的人減少，就會短缺。'],
+ ['課稅造成的「無謂損失」指的是？',['政府收到的稅','因為稅而沒有發生的互利交易所損失的剩餘','廠商的利潤','消費者付的錢'],1,'稅讓成交量減少，那些本來對雙方都有利的交易消失了，這部分損失沒有任何人得到。']]});
+
+LS.push({id:'l13',u:2,t:'廠商的成本',s:'做越多越便宜，還是越貴？',min:15,body:`
+<p>站到老闆的角度想想：要做多少才賺最多？先要搞懂成本。</p>
+<h2>兩種成本</h2>
+<ul><li><b>固定成本</b>：不管做多少都要付的錢，例如廠房租金、機器。就算今天一件都沒做，房租還是要繳。</li>
+<li><b>變動成本</b>：跟著產量增減的錢，例如布料、電費、工人加班費。</li></ul>
+<div class="formula">總成本 = 固定成本 + 變動成本　　平均成本 = 總成本 ÷ 產量</div>
+<h2>邊際成本：多做一件要多花多少？</h2>
+<p>一開始，多做一點會讓平均成本下降：固定成本被分攤到更多件上。但產量太大時，工廠變擠、機器過熱、工人累壞，多做一件的<b>邊際成本</b>會越來越高。來經營你的 T 恤工廠吧：</p>
+<div class="w" data-w="cost"></div>
+<h2>三個關鍵發現</h2>
+<ol><li><b>邊際成本曲線會穿過平均成本的最低點</b>。想像你的平均考試分數是 80 分，下一次考 90 分（邊際），平均就會上升；考 70 分，平均就會下降。</li>
+<li><b>利潤最大化的產量</b>：做到「多賣一件的收入（價格）= 多做一件的成本（邊際成本）」為止。再多做就虧了。</li>
+<li><b>規模經濟</b>：很多產業規模越大、平均成本越低，所以大公司往往比小公司便宜。例如一次訂一萬件布料，單價比訂一百件便宜很多。</li></ol>
+<div class="key"><b class="h">⭐ 重點</b>聰明的老闆看的是<b>邊際</b>，不是平均：「多做這一件，能不能多賺？」</div>
+<div class="box fun"><b class="h">💡 短期與長期</b>經濟學的「短期」和「長期」不是看幾天幾個月，而是看<b>能不能改變所有投入</b>。短期內廠房換不了（固定成本存在）；長期來看，所有東西都能調整，連要不要繼續開工廠都能決定。</div>`,
+terms:[['固定成本','Fixed cost','不隨產量變動的成本，例如租金。','fixed 來自拉丁文 figere「釘住」，就像被釘在牆上不會動。'],
+ ['變動成本','Variable cost','隨產量增減而變動的成本，例如原料。','variable 來自拉丁文 variare「變化」，和「變數」是同一個字。'],
+ ['邊際成本','Marginal cost','多生產一單位產品所增加的成本。','結合了「邊際」（邊緣上多一點）和「成本」。1870 年代邊際革命之後，經濟學家開始用邊際的眼光看成本，改變了整個廠商理論。'],
+ ['規模經濟','Economies of scale','產量增加時，平均成本下降的現象。','scale 來自拉丁文 scala「梯子」，一階一階往上爬，引申為「規模、尺度」。亞當斯密的別針工廠其實就是規模經濟的早期例子。'],
+ ['利潤','Profit','總收入減去總成本。','拉丁文 proficere「前進、有進展」。中文「利」字左邊是禾（稻子），右邊是刀，本義是用刀收割莊稼，收穫就是「利」。']],
+q:[['下列哪一項是固定成本？',['布料','工廠租金','按件計酬的工資','包裝材料'],1,'不管做多少件，租金都要付，所以是固定成本。'],
+ ['廠商利潤最大時的產量，大約在哪裡？',['平均成本最低處','價格 = 邊際成本處','產量最大處','固定成本最低處'],1,'只要多賣一件的收入大於多做一件的成本就繼續做，直到兩者相等。'],
+ ['大賣場進貨量大、單位成本低，這是？',['規模經濟','邊際效用遞減','比較利益','外部性'],0,'規模越大，平均成本越低，就是規模經濟。']]});
+
+LS.push({id:'l14',u:2,t:'市場結構',s:'從夜市攤販到獨佔企業',min:12,body:`
+<p>不同的市場，賣家的數量和力量差很多。夜市裡上百個攤販賣雞排，和全台只有一家公司賣自來水，完全是兩個世界。</p>
+<table class="t"><tr><th>市場結構</th><th>賣家數量</th><th>商品</th><th>定價能力</th><th>例子</th></tr>
+<tr><td>完全競爭</td><td>非常多</td><td>幾乎一樣</td><td>沒有，只能接受市場價格</td><td>農產品市場、外匯市場</td></tr>
+<tr><td>獨佔性競爭</td><td>很多</td><td>有差異</td><td>有一點</td><td>餐廳、手搖飲、髮廊</td></tr>
+<tr><td>寡占</td><td>少數幾家</td><td>一樣或有差異</td><td>相當大，會互相觀察</td><td>電信公司、手機作業系統、石油</td></tr>
+<tr><td>獨占</td><td>只有一家</td><td>沒有替代品</td><td>很大</td><td>自來水公司、專利藥</td></tr></table>
+<h2>完全競爭：沒人能耍大牌</h2>
+<p>如果市場上有幾千個種白米的農夫，每一包米都差不多，那沒有一個農夫能自己漲價：你貴一塊錢，客人就去買別家。長期下來，大家只能賺「正常」的利潤。這對消費者最好。</p>
+<h2>獨占：一個人說了算</h2>
+<p>只有一家公司時，它可以把價格訂高、產量減少，賺取超額利潤，消費者只能接受。所以很多國家有《公平交易法》，防止企業壟斷。</p>
+<p>但獨占不一定都是壞事：<b>專利</b>就是政府故意給發明者 20 年的獨占權，讓大家願意花大錢研發新藥和新技術。</p>
+<h2>寡占：少數巨頭的心理戰</h2>
+<p>寡占市場裡，每家公司都要猜對手會怎麼做：我降價，對手會跟嗎？它們有時候會偷偷串通一起漲價，這叫<b>聯合壟斷（卡特爾）</b>，在大部分國家都違法。最有名的例子是石油輸出國組織 OPEC，它們協調產量來影響油價。寡占的策略思考，要用下一課的「賽局理論」來分析。</p>
+<div class="box fun"><b class="h">💡 為什麼叫「獨佔性競爭」？</b>聽起來很矛盾吧？既獨佔又競爭？其實意思是：每家店的商品都有自己的特色（在自己的特色上「獨佔」），但又跟很多類似的店競爭。你的愛店的珍奶是獨一無二的，但它還是要跟整條街的飲料店搶客人。</div>`,
+terms:[['獨占','Monopoly','市場上只有一家廠商，沒有相近替代品。','希臘文 monos（單一）+ pōlein（販賣），意思就是「只有一個人在賣」。有名的桌遊「大富翁」英文就叫 Monopoly，目標就是壟斷所有地產。'],
+ ['寡占','Oligopoly','市場由少數幾家大廠商主導。','希臘文 oligoi（少數）+ pōlein（販賣）。「寡」在中文就是「少」的意思，翻譯得很精準。'],
+ ['完全競爭','Perfect competition','買賣雙方眾多、商品同質、進出自由、資訊充分的市場。','這是經濟學家想像出來的「理想狀態」，現實中很少完全符合，但它是衡量其他市場的標準尺。'],
+ ['卡特爾','Cartel','廠商之間串通，共同決定價格或產量的組織。','來自德文 Kartell，原本是中世紀騎士決鬥前簽的「協議書」。19 世紀德國企業之間的價格同盟被叫做 Kartell，這個字就傳遍全世界。'],
+ ['專利','Patent','政府授予發明人在一定期間內獨家使用發明的權利。','拉丁文 litterae patentes，意思是「公開的信」：國王給的特許狀是公開展示的，不是密封的。']],
+q:[['下列哪一個最接近完全競爭市場？',['自來水公司','某品牌手機','農夫賣的白米','電信公司'],2,'白米市場有非常多賣家，商品也差不多，每個農夫都無法自己決定價格。'],
+ ['政府給藥廠專利，等於給它什麼？',['補貼','一段時間的獨占權','價格上限','免稅'],1,'專利是法律保障的獨占權，用來鼓勵研發創新。'],
+ ['「Oligopoly」中的 oligoi 是什麼意思？',['單一','少數','很多','全部'],1,'oligoi 在希臘文是「少數」，寡占就是少數幾家在賣。']]});
+
+LS.push({id:'l15',u:2,t:'賽局理論',s:'當你的選擇取決於別人的選擇',min:14,body:`
+<p>下棋、猜拳、打牌時，你的最佳策略取決於對手會怎麼出招。經濟學用<b>賽局理論</b>來研究這種「互相猜測」的情況。</p>
+<h2>囚犯困境</h2>
+<div class="box story"><b class="h">🚔 經典故事</b>警察抓到兩個共犯，把他們分開審問，給出條件：<br>・兩人都不招：各關 1 年。<br>・一人招、一人不招：招的人當場釋放，不招的關 10 年。<br>・兩人都招：各關 5 年。<br>站在甲的角度想：如果乙不招，我招就能直接出獄；如果乙招了，我招只關 5 年，不招要關 10 年。<b>不管乙怎麼做，我招都比較好！</b>乙也這麼想。結果兩人都招了，各關 5 年。明明兩人都不招只要關 1 年啊！</div>
+<p>這就是<mark>囚犯困境</mark>：每個人都做了對自己最好的選擇，結果卻讓大家都變差。</p>
+<h2>現實中的囚犯困境</h2>
+<ul><li>兩家店都降價搶客，結果大家都沒賺錢。</li><li>國家之間的軍備競賽。</li><li>考試時大家都拚命補習，結果排名還是一樣，只是每個人都更累。</li><li>每個國家都想少減碳，讓別國去減，結果地球一起變熱。</li></ul>
+<h2>怎麼逃出困境？重複的賽局</h2>
+<p>如果只玩一次，背叛是「最佳」選擇。但如果<b>每天都要玩</b>，情況就不同了：今天你背叛，明天對手就報復你。來試試看：</p>
+<div class="w" data-w="pd"></div>
+<div class="box fun"><b class="h">💡 以牙還牙拿下冠軍</b>1980 年，美國政治學家艾瑟羅德舉辦了一場電腦程式比賽，讓各種策略重複對戰囚犯困境。最後的冠軍是一個只有 4 行程式碼的簡單策略「以牙還牙」：先合作，然後對手上次怎麼對你，你就怎麼對他。它的特點是：善良、會報復、會原諒、而且清楚易懂。</div>
+<h2>納許均衡</h2>
+<p>如果在某個狀態下，<b>每個人在別人的選擇不變時，都沒有理由改變自己的選擇</b>，這個狀態就叫<b>納許均衡</b>。囚犯困境中「兩人都招」就是納許均衡：它穩定，但不一定是最好的結果。</p>`,
+terms:[['賽局理論','Game theory','研究多個決策者之間策略互動的理論。','1944 年，數學天才馮紐曼（John von Neumann）和經濟學家摩根斯坦合寫《賽局理論與經濟行為》，開創了這個領域。中國大陸譯作「博弈論」，「博」和「弈」都是古代的棋類遊戲。'],
+ ['囚犯困境','Prisoner\'s dilemma','每個人都做出對自己最有利的選擇，結果卻比合作時更差的情況。','1950 年美國蘭德公司的兩位研究員弗勒德和德瑞舍設計出這個賽局，數學家塔克（Albert Tucker）替它編了「兩個囚犯」的故事並取了這個名字，因為故事比數字好記多了。'],
+ ['納許均衡','Nash equilibrium','在其他人的策略不變下，沒有人能透過單獨改變策略而獲得更好結果的狀態。','由美國數學家納許（John Nash）在 1950 年的博士論文提出，論文只有 27 頁。他在 1994 年獲得諾貝爾經濟學獎，他的人生故事被拍成電影《美麗境界》。'],
+ ['以牙還牙','Tit for tat','先合作，之後模仿對手上一回合的行動。','英文 tit for tat 原本是 tip for tap「輕打還一下輕打」。中文「以牙還牙」出自《聖經》「以眼還眼，以牙還牙」。這個策略是由心理學家拉波波特寫出來參賽的。']],
+q:[['囚犯困境告訴我們什麼？',['合作一定會發生','個人理性的選擇可能導致集體更差的結果','背叛永遠是錯的','警察很聰明'],1,'每個人都選對自己最好的，結果卻讓兩人都比合作更差。'],
+ ['在重複賽局中，「以牙還牙」策略第一回合會怎麼做？',['背叛','合作','隨機','放棄'],1,'以牙還牙一開始先合作，之後模仿對手上一回合的行動。'],
+ ['納許均衡是誰提出的？',['亞當斯密','凱因斯','納許','馮紐曼'],2,'美國數學家納許在 1950 年的博士論文中提出。']]});
+
+LS.push({id:'l16',u:2,t:'市場失靈',s:'看不見的手也會失手',min:16,body:`
+<p>前幾課說市場很厲害，能自動找到有效率的價格。但有些情況下，市場自己解決不了問題，這叫<b>市場失靈</b>。常見的有四種。</p>
+<h2>① 外部性：別人幫你付了帳</h2>
+<p>一家工廠排放廢水到河裡，下游的漁民和居民受害，但工廠不用付錢。這種「你的行為影響到別人，卻沒有反映在價格上」的情況，叫做<b>外部性</b>。</p>
+<div class="w" data-w="ext"></div>
+<ul><li><b>負外部性</b>：污染、二手菸、深夜噪音、塞車。市場會生產<b>太多</b>。</li>
+<li><b>正外部性</b>：打疫苗（也保護了別人）、教育、在家門口種花。市場會生產<b>太少</b>，所以政府常常補貼。</li></ul>
+<p>解決方法：課<b>污染稅</b>（皮古稅）、發放排放許可、或像碳交易一樣讓污染權可以買賣。</p>
+<h2>② 公共財：大家都想搭便車</h2>
+<p>路燈、國防、煙火秀有兩個特性：<b>一個人用不會減少別人能用的</b>（非敵對性），<b>也很難阻止沒付錢的人使用</b>（非排他性）。</p>
+<p>如果讓大家自願出錢裝路燈，很多人會想：「反正別人會出錢，我不出也照樣有路燈。」這叫<mark>搭便車</mark>。結果沒人出錢，路燈就沒了。所以公共財通常由政府用稅金提供。</p>
+<h2>③ 公地悲劇：共享的東西容易被用光</h2>
+<p>一片大家共用的草地，每個牧羊人都想多放幾隻羊，因為好處是自己的，草被吃光的代價卻由大家分擔。最後草地被啃光，所有人都沒得放。過度捕魚、地下水超抽都是這個問題。</p>
+<h2>④ 資訊不對稱：你知我不知</h2>
+<div class="box story"><b class="h">🚗 二手車市場</b>賣車的人知道車子有沒有問題，買的人不知道。買家怕買到爛車，只願意出「平均價」。結果好車的車主覺得太便宜，不賣了；市場上只剩爛車。這就是著名的「檸檬市場」（在美國俚語裡，lemon 指的就是爛車）。</div>
+<p>解決方法：保固、第三方檢驗、評價系統、法律規定要揭露資訊。你買東西會先看網路評價，就是在減少資訊不對稱！</p>
+<div class="key"><b class="h">⭐ 重點</b>市場失靈時，政府介入<b>可能</b>讓結果變好。但政府也會犯錯（叫「政府失靈」），所以要謹慎比較。</div>`,
+terms:[['外部性','Externality','一個人的行為影響到旁人，卻沒有為此付費或得到補償。','external 是「外部的」：影響跑到交易的雙方「外面」去了。英國經濟學家皮古（Arthur Pigou）在 1920 年《福利經濟學》中系統化這個概念。'],
+ ['皮古稅','Pigouvian tax','針對負外部性課徵、讓製造者負擔社會成本的稅。','以皮古命名。1960 年另一位英國經濟學家寇斯（Ronald Coase）提出不同想法：只要財產權清楚、協商成本低，當事人可以自己談出解決辦法，這叫「寇斯定理」，他在 1991 年得到諾貝爾獎。'],
+ ['公共財','Public good','具有非敵對性和非排他性的商品，例如國防、路燈。','美國經濟學家薩繆爾森在 1954 年用數學正式定義了公共財。'],
+ ['搭便車','Free rider','享受好處卻不分擔成本的人。','原本指不買票就跳上車的人。中文翻譯非常傳神。'],
+ ['公地悲劇','Tragedy of the commons','共享資源因每個人追求自身利益而被過度使用、最終耗盡。','英國學者洛伊德在 1833 年用放牧的例子提出，美國生態學家哈丁（Garrett Hardin）在 1968 年用這個名字發表文章後廣為人知。2009 年諾貝爾獎得主歐斯壯（Elinor Ostrom）則證明：社區可以自己訂規則，成功管理共享資源。'],
+ ['資訊不對稱','Information asymmetry','交易的一方掌握的資訊比另一方多。','美國經濟學家艾克羅夫（George Akerlof）1970 年發表《檸檬市場》論文，一開始被三家期刊拒絕，說它「太簡單」。後來他因此獲得 2001 年諾貝爾獎。']],
+q:[['工廠排放廢氣讓附近居民生病，這是？',['正外部性','負外部性','公共財','資訊不對稱'],1,'工廠的行為傷害了第三方卻沒有付出代價，是負外部性。'],
+ ['為什麼路燈通常由政府提供？',['因為路燈很貴','因為有搭便車問題，私人不願出錢','因為路燈是獨占','因為路燈有負外部性'],1,'路燈是公共財，無法阻止沒付錢的人使用，自願出錢會有搭便車問題。'],
+ ['二手車市場中，好車慢慢消失、只剩爛車，這是因為？',['外部性','公地悲劇','資訊不對稱','規模經濟'],2,'買家無法分辨好壞車，只願出平均價，好車車主因此不願賣，這就是檸檬市場。']]});
+</script>
+<script>
+LS.push({id:'l17',u:3,t:'GDP：國家的成績單',s:'怎麼知道一個國家的經濟好不好？',min:14,body:`
+<p>新聞常說「今年經濟成長率 3%」，這個數字到底是怎麼算的？答案就是 <b>GDP</b>。</p>
+<h2>GDP 是什麼？</h2>
+<div class="formula">GDP = 一個國家在一段時間內，生產的所有<b>最終</b>商品和服務的市場價值</div>
+<p>拆開來看：</p>
+<ul><li><b>一個國家內</b>：外國公司在台灣生產也算台灣的 GDP；台灣人在國外工作賺的不算。</li>
+<li><b>一段時間</b>：通常是一季或一年。</li>
+<li><b>最終</b>：只算到消費者手上的東西，中間原料不重複計算。</li>
+<li><b>市場價值</b>：用價格把蘋果和手機加在一起。</li></ul>
+<div class="w" data-w="gdp"></div>
+<h2>GDP 由誰花掉？</h2>
+<div class="formula">GDP = C + I + G + (X − M)</div>
+<table class="t"><tr><th>符號</th><th>意思</th><th>例子</th></tr>
+<tr><td>C</td><td>民間消費</td><td>你買衣服、吃飯、看電影</td></tr>
+<tr><td>I</td><td>投資</td><td>企業蓋工廠、買機器（不是買股票！）</td></tr>
+<tr><td>G</td><td>政府支出</td><td>蓋捷運、付公務員薪水</td></tr>
+<tr><td>X − M</td><td>出口減進口（淨出口）</td><td>台灣賣晶片到國外，減去從國外買的石油</td></tr></table>
+<h2>名目 vs. 實質</h2>
+<p>如果今年所有東西都漲價一倍，GDP 也會變成兩倍，但其實大家並沒有生產更多東西。所以經濟學家會扣掉物價上漲的部分，算出<b>實質 GDP</b>，這才是真正的成長。</p>
+<h2>GDP 不是萬能的</h2>
+<ul><li>不算家務和志工：爸媽在家煮飯不算，去餐廳吃就算。</li>
+<li>不看分配：GDP 很高，可能大部分錢在少數人手上。</li>
+<li>不扣污染：工廠拚命生產、污染環境，GDP 還是增加。</li>
+<li>不算快樂：不丹就提出「國民幸福指數」來補充。</li></ul>
+<div class="box fun"><b class="h">💡 GDP 的發明者自己就警告過</b>1934 年，美國經濟學家顧志耐（Simon Kuznets）替美國國會設計了國民所得的算法。但他同時提醒：「一個國家的福祉，幾乎無法從國民所得推論出來。」</div>`,
+terms:[['國內生產毛額','Gross Domestic Product, GDP','一國境內在一定期間內所生產的最終商品與服務的市場價值總和。','「毛」是 gross 的翻譯，意思是「還沒扣掉某些東西」，這裡指還沒扣掉機器設備的折舊，就像「毛利」還沒扣成本。中國大陸譯為「國內生產總值」。現代國民所得帳由顧志耐在 1930 年代建立，他在 1971 年獲得諾貝爾獎。'],
+ ['最終財','Final goods','直接賣給最後使用者、不再加工的商品。','相對的是「中間財」（intermediate goods），例如麵粉之於麵包。只算最終財就能避免重複計算。'],
+ ['附加價值','Value added','每個生產階段新增加的價值，等於銷售額減去購入原料的成本。','台灣和歐洲的「營業稅」其實就是對附加價值課稅，所以又叫「加值型營業稅」（VAT）。'],
+ ['實質 GDP','Real GDP','扣除物價變動影響後的 GDP，反映真正的產量變化。','real 在這裡不是「真的」，而是「以實物計算」，相對於用當年價格計算的「名目」（nominal，拉丁文 nomen「名字」，只是名義上的數字）。'],
+ ['投資','Investment','在經濟學中指購買資本財，例如廠房、機器、設備。','拉丁文 investire「給……穿上衣服」，原本指替某人披上官服、授予職位，後來引申為「把錢投入事業」。注意：經濟學的投資不包括買股票，那只是資產換手。']],
+q:[['下列哪一項會算進台灣的 GDP？',['媽媽在家煮晚餐','台積電在台灣工廠生產的晶片','一台二手機車的買賣','台灣人在美國工作的薪水'],1,'GDP 算的是國內新生產的最終商品與服務。家務不經過市場、二手貨不是新生產、國外所得不在國內。'],
+ ['為什麼 GDP 只算「最終財」？',['因為中間財不重要','為了避免重複計算','因為中間財沒有價格','因為政府規定'],1,'中間財的價值已經包含在最終財的價格裡，再算一次就重複了。'],
+ ['GDP = C + I + G + (X−M) 中，I 代表什麼？',['利息','投資（企業購買廠房設備）','所得','進口'],1,'I 是 Investment，指企業購買廠房、機器等資本財。']]});
+
+LS.push({id:'l18',u:3,t:'通貨膨脹',s:'為什麼錢越來越不值錢？',min:14,body:`
+<div class="box story"><b class="h">🧋 阿公的珍奶</b>珍奶剛流行的 1980 年代，一杯大約 20～30 元；現在一杯要 60 元以上。珍奶沒有變大兩倍，是<b>錢變得不值錢</b>了。</div>
+<p>整體物價持續上漲的現象，叫做<b>通貨膨脹</b>，簡稱通膨。反過來，物價持續下跌叫<b>通貨緊縮</b>。</p>
+<h2>怎麼衡量？消費者物價指數 CPI</h2>
+<p>政府會定期調查一大籃子「一般家庭常買的東西」：食物、房租、交通、學費……看看這一籃東西的總價比去年貴了多少。這個指數叫做 <b>CPI</b>。CPI 年增率 2%，就代表物價比去年平均上漲 2%。</p>
+<div class="w" data-w="infl"></div>
+<h2>通膨從哪裡來？</h2>
+<ol><li><b>需求拉動</b>：大家手上錢很多、搶著買東西，但東西沒變多，價格就被拉高。</li>
+<li><b>成本推動</b>：石油、原料、工資變貴，廠商只好漲價。</li>
+<li><b>錢印太多</b>：傅利曼有句名言：「通貨膨脹無論何時何地都是一種貨幣現象。」如果政府狂印鈔票，錢就像灌水的股票一樣稀釋。</li></ol>
+<h2>通膨的傷害</h2>
+<ul><li>存款的購買力下降，特別傷害靠存款或固定收入生活的人（例如退休老人）。</li>
+<li>讓價格訊號變混亂，企業很難規劃。</li>
+<li>欠錢的人反而佔便宜：借 100 萬，十年後的 100 萬比較不值錢。</li></ul>
+<p>但一點點溫和的通膨（大約每年 2%）通常被認為是健康的，所以很多國家的央行把目標訂在 2% 左右。<b>通貨緊縮</b>反而很可怕：大家預期東西會更便宜，就一直延後消費，經濟就停住了。日本就經歷過很長的通縮時期。</p>
+<h2>惡性通膨：錢變成壁紙</h2>
+<div class="box story"><b class="h">🧺 用推車裝錢去買麵包</b>1923 年的德國，物價每幾天就翻倍，人們用推車載一整車鈔票去買一條麵包，小孩拿成捆的鈔票當積木玩。2008 年的辛巴威更誇張，政府發行了面額「100 兆」的鈔票，但它連一條麵包都買不起。</div>`,
+terms:[['通貨膨脹','Inflation','一般物價水準持續上漲的現象。','拉丁文 inflare，意思是「吹氣」，就像把氣球吹脹。「通貨」是「流通的貨幣」，連起來就是「流通的錢被吹大、變得稀薄」。'],
+ ['通貨緊縮','Deflation','一般物價水準持續下跌的現象。','de-（向下）+ flare（吹）：把氣放掉，氣球縮小。'],
+ ['消費者物價指數','Consumer Price Index, CPI','衡量一般家庭購買的一籃商品和服務價格變化的指數。','index 是拉丁文「食指」，用手指「指出」某個東西，後來指「指標、索引」。台灣由主計總處每月發布 CPI。'],
+ ['惡性通膨','Hyperinflation','極度快速的通膨，通常定義為每月物價上漲超過 50%。','hyper 是希臘文「超過」。這個「每月 50%」的標準來自美國經濟學家凱根（Phillip Cagan）1956 年的研究。'],
+ ['70 法則','Rule of 70','用 70 除以年成長率，大約就是數值翻倍所需的年數。','來自數學上的自然對數：ln 2 ≈ 0.693。很多人也用 72，因為 72 能被 2、3、4、6、8、9、12 整除，心算更方便。']],
+q:[['CPI 上升 3%，代表什麼？',['GDP 成長 3%','一般家庭常買的東西平均貴了 3%','失業率 3%','利率 3%'],1,'CPI 衡量一般家庭購買的一籃商品價格變化。'],
+ ['下列哪一種人最容易被通膨傷害？',['欠很多錢的人','把大量現金存著、靠固定退休金生活的人','擁有房地產的人','薪水跟著物價調整的人'],1,'通膨讓現金和固定收入的購買力下降。'],
+ ['每年通膨 7%，物價大約幾年會翻倍？',['7 年','10 年','14 年','70 年'],1,'70 ÷ 7 = 10 年。']]});
+
+LS.push({id:'l19',u:3,t:'失業',s:'找不到工作的人，都一樣嗎？',min:12,body:`
+<p>失業不只是數字，也是每個家庭的真實壓力。先弄清楚：誰才算「失業」？</p>
+<h2>失業的定義</h2>
+<p>在經濟學和政府統計裡，<b>失業者</b>必須同時符合：<b>有工作能力、想工作、正在找工作，但還沒找到</b>。所以在學校念書的學生、全職家管、已經退休的人，都不算失業，他們叫做「非勞動力」。</p>
+<div class="w" data-w="unemp"></div>
+<div class="formula">失業率 = 失業人數 ÷ 勞動力 × 100%<br>勞動力 = 就業者 + 失業者</div>
+<h2>失業的三種類型</h2>
+<table class="t"><tr><th>類型</th><th>原因</th><th>例子</th><th>怎麼辦</th></tr>
+<tr><td><b>摩擦性失業</b></td><td>換工作、剛畢業，找工作需要時間</td><td>大學剛畢業正在投履歷</td><td>求職網站、就業服務</td></tr>
+<tr><td><b>結構性失業</b></td><td>產業轉型，技能跟不上</td><td>工廠自動化後，傳統作業員被取代</td><td>職業訓練、再教育</td></tr>
+<tr><td><b>循環性失業</b></td><td>景氣不好，企業裁員</td><td>金融海嘯時大批裁員</td><td>政府刺激景氣</td></tr></table>
+<p>因為摩擦性和結構性失業永遠存在，所以失業率不可能是 0%。經濟學家把「只剩這兩種失業」時的失業率叫做<b>自然失業率</b>，大約 3%～5%。</p>
+<div class="key"><b class="h">⭐ 重點</b>AI 和自動化會帶來新的結構性失業，但歷史上每次技術革命也都創造了新的工作。關鍵是：人要不斷學習新技能。</div>
+<div class="box fun"><b class="h">💡 盧德分子</b>19 世紀初的英國，一群紡織工人擔心新機器搶走工作，晚上跑去工廠砸毀織布機。他們自稱追隨傳說人物「盧德將軍」，所以後來反對新科技的人被叫做「盧德分子」（Luddite）。</div>`,
+terms:[['失業率','Unemployment rate','失業人數佔勞動力的比例。','台灣由行政院主計總處每月調查發布。「失業」的「業」是職業、工作；unemployment 則是 un-（沒有）+ employ（雇用），來自拉丁文 implicare「捲入、參與」。'],
+ ['勞動力','Labor force','15 歲以上、有能力且有意願工作的人，包括就業者和失業者。','在台灣的統計中，勞動力指 15 歲以上可以工作的民間人口。勞動力佔 15 歲以上人口的比例叫「勞動參與率」。'],
+ ['怯志工作者','Discouraged worker','想工作，但因為長期找不到而放棄找工作的人。','「怯」是害怕、退縮，「志」是意志。這些人被算成非勞動力，會讓失業率看起來比實際好。'],
+ ['自然失業率','Natural rate of unemployment','經濟正常運作時仍然存在的失業率，只包含摩擦性和結構性失業。','由傅利曼和費爾普斯在 1960 年代分別提出，兩人後來都得到諾貝爾經濟學獎。']],
+q:[['下列哪一位算是「失業者」？',['全職念書的高中生','退休的阿公','想工作也在找工作，但還沒找到的阿姨','在家照顧小孩、不想工作的爸爸'],2,'失業者必須有能力、想工作、正在找工作卻沒找到。'],
+ ['某國就業者 95 人、失業者 5 人，失業率是？',['5%','95%','5.3%','100%'],0,'5 ÷ (95 + 5) = 5%。'],
+ ['工廠導入機器人，作業員因技能不符而失業，屬於？',['摩擦性失業','結構性失業','循環性失業','自願失業'],1,'產業結構改變、技能不符造成的失業，是結構性失業。']]});
+
+LS.push({id:'l20',u:3,t:'利率與複利',s:'錢也有價格：時間的價值',min:12,body:`
+<p>今天的 100 元和一年後的 100 元，哪個比較值錢？答案是今天的。因為你可以拿今天的 100 元去存銀行、投資，一年後就不只 100 元。這叫做<b>貨幣的時間價值</b>。</p>
+<h2>利率是「借錢的價格」</h2>
+<p>你跟銀行借錢，要付<b>利息</b>；你把錢存進銀行，等於借錢給銀行，銀行付利息給你。<b>利率</b>就是利息佔本金的比例，也就是「使用別人的錢一段時間」的價格。</p>
+<h2>單利 vs. 複利</h2>
+<ul><li><b>單利</b>：只有本金會生利息。</li>
+<li><b>複利</b>：利息加進本金，下一期連利息也會生利息，俗稱「利滾利」。</li></ul>
+<div class="w" data-w="compound"></div>
+<p>你會發現，時間越長，複利的威力越驚人。這就是為什麼很多人說：<mark>越早開始存錢越好</mark>。20 歲開始每月存一點，可能比 40 歲開始存兩倍的錢還多。</p>
+<div class="box story"><b class="h">⚠️ 複利也會咬人</b>信用卡循環利息可能高達每年 15% 左右，用複利計算。欠 10 萬不還，大約 5 年就變 20 萬。複利對存錢的人是朋友，對欠錢的人是敵人。</div>
+<h2>名目利率 vs. 實質利率</h2>
+<div class="formula">實質利率 ≈ 名目利率 − 通膨率</div>
+<p>銀行給你 2% 利息，但通膨 3%，你的錢其實每年變少 1%。只看數字是不夠的。</p>
+<div class="box fun"><b class="h">💡 72 法則有五百多年歷史</b>義大利數學家帕西奧利在 1494 年的數學書裡就寫到這個法則。他也是第一個完整記錄「複式簿記」（現代會計的基礎）的人，被稱為「會計學之父」。</div>`,
+terms:[['利率','Interest rate','借款時支付的利息佔本金的比例，是資金的價格。','英文 interest 來自拉丁文 interesse「在兩者之間、有關係」。中世紀教會禁止放貸收利息，商人就說這是補償借錢期間的「損失差額」，用這個詞繞過禁令。中文「利」字是禾加刀，意思是收穫。'],
+ ['複利','Compound interest','利息加入本金後，下一期連同利息一起計息。','compound 是「混合、組合」：利息和本金混在一起再生利息。常有人說愛因斯坦稱複利是「世界第八大奇蹟」，但沒有任何可靠證據顯示他說過這句話。'],
+ ['本金','Principal','借出或存入的原始金額。','principal 來自拉丁文 principalis「最主要的、第一的」，本金就是最主要的那筆錢。'],
+ ['貨幣的時間價值','Time value of money','現在的一筆錢比未來同樣金額的錢更有價值。','這是整個金融學的基礎。奧地利經濟學家龐巴維克（Böhm-Bawerk）在 19 世紀末解釋：人天生偏好現在的享受，所以要補償利息才願意等待。']],
+q:[['存 10,000 元，年利率 10% 複利，2 年後有多少？',['12,000 元','12,100 元','11,000 元','20,000 元'],1,'第一年 11,000，第二年 11,000 × 1.1 = 12,100 元。多出的 100 元就是「利息的利息」。'],
+ ['銀行利率 1.5%，通膨率 2.5%，實質利率大約是？',['4%','1.5%','−1%','2.5%'],2,'1.5% − 2.5% = −1%，存錢的購買力其實在下降。'],
+ ['為什麼「越早存錢越好」？',['因為銀行比較喜歡年輕人','因為複利需要時間累積，時間越長效果越大','因為年輕人的利率比較高','因為以後會沒有銀行'],1,'複利的效果隨時間呈指數成長，越早開始越有利。']]});
+
+LS.push({id:'l21',u:3,t:'銀行與貨幣創造',s:'銀行其實會「生」出錢',min:14,body:`
+<p>你以為銀行只是一個放錢的保險箱嗎？其實銀行把你的存款大部分都借出去了，而且在這個過程中，<b>整個社會的錢變多了</b>。</p>
+<h2>銀行怎麼賺錢？</h2>
+<p>銀行用較低的利率吸收存款（例如給存款人 1.5%），再用較高的利率借給需要錢的人（例如房貸 2.5%），中間的差距叫<b>利差</b>，就是銀行的主要收入。</p>
+<h2>部分準備制度</h2>
+<p>銀行不會把你的錢全部鎖在金庫，因為大家不會同時來領錢。它只留下一部分當<b>準備金</b>，其餘借出去。央行會規定最低要留多少比例，叫做<b>法定準備率</b>。</p>
+<div class="w" data-w="bank"></div>
+<h2>錢是怎麼「變多」的？</h2>
+<ol><li>你存 1,000 元到 A 銀行，準備率 10%，A 銀行留 100 元，借出 900 元給小王。</li>
+<li>小王用 900 元買了腳踏車，腳踏車店老闆把 900 元存進 B 銀行。</li>
+<li>B 銀行留 90 元，借出 810 元……</li>
+<li>一直重複下去，你的 1,000 元最後變成 10,000 元的存款！</li></ol>
+<p>這就是<mark>貨幣乘數</mark>效果。注意：銀行並沒有印鈔票，而是透過「借貸」讓存款數字變多了。</p>
+<h2>擠兌：銀行最怕的事</h2>
+<p>如果大家突然擔心銀行倒閉，同時衝去領錢，銀行手上只有 10% 的準備金，根本付不出來，就真的會倒。這叫<b>擠兌</b>。為了防止擠兌，政府設立了<b>存款保險</b>：台灣每家銀行每位存款人的存款，最高保障新台幣 300 萬元。</p>
+<div class="box origin"><b class="h">📜 銀行和破產都是「長凳」</b>文藝復興時期的義大利，兌換錢幣的商人坐在廣場的長凳（banco）上做生意，於是 banco 變成了 bank。如果商人賠光了，大家就會把他的長凳打斷（banca rotta），這就是 bankrupt「破產」的由來。<br>中文為什麼叫「銀行」？中國古代以白銀為主要貨幣，「行」是商號、行業的意思（就像「商行」、「行情」），經營銀錢的商號就叫「銀行」。</div>`,
+terms:[['銀行','Bank','吸收存款、發放貸款的金融機構。','義大利文 banco（長凳）。中文「銀」指白銀貨幣，「行」讀作「杭」，是商號、行業的意思。'],
+ ['法定準備率','Required reserve ratio','中央銀行規定商業銀行必須保留的準備金佔存款的比例。','reserve 來自拉丁文 reservare「保留起來」。有些國家（例如美國在 2020 年）已經把法定準備率降到 0%，改用其他方式管理銀行。'],
+ ['貨幣乘數','Money multiplier','銀行體系透過存放款使貨幣供給放大的倍數，理論上等於 1 ÷ 準備率。','multiplier 來自拉丁文 multiplicare「使變多」。實際上因為人們會持有現金、銀行也會多留準備金，真正的乘數比理論值小。'],
+ ['擠兌','Bank run','大量存款人因擔心銀行倒閉而同時提領存款。','英文 run 是「跑」：大家「跑」去銀行領錢。中文「擠」字很傳神，描寫人潮擠在銀行門口的畫面。2023 年美國矽谷銀行發生了用手機 App 進行的「數位擠兌」，一天內被領走四百多億美元。'],
+ ['破產','Bankruptcy','無法清償債務，由法院處理其財產的狀態。','義大利文 banca rotta「打斷的長凳」。']],
+q:[['法定準備率 20%，存入 1,000 元，理論上最多可創造多少存款？',['1,200 元','5,000 元','20,000 元','800 元'],1,'貨幣乘數 = 1 ÷ 20% = 5，所以 1,000 × 5 = 5,000 元。'],
+ ['為什麼政府要設立存款保險？',['讓銀行多賺錢','防止擠兌，保障存款人','提高利率','增加稅收'],1,'存款保險讓民眾不用擔心存款拿不回來，降低擠兌發生的機會。'],
+ ['英文 bankrupt（破產）的由來是？',['銀行被搶','打斷的長凳','燒掉的鈔票','關門的店'],1,'來自義大利文 banca rotta，賠光的錢商長凳會被打斷。']]});
+
+LS.push({id:'l22',u:3,t:'中央銀行與貨幣政策',s:'控制整個國家經濟溫度的遙控器',min:14,body:`
+<p>每個國家都有一家「銀行的銀行」，叫做<b>中央銀行</b>。台灣的中央銀行位在台北，美國的叫<b>聯準會</b>（Fed），歐元區的叫歐洲中央銀行。</p>
+<h2>中央銀行做什麼？</h2>
+<ul><li><b>發行貨幣</b>：新台幣就是中央銀行發行的。</li>
+<li><b>穩定物價</b>：不讓通膨太高或太低。</li>
+<li><b>維持金融穩定</b>：銀行出事時當「最後貸款者」。</li>
+<li><b>管理外匯</b>：讓匯率不要大起大落。</li></ul>
+<h2>三大工具</h2>
+<ol><li><b>調整利率</b>（最常用）：央行調整借錢給銀行的利率，連帶影響房貸、存款利率。</li>
+<li><b>公開市場操作</b>：買賣政府債券。央行買債券，錢流進市場；賣債券，把錢收回來。</li>
+<li><b>調整準備率</b>：準備率降低，銀行能借出更多錢（還記得上一課的乘數嗎？）。</li></ol>
+<div class="w" data-w="mpol"></div>
+<div class="key"><b class="h">⭐ 重點</b>經濟太熱、通膨太高 → 央行<b>升息</b>，讓經濟降溫（緊縮性政策）。<br>經濟太冷、失業增加 → 央行<b>降息</b>，刺激經濟（寬鬆性政策）。</div>
+<h2>為什麼央行要「獨立」？</h2>
+<p>政治人物為了選票，常常希望一直降息、讓經濟看起來很好。但這樣可能造成高通膨。所以大部分國家讓央行獨立運作，不受政治干擾，專心看長期的經濟健康。</p>
+<div class="box story"><b class="h">📉 2022 年的全球升息潮</b>疫情期間各國央行大降息、大印鈔，加上供應鏈斷裂和俄烏戰爭，2022 年美國通膨一度衝到 9% 以上，是四十年來最高。聯準會一年內快速升息好幾次，台灣央行也跟著升息，就是為了把通膨壓下來。</div>
+<div class="box fun"><b class="h">💡 量化寬鬆</b>2008 年金融海嘯時，利率已經降到接近 0%，沒辦法再降了。美國聯準會就大量買進債券，把錢直接灌進市場，這叫「量化寬鬆」（QE）。你可以把它想成「利率遙控器按到底後，改開大水龍頭」。</div>`,
+terms:[['中央銀行','Central bank','負責發行貨幣、制定貨幣政策、維持金融穩定的國家機構。','世界上最早的中央銀行是 1668 年成立的瑞典國家銀行，其次是 1694 年的英格蘭銀行。瑞典國家銀行在 1968 年出資設立了「諾貝爾經濟學獎」，正式名稱是「瑞典中央銀行紀念諾貝爾經濟科學獎」。'],
+ ['聯準會','Federal Reserve, Fed','美國的中央銀行體系，全名「聯邦準備理事會」。','1913 年成立。成立的原因是 1907 年美國發生嚴重的銀行恐慌，最後竟然要靠銀行家摩根一個人出面救市，大家才發現國家需要一個中央銀行。'],
+ ['貨幣政策','Monetary policy','中央銀行透過調整利率或貨幣數量來影響經濟的政策。','monetary 和 money 同源，都來自羅馬女神朱諾・莫內塔（Moneta）。'],
+ ['量化寬鬆','Quantitative easing, QE','利率已接近零時，中央銀行大量購買債券等資產，增加市場資金的非傳統政策。','日本銀行在 2001 年最早大規模實施。quantitative 是「數量的」，意思是不再調利率（價格），改成直接調錢的「數量」。']],
+q:[['通膨太高時，央行通常會？',['降息','升息','印更多鈔票','降低準備率'],1,'升息讓借錢變貴，減少消費和投資，使經濟降溫、壓抑通膨。'],
+ ['央行在公開市場「買進」政府債券，市場上的錢會？',['減少','增加','不變','消失'],1,'央行付錢買債券，錢就流入市場，貨幣供給增加。'],
+ ['為什麼多數國家讓央行獨立運作？',['因為央行很有錢','避免政治人物為了短期選票而犧牲長期物價穩定','因為法律很舊','因為央行不喜歡政府'],1,'獨立的央行比較能做出不受歡迎但必要的決定，例如升息對抗通膨。']]});
+
+LS.push({id:'l23',u:3,t:'政府與財政政策',s:'稅收、支出和乘數效果',min:14,body:`
+<p>央行管「錢」，政府則管「收稅」和「花錢」，這叫<b>財政政策</b>。</p>
+<h2>政府的錢從哪來、花去哪？</h2>
+<ul><li><b>收入</b>：所得稅、營業稅、貨物稅、關稅……不夠的話就發行公債（借錢）。</li>
+<li><b>支出</b>：教育、國防、健保、社福、交通建設、公務員薪水。</li></ul>
+<p>收入大於支出叫<b>財政盈餘</b>；支出大於收入叫<b>財政赤字</b>。赤字一年一年累積，就變成<b>政府債務</b>。</p>
+<h2>凱因斯的想法：不景氣時政府要出手</h2>
+<p>1929 年全球經濟大蕭條，美國失業率高達約 25%。當時很多經濟學家認為市場會自己恢復，只要等就好。英國經濟學家<b>凱因斯</b>卻說：「長期來看，我們都死了。」他主張：當大家不敢花錢時，政府應該帶頭花錢，把經濟救起來。</p>
+<h2>乘數效果</h2>
+<p>政府花的錢會在經濟中一輪一輪傳下去：政府付錢給蓋橋的工人，工人拿去吃飯，餐廳老闆拿去買菜……每一輪都有人把錢花掉一部分。</p>
+<div class="w" data-w="fiscal"></div>
+<div class="formula">支出乘數 = 1 ÷ (1 − 邊際消費傾向)</div>
+<h2>財政政策的兩難</h2>
+<ul><li><b>時間落差</b>：從討論、立法到真的花出去，可能要好幾年，景氣可能早就變了。</li>
+<li><b>排擠效果</b>：政府借很多錢，可能推高利率，讓企業借不到便宜的錢，反而減少民間投資。</li>
+<li><b>債務負擔</b>：今天借的錢，未來要靠下一代繳稅還。</li></ul>
+<div class="box story"><b class="h">🎫 振興三倍券</b>2020 年台灣推出「振興三倍券」：付 1,000 元換 3,000 元的券，鼓勵大家出門消費，讓疫情下的店家有生意。這就是一種用財政政策刺激需求的例子。</div>`,
+terms:[['財政政策','Fiscal policy','政府透過調整稅收和支出來影響經濟的政策。','fiscal 來自拉丁文 fiscus，原意是「籃子、錢袋」，後來指羅馬皇帝的私人金庫。中文「財政」就是「管理財物的政事」。'],
+ ['凱因斯','John Maynard Keynes','20 世紀最有影響力的英國經濟學家，主張政府在不景氣時應積極介入。','1936 年出版《就業、利息與貨幣的一般理論》，開創了「總體經濟學」。他也是厲害的投資人，還參與設計了二戰後的國際貨幣體系。'],
+ ['乘數效果','Multiplier effect','一筆初始支出透過連鎖消費，使總所得增加數倍的效果。','由凱因斯的學生卡恩（Richard Kahn）在 1931 年提出，凱因斯把它放進自己的理論。'],
+ ['邊際消費傾向','Marginal propensity to consume, MPC','每多增加 1 元所得，會拿去消費的比例。','propensity 是「傾向、習性」，來自拉丁文 propendere「往前傾」。'],
+ ['財政赤字','Budget deficit','政府支出超過收入的差額。','deficit 是拉丁文「它不足」。中文「赤字」來自記帳習慣：虧損的數字用紅筆寫，紅色就是「赤」。'],
+ ['排擠效果','Crowding out','政府大量舉債推升利率，使民間投資減少的現象。','crowd out 是「擠出去」，就像捷運車廂裡政府這個大塊頭一上車，把民間擠了出去。']],
+q:[['邊際消費傾向是 0.75，支出乘數是？',['0.75','1.33','4','7.5'],2,'1 ÷ (1 − 0.75) = 4。'],
+ ['政府支出大於稅收，稱為？',['財政盈餘','財政赤字','貿易逆差','通貨緊縮'],1,'支出超過收入就是赤字，「赤」來自記帳用紅字表示虧損。'],
+ ['主張不景氣時政府應增加支出救經濟的是？',['亞當斯密','凱因斯','李嘉圖','海耶克'],1,'凱因斯在經濟大蕭條後提出政府積極介入的理論。']]});
+
+LS.push({id:'l24',u:3,t:'國際貿易與匯率',s:'台灣是靠貿易起家的島',min:15,body:`
+<p>台灣資源不多，卻靠出口電子產品、機械、紡織品成為富裕的經濟體。為什麼國家之間要貿易？答案就在第 4 課：<b>比較利益</b>。每個國家專心做自己相對擅長的事，再互相交換，全世界都能得到更多東西。</p>
+<h2>匯率：兩種貨幣的交換比例</h2>
+<p>台灣人用台幣、美國人用美元。要買美國的東西，就得先換成美元。<b>匯率</b>就是兩種貨幣之間的價格，例如「1 美元 = 30 台幣」。</p>
+<div class="w" data-w="fx"></div>
+<div class="key"><b class="h">⭐ 升值與貶值怎麼記？</b>「1 美元換 30 台幣」變成「1 美元換 28 台幣」：同樣 1 美元換到的台幣變少了，代表台幣變得更值錢，叫<b>台幣升值</b>。數字變小 = 台幣升值，數字變大 = 台幣貶值。</div>
+<h2>匯率由什麼決定？</h2>
+<p>還是供給和需求！外國人想買台灣的晶片、來台灣觀光、投資台股，就需要台幣，台幣需求增加 → 升值。台灣人想出國玩、買美國股票，就要賣台幣換美元 → 台幣貶值。</p>
+<h2>大麥克指數：用漢堡比較購買力</h2>
+<p>英國《經濟學人》雜誌從 1986 年開始，比較全世界麥當勞大麥克漢堡的價格。理論上，同樣的漢堡在各國應該差不多價錢（這叫<b>購買力平價</b>）。如果台灣的大麥克換算成美元比美國便宜很多，可能代表台幣被「低估」了。</p>
+<h2>貿易保護：關稅與配額</h2>
+<p>雖然自由貿易整體有利，但會有人受傷：外國便宜的產品進來，本國同類產業的工人可能失業。所以各國常常用<b>關稅</b>（對進口品課稅）或<b>配額</b>（限制進口數量）來保護本國產業。代價是：消費者要付更高的價格，而且可能引發貿易戰，對方也報復性課稅。</p>
+<ul><li><b>貿易順差</b>：出口 &gt; 進口。台灣長期是順差。</li>
+<li><b>貿易逆差</b>：出口 &lt; 進口。</li></ul>`,
+terms:[['匯率','Exchange rate','一國貨幣兌換另一國貨幣的比例。','「匯」字原本是「水流匯集」，古代商人用「匯票」讓錢在異地之間流通，就像水流匯過去一樣。'],
+ ['升值與貶值','Appreciation & Depreciation','貨幣相對於其他貨幣變得更值錢／更不值錢。','拉丁文 pretium（價格）：ad-（增加）+ pretium = 升值；de-（減少）+ pretium = 貶值。'],
+ ['關稅','Tariff','政府對進口商品課徵的稅。','據說來自阿拉伯文 ta‘rīf「通知、公告」，經義大利文 tariffa 傳入歐洲，原本是「價目表」。中文「關稅」是在「關口」收的稅，古代在邊境關卡檢查貨物收稅。'],
+ ['購買力平價','Purchasing power parity, PPP','長期來看，匯率應調整到讓相同商品在各國的價格相等。','瑞典經濟學家卡塞爾（Gustav Cassel）在 1918 年提出。parity 是「相等」的意思。'],
+ ['貿易順差／逆差','Trade surplus / deficit','出口大於進口／進口大於出口。','「順」和「逆」原本形容水流方向：錢順著流進來是順差，逆著流出去是逆差。']],
+q:[['匯率從 1 美元 = 30 台幣，變成 1 美元 = 33 台幣，代表？',['台幣升值','台幣貶值','美元貶值','沒有變化'],1,'同樣 1 美元能換更多台幣，表示台幣變得比較不值錢，是貶值。'],
+ ['台幣升值，對誰最有利？',['出口商','要出國旅遊的台灣人','來台灣觀光的外國人','賣產品到美國的工廠'],1,'台幣升值後可以換到更多外幣，出國旅遊、買進口貨變便宜。'],
+ ['國家之間進行貿易的主要理論基礎是？',['絕對利益','比較利益','規模經濟','外部性'],1,'就算一國在每樣東西都比較有效率，只要機會成本不同，專業分工再貿易仍對雙方有利。']]});
+
+LS.push({id:'l25',u:3,t:'景氣循環',s:'經濟的雲霄飛車',min:12,body:`
+<p>經濟不會一直穩定成長，而是會像雲霄飛車一樣時好時壞。這種擴張和衰退交替出現的現象，叫做<b>景氣循環</b>。</p>
+<div class="w" data-w="cycle"></div>
+<h2>四個階段</h2>
+<table class="t"><tr><th>階段</th><th>會看到什麼</th></tr>
+<tr><td>📈 擴張</td><td>訂單增加、工廠加班、失業率下降、股市上漲</td></tr>
+<tr><td>🎢 高峰</td><td>生意最好，但物價上漲、可能出現泡沫</td></tr>
+<tr><td>🥶 衰退</td><td>訂單減少、企業裁員、大家不敢花錢</td></tr>
+<tr><td>📉 谷底</td><td>最壞的時候，但也是準備反彈的起點</td></tr></table>
+<p>一般認定：實質 GDP <b>連續兩季</b>負成長，就叫做「衰退」。非常嚴重、持續很久的衰退，叫做「蕭條」。</p>
+<h2>景氣為什麼會循環？</h2>
+<ul><li><b>人的情緒</b>：景氣好時大家過度樂觀、借錢投資；一有風吹草動又過度悲觀。凱因斯稱之為「動物本能」。</li>
+<li><b>存貨調整</b>：企業看到生意好就大量進貨，結果貨太多，只好減少生產。</li>
+<li><b>外部衝擊</b>：戰爭、疫情、石油危機、金融危機。</li>
+<li><b>信用擴張與收縮</b>：錢借太容易，資產價格飆漲形成泡沫，泡沫破了就一路往下。</li></ul>
+<h2>歷史上的大衰退</h2>
+<div class="timeline">
+<div><b>1929 經濟大蕭條</b><br>美國股市崩盤，接著銀行大量倒閉，全球經濟陷入十年黑暗。</div>
+<div><b>1973 石油危機</b><br>中東產油國減產，油價暴漲，出現「停滯性通膨」。</div>
+<div><b>2008 全球金融海嘯</b><br>美國房貸泡沫破裂，雷曼兄弟投資銀行倒閉，風暴席捲全球。</div>
+<div><b>2020 新冠疫情</b><br>全球封城，經濟短時間內劇烈萎縮，之後各國大量撒錢救市。</div></div>
+<h2>怎麼知道現在是哪個階段？</h2>
+<p>台灣國家發展委員會每個月會公布<b>景氣對策信號</b>，用五種顏色表示：🔴紅燈（過熱）、🟡黃紅燈、🟢綠燈（穩定）、🟡黃藍燈、🔵藍燈（低迷）。就像交通號誌一樣，一看就知道經濟的溫度。</p>
+<div class="box fun"><b class="h">💡 牛市和熊市</b>股市上漲叫「牛市」，下跌叫「熊市」。常見的說法是：牛攻擊時用角由下往上頂，熊攻擊時用掌由上往下拍。</div>`,
+terms:[['景氣循環','Business cycle','經濟活動在擴張與衰退之間反覆波動的現象。','「景氣」是日文漢字詞，原本形容「氣氛、樣子」，後來指經濟的活絡程度，傳入中文使用。經濟學家發現了不同長度的循環：約 3～4 年的「基欽週期」、7～11 年的「朱格拉週期」、長達 50 年的「康德拉季耶夫長波」，都以發現者命名。'],
+ ['衰退','Recession','經濟活動顯著下滑，常以實質 GDP 連續兩季負成長作為簡單判斷標準。','拉丁文 recedere「往後退」。'],
+ ['蕭條','Depression','非常嚴重且持久的經濟衰退。','depress 是「往下壓」。有個經濟學笑話：「你的鄰居失業叫衰退，你自己失業叫蕭條。」'],
+ ['泡沫','Bubble','資產價格遠高於其真實價值，最後必然破裂的現象。','最早的泡沫之一是 1630 年代荷蘭的「鬱金香狂熱」，一顆鬱金香球莖的價格據說能買一棟房子。1720 年英國的「南海泡沫」讓大科學家牛頓也賠了一大筆錢，他感嘆：「我能計算天體的運行，卻無法計算人類的瘋狂。」（這句話是後人轉述的，未必是原話。）'],
+ ['動物本能','Animal spirits','影響經濟決策的非理性情緒，例如信心、恐懼和衝動。','凱因斯在 1936 年的《一般理論》中使用這個詞。它其實來自古代醫學，當時認為人體裡流動著控制行動的「精氣」（spiritus animalis）。']],
+q:[['台灣景氣對策信號亮「藍燈」代表？',['景氣過熱','景氣穩定','景氣低迷','股市大漲'],2,'藍燈代表景氣低迷，紅燈代表過熱，綠燈代表穩定。'],
+ ['實質 GDP 連續幾季負成長，常被視為經濟衰退？',['一季','兩季','四季','十季'],1,'常見的簡單判斷標準是連續兩季負成長。'],
+ ['荷蘭的「鬱金香狂熱」是哪一種經濟現象的著名例子？',['通貨緊縮','泡沫','比較利益','乘數效果'],1,'鬱金香球莖價格被炒到遠超過真實價值後崩盤，是歷史上著名的泡沫。']]});
+</script>
+<script>
+LS.push({id:'l26',u:4,t:'AD-AS 模型',s:'用一張圖看懂整個國家的經濟',min:16,body:`
+<p>還記得第 9 課的供需圖嗎？經濟學家把它「放大」到整個國家，就得到總體經濟學最重要的工具：<b>總需求－總供給模型</b>（AD-AS）。</p>
+<ul><li><b>總需求（AD）</b>：全國所有人（家庭、企業、政府、外國人）想買的東西總量。就是第 17 課的 C + I + G + (X − M)。</li>
+<li><b>總供給（AS）</b>：全國所有廠商願意生產的總量。</li>
+<li>橫軸不再是「芒果數量」，而是整個國家的<b>實質 GDP</b>；縱軸不再是「芒果價格」，而是<b>整體物價水準</b>。</li></ul>
+<div class="w" data-w="adas"></div>
+<h2>兩種衝擊</h2>
+<table class="t"><tr><th>衝擊</th><th>物價</th><th>產出</th><th>政策難題</th></tr>
+<tr><td>需求衝擊（AD 移動）</td><td>和產出同方向</td><td>同方向</td><td>比較好處理：經濟太冷就刺激，太熱就降溫</td></tr>
+<tr><td>供給衝擊（AS 移動）</td><td>和產出反方向</td><td>反方向</td><td>很棘手：刺激經濟會讓通膨更糟，壓通膨會讓失業更嚴重</td></tr></table>
+<h2>菲利浦曲線：通膨和失業的蹺蹺板</h2>
+<p>1958 年，紐西蘭經濟學家菲利浦發現：英國歷史資料中，<b>失業率低的時候，工資漲得快；失業率高的時候，工資漲得慢</b>。後來經濟學家把它延伸成「通膨和失業之間有取捨」：想要低失業，就得忍受高通膨。</p>
+<p>但 1970 年代的石油危機打破了這個關係：通膨和失業<b>同時</b>很高，叫<mark>停滯性通膨</mark>。傅利曼和費爾普斯早就預言：如果人們開始「預期」通膨會發生，這個取捨就會消失。這場辯論改寫了整個總體經濟學，讓經濟學家開始重視「預期」的力量。</p>
+<div class="key"><b class="h">⭐ 重點</b>AD-AS 模型能幫你讀懂新聞：看到一個事件，先問「它影響的是總需求還是總供給？」就能預測物價和經濟的走向。</div>
+<div class="box fun"><b class="h">💡 用水做的經濟電腦</b>菲利浦年輕時是電機工程師，1949 年他用水管、水槽和幫浦做了一台「MONIAC」機器：彩色的水代表錢，在代表儲蓄、稅收、進出口的管線中流動，可以模擬整個英國經濟。現在英國科學博物館還看得到。</div>`,
+terms:[['總需求','Aggregate demand, AD','在各種物價水準下，整個經濟體對商品和服務的需求總量。','aggregate 來自拉丁文 aggregare「聚集成群」：ad-（朝向）+ grex（羊群），把所有人的需求「趕成一群」加起來。'],
+ ['總供給','Aggregate supply, AS','在各種物價水準下，整個經濟體中廠商願意生產的總量。','與總需求一起，是凱因斯之後總體經濟學的標準分析工具。'],
+ ['停滯性通膨','Stagflation','經濟停滯（高失業、低成長）與高通膨同時發生的現象。','stagnation（停滯）+ inflation（通膨）合成的新字。英國政治家麥克勞德（Iain Macleod）在 1965 年的國會演講中首次使用。'],
+ ['菲利浦曲線','Phillips curve','描述失業率與通膨率（或工資成長率）之間反向關係的曲線。','以紐西蘭出生的經濟學家菲利浦（A. W. Phillips）命名。他在二戰時當過日軍戰俘，在集中營裡還偷偷組裝收音機聽新聞。'],
+ ['預期','Expectations','人們對未來經濟狀況的看法，會影響今天的決策。','1970 年代美國經濟學家盧卡斯（Robert Lucas）提出「理性預期」，認為人會用所有資訊預測未來，政府很難一直「騙」大家。他在 1995 年得到諾貝爾獎。']],
+q:[['政府發放消費券，在 AD-AS 模型中是？',['AD 右移','AD 左移','AS 右移','AS 左移'],0,'消費券增加民間消費，使總需求增加，AD 右移。'],
+ ['石油危機讓生產成本暴增，最可能出現？',['物價下跌、產出增加','停滯性通膨','通貨緊縮','經濟過熱'],1,'AS 左移，物價上漲而產出下降，就是停滯性通膨。'],
+ ['原始的菲利浦曲線描述的是哪兩者的關係？',['利率與匯率','失業與工資上漲（通膨）','GDP 與人口','稅收與支出'],1,'菲利浦發現失業率與工資成長率呈反向關係，後來被延伸為失業與通膨的取捨。']]});
+
+LS.push({id:'l27',u:4,t:'行為經濟學',s:'人類其實沒有那麼理性',min:15,body:`
+<p>傳統經濟學假設人是「理性」的，會冷靜計算得失。但你真的是這樣嗎？心理學家和經濟學家合作後發現：人類的大腦有很多固定的「bug」，而且是<b>可以預測的</b>。這就是<b>行為經濟學</b>。</p>
+<h2>① 損失規避：輸的痛比贏的爽更強烈</h2>
+<div class="w" data-w="loss"></div>
+<p>這也解釋了為什麼很多人抱著虧錢的股票不肯賣：賣掉就「確定」賠錢了，太痛了。</p>
+<h2>② 定錨效應：第一個數字綁架你的判斷</h2>
+<div class="box story"><b class="h">🏷️ 原價 3,990，特價 1,990！</b>你覺得賺到了。但如果一開始就標 1,990，你可能覺得普通。那個被劃掉的「原價」，就是讓你的判斷停泊的「錨」。餐廳菜單上放一道超貴的招牌菜，也是為了讓其他菜看起來便宜。</div>
+<h2>③ 心理帳戶：錢不是都一樣的</h2>
+<p>理論上 1,000 元就是 1,000 元。但你在路上撿到 1,000 元，可能馬上請朋友吃大餐；如果是打工辛苦賺來的 1,000 元，就捨不得花。我們會在腦袋裡把錢放進不同的「帳戶」。</p>
+<h2>④ 現在偏誤：明天再說</h2>
+<p>「明天開始減肥」「下個月開始存錢」「寒假最後一天再寫作業」……人總是高估現在的快樂、低估未來的代價。</p>
+<h2>⑤ 從眾效應與預設選項</h2>
+<p>排隊的店看起來比較好吃；大家都買的股票看起來比較會漲。另外，人很懶得改變「預設選項」：有些國家把器官捐贈設成「預設同意、不想捐的人要自己退出」，同意率遠遠高過需要自己主動登記的國家。</p>
+<h2>推力：溫柔地推人一把</h2>
+<p>既然人有這些 bug，能不能反過來利用它們幫助人？例如：學校餐廳把水果放在最顯眼的位置、把甜點放在角落；電費帳單上寫「你比鄰居多用了 20% 的電」。不強迫、不禁止，只是改變選擇的呈現方式，這叫做<mark>推力</mark>。</p>
+<div class="key"><b class="h">⭐ 重點</b>知道自己的大腦有哪些 bug，就能少被廣告和業務員「帶風向」，也能設計更好的方法幫自己存錢、讀書。</div>`,
+terms:[['行為經濟學','Behavioral economics','結合心理學研究人們實際如何做經濟決策的學科。','以色列心理學家康納曼（Daniel Kahneman）和特沃斯基（Amos Tversky）在 1970 年代開創。康納曼在 2002 年得到諾貝爾經濟學獎：一位沒修過經濟學的心理學家得了經濟學獎！'],
+ ['損失規避','Loss aversion','損失帶來的痛苦大於同等收穫帶來的快樂。','出自康納曼和特沃斯基 1979 年的「展望理論」，這篇論文是經濟學史上被引用最多次的論文之一。研究估計，損失的痛苦大約是同樣收穫的 2 倍。'],
+ ['定錨效應','Anchoring effect','人們做判斷時，過度依賴最先得到的資訊。','anchor 是船錨：船被錨固定後只能在附近漂動，判斷也被第一個數字「錨」住了。特沃斯基和康納曼 1974 年用轉盤實驗證明：連隨機轉出來的數字都會影響人的估計。'],
+ ['心理帳戶','Mental accounting','人們在心中把錢分類、並對不同類別的錢有不同的使用態度。','由美國經濟學家塞勒（Richard Thaler）提出，他在 2017 年得到諾貝爾獎。他還客串過電影《大賣空》，在賭場裡向觀眾解釋經濟學。'],
+ ['推力','Nudge','不限制選擇、不大幅改變誘因，而是透過設計選擇環境來引導行為。','nudge 原意是「用手肘輕輕推一下」。塞勒和法律學者桑斯坦在 2008 年出版同名書籍後，英國政府還成立了「推力小組」（Behavioural Insights Team）來設計政策。']],
+q:[['股票虧錢了卻遲遲不肯賣，最可能是因為？',['定錨效應','損失規避','規模經濟','比較利益'],1,'賣掉就要「確認」損失，那種痛苦讓人選擇逃避。'],
+ ['商品標示「原價 5,000，特價 2,500」讓人覺得很划算，這利用了？',['定錨效應','外部性','乘數效果','公地悲劇'],0,'「原價」成為判斷的錨，讓特價看起來特別便宜。'],
+ ['學校餐廳把水果放在最顯眼的地方，讓學生多吃水果，這叫？',['課稅','價格上限','推力','補貼'],2,'不強迫、不改變價格，只改變選擇的呈現方式，就是推力。']]});
+
+LS.push({id:'l28',u:4,t:'經濟思想簡史',s:'三百年來，偉大的頭腦怎麼吵架',min:15,body:`
+<p>經濟學不是一次發明出來的，而是很多聰明人在不同時代，為了回答自己那個時代的問題，一邊吵架一邊建立起來的。</p>
+<div class="timeline">
+<div><b>16～18 世紀　重商主義</b><br>各國認為財富 = 金銀，所以要拚命出口、限制進口，把黃金留在國內。殖民掠奪也因此合理化。</div>
+<div><b>1758　重農學派</b><br>法國醫生魁奈畫出《經濟表》，把經濟看成像血液循環一樣的流動，並認為只有農業能創造真正的財富。據說魁奈很欣賞中國重視農業的傳統。</div>
+<div><b>1776　亞當斯密《國富論》</b><br>財富不是金銀，而是國家生產商品的能力。分工、自由市場和「看不見的手」能讓國家富裕。經濟學正式誕生。</div>
+<div><b>1798　馬爾薩斯《人口論》</b><br>人口成長比糧食快，最後會陷入饑荒。這個悲觀預言讓經濟學被稱為「憂鬱的科學」。幸好後來的技術進步讓預言沒有成真。</div>
+<div><b>1817　李嘉圖</b><br>比較利益理論，奠定自由貿易的基礎。</div>
+<div><b>1867　馬克思《資本論》</b><br>批判資本主義：資本家剝削勞工的「剩餘價值」，貧富差距會越來越大，資本主義最終會崩潰。他的思想影響了 20 世紀一半的世界。</div>
+<div><b>1870 年代　邊際革命</b><br>耶文斯、孟格、瓦爾拉斯三人在不同國家、幾乎同時提出「邊際效用」，價格理論從此改頭換面。</div>
+<div><b>1890　馬歇爾《經濟學原理》</b><br>把供給需求畫成那張經典的圖，讓經濟學變成大學裡的正式科目。</div>
+<div><b>1936　凱因斯《一般理論》</b><br>大蕭條後主張政府要在不景氣時出手。總體經濟學誕生。</div>
+<div><b>1944　海耶克《通往奴役之路》</b><br>凱因斯的頭號對手。他警告：政府管太多，會一步步剝奪個人自由；市場價格其實是散布在無數人腦中的「知識」，沒有任何計畫者能全部掌握。</div>
+<div><b>1960～70 年代　傅利曼與貨幣學派</b><br>主張控制貨幣數量比政府花錢更重要，並預言停滯性通膨。後來影響了英國柴契爾和美國雷根的政策。</div>
+<div><b>1970 年代至今　行為經濟學、賽局理論、資訊經濟學</b><br>經濟學開始研究「不完美」的人和「不完美」的市場，也更依賴數據和實驗。</div></div>
+<h2>凱因斯 vs. 海耶克：世紀大辯論</h2>
+<table class="t"><tr><th></th><th>凱因斯</th><th>海耶克</th></tr>
+<tr><td>不景氣怎麼辦？</td><td>政府增加支出，把需求撐起來</td><td>讓市場自己調整，政府亂花錢會讓問題更糟</td></tr>
+<tr><td>對市場的看法</td><td>市場可能長期卡在高失業</td><td>市場是最好的資訊處理系統</td></tr>
+<tr><td>擔心什麼</td><td>大量失業帶來的痛苦與社會動盪</td><td>政府權力膨脹，個人自由消失</td></tr></table>
+<p>兩人其實是好朋友，二戰時還曾在劍橋大學的屋頂上一起值夜防空。這場辯論到今天都沒有結束，每次經濟危機都會重演一次。</p>
+<div class="key"><b class="h">⭐ 重點</b>經濟學沒有「唯一正確」的學派。了解不同觀點，你才能判斷新聞裡的政策主張背後，是站在哪一種世界觀上。</div>`,
+terms:[['重商主義','Mercantilism','認為國家財富來自累積金銀，主張多出口、少進口的經濟思想。','mercantile 是「商人的」，來自拉丁文 mercari「做買賣」。這個名稱其實是亞當斯密在批評它時才普及的。'],
+ ['重農學派','Physiocracy','18 世紀法國學派，認為只有農業能創造淨財富，主張自由放任。','希臘文 physis（自然）+ kratos（統治）＝「自然的統治」。「自由放任」（laissez-faire，法文「讓他們去做」）這句口號也和他們密切相關。'],
+ ['憂鬱的科學','The dismal science','經濟學的一個綽號。','英國作家卡萊爾（Thomas Carlyle）在 1849 年創造的詞。常有人說是因為馬爾薩斯的悲觀預言，但其實卡萊爾是在一篇支持奴隸制度的文章裡，攻擊主張廢奴、相信人人自由平等的經濟學家。'],
+ ['資本主義','Capitalism','生產工具主要由私人擁有，透過市場競爭來分配資源的經濟制度。','capital 來自拉丁文 caput「頭」，古代以牲畜的「頭數」計算財產。「資本主義」這個詞在 19 世紀中期才開始普遍使用，馬克思的著作讓它流行起來。'],
+ ['自由放任','Laissez-faire','主張政府盡量不干預經濟活動的思想。','法文，意思是「讓他們去做」。相傳 17 世紀法國財政大臣問商人：「政府能幫你們什麼？」商人回答：「讓我們自己做就好。」']],
+q:[['被稱為「經濟學之父」、在 1776 年出版《國富論》的是？',['馬克思','亞當斯密','凱因斯','馬歇爾'],1,'亞當斯密在 1776 年出版《國富論》，標誌著現代經濟學的誕生。'],
+ ['重商主義認為國家的財富來自？',['農業','金銀的累積','勞動','科技'],1,'重商主義把財富等同於金銀，所以主張多出口、少進口。'],
+ ['在「不景氣時政府是否該大量花錢」的辯論中，反對政府過度介入的代表人物是？',['凱因斯','海耶克','卡恩','菲利浦'],1,'海耶克認為政府干預會扭曲市場，並警告政府權力膨脹的危險。']]});
+
+LS.push({id:'l29',u:4,t:'像經濟學家一樣思考',s:'畢業前的最後一課：帶走一套思考工具',min:14,body:`
+<p>恭喜你走到最後一課！經濟學最有價值的，不是記住多少名詞，而是學會一套<b>看世界的方法</b>。這一課幫你把工具整理起來。</p>
+<h2>工具一：模型是地圖，不是風景</h2>
+<p>供需圖、AD-AS、PPF 都是<b>模型</b>，它們刻意簡化了真實世界。就像捷運路線圖不會畫出每一棟房子，但能幫你找到路。好的模型不是「完全像真的」，而是能幫你<b>抓住重點、做出預測</b>。</p>
+<h2>工具二：其他條件不變</h2>
+<p>真實世界裡很多事情同時在變。經濟學家的做法是：一次只動一個變數，其他先固定住，看它單獨的影響。這就是 <i>ceteris paribus</i>。</p>
+<h2>工具三：相關不等於因果</h2>
+<div class="box story"><b class="h">🍦 冰淇淋會害人溺水？</b>資料顯示：冰淇淋賣得越多的月份，溺水的人也越多。所以冰淇淋會害人溺水嗎？當然不是！真正的原因是<b>夏天</b>：天氣熱，大家吃冰也去游泳。兩件事一起變動（相關），不代表其中一件造成另一件（因果）。</div>
+<p>經濟學家花很多力氣分辨因果，例如用「隨機對照實驗」或尋找「自然實驗」。2019 年諾貝爾獎就頒給了在開發中國家用隨機實驗研究如何減少貧窮的學者。</p>
+<h2>工具四：實證 vs. 規範</h2>
+<ul><li><b>實證</b>陳述：描述「是什麼」，可以用資料驗證。例如「提高菸稅會讓吸菸人數減少」。</li>
+<li><b>規範</b>陳述：主張「應該怎樣」，牽涉價值判斷。例如「政府應該提高菸稅」。</li></ul>
+<p>經濟學家常常在實證問題上意見接近，在規範問題上吵翻天，因為每個人重視的價值不同（效率、公平、自由……）。</p>
+<h2>工具五：看見「看不見的」</h2>
+<div class="box story"><b class="h">🪟 破窗謬誤</b>一個小孩打破麵包店的窗戶。有人說：「這也不錯啊！老闆要花錢修窗，玻璃店就有生意了，經濟被帶動了！」<br>法國經濟學家巴斯夏在 1850 年指出這個錯誤：你只看到了玻璃店的生意（看得見的），卻沒看到老闆本來可以用這筆錢買一雙新鞋（看不見的）。破壞不會創造財富，只是把錢從一個用途轉到另一個用途，而且還少了一扇窗。</div>
+<h2>總整理：經濟學家的十句口頭禪</h2>
+<ol><li>天下沒有白吃的午餐（機會成本）</li><li>沉沒成本不是成本</li><li>人會對誘因做出反應</li><li>想一想「多一單位」會怎樣（邊際）</li><li>交易能讓雙方都更好（比較利益）</li><li>價格是訊號，傳遞稀少的資訊（供需）</li><li>市場通常有效率，但也會失靈（外部性、公共財）</li><li>錢印太多，物價就會上漲（通膨）</li><li>短期內，通膨和失業常有取捨（菲利浦曲線）</li><li>要看到「看不見的」（破窗謬誤）</li></ol>
+<div class="key"><b class="h">🎓 接下來可以去哪裡？</b>想繼續深入，可以讀曼昆（Mankiw）的《經濟學原理》這本全世界最暢銷的入門教科書；想輕鬆一點，可以讀《蘋果橘子經濟學》或塞勒的《推力》。也可以每天看新聞時，試著用這本筆記本的工具分析一則經濟新聞。到那時，你就真的開始像經濟學家一樣思考了。</div>`,
+terms:[['模型','Model','對真實世界的簡化描述，用來理解和預測現象。','拉丁文 modulus「小的尺度」，原意是建築師做的「縮小樣品」。經濟模型就像把整個經濟「縮小」到一張圖上。英國統計學家博克斯有句名言：「所有模型都是錯的，但有些是有用的。」'],
+ ['相關與因果','Correlation & Causation','兩件事一起變動（相關），不代表一件造成另一件（因果）。','correlation 是 co-（一起）+ relation（關係）。19 世紀英國學者高爾頓（Francis Galton）在研究身高遺傳時發展出相關的概念。'],
+ ['實證與規範','Positive & Normative','描述「是什麼」的陳述，與主張「應該怎樣」的陳述。','positive 來自拉丁文 positus「被放置的、已確立的」，表示事實；normative 來自 norma「木匠的直角尺」，表示衡量對錯的標準。'],
+ ['破窗謬誤','Broken window fallacy','以為破壞能創造經濟利益，忽略了資源被挪用的機會成本。','出自法國經濟學家巴斯夏（Frédéric Bastiat）1850 年的文章《看得見的與看不見的》。他說：壞的經濟學家只看得見的效果，好的經濟學家還會預見看不見的效果。'],
+ ['隨機對照實驗','Randomized controlled trial, RCT','把研究對象隨機分成實驗組和對照組，比較結果以找出因果關係。','原本是醫學測試新藥的方法。巴納吉、杜芙若和克雷默把它用在研究貧窮問題上，獲得 2019 年諾貝爾經濟學獎。杜芙若是史上最年輕的經濟學獎得主之一，也是第二位得到這個獎的女性。']],
+q:[['「夏天冰淇淋銷量和溺水人數都增加」，正確的解讀是？',['冰淇淋造成溺水','溺水造成冰淇淋熱賣','兩者相關，但可能都是被天氣熱影響','兩者完全沒有關係'],2,'兩者有相關，但真正的原因是第三個因素「天氣熱」，這就是相關不等於因果。'],
+ ['下列哪一句是「規範」陳述？',['最低工資提高後，某行業的雇用人數減少了 2%','政府應該提高最低工資','去年台灣的通膨率是 2%','利率上升會減少房貸需求'],1,'「應該」牽涉價值判斷，屬於規範陳述；其他都是可以用資料驗證的實證陳述。'],
+ ['「颱風災後重建能刺激經濟，所以颱風對經濟有好處。」這犯了什麼錯？',['破窗謬誤','定錨效應','比較利益','邊際效用遞減'],0,'只看到重建的支出，沒看到這些資源本來可以用在別的地方，財富其實是減少的。']]});
+</script>
+<script>
+(function(){
+const $=(s,r=document)=>r.querySelector(s);
+const main=$('#main'), side=$('#side');
+let done=new Set();
+try{done=new Set(JSON.parse(localStorage.getItem('econ_done')||'[]'))}catch(e){}
+function save(){try{localStorage.setItem('econ_done',JSON.stringify([...done]))}catch(e){}}
+try{const t=localStorage.getItem('econ_theme');if(t)document.documentElement.dataset.theme=t}catch(e){}
+$('#themeBtn').onclick=()=>{
+  const cur=document.documentElement.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  const nx=cur==='dark'?'light':'dark';document.documentElement.dataset.theme=nx;
+  try{localStorage.setItem('econ_theme',nx)}catch(e){}
+};
+const openM=o=>{side.classList.toggle('open',o);$('#scrim').classList.toggle('show',o)};
+$('#menuBtn').onclick=()=>openM(true);$('#scrim').onclick=()=>openM(false);
+
+function prog(){
+  const n=LS.filter(l=>done.has(l.id)).length;
+  $('#pbar').style.width=(n/LS.length*100)+'%';
+  $('#ptxt').textContent=`已完成 ${n} / ${LS.length} 課`;
+}
+function sidebar(cur){
+  let h='';
+  UNITS.forEach(u=>{
+    h+=`<div class="side-unit" style="--c:${u.c}"><h3>第 ${u.n} 單元</h3>`;
+    LS.forEach((l,i)=>{if(l.u!==u.n)return;
+      h+=`<a href="#${l.id}" class="${cur===l.id?'on':''}"><span class="n">${i+1}</span><span>${l.t}</span>${done.has(l.id)?'<span class="ck">✓</span>':''}</a>`});
+    h+='</div>';
+  });
+  h+=`<div class="side-extra"><a href="#glossary">📜 名詞由來辭典</a><a href="#exam">🏁 綜合測驗</a><a href="#home">🏠 課程地圖</a></div>`;
+  side.innerHTML=h;
+  side.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>openM(false)));
+}
+function setAc(u){document.documentElement.style.setProperty('--ac',u?`var(--u${u})`:'var(--u1)')}
+
+function home(){
+  setAc(1);
+  const next=LS.find(l=>!done.has(l.id))||LS[0];
+  let h=`<section class="hero"><h1>經濟學，從一杯珍奶開始</h1>
+  <p class="lead">不用先懂數學，也不用背公式。${LS.length} 堂課，從「為什麼東西會漲價」一路走到央行、匯率和諾貝爾獎等級的想法。</p>
+  <svg viewBox="0 0 420 220" aria-label="供給與需求曲線交叉的示意圖">
+   <line class="ax" x1="40" y1="10" x2="40" y2="190"/><line class="ax" x1="40" y1="190" x2="410" y2="190"/>
+   <text x="46" y="20" style="font-size:13px;fill:var(--mut)">價格</text><text x="370" y="208" style="font-size:13px;fill:var(--mut)">數量</text>
+   <path class="cd draw" d="M60 30 L380 180"/><path class="cs draw d2" d="M60 180 L380 30"/>
+   <g class="pop"><line class="dash" x1="40" y1="105" x2="220" y2="105"/><line class="dash" x1="220" y1="105" x2="220" y2="190"/>
+   <circle class="dot" cx="220" cy="105" r="7"/><text x="232" y="100" style="font-size:14px;fill:var(--ink);font-weight:700">市場價格就在這裡決定</text>
+   <text x="330" y="176" style="font-size:14px;fill:var(--pen);font-weight:700">需求</text><text x="330" y="40" style="font-size:14px;fill:var(--red);font-weight:700">供給</text></g>
+  </svg>
+  <p>這張圖叫「供需圖」，是經濟學最有名的一張圖。上完第 9 課，你就能自己用它預測價格。</p>
+  <a class="cta" href="#${next.id}">${done.size?'繼續上課：':'從第 1 課開始：'}${next.t}</a></section>
+  <div class="box story"><b class="h">怎麼使用這本筆記本</b>每一課都有：生活例子、可以動手玩的互動圖、「名詞小辭典」告訴你專有名詞的由來，最後是隨堂小測驗。答完一課的測驗就算完成，進度會存在這台裝置的瀏覽器裡。</div>
+  <div class="units">`;
+  UNITS.forEach(u=>{
+    h+=`<div class="ucard" style="--c:${u.c}"><h3>第 ${u.n} 單元　${u.name}</h3><p>${u.d}</p><ol start="${LS.findIndex(l=>l.u===u.n)+1}">`;
+    LS.forEach(l=>{if(l.u===u.n)h+=`<li class="${done.has(l.id)?'dn':''}"><a href="#${l.id}">${l.t}</a>${done.has(l.id)?' ✓':''}</li>`});
+    h+='</ol></div>';
+  });
+  h+='</div>';
+  main.innerHTML=h;
+}
+
+function termHTML(t,link){return `<div class="term"><div class="tt">${t[0]}<span>${t[1]}</span></div><p><b>意思：</b>${t[2]}</p><p class="og"><b>由來：</b>${t[3]}</p>${link||''}</div>`}
+function qHTML(q,k){
+  return `<div class="qq" data-a="${q[2]}"><p>${k}. ${q[0]}</p><div class="opts">${q[1].map((o,j)=>`<button data-i="${j}">${'ABCD'[j]}. ${o}</button>`).join('')}</div><p class="why" hidden>${q[3]}</p></div>`;
+}
+function bindQuiz(root,onAll,onEach){
+  const qs=[...root.querySelectorAll('.qq')];let answered=0,right=0;
+  qs.forEach(qq=>{const a=+qq.dataset.a;
+    qq.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+      const i=+b.dataset.i;qq.querySelectorAll('button').forEach(x=>x.disabled=true);
+      qq.querySelectorAll('button')[a].classList.add('ok');
+      if(i!==a)b.classList.add('no');else right++;
+      const w=qq.querySelector('.why');w.hidden=false;w.innerHTML=(i===a?'✅ 答對了！':'❌ 再想想：')+w.innerHTML;
+      answered++; onEach&&onEach(right,answered);
+      if(answered===qs.length)onAll(right,qs.length);
+    });
+  });
+}
+function lesson(i){
+  const l=LS[i];setAc(l.u);
+  main.innerHTML=`<article class="lesson"><div class="lhead"><span class="tag">第 ${l.u} 單元　第 ${i+1} 課</span><br><h1>${l.t}</h1><p class="sub">${l.s}</p><span class="min">⏱ 大約 ${l.min} 分鐘</span></div>
+  <div class="body">${l.body}</div>
+  <section class="terms"><h2>📜 名詞小辭典：這些詞從哪裡來？</h2>${l.terms.map(t=>termHTML(t)).join('')}</section>
+  <section class="quiz"><h2>✏️ 隨堂小測驗</h2>${l.q.map((q,k)=>qHTML(q,k+1)).join('')}<div id="qres"></div></section>
+  <nav class="pn">${i>0?`<a href="#${LS[i-1].id}">← ${LS[i-1].t}</a>`:'<span></span>'}${i<LS.length-1?`<a href="#${LS[i+1].id}">下一課：${LS[i+1].t}</a>`:'<a href="#exam">去做綜合測驗 🏁</a>'}</nav></article>`;
+  main.querySelectorAll('[data-w]').forEach(el=>{try{W[el.dataset.w](el)}catch(e){console.error(e);el.innerHTML='<p>這個互動圖沒有載入成功，請重新整理頁面。</p>'}});
+  bindQuiz(main.querySelector('.quiz'),(r,n)=>{
+    done.add(l.id);save();prog();sidebar(l.id);
+    $('#qres').innerHTML=`<div class="qdone">🎉 本課完成！答對 ${r} / ${n} 題${r===n?'，滿分！':'。答錯的題目看看解析，再回頭讀一次重點。'}</div>`;
+  });
+}
+function glossary(){
+  setAc(1);
+  let h=`<div class="lhead"><h1>📜 名詞由來辭典</h1><p class="sub">全部課程的專有名詞，連同它們的身世故事。可以搜尋中文或英文。</p></div><input class="search" id="gq" placeholder="搜尋，例如：通膨、GDP、margin" aria-label="搜尋名詞"><div id="gl"></div>`;
+  main.innerHTML=h;
+  const all=[];LS.forEach((l,i)=>l.terms.forEach(t=>all.push({t,i})));
+  const draw=q=>{q=(q||'').toLowerCase();
+    const f=all.filter(x=>!q||x.t.join(' ').toLowerCase().includes(q));
+    $('#gl').innerHTML=f.length?f.map(x=>termHTML(x.t,`<p style="font-size:13px"><a href="#${LS[x.i].id}">出自第 ${x.i+1} 課：${LS[x.i].t}</a></p>`)).join(''):'<p>找不到這個詞。試試更短的關鍵字，或換成英文。</p>';};
+  draw();$('#gq').oninput=e=>draw(e.target.value);
+}
+function exam(){
+  setAc(4);
+  const pool=[];LS.forEach(l=>l.q.forEach(q=>pool.push(q)));
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}
+  const pick=pool.slice(0,20);
+  main.innerHTML=`<div class="lhead"><h1>🏁 綜合測驗</h1><p class="sub">從全部 ${pool.length} 題中隨機抽出 20 題。每次重來題目都不一樣。</p></div><p id="esc">目前：0 / 20</p><section class="quiz" style="margin-top:10px">${pick.map((q,k)=>qHTML(q,k+1)).join('')}</section><div id="eres"></div>`;
+  bindQuiz(main.querySelector('.quiz'),(r,n)=>{
+    const lv=r>=18?'經濟學達人 🏆':r>=14?'穩穩的中級生 👍':r>=10?'入門完成 🌱':'再複習一輪會更好 📖';
+    $('#eres').innerHTML=`<div class="qdone">得分 ${r} / ${n}：${lv}</div><div class="pn"><a href="#exam" onclick="setTimeout(()=>dispatchEvent(new HashChangeEvent('hashchange')),0)">再測一次</a><a href="#glossary">複習名詞辭典</a></div>`;
+  },(r,a)=>{$('#esc').textContent=`目前：答對 ${r} / 已答 ${a} / 共 20 題`});
+}
+function route(){
+  const r=location.hash.slice(1)||'home';
+  const i=LS.findIndex(l=>l.id===r);
+  sidebar(i>=0?r:null);
+  if(i>=0)lesson(i);else if(r==='glossary')glossary();else if(r==='exam')exam();else home();
+  prog();window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route);
+route();
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-725aca81ae" data-category="general"></script></body>
+</html>

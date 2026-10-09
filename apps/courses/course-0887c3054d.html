@@ -1,0 +1,2089 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>從零開始學做菜｜咖啡・炒飯・麵・義大利麵・漢堡・炸雞・火鍋</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --tile:#E9F0EE; --tile-line:#D7E2DF; --paper:#FFFFFF; --ink:#1F2A2E; --muted:#56666B;
+  --soy:#0F5C63; --soy-soft:#DCEBEA; --yolk:#F2B705; --yolk-soft:#FFF4CC;
+  --chili:#C8341F; --chili-soft:#FBE3DF; --leaf:#3E7D3A; --leaf-soft:#E2F0DF;
+  --line:#CFDAD8; --shadow:0 1px 0 var(--line);
+  --f-head:"LXGW WenKai TC","Kaiti TC","STKaiti","BiauKai","DFKai-SB",serif;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --tile:#122022; --tile-line:#1A2C2F; --paper:#18282B; --ink:#E6EEEC; --muted:#9FB2B4;
+    --soy:#6FC7CE; --soy-soft:#1E3A3D; --yolk:#F5C842; --yolk-soft:#3A3217;
+    --chili:#FF7D68; --chili-soft:#3E2220; --leaf:#8BCB84; --leaf-soft:#1F3320; --line:#2A3F42;
+  }
+}
+:root[data-theme="dark"]{
+  --tile:#122022; --tile-line:#1A2C2F; --paper:#18282B; --ink:#E6EEEC; --muted:#9FB2B4;
+  --soy:#6FC7CE; --soy-soft:#1E3A3D; --yolk:#F5C842; --yolk-soft:#3A3217;
+  --chili:#FF7D68; --chili-soft:#3E2220; --leaf:#8BCB84; --leaf-soft:#1F3320; --line:#2A3F42;
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;font-family:var(--f-body);color:var(--ink);font-size:17px;line-height:1.85;
+  background-color:var(--tile);
+  background-image:linear-gradient(var(--tile-line) 1px,transparent 1px),linear-gradient(90deg,var(--tile-line) 1px,transparent 1px);
+  background-size:48px 48px;}
+img,svg{max-width:100%}
+a{color:var(--soy)}
+:focus-visible{outline:3px solid var(--yolk);outline-offset:2px;border-radius:4px}
+button{font:inherit;color:inherit;cursor:pointer}
+
+/* ---------- layout ---------- */
+.app{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:100vh}
+.app>div{min-width:0}
+.side{position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--paper);border-right:1px solid var(--line);padding:24px 18px 40px}
+.brand{font-family:var(--f-head);font-size:1.45rem;line-height:1.3;margin:0 0 4px}
+.brand small{display:block;font-family:var(--f-body);font-size:.8rem;color:var(--muted);font-weight:400;margin-top:4px}
+.progress{margin:16px 0 20px}
+.bar{height:10px;border-radius:5px;background:var(--soy-soft);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--soy);transition:width .4s}
+.progress p{margin:6px 0 0;font-size:.85rem;color:var(--muted)}
+.route{list-style:none;margin:0;padding:0}
+.route .part{font-family:var(--f-head);font-size:1rem;color:var(--muted);margin:18px 0 6px;padding-left:4px}
+.route a{position:relative;display:flex;gap:10px;align-items:flex-start;padding:7px 8px 7px 30px;border-radius:8px;text-decoration:none;color:var(--ink);font-size:.95rem;line-height:1.45}
+.route a::before{content:"";position:absolute;left:11px;top:13px;width:10px;height:10px;border-radius:50%;border:2px solid var(--muted);background:var(--paper)}
+.route a::after{content:"";position:absolute;left:15px;top:25px;width:2px;height:calc(100% - 12px);background:var(--line)}
+.route li:last-child a::after{display:none}
+.route a.done::before{background:var(--leaf);border-color:var(--leaf)}
+.route a.cur{background:var(--soy-soft);font-weight:700}
+.route a.cur::before{border-color:var(--soy);background:var(--yolk)}
+.route .num{color:var(--muted);min-width:2.4em;font-variant-numeric:tabular-nums}
+.side-tools{display:flex;gap:8px;margin-top:22px;flex-wrap:wrap}
+.side-tools button{border:1px solid var(--line);background:transparent;padding:6px 12px;border-radius:20px;font-size:.85rem}
+
+.topbar{display:none}
+main{padding:32px 24px 120px;min-width:0}
+.lesson{display:none;max-width:760px;margin:0 auto;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:36px 40px 44px}
+.lesson.show{display:block}
+
+/* ---------- lesson typography ---------- */
+.l-head{border-bottom:2px dashed var(--line);padding-bottom:18px;margin-bottom:24px}
+.l-no{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.95rem}
+.stage{display:inline-block;font-size:.8rem;padding:1px 10px;border-radius:12px;font-weight:700}
+.stage.s1{background:var(--leaf-soft);color:var(--leaf)}
+.stage.s2{background:var(--yolk-soft);color:#8a6400}
+:root[data-theme="dark"] .stage.s2{color:var(--yolk)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .stage.s2{color:var(--yolk)}}
+.stage.s3{background:var(--chili-soft);color:var(--chili)}
+h1,h2,h3{font-family:var(--f-head);line-height:1.35;font-weight:700}
+.lesson h1{font-size:2.3rem;margin:6px 0 8px}
+.lesson .lead{font-size:1.08rem;color:var(--muted);margin:0}
+.lesson h2{font-size:1.55rem;margin:40px 0 12px;padding-left:14px;border-left:6px solid var(--yolk)}
+.lesson h3{font-size:1.22rem;margin:26px 0 8px}
+.lesson p{margin:0 0 14px}
+.lesson ul,.lesson ol{padding-left:1.4em;margin:0 0 16px}
+.lesson li{margin-bottom:6px}
+strong{font-weight:700}
+mark{background:linear-gradient(transparent 55%,var(--yolk-soft) 55%);color:inherit;padding:0 2px}
+
+/* term popover */
+.term{border-bottom:2px dotted var(--soy);color:var(--soy);cursor:help;font-weight:500}
+.pop{position:fixed;z-index:50;max-width:340px;background:var(--paper);border:2px solid var(--soy);border-radius:12px;padding:14px 16px;font-size:.93rem;line-height:1.7;box-shadow:0 10px 30px rgba(0,0,0,.18);display:none}
+.pop.show{display:block}
+.pop h4{margin:0 0 2px;font-family:var(--f-head);font-size:1.15rem}
+.pop .en{color:var(--muted);font-size:.82rem;margin-bottom:8px}
+.pop .o{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
+.pop .o b{color:var(--chili)}
+.pop .x{position:absolute;right:8px;top:4px;border:0;background:none;font-size:1.3rem;color:var(--muted)}
+
+/* boxes */
+.box{border-radius:12px;padding:16px 18px;margin:18px 0}
+.box>b.t{display:block;font-family:var(--f-head);font-size:1.1rem;margin-bottom:6px}
+.box p:last-child,.box ul:last-child,.box ol:last-child{margin-bottom:0}
+.goal{background:var(--soy-soft)}
+.goal ul{margin:0}
+.why{background:var(--yolk-soft);border-left:5px solid var(--yolk)}
+.origin{background:transparent;border:2px solid var(--soy);position:relative}
+.origin>b.t{color:var(--soy)}
+.warn{background:var(--chili-soft);border-left:5px solid var(--chili)}
+.warn>b.t{color:var(--chili)}
+.try{background:var(--leaf-soft);border-left:5px solid var(--leaf)}
+.try>b.t{color:var(--leaf)}
+
+/* tables */
+.tw{overflow-x:auto;margin:16px 0}
+table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:460px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--soy-soft);font-weight:700}
+
+/* recipe */
+.recipe{border:2px solid var(--ink);border-radius:14px;margin:26px 0;overflow:hidden}
+.recipe .rh{background:var(--ink);color:var(--paper);padding:12px 18px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.recipe .rh h3{margin:0;color:var(--paper);font-size:1.3rem}
+.recipe .rh span{font-size:.9rem;opacity:.85}
+.recipe .rb{padding:16px 18px}
+.ing{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:4px 20px;list-style:none;padding:0!important;margin:0 0 16px!important}
+.ing li{display:flex;justify-content:space-between;border-bottom:1px dotted var(--line);padding:3px 0;margin:0}
+.ing li b{font-weight:500;color:var(--muted);white-space:nowrap;margin-left:10px}
+.steps{counter-reset:s;list-style:none;padding:0!important}
+.steps>li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:14px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:2px;width:30px;height:30px;border-radius:50%;background:var(--yolk);color:#3a2a00;font-weight:700;display:grid;place-items:center;font-size:.95rem}
+.steps .w{display:block;font-size:.92rem;color:var(--muted);margin-top:2px}
+.steps .w::before{content:"為什麼？ ";color:var(--soy);font-weight:700}
+
+/* demo */
+.demo{border:2px dashed var(--soy);border-radius:14px;padding:18px;margin:24px 0;background:var(--paper)}
+.demo>.dt{font-family:var(--f-head);font-size:1.15rem;margin:0 0 4px;color:var(--soy)}
+.demo>.dd{font-size:.9rem;color:var(--muted);margin:0 0 14px}
+.demo input[type=range]{width:100%;accent-color:var(--soy);height:28px}
+.demo .readout{font-size:1.05rem;margin-top:10px;min-height:3.4em}
+.demo .readout b{font-family:var(--f-head);font-size:1.12rem}
+.seg{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 12px}
+.seg button{border:2px solid var(--soy);background:transparent;border-radius:20px;padding:5px 16px;font-weight:500}
+.seg button[aria-pressed="true"]{background:var(--soy);color:var(--paper)}
+.stage-box{display:grid;place-items:center;min-height:180px;background:var(--tile);border-radius:10px;overflow:hidden}
+
+/* quiz */
+.quizzes{margin-top:40px;border-top:2px dashed var(--line);padding-top:10px}
+.quiz{margin:18px 0;padding:16px;border-radius:12px;background:var(--tile)}
+.quiz .q{font-weight:700;margin-bottom:10px}
+.quiz .opts{display:grid;gap:8px}
+.quiz .opts button{text-align:left;border:2px solid var(--line);background:var(--paper);border-radius:10px;padding:9px 14px;line-height:1.5}
+.quiz .opts button.right{border-color:var(--leaf);background:var(--leaf-soft)}
+.quiz .opts button.wrong{border-color:var(--chili);background:var(--chili-soft)}
+.quiz .fb{display:none;margin-top:10px;font-size:.95rem}
+.quiz.answered .fb{display:block}
+
+.l-foot{display:flex;justify-content:space-between;gap:12px;margin-top:36px;flex-wrap:wrap}
+.btn{border:2px solid var(--ink);background:var(--paper);border-radius:10px;padding:10px 18px;font-weight:700}
+.btn.primary{background:var(--soy);border-color:var(--soy);color:#fff}
+:root[data-theme="dark"] .btn.primary{color:#0e1c1e}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.primary{color:#0e1c1e}}
+.btn:disabled{opacity:.35;cursor:default}
+
+/* figures */
+figure{margin:20px 0;text-align:center}
+figcaption{font-size:.88rem;color:var(--muted);margin-top:6px}
+.figsvg{background:var(--tile);border-radius:12px;padding:10px}
+.svg-ink{stroke:var(--ink);fill:none}
+.svg-txt{fill:var(--ink);font-family:var(--f-body);font-size:13px}
+
+/* hero (lesson 0) */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:center;margin:-8px 0 10px}
+.hero h1{font-size:2.8rem;line-height:1.2;margin:0 0 12px}
+.hero p{color:var(--muted)}
+.wokstage{position:relative;height:230px}
+.flame{transform-origin:50% 100%;animation:flick .35s infinite alternate ease-in-out}
+@keyframes flick{from{transform:scaleY(.9) scaleX(1)}to{transform:scaleY(1.08) scaleX(.95)}}
+.wok-g{animation:toss 1.6s infinite ease-in-out;transform-origin:120px 150px}
+@keyframes toss{0%,55%,100%{transform:rotate(0) translateY(0)}20%{transform:rotate(-7deg) translate(-6px,-4px)}35%{transform:rotate(4deg) translate(4px,2px)}}
+.grain{animation:fly 1.6s infinite ease-in-out}
+@keyframes fly{0%,15%,60%,100%{transform:translate(0,0)}32%{transform:translate(var(--dx),var(--dy))}}
+
+/* route map in lesson 0 */
+.map{display:grid;gap:10px;margin:18px 0}
+.map div{display:grid;grid-template-columns:4.2em 1fr;gap:12px;align-items:start;padding:10px 12px;border-radius:10px;background:var(--tile)}
+.map b{font-family:var(--f-head);font-size:1.05rem;color:var(--soy)}
+
+/* glossary */
+.gl-search{width:100%;padding:10px 14px;border:2px solid var(--line);border-radius:10px;font:inherit;background:var(--paper);color:var(--ink);margin-bottom:14px}
+.gl-item{padding:14px 0;border-bottom:1px dashed var(--line)}
+.gl-item h3{margin:0}
+.gl-item .en{color:var(--muted);font-size:.85rem}
+.gl-item p{margin:6px 0 0}
+.gl-item .o{color:var(--ink)}
+.gl-item .o b{color:var(--chili)}
+.gl-item .from{font-size:.82rem;color:var(--muted)}
+
+/* certificate */
+.cert{border:6px double var(--soy);border-radius:10px;padding:30px;text-align:center;margin:24px 0}
+.cert h2{border:0;padding:0;margin:0 0 10px;font-size:2rem}
+.cert input{font:inherit;font-size:1.3rem;text-align:center;border:0;border-bottom:2px solid var(--ink);background:transparent;color:var(--ink);width:min(260px,100%);font-family:var(--f-head)}
+
+/* bubbles & misc animations */
+.bub{animation:rise 1.4s infinite ease-in}
+@keyframes rise{0%{transform:translateY(0);opacity:0}15%{opacity:1}100%{transform:translateY(-40px);opacity:0}}
+.drip{animation:drip 1.2s infinite ease-in}
+@keyframes drip{0%{transform:translateY(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(46px);opacity:0}}
+.steam{animation:steam 2.4s infinite ease-out}
+@keyframes steam{0%{transform:translateY(0);opacity:0}30%{opacity:.7}100%{transform:translateY(-30px);opacity:0}}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* ---------- mobile ---------- */
+@media (max-width:900px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{position:fixed;left:0;top:0;bottom:0;width:min(320px,86vw);height:100%;z-index:40;transform:translateX(-105%);transition:transform .25s;padding-top:calc(env(safe-area-inset-top,0px) + 20px)}
+  .side.open{transform:none;box-shadow:0 0 0 100vmax rgba(0,0,0,.35)}
+  .topbar{display:flex;position:sticky;top:0;z-index:30;align-items:center;gap:10px;padding:10px 14px;padding-top:calc(env(safe-area-inset-top,0px) + 10px);background:var(--paper);border-bottom:1px solid var(--line)}
+  .topbar button{border:2px solid var(--ink);background:transparent;border-radius:8px;padding:4px 12px;font-weight:700}
+  .topbar .tt{font-family:var(--f-head);font-size:1.05rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+  .topbar .pc{font-size:.8rem;color:var(--muted)}
+  main{padding:14px 10px 80px}
+  .lesson{padding:22px 18px 30px;border-radius:12px}
+  .lesson h1{font-size:1.85rem}
+  .hero{grid-template-columns:1fr}
+  .hero h1{font-size:2.1rem}
+  .wokstage{height:190px}
+  body{font-size:16.5px}
+}
+@media print{
+  .side,.topbar,.l-foot,.quizzes,.demo{display:none!important}
+  .app{display:block} .lesson{display:block!important;border:0;page-break-after:always}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side" id="side" aria-label="課程目錄">
+  <p class="brand">從零開始學做菜<small>咖啡・炒飯・麵・義大利麵・漢堡・炸雞・火鍋</small></p>
+  <div class="progress"><div class="bar"><i id="barFill"></i></div><p id="barText">已完成 0 課</p></div>
+  <ul class="route" id="route"></ul>
+  <div class="side-tools">
+    <button type="button" id="themeBtn">切換深淺色</button>
+    <button type="button" id="resetBtn">重設進度</button>
+  </div>
+</aside>
+
+<div>
+<header class="topbar">
+  <button type="button" id="menuBtn" aria-controls="side" aria-expanded="false">目錄</button>
+  <span class="tt" id="topTitle">從零開始學做菜</span>
+  <span class="pc" id="topPc"></span>
+</header>
+<main id="main">
+
+<!-- ======================= 第 0 課 ======================= -->
+<section class="lesson" id="l0" data-no="0" data-part="開始之前" data-title="這門課怎麼上">
+  <div class="hero">
+    <div>
+      <p class="l-no">第 0 課 <span class="stage s1">入門</span></p>
+      <h1>從零開始<br>學做菜</h1>
+      <p>不用天分，也不用很貴的鍋子。這門課會從「火是怎麼把食物變好吃的」開始講，一路帶你做出炒飯、麵、義大利麵、漢堡、炸雞、火鍋和一杯好咖啡，最後看看專業廚師是怎麼工作的。</p>
+    </div>
+    <div class="wokstage" aria-hidden="true">
+      <svg viewBox="0 0 240 230" width="100%" height="100%">
+        <g class="flame"><path d="M70 225 Q80 190 95 205 Q100 170 120 195 Q135 165 145 205 Q160 188 170 225 Z" fill="#F2B705"/><path d="M92 225 Q100 205 110 214 Q120 192 130 214 Q140 205 148 225Z" fill="#C8341F" opacity=".8"/></g>
+        <g class="wok-g">
+          <path d="M30 120 Q120 215 210 120 Z" fill="#1F2A2E"/>
+          <path d="M40 124 Q120 196 200 124" stroke="#3a4a50" stroke-width="3" fill="none"/>
+          <rect x="200" y="112" width="40" height="10" rx="5" fill="#8a5a2b"/>
+          <g fill="#FFF4CC" stroke="#e8c96a" stroke-width="1">
+            <ellipse class="grain" style="--dx:-10px;--dy:-60px" cx="90" cy="140" rx="5" ry="3"/>
+            <ellipse class="grain" style="--dx:4px;--dy:-80px;animation-delay:.05s" cx="110" cy="146" rx="5" ry="3"/>
+            <ellipse class="grain" style="--dx:12px;--dy:-66px;animation-delay:.1s" cx="128" cy="147" rx="5" ry="3"/>
+            <ellipse class="grain" style="--dx:-4px;--dy:-90px;animation-delay:.08s" cx="146" cy="142" rx="5" ry="3"/>
+            <ellipse class="grain" style="--dx:18px;--dy:-52px;animation-delay:.03s" cx="160" cy="136" rx="5" ry="3"/>
+          </g>
+          <g fill="#F2B705">
+            <circle class="grain" style="--dx:-6px;--dy:-72px;animation-delay:.12s" cx="100" cy="143" r="4"/>
+            <circle class="grain" style="--dx:8px;--dy:-58px;animation-delay:.07s" cx="138" cy="146" r="4"/>
+          </g>
+          <g fill="#3E7D3A">
+            <rect class="grain" style="--dx:0;--dy:-84px;animation-delay:.02s" x="118" y="140" width="6" height="4" rx="1"/>
+            <rect class="grain" style="--dx:-14px;--dy:-64px;animation-delay:.1s" x="80" y="134" width="6" height="4" rx="1"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="box goal"><b class="t">這一課你會知道</b>
+    <ul><li>這門課的學習順序，以及為什麼要照這個順序</li><li>每一課的固定結構，和怎麼使用互動小工具</li><li>三個讓你進步最快的學習習慣</li></ul>
+  </div>
+
+  <h2>學習路線：先懂原理，再做料理</h2>
+  <p>很多人學做菜是背食譜：「放兩匙醬油、炒三分鐘」。可是換了一口鍋、換了一個爐子，同樣的步驟就失敗了。<mark>這門課要教的是食譜背後的「為什麼」</mark>，懂了原理，你就能自己判斷、自己調整。</p>
+  <p>所以課程是一條單行道，每一道料理都會用到前面學過的原理，而且每道料理會再教你一個新原理：</p>
+  <div class="map">
+    <div><b>第一部</b><span>廚房基礎（第 1–6 課）：安全、工具、刀工、火候、味道、讓食物變好吃的化學反應。後面所有料理都靠這六課。</span></div>
+    <div><b>第二部</b><span>米與麵（第 7–9 課）：炒飯學「澱粉與鍋氣」，中式麵學「麵筋」，義大利麵學「乳化」。</span></div>
+    <div><b>第三部</b><span>肉與油（第 10–11 課）：漢堡學「煎出焦香」，炸雞學「油溫控制」。</span></div>
+    <div><b>第四部</b><span>湯與鍋（第 12 課）：火鍋學「高湯」，把前面所有觀念整合起來。</span></div>
+    <div><b>第五部</b><span>飲品（第 13 課）：咖啡學「萃取」，一門完全用溫度、時間、比例說話的手藝。</span></div>
+    <div><b>第六部</b><span>專業之路（第 14–15 課）：專業廚房怎麼運作、怎麼算成本，最後完成畢業挑戰。</span></div>
+  </div>
+  <p>每道料理內部也分三個階段：<span class="stage s1">入門</span> 先做出來、<span class="stage s2">進階</span> 做得穩定好吃、<span class="stage s3">專業</span> 了解餐廳的做法和標準。</p>
+
+  <h2>每一課長什麼樣子</h2>
+  <p>每一課都用同樣的順序，你很快就會習慣：</p>
+  <div class="box goal"><b class="t">藍底框：本課目標</b><p>先告訴你這一課要學什麼，看完回頭檢查自己有沒有學會。</p></div>
+  <div class="box why"><b class="t">黃框：為什麼？</b><p>解釋步驟背後的原因。這是整門課最重要的部分。</p></div>
+  <div class="box origin"><b class="t">藍線框：名詞由來</b><p>專有名詞是從哪裡來的、原本是什麼意思。知道由來，名詞就不用死背。</p></div>
+  <div class="box warn"><b class="t">紅框：安全提醒</b><p>會燙傷、會割傷、會吃壞肚子的地方，一定要看。</p></div>
+  <div class="box try"><b class="t">綠框：動手試試</b><p>在家就能做的小實驗。</p></div>
+  <p>文章裡<span class="term" data-t="term">像這樣有虛線的字</span>是專有名詞，點一下就會跳出解釋和由來。全部名詞也整理在最後的「名詞小辭典」。</p>
+  <p>每課最後有小測驗，按下「我完成這一課了」，左邊目錄的圓點會變綠色，進度會自動記在這台裝置的瀏覽器裡。</p>
+
+  <h2>三個讓你進步最快的習慣</h2>
+  <ol>
+    <li><strong>先把整篇食譜看完再動手。</strong>很多失敗是因為炒到一半才發現蔥還沒切。</li>
+    <li><strong>剛開始用秤和量匙，不要用「適量」。</strong>先照數字做出一次成功的味道，之後才有能力憑感覺調整。</li>
+    <li><strong>每次做完寫一行筆記。</strong>例如「鹽多了一點、飯太濕」。下一次只改一件事，你會清楚知道是哪個改變讓它變好吃。</li>
+  </ol>
+  <div class="box warn"><b class="t">安全提醒</b><p>如果你是國中生或第一次下廚，用火、用刀、油炸的課程請一定要有大人在旁邊。會做菜的人，第一個學會的是保護自己。</p></div>
+
+  <div class="quizzes">
+    <h2>小測驗</h2>
+    <div class="quiz" data-a="1" data-exp="這門課的核心是「原理」。懂了為什麼，換了鍋子、爐子也能自己調整。">
+      <p class="q">1. 這門課最希望你學會的是什麼？</p>
+      <ol><li>背下越多食譜越好</li><li>食譜背後的原理，讓你能自己判斷和調整</li><li>買最貴的廚具</li></ol>
+    </div>
+    <div class="quiz" data-a="2" data-exp="一次只改一個地方，才知道到底是哪個改變造成差別。這就是科學實驗的方法，專業廚師也這樣試菜。">
+      <p class="q">2. 炒飯做得不好吃，下次該怎麼改？</p>
+      <ol><li>鹽、油、火、飯全部一起換</li><li>直接放棄</li><li>一次只改一個地方，並記錄結果</li></ol>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 第 1 課 ======================= -->
+<section class="lesson" id="l1" data-no="1" data-part="第一部　廚房基礎" data-title="廚房安全與衛生">
+  <div class="l-head"><p class="l-no">第 1 課 <span class="stage s1">入門</span></p><h1>廚房安全與衛生</h1><p class="lead">好吃之前，要先「吃了不會生病」和「做菜不會受傷」。</p></div>
+  <div class="box goal"><b class="t">本課目標</b><ul><li>正確洗手、分開生食和熟食</li><li>知道細菌最喜歡的溫度，食物該怎麼保存</li><li>燙傷和油鍋起火時該怎麼處理</li></ul></div>
+
+  <h2>一、看不見的敵人：細菌</h2>
+  <p>會讓人拉肚子的，通常不是食物「壞掉」的味道，而是你看不見的細菌。它們在生肉、生蛋、沒洗的手上最多。所以廚房衛生只有三件事：<strong>洗乾淨、分開放、控溫度</strong>。</p>
+  <h3>洗手：至少 20 秒</h3>
+  <p>用肥皂搓手心、手背、指縫、指尖、大拇指、手腕，大約是在心裡唱兩遍〈生日快樂歌〉的時間。摸過生肉、蛋殼、手機、垃圾桶之後都要再洗一次。</p>
+  <h3>生熟分開</h3>
+  <p>切過生雞肉的刀和砧板，如果沒洗就拿去切要直接吃的番茄，雞肉上的細菌就搬家到番茄上了。這叫做<span class="term" data-t="cross">交叉污染</span>。</p>
+  <div class="box why"><b class="t">為什麼煮熟的東西就安全，生番茄卻危險？</b><p>加熱會殺死大部分細菌，所以雞肉煮熟就安全。但番茄是生吃的，沒有經過加熱這一關，沾到的細菌會直接被你吃下去。最簡單的做法是準備兩塊不同顏色的砧板：一塊專切生肉，一塊切熟食和水果。</p></div>
+
+  <h2>二、細菌最愛的溫度</h2>
+  <p>大部分細菌在大約 5°C 到 60°C 之間繁殖得最快，這一段叫做<span class="term" data-t="danger">危險溫度帶</span>。室溫剛好就在正中間。</p>
+  <figure>
+    <svg class="figsvg" viewBox="0 0 520 150" width="100%" role="img" aria-label="溫度帶示意圖：5度以下冷藏安全，5到60度危險，60度以上加熱保溫安全">
+      <defs><linearGradient id="tg" x1="0" x2="1"><stop offset="0" stop-color="#6FB7E8"/><stop offset=".2" stop-color="#F2B705"/><stop offset=".75" stop-color="#C8341F"/><stop offset="1" stop-color="#8a1f10"/></linearGradient></defs>
+      <rect x="20" y="50" width="480" height="30" rx="15" fill="url(#tg)"/>
+      <line x1="110" y1="40" x2="110" y2="90" stroke="currentColor" class="svg-ink" stroke-width="2"/>
+      <line x1="380" y1="40" x2="380" y2="90" class="svg-ink" stroke-width="2"/>
+      <text class="svg-txt" x="100" y="108">5°C</text><text class="svg-txt" x="366" y="108">60°C</text>
+      <text class="svg-txt" x="28" y="35">冷藏：細菌睡覺</text>
+      <text class="svg-txt" x="160" y="35" style="font-weight:700;fill:#C8341F">危險溫度帶：細菌狂歡</text>
+      <text class="svg-txt" x="392" y="35">加熱：細菌死掉</text>
+      <text class="svg-txt" x="160" y="135">室溫（約 25–30°C）就在這裡</text>
+    </svg>
+  </figure>
+  <ul>
+    <li>煮好的菜在室溫不要放超過 2 小時（夏天更短）。</li>
+    <li>剩菜要稍微放涼後就放冰箱，不要整晚留在桌上。</li>
+    <li>冷凍肉要放冰箱冷藏室慢慢退冰，或整包泡冷水退冰；不要放在室溫一整天。</li>
+  </ul>
+  <div class="box why"><b class="t">為什麼冰箱不能殺死細菌？</b><p>低溫只是讓細菌「睡著」，不會殺死它。拿出來回到溫暖的地方，它又醒過來繼續繁殖。所以冰箱只能延長保存時間，不是讓食物永遠不壞。</p></div>
+
+  <h2>三、保護自己</h2>
+  <h3>鍋子與刀</h3>
+  <ul>
+    <li>鍋柄朝向爐子內側，不要朝外，才不會經過時勾到打翻。</li>
+    <li>刀子掉下去時<strong>往後退，絕對不要伸手去接</strong>。</li>
+    <li>刀子不要泡在充滿泡泡的水槽裡，別人伸手進去會被割到。</li>
+  </ul>
+  <h3>燙傷：沖、脫、泡、蓋、送</h3>
+  <p>先用流動的冷水沖 15 到 30 分鐘；在水中小心脫掉衣物；再泡冷水；用乾淨的布蓋住；嚴重的話送醫。不要塗牙膏、醬油或奶油，那些東西會把熱悶在皮膚裡，還可能造成感染。</p>
+  <div class="box warn"><b class="t">油鍋起火怎麼辦？</b>
+    <ol><li><strong>關火</strong>（關掉瓦斯或電源）。</li><li><strong>蓋上鍋蓋</strong>或用濕布整片蓋住，隔絕空氣，火就會熄滅。</li><li><strong>絕對不能潑水！</strong></li></ol>
+    <p>為什麼不能潑水？水比油重，會沉到超過 200°C 的熱油底下，瞬間變成水蒸氣。水變成蒸氣時體積會膨脹大約 1700 倍，像爆炸一樣把著火的油噴向四周和天花板。</p>
+  </div>
+
+  <div class="quizzes">
+    <h2>小測驗</h2>
+    <div class="quiz" data-a="2" data-exp="生雞肉的細菌會經由刀和砧板跑到番茄上，而番茄不會再加熱，所以要分開或徹底洗淨。">
+      <p class="q">1. 剛切完生雞肉的砧板，下一步怎麼做才對？</p>
+      <ol><li>直接切要生吃的番茄</li><li>用衛生紙擦一擦就好</li><li>用清潔劑徹底洗淨，或改用另一塊熟食砧板</li></ol>
+    </div>
+    <div class="quiz" data-a="0" data-exp="5–60°C 是細菌繁殖最快的危險溫度帶，室溫就落在中間。">
+      <p class="q">2. 細菌最喜歡的溫度範圍大約是？</p>
+      <ol><li>5°C 到 60°C</li><li>-18°C 以下</li><li>100°C 以上</li></ol>
+    </div>
+    <div class="quiz" data-a="1" data-exp="關火、蓋鍋蓋隔絕空氣。潑水會讓水在熱油底下瞬間變成蒸氣，把火油噴得到處都是。">
+      <p class="q">3. 炒菜時油鍋起火，最正確的做法是？</p>
+      <ol><li>趕快潑一杯水</li><li>關火，蓋上鍋蓋</li><li>用嘴巴吹熄</li></ol>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 第 2 課 ======================= -->
+<section class="lesson" id="l2" data-no="2" data-part="第一部　廚房基礎" data-title="認識你的工具">
+  <div class="l-head"><p class="l-no">第 2 課 <span class="stage s1">入門</span></p><h1>認識你的工具</h1><p class="lead">不用買很多，但要知道每樣工具擅長什麼。</p></div>
+  <div class="box goal"><b class="t">本課目標</b><ul><li>認識基本的刀、鍋、量具</li><li>知道不同材質的鍋適合做什麼</li><li>明白為什麼專業廚師都用秤</li></ul></div>
+
+  <h2>一、刀與砧板</h2>
+  <div class="tw"><table>
+    <tr><th>工具</th><th>長相</th><th>最適合</th></tr>
+    <tr><td>中式菜刀</td><td>方方的大刀面</td><td>切、剁、拍蒜，刀面還能當鏟子把菜鏟起來</td></tr>
+    <tr><td>主廚刀（西式廚刀）</td><td>刀尖翹起、刀身有弧度</td><td>前後搖動切碎香草、洋蔥；這門課的切法都能用它做</td></tr>
+    <tr><td>水果刀</td><td>小而短</td><td>削皮、切小東西</td></tr>
+    <tr><td>砧板</td><td>木頭或塑膠</td><td>下面墊一條濕毛巾就不會滑動</td></tr>
+  </table></div>
+  <p>一把「鋒利」的刀其實比鈍刀安全。鈍刀要很用力才切得動，容易滑開切到手；鋒利的刀輕輕就切下去，你比較控制得住。</p>
+
+  <h2>二、鍋子：形狀和材質都有差</h2>
+  <p>這門課會用到四種鍋：</p>
+  <ul>
+    <li><span class="term" data-t="wok">炒鍋</span>：底部圓、鍋壁高，食物可以沿著斜面翻動。炒飯、炒麵的主角。</li>
+    <li><strong>平底鍋</strong>：底部平、面積大，食物能整片貼著鍋子。煎漢堡肉、做義大利麵醬汁。</li>
+    <li><strong>湯鍋</strong>：深、容量大。煮麵、熬高湯、火鍋。</li>
+    <li><strong>深鍋或小炸鍋</strong>：油炸用，越深越安全，油不容易濺出。</li>
+  </ul>
+  <div class="tw"><table>
+    <tr><th>材質</th><th>優點</th><th>要注意</th></tr>
+    <tr><td>鐵鍋</td><td>耐高溫、能炒出焦香，越用越好用</td><td>會生鏽，洗完要擦乾、薄抹一層油（叫做「養鍋」）</td></tr>
+    <tr><td>不沾鍋</td><td>煎蛋不黏，初學者友善</td><td>不能空燒或開到最大火，塗層會壞；不要用鐵鏟刮</td></tr>
+    <tr><td>不鏽鋼鍋</td><td>耐用、不怕酸，煮湯煮醬都行</td><td>煎東西容易黏，要先把鍋燒熱（第 4 課教你判斷）</td></tr>
+  </table></div>
+
+  <h2>三、量具：從「適量」到「精準」</h2>
+  <ul>
+    <li><strong>電子秤</strong>：最重要的工具。麵、米、肉、咖啡豆都用重量算。</li>
+    <li><strong>量匙</strong>：1 大匙 = 15 毫升，1 小匙（茶匙）= 5 毫升。所以 1 大匙 = 3 小匙。</li>
+    <li><strong>量杯</strong>：量水、高湯。</li>
+    <li><strong>探針溫度計</strong>：插進肉裡看中心溫度，或量油溫。進階之後非常好用。</li>
+  </ul>
+  <div class="box why"><b class="t">為什麼專業廚房一定用秤？</b><p>「一碗飯」每個人盛的不一樣，「一匙鹽」還分粗鹽細鹽。可是「250 公克」在誰手上都一樣。專業廚房要讓每一盤的味道都相同，靠的就是把東西變成數字，這叫做「可以重複」。你學會用秤，就已經踏出變專業的第一步。</p></div>
+  <div class="box try"><b class="t">動手試試</b><p>拿一個你家的飯碗裝滿白飯，放上電子秤，記下重量。之後食譜寫「白飯 250 公克」，你就知道大概是幾碗了。</p></div>
+
+  <div class="quizzes">
+    <h2>小測驗</h2>
+    <div class="quiz" data-a="1" data-exp="1 大匙 15 毫升，1 小匙 5 毫升，所以是 3 倍。">
+      <p class="q">1. 1 大匙等於幾小匙？</p>
+      <ol><li>2 小匙</li><li>3 小匙</li><li>5 小匙</li></ol>
+    </div>
+    <div class="quiz" data-a="2" data-exp="不沾鍋的塗層怕高溫空燒，也怕金屬刮。">
+      <p class="q">2. 關於不沾鍋，哪一個做法是錯的？</p>
+      <ol><li>用木鏟或矽膠鏟</li><li>用中小火煎蛋</li><li>開最大火空燒到冒煙</li></ol>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 第 3 課 ======================= -->
+<section class="lesson" id="l3" data-no="3" data-part="第一部　廚房基礎" data-title="刀工與備料">
+  <div class="l-head"><p class="l-no">第 3 課 <span class="stage s1">入門</span></p><h1>刀工與備料</h1><p class="lead">切得一樣大，比切得快重要一百倍。</p></div>
+  <div class="box goal"><b class="t">本課目標</b><ul><li>安全的握刀方式和「爪形手」</li><li>分辨片、絲、丁、末</li><li>學會專業廚師開工前一定做的事：備料就位</li></ul></div>
+
+  <h2>一、握刀與扶菜的手</h2>
+  <p><strong>拿刀的手</strong>：大拇指和食指捏住刀身和刀柄交接的地方，其他三指握住刀柄。這樣刀不會左右晃。</p>
+  <p><strong>扶菜的手</strong>：手指彎起來像貓爪，指尖往內縮，讓「指關節」頂著刀面。刀子只會碰到關節的平面，碰不到指尖。這就是<strong>爪形手</strong>。</p>
+  <figure>
+    <svg class="figsvg" viewBox="0 0 460 170" width="100%" role="img" aria-label="爪形手示意：指尖內縮，指關節靠著刀面">
+      <rect x="40" y="120" width="380" height="14" rx="4" fill="#c9a36b"/>
+      <rect x="140" y="92" width="200" height="28" rx="14" fill="#F2B705" opacity=".85"/>
+      <path d="M150 30 L150 118 L176 118 L176 40 Z" fill="#B8C4C7" stroke="#56666B"/>
+      <rect x="146" y="10" width="34" height="22" rx="4" fill="#8a5a2b"/>
+      <path d="M186 118 Q182 70 205 58 Q228 50 240 66 L250 90 Q256 104 244 118 Z" fill="#F1C9A5" stroke="#b07d58"/>
+      <path d="M190 80 Q200 72 212 76" stroke="#b07d58" fill="none"/>
+      <circle cx="187" cy="88" r="4" fill="#C8341F"/>
+      <text class="svg-txt" x="250" y="40">指尖藏在後面</text>
+      <text class="svg-txt" x="40" y="86">指關節頂著刀面</text>
+      <line x1="140" y1="84" x2="183" y2="88" class="svg-ink" stroke-width="1.5"/>
+      <text class="svg-txt" x="40" y="158">刀往前推著切，手指一步一步往後退</text>
+    </svg>
+    <figcaption>紅點就是刀面碰到的地方：指關節，而不是指尖。</figcaption>
+  </figure>
+  <div class="box why"><b class="t">為什麼要先把圓的東西切出平面？</b><p>紅蘿蔔、洋蔥是圓的，放在砧板上會滾。先切掉一小片，讓平的那面朝下，它就穩穩不動了。大部分切傷都是因為食材在滾。</p></div>
+
+  <h2>二、四種基本形狀</h2>
+  <figure>
+    <svg class="figsvg" viewBox="0 0 480 150" width="100%" role="img" aria-label="片、絲、丁、末的大小比較">
+      <g fill="#F2B705" stroke="#8a6400">
+        <rect x="30" y="40" width="70" height="50" rx="3"/><rect x="36" y="46" width="70" height="50" rx="3" opacity=".6"/>
+        <rect x="150" y="30" width="6" height="70"/><rect x="162" y="32" width="6" height="70"/><rect x="174" y="30" width="6" height="70"/><rect x="186" y="34" width="6" height="70"/>
+        <rect x="260" y="50" width="18" height="18"/><rect x="284" y="46" width="18" height="18"/><rect x="266" y="74" width="18" height="18"/><rect x="292" y="70" width="18" height="18"/>
+        <rect x="380" y="60" width="5" height="5"/><rect x="390" y="66" width="5" height="5"/><rect x="400" y="58" width="5" height="5"/><rect x="386" y="76" width="5" height="5"/><rect x="398" y="74" width="5" height="5"/><rect x="410" y="68" width="5" height="5"/><rect x="376" y="72" width="5" height="5"/>
+      </g>
+      <text class="svg-txt" x="50" y="130">片</text><text class="svg-txt" x="165" y="130">絲</text><text class="svg-txt" x="278" y="130">丁</text><text class="svg-txt" x="390" y="130">末</text>
+    </svg>
+  </figure>
+  <div class="tw"><table>
+    <tr><th>形狀</th><th>大概尺寸</th><th>常用在</th></tr>
+    <tr><td>片</td><td>薄薄一片，約 2–3 毫米厚</td><td>蒜片（義大利麵）、火鍋肉片</td></tr>
+    <tr><td>絲</td><td>把片疊起來再切成細條</td><td>薑絲、青椒絲</td></tr>
+    <tr><td>丁</td><td>小方塊，約 0.5–1 公分</td><td>炒飯裡的紅蘿蔔、洋蔥丁</td></tr>
+    <tr><td>末</td><td>比米粒還小</td><td>蒜末、薑末、辣椒末</td></tr>
+  </table></div>
+  <div class="box why"><b class="t">為什麼一定要切得一樣大？</b><p>熱從食物外面往裡面走（第 4 課會細講）。大塊的中心要很久才熟，小塊一下子就熟。如果你的紅蘿蔔丁有大有小，就會出現「小的已經爛了，大的還是生的」。大小一致，熟度才會一致。</p></div>
+
+  <h3>練習：洋蔥切丁</h3>
+  <ol class="steps">
+    <li>洋蔥切掉頭尾，對半切開，剝掉外皮。<span class="w">對半後有平面可以朝下，不會滾。</span></li>
+    <li>平面朝下，保留根部那一端不切斷，從另一端直直往根部切幾刀。<span class="w">根部像釘書針一樣把洋蔥固定住，才不會散開。</span></li>
+    <li>刀橫放，平行砧板切一到兩刀（初學者可省略）。</li>
+    <li>最後垂直方向往下切，洋蔥丁就一顆顆掉下來了。</li>
+  </ol>
+  <div class="box try"><b class="t">切洋蔥會流眼淚？</b><p>洋蔥被切開時，細胞破裂會釋放一種刺激眼睛的氣體。先把洋蔥冰 30 分鐘、用鋒利的刀、在抽油煙機下切，都能減少眼淚。冰過的洋蔥氣體跑得慢，鋒利的刀壓破的細胞比較少。</p></div>
+
+  <h2>三、備料就位：專業廚師的第一個習慣</h2>
+  <p>開火之前，把所有材料都洗好、切好、量好，分別放在小碗裡排好。這在法國專業廚房叫做 <span class="term" data-t="mise">Mise en place</span>，中文常說「備料」。</p>
+  <div class="box why"><b class="t">為什麼開火前就要全部準備好？</b><p>像炒飯這種大火料理，從下鍋到起鍋可能只有 3 分鐘。你轉身去切蔥的 30 秒，鍋裡的蛋就焦了。餐廳的廚師一個晚上要做上百盤，全靠開店前的備料。</p></div>
+
+  <div class="quizzes">
+    <h2>小測驗</h2>
+    <div class="quiz" data-a="1" data-exp="爪形手是指尖內縮、用指關節靠著刀面，刀碰不到指尖。">
+      <p class="q">1. 扶菜的手正確的樣子是？</p>
+      <ol><li>手指伸直壓住食材</li><li>指尖內縮像貓爪，指關節靠著刀面</li><li>手放遠一點不要碰到</li></ol>
+    </div>
+    <div class="quiz" data-a="0" data-exp="大小一致，受熱才一致，熟度才一致。">
+      <p class="q">2. 紅蘿蔔丁要切得一樣大，最主要是為了？</p>
+      <ol><li>讓每一顆熟的程度一樣</li><li>拍照比較好看而已</li><li>比較省時間</li></ol>
+    </div>
+    <div class="quiz" data-a="2" data-exp="Mise en place 是法文「放在該放的位置」，也就是開火前完成所有備料。">
+      <p class="q">3. Mise en place 指的是？</p>
+      <ol><li>一種法國刀</li><li>擺盤的方式</li><li>開火前把材料全部準備好、排好</li></ol>
+    </div>
+  </div>
+</section>
+<!-- ======================= 第 4 課 ======================= -->
+<section class="lesson" id="l4" data-no="4" data-part="第一部　廚房基礎" data-title="火候：熱是怎麼跑進食物的">
+  <div class="l-head"><p class="l-no">第 4 課 <span class="stage s1">入門</span></p><h1>火候：熱是怎麼跑進食物的</h1><p class="lead">「火候」這兩個字，其實就是控制熱量的大小和時間。</p></div>
+  <div class="box goal"><b class="t">本課目標</b><ul><li>熱傳進食物的三種方式</li><li>大火、中火、小火各自適合做什麼</li><li>判斷鍋子熱了沒、為什麼鍋子不能塞太滿</li></ul></div>
+
+  <h2>一、熱的三種交通方式</h2>
+  <p>在理化課你會學到<span class="term" data-t="heat">熱的傳遞</span>。在廚房裡，它們每天都在發生：</p>
+  <div class="tw"><table>
+    <tr><th>方式</th><th>像什麼</th><th>廚房例子</th></tr>
+    <tr><td><strong>傳導</strong></td><td>排隊傳東西，一個碰一個傳下去</td><td>鍋底把熱傳給貼在上面的漢堡肉；肉的外層再把熱傳給中心</td></tr>
+    <tr><td><strong>對流</strong></td><td>熱的水或油會流動，把熱帶著跑</td><td>煮麵時滾水翻動、炸雞時熱油包圍著雞塊</td></tr>
+    <tr><td><strong>輻射</strong></td><td>像太陽曬在臉上，不用碰到也會熱</td><td>烤箱的上火、炭火烤肉</td></tr>
+  </table></div>
+  <div class="box why"><b class="t">為什麼大塊肉外面焦了裡面還是生的？</b><p>因為熱從外往內是「一層一層傳」的，速度很慢。火太大時，外層已經燒焦，熱還來不及走到中心。所以<mark>越大塊、越厚的食物，越要用中小火慢慢讓熱走進去</mark>；越薄越小的，越可以用大火快速做完。</p></div>
+
+  <div class="demo" id="flameDemo">
+    <p class="dt">互動：選一個火力看看</p>
+    <p class="dd">點按鈕，看火焰大小和適合的料理。</p>
+    <div class="seg" role="group" aria-label="火力">
+      <button type="button" data-lv="1" aria-pressed="false">小火</button>
+      <button type="button" data-lv="2" aria-pressed="true">中火</button>
+      <button type="button" data-lv="3" aria-pressed="false">大火</button>
+    </div>
+    <div class="stage-box">
+      <svg viewBox="0 0 200 140" width="220" aria-hidden="true">
+        <ellipse cx="100" cy="30" rx="80" ry="12" fill="#1F2A2E"/>
+        <rect x="20" y="30" width="160" height="10" fill="#1F2A2E"/>
+        <g id="flameG" style="transform-origin:100px 130px;transition:transform .3s">
+          <g class="flame"><path d="M60 130 Q70 95 82 110 Q88 75 100 100 Q112 70 118 110 Q130 95 140 130Z" fill="#F2B705"/><path d="M80 130 Q88 110 96 118 Q102 100 108 118 Q114 110 120 130Z" fill="#C8341F" opacity=".75"/></g>
+        </g>
+        <rect x="40" y="128" width="120" height="8" rx="4" fill="#56666B"/>
+      </svg>
+    </div>
+    <div class="readout" id="flameOut"></div>
+  </div>
+
+  <h2>二、鍋子熱了沒？</h2>
+  <p>食物下鍋時，鍋子要夠熱，不然肉會黏在鍋上、蔬菜會出水變軟爛。用一滴水就能判斷：</p>
+  <ul>
+    <li>水滴下去安靜不動、慢慢冒泡：還不夠熱。</li>
+    <li>水滴「嘶」一聲很快蒸發：中溫，可以炒蔬菜。</li>
+    <li>水滴變成一顆顆小珠子在鍋面滾來滾去：夠熱了，可以煎肉。這叫<span class="term" data-t="leiden">萊頓弗羅斯特效應</span>。</li>
+  </ul>
+  <div class="box why"><b class="t">為什麼鍋子更燙，水珠反而不會馬上蒸發？</b><p>鍋子非常燙時，水珠底部一碰到鍋面就瞬間產生一層薄薄的水蒸氣，水珠就「坐」在這層蒸氣墊上，像氣墊船一樣滑來滑去，反而沒有直接碰到鍋子。</p></div>
+  <p>炒菜常聽到「<strong>熱鍋冷油</strong>」：先把空鍋燒熱，再倒入油，油溫一下就上來，馬上下食材。鍋面的小縫隙被熱脹填平、油又薄薄鋪滿，食物就比較不會黏。（不沾鍋例外，不要空燒，倒油後再加熱。）</p>
+
+  <h2>三、鍋子不要塞太滿</h2>
+  <p>一次倒一大堆肉進鍋，鍋子的溫度會一下子掉下去。食物裡的水分跑出來，卻沒有足夠的熱量把它蒸發掉，肉就泡在自己的湯汁裡變成「用煮的」，灰灰的、沒有香味。</p>
+  <div class="box why"><b class="t">家裡的爐子怎麼辦？</b><p>餐廳爐火比家裡強好幾倍。家用爐子就用「分批」來解決：肉分兩次煎，炒飯一次最多炒兩人份。每批之間讓鍋子重新熱起來。</p></div>
+
+  <div class="quizzes">
+    <h2>小測驗</h2>
+    <div class="quiz" data-a="1" data-exp="煮麵時是滾水流動把熱帶給麵條，這是對流。">
+      <p class="q">1. 煮麵時，熱主要靠哪一種方式傳給麵條？</p>
+      <ol><li>輻射</li><li>對流</li><li>完全不用傳</li></ol>
+    </div>
+    <div class="quiz" data-a="2" data-exp="厚的食物用太大的火，外面會先焦掉，熱還沒走到中心。">
+      <p class="q">2. 一塊很厚的肉，外面焦了、裡面還生，最可能的原因是？</p>
+      <ol><li>火太小</li><li>肉太薄</li><li>火太大，熱來不及傳到中心</li></ol>
+    </div>
+    <div class="quiz" data-a="0" data-exp="一次放太多，鍋溫下降，水分蒸發不掉，肉就變成用煮的。">
+      <p class="q">3. 一次放太多肉下鍋，會怎麼樣？</p>
+      <ol><li>鍋溫下降，肉出水變成「用煮的」，沒有焦香</li><li>熟得更快</li><li>完全沒影響</li></ol>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 第 5 課 ======================= -->
+<section class="lesson" id="l5" data-no="5" data-part="第一部　廚房基礎" data-title="味道的科學與調味">
+  <div class="l-head"><p class="l-no">第 5 課 <span class="stage s1">入門</span></p><h1>味道的科學與調味</h1><p class="lead">好廚師的祕密不是加了什麼神秘醬料，而是懂得「平衡」。</p></div>
+  <div class="box goal"><b class="t">本課目標</b><ul><li>舌頭能嚐到的五種基本味道</li><li>為什麼「辣」和「麻」不是味道</li><li>味道太鹹、太淡、太膩時怎麼救</li></ul></div>
+
+  <h2>一、五種基本味道</h2>
+  <div class="tw"><table>
+    <tr><th>味道</th><th>來自</th><th>在料理裡的角色</th></tr>
+    <tr><td>鹹</td><td>鹽、醬油、魚露</td><td>讓其他味道「被聽見」，是調味的基礎</td></tr>
+    <tr><td>甜</td><td>糖、洋蔥、紅蘿蔔炒過</td><td>讓味道圓潤，平衡酸和辣</td></tr>
+    <tr><td>酸</td><td>醋、檸檬、番茄</td><td>讓味道變「亮」，解油膩</td></tr>
+    <tr><td>苦</td><td>咖啡、苦瓜、深綠蔬菜</td><td>少量能增加層次，多了就難吃</td></tr>
+    <tr><td>鮮</td><td>昆布、番茄、起司、香菇、肉湯</td><td>讓人覺得「有肉味、很滿足」</td></tr>
+  </table></div>
+  <div class="box origin"><b class="t">名詞由來：鮮味</b><p>以前西方科學家只承認四種味道。1908 年，日本化學家池田菊苗好奇：昆布湯為什麼那麼好喝？他從昆布裡找到一種叫「麩胺酸」的物質，把這種味道取名為<span class="term" data-t="umami">うま味</span>（日文「好吃」的意思）。他後來還用麩胺酸做出了味精。直到 2000 年代，科學家在舌頭上找到專門感受鮮味的接受器，鮮味才正式被公認為第五種基本味道。</p></div>
+
+  <h2>二、辣和麻為什麼不算味道？</h2>
+  <p>辣椒裡的<span class="term" data-t="capsaicin">辣椒素</span>刺激的是舌頭上感覺「燙」的神經，所以吃辣會覺得熱、會流汗。辣其實是一種<strong>痛覺</strong>。花椒的麻則是讓嘴唇好像被輕輕震動，是一種<strong>觸覺</strong>。這兩種感覺在火鍋課會再遇到。</p>
+
+  <h2>三、鼻子比舌頭更重要</h2>
+  <div class="box try"><b class="t">動手試試：捏鼻子吃糖</b><p>捏住鼻子，把一顆有水果味的軟糖放進嘴裡嚼。你只會嚐到「甜」和「酸」。放開鼻子的那一刻，草莓或葡萄的味道一下子衝出來。這證明我們以為的「味道」，大部分其實是鼻子聞到的「香氣」。所以感冒鼻塞時吃什麼都沒味道。</p></div>
+  <p>這也是為什麼後面會一直教你「爆香」：蔥、薑、蒜用油炒過，香氣會跑出來，料理就更有味道。</p>
+
+  <h2>四、調味的四個原則</h2>
+  <ol>
+    <li><strong>少量多次，邊做邊嚐。</strong>鹽加了就拿不出來，寧可少一點再補。</li>
+    <li><strong>鹽要分次加。</strong>食材本身先有一點鹹味，最後再微調，會比最後一次加一大匙更均勻。</li>
+    <li><strong>湯汁會濃縮。</strong>一鍋湯煮 30 分鐘，水變少了，鹽沒變，就會越來越鹹。長時間燉煮的東西最後才定鹹淡。</li>
+    <li><strong>用平衡來救味道</strong>，見下表。</li>
+  </ol>
+  <div class="tw"><table>
+    <tr><th>問題</th><th>怎麼救</th><th>原理</th></tr>
+    <tr><td>太鹹</td><td>加水、加更多食材稀釋；湯可以加一點酸或甜</td><td>酸和甜能讓舌頭對鹹沒那麼敏感，但最有效還是稀釋</td></tr>
+    <tr><td>淡淡的、不夠味</td><td>先加一小撮鹽，嚐一下；再不夠可擠一點檸檬或醋</td><td>很多時候不是缺味道，是缺鹽或缺酸</td></tr>
+    <tr><td>太油膩</td><td>加酸（醋、檸檬、番茄）</td><td>酸讓口腔清爽，所以炸雞常配檸檬、酸黃瓜</td></tr>
+    <tr><td>太酸</td><td>加一點糖</td><td>甜和酸互相抵消</td></tr>
+    <tr><td>太辣</td><td>加糖、加奶或乳製品</td><td>辣椒素溶在油脂裡，喝牛奶比喝水更解辣</td></tr>
+  </table></div>
+
+  <div class="quizzes">
+    <h2>小測驗</h2>
+    <div class="quiz" data-a="2" data-exp="鮮味由池田菊苗在 1908 年從昆布中發現，來源是麩胺酸。">
+      <p class="q">1. 第五種基本味道「鮮味」是從哪種食材研究發現的？</p>
+      <ol><li>辣椒</li><li>砂糖</li><li>昆布</li></ol>
+    </div>
+    <div class="quiz" data-a="0" data-exp="辣椒素刺激感覺熱和痛的神經，所以辣是痛覺。">
+      <p class="q">2. 為什麼「辣」不算基本味道？</p>
+      <ol><li>因為它是痛覺，刺激的是感覺燙的神經</li><li>因為辣椒不好吃</li><li>因為只有亞洲人吃辣</li></ol>
+    </div>
+    <div class="quiz" data-a="1" data-exp="酸能解油膩，讓味道清爽明亮。">
+      <p class="q">3. 一道菜吃起來很油膩，加什麼最有幫助？</p>
+      <ol><li>再加油</li><li>加一點檸檬或醋</li><li>加更多鹽</li></ol>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 第 6 課 ======================= -->
+<section class="lesson" id="l6" data-no="6" data-part="第一部　廚房基礎" data-title="讓食物變好吃的四種變化">
+  <div class="l-head"><p class="l-no">第 6 課 <span class="stage s2">進階</span></p><h1>讓食物變好吃的四種變化</h1><p class="lead">這一課是整門課的心臟。後面七道料理，全部都在運用這四種變化。</p></div>
+  <div class="box goal"><b class="t">本課目標</b><ul><li>梅納反應：為什麼煎的比煮的香</li><li>焦糖化：糖的變身</li><li>澱粉的糊化和老化：飯和麵的祕密</li><li>乳化：讓油和水變成好朋友</li></ul></div>
+
+  <h2>一、梅納反應：焦香的來源</h2>
+  <p>烤吐司的金黃色、煎牛排的褐色外皮、炒飯的焦香、咖啡豆的香味，全部來自同一個化學反應：<span class="term" data-t="maillard">梅納反應</span>。</p>
+  <p>簡單說：食物裡的<strong>蛋白質（胺基酸）</strong>和<strong>糖</strong>一起被加熱到大約 140°C 以上，會產生幾百種新的香味分子和褐色物質。</p>
+  <div class="box why"><b class="t">為什麼水煮肉不會香？</b><p>水在一般的鍋子裡最高只能到 100°C，再加熱它就變成蒸氣跑掉，溫度不會再上升。所以只要食物周圍有水，就到不了梅納反應需要的溫度。這就是為什麼：<br>① 煎肉前要把表面<strong>擦乾</strong>；<br>② 鍋子<strong>不能塞太滿</strong>（第 4 課）；<br>③ 炒飯要用<strong>比較乾的飯</strong>（第 7 課）。<br>三個規則，其實是同一個原理。</p></div>
+
+  <h2>二、焦糖化：糖自己的變身</h2>
+  <p>只有糖、沒有蛋白質，單獨加熱到大約 160°C 以上，糖會分解變成褐色、帶一點苦味的香氣，這叫<span class="term" data-t="caramel">焦糖化</span>。布丁上的焦糖、慢慢炒到褐色的洋蔥（洋蔥裡有糖），都有焦糖化。</p>
+
+  <div class="demo" id="tempDemo">
+    <p class="dt">互動：把溫度往上推</p>
+    <p class="dd">拖動滑桿，看看在不同溫度下，食物會發生什麼事。</p>
+    <input type="range" id="tempRange" min="20" max="250" value="25" aria-label="溫度">
+    <div style="display:flex;gap:14px;align-items:center;margin-top:10px">
+      <div id="tempSwatch" style="width:90px;height:60px;border-radius:12px;border:2px solid var(--line);flex:none"></div>
+      <div class="readout" id="tempOut" style="margin:0"></div>
+    </div>
+  </div>
+
+  <h2>三、澱粉的糊化與老化</h2>
+  <p>米和麵粉主要的成分是<strong>澱粉</strong>。生的澱粉很硬，像一顆顆緊緊綁好的毛線球。</p>
+  <ul>
+    <li><span class="term" data-t="gelat">糊化</span>：澱粉加水加熱，毛線球吸水膨脹、鬆開，變得又軟又黏。生米變成白飯、麵條煮軟，都是糊化。</li>
+    <li><span class="term" data-t="retro">老化</span>：煮好的澱粉冷掉後，鬆開的毛線又慢慢重新排整齊，把水擠出來，變得比較硬、比較乾。冰過的飯、隔夜的饅頭變硬，就是老化。</li>
+  </ul>
+  <p>老化聽起來是壞事，但下一課你會發現：<mark>炒飯最需要的，就是一點點老化</mark>。</p>
+
+  <h2>四、乳化：讓油和水在一起</h2>
+  <p>油和水本來不會混合，搖一搖放著，油又會浮上來。但如果加入一種「兩邊都能抓住」的東西，再用力攪拌，油就會變成小到看不見的油滴，均勻散在水裡，變成濃稠滑順的醬。這叫<span class="term" data-t="emulsion">乳化</span>，那個「兩邊都能抓」的東西叫<span class="term" data-t="emulsifier">乳化劑</span>。</p>
+  <figure>
+    <svg class="figsvg" viewBox="0 0 480 170" width="100%" role="img" aria-label="乳化示意：左邊油水分層，右邊油變成小油滴散在水中">
+      <rect x="40" y="30" width="140" height="120" rx="10" class="svg-ink" stroke-width="2"/>
+      <rect x="42" y="32" width="136" height="40" fill="#F2B705" opacity=".7"/>
+      <rect x="42" y="72" width="136" height="76" fill="#6FB7E8" opacity=".35"/>
+      <text class="svg-txt" x="70" y="56">油浮在上面</text><text class="svg-txt" x="84" y="116">水</text>
+      <path d="M205 90 L265 90" class="svg-ink" stroke-width="2"/><path d="M258 83 L268 90 L258 97" class="svg-ink" stroke-width="2"/>
+      <text class="svg-txt" x="198" y="78">乳化劑＋攪拌</text>
+      <rect x="290" y="30" width="140" height="120" rx="10" class="svg-ink" stroke-width="2"/>
+      <rect x="292" y="32" width="136" height="116" fill="#F2B705" opacity=".25"/>
+      <g fill="#F2B705"><circle cx="310" cy="50" r="5"/><circle cx="335" cy="65" r="4"/><circle cx="360" cy="48" r="5"/><circle cx="395" cy="60" r="4"/><circle cx="410" cy="90" r="5"/><circle cx="320" cy="95" r="4"/><circle cx="350" cy="110" r="5"/><circle cx="380" cy="100" r="4"/><circle cx="405" cy="128" r="4"/><circle cx="330" cy="132" r="5"/><circle cx="365" cy="80" r="4"/></g>
+      <text class="svg-txt" x="300" y="166">油變成小油滴，醬汁變濃稠</text>
+    </svg>
+  </figure>
+  <p>生活中的乳化：美乃滋（蛋黃是乳化劑）、牛奶（天然乳化）、義大利麵醬汁（煮麵水裡的澱粉是乳化劑）、豚骨拉麵的白色湯頭（膠質是乳化劑）。</p>
+
+  <div class="box try"><b class="t">動手試試</b><p>在小瓶子裡倒兩匙油、兩匙醋，搖一搖，放著一分鐘，會分層。再加半小匙芥末醬或一點蛋黃，用力搖 20 秒，就會變成混濁不分層的醬，這就是沙拉醬。</p></div>
+
+  <div class="quizzes">
+    <h2>小測驗</h2>
+    <div class="quiz" data-a="1" data-exp="水的沸點 100°C，梅納反應大約要 140°C 以上，食物表面濕的時候溫度上不去。">
+      <p class="q">1. 為什麼煎肉前要把肉的表面擦乾？</p>
+      <ol><li>讓肉比較輕</li><li>表面有水時溫度卡在 100°C，到不了梅納反應需要的溫度</li><li>避免肉變成紅色</li></ol>
+    </div>
+    <div class="quiz" data-a="0" data-exp="煮好的澱粉冷卻後重新排列、變硬，叫做老化。">
+      <p class="q">2. 白飯放進冰箱一晚後變硬、變乾，這叫做？</p>
+      <ol><li>老化</li><li>糊化</li><li>乳化</li></ol>
+    </div>
+    <div class="quiz" data-a="2" data-exp="蛋黃裡的卵磷脂能同時抓住油和水，是美乃滋的乳化劑。">
+      <p class="q">3. 美乃滋能讓油和醋混在一起不分層，是靠什麼？</p>
+      <ol><li>鹽</li><li>糖</li><li>蛋黃中的乳化劑</li></ol>
+    </div>
+  </div>
+</section>
+<!-- ======================= 第 7 課 炒飯 ======================= -->
+<section class="lesson" id="l7" data-no="7" data-part="第二部　米與麵" data-title="炒飯：澱粉與鍋氣">
+  <div class="l-head"><p class="l-no">第 7 課 <span class="stage s1">入門</span><span class="stage s2">進階</span><span class="stage s3">專業</span></p><h1>炒飯：澱粉與鍋氣</h1><p class="lead">一盤蛋炒飯，就是火候、老化和梅納反應的期末考。</p></div>
+  <div class="box goal"><b class="t">本課目標</b><ul><li>了解不同的米，以及為什麼隔夜飯比較好炒</li><li>做出粒粒分明的蛋炒飯</li><li>認識「鍋氣」，學會在家用爐火接近它</li><li>會自己找出炒飯失敗的原因</li></ul></div>
+
+  <h2>一、先認識米</h2>
+  <p>澱粉分成兩種：<span class="term" data-t="amylose">直鏈澱粉和支鏈澱粉</span>。直鏈澱粉像一根直直的棒子，支鏈澱粉像一棵長滿分枝的樹，分枝會互相勾住，所以支鏈越多，米越黏。</p>
+  <div class="tw"><table>
+    <tr><th>米的種類</th><th>台灣常見名稱</th><th>口感</th><th>炒飯適不適合</th></tr>
+    <tr><td>秈米（長米）</td><td>在來米、泰國香米</td><td>細長、鬆散、不黏</td><td>很適合，容易粒粒分明</td></tr>
+    <tr><td>粳米（短圓米）</td><td><span class="term" data-t="penglai">蓬萊米</span>（一般白米）</td><td>Q、有黏性</td><td>可以，但要用隔夜飯或少水煮</td></tr>
+    <tr><td>糯米</td><td>圓糯、長糯</td><td>幾乎全是支鏈澱粉，非常黏</td><td>不適合炒飯，適合油飯、湯圓</td></tr>
+  </table></div>
+
+  <h2>二、為什麼大家都說用隔夜飯？</h2>
+  <p>還記得第 6 課的<span class="term" data-t="retro">老化</span>嗎？剛煮好的熱飯表面濕、黏，一下鍋就糊成一團，鍋子的熱量全部拿去蒸發水分，炒不出香味。冷藏過的飯經過老化，表面比較乾、飯粒比較硬挺，下鍋後能一粒一粒散開，直接接觸鍋面產生<span class="term" data-t="maillard">梅納反應</span>。</p>
+  <div class="box warn"><b class="t">隔夜飯要「冷藏」，不是放在電鍋裡過夜</b><p>米飯裡可能有一種叫仙人掌桿菌的細菌，它在室溫下會繁殖並產生毒素，而且毒素加熱也不一定破壞得了。所以剩飯要放涼後一小時左右就蓋好放進冰箱，不要留在電鍋保溫或放在桌上一整夜。</p></div>
+  <div class="box why"><b class="t">沒有隔夜飯怎麼辦？</b><p>① 煮飯時水量減少大約一成，飯本來就比較乾；② 煮好後攤開在大盤子上，用電風扇吹涼，讓表面水分蒸發；③ 放進冰箱冷藏 30 分鐘到 1 小時再炒。</p></div>
+
+  <h2>三、動手做：基礎蛋炒飯 <span class="stage s1">入門</span></h2>
+  <div class="recipe">
+    <div class="rh"><h3>基礎蛋炒飯</h3><span>1 人份｜約 10 分鐘｜炒鍋或不沾平底鍋</span></div>
+    <div class="rb">
+      <ul class="ing">
+        <li>冷藏白飯<b>250 公克</b></li><li>雞蛋<b>2 顆</b></li><li>青蔥<b>1 支</b></li><li>食用油<b>2 大匙</b></li><li>鹽<b>約 1/3 小匙（2 公克）</b></li><li>白胡椒粉<b>少許</b></li><li>醬油（可省略）<b>1 小匙</b></li>
+      </ul>
+      <ol class="steps">
+        <li>把冷飯倒進大碗，戴手套或用手沾一點水，把結塊的飯抓散。<span class="w">在碗裡先弄散，下鍋就不用一直壓，飯粒比較不會被壓爛。</span></li>
+        <li>蔥切成蔥花，把白色部分（蔥白）和綠色部分（蔥綠）分開放。蛋打散，加一小撮鹽。<span class="w">蔥白比較硬、耐炒，用來爆香；蔥綠很嫩，最後放才會保持翠綠和香氣。</span></li>
+        <li>所有材料排在爐子旁邊（這就是第 3 課的備料就位）。</li>
+        <li>鍋子用中大火燒熱，倒入油，轉動鍋子讓油鋪滿。放入蔥白炒 10 秒到有香味。<span class="w">這叫「爆香」：蔥的香氣分子喜歡溶在油裡，油熱了會把香味帶出來，之後每粒飯都裹著香油。</span></li>
+        <li>倒入蛋液，等邊緣開始凝固、中間還是半熟軟嫩的時候，馬上倒入白飯。<span class="w">半熟的蛋能包住一部分飯粒，蛋也不會炒得太老太乾。</span></li>
+        <li>用鍋鏟「切」和「翻」：用鏟子邊緣把飯塊切開，再從鍋底鏟起翻面，重複大約 2–3 分鐘，炒到飯粒在鍋裡會跳動、發出沙沙聲。<span class="w">飯粒會跳，代表表面水分已經蒸發、變乾了，這時才開始有焦香。</span></li>
+        <li>撒鹽和白胡椒，翻炒均勻。想要醬油香，就把醬油沿著「鍋邊」淋一圈，而不是直接倒在飯上。<span class="w">鍋邊溫度很高，醬油碰到會馬上冒煙、產生焦香（梅納反應和焦糖化），這個技巧叫「嗆鍋邊」。直接倒在飯上只會讓飯變濕、變色不均。</span></li>
+        <li>關火，撒入蔥綠，翻兩下就盛盤。<span class="w">鍋子的餘熱就足夠讓蔥綠散出香氣。</span></li>
+      </ol>
+    </div>
+  </div>
+
+  <h2>四、做得更好：鍋氣與變化 <span class="stage s2">進階</span></h2>
+  <p>中餐廳的炒飯有一種說不出來的煙燻焦香，粵菜師傅叫它<span class="term" data-t="wokhei">鍋氣</span>。它來自三件事：非常高的鍋溫、食物接觸鍋面產生的梅納反應，以及師傅甩鍋時，帶油的飯粒飛過火焰上方，細小的油滴短暫燃燒產生的煙燻味。</p>
+  <p>家用爐子火力比餐廳小很多，但可以這樣接近：</p>
+  <ul>
+    <li><strong>一次只炒一到兩人份</strong>，讓每粒飯都有機會碰到鍋子。</li>
+    <li><strong>鍋子要先燒到非常熱</strong>，放油後微微冒煙再下材料（鐵鍋才這樣做，不沾鍋不要）。</li>
+    <li><strong>不要一直翻</strong>：讓飯貼著鍋面 10 秒左右再翻，給它上色的時間。</li>
+  </ul>
+  <h3>變化版：黃金炒飯</h3>
+  <p>把生的蛋黃直接跟冷飯拌勻，讓每粒飯都裹上一層蛋黃，再下鍋炒。炒出來整盤金黃，每一粒都有蛋香。蛋白可以另外炒熟再加回去。</p>
+  <h3>加料的順序</h3>
+  <p>想加火腿、蝦仁、蔬菜？原則是：<mark>難熟的先下，容易熟的後下；會出水的另外炒</mark>。例如紅蘿蔔丁先炒軟、蝦仁先炒到變色撈起，最後才跟飯合在一起，才不會讓鍋子溫度掉下去、飯變濕。</p>
+
+  <h2>五、專業的標準 <span class="stage s3">專業</span></h2>
+  <div class="box origin"><b class="t">名詞由來：揚州炒飯</b><p>中國最有名的炒飯。相傳它的前身是隋朝的「碎金飯」，因為金黃的蛋包在飯粒外面像碎金一樣。這是民間傳說，但也告訴我們：從古代開始，好炒飯的標準就是「蛋要包住飯粒」。現在江蘇揚州還訂有揚州炒飯的地方標準。</p></div>
+  <p>專業廚房評價炒飯，常看這幾點：</p>
+  <ul>
+    <li><strong>粒粒分明</strong>：飯粒不結塊，但也不乾硬。</li>
+    <li><strong>油亮不膩</strong>：盤底不應該有一灘油。</li>
+    <li><strong>味道均勻</strong>：每一口鹹淡一樣。</li>
+    <li><strong>有鍋氣</strong>：聞得到焦香。</li>
+  </ul>
+  <h3>失敗排除表</h3>
+  <div class="tw"><table>
+    <tr><th>問題</th><th>可能原因</th><th>下次怎麼改</th></tr>
+    <tr><td>黏成一團、糊糊的</td><td>飯太濕、一次炒太多、火太小</td><td>用冷藏飯、分批炒、鍋子先燒熱</td></tr>
+    <tr><td>盤底一攤油</td><td>油放太多，或飯太乾一直補油</td><td>2 大匙油配 250 公克飯就夠</td></tr>
+    <tr><td>有的鹹有的淡</td><td>鹽最後才撒，沒炒勻</td><td>鹽可以提早一點撒，或先加在蛋液裡</td></tr>
+    <tr><td>沒有香味</td><td>沒爆香、火不夠、飯沒炒到會跳</td><td>炒到飯粒發出沙沙聲再調味</td></tr>
+    <tr><td>黏鍋、燒焦</td><td>鍋不夠熱就下油、翻炒不夠</td><td>熱鍋冷油，飯貼鍋 10 秒就翻</td></tr>
+  </table></div>
+
+  <div class="quizzes">
+    <h2>小測驗</h2>
+    <div class="quiz" data-a="0" data-exp="冷藏後澱粉老化，飯粒表面比較乾硬，下鍋不容易黏在一起，也更容易產生焦香。">
+      <p class="q">1. 隔夜冷藏的飯為什麼比較好炒？</p>
+      <ol><li>澱粉老化，表面較乾，飯粒容易散開、上色</li><li>冷飯比較甜</li><li>冷飯比較重</li></ol>
+    </div>
+    <div class="quiz" data-a="2" data-exp="醬油碰到高溫的鍋邊會瞬間焦香，直接倒在飯上只會讓飯變濕。">
+      <p class="q">2. 為什麼醬油要沿著鍋邊淋？</p>
+      <ol><li>比較好看</li><li>比較省醬油</li><li>鍋邊很燙，醬油會瞬間產生焦香，飯也不會變濕</li></ol>
+    </div>
+    <div class="quiz" data-a="1" data-exp="剩飯要放進冰箱冷藏，在室溫或保溫狀態過夜可能滋生細菌和毒素。">
+      <p class="q">3. 下面哪種「隔夜飯」是安全的做法？</p>
+      <ol><li>放在電鍋保溫一整晚</li><li>放涼後蓋好冷藏</li><li>放在桌上用蓋子蓋著過夜</li></ol>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 第 8 課 中式麵 ======================= -->
+<section class="lesson" id="l8" data-no="8" data-part="第二部　米與麵" data-title="麵：麵粉、麵筋與煮麵">
+  <div class="l-head"><p class="l-no">第 8 課 <span class="stage s1">入門</span><span class="stage s2">進階</span><span class="stage s3">專業</span></p><h1>麵：麵粉、麵筋與煮麵</h1><p class="lead">一根麵條為什麼會 Q？答案藏在一張看不見的網子裡。</p></div>
+  <div class="box goal"><b class="t">本課目標</b><ul><li>分辨高筋、中筋、低筋麵粉</li><li>了解麵筋是怎麼形成的</li><li>學會煮麵的正確方法，做出蔥油拌麵</li><li>進階：自己揉一份手工麵條；專業：拉麵的組成</li></ul></div>
+
+  <h2>一、麵粉的「筋」</h2>
+  <p>麵粉是小麥磨成的粉。小麥裡有兩種蛋白質，加水揉在一起，會連成一張有彈性的網子，這張網子就是<span class="term" data-t="gluten">麵筋</span>。網子越多越強，麵就越有嚼勁。</p>
+  <div class="tw"><table>
+    <tr><th>麵粉</th><th>蛋白質大約</th><th>特性</th><th>適合做</th></tr>
+    <tr><td>高筋麵粉</td><td>12–14%</td><td>筋最多，很有彈性</td><td>麵包、有嚼勁的麵條</td></tr>
+    <tr><td>中筋麵粉</td><td>10–11%</td><td>彈性適中</td><td>中式麵條、水餃皮、包子</td></tr>
+    <tr><td>低筋麵粉</td><td>7–9%</td><td>筋很少，鬆軟</td><td>蛋糕、餅乾、炸物麵衣</td></tr>
+  </table></div>
+  <div class="box try"><b class="t">動手試試：洗出麵筋</b><p>100 公克高筋麵粉加 60 公克水揉成團，醒 20 分鐘後放在水裡一邊搓一邊換水。白白的澱粉會被洗掉，最後手上剩下一團會拉長、有彈性的黃色東西，那就是麵筋。它煮熟後就是素食常吃的「麵筋」。</p></div>
+  <p>揉麵是在幫蛋白質排隊連成網子；揉完之後讓麵團休息一下，叫做<span class="term" data-t="rest">醒麵</span>，讓繃緊的網子放鬆，之後擀開才不會一直縮回去。</p>
+
+  <h2>二、麵條為什麼有不同顏色和口感？</h2>
+  <ul>
+    <li><strong>白色的陽春麵、雞蛋少的麵</strong>：麵粉、水、鹽做成。</li>
+    <li><strong>黃色、很有彈性的油麵、拉麵</strong>：加了<span class="term" data-t="kansui">鹼水</span>。鹼讓麵筋網子變得更緊、更有彈性，也讓麵粉裡的天然色素變黃。</li>
+    <li><strong>雞蛋麵</strong>：加蛋，蛋白質更多，顏色也更黃。</li>
+  </ul>
+
+  <h2>三、煮麵的五個關鍵 <span class="stage s1">入門</span></h2>
+  <ol class="steps">
+    <li><strong>水要多</strong>：每 100 公克麵至少 1 公升水。<span class="w">麵下鍋會讓水溫下降，水多溫度掉得少，很快又能滾；水少的話麵表面的澱粉會讓水變很稠，麵就黏在一起。</span></li>
+    <li><strong>大滾才下麵</strong>，下鍋後馬上用筷子撥散。<span class="w">麵剛碰到熱水的前 30 秒，表面澱粉最黏，這時不撥開就會黏成一坨。</span></li>
+    <li><strong>保持滾但不要溢出</strong>：滾到快溢出來時加一小碗冷水，叫做「點水」。<span class="w">傳統煮手工麵會點水兩三次，讓水溫降一下，麵的外層不會先爛掉，中心有時間熟透。用火力控制也能達到一樣效果。</span></li>
+    <li><strong>試吃判斷熟度</strong>：夾一根咬斷看看，中心沒有白色硬芯就好了。包裝上的時間只是參考。</li>
+    <li><strong>湯麵直接撈進湯裡；涼麵要過冰水</strong>。<span class="w">冰水讓麵表面的澱粉快速收縮，麵變得緊實Q彈，也洗掉黏黏的澱粉。但湯麵不用過水，否則湯會變涼。</span></li>
+  </ol>
+
+  <div class="recipe">
+    <div class="rh"><h3>蔥油拌麵</h3><span>2 人份｜約 25 分鐘｜小鍋＋煮麵鍋</span></div>
+    <div class="rb">
+      <ul class="ing">
+        <li>乾麵條（細麵或陽春麵）<b>200 公克</b></li><li>青蔥<b>6 支</b></li><li>食用油<b>80 毫升</b></li><li>醬油<b>3 大匙</b></li><li>深色醬油（<span class="term" data-t="laochou">老抽</span>，可省略）<b>1 小匙</b></li><li>砂糖<b>1 大匙</b></li>
+      </ul>
+      <ol class="steps">
+        <li>蔥洗淨擦乾，切成約 5 公分的段，蔥白和蔥綠分開。<span class="w">蔥上的水滴進熱油會噴濺，一定要擦乾。</span></li>
+        <li>冷油放入蔥白，開小火慢慢炸，約 3 分鐘後再放蔥綠。<span class="w">冷油小火讓蔥的香氣慢慢釋放到油裡，大火會讓外面焦了、香氣還沒出來。蔥白比較硬，所以先下。</span></li>
+        <li>繼續小火炸到蔥變成深褐色、乾乾脆脆，約 10–15 分鐘。<span class="w">這就是梅納反應和焦糖化，蔥的糖和蛋白質變成焦香，這是整道菜香味的來源。顏色不夠深，味道就不夠。但變黑就是燒焦了，會苦。</span></li>
+        <li>夾出一半蔥段放旁邊，鍋裡加入醬油、老抽和糖，小火煮到冒小泡、糖溶化，約 1 分鐘，關火。這就是蔥油醬。<span class="w">醬油倒進熱油會劇烈起泡，要小心往後站。</span></li>
+        <li>照「煮麵的五個關鍵」煮好麵，瀝乾。</li>
+        <li>每碗麵淋 2–3 大匙蔥油醬，放上脆蔥段，趁熱拌勻。<span class="w">熱麵表面還有一點水和澱粉，會和醬油、油稍微乳化，醬汁就能掛在麵上。麵冷了才拌，油會跑到碗底。</span></li>
+      </ol>
+      <p style="margin:0">剩下的蔥油醬冷藏可以放一週，拌麵、拌飯、淋燙青菜都好吃。</p>
+    </div>
+  </div>
+
+  <h2>四、自己做麵條 <span class="stage s2">進階</span></h2>
+  <p>手工麵條只需要麵粉、水和鹽。這裡要學一個專業用語：<span class="term" data-t="hydration">含水率</span>，就是「水的重量 ÷ 麵粉重量」。</p>
+  <div class="recipe">
+    <div class="rh"><h3>手切麵條</h3><span>2 人份｜揉 10 分鐘＋醒 30 分鐘</span></div>
+    <div class="rb">
+      <ul class="ing"><li>中筋麵粉<b>200 公克</b></li><li>水<b>100 公克（含水率 50%）</b></li><li>鹽<b>2 公克</b></li><li>防黏用太白粉<b>少許</b></li></ul>
+      <ol class="steps">
+        <li>鹽溶在水裡，分三次倒入麵粉，用筷子攪成棉絮狀。<span class="w">分次加水，每一部分麵粉都能均勻吸到水，不會有乾粉團。</span></li>
+        <li>用手揉成團。一開始會很粗糙，揉 5 分鐘後蓋上保鮮膜休息 10 分鐘，再揉 5 分鐘，直到表面光滑。<span class="w">中間休息時水分會自己滲進麵粉，麵筋也會開始自己形成，第二次揉起來輕鬆很多。</span></li>
+        <li>包好醒 30 分鐘。<span class="w">讓麵筋放鬆，擀的時候才不會一直縮回去。</span></li>
+        <li>撒太白粉，擀成約 2 毫米厚的長方形，折成三折，切成你要的寬度，抖開。</li>
+        <li>大滾水煮 2–4 分鐘，試吃確認熟度。手工麵很新鮮，比乾麵熟得快。</li>
+      </ol>
+    </div>
+  </div>
+  <p>含水率低（約 35–45%）麵很硬、要用機器壓，像日本拉麵、烏龍麵的某些做法；含水率高（約 50% 以上）麵團軟、好揉，適合手工。改變含水率，就是在改變麵的口感。</p>
+
+  <h2>五、專業：一碗拉麵的五個零件 <span class="stage s3">專業</span></h2>
+  <div class="box origin"><b class="t">名詞由來：拉麵</b><p>日本的<span class="term" data-t="ramen">拉麵（ラーメン）</span>是由中國移民在 19 世紀末到 20 世紀初帶進日本的麵食演變而來，早期被叫做「支那そば」「中華そば」（中國蕎麥麵）。「ラーメン」這個名字，一般認為是從中文「拉麵」的發音來的，但也有其他說法，目前沒有定論。</p></div>
+  <p>專業拉麵店把一碗麵拆成五個零件，分開製作，出餐時才組合：</p>
+  <div class="tw"><table>
+    <tr><th>零件</th><th>是什麼</th><th>例子</th></tr>
+    <tr><td>湯頭</td><td>長時間熬煮的高湯（第 12 課詳細教）</td><td>豚骨、雞白湯、魚介</td></tr>
+    <tr><td><span class="term" data-t="tare">醬汁（タレ）</span></td><td>決定鹹味和風格的濃縮醬，放在碗底</td><td>醬油、鹽味、味噌</td></tr>
+    <tr><td>香味油</td><td>浮在湯上的油，帶來第一口的香氣</td><td>蔥油、蒜油、雞油</td></tr>
+    <tr><td>麵</td><td>鹼水麵，粗細配合湯頭濃淡</td><td>濃湯配粗麵、清湯配細麵</td></tr>
+    <tr><td>配料</td><td>叉燒、溏心蛋、筍乾、海苔、蔥</td><td></td></tr>
+  </table></div>
+  <div class="box why"><b class="t">為什麼要拆開做？</b><p>湯頭沒有調味，鹹味全靠碗底的醬汁。這樣同一鍋湯，換一種醬汁就能變成醬油拉麵或鹽味拉麵，而且每碗的鹹度都能用量匙精準控制。這就是「標準化」的思考方式，第 14 課還會再講到。</p></div>
+
+  <div class="quizzes">
+    <h2>小測驗</h2>
+    <div class="quiz" data-a="2" data-exp="蛋糕要鬆軟，需要筋最少的低筋麵粉。">
+      <p class="q">1. 做鬆軟的蛋糕應該用哪種麵粉？</p>
+      <ol><li>高筋麵粉</li><li>中筋麵粉</li><li>低筋麵粉</li></ol>
+    </div>
+    <div class="quiz" data-a="0" data-exp="水多，下麵後水溫掉得少，也不會因為澱粉太濃讓麵黏在一起。">
+      <p class="q">2. 煮麵時為什麼水要多？</p>
+      <ol><li>水溫不容易降，麵也比較不會黏</li><li>比較好清洗</li><li>讓麵變鹹</li></ol>
+    </div>
+    <div class="quiz" data-a="1" data-exp="含水率 = 水 ÷ 麵粉 = 120 ÷ 200 = 60%。">
+      <p class="q">3. 200 公克麵粉加 120 公克水，含水率是多少？</p>
+      <ol><li>50%</li><li>60%</li><li>120%</li></ol>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 第 9 課 義大利麵 ======================= -->
+<section class="lesson" id="l9" data-no="9" data-part="第二部　米與麵" data-title="義大利麵：麵水與乳化">
+  <div class="l-head"><p class="l-no">第 9 課 <span class="stage s1">入門</span><span class="stage s2">進階</span><span class="stage s3">專業</span></p><h1>義大利麵：麵水與乳化</h1><p class="lead">義大利麵的醬汁為什麼能緊緊抓住麵條？關鍵是那鍋你一直倒掉的煮麵水。</p></div>
+  <div class="box goal"><b class="t">本課目標</b><ul><li>認識義大利麵的麵粉和形狀</li><li>學會煮出 Al dente 的麵</li><li>用煮麵水乳化醬汁，做出蒜香辣椒麵、番茄紅醬麵</li><li>專業：不加鮮奶油的正統培根蛋麵</li></ul></div>
+
+  <h2>一、義大利麵和中式麵有什麼不同？</h2>
+  <div class="box origin"><b class="t">名詞由來：Pasta 與 Spaghetti</b><p><span class="term" data-t="pasta">Pasta</span> 在義大利文是「麵團」的意思，泛指所有義大利的麵食。我們最常吃的細長麵叫 <span class="term" data-t="spaghetti">Spaghetti</span>，來自義大利文 spago（細繩），加上表示「小」的字尾，意思就是「一根根的小細繩」。</p></div>
+  <p>乾燥的義大利麵大多用<span class="term" data-t="durum">杜蘭小麥</span>磨成的<span class="term" data-t="semolina">粗粒小麥粉</span>製作。杜蘭小麥是最硬的小麥，蛋白質含量高，顏色偏黃。所以義大利麵煮完不容易爛，能保持彈牙的中心。</p>
+  <h3>形狀跟醬汁要搭配</h3>
+  <div class="tw"><table>
+    <tr><th>形狀</th><th>例子</th><th>適合的醬</th><th>為什麼</th></tr>
+    <tr><td>細長麵</td><td>Spaghetti、細扁麵</td><td>油基醬、番茄醬、清爽的醬</td><td>表面光滑，稀一點的醬比較好附著</td></tr>
+    <tr><td>寬扁麵</td><td>Fettuccine、寬麵</td><td>奶油醬、肉醬等濃稠的醬</td><td>表面積大，能扛住厚重的醬</td></tr>
+    <tr><td>短管麵</td><td>Penne（筆管麵）</td><td>有小塊料的醬</td><td>醬汁和碎料可以躲進管子裡</td></tr>
+    <tr><td>螺旋麵</td><td>Fusilli</td><td>青醬、冷麵沙拉</td><td>螺旋的溝紋能卡住醬</td></tr>
+  </table></div>
+
+  <h2>二、煮出 Al dente <span class="stage s1">入門</span></h2>
+  <p>義大利人認為最好吃的麵叫 <span class="term" data-t="aldente">Al dente</span>：外面熟軟，咬到中心還有一點點韌性，但不是生的。</p>
+  <div class="demo" id="pastaDemo">
+    <p class="dt">互動：麵條的橫切面</p>
+    <p class="dd">假設包裝寫「煮 10 分鐘」。拖動滑桿，看麵條中心的白芯怎麼變化。</p>
+    <input type="range" id="pastaRange" min="0" max="13" value="0" step="1" aria-label="煮麵時間（分鐘）">
+    <div style="display:flex;gap:18px;align-items:center;margin-top:8px;flex-wrap:wrap">
+      <svg viewBox="0 0 120 120" width="120" aria-hidden="true">
+        <circle cx="60" cy="60" r="50" id="pastaOuter" fill="#F5D98B" stroke="#c9a14a" stroke-width="2"/>
+        <circle cx="60" cy="60" r="40" id="pastaCore" fill="#FFFDF4" stroke="#e5d7a8" style="transition:r .3s"/>
+      </svg>
+      <div class="readout" id="pastaOut" style="flex:1;min-width:200px"></div>
+    </div>
+  </div>
+  <ol class="steps">
+    <li><strong>水要多、要加鹽</strong>：每 100 公克麵約 1 公升水、10 公克鹽（約 1%）。<span class="w">麵條在煮的時候會吸水，這是唯一能讓麵「裡面」也有味道的機會。醬汁只會停在表面。</span></li>
+    <li><strong>不要在水裡加油</strong>。<span class="w">油會在麵表面形成一層油膜，之後醬汁反而掛不住。防黏靠的是水夠多和一開始有攪拌。</span></li>
+    <li><strong>比包裝時間早 1–2 分鐘撈起</strong>，放進醬汁鍋裡再煮完最後一段。<span class="w">麵在醬裡還會繼續熟、繼續吸收醬汁的味道。如果在水裡就煮到剛好，放進醬裡就會過軟。</span></li>
+    <li><strong>撈起前先舀一杯煮麵水留著</strong>。<span class="w">這杯水是整道菜最重要的材料，下一段告訴你為什麼。</span></li>
+  </ol>
+
+  <h2>三、麵水與乳化 <span class="stage s2">進階</span></h2>
+  <p>煮麵水裡有從麵條溶出來的澱粉，還有鹽。回想第 6 課：<mark>澱粉可以當乳化劑</mark>。把麵、油（或奶油、起司）和一點麵水一起放進鍋裡快速翻拌，油和水就會乳化成一層薄薄、滑順、帶光澤的醬汁，緊緊裹住每根麵。這個最後收尾的動作，義大利文叫 <span class="term" data-t="mantecatura">Mantecatura</span>。</p>
+  <div class="box why"><b class="t">為什麼很多人做的義大利麵盤底都是油？</b><p>因為只把油和麵拌在一起，沒有加麵水、沒有用力翻拌，油和水沒有乳化，油就流到盤底去了。醬汁變濁、變稍微濃稠、會黏著麵，就代表乳化成功。</p></div>
+
+  <div class="recipe">
+    <div class="rh"><h3>蒜香辣椒義大利麵（Aglio e olio）</h3><span>1 人份｜約 15 分鐘｜煮麵鍋＋平底鍋</span></div>
+    <div class="rb">
+      <p style="margin-top:0">義大利文 aglio 是蒜、olio 是油，名字就是材料。這道麵材料最少，所以最能練習乳化。</p>
+      <ul class="ing"><li>Spaghetti<b>100 公克</b></li><li>大蒜<b>3–4 瓣</b></li><li>橄欖油<b>3 大匙</b></li><li>乾辣椒片<b>少許</b></li><li>巴西里（可省略）<b>1 小撮</b></li><li>煮麵水<b>約 80 毫升</b></li><li>煮麵用鹽<b>水量的 1%</b></li></ul>
+      <ol class="steps">
+        <li>大蒜切薄片。煮一鍋加了鹽的水，水滾下麵，設定計時器比包裝時間少 2 分鐘。</li>
+        <li>麵下鍋後，另一個平底鍋放橄欖油和蒜片，<strong>冷油開小火</strong>，慢慢加熱到蒜片邊緣微微金黃，加入辣椒片後離火。<span class="w">蒜很容易焦，焦了會苦。冷油小火讓蒜香慢慢溶進油裡，油本身就變成了醬汁的味道。</span></li>
+        <li>計時器響時，先舀出一杯麵水，再用夾子把麵夾進蒜油鍋裡，加入約 60 毫升麵水，開中大火。</li>
+        <li>用夾子一邊翻、一邊搖晃鍋子，約 1–2 分鐘，直到湯汁變混濁、變稠，裹在麵上。太乾就再加一點麵水。<span class="w">翻拌和搖晃就是在「攪拌」，把油打成小油滴，讓澱粉把它們穩定下來，這就是乳化。</span></li>
+        <li>試吃調整鹹淡，撒上巴西里，盛盤。</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="recipe">
+    <div class="rh"><h3>番茄紅醬義大利麵</h3><span>2 人份｜約 30 分鐘</span></div>
+    <div class="rb">
+      <ul class="ing"><li>Spaghetti 或筆管麵<b>200 公克</b></li><li>整顆番茄罐頭<b>1 罐（約 400 公克）</b></li><li>洋蔥<b>半顆，切丁</b></li><li>大蒜<b>2 瓣，切末</b></li><li>橄欖油<b>2 大匙</b></li><li>鹽<b>適量（約 1/2 小匙起）</b></li><li>糖（番茄太酸時）<b>1/2 小匙</b></li><li>九層塔或羅勒<b>幾片</b></li><li>帕馬森起司（可省略）<b>少許</b></li></ul>
+      <ol class="steps">
+        <li>橄欖油中小火炒洋蔥丁約 5 分鐘，炒到透明、變軟、有甜味，再加蒜末炒 30 秒。<span class="w">洋蔥慢炒會釋放糖分並稍微焦糖化，是紅醬甜味的基礎。蒜比較容易焦，所以後放。</span></li>
+        <li>倒入番茄罐頭，用鍋鏟把整顆番茄壓碎，加一小撮鹽，小火煮 15–20 分鐘，偶爾攪拌。<span class="w">煮的過程讓水分蒸發、味道濃縮，番茄的生澀味也會變成溫和的甜味。</span></li>
+        <li>試吃：太酸加一點糖，不夠味加鹽。<span class="w">這就是第 5 課的平衡法則。</span></li>
+        <li>麵煮到比包裝時間少 1–2 分鐘，連同半杯麵水倒進醬汁鍋，中火翻拌 1–2 分鐘到醬汁裹住麵。</li>
+        <li>關火，撕入羅勒葉，可以淋一點生橄欖油、刨些起司。</li>
+      </ol>
+      <div class="box why" style="margin-bottom:0"><b class="t">為什麼用罐頭番茄而不是新鮮番茄？</b><p>罐頭番茄是在盛產季節、最成熟的時候採收加工的，品質一年四季都很穩定。非產季的新鮮番茄常常酸、水分多、味道淡。義大利的家庭和餐廳也大量使用罐頭番茄。</p></div>
+    </div>
+  </div>
+
+  <h2>四、正統培根蛋麵 <span class="stage s3">專業</span></h2>
+  <div class="box origin"><b class="t">名詞由來：Carbonara</b><p>義大利文 <span class="term" data-t="carbonara">carbonaro</span> 是「燒炭工人」。有人說這道麵是燒炭工人在山上煮的，也有人說滿滿的黑胡椒像撒了一層炭粉，還有一說是二戰後駐紮在羅馬的美軍帶來了培根和雞蛋。真正的起源到現在還有爭論，但這道菜 20 世紀中期才出現在紀錄裡，是羅馬的代表料理。</p></div>
+  <p>在台灣常吃到加了很多鮮奶油的「白醬培根麵」，但羅馬的正統做法<strong>完全不加鮮奶油</strong>，濃稠滑順全靠蛋黃、起司和麵水的乳化。這是專業等級的挑戰，因為你必須控制溫度。</p>
+  <div class="recipe">
+    <div class="rh"><h3>羅馬式培根蛋麵（Carbonara）</h3><span>1 人份｜約 20 分鐘</span></div>
+    <div class="rb">
+      <ul class="ing"><li>Spaghetti<b>100 公克</b></li><li>蛋黃<b>2 顆</b></li><li><span class="term" data-t="guanciale">豬頰肉</span>或厚培根<b>50 公克，切條</b></li><li><span class="term" data-t="pecorino">佩克里諾羊奶起司</span>（或帕馬森）<b>25 公克，刨細</b></li><li>粗粒黑胡椒<b>多一點</b></li><li>煮麵水<b>約 50–80 毫升</b></li></ul>
+      <ol class="steps">
+        <li>碗裡放蛋黃、大部分起司和很多黑胡椒，攪成濃稠的糊。</li>
+        <li>冷鍋放入肉條，小火慢慢煎到油脂流出、肉變得微脆，關火。不用另外加油。<span class="w">小火讓肥肉裡的油慢慢「逼」出來，這些油就是醬汁的一部分。</span></li>
+        <li>麵煮到比包裝時間少 1 分鐘，夾進肉的鍋子裡（火是關著的），拌勻讓麵裹上豬油，靜置約 30 秒讓鍋子稍降溫。</li>
+        <li>先用 2 大匙麵水把蛋黃糊稍微調開，倒進鍋裡，用夾子快速翻拌，一邊視情況加麵水，直到醬汁滑順濃稠、像奶油一樣。<span class="w">蛋黃大約 70°C 左右就會開始凝固。鍋子如果還在大火上，蛋黃會直接變成炒蛋。離火利用麵和鍋子的餘溫，讓蛋黃剛好變稠又不結塊，麵水則幫助乳化並調整濃度。</span></li>
+        <li>盛盤，撒上剩下的起司和黑胡椒。</li>
+      </ol>
+      <p style="margin:0">失敗了出現小顆粒的炒蛋？代表溫度太高。下次多等一下再倒蛋黃，或多加一點麵水降溫。</p>
+    </div>
+  </div>
+
+  <div class="quizzes">
+    <h2>小測驗</h2>
+    <div class="quiz" data-a="1" data-exp="Al dente 義大利文是「到牙齒」，中心還有一點點咬勁。">
+      <p class="q">1. Al dente 指的是哪種狀態？</p>
+      <ol><li>完全生的</li><li>外面熟軟、中心咬起來還有一點韌性</li><li>煮到非常軟爛</li></ol>
+    </div>
+    <div class="quiz" data-a="2" data-exp="麵水中的澱粉是乳化劑，能讓油和水結合成裹住麵的醬汁。">
+      <p class="q">2. 煮麵水為什麼要留下來？</p>
+      <ol><li>拿來洗碗</li><li>讓麵變冷</li><li>裡面的澱粉能幫助醬汁乳化，讓醬汁裹住麵</li></ol>
+    </div>
+    <div class="quiz" data-a="0" data-exp="蛋黃溫度太高會凝固，所以要離火利用餘溫。">
+      <p class="q">3. 做正統 Carbonara 時，為什麼倒入蛋黃前要關火？</p>
+      <ol><li>避免蛋黃太熱凝固成炒蛋</li><li>節省瓦斯</li><li>讓麵變冷比較好吃</li></ol>
+    </div>
+  </div>
+</section>
+<!-- ======================= 第 10 課 漢堡 ======================= -->
+<section class="lesson" id="l10" data-no="10" data-part="第三部　肉與油" data-title="漢堡：煎出焦香的肉餅">
+  <div class="l-head"><p class="l-no">第 10 課 <span class="stage s1">入門</span><span class="stage s2">進階</span><span class="stage s3">專業</span></p><h1>漢堡：煎出焦香的肉餅</h1><p class="lead">好漢堡的祕密不在醬，在於肉餅表面那層焦脆的褐色。</p></div>
+  <div class="box goal"><b class="t">本課目標</b><ul><li>選對絞肉、正確捏出肉餅</li><li>用梅納反應煎出焦香外皮</li><li>了解絞肉為什麼一定要全熟</li><li>組裝順序的道理；專業的「壓扁漢堡」和標準化</li></ul></div>
+
+  <div class="box origin"><b class="t">名詞由來：Hamburger</b><p>名字來自德國的港口城市<span class="term" data-t="hamburger">漢堡（Hamburg）</span>。19 世紀很多德國移民坐船從漢堡港到美國，把一種剁碎牛肉做成的「漢堡式牛排」帶了過去。後來誰先把肉餅夾進圓麵包裡，美國好幾個城市都說是自己，到現在還沒有定論。英文 burger 則是從 hamburger 剪下來的後半段，所以現在才有 cheeseburger、chicken burger 這些說法。</p></div>
+
+  <h2>一、選絞肉：肥肉是好朋友 <span class="stage s1">入門</span></h2>
+  <p>最常見的漢堡肉是牛絞肉，選「<strong>瘦肉 80%、肥肉 20%</strong>」左右，常用牛肩部位。</p>
+  <div class="box why"><b class="t">為什麼不要選全瘦的？</b><p>肥肉在加熱時會融化，讓肉餅多汁，而且很多香味分子溶在油脂裡。全瘦的絞肉煎完又乾又柴。煎的時候流出的油，正好也幫肉餅表面「炸」出焦香。</p></div>
+
+  <h2>二、捏肉餅：越少碰越好</h2>
+  <ol class="steps">
+    <li>絞肉保持冰涼，從冰箱拿出來就捏。<span class="w">手的溫度會讓肥肉開始融化，油跑到手上而不是留在肉裡。</span></li>
+    <li>輕輕把肉聚成一個比麵包<strong>大一圈</strong>、約 1.5–2 公分厚的圓餅，不要用力搓揉。<span class="w">肉在加熱時會縮小大約兩成。過度揉捏會讓肉的蛋白質互相纏緊，口感變得像香腸一樣又緊又彈，而不是鬆軟多汁。</span></li>
+    <li>用大拇指在肉餅中間壓一個淺淺的凹洞。<span class="w">肉餅邊緣受熱收縮時，會把中間往上擠，最後變成圓鼓鼓的饅頭形。先壓凹，煎好剛好是平的。</span></li>
+    <li><strong>下鍋前才撒鹽</strong>，兩面都撒。<span class="w">鹽如果太早拌進絞肉裡，會溶解肉裡的蛋白質，讓肉變得黏黏的，口感也會變成香腸那樣。所以要在最後一刻撒在表面。</span></li>
+  </ol>
+
+  <h2>三、煎：讓它安靜地變褐色</h2>
+  <p>平底鍋或鐵板用中大火燒熱，加一點點油，放入肉餅，<mark>然後不要動它</mark>。等 3–4 分鐘，底部形成深褐色的焦脆外皮，再翻面一次。</p>
+  <div class="box why"><b class="t">為什麼不要一直翻、一直壓？</b><p>一直翻面，表面溫度就一直掉，永遠到不了梅納反應需要的溫度。用鏟子壓正在煎的厚肉餅，會把肉汁壓出來流到鍋裡，肉就乾了。（等一下要學的「壓扁漢堡」是例外，它只在剛下鍋的第一刻壓。）</p></div>
+
+  <div class="box warn"><b class="t">絞肉一定要全熟：中心溫度 71°C</b><p>一塊完整的牛排，細菌只在外表面，表面煎過就殺死了，所以牛排可以吃三分熟。但是絞肉在絞的過程中，把原本表面的細菌都混進了肉的中心，所以絞肉做的漢堡一定要熟透。最準的方法是用探針溫度計插進肉餅中心，達到 71°C 就安全了；沒有溫度計的話，切開中心應該沒有粉紅色，流出的肉汁是透明的。</p></div>
+
+  <h2>四、組裝：每一層都有道理</h2>
+  <p>麵包切面先用奶油或肉餅的油在鍋裡煎到金黃。這一步不只是好吃（又是梅納反應），還會在麵包表面形成一層「防水層」，醬汁和肉汁就不會讓麵包變得濕軟。</p>
+  <div class="demo" id="burgerDemo">
+    <p class="dt">互動：一層一層蓋漢堡</p>
+    <p class="dd">按「放上下一層」，看每一層為什麼放在那裡。</p>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end">
+      <div class="stage-box" style="width:220px;min-height:230px;align-items:end">
+        <svg viewBox="0 0 200 220" width="200" id="burgerSvg" aria-hidden="true"></svg>
+      </div>
+      <div style="flex:1;min-width:200px">
+        <div class="readout" id="burgerOut">從最下面的麵包開始。</div>
+        <div class="seg"><button type="button" id="burgerNext">放上下一層</button><button type="button" id="burgerReset">重來</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="recipe">
+    <div class="rh"><h3>經典起司漢堡</h3><span>2 個｜約 20 分鐘｜平底鍋</span></div>
+    <div class="rb">
+      <ul class="ing"><li>牛絞肉（肥瘦約 2:8）<b>300 公克</b></li><li>漢堡麵包<b>2 個</b></li><li>切達起司片<b>2 片</b></li><li>生菜<b>2 片</b></li><li>番茄<b>2 片</b></li><li>洋蔥<b>2 圈薄片</b></li><li>鹽、黑胡椒<b>適量</b></li><li>奶油<b>10 公克</b></li><li>番茄醬、黃芥末、美乃滋<b>依喜好</b></li></ul>
+      <ol class="steps">
+        <li>先把所有配料切好、醬料擺好，麵包橫切開。<span class="w">肉煎好要趁熱組裝，這時不能再手忙腳亂。</span></li>
+        <li>絞肉分成兩份，各 150 公克，輕輕捏成比麵包大一圈的肉餅，中間壓凹，放回冰箱。</li>
+        <li>平底鍋中火融化奶油，麵包切面朝下煎 1 分鐘到金黃，取出。</li>
+        <li>鍋子轉中大火，肉餅兩面撒鹽和胡椒，下鍋煎 3–4 分鐘不要動。</li>
+        <li>翻面，立刻放上起司片，蓋上鍋蓋煎 2–3 分鐘。<span class="w">蓋鍋蓋讓熱氣包住上方，起司就會融化，肉餅中心也熟得更均勻。</span></li>
+        <li>確認中心熟透（71°C 或切開無粉紅色），依照剛剛學的順序組裝。</li>
+      </ol>
+    </div>
+  </div>
+
+  <h2>五、進階：壓扁漢堡 <span class="stage s2">進階</span></h2>
+  <p>近年很流行的<span class="term" data-t="smash">Smash burger</span>（壓扁漢堡），反而是把肉壓得很薄。它的邏輯是：<mark>肉越薄，焦脆的表面佔的比例越大</mark>。</p>
+  <ol class="steps">
+    <li>絞肉捏成約 80 公克的小肉球，不要壓扁。</li>
+    <li>鐵鍋或鑄鐵鍋燒到非常熱（冒一點煙），放入肉球。</li>
+    <li><strong>立刻</strong>用鍋鏟或平底的重物用力壓扁成約 0.5 公分的薄片，壓 10 秒後放開，撒鹽胡椒。<span class="w">只在剛下鍋、肉汁還沒開始流出時壓，讓肉整面緊貼超熱的鍋子，產生大面積的梅納反應。之後就不再壓。</span></li>
+    <li>煎約 2 分鐘，邊緣變得像蕾絲一樣焦脆，用鏟子把整片刮起來翻面，放起司，30 秒就好。薄肉片很快熟透。</li>
+    <li>通常兩片疊在一起做成雙層漢堡。</li>
+  </ol>
+
+  <h2>六、專業：漢堡店的標準化 <span class="stage s3">專業</span></h2>
+  <ul>
+    <li><strong>固定重量</strong>：每一片肉餅都秤重。美國有名的 <span class="term" data-t="quarter">Quarter Pounder</span>，就是「四分之一磅」，大約 113 公克的肉餅。</li>
+    <li><strong>固定溫度和時間</strong>：專業鐵板設定溫度，肉餅煎幾秒翻面都有規定，每一個漢堡品質才會一樣。</li>
+    <li><strong>自製醬汁</strong>：很多漢堡店都有自己的招牌醬。常見的基礎配方是美乃滋、番茄醬、切碎的酸黃瓜和一點芥末，酸甜又解膩。這也是第 5 課的「用酸平衡油膩」。</li>
+    <li><strong>麵包的選擇</strong>：很多店使用<span class="term" data-t="brioche">布里歐麵包</span>，奶油和蛋多，微甜柔軟，烤過後香氣更濃。</li>
+  </ul>
+
+  <div class="quizzes">
+    <h2>小測驗</h2>
+    <div class="quiz" data-a="2" data-exp="絞肉把表面的細菌混進中心，所以不能像牛排一樣吃半生，中心要到 71°C。">
+      <p class="q">1. 為什麼牛排可以三分熟，漢堡肉卻一定要全熟？</p>
+      <ol><li>牛排比較貴</li><li>漢堡肉比較厚</li><li>絞肉把表面的細菌混進了中心</li></ol>
+    </div>
+    <div class="quiz" data-a="0" data-exp="鹽太早混入絞肉會溶解蛋白質，口感變得像香腸。">
+      <p class="q">2. 做漢堡肉餅，鹽什麼時候放最好？</p>
+      <ol><li>下鍋前才撒在表面</li><li>前一天就拌進絞肉裡揉匀</li><li>吃的時候才撒</li></ol>
+    </div>
+    <div class="quiz" data-a="1" data-exp="肉受熱收縮時邊緣會把中間擠高，先壓凹就能煎成平的。">
+      <p class="q">3. 肉餅中間壓一個凹洞是為了？</p>
+      <ol><li>放醬汁</li><li>避免煎完中間鼓起來</li><li>讓肉比較快熟一點點而已</li></ol>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 第 11 課 炸雞 ======================= -->
+<section class="lesson" id="l11" data-no="11" data-part="第三部　肉與油" data-title="炸雞：油溫與酥脆">
+  <div class="l-head"><p class="l-no">第 11 課 <span class="stage s1">入門</span><span class="stage s2">進階</span><span class="stage s3">專業</span></p><h1>炸雞：油溫與酥脆</h1><p class="lead">炸東西不是把食物泡在油裡，而是一場水和油之間的賽跑。</p></div>
+  <div class="box goal"><b class="t">本課目標</b><ul><li>了解油炸時到底發生了什麼事</li><li>用筷子判斷油溫</li><li>醃肉、裹粉、二次炸，做出台式炸雞塊</li><li>比較世界各地的炸雞</li></ul></div>
+
+  <div class="box warn"><b class="t">這一課一定要有大人在旁邊</b><ul>
+    <li>油量不要超過鍋子高度的一半，放入食物時油面會上升。</li>
+    <li>食物表面擦乾、多餘的粉拍掉再下鍋，水滴進熱油會噴濺。</li>
+    <li>放食物時從靠近自己的那邊輕輕滑入，讓油往遠離你的方向濺。</li>
+    <li>鍋柄朝內，炸的時候不要離開爐子。</li>
+    <li>用過的油放涼後裝瓶丟棄，不要倒進水槽，會堵塞水管、污染水源。</li>
+  </ul></div>
+
+  <h2>一、油炸時發生了什麼事？</h2>
+  <p>把雞塊放進 170°C 的油裡，你會看到很多泡泡。那些泡泡<strong>不是油在滾</strong>，是雞肉表面的水分瞬間被加熱成水蒸氣，從食物裡往外衝出來。</p>
+  <ul>
+    <li>水蒸氣一直往外衝，把油擋在外面，所以食物不會吸飽油。</li>
+    <li>表面的水分被趕光後，外層變乾，溫度才能超過 100°C，開始梅納反應，變成金黃酥脆。</li>
+    <li>同時，熱靠「傳導」慢慢走進中心，把肉煮熟。</li>
+  </ul>
+  <div class="box why"><b class="t">為什麼油溫太低，炸出來很油？</b><p>油溫不夠，水蒸氣往外衝的力量太弱，擋不住油，油就慢慢滲進食物裡。表面也一直是濕的，不會變脆。反過來，油溫太高，外面很快變黑，中心還沒熟。所以油炸的重點就是<mark>控制油溫</mark>。</p></div>
+
+  <h2>二、選油與油溫 <span class="stage s1">入門</span></h2>
+  <p>油炸要選<span class="term" data-t="smoke">發煙點</span>高、味道中性的油，例如花生油、芥花油、大豆沙拉油、葵花油。初榨橄欖油、奶油的發煙點比較低，也貴，不適合拿來炸。</p>
+  <div class="demo" id="oilDemo">
+    <p class="dt">互動：筷子測油溫</p>
+    <p class="dd">沒有溫度計時，把乾的木筷子插進油裡，看筷子周圍冒泡的樣子。拖動滑桿看看。</p>
+    <input type="range" id="oilRange" min="120" max="200" value="120" step="5" aria-label="油溫">
+    <div style="display:flex;gap:16px;align-items:center;margin-top:8px;flex-wrap:wrap">
+      <div class="stage-box" style="width:170px;min-height:170px">
+        <svg viewBox="0 0 160 160" width="160" aria-hidden="true">
+          <rect x="10" y="60" width="140" height="90" rx="8" fill="#F2B705" opacity=".55"/>
+          <rect x="74" y="8" width="12" height="130" rx="4" fill="#c9a36b" stroke="#8a6a3b"/>
+          <g id="oilBubbles"></g>
+        </svg>
+      </div>
+      <div class="readout" id="oilOut" style="flex:1;min-width:200px"></div>
+    </div>
+  </div>
+  <p>有溫度計的話更準。而且記得：<strong>一次放太多食物，油溫會大幅下降</strong>（第 4 課的道理），所以要分批炸，每批之間等油溫回升。</p>
+
+  <h2>三、醃、裹、炸</h2>
+  <h3>醃：讓味道進到肉裡</h3>
+  <p>雞肉的味道要在裹粉前就決定。醃料的核心是<strong>鹽</strong>（或醬油），鹽會慢慢滲進肉裡，也幫助肉保住水分，炸完更多汁。醃 30 分鐘就有效果，冷藏醃幾個小時更入味。這個步驟叫<span class="term" data-t="marinade">醃漬</span>。</p>
+  <h3>裹粉：決定外皮的個性</h3>
+  <div class="tw"><table>
+    <tr><th>粉</th><th>口感</th><th>常見於</th></tr>
+    <tr><td>地瓜粉（粗粒）</td><td>表面一顆顆小脆粒，非常酥</td><td>台式鹽酥雞、雞排</td></tr>
+    <tr><td>太白粉、馬鈴薯澱粉</td><td>薄薄一層，脆而輕</td><td>日式<span class="term" data-t="karaage">唐揚炸雞</span></td></tr>
+    <tr><td>麵粉＋澱粉混合，常沾兩次</td><td>厚、有層次、坑坑疤疤的酥皮</td><td>美式南方炸雞</td></tr>
+    <tr><td>稀麵糊</td><td>薄脆、可以塗醬</td><td>韓式炸雞</td></tr>
+  </table></div>
+  <div class="box why"><b class="t">為什麼純澱粉比麵粉脆？</b><p>麵粉有蛋白質，會形成<span class="term" data-t="gluten">麵筋</span>，麵筋有彈性、比較韌。純澱粉沒有麵筋，炸完水分跑光後就是乾乾脆脆的一層。這也是第 8 課說「炸物麵衣用低筋麵粉」的原因。</p></div>
+  <h3>二次炸：專業酥脆的祕密</h3>
+  <p>第一次用比較低的油溫把中心炸熟，撈起來休息幾分鐘，第二次用高溫短時間炸，逼出表面剩下的水分，外皮就特別脆。這叫<span class="term" data-t="doublefry">二次炸</span>。</p>
+
+  <div class="recipe">
+    <div class="rh"><h3>台式炸雞塊（鹽酥雞風）</h3><span>2–3 人份｜醃 30 分鐘＋炸 15 分鐘｜深鍋</span></div>
+    <div class="rb">
+      <ul class="ing"><li>去骨雞腿肉<b>500 公克</b></li><li>醬油<b>1.5 大匙</b></li><li>米酒<b>1 大匙</b></li><li>蒜泥<b>3 瓣</b></li><li>糖<b>1 小匙</b></li><li>白胡椒粉<b>1/2 小匙</b></li><li>五香粉<b>1/4 小匙</b></li><li>蛋液<b>半顆</b></li><li>地瓜粉<b>約 80 公克</b></li><li>炸油<b>約 800 毫升</b></li><li>九層塔（可省略）<b>1 小把</b></li><li>胡椒鹽<b>適量</b></li></ul>
+      <ol class="steps">
+        <li>雞腿肉切成約 3 公分的塊狀，大小一致。<span class="w">第 3 課：大小一樣，熟度才一樣。</span></li>
+        <li>加入醬油、米酒、蒜泥、糖、白胡椒、五香粉、蛋液，抓勻，冷藏醃 30 分鐘以上。<span class="w">蛋液能讓粉更容易黏在肉上。</span></li>
+        <li>把雞塊一塊塊放進地瓜粉裡壓一壓，讓粉均勻沾滿，靜置 5 分鐘「反潮」，表面看起來微濕。<span class="w">靜置讓粉吸收醃料的水分、牢牢黏住肉，下鍋時粉才不會掉，也比較不會噴油。</span></li>
+        <li>油加熱到 160°C（筷子周圍冒出細小穩定的泡泡），分批放入雞塊，炸 4–5 分鐘到淡金黃，撈起放在網架上，休息 3 分鐘。<span class="w">休息時，外層的熱會繼續往中心傳，把中心煮熟；中心的水分也會慢慢跑到表面。</span></li>
+        <li>油溫拉高到 180–190°C，雞塊回鍋炸 40–60 秒到深金黃。九層塔擦乾，最後幾秒丟進去炸 3 秒馬上撈出（會劇烈噴油，要小心）。<span class="w">高溫短時間把表面剛跑出來的水分一口氣逼掉，外皮就變得非常脆。</span></li>
+        <li>撈起瀝油，放在網架上而不是直接放在紙巾上，撒胡椒鹽。<span class="w">直接放在盤子或紙巾上，底部蒸氣散不出去，會把剛炸好的脆皮悶軟。</span></li>
+      </ol>
+      <p style="margin:0">安全確認：切開最大的一塊，肉汁透明、沒有粉紅色；用溫度計的話，雞肉中心要達到 74°C。</p>
+    </div>
+  </div>
+
+  <h2>四、進階：更多汁的方法 <span class="stage s2">進階</span></h2>
+  <ul>
+    <li><strong>鹽水浸泡</strong>：雞肉泡在約 5% 的鹽水中冷藏 1–2 小時（1 公升水加 50 公克鹽），再醃味道。鹽水會讓肉的蛋白質吸住更多水分。這叫<span class="term" data-t="brine">鹽水醃</span>。</li>
+    <li><strong>用酸性的奶醃</strong>：美國南方炸雞傳統用<span class="term" data-t="buttermilk">白脫牛奶</span>浸泡雞肉，輕微的酸讓肉變嫩。家裡可以用無糖優格加一點水代替。</li>
+    <li><strong>用雞腿不用雞胸</strong>：雞腿有比較多的脂肪和結締組織，比較不容易炸柴。</li>
+  </ul>
+
+  <h2>五、專業：世界的炸雞 <span class="stage s3">專業</span></h2>
+  <div class="tw"><table>
+    <tr><th>炸雞</th><th>特色</th><th>技術重點</th></tr>
+    <tr><td>美式南方炸雞</td><td>帶骨、厚酥皮</td><td>白脫牛奶醃、麵粉裹兩次、常用中溫較長時間炸帶骨雞</td></tr>
+    <tr><td>日式唐揚炸雞</td><td>小塊、醬油薑蒜味、薄脆</td><td>醬油醃、太白粉或馬鈴薯澱粉、常二次炸</td></tr>
+    <tr><td>韓式炸雞</td><td>超脆、刷上甜辣醬</td><td>稀麵糊、二次炸，炸完才刷醬，讓脆皮撐得住</td></tr>
+    <tr><td>台式鹽酥雞、雞排</td><td>地瓜粉顆粒、胡椒鹽、九層塔</td><td>地瓜粉反潮、二次炸</td></tr>
+  </table></div>
+  <div class="box origin"><b class="t">名詞由來：炸雞在美國南方</b><p>歷史學家常說，美式炸雞結合了兩種傳統：蘇格蘭移民習慣用油炸雞肉，而被帶到美國南方的西非人則帶來了豐富的調味方式。兩種傳統在美國南方融合，後來隨著速食店傳遍全世界，又在各地變成韓式、台式等不同版本。</p></div>
+  <p>專業廚房還會管理<strong>炸油的品質</strong>：油炸越多次，油會變深、變黏、起很多泡、有油耗味，發煙點也會下降。餐廳會定期過濾、測量並更換炸油，因為劣化的油不但難吃，對健康也不好。</p>
+
+  <div class="quizzes">
+    <h2>小測驗</h2>
+    <div class="quiz" data-a="1" data-exp="泡泡是食物表面的水分變成水蒸氣往外衝出來。">
+      <p class="q">1. 炸雞時油裡冒出的泡泡，主要是什麼？</p>
+      <ol><li>油沸騰了</li><li>食物裡的水分變成水蒸氣跑出來</li><li>空氣</li></ol>
+    </div>
+    <div class="quiz" data-a="0" data-exp="第一次中溫把中心炸熟，第二次高溫短時間逼出表面水分，外皮更脆。">
+      <p class="q">2. 二次炸的第二次，為什麼要用比較高的油溫？</p>
+      <ol><li>快速逼出表面水分，讓外皮更脆</li><li>讓雞肉中心變生</li><li>節省油</li></ol>
+    </div>
+    <div class="quiz" data-a="2" data-exp="放在網架上，底部的蒸氣才能散開，不會把脆皮悶軟。">
+      <p class="q">3. 炸好的雞塊最好放在哪裡？</p>
+      <ol><li>直接疊在盤子上</li><li>蓋上蓋子保溫</li><li>放在網架上，讓底部透氣</li></ol>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 第 12 課 火鍋 ======================= -->
+<section class="lesson" id="l12" data-no="12" data-part="第四部　湯與鍋" data-title="火鍋：高湯、鍋底與沾醬">
+  <div class="l-head"><p class="l-no">第 12 課 <span class="stage s1">入門</span><span class="stage s2">進階</span><span class="stage s3">專業</span></p><h1>火鍋：高湯、鍋底與沾醬</h1><p class="lead">火鍋看起來只是把東西丟進湯裡，但一鍋好湯，是這門課所有原理的總複習。</p></div>
+  <div class="box goal"><b class="t">本課目標</b><ul><li>了解高湯的原理和「鮮味相乘」</li><li>熬出日式昆布柴魚高湯、雞骨高湯</li><li>做出麻辣鍋底和沙茶沾醬</li><li>知道下料的順序和道理</li></ul></div>
+
+  <figure>
+    <svg class="figsvg" viewBox="0 0 360 200" width="100%" style="max-width:420px" role="img" aria-label="冒著泡泡的鴛鴦鍋動畫，一半紅色麻辣，一半清湯">
+      <g fill="#9FB2B4" opacity=".6">
+        <path class="steam" d="M130 40 q8 -10 0 -20 q-8 -10 0 -20" stroke="#9FB2B4" fill="none" stroke-width="4"/>
+        <path class="steam" style="animation-delay:.8s" d="M180 44 q8 -10 0 -20 q-8 -10 0 -20" stroke="#9FB2B4" fill="none" stroke-width="4"/>
+        <path class="steam" style="animation-delay:1.5s" d="M230 40 q8 -10 0 -20 q-8 -10 0 -20" stroke="#9FB2B4" fill="none" stroke-width="4"/>
+      </g>
+      <ellipse cx="180" cy="120" rx="150" ry="45" fill="#56666B"/>
+      <path d="M40 110 A140 38 0 0 1 180 72 L180 150 A140 38 0 0 1 40 110Z" fill="#C8341F"/>
+      <path d="M180 72 A140 38 0 0 1 320 110 A140 38 0 0 1 180 150Z" fill="#F4E7C3"/>
+      <path d="M180 72 Q170 110 180 150" stroke="#56666B" stroke-width="5" fill="none"/>
+      <g fill="#FF9B87"><circle class="bub" cx="90" cy="115" r="5"/><circle class="bub" style="animation-delay:.4s" cx="120" cy="100" r="4"/><circle class="bub" style="animation-delay:.9s" cx="145" cy="125" r="5"/></g>
+      <g fill="#fff"><circle class="bub" style="animation-delay:.2s" cx="220" cy="108" r="4"/><circle class="bub" style="animation-delay:.7s" cx="260" cy="120" r="5"/><circle class="bub" style="animation-delay:1.1s" cx="290" cy="104" r="4"/></g>
+      <rect x="20" y="150" width="320" height="16" rx="8" fill="#1F2A2E"/>
+      <text class="svg-txt" x="80" y="192">麻辣鍋</text><text class="svg-txt" x="235" y="192">清湯</text>
+    </svg>
+    <figcaption>一鍋兩味的<span class="term" data-t="yuanyang">鴛鴦鍋</span>。</figcaption>
+  </figure>
+
+  <div class="box origin"><b class="t">名詞由來：火鍋的地圖</b><p>中國各地很早就有邊煮邊吃的鍋物。北京的<span class="term" data-t="shuan">涮羊肉</span>用清湯燙薄羊肉片；四川重慶的麻辣火鍋，一般說法是源自長江邊的碼頭工人和船工，把便宜的牛內臟（例如毛肚）丟進又麻又辣的湯裡煮來吃；台灣則有沙茶火鍋、石頭火鍋、薑母鴨、酸菜白肉鍋。日本有涮涮鍋、壽喜燒。同樣是一鍋湯，每個地方都用自己的食材寫出不同的答案。</p></div>
+
+  <h2>一、高湯是什麼？ <span class="stage s1">入門</span></h2>
+  <p><span class="term" data-t="stock">高湯</span>就是用骨頭、肉、海帶、蔬菜等，在水裡慢慢把味道「萃取」出來的湯。它是湯底，本身通常不加太多鹽，讓後面的料理自己決定鹹淡。</p>
+  <h3>鮮味相乘：1＋1 大於 2</h3>
+  <p>第 5 課學過，昆布裡有麩胺酸，帶來鮮味。柴魚、肉類裡則有另一種鮮味物質「肌苷酸」，香菇裡有「鳥苷酸」。科學家發現：<mark>麩胺酸和肌苷酸或鳥苷酸加在一起，鮮味會比單獨加起來強好幾倍</mark>，這叫鮮味相乘。</p>
+  <p>所以世界各地的好湯，幾乎都是「植物＋動物」的組合：日本用昆布加柴魚、中式用雞骨加香菇、西式用蔬菜加牛骨。古人不懂化學，卻靠經驗找到了同一個答案。</p>
+
+  <div class="recipe">
+    <div class="rh"><h3>昆布柴魚高湯（<span class="term" data-t="dashi">出汁</span>）</h3><span>約 1 公升｜泡 30 分鐘＋煮 15 分鐘</span></div>
+    <div class="rb">
+      <ul class="ing"><li>水<b>1.1 公升</b></li><li>昆布<b>10 公克</b></li><li>柴魚片<b>20 公克</b></li></ul>
+      <ol class="steps">
+        <li>昆布用乾布輕輕擦去灰塵，不要用水洗。表面的白色粉末是鮮味物質，要保留。<span class="w">那層白粉有很多是昆布自己的麩胺酸等成分，不是髒東西。</span></li>
+        <li>昆布泡在冷水裡 30 分鐘以上，再用小火慢慢加熱，在水快要滾、鍋邊冒小泡時取出昆布。<span class="w">昆布如果大滾，會釋放黏液和海藻腥味，湯變黏、變混濁。溫和地加熱，只取出鮮味。</span></li>
+        <li>水滾後關火，放入柴魚片，靜置 2–3 分鐘，等柴魚沉下去。<span class="w">柴魚的香氣很纖細，在滾水裡煮太久會變苦、有魚腥味。關火浸泡剛好萃取出香氣和鮮味。</span></li>
+        <li>用鋪了紙巾的濾網過濾，不要擠壓柴魚。<span class="w">擠壓會把苦味和雜味也擠進湯裡，湯也會變混濁。</span></li>
+      </ol>
+    </div>
+  </div>
+
+  <h2>二、動物高湯：清湯與白湯 <span class="stage s2">進階</span></h2>
+  <p>骨頭和雞爪裡有很多<span class="term" data-t="collagen">膠原蛋白</span>，長時間燉煮會變成明膠，讓湯有黏嘴的濃厚感，冷掉後還會結成果凍。</p>
+  <div class="recipe">
+    <div class="rh"><h3>雞骨高湯</h3><span>約 2 公升｜2–3 小時</span></div>
+    <div class="rb">
+      <ul class="ing"><li>雞骨架（可加雞爪）<b>1 公斤</b></li><li>冷水<b>3 公升</b></li><li>青蔥<b>2 支</b></li><li>薑<b>3 片</b></li><li>乾香菇（可省略）<b>3 朵</b></li></ul>
+      <ol class="steps">
+        <li><span class="term" data-t="blanch">汆燙</span>：雞骨放入冷水，大火煮到滾，滾 2–3 分鐘，倒掉水，把骨頭沖洗乾淨。<span class="w">骨頭裡的血水和雜質遇熱會變成灰色的浮沫，先燙掉一次，高湯才會乾淨、沒有腥味。</span></li>
+        <li>洗乾淨的骨頭放回洗過的鍋子，加 3 公升冷水、蔥、薑、香菇，大火煮滾後馬上轉最小火。<span class="w">冷水開始加熱，味道能慢慢溶出。</span></li>
+        <li>保持「表面偶爾冒一顆泡泡」的微滾狀態 2–3 小時，不蓋鍋蓋或蓋一半，隨時撈掉浮沫和浮油。<span class="w">這是關鍵：微滾的湯清澈，大滾的湯會把脂肪和膠質打散乳化，變成白濁的湯。</span></li>
+        <li>過濾，放涼後冷藏。表面凝固的一層油很容易刮掉。</li>
+      </ol>
+    </div>
+  </div>
+  <div class="box why"><b class="t">清湯和白湯，差在火力</b><p>用微滾，湯就是清澈的「清湯」。如果故意用大火長時間滾煮，翻騰的湯會把脂肪打成小油滴，膠質當乳化劑，把油滴穩定地留在湯裡，湯就變成像牛奶一樣白，叫做「白湯」。日本豚骨拉麵、雞白湯就是這樣做的。又是第 6 課的<span class="term" data-t="emulsion">乳化</span>！</p></div>
+
+  <h2>三、麻辣鍋底與沾醬 <span class="stage s2">進階</span></h2>
+  <p><span class="term" data-t="mala">麻辣</span>是兩種不同的感覺：辣來自辣椒，麻來自花椒。花椒讓嘴唇有像被輕輕震動的感覺，這種麻能讓辣感變得比較不刺痛，也讓人一口接一口。</p>
+  <div class="recipe">
+    <div class="rh"><h3>家庭版麻辣鍋底</h3><span>一鍋（約 4 人份）｜約 30 分鐘</span></div>
+    <div class="rb">
+      <ul class="ing"><li>牛油或食用油<b>150 公克</b></li><li>郫縣豆瓣醬<b>3 大匙</b></li><li>乾辣椒（剪段）<b>20 公克</b></li><li>花椒粒<b>10 公克</b></li><li>薑片<b>5 片</b></li><li>大蒜<b>6 瓣</b></li><li>冰糖<b>1 大匙</b></li><li>米酒<b>2 大匙</b></li><li>雞骨高湯或水<b>1.5 公升</b></li></ul>
+      <ol class="steps">
+        <li>乾辣椒剪段，用溫水泡 10 分鐘後瀝乾。<span class="w">泡過的乾辣椒下鍋比較不會馬上焦黑變苦。</span></li>
+        <li>油用小火加熱，放入薑、蒜炒香，再加入豆瓣醬，<strong>小火</strong>慢慢炒 5 分鐘，炒到油變成紅色、豆瓣的香味出來。<span class="w">辣椒的紅色素和香氣都溶在油裡（脂溶性），慢慢炒才能把它們帶到油中，這就是「紅油」。大火會讓豆瓣焦掉發苦。</span></li>
+        <li>加入乾辣椒和花椒，小火再炒 2 分鐘，加入冰糖、米酒。<span class="w">冰糖讓辣味圓潤，也是第 5 課「甜能平衡辣」的應用。</span></li>
+        <li>倒入高湯煮滾，轉小火煮 15 分鐘，讓味道融合，就能開始涮料。</li>
+      </ol>
+      <p style="margin:0">傳統重慶火鍋用牛油（牛的脂肪），香氣更濃，冷了會凝固。家裡用一般植物油比較好處理。</p>
+    </div>
+  </div>
+  <h3>台式沙茶沾醬</h3>
+  <div class="box origin"><b class="t">名詞由來：沙茶</b><p><span class="term" data-t="shacha">沙茶</span>的名字來自東南亞的「沙嗲（sate）」。潮汕人（廣東東部）到南洋工作，把沙嗲醬的概念帶回家鄉改良，加入大量扁魚、蝦米等乾貨，變成鹹香的沙茶醬。後來潮汕移民又把沙茶帶到台灣，成了台灣火鍋最經典的沾醬。</p></div>
+  <p>基本配方：沙茶醬 1 大匙、醬油 1 小匙、一點糖，加蔥花、蒜末、辣椒，有人還會打一顆生蛋黃拌勻，讓沾醬更滑順（又是蛋黃的乳化）。沾醬也可以用第 5 課的方法自己調：鹹、甜、酸、辣、香，自由組合。</p>
+
+  <h2>四、下料的順序 <span class="stage s1">入門</span></h2>
+  <p>火鍋的每種食材熟的速度不一樣，下鍋順序會決定整鍋湯的味道和口感：</p>
+  <ol class="steps">
+    <li><strong>先下：耐煮、會出味的</strong>，例如玉米、白蘿蔔、高麗菜梗、菇類、番茄。<span class="w">它們需要時間煮軟，同時把甜味和鮮味釋放到湯裡，讓湯越來越好喝。</span></li>
+    <li><strong>接著：火鍋料</strong>，例如丸子、豆腐、魚餃。<span class="w">這些多半已經是熟的，只需要加熱透，大約煮到浮起來再多滾一下。</span></li>
+    <li><strong>吃的時候才涮：肉片、海鮮</strong>。薄肉片在滾湯裡擺動 10–20 秒，變色就可以吃。<span class="w">薄肉片很快熟，煮太久會變硬變柴。這就是「涮」。</span></li>
+    <li><strong>中途補：葉菜類</strong>，燙一下就撈。<span class="w">葉菜煮太久會變黃、變爛。</span></li>
+    <li><strong>最後：麵、冬粉或煮粥</strong>。<span class="w">這時湯裡已經有所有食材的鮮味，用它煮澱粉類最好吃。澱粉放太早會讓湯變稠、容易黏鍋燒焦。</span></li>
+  </ol>
+  <div class="box warn"><b class="t">火鍋的衛生與健康</b><ul>
+    <li><strong>生熟分開</strong>：夾生肉的筷子和夾子，跟自己吃的筷子要分開（第 1 課的交叉污染）。</li>
+    <li><strong>肉要熟</strong>：豬肉、雞肉要完全變色熟透才吃；海鮮要煮到熟。</li>
+    <li><strong>湯會越來越鹹</strong>：長時間滾煮水分蒸發，湯會越來越濃，要適時加高湯或水。煮很久的火鍋湯鹽分和普林都比較高，不要一直喝。</li>
+  </ul></div>
+
+  <h2>五、專業：火鍋店的祕密 <span class="stage s3">專業</span></h2>
+  <ul>
+    <li><strong>中央廚房</strong>：連鎖火鍋店的湯底，通常在中央廚房用大鍋按照固定配方熬好、秤重分裝，送到每間分店，保證每一鍋味道一樣。</li>
+    <li><strong>備料標準</strong>：每一盤肉片秤重，蔬菜盤擺放方式有照片標準，冷藏溫度每天記錄。</li>
+    <li><strong>肉片的切法</strong>：肉片是冷凍到半硬再用機器刨薄，才能切得那麼薄又整齊。</li>
+    <li><strong>加湯的規則</strong>：服務人員加的是較淡的「補湯」，避免客人越吃越鹹。</li>
+  </ul>
+
+  <div class="quizzes">
+    <h2>小測驗</h2>
+    <div class="quiz" data-a="0" data-exp="麩胺酸和肌苷酸一起，鮮味會大幅增強，這就是鮮味相乘。">
+      <p class="q">1. 昆布加柴魚的高湯特別鮮，是因為？</p>
+      <ol><li>兩種不同的鮮味物質會互相加乘</li><li>柴魚比較貴</li><li>昆布很鹹</li></ol>
+    </div>
+    <div class="quiz" data-a="2" data-exp="大滾讓脂肪乳化進湯裡，湯就變白濁；要清湯就用微滾。">
+      <p class="q">2. 想熬清澈的雞湯，火力應該是？</p>
+      <ol><li>一直大火滾</li><li>完全不加熱</li><li>保持微滾，表面偶爾冒泡</li></ol>
+    </div>
+    <div class="quiz" data-a="1" data-exp="耐煮的蔬菜先下釋放甜味，薄肉片要吃時才涮，麵類最後。">
+      <p class="q">3. 下面哪個火鍋下料順序最合理？</p>
+      <ol><li>麵 → 肉片 → 玉米</li><li>玉米、菇 → 火鍋料 → 涮肉片 → 最後煮麵</li><li>全部一起丟進去煮一小時</li></ol>
+    </div>
+  </div>
+</section>
+<!-- ======================= 第 13 課 咖啡 ======================= -->
+<section class="lesson" id="l13" data-no="13" data-part="第五部　飲品" data-title="咖啡：萃取的科學">
+  <div class="l-head"><p class="l-no">第 13 課 <span class="stage s1">入門</span><span class="stage s2">進階</span><span class="stage s3">專業</span></p><h1>咖啡：萃取的科學</h1><p class="lead">煮咖啡，其實就是用水把咖啡粉裡「好的味道」拿出來，把「不好的味道」留下。</p></div>
+  <div class="box goal"><b class="t">本課目標</b><ul><li>咖啡豆從哪裡來、烘焙度怎麼影響味道</li><li>理解「萃取」：為什麼咖啡會太酸或太苦</li><li>用濾壓壺和手沖做一杯咖啡</li><li>認識義式濃縮、各種奶咖啡、奶泡和拉花</li></ul></div>
+  <div class="box warn"><b class="t">給國中生的提醒</b><p>咖啡含有咖啡因，會讓人心跳變快、睡不著。成長中的青少年要少喝，常見的建議是每天每公斤體重不超過約 2.5 毫克咖啡因（體重 50 公斤約 125 毫克，大概一杯中杯美式或拿鐵）。這一課你可以用<strong>低咖啡因咖啡豆</strong>練習，或者專心練習奶泡和手沖技術，讓家人品嘗你的作品。</p></div>
+
+  <h2>一、咖啡的身世 <span class="stage s1">入門</span></h2>
+  <div class="box origin"><b class="t">名詞由來：Coffee</b><p>咖啡樹原產於非洲的衣索比亞。最有名的傳說是：牧羊人卡爾迪發現他的山羊吃了某種紅色果實後，興奮得跳來跳去（這個故事在 17 世紀才被寫下來，是傳說）。咖啡後來在阿拉伯半島的葉門被大量種植和飲用。「咖啡」這個字，從阿拉伯文 qahwa，變成土耳其文 kahve，再到義大利文 caffè，最後成為英文 <span class="term" data-t="coffee">coffee</span>，中文則是音譯。</p></div>
+  <p>咖啡豆其實是咖啡樹果實裡的<strong>種子</strong>。果實成熟會變紅，像櫻桃，所以叫「咖啡櫻桃」。去掉果肉、曬乾的種子是綠色的，叫「生豆」，要烘焙過才會變成褐色、有咖啡香。</p>
+  <div class="tw"><table>
+    <tr><th>品種</th><th>味道</th><th>咖啡因</th><th>常見用途</th></tr>
+    <tr><td><span class="term" data-t="arabica">阿拉比卡</span></td><td>香氣多、酸質明亮、有水果或花香</td><td>較低</td><td>精品咖啡、手沖</td></tr>
+    <tr><td><span class="term" data-t="arabica">羅布斯塔</span></td><td>苦味較重、較濃厚、香氣較少</td><td>大約是阿拉比卡的兩倍</td><td>即溶咖啡、部分義式配方</td></tr>
+  </table></div>
+
+  <h2>二、烘焙度：同一顆豆子，不同個性</h2>
+  <p>生豆在烘豆機裡加熱，會發生很多我們學過的變化：<span class="term" data-t="maillard">梅納反應</span>產生香氣和褐色，<span class="term" data-t="caramel">焦糖化</span>帶來甜味和苦味。豆子內部的水分變成蒸氣，會把豆子撐裂發出「啪」的聲音，叫做<span class="term" data-t="crack">一爆</span>。</p>
+  <figure>
+    <svg class="figsvg" viewBox="0 0 480 120" width="100%" role="img" aria-label="烘焙度由淺到深，顏色從淺褐到深褐">
+      <g>
+        <ellipse cx="60" cy="50" rx="26" ry="18" fill="#8BC34A" opacity=".7"/><path d="M40 50 Q60 44 80 50" stroke="#5a7a2a" fill="none"/>
+        <ellipse cx="160" cy="50" rx="26" ry="18" fill="#B07D4F"/><path d="M140 50 Q160 44 180 50" stroke="#6a4520" fill="none"/>
+        <ellipse cx="260" cy="50" rx="26" ry="18" fill="#7A4A26"/><path d="M240 50 Q260 44 280 50" stroke="#3e2410" fill="none"/>
+        <ellipse cx="360" cy="50" rx="26" ry="18" fill="#3E2410"/><path d="M340 50 Q360 44 380 50" stroke="#1a0e05" fill="none"/>
+        <ellipse cx="440" cy="50" rx="26" ry="18" fill="#1F1208"/>
+      </g>
+      <text class="svg-txt" x="44" y="95">生豆</text><text class="svg-txt" x="144" y="95">淺焙</text><text class="svg-txt" x="244" y="95">中焙</text><text class="svg-txt" x="344" y="95">深焙</text><text class="svg-txt" x="416" y="95">極深焙</text>
+      <text class="svg-txt" x="120" y="115" style="font-size:11px">酸、果香、茶感 ←───────→ 苦、焦糖、巧克力、煙燻</text>
+    </svg>
+  </figure>
+  <p>淺焙的豆子保留比較多豆子本身的風味，酸明顯；越深焙，苦味和烘焙香越重，豆子原本的特色越少。沒有好壞，只有喜好。</p>
+  <div class="box why"><b class="t">為什麼要「現磨」？</b><p>咖啡的香氣是很容易飛走的小分子。整顆豆子能把香氣鎖在裡面好幾週，但磨成粉後表面積變大好幾百倍，香氣在十幾分鐘內就大量流失。所以最好喝之前才磨。剛烘好的豆子會釋放很多二氧化碳，通常放幾天到一週後風味更穩定，叫「養豆」。</p></div>
+
+  <h2>三、萃取：這一課最重要的觀念 <span class="stage s2">進階</span></h2>
+  <p><span class="term" data-t="extraction">萃取</span>就是熱水把咖啡粉裡的物質溶解出來。重點是：不同的味道，溶出來的速度不同。</p>
+  <ol>
+    <li>最先溶出來的：<strong>酸味</strong>和一些香氣。</li>
+    <li>接著：<strong>甜味</strong>、醇厚感。</li>
+    <li>最後才出來：<strong>苦味</strong>、澀味、雜味。</li>
+  </ol>
+  <p>所以：萃取太少（<strong>萃取不足</strong>）→ 只有酸、水水的、沒有甜；萃取太多（<strong>過度萃取</strong>）→ 苦澀、喉嚨乾。好喝的咖啡在中間。專業標準認為，咖啡粉大約被溶出 18–22% 的重量時最平衡，這叫<span class="term" data-t="goldcup">金杯準則</span>。</p>
+  <p>控制萃取的方法有：研磨粗細（越細，表面積越大，萃取越快）、接觸時間（越久萃取越多）、水溫（越熱萃取越快）。</p>
+
+  <div class="demo" id="extractDemo">
+    <p class="dt">互動：調整研磨和時間</p>
+    <p class="dd">改變研磨粗細和萃取時間，看看這杯咖啡會是什麼味道。</p>
+    <label for="grindRange">研磨：<span id="grindLbl"></span></label>
+    <input type="range" id="grindRange" min="1" max="5" value="3" step="1">
+    <label for="timeRange">時間：<span id="timeLbl"></span></label>
+    <input type="range" id="timeRange" min="1" max="5" value="3" step="1">
+    <div style="margin-top:10px">
+      <div class="bar" style="height:16px;position:relative;background:linear-gradient(90deg,#F2B705 0 37.5%,#3E7D3A 37.5% 62.5%,#6b3a1f 62.5%)"><i id="extMark" style="position:absolute;top:-4px;width:6px;height:24px;background:var(--ink);border-radius:3px;left:50%;transition:left .3s"></i></div>
+      <div style="display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted)"><span>萃取不足（酸）</span><span>剛好</span><span>過度萃取（苦）</span></div>
+    </div>
+    <div class="readout" id="extOut"></div>
+  </div>
+
+  <h2>四、動手做：兩種入門方法 <span class="stage s1">入門</span></h2>
+  <p>先記住一個比例：<mark>1 份咖啡粉配 15 份水</mark>（1:15），這叫<span class="term" data-t="ratio">粉水比</span>。15 公克咖啡粉，就配 225 公克水。喜歡濃一點用 1:14，淡一點用 1:16 或 1:17。</p>
+  <div class="demo" id="ratioDemo">
+    <p class="dt">互動：粉水比計算機</p>
+    <p class="dd">輸入咖啡粉重量，選擇比例，算出要用多少水。</p>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <label>咖啡粉 <input type="number" id="ratioCoffee" value="15" min="5" max="60" style="width:80px;font:inherit;padding:4px 8px;border:2px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)"> 公克</label>
+    </div>
+    <label for="ratioRange" style="display:block;margin-top:10px">比例：1 : <span id="ratioLbl">15</span></label>
+    <input type="range" id="ratioRange" min="13" max="18" value="15" step="0.5">
+    <div class="readout" id="ratioOut"></div>
+  </div>
+
+  <div class="recipe">
+    <div class="rh"><h3>方法一：濾壓壺（法式壓壺）</h3><span>1 杯｜4 分鐘｜最容易成功</span></div>
+    <div class="rb">
+      <ul class="ing"><li>咖啡豆<b>15 公克，粗研磨（像粗砂糖）</b></li><li>熱水<b>225 公克，約 93°C</b></li></ul>
+      <ol class="steps">
+        <li>熱水先把壺燙一下倒掉。<span class="w">冷的壺會把水溫拉低，萃取就不穩定。</span></li>
+        <li>放入咖啡粉，倒入所有熱水，輕輕攪拌 3 下，蓋上蓋子（先不要壓下濾網）。</li>
+        <li>計時 4 分鐘。</li>
+        <li>慢慢把濾網壓到底，馬上把咖啡倒出來。<span class="w">如果留在壺裡，咖啡粉會一直繼續萃取，越放越苦。</span></li>
+      </ol>
+      <p style="margin:0">為什麼用粗研磨？因為浸泡時間長達 4 分鐘，粉太細會過度萃取，而且細粉會穿過濾網，讓咖啡混濁有渣。</p>
+    </div>
+  </div>
+
+  <div class="recipe">
+    <div class="rh"><h3>方法二：手沖咖啡</h3><span>1 杯｜約 3 分鐘｜濾杯＋濾紙＋細口壺</span></div>
+    <div class="rb">
+      <figure style="margin-top:0">
+        <svg viewBox="0 0 200 200" width="170" aria-hidden="true">
+          <path d="M150 20 Q120 20 110 40" stroke="#56666B" stroke-width="5" fill="none"/>
+          <path class="drip" d="M108 44 L108 48" stroke="#8a5a2b" stroke-width="3"/>
+          <path d="M55 60 L145 60 L115 115 L85 115 Z" fill="#f5f0e6" stroke="#b8a888" stroke-width="2"/>
+          <path d="M66 72 L134 72 L112 108 L88 108 Z" fill="#6b3a1f"/>
+          <circle class="drip" cx="100" cy="122" r="3" fill="#6b3a1f"/>
+          <circle class="drip" style="animation-delay:.6s" cx="100" cy="122" r="3" fill="#6b3a1f"/>
+          <path d="M60 130 L140 130 L135 188 L65 188 Z" fill="none" stroke="#56666B" stroke-width="3"/>
+          <rect x="66" y="160" width="68" height="26" fill="#6b3a1f" opacity=".85"/>
+        </svg>
+      </figure>
+      <ul class="ing"><li>咖啡豆<b>15 公克，中細研磨（像細砂糖）</b></li><li>熱水<b>225 公克，90–94°C</b></li><li>另備熱水<b>沖濾紙用</b></li></ul>
+      <ol class="steps">
+        <li>把濾紙放進濾杯，用熱水把濾紙整個淋濕，倒掉這些水。<span class="w">洗掉濾紙的紙味，同時預熱濾杯和下面的杯子。</span></li>
+        <li>倒入咖啡粉，輕拍讓表面平整，放上電子秤歸零。</li>
+        <li><span class="term" data-t="bloom">悶蒸</span>：從中心慢慢繞圈注入約 30 公克熱水，剛好讓所有粉濕透，等 30–40 秒。你會看到咖啡粉像麵包一樣膨脹起來。<span class="w">新鮮的咖啡粉裡有二氧化碳。先讓它排出來，後面的水才能均勻接觸咖啡粉。氣體沒排出，水會被擋住、繞路流走，萃取就不均勻。</span></li>
+        <li>分 2–3 次，從中心往外畫小圓圈慢慢注水，每次讓水位稍微降下再倒，直到秤上顯示 225 公克。<span class="w">避免直接沖在濾紙上，水會從旁邊流掉而沒經過咖啡粉。</span></li>
+        <li>全部滴完的總時間大約 2 分 30 秒到 3 分鐘。<span class="w">太快（例如 1 分半）通常代表磨太粗，會偏酸；太慢（例如 4 分鐘）代表磨太細，會偏苦。下次只調整研磨一個變數。</span></li>
+      </ol>
+    </div>
+  </div>
+
+  <h2>五、義式咖啡家族 <span class="stage s2">進階</span></h2>
+  <div class="box origin"><b class="t">名詞由來：Espresso</b><p><span class="term" data-t="espresso">Espresso</span> 在義大利文有「壓出來的」意思，也有「特地為你現做、快速」的意思，跟英文 express（快遞）同源。它是用機器以大約 9 個大氣壓的壓力，讓熱水在 25–30 秒內快速穿過磨得很細、壓得很緊的咖啡粉，萃取出一小杯濃縮咖啡，表面有一層金褐色的泡沫叫 <span class="term" data-t="crema">Crema</span>。</p></div>
+  <p>義式咖啡館常用的標準：約 18 公克咖啡粉，萃取出約 36 公克的濃縮咖啡（比例 1:2），時間 25–30 秒。幾乎所有咖啡館的飲料，都是用濃縮咖啡加上水或牛奶組合出來的：</p>
+  <figure>
+    <svg class="figsvg" viewBox="0 0 520 200" width="100%" role="img" aria-label="四種咖啡的組成：濃縮、美式、拿鐵、卡布奇諾">
+      <g font-size="12">
+        <path d="M30 70 L100 70 L94 160 L36 160Z" fill="none" class="svg-ink" stroke-width="2"/>
+        <rect x="40" y="130" width="52" height="28" fill="#4a2410"/><rect x="40" y="124" width="52" height="6" fill="#C98B4B"/>
+        <text class="svg-txt" x="30" y="185">濃縮咖啡</text>
+
+        <path d="M150 50 L230 50 L222 160 L158 160Z" fill="none" class="svg-ink" stroke-width="2"/>
+        <rect x="160" y="130" width="60" height="28" fill="#4a2410"/><rect x="159" y="70" width="62" height="60" fill="#6FB7E8" opacity=".35"/>
+        <text class="svg-txt" x="166" y="100">熱水</text>
+        <text class="svg-txt" x="165" y="185"><tspan>美式</tspan></text>
+
+        <path d="M280 40 L360 40 L352 160 L288 160Z" fill="none" class="svg-ink" stroke-width="2"/>
+        <rect x="290" y="130" width="60" height="28" fill="#4a2410"/><rect x="289" y="62" width="62" height="68" fill="#F4E7C3"/><rect x="288" y="48" width="64" height="14" fill="#fff" stroke="#e5d7a8"/>
+        <text class="svg-txt" x="302" y="100">牛奶</text><text class="svg-txt" x="300" y="185">拿鐵</text>
+
+        <path d="M410 70 L490 70 L482 160 L418 160Z" fill="none" class="svg-ink" stroke-width="2"/>
+        <rect x="420" y="130" width="60" height="28" fill="#4a2410"/><rect x="419" y="104" width="62" height="26" fill="#F4E7C3"/><rect x="416" y="76" width="68" height="28" fill="#fff" stroke="#e5d7a8"/>
+        <text class="svg-txt" x="428" y="95">奶泡</text><text class="svg-txt" x="416" y="185">卡布奇諾</text>
+      </g>
+    </svg>
+  </figure>
+  <div class="tw"><table>
+    <tr><th>飲料</th><th>組成</th><th>名字由來</th></tr>
+    <tr><td><span class="term" data-t="americano">美式咖啡</span></td><td>濃縮＋熱水</td><td>一般流傳的說法是二戰時在義大利的美軍嫌濃縮太濃，加水稀釋成像家鄉的咖啡</td></tr>
+    <tr><td><span class="term" data-t="latte">拿鐵</span></td><td>濃縮＋大量熱牛奶＋薄奶泡</td><td>義大利文 latte 就是「牛奶」，完整說法是 caffè latte（咖啡牛奶）</td></tr>
+    <tr><td><span class="term" data-t="cappuccino">卡布奇諾</span></td><td>濃縮＋牛奶＋較厚奶泡</td><td>顏色像天主教「嘉布遣會」修士穿的褐色長袍</td></tr>
+    <tr><td>瑪奇朵</td><td>濃縮＋一小匙奶泡</td><td>義大利文 macchiato 是「染上斑點的」，奶泡在咖啡上點了一個白點</td></tr>
+    <tr><td>馥列白（Flat white）</td><td>濃縮＋少量牛奶＋非常薄的奶泡</td><td>源自澳洲和紐西蘭，flat 指奶泡層很「平」、很薄</td></tr>
+  </table></div>
+  <div class="box why"><b class="t">在義大利點「latte」會拿到什麼？</b><p>很可能是一杯牛奶！因為 latte 在義大利文就只是「牛奶」。要點咖啡牛奶要說 caffè latte。知道名詞由來，出國點餐就不會出錯。</p></div>
+
+  <h2>六、奶泡與拉花 <span class="stage s3">專業</span></h2>
+  <p>咖啡師（<span class="term" data-t="barista">Barista</span>）用咖啡機的蒸汽管打奶泡，目標是做出綿密、表面像絲綢一樣光亮的<span class="term" data-t="microfoam">微奶泡</span>。</p>
+  <ol class="steps">
+    <li>用冰的全脂鮮奶，倒入拉花鋼杯約到壺嘴下方。<span class="w">冰牛奶讓你有比較長的時間打發；全脂牛奶的脂肪和蛋白質讓奶泡更綿密穩定。</span></li>
+    <li><strong>打發（進氣）</strong>：蒸汽管的噴嘴剛好在牛奶表面下一點點，會聽到「嘶嘶」的吸氣聲，讓空氣進入，牛奶體積增加。</li>
+    <li><strong>打綿（旋轉）</strong>：把噴嘴稍微往下，讓牛奶在杯子裡像漩渦一樣旋轉，把大泡泡打碎成看不見的小泡泡。</li>
+    <li>摸杯子覺得燙手、大約 55–65°C 就關蒸汽。<span class="w">這個溫度牛奶的甜味最明顯。超過約 70°C，牛奶的蛋白質變質，會出現煮過頭的味道，甜味也減少，而且喝了容易燙傷。</span></li>
+    <li>在桌上輕敲杯子震掉大泡泡，搖晃讓奶泡保持光亮。</li>
+  </ol>
+  <h3>拉一顆愛心</h3>
+  <ol class="steps">
+    <li>咖啡杯微微傾斜，拉花杯從高處細細地倒入牛奶到杯子一半。<span class="w">從高處倒，牛奶會穿過 Crema 沉到下面，表面還是咖啡色，當作畫布。</span></li>
+    <li>把拉花杯的壺嘴壓低，貼近咖啡表面，加快倒的速度，白色的奶泡就會浮在表面形成一個圓。</li>
+    <li>圓變大後，把拉花杯往上提高、倒得細一點，直直往前劃過圓心，拉出愛心的尖端。</li>
+  </ol>
+  <p><span class="term" data-t="latteart">拉花</span>需要大量練習，職業咖啡師也是倒了上千杯才穩定。可以用加了一點洗碗精的水代替牛奶練習手勢，比較省錢。</p>
+
+  <div class="quizzes">
+    <h2>小測驗</h2>
+    <div class="quiz" data-a="0" data-exp="酸味最先被萃取出來，萃取不足時只喝到酸、沒有甜。">
+      <p class="q">1. 一杯咖啡喝起來很酸、水水的、沒有甜味，最可能是？</p>
+      <ol><li>萃取不足，例如磨太粗或時間太短</li><li>過度萃取</li><li>咖啡豆太新鮮</li></ol>
+    </div>
+    <div class="quiz" data-a="2" data-exp="20 × 15 = 300 公克水。">
+      <p class="q">2. 用 1:15 的粉水比，20 公克咖啡粉要配多少水？</p>
+      <ol><li>150 公克</li><li>200 公克</li><li>300 公克</li></ol>
+    </div>
+    <div class="quiz" data-a="1" data-exp="悶蒸讓新鮮咖啡粉裡的二氧化碳先排出，之後的水才能均勻萃取。">
+      <p class="q">3. 手沖時為什麼要先「悶蒸」？</p>
+      <ol><li>讓咖啡變冷</li><li>讓咖啡粉裡的二氧化碳排出，之後萃取更均勻</li><li>讓咖啡變甜</li></ol>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 第 14 課 專業 ======================= -->
+<section class="lesson" id="l14" data-no="14" data-part="第六部　專業之路" data-title="從家裡廚房到專業廚房">
+  <div class="l-head"><p class="l-no">第 14 課 <span class="stage s3">專業</span></p><h1>從家裡廚房到專業廚房</h1><p class="lead">在家做菜是讓一個人開心；專業廚房是讓每一位客人，每一次都吃到一樣好的東西。</p></div>
+  <div class="box goal"><b class="t">本課目標</b><ul><li>專業廚房的分工制度</li><li>寫出一份標準化食譜</li><li>會計算食材成本和售價</li><li>專業的食品安全管理、試菜方法、擺盤原則</li><li>知道怎麼走上餐飲這條路</li></ul></div>
+
+  <h2>一、廚房是一支軍隊</h2>
+  <p>19 世紀末，法國名廚<strong>艾斯科菲耶</strong>（Auguste Escoffier）參考軍隊的制度，把大型廚房分成不同的「站」，每個人負責一件事，有清楚的上下關係。這個制度叫<span class="term" data-t="brigade">廚房編制</span>，今天全世界的餐廳還在使用它的精神。</p>
+  <div class="tw"><table>
+    <tr><th>職位</th><th>負責</th><th>名字由來</th></tr>
+    <tr><td>主廚（Chef de cuisine）</td><td>設計菜單、管理整個廚房</td><td><span class="term" data-t="chef">chef</span> 法文是「頭」、「首領」</td></tr>
+    <tr><td>副主廚（Sous chef）</td><td>主廚的副手，帶領現場</td><td><span class="term" data-t="chef">sous</span> 法文是「在……之下」</td></tr>
+    <tr><td>各站廚師</td><td>熱炒、煎烤、炸物、冷盤、湯、甜點各有專人</td><td>中餐也分爐台、砧板、打荷（負責配菜和擺盤）等工作</td></tr>
+    <tr><td>學徒、助手</td><td>備料、清潔、支援</td><td>每個主廚都是從這裡開始</td></tr>
+  </table></div>
+  <p>出餐時，負責統籌的人會「喊單」：唸出每一桌點了什麼、什麼時候要出。所有人回答「收到」，確認訊息沒漏掉。</p>
+
+  <h2>二、標準化食譜</h2>
+  <p>專業廚房的食譜叫做<span class="term" data-t="sop">標準作業程序（SOP）</span>或標準食譜卡。它和家庭食譜最大的不同是：<mark>任何一個受過訓練的人照著做，結果都一樣</mark>。一份好的標準食譜包含：</p>
+  <ul>
+    <li><strong>每一樣材料的重量</strong>（公克，不寫「適量」）</li>
+    <li><strong>溫度和時間</strong>（油溫 170°C、炸 4 分鐘）</li>
+    <li><strong>判斷標準</strong>（炸到金黃色、中心溫度 74°C）</li>
+    <li><strong>份量和擺盤</strong>（每盤 200 公克、附一張成品照片）</li>
+    <li><strong>成本</strong>（下一段教你算）</li>
+  </ul>
+  <p>回頭看看這門課的食譜，你會發現都是照這個方式寫的：有重量、有溫度、有「為什麼」。</p>
+
+  <h2>三、算成本：好吃也要能賺錢</h2>
+  <p>餐廳最常用的指標是<span class="term" data-t="foodcost">食材成本率</span>：</p>
+  <p style="text-align:center;font-family:var(--f-head);font-size:1.25rem">食材成本率 ＝ 一份的食材成本 ÷ 售價 × 100%</p>
+  <p>許多餐廳會把食材成本率控制在大約 28–35%。剩下的錢要付房租、水電、瓦斯、員工薪水、設備、包材，最後才是利潤。</p>
+  <p>另一個要注意的是<span class="term" data-t="yield">可食率</span>：你買 1 公斤洋蔥，剝皮、切掉頭尾後可能只剩大約 900 公克能用；買一隻全雞，骨頭不能直接賣。計算成本時要用「實際能用的部分」來算。</p>
+
+  <div class="demo" id="costDemo">
+    <p class="dt">互動：幫你的炒飯訂價錢</p>
+    <p class="dd">輸入一份的食材成本和想要的成本率，算出建議售價。</p>
+    <div style="display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
+      <label>一份食材成本（元）<br><input type="number" id="costIn" value="35" min="1" style="width:100%;font:inherit;padding:6px 10px;border:2px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)"></label>
+      <label>目標成本率：<span id="costPctLbl">30</span>%<br><input type="range" id="costPct" min="20" max="45" value="30"></label>
+    </div>
+    <div class="readout" id="costOut"></div>
+  </div>
+  <div class="box try"><b class="t">動手試試：算一份蛋炒飯的成本</b><p>去超市看看價格：白米、雞蛋、蔥、油、鹽。用第 7 課的份量（白飯 250 公克大約需要生米 100–110 公克、蛋 2 顆……），算出一份的成本，再用上面的計算機訂出售價。你會很驚訝，餐廳的一盤炒飯價錢其實大部分不是食材。</p></div>
+
+  <h2>四、專業的食品安全</h2>
+  <p>還記得第 1 課的危險溫度帶嗎？專業廚房把它變成一整套管理系統，叫做 <span class="term" data-t="haccp">HACCP</span>，中文常稱「食品安全管制系統」。它的核心想法是：找出整個流程裡最可能出問題的「關鍵點」，例如雞肉的中心溫度、冷藏庫的溫度，然後<strong>每天監測並記錄</strong>。</p>
+  <ul>
+    <li><strong>冷藏</strong>保持在 7°C 以下，<strong>冷凍</strong>在 -18°C 以下，每天記錄溫度。</li>
+    <li><strong><span class="term" data-t="fifo">先進先出</span></strong>：新進的貨放在後面，先用舊的，避免過期。</li>
+    <li><strong>標示</strong>：每個備料盒貼上品名、製作日期和使用期限。</li>
+    <li><strong>個人衛生</strong>：戴帽子和口罩、不戴戒指手錶、生病不上工。</li>
+  </ul>
+
+  <h2>五、試菜：像科學家一樣改良</h2>
+  <p>第 0 課說過「一次只改一件事」。專業廚師開發新菜時會做一張試菜紀錄表：</p>
+  <div class="tw"><table>
+    <tr><th>日期</th><th>版本</th><th>這次改了什麼</th><th>結果</th><th>下次</th></tr>
+    <tr><td>第 1 天</td><td>A</td><td>照原始配方</td><td>飯偏濕，鹹度剛好</td><td>改用冷藏飯</td></tr>
+    <tr><td>第 2 天</td><td>B</td><td>只改：用冷藏飯</td><td>粒粒分明，香氣不足</td><td>鍋子燒更熱</td></tr>
+    <tr><td>第 3 天</td><td>C</td><td>只改：鍋燒到冒煙再下油</td><td>有焦香，家人說好吃</td><td>定為標準</td></tr>
+  </table></div>
+  <p>試吃的時候請家人或朋友評分，而且最好不告訴他們哪一盤是哪個版本，這樣評分才公平。</p>
+
+  <h2>六、擺盤：眼睛先吃</h2>
+  <ul>
+    <li><strong>盤緣要乾淨</strong>：醬汁滴到盤邊就用紙巾擦掉，這是最基本也最重要的一點。</li>
+    <li><strong>留白</strong>：不要把盤子裝滿，留一些空間，食物看起來更精緻。</li>
+    <li><strong>高度</strong>：把食物堆得有一點高度，比平平攤開更有立體感。</li>
+    <li><strong>顏色對比</strong>：金黃的炒飯撒上翠綠蔥花、紅色辣椒，顏色一對比就很好看。</li>
+    <li><strong>奇數原則</strong>：擺 3 塊或 5 塊炸雞，通常比 2 塊或 4 塊看起來自然。</li>
+  </ul>
+
+  <h2>七、如果你想走這條路</h2>
+  <ul>
+    <li><strong>升學</strong>：國中畢業後可以選擇高職的餐飲管理科、觀光事業科，之後還有大專院校的餐飲、烘焙、廚藝相關科系。</li>
+    <li><strong>證照</strong>：台灣有勞動部的中餐烹調、西餐烹調、烘焙食品等技術士證照，從丙級開始考。咖啡方面有國際咖啡協會等機構的專業課程認證。</li>
+    <li><strong>現在就能做的事</strong>：每週幫家裡做一道菜、把這門課的食譜做到熟練、寫自己的試菜筆記。</li>
+  </ul>
+  <p>專業廚師最重要的特質，不是天分，而是<mark>願意一次又一次把同一件事做好</mark>。</p>
+
+  <div class="quizzes">
+    <h2>小測驗</h2>
+    <div class="quiz" data-a="1" data-exp="40 ÷ 160 = 0.25，也就是 25%。">
+      <p class="q">1. 一份義大利麵食材成本 40 元，售價 160 元，食材成本率是？</p>
+      <ol><li>40%</li><li>25%</li><li>4%</li></ol>
+    </div>
+    <div class="quiz" data-a="0" data-exp="先進先出：先用先進貨的，避免食材放到過期。">
+      <p class="q">2. 「先進先出」是什麼意思？</p>
+      <ol><li>先進貨的食材先使用</li><li>先進廚房的人先下班</li><li>先點的菜先付錢</li></ol>
+    </div>
+    <div class="quiz" data-a="2" data-exp="sous 法文是「在……之下」，副主廚是主廚的副手。">
+      <p class="q">3. Sous chef 的 sous 是什麼意思？</p>
+      <ol><li>湯</li><li>醬汁</li><li>在……之下</li></ol>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 第 15 課 畢業 ======================= -->
+<section class="lesson" id="l15" data-no="15" data-part="第六部　專業之路" data-title="畢業挑戰">
+  <div class="l-head"><p class="l-no">第 15 課 <span class="stage s3">專業</span></p><h1>畢業挑戰</h1><p class="lead">把學過的東西串起來，為家人做一份完整的餐。</p></div>
+  <div class="box goal"><b class="t">本課目標</b><ul><li>回顧整門課的核心原理</li><li>自己規劃並完成一份套餐</li><li>拿到你的結業證書</li></ul></div>
+
+  <h2>一、整門課只有六個大原理</h2>
+  <p>回頭看，七道料理其實都在用同一套觀念：</p>
+  <div class="tw"><table>
+    <tr><th>原理</th><th>學到它的地方</th><th>用在哪些料理</th></tr>
+    <tr><td>熱從外往內傳，大小要一致</td><td>第 3、4 課</td><td>全部</td></tr>
+    <tr><td>梅納反應：乾燥＋高溫＝焦香</td><td>第 6 課</td><td>炒飯、漢堡、炸雞、蔥油、咖啡烘焙</td></tr>
+    <tr><td>澱粉的糊化和老化</td><td>第 6、7 課</td><td>炒飯、麵、義大利麵、火鍋最後的麵和粥</td></tr>
+    <tr><td>乳化：油水靠乳化劑結合</td><td>第 6、9 課</td><td>義大利麵、Carbonara、白湯、沾醬、美乃滋</td></tr>
+    <tr><td>萃取：把味道從食材裡拿出來</td><td>第 12、13 課</td><td>高湯、紅油、咖啡、蔥油</td></tr>
+    <tr><td>平衡五味、控制溫度與衛生</td><td>第 1、5 課</td><td>全部</td></tr>
+  </table></div>
+
+  <h2>二、畢業挑戰：設計一份家庭套餐</h2>
+  <p>選一個週末，為家人（2–4 人）完成一份套餐。你要自己規劃，就像一個真正的主廚：</p>
+  <ol class="steps">
+    <li><strong>設計菜單</strong>：一道主食（炒飯、麵、義大利麵或漢堡擇一）＋一道配菜或湯（可以用高湯做一碗蛋花湯或蔬菜湯）＋飲品（給大人的咖啡，或給自己的奶泡鮮奶）。</li>
+    <li><strong>寫標準食譜</strong>：用第 14 課的格式寫下每一道菜的材料重量、步驟和判斷標準。</li>
+    <li><strong>算成本</strong>：去市場或超市買材料，保留收據，算出每人份的成本。</li>
+    <li><strong>排時間表</strong>：從最久的開始倒推。例如高湯要熬 2 小時，就最先做；炒飯最後才炒，趁熱上桌。這是專業廚房每天都在做的事。</li>
+    <li><strong>備料就位</strong>：開火前所有材料切好、量好、排好。</li>
+    <li><strong>出餐與擺盤</strong>：注意盤緣乾淨、顏色對比。</li>
+    <li><strong>收集回饋</strong>：請每個家人說一個優點和一個可以改進的地方，寫進你的試菜紀錄。</li>
+    <li><strong>收拾乾淨</strong>：專業廚師的工作，是在廚房恢復乾淨時才結束。</li>
+  </ol>
+
+  <h2>三、結業證書</h2>
+  <p>完成所有課程後，在下面寫上你的名字。</p>
+  <div class="cert" id="cert">
+    <p style="margin:0;color:var(--muted)">結業證書</p>
+    <h2>從零開始學做菜</h2>
+    <p>茲證明 <input type="text" id="certName" placeholder="你的名字" aria-label="你的名字"> 同學</p>
+    <p id="certText">已完成 0 / 15 課。</p>
+    <p style="font-size:.9rem;color:var(--muted)" id="certDate"></p>
+  </div>
+  <p style="font-size:.9rem;color:var(--muted)">想留念？可以用手機截圖，或用瀏覽器的「列印」存成 PDF。</p>
+
+  <div class="quizzes">
+    <h2>總複習小測驗</h2>
+    <div class="quiz" data-a="1" data-exp="炒飯要乾燥高溫產生梅納反應，漢堡也是。一個原理，兩道菜。">
+      <p class="q">1. 炒飯要用乾的飯，漢堡肉下鍋前表面要擦乾，這兩件事背後是同一個原理嗎？</p>
+      <ol><li>不是，完全沒關係</li><li>是，都是為了讓表面超過 100°C，產生梅納反應</li><li>是，都是為了殺菌</li></ol>
+    </div>
+    <div class="quiz" data-a="2" data-exp="這三個都是乳化：麵水澱粉、膠質、蛋黃分別當乳化劑。">
+      <p class="q">2. 下面哪些料理用到了「乳化」？</p>
+      <ol><li>只有美乃滋</li><li>只有義大利麵</li><li>義大利麵醬汁、豚骨白湯、加蛋黃的沙茶醬都是</li></ol>
+    </div>
+    <div class="quiz" data-a="0" data-exp="一次只改一個變數，才知道是哪個改變造成的結果。">
+      <p class="q">3. 你的手沖咖啡太苦，下一次最好的做法是？</p>
+      <ol><li>只把研磨調粗一點，其他不變，再試一次</li><li>換豆子、換水溫、換研磨、換比例全部一起改</li><li>多加糖就好</li></ol>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 名詞小辭典 ======================= -->
+<section class="lesson" id="lg" data-no="" data-part="附錄" data-title="名詞小辭典">
+  <div class="l-head"><p class="l-no">附錄</p><h1>名詞小辭典</h1><p class="lead">課程中所有專有名詞的意思和由來。可以搜尋。</p></div>
+  <input type="search" class="gl-search" id="glSearch" placeholder="搜尋名詞，例如：梅納、乳化、拿鐵" aria-label="搜尋名詞">
+  <div id="glList"></div>
+</section>
+
+</main>
+</div>
+</div>
+<div class="pop" id="pop" role="dialog" aria-live="polite"><button class="x" type="button" aria-label="關閉">×</button><div id="popBody"></div></div>
+<script>
+(function(){
+"use strict";
+/* ================= 名詞資料 ================= */
+var G = {
+term:{n:"專有名詞",e:"Term",l:0,m:"某個領域裡有特定意思的詞。在這門課裡，點一下有虛線的字就能看到解釋。",o:"「名詞由來」會告訴你這個詞原本是哪國語言、什麼意思。知道由來，就不用死背。"},
+cross:{n:"交叉污染",e:"Cross-contamination",l:1,m:"生食上的細菌，經由手、刀、砧板、抹布，跑到不會再加熱的熟食或生菜上。",o:"「交叉」指細菌從一邊跨到另一邊。是食品衛生最常見的出事原因之一。"},
+danger:{n:"危險溫度帶",e:"Temperature danger zone",l:1,m:"大約 5–60°C，大多數會讓人生病的細菌在這個範圍繁殖最快。各國規定的數字略有不同（例如 4–60°C 或 7–60°C）。",o:"食品安全教育用語，提醒大家熟食不要長時間放在室溫。"},
+wok:{n:"炒鍋（鑊）",e:"Wok",l:2,m:"圓底、鍋壁高的中式鍋，能用大火快速翻炒。",o:"英文 wok 來自粵語「鑊」的發音。19 世紀起廣東人移民到世界各地開中餐館，這個字就跟著進入了英文。"},
+heat:{n:"熱的傳遞",e:"Heat transfer",l:4,m:"熱從高溫的地方移動到低溫的地方，有三種方式：傳導（接觸）、對流（流體流動帶走熱）、輻射（不用接觸，像太陽）。",o:"這是理化課的內容。廚房就是最好的實驗室。"},
+leiden:{n:"萊頓弗羅斯特效應",e:"Leidenfrost effect",l:4,m:"水滴在非常燙的表面上，底部瞬間形成一層蒸氣墊，讓水滴浮著滾來滾去，反而蒸發得比較慢。",o:"以德國醫生萊頓弗羅斯特（Johann Gottlob Leidenfrost）命名，他在 1756 年寫下對這個現象的描述。"},
+umami:{n:"鮮味（うま味）",e:"Umami",l:5,m:"五種基本味道之一，來自麩胺酸、肌苷酸、鳥苷酸等物質。昆布、番茄、起司、香菇、肉湯都很鮮。",o:"1908 年日本化學家池田菊苗從昆布湯中分離出麩胺酸，取日文「うまい（好吃）」造了「うま味」這個詞。英文直接用日文發音 umami。"},
+capsaicin:{n:"辣椒素",e:"Capsaicin",l:5,m:"辣椒裡讓人覺得辣的物質，會刺激感覺熱和痛的神經，所以辣其實是一種痛覺。它能溶在油和乳脂裡，所以喝牛奶比喝水解辣。",o:"名稱來自辣椒的植物學屬名 Capsicum。"},
+maillard:{n:"梅納反應",e:"Maillard reaction",l:6,m:"胺基酸（蛋白質的一部分）和糖一起加熱（約 140°C 以上較明顯），產生褐色和幾百種香味分子。煎肉、烤吐司、炒飯、烘咖啡豆的香味都來自它。",o:"以法國化學家路易-卡米耶・梅納（Louis-Camille Maillard）命名，他在 1912 年發表了對這種反應的研究。「梅納」是音譯，也有人譯作「美拉德」。"},
+caramel:{n:"焦糖化",e:"Caramelization",l:6,m:"糖單獨被加熱到約 160°C 以上，分解變成褐色並產生香甜帶苦的味道。不需要蛋白質，這是它和梅納反應的不同。",o:"英文 caramel 經由法文、西班牙文傳來，一般認為和拉丁文裡指「甘蔗、蘆葦」的字有關。"},
+gelat:{n:"糊化",e:"Gelatinization",l:6,m:"澱粉加水加熱後吸水膨脹，結構鬆開，變軟、變黏、變透明。生米變成飯就是糊化。",o:"中文「糊」就是變成糊狀、黏黏的；英文 gelatin- 有「變成膠凍」的意思。"},
+retro:{n:"老化（回凝）",e:"Retrogradation",l:6,m:"糊化後的澱粉冷卻，分子重新排列整齊，把水擠出來，變硬變乾。冰過的飯變硬就是老化，但這正是炒飯需要的。",o:"英文 retrogradation 意思是「往回走」：澱粉好像退回到比較整齊的狀態。"},
+emulsion:{n:"乳化",e:"Emulsion",l:6,m:"把本來不相溶的油和水，打成極小的液滴均勻混在一起，變成濃稠滑順的液體。美乃滋、牛奶、義大利麵醬、豚骨湯都是。",o:"來自拉丁文 emulgere，意思是「擠奶」。因為牛奶就是大自然的乳化液：小油滴散在水裡。中文「乳化」也就是「變得像乳汁一樣」。"},
+emulsifier:{n:"乳化劑",e:"Emulsifier",l:6,m:"一邊喜歡水、一邊喜歡油的物質，能抓住兩邊，讓乳化穩定不分層。例如蛋黃裡的卵磷脂、麵水裡的澱粉、湯裡的膠質、芥末。",o:"卵磷脂的英文 lecithin 來自希臘文 lekithos，意思就是「蛋黃」。"},
+amylose:{n:"直鏈澱粉與支鏈澱粉",e:"Amylose / Amylopectin",l:7,m:"直鏈澱粉像直直的棒子，支鏈澱粉像有很多分枝的樹。支鏈越多，煮熟後越黏，糯米幾乎全是支鏈澱粉。",o:"字首 amyl- 來自拉丁文 amylum，意思是「澱粉」。"},
+penglai:{n:"蓬萊米",e:"Ponlai rice",l:7,m:"台灣最常吃的短圓形白米，屬於粳米，口感 Q 軟有黏性。",o:"日治時期，日本農學家在台灣培育出適合台灣氣候的日本型稻米，1926 年以台灣的古稱「蓬萊」命名。"},
+wokhei:{n:"鍋氣（鑊氣）",e:"Wok hei",l:7,m:"熱炒料理特有的煙燻焦香，來自非常高的鍋溫、梅納反應，以及甩鍋時油滴碰到火焰的短暫燃燒。",o:"粵語「鑊氣」，字面意思是「鍋子的氣息」。英文直接用粵語拼音 wok hei。"},
+gluten:{n:"麵筋",e:"Gluten",l:8,m:"小麥裡的兩種蛋白質（麥穀蛋白、醇溶蛋白）加水揉合後形成的彈性網狀結構，讓麵有嚼勁、讓麵包能膨脹。",o:"拉丁文 gluten 是「膠」的意思。中文「麵筋」則是形容它像筋一樣有彈性。"},
+rest:{n:"醒麵",e:"Resting the dough",l:8,m:"揉好的麵團蓋起來休息一段時間，讓水分均勻、繃緊的麵筋放鬆，之後擀開才不會一直縮回去。",o:"「醒」是讓麵團像睡醒一樣變得舒展、好操作。"},
+kansui:{n:"鹼水",e:"Kansui（かんすい）",l:8,m:"碳酸鉀、碳酸鈉等鹼性物質的水溶液。加進麵裡會讓麵變黃、更有彈性，還有獨特的鹼香。拉麵、油麵都有用。",o:"日文寫作「かん水／梘水」。據說早年中國北方用含天然鹼的湖水揉麵，發現麵特別 Q，這個做法後來傳開。"},
+laochou:{n:"老抽",e:"Dark soy sauce",l:8,m:"顏色深、質地較濃稠的醬油，主要用來上色，鹹味比一般醬油溫和。一般醬油（生抽）主要用來調味。",o:"粵語的「抽」是從醬缸裡抽取醬油的意思；「老」指釀得比較久、顏色比較深。"},
+hydration:{n:"含水率",e:"Hydration",l:8,m:"麵團中水的重量除以麵粉重量的百分比。200 公克麵粉加 100 公克水，含水率是 50%。含水率越高，麵團越軟。",o:"烘焙和製麵的專業用語，英文 hydration 就是「加水」。專業師傅用它精準描述麵團。"},
+ramen:{n:"拉麵",e:"Ramen（ラーメン）",l:8,m:"日本的湯麵，由湯頭、醬汁、香味油、鹼水麵和配料組成。",o:"源自 19 世紀末至 20 世紀初中國移民帶到日本的麵食，早期稱「支那そば」「中華そば」。ラーメン一般認為來自中文「拉麵」的發音，但仍有其他說法。"},
+tare:{n:"醬汁（タレ）",e:"Tare",l:8,m:"拉麵碗底的濃縮調味醬，決定這碗麵的鹹味和風格，例如醬油、鹽味、味噌。",o:"日文タレ來自動詞「垂れる」（滴下、垂下），原本指淋在食物上的醬汁。"},
+pasta:{n:"Pasta",e:"Pasta（義大利文）",l:9,m:"義大利麵食的總稱，包括長麵、短麵、餃子類。",o:"義大利文 pasta 意思是「麵團、糊」，可以追溯到晚期拉丁文和希臘文中指「糊狀食物」的字。"},
+spaghetti:{n:"Spaghetti（直麵）",e:"Spaghetti",l:9,m:"最常見的細長圓形義大利麵。",o:"義大利文 spago 是「細繩」，加上表示「小」的字尾 -etti，意思是「一根根的小細繩」。"},
+durum:{n:"杜蘭小麥",e:"Durum wheat",l:9,m:"最硬的小麥品種，蛋白質高、顏色偏黃，製成的義大利麵久煮不爛、能保持彈牙。",o:"拉丁文 durum 就是「硬」的意思。"},
+semolina:{n:"粗粒小麥粉",e:"Semolina",l:9,m:"杜蘭小麥磨成的粗顆粒粉，是乾燥義大利麵的主要原料。",o:"來自義大利文 semola，可以追溯到拉丁文 simila「精細的麵粉」。"},
+aldente:{n:"Al dente（彈牙）",e:"Al dente",l:9,m:"義大利麵理想的熟度：外層熟軟，咬到中心還有一點點韌性，但不是生的。",o:"義大利文，字面意思是「到牙齒」，也就是要讓牙齒感覺得到一點阻力。"},
+mantecatura:{n:"Mantecatura（收汁拌勻）",e:"Mantecatura",l:9,m:"義大利料理最後的收尾動作：把麵（或燉飯）、醬、麵水和油脂或起司快速翻拌，乳化成滑順濃稠的醬汁。",o:"來自義大利文 mantecare，意思是「讓它變得滑順如奶油」。"},
+carbonara:{n:"Carbonara（培根蛋麵）",e:"Carbonara",l:9,m:"羅馬的經典麵：豬頰肉、蛋黃、佩克里諾起司和黑胡椒，正統做法不加鮮奶油。",o:"義大利文 carbonaro 是「燒炭工人」。起源說法很多：燒炭工人的料理、黑胡椒像炭粉、二戰美軍帶來的培根和蛋，至今仍有爭論。"},
+guanciale:{n:"豬頰肉",e:"Guanciale",l:9,m:"用鹽和香料醃過、風乾的豬臉頰肉，油脂香甜，是 Carbonara 的傳統材料。",o:"義大利文 guancia 是「臉頰」。"},
+pecorino:{n:"佩克里諾起司",e:"Pecorino Romano",l:9,m:"用綿羊奶做的硬質起司，鹹味和香氣都很強烈。",o:"義大利文 pecora 是「綿羊」，pecorino 就是「羊的」。"},
+hamburger:{n:"漢堡",e:"Hamburger",l:10,m:"絞肉肉餅夾在圓麵包裡的食物。",o:"來自德國港口城市漢堡（Hamburg）。19 世紀德國移民把「漢堡式牛排」帶到美國；後來誰第一個夾進麵包，美國好幾個地方都宣稱是自己。英文 burger 是從 hamburger 剪下的後半段。"},
+smash:{n:"壓扁漢堡",e:"Smash burger",l:10,m:"肉球放上超熱鐵板後立刻用力壓成薄片，讓整面產生大面積焦脆的漢堡做法。",o:"英文 smash 就是「猛力壓碎、壓扁」。"},
+quarter:{n:"四分之一磅",e:"Quarter pounder",l:10,m:"1 磅約 453.6 公克，四分之一磅約 113 公克，是美國常見的漢堡肉餅重量。",o:"英文 quarter 是「四分之一」，pound 是「磅」。"},
+brioche:{n:"布里歐麵包",e:"Brioche",l:10,m:"加了大量奶油和雞蛋的法式麵包，柔軟微甜、金黃色，常用來做高級漢堡麵包。",o:"法文詞，確切的字源有不同說法。"},
+smoke:{n:"發煙點",e:"Smoke point",l:11,m:"油加熱到開始持續冒煙的溫度，代表油開始分解、產生不好的味道和物質。油炸要選發煙點高的油，油用越多次發煙點越低。",o:"直譯自英文 smoke point。"},
+marinade:{n:"醃漬",e:"Marinade",l:11,m:"把食材泡在含鹽、醬油、酸或香料的液體裡一段時間，讓味道滲入、口感變嫩。",o:"英文 marinade 來自法文和西班牙文，原意是「用海水醃漬」，可以追溯到拉丁文 mare（海）。"},
+karaage:{n:"唐揚炸雞",e:"Karaage（唐揚げ）",l:11,m:"日式炸雞：雞肉用醬油、薑、蒜醃過，裹太白粉或馬鈴薯澱粉油炸。",o:"日文「唐」在古代泛指中國，常見說法是「從中國傳來的炸法」；也有人認為原本寫作「空揚げ」（不裹厚麵衣的炸法）。"},
+doublefry:{n:"二次炸",e:"Double frying",l:11,m:"先用中溫把食物炸熟，撈起休息，再用高溫短時間回鍋，逼出表面水分讓外皮更脆。",o:"台灣也常說「回鍋炸」「逼油」。"},
+brine:{n:"鹽水醃",e:"Brining",l:11,m:"把肉泡在鹽水裡一段時間，鹽讓肉的蛋白質留住更多水分，煮完更多汁。",o:"英文 brine 就是「濃鹽水」。"},
+buttermilk:{n:"白脫牛奶",e:"Buttermilk",l:11,m:"原本是攪拌鮮奶油做奶油後剩下的液體，微酸。現在市售的多是發酵過的酸奶。美國南方用它醃雞讓肉變嫩。",o:"英文 butter（奶油）＋ milk（奶），中文「白脫」是 butter 的音譯。"},
+yuanyang:{n:"鴛鴦鍋",e:"Yuanyang hotpot",l:12,m:"中間隔開、一鍋兩種湯底的火鍋，常見是一邊麻辣、一邊清湯。",o:"鴛鴦這種鳥總是一雌一雄成對出現，用來比喻「成對的兩樣東西」。"},
+shuan:{n:"涮",e:"Shuan",l:12,m:"把切得很薄的肉片夾在滾湯裡來回擺動幾秒就燙熟。北京涮羊肉、日本涮涮鍋都是這種吃法。",o:"「涮」本來是「在水裡擺動清洗」的意思。日本的「しゃぶしゃぶ」則是模仿肉片在湯裡涮動的聲音。"},
+stock:{n:"高湯",e:"Stock",l:12,m:"用骨頭、肉、海帶、蔬菜等在水中長時間熬出味道的湯底，本身通常不調太多鹹味。",o:"英文 stock 有「庫存、儲備」的意思：廚房裡隨時備著的湯。法文叫 fond，意思是「基礎」，因為它是很多料理的基礎。"},
+dashi:{n:"出汁",e:"Dashi（だし）",l:12,m:"日式高湯，最基本的是昆布加柴魚。",o:"日文「出汁」字面意思就是「煮出來的汁」。"},
+collagen:{n:"膠原蛋白",e:"Collagen",l:12,m:"骨頭、皮、雞爪裡的蛋白質，長時間燉煮會變成明膠，讓湯濃稠黏嘴、冷了會結凍。",o:"來自希臘文 kolla（膠）加上 -gen（產生），意思是「會產生膠的東西」。古人真的用動物皮熬膠。"},
+blanch:{n:"汆燙（飛水）",e:"Blanching",l:12,m:"把食材放進滾水短暫燙過再撈出。熬湯前燙骨頭可以去掉血水和雜質。",o:"英文 blanch 來自法文 blanchir，意思是「使變白」，燙過的骨頭表面會變白。「飛水」是粵語說法。"},
+mala:{n:"麻辣",e:"Mala",l:12,m:"四川、重慶料理的代表味道。辣來自辣椒素（痛覺），麻來自花椒裡的山椒素，讓嘴唇有像輕微震動的感覺（觸覺）。",o:"「麻」原本就是身體發麻的意思。科學家測量發現，花椒造成的麻感，跟每秒約 50 次的輕微震動感覺相似。"},
+shacha:{n:"沙茶",e:"Shacha",l:12,m:"用扁魚、蝦米、花生、蒜、香料等做成的鹹香醬料，是台灣火鍋的經典沾醬。",o:"名稱來自東南亞的沙嗲（sate）。潮汕人從南洋帶回改良，再由潮汕移民帶到台灣。「沙茶」是潮汕話對 sate 的發音寫法。"},
+coffee:{n:"咖啡",e:"Coffee",l:13,m:"用烘焙過的咖啡樹種子（咖啡豆）磨粉、以熱水萃取的飲料。",o:"原產於衣索比亞。字源從阿拉伯文 qahwa，到土耳其文 kahve、義大利文 caffè，再到英文 coffee；中文「咖啡」是音譯。"},
+arabica:{n:"阿拉比卡與羅布斯塔",e:"Arabica / Robusta",l:13,m:"兩大咖啡品種。阿拉比卡香氣豐富、酸質明亮；羅布斯塔苦味重、咖啡因約為兩倍、抗病力強。",o:"Arabica 意思是「阿拉伯的」，因為早期經由阿拉伯半島傳播；Robusta 意思是「強壯的」，指它的樹強健、耐病蟲害。"},
+crack:{n:"一爆",e:"First crack",l:13,m:"烘豆時豆子內部水分變成蒸氣把豆子撐裂，發出像爆米花的「啪」聲，代表豆子進入可以飲用的烘焙程度。繼續烘還會有「二爆」。",o:"直譯自英文 first crack。"},
+extraction:{n:"萃取",e:"Extraction",l:13,m:"用溶劑（這裡是熱水）把固體裡的物質溶解出來。沖咖啡、泡茶、熬高湯都是萃取。",o:"「萃」有「聚集精華」的意思，「萃取」就是取出精華。"},
+goldcup:{n:"金杯準則",e:"Golden Cup Standard",l:13,m:"咖啡粉重量約 18–22% 被溶解到咖啡裡時味道最平衡的經驗標準，也包括適合的濃度範圍。",o:"1950–60 年代美國的咖啡研究機構（以化學家洛克哈特 E. E. Lockhart 為代表）研究什麼樣的咖啡最好喝，達到標準的咖啡可以得到「金杯」認證，名字由此而來。"},
+ratio:{n:"粉水比",e:"Brew ratio",l:13,m:"咖啡粉和水的重量比例。手沖常用 1:15，意思是 1 公克粉配 15 公克水。",o:"咖啡師的基本用語。用重量而不是用匙，是專業的開始。"},
+bloom:{n:"悶蒸",e:"Bloom",l:13,m:"手沖第一步，先用少量熱水讓咖啡粉全部濕透並等待 30–40 秒，讓裡面的二氧化碳排出。",o:"英文 bloom 是「開花」，因為咖啡粉會像花一樣膨脹鼓起來。"},
+espresso:{n:"義式濃縮咖啡",e:"Espresso",l:13,m:"用約 9 個大氣壓的壓力，讓熱水在 25–30 秒內穿過細粉，萃取出的一小杯濃咖啡，是拿鐵、卡布奇諾等飲料的基底。",o:"義大利文，有「壓出來的」和「特地為你快速現做」的意思，和英文 express 同源。"},
+crema:{n:"Crema（咖啡油脂）",e:"Crema",l:13,m:"濃縮咖啡表面金褐色、細緻的泡沫層，由咖啡的油脂、二氧化碳和其他物質組成。",o:"義大利文 crema 就是「奶油、乳霜」的意思，因為它看起來像一層奶油。"},
+americano:{n:"美式咖啡",e:"Americano",l:13,m:"濃縮咖啡加熱水稀釋。",o:"義大利文「美國的」。流傳的說法是二戰時在義大利的美國士兵覺得濃縮太濃，加水喝成家鄉口味。"},
+latte:{n:"拿鐵",e:"Caffè latte",l:13,m:"濃縮咖啡加大量熱牛奶和一層薄奶泡。",o:"義大利文 latte 就是「牛奶」，完整名稱 caffè latte 是「咖啡牛奶」。在義大利只說 latte，可能真的只會拿到一杯牛奶。"},
+cappuccino:{n:"卡布奇諾",e:"Cappuccino",l:13,m:"濃縮咖啡加牛奶和較厚的奶泡。",o:"名字來自天主教「嘉布遣會」（Capuchin）修士，因為這種咖啡的顏色像他們穿的褐色長袍。"},
+barista:{n:"咖啡師",e:"Barista",l:13,m:"專業製作咖啡飲品的人。",o:"義大利文，原本是「在吧台（bar）工作的人」。在義大利，咖啡館就叫 bar。"},
+microfoam:{n:"微奶泡",e:"Microfoam",l:13,m:"泡泡小到肉眼幾乎看不見、表面像絲綢一樣光亮的奶泡，是拉花的必要條件。",o:"英文 micro（微小）＋ foam（泡沫）。"},
+latteart:{n:"拉花",e:"Latte art",l:13,m:"把奶泡倒進濃縮咖啡時，利用手勢在表面畫出愛心、葉子等圖案。",o:"大約在 1980 年代前後，在義大利和美國西雅圖的咖啡館發展並流行起來。"},
+mise:{n:"備料就位",e:"Mise en place",l:3,m:"開火之前，把所有材料洗好、切好、量好、排好，工具也準備好。",o:"法文，意思是「放在該放的位置」（讀音約「密桑普拉斯」）。在法國專業廚房的制度中成為每位廚師的基本紀律。"},
+brigade:{n:"廚房編制",e:"Brigade de cuisine",l:14,m:"把專業廚房分成不同工作站、有清楚職位和上下關係的分工制度。",o:"法文 brigade 是軍隊的「分隊」。19 世紀末法國名廚艾斯科菲耶參考軍隊的組織方式整理了這套制度。"},
+chef:{n:"Chef 與 Sous chef",e:"Chef / Sous chef",l:14,m:"Chef de cuisine 是主廚；Sous chef 是副主廚。",o:"法文 chef 是「頭、首領」（和英文 chief 同源）；sous 是「在……之下」，所以 sous chef 就是在主廚之下的人。"},
+sop:{n:"標準作業程序",e:"SOP, Standard Operating Procedure",l:14,m:"把一件工作的材料、步驟、溫度、時間、判斷標準都寫清楚，讓任何受過訓練的人都能做出一樣的結果。",o:"英文 Standard（標準）Operating（作業）Procedure（程序）的縮寫，工廠、醫院、餐廳都在用。"},
+foodcost:{n:"食材成本率",e:"Food cost percentage",l:14,m:"一份料理的食材成本除以售價。很多餐廳控制在大約 28–35%。",o:"餐飲管理最基本的數字之一。"},
+yield:{n:"可食率（出成率）",e:"Yield",l:14,m:"食材處理後真正能用的重量占買進重量的比例。算成本要用可食的部分。",o:"英文 yield 是「產出」的意思。"},
+haccp:{n:"HACCP（食品安全管制系統）",e:"Hazard Analysis and Critical Control Point",l:14,m:"找出食物製作流程中可能出問題的「關鍵控制點」，並持續監測和記錄的食品安全管理方法。",o:"1960 年代，美國食品公司 Pillsbury 與 NASA 等單位為了確保太空人的食物絕對安全而發展出來，後來成為全世界食品業的標準。"},
+fifo:{n:"先進先出",e:"FIFO, First In First Out",l:14,m:"先進貨、先製作的食材先使用，避免放到過期。",o:"英文 First In, First Out 的縮寫，倉庫管理的通用原則。"}
+};
+
+/* ================= 狀態 ================= */
+var KEY="cookcourse_v1", state={done:{},cur:"l0",name:""};
+try{var s=localStorage.getItem(KEY); if(s){var p=JSON.parse(s); if(p&&typeof p==="object"){state.done=p.done||{};state.cur=p.cur||"l0";state.name=p.name||"";}}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+
+var lessons=[].slice.call(document.querySelectorAll(".lesson"));
+var ids=lessons.map(function(l){return l.id;});
+var countable=lessons.filter(function(l){return /^l\d+$/.test(l.id) && l.id!=="l0";});
+
+/* ================= 目錄 ================= */
+var route=document.getElementById("route"), lastPart="";
+lessons.forEach(function(l){
+  var part=l.dataset.part;
+  if(part!==lastPart){var h=document.createElement("li");h.className="part";h.textContent=part;route.appendChild(h);lastPart=part;}
+  var li=document.createElement("li"), a=document.createElement("a");
+  a.href="#"+l.id; a.dataset.id=l.id;
+  a.innerHTML='<span class="num">'+(l.dataset.no!==""?l.dataset.no:"附")+'</span><span></span>';
+  a.lastChild.textContent=l.dataset.title;
+  li.appendChild(a); route.appendChild(li);
+});
+
+/* ================= 課程底部按鈕 ================= */
+lessons.forEach(function(l,i){
+  var f=document.createElement("div"); f.className="l-foot";
+  var prev=document.createElement("button"); prev.type="button"; prev.className="btn"; prev.textContent="上一課";
+  prev.disabled=i===0; prev.onclick=function(){go(ids[i-1]);};
+  var next=document.createElement("button"); next.type="button"; next.className="btn primary";
+  var isCount=countable.indexOf(l)>-1;
+  if(isCount || l.id==="l0"){
+    next.textContent= i===lessons.length-1?"完成":"我完成這一課了，下一課";
+    next.onclick=function(){ if(isCount){state.done[l.id]=true;save();} refresh(); if(ids[i+1]) go(ids[i+1]); };
+  } else { next.textContent="回到第 0 課"; next.onclick=function(){go("l0");}; }
+  f.appendChild(prev); f.appendChild(next); l.appendChild(f);
+});
+
+function go(id){window.AC_COURSE_GO=function(v){go(v)};window.AC_COURSE_POSITION=id;
+  if(ids.indexOf(id)<0) id="l0";
+  lessons.forEach(function(l){l.classList.toggle("show",l.id===id);});
+  state.cur=id; save(); refresh();
+  if(location.hash!=="#"+id) history.replaceState(null,"","#"+id);
+  window.scrollTo(0,0);
+  closeMenu(); hidePop();
+}
+function refresh(){
+  var n=countable.filter(function(l){return state.done[l.id];}).length;
+  var pct=Math.round(n/countable.length*100);
+  document.getElementById("barFill").style.width=pct+"%";
+  document.getElementById("barText").textContent="已完成 "+n+" / "+countable.length+" 課（"+pct+"%）";
+  document.getElementById("topPc").textContent=n+"/"+countable.length;
+  [].forEach.call(route.querySelectorAll("a"),function(a){
+    a.classList.toggle("done",!!state.done[a.dataset.id]);
+    a.classList.toggle("cur",a.dataset.id===state.cur);
+    if(a.dataset.id===state.cur) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current");
+  });
+  var cur=document.getElementById(state.cur);
+  document.getElementById("topTitle").textContent=cur?(cur.dataset.no!==""?"第 "+cur.dataset.no+" 課　":"")+cur.dataset.title:"";
+  var ct=document.getElementById("certText");
+  if(ct){
+    ct.textContent = n===countable.length ? "已完成全部 "+n+" 課，學會從廚房安全到專業廚房的烹調原理，以及咖啡、炒飯、麵、義大利麵、漢堡、炸雞、火鍋的製作。" : "已完成 "+n+" / "+countable.length+" 課。完成全部課程後，這張證書就會生效。";
+    var d=new Date(); document.getElementById("certDate").textContent=d.getFullYear()+" 年 "+(d.getMonth()+1)+" 月 "+d.getDate()+" 日";
+  }
+}
+route.addEventListener("click",function(e){var a=e.target.closest("a"); if(a){e.preventDefault(); go(a.dataset.id);}});
+window.addEventListener("hashchange",function(){var h=location.hash.slice(1); if(h&&h!==state.cur) go(h);});
+
+/* menu */
+var side=document.getElementById("side"), menuBtn=document.getElementById("menuBtn");
+function closeMenu(){side.classList.remove("open");menuBtn.setAttribute("aria-expanded","false");}
+menuBtn.onclick=function(e){e.stopPropagation(); var o=side.classList.toggle("open"); menuBtn.setAttribute("aria-expanded",o?"true":"false");};
+document.getElementById("main").addEventListener("click",function(){if(side.classList.contains("open")) closeMenu();});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"){closeMenu();hidePop();}});
+
+document.getElementById("themeBtn").onclick=function(){
+  var r=document.documentElement, cur=r.getAttribute("data-theme");
+  var dark = cur ? cur==="dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  r.setAttribute("data-theme", dark?"light":"dark");
+};
+document.getElementById("resetBtn").onclick=function(){
+  if(confirm("確定要清除所有完成紀錄嗎？")){state.done={};save();refresh();}
+};
+
+/* ================= 名詞彈出框 ================= */
+var pop=document.getElementById("pop"), popBody=document.getElementById("popBody");
+function entryHTML(g){
+  return '<h4></h4><div class="en"></div><div class="m"></div><div class="o"><b>由來：</b><span></span></div>';
+}
+function fill(el,g){
+  el.querySelector("h4,h3").textContent=g.n; el.querySelector(".en").textContent=g.e;
+  el.querySelector(".m").textContent=g.m; el.querySelector(".o span").textContent=g.o;
+}
+function hidePop(){pop.classList.remove("show");}
+pop.querySelector(".x").onclick=hidePop;
+document.addEventListener("click",function(e){
+  var t=e.target.closest(".term");
+  if(t){
+    e.stopPropagation();
+    var g=G[t.dataset.t]; if(!g) return;
+    popBody.innerHTML=entryHTML(g); fill(popBody,g);
+    pop.classList.add("show");
+    var r=t.getBoundingClientRect(), pw=Math.min(340,window.innerWidth-20), ph=pop.offsetHeight;
+    var left=Math.max(10,Math.min(r.left,window.innerWidth-pw-10));
+    var top=r.bottom+8; if(top+ph>window.innerHeight-10) top=Math.max(10,r.top-ph-8);
+    pop.style.left=left+"px"; pop.style.top=top+"px"; pop.style.width=pw+"px";
+    return;
+  }
+  if(!e.target.closest(".pop")) hidePop();
+});
+document.addEventListener("keydown",function(e){ if((e.key==="Enter"||e.key===" ")&&e.target.classList&&e.target.classList.contains("term")){e.preventDefault();e.target.click();}});
+[].forEach.call(document.querySelectorAll(".term"),function(t){t.tabIndex=0;t.setAttribute("role","button");});
+window.addEventListener("scroll",hidePop,{passive:true});
+
+/* ================= 名詞小辭典 ================= */
+var glList=document.getElementById("glList");
+var keys=Object.keys(G).filter(function(k){return k!=="term";}).sort(function(a,b){return G[a].l-G[b].l;});
+keys.forEach(function(k){
+  var g=G[k], d=document.createElement("div"); d.className="gl-item";
+  d.innerHTML='<h3></h3><div class="en"></div><p class="m"></p><p class="o"><b>由來：</b><span></span></p><p class="from"></p>';
+  fill(d,g); d.querySelector(".from").textContent="出現在：第 "+g.l+" 課";
+  d.dataset.s=(g.n+g.e+g.m+g.o).toLowerCase();
+  glList.appendChild(d);
+});
+document.getElementById("glSearch").addEventListener("input",function(){
+  var q=this.value.trim().toLowerCase();
+  [].forEach.call(glList.children,function(d){d.style.display=!q||d.dataset.s.indexOf(q)>-1?"":"none";});
+});
+
+/* ================= 小測驗 ================= */
+[].forEach.call(document.querySelectorAll(".quiz"),function(q){
+  var ol=q.querySelector("ol"), items=[].slice.call(ol.children), ans=+q.dataset.a;
+  var wrap=document.createElement("div"); wrap.className="opts";
+  var fb=document.createElement("div"); fb.className="fb"; fb.setAttribute("aria-live","polite");
+  items.forEach(function(li,i){
+    var b=document.createElement("button"); b.type="button"; b.textContent=String.fromCharCode(65+i)+"．"+li.textContent;
+    b.onclick=function(){
+      if(q.classList.contains("answered")) return;
+      q.classList.add("answered");
+      var btns=wrap.children; btns[ans].classList.add("right");
+      if(i===ans){fb.innerHTML="<b style='color:var(--leaf)'>答對了！</b> ";}
+      else{b.classList.add("wrong"); fb.innerHTML="<b style='color:var(--chili)'>正確答案是 "+String.fromCharCode(65+ans)+"。</b> ";}
+      fb.appendChild(document.createTextNode(q.dataset.exp));
+      var again=document.createElement("button"); again.type="button"; again.className="btn"; again.style.cssText="margin-top:8px;padding:4px 12px;font-size:.85rem;display:block";
+      again.textContent="再作答一次"; again.onclick=function(){q.classList.remove("answered");[].forEach.call(btns,function(x){x.classList.remove("right","wrong");});fb.textContent="";};
+      fb.appendChild(again);
+    };
+    wrap.appendChild(b);
+  });
+  ol.replaceWith(wrap); q.appendChild(fb);
+});
+
+/* ================= 互動：火力 ================= */
+(function(){
+  var box=document.getElementById("flameDemo"); if(!box) return;
+  var g=document.getElementById("flameG"), out=document.getElementById("flameOut");
+  var L={1:{s:.5,t:"<b>小火</b><br>火焰小小的，碰不到鍋底。熱慢慢進去，不容易焦。<br>適合：熬高湯、煮醬汁、慢炸蔥油、炒豆瓣醬、爆蒜片。"},
+         2:{s:.8,t:"<b>中火</b><br>火焰尖端剛好碰到鍋底。最常用的火力，熱度穩定好控制。<br>適合：炒洋蔥、煎蛋、煎漢堡肉、煮麵後保持滾。"},
+         3:{s:1.15,t:"<b>大火</b><br>火焰包住整個鍋底，熱量最多。水分一下就蒸發，能產生焦香。<br>適合：炒飯、快炒青菜、燒開水、煎肉的第一面。要注意不要離開爐子。"}};
+  function set(lv){g.style.transform="scale("+L[lv].s+")"; out.innerHTML=L[lv].t;
+    [].forEach.call(box.querySelectorAll(".seg button"),function(b){b.setAttribute("aria-pressed",b.dataset.lv==lv?"true":"false");});}
+  [].forEach.call(box.querySelectorAll(".seg button"),function(b){b.onclick=function(){set(b.dataset.lv);};});
+  set(2);
+})();
+
+/* ================= 互動：溫度 ================= */
+(function(){
+  var r=document.getElementById("tempRange"); if(!r) return;
+  var sw=document.getElementById("tempSwatch"), out=document.getElementById("tempOut");
+  var stops=[[20,[222,140,140]],[60,[205,170,160]],[99,[196,180,168]],[139,[214,178,120]],[160,[196,130,60]],[185,[150,85,35]],[215,[95,55,25]],[250,[30,22,18]]];
+  function col(t){for(var i=1;i<stops.length;i++){if(t<=stops[i][0]){var a=stops[i-1],b=stops[i],k=(t-a[0])/(b[0]-a[0]);return "rgb("+a[1].map(function(v,j){return Math.round(v+(b[1][j]-v)*k);}).join(",")+")";}}return "rgb(30,22,18)";}
+  function msg(t){
+    if(t<40) return "室溫到微溫。食物沒什麼變化，但如果放太久，細菌正在這個溫度狂歡。";
+    if(t<60) return "仍在危險溫度帶。肉的顏色開始慢慢改變，蛋白質開始變性。";
+    if(t<100) return "蛋白質凝固：蛋白變白、肉變成灰白色。大部分細菌在這裡會被殺死。燉煮、水煮都在這個範圍。";
+    if(t<140) return "<b>100°C：水沸騰</b>。只要食物表面還有水，溫度就會卡在這附近，所以水煮、蒸的食物不會變褐色。";
+    if(t<160) return "<b>梅納反應開始</b>！表面變金黃，香味出現。前提是表面已經乾了。";
+    if(t<185) return "<b>梅納反應旺盛＋焦糖化</b>。褐色、焦香、微甜。油炸常用 160–190°C，就是為了這個範圍。";
+    if(t<215) return "顏色變深褐，香氣很強但接近極限。有些油在這個溫度開始接近發煙點，要小心。";
+    return "<b>燒焦（碳化）</b>：變黑、變苦，還會產生對身體不好的物質。火太大或放太久就會到這裡。";
+  }
+  function upd(){var t=+r.value; sw.style.background=col(t); out.innerHTML="<b>"+t+"°C</b><br>"+msg(t);}
+  r.addEventListener("input",upd); upd();
+})();
+
+/* ================= 互動：義大利麵 ================= */
+(function(){
+  var r=document.getElementById("pastaRange"); if(!r) return;
+  var core=document.getElementById("pastaCore"), outer=document.getElementById("pastaOuter"), out=document.getElementById("pastaOut");
+  function upd(){
+    var m=+r.value, rad, o=50, t;
+    if(m<=8) rad=40-m*4.5; else if(m===9) rad=3; else if(m===10) rad=1.5; else rad=0;
+    if(m>10){o=50+(m-10)*2.5;}
+    core.setAttribute("r",Math.max(rad,0)); outer.setAttribute("r",o);
+    outer.setAttribute("fill", m>10?"#FBEBC0":"#F5D98B");
+    if(m===0) t="<b>0 分鐘：生的</b>。整根都是硬的。";
+    else if(m<5) t="<b>"+m+" 分鐘</b>：外層開始吸水糊化，中心還是一大圈白色硬芯。";
+    else if(m<8) t="<b>"+m+" 分鐘</b>：外面軟了，但咬下去中心還很硬，太早了。";
+    else if(m===8) t="<b>8 分鐘：撈起來放進醬汁鍋！</b>中心還有一條細細的白芯。它會在醬汁裡再煮 1–2 分鐘，同時吸收醬汁的味道。";
+    else if(m===9) t="<b>9 分鐘</b>：白芯只剩一個小點，快到 Al dente 了。";
+    else if(m===10) t="<b>10 分鐘：Al dente</b>。中心幾乎看不到白點，咬下去有一點點彈牙的阻力。如果不再放進醬汁，這時就是最佳狀態。";
+    else t="<b>"+m+" 分鐘：過軟</b>。麵條吸太多水膨脹，外層開始軟爛，失去嚼勁，醬汁一拌就斷。";
+    out.innerHTML=t;
+  }
+  r.addEventListener("input",upd); upd();
+})();
+
+/* ================= 互動：漢堡 ================= */
+(function(){
+  var svg=document.getElementById("burgerSvg"); if(!svg) return;
+  var out=document.getElementById("burgerOut"), NS="http://www.w3.org/2000/svg";
+  var layers=[
+    {n:"下層麵包（切面烤過）",h:22,c:"#D9A35B",shape:"bottom",w:"烤過的切面是第一道防水層，醬汁和肉汁比較不會讓麵包濕軟。"},
+    {n:"醬（例如美乃滋）",h:5,c:"#F7EFC9",w:"油脂在麵包表面再多一層防水，也讓上面的生菜黏住不會滑。"},
+    {n:"生菜",h:10,c:"#6DB35B",wave:1,w:"生菜當防水牆，擋住肉汁往下滲，吃到最後一口麵包也不會爛掉。"},
+    {n:"肉餅",h:22,c:"#6B3A1F",w:"最重的放在下半部，重心低，咬的時候比較不會滑出來。"},
+    {n:"起司",h:6,c:"#F2B705",drip:1,w:"直接蓋在熱肉上才會融化，像膠水一樣把肉和上面的配料黏在一起。"},
+    {n:"番茄片",h:9,c:"#D9432F",w:"放在起司上，被起司黏住不會滑走。多汁的番茄不直接碰下層麵包。"},
+    {n:"洋蔥、酸黃瓜",h:6,c:"#E9D7F0",w:"薄薄的脆口配料，讓每一口都有爽脆感。酸黃瓜的酸還能解膩（第 5 課）。"},
+    {n:"番茄醬、芥末",h:5,c:"#B8321F",w:"酸甜的醬放在上層，第一口就能嚐到味道。"},
+    {n:"上層麵包（切面烤過）",h:30,c:"#D9A35B",shape:"top",w:"完成！上層麵包的烤面朝下，一樣擋住醬汁。現在你知道每一層的位置都有原因了。"}
+  ];
+  var i=0, y=212;
+  function add(){
+    if(i>=layers.length) return;
+    var L=layers[i], g=document.createElementNS(NS,"g"), el;
+    y-=L.h;
+    if(L.shape==="bottom"){el=document.createElementNS(NS,"path");el.setAttribute("d","M22 "+y+" h156 v"+(L.h-6)+" q0 6 -6 6 h-144 q-6 0 -6 -6z");}
+    else if(L.shape==="top"){el=document.createElementNS(NS,"path");el.setAttribute("d","M22 "+(y+L.h)+" h156 q0 -"+(L.h+8)+" -78 -"+(L.h+8)+" q-78 0 -78 "+(L.h+8)+"z");
+      for(var k=0;k<5;k++){var se=document.createElementNS(NS,"ellipse");se.setAttribute("cx",60+k*20);se.setAttribute("cy",y+4+(k%2)*5);se.setAttribute("rx",3);se.setAttribute("ry",1.6);se.setAttribute("fill","#FFF4CC");g.appendChild(se);}}
+    else if(L.wave){el=document.createElementNS(NS,"path");var d="M16 "+(y+L.h);for(var x=16;x<=184;x+=12){d+=" Q"+(x+6)+" "+(y-2)+" "+(x+12)+" "+(y+L.h/2);}d+=" L184 "+(y+L.h)+"z";el.setAttribute("d",d);}
+    else if(L.drip){el=document.createElementNS(NS,"path");el.setAttribute("d","M20 "+y+" h160 v"+L.h+" l-12 8 l-10 -8 h-110 l-8 10 l-8 -10 h-12z");}
+    else {el=document.createElementNS(NS,"rect");el.setAttribute("x",L.n==="肉餅"?16:26);el.setAttribute("y",y);el.setAttribute("width",L.n==="肉餅"?168:148);el.setAttribute("height",L.h);el.setAttribute("rx",L.n==="肉餅"?8:3);}
+    el.setAttribute("fill",L.c); g.insertBefore(el,g.firstChild);
+    if(L.shape==="top") y-=8;
+    svg.appendChild(g);
+    out.innerHTML="<b>第 "+(i+1)+" 層：" + L.n + "</b><br>" + L.w;
+    i++;
+    document.getElementById("burgerNext").disabled = i>=layers.length;
+  }
+  function reset(){while(svg.firstChild) svg.removeChild(svg.firstChild); i=0; y=212; out.innerHTML="從最下面的麵包開始。"; document.getElementById("burgerNext").disabled=false;}
+  document.getElementById("burgerNext").onclick=add;
+  document.getElementById("burgerReset").onclick=reset;
+})();
+
+/* ================= 互動：油溫 ================= */
+(function(){
+  var r=document.getElementById("oilRange"); if(!r) return;
+  var g=document.getElementById("oilBubbles"), out=document.getElementById("oilOut"), NS="http://www.w3.org/2000/svg";
+  function upd(){
+    var t=+r.value, n, dur, size, txt;
+    if(t<140){n=0;txt="<b>"+t+"°C：幾乎沒有泡泡</b><br>油溫太低。現在下鍋，食物會吸油、變得軟軟油油的。";}
+    else if(t<155){n=3;dur=2.2;size=1.6;txt="<b>"+t+"°C：偶爾冒出幾顆小泡</b><br>偏低，再等一下。";}
+    else if(t<175){n=9;dur=1.4;size=2;txt="<b>"+t+"°C：筷子周圍冒出細小、密集、穩定的泡泡</b><br>中溫，適合<b>第一次炸</b>，把中心炸熟。";}
+    else if(t<190){n=16;dur=.8;size=2.6;txt="<b>"+t+"°C：大量泡泡快速湧出，還有滋滋聲</b><br>高溫，適合<b>二次炸</b>，短時間逼出水分，讓外皮酥脆。";}
+    else {n=26;dur=.5;size=3.2;txt="<b>"+t+"°C：泡泡劇烈翻滾，油面可能開始冒煙</b><br>太高了！食物會外焦內生，油也在劣化。請調小火，讓油溫降下來。";}
+    while(g.firstChild) g.removeChild(g.firstChild);
+    for(var k=0;k<n;k++){
+      var c=document.createElementNS(NS,"circle");
+      c.setAttribute("cx",(k%2?91:69)+ (k%3)*3 - 3); c.setAttribute("cy",134-(k%5)*9);
+      c.setAttribute("r",1.8*size*(0.7+((k*7)%5)/8)); c.setAttribute("fill","#FFF8DC"); c.setAttribute("stroke","#c9a14a");
+      c.setAttribute("class","bub"); c.style.animationDuration=dur+"s"; c.style.animationDelay=(k*dur/n).toFixed(2)+"s";
+      g.appendChild(c);
+    }
+    out.innerHTML=txt;
+  }
+  r.addEventListener("input",upd); upd();
+})();
+
+/* ================= 互動：萃取 ================= */
+(function(){
+  var gR=document.getElementById("grindRange"); if(!gR) return;
+  var tR=document.getElementById("timeRange"), mark=document.getElementById("extMark"), out=document.getElementById("extOut");
+  var gN=["極細（像麵粉，義式濃縮用）","細（像細鹽）","中細（像細砂糖，手沖用）","粗（像粗砂糖，濾壓壺用）","極粗（像海鹽顆粒）"];
+  var tN=["很短","偏短","剛好","偏長","很長"];
+  function upd(){
+    var g=+gR.value, t=+tR.value;
+    document.getElementById("grindLbl").textContent=gN[g-1];
+    document.getElementById("timeLbl").textContent=tN[t-1];
+    var ext=20+(3-g)*1.8+(t-3)*1.6;
+    var pos=Math.max(2,Math.min(98,(ext-12)/16*100));
+    mark.style.left="calc("+pos+"% - 3px)";
+    var txt;
+    if(ext<16) txt="<b>很酸、水水的</b>：萃取嚴重不足，甜味和厚實感都還沒溶出來。試著磨細一點，或延長時間。";
+    else if(ext<18) txt="<b>偏酸、有點單薄</b>：萃取稍微不足。磨細一格或延長一點時間。";
+    else if(ext<=22) txt="<b>平衡！</b>酸、甜、苦剛剛好，喝得到甜感，尾韻乾淨。這就是萃取率 18–22% 的金杯範圍。";
+    else if(ext<=24) txt="<b>偏苦、有點澀</b>：萃取稍微過度。磨粗一格或縮短時間。";
+    else txt="<b>很苦、澀、喉嚨乾</b>：過度萃取，連不好的味道都溶出來了。磨粗一點，或縮短時間。";
+    out.innerHTML="估計萃取率約 <b>"+ext.toFixed(1)+"%</b><br>"+txt;
+  }
+  gR.addEventListener("input",upd); tR.addEventListener("input",upd); upd();
+})();
+
+/* ================= 互動：粉水比 ================= */
+(function(){
+  var c=document.getElementById("ratioCoffee"); if(!c) return;
+  var r=document.getElementById("ratioRange"), out=document.getElementById("ratioOut");
+  function upd(){
+    var g=parseFloat(c.value)||0, k=+r.value;
+    document.getElementById("ratioLbl").textContent=k;
+    var w=Math.round(g*k), cup=Math.max(0,Math.round(w-g*2));
+    var feel=k<=14?"偏濃、厚實":k<=15.5?"標準、平衡":k<=16.5?"清爽":"很淡、像茶";
+    out.innerHTML="需要熱水 <b>"+w+" 公克</b><br>咖啡粉會吸住大約自己兩倍重的水，所以最後大約得到 "+cup+" 毫升咖啡。口感："+feel+"。";
+  }
+  c.addEventListener("input",upd); r.addEventListener("input",upd); upd();
+})();
+
+/* ================= 互動：成本 ================= */
+(function(){
+  var c=document.getElementById("costIn"); if(!c) return;
+  var p=document.getElementById("costPct"), out=document.getElementById("costOut");
+  function upd(){
+    var cost=parseFloat(c.value)||0, pct=+p.value;
+    document.getElementById("costPctLbl").textContent=pct;
+    var price=cost/(pct/100), nice=Math.ceil(price/5)*5;
+    out.innerHTML="建議售價約 <b>"+nice+" 元</b>（計算值 "+price.toFixed(0)+" 元，無條件進位到 5 元）<br>每賣一份，扣掉食材後剩 "+(nice-cost).toFixed(0)+" 元，要拿去付房租、水電、人事和其他開銷，剩下的才是利潤。";
+  }
+  c.addEventListener("input",upd); p.addEventListener("input",upd); upd();
+})();
+
+/* ================= 證書 ================= */
+var cn=document.getElementById("certName");
+if(cn){cn.value=state.name; cn.addEventListener("input",function(){state.name=cn.value;save();});}
+
+/* ================= 開始 ================= */
+var start=location.hash.slice(1); if(ids.indexOf(start)<0) start=state.cur;
+go(start);
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-0887c3054d" data-category="personal"></script></body>
+</html>

@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>菩提路：從零開始的佛學課</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDF0E9; --surface:#FAFBF7; --surface2:#F2F5EF; --ink:#1F2620; --muted:#586457; --line:#D2D9CD;
+  --saffron:#A96A12; --saffron-soft:#F3E2C1; --lotus:#9E3F5A; --lotus-soft:#F2DCE3;
+  --indigo:#2F3F6B; --indigo-soft:#DCE1EF; --leaf:#40683A; --leaf-soft:#DAE7D4;
+  --night:#1A2236; --moon:#F3E7B8;
+  --font-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
+  --font-brush:"LXGW WenKai TC","Kaiti TC","BiauKai","DFKai-SB","STKaiti","KaiTi",serif;
+  --hdr:56px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141914; --surface:#1C231D; --surface2:#222A23; --ink:#E4E9E0; --muted:#A2AE9F; --line:#34403A;
+    --saffron:#E0A546; --saffron-soft:#3A2F1B; --lotus:#E48CA5; --lotus-soft:#3B2229;
+    --indigo:#9DB0E6; --indigo-soft:#232B42; --leaf:#8DC282; --leaf-soft:#223220;
+    --night:#0E1320; --moon:#F3E7B8; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141914; --surface:#1C231D; --surface2:#222A23; --ink:#E4E9E0; --muted:#A2AE9F; --line:#34403A;
+  --saffron:#E0A546; --saffron-soft:#3A2F1B; --lotus:#E48CA5; --lotus-soft:#3B2229;
+  --indigo:#9DB0E6; --indigo-soft:#232B42; --leaf:#8DC282; --leaf-soft:#223220;
+  --night:#0E1320; --moon:#F3E7B8; color-scheme: dark;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(var(--hdr) + env(safe-area-inset-top,0px) + 12px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.85;letter-spacing:.02em}
+img,svg{max-width:100%}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--saffron);outline-offset:2px;border-radius:6px}
+a{color:var(--indigo)}
+
+/* header */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:30;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.hdr-in{height:var(--hdr);display:flex;align-items:center;gap:10px;padding:0 14px}
+.icon-btn{border:0;background:transparent;width:40px;height:40px;border-radius:10px;display:grid;place-items:center}
+.icon-btn:hover{background:var(--surface2)}
+.brand{font-family:var(--font-brush);font-size:21px;font-weight:700;background:none;border:0;padding:0;white-space:nowrap}
+.prog{flex:1;display:flex;align-items:center;gap:10px;justify-content:flex-end;min-width:0}
+.prog-bar{flex:0 1 180px;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.prog-bar i{display:block;height:100%;width:0;background:var(--leaf);transition:width .5s}
+.prog-txt{font-size:13px;color:var(--muted);white-space:nowrap}
+
+/* shell */
+.shell{padding-top:var(--hdr);display:grid;grid-template-columns:300px minmax(0,1fr);min-height:100vh}
+.side{position:sticky;top:calc(var(--hdr) + env(safe-area-inset-top,0px));height:calc(100vh - var(--hdr) - env(safe-area-inset-top,0px));overflow-y:auto;border-right:1px solid var(--line);padding:18px 12px 40px;background:var(--bg)}
+.side h4{font-family:var(--font-brush);font-size:16px;margin:18px 10px 6px;color:var(--saffron);font-weight:700}
+.side h4:first-child{margin-top:4px}
+.nav-l{display:flex;gap:10px;align-items:baseline;width:100%;text-align:left;border:0;background:transparent;padding:7px 10px;border-radius:8px;font-size:15px;line-height:1.5}
+.nav-l:hover{background:var(--surface2)}
+.nav-l.on{background:var(--surface);box-shadow:inset 3px 0 0 var(--saffron);font-weight:500}
+.nav-l .n{font-family:var(--font-brush);color:var(--muted);min-width:1.6em;text-align:right}
+.nav-l .ok{margin-left:auto;color:var(--leaf);font-size:13px}
+.side .extra{margin-top:18px;border-top:1px solid var(--line);padding-top:12px}
+.scrim{display:none}
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr}
+  .side{position:fixed;left:0;top:calc(var(--hdr) + env(safe-area-inset-top,0px));bottom:0;height:auto;width:min(86vw,320px);z-index:25;transform:translateX(-102%);transition:transform .3s;box-shadow:4px 0 20px rgba(0,0,0,.15);padding-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
+  body.nav-open .side{transform:none}
+  body.nav-open .scrim{display:block;position:fixed;inset:0;z-index:24;background:rgba(0,0,0,.3)}
+}
+@media (min-width:901px){#menuBtn{display:none}}
+
+main{padding:28px 20px 80px;min-width:0}
+.col{max-width:720px;margin:0 auto}
+
+/* home */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:24px;align-items:center;padding:24px 0 12px}
+.hero h1{font-family:var(--font-brush);font-size:clamp(44px,9vw,72px);line-height:1.1;margin:0 0 12px;font-weight:700;letter-spacing:.06em}
+.hero .lead{font-size:18px;color:var(--muted);margin:0 0 22px}
+.leaf-svg{width:100%;height:auto}
+.leaf-svg path{fill:none;stroke:var(--leaf);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.leaf-svg .outline{stroke-width:3;stroke-dasharray:1200;stroke-dashoffset:1200;animation:draw 3.2s ease-out .2s forwards}
+.leaf-svg .vein{stroke-width:1.4;opacity:0;animation:fade 1.2s ease-out 2.6s forwards}
+.leaf-svg .fill{fill:var(--leaf-soft);stroke:none;opacity:0;animation:fade 1.6s ease-out 2.2s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fade{to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.leaf-svg .outline{animation:none;stroke-dashoffset:0}.leaf-svg .vein,.leaf-svg .fill{animation:none;opacity:1}}
+@media (max-width:640px){.hero{grid-template-columns:1fr}.hero .leaf-wrap{order:-1;max-width:150px}}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--bg);padding:10px 20px;border-radius:999px;font-size:16px;font-weight:500}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.sm{padding:6px 14px;font-size:14px}
+.btn:hover{opacity:.88}
+.btn:disabled{opacity:.4;cursor:default}
+.howto{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:36px 0}
+.howto div{background:var(--surface);border-radius:12px;padding:14px 16px;font-size:15px;line-height:1.7}
+.howto b{display:block;font-family:var(--font-brush);font-size:18px;margin-bottom:4px}
+@media (max-width:640px){.howto{grid-template-columns:1fr}}
+.map-part{margin:30px 0}
+.map-part h3{font-family:var(--font-brush);font-size:24px;margin:0 0 4px;font-weight:700}
+.map-part p{margin:0 0 10px;color:var(--muted);font-size:15px}
+.map-list{list-style:none;margin:0;padding:0;border-left:2px solid var(--line);margin-left:10px}
+.map-list li{position:relative;padding:0 0 0 20px}
+.map-list li::before{content:"";position:absolute;left:-7px;top:13px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--line)}
+.map-list li.done::before{background:var(--leaf);border-color:var(--leaf)}
+.map-list button{border:0;background:none;padding:4px 0;text-align:left;font-size:16px;line-height:1.6}
+.map-list button:hover{color:var(--saffron)}
+.map-list .n{font-family:var(--font-brush);color:var(--muted);margin-right:8px}
+
+/* lesson */
+.l-head{margin:10px 0 24px}
+.l-part{font-size:14px;color:var(--saffron);font-weight:500;margin:0}
+.l-title{display:flex;gap:16px;align-items:flex-end;margin:6px 0 6px}
+.l-num{font-family:var(--font-brush);font-size:clamp(64px,14vw,96px);line-height:.9;color:var(--saffron);font-weight:700}
+.l-title h1{font-family:var(--font-brush);font-size:clamp(28px,6vw,40px);line-height:1.25;margin:0;font-weight:700}
+.l-sub{color:var(--muted);margin:4px 0 0}
+.goals{background:var(--surface);border-radius:12px;padding:14px 18px;margin:18px 0 26px}
+.goals strong{font-size:15px;background:none}
+.nudge{background:var(--saffron-soft);border-radius:12px;padding:12px 16px;margin:0 0 20px;font-size:15.5px;line-height:1.7}
+.goals ul{margin:6px 0 0;padding-left:1.3em}
+.goals li{font-size:15.5px;line-height:1.7}
+.lesson h3{font-family:var(--font-brush);font-size:25px;font-weight:700;margin:40px 0 10px;line-height:1.35}
+.lesson p{margin:0 0 16px}
+.lesson ul,.lesson ol{padding-left:1.4em;margin:0 0 16px}
+.lesson li{margin-bottom:6px}
+.lesson strong{color:var(--ink);background:linear-gradient(transparent 62%,var(--saffron-soft) 62%)}
+.ex{border-left:4px solid var(--leaf);background:var(--leaf-soft);padding:12px 16px;border-radius:0 12px 12px 0;margin:20px 0}
+.ex::before{content:"生活例子";display:block;font-weight:700;font-size:14px;color:var(--leaf);margin-bottom:2px}
+.ex.story::before{content:"故事時間"}
+.ex.warn{border-color:var(--lotus);background:var(--lotus-soft)}
+.ex.warn::before{content:"常見誤會";color:var(--lotus)}
+.ex p:last-child{margin-bottom:0}
+.origin{border:1.5px dashed var(--saffron);border-radius:12px;padding:12px 16px;margin:20px 0;background:var(--surface)}
+.origin::before{content:"名詞由來";display:block;font-weight:700;font-size:14px;color:var(--saffron);margin-bottom:2px}
+.origin p:last-child{margin-bottom:0}
+.quote{font-family:var(--font-brush);font-size:20px;line-height:1.8;text-align:center;padding:14px 10px;margin:22px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.quote small{display:block;font-family:var(--font-body);font-size:13px;color:var(--muted);margin-top:4px}
+.tbl{overflow-x:auto;margin:16px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;min-width:480px;font-size:15px;line-height:1.6}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+.tbl th{background:var(--surface2);font-weight:700}
+.t{border:0;background:none;padding:0;font:inherit;color:inherit;border-bottom:2px dotted var(--saffron);cursor:help;line-height:inherit;letter-spacing:inherit}
+.t:hover{background:var(--saffron-soft)}
+.sum{background:var(--indigo-soft);border-radius:14px;padding:16px 20px;margin:36px 0 10px}
+.sum h4{margin:0 0 6px;font-family:var(--font-brush);font-size:20px;color:var(--indigo)}
+.sum ul{margin:0;padding-left:1.3em}
+.sum li{margin-bottom:4px}
+
+/* quiz */
+.quiz{margin:30px 0}
+.quiz>h4{font-family:var(--font-brush);font-size:22px;margin:0 0 12px}
+.qi{background:var(--surface);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.qi .q{font-weight:500;margin:0 0 8px}
+.opts{display:grid;gap:6px}
+.opt{text-align:left;border:1.5px solid var(--line);background:var(--bg);border-radius:10px;padding:8px 12px;font-size:15.5px;line-height:1.55}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt.right{border-color:var(--leaf);background:var(--leaf-soft)}
+.opt.wrong{border-color:var(--lotus);background:var(--lotus-soft)}
+.opt:disabled{cursor:default}
+.exp{margin:8px 0 0;font-size:15px;line-height:1.7;color:var(--muted)}
+.exp b{color:var(--ink)}
+
+.l-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:20px;margin-top:30px}
+.done-row{text-align:center;margin:26px 0 10px}
+
+/* widgets base */
+.wbox{border:1px solid var(--line);border-radius:18px;padding:16px;background:var(--surface);margin:24px 0}
+.wbox .wt{font-weight:700;font-size:15px;margin:0 0 10px;color:var(--muted)}
+.wbox svg{display:block;margin:0 auto;width:100%;height:auto}
+.wbox .cap{text-align:center;margin:10px 0;font-size:16px;min-height:1.8em}
+.wbox .ctrl{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.detail{background:var(--surface2);border-radius:10px;padding:12px 14px;margin-top:12px;font-size:15.5px;line-height:1.75;min-height:4em}
+.detail b{font-family:var(--font-brush);font-size:18px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.chip{border:1.5px solid var(--line);background:var(--bg);border-radius:999px;padding:5px 12px;font-size:14.5px;line-height:1.4}
+.chip.on{border-color:var(--saffron);background:var(--saffron-soft);font-weight:700}
+
+/* rope */
+.rope .room{fill:var(--night);transition:fill .9s}
+.rope.lit .room{fill:#F5EFD9}
+.rope .rp{fill:none;stroke:#4E7A3E;stroke-width:9;stroke-linecap:round;transition:stroke .9s}
+.rope.lit .rp{stroke:#A88758;stroke-dasharray:3 2}
+.rope .snake{transition:opacity .6s}
+.rope .snake circle{fill:#F2D34C}
+.rope .snake path{stroke:#D0364A;stroke-width:2;fill:none}
+.rope.lit .snake{opacity:0}
+.rope .lamp{fill:#555;transition:fill .6s}
+.rope.lit .lamp{fill:#FFD76A}
+.rope .glow{fill:#FFE9A8;opacity:0;transition:opacity .9s}
+.rope.lit .glow{opacity:.55}
+
+/* timeline */
+.tl-dots{display:flex;overflow-x:auto;gap:0;padding:6px 2px 4px;scrollbar-width:thin}
+.tl-dot{flex:0 0 auto;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 8px;min-width:68px;font-size:13.5px;position:relative}
+.tl-dot::after{content:"";position:absolute;top:15px;left:50%;width:100%;height:2px;background:var(--line);z-index:0}
+.tl-dot:last-child::after{display:none}
+.tl-dot i{width:18px;height:18px;border-radius:50%;border:2.5px solid var(--line);background:var(--surface);z-index:1;transition:all .3s}
+.tl-dot.past i{border-color:var(--saffron)}
+.tl-dot.on i{background:var(--saffron);border-color:var(--saffron);transform:scale(1.25)}
+.tl-dot.on{font-weight:700}
+
+/* gems, cards */
+.gems{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.gem{border:1.5px solid var(--line);background:var(--bg);border-radius:14px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;font-family:var(--font-brush);font-size:22px}
+.gem svg{width:52px;height:52px}
+.gem.on{border-color:var(--saffron);background:var(--saffron-soft)}
+.steps4{display:grid;gap:10px}
+.st4{display:grid;grid-template-columns:54px 1fr;gap:12px;align-items:start;background:var(--bg);border-radius:12px;padding:10px 12px;opacity:.25;filter:grayscale(1);transition:opacity .5s,filter .5s,transform .5s;transform:translateY(6px)}
+.st4.show{opacity:1;filter:none;transform:none}
+.st4 .big{font-family:var(--font-brush);font-size:34px;line-height:1;text-align:center;color:var(--lotus);font-weight:700}
+.st4 .big small{display:block;font-family:var(--font-body);font-size:11px;color:var(--muted);margin-top:4px}
+.st4 p{margin:0;font-size:15px;line-height:1.65}
+.st4 p.eg{color:var(--leaf);margin-top:4px}
+
+/* wheel */
+.wheel .rim{fill:none;stroke:var(--saffron);stroke-width:8}
+.wheel .hub{fill:var(--saffron)}
+.wheel .spk{stroke:var(--saffron);stroke-width:4}
+.wheel .nd{cursor:pointer}
+.wheel .nd circle{stroke:var(--surface);stroke-width:3;transition:transform .25s}
+.wheel .nd text{fill:#fff;font-size:13px;font-weight:700;text-anchor:middle;dominant-baseline:central;pointer-events:none;font-family:var(--font-body)}
+.wheel .nd.on circle{stroke:var(--ink);stroke-width:3}
+.wheel .g-hui circle{fill:#3E5190}.wheel .g-jie circle{fill:#A96A12}.wheel .g-ding circle{fill:#40683A}
+.legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;font-size:14px;margin-top:6px}
+.legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:5px;vertical-align:-1px;background:var(--c)}
+
+/* flower */
+.flower .soil{fill:#8A6A48}
+.flower .stg{opacity:0;transition:opacity .5s}
+.flower .stg.on{opacity:1}
+.flower .stem{stroke:#4E8A44;stroke-width:5;fill:none;stroke-linecap:round}
+.flower .lf{fill:#5E9A52}
+.flower .pet{fill:#E68AA6}
+.flower .pet.old{fill:#B5876F}
+.flower .ctr{fill:#F1C040}
+.flower .sd{fill:#5B4230}
+input[type=range]{width:100%;accent-color:var(--saffron)}
+
+/* chain */
+.chain{display:grid;gap:4px}
+.lk{display:grid;grid-template-columns:62px 1fr;align-items:center;gap:10px;background:var(--bg);border-radius:10px;padding:8px 12px;opacity:.2;transition:opacity .45s,transform .45s;transform:translateX(-8px)}
+.lk.show{opacity:1;transform:none}
+.lk b{font-family:var(--font-brush);font-size:18px;color:var(--indigo)}
+.lk span{font-size:15px;line-height:1.6}
+.arrow{text-align:center;color:var(--muted);font-size:13px;line-height:1}
+
+/* twelve */
+.tw .ring{fill:none;stroke:var(--line);stroke-width:2;stroke-dasharray:4 6}
+.tw .nd{cursor:pointer}
+.tw .nd circle{fill:var(--surface2);stroke:var(--indigo);stroke-width:2;transition:fill .3s}
+.tw .nd text{font-size:12.5px;text-anchor:middle;dominant-baseline:central;fill:var(--ink);pointer-events:none;font-family:var(--font-body);font-weight:500}
+.tw .nd.on circle{fill:var(--indigo)}
+.tw .nd.on text{fill:var(--surface)}
+.tw .ctr{font-family:var(--font-brush);font-size:15px;fill:var(--muted);text-anchor:middle}
+
+/* flip cards */
+.flips{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.flip{border:0;background:none;padding:0;perspective:800px;height:150px}
+.flip .in{position:relative;width:100%;height:100%;transition:transform .55s;transform-style:preserve-3d}
+.flip.on .in{transform:rotateY(180deg)}
+.flip .fa,.flip .ba{position:absolute;inset:0;border-radius:12px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px;text-align:center}
+.flip .fa{background:var(--saffron-soft);border:1.5px solid var(--saffron)}
+.flip .fa b{font-family:var(--font-brush);font-size:24px}
+.flip .fa small{font-size:12px;color:var(--muted)}
+.flip .ba{background:var(--surface2);border:1.5px solid var(--line);transform:rotateY(180deg);font-size:13.5px;line-height:1.55}
+@media (prefers-reduced-motion:reduce){.flip .in{transition:none}}
+
+/* breath */
+.breath{display:grid;place-items:center;height:240px}
+.bc{width:110px;height:110px;border-radius:50%;background:radial-gradient(circle at 40% 35%,var(--leaf-soft),var(--leaf));display:grid;place-items:center;color:#fff;font-weight:700;font-size:15px;transform:scale(1);transition-property:transform;transition-timing-function:ease-in-out}
+.bc span{font-family:var(--font-brush);font-size:30px;line-height:1}
+.bc small{font-family:var(--font-body)}
+
+/* rings */
+.rings circle{fill:none;stroke-width:2;transition:opacity .6s,stroke-width .6s;opacity:0}
+.rings circle.on{opacity:1}
+.rings text{font-size:12px;text-anchor:middle;fill:var(--ink);opacity:0;transition:opacity .6s;font-family:var(--font-body)}
+.rings text.on{opacity:1}
+
+/* river */
+.river .bank{fill:var(--leaf-soft)}
+.river .water{fill:#7FB3D5}
+.river .stone{fill:#C9C2B5;stroke:#8A8172;stroke-width:1.5;cursor:pointer}
+.river .stone.on{fill:var(--saffron-soft);stroke:var(--saffron);stroke-width:3}
+.river .me{transition:transform .6s cubic-bezier(.5,-0.3,.4,1.3)}
+.river text{font-size:13px;text-anchor:middle;font-family:var(--font-body);fill:var(--ink);pointer-events:none}
+.river .wave{fill:none;stroke:#fff;stroke-width:1.5;opacity:.6}
+
+/* map */
+.amap .land{fill:var(--surface2);stroke:var(--line)}
+.amap .route{fill:none;stroke-width:3;stroke-linecap:round;opacity:.18;transition:opacity .4s}
+.amap .route.on{opacity:1;stroke-dasharray:8 6;animation:dash 1.2s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-28}}
+@media (prefers-reduced-motion:reduce){.amap .route.on{animation:none}}
+.amap .r-s{stroke:#C77B12}.amap .r-n{stroke:#3E5190}.amap .r-t{stroke:#9E3F5A}
+.amap circle{fill:var(--ink)}
+.amap text{font-size:11.5px;fill:var(--ink);font-family:var(--font-body);paint-order:stroke;stroke:var(--surface);stroke-width:3px}
+
+/* schools */
+.sch{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.sch button{border:1.5px solid var(--line);background:var(--bg);border-radius:12px;padding:10px;text-align:left;line-height:1.4}
+.sch button b{font-family:var(--font-brush);font-size:20px;display:block}
+.sch button small{color:var(--muted);font-size:12.5px}
+.sch button.on{border-color:var(--indigo);background:var(--indigo-soft)}
+
+/* chariot */
+.car .part{transition:opacity .6s,transform .6s}
+.car .part.gone{opacity:0;transform:translateY(30px)}
+.car .ground{stroke:var(--muted);stroke-width:2}
+.car .wood{fill:#A0784C;stroke:#6E4F2E;stroke-width:2}
+.car .whl{fill:none;stroke:#6E4F2E;stroke-width:5}
+.car .spk{stroke:#6E4F2E;stroke-width:2}
+.car .flag{fill:var(--lotus)}
+
+/* iceberg */
+.ice .sky{fill:#DCEBF5}.ice .sea{fill:#2F5C86}
+:root[data-theme="dark"] .ice .sky{fill:#23344A}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ice .sky{fill:#23344A}}
+.ice .berg{fill:#F4FAFF;stroke:#9CC3E0;stroke-width:2}
+.ice .under{fill:#BFD9EE;opacity:.85}
+.ice .lb{cursor:pointer}
+.ice .lb rect{fill:var(--surface);stroke:var(--indigo);stroke-width:1.5}
+.ice .lb.on rect{fill:var(--indigo)}
+.ice .lb text{font-size:13px;text-anchor:middle;dominant-baseline:central;fill:var(--ink);pointer-events:none;font-family:var(--font-body);font-weight:500}
+.ice .lb.on text{fill:var(--surface)}
+
+/* moon */
+.moon .skyb{fill:var(--night)}
+.moon .mn{fill:var(--moon);transition:opacity .6s,filter .6s}
+.moon.finger .mn{opacity:.25}
+.moon .hand{fill:#E9C9A5;stroke:#B28A62;stroke-width:1.5;transition:transform .6s}
+.moon.finger .hand{transform:scale(1.08)}
+.moon .ray{stroke:var(--moon);stroke-width:1.5;stroke-dasharray:4 5;opacity:.6}
+.moon .star{fill:#fff}
+.moon .halo{fill:var(--moon);opacity:.15;transition:opacity .6s}
+.moon.finger .halo{opacity:0}
+
+/* glossary */
+.gsearch{width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;margin:10px 0 20px}
+.gitem{border-bottom:1px solid var(--line);padding:12px 0}
+.gitem h5{margin:0;font-family:var(--font-brush);font-size:21px;font-weight:700}
+.gitem .src{font-size:13.5px;color:var(--saffron);margin:0 0 4px}
+.gitem p{margin:0;font-size:15.5px;line-height:1.75}
+
+/* term sheet */
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:40;opacity:0;pointer-events:none;transition:opacity .25s}
+.sheet-bg.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:50%;bottom:0;z-index:41;width:min(560px,100%);transform:translate(-50%,110%);transition:transform .3s;background:var(--surface);border-radius:18px 18px 0 0;padding:18px 20px calc(22px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 30px rgba(0,0,0,.18);max-height:70vh;overflow-y:auto}
+.sheet{visibility:hidden}.sheet.on{transform:translate(-50%,0);visibility:visible}
+.sheet h5{font-family:var(--font-brush);font-size:28px;margin:0;font-weight:700}
+.sheet .src{color:var(--saffron);font-size:14px;margin:2px 0 10px}
+.sheet p{margin:0 0 10px;font-size:16px;line-height:1.8}
+.sheet .lbl{font-weight:700;font-size:14px;color:var(--muted);display:block}
+.sheet .x{position:absolute;right:12px;top:12px}
+
+.exam-score{font-family:var(--font-brush);font-size:40px;text-align:center;margin:10px 0}
+.note{font-size:14px;color:var(--muted)}
+</style>
+</head>
+<body>
+<header class="hdr"><div class="hdr-in">
+  <button class="icon-btn" id="menuBtn" aria-label="開啟課程目錄"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <button class="brand" id="homeBtn">菩提路</button>
+  <div class="prog"><div class="prog-bar" aria-hidden="true"><i id="progI"></i></div><span class="prog-txt" id="progT">0 / 19 課</span>
+  <button class="icon-btn" id="themeBtn" aria-label="切換深淺色"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button></div>
+</div></header>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+  <nav class="side" id="side" aria-label="課程目錄"></nav>
+  <main id="main"><div class="col" id="view"></div></main>
+</div>
+<div class="sheet-bg" id="sheetBg"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetH"><button class="icon-btn x" id="sheetX" aria-label="關閉">✕</button><div id="sheetC"></div></div>
+<script>
+/* ========== 名詞辭典：s=原文　m=意思　o=由來 ========== */
+const G = {
+'佛':{s:'梵文 Buddha 的音譯簡稱',m:'覺悟的人、醒過來的人。',o:'梵文動詞 budh 是「醒來、知道」。漢朝人用「佛」字來翻譯，因為當時「佛」的古音唸起來接近 but，很像 Bud 的發音。後來才慢慢變成今天的讀音。'},
+'佛陀':{s:'梵文 Buddha',m:'「覺者」，已經完全看清真相的人。它是一個稱號，不是名字。',o:'早期也譯作「浮屠」「浮圖」，後來統一為「佛陀」，再簡稱為「佛」。'},
+'梵文':{s:'Sanskrit（Saṃskṛta）',m:'古印度的書面語言，許多大乘佛經最早用它寫成。',o:'Saṃskṛta 意思是「修飾完美的（語言）」。中國人傳說這是梵天（印度的創造神）所造的文字，所以稱為「梵文」。'},
+'巴利文':{s:'Pāli',m:'古印度的一種方言，南傳佛教的經典用它保存。',o:'Pāli 原本的意思是「一行行的文字、經文」，後來人們就把這些經文所用的語言叫做巴利語。'},
+'覺悟':{s:'漢語詞，對應梵文 bodhi',m:'從迷糊中醒來，看清楚真相。',o:'「覺」是睡醒，「悟」是明白。佛教用這兩個字翻譯「菩提」，後來變成大家常用的日常詞。'},
+'世界':{s:'漢譯佛經用語',m:'時間與空間的總和。',o:'《楞嚴經》解釋：「世」是時間的流動（過去、現在、未來），「界」是空間的方位（東西南北上下）。這個詞原本是佛教詞，現在人人都在用。'},
+'剎那':{s:'梵文 kṣaṇa',m:'極短的一瞬間。',o:'古印度人用來形容最短的時間單位。有一種說法是：一彈指之間就有六十剎那。'},
+'釋迦牟尼':{s:'梵文 Śākyamuni',m:'「釋迦族的聖者」。',o:'「釋迦」是佛陀出身的家族名稱；「牟尼」是聖者、寂靜的修行人。後人用這個尊稱來稱呼他。'},
+'悉達多':{s:'梵文 Siddhārtha',m:'「目標已經達成的人」「一切願望都成就」。',o:'這是佛陀出家前當王子時的本名，是父親替他取的。'},
+'喬達摩':{s:'梵文 Gautama／巴利文 Gotama',m:'佛陀的姓氏（家族名）。',o:'所以佛陀全名可以說是「喬達摩．悉達多」。'},
+'如來':{s:'梵文 Tathāgata',m:'「如實而來、如實而去的人」，佛的十種稱號之一。',o:'tathā 是「如此、真實」，gata 是「去」、āgata 是「來」。意思是他順著真理而來，也順著真理而去。'},
+'世尊':{s:'梵文 Bhagavat',m:'「世間最受尊敬的人」，弟子對佛陀的稱呼。',o:'Bhagavat 原本是「有福德的人」，漢譯取其意為「世尊」。佛經常出現「世尊告訴某某弟子……」。'},
+'菩提':{s:'梵文 bodhi',m:'覺悟、智慧。',o:'和「佛陀」來自同一個字根 budh（醒來）。「菩提」是音譯。'},
+'菩提樹':{s:'學名 Ficus religiosa（畢缽羅樹）',m:'佛陀在它下面覺悟的那種樹。',o:'原本叫畢缽羅樹，因為佛陀在樹下得到「菩提」，大家就改叫它菩提樹。印度菩提伽耶至今仍有這棵樹的後代。'},
+'中道':{s:'巴利文 majjhimā paṭipadā',m:'不走極端的路：不放縱享樂，也不虐待自己。',o:'佛陀當過享樂的王子，也做過差點餓死的苦行僧，兩邊都試過之後，發現中間那條路才走得通。後來「中道」也用來指思想上不落入極端。'},
+'法輪':{s:'梵文 dharmacakra',m:'「真理的輪子」，佛法的象徵。',o:'古印度國王的戰車輪子象徵力量；佛陀的教法像輪子一樣轉動、滾到各地、壓碎煩惱。第一次說法就叫「初轉法輪」。'},
+'比丘':{s:'梵文 bhikṣu',m:'出家受完整戒律的男性修行者；女性叫「比丘尼」。',o:'原意是「乞食的人」。中國解釋為「乞士」：向上向佛乞求佛法，向下向大眾乞食維生。'},
+'沙門':{s:'梵文 śramaṇa',m:'古印度離開家庭、專心修行的人。',o:'原意是「勤勞努力的人」。佛陀出家前在路上看到的就是一位沙門。'},
+'涅槃':{s:'梵文 nirvāṇa',m:'煩惱完全熄滅後的平靜狀態；也用來指佛陀的去世。',o:'nirvāṇa 本意是「吹熄」，像吹熄一盞火。被吹熄的是貪心、生氣、愚痴這三把火，不是把人消滅。'},
+'三寶':{s:'梵文 triratna',m:'佛、法、僧三樣最珍貴的東西。',o:'ratna 是「寶石」。佛教徒把佛陀、佛法、僧團看成比珠寶還珍貴，因此叫三寶。'},
+'法':{s:'梵文 dharma／巴利文 dhamma',m:'有三個常用意思：一、佛陀說的真理與教導；二、宇宙運作的規律；三、一切事物、現象。',o:'字根 dhṛ 是「支持、保持」。古人解釋為「軌持」：像軌道一樣讓人依循，又能保持自己的特性。音譯是「達摩」。'},
+'僧':{s:'梵文 saṃgha（僧伽）',m:'修行者組成的團體。',o:'saṃgha 原意是「群體、團隊」，音譯「僧伽」，簡稱「僧」。嚴格說「僧」是團體，不是指一個人。'},
+'皈依':{s:'梵文 śaraṇa',m:'把佛、法、僧當成人生的依靠與方向，是成為佛教徒的正式儀式。',o:'śaraṇa 原意是「避難所、庇護處」。「皈」通「歸」，是回來；「依」是依靠。就像下大雨時跑進屋簷下躲雨。'},
+'和尚':{s:'源自梵文 upādhyāya',m:'原本指「親自教導你的老師」，後來變成對出家男眾的俗稱。',o:'梵文 upādhyāya 經過西域語言（例如于闐語）轉音傳到中國，變成「和尚」。所以它原本是「老師」的意思，不是隨便叫的。'},
+'四聖諦':{s:'梵文 catvāri āryasatyāni',m:'四個神聖的真理：苦、集、滅、道。',o:'ārya 是「高貴、神聖」，satya 是「真實」。這是佛陀成道後第一次說法的內容。'},
+'諦':{s:'梵文 satya',m:'真實、確定不變的道理。',o:'漢字「諦」原本有「仔細、審察」的意思，所以有「仔細看清的真理」的味道。成語「真諦」就來自這裡。'},
+'苦':{s:'巴利文 dukkha',m:'不只是「痛」，而是一切「不圓滿、不滿足、不穩定」的感覺。',o:'有一種古老解釋：duḥ 是「壞的」，kha 是「車軸孔」。車輪的軸孔歪了，車子就一路搖晃、不順。人生的苦就像這樣。'},
+'集':{s:'梵文 samudaya',m:'苦的原因，特別是「渴愛」。',o:'samudaya 是「生起、聚集」。很多原因聚在一起，苦就生起了。'},
+'滅':{s:'梵文 nirodha',m:'苦的止息，也就是涅槃。',o:'nirodha 是「停止、熄滅」。不是毀滅，而是讓苦不再生起。'},
+'道':{s:'梵文 mārga',m:'離苦的方法，也就是八正道。',o:'mārga 原意是「道路、路徑」。'},
+'渴愛':{s:'梵文 tṛṣṇā',m:'像口渴一樣停不下來的想要。',o:'tṛṣṇā 的字面意思就是「口渴」。越喝鹽水越渴，越想要越不滿足。'},
+'八正道':{s:'巴利文 ariya aṭṭhaṅgika magga',m:'八種正確、恰當的生活方式，是離苦的方法。',o:'「正」的原文 sammā 有「完整、剛好、恰當」的意思，不只是「對或錯」的「對」。'},
+'三學':{s:'梵文 triśikṣā',m:'戒、定、慧，佛教修行的三大科目。',o:'śikṣā 是「學習、訓練」。所以佛教修行本身就叫做「學」。'},
+'法印':{s:'梵文 dharma-mudrā',m:'檢驗一個說法是不是佛法的標準。',o:'mudrā 是「印章」。古代公文要蓋官印才算真，符合三法印的教導才算是佛法。'},
+'無常':{s:'梵文 anitya',m:'一切由條件組成的東西都會改變，沒有永遠不變的。',o:'a 是「不」，nitya 是「永恆」。「常」在古漢語是「恆常」的意思。'},
+'無我':{s:'梵文 anātman',m:'找不到一個永遠不變、能完全自己作主的「我」。',o:'ātman 是古印度婆羅門教所說的「永恆靈魂」。佛陀說 an-ātman（沒有這種東西），是佛教和當時其他宗教最大的不同之一。'},
+'行':{s:'梵文 saṃskāra',m:'在「諸行無常」裡，指「由條件組合而成的一切」。',o:'saṃskāra 原意是「造作、組合」。一台手機、一個人、一個念頭都是組合出來的「行」。在十二因緣裡，「行」則指由無明推動的行為。'},
+'業':{s:'梵文 karma',m:'行為，以及行為留下的影響力。',o:'字根 kṛ 是「做」。所以「業」最原始的意思就是「做的事」。中文「作業」「事業」的「業」也有「做事」的意思，翻譯得很貼切。'},
+'因緣':{s:'梵文 hetu（因）與 pratyaya（緣）',m:'「因」是主要原因，「緣」是配合的條件。',o:'種子是因，陽光、水、土是緣。華人說「有緣」「緣分」都是從這裡來的。'},
+'因果':{s:'漢譯佛經用語',m:'原因和結果的關係。',o:'佛教大量討論因果，這個詞後來成為日常用語，「因果關係」也被科學與邏輯借用。'},
+'輪迴':{s:'梵文 saṃsāra',m:'生命在生死之間一再流轉、不斷重來。',o:'saṃsāra 原意是「流動、漫遊」，像沒有終點的旅行。中文用「輪」（車輪轉動）和「迴」（繞回來）來翻譯，很有畫面。'},
+'六道':{s:'梵文 ṣaḍ-gati',m:'佛教說眾生輪迴的六種去處：天、人、阿修羅、畜生、餓鬼、地獄。',o:'gati 是「去處、道路」。'},
+'緣起':{s:'梵文 pratītya-samutpāda',m:'一切事物都依靠條件而生起，也依靠條件而消失。',o:'pratītya 是「依靠」，samutpāda 是「一起生起」。這是佛教最核心的觀念之一。'},
+'無明':{s:'梵文 avidyā',m:'看不清真相，是一切煩惱的根源。',o:'vidyā 是「知識、明白」，a 是「不」。就像第一課那間沒開燈的房間。'},
+'戒':{s:'梵文 śīla',m:'自願遵守的行為準則。',o:'śīla 最早的意思是「習慣、品性」。所以持戒的重點是「養成好習慣」，而不只是「禁止」。'},
+'十善':{s:'梵文 daśa-kuśala',m:'十種善的行為：身三、口四、意三。',o:'kuśala 原意是「靈巧、有益的」，後來指善。'},
+'禪':{s:'梵文 dhyāna（禪那）',m:'讓心安靜、專注的修行。',o:'dhyāna 音譯為「禪那」，古音接近 dzyen-na，後來簡稱「禪」。傳到日本唸 Zen，所以英文的 Zen 也是從這個字來的。'},
+'止觀':{s:'梵文 śamatha（止）與 vipaśyanā（觀）',m:'「止」是讓心停下來、專注；「觀」是清楚地看見真相。',o:'śamatha 意思是「平靜」；vipaśyanā 是 vi（清楚、分別）加 paś（看），就是「看清楚」。'},
+'正念':{s:'巴利文 sammā-sati',m:'清楚知道自己此刻在做什麼、想什麼、感覺什麼。',o:'sati 原意是「記得、不忘失」，也就是隨時「記得」看顧自己的心。現在英文 mindfulness 就是翻譯這個字。'},
+'數息':{s:'梵文 ānāpāna（安那般那）',m:'一邊呼吸一邊數數，讓心專注的方法。',o:'āna 是「吸氣」，apāna 是「吐氣」。東漢安世高譯有《安般守意經》，是中國最早介紹呼吸禪修的經典之一。'},
+'慈悲':{s:'梵文 maitrī（慈）與 karuṇā（悲）',m:'慈是希望別人快樂，悲是希望別人不再痛苦。',o:'maitrī 來自 mitra，意思是「朋友」。所以「慈」就是把別人當朋友。karuṇā 有「心被觸動而顫動」的意思。'},
+'四無量心':{s:'梵文 apramāṇa',m:'慈、悲、喜、捨四種沒有邊界的心。',o:'pramāṇa 是「量、界限」，a 是「無」。意思是這四種心可以擴大到無限多的眾生。'},
+'捨':{s:'梵文 upekṣā',m:'平等心：不偏愛、不排斥，對每個人都一樣公平。',o:'upekṣā 原意是「從旁觀看」，保持平衡不偏向一邊。不是冷漠，而是不被偏見拉走。'},
+'結集':{s:'梵文 saṃgīti',m:'弟子們聚在一起，把佛陀的教導一起背誦、確認。',o:'saṃgīti 原意是「一起唱誦」。因為當時還沒寫成文字，靠大家一起背誦來核對。'},
+'如是我聞':{s:'巴利文 evaṃ me sutaṃ',m:'「我是這樣聽說的」，幾乎每部佛經的第一句話。',o:'第一次結集時，阿難負責背誦佛陀說過的話。他每次開頭都說「我是這樣聽佛陀說的」，表示不是自己編的。'},
+'三藏':{s:'梵文 Tripiṭaka',m:'佛教經典的總稱：經藏、律藏、論藏。',o:'piṭaka 是「籃子」。古印度人用籃子裝東西，把經典分成三個籃子，就是「三藏」。玄奘被稱為「三藏法師」，就是精通三藏的人。'},
+'經':{s:'梵文 sūtra',m:'佛陀所說的教導。',o:'sūtra 原意是「線」，把花串起來的線，也就是把道理串起來。中文的「經」原本是織布時直向的線，又有「經典」之意，翻譯得非常巧妙。'},
+'大藏經':{s:'漢語詞',m:'把所有漢譯佛教經典收在一起的總集。',o:'「藏」是收藏。歷代朝廷和寺院不斷編修大藏經，今天學者最常用的是日本編的《大正新脩大藏經》，簡稱「大正藏」。'},
+'五不翻':{s:'玄奘提出的翻譯原則',m:'五種情況下只音譯、不意譯。',o:'一、秘密的咒語；二、一個字有很多意思；三、中國沒有的東西；四、以前的人已經習慣音譯；五、音譯更能讓人生起尊重。這就是為什麼「般若」「涅槃」等詞都用音譯。'},
+'般若':{s:'梵文 prajñā／巴利文 paññā',m:'看透真相的智慧，特別是理解「空」的智慧。',o:'唸作「ㄅㄛ ㄖㄜˇ」。玄奘認為它的意思太深，翻成「智慧」會讓人以為只是聰明，所以保留音譯。'},
+'部派':{s:'梵文 nikāya',m:'佛陀去世後，僧團分裂成的許多學派。',o:'大約在佛陀去世一百年後開始分裂，傳說最後分成十八或二十部，所以這段時間叫「部派佛教」。'},
+'上座部':{s:'巴利文 Theravāda',m:'「長老們的教說」，今天南傳佛教的主流。',o:'thera 是「長老」，vāda 是「說法」。在法會中坐在上座的都是長老，所以漢譯為「上座部」。'},
+'大眾部':{s:'梵文 Mahāsāṃghika',m:'早期分裂出的另一派，人數比較多。',o:'mahā 是「大」，saṃgha 是「僧團」，意思是「大多數僧人的一派」。'},
+'大乘':{s:'梵文 Mahāyāna',m:'「大的車子」，強調自己覺悟之外，也要幫助一切眾生覺悟。',o:'yāna 是「車子、交通工具」。佛法像一台載人過河的車，大乘自稱是能載很多人的大車。'},
+'小乘':{s:'梵文 Hīnayāna',m:'大乘佛教對早期部派佛教的稱呼。',o:'hīna 有「小、低劣」的意思，帶有貶低的味道。現在學術界和國際佛教界多改稱「上座部」「南傳佛教」或「早期佛教」，比較尊重。'},
+'菩薩':{s:'梵文 bodhisattva（菩提薩埵）',m:'立志要覺悟，並且發願幫助所有眾生覺悟的人。',o:'bodhi 是覺悟，sattva 是有情眾生。所以菩薩就是「追求覺悟的眾生」，也解釋為「覺有情」。'},
+'阿羅漢':{s:'梵文 arhat',m:'已經斷盡煩惱、不再輪迴的聖者。',o:'arhat 原意是「值得尊敬、值得供養的人」。中國也常簡稱「羅漢」，寺廟裡的「十八羅漢」就是這個。'},
+'波羅蜜':{s:'梵文 pāramitā',m:'到達彼岸；完成、圓滿。',o:'pāram 是「對岸」，itā 是「到達」。把煩惱的人生比喻為河的這一邊，覺悟是河的對岸。'},
+'六度':{s:'六波羅蜜',m:'菩薩的六種修行：布施、持戒、忍辱、精進、禪定、般若。',o:'「度」是「渡」，渡過河的意思，就是「波羅蜜」的意譯。'},
+'金剛乘':{s:'梵文 Vajrayāna',m:'以密法修行為特色的佛教，主要在西藏、蒙古、不丹流傳。',o:'vajra 是「金剛」，古印度神話中最堅硬、能擊破一切的武器，也指鑽石。'},
+'阿育王':{s:'梵文 Aśoka',m:'西元前三世紀統一印度的國王，大力護持佛教。',o:'Aśoka 意思是「無憂」，所以也譯為「無憂王」。他早年戰爭殺人無數，後來後悔而信佛，派人把佛法傳到印度以外。'},
+'判教':{s:'漢傳佛教用語',m:'把大量佛經依內容深淺、說法時間分類整理的方法。',o:'「判」是判別，「教」是教法。中國一下子從印度收到幾百部經典，內容看起來互相不同，只好想辦法整理出一套順序。'},
+'阿彌陀佛':{s:'梵文 Amitābha／Amitāyus',m:'西方極樂世界的佛，淨土宗主要信仰的對象。',o:'amita 是「無量」，ābha 是「光」，āyus 是「壽命」。所以阿彌陀佛又稱「無量光佛」「無量壽佛」。'},
+'南無':{s:'梵文 namo／namas',m:'「向……致敬、歸依」。',o:'唸作「ㄋㄚ ㄇㄛ」，不唸「ㄋㄢ ㄨ」。印度打招呼用的 namaste 裡的 namas 就是同一個字。'},
+'公案':{s:'漢語詞',m:'禪師與弟子之間的問答故事，用來打破習慣性的思考。',o:'「公案」原本是古代官府處理案件的公文。禪宗借用它，意思是「可以當作判準的案例」。'},
+'頓悟':{s:'漢傳佛教用語',m:'一下子突然明白；相對的叫「漸悟」，慢慢明白。',o:'禪宗六祖慧能特別強調頓悟，所以禪宗又稱「頓教」。'},
+'空':{s:'梵文 śūnyatā',m:'一切事物沒有獨立、不變的本質（沒有自性），因為它們都是依靠條件而存在的。',o:'śūnya 在古印度數學裡正是「零」的意思！零不是「什麼都沒有」，它是一個能讓數字運作的位置。空也不是「沒有」，而是「充滿可能性」。'},
+'自性':{s:'梵文 svabhāva',m:'靠自己存在、不依靠其他條件、永遠不變的本質。',o:'sva 是「自己」，bhāva 是「存在」。中觀學派說：一切事物都沒有這種自性。'},
+'中觀':{s:'梵文 Madhyamaka',m:'龍樹開創的學派，用「中道」觀察「空」。',o:'madhyama 是「中間」。它主張既不說事物「真實永恆地存在」，也不說它們「根本不存在」。'},
+'二諦':{s:'梵文 dve satye',m:'兩種層次的真理：世俗諦（日常生活的說法）與勝義諦（最究竟的真相）。',o:'就像「太陽下山了」在日常生活是對的，但從天文學看，是地球在轉。兩種說法各有用處。'},
+'色':{s:'梵文 rūpa',m:'佛經裡的「色」指有形狀的物質，包括身體。不是顏色，更不是男女之事。',o:'rūpa 原意是「形狀、形體」。所以《心經》「色即是空」說的是物質現象的本質，常被誤解。'},
+'唯識':{s:'梵文 vijñapti-mātra',m:'「只有心識的顯現」，強調我們經驗到的一切離不開心的作用。',o:'mātra 是「只有」，vijñapti 是「識的顯現」。由無著、世親兄弟在四到五世紀發揚。'},
+'阿賴耶識':{s:'梵文 ālaya-vijñāna',m:'第八識，儲存一切經驗「種子」的深層心識，也叫「藏識」。',o:'ālaya 是「倉庫、收藏處」。喜馬拉雅山 Himālaya 就是 hima（雪）加 ālaya（藏）＝「雪的倉庫」，用這個來記最容易。'},
+'末那識':{s:'梵文 manas',m:'第七識，一直抓著「這是我」不放的心。',o:'manas 原意是「思量」。它隨時都在計算「對我好不好」，所以被說是自私的根源。'},
+'熏習':{s:'梵文 vāsanā',m:'行為與念頭一再重複，在心裡留下影響，像香味沾上衣服。',o:'vāsanā 本來就有「香氣薰染」的意思。古人把衣服放在香爐旁邊，久了衣服就香了。'},
+'種子':{s:'梵文 bīja',m:'唯識學說：每次行為都在心中留下種子，條件成熟就會發芽。',o:'借用植物種子的比喻，說明為什麼習慣和業力會延續。'},
+'如來藏':{s:'梵文 tathāgata-garbha',m:'每個眾生心中都藏著成佛的可能。',o:'garbha 有「胎、子宮、寶藏」的意思，好像每個人肚子裡都懷著一位未來的佛。'},
+'佛性':{s:'梵文 buddha-dhātu',m:'成佛的本性或可能性。',o:'dhātu 是「本質、元素」。《涅槃經》說「一切眾生悉有佛性」，對中國佛教影響極大。'},
+'煩惱':{s:'梵文 kleśa',m:'讓心不安、痛苦、迷惑的情緒與想法。',o:'kleśa 原意是「污染、折磨」。中文的「煩惱」也是從佛經流行起來的。'},
+'三毒':{s:'貪、嗔（瞋）、癡',m:'三種最根本的煩惱：貪心、生氣、愚痴。',o:'佛教把它們比喻成毒藥，會毒害自己和別人。涅槃就是把這三把火吹熄。'},
+'聞思修':{s:'三慧',m:'學習的三步驟：聽聞學習、思考理解、實際練習。',o:'佛教認為智慧有三種來源：聽來的（聞慧）、想通的（思慧）、練出來的（修慧）。'},
+'寺':{s:'漢語詞',m:'佛教的寺院。',o:'「寺」原本是漢朝的政府機關，例如接待外國使節的「鴻臚寺」。傳說東漢時兩位印度僧人住在鴻臚寺，後來為他們建的住所就叫「白馬寺」，從此「寺」就變成佛教道場的名稱。'},
+'塔':{s:'梵文 stūpa（窣堵波）',m:'安放佛陀或高僧遺骨的建築。',o:'最早音譯為「塔婆」，古代中文沒有「塔」這個字，是為了翻譯而新造的字。'},
+'劫':{s:'梵文 kalpa（劫波）',m:'非常非常長的時間。',o:'成語「浩劫」「劫數」「萬劫不復」都來自這個字。佛經比喻：一座大石山，每百年用細布擦一次，石山磨平了，一劫還沒過完。'},
+'舍利':{s:'梵文 śarīra',m:'佛陀或高僧火化後留下的遺骨。',o:'śarīra 原意就是「身體」。'},
+'正信':{s:'漢傳佛教用語',m:'有正確理解、合乎佛法原則的信仰，相對於迷信。',o:'「正」是正確，「信」是信心。重點在於信仰要經得起理智檢驗。'}
+};
+/* ========== 課程篇章 ========== */
+const PARTS = [
+ {t:'第一篇　入門：認識佛教', d:'佛是誰？佛教從哪裡來？先把地基打好。'},
+ {t:'第二篇　基礎：核心教義', d:'佛陀到底教了什麼？這五課是整個佛教的骨架。'},
+ {t:'第三篇　實踐：把佛法帶進生活', d:'懂了道理，接下來是怎麼做。'},
+ {t:'第四篇　進階：經典、宗派與傳播', d:'兩千五百年來，佛教怎麼從印度走到全世界。'},
+ {t:'第五篇　深入：佛教哲學專題', d:'空性、唯識、佛性與禪，進入專業的領域。'}
+];
+
+/* ========== 課程內容 ========== */
+const L = [];
+
+/* ---------- 第 1 課 ---------- */
+L.push({part:0, title:'佛教是什麼？', sub:'從一個「開燈」的比喻開始',
+goals:['知道「佛」這個字的意思和由來','了解佛教同時是宗教、哲學與生活方式','發現自己每天都在使用佛教的詞'],
+body:`
+<p>先想像一個畫面：晚上你走進一間漆黑的房間，看到地上有一條彎彎曲曲的東西。你嚇了一大跳，心想：「蛇！」心跳加速、全身發冷。可是等你打開燈，才發現地上只是一條繩子。</p>
+<div class="w" data-w="rope"></div>
+<p>在黑暗中，你的害怕是真的，心跳加速也是真的，但讓你害怕的「蛇」其實從來不存在。問題不在繩子，而在於<strong>你看不清楚</strong>。</p>
+<p>佛教想做的事，說穿了就是「幫人開燈」：讓人看清楚生命真實的樣子。看清楚之後，很多不必要的害怕、生氣、煩惱，就自然放下了。這個「開燈、看清楚」的經驗，佛教叫做[[覺悟]]。</p>
+
+<h3>「佛」這個字是什麼意思？</h3>
+<p>「佛」是[[佛陀]]的簡稱。佛陀是古印度語言[[梵文]]的 Buddha，意思是「<strong>醒過來的人</strong>」「覺悟的人」。</p>
+<div class="origin"><p>為什麼用「佛」這個字？兩千年前的漢朝人要翻譯 Buddha，找了一個發音相近的字。當時「佛」的古音唸起來接近 <i>but</i>，很像 Bud。這種「照發音翻譯」的方法叫做<strong>音譯</strong>，就像我們把 coffee 翻成「咖啡」。佛教裡有很多奇怪的詞，都是音譯來的，這門課會一個一個幫你解開。</p></div>
+<p>所以「佛」<strong>不是一位神的名字，而是一個稱號</strong>，就像「博士」「冠軍」一樣，是達到某個程度的人才能得到的稱呼。歷史上第一位被稱為佛的人，名叫悉達多，下一課我們會認識他。</p>
+<p>佛教還有一個很特別的想法：佛陀認為，<strong>每一個人都有可能覺悟</strong>。他不是要大家崇拜他，而是希望大家都能像他一樣「醒過來」。</p>
+
+<h3>佛教是宗教、哲學，還是生活方式？</h3>
+<p>三種都有一點，看你從哪個角度去看：</p>
+<ul>
+<li><strong>宗教的一面：</strong>有寺廟、有出家人、有拜佛與誦經的儀式，也有許多人把它當成信仰。</li>
+<li><strong>哲學的一面：</strong>它認真地思考「痛苦從哪裡來」「我到底是誰」「世界是怎麼運作的」，這些問題和哲學家問的一樣。</li>
+<li><strong>生活方式的一面：</strong>靜坐、待人和氣、不傷害生命、控制情緒，這些都是每天可以練習的事。</li>
+</ul>
+<div class="ex warn"><p>很多人以為佛教就是「拜拜求平安、求發財」。其實佛陀本人最重視的是<strong>了解自己的心</strong>，而不是求神明幫忙。佛教並不教導有一位創造宇宙的神，佛陀比較像一位老師，而不是一位掌管一切的神。</p></div>
+<p>這門課的態度是：<strong>先理解，再判斷</strong>。你不需要先相信任何東西，就像學希臘神話或學物理一樣，先弄懂它在說什麼，之後你自己決定怎麼看待它。</p>
+
+<h3>你每天都在說的佛教詞</h3>
+<p>佛教大約在兩千年前傳入中國，帶來了一大批新詞。很多詞用久了，大家早就忘記它們原本是佛教用語：</p>
+<div class="tbl"><table>
+<tr><th>日常用語</th><th>原本的佛教意思</th></tr>
+<tr><td>[[世界]]</td><td>「世」是時間，「界」是空間，合起來就是整個宇宙。</td></tr>
+<tr><td>[[剎那]]</td><td>梵文 kṣaṇa，極短的一瞬間。</td></tr>
+<tr><td>[[因果]]</td><td>原因和結果，佛教的核心觀念。</td></tr>
+<tr><td>平等</td><td>佛經說一切眾生本質上平等，沒有高低。</td></tr>
+<tr><td>方便</td><td>佛陀為了讓人聽懂，使用靈活的方法。原意是「好用的方法」。</td></tr>
+<tr><td>一塵不染</td><td>心不被外在的誘惑（「塵」）污染。</td></tr>
+<tr><td>醍醐灌頂</td><td>「醍醐」是從牛奶一層層提煉出的最精純的油，佛經用來比喻最高的佛法。被醍醐灌在頭上，就是突然完全明白。</td></tr>
+<tr><td>[[煩惱]]</td><td>梵文 kleśa，讓心不安的東西。</td></tr>
+</table></div>
+<p>在課文中，<strong>有點狀底線的詞都可以點開</strong>，看它的原文和由來。現在就點點看上面的「世界」吧！</p>
+
+<h3>佛教在今天的世界</h3>
+<p>全世界大約有五億人信仰佛教，是世界主要宗教之一。它大致分成三大傳統，第十四課會詳細介紹：</p>
+<ul>
+<li><strong>南傳佛教：</strong>斯里蘭卡、緬甸、泰國、柬埔寨、寮國。</li>
+<li><strong>漢傳佛教：</strong>中國、台灣、香港、韓國、日本、越南。</li>
+<li><strong>藏傳佛教：</strong>西藏、蒙古、不丹，以及喜馬拉雅山一帶。</li>
+</ul>
+`,
+sum:['「佛」是梵文 Buddha 的音譯，意思是「覺悟的人」，是稱號不是神名。','佛教像是「幫人開燈」：看清真相，放下不必要的痛苦。','佛教同時有宗教、哲學、生活方式三個面向。','世界、剎那、因果、煩惱等日常詞都來自佛教。'],
+quiz:[
+ {q:'「佛陀」這個詞最原始的意思是什麼？',o:['天上的神明','覺悟、醒過來的人','很有錢的國王','會法術的人'],a:1,e:'佛陀來自梵文 Buddha，字根 budh 就是「醒來、知道」。'},
+ {q:'漢朝人為什麼選「佛」這個字來翻譯 Buddha？',o:['因為佛字很漂亮','因為佛字的古音接近 but','因為皇帝規定的','因為佛字代表神'],a:1,e:'這是「音譯」：依照發音來翻譯。「佛」的古音接近 but。'},
+ {q:'「世界」一詞在佛經裡的意思是？',o:['地球','世界上的國家','時間加空間','天堂'],a:2,e:'「世」是時間的流動，「界」是空間的方位。'}
+]});
+
+/* ---------- 第 2 課 ---------- */
+L.push({part:0, title:'佛陀的一生', sub:'一位王子，為什麼放棄王位？',
+goals:['按照順序認識佛陀一生的八個重要階段','理解「中道」這個觀念是怎麼來的','學會分辨歷史事實與後人的傳說'],
+body:`
+<p>大約兩千五百年前（學者對確切年代還有不同看法，大約在西元前六到五世紀），在今天印度和尼泊爾的交界處，有一個小國叫迦毘羅衛國，由[[釋迦牟尼|釋迦牟尼]]所屬的「釋迦族」統治。國王叫淨飯王，王后叫摩耶夫人。</p>
+<p>下面這條時間軸，請<strong>從左到右</strong>依序點開，跟著佛陀走一遍他的人生：</p>
+<div class="w" data-w="life"></div>
+
+<h3>一、王子的出生</h3>
+<p>摩耶夫人在回娘家的路上，於藍毘尼園生下了一位王子，取名[[悉達多]]，姓[[喬達摩]]。據說有位預言家說：「這孩子長大後，不是成為統一天下的偉大國王，就是成為出家修行的覺悟者。」國王當然希望兒子繼承王位，於是替他蓋了豪華的宮殿，讓他從小過著什麼都不缺的生活，盡量不讓他看到世間的痛苦。悉達多長大後結婚，也有了一個兒子。</p>
+
+<h3>二、四門遊觀：看見人生的真相</h3>
+<p>有一天，悉達多坐車出城遊玩。傳說他分四次從四個城門出去，依序看見：</p>
+<ol>
+<li>一位駝背、滿臉皺紋的<strong>老人</strong></li>
+<li>一位躺在路邊呻吟的<strong>病人</strong></li>
+<li>一支抬著<strong>死人</strong>的送葬隊伍</li>
+<li>一位神情平靜的<strong>修行人</strong>（[[沙門]]）</li>
+</ol>
+<p>他問車夫：「我也會變老、生病、死亡嗎？」車夫說：「每個人都會，王子也不例外。」這個回答深深震撼了他。原來再多的財富也擋不住老、病、死。而那位修行人的平靜，讓他看見了一條可能的出路。</p>
+<div class="ex"><p>想像你是一個從來沒見過下雨的人，突然有一天全身被淋濕。那種震驚，大概就是悉達多當時的心情。我們從小就知道人會老、會死，所以習以為常；但真的認真去想，這其實是每個人都要面對的大問題。</p></div>
+
+<h3>三、出家：半夜離開皇宮</h3>
+<p>二十九歲那年的一個夜晚，悉達多悄悄離開了皇宮、妻子與兒子，剪去頭髮，換上修行人的衣服。他要去找一個問題的答案：<strong>人要怎樣才能真正脫離痛苦？</strong></p>
+
+<h3>四、六年苦行：差點餓死</h3>
+<p>當時的印度流行「苦行」：人們相信折磨身體可以讓心靈變純淨。悉達多非常認真，每天只吃一點點東西，瘦到皮包骨，摸肚子都能摸到脊椎。可是六年過去了，他沒有覺悟，反而差點死掉。</p>
+<p>後來他接受了一位牧羊女送來的乳粥，恢復體力。他領悟到：過度享樂不行（他在皇宮試過了），過度折磨自己也不行（他苦行試過了）。<strong>真正的路在兩個極端的中間</strong>，這就是[[中道]]。</p>
+<div class="ex"><p>佛陀後來用彈琴來比喻中道：琴弦調得<strong>太緊</strong>會斷掉，調得<strong>太鬆</strong>彈不出聲音，要<strong>不緊不鬆</strong>，才能彈出好聽的音樂。讀書也是一樣：完全不讀當然不行，但每天只睡三小時拼命讀，身體垮了也讀不好。</p></div>
+
+<h3>五、成道：菩提樹下的那一夜</h3>
+<p>三十五歲時，悉達多來到今天印度的菩提伽耶，坐在一棵大樹下，發誓：「不覺悟，就不起來。」經過一整夜的深入禪定，在天快亮、看見晨星的時候，他終於徹底明白了痛苦的原因和解脫的方法。從此，他成為「佛陀」，那棵樹也被稱為[[菩提樹]]。</p>
+<div class="ex warn"><p>佛經描寫這一夜有魔王帶著大軍來攻擊、用美女來誘惑。許多老師認為，這些故事是在<strong>象徵內心的掙扎</strong>：恐懼、慾望、懷疑。讀佛陀的故事時，要學會分辨：哪些是可信的歷史，哪些是後人用來表達敬意或教育意義的傳說。</p></div>
+
+<h3>六、初轉法輪：第一堂課</h3>
+<p>佛陀覺悟後，走到鹿野苑，找到以前和他一起苦行的五位同伴，對他們說出了自己的發現，也就是第四課要學的「四聖諦」。這是佛陀的第一次說法，叫做「初轉[[法輪]]」。這五個人成為最早的弟子，佛教的僧團從這裡誕生。</p>
+
+<h3>七、四十五年的教學</h3>
+<p>接下來的四十五年，佛陀走遍印度北部，教導各式各樣的人：國王、商人、農夫、乞丐，甚至曾經殺人的強盜。當時的印度有嚴格的「種姓制度」，把人分成高低不同的階級，但佛陀的僧團<strong>不分階級</strong>，誰都能加入，這在當時是非常大膽的做法。</p>
+
+<h3>八、涅槃：最後的教導</h3>
+<p>八十歲時，佛陀在拘尸那羅的兩棵樹之間躺下，平靜地離開人世，這叫做入[[涅槃]]。臨走前，他對弟子說的最後一段話，大意是：「一切組合而成的東西都會壞滅，你們要努力，不要放逸。」他沒有要大家崇拜他，而是提醒大家<strong>自己努力</strong>。</p>
+
+<div class="origin"><p>佛陀有很多名字，各有來歷：<br>
+[[悉達多]]：出家前的本名。<br>
+[[喬達摩]]：姓氏。<br>
+[[釋迦牟尼]]：「釋迦族的聖者」，是後人的尊稱。<br>
+[[如來]]、[[世尊]]：佛經中常見的稱號。<br>
+出生、成道、初轉法輪、涅槃這四個地方，後來被稱為「佛教四大聖地」，至今仍有世界各地的人去朝聖。</p></div>
+`,
+sum:['悉達多是釋迦族的王子，29 歲出家、35 歲成道、80 歲涅槃。','四門遊觀讓他看見老、病、死，也看見修行的出路。','苦行六年失敗後，他發現了「中道」：不走極端。','佛經故事中有歷史，也有象徵性的傳說，要學會分辨。'],
+quiz:[
+ {q:'「中道」是佛陀從哪一段經歷中體會出來的？',o:['王子時期的享樂和六年苦行都走不通','四門遊觀','初轉法輪','涅槃之前'],a:0,e:'享樂與苦行兩個極端他都試過，才明白要走中間的路。'},
+ {q:'以下哪一個是佛陀出家前的本名？',o:['釋迦牟尼','如來','悉達多','世尊'],a:2,e:'悉達多是本名；釋迦牟尼、如來、世尊都是尊稱。'},
+ {q:'佛陀第一次說法的地方是哪裡？',o:['藍毘尼園','菩提伽耶','鹿野苑','拘尸那羅'],a:2,e:'鹿野苑是初轉法輪之處；藍毘尼是出生地，菩提伽耶是成道處，拘尸那羅是涅槃處。'}
+]});
+
+/* ---------- 第 3 課 ---------- */
+L.push({part:0, title:'三寶：佛、法、僧', sub:'佛教的三個核心，缺一不可',
+goals:['說出三寶是什麼，以及它們之間的關係','了解「皈依」的真正意思','知道「和尚」「比丘」等稱呼的由來'],
+body:`
+<p>任何一個學習系統，大概都有三個要素：<strong>老師、教材、同學</strong>。佛教也一樣，這三樣東西被稱為[[三寶]]：[[佛]]、[[法]]、[[僧]]。</p>
+<div class="w" data-w="gems"></div>
+
+<h3>佛：指路的老師</h3>
+<p>「佛寶」指的是佛陀。在佛教裡，佛陀是一位<strong>示範者</strong>：他證明了人可以從痛苦中醒來，並且把方法教給大家。他不是主宰我們命運的神，而比較像登山隊裡第一個登頂、回頭告訴大家路怎麼走的人。</p>
+
+<h3>法：真理與方法</h3>
+<p>「法寶」指的是佛陀的教導，以及教導背後的真理。梵文叫 dharma，這個字在佛教裡非常重要，也有好幾個意思，點開來看看：[[法]]。</p>
+<p>佛陀曾經用「筏」（竹筏）來比喻佛法：佛法像一艘過河用的竹筏，是用來幫你渡河的；到了對岸，你不需要把竹筏扛在頭上繼續走。意思是：<strong>佛法是工具，不是拿來爭吵或炫耀的東西</strong>。</p>
+
+<h3>僧：一起修行的團體</h3>
+<p>「僧寶」原本指的是修行的團體。梵文 saṃgha 的意思是「群體」，所以嚴格來說，「僧」指的是一群人，而不是單獨一個人。</p>
+<p>佛教團體包括四種人，叫做「四眾」：</p>
+<div class="tbl"><table>
+<tr><th></th><th>男眾</th><th>女眾</th></tr>
+<tr><td>出家</td><td>[[比丘]]</td><td>比丘尼</td></tr>
+<tr><td>在家</td><td>優婆塞（在家男信徒）</td><td>優婆夷（在家女信徒）</td></tr>
+</table></div>
+<div class="origin"><p>[[和尚]]這個詞本來不是指出家人，而是梵文 upādhyāya，意思是「<strong>親自教導你的老師</strong>」。它經過西域語言的轉音傳到中國，才變成「和尚」，後來慢慢成為對出家男眾的通稱。</p></div>
+
+<h3>三寶就像看病</h3>
+<p>佛經中有一個很經典的比喻：</p>
+<div class="tbl"><table>
+<tr><th>三寶</th><th>比喻</th><th>為什麼</th></tr>
+<tr><td>佛</td><td>醫生</td><td>診斷出病因，開出藥方</td></tr>
+<tr><td>法</td><td>藥</td><td>真正能治病的是藥</td></tr>
+<tr><td>僧</td><td>護理師</td><td>照顧你、陪你按時吃藥</td></tr>
+</table></div>
+<p>光有醫生，你不吃藥，病不會好；光有藥，沒人教你怎麼吃，也可能吃錯；有護理師陪伴，才容易堅持下去。三者缺一不可。</p>
+<div class="ex"><p>學游泳也一樣：<strong>教練</strong>（佛）示範動作，<strong>游泳技巧</strong>（法）是你真正要學會的，<strong>一起練習的隊友</strong>（僧）讓你不容易放棄。</p></div>
+
+<h3>皈依：找到依靠</h3>
+<p>成為佛教徒的正式儀式叫[[皈依]]，儀式中會念三句話：「皈依佛、皈依法、皈依僧。」</p>
+<p>「皈依」的梵文原意是「避難所」。想像你在野外突然遇到大雷雨，跑進一間堅固的小屋躲雨，那間小屋就是你的「皈依處」。佛教徒把三寶當成人生風雨中的避風港與方向。</p>
+<div class="ex warn"><p>皈依不是「加入某個師父的私人團體」，也不需要付錢。它的重點是以佛、法、僧為學習方向。如果有人說「皈依我才能得救」，要特別小心，第十九課會教你怎麼判斷。</p></div>
+`,
+sum:['三寶是佛（老師）、法（教導與真理）、僧（修行團體）。','比喻：佛是醫生，法是藥，僧是護理師。','「皈依」原意是避難所，表示以三寶為依靠。','「和尚」原意是親教老師，「比丘」原意是乞食者。'],
+quiz:[
+ {q:'在「看病」的比喻中，「法」相當於什麼？',o:['醫生','藥','護理師','病人'],a:1,e:'真正治病的是藥，所以法就是藥。'},
+ {q:'「僧」的原本意思是？',o:['一個光頭的人','一個團體','寺廟','經書'],a:1,e:'saṃgha 意思是群體，嚴格說「僧」指的是修行團體。'},
+ {q:'佛陀用「竹筏」比喻佛法，想說明什麼？',o:['佛法很便宜','佛法是渡河的工具，到了對岸就不必扛著','一定要住在河邊','竹子很神聖'],a:1,e:'佛法是工具，重點是用它渡過痛苦，而不是執著、爭論它。'}
+]});
+
+/* ---------- 第 4 課 ---------- */
+L.push({part:1, title:'四聖諦：人生問題的診斷書', sub:'佛陀的第一堂課，像醫生一樣思考',
+goals:['說出四聖諦「苦、集、滅、道」的內容和順序','理解佛教說的「苦」不只是痛','用四聖諦分析一個生活中的煩惱'],
+body:`
+<p>上一課說佛陀像醫生。醫生看病有固定的順序：先看出你哪裡不舒服，再找出原因，然後告訴你能不能治好，最後開藥。佛陀覺悟後第一次說法，講的正是這樣一套「診斷流程」，叫做[[四聖諦]]。</p>
+<div class="origin"><p>[[諦]]的梵文 satya 是「真實」。「四聖諦」就是「四個神聖的真理」。成語「真諦」就是從這裡來的。</p></div>
+<p>請按「下一步」，一步步看醫生和佛陀的對照：</p>
+<div class="w" data-w="doctor"></div>
+
+<h3>第一諦・苦：承認問題存在</h3>
+<p>「[[苦]]」的原文是巴利文 dukkha。它不只是「痛」，而是一種<strong>不圓滿、不滿足、不穩定</strong>的感覺。有一個古老的解釋很傳神：dukkha 就像車輪的軸孔歪了，車子一路喀喀搖晃，怎麼走都不順。</p>
+<p>佛經把人生的苦整理成八種，叫「八苦」：</p>
+<ul>
+<li><strong>生、老、病、死：</strong>身體上避不開的苦。</li>
+<li><strong>愛別離：</strong>和喜歡的人或東西分開，例如好朋友轉學、寵物過世。</li>
+<li><strong>怨憎會：</strong>不得不和討厭的人相處，例如分組時被分到不合的同學。</li>
+<li><strong>求不得：</strong>想要的得不到，例如想要最新款手機、想考第一名。</li>
+<li><strong>五陰熾盛：</strong>我們的身體和心本身就一直在變動、不穩定，這是所有苦的總根源。</li>
+</ul>
+<div class="ex warn"><p>「佛教說人生是苦，好悲觀！」這是最常見的誤會。醫生說「你生病了」，不是要嚇你，而是為了治好你。佛陀說苦，是因為<strong>接下來他要告訴你怎麼離苦</strong>。而且佛教並不否認快樂存在，只是指出：快樂也會變，抓不住，所以終究不能讓人完全滿足。</p></div>
+
+<h3>第二諦・集：找出原因</h3>
+<p>「[[集]]」是聚集，指苦是由許多原因聚集而生起的。佛陀認為最主要的原因是[[渴愛]]：像口渴一樣停不下來的「想要」。</p>
+<div class="ex"><p>你發了一張照片到社群網站，一開始有 20 個讚，你很開心。第二次只有 8 個讚，你就失落了。第三次你一直刷新頁面，心情跟著數字上上下下。讓你痛苦的是那些數字嗎？其實是你心裡那個「想要更多」的渴。就像喝海水，越喝越渴。</p></div>
+
+<h3>第三諦・滅：確認可以治好</h3>
+<p>「[[滅]]」是熄滅。佛陀宣布一個好消息：<strong>苦是可以止息的</strong>。當渴愛熄滅，苦就不再生起，這種狀態就是[[涅槃]]。</p>
+<p>記得涅槃的原意嗎？是「吹熄」。被吹熄的是貪心、生氣、愚痴這三把火，人還在，只是不再被這三把火燒得坐立難安。</p>
+
+<h3>第四諦・道：開出藥方</h3>
+<p>「[[道]]」是道路、方法。佛陀開出的藥方是「八正道」，下一課我們就來學。</p>
+
+<h3>練習：用四聖諦分析「考試焦慮」</h3>
+<div class="tbl"><table>
+<tr><th>四聖諦</th><th>分析</th></tr>
+<tr><td>苦</td><td>考前睡不著、胃痛、一直擔心。</td></tr>
+<tr><td>集</td><td>「一定要考高分」「怕被爸媽罵」「怕被同學比下去」的強烈執著。</td></tr>
+<tr><td>滅</td><td>焦慮不是永遠的，可以減輕，也可以放下。</td></tr>
+<tr><td>道</td><td>好好準備（正精進）、覺察自己的擔心（正念）、調整想法「盡力就好」（正思惟）。</td></tr>
+</table></div>
+<p>注意：佛法不是叫你「不要在乎成績」，而是讓你<strong>在乎但不被綁住</strong>。你一樣認真讀書，只是不被焦慮壓垮。</p>
+`,
+sum:['四聖諦：苦（症狀）、集（病因）、滅（可以痊癒）、道（藥方）。','「苦」是不圓滿、不穩定，不只是痛。','苦的主要原因是「渴愛」，像喝海水越喝越渴。','佛教說苦不是悲觀，而是為了找出離苦的方法。'],
+quiz:[
+ {q:'四聖諦的正確順序是？',o:['苦、滅、集、道','集、苦、道、滅','苦、集、滅、道','道、滅、集、苦'],a:2,e:'先看症狀（苦），再找病因（集），確認能治（滅），最後開藥（道）。'},
+ {q:'佛陀認為苦最主要的原因是什麼？',o:['運氣不好','渴愛（停不下來的想要）','別人害的','上輩子的錯'],a:1,e:'集諦指出，苦主要來自渴愛。'},
+ {q:'「和討厭的人不得不一起相處」是八苦中的哪一種？',o:['愛別離','求不得','怨憎會','五陰熾盛'],a:2,e:'「怨憎會」：怨恨、憎惡的人偏偏要相會。'}
+]});
+
+/* ---------- 第 5 課 ---------- */
+L.push({part:1, title:'八正道：離苦的八根輪輻', sub:'佛陀開出的藥方',
+goals:['說出八正道的八項內容','了解八正道如何分成戒、定、慧三組','知道「正」不只是「對錯」的意思'],
+body:`
+<p>上一課的第四諦「道」，內容就是[[八正道]]。佛教常用一個有八根輪輻的輪子來代表它，也就是[[法輪]]。點點看輪子上的每一個圓點：</p>
+<div class="w" data-w="wheel"></div>
+
+<h3>「正」是什麼意思？</h3>
+<p>「正」的原文 sammā，有「<strong>完整、恰當、剛剛好</strong>」的意思。它不像考試的是非題，而更像煮菜的「火候剛好」、投籃的「力道剛好」。這其實就是第二課的「中道」精神。</p>
+
+<h3>八正道逐一看</h3>
+<div class="tbl"><table>
+<tr><th>名稱</th><th>意思</th><th>國中生版例子</th></tr>
+<tr><td>正見</td><td>正確的理解：明白四聖諦、因果</td><td>知道「我的行為會帶來結果」，不怪東怪西</td></tr>
+<tr><td>正思惟</td><td>正確的想法與動機：善意、不傷害</td><td>和同學吵架後，想的是「怎麼和好」而不是「怎麼報仇」</td></tr>
+<tr><td>正語</td><td>說話不說謊、不挑撥、不罵人、不說廢話</td><td>不在群組裡傳同學的八卦</td></tr>
+<tr><td>正業</td><td>行為不傷害生命、不偷、不做不正當的事</td><td>不欺負弱小、不拿別人的東西</td></tr>
+<tr><td>正命</td><td>用正當的方式生活、賺錢</td><td>長大後不做詐騙、不賣假貨</td></tr>
+<tr><td>正精進</td><td>在對的方向上持續努力</td><td>每天練習一點，而不是考前一天熬夜</td></tr>
+<tr><td>正念</td><td>清楚覺察自己當下的身心</td><td>發現「我現在很生氣」，而不是生氣了還不知道</td></tr>
+<tr><td>正定</td><td>心能夠專注、穩定</td><td>寫功課時能專心，不被手機一直拉走</td></tr>
+</table></div>
+
+<h3>三組：戒、定、慧</h3>
+<p>這八項可以分成三組，叫做[[三學]]：</p>
+<ul>
+<li><strong>戒（行為）：</strong>正語、正業、正命。管好自己的嘴巴和行為。</li>
+<li><strong>定（專注）：</strong>正精進、正念、正定。訓練心的穩定。</li>
+<li><strong>慧（理解）：</strong>正見、正思惟。看清真相。</li>
+</ul>
+<div class="ex"><p>三學就像拍一張清楚的照片：<strong>戒</strong>是把三腳架架穩（行為不亂來，心就不慌亂），<strong>定</strong>是讓鏡頭不晃動（心能專注），<strong>慧</strong>是按下快門看清楚畫面。架子不穩，照片一定模糊。</p></div>
+<div class="ex warn"><p>八正道<strong>不是八個關卡</strong>，不是做完第一項才能做第二項。它們像輪子的八根輪輻，要<strong>一起支撐</strong>，輪子才能轉。</p></div>
+<div class="origin"><p>法輪這個符號非常有名。印度國旗正中央那個藍色輪子，就是來自古代阿育王在鹿野苑立的石柱上的法輪圖案（不過國旗上的輪子有 24 根輪輻）。</p></div>
+`,
+sum:['八正道：正見、正思惟、正語、正業、正命、正精進、正念、正定。','「正」是恰當、剛剛好，延續中道精神。','可分成戒（行為）、定（專注）、慧（理解）三學。','八項要同時練習，像輪輻一起支撐輪子。'],
+quiz:[
+ {q:'「不在群組裡傳同學的八卦」屬於八正道中的哪一項？',o:['正見','正語','正定','正命'],a:1,e:'正語：不說謊、不挑撥、不惡口、不說無意義的閒話。'},
+ {q:'「正念、正定、正精進」屬於三學中的哪一組？',o:['戒','定','慧','都不是'],a:1,e:'這三項都在訓練心的專注與穩定，屬於「定」。'},
+ {q:'關於八正道，下面哪一句是對的？',o:['要照順序一關一關完成','只有出家人要做','八項要同時練習、互相支撐','只要做到正見就夠了'],a:2,e:'八正道像輪輻，彼此支撐，一起練習。'}
+]});
+
+/* ---------- 第 6 課 ---------- */
+L.push({part:1, title:'三法印：佛法的防偽標章', sub:'無常、無我、涅槃寂靜',
+goals:['說出三法印的內容','用生活例子說明「無常」和「無我」','分辨「無我」和「我不存在」的差別'],
+body:`
+<p>古代的官府公文，要蓋上官印才算數。佛教也有三顆「印章」，用來檢查一個說法是不是真正的佛法，叫做三[[法印]]：</p>
+<div class="quote">諸行無常　諸法無我　涅槃寂靜<small>三法印</small></div>
+
+<h3>第一印・諸行無常</h3>
+<p>「[[諸行|行]]」指一切由條件組合起來的東西；「[[無常]]」是不會永遠不變。拖動下面的滑桿，看一朵花的一生：</p>
+<div class="w" data-w="flower"></div>
+<p>看看你身邊的東西：</p>
+<ul>
+<li>你的身高、聲音、長相，每一年都在變。</li>
+<li>你的心情，早上開心，下午可能就煩了。</li>
+<li>手機電量、朋友關係、流行歌曲、恐龍、高山，全部都在變，只是快慢不同。</li>
+</ul>
+<div class="ex"><p>無常聽起來有點悲傷，其實它也是<strong>好消息</strong>：這次考不好，不代表永遠考不好；現在很難過，這份難過也會過去。正因為一切會變，所以人才有進步的可能。</p></div>
+<p>那為什麼無常會讓人痛苦？因為我們<strong>希望</strong>喜歡的東西永遠不變。心想「永遠」，現實卻「一直在變」，兩者的落差就是苦。</p>
+
+<h3>第二印・諸法無我</h3>
+<p>這是佛教最特別、也最難懂的觀念。先看看[[無我]]這個詞的由來：當時印度的主流宗教相信每個人裡面有一個永恆不變的靈魂，叫 ātman（我）。佛陀說：<strong>仔細找，找不到這樣的東西</strong>。</p>
+<p>我們來做個實驗。你覺得「我」是什麼？</p>
+<ul>
+<li>是身體嗎？身體的細胞一直在更新，你現在的身體和十年前幾乎不是同一批細胞。</li>
+<li>是想法嗎？你的想法每天都在變，小學時喜歡的東西現在可能覺得很幼稚。</li>
+<li>是記憶嗎？記憶會忘記、會記錯。</li>
+</ul>
+<p>找來找去，找不到一個<strong>永遠不變、完全自己作主</strong>的「我」。</p>
+<div class="ex"><p>想想一條河，例如淡水河。每一秒流過的水都不一樣，河岸也一直在改變，可是我們還是叫它「淡水河」。這條河是存在的，但裡面沒有一個「永遠不變的河的核心」。人也是這樣：你真的存在，但你是一條<strong>不斷流動的河</strong>，而不是一塊永遠不變的石頭。</p></div>
+<div class="ex warn"><p>「無我」不是說「你不存在」，也不是說「你不重要」。它說的是：沒有一個<strong>固定不變、獨立自主的核心</strong>。明白這點，反而讓人比較不會那麼在意面子、比較容易改變自己。</p></div>
+
+<h3>第三印・涅槃寂靜</h3>
+<p>當一個人真正看懂無常和無我，就不會再緊緊抓著「我的」東西不放，貪、嗔、癡這三把火自然熄滅，心就非常平靜。這種平靜就是「涅槃寂靜」。</p>
+<div class="origin"><p>有些經典把「一切皆苦」也列入，變成「四法印」：諸行無常、一切皆苦、諸法無我、涅槃寂靜。不同傳統的整理方式略有不同，但意思是相通的。</p></div>
+`,
+sum:['三法印是檢驗佛法的標準：諸行無常、諸法無我、涅槃寂靜。','無常：一切都在變，這也代表人可以改變與進步。','無我：沒有永遠不變、完全自主的「我」，但不是「你不存在」。','看懂無常與無我，放下執著，就接近涅槃的平靜。'],
+quiz:[
+ {q:'「法印」的「印」原本是什麼意思？',o:['印度','印章，用來證明真偽','印刷','印象'],a:1,e:'像官印一樣，符合三法印的才算佛法。'},
+ {q:'下面哪一句最符合「無我」的意思？',o:['我根本不存在','沒有一個永遠不變、完全自主的我','我一點也不重要','不要有自己的想法'],a:1,e:'無我否定的是「永恆不變的核心」，不是否定你的存在。'},
+ {q:'「這次考不好，不代表永遠考不好。」這句話運用了哪個觀念？',o:['無常','無我','涅槃','皈依'],a:0,e:'一切都會變，包括成績，所以無常也帶來希望。'}
+]});
+
+/* ---------- 第 7 課 ---------- */
+L.push({part:1, title:'業與輪迴：你播下的種子', sub:'業不是命運，是行為的力量',
+goals:['知道「業」的原意是「行為」','分辨業和「宿命論」的不同','認識六道與輪迴的傳統說法和現代解讀'],
+body:`
+<p>你一定聽過有人說：「這是他的業障」「這都是命。」很多人以為「業」就是命運，其實這是很大的誤會。</p>
+
+<h3>業就是「做」</h3>
+<p>[[業]]的梵文 karma，字根 kṛ 是「做」。所以「業」最原始的意思就是<strong>行為</strong>。佛教把行為分成三種：</p>
+<ul>
+<li><strong>身業：</strong>身體做的事，例如幫忙、打人。</li>
+<li><strong>口業：</strong>嘴巴說的話，例如讚美、罵人。</li>
+<li><strong>意業：</strong>心裡的念頭，例如善意、嫉妒。</li>
+</ul>
+<p>佛陀特別強調：<strong>動機（心意）才是業的核心</strong>。不小心踩死一隻螞蟻，和故意踩死螞蟻，是完全不同的業。</p>
+
+<h3>種子和果實</h3>
+<p>佛教常用種子來比喻業：每一次行為，都在心裡種下一顆種子，將來會長出相應的果實。這就是[[因果]]。但種子要長大，還需要陽光、水、土壤這些條件，佛教把主要原因叫「因」，配合的條件叫「緣」，合稱[[因緣]]。</p>
+<p>選一個情境，按「下一步」看一顆小小的種子怎麼長大：</p>
+<div class="w" data-w="karma"></div>
+<div class="ex"><p>這就是為什麼佛教說「命運掌握在自己手上」。業不是一張寫死的判決書，而是<strong>你每天的選擇累積起來的方向</strong>。今天做出不同的選擇，就是在種新的種子。</p></div>
+
+<h3>業不是宿命論</h3>
+<div class="ex warn"><p>「他生病是因為業障，活該。」這種說法完全違背佛教的精神。第一，佛教認為一件事的發生有非常多的因緣，不能簡單歸因；第二，佛教最重視的是<strong>慈悲</strong>，看到別人受苦，要做的是幫忙，而不是評判。第三，業也不能用錢「買掉」。如果有人說「捐多少錢就能消業障」，要提高警覺。</p></div>
+
+<h3>輪迴與六道</h3>
+<p>[[輪迴]]的梵文 saṃsāra 意思是「流動、漫遊」。傳統佛教認為，生命不是只有這一次，而是依著業力在生死之間一再流轉，去處有六種，叫[[六道]]：</p>
+<div class="tbl"><table>
+<tr><th>六道</th><th>傳統說法</th><th>在心裡的樣子（現代解讀）</th></tr>
+<tr><td>天</td><td>享樂的天神</td><td>一切順利、得意忘形</td></tr>
+<tr><td>阿修羅</td><td>好鬥、愛嫉妒的神</td><td>處處跟人比較、不服輸</td></tr>
+<tr><td>人</td><td>有苦有樂，最適合修行</td><td>有能力反省和改變</td></tr>
+<tr><td>畜生</td><td>動物</td><td>只顧本能，不想後果</td></tr>
+<tr><td>餓鬼</td><td>肚子大、喉嚨細，永遠吃不飽</td><td>怎麼得到都不滿足</td></tr>
+<tr><td>地獄</td><td>受極大痛苦的地方</td><td>憤怒、仇恨燒得自己很痛</td></tr>
+</table></div>
+<p>傳統上，許多佛教徒相信六道是真實存在的去處。也有不少現代老師強調，六道同時可以用來理解<strong>我們一天之內心情的變化</strong>：早上被罵，心在地獄；下午拿到禮物，心在天上。兩種理解並不衝突，你可以先記住它的內容，將來再自己判斷。</p>
+<p>值得注意的是「人道」被認為最適合修行：天道太快樂，沒動力改變；地獄太痛苦，沒力氣改變；人間有苦有樂，<strong>剛好</strong>能讓人反省。又是中道！</p>
+`,
+sum:['業的原意是「行為」，包括身、口、意三種。','動機是業的核心；業是可以改變的方向，不是命運判決書。','因（種子）加上緣（條件），才會結果。','輪迴是生命的流轉，有六道；也可用來理解心情的起伏。'],
+quiz:[
+ {q:'「業」的梵文 karma，字根原本的意思是？',o:['命運','懲罰','做、行為','神的旨意'],a:2,e:'字根 kṛ 是「做」。業就是行為。'},
+ {q:'佛教認為業最核心的部分是什麼？',o:['結果的大小','行為的動機（心意）','做事的地點','別人怎麼看'],a:1,e:'佛陀說「思即是業」，心意是業的核心。'},
+ {q:'六道中，為什麼「人道」被認為最適合修行？',o:['因為人最聰明','有苦有樂，剛好能讓人反省','因為人最有錢','因為只有人會死'],a:1,e:'太樂不想修，太苦沒力修，有苦有樂剛剛好。'}
+]});
+/* ---------- 第 8 課 ---------- */
+L.push({part:1, title:'緣起：一碗飯裡的宇宙', sub:'佛教最核心的觀念',
+goals:['用一句話說出「緣起」的意思','認識十二因緣的內容與用途','把緣起和無常、無我連在一起理解'],
+body:`
+<p>請看看你今天吃的一碗飯。它是怎麼來到你面前的？</p>
+<p>農夫插秧、除草、收割；需要陽光、雨水、土壤；稻米要被碾好、裝袋；卡車司機把米載到市場；有人賺錢買米；有人洗米、煮飯。再往前追：農夫要吃飯才有力氣，卡車需要汽油，汽油來自地底……</p>
+<p>一碗飯，<strong>牽連著整個世界</strong>。拿掉其中任何一個條件，這碗飯就不會出現在你面前。這就是[[緣起]]。</p>
+
+<h3>緣起的公式</h3>
+<p>佛陀用四句話說明緣起，被稱為「緣起的公式」：</p>
+<div class="quote">此有故彼有，此生故彼生；<br>此無故彼無，此滅故彼滅。<small>《雜阿含經》</small></div>
+<p>翻成白話：「<strong>因為有這個，所以有那個；這個生起，那個就生起。沒有這個，就沒有那個；這個消失，那個就消失。</strong>」</p>
+<div class="ex"><p>骨牌就是最好的例子：第一塊倒了，第二塊跟著倒。把中間一塊拿走，後面的就不會倒。生活中也一樣：因為熬夜，所以早上爬不起來；因為爬不起來，所以遲到；因為遲到，所以被罵、心情不好……只要把「熬夜」這塊骨牌拿掉，後面一連串都不會發生。</p></div>
+
+<h3>一首偈子改變了一個人</h3>
+<div class="ex story"><p>佛陀有一位弟子叫舍利弗，他原本是別的宗教的傑出修行者。有一天，他在路上遇到一位神情安詳的比丘，就問：「你的老師教什麼？」比丘說：「我才剛出家，只能說個大概。」接著念了一首偈（佛教的詩句）：<br><strong>「諸法從緣起，如來說是因；彼法因緣盡，是大沙門說。」</strong><br>意思是：一切事物都從因緣而生，佛陀說明了它們的原因，也說明了它們怎麼消失。舍利弗一聽就恍然大悟，後來成為佛陀弟子中「智慧第一」的人。</p></div>
+
+<h3>緣起把前面學的全部串起來</h3>
+<ul>
+<li>因為一切都依靠條件而存在，條件一直在變，所以<strong>無常</strong>。</li>
+<li>因為一切都依靠別的東西而存在，沒有能獨立自主的核心，所以<strong>無我</strong>。</li>
+<li>苦也是因緣生起的，所以只要改變條件，苦就能止息，這就是<strong>四聖諦</strong>的道理。</li>
+</ul>
+<p>第十六課的「空」，也是從緣起來的。所以學者常說：<strong>緣起是佛教的心臟</strong>。</p>
+
+<h3>十二因緣：生命輪轉的十二張骨牌</h3>
+<p>佛陀用緣起的道理，詳細說明了「人為什麼會一直在苦裡打轉」，列出十二個環節，叫十二因緣。點擊圓圈上的每一個環節：</p>
+<div class="w" data-w="twelve"></div>
+<p>十二因緣是一個圓圈，會一直轉下去。那要怎麼打破它？佛教認為關鍵有兩處：</p>
+<ol>
+<li><strong>無明</strong>：源頭是看不清楚，所以要培養智慧（開燈）。</li>
+<li><strong>受 → 愛</strong>：這是我們每天都能下手的地方。感受出現了（例如看到別人的新球鞋，心裡「好想要」），如果能<strong>清楚看見這份感受</strong>，不讓它立刻變成強烈的渴求，骨牌就在這裡停下來了。</li>
+</ol>
+<div class="ex"><p>你在寫功課，手機響了一聲（觸），你覺得好奇（受），立刻很想拿起來看（愛），拿起來後滑了一小時（取、有）……如果在「好奇」那一刻停一下，對自己說「我注意到我想看手機」，你就有了選擇的空間。這一停，就是修行。</p></div>
+`,
+sum:['緣起：一切事物都依靠條件生起，也依靠條件消失。','公式：此有故彼有，此生故彼生；此無故彼無，此滅故彼滅。','緣起是無常、無我、四聖諦與空的共同基礎。','十二因緣說明輪迴怎麼轉，關鍵的斷點在「無明」和「受→愛」。'],
+quiz:[
+ {q:'下面哪一句最能代表「緣起」？',o:['一切都是神安排的','一切都依靠條件而生起','一切都是偶然','一切都不會改變'],a:1,e:'緣起就是依條件（因緣）而生起。'},
+ {q:'十二因緣中，第一個環節是什麼？',o:['生','愛','無明','老死'],a:2,e:'十二因緣從「無明」開始，到「老死」結束。'},
+ {q:'在日常生活中，哪一個環節最容易「踩剎車」？',o:['生到老死','受到愛之間','識到名色','無法踩剎車'],a:1,e:'感受出現時保持覺察，不讓它立刻變成渴求，就是日常的下手處。'}
+]});
+
+/* ---------- 第 9 課 ---------- */
+L.push({part:2, title:'五戒與十善：好習慣的清單', sub:'戒律是保護，不是枷鎖',
+goals:['說出五戒的內容與現代意義','了解「戒」的原意是「好習慣」','認識十善的身、口、意分類'],
+body:`
+<p>從這一篇開始，我們要把學到的道理帶進生活。第一步是「戒」，也就是三學中的第一項。</p>
+<div class="origin"><p>[[戒]]的梵文 śīla，最早的意思是「<strong>習慣、品性</strong>」。所以持戒的重點不是「被禁止」，而是「養成好習慣」。佛教的戒是<strong>自願</strong>受持的，不是神下的命令，也沒有人會來懲罰你。</p></div>
+<div class="ex"><p>戒律就像運動員的訓練守則：「比賽前不熬夜、不吃垃圾食物。」沒有人逼他，但他知道這些規則能讓自己表現得更好。又像高速公路的護欄，不是為了限制你，而是保護你不掉下山谷。</p></div>
+
+<h3>五戒</h3>
+<p>五戒是在家佛教徒最基本的戒律。點擊每張卡片，翻面看它在現代生活的意思：</p>
+<div class="w" data-w="precepts"></div>
+<p>為什麼「不飲酒」會和其他四條並列？因為前四條是「不做壞事」，第五條是「<strong>保持讓自己不做壞事的清醒</strong>」。很多傷害、衝突、意外，都是在頭腦不清楚的時候發生的。</p>
+<p>五戒的核心精神可以用一句話說：<strong>不傷害別人，也不傷害自己</strong>。</p>
+
+<h3>十善：從行為到念頭</h3>
+<p>五戒主要規範行為，[[十善]]則更進一步，連說話和念頭都包括進來：</p>
+<div class="tbl"><table>
+<tr><th>分類</th><th>十善</th><th>白話</th></tr>
+<tr><td rowspan="3">身（行為）三</td><td>不殺生</td><td>不傷害生命</td></tr>
+<tr><td>不偷盜</td><td>不拿不屬於自己的東西</td></tr>
+<tr><td>不邪淫</td><td>不做傷害感情與家庭的不正當關係</td></tr>
+<tr><td rowspan="4">口（說話）四</td><td>不妄語</td><td>不說謊</td></tr>
+<tr><td>不兩舌</td><td>不挑撥離間（兩邊說不同的話）</td></tr>
+<tr><td>不惡口</td><td>不罵人、不說刻薄話</td></tr>
+<tr><td>不綺語</td><td>不說花言巧語、不說無意義的閒話</td></tr>
+<tr><td rowspan="3">意（念頭）三</td><td>不貪</td><td>不過度想要</td></tr>
+<tr><td>不嗔</td><td>不懷恨、不暴怒</td></tr>
+<tr><td>不癡</td><td>不糊塗，要明白因果</td></tr>
+</table></div>
+<p>注意嘴巴佔了四條，是最多的！因為人最常犯錯的地方就是說話。在網路時代更是如此：一則留言、一個轉傳，都可能傷害一個人。</p>
+<div class="origin"><p>「兩舌」這個詞很有畫面：好像有兩條舌頭，對 A 說 B 的壞話，對 B 說 A 的壞話。「綺」是有花紋的絲織品，「綺語」就是像花布一樣好看、但內容空洞的話。</p></div>
+
+<h3>出家人的戒律更多</h3>
+<p>出家的比丘要守的戒更多，依照漢傳佛教常用的《四分律》，比丘約有 250 條，比丘尼約 348 條，細到怎麼吃飯、怎麼穿衣都有規定。大乘佛教還有「菩薩戒」，更強調主動去做好事、幫助眾生。</p>
+<div class="ex warn"><p>犯了戒怎麼辦？佛教不講「永遠有罪」，而是講「懺悔」：承認錯誤、真心後悔、下次改進。「懺悔」一詞也很有趣，「懺」是梵文 kṣama（請求原諒）的音譯，「悔」是中文的後悔，一半梵文一半中文，合成了一個詞。</p></div>
+`,
+sum:['「戒」的原意是好習慣，是自願受持的保護，不是枷鎖。','五戒：不殺生、不偷盜、不邪淫、不妄語、不飲酒。','十善分身三、口四、意三，說話佔最多條。','犯錯可以懺悔：承認、後悔、改進。'],
+quiz:[
+ {q:'「戒」的梵文 śīla 最早的意思是？',o:['懲罰','禁止','習慣、品性','命令'],a:2,e:'持戒重在養成好習慣。'},
+ {q:'「在朋友之間挑撥離間」違反十善中的哪一條？',o:['不妄語','不兩舌','不惡口','不綺語'],a:1,e:'兩舌：兩邊說不同的話，製造對立。'},
+ {q:'五戒中「不飲酒」的主要用意是什麼？',o:['酒很貴','保持清醒，才不容易做出傷害的事','酒不好喝','只有出家人不能喝'],a:1,e:'前四戒是不做壞事，第五戒是保護讓自己不做壞事的清醒。'}
+]});
+
+/* ---------- 第 10 課 ---------- */
+L.push({part:2, title:'禪修入門：讓心沉澱下來', sub:'止與觀，從五分鐘開始',
+goals:['了解「禪」的由來，以及止與觀的差別','實際練習數息法','破除對禪修的常見誤解'],
+body:`
+<p>三學的第二項是「定」，練習的方法就是禪修。</p>
+<div class="origin"><p>[[禪]]是梵文 dhyāna 的音譯「禪那」的簡稱。這個字傳到日本唸成 Zen，所以英文的 Zen 其實也是從這裡來的。</p></div>
+
+<h3>止與觀：雪花球的比喻</h3>
+<p>佛教禪修有兩大類，合稱[[止觀]]：</p>
+<ul>
+<li><strong>止（śamatha）：</strong>讓心停下來、安定、專注。</li>
+<li><strong>觀（vipaśyanā）：</strong>在安定的心中，清楚地看見身心的真相，例如看見念頭來了又走（無常）。</li>
+</ul>
+<div class="ex"><p>拿一個雪花球用力搖一搖，裡面白茫茫一片，什麼都看不清楚。這就像我們平常的心：擔心、想東想西、情緒翻騰。把雪花球放在桌上<strong>不要動它</strong>（止），雪花慢慢沉澱，水變得清澈，你就能清楚看見裡面的小房子（觀）。</p></div>
+
+<h3>動手練習：數息法</h3>
+<p>最古老、最簡單的方法是[[數息]]：數自己的呼吸。</p>
+<ol>
+<li><strong>坐好：</strong>坐在椅子上也可以，背自然挺直，肩膀放鬆，雙手放在腿上。</li>
+<li><strong>閉眼或半閉：</strong>眼睛輕輕看著前方地面也可以。</li>
+<li><strong>自然呼吸：</strong>不用刻意深呼吸，只是感覺空氣從鼻子進出。</li>
+<li><strong>數數：</strong>每吐一口氣，心裡數一個數字，從 1 數到 10，再從 1 開始。</li>
+<li><strong>數錯了、分心了：</strong>沒關係，發現了就從 1 重新開始。</li>
+</ol>
+<p>下面的圓圈會帶你呼吸：圓圈變大時吸氣，變小時吐氣。先試著跟它做十次：</p>
+<div class="w" data-w="breath"></div>
+
+<h3>「發現分心」就是在練習</h3>
+<p>剛開始，你大概數到 3 就會發現自己在想晚餐吃什麼。很多人會因此覺得「我不適合禪修」。其實剛好相反：<strong>你發現自己分心的那一刻，就是正念在運作的時候</strong>。就像舉啞鈴，每把注意力拉回來一次，就是舉起一次啞鈴，心的肌肉就強壯一點。</p>
+
+<h3>正念：把禪修帶進日常</h3>
+<p>[[正念]]就是清楚知道自己此刻在做什麼。你不一定要坐著，吃飯、走路、刷牙都可以練習：</p>
+<div class="ex"><p><strong>正念吃一顆葡萄乾：</strong>先看它的皺紋和顏色，聞聞它的味道，放進嘴裡先不要咬，感覺它在舌頭上的樣子，然後慢慢咬，感覺甜味散開。你會發現，平常一口吞下的東西，原來有這麼多細節。我們大部分時間都在「自動駕駛」，正念就是把方向盤拿回自己手上。</p></div>
+
+<div class="ex warn"><p>常見的誤解：<br>一、禪修<strong>不是</strong>「什麼都不想」，而是清楚知道自己在想什麼。<br>二、禪修<strong>不是</strong>為了得到神通或看到特殊景象。<br>三、禪修<strong>不是</strong>逃避問題，而是讓你更有力氣面對問題。<br>另外，如果練習時感到強烈不舒服或情緒很大，先停下來，睜開眼睛走動一下，並找信任的大人或專業老師討論。</p></div>
+`,
+sum:['「禪」來自梵文 dhyāna，英文 Zen 也從這個字來。','止是讓心安定，觀是看清真相，像讓雪花球沉澱。','數息法：吐氣時數 1 到 10，分心就從 1 重來。','發現分心就是在練習；正念可以帶進吃飯、走路等日常生活。'],
+quiz:[
+ {q:'用雪花球比喻，「止」相當於？',o:['用力搖晃雪花球','把雪花球放著不動，讓雪花沉澱','把雪花球打破','買新的雪花球'],a:1,e:'止是讓心安定下來，像雪花沉澱。'},
+ {q:'數息時發現自己分心了，應該怎麼辦？',o:['責怪自己，放棄','假裝沒發生','溫和地從 1 重新數起','換一個更難的方法'],a:2,e:'發現分心本身就是練習，溫和地回來就好。'},
+ {q:'關於禪修，下面哪一句是正確的？',o:['禪修就是什麼都不想','禪修是為了得到神通','禪修是清楚知道自己此刻的身心狀態','只有出家人能禪修'],a:2,e:'禪修重在覺察，而不是放空或追求神通。'}
+]});
+
+/* ---------- 第 11 課 ---------- */
+L.push({part:2, title:'慈悲與四無量心', sub:'把善意一圈一圈擴大',
+goals:['說出慈、悲、喜、捨的意思','分辨慈悲與同情、捨與冷漠','練習慈心觀'],
+body:`
+<p>如果說戒和定是修行的地基，那麼慈悲就是佛教最溫暖的部分。佛教常說：<strong>智慧和慈悲，像鳥的兩隻翅膀</strong>，少了一隻就飛不起來。只有智慧沒有慈悲，會變得冷冰冰；只有慈悲沒有智慧，可能好心做壞事。</p>
+
+<h3>四無量心</h3>
+<p>佛教把最重要的四種善心稱為[[四無量心]]，「無量」是沒有邊界，意思是這四種心可以擴大到所有生命：</p>
+<div class="tbl"><table>
+<tr><th>名稱</th><th>意思</th><th>它的「相反」</th><th>生活例子</th></tr>
+<tr><td>慈</td><td>希望別人快樂</td><td>惡意</td><td>看到新同學一個人，主動去打招呼</td></tr>
+<tr><td>悲</td><td>希望別人不再痛苦</td><td>冷酷</td><td>看到同學被欺負，去告訴老師或陪伴他</td></tr>
+<tr><td>喜</td><td>為別人的好事高興</td><td>嫉妒</td><td>好朋友比你先考上理想學校，真心替他開心</td></tr>
+<tr><td>捨</td><td>平等心，不偏愛、不排斥</td><td>偏心、成見</td><td>不因為某人長得不好看或成績差就看不起他</td></tr>
+</table></div>
+<div class="origin"><p>[[慈悲]]的「慈」，梵文 maitrī 來自 mitra，就是「朋友」。所以慈心就是<strong>把每個人都當成朋友</strong>。「悲」的梵文 karuṇā 有「心被觸動而顫動」的意思，看到別人痛，自己的心也跟著動。</p></div>
+
+<h3>容易搞混的地方</h3>
+<div class="ex warn"><p><strong>悲 ≠ 可憐別人。</strong>「可憐」有時帶著「我比你好」的感覺；悲心是「我們都會受苦，我懂你的痛」，是平等的。<br><strong>[[捨]] ≠ 冷漠。</strong>捨不是「關我什麼事」，而是不被好惡拉著走，對每個人都公平。一位好醫生對每個病人都一樣認真，不因為病人有錢就特別照顧，這就是捨。</p></div>
+<p>「喜」其實是四種裡最難的。別人倒楣時，我們比較容易同情；別人比我們好時，要真心替他高興，常常很不容易。下次你感到嫉妒時，可以試著對自己說：「他很開心，真好。」這就是在練習喜心。</p>
+
+<h3>練習：慈心觀</h3>
+<p>慈心觀是一種很受歡迎的禪修，做法是在心裡默念祝福，並且把祝福的對象<strong>一圈一圈擴大</strong>。按按鈕，看看善意怎麼擴散：</p>
+<div class="w" data-w="rings"></div>
+<p>為什麼要從「自己」開始？因為一個總是討厭自己的人，很難真心善待別人。先對自己溫柔，才有力氣對別人溫柔。</p>
+<p>為什麼要練習祝福「不喜歡的人」？這不是說你要假裝喜歡他，也不是說他做的錯事沒關係。而是：<strong>恨一個人，最先被燒傷的是自己</strong>。佛經比喻，生氣就像手裡抓著一塊燒紅的炭想丟向別人，還沒丟出去，自己的手已經燙傷了。</p>
+<div class="ex"><p>每天睡前花兩分鐘，在心裡默念：「願我平安，願我快樂。願我的家人平安快樂。願我的朋友平安快樂。願世界上所有生命都平安快樂。」持續一個月，看看自己有沒有什麼不同。</p></div>
+`,
+sum:['智慧和慈悲是鳥的兩翼，缺一不可。','四無量心：慈（給樂）、悲（拔苦）、喜（隨喜）、捨（平等）。','悲不是可憐別人，捨不是冷漠。','慈心觀從自己開始，逐步擴大到所有生命。'],
+quiz:[
+ {q:'好朋友比賽得獎，你真心替他高興，這是四無量心的哪一種？',o:['慈','悲','喜','捨'],a:2,e:'喜：為別人的好事高興，對治嫉妒。'},
+ {q:'「慈」的梵文 maitrī 來自哪一個字？',o:['mitra，朋友','mother，母親','money，金錢','moon，月亮'],a:0,e:'mitra 是朋友，慈心就是把人當朋友。'},
+ {q:'下面哪一句最能描述「捨」？',o:['什麼都不管','把東西都丟掉','平等對待每個人，不被好惡拉走','只對喜歡的人好'],a:2,e:'捨是平等心，不是冷漠也不是丟東西。'}
+]});
+
+/* ---------- 第 12 課 ---------- */
+L.push({part:3, title:'佛經是怎麼來的？', sub:'從口耳相傳到大藏經',
+goals:['知道佛經最早是靠背誦流傳的','了解「三藏」與「結集」','認識重要的翻譯家與「五不翻」原則'],
+body:`
+<p>佛陀一生沒有寫過任何一本書。那我們今天看到的那麼多佛經，是怎麼來的？</p>
+
+<h3>第一次結集：大家一起背</h3>
+<p>佛陀涅槃後，弟子們擔心教法會失傳或被說錯。於是由大迦葉帶領，五百位阿羅漢聚集在王舍城附近的洞窟，舉行了第一次[[結集]]。</p>
+<ul>
+<li><strong>阿難</strong>是佛陀的侍者，跟在佛陀身邊最久、記憶力最好，負責背誦佛陀說過的法。</li>
+<li><strong>優波離</strong>最熟悉戒律，負責背誦戒律。</li>
+</ul>
+<p>阿難每背一段，大家就一起核對，確認沒錯，再一起背誦下來。</p>
+<div class="origin"><p>「結集」的梵文 saṃgīti 意思是「一起唱誦」。你一定看過佛經第一句話是「<strong>[[如是我聞]]</strong>」，意思是「我是這樣聽說的」，這就是阿難在結集時的開場白，表示「這是我親耳聽佛陀說的，不是我編的」。</p></div>
+<div class="ex"><p>靠背誦能準確嗎？其實古印度人非常擅長背誦，婆羅門教的經典也靠背誦傳了上千年。而且佛經常常重複、有固定格式，就像兒歌一樣，本來就是為了方便記憶而設計的。這也是為什麼佛經讀起來常常「一直重複」。</p></div>
+
+<h3>三藏：三個籃子</h3>
+<p>佛教的經典分為三大類，稱為[[三藏]]，梵文原意是「三個籃子」。點點看每個籃子：</p>
+<div class="w" data-w="baskets"></div>
+<p>玄奘被稱為「三藏法師」，意思就是精通經、律、論三藏的人。《西遊記》裡的「唐三藏」，就是從這個稱號來的。</p>
+
+<h3>從口傳到文字</h3>
+<p>佛經口耳相傳了幾百年，大約在西元前一世紀，斯里蘭卡的僧人擔心戰亂和饑荒會讓背誦的人斷絕，才把經典寫在棕櫚葉上。這就是今天南傳佛教的[[巴利文]]三藏。大乘佛經則多以[[梵文]]寫成。</p>
+
+<h3>翻譯成中文：兩位超級翻譯家</h3>
+<p>佛經傳到中國，面臨一個大問題：語言完全不同。歷史上有許多偉大的翻譯家，其中最有名的兩位是：</p>
+<div class="tbl"><table>
+<tr><th></th><th>鳩摩羅什（344–413）</th><th>玄奘（602–664）</th></tr>
+<tr><td>出身</td><td>西域龜茲國（今新疆庫車）</td><td>唐朝，今河南人</td></tr>
+<tr><td>特色</td><td>譯文流暢優美，好讀好背</td><td>譯文精確嚴謹，貼近原文</td></tr>
+<tr><td>代表譯作</td><td>《金剛經》《法華經》《阿彌陀經》</td><td>《大般若經》、今天最流行的《心經》版本</td></tr>
+<tr><td>小故事</td><td>曾被困在涼州十七年，因此學會流利中文</td><td>違反禁令偷偷出國，走了十七年，帶回六百多部經典</td></tr>
+</table></div>
+<p>玄奘西行的故事，後來被改編成小說《西遊記》。真實的玄奘沒有孫悟空保護，是一個人穿越沙漠、翻越雪山，好幾次差點渴死。</p>
+
+<h3>為什麼佛經有這麼多「怪字」？</h3>
+<p>你可能發現，佛經裡有很多看不懂的音譯詞，像「般若」「涅槃」「阿耨多羅三藐三菩提」。這是因為玄奘定下了[[五不翻]]原則：遇到某些情況，寧可保留原音，也不要隨便翻譯。</p>
+<div class="ex"><p>例如「[[般若]]」，如果翻成「智慧」，一般人會以為就是考試考得好的那種聰明。但佛教的般若是「看透一切真相的智慧」，意思比「聰明」深得多，所以玄奘選擇保留原音，讓人一看就知道「這是個特別的詞，要好好學」。</p></div>
+
+<h3>讀懂一部佛經的結構</h3>
+<p>東晉的道安法師發現，佛經大多可以分成三部分，這種分析方法一直用到今天：</p>
+<ul>
+<li><strong>序分：</strong>開頭，交代時間、地點、人物。例如「如是我聞，一時，佛在舍衛國……」</li>
+<li><strong>正宗分：</strong>主要內容，佛陀說的核心道理。</li>
+<li><strong>流通分：</strong>結尾，大家聽完很歡喜，發願傳播這部經。</li>
+</ul>
+<p>把所有漢譯經典收集起來，就是[[大藏經]]。今天台灣的「CBETA 中華電子佛典」把大藏經全部數位化，免費讓全世界的人查詢，第十九課會再介紹。</p>
+`,
+sum:['佛陀沒有寫書，經典最初靠弟子「結集」背誦流傳。','「如是我聞」是阿難的開場白：我是這樣聽說的。','三藏：經（佛陀的教導）、律（戒律）、論（弟子的解說）。','鳩摩羅什譯文流暢，玄奘譯文精確；「五不翻」解釋了為什麼有許多音譯詞。'],
+quiz:[
+ {q:'第一次結集時，負責背誦佛陀所說之法的是誰？',o:['優波離','阿難','玄奘','舍利弗'],a:1,e:'阿難背誦經（法），優波離背誦律。'},
+ {q:'「三藏」的「藏」，梵文原意是？',o:['寶藏','西藏','籃子','隱藏'],a:2,e:'piṭaka 是籃子，三藏就是三個裝經典的籃子。'},
+ {q:'為什麼「般若」不翻成「智慧」？',o:['翻譯家偷懶','怕意思被誤解成一般的聰明，所以保留原音','因為皇帝不准','因為中文沒有「智慧」這個詞'],a:1,e:'依照五不翻中「多含義」與「生善」的原則，保留音譯更能表現其深意。'}
+]});
+
+/* ---------- 第 13 課 ---------- */
+L.push({part:3, title:'部派、上座部與大乘', sub:'同一位老師，為什麼有不同的學派？',
+goals:['了解佛教分裂的經過','比較上座部與大乘的差異','認識菩薩與六度'],
+body:`
+<p>一個班級的同學，就算上同一位老師的課，畢業多年後對老師說過的話也會有不同的理解和記憶。佛教也是這樣。</p>
+
+<h3>第一次分裂</h3>
+<p>佛陀涅槃大約一百年後，僧團對於一些戒律的細節（例如出家人能不能接受金錢）以及修行的看法產生爭論，分成了兩派：</p>
+<ul>
+<li>[[上座部]]：比較保守，主張嚴格遵守原本的規矩，以長老為主。</li>
+<li>[[大眾部]]：比較開放，主張可以依照情況調整，人數較多。</li>
+</ul>
+<p>之後兩派又各自再分，傳說最後分成十八或二十個學派，這段時期叫做「[[部派]]佛教」。這不一定是壞事，各派都認真研究佛法，留下了大量的「論」。</p>
+
+<h3>大乘佛教的出現</h3>
+<p>大約在西元前一世紀到西元一世紀，印度出現了一批新的經典，例如《般若經》《法華經》，形成了「[[大乘]]」佛教。大乘最重要的主張是：</p>
+<div class="quote">自己覺悟還不夠，要幫助一切眾生都覺悟。</div>
+<p>擁有這種大願的人，稱為[[菩薩]]。</p>
+<div class="ex"><p>想像一場火災：有一種人先確保自己安全逃出來（這也很重要，自己都逃不出來怎麼救人？），另一種人逃出來以後，發願要一次又一次衝回去，直到把每個人都救出來。後者就是菩薩精神。大乘佛教把這個理想看得最重，而早期佛教與上座部的修行目標主要是成為斷盡煩惱的[[阿羅漢]]。</p></div>
+
+<h3>比較表</h3>
+<p>下面是一個簡化的比較，實際情況更複雜，兩者也有很多共同點（例如都接受四聖諦、八正道、緣起）：</p>
+<div class="tbl"><table>
+<tr><th></th><th>上座部（南傳）</th><th>大乘（北傳）</th></tr>
+<tr><td>修行理想</td><td>阿羅漢：自己徹底解脫</td><td>菩薩：度一切眾生，最後成佛</td></tr>
+<tr><td>主要經典語言</td><td>巴利文</td><td>梵文，後來譯成漢文、藏文</td></tr>
+<tr><td>對佛的理解</td><td>著重歷史上的釋迦牟尼佛</td><td>除釋迦佛外，十方有無數的佛與菩薩</td></tr>
+<tr><td>主要地區</td><td>斯里蘭卡、緬甸、泰國、柬埔寨、寮國</td><td>中國、台灣、韓國、日本、越南</td></tr>
+<tr><td>出家人的樣子</td><td>多穿橘黃色袈裟，早上托缽</td><td>漢傳多穿灰、褐色僧服，吃素</td></tr>
+</table></div>
+<div class="ex warn"><p>你可能聽過「[[小乘]]」這個詞。它是大乘佛教對其他部派的稱呼，原文帶有「低劣」的意思，並不禮貌。今天學術界和國際佛教交流中，大多改用「上座部佛教」「南傳佛教」或「早期佛教」。就像我們不會用帶有貶意的綽號稱呼別人一樣。</p></div>
+
+<h3>菩薩的功課：六度</h3>
+<p>菩薩要練習六種功課，叫做[[六度]]，也叫六[[波羅蜜]]。「波羅蜜」的意思是「到彼岸」：煩惱的人生是河的這一邊，覺悟是河的對岸，這六種修行就是過河的六塊踏腳石。點擊石頭，陪小人過河：</p>
+<div class="w" data-w="river"></div>
+<p>你會發現六度就是把前面學的都整合起來了：持戒對應戒，禪定對應定，般若對應慧，再加上布施、忍辱、精進這些<strong>面向他人</strong>的修行。</p>
+
+<h3>第三個傳統：金剛乘</h3>
+<p>大約在西元六、七世紀以後，印度又發展出以密法（咒語、手印、觀想）為特色的佛教，叫做[[金剛乘]]，也稱密教。它後來傳到西藏，成為藏傳佛教的重要特色。下一課我們會看到它的傳播路線。</p>
+`,
+sum:['佛陀涅槃約百年後，僧團分為上座部與大眾部，之後進入部派時期。','大乘強調菩薩精神：自己覺悟，也幫助一切眾生覺悟。','「小乘」帶有貶意，今天多稱上座部或南傳佛教。','六度（六波羅蜜）：布施、持戒、忍辱、精進、禪定、般若。'],
+quiz:[
+ {q:'大乘佛教最核心的理想人物是？',o:['阿羅漢','菩薩','國王','天神'],a:1,e:'菩薩發願幫助一切眾生覺悟。'},
+ {q:'「波羅蜜」的意思是？',o:['蜂蜜','到彼岸','很甜','智慧'],a:1,e:'pāramitā：到達對岸，比喻從煩惱到覺悟。'},
+ {q:'為什麼現在多不用「小乘」稱呼南傳佛教？',o:['因為它比較大','因為這個詞帶有貶低的意思','因為南傳佛教不存在了','因為國家規定'],a:1,e:'hīna 有「低劣」之意，改稱上座部或南傳佛教較為尊重。'}
+]});
+/* ---------- 第 14 課 ---------- */
+L.push({part:3, title:'佛教走向世界', sub:'南傳、北傳、藏傳三條路線',
+goals:['說出三大佛教傳統的傳播路線','知道佛教傳入中國的經過','了解佛教在印度衰落與復興的過程'],
+body:`
+<p>佛教在印度誕生，卻在印度以外的地方開枝散葉。它是怎麼走出去的？</p>
+
+<h3>關鍵人物：阿育王</h3>
+<p>西元前三世紀，[[阿育王]]統一了大部分的印度。他早年打仗殺了非常多人，在一場特別慘烈的戰爭之後，他深深後悔，開始信仰佛教，改用道德與慈悲來治理國家。他在各地立石柱、刻下勸人向善的文字，還派遣使者把佛法傳到印度以外，其中他的兒子摩哂陀把佛教帶到了斯里蘭卡。</p>
+
+<h3>三條路線</h3>
+<p>點擊按鈕，看看三條傳播路線（示意圖，不是真實比例）：</p>
+<div class="w" data-w="map"></div>
+
+<h3>南傳佛教</h3>
+<p>從斯里蘭卡出發，傳到緬甸、泰國、柬埔寨、寮國，屬於上座部傳統，使用巴利文經典。在這些國家，很多男孩子一生中都會短期出家一段時間，就像一種成年禮。清晨常可看到穿著橘黃色袈裟的僧人赤腳托缽，信徒把食物放進缽裡。</p>
+<div class="ex"><p>柬埔寨的吳哥窟最初是十二世紀為印度教毗濕奴神建造的神廟，後來才逐漸轉變為佛教寺院。一座建築本身，就記錄了東南亞宗教的變化。</p></div>
+
+<h3>北傳佛教（漢傳）</h3>
+<p>佛教沿著「絲路」，經過中亞傳入中國。傳說東漢明帝夢見一位全身發光的金人，派使者到西方尋找，請回兩位印度僧人，用白馬載著經書回到洛陽，朝廷為他們建了「白馬寺」，這被認為是中國第一座佛寺。</p>
+<div class="origin"><p>為什麼佛教的道場叫「[[寺]]」？漢朝的「寺」原本是政府機關的名稱，例如負責接待外國使節的「鴻臚寺」。兩位印度僧人最初被安排住在鴻臚寺，後來為他們建的住所就沿用了「寺」字。同樣地，「[[塔]]」這個字是為了翻譯梵文 stūpa 而新造的，古代原本沒有這個字。</p></div>
+<p>佛教在中國經過幾百年的翻譯與消化，到隋唐時期發展出獨特的宗派（下一課），再從中國傳到韓國（約四世紀）、日本（約六世紀）和越南。</p>
+
+<h3>藏傳佛教</h3>
+<p>七世紀，吐蕃（西藏）國王松贊干布迎娶了來自唐朝的文成公主和來自尼泊爾的赤尊公主，兩位公主都帶來了佛像，佛教開始在西藏生根。八世紀，印度的寂護大師和蓮花生大士入藏，建立了西藏第一座有出家僧團的寺院桑耶寺。藏傳佛教保留了大量印度後期的經典和密法（[[金剛乘]]），後來也傳到蒙古。藏傳佛教有「轉世」的傳統，認為高僧會轉世回來繼續度眾生。</p>
+
+<h3>佛教在印度：衰落與復興</h3>
+<p>很多人不知道，佛教在它的出生地印度，大約到十二、十三世紀就幾乎消失了。原因很多，包括印度教的復興、佛教與印度教越來越相似，以及外族入侵時許多寺院被摧毀，例如玄奘曾經留學的那爛陀寺。</p>
+<p>到了二十世紀，印度憲法的主要起草人安貝卡博士出身於被歧視的「賤民」階級，他認為佛教主張人人平等，在 1956 年帶領數十萬人改信佛教，讓佛教在印度重新出現。今天，佛教也傳到了歐洲、美洲，禪修與正念在西方非常流行。</p>
+`,
+sum:['阿育王在西元前三世紀大力推動佛教向外傳播。','南傳：斯里蘭卡→東南亞，上座部，巴利文。','北傳：絲路→中國→韓國、日本、越南，大乘，漢文。','藏傳：印度→西藏→蒙古，金剛乘，藏文。佛教在印度曾衰落，二十世紀復興。'],
+quiz:[
+ {q:'柬埔寨、泰國、緬甸主要屬於哪一個佛教傳統？',o:['南傳上座部','漢傳大乘','藏傳金剛乘','日本禪宗'],a:0,e:'這些國家屬於南傳上座部，使用巴利文經典。'},
+ {q:'傳說中國第一座佛寺是？',o:['少林寺','白馬寺','大慈恩寺','桑耶寺'],a:1,e:'東漢時的白馬寺被認為是中國第一座佛寺。'},
+ {q:'「寺」這個字原本是什麼意思？',o:['佛教建築','漢朝的政府機關名稱','山上的房子','廟會'],a:1,e:'例如鴻臚寺是接待外賓的官署，後來才用來稱佛教道場。'}
+]});
+
+/* ---------- 第 15 課 ---------- */
+L.push({part:3, title:'中國佛教八大宗派', sub:'同一座山，八條登山步道',
+goals:['了解中國為什麼會出現許多宗派','認識八大宗派的名稱、代表人物與特色','知道今天台灣佛教的主要樣貌'],
+body:`
+<p>想像一下，你一口氣收到幾百本書，內容有深有淺，有的看起來還互相矛盾。你會怎麼整理？中國的僧人就遇到了這個問題。印度幾百年間陸續出現的經典，在很短的時間內一起被翻譯到中國，大家搞不清楚哪部先、哪部後、哪部最重要。</p>
+<p>於是中國的高僧發展出[[判教]]：把佛經依照深淺、對象、說法時間排出順序。<strong>選擇不同的經典作為核心，就形成了不同的宗派</strong>。這是中國佛教最有創意的地方之一。</p>
+<div class="ex"><p>宗派就像登同一座山的不同步道：有人走陡峭但快的路（禪宗的頓悟），有人走平緩但穩的路（淨土宗的念佛），有人一邊走一邊研究地圖（唯識宗、華嚴宗）。目標都是山頂，只是風景和方法不同。</p></div>
+
+<h3>八大宗派</h3>
+<p>點擊每一個宗派，看看它的特色：</p>
+<div class="w" data-w="schools"></div>
+
+<h3>記憶口訣</h3>
+<p>傳統上把八宗分成兩大類：</p>
+<ul>
+<li><strong>重理論的「性相」四宗：</strong>天台、華嚴、三論、唯識。它們對佛教哲學有非常深入的研究。</li>
+<li><strong>重實踐的四宗：</strong>禪、淨土、律、密。它們各有一套具體的修行方法。</li>
+</ul>
+<p>有一句老話說：「<strong>密富禪貧方便淨，唯識耐煩三論空；傳統華嚴修身律，義理組織天台宗。</strong>」意思是：密宗儀式多、需要很多資源；禪宗簡樸；淨土宗最方便；唯識宗要很有耐心研究；三論宗專講空；華嚴宗最有傳統氣象；律宗重視修身；天台宗理論組織最完整。</p>
+
+<h3>今天的台灣佛教</h3>
+<p>經過一千多年的發展，許多宗派已經互相融合。今天台灣的漢傳佛教寺院，最常見的是「<strong>禪淨雙修</strong>」：既打坐參禪，也念佛。二十世紀的太虛大師、印順法師等人提倡「<strong>人間佛教</strong>」，強調佛法要落實在人間，關心教育、醫療、救災和社會，而不只是關心死後的事。這深深影響了今天台灣佛教團體的樣貌。</p>
+`,
+sum:['大量經典同時傳入，中國高僧用「判教」整理，形成宗派。','八大宗派：天台、華嚴、三論、唯識、禪、淨土、律、密。','前四宗偏重理論，後四宗偏重實踐。','今天台灣多「禪淨雙修」，並深受「人間佛教」理念影響。'],
+quiz:[
+ {q:'以念「阿彌陀佛」、發願往生極樂世界為主要修行的是哪一宗？',o:['禪宗','淨土宗','唯識宗','律宗'],a:1,e:'淨土宗以念佛往生西方極樂世界為核心。'},
+ {q:'玄奘和他的弟子窺基開創的是哪一宗？',o:['天台宗','華嚴宗','唯識宗（法相宗）','三論宗'],a:2,e:'唯識宗又叫法相宗、慈恩宗，以西安大慈恩寺為祖庭。'},
+ {q:'中國佛教會出現這麼多宗派，主要原因是？',o:['大家不喜歡彼此','皇帝規定一定要分宗派','大量經典同時傳入，各宗選擇不同的經典為核心','佛陀規定要分八宗'],a:2,e:'判教的結果不同，就形成不同宗派。'}
+]});
+
+/* ---------- 第 16 課 ---------- */
+L.push({part:4, title:'空性與中觀', sub:'「空」不是什麼都沒有',
+goals:['正確理解「空」的意思','認識龍樹與中觀學派','理解「二諦」和《心經》的「色即是空」'],
+body:`
+<p>從這一課開始進入佛教哲學的深水區。別擔心，我們一樣從例子開始。</p>
+
+<h3>一台車在哪裡？</h3>
+<div class="ex story"><p>大約兩千多年前，有一位希臘血統的國王彌蘭陀，統治印度西北部。他很愛辯論，有一天遇到一位叫那先的比丘。國王問：「你叫什麼名字？」那先說：「大家叫我那先，但『那先』只是個名稱，其實找不到一個真正的『那先』。」國王不服氣。那先就問：「大王您是坐車來的嗎？請問，什麼是車？輪子是車嗎？」「不是。」「車軸是車嗎？」「不是。」「車廂是車嗎？」「不是。」「那把這些以外的東西當作車？」「也不是。」「那車到底在哪裡呢？」<br>這段對話記載在《那先比丘經》（巴利文叫《彌蘭陀王問經》）裡。</p></div>
+<p>自己動手試試看，把車子一件一件拆開：</p>
+<div class="w" data-w="chariot"></div>
+<p>結論是：「車」不是一個獨立存在的東西，而是輪子、車軸、車廂等零件，<strong>在某種條件下組合起來，我們給它的名稱</strong>。這並不是說車子不存在（你還是可以坐上去），而是說：車沒有一個能離開零件、獨立存在的「車的本質」。</p>
+
+<h3>什麼是「空」？</h3>
+<p>佛教把這種「沒有獨立不變本質」的狀態，叫做[[空]]。「本質」在這裡有個專有名詞叫[[自性]]，意思是「靠自己存在、不需要依靠任何條件、永遠不變的本質」。</p>
+<div class="quote">空＝沒有自性＝因為一切都是緣起的</div>
+<div class="origin"><p>「空」的梵文 śūnya，在古印度數學裡正是「<strong>零</strong>」的意思！印度人發明了零，零本身「沒有數值」，但它非常有用：沒有零，就寫不出 10、100、2026。空也是這樣，<strong>正因為事物沒有固定不變的本質，所以才能變化、成長、互相連結</strong>。如果一顆種子有「永遠是種子」的本質，它就永遠長不成樹了。</p></div>
+<div class="ex warn"><p>最常見的誤解有三種：<br>一、「空就是什麼都沒有。」錯，這叫「虛無」，佛教反對虛無。<br>二、「一切都是空，所以做什麼都無所謂。」錯，正因為一切是緣起的，你的每個行為都會帶來影響，因果反而更重要。<br>三、「空是一種看不見的神秘物質。」錯，空不是一個東西，而是描述事物「如何存在」的方式。</p></div>
+
+<h3>龍樹與中觀學派</h3>
+<p>大約在西元二、三世紀，印度出現了一位偉大的思想家<strong>龍樹</strong>，他被許多大乘傳統尊為「八宗共祖」。他寫了《中論》，系統地說明空的道理，開創了[[中觀]]學派。他最有名的一首偈子是：</p>
+<div class="quote">眾因緣生法，我說即是空，<br>亦為是假名，亦是中道義。<small>龍樹《中論》，鳩摩羅什譯</small></div>
+<p>白話：由因緣所生的一切，我說它們是空的；它們只是暫時的名稱（像「車」一樣）；這就是不落兩邊的中道。</p>
+<p>這裡的「中道」和第二課佛陀的中道是同一個精神，只是從「生活」提升到了「思想」：</p>
+<ul>
+<li>不落入「<strong>有</strong>」：以為事物有永恆不變的本質（常見）。</li>
+<li>也不落入「<strong>無</strong>」：以為事物根本不存在、做什麼都沒意義（斷見）。</li>
+</ul>
+
+<h3>二諦：兩種層次的說話方式</h3>
+<p>如果一切都是空的，那我們還能說「我」「你」「車」嗎？中觀用[[二諦]]來回答：</p>
+<ul>
+<li><strong>世俗諦：</strong>日常生活的層次。在這個層次，我、你、車、學校都可以正常地說、正常地用。</li>
+<li><strong>勝義諦：</strong>最究竟的層次。仔細分析，一切都沒有自性，是空的。</li>
+</ul>
+<div class="ex"><p>「太陽從東邊升起」在日常生活是對的，你不會說「地球自轉使我所在的位置轉向太陽」。但從天文學看，太陽並沒有「升起」。兩種說法各有它的用處，不衝突。<br>再舉一個例子：「我們班」由三十個同學組成，每年都有同學轉進轉出，但「我們班」還在。你找不到一個離開所有同學而存在的「班」，可是班級的榮譽、班級的活動，都真實地影響著每個人。</p></div>
+
+<h3>《心經》的「色即是空」</h3>
+<p>《心經》只有兩百多字，是最多人背誦的佛經。其中最有名的一句是「<strong>色即是空，空即是色</strong>」。</p>
+<p>先搞清楚[[色]]：在佛經裡，「色」指的是有形的物質，包括我們的身體，不是顏色，更不是男女之事。</p>
+<div class="ex"><p>可以用<strong>海浪和海水</strong>來想：海浪有各種形狀（色），但每一道浪都是海水，沒有離開海水的浪；而海水在風吹之下，就顯現為浪。浪起浪落，沒有一道浪是「永遠的浪」。色即是空，就是說一切有形的東西都沒有獨立的本質；空即是色，就是說正因為空，一切才能呈現出各種樣貌。</p></div>
+<p>龍樹在《中論》開頭還用「八不」總結空的道理：不生亦不滅，不常亦不斷，不一亦不異，不來亦不出。意思是：不要用「生／滅」「永恆／斷絕」「同一／不同」「來／去」這些二分法，去框住緣起的真相。這部分比較深，現在知道有這個說法就好。</p>
+`,
+sum:['「車在哪裡？」說明事物是因緣組合而成、被命名的。','空＝沒有自性（獨立不變的本質），因為一切都是緣起的。','空不是虛無；龍樹的中觀不落「有」也不落「無」。','二諦：世俗諦可正常使用名稱，勝義諦看見一切皆空。'],
+quiz:[
+ {q:'「空」最正確的意思是？',o:['什麼都沒有','一種看不見的物質','沒有獨立不變的本質（自性）','做什麼都沒關係'],a:2,e:'空＝無自性，因為一切依因緣而存在。'},
+ {q:'「空」的梵文 śūnya 在古印度數學中代表什麼？',o:['一','零','無限大','圓周率'],a:1,e:'śūnya 就是零。零沒有數值，但讓整個數字系統運作起來。'},
+ {q:'《心經》「色即是空」的「色」指的是什麼？',o:['顏色','男女之事','有形的物質現象','臉色'],a:2,e:'色（rūpa）是有形體的物質，包括身體。'}
+]});
+
+/* ---------- 第 17 課 ---------- */
+L.push({part:4, title:'唯識學：心的地圖', sub:'你看到的世界，是心畫出來的',
+goals:['認識八識的名稱和作用','理解種子與熏習的觀念','用唯識的「三性」重新理解第一課的繩與蛇'],
+body:`
+<p>同一部電影，你覺得超好笑，你的朋友卻覺得無聊到睡著。同一場雨，農夫覺得是好雨，要去郊遊的人覺得是壞天氣。雨還是那場雨，<strong>不同的是看它的心</strong>。</p>
+<p>大約四到五世紀，印度的無著和世親兩兄弟，深入研究這個現象，發展出[[唯識]]學派。「唯識」的意思是：我們經驗到的一切，都離不開心識的作用。這一派在中國由玄奘和窺基傳承，就是第十五課的唯識宗。</p>
+<div class="ex warn"><p>唯識不是說「外面什麼都沒有，桌子是我想像出來的，所以撞上去不會痛」。學者對唯識到底有多「唯心」有不同的解讀，但至少它強調：<strong>我們永遠是透過自己的心在看世界</strong>，沒有人能跳出自己的心，去看一個「純粹客觀」的世界。</p></div>
+
+<h3>八識：心像一座冰山</h3>
+<p>唯識把心分成八個層次，叫「八識」。就像冰山，露出水面的只有一小部分，大部分都藏在水面下。點擊每一層：</p>
+<div class="w" data-w="iceberg"></div>
+<div class="tbl"><table>
+<tr><th>識</th><th>作用</th><th>比喻</th></tr>
+<tr><td>前五識</td><td>眼、耳、鼻、舌、身，接收外界訊息</td><td>電腦的鏡頭、麥克風、感應器</td></tr>
+<tr><td>第六識：意識</td><td>思考、判斷、想像、回憶</td><td>電腦的處理器</td></tr>
+<tr><td>第七識：[[末那識]]</td><td>一直抓著「這是我」不放</td><td>一個永遠在計算「對我有沒有好處」的保全</td></tr>
+<tr><td>第八識：[[阿賴耶識]]</td><td>儲存所有經驗的種子</td><td>存放一切紀錄的超大倉庫</td></tr>
+</table></div>
+<div class="origin"><p>「阿賴耶」的梵文 ālaya 是「倉庫、收藏處」。喜馬拉雅山的英文 Himalaya 就是 hima（雪）加 ālaya（藏），意思是「雪的倉庫」。記住喜馬拉雅山，就記住阿賴耶識了！</p></div>
+
+<h3>種子與熏習</h3>
+<p>唯識說，每一次的行為、說話、念頭，都會在阿賴耶識裡留下一顆[[種子]]。條件成熟時，種子就會發芽，變成新的念頭和行為。種子被一次又一次強化的過程，叫做[[熏習]]。</p>
+<div class="ex"><p>古人把衣服掛在香爐旁邊，一開始沒什麼感覺，放久了衣服就有香味，這就是「熏習」。反過來，如果衣服放在廚房油煙旁邊，久了就一身油煙味。<br>你每天滑手機兩小時，「想滑手機」的種子就一天天被熏得更強；你每天讀十分鐘書，「想讀書」的種子也會慢慢變強。<strong>習慣就是這樣養成的</strong>。這也把第七課的「業」解釋得更細緻了。</p></div>
+
+<h3>回到第一課：繩子和蛇</h3>
+<p>還記得第一課那條被看成蛇的繩子嗎？那個比喻其實就來自唯識學，叫「三性」：</p>
+<div class="tbl"><table>
+<tr><th>三性</th><th>繩與蛇的比喻</th><th>意思</th></tr>
+<tr><td>遍計所執性</td><td>把繩子看成蛇</td><td>我們用錯誤的執著，把事物看成獨立實在的東西</td></tr>
+<tr><td>依他起性</td><td>繩子本身，由麻線因緣組成</td><td>事物是依靠條件而生起的（緣起）</td></tr>
+<tr><td>圓成實性</td><td>開燈看清楚：沒有蛇，只有因緣組成的繩</td><td>去掉錯誤執著後，看見的真相</td></tr>
+</table></div>
+<p>你看，整門課從第一課的開燈比喻，一路走到這裡，其實都是同一件事：<strong>看清楚</strong>。</p>
+
+<h3>轉識成智</h3>
+<p>唯識的修行目標是「轉識成智」：透過修行，把被執著污染的八識，轉變成四種清淨的智慧。例如把一直執著自我的第七識，轉成「平等性智」，看見自己和別人本來平等；把儲存一切的第八識，轉成「大圓鏡智」，像一面巨大的圓鏡，清楚映照一切。</p>
+`,
+sum:['唯識：我們經驗的一切都離不開心識的作用。','八識：前五識、意識、末那識（執著自我）、阿賴耶識（儲存種子）。','行為留下種子，一再重複叫熏習，習慣就是這樣形成的。','三性用繩與蛇比喻：錯看、緣起、看清真相。'],
+quiz:[
+ {q:'八識中，一直執著「這是我」的是哪一識？',o:['眼識','意識','末那識','阿賴耶識'],a:2,e:'第七末那識恆常執著自我。'},
+ {q:'「阿賴耶」的意思和下面哪個名字有關？',o:['亞馬遜河','喜馬拉雅山','撒哈拉沙漠','太平洋'],a:1,e:'Himālaya＝雪的倉庫，ālaya 就是倉庫、收藏處。'},
+ {q:'把繩子看成蛇，在唯識三性中屬於哪一種？',o:['遍計所執性','依他起性','圓成實性','都不是'],a:0,e:'錯誤地執著、誤認，就是遍計所執性。'}
+]});
+
+/* ---------- 第 18 課 ---------- */
+L.push({part:4, title:'佛性與禪', sub:'每個人心裡都有一顆寶珠',
+goals:['了解「佛性」「如來藏」的意思','認識禪宗六祖慧能的故事','體會公案與「指月」的精神'],
+body:`
+<h3>衣服裡的寶珠</h3>
+<div class="ex story"><p>《法華經》裡有一個故事：有個窮人去拜訪有錢的朋友，喝醉睡著了。朋友臨時要出遠門，就把一顆無價的寶珠縫在窮人的衣服裡。窮人醒來什麼都不知道，繼續到處流浪、過著辛苦的日子。多年後兩人再相遇，朋友說：「你衣服裡早就有一顆寶珠了，為什麼還這麼辛苦？」</p></div>
+<p>這個故事說的是：<strong>每個人本來就有成佛的可能，只是自己不知道</strong>。這種可能性叫做[[佛性]]，也叫[[如來藏]]。《涅槃經》說：「一切眾生悉有佛性。」這句話對中國佛教影響非常大。</p>
+<p>佛性和空有什麼關係？這是佛教史上討論很多的問題。有些學者認為佛性就是空性的另一種說法，強調「因為空，所以人人都能改變、都能成佛」；也有人認為佛性說是為了鼓勵人們有信心而使用的教學方式。這是專業研究中的重要題目，你現在知道有不同看法就好。</p>
+
+<h3>禪宗的故事：一首偈子當上六祖</h3>
+<p>禪宗傳說由印度的菩提達摩在南北朝時傳入中國。傳到第五代祖師弘忍時，他要選接班人，請弟子們各寫一首偈子表達自己的領悟。</p>
+<p>大弟子神秀學問最好，寫下：</p>
+<div class="quote">身是菩提樹，心如明鏡臺，<br>時時勤拂拭，勿使惹塵埃。<small>神秀</small></div>
+<p>意思是：身體像菩提樹，心像明亮的鏡子，要時常擦拭，不要讓它沾上灰塵。這是很好的修行態度。</p>
+<p>當時寺裡有一位在廚房舂米、不識字的年輕人叫慧能，他聽人念了這首偈子，請人幫他寫下另一首：</p>
+<div class="quote">菩提本無樹，明鏡亦非臺，<br>本來無一物，何處惹塵埃？<small>慧能，依《六祖壇經》通行本</small></div>
+<p>意思是：覺悟本來就不是一棵樹，心也不是一座鏡臺；本來就空無一物，灰塵要沾在哪裡呢？弘忍看了，把衣缽傳給慧能，他就是禪宗的<strong>六祖</strong>。</p>
+<div class="ex"><p>兩首偈子的差別在哪裡？神秀把心看成一個「東西」，要一直努力保持乾淨，這是<strong>漸悟</strong>的路線：一步步修。慧能則看見心本來就是空的（第十六課），根本沒有一個可以被弄髒的東西，這是[[頓悟]]的路線：一下子看穿。還記得第一課的「一塵不染」嗎？慧能的意思是：不是要努力讓心不染塵，而是看清楚本來就無物可染。</p></div>
+
+<h3>禪宗的特色</h3>
+<div class="quote">不立文字，教外別傳，直指人心，見性成佛。</div>
+<p>禪宗強調：真正的覺悟不能只靠讀書、背經，要直接看見自己的本性。</p>
+<div class="ex warn"><p>「不立文字」不是說禪宗不讀書！禪宗留下的語錄和典籍其實非常多，例如《六祖壇經》。它的意思是：<strong>不要執著於文字</strong>，文字只是工具。</p></div>
+<p>禪宗有一個有名的比喻叫「以指指月」。點點看下面的按鈕：</p>
+<div class="w" data-w="moon"></div>
+<p>老師用手指指向月亮，是要你看月亮，如果你一直盯著老師的手指研究，就錯過了月亮。<strong>佛經和老師的話是手指，真相是月亮</strong>。這和第三課的「竹筏」比喻是同一個道理。</p>
+
+<h3>公案：打破習慣的思考</h3>
+<p>禪師常用一些奇怪的問答來啟發弟子，這些故事被記錄下來，叫做[[公案]]。</p>
+<div class="ex story"><p><strong>吃茶去：</strong>唐朝的趙州禪師問一位新來的僧人：「你來過這裡嗎？」僧人說：「來過。」趙州說：「吃茶去。」又問另一位僧人，他說：「沒來過。」趙州也說：「吃茶去。」旁邊的院主不懂：「來過的叫他吃茶去，沒來過的也叫他吃茶去，這是為什麼？」趙州喊：「院主！」院主應了一聲。趙州說：「吃茶去。」</p></div>
+<p>這個公案在說什麼？禪宗不喜歡標準答案，但可以提供一個方向：修行不在遠方、不在特別的地方，<strong>就在喝茶、吃飯這些平常事裡</strong>。唐朝的大珠慧海禪師說過，修行就是「飢來吃飯，睏來即眠」。聽起來簡單，但一般人吃飯時想著手機、睡覺時想著明天，其實很少人真的「只是吃飯、只是睡覺」。</p>
+<p>公案的目的不是讓你猜謎，而是<strong>打破你習慣的思考方式</strong>，讓你在想不通、停下來的那一刻，直接看見自己的心。</p>
+`,
+sum:['佛性（如來藏）：每個人都有成佛的可能，像衣裡的寶珠。','神秀的偈子代表漸悟，慧能的偈子代表頓悟，慧能成為六祖。','禪宗「不立文字」是不執著文字，不是不讀書；經典是指月的手指。','公案用來打破習慣思考；禪就在日常生活之中。'],
+quiz:[
+ {q:'「本來無一物，何處惹塵埃」是誰寫的？',o:['神秀','慧能','弘忍','達摩'],a:1,e:'這是六祖慧能的偈子，代表頓悟的精神。'},
+ {q:'「以指指月」中，手指比喻的是什麼？',o:['真相本身','佛經、老師的話等工具','月亮','修行的人'],a:1,e:'手指是指向真相的工具，月亮才是真相。'},
+ {q:'禪宗「不立文字」的正確理解是？',o:['禁止讀書','不執著於文字，文字只是工具','禪宗沒有任何經典','不准寫字'],a:1,e:'禪宗其實留下大量典籍，重點是不要執著文字。'}
+]});
+
+/* ---------- 第 19 課 ---------- */
+L.push({part:4, title:'成為專業的學習者', sub:'讀什麼、怎麼讀、怎麼判斷',
+goals:['規劃一條從入門到專業的閱讀路線','認識專業研究的工具','學會分辨正信與迷信'],
+body:`
+<p>恭喜你走到最後一課！這一課不教新的教義，而是給你一張地圖，讓你離開這門課之後，知道下一步怎麼走。</p>
+
+<h3>學習三步驟：聞、思、修</h3>
+<p>佛教把學習分成三個步驟，叫[[聞思修]]：</p>
+<ul>
+<li><strong>聞：</strong>聽聞、閱讀，吸收知識。</li>
+<li><strong>思：</strong>自己思考、提問、比較，把知識變成理解。</li>
+<li><strong>修：</strong>在生活中實際練習，把理解變成能力。</li>
+</ul>
+<p>只聞不思，是背書；只思不修，是空談；只修不聞不思，容易走偏。三者要一起來。</p>
+
+<h3>閱讀路線圖</h3>
+<p><strong>第一階段：打好基礎（國中、高中）</strong></p>
+<ul>
+<li>把這門課再複習一次，特別是第四到第八課。</li>
+<li>讀《法句經》：南傳經典，短短的詩句，像佛陀的格言集，最適合入門。</li>
+<li>讀一本現代人寫的佛陀傳記或佛學入門書。</li>
+</ul>
+<p><strong>第二階段：讀原典（高中、大學）</strong></p>
+<ul>
+<li>《心經》：兩百多字，配合第十六課理解。</li>
+<li>《金剛經》：談空與不執著，鳩摩羅什譯本文字優美。</li>
+<li>《六祖壇經》：禪宗入門，故事性強。</li>
+<li>《阿彌陀經》：理解淨土信仰。</li>
+<li>《雜阿含經》選讀：最接近早期佛教的經典。</li>
+</ul>
+<p><strong>第三階段：系統學習（大學以上）</strong></p>
+<ul>
+<li>完整讀一部佛教史，理解印度、中國、藏傳佛教的發展。</li>
+<li>讀論典：龍樹《中論》、世親《唯識三十頌》等，最好在老師指導下讀。</li>
+<li>比較南傳的巴利尼柯耶和漢譯的《阿含經》。</li>
+</ul>
+<p><strong>第四階段：專業研究</strong></p>
+<ul>
+<li>學習古典語言：巴利文、梵文、古典藏文，能直接讀原典。</li>
+<li>閱讀學術論文，了解文獻學、歷史學、哲學的研究方法。</li>
+<li>進入大學宗教學系、哲學系，或佛教研究所進修。</li>
+</ul>
+
+<h3>專業工具箱</h3>
+<div class="tbl"><table>
+<tr><th>工具</th><th>用途</th></tr>
+<tr><td>CBETA 中華電子佛典</td><td>台灣團隊製作，免費線上查詢整部漢譯大藏經，可全文搜尋。</td></tr>
+<tr><td>SuttaCentral</td><td>免費閱讀巴利經典，並對照漢譯、藏譯與多國語言翻譯。</td></tr>
+<tr><td>《佛光大辭典》</td><td>中文佛學辭典，查專有名詞的好幫手。</td></tr>
+<tr><td>丁福保《佛學大辭典》</td><td>較早期的經典佛學辭典，也有線上版本。</td></tr>
+</table></div>
+<div class="ex"><p>專業學者的習慣：看到一句「佛陀說……」，會去查它<strong>出自哪一部經、哪一卷</strong>。網路上有很多所謂的「佛陀名言」，其實根本不是佛陀說的。學會查證，是從入門到專業最重要的一步。</p></div>
+
+<h3>正信與迷信：自我檢查表</h3>
+<p>學習任何宗教，都要保護好自己。佛陀本人就提醒過：在《卡拉瑪經》中，他告訴卡拉瑪族人，<strong>不要因為是傳說、是經典記載、是老師說的，就盲目相信</strong>，要自己檢驗：這件事會帶來傷害還是利益？智者會讚許還是批評？親自實踐後，會讓自己和別人更好還是更糟？</p>
+<p>如果你遇到一個團體或個人有下面的情況，要特別提高警覺，並和家人或信任的大人討論：</p>
+<ul>
+<li>要你花大錢「消災」「改運」「消業障」。</li>
+<li>要你切斷和家人、朋友的聯繫。</li>
+<li>說只有他們是對的，其他人都是魔、都會下地獄。</li>
+<li>強調神通、預言、特異功能。</li>
+<li>不准你提問、不准你懷疑、不准你離開。</li>
+</ul>
+<p>真正的佛法，會讓你<strong>更清醒、更善良、更自由</strong>，而不是更害怕、更依賴。這就是[[正信]]。</p>
+
+<h3>兩種學習角度</h3>
+<p>最後要說：學佛教有兩種同樣正當的角度。一種是<strong>信仰與修行的角度</strong>：把佛法當成人生的依靠，實際去修行。另一種是<strong>學術研究的角度</strong>：把佛教當成人類重要的文化、歷史和哲學來研究，不一定要成為佛教徒。你可以選擇其中一種，也可以兩者兼具。</p>
+<p>不管選哪一種，希望你都記得這門課的第一個比喻：<strong>佛法就是幫人開燈</strong>。祝你一路看得更清楚。</p>
+`,
+sum:['學習三步驟：聞（學）、思（想）、修（做）。','閱讀路線：法句經 → 心經、金剛經、壇經 → 論典與佛教史 → 古典語言與學術研究。','善用 CBETA、SuttaCentral、佛學辭典，養成查證出處的習慣。','依《卡拉瑪經》的精神檢驗所學；真正的佛法使人更清醒、善良、自由。'],
+quiz:[
+ {q:'「聞思修」三步驟中，「思」指的是什麼？',o:['聽老師講課','自己思考、提問，把知識變成理解','每天打坐','背誦經文'],a:1,e:'思是思考消化，讓知識變成真正的理解。'},
+ {q:'想要免費全文搜尋漢譯大藏經，可以用哪個工具？',o:['CBETA 中華電子佛典','線上遊戲','社群網站','購物網站'],a:0,e:'CBETA 提供免費的大藏經全文檢索。'},
+ {q:'依照《卡拉瑪經》的精神，下面哪一種做法最恰當？',o:['老師說的一律照做','古書寫的一定對','自己檢驗它是否帶來利益、智者是否讚許','誰說得最大聲就信誰'],a:2,e:'佛陀鼓勵自己檢驗，而不是盲目相信。'}
+]});
+/* ========== 互動圖解 ========== */
+const $ = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+let CLEAN = [];
+const W = {};
+
+/* 1 繩與蛇 */
+W.rope = el => {
+ el.innerHTML = `<div class="wbox rope"><p class="wt">互動：按下開燈</p>
+ <svg viewBox="0 0 320 170" role="img" aria-label="暗房裡的一條繩子">
+  <rect class="room" x="0" y="0" width="320" height="170" rx="12"/>
+  <circle class="glow" cx="160" cy="0" r="170"/>
+  <line x1="160" y1="0" x2="160" y2="12" stroke="#777" stroke-width="2"/>
+  <circle class="lamp" cx="160" cy="18" r="8"/>
+  <path class="rp" d="M34 132 C70 96,108 150,148 128 S220 88,262 116"/>
+  <g class="snake"><circle cx="268" cy="112" r="3.2"/><circle cx="262" cy="120" r="3.2"/><path d="M270 120 l12 4 m-12 -4 l11 -3"/></g>
+ </svg>
+ <p class="cap">黑暗裡：「哇！有一條蛇！」</p>
+ <div class="ctrl"><button class="btn sm">開燈</button></div></div>`;
+ const box=$('.rope',el), cap=$('.cap',el), b=$('button',el);
+ b.onclick=()=>{const on=box.classList.toggle('lit'); cap.textContent=on?'開燈後：「原來只是一條繩子。」':'黑暗裡：「哇！有一條蛇！」'; b.textContent=on?'關燈':'開燈';};
+};
+
+/* 2 佛陀一生 */
+W.life = el => {
+ const S=[
+  {t:'出生',a:'0 歲',p:'藍毘尼園（今尼泊爾南部）',d:'摩耶夫人在回娘家的路上生下王子，取名悉達多。'},
+  {t:'宮中生活',a:'0–29 歲',p:'迦毘羅衛城',d:'過著富裕的王子生活，結婚生子。父王刻意不讓他看見世間的痛苦。'},
+  {t:'四門遊觀',a:'約 29 歲',p:'城門外',d:'先後看見老人、病人、死人與修行人，開始思考：人要怎樣才能脫離痛苦？'},
+  {t:'出家',a:'29 歲',p:'離開皇宮',d:'半夜離開皇宮與家人，剪去頭髮，成為修行人。'},
+  {t:'苦行',a:'29–35 歲',p:'尼連禪河附近',d:'六年極端苦行，瘦到皮包骨也沒有覺悟，於是接受供養的乳粥，體會到「中道」。'},
+  {t:'成道',a:'35 歲',p:'菩提伽耶（今印度）',d:'在菩提樹下禪定一整夜，天將亮時徹底覺悟，成為「佛陀」。'},
+  {t:'初轉法輪',a:'35 歲',p:'鹿野苑（今印度瓦拉納西附近）',d:'為五位昔日同伴講說四聖諦，第一批弟子出現，僧團誕生。'},
+  {t:'涅槃',a:'80 歲',p:'拘尸那羅（今印度）',d:'教化四十五年後，平靜地離開人世，留下「要自己精進努力」的教誨。'}
+ ];
+ el.innerHTML=`<div class="wbox"><p class="wt">佛陀一生時間軸（依序點開）</p><div class="tl-dots">${S.map((s,k)=>`<button class="tl-dot" data-k="${k}"><i></i>${s.t}</button>`).join('')}</div><div class="detail" aria-live="polite"></div><div class="ctrl"><button class="btn sm ghost" data-a="-1">上一站</button><button class="btn sm" data-a="1">下一站</button></div></div>`;
+ const dots=$$('.tl-dot',el), det=$('.detail',el), row=$('.tl-dots',el); let i=0;
+ const show=k=>{i=k;dots.forEach((d,n)=>{d.classList.toggle('on',n===k);d.classList.toggle('past',n<k)});
+  det.innerHTML=`<b>${S[k].t}</b>　${S[k].a}｜${S[k].p}<br>${S[k].d}`;
+  const d=dots[k]; row.scrollLeft=d.offsetLeft-row.clientWidth/2+d.offsetWidth/2;};
+ dots.forEach(d=>d.onclick=()=>show(+d.dataset.k));
+ $$('[data-a]',el).forEach(b=>b.onclick=()=>show(Math.min(S.length-1,Math.max(0,i+ +b.dataset.a))));
+ show(0);
+};
+
+/* 3 三寶 */
+W.gems = el => {
+ const D=[
+  {n:'佛',c:'#C98A1B',d:'<b>佛寶</b>：覺悟的老師、示範者。他證明人可以醒過來，並把方法教給大家。<br>比喻：醫生。'},
+  {n:'法',c:'#3E5190',d:'<b>法寶</b>：佛陀的教導，以及教導所指向的真理。<br>比喻：藥。真正治病的是藥。'},
+  {n:'僧',c:'#9E3F5A',d:'<b>僧寶</b>：共同修行的團體，互相支持、傳承佛法。<br>比喻：護理師，陪你按時吃藥。'}
+ ];
+ const gem=c=>`<svg viewBox="0 0 60 60" aria-hidden="true"><polygon points="30,4 54,22 30,56 6,22" fill="${c}"/><polygon points="30,4 42,22 30,56 18,22" fill="#fff" opacity=".22"/><line x1="6" y1="22" x2="54" y2="22" stroke="#fff" stroke-opacity=".5"/></svg>`;
+ el.innerHTML=`<div class="wbox"><p class="wt">點選三寶</p><div class="gems">${D.map((g,k)=>`<button class="gem" data-k="${k}">${gem(g.c)}${g.n}</button>`).join('')}</div><div class="detail" aria-live="polite">點一顆寶石看看。</div></div>`;
+ const bs=$$('.gem',el), det=$('.detail',el);
+ bs.forEach(b=>b.onclick=()=>{bs.forEach(x=>x.classList.toggle('on',x===b));det.innerHTML=D[+b.dataset.k].d;});
+};
+
+/* 4 四聖諦 醫生 */
+W.doctor = el => {
+ const S=[
+  {k:'苦',n:'症狀',doc:'醫生：「你生病了，發燒又咳嗽。」',bud:'佛陀：「人生有苦，這是事實。」',eg:'例：考前睡不著、胃痛。'},
+  {k:'集',n:'病因',doc:'醫生：「是細菌感染造成的。」',bud:'佛陀：「苦來自渴愛與執著。」',eg:'例：「一定要考第一」的強烈執著。'},
+  {k:'滅',n:'能痊癒',doc:'醫生：「放心，這個病可以治好。」',bud:'佛陀：「苦可以止息，那就是涅槃。」',eg:'例：焦慮不是永遠的，可以放下。'},
+  {k:'道',n:'藥方',doc:'醫生：「照這張藥單吃藥、休息。」',bud:'佛陀：「照八正道去做。」',eg:'例：好好準備、覺察擔心、調整想法。'}
+ ];
+ el.innerHTML=`<div class="wbox"><p class="wt">醫生看病 × 四聖諦</p><div class="steps4">${S.map(s=>`<div class="st4"><div class="big">${s.k}<small>${s.n}</small></div><div><p>${s.doc}</p><p>${s.bud}</p><p class="eg">${s.eg}</p></div></div>`).join('')}</div><div class="ctrl"><button class="btn sm" data-a="n">下一步</button><button class="btn sm ghost" data-a="r">重來</button></div></div>`;
+ const it=$$('.st4',el); let i=0; const nb=$('[data-a=n]',el);
+ const upd=()=>{it.forEach((x,k)=>x.classList.toggle('show',k<i)); nb.disabled=i>=S.length; nb.textContent=i===0?'開始看診':'下一步';};
+ nb.onclick=()=>{i++;upd();}; $('[data-a=r]',el).onclick=()=>{i=0;upd();}; upd();
+};
+
+/* 5 法輪 */
+W.wheel = el => {
+ const N=[['正見','hui','正確的理解：明白四聖諦、明白行為會帶來結果。'],['正思惟','hui','正確的動機與想法：出於善意、不想傷害別人。'],['正語','jie','好好說話：不說謊、不挑撥、不罵人、不說無意義的閒話。'],['正業','jie','好的行為：不傷害生命、不偷盜、不做不正當的事。'],['正命','jie','正當的生活方式：不靠傷害別人的工作賺錢。'],['正精進','ding','正確的努力：持續在好的方向用功，不偷懶也不蠻幹。'],['正念','ding','清楚覺察：知道自己此刻的身體、感受與念頭。'],['正定','ding','心的專注穩定：能把心安住在一件事上。']];
+ const G={hui:'慧',jie:'戒',ding:'定'};
+ const cx=150,cy=150,R=108;
+ let sp='',nd='';
+ N.forEach((n,k)=>{const a=(-90+k*45)*Math.PI/180,x=cx+R*Math.cos(a),y=cy+R*Math.sin(a);
+  sp+=`<line class="spk" x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}"/>`;
+  nd+=`<g class="nd g-${n[1]}" data-k="${k}" tabindex="0" role="button" aria-label="${n[0]}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="27"/><text x="${x.toFixed(1)}" y="${y.toFixed(1)}">${n[0]}</text></g>`;});
+ el.innerHTML=`<div class="wbox wheel"><p class="wt">八正道法輪：點選輪上的圓點</p><svg viewBox="0 0 300 300" style="max-width:340px">
+  <circle class="rim" cx="${cx}" cy="${cy}" r="${R}"/>${sp}<circle class="hub" cx="${cx}" cy="${cy}" r="20"/>${nd}</svg>
+  <div class="legend"><span style="--c:#3E5190">慧（理解）</span><span style="--c:#A96A12">戒（行為）</span><span style="--c:#40683A">定（專注）</span></div>
+  <div class="detail" aria-live="polite">八根輪輻要一起支撐，輪子才轉得動。點一個試試。</div></div>`;
+ const det=$('.detail',el), gs=$$('.nd',el);
+ const pick=g=>{gs.forEach(x=>x.classList.toggle('on',x===g));const n=N[+g.dataset.k];det.innerHTML=`<b>${n[0]}</b>（屬於「${G[n[1]]}」）<br>${n[2]}`;};
+ gs.forEach(g=>{g.onclick=()=>pick(g);g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();pick(g);}}});
+};
+
+/* 6 花的一生 */
+W.flower = el => {
+ const petals=(x,y,r,d,cls)=>{let s='';for(let k=0;k<6;k++){const a=k*60*Math.PI/180;s+=`<circle class="pet ${cls||''}" cx="${(x+d*Math.cos(a)).toFixed(1)}" cy="${(y+d*Math.sin(a)).toFixed(1)}" r="${r}"/>`;}return s;};
+ const st=[
+  `<ellipse class="sd" cx="120" cy="198" rx="7" ry="5"/>`,
+  `<ellipse class="sd" cx="120" cy="198" rx="6" ry="4"/><path class="stem" d="M120 195 Q118 170 120 152"/><ellipse class="lf" cx="110" cy="158" rx="9" ry="4" transform="rotate(-25 110 158)"/><ellipse class="lf" cx="130" cy="156" rx="9" ry="4" transform="rotate(25 130 156)"/>`,
+  `<path class="stem" d="M120 185 Q116 130 120 92"/><ellipse class="lf" cx="104" cy="140" rx="15" ry="6" transform="rotate(-25 104 140)"/><ellipse class="lf" cx="136" cy="128" rx="15" ry="6" transform="rotate(25 136 128)"/><ellipse class="pet" cx="120" cy="82" rx="10" ry="15"/><path d="M110 88 Q120 100 130 88" fill="#5E9A52"/>`,
+  `<path class="stem" d="M120 185 Q116 130 120 84"/><ellipse class="lf" cx="104" cy="140" rx="15" ry="6" transform="rotate(-25 104 140)"/><ellipse class="lf" cx="136" cy="128" rx="15" ry="6" transform="rotate(25 136 128)"/>${petals(120,68,13,19)}<circle class="ctr" cx="120" cy="68" r="11"/>`,
+  `<path class="stem" style="stroke:#7E8C4E" d="M120 185 Q118 130 136 102 Q146 92 150 104"/><ellipse class="lf" style="fill:#9A9A5A" cx="106" cy="142" rx="14" ry="5" transform="rotate(30 106 142)"/>${petals(150,112,8,12,'old')}<circle class="ctr" style="fill:#A88A3A" cx="150" cy="112" r="8"/><ellipse class="pet old" cx="176" cy="150" rx="6" ry="4"/><ellipse class="pet old" cx="94" cy="168" rx="6" ry="4"/>`,
+  `<path class="stem" style="stroke:#8A7A5A" d="M120 185 Q123 165 132 156"/><ellipse class="pet old" cx="92" cy="183" rx="8" ry="3"/><ellipse class="pet old" cx="146" cy="184" rx="8" ry="3"/><ellipse class="pet old" cx="166" cy="182" rx="7" ry="3"/><ellipse class="sd" cx="104" cy="200" rx="5" ry="3.5"/><ellipse class="sd" cx="138" cy="203" rx="5" ry="3.5"/><ellipse class="sd" cx="158" cy="198" rx="5" ry="3.5"/>`
+ ];
+ const C=['一顆種子，靜靜躺在土裡。它需要水、陽光、土壤這些「緣」。','發芽了！種子已經不再是原來的種子。','長出花苞。每一刻都在變，只是變得太慢，我們看不出來。','盛開了，最美的時刻。我們多希望它永遠這樣……','花開始凋謝。這不是意外，從種子那一刻起，變化就一直在發生。','花瓣落回土裡成為養分，又留下新的種子。結束，也是另一個開始。'];
+ el.innerHTML=`<div class="wbox flower"><p class="wt">拖動滑桿：一朵花的一生</p><svg viewBox="0 0 240 220" style="max-width:300px" role="img" aria-label="花的成長與凋謝"><rect class="soil" x="0" y="186" width="240" height="34" rx="6"/>${st.map((s,k)=>`<g class="stg" data-k="${k}">${s}</g>`).join('')}</svg><input type="range" min="0" max="5" step="1" value="0" aria-label="時間"><p class="cap" aria-live="polite"></p></div>`;
+ const r=$('input',el), gs=$$('.stg',el), cap=$('.cap',el);
+ const upd=()=>{const v=+r.value;gs.forEach((g,k)=>g.classList.toggle('on',k===v));cap.textContent=C[v];};
+ r.oninput=upd; upd();
+};
+
+/* 7 業的種子 */
+W.karma = el => {
+ const S={
+  a:{t:'選擇幫同學解題',c:[['念頭','「他好像不太會，我來教他。」'],['行為','放學前花十分鐘，教同學一題數學。'],['習慣','越來越常主動分享，也越講越清楚。'],['性格','變得有耐心，被大家信任。'],['結果','朋友變多，自己的數學也因為常常講解而更扎實。']]},
+  b:{t:'選擇抄作業',c:[['念頭','「好累喔，抄一下就好。」'],['行為','借同學的作業來抄。'],['習慣','一遇到難題，就想找捷徑。'],['性格','越來越怕困難、依賴別人。'],['結果','考試時不會寫，壓力更大，又更想逃避。']]}
+ };
+ el.innerHTML=`<div class="wbox"><p class="wt">一顆種子怎麼長大</p><div class="chips"><button class="chip on" data-s="a">${S.a.t}</button><button class="chip" data-s="b">${S.b.t}</button></div><div class="chain" style="margin-top:12px"></div><div class="ctrl"><button class="btn sm" data-a="n">下一步</button><button class="btn sm ghost" data-a="r">重來</button></div></div>`;
+ const ch=$('.chain',el), nb=$('[data-a=n]',el); let cur='a', i=0;
+ const draw=()=>{ch.innerHTML=S[cur].c.map((x,k)=>`${k?'<div class="arrow">↓ 加上時間與環境（緣）</div>':''}<div class="lk${k<i?' show':''}"><b>${x[0]}</b><span>${x[1]}</span></div>`).join('');nb.disabled=i>=5;};
+ $$('.chip',el).forEach(b=>b.onclick=()=>{$$('.chip',el).forEach(x=>x.classList.toggle('on',x===b));cur=b.dataset.s;i=0;draw();});
+ nb.onclick=()=>{i++;const l=$$('.lk',ch);if(l[i-1])l[i-1].classList.add('show');nb.disabled=i>=5;};
+ $('[data-a=r]',el).onclick=()=>{i=0;draw();};
+ draw();
+};
+
+/* 8 十二因緣 */
+W.twelve = el => {
+ const N=[['無明','看不清真相，就像第一課沒開燈的房間。這是整個循環的源頭。'],['行','因為看不清，就依著習慣做出各種行為，留下業力。'],['識','業力推動新生命的心識開始運作（傳統解釋為投胎時的心識）。'],['名色','身體（色）與心理作用（名）逐漸形成。'],['六入','眼、耳、鼻、舌、身、意六種感官發育完成。'],['觸','感官接觸外界：看到、聽到、碰到。'],['受','產生感受：舒服、不舒服，或沒什麼感覺。'],['愛','對舒服的感受產生渴求，對不舒服的產生排斥。這是日常生活中最好「踩剎車」的地方！'],['取','緊緊抓住不放，變成強烈的執著。'],['有','執著累積出新的業力，形成「再次存在」的力量。'],['生','於是又有新的出生。'],['老死','有生就有老、病、死與種種憂苦……然後又回到無明，繼續轉圈。']];
+ const c=160,R=120; let nd='';
+ N.forEach((n,k)=>{const a=(-90+k*30)*Math.PI/180,x=(c+R*Math.cos(a)).toFixed(1),y=(c+R*Math.sin(a)).toFixed(1);
+  nd+=`<g class="nd" data-k="${k}" tabindex="0" role="button" aria-label="${n[0]}"><circle cx="${x}" cy="${y}" r="26"/><text x="${x}" y="${y}">${n[0]}</text></g>`;});
+ el.innerHTML=`<div class="wbox tw"><p class="wt">十二因緣：點選環節，或按「下一個」繞一圈</p><svg viewBox="0 0 320 320" style="max-width:360px"><circle class="ring" cx="${c}" cy="${c}" r="${R}"/><text class="ctr" x="${c}" y="${c-8}">此有故彼有</text><text class="ctr" x="${c}" y="${c+16}">此滅故彼滅</text>${nd}</svg><div class="detail" aria-live="polite"></div><div class="ctrl"><button class="btn sm ghost" data-a="-1">上一個</button><button class="btn sm" data-a="1">下一個</button></div></div>`;
+ const gs=$$('.nd',el), det=$('.detail',el); let i=0;
+ const show=k=>{i=(k+12)%12;gs.forEach((g,n)=>g.classList.toggle('on',n===i));det.innerHTML=`<b>${i+1}．${N[i][0]}</b><br>${N[i][1]}`;};
+ gs.forEach(g=>{g.onclick=()=>show(+g.dataset.k);g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();show(+g.dataset.k);}}});
+ $$('[data-a]',el).forEach(b=>b.onclick=()=>show(i+ +b.dataset.a));
+ show(0);
+};
+
+/* 9 五戒翻牌 */
+W.precepts = el => {
+ const P=[['不殺生','不傷害生命','不傷害、不虐待動物，也不霸凌、不傷害他人。尊重每一個生命。'],['不偷盜','不拿不屬於自己的','不偷東西、不佔小便宜，也包括不抄襲別人的作品、不隨便拿同學的東西。'],['不邪淫','不做不正當的關係','尊重自己和他人的身體與感情，不做傷害伴侶與家庭的事。'],['不妄語','不說謊','不說謊、不造謠，也不在網路上亂傳沒有查證的消息。'],['不飲酒','保持清醒','不讓酒精或毒品奪走判斷力，保護自己不去犯前面四戒。']];
+ el.innerHTML=`<div class="wbox"><p class="wt">點卡片翻面</p><div class="flips">${P.map(p=>`<button class="flip" aria-label="${p[0]}：${p[1]}"><div class="in"><div class="fa"><b>${p[0]}</b><small>${p[1]}</small></div><div class="ba">${p[2]}</div></div></button>`).join('')}</div></div>`;
+ $$('.flip',el).forEach(f=>f.onclick=()=>f.classList.toggle('on'));
+};
+
+/* 10 呼吸 */
+W.breath = el => {
+ el.innerHTML=`<div class="wbox"><p class="wt">數息練習：圓變大吸氣（4 秒），變小吐氣（6 秒）</p><div class="breath"><div class="bc"><div style="text-align:center"><span>·</span><br><small>準備</small></div></div></div><p class="cap" aria-live="polite">按「開始」，吐氣時跟著數數。</p><div class="ctrl"><button class="btn sm">開始</button></div></div>`;
+ const bc=$('.bc',el), num=$('.bc span',el), lab=$('.bc small',el), cap=$('.cap',el), b=$('button',el);
+ let run=false,n=0,t=null;
+ const inhale=()=>{if(!run)return;bc.style.transitionDuration='4s';bc.style.transform='scale(1.6)';lab.textContent='吸氣';t=setTimeout(exhale,4000);};
+ const exhale=()=>{if(!run)return;n=n%10+1;num.textContent=n;bc.style.transitionDuration='6s';bc.style.transform='scale(1)';lab.textContent='吐氣';cap.textContent=n===10?'數到十了！從一重新開始。':'吐氣，心裡默數 '+n+'。分心了就從 1 重來。';t=setTimeout(inhale,6000);};
+ const stop=()=>{run=false;clearTimeout(t);bc.style.transitionDuration='1s';bc.style.transform='scale(1)';lab.textContent='暫停';b.textContent='開始';};
+ b.onclick=()=>{if(run){stop();return;}run=true;n=0;num.textContent='·';b.textContent='暫停';cap.textContent='慢慢吸氣……';inhale();};
+ CLEAN.push(stop);
+};
+
+/* 11 慈心擴大 */
+W.rings = el => {
+ const R=[['我','願我平安，願我快樂。'],['家人','願我的家人平安快樂。'],['朋友','願我的朋友平安快樂。'],['陌生人','願今天路上遇到的陌生人，也平安快樂。'],['不喜歡的人','願我不喜歡的人，也能離開痛苦、平安快樂。'],['一切生命','願世界上所有的生命，都平安快樂。']];
+ const cols=['#C98A1B','#C27A3A','#A8645A','#8A5F78','#5E6A9A','#40683A'];
+ const rs=[24,47,70,93,116,139];
+ el.innerHTML=`<div class="wbox rings"><p class="wt">慈心觀：一圈一圈擴大</p><svg viewBox="0 0 300 300" style="max-width:320px">${rs.map((r,k)=>`<circle data-k="${k}" cx="150" cy="150" r="${r}" stroke="${cols[k]}" fill="${k===0?cols[0]:'none'}" fill-opacity=".18"/>`).join('')}${rs.map((r,k)=>`<text data-k="${k}" x="150" y="${k===0?154:150-r+15}">${R[k][0]}</text>`).join('')}</svg><p class="cap" aria-live="polite"></p><div class="ctrl"><button class="btn sm" data-a="n">擴大一圈</button><button class="btn sm ghost" data-a="r">重來</button></div></div>`;
+ const cs=$$('circle',el), ts=$$('text',el), cap=$('.cap',el), nb=$('[data-a=n]',el); let i=1;
+ const upd=()=>{cs.forEach((c,k)=>c.classList.toggle('on',k<i));ts.forEach((t,k)=>t.classList.toggle('on',k<i));cap.textContent='「'+R[i-1][1]+'」';nb.disabled=i>=R.length;};
+ nb.onclick=()=>{i++;upd();}; $('[data-a=r]',el).onclick=()=>{i=1;upd();}; upd();
+};
+
+/* 12 三藏 */
+W.baskets = el => {
+ const B=[['經藏','sūtra','佛陀（以及部分大弟子）說的教導。例如《阿含經》《法華經》《金剛經》。','像學校的「課本」'],['律藏','vinaya','出家僧團的戒律與生活規範，還記錄了每一條戒是因為發生什麼事才制定的。','像學校的「校規」，附上每條規定的由來'],['論藏','abhidharma','後代弟子與學者對佛經的解釋、整理與討論。','像「參考書」與「解題本」']];
+ const bk=(x,c)=>`<path d="M${x-38} 60 L${x+38} 60 L${x+30} 118 L${x-30} 118 Z" fill="${c}" stroke="#6E4F2E" stroke-width="2"/><path d="M${x-36} 75 H${x+36} M${x-34} 90 H${x+34} M${x-32} 105 H${x+32}" stroke="#6E4F2E" stroke-width="1.2" opacity=".6"/><path d="M${x-26} 60 Q${x} 26 ${x+26} 60" fill="none" stroke="#6E4F2E" stroke-width="3"/>`;
+ el.innerHTML=`<div class="wbox"><p class="wt">點選籃子</p><svg viewBox="0 0 320 150" style="max-width:420px">${B.map((b,k)=>`<g data-k="${k}" style="cursor:pointer" tabindex="0" role="button" aria-label="${b[0]}">${bk(58+k*102,['#D9B77A','#C9A06A','#B98C5A'][k])}<text x="${58+k*102}" y="140" text-anchor="middle" font-size="15" font-weight="700" fill="currentColor">${b[0]}</text></g>`).join('')}</svg><div class="detail" aria-live="polite">佛教經典分成三個「籃子」，點一個看看。</div></div>`;
+ const det=$('.detail',el);
+ $$('g[data-k]',el).forEach(g=>{const f=()=>{const b=B[+g.dataset.k];det.innerHTML=`<b>${b[0]}</b>（梵文 ${b[1]}）<br>${b[2]}<br>比喻：${b[3]}。`;};g.onclick=f;g.onkeydown=e=>{if(e.key==='Enter'){f();}};});
+};
+
+/* 13 六度渡河 */
+W.river = el => {
+ const S=[['布施','把東西、知識、關懷分享給別人。可以是財物（財施），可以是教人道理（法施），也可以是給人安全感（無畏施）。'],['持戒','守好戒律，不傷害自己也不傷害別人。'],['忍辱','面對批評、委屈與困難能夠忍耐，不以牙還牙。這不是懦弱，而是不讓怒火主宰自己。'],['精進','持續努力，不偷懶也不蠻幹。'],['禪定','讓心專注、穩定，不被情緒拉走。'],['般若','看清真相（空）的智慧。佛教常比喻：前五度像看不見路的人，般若像帶路的眼睛，有了它才真正到得了彼岸。']];
+ const pos=S.map((s,k)=>[76+k*38,k%2?112:92]);
+ el.innerHTML=`<div class="wbox river"><p class="wt">點石頭，陪小人過河</p><svg viewBox="0 0 340 200"><rect class="water" x="40" y="20" width="260" height="170" rx="4"/><path class="wave" d="M60 50 q10 -6 20 0 t20 0 M200 160 q10 -6 20 0 t20 0 M150 40 q10 -6 20 0 t20 0"/><rect class="bank" x="0" y="20" width="44" height="170" rx="6"/><rect class="bank" x="296" y="20" width="44" height="170" rx="6"/><text x="22" y="185">此岸</text><text x="318" y="185">彼岸</text><text x="22" y="40" style="font-size:11px">煩惱</text><text x="318" y="40" style="font-size:11px">覺悟</text>${pos.map((p,k)=>`<g data-k="${k}" tabindex="0" role="button" aria-label="${S[k][0]}"><ellipse class="stone" cx="${p[0]}" cy="${p[1]}" rx="17" ry="11"/><text x="${p[0]}" y="${p[1]+28}">${S[k][0]}</text></g>`).join('')}<g class="me" style="transform:translate(22px,100px)"><circle cx="0" cy="-22" r="6" fill="#40683A"/><path d="M0 -16 V-2 M-7 -10 H7 M0 -2 L-5 8 M0 -2 L5 8" stroke="#40683A" stroke-width="3" stroke-linecap="round"/></g></svg><div class="detail" aria-live="polite">波羅蜜＝到彼岸。從第一塊石頭「布施」開始。</div><div class="ctrl"><button class="btn sm" data-a="up" disabled>走上彼岸</button><button class="btn sm ghost" data-a="r">回到此岸</button></div></div>`;
+ const me=$('.me',el), det=$('.detail',el), up=$('[data-a=up]',el), gs=$$('g[data-k]',el), seen=new Set();
+ const go=k=>{const p=pos[k];me.style.transform=`translate(${p[0]}px,${p[1]-6}px)`;gs.forEach(g=>$('.stone',g).classList.toggle('on',g===gs[k]));seen.add(k);det.innerHTML=`<b>${k+1}．${S[k][0]}波羅蜜</b><br>${S[k][1]}`;up.disabled=seen.size<6;};
+ gs.forEach(g=>{g.onclick=()=>go(+g.dataset.k);g.onkeydown=e=>{if(e.key==='Enter'){go(+g.dataset.k);}};});
+ up.onclick=()=>{me.style.transform='translate(318px,100px)';gs.forEach(g=>$('.stone',g).classList.remove('on'));det.innerHTML='<b>到彼岸了！</b><br>六度合起來，就是菩薩從煩惱走到覺悟的路。';};
+ $('[data-a=r]',el).onclick=()=>{seen.clear();me.style.transform='translate(22px,100px)';gs.forEach(g=>$('.stone',g).classList.remove('on'));up.disabled=true;det.innerHTML='波羅蜜＝到彼岸。從第一塊石頭「布施」開始。';};
+};
+
+/* 14 傳播地圖 */
+W.map = el => {
+ const P={'印度':[112,160,-30,4],'斯里蘭卡':[130,228,9,4],'緬甸':[178,150,-30,-4],'泰國':[200,182,-30,8],'寮國':[222,165,-12,-9],'柬埔寨':[240,192,-14,18],'越南':[256,158,8,2],'中國':[235,100,8,4],'西藏':[150,110,-12,-10],'中亞':[70,75,-12,-10],'蒙古':[225,45,8,4],'韓國':[298,78,-30,-6],'日本':[322,102,-10,-12]};
+ const R={s:{n:'南傳',p:'M112 160 L130 228 L178 150 L200 182 L222 165 M200 182 L240 192',d:'<b>南傳佛教</b>：約西元前三世紀，阿育王之子摩哂陀把佛法帶到斯里蘭卡，再傳到緬甸、泰國、柬埔寨、寮國。屬上座部，使用巴利文經典。'},
+  n:{n:'北傳',p:'M112 160 L70 75 L235 100 L298 78 L322 102 M235 100 L256 158',d:'<b>北傳（漢傳）佛教</b>：約西元一世紀前後經絲路、中亞傳入中國；約四世紀傳入韓國、六世紀傳入日本，也傳入越南。以大乘為主，使用漢文經典。'},
+  t:{n:'藏傳',p:'M112 160 L150 110 L225 45',d:'<b>藏傳佛教</b>：七到八世紀從印度傳入西藏，保留大量印度後期經典與密法（金剛乘），後來傳到蒙古、不丹等地。使用藏文經典。'}};
+ el.innerHTML=`<div class="wbox amap"><p class="wt">佛教傳播路線（示意圖）</p><svg viewBox="0 0 340 250" role="img" aria-label="亞洲佛教傳播路線示意圖"><path class="land" d="M15 15 H330 V55 L312 75 L300 110 L278 140 L262 175 L248 205 L232 210 L226 185 L214 200 L205 225 L196 222 L198 190 L186 172 L168 168 L150 186 L128 208 L112 196 L98 162 L70 140 L40 130 L15 125 Z"/><ellipse class="land" cx="130" cy="228" rx="7" ry="11"/><ellipse class="land" cx="322" cy="102" rx="6" ry="18" transform="rotate(25 322 102)"/>${Object.entries(R).map(([k,r])=>`<path class="route r-${k}" data-r="${k}" d="${r.p}"/>`).join('')}${Object.entries(P).map(([n,p])=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.5"/><text x="${p[0]+p[2]}" y="${p[1]+p[3]}">${n}</text>`).join('')}</svg><div class="chips">${Object.entries(R).map(([k,r])=>`<button class="chip" data-r="${k}">${r.n}</button>`).join('')}</div><div class="detail" aria-live="polite">點上面的按鈕，看每一條路線。</div></div>`;
+ const det=$('.detail',el);
+ $$('.chip',el).forEach(b=>b.onclick=()=>{const k=b.dataset.r;$$('.chip',el).forEach(x=>x.classList.toggle('on',x===b));$$('.route',el).forEach(p=>p.classList.toggle('on',p.dataset.r===k));det.innerHTML=R[k].d;});
+};
+
+/* 15 八宗 */
+W.schools = el => {
+ const S=[
+  {n:'天台宗',a:'又稱法華宗',p:'智顗（智者大師）',k:'《法華經》',h:'浙江天台山國清寺',d:'中國第一個成熟的本土宗派。提出「一念三千」：一個念頭裡就包含宇宙的一切可能。重視止觀並重，理論與實踐兼顧。'},
+  {n:'華嚴宗',a:'又稱賢首宗',p:'法藏（賢首大師）',k:'《華嚴經》',h:'陝西西安一帶',d:'講「一即一切，一切即一」。用「因陀羅網」比喻：天神宮殿掛著一張網，每個網結上有一顆寶珠，每顆寶珠都映照出其他所有寶珠。萬物互相映照、互相包含。'},
+  {n:'三論宗',a:'',p:'吉藏',k:'《中論》《百論》《十二門論》',h:'西安草堂寺、南京棲霞寺',d:'繼承龍樹的中觀思想，專門闡揚「空」與「中道」，破除一切執著。宗名來自它依據的三部論（第十六課會學）。'},
+  {n:'唯識宗',a:'又稱法相宗、慈恩宗',p:'玄奘、窺基',k:'《成唯識論》《解深密經》',h:'西安大慈恩寺（大雁塔）',d:'分析心識的結構，主張「萬法唯識」。理論非常精細，像一部心理學百科（第十七課會學）。'},
+  {n:'禪宗',a:'',p:'菩提達摩、六祖慧能',k:'《六祖壇經》《金剛經》',h:'河南嵩山少林寺、廣東曹溪南華寺',d:'主張「直指人心，見性成佛」，重視參禪與在日常生活中覺悟。後來成為影響最大的宗派之一，也傳到日本（Zen）、韓國、越南（第十八課會學）。'},
+  {n:'淨土宗',a:'又稱蓮宗',p:'慧遠（初祖）、善導',k:'《阿彌陀經》等淨土三經',h:'江西廬山東林寺',d:'稱念「[[南無]][[阿彌陀佛]]」，發願往生西方極樂世界，在那裡繼續修行成佛。方法簡單、人人可行，是民間最普及的宗派。'},
+  {n:'律宗',a:'又稱南山宗',p:'道宣',k:'《四分律》',h:'陝西終南山',d:'專門研究與實踐戒律。沒有戒律，僧團就無法健康運作，所以各宗出家人都要學律。唐朝鑑真和尚東渡日本，傳的就是律宗。'},
+  {n:'密宗',a:'又稱真言宗',p:'善無畏、金剛智、不空（開元三大士）',k:'《大日經》《金剛頂經》',h:'西安大興善寺、青龍寺',d:'重視「三密」：手結印（身）、口誦咒（口）、心觀想（意）。唐朝盛行，日本空海大師到青龍寺學習後，回日本開創真言宗。'}
+ ];
+ el.innerHTML=`<div class="wbox"><p class="wt">點選宗派</p><div class="sch">${S.map((s,k)=>`<button data-k="${k}"><b>${s.n}</b><small>${s.p}</small></button>`).join('')}</div><div class="detail" aria-live="polite">八個宗派，八條登山步道。點一個看看。</div></div>`;
+ const det=$('.detail',el), bs=$$('.sch button',el);
+ bs.forEach(b=>b.onclick=()=>{bs.forEach(x=>x.classList.toggle('on',x===b));const s=S[+b.dataset.k];det.innerHTML=tfy(`<b>${s.n}</b>${s.a?'（'+s.a+'）':''}<br>代表人物：${s.p}<br>主要經典：${s.k}<br>祖庭：${s.h}<br>${s.d}`);});
+};
+
+/* 16 拆車 */
+W.chariot = el => {
+ const parts=[['flag','旗子','拆掉旗子。還是車嗎？是。所以旗子不是車。'],['pole','車轅','拆掉車轅（拉車用的長桿）。好像還是車……'],['body','車廂','拆掉車廂。現在只剩輪子和車軸，這還是車嗎？'],['wheels','輪子','拆掉輪子。只剩一根車軸，你還會叫它「車」嗎？'],['axle','車軸','全部拆光了！每一個零件都不是車，可是零件之外，也找不到「車」。「車」只是這些零件組合在一起時，我們給的名稱。']];
+ const wheel=cx=>`<circle class="whl" cx="${cx}" cy="140" r="30"/>${[0,45,90,135].map(a=>{const r=a*Math.PI/180;return `<line class="spk" x1="${(cx-28*Math.cos(r)).toFixed(1)}" y1="${(140-28*Math.sin(r)).toFixed(1)}" x2="${(cx+28*Math.cos(r)).toFixed(1)}" y2="${(140+28*Math.sin(r)).toFixed(1)}"/>`;}).join('')}<circle cx="${cx}" cy="140" r="5" fill="#6E4F2E"/>`;
+ el.innerHTML=`<div class="wbox car"><p class="wt">一台車在哪裡？</p><svg viewBox="0 0 320 190" style="max-width:420px"><line class="ground" x1="10" y1="172" x2="310" y2="172"/>
+  <g class="part" data-p="pole"><path d="M218 112 L305 98" stroke="#6E4F2E" stroke-width="7" stroke-linecap="round"/></g>
+  <g class="part" data-p="axle"><rect class="wood" x="70" y="136" width="160" height="9" rx="4"/></g>
+  <g class="part" data-p="body"><path class="wood" d="M72 70 H228 L220 128 H80 Z"/><path d="M90 84 H210" stroke="#6E4F2E" stroke-width="1.5" opacity=".6"/></g>
+  <g class="part" data-p="flag"><line x1="92" y1="70" x2="92" y2="18" stroke="#6E4F2E" stroke-width="3"/><path class="flag" d="M94 20 L132 30 L94 42 Z"/></g>
+  <g class="part" data-p="wheels">${wheel(100)}${wheel(200)}</g>
+ </svg><p class="cap" aria-live="polite">這是一台車。請問：「車」在哪裡？</p><div class="ctrl"><button class="btn sm" data-a="n">拆掉旗子</button><button class="btn sm ghost" data-a="r">重新組合</button></div></div>`;
+ const cap=$('.cap',el), nb=$('[data-a=n]',el); let i=0;
+ nb.onclick=()=>{if(i>=parts.length)return;$(`[data-p=${parts[i][0]}]`,el).classList.add('gone');cap.textContent=parts[i][2];i++;nb.disabled=i>=parts.length;if(i<parts.length)nb.textContent='拆掉'+parts[i][1];};
+ $('[data-a=r]',el).onclick=()=>{i=0;$$('.part',el).forEach(p=>p.classList.remove('gone'));cap.textContent='這是一台車。請問：「車」在哪裡？';nb.disabled=false;nb.textContent='拆掉旗子';};
+};
+
+/* 17 冰山八識 */
+W.iceberg = el => {
+ const L=[['前五識',62,74,'<b>前五識</b>：眼、耳、鼻、舌、身五種感覺，接收顏色、聲音、氣味、味道、觸感。像露出水面的冰山尖，最容易被注意到。'],['第六識　意識',112,112,'<b>第六識：意識</b>：負責思考、判斷、比較、想像、回憶。它在水面附近：有時我們清楚知道自己在想什麼，有時又說不上來。'],['第七識　末那識',182,126,'<b>第七識：末那識</b>：在水面下，二十四小時抓著「我」不放：我的東西、我的面子、對我好不好。平常察覺不到，卻讓我們自私、愛比較。'],['第八識　阿賴耶識',258,140,'<b>第八識：阿賴耶識</b>：最深最大的一層，像巨大的倉庫，儲存一切經驗留下的種子。它推動著上面的一切，是習慣與業力延續的基礎。']];
+ el.innerHTML=`<div class="wbox ice"><p class="wt">心的冰山：點選每一層</p><svg viewBox="0 0 320 320" style="max-width:360px"><rect class="sky" x="0" y="0" width="320" height="96" rx="10"/><rect class="sea" x="0" y="96" width="320" height="224" rx="10"/><polygon class="under" points="96,96 58,180 78,282 160,312 252,272 268,170 226,96"/><polygon class="berg" points="118,96 146,52 160,30 176,48 204,96"/><line x1="0" y1="96" x2="320" y2="96" stroke="#fff" stroke-width="2" stroke-dasharray="6 5"/>${L.map((l,k)=>`<g class="lb" data-k="${k}" tabindex="0" role="button" aria-label="${l[0]}"><rect x="${160-l[2]/2}" y="${l[1]-14}" width="${l[2]}" height="28" rx="14"/><text x="160" y="${l[1]}">${l[0]}</text></g>`).join('')}<text x="300" y="90" text-anchor="end" font-size="11" fill="#2F5C86">水面</text></svg><div class="detail" aria-live="polite">露出水面的只是一小部分，心的大部分運作，我們平常察覺不到。</div></div>`;
+ const det=$('.detail',el), gs=$$('.lb',el);
+ const pick=g=>{gs.forEach(x=>x.classList.toggle('on',x===g));det.innerHTML=L[+g.dataset.k][3];};
+ gs.forEach(g=>{g.onclick=()=>pick(g);g.onkeydown=e=>{if(e.key==='Enter'){pick(g);}};});
+};
+
+/* 18 指月 */
+W.moon = el => {
+ el.innerHTML=`<div class="wbox moon"><p class="wt">以指指月</p><svg viewBox="0 0 320 200" style="max-width:420px"><rect class="skyb" x="0" y="0" width="320" height="200" rx="12"/><circle class="star" cx="40" cy="30" r="1.5"/><circle class="star" cx="130" cy="22" r="1.2"/><circle class="star" cx="190" cy="60" r="1.4"/><circle class="star" cx="300" cy="130" r="1.2"/><circle class="star" cx="80" cy="80" r="1"/><circle class="halo" cx="252" cy="52" r="44"/><circle class="mn" cx="252" cy="52" r="26"/><line class="ray" x1="128" y1="120" x2="228" y2="66"/><g class="hand" style="transform-box:fill-box;transform-origin:center"><rect x="46" y="138" width="46" height="40" rx="12"/><rect x="78" y="134" width="56" height="12" rx="6" transform="rotate(-28 80 140)"/></g></svg><p class="cap" aria-live="polite">老師用手指著月亮。你會看哪裡？</p><div class="ctrl"><button class="btn sm ghost" data-a="f">盯著手指</button><button class="btn sm" data-a="m">順著看月亮</button></div></div>`;
+ const box=$('.moon',el), cap=$('.cap',el);
+ $('[data-a=f]',el).onclick=()=>{box.classList.add('finger');cap.textContent='你一直研究手指：指甲、紋路、角度……卻錯過了月亮。只背經文、爭論字句，就像這樣。';};
+ $('[data-a=m]',el).onclick=()=>{box.classList.remove('finger');cap.textContent='順著手指看出去，月亮就在那裡。經典與老師的話是手指，真相是月亮。';};
+};
+/* ========== 主程式 ========== */
+const KEY='bodhi-path-v1';
+const state={done:{},last:0,theme:''};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s)Object.assign(state,s);}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}};
+const CN=['一','二','三','四','五','六','七','八','九','十','十一','十二','十三','十四','十五','十六','十七','十八','十九'];
+
+function tfy(s){return s.replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g,(m,txt,key)=>{key=key||txt;return G[key]?`<button class="t" data-t="${key}">${txt}</button>`:txt;});}
+
+/* 側欄 */
+function renderSide(cur){
+ let h='';
+ PARTS.forEach((p,pi)=>{h+=`<h4>${p.t}</h4>`;L.forEach((l,i)=>{if(l.part!==pi)return;h+=`<button class="nav-l${cur===i?' on':''}" data-go="#l${i+1}"><span class="n">${i+1}</span><span>${l.title}</span>${state.done[i]?'<span class="ok" aria-label="已完成">✓</span>':''}</button>`;});});
+ h+=`<div class="extra"><button class="nav-l${cur==='g'?' on':''}" data-go="#glossary"><span class="n">辭</span><span>名詞辭典</span></button><button class="nav-l${cur==='e'?' on':''}" data-go="#exam"><span class="n">試</span><span>結業測驗</span></button><button class="nav-l${cur==='h'?' on':''}" data-go="#home"><span class="n">首</span><span>課程首頁</span></button></div>`;
+ $('#side').innerHTML=h;
+}
+function renderProg(){const n=Object.keys(state.done).length;$('#progI').style.width=(n/L.length*100)+'%';$('#progT').textContent=`${n} / ${L.length} 課`;}
+
+/* 首頁 */
+function renderHome(){
+ const n=Object.keys(state.done).length;
+ const next=L.findIndex((l,i)=>!state.done[i]);
+ let h=`<section class="hero"><div><h1>菩提路</h1><p class="lead">一門從零開始的佛學課。從「佛是什麼意思」出發，一步一步走到空性、唯識這些專業哲學。十九堂課，國中生讀得懂，大人讀了也有收穫。</p><div class="btns"><button class="btn" data-go="#l1">從第一課開始</button>${n>0&&next>=0?`<button class="btn ghost" data-go="#l${next+1}">繼續第 ${next+1} 課</button>`:''}</div></div>
+ <div class="leaf-wrap"><svg class="leaf-svg" viewBox="0 0 200 260" aria-hidden="true"><path class="fill" d="M100 8 C60 50 18 90 22 150 C26 200 70 232 100 240 C130 232 174 200 178 150 C182 90 140 50 100 8 Z"/><path class="outline" d="M100 8 C60 50 18 90 22 150 C26 200 70 232 100 240 C130 232 174 200 178 150 C182 90 140 50 100 8 Z M100 240 L100 256"/><path class="vein" d="M100 30 V238 M100 80 L66 64 M100 80 L134 64 M100 115 L52 98 M100 115 L148 98 M100 150 L44 140 M100 150 L156 140 M100 185 L56 184 M100 185 L144 184 M100 215 L74 222 M100 215 L126 222"/></svg></div></section>
+ <div class="howto"><div><b>依序學習</b>課程從最基礎開始，每一課都用到前一課的觀念，請照順序讀。</div><div><b>點底線詞</b>有點狀底線的專有名詞，點一下就能看到原文與由來。</div><div><b>動手與測驗</b>每課都有互動圖解，最後有三題小測驗，讀完按「完成本課」。</div></div>`;
+ PARTS.forEach((p,pi)=>{h+=`<section class="map-part"><h3>${p.t}</h3><p>${p.d}</p><ul class="map-list">`;L.forEach((l,i)=>{if(l.part!==pi)return;h+=`<li class="${state.done[i]?'done':''}"><button data-go="#l${i+1}"><span class="n">第${CN[i]}課</span>${l.title}</button></li>`;});h+='</ul></section>';});
+ h+=`<section class="map-part"><h3>學完之後</h3><p>用名詞辭典複習專有名詞，再挑戰結業測驗。</p><div class="btns"><button class="btn ghost" data-go="#glossary">名詞辭典</button><button class="btn ghost" data-go="#exam">結業測驗</button></div></section><p class="note">本課程以介紹佛教思想與歷史為主，不要求任何信仰。不同佛教傳統對部分內容有不同解釋，課文已盡量註明。</p>`;
+ $('#view').innerHTML=h;
+}
+
+/* 測驗 */
+function quizHTML(qs,prefix){return qs.map((q,k)=>`<div class="qi" data-a="${q.a}"><p class="q">${k+1}．${q.q}</p><div class="opts">${q.o.map((o,j)=>`<button class="opt" data-j="${j}">${String.fromCharCode(65+j)}．${o}</button>`).join('')}</div><p class="exp" hidden>${q.e}</p></div>`).join('');}
+function bindQuiz(root,onAll){
+ const items=$$('.qi',root);let answered=0,right=0;
+ items.forEach(it=>{const a=+it.dataset.a;$$('.opt',it).forEach(b=>b.onclick=()=>{const j=+b.dataset.j;$$('.opt',it).forEach(x=>{x.disabled=true;if(+x.dataset.j===a)x.classList.add('right');});if(j!==a)b.classList.add('wrong');else right++;const e=$('.exp',it);e.hidden=false;e.innerHTML=(j===a?'<b>答對了！</b>':'<b>再想想：</b>')+e.innerHTML;answered++;if(answered===items.length&&onAll)onAll(right,items.length);});});
+}
+
+/* 課程頁 */
+function renderLesson(i){window.AC_COURSE_GO=function(v){renderLesson(v)};window.AC_COURSE_POSITION=i;
+ const l=L[i];
+ const prevUndone=i>0&&!state.done[i-1]&&!state.done[i];
+ let h=`<article class="lesson">`;
+ if(prevUndone)h+=`<div class="nudge">這一課會用到前面的觀念，建議先讀完第 ${i} 課「${L[i-1].title}」。<button class="btn sm ghost" style="margin-left:6px" data-go="#l${i}">回到第 ${i} 課</button></div>`;
+ h+=`<header class="l-head"><p class="l-part">${PARTS[l.part].t}</p><div class="l-title"><span class="l-num" aria-hidden="true">${i+1}</span><h1>${l.title}</h1></div><p class="l-sub">${l.sub}</p></header>
+ <div class="goals"><strong>這一課你會學到</strong><ul>${l.goals.map(g=>`<li>${g}</li>`).join('')}</ul></div>
+ ${tfy(l.body)}
+ <div class="sum"><h4>重點整理</h4><ul>${l.sum.map(s=>`<li>${s}</li>`).join('')}</ul></div>
+ <section class="quiz"><h4>小測驗</h4>${quizHTML(l.quiz)}</section>
+ <div class="done-row"><button class="btn" id="doneBtn">${state.done[i]?'已完成 ✓　再讀一次也很好':'完成本課'}</button></div>
+ <nav class="l-foot">${i>0?`<button class="btn ghost sm" data-go="#l${i}">上一課：${L[i-1].title}</button>`:'<span></span>'}${i<L.length-1?`<button class="btn sm" data-go="#l${i+2}">下一課：${L[i+1].title}</button>`:`<button class="btn sm" data-go="#exam">前往結業測驗</button>`}</nav></article>`;
+ $('#view').innerHTML=h;
+ $$('.w',$('#view')).forEach(w=>{const f=W[w.dataset.w];if(f)f(w);});
+ bindQuiz($('.quiz'));
+ $('#doneBtn').onclick=()=>{state.done[i]=1;state.last=i;save();renderProg();renderSide(i);if(i<L.length-1)location.hash='#l'+(i+2);else location.hash='#exam';};
+ state.last=i;save();
+}
+
+/* 辭典 */
+function renderGloss(){
+ const keys=Object.keys(G);
+ $('#view').innerHTML=`<header class="l-head"><div class="l-title"><h1>名詞辭典</h1></div><p class="l-sub">共 ${keys.length} 個專有名詞，附原文與由來。</p></header><input class="gsearch" type="search" placeholder="搜尋，例如：涅槃、空、菩薩" aria-label="搜尋名詞"><div id="glist"></div>`;
+ const list=$('#glist');
+ const draw=q=>{list.innerHTML=keys.filter(k=>!q||k.includes(q)||G[k].m.includes(q)||G[k].s.toLowerCase().includes(q.toLowerCase())).map(k=>`<div class="gitem"><h5>${k}</h5><p class="src">${G[k].s}</p><p>${G[k].m}</p><p style="color:var(--muted);margin-top:4px">${G[k].o}</p></div>`).join('')||'<p>找不到這個詞。試試別的關鍵字，或到課文裡找找看。</p>';};
+ $('.gsearch').oninput=e=>draw(e.target.value.trim()); draw('');
+}
+
+/* 結業測驗 */
+function renderExam(){
+ const all=[];L.forEach(l=>l.quiz.forEach(q=>all.push(q)));
+ for(let k=all.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[all[k],all[j]]=[all[j],all[k]];}
+ const qs=all.slice(0,15);
+ const n=Object.keys(state.done).length;
+ $('#view').innerHTML=`<header class="l-head"><div class="l-title"><h1>結業測驗</h1></div><p class="l-sub">從十九課隨機抽出 15 題。${n<L.length?`你目前完成了 ${n} 課，建議全部讀完再來挑戰。`:'你已經完成所有課程，來檢驗一下吧！'}</p></header><section class="quiz">${quizHTML(qs)}</section><div id="score"></div><div class="done-row"><button class="btn ghost" id="again">重新出題</button></div>`;
+ bindQuiz($('.quiz'),(r,t)=>{const msg=r===t?'全對！你已經掌握了這門課的核心。':r>=t*0.8?'非常好！回頭看看答錯的那幾題就更完整了。':r>=t*0.6?'不錯的開始，建議複習答錯題目的那幾課。':'建議再依序讀一次課程，你會發現第二次讀收穫更多。';$('#score').innerHTML=`<p class="exam-score">${r} / ${t}</p><p style="text-align:center">${msg}</p>`;$('#score').scrollIntoView({behavior:'smooth',block:'center'});});
+ $('#again').onclick=renderExam;
+}
+
+/* 名詞彈窗 */
+function openSheet(k){const g=G[k];if(!g)return;$('#sheetC').innerHTML=`<h5 id="sheetH">${k}</h5><p class="src">${g.s}</p><p><span class="lbl">意思</span>${g.m}</p><p><span class="lbl">由來</span>${g.o}</p>`;$('#sheet').classList.add('on');$('#sheetBg').classList.add('on');$('#sheetX').focus();}
+function closeSheet(){$('#sheet').classList.remove('on');$('#sheetBg').classList.remove('on');}
+
+/* 路由 */
+function route(){
+ CLEAN.forEach(f=>{try{f();}catch(e){}});CLEAN=[];
+ closeSheet();document.body.classList.remove('nav-open');
+ const h=location.hash||'#home';let cur='h';
+ const m=h.match(/^#l(\d+)$/);
+ if(m&&L[+m[1]-1]){cur=+m[1]-1;renderLesson(cur);}
+ else if(h==='#glossary'){cur='g';renderGloss();}
+ else if(h==='#exam'){cur='e';renderExam();}
+ else renderHome();
+ renderSide(cur);renderProg();window.scrollTo(0,0);
+}
+
+/* 事件 */
+document.addEventListener('click',e=>{
+ const t=e.target.closest('.t');if(t){openSheet(t.dataset.t);return;}
+ const g=e.target.closest('[data-go]');if(g){const to=g.dataset.go;if(location.hash===to)route();else location.hash=to;}
+});
+$('#sheetBg').onclick=closeSheet;$('#sheetX').onclick=closeSheet;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSheet();document.body.classList.remove('nav-open');}});
+$('#menuBtn').onclick=()=>document.body.classList.toggle('nav-open');
+$('#scrim').onclick=()=>document.body.classList.remove('nav-open');
+$('#homeBtn').onclick=()=>{location.hash='#home';};
+const applyTheme=()=>{if(state.theme)document.documentElement.setAttribute('data-theme',state.theme);else document.documentElement.removeAttribute('data-theme');};
+$('#themeBtn').onclick=()=>{const dark=state.theme?state.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;state.theme=dark?'light':'dark';save();applyTheme();};
+applyTheme();
+window.addEventListener('hashchange',route);
+route();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-b878ab6737" data-category="classics"></script></body>
+</html>

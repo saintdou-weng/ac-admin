@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>電機入門互動教室 — 從零開始學電與馬達</title>
+<style>
+:root{
+  --linen:#FAF6EF;
+  --paper:#FFFFFF;
+  --khaki:#A8946A;
+  --khaki-dark:#8A774E;
+  --ink:#1F1D1A;
+  --gray:#6E6A63;
+  --line:#E6DFD2;
+  --blue:#2E5E7E;   /* 電流 藍 */
+  --red:#8C4A3C;    /* N極/火線 磚紅 */
+  --ok:#3E6B4F;
+  --bad:#A24936;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
+  background:var(--linen);color:var(--ink);line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+.num{font-family:Georgia,"Times New Roman",serif;font-variant-numeric:tabular-nums;}
+
+header{background:var(--ink);color:var(--linen);padding:28px 20px 22px;text-align:center;}
+header .eyebrow{font-size:12px;letter-spacing:4px;color:var(--khaki);margin-bottom:8px;}
+header h1{font-size:24px;font-weight:700;letter-spacing:2px;}
+header p{font-size:13px;color:#B8B2A6;margin-top:6px;}
+
+nav{position:sticky;top:0;z-index:50;background:var(--paper);border-bottom:1px solid var(--line);
+  display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+nav::-webkit-scrollbar{display:none;}
+nav button{flex:0 0 auto;background:none;border:none;padding:14px 14px;font-size:13px;color:var(--gray);
+  border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;font-family:inherit;}
+nav button.active{color:var(--ink);border-bottom-color:var(--khaki);font-weight:700;}
+.progress-wrap{height:3px;background:var(--line);}
+.progress-bar{height:3px;background:var(--khaki);width:0;transition:width .4s;}
+
+main{max-width:760px;margin:0 auto;padding:24px 18px 80px;}
+section.chapter{display:none;animation:fadein .35s ease;}
+section.chapter.show{display:block;}
+@keyframes fadein{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+.ch-label{font-size:12px;letter-spacing:3px;color:var(--khaki-dark);margin-bottom:4px;}
+h2{font-size:22px;margin-bottom:16px;}
+h3{font-size:17px;margin:28px 0 10px;padding-left:10px;border-left:4px solid var(--khaki);}
+p{margin-bottom:12px;font-size:15px;}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px;margin:14px 0;}
+.story{background:#F3EDDF;border-left:4px solid var(--khaki);border-radius:0 10px 10px 0;
+  padding:16px 18px;margin:14px 0;font-size:15px;}
+.story b{color:var(--khaki-dark);}
+.tip{background:var(--paper);border:1px dashed var(--khaki);border-radius:10px;padding:14px 16px;margin:14px 0;font-size:14px;}
+.tip::before{content:"💡 小重點";display:block;font-weight:700;color:var(--khaki-dark);margin-bottom:6px;font-size:13px;letter-spacing:1px;}
+.origin{background:#EFF3F5;border-left:4px solid var(--blue);border-radius:0 10px 10px 0;
+  padding:12px 16px;margin:14px 0;font-size:14px;}
+.origin::before{content:"📖 名詞的由來";display:block;font-weight:700;color:var(--blue);margin-bottom:4px;font-size:13px;letter-spacing:1px;}
+
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;background:var(--paper);}
+th{background:var(--ink);color:var(--linen);padding:9px 10px;text-align:left;font-weight:600;}
+td{border:1px solid var(--line);padding:9px 10px;vertical-align:top;}
+tr:nth-child(even) td{background:#FBF8F1;}
+.right{text-align:right;}
+
+.btn{display:inline-block;background:var(--ink);color:var(--linen);border:none;border-radius:8px;
+  padding:10px 18px;font-size:14px;cursor:pointer;font-family:inherit;transition:opacity .15s;}
+.btn:active{opacity:.75;}
+.btn.ghost{background:var(--paper);color:var(--ink);border:1px solid var(--ink);}
+.btn.small{padding:8px 14px;font-size:13px;}
+.btn.khaki{background:var(--khaki-dark);}
+
+/* 互動實驗盒 */
+.lab{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:16px 0;}
+.lab .lab-title{font-weight:700;margin-bottom:10px;font-size:15px;}
+.lab .lab-title::before{content:"🔬 ";}
+.slider-row{display:flex;align-items:center;gap:10px;margin:10px 0;font-size:14px;}
+.slider-row label{width:110px;flex:0 0 auto;font-weight:700;}
+.slider-row input[type=range]{flex:1;accent-color:var(--khaki-dark);}
+.slider-row .val{width:88px;text-align:right;flex:0 0 auto;}
+.lab .result{background:var(--linen);border-radius:8px;padding:12px 14px;margin-top:10px;font-size:15px;text-align:center;}
+.lab .result b{color:var(--khaki-dark);font-size:18px;}
+.lab svg{width:100%;height:auto;display:block;margin:8px auto;}
+
+/* 測驗 */
+.quiz{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;}
+.quiz .q-text{font-weight:700;margin-bottom:10px;font-size:15px;}
+.quiz .opts{display:flex;flex-direction:column;gap:8px;}
+.quiz .opt{text-align:left;background:var(--linen);border:1px solid var(--line);border-radius:8px;
+  padding:10px 12px;font-size:14px;cursor:pointer;font-family:inherit;}
+.quiz .opt.correct{background:#E7F0E9;border-color:var(--ok);color:var(--ok);font-weight:700;}
+.quiz .opt.wrong{background:#F6E7E2;border-color:var(--bad);color:var(--bad);}
+.quiz .fb{margin-top:10px;font-size:14px;display:none;}
+.quiz .fb.show{display:block;}
+.quiz .fb.good{color:var(--ok);}
+.quiz .fb.no{color:var(--bad);}
+
+.pager{display:flex;justify-content:space-between;margin-top:32px;gap:10px;}
+.pager .btn{flex:1;text-align:center;}
+
+#finalScore{display:none;text-align:center;padding:20px;}
+#finalScore .big{font-size:40px;font-weight:700;color:var(--khaki-dark);}
+
+/* 馬達動畫 */
+.rotor-spin{transform-origin:210px 130px;animation:spin 2.4s linear infinite;}
+.rotor-spin.paused{animation-play-state:paused;}
+@keyframes spin{to{transform:rotate(360deg);}}
+/* 電子流動 */
+.flow-dot{animation:flow 2.2s linear infinite;}
+@keyframes flow{to{stroke-dashoffset:-60;}}
+
+@media (max-width:480px){
+  h2{font-size:20px;}
+  .slider-row label{width:88px;font-size:13px;}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important;transition:none !important;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">ELECTRICITY &amp; MOTORS · FROM ZERO</div>
+  <h1>電機入門互動教室</h1>
+  <p>從「電是什麼」一路學到工廠的三相馬達與變頻器,國中生也能懂</p>
+</header>
+
+<nav id="nav"></nav>
+<div class="progress-wrap"><div class="progress-bar" id="pbar"></div></div>
+
+<main>
+
+<!-- ======== 序章 ======== -->
+<section class="chapter" data-title="開場">
+  <div class="ch-label">序章</div>
+  <h2>電機是什麼?為什麼值得學?</h2>
+
+  <div class="story">
+    走進一間成衣廠:縫紉機在跑、裁床在動、風扇在轉、空壓機在打氣、電梯上上下下……<br>
+    這些機器的心臟,全都是同一種東西——<b>馬達(電動機)</b>。<br><br>
+    <b>電機</b>這門學問,講的就是「<b>電</b>」和「<b>機</b>(旋轉的機器)」之間的互相轉換:<br>
+    ⚡ 電 → 動力:<b>馬達</b>(電動機)<br>
+    🌀 動力 → 電:<b>發電機</b><br>
+    兩個其實是雙胞胎,學會一個就等於學會另一個。
+  </div>
+
+  <p>這堂課保證<b>不跳步</b>:先弄懂電本身(電壓、電流、電阻),再看電和磁怎麼牽上線,最後才進到馬達——每一章都踩在前一章的地基上。</p>
+
+  <h3>學習地圖(請照順序走)</h3>
+  <div class="card">
+    <table>
+      <tr><th style="width:64px;">章節</th><th>你會學到</th><th style="width:88px;">地基</th></tr>
+      <tr><td>第 1 章</td><td>電是什麼:原子、電子、電荷</td><td>—</td></tr>
+      <tr><td>第 2 章</td><td>電壓、電流、電阻與歐姆定律(互動計算器)</td><td>第 1 章</td></tr>
+      <tr><td>第 3 章</td><td>電功率與電費:瓦特、度電(電費計算器)</td><td>第 2 章</td></tr>
+      <tr><td>第 4 章</td><td>磁鐵與電磁鐵:電第一次遇見磁</td><td>第 2 章</td></tr>
+      <tr><td>第 5 章</td><td>電磁感應:發電機的祕密</td><td>第 4 章</td></tr>
+      <tr><td>第 6 章</td><td>馬達怎麼轉起來(旋轉動畫)</td><td>第 4、5 章</td></tr>
+      <tr><td>第 7 章</td><td>交流電與三相電(波形動畫)</td><td>第 5 章</td></tr>
+      <tr><td>第 8 章</td><td>工廠的主力:感應馬達與伺服馬達</td><td>第 6、7 章</td></tr>
+      <tr><td>第 9 章</td><td>看懂馬達銘牌、認識變頻器</td><td>第 8 章</td></tr>
+      <tr><td>第 10 章</td><td>用電安全:保命必修</td><td>全部</td></tr>
+      <tr><td>第 11 章</td><td>總測驗 + 畢業備忘卡</td><td>全部</td></tr>
+    </table>
+  </div>
+
+  <div class="origin">
+    「電」的英文 <b>electricity</b>,來自希臘文 <b>ēlektron(琥珀)</b>。兩千多年前古希臘人發現:用布摩擦琥珀,它會吸起小紙屑、羽毛——這就是人類最早記錄的「電」。中文「電」字更古老,原本畫的是<b>閃電</b>的形狀。
+  </div>
+</section>
+
+<!-- ======== 第1章 ======== -->
+<section class="chapter" data-title="1·電是什麼">
+  <div class="ch-label">第 1 章</div>
+  <h2>電是什麼:一切從原子說起</h2>
+
+  <p>要懂電,先懂世界是什麼做的。<b>萬物都由「原子」組成</b>——你的手、桌子、銅線,全是原子堆出來的。原子長這樣:</p>
+
+  <div class="card" style="text-align:center;">
+    <svg viewBox="0 0 320 180" style="max-width:340px;width:100%;">
+      <circle cx="160" cy="90" r="18" fill="#8C4A3C"/>
+      <text x="160" y="95" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">原子核</text>
+      <ellipse cx="160" cy="90" rx="70" ry="34" fill="none" stroke="#A8946A" stroke-width="1.5" stroke-dasharray="4 4"/>
+      <ellipse cx="160" cy="90" rx="120" ry="62" fill="none" stroke="#A8946A" stroke-width="1.5" stroke-dasharray="4 4"/>
+      <circle cx="90" cy="90" r="9" fill="#2E5E7E"/><text x="90" y="94" text-anchor="middle" fill="#fff" font-size="10">e−</text>
+      <circle cx="230" cy="90" r="9" fill="#2E5E7E"/><text x="230" y="94" text-anchor="middle" fill="#fff" font-size="10">e−</text>
+      <circle cx="160" cy="28" r="9" fill="#2E5E7E"/><text x="160" y="32" text-anchor="middle" fill="#fff" font-size="10">e−</text>
+      <text x="160" y="170" text-anchor="middle" font-size="12" fill="#6E6A63">原子核(帶正電 +)住中間,電子(帶負電 −)繞外圈</text>
+    </svg>
+  </div>
+
+  <div class="card">
+    <table>
+      <tr><th>成員</th><th>帶什麼電</th><th>特性</th></tr>
+      <tr><td><b>質子</b>(在原子核裡)</td><td>正電(+)</td><td>很重,住在核心,不動</td></tr>
+      <tr><td><b>中子</b>(在原子核裡)</td><td>不帶電</td><td>陪質子住,也不動</td></tr>
+      <tr><td><b>電子</b>(繞外圈)</td><td>負電(−)</td><td><b>又輕又好動,是電的主角!</b></td></tr>
+    </table>
+  </div>
+
+  <p>重點只有一句:<b>「電流」就是電子的集體移動。</b>就像一條路上塞滿汽車,平常各自亂晃;一旦有力量推它們往同一個方向跑,就形成「車流」——電子被推著跑,就形成「電流」。</p>
+
+  <h3>生活裡的電:靜電</h3>
+  <div class="story">
+    冬天脫毛衣「啪」一聲、梳完頭髮梳子能吸小紙屑——這是<b>靜電</b>:摩擦讓電子從一個物體「搬家」到另一個物體,一邊多電子(帶負電)、一邊少電子(帶正電),互相吸引。柬埔寨潮濕所以少見,乾冷的地方天天上演。
+  </div>
+
+  <h3>導體與絕緣體</h3>
+  <p>為什麼電線是「銅芯 + 塑膠皮」?因為材料分兩派:</p>
+  <div class="card">
+    <table>
+      <tr><th></th><th>電子好不好跑</th><th>例子</th><th>用途</th></tr>
+      <tr><td><b>導體</b></td><td>電子很自由,愛跑</td><td>銅、鋁、鐵、水(含雜質)、人體</td><td>電線的芯:讓電通過</td></tr>
+      <tr><td><b>絕緣體</b></td><td>電子被抓得死死的</td><td>塑膠、橡膠、乾木頭、陶瓷</td><td>電線的皮:擋住電、保護人</td></tr>
+    </table>
+    <p style="font-size:13px;color:var(--gray);margin:0;">注意:<b>人體是導體</b>——這就是為什麼會觸電。第 10 章會專門講安全。</p>
+  </div>
+
+  <div class="tip">
+    本章只要帶走一句話:<b>電流 = 電子的集體移動;銅線讓它跑,塑膠皮擋住它。</b>下一章我們來學怎麼「推」電子、怎麼量它。
+  </div>
+
+  <div id="q1"></div>
+</section>
+
+<!-- ======== 第2章 ======== -->
+<section class="chapter" data-title="2·電壓電流電阻">
+  <div class="ch-label">第 2 章</div>
+  <h2>電壓、電流、電阻:用水管一次搞懂</h2>
+
+  <p>電看不見,所以我們借一個看得見的東西來想:<b>水管</b>。這是全世界電學老師都在用的比喻,因為真的準:</p>
+
+  <div class="card" style="text-align:center;">
+    <svg viewBox="0 0 360 150" style="max-width:380px;width:100%;">
+      <rect x="20" y="20" width="50" height="90" rx="6" fill="#2E5E7E"/>
+      <text x="45" y="60" text-anchor="middle" fill="#fff" font-size="11">水塔</text>
+      <text x="45" y="76" text-anchor="middle" fill="#fff" font-size="11">(水壓)</text>
+      <rect x="70" y="55" width="200" height="22" rx="8" fill="#CBDDE8" stroke="#2E5E7E"/>
+      <path class="flow-dot" d="M75 66 H265" stroke="#2E5E7E" stroke-width="4" stroke-dasharray="10 20" fill="none"/>
+      <rect x="150" y="50" width="16" height="32" fill="#8C4A3C" rx="3"/>
+      <text x="158" y="105" text-anchor="middle" font-size="11" fill="#8C4A3C">管子變窄=阻力</text>
+      <circle cx="300" cy="66" r="26" fill="#A8946A"/>
+      <text x="300" y="63" text-anchor="middle" fill="#fff" font-size="10">水車</text>
+      <text x="300" y="77" text-anchor="middle" fill="#fff" font-size="10">(電器)</text>
+      <text x="180" y="140" text-anchor="middle" font-size="12" fill="#6E6A63">水壓推 → 水流動 → 水車轉;電壓推 → 電流動 → 電器動</text>
+    </svg>
+  </div>
+
+  <div class="card">
+    <table>
+      <tr><th>電學名詞</th><th>水管世界</th><th>白話意思</th><th>單位</th></tr>
+      <tr><td><b>電壓 V</b></td><td>水壓</td><td>推電子的「力道」,越高推越用力</td><td>伏特 V</td></tr>
+      <tr><td><b>電流 I</b></td><td>水流量</td><td>每秒流過多少電子,越多電流越大</td><td>安培 A</td></tr>
+      <tr><td><b>電阻 R</b></td><td>水管的窄與粗糙</td><td>阻礙電子跑的程度</td><td>歐姆 Ω</td></tr>
+    </table>
+  </div>
+
+  <div class="origin">
+    三個單位都是<b>人名</b>,紀念三位開路先鋒:<br>
+    <b>伏特(Volta)</b>—義大利人,1800 年發明世界第一顆電池「伏打電堆」,人類從此有了穩定的電源。<br>
+    <b>安培(Ampère)</b>—法國人,研究電流與磁的關係,被稱為「電學中的牛頓」。<br>
+    <b>歐姆(Ohm)</b>—德國中學老師,1827 年發現電壓、電流、電阻的關係,一開始還被學界嘲笑,後來這條定律以他為名。
+  </div>
+
+  <h3>歐姆定律:電學第一公式</h3>
+  <p>歐姆發現的關係簡單到不可思議:</p>
+  <div class="card" style="text-align:center;font-size:20px;font-weight:700;">
+    電流 I = 電壓 V ÷ 電阻 R
+  </div>
+  <p>白話:<b>推力越大,流得越多;阻礙越大,流得越少。</b>跟水管一模一樣。動手玩玩看:</p>
+
+  <div class="lab">
+    <div class="lab-title">互動實驗:歐姆定律計算器</div>
+    <div class="slider-row">
+      <label>電壓 V</label>
+      <input type="range" id="ohmV" min="1" max="380" value="230" oninput="ohmCalc()">
+      <span class="val num" id="ohmVv">230 V</span>
+    </div>
+    <div class="slider-row">
+      <label>電阻 R</label>
+      <input type="range" id="ohmR" min="1" max="200" value="50" oninput="ohmCalc()">
+      <span class="val num" id="ohmRv">50 Ω</span>
+    </div>
+    <div class="result" id="ohmOut"></div>
+    <p style="font-size:13px;color:var(--gray);margin:8px 0 0;">試試:把電壓調大 → 電流變大;把電阻調大 → 電流變小。這就是歐姆定律。</p>
+  </div>
+
+  <h3>生活中的電壓長什麼樣?</h3>
+  <div class="card">
+    <table>
+      <tr><th>東西</th><th class="right">電壓</th><th>備註</th></tr>
+      <tr><td>乾電池(3 號)</td><td class="right num">1.5 V</td><td>遙控器、時鐘</td></tr>
+      <tr><td>手機充電</td><td class="right num">5 V</td><td>USB 標準</td></tr>
+      <tr><td>機車/汽車電瓶</td><td class="right num">12 V</td><td>直流電</td></tr>
+      <tr><td>柬埔寨家用插座</td><td class="right num">230 V</td><td>台灣是 110 V,所以電器要看清楚!</td></tr>
+      <tr><td>工廠三相電源</td><td class="right num">380 V</td><td>大馬達專用,第 7 章詳講</td></tr>
+    </table>
+  </div>
+
+  <div id="q2"></div>
+</section>
+
+<!-- ======== 第3章 ======== -->
+<section class="chapter" data-title="3·功率與電費">
+  <div class="ch-label">第 3 章</div>
+  <h2>電功率與電費:瓦特和「度」是什麼</h2>
+
+  <p>上一章學會了推力(V)和流量(I),這章回答一個很實際的問題:<b>電器「吃電」多兇,怎麼量?電費怎麼算?</b></p>
+
+  <h3>功率:每秒吃多少電</h3>
+  <div class="card" style="text-align:center;font-size:20px;font-weight:700;">
+    功率 P = 電壓 V × 電流 I(單位:瓦特 W)
+  </div>
+  <p>白話:推力 × 流量 = 做工的猛烈程度。水壓大、水量又大,水車就轉得猛——電也一樣。</p>
+
+  <div class="origin">
+    <b>瓦特(Watt)</b>—蘇格蘭工程師,改良蒸汽機、點燃工業革命的那位。後人用他的名字當功率單位。順帶一提,他還發明了「馬力(hp)」這個詞來推銷蒸汽機:1 馬力 ≈ 746 瓦。所以馬達銘牌上的 HP 和 kW 是可以互換的!
+  </div>
+
+  <h3>電能:「一度電」的真面目</h3>
+  <p>功率是「每秒吃多快」,電費算的是「總共吃多少」——功率 × 時間:</p>
+  <div class="card" style="text-align:center;font-size:17px;font-weight:700;">
+    1 度電 = 1 kWh = 1,000 瓦的電器,連續用 1 小時
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">互動實驗:工廠電費計算器</div>
+    <div class="slider-row">
+      <label>電器功率</label>
+      <input type="range" id="pwP" min="10" max="5000" step="10" value="550" oninput="pwCalc()">
+      <span class="val num" id="pwPv">550 W</span>
+    </div>
+    <div class="slider-row">
+      <label>每天使用</label>
+      <input type="range" id="pwH" min="1" max="24" value="8" oninput="pwCalc()">
+      <span class="val num" id="pwHv">8 小時</span>
+    </div>
+    <div class="slider-row">
+      <label>電價(每度)</label>
+      <input type="range" id="pwC" min="0.05" max="0.30" step="0.01" value="0.15" oninput="pwCalc()">
+      <span class="val num" id="pwCv">$0.15</span>
+    </div>
+    <div class="result" id="pwOut"></div>
+    <p style="font-size:13px;color:var(--gray);margin:8px 0 0;">預設 550W 正是一台縫紉機伺服馬達的常見功率。把它調到 5000W(空壓機等級)看看差多少!</p>
+  </div>
+
+  <div class="tip">
+    功率公式 P = V × I 還藏了一個工廠常識:同樣的功率,<b>電壓越高、電流就越小</b>。電流小 → 電線可以更細、發熱更少。這就是為什麼大馬達要用 380V 而不是 230V——第 7 章講三相電時會再回來看這件事。
+  </div>
+
+  <div id="q3"></div>
+</section>
+
+<!-- ======== 第4章 ======== -->
+<section class="chapter" data-title="4·磁與電磁鐵">
+  <div class="ch-label">第 4 章</div>
+  <h2>磁鐵與電磁鐵:電第一次遇見磁</h2>
+
+  <p>馬達 = 電 + 磁。電的部分你已經會了,現在補上磁的地基。</p>
+
+  <h3>磁鐵的三個規矩</h3>
+  <div class="card">
+    ① 磁鐵一定有兩極:<b class="num">N</b> 極(指北)和 <b class="num">S</b> 極(指南),切一半也各自長出兩極,永遠不會只有單極。<br>
+    ② <b>同極相斥、異極相吸</b>(N 對 N 推開,N 對 S 吸住)。<br>
+    ③ 磁鐵周圍有看不見的「<b>磁場</b>」——撒鐵粉會排出一圈圈的線,那就是磁力作用的範圍。
+  </div>
+
+  <h3>1820 年:一根指南針改變世界</h3>
+  <div class="story">
+    丹麥物理老師<b>奧斯特(Ørsted)</b>上課做實驗時,發現一件怪事:電線一通電,旁邊的<b>指南針竟然偏轉了</b>!<br><br>
+    這一下不得了——在那之前,大家以為「電」和「磁」是兩門不相干的學問。奧斯特證明了:<b>電流會產生磁場</b>。電和磁從此牽上線,馬達、發電機、變壓器……全部從這一刻開始變得可能。
+  </div>
+
+  <h3>電磁鐵:通電就有磁、斷電就沒磁</h3>
+  <p>既然直的電線有微弱磁場,那把電線<b>繞成一圈圈線圈</b>,磁場就會疊加變強;中間再插一根<b>鐵芯</b>,磁力再放大幾百倍——這就是<b>電磁鐵</b>:</p>
+
+  <div class="card" style="text-align:center;">
+    <svg viewBox="0 0 360 140" style="max-width:380px;width:100%;">
+      <rect x="110" y="45" width="140" height="30" rx="4" fill="#8A8A8A"/>
+      <text x="180" y="64" text-anchor="middle" fill="#fff" font-size="11">鐵芯</text>
+      <path d="M115 45 q8 -18 16 0 M139 45 q8 -18 16 0 M163 45 q8 -18 16 0 M187 45 q8 -18 16 0 M211 45 q8 -18 16 0 M235 45 q8 -18 16 0" stroke="#8C4A3C" stroke-width="4" fill="none"/>
+      <path d="M115 75 q8 18 16 0 M139 75 q8 18 16 0 M163 75 q8 18 16 0 M187 75 q8 18 16 0 M211 75 q8 18 16 0 M235 75 q8 18 16 0" stroke="#8C4A3C" stroke-width="4" fill="none"/>
+      <line x1="115" y1="60" x2="60" y2="60" stroke="#8C4A3C" stroke-width="4"/>
+      <line x1="251" y1="60" x2="306" y2="60" stroke="#8C4A3C" stroke-width="4"/>
+      <rect x="30" y="48" width="30" height="24" rx="4" fill="#2E5E7E"/>
+      <text x="45" y="64" text-anchor="middle" fill="#fff" font-size="10">電池</text>
+      <text x="95" y="110" text-anchor="middle" font-size="12" fill="#3E6B4F" font-weight="bold">N</text>
+      <text x="265" y="110" text-anchor="middle" font-size="12" fill="#8C4A3C" font-weight="bold">S</text>
+      <text x="180" y="128" text-anchor="middle" font-size="12" fill="#6E6A63">線圈 + 鐵芯 + 電流 = 可開關、可變強弱的磁鐵</text>
+    </svg>
+  </div>
+
+  <p>電磁鐵比天然磁鐵厲害在三件事:<b>能開關</b>(斷電就失磁)、<b>能調強弱</b>(電流越大磁越強)、<b>能換方向</b>(電流反過來,N/S 就對調)。記住第三點——<b>它就是馬達會轉的關鍵</b>。</p>
+
+  <div class="card">
+    <b>生活與工廠裡的電磁鐵:</b>門禁磁扣鎖、電鈴、喇叭、繼電器(用小電流開關大電流的「電控開關」,配電箱裡到處都是)、廢鐵場吊車的大吸盤。
+  </div>
+
+  <div id="q4"></div>
+</section>
+
+<!-- ======== 第5章 ======== -->
+<section class="chapter" data-title="5·電磁感應">
+  <div class="ch-label">第 5 章</div>
+  <h2>電磁感應:發電機的祕密</h2>
+
+  <p>上一章:電流 → 產生磁(奧斯特)。科學家馬上想:那反過來,<b>磁能不能變出電?</b></p>
+
+  <div class="story">
+    英國的<b>法拉第(Faraday)</b>——一位書店學徒出身、幾乎沒上過學的自學天才——花了十年反覆嘗試,終於在 1831 年找到答案:<br><br>
+    磁鐵靜靜放在線圈旁邊 → <b>沒電</b>。<br>
+    把磁鐵「<b>抽進抽出</b>」讓磁場不斷變化 → 線圈裡<b>冒出電流了!</b><br><br>
+    結論:<b>「變化的磁場」會在線圈裡感應出電流。</b>這叫<b>電磁感應</b>。
+  </div>
+
+  <div class="origin">
+    「<b>感應</b>」的意思是:磁鐵和線圈<b>沒有接觸</b>,電卻隔空「被引出來」——像被感召、被喚醒一樣,所以叫感應(induction)。記住這個詞,第 8 章的主角「感應馬達」就是靠它工作的。
+  </div>
+
+  <h3>發電機:全世界的電都這樣來的</h3>
+  <p>既然「磁場變化」就能生電,最簡單的辦法就是:<b>讓線圈在磁鐵之間轉圈圈</b>——轉動時線圈感受到的磁場不斷變化,電就源源不絕。這就是<b>發電機</b>。</p>
+
+  <div class="card">
+    你以為發電廠很神祕?其實所有發電廠都只是在比「<b>誰有力氣轉線圈</b>」:<br>
+    🔥 火力發電:燒煤燒氣 → 水變蒸汽 → 蒸汽推渦輪<b>轉</b><br>
+    💧 水力發電:水從高處衝下來<b>轉</b>水輪<br>
+    🌬️ 風力發電:風吹大風車<b>轉</b><br>
+    ☢️ 核能發電:核反應燒開水 → 蒸汽<b>轉</b>渦輪<br>
+    轉的東西不同,發電原理一模一樣:法拉第的電磁感應。
+  </div>
+
+  <div class="tip">
+    到這裡,拼圖已經齊了:<br>
+    電 → 磁(奧斯特,第 4 章)<br>
+    磁的變化 → 電(法拉第,第 5 章)<br>
+    下一章把兩塊拼在一起,馬達就轉起來了。
+  </div>
+
+  <div id="q5"></div>
+</section>
+
+<!-- ======== 第6章 ======== -->
+<section class="chapter" data-title="6·馬達原理">
+  <div class="ch-label">第 6 章</div>
+  <h2>馬達怎麼轉起來?</h2>
+
+  <p>還缺最後一塊小拼圖:<b>通電的電線放在磁場裡,會被「推」一把</b>(這股力叫安培力)。想像磁鐵的磁場是一條河,通電導線像一支插進河裡的槳——河水會推槳。電流方向反過來,推的方向也反過來。</p>
+
+  <h3>直流馬達:推力 + 換向 = 旋轉</h3>
+  <p>把「會被推的線圈」放進磁鐵中間,再加一個小機關,就是馬達:</p>
+
+  <div class="lab">
+    <div class="lab-title">動畫:直流(DC)馬達</div>
+    <svg viewBox="0 0 420 260">
+      <rect x="30" y="70" width="60" height="120" rx="8" fill="#8C4A3C"/>
+      <text x="60" y="135" text-anchor="middle" fill="#fff" font-size="20" font-weight="bold">N</text>
+      <rect x="330" y="70" width="60" height="120" rx="8" fill="#2E5E7E"/>
+      <text x="360" y="135" text-anchor="middle" fill="#fff" font-size="20" font-weight="bold">S</text>
+      <g id="rotor" class="rotor-spin">
+        <rect x="130" y="122" width="160" height="16" rx="8" fill="#A8946A"/>
+        <circle cx="210" cy="130" r="16" fill="#8A774E"/>
+        <circle cx="138" cy="130" r="10" fill="#F0E9D8" stroke="#8A774E" stroke-width="2"/>
+        <circle cx="282" cy="130" r="10" fill="#F0E9D8" stroke="#8A774E" stroke-width="2"/>
+      </g>
+      <circle cx="210" cy="130" r="5" fill="#1F1D1A"/>
+      <text x="210" y="232" text-anchor="middle" font-size="12" fill="#6E6A63">定子(磁鐵不動)+ 轉子(線圈被推著轉)</text>
+    </svg>
+    <div style="text-align:center;">
+      <button class="btn small" id="motorBtn" onclick="motorToggle()">⏸ 暫停</button>
+      <button class="btn small ghost" onclick="motorSpeed(-1)">慢</button>
+      <button class="btn small ghost" onclick="motorSpeed(1)">快</button>
+    </div>
+  </div>
+
+  <p>馬達的兩大部件,名字很直白:</p>
+  <div class="card">
+    <table>
+      <tr><th>部件</th><th>角色</th></tr>
+      <tr><td><b>定子</b>(Stator)</td><td>「定」住不動的部分——提供磁場(磁鐵或電磁鐵)</td></tr>
+      <tr><td><b>轉子</b>(Rotor)</td><td>「轉」動的部分——被磁場推著跑的線圈/鐵芯,帶動轉軸輸出動力</td></tr>
+    </table>
+  </div>
+
+  <h3>關鍵小機關:換向器</h3>
+  <p>線圈被推轉半圈後,如果電流方向不變,推力會反過來把它推回去,馬達只會「搖頭」不會轉圈。所以 DC 馬達裝了<b>換向器 + 電刷</b>:每轉半圈,自動把電流方向反過來,讓推力永遠往同一邊——馬達就連續旋轉了。這正是第 4 章說的「電磁鐵能換方向」派上用場。</p>
+
+  <div class="tip">
+    <b>馬達和發電機是雙胞胎</b>:給馬達通電,它輸出轉動;反過來用手轉馬達的軸,它的線圈在磁場裡變化,就會發電(法拉第!)。玩具馬達接 LED 再用手指搓轉軸,燈真的會亮——同一顆機器,兩種用法。
+  </div>
+
+  <div class="card">
+    <b>DC 馬達在哪裡?</b>玩具車、電動牙刷、手機震動馬達、汽車雨刷、電動機車。優點:簡單、好調速。缺點:<b>電刷會磨損</b>,要保養更換——這個缺點,工廠的主力馬達用另一招解決,第 8 章揭曉。
+  </div>
+
+  <div id="q6"></div>
+</section>
+
+<!-- ======== 第7章 ======== -->
+<section class="chapter" data-title="7·交流與三相">
+  <div class="ch-label">第 7 章</div>
+  <h2>交流電與三相電:插座裡的世界</h2>
+
+  <h3>直流 DC vs 交流 AC</h3>
+  <div class="card">
+    <table>
+      <tr><th></th><th>直流 DC</th><th>交流 AC</th></tr>
+      <tr><td>方向</td><td>永遠同一方向流</td><td><b>方向來回交替</b>,每秒換 50 次(50Hz)</td></tr>
+      <tr><td>來源</td><td>電池、USB、太陽能板</td><td>牆上插座、發電廠</td></tr>
+      <tr><td>波形</td><td>一條直線</td><td>正弦波(下面動畫)</td></tr>
+    </table>
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">動畫:交流電的正弦波</div>
+    <svg viewBox="0 0 420 150">
+      <line x1="20" y1="75" x2="400" y2="75" stroke="#B8B2A6" stroke-width="1"/>
+      <text x="408" y="79" font-size="10" fill="#6E6A63">0</text>
+      <path d="M20 75 q25 -55 50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0" fill="none" stroke="#2E5E7E" stroke-width="3" stroke-dasharray="8 4" class="flow-dot"/>
+      <text x="60" y="26" font-size="11" fill="#3E6B4F">正向流 ↑</text>
+      <text x="60" y="140" font-size="11" fill="#8C4A3C">反向流 ↓</text>
+    </svg>
+    <p style="font-size:13px;color:var(--gray);margin:0;">為什麼發電機發出來天生是交流?回想第 5 章:線圈轉一圈,面向 N 極、再面向 S 極,感應出的電自然一正一負來回擺——正弦波就是「旋轉」畫在時間軸上的樣子。</p>
+  </div>
+
+  <div class="story">
+    <b>電流大戰:</b>1880 年代,愛迪生(押 DC)和特斯拉+西屋公司(押 AC)大打商業戰。AC 勝出,關鍵是<b>變壓器</b>:交流電可以輕鬆升壓到幾十萬伏特做長距離輸送(高壓 → 電流小 → 電線損耗少,第 3 章的觀念!),到你家再降回 230V。DC 當年做不到。今天磁浮列車用的單位「特斯拉(T,磁場強度)」就是紀念他。
+  </div>
+
+  <h3>三相電:工廠的動力血管</h3>
+  <p>家裡插座是<b>單相</b>(一條正弦波)。工廠拉的是<b>三相 380V</b>:三條一模一樣的正弦波,但出發時間<b>各錯開 1/3 拍(120°)</b>:</p>
+
+  <div class="lab">
+    <div class="lab-title">動畫:三相電波形(R、S、T 三條線)</div>
+    <svg viewBox="0 0 420 150">
+      <line x1="20" y1="75" x2="400" y2="75" stroke="#B8B2A6" stroke-width="1"/>
+      <path d="M20 75 q25 -55 50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0" fill="none" stroke="#8C4A3C" stroke-width="2.5" stroke-dasharray="8 4" class="flow-dot"/>
+      <path d="M20 75 q25 55 50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0" fill="none" stroke="#2E5E7E" stroke-width="2.5" stroke-dasharray="8 4" class="flow-dot" style="animation-delay:-.73s"/>
+      <path d="M3 75 q25 -55 50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0" fill="none" stroke="#3E6B4F" stroke-width="2.5" stroke-dasharray="8 4" class="flow-dot" style="animation-delay:-1.46s"/>
+      <text x="30" y="20" font-size="11" fill="#8C4A3C">R 相</text>
+      <text x="70" y="20" font-size="11" fill="#2E5E7E">S 相</text>
+      <text x="110" y="20" font-size="11" fill="#3E6B4F">T 相</text>
+    </svg>
+  </div>
+
+  <div class="story">
+    <b>盪鞦韆比喻:</b>單相電像一個人推鞦韆——推一下、等它盪回來、再推,推力一陣一陣的。<br>
+    三相電像<b>三個人站在不同位置輪流推</b>——任何時刻都有人在出力,推力<b>連續又平穩</b>。<br>
+    所以三相馬達力量大、運轉順、不用輔助起動,工廠的大機器(空壓機、裁床、電梯)幾乎清一色吃三相電。
+  </div>
+
+  <div class="tip">
+    三相還有一個隱藏絕招:三條錯開的電輪流通進三組線圈,會直接變出一個<b>「會旋轉的磁場」</b>——不需要任何機關,磁場自己轉!這就是下一章感應馬達的心臟。
+  </div>
+
+  <div id="q7"></div>
+</section>
+
+<!-- ======== 第8章 ======== -->
+<section class="chapter" data-title="8·感應與伺服">
+  <div class="ch-label">第 8 章</div>
+  <h2>工廠的主力:感應馬達與伺服馬達</h2>
+
+  <h3>三相感應馬達:全球 90% 工業馬達</h3>
+  <p>把前面所學全部組裝起來:</p>
+  <div class="card">
+    ① 定子繞三組線圈,通入三相電 → 產生<b>旋轉磁場</b>(第 7 章)。<br>
+    ② 轉子是一個像「鼠籠」的鋁條籠子(所以叫<b>鼠籠式轉子</b>),不接任何電線。<br>
+    ③ 旋轉磁場掃過鼠籠 → 磁場變化 → 鼠籠裡<b>感應</b>出電流(第 5 章法拉第!)。<br>
+    ④ 有了電流的鼠籠在磁場中受力(第 6 章)→ 被旋轉磁場<b>拖著追跑</b> → 轉軸輸出動力。
+  </div>
+
+  <div class="origin">
+    為什麼叫「<b>感應</b>馬達」?因為轉子的電<b>不是接線送進去的,是隔空感應出來的</b>。它又叫「<b>異步</b>馬達」:轉子永遠追不上旋轉磁場、差一小步(叫「轉差」)——一旦追平,磁場相對轉子就不變化了,感應消失、推力歸零,所以永遠「異步」地追。
+  </div>
+
+  <div class="card">
+    <b>感應馬達為什麼稱霸工廠?</b>轉子不用接電 → <b>沒有電刷、沒有換向器</b> → 幾乎不磨損、少保養、耐操便宜。缺點是轉速基本被電源頻率綁死、不好精準控制——這個弱點,由下面兩位隊友補上。
+  </div>
+
+  <h3>伺服馬達:縫紉機下面那顆</h3>
+  <div class="story">
+    老式縫紉機用「離合器馬達」:馬達整天全速空轉,踩踏板才咬合傳動——<b>吵、燙、超耗電</b>。<br>
+    現代縫紉機改用<b>伺服馬達</b>:踩多少、轉多少,不踩就完全靜止;還能設定速、慢起針、定針位。一台大約<b>省電 50~70%</b>,車間也安靜許多。
+  </div>
+  <div class="origin">
+    「<b>伺服</b>(servo)」來自拉丁文 <b>servus = 僕人</b>:馬達內建感測器,隨時回報「我現在轉多快、轉到哪個角度」,控制器不斷下指令修正——像個絕對服從、使命必達的僕人,所以叫伺服。
+  </div>
+
+  <h3>三種馬達,一張表看懂</h3>
+  <div class="card">
+    <table>
+      <tr><th></th><th>直流(有刷)馬達</th><th>三相感應馬達</th><th>伺服馬達</th></tr>
+      <tr><td>電源</td><td>DC(電池)</td><td>三相 AC 380V</td><td>AC/DC 皆有,配驅動器</td></tr>
+      <tr><td>強項</td><td>便宜、好調速</td><td>耐用、少保養、力大</td><td>精準控速控位置、省電</td></tr>
+      <tr><td>弱點</td><td>電刷磨損</td><td>轉速不好精控</td><td>價格較高</td></tr>
+      <tr><td>在哪裡</td><td>玩具、雨刷、電動牙刷</td><td>空壓機、風機、水泵、裁床</td><td>縫紉機、自動裁床、機械手臂</td></tr>
+    </table>
+  </div>
+
+  <div id="q8"></div>
+</section>
+
+<!-- ======== 第9章 ======== -->
+<section class="chapter" data-title="9·銘牌與變頻器">
+  <div class="ch-label">第 9 章</div>
+  <h2>看懂銘牌、認識變頻器</h2>
+
+  <h3>馬達銘牌:每顆馬達的身分證</h3>
+  <p>每台馬達側面都鎖著一塊金屬牌,叫<b>銘牌</b>。看懂它,你就能跟任何電機師傅對話:</p>
+  <div class="card">
+    <table>
+      <tr><th>欄位</th><th>意思</th><th>例(常見 4 極馬達)</th></tr>
+      <tr><td><b>kW / HP</b></td><td>輸出功率(第 3 章)。1 HP ≈ 0.75 kW</td><td class="num">3.7 kW(5 HP)</td></tr>
+      <tr><td><b>V</b></td><td>額定電壓</td><td class="num">380 V(三相)</td></tr>
+      <tr><td><b>A</b></td><td>額定電流——選斷路器、電線粗細的依據</td><td class="num">7.5 A</td></tr>
+      <tr><td><b>Hz</b></td><td>電源頻率。柬埔寨/台灣 50/60Hz 要看清</td><td class="num">50 Hz</td></tr>
+      <tr><td><b>RPM</b></td><td>每分鐘轉速</td><td class="num">1450 RPM</td></tr>
+      <tr><td><b>P(極數)</b></td><td>定子磁極數,決定轉速</td><td class="num">4P</td></tr>
+      <tr><td><b>IP</b></td><td>防塵防水等級,如 IP55</td><td class="num">IP55</td></tr>
+    </table>
+  </div>
+
+  <h3>轉速公式:感應馬達唯一要會的計算</h3>
+  <div class="card" style="text-align:center;font-size:17px;font-weight:700;">
+    同步轉速 RPM = 120 × 頻率(Hz)÷ 極數
+  </div>
+  <p>例:50Hz、4 極 → 120×50÷4 = <b>1500 RPM</b>。銘牌寫 1450,少掉的 50 轉就是上一章說的「轉差」——感應馬達永遠追不上磁場的那一小步。親手算算看:</p>
+
+  <div class="lab">
+    <div class="lab-title">互動實驗:頻率、極數與轉速</div>
+    <div class="slider-row">
+      <label>頻率 Hz</label>
+      <input type="range" id="rpmF" min="5" max="60" value="50" oninput="rpmCalc()">
+      <span class="val num" id="rpmFv">50 Hz</span>
+    </div>
+    <div class="slider-row">
+      <label>極數 P</label>
+      <input type="range" id="rpmP" min="1" max="4" value="2" oninput="rpmCalc()">
+      <span class="val num" id="rpmPv">4 極</span>
+    </div>
+    <div class="result" id="rpmOut"></div>
+    <p style="font-size:13px;color:var(--gray);margin:8px 0 0;">注意:極數是做馬達時就焊死的,改不了;但<b>頻率可以改</b>——把頻率滑桿拉低,轉速就降。誰有本事改頻率?就是變頻器。</p>
+  </div>
+
+  <h3>變頻器(VFD):給馬達裝上油門</h3>
+  <div class="card">
+    <b>變頻器</b>(Variable Frequency Drive)接在電源和馬達之間,把固定 50Hz 的電,變成 5~60Hz 隨你調的電,於是:<br>
+    ① <b>調速</b>:風機水泵不必永遠全速——需求小就降頻慢轉。<br>
+    ② <b>省電</b>:風機轉速降 20%,耗電約降近一半(耗電和轉速的三次方成正比),是工廠節能第一招。<br>
+    ③ <b>緩啟動</b>:大馬達直接起動的瞬間電流是平常的 6~8 倍,會讓全廠燈光一閃、跳電;變頻器讓它從 0Hz 緩緩加速,溫柔上路,機械皮帶齒輪也更長壽。
+  </div>
+
+  <div class="tip">
+    看懂銘牌 + 會算轉速 + 知道變頻器在幹嘛,你已經能聽懂電機師傅 80% 的對話,也能判斷「這台馬達該不該加變頻器省電」——這是很多主管都不具備的能力。
+  </div>
+
+  <div id="q9"></div>
+</section>
+
+<!-- ======== 第10章 ======== -->
+<section class="chapter" data-title="10·用電安全">
+  <div class="ch-label">第 10 章</div>
+  <h2>用電安全:保命必修課</h2>
+
+  <p>學了這麼多,最後也最重要的一章:電怎麼傷人、怎麼防。</p>
+
+  <h3>觸電的真相:可怕的是電流,不是電壓</h3>
+  <div class="card">
+    <table>
+      <tr><th>流過人體的電流</th><th>感覺 / 後果</th></tr>
+      <tr><td class="num">1 mA</td><td>微微刺麻</td></tr>
+      <tr><td class="num">10 mA</td><td>肌肉收縮,手可能<b>抓住電線放不開</b></td></tr>
+      <tr><td class="num">30 mA</td><td>呼吸困難——漏電斷路器的跳脫標準就設在這附近</td></tr>
+      <tr><td class="num">50 mA 以上</td><td>心室顫動,可能致命</td></tr>
+    </table>
+    <p style="font-size:13px;color:var(--gray);margin:0;">用歐姆定律算:230V ÷ 人體約 1,000~2,000Ω(潮濕時更低)= 100 mA 以上——遠超危險線。<b>越潮濕、電阻越低、越危險</b>,這對海邊高濕環境的工廠尤其重要。</p>
+  </div>
+
+  <h3>三道保命防線</h3>
+  <div class="card">
+    ① <b>接地線</b>:電器外殼接一條線通到大地。萬一內部漏電碰殼,電流走接地線跑掉,不等人來當導體。插頭第三支腳就是它——<b>別剪掉!</b><br>
+    ② <b>漏電斷路器(ELCB/RCD)</b>:隨時比對「流出去的電」和「流回來的電」,一旦不相等(表示有電漏去別的地方——可能是人身上!),0.1 秒內跳電。潮濕區域、戶外插座必裝。<br>
+    ③ <b>無熔絲開關(NFB/斷路器)</b>:電流超載或短路時自動跳脫,防電線過熱起火。跳了別急著推回去——<b>先找原因</b>。
+  </div>
+
+  <h3>工廠場景的五個「不」</h3>
+  <div class="card">
+    ① <b>不</b>用濕手碰開關插頭;雨天進配電室加倍小心。<br>
+    ② <b>不</b>讓排插串排插、小線帶大機器(電線發燙 = 火警前兆)。<br>
+    ③ <b>不</b>用破皮、老化的電線;膠帶纏一纏≠修好。<br>
+    ④ <b>不</b>私自打開配電箱、馬達接線盒——斷電、掛牌、上鎖(LOTO)後才能作業,交給合格電工。<br>
+    ⑤ <b>不</b>忽視異狀:馬達燒焦味、異音、外殼發麻,立刻停機通報。
+  </div>
+
+  <div class="tip">
+    有人觸電時:<b>先斷電源</b>(拉開關/用乾木棍挑開電線),<b>絕對不要徒手去拉人</b>——否則你也變成電路的一部分。斷電後再施救、叫救護。
+  </div>
+
+  <div id="q10"></div>
+</section>
+
+<!-- ======== 第11章 ======== -->
+<section class="chapter" data-title="11·總測驗">
+  <div class="ch-label">第 11 章</div>
+  <h2>總測驗:你會了嗎?</h2>
+  <p>12 題,涵蓋整堂課。答完自動計分,錯的題目會告訴你為什麼。</p>
+  <div id="finalQuiz"></div>
+  <div style="text-align:center;margin-top:16px;">
+    <button class="btn" onclick="gradeFinal()">交卷計分</button>
+    <button class="btn ghost" onclick="resetFinal()" style="margin-left:8px;">重新作答</button>
+  </div>
+  <div id="finalScore" class="card"></div>
+
+  <h3>畢業備忘卡 🎓</h3>
+  <div class="card">
+    <table>
+      <tr><td><b>電的本質</b></td><td>電流 = 電子的集體移動</td></tr>
+      <tr><td><b>歐姆定律</b></td><td>I = V ÷ R(推力越大流越多,阻礙越大流越少)</td></tr>
+      <tr><td><b>功率電能</b></td><td>P = V × I;1 度電 = 1000W 用 1 小時</td></tr>
+      <tr><td><b>電磁二重奏</b></td><td>電流生磁(奧斯特);磁場變化生電(法拉第)</td></tr>
+      <tr><td><b>馬達</b></td><td>定子給磁場、轉子被推著轉;馬達與發電機是雙胞胎</td></tr>
+      <tr><td><b>三相電</b></td><td>三波錯開 120°,推力連續,還能直接變出旋轉磁場</td></tr>
+      <tr><td><b>感應馬達</b></td><td>旋轉磁場拖著鼠籠轉子追,無電刷、耐用,工廠主力</td></tr>
+      <tr><td><b>轉速</b></td><td>RPM = 120 × Hz ÷ 極數;變頻器改頻率 = 裝油門 + 省電</td></tr>
+      <tr><td><b>安全</b></td><td>危險的是電流;接地 + 漏電斷路器 + NFB 三道防線</td></tr>
+    </table>
+  </div>
+</section>
+
+<div class="pager">
+  <button class="btn ghost" id="prevBtn" onclick="go(-1)">← 上一章</button>
+  <button class="btn" id="nextBtn" onclick="go(1)">下一章 →</button>
+</div>
+
+</main>
+
+<script>
+/* ===== 章節導覽 ===== */
+const chapters=[...document.querySelectorAll('section.chapter')];
+const nav=document.getElementById('nav');
+let cur=0;
+chapters.forEach((c,i)=>{
+  const b=document.createElement('button');
+  b.textContent=c.dataset.title;
+  b.onclick=()=>show(i);
+  nav.appendChild(b);
+});
+function show(i){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=i;
+  cur=i;
+  chapters.forEach((c,j)=>c.classList.toggle('show',j===i));
+  [...nav.children].forEach((b,j)=>b.classList.toggle('active',j===i));
+  document.getElementById('pbar').style.width=((i+1)/chapters.length*100)+'%';
+  document.getElementById('prevBtn').style.visibility=i===0?'hidden':'visible';
+  document.getElementById('nextBtn').textContent=i===chapters.length-1?'完成 🎉':'下一章 →';
+  nav.children[i].scrollIntoView({inline:'center',block:'nearest'});
+  window.scrollTo({top:0});
+}
+function go(d){
+  const n=cur+d;
+  if(n<0)return;
+  if(n>=chapters.length){alert('恭喜完成整堂課!🎓 記得回第 11 章交卷看分數。');return;}
+  show(n);
+}
+show(0);
+
+/* ===== 歐姆定律計算器 ===== */
+function ohmCalc(){
+  const V=+document.getElementById('ohmV').value;
+  const R=+document.getElementById('ohmR').value;
+  document.getElementById('ohmVv').textContent=V+' V';
+  document.getElementById('ohmRv').textContent=R+' Ω';
+  const I=V/R;
+  document.getElementById('ohmOut').innerHTML=
+    `電流 I = ${V} ÷ ${R} = <b class="num">${I.toFixed(2)} A</b>`;
+}
+ohmCalc();
+
+/* ===== 電費計算器 ===== */
+function pwCalc(){
+  const P=+document.getElementById('pwP').value;
+  const H=+document.getElementById('pwH').value;
+  const C=+document.getElementById('pwC').value;
+  document.getElementById('pwPv').textContent=P+' W';
+  document.getElementById('pwHv').textContent=H+' 小時';
+  document.getElementById('pwCv').textContent='$'+C.toFixed(2);
+  const kwhDay=P*H/1000;
+  const monthCost=kwhDay*30*C;
+  document.getElementById('pwOut').innerHTML=
+    `每天用電 ${P}W × ${H}h ÷ 1000 = <b class="num">${kwhDay.toFixed(1)} 度</b><br>一個月(30 天)電費 ≈ <b class="num">$${monthCost.toFixed(1)}</b>`;
+}
+pwCalc();
+
+/* ===== 馬達動畫控制 ===== */
+let motorDur=2.4;
+function motorToggle(){
+  const r=document.getElementById('rotor');
+  const b=document.getElementById('motorBtn');
+  r.classList.toggle('paused');
+  b.textContent=r.classList.contains('paused')?'▶ 轉動':'⏸ 暫停';
+}
+function motorSpeed(d){
+  motorDur=Math.min(6,Math.max(.5,motorDur*(d>0?0.6:1.6)));
+  document.getElementById('rotor').style.animationDuration=motorDur+'s';
+}
+
+/* ===== 轉速計算器 ===== */
+function rpmCalc(){
+  const f=+document.getElementById('rpmF').value;
+  const p=+document.getElementById('rpmP').value*2; // 2,4,6,8極
+  document.getElementById('rpmFv').textContent=f+' Hz';
+  document.getElementById('rpmPv').textContent=p+' 極';
+  const rpm=120*f/p;
+  document.getElementById('rpmOut').innerHTML=
+    `同步轉速 = 120 × ${f} ÷ ${p} = <b class="num">${rpm.toFixed(0)} RPM</b><br><span style="font-size:13px;color:var(--gray);">實際轉速會再慢一點點(轉差)</span>`;
+}
+rpmCalc();
+
+/* ===== 各章小測驗 ===== */
+function makeQuiz(elId,qs){
+  const box=document.getElementById(elId);
+  if(!box)return;
+  const h=document.createElement('h3');h.textContent='✏️ 隨堂小測';box.appendChild(h);
+  qs.forEach((q,i)=>{
+    const opts=q[1].map((t,j)=>({t,ok:j===q[2]})).sort(()=>Math.random()-.5);
+    const div=document.createElement('div');
+    div.className='quiz';
+    div.innerHTML=`<div class="q-text">Q${i+1}. ${q[0]}</div>
+      <div class="opts">${opts.map(o=>`<button class="opt" data-ok="${o.ok}">${o.t}</button>`).join('')}</div>
+      <div class="fb"></div>`;
+    div.querySelectorAll('.opt').forEach(btn=>{
+      btn.onclick=()=>{
+        if(div.dataset.done)return;
+        div.dataset.done='1';
+        const ok=btn.dataset.ok==='true';
+        btn.classList.add(ok?'correct':'wrong');
+        if(!ok)div.querySelector('[data-ok="true"]').classList.add('correct');
+        const fb=div.querySelector('.fb');
+        fb.className='fb show '+(ok?'good':'no');
+        fb.textContent=(ok?'✓ 答對!':'✗ ')+q[3];
+      };
+    });
+    box.appendChild(div);
+  });
+}
+makeQuiz('q1',[
+  ['「電流」的本質是?',['原子核在移動','電子的集體移動','塑膠在震動'],1,'電子又輕又好動,被推著往同一方向跑就是電流。'],
+  ['電線外面包塑膠皮,是因為塑膠是?',['導體','絕緣體','磁鐵'],1,'絕緣體把電子抓得死死的,電跑不出來,保護人。'],
+]);
+makeQuiz('q2',[
+  ['用水管比喻,「電壓」相當於?',['水壓','水流量','水管粗細'],0,'電壓是推電子的力道,就像水壓推水。'],
+  ['電壓不變,電阻變大,電流會?',['變大','變小','不變'],1,'I = V ÷ R,分母變大、結果變小。'],
+  ['「伏特、安培、歐姆」這些單位是?',['拉丁文的形容詞','三位科學家的名字','古希臘的度量衡'],1,'紀念 Volta、Ampère、Ohm 三位開路先鋒。'],
+]);
+makeQuiz('q3',[
+  ['「一度電」是指?',['1000W 用 1 小時','100W 用 1 分鐘','1V 通 1A'],0,'1 度 = 1 kWh = 1000 瓦 × 1 小時。'],
+  ['同樣功率下,把電壓提高,電流會?',['變大','變小','不變'],1,'P = V × I,P 不變、V 變大,I 就變小——所以大馬達用 380V,電線可以細一點、發熱少一點。'],
+]);
+makeQuiz('q4',[
+  ['1820 年奧斯特發現了什麼?',['磁鐵能發電','電流會產生磁場','琥珀能吸紙屑'],1,'指南針在通電導線旁偏轉——電與磁第一次牽手。'],
+  ['電磁鐵比天然磁鐵多了哪個「馬達關鍵」能力?',['更漂亮','電流反向、N/S 就對調','永遠有磁性'],1,'能換磁極方向,才能讓馬達持續被推著轉。'],
+]);
+makeQuiz('q5',[
+  ['法拉第發現:線圈要生電,磁場必須?',['很強','不斷變化','完全靜止'],1,'磁鐵靜止沒電,抽進抽出(變化)才有電——電磁感應。'],
+  ['火力、水力、風力發電廠的共同點是?',['都在燒東西','都在找方法轉動線圈','都用電池'],1,'發電原理全是電磁感應,差別只在誰出力氣轉。'],
+]);
+makeQuiz('q6',[
+  ['馬達裡「不動、提供磁場」的部分叫?',['轉子','定子','電刷'],1,'定子=定住不動;轉子=被推著轉、輸出動力。'],
+  ['DC 馬達的換向器負責?',['散熱','每轉半圈把電流方向反過來','固定螺絲'],1,'不換向,線圈轉半圈就被推回去,只會搖頭不會旋轉。'],
+]);
+makeQuiz('q7',[
+  ['交流電(AC)和直流電(DC)的差別是?',['AC 方向來回交替、DC 單一方向','AC 比較細','DC 只能晚上用'],0,'插座是 AC(每秒換向 50 次),電池是 DC。'],
+  ['三相電力量平穩,像?',['一個人偶爾推鞦韆','三個人輪流推鞦韆','鞦韆自己會動'],1,'三條波錯開 120°,任何時刻都有人在出力。'],
+]);
+makeQuiz('q8',[
+  ['感應馬達的「感應」是指?',['轉子的電是隔空感應出來的,不用接線','馬達有感情','會感應人靠近'],0,'旋轉磁場掃過鼠籠轉子,法拉第感應生電、再受力被拖著轉。'],
+  ['縫紉機換裝伺服馬達,最大的好處是?',['比較重','踩多少轉多少,不踩不轉,省電 50~70%','聲音比較大'],1,'老式離合器馬達整天空轉;伺服馬達聽命令才動。'],
+]);
+makeQuiz('q9',[
+  ['50Hz、4 極感應馬達的同步轉速是?',['3000 RPM','1500 RPM','750 RPM'],1,'120 × 50 ÷ 4 = 1500。'],
+  ['變頻器讓馬達省電、緩啟動的原理是?',['換更粗的電線','改變供電頻率來控制轉速','幫馬達上油'],1,'RPM 跟著頻率走,降頻=降速=大幅省電,緩緩升頻=溫柔起動。'],
+]);
+makeQuiz('q10',[
+  ['真正決定觸電傷害的是?',['電壓高低','流過人體的電流大小','電線顏色'],1,'幾十 mA 就足以致命;潮濕讓人體電阻更低、更危險。'],
+  ['看到有人觸電,第一步是?',['徒手把人拉開','先切斷電源','拍照存證'],1,'徒手拉人,你也會變成電路的一部分。先斷電!'],
+]);
+
+/* ===== 總測驗 ===== */
+const finalQs=[
+  ['電流的本質是?',['質子在跳動','電子的集體移動','空氣的流動'],1,'電子是電的主角。'],
+  ['I = V ÷ R,230V 接 46Ω 的電阻,電流是?',['5 A','0.2 A','10 A'],0,'230 ÷ 46 = 5 A。'],
+  ['一台 1000W 的機器連續用 3 小時,用了幾度電?',['1 度','3 度','30 度'],1,'1000W × 3h = 3 kWh = 3 度。'],
+  ['「電流會產生磁場」是誰發現的?',['奧斯特','法拉第','瓦特'],0,'1820 年,指南針在電線旁偏轉。'],
+  ['發電機的原理是?',['電流生磁','變化的磁場感應出電','摩擦生熱'],1,'法拉第的電磁感應——所有發電廠的共同心臟。'],
+  ['馬達中被磁場推著轉、輸出動力的部分是?',['定子','轉子','銘牌'],1,'轉子轉、定子定。'],
+  ['工廠大馬達用三相 380V 而非單相 230V,主要因為?',['三相推力連續平穩、還能產生旋轉磁場','380 比較便宜','顏色好看'],0,'三人輪流推鞦韆,力量大又平穩,且旋轉磁場是感應馬達的心臟。'],
+  ['感應馬達耐用少保養的關鍵是?',['轉子不接線、沒有電刷可磨損','用黃金做的','轉很慢'],0,'轉子的電靠感應,不需電刷換向器。'],
+  ['「伺服(servo)」一詞源自拉丁文,意思是?',['國王','僕人','閃電'],1,'servus=僕人:有感測器回授、絕對聽命令的馬達。'],
+  ['50Hz、2 極馬達的同步轉速是?',['1500 RPM','3000 RPM','750 RPM'],1,'120 × 50 ÷ 2 = 3000。極數越少轉越快。'],
+  ['風機加裝變頻器把轉速降 20%,耗電大約?',['降近一半','完全不變','增加'],0,'耗電約與轉速三次方成正比,小降速=大省電,工廠節能第一招。'],
+  ['漏電斷路器(RCD)跳電的判斷依據是?',['天氣太熱','流出與流回的電流不相等','電費太貴'],1,'電流有去無回=漏去別處(可能是人體),0.1 秒內切斷。'],
+];
+const fq=document.getElementById('finalQuiz');
+function buildFinal(){
+  fq.innerHTML='';
+  finalQs.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='quiz';d.dataset.q=i;
+    d.innerHTML=`<div class="q-text">Q${i+1}. ${q[0]}</div>
+      <div class="opts">${q[1].map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join('')}</div>
+      <div class="fb"></div>`;
+    d.querySelectorAll('.opt').forEach(btn=>{
+      btn.onclick=()=>{
+        d.querySelectorAll('.opt').forEach(b=>b.style.outline='');
+        btn.style.outline='2px solid var(--khaki-dark)';
+        d.dataset.sel=btn.dataset.j;
+      };
+    });
+    fq.appendChild(d);
+  });
+  document.getElementById('finalScore').style.display='none';
+}
+function gradeFinal(){
+  let right=0,unanswered=0;
+  fq.querySelectorAll('.quiz').forEach(d=>{
+    const q=finalQs[d.dataset.q];
+    const sel=d.dataset.sel;
+    const fb=d.querySelector('.fb');
+    d.querySelectorAll('.opt').forEach((b,j)=>{
+      b.classList.remove('correct','wrong');
+      if(j===q[2])b.classList.add('correct');
+    });
+    if(sel===undefined){unanswered++;fb.className='fb show no';fb.textContent='(未作答)'+q[3];return;}
+    if(+sel===q[2]){right++;fb.className='fb show good';fb.textContent='✓ '+q[3];}
+    else{d.querySelectorAll('.opt')[+sel].classList.add('wrong');fb.className='fb show no';fb.textContent='✗ '+q[3];}
+  });
+  const box=document.getElementById('finalScore');
+  box.style.display='block';
+  let cmt;
+  if(right===12)cmt='滿分!從電子到變頻器全部打通,可以去跟電機師傅聊天了 🏆';
+  else if(right>=9)cmt='很棒!觀念很扎實,把錯的題目看一下解析就完整了 🎉';
+  else if(right>=6)cmt='有基礎了!建議回第 2、5、6 章把歐姆定律和電磁二重奏再走一遍 💪';
+  else cmt='別氣餒,照學習地圖從第 1 章重新走,每章地基踩穩就會通 🌱';
+  box.innerHTML=`<div class="big num">${right} / 12</div><p>${cmt}</p>${unanswered?`<p style="color:var(--gray);font-size:13px;">(有 ${unanswered} 題未作答)</p>`:''}`;
+  box.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function resetFinal(){buildFinal();window.scrollTo({top:0});}
+buildFinal();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-5bb68c3584" data-category="science"></script></body>
+</html>

@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>製鞋工廠互動教室 — 一雙運動鞋從下單到出貨</title>
+<style>
+:root{
+  --linen:#FAF6EF;
+  --paper:#FFFFFF;
+  --khaki:#A8946A;
+  --khaki-dark:#8A774E;
+  --ink:#1F1D1A;
+  --gray:#6E6A63;
+  --line:#E6DFD2;
+  --blue:#2E5E7E;
+  --red:#8C4A3C;
+  --ok:#3E6B4F;
+  --bad:#A24936;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
+  background:var(--linen);color:var(--ink);line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+.num{font-family:Georgia,"Times New Roman",serif;font-variant-numeric:tabular-nums;}
+
+header{background:var(--ink);color:var(--linen);padding:28px 20px 22px;text-align:center;}
+header .eyebrow{font-size:12px;letter-spacing:4px;color:var(--khaki);margin-bottom:8px;}
+header h1{font-size:24px;font-weight:700;letter-spacing:2px;}
+header p{font-size:13px;color:#B8B2A6;margin-top:6px;}
+
+nav{position:sticky;top:0;z-index:50;background:var(--paper);border-bottom:1px solid var(--line);
+  display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+nav::-webkit-scrollbar{display:none;}
+nav button{flex:0 0 auto;background:none;border:none;padding:14px 13px;font-size:13px;color:var(--gray);
+  border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;font-family:inherit;}
+nav button.active{color:var(--ink);border-bottom-color:var(--khaki);font-weight:700;}
+.progress-wrap{height:3px;background:var(--line);}
+.progress-bar{height:3px;background:var(--khaki);width:0;transition:width .4s;}
+
+main{max-width:760px;margin:0 auto;padding:24px 18px 80px;}
+section.chapter{display:none;animation:fadein .35s ease;}
+section.chapter.show{display:block;}
+@keyframes fadein{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+.ch-label{font-size:12px;letter-spacing:3px;color:var(--khaki-dark);margin-bottom:4px;}
+h2{font-size:22px;margin-bottom:16px;}
+h3{font-size:17px;margin:28px 0 10px;padding-left:10px;border-left:4px solid var(--khaki);}
+p{margin-bottom:12px;font-size:15px;}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px;margin:14px 0;}
+.story{background:#F3EDDF;border-left:4px solid var(--khaki);border-radius:0 10px 10px 0;
+  padding:16px 18px;margin:14px 0;font-size:15px;}
+.story b{color:var(--khaki-dark);}
+.tip{background:var(--paper);border:1px dashed var(--khaki);border-radius:10px;padding:14px 16px;margin:14px 0;font-size:14px;}
+.tip::before{content:"💡 小重點";display:block;font-weight:700;color:var(--khaki-dark);margin-bottom:6px;font-size:13px;letter-spacing:1px;}
+.origin{background:#EFF3F5;border-left:4px solid var(--blue);border-radius:0 10px 10px 0;
+  padding:12px 16px;margin:14px 0;font-size:14px;}
+.origin::before{content:"📖 名詞的由來";display:block;font-weight:700;color:var(--blue);margin-bottom:4px;font-size:13px;letter-spacing:1px;}
+
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;background:var(--paper);}
+th{background:var(--ink);color:var(--linen);padding:9px 10px;text-align:left;font-weight:600;}
+td{border:1px solid var(--line);padding:9px 10px;vertical-align:top;}
+tr:nth-child(even) td{background:#FBF8F1;}
+.right{text-align:right;}
+
+.btn{display:inline-block;background:var(--ink);color:var(--linen);border:none;border-radius:8px;
+  padding:10px 18px;font-size:14px;cursor:pointer;font-family:inherit;transition:opacity .15s;}
+.btn:active{opacity:.75;}
+.btn.ghost{background:var(--paper);color:var(--ink);border:1px solid var(--ink);}
+.btn.small{padding:8px 14px;font-size:13px;}
+.btn.khaki{background:var(--khaki-dark);}
+
+.lab{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:16px 0;}
+.lab .lab-title{font-weight:700;margin-bottom:10px;font-size:15px;}
+.lab .lab-title::before{content:"🔬 ";}
+.slider-row{display:flex;align-items:center;gap:10px;margin:10px 0;font-size:14px;}
+.slider-row label{width:110px;flex:0 0 auto;font-weight:700;}
+.slider-row input[type=range]{flex:1;accent-color:var(--khaki-dark);}
+.slider-row .val{width:100px;text-align:right;flex:0 0 auto;}
+.lab .result{background:var(--linen);border-radius:8px;padding:12px 14px;margin-top:10px;font-size:15px;text-align:center;}
+.lab .result b{color:var(--khaki-dark);font-size:18px;}
+.lab svg{width:100%;height:auto;display:block;margin:8px auto;}
+.lab input[type=date]{font-family:inherit;font-size:15px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--linen);}
+
+/* 鞋子解剖圖 熱點 */
+.hotspot{cursor:pointer;}
+.hotspot circle{fill:var(--khaki-dark);stroke:#fff;stroke-width:2;transition:r .15s;}
+.hotspot.on circle{fill:var(--red);}
+.hotspot text{fill:#fff;font-size:12px;font-weight:bold;pointer-events:none;}
+.part-info{background:var(--linen);border-radius:8px;padding:12px 14px;margin-top:10px;font-size:14px;min-height:76px;}
+.part-info b{color:var(--khaki-dark);}
+
+/* 生產流水線動畫 */
+.pipeline{display:flex;align-items:center;justify-content:space-between;gap:4px;margin:14px 0 6px;}
+.pipeline .stn{flex:1;background:var(--ink);color:var(--linen);border-radius:8px;text-align:center;
+  padding:10px 4px;font-size:13px;font-weight:700;}
+.pipeline .arrow{color:var(--khaki-dark);font-weight:700;flex:0 0 auto;}
+.beltwrap{height:14px;position:relative;margin:0 0 14px;}
+.belt{position:absolute;inset:0;border-top:3px dashed var(--khaki);}
+.shoe-dot{position:absolute;top:-11px;left:0;font-size:16px;animation:walk 6s linear infinite;}
+@keyframes walk{from{left:0;}to{left:calc(100% - 20px);}}
+
+/* 測驗 */
+.quiz{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;}
+.quiz .q-text{font-weight:700;margin-bottom:10px;font-size:15px;}
+.quiz .opts{display:flex;flex-direction:column;gap:8px;}
+.quiz .opt{text-align:left;background:var(--linen);border:1px solid var(--line);border-radius:8px;
+  padding:10px 12px;font-size:14px;cursor:pointer;font-family:inherit;}
+.quiz .opt.correct{background:#E7F0E9;border-color:var(--ok);color:var(--ok);font-weight:700;}
+.quiz .opt.wrong{background:#F6E7E2;border-color:var(--bad);color:var(--bad);}
+.quiz .fb{margin-top:10px;font-size:14px;display:none;}
+.quiz .fb.show{display:block;}
+.quiz .fb.good{color:var(--ok);}
+.quiz .fb.no{color:var(--bad);}
+
+.pager{display:flex;justify-content:space-between;margin-top:32px;gap:10px;}
+.pager .btn{flex:1;text-align:center;}
+
+#finalScore{display:none;text-align:center;padding:20px;}
+#finalScore .big{font-size:40px;font-weight:700;color:var(--khaki-dark);}
+
+@media (max-width:480px){
+  h2{font-size:20px;}
+  .slider-row label{width:92px;font-size:13px;}
+  .pipeline .stn{font-size:11px;padding:8px 2px;}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important;transition:none !important;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">FOOTWEAR FACTORY · FROM ZERO</div>
+  <h1>製鞋工廠互動教室</h1>
+  <p>一雙運動鞋,從品牌下單到裝櫃出海的完整旅程</p>
+</header>
+
+<nav id="nav"></nav>
+<div class="progress-wrap"><div class="progress-bar" id="pbar"></div></div>
+
+<main>
+
+<!-- ======== 序章 ======== -->
+<section class="chapter" data-title="開場">
+  <div class="ch-label">序章</div>
+  <h2>一雙鞋的旅程,為什麼值得學?</h2>
+
+  <div class="story">
+    你腳上那雙運動鞋,出生在一間像小城市的工廠裡:<br>
+    它先是品牌設計師電腦裡的一張圖 → 變成一張<b>訂單</b> → 幾十種材料從世界各地被<b>採購</b>進倉 → 經過<b>裁斷、針車、成型、包裝</b>四段旅程 → 通過層層<b>品檢</b> → 裝進紙箱、塞進貨櫃、漂洋過海——最後才站上鞋店的架子。<br><br>
+    整趟旅程常常要走 <b>2~4 個月</b>,牽動上千名員工。這堂課就帶你把這條路<b>從頭到尾走一遍</b>。
+  </div>
+
+  <p>學會這套流程,你就看懂了整個「接單代工製造業」的骨架——不只做鞋,做衣服、做家具、做電子產品,骨架都長一樣:<b>接單 → 開發 → 採購 → 生產 → 品檢 → 出貨</b>。</p>
+
+  <h3>學習地圖(請照順序走,每章踩著前一章)</h3>
+  <div class="card">
+    <table>
+      <tr><th style="width:64px;">章節</th><th>你會學到</th><th style="width:88px;">地基</th></tr>
+      <tr><td>第 1 章</td><td>解剖一雙運動鞋:每個部位叫什麼(互動圖)</td><td>—</td></tr>
+      <tr><td>第 2 章</td><td>製鞋業怎麼做生意:品牌與代工廠(OEM/ODM)</td><td>—</td></tr>
+      <tr><td>第 3 章</td><td>開發與打樣:訂單來之前的三關樣品 + 報價</td><td>第 1、2 章</td></tr>
+      <tr><td>第 4 章</td><td>接到訂單(PO):訂單評審與生產計畫(產能計算器)</td><td>第 3 章</td></tr>
+      <tr><td>第 5 章</td><td>物料採購:BOM 表、交期賽跑、來料檢驗</td><td>第 4 章</td></tr>
+      <tr><td>第 6 章</td><td>生產前準備:楦頭、刀模、試產、產前會議</td><td>第 5 章</td></tr>
+      <tr><td>第 7 章</td><td>生產四大工段:裁斷→針車→成型→包裝(流水線動畫)</td><td>第 6 章</td></tr>
+      <tr><td>第 8 章</td><td>品質管理:四道關卡與 AQL 抽驗(互動查表)</td><td>第 7 章</td></tr>
+      <tr><td>第 9 章</td><td>出貨:裝箱、嘜頭、驗貨、報關、貨櫃上船</td><td>第 8 章</td></tr>
+      <tr><td>第 10 章</td><td>全流程串連 + 交期倒推計算器(T&amp;A)</td><td>全部</td></tr>
+      <tr><td>第 11 章</td><td>總測驗 + 畢業備忘卡</td><td>全部</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ======== 第1章 ======== -->
+<section class="chapter" data-title="1·解剖一雙鞋">
+  <div class="ch-label">第 1 章</div>
+  <h2>解剖一雙運動鞋:先學會叫名字</h2>
+
+  <p>進工廠第一課,是把鞋子的部位名稱叫對——因為後面每個工段,就是在做其中一個部位。<b>點下圖的數字圓點</b>,認識每個零件:</p>
+
+  <div class="lab">
+    <div class="lab-title">互動:運動鞋部位解剖圖(側面)</div>
+    <svg viewBox="0 0 460 250" id="shoeSvg">
+      <!-- 大底 -->
+      <path d="M28 208 C24 196 40 190 70 190 L400 190 C428 190 440 197 434 210 C420 222 320 228 230 228 C140 228 50 224 28 208 Z" fill="#1F1D1A"/>
+      <!-- 中底 -->
+      <path d="M34 190 C32 176 44 168 72 168 L392 176 C420 178 430 182 428 190 Z" fill="#EDE6D6" stroke="#C9BFA8"/>
+      <!-- 鞋面主體 -->
+      <path d="M64 170 C60 110 92 78 150 74 C196 71 224 92 252 118 C286 148 340 164 396 176 L72 168 Z" fill="#A8946A"/>
+      <!-- 後跟港寶區 -->
+      <path d="M64 170 C62 122 78 92 108 80 L116 168 L72 168 Z" fill="#8A774E"/>
+      <!-- 鞋頭片 -->
+      <path d="M320 158 C352 164 380 170 396 176 L330 174 Z" fill="#8A774E"/>
+      <!-- 鞋舌 -->
+      <path d="M148 72 L192 62 L202 92 L162 100 Z" fill="#D8CCAF" stroke="#8A774E"/>
+      <!-- 鞋帶 -->
+      <line x1="168" y1="104" x2="228" y2="118" stroke="#FAF6EF" stroke-width="5" stroke-linecap="round"/>
+      <line x1="178" y1="122" x2="238" y2="136" stroke="#FAF6EF" stroke-width="5" stroke-linecap="round"/>
+      <line x1="188" y1="140" x2="248" y2="152" stroke="#FAF6EF" stroke-width="5" stroke-linecap="round"/>
+      <!-- 熱點 -->
+      <g class="hotspot" data-p="0" transform="translate(210,100)"><circle r="12"/><text x="0" y="4" text-anchor="middle">1</text></g>
+      <g class="hotspot" data-p="1" transform="translate(178,70)"><circle r="12"/><text x="0" y="4" text-anchor="middle">2</text></g>
+      <g class="hotspot" data-p="2" transform="translate(213,133)"><circle r="12"/><text x="0" y="4" text-anchor="middle">3</text></g>
+      <g class="hotspot" data-p="3" transform="translate(86,122)"><circle r="12"/><text x="0" y="4" text-anchor="middle">4</text></g>
+      <g class="hotspot" data-p="4" transform="translate(368,168)"><circle r="12"/><text x="0" y="4" text-anchor="middle">5</text></g>
+      <g class="hotspot" data-p="5" transform="translate(230,180)"><circle r="12"/><text x="0" y="4" text-anchor="middle">6</text></g>
+      <g class="hotspot" data-p="6" transform="translate(230,212)"><circle r="12"/><text x="0" y="4" text-anchor="middle">7</text></g>
+      <text x="230" y="246" text-anchor="middle" font-size="12" fill="#6E6A63">點數字圓點看說明(鞋頭朝右)</text>
+    </svg>
+    <div class="part-info" id="partInfo">👆 點上面的數字,從 1 號開始認識。</div>
+  </div>
+
+  <div class="origin">
+    <b>「港寶」</b>是行業裡有趣的音譯詞:後跟裡那片定型硬片,英文叫 <b>counter</b>,早年經廣東師傅口耳相傳,粵語音譯成「港寶」沿用至今。製鞋業還有很多這種「師傅傳下來的話」,學名詞順便學到行業的歷史。
+  </div>
+
+  <div class="tip">
+    一雙鞋大致分成兩大塊:<b>鞋面(Upper)</b>——腳背以上所有布料皮料的組合;<b>鞋底(Bottom)</b>——中底加大底。記住這個分法,因為工廠的工段就是照它切的:<b>裁斷+針車做鞋面,成型把鞋面和鞋底黏成一雙鞋</b>。
+  </div>
+
+  <div id="q1"></div>
+</section>
+
+<!-- ======== 第2章 ======== -->
+<section class="chapter" data-title="2·生意模式">
+  <div class="ch-label">第 2 章</div>
+  <h2>製鞋業怎麼做生意:品牌與代工廠</h2>
+
+  <div class="story">
+    先破解一個常見誤會:<b>知名運動品牌幾乎都不自己開工廠。</b><br>
+    品牌負責<b>設計、行銷、賣鞋</b>;鞋子本身,交給亞洲的<b>代工廠</b>製造——台灣人經營的鞋廠(在越南、印尼、中國、柬埔寨等地)就承包了全球運動鞋很大一部分產量。<br><br>
+    所以整條產業鏈是:<b>品牌(客戶)→ 代工廠(我們)→ 材料供應商(上游)</b>。
+  </div>
+
+  <div class="origin">
+    <b>OEM</b>(Original Equipment Manufacturer,原廠委託製造):品牌給圖、給規格,工廠<b>照著做</b>。<br>
+    <b>ODM</b>(Original Design Manufacturer,原廠委託設計製造):工廠<b>連設計都包</b>,品牌挑款貼牌。<br>
+    大型鞋廠多半介於兩者之間:品牌出概念,工廠的開發中心一起把鞋「做得出來、做得便宜、做得耐穿」。
+  </div>
+
+  <h3>一張訂單怎麼誕生?</h3>
+  <div class="card">
+    運動品牌一年分好幾個<b>季度(Season)</b>推新鞋,每一季都走同一條路:<br>
+    ① 品牌設計師畫出新款 → ② 丟給代工廠<b>開發打樣</b>(第 3 章)→ ③ 樣品確認、<b>報價議價</b> → ④ 品牌正式下<b>採購訂單(PO)</b>(第 4 章)→ ⑤ 工廠採購、生產、出貨(第 5~9 章)。
+  </div>
+
+  <div class="tip">
+    代工廠賺的是<b>製造財</b>:單價低、量大、靠效率。一雙零售 $100 的運動鞋,工廠出廠價(FOB)可能只有 $20 上下,毛利再從中擠出幾個百分點——所以後面每一章講的流程管理,直接決定工廠賺錢還是賠錢。
+  </div>
+
+  <div id="q2"></div>
+</section>
+
+<!-- ======== 第3章 ======== -->
+<section class="chapter" data-title="3·開發打樣">
+  <div class="ch-label">第 3 章</div>
+  <h2>開發與打樣:訂單來之前的暖身賽</h2>
+
+  <p>品牌不會看一張圖就下幾十萬雙的單——要先做出<b>樣品鞋(Sample)</b>,一關一關確認。這段「暖身賽」常常比生產本身還長:</p>
+
+  <h3>樣品的三大關卡</h3>
+  <div class="card">
+    <table>
+      <tr><th>關卡</th><th>目的</th><th>白話</th></tr>
+      <tr><td>① <b>開發樣</b></td><td>把設計圖第一次做成實鞋,反覆修改外觀、結構、材料</td><td>「先做一雙看看長怎樣」</td></tr>
+      <tr><td>② <b>確認樣</b>(CFM)</td><td>品牌簽字確認:以後大貨就照這雙做,同時做穿著測試、材料物性測試</td><td>「就是它了,簽名為證」</td></tr>
+      <tr><td>③ <b>產前樣</b>(PPS)</td><td>用<b>大貨真正的材料、在大貨產線上</b>做出的樣品,證明量產做得出同樣品質</td><td>「量產前的期末考」</td></tr>
+    </table>
+    <p style="font-size:13px;color:var(--gray);margin:0;">出貨前還有一關「船頭樣」:從做好的大貨裡抽幾雙寄給品牌留底,代表「我出的貨長這樣」。</p>
+  </div>
+
+  <h3>報價:一雙鞋的錢都花去哪?</h3>
+  <p>樣品定案後,業務要跟品牌<b>報價</b>。一雙運動鞋的出廠成本結構大致長這樣:</p>
+  <div class="card">
+    <table>
+      <tr><th>成本項</th><th class="right">大約占比</th><th>內容</th></tr>
+      <tr><td>材料</td><td class="right num">50~60%</td><td>鞋面布料、大底、中底、鞋帶、膠水、鞋盒……(第 5 章的 BOM)</td></tr>
+      <tr><td>人工</td><td class="right num">15~25%</td><td>裁斷、針車、成型各工段的工資</td></tr>
+      <tr><td>製造費用</td><td class="right num">10~15%</td><td>水電、機器折舊(電機課學過的馬達們!)、廠房</td></tr>
+      <tr><td>利潤</td><td class="right num">5~10%</td><td>工廠真正賺到的</td></tr>
+    </table>
+  </div>
+
+  <div class="origin">
+    報價常用 <b>FOB</b>(Free On Board,「船上交貨」):這個價錢包含把鞋做好、送上<b>出口港的船</b>為止;之後的海運費、保險由品牌負責。如果連海運費+保險都包,叫 <b>CIF</b>(Cost, Insurance and Freight)。這些是幾百年海上貿易留下來的老規矩,寫進了國際貿易條規(Incoterms)。
+  </div>
+
+  <div id="q3"></div>
+</section>
+
+<!-- ======== 第4章 ======== -->
+<section class="chapter" data-title="4·接單與計畫">
+  <div class="ch-label">第 4 章</div>
+  <h2>接到訂單(PO):先評審,再排產</h2>
+
+  <div class="origin">
+    <b>PO</b> = Purchase Order,<b>採購訂單</b>——品牌正式「下單購買」的法律文件。上面寫清楚:款號、顏色、<b>數量</b>、<b>尺碼配比</b>(哪個尺寸各做幾雙)、單價、<b>交期</b>(哪天要出貨)、交貨條件(FOB 哪個港)。從收到 PO 那天起,工廠的倒數計時就開始了。
+  </div>
+
+  <h3>第一步不是開工,是「訂單評審」</h3>
+  <div class="card">
+    收到 PO 先開會回答三個問題,任何一題答不出來就要立刻跟品牌談:<br>
+    ① <b>產能夠嗎?</b>——交期之前,產線排得進這批量嗎?<br>
+    ② <b>材料來得及嗎?</b>——最慢的材料(通常是要開模的大底)提前期夠嗎?(第 5 章)<br>
+    ③ <b>做得出來嗎?</b>——技術、設備、品質要求都沒問題嗎?<br>
+    評審通過 → 排進<b>生產計畫</b>,同時發動採購。
+  </div>
+
+  <h3>產能:工廠的「胃口」怎麼算</h3>
+  <p>製鞋廠的產能以<b>成型線</b>為單位算(因為成型是最後的瓶頸段,第 7 章會看到)。動手算算看:</p>
+
+  <div class="lab">
+    <div class="lab-title">互動實驗:這張訂單要做幾天?</div>
+    <div class="slider-row">
+      <label>訂單數量</label>
+      <input type="range" id="capQ" min="10000" max="300000" step="5000" value="60000" oninput="capCalc()">
+      <span class="val num" id="capQv">60,000 雙</span>
+    </div>
+    <div class="slider-row">
+      <label>成型線數</label>
+      <input type="range" id="capL" min="1" max="8" value="2" oninput="capCalc()">
+      <span class="val num" id="capLv">2 條</span>
+    </div>
+    <div class="slider-row">
+      <label>每線日產</label>
+      <input type="range" id="capD" min="800" max="2400" step="100" value="1800" oninput="capCalc()">
+      <span class="val num" id="capDv">1,800 雙</span>
+    </div>
+    <div class="result" id="capOut"></div>
+    <p style="font-size:13px;color:var(--gray);margin:8px 0 0;">試試:把訂單調到 30 萬雙、只開 1 條線——馬上明白為什麼訂單評審要先看產能!</p>
+  </div>
+
+  <div class="tip">
+    <b>尺碼配比(Size Ratio)</b>是新手最容易忽略的坑:PO 不是「6 萬雙隨便做」,而是每個尺寸各多少雙(例如 US8 號最多、特大特小很少)。裁斷的刀模、成型的楦頭都<b>分尺寸</b>,配比排錯,會做出一堆賣不掉的尺寸、缺一堆該交的尺寸。
+  </div>
+
+  <div id="q4"></div>
+</section>
+
+<!-- ======== 第5章 ======== -->
+<section class="chapter" data-title="5·物料採購">
+  <div class="ch-label">第 5 章</div>
+  <h2>物料採購:一場和交期的賽跑</h2>
+
+  <h3>BOM 表:一雙鞋的「食譜」</h3>
+  <div class="origin">
+    <b>BOM</b> = Bill of Materials,<b>材料清單</b>——直譯是「材料的帳單」。它像食譜一樣列出:做一雙鞋需要哪些材料、各用多少、跟誰買。開發打樣時(第 3 章)就建好,下單後採購照著它買菜。
+  </div>
+
+  <p>一雙看似簡單的運動鞋,BOM 上常常有 <b>50~100 種</b>材料。抽幾樣看看:</p>
+  <div class="card">
+    <table>
+      <tr><th>類別</th><th>材料例子</th><th>用在哪(對照第 1 章)</th></tr>
+      <tr><td>面料</td><td>網布、飛織布、合成皮、天然皮</td><td>鞋面、鞋舌</td></tr>
+      <tr><td>底料</td><td>橡膠大底、EVA 中底(常要<b>開模</b>)</td><td>大底、中底</td></tr>
+      <tr><td>輔料</td><td>鞋帶、鞋眼、港寶、内里布、泡棉、車縫線</td><td>全鞋各處</td></tr>
+      <tr><td>化工</td><td>膠水、處理劑、油墨</td><td>成型貼底、印刷</td></tr>
+      <tr><td>包材</td><td>鞋盒(內盒)、外箱、包紙、標籤貼紙</td><td>第 9 章出貨用</td></tr>
+    </table>
+  </div>
+
+  <h3>交期賽跑:提前期(Lead Time)</h3>
+  <div class="story">
+    材料不是今天訂、明天到。每種材料有自己的<b>提前期</b>:網布可能 2~3 週;但<b>大底要先做鋼模再射出成型</b>,新模具動輒 30~45 天——<b>誰最慢,誰決定你哪天能開工</b>。所以採購員的日常,就是盯著幾十家供應商的交期表跑接力賽,哪一棒慢了馬上追。
+  </div>
+
+  <h3>材料到廠:先過 IQC 這一關</h3>
+  <div class="card">
+    材料進倉前要經過 <b>IQC(Incoming Quality Control,進料檢驗)</b>:對色卡(顏色對不對)、量規格(厚度、寬度)、抽測物性(拉力、耐磨)。不合格就退供應商——<b>爛材料進了倉,後面做得再認真也是爛鞋</b>。這是第 8 章四道品質關卡的第一道,先在這裡見個面。
+  </div>
+
+  <div class="tip">
+    採購還有一個關鍵字:<b>齊料</b>。生產線最怕「做到一半等材料」——缺一條鞋帶,整批鞋就包不了。所以生產計畫都盯著「齊料日」:所有材料到齊並驗收合格的那一天,才是真正能安心開工的日子。
+  </div>
+
+  <div id="q5"></div>
+</section>
+
+<!-- ======== 第6章 ======== -->
+<section class="chapter" data-title="6·生產前準備">
+  <div class="ch-label">第 6 章</div>
+  <h2>生產前準備:磨刀不誤砍柴工</h2>
+
+  <h3>楦頭:鞋子的「靈魂模具」</h3>
+  <div class="origin">
+    <b>楦頭(Last)</b>是一隻塑膠(古時是木頭)做的「假腳」——鞋子是<b>包著它成型</b>的,鞋好不好穿,楦頭定生死。<br>
+    中文「<b>楦</b>」字本義就是「把東西塞進去撐出形狀」;英文 <b>last</b> 更古老,源自古英語 <b>lāst = 腳印、足跡</b>——兩個語言不約而同都在說:這是腳的替身。每個尺寸一副楦,一條成型線要備幾百上千支。
+  </div>
+
+  <h3>刀模:裁布的「餅乾模」</h3>
+  <div class="card">
+    鞋面每一片形狀(第 7 章要裁的),都要先做<b>刀模</b>——像餅乾壓模一樣的鋼帶刀,一個部件一個尺寸一副刀。現代工廠部分改用<b>電腦裁割機</b>(震動刀/雷射),免開刀模、換款快,但傳統斬刀在大量生產仍然常見。
+  </div>
+
+  <h3>試產與產前會議:正式開跑前的彩排</h3>
+  <div class="card">
+    ① <b>試產(Pilot Run)</b>:用大貨材料在正式產線小量跑幾十到幾百雙,把問題(某道車縫很難車、膠水配合度不佳、某工序太慢)在小量時抓出來。<br>
+    ② <b>產前會議(PP Meeting)</b>:開工前把業務、開發、採購、生產、品管全部叫進會議室,對著<b>確認樣和 PPS</b> 把每個細節講一遍:用什麼材料、標準工序、品質重點、交期節點。開完會,人人手上一份<b>作業指導書(SOP)</b>。
+  </div>
+
+  <div class="origin">
+    <b>SOP</b> = Standard Operating Procedure,<b>標準作業程序</b>:把「這個工位該怎麼做」寫成圖文步驟貼在工位上,讓 1,000 個工人做出同 1 種品質。這個詞源自軍隊——部隊要求每個士兵動作一致,工廠借來要求每雙鞋品質一致。
+  </div>
+
+  <div class="tip">
+    這一章的所有準備,目的只有一個:<b>讓量產第一天就順</b>。工廠有句老話:「試產多流一滴汗,量產少流一桶血。」問題在 100 雙時修正很便宜,在 6 萬雙時修正是災難。
+  </div>
+
+  <div id="q6"></div>
+</section>
+
+<!-- ======== 第7章 ======== -->
+<section class="chapter" data-title="7·四大工段">
+  <div class="ch-label">第 7 章</div>
+  <h2>生產四大工段:一雙鞋的生產旅程</h2>
+
+  <p>材料齊了、彩排完了,正式開工!看著這雙鞋在流水線上走:</p>
+
+  <div class="lab">
+    <div class="lab-title">動畫:生產流水線</div>
+    <div class="pipeline">
+      <div class="stn">① 裁斷</div><div class="arrow">→</div>
+      <div class="stn">② 針車</div><div class="arrow">→</div>
+      <div class="stn">③ 成型</div><div class="arrow">→</div>
+      <div class="stn">④ 包裝</div>
+    </div>
+    <div class="beltwrap"><div class="belt"></div><div class="shoe-dot">👟</div></div>
+    <p style="font-size:13px;color:var(--gray);margin:0;">前段做「鞋面」,後段把鞋面和鞋底合體——對應第 1 章「鞋面 + 鞋底」的分法。</p>
+  </div>
+
+  <h3>① 裁斷(Cutting):把布變成拼圖片</h3>
+  <div class="card">
+    把整卷網布、皮料鋪在裁斷機上,用<b>刀模</b>(第 6 章)一片片沖下來——鞋頭片、側身片、後跟片、內里……一雙鞋面常有 <b>20~40 片</b>部件。<br>
+    功夫在<b>排版(套排)</b>:部件在材料上怎麼排最省料?材料占成本一半以上(第 3 章),排版省 3%,就是白賺 3% 的料錢。裁好的部件按尺寸綁成捆,送往針車。
+  </div>
+
+  <h3>② 針車(Stitching):把拼圖縫成鞋面</h3>
+  <div class="card">
+    幾十片部件在針車線上按 SOP 一道道<b>車縫、貼合、印刷、打鞋眼</b>,層層疊出立體的鞋面。這是<b>人最多、工序最細</b>的工段,一條針車線幾十個工位,每人只負責一兩道,像接力賽。
+  </div>
+  <div class="origin">
+    為什麼縫紉機叫「<b>針車</b>」、工人叫「車工」?早年縫紉機靠腳踏板帶動<b>輪子</b>運轉,像踩車一樣,「車」就成了縫紉機的行話,動詞也跟著說「車一道線」。這個詞從成衣業到製鞋業通用。
+  </div>
+
+  <h3>③ 成型(Lasting / Assembly):鞋面 + 鞋底 = 一雙鞋</h3>
+  <div class="card">
+    整條課程最精彩的一段,鞋在這裡「立體化」:<br>
+    <b>攀幫</b> → 把鞋面套上楦頭,前幫機、中幫機、後幫機像三雙鐵手,把鞋面緊緊拉伏在楦頭上(「攀」= 拉緊繃住)。<br>
+    <b>磨粗</b> → 把要貼底的邊緣磨毛,膠水才咬得住。<br>
+    <b>刷膠 + 烘箱</b> → 鞋面、鞋底各刷膠,過烘箱活化。<br>
+    <b>貼底 + 壓底機</b> → 對準貼合,機器加壓數十秒,讓膠完全咬合。<br>
+    <b>冷凍定型</b> → 過冷凍箱急速降溫,膠水定型、鞋型固定。<br>
+    <b>脫楦</b> → 把楦頭抽出來——鞋,誕生了!
+  </div>
+  <div class="origin">
+    這種用膠水貼底的做法叫「<b>冷粘（冷膠）工藝</b>」,是現代運動鞋主流。另一派老工藝叫「<b>硫化</b>」:把生橡膠底和鞋面一起送進高溫爐,橡膠熟化黏死(帆布鞋常用)。「硫化 vulcanization」一詞源自羅馬神話的<b>火神 Vulcan</b>——1839 年固特異(Goodyear)發現生橡膠加硫磺加熱會變強韌,就借火神之名命名。
+  </div>
+
+  <h3>④ 整理包裝(Finishing & Packing)</h3>
+  <div class="card">
+    穿鞋帶、塞紙團(撐型)、清潔除膠、掛吊牌 → 檢查(下一章的 FQC)→ 左右腳配對裝進<b>鞋盒(內盒)</b> → 按尺碼配比裝進<b>外箱</b>。包裝錯尺寸、貼錯標,前面做得再好都白費——所以包裝區牆上永遠貼著大大的配比表。
+  </div>
+
+  <div class="tip">
+    四段的節奏必須<b>互相咬合</b>:裁斷快過針車 → 半成品堆積;針車慢過成型 → 成型線「斷料」停線,一停一分鐘就是幾十雙的損失。生產管理的日常,就是讓四段像齒輪一樣同速轉——這也是為什麼產能用「成型線」計算(第 4 章):它是隊伍裡步伐最關鍵的那個人。
+  </div>
+
+  <div id="q7"></div>
+</section>
+
+<!-- ======== 第8章 ======== -->
+<section class="chapter" data-title="8·品質管理">
+  <div class="ch-label">第 8 章</div>
+  <h2>品質管理:四道關卡守住招牌</h2>
+
+  <p>品牌最怕的是消費者買到開膠、斷底的鞋。所以品質不是最後才檢查,而是<b>沿路設四道關卡</b>:</p>
+
+  <div class="card">
+    <table>
+      <tr><th>關卡</th><th>全名</th><th>守在哪</th><th>抓什麼</th></tr>
+      <tr><td><b>IQC</b></td><td>進料檢驗</td><td>倉庫門口(第 5 章)</td><td>爛材料不進門</td></tr>
+      <tr><td><b>IPQC</b></td><td>製程巡檢</td><td>產線上來回巡</td><td>問題在線上立刻抓,不讓錯繼續做</td></tr>
+      <tr><td><b>FQC</b></td><td>成品檢驗</td><td>包裝前逐雙檢</td><td>外觀、配雙、有無開膠溢膠</td></tr>
+      <tr><td><b>OQC</b></td><td>出貨檢驗</td><td>裝箱後抽驗</td><td>整批出貨前最後把關</td></tr>
+    </table>
+    <p style="font-size:13px;color:var(--gray);margin:0;">口訣:I 進門、IP 巡線、F 逐雙、O 出門。</p>
+  </div>
+
+  <h3>AQL 抽驗:不必每雙都拆,也能判斷整批</h3>
+  <div class="origin">
+    <b>AQL</b> = Acceptable Quality Limit,<b>允收品質水準</b>。這套「抽一部分、判整批」的統計方法誕生於<b>二戰美軍</b>:軍方要驗收百萬計的砲彈,不可能顆顆試射,統計學家設計出抽樣標準(MIL-STD-105),戰後全世界工廠沿用至今。品牌驗鞋常用:<b>嚴重缺陷 0 收、主要缺陷 AQL 2.5、次要缺陷 AQL 4.0</b>。
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">互動:AQL 抽驗查表器(一般檢驗水準 II、主要缺陷 AQL 2.5)</div>
+    <div class="slider-row">
+      <label>這批鞋數量</label>
+      <input type="range" id="aqlQ" min="0" max="4" step="1" value="2" oninput="aqlCalc()">
+      <span class="val num" id="aqlQv"></span>
+    </div>
+    <div class="result" id="aqlOut"></div>
+    <p style="font-size:13px;color:var(--gray);margin:8px 0 0;">Ac(Accept)= 允收數:壞鞋 ≤ 這個數,整批放行;Re(Reject)= 拒收數:壞鞋 ≥ 這個數,整批退回重整。</p>
+  </div>
+
+  <div class="story">
+    <b>品牌驗貨日</b>是全廠最緊張的一天:品牌派驗貨員(或第三方公司)到廠,按 AQL 隨機抽箱、開箱、逐雙翻看,還會做<b>拉力測試</b>(用儀器拉扯鞋面鞋底接合處)。驗貨 <b>PASS</b> 才准出貨;<b>FAIL</b> 就要全批返工重驗——交期立刻告急,這就是為什麼前面三道關卡要把問題提早消化掉。
+  </div>
+
+  <div id="q8"></div>
+</section>
+
+<!-- ======== 第9章 ======== -->
+<section class="chapter" data-title="9·出貨">
+  <div class="ch-label">第 9 章</div>
+  <h2>出貨:最後一哩路</h2>
+
+  <h3>包裝的三層結構</h3>
+  <div class="card">
+    ① <b>鞋 + 包紙/紙團</b>:防刮、撐型、防潮(常放乾燥劑——海運一個月,濕氣是發霉元兇)。<br>
+    ② <b>內盒(鞋盒)</b>:一雙一盒,印著品牌、款號、尺寸、條碼——消費者看到的那個盒子。<br>
+    ③ <b>外箱</b>:多雙裝一箱,按 PO 的<b>尺碼配比</b>混裝或單一尺寸裝(照品牌指定),箱外印<b>嘜頭</b>。
+  </div>
+
+  <div class="origin">
+    <b>嘜頭(Shipping Mark)</b>:外箱上那一大面印刷——收貨人、目的港、箱號、數量、產地。「嘜」是英文 <b>mark</b> 的粵語音譯,和「港寶」一樣是老一輩貿易口語留下的字。碼頭工人不懂你的語言沒關係,看嘜頭就知道這箱貨去哪。
+  </div>
+
+  <h3>出貨文件與報關</h3>
+  <div class="card">
+    跟著貨走的三張基本文件:<br>
+    ① <b>商業發票(Invoice)</b>:這批貨值多少錢。<br>
+    ② <b>裝箱單(Packing List)</b>:幾箱、每箱裝什麼、毛重淨重體積。<br>
+    ③ <b>提單(B/L, Bill of Lading)</b>:船公司開的「貨物收據 + 提貨憑證」,像貨的身分證。<br>
+    貨出廠前向海關<b>報關</b>,放行後才能進港上船。
+  </div>
+
+  <h3>裝櫃上船</h3>
+  <div class="story">
+    出貨日,貨櫃車開進成品倉月台。常用 <b>40 呎高櫃(40'HQ)</b>,約可裝 <b>1,000 箱上下、一萬雙左右</b>的運動鞋(依鞋型箱規而異)。裝櫃有學問:重箱在下、按目的地順序疊、拍照存證、拉封條記錄<b>櫃號與封條號</b>。<br><br>
+    櫃門一關、封條一拉,貨櫃駛向港口——按第 3 章談好的 <b>FOB</b> 條件,貨過船舷的那一刻,風險和責任正式移交品牌。工廠隨後憑文件向品牌<b>收款</b>,這張訂單的旅程走完。
+  </div>
+
+  <div class="tip">
+    交期(第 4 章 PO 上那個日期)指的通常是<b>船期(ETD,預計開船日)</b>。船是排班的,錯過這班要等下一班——趕不上船期,品牌的門市上架計畫全亂,輕則罰款、改<b>空運</b>(運費貴 5~10 倍,常由工廠自付,一單利潤直接蒸發),重則丟掉客戶。這就是全工廠為什麼天天盯著交期倒數。
+  </div>
+
+  <div id="q9"></div>
+</section>
+
+<!-- ======== 第10章 ======== -->
+<section class="chapter" data-title="10·全流程串連">
+  <div class="ch-label">第 10 章</div>
+  <h2>串起來看:從 PO 到上船的時間軸</h2>
+
+  <p>把 2~9 章排成一條線,就是每張訂單的人生:</p>
+
+  <div class="card" style="text-align:center;">
+    <svg viewBox="0 0 420 300">
+      <line x1="40" y1="20" x2="40" y2="280" stroke="#A8946A" stroke-width="3"/>
+      <g font-size="13" fill="#1F1D1A">
+        <circle cx="40" cy="30" r="7" fill="#8A774E"/><text x="58" y="35">收到 PO,訂單評審(第 4 章)</text>
+        <circle cx="40" cy="70" r="7" fill="#8A774E"/><text x="58" y="75">發採購單,材料開始賽跑(第 5 章)</text>
+        <circle cx="40" cy="110" r="7" fill="#8A774E"/><text x="58" y="115">齊料 + 試產 + 產前會議(第 6 章)</text>
+        <circle cx="40" cy="150" r="7" fill="#8A774E"/><text x="58" y="155">量產:裁斷→針車→成型→包裝(第 7 章)</text>
+        <circle cx="40" cy="190" r="7" fill="#8A774E"/><text x="58" y="195">品牌驗貨 PASS(第 8 章)</text>
+        <circle cx="40" cy="230" r="7" fill="#8A774E"/><text x="58" y="235">裝櫃、報關(第 9 章)</text>
+        <circle cx="40" cy="270" r="7" fill="#8C4A3C"/><text x="58" y="275" font-weight="bold">開船(ETD)— 交期達成 🚢</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3>T&amp;A:把時間軸變成作戰日曆</h3>
+  <div class="origin">
+    <b>T&amp;A</b> = Time and Action calendar,<b>時間行動表</b>:從出貨日<b>往回倒推</b>,算出每個節點最晚哪天要完成,然後每週對照追蹤。它是跟單員(Merchandiser)的隨身武器——「跟單」這個職位,名字就是「跟著訂單跑全程的人」。
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">互動:交期倒推計算器(輸入開船日,自動排出 T&amp;A)</div>
+    <p style="font-size:14px;margin-bottom:8px;">預計開船日(ETD):<input type="date" id="taDate" onchange="taCalc()"></p>
+    <div id="taOut"></div>
+    <p style="font-size:13px;color:var(--gray);margin:8px 0 0;">天數為常見參考值(材料採購以最慢的開模大底約 45 天估)。實務上每張訂單的 T&amp;A 都會依款式材料微調。</p>
+  </div>
+
+  <div class="tip">
+    看懂倒推表你會發現一個殘酷事實:一張 75 天交期的訂單,<b>真正在生產線上的時間可能只有 20 幾天</b>,一半以上的時間花在採購等料。所以工廠高手搶交期,搶的多半不是產線速度,而是<b>前段:樣品早確認、材料早下單、齊料不延誤</b>。
+  </div>
+
+  <div id="q10"></div>
+</section>
+
+<!-- ======== 第11章 ======== -->
+<section class="chapter" data-title="11·總測驗">
+  <div class="ch-label">第 11 章</div>
+  <h2>總測驗:你會了嗎?</h2>
+  <p>12 題,涵蓋整堂課。答完自動計分,錯的題目會告訴你為什麼。</p>
+  <div id="finalQuiz"></div>
+  <div style="text-align:center;margin-top:16px;">
+    <button class="btn" onclick="gradeFinal()">交卷計分</button>
+    <button class="btn ghost" onclick="resetFinal()" style="margin-left:8px;">重新作答</button>
+  </div>
+  <div id="finalScore" class="card"></div>
+
+  <h3>畢業備忘卡 🎓</h3>
+  <div class="card">
+    <table>
+      <tr><td><b>鞋的結構</b></td><td>鞋面(Upper)+ 鞋底(中底緩震、大底耐磨);後跟硬片叫港寶(counter 音譯)</td></tr>
+      <tr><td><b>生意模式</b></td><td>品牌設計行銷、代工廠(OEM/ODM)製造;賺效率財</td></tr>
+      <tr><td><b>樣品三關</b></td><td>開發樣 → 確認樣 → 產前樣(PPS);出貨再留船頭樣</td></tr>
+      <tr><td><b>接單</b></td><td>PO 到手先訂單評審:產能、材料、技術三問</td></tr>
+      <tr><td><b>採購</b></td><td>BOM 是食譜;最慢的材料決定開工日;齊料才安心</td></tr>
+      <tr><td><b>準備</b></td><td>楦頭是腳的替身、刀模是餅乾模;試產 + 產前會議 + SOP</td></tr>
+      <tr><td><b>四大工段</b></td><td>裁斷 → 針車 → 成型(攀幫刷膠貼底冷凍脫楦)→ 包裝</td></tr>
+      <tr><td><b>品質</b></td><td>IQC 進門、IPQC 巡線、FQC 逐雙、OQC 出門;AQL 抽驗判整批</td></tr>
+      <tr><td><b>出貨</b></td><td>內盒外箱嘜頭 → 驗貨 PASS → 報關裝櫃 → FOB 過船舷交責</td></tr>
+      <tr><td><b>心法</b></td><td>T&amp;A 從交期倒推;搶交期先搶前段(樣品、採購、齊料)</td></tr>
+    </table>
+  </div>
+</section>
+
+<div class="pager">
+  <button class="btn ghost" id="prevBtn" onclick="go(-1)">← 上一章</button>
+  <button class="btn" id="nextBtn" onclick="go(1)">下一章 →</button>
+</div>
+
+</main>
+
+<script>
+/* ===== 章節導覽 ===== */
+const chapters=[...document.querySelectorAll('section.chapter')];
+const nav=document.getElementById('nav');
+let cur=0;
+chapters.forEach((c,i)=>{
+  const b=document.createElement('button');
+  b.textContent=c.dataset.title;
+  b.onclick=()=>show(i);
+  nav.appendChild(b);
+});
+function show(i){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=i;
+  cur=i;
+  chapters.forEach((c,j)=>c.classList.toggle('show',j===i));
+  [...nav.children].forEach((b,j)=>b.classList.toggle('active',j===i));
+  document.getElementById('pbar').style.width=((i+1)/chapters.length*100)+'%';
+  document.getElementById('prevBtn').style.visibility=i===0?'hidden':'visible';
+  document.getElementById('nextBtn').textContent=i===chapters.length-1?'完成 🎉':'下一章 →';
+  nav.children[i].scrollIntoView({inline:'center',block:'nearest'});
+  window.scrollTo({top:0});
+}
+function go(d){
+  const n=cur+d;
+  if(n<0)return;
+  if(n>=chapters.length){alert('恭喜完成整堂課!🎓 記得回第 11 章交卷看分數。');return;}
+  show(n);
+}
+show(0);
+
+/* ===== 第1章 鞋子解剖熱點 ===== */
+const parts=[
+  ['鞋面(Upper)','鞋子的「上半身」,包住腳背與腳側。運動鞋多用網布、飛織布——輕、透氣;皮革款則更耐用有型。它由 20~40 片部件車縫而成,是裁斷+針車兩個工段的作品。'],
+  ['鞋舌(Tongue)','長得像舌頭所以叫鞋舌。墊在鞋帶下方,擋住鞋帶壓腳背、防止灰塵進鞋。裡面通常夾一層泡棉。'],
+  ['鞋帶與鞋眼(Laces & Eyelets)','鞋眼是穿鞋帶的孔,金屬或塑膠圈補強。別小看它:鞋帶是 BOM 上的一項材料,缺了它整批鞋包裝不了。'],
+  ['後跟港寶(Heel Counter)','藏在後跟夾層裡的硬質定型片,抓住腳跟不晃。「港寶」是英文 counter 的粵語音譯——行業老詞。'],
+  ['鞋頭(Toe)','最容易踢到、磨損的地方,常加補強片或貼片。安全鞋在這裡放鋼頭。'],
+  ['中底(Midsole)','鞋底的「夾心」,緩震的靈魂!多用 EVA 發泡材料——EVA 是一種塑膠(乙烯-醋酸乙烯共聚物)發泡後像記憶棉,踩下去回彈。高階跑鞋的科技大戰都在這一層。'],
+  ['大底(Outsole)','直接接觸地面的橡膠層,負責防滑、耐磨,表面刻花紋抓地。大底要「開模」射出成型,是提前期最長的材料之一(第 5 章會再遇到它)。'],
+];
+document.querySelectorAll('.hotspot').forEach(h=>{
+  h.addEventListener('click',()=>{
+    document.querySelectorAll('.hotspot').forEach(x=>x.classList.remove('on'));
+    h.classList.add('on');
+    const p=parts[+h.dataset.p];
+    document.getElementById('partInfo').innerHTML=`<b>${+h.dataset.p+1}. ${p[0]}</b><br>${p[1]}`;
+  });
+});
+
+/* ===== 第4章 產能計算 ===== */
+function capCalc(){
+  const Q=+document.getElementById('capQ').value;
+  const L=+document.getElementById('capL').value;
+  const D=+document.getElementById('capD').value;
+  document.getElementById('capQv').textContent=Q.toLocaleString()+' 雙';
+  document.getElementById('capLv').textContent=L+' 條';
+  document.getElementById('capDv').textContent=D.toLocaleString()+' 雙';
+  const daily=L*D;
+  const days=Q/daily;
+  document.getElementById('capOut').innerHTML=
+    `日產能 = ${L} 條 × ${D.toLocaleString()} 雙 = <b class="num">${daily.toLocaleString()} 雙/天</b><br>`+
+    `這張訂單需要 ${Q.toLocaleString()} ÷ ${daily.toLocaleString()} ≈ <b class="num">${Math.ceil(days)} 個工作天</b>`;
+}
+capCalc();
+
+/* ===== 第8章 AQL 查表 ===== */
+const aqlTable=[
+  ['281 ~ 500 雙',50,3,4],
+  ['501 ~ 1,200 雙',80,5,6],
+  ['1,201 ~ 3,200 雙',125,7,8],
+  ['3,201 ~ 10,000 雙',200,10,11],
+  ['10,001 ~ 35,000 雙',315,14,15],
+];
+function aqlCalc(){
+  const i=+document.getElementById('aqlQ').value;
+  const r=aqlTable[i];
+  document.getElementById('aqlQv').textContent=r[0];
+  document.getElementById('aqlOut').innerHTML=
+    `批量 ${r[0]} → 隨機抽 <b class="num">${r[1]} 雙</b>檢查<br>`+
+    `主要缺陷 Ac = <b class="num">${r[2]}</b>(≤${r[2]} 雙不良 → 整批允收)  Re = <b class="num">${r[3]}</b>(≥${r[3]} 雙 → 整批拒收)`;
+}
+aqlCalc();
+
+/* ===== 第10章 T&A 倒推 ===== */
+const taSteps=[
+  ['收到 PO,訂單評審完成',75],
+  ['產前樣(PPS)確認',68],
+  ['發出所有採購單',65],
+  ['材料齊料 + IQC 合格',33],
+  ['試產 + 產前會議',30],
+  ['量產開始(裁斷投產)',28],
+  ['量產完成(包裝入庫)',7],
+  ['品牌驗貨 PASS',5],
+  ['報關 + 裝櫃',2],
+  ['開船(ETD)🚢',0],
+];
+function fmtDate(d){
+  return d.getFullYear()+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0');
+}
+function taCalc(){
+  const v=document.getElementById('taDate').value;
+  if(!v)return;
+  const etd=new Date(v+'T00:00:00');
+  let html='<table><tr><th>節點</th><th>最晚完成日</th><th class="right">距開船</th></tr>';
+  taSteps.forEach(s=>{
+    const d=new Date(etd);d.setDate(d.getDate()-s[1]);
+    html+=`<tr><td>${s[0]}</td><td class="num">${fmtDate(d)}</td><td class="right num">${s[1]?('−'+s[1]+' 天'):'當天'}</td></tr>`;
+  });
+  html+='</table>';
+  document.getElementById('taOut').innerHTML=html;
+}
+(function(){
+  const d=new Date();d.setDate(d.getDate()+75);
+  document.getElementById('taDate').value=d.toISOString().slice(0,10);
+  taCalc();
+})();
+
+/* ===== 各章小測 ===== */
+function makeQuiz(elId,qs){
+  const box=document.getElementById(elId);
+  if(!box)return;
+  const h=document.createElement('h3');h.textContent='✏️ 隨堂小測';box.appendChild(h);
+  qs.forEach((q,i)=>{
+    const opts=q[1].map((t,j)=>({t,ok:j===q[2]})).sort(()=>Math.random()-.5);
+    const div=document.createElement('div');
+    div.className='quiz';
+    div.innerHTML=`<div class="q-text">Q${i+1}. ${q[0]}</div>
+      <div class="opts">${opts.map(o=>`<button class="opt" data-ok="${o.ok}">${o.t}</button>`).join('')}</div>
+      <div class="fb"></div>`;
+    div.querySelectorAll('.opt').forEach(btn=>{
+      btn.onclick=()=>{
+        if(div.dataset.done)return;
+        div.dataset.done='1';
+        const ok=btn.dataset.ok==='true';
+        btn.classList.add(ok?'correct':'wrong');
+        if(!ok)div.querySelector('[data-ok="true"]').classList.add('correct');
+        const fb=div.querySelector('.fb');
+        fb.className='fb show '+(ok?'good':'no');
+        fb.textContent=(ok?'✓ 答對!':'✗ ')+q[3];
+      };
+    });
+    box.appendChild(div);
+  });
+}
+makeQuiz('q1',[
+  ['負責緩震、被稱為運動鞋科技靈魂的是?',['大底','中底','鞋舌'],1,'中底用 EVA 等發泡材料吸收衝擊;大底負責防滑耐磨。'],
+  ['「港寶」是哪個部位、詞從哪來?',['後跟定型硬片,英文 counter 的粵語音譯','鞋帶,葡萄牙文音譯','鞋墊,日文音譯'],0,'藏在後跟夾層的硬片,固定腳跟。'],
+]);
+makeQuiz('q2',[
+  ['知名運動品牌的鞋,通常是誰做的?',['品牌自己的工廠','亞洲的代工廠(OEM/ODM)','鞋店現場手工'],1,'品牌管設計行銷,製造交給代工廠。'],
+  ['OEM 和 ODM 的差別是?',['ODM 連設計都由工廠包辦','OEM 比較貴','沒有差別'],0,'OEM 照圖做;ODM 工廠出設計、品牌貼牌。'],
+]);
+makeQuiz('q3',[
+  ['「產前樣(PPS)」的特別之處是?',['用大貨材料、在大貨產線上做','用紙做的','由品牌自己做'],0,'證明量產條件下能做出同樣品質——量產前的期末考。'],
+  ['FOB 報價包含到哪裡為止?',['送到品牌門市','把貨送上出口港的船','消費者家門口'],1,'Free On Board=船上交貨;之後運費保險歸買方。'],
+]);
+makeQuiz('q4',[
+  ['收到 PO 後的第一件事是?',['立刻開工','訂單評審:產能、材料、技術三問','先慶祝'],1,'先確認吃得下、來得及、做得出,再排產。'],
+  ['尺碼配比排錯會發生什麼?',['沒影響','做出一堆賣不掉的尺寸、缺該交的尺寸','鞋會變色'],1,'刀模、楦頭都分尺寸,配比是排產的基本功。'],
+]);
+makeQuiz('q5',[
+  ['BOM 表最貼切的比喻是?',['一雙鞋的食譜(材料清單)','員工名冊','電費帳單'],0,'Bill of Materials:列出所有材料、用量、供應商。'],
+  ['哪天才是真正能安心開工的日子?',['收到 PO 那天','所有材料到齊且驗收合格的「齊料日」','老闆生日'],1,'缺一樣材料都可能讓整線停擺。'],
+]);
+makeQuiz('q6',[
+  ['楦頭(Last)的角色是?',['鞋盒的一種','鞋子成型時的「假腳」模具','一種膠水'],1,'鞋包著楦頭成型;英文 last 源自古英語「腳印」。'],
+  ['試產(Pilot Run)的目的為何?',['小量先跑,把問題在便宜的時候抓出來','提前交貨','訓練新人跑步'],0,'問題在 100 雙時修正很便宜,在 6 萬雙時是災難。'],
+]);
+makeQuiz('q7',[
+  ['四大工段的正確順序是?',['裁斷→針車→成型→包裝','針車→裁斷→包裝→成型','成型→裁斷→針車→包裝'],0,'先把布裁成片、縫成鞋面,再與鞋底成型,最後包裝。'],
+  ['「硫化 vulcanization」一詞源自?',['羅馬火神 Vulcan','一種火山石','發明者的名字'],0,'固特異發現橡膠加硫加熱變強韌,借火神之名命名。'],
+]);
+makeQuiz('q8',[
+  ['四道品質關卡中,守在倉庫門口擋爛材料的是?',['IQC','FQC','OQC'],0,'I 進門、IP 巡線、F 逐雙、O 出門。'],
+  ['AQL 抽驗的核心概念是?',['每雙都拆開檢查','抽一部分、用統計判整批','只看外箱'],1,'源自二戰美軍驗收砲彈的抽樣標準。'],
+]);
+makeQuiz('q9',[
+  ['外箱上的「嘜頭」是?',['一種鞋帶','箱外印的收貨人/目的港/箱號等標記(mark 音譯)','海關人員'],1,'碼頭工人看嘜頭就知道貨去哪。'],
+  ['趕不上船期最可能的下場是?',['沒事,等下一班','罰款或改空運(運費貴 5~10 倍,常由工廠自付)','品牌會道歉'],1,'所以全廠天天盯交期倒數。'],
+]);
+makeQuiz('q10',[
+  ['T&A 時間行動表的做法是?',['從出貨日往回倒推每個節點','隨便排','從發薪日算起'],0,'倒推出每個節點最晚完成日,每週追蹤。'],
+  ['75 天交期的訂單,時間多半花在?',['生產線上','前段:打樣確認、採購等料','包裝'],1,'真正量產可能只有 20 幾天,搶交期先搶前段。'],
+]);
+
+/* ===== 總測驗 ===== */
+const finalQs=[
+  ['運動鞋負責防滑耐磨、直接踩地的是?',['中底','大底','港寶'],1,'大底=橡膠外底;中底負責緩震。'],
+  ['品牌與代工廠的分工是?',['品牌設計行銷、代工廠製造','品牌製造、工廠賣鞋','兩者都只做廣告'],0,'這就是 OEM/ODM 產業鏈。'],
+  ['樣品三關的正確順序是?',['開發樣→確認樣→產前樣','產前樣→開發樣→確認樣','確認樣→開發樣→產前樣'],0,'先做出來、再簽字確認、最後用大貨條件驗證。'],
+  ['PO 上一定會有的關鍵資訊是?',['款號、數量、尺碼配比、交期、單價','老闆的嗜好','天氣預報'],0,'PO 是正式採購文件,交期倒數從它開始。'],
+  ['決定「哪天能開工」的通常是?',['最快到的材料','最慢到的材料(如開模大底)','鞋帶'],1,'提前期最長的那項材料,決定齊料日。'],
+  ['楦頭的英文 last 源自古英語,意思是?',['最後一個','腳印、足跡','木頭'],1,'中文「楦」=塞進去撐形;兩個語言都在說「腳的替身」。'],
+  ['成型段「攀幫」是在做什麼?',['把鞋面拉伏繃緊在楦頭上','把鞋帶打結','把鞋盒摺好'],0,'前幫、中幫、後幫機像鐵手把鞋面繃上楦頭。'],
+  ['冷粘工藝靠什麼把鞋面和鞋底結合?',['釘子','刷膠+壓底+冷凍定型','磁鐵'],1,'磨粗→刷膠→烘箱→貼合壓底→冷凍→脫楦。'],
+  ['IPQC 的工作是?',['在產線上巡檢,問題當場抓','在門市賣鞋','開貨櫃車'],0,'不讓錯誤繼續往下做,是最省錢的品管。'],
+  ['批量 1,201~3,200 雙、AQL 2.5,抽 125 雙後允收條件是?',['不良 ≤ 7 雙','不良 ≤ 50 雙','一雙都不能有'],0,'Ac=7、Re=8——這就是查 AQL 表。'],
+  ['FOB 條件下,風險何時移交品牌?',['貨過船舷(裝上船)那一刻','鞋做好那一刻','消費者買走那一刻'],0,'所以叫「船上交貨」;之後海運風險歸買方。'],
+  ['想縮短整體交期,最有效的著力點通常在?',['要求工人跑步上班','前段:樣品早確認、材料早下單、齊料不延誤','把鞋做小一點'],1,'訂單一半以上時間花在前段等料。'],
+];
+const fq=document.getElementById('finalQuiz');
+function buildFinal(){
+  fq.innerHTML='';
+  finalQs.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='quiz';d.dataset.q=i;
+    d.innerHTML=`<div class="q-text">Q${i+1}. ${q[0]}</div>
+      <div class="opts">${q[1].map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join('')}</div>
+      <div class="fb"></div>`;
+    d.querySelectorAll('.opt').forEach(btn=>{
+      btn.onclick=()=>{
+        d.querySelectorAll('.opt').forEach(b=>b.style.outline='');
+        btn.style.outline='2px solid var(--khaki-dark)';
+        d.dataset.sel=btn.dataset.j;
+      };
+    });
+    fq.appendChild(d);
+  });
+  document.getElementById('finalScore').style.display='none';
+}
+function gradeFinal(){
+  let right=0,unanswered=0;
+  fq.querySelectorAll('.quiz').forEach(d=>{
+    const q=finalQs[d.dataset.q];
+    const sel=d.dataset.sel;
+    const fb=d.querySelector('.fb');
+    d.querySelectorAll('.opt').forEach((b,j)=>{
+      b.classList.remove('correct','wrong');
+      if(j===q[2])b.classList.add('correct');
+    });
+    if(sel===undefined){unanswered++;fb.className='fb show no';fb.textContent='(未作答)'+q[3];return;}
+    if(+sel===q[2]){right++;fb.className='fb show good';fb.textContent='✓ '+q[3];}
+    else{d.querySelectorAll('.opt')[+sel].classList.add('wrong');fb.className='fb show no';fb.textContent='✗ '+q[3];}
+  });
+  const box=document.getElementById('finalScore');
+  box.style.display='block';
+  let cmt;
+  if(right===12)cmt='滿分!整條製鞋供應鏈已在你腦中跑通,可以去跟廠長聊 T&A 了 🏆';
+  else if(right>=9)cmt='很棒!流程骨架很扎實,把錯的題目看一下解析就完整了 🎉';
+  else if(right>=6)cmt='有基礎了!建議回第 5、7、10 章把採購、四大工段和倒推法再走一遍 💪';
+  else cmt='別氣餒,照學習地圖從第 1 章重新走,跟著那雙鞋再旅行一次就會通 🌱';
+  box.innerHTML=`<div class="big num">${right} / 12</div><p>${cmt}</p>${unanswered?`<p style="color:var(--gray);font-size:13px;">(有 ${unanswered} 題未作答)</p>`:''}`;
+  box.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function resetFinal(){buildFinal();window.scrollTo({top:0});}
+buildFinal();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-19f94403d2" data-category="garment"></script></body>
+</html>

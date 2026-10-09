@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>保全公司經營互動教室 — 從設立到勤務的完整流程</title>
+<style>
+:root{
+  --linen:#FAF6EF;--paper:#FFFFFF;--khaki:#A8946A;--khaki-dark:#8A774E;
+  --ink:#1F1D1A;--gray:#6E6A63;--line:#E6DFD2;--blue:#2E5E7E;--red:#8C4A3C;
+  --ok:#3E6B4F;--bad:#A24936;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;background:var(--linen);color:var(--ink);line-height:1.8;-webkit-font-smoothing:antialiased;}
+.num{font-family:Georgia,"Times New Roman",serif;font-variant-numeric:tabular-nums;}
+header{background:var(--ink);color:var(--linen);padding:28px 20px 22px;text-align:center;}
+header .eyebrow{font-size:12px;letter-spacing:4px;color:var(--khaki);margin-bottom:8px;}
+header h1{font-size:24px;font-weight:700;letter-spacing:2px;}
+header p{font-size:13px;color:#B8B2A6;margin-top:6px;}
+nav{position:sticky;top:0;z-index:50;background:var(--paper);border-bottom:1px solid var(--line);display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+nav::-webkit-scrollbar{display:none;}
+nav button{flex:0 0 auto;background:none;border:none;padding:14px 12px;font-size:13px;color:var(--gray);border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;font-family:inherit;}
+nav button.active{color:var(--ink);border-bottom-color:var(--khaki);font-weight:700;}
+.progress-wrap{height:3px;background:var(--line);}
+.progress-bar{height:3px;background:var(--khaki);width:0;transition:width .4s;}
+main{max-width:760px;margin:0 auto;padding:24px 18px 80px;}
+section.chapter{display:none;animation:fadein .35s ease;}
+section.chapter.show{display:block;}
+@keyframes fadein{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.ch-label{font-size:12px;letter-spacing:3px;color:var(--khaki-dark);margin-bottom:4px;}
+h2{font-size:22px;margin-bottom:16px;}
+h3{font-size:17px;margin:28px 0 10px;padding-left:10px;border-left:4px solid var(--khaki);}
+p{margin-bottom:12px;font-size:15px;}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px;margin:14px 0;}
+.story{background:#F3EDDF;border-left:4px solid var(--khaki);border-radius:0 10px 10px 0;padding:16px 18px;margin:14px 0;font-size:15px;}
+.story b{color:var(--khaki-dark);}
+.tip{background:var(--paper);border:1px dashed var(--khaki);border-radius:10px;padding:14px 16px;margin:14px 0;font-size:14px;}
+.tip::before{content:"💡 小重點";display:block;font-weight:700;color:var(--khaki-dark);margin-bottom:6px;font-size:13px;letter-spacing:1px;}
+.warn{background:#F6E7E2;border-left:4px solid var(--bad);border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:14px;}
+.warn::before{content:"⚠️ 注意";display:block;font-weight:700;color:var(--bad);margin-bottom:4px;font-size:13px;letter-spacing:1px;}
+.origin{background:#EFF3F5;border-left:4px solid var(--blue);border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:14px;}
+.origin::before{content:"📖 名詞的由來";display:block;font-weight:700;color:var(--blue);margin-bottom:4px;font-size:13px;letter-spacing:1px;}
+.steps{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;font-size:15px;counter-reset:st;}
+.steps .st{position:relative;padding:6px 0 6px 40px;counter-increment:st;}
+.steps .st::before{content:counter(st);position:absolute;left:0;top:8px;width:26px;height:26px;background:var(--khaki-dark);color:#fff;border-radius:50%;text-align:center;line-height:26px;font-size:13px;font-weight:700;}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;background:var(--paper);}
+th{background:var(--ink);color:var(--linen);padding:9px 10px;text-align:left;font-weight:600;}
+td{border:1px solid var(--line);padding:9px 10px;vertical-align:top;}
+tr:nth-child(even) td{background:#FBF8F1;}
+.center{text-align:center;}
+.btn{display:inline-block;background:var(--ink);color:var(--linen);border:none;border-radius:8px;padding:10px 18px;font-size:14px;cursor:pointer;font-family:inherit;transition:opacity .15s;margin:3px;}
+.btn:active{opacity:.75;}
+.btn.ghost{background:var(--paper);color:var(--ink);border:1px solid var(--ink);}
+.btn.small{padding:8px 14px;font-size:13px;}
+.btn.on{background:var(--khaki-dark);color:#fff;border-color:var(--khaki-dark);}
+.btn[disabled]{opacity:.35;cursor:default;}
+.lab{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:16px 0;}
+.lab .lab-title{font-weight:700;margin-bottom:10px;font-size:15px;}
+.lab .lab-title::before{content:"🔬 ";}
+.lab .result{background:var(--linen);border-radius:8px;padding:12px 14px;margin-top:10px;font-size:14px;}
+.lab .result b{color:var(--khaki-dark);font-size:16px;}
+.lab svg{width:100%;height:auto;display:block;}
+.slider-row{display:flex;align-items:center;gap:10px;margin:10px 0;font-size:14px;}
+.slider-row label{width:112px;flex:0 0 auto;font-weight:700;}
+.slider-row input[type=range]{flex:1;accent-color:var(--khaki-dark);}
+.slider-row .val{width:92px;text-align:right;flex:0 0 auto;}
+.good{color:var(--ok);font-weight:700;}
+.bad{color:var(--bad);font-weight:700;}
+/* 排班表 */
+.sched{overflow-x:auto;}
+.sched table{font-size:12px;min-width:560px;}
+.sched td,.sched th{padding:5px 3px;text-align:center;}
+.sh-D{background:#F3E7C9 !important;color:#6E5C39;font-weight:700;}
+.sh-N{background:#2E5E7E !important;color:#fff;font-weight:700;}
+.sh-M{background:#F3E7C9 !important;color:#6E5C39;font-weight:700;}
+.sh-E{background:#A8946A !important;color:#fff;font-weight:700;}
+.sh-O{background:#FFFFFF !important;color:#B8B2A6;}
+/* 巡邏 log */
+.log{background:var(--ink);color:#D8D2C4;font-family:Menlo,Consolas,monospace;font-size:12px;border-radius:8px;padding:10px 12px;margin-top:10px;min-height:110px;max-height:190px;overflow-y:auto;}
+.log .al{color:#F0A08C;font-weight:700;}
+.log .okc{color:#9CC7A4;}
+/* 情境 */
+.scene{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;}
+.scene .sc-t{font-size:12px;letter-spacing:2px;color:var(--khaki-dark);font-weight:700;}
+.scene .sc-q{font-size:15px;font-weight:700;margin:6px 0 10px;}
+.scene .sc-opts{display:flex;flex-direction:column;gap:8px;}
+.scene .sc-opts button{text-align:left;background:var(--linen);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px;cursor:pointer;font-family:inherit;}
+.scene .sc-opts button.correct{background:#E7F0E9;border-color:var(--ok);color:var(--ok);font-weight:700;}
+.scene .sc-opts button.wrong{background:#F6E7E2;border-color:var(--bad);color:var(--bad);}
+.scene .sc-fb{margin-top:10px;font-size:14px;display:none;background:var(--linen);border-radius:8px;padding:10px 12px;}
+.scene .sc-fb.show{display:block;}
+/* 測驗 */
+.quiz{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;}
+.quiz .q-text{font-weight:700;margin-bottom:10px;font-size:15px;}
+.quiz .opts{display:flex;flex-direction:column;gap:8px;}
+.quiz .opt{text-align:left;background:var(--linen);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px;cursor:pointer;font-family:inherit;}
+.quiz .opt.correct{background:#E7F0E9;border-color:var(--ok);color:var(--ok);font-weight:700;}
+.quiz .opt.wrong{background:#F6E7E2;border-color:var(--bad);color:var(--bad);}
+.quiz .fb{margin-top:10px;font-size:14px;display:none;}
+.quiz .fb.show{display:block;}
+.quiz .fb.good{color:var(--ok);}
+.quiz .fb.no{color:var(--bad);}
+.pager{display:flex;justify-content:space-between;margin-top:32px;gap:10px;}
+.pager .btn{flex:1;text-align:center;}
+#finalScore{display:none;text-align:center;padding:20px;}
+#finalScore .big{font-size:40px;font-weight:700;color:var(--khaki-dark);}
+.note{font-size:12px;color:var(--gray);margin-top:24px;}
+@media (max-width:480px){
+  h2{font-size:20px;}
+  .slider-row label{width:88px;font-size:13px;}
+  .slider-row .val{width:78px;}
+}
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">SECURITY SERVICES · FROM ZERO</div>
+  <h1>保全公司經營互動教室</h1>
+  <p>從設立公司、招人排班、報價接案,到每天的勤務與緊急應變</p>
+</header>
+
+<nav id="nav"></nav>
+<div class="progress-wrap"><div class="progress-bar" id="pbar"></div></div>
+
+<main>
+
+<!-- ======== 序章 ======== -->
+<section class="chapter" data-title="開場">
+  <div class="ch-label">序章</div>
+  <h2>保全公司賣的是什麼?</h2>
+
+  <div class="story">
+    <b>阿守</b>退伍後在一間工廠當了五年警衛,從門口站哨做到帶一個班。有一天他想:「附近這麼多工廠、社區、倉庫都需要警衛,我能不能自己開一間保全公司?」<br><br>
+    他很快發現,保全公司賣的東西很特別——<b>它賣的不是商品,是「安心」</b>。客戶付錢,是希望半夜不用擔心工廠被偷、火災沒人發現、陌生人隨便進出。<br>
+    而要讓客戶安心,阿守得做好很多看不見的事:找到可靠的人、訓練他們、排好 24 小時不斷的班、定好每一個崗位要做什麼、出事時知道怎麼處理、還要讓公司賺得到錢。<br><br>
+    這堂課就跟著阿守,從<b>「想開保全公司」</b>走到<b>「公司穩定經營」</b>。
+  </div>
+
+  <div class="origin">
+    <b>security(安全)</b>源自拉丁文 <b>securus</b> = se(沒有)+ cura(擔憂)——字面意思就是「<b>無憂</b>」。保全業賣的,正是客戶的「無憂」。<br>
+    <b>保全</b>一詞在台灣常解釋為「保障安全」。台灣現代保全業大約從 1970 年代末開始發展,早期引進日本保全業的經驗與系統。
+  </div>
+
+  <h3>學習地圖(請照順序走)</h3>
+  <div class="card">
+    <table>
+      <tr><th style="width:64px;">章節</th><th>你會學到</th></tr>
+      <tr><td>第 1 章</td><td>保全業是什麼:服務種類、保全和警察的界線</td></tr>
+      <tr><td>第 2 章</td><td>法規與設立:許可、資格、保險</td></tr>
+      <tr><td>第 3 章</td><td>客戶與合約:誰需要保全、合約寫什麼</td></tr>
+      <tr><td>第 4 章</td><td>人員:招募、背景查核、訓練、裝備</td></tr>
+      <tr><td>第 5 章</td><td>人力與排班:一個崗位要幾人(計算器 + 排班產生器)</td></tr>
+      <tr><td>第 6 章</td><td>報價與成本(報價計算器)</td></tr>
+      <tr><td>第 7 章</td><td>勤務作業:崗位說明、交接、門禁、巡邏(巡邏動畫)</td></tr>
+      <tr><td>第 8 章</td><td>事件處理:通報流程、情境演練、事件報告</td></tr>
+      <tr><td>第 9 章</td><td>緊急應變:火災、醫療、天災、群眾事件</td></tr>
+      <tr><td>第 10 章</td><td>督導與品質:查勤、KPI、客戶月報</td></tr>
+      <tr><td>第 11 章</td><td>保全科技:監視、門禁、電子巡邏、系統保全</td></tr>
+      <tr><td>第 12 章</td><td>財務與風險:現金流、保險、誠信風險</td></tr>
+      <tr><td>第 13 章</td><td>全流程串連:接一個工廠新客戶的 30 天</td></tr>
+      <tr><td>第 14 章</td><td>總測驗 + 畢業備忘卡</td></tr>
+    </table>
+  </div>
+
+  <div class="warn">
+    本課程的法規部分是<b>概念與一般做法</b>。各國對保全業的規定差異很大、也會修改,實際設立與經營請以當地主管機關最新規定為準,並諮詢律師。
+  </div>
+</section>
+
+<!-- ======== 第1章 ======== -->
+<section class="chapter" data-title="1·保全是什麼">
+  <div class="ch-label">第 1 章</div>
+  <h2>保全業是什麼?</h2>
+
+  <h3>保全服務的五大類</h3>
+  <div class="card">
+    <table>
+      <tr><th>類別</th><th>做什麼</th><th>常見客戶</th></tr>
+      <tr><td><b>駐衛保全</b></td><td>派人長駐現場站哨、巡邏、門禁管理</td><td>工廠、社區大樓、商場、醫院</td></tr>
+      <tr><td><b>系統保全</b></td><td>裝感應器、監視器,由控制中心遠端監控,異常時派人趕到</td><td>商店、住家、銀行分行</td></tr>
+      <tr><td><b>運送保全</b></td><td>護送現金、貴重物品(運鈔車)</td><td>銀行、ATM、大型賣場</td></tr>
+      <tr><td><b>人身保全</b></td><td>保護特定人物的安全</td><td>企業主管、名人、外賓</td></tr>
+      <tr><td><b>活動保全</b></td><td>大型活動的秩序、人流管理</td><td>演唱會、展覽、運動賽事</td></tr>
+    </table>
+    <p style="font-size:13px;color:var(--gray);margin:0;">新公司通常從<b>駐衛保全</b>起步:設備投資少、需求穩定。本課程也以駐衛保全為主軸。</p>
+  </div>
+
+  <div class="origin">
+    <b>guard(警衛)</b>源自古法文 garder(看守),和 warden(看守人)、ward(病房、監護)是親戚,核心意思都是「看顧」。<br>
+    現代私人保全業常被追溯到 1850 年美國的 <b>Pinkerton</b> 偵探與保全公司,它的招牌是一隻睜大的眼睛,配上標語「We Never Sleep(我們從不睡覺)」。英文俗稱私家偵探為 <b>private eye</b>,一說就是從這隻眼睛來的。
+  </div>
+
+  <h3>最重要的觀念:保全不是警察</h3>
+  <div class="card">
+    <table>
+      <tr><th></th><th>警察</th><th>保全人員</th></tr>
+      <tr><td>權力來源</td><td>法律賦予的公權力</td><td>客戶的委託(合約)</td></tr>
+      <tr><td>可以做</td><td>依法盤查、搜索、逮捕、開罰</td><td>觀察、通報、門禁管制、勸阻、記錄、協助</td></tr>
+      <tr><td>不能做</td><td>—</td><td>一般不能強制搜身、扣押人、使用武力執法(各國規定不同)</td></tr>
+      <tr><td>核心任務</td><td>執法</td><td><b>預防、發現、通報</b></td></tr>
+    </table>
+  </div>
+
+  <div class="tip">
+    保全人員的三個動詞:<b>看見、通報、記錄</b>。發現問題時,保全的工作是讓對的人(主管、警察、消防)在最短時間內知道,而不是自己當英雄。很多保全事故,都是因為人員越過了這條界線——這個觀念會在第 8 章反覆出現。
+  </div>
+
+  <div id="q1"></div>
+</section>
+
+<!-- ======== 第2章 ======== -->
+<section class="chapter" data-title="2·法規設立">
+  <div class="ch-label">第 2 章</div>
+  <h2>法規與設立:保全業是「特許行業」</h2>
+
+  <p>開飲料店,登記公司就能營業。但保全業不一樣——它涉及別人的生命財產安全,所以多數國家都把它列為<b>特許行業</b>:要先拿到政府的<b>許可</b>,才能營業。</p>
+
+  <div class="origin">
+    <b>特許行業</b>:「特別許可」才能經營的行業,像保全、銀行、當鋪、藥局。政府會事先審查經營者和人員的資格,並持續監督。<br>
+    以台灣為例,專門規範保全業的法律是 1991 年公布的<b>《保全業法》</b>。柬埔寨的私人保全公司一般也需要向內政主管機關申請許可。
+  </div>
+
+  <h3>設立流程(以台灣為例的一般概念)</h3>
+  <div class="steps">
+    <div class="st"><b>準備資本與人員</b>:法規訂有最低資本額門檻;負責人與主要幹部要符合資格(例如沒有特定犯罪紀錄)。</div>
+    <div class="st"><b>向主管機關申請保全業許可</b>:提出營業計畫、組織、人員、設備等資料審查。</div>
+    <div class="st"><b>取得許可後辦理公司登記</b>:成為合法的股份有限公司或有限公司(開廠課第 1、3 章的流程)。</div>
+    <div class="st"><b>投保責任保險</b>:依法須投保,萬一保全疏失造成客戶損失,有保險可以賠償。</div>
+    <div class="st"><b>向主管機關報備開業</b>,之後人員任用、異動也要依規定報備。</div>
+  </div>
+
+  <h3>人員資格:不是誰都能當保全</h3>
+  <div class="card">
+    法規通常會限制<b>有特定犯罪紀錄的人</b>擔任保全人員(例如竊盜、搶奪、性犯罪、毒品等),並要求公司在任用前<b>查核</b>、任用後<b>報備</b>。<br>
+    道理很簡單:客戶把鑰匙、倉庫、甚至家人的安全交給保全,<b>人員的誠信就是這個行業的地基</b>。
+  </div>
+
+  <div class="tip">
+    設立前先把三份文件準備好:<b>①營業計畫書</b>(做哪類保全、服務哪些客戶)、<b>②組織與人員名冊</b>(幹部資格證明)、<b>③標準作業手冊</b>(第 7~9 章的內容)。主管機關審查時看的,就是你「有沒有能力把安全做好」。
+  </div>
+
+  <div id="q2"></div>
+</section>
+
+<!-- ======== 第3章 ======== -->
+<section class="chapter" data-title="3·客戶合約">
+  <div class="ch-label">第 3 章</div>
+  <h2>客戶與合約:誰需要保全、合約寫什麼</h2>
+
+  <h3>客戶為什麼找保全公司?</h3>
+  <div class="card">
+    <table>
+      <tr><th></th><th>自聘警衛(公司自己的安全部門)</th><th>委外保全公司</th></tr>
+      <tr><td>管理</td><td>自己招募、訓練、排班、管理</td><td>交給專業公司,客戶只管驗收</td></tr>
+      <tr><td>彈性</td><td>人力調整較慢</td><td>臨時加人、代班較容易</td></tr>
+      <tr><td>專業</td><td>要自己建立制度</td><td>保全公司有現成 SOP、督導、訓練</td></tr>
+      <tr><td>掌控度</td><td>高,人員熟悉公司</td><td>較低,要靠合約與督導</td></tr>
+    </table>
+    <p style="font-size:13px;color:var(--gray);margin:0;">很多工廠採用<b>混合模式</b>:自己的安全部門負責管理與關鍵崗位,再委外補足人力。所以保全公司的客戶,常常就是另一家公司的「安全主管」——你要說得出比他自己做更好的理由。</p>
+  </div>
+
+  <h3>接案流程</h3>
+  <div class="steps">
+    <div class="st"><b>現場勘查(Site Survey)</b>:到客戶現場走一圈,看出入口、圍牆、死角、照明、重要設施、過去發生過的事件。</div>
+    <div class="st"><b>風險評估</b>:找出最需要保護的東西和最可能出事的地方(第 13 章會實作)。</div>
+    <div class="st"><b>提出方案</b>:建議幾個崗位、幾個班、巡邏路線、搭配哪些設備。</div>
+    <div class="st"><b>報價</b>(第 6 章)、議價。</div>
+    <div class="st"><b>簽約</b>、導入(第 13 章)。</div>
+  </div>
+
+  <h3>合約一定要寫清楚的八件事</h3>
+  <div class="card">
+    ① <b>服務範圍</b>:哪些區域、哪些工作(站哨、巡邏、門禁、收發包裹?)<br>
+    ② <b>崗位與人數</b>:幾個崗位、每崗幾小時、幾班<br>
+    ③ <b>服務標準</b>:到勤率、巡邏頻率、事件通報時限<br>
+    ④ <b>費用與付款條件</b>:月費多少、幾天內付款、加班或臨時加派怎麼算<br>
+    ⑤ <b>責任與賠償上限</b>:保全疏失造成損失時,賠多少、怎麼認定<br>
+    ⑥ <b>保險</b>:保全公司投保的責任險、員工保險證明<br>
+    ⑦ <b>罰則與改善</b>:未達標準時的扣款或改善期限<br>
+    ⑧ <b>合約期間與終止</b>:幾年一約、提前終止要提前多久通知
+  </div>
+
+  <div class="origin">
+    合約中的服務標準,常用 <b>SLA(Service Level Agreement,服務水準協議)</b>寫成可量化的數字,例如「到勤率 ≥ 99%」「異常事件 5 分鐘內通報」。有數字,雙方才不會各說各話。這個詞源自 1980 年代的資訊與電信業,後來被各種服務業採用。
+  </div>
+
+  <div id="q3"></div>
+</section>
+
+<!-- ======== 第4章 ======== -->
+<section class="chapter" data-title="4·人員訓練">
+  <div class="ch-label">第 4 章</div>
+  <h2>人員:招募、查核、訓練、裝備</h2>
+
+  <p>保全公司沒有工廠、沒有商品,<b>唯一的產品就是「人」</b>。人選對、訓練好,公司就成功一半。</p>
+
+  <h3>招募:找什麼樣的人?</h3>
+  <div class="card">
+    <table>
+      <tr><th>條件</th><th>為什麼</th></tr>
+      <tr><td><b>誠信</b></td><td>最重要。會接觸鑰匙、倉庫、貴重物品</td></tr>
+      <tr><td><b>責任感與耐心</b></td><td>工作大多平淡重複,要能長時間保持警覺</td></tr>
+      <tr><td><b>溝通能力</b></td><td>每天面對員工、訪客、司機,態度決定客戶觀感</td></tr>
+      <tr><td><b>體能與健康</b></td><td>久站、夜班、巡邏要走很多路</td></tr>
+      <tr><td><b>基本讀寫</b></td><td>要能寫勤務日誌和事件報告</td></tr>
+    </table>
+  </div>
+
+  <h3>背景查核:三道把關</h3>
+  <div class="card">
+    ① <b>身分證件</b>:確認本人、確認年齡符合法規。<br>
+    ② <b>犯罪紀錄證明</b>:台灣俗稱「良民證」(警察刑事紀錄證明);其他國家也有類似文件。<br>
+    ③ <b>前雇主查詢</b>:打電話給前一份工作的主管,問問離職原因和工作表現。
+  </div>
+
+  <h3>訓練:從新人到可以獨立站哨</h3>
+  <div class="card">
+    <table>
+      <tr><th>階段</th><th>內容</th></tr>
+      <tr><td><b>職前訓練</b></td><td>法規與權限界線、服務禮儀、門禁與巡邏、無線電用語、勤務日誌與報告寫作、消防與急救基礎</td></tr>
+      <tr><td><b>現場帶訓</b></td><td>到客戶現場,由老鳥帶著熟悉崗位說明書、路線、人員、緊急聯絡方式</td></tr>
+      <tr><td><b>在職訓練</b></td><td>每月複訓、消防演練、案例檢討(把真實事件當教材)</td></tr>
+    </table>
+    <p style="font-size:13px;color:var(--gray);margin:0;">許多國家法規對保全人員的訓練時數有明確規定,依當地法規辦理。</p>
+  </div>
+
+  <h3>裝備</h3>
+  <div class="card">
+    <b>基本配備</b>:制服與識別證、手電筒、無線電對講機、哨子、筆記本、反光背心(夜間與車道)。<br>
+    <b>崗位配備</b>:訪客登記簿、放行單、鑰匙管理箱、急救箱、滅火器位置圖。<br>
+    <b>制服的意義</b>:讓人一眼認出「這裡有人在看守」——光是被看見,就能嚇阻很多不良企圖。這叫<b>嚇阻效果</b>。
+  </div>
+
+  <div class="origin">
+    <b>對講機(walkie-talkie)</b>:walk(走)+ talk(說話),可以「邊走邊說」。第二次世界大戰期間為軍隊發展出來的手持無線電,戰後進入警察、保全、工地等民間用途。
+  </div>
+
+  <div id="q4"></div>
+</section>
+
+<!-- ======== 第5章 ======== -->
+<section class="chapter" data-title="5·人力排班">
+  <div class="ch-label">第 5 章</div>
+  <h2>人力與排班:一個崗位要幾個人?</h2>
+
+  <div class="story">
+    客戶說:「我要大門 24 小時都有人。」新手的第一反應:兩班制,一班 12 小時,<b>請 2 個人</b>就好。<br>
+    但一週有 168 小時(24 × 7)。2 個人每人每週要上 84 小時——<b>違反勞動法,也會累垮人</b>。而且有人請假、生病時,誰來頂?<br>
+    所以一個 24 小時崗位,實際需要的人數遠比想像多。
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">互動:崗位人力計算器</div>
+    <div class="slider-row"><label>崗位數</label><input type="range" id="mpP" min="1" max="12" step="1" value="3" oninput="mpCalc()"><span class="val num" id="mpPv"></span></div>
+    <div class="slider-row"><label>每天開幾小時</label><input type="range" id="mpH" min="8" max="24" step="1" value="24" oninput="mpCalc()"><span class="val num" id="mpHv"></span></div>
+    <div class="slider-row"><label>每週開幾天</label><input type="range" id="mpD" min="5" max="7" step="1" value="7" oninput="mpCalc()"><span class="val num" id="mpDv"></span></div>
+    <div class="slider-row"><label>每人每週工時</label><input type="range" id="mpW" min="40" max="60" step="1" value="48" oninput="mpCalc()"><span class="val num" id="mpWv"></span></div>
+    <div class="slider-row"><label>請假替補率</label><input type="range" id="mpR" min="0" max="25" step="1" value="10" oninput="mpCalc()"><span class="val num" id="mpRv"></span></div>
+    <div class="result" id="mpOut"></div>
+    <p style="font-size:13px;color:var(--gray);margin:8px 0 0;">每人每週工時上限依當地勞動法規(台灣一般為每週 40 小時正常工時,另計加班;柬埔寨一般為每週 48 小時)。</p>
+  </div>
+
+  <div class="origin">
+    <b>替補率(Relief Factor)</b>:為了應付休假、病假、訓練、離職空窗,在基本人力上多準備的比例。業界常說一個 24 小時全年無休的崗位大約需要 <b>4~5 個人</b>,就是這樣算出來的。
+  </div>
+
+  <h3>兩種常見班制</h3>
+  <div class="card">
+    <table>
+      <tr><th></th><th>三班制(8 小時)</th><th>兩班制(12 小時)</th></tr>
+      <tr><td>時段</td><td>早 07-15、中 15-23、夜 23-07</td><td>日 07-19、夜 19-07</td></tr>
+      <tr><td>優點</td><td>每班短,體力負擔輕、較能保持警覺</td><td>交接次數少、休假日較完整</td></tr>
+      <tr><td>缺點</td><td>交接次數多</td><td>一班太長,後半段容易疲勞;加班費較高</td></tr>
+    </table>
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">互動:排班產生器(1 個 24 小時崗位,4 人輪班,顯示 14 天)</div>
+    <div class="center">
+      <button class="btn small on" id="sh12" onclick="shSet(12)">兩班制 12 小時</button>
+      <button class="btn small ghost" id="sh8" onclick="shSet(8)">三班制 8 小時</button>
+    </div>
+    <div class="sched" id="shOut"></div>
+    <div class="result" id="shNote"></div>
+  </div>
+
+  <div class="tip">
+    好的排班三原則:① <b>每天每班都有人</b>(上表每一欄都要齊);② <b>日夜班輪替要往後推</b>(日 → 夜 → 休,不要夜班接早班);③ <b>固定循環</b>,讓員工能提早安排生活。排班穩定,離職率就低——而保全業最大的成本殺手,正是人員流動。
+  </div>
+
+  <div id="q5"></div>
+</section>
+
+<!-- ======== 第6章 ======== -->
+<section class="chapter" data-title="6·報價成本">
+  <div class="ch-label">第 6 章</div>
+  <h2>報價與成本:一個崗位每月收多少?</h2>
+
+  <p>保全公司的成本結構很單純:<b>人事費用通常占總成本的七到八成以上</b>。所以報價的核心,就是把「一個崗位需要的人」算清楚,再加上管理成本和合理利潤。</p>
+
+  <div class="card">
+    <b>報價四層:</b><br>
+    ① <b>人員直接成本</b> = 每人月薪 ×(1 + 社保福利率)+ 每人裝備攤提<br>
+    ② <b>崗位直接成本</b> = 人員直接成本 × 每崗所需人數(第 5 章算出來的)<br>
+    ③ 加上 <b>督導費用</b>(查勤主管、訓練)與 <b>公司管銷</b>(辦公室、行政、保險)<br>
+    ④ 加上 <b>利潤</b>
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">互動:每崗位月報價計算器(美元,示範數字)</div>
+    <div class="slider-row"><label>每人月薪</label><input type="range" id="qtW" min="150" max="1500" step="10" value="300" oninput="qtCalc()"><span class="val num" id="qtWv"></span></div>
+    <div class="slider-row"><label>社保福利率</label><input type="range" id="qtB" min="0" max="40" step="1" value="15" oninput="qtCalc()"><span class="val num" id="qtBv"></span></div>
+    <div class="slider-row"><label>每人裝備攤提</label><input type="range" id="qtE" min="0" max="60" step="1" value="12" oninput="qtCalc()"><span class="val num" id="qtEv"></span></div>
+    <div class="slider-row"><label>每崗所需人數</label><input type="range" id="qtN" min="1" max="6" step="0.1" value="4.2" oninput="qtCalc()"><span class="val num" id="qtNv"></span></div>
+    <div class="slider-row"><label>督導費用率</label><input type="range" id="qtS" min="0" max="20" step="1" value="8" oninput="qtCalc()"><span class="val num" id="qtSv"></span></div>
+    <div class="slider-row"><label>公司管銷率</label><input type="range" id="qtO" min="0" max="25" step="1" value="10" oninput="qtCalc()"><span class="val num" id="qtOv"></span></div>
+    <div class="slider-row"><label>利潤率</label><input type="range" id="qtP" min="0" max="25" step="1" value="10" oninput="qtCalc()"><span class="val num" id="qtPv"></span></div>
+    <div class="result" id="qtOut"></div>
+  </div>
+
+  <div class="warn">
+    保全業常見的惡性競爭是<b>殺價搶標</b>:報價低到付不起合法工資和社保,只好壓低人員待遇、少派人、讓人連續加班。結果是人員流動率飆高、服務品質崩壞、違法被罰,最後客戶和公司兩敗俱傷。<b>寧可不接,也不要接一個算不過來的案子。</b>
+  </div>
+
+  <div id="q6"></div>
+</section>
+
+<!-- ======== 第7章 ======== -->
+<section class="chapter" data-title="7·勤務作業">
+  <div class="ch-label">第 7 章</div>
+  <h2>勤務作業:一天的保全工作長什麼樣</h2>
+
+  <h3>崗位勤務說明書:每個崗位的「說明書」</h3>
+  <div class="card">
+    每個崗位都要有一份<b>崗位勤務說明書(Post Orders)</b>,貼在崗亭裡,內容包括:<br>
+    ① 崗位位置與負責範圍<br>
+    ② 上下班時間、交接方式<br>
+    ③ 例行工作(開關門時間、巡邏時刻、訪客登記、收發物品)<br>
+    ④ 可以放行 / 不可放行的規則<br>
+    ⑤ 緊急聯絡電話(客戶主管、保全督導、警察、消防、醫院)<br>
+    ⑥ 常見異常的處理步驟<br>
+    新人第一天拿到它,就知道自己該做什麼——人換了,標準不變。
+  </div>
+
+  <h3>交接班:最容易出漏洞的五分鐘</h3>
+  <div class="steps">
+    <div class="st">接班人<b>提前 10~15 分鐘</b>到崗,穿好制服、帶齊裝備。</div>
+    <div class="st">交班人口頭說明本班發生的事、還在處理中的事。</div>
+    <div class="st">一起清點:鑰匙、對講機、訪客證、重要物品。</div>
+    <div class="st">雙方在<b>勤務日誌</b>上簽名,寫下交接時間。</div>
+    <div class="st">交班人離開前,接班人確認一切正常。</div>
+  </div>
+
+  <div class="origin">
+    <b>日誌(log)</b>的英文原意是「<b>木頭</b>」。早期帆船要量船速,會把一塊綁著繩子的木頭丟進海裡,看繩子被拉出多少——量到的速度記在本子上,這本子就叫 logbook(航海日誌)。今天的勤務日誌、電腦的 log 檔,都是它的後代。
+  </div>
+
+  <h3>門禁管理:工廠大門的三道把關</h3>
+  <div class="card">
+    <table>
+      <tr><th>對象</th><th>做法</th></tr>
+      <tr><td><b>人員</b></td><td>員工刷卡或看識別證;訪客登記身分、事由、受訪人,發訪客證,離開時收回</td></tr>
+      <tr><td><b>車輛</b></td><td>登記車號、司機、事由;貨車進出廠要檢查車廂</td></tr>
+      <tr><td><b>物品</b></td><td>公司物品出廠一定要有主管簽核的<b>放行單</b>,保全核對品名與數量後才放行</td></tr>
+    </table>
+  </div>
+
+  <h3>巡邏:用腳走出來的安全</h3>
+  <div class="origin">
+    <b>patrol(巡邏)</b>源自法文 patrouiller,原本的意思是「<b>在泥巴裡踩來踩去</b>」——早期士兵巡營,常常就是在泥濘的營地裡來回走。
+  </div>
+
+  <p>巡邏路線上會設好幾個<b>巡邏點</b>(倉庫門、圍牆死角、發電機房、消防設備),保全每到一點就打卡記錄。看看一趟夜間巡邏:</p>
+
+  <div class="lab">
+    <div class="lab-title">動畫:夜間巡邏(工廠平面示意)</div>
+    <svg viewBox="0 0 420 260" id="ptSvg"></svg>
+    <div class="center">
+      <button class="btn small" id="ptBtn" onclick="ptStart()">▶ 開始巡邏</button>
+      <button class="btn small ghost" onclick="ptReset()">重來</button>
+    </div>
+    <div class="log" id="ptLog">巡邏紀錄會顯示在這裡……</div>
+  </div>
+
+  <div class="tip">
+    巡邏時間要<b>不固定</b>:如果保全每天都在 2:00 準時經過倉庫,小偷只要 2:05 動手就好。好的做法是固定「每小時至少一趟」,但實際出發時間與路線順序由督導隨機調整。
+  </div>
+
+  <div id="q7"></div>
+</section>
+
+<!-- ======== 第8章 ======== -->
+<section class="chapter" data-title="8·事件處理">
+  <div class="ch-label">第 8 章</div>
+  <h2>事件處理:遇到狀況怎麼辦</h2>
+
+  <h3>事件處理四步驟</h3>
+  <div class="steps">
+    <div class="st"><b>觀察</b>:先確認自己安全,看清楚發生什麼事、幾個人、有沒有危險物品。</div>
+    <div class="st"><b>通報</b>:用對講機或電話通知督導與客戶主管;必要時直接報警、叫救護車、叫消防。</div>
+    <div class="st"><b>處置</b>:在自己的權限與安全範圍內行動:勸阻、疏散、關閉出入口、引導救援。</div>
+    <div class="st"><b>紀錄</b>:事後立刻寫事件報告,保留證據(監視畫面、照片、目擊者)。</div>
+  </div>
+
+  <div class="warn">
+    記住第 1 章的界線:<b>生命安全永遠第一,財物第二</b>。保全人員不追逐、不動手、不單獨面對危險。你的角色是「眼睛和嘴巴」——看清楚、講清楚,讓專業的人來處理。
+  </div>
+
+  <h3>情境演練:你會怎麼做?</h3>
+  <div id="scenes"></div>
+
+  <h3>事件報告:用 5W1H 寫</h3>
+  <div class="origin">
+    <b>5W1H</b>:Who(誰)、What(什麼事)、When(何時)、Where(何地)、Why(為什麼)、How(怎麼發生、怎麼處理)。常被追溯到英國作家<b>吉卜林</b> 1902 年的一首小詩:「我有六個忠實的僕人,他們教會我一切;他們的名字是 What、Why、When、How、Where 和 Who。」後來成為新聞寫作和事件報告的標準格式。
+  </div>
+
+  <div class="card">
+    <b>範例事件報告</b><br>
+    <b>When</b>:10 月 3 日 02:40<br>
+    <b>Where</b>:B 棟倉庫後方圍牆<br>
+    <b>Who</b>:發現人:夜班保全甲;可疑人士 2 名,男性,深色衣服,一人戴白色帽子<br>
+    <b>What</b>:2 人試圖翻越圍牆,見巡邏手電筒光後往外逃離,未進入廠區<br>
+    <b>Why</b>:研判意圖竊取倉庫物品(圍牆該段照明故障)<br>
+    <b>How</b>:保全保持距離,02:41 以對講機通報督導,02:45 報警;警方 03:05 到場。清點倉庫無損失。建議:修復該段照明、增加該點巡邏頻率。<br>
+    <span style="font-size:13px;color:var(--gray)">注意:只寫事實(看到、聽到的),把推測清楚標為「研判」,最後附上改善建議。</span>
+  </div>
+
+  <div id="q8"></div>
+</section>
+
+<!-- ======== 第9章 ======== -->
+<section class="chapter" data-title="9·緊急應變">
+  <div class="ch-label">第 9 章</div>
+  <h2>緊急應變:最壞的時候,最需要保全</h2>
+
+  <p>平常的保全工作很平淡,但<b>真正的價值在出事的那幾分鐘</b>。尤其是夜間和假日,工廠裡可能只有保全在,他就是第一個反應的人。</p>
+
+  <div class="card">
+    <table>
+      <tr><th>狀況</th><th>保全的第一步</th><th>接著</th></tr>
+      <tr><td>🔥 <b>火災</b></td><td>按火警警報、通報消防與主管</td><td>引導人員疏散、在安全前提下用滅火器初期滅火、打開大門引導消防車、到集合點清點人數</td></tr>
+      <tr><td>🚑 <b>醫療急症/工傷</b></td><td>叫救護車、通報主管與醫務室</td><td>不隨意移動傷者(除非有立即危險)、有受訓者做急救、派人到門口接救護車</td></tr>
+      <tr><td>🌊 <b>颱風、淹水、雷擊</b></td><td>依天氣預報提前加強巡查</td><td>確認排水、關好門窗、重要設備墊高;停電時確認發電機啟動</td></tr>
+      <tr><td>⚡ <b>停電</b></td><td>確認發電機、緊急照明是否啟動</td><td>加強巡邏(停電時監視器與門禁可能失效)、通報機修</td></tr>
+      <tr><td>👥 <b>群眾聚集、勞資爭議</b></td><td>通報管理層,關閉大門保護人員與設施</td><td>保持中立、不推擠不衝突、不介入勞資談判、記錄經過,必要時請警方協助</td></tr>
+    </table>
+  </div>
+
+  <div class="tip">
+    <b>保持中立</b>在工廠特別重要:勞資爭議時,保全的任務是<b>保護所有人的安全與設施</b>,不是替任何一方驅趕另一方。保全一旦被員工視為「對立的一方」,之後的每一天工作都會變得很困難,甚至危險。
+  </div>
+
+  <h3>演練:讓身體記住</h3>
+  <div class="card">
+    每種緊急狀況都要有<b>應變流程卡</b>(貼在崗亭),並且定期<b>演練</b>——消防演練至少每半年一次,讓每個保全都實際按過警報、拿過滅火器、帶過疏散。<br>
+    危機發生時,人的大腦會慌;慌的時候,<b>只做得出平常練過的事</b>。
+  </div>
+
+  <div id="q9"></div>
+</section>
+
+<!-- ======== 第10章 ======== -->
+<section class="chapter" data-title="10·督導品質">
+  <div class="ch-label">第 10 章</div>
+  <h2>督導與品質:誰來看守看守的人?</h2>
+
+  <div class="origin">
+    古羅馬詩人 Juvenal 有一句名言:「<b>Quis custodiet ipsos custodes?</b>」——誰來看守這些看守的人?這正是保全公司管理的核心問題。<br>
+    <b>督導(supervisor)</b>源自拉丁文 super(在上面)+ videre(看)——「<b>從上面看</b>」的人。
+  </div>
+
+  <h3>督導的工作</h3>
+  <div class="card">
+    ① <b>查勤</b>:不定時到各客戶現場,確認人員在崗、清醒、服裝整齊、日誌有寫。<b>夜間突擊查勤</b>最能發現問題。<br>
+    ② <b>在職訓練</b>:現場指導、定期複訓。<br>
+    ③ <b>代班調度</b>:有人臨時請假,要立刻找人補上,崗位不能空。<br>
+    ④ <b>客戶溝通</b>:定期拜訪客戶主管,聽取意見。<br>
+    ⑤ <b>事件跟進</b>:確認事件報告完整、改善措施有落實。
+  </div>
+
+  <h3>保全公司的 KPI</h3>
+  <div class="card">
+    <table>
+      <tr><th>指標</th><th>算法</th><th>目標參考</th></tr>
+      <tr><td><b>到勤率</b></td><td>實際到勤班次 ÷ 應到班次</td><td>≥ 99.5%</td></tr>
+      <tr><td><b>巡邏完成率</b></td><td>實際打卡巡邏點 ÷ 應打卡巡邏點</td><td>≥ 98%</td></tr>
+      <tr><td><b>事件通報時效</b></td><td>發現到通報的平均分鐘數</td><td>≤ 5 分鐘</td></tr>
+      <tr><td><b>查勤缺失數</b></td><td>督導查勤發現的缺失件數</td><td>逐月下降</td></tr>
+      <tr><td><b>客訴件數</b></td><td>客戶反映的問題件數</td><td>逐月下降</td></tr>
+      <tr><td><b>人員流動率</b></td><td>當月離職人數 ÷ 平均在職人數</td><td>越低越好</td></tr>
+    </table>
+  </div>
+
+  <h3>給客戶的月報</h3>
+  <div class="card">
+    每月給客戶一份報告:<b>KPI 數字、當月事件摘要、改善建議</b>(例如「B 棟圍牆照明不足,建議加裝燈具」)。<br>
+    月報讓客戶看見保全公司「做了什麼」——保全做得越好,越沒事發生,客戶反而越容易覺得「好像不需要你」。月報就是讓看不見的價值被看見。
+  </div>
+
+  <div id="q10"></div>
+</section>
+
+<!-- ======== 第11章 ======== -->
+<section class="chapter" data-title="11·保全科技">
+  <div class="ch-label">第 11 章</div>
+  <h2>保全科技:人力的延伸</h2>
+
+  <p>科技不會取代保全人員,但能讓<b>同樣的人力看得更廣、反應更快、紀錄更完整</b>。</p>
+
+  <div class="card">
+    <table>
+      <tr><th>科技</th><th>做什麼</th><th>搭配人力的方式</th></tr>
+      <tr><td><b>監視系統 CCTV</b></td><td>24 小時錄影、即時監看</td><td>監控室人員看畫面,發現異常派巡邏人員前往</td></tr>
+      <tr><td><b>門禁系統</b></td><td>刷卡、人臉辨識進出</td><td>自動記錄進出,保全處理例外(忘帶卡、訪客)</td></tr>
+      <tr><td><b>電子巡邏系統</b></td><td>巡邏點裝感應晶片,保全用手機或巡邏棒感應打卡</td><td>自動產生巡邏報表,督導可即時看是否漏點</td></tr>
+      <tr><td><b>系統保全(遠端監控)</b></td><td>感應器偵測入侵、煙霧,訊號傳到控制中心</td><td>控制中心確認後派機動人員趕到現場</td></tr>
+      <tr><td><b>數位勤務系統</b></td><td>勤務日誌、事件報告、排班、查勤全部上雲端</td><td>即時通報、照片佐證、自動產生客戶月報</td></tr>
+    </table>
+  </div>
+
+  <div class="origin">
+    <b>CCTV</b> = Closed-Circuit Television,<b>閉路電視</b>:畫面只在一個封閉的線路內傳送,不像電視台對外播放。一般認為最早的 CCTV 系統之一出現在 1942 年的德國,用來遠距離觀察火箭發射——讓人不必站在危險的現場旁邊。
+  </div>
+
+  <div class="tip">
+    科技最大的價值,常常不是「抓到壞人」,而是<b>「留下紀錄」</b>:巡邏打卡有時間、事件有照片、進出有資料。紀錄完整,客戶信任你、法遵查核過得了、出事時責任也分得清楚。紙本日誌改成數位系統,是保全公司升級最划算的一步。
+  </div>
+
+  <div id="q11"></div>
+</section>
+
+<!-- ======== 第12章 ======== -->
+<section class="chapter" data-title="12·財務風險">
+  <div class="ch-label">第 12 章</div>
+  <h2>財務與風險:讓公司活得久</h2>
+
+  <h3>現金流:保全公司最大的壓力</h3>
+  <div class="card">
+    保全公司每個月<b>先發薪水</b>(人事占大部分成本),客戶卻常常<b>月結 30~60 天</b>才付款。等於公司永遠要先墊一到兩個月的薪水。<br>
+    接越多案子,要墊的錢越多——<b>成長太快反而可能現金斷掉</b>。所以要:<br>
+    ① 準備至少 2~3 個月的薪資週轉金;② 爭取較短的付款條件;③ 嚴格追收帳款。
+  </div>
+
+  <h3>五大風險</h3>
+  <div class="card">
+    <table>
+      <tr><th>風險</th><th>例子</th><th>對策</th></tr>
+      <tr><td><b>誠信風險</b></td><td>保全監守自盜、收賄放行</td><td>嚴格背景查核、定期輪調崗位、重要崗位雙人制、放行單稽核</td></tr>
+      <tr><td><b>疏失賠償</b></td><td>保全睡著,倉庫被偷</td><td>責任保險、查勤、合約訂明賠償上限</td></tr>
+      <tr><td><b>人員流動</b></td><td>每月走一成人,訓練白做、服務不穩</td><td>合法薪資、穩定排班、晉升管道、尊重員工</td></tr>
+      <tr><td><b>勞動法遵</b></td><td>超時工作、少付加班費被罰</td><td>排班合法、工時紀錄完整、按時繳社保</td></tr>
+      <tr><td><b>客戶集中</b></td><td>最大客戶解約,三分之一人力沒地方派</td><td>客戶分散、多類型服務</td></tr>
+    </table>
+  </div>
+
+  <div class="origin">
+    <b>雙人制(Two-Person Rule)</b>:重要的事一定要兩個人在場才能做,例如開金庫、清點現金、處理扣押物品。源自軍事與核武管理的規則——兩個人同時出錯或同時作弊的機率,遠低於一個人。
+  </div>
+
+  <h3>保險</h3>
+  <div class="card">
+    ① <b>責任保險</b>:保全疏失造成客戶損失時賠償(多數國家法規要求)。<br>
+    ② <b>員工意外與團體保險</b>:保全工作有一定危險,員工受傷要有保障。<br>
+    ③ <b>誠實保證保險</b>:員工不誠實行為造成損失時的保障。
+  </div>
+
+  <div id="q12"></div>
+</section>
+
+<!-- ======== 第13章 ======== -->
+<section class="chapter" data-title="13·全流程串連">
+  <div class="ch-label">第 13 章</div>
+  <h2>全流程串連:接一個工廠新客戶的 30 天</h2>
+
+  <p>阿守接到一間約 500 人成衣廠的案子:大門、後門、倉庫三個崗位,24 小時。從簽約到正式上線,他的 30 天是這樣走的:</p>
+
+  <div class="lab">
+    <div class="lab-title">新客戶導入時程</div>
+    <svg viewBox="0 0 420 290" id="obSvg"></svg>
+  </div>
+
+  <h3>風險評估:先找出最該保護的地方</h3>
+  <div class="card">
+    <table>
+      <tr><th>區域</th><th>可能發生什麼</th><th>可能性</th><th>影響</th><th>對策</th></tr>
+      <tr><td>成品倉庫</td><td>成品被偷運出廠</td><td>中</td><td>高</td><td>倉庫崗位 + 放行單稽核 + 監視</td></tr>
+      <tr><td>後側圍牆</td><td>夜間翻牆入侵</td><td>中</td><td>中</td><td>加強照明 + 巡邏點</td></tr>
+      <tr><td>發電機、配電室</td><td>火災、停電</td><td>低</td><td>高</td><td>每趟巡邏必到 + 消防演練</td></tr>
+      <tr><td>大門</td><td>未登記人員或車輛進入</td><td>高</td><td>中</td><td>訪客登記 + 車輛檢查</td></tr>
+    </table>
+    <p style="font-size:13px;color:var(--gray);margin:0;">「可能性 × 影響」都高的地方,優先配置人力與設備。</p>
+  </div>
+
+  <h3>穩定營運後的每月循環</h3>
+  <div class="steps">
+    <div class="st"><b>每天</b>:站哨、巡邏、門禁、勤務日誌、交接。</div>
+    <div class="st"><b>每週</b>:督導查勤(含至少一次夜間)、排班檢查、事件跟進。</div>
+    <div class="st"><b>每月</b>:KPI 統計、客戶月報、在職訓練、薪資與請款。</div>
+    <div class="st"><b>每半年</b>:消防與緊急演練、風險評估更新、合約與報價檢討。</div>
+  </div>
+
+  <div class="tip">
+    整堂課的一句話:<b>保全公司賣的是「可靠」</b>。可靠來自對的人(第 4 章)、夠的人(第 5 章)、合理的價格(第 6 章)、清楚的制度(第 7~9 章)、持續的監督(第 10 章)、完整的紀錄(第 11 章)。每一環都做到,客戶才會年年續約。
+  </div>
+</section>
+
+<!-- ======== 第14章 ======== -->
+<section class="chapter" data-title="14·總測驗">
+  <div class="ch-label">第 14 章</div>
+  <h2>總測驗:你會了嗎?</h2>
+  <p>12 題,涵蓋整堂課。答完自動計分,錯的題目會告訴你為什麼。</p>
+  <div id="finalQuiz"></div>
+  <div class="center" style="margin-top:16px;">
+    <button class="btn" onclick="gradeFinal()">交卷計分</button>
+    <button class="btn ghost" onclick="resetFinal()">重新作答</button>
+  </div>
+  <div id="finalScore" class="card"></div>
+
+  <h3>畢業備忘卡 🎓</h3>
+  <div class="card">
+    <table>
+      <tr><td><b>本質</b></td><td>保全賣的是「無憂」與可靠;三個動詞:看見、通報、記錄</td></tr>
+      <tr><td><b>界線</b></td><td>保全不是警察;生命第一、財物第二;不追、不打、不單獨冒險</td></tr>
+      <tr><td><b>設立</b></td><td>特許行業:先許可再登記;人員資格查核;責任保險</td></tr>
+      <tr><td><b>合約</b></td><td>勘查 → 風險評估 → 方案 → 報價 → 簽約;SLA 量化標準</td></tr>
+      <tr><td><b>人員</b></td><td>誠信第一;身分、犯罪紀錄、前雇主三道查核;職前 + 現場 + 在職訓練</td></tr>
+      <tr><td><b>人力</b></td><td>24 小時崗位約需 4~5 人;替補率;日→夜→休往後推</td></tr>
+      <tr><td><b>報價</b></td><td>人員成本 × 每崗人數 + 督導 + 管銷 + 利潤;不殺價接算不過來的案</td></tr>
+      <tr><td><b>勤務</b></td><td>崗位說明書、交接簽名、門禁三把關、放行單、巡邏時間不固定</td></tr>
+      <tr><td><b>事件</b></td><td>觀察 → 通報 → 處置 → 紀錄;5W1H 報告,事實與研判分開</td></tr>
+      <tr><td><b>應變</b></td><td>流程卡 + 定期演練;群眾事件保持中立</td></tr>
+      <tr><td><b>督導</b></td><td>夜間突擊查勤;到勤率、巡邏完成率、通報時效;客戶月報</td></tr>
+      <tr><td><b>科技</b></td><td>CCTV、門禁、電子巡邏、數位勤務:最大價值是完整紀錄</td></tr>
+      <tr><td><b>風險</b></td><td>現金流(先發薪後收款)、誠信(輪調、雙人制)、流動率、法遵、客戶集中</td></tr>
+    </table>
+  </div>
+
+  <p class="note">※ 本課程的法規內容為概念性介紹,台灣《保全業法》及其他國家保全相關規定的細節(資本額、人員資格、訓練時數、保險金額等)會隨修法調整;名詞由來與歷史典故為一般通說。實際經營請以主管機關最新規定為準,並諮詢律師。</p>
+</section>
+
+<div class="pager">
+  <button class="btn ghost" id="prevBtn" onclick="go(-1)">← 上一章</button>
+  <button class="btn" id="nextBtn" onclick="go(1)">下一章 →</button>
+</div>
+
+</main>
+
+<script>
+/* ===== 章節導覽 ===== */
+const chapters=[...document.querySelectorAll('section.chapter')];
+const nav=document.getElementById('nav');
+let cur=0;
+chapters.forEach((c,i)=>{
+  const b=document.createElement('button');
+  b.textContent=c.dataset.title;
+  b.onclick=()=>show(i);
+  nav.appendChild(b);
+});
+function show(i){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=i;
+  cur=i;
+  chapters.forEach((c,j)=>c.classList.toggle('show',j===i));
+  [...nav.children].forEach((b,j)=>b.classList.toggle('active',j===i));
+  document.getElementById('pbar').style.width=((i+1)/chapters.length*100)+'%';
+  document.getElementById('prevBtn').style.visibility=i===0?'hidden':'visible';
+  document.getElementById('nextBtn').textContent=i===chapters.length-1?'完成 🎉':'下一章 →';
+  nav.children[i].scrollIntoView({inline:'center',block:'nearest'});
+  window.scrollTo({top:0});
+}
+function go(d){
+  const n=cur+d;
+  if(n<0)return;
+  if(n>=chapters.length){alert('恭喜完成整堂課!🎓 記得回第 14 章交卷看分數。');return;}
+  show(n);
+}
+show(0);
+
+const $=id=>document.getElementById(id);
+const fmt=n=>Math.round(n).toLocaleString();
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ===== 第5章 人力計算 ===== */
+function mpCalc(){
+  const P=+$('mpP').value,H=+$('mpH').value,D=+$('mpD').value,W=+$('mpW').value,R=+$('mpR').value;
+  $('mpPv').textContent=P+' 個';$('mpHv').textContent=H+' 小時';$('mpDv').textContent=D+' 天';$('mpWv').textContent=W+' 小時';$('mpRv').textContent=R+' %';
+  const cover=H*D, base=cover/W, per=base*(1+R/100), total=Math.ceil(per*P);
+  $('mpOut').innerHTML=`每崗每週需要覆蓋 ${H} × ${D} = <b>${cover} 小時</b><br>`+
+    `基本人力 = ${cover} ÷ ${W} = ${base.toFixed(2)} 人;加替補 ${R}% → <b>每崗約 ${per.toFixed(1)} 人</b><br>`+
+    `${P} 個崗位合計需要 <b style="font-size:20px;">${total} 人</b>`+
+    `<br><span style="font-size:13px;color:var(--gray)">對照新手直覺「兩班各一人」:${P} 崗只請 ${P*2} 人,每人每週要上 ${(cover/2).toFixed(0)} 小時。</span>`;
+}
+mpCalc();
+
+/* ===== 第5章 排班產生器 ===== */
+let shMode=12;
+function shSet(m){
+  shMode=m;
+  $('sh12').className='btn small '+(m===12?'on':'ghost');
+  $('sh8').className='btn small '+(m===8?'on':'ghost');
+  shRender();
+}
+function shRender(){
+  const pat=shMode===12?['D','D','N','N','O','O','O','O']:['M','M','E','E','N','N','O','O'];
+  const label={D:'日',N:'夜',M:'早',E:'中',O:'休'};
+  const names=['保全甲','保全乙','保全丙','保全丁'];
+  const days=14;
+  let h='<table><tr><th>人員</th>';
+  for(let d=0;d<days;d++)h+=`<th>${d+1}</th>`;
+  h+='</tr>';
+  names.forEach((n,k)=>{
+    h+=`<tr><td style="font-weight:700;white-space:nowrap;">${n}</td>`;
+    for(let d=0;d<days;d++){const s=pat[(d+2*k)%8];h+=`<td class="sh-${s}">${label[s]}</td>`;}
+    h+='</tr>';
+  });
+  // 覆蓋檢查列
+  h+='<tr><td style="font-size:11px;">覆蓋</td>';
+  for(let d=0;d<days;d++){
+    const set=new Set(names.map((_,k)=>pat[(d+2*k)%8]).filter(x=>x!=='O'));
+    const need=shMode===12?2:3;
+    h+=`<td style="font-size:11px;">${set.size===need?'✅':'❌'}</td>`;
+  }
+  h+='</tr></table>';
+  $('shOut').innerHTML=h;
+  $('shNote').innerHTML=shMode===12?
+    '兩班制循環:<b>日、日、夜、夜、休、休、休、休</b>(8 天一輪),4 人錯開 2 天。每天都有一人上日班、一人上夜班;每人平均每週約 <b>42 小時</b>,連休 4 天可充分恢復。':
+    '三班制循環:<b>早、早、中、中、夜、夜、休、休</b>(8 天一輪),4 人錯開 2 天。每天早、中、夜三班都有人;每人平均每週約 <b>42 小時</b>,輪班方向「早→中→夜→休」往後推,身體比較容易適應。';
+}
+shRender();
+
+/* ===== 第6章 報價 ===== */
+function qtCalc(){
+  const W=+$('qtW').value,B=+$('qtB').value,E=+$('qtE').value,N=+$('qtN').value,S=+$('qtS').value,O=+$('qtO').value,P=+$('qtP').value;
+  $('qtWv').textContent='$'+W;$('qtBv').textContent=B+' %';$('qtEv').textContent='$'+E;$('qtNv').textContent=N.toFixed(1)+' 人';
+  $('qtSv').textContent=S+' %';$('qtOv').textContent=O+' %';$('qtPv').textContent=P+' %';
+  const person=W*(1+B/100)+E, post=person*N, withSup=post*(1+S/100), withOH=withSup*(1+O/100), price=withOH*(1+P/100);
+  const labourShare=(W*(1+B/100)*N)/price*100;
+  $('qtOut').innerHTML=`每人直接成本 = ${W} × ${(1+B/100).toFixed(2)} + ${E} = <b>$${fmt(person)}</b><br>`+
+    `每崗直接成本 = ${fmt(person)} × ${N.toFixed(1)} 人 = <b>$${fmt(post)}</b><br>`+
+    `加督導 ${S}%、管銷 ${O}%、利潤 ${P}% → 每崗月報價 ≈ <b style="font-size:20px;">$${fmt(price)}</b><br>`+
+    `<span style="font-size:13px;color:var(--gray)">其中人事(薪資+社保)約占報價的 ${labourShare.toFixed(0)}%;每月利潤約 $${fmt(price-withOH)}。</span>`;
+}
+qtCalc();
+
+/* ===== 第7章 巡邏動畫 ===== */
+const PT_POINTS=[
+  {n:'警衛室(出發)',x:60,y:222},
+  {n:'大門',x:60,y:170},
+  {n:'成品倉庫',x:70,y:55},
+  {n:'發電機房',x:205,y:40},
+  {n:'後側圍牆',x:370,y:45},
+  {n:'配電室',x:375,y:150},
+  {n:'廠房 B 消防栓',x:290,y:210},
+  {n:'宿舍區',x:175,y:222},
+  {n:'警衛室(返回)',x:60,y:222},
+];
+let ptTimer=null,ptAnom=-1;
+function ptDrawBase(){
+  let s=`<rect x="4" y="4" width="412" height="252" rx="8" fill="#FFFFFF" stroke="#8A774E" stroke-width="3" stroke-dasharray="10 4"/>`;
+  s+=`<g font-size="11" text-anchor="middle" font-weight="bold">`+
+    `<rect x="100" y="25" width="80" height="60" rx="6" fill="#2E5E7E"/><text x="140" y="59" fill="#fff">成品倉庫</text>`+
+    `<rect x="230" y="70" width="110" height="60" rx="6" fill="#1F1D1A"/><text x="285" y="104" fill="#fff">廠房 A</text>`+
+    `<rect x="120" y="110" width="90" height="70" rx="6" fill="#8A774E"/><text x="165" y="149" fill="#fff">廠房 B</text>`+
+    `<rect x="225" y="165" width="50" height="40" rx="6" fill="#EDE6D6"/><text x="250" y="189" fill="#6E6A63">餐廳</text>`+
+    `<rect x="20" y="200" width="70" height="44" rx="6" fill="#8C4A3C"/><text x="55" y="226" fill="#fff">警衛室</text>`+
+    `<text x="30" y="150" fill="#6E6A63" font-size="10">大門 ⇆</text>`+
+  `</g>`;
+  const d=PT_POINTS.map((p,i)=>(i?'L':'M')+p.x+' '+p.y).join(' ');
+  s+=`<path id="ptPath" d="${d}" fill="none" stroke="#A8946A" stroke-width="2" stroke-dasharray="5 5"/>`;
+  PT_POINTS.slice(1,-1).forEach((p,i)=>{
+    s+=`<circle id="ptc${i+1}" cx="${p.x}" cy="${p.y}" r="7" fill="#FAF6EF" stroke="#8A774E" stroke-width="2"/>`;
+  });
+  s+=`<circle id="ptDot" cx="${PT_POINTS[0].x}" cy="${PT_POINTS[0].y}" r="8" fill="#2E5E7E" stroke="#fff" stroke-width="2"/>`;
+  $('ptSvg').innerHTML=s;
+}
+function ptLog(msg,cls){
+  const el=$('ptLog');
+  if(el.dataset.fresh!=='1'){el.innerHTML='';el.dataset.fresh='1';}
+  el.innerHTML+=`<div class="${cls||''}">${msg}</div>`;
+  el.scrollTop=el.scrollHeight;
+}
+function ptStart(){
+  if(ptTimer)return;
+  $('ptBtn').disabled=true;
+  ptAnom=2+Math.floor(Math.random()*5); // 隨機一個點有異常
+  const path=$('ptPath'),total=path.getTotalLength();
+  // 計算每個巡邏點在路徑上的長度位置
+  const stops=[];let acc=0;
+  for(let i=1;i<PT_POINTS.length;i++){
+    const a=PT_POINTS[i-1],b=PT_POINTS[i];acc+=Math.hypot(b.x-a.x,b.y-a.y);stops.push(acc);
+  }
+  let len=0,next=0,min=0;
+  ptLog('02:00 夜班巡邏出發,攜帶手電筒、對講機、巡邏棒。');
+  ptTimer=setInterval(()=>{
+    len+=3;
+    const p=path.getPointAtLength(Math.min(len,total));
+    $('ptDot').setAttribute('cx',p.x);$('ptDot').setAttribute('cy',p.y);
+    if(next<stops.length&&len>=stops[next]){
+      const idx=next+1;
+      min+=4+Math.floor(Math.random()*3);
+      const t='02:'+String(min).padStart(2,'0');
+      if(idx===PT_POINTS.length-1){
+        ptLog(`${t} 返回警衛室,巡邏完成。已登記勤務日誌,異常事項已通報督導。`,'okc');
+      }else if(idx===ptAnom){
+        const c=$('ptc'+idx);if(c)c.setAttribute('fill','#F0A08C');
+        const msg=['門鎖未上鎖','照明故障','有可疑人影離開','地面有漏水','設備異常聲響'][Math.floor(Math.random()*5)];
+        ptLog(`${t} ⚠ ${PT_POINTS[idx].n}:發現「${msg}」→ 拍照、對講機通報督導、記錄。`,'al');
+      }else{
+        const c=$('ptc'+idx);if(c)c.setAttribute('fill','#9CC7A4');
+        ptLog(`${t} ✓ ${PT_POINTS[idx].n} 打卡,正常。`);
+      }
+      next++;
+    }
+    if(len>=total){clearInterval(ptTimer);ptTimer=null;}
+  },30);
+}
+function ptReset(){
+  clearInterval(ptTimer);ptTimer=null;
+  ptDrawBase();
+  $('ptBtn').disabled=false;
+  $('ptLog').innerHTML='巡邏紀錄會顯示在這裡……';$('ptLog').dataset.fresh='0';
+}
+ptReset();
+
+/* ===== 第8章 情境演練 ===== */
+const SCENES=[
+  {t:'情境一 · 凌晨 2:40',q:'夜間巡邏時,你看到兩個人正在翻越倉庫後方的圍牆。你會怎麼做?',
+   o:[['衝上前去把他們抓下來',false,'危險且超越權限。對方人數多、可能攜帶工具或武器;保全不應單獨冒險。'],
+      ['保持安全距離,用對講機通報督導、記下人數與衣著特徵,依指示報警',true,'正確!觀察 → 通報 → 記錄。你的角色是眼睛和嘴巴,讓警察處理。'],
+      ['當作沒看到,繼續巡邏',false,'失職。發現異常不通報,等於保全不存在。']]},
+  {t:'情境二 · 下班時間',q:'一位員工提著一袋布料走出大門,沒有出示放行單。你會怎麼做?',
+   o:[['直接打開他的袋子搜查',false,'保全一般沒有強制搜查的權力,可能引發衝突與法律問題。應依公司規定、在對方同意與見證下處理。'],
+      ['禮貌請他出示放行單;沒有的話請他在崗亭稍候,通報主管,依公司規定處理並記錄',true,'正確!依制度處理、請有權限的人決定、全程記錄。態度禮貌可以避免衝突。'],
+      ['他是熟面孔,就放行了',false,'「熟人放行」是監守自盜最常見的漏洞。制度對每個人都一樣。']]},
+  {t:'情境三 · 凌晨 3:15',q:'巡邏經過廠房時,你聞到燒焦味,看到配電箱冒出煙。你會怎麼做?',
+   o:[['自己先拿滅火器處理,等確定撲滅了再回報',false,'通報延遲是大忌。萬一沒撲滅,寶貴的時間已經浪費了。'],
+      ['立刻按火警警報、通報消防與主管;在安全前提下用適合電器火災的滅火器初期滅火,並準備引導消防車',true,'正確!先通報、再處置。電器火災不可用水,要用合適的滅火器;火勢擴大就撤離。'],
+      ['等天亮請機修來看',false,'電氣火災可能在幾分鐘內擴大,必須立即處理。']]},
+  {t:'情境四 · 上班時間',q:'工廠大門口聚集了一群員工,情緒激動,表示要罷工。你會怎麼做?',
+   o:[['用身體推擠,把人群驅散',false,'會引發衝突與受傷,也讓保全被視為對立的一方。'],
+      ['保持冷靜與中立,通報管理層,管制大門保護人員與設施,不推擠、不參與爭論,記錄經過',true,'正確!保全保護所有人的安全,不介入勞資雙方的爭議。'],
+      ['放下崗位加入討論',false,'擅離職守,崗位失去管制。保全必須保持中立。']]},
+];
+(function(){
+  const box=$('scenes');
+  SCENES.forEach((sc,i)=>{
+    const d=document.createElement('div');
+    d.className='scene';
+    const opts=shuffle(sc.o.map((o,j)=>({o,j})));
+    d.innerHTML=`<div class="sc-t">${sc.t}</div><div class="sc-q">${sc.q}</div>
+      <div class="sc-opts">${opts.map(x=>`<button data-j="${x.j}">${x.o[0]}</button>`).join('')}</div>
+      <div class="sc-fb"></div>`;
+    d.querySelectorAll('.sc-opts button').forEach(b=>{
+      b.onclick=()=>{
+        if(d.dataset.done)return;d.dataset.done='1';
+        const o=sc.o[+b.dataset.j];
+        b.classList.add(o[1]?'correct':'wrong');
+        if(!o[1]){const ci=sc.o.findIndex(x=>x[1]);d.querySelector(`[data-j="${ci}"]`).classList.add('correct');}
+        const fb=d.querySelector('.sc-fb');fb.classList.add('show');
+        fb.innerHTML=(o[1]?'<span class="good">✓ </span>':'<span class="bad">✗ </span>')+o[2]+
+          (o[1]?'':'<br><b>正確做法:</b>'+sc.o.find(x=>x[1])[2]);
+      };
+    });
+    box.appendChild(d);
+  });
+})();
+
+/* ===== 第13章 導入時程 ===== */
+(function(){
+  const tasks=[
+    ['簽約、成立專案',1,2,'#1F1D1A'],
+    ['現場勘查、風險評估',2,5,'#2E5E7E'],
+    ['撰寫崗位勤務說明書',5,10,'#2E5E7E'],
+    ['規劃巡邏路線、裝巡邏點',6,12,'#8A774E'],
+    ['招募、背景查核',3,15,'#3E6B4F'],
+    ['職前訓練',12,20,'#3E6B4F'],
+    ['現場帶訓、熟悉環境',20,26,'#3E6B4F'],
+    ['與客戶確認緊急聯絡網',15,22,'#8C4A3C'],
+    ['試運行、每日檢討',26,30,'#8C4A3C'],
+    ['正式上線 🎉',30,30,'#A8946A'],
+  ];
+  const L=150,R=412,T=28,rowH=25,days=30,w=(R-L)/days;
+  let s='';
+  [0,5,10,15,20,25,30].forEach(d=>{
+    s+=`<line x1="${L+d*w}" y1="${T-6}" x2="${L+d*w}" y2="${T+tasks.length*rowH}" stroke="#E6DFD2"/>`;
+    s+=`<text x="${L+d*w}" y="${T-10}" font-size="10" text-anchor="middle" fill="#6E6A63">第${d||1}天</text>`;
+  });
+  tasks.forEach((t,i)=>{
+    const y=T+i*rowH;
+    s+=`<text x="${L-6}" y="${y+16}" font-size="11" text-anchor="end" fill="#1F1D1A">${t[0]}</text>`;
+    const x0=L+(t[1]-1)*w,wd=Math.max(8,(t[2]-t[1]+1)*w);
+    s+=`<rect x="${x0}" y="${y+5}" width="${wd}" height="15" rx="4" fill="${t[3]}"/>`;
+  });
+  $('obSvg').innerHTML=s;
+})();
+
+/* ===== 各章小測 ===== */
+function makeQuiz(elId,qs){
+  const box=$(elId);
+  if(!box)return;
+  const h=document.createElement('h3');h.textContent='✏️ 隨堂小測';box.appendChild(h);
+  qs.forEach((q,i)=>{
+    const opts=shuffle(q[1].map((t,j)=>({t,ok:j===q[2]})));
+    const div=document.createElement('div');
+    div.className='quiz';
+    div.innerHTML=`<div class="q-text">Q${i+1}. ${q[0]}</div>
+      <div class="opts">${opts.map(o=>`<button class="opt" data-ok="${o.ok}">${o.t}</button>`).join('')}</div>
+      <div class="fb"></div>`;
+    div.querySelectorAll('.opt').forEach(btn=>{
+      btn.onclick=()=>{
+        if(div.dataset.done)return;
+        div.dataset.done='1';
+        const ok=btn.dataset.ok==='true';
+        btn.classList.add(ok?'correct':'wrong');
+        if(!ok)div.querySelector('[data-ok="true"]').classList.add('correct');
+        const fb=div.querySelector('.fb');
+        fb.className='fb show '+(ok?'good':'no');
+        fb.textContent=(ok?'✓ 答對!':'✗ ')+q[3];
+      };
+    });
+    box.appendChild(div);
+  });
+}
+makeQuiz('q1',[
+  ['security 的拉丁字源意思是?',['無憂','武器','牆壁'],0,'se(沒有)+ cura(擔憂)。'],
+  ['保全人員的核心任務是?',['預防、發現、通報','逮捕與開罰','執法審判'],0,'看見、通報、記錄;執法是警察的工作。'],
+]);
+makeQuiz('q2',[
+  ['保全業為什麼是「特許行業」?',['涉及他人生命財產安全,需先經政府許可','因為很賺錢','因為要穿制服'],0,'政府事先審查經營者與人員資格。'],
+  ['保全人員資格審查最主要的目的是?',['確保人員誠信','確保身高夠高','確保會外語'],0,'客戶把鑰匙和安全交給保全,誠信是行業地基。'],
+]);
+makeQuiz('q3',[
+  ['接案流程的第一步通常是?',['現場勘查','直接報價','先派人上班'],0,'看過現場才知道需要什麼。'],
+  ['SLA 的作用是?',['把服務標準寫成可量化的數字','增加合約頁數','計算稅金'],0,'例如到勤率 ≥ 99%,雙方才不會各說各話。'],
+]);
+makeQuiz('q4',[
+  ['招募保全人員最重要的條件是?',['誠信','年輕','會武術'],0,'會接觸鑰匙、倉庫與貴重物品。'],
+  ['walkie-talkie 名稱的意思是?',['可以邊走邊說','走路很吵','會說話的玩具'],0,'walk + talk,二戰時期為軍隊發展。'],
+]);
+makeQuiz('q5',[
+  ['一週要覆蓋幾小時才算 24 小時全年無休崗位?',['168 小時','48 小時','24 小時'],0,'24 × 7 = 168。'],
+  ['排班時日夜班輪替的建議方向是?',['日 → 夜 → 休,往後推','夜班直接接早班','隨機'],0,'往後推的輪替比較符合人體作息。'],
+]);
+makeQuiz('q6',[
+  ['保全公司最大宗的成本是?',['人事費用','設備','廣告'],0,'通常占七到八成以上。'],
+  ['殺價搶標的後果通常是?',['壓低待遇、人員流動、服務崩壞、違法被罰','公司越做越好','客戶更滿意'],0,'寧可不接算不過來的案子。'],
+]);
+makeQuiz('q7',[
+  ['公司物品出廠,保全應核對什麼?',['主管簽核的放行單','司機的心情','貨物顏色'],0,'核對品名與數量後才放行。'],
+  ['巡邏時間為什麼要不固定?',['避免被有心人掌握規律','讓保全可以休息','沒有理由'],0,'固定時間等於告訴小偷何時安全。'],
+]);
+makeQuiz('q8',[
+  ['事件處理四步驟的正確順序?',['觀察 → 通報 → 處置 → 紀錄','處置 → 紀錄 → 觀察 → 通報','紀錄 → 處置 → 通報 → 觀察'],0,'先確認安全與狀況,再讓對的人知道。'],
+  ['事件報告中推測的內容應該?',['清楚標為「研判」,和事實分開','寫成事實','不要寫'],0,'只寫看到、聽到的事實;推測要標明。'],
+]);
+makeQuiz('q9',[
+  ['發生勞資爭議時,保全應該?',['保持中立,保護所有人的安全與設施','幫資方驅趕員工','加入員工'],0,'保全一旦被視為對立一方,之後的工作會很困難。'],
+  ['為什麼緊急應變要定期演練?',['危機時人只做得出平常練過的事','為了拍照','法規沒要求就不用'],0,'讓身體記住流程。'],
+]);
+makeQuiz('q10',[
+  ['supervisor 的拉丁字源意思是?',['從上面看的人','很厲害的人','穿制服的人'],0,'super(在上面)+ videre(看)。'],
+  ['客戶月報最大的價值是?',['讓保全看不見的價值被看見','增加紙張用量','取代合約'],0,'越沒事發生,越需要讓客戶知道你做了什麼。'],
+]);
+makeQuiz('q11',[
+  ['CCTV 的意思是?',['閉路電視','彩色電視','雲端電視'],0,'畫面只在封閉線路內傳送。'],
+  ['電子巡邏系統的主要好處是?',['自動記錄巡邏時間,督導可即時查核','讓保全不用巡邏','降低薪水'],0,'科技最大的價值是完整紀錄。'],
+]);
+makeQuiz('q12',[
+  ['保全公司現金流壓力大的原因是?',['先發薪水,客戶月結後才付款','沒有客戶','設備太貴'],0,'成長太快反而可能現金斷掉。'],
+  ['「雙人制」是為了防範什麼?',['單一人員出錯或作弊','人太少','天氣不好'],0,'兩人同時出錯或作弊的機率低很多。'],
+]);
+
+/* ===== 總測驗 ===== */
+const finalQs=[
+  ['保全公司本質上賣的是?',['客戶的安心與可靠','制服','監視器'],0,'security = 無憂。'],
+  ['以下哪個是保全人員一般「不能」做的?',['強制搜身與逮捕執法','觀察通報','門禁管制'],0,'那是警察的公權力。'],
+  ['在台灣,專門規範保全業的法律是?',['保全業法','公司法','消防法'],0,'1991 年公布。'],
+  ['合約中「到勤率 ≥ 99%」屬於?',['SLA 服務水準','公司章程','勞動契約'],0,'把服務標準量化。'],
+  ['背景查核的三道把關是?',['身分證件、犯罪紀錄證明、前雇主查詢','身高、體重、視力','學歷、星座、血型'],0,'誠信是行業地基。'],
+  ['一個 24 小時全年無休崗位大約需要幾人?',['4~5 人','2 人','1 人'],0,'168 小時 ÷ 每人工時,再加替補率。'],
+  ['保全公司報價的核心是?',['把每崗所需人數與人員成本算清楚','抄競爭對手的價','越低越好'],0,'人事占成本大宗。'],
+  ['交接班時雙方應該?',['清點物品並在勤務日誌簽名','口頭說聲再見就好','不用交接'],0,'交接是最容易出漏洞的時刻。'],
+  ['patrol 的法文字源原意是?',['在泥巴裡踩來踩去','站得很直','吹哨子'],0,'早期士兵在泥濘營地來回巡邏。'],
+  ['發現配電箱冒煙,第一步是?',['按警報、通報消防與主管','等天亮','拍照上傳社群'],0,'先通報,再在安全前提下處置。'],
+  ['「誰來看守看守的人?」對應保全公司的哪項工作?',['督導查勤','報價','招募'],0,'夜間突擊查勤最能發現問題。'],
+  ['防範保全監守自盜的對策不包括?',['讓同一人長期獨自管理倉庫鑰匙與放行','定期輪調','雙人制'],0,'長期單人掌控正是風險來源。'],
+];
+const fq=$('finalQuiz');
+function buildFinal(){
+  fq.innerHTML='';
+  finalQs.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='quiz';d.dataset.q=i;
+    d.innerHTML=`<div class="q-text">Q${i+1}. ${q[0]}</div>
+      <div class="opts">${q[1].map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join('')}</div>
+      <div class="fb"></div>`;
+    d.querySelectorAll('.opt').forEach(btn=>{
+      btn.onclick=()=>{
+        d.querySelectorAll('.opt').forEach(b=>b.style.outline='');
+        btn.style.outline='2px solid var(--khaki-dark)';
+        d.dataset.sel=btn.dataset.j;
+      };
+    });
+    fq.appendChild(d);
+  });
+  $('finalScore').style.display='none';
+}
+function gradeFinal(){
+  let right=0,unanswered=0;
+  fq.querySelectorAll('.quiz').forEach(d=>{
+    const q=finalQs[d.dataset.q];
+    const sel=d.dataset.sel;
+    const fb=d.querySelector('.fb');
+    d.querySelectorAll('.opt').forEach((b,j)=>{
+      b.classList.remove('correct','wrong');
+      if(j===q[2])b.classList.add('correct');
+    });
+    if(sel===undefined){unanswered++;fb.className='fb show no';fb.textContent='(未作答)'+q[3];return;}
+    if(+sel===q[2]){right++;fb.className='fb show good';fb.textContent='✓ '+q[3];}
+    else{d.querySelectorAll('.opt')[+sel].classList.add('wrong');fb.className='fb show no';fb.textContent='✗ '+q[3];}
+  });
+  const box=$('finalScore');
+  box.style.display='block';
+  let cmt;
+  if(right===12)cmt='滿分!從設立到勤務全線打通,你已經有保全公司經營者的全局視野了 🏆';
+  else if(right>=9)cmt='很棒!骨架很扎實,把錯的題目看一下解析,再玩一次第 8 章情境演練 🎉';
+  else if(right>=6)cmt='有基礎了!建議回第 5、6、8 章,把人力、報價和事件處理再走一遍 💪';
+  else cmt='別氣餒,照學習地圖從第 1 章重新走,跟著阿守再開一次公司 🌱';
+  box.innerHTML=`<div class="big num">${right} / 12</div><p>${cmt}</p>${unanswered?`<p style="color:var(--gray);font-size:13px;">(有 ${unanswered} 題未作答)</p>`:''}`;
+  box.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function resetFinal(){buildFinal();window.scrollTo({top:0});}
+buildFinal();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-2108d348ac" data-category="business"></script></body>
+</html>

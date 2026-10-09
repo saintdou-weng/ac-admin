@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>道教入門到專業：一步一步走上山</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E6EBEE; --card:#F4F6F7; --ink:#1A2330; --muted:#56626E; --line:#C9D1D7;
+  --zhu:#B3372B; --qing:#2A5B6C; --jin:#94701F; --soft-zhu:#F2DFDA; --soft-qing:#D7E5EA; --soft-jin:#EFE6CF;
+  --yin:#26303B; --yang:#F7F4EA;
+  --serif:"Noto Serif TC","Songti TC","PMingLiU","MingLiU",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#10151C; --card:#18202A; --ink:#DDE3E8; --muted:#95A2AD; --line:#2B3642;
+    --zhu:#E57B6E; --qing:#82B7C9; --jin:#D6B263; --soft-zhu:#3A2421; --soft-qing:#1B2F37; --soft-jin:#352D1B;
+    --yin:#0B0F14; --yang:#E8E3D3;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10151C; --card:#18202A; --ink:#DDE3E8; --muted:#95A2AD; --line:#2B3642;
+  --zhu:#E57B6E; --qing:#82B7C9; --jin:#D6B263; --soft-zhu:#3A2421; --soft-qing:#1B2F37; --soft-jin:#352D1B;
+  --yin:#0B0F14; --yang:#E8E3D3;
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px);}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.9;-webkit-text-size-adjust:100%;padding-bottom:84px}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--qing);outline-offset:2px;border-radius:4px}
+
+/* 上方列 */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--bg);border-bottom:1px solid var(--line)}
+.top-in{max-width:760px;margin:0 auto;padding:10px 18px 8px;display:flex;align-items:center;gap:12px}
+.top-t{font-family:var(--serif);font-weight:700;font-size:16px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-b{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:4px 12px;font-size:15px}
+.path{max-width:760px;margin:0 auto;padding:0 18px 10px;display:flex;gap:4px}
+.path i{flex:1;height:5px;border-radius:3px;background:var(--line);transition:background .3s}
+.path i.on{background:var(--qing)} .path i.now{background:var(--zhu)}
+
+/* 課文 */
+main{max-width:760px;margin:0 auto;padding:8px 18px 40px}
+.lesson{display:none}
+.lesson.show{display:block}
+.unit{font-family:var(--serif);color:var(--zhu);font-size:15px;margin:22px 0 0;letter-spacing:.08em}
+h2{font-family:var(--serif);font-size:30px;line-height:1.35;margin:4px 0 14px;font-weight:900}
+h3{font-family:var(--serif);font-size:21px;margin:30px 0 8px;font-weight:700}
+p{margin:0 0 14px}
+.goal{background:var(--card);border-left:4px solid var(--qing);padding:10px 14px;border-radius:0 8px 8px 0;color:var(--muted);font-size:16px}
+.goal b{color:var(--ink)}
+.box{border-radius:10px;padding:14px 16px;margin:16px 0}
+.box .bh{font-weight:700;font-family:var(--serif);margin-bottom:4px;font-size:17px}
+.eg{background:var(--soft-qing)}
+.word{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--zhu)}
+.warn{background:var(--soft-zhu)}
+.quote{font-family:var(--serif);font-size:21px;line-height:1.8;background:var(--soft-jin);border-radius:10px;padding:14px 18px;margin:16px 0 6px}
+.quote small{display:block;font-family:var(--sans);font-size:14px;color:var(--muted);margin-top:4px}
+.bai{font-size:16px;color:var(--muted);margin:0 0 16px;padding-left:18px}
+.tag{display:inline-block;font-size:13px;border-radius:5px;padding:0 7px;margin:0 3px;vertical-align:2px;line-height:1.7;font-weight:700}
+.tag.h{background:var(--soft-qing);color:var(--qing)} .tag.l{background:var(--soft-zhu);color:var(--zhu)}
+.t{background:none;border:none;padding:0;font-weight:700;color:var(--qing);border-bottom:2px dotted var(--qing);line-height:1.3}
+details.think{border:1px dashed var(--line);border-radius:10px;padding:10px 14px;margin:18px 0;background:var(--card)}
+details.think summary{font-weight:700;cursor:pointer}
+details.think p{margin:10px 0 0;color:var(--muted)}
+.sum{border-top:2px solid var(--ink);margin-top:34px;padding-top:12px}
+.sum h4{font-family:var(--serif);margin:0 0 6px;font-size:18px}
+.sum ul{margin:0;padding-left:22px}
+.sum li{margin-bottom:4px}
+.cmp{overflow-x:auto;margin:16px 0}
+.cmp table{border-collapse:collapse;width:100%;min-width:460px;font-size:16px;background:var(--card)}
+.cmp th,.cmp td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+.cmp th{background:var(--soft-jin);font-family:var(--serif)}
+
+/* 互動區 */
+.lab{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin:18px 0}
+.lab .lh{font-family:var(--serif);font-weight:700;margin-bottom:8px}
+.lab svg{display:block;width:100%;height:auto;max-width:420px;margin:0 auto}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.btns button{border:1px solid var(--line);background:var(--bg);border-radius:20px;padding:5px 14px;font-size:15px}
+.btns button.on{background:var(--qing);color:var(--card);border-color:var(--qing)}
+.cap{background:var(--bg);border-radius:8px;padding:10px 12px;font-size:16px;min-height:3em}
+input[type=range]{width:100%;accent-color:var(--zhu)}
+
+/* 封面 */
+.hero{padding:28px 0 10px;display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center}
+.hero h1{writing-mode:vertical-rl;font-family:var(--serif);font-size:74px;font-weight:900;margin:0;line-height:1.05;letter-spacing:.08em}
+.hero h1 span{color:var(--zhu)}
+.taiji{width:100%;max-width:230px;justify-self:center}
+.taiji g{transform-origin:100px 100px;animation:spin 40s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-p{font-size:18px}
+.map{list-style:none;padding:0;margin:20px 0;counter-reset:u}
+.map li{display:grid;grid-template-columns:62px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.map li b{font-family:var(--serif);color:var(--zhu)}
+.map li span{color:var(--muted);font-size:15px}
+.start{display:block;width:100%;background:var(--zhu);color:#fff;border:none;border-radius:10px;padding:14px;font-size:19px;font-weight:700;font-family:var(--serif);margin:18px 0}
+
+/* 下方翻頁 */
+.pager{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--bg);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.pager-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:10px 18px}
+.pager button{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 14px;font-size:16px}
+.pager .nx{background:var(--qing);color:var(--card);border-color:var(--qing);font-weight:700}
+.pager button:disabled{opacity:.35;cursor:default}
+.pager .pn{flex:1;text-align:center;color:var(--muted);font-size:14px}
+
+/* 目錄抽屜與名詞卡 */
+.veil{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:40;display:none}
+.veil.show{display:block}
+.drawer{position:fixed;top:0;bottom:0;right:0;width:min(360px,88vw);background:var(--card);z-index:41;transform:translateX(105%);transition:transform .25s;overflow-y:auto;padding:calc(env(safe-area-inset-top,0px) + 16px) 18px calc(env(safe-area-inset-bottom,0px) + 20px)}
+.drawer.show{transform:none}
+.drawer h3{margin:18px 0 4px;font-size:16px;color:var(--zhu)}
+.drawer button{display:block;width:100%;text-align:left;border:none;background:none;padding:7px 4px;font-size:16px;border-radius:6px}
+.drawer button.cur{background:var(--soft-qing);font-weight:700}
+.drawer button.dn::after{content:" ✓";color:var(--qing)}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--card);border-radius:16px 16px 0 0;max-height:70vh;overflow-y:auto;transform:translateY(105%);transition:transform .25s;padding:18px 20px calc(env(safe-area-inset-bottom,0px) + 22px);max-width:760px;margin:0 auto}
+.sheet.show{transform:none}
+.sheet h4{font-family:var(--serif);font-size:28px;margin:0}
+.sheet .py{color:var(--muted);font-size:15px;margin-bottom:8px}
+.sheet .x{float:right;border:none;background:var(--bg);border-radius:50%;width:34px;height:34px;font-size:18px}
+
+/* 測驗與名詞表 */
+.q{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:12px 0}
+.q p{font-weight:700;margin-bottom:8px}
+.q button{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:7px 12px;margin:6px 0;font-size:16px}
+.q button.ok{background:var(--soft-qing);border-color:var(--qing)}
+.q button.no{background:var(--soft-zhu);border-color:var(--zhu)}
+.q .ex{font-size:15px;color:var(--muted);display:none;margin-top:6px}
+.q.done .ex{display:block}
+.score{font-family:var(--serif);font-size:22px;text-align:center;margin:18px 0}
+.gl{columns:2 220px;column-gap:16px}
+.gl button{display:block;width:100%;text-align:left;break-inside:avoid;border:none;border-bottom:1px solid var(--line);background:none;padding:8px 2px;font-size:16px}
+.gl button span{color:var(--muted);font-size:14px}
+
+/* 小元件 */
+.dou{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+.dou div{width:54px;height:46px;border:3px solid var(--jin);border-top:none;border-radius:0 0 8px 8px;position:relative;background:linear-gradient(to top,var(--soft-jin) 80%,transparent 80%)}
+.dou div::after{content:"斗";position:absolute;inset:0;display:grid;place-items:center;font-family:var(--serif);font-weight:700;color:var(--jin)}
+.gua{display:flex;flex-direction:column-reverse;gap:10px;align-items:center;margin:8px auto;width:150px}
+.gua button{width:150px;height:22px;border:none;padding:0;background:transparent;position:relative}
+.gua button::before,.gua button::after{content:"";position:absolute;top:0;height:22px;background:var(--ink);border-radius:3px}
+.gua button::before{left:0;width:100%}
+.gua button.yin::before{width:43%}
+.gua button.yin::after{right:0;width:43%}
+.tally{font-family:var(--serif);font-size:24px;text-align:center;margin:8px 0}
+.check label{display:flex;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:16px}
+.check label em{margin-left:auto;font-style:normal;font-weight:700}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0}
+.cards button{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:12px;text-align:left;min-height:96px}
+.cards button b{display:block;font-family:var(--serif);font-size:18px}
+.cards button span{display:none;font-size:15px;color:var(--muted)}
+.cards button.open{background:var(--soft-jin)}
+.cards button.open span{display:block}
+.cards button.open i{display:none}
+.cards button i{font-style:normal;font-size:14px;color:var(--muted)}
+.tl{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.flame{transform-origin:100px 70px;animation:flick 1.6s ease-in-out infinite alternate}
+@keyframes flick{from{transform:scale(1,1)}to{transform:scale(.92,1.08)}}
+@media (prefers-reduced-motion: reduce){
+  .taiji g,.flame{animation:none}
+  *{transition:none!important}
+}
+@media (max-width:480px){
+  h2{font-size:26px}
+  .hero{grid-template-columns:1fr;justify-items:center;text-align:left}
+  .hero h1{writing-mode:horizontal-tb;font-size:52px;letter-spacing:.04em}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="top-t" id="topTitle">道教入門到專業</div>
+    <button class="top-b" id="themeBtn" aria-label="切換深淺色">◐</button>
+    <button class="top-b" id="tocBtn">目錄</button>
+  </div>
+  <div class="path" id="path"></div>
+</header>
+<main id="main">
+<!-- 封面 -->
+<section class="lesson" data-u="0" data-title="課程地圖">
+  <div class="hero">
+    <h1>道<span>教</span></h1>
+    <svg class="taiji" viewBox="0 0 200 200" aria-label="慢慢轉動的太極圖">
+      <g>
+        <circle cx="100" cy="100" r="96" fill="var(--yang)" stroke="var(--ink)" stroke-width="3"/>
+        <path d="M100 4 A96 96 0 0 1 100 196 A48 48 0 0 1 100 100 A48 48 0 0 0 100 4 Z" fill="var(--yin)"/>
+        <circle cx="100" cy="52" r="13" fill="var(--yin)"/>
+        <circle cx="100" cy="148" r="13" fill="var(--yang)"/>
+      </g>
+    </svg>
+  </div>
+  <p class="hero-p">學道教，像爬一座山。這門課有二十四堂，分成八段路，從最基本的「道這個字是什麼意思」開始，一路走到歷史、神明、經典、修煉、儀式，最後是專業研究的方法。</p>
+  <p>每一堂都只用前面學過的東西。遇到藍色有虛線的詞，點一下就會跳出它的<b>讀音和由來</b>。標著 <span class="tag h">史實</span> 的是有文獻或考古根據的；標著 <span class="tag l">傳說</span> 的是流傳下來的故事，不一定真的發生過。</p>
+  <ol class="map">
+    <li><b>第一段</b><div>認識道教<br><span>道教是什麼、「道」字的由來、陰陽五行八卦</span></div></li>
+    <li><b>第二段</b><div>道教怎麼誕生<br><span>巫與方士、張道陵創教</span></div></li>
+    <li><b>第三段</b><div>一路長大的歷史<br><span>魏晉到今天，兩大派怎麼形成</span></div></li>
+    <li><b>第四段</b><div>神仙世界<br><span>三清、玉皇、身邊的神明、仙是什麼</span></div></li>
+    <li><b>第五段</b><div>經典<br><span>《道藏》怎麼分類、必讀的幾本書</span></div></li>
+    <li><b>第六段</b><div>修煉<br><span>精氣神、外丹、內丹、行善</span></div></li>
+    <li><b>第七段</b><div>儀式與生活<br><span>符籙法器、齋醮、道士與宮觀、三元節</span></div></li>
+    <li><b>第八段</b><div>專業之路<br><span>道教在文化裡的影子、怎麼深入研究</span></div></li>
+  </ol>
+  <button class="start" data-go="1">從第一課開始</button>
+</section>
+
+<!-- ============ 第一段 ============ -->
+<section class="lesson" data-u="1" data-title="道教到底是什麼？">
+  <p class="unit">第一段・認識道教　第 1 課</p>
+  <h2>道教到底是什麼？</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>什麼叫宗教、道教和「道家」差在哪裡。</p>
+
+  <p>走進台灣任何一間廟，你會看到香爐、神像、有人在擲筊、有人在燒金紙。這些東西很多都跟道教有關。可是「道教」到底是什麼？我們先從名字拆起。</p>
+
+  <div class="box word"><div class="bh">「道教」兩個字</div>
+  <b>道</b>：本來是「路」，後來變成「方法、道理」，最後變成「宇宙萬物的根源」。下一課會專門講這個字。<br>
+  <b>教</b>：古代字典《說文解字》說，教是「上面的人做給下面的人看，下面的人跟著學」。所以「道教」原本的意思就是：<b>教人怎麼去認識、跟隨「道」</b>。</div>
+
+  <h3>什麼是「宗教」？</h3>
+  <p>一個<button class="t" data-t="宗教">宗教</button>通常有四樣東西：</p>
+  <div class="cmp"><table>
+    <tr><th>要素</th><th>意思</th><th>在道教裡</th></tr>
+    <tr><td>信仰對象</td><td>相信有超越人的力量</td><td>道、三清、各路神明</td></tr>
+    <tr><td>經典</td><td>寫下教義的書</td><td>《道德經》等上千部經書</td></tr>
+    <tr><td>儀式</td><td>固定的做法</td><td>拜拜、打醮、做法事</td></tr>
+    <tr><td>組織</td><td>專職的人和場所</td><td>道士、宮、觀</td></tr>
+  </table></div>
+
+  <h3>道家 ≠ 道教</h3>
+  <p>這是初學者最常搞混的地方。<button class="t" data-t="道家">道家</button>和<button class="t" data-t="道教">道教</button>很像，但不是同一件事。</p>
+  <div class="cmp"><table>
+    <tr><th></th><th>道家</th><th>道教</th></tr>
+    <tr><td>是什麼</td><td>一種思想、哲學</td><td>一種宗教</td></tr>
+    <tr><td>出現時間</td><td>春秋戰國（約兩千五百年前）</td><td>東漢末年（約一千九百年前）</td></tr>
+    <tr><td>代表人物</td><td>老子、莊子</td><td>張道陵、葛洪、王重陽</td></tr>
+    <tr><td>老子的身分</td><td>一位思想家</td><td>神明「太上老君」</td></tr>
+    <tr><td>追求什麼</td><td>想通人生和世界的道理</td><td>修煉、成仙、祈福消災</td></tr>
+  </table></div>
+
+  <div class="box eg"><div class="bh">用比喻來記</div>
+  道家像是一本<b>很厲害的哲學書</b>；道教是後來的人讀了這本書，再加上古代的神話、醫術、法術、祭祀，蓋成了一座<b>有神明、有儀式、有修行方法的大廟</b>。書是廟的地基之一，但廟裡還有很多別的東西。</div>
+
+  <h3>道教是「中國土生土長」的宗教</h3>
+  <p>佛教是從印度傳進中國的；基督教、伊斯蘭教來自西亞。道教不一樣，它是在中國本地長出來的，所以跟中國人的生活習慣黏得特別緊：過年、中元節、看風水、算命、中醫，很多都能看到道教的影子。</p>
+
+  <details class="think"><summary>想一想：你家附近的廟，你覺得是道教、佛教，還是都有？</summary>
+  <p>參考：很多台灣的廟其實是「民間信仰」，會同時拜道教神明、佛教菩薩和地方神。看廟裡主神是誰、有沒有道士做儀式，是分辨的線索。第 11 課會再教你怎麼分。</p></details>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>道教＝教人認識、跟隨「道」的宗教。</li>
+    <li>宗教通常有：信仰對象、經典、儀式、組織。</li>
+    <li>道家是思想（春秋戰國）；道教是宗教（東漢末年）。</li>
+  </ul></div>
+</section>
+
+<section class="lesson" data-u="1" data-title="「道」這個字從哪裡來">
+  <p class="unit">第一段・認識道教　第 2 課</p>
+  <h2>「道」這個字從哪裡來</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>「道」怎麼從「路」變成「宇宙的根源」。</p>
+
+  <p>中國的字很多是用圖畫變來的。只要把「道」拆開，就能看到古人怎麼想。</p>
+
+  <div class="lab">
+    <div class="lh">動手拆字：「道」</div>
+    <svg viewBox="0 0 240 170" aria-label="道字拆解圖">
+      <g id="daoRoad">
+        <rect x="95" y="5" width="50" height="160" fill="var(--soft-jin)" stroke="var(--jin)" stroke-width="2"/>
+        <rect x="10" y="60" width="220" height="50" fill="var(--soft-jin)" stroke="var(--jin)" stroke-width="2"/>
+        <rect x="96" y="61" width="48" height="48" fill="var(--soft-jin)"/>
+        <line x1="120" y1="10" x2="120" y2="160" stroke="var(--jin)" stroke-dasharray="6 6"/>
+        <line x1="15" y1="85" x2="225" y2="85" stroke="var(--jin)" stroke-dasharray="6 6"/>
+      </g>
+      <g id="daoHead" style="transform:translate(120px,85px)">
+        <circle r="18" fill="var(--card)" stroke="var(--ink)" stroke-width="3"/>
+        <circle cx="7" cy="-2" r="2.5" fill="var(--ink)"/>
+        <path d="M-12 -14 L-16 -28 M-4 -18 L-5 -32 M5 -18 L8 -31" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+      </g>
+    </svg>
+    <div class="btns" id="daoBtns">
+      <button data-s="1">① 行</button><button data-s="2">② 首</button><button data-s="3">③ 合起來</button>
+    </div>
+    <div class="cap" id="daoCap">按上面的按鈕，一步一步把「道」拆開。</div>
+  </div>
+
+  <p>在大約三千年前青銅器上的文字（叫<button class="t" data-t="金文">金文</button>），「道」是一個「首」（頭）放在「行」（十字路口）中間。意思很直接：<b>一個人走在路上</b>。後來「行」被簡化成我們今天看到的「辶」（走之旁）。</p>
+
+  <h3>一個字，三層意思</h3>
+  <p>「道」的意思是一層一層長大的，就像樹從根長出枝葉：</p>
+  <div class="cmp"><table>
+    <tr><th>層次</th><th>意思</th><th>今天的例子</th></tr>
+    <tr><td>第一層</td><td>路</td><td>「道路」、「人行道」</td></tr>
+    <tr><td>第二層</td><td>方法、規則</td><td>「生財之道」、「待客之道」、「道理」</td></tr>
+    <tr><td>第三層</td><td>萬物的源頭和運作規律</td><td>「道生一，一生二，二生三，三生萬物」</td></tr>
+  </table></div>
+
+  <div class="box eg"><div class="bh">為什麼「路」可以變成「規律」？</div>
+  想想你每天上學的路。走久了，你知道哪裡會塞車、哪個紅燈特別長——路本身就藏著「規律」。古人看太陽每天從東邊出來、四季每年輪一次，覺得整個宇宙也在走一條看不見的「路」，這條路就叫「道」。</div>
+
+  <p>老子在《道德經》裡把「道」講得最深。他說：</p>
+  <div class="quote">道生一，一生二，二生三，三生萬物。<small>《道德經》第四十二章</small></div>
+  <p class="bai">白話：道先生出一個整體，這個整體分出兩種力量（後來叫陰和陽），兩種力量交流產生第三種狀態，於是世界上所有東西都出現了。</p>
+  <p>道教把這個「道」當成最高的存在。所以道教的最終目標，常常被說成「<b>得道</b>」——跟這條宇宙之路合而為一。</p>
+
+  <details class="think"><summary>想一想：「道」在你生活中還出現在哪些詞裡？</summary>
+  <p>參考：知道、道歉、報導、味道、道具、柔道、茶道……很多都是「方法」或「路」的延伸。像「茶道」就是「泡茶的方法和學問」。</p></details>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>「道」的古字＝「首」（頭）＋「行」（十字路），人走在路上。</li>
+    <li>意思一路擴大：路 → 方法 → 宇宙的源頭與規律。</li>
+    <li>道教的最終目標是「得道」。</li>
+  </ul></div>
+</section>
+
+<section class="lesson" data-u="1" data-title="陰陽、五行、八卦">
+  <p class="unit">第一段・認識道教　第 3 課</p>
+  <h2>陰陽、五行、八卦</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>道教用來解釋世界的三把「尺」。後面每一課都會用到它們。</p>
+
+  <p>上一課說「一生二」，這個「二」就是<button class="t" data-t="陰陽">陰陽</button>。陰陽、五行、八卦並不是道教發明的，它們是古代中國人共同的「世界觀工具」，儒家、中醫、風水都在用。道教把它們全部吸收進來，當成解釋宇宙和修煉身體的基礎。</p>
+
+  <h3>一、陰陽：一體兩面</h3>
+  <div class="box word"><div class="bh">陰、陽的由來</div>
+  「陽」的右邊是「昜」，畫的是太陽升到上面；「陰」的右邊有「云」，是雲遮住太陽。最早的意思很簡單：<b>山被太陽照到的那一面叫陽，照不到的叫陰</b>。所以古地名「衡陽」，就是因為它在衡山的南邊、向著太陽；「山陰」則在會稽山的北邊。</div>
+  <p>後來古人發現，很多東西都有兩個相對的面：白天和晚上、熱和冷、動和靜、男和女。於是用陰陽來稱呼一切相對又相連的兩面。</p>
+
+  <div class="lab">
+    <div class="lh">拉拉看：一天之中的陰陽</div>
+    <input type="range" id="yyR" min="0" max="23" value="6" aria-label="時間">
+    <div style="display:flex;height:26px;border-radius:6px;overflow:hidden;margin:8px 0;border:1px solid var(--line)">
+      <div id="yyYang" style="background:var(--yang);transition:width .2s"></div>
+      <div id="yyYin" style="background:var(--yin);flex:1"></div>
+    </div>
+    <div class="cap" id="yyCap"></div>
+  </div>
+  <p>拉動時你會發現三件事，這就是陰陽的三大規則：</p>
+  <div class="box eg">
+  <b>1. 互相消長</b>：陽多一點，陰就少一點，像蹺蹺板。<br>
+  <b>2. 物極必反</b>：中午陽最多，但從那一刻起就開始變少；半夜陰最多，陽也從那一刻開始回來。<br>
+  <b>3. 你中有我</b>：太極圖裡，黑魚有白眼睛，白魚有黑眼睛。再熱的夏天，也有涼快的晚上。</div>
+  <p>封面那個黑白魚圖叫<button class="t" data-t="太極">太極</button>圖。<span class="tag h">史實</span> 今天常見的「陰陽魚」畫法，大約到明代才流行起來，比道教誕生晚了一千多年；但「太極」這個詞很早就出現在《易經》的注解裡。</p>
+
+  <h3>二、五行：五種會變化的力量</h3>
+  <p><button class="t" data-t="五行">五行</button>是木、火、土、金、水。注意「行」是「走、運行」的意思——古人認為它們不是五種死的材料，而是五種<b>會互相推動、互相制衡</b>的力量。</p>
+  <div class="lab">
+    <div class="lh">五行關係圖</div>
+    <svg viewBox="0 0 240 230" id="wxSvg" aria-label="五行相生相剋圖">
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="context-stroke"/></marker></defs>
+      <g id="wxLines"></g><g id="wxNodes"></g>
+    </svg>
+    <div class="btns"><button id="wxSheng" class="on">相生</button><button id="wxKe">相剋</button></div>
+    <div class="cap" id="wxCap"></div>
+  </div>
+
+  <h3>三、八卦：三條線組成的八個符號</h3>
+  <p>如果用一條長線「⚊」代表陽，一條斷開的線「⚋」代表陰，每次疊三條，一共可以疊出 2×2×2＝8 種組合，這就是<button class="t" data-t="八卦">八卦</button>。每一卦代表一種大自然的現象。</p>
+  <div class="lab">
+    <div class="lh">自己疊一卦：點每一條線切換陰陽（從下往上看）</div>
+    <div class="gua" id="gua"><button aria-label="第一條線（最下）"></button><button aria-label="第二條線"></button><button aria-label="第三條線（最上）"></button></div>
+    <div class="cap" id="guaCap" style="text-align:center"></div>
+  </div>
+  <p>你在道士的衣服、廟的屋頂、甚至韓國國旗上都看得到八卦。道教用它來代表方位、宇宙秩序，也用在儀式裡。</p>
+
+  <details class="think"><summary>想一想：「物極必反」在你生活中有沒有例子？</summary>
+  <p>參考：考試前拚命熬夜，反而考試那天精神很差；一次吃太多喜歡的東西，反而吃膩了。太滿的東西，會開始往另一邊走。</p></details>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>陰陽：相對又相連的兩面，會消長、會反轉、互相包含。</li>
+    <li>五行：木火土金水，相生（推動）和相剋（制衡）。</li>
+    <li>八卦：三條陰陽線組成，共八種，代表八種自然現象。</li>
+  </ul></div>
+</section>
+
+<!-- ============ 第二段 ============ -->
+<section class="lesson" data-u="2" data-title="道教出現之前：巫、方士與神仙夢">
+  <p class="unit">第二段・道教怎麼誕生　第 4 課</p>
+  <h2>道教出現之前：巫、方士與神仙夢</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>道教不是一天蓋好的，它有四個「源頭」。</p>
+
+  <p>一條大河，是很多小溪匯流而成。道教在東漢末年正式出現之前，已經有四條小溪流了好幾百年。</p>
+
+  <h3>源頭一：巫——最古老的溝通者</h3>
+  <div class="box word"><div class="bh">「巫」字的由來</div>
+  甲骨文的「巫」像兩個交叉的工具，有學者認為是占卜或測量用的器具。<button class="t" data-t="巫">巫</button>是上古時代負責跟鬼神溝通的人：求雨、治病、占卜、主持祭祀。他們會跳舞、唱歌、進入恍惚狀態。</div>
+  <p>道教後來的很多儀式，像畫符、唸咒、驅邪，都能在古代巫術裡找到影子。</p>
+
+  <h3>源頭二：方士——追求長生的技術人員</h3>
+  <p>戰國到秦漢時期，出現一批叫<button class="t" data-t="方士">方士</button>的人。「方」是「方法、技術」，就像今天說「藥方」「祕方」。他們會煉藥、占星、看相，最有名的業務是：<b>幫皇帝找長生不老藥</b>。</p>
+  <div class="box eg"><div class="bh"><span class="tag h">史實</span>秦始皇與徐福</div>
+  司馬遷的《史記》記載，秦始皇派方士徐福帶著數千名童男童女出海，去找傳說中的仙山「蓬萊、方丈、瀛洲」求仙藥。徐福後來沒有回來。至於他是不是到了日本，那就是<span class="tag l">傳說</span>了。</div>
+
+  <h3>源頭三：神仙思想——人可以不死</h3>
+  <p>戰國時期的人開始相信：世界上有一種人，不會老、不會死、可以飛，住在高山或海上仙島，這就是「仙」。第 12 課會詳細講「仙」字的由來。這個想法讓道教有了最核心的夢想：<b>修煉成仙</b>。</p>
+
+  <h3>源頭四：黃老之學——老子的思想被拿來治國</h3>
+  <p>漢朝初年，打了很多年仗，百姓很窮。朝廷採用<button class="t" data-t="黃老">黃老</button>之學：少打擾百姓、少收稅，讓社會自己恢復。這讓老子的地位越來越高，慢慢從「思想家」被抬成「神」。</p>
+  <div class="box eg"><div class="bh">四條溪流匯成一條河</div>
+  巫 → 給了道教「儀式和法術」<br>
+  方士 → 給了道教「煉丹和養生技術」<br>
+  神仙思想 → 給了道教「成仙的目標」<br>
+  黃老之學 → 給了道教「老子和道的理論」</div>
+
+  <details class="think"><summary>想一想：為什麼古代皇帝特別想長生不老？</summary>
+  <p>參考：皇帝什麼都有，唯一買不到的就是時間。擁有越多的人，越怕失去。這也讓方士有了很大的市場。</p></details>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>道教有四個源頭：巫、方士、神仙思想、黃老之學。</li>
+    <li>方士的「方」是技術、方法；最有名的是替秦始皇求仙藥的徐福。</li>
+    <li>老子在漢代慢慢被神化。</li>
+  </ul></div>
+</section>
+
+<section class="lesson" data-u="2" data-title="道教誕生：張道陵與五斗米">
+  <p class="unit">第二段・道教怎麼誕生　第 5 課</p>
+  <h2>道教誕生：張道陵與五斗米</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>道教正式成立的時間、人物，還有「天師」「五斗米道」名稱的由來。</p>
+
+  <p>到了東漢末年（大約公元二世紀），四條溪流終於匯成大河。這時出現了兩個有組織、有經典、有信徒的團體，學者一般把它們當成道教正式成立的標誌。</p>
+
+  <h3>張道陵：第一代天師</h3>
+  <p>張道陵（本名張陵）是東漢人。<span class="tag l">傳說</span> 漢順帝時（常說是公元 142 年），他在四川的鶴鳴山修道，太上老君親自降臨，傳給他經書和法術，命他為「<button class="t" data-t="天師">天師</button>」。</p>
+  <p><span class="tag h">史實</span> 歷史上可以確定的是：他在四川一帶建立了一個宗教團體，用符水治病，要求信徒悔過、做善事、修路。他的子孫世世代代被稱為「天師」，今天在台灣還有自稱傳承這一脈的天師。</p>
+
+  <h3>「五斗米道」名字的由來</h3>
+  <p>加入這個團體的人，要繳<b>五斗米</b>。所以外人叫它「<button class="t" data-t="五斗米道">五斗米道</button>」。信徒自己則叫它「正一盟威之道」，後來被稱為「天師道」。</p>
+  <div class="lab">
+    <div class="lh">五斗米到底有多少？</div>
+    <div class="dou"><div></div><div></div><div></div><div></div><div></div></div>
+    <p style="margin:6px 0 0;font-size:16px">「斗」是古代量米的方形木器。漢代一斗大約等於今天 2 公升，所以五斗米大約是 <b>10 公升的米</b>，差不多兩大包家用米。對當時的農民來說不算太少，但也付得起——這讓它很快吸引了大量窮苦百姓。</p>
+  </div>
+  <div class="box eg"><div class="bh">連「米」都有管理制度</div>
+  張道陵的孫子張魯後來在漢中（今天陝西南部）建立了一個幾乎是政教合一的地方政權，時間將近三十年。他在路邊設「義舍」，放米和肉讓路過的人免費吃，但只能拿夠吃的量，拿太多會被認為受到鬼神懲罰。<span class="tag h">史實</span> 這記載在《三國志》裡。公元 215 年張魯投降曹操，天師道也跟著傳到北方。</div>
+
+  <h3>另一個團體：太平道與黃巾之亂</h3>
+  <p>同一個時期，河北的張角創立<button class="t" data-t="太平道">太平道</button>，名字來自一本叫《太平經》的書，目標是實現「天下太平」。他也用符水治病，十幾年間信徒多達數十萬人。</p>
+  <p><span class="tag h">史實</span> 公元 184 年，張角帶領信徒起兵反抗東漢朝廷，大家頭綁黃色頭巾，史稱「黃巾之亂」。你如果看過《三國演義》，故事就是從這裡開始的。起事失敗後，太平道就消失了，但天師道活了下來，成為道教的主幹。</p>
+  <div class="cmp"><table>
+    <tr><th></th><th>五斗米道（天師道）</th><th>太平道</th></tr>
+    <tr><td>創始人</td><td>張道陵</td><td>張角</td></tr>
+    <tr><td>地區</td><td>四川、漢中</td><td>河北一帶</td></tr>
+    <tr><td>經典</td><td>《道德經》等</td><td>《太平經》</td></tr>
+    <tr><td>結局</td><td>傳承至今</td><td>黃巾之亂失敗後消失</td></tr>
+  </table></div>
+
+  <details class="think"><summary>想一想：為什麼「用符水治病」在東漢末年特別吸引人？</summary>
+  <p>參考：當時瘟疫、戰亂、饑荒不斷，一般人請不起醫生。一個會照顧病人、發米、給人希望的團體，自然很有吸引力。宗教的興起，常常和社會的痛苦有關。</p></details>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>道教正式成立於東漢末年，代表是張道陵的五斗米道（天師道）。</li>
+    <li>「天師」是張道陵與後代的稱號；「五斗米」是入道要繳的米，約 10 公升。</li>
+    <li>張角的太平道發動黃巾之亂後消失；天師道成為道教主幹。</li>
+  </ul></div>
+</section>
+<!-- ============ 第三段 ============ -->
+<section class="lesson" data-u="3" data-title="魏晉南北朝：把道教整理成形">
+  <p class="unit">第三段・一路長大的歷史　第 6 課</p>
+  <h2>魏晉南北朝：把道教整理成形</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>四位關鍵人物，如何把鬆散的道教整理成有理論、有經書、有規矩的宗教。</p>
+
+  <p>東漢滅亡後，中國分裂了將近四百年（公元 220～589 年），叫魏晉南北朝。天下很亂，可是道教反而在這段時間「長大成人」。我們按時間順序認識四個人。</p>
+
+  <h3>1. 葛洪：替「成仙」寫說明書（283～343 年）</h3>
+  <p>葛洪是東晉人，自號「抱朴子」，寫了一本書也叫《<button class="t" data-t="抱朴子">抱朴子</button>》。他最想證明一件事：<b>神仙是真的，而且人可以靠學習成仙</b>。書裡詳細記錄了煉丹的方法、藥材、該注意的事。</p>
+  <div class="box eg"><div class="bh">他是古代的「實驗記錄者」</div>
+  不管你信不信成仙，葛洪留下了大量古代化學和醫學的紀錄。他的另一本書《肘後備急方》裡，有用「青蒿」治療瘧疾的方法。<span class="tag h">史實</span> 2015 年得到諾貝爾獎的屠呦呦，正是讀到這段記載，才想到用低溫萃取青蒿素。</div>
+
+  <h3>2. 寇謙之：整頓北方的天師道（365～448 年）</h3>
+  <p>北魏的道士寇謙之覺得天師道變得太亂：有人收錢、有人亂傳法術。他宣稱得到太上老君的新指示，廢除一些舊做法，改用戒律和禮拜。北魏皇帝支持他，道教甚至一度成為北魏的國教。</p>
+
+  <h3>3. 陸修靜：第一次替經書編目錄（406～477 年）</h3>
+  <p>南朝的陸修靜做了一件很「圖書館員」的事：他蒐集當時所有道教經書，分成三大類，叫「<button class="t" data-t="三洞">三洞</button>」，還編出儀式的標準流程。第 13 課講《道藏》時會用到這套分類。</p>
+
+  <h3>4. 陶弘景：「山中宰相」（456～536 年）</h3>
+  <p>陶弘景住在江蘇的茅山，整理「上清派」的經典，也把神仙排出等級次序。他還是醫學家，整理了中藥書《本草經集注》。<span class="tag h">史實</span> 梁武帝遇到國家大事常寫信問他，所以人稱「山中宰相」。</p>
+
+  <div class="box word"><div class="bh">派別的名字怎麼來？</div>
+  這時期出現好幾個派別，常用它們重視的「經典」或「天界」來命名：<br>
+  <b>上清派</b>：重視《上清經》，強調冥想、存想身體裡的神。<br>
+  <b>靈寶派</b>：重視《靈寶經》，強調儀式和普度眾生，深受佛教影響。</div>
+
+  <details class="think"><summary>想一想：為什麼宗教需要「整理」？</summary>
+  <p>參考：一個團體越大，大家的說法就越不一樣。有人亂傳，就會失去信用。訂經書目錄、訂規矩，就像學校訂校規和課本，讓大家有共同標準。</p></details>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>葛洪《抱朴子》：成仙理論與煉丹紀錄。</li>
+    <li>寇謙之整頓北天師道；陸修靜編「三洞」經目與儀式；陶弘景整理上清經典與神仙次序。</li>
+    <li>魏晉南北朝是道教「定型」的時代。</li>
+  </ul></div>
+</section>
+
+<section class="lesson" data-u="3" data-title="唐宋：皇帝和道教的親密關係">
+  <p class="unit">第三段・一路長大的歷史　第 7 課</p>
+  <h2>唐宋：皇帝和道教的親密關係</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>為什麼唐朝特別尊崇道教，以及宋朝時修煉方法怎麼轉向。</p>
+
+  <h3>唐朝：老子成了皇帝的祖先</h3>
+  <p>唐朝皇帝姓李，老子也姓李（名李耳）。唐朝皇室就宣稱：<b>老子是我們的老祖宗</b>。這樣一來，皇帝的地位就有了神聖的來源。</p>
+  <p><span class="tag h">史實</span> 唐高宗在公元 666 年追封老子為「太上玄元皇帝」；唐玄宗規定家家戶戶要有一本《道德經》，科舉考試也考道家經典，還把《莊子》尊稱為《南華真經》。</p>
+  <div class="box eg"><div class="bh">詩人李白也是道教徒</div>
+  李白正式受過「道籙」（第 19 課會解釋），算是入了道籍。他的朋友賀知章讀了他的詩，驚嘆他是「<button class="t" data-t="謫仙">謫仙</button>人」——被貶到人間的神仙。「詩仙」這個外號就是這樣來的。</div>
+
+  <div class="box warn"><div class="bh">吃丹藥的代價</div>
+  唐朝很多皇帝熱衷吃煉丹爐燒出來的「仙丹」。<span class="tag h">史實</span> 史學家一般認為，唐朝有好幾位皇帝（例如唐憲宗、唐武宗）的死，很可能和服用含有重金屬的丹藥有關。這個教訓後來促成了修煉方法的大轉彎。</div>
+
+  <h3>宋朝：從「燒藥」轉向「修身體」</h3>
+  <p>外面煉的藥會毒死人，那怎麼辦？宋朝開始流行一種新想法：<b>不要在爐子裡煉藥，改在自己身體裡「煉」</b>。這就是「<button class="t" data-t="內丹">內丹</button>」，第 17 課會仔細講。</p>
+  <p>宋朝皇帝也很愛道教。宋徽宗甚至自稱「教主道君皇帝」，大量蓋道觀、編道書。不過他書法和畫畫很厲害，治國卻很失敗，最後北宋被金國滅亡，他本人也被俘虜。</p>
+
+  <details class="think"><summary>想一想：皇帝支持一個宗教，對宗教是好事還是壞事？</summary>
+  <p>參考：好處是有錢、有地位、經書能被整理保存；壞處是宗教可能變成政治工具，而且皇帝一換，待遇可能一夕之間改變。</p></details>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>唐朝皇室姓李，尊老子為祖先，道教地位很高。</li>
+    <li>吃丹藥中毒的教訓，讓修煉方法從「外丹」轉向「內丹」。</li>
+    <li>宋朝內丹興起，宋徽宗自稱「教主道君皇帝」。</li>
+  </ul></div>
+</section>
+
+<section class="lesson" data-u="3" data-title="金元：全真與正一兩大派">
+  <p class="unit">第三段・一路長大的歷史　第 8 課</p>
+  <h2>金元：全真與正一兩大派</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>今天道教最主要的兩大派是怎麼來的、差在哪裡。</p>
+
+  <h3>王重陽創立全真道</h3>
+  <p>北宋滅亡後，北方被金國統治。陝西人王重陽（1112～1170 年）原本想當官、當將軍，都不順利，後來出家修道。<span class="tag h">史實</span> 1167 年他到山東傳道，收了七個重要弟子，叫「全真七子」，創立<button class="t" data-t="全真">全真道</button>。</p>
+  <p>全真道有三個很大的特色：</p>
+  <div class="box eg">
+  <b>1. 三教合一</b>：他主張儒、釋（佛）、道三教道理相通，要弟子讀《道德經》、佛教《心經》和儒家《孝經》。<br>
+  <b>2. 出家修行</b>：像佛教和尚一樣，不結婚、吃素、住在道觀裡。<br>
+  <b>3. 重內丹、輕符籙</b>：修行重點是修心和內丹，而不是畫符作法。</div>
+  <p>如果你讀過金庸的《射鵰英雄傳》，裡面的「全真教」「王重陽」「丘處機」都是真實人物改編的，不過武功是小說虛構的。</p>
+
+  <h3>丘處機見成吉思汗</h3>
+  <p><span class="tag h">史實</span> 全真七子之一的丘處機，七十多歲時應成吉思汗邀請，從山東走了一萬多里，1222 年在今天阿富汗一帶的大雪山見到成吉思汗。成吉思汗問他長生藥，他回答世界上沒有長生藥，只有養生的道理，並勸他少殺人、愛護百姓。後來元朝給全真道很多特權，全真道迅速壯大。</p>
+
+  <h3>南方的天師道變成「正一派」</h3>
+  <p>同一時間，南方江西龍虎山的張天師後代一直傳承著天師道。<span class="tag h">史實</span> 1304 年，元成宗封第 38 代天師張與材為「正一教主」，讓他統領南方幾個主要的符籙派別。從此這些派別合稱<button class="t" data-t="正一">正一派</button>。</p>
+  <div class="cmp"><table>
+    <tr><th></th><th>全真派</th><th>正一派</th></tr>
+    <tr><td>源頭</td><td>王重陽，金代</td><td>張道陵天師道，元代統合</td></tr>
+    <tr><td>中心</td><td>北京白雲觀</td><td>江西龍虎山</td></tr>
+    <tr><td>生活</td><td>出家，住道觀，吃素，不結婚</td><td>多數可以結婚、住在家裡</td></tr>
+    <tr><td>擅長</td><td>內丹、修心、靜坐</td><td>符籙、科儀、驅邪祈福</td></tr>
+    <tr><td>髮型</td><td>留長髮，頭頂盤髻</td><td>平日不一定，做儀式時戴冠</td></tr>
+  </table></div>
+  <p>今天的道教，大致就是這兩大派。台灣的道士絕大多數屬於<b>正一派</b>，所以你在台灣看到的道士，很多平常就是住在一般家裡、有家庭的人。</p>
+
+  <details class="think"><summary>想一想：為什麼兩派會一個在北、一個在南？</summary>
+  <p>參考：當時中國南北被不同政權統治很久，交通也不方便。宗教會跟著當地的政治和生活習慣長出不同樣子，就像同一種植物，種在不同土地會長得不一樣。</p></details>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>全真派：王重陽創，出家、吃素、重內丹與修心，主張三教合一。</li>
+    <li>正一派：天師道的延續，元代統合，擅長符籙科儀，道士多可成家。</li>
+    <li>台灣道士多屬正一派。</li>
+  </ul></div>
+</section>
+
+<section class="lesson" data-u="3" data-title="明清到今天＋整條時間軸">
+  <p class="unit">第三段・一路長大的歷史　第 9 課</p>
+  <h2>明清到今天＋整條時間軸</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>道教近代的變化，並把前面學過的歷史串成一條線。</p>
+
+  <h3>明朝：編成《道藏》</h3>
+  <p>明朝皇帝很重視道教。<span class="tag h">史實</span> 1445 年完成《正統道藏》，把五千多卷道教經書收成一套，後來又補編《萬曆續道藏》。這是今天研究道教最重要的資料庫，第 13 課會細講。明朝也是武當山（供奉玄天上帝）最興盛的時候。</p>
+
+  <h3>清朝：宮廷冷淡，民間熱鬧</h3>
+  <p>清朝皇室比較信藏傳佛教，對道教沒那麼支持。可是在民間，道教和各地拜拜習俗結合得越來越緊，變成老百姓生活的一部分：生孩子、蓋房子、結婚、辦喪事、中元節，都可能請道士。</p>
+
+  <h3>今天：跨海傳播</h3>
+  <p>明清時期，大批福建、廣東人移民到台灣和東南亞，也把道教和民間信仰帶過去。今天在台灣、香港、馬來西亞、新加坡等地的華人社會，都能看到活躍的道教宮廟；中國大陸也有全國性的道教協會；歐美則有不少學者專門研究道教。</p>
+
+  <div class="lab">
+    <div class="lh">時間軸：點一個時代看重點</div>
+    <div class="btns tl" id="tl"></div>
+    <div class="cap" id="tlCap">點上面的時代。</div>
+  </div>
+
+  <details class="think"><summary>想一想：如果要用一句話說道教的歷史，你會怎麼說？</summary>
+  <p>參考：「從民間治病的團體出發，經過整理、被皇帝抬高、分成兩大派，最後走進老百姓的日常生活，並跟著移民走向世界。」</p></details>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>明代編成《正統道藏》（1445 年），是最重要的道教資料庫。</li>
+    <li>清代道教在宮廷衰落，在民間卻更深入生活。</li>
+    <li>道教隨移民傳到台灣與東南亞。</li>
+  </ul></div>
+</section>
+
+<!-- ============ 第四段 ============ -->
+<section class="lesson" data-u="4" data-title="最高的神：三清與玉皇大帝">
+  <p class="unit">第四段・神仙世界　第 10 課</p>
+  <h2>最高的神：三清與玉皇大帝</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>道教神仙世界的「最上層」是誰，還有「一氣化三清」是什麼意思。</p>
+
+  <p>道教的神很多，多到像一個龐大的政府。我們先認識最上層。</p>
+
+  <h3>三清：道的三種化身</h3>
+  <p>道教認為最高的是「道」，而道化成三位最高的神，叫<button class="t" data-t="三清">三清</button>。他們各自住在一層最高的天界：玉清、上清、太清。</p>
+  <div class="lab">
+    <div class="lh">一氣化三清</div>
+    <svg viewBox="0 0 300 180" aria-label="一氣化三清示意圖">
+      <g id="sq1" style="transform:translate(150px,90px);transition:transform .8s">
+        <circle r="34" fill="var(--soft-jin)" stroke="var(--jin)" stroke-width="3"/>
+        <text text-anchor="middle" y="-2" font-size="15" fill="var(--ink)" font-family="var(--serif)" font-weight="700">玉清</text>
+        <text text-anchor="middle" y="16" font-size="11" fill="var(--muted)">元始天尊</text>
+      </g>
+      <g id="sq2" style="transform:translate(150px,90px);transition:transform .8s">
+        <circle r="34" fill="var(--soft-qing)" stroke="var(--qing)" stroke-width="3"/>
+        <text text-anchor="middle" y="-2" font-size="15" fill="var(--ink)" font-family="var(--serif)" font-weight="700">上清</text>
+        <text text-anchor="middle" y="16" font-size="11" fill="var(--muted)">靈寶天尊</text>
+      </g>
+      <g id="sq3" style="transform:translate(150px,90px);transition:transform .8s">
+        <circle r="34" fill="var(--soft-zhu)" stroke="var(--zhu)" stroke-width="3"/>
+        <text text-anchor="middle" y="-2" font-size="15" fill="var(--ink)" font-family="var(--serif)" font-weight="700">太清</text>
+        <text text-anchor="middle" y="16" font-size="11" fill="var(--muted)">道德天尊</text>
+      </g>
+      <g id="sq0" style="transition:opacity .5s">
+        <circle cx="150" cy="90" r="40" fill="var(--card)" stroke="var(--ink)" stroke-width="3"/>
+        <text x="150" y="97" text-anchor="middle" font-size="20" fill="var(--ink)" font-family="var(--serif)" font-weight="900">一氣</text>
+      </g>
+    </svg>
+    <div class="btns"><button id="sqBtn">化為三清</button></div>
+    <div class="cap" id="sqCap">道教說，宇宙最初只有一團混沌的「氣」（道），它化成了三位最高的神。</div>
+  </div>
+  <div class="cmp"><table>
+    <tr><th>名號</th><th>住的天</th><th>代表</th><th>神像手上常拿</th></tr>
+    <tr><td>元始天尊</td><td>玉清</td><td>宇宙剛開始的時候</td><td>一顆珠子（或手作拈珠狀）</td></tr>
+    <tr><td>靈寶天尊</td><td>上清</td><td>宇宙開始運轉</td><td>如意</td></tr>
+    <tr><td>道德天尊</td><td>太清</td><td>把道傳給人間；就是太上老君（老子）</td><td>扇子</td></tr>
+  </table></div>
+  <div class="box word"><div class="bh">「天尊」的由來</div>
+  <b>天尊</b>＝天界中最尊貴的。道教用來稱呼最高等級的神。你在廟裡可能聽過道士說「無量天尊」，意思是「無限尊貴的天尊」，就像打招呼時表示敬意的一句話。</div>
+
+  <h3>玉皇大帝：天庭的「總統」</h3>
+  <p>很多人以為<button class="t" data-t="玉皇大帝">玉皇大帝</button>是最大的神，其實在道教的排序中，他在三清之下。可以這樣理解：</p>
+  <div class="box eg"><div class="bh">比喻：公司的董事會和總經理</div>
+  三清像是公司的<b>創辦人和董事會</b>，代表最根本的道，不管日常瑣事。<br>
+  玉皇大帝像是<b>總經理</b>，實際管理天上、人間、地府所有神明和事務。<br>
+  所以一般老百姓遇到事情，比較常拜玉皇大帝（台灣俗稱「天公」）。農曆正月初九「天公生」就是他的生日。</div>
+
+  <details class="think"><summary>想一想：為什麼道教要把神明安排得像政府一樣？</summary>
+  <p>參考：古人最熟悉的權力結構就是朝廷：皇帝、宰相、各部官員、地方官。用這個樣子去想像天界，大家馬上就懂「有事該找誰」。</p></details>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>三清：元始天尊（玉清）、靈寶天尊（上清）、道德天尊（太清＝太上老君）。</li>
+    <li>一氣化三清：三清是道的三種化身。</li>
+    <li>玉皇大帝管天庭日常事務，排序在三清之下。</li>
+  </ul></div>
+</section>
+
+<section class="lesson" data-u="4" data-title="身邊的神明">
+  <p class="unit">第四段・神仙世界　第 11 課</p>
+  <h2>身邊的神明</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>常見神明的由來，以及「道教」和「民間信仰」的關係。</p>
+
+  <p>天庭有「中央政府」，也有「地方政府」。我們從離你最近的神開始認識。</p>
+
+  <h3>土地公：你家社區的里長</h3>
+  <p>土地公正式名稱叫「<button class="t" data-t="福德正神">福德正神</button>」。古代人祭拜土地，是因為所有作物都從土裡長出來。每一塊地方都有自己的土地公，所以他管的範圍很小，但離人最近——像里長一樣。</p>
+
+  <h3>城隍爺：城市的市長兼法官</h3>
+  <div class="lab">
+    <div class="lh">拆字：城隍</div>
+    <svg viewBox="0 0 300 140" aria-label="城牆與護城壕示意圖">
+      <g id="chengG" style="transition:opacity .4s">
+        <rect x="90" y="40" width="200" height="60" fill="var(--soft-jin)" stroke="var(--jin)" stroke-width="2"/>
+        <path d="M90 40 v-14 h20 v14 h20 v-14 h20 v14 h20 v-14 h20 v14 h20 v-14 h20 v14 h20 v-14 h20 v14" fill="var(--soft-jin)" stroke="var(--jin)" stroke-width="2"/>
+        <text x="190" y="78" text-anchor="middle" font-size="18" fill="var(--ink)" font-family="var(--serif)" font-weight="700">城（城牆）</text>
+      </g>
+      <g id="huangG" style="transition:opacity .4s">
+        <path d="M10 100 L20 128 L70 128 L80 100 Z" fill="var(--bg)" stroke="var(--muted)" stroke-width="2"/>
+        <text x="45" y="92" text-anchor="middle" font-size="16" fill="var(--ink)" font-family="var(--serif)" font-weight="700">隍</text>
+        <text x="45" y="120" text-anchor="middle" font-size="10" fill="var(--muted)">乾的壕溝</text>
+      </g>
+      <line x1="0" y1="100" x2="300" y2="100" stroke="var(--ink)" stroke-width="2"/>
+    </svg>
+    <div class="btns"><button data-ch="c">城</button><button data-ch="h">隍</button><button data-ch="b">城隍</button></div>
+    <div class="cap" id="chCap">點按鈕看看「城」和「隍」各是什麼。</div>
+  </div>
+  <p><button class="t" data-t="城隍">城隍</button>本來是守護城市的「城牆」和「壕溝」，後來被神化成守護一座城的神。道教認為城隍爺管理這座城裡活人和亡魂的善惡紀錄，像是陰間的市長兼法官。很多城隍廟都掛著大算盤，意思是「善惡都會算清楚」。</p>
+
+  <h3>其他常見神明</h3>
+  <div class="cards" id="godCards">
+    <button><b>關聖帝君</b><i>點開看由來</i><span>三國時代的關羽。因為忠義，死後被民間崇拜，歷代皇帝不斷加封。儒家、佛教、道教都尊敬他，商人也拜他當財神。</span></button>
+    <button><b>玄天上帝</b><i>點開看由來</i><span>又叫北極玄天上帝、上帝公。原本是古代對北方星宿的崇拜（玄武：龜和蛇），明朝時大受尊崇，湖北武當山是他的聖地。</span></button>
+    <button><b>太歲星君</b><i>點開看由來</i><span>古人用木星（歲星）紀年，想像天上有一顆和它反方向運行的「太歲」。每一年由一位太歲值班，所以才有「安太歲」的習俗。</span></button>
+    <button><b>媽祖</b><i>點開看由來</i><span>宋代福建莆田的女子林默，傳說能救海難。她原本是民間信仰的海神，後來被朝廷封為「天妃」「天后」，道教也尊稱她為天上聖母。</span></button>
+    <button><b>文昌帝君</b><i>點開看由來</i><span>管讀書、考試、文運的神。「文昌」原本是北斗附近的一組星星，後來和一位四川的地方神合在一起。考生常去拜。</span></button>
+    <button><b>王爺</b><i>點開看由來</i><span>台灣南部很常見，身分來源很多，常被認為是代天巡狩、驅除瘟疫的神。有名的「燒王船」就是送王爺把瘟疫帶走的儀式。</span></button>
+  </div>
+
+  <h3>道教？佛教？還是民間信仰？</h3>
+  <p>很多台灣的廟其實是<button class="t" data-t="民間信仰">民間信仰</button>：老百姓覺得哪位神靈驗就拜哪位，不太在意是哪個宗教。道教和民間信仰像兩個重疊很多的圓圈。分辨的小技巧：</p>
+  <div class="cmp"><table>
+    <tr><th>看什麼</th><th>比較偏道教</th><th>比較偏佛教</th></tr>
+    <tr><td>主神</td><td>三清、玉皇、天師、神仙</td><td>釋迦牟尼佛、觀世音菩薩</td></tr>
+    <tr><td>做儀式的人</td><td>道士（戴道冠、穿道袍）</td><td>出家師父（剃光頭）</td></tr>
+    <tr><td>稱呼</td><td>宮、觀、壇</td><td>寺、院、庵</td></tr>
+  </table></div>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>土地公（福德正神）管一小塊地方；城隍爺管一座城。</li>
+    <li>「城」是城牆，「隍」是沒有水的壕溝。</li>
+    <li>很多台灣廟是民間信仰，和道教重疊但不完全相同。</li>
+  </ul></div>
+</section>
+
+<section class="lesson" data-u="4" data-title="「仙」是什麼？八仙的故事">
+  <p class="unit">第四段・神仙世界　第 12 課</p>
+  <h2>「仙」是什麼？八仙的故事</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>「神」和「仙」的差別、「仙」字的由來、仙的等級，以及八仙是誰。</p>
+
+  <h3>神和仙，不一樣</h3>
+  <div class="cmp"><table>
+    <tr><th></th><th>神</th><th>仙</th></tr>
+    <tr><td>怎麼來的</td><td>天生的，或死後被封的</td><td>活人修煉成功的</td></tr>
+    <tr><td>例子</td><td>三清、雷神、城隍</td><td>呂洞賓、張果老</td></tr>
+    <tr><td>重點</td><td>有職位、管事情</td><td>長生不死、自由自在</td></tr>
+  </table></div>
+  <p>這就是道教最吸引人的地方：<b>神是天生的，但仙是可以「學」出來的</b>。</p>
+
+  <div class="box word"><div class="bh">「仙」字的由來</div>
+  「<button class="t" data-t="仙">仙</button>」＝「人」＋「山」。漢朝的字典《釋名》解釋：人老了卻不死，就叫仙；仙就是「遷」，搬到山裡去住。所以仙的原始形象是：<b>住進深山修行、不再老去的人</b>。古代也寫成「僊」，有「飛升、遷走」的意思。</div>
+
+  <h3>仙也有等級</h3>
+  <p>葛洪在《抱朴子》裡把仙分成三等：</p>
+  <div class="box eg">
+  <b>天仙</b>：最高級，整個身體飛上天。<br>
+  <b>地仙</b>：留在人間的名山裡，長生不老。<br>
+  <b>屍解仙</b>：看起來像死了，其實只是留下外殼，本人已經離開成仙。就像蟬脫殼一樣。</div>
+  <p>也因為這個想法，道士過世不說「死」，而說「<button class="t" data-t="羽化">羽化</button>」或「登仙」。</p>
+
+  <h3>八仙：最有名的神仙團體</h3>
+  <p>八仙的故事大多在唐宋以後的民間傳說裡慢慢成形，到明代小說裡才固定成八個人。<span class="tag l">傳說</span></p>
+  <div class="cards">
+    <button><b>鐵拐李</b><i>點開</i><span>拄鐵拐、背葫蘆的乞丐模樣。傳說他靈魂出竅時身體被燒掉，只好借一個跛腳乞丐的身體回來。</span></button>
+    <button><b>漢鍾離</b><i>點開</i><span>袒胸露肚，手拿大扇子。傳說是呂洞賓的師父。</span></button>
+    <button><b>張果老</b><i>點開</i><span>倒騎毛驢的老人。唐代史書確實有一位叫張果的方士見過唐玄宗。</span></button>
+    <button><b>呂洞賓</b><i>點開</i><span>背著寶劍的書生。全真道尊他為祖師之一，是八仙中最受崇拜的一位。</span></button>
+    <button><b>何仙姑</b><i>點開</i><span>八仙裡唯一的女性，手拿荷花。</span></button>
+    <button><b>藍采和</b><i>點開</i><span>手提花籃，邊走邊唱歌，行為瘋瘋癲癲。</span></button>
+    <button><b>韓湘子</b><i>點開</i><span>吹笛子的少年。傳說是唐代大文學家韓愈的姪孫。</span></button>
+    <button><b>曹國舅</b><i>點開</i><span>穿官服、拿玉板（拍板）。傳說是宋朝皇后的弟弟。</span></button>
+  </div>
+  <div class="box eg"><div class="bh">成語：八仙過海，各顯神通</div>
+  傳說八仙要渡過東海，每個人都不坐船，而是用自己的法寶過海。後來這句話用來比喻：<b>大家各自用自己的本事完成事情</b>。你們班分組報告時，就可以說「八仙過海，各顯神通」。</div>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>神是天生或受封的；仙是人修煉成功的。</li>
+    <li>「仙」＝人＋山：住進山裡不再老去的人。</li>
+    <li>仙分天仙、地仙、屍解仙；道士過世稱「羽化」。</li>
+  </ul></div>
+</section>
+<!-- ============ 第五段 ============ -->
+<section class="lesson" data-u="5" data-title="《道藏》：道教的大圖書館">
+  <p class="unit">第五段・經典　第 13 課</p>
+  <h2>《道藏》：道教的大圖書館</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>「經」「藏」的由來，還有《道藏》的「三洞四輔」分類法。</p>
+
+  <div class="box word"><div class="bh">「經」字的由來</div>
+  「<button class="t" data-t="經">經</button>」的左邊是「糸」（絲線）。它本來是織布機上<b>直的那一排線</b>。織布時，直線先固定好，橫線（緯）才能來回穿梭。所以「經」引申為：最基本、不會變的道理。重要的書就叫「經」。地球的「經線」也是同一個意思。</div>
+  <div class="box word"><div class="bh">「藏」字的由來</div>
+  這裡的「藏」讀作 zàng，是「收藏東西的大倉庫」，像「寶藏」。<button class="t" data-t="道藏">道藏</button>就是「收藏道教經書的大倉庫」，也就是道教的全集。佛教的全集則叫《大藏經》。</div>
+
+  <h3>三洞四輔：七大書架</h3>
+  <p>還記得第 6 課的陸修靜嗎？他把經書分成「三洞」，後人再補上「四輔」，變成七大類。<button class="t" data-t="洞">洞</button>是「通」的意思——通往道的途徑。點點看每個書架：</p>
+  <div class="lab">
+    <div class="lh">《道藏》的七大書架</div>
+    <div class="cards" id="dzCards">
+      <button><b>洞真部</b><i>三洞之一</i><span>收上清派經典。重點是冥想、存思，最高級。</span></button>
+      <button><b>洞玄部</b><i>三洞之一</i><span>收靈寶派經典。重點是儀式、齋醮、普度。</span></button>
+      <button><b>洞神部</b><i>三洞之一</i><span>收三皇派經典。重點是召請鬼神、符咒法術。</span></button>
+      <button><b>太玄部</b><i>四輔之一</i><span>輔助洞真部，以《道德經》及相關注解為主。</span></button>
+      <button><b>太平部</b><i>四輔之一</i><span>輔助洞玄部，以《太平經》系統為主。</span></button>
+      <button><b>太清部</b><i>四輔之一</i><span>輔助洞神部，多是煉丹、外丹的書。</span></button>
+      <button><b>正一部</b><i>四輔之一</i><span>貫通前面全部，收天師道（正一派）的經典。</span></button>
+    </div>
+  </div>
+  <div class="box eg"><div class="bh">比喻：學校圖書館</div>
+  三洞像是三個主要學科區（例如文學、自然、社會），四輔像是每區旁邊的「參考書區」。每一區再細分成「本文、神符、玉訣、靈圖……」等十二小類，一共可以分得很細。</div>
+  <p><span class="tag h">史實</span> 現存最完整的是明朝的《正統道藏》加上《萬曆續道藏》，合計五千多卷，大約一千五百種書。裡面不只宗教，還有醫學、化學、天文、哲學、文學，是研究中國古代科技的寶庫。</p>
+
+  <details class="think"><summary>想一想：為什麼把書分類這麼重要？</summary>
+  <p>參考：五千多卷書如果亂放，沒有人找得到。分類讓後人知道「想學什麼，去哪裡找」。這也是道教能流傳兩千年的原因之一。</p></details>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>「經」＝織布的直線，引申為基本道理；「藏」＝收藏的大倉庫。</li>
+    <li>《道藏》分三洞（洞真、洞玄、洞神）與四輔（太玄、太平、太清、正一）。</li>
+    <li>現存《正統道藏》＋《萬曆續道藏》共五千多卷。</li>
+  </ul></div>
+</section>
+
+<section class="lesson" data-u="5" data-title="必讀的幾本道教經典">
+  <p class="unit">第五段・經典　第 14 課</p>
+  <h2>必讀的幾本道教經典</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>六本最重要的經典，各在講什麼、適合什麼時候讀。</p>
+  <p>五千多卷當然讀不完。下面六本是入門最常被推薦的，按照難度由淺到深排列。</p>
+
+  <h3>1.《太上感應篇》——教你做好人</h3>
+  <p>宋代出現的<button class="t" data-t="善書">善書</button>，一千多字，列出一百多種善行和惡行。它的開頭非常有名：</p>
+  <div class="quote">禍福無門，惟人自召；善惡之報，如影隨形。<small>《太上感應篇》</small></div>
+  <p class="bai">白話：災禍和福氣沒有固定的門，都是人自己招來的；做善事、做壞事的報應，就像影子跟著身體一樣甩不掉。</p>
+  <p>這本書在明清時期是全中國印最多的書之一，很多人家裡都有，因為人們相信印書送人也是一種功德。</p>
+
+  <h3>2.《道德經》——道教的根本</h3>
+  <p>老子所著，約五千字，道教尊為《道德真經》。它講「道」是什麼、怎麼順應自然、為什麼柔弱勝剛強。道教每一派都讀它。</p>
+
+  <h3>3.《南華真經》——就是《莊子》</h3>
+  <p>唐玄宗把莊子封為「南華真人」，所以《莊子》在道教裡叫《南華真經》。裡面有很多寓言：莊周夢蝶、庖丁解牛。它教人看開、自由。</p>
+  <div class="box word"><div class="bh">「真人」的由來</div>
+  「<button class="t" data-t="真人">真人</button>」最早出現在《莊子》裡，指<b>真正懂得道的人</b>：不怕死、不貪心、心很平靜。後來道教用「真人」來尊稱修道有成的人，例如「張天師」也被稱作「正一真人」。</div>
+
+  <h3>4.《清靜經》——教你把心靜下來</h3>
+  <p>全名《太上老君說常清靜經》，不到四百字，道士每天早晚課都會唸。它說：人的心本來喜歡安靜，是欲望把它弄亂了。</p>
+  <div class="quote">人能常清靜，天地悉皆歸。<small>《清靜經》</small></div>
+  <p class="bai">白話：一個人如果能常常保持內心清淨，天地萬物的道理都會回到他身上。</p>
+
+  <h3>5.《黃庭經》——身體裡的神明地圖</h3>
+  <div class="box word"><div class="bh">「黃庭」的由來</div>
+  <b>黃</b>在五行裡屬「土」，代表中央；<b>庭</b>是院子。「<button class="t" data-t="黃庭">黃庭</button>」就是「身體中央的院子」。這本經認為身體每個器官都住著神明，修煉者要在冥想中「看見」他們。上清派特別重視它。相傳書法家王羲之抄寫過《黃庭經》，還用它跟道士換了一群鵝。</div>
+
+  <h3>6.《度人經》——靈寶派的第一經</h3>
+  <p>全名《靈寶無量度人上品妙經》，是《道藏》的第一部經。「度」是「渡河」的渡，意思是幫人從苦難的這一岸渡到解脫的那一岸。道教的超度法會常唸這部經。</p>
+
+  <div class="cmp"><table>
+    <tr><th>經典</th><th>一句話</th><th>入門難度</th></tr>
+    <tr><td>太上感應篇</td><td>做好人、行善積德</td><td>★☆☆</td></tr>
+    <tr><td>清靜經</td><td>讓心安靜</td><td>★★☆</td></tr>
+    <tr><td>道德經</td><td>道與自然</td><td>★★☆</td></tr>
+    <tr><td>南華真經</td><td>自由與看開</td><td>★★☆</td></tr>
+    <tr><td>黃庭經</td><td>身體裡的神</td><td>★★★</td></tr>
+    <tr><td>度人經</td><td>救度眾生、儀式</td><td>★★★</td></tr>
+  </table></div>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>入門順序：感應篇 → 清靜經 → 道德經、南華真經 → 黃庭經、度人經。</li>
+    <li>「真人」出自《莊子》，指真正懂道的人。</li>
+    <li>「黃庭」＝身體中央的院子；「度」＝渡河到彼岸。</li>
+  </ul></div>
+</section>
+
+<!-- ============ 第六段 ============ -->
+<section class="lesson" data-u="6" data-title="精、氣、神：人身上的三寶">
+  <p class="unit">第六段・修煉　第 15 課</p>
+  <h2>精、氣、神：人身上的三寶</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>道教修煉的基本材料是什麼。之後的外丹、內丹都要用到。</p>
+
+  <p>道教認為人有三樣最珍貴的東西，叫「三寶」：<button class="t" data-t="精氣神">精、氣、神</button>。我們今天說一個人「很有精神」「精氣神很好」，就是從這裡來的。</p>
+
+  <div class="lab">
+    <div class="lh">用一根蠟燭來理解：點蠟燭的不同部分</div>
+    <svg viewBox="0 0 200 250" aria-label="蠟燭比喻精氣神">
+      <circle id="cGlow" cx="100" cy="62" r="52" fill="var(--jin)" opacity=".15"/>
+      <g class="flame" id="cFlame"><path d="M100 30 C118 55 114 78 100 88 C86 78 82 55 100 30Z" fill="var(--zhu)"/><path d="M100 55 C107 67 106 78 100 84 C94 78 93 67 100 55Z" fill="var(--jin)"/></g>
+      <line x1="100" y1="88" x2="100" y2="100" stroke="var(--ink)" stroke-width="3"/>
+      <rect id="cWax" x="70" y="100" width="60" height="130" rx="6" fill="var(--yang)" stroke="var(--ink)" stroke-width="2"/>
+      <rect x="55" y="228" width="90" height="10" rx="4" fill="var(--muted)"/>
+    </svg>
+    <div class="btns"><button data-cd="jing">蠟＝精</button><button data-cd="qi">火＝氣</button><button data-cd="shen">光＝神</button></div>
+    <div class="cap" id="cdCap">點上面三個按鈕。</div>
+  </div>
+
+  <div class="box word"><div class="bh">三個字的由來</div>
+  <b>精</b>：左邊是「米」，本來指挑選過的好米。引申為最純、最精華的東西。在身體裡指生命最基本的物質。<br>
+  <b>氣</b>：最早寫作「气」，畫的是天上一層層的雲氣。後來加上「米」變成「氣」，有人解釋為煮米冒出的蒸氣。道教還常寫成「<button class="t" data-t="炁">炁</button>」，專門指先天、原始的生命能量。<br>
+  <b>神</b>：左邊「示」是祭壇，右邊「申」是閃電的形狀。古人覺得閃電代表天上神靈。在身體裡指人的意識、心思、精神。</div>
+
+  <h3>三者的關係：節約，然後轉化</h3>
+  <p>道教修煉的基本想法可以分兩步：</p>
+  <div class="box eg">
+  <b>第一步：不浪費</b>。熬夜、暴飲暴食、整天發脾氣，就像讓蠟燭在大風裡燒，燒得又快又暗。<br>
+  <b>第二步：往上轉化</b>。內丹修煉說：精 → 化成氣 → 化成神 → 回到虛無（道）。就像把蠟慢慢燒成穩定明亮的光。</div>
+
+  <div class="box warn"><div class="bh">用科學的眼光看</div>
+  「精氣神」是古人描述身心狀態的概念，不是現代解剖學或物理學找得到的東西。可以把它當成一種理解身心的語言：睡飽、吃得好（精），呼吸順暢、體力充足（氣），專注、心情平穩（神）。</div>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>人身三寶：精（基本物質）、氣（生命能量）、神（意識精神）。</li>
+    <li>比喻：蠟燭的蠟、火、光。</li>
+    <li>修煉兩步：先不浪費，再往上轉化。</li>
+  </ul></div>
+</section>
+
+<section class="lesson" data-u="6" data-title="外丹：煉丹爐裡的古代化學">
+  <p class="unit">第六段・修煉　第 16 課</p>
+  <h2>外丹：煉丹爐裡的古代化學</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>「丹」字的由來、古人為什麼相信吃丹能成仙，以及它意外的貢獻和危險。</p>
+
+  <div class="box word"><div class="bh">「丹」字的由來</div>
+  《說文解字》說：丹是「巴越之赤石」，也就是四川、南方出產的<b>紅色礦石</b>——丹砂，又叫硃砂。「丹」後來也指「紅色」（丹心、丹楓），再後來才指煉出來的藥（仙丹）。</div>
+
+  <p><button class="t" data-t="外丹">外丹</button>就是在身體「外面」，用爐子和鼎燒煉礦物，想做出吃了能長生的仙丹。為什麼古人特別看重丹砂？做一次實驗就知道：</p>
+
+  <div class="lab">
+    <div class="lh">虛擬實驗室：燒丹砂（請勿在家嘗試）</div>
+    <svg viewBox="0 0 260 200" aria-label="丹砂加熱實驗">
+      <g id="fume" style="opacity:0;transition:opacity .6s">
+        <path d="M110 40 q-8 -12 0 -24 M130 36 q8 -12 0 -26 M150 40 q-8 -12 0 -24" stroke="var(--muted)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </g>
+      <path d="M80 60 L180 60 L170 130 L90 130 Z" fill="var(--card)" stroke="var(--ink)" stroke-width="3"/>
+      <ellipse id="powder" cx="130" cy="118" rx="36" ry="9" fill="#C0392B" style="transition:opacity .8s"/>
+      <g id="drops" style="opacity:0;transition:opacity .8s">
+        <circle cx="112" cy="121" r="6" fill="#B8C2C8" stroke="#6E7A82"/><circle cx="130" cy="123" r="8" fill="#B8C2C8" stroke="#6E7A82"/><circle cx="148" cy="121" r="5" fill="#B8C2C8" stroke="#6E7A82"/>
+      </g>
+      <rect x="70" y="130" width="120" height="40" fill="var(--soft-jin)" stroke="var(--jin)" stroke-width="2"/>
+      <g id="fire" style="opacity:.25;transition:opacity .4s">
+        <path d="M100 168 q6 -20 12 0 M124 168 q6 -26 12 0 M148 168 q6 -20 12 0" fill="var(--zhu)" stroke="var(--zhu)" stroke-width="2"/>
+      </g>
+      <text x="130" y="192" text-anchor="middle" font-size="12" fill="var(--muted)">丹爐</text>
+    </svg>
+    <div class="btns"><button id="labHeat">① 加熱丹砂</button><button id="labBack">② 加硫磺再燒</button><button id="labReset">重來</button></div>
+    <div class="cap" id="labCap">鼎裡是紅色的丹砂。按「加熱」。</div>
+  </div>
+  <p>葛洪在《抱朴子》裡就記錄了這個現象：</p>
+  <div class="quote">丹砂燒之成水銀，積變又還成丹砂。<small>葛洪《抱朴子・金丹》</small></div>
+  <p class="bai">白話：丹砂燒了會變成水銀，再經過變化，又會變回丹砂。</p>
+  <div class="box eg"><div class="bh">古人的推論</div>
+  紅色的石頭可以「死去」變成流動的銀色液體，又能「復活」變回紅色石頭——這不就是<b>死而復生、永遠不壞</b>嗎？所以古人推想：吃下這種東西，人也能像它一樣不死。<br>
+  今天我們知道，這只是化學反應：硫化汞（丹砂）加熱分解成汞（水銀）；汞再和硫結合，又變回硫化汞。</div>
+
+  <h3>意外的收穫：火藥</h3>
+  <p><span class="tag h">史實</span> 煉丹師常把硝石、硫磺、木炭拿來一起燒。唐代的煉丹書就警告：這幾樣混在一起燒，會突然起火，燒到臉和手，甚至燒掉房子。這就是最早的<b>火藥</b>紀錄之一。想長生的人，意外發明了中國四大發明之一。</p>
+
+  <div class="box warn"><div class="bh">致命的代價</div>
+  水銀、鉛、砷都有劇毒。第 7 課說過，唐朝好幾位皇帝很可能死於丹藥中毒。所以後來的道教主流，大多放棄吃外丹，改修內丹。<b>任何聲稱能長生的礦物「仙丹」都絕對不要吃。</b></div>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>「丹」本來是紅色礦石丹砂（硫化汞）。</li>
+    <li>丹砂能「變成水銀又變回來」，古人以為代表不死。</li>
+    <li>外丹意外催生火藥，卻也造成嚴重中毒，最後被內丹取代。</li>
+  </ul></div>
+</section>
+
+<section class="lesson" data-u="6" data-title="內丹：把身體當成丹爐">
+  <p class="unit">第六段・修煉　第 17 課</p>
+  <h2>內丹：把身體當成丹爐</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>丹田、任督二脈、周天的由來，以及內丹修煉的三個階段。</p>
+
+  <p><button class="t" data-t="內丹">內丹</button>借用了外丹的所有名詞，但把它們全部搬進身體：</p>
+  <div class="cmp"><table>
+    <tr><th>外丹用的</th><th>內丹比喻成</th></tr>
+    <tr><td>爐、鼎</td><td>自己的身體</td></tr>
+    <tr><td>藥材</td><td>精、氣、神</td></tr>
+    <tr><td>火候</td><td>呼吸和意念的控制</td></tr>
+    <tr><td>煉成的丹</td><td>身心合一、與道相通的狀態</td></tr>
+  </table></div>
+
+  <div class="box word"><div class="bh">「丹田」的由來</div>
+  <b>丹</b>是仙丹，<b>田</b>是種東西的田。「<button class="t" data-t="丹田">丹田</button>」就是<b>種出仙丹的田</b>。內丹認為身體有三個丹田。</div>
+
+  <div class="lab">
+    <div class="lh">三丹田與小周天</div>
+    <svg viewBox="0 0 300 280" aria-label="三丹田與任督二脈示意圖">
+      <rect x="105" y="95" width="90" height="155" rx="30" fill="var(--soft-jin)" stroke="var(--jin)" stroke-width="2"/>
+      <circle cx="150" cy="60" r="32" fill="var(--soft-jin)" stroke="var(--jin)" stroke-width="2"/>
+      <path id="zt" d="M150 262 C95 262 92 190 96 130 C99 75 112 18 150 18 C188 18 201 75 204 130 C208 190 205 262 150 262 Z" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="5 5"/>
+      <text x="60" y="150" font-size="12" fill="var(--muted)" text-anchor="middle">督脈</text><text x="60" y="166" font-size="11" fill="var(--muted)" text-anchor="middle">（背後↑）</text>
+      <text x="240" y="150" font-size="12" fill="var(--muted)" text-anchor="middle">任脈</text><text x="240" y="166" font-size="11" fill="var(--muted)" text-anchor="middle">（前面↓）</text>
+      <g class="dt" data-d="1"><circle cx="150" cy="58" r="9" fill="var(--zhu)"/><text x="166" y="54" font-size="11" fill="var(--ink)">上</text></g>
+      <g class="dt" data-d="2"><circle cx="150" cy="140" r="9" fill="var(--zhu)"/><text x="166" y="136" font-size="11" fill="var(--ink)">中</text></g>
+      <g class="dt" data-d="3"><circle cx="150" cy="205" r="9" fill="var(--zhu)"/><text x="166" y="201" font-size="11" fill="var(--ink)">下</text></g>
+      <circle id="ztDot" r="7" fill="var(--qing)" style="opacity:0"/>
+    </svg>
+    <div class="btns"><button data-dt="1">上丹田</button><button data-dt="2">中丹田</button><button data-dt="3">下丹田</button><button id="ztBtn">▶ 小周天</button></div>
+    <div class="cap" id="dtCap">點按鈕看三個丹田的位置，或播放「小周天」。</div>
+  </div>
+
+  <div class="box word"><div class="bh">任、督、周天的由來</div>
+  <b>督</b>是「統領、監督」，督脈走在背部正中間，統領全身的陽。<br>
+  <b>任</b>和「妊」（懷孕）有關，也有「擔任」的意思，任脈走在身體前面正中間，主管全身的陰。<br>
+  <b>周天</b>原本是天文學名詞：太陽、星星在天上繞一整圈。內丹借來比喻「氣在身體裡繞一圈」。武俠小說常說「打通任督二脈」，就是從這裡來的。</div>
+
+  <h3>內丹三階段</h3>
+  <p>接續第 15 課「精 → 氣 → 神」的轉化，內丹修煉通常分成三關：</p>
+  <div class="box eg">
+  <b>煉精化氣</b>：保養身體，讓精轉成氣（常說的「小周天」階段）。<br>
+  <b>煉氣化神</b>：讓氣轉成更高層次的神（常說的「大周天」階段）。<br>
+  <b>煉神還虛</b>：讓心神回到空靈、與道合一。<br>
+  在這之前通常還有一步「築基」——就像蓋房子先打地基：先把身體和生活習慣調好。</div>
+
+  <div class="box warn"><div class="bh">重要提醒</div>
+  丹田、經脈是傳統修煉和中醫的概念，現代解剖學找不到對應的實體構造。真正修內丹的傳統都強調<b>要有老師指導、循序漸進</b>。一般人最安全、最有益的部分，就是規律作息、慢而深的呼吸和靜心，而不是追求任何「特殊感覺」。</div>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>內丹：身體是爐鼎，精氣神是藥材，呼吸意念是火候。</li>
+    <li>丹田＝種仙丹的田，有上中下三個。</li>
+    <li>小周天：氣沿督脈上升、任脈下降繞一圈。三階段：煉精化氣、煉氣化神、煉神還虛。</li>
+  </ul></div>
+</section>
+
+<section class="lesson" data-u="6" data-title="養生功法與行善積德">
+  <p class="unit">第六段・修煉　第 18 課</p>
+  <h2>養生功法與行善積德</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>道教修煉不只修身體，也修品德。</p>
+
+  <h3>身體的修煉：導引、太極拳、辟穀</h3>
+  <p><button class="t" data-t="導引">導引</button>是結合動作和呼吸的健身法。「導」是引導氣，「引」是伸展身體。<span class="tag h">史實</span> 1973 年湖南馬王堆漢墓出土的〈導引圖〉，畫了四十多個人在做各種伸展動作，證明兩千多年前就有這種運動。東漢名醫華佗模仿老虎、鹿、熊、猿、鳥的動作，編出「五禽戲」。</p>
+  <p>太極拳的名字來自第 3 課的「太極」，動作講求圓轉、陰陽虛實交替。<span class="tag l">傳說</span> 常說是武當山道士張三豐所創，但史學界多認為這個說法無法證實。</p>
+  <p><button class="t" data-t="辟穀">辟穀</button>是不吃五穀（米、麥等主食）的修煉法。「辟」是「避開」的意思。</p>
+  <div class="box warn"><div class="bh">辟穀的安全提醒</div>
+  長時間不吃東西，可能造成低血糖、營養不良、器官損傷。國中生正在發育，<b>絕對不要嘗試辟穀或長時間斷食</b>。了解它是一種文化和歷史就好。</div>
+
+  <h3>品德的修煉：行善才是基本功</h3>
+  <p>很多人以為道教修煉只是打坐、練氣。其實葛洪在《抱朴子》裡就強調，想成仙要先做好人：要以忠孝、和順、仁信為根本，只修方術而不修德行，也不能長生。</p>
+  <div class="box word"><div class="bh">「承負」：前人種樹，後人乘涼</div>
+  《太平經》提出「<button class="t" data-t="承負">承負</button>」的觀念：<b>前人做的事，後人要承擔</b>。祖先做了壞事，子孫可能受連累；祖先行善，子孫會得福。這跟俗語「前人種樹，後人乘涼」很像，也讓人做事時會想到下一代。</div>
+
+  <h3>功過格：古人的行為記錄本</h3>
+  <p>宋金時期開始流行一種叫<button class="t" data-t="功過格">功過格</button>的小冊子，列出各種好事和壞事，每做一件就記上分數。「功」是做好事，「過」是犯錯，「格」是表格。每天晚上自己記，看看今天是加分還是扣分。</p>
+  <div class="lab">
+    <div class="lh">試試看：今天的功過格（練習版，分數是本課自訂的）</div>
+    <div class="check" id="gg">
+      <label><input type="checkbox" value="1">主動幫家人做家事<em>+1</em></label>
+      <label><input type="checkbox" value="2">安慰難過的同學<em>+2</em></label>
+      <label><input type="checkbox" value="3">撿到東西交還失主<em>+3</em></label>
+      <label><input type="checkbox" value="1">不亂丟垃圾，還撿起別人的<em>+1</em></label>
+      <label><input type="checkbox" value="-2">說謊騙人<em>−2</em></label>
+      <label><input type="checkbox" value="-2">取笑別人的缺點<em>−2</em></label>
+      <label><input type="checkbox" value="-1">浪費食物<em>−1</em></label>
+    </div>
+    <div class="tally" id="ggT">今天：0 分</div>
+  </div>
+  <p>功過格的意義不是真的算分數，而是讓人每天<b>回頭看自己做了什麼</b>。這和今天老師要你寫的反思日記，其實是一樣的道理。</p>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>導引、五禽戲、太極拳是身體修煉；辟穀有危險，不要嘗試。</li>
+    <li>道教強調修德是修仙的根本。</li>
+    <li>承負：前人行為後人承擔；功過格：每天記錄善惡。</li>
+  </ul></div>
+</section>
+<!-- ============ 第七段 ============ -->
+<section class="lesson" data-u="7" data-title="符、籙、咒與法器">
+  <p class="unit">第七段・儀式與生活　第 19 課</p>
+  <h2>符、籙、咒與法器</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>道士做儀式時用的「文件」和「工具」各是什麼。</p>
+
+  <p>第 10 課說過，道教把天界想像成一個大政府。那麼，人要請神明幫忙，就要用「政府的方式」：寫公文、蓋印章、出示證件。</p>
+
+  <div class="box word"><div class="bh">符、籙、咒的由來</div>
+  <b><button class="t" data-t="符">符</button></b>：古代朝廷調兵用的「兵符」，一塊信物剖成兩半，合起來對得上才算數。道教的符就是<b>寫給神明看的命令書</b>，要「合符」才生效。<br>
+  <b><button class="t" data-t="籙">籙</button></b>：同「錄」，是<b>名冊</b>。上面記載神明、神將的名字和職務。道士「受籙」，就像拿到公務員的任命書和通訊錄，從此有資格調動這些神將。<br>
+  <b><button class="t" data-t="咒">咒</button></b>：本來寫作「祝」，是祭祀時對神說的禱詞。後來變成唸出來的法語。</div>
+
+  <div class="box eg"><div class="bh">三者合起來看</div>
+  籙＝<b>身分證和任命書</b>（證明你是誰、能指揮誰）<br>
+  符＝<b>寫好的公文</b>（要辦什麼事）<br>
+  咒＝<b>口頭命令</b>（唸出來送出去）<br>
+  很多咒語最後的「急急如律令」，其實是漢朝公文的結尾用語，意思是「立刻依照法令執行」。</div>
+
+  <h3>法器：道士的工具箱</h3>
+  <p>點開每一張卡片：</p>
+  <div class="cards">
+    <button><b>帝鐘</b><i>點開</i><span>有柄的小銅鈴，搖響用來召請神明、振奮精神。柄頂常做成「山」字形代表三清，所以也叫三清鈴。</span></button>
+    <button><b>法劍</b><i>點開</i><span>常刻北斗七星，叫七星劍，象徵斬除邪氣。儀式用，通常不開鋒。</span></button>
+    <button><b>令牌</b><i>點開</i><span>長方形木牌，刻「五雷號令」等字。拍在桌上表示發號施令，像法官敲法槌。</span></button>
+    <button><b>朝板</b><i>點開</i><span>古代官員上朝手拿的「笏」。道士拿著它朝見神明，表示自己是向天庭報告的官員。</span></button>
+    <button><b>法印</b><i>點開</i><span>刻著神明或道派名號的印章，蓋在符和文書上，證明這份公文是真的。</span></button>
+    <button><b>拂塵</b><i>點開</i><span>木柄上綁一束獸毛或馬尾。原本用來趕蚊蠅、拂灰塵，後來象徵拂去心中的煩惱塵埃。</span></button>
+  </div>
+
+  <div class="box warn"><div class="bh">理性看待</div>
+  符咒是一種宗教文化，研究它能幫我們了解古人怎麼想像世界。但它不能代替醫生、藥物和法律。生病要看醫生；有人用符咒向你收高額費用、或說「不做就會有大災難」，要特別小心（第 24 課會再談）。</div>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>符＝命令書（來自兵符）；籙＝神將名冊與任命書；咒＝口頭法語。</li>
+    <li>「急急如律令」原是漢代公文結尾。</li>
+    <li>法器：帝鐘、法劍、令牌、朝板、法印、拂塵。</li>
+  </ul></div>
+</section>
+
+<section class="lesson" data-u="7" data-title="齋醮：道教的大型儀式">
+  <p class="unit">第七段・儀式與生活　第 20 課</p>
+  <h2>齋醮：道教的大型儀式</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>「齋」「醮」「科儀」的意思，以及台灣廟會「建醮」在做什麼。</p>
+
+  <div class="box word"><div class="bh">齋、醮、科儀的由來</div>
+  <b><button class="t" data-t="齋">齋</button></b>：本來是祭祀前讓身心乾淨——洗澡、吃素、不喝酒、不做壞事。今天說「吃齋」就是從這裡來的。<br>
+  <b><button class="t" data-t="醮">醮</button></b>：古代的一種祭祀，擺上酒和祭品，向神明祈求。<br>
+  <b><button class="t" data-t="科儀">科儀</button></b>：「科」是規則條目，「儀」是儀式。科儀就是<b>有固定規則的儀式流程</b>，像學校的畢業典禮有固定程序一樣。</div>
+  <p>早期「齋」和「醮」是兩種不同的儀式：齋偏重懺悔、潔淨；醮偏重祭祀、祈福。後來常合在一起舉行，就叫「齋醮」。</p>
+
+  <h3>台灣的「建醮」</h3>
+  <p>如果你在台灣看過整個社區掛滿燈籠、家家戶戶吃素、廟前搭起高高的燈篙，那可能就是在「建醮」。建醮通常是廟宇重建完成、或每隔幾年一次，向天地神明<b>謝恩、祈求平安</b>。</p>
+  <div class="lab">
+    <div class="lh">一場醮典的大致流程（按順序點）</div>
+    <div class="btns" id="jiaoBtns"></div>
+    <div class="cap" id="jiaoCap">從第一步開始點。</div>
+  </div>
+  <p class="bai" style="padding-left:0">各地、各派的流程和名稱差很多，上面是常見的簡化版本。</p>
+
+  <h3>中元普渡</h3>
+  <p>農曆七月十五的中元節，道教稱為「地官赦罪」的日子（下一課會講三元）。這一天也和佛教的「盂蘭盆會」結合，形成台灣大規模的「<button class="t" data-t="普渡">普渡</button>」：準備很多食物，請無人祭拜的孤魂野鬼來吃。「普」是普遍，「渡」是救渡——讓所有的靈魂都得到照顧。</p>
+
+  <details class="think"><summary>想一想：為什麼建醮時整個社區都要吃素？</summary>
+  <p>參考：因為「齋」的本意是讓身心潔淨。全社區一起吃素，表示大家一起誠心準備。它同時也讓社區的人有共同參與的感覺，是一種凝聚力。</p></details>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>齋＝潔淨身心；醮＝祭祀祈福；科儀＝有規則的儀式流程。</li>
+    <li>建醮是向神明謝恩、祈求平安的大型儀式，常包含普渡。</li>
+    <li>中元普渡結合道教地官赦罪與佛教盂蘭盆會。</li>
+  </ul></div>
+</section>
+
+<section class="lesson" data-u="7" data-title="宮觀、道士與參拜禮儀">
+  <p class="unit">第七段・儀式與生活　第 21 課</p>
+  <h2>宮觀、道士與參拜禮儀</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>道教的場所怎麼命名、道士有哪些類型，以及到廟裡該注意的禮儀。</p>
+
+  <h3>宮、觀、廟、壇</h3>
+  <div class="box word"><div class="bh">「觀」的由來</div>
+  「<button class="t" data-t="觀">觀</button>」在這裡讀 guàn。<span class="tag l">傳說</span> 老子西行時，守關的官員尹喜在終南山結草搭樓，用來觀看星象，這座樓叫「樓觀」。尹喜攔下老子，請他寫下《道德經》。後來道士住的地方就叫「觀」。<br>
+  「<b>宮</b>」本來是帝王住的地方，規模大、或受過皇帝封賜的道教建築常叫「宮」。合起來就叫「<b>宮觀</b>」。</div>
+  <p>「廟」泛指祭祀神明的地方，不一定屬於道教；「壇」是做法事的場所，台灣很多道士自己開設的道壇就叫「某某壇」。</p>
+
+  <h3>道士的類型</h3>
+  <div class="cmp"><table>
+    <tr><th></th><th>出家道士（全真為主）</th><th>火居道士（正一為主）</th></tr>
+    <tr><td>住哪裡</td><td>宮觀</td><td>自己家</td></tr>
+    <tr><td>婚姻</td><td>不結婚</td><td>可以結婚</td></tr>
+    <tr><td>飲食</td><td>吃素</td><td>平時不一定吃素，做法事前要齋戒</td></tr>
+    <tr><td>主要工作</td><td>修行、住持宮觀</td><td>替人做科儀、法事</td></tr>
+  </table></div>
+  <div class="box word"><div class="bh">「火居」的由來</div>
+  「<button class="t" data-t="火居">火居</button>」就是<b>住在有灶火的家裡</b>，過一般人的家庭生活。相對的，出家就是離開家庭。</div>
+  <p>入道的人會得到一個「<button class="t" data-t="道號">道號</button>」，像是一個修行用的新名字。例如王重陽的道號是「重陽子」，丘處機的道號是「長春子」。女性道士叫「坤道」，男性叫「乾道」——這兩個詞就是從第 3 課的八卦「乾（天）」「坤（地）」來的。</p>
+
+  <h3>去宮廟參拜的禮儀</h3>
+  <div class="box eg">
+  <b>1. 龍進虎出</b>：面對廟門，右手邊是「龍邊」、左手邊是「虎邊」。從龍邊的門進去，從虎邊的門出來。<br>
+  <b>2. 中門不走</b>：正中間的門是給神明走的。<br>
+  <b>3. 不踩門檻</b>：跨過去就好，門檻象徵廟的莊嚴。<br>
+  <b>4. 衣著整齊、輕聲說話</b>：就像拜訪長輩的家。<br>
+  <b>5. 打招呼</b>：遇到道士可以拱手，道教界常用「無量天尊」或「慈悲」互相問候。</div>
+  <p>龍邊和虎邊的說法，是從神明坐在廟裡往外看的角度來分的：神明的左手邊是青龍，右手邊是白虎，而古代以左為尊，所以從龍邊進。</p>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>觀（guàn）來自尹喜的「樓觀」傳說；宮是規模大或受封的道教建築。</li>
+    <li>道士分出家道士與火居道士；台灣多為火居的正一道士。</li>
+    <li>參拜禮儀：龍進虎出、不走中門、不踩門檻。</li>
+  </ul></div>
+</section>
+
+<section class="lesson" data-u="7" data-title="道教的節日：三元與神明生日">
+  <p class="unit">第七段・儀式與生活　第 22 課</p>
+  <h2>道教的節日：三元與神明生日</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>上元、中元、下元是怎麼來的，以及它們和我們今天過的節日有什麼關係。</p>
+
+  <p>你一定過過元宵節和中元節，但你知道它們原本是道教的節日嗎？它們屬於同一組，叫「<button class="t" data-t="三元">三元</button>」。</p>
+  <div class="box word"><div class="bh">「元」的由來</div>
+  「元」的古字畫的是一個人，上面特別強調頭部。頭是身體的開始，所以「元」有「最開始、根本」的意思，像「元旦」「元首」。三元就是三個重要的起點日。</div>
+
+  <div class="lab">
+    <div class="lh">三官大帝與三元節</div>
+    <div class="btns" id="syBtns">
+      <button data-sy="0">上元</button><button data-sy="1">中元</button><button data-sy="2">下元</button>
+    </div>
+    <div class="cap" id="syCap">點一個節日。</div>
+  </div>
+  <p>三元各由一位「官」主管，合稱「<b>三官大帝</b>」：天官、地官、水官。早期天師道替人治病時，會寫三封懺悔信，一封放在山上給天官、一封埋在地下給地官、一封沉到水裡給水官，叫「三官手書」。<span class="tag h">史實</span> 這個做法記載在史書裡，三官信仰就是這樣開始的。</p>
+
+  <h3>其他重要日子（農曆）</h3>
+  <div class="cmp"><table>
+    <tr><th>日期</th><th>節日</th><th>說明</th></tr>
+    <tr><td>正月初九</td><td>天公生</td><td>玉皇大帝的生日，台灣很多人半夜就開始拜</td></tr>
+    <tr><td>二月十五</td><td>太上老君聖誕</td><td>道教一般以這天紀念老子</td></tr>
+    <tr><td>三月二十三</td><td>媽祖生</td><td>各地媽祖遶境最熱鬧的時候</td></tr>
+    <tr><td>五月初五</td><td>端午</td><td>道教視為驅邪避疫的日子，掛艾草、菖蒲</td></tr>
+    <tr><td>臘月二十四</td><td>送神</td><td>送灶神等回天庭報告一年的事（各地日期略有不同）</td></tr>
+  </table></div>
+
+  <details class="think"><summary>想一想：為什麼三元都在「十五」？</summary>
+  <p>參考：農曆十五是滿月，月亮最圓最亮。古人用月亮記時間，滿月是最容易記、也最有象徵意義的日子。</p></details>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>三元：上元正月十五（天官賜福）、中元七月十五（地官赦罪）、下元十月十五（水官解厄）。</li>
+    <li>三官信仰來自天師道的「三官手書」。</li>
+    <li>元宵、中元、天公生、送神都和道教有關。</li>
+  </ul></div>
+</section>
+
+<!-- ============ 第八段 ============ -->
+<section class="lesson" data-u="8" data-title="道教藏在文化的哪裡">
+  <p class="unit">第八段・專業之路　第 23 課</p>
+  <h2>道教藏在文化的哪裡</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>即使不信教，道教也早就在你的語言、醫學、科學和故事裡。</p>
+
+  <h3>成語和俗語</h3>
+  <div class="cards">
+    <button><b>脫胎換骨</b><i>點開</i><span>道教說修煉成功的人，會換掉凡人的胎體和骨頭，變成仙體。今天比喻徹底改變、變得更好。</span></button>
+    <button><b>一人得道，雞犬升天</b><i>點開</i><span>傳說漢朝淮南王劉安修煉成仙，剩下的仙藥被家裡的雞和狗吃了，也跟著飛上天。今天多用來諷刺一人當官、親友都沾光。</span></button>
+    <button><b>靈丹妙藥</b><i>點開</i><span>來自煉丹。今天比喻能解決問題的好辦法。</span></button>
+    <button><b>爐火純青</b><i>點開</i><span>煉丹時爐火從紅變成純青色，代表火候到了。今天比喻功夫非常純熟。</span></button>
+    <button><b>急急如律令</b><i>點開</i><span>第 19 課學過：漢代公文用語，被道教咒語借用。今天常開玩笑說「快點快點」。</span></button>
+    <button><b>天機不可洩漏</b><i>點開</i><span>天的祕密不能說出去。今天用在不能透露的事情上。</span></button>
+  </div>
+
+  <h3>醫學與科學</h3>
+  <p>很多中醫大師和道教關係很深：葛洪（第 6 課）、陶弘景整理中藥書、唐代的孫思邈寫了《千金要方》，被後人尊為「藥王」。道教追求長生，所以特別重視身體、藥物和養生，客觀上推動了古代醫學和化學的發展，火藥就是例子（第 16 課）。</p>
+
+  <h3>文學和娛樂</h3>
+  <p>《西遊記》裡的太上老君、玉皇大帝、煉丹爐；明代小說《封神演義》裡的元始天尊、姜子牙；金庸武俠的全真教、武當派；今天的仙俠小說、修仙遊戲，說的「築基、結丹、元嬰、渡劫」，很多是從道教內丹的名詞借來的，再加上大量想像。</p>
+  <div class="box eg"><div class="bh">分清楚：小說 vs 真實道教</div>
+  小說裡的「修仙等級」「飛劍」「法寶大戰」是創作。真實的道教修行比較像：每天誦經、靜坐、守戒律、做科儀、照顧信眾。讀小說時知道哪些是借來的名詞、哪些是作者的發明，是很好的練習。</div>
+
+  <h3>藝術與建築</h3>
+  <p>道教宮觀的屋頂剪黏、門神彩繪、八卦藻井；書法家王羲之、畫家黃公望都與道教有淵源；台灣廟宇本身就是一座民間藝術博物館。</p>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>很多成語來自道教：脫胎換骨、爐火純青、雞犬升天。</li>
+    <li>道教推動古代醫學與化學，孫思邈被尊為藥王。</li>
+    <li>仙俠小說的名詞借自內丹，但內容多為創作。</li>
+  </ul></div>
+</section>
+
+<section class="lesson" data-u="8" data-title="怎麼深入研究，以及理性看待">
+  <p class="unit">第八段・專業之路　第 24 課</p>
+  <h2>怎麼深入研究，以及理性看待</h2>
+  <p class="goal"><b>這堂課要搞懂：</b>從「知道一些」到「專業」的三條路，以及如何保護自己。</p>
+
+  <p>恭喜你走到山頂附近了。接下來，要看你想往哪個方向繼續走。</p>
+
+  <h3>路線一：學術研究</h3>
+  <p>在大學裡，道教屬於<b>宗教學、歷史學、中文、人類學</b>研究的範圍。學者不一定信道教，而是用客觀的方法去了解它。</p>
+  <div class="box eg"><div class="bh">可以找來讀的書（由淺到深）</div>
+  <b>工具書</b>：遇到不懂的名詞，可查《中華道教大辭典》（胡孚琛主編）這類道教辭典。<br>
+  <b>通史</b>：想了解完整歷史，可讀《中國道教史》（卿希泰主編，多卷本）。<br>
+  <b>原典</b>：先讀本課程第 14 課列的經典，挑有白話注釋的版本。<br>
+  <b>外國人的觀點</b>：荷蘭學者施舟人（Kristofer Schipper）在台灣台南拜道士為師、正式受籙，再寫書向西方介紹道教，是「既當研究者、又親身參與」的著名例子。</div>
+
+  <h3>路線二：田野觀察</h3>
+  <div class="box word"><div class="bh">什麼是「田野調查」？</div>
+  「<button class="t" data-t="田野調查">田野調查</button>」不是去田裡，而是<b>到事情真正發生的地方</b>去觀察、訪談、記錄。研究道教的人會去看醮典、跟道士聊天、拍照記錄儀式流程。</div>
+  <p>你現在就能做：選一間家附近的廟，記下主神是誰、廟名是宮還是寺、有哪些陪祀神明、有沒有道士，然後用這門課學到的知識來分析。</p>
+
+  <h3>路線三：親身修行</h3>
+  <p>如果長大後真的想入道，正式的途徑是：拜有傳承的師父、在宮觀學習（全真）或經過傳度、受籙（正一）。這需要多年時間，也要成年後自己做決定。</p>
+
+  <h3>理性看待：分辨文化和詐騙</h3>
+  <div class="box warn"><div class="bh">遇到這些情況，要提高警覺</div>
+  1. 說你「犯了大煞」，一定要花很多錢做法才能化解。<br>
+  2. 說不照做家人就會生病、出車禍，製造恐懼。<br>
+  3. 要你生病不要看醫生，只喝符水或吃「仙丹」。<br>
+  4. 要你保密，不能跟家人或老師說。<br>
+  5. 要求獨處、身體接觸，或要你交出私人照片和資料。<br>
+  <b>正派的宗教不會用恐嚇、保密和金錢逼你。</b>遇到這些情況，要馬上告訴信任的大人。</div>
+
+  <details class="think"><summary>最後一題：學完這門課，你覺得道教最核心的一個想法是什麼？</summary>
+  <p>參考答案之一：「人可以透過修身、修心、行善，讓自己越來越接近宇宙的道。」你的答案可以不一樣——能用自己的話說出來，就代表你真的學會了。</p></details>
+
+  <div class="sum"><h4>本課重點</h4><ul>
+    <li>三條深入的路：學術研究、田野觀察、親身修行。</li>
+    <li>田野調查＝到現場觀察、訪談、記錄。</li>
+    <li>正派宗教不會用恐嚇、保密和金錢逼迫人。</li>
+  </ul></div>
+</section>
+
+<!-- 總複習 -->
+<section class="lesson" data-u="9" data-title="總複習測驗">
+  <p class="unit">山頂・總複習</p>
+  <h2>總複習測驗</h2>
+  <p class="goal"><b>十五題，</b>涵蓋全部八段。點選答案會立刻看到解說。</p>
+  <div id="quiz"></div>
+  <div class="score" id="score"></div>
+  <button class="start" id="quizReset" style="background:var(--qing)">重新作答</button>
+</section>
+
+<section class="lesson" data-u="9" data-title="名詞總表">
+  <p class="unit">山頂・工具</p>
+  <h2>名詞總表</h2>
+  <p class="goal">課程裡所有專有名詞，按出現順序排列。點一下看讀音和由來。</p>
+  <div class="gl" id="gl"></div>
+</section>
+</main>
+
+<div class="veil" id="veil"></div>
+<nav class="drawer" id="drawer" aria-label="課程目錄"></nav>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shT">
+  <button class="x" id="shX" aria-label="關閉">✕</button>
+  <h4 id="shT"></h4><div class="py" id="shP"></div><div id="shB"></div>
+</div>
+<div class="pager"><div class="pager-in">
+  <button id="prev">上一課</button><div class="pn" id="pn"></div><button class="nx" id="next">下一課</button>
+</div></div>
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- 名詞與由來 ---------- */
+const G={
+"宗教":["zōng jiào","「宗」是屋頂下有祭台，原本是祭祀祖先的地方，引申為「被尊崇的根本」；「教」是教導。近代日本人用「宗教」兩字翻譯英文 religion，再傳回中文，才變成今天的意思。"],
+"道家":["dào jiā","「家」在這裡是「學派」，像「百家爭鳴」的家。道家就是以「道」為核心的學派。漢代的司馬談把先秦思想分成六家，其中一家就叫道家。"],
+"道教":["dào jiào","以「道」為最高信仰的宗教。東漢末年以張道陵的天師道為代表正式形成，把老子奉為神明「太上老君」。"],
+"金文":["jīn wén","古代把青銅叫做「金」。鑄或刻在商周青銅器（像鐘、鼎）上的文字就叫金文，大約比甲骨文晚一點。"],
+"陰陽":["yīn yáng","最早指山的兩面：向陽的一面叫陽，背陰的一面叫陰。後來用來稱呼一切相對又相連的兩面，例如日夜、冷熱、動靜。"],
+"太極":["tài jí","「極」本來是房屋最高的那根大梁，引申為「最高、盡頭」；「太」是「更」。太極就是「比最開始還要開始」的源頭。《易傳》說：「易有太極，是生兩儀。」兩儀就是陰陽。"],
+"五行":["wǔ xíng","木、火、土、金、水。「行」是運行、走動，表示這五種東西會互相推動、互相制衡，而不是靜止不動的材料。"],
+"八卦":["bā guà","「卦」的左邊「圭」表示讀音，右邊「卜」表示和占卜有關。八卦就是用陰陽線疊三層組成的八個符號，最早用來占卜，後來代表八種自然現象。"],
+"巫":["wū","上古負責和鬼神溝通的人：求雨、治病、占卜、主持祭祀。甲骨文的「巫」像兩個交叉的工具。"],
+"方士":["fāng shì","「方」是方法、技術，像「藥方」「祕方」。方士就是掌握煉藥、占星、求仙等技術的人，戰國到秦漢時很活躍。"],
+"黃老":["huáng lǎo","黃帝和老子。戰國到漢初，有人把治國養生的學問託名給黃帝，再和老子的思想結合，叫黃老之學。主張少干擾百姓、讓社會自然恢復。"],
+"天師":["tiān shī","天派下來的老師。《莊子》裡黃帝曾尊稱一位牧馬少年為「天師」。道教用來稱張道陵和他的子孫。"],
+"五斗米道":["wǔ dǒu mǐ dào","因為入道要繳五斗米而得名，這是外人的叫法。信徒自稱「正一盟威之道」，後來稱天師道。漢代五斗約等於今天 10 公升。"],
+"太平道":["tài píng dào","「太平」是天下安定、沒有戰亂。張角以《太平經》為依據創立，184 年發動黃巾之亂。"],
+"抱朴子":["bào pǔ zǐ","「朴」同「樸」，本來是還沒加工的原木，比喻純樸的本性。「抱朴」就是守住本來的樣子，出自《道德經》「見素抱樸」。葛洪用它當自己的號，也當書名。"],
+"三洞":["sān dòng","洞真、洞玄、洞神三大類道經。「洞」是「通」，通往道的途徑。陸修靜最早用這個方法分類經書。"],
+"謫仙":["zhé xiān","「謫」是被貶官、被處罰調到遠方。謫仙就是犯了錯、被貶到人間的神仙。賀知章用它來稱讚李白。"],
+"內丹":["nèi dān","在身體「裡面」煉的丹。以身體為爐鼎、精氣神為藥材、呼吸意念為火候，宋代以後成為道教修煉的主流。"],
+"全真":["quán zhēn","「保全本真」：保住人本來真實、純淨的本性。王重陽在他修行的庵上題名「全真堂」，派名由此而來。"],
+"正一":["zhèng yī","來自天師道的正式名稱「正一盟威之道」。「正」是正道，「一」是道的根本。元代起成為南方符籙各派的總稱。"],
+"三清":["sān qīng","玉清、上清、太清三層最高的天，以及住在其中的元始天尊、靈寶天尊、道德天尊。「清」是清淨，形容那裡沒有一點污濁。"],
+"玉皇大帝":["yù huáng dà dì","「玉」代表最珍貴純潔，「皇」是君王。宋真宗時正式上了很長的「玉皇大天帝」尊號，此後在民間地位越來越高，台灣俗稱「天公」。"],
+"福德正神":["fú dé zhèng shén","土地公的正式稱號。「福德」是有福氣、有德行，「正神」是正統、受承認的神明。"],
+"城隍":["chéng huáng","《說文解字》說：隍是城外的壕溝，有水的叫「池」，沒有水的叫「隍」。城牆和壕溝守護一座城，後來被神化成守護城市的神。"],
+"民間信仰":["mín jiān xìn yǎng","老百姓在生活中自然形成的信仰，沒有單一教主和固定經典，常同時拜道教、佛教和地方神明。"],
+"仙":["xiān","「人」＋「山」。《釋名》說：老而不死叫仙，仙就是「遷」，搬到山裡去。古代也寫成「僊」。"],
+"羽化":["yǔ huà","像蟲長出翅膀、人長出羽毛一樣飛走。蘇軾〈赤壁賦〉有「羽化而登仙」。道士過世也稱羽化。"],
+"經":["jīng","左邊「糸」是絲線。本來是織布機上直的那一排線，先固定好，橫線才能穿梭。引申為最基本、不會變的道理，重要的書就叫經。"],
+"道藏":["dào zàng","「藏」讀 zàng，是收藏東西的大倉庫。道藏就是道教經書的全集。"],
+"洞":["dòng","山洞能從這頭通到那頭，所以「洞」有「通透、貫通」的意思，像「洞悉」。道藏的三洞就是三條通往道的途徑。"],
+"善書":["shàn shū","勸人做好事的書，常由善心人士出錢印刷免費贈送，相信印書送人也是一種功德。"],
+"真人":["zhēn rén","出自《莊子》，指真正懂得道的人：不怕死、不貪求、內心平靜。後來道教用來尊稱修道有成的人。"],
+"黃庭":["huáng tíng","「黃」在五行屬土，代表中央；「庭」是院子。黃庭就是身體中央的院子，也是《黃庭經》的書名。"],
+"精氣神":["jīng qì shén","人身三寶。精：挑選過的好米，引申為最精華的物質。氣：天上的雲氣。神：祭壇（示）加上閃電（申）。"],
+"炁":["qì","「氣」的另一種寫法，道教常用來專指先天、原始的生命能量，和呼吸的空氣做區分。"],
+"外丹":["wài dān","在身體「外面」用爐鼎燒煉礦物做成的丹藥。「丹」本來指紅色礦石丹砂。"],
+"丹田":["dān tián","種出仙丹的田。內丹說人有上、中、下三個丹田，一般說的丹田指肚臍下方的下丹田。"],
+"導引":["dǎo yǐn","「導」是引導氣，「引」是伸展身體。結合呼吸和動作的健身法，馬王堆漢墓就出土過〈導引圖〉。"],
+"辟穀":["bì gǔ","「辟」讀 bì，是避開；「穀」是米麥等主食。辟穀就是不吃主食的修煉法。長時間斷食對身體有危險，尤其是青少年。"],
+"承負":["chéng fù","《太平經》的觀念。「承」是承接，「負」是擔負：前人做的事，後人要承擔結果。"],
+"功過格":["gōng guò gé","「功」是好事，「過」是過錯，「格」是表格。把善惡行為列成表、每天記分的小冊子。"],
+"符":["fú","原本是朝廷調兵的「兵符」，一個信物剖成兩半，合起來對上才算數。道教的符是寫給神明的命令書。"],
+"籙":["lù","同「錄」，名冊。記載神明、神將名字與職務的冊子。道士「受籙」就像拿到任命書和通訊錄。"],
+"咒":["zhòu","本來寫作「祝」，是祭祀時向神說的禱詞，後來變成唸出來的法語。"],
+"齋":["zhāi","祭祀前讓身心潔淨：沐浴、吃素、不喝酒、收斂行為。今天「吃齋」就是從這裡來。"],
+"醮":["jiào","古代的一種祭祀，擺設酒和祭品向神明祈求。後來專指道教的祈福大典，像「建醮」。"],
+"科儀":["kē yí","「科」是規則條目，「儀」是儀式。有固定規則和程序的宗教儀式。"],
+"普渡":["pǔ dù","「普」是普遍，「渡」是救渡、渡過苦海。普渡就是照顧所有孤魂，讓大家都得到救渡。"],
+"觀":["guàn","這裡讀 guàn。相傳尹喜結草為樓觀看星象，叫「樓觀」，後來道士住的地方就叫觀。"],
+"火居":["huǒ jū","住在有灶火的家裡，過一般家庭生活。火居道士可以結婚，台灣正一道士大多是火居。"],
+"道號":["dào hào","入道後取的修行名字，像王重陽的「重陽子」、丘處機的「長春子」。"],
+"三元":["sān yuán","上元（正月十五）、中元（七月十五）、下元（十月十五）。「元」是開始、根本。分別由天官、地官、水官主管。"],
+"田野調查":["tián yě diào chá","「田野」借自英文 fieldwork，意思是到事情實際發生的現場去觀察、訪談、記錄，不是真的去田裡。"]
+};
+
+/* ---------- 課程翻頁 ---------- */
+const L=$$('.lesson');
+const UN=['課程地圖','第一段・認識道教','第二段・道教怎麼誕生','第三段・一路長大的歷史','第四段・神仙世界','第五段・經典','第六段・修煉','第七段・儀式與生活','第八段・專業之路','山頂'];
+let cur=0; const seen=new Set();
+try{const s=JSON.parse(localStorage.getItem('taoCourseV1')||'{}');
+  if(Number.isInteger(s.cur)&&s.cur>=0&&s.cur<L.length)cur=s.cur;
+  (s.seen||[]).forEach(i=>seen.add(i));}catch(e){}
+function save(){try{localStorage.setItem('taoCourseV1',JSON.stringify({cur,seen:[...seen]}))}catch(e){}}
+const path=$('#path');
+L.forEach(()=>path.appendChild(document.createElement('i')));
+function label(i){return i===0?'課程地圖':(i<=24?i+'. '+L[i].dataset.title:L[i].dataset.title)}
+function buildToc(){
+  const d=$('#drawer'); d.innerHTML='<h3 style="color:var(--ink);font-size:20px;margin-top:0">目錄</h3>';
+  let u=-1;
+  L.forEach((s,i)=>{
+    const su=+s.dataset.u;
+    if(su!==u){u=su;const h=document.createElement('h3');h.textContent=UN[u];d.appendChild(h)}
+    const b=document.createElement('button');b.textContent=label(i);b.dataset.i=i;
+    if(i===cur)b.classList.add('cur'); if(seen.has(i)&&i!==cur)b.classList.add('dn');
+    b.onclick=()=>{closeAll();show(i)}; d.appendChild(b);
+  });
+}
+function show(i){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=i;
+  if(i<0||i>=L.length)return;
+  L.forEach(s=>s.classList.remove('show'));
+  cur=i; L[i].classList.add('show'); seen.add(i);
+  $('#topTitle').textContent=i===0?'道教入門到專業':label(i);
+  $('#pn').textContent=i===0?'課程地圖':(i<=24?'第 '+i+' 課／共 24 課':L[i].dataset.title);
+  $('#prev').disabled=i===0; $('#next').disabled=i===L.length-1;
+  $('#next').textContent=i===0?'開始上課':'下一課';
+  [...path.children].forEach((t,k)=>{t.className=k===i?'now':(seen.has(k)?'on':'')});
+  window.scrollTo(0,0); save();
+}
+$('#prev').onclick=()=>show(cur-1);
+$('#next').onclick=()=>show(cur+1);
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g)show(+g.dataset.go)});
+
+/* 抽屜、名詞卡 */
+const veil=$('#veil'),drawer=$('#drawer'),sheet=$('#sheet');
+function closeAll(){veil.classList.remove('show');drawer.classList.remove('show');sheet.classList.remove('show')}
+$('#tocBtn').onclick=()=>{buildToc();drawer.classList.add('show');veil.classList.add('show')};
+veil.onclick=closeAll; $('#shX').onclick=closeAll;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAll()});
+function term(k){const g=G[k];if(!g)return;
+  $('#shT').textContent=k;$('#shP').textContent='讀音：'+g[0];$('#shB').textContent=g[1];
+  sheet.classList.add('show');veil.classList.add('show');$('#shX').focus()}
+document.addEventListener('click',e=>{const t=e.target.closest('.t');if(t)term(t.dataset.t)});
+const gl=$('#gl');
+Object.keys(G).forEach(k=>{const b=document.createElement('button');b.innerHTML='<b></b> <span></span>';
+  b.querySelector('b').textContent=k;b.querySelector('span').textContent=G[k][0];b.onclick=()=>term(k);gl.appendChild(b)});
+
+/* 深淺色 */
+const root=document.documentElement;
+try{const th=localStorage.getItem('taoTheme');if(th)root.dataset.theme=th}catch(e){}
+$('#themeBtn').onclick=()=>{
+  const dark=root.dataset.theme?root.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+  root.dataset.theme=dark?'light':'dark';try{localStorage.setItem('taoTheme',root.dataset.theme)}catch(e){}};
+
+/* 翻開卡片 */
+document.addEventListener('click',e=>{const c=e.target.closest('.cards button');if(c)c.classList.toggle('open')});
+
+/* 第2課：道字 */
+const daoCap={1:'「行」：在金文裡畫的是一個十字路口，意思是道路、行走。',
+  2:'「首」：畫的是一顆頭，上面還有頭髮。在這裡代表「人」。',
+  3:'合起來：把一顆頭放在十字路口中間——一個人走在路上，這就是「道」。後來「行」簡化成「辶」（走之旁）。'};
+const road=$('#daoRoad'),head=$('#daoHead');head.style.transition='transform .7s, opacity .5s';road.style.transition='opacity .5s';
+$$('#daoBtns button').forEach(b=>b.onclick=()=>{
+  const s=+b.dataset.s; $$('#daoBtns button').forEach(x=>x.classList.toggle('on',x===b));
+  road.style.opacity=s===2?.2:1;
+  head.style.opacity=s===1?0:1;
+  head.style.transform=s===2?'translate(120px,95px) scale(2.2)':'translate(120px,85px) scale(1)';
+  $('#daoCap').textContent=daoCap[s];});
+
+/* 第3課：陰陽 */
+const yyR=$('#yyR');
+function yy(){const h=+yyR.value,yang=(1-Math.cos(h/24*2*Math.PI))/2;
+  $('#yyYang').style.width=(yang*100)+'%';
+  let t;
+  if(h===0)t='子時（半夜）：陰最多。但就從這一刻起，陽開始回來了，古人叫「一陽來復」。';
+  else if(h<6)t='天還沒亮：陰多陽少，但陽正一點一點增加。';
+  else if(h===6)t='日出：陰陽差不多一半一半，陽正在上升。';
+  else if(h<12)t='上午：陽越來越多，陰越來越少。';
+  else if(h===12)t='午時（中午）：陽最多。可是從這一刻起，陰開始回來——這就是「物極必反」。';
+  else if(h<18)t='下午：陽慢慢減少，陰慢慢增加。';
+  else if(h===18)t='日落：陰陽又差不多一半一半，這次換陰在上升。';
+  else t='晚上：陰越來越多，陽越來越少。';
+  $('#yyCap').textContent=h+':00　'+t;}
+yyR.oninput=yy; yy();
+
+/* 第3課：五行 */
+const WX=['木','火','土','金','水'],WC=['#4E8A5B','var(--zhu)','var(--jin)','var(--muted)','var(--qing)'];
+const P=WX.map((_,k)=>{const a=(-90+k*72)*Math.PI/180;return[120+85*Math.cos(a),118+85*Math.sin(a)]});
+const ns='http://www.w3.org/2000/svg';
+P.forEach((p,k)=>{const g=document.createElementNS(ns,'g');
+  g.innerHTML=`<circle cx="${p[0]}" cy="${p[1]}" r="22" fill="var(--card)" stroke="${WC[k]}" stroke-width="3"/><text x="${p[0]}" y="${p[1]+7}" text-anchor="middle" font-size="20" font-weight="700" fill="${WC[k]}" font-family="var(--serif)">${WX[k]}</text>`;
+  $('#wxNodes').appendChild(g)});
+const wxT={sheng:'<b>相生像接力：</b>木生火（木頭燒成火）→ 火生土（燒完變灰土）→ 土生金（金屬礦藏在土裡）→ 金生水（古人看到金屬表面會凝結水珠）→ 水生木（澆水讓樹長大）。',
+  ke:'<b>相剋像煞車：</b>木剋土（樹根鑽破土地）、土剋水（築堤擋水）、水剋火（澆熄火）、火剋金（熔化金屬）、金剋木（斧頭砍樹）。<br>只有油門沒有煞車會失控，只有煞車不會前進，所以生和剋都要有。'};
+function wx(m){const g=$('#wxLines');g.innerHTML='';const step=m==='sheng'?1:2;
+  for(let k=0;k<5;k++){const a=P[k],b=P[(k+step)%5],dx=b[0]-a[0],dy=b[1]-a[1],d=Math.hypot(dx,dy),ux=dx/d,uy=dy/d;
+    const l=document.createElementNS(ns,'line');
+    l.setAttribute('x1',a[0]+ux*26);l.setAttribute('y1',a[1]+uy*26);l.setAttribute('x2',b[0]-ux*28);l.setAttribute('y2',b[1]-uy*28);
+    l.setAttribute('stroke',m==='sheng'?'var(--qing)':'var(--zhu)');l.setAttribute('stroke-width','2.5');l.setAttribute('marker-end','url(#ar)');
+    if(m==='ke')l.setAttribute('stroke-dasharray','6 4');g.appendChild(l)}
+  $('#wxSheng').classList.toggle('on',m==='sheng');$('#wxKe').classList.toggle('on',m==='ke');$('#wxCap').innerHTML=wxT[m];}
+$('#wxSheng').onclick=()=>wx('sheng');$('#wxKe').onclick=()=>wx('ke');wx('sheng');
+
+/* 第3課：八卦 */
+const GUA={'111':['☰','乾','天','三條都是陽，最剛強。'],'110':['☱','兌','澤（湖）','最上面斷開，像湖面有個開口。'],
+ '101':['☲','離','火','中間是陰，像火焰外面亮、裡面虛。'],'100':['☳','震','雷','一條陽在最下面往上衝，像打雷震動。'],
+ '011':['☴','巽','風','一條陰在最下面，像風鑽進縫隙。'],'010':['☵','坎','水','一條陽陷在中間，像水流在低處。'],
+ '001':['☶','艮','山','一條陽在最上面擋住，像山停在那裡。'],'000':['☷','坤','地','三條都是陰，最柔順，像大地承載萬物。']};
+const gs=[1,1,1],gb=$$('#gua button');
+function gua(){gb.forEach((b,k)=>b.classList.toggle('yin',!gs[k]));const g=GUA[gs.join('')];
+  $('#guaCap').innerHTML=`<span style="font-size:30px">${g[0]}</span><br><b>${g[1]}卦</b>，代表「${g[2]}」。${g[3]}`;}
+gb.forEach((b,k)=>b.onclick=()=>{gs[k]=gs[k]?0:1;gua()});gua();
+
+/* 第9課：時間軸 */
+const TL=[['先秦','老子、莊子寫下道家經典；巫和方士很活躍。'],['秦漢','秦始皇派徐福出海求仙藥；漢初用黃老之學治國。'],
+ ['東漢末','張道陵創五斗米道（相傳 142 年）；張角太平道發動黃巾之亂（184 年）。道教正式誕生。'],
+ ['魏晉南北朝','葛洪寫《抱朴子》；寇謙之、陸修靜、陶弘景整頓與整理，道教定型。'],
+ ['唐','皇室姓李，尊老子為祖先；外丹盛行，幾位皇帝疑因丹藥中毒而死。'],['宋','內丹興起；宋徽宗自稱「教主道君皇帝」。'],
+ ['金元','王重陽創全真道（1167 年）；丘處機見成吉思汗（1222 年）；正一派統合（1304 年）。'],
+ ['明','《正統道藏》完成（1445 年）；武當山興盛。'],['清到今天','宮廷冷淡、民間興盛；隨移民傳到台灣和東南亞。']];
+TL.forEach((t,k)=>{const b=document.createElement('button');b.textContent=t[0];
+  b.onclick=()=>{$$('#tl button').forEach(x=>x.classList.toggle('on',x===b));$('#tlCap').innerHTML='<b>'+t[0]+'</b>　'+t[1]};$('#tl').appendChild(b)});
+
+/* 第10課：一氣化三清 */
+let split=false;
+$('#sqBtn').onclick=()=>{split=!split;
+  $('#sq1').style.transform=split?'translate(55px,90px)':'translate(150px,90px)';
+  $('#sq3').style.transform=split?'translate(245px,90px)':'translate(150px,90px)';
+  $('#sq0').style.opacity=split?0:1;
+  $('#sqBtn').textContent=split?'合回一氣':'化為三清';
+  $('#sqCap').textContent=split?'一氣化成三位最高的神：元始天尊（玉清）、靈寶天尊（上清）、道德天尊（太清）。他們是同一個「道」的三種樣子，就像水、冰、水蒸氣都是同一種東西。':'道教說，宇宙最初只有一團混沌的「氣」（道），它化成了三位最高的神。';};
+
+/* 第11課：城隍 */
+const chT={c:'「城」：用土堆起來的城牆，保護裡面的人。',h:'「隍」：城牆外面挖的壕溝。《說文解字》說，有水的叫「池」，沒有水的叫「隍」。',
+  b:'城牆加上壕溝，就是一座城的防護。守護這一切的神，就叫「城隍」。'};
+$$('[data-ch]').forEach(b=>b.onclick=()=>{const m=b.dataset.ch;
+  $$('[data-ch]').forEach(x=>x.classList.toggle('on',x===b));
+  $('#chengG').style.opacity=m==='h'?.2:1;$('#huangG').style.opacity=m==='c'?.2:1;$('#chCap').textContent=chT[m]});
+
+/* 第15課：蠟燭 */
+const cdT={jing:'蠟＝「精」：燃燒的材料，生命的基礎。蠟太少，火就撐不久。對應到人：身體的基本物質，靠吃得好、睡得飽來保養。',
+  qi:'火＝「氣」：讓生命動起來的能量。火太猛燒得快，太小會熄。對應到人：呼吸、體力、活力。',
+  shen:'光＝「神」：最高層次的表現。光亮不亮，要看蠟和火穩不穩。對應到人：意識、專注力、眼神裡的光彩。'};
+$$('[data-cd]').forEach(b=>b.onclick=()=>{const m=b.dataset.cd;$$('[data-cd]').forEach(x=>x.classList.toggle('on',x===b));
+  $('#cWax').setAttribute('fill',m==='jing'?'var(--soft-jin)':'var(--yang)');
+  $('#cWax').setAttribute('stroke-width',m==='jing'?4:2);
+  $('#cFlame').style.opacity=m==='qi'||m==='shen'?1:.5;
+  $('#cGlow').setAttribute('opacity',m==='shen'?.5:.15);
+  $('#cdCap').textContent=cdT[m]});
+
+/* 第16課：丹砂實驗 */
+let heated=false;
+function labSet(p,d,f,fire){$('#powder').style.opacity=p;$('#drops').style.opacity=d;$('#fume').style.opacity=f;$('#fire').style.opacity=fire}
+$('#labHeat').onclick=()=>{heated=true;labSet(0,1,1,1);
+  $('#labCap').innerHTML='紅色粉末不見了，出現會滾動的銀色液體——<b>水銀（汞）</b>。丹砂的化學名稱是硫化汞，加熱後分解。冒出的煙含有毒的汞蒸氣。'};
+$('#labBack').onclick=()=>{if(!heated){$('#labCap').textContent='先按「① 加熱丹砂」，讓它變成水銀。';return}
+  labSet(1,0,.3,1);$('#labCap').innerHTML='把水銀和硫磺一起加熱，兩者重新結合，<b>又變回紅色的硫化汞</b>。在古人眼中，這就是「死而復生」。'};
+$('#labReset').onclick=()=>{heated=false;labSet(1,0,0,.25);$('#labCap').textContent='鼎裡是紅色的丹砂。按「加熱」。'};
+
+/* 第17課：丹田與小周天 */
+const dtT={1:'上丹田：在兩眉之間往頭內的位置，又叫「泥丸」，被認為是藏「神」的地方。',
+  2:'中丹田：在胸口正中央，被認為是藏「氣」的地方。',
+  3:'下丹田：在肚臍下方、身體內部，被認為是藏「精」的地方。一般說「氣沉丹田」指的就是它。'};
+$$('[data-dt]').forEach(b=>b.onclick=()=>{const d=b.dataset.dt;
+  $$('[data-dt]').forEach(x=>x.classList.toggle('on',x===b));$('#ztBtn').classList.remove('on');
+  $$('.dt').forEach(g=>g.style.opacity=g.dataset.d===d?1:.3);$('#dtCap').textContent=dtT[d]});
+let ztRun=0;
+$('#ztBtn').onclick=()=>{
+  $$('[data-dt]').forEach(x=>x.classList.remove('on'));$('#ztBtn').classList.add('on');
+  $$('.dt').forEach(g=>g.style.opacity=g.dataset.d==='3'?1:.3);
+  $('#dtCap').textContent='氣從下丹田往下到會陰，沿著背後的督脈往上升到頭頂，再沿著身體前面的任脈往下，回到下丹田。繞一圈，就叫「小周天」。';
+  const p=$('#zt'),dot=$('#ztDot'),len=p.getTotalLength();
+  p.setAttribute('stroke','var(--qing)');
+  if(RM){dot.style.opacity=0;return}
+  const id=++ztRun,t0=performance.now(),dur=5000;dot.style.opacity=1;
+  (function f(now){if(id!==ztRun)return;const k=(now-t0)/dur;
+    if(k>=2){dot.style.opacity=0;return}
+    const pt=p.getPointAtLength((k%1)*len);dot.setAttribute('cx',pt.x);dot.setAttribute('cy',pt.y);requestAnimationFrame(f)})(t0);};
+
+/* 第18課：功過格 */
+$$('#gg input').forEach(c=>c.onchange=()=>{let s=0;$$('#gg input:checked').forEach(x=>s+=+x.value);
+  const el=$('#ggT');el.textContent='今天：'+(s>0?'+':'')+s+' 分';el.style.color=s>0?'var(--qing)':(s<0?'var(--zhu)':'var(--ink)')});
+
+/* 第20課：醮典流程 */
+const JIAO=[['豎燈篙','醮典前幾天，在廟前豎起高高的竹竿掛燈。燈照天上，通知神明；也照地下，招引孤魂來接受普渡。'],
+ ['發表','道士寫好公文（表文），燒化送上天庭，報告：某地某廟要舉行醮典。就像活動前先發正式邀請函。'],
+ ['請神','恭請三清、玉皇和各路神明降臨醮壇。'],['誦經拜懺','連續幾天念經、禮拜、懺悔，替社區消災祈福。'],
+ ['放水燈','在河邊或海邊放出燈，招引水中的孤魂一起來參加普渡。'],['普渡','擺出大量祭品，施食給無人祭拜的孤魂，讓所有靈魂都得到照顧。'],
+ ['謝壇送神','感謝神明，把神明恭送回天界，醮典圓滿結束。']];
+JIAO.forEach((s,k)=>{const b=document.createElement('button');b.textContent=(k+1)+'. '+s[0];
+  b.onclick=()=>{$$('#jiaoBtns button').forEach((x,j)=>x.classList.toggle('on',j<=k));$('#jiaoCap').innerHTML='<b>'+s[0]+'</b>　'+s[1]};$('#jiaoBtns').appendChild(b)});
+
+/* 第22課：三元 */
+const SY=[['上元・正月十五','天官賜福','天官負責賜給人間福氣。這天就是元宵節：提燈籠、吃湯圓、猜燈謎。「元宵」就是「上元的夜晚」。'],
+ ['中元・七月十五','地官赦罪','地官負責赦免罪過，包括亡魂。這天和佛教的盂蘭盆會結合，台灣會舉行大規模普渡。'],
+ ['下元・十月十五','水官解厄','水官負責解除災難（厄）。現在比較少人特別過，但有些地方會在這時候做法會、謝平安。']];
+$$('[data-sy]').forEach(b=>b.onclick=()=>{const s=SY[+b.dataset.sy];
+  $$('[data-sy]').forEach(x=>x.classList.toggle('on',x===b));$('#syCap').innerHTML='<b>'+s[0]+'</b>　'+s[1]+'<br>'+s[2]});
+
+/* 總複習測驗 */
+const Q=[
+ ['道家和道教最大的差別是？',['兩個是同一件事','道家是思想，道教是宗教','道家比道教晚出現','道教沒有經典'],1,'第 1 課：道家是春秋戰國的思想，道教是東漢末年形成的宗教。'],
+ ['「道」的古字是由哪兩個部分組成？',['首＋止','足＋行','首＋行','目＋行'],2,'第 2 課：一顆頭（首）在十字路口（行）中間，人走在路上。'],
+ ['中午陽最多，之後就開始變少。這是陰陽的哪一條規則？',['物極必反','互相包含','一分為三','相剋'],0,'第 3 課：到了頂點就開始往反方向走。'],
+ ['五行中的「水生木」屬於哪一種關係？',['相剋','相生','相反','相等'],1,'第 3 課：澆水讓樹長大，是相生。'],
+ ['學者一般把哪一個團體當作道教正式成立的代表？',['秦始皇的方士','張道陵的五斗米道','全真七子','太平天國'],1,'第 5 課：東漢末年張道陵的五斗米道（天師道）。'],
+ ['寫《抱朴子》、記錄煉丹方法的是誰？',['陶弘景','寇謙之','葛洪','王重陽'],2,'第 6 課：東晉的葛洪。'],
+ ['下列哪一項是全真派的特色？',['道士大多結婚住家裡','出家、吃素、重視內丹','專門畫符驅邪','在唐朝成立'],1,'第 8 課：全真派由王重陽在金代創立，出家修行、重內丹。'],
+ ['三清中的「道德天尊」就是誰？',['玉皇大帝','太上老君','張天師','關聖帝君'],1,'第 10 課：道德天尊住太清，就是神化的老子。'],
+ ['「城隍」的「隍」本來是什麼？',['城門','沒有水的護城壕溝','城裡的市場','皇帝'],1,'第 11 課：有水叫池，沒水叫隍。'],
+ ['「經」這個字本來是指什麼？',['織布機上直的線','一本很厚的書','地圖上的線','寺廟的柱子'],0,'第 13 課：先固定直線，橫線才能穿梭，引申為基本道理。'],
+ ['外丹最常用的紅色礦石是什麼？',['石灰','丹砂','黃金','玉石'],1,'第 16 課：丹砂（硫化汞），加熱會變成水銀。'],
+ ['「小周天」中，氣大致怎麼走？',['只在頭部打轉','沿督脈往上，再沿任脈往下','從手流到腳','只停在下丹田'],1,'第 17 課：背後督脈上升、前面任脈下降，繞一圈。'],
+ ['「籙」是什麼？',['一種法劍','記載神將名字和職務的名冊','燒給神明的紙錢','道士的帽子'],1,'第 19 課：籙同「錄」，是名冊，受籙就像拿到任命書。'],
+ ['中元節（七月十五）對應三官中的哪一位？',['天官賜福','地官赦罪','水官解厄','玉皇大帝'],1,'第 22 課：中元地官赦罪，並和盂蘭盆會結合成普渡。'],
+ ['下列哪一種情況最應該提高警覺？',['廟裡請你輕聲說話','有人說不花大錢做法就會有災難，還要你保密','道士跟你說無量天尊','老師帶你去參觀醮典'],1,'第 24 課：正派宗教不會用恐嚇、保密和金錢逼人。']];
+function quiz(){const box=$('#quiz');box.innerHTML='';let got=0,ans=0;$('#score').textContent='';
+  Q.forEach((q,n)=>{const d=document.createElement('div');d.className='q';
+    const p=document.createElement('p');p.textContent=(n+1)+'. '+q[0];d.appendChild(p);
+    q[1].forEach((o,k)=>{const b=document.createElement('button');b.textContent=o;
+      b.onclick=()=>{if(d.classList.contains('done'))return;d.classList.add('done');ans++;
+        d.querySelectorAll('button')[q[2]].classList.add('ok');if(k===q[2])got++;else b.classList.add('no');
+        if(ans===Q.length)$('#score').textContent='答對 '+got+' / '+Q.length+' 題'+(got>=13?'，你已經登上山頂了！':got>=9?'，很不錯，回去看看答錯的課。':'，可以從目錄回頭複習。');};
+      d.appendChild(b)});
+    const ex=document.createElement('div');ex.className='ex';ex.textContent=q[3];d.appendChild(ex);box.appendChild(d)});}
+$('#quizReset').onclick=quiz; quiz();
+
+show(cur);
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-39ed4e5c73" data-category="classics"></script></body>
+</html>

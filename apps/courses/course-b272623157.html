@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>魔術方塊・從零到一分鐘與單手</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1c1c1c; --gray:#6b6b6b; --paper:#faf8f3; --khaki:#b8a67a; --khaki-d:#8a7647;
+  --linen:#ede7da; --steel:#4a6fa5; --coral:#c05a3c; --card:#ffffff;
+  --serif:'Noto Serif TC','PMingLiU',serif;
+  --sans:'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif;
+  --mono:'Consolas','Courier New',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);color:var(--ink);line-height:1.9;font-size:16px;
+  background:var(--paper);
+  background-image:
+    linear-gradient(rgba(184,166,122,.10) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(184,166,122,.10) 1px,transparent 1px),
+    linear-gradient(rgba(184,166,122,.16) 2px,transparent 2px),
+    linear-gradient(90deg,rgba(184,166,122,.16) 2px,transparent 2px);
+  background-size:22px 22px,22px 22px,66px 66px,66px 66px; /* 3×3 格 */
+}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
+
+/* ---------- 封面 ---------- */
+header{background:var(--ink);color:var(--paper);padding:56px 0 44px;position:relative}
+header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:7px;
+  background:linear-gradient(90deg,#f5d130 0 16.6%,#f2efe8 16.6% 33.3%,#23a05a 33.3% 50%,#2b62c4 50% 66.6%,#f28a1e 66.6% 83.3%,#cf3a2f 83.3%);}
+.eyebrow{color:var(--khaki);letter-spacing:.35em;font-size:12px;font-weight:700;margin-bottom:14px}
+h1.title{font-family:var(--serif);font-weight:900;font-size:clamp(30px,6vw,52px);line-height:1.28;margin-bottom:12px}
+.sub{color:#b9b3a6;font-size:15px;max-width:600px}
+.route{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.route span{font-size:13px;border:1px solid #4a4a4a;color:#cfc8b8;border-radius:999px;padding:5px 14px}
+.route span b{color:var(--khaki)}
+.herocube{float:right;width:210px;margin:-10px 0 0 16px}
+@media(max-width:700px){.herocube{float:none;display:block;margin:0 auto 10px;width:190px}}
+
+/* ---------- 導覽 ---------- */
+nav.toc{position:sticky;top:0;z-index:50;background:rgba(250,248,243,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--linen)}
+nav.toc .wrap{display:flex;gap:6px;overflow-x:auto;padding:10px 20px;scrollbar-width:none}
+nav.toc a{flex:0 0 auto;font-size:13px;font-weight:500;color:var(--gray);text-decoration:none;padding:6px 12px;border-radius:999px;border:1px solid transparent;white-space:nowrap}
+nav.toc a:hover,nav.toc a:focus-visible{color:var(--ink);border-color:var(--khaki);outline:none}
+
+/* ---------- 章節 ---------- */
+.part{margin-top:58px;padding:20px 22px;border-radius:16px;background:var(--ink);color:var(--paper)}
+.part .pno{color:var(--khaki);font-size:13px;letter-spacing:.25em;font-weight:700}
+.part h2{font-family:var(--serif);font-weight:900;font-size:clamp(22px,4.5vw,32px);margin-top:4px}
+.part p{color:#b9b3a6;font-size:14px;margin-top:6px}
+
+section.lesson{padding:46px 0 6px}
+.lesson-tag{display:flex;align-items:baseline;gap:14px;margin-bottom:12px}
+.lesson-tag .no{font-family:var(--serif);font-weight:900;font-size:15px;color:var(--khaki-d);letter-spacing:.12em;white-space:nowrap}
+.lesson-tag h3{font-family:var(--serif);font-weight:900;font-size:clamp(21px,4vw,28px)}
+.lesson p.lead{color:#444;margin-bottom:12px}
+
+.card{background:var(--card);border:1px solid var(--linen);border-radius:14px;padding:22px;margin:16px 0;box-shadow:0 1px 3px rgba(26,26,26,.05)}
+.tip{background:#faf6ea;border-left:4px solid var(--khaki);border-radius:0 10px 10px 0;padding:13px 16px;margin:14px 0;font-size:14.5px;color:#5a5a5a}
+.tip b{color:#7a6520}
+.key{background:#e9edf5;border-left:4px solid var(--steel);border-radius:0 10px 10px 0;padding:13px 16px;margin:14px 0;font-size:15px;font-weight:700;color:#2c4a75}
+.etym{background:#fdf1ec;border-left:4px solid var(--coral);border-radius:0 10px 10px 0;padding:13px 16px;margin:14px 0;font-size:14.5px;color:#6a453a}
+.etym b{color:var(--coral)}
+.warn{background:#fff4e5;border-left:4px solid #e0922b;border-radius:0 10px 10px 0;padding:13px 16px;margin:14px 0;font-size:14.5px;color:#6b4a1f}
+.warn b{color:#b36a12}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:10px 0}
+th{background:var(--ink);color:#fff;font-weight:700;padding:9px 10px;text-align:left}
+td{padding:9px 10px;border-bottom:1px solid var(--linen);vertical-align:top}
+tr:nth-child(even) td{background:#f6f4ee}
+.small{font-size:13px;color:var(--gray)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.two{grid-template-columns:1fr}}
+.alg{font-family:var(--mono);font-weight:700;background:var(--ink);color:#f5d130;padding:2px 9px;border-radius:6px;font-size:15px;white-space:nowrap;letter-spacing:.5px}
+.bigalg{font-family:var(--mono);font-weight:700;font-size:clamp(18px,4.5vw,26px);text-align:center;background:var(--ink);color:#f5d130;border-radius:12px;padding:14px 10px;margin:12px 0;letter-spacing:2px;word-spacing:6px}
+
+/* 流程膠囊 */
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+.flow span{background:var(--linen);border:1px solid #ddd3bd;border-radius:10px;padding:7px 12px;font-size:13.5px;font-weight:500}
+.flow i{color:var(--khaki-d);font-style:normal;font-weight:700}
+.flow em{color:var(--gray);font-style:normal}
+
+/* 互動共用 */
+.stage{background:#22262b;border-radius:14px;padding:16px;color:#d8d2c4}
+.stage h4{font-family:var(--serif);color:var(--linen);font-size:17px;margin-bottom:6px}
+.btnrow{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}
+button.ui{font-family:var(--sans);font-size:14px;font-weight:700;padding:7px 16px;border-radius:999px;border:1px solid #555;background:transparent;color:#d8d2c4;cursor:pointer;transition:.15s}
+button.ui:hover{border-color:var(--khaki);color:var(--khaki)}
+button.ui.primary{background:var(--khaki);border-color:var(--khaki);color:#1a1a1a}
+button.ui:disabled{opacity:.35;cursor:default}
+button.mv{font-family:var(--mono);font-size:15px;font-weight:700;min-width:48px;padding:7px 8px;border-radius:9px;border:1px solid #4a4f57;background:#2c3138;color:#f5d130;cursor:pointer}
+button.mv:hover{border-color:var(--khaki)}
+svg.cubesvg{width:100%;max-width:420px;display:block;margin:0 auto}
+.toks{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin:8px 0}
+.toks span{font-family:var(--mono);font-weight:700;font-size:15px;padding:3px 9px;border-radius:7px;background:#2c3138;color:#8d867a;border:1px solid transparent;transition:.15s}
+.toks span.done{color:#a9c48f}
+.toks span.next{background:#f5d130;color:#1a1a1a}
+.pcap{text-align:center;font-size:14px;color:#b9b3a6;min-height:24px}
+.pcap b{color:var(--linen)}
+.stageinfo{font-size:14px;color:#b9b3a6}
+.stageinfo b{color:var(--linen)}
+.maps{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px}
+.maps figure{background:#22262b;border-radius:12px;padding:8px 6px 10px;text-align:center}
+.maps figcaption{font-size:12.5px;color:#d8d2c4;line-height:1.5}
+.maps figcaption b{color:#f5d130;display:block;font-size:13px}
+.icons{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:10px 0}
+.icons figure{border:1px solid var(--linen);border-radius:12px;padding:10px;text-align:center;background:#fff}
+.icons figcaption{font-size:13px;color:#444;line-height:1.6}
+.icons figcaption b{color:var(--ink)}
+
+/* 計時器 */
+#timerBtn{width:100%;font-family:var(--mono);font-size:clamp(46px,12vw,72px);font-weight:700;color:#f5d130;background:#1a1d21;border:2px solid #3a3f46;border-radius:16px;padding:18px 8px;cursor:pointer;letter-spacing:2px}
+#timerBtn.run{color:#a9c48f;border-color:#a9c48f}
+#scr{font-family:var(--mono);font-size:15px;color:#e8e2d4;background:#2c3138;border-radius:10px;padding:10px 12px;text-align:center;line-height:1.8;word-spacing:4px}
+.stats{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;font-size:13.5px;color:#8d867a;margin-top:8px}
+.stats b{color:var(--khaki);font-size:17px;font-family:var(--mono)}
+#timeList{font-family:var(--mono);font-size:13px;color:#b9b3a6;text-align:center;margin-top:6px;min-height:20px}
+
+/* 測驗 */
+.q{border:1px solid var(--linen);border-radius:12px;padding:14px 16px;margin:10px 0;background:#fff}
+.q .qt{font-weight:700;margin-bottom:6px}
+.q button{font-family:var(--sans);font-size:13px;border:1px solid var(--khaki);background:transparent;color:var(--khaki-d);border-radius:999px;padding:4px 14px;cursor:pointer}
+.q .ans{display:none;margin-top:8px;font-size:14px;color:#2c4a75;background:#eef1f7;border-radius:8px;padding:9px 12px}
+.q.open .ans{display:block}
+
+footer{margin-top:64px;padding:34px 0;background:var(--ink);color:#9a948a;font-size:13px;text-align:center}
+footer b{color:var(--khaki)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+:focus-visible{outline:2px solid var(--steel);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <svg class="herocube" id="heroCube" viewBox="0 0 180 170" role="img" aria-label="旋轉中的魔術方塊"></svg>
+    <div class="eyebrow">Rubik's Cube · Speed &amp; One-Handed</div>
+    <h1 class="title">魔術方塊<br>從零到一分鐘,再到單手</h1>
+    <p class="sub">不需要天分,也不用背一百條公式。這門課用<b style="color:#f5d130">7 條公式</b>帶你第一次親手還原,再一路練到 1~3 分鐘、最後挑戰單手。每條公式都有 3D 動畫,一步一步轉給你看。</p>
+    <div class="route">
+      <span><b>第一部</b> 認識方塊與語言</span>
+      <span><b>第二部</b> 七步還原(層先法)</span>
+      <span><b>第三部</b> 提速・單手・專業</span>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+</header>
+
+<nav class="toc"><div class="wrap">
+  <a href="#l1">1 認識方塊</a><a href="#l2">2 轉動記號</a><a href="#l3">3 解法地圖</a>
+  <a href="#l4">4 白十字</a><a href="#l5">5 白角</a><a href="#l6">6 中層</a><a href="#l7">7 黃十字</a><a href="#l8">8 黃面</a><a href="#l9">9 頂層歸位</a>
+  <a href="#l10">10 提速計時</a><a href="#l11">11 單手</a><a href="#l12">12 專業之路</a><a href="#quiz">總測驗</a>
+</div></nav>
+
+<main class="wrap">
+
+<div class="part">
+  <div class="pno">PART 1</div>
+  <h2>認識方塊與它的語言</h2>
+  <p>先別急著轉。第一部三課:看懂方塊的構造、學會轉動的「文字」、看一眼整張解法地圖。這三件事搞懂,後面每條公式你都讀得懂、記得住。</p>
+</div>
+
+<!-- 第1課 -->
+<section class="lesson" id="l1">
+  <div class="lesson-tag"><span class="no">第 1 課</span><h3>方塊的身世與構造:解的是「塊」,不是貼紙</h3></div>
+  <p class="lead">一顆 3×3 魔術方塊有 54 張貼紙,但它真正的零件只有 26 個小塊,分三種。<b>點下面按鈕,把每一種零件單獨亮出來</b>:</p>
+  <div class="card">
+    <div class="stage">
+      <h4>互動:認識三種零件</h4>
+      <svg class="cubesvg" id="pieceSvg" viewBox="0 0 360 182" role="img" aria-label="零件示意"></svg>
+      <div class="btnrow" style="justify-content:center">
+        <button class="ui primary" data-pc="1">中心塊 ×6</button>
+        <button class="ui" data-pc="2">邊塊 ×12</button>
+        <button class="ui" data-pc="3">角塊 ×8</button>
+        <button class="ui" data-pc="0">全部</button>
+      </div>
+      <div class="pcap" id="pieceCap"></div>
+    </div>
+    <table style="margin-top:12px">
+      <tr><th>零件</th><th>數量</th><th>顏色數</th><th>最重要的性質</th></tr>
+      <tr><td><b>中心塊</b></td><td>6</td><td>1 色</td><td><b>永遠不會移動</b>——它決定這一面「應該是什麼顏色」</td></tr>
+      <tr><td><b>邊塊(稜塊)</b></td><td>12</td><td>2 色</td><td>永遠只會跑到別的邊塊位置</td></tr>
+      <tr><td><b>角塊</b></td><td>8</td><td>3 色</td><td>永遠只會跑到別的角塊位置</td></tr>
+    </table>
+    <p class="small">所以:<b>白色面的正中央是白色,那一面就是白色面</b>,不用猜。還有一個超重要的推論——紅綠邊塊只有一個,它一定要放在紅中心與綠中心之間。還原方塊,就是把 20 個會動的塊(12 邊 + 8 角)一個個送回家。本課程方塊的拿法固定為:<b>黃色中心朝上、白色中心朝下、綠色朝前</b>。</p>
+  </div>
+  <div class="etym"><b>詞源|Rubik's Cube 與「魔術方塊」:</b>1974 年,匈牙利建築學教授<b>魯比克(Ernő Rubik)</b>為了讓學生理解「立體結構怎麼轉動而不散開」,做出了第一顆方塊——他自己轉亂之後,花了大約一個月才轉回來。1977 年它在匈牙利上市,原名 <b>Bűvös kocka</b>,意思就是「魔術方塊」,中文名稱正是從這裡直譯;1980 年推向全世界時才改用發明人的名字 Rubik's Cube。它總共有 <b>43,252,003,274,489,856,000</b> 種(約四千三百京)不同狀態,但 2010 年科學家用大量電腦算力證明:<b>任何亂序都能在 20 步內還原</b>,這個數字被稱為「上帝之數」。</div>
+  <div class="key">第一心法:<b>看中心塊認面、看塊不看貼紙</b>。從此你看方塊的眼光不一樣了。</div>
+</section>
+
+<!-- 第2課 -->
+<section class="lesson" id="l2">
+  <div class="lesson-tag"><span class="no">第 2 課</span><h3>轉動記號:魔術方塊的文字</h3></div>
+  <p class="lead">公式是一串英文字母,例如 <span class="alg">R U R' U'</span>。只要學會 6 個字母+2 個符號,全世界的公式你都看得懂:</p>
+  <div class="card">
+    <table>
+      <tr><th>字母</th><th>英文</th><th>哪一面</th></tr>
+      <tr><td><span class="alg">R</span></td><td>Right</td><td>右面</td></tr>
+      <tr><td><span class="alg">L</span></td><td>Left</td><td>左面</td></tr>
+      <tr><td><span class="alg">U</span></td><td>Up</td><td>上面</td></tr>
+      <tr><td><span class="alg">D</span></td><td>Down</td><td>下面</td></tr>
+      <tr><td><span class="alg">F</span></td><td>Front</td><td>前面(面對你的那面)</td></tr>
+      <tr><td><span class="alg">B</span></td><td>Back</td><td>後面</td></tr>
+    </table>
+    <div class="two">
+      <div>
+        <b>規則一:只寫字母 = 順時針轉 90°</b>
+        <p style="font-size:14px;margin-top:4px">關鍵是「<b>假裝你正對著那一面看</b>」時的順時針。所以 R 是右面往上翻(從右邊看是順時針),L 是左面往下翻——兩者方向看起來相反,因為你是從不同邊「看」的。</p>
+      </div>
+      <div>
+        <b>規則二:加 ' 是逆時針,加 2 是轉 180°</b>
+        <p style="font-size:14px;margin-top:4px"><span class="alg">R'</span> 念「R prime」,右面往下;<span class="alg">U2</span> 上面轉半圈(順逆都一樣)。另外小寫的 <span class="alg">x</span> <span class="alg">y</span> 代表<b>整顆方塊</b>轉向:y 像 U 那樣整顆轉、x 像 R 那樣整顆翻。</p>
+      </div>
+    </div>
+    <div class="stage" style="margin-top:12px">
+      <h4>互動:轉動練習場——每個按鈕都按一次,看方塊怎麼動</h4>
+      <svg class="cubesvg" id="playSvg" viewBox="0 0 360 182" role="img" aria-label="轉動練習場"></svg>
+      <div class="pcap" id="playCap">左邊「前視」看得到上、前、右三面;右邊「後視」看得到上、後、左三面。</div>
+      <div class="btnrow" style="justify-content:center" id="playBtns"></div>
+      <div class="btnrow" style="justify-content:center">
+        <button class="ui" id="playScr">🔀 打亂</button>
+        <button class="ui" id="playReset">↺ 還原</button>
+      </div>
+    </div>
+  </div>
+  <div class="etym"><b>詞源|Singmaster 記號與「順時針」:</b>這套字母記號由英國數學家<b>大衛・辛馬斯特(David Singmaster)</b>在 1979 年前後整理推廣,所以叫 Singmaster notation——四十多年來全世界通用,是方塊界的「國際音標」。至於「順時針」為什麼是這個方向?因為最早的時鐘模仿北半球的<b>日晷</b>:太陽東升西落,晷針影子在地上就是往這個方向繞,後來的機械鐘沿用了影子的方向。</div>
+  <div class="tip"><b>生活比喻:</b>記號像樂譜。不會看譜,只能靠別人彈給你聽;會看譜,任何一首曲子(公式)拿來就能彈。花十分鐘把練習場的每顆按鈕都按過,這份「看譜能力」就是你的了。</div>
+</section>
+
+<!-- 第3課 -->
+<section class="lesson" id="l3">
+  <div class="lesson-tag"><span class="no">第 3 課</span><h3>解法地圖:一層一層蓋上去</h3></div>
+  <p class="lead">新手最常犯的錯,是想「一面一面」拼——拼好白色面,一轉又亂了。正確觀念是<b>一層一層</b>:先蓋好底層,再蓋中層,最後處理頂層,而且<b>後面的步驟絕不破壞前面蓋好的</b>。整張地圖只有 7 站(彩色=已完成,灰色=還不用管):</p>
+  <div class="card">
+    <div class="maps" id="mapGrid"></div>
+    <table style="margin-top:14px">
+      <tr><th>站</th><th>目標</th><th>要記的公式</th></tr>
+      <tr><td>① 白十字</td><td>底面拼出白色十字,邊塊側色對齊中心</td><td>不用公式(直覺)</td></tr>
+      <tr><td>② 白角</td><td>第一層完成</td><td><span class="alg">R U R' U'</span></td></tr>
+      <tr><td>③ 中層</td><td>前兩層完成</td><td>右、左各一條</td></tr>
+      <tr><td>④ 黃十字</td><td>頂面出現黃色十字</td><td><span class="alg">F R U R' U' F'</span></td></tr>
+      <tr><td>⑤ 黃面</td><td>頂面全黃</td><td><span class="alg">R U R' U R U2 R'</span></td></tr>
+      <tr><td>⑥ 頂角歸位</td><td>頂層四個角位置正確</td><td>A-perm 一條</td></tr>
+      <tr><td>⑦ 頂邊歸位</td><td>全部完成!</td><td>U-perm 一條</td></tr>
+    </table>
+    <p class="small">合計 <b>7 條公式</b>。學會這一套,正常練習幾週可以穩定在 2~3 分鐘,認真練指法與預判可以進到 1 分鐘內。</p>
+  </div>
+  <div class="etym"><b>詞源|層先法與「公式」:</b>這套解法叫<b>層先法</b>(Layer by Layer,簡稱 LBL)——「層」先完成、再往上,名字就是做法。方塊玩家把固定的轉動序列叫「公式」,英文叫 <b>algorithm(簡寫 alg)</b>——跟電腦的「演算法」同一個字:一串照著做、保證得到結果的步驟。它們不是用來「理解」的,是用來「背進手指」的,就像背九九乘法。</div>
+  <div class="key">第二心法:<b>一層一層蓋、後面不拆前面</b>。每條公式都是設計好的「只動上面、不動下面」——相信公式,別在中途亂改。</div>
+</section>
+
+<div class="part">
+  <div class="pno">PART 2</div>
+  <h2>七步還原:層先法</h2>
+  <p>正式開工。每一課都有 3D 播放器:按「▶ 播放」看完整示範,或用「下一步」一格一格跟著轉。建議<b>手上拿著方塊,跟動畫同步轉</b>——眼睛看、手指記,學得最快。</p>
+</div>
+
+<!-- 第4課 -->
+<section class="lesson" id="l4">
+  <div class="lesson-tag"><span class="no">第 4 課</span><h3>第 ① 站:白色十字(小雛菊法)</h3></div>
+  <p class="lead">第一站不用背公式,用直覺。新手最順的做法分兩段:<b>先在黃色中心周圍種出一朵「小雛菊」(黃心、四片白色花瓣),再把花瓣一片片「對色下放」到底層</b>。</p>
+  <div class="card">
+    <div class="two">
+      <div>
+        <b>A 段:種雛菊(白邊塊全部送到頂層、白色朝上)</b>
+        <p style="font-size:14px;margin-top:4px">找到白色邊塊,依它在哪裡處理:</p>
+        <table>
+          <tr><th>白邊在</th><th>怎麼送上來</th></tr>
+          <tr><td>中層</td><td>轉它所在的側面,讓它往上跑到頂層、白色朝上</td></tr>
+          <tr><td>底層、白朝下</td><td>把那一面轉 180°(例如 F2)直接送上去</td></tr>
+          <tr><td>頂層、白朝側面</td><td>先轉那一面一下讓它掉到中層,再用「中層」的方法送上來</td></tr>
+        </table>
+        <div class="warn" style="margin-bottom:0"><b>唯一要小心的事:</b>往上送之前,先轉 U 讓「目標位置」空著(不是白色花瓣),不然會把已經種好的花瓣擠下去。</div>
+      </div>
+      <div>
+        <b>B 段:對色下放(花瓣移到底層)</b>
+        <p style="font-size:14px;margin-top:4px">轉上層 U,直到某片花瓣的<b>側面顏色</b>和它下方的中心同色(看起來像一根同色柱子),就把那一面轉 180°,白色邊塊就掉到底層了。四片都做完,翻過來看底面——白色十字完成!</p>
+        <div class="stage" id="plDaisy" style="margin-top:8px"></div>
+      </div>
+    </div>
+  </div>
+  <div class="warn"><b>最常見的失敗:</b>底面白十字拼好了,但邊塊的側面顏色沒對齊中心(例如綠色側對到紅色中心)。這樣後面一定會卡住。用 B 段的「對色下放」,這個問題自動不會發生。</div>
+  <div class="etym"><b>詞源|Daisy 雛菊:</b>英文 daisy 來自古英文 dæġes ēage,意思是「白晝之眼(day's eye)」——這種花早上開、晚上合,像眼睛一樣隨太陽睜閉。黃心白瓣的樣子,跟我們在方塊頂面種出的圖案一模一樣,所以方塊圈就把這招叫做雛菊法。</div>
+</section>
+
+<!-- 第5課 -->
+<section class="lesson" id="l5">
+  <div class="lesson-tag"><span class="no">第 5 課</span><h3>第 ② 站:白色角塊——第一條公式</h3></div>
+  <p class="lead">底層還缺 4 個角。每個白色角塊有三色,例如「白綠橙」——它的家就在<b>白、綠、橙三個中心交會的那個底角</b>。送它回家只要一條公式,而且是「一直重複」那種:</p>
+  <div class="bigalg">R U R' U'</div>
+  <div class="card">
+    <div class="two">
+      <div>
+        <b>三步驟</b>
+        <table>
+          <tr><th>#</th><th>動作</th></tr>
+          <tr><td>1</td><td>在頂層找一個含白色的角,看它另外兩色(例:綠、橙)</td></tr>
+          <tr><td>2</td><td>轉 U 把它移到「家」的正上方,再整顆轉方塊讓這個位置在<b>右前上方</b></td></tr>
+          <tr><td>3</td><td>重複 <span class="alg">R U R' U'</span> 直到它歸位:<b>白朝右 1 次、白朝上 3 次、白朝前 5 次</b></td></tr>
+        </table>
+        <p class="small">角卡在底層、但位置或方向錯了?把它轉到右前下方,做一次 <span class="alg">R U R' U'</span> 就會被「踢」到頂層,再照三步驟處理。</p>
+      </div>
+      <div>
+        <div class="stage" id="plCorner"></div>
+      </div>
+    </div>
+  </div>
+  <div class="etym"><b>詞源|R U R' U' 的暱稱:</b>這四步是全世界被轉最多次的一組動作,英文方塊圈給它一個俏皮暱稱 <b>sexy move</b>,形容它手感行雲流水、一氣呵成。有趣的是,它連續做 6 次會回到原狀——你可以拿一顆完成的方塊試試看,這叫公式的「週期」。</div>
+  <div class="key">完成這一站,整個第一層(白面+四周一排)就好了。翻過來看:白色底面加上四圈「倒 T」,每面側邊都跟中心同色。</div>
+</section>
+
+<!-- 第6課 -->
+<section class="lesson" id="l6">
+  <div class="lesson-tag"><span class="no">第 6 課</span><h3>第 ③ 站:中層邊塊——左右兩條公式</h3></div>
+  <p class="lead">中層有 4 個邊塊要放。它們現在多半在頂層:找一個<b>不含黃色</b>的頂層邊塊(含黃色的屬於頂層,先別管)。轉 U,讓它的<b>側面顏色</b>跟下方中心對齊,形成一個「T」字。接著看它<b>上面那一色</b>要去右邊還是左邊:</p>
+  <div class="card">
+    <div class="two">
+      <div>
+        <b>往右放(上面色 = 右中心)</b>
+        <div class="bigalg" style="font-size:19px">U R U' R' U' F' U F</div>
+        <div class="stage" id="plMidR"></div>
+      </div>
+      <div>
+        <b>往左放(上面色 = 左中心)</b>
+        <div class="bigalg" style="font-size:19px">U' L' U L U F U' F'</div>
+        <div class="stage" id="plMidL"></div>
+      </div>
+    </div>
+    <p class="small" style="margin-top:10px"><b>記憶訣竅:</b>兩條是鏡像——右邊版本「先往右離開、再從前面收」;左邊版本把 R 換 L、方向全部相反。前四步把第一層的角「騰出空位」,後四步再把角與邊一起送回來,所以第一層不會被破壞。</p>
+  </div>
+  <div class="warn"><b>卡關情況:</b>頂層的邊塊全都含黃色,但中層還有邊塊放錯(位置錯或顏色翻反)。解法:把錯的那個槽轉到右前,隨便用一個頂層邊塊做一次「往右放」公式——錯的邊塊就被擠到頂層了,再正常放進去。</div>
+  <div class="etym"><b>詞源|稜塊:</b>中文把邊塊也叫「<b>稜塊</b>」。「稜」本意是物體的邊線(想想「稜角分明」),方塊的邊塊正好坐在兩個面相交的那條稜線上。英文 edge 也是「邊緣、刀鋒」的意思——東西方都用「邊線」來命名它。</div>
+</section>
+
+<!-- 第7課 -->
+<section class="lesson" id="l7">
+  <div class="lesson-tag"><span class="no">第 7 課</span><h3>第 ④ 站:黃色十字</h3></div>
+  <p class="lead">前兩層完成,翻到頂層(黃色面)。現在只看<b>黃色邊塊有沒有朝上</b>,角先不管。你一定會看到下面四種圖案之一:</p>
+  <div class="card">
+    <div class="icons" id="crossIcons"></div>
+    <div class="bigalg">F R U R' U' F'</div>
+    <div class="two">
+      <div>
+        <table>
+          <tr><th>看到</th><th>怎麼擺</th><th>做完變成</th></tr>
+          <tr><td>點</td><td>隨便</td><td>L 形</td></tr>
+          <tr><td>L 形</td><td>轉 U,讓黃邊在<b>後面+左邊</b>(像時鐘 9 點到 12 點)</td><td>一字</td></tr>
+          <tr><td>一字</td><td>轉 U,讓它<b>橫著擺</b>(左右方向)</td><td>十字 ✓</td></tr>
+        </table>
+        <p class="small">所以最多做 3 次:點 → L → 一字 → 十字。注意公式中間夾著的 <span class="alg">R U R' U'</span> 就是第 5 課那組老朋友,前後各加一個 F 和 F' 包起來。</p>
+      </div>
+      <div><div class="stage" id="plCross"></div></div>
+    </div>
+  </div>
+  <div class="etym"><b>詞源|Orientation 朝向:</b>高手把這一步叫「頂層定向」,英文 orientation。它來自拉丁文 oriens「太陽升起的方向=東方」——中世紀歐洲蓋教堂,祭壇一定要「朝東」,這個動作就叫 orient。後來意思變成「讓東西朝向正確的方向」。這一步正是讓黃色朝向正確的方向(朝上)。</div>
+</section>
+
+<!-- 第8課 -->
+<section class="lesson" id="l8">
+  <div class="lesson-tag"><span class="no">第 8 課</span><h3>第 ⑤ 站:黃色面(小魚公式)</h3></div>
+  <p class="lead">黃十字有了,接著讓四個角的黃色也朝上。先數一數:<b>頂面有幾個角是黃色朝上?</b>依數量決定怎麼擺:</p>
+  <div class="card">
+    <div class="icons" id="suneIcons"></div>
+    <div class="bigalg">R U R' U R U2 R'</div>
+    <div class="two">
+      <div>
+        <table>
+          <tr><th>黃朝上的角</th><th>怎麼擺(轉 U)</th></tr>
+          <tr><td><b>1 個</b>(小魚)</td><td>把那個黃朝上的角放在<b>左前</b></td></tr>
+          <tr><td><b>0 或 2 個</b></td><td>讓<b>左前角的黃色朝向左邊</b></td></tr>
+        </table>
+        <p class="small">擺好就做公式,做完再數一次、再擺、再做——<b>最多 3 次</b>頂面就全黃。節奏口訣:「R U R' U(上去、轉、下來、轉)R U2 R'(上去、轉兩下、下來)」。</p>
+        <div class="warn" style="margin-bottom:0">做完後頂層側邊的顏色亂成一團是<b>正常的</b>!這一站只管頂面全黃,側邊留給最後兩站。</div>
+      </div>
+      <div><div class="stage" id="plSune"></div></div>
+    </div>
+  </div>
+  <div class="etym"><b>詞源|小魚公式:</b>只有一個角黃朝上時,頂面的黃色剛好排成一條魚的形狀——黃朝上的角是魚頭,十字是魚身,所以中文玩家叫它「<b>小魚公式</b>」,英文圈叫 Sune。它也是第 12 課高手解法 OLL 的第一條公式——你現在學的,正是專業路線的入口。</div>
+</section>
+
+<!-- 第9課 -->
+<section class="lesson" id="l9">
+  <div class="lesson-tag"><span class="no">第 9 課</span><h3>第 ⑥⑦ 站:頂層歸位——最後兩條公式</h3></div>
+  <p class="lead">頂面全黃了,只剩頂層的「位置」不對。先排好 4 個角,再排好 4 個邊,方塊就完成了。</p>
+  <div class="card">
+    <b>第 ⑥ 站:頂角歸位——找「頭燈」</b>
+    <p style="font-size:14px;margin:4px 0">看四個側面的頂排:如果某一面的<b>左右兩個角是同一個顏色</b>,那一對就叫「頭燈」(像汽車前面一對同色大燈)。</p>
+    <div class="bigalg" style="font-size:19px">R' F R' B2 R F' R' B2 R2</div>
+    <div class="two">
+      <div>
+        <table>
+          <tr><th>看到</th><th>怎麼做</th></tr>
+          <tr><td>有頭燈</td><td>轉 U 把頭燈放到<b>後面</b>,做公式</td></tr>
+          <tr><td>沒有頭燈</td><td>任意角度先做一次,就會冒出頭燈,再照上一行</td></tr>
+          <tr><td>四面都有頭燈</td><td>轉 U 讓角和中心同色 → 進第 ⑦ 站</td></tr>
+        </table>
+        <p class="small">記憶法:切成三段「<b>R' F R' B2</b> | <b>R F' R' B2</b> | <b>R2</b>」——前兩段長得很像,只差中間的 F 變 F'。B2 是後面轉半圈。播放器請看右邊的「後視」,頭燈就在那裡。</p>
+      </div>
+      <div><div class="stage" id="plAperm"></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <b>第 ⑦ 站:頂邊歸位——最後一條</b>
+    <p style="font-size:14px;margin:4px 0">現在角都對了,找一面「<b>頂排三格全同色</b>」的面(已完成的那一面)。</p>
+    <div class="bigalg" style="font-size:19px">R U' R U R U R U' R' U' R2</div>
+    <div class="two">
+      <div>
+        <table>
+          <tr><th>看到</th><th>怎麼做</th></tr>
+          <tr><td>有一面完成</td><td>整顆轉,把完成的面放在<b>後面</b>,做公式</td></tr>
+          <tr><td>做完還沒好</td><td>(邊塊轉錯方向了)<b>再做一次</b>就好</td></tr>
+          <tr><td>四面都沒完成</td><td>任意角度做一次,就會出現完成的一面</td></tr>
+        </table>
+        <p class="small">最多 3 次必定完成。記憶法:「R U' 開頭,然後 R U R U R U' 一路跳,最後 R' U' R2 收尾」——右手一直在上下,手指會自己記住節奏。</p>
+      </div>
+      <div><div class="stage" id="plUperm"></div></div>
+    </div>
+  </div>
+  <div class="etym"><b>詞源|Permutation 與 A-perm、U-perm:</b>這兩站叫「頂層排列」,英文 permutation,來自拉丁文 permutare =「徹底(per)交換(mutare)」——把塊的位置互相交換到對的地方。公式名字的字母來自示意圖:把「哪塊跑去哪」畫成箭頭,U-perm 的箭頭繞成一個 <b>U</b> 字,A-perm 的三角箭頭像一個 <b>A</b> 字。全世界的高手就是用字母形狀給公式取名的。</div>
+  <div class="key">🎉 做完第 ⑦ 站,你已經親手還原了魔術方塊!全部只用了 7 條公式。現在拿起方塊、打亂、從第 ① 站再來一次——第一次還原通常要 5~10 分鐘,這完全正常,第三部就教你怎麼變快。</div>
+</section>
+
+<div class="part">
+  <div class="pno">PART 3</div>
+  <h2>提速・單手・走向專業</h2>
+  <p>會還原只是起點。第三部把你從 5 分鐘推進到 1 分鐘,接著用同一套公式挑戰單手,最後打開世界級選手用的 CFOP 地圖。</p>
+</div>
+
+<!-- 第10課 -->
+<section class="lesson" id="l10">
+  <div class="lesson-tag"><span class="no">第 10 課</span><h3>從 5 分鐘到 1 分鐘:提速五招+計時器</h3></div>
+  <p class="lead">變快的祕密不是「手轉得快」,而是<b>停頓變少</b>。錄下自己還原的影片就會發現:真正在轉的時間可能只有一半,另一半都在「找下一塊」。所以提速的順序是:</p>
+  <div class="card">
+    <div class="flow">
+      <span><i>5 分</i><br><em>第一次還原</em></span><span><i>3 分</i><br><em>公式背熟</em></span><span><i>2 分</i><br><em>指法+少轉整顆</em></span><span><i>1 分</i><br><em>預判+直接白十字</em></span>
+    </div>
+    <table>
+      <tr><th>招式</th><th>做法</th><th>省下</th></tr>
+      <tr><td><b>① 公式進手指</b></td><td>每條公式練到「邊聊天邊做也不會錯」。每天對著完成的方塊做 <span class="alg">R U R' U'</span> ×6 回原狀,當熱身</td><td>想公式的停頓</td></tr>
+      <tr><td><b>② 指法</b></td><td><span class="alg">U</span> 用右手食指把頂層往左「撥」;<span class="alg">U'</span> 用左手食指往右撥;<span class="alg">R</span>、<span class="alg">R'</span> 用手腕轉。雙手固定握著方塊,不要放開再抓</td><td>每步 0.3 秒 × 幾百步</td></tr>
+      <tr><td><b>③ 少整顆轉</b></td><td>用眼睛繞著方塊找塊,不要一直把方塊翻來翻去</td><td>找塊時間</td></tr>
+      <tr><td><b>④ 預判(look ahead)</b></td><td>做這塊的公式時,眼睛已經在找下一塊。口訣:<b>慢慢轉、不要停,勝過快快轉、一直停</b></td><td>最大的一塊!</td></tr>
+      <tr><td><b>⑤ 直接做白十字</b></td><td>熟練後跳過雛菊,直接把白邊塊送到底層正確位置(練習目標:8 步內)</td><td>10~20 秒</td></tr>
+    </table>
+    <p class="small">裝備建議:買一顆入門級「速解方塊」(常見有磁力定位款),比玩具方塊轉起來順太多,價格也不貴——工具好,練習更有樂趣。</p>
+  </div>
+  <div class="card">
+    <div class="stage">
+      <h4>互動:計時器+打亂公式(照著打亂,再開始還原)</h4>
+      <div id="scr"></div>
+      <div class="btnrow" style="justify-content:center"><button class="ui" id="newScr">🔀 換一組打亂</button></div>
+      <button id="timerBtn" aria-label="計時器:點一下開始,再點一下停止">0.00</button>
+      <p class="small" style="color:#8d867a;text-align:center;margin-top:6px">點大數字(或按 Tab 選到它後按空白鍵)開始,還原完再點一下停止。成績只存在這一頁,重新整理會清空。</p>
+      <div class="stats"><span>次數 <b id="stN">0</b></span><span>最佳 <b id="stBest">–</b></span><span>最近5次平均 ao5 <b id="stAo5">–</b></span></div>
+      <div id="timeList"></div>
+      <div class="btnrow" style="justify-content:center"><button class="ui" id="clrTimes">清除成績</button></div>
+    </div>
+  </div>
+  <div class="etym"><b>詞源|WCA、ao5 與 Stackmat:</b>速解方塊叫 speedcubing,國際比賽由 2004 年成立的<b>世界魔術方塊協會 WCA</b> 主辦。比賽開始前有 15 秒「觀察時間」可以看方塊但不能轉;成績採 <b>ao5(average of 5)</b>:轉 5 次、<b>去掉最快與最慢</b>,剩下 3 次平均——跟跳水、體操評分「去頭去尾」同一個道理,排除運氣。比賽用的觸碰式計時器叫 <b>Stackmat</b>,原本是「疊杯」運動(Speed Stacks)用的計時墊,方塊界借來用到今天。</div>
+</section>
+
+<!-- 第11課 -->
+<section class="lesson" id="l11">
+  <div class="lesson-tag"><span class="no">第 11 課</span><h3>單手還原:同一套公式,換一種手</h3></div>
+  <p class="lead">單手(One-Handed,簡稱 OH)是 WCA 的正式項目。好消息是:<b>不用學新方法</b>,七步還原完全照用;要改的只有「怎麼握、怎麼轉」,以及把幾條公式換成單手順的寫法。</p>
+  <div class="card">
+    <div class="two">
+      <div>
+        <b>① 選手</b>
+        <p style="font-size:14px;margin-top:4px">左右手都可以。拿一顆方塊,兩隻手各試著單手做 10 次 <span class="alg">R U R' U'</span>,哪隻手順就用哪隻——<b>選定之後就別換</b>,手指記憶才會累積。</p>
+        <b>② 握法</b>
+        <p style="font-size:14px;margin-top:4px">分工原則:<b>手掌和拇指負責「抓穩」,食指、中指負責「撥轉」</b>。方塊的一側貼在掌心,拇指扣住下緣,讓手指可以自由撥動上層與側層。</p>
+      </div>
+      <div>
+        <b>③ 三個基本動作</b>
+        <table>
+          <tr><th>動作</th><th>練法</th></tr>
+          <tr><td>撥上層(U / U')</td><td>用食指推頂層,練到一撥就是 90°</td></tr>
+          <tr><td>轉側層(R / R')</td><td>手指推動側面一層,手掌穩住其他兩層</td></tr>
+          <tr><td>換握(regrip)</td><td>遇到難轉的面,快速調整握的位置再繼續</td></tr>
+        </table>
+        <p class="small">原則:<b>單手最順的是 R 和 U</b>,F、L、B、D 比較彆扭——所以單手高手偏愛只用 R、U 的公式。</p>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <b>七條公式的單手友善度(改寫版本皆經驗證與原公式效果完全相同)</b>
+    <table>
+      <tr><th>站</th><th>原公式</th><th>單手</th><th>建議</th></tr>
+      <tr><td>② 白角</td><td><span class="alg">R U R' U'</span></td><td>★★★</td><td>只有 R、U,最順</td></tr>
+      <tr><td>③ 中層右</td><td><span class="alg">U R U' R' U' F' U F</span></td><td>★★</td><td>後半的 F 需要換握,放慢練</td></tr>
+      <tr><td>③ 中層左</td><td><span class="alg">U' L' U L U F U' F'</span></td><td>★</td><td>改成:整顆轉 <span class="alg">y'</span> 後做 <span class="alg">U' F' U F U R U' R'</span>,避開 L</td></tr>
+      <tr><td>④ 黃十字</td><td><span class="alg">F R U R' U' F'</span></td><td>★★</td><td>開頭結尾的 F 換握;中間四步是老朋友</td></tr>
+      <tr><td>⑤ 小魚</td><td><span class="alg">R U R' U R U2 R'</span></td><td>★★★</td><td>只有 R、U,單手最愛</td></tr>
+      <tr><td>⑥ 頭燈</td><td><span class="alg">R' F R' B2 R F' R' B2 R2</span></td><td>★</td><td>改成:<span class="alg">x R' U R' D2 R U' R' D2 R2 x'</span>(先整顆往上翻,就只剩 R、U、D)</td></tr>
+      <tr><td>⑦ 頂邊</td><td><span class="alg">R U' R U R U R U' R' U' R2</span></td><td>★★★</td><td>只有 R、U,整條一氣呵成</td></tr>
+    </table>
+    <p class="small">目標參考:剛開始單手通常是雙手時間的 2~3 倍,很正常。先求「單手完整還原一次」,再求穩定,最後才求快。</p>
+  </div>
+  <div class="warn"><b>保護手腕:</b>單手練習對手指、手腕負擔比較大。每練 15~20 分鐘就休息、甩甩手;覺得痠痛就停,隔天再練。長久比猛練重要。</div>
+  <div class="etym"><b>詞源|Regrip 換握:</b>re(再一次)+ grip(握住)——「重新抓好」。方塊圈把每次換握都視為「浪費的時間」,所以高手挑公式的標準不只是步數少,還有「換握次數少」。單手選手甚至會為同一個情況準備專屬版本,只為了少換一次握——這就是專業的精神:<b>不只做對,還要做順</b>。</div>
+</section>
+
+<!-- 第12課 -->
+<section class="lesson" id="l12">
+  <div class="lesson-tag"><span class="no">第 12 課</span><h3>專業之路:CFOP 與你的下一步</h3></div>
+  <p class="lead">世界上絕大多數速解選手用的方法叫 <b>CFOP</b>。好消息:你學的層先法,其實就是 CFOP 的「新手版」——每一站都對得上,升級只是把兩步合成一步:</p>
+  <div class="card">
+    <table>
+      <tr><th>你學的</th><th>CFOP 對應</th><th>升級方向</th></tr>
+      <tr><td>① 白十字</td><td><b>C</b>ross 十字</td><td>不種雛菊,直接做,8 步內完成</td></tr>
+      <tr><td>② 白角 + ③ 中層</td><td><b>F</b>2L(First 2 Layers)</td><td>角與邊先「配對」再一起放進去,一次解一組;共 41 種情況,先用直覺學</td></tr>
+      <tr><td>④ 黃十字 + ⑤ 黃面</td><td><b>O</b>LL(頂層定向)</td><td>你已經會「兩段式 OLL」的一部分;全套 57 條可一步完成</td></tr>
+      <tr><td>⑥ 頭燈 + ⑦ 頂邊</td><td><b>P</b>LL(頂層排列)</td><td>你已經會「兩段式 PLL」的兩條;全套 21 條可一步完成</td></tr>
+    </table>
+    <p class="small">建議升級順序:<b>F2L 直覺法</b>(提速效果最大)→ 兩段式 OLL(10 條)→ 兩段式 PLL(6 條)→ 全 PLL 21 條 → 全 OLL 57 條。用 CFOP 穩定 20 秒內,就是許多地區比賽的中上水準;世界頂尖選手則在 3~5 秒之間。其他知名方法還有 Roux、ZZ、Petrus,都以發明者命名,有興趣可以再探索。</p>
+  </div>
+  <div class="card">
+    <b>30 天練功計畫(每天 20 分鐘)</b>
+    <table>
+      <tr><th>時段</th><th>重點</th><th>過關標準</th></tr>
+      <tr><td>第 1 週</td><td>跟著本課程完成七站,每天還原 3 次</td><td>不看教材獨立還原</td></tr>
+      <tr><td>第 2 週</td><td>7 條公式默背+指法(第 10 課②)</td><td>ao5 進 3 分鐘</td></tr>
+      <tr><td>第 3 週</td><td>預判練習:故意放慢,但全程不停</td><td>ao5 進 2 分鐘</td></tr>
+      <tr><td>第 4 週</td><td>直接做白十字;每天 5 次單手</td><td>雙手 ao5 接近 1 分鐘、單手完整還原</td></tr>
+    </table>
+    <p class="small">之後的路:參加 WCA 比賽(只要報名就能參加,拿到你的第一個官方成績)、學 F2L、挑戰 2×2、4×4 等其他方塊。</p>
+  </div>
+  <div class="etym"><b>詞源|CFOP 與 Fridrich 法:</b>CFOP 四個字母就是四個步驟:Cross、F2L、OLL(Orientation of the Last Layer,頂層定向)、PLL(Permutation of the Last Layer,頂層排列)——第 7、9 課的 orientation 與 permutation 在這裡會合。這套方法因捷克的<b>潔西卡・弗里德里希(Jessica Fridrich)</b>在 1980 年代整理完善、1997 年放上網路後傳遍世界,所以也叫「Fridrich 法」。她後來成為大學教授,研究的正是數位影像與資訊安全——一個轉方塊的人,後來還在解其他的謎題。</div>
+  <div class="key">結業心法:<b>看中心認面、一層一層蓋、公式進手指、慢轉不停</b>。十六個字,從第一次還原走到一分鐘、走到單手。</div>
+</section>
+
+<!-- 總測驗 -->
+<section class="lesson" id="quiz">
+  <div class="lesson-tag"><span class="no">結業</span><h3>十題總測驗</h3></div>
+  <p class="lead">先自己想,再點「看答案」。全對的話——去打亂一顆方塊,按下計時器吧。</p>
+  <div id="quizBox"></div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">魔術方塊・從零到一分鐘與單手|單檔離線教材<br><b>SAINTDOU</b> · Simply the Minimalist · 2026</div>
+</footer>
+
+<script>
+/* ===== 1. 方塊引擎(每條公式都以此引擎驗證過) ===== */
+const COLOR_OF=n=>n[1]===1?'Y':n[1]===-1?'W':n[2]===1?'G':n[2]===-1?'B':n[0]===1?'O':'R';
+function solvedCube(){const s=[];for(let x=-1;x<=1;x++)for(let y=-1;y<=1;y++)for(let z=-1;z<=1;z++){const p=[x,y,z];
+  for(let a=0;a<3;a++){if(p[a]!==0){const n=[0,0,0];n[a]=p[a];s.push({p:[...p],n,c:COLOR_OF(n),home:[...p],hn:[...n]});}}}return s;}
+const MOVES={R:{ax:0,l:1,d:-90},L:{ax:0,l:-1,d:90},x:{ax:0,l:null,d:-90},U:{ax:1,l:1,d:-90},D:{ax:1,l:-1,d:90},y:{ax:1,l:null,d:-90},F:{ax:2,l:1,d:-90},B:{ax:2,l:-1,d:90},z:{ax:2,l:null,d:-90}};
+function rotVec(v,ax,deg){const r=deg*Math.PI/180,c=Math.cos(r),s=Math.sin(r);const[x,y,z]=v;
+  if(ax===0)return[x,y*c-z*s,y*s+z*c];if(ax===1)return[x*c+z*s,y,-x*s+z*c];return[x*c-y*s,x*s+y*c,z];}
+function parseMove(t){const m=MOVES[t[0]];let k=1;if(t.endsWith('2'))k=2;else if(t.endsWith("'"))k=-1;return{...m,d:m.d*k};}
+const inLayer=(st,mv)=>mv.l===null||Math.round(st.p[mv.ax])===mv.l;
+function applyMove(cube,t){const mv=parseMove(t);for(const st of cube){if(!inLayer(st,mv))continue;
+  st.p=rotVec(st.p,mv.ax,mv.d).map(Math.round);st.n=rotVec(st.n,mv.ax,mv.d).map(Math.round);}return cube;}
+function applyAlg(cube,alg){alg.trim().split(/\s+/).filter(Boolean).forEach(t=>applyMove(cube,t));return cube;}
+const invTok=t=>t.endsWith('2')?t:(t.endsWith("'")?t[0]:t+"'");
+const invertAlg=a=>a.trim().split(/\s+/).reverse().map(invTok).join(' ');
+
+/* ===== 2. 等角投影 3D 渲染 ===== */
+const CC={Y:'#f5d130',W:'#f2efe8',G:'#23a05a',B:'#2b62c4',O:'#f28a1e',R:'#cf3a2f',X:'#474c54'};
+const reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function projP(P,S,cx,cy){return[cx+(P[0]-P[2])*0.8660254*S,cy+((P[0]+P[2])*0.5-P[1])*S];}
+const ptsStr=a=>a.map(q=>q[0].toFixed(1)+','+q[1].toFixed(1)).join(' ');
+const TWO_VIEWS=[{cx:90,cy:82,S:25,back:false,label:'前視(上・前・右)'},{cx:270,cy:82,S:25,back:true,label:'後視(上・後・左)'}];
+function cubeSVG(cube,opt={}){
+  const views=opt.views||TWO_VIEWS;let out='';
+  for(const v of views){const S=v.S;
+    const vs=[];for(const a of[-1.5,1.5])for(const b of[-1.5,1.5])for(const c of[-1.5,1.5])vs.push(projP([a,b,c],S,v.cx,v.cy));
+    const hex=vs.filter(q=>Math.hypot(q[0]-v.cx,q[1]-v.cy)>1).sort((p,q)=>Math.atan2(p[1]-v.cy,p[0]-v.cx)-Math.atan2(q[1]-v.cy,q[0]-v.cx));
+    out+=`<polygon points="${ptsStr(hex.map(q=>[(q[0]-v.cx)*1.02+v.cx,(q[1]-v.cy)*1.02+v.cy]))}" fill="#0d0f12"/>`;
+    const polys=[];
+    for(const st of cube){
+      let p=st.p,n=st.n;const a=[0,1,2].find(i=>Math.round(st.n[i])!==0);const o=[0,1,2].filter(i=>i!==a);
+      let t1=[0,0,0],t2=[0,0,0];t1[o[0]]=1;t2[o[1]]=1;
+      if(opt.anim&&inLayer(st,opt.anim.mv)){const{ax}=opt.anim.mv,g=opt.anim.angle;p=rotVec(p,ax,g);n=rotVec(n,ax,g);t1=rotVec(t1,ax,g);t2=rotVec(t2,ax,g);}
+      if(v.back){const f=w=>[-w[0],w[1],-w[2]];p=f(p);n=f(n);t1=f(t1);t2=f(t2);}
+      if(n[0]+n[1]+n[2]<0.05)continue;
+      const c=[p[0]+n[0]*.5,p[1]+n[1]*.5,p[2]+n[2]*.5];
+      const quad=h=>[[1,1],[1,-1],[-1,-1],[-1,1]].map(([i,j])=>projP([c[0]+(t1[0]*i+t2[0]*j)*h,c[1]+(t1[1]*i+t2[1]*j)*h,c[2]+(t1[2]*i+t2[2]*j)*h],S,v.cx,v.cy));
+      polys.push({d:c[0]+c[1]+c[2],base:quad(.5),stk:quad(.41),col:st.gray?CC.X:CC[st.c]});
+    }
+    polys.sort((a,b)=>a.d-b.d);
+    for(const q of polys)out+=`<polygon points="${ptsStr(q.base)}" fill="#0d0f12"/><polygon points="${ptsStr(q.stk)}" fill="${q.col}" stroke="${q.col}" stroke-width="1.2" stroke-linejoin="round"/>`;
+    if(v.label)out+=`<text x="${v.cx}" y="${v.cy+3*S+17}" font-size="11.5" fill="#8d867a" text-anchor="middle">${v.label}</text>`;
+  }
+  return out;
+}
+function animateMove(cube,tok,render,ms,done){
+  const mv=parseMove(tok);
+  if(reduceMotion){applyMove(cube,tok);render();done&&done();return;}
+  const dur=Math.abs(mv.d)>90?ms*1.5:ms,t0=performance.now();
+  (function frame(now){const k=Math.min(1,(now-t0)/dur),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+    if(k<1){render({mv,angle:mv.d*e});requestAnimationFrame(frame);}else{applyMove(cube,tok);render();done&&done();}})(t0);
+}
+const MOVE_DESC={R:'右面往上',"R'":'右面往下',R2:'右面轉半圈',L:'左面往下',"L'":'左面往上',L2:'左面轉半圈',
+  U:'上層往左轉',"U'":'上層往右轉',U2:'上層轉半圈',D:'下層往右轉',"D'":'下層往左轉',D2:'下層轉半圈',
+  F:'前面順時針',"F'":'前面逆時針',F2:'前面轉半圈',B:'後面順時針(從後面看)',"B'":'後面逆時針(從後面看)',B2:'後面轉半圈',
+  x:'整顆往上翻(像 R)',"x'":'整顆往下翻',y:'整顆往左轉(像 U)',"y'":'整顆往右轉'};
+
+/* ===== 3. 公式播放器 ===== */
+function makePlayer(id,alg,cap){
+  const root=document.getElementById(id);if(!root)return;
+  const toks=alg.split(/\s+/);
+  root.innerHTML=`<svg class="cubesvg" viewBox="0 0 360 182" role="img" aria-label="公式示範動畫"></svg>
+   <div class="toks">${toks.map(t=>`<span>${t}</span>`).join('')}</div>
+   <div class="btnrow" style="justify-content:center">
+     <button class="ui primary" data-a="play">▶ 播放</button>
+     <button class="ui" data-a="prev" aria-label="上一步">←</button>
+     <button class="ui" data-a="next" aria-label="下一步">→</button>
+     <button class="ui" data-a="reset" aria-label="重來">↺</button></div>
+   <div class="pcap"></div>`;
+  const svg=root.querySelector('svg'),spans=root.querySelectorAll('.toks span'),capEl=root.querySelector('.pcap'),playBtn=root.querySelector('[data-a=play]');
+  let cube,i=0,busy=false,playing=false;
+  const render=anim=>{svg.innerHTML=cubeSVG(cube,{anim});};
+  function mark(){spans.forEach((s,k)=>s.className=k<i?'done':(k===i?'next':''));
+    capEl.innerHTML=i===0?cap.start:(i>=toks.length?cap.end:`第 ${i} / ${toks.length} 步:<b>${toks[i-1]}</b> ${MOVE_DESC[toks[i-1]]||''}`);
+    playBtn.textContent=playing?'⏸ 暫停':(i>=toks.length?'▶ 再看一次':'▶ 播放');}
+  function reset(){playing=false;cube=applyAlg(solvedCube(),cap.setup||invertAlg(alg));i=0;mark();render();}
+  function step(cb){if(busy||i>=toks.length)return;busy=true;animateMove(cube,toks[i],render,320,()=>{i++;busy=false;mark();cb&&cb();});}
+  function loop(){if(!playing)return;if(i>=toks.length){playing=false;mark();return;}step(()=>setTimeout(loop,140));}
+  root.querySelector('[data-a=play]').onclick=()=>{if(playing){playing=false;mark();return;}if(i>=toks.length)reset();playing=true;mark();loop();};
+  root.querySelector('[data-a=next]').onclick=()=>{playing=false;step();};
+  root.querySelector('[data-a=prev]').onclick=()=>{playing=false;if(busy||i===0)return;busy=true;animateMove(cube,invTok(toks[i-1]),render,320,()=>{i--;busy=false;mark();});};
+  root.querySelector('[data-a=reset]').onclick=reset;
+  reset();
+}
+makePlayer('plDaisy',"U F2 U R2 U2 B2 U L2",{setup:"F2 R2 B2 L2 R U' R U R U R U' R' U' R2",
+  start:'雛菊已種好。每次轉 U 對好一片的顏色,就把那一面轉 180° 送下去。',end:'✓ 四片都下去了——底面白十字完成(白色在底部,這裡看不到,但側邊都對齊中心了)'});
+makePlayer('plCorner',"R U R' U' R U R' U' R U R' U'",{start:'右前上方的角:白色朝上 → 需要做 3 次。',end:'✓ 做了 3 次,白綠橙角回到右前下方,白色朝下。'});
+makePlayer('plMidR',"U R U' R' U' F' U F",{start:'頂層前方的邊:前色對齊前中心(T 字),上面色 = 右中心 → 往右放。',end:'✓ 邊塊進到右前中層,第一層完好無損。'});
+makePlayer('plMidL',"U' L' U L U F U' F'",{start:'前色對齊前中心(T 字),上面色 = 左中心 → 往左放。',end:'✓ 邊塊進到左前中層。'});
+makePlayer('plCross',"F R U R' U' F'",{start:'頂面是「一字」,已經橫著擺(左右方向)。',end:'✓ 黃十字出現!'});
+makePlayer('plSune',"R U R' U R U2 R'",{start:'小魚:唯一黃朝上的角已放在左前。',end:'✓ 頂面全黃。'});
+makePlayer('plAperm',"R' F R' B2 R F' R' B2 R2",{start:'看「後視」:後面兩個角同色 = 頭燈,已擺在後面。',end:'✓ 四個角都歸位。'});
+makePlayer('plUperm',"R U' R U R U R U' R' U' R2",{start:'看「後視」:後面頂排三格已完成,擺在後面。',end:'🎉 方塊還原完成!'});
+
+/* ===== 4. 第1課 零件亮燈 ===== */
+const pcCap={1:'<b>中心塊</b>:6 個,永遠不動,決定每一面的顏色。',2:'<b>邊塊</b>:12 個,每個有 2 色,坐在兩面交界的稜線上。',3:'<b>角塊</b>:8 個,每個有 3 色,坐在三面交會的角上。',0:'<b>全部</b>:6 中心 + 12 邊 + 8 角 = 26 塊(正中心藏著轉軸,看不到)。'};
+function showPieces(t){const c=solvedCube();c.forEach(s=>{const k=s.home.filter(v=>v!==0).length;s.gray=t!==0&&k!==t;});
+  document.getElementById('pieceSvg').innerHTML=cubeSVG(c);document.getElementById('pieceCap').innerHTML=pcCap[t];}
+document.querySelectorAll('[data-pc]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-pc]').forEach(x=>x.classList.remove('primary'));b.classList.add('primary');showPieces(+b.dataset.pc);});
+showPieces(1);
+
+/* ===== 5. 第2課 轉動練習場 ===== */
+(function(){
+  const svg=document.getElementById('playSvg'),cube=solvedCube();let busy=false;const q=[];
+  const render=anim=>{svg.innerHTML=cubeSVG(cube,{anim});};
+  const run=()=>{if(busy||!q.length)return;const t=q.shift();busy=true;
+    document.getElementById('playCap').innerHTML=`<b>${t}</b>:${MOVE_DESC[t]}`;
+    animateMove(cube,t,render,300,()=>{busy=false;run();});};
+  const list=["R","R'","L","L'","U","U'","D","D'","F","F'","B","B'","R2","U2","x","y"];
+  document.getElementById('playBtns').innerHTML=list.map(t=>`<button class="mv" data-t="${t}">${t}</button>`).join('');
+  document.querySelectorAll('#playBtns .mv').forEach(b=>b.onclick=()=>{q.push(b.dataset.t);run();});
+  document.getElementById('playScr').onclick=()=>{if(busy)return;const s=genScramble(20);applyAlg(cube,s);render();document.getElementById('playCap').innerHTML='打亂:'+s;};
+  document.getElementById('playReset').onclick=()=>{if(busy)return;q.length=0;const f=solvedCube();cube.forEach((s,i)=>{s.p=f[i].p;s.n=f[i].n;});render();document.getElementById('playCap').textContent='已還原。';};
+  render();
+})();
+
+/* ===== 6. 第3課 解法地圖 ===== */
+(function(){
+  const stages=[
+    ['① 白十字','底面十字',(s,t)=>t===1||(t===2&&s.home[1]===-1),true],
+    ['② 白角','第一層完成',(s,t)=>t===1||s.home[1]===-1,true],
+    ['③ 中層','前兩層完成',(s,t)=>t===1||s.home[1]<=0,false],
+    ['④ 黃十字','頂面十字',(s,t)=>t===1||s.home[1]<=0||(t===2&&s.hn[1]===1),false],
+    ['⑤ 黃面','頂面全黃',(s,t)=>t===1||s.home[1]<=0||s.hn[1]===1,false],
+    ['⑥ 頂角歸位','角都對了',(s,t)=>t===1||s.home[1]<=0||s.hn[1]===1||t===3,false],
+    ['⑦ 頂邊歸位','完成!',()=>true,false]];
+  document.getElementById('mapGrid').innerHTML=stages.map(([a,b,f,flip])=>{
+    const c=solvedCube();c.forEach(s=>{s.gray=!f(s,s.home.filter(v=>v!==0).length);});
+    if(flip)applyAlg(c,'x2');
+    return `<figure><svg viewBox="0 0 110 100" role="img" aria-label="${a}">${cubeSVG(c,{views:[{cx:55,cy:50,S:15}]})}</svg><figcaption><b>${a}</b>${b}${flip?'<br><span style="color:#8d867a">(翻過來看底面)</span>':''}</figcaption></figure>`;}).join('');
+})();
+
+/* ===== 7. 頂面圖示(黃十字/小魚) ===== */
+function topIcon(top,sides={}){
+  const cs=18,o=22;let s=`<svg viewBox="0 0 98 98" width="98" height="98" role="img">`;
+  for(let r=0;r<3;r++)for(let c=0;c<3;c++){const k=top[r*3+c];s+=`<rect x="${o+c*cs}" y="${o+r*cs}" width="${cs-2}" height="${cs-2}" rx="3" fill="${k==='Y'?'#f5d130':'#c9c3b6'}"/>`;}
+  const strip=(f,i)=>{const k=(sides[f]||'...')[i];if(k!=='Y')return'';
+    if(f==='B')return`<rect x="${o+i*cs}" y="${o-9}" width="${cs-2}" height="6" rx="2" fill="#f5d130"/>`;
+    if(f==='F')return`<rect x="${o+i*cs}" y="${o+3*cs+3}" width="${cs-2}" height="6" rx="2" fill="#f5d130"/>`;
+    if(f==='L')return`<rect x="${o-9}" y="${o+i*cs}" width="6" height="${cs-2}" rx="2" fill="#f5d130"/>`;
+    return`<rect x="${o+3*cs+3}" y="${o+i*cs}" width="6" height="${cs-2}" rx="2" fill="#f5d130"/>`;};
+  for(const f of['B','F','L','R'])for(let i=0;i<3;i++)s+=strip(f,i);
+  s+=`<text x="49" y="12" font-size="9" fill="#8d867a" text-anchor="middle">後</text><text x="49" y="97" font-size="9" fill="#8d867a" text-anchor="middle">前(面對你)</text>`;
+  return s+'</svg>';
+}
+document.getElementById('crossIcons').innerHTML=[
+  ['....Y....','<b>點</b><br>只有中心'],['.Y.YY....','<b>L 形</b><br>擺在後+左'],['...YYY...','<b>一字</b><br>擺成橫的'],['.Y.YYY.Y.','<b>十字</b><br>完成!']]
+  .map(([t,c])=>`<figure>${topIcon(t)}<figcaption>${c}</figcaption></figure>`).join('');
+document.getElementById('suneIcons').innerHTML=[
+  ['.Y.YYYYY.',{},'<b>1 個(小魚)</b><br>魚頭(黃朝上的角)放左前'],
+  ['.Y.YYY.Y.',{L:'..Y'},'<b>0 個</b><br>左前角的黃色朝左'],
+  ['.YYYYY.YY',{L:'..Y'},'<b>2 個</b><br>一樣:左前角的黃色朝左']]
+  .map(([t,sd,c])=>`<figure>${topIcon(t,sd)}<figcaption>${c}</figcaption></figure>`).join('');
+
+/* ===== 8. 打亂與計時器 ===== */
+function genScramble(n){const F=['R','L','U','D','F','B'],AX={R:0,L:0,U:1,D:1,F:2,B:2},suf=['',"'",'2'];const out=[];let a=null,b=null;
+  while(out.length<n){const f=F[Math.floor(Math.random()*6)];if(f===a)continue;if(a&&b&&AX[f]===AX[a]&&AX[a]===AX[b])continue;
+    out.push(f+suf[Math.floor(Math.random()*3)]);b=a;a=f;}return out.join(' ');}
+(function(){
+  const btn=document.getElementById('timerBtn');let t0=0,raf=null,running=false;const times=[];
+  const fmt=ms=>{const s=ms/1000;if(s<60)return s.toFixed(2);const m=Math.floor(s/60);return m+':'+(s-m*60).toFixed(2).padStart(5,'0');};
+  const newScr=()=>{document.getElementById('scr').textContent=genScramble(20);};
+  function stats(){document.getElementById('stN').textContent=times.length;
+    document.getElementById('stBest').textContent=times.length?fmt(Math.min(...times)):'–';
+    if(times.length>=5){const l=times.slice(-5).sort((a,b)=>a-b).slice(1,4);document.getElementById('stAo5').textContent=fmt(l.reduce((a,b)=>a+b,0)/3);}
+    else document.getElementById('stAo5').textContent='–';
+    document.getElementById('timeList').textContent=times.length?'最近:'+times.slice(-8).map(fmt).join(' · '):'';}
+  const tick=()=>{btn.textContent=fmt(performance.now()-t0);raf=requestAnimationFrame(tick);};
+  btn.onclick=()=>{if(!running){running=true;t0=performance.now();btn.classList.add('run');tick();}
+    else{running=false;cancelAnimationFrame(raf);const ms=performance.now()-t0;btn.textContent=fmt(ms);btn.classList.remove('run');times.push(ms);stats();newScr();}};
+  document.getElementById('newScr').onclick=newScr;
+  document.getElementById('clrTimes').onclick=()=>{times.length=0;stats();btn.textContent='0.00';};
+  newScr();stats();
+})();
+
+/* ===== 9. 封面方塊(R U R' U' 循環,做 6 輪回原狀) ===== */
+(function(){
+  const svg=document.getElementById('heroCube'),cube=solvedCube(),seq=["R","U","R'","U'"];let k=0;
+  const render=anim=>{svg.innerHTML=cubeSVG(cube,{anim,views:[{cx:90,cy:84,S:27}]});};
+  render();if(reduceMotion)return;
+  (function next(){animateMove(cube,seq[k%4],render,380,()=>{k++;setTimeout(next,k%24===0?1400:260);});})();
+})();
+
+/* ===== 10. 總測驗 ===== */
+const QA=[
+ ['中心塊會移動嗎?它有什麼意義?','永遠不會移動(只會原地轉)。中心塊的顏色決定那一面「應該是什麼顏色」——看中心認面。'],
+ ['R 和 L 都是「順時針」,為什麼看起來方向相反?','順時針是「正對著那一面看」的方向。R 從右邊看、L 從左邊看,所以 R 是右面往上、L 是左面往下。'],
+ ['為什麼層先法不「一面一面」拼?','拼好一面後,四周的顏色沒對好,後面一轉就亂。一層一層蓋,而且每條公式都只動上面不破壞下面。'],
+ ['白十字最常見的失敗是什麼?怎麼避免?','白十字拼好了但邊塊側色沒對齊中心。用雛菊法的「對色下放」:先讓側色與中心同色才轉 180° 送下去。'],
+ ['用 R U R\' U\' 放白角:白朝右、朝上、朝前各要做幾次?','白朝右 1 次、白朝上 3 次、白朝前 5 次(角要先放在右前上方)。'],
+ ['中層步驟為什麼要找「不含黃色」的頂層邊塊?','含黃色的邊塊屬於頂層,不會放進中層;不含黃色的才是中層的 4 個邊塊。'],
+ ['黃十字遇到 L 形要怎麼擺?做完會變成什麼?','轉 U 讓黃邊在「後面+左邊」,做 F R U R\' U\' F\' 會變成一字;一字橫擺再做一次就是十字。'],
+ ['小魚公式遇到 0 或 2 個黃角朝上時怎麼擺?','轉 U 讓「左前角的黃色朝向左邊」,再做 R U R\' U R U2 R\',最多 3 次頂面全黃。'],
+ ['「頭燈」要擺在哪裡?沒有頭燈怎麼辦?','擺在後面再做 A-perm;沒有頭燈就任意做一次,頭燈就會出現。'],
+ ['CFOP 四個字母代表什麼?你學的七站怎麼對應?','Cross、F2L、OLL、PLL。①=C;②③=F2L;④⑤=OLL(兩段式);⑥⑦=PLL(兩段式)。']
+];
+document.getElementById('quizBox').innerHTML=QA.map((q,i)=>`
+ <div class="q" id="qq${i}"><div class="qt">${i+1}. ${q[0]}</div>
+ <button onclick="document.getElementById('qq${i}').classList.toggle('open')">看答案</button>
+ <div class="ans">${q[1]}</div></div>`).join('');
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-b272623157" data-category="personal"></script></body>
+</html>

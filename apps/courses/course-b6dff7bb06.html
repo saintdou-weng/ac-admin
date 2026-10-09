@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>從一根線到一箱貨｜成衣車縫、整燙、包裝完整課程</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --mat:#1E4B40; --mat-2:#2A5E51; --mat-line:rgba(255,255,255,.09);
+  --paper:#F6F7F4; --card:#FFFFFF; --ink:#1D2430; --muted:#586272;
+  --chalk:#F1C94B; --chalk-l:#FBF1CC; --thread:#C23A3F; --thread-l:#F7E1E1;
+  --indigo:#2F3F73; --indigo-l:#E3E7F3; --rule:#D5DBD3;
+  --hand:"LXGW WenKai TC","Kaiti TC","STKaiti","DFKai-SB","BiauKai",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-text-size-adjust:100%}
+img,svg{max-width:100%}
+a{color:var(--indigo)}
+:focus-visible{outline:3px solid var(--chalk);outline-offset:2px}
+
+/* ---------- 封面：裁布墊 ---------- */
+.hero{background-color:var(--mat);color:#fff;position:relative;overflow:hidden;
+  background-image:linear-gradient(var(--mat-line) 1px,transparent 1px),linear-gradient(90deg,var(--mat-line) 1px,transparent 1px),
+  linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:80px 80px,80px 80px,16px 16px,16px 16px;
+  padding:calc(56px + env(safe-area-inset-top,0px)) 24px 40px}
+.hero-inner{max-width:1100px;margin:0 auto}
+.hero h1{font-family:var(--hand);font-weight:700;font-size:clamp(2.4rem,7vw,4.6rem);line-height:1.15;margin:0 0 .3em;letter-spacing:.02em;color:var(--chalk)}
+.hero p{max-width:34em;margin:0 0 1em;color:rgba(255,255,255,.88);font-size:1.05rem}
+.hero .meta{display:flex;flex-wrap:wrap;gap:10px 22px;font-size:.95rem;color:rgba(255,255,255,.75);margin-top:18px}
+.hero .meta b{color:#fff;font-weight:500}
+.seam-svg{display:block;width:100%;height:auto;margin-top:26px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.btn{font:inherit;font-size:.98rem;border:2px solid currentColor;background:transparent;color:inherit;padding:8px 18px;border-radius:999px;cursor:pointer}
+.btn.solid{background:var(--chalk);border-color:var(--chalk);color:var(--ink);font-weight:700}
+.btn:hover{filter:brightness(1.08)}
+
+/* 縫線動畫：只在封面發生一次 */
+.stitch-line{stroke:var(--thread);stroke-width:4;stroke-dasharray:16 9;fill:none}
+.reveal-rect{animation:reveal 4.2s linear forwards}
+.needle-run{animation:run 4.2s linear forwards}
+.needle-bob{animation:bob .3s ease-in-out 14 alternate}
+@keyframes reveal{from{width:0}to{width:1000px}}
+@keyframes run{from{transform:translateX(0)}to{transform:translateX(960px)}}
+@keyframes bob{from{transform:translateY(-18px)}to{transform:translateY(8px)}}
+@media (prefers-reduced-motion:reduce){.reveal-rect,.needle-run,.needle-bob{animation:none}.reveal-rect{width:1000px}.needle-run{transform:translateX(960px)}}
+
+/* ---------- 版面 ---------- */
+.layout{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:270px minmax(0,1fr);gap:40px;padding:0 24px calc(60px + env(safe-area-inset-bottom,0px))}
+nav.toc{position:sticky;top:env(safe-area-inset-top,0px);align-self:start;max-height:100vh;overflow:auto;padding:28px 0}
+.toc h2{font-family:var(--hand);font-size:1.25rem;margin:0 0 8px}
+.progress{height:8px;background:var(--rule);border-radius:4px;overflow:hidden;margin:6px 0 4px}
+.progress i{display:block;height:100%;width:0;background:var(--thread);transition:width .4s}
+.progress-txt{font-size:.85rem;color:var(--muted);margin-bottom:14px}
+.toc .stage{font-size:.82rem;color:var(--muted);margin:14px 0 4px;padding-left:2px}
+.toc ol{list-style:none;margin:0;padding:0}
+.toc a{display:grid;grid-template-columns:2.2em 1fr 1.2em;align-items:start;gap:4px;text-decoration:none;color:var(--ink);padding:6px 8px;border-radius:8px;font-size:.95rem;line-height:1.5}
+.toc a .n{font-family:var(--hand);color:var(--muted)}
+.toc a:hover{background:var(--indigo-l)}
+.toc a.on{background:var(--mat);color:#fff}
+.toc a.on .n{color:var(--chalk)}
+.toc a .ck{color:var(--thread);font-weight:700;text-align:right}
+.toc a.on .ck{color:var(--chalk)}
+.menu-btn{display:none}
+
+main{min-width:0;padding-top:28px}
+.lesson{display:none;max-width:44em}
+.lesson.show{display:block}
+.lesson > header{margin-bottom:26px}
+.lesson .kicker{font-family:var(--hand);font-size:1.15rem;color:var(--thread)}
+.lesson h2{font-family:var(--hand);font-weight:700;font-size:clamp(1.9rem,4.5vw,2.6rem);line-height:1.25;margin:.1em 0 .25em}
+.seam{height:0;border:0;border-top:3px dashed var(--thread);margin:6px 0 0;width:100%;opacity:.85}
+.lead{font-size:1.1rem;color:#333c4a}
+.lesson h3{font-family:var(--hand);font-size:1.55rem;margin:2.1em 0 .4em;line-height:1.35}
+.lesson h4{font-size:1.05rem;margin:1.5em 0 .3em}
+.lesson p{margin:.6em 0}
+.lesson ul,.lesson ol{padding-left:1.4em}
+.lesson li{margin:.25em 0}
+.t{font-weight:700;color:var(--indigo)}
+.en{font-size:.85em;color:var(--muted);font-weight:400}
+
+/* 各種便條：像貼在版型紙上的註記 */
+.note{margin:1.4em 0;padding:14px 18px 14px 18px;border-left:5px solid var(--indigo);background:var(--card);border-radius:0 10px 10px 0}
+.note > .lab{font-family:var(--hand);font-size:1.1rem;font-weight:700;display:block;margin-bottom:2px}
+.note.analogy{border-color:var(--indigo)} .note.analogy .lab{color:var(--indigo)}
+.note.origin{border:0;background:var(--chalk-l);border-radius:4px;position:relative;box-shadow:0 1px 0 #e7d9a6}
+.note.origin .lab{color:#7a5a00}
+.note.warn{border-color:var(--thread);background:var(--thread-l)} .note.warn .lab{color:var(--thread)}
+.note.try{border-color:var(--chalk);border-style:dashed;border-width:2px 2px 2px 5px;background:transparent} .note.try .lab{color:#8a6a00}
+.note.pro{border-color:var(--mat);background:#E6EFEC} .note.pro .lab{color:var(--mat)}
+
+/* 圖與互動 */
+.fig{margin:1.6em 0;background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:16px}
+.fig svg{display:block;width:100%;height:auto}
+.fig .cap{font-size:.9rem;color:var(--muted);margin-top:8px}
+.ctrl{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px}
+.ctrl label{font-size:.95rem}
+.ctrl input[type=range]{flex:1;min-width:160px;accent-color:var(--thread)}
+.chip{font:inherit;font-size:.92rem;border:1.5px solid var(--rule);background:var(--paper);padding:5px 14px;border-radius:999px;cursor:pointer;color:var(--ink)}
+.chip[aria-pressed=true]{background:var(--indigo);border-color:var(--indigo);color:#fff}
+.readout{font-size:.95rem;background:var(--paper);border-radius:8px;padding:10px 12px;margin-top:10px;min-height:2.6em}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+table{border-collapse:collapse;width:100%;font-size:.93rem;line-height:1.6}
+.tbl{overflow-x:auto;margin:1.2em 0;border:1px solid var(--rule);border-radius:10px;background:var(--card)}
+th,td{padding:9px 11px;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}
+th{background:#EEF1EC;font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+
+/* 旅程步驟 */
+.journey{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.journey button{font:inherit;font-size:.92rem;border:1.5px solid var(--rule);background:var(--card);border-radius:10px;padding:6px 10px;cursor:pointer;display:flex;gap:6px;align-items:center}
+.journey button b{font-family:var(--hand);color:var(--thread)}
+.journey button[aria-pressed=true]{border-color:var(--mat);background:var(--mat);color:#fff}
+.journey button[aria-pressed=true] b{color:var(--chalk)}
+
+/* 測驗 */
+.quiz{margin:2.4em 0 1em;padding:20px;background:var(--card);border:2px solid var(--mat);border-radius:14px}
+.quiz h3{margin-top:0}
+.qa{margin:18px 0;padding-top:14px;border-top:1px dashed var(--rule)}
+.qa:first-of-type{border-top:0;padding-top:0}
+.qa .q{font-weight:700;margin-bottom:8px}
+.qa .opts{display:grid;gap:6px}
+.qa .opts button{font:inherit;text-align:left;border:1.5px solid var(--rule);background:var(--paper);border-radius:8px;padding:8px 12px;cursor:pointer;color:var(--ink)}
+.qa .opts button.right{border-color:#2f7d4f;background:#E3F3E9}
+.qa .opts button.wrong{border-color:var(--thread);background:var(--thread-l)}
+.qa .why{display:none;margin-top:8px;font-size:.93rem;color:#333c4a;background:var(--chalk-l);padding:8px 12px;border-radius:6px}
+.qa.done .why{display:block}
+.score{font-family:var(--hand);font-size:1.2rem;color:var(--mat)}
+
+.pager{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:40px 0 10px;padding-top:20px;border-top:1px solid var(--rule)}
+.pager .btn{color:var(--mat)}
+.done-toggle{font:inherit;border:2px dashed var(--thread);color:var(--thread);background:transparent;border-radius:999px;padding:8px 18px;cursor:pointer}
+.done-toggle[aria-pressed=true]{background:var(--thread);color:#fff;border-style:solid}
+
+/* 名詞辭典 */
+.gloss-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 16px}
+.gloss-tools input{font:inherit;padding:8px 12px;border:1.5px solid var(--rule);border-radius:8px;flex:1;min-width:200px}
+.gl{padding:14px 0;border-bottom:1px dashed var(--rule)}
+.gl h4{margin:0;font-size:1.08rem}
+.gl .o{font-size:.92rem;background:var(--chalk-l);padding:6px 10px;border-radius:4px;margin-top:6px}
+
+/* 手機 */
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr;gap:0;padding:0 16px calc(60px + env(safe-area-inset-bottom,0px))}
+  nav.toc{position:fixed;inset:0 25% 0 0;background:var(--paper);z-index:20;padding:calc(20px + env(safe-area-inset-top,0px)) 16px 20px;transform:translateX(-105%);transition:transform .25s;box-shadow:4px 0 20px rgba(0,0,0,.15);max-height:none}
+  nav.toc.open{transform:none}
+  .menu-btn{display:inline-flex;position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:21;background:var(--mat);color:#fff;border:0;border-radius:999px;padding:12px 18px;font:inherit;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+  .two{grid-template-columns:1fr}
+  body{font-size:16px}
+}
+@media print{
+  .hero-actions,.menu-btn,nav.toc,.pager,.ctrl,.gloss-tools{display:none!important}
+  .layout{display:block}
+  .lesson{display:block!important;page-break-before:always}
+  .hero{background:#fff;color:#000}.hero h1{color:#000}.hero p,.hero .meta{color:#000}
+  .qa .why{display:block}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-inner">
+    <h1>從一根線<br>到一箱貨</h1>
+    <p>成衣車縫、整燙、包裝的完整課程。梭織和針織都教，從「布是怎麼來的」一路講到工廠產線怎麼算效率。每個專有名詞都告訴你它的由來，看得懂國字就能學。</p>
+    <div class="meta"><span><b>13</b> 課正課</span><span><b>40+</b> 題隨堂測驗</span><span><b>12</b> 個互動圖解</span><span><b>60+</b> 個名詞由來</span></div>
+    <svg class="seam-svg" viewBox="0 0 1000 110" aria-hidden="true">
+      <defs><clipPath id="rv"><rect class="reveal-rect" x="0" y="0" width="0" height="110"/></clipPath></defs>
+      <line x1="0" y1="78" x2="1000" y2="78" stroke="rgba(255,255,255,.18)" stroke-width="2"/>
+      <path class="stitch-line" d="M0 78 H1000" clip-path="url(#rv)"/>
+      <g class="needle-run"><g class="needle-bob">
+        <rect x="18" y="0" width="12" height="40" rx="2" fill="#c9ced6"/>
+        <path d="M21 40 H27 L25.5 84 L24 90 L22.5 84 Z" fill="#e8ebef"/>
+        <ellipse cx="24" cy="76" rx="1.2" ry="3.5" fill="#1E4B40"/>
+      </g></g>
+    </svg>
+    <div class="hero-actions">
+      <button class="btn solid" onclick="go('c0')">從第 0 課開始</button>
+      <button class="btn" onclick="go('gloss')">先翻名詞辭典</button>
+      <button class="btn" onclick="window.print()">列印／存成 PDF</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc" id="toc" aria-label="課程目錄">
+  <h2>課程目錄</h2>
+  <div class="progress"><i id="bar"></i></div>
+  <div class="progress-txt" id="ptxt">已完成 0 課</div>
+  <div id="tocList"></div>
+</nav>
+<button class="menu-btn" id="menuBtn" aria-controls="toc" aria-expanded="false">目錄</button>
+<main id="main">
+
+<!-- ================= 第 0 課 ================= -->
+<section class="lesson" id="c0" data-n="0" data-stage="入門" data-title="一件衣服的旅程">
+<header><div class="kicker">第 0 課</div><h2>一件衣服的旅程</h2><hr class="seam"></header>
+<p class="lead">你身上這件 T 恤，從一捲布變成掛在店裡的樣子，中間至少經過二十幾雙手。這一課先帶你把整條路走一遍，之後每一課都是在把其中一段放大來看。</p>
+
+<div class="note origin"><span class="lab">名詞由來：成衣</span>「成」是「已經完成」的意思。<span class="t">成衣</span>就是做好了、買回家直接能穿的衣服，英文叫 <i>ready-to-wear</i>（準備好可以穿），法文叫 <i>prêt-à-porter</i>。在成衣出現之前，衣服幾乎都是找裁縫量身訂做，或是家裡自己縫。工業革命後有了縫紉機和工廠，才能一次做出成千上萬件同樣的衣服。</div>
+
+<h3>點點看：一件衣服的 10 站</h3>
+<p>下面每一站都點點看，會出現這一站在做什麼。</p>
+<div class="fig">
+  <div class="journey" id="journey"></div>
+  <div class="readout" id="journeyOut">點上面任何一站開始。</div>
+</div>
+
+<div class="note analogy"><span class="lab">打個比方</span>做衣服很像做便當。<b>設計</b>是決定菜單，<b>打版</b>是寫食譜，<b>裁剪</b>是切菜，<b>車縫</b>是下鍋煮，<b>整燙</b>是擺盤，<b>檢驗</b>是試吃，<b>包裝</b>是裝盒蓋蓋子，<b>出貨</b>就是外送出門。任何一步沒做好，客人打開便當都會發現。</div>
+
+<h3>本課程怎麼走</h3>
+<p>課程分三個階段，建議照順序學，因為後面的課會用到前面的名詞。</p>
+<div class="tbl"><table>
+<tr><th>階段</th><th>課次</th><th>學完你會</th></tr>
+<tr><td>入門</td><td>第 0–5 課</td><td>認得布料、工具、縫紉機，知道一針一線是怎麼「鎖」起來的，能看懂縫法。</td></tr>
+<tr><td>實戰</td><td>第 6–10 課</td><td>知道襯衫、牛仔褲、T 恤、Polo 衫在工廠裡的做法，會整燙、會驗貨、會包裝裝箱。</td></tr>
+<tr><td>專業</td><td>第 11–12 課</td><td>會算標準工時與效率、找出產線瓶頸，懂精實管理和工廠裡的職涯路線。</td></tr>
+</table></div>
+
+<div class="note try"><span class="lab">動手做</span>打開你的衣櫃，拿出一件 T 恤和一件襯衫（或制服上衣）。翻到反面，找找看裡面的縫線長得一不一樣？把你的觀察寫下來，學完第 4 課再回來對答案。</div>
+</section>
+
+<!-- ================= 第 1 課 ================= -->
+<section class="lesson" id="c1" data-n="1" data-stage="入門" data-title="纖維與紗線">
+<header><div class="kicker">第 1 課</div><h2>纖維與紗線：布的原料</h2><hr class="seam"></header>
+<p class="lead">布是紗做的，紗是纖維做的。要會做衣服，得先知道衣服是「什麼東西」做的。</p>
+
+<div class="note analogy"><span class="lab">打個比方</span><span class="t">纖維</span>就像一根根頭髮，又短又細；把很多頭髮扭在一起綁成辮子，就是<span class="t">紗線</span>；再把辮子編成一張草蓆，就是<span class="t">布</span>。</div>
+
+<h3>纖維分兩大家族</h3>
+<p><b>天然纖維</b>是大自然本來就有的；<b>化學纖維</b>是人在工廠裡做出來的。化學纖維又分兩種：用木頭等天然材料「重新做一次」的叫<span class="t">再生纖維</span>，從石油化學原料「從零合成」的叫<span class="t">合成纖維</span>。</p>
+<div class="tbl"><table>
+<tr><th>家族</th><th>纖維</th><th>特性</th><th>常見衣服</th></tr>
+<tr><td rowspan="2">天然・植物</td><td>棉 <span class="en">Cotton</span></td><td>吸汗、透氣、舒服，但容易皺、會縮水</td><td>T 恤、襯衫、內衣</td></tr>
+<tr><td>麻 <span class="en">Linen</span></td><td>非常涼爽、硬挺，超級容易皺</td><td>夏季襯衫、褲子</td></tr>
+<tr><td rowspan="2">天然・動物</td><td>羊毛 <span class="en">Wool</span></td><td>保暖、有彈性，怕高溫與搓洗</td><td>毛衣、西裝</td></tr>
+<tr><td>蠶絲 <span class="en">Silk</span></td><td>光滑有光澤、很輕，嬌貴</td><td>絲巾、禮服</td></tr>
+<tr><td rowspan="2">化學・再生</td><td>嫘縈 <span class="en">Rayon / Viscose</span></td><td>垂墜、滑順、吸濕，濕的時候強度變差</td><td>洋裝、襯衫</td></tr>
+<tr><td>天絲 <span class="en">Lyocell</span></td><td>比嫘縈更強韌，製程較環保</td><td>襯衫、寢具</td></tr>
+<tr><td rowspan="4">化學・合成</td><td>聚酯 <span class="en">Polyester</span></td><td>耐穿、不易皺、乾得快，不太吸汗</td><td>運動服、外套、縫紉線</td></tr>
+<tr><td>尼龍 <span class="en">Nylon</span></td><td>非常耐磨、強度高、很輕</td><td>風衣、泳衣、襪子</td></tr>
+<tr><td>壓克力 <span class="en">Acrylic</span></td><td>像羊毛般蓬鬆保暖，便宜</td><td>毛衣、毛帽</td></tr>
+<tr><td>氨綸 <span class="en">Spandex</span></td><td>可以拉長好幾倍再彈回來</td><td>緊身褲、運動衣（通常只混一點點）</td></tr>
+</table></div>
+
+<div class="note origin"><span class="lab">名詞由來：這些纖維的名字</span>
+<b>Cotton（棉）</b>來自阿拉伯文 <i>qutn</i>，隨著貿易傳進歐洲。<br>
+<b>Nylon（尼龍）</b>是美國杜邦公司在 1930 年代發明並自己造的新字。常聽到的「紐約 NY + 倫敦 Lon」說法其實是誤傳。<br>
+<b>Polyester（聚酯）</b>拆開看：<i>poly</i> = 很多，<i>ester</i> = 酯（一種化學結構）。中文「聚酯」就是「很多酯聚在一起」，翻得非常直接。<br>
+<b>Spandex</b> 是把英文 <i>expands</i>（擴張）的字母重新排列而成的；很多人叫它「萊卡 Lycra」，那其實是品牌名。中文「氨綸」取自它的化學成分。<br>
+<b>嫘縈</b>是 Rayon 的音譯。選字很巧：「嫘」是傳說中教人養蠶的嫘祖，因為嫘縈最早就是被當作「人造絲」發明的。</div>
+
+<h3>紗線有多粗？三種說法</h3>
+<p>紗很細，用尺量不準，所以紡織業改用「重量和長度的關係」來表示粗細。三種單位方向不一樣，要特別小心：</p>
+<div class="tbl"><table>
+<tr><th>單位</th><th>怎麼算</th><th>數字變大代表</th><th>常用在</th></tr>
+<tr><td>英制支數 <span class="en">Ne</span></td><td>1 磅重的紗，能拉出幾個 840 碼長</td><td><b>越細</b></td><td>棉紗（例如 30 支、40 支）</td></tr>
+<tr><td>丹尼 <span class="en">Denier, D</span></td><td>9,000 公尺長的紗重幾公克</td><td><b>越粗</b></td><td>聚酯、尼龍長絲（例如 75D）</td></tr>
+<tr><td>特克斯 <span class="en">Tex</span></td><td>1,000 公尺長的紗重幾公克</td><td><b>越粗</b></td><td>縫紉線（例如 Tex 27）</td></tr>
+</table></div>
+<div class="note analogy"><span class="lab">打個比方</span>支數像「一包麵粉能做幾條麵」：同樣重量能拉得越長，代表每一條越細，所以數字越大越細。丹尼和 Tex 反過來，像「一條麵有多重」：越重就越粗。</div>
+<div class="note origin"><span class="lab">名詞由來：丹尼</span><span class="t">Denier</span> 原本是法國古代一種銀幣的名字。以前人們拿這種小錢幣當砝碼，來秤蠶絲有多重，久而久之就變成紗線粗細的單位。<b>Tex</b> 則來自 <i>textile</i>（紡織品），是後來國際上推動的公制單位。</div>
+
+<h3>混紡：把優點混在一起</h3>
+<p>很多布不是單一纖維，而是<span class="t">混紡</span>，例如「棉 60%／聚酯 40%」。棉負責舒服吸汗，聚酯負責耐穿不皺。你在衣服上常看到的代號：</p>
+<ul>
+<li><b>T/C</b>：聚酯比棉多的混紡。T 來自日本帝人和東麗兩家公司的聚酯商標 <i>Tetoron</i>，C 是 Cotton。</li>
+<li><b>CVC</b>：<i>Chief Value Cotton</i>，意思是「棉是主要成分」，棉超過一半。</li>
+<li><b>TR</b>：聚酯加嫘縈（Rayon），常見在西裝褲、制服。</li>
+</ul>
+
+<div class="note try"><span class="lab">動手做：燃燒測試（一定要老師或大人陪同）</span>專業人員會剪一小段紗，用打火機燒，看它怎麼燒、聞味道、摸灰燼，來判斷是什麼纖維。在金屬盤上操作，旁邊準備一杯水。<br>
+<b>棉、麻、嫘縈</b>：燒得快，像燒紙的味道，灰燼軟軟灰灰一捏就碎。<br>
+<b>羊毛、蠶絲</b>：燒得慢，有燒頭髮的臭味，灰燼是脆的黑球。<br>
+<b>聚酯、尼龍</b>：遇火先縮再熔化，會滴下熱熔液（非常燙！），冷了變成硬硬的小珠子。</div>
+<div class="note warn"><span class="lab">安全提醒</span>合成纖維熔化後的液體溫度很高，碰到皮膚會黏住燙傷。這也是為什麼工廠規定：做燙工或靠近熱源的人，最好不要穿全聚酯的衣服。</div>
+
+<div class="note pro"><span class="lab">專業補充</span>工廠收到布料時，除了看成分，還要看<span class="t">縮水率</span>（洗過會縮多少）和<span class="t">色牢度</span>（顏色會不會掉、會不會染到別件）。如果布縮水 5%，版型就要事先放大，或先把布<span class="t">預縮</span>，不然衣服洗一次就小一號。</div>
+
+<div class="quiz" data-ch="c1"></div>
+</section>
+<!-- ================= 第 2 課 ================= -->
+<section class="lesson" id="c2" data-n="2" data-stage="入門" data-title="梭織與針織">
+<header><div class="kicker">第 2 課</div><h2>梭織與針織：布的兩種做法</h2><hr class="seam"></header>
+<p class="lead">成衣工廠最常聽到的一句話是：「這張單是梭織還是針織？」答案決定了要用什麼機器、什麼針、什麼線，甚至由哪一條產線來做。</p>
+
+<h3>梭織：直線和橫線上下交錯</h3>
+<p><span class="t">梭織布</span> <span class="en">Woven</span> 是用兩組紗線互相穿插做成的：一組直的叫<span class="t">經紗</span> <span class="en">Warp</span>，一組橫的叫<span class="t">緯紗</span> <span class="en">Weft</span>。緯紗一下從經紗上面過、一下從下面過，就把布「織」起來了。</p>
+<div class="note origin"><span class="lab">名詞由來：梭織、經緯</span>
+古代織布機要讓緯紗橫著來回穿過經紗，用的工具是一個兩頭尖、像小船的木頭，叫做<span class="t">梭</span>（英文 <i>shuttle</i>）。「用梭子織出來的布」就叫梭織布。成語「日月如梭」，就是形容時間像梭子一樣飛快地來回。<br>
+「經」在古文裡本來就是指織布機上的直線，「緯」是橫線。後來人們把地球上的直線叫經線、橫線叫緯線，其實是從織布借來的說法。</div>
+
+<div class="fig">
+  <svg id="weaveSvg" viewBox="0 0 300 300" role="img" aria-label="梭織組織圖"></svg>
+  <div class="ctrl" id="weaveCtrl">
+    <button class="chip" data-w="plain" aria-pressed="true">平紋</button>
+    <button class="chip" data-w="twill" aria-pressed="false">斜紋</button>
+    <button class="chip" data-w="satin" aria-pressed="false">緞紋</button>
+  </div>
+  <div class="readout" id="weaveOut"></div>
+  <div class="cap">藍色直條是經紗浮在上面，黃色橫條是緯紗浮在上面。切換看看三種基本組織。</div>
+</div>
+
+<div class="note origin"><span class="lab">名詞由來：丹寧、卡其、緞</span>
+<b>丹寧 Denim</b>：來自法文 <i>serge de Nîmes</i>，意思是「法國尼姆城出產的斜紋布」，後來唸快了就變成 de-Nîmes → denim。<br>
+<b>Jeans（牛仔褲）</b>：一說來自義大利港口熱那亞（法文 Gênes），當地水手穿這種耐磨布料做的褲子。<br>
+<b>卡其 Khaki</b>：源自波斯語，意思是「塵土」，指那種泥土般的顏色，後來被英國軍服採用。<br>
+<b>緞 Satin</b>：一般認為來自阿拉伯商人對中國泉州的稱呼 <i>Zaitun</i>（刺桐），因為中世紀的絲緞多從泉州出口。</div>
+
+<h3>布紋方向：直、橫、斜</h3>
+<p>梭織布有方向性，裁剪時一定要注意，這叫<span class="t">布紋</span> <span class="en">Grain</span>。</p>
+<div class="fig">
+<svg viewBox="0 0 520 230" role="img" aria-label="布紋方向示意">
+  <rect x="40" y="20" width="440" height="190" fill="#E3E7F3"/>
+  <rect x="40" y="20" width="440" height="12" fill="#2F3F73"/><rect x="40" y="198" width="440" height="12" fill="#2F3F73"/>
+  <text x="260" y="15" text-anchor="middle" font-size="13" fill="#586272">布邊（Selvage）</text>
+  <g stroke="#C23A3F" stroke-width="3" fill="#C23A3F">
+    <line x1="120" y1="185" x2="120" y2="55"/><path d="M112 62 L120 45 L128 62Z"/>
+    <line x1="210" y1="120" x2="330" y2="120"/><path d="M322 112 L340 120 L322 128Z"/>
+    <line x1="370" y1="185" x2="450" y2="60"/><path d="M439 62 L456 50 L453 70Z"/>
+  </g>
+  <g font-size="15" fill="#1D2430" font-weight="700">
+    <text x="130" y="110">直紋</text><text x="232" y="110">橫紋</text><text x="400" y="150">斜紋 45°</text>
+  </g>
+  <g font-size="12" fill="#586272"><text x="130" y="128">最穩定、不易變形</text><text x="222" y="145">略有伸縮</text><text x="400" y="168">最會伸長、最垂墜</text></g>
+</svg>
+<div class="cap">衣服的長度方向通常要對齊直紋，這樣穿久了才不會歪。版型紙上畫的那條長箭頭，就是在告訴裁剪人員「這裡要對直紋」。</div>
+</div>
+<div class="note origin"><span class="lab">名詞由來：布邊</span>布匹左右兩側、織得特別密、不會散開的邊，英文叫 <i>selvage</i> 或 <i>selvedge</i>，就是 <i>self-edge</i>（自己收好的邊）唸快了的樣子。高級牛仔褲會把紅白色的布邊留在褲管內側，叫做「赤耳丹寧」。</div>
+
+<h3>針織：一條線打成一個個小圈圈</h3>
+<p><span class="t">針織布</span> <span class="en">Knit</span> 不是穿插，而是用針把紗線拉成一個一個<span class="t">線圈</span> <span class="en">Loop</span>，新的圈套進舊的圈裡，一排接一排串起來。就像阿嬤用棒針打毛衣，只是機器打得又細又快。</p>
+<p>因為線圈可以被拉開變形，針織布天生就有彈性，這就是 T 恤穿起來比襯衫舒服的原因。</p>
+
+<div class="fig">
+  <div class="two">
+    <div><svg id="wovenBox" viewBox="0 0 200 170" role="img" aria-label="梭織布受拉"></svg><div class="cap" style="text-align:center">梭織（平紋）</div></div>
+    <div><svg id="knitBox" viewBox="0 0 200 170" role="img" aria-label="針織布受拉"></svg><div class="cap" style="text-align:center">針織（平針）</div></div>
+  </div>
+  <div class="ctrl"><label for="pull">拉一拉：</label><input type="range" id="pull" min="0" max="100" value="0"></div>
+  <div class="readout" id="pullOut">把滑桿往右拖，看兩塊布被橫向拉的時候有什麼不同。</div>
+</div>
+
+<h4>緯編與經編</h4>
+<ul>
+<li><span class="t">緯編</span> <span class="en">Weft knit</span>：一條紗橫著走，一排一排打圈。T 恤、毛衣、大學 T 幾乎都是。缺點是線斷了會一路「脫散」，就像絲襪勾到後一整條跑掉。</li>
+<li><span class="t">經編</span> <span class="en">Warp knit</span>：很多條紗直著走，互相勾來勾去。比較不會脫散，常見在蕾絲、運動網眼布、內衣布。</li>
+</ul>
+
+<h4>常見針織布</h4>
+<div class="tbl"><table>
+<tr><th>名稱</th><th>樣子</th><th>用在哪</th><th>名字的由來</th></tr>
+<tr><td>平針布 <span class="en">Single Jersey</span></td><td>正面是一排排小 V，反面是小橫彎；布邊會捲起來</td><td>T 恤</td><td>英國澤西島（Jersey）漁民穿的針織衣而得名</td></tr>
+<tr><td>羅紋布 <span class="en">Rib</span></td><td>一條條直的凸條，橫向特別有彈性</td><td>領口、袖口、下擺</td><td>凸條像一根根肋骨（rib）</td></tr>
+<tr><td>雙面布 <span class="en">Interlock</span></td><td>兩面看起來都像正面，厚實不捲邊</td><td>童裝、高級 T 恤</td><td>兩層線圈互相扣鎖（inter-lock）</td></tr>
+<tr><td>珠地布 <span class="en">Piqué</span></td><td>表面有小小的凹凸顆粒</td><td>Polo 衫</td><td>法文 <i>piqué</i> 是「壓出凹凸」；中文「珠地」形容表面像撒了小珠子</td></tr>
+<tr><td>毛圈布 <span class="en">French Terry</span></td><td>正面平滑，反面是一個個小線圈</td><td>大學 T、帽 T</td><td>一說來自法文 <i>tirer</i>（拉出），指把線圈拉出來</td></tr>
+<tr><td>刷毛布 <span class="en">Fleece</span></td><td>把反面的線圈刷開變成絨毛</td><td>保暖外套</td><td>fleece 原意是「羊毛」</td></tr>
+</table></div>
+
+<h3>一張表比較兩種布</h3>
+<div class="tbl"><table>
+<tr><th>比較項目</th><th>梭織 Woven</th><th>針織 Knit</th></tr>
+<tr><td>結構</td><td>經紗緯紗上下交錯</td><td>線圈互相串套</td></tr>
+<tr><td>彈性</td><td>很小（除非加了氨綸）</td><td>大，尤其是橫向</td></tr>
+<tr><td>剪開的邊</td><td>會一直掉紗鬚</td><td>比較不掉鬚，但平針布會捲邊</td></tr>
+<tr><td>主力機器</td><td>平車（直線車）</td><td>拷克、三本（有彈性的線跡）</td></tr>
+<tr><td>車縫用針</td><td>尖頭針，刺穿紗線</td><td>圓頭針，把線圈推開</td></tr>
+<tr><td>代表服裝</td><td>襯衫、西裝、牛仔褲、外套</td><td>T 恤、Polo 衫、運動服、內衣</td></tr>
+</table></div>
+
+<div class="note try"><span class="lab">動手做：三招分辨梭織、針織</span>
+① <b>拉拉看</b>：橫向輕拉，一下就被拉長的多半是針織。<br>
+② <b>看邊</b>：剪開的邊一直掉線頭是梭織；邊自己捲起來是平針針織。<br>
+③ <b>放大看</b>：用手機相機放到最大，看到十字交錯是梭織，看到一排排小 V 是針織。</div>
+
+<div class="note pro"><span class="lab">專業補充</span>
+<span class="t">克重 GSM</span>（Grams per Square Meter）：每平方公尺的布有幾公克，數字越大布越厚。一般夏季 T 恤大約 140–180 GSM，大學 T 大約 280–350 GSM。<br>
+<span class="t">扭度</span>（Spirality）：平針布的線圈天生有點歪斜，如果布料沒處理好，T 恤洗幾次後側縫會轉到前面來。這在工廠叫「扭骨」，是針織常見的客訴之一。</div>
+
+<div class="quiz" data-ch="c2"></div>
+</section>
+<!-- ================= 第 3 課 ================= -->
+<section class="lesson" id="c3" data-n="3" data-stage="入門" data-title="工具與縫紉機">
+<header><div class="kicker">第 3 課</div><h2>工具與縫紉機</h2><hr class="seam"></header>
+<p class="lead">工欲善其事，必先利其器。這一課認識手邊的小工具、縫紉機的身體構造，以及工廠裡各種「車」各自負責什麼。</p>
+
+<div class="note origin"><span class="lab">名詞由來：為什麼叫「車」</span>台灣工廠說「車衣服」「平車」「車工」，這個「車」就是縫紉機。台語把縫紉機叫「針車」（tsiam-tshia），因為它有會轉的輪子，像一台車。日文則把縫紉機叫「ミシン」，是英文 <i>sewing machine</i> 裡 machine 的發音演變來的。</div>
+
+<h3>手工具</h3>
+<div class="tbl"><table>
+<tr><th>工具</th><th>用途</th><th>小知識</th></tr>
+<tr><td>布剪</td><td>剪布料</td><td>只能剪布！剪紙會讓刀刃變鈍，裁縫師最討厭別人拿他的布剪去剪紙。</td></tr>
+<tr><td>紗剪（U 型剪）</td><td>剪線頭</td><td>用手指一捏就剪，車工幾乎一整天都握在手上。</td></tr>
+<tr><td>拆線器</td><td>拆掉車錯的線</td><td>一頭尖、一頭有小刀，刀口在兩個尖角中間的凹槽裡。</td></tr>
+<tr><td>錐子</td><td>在布上點記號、推布</td><td>車小地方時可以代替手指推布，手指才不會靠近針。</td></tr>
+<tr><td>劃粉／消失筆</td><td>在布上畫線</td><td>劃粉可以拍掉；消失筆的墨水一段時間後或遇水會消失。</td></tr>
+<tr><td>皮尺</td><td>量尺寸</td><td>一面公分、一面英吋。外銷訂單常用英吋，1 吋 = 2.54 公分。</td></tr>
+<tr><td>珠針</td><td>暫時固定布料</td><td>頭上有小珠子，比較好拿，也比較不會遺失在衣服裡。</td></tr>
+</table></div>
+
+<h3>工業平車長什麼樣子</h3>
+<div class="fig">
+<svg viewBox="0 0 560 300" role="img" aria-label="工業平車部位圖">
+  <rect x="20" y="210" width="520" height="16" fill="#C9B38A"/>
+  <path d="M110 210 V120 Q110 70 160 70 H420 Q460 70 460 110 V210 Z" fill="#DDE2E8" stroke="#586272" stroke-width="2"/>
+  <path d="M150 210 V140 Q150 110 180 110 H420 V210 Z" fill="#F6F7F4"/>
+  <rect x="85" y="90" width="50" height="90" rx="6" fill="#C9CED6" stroke="#586272" stroke-width="2"/>
+  <circle cx="490" cy="130" r="42" fill="#fff" stroke="#586272" stroke-width="3"/><circle cx="490" cy="130" r="8" fill="#586272"/>
+  <rect x="104" y="180" width="4" height="32" fill="#586272"/>
+  <rect x="98" y="178" width="16" height="5" fill="#586272"/>
+  <path d="M112 200 H132 V206 H112 Z" fill="#586272"/>
+  <path d="M100 110 L70 100" stroke="#C23A3F" stroke-width="4"/>
+  <circle cx="68" cy="99" r="4" fill="#C23A3F"/>
+  <circle cx="160" cy="92" r="9" fill="#F1C94B" stroke="#586272" stroke-width="2"/>
+  <rect x="60" y="226" width="110" height="10" fill="#2F3F73" opacity=".35"/>
+  <g font-size="13" fill="#1D2430">
+    <g fill="#1E4B40" font-weight="700">
+    <circle cx="40" cy="95" r="11"/><circle cx="175" cy="50" r="11"/><circle cx="40" cy="190" r="11"/><circle cx="80" cy="262" r="11"/><circle cx="490" cy="50" r="11"/><circle cx="300" cy="50" r="11"/><circle cx="160" cy="262" r="11"/>
+    </g>
+    <g fill="#fff" font-size="12" text-anchor="middle" font-weight="700">
+    <text x="40" y="99">A</text><text x="175" y="54">B</text><text x="40" y="194">C</text><text x="80" y="266">D</text><text x="490" y="54">E</text><text x="300" y="54">F</text><text x="160" y="266">G</text>
+    </g>
+  </g>
+  <g stroke="#1E4B40" stroke-width="1.5" fill="none" stroke-dasharray="3 3">
+    <path d="M51 95 H66"/><path d="M168 60 L162 83"/><path d="M51 190 H104"/><path d="M86 252 L118 214"/><path d="M490 61 V88"/><path d="M300 61 V72"/><path d="M160 251 V226"/>
+  </g>
+</svg>
+<div class="tbl" style="margin-top:8px"><table>
+<tr><th>代號</th><th>部位</th><th>做什麼</th></tr>
+<tr><td>A</td><td>挑線桿 <span class="en">Take-up lever</span></td><td>上上下下擺動，每一針都把上線拉緊</td></tr>
+<tr><td>B</td><td>夾線器 <span class="en">Tension disc</span></td><td>兩片圓盤夾住上線，旋鈕越緊，線越緊</td></tr>
+<tr><td>C</td><td>針與壓腳 <span class="en">Needle / Presser foot</span></td><td>針上下穿布；壓腳把布壓平在針板上</td></tr>
+<tr><td>D</td><td>針板與送布牙 <span class="en">Needle plate / Feed dog</span></td><td>送布牙從針板下冒出來，像牙齒一樣咬住布往後送</td></tr>
+<tr><td>E</td><td>手輪 <span class="en">Handwheel</span></td><td>用手轉可以讓針慢慢動一下，永遠朝自己的方向轉</td></tr>
+<tr><td>F</td><td>機臂 <span class="en">Arm</span></td><td>裡面有軸把馬達的力量傳到針</td></tr>
+<tr><td>G</td><td>梭床 <span class="en">Hook &amp; bobbin</span></td><td>藏在台面下，裝著底線，第 4 課會詳細看它怎麼運作</td></tr>
+</table></div>
+</div>
+
+<h3>工廠裡的各種「車」</h3>
+<div class="tbl"><table>
+<tr><th>機器</th><th>線跡</th><th>負責什麼</th><th>名字由來</th></tr>
+<tr><td>平車 <span class="en">Single needle lockstitch</span></td><td>1 針 2 線，正反面都是直線</td><td>梭織的主力：合縫、壓線、上領、上袖</td><td>車出來的線平平直直，也是最「平常」的車</td></tr>
+<tr><td>雙針車</td><td>2 針，兩條平行直線</td><td>牛仔褲、襯衫的雙線壓線</td><td>日文叫「二本針」，本 = 根</td></tr>
+<tr><td>拷克 <span class="en">Overlock</span></td><td>3、4、5 線，包住布邊</td><td>針織合縫；梭織布邊收邊防鬚</td><td>一般認為是 overlock（經日文「ロック」）的音譯</td></tr>
+<tr><td>三本車 <span class="en">Coverstitch</span></td><td>正面 2–3 條直線，反面網狀</td><td>T 恤下擺、袖口；有彈性又好看</td><td>日文「三本針」，三根針的意思</td></tr>
+<tr><td>爬網車 <span class="en">Flatlock</span></td><td>正反面都是扁平網狀</td><td>運動服、內衣，縫線不會磨皮膚</td><td>線跡像一條爬在布上的網</td></tr>
+<tr><td>人字車 <span class="en">Zigzag</span></td><td>Z 字形</td><td>內衣、鬆緊帶、有彈性的地方</td><td>線跡像一排「人」字</td></tr>
+<tr><td>鎖眼車 <span class="en">Buttonhole</span></td><td>密密的邊</td><td>開鈕扣洞</td><td>把洞口「鎖」住不讓它鬚開</td></tr>
+<tr><td>釘扣車 <span class="en">Button sewer</span></td><td>來回固定</td><td>縫鈕扣</td><td>—</td></tr>
+<tr><td>打結車 <span class="en">Bartack</span></td><td>密集短橫條</td><td>口袋角、褲耳等受力點加固</td><td>香港工廠叫「打棗」</td></tr>
+</table></div>
+
+<h3>針：小東西，大學問</h3>
+<p>工業車針的粗細用<span class="t">針號</span>表示。公制的 Nm 70 表示針桿直徑 0.70 公釐，Nm 90 就是 0.90 公釐；美制則用 9、11、14 這種號碼。布越薄用越細的針，布越厚用越粗的針。</p>
+<ul>
+<li><b>尖頭針</b>：針尖尖尖的，直接刺穿紗線，適合梭織布。</li>
+<li><b>圓頭針</b> <span class="en">Ball point</span>：針尖圓圓的，會把針織線圈「推開」穿過去，而不是刺斷它。針織布用錯尖頭針，洗幾次就會出現小破洞。</li>
+</ul>
+
+<h3>線</h3>
+<p>工廠最常用的是<span class="t">聚酯包芯線</span>：中間一根聚酯長絲提供強度，外面包一層短纖維讓它好車、不易斷。拷克和三本車縫針織布時，常用一種蓬鬆有彈性的<span class="t">彈力線</span>，讓縫線跟著布一起伸縮。</p>
+
+<div class="note warn"><span class="lab">安全規則，第一天就要記住</span>
+① 手指永遠不要放在壓腳前面，推布用手掌或錐子。<br>
+② 穿線、換針、清理時，先讓腳離開踏板，最好關掉馬達。<br>
+③ 長頭髮要綁起來，不要戴垂下來的項鍊。<br>
+④ 斷針一定要把碎片全部找齊，交給組長登記。這叫<span class="t">斷針管理</span>，因為只要一小段斷針留在衣服裡，穿的人就可能受傷。</div>
+
+<div class="quiz" data-ch="c3"></div>
+</section>
+<!-- ================= 第 4 課 ================= -->
+<section class="lesson" id="c4" data-n="4" data-stage="入門" data-title="車縫原理">
+<header><div class="kicker">第 4 課</div><h2>車縫原理：兩條線怎麼「鎖」在一起</h2><hr class="seam"></header>
+<p class="lead">手縫只要一條線，但縫紉機的針不能像手一樣穿過布再從另一面拉回來。所以發明家想出一個聰明辦法：布的上面一條線、下面一條線，讓它們在布的中間勾在一起。</p>
+
+<h3>平車的一針，分成六個動作</h3>
+<p>平車縫出來的線跡叫<span class="t">鎖式線跡</span> <span class="en">Lockstitch</span>。上面那條從線架經過夾線器、挑線桿、穿過針孔的線叫<span class="t">面線</span>（上線）；藏在台面下、捲在小線軸上的叫<span class="t">底線</span>，那個小線軸叫<span class="t">梭芯</span> <span class="en">Bobbin</span>。按「下一步」一格一格看：</p>
+<div class="fig">
+  <svg id="lockSvg" viewBox="0 -70 320 320" role="img" aria-label="鎖式線跡形成過程">
+    <rect x="10" y="100" width="300" height="18" fill="#E3E7F3" stroke="#2F3F73" stroke-width="1"/>
+    <text x="16" y="94" font-size="11" fill="#586272">布</text>
+    <path d="M20 100 H148" stroke="#C23A3F" stroke-width="3" stroke-dasharray="14 6"/>
+    <path d="M20 118 H148" stroke="#2F3F73" stroke-width="3" stroke-dasharray="14 6"/>
+    <path id="newStitch" d="M148 100 H200" stroke="#C23A3F" stroke-width="3" opacity="0"/>
+    <path id="newStitchB" d="M148 118 H200" stroke="#2F3F73" stroke-width="3" opacity="0"/>
+    <g id="hook" style="transform-origin:160px 180px">
+      <circle cx="160" cy="180" r="40" fill="none" stroke="#586272" stroke-width="3"/>
+      <path d="M160 140 L178 146" stroke="#586272" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <circle cx="160" cy="180" r="16" fill="#2F3F73"/><circle cx="160" cy="180" r="5" fill="#fff"/>
+    <path id="bobThread" d="M160 164 Q150 140 150 118" stroke="#2F3F73" stroke-width="2.5" fill="none"/>
+    <ellipse id="loop" cx="168" cy="150" rx="8" ry="16" fill="none" stroke="#C23A3F" stroke-width="2.5" opacity="0"/>
+    <g id="needle">
+      <line id="topThread" x1="159" y1="-40" x2="159" y2="92" stroke="#C23A3F" stroke-width="2.5"/>
+      <rect x="156" y="-40" width="8" height="125" fill="#9aa3ad"/>
+      <path d="M156 85 H164 L161 100 L160 104 L159 100 Z" fill="#9aa3ad"/>
+      <ellipse cx="160" cy="92" rx="1.3" ry="3" fill="#fff"/>
+    </g>
+    <path id="feedArrow" d="M110 136 H70" stroke="#1E4B40" stroke-width="3" opacity="0"/>
+    <path id="feedHead" d="M76 130 L64 136 L76 142Z" fill="#1E4B40" opacity="0"/>
+  </svg>
+  <div class="ctrl">
+    <button class="chip" id="lockPrev">上一步</button>
+    <button class="chip" id="lockNext" aria-pressed="true">下一步</button>
+    <span id="lockStep" class="en">第 1 / 6 步</span>
+  </div>
+  <div class="readout" id="lockOut"></div>
+  <div class="cap">紅色是面線，藍色是底線。灰色大圓圈是旋梭（一個會轉的鉤子），中間的藍色圓是梭芯。</div>
+</div>
+
+<div class="note origin"><span class="lab">名詞由來：鎖式線跡與梭芯</span>
+兩條線在布中間互相勾住、像鎖頭扣起來一樣，所以叫「鎖式」。1846 年美國人伊萊亞斯・豪（Elias Howe）為這種縫紉機申請了專利，後來勝家（Singer）把它改良成家家戶戶都買得起的縫紉機。<br>
+<b>Bobbin</b> 原本是指紡織用的小線軸。中文叫「梭芯」，因為它就裝在古代梭子的那個位置，是整個梭子的「心」。</div>
+
+<h3>張力：兩條線在拔河</h3>
+<p>面線和底線就像在拔河。夾線器轉緊，面線就用力；梭殼上的小螺絲轉緊，底線就用力。兩邊一樣大，打結點就會剛好停在兩層布的中間，正面反面都很漂亮。這叫<span class="t">張力平衡</span>。</p>
+<div class="fig">
+  <svg id="tenSvg" viewBox="0 0 600 150" role="img" aria-label="線張力平衡示意"></svg>
+  <div class="ctrl"><label for="ten">面線 ← 誰比較用力 → 底線</label><input type="range" id="ten" min="-2" max="2" step="1" value="0"></div>
+  <div class="readout" id="tenOut"></div>
+</div>
+<div class="note analogy"><span class="lab">打個比方</span>兩隊拔河，繩子中間綁一條紅布。兩隊力氣一樣，紅布停在中線；上面那隊太用力，紅布就被拉到上面。縫線的「打結點」就是那條紅布。</div>
+
+<h3>針距：一英吋有幾針</h3>
+<p><span class="t">針距</span>就是每一針的長度。外銷工廠常用 <span class="t">SPI</span>（<i>Stitches Per Inch</i>，每英吋幾針）來講，歐洲客人有時用「每 3 公分幾針」。針數越多，針距越密。</p>
+<div class="fig">
+  <svg id="spiSvg" viewBox="0 0 460 90" role="img" aria-label="針距示意"></svg>
+  <div class="ctrl"><label for="spi">SPI：</label><input type="range" id="spi" min="6" max="18" value="12"></div>
+  <div class="readout" id="spiOut"></div>
+</div>
+<div class="tbl"><table>
+<tr><th>情況</th><th>大約 SPI</th><th>原因</th></tr>
+<tr><td>牛仔褲、厚外套壓線</td><td>7–10</td><td>布厚、線粗，針太密會把布打爛</td></tr>
+<tr><td>一般襯衫、褲子合縫</td><td>11–14</td><td>夠牢又好看</td></tr>
+<tr><td>高級薄襯衫</td><td>14–18</td><td>線跡細緻，看起來精緻</td></tr>
+</table></div>
+<p class="en">以上只是常見範圍，實際一定以客人的<b>工藝單</b>（Tech Pack）為準。</p>
+
+<h3>線跡的國際分類</h3>
+<p>全世界的工廠要溝通，靠的是國際標準 <span class="t">ISO 4915</span>，它把線跡分成六大類，用百位數字表示：</p>
+<div class="tbl"><table>
+<tr><th>類別</th><th>名稱</th><th>代表</th><th>特色</th></tr>
+<tr><td>100</td><td>單線鏈式</td><td>101</td><td>一條線自己套圈。拉一端整條會散開，米袋、麵粉袋的封口就是這種</td></tr>
+<tr><td>300</td><td>鎖式</td><td>301 平車、304 人字</td><td>正反面一樣，最牢，但幾乎沒有彈性</td></tr>
+<tr><td>400</td><td>多線鏈式</td><td>401 鏈式車、406 三本</td><td>反面是鏈狀，有彈性，速度快</td></tr>
+<tr><td>500</td><td>包縫</td><td>504 三線拷克、514 四線拷克</td><td>把布邊包起來，針織主力</td></tr>
+<tr><td>600</td><td>覆蓋式</td><td>605、607 爬網</td><td>正反都有線蓋住，平貼不磨皮膚</td></tr>
+</table></div>
+<p>還有一個 200 類是「仿手縫」，工廠較少用到。記住最常用的幾個號碼：<b>301、401、406、504、514、607</b>，看到工藝單就不會霧煞煞。</p>
+
+<div class="note try"><span class="lab">回頭對答案</span>還記得第 0 課翻出來的 T 恤和襯衫嗎？襯衫側縫翻過來，正反面都是一條直線，那是 301 平車；T 恤側縫翻過來，布邊被一團線包住，那是 504 或 514 拷克；T 恤下擺正面兩條平行線、反面網狀，那是 406 三本。</div>
+
+<h3>車縫出問題怎麼辦</h3>
+<div class="tbl"><table>
+<tr><th>毛病</th><th>樣子</th><th>常見原因</th></tr>
+<tr><td>跳針</td><td>有幾針沒車到，線跡斷斷續續</td><td>針裝反或沒裝到底、針彎了、針織布用了尖頭針、針號不對</td></tr>
+<tr><td>斷線</td><td>線一直斷</td><td>面線太緊、穿線路線錯、針孔或針板有毛刺、線品質差</td></tr>
+<tr><td>浮線</td><td>一面的線鬆鬆的浮在布上</td><td>張力不平衡：正面看得到藍色底線一點一點 = 面線太緊；反面面線一圈圈鬆掉 = 面線太鬆</td></tr>
+<tr><td>起皺 <span class="en">Puckering</span></td><td>縫線旁的布皺成一條</td><td>張力太緊、針距太密、線太粗、上下兩層布送得不一樣快</td></tr>
+<tr><td>斷針</td><td>針斷掉</td><td>車到釦子或拉鍊、用手拉布、針太細碰到厚處</td></tr>
+</table></div>
+
+<div class="quiz" data-ch="c4"></div>
+</section>
+<!-- ================= 第 5 課 ================= -->
+<section class="lesson" id="c5" data-n="5" data-stage="入門" data-title="縫型與基本功">
+<header><div class="kicker">第 5 課</div><h2>縫型與基本功</h2><hr class="seam"></header>
+<p class="lead">「線跡」是線長什麼樣子；「縫型」是布和布怎麼疊、怎麼摺、怎麼接。同樣一台平車，換一種縫型，做出來的衣服耐穿度和質感就完全不同。</p>
+
+<h3>先學三個基本名詞</h3>
+<ul>
+<li><span class="t">縫份</span> <span class="en">Seam allowance</span>：縫線到布邊之間多留的那一段布，就像寫字時紙邊留的空白。常見 1 公分左右，但每個部位、每張單都可能不一樣，版型上會標清楚。</li>
+<li><span class="t">刀口</span> <span class="en">Notch</span>：裁片邊上剪的小缺口，是對位記號。兩片布的刀口對齊，就像拼圖的卡榫對上，縫起來才不會歪。</li>
+<li><span class="t">回針</span> <span class="en">Backtack</span>：開頭和結尾往回車幾針，把線頭固定住不讓它鬆開，就像寫完字要蓋章。</li>
+</ul>
+
+<h3>六種常見縫型（剖面圖）</h3>
+<p>下面的圖是把縫好的布「切一刀」，從側面看進去的樣子。藍色和綠色是兩塊不同的布，紅色短線是縫線的位置。</p>
+<div class="two">
+<div class="fig"><svg viewBox="0 0 220 80"><g fill="none" stroke-width="5" stroke-linecap="round"><path d="M10 34 H106 Q112 38 106 44 H70" stroke="#2F3F73"/><path d="M210 34 H114 Q108 38 114 44 H150" stroke="#6B8F86"/></g><path d="M110 26 V50" stroke="#C23A3F" stroke-width="3"/></svg>
+<div class="cap"><b>平縫・分燙</b>：最基本的接合，縫份左右燙開攤平。用在西裝褲、裙子。</div></div>
+<div class="fig"><svg viewBox="0 0 220 80"><g fill="none" stroke-width="5" stroke-linecap="round"><path d="M10 30 H106 Q112 34 106 40 H74" stroke="#2F3F73"/><path d="M210 30 H112 Q104 38 108 48 H72" stroke="#6B8F86"/></g><path d="M110 22 V52 M88 22 V56" stroke="#C23A3F" stroke-width="3"/></svg>
+<div class="cap"><b>倒縫・壓線</b>：縫份一起倒向一邊，正面再壓一道明線，更牢也有裝飾效果。</div></div>
+<div class="fig"><svg viewBox="0 0 220 90"><g fill="none" stroke-width="5" stroke-linecap="round"><path d="M10 30 H100 V64 Q100 72 107 72 Q114 72 114 64 V46" stroke="#2F3F73"/><path d="M210 30 H107 V56" stroke="#6B8F86"/></g><path d="M96 42 H118 M101 60 H113" stroke="#C23A3F" stroke-width="3"/></svg>
+<div class="cap"><b>來去縫</b> <span class="en">French seam</span>：先反面車一道、翻過來再車一道，毛邊被包在裡面。用在薄紗、雪紡。</div></div>
+<div class="fig"><svg viewBox="0 0 220 80"><g fill="none" stroke-width="5" stroke-linecap="round"><path d="M10 30 H128 Q135 37 128 44 H96" stroke="#2F3F73"/><path d="M210 50 H92 Q86 44 92 38 H116" stroke="#6B8F86"/></g><path d="M100 22 V58 M124 22 V58" stroke="#C23A3F" stroke-width="3"/></svg>
+<div class="cap"><b>雙針搭縫</b> <span class="en">Flat-felled seam</span>：兩片布互相勾住、壓兩道線，極耐拉。牛仔褲內側、工作服。</div></div>
+<div class="fig"><svg viewBox="0 0 220 80"><g fill="none" stroke-width="5" stroke-linecap="round"><path d="M10 30 H182 Q192 35 182 40 H148 Q140 44 148 48 H176" stroke="#2F3F73"/></g><path d="M158 22 V56" stroke="#C23A3F" stroke-width="3"/></svg>
+<div class="cap"><b>雙摺捲邊</b>：布邊往內摺兩次再車，毛邊完全藏起來。襯衫下擺、褲口。</div></div>
+<div class="fig"><svg viewBox="0 0 220 80"><g fill="none" stroke-width="5" stroke-linecap="round"><path d="M10 40 H150" stroke="#2F3F73"/><path d="M112 30 H156 Q166 30 166 40 Q166 50 156 50 H112" stroke="#6B8F86"/></g><path d="M126 20 V60" stroke="#C23A3F" stroke-width="3"/></svg>
+<div class="cap"><b>滾邊</b> <span class="en">Binding</span>：用一條布條把毛邊包起來。常見在 T 恤後領、背心的領口袖口。</div></div>
+</div>
+
+<div class="note origin"><span class="lab">名詞由來：來去縫、搭縫</span>
+<b>來去縫</b>的「來去」就是「車過去、翻過來再車回來」，一來一回。英文叫 French seam（法式縫），因為高級法國女裝最愛用這種把毛邊藏起來的精緻做法。<br>
+<b>Flat-felled</b> 的 <i>fell</i> 在裁縫用語中是「把縫份壓倒、縫平」的意思，所以 flat-felled seam 就是「壓得平平的縫」。</div>
+
+<div class="note pro"><span class="lab">專業補充：ISO 4916 縫型分類</span>就像線跡有 ISO 4915，縫型也有國際標準 <b>ISO 4916</b>，把縫型分成 8 大類。最常用的三類是：<b>第 1 類</b>疊合縫（兩片布疊起來縫，像平縫）、<b>第 2 類</b>搭接縫（兩片布一左一右互相搭住，像雙針搭縫）、<b>第 3 類</b>包邊縫（用布條包住邊，像滾邊）。看到工藝單寫「SSa-1」「LSc-2」這種代號時，就是舊的美國標準 ASTM D6193 的縫型寫法，意思相同。</div>
+
+<h3>布邊怎麼收：不讓它鬚開</h3>
+<div class="tbl"><table>
+<tr><th>方法</th><th>適合</th><th>說明</th></tr>
+<tr><td>拷克</td><td>大部分梭織和針織</td><td>最快、最普遍，工廠的預設選擇</td></tr>
+<tr><td>來去縫</td><td>薄透布料</td><td>最乾淨，但費工</td></tr>
+<tr><td>滾邊</td><td>外套內裡、高級款</td><td>好看，翻開衣服也漂亮</td></tr>
+<tr><td>鋸齒剪</td><td>不太會鬚的布、樣品</td><td>用剪刀剪出鋸齒，最省事但最不耐洗</td></tr>
+</table></div>
+
+<h3>車工的基本功練習</h3>
+<p>工廠訓練新車工，第一週常常是「不穿線」練習，只讓針在紙上打洞：</p>
+<ol>
+<li><b>直線</b>：在紙上畫幾條直線，車出來的針孔要剛好落在線上。</li>
+<li><b>平行線</b>：沿著壓腳邊緣走，練習和布邊保持固定距離。</li>
+<li><b>方框轉角</b>：車到角落時讓針停在紙裡，抬壓腳、轉紙、放壓腳，再繼續。這叫<span class="t">針停轉角</span>，是上領、車口袋最重要的技巧。</li>
+<li><b>弧線與螺旋</b>：練習一邊車一邊轉布，模擬車領圈和袖窿。</li>
+<li><b>控制速度</b>：用腳踏板練習「很慢、中速、很快、說停就停」。</li>
+</ol>
+<div class="note try"><span class="lab">動手做</span>沒有縫紉機？拿一張 A4 紙，畫一個 5 × 5 公分的方框和一個圓形，用圖釘或牙籤沿著線每隔 3 公釐戳一個洞，看看你能不能「每一針都在線上」。這就是車工講究的「手眼腳協調」。</div>
+
+<h3>車縫順序的大原則</h3>
+<ul>
+<li><b>先小片，後大片</b>：口袋、袖衩、領子這些小零件先做好，再拼到大身上。</li>
+<li><b>先平面，後立體</b>：衣服還是平的時候先把能車的車完，接成筒狀就很難車了。</li>
+<li><b>先做看不到的，再做看得到的</b>：內部固定先完成，最後才壓正面明線。</li>
+</ul>
+<p>這三個原則，第 6、7 課做襯衫和 T 恤時你會一直看到。</p>
+
+<div class="quiz" data-ch="c5"></div>
+</section>
+<!-- ================= 第 6 課 ================= -->
+<section class="lesson" id="c6" data-n="6" data-stage="實戰" data-title="梭織實戰：襯衫與牛仔褲">
+<header><div class="kicker">第 6 課</div><h2>梭織實戰：襯衫與牛仔褲</h2><hr class="seam"></header>
+<p class="lead">襯衫是梭織裡「零件最多、最講究精準」的衣服；牛仔褲是「最厚、最需要力氣」的衣服。把這兩件搞懂，其他梭織服裝都是它們的變化版。</p>
+
+<h3>襯衫的零件：點點看</h3>
+<div class="fig">
+<svg id="shirtSvg" viewBox="0 0 360 330" role="img" aria-label="襯衫部件圖（可點選）" style="cursor:pointer">
+  <g stroke="#1D2430" stroke-width="1.6" stroke-linejoin="round">
+    <path data-part="sleeve" d="M110 64 L38 202 L70 216 L114 130 Z" fill="#E3E7F3"/>
+    <path data-part="sleeve" d="M250 64 L322 202 L290 216 L246 130 Z" fill="#E3E7F3"/>
+    <path data-part="cuff" d="M38 202 L70 216 L60 240 L27 226 Z" fill="#C9D2EA"/>
+    <path data-part="cuff" d="M322 202 L290 216 L300 240 L333 226 Z" fill="#C9D2EA"/>
+    <path data-part="body" d="M110 64 L250 64 L262 306 Q180 322 98 306 Z" fill="#F4F6FB"/>
+    <path data-part="yoke" d="M110 64 L250 64 L253 98 L107 98 Z" fill="#DCE3F2"/>
+    <rect data-part="placket" x="172" y="84" width="16" height="228" fill="#E9EDF7"/>
+    <rect data-part="pocket" x="118" y="128" width="40" height="46" rx="2" fill="#DCE3F2"/>
+    <path data-part="stand" d="M142 50 Q180 40 218 50 L218 62 Q180 54 142 62 Z" fill="#C9D2EA"/>
+    <path data-part="collar" d="M142 58 L180 86 L218 58 L232 72 L186 96 L180 88 L174 96 L128 72 Z" fill="#F4F6FB"/>
+    <path data-part="sleevePlacket" d="M50 196 L66 164" stroke="#2F3F73" stroke-width="6" fill="none"/>
+    <path data-part="hem" d="M98 306 Q180 322 262 306" fill="none" stroke="#C23A3F" stroke-width="4"/>
+  </g>
+  <g fill="#fff" stroke="#586272"><circle cx="180" cy="120" r="3.5"/><circle cx="180" cy="160" r="3.5"/><circle cx="180" cy="200" r="3.5"/><circle cx="180" cy="240" r="3.5"/><circle cx="180" cy="280" r="3.5"/></g>
+</svg>
+<div class="readout" id="shirtOut">點衣服的任何一個部位，這裡會告訴你它叫什麼、做什麼用、名字怎麼來的。</div>
+</div>
+
+<h3>黏合襯：衣服的骨架</h3>
+<p>領子、袖口、門襟為什麼挺挺的不會軟趴趴？因為裡面燙了一層<span class="t">襯</span> <span class="en">Interlining</span>。工廠用的多是<span class="t">黏合襯</span>：背面有熱熔膠，用<span class="t">黏合機</span>加熱加壓，就會牢牢黏在布上。</p>
+<div class="note warn"><span class="lab">常見錯誤</span>黏合機的溫度、壓力、時間三個條件要照襯布廠商的建議設定並定時測試。溫度不夠會「脫膠起泡」，太高會讓膠滲出布面，或把淺色布燙黃。</div>
+<div class="note origin"><span class="lab">名詞由來：襯</span>「襯」字本意是貼身穿在裡面的衣服，引申為「墊在裡面支撐的東西」，像「襯托」「襯底」。衣服裡的襯，就是墊在裡面撐出形狀的那一層。</div>
+
+<h3>一件襯衫的車縫順序</h3>
+<p>工廠會把一件衣服拆成很多道<span class="t">工序</span> <span class="en">Operation</span>，每個人只負責其中幾道。下面是一件基本長袖男襯衫的簡化流程，你會看到「先小片、後大片」的原則：</p>
+<ol>
+<li>裁片黏襯：領、領座、袖口、門襟</li>
+<li>做口袋：燙口袋邊、車口袋口</li>
+<li>做門襟，把口袋車到左前片上</li>
+<li>後片打褶，接上覆肩（過肩）</li>
+<li>合肩縫：前片接到覆肩上</li>
+<li>做領子：車領、修剪縫份、翻領、壓領邊明線</li>
+<li>領子夾進領座，做成整個領</li>
+<li>上領：把領子接到領圈上</li>
+<li>做袖衩（開袖口的那道開口）</li>
+<li>上袖：把袖子接到大身的袖窿</li>
+<li>合脅：從袖底一路車到衣服下擺（常用埋夾車一次完成）</li>
+<li>做袖口，上袖口</li>
+<li>捲下擺</li>
+<li>鎖眼、釘扣</li>
+<li>剪線頭、檢查 → 送整燙</li>
+</ol>
+<div class="note origin"><span class="lab">名詞由來：埋夾</span>「埋夾」是從香港傳到各地工廠的用語，指把袖底和側縫用<span class="t">雙針搭縫</span>一次接起來的車法，專用的機器叫埋夾車（Feed-off-the-arm）。這台車的機臂是一根長長的筒子，衣服可以套在上面車，所以特別適合車筒狀的地方。</div>
+
+<h3>牛仔褲：五個口袋的秘密</h3>
+<p>經典牛仔褲叫<span class="t">五袋款</span>：前面兩個大口袋、後面兩個貼袋，再加上右前口袋裡面那個小小的口袋。</p>
+<div class="note origin"><span class="lab">名詞由來：表袋與鉚釘</span>
+那個小口袋叫<b>表袋</b> <span class="en">Watch pocket</span>，是 19 世紀給牛仔放懷錶用的，現在大多拿來放硬幣或耳機。<br>
+口袋角落那顆金屬釘叫<b>鉚釘</b> <span class="en">Rivet</span>。1873 年，裁縫雅各・戴維斯（Jacob Davis）和布商李維・史特勞斯（Levi Strauss）一起申請專利，用鉚釘加固礦工褲的口袋角，因為礦工常把口袋撐破。現代牛仔褲沿用至今，成為牛仔褲最有代表性的特徵之一。</div>
+<h4>牛仔褲的關鍵工序與機器</h4>
+<div class="tbl"><table>
+<tr><th>工序</th><th>用什麼車</th><th>重點</th></tr>
+<tr><td>後貼袋裝飾線</td><td>平車／雙針車／花樣車</td><td>每個品牌口袋上的線條都是它的「臉」，不能歪</td></tr>
+<tr><td>後育克（後腰下那塊 V 形布）</td><td>埋夾車</td><td>讓臀部更立體</td></tr>
+<tr><td>前門襟拉鍊</td><td>平車</td><td>門襟那條 J 字形明線要圓順</td></tr>
+<tr><td>外側縫</td><td>拷克 + 平車壓線</td><td>—</td></tr>
+<tr><td>內側縫</td><td>埋夾車</td><td>內側最容易被拉扯，要用雙針搭縫</td></tr>
+<tr><td>上腰頭</td><td>腰頭專用車</td><td>一次把腰頭布摺好接上</td></tr>
+<tr><td>褲耳、口袋角加固</td><td>打結車</td><td>受力點要打結</td></tr>
+<tr><td>鉚釘、工字扣</td><td>打釘機</td><td>檢查不能有鬆動、割手</td></tr>
+</table></div>
+<div class="note pro"><span class="lab">專業補充：牛仔布會縮、會退色</span>未處理的原色牛仔布第一次洗可能縮水好幾個百分比，所以大部分牛仔褲車好之後會送去<span class="t">水洗廠</span>，做石洗、酵素洗、漂白等，讓顏色和尺寸都穩定下來。這代表打版時要先把水洗後的縮率算進去，尺寸表要量「洗後」的數字。</div>
+
+<h3>梭織的三大難關</h3>
+<ul>
+<li><b>對格對條</b>：格子或條紋布，左右前片、口袋、袖子的圖案要接得起來。裁剪時就要對，不是車的時候才想辦法。</li>
+<li><b>吃縫</b>：袖山（袖子頂端的弧線）通常比袖窿略長，車的時候要把多出來的一點點均勻「吃」進去，肩膀才會圓潤立體。這靠的是車工手上的功夫。</li>
+<li><b>明線要直、間距要一樣</b>：梭織衣服的明線大多露在正面，歪一點點都看得出來。</li>
+</ul>
+
+<div class="quiz" data-ch="c6"></div>
+</section>
+<!-- ================= 第 7 課 ================= -->
+<section class="lesson" id="c7" data-n="7" data-stage="實戰" data-title="針織實戰：T 恤與 Polo 衫">
+<header><div class="kicker">第 7 課</div><h2>針織實戰：T 恤與 Polo 衫</h2><hr class="seam"></header>
+<p class="lead">針織衣服看起來簡單，但它會伸縮、會捲邊、會變形。做針織的秘訣只有一句話：<b>布會動，縫線也要能跟著動。</b></p>
+
+<div class="note origin"><span class="lab">名詞由來：T 恤、Polo 衫</span>
+<b>T-shirt</b>：攤平時整件衣服就像一個大寫的 T 字。它原本是 20 世紀初美國海軍發給水兵的內衣，後來才變成外穿的衣服。中文「恤」是廣東話 shirt 的音譯。<br>
+<b>Polo 衫</b>：原本是英國馬球（polo）選手穿的上衣。後來網球選手拉科斯特（René Lacoste）設計了短袖珠地布的款式，大受歡迎，大家就一直沿用 Polo 衫這個名字。</div>
+
+<h3>為什麼針織不能只用平車</h3>
+<p>平車的 301 線跡正反都是直直一條，幾乎沒有彈性。把它車在會伸長的針織布上，穿衣服時布一拉，線就「啪」一聲斷掉。所以針織主要靠<b>拷克</b>（504/514）合縫，靠<b>三本</b>（406）收下擺和袖口，因為這兩種線跡的線圈可以跟著布伸縮。</p>
+<div class="note analogy"><span class="lab">打個比方</span>平車的線像一根筷子，拉不長；拷克和三本的線像一條彈簧，布拉長它就跟著拉長。</div>
+
+<h3>一件 T 恤的工序</h3>
+<div class="tbl"><table>
+<tr><th>工序</th><th>機器</th><th>重點</th></tr>
+<tr><td>合肩（加肩帶）</td><td>四線拷克</td><td>同時車進一條窄窄的<span class="t">肩帶</span>，防止肩線被衣服重量拉長</td></tr>
+<tr><td>領羅紋接成圈</td><td>平車</td><td>接縫要對到後中</td></tr>
+<tr><td>上領</td><td>四線拷克</td><td>羅紋要比領圈短一點點，一邊車一邊輕拉羅紋，領子才會服貼</td></tr>
+<tr><td>後領包條／領口壓線</td><td>平車或三本</td><td>蓋住後領的縫份，穿起來不刺</td></tr>
+<tr><td>上袖</td><td>四線拷克</td><td>袖山對肩線，刀口要對準</td></tr>
+<tr><td>袖口捲邊</td><td>三本車</td><td>還沒合脅前袖子是平的，比較好車；合脅後才做，就要用機臂是圓筒的三本車</td></tr>
+<tr><td>合脅（袖底到下擺）</td><td>四線拷克</td><td>腋下十字接縫要對齊</td></tr>
+<tr><td>下擺捲邊</td><td>三本車</td><td>接頭處要重疊一點點，不能留縫</td></tr>
+<tr><td>釘主標、尺碼標</td><td>平車</td><td>標籤要置中、不能歪</td></tr>
+<tr><td>加固</td><td>打結車／平車回針</td><td>三本接頭、領口等處</td></tr>
+<tr><td>剪線頭、自檢</td><td>手工</td><td>—</td></tr>
+</table></div>
+<p>這張表在第 11 課會變成一個「產線平衡」小遊戲，先記住它。</p>
+
+<h3>針織的五個關鍵技術</h3>
+<h4>1. 差動送布</h4>
+<p>拷克和三本通常有兩組送布牙，前面一組、後面一組，速度可以調成不一樣，這叫<span class="t">差動</span> <span class="en">Differential feed</span>。</p>
+<ul>
+<li>前面送得比後面快 → 布被「推擠」一點再車 → 防止薄針織車成波浪邊。</li>
+<li>前面送得比後面慢 → 布被「撐開」一點再車 → 防止薄布縮皺。</li>
+</ul>
+<div class="note analogy"><span class="lab">打個比方</span>兩個人一前一後抬一張桌子往前走。前面的人走比較快，桌布就被拉平；後面的人推比較快，桌布就被擠皺。差動就是調兩個人的步伐。</div>
+
+<h4>2. 用圓頭針、細針</h4>
+<p>第 3 課學過：針織要用圓頭針把線圈推開。如果成品上出現一排小洞，第一個要懷疑的就是針。</p>
+
+<h4>3. 不要拉布</h4>
+<p>車工習慣用手拉布幫忙送，但針織布一拉就變長，車完彈回來就起皺，或是尺寸跑掉。讓送布牙自己送，手只負責「引導方向」。</p>
+
+<h4>4. 注意捲邊</h4>
+<p>平針布剪開後會自己捲起來，車工拿到裁片要先把它撫平。裁剪時也要特別小心，捲邊會讓裁片尺寸不準。</p>
+
+<h4>5. 放置時間</h4>
+<p>針織布從捲筒上拉開時被拉緊了，要先攤開放一段時間讓它「回縮」再裁，這叫<span class="t">鬆布</span>（Relaxing）。不鬆布就裁，衣服做好後會自己縮小。</p>
+
+<h3>Polo 衫多了什麼</h3>
+<ul>
+<li><b>門襟</b>：前領口開一個有 2–3 顆扣子的開口，要黏襯才挺，是 Polo 衫最難做的部位。</li>
+<li><b>橫機領</b>：領子不是用布剪的，而是在<span class="t">橫機</span>（一種平面針織機）上直接織出一片完整的領子，連邊都收好了。</li>
+<li><b>側開衩</b>：下擺兩側開小衩，前短後長，方便活動。</li>
+</ul>
+
+<h3>大學 T 與運動服</h3>
+<ul>
+<li><b>大學 T</b>：毛圈布或刷毛布，領口、袖口、下擺都接<b>羅紋</b>，讓開口收緊保暖。</li>
+<li><b>運動服</b>：常用<b>爬網車</b>（607），因為縫線完全平貼，跑步時不會磨皮膚。</li>
+<li><b>含氨綸的布</b>：彈性超大，要用更有彈性的線跡和彈力線，並特別注意張力。</li>
+</ul>
+
+<h3>針織常見問題</h3>
+<div class="tbl"><table>
+<tr><th>問題</th><th>原因</th><th>預防</th></tr>
+<tr><td>針洞、破洞</td><td>針太粗、針不是圓頭、針鈍了</td><td>換對的針，定時換針</td></tr>
+<tr><td>波浪邊</td><td>車的時候布被拉長</td><td>調差動、不要拉布</td></tr>
+<tr><td>扭骨（側縫轉到前面）</td><td>布料扭度太大、裁剪沒對布紋</td><td>進料檢查扭度、裁剪對紋</td></tr>
+<tr><td>領口鬆垮</td><td>羅紋比例不對、沒加肩帶、上領時拉錯</td><td>照版型的羅紋長度，上領時均勻輕拉</td></tr>
+<tr><td>跳針</td><td>彈性大的布在針上「跳」</td><td>換針、調整壓腳壓力</td></tr>
+</table></div>
+
+<div class="quiz" data-ch="c7"></div>
+</section>
+<!-- ================= 第 8 課 ================= -->
+<section class="lesson" id="c8" data-n="8" data-stage="實戰" data-title="整燙">
+<header><div class="kicker">第 8 課</div><h2>整燙：讓衣服「站好」</h2><hr class="seam"></header>
+<p class="lead">車好的衣服皺皺的、縫份東倒西歪。整燙不只是把衣服燙平，更是幫衣服「定型」，決定它掛在店裡時第一眼好不好看。</p>
+
+<h3>整燙的原理：軟化 → 塑形 → 定型</h3>
+<p>纖維在<b>熱</b>和<b>水氣</b>下會變軟，這時用<b>壓力</b>把它壓成想要的形狀，然後讓它<b>冷卻、乾燥</b>，形狀就被「鎖」住了。</p>
+<div class="note analogy"><span class="lab">打個比方</span>就像用吹風機整理頭髮：先用熱風和濕氣讓頭髮變軟，用梳子拉成想要的樣子，最後吹冷風讓它定型。只吹熱風不吹冷風，一出門頭髮就塌了。衣服也一樣，燙完馬上摺起來，剛燙好的形狀就會被壓壞。</div>
+
+<h3>整燙四要素</h3>
+<div class="tbl"><table>
+<tr><th>要素</th><th>作用</th><th>太少會</th><th>太多會</th></tr>
+<tr><td>溫度</td><td>讓纖維變軟</td><td>燙不平</td><td>燙黃、燒焦、合成纖維熔化發亮</td></tr>
+<tr><td>蒸氣（濕度）</td><td>讓熱傳進纖維裡</td><td>燙不透</td><td>留下水漬、布變形、縮水</td></tr>
+<tr><td>壓力</td><td>把形狀壓出來</td><td>摺線不明顯</td><td>燙出「極光」、縫份印到正面</td></tr>
+<tr><td>時間</td><td>讓熱和壓力作用</td><td>定型不牢</td><td>燙黃、布變硬</td></tr>
+</table></div>
+<p>最後還有一個常被忘記的第五步：<b>冷卻抽濕</b>。工廠的燙台大多是<span class="t">抽濕燙台</span>，台面下有風扇把蒸氣往下吸，讓衣服很快變乾、變涼，形狀才會定住。</p>
+
+<h3>不同纖維用什麼溫度</h3>
+<p>選一種纖維，看看熨斗該開多熱。熨斗圖案裡的點點，就是洗標上告訴你溫度的方法。</p>
+<div class="fig">
+  <div class="ctrl" id="fiberCtrl" style="margin-top:0"></div>
+  <svg id="ironSvg" viewBox="0 0 300 130" style="max-width:440px" role="img" aria-label="熨斗溫度示意"></svg>
+  <div class="readout" id="fiberOut"></div>
+</div>
+<div class="tbl"><table>
+<tr><th>熨斗符號</th><th>底板最高溫度</th><th>適合</th></tr>
+<tr><td>一個點</td><td>約 110°C</td><td>尼龍、壓克力、氨綸含量高的布</td></tr>
+<tr><td>兩個點</td><td>約 150°C</td><td>聚酯、羊毛、蠶絲、嫘縈</td></tr>
+<tr><td>三個點</td><td>約 200°C</td><td>棉、麻</td></tr>
+<tr><td>打叉</td><td>不可熨燙</td><td>某些塗層布、有印花或亮片的地方</td></tr>
+</table></div>
+<div class="note warn"><span class="lab">混紡布怎麼辦？</span>以「最怕熱的那種纖維」為準。例如棉 95%、氨綸 5%，雖然大部分是棉，還是要用低溫，因為氨綸一過熱就會失去彈性，衣服從此鬆垮。</div>
+
+<h3>燙壓和推燙不一樣</h3>
+<ul>
+<li><span class="t">推燙</span> <span class="en">Ironing</span>：熨斗在布上滑來滑去。適合平平的大面積梭織布。</li>
+<li><span class="t">燙壓</span> <span class="en">Pressing</span>：熨斗「放下、停一下、拿起來、換位置」，不滑動。針織布、羊毛、有形狀的地方都要用這種，不然會把布推變形、推長。</li>
+</ul>
+
+<h3>整燙的工具</h3>
+<div class="tbl"><table>
+<tr><th>工具</th><th>用途</th><th>名字由來</th></tr>
+<tr><td>蒸汽熨斗</td><td>主力工具，工業用的接鍋爐，蒸氣量大又穩定</td><td>—</td></tr>
+<tr><td>抽濕燙台</td><td>台面下抽氣，讓衣服快速乾燥定型</td><td>會「抽走濕氣」</td></tr>
+<tr><td>燙饅頭</td><td>圓鼓鼓的硬墊子，燙肩膀、胸部等立體弧面</td><td>英文 <i>tailor's ham</i>，因為形狀像一條火腿；中文看它圓圓的叫饅頭</td></tr>
+<tr><td>袖燙板</td><td>窄長的小燙板，可以套進袖子裡燙</td><td>—</td></tr>
+<tr><td>燙墊布</td><td>蓋在衣服上再燙，保護布面</td><td>—</td></tr>
+<tr><td>T 恤燙板</td><td>做成衣服形狀的板子，整件 T 恤套上去燙</td><td>—</td></tr>
+<tr><td>立體整燙機</td><td>像人台一樣，衣服套上去從裡面噴蒸氣吹鼓</td><td>—</td></tr>
+</table></div>
+
+<h3>整燙常見缺點</h3>
+<ul>
+<li><span class="t">極光</span> <span class="en">Shine</span>：布面被燙得發亮，特別是深色布和羊毛。原因是纖維表面被壓扁了，像鏡子一樣反光。預防：從反面燙，或蓋燙墊布。</li>
+<li><b>縫份印</b>：縫份的厚度被壓到正面，出現一條印子。預防：在縫份下面墊一張厚紙再燙。</li>
+<li><b>燙黃、燒焦</b>：溫度太高或停太久。</li>
+<li><b>水漬</b>：熨斗吐出水滴，或鍋爐蒸氣太濕。每天開工先對著廢布噴一下，把管子裡的冷水排掉。</li>
+<li><b>燙縮</b>：布料遇熱縮小，衣服尺寸變了。量產前要先做<b>燙縮測試</b>。</li>
+</ul>
+<div class="note origin"><span class="lab">名詞由來：極光</span>「極光」是台灣工廠的俗稱，一般認為是形容那片亮面在燈光下一閃一閃，像極光一樣。英文就簡單叫 shine（發亮）。</div>
+
+<h3>襯衫的整燙順序</h3>
+<ol>
+<li>領子：先燙反面，再燙正面，從領尖往中間燙，避免領尖起皺。</li>
+<li>袖口：一樣先反後正，接著燙袖衩。</li>
+<li>袖子：攤平燙，袖子正中間不能燙出摺痕（除非客人要求）。</li>
+<li>後片、覆肩</li>
+<li>前片、門襟：門襟要直，扣子旁邊要用熨斗尖繞過去燙。</li>
+<li>扣好扣子，送去摺衣。</li>
+</ol>
+<p>T 恤就簡單多了：套上 T 恤燙板，正面反面用蒸氣「燙壓」，重點是領口和下擺要平順，側縫不要燙歪。</p>
+
+<div class="note warn"><span class="lab">安全</span>工業熨斗和蒸氣管溫度非常高，熨斗不用時一定放在耐熱架上。蒸氣會燙傷，不要把手放在正在噴氣的熨斗下面。</div>
+
+<div class="quiz" data-ch="c8"></div>
+</section>
+<!-- ================= 第 9 課 ================= -->
+<section class="lesson" id="c9" data-n="9" data-stage="實戰" data-title="品質檢驗">
+<header><div class="kicker">第 9 課</div><h2>品質檢驗：把關每一件</h2><hr class="seam"></header>
+<p class="lead">一件衣服有一個小洞，客人不會記得其他 999 件都很好。品質檢驗就是在衣服離開工廠之前，確定它們符合客人的要求。</p>
+
+<div class="note analogy"><span class="lab">先記住一句話</span>品質是<b>做出來的</b>，不是<b>檢查出來的</b>。檢驗只能把壞的挑出來，沒辦法讓它變好。所以最好的品質管理，是讓每個車工第一次就做對。</div>
+
+<h3>一件衣服要過幾道關</h3>
+<div class="tbl"><table>
+<tr><th>關卡</th><th>檢查什麼</th></tr>
+<tr><td>進料檢驗</td><td>布料有沒有瑕疵、色差、縮水率；輔料（扣子、拉鍊、線、標籤）對不對</td></tr>
+<tr><td>裁片檢驗</td><td>裁片尺寸準不準、刀口有沒有剪、上下層有沒有色差</td></tr>
+<tr><td>線上檢驗（中查）</td><td>在產線中間抽查車工，早點發現問題，不要等到做完一整批</td></tr>
+<tr><td>尾查</td><td>每一件車好的衣服全部翻過來檢查、量尺寸</td></tr>
+<tr><td>整燙後檢驗</td><td>燙得好不好、有沒有污漬、線頭</td></tr>
+<tr><td>最終檢驗</td><td>包裝好後，由工廠 QA 或客人派來的驗貨員按 AQL 抽驗</td></tr>
+</table></div>
+
+<h3>布料怎麼驗：四分制</h3>
+<p>驗布機把布捲攤開在燈箱上慢慢捲過，檢驗員看到瑕疵就依長度給分：</p>
+<div class="tbl"><table>
+<tr><th>瑕疵長度</th><th>扣分</th></tr>
+<tr><td>3 英吋以內</td><td>1 分</td></tr>
+<tr><td>3 到 6 英吋</td><td>2 分</td></tr>
+<tr><td>6 到 9 英吋</td><td>3 分</td></tr>
+<tr><td>超過 9 英吋，或有破洞</td><td>4 分</td></tr>
+</table></div>
+<p>最後換算成「每 100 平方碼幾分」，低於客人訂的標準（很多客人用 40 分左右）才算合格。一碼布再多瑕疵，最多也只扣 4 分，所以叫<span class="t">四分制</span>。</p>
+
+<h3>衣服上的瑕疵分三級</h3>
+<div class="tbl"><table>
+<tr><th>等級</th><th>意思</th><th>例子</th></tr>
+<tr><td>嚴重 <span class="en">Critical</span></td><td>可能傷害穿的人，或違反法規</td><td>斷針殘留、兒童衣服小零件脫落、尖銳金屬</td></tr>
+<tr><td>主要 <span class="en">Major</span></td><td>客人看了會不想買，或穿一下就壞</td><td>破洞、開線、明顯色差、尺寸超出公差、標籤錯</td></tr>
+<tr><td>次要 <span class="en">Minor</span></td><td>小瑕疵，不影響穿，但不夠完美</td><td>短線頭、不明顯的小污點、輕微不對稱</td></tr>
+</table></div>
+<h4>最常見的車縫瑕疵</h4>
+<p>跳針、斷線、浮線、起皺、縫份不均、明線歪、左右不對稱、漏車、車到別的布（夾到裡布）、線頭沒剪、油污（縫紉機的機油）、粉印沒清、標籤歪或位置錯。</p>
+
+<h3>量尺寸：尺寸表與公差</h3>
+<p>客人會給一張<span class="t">尺寸表</span>，寫明每個尺碼每個部位應該多長，並給一個<span class="t">公差</span> <span class="en">Tolerance</span>，也就是可以接受的誤差範圍。</p>
+<div class="tbl"><table>
+<tr><th>部位（M 碼）</th><th>標準</th><th>公差</th><th>量到</th><th>結果</th></tr>
+<tr><td>胸寬（腋下 1 吋處）</td><td>52 cm</td><td>±1 cm</td><td>52.5 cm</td><td>合格</td></tr>
+<tr><td>衣長（肩頸點量起）</td><td>72 cm</td><td>±1 cm</td><td>70.5 cm</td><td style="color:var(--thread);font-weight:700">太短，不合格</td></tr>
+<tr><td>袖長</td><td>20 cm</td><td>±0.5 cm</td><td>20.3 cm</td><td>合格</td></tr>
+</table></div>
+<p>量尺寸時要把衣服攤平在桌上、不要拉，每個部位要照客人規定的量法量。量法不同，數字就不同。</p>
+
+<h3>AQL 抽樣：不可能每件都拆開看</h3>
+<p>一批 3,000 件衣服，驗貨員不可能在一天內全部仔細檢查，所以用統計的方法<b>抽一部分</b>來判斷整批好不好，這就是 <span class="t">AQL</span>。</p>
+<div class="note origin"><span class="lab">名詞由來：AQL</span>AQL 是 <i>Acceptance Quality Limit</i>（允收品質界限）的縮寫，早期叫 <i>Acceptable Quality Level</i>。這套方法源自二次世界大戰時美國軍方採購彈藥、裝備的抽樣標準（MIL-STD-105），後來變成國際標準 ISO 2859-1，現在全世界的成衣驗貨都在用。</div>
+<div class="fig">
+  <div class="ctrl" style="margin-top:0">
+    <label for="lot">這批貨有幾件：</label><input type="number" id="lot" value="3000" min="2" max="1000000" style="font:inherit;width:9em;padding:6px 10px;border:1.5px solid var(--rule);border-radius:8px">
+  </div>
+  <div class="readout" id="aqlOut"></div>
+  <div class="cap">教學用簡化版：一般檢驗水準 II、AQL 2.5（主要瑕疵常用的標準），單次正常抽樣。正式驗貨時請照客人指定的水準，並查 ISO 2859-1 原表。</div>
+</div>
+<div class="note analogy"><span class="lab">打個比方</span>AQL 就像喝一口湯判斷整鍋鹹不鹹。你不用喝完整鍋，但要攪拌均勻再舀，而且鍋子越大要多喝幾口。抽樣時也一樣：要從不同箱子、不同顏色尺碼平均抽，不能只拿最上面那箱。</div>
+
+<h3>驗針：最後一道安全網</h3>
+<p>所有衣服包裝前都要通過<span class="t">驗針機</span>：衣服放上輸送帶經過一道磁場，只要裡面有一小段斷針或金屬碎片，機器就會嗶嗶叫並停下來。驗針機每天開工前要用標準測試片校正，確定它真的測得到。</p>
+<div class="note pro"><span class="lab">專業補充</span>驗針不能取代斷針管理。好的工廠會把「發針、換針、斷針碎片找回」都登記在表上，一根針的來龍去脈都查得到。斷針找不齊的那一批衣服要全部隔離、逐件驗針。</div>
+
+<div class="quiz" data-ch="c9"></div>
+</section>
+<!-- ================= 第 10 課 ================= -->
+<section class="lesson" id="c10" data-n="10" data-stage="實戰" data-title="包裝與出貨">
+<header><div class="kicker">第 10 課</div><h2>包裝與出貨</h2><hr class="seam"></header>
+<p class="lead">包裝是衣服在工廠裡的最後一站，也是客人打開箱子時的第一印象。標籤貼錯、摺法不對、箱子裡尺碼放錯，整批貨都可能被退回。</p>
+
+<h3>衣服上的各種標籤</h3>
+<div class="tbl"><table>
+<tr><th>標籤</th><th>在哪裡</th><th>寫什麼</th></tr>
+<tr><td>主標 <span class="en">Main label</span></td><td>後領內側</td><td>品牌名稱</td></tr>
+<tr><td>尺碼標 <span class="en">Size label</span></td><td>主標旁或下方</td><td>S、M、L 等</td></tr>
+<tr><td>洗標 <span class="en">Care label</span></td><td>左側縫內側（最常見）</td><td>纖維成分、洗滌符號、產地（例如 Made in Cambodia）</td></tr>
+<tr><td>吊牌 <span class="en">Hangtag</span></td><td>用塑膠槍針掛在外面</td><td>品牌、款號、顏色、尺碼、價格、條碼</td></tr>
+</table></div>
+<div class="note warn"><span class="lab">小心</span>吊牌的<span class="t">槍針</span>（用標籤槍打的塑膠針）要打在客人規定的位置，通常是穿過主標或洗標，不能直接打穿布料，否則會留下洞。</div>
+
+<h3>看懂洗滌符號</h3>
+<p>全世界通用五個基本圖形：水盆、三角形、方形、熨斗、圓形。加上點點、橫線、打叉，就能表達所有洗滌方法。</p>
+<div class="fig">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px">
+<div><svg viewBox="0 0 60 50" style="width:64px"><g fill="none" stroke="#1D2430" stroke-width="2.4" stroke-linejoin="round"><path d="M8 16 L14 42 H46 L52 16"/><path d="M8 16 Q15 10 22 16 Q30 22 38 16 Q45 10 52 16"/></g><text x="30" y="37" font-size="12" text-anchor="middle" font-weight="700" fill="#1D2430">30</text></svg><div class="cap"><b>水盆</b>：可水洗，數字是最高水溫。盆下多一條橫線 = 溫和洗程。</div></div>
+<div><svg viewBox="0 0 60 50" style="width:64px"><g fill="none" stroke="#1D2430" stroke-width="2.4" stroke-linejoin="round"><path d="M30 6 L54 44 H6 Z"/><path d="M12 10 L48 46 M48 10 L12 46" stroke="#C23A3F"/></g></svg><div class="cap"><b>三角形</b>：漂白。打叉 = 不可漂白。</div></div>
+<div><svg viewBox="0 0 60 50" style="width:64px"><g fill="none" stroke="#1D2430" stroke-width="2.4"><rect x="10" y="6" width="40" height="38"/><circle cx="30" cy="25" r="13"/></g><circle cx="30" cy="25" r="2.5" fill="#1D2430"/></svg><div class="cap"><b>方形加圓</b>：可烘乾，一點 = 低溫。方形沒有圓 = 自然晾乾。</div></div>
+<div><svg viewBox="0 0 60 50" style="width:64px"><path d="M8 40 H52 Q52 20 38 16 H22 Q14 16 12 26 Z" fill="none" stroke="#1D2430" stroke-width="2.4" stroke-linejoin="round"/><circle cx="26" cy="31" r="2.4" fill="#1D2430"/><circle cx="36" cy="31" r="2.4" fill="#1D2430"/></svg><div class="cap"><b>熨斗</b>：點越多可以越熱。兩點 = 中溫（約 150°C）。</div></div>
+<div><svg viewBox="0 0 60 50" style="width:64px"><circle cx="30" cy="25" r="18" fill="none" stroke="#1D2430" stroke-width="2.4"/><text x="30" y="31" font-size="16" text-anchor="middle" font-weight="700" fill="#1D2430">P</text></svg><div class="cap"><b>圓形</b>：專業乾洗，裡面的字母告訴乾洗店用哪種溶劑。</div></div>
+<div><svg viewBox="0 0 60 50" style="width:64px"><g fill="none" stroke="#1D2430" stroke-width="2.4"><rect x="10" y="6" width="40" height="38"/><circle cx="30" cy="25" r="13"/><path d="M12 8 L48 42 M48 8 L12 42" stroke="#C23A3F"/></g></svg><div class="cap"><b>打叉</b>：任何符號打叉都是「不可以」。這個 = 不可烘乾。</div></div>
+</div>
+</div>
+
+<h3>摺衣：一步一步來</h3>
+<p>工廠用<span class="t">摺衣板</span>讓每件衣服摺出來大小都一樣，才能整齊地裝進膠袋和箱子。以 T 恤為例：</p>
+<div class="fig">
+  <svg id="foldSvg" viewBox="0 0 320 270" role="img" aria-label="T 恤摺衣步驟">
+    <g class="ff" data-f="0"><path d="M125 30 Q160 50 195 30 L240 40 L290 80 L268 108 L240 92 L240 250 L80 250 L80 92 L52 108 L30 80 L80 40 Z" fill="#E3E7F3" stroke="#2F3F73" stroke-width="2"/><path d="M125 30 Q160 50 195 30" fill="none" stroke="#2F3F73" stroke-width="5"/><path d="M120 40 V250 M200 40 V250" stroke="#C23A3F" stroke-dasharray="6 5" stroke-width="2"/></g>
+    <g class="ff" data-f="1" style="display:none"><path d="M125 30 Q160 50 195 30 L240 40 L290 80 L268 108 L240 92 L240 250 L120 250 L120 40 Z" fill="#E3E7F3" stroke="#2F3F73" stroke-width="2"/><path d="M120 40 H148 V250 H120 Z" fill="#C9D2EA" stroke="#2F3F73" stroke-width="2"/><path d="M120 62 L168 90 L158 112 L120 92 Z" fill="#C9D2EA" stroke="#2F3F73" stroke-width="2"/><path d="M125 30 Q160 50 195 30" fill="none" stroke="#2F3F73" stroke-width="5"/><path d="M200 40 V250" stroke="#C23A3F" stroke-dasharray="6 5" stroke-width="2"/></g>
+    <g class="ff" data-f="2" style="display:none"><path d="M125 30 Q160 50 195 30 L200 38 V250 H120 V38 Z" fill="#E3E7F3" stroke="#2F3F73" stroke-width="2"/><path d="M120 40 H148 V250 H120 Z M172 40 H200 V250 H172 Z" fill="#C9D2EA" stroke="#2F3F73" stroke-width="2"/><path d="M120 62 L160 90 L152 112 L120 92 Z M200 62 L160 90 L168 112 L200 92 Z" fill="#C9D2EA" stroke="#2F3F73" stroke-width="2"/><path d="M125 30 Q160 50 195 30" fill="none" stroke="#2F3F73" stroke-width="5"/><path d="M112 145 H208" stroke="#C23A3F" stroke-dasharray="6 5" stroke-width="2"/></g>
+    <g class="ff" data-f="3" style="display:none"><path d="M125 30 Q160 50 195 30 L200 38 V145 H120 V38 Z" fill="#E3E7F3" stroke="#2F3F73" stroke-width="2"/><path d="M120 110 H200 V145 H120 Z" fill="#C9D2EA" stroke="#2F3F73" stroke-width="2"/><path d="M125 30 Q160 50 195 30" fill="none" stroke="#2F3F73" stroke-width="5"/></g>
+    <g class="ff" data-f="4" style="display:none"><path d="M125 30 Q160 50 195 30 L200 38 V145 H120 V38 Z" fill="#E3E7F3" stroke="#2F3F73" stroke-width="2"/><path d="M120 110 H200 V145 H120 Z" fill="#C9D2EA" stroke="#2F3F73" stroke-width="2"/><path d="M125 30 Q160 50 195 30" fill="none" stroke="#2F3F73" stroke-width="5"/><rect x="106" y="16" width="108" height="146" rx="4" fill="rgba(255,255,255,.35)" stroke="#586272" stroke-width="2" stroke-dasharray="4 3"/><rect x="168" y="124" width="36" height="22" rx="2" fill="#F1C94B" stroke="#1D2430"/><text x="186" y="140" font-size="13" text-anchor="middle" font-weight="700" fill="#1D2430">M</text></g>
+  </svg>
+  <div class="ctrl"><button class="chip" id="foldPrev">上一步</button><button class="chip" id="foldNext" aria-pressed="true">下一步</button><span class="en" id="foldStep"></span></div>
+  <div class="readout" id="foldOut"></div>
+</div>
+<p>襯衫摺法更講究：要放<b>領撐</b>（領子裡的紙板或塑膠片）、<b>背板</b>（衣服背後的紙板），有時還要用<b>蝴蝶片</b>固定領子，用<b>大頭針或塑膠夾</b>固定袖子。每個客人規定都不一樣，會寫在<span class="t">包裝指示</span>裡。</p>
+
+<h3>膠袋</h3>
+<p>摺好的衣服裝進<span class="t">膠袋</span> <span class="en">Polybag</span>，封口、貼上寫著款號、顏色、尺碼的貼紙。膠袋上常常印有<b>窒息警告</b>，提醒大人不要讓小孩拿膠袋玩。很多國家對這段警語的文字和尺寸有法律規定，一定要照客人的要求。</p>
+
+<h3>裝箱：一箱放什麼</h3>
+<ul>
+<li><span class="t">單色單碼</span> <span class="en">Solid pack</span>：一箱只放同一個顏色、同一個尺碼，例如一箱 24 件全是黑色 M。</li>
+<li><span class="t">配比裝箱</span> <span class="en">Ratio / Assorted pack</span>：一箱依比例放不同尺碼，讓每家店收到後尺碼剛好齊全。</li>
+</ul>
+<div class="note try"><span class="lab">算算看</span>客人訂 1,200 件黑色 T 恤，尺碼比例 S : M : L : XL = 1 : 2 : 2 : 1，每箱 12 件。<br>
+① 一組比例共 1 + 2 + 2 + 1 = 6 件，一箱 12 件就是 2 組。<br>
+② 每箱放 S 2 件、M 4 件、L 4 件、XL 2 件。<br>
+③ 需要 1,200 ÷ 12 = <b>100 箱</b>；總共 S 200、M 400、L 400、XL 200 件。<br>
+算對了嗎？工廠裡的<span class="t">裝箱單</span> <span class="en">Packing list</span> 就是在記錄這些數字：每箱的箱號、顏色、尺碼、件數、重量、尺寸。</div>
+
+<h3>嘜頭：箱子的身分證</h3>
+<p>外箱上印的文字叫<span class="t">嘜頭</span> <span class="en">Shipping mark</span>，讓倉庫、船公司、客人的物流中心不用開箱就知道裡面是什麼。印在大面的叫<b>正嘜</b>，印在側面的叫<b>側嘜</b>。</p>
+<div class="fig">
+<svg viewBox="0 0 420 200" role="img" aria-label="嘜頭範例">
+  <rect x="10" y="10" width="400" height="180" fill="#D9C39A" stroke="#8a7350" stroke-width="3"/>
+  <g font-size="14" fill="#1D2430">
+    <text x="30" y="42" font-weight="700" font-size="18">客戶名稱／品牌</text>
+    <text x="30" y="70">PO No.：訂單號碼</text>
+    <text x="30" y="92">Style：款號　Color：BLACK</text>
+    <text x="30" y="114">Size：S/2 M/4 L/4 XL/2　Qty：12 PCS</text>
+    <text x="30" y="136">C/No.：1 of 100（第 1 箱，共 100 箱）</text>
+    <text x="30" y="158">G.W. 毛重／N.W. 淨重（公斤）</text>
+    <text x="30" y="180">Made in：產地</text>
+  </g>
+</svg>
+<div class="cap"><b>毛重</b>（G.W.）是連箱子一起的重量；<b>淨重</b>（N.W.）是只算衣服的重量。</div>
+</div>
+<div class="note origin"><span class="lab">名詞由來：嘜頭</span>「嘜」是英文 <i>mark</i> 的廣東話音譯，早年香港的貿易商把 shipping mark 叫做「嘜頭」，意思是「箱子上的標記」，後來傳遍整個華人成衣界。同樣的，裁剪用的排料圖叫「嘜架」，就是 <i>marker</i> 的音譯。</div>
+
+<div class="note pro"><span class="lab">專業補充</span>
+• 裝箱前衣服一定已經通過驗針。<br>
+• 紙箱要照客人規定的材質（例如五層瓦楞紙）、尺寸、重量上限。太重的箱子會讓搬運工受傷，很多客人都有規定每箱的最高重量。<br>
+• 箱子封好後常常還會做<b>摔箱測試</b>，從一定高度摔下，看箱子和衣服有沒有損壞。<br>
+• 客人驗貨（最終檢驗）通常在「至少 80% 已裝箱」時進行，驗貨員會隨機指定要開哪幾箱。</div>
+
+<div class="quiz" data-ch="c10"></div>
+</section>
+<!-- ================= 第 11 課 ================= -->
+<section class="lesson" id="c11" data-n="11" data-stage="專業" data-title="工廠專業：產線與效率">
+<header><div class="kicker">第 11 課</div><h2>工廠專業：產線、工時與效率</h2><hr class="seam"></header>
+<p class="lead">會車衣服是技術，讓 30 個人一起每天車出 1,000 件是管理。這一課學工廠經理、組長、工業工程師每天在想的事。</p>
+
+<h3>三種生產方式</h3>
+<div class="tbl"><table>
+<tr><th>方式</th><th>怎麼做</th><th>優點</th><th>缺點</th></tr>
+<tr><td>捆紮系統 <span class="en">Bundle system</span></td><td>裁片 10–30 件綁成一捆，一捆一捆傳給下一個人</td><td>車工可以一直做同一件事，速度快</td><td>線上堆很多半成品，出問題要很久才發現</td></tr>
+<tr><td>單件流 <span class="en">One-piece flow</span></td><td>一次只傳一件，車好馬上給下一個人，常排成 U 型</td><td>半成品少、問題馬上看得到、換款快</td><td>要求車工會多道工序、產線要很平衡</td></tr>
+<tr><td>吊掛系統 <span class="en">Hanging system</span></td><td>裁片夾在吊架上，由軌道自動送到下一個工位</td><td>搬運自動化、電腦即時記錄產量</td><td>設備昂貴、需要維護</td></tr>
+</table></div>
+
+<h3>標準工時 SMV：做一件要幾分鐘</h3>
+<p><span class="t">SMV</span>（<i>Standard Minute Value</i>，標準分鐘值）是「一個熟練的車工，用正常速度，加上合理的休息和寬放時間，完成一道工序需要幾分鐘」。也有人叫 <span class="t">SAM</span>（<i>Standard Allowed Minute</i>），意思一樣。</p>
+<div class="note origin"><span class="lab">名詞由來：工時研究</span>SMV 來自一百多年前美國工程師泰勒（Frederick Taylor）提倡的「時間研究」：拿碼錶把工作的每個動作計時，找出最有效率的方法。後來發展成一門學科，叫<span class="t">工業工程</span>（Industrial Engineering，簡稱 <b>IE</b>）。成衣廠裡負責算工時、排產線的人，就叫 IE。</div>
+<p>整件衣服所有工序的 SMV 加起來，就是這件衣服的 SMV。一件基本 T 恤大約 5–8 分鐘，一件男襯衫大約 18–25 分鐘，一條五袋牛仔褲大約 15–25 分鐘，實際依款式和工廠而不同。</p>
+
+<h3>效率怎麼算</h3>
+<p>公式只有一行：</p>
+<div class="note" style="border-color:var(--mat);font-size:1.05rem"><b>效率 ＝ 產出件數 × SMV ÷（人數 × 工作分鐘）× 100%</b></div>
+<p>意思是「這些衣服照標準應該花多少分鐘」除以「大家實際上班了多少分鐘」。</p>
+<div class="fig">
+  <div class="two">
+    <label>每件 SMV（分鐘）<br><input type="number" id="eSmv" value="6" step="0.1" min="0.1" style="font:inherit;width:100%;padding:6px 10px;border:1.5px solid var(--rule);border-radius:8px"></label>
+    <label>產線人數<br><input type="number" id="eOp" value="20" min="1" style="font:inherit;width:100%;padding:6px 10px;border:1.5px solid var(--rule);border-radius:8px"></label>
+    <label>工作小時<br><input type="number" id="eHr" value="8" step="0.5" min="0.5" style="font:inherit;width:100%;padding:6px 10px;border:1.5px solid var(--rule);border-radius:8px"></label>
+    <label>實際產出（件）<br><input type="number" id="eOut" value="1000" min="0" style="font:inherit;width:100%;padding:6px 10px;border:1.5px solid var(--rule);border-radius:8px"></label>
+  </div>
+  <div class="readout" id="effOut"></div>
+</div>
+
+<h3>瓶頸與產線平衡</h3>
+<p>產線像接力賽，但跑最慢的人決定全隊的速度。整條線裡最慢的那道工序叫<span class="t">瓶頸</span> <span class="en">Bottleneck</span>。</p>
+<div class="note origin"><span class="lab">名詞由來：瓶頸</span>把一瓶水倒過來，水流得多快，不是看瓶身多粗，而是看瓶口的「脖子」有多細。產線也一樣，產量被最窄的那一段卡住。</div>
+<p><b>產線平衡</b>就是重新分配工作和人手，讓每個工位的時間盡量一樣長。下面用第 7 課的 T 恤工序玩玩看：一開始每道工序各 1 個人，按「＋」給慢的工序加人，找出瓶頸、提高每小時產量。</p>
+<div class="fig">
+  <div id="lbBars"></div>
+  <div class="readout" id="lbOut"></div>
+  <div class="ctrl"><button class="chip" id="lbReset">重來</button></div>
+  <div class="cap">工序時間為教學示範值。一道工序配 2 個人，每人負責一半產量，所以那道工序的「節拍」變成原來的一半。</div>
+</div>
+<div class="note origin"><span class="lab">名詞由來：節拍時間</span><span class="t">Takt time</span> 的 Takt 是德文，意思是音樂的節拍、指揮棒打的拍子。它是根據客人需要的數量算出來的「每幾秒必須完成一件」，整條產線就像樂團一樣跟著這個拍子走。公式：可用工作時間 ÷ 需要的產量。</div>
+
+<h3>精實生產：消除浪費</h3>
+<p><span class="t">精實生產</span> <span class="en">Lean</span> 源自日本豐田汽車的生產方式，核心想法是：<b>把所有不會讓產品更有價值的事情都當作浪費，然後想辦法消除它。</b>Lean 這個英文名稱是 1988 年一位研究豐田的美國學者取的，意思是「精瘦、沒有贅肉」。</p>
+<h4>七大浪費（日文叫「無駄 muda」）在成衣廠長什麼樣子</h4>
+<div class="tbl"><table>
+<tr><th>浪費</th><th>成衣廠的例子</th></tr>
+<tr><td>過量生產</td><td>客人要 1,000 件，多做了 100 件「以防萬一」</td></tr>
+<tr><td>等待</td><td>車工等裁片、等換線、等機修</td></tr>
+<tr><td>搬運</td><td>裁片推車在工廠裡來回走好幾趟</td></tr>
+<tr><td>過度加工</td><td>客人沒要求，卻多壓了一道明線</td></tr>
+<tr><td>庫存</td><td>線上堆了好幾百件半成品</td></tr>
+<tr><td>多餘動作</td><td>裁片放太遠，車工每拿一片都要轉身彎腰</td></tr>
+<tr><td>不良</td><td>車錯要拆掉重車，還可能浪費布料</td></tr>
+</table></div>
+
+<h4>5S：整理工作環境</h4>
+<p>5S 是五個日文詞的羅馬拼音開頭都是 S：</p>
+<ol>
+<li><b>整理</b>（Seiri）：把不要的東西清掉。</li>
+<li><b>整頓</b>（Seiton）：要用的東西放在固定位置，一眼就找得到。</li>
+<li><b>清掃</b>（Seiso）：把工作區和機器擦乾淨，順便檢查有沒有漏油。</li>
+<li><b>清潔</b>（Seiketsu）：把前三個 S 變成規定和標準。</li>
+<li><b>素養</b>（Shitsuke）：大家養成習慣，不用人提醒也會做。</li>
+</ol>
+<div class="note origin"><span class="lab">名詞由來：改善</span>日文「改善」（Kaizen）在全世界工廠直接用原音。它強調每天一點點的小改進，而不是一次大改革，例如把紗剪掛在車工右手邊，每件省一秒，一天就省下好幾分鐘。</div>
+
+<h3>工廠裡的職涯路線</h3>
+<div class="tbl"><table>
+<tr><th>職位</th><th>做什麼</th><th>需要的能力</th></tr>
+<tr><td>車工</td><td>負責一道或幾道工序</td><td>手眼腳協調、穩定的品質和速度</td></tr>
+<tr><td>多能工</td><td>會操作多種機器、多道工序，哪裡缺人就補哪裡</td><td>多技能，是產線平衡的關鍵人物</td></tr>
+<tr><td>組長</td><td>帶一條產線，安排人手、追產量品質</td><td>懂每道工序、會帶人、會溝通</td></tr>
+<tr><td>QC／QA</td><td>檢查品質、驗貨</td><td>細心、懂標準、敢說「不合格」</td></tr>
+<tr><td>技術員／樣衣師</td><td>試做樣衣、教產線新款怎麼做</td><td>車縫技術全面、會看工藝單</td></tr>
+<tr><td>機修</td><td>保養、修理縫紉機</td><td>機械知識</td></tr>
+<tr><td>IE 工業工程師</td><td>算 SMV、排產線、改善方法</td><td>數學、邏輯、懂車縫</td></tr>
+<tr><td>生產經理／廠長</td><td>管理整座工廠的產量、品質、交期、成本、人員安全</td><td>以上全部，再加上領導力</td></tr>
+</table></div>
+<div class="note pro"><span class="lab">專業補充：客人會來看工廠</span>國際品牌下單前，會派人或委託第三方來<span class="t">驗廠</span>（Social / Compliance audit），檢查工廠的消防安全、逃生通道、工時、薪資、有沒有童工、化學品管理等。現代成衣專業人員除了懂技術，也必須懂這些規定，因為做得出好衣服，還要用對的方式做。</div>
+
+<div class="quiz" data-ch="c11"></div>
+</section>
+
+<!-- ================= 第 12 課 期末 ================= -->
+<section class="lesson" id="c12" data-n="12" data-stage="專業" data-title="總複習與期末測驗">
+<header><div class="kicker">第 12 課</div><h2>總複習與期末測驗</h2><hr class="seam"></header>
+<p class="lead">恭喜你走完整條路！從一根纖維、一條紗、一塊布，到一針一線、一燙一摺、一箱出貨。先用一張表把整個流程串起來，再挑戰期末測驗。</p>
+<div class="tbl"><table>
+<tr><th>階段</th><th>最重要的三件事</th></tr>
+<tr><td>布料</td><td>分得出梭織和針織；知道纖維決定燙溫；注意縮水和布紋</td></tr>
+<tr><td>機器</td><td>平車 301 做梭織；拷克 504/514 和三本 406 做針織；針織用圓頭針</td></tr>
+<tr><td>車縫</td><td>張力平衡、針距正確；先小片後大片；對刀口</td></tr>
+<tr><td>整燙</td><td>溫度、蒸氣、壓力、時間，最後冷卻定型；針織只壓不推</td></tr>
+<tr><td>檢驗</td><td>品質是做出來的；尺寸看公差；AQL 抽樣；一定要驗針</td></tr>
+<tr><td>包裝</td><td>標籤位置正確；摺法照包裝指示；裝箱配比和嘜頭不能錯</td></tr>
+<tr><td>管理</td><td>效率 = 產出 × SMV ÷ 投入分鐘；找瓶頸；消除浪費</td></tr>
+</table></div>
+<div class="quiz" id="finalQuiz">
+  <h3>期末測驗</h3>
+  <p>從全部題庫隨機抽 15 題。答完會顯示分數，每題都有解說。</p>
+  <button class="btn" style="color:var(--mat)" id="finalStart">開始期末測驗</button>
+  <div id="finalBody"></div>
+</div>
+</section>
+
+<!-- ================= 名詞辭典 ================= -->
+<section class="lesson" id="gloss" data-n="辭" data-stage="附錄" data-title="名詞辭典">
+<header><div class="kicker">附錄</div><h2>名詞辭典</h2><hr class="seam"></header>
+<p class="lead">課程裡出現的專有名詞，連同它們的由來都整理在這裡。可以打字搜尋，也可以按分類篩選。</p>
+<div class="gloss-tools">
+  <input type="search" id="gq" placeholder="搜尋，例如：拷克、SPI、嘜頭">
+  <div id="gcats" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+</div>
+<div id="glist"></div>
+</section>
+
+</main>
+</div>
+<script>
+const JOURNEY=[
+ ["設計","設計師畫出款式圖，決定布料、顏色、尺寸和每個細節，整理成一份<b>工藝單</b>（Tech Pack）。工藝單就是這件衣服的「說明書」，後面每一站都照著它做。"],
+ ["打版","<b>版師</b>把設計圖變成一片一片的紙樣，叫<b>版型</b>（Pattern）。就像把一個立體的紙盒拆開攤平，變成一張可以剪的展開圖。「版」就是樣板的意思。"],
+ ["放碼","打好的版通常是一個尺碼（例如 M）。<b>放碼</b>（Grading）是照規則把它放大縮小，變成 S、L、XL 等全部尺碼。「碼」就是尺碼。"],
+ ["排料","把所有尺碼的版型在布上排得最緊密、最省布，排好的圖叫<b>嘜架</b>（Marker）。省下 1% 的布，一萬件衣服就是一大筆錢。"],
+ ["裁剪","把布一層層鋪在長桌上（叫<b>拉布</b>），用電剪或自動裁床把幾十層一起剪下來，再分捆、編號。同一疊裡上下層可能有色差，所以同一件衣服的裁片要來自同一層。"],
+ ["車縫","產線上每個車工負責一道或幾道<b>工序</b>，把裁片一步步接成衣服。這是本課程的重點，第 3 到第 7 課都在講它。"],
+ ["整燙","用溫度、蒸氣和壓力把衣服燙平、定型，讓它看起來挺拔好看。第 8 課詳細說明。"],
+ ["檢驗","翻過來看做工、量尺寸、剪線頭、<b>驗針</b>，把不合格的挑出來修。第 9 課詳細說明。"],
+ ["包裝","掛吊牌、摺衣、裝膠袋、依比例裝箱、貼上<b>嘜頭</b>。第 10 課詳細說明。"],
+ ["出貨","客人驗貨通過後，紙箱裝進貨櫃，坐船或飛機送到世界各地的倉庫和店面，最後才到你手上。"]
+];
+
+const QUIZ={
+c1:[
+ ["下面哪一種是合成纖維？",["棉","羊毛","聚酯","蠶絲"],2,"聚酯是用石油化學原料在工廠裡合成的；棉、羊毛、蠶絲都是天然纖維。"],
+ ["棉紗「40 支」和「20 支」，哪一個比較細？",["40 支","20 支","一樣粗","無法比較"],0,"支數是「同樣重量能拉多長」，數字越大代表越細。"],
+ ["燃燒時有燒頭髮的味道、灰燼是脆脆的黑球，最可能是什麼纖維？",["棉","羊毛","聚酯","麻"],1,"羊毛和蠶絲是動物蛋白質，燒起來和頭髮一樣。"],
+ ["Spandex（氨綸）這個名字是怎麼來的？",["發明人的名字","把 expands 的字母重新排列","產地的名字","化學式縮寫"],1,"expands 意思是擴張，正好形容它能被拉長的特性。"]
+],
+c2:[
+ ["梭織布中，直向的紗叫什麼？",["緯紗","經紗","布邊","線圈"],1,"經 = 直，緯 = 橫，地球的經緯線就是借用織布的說法。"],
+ ["牛仔布是哪一種組織？",["平紋","斜紋","緞紋","針織"],1,"牛仔布是 3/1 斜紋，所以表面有斜斜的紋路。"],
+ ["梭織布哪一個方向最會伸長？",["直紋","橫紋","斜紋 45°","都一樣"],2,"45° 斜向最有彈性也最垂墜，所以斜裁的裙子特別貼身。"],
+ ["Polo 衫常用、表面有小凹凸顆粒的布是？",["平針布","羅紋布","珠地布","刷毛布"],2,"珠地布（Piqué）表面像撒了小珠子，透氣又挺。"],
+ ["下列哪一個是針織布的特性？",["經紗緯紗交錯","線圈串套，彈性大","剪開後一直掉紗鬚","幾乎不能伸縮"],1,"針織靠線圈串起來，線圈能被拉開變形，所以有彈性。"]
+],
+c3:[
+ ["車針織布要用哪一種針？",["尖頭針","圓頭針","越粗越好","手縫針"],1,"圓頭針會把線圈推開，不會刺斷紗線造成破洞。"],
+ ["T 恤下擺正面兩條平行線、反面是網狀，是哪一台車做的？",["平車","拷克","三本車","鎖眼車"],2,"三本車（406 線跡）正面平行直線、反面網狀，有彈性。"],
+ ["Nm 90 的針，針桿直徑大約是？",["9 mm","0.9 mm","90 mm","0.09 mm"],1,"公制針號除以 100 就是直徑公釐數。"],
+ ["斷針之後，正確的做法是？",["丟進垃圾桶就好","把碎片找齊交給組長登記","先把這捆車完再說","用磁鐵吸一下就算了"],1,"斷針管理要能追蹤每一根針，找不齊的衣服要隔離逐件驗針。"]
+],
+c4:[
+ ["鎖式線跡的面線和底線，最理想是在哪裡勾在一起？",["布的正面","布的反面","兩層布的中間","壓腳上"],2,"張力平衡時打結點藏在布中間，正反面都漂亮。"],
+ ["正面看得到一點一點的底線，最可能的原因是？",["面線太緊","面線太鬆","針太細","針距太長"],0,"面線太用力，就把底線拉到正面來了。"],
+ ["SPI 12 代表什麼？",["每公分 12 針","每英吋 12 針","每針 12 公釐","用 12 條線"],1,"SPI = Stitches Per Inch，每英吋幾針。"],
+ ["哪一種線跡拉一端線頭就整條散開，常用在米袋封口？",["101 單線鏈式","301 鎖式","504 拷克","607 爬網"],0,"單線鏈式只有一條線自己套圈，方便拆開。"],
+ ["針織布一直跳針，第一個要檢查什麼？",["線的顏色","有沒有用對的圓頭針、針有沒有裝好","布的價格","燙台溫度"],1,"跳針最常見的原因就是針：裝反、沒裝到底、針型不對或針彎了。"]
+],
+c5:[
+ ["縫線到布邊之間多留的那段布叫？",["刀口","縫份","回針","布邊"],1,"縫份就像紙張的留白，留給縫線和日後修改。"],
+ ["很薄的紗布想把毛邊藏在裡面，最適合哪一種縫型？",["來去縫","鋸齒剪","平縫分燙","打結"],0,"來去縫一來一回車兩次，毛邊被包在裡面。"],
+ ["牛仔褲內側縫常用哪一種縫型？",["滾邊","來去縫","雙針搭縫","雙摺捲邊"],2,"雙針搭縫兩片互勾、壓兩道線，最耐拉扯。"],
+ ["下列哪一個車縫順序原則是正確的？",["先大片後小片","先立體後平面","先小片後大片、先平面後立體","先壓明線再合縫"],2,"小零件先做好、趁衣服還是平的時候多做一些，會輕鬆很多。"]
+],
+c6:[
+ ["襯衫背後、肩膀上那塊橫的布叫？",["門襟","覆肩（過肩）","袖衩","領座"],1,"Yoke 原意是牛軛，都是架在肩上的東西。"],
+ ["襯衫領子、袖口挺挺的，是因為裡面有？",["鉚釘","黏合襯","羅紋","肩帶"],1,"黏合襯用熱和壓力黏在布上，撐出形狀。"],
+ ["牛仔褲口袋角的鉚釘，最早是為了什麼？",["裝飾好看","加固，防止口袋被撐破","掛鑰匙","分辨尺碼"],1,"1873 年的專利就是為了讓礦工褲的口袋更耐用。"],
+ ["袖山比袖窿略長，車縫時把多出來的量均勻收進去，叫？",["吃縫","回針","差動","鬆布"],0,"吃縫讓肩膀圓潤立體，是很考功夫的技巧。"]
+],
+c7:[
+ ["為什麼 T 恤側縫多用拷克，而不用平車？",["拷克比較便宜","拷克的線跡有彈性，平車的線被拉會斷","平車完全不能車針織","客人規定的"],1,"301 線跡幾乎沒有彈性，針織布一拉線就斷。"],
+ ["T 恤合肩時車進一條肩帶，目的是？",["裝飾","防止肩線被拉長變形","方便剪線頭","讓衣服變重"],1,"衣服的重量都掛在肩線上，肩帶讓它不會越穿越長。"],
+ ["薄針織布車出波浪邊，可以怎麼調整？",["調差動，讓前面送得比後面快","用手用力拉布","換成尖頭針","把張力調到最緊"],0,"前面多送一點，布被輕輕推擠後再車，就不會被拉長成波浪。"],
+ ["針織布裁剪前先攤開放一段時間讓它回縮，叫做？",["預縮","鬆布","黏襯","對條"],1,"鬆布可以避免衣服做好後自己縮小。"]
+],
+c8:[
+ ["下列哪一個不是整燙的要素？",["溫度","蒸氣","壓力","布的顏色"],3,"四要素是溫度、蒸氣、壓力、時間，最後還要冷卻定型。"],
+ ["熨斗符號裡有兩個點，代表大約多少度？",["110°C","150°C","200°C","不可熨燙"],1,"一點約 110°C、兩點約 150°C、三點約 200°C。"],
+ ["棉 95%、氨綸 5% 的布，要用什麼溫度燙？",["高溫，因為大部分是棉","以最怕熱的氨綸為準，用低溫","不需要燙","越熱越好"],1,"氨綸過熱會失去彈性，混紡以最怕熱的纖維為準。"],
+ ["深色布被燙出一片發亮，叫做？",["水漬","極光","燙縮","扭骨"],1,"纖維被壓扁後像鏡子一樣反光。從反面燙或蓋燙墊布可以預防。"],
+ ["燙針織布的正確方法是？",["熨斗大力來回推","燙壓：放下、停一下、拿起來，不滑動","完全不用蒸氣","開到最高溫"],1,"來回推會把針織布推長、推變形。"]
+],
+c9:[
+ ["斷針殘留在衣服裡，屬於哪一級瑕疵？",["次要","主要","嚴重","不算瑕疵"],2,"可能傷害穿的人，一律是嚴重瑕疵。"],
+ ["胸寬標準 52 cm、公差 ±1 cm，量到 50.8 cm，結果是？",["合格","不合格","要看顏色","看驗貨員心情"],1,"可接受範圍是 51 到 53 cm，50.8 cm 太小了。"],
+ ["AQL 抽樣為什麼要從不同箱子、不同尺碼平均抽？",["比較好玩","讓抽到的樣本能代表整批貨","規定只能開一箱","比較省時間"],1,"就像喝湯前要先攪拌，只舀最上面那口不準。"],
+ ["四分制驗布，一個 7 英吋長的瑕疵扣幾分？",["1 分","2 分","3 分","4 分"],2,"6 到 9 英吋扣 3 分。"]
+],
+c10:[
+ ["洗標上三角形打叉，代表什麼？",["不可水洗","不可漂白","不可烘乾","不可熨燙"],1,"三角形是漂白，打叉就是不可以。"],
+ ["「嘜頭」的「嘜」字來自？",["日文","英文 mark 的廣東話音譯","閩南語","法文"],1,"嘜頭 = shipping mark，嘜架 = marker，都是香港傳來的音譯。"],
+ ["尺碼比例 1:2:2:1（S:M:L:XL）、每箱 12 件，每箱 M 碼有幾件？",["2 件","3 件","4 件","6 件"],2,"一組 6 件，一箱 2 組，M 是 2 × 2 = 4 件。"],
+ ["G.W. 和 N.W. 的差別是？",["G.W. 是毛重，包含箱子","N.W. 包含箱子","兩個一樣","G.W. 是件數"],0,"G.W. 毛重連箱子一起秤；N.W. 淨重只算貨物。"]
+],
+c11:[
+ ["SMV 6 分鐘、20 人、工作 8 小時，做出 1,000 件，效率大約是？",["50%","62.5%","75%","100%"],1,"1000 × 6 ÷ (20 × 480) = 6000 ÷ 9600 = 62.5%。"],
+ ["產線上最慢、決定整條線產量的工序叫？",["節拍","瓶頸","改善","單件流"],1,"就像瓶子的脖子，流量被最細的地方卡住。"],
+ ["下列哪一個屬於精實生產說的「浪費」？",["客人要求的明線","車工等裁片等了 20 分鐘","驗針","照規定包裝"],1,"等待不會讓衣服更有價值，是七大浪費之一。"],
+ ["5S 的第一個 S「整理」是指？",["把東西擦乾淨","把不需要的東西清掉","養成習慣","訂出標準"],1,"整理 = 分出要與不要，不要的清掉。"],
+ ["Takt time 的 Takt 是哪一國的字、什麼意思？",["英文，時間","德文，節拍","日文，改善","法文，速度"],1,"Takt 是德文的節拍，產線跟著這個拍子走。"]
+]
+};
+
+const GLOSS=[
+["成衣","Ready-to-wear","布料","已經做好、買了就能直接穿的衣服。","「成」是完成。法文叫 prêt-à-porter，意思是「準備好可以穿」。"],
+["工藝單","Tech Pack","品質","一件衣服的完整說明書：款式圖、尺寸表、布料、線跡、包裝方式。","Tech 是 technical（技術），pack 是一整包資料。"],
+["打版／版型","Pattern","布料","把立體的衣服拆成平面的紙樣。","「版」是樣板、模子的意思。"],
+["放碼","Grading","布料","把基本尺碼的版型依規則放大縮小成各尺碼。","「碼」是尺碼；英文 grade 是分級。"],
+["嘜架","Marker","包裝","排料圖：把所有裁片在布上排得最省布的排法。","marker 的廣東話音譯，由香港成衣業傳開。"],
+["纖維","Fiber","布料","構成紗線最小的細長單位，像頭髮一樣。",""],
+["紗線","Yarn","布料","很多纖維扭在一起成為連續的線。",""],
+["混紡","Blend","布料","兩種以上纖維混在一起紡紗，截長補短。",""],
+["T/C","Tetoron/Cotton","布料","聚酯比例較高的聚酯棉混紡布。","T 來自日本帝人和東麗的聚酯商標 Tetoron；C 是 Cotton。"],
+["CVC","Chief Value Cotton","布料","棉占一半以上的棉聚酯混紡。","直譯是「主要價值在棉」。"],
+["支數","Ne, English cotton count","布料","1 磅紗能拉出幾個 840 碼，數字越大越細。","英國棉紡業的傳統單位。"],
+["丹尼","Denier","布料","9,000 公尺長的紗重幾公克，數字越大越粗。","源自法國古代銀幣 denier，古人拿它當砝碼秤絲。"],
+["Tex","Tex","布料","1,000 公尺長的紗重幾公克。縫紉線常用。","來自 textile（紡織品）。"],
+["氨綸","Spandex / Elastane","布料","可以拉長數倍再彈回的彈性纖維。","Spandex 是 expands 的字母重排；Lycra（萊卡）是品牌名。"],
+["尼龍","Nylon","布料","強韌耐磨的合成纖維。","杜邦公司自創的字；「紐約 + 倫敦」是誤傳。"],
+["嫘縈","Rayon / Viscose","布料","用木漿等天然材料再生的纖維，滑順垂墜。","Rayon 的音譯；「嫘」取自傳說教人養蠶的嫘祖，因為它最早被當作人造絲。"],
+["梭織","Woven","布料","經紗和緯紗上下交錯織成的布。","織布時用來穿緯紗的工具叫「梭」（shuttle）。"],
+["經紗","Warp","布料","梭織布直向的紗。","「經」古義就是織布機上的直線，地球經線也是借用這個字。"],
+["緯紗","Weft","布料","梭織布橫向的紗。","「緯」古義是織物上的橫線。"],
+["平紋","Plain weave","布料","一上一下交錯，最基本、最耐用的梭織組織。",""],
+["斜紋","Twill","布料","浮點斜向排列，表面有斜線，例如牛仔布、卡其布。",""],
+["緞紋","Satin","布料","浮線很長、交錯點很少，表面光滑有光澤。","一般認為來自阿拉伯商人對泉州的稱呼 Zaitun。"],
+["丹寧","Denim","布料","靛藍色經紗、白色緯紗的斜紋棉布。","法文 serge de Nîmes（尼姆城的斜紋布）唸快變成 denim。"],
+["卡其","Khaki","布料","泥土色的斜紋布。","源自波斯語，意思是塵土。"],
+["布邊","Selvage / Selvedge","布料","布匹兩側織得緊密、不會散開的邊。","self-edge（自己收好的邊）的變音。"],
+["布紋","Grain","布料","布的方向：直紋最穩定，斜紋 45° 最會伸長。",""],
+["針織","Knit","布料","用針把紗線拉成線圈、互相串套而成的布。",""],
+["平針布","Single jersey","布料","最常見的 T 恤布，正面是一排排小 V，布邊會捲。","得名自英國澤西島（Jersey）漁民穿的針織衣。"],
+["羅紋","Rib","布料","有直向凸條、橫向彈性很大的針織布，用在領口袖口。","凸條像肋骨（rib）。"],
+["珠地布","Piqué","布料","表面有小凹凸顆粒的針織布，Polo 衫常用。","法文 piqué 是「壓出凹凸」；「珠地」形容表面像撒了小珠。"],
+["毛圈布","French terry","布料","反面是一個個小線圈的針織布，大學 T 常用。","一說來自法文 tirer（拉出）。"],
+["克重","GSM","布料","每平方公尺布重幾公克，數字越大越厚。","Grams per Square Meter 的縮寫。"],
+["扭度／扭骨","Spirality","布料","針織布線圈歪斜，使 T 恤側縫洗後轉到前面。","「扭骨」是工廠口語，形容側縫扭轉跑位。"],
+["縮水率","Shrinkage","布料","布洗過或燙過後縮小的百分比。",""],
+["鬆布","Relaxing","布料","針織布裁剪前攤開靜置，讓它自然回縮。",""],
+["車／針車","Sewing machine","機器","縫紉機。","台語叫針車，因為有會轉的輪子。日文ミシン來自英文 machine。"],
+["平車","Lockstitch machine","機器","單針鎖式線跡（301）縫紉機，梭織主力。",""],
+["拷克","Overlock","機器","把布邊包起來的包縫機（504/514），針織主力。","一般認為是 overlock（經日文ロック）的音譯。"],
+["三本車","Coverstitch","機器","正面平行直線、反面網狀的繃縫機（406），做下擺袖口。","日文「三本針」，本是計算細長物的量詞。"],
+["爬網車","Flatlock","機器","正反面都扁平的覆蓋線跡（607），運動服常用。","線跡像一條網爬在布上。"],
+["埋夾車","Feed-off-the-arm","機器","機臂是長筒的雙針搭縫機，用來車側縫、袖底、褲內側。","香港工廠用語。"],
+["打結","Bartack","機器","在受力點車一小段密集線跡加固。","香港叫「打棗」。"],
+["梭芯","Bobbin","機器","裝底線的小線軸，藏在針板下的梭殼裡。","bobbin 原指紡織用小線軸；中文取「梭子的心」。"],
+["送布牙","Feed dog","機器","針板下冒出來、把布往後送的鋸齒。","像牙齒一樣咬住布。"],
+["挑線桿","Take-up lever","機器","每一針把面線拉緊的擺桿。",""],
+["圓頭針","Ball point needle","機器","針尖圓鈍，推開針織線圈而不刺斷紗線。",""],
+["差動","Differential feed","機器","前後兩組送布牙速度不同，防止針織布拉長或起皺。",""],
+["鎖式線跡","Lockstitch","車縫","面線和底線在布中間互相勾住的線跡（301）。","兩線像鎖一樣扣住。1846 年 Elias Howe 取得專利。"],
+["面線／底線","Needle thread / Bobbin thread","車縫","面線從上方穿過針孔；底線從下方的梭芯出來。",""],
+["張力","Thread tension","車縫","線被拉緊的程度。面線底線平衡，打結點才會在布中間。",""],
+["SPI","Stitches Per Inch","車縫","每英吋有幾針，用來表示針距。",""],
+["縫份","Seam allowance","車縫","縫線到布邊之間多留的布。",""],
+["刀口","Notch","車縫","裁片邊上的小缺口，是對位記號。","像拼圖的卡榫。"],
+["回針","Backtack","車縫","開頭結尾往回車幾針固定線頭。",""],
+["來去縫","French seam","車縫","正反各車一次、把毛邊包在裡面的縫法。","一來一回；法式高級女裝愛用。"],
+["雙針搭縫","Flat-felled seam","車縫","兩片布互相勾住、壓兩道線的縫法，極耐拉。","fell 是把縫份壓倒縫平。"],
+["滾邊","Binding","車縫","用布條包住毛邊。",""],
+["起皺","Puckering","車縫","縫線旁的布皺成一條。",""],
+["跳針","Skipped stitch","車縫","有幾針沒有形成線跡。",""],
+["吃縫","Easing","車縫","把略長的一邊均勻收進較短的一邊，做出立體感。",""],
+["ISO 4915／4916","Stitch / Seam classification","車縫","國際標準：4915 分類線跡（100–600），4916 分類縫型。",""],
+["覆肩（過肩）","Yoke","部位","襯衫背後肩膀上的橫片。","英文 yoke 是牛軛，架在牛肩上的木頭。"],
+["門襟","Placket","部位","衣服前面開合、釘扣子的那一條。","「襟」是衣服前面交疊開口的部分。"],
+["領座","Collar stand","部位","襯衫領子下面直立的那一圈。",""],
+["袖衩","Sleeve placket","部位","袖口的開口，方便手穿過。","「衩」是衣服的開口，像旗袍開衩。"],
+["襯／黏合襯","Interlining / Fusible","部位","墊在裡面撐出形狀的布，黏合襯用熱壓黏上。","「襯」本義是貼身在裡面的衣服，引申為墊在裡面。"],
+["肩帶","Shoulder tape","部位","車進 T 恤肩縫的窄布條，防止肩線被拉長。",""],
+["表袋","Watch pocket","部位","牛仔褲右前袋裡的小口袋。","原本給牛仔放懷錶。"],
+["鉚釘","Rivet","部位","牛仔褲口袋角的金屬釘，加固用。","1873 年 Jacob Davis 與 Levi Strauss 的專利。"],
+["T 恤","T-shirt","部位","攤平時像大寫 T 字的上衣。","「恤」是廣東話 shirt 的音譯。"],
+["Polo 衫","Polo shirt","部位","有領、有短門襟的針織上衣。","原為馬球選手服，後由網球選手 Lacoste 發揚。"],
+["燙壓／推燙","Pressing / Ironing","整燙","燙壓是放下、停、拿起；推燙是滑動。針織和羊毛要燙壓。",""],
+["燙饅頭","Tailor's ham","整燙","圓鼓鼓的硬墊子，燙肩膀、胸部等曲面。","英文因形狀像火腿而得名。"],
+["極光","Shine","整燙","布面被燙得發亮。","台灣工廠俗稱，形容亮面一閃一閃。"],
+["抽濕燙台","Vacuum table","整燙","台面下抽氣，讓衣服快速乾燥定型。",""],
+["AQL","Acceptance Quality Limit","品質","統計抽樣的允收標準，決定抽幾件、幾件不良可以接受。","源自二戰美軍的 MIL-STD-105，現為 ISO 2859-1。"],
+["公差","Tolerance","品質","尺寸可以接受的誤差範圍，例如 ±1 cm。",""],
+["四分制","Four-point system","品質","驗布扣分法，每個瑕疵依長度扣 1 到 4 分。","單一瑕疵最多扣 4 分而得名。"],
+["驗針","Needle detection","品質","用磁場檢測衣服裡有沒有斷針或金屬。",""],
+["洗標","Care label","包裝","寫著成分、洗滌符號、產地的標籤。",""],
+["吊牌","Hangtag","包裝","掛在衣服外面的紙牌，有品牌、價格、條碼。",""],
+["槍針","Tag pin","包裝","用標籤槍打的塑膠針，用來掛吊牌。",""],
+["嘜頭","Shipping mark","包裝","外箱上印的文字，說明箱內貨物。正嘜在大面，側嘜在側面。","mark 的廣東話音譯。"],
+["裝箱單","Packing list","包裝","記錄每箱箱號、顏色、尺碼、件數、重量的清單。",""],
+["配比裝箱","Ratio / Assorted pack","包裝","一箱依比例裝不同尺碼。",""],
+["毛重／淨重","G.W. / N.W.","包裝","毛重含箱子，淨重只算貨物。","Gross Weight / Net Weight。"],
+["SMV／SAM","Standard Minute Value","管理","熟練車工以正常速度完成工作所需的標準分鐘數。","來自泰勒的時間研究。"],
+["IE","Industrial Engineering","管理","工業工程，負責算工時、排產線、改善方法。",""],
+["效率","Efficiency","管理","產出 × SMV ÷（人數 × 工作分鐘）× 100%。",""],
+["瓶頸","Bottleneck","管理","整條線最慢、決定產量的工序。","瓶子的脖子最細，流量被它卡住。"],
+["節拍時間","Takt time","管理","依客戶需求算出的「每幾秒必須完成一件」。","Takt 是德文，意思是音樂的節拍。"],
+["精實生產","Lean","管理","以消除浪費為核心的生產方式。","源自豐田生產方式；Lean 一詞 1988 年由美國研究者提出。"],
+["無駄","Muda","管理","日文的「浪費」，精實說的七大浪費。",""],
+["5S","5S","管理","整理、整頓、清掃、清潔、素養。","五個日文詞羅馬拼音都以 S 開頭。"],
+["改善","Kaizen","管理","每天一點點持續改進。","日文原音在全世界通用。"],
+["捆紮系統","Bundle system","管理","裁片綁成一捆一捆在產線上傳遞。",""],
+["單件流","One-piece flow","管理","一次只做、只傳一件，半成品最少。",""],
+["多能工","Multi-skilled operator","管理","會多種機器與工序的車工。",""],
+["驗廠","Social / Compliance audit","管理","品牌檢查工廠的安全、工時、薪資與法規遵守。",""]
+];
+</script>
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const NS='http://www.w3.org/2000/svg';
+const el=(tag,attrs,parent)=>{const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;};
+const KEY='garment-course-done-v1';
+let done={};
+try{done=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){done={};}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(done));}catch(e){}};
+
+/* ---------- 目錄與換頁 ---------- */
+const lessons=$$('.lesson');
+const tocList=$('#tocList');
+let lastStage='';
+let ol;
+lessons.forEach(s=>{
+  if(s.dataset.stage!==lastStage){lastStage=s.dataset.stage;const d=document.createElement('div');d.className='stage';d.textContent=lastStage;tocList.appendChild(d);ol=document.createElement('ol');tocList.appendChild(ol);}
+  const li=document.createElement('li');
+  li.innerHTML=`<a href="#${s.id}" data-id="${s.id}"><span class="n">${s.dataset.n}</span><span>${s.dataset.title}</span><span class="ck"></span></a>`;
+  ol.appendChild(li);
+});
+lessons.forEach((s,i)=>{
+  const p=document.createElement('div');p.className='pager';
+  const prev=lessons[i-1],next=lessons[i+1];
+  p.innerHTML=(prev?`<button class="btn" data-go="${prev.id}">上一課：${prev.dataset.title}</button>`:'<span></span>')+
+    `<button class="done-toggle" data-done="${s.id}" aria-pressed="false">標記為已完成</button>`+
+    (next?`<button class="btn" data-go="${next.id}">下一課：${next.dataset.title}</button>`:'<span></span>');
+  s.appendChild(p);
+});
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){go(g.dataset.go);}
+  const d=e.target.closest('[data-done]');if(d){const id=d.dataset.done;done[id]=!done[id];save();paintDone();}
+});
+function paintDone(){
+  let n=0;
+  $$('#tocList a').forEach(a=>{const ok=!!done[a.dataset.id];a.querySelector('.ck').textContent=ok?'✓':'';if(ok)n++;});
+  $$('[data-done]').forEach(b=>{const ok=!!done[b.dataset.done];b.setAttribute('aria-pressed',ok);b.textContent=ok?'已完成 ✓':'標記為已完成';});
+  $('#bar').style.width=(n/lessons.length*100)+'%';
+  $('#ptxt').textContent=`已完成 ${n} / ${lessons.length}`;
+}
+function show(id){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=id;
+  if(!document.getElementById(id))id='c0';
+  lessons.forEach(s=>s.classList.toggle('show',s.id===id));
+  $$('#tocList a').forEach(a=>a.classList.toggle('on',a.dataset.id===id));
+}
+window.go=function(id){
+  if(location.hash!=='#'+id)history.pushState(null,'','#'+id);
+  show(id);closeMenu();
+  $('#main').scrollIntoView({behavior:'auto',block:'start'});
+};
+$('#tocList').addEventListener('click',e=>{const a=e.target.closest('a');if(a){e.preventDefault();go(a.dataset.id);}});
+window.addEventListener('popstate',()=>show(location.hash.slice(1)));
+const toc=$('#toc'),mb=$('#menuBtn');
+function closeMenu(){toc.classList.remove('open');mb.setAttribute('aria-expanded','false');mb.textContent='目錄';}
+mb.addEventListener('click',()=>{const o=toc.classList.toggle('open');mb.setAttribute('aria-expanded',o);mb.textContent=o?'關閉':'目錄';});
+show(location.hash.slice(1)||'c0');paintDone();
+
+/* ---------- 第 0 課：旅程 ---------- */
+const jw=$('#journey');
+JOURNEY.forEach((j,i)=>{const b=document.createElement('button');b.innerHTML=`<b>${i+1}</b>${j[0]}`;b.setAttribute('aria-pressed','false');
+  b.onclick=()=>{$$('#journey button').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');$('#journeyOut').innerHTML=`<b>第 ${i+1} 站　${j[0]}</b><br>${j[1]}`;};jw.appendChild(b);});
+
+/* ---------- 第 2 課：組織圖 ---------- */
+const WEAVE={
+ plain:[(r,c)=>(r+c)%2===0,'<b>平紋</b>：一上一下交錯，交錯點最多，所以最結實、最不易變形。例如襯衫常用的府綢、雪紡、帆布。'],
+ twill:[(r,c)=>(r+c)%4!==0,'<b>斜紋</b>（3/1）：經紗連續浮在三根緯紗上，每一排錯開一格，排出斜斜的紋路。牛仔布就是這樣，藍色經紗浮在正面，所以正面藍、反面白。'],
+ satin:[(r,c)=>(((c-2*r)%5)+5)%5!==0,'<b>緞紋</b>：交錯點很少而且分散，經紗長長地浮在表面，所以像鏡子一樣光滑有光澤，但比較容易勾紗。']
+};
+function drawWeave(t){
+  const svg=$('#weaveSvg');svg.innerHTML='';const n=10,cs=28,o=10;
+  el('rect',{x:0,y:0,width:300,height:300,fill:'#F6F7F4'},svg);
+  for(let r=0;r<n;r++)for(let c=0;c<n;c++){
+    const up=WEAVE[t][0](r,c),x=o+c*cs,y=o+r*cs;
+    if(up){el('rect',{x:x+2,y:y+7,width:cs-4,height:cs-14,fill:'#E9C85A',rx:3},svg);el('rect',{x:x+6,y:y,width:cs-12,height:cs,fill:'#2F3F73',rx:5},svg);}
+    else{el('rect',{x:x+7,y:y+2,width:cs-14,height:cs-4,fill:'#2F3F73',rx:3},svg);el('rect',{x:x,y:y+6,width:cs,height:cs-12,fill:'#E9C85A',rx:5},svg);}
+  }
+  $('#weaveOut').innerHTML=WEAVE[t][1];
+}
+$$('#weaveCtrl .chip').forEach(b=>b.onclick=()=>{$$('#weaveCtrl .chip').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');drawWeave(b.dataset.w);});
+drawWeave('plain');
+
+/* ---------- 第 2 課：拉一拉 ---------- */
+const wv=el('g',{},$('#wovenBox'));
+for(let r=0;r<7;r++)for(let c=0;c<7;c++){const x=30+c*20,y=15+r*20,up=(r+c)%2===0;
+  if(up)el('rect',{x:x+4,y:y,width:12,height:20,fill:'#2F3F73',rx:3},wv);else el('rect',{x:x,y:y+4,width:20,height:12,fill:'#E9C85A',rx:3},wv);}
+const kn=el('g',{},$('#knitBox'));
+for(let r=0;r<8;r++)for(let c=0;c<6;c++){const x=46+c*18,y=12+r*17;
+  el('path',{d:`M${x+2} ${y} Q${x+3} ${y+13} ${x+8} ${y+19} M${x+16} ${y} Q${x+15} ${y+13} ${x+10} ${y+19}`,fill:'none',stroke:'#C23A3F','stroke-width':3.4,'stroke-linecap':'round'},kn);}
+function pull(){
+  const k=$('#pull').value/100;
+  wv.setAttribute('transform',`translate(100 85) scale(${1+0.03*k} 1) translate(-100 -85)`);
+  kn.setAttribute('transform',`translate(100 85) scale(${1+0.55*k} ${1-0.12*k}) translate(-100 -85)`);
+  $('#pullOut').innerHTML=k===0?'把滑桿往右拖，看兩塊布被橫向拉的時候有什麼不同。':
+   k<0.5?'針織布的小 V 開始被拉寬了，梭織布幾乎沒動。':
+   '針織布的線圈被拉開，整塊布變寬、還稍微變矮；梭織布的經緯紗已經拉直拉緊，再用力也伸不長。這就是為什麼 T 恤好穿，但車 T 恤的縫線也必須能伸縮。';
+}
+$('#pull').addEventListener('input',pull);pull();
+
+/* ---------- 第 4 課：鎖式線跡六步 ---------- */
+const LS=[
+ {ny:-60,ang:0,loop:0,st:0,feed:0,t:'<b>① 準備</b>：針在最高點，面線已經穿過針孔。布壓在壓腳下面，左邊是之前已經車好的線跡。'},
+ {ny:45,ang:0,loop:0,st:0,feed:0,t:'<b>② 針往下</b>：針刺穿布料，把面線一起帶到布的下面。'},
+ {ny:33,ang:40,loop:1,st:0,feed:0,t:'<b>③ 形成線圈</b>：針稍微往上一點點，面線因為和布摩擦，在針的旁邊鼓出一個小線圈。'},
+ {ny:33,ang:190,loop:2,st:0,feed:0,t:'<b>④ 旋梭勾線</b>：旋梭的尖鉤剛好經過，勾住這個線圈，帶著它繞過整個梭芯。底線就被套在線圈裡面了。'},
+ {ny:-60,ang:360,loop:0,st:1,feed:0,t:'<b>⑤ 拉緊上鎖</b>：線圈滑出鉤子，針往上走，挑線桿把面線拉緊。面線和底線在兩層布中間扣在一起，一針完成。'},
+ {ny:-60,ang:360,loop:0,st:1,feed:1,t:'<b>⑥ 送布</b>：送布牙把布往後送一個針距，準備下一針。工業平車每分鐘可以重複這六個動作好幾千次。'}
+];
+let ls=0;
+function paintLS(){
+  const s=LS[ls];
+  $('#needle').setAttribute('transform',`translate(0 ${s.ny})`);
+  $('#hook').style.transform=`rotate(${s.ang}deg)`;
+  const lp=$('#loop');
+  if(s.loop===1){lp.setAttribute('opacity',1);lp.setAttribute('cx',168);lp.setAttribute('cy',150);lp.setAttribute('rx',7);lp.setAttribute('ry',14);}
+  else if(s.loop===2){lp.setAttribute('opacity',1);lp.setAttribute('cx',160);lp.setAttribute('cy',172);lp.setAttribute('rx',46);lp.setAttribute('ry',50);}
+  else lp.setAttribute('opacity',0);
+  $('#newStitch').setAttribute('opacity',s.st);$('#newStitchB').setAttribute('opacity',s.st);
+  $('#feedArrow').setAttribute('opacity',s.feed);$('#feedHead').setAttribute('opacity',s.feed);
+  $('#lockOut').innerHTML=s.t;$('#lockStep').textContent=`第 ${ls+1} / 6 步`;
+}
+$('#lockNext').onclick=()=>{ls=(ls+1)%LS.length;paintLS();};
+$('#lockPrev').onclick=()=>{ls=(ls+LS.length-1)%LS.length;paintLS();};
+$('#hook').style.transition='transform .6s ease';
+paintLS();
+
+/* ---------- 第 4 課：張力 ---------- */
+const TEN={
+ '-2':'<b>面線太緊</b>：面線太用力，把底線拉到正面來。正面看到一粒一粒的藍點，布也容易被拉皺。',
+ '-1':'<b>面線偏緊</b>：打結點靠近正面，把布稍微拉開就看得到底線。',
+ '0':'<b>平衡</b>：打結點藏在兩層布的中間，正面只看到紅色面線，反面只看到藍色底線，這就是標準的好線跡。',
+ '1':'<b>面線偏鬆</b>：打結點靠近反面，翻過來可能看得到面線。',
+ '2':'<b>面線太鬆</b>：面線被拉到反面，反面出現一圈圈鬆鬆的紅色面線，很容易勾到、拉脫。'
+};
+function drawTen(){
+  const v=+$('#ten').value,svg=$('#tenSvg');svg.innerHTML='';
+  el('rect',{x:10,y:55,width:580,height:20,fill:'#E3E7F3'},svg);el('rect',{x:10,y:75,width:580,height:20,fill:'#D6DDEE'},svg);
+  el('text',{x:14,y:48,'font-size':12,fill:'#586272'},svg).textContent='正面';
+  el('text',{x:14,y:112,'font-size':12,fill:'#586272'},svg).textContent='反面';
+  const ky=75+v*14,xs=[];for(let x=70;x<=560;x+=70)xs.push(x);
+  let top='M40 53',bot='M40 97';
+  xs.forEach(x=>{top+=` L${x-3} 53 L${x-3} ${ky} L${x+3} ${ky} L${x+3} 53`;bot+=` L${x-3} 97 L${x-3} ${ky} L${x+3} ${ky} L${x+3} 97`;});
+  top+=' L580 53';bot+=' L580 97';
+  el('path',{d:bot,fill:'none',stroke:'#2F3F73','stroke-width':3,'stroke-linejoin':'round'},svg);
+  el('path',{d:top,fill:'none',stroke:'#C23A3F','stroke-width':3,'stroke-linejoin':'round'},svg);
+  xs.forEach(x=>el('circle',{cx:x,cy:ky,r:4.5,fill:'#1D2430'},svg));
+  el('text',{x:590,y:140,'font-size':12,fill:'#586272','text-anchor':'end'},svg).textContent='黑點 = 打結點';
+  $('#tenOut').innerHTML=TEN[String(v)];
+}
+$('#ten').addEventListener('input',drawTen);drawTen();
+
+/* ---------- 第 4 課：SPI ---------- */
+function drawSpi(){
+  const n=+$('#spi').value,svg=$('#spiSvg');svg.innerHTML='';
+  el('rect',{x:20,y:30,width:420,height:28,fill:'#E3E7F3'},svg);
+  const L=400/n;
+  for(let i=0;i<n;i++)el('line',{x1:30+i*L+2,y1:44,x2:30+(i+1)*L-2,y2:44,stroke:'#C23A3F','stroke-width':3.5,'stroke-linecap':'round'},svg);
+  [30,430].forEach(x=>el('line',{x1:x,y1:22,x2:x,y2:66,stroke:'#1D2430','stroke-width':1.5},svg));
+  el('text',{x:30,y:82,'font-size':12,fill:'#586272'},svg).textContent='0';
+  el('text',{x:430,y:82,'font-size':12,fill:'#586272','text-anchor':'end'},svg).textContent='1 英吋（2.54 公分）';
+  const mm=(25.4/n).toFixed(1),per3=(n*3/2.54).toFixed(1);
+  const judge=n<=9?'針距很長，常見在厚布、牛仔褲的裝飾明線。':n<=14?'一般襯衫、褲子合縫常見的範圍。':'非常密，常見在高級薄襯衫；但太密會把布「打穿」、容易起皺。';
+  $('#spiOut').innerHTML=`<b>SPI ${n}</b>：每針長約 <b>${mm} mm</b>，換算每 3 公分約 <b>${per3}</b> 針。${judge}`;
+}
+$('#spi').addEventListener('input',drawSpi);drawSpi();
+
+/* ---------- 第 6 課：襯衫部件 ---------- */
+const PART={
+ collar:'<b>領子（翻領）</b> Collar：翻下來、看得到的那一片，裡面有黏合襯。領尖要尖、左右要對稱，是襯衫的「臉」。',
+ stand:'<b>領座</b> Collar stand：領子下面直立、繞著脖子的那一圈，扣子扣在這裡。沒有領座的襯衫，領子會軟軟地攤開。',
+ yoke:'<b>覆肩（過肩）</b> Yoke：背後肩膀上那塊橫的布，讓肩膀更合身、更耐穿。英文 yoke 原意是「牛軛」，就是架在牛肩膀上拉車的木頭，形狀和位置都很像。',
+ body:'<b>大身</b> Body：前片和後片，是衣服最大的兩塊裁片。',
+ placket:'<b>門襟</b> Placket：前面開合、釘扣子和鎖扣眼的那一條，裡面有襯。「襟」是衣服前面交疊開口的部分，所以古人說「衣襟」「胸襟」。',
+ pocket:'<b>胸袋</b> Chest pocket：貼在左胸的口袋。口袋的高低、左右位置要照版型上的點位，而且格子布要對格。',
+ sleeve:'<b>袖子</b> Sleeve：袖子頂端的弧線叫<b>袖山</b>，接到大身的<b>袖窿</b>（手臂穿出來的洞）上。',
+ cuff:'<b>袖口</b> Cuff：袖子尾端那一圈，有襯、有扣子，可以扣緊手腕。',
+ sleevePlacket:'<b>袖衩</b> Sleeve placket：袖口上方的開口，讓手能穿過去。「衩」就是衣服的開口，像旗袍的開衩。常見的「劍型袖衩」頂端是尖的，像一把劍。',
+ hem:'<b>下擺</b> Hem：衣服最下面的邊。襯衫下擺常做成前後弧形，用雙摺捲邊車縫。'
+};
+$('#shirtSvg').addEventListener('click',e=>{
+  const p=e.target.closest('[data-part]');if(!p)return;
+  $$('#shirtSvg [data-part]').forEach(x=>{x.style.stroke='';x.style.strokeWidth='';});
+  $$(`#shirtSvg [data-part="${p.dataset.part}"]`).forEach(x=>{x.style.stroke='#C23A3F';x.style.strokeWidth=p.dataset.part==='sleevePlacket'||p.dataset.part==='hem'?'7':'3';});
+  $('#shirtOut').innerHTML=PART[p.dataset.part];
+});
+
+/* ---------- 第 8 課：纖維溫度 ---------- */
+const FIB=[
+ ['棉',3,200,'可以用高溫和大量蒸氣。深色棉布從反面燙，避免極光。'],
+ ['麻',3,200,'要高溫，而且在布還微濕的時候燙最平。麻非常容易皺，燙完要馬上掛好。'],
+ ['羊毛',2,150,'一定要蓋燙墊布、用大量蒸氣，只能燙壓不能推。溫度太高羊毛會變硬、發亮。'],
+ ['蠶絲',1,110,'低溫、從反面燙，不要噴水（會留下水漬）。'],
+ ['聚酯',2,150,'中溫就夠。太熱會熔化發亮，而且燙出來的摺痕很難消掉。'],
+ ['尼龍',1,110,'低溫快速燙過。尼龍很怕熱，一下就會熔出亮面或變形。'],
+ ['嫘縈',2,150,'中溫、從反面燙。嫘縈濕的時候很脆弱，不要一邊噴蒸氣一邊用力拉。'],
+ ['含氨綸',1,110,'以氨綸為準用低溫，快速燙壓。過熱會讓布失去彈性。']
+];
+const fc=$('#fiberCtrl');
+function drawIron(i){
+  const f=FIB[i],svg=$('#ironSvg');svg.innerHTML='';
+  el('path',{d:'M20 100 H150 Q150 50 110 40 H60 Q38 40 32 68 Z',fill:'#fff',stroke:'#1D2430','stroke-width':3,'stroke-linejoin':'round'},svg);
+  el('path',{d:'M62 40 Q62 22 80 22 H118',fill:'none',stroke:'#1D2430','stroke-width':3},svg);
+  const cx=[[88],[74,102],[64,88,112]][f[1]-1];cx.forEach(x=>el('circle',{cx:x,cy:78,r:6,fill:'#1D2430'},svg));
+  el('rect',{x:180,y:14,width:22,height:96,rx:11,fill:'#EEF1EC',stroke:'#586272','stroke-width':2},svg);
+  const h=Math.round(f[2]/220*90);
+  el('rect',{x:184,y:106-h,width:14,height:h,rx:7,fill:'#C23A3F'},svg);
+  el('circle',{cx:191,cy:112,r:13,fill:'#C23A3F'},svg);
+  el('text',{x:214,y:66,'font-size':22,'font-weight':700,fill:'#1D2430'},svg).textContent=`${f[2]}°C`;
+  el('text',{x:214,y:88,'font-size':12,fill:'#586272'},svg).textContent='最高溫（約）';
+  $('#fiberOut').innerHTML=`<b>${f[0]}</b>：熨斗 ${f[1]} 個點，約 ${f[2]}°C 以下。${f[3]}`;
+}
+FIB.forEach((f,i)=>{const b=document.createElement('button');b.className='chip';b.textContent=f[0];b.setAttribute('aria-pressed',i===0);
+  b.onclick=()=>{$$('#fiberCtrl .chip').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');drawIron(i);};fc.appendChild(b);});
+drawIron(0);
+
+/* ---------- 第 10 課：摺衣 ---------- */
+const FOLD=['<b>① 攤平</b>：衣服正面朝下攤平在桌上，把摺衣板放在背上。紅色虛線是等一下要摺的位置。',
+ '<b>② 摺左邊</b>：左邊沿著摺衣板往內摺，袖子往下斜摺，讓袖子不要超出摺衣板。',
+ '<b>③ 摺右邊</b>：右邊用同樣方式摺過來，左右寬度要一樣。',
+ '<b>④ 摺下擺</b>：下擺往上摺到定位（照客人規定摺成對半或三摺），抽出摺衣板，翻過來讓正面朝上、領子置中。',
+ '<b>⑤ 入袋</b>：裝進膠袋，貼上尺碼貼紙，封口。每件大小都一樣，裝箱才會整齊。'];
+let fs=0;
+function paintFold(){$$('#foldSvg .ff').forEach(g=>g.style.display=(+g.dataset.f===fs)?'':'none');$('#foldOut').innerHTML=FOLD[fs];$('#foldStep').textContent=`第 ${fs+1} / 5 步`;}
+$('#foldNext').onclick=()=>{fs=(fs+1)%5;paintFold();};
+$('#foldPrev').onclick=()=>{fs=(fs+4)%5;paintFold();};
+paintFold();
+
+/* ---------- 第 9 課：AQL ---------- */
+const CODES=[[8,'A',2],[15,'B',3],[25,'C',5],[50,'D',8],[90,'E',13],[150,'F',20],[280,'G',32],[500,'H',50],[1200,'J',80],[3200,'K',125],[10000,'L',200],[35000,'M',315],[150000,'N',500],[500000,'P',800],[Infinity,'Q',1250]];
+const PLAN={2:[5,0,1,'↓'],3:[5,0,1,'↓'],5:[5,0,1,''],8:[5,0,1,'↑'],13:[20,1,2,'↓'],20:[20,1,2,''],32:[32,2,3,''],50:[50,3,4,''],80:[80,5,6,''],125:[125,7,8,''],200:[200,10,11,''],315:[315,14,15,''],500:[500,21,22,''],800:[500,21,22,'↑'],1250:[500,21,22,'↑']};
+function aql(){
+  const N=Math.floor(+$('#lot').value);const out=$('#aqlOut');
+  if(!N||N<2){out.textContent='請輸入 2 以上的數字。';return;}
+  const c=CODES.find(x=>N<=x[0]);const p=PLAN[c[2]];
+  let s=`批量 <b>${N.toLocaleString()}</b> 件 → 樣本代碼 <b>${c[1]}</b>，原表樣本數 ${c[2]} 件。`;
+  if(p[3])s+=`<br>在 AQL 2.5 這一欄，代碼 ${c[1]} 是箭頭「${p[3]}」，規定要順著箭頭改用 <b>${p[0]}</b> 件的抽樣方案。`;
+  if(p[0]>=N)s+=`<br>要抽的件數已經大於或等於整批數量，所以直接<b>全數檢驗</b>。`;
+  else s+=`<br>實際抽 <b>${p[0]}</b> 件：主要瑕疵 <b>${p[1]} 件以內</b>允收（Ac），達到 <b>${p[2]} 件</b>就拒收（Re）。`;
+  out.innerHTML=s;
+}
+$('#lot').addEventListener('input',aql);aql();
+
+/* ---------- 第 11 課：效率 ---------- */
+function eff(){
+  const smv=+$('#eSmv').value,op=+$('#eOp').value,hr=+$('#eHr').value,o=+$('#eOut').value;
+  if(!(smv>0&&op>0&&hr>0)){$('#effOut').textContent='請輸入大於 0 的數字。';return;}
+  const min=op*hr*60,e=o*smv/min*100,full=Math.floor(min/smv);
+  const word=e<40?'偏低，值得找出等待、瓶頸或品質問題。':e<60?'普通，很多成衣廠平常落在這個範圍附近。':e<80?'不錯，產線運作順暢。':e<=100?'非常好，代表人員熟練、產線平衡。':'超過 100%，通常代表 SMV 設得太寬鬆，或產出數字算錯了。';
+  $('#effOut').innerHTML=`投入 ${op} 人 × ${hr} 小時 = <b>${min.toLocaleString()}</b> 分鐘；產出 ${o.toLocaleString()} 件 × ${smv} 分鐘 = <b>${(o*smv).toLocaleString()}</b> 標準分鐘。<br>效率 = <b>${e.toFixed(1)}%</b>，${word}<br>如果效率 100%，理論上可以做 ${full.toLocaleString()} 件。`;
+}
+['#eSmv','#eOp','#eHr','#eOut'].forEach(s=>$(s).addEventListener('input',eff));eff();
+
+/* ---------- 第 11 課：產線平衡 ---------- */
+const OPS=[['合肩',.35],['領羅紋接圈',.20],['上領',.45],['後領包條',.60],['上袖',.80],['袖口三本',.55],['合脅',.90],['下擺三本',.50],['釘標',.30],['加固',.25],['剪線頭自檢',.60]];
+let W=OPS.map(()=>1);
+function lb(){
+  const box=$('#lbBars');box.innerHTML='';
+  const t=OPS.map((o,i)=>o[1]/W[i]),mx=Math.max(...t),tot=OPS.reduce((a,o)=>a+o[1],0),ppl=W.reduce((a,b)=>a+b,0);
+  OPS.forEach((o,i)=>{
+    const isB=Math.abs(t[i]-mx)<1e-9;
+    const row=document.createElement('div');
+    row.style.cssText='display:grid;grid-template-columns:6.5em 1fr auto;gap:8px;align-items:center;margin:5px 0;font-size:.9rem';
+    row.innerHTML=`<span>${o[0]}</span><span style="background:#EEF1EC;border-radius:4px;height:20px;position:relative;overflow:hidden"><i style="position:absolute;inset:0 auto 0 0;width:${t[i]/0.9*100}%;background:${isB?'#C23A3F':'#2F3F73'}"></i><em style="position:absolute;left:${t[i]/0.9*100<45?`calc(${t[i]/0.9*100}% + 6px)`:'6px'};top:0;font-style:normal;font-size:.78rem;color:${t[i]/0.9*100<45?'#1D2430':'#fff'};line-height:20px">${t[i].toFixed(2)} 分</em></span>
+    <span style="white-space:nowrap"><button class="chip" data-m="${i}" aria-label="${o[0]} 減少一人" style="padding:2px 10px">−</button> ${W[i]} 人 <button class="chip" data-p="${i}" aria-label="${o[0]} 增加一人" style="padding:2px 10px">＋</button></span>`;
+    box.appendChild(row);
+  });
+  const perHr=60/mx,bal=tot/(ppl*mx)*100,bn=OPS.filter((o,i)=>Math.abs(t[i]-mx)<1e-9).map(o=>o[0]).join('、');
+  const win=ppl<=14&&perHr>=90;
+  $('#lbOut').innerHTML=`總人數 <b>${ppl}</b> 人｜瓶頸：<b style="color:var(--thread)">${bn}</b>（每 ${mx.toFixed(2)} 分鐘出一件）<br>每小時產量約 <b>${Math.floor(perHr)}</b> 件｜平衡率 <b>${bal.toFixed(0)}%</b>（越接近 100% 代表大家越平均）<br>`+
+   (win?'<b style="color:#2f7d4f">挑戰成功！</b>你用 '+ppl+' 個人讓產量超過每小時 90 件。真實工廠還會把短工序合併給同一個人，讓平衡率更高。':'挑戰：用不超過 <b>14</b> 個人，讓每小時產量達到 <b>90 件</b>以上。提示：先處理紅色的那一條。');
+}
+$('#lbBars').addEventListener('click',e=>{const p=e.target.closest('[data-p]'),m=e.target.closest('[data-m]');
+  if(p){W[+p.dataset.p]=Math.min(4,W[+p.dataset.p]+1);lb();}if(m){W[+m.dataset.m]=Math.max(1,W[+m.dataset.m]-1);lb();}});
+$('#lbReset').onclick=()=>{W=OPS.map(()=>1);lb();};
+lb();
+
+/* ---------- 測驗 ---------- */
+function renderQuiz(box,qs,title){
+  box.innerHTML=`<h3>${title}</h3><p class="en" style="margin-top:0">點選答案，馬上看解說。</p>`;
+  let answered=0,right=0;
+  const sc=document.createElement('div');sc.className='score';
+  qs.forEach((q,qi)=>{
+    const d=document.createElement('div');d.className='qa';
+    d.innerHTML=`<div class="q">${qi+1}. ${q[0]}</div><div class="opts">${q[1].map((o,i)=>`<button data-i="${i}">${'ABCD'[i]}. ${o}</button>`).join('')}</div><div class="why">${q[3]}</div>`;
+    d.querySelectorAll('.opts button').forEach(b=>b.onclick=()=>{
+      if(d.classList.contains('done'))return;d.classList.add('done');answered++;
+      const i=+b.dataset.i;if(i===q[2])right++;else b.classList.add('wrong');
+      d.querySelectorAll('.opts button')[q[2]].classList.add('right');
+      d.querySelectorAll('.opts button').forEach(x=>x.disabled=true);
+      if(answered===qs.length)sc.textContent=`得分：${right} / ${qs.length}　`+(right===qs.length?'全對，太厲害了！':right>=qs.length*0.6?'不錯！錯的題目回頭看一下課文。':'建議把這一課再讀一次。');
+    });
+    box.appendChild(d);
+  });
+  box.appendChild(sc);
+}
+$$('.quiz[data-ch]').forEach(b=>renderQuiz(b,QUIZ[b.dataset.ch],'隨堂測驗'));
+$('#finalStart').onclick=()=>{
+  const pool=Object.values(QUIZ).flat().slice();
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+  renderQuiz($('#finalBody'),pool.slice(0,15),'');
+  $('#finalStart').textContent='重新抽 15 題';
+};
+
+/* ---------- 名詞辭典 ---------- */
+const cats=['全部',...new Set(GLOSS.map(g=>g[2]))];let cat='全部';
+const gc=$('#gcats');
+cats.forEach(c=>{const b=document.createElement('button');b.className='chip';b.textContent=c;b.setAttribute('aria-pressed',c==='全部');
+  b.onclick=()=>{cat=c;$$('#gcats .chip').forEach(x=>x.setAttribute('aria-pressed',x.textContent===c));gl();};gc.appendChild(b);});
+function gl(){
+  const q=$('#gq').value.trim().toLowerCase();
+  const list=GLOSS.filter(g=>(cat==='全部'||g[2]===cat)&&(!q||g.join(' ').toLowerCase().includes(q)));
+  $('#glist').innerHTML=list.length?list.map(g=>`<div class="gl"><h4>${g[0]} <span class="en">${g[1]}｜${g[2]}</span></h4><div>${g[3]}</div>${g[4]?`<div class="o"><b>由來：</b>${g[4]}</div>`:''}</div>`).join(''):'<p>找不到這個名詞，換個關鍵字試試，例如「車」「燙」「箱」。</p>';
+}
+$('#gq').addEventListener('input',gl);gl();
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-b6dff7bb06" data-category="garment"></script></body>
+</html>

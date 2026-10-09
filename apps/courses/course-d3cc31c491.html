@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>電商入門互動教室 — 從開店到出貨的完整旅程</title>
+<style>
+:root{
+  --linen:#FAF6EF;
+  --paper:#FFFFFF;
+  --khaki:#A8946A;
+  --khaki-dark:#8A774E;
+  --ink:#1F1D1A;
+  --gray:#6E6A63;
+  --line:#E6DFD2;
+  --blue:#2E5E7E;
+  --red:#8C4A3C;
+  --ok:#3E6B4F;
+  --bad:#A24936;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
+  background:var(--linen);color:var(--ink);line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+.num{font-family:Georgia,"Times New Roman",serif;font-variant-numeric:tabular-nums;}
+
+header{background:var(--ink);color:var(--linen);padding:28px 20px 22px;text-align:center;}
+header .eyebrow{font-size:12px;letter-spacing:4px;color:var(--khaki);margin-bottom:8px;}
+header h1{font-size:24px;font-weight:700;letter-spacing:2px;}
+header p{font-size:13px;color:#B8B2A6;margin-top:6px;}
+
+nav{position:sticky;top:0;z-index:50;background:var(--paper);border-bottom:1px solid var(--line);
+  display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+nav::-webkit-scrollbar{display:none;}
+nav button{flex:0 0 auto;background:none;border:none;padding:14px 13px;font-size:13px;color:var(--gray);
+  border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;font-family:inherit;}
+nav button.active{color:var(--ink);border-bottom-color:var(--khaki);font-weight:700;}
+.progress-wrap{height:3px;background:var(--line);}
+.progress-bar{height:3px;background:var(--khaki);width:0;transition:width .4s;}
+
+main{max-width:760px;margin:0 auto;padding:24px 18px 80px;}
+section.chapter{display:none;animation:fadein .35s ease;}
+section.chapter.show{display:block;}
+@keyframes fadein{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+.ch-label{font-size:12px;letter-spacing:3px;color:var(--khaki-dark);margin-bottom:4px;}
+h2{font-size:22px;margin-bottom:16px;}
+h3{font-size:17px;margin:28px 0 10px;padding-left:10px;border-left:4px solid var(--khaki);}
+p{margin-bottom:12px;font-size:15px;}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px;margin:14px 0;}
+.story{background:#F3EDDF;border-left:4px solid var(--khaki);border-radius:0 10px 10px 0;
+  padding:16px 18px;margin:14px 0;font-size:15px;}
+.story b{color:var(--khaki-dark);}
+.tip{background:var(--paper);border:1px dashed var(--khaki);border-radius:10px;padding:14px 16px;margin:14px 0;font-size:14px;}
+.tip::before{content:"💡 小重點";display:block;font-weight:700;color:var(--khaki-dark);margin-bottom:6px;font-size:13px;letter-spacing:1px;}
+.origin{background:#EFF3F5;border-left:4px solid var(--blue);border-radius:0 10px 10px 0;
+  padding:12px 16px;margin:14px 0;font-size:14px;}
+.origin::before{content:"📖 名詞的由來";display:block;font-weight:700;color:var(--blue);margin-bottom:4px;font-size:13px;letter-spacing:1px;}
+
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;background:var(--paper);}
+th{background:var(--ink);color:var(--linen);padding:9px 10px;text-align:left;font-weight:600;}
+td{border:1px solid var(--line);padding:9px 10px;vertical-align:top;}
+tr:nth-child(even) td{background:#FBF8F1;}
+.right{text-align:right;}
+
+.btn{display:inline-block;background:var(--ink);color:var(--linen);border:none;border-radius:8px;
+  padding:10px 18px;font-size:14px;cursor:pointer;font-family:inherit;transition:opacity .15s;}
+.btn:active{opacity:.75;}
+.btn.ghost{background:var(--paper);color:var(--ink);border:1px solid var(--ink);}
+.btn.small{padding:8px 14px;font-size:13px;}
+
+.lab{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:16px 0;}
+.lab .lab-title{font-weight:700;margin-bottom:10px;font-size:15px;}
+.lab .lab-title::before{content:"🔬 ";}
+.slider-row{display:flex;align-items:center;gap:10px;margin:10px 0;font-size:14px;}
+.slider-row label{width:118px;flex:0 0 auto;font-weight:700;}
+.slider-row input[type=range]{flex:1;accent-color:var(--khaki-dark);}
+.slider-row .val{width:100px;text-align:right;flex:0 0 auto;}
+.lab .result{background:var(--linen);border-radius:8px;padding:12px 14px;margin-top:10px;font-size:15px;text-align:center;}
+.lab .result b{color:var(--khaki-dark);font-size:18px;}
+.lab .result .warn{color:var(--bad);font-weight:700;}
+.lab .result .good{color:var(--ok);font-weight:700;}
+
+/* 漏斗 */
+.funnel{margin:12px auto;max-width:420px;}
+.f-step{margin:6px 0;}
+.f-bar{height:34px;background:var(--khaki);border-radius:6px;margin:0 auto;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;
+  transition:width .4s;min-width:110px;white-space:nowrap;}
+.f-step:nth-child(2) .f-bar{background:#9B8760;}
+.f-step:nth-child(3) .f-bar{background:#8A774E;}
+.f-step:nth-child(4) .f-bar{background:#6E5C39;}
+
+/* 流水線動畫 */
+.pipeline{display:flex;align-items:center;justify-content:space-between;gap:4px;margin:14px 0 6px;}
+.pipeline .stn{flex:1;background:var(--ink);color:var(--linen);border-radius:8px;text-align:center;
+  padding:10px 2px;font-size:12px;font-weight:700;}
+.pipeline .arrow{color:var(--khaki-dark);font-weight:700;flex:0 0 auto;}
+.beltwrap{height:14px;position:relative;margin:0 0 14px;}
+.belt{position:absolute;inset:0;border-top:3px dashed var(--khaki);}
+.box-dot{position:absolute;top:-11px;left:0;font-size:16px;animation:walk 6s linear infinite;}
+@keyframes walk{from{left:0;}to{left:calc(100% - 20px);}}
+
+/* 測驗 */
+.quiz{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;}
+.quiz .q-text{font-weight:700;margin-bottom:10px;font-size:15px;}
+.quiz .opts{display:flex;flex-direction:column;gap:8px;}
+.quiz .opt{text-align:left;background:var(--linen);border:1px solid var(--line);border-radius:8px;
+  padding:10px 12px;font-size:14px;cursor:pointer;font-family:inherit;}
+.quiz .opt.correct{background:#E7F0E9;border-color:var(--ok);color:var(--ok);font-weight:700;}
+.quiz .opt.wrong{background:#F6E7E2;border-color:var(--bad);color:var(--bad);}
+.quiz .fb{margin-top:10px;font-size:14px;display:none;}
+.quiz .fb.show{display:block;}
+.quiz .fb.good{color:var(--ok);}
+.quiz .fb.no{color:var(--bad);}
+
+.pager{display:flex;justify-content:space-between;margin-top:32px;gap:10px;}
+.pager .btn{flex:1;text-align:center;}
+
+#finalScore{display:none;text-align:center;padding:20px;}
+#finalScore .big{font-size:40px;font-weight:700;color:var(--khaki-dark);}
+
+@media (max-width:480px){
+  h2{font-size:20px;}
+  .slider-row label{width:96px;font-size:13px;}
+  .pipeline .stn{font-size:10px;}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important;transition:none !important;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">E-COMMERCE · FROM ZERO</div>
+  <h1>電商入門互動教室</h1>
+  <p>從開一間網店到訂單出貨,一步一步走完整條電商之路</p>
+</header>
+
+<nav id="nav"></nav>
+<div class="progress-wrap"><div class="progress-bar" id="pbar"></div></div>
+
+<main>
+
+<!-- ======== 序章 ======== -->
+<section class="chapter" data-title="開場">
+  <div class="ch-label">序章</div>
+  <h2>電商是什麼?為什麼值得學?</h2>
+
+  <div class="story">
+    <b>小恩</b>想做點小生意,但租店面太貴。她決定開一間<b>網路商店</b>賣露營杯:<br>
+    她在平台上開了店 → 找到供應商<b>進貨</b> → 拍照上架、寫文案 → 投一點廣告<b>引流</b> → 有人下單付款 → 她<b>揀貨、包裝、出貨</b> → 買家收到後給了五顆星 → 回頭客越來越多……<br><br>
+    這條路的每一站,就是這堂課的每一章。走完,你就懂了一間網店<b>從 0 到能賺錢</b>的完整運作。
+  </div>
+
+  <p>電商(電子商務)= 在網路上完成「<b>看貨、下單、付款、收貨</b>」的做生意方式。它把傳統開店的門檻(店租、裝潢、店員)大幅降低,但把戰場搬到了<b>流量、轉換、數據</b>——這些新武器,正是這堂課要教的。</p>
+
+  <div class="origin">
+    <b>e-commerce</b> 的 e = electronic(電子);<b>commerce(商業)</b>源自拉丁文 <b>commercium</b> = com(一起)+ merx(商品)——「大家帶著商品聚在一起交易」。兩千年前的羅馬市集和今天的購物網站,本質上是同一件事:把買家和賣家聚起來。
+  </div>
+
+  <h3>電商的骨架:三條「流」</h3>
+  <div class="card">
+    任何一筆網購,背後都有三條路同時在跑,<b>這是整堂課的地圖</b>:<br>
+    ① <b>資訊流</b>:商品資訊、訂單資料的流動(第 4~6 章:上架、行銷、轉換)<br>
+    ② <b>金流</b>:錢的流動(第 8 章:付款、手續費、對帳)<br>
+    ③ <b>物流</b>:貨的流動(第 3、7 章:進貨、出貨、配送)<br>
+    三條流都通,生意才轉得動;哪條堵住,哪裡就出事。
+  </div>
+
+  <h3>學習地圖(請照順序走,每章踩著前一章)</h3>
+  <div class="card">
+    <table>
+      <tr><th style="width:64px;">章節</th><th>你會學到</th><th style="width:88px;">地基</th></tr>
+      <tr><td>第 1 章</td><td>電商的模式:B2C、C2C、D2C;平台開店 vs 自建官網</td><td>—</td></tr>
+      <tr><td>第 2 章</td><td>選市場與選品:紅海藍海、利基、選品五問</td><td>第 1 章</td></tr>
+      <tr><td>第 3 章</td><td>貨從哪來:採購四條路、MOQ、落地成本</td><td>第 2 章</td></tr>
+      <tr><td>第 4 章</td><td>上架與定價:商品頁三要素、SKU、毛利計算器</td><td>第 3 章</td></tr>
+      <tr><td>第 5 章</td><td>行銷引流:免費與付費流量、CPC/CPM、ROAS 計算器</td><td>第 4 章</td></tr>
+      <tr><td>第 6 章</td><td>轉換漏斗:AIDA、轉換率、互動漏斗實驗</td><td>第 5 章</td></tr>
+      <tr><td>第 7 章</td><td>訂單與物流:揀貨包裝出貨、配送選擇、退貨</td><td>第 6 章</td></tr>
+      <tr><td>第 8 章</td><td>金流與客服:付款方式、手續費、評價經營</td><td>第 7 章</td></tr>
+      <tr><td>第 9 章</td><td>數據與回購:電商第一公式、LTV 與 CAC</td><td>第 5~8 章</td></tr>
+      <tr><td>第 10 章</td><td>全流程串連 + 月營收模擬器(當一個月店長!)</td><td>全部</td></tr>
+      <tr><td>第 11 章</td><td>總測驗 + 畢業備忘卡</td><td>全部</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ======== 第1章 ======== -->
+<section class="chapter" data-title="1·電商模式">
+  <div class="ch-label">第 1 章</div>
+  <h2>電商的模式:你要開哪一種店?</h2>
+
+  <h3>先看懂 B2C、C2C 這些暗號</h3>
+  <div class="origin">
+    這串字母是「誰賣給誰」的縮寫,中間的 <b>2 = to 的諧音</b>(two 和 to 同音,矽谷人愛玩的文字梗):<br>
+    <b>B2C</b> = Business to Consumer,<b>企業賣給消費者</b>(大多數購物網站)<br>
+    <b>C2C</b> = Consumer to Consumer,<b>個人賣給個人</b>(拍賣、二手平台)<br>
+    <b>B2B</b> = Business to Business,<b>企業賣給企業</b>(批發、原料網站)<br>
+    <b>D2C</b> = Direct to Consumer,<b>品牌跳過中間商直接賣消費者</b>(自營官網)
+  </div>
+
+  <h3>開店的兩條路:租櫃位 vs 蓋自己的店</h3>
+  <div class="card">
+    <table>
+      <tr><th></th><th>平台開店(蝦皮、露天、Amazon…)</th><th>自建官網(Shopify、自架網站)</th></tr>
+      <tr><td>比喻</td><td>到大百貨公司<b>租櫃位</b></td><td>自己<b>蓋一間店面</b></td></tr>
+      <tr><td>人潮</td><td>平台自帶人潮,開店就有人路過</td><td>沒人知道你,流量全靠自己找(第 5 章)</td></tr>
+      <tr><td>成本</td><td>抽成(每筆訂單抽 5~15%)</td><td>月費+金流費,但不被抽成</td></tr>
+      <tr><td>自由度</td><td>版面規則受平台管,客人資料是平台的</td><td>全部自己作主,累積<b>自己的客人名單</b></td></tr>
+      <tr><td>適合</td><td>新手起步、測試商品</td><td>有品牌、想長期經營回購</td></tr>
+    </table>
+  </div>
+
+  <div class="tip">
+    很多店家的路線是:<b>先在平台練功、驗證商品賣得動 → 再蓋自己的官網養熟客</b>。兩者不是二選一,是先後棒次。這堂課的流程兩種店都適用。
+  </div>
+
+  <div id="q1"></div>
+</section>
+
+<!-- ======== 第2章 ======== -->
+<section class="chapter" data-title="2·選市場選品">
+  <div class="ch-label">第 2 章</div>
+  <h2>選市場與選品:賣什麼,決定一半勝負</h2>
+
+  <h3>紅海、藍海與利基</h3>
+  <div class="origin">
+    <b>紅海/藍海</b>:2005 年《藍海策略》一書提出——競爭者擠成一團、殺價殺到見血的市場像<b>染紅的海</b>;還沒人競爭的新市場是一片<b>藍海</b>。<br>
+    <b>利基(niche)</b>:源自法文 <b>niche = 牆上放雕像的小壁龕</b>——小小的、剛好容得下你的位置。「利基市場」= 大市場裡一塊小而專的角落,例:不賣「水杯」(紅海),賣「露營專用鈦合金杯」(利基)。
+  </div>
+
+  <h3>選品五問:過不了就換一個</h3>
+  <div class="card">
+    ① <b>有人要嗎?</b>——搜尋量、社群討論度查得到需求。<br>
+    ② <b>對手多強?</b>——搜同款,前十名都是萬筆評價的大店,新手別硬碰。<br>
+    ③ <b>毛利夠嗎?</b>——扣掉進貨、抽成、運費、廣告還有剩嗎?(第 4 章教你算)<br>
+    ④ <b>好寄嗎?</b>——體積小、重量輕、不易碎的商品,物流成本低、糾紛少。<br>
+    ⑤ <b>會不會過期過季?</b>——生鮮、快時尚壓錯貨就是災難;長銷品對新手友善。
+  </div>
+
+  <div class="story">
+    小恩本來想賣「手機殼」——搜尋一看,幾萬家店在殺價,一個賺 5 元(紅海)。她改切利基:「露營風琺瑯杯+客製刻字」,對手少、單價高、客人願意等——<b>小池塘裡當大魚,勝過大海裡當小蝦</b>。
+  </div>
+
+  <div class="tip">
+    網路商店還有一個實體店做不到的優勢,叫<b>長尾</b>:實體店架位有限,只能擺熱門貨;網店「貨架無限」,一堆冷門小眾商品各賣一點點,加總起來也很可觀——這正是利基策略能活的土壤。
+  </div>
+
+  <div id="q2"></div>
+</section>
+
+<!-- ======== 第3章 ======== -->
+<section class="chapter" data-title="3·採購進貨">
+  <div class="ch-label">第 3 章</div>
+  <h2>貨從哪來:採購的四條路</h2>
+
+  <div class="card">
+    <table>
+      <tr><th>路線</th><th>怎麼運作</th><th>優點 / 代價</th></tr>
+      <tr><td>① <b>批發進貨</b></td><td>向批發商、批發網站小量買現貨</td><td>快、門檻低 / 跟別人賣一樣的貨,拚價格</td></tr>
+      <tr><td>② <b>工廠代工(OEM/ODM)</b></td><td>找工廠照你的規格生產、貼你的牌</td><td>獨家、毛利高 / 有 MOQ 門檻、要等生產交期</td></tr>
+      <tr><td>③ <b>一件代發(Dropshipping)</b></td><td>你只管賣,訂單轉給供應商<b>直接出貨給買家</b></td><td>零庫存、零囤貨風險 / 毛利薄、品質出貨不在你手上</td></tr>
+      <tr><td>④ <b>自製手作</b></td><td>自己做(烘焙、手工藝、客製品)</td><td>獨一無二 / 產量被自己的雙手限制</td></tr>
+    </table>
+  </div>
+
+  <div class="origin">
+    <b>MOQ</b> = Minimum Order Quantity,<b>最低訂購量</b>——工廠開一次機、調一次料有固定成本,量太小不划算,所以設門檻(例:此款 MOQ 500 個)。<br>
+    <b>Dropshipping(一件代發)</b>:drop(丟)+ shipping(出貨)——訂單「丟」給供應商,他替你出貨,你從頭到尾沒摸到貨。
+  </div>
+
+  <h3>跟工廠打交道:先拿樣品!</h3>
+  <div class="story">
+    小恩找到琺瑯杯工廠,第一件事不是下單,而是<b>付費買樣品</b>:摸材質、試刻字、量重量、自己寄一次看會不會摔破。<b>樣品滿意才談量產</b>——和製造業「先打樣、再下單」的規矩一模一樣,只是角色互換:這次你是下單的「品牌」了。
+  </div>
+
+  <h3>算清楚:落地成本(Landed Cost)</h3>
+  <div class="card">
+    進貨成本不是只有貨款!把貨「落地」到你倉庫的總成本 =<br>
+    <b>貨款 + 運費 + 關稅(進口的話)+ 檢驗/包材</b><br>
+    例:杯子單價 80 元 × 500 個 = 40,000,國際運費 6,000、雜費 2,000 → 落地成本 48,000 ÷ 500 = <b>每個 96 元</b>——比 80 元多了兩成!第 4 章定價,要用 96 這個數字算,不是 80。
+  </div>
+
+  <div class="tip">
+    庫存是「凍住的現金」:進 500 個杯子 = 押了 48,000 元在倉庫裡,賣掉才變回錢。<b>進貨量的拿捏</b>(壓太多怕賣不掉、進太少怕斷貨)是電商永遠的功課,第 9 章的數據會幫你越抓越準。
+  </div>
+
+  <div id="q3"></div>
+</section>
+
+<!-- ======== 第4章 ======== -->
+<section class="chapter" data-title="4·上架與定價">
+  <div class="ch-label">第 4 章</div>
+  <h2>上架與定價:把商品「放上貨架」</h2>
+
+  <h3>商品頁三要素:網店的門面</h3>
+  <div class="card">
+    ① <b>標題</b>:塞進買家會搜尋的<b>關鍵字</b>(品名+特色+規格),因為標題是搜尋引擎找到你的第一線。<br>
+    ② <b>圖片</b>:首圖決定點不點進來;情境圖(在營地使用中)比白底圖更會說故事。網購摸不到貨,<b>圖片就是你的店員</b>。<br>
+    ③ <b>文案</b>:別只列規格,回答買家心裡的三個問題——這能幫我什麼?為什麼跟你買?現在買有什麼理由?
+  </div>
+
+  <div class="origin">
+    <b>SKU</b> = Stock Keeping Unit,<b>庫存管理單位</b>——倉庫管理的老詞:每一種「不可再細分」的貨,給一個編號。同一款杯子有 3 色 × 2 尺寸 = <b>6 個 SKU</b>,每個 SKU 各自有庫存數。上架、揀貨、盤點、看報表,全靠 SKU 對話——它是電商世界的身分證字號。
+  </div>
+
+  <h3>定價:別憑感覺,先算毛利</h3>
+  <p>售價 − 所有跟這一單有關的成本 = <b>每單毛利</b>。動手拉拉看,很多新手第一次算完會嚇一跳:</p>
+
+  <div class="lab">
+    <div class="lab-title">互動實驗:一單到底賺多少?(毛利計算器)</div>
+    <div class="slider-row">
+      <label>售價</label>
+      <input type="range" id="prS" min="100" max="1500" step="10" value="399" oninput="prCalc()">
+      <span class="val num" id="prSv">399 元</span>
+    </div>
+    <div class="slider-row">
+      <label>進貨成本<br>(落地)</label>
+      <input type="range" id="prC" min="30" max="800" step="5" value="96" oninput="prCalc()">
+      <span class="val num" id="prCv">96 元</span>
+    </div>
+    <div class="slider-row">
+      <label>平台抽成+金流</label>
+      <input type="range" id="prF" min="0" max="20" step="0.5" value="10" oninput="prCalc()">
+      <span class="val num" id="prFv">10 %</span>
+    </div>
+    <div class="slider-row">
+      <label>物流+包材/單</label>
+      <input type="range" id="prL" min="0" max="150" step="5" value="65" oninput="prCalc()">
+      <span class="val num" id="prLv">65 元</span>
+    </div>
+    <div class="result" id="prOut"></div>
+    <p style="font-size:13px;color:var(--gray);margin:8px 0 0;">注意:這裡還<b>沒扣廣告費</b>!第 5 章會發現,毛利要先留出「請流量進門」的預算。</p>
+  </div>
+
+  <div class="tip">
+    兩種常見定價法:<b>成本加成法</b>(成本 × 倍數,電商常抓 2.5~4 倍才活得下去)和<b>市場定價法</b>(看同類商品行情,決定你要打「更便宜」還是「更有價值」)。利基商品(第 2 章)的好處在這裡兌現:<b>沒得比價,就有定價權</b>。
+  </div>
+
+  <div id="q4"></div>
+</section>
+
+<!-- ======== 第5章 ======== -->
+<section class="chapter" data-title="5·行銷引流">
+  <div class="ch-label">第 5 章</div>
+  <h2>行銷引流:讓人走進你的店</h2>
+
+  <p>店開好了、商品上架了——然後<b>一張訂單都沒有</b>。為什麼?因為網路上沒有「路過」這回事:<b>沒有流量 = 店開在沙漠裡</b>。流量,就是「走進你商品頁的人」。</p>
+
+  <h3>流量的兩大來源</h3>
+  <div class="card">
+    <table>
+      <tr><th></th><th>免費流量(慢但長效)</th><th>付費流量(快但要錢)</th></tr>
+      <tr><td>方法</td><td>SEO 搜尋排名、社群經營、短影音、內容文章、口碑分享</td><td>關鍵字廣告、社群廣告、購物平台站內廣告</td></tr>
+      <tr><td>比喻</td><td>種果樹:澆水很久,結果後年年收成</td><td>開水龍頭:付錢就有水,停付就停水</td></tr>
+      <tr><td>新手策略</td><td colspan="2">兩條都要:用<b>付費</b>快速測試商品賣不賣得動,同時默默<b>種樹</b>累積免費流量</td></tr>
+    </table>
+  </div>
+
+  <div class="origin">
+    <b>SEO</b> = Search Engine Optimization,<b>搜尋引擎最佳化</b>:調整標題、內容、關鍵字,讓搜尋引擎把你排前面——排越前面,免費流量越多。<br>
+    廣告計價的兩個暗號:<b>CPC</b>(Cost Per Click,每次<b>點擊</b>付一次錢)和 <b>CPM</b>(Cost Per Mille,每<b>千次曝光</b>付一次錢)——<b>mille 是拉丁文的「一千」</b>,英里 mile(千步)、毫米 millimeter 都是它的親戚。
+  </div>
+
+  <h3>廣告到底划不划算?看 ROAS</h3>
+  <div class="origin">
+    <b>ROAS</b> = Return On Ad Spend,<b>廣告投資報酬率</b> = 廣告帶來的營收 ÷ 廣告費。ROAS 3 = 花 1 元廣告,換回 3 元營收。但注意:<b>營收不是利潤</b>——毛利率 40% 的店,ROAS 要超過 1÷0.4 = 2.5 才真的開始賺。
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">互動實驗:這檔廣告賺還是賠?(ROAS 計算器)</div>
+    <div class="slider-row">
+      <label>廣告預算</label>
+      <input type="range" id="adB" min="1000" max="50000" step="500" value="10000" oninput="adCalc()">
+      <span class="val num" id="adBv">10,000 元</span>
+    </div>
+    <div class="slider-row">
+      <label>每次點擊 CPC</label>
+      <input type="range" id="adC" min="1" max="30" step="0.5" value="8" oninput="adCalc()">
+      <span class="val num" id="adCv">8 元</span>
+    </div>
+    <div class="slider-row">
+      <label>下單轉換率</label>
+      <input type="range" id="adR" min="0.5" max="8" step="0.1" value="2" oninput="adCalc()">
+      <span class="val num" id="adRv">2 %</span>
+    </div>
+    <div class="slider-row">
+      <label>客單價</label>
+      <input type="range" id="adA" min="100" max="2000" step="10" value="399" oninput="adCalc()">
+      <span class="val num" id="adAv">399 元</span>
+    </div>
+    <div class="result" id="adOut"></div>
+    <p style="font-size:13px;color:var(--gray);margin:8px 0 0;">玩玩看:CPC 變貴一倍,或轉換率掉一半,ROAS 立刻垮——廣告的生死,一半握在下一章的「轉換率」手上。</p>
+  </div>
+
+  <div id="q5"></div>
+</section>
+
+<!-- ======== 第6章 ======== -->
+<section class="chapter" data-title="6·轉換漏斗">
+  <div class="ch-label">第 6 章</div>
+  <h2>轉換漏斗:進來的人,怎麼變成訂單?</h2>
+
+  <div class="origin">
+    <b>AIDA</b>:1898 年美國廣告先驅 <b>路易斯(E. St. Elmo Lewis)</b>提出的顧客心理四階段——<b>A</b>ttention 注意 → <b>I</b>nterest 興趣 → <b>D</b>esire 慾望 → <b>A</b>ction 行動。一百多年後的電商,走的還是這條心理路線。<br>
+    因為每一階段人數<b>越走越少</b>,畫出來上寬下窄,像一個<b>漏斗(Funnel)</b>——這就是「行銷漏斗」名字的由來。
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">互動實驗:你的漏斗長什麼樣?</div>
+    <div class="slider-row">
+      <label>本月訪客</label>
+      <input type="range" id="fnV" min="500" max="20000" step="100" value="5000" oninput="fnCalc()">
+      <span class="val num" id="fnVv">5,000 人</span>
+    </div>
+    <div class="slider-row">
+      <label>加入購物車率</label>
+      <input type="range" id="fnA" min="2" max="25" step="0.5" value="10" oninput="fnCalc()">
+      <span class="val num" id="fnAv">10 %</span>
+    </div>
+    <div class="slider-row">
+      <label>結帳完成率</label>
+      <input type="range" id="fnK" min="10" max="80" step="1" value="30" oninput="fnCalc()">
+      <span class="val num" id="fnKv">30 %</span>
+    </div>
+    <div class="funnel" id="fnBars"></div>
+    <div class="result" id="fnOut"></div>
+  </div>
+
+  <div class="story">
+    看到了嗎?<b>加了購物車的人,七成左右不會結帳</b>——這叫「購物車放棄率」,全球電商平均高達 70%。原因排行榜:運費太貴、要註冊會員好麻煩、結帳步驟太多、只是先收藏比價。<br>
+    補救三招:<b>滿額免運</b>(給個湊單理由)、<b>簡化結帳</b>(免註冊、一頁完成)、<b>再行銷</b>(對放棄購物車的人發提醒或折扣)。
+  </div>
+
+  <div class="origin">
+    順便說個冷知識:<b>購物車</b>不是網路發明的——1937 年美國超市老闆 <b>Sylvan Goldman</b> 發明手推車,讓客人一次拿更多貨;60 年後電商把這台車搬進網頁,連名字一起借走。
+  </div>
+
+  <div class="tip">
+    <b>轉換率(Conversion Rate)= 下單人數 ÷ 訪客數</b>,是電商最重要的體質指標。同樣 5,000 個訪客,轉換率 1% → 50 單;3% → 150 單——<b>不花一毛廣告費,業績變三倍</b>。所以老手的順序永遠是:先補漏斗的洞(優化商品頁、結帳流程),再開大流量的水龍頭。
+  </div>
+
+  <div id="q6"></div>
+</section>
+
+<!-- ======== 第7章 ======== -->
+<section class="chapter" data-title="7·訂單與物流">
+  <div class="ch-label">第 7 章</div>
+  <h2>訂單來了!揀貨、包裝、出貨</h2>
+
+  <p>「叮咚——您有新訂單!」接下來這段,決定買家的實際體驗:</p>
+
+  <div class="lab">
+    <div class="lab-title">動畫:一張訂單的出貨旅程</div>
+    <div class="pipeline">
+      <div class="stn">接單</div><div class="arrow">→</div>
+      <div class="stn">揀貨</div><div class="arrow">→</div>
+      <div class="stn">包裝</div><div class="arrow">→</div>
+      <div class="stn">出貨</div><div class="arrow">→</div>
+      <div class="stn">配送</div><div class="arrow">→</div>
+      <div class="stn">簽收</div>
+    </div>
+    <div class="beltwrap"><div class="belt"></div><div class="box-dot">📦</div></div>
+  </div>
+
+  <div class="card">
+    ① <b>接單核對</b>:確認付款成功、地址完整、有無備註(刻字內容!)。<br>
+    ② <b>揀貨(Picking)</b>:照訂單到貨架上把貨找出來——<b>用 SKU 條碼掃描核對</b>(第 4 章的身分證派上用場),寄錯顏色尺寸是差評第一大來源。<br>
+    ③ <b>包裝</b>:防撞(易碎品加氣泡袋)、防水、貼出貨單。包裝也是品牌體驗——小卡片、緞帶,常常換來一張開箱好評照。<br>
+    ④ <b>出貨 + 上傳追蹤碼</b>:交給物流,把<b>物流單號</b>回填系統,買家就能查「我的貨到哪了」。
+  </div>
+
+  <h3>配送方式怎麼選?</h3>
+  <div class="card">
+    <table>
+      <tr><th>方式</th><th>特色</th><th>適合</th></tr>
+      <tr><td>超商取貨</td><td>便宜、買家自取時間彈性,常搭配<b>取貨付款</b></td><td>小件、C2C、年輕客群</td></tr>
+      <tr><td>宅配到府</td><td>大件、快速、可指定時段</td><td>大型/易碎/生鮮(冷鏈)</td></tr>
+      <tr><td>郵寄</td><td>最便宜,速度普通</td><td>信封類小物</td></tr>
+      <tr><td>跨境物流</td><td>國際小包、海外倉</td><td>賣到國外的訂單</td></tr>
+    </table>
+  </div>
+
+  <div class="origin">
+    訂單多到自己包不完時,可以外包給 <b>3PL</b>(Third-Party Logistics,<b>第三方物流</b>):貨放他家倉庫,接單後由他揀貨包裝出貨——第一方是賣家、第二方是買家,幫忙搬貨的「第三方」因此得名。
+  </div>
+
+  <h3>逆物流:貨也會「游回來」</h3>
+  <div class="card">
+    網購依法多有<b>鑑賞期</b>(例如台灣 7 天猶豫期),買家可退貨。退貨處理(收回→驗貨→退款→整新上架)叫<b>逆物流</b>——方向跟出貨相反。退貨率是重要指標:<b>圖文與實物落差</b>是退貨第一大原因,所以第 4 章的商品頁誠實一點,第 7 章就輕鬆一點。
+  </div>
+
+  <div id="q7"></div>
+</section>
+
+<!-- ======== 第8章 ======== -->
+<section class="chapter" data-title="8·金流與客服">
+  <div class="ch-label">第 8 章</div>
+  <h2>金流與客服:錢的路,和人的心</h2>
+
+  <h3>金流:錢怎麼從買家口袋到你手上</h3>
+  <div class="card">
+    <table>
+      <tr><th>付款方式</th><th>特點</th></tr>
+      <tr><td>信用卡 / 行動支付</td><td>最主流,體驗順;金流商收手續費(約 2~3%)</td></tr>
+      <tr><td>貨到付款(COD)</td><td>買家最安心;但<b>棄單風險</b>高(拒收就白跑一趟運費)</td></tr>
+      <tr><td>ATM 轉帳</td><td>手續費低;要人工或系統對帳</td></tr>
+      <tr><td>超商代碼繳費</td><td>沒有信用卡的客群愛用</td></tr>
+    </table>
+  </div>
+
+  <div class="origin">
+    <b>COD</b> = Cash On Delivery,「<b>送達時付現</b>」——比信用卡古老得多的交易方式,郵購時代就存在。在信任還沒建立的市場(新店、新客),COD 是降低「怕被騙」心理門檻的利器,代價是棄單風險由賣家扛。
+  </div>
+
+  <div class="tip">
+    平台賣家要注意<b>撥款週期</b>:買家付的錢先進平台,等「買家確認收貨 + 幾個工作天」才撥給你——中間你已經付了進貨和運費。生意越好、押的錢越多,<b>帳上有賺、現金卻卡在路上</b>,和實體製造業「客戶月結」是同一個現金流陷阱。
+  </div>
+
+  <h3>客服與評價:網店的生命線</h3>
+  <div class="card">
+    網購買家看不到你這個人,他判斷「敢不敢跟你買」只靠兩樣:<b>評價星等</b>和<b>提問回覆速度</b>。<br>
+    ① 回覆快(平台多半公開顯示「平均回覆時間」)。<br>
+    ② 出問題先解決、再計較:一次大方的退換,換來的五星評價是廣告買不到的。<br>
+    ③ 差評不是刪掉(也刪不掉),是<b>公開、有風度地處理</b>——後來的買家都在看你怎麼對待前一個客人。
+  </div>
+
+  <div id="q8"></div>
+</section>
+
+<!-- ======== 第9章 ======== -->
+<section class="chapter" data-title="9·數據與回購">
+  <div class="ch-label">第 9 章</div>
+  <h2>數據與回購:老手和新手的分水嶺</h2>
+
+  <h3>電商第一公式</h3>
+  <div class="card" style="text-align:center;font-size:18px;font-weight:700;">
+    營收 = 流量 × 轉換率 × 客單價
+  </div>
+  <p>把前幾章串起來了:<b>流量</b>(第 5 章)×<b>轉換率</b>(第 6 章)×<b>客單價</b>。想讓業績變好,只有這三個把手可以轉——每次業績檢討,先問是哪一個掉了。</p>
+
+  <div class="origin">
+    <b>AOV</b> = Average Order Value,<b>平均客單價</b>(營收 ÷ 訂單數)。拉高 AOV 的招式你一定遇過:滿額免運、加購價、組合優惠——都是在讓每張訂單「再多裝一點」。<br>
+    <b>LTV</b> = Lifetime Value,<b>顧客終身價值</b>:一位客人從第一次買到最後一次買,總共讓你賺多少。<br>
+    <b>CAC</b> = Customer Acquisition Cost,<b>獲客成本</b>:平均花多少行銷費才換到一位新客人。
+  </div>
+
+  <h3>生死判斷式:LTV 要大於 CAC</h3>
+  <div class="story">
+    花 200 元廣告換一個新客(CAC=200),他只買一次、毛利 120 → <b>每拉一個客人賠 80</b>,生意越大賠越多。<br>
+    但如果商品好、客服好,他一年回購 3 次、留 2 年 → LTV 遠超 200 → <b>前面的廣告費變成划算的投資</b>。<br>
+    這就是為什麼成熟電商拚命經營<b>回購</b>(會員、LINE/EDM 名單、訂閱制):<b>新客是用買的,熟客才是賺的</b>。健康標準常抓 <b>LTV ≥ 3 × CAC</b>。
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">互動實驗:你的生意體質健康嗎?(LTV / CAC)</div>
+    <div class="slider-row">
+      <label>每單毛利</label>
+      <input type="range" id="ltG" min="30" max="600" step="10" value="150" oninput="ltCalc()">
+      <span class="val num" id="ltGv">150 元</span>
+    </div>
+    <div class="slider-row">
+      <label>每年回購次數</label>
+      <input type="range" id="ltN" min="1" max="12" step="1" value="3" oninput="ltCalc()">
+      <span class="val num" id="ltNv">3 次</span>
+    </div>
+    <div class="slider-row">
+      <label>平均留存年數</label>
+      <input type="range" id="ltY" min="1" max="5" step="0.5" value="2" oninput="ltCalc()">
+      <span class="val num" id="ltYv">2 年</span>
+    </div>
+    <div class="slider-row">
+      <label>獲客成本 CAC</label>
+      <input type="range" id="ltC" min="20" max="800" step="10" value="200" oninput="ltCalc()">
+      <span class="val num" id="ltCv">200 元</span>
+    </div>
+    <div class="result" id="ltOut"></div>
+    <p style="font-size:13px;color:var(--gray);margin:8px 0 0;">把「每年回購次數」調到 1 看看——一次性生意有多難做,一目了然。</p>
+  </div>
+
+  <div id="q9"></div>
+</section>
+
+<!-- ======== 第10章 ======== -->
+<section class="chapter" data-title="10·全流程串連">
+  <div class="ch-label">第 10 章</div>
+  <h2>串起來看:當一個月的店長</h2>
+
+  <p>把 1~9 章排成一條線,就是一間網店的完整循環:</p>
+
+  <div class="card" style="text-align:center;">
+    <svg viewBox="0 0 420 300">
+      <line x1="40" y1="20" x2="40" y2="280" stroke="#A8946A" stroke-width="3"/>
+      <g font-size="13" fill="#1F1D1A">
+        <circle cx="40" cy="30" r="7" fill="#8A774E"/><text x="58" y="35">選模式、開店(第 1 章)</text>
+        <circle cx="40" cy="66" r="7" fill="#8A774E"/><text x="58" y="71">選市場選品(第 2 章)</text>
+        <circle cx="40" cy="102" r="7" fill="#8A774E"/><text x="58" y="107">採購進貨,算落地成本(第 3 章)</text>
+        <circle cx="40" cy="138" r="7" fill="#8A774E"/><text x="58" y="143">上架定價(第 4 章)</text>
+        <circle cx="40" cy="174" r="7" fill="#8A774E"/><text x="58" y="179">引流 → 轉換 → 訂單(第 5、6 章)</text>
+        <circle cx="40" cy="210" r="7" fill="#8A774E"/><text x="58" y="215">出貨配送、收款客服(第 7、8 章)</text>
+        <circle cx="40" cy="246" r="7" fill="#8A774E"/><text x="58" y="251">看數據 → 養回購(第 9 章)</text>
+        <circle cx="40" cy="280" r="7" fill="#8C4A3C"/><text x="58" y="285" font-weight="bold">回到選品進貨,越滾越大 🔁</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3>期末實戰:月營收模擬器</h3>
+  <p>現在你是店長。拉動下面六支把手,看這個月是賺是賠——這台模擬器把整堂課的公式全接在一起了:</p>
+
+  <div class="lab">
+    <div class="lab-title">互動實驗:這個月,你的店賺錢嗎?</div>
+    <div class="slider-row">
+      <label>月訪客(流量)</label>
+      <input type="range" id="smV" min="1000" max="60000" step="500" value="8000" oninput="smCalc()">
+      <span class="val num" id="smVv">8,000 人</span>
+    </div>
+    <div class="slider-row">
+      <label>轉換率</label>
+      <input type="range" id="smR" min="0.5" max="6" step="0.1" value="2" oninput="smCalc()">
+      <span class="val num" id="smRv">2 %</span>
+    </div>
+    <div class="slider-row">
+      <label>客單價</label>
+      <input type="range" id="smA" min="150" max="1500" step="10" value="399" oninput="smCalc()">
+      <span class="val num" id="smAv">399 元</span>
+    </div>
+    <div class="slider-row">
+      <label>商品成本率</label>
+      <input type="range" id="smC" min="20" max="70" step="1" value="30" oninput="smCalc()">
+      <span class="val num" id="smCv">30 %</span>
+    </div>
+    <div class="slider-row">
+      <label>抽成+物流/單</label>
+      <input type="range" id="smL" min="40" max="250" step="5" value="105" oninput="smCalc()">
+      <span class="val num" id="smLv">105 元</span>
+    </div>
+    <div class="slider-row">
+      <label>月廣告費</label>
+      <input type="range" id="smAd" min="0" max="80000" step="1000" value="20000" oninput="smCalc()">
+      <span class="val num" id="smAdv">20,000 元</span>
+    </div>
+    <div class="result" id="smOut"></div>
+    <p style="font-size:13px;color:var(--gray);margin:8px 0 0;">實驗三件事:① 轉換率 2%→3%,淨利跳多少?② 廣告加倍但訪客沒加倍會怎樣?③ 客單價 +100 元的威力。你會親手發現「電商第一公式」三個把手各自的份量。</p>
+  </div>
+
+  <div class="tip">
+    店長心法總結:<b>先把漏斗補好(轉換率),再開流量水龍頭(廣告),然後經營回購(LTV)</b>——順序反過來,就是把錢倒進漏水的桶子。
+  </div>
+
+  <div id="q10"></div>
+</section>
+
+<!-- ======== 第11章 ======== -->
+<section class="chapter" data-title="11·總測驗">
+  <div class="ch-label">第 11 章</div>
+  <h2>總測驗:你會了嗎?</h2>
+  <p>12 題,涵蓋整堂課。答完自動計分,錯的題目會告訴你為什麼。</p>
+  <div id="finalQuiz"></div>
+  <div style="text-align:center;margin-top:16px;">
+    <button class="btn" onclick="gradeFinal()">交卷計分</button>
+    <button class="btn ghost" onclick="resetFinal()" style="margin-left:8px;">重新作答</button>
+  </div>
+  <div id="finalScore" class="card"></div>
+
+  <h3>畢業備忘卡 🎓</h3>
+  <div class="card">
+    <table>
+      <tr><td><b>三條流</b></td><td>資訊流、金流、物流——三流皆通,生意才轉</td></tr>
+      <tr><td><b>模式</b></td><td>B2C/C2C/D2C(2=to);平台練功 → 官網養熟客</td></tr>
+      <tr><td><b>選品</b></td><td>避紅海、找利基(niche=小壁龕);選品五問</td></tr>
+      <tr><td><b>採購</b></td><td>批發/代工/一件代發/自製;先拿樣品;用落地成本算帳</td></tr>
+      <tr><td><b>上架</b></td><td>標題關鍵字+圖片+文案;SKU 是商品身分證;成本×2.5~4 倍起跳</td></tr>
+      <tr><td><b>引流</b></td><td>免費種樹、付費開水龍頭;ROAS 要 > 1÷毛利率才真賺</td></tr>
+      <tr><td><b>轉換</b></td><td>AIDA 漏斗;購物車放棄率 ~70%;先補洞再倒水</td></tr>
+      <tr><td><b>出貨</b></td><td>接單→揀貨(掃 SKU)→包裝→出貨上傳單號;退貨=逆物流</td></tr>
+      <tr><td><b>金流客服</b></td><td>注意撥款週期的現金流陷阱;評價星等是新客的信任來源</td></tr>
+      <tr><td><b>第一公式</b></td><td>營收=流量×轉換率×客單價;LTV ≥ 3×CAC 才健康;熟客才是賺的</td></tr>
+    </table>
+  </div>
+</section>
+
+<div class="pager">
+  <button class="btn ghost" id="prevBtn" onclick="go(-1)">← 上一章</button>
+  <button class="btn" id="nextBtn" onclick="go(1)">下一章 →</button>
+</div>
+
+</main>
+
+<script>
+/* ===== 章節導覽 ===== */
+const chapters=[...document.querySelectorAll('section.chapter')];
+const nav=document.getElementById('nav');
+let cur=0;
+chapters.forEach((c,i)=>{
+  const b=document.createElement('button');
+  b.textContent=c.dataset.title;
+  b.onclick=()=>show(i);
+  nav.appendChild(b);
+});
+function show(i){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=i;
+  cur=i;
+  chapters.forEach((c,j)=>c.classList.toggle('show',j===i));
+  [...nav.children].forEach((b,j)=>b.classList.toggle('active',j===i));
+  document.getElementById('pbar').style.width=((i+1)/chapters.length*100)+'%';
+  document.getElementById('prevBtn').style.visibility=i===0?'hidden':'visible';
+  document.getElementById('nextBtn').textContent=i===chapters.length-1?'完成 🎉':'下一章 →';
+  nav.children[i].scrollIntoView({inline:'center',block:'nearest'});
+  window.scrollTo({top:0});
+}
+function go(d){
+  const n=cur+d;
+  if(n<0)return;
+  if(n>=chapters.length){alert('恭喜完成整堂課!🎓 記得回第 11 章交卷看分數。');return;}
+  show(n);
+}
+show(0);
+
+const fmt=n=>Math.round(n).toLocaleString();
+
+/* ===== 第4章 毛利計算器 ===== */
+function prCalc(){
+  const S=+document.getElementById('prS').value;
+  const C=+document.getElementById('prC').value;
+  const F=+document.getElementById('prF').value;
+  const L=+document.getElementById('prL').value;
+  document.getElementById('prSv').textContent=fmt(S)+' 元';
+  document.getElementById('prCv').textContent=fmt(C)+' 元';
+  document.getElementById('prFv').textContent=F+' %';
+  document.getElementById('prLv').textContent=fmt(L)+' 元';
+  const fee=S*F/100;
+  const g=S-C-fee-L;
+  const gm=g/S*100;
+  document.getElementById('prOut').innerHTML=
+    `售價 ${fmt(S)} − 成本 ${fmt(C)} − 抽成 ${fmt(fee)} − 物流包材 ${fmt(L)}<br>`+
+    `= 每單毛利 <b class="num">${fmt(g)} 元</b>(毛利率 <b class="num">${gm.toFixed(1)}%</b>)`+
+    (g<0?'<br><span class="warn">⚠ 賣一單賠一單!調整售價或成本結構</span>':
+     gm<30?'<br><span class="warn">⚠ 毛利率偏低,扣掉廣告費恐怕不剩</span>':
+     '<br><span class="good">✓ 有留出打廣告的空間</span>');
+}
+prCalc();
+
+/* ===== 第5章 ROAS ===== */
+function adCalc(){
+  const B=+document.getElementById('adB').value;
+  const C=+document.getElementById('adC').value;
+  const R=+document.getElementById('adR').value;
+  const A=+document.getElementById('adA').value;
+  document.getElementById('adBv').textContent=fmt(B)+' 元';
+  document.getElementById('adCv').textContent=C+' 元';
+  document.getElementById('adRv').textContent=R+' %';
+  document.getElementById('adAv').textContent=fmt(A)+' 元';
+  const clicks=B/C;
+  const orders=clicks*R/100;
+  const rev=orders*A;
+  const roas=rev/B;
+  document.getElementById('adOut').innerHTML=
+    `${fmt(B)} 元 ÷ CPC ${C} = <b class="num">${fmt(clicks)}</b> 次點擊 → × ${R}% = <b class="num">${orders.toFixed(1)}</b> 張訂單<br>`+
+    `帶來營收 <b class="num">${fmt(rev)} 元</b> → ROAS = <b class="num">${roas.toFixed(2)}</b>`+
+    (roas>=2.5?'<br><span class="good">✓ 以毛利率 40% 估,已越過損益線(2.5)</span>':
+     '<br><span class="warn">⚠ 以毛利率 40% 估,ROAS 要 ≥ 2.5 才開始賺</span>');
+}
+adCalc();
+
+/* ===== 第6章 漏斗 ===== */
+function fnCalc(){
+  const V=+document.getElementById('fnV').value;
+  const A=+document.getElementById('fnA').value;
+  const K=+document.getElementById('fnK').value;
+  document.getElementById('fnVv').textContent=fmt(V)+' 人';
+  document.getElementById('fnAv').textContent=A+' %';
+  document.getElementById('fnKv').textContent=K+' %';
+  const cart=V*A/100;
+  const buy=cart*K/100;
+  const cr=buy/V*100;
+  const steps=[['訪客',V,100],['加入購物車',cart,A],['完成結帳(訂單)',buy,A*K/100]];
+  document.getElementById('fnBars').innerHTML=steps.map(s=>
+    `<div class="f-step"><div class="f-bar" style="width:${Math.max(26,s[2])}%">${s[0]} ${fmt(s[1])}</div></div>`
+  ).join('');
+  document.getElementById('fnOut').innerHTML=
+    `整體轉換率 = ${fmt(buy)} ÷ ${fmt(V)} = <b class="num">${cr.toFixed(2)}%</b><br>`+
+    `<span style="font-size:13px;color:var(--gray);">被漏斗「漏掉」的:${fmt(V-buy)} 人——每一個都是優化的機會</span>`;
+}
+fnCalc();
+
+/* ===== 第9章 LTV/CAC ===== */
+function ltCalc(){
+  const G=+document.getElementById('ltG').value;
+  const N=+document.getElementById('ltN').value;
+  const Y=+document.getElementById('ltY').value;
+  const C=+document.getElementById('ltC').value;
+  document.getElementById('ltGv').textContent=fmt(G)+' 元';
+  document.getElementById('ltNv').textContent=N+' 次';
+  document.getElementById('ltYv').textContent=Y+' 年';
+  document.getElementById('ltCv').textContent=fmt(C)+' 元';
+  const ltv=G*N*Y;
+  const ratio=ltv/C;
+  document.getElementById('ltOut').innerHTML=
+    `LTV = ${fmt(G)} × ${N} 次 × ${Y} 年 = <b class="num">${fmt(ltv)} 元</b><br>`+
+    `LTV ÷ CAC = <b class="num">${ratio.toFixed(1)}</b>`+
+    (ratio>=3?'<br><span class="good">✓ 體質健康(≥3):放心投廣告養客</span>':
+     ratio>=1?'<br><span class="warn">△ 介於 1~3:能活,但要拉回購或降獲客成本</span>':
+     '<br><span class="warn">⚠ 小於 1:每拉一個客人就賠一次,先修產品與回購</span>');
+}
+ltCalc();
+
+/* ===== 第10章 月營收模擬器 ===== */
+function smCalc(){
+  const V=+document.getElementById('smV').value;
+  const R=+document.getElementById('smR').value;
+  const A=+document.getElementById('smA').value;
+  const C=+document.getElementById('smC').value;
+  const L=+document.getElementById('smL').value;
+  const Ad=+document.getElementById('smAd').value;
+  document.getElementById('smVv').textContent=fmt(V)+' 人';
+  document.getElementById('smRv').textContent=R+' %';
+  document.getElementById('smAv').textContent=fmt(A)+' 元';
+  document.getElementById('smCv').textContent=C+' %';
+  document.getElementById('smLv').textContent=fmt(L)+' 元';
+  document.getElementById('smAdv').textContent=fmt(Ad)+' 元';
+  const orders=V*R/100;
+  const rev=orders*A;
+  const cogs=rev*C/100;
+  const logi=orders*L;
+  const gross=rev-cogs-logi;
+  const net=gross-Ad;
+  document.getElementById('smOut').innerHTML=
+    `訂單 = ${fmt(V)} × ${R}% = <b class="num">${fmt(orders)} 張</b> | 營收 = <b class="num">${fmt(rev)} 元</b><br>`+
+    `− 商品成本 ${fmt(cogs)} − 抽成物流 ${fmt(logi)} = 毛利 <b class="num">${fmt(gross)}</b><br>`+
+    `− 廣告費 ${fmt(Ad)} = 本月淨利 <b class="num" style="font-size:22px;">${fmt(net)} 元</b> `+
+    (net>0?'<span class="good">🎉 賺錢!</span>':'<span class="warn">😱 虧損中</span>');
+}
+smCalc();
+
+/* ===== 各章小測 ===== */
+function makeQuiz(elId,qs){
+  const box=document.getElementById(elId);
+  if(!box)return;
+  const h=document.createElement('h3');h.textContent='✏️ 隨堂小測';box.appendChild(h);
+  qs.forEach((q,i)=>{
+    const opts=q[1].map((t,j)=>({t,ok:j===q[2]})).sort(()=>Math.random()-.5);
+    const div=document.createElement('div');
+    div.className='quiz';
+    div.innerHTML=`<div class="q-text">Q${i+1}. ${q[0]}</div>
+      <div class="opts">${opts.map(o=>`<button class="opt" data-ok="${o.ok}">${o.t}</button>`).join('')}</div>
+      <div class="fb"></div>`;
+    div.querySelectorAll('.opt').forEach(btn=>{
+      btn.onclick=()=>{
+        if(div.dataset.done)return;
+        div.dataset.done='1';
+        const ok=btn.dataset.ok==='true';
+        btn.classList.add(ok?'correct':'wrong');
+        if(!ok)div.querySelector('[data-ok="true"]').classList.add('correct');
+        const fb=div.querySelector('.fb');
+        fb.className='fb show '+(ok?'good':'no');
+        fb.textContent=(ok?'✓ 答對!':'✗ ')+q[3];
+      };
+    });
+    box.appendChild(div);
+  });
+}
+makeQuiz('q1',[
+  ['B2C 的「2」是什麼意思?',['second(第二)','to 的諧音(two 同音)','2 種商品'],1,'B2C = Business to Consumer,企業賣給消費者。'],
+  ['平台開店最貼切的比喻是?',['自己蓋店面','到百貨公司租櫃位','擺路邊攤'],1,'平台自帶人潮但要抽成、受平台規則管。'],
+]);
+makeQuiz('q2',[
+  ['「利基市場(niche)」的原意是?',['牆上放雕像的小壁龕','一種魚','高利率存款'],0,'小而專、剛好容得下你的位置——大市場裡的小角落。'],
+  ['「紅海」市場的特徵是?',['沒有競爭者','競爭者擠成一團殺價見血','只賣紅色商品'],1,'新手應避開紅海,往利基走。'],
+]);
+makeQuiz('q3',[
+  ['一件代發(Dropshipping)的特點是?',['自己囤大量庫存','訂單轉給供應商直接出貨,自己不碰貨','只賣自己做的東西'],1,'零庫存風險,但毛利薄、品質不在自己手上。'],
+  ['落地成本(Landed Cost)是指?',['只有貨款','貨款+運費+關稅+雜費的總成本','店租'],1,'定價要用落地成本算,不是進貨單價。'],
+]);
+makeQuiz('q4',[
+  ['SKU 是什麼?',['一種貨幣','庫存管理單位:每種不可再分的貨一個編號','快遞公司'],1,'同款 3 色 2 尺寸 = 6 個 SKU,它是商品的身分證。'],
+  ['同樣商品,售價不變、平台抽成從 5% 漲到 15%,毛利會?',['不變','變少','變多'],1,'抽成直接吃掉毛利,定價時必須先算進去。'],
+]);
+makeQuiz('q5',[
+  ['CPM 的 M(mille)是哪個語言的「一千」?',['拉丁文','日文','德文'],0,'mille=千,CPM=每千次曝光的成本;mile、millimeter 是親戚。'],
+  ['毛利率 40% 的店,ROAS 至少要多少才開始賺?',['1','2.5','10'],1,'1 ÷ 0.4 = 2.5:花 1 元廣告要換回 2.5 元營收才打平。'],
+]);
+makeQuiz('q6',[
+  ['AIDA 依序是?',['注意→興趣→慾望→行動','行動→注意→興趣→慾望','注意→行動→興趣→慾望'],0,'1898 年路易斯提出,漏斗形狀由此而來。'],
+  ['全球購物車放棄率大約是?',['10%','70%','99%'],1,'七成加了車不結帳;免運門檻、簡化結帳、再行銷是三帖藥。'],
+]);
+makeQuiz('q7',[
+  ['揀貨時掃 SKU 條碼是為了?',['好玩','防止寄錯顏色尺寸','計算薪水'],1,'寄錯品項是差評第一大來源。'],
+  ['「逆物流」是指?',['物流公司倒閉','退貨往回走的流程','貨車倒車'],1,'收回→驗貨→退款→整新,方向與出貨相反。'],
+]);
+makeQuiz('q8',[
+  ['COD 是哪種付款方式?',['信用卡','貨到付款(Cash On Delivery)','虛擬貨幣'],1,'買家最安心,但棄單風險由賣家扛。'],
+  ['平台「撥款週期」造成的風險是?',['帳上有賺、現金卡在路上','貨會壞掉','評價變低'],0,'錢先在平台手上,進貨運費卻要先付——現金流陷阱。'],
+]);
+makeQuiz('q9',[
+  ['電商第一公式是?',['營收=流量×轉換率×客單價','營收=員工數×工時','營收=庫存×售價'],0,'業績檢討先問:三個把手哪一個掉了?'],
+  ['LTV ≥ 3 × CAC 的意思是?',['客人一生帶來的價值至少是獲客成本的 3 倍','要開 3 家店','廣告只能投 3 天'],0,'低於 1 是拉一個賠一個;回購是把比值拉高的關鍵。'],
+]);
+makeQuiz('q10',[
+  ['老手優化的正確順序是?',['先補轉換率的洞,再開流量水龍頭,再養回購','先狂投廣告再說','先裝潢辦公室'],0,'順序反了=把錢倒進漏水的桶子。'],
+  ['模擬器裡,不花一毛錢就能讓淨利大增的把手是?',['轉換率','廣告費','員工人數'],0,'轉換率 2%→3%,訂單直接 +50%,廣告費一毛沒多花。'],
+]);
+
+/* ===== 總測驗 ===== */
+const finalQs=[
+  ['電商運作的三條流是?',['資訊流、金流、物流','人流、車流、水流','上流、中流、下流'],0,'三流皆通,生意才轉得動。'],
+  ['D2C 指的是?',['個人賣個人','品牌跳過中間商直接賣消費者','企業賣企業'],1,'Direct to Consumer,常見於自營官網品牌。'],
+  ['新手選品應該?',['直衝最熱門的紅海商品','找小而專的利基市場','隨便選'],1,'小池塘裡當大魚,勝過大海裡當小蝦。'],
+  ['MOQ 是?',['最低訂購量','最高品質','一種物流'],0,'Minimum Order Quantity——工廠開機有固定成本,量太小不接。'],
+  ['向工廠下大單之前,正確的第一步是?',['先付全款','先拿樣品確認品質','先辦慶功宴'],1,'樣品滿意才談量產,和製造業打樣規矩相同。'],
+  ['定價時應該用哪個成本?',['落地成本(含運費關稅雜費)','只用貨款單價','老闆心情'],0,'漏算運雜費,毛利會憑空消失兩成。'],
+  ['免費流量和付費流量的比喻是?',['種果樹 vs 開水龍頭','跑步 vs 游泳','早餐 vs 晚餐'],0,'種樹慢但長效;水龍頭快但停付就停水,兩條都要。'],
+  ['轉換率的定義是?',['下單人數 ÷ 訪客數','營收 ÷ 成本','點擊 ÷ 曝光'],0,'電商最重要的體質指標,先補洞再倒水。'],
+  ['購物車的發明順序是?',['先有網路購物車,超市才學','1937 年超市手推車在先,電商借名字','兩者同時發明'],1,'Sylvan Goldman 為了讓客人多買發明手推車,60 年後電商整台借走。'],
+  ['3PL 指的是?',['第三方物流:外包倉儲揀貨出貨','三倍利潤','第三個包裹'],0,'賣家第一方、買家第二方、幫忙搬貨的第三方。'],
+  ['AOV 是?',['平均客單價(營收÷訂單數)','廣告觀看次數','退貨率'],0,'滿額免運、加購價都是拉高 AOV 的招式。'],
+  ['「新客是用買的,熟客才是賺的」對應哪組指標?',['LTV 與 CAC','CPC 與 CPM','SKU 與 MOQ'],0,'獲客要花錢(CAC),回購把 LTV 拉高,生意才健康。'],
+];
+const fq=document.getElementById('finalQuiz');
+function buildFinal(){
+  fq.innerHTML='';
+  finalQs.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='quiz';d.dataset.q=i;
+    d.innerHTML=`<div class="q-text">Q${i+1}. ${q[0]}</div>
+      <div class="opts">${q[1].map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join('')}</div>
+      <div class="fb"></div>`;
+    d.querySelectorAll('.opt').forEach(btn=>{
+      btn.onclick=()=>{
+        d.querySelectorAll('.opt').forEach(b=>b.style.outline='');
+        btn.style.outline='2px solid var(--khaki-dark)';
+        d.dataset.sel=btn.dataset.j;
+      };
+    });
+    fq.appendChild(d);
+  });
+  document.getElementById('finalScore').style.display='none';
+}
+function gradeFinal(){
+  let right=0,unanswered=0;
+  fq.querySelectorAll('.quiz').forEach(d=>{
+    const q=finalQs[d.dataset.q];
+    const sel=d.dataset.sel;
+    const fb=d.querySelector('.fb');
+    d.querySelectorAll('.opt').forEach((b,j)=>{
+      b.classList.remove('correct','wrong');
+      if(j===q[2])b.classList.add('correct');
+    });
+    if(sel===undefined){unanswered++;fb.className='fb show no';fb.textContent='(未作答)'+q[3];return;}
+    if(+sel===q[2]){right++;fb.className='fb show good';fb.textContent='✓ '+q[3];}
+    else{d.querySelectorAll('.opt')[+sel].classList.add('wrong');fb.className='fb show no';fb.textContent='✗ '+q[3];}
+  });
+  const box=document.getElementById('finalScore');
+  box.style.display='block';
+  let cmt;
+  if(right===12)cmt='滿分!整條電商鏈已在你腦中跑通,可以去開店(或當顧問)了 🏆';
+  else if(right>=9)cmt='很棒!骨架很扎實,把錯的題目看一下解析就完整了 🎉';
+  else if(right>=6)cmt='有基礎了!建議回第 4、6、9 章把毛利、漏斗和 LTV 再玩一輪計算器 💪';
+  else cmt='別氣餒,照學習地圖從第 1 章重新走,跟著小恩再開一次店就會通 🌱';
+  box.innerHTML=`<div class="big num">${right} / 12</div><p>${cmt}</p>${unanswered?`<p style="color:var(--gray);font-size:13px;">(有 ${unanswered} 題未作答)</p>`:''}`;
+  box.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function resetFinal(){buildFinal();window.scrollTo({top:0});}
+buildFinal();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-d3cc31c491" data-category="business"></script></body>
+</html>

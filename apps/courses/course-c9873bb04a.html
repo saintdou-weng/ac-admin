@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>成衣品管學堂｜從入門到專業</title>
+<style>
+:root{
+  --ink:#1B2A3A; --muted:#566473; --paper:#F3F5F6; --card:#FFFFFF; --line:#D5DCE2;
+  --denim:#24456E; --denim2:#4A6E9E; --denim-soft:#E4EBF4;
+  --chalk:#E7B93E; --chalk-soft:#FBF1D3;
+  --thread:#C2413A; --thread-soft:#F8E1DF;
+  --pass:#2C8656; --pass-soft:#DDF0E5;
+  --n7:#8C8F93;
+  --serif:"Noto Serif TC","Source Han Serif TC","Songti TC","PMingLiU","MingLiU",serif;
+  --sans:"Noto Sans TC","Source Han Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ink:#E4E9EF; --muted:#9CA9B7; --paper:#111820; --card:#18222D; --line:#2B3947;
+    --denim:#86AEE0; --denim2:#A9C6EC; --denim-soft:#1E2E43;
+    --chalk:#F0C95B; --chalk-soft:#3A3219; --thread:#EE7A71; --thread-soft:#3D2220;
+    --pass:#5CC08B; --pass-soft:#193427; --n7:#9DA1A6;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#E4E9EF; --muted:#9CA9B7; --paper:#111820; --card:#18222D; --line:#2B3947;
+  --denim:#86AEE0; --denim2:#A9C6EC; --denim-soft:#1E2E43;
+  --chalk:#F0C95B; --chalk-soft:#3A3219; --thread:#EE7A71; --thread-soft:#3D2220;
+  --pass:#5CC08B; --pass-soft:#193427; --n7:#9DA1A6;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px);scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.8;-webkit-text-size-adjust:100%}
+img,svg{max-width:100%}
+a{color:var(--denim)}
+:focus-visible{outline:3px solid var(--chalk);outline-offset:2px}
+h1,h2,h3,h4{font-family:var(--serif);line-height:1.35;color:var(--ink)}
+h2{font-size:1.75rem;margin:0 0 .4em}
+h3{font-size:1.28rem;margin:2.2em 0 .6em;padding-left:.7em;border-left:4px solid var(--denim)}
+h4{font-size:1.08rem;margin:1.6em 0 .4em}
+p{margin:.6em 0}
+strong{color:var(--denim)}
+small{color:var(--muted)}
+
+/* 頂列 */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;display:flex;align-items:center;gap:12px;
+  padding:10px 16px;background:var(--denim);color:#fff}
+:root[data-theme="dark"] .topbar{background:#1C3150}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .topbar{background:#1C3150}}
+.topbar .brand{font-family:var(--serif);font-weight:700;font-size:1.05rem;white-space:nowrap}
+.topbar .grow{flex:1}
+.topbar button{background:transparent;border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:6px;padding:6px 10px;font:inherit;font-size:.9rem;cursor:pointer}
+.prog{display:flex;align-items:center;gap:8px;font-size:.85rem;white-space:nowrap}
+.prog .tape{width:120px;height:10px;border-radius:2px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.35) 0 1px,transparent 1px 6px),rgba(255,255,255,.15);overflow:hidden}
+.prog .tape i{display:block;height:100%;width:0;background:var(--chalk);transition:width .4s}
+@media (max-width:600px){.prog .tape{width:64px}.topbar .brand{font-size:.95rem}}
+
+/* 版面 */
+.layout{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1240px;margin:0 auto}
+nav#toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 54px);height:calc(100vh - 54px);overflow:auto;padding:22px 16px 40px;border-right:1px solid var(--line);font-size:.95rem}
+nav#toc .lv{margin:18px 0 6px;font-family:var(--serif);font-weight:700;color:var(--muted);font-size:.9rem}
+nav#toc a{display:flex;gap:8px;align-items:baseline;padding:5px 8px;border-radius:6px;text-decoration:none;color:var(--ink)}
+nav#toc a:hover{background:var(--denim-soft)}
+nav#toc a.active{background:var(--denim);color:#fff}
+nav#toc a .n{font-variant-numeric:tabular-nums;color:var(--muted);min-width:2.2em;font-size:.85rem}
+nav#toc a.active .n{color:#dfe8f5}
+nav#toc a .ok{margin-left:auto;color:var(--pass);font-weight:700;visibility:hidden}
+nav#toc a.done .ok{visibility:visible}
+main{padding:0 28px 80px;min-width:0}
+.wrap{max-width:780px}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr}
+  nav#toc{position:fixed;left:0;top:calc(env(safe-area-inset-top,0px) + 54px);bottom:0;height:auto;width:min(86vw,320px);z-index:25;background:var(--card);transform:translateX(-102%);transition:transform .25s;box-shadow:4px 0 20px rgba(0,0,0,.2)}
+  nav#toc.open{transform:none}
+  main{padding:0 16px 80px}
+}
+@media (min-width:901px){#menuBtn{display:none}}
+
+/* 封面 */
+.hero{padding:44px 0 28px}
+.hero h1{font-size:clamp(2.2rem,6vw,3.6rem);margin:0;letter-spacing:.04em}
+.hero .sub{font-size:1.15rem;color:var(--muted);margin:.4em 0 1.2em}
+.seamline{display:block;width:100%;height:90px}
+.seamline .fab{fill:var(--denim-soft);stroke:var(--line)}
+.seamline .st{stroke:var(--thread);stroke-width:3;stroke-linecap:round;stroke-dasharray:14 9;fill:none}
+.seamline .cover{animation:reveal 3.2s linear forwards}
+@keyframes reveal{to{transform:translateX(780px)}}
+.seamline .runner{animation:runx 3.2s linear forwards}
+@keyframes runx{to{transform:translateX(760px)}}
+.seamline .needle{animation:needle .3s ease-in-out infinite alternate}
+@keyframes needle{from{transform:translateY(-10px)}to{transform:translateY(6px)}}
+.hero .seamline{overflow:hidden}
+.map{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:20px 0}
+.map a{display:block;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-top:5px solid var(--denim);padding:12px 14px;border-radius:4px}
+.map a:nth-child(2){border-top-color:var(--denim2)}
+.map a:nth-child(3){border-top-color:var(--chalk)}
+.map a:nth-child(4){border-top-color:var(--thread)}
+.map b{font-family:var(--serif);font-size:1.1rem;display:block}
+.map span{font-size:.88rem;color:var(--muted)}
+.btn{display:inline-block;background:var(--denim);color:#fff;border:0;border-radius:6px;padding:9px 16px;font:inherit;font-size:.95rem;cursor:pointer;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--denim);border:1.5px solid var(--denim)}
+.btn.sm{padding:5px 11px;font-size:.88rem}
+.btn:disabled{opacity:.45;cursor:default}
+
+/* 課程 */
+.lesson{padding:40px 0 30px;border-top:2px dashed var(--line)}
+.lh{display:flex;gap:16px;align-items:flex-start;margin-bottom:10px}
+.wlabel{flex:none;width:74px;text-align:center;background:var(--denim);color:#fff;font-family:var(--serif);padding:8px 4px 10px;border-radius:2px;position:relative;box-shadow:inset 0 0 0 3px var(--denim),inset 0 0 0 4px rgba(255,255,255,.4)}
+.wlabel small{display:block;color:#d9e3f1;font-size:.72rem;line-height:1.2}
+.wlabel b{font-size:1.9rem;line-height:1}
+.wlabel.l2{background:var(--denim2);box-shadow:inset 0 0 0 3px var(--denim2),inset 0 0 0 4px rgba(255,255,255,.4)}
+.wlabel.l3{background:#9A7418;box-shadow:inset 0 0 0 3px #9A7418,inset 0 0 0 4px rgba(255,255,255,.4)}
+.wlabel.l4{background:#9B302A;box-shadow:inset 0 0 0 3px #9B302A,inset 0 0 0 4px rgba(255,255,255,.4)}
+.lh .goal{color:var(--muted);font-size:.95rem;margin:0}
+
+.box{border-radius:6px;padding:12px 16px;margin:16px 0;background:var(--card);border:1px solid var(--line)}
+.box>b:first-child{display:block;font-family:var(--serif);margin-bottom:2px}
+.box.origin{border-left:5px solid var(--chalk);background:var(--chalk-soft);border-color:transparent}
+.box.origin>b:first-child::before{content:"名詞由來｜";color:#9A7418}
+:root[data-theme="dark"] .box.origin>b:first-child::before{color:var(--chalk)}
+.box.tip{border-left:5px solid var(--pass);background:var(--pass-soft);border-color:transparent}
+.box.warn{border-left:5px solid var(--thread);background:var(--thread-soft);border-color:transparent}
+.box.eg{border-left:5px solid var(--denim2);background:var(--denim-soft);border-color:transparent}
+
+.tw{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:6px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:.93rem;line-height:1.55}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--denim-soft);font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.c,th.c{text-align:center}
+
+.lab{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px;margin:18px 0}
+.lab>.t{font-family:var(--serif);font-weight:700;margin:0 0 8px;display:flex;align-items:center;gap:8px}
+.lab>.t::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--chalk);flex:none}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0}
+label.f{display:flex;flex-direction:column;font-size:.85rem;color:var(--muted);gap:3px}
+input[type=number],input[type=text],select{font:inherit;font-size:.95rem;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);min-width:0;width:120px}
+input[type=range]{width:200px;accent-color:var(--denim)}
+.out{font-size:1.02rem;padding:10px 12px;border-radius:6px;background:var(--denim-soft);margin-top:8px}
+.pass{color:var(--pass);font-weight:700}
+.fail{color:var(--thread);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid var(--line);background:var(--paper);color:var(--ink);border-radius:20px;padding:4px 12px;font:inherit;font-size:.9rem;cursor:pointer}
+.chip.on{background:var(--denim);border-color:var(--denim);color:#fff}
+
+ol.steps{counter-reset:s;list-style:none;padding:0}
+ol.steps>li{counter-increment:s;position:relative;padding:4px 0 10px 44px}
+ol.steps>li::before{content:counter(s);position:absolute;left:0;top:4px;width:30px;height:30px;border-radius:50%;background:var(--denim);color:#fff;font-weight:700;text-align:center;line-height:30px;font-size:.9rem}
+ol.steps>li::after{content:"";position:absolute;left:14px;top:36px;bottom:0;border-left:2px dashed var(--line)}
+ol.steps>li:last-child::after{display:none}
+
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.dcard{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px}
+.dcard svg{display:block;width:100%;height:90px;background:var(--paper);border-radius:4px;margin-bottom:6px}
+.dcard h4{margin:.2em 0}
+.dcard p{font-size:.9rem;margin:.3em 0;line-height:1.6}
+.tag{display:inline-block;font-size:.75rem;padding:1px 8px;border-radius:10px;font-weight:700;vertical-align:middle}
+.tag.cr{background:var(--thread);color:#fff}
+.tag.ma{background:var(--chalk);color:#3a2c00}
+.tag.mi{background:var(--n7);color:#fff}
+
+/* 測驗 */
+.quiz{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px;margin:26px 0 12px}
+.quiz h4{margin:0 0 6px}
+.qi{margin:14px 0;padding-top:10px;border-top:1px dashed var(--line)}
+.qi:first-of-type{border-top:0}
+.qi p{margin:.2em 0 .5em;font-weight:700}
+.qi button{display:block;width:100%;text-align:left;margin:5px 0;background:var(--paper);border:1.5px solid var(--line);border-radius:6px;padding:8px 12px;font:inherit;font-size:.95rem;color:var(--ink);cursor:pointer}
+.qi button.right{border-color:var(--pass);background:var(--pass-soft)}
+.qi button.wrong{border-color:var(--thread);background:var(--thread-soft)}
+.qi .ex{font-size:.9rem;color:var(--muted);display:none;margin-top:4px}
+.qi.answered .ex{display:block}
+.donebar{display:flex;gap:10px;align-items:center;margin-top:10px}
+
+svg text{font-family:var(--sans)}
+.c-ax{stroke:var(--muted);stroke-width:1}
+.c-grid{stroke:var(--line);stroke-width:1}
+.c-bar{fill:var(--denim2)}
+.c-bar2{fill:var(--chalk)}
+.c-line{stroke:var(--thread);stroke-width:2.5;fill:none}
+.c-pt{fill:var(--thread)}
+.c-txt{fill:var(--muted);font-size:11px}
+.c-txt2{fill:var(--ink);font-size:12px}
+.c-spec{stroke:var(--thread);stroke-width:2;stroke-dasharray:6 4}
+.c-cl{stroke:var(--pass);stroke-width:2}
+.c-ok{fill:var(--denim)}
+.c-bad{fill:var(--thread)}
+
+.chartwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media (max-width:600px){.chartwrap svg{min-width:460px}.c-txt{font-size:12.5px}.c-txt2{font-size:13px}}
+.gl-list dt{font-weight:700;margin-top:12px;font-family:var(--serif)}
+.gl-list dd{margin:2px 0 0 0;color:var(--ink);font-size:.95rem}
+.gl-list dd em{color:var(--muted);font-style:normal}
+footer{padding:30px 0;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line)}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .seamline .cover{display:none}
+  html{scroll-behavior:auto}
+}
+@media print{
+  .topbar,nav#toc,.quiz,.donebar{display:none}
+  .layout{display:block}
+  .lesson{break-before:page}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <button id="menuBtn" aria-label="開啟課程目錄" aria-expanded="false">目錄</button>
+  <span class="brand">成衣品管學堂</span>
+  <span class="grow"></span>
+  <span class="prog" title="已完成課數"><span class="tape"><i id="progBar"></i></span><span id="progTxt">0/12</span></span>
+  <button id="themeBtn" aria-label="切換深淺色">深淺</button>
+</header>
+
+<div class="layout">
+<nav id="toc" aria-label="課程目錄">
+  <div class="lv">開始之前</div>
+  <a href="#top"><span class="n">★</span>課程地圖</a>
+  <div class="lv">入門篇</div>
+  <a href="#L1" data-l="L1"><span class="n">1</span>什麼是品質<span class="ok">✓</span></a>
+  <a href="#L2" data-l="L2"><span class="n">2</span>一件衣服的誕生<span class="ok">✓</span></a>
+  <a href="#L3" data-l="L3"><span class="n">3</span>縫紉與線跡<span class="ok">✓</span></a>
+  <div class="lv">基礎篇</div>
+  <a href="#L4" data-l="L4"><span class="n">4</span>瑕疵大圖鑑<span class="ok">✓</span></a>
+  <a href="#L5" data-l="L5"><span class="n">5</span>尺寸量測<span class="ok">✓</span></a>
+  <a href="#L6" data-l="L6"><span class="n">6</span>驗布與四分制<span class="ok">✓</span></a>
+  <div class="lv">進階篇</div>
+  <a href="#L7" data-l="L7"><span class="n">7</span>品管站點與流程<span class="ok">✓</span></a>
+  <a href="#L8" data-l="L8"><span class="n">8</span>AQL 抽樣檢驗<span class="ok">✓</span></a>
+  <a href="#L9" data-l="L9"><span class="n">9</span>QC 七大手法<span class="ok">✓</span></a>
+  <a href="#L10" data-l="L10"><span class="n">10</span>驗貨光源與色差<span class="ok">✓</span></a>
+  <div class="lv">專業篇</div>
+  <a href="#L11" data-l="L11"><span class="n">11</span>品檢實驗室設立<span class="ok">✓</span></a>
+  <a href="#L12" data-l="L12"><span class="n">12</span>專業品質系統<span class="ok">✓</span></a>
+  <div class="lv">附錄</div>
+  <a href="#GL"><span class="n">A</span>名詞小辭典</a>
+  <a href="#EXAM"><span class="n">B</span>結業測驗</a>
+</nav>
+
+<main>
+<div class="wrap">
+
+<section class="hero" id="top">
+  <svg class="seamline" viewBox="0 0 800 90" aria-hidden="true">
+    <rect class="fab" x="0" y="30" width="800" height="40" rx="3"/>
+    <line class="st" x1="20" y1="50" x2="780" y2="50"/>
+    <rect class="cover" x="14" y="36" width="780" height="28" style="fill:var(--denim-soft)"/>
+    <g class="runner"><g class="needle">
+      <rect x="16" y="0" width="4" height="46" rx="2" style="fill:var(--n7)"/>
+      <circle cx="18" cy="8" r="1.6" style="fill:var(--paper)"/>
+    </g></g>
+  </svg>
+  <h1>成衣品管學堂</h1>
+  <p class="sub">從一根線頭開始，學會像專業 QC 一樣看衣服。</p>
+  <p>這套課程寫給完全沒學過品管的人。只要你會加減乘除、看得懂表格，就能從「什麼是品質」一路學到「AQL 抽樣、QC 七大手法、驗貨光源、實驗室設立」。每一課都有<strong>生活例子</strong>、<strong>名詞由來</strong>、<strong>可以動手玩的小工具</strong>，最後還有小測驗。</p>
+  <div class="map">
+    <a href="#L1"><b>入門篇</b><span>第 1–3 課：品質是什麼、衣服怎麼做、線怎麼縫</span></a>
+    <a href="#L4"><b>基礎篇</b><span>第 4–6 課：認識瑕疵、量尺寸、驗布料</span></a>
+    <a href="#L7"><b>進階篇</b><span>第 7–10 課：品管站點、AQL、七大手法、光源</span></a>
+    <a href="#L11"><b>專業篇</b><span>第 11–12 課：實驗室設立、品質系統與改善</span></a>
+  </div>
+  <div class="box tip"><b>怎麼學最有效</b>一天讀一課，讀完把課後小測驗做完，再按「標記完成」。進度會存在這台裝置的瀏覽器裡。所有工具都能離線使用，這個檔案下載後直接用瀏覽器打開就行。</div>
+</section>
+
+<!-- ============ 第1課 ============ -->
+<article class="lesson" id="L1">
+  <header class="lh"><div class="wlabel"><small>入門</small><b>1</b></div>
+    <div><h2>什麼是品質？什麼是品管？</h2><p class="goal">學完你會知道：品質的意思、QC／QA 的差別、品管是怎麼演變來的，以及為什麼「越早發現問題越省錢」。</p></div></header>
+
+  <h3>從一件 T 恤說起</h3>
+  <p>你花 300 元買了一件 T 恤。洗了一次，衣服縮成小一號，腋下的縫線還裂開了。你一定會說：「這件品質好差！」</p>
+  <p>反過來，如果一件 T 恤穿了兩年，洗了幾十次，還是不變形、不褪色、縫線完好，你會說它「品質很好」。所以<strong>品質</strong>不是「貴」或「漂亮」，而是：</p>
+  <div class="box eg"><b>品質的簡單定義</b>產品<strong>符合約定的要求</strong>（尺寸、顏色、做工、安全），而且<strong>用起來讓人滿意</strong>。美國品質大師朱蘭（Joseph Juran）說得更短：品質就是「適合使用」（fitness for use）。</div>
+
+  <h3>品管、QC、QA 到底差在哪？</h3>
+  <p>用「考試」來比喻最容易懂：</p>
+  <div class="tw"><table>
+    <tr><th>名稱</th><th>英文</th><th>像學校裡的什麼</th><th>在成衣廠做什麼</th></tr>
+    <tr><td>品質管制（QC）</td><td>Quality Control</td><td>老師改考卷，把錯的挑出來</td><td>檢查布料、半成品、成衣，把不良品找出來、退回修</td></tr>
+    <tr><td>品質保證（QA）</td><td>Quality Assurance</td><td>平常把課教好，讓學生<em>一開始就</em>會寫</td><td>訂標準、做首件確認、教員工、查流程，讓不良品<em>根本不要發生</em></td></tr>
+    <tr><td>品質管理（QM）</td><td>Quality Management</td><td>整間學校的教育制度</td><td>公司層級的品質政策、目標、制度（例如 ISO 9001）</td></tr>
+  </table></div>
+  <p>記住一句話：<strong>QC 是「找出問題」，QA 是「預防問題」。</strong>一個好工廠兩者都要有。</p>
+  <div class="box origin"><b>品管</b>「品管」是「品質管制」的簡稱，翻譯自英文 Quality Control。Control 原意是「掌控、使它照規矩走」，所以品管不只是檢查，還包含「發現偏差後把它拉回來」。日本把 Quality Control 翻成「品質管理」，台灣工廠兩種說法都聽得到。</div>
+
+  <h3>品管的演變：從老師傅到統計學</h3>
+  <ol class="steps">
+    <li><b>工匠時代</b>：一個師傅從頭做到尾，好壞全靠他自己的眼睛和良心。</li>
+    <li><b>工業革命（1800 年代）</b>：工廠分工，一個人只做一道工序，於是出現「檢驗員」專門在最後挑毛病。</li>
+    <li><b>1924 年，統計品管誕生</b>：美國貝爾實驗室的休哈特（Walter Shewhart）畫出第一張<strong>管制圖</strong>，開始用數學判斷「製程是否正常」。</li>
+    <li><b>二次世界大戰</b>：軍方要檢驗數量龐大的軍火，不可能每顆子彈都測，於是發展出<strong>抽樣檢驗</strong>，戰後整理成 MIL-STD-105（1950 年），就是今天 AQL 的祖先。</li>
+    <li><b>1950 年代，日本崛起</b>：戴明（W. Edwards Deming）到日本演講統計品管，日本企業把品質做成競爭力。石川馨整理出<strong>QC 七大手法</strong>，推廣「品管圈」，讓第一線員工也能解決問題。</li>
+    <li><b>1987 年，ISO 9001</b>：國際標準化組織發布品質管理系統標準，品質變成全世界通用的「制度語言」。</li>
+    <li><b>今天</b>：觀念從「做完再挑」轉為「一次做對」（Right First Time），重點在預防。</li>
+  </ol>
+
+  <h3>為什麼越早發現越省錢：1–10–100 法則</h3>
+  <p>業界常用一個說法：同一個問題，<strong>在源頭預防花 1 元，在工廠裡才發現要花 10 元修，到了客人手上才發現要賠 100 元</strong>。數字是比喻，但方向是真的。</p>
+  <div class="box eg"><b>成衣例子</b>布料有色差：驗布時發現，換一卷布就好（1 元）；裁剪、縫好才發現，整批要拆、重裁、趕工加班（10 元）；出貨到國外被消費者退貨，要付退貨運費、罰款，甚至失去客戶（100 元以上）。</div>
+
+  <h3>成衣品管為什麼特別難？</h3>
+  <ul>
+    <li><b>人工多</b>：一件襯衫可能有 40 道以上工序，大多靠人操作車縫機，每個人手感不同。</li>
+    <li><b>材料會變</b>：布會縮、會伸、會褪色，同一種布不同批次顏色也不一樣。</li>
+    <li><b>款式換得快</b>：一條產線一個月可能換好幾個款，每次都要重新學。</li>
+    <li><b>客戶標準不同</b>：每個品牌有自己的尺寸表、公差、測試要求。</li>
+  </ul>
+  <div class="quiz" data-l="L1"></div>
+</article>
+
+<!-- ============ 第2課 ============ -->
+<article class="lesson" id="L2">
+  <header class="lh"><div class="wlabel"><small>入門</small><b>2</b></div>
+    <div><h2>一件衣服的誕生</h2><p class="goal">學完你會知道：成衣從布料到出貨的每一站、每一站要檢查什麼，以及梭織布和針織布的差別。</p></div></header>
+
+  <h3>生產流程：跟著一塊布走一趟</h3>
+  <p>按「下一站」，看布料一路變成衣服，每站都有品管要注意的重點。</p>
+  <div class="lab" id="flowLab">
+    <p class="t">生產流程動畫</p>
+    <svg id="flowSvg" viewBox="0 0 700 110" style="width:100%;height:auto" aria-hidden="true"></svg>
+    <div id="flowCard" class="out" style="min-height:110px"></div>
+    <div class="row"><button class="btn ghost sm" id="flowPrev">上一站</button><button class="btn sm" id="flowNext">下一站</button><span id="flowIdx" style="color:var(--muted);font-size:.9rem"></span></div>
+  </div>
+
+  <h3>梭織布 vs. 針織布</h3>
+  <p>衣服的布大致分兩大家族。按下面的按鈕切換看看它們的結構：</p>
+  <div class="lab">
+    <p class="t">布料結構放大鏡</p>
+    <div class="chips" id="weaveChips"><button class="chip on" data-w="woven">梭織（平紋）</button><button class="chip" data-w="knit">針織（緯編）</button></div>
+    <svg id="weaveSvg" viewBox="0 0 300 180" style="width:100%;max-width:420px;height:auto;display:block;margin:10px auto"></svg>
+    <div id="weaveTxt" class="out"></div>
+  </div>
+  <div class="tw"><table>
+    <tr><th></th><th>梭織布（Woven）</th><th>針織布（Knit）</th></tr>
+    <tr><td>怎麼做</td><td>直紗、橫紗一上一下交錯</td><td>一根紗線繞成一個個線圈，互相套住</td></tr>
+    <tr><td>彈性</td><td>小（除非加彈性纖維）</td><td>大，容易拉伸</td></tr>
+    <tr><td>常見衣服</td><td>襯衫、西裝褲、牛仔褲</td><td>T 恤、Polo 衫、運動服、內衣</td></tr>
+    <tr><td>品管特別注意</td><td>緯斜、滑紗、縫份脫散</td><td>縮水、扭轉（洗後側縫跑到前面）、破洞容易「跑線」</td></tr>
+  </table></div>
+  <div class="box origin"><b>經紗、緯紗、梭織</b>織布機上先拉好的直紗叫<strong>經紗</strong>，來回穿過去的橫紗叫<strong>緯紗</strong>。地圖上的「經線、緯線」其實是從織布借來的詞，不是反過來喔！而「梭織」的「梭」是織布時帶著緯紗來回穿梭的工具「梭子」（shuttle）。<br><strong>布邊</strong>英文叫 selvedge，來自古英語 self-edge，意思是「自己收好的邊」，因為它不會散開。</div>
+  <div class="box origin"><b>Spandex 與萊卡</b>彈性纖維的英文 Spandex，是把 expands（會伸展）這個字的字母重新排列而成。常聽到的「萊卡」（LYCRA®）是一個品牌名，就像「養樂多」是品牌、乳酸菌飲料是品名。</div>
+
+  <h3>布料的幾個基本數字</h3>
+  <ul>
+    <li><b>克重（GSM）</b>：每平方公尺布有幾公克。T 恤常見 140–220 GSM，數字越大布越厚。GSM＝grams per square meter。</li>
+    <li><b>門幅</b>：布的寬度，例如 150 cm。古文的「幅」本來就是指布帛的寬度。</li>
+    <li><b>成分</b>：例如「棉 95%、彈性纖維 5%」，必須和洗標上寫的一模一樣，寫錯是嚴重問題。</li>
+    <li><b>支數</b>：紗有多細，數字越大紗越細，例如 30 支棉。</li>
+  </ul>
+  <div class="quiz" data-l="L2"></div>
+</article>
+
+<!-- ============ 第3課 ============ -->
+<article class="lesson" id="L3">
+  <header class="lh"><div class="wlabel"><small>入門</small><b>3</b></div>
+    <div><h2>縫紉與線跡</h2><p class="goal">學完你會知道：車縫機怎麼把兩條線鎖在一起、常見線跡編號、針距是什麼，以及它們怎麼影響品質。</p></div></header>
+
+  <h3>平車的秘密：上線和底線握手</h3>
+  <p>手縫只用一條線，但工業平車用兩條線：從上面穿針的<strong>面線</strong>，和藏在機器下面梭心裡的<strong>底線</strong>。針把面線帶到布下面，旋梭勾住它繞過底線，拉上來時兩條線就在<strong>布的正中間</strong>互相扣住，這叫<strong>鎖式線跡</strong>。</p>
+  <div class="lab">
+    <p class="t">鎖式線跡動畫</p>
+    <svg viewBox="0 0 400 170" style="width:100%;max-width:520px;height:auto;display:block;margin:auto" aria-label="面線與底線在布料中間互鎖的示意動畫">
+      <rect x="10" y="70" width="380" height="16" style="fill:var(--denim-soft);stroke:var(--line)"/>
+      <rect x="10" y="86" width="380" height="16" style="fill:var(--denim-soft);stroke:var(--line);opacity:.7"/>
+      <text x="14" y="66" class="c-txt">上層布</text><text x="14" y="118" class="c-txt">下層布</text>
+      <path id="topThread" d="M20 70 H60 V86 H60 M60 70 H120 V86 M120 70 H180 V86 M180 70 H240 V86 M240 70 H300 V86 M300 70 H360 V86" style="stroke:var(--thread);stroke-width:3;fill:none;stroke-dasharray:600;stroke-dashoffset:600" class="ls-anim"/>
+      <path d="M20 102 H60 V86 M60 102 H120 V86 M120 102 H180 V86 M180 102 H240 V86 M240 102 H300 V86 M300 102 H360 V86" style="stroke:var(--denim);stroke-width:3;fill:none;stroke-dasharray:600;stroke-dashoffset:600" class="ls-anim"/>
+      <g class="ls-needle"><rect x="58" y="10" width="4" height="62" rx="2" style="fill:var(--n7)"/></g>
+      <text x="300" y="30" class="c-txt2" style="fill:var(--thread)">紅＝面線</text>
+      <text x="300" y="150" class="c-txt2" style="fill:var(--denim)">藍＝底線</text>
+      <text x="130" y="150" class="c-txt">交會點在兩層布之間 ✓</text>
+    </svg>
+    <style>
+      .ls-anim{animation:lsdraw 4s linear infinite}
+      @keyframes lsdraw{0%{stroke-dashoffset:600}80%,100%{stroke-dashoffset:0}}
+      .ls-needle{animation:lsneedle 4s linear infinite}
+      @keyframes lsneedle{0%{transform:translate(0,0)}4%{transform:translate(0,18px)}8%{transform:translate(0,0)}
+        16%{transform:translate(60px,0)}20%{transform:translate(60px,18px)}24%{transform:translate(60px,0)}
+        32%{transform:translate(120px,0)}36%{transform:translate(120px,18px)}40%{transform:translate(120px,0)}
+        48%{transform:translate(180px,0)}52%{transform:translate(180px,18px)}56%{transform:translate(180px,0)}
+        64%{transform:translate(240px,0)}68%{transform:translate(240px,18px)}72%{transform:translate(240px,0)}
+        80%,100%{transform:translate(300px,0)}}
+    </style>
+    <p style="font-size:.92rem;margin-bottom:0">如果交會點跑到布的<strong>上面</strong>或<strong>下面</strong>，就代表張力不平衡：面線太緊，底線會被拉上來；面線太鬆，布底下會出現一圈圈的「浮線」。這就是最常見的車縫瑕疵之一。</p>
+  </div>
+  <div class="box origin"><b>鎖式線跡與車縫機</b>1846 年美國人豪威（Elias Howe）取得車縫機專利，關鍵發明是把「針孔」開在<strong>針尖附近</strong>，而不是像手縫針開在尾端，這樣才能把線帶到布下面和底線鎖在一起。後來勝家（Isaac Singer）改良並大量銷售，車縫機才普及到全世界。</div>
+
+  <h3>線跡編號：工廠裡的共通語言</h3>
+  <p>國際標準 ISO 4915 把線跡分成六大類，用三位數編號。看到 301、504，就知道是哪種線跡：</p>
+  <div class="tw"><table>
+    <tr><th>類別</th><th>常見編號</th><th>工廠常見叫法</th><th>用在哪裡</th></tr>
+    <tr><td>300 鎖式</td><td>301</td><td>平車、單針</td><td>襯衫、褲子大部分縫線</td></tr>
+    <tr><td>400 多線鏈式</td><td>401</td><td>鏈式車（雙線鏈）</td><td>牛仔褲後襠、腰頭，彈性較好</td></tr>
+    <tr><td>500 包縫</td><td>504／514／516</td><td>拷克（三線、四線、五線）</td><td>針織衣縫合、布邊防脫散</td></tr>
+    <tr><td>600 繃縫</td><td>406／605／607</td><td>繃縫、坎車、爬網等（各地叫法不同）</td><td>T 恤下擺、袖口、運動服拼接</td></tr>
+    <tr><td>100 單線鏈式</td><td>101</td><td>單線鏈</td><td>暫時性縫線、麻袋封口</td></tr>
+    <tr><td>200 手縫式</td><td>209 等</td><td>手縫、仿手縫</td><td>高級西裝裝飾線</td></tr>
+  </table></div>
+  <div class="box origin"><b>拷克</b>台灣工廠把包縫機叫「拷克車」，一般認為是英文 overlock 中「lock」一詞經日語傳入後的音譯。它一邊縫、一邊用刀片切齊布邊，再用線把邊包起來。</div>
+
+  <h3>針距：一英吋裡有幾針？</h3>
+  <p><strong>針距</strong>是縫線的疏密。國際上常用 <b>SPI</b>（Stitches Per Inch，每英吋針數），台灣和中國大陸的工廠也常說「每 3 公分幾針」。拉動滑桿看看：</p>
+  <div class="lab">
+    <p class="t">針距模擬器</p>
+    <div class="row"><input type="range" id="spi" min="6" max="18" value="11" aria-label="SPI"><span id="spiTxt"></span></div>
+    <svg id="spiSvg" viewBox="0 0 340 70" style="width:100%;max-width:520px;height:auto"></svg>
+    <div id="spiOut" class="out"></div>
+  </div>
+  <ul>
+    <li><b>太疏</b>：縫線不牢，一拉就開，容易「爆口」。</li>
+    <li><b>太密</b>：針孔太多，布會被打穿變脆弱，薄布還會起皺。</li>
+    <li>一般平車常見 10–12 SPI，實際要依客戶的工藝單（Tech Pack）規定。</li>
+  </ul>
+  <div class="box origin"><b>縫份</b>縫線到布邊的距離叫縫份（seam allowance），像是「預留的份量」。縫份太小，布邊一拉就從縫線滑脫，這叫「滑脫」或「脫縫」。</div>
+  <div class="quiz" data-l="L3"></div>
+</article>
+
+<!-- ============ 第4課 ============ -->
+<article class="lesson" id="L4">
+  <header class="lh"><div class="wlabel l2"><small>基礎</small><b>4</b></div>
+    <div><h2>瑕疵大圖鑑</h2><p class="goal">學完你會知道：成衣最常見的瑕疵長什麼樣、為什麼會發生、怎麼預防，以及「致命、主要、次要」三級怎麼判斷。</p></div></header>
+
+  <h3>瑕疵分三級</h3>
+  <p><strong>瑕疵</strong>（defect）就是「不符合要求的地方」。不是所有瑕疵都一樣嚴重，所以要分級。可以用「看醫生」來記：</p>
+  <div class="tw"><table>
+    <tr><th>等級</th><th>像什麼</th><th>判斷方法</th><th>例子</th></tr>
+    <tr><td><span class="tag cr">致命 Critical</span></td><td>會危及生命的急診</td><td>可能<strong>傷害人</strong>，或<strong>違反法規</strong></td><td>斷針殘留、童裝小零件易脫落、成分標示錯誤、發霉</td></tr>
+    <tr><td><span class="tag ma">主要 Major</span></td><td>需要看醫生的病</td><td>消費者看到會<strong>不想買或退貨</strong>，或影響功能</td><td>破洞、開縫、明顯色差、尺寸超出公差</td></tr>
+    <tr><td><span class="tag mi">次要 Minor</span></td><td>小擦傷</td><td>不符合標準，但<strong>不太影響購買和使用</strong></td><td>短線頭、不明顯處的小污點、輕微不直</td></tr>
+  </table></div>
+  <div class="box warn"><b>位置也會改變等級</b>同樣 3 公釐的污點，在前胸正中央（最顯眼的 A 區）可能是主要瑕疵；在下擺內側（不顯眼的 C 區）可能只算次要。很多客戶會把衣服分成 A／B／C 區，還會規定「在一臂距離（約 60–90 公分）看得到才算」。一定要以客戶的品質手冊為準。</div>
+
+  <h3>常見瑕疵圖鑑</h3>
+  <div class="grid2">
+    <div class="dcard"><svg viewBox="0 0 200 90"><rect x="0" y="30" width="200" height="30" style="fill:var(--denim-soft)"/><path d="M10 45h14m8 0h14m8 0h14M118 45h14m8 0h14m8 0h14" style="stroke:var(--thread);stroke-width:3"/><path d="M92 45h18" style="stroke:var(--thread);stroke-width:3;stroke-dasharray:2 3"/><circle cx="100" cy="45" r="14" style="fill:none;stroke:var(--chalk);stroke-width:2"/></svg>
+      <h4>跳針 <span class="tag ma">主要</span></h4><p><b>樣子</b>：有一段線跡突然變長，中間漏了幾針。<br><b>原因</b>：針彎、針號不對、旋梭沒勾到線。<br><b>預防</b>：定時換針、用對的針號、機修保養。</p></div>
+    <div class="dcard"><svg viewBox="0 0 200 90"><rect x="0" y="20" width="95" height="50" style="fill:var(--denim-soft)"/><rect x="105" y="20" width="95" height="50" style="fill:var(--denim-soft)"/><path d="M10 45h10m6 0h10m6 0h10m6 0h10M140 45h10m6 0h10m6 0h10" style="stroke:var(--thread);stroke-width:3"/><path d="M84 42q8-6 14 2M114 48q-8 6-12-4" style="stroke:var(--thread);stroke-width:2;fill:none"/></svg>
+      <h4>開縫／斷線 <span class="tag ma">主要</span></h4><p><b>樣子</b>：縫線斷掉，兩片布分開。<br><b>原因</b>：線太細、張力太緊、針距太疏、縫份太小。<br><b>預防</b>：依布料選線、檢查張力、做拉力測試。</p></div>
+    <div class="dcard"><svg viewBox="0 0 200 90"><rect x="0" y="30" width="200" height="30" style="fill:var(--denim-soft)"/><path d="M10 45h180" style="stroke:var(--denim);stroke-width:2"/><path d="M20 60q6 14 12 0M50 60q6 16 12 0M80 60q6 12 12 0M110 60q6 16 12 0M140 60q6 14 12 0" style="stroke:var(--thread);stroke-width:2;fill:none"/></svg>
+      <h4>浮線 <span class="tag ma">主要</span></h4><p><b>樣子</b>：布背面有一圈圈鬆鬆的線。<br><b>原因</b>：面線和底線張力不平衡。<br><b>預防</b>：每次換線、換布都試車調張力。</p></div>
+    <div class="dcard"><svg viewBox="0 0 200 90"><path d="M0 30q12-8 25 0t25 0t25 0t25 0t25 0t25 0t25 0t25 0V60q-12 8-25 0t-25 0t-25 0t-25 0t-25 0t-25 0t-25 0t-25 0Z" style="fill:var(--denim-soft)"/><path d="M5 45q12-6 25 0t25 0t25 0t25 0t25 0t25 0t25 0t20 0" style="stroke:var(--thread);stroke-width:2.5;fill:none"/></svg>
+      <h4>起皺 <span class="tag ma">主要</span></h4><p><b>樣子</b>：縫線旁邊的布波浪狀皺起來。<br><b>原因</b>：線太緊、上下布送料速度不同、針距太密、線會縮水。<br><b>預防</b>：調壓腳與送布齒、選低縮率縫線、用對的線跡。</p></div>
+    <div class="dcard"><svg viewBox="0 0 200 90"><rect x="0" y="30" width="200" height="30" style="fill:var(--denim-soft)"/><path d="M10 45h170" style="stroke:var(--denim);stroke-width:2;stroke-dasharray:10 5"/><path d="M180 45q10 10 6 30" style="stroke:var(--thread);stroke-width:2;fill:none"/></svg>
+      <h4>線頭 <span class="tag mi">次要</span></h4><p><b>樣子</b>：縫完沒剪掉的線尾。<br><b>原因</b>：剪線工序漏掉、自動剪線故障。<br><b>預防</b>：尾查 100% 修剪、吸線頭機。長線頭或在顯眼處可能升為主要。</p></div>
+    <div class="dcard"><svg viewBox="0 0 200 90"><rect x="0" y="10" width="200" height="70" style="fill:var(--denim-soft)"/><ellipse cx="100" cy="45" rx="18" ry="11" style="fill:#8b6d3d;opacity:.55"/></svg>
+      <h4>污漬 <span class="tag ma">主要／次要</span></h4><p><b>樣子</b>：油污、粉筆記號、手汗印、鏽斑。<br><b>原因</b>：機油漏、工作台髒、手沒擦乾淨。<br><b>預防</b>：每日清潔機台、機器下墊布、禁止在產線吃東西。依大小和位置分級。</p></div>
+    <div class="dcard"><svg viewBox="0 0 200 90"><rect x="0" y="10" width="200" height="70" style="fill:var(--denim-soft)"/><circle cx="100" cy="45" r="8" style="fill:var(--paper);stroke:var(--thread);stroke-width:1.5"/></svg>
+      <h4>破洞 <span class="tag ma">主要</span></h4><p><b>樣子</b>：布被刺穿或磨破。<br><b>原因</b>：針尖鈍、剪刀誤剪、布料本身瑕疵。<br><b>預防</b>：針織布用圓頭針、驗布、修線時小心。</p></div>
+    <div class="dcard"><svg viewBox="0 0 200 90"><rect x="20" y="10" width="75" height="70" style="fill:#3f6aa3"/><rect x="105" y="10" width="75" height="70" style="fill:#4f79b0"/></svg>
+      <h4>色差 <span class="tag ma">主要</span></h4><p><b>樣子</b>：同一件衣服前片和袖子顏色不同。<br><b>原因</b>：不同缸布混用、同卷布頭尾色不同、裁片沒配對。<br><b>預防</b>：按缸號分開裁、裁片編號配片。第 10 課會詳細教。</p></div>
+    <div class="dcard"><svg viewBox="0 0 200 90"><path d="M60 15l-30 18 12 16 14-8v45h88V41l14 8 12-16-30-18q-20 14-40 0Z" style="fill:var(--denim-soft);stroke:var(--denim)"/><path d="M42 49l-20 20" style="stroke:var(--thread);stroke-width:2"/></svg>
+      <h4>左右不對稱 <span class="tag ma">主要</span></h4><p><b>樣子</b>：兩邊袖長不同、口袋一高一低。<br><b>原因</b>：裁剪偏差、車縫對位記號沒對。<br><b>預防</b>：用剪口／對位點、首件量測。</p></div>
+    <div class="dcard"><svg viewBox="0 0 200 90"><rect x="40" y="15" width="120" height="60" rx="3" style="fill:var(--card);stroke:var(--line)"/><text x="100" y="42" text-anchor="middle" style="font-size:12px;fill:var(--ink)">100% 棉</text><text x="100" y="60" text-anchor="middle" style="font-size:10px;fill:var(--thread)">實際：聚酯纖維 ✗</text></svg>
+      <h4>標籤錯誤 <span class="tag cr">致命</span></h4><p><b>樣子</b>：成分、洗滌說明、產地、尺碼標錯。<br><b>原因</b>：標籤版本弄錯、混碼。<br><b>預防</b>：標籤發放核對、首件確認、包裝前抽核。成分和洗滌標錯可能違法。</p></div>
+    <div class="dcard"><svg viewBox="0 0 200 90"><rect x="0" y="10" width="200" height="70" style="fill:var(--denim-soft)"/><path d="M85 55l30-18" style="stroke:var(--n7);stroke-width:3;stroke-linecap:round"/><circle cx="100" cy="46" r="22" style="fill:none;stroke:var(--thread);stroke-width:2"/></svg>
+      <h4>斷針／金屬殘留 <span class="tag cr">致命</span></h4><p><b>樣子</b>：衣服裡藏著斷針碎片、釘書針、刀片。<br><b>原因</b>：斷針沒找回、工具管理不當。<br><b>預防</b>：斷針管制、100% 過驗針機（第 7 課）。</p></div>
+    <div class="dcard"><svg viewBox="0 0 200 90"><rect x="0" y="10" width="200" height="70" style="fill:var(--denim-soft)"/><circle cx="100" cy="45" r="10" style="fill:var(--card);stroke:var(--denim);stroke-width:2"/><path d="M100 55v20" style="stroke:var(--thread);stroke-width:1.5;stroke-dasharray:3 2"/><text x="118" y="75" style="font-size:10px;fill:var(--thread)">一拉就掉</text></svg>
+      <h4>童裝小配件脫落 <span class="tag cr">致命</span></h4><p><b>樣子</b>：鈕扣、亮片、四合扣輕輕一拉就掉。<br><b>原因</b>：釘扣不牢、壓扣機力道不對。<br><b>預防</b>：拉力測試、壓扣機每日校驗。小孩可能吞下去窒息。</p></div>
+  </div>
+
+  <h3>小遊戲：你來判等級</h3>
+  <div class="lab">
+    <p class="t">瑕疵分級挑戰</p>
+    <div id="dgQ" class="out" style="min-height:60px"></div>
+    <div class="row" id="dgBtns">
+      <button class="btn sm" data-g="cr" style="background:var(--thread)">致命</button>
+      <button class="btn sm" data-g="ma" style="background:#9A7418">主要</button>
+      <button class="btn sm" data-g="mi" style="background:var(--n7)">次要</button>
+    </div>
+    <div id="dgFb" style="min-height:48px;font-size:.95rem"></div>
+    <div class="row"><button class="btn ghost sm" id="dgNext">下一題</button><span id="dgScore" style="color:var(--muted);font-size:.9rem"></span></div>
+  </div>
+  <div class="quiz" data-l="L4"></div>
+</article>
+
+<!-- ============ 第5課 ============ -->
+<article class="lesson" id="L5">
+  <header class="lh"><div class="wlabel l2"><small>基礎</small><b>5</b></div>
+    <div><h2>尺寸量測</h2><p class="goal">學完你會知道：尺寸表怎麼看、量測點（POM）是什麼、公差怎麼判斷合格，以及正確的量法。</p></div></header>
+
+  <h3>為什麼尺寸這麼重要？</h3>
+  <p>消費者在網路上買 M 號，就是相信它跟上次買的 M 號一樣大。尺寸不準，客人穿不下就退貨。所以每個客戶都會給一張<strong>尺寸表</strong>（Size Spec / Measurement Chart），寫清楚每個尺碼、每個部位該是幾公分。</p>
+  <div class="box origin"><b>POM 與公差</b><strong>POM</strong> 是 Point of Measurement 的縮寫，意思是「量測點」，也就是「從哪裡量到哪裡」。<strong>公差</strong>（tolerance）是「大家公認可以接受的誤差」。因為布料有彈性、人工車縫會有些微偏差，不可能每件都剛好 52.0 公分，所以允許一個範圍，例如 52 ± 1 公分，代表 51 到 53 公分都算合格。</div>
+  <div class="box origin"><b>HPS（高肩點）</b>High Point Shoulder，指肩線和領口交會的最高點。量衣長時「從 HPS 量到下擺」是國際常見做法，因為這個點最穩定、不受領型影響。</div>
+
+  <h3>T 恤的主要量測點</h3>
+  <svg viewBox="0 0 360 300" style="width:100%;max-width:440px;height:auto;display:block;margin:10px auto" aria-label="T恤量測點示意圖">
+    <path d="M130 30 Q180 55 230 30 L300 60 L285 120 L255 110 L255 280 L105 280 L105 110 L75 120 L60 60 Z" style="fill:var(--denim-soft);stroke:var(--denim);stroke-width:2"/>
+    <path d="M130 30 Q180 55 230 30" style="fill:none;stroke:var(--denim);stroke-width:2"/>
+    <line x1="105" y1="128" x2="255" y2="128" class="c-spec"/><text x="180" y="122" text-anchor="middle" class="c-txt2">A 胸寬（腋下 2.5 cm）</text>
+    <line x1="140" y1="33" x2="140" y2="280" style="stroke:var(--pass);stroke-width:2;stroke-dasharray:6 4"/><text x="146" y="200" class="c-txt2">B 衣長（HPS→下擺）</text>
+    <line x1="72" y1="52" x2="288" y2="52" style="stroke:var(--chalk);stroke-width:2;stroke-dasharray:6 4"/><text x="180" y="18" text-anchor="middle" class="c-txt2">C 肩寬（肩點到肩點）</text>
+    <line x1="72" y1="52" x2="60" y2="118" style="stroke:var(--denim);stroke-width:2.5"/><text x="4" y="92" class="c-txt2">D 袖長</text>
+    <line x1="105" y1="270" x2="255" y2="270" class="c-spec"/><text x="180" y="295" text-anchor="middle" class="c-txt2">E 下擺寬</text>
+    <line x1="150" y1="40" x2="210" y2="40" style="stroke:var(--denim);stroke-width:2"/><text x="238" y="44" class="c-txt">F 領寬</text>
+    <text x="290" y="140" class="c-txt">G 袖口寬</text><line x1="285" y1="120" x2="300" y2="62" style="stroke:var(--denim);stroke-width:1;opacity:.4"/>
+  </svg>
+
+  <h3>正確量法五要點</h3>
+  <ol class="steps">
+    <li><b>平放</b>：衣服攤平在乾淨平整的桌面，扣好扣子、拉好拉鍊。</li>
+    <li><b>撫平不拉扯</b>：用手輕輕撫平皺褶，<strong>不能拉長</strong>，尤其針織布一拉就變長。</li>
+    <li><b>工具正確</b>：用經過校正的軟尺，量長邊可搭配直尺。捲尺用久了會拉長，要定期比對。</li>
+    <li><b>照規定量</b>：依客戶的量法說明（How to Measure），例如胸寬到底是「腋下 1 英吋」還是「腋下 2 公分」。</li>
+    <li><b>單位一致</b>：美系客戶常用英吋，1 英吋 = 2.54 公分。英吋的公差常寫成分數，例如 ±1/2"。</li>
+  </ol>
+
+  <h3>動手試：量完判定合不合格</h3>
+  <div class="lab">
+    <p class="t">M 號 T 恤尺寸判定（單位：公分，可修改實量數字）</p>
+    <div class="tw"><table id="measTbl"><thead><tr><th>部位</th><th class="c">標準</th><th class="c">公差</th><th class="c">實量</th><th class="c">差異</th><th class="c">判定</th></tr></thead><tbody></tbody></table></div>
+    <div id="measOut" class="out"></div>
+    <div class="row" style="margin-top:12px"><label class="f">英吋<input type="number" id="inIn" value="1" step="0.125"></label><span>＝</span><label class="f">公分<input type="number" id="cmIn" value="2.54" step="0.1"></label><small>英吋、公分互換</small></div>
+  </div>
+  <div class="box tip"><b>專業提醒</b>量測前衣服要先「回溫回濕」一段時間，剛從整燙機拿下來還熱熱的衣服，尺寸會不準。抽量時每個尺碼都要量，不要只量 M 號。</div>
+  <div class="box origin"><b>放碼</b>把基本尺碼（通常是 M）的紙樣按比例放大、縮小成 S、L、XL，叫<strong>放碼</strong>（grading）。「碼」就是尺碼的意思。放碼錯了，整批某個尺碼都會出問題，所以每個尺碼都要抽量。</div>
+  <div class="quiz" data-l="L5"></div>
+</article>
+
+<!-- ============ 第6課 ============ -->
+<article class="lesson" id="L6">
+  <header class="lh"><div class="wlabel l2"><small>基礎</small><b>6</b></div>
+    <div><h2>驗布與四分制</h2><p class="goal">學完你會知道：布料進廠要檢查什麼、國際通用的「四分制」怎麼扣分，並能自己算出一卷布合不合格。</p></div></header>
+
+  <h3>為什麼要驗布？</h3>
+  <p>布料的問題一旦被裁剪、縫進衣服，就很難補救。還記得 1–10–100 法則嗎？驗布就是花「1 元」的那一關。布料約佔成衣成本的六到七成，驗布絕對值得。</p>
+  <p>驗布通常在<strong>驗布機</strong>上進行：布從下方的燈箱上慢慢捲過，透光可以看到破洞、稀路；上方燈光可以看表面污漬。驗布員站在機器前，看到瑕疵就停機、用貼紙標記並記錄。</p>
+
+  <h3>驗布要檢查的項目</h3>
+  <div class="tw"><table>
+    <tr><th>項目</th><th>說明</th></tr>
+    <tr><td>外觀瑕疵</td><td>破洞、斷紗、粗紗、油污、染色不勻、跳紗、結頭</td></tr>
+    <tr><td>色差</td><td>和確認樣比、頭尾比、左中右比、卷與卷比</td></tr>
+    <tr><td>門幅</td><td>實際寬度夠不夠，太窄會排不下紙樣</td></tr>
+    <tr><td>長度</td><td>和碼單上寫的是否一致</td></tr>
+    <tr><td>克重</td><td>用圓盤取樣器取樣秤重（第 11 課）</td></tr>
+    <tr><td>緯斜、緯弧</td><td>橫紗沒有和直紗垂直，會讓衣服洗後扭轉、格子條紋對不齊</td></tr>
+    <tr><td>手感、氣味</td><td>是否和確認樣相同，有無霉味或化學味</td></tr>
+  </table></div>
+
+  <h3>四分制：瑕疵怎麼扣分</h3>
+  <p>四分制（4-Point System）按照<strong>瑕疵的長度</strong>給分，一個瑕疵最多扣 4 分，所以叫「四分制」。美國業界發展出來，後來寫進美國材料試驗協會標準 ASTM D5430，現在全世界通用。</p>
+  <div class="tw"><table>
+    <tr><th>瑕疵長度（任何方向）</th><th class="c">扣分</th></tr>
+    <tr><td>3 英吋（約 7.5 cm）以下</td><td class="c">1 分</td></tr>
+    <tr><td>超過 3 到 6 英吋（7.5–15 cm）</td><td class="c">2 分</td></tr>
+    <tr><td>超過 6 到 9 英吋（15–23 cm）</td><td class="c">3 分</td></tr>
+    <tr><td>超過 9 英吋（23 cm 以上）</td><td class="c">4 分</td></tr>
+    <tr><td>破洞、開口（不論大小）</td><td class="c">4 分</td></tr>
+  </table></div>
+  <div class="box warn"><b>兩條規則</b>① 同一碼（直向一碼長）內，不論有幾個瑕疵，最多只扣 4 分。② 連續出現的瑕疵（例如整段都有的色條）每一碼都扣 4 分。</div>
+
+  <h4>算分公式</h4>
+  <p style="text-align:center;font-size:1.05rem;background:var(--card);border:1px solid var(--line);padding:10px;border-radius:6px">每 100 平方碼得分 ＝ 總扣分 × 36 × 100 ÷（檢驗碼數 × 可裁門幅英吋）</p>
+  <p>為什麼有 36？因為 1 碼 = 36 英吋，要把「碼 × 英吋」換成「平方碼」。很多客戶的合格標準是<strong>每 100 平方碼 ≤ 40 分</strong>，也有的訂 ≤ 28 分或更嚴，要看合約。</p>
+
+  <div class="lab">
+    <p class="t">四分制計算機</p>
+    <div class="row">
+      <label class="f">1 分瑕疵（個）<input type="number" id="fp1" value="12" min="0"></label>
+      <label class="f">2 分瑕疵（個）<input type="number" id="fp2" value="5" min="0"></label>
+      <label class="f">3 分瑕疵（個）<input type="number" id="fp3" value="2" min="0"></label>
+      <label class="f">4 分瑕疵（個）<input type="number" id="fp4" value="3" min="0"></label>
+    </div>
+    <div class="row">
+      <label class="f">檢驗長度（碼）<input type="number" id="fyd" value="100" min="1"></label>
+      <label class="f">可裁門幅（英吋）<input type="number" id="fwd" value="58" min="1"></label>
+      <label class="f">合格上限（分／100 平方碼）<input type="number" id="flim" value="40" min="1"></label>
+    </div>
+    <div id="fOut" class="out"></div>
+    <small>公制換算：1 碼 ≈ 0.914 公尺，1 英吋 = 2.54 公分。例如 150 cm 門幅 ≈ 59 英吋。</small>
+  </div>
+  <div class="box tip"><b>抽驗多少卷？</b>常見做法是每批（同缸號）至少抽驗 10% 的卷數，而且每個缸號都要抽到；新供應商或以往品質差的，就提高比例甚至全驗。合格率不好，就要跟布廠開會改善或退貨。</div>
+  <div class="quiz" data-l="L6"></div>
+</article>
+
+<!-- ============ 第7課 ============ -->
+<article class="lesson" id="L7">
+  <header class="lh"><div class="wlabel l3"><small>進階</small><b>7</b></div>
+    <div><h2>品管站點與流程</h2><p class="goal">學完你會知道：IQC、IPQC、FQC、OQC 各管什麼、產前會議和首件怎麼做、巡檢紅綠燈法，以及成衣廠最重要的「斷針管制」。</p></div></header>
+
+  <h3>四個品管關卡：用開餐廳來比喻</h3>
+  <div class="tw"><table>
+    <tr><th>站點</th><th>全名</th><th>餐廳比喻</th><th>成衣廠做什麼</th></tr>
+    <tr><td><b>IQC</b></td><td>Incoming QC 進料檢驗</td><td>食材送來先檢查新不新鮮</td><td>驗布、驗輔料（線、鈕扣、拉鍊、標籤、吊牌、紙箱）</td></tr>
+    <tr><td><b>IPQC</b></td><td>In-Process QC 製程檢驗</td><td>煮的時候邊試味道</td><td>裁片抽查、首件、產線巡檢、半成品檢查</td></tr>
+    <tr><td><b>FQC</b></td><td>Final QC 成品檢驗</td><td>上桌前看擺盤</td><td>尾查全檢、整燙後檢查、量尺寸</td></tr>
+    <tr><td><b>OQC</b></td><td>Outgoing QC 出貨檢驗</td><td>外送前確認餐點和封好袋</td><td>包裝、裝箱、嘜頭、抽樣驗貨（AQL）、驗針</td></tr>
+  </table></div>
+  <div class="box origin"><b>QC 字母縮寫</b>這些名稱都是「位置＋QC」組成：I = Incoming（進來的），IP = In-Process（製程中），F = Final（最終），O = Outgoing（出去的）。記住英文意思就不會搞混。</div>
+
+  <h3>一張訂單的品管時間線</h3>
+  <ol class="steps">
+    <li><b>產前會議（PP Meeting）</b>：開裁前，業務、技術、生產、品管一起看<strong>產前樣</strong>（Pre-Production Sample）和客戶評語，把難做的地方、容易出錯的工序、特殊要求先講清楚。</li>
+    <li><b>首件檢驗（First Piece）</b>：產線做出第一件（或第一批）成品，品管全面檢查外觀和尺寸，確認沒問題才能大量生產。這一步能擋下最多「整批做錯」的災難。</li>
+    <li><b>巡檢（Roving QC）與在線檢驗（Inline）</b>：品管在產線上走動，定時抽查每位車工的工作。</li>
+    <li><b>尾查（End-line）</b>：每件衣服下線時 100% 檢查，挑出不良品退回修補。</li>
+    <li><b>中期驗貨（DUPRO）</b>：生產約 20–50% 時，客戶或第三方來抽驗，及早發現系統性問題。DUPRO = During Production。</li>
+    <li><b>終期驗貨（FRI）</b>：大貨至少 80% 完成包裝後，依 AQL 抽樣驗貨。FRI = Final Random Inspection，「隨機」是重點：箱子由驗貨員自己挑。</li>
+  </ol>
+
+  <h3>巡檢紅綠燈法</h3>
+  <p>很多工廠用「紅綠燈」管理巡檢：品管每一輪到每位車工旁邊，<strong>隨機抽 7 件</strong>她做好的半成品檢查，然後掛上對應顏色的牌子。</p>
+  <div class="lab">
+    <p class="t">紅綠燈模擬：這 7 件裡有幾件不良？</p>
+    <div class="row"><input type="range" id="tlR" min="0" max="7" value="0" aria-label="不良件數"><span id="tlN"></span></div>
+    <svg id="tlSvg" viewBox="0 0 320 70" style="width:100%;max-width:420px;height:auto"></svg>
+    <div id="tlOut" class="out"></div>
+  </div>
+  <p>紅牌的車工會被更頻繁地巡查，同時找原因：是新手不熟？機器有問題？還是布料難車？這就是把 QC（找問題）變成 QA（預防問題）。</p>
+
+  <h3>斷針管制：零容忍</h3>
+  <p>一根斷針留在衣服裡，穿的人可能被刺傷，尤其是嬰幼兒。日本、歐美客戶都要求工廠有嚴格的<strong>斷針管制</strong>，一旦被消費者發現，可能被索賠甚至失去整個客戶。</p>
+  <ol class="steps">
+    <li><b>換針要以舊換新</b>：車工拿斷針（所有碎片）到針管員處，才能換新針。</li>
+    <li><b>碎片要找齊</b>：斷針碎片黏在「斷針記錄表」上，記錄時間、車工、機台、款號、組長簽名。</li>
+    <li><b>找不齊就隔離</b>：碎片沒找全時，那台機器附近的半成品全部隔離，用手持探測器找，找不到就整批過驗針機。</li>
+    <li><b>尖銳工具管理</b>：剪刀、紗剪用繩子綁在機台上；禁止用釘書針、大頭針；刀片統一保管發放。</li>
+    <li><b>100% 過驗針機</b>：包裝前每件都要過。驗針機每天開工前和每隔一段時間（例如每小時）要用<strong>測試片</strong>（常見為直徑 1.0 或 1.2 mm 鐵球）校驗，測不到就要停用，並把上次校驗後過機的衣服全部重驗。</li>
+  </ol>
+  <div class="box warn"><b>記錄就是證據</b>萬一客戶投訴，你拿得出完整的斷針記錄、驗針機校驗記錄，才證明工廠有盡到管理責任。沒有記錄，等於沒做。</div>
+  <div class="quiz" data-l="L7"></div>
+</article>
+
+<!-- ============ 第8課 ============ -->
+<article class="lesson" id="L8">
+  <header class="lh"><div class="wlabel l3"><small>進階</small><b>8</b></div>
+    <div><h2>AQL 抽樣檢驗</h2><p class="goal">學完你會知道：為什麼抽樣就能判斷一整批貨、AQL 表怎麼查、允收數和拒收數是什麼，並能自己算出任何一批貨該抽幾件。</p></div></header>
+
+  <h3>喝一口湯就知道鹹不鹹</h3>
+  <p>煮一大鍋湯，你不用把整鍋喝完才知道鹹淡，只要<strong>攪拌均勻</strong>後喝一口就知道。抽樣檢驗也是這個道理：從一大批貨裡<strong>隨機</strong>抽一部分來檢查，用結果推斷整批的品質。</p>
+  <p>為什麼不全部檢查？因為一批 5,000 件全驗，太花時間和人力；而且人連續檢查幾千件會疲勞，反而漏看。抽樣用統計學控制「判斷錯誤的風險」。</p>
+  <div class="box origin"><b>AQL</b>AQL 最早是 Acceptable Quality Level（可接受品質水準），現行標準改稱 Acceptance Quality Limit（允收品質界限）。它的祖先是二戰時美國軍方的抽樣表，1950 年整理成 MIL-STD-105，後來演變成美國的 ANSI/ASQ Z1.4 和國際的 ISO 2859-1。成衣業用的 AQL 表，就是這張「軍用表」的後代。</div>
+
+  <h3>查 AQL 表要知道的五個詞</h3>
+  <div class="tw"><table>
+    <tr><th>名詞</th><th>意思</th><th>例子</th></tr>
+    <tr><td>批量（Lot size）</td><td>這次要驗的總件數</td><td>一個訂單 3,000 件</td></tr>
+    <tr><td>檢驗水準（Inspection level）</td><td>檢查得多嚴。一般水準分 I、II、III，<strong>II 最常用</strong>；另有特殊水準 S-1 到 S-4，用在破壞性測試</td><td>成衣大多用一般水準 II</td></tr>
+    <tr><td>樣本代字（Code letter）</td><td>用批量和水準查出的一個英文字母，再用它查抽樣數</td><td>3,000 件、水準 II → K</td></tr>
+    <tr><td>允收數 Ac（Accept）</td><td>不良數<strong>小於或等於</strong>這個數就「允收」</td><td>Ac = 7</td></tr>
+    <tr><td>拒收數 Re（Reject）</td><td>不良數<strong>大於或等於</strong>這個數就「拒收」</td><td>Re = 8</td></tr>
+  </table></div>
+  <p>成衣業最常見的設定是：<strong>致命 AQL 0（一個都不行）、主要 AQL 2.5、次要 AQL 4.0</strong>。三種瑕疵<strong>分開</strong>計算、分開判定，任一種超標，整批就不合格。</p>
+  <div class="box warn"><b>常見誤會</b>「AQL 2.5 就是允許 2.5% 不良」並不精確。AQL 是一個「製程平均不良率的上限」的概念：若工廠長期不良率在 2.5% 以下，這套抽樣計畫大多數時候會讓它通過。單看某一次抽樣，允收數和 2.5% 並不相等，一定要查表。</div>
+
+  <h3>AQL 計算機</h3>
+  <div class="lab">
+    <p class="t">輸入批量，自動查表（單次抽樣、正常檢驗）</p>
+    <div class="row">
+      <label class="f">批量（件）<input type="number" id="aqLot" value="3000" min="2"></label>
+      <label class="f">檢驗水準<select id="aqLv"><option value="0">一般 I（放寬）</option><option value="1" selected>一般 II（標準）</option><option value="2">一般 III（加嚴）</option></select></label>
+    </div>
+    <div class="row">
+      <label class="f">主要瑕疵 AQL<select id="aqMa"><option>0.65</option><option>1.0</option><option>1.5</option><option selected>2.5</option><option>4.0</option><option>6.5</option></select></label>
+      <label class="f">次要瑕疵 AQL<select id="aqMi"><option>0.65</option><option>1.0</option><option>1.5</option><option>2.5</option><option selected>4.0</option><option>6.5</option></select></label>
+    </div>
+    <div class="row">
+      <label class="f">驗到的致命瑕疵<input type="number" id="aqFc" value="0" min="0"></label>
+      <label class="f">驗到的主要瑕疵<input type="number" id="aqFma" value="5" min="0"></label>
+      <label class="f">驗到的次要瑕疵<input type="number" id="aqFmi" value="9" min="0"></label>
+    </div>
+    <div id="aqOut" class="out"></div>
+    <small>依 ISO 2859-1／ANSI Z1.4 表格。表中箭頭處已自動換成對應的抽樣數與允收數。</small>
+  </div>
+
+  <h3>終期驗貨的標準流程</h3>
+  <ol class="steps">
+    <li><b>核對資料</b>：訂單、尺寸表、確認樣、包裝要求、客戶評語。</li>
+    <li><b>點數量</b>：確認至少 80% 已裝箱，清點箱數。</li>
+    <li><b>隨機抽箱</b>：常見做法是抽「總箱數開根號」箱，上下左右、前後都要抽到，不能讓工廠指定。</li>
+    <li><b>抽件</b>：從抽出的箱子裡平均取出規定件數，所有尺碼、顏色都要涵蓋。</li>
+    <li><b>檢驗</b>：外觀、做工、尺寸（通常抽其中一部分量）、功能（拉鍊、鈕扣）、包裝與標籤、現場測試（摔箱、驗針、色牢度摩擦等）。</li>
+    <li><b>統計判定</b>：分開計算致命、主要、次要的數量，對照 Ac／Re。</li>
+    <li><b>報告</b>：拍照、寫報告；不合格要重工（返工）後重驗。</li>
+  </ol>
+  <div class="box tip"><b>計算方式要先講好</b>有的客戶算「不良件數」（一件有三個瑕疵算一件，以最嚴重的那個分級），有的算「瑕疵個數」。驗貨前要確認合約寫的是哪一種。</div>
+  <div class="quiz" data-l="L8"></div>
+</article>
+
+<!-- ============ 第9課 ============ -->
+<article class="lesson" id="L9">
+  <header class="lh"><div class="wlabel l3"><small>進階</small><b>9</b></div>
+    <div><h2>QC 七大手法</h2><p class="goal">學完你會知道：七個最經典的品質分析工具是什麼、從哪裡來、怎麼用在成衣廠，並能親手操作每一個工具。</p></div></header>
+
+  <p>QC 七大手法是日本品管專家<strong>石川馨</strong>在 1960 年代整理推廣的七個工具。他認為工廠裡九成以上的品質問題，只要用這七個簡單工具就能分析解決，而且第一線員工也學得會。先記口訣：</p>
+  <div class="box eg" style="font-family:var(--serif);font-size:1.05rem;line-height:2">
+    查檢表：集數據　　層別法：作分類<br>
+    柏拉圖：抓重點　　魚骨圖：追原因<br>
+    直方圖：看分佈　　散佈圖：找關係<br>
+    管制圖：抓異常
+  </div>
+  <p>下面用同一個故事串起七個工具：<strong>A、B 兩條產線最近尾查不良很多，主管要你找出原因。</strong></p>
+
+  <h3>① 查檢表（Check Sheet）：先把數據收集起來</h3>
+  <p>沒有數據，一切都是猜測。查檢表是一張事先設計好的表格，檢查時只要「畫正字」或打勾就能記錄。按 ＋ 模擬尾查記錄，下面的層別法、柏拉圖會即時更新。</p>
+  <div class="lab">
+    <p class="t">尾查不良查檢表（本週）</p>
+    <div class="tw"><table id="tallyTbl"></table></div>
+    <div class="row"><button class="btn ghost sm" id="tallyReset">恢復範例數據</button></div>
+  </div>
+  <div class="box origin"><b>查檢表與畫正字</b>中文圈用「正」字記數，因為「正」剛好五筆；英文圈則畫四條直線再用一條斜線劃過。設計查檢表的重點是：項目事先列好、格式簡單、記錄人和時間要寫清楚。</div>
+
+  <h3>② 層別法（Stratification）：把數據分類看</h3>
+  <p>把混在一起的數據，依<strong>產線、班別、機台、人員、布料批號</strong>等分開來比較，常常一眼就看出問題集中在哪。</p>
+  <div class="lab">
+    <p class="t">依產線分層</p>
+    <svg id="stratSvg" viewBox="0 0 520 220" style="width:100%;height:auto"></svg>
+    <div id="stratOut" class="out"></div>
+  </div>
+  <div class="box origin"><b>層別</b>「層」來自地質學的「地層」（strata），把岩石一層一層分開看，就能讀出它的歷史。數據也一樣，分層看才看得清楚。</div>
+
+  <h3>③ 柏拉圖（Pareto Chart）：抓出最重要的少數</h3>
+  <p>把不良項目<strong>由多到少</strong>排成長條，再畫出<strong>累積百分比</strong>折線。通常前兩三項就佔了約 80%，先解決它們，效果最大。</p>
+  <div class="lab">
+    <p class="t">柏拉圖（兩線合計，自動更新）</p>
+    <svg id="paretoSvg" viewBox="0 0 520 260" style="width:100%;height:auto"></svg>
+    <div id="paretoOut" class="out"></div>
+  </div>
+  <div class="box origin"><b>柏拉圖和 80／20 法則</b>名字來自義大利經濟學家帕雷托（Vilfredo Pareto，中文常音譯成「柏拉圖」，跟希臘哲學家柏拉圖無關）。他在 1890 年代發現義大利約 80% 的土地由約 20% 的人擁有。後來品管大師朱蘭把它應用到品質上，稱為「關鍵少數、次要多數」。</div>
+
+  <h3>④ 魚骨圖（特性要因圖）：追出根本原因</h3>
+  <p>把「問題」寫在魚頭，從<strong>人、機、料、法、環、測</strong>六個大骨去想可能的原因，再一層層往小骨細分。適合團隊一起腦力激盪。</p>
+  <div class="lab">
+    <p class="t">範例：為什麼側縫起皺？</p>
+    <svg viewBox="0 0 640 300" style="width:100%;height:auto" aria-label="側縫起皺的魚骨圖">
+      <line x1="30" y1="150" x2="520" y2="150" style="stroke:var(--ink);stroke-width:3"/>
+      <path d="M520 110 L620 150 L520 190 Z" style="fill:var(--thread)"/>
+      <text x="566" y="146" text-anchor="middle" style="fill:#fff;font-size:13px;font-weight:700">側縫</text><text x="566" y="163" text-anchor="middle" style="fill:#fff;font-size:13px;font-weight:700">起皺</text>
+      <g style="stroke:var(--denim);stroke-width:2">
+        <line x1="90" y1="40" x2="150" y2="150"/><line x1="250" y1="40" x2="310" y2="150"/><line x1="410" y1="40" x2="470" y2="150"/>
+        <line x1="90" y1="260" x2="150" y2="150"/><line x1="250" y1="260" x2="310" y2="150"/><line x1="410" y1="260" x2="470" y2="150"/>
+      </g>
+      <g class="c-txt2" style="font-weight:700">
+        <text x="70" y="32">人 Man</text><text x="230" y="32">機 Machine</text><text x="390" y="32">料 Material</text>
+        <text x="70" y="280">法 Method</text><text x="230" y="280">環 Environment</text><text x="390" y="280">測 Measurement</text>
+      </g>
+      <g class="c-txt">
+        <text x="100" y="70">新手拉布手勢</text><text x="112" y="95">未經訓練</text>
+        <text x="260" y="70">壓腳壓力太大</text><text x="272" y="95">送布齒磨損</text><text x="284" y="120">針太粗</text>
+        <text x="420" y="70">縫線縮率大</text><text x="432" y="95">布料太薄滑</text><text x="444" y="120">兩片布伸縮不同</text>
+        <text x="130" y="200">針距太密</text><text x="116" y="225">線跡選錯</text>
+        <text x="290" y="200">濕度高布吸水</text><text x="276" y="225">照明不足</text>
+        <text x="450" y="200">判定標準不一</text><text x="436" y="225">沒有標準樣</text>
+      </g>
+    </svg>
+  </div>
+  <div class="box origin"><b>魚骨圖、5M1E</b>由石川馨在 1940 年代提出，所以也叫「石川圖」，因為長得像魚骨頭而得名。六大骨常稱為 5M1E：Man（人）、Machine（機）、Material（料）、Method（法）、Measurement（測）、Environment（環）。</div>
+
+  <h3>⑤ 直方圖（Histogram）：看數據怎麼分佈</h3>
+  <p>把量測數據分組、畫成長條，看它<strong>集中在哪裡、散得多開、有沒有超出規格</strong>。下面是 100 件 T 恤胸寬的量測結果，規格 52 ± 1 cm。拉動滑桿改變製程：</p>
+  <div class="lab">
+    <p class="t">胸寬直方圖</p>
+    <div class="row"><label class="f">製程平均（cm）<input type="range" id="hMu" min="50.5" max="53.5" step="0.1" value="52"></label><span id="hMuT"></span></div>
+    <div class="row"><label class="f">變異大小（標準差）<input type="range" id="hSd" min="0.15" max="0.9" step="0.05" value="0.3"></label><span id="hSdT"></span></div>
+    <svg id="histSvg" viewBox="0 0 520 240" style="width:100%;height:auto"></svg>
+    <div class="row"><button class="btn ghost sm" id="hNew">重新量 100 件</button></div>
+    <div id="histOut" class="out"></div>
+  </div>
+  <div class="box origin"><b>直方圖</b>英文 histogram 由英國統計學家皮爾森（Karl Pearson）在 1890 年代命名。中文「直方」就是「直立的方塊」。理想的形狀像一座中間高、兩邊低的鐘，而且整座鐘都在規格線內。</div>
+
+  <h3>⑥ 散佈圖（Scatter Diagram）：兩件事有沒有關係</h3>
+  <p>把兩種數據畫成點，看它們是否一起變化。選一組數據看看：</p>
+  <div class="lab">
+    <p class="t">散佈圖</p>
+    <div class="chips" id="scChips"><button class="chip on" data-s="0">車速 vs 跳針數</button><button class="chip" data-s="1">車工經驗 vs 不良數</button><button class="chip" data-s="2">車工年齡 vs 不良數</button></div>
+    <svg id="scSvg" viewBox="0 0 520 260" style="width:100%;height:auto"></svg>
+    <div id="scOut" class="out"></div>
+  </div>
+  <div class="box warn"><b>相關不等於因果</b>夏天冰淇淋賣得多，溺水的人也多，但吃冰淇淋不會讓人溺水，兩者都是因為「天氣熱」。散佈圖只能告訴你「有關係」，原因要再用魚骨圖和實驗去確認。</div>
+
+  <h3>⑦ 管制圖（Control Chart）：製程有沒有失控</h3>
+  <p>每小時抽 5 件量胸寬、算平均，按時間順序畫點。中間是<strong>中心線</strong>，上下兩條是<strong>管制界限</strong>（約平均值 ± 3 個標準差）。點跑出界限，或連續很多點偏在同一邊，就代表製程出現「異常原因」，要立刻停下來查。</p>
+  <div class="lab">
+    <p class="t">X̄ 管制圖（每組 5 件）</p>
+    <svg id="ccSvg" viewBox="0 0 540 260" style="width:100%;height:auto"></svg>
+    <div class="row"><button class="btn sm" id="ccNormal">模擬正常製程</button><button class="btn ghost sm" id="ccShift">模擬第 15 組後換了一卷布</button><button class="btn ghost sm" id="ccSpike">模擬一次量錯</button></div>
+    <div id="ccOut" class="out"></div>
+  </div>
+  <div class="box origin"><b>管制圖</b>1924 年休哈特在貝爾實驗室發明，是七大手法中歷史最早的。他把變異分成兩種：<strong>一般原因</strong>（天天都有的小波動，像呼吸）和<strong>特殊原因</strong>（突然發生的事件，像咳嗽）。管制圖的任務就是分辨這兩種，不要對正常波動大驚小怪，也不要放過真正的異常。</div>
+  <div class="box eg"><b>判讀異常的常見規則</b>① 任何一點超出上下管制界限。② 連續 7 點在中心線同一側（有的規則用 8 或 9 點）。③ 連續 7 點持續上升或下降。④ 點的分佈出現明顯的週期性。</div>
+  <div class="box tip"><b>延伸：新七大手法</b>七大手法主要處理「數字」。日本後來又整理出處理「文字和想法」的<strong>新 QC 七大手法</strong>：親和圖、關聯圖、系統圖、矩陣圖、矩陣數據解析、PDPC 法、箭線圖。學會舊七大手法後再去研究即可。</div>
+  <div class="quiz" data-l="L9"></div>
+</article>
+
+<!-- ============ 第10課 ============ -->
+<article class="lesson" id="L10">
+  <header class="lh"><div class="wlabel l3"><small>進階</small><b>10</b></div>
+    <div><h2>驗貨光源與色差</h2><p class="goal">學完你會知道：為什麼同一件衣服在不同燈下顏色不同、色溫是什麼、D65、TL84 等標準光源的由來，以及對色和評色差的標準作業。</p></div></header>
+
+  <h3>顏色其實是「光」的遊戲</h3>
+  <p>我們看到的顏色，是三件事合作的結果：<strong>光源</strong>照在<strong>物體</strong>上，物體反射一部分光，進到<strong>眼睛</strong>。三者只要換一個，看到的顏色就會變。所以你在服飾店試穿覺得是墨綠色，回家在黃燈下看卻像咖啡色，這不是你眼花。</p>
+  <p>成衣業是跨國生意：工廠在柬埔寨或越南，客戶在美國或日本，衣服最後掛在各國賣場。大家如果用不同的燈看顏色，永遠吵不完。所以要規定<strong>標準光源</strong>，大家在同樣的燈下判斷。</p>
+
+  <h3>色溫：光的「冷暖」</h3>
+  <p>拉動滑桿，看光的顏色怎麼隨著色溫變化：</p>
+  <div class="lab">
+    <p class="t">色溫模擬</p>
+    <div class="row"><input type="range" id="ctR" min="1800" max="10000" step="50" value="6500" aria-label="色溫"><b id="ctT"></b></div>
+    <div id="ctBox" style="height:90px;border-radius:6px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;color:#222"></div>
+    <div id="ctOut" class="out"></div>
+  </div>
+  <div class="box origin"><b>色溫與 K（克耳文）</b>把一塊鐵加熱，它會從暗紅、橙、黃一路變成白、藍白。科學家用「燒到多少溫度會發出這種顏色的光」來描述光色，單位是<strong>克耳文（K）</strong>，紀念英國物理學家克耳文勳爵。數字<strong>越低越偏黃紅（暖）</strong>，<strong>越高越偏白藍（冷）</strong>。有趣的是：我們說的「暖色光」，色溫數字反而比較低。</div>
+
+  <h3>常見標準光源</h3>
+  <div class="tw"><table>
+    <tr><th>光源</th><th class="c">色溫約</th><th>模擬什麼</th><th>名稱由來與使用</th></tr>
+    <tr><td><b>D65</b></td><td class="c">6500 K</td><td>北半球中午的平均日光</td><td>D = Daylight，65 = 6500 K。國際照明委員會（CIE）定義的標準日光，最常作為<strong>主光源</strong>。</td></tr>
+    <tr><td><b>TL84</b></td><td class="c">4000 K</td><td>歐洲、亞洲賣場的螢光燈</td><td>飛利浦 TL 系列燈管型號。「8」代表顯色指數 80 多，「4」代表 4000 K。許多歐洲和日本客戶指定。</td></tr>
+    <tr><td><b>CWF</b></td><td class="c">4150 K</td><td>美國賣場、辦公室的冷白螢光燈</td><td>Cool White Fluorescent 的縮寫。美系客戶常用作第二光源。</td></tr>
+    <tr><td><b>U30／U35</b></td><td class="c">3000／3500 K</td><td>美國部分零售商的店內燈</td><td>來自 Ultralume 燈管的型號，部分美國零售品牌指定使用。</td></tr>
+    <tr><td><b>A（INCA）</b></td><td class="c">2856 K</td><td>家裡的黃色白熾燈泡</td><td>CIE 標準光源 A，INCA 是 incandescent（白熾）的縮寫。</td></tr>
+    <tr><td><b>Horizon</b></td><td class="c">約 2300 K</td><td>日出、日落的光</td><td>Horizon 是「地平線」，太陽在地平線時光最黃紅。</td></tr>
+    <tr><td><b>UV</b></td><td class="c">—</td><td>紫外光</td><td>看不見的光，用來檢查<strong>螢光增白劑</strong>、螢光色和某些看不見的污漬。白色衣服常用。</td></tr>
+  </table></div>
+  <p>客戶通常會指定<strong>主光源</strong>和<strong>次光源</strong>，例如「主光源 D65、次光源 TL84」。近年很多賣場改用 LED 燈，也有客戶開始要求 LED 光源，一定要照客戶手冊。</p>
+
+  <h3>同色異譜：在這盞燈一樣，換一盞就不一樣</h3>
+  <p>兩塊布如果用了<strong>不同的染料配方</strong>，可能在 D65 下看起來一模一樣，換到 TL84 或黃燈下卻明顯不同。這叫<strong>同色異譜</strong>，也是為什麼對色一定要看多種光源。點選不同光源試試：</p>
+  <div class="lab">
+    <p class="t">標準光源箱模擬</p>
+    <div class="chips" id="mmChips"><button class="chip on" data-m="D65">D65</button><button class="chip" data-m="TL84">TL84</button><button class="chip" data-m="CWF">CWF</button><button class="chip" data-m="A">A 黃燈</button><button class="chip" data-m="UV">UV</button></div>
+    <div id="mmBox" style="margin-top:12px;padding:22px;border-radius:6px;display:flex;gap:16px;justify-content:center;transition:background .4s">
+      <div style="text-align:center"><div id="mmA" style="width:110px;height:110px;border-radius:3px;transition:background .4s"></div><small style="color:#333">確認樣</small></div>
+      <div style="text-align:center"><div id="mmB" style="width:110px;height:110px;border-radius:3px;transition:background .4s"></div><small style="color:#333">大貨布</small></div>
+    </div>
+    <div id="mmOut" class="out"></div>
+  </div>
+  <div class="box origin"><b>同色異譜</b>英文 metamerism，來自希臘文 meta（改變）加 meros（部分）。「同色」是看起來顏色相同，「異譜」是反射光的光譜其實不同。</div>
+
+  <h3>對色標準作業</h3>
+  <ol class="steps">
+    <li><b>環境</b>：燈箱內壁是中性灰（常用孟塞爾 N7 灰），房間關掉其他燈，避開窗戶陽光。</li>
+    <li><b>開燈預熱</b>：燈管打開幾分鐘穩定後再看。</li>
+    <li><b>樣品擺放</b>：確認樣和大貨並排、緊貼、<strong>同一個方向</strong>（布有絨毛方向、紋路方向，擺反顏色會不同），大小相近。</li>
+    <li><b>觀看角度</b>：光從正上方照下，眼睛約從 45° 看，這是常見的「0°／45°」觀察條件。</li>
+    <li><b>先主後次</b>：先在主光源判斷，再換次光源檢查有沒有同色異譜，最後可以看 UV。</li>
+    <li><b>記錄</b>：用灰卡評級，寫下光源、級數、判定人。</li>
+  </ol>
+  <div class="box warn"><b>燈管也會老</b>燈管用久了光色會偏移。標準光源燈管通常用約 2,000 小時就要換，燈箱多有計時器，要建立<strong>燈管使用時數紀錄</strong>。</div>
+  <div class="box tip"><b>對色人員要求</b>① 通過色覺檢查，常用<strong>石原氏色盲檢查表</strong>（1917 年日本眼科醫生石原忍發明）篩檢，專業對色員還會做 FM-100 色相排列測驗。② 不戴有色眼鏡或變色鏡片。③ 不穿鮮豔衣服站在燈箱前（會反光干擾）。④ 連續看顏色一段時間要休息，眼睛會疲勞。</div>
+
+  <h3>灰卡：色差要量化</h3>
+  <p>光說「有一點不一樣」沒辦法溝通，所以用<strong>灰色樣卡</strong>評級。灰卡上有一對對深淺不同的灰色，對照樣品差異大約等於哪一對：</p>
+  <div class="lab">
+    <p class="t">灰卡評級示意（變色用）</p>
+    <div id="gsBox" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    <small>5 級＝完全沒差；4–5 級常是大貨色差的合格線；1 級＝差異非常大。實際級距與合格線依客戶規定。</small>
+  </div>
+  <p>評「變色」（衣服本身顏色變了）和評「沾色」（顏色染到別的布上）用的是<strong>兩種不同的灰卡</strong>，分別對應 ISO 105-A02 和 ISO 105-A03。</p>
+  <div class="box origin"><b>ΔE（Delta E）</b>用測色儀器量色差時，結果寫成 ΔE。Δ 是希臘字母，數學上代表「差」；E 來自德文 Empfindung，意思是「感覺」。ΔE 越小越接近，大約 1 以下多數人肉眼分辨不出來。</div>
+
+  <h3>成衣常見的四種色差</h3>
+  <div class="tw"><table>
+    <tr><th>名稱</th><th>意思</th><th>怎麼防</th></tr>
+    <tr><td>缸差</td><td>不同染缸（批次）的布顏色不同。「缸」就是染布的大缸。</td><td>同一件衣服只用同一缸布；按缸號分開裁剪和包裝</td></tr>
+    <tr><td>頭尾差</td><td>同一卷布前段和後段顏色不同</td><td>驗布時比頭尾；裁片按層順序編號</td></tr>
+    <tr><td>左中右差</td><td>同一段布的布邊和中間顏色不同</td><td>驗布時剪布條比；排版時同一件的裁片放近一點</td></tr>
+    <tr><td>件內色差</td><td>同一件衣服不同裁片顏色不同</td><td>裁片打編號、同號配片縫製，不可混片</td></tr>
+  </table></div>
+  <div class="box tip"><b>驗貨桌的照明</b>一般外觀檢驗不在燈箱裡做，而是在驗貨桌上。桌面照度常見要求在 1,000 lux 以上，光線均勻、沒有陰影，最好是色溫接近日光的白光。可以買一台照度計定期量。lux（勒克斯）來自拉丁文，意思就是「光」。</div>
+  <div class="quiz" data-l="L10"></div>
+</article>
+
+<!-- ============ 第11課 ============ -->
+<article class="lesson" id="L11">
+  <header class="lh"><div class="wlabel l4"><small>專業</small><b>11</b></div>
+    <div><h2>品檢實驗室設立作業</h2><p class="goal">學完你會知道：工廠自己的紡織實驗室要怎麼規劃空間、控制環境、買哪些設備、建立哪些流程，以及常見測試的計算方法。</p></div></header>
+
+  <h3>為什麼工廠要有自己的實驗室？</h3>
+  <ul>
+    <li><b>快</b>：布一到廠就能測縮水、色牢度，不用等外面實驗室好幾天。</li>
+    <li><b>省</b>：日常預測自己做，只有客戶指定的正式報告才送第三方。</li>
+    <li><b>早發現</b>：裁剪前就知道布會縮 8%，可以先調整紙樣或退布，避免整批做完才出事。</li>
+    <li><b>說得出道理</b>：有數據才能和布廠、客戶談判。</li>
+  </ul>
+
+  <h3>設立步驟</h3>
+  <ol class="steps">
+    <li><b>確定範圍</b>：列出主要客戶要求的測試項目，決定哪些自己做、哪些送外。</li>
+    <li><b>選址與空間規劃</b>：乾區、濕區分開；對色區要能遮光；需要水、排水、穩定電源、通風。</li>
+    <li><b>環境控制</b>：建立恆溫恆濕的調濕區，裝溫濕度計並每天記錄。</li>
+    <li><b>設備採購與校正</b>：分階段採購，每台設備建立履歷卡和校正計畫。</li>
+    <li><b>人員訓練</b>：測試員通過色覺檢查、標準方法訓練與考核，建立授權名單。</li>
+    <li><b>建立文件</b>：作業指導書（SOP）、委託單、原始記錄表、報告格式、設備校正記錄。</li>
+    <li><b>試運行與比對</b>：同一塊布同時送第三方實驗室測，比較結果，差太多就找原因。</li>
+    <li><b>持續管理</b>：內部稽核、能力比對；有需要可申請 ISO/IEC 17025 實驗室認證。</li>
+  </ol>
+
+  <h3>空間配置參考</h3>
+  <svg viewBox="0 0 560 330" style="width:100%;height:auto;display:block;margin:10px 0" aria-label="實驗室平面配置示意">
+    <rect x="10" y="10" width="540" height="310" style="fill:var(--card);stroke:var(--ink);stroke-width:2"/>
+    <rect x="20" y="20" width="150" height="110" style="fill:var(--denim-soft);stroke:var(--denim)"/><text x="95" y="62" text-anchor="middle" class="c-txt2" style="font-weight:700">收樣／記錄區</text><text x="95" y="82" text-anchor="middle" class="c-txt">登記編號、委託單</text><text x="95" y="100" text-anchor="middle" class="c-txt">留樣櫃</text>
+    <rect x="180" y="20" width="180" height="110" style="fill:var(--pass-soft);stroke:var(--pass)"/><text x="270" y="62" text-anchor="middle" class="c-txt2" style="font-weight:700">恆溫恆濕調濕室</text><text x="270" y="82" text-anchor="middle" class="c-txt">20±2°C　65±4%RH</text><text x="270" y="100" text-anchor="middle" class="c-txt">天平、克重、物性測試</text>
+    <rect x="370" y="20" width="170" height="110" style="fill:#3b3f44;stroke:var(--ink)"/><text x="455" y="62" text-anchor="middle" style="fill:#fff;font-size:12px;font-weight:700">對色暗房</text><text x="455" y="82" text-anchor="middle" style="fill:#ddd;font-size:11px">標準光源箱</text><text x="455" y="100" text-anchor="middle" style="fill:#ddd;font-size:11px">無窗、牆面中性灰</text>
+    <rect x="20" y="140" width="250" height="170" style="fill:var(--chalk-soft);stroke:#9A7418"/><text x="145" y="190" text-anchor="middle" class="c-txt2" style="font-weight:700">濕測區</text><text x="145" y="212" text-anchor="middle" class="c-txt">水洗色牢度機、洗衣機、烘乾機</text><text x="145" y="232" text-anchor="middle" class="c-txt">汗漬、pH、水槽與排水</text><text x="145" y="252" text-anchor="middle" class="c-txt">防滑地板、防漏電插座</text>
+    <rect x="280" y="140" width="260" height="170" style="fill:var(--denim-soft);stroke:var(--denim)"/><text x="410" y="190" text-anchor="middle" class="c-txt2" style="font-weight:700">乾式物性區</text><text x="410" y="212" text-anchor="middle" class="c-txt">摩擦色牢度、拉力機、起毛起球</text><text x="410" y="232" text-anchor="middle" class="c-txt">撕裂、鈕扣拉力、耐光機</text><text x="410" y="252" text-anchor="middle" class="c-txt">化學品櫃與 SDS 放置處</text>
+    <line x1="270" y1="140" x2="270" y2="310" style="stroke:var(--thread);stroke-width:3;stroke-dasharray:8 5"/><text x="275" y="300" style="fill:var(--thread);font-size:11px">乾濕分隔</text>
+  </svg>
+
+  <h3>環境控制：為什麼要恆溫恆濕？</h3>
+  <p>纖維像海綿一樣會吸收空氣中的水氣。同一塊棉布，在潮濕的雨季秤起來比乾季重，拉力、尺寸也會改變。為了讓全世界的實驗室結果能互相比較，標準規定了<strong>測試用標準大氣</strong>：</p>
+  <div class="tw"><table>
+    <tr><th>標準</th><th class="c">溫度</th><th class="c">相對濕度</th><th>常見使用</th></tr>
+    <tr><td>ISO 139</td><td class="c">20 ± 2 °C</td><td class="c">65 ± 4 %</td><td>歐洲、亞洲客戶、國際標準方法</td></tr>
+    <tr><td>ASTM D1776</td><td class="c">21 ± 1 °C</td><td class="c">65 ± 2 %</td><td>美系客戶、ASTM 方法</td></tr>
+  </table></div>
+  <p>樣品測試前要先放在標準大氣中「<strong>調濕</strong>」，讓它的含水量穩定。一般至少 4 小時，許多方法要求 24 小時，以重量不再變化為準。柬埔寨、越南這類濕熱地區，恆溫恆濕設備（空調加除濕加濕）是實驗室最重要的投資之一。</p>
+  <div class="box origin"><b>調濕與 RH</b>「調濕」是把樣品的濕度調到標準狀態，英文 conditioning。RH 是 Relative Humidity（相對濕度），指空氣中的水氣佔「最多能容納的水氣」的百分比。</div>
+
+  <h3>設備清單與分階段採購</h3>
+  <div class="tw"><table>
+    <tr><th>設備</th><th>測什麼</th><th>常見參考標準</th><th class="c">階段</th></tr>
+    <tr><td>標準光源箱</td><td>對色、色差、UV 檢查</td><td>客戶指定光源</td><td class="c">一</td></tr>
+    <tr><td>電子天平（0.01 g）＋圓盤取樣器</td><td>克重</td><td>ASTM D3776／ISO 3801</td><td class="c">一</td></tr>
+    <tr><td>洗衣機、烘乾機、標記尺</td><td>縮水率（尺寸穩定性）、洗後外觀</td><td>ISO 6330＋ISO 5077、AATCC 135／150</td><td class="c">一</td></tr>
+    <tr><td>摩擦色牢度儀</td><td>乾、濕摩擦會不會掉色</td><td>ISO 105-X12、AATCC 8</td><td class="c">一</td></tr>
+    <tr><td>水洗色牢度機</td><td>洗滌會不會褪色、染到別的衣服</td><td>ISO 105-C06、AATCC 61</td><td class="c">一</td></tr>
+    <tr><td>變色、沾色灰卡</td><td>色差評級</td><td>ISO 105-A02／A03</td><td class="c">一</td></tr>
+    <tr><td>溫濕度計</td><td>環境記錄</td><td>—</td><td class="c">一</td></tr>
+    <tr><td>鈕扣／四合扣拉力計</td><td>配件牢度（童裝必備）</td><td>客戶規範</td><td class="c">一</td></tr>
+    <tr><td>汗漬試驗儀＋恆溫烘箱</td><td>汗漬色牢度</td><td>ISO 105-E04、AATCC 15</td><td class="c">二</td></tr>
+    <tr><td>起毛起球測試儀</td><td>起球等級</td><td>ISO 12945 系列、ASTM D3512／D4970</td><td class="c">二</td></tr>
+    <tr><td>萬能拉力機</td><td>布料強力、縫線滑脫、縫合強力</td><td>ISO 13934、ISO 13936、ISO 13935</td><td class="c">二</td></tr>
+    <tr><td>pH 計</td><td>布料酸鹼值</td><td>ISO 3071、AATCC 81</td><td class="c">二</td></tr>
+    <tr><td>撕裂強力儀</td><td>撕破強力</td><td>ISO 13937、ASTM D1424</td><td class="c">三</td></tr>
+    <tr><td>氙燈耐光機</td><td>日曬褪色</td><td>ISO 105-B02、AATCC 16</td><td class="c">三</td></tr>
+    <tr><td>分光測色儀</td><td>用 ΔE 客觀量化色差</td><td>—</td><td class="c">三</td></tr>
+  </table></div>
+  <div class="box origin"><b>ISO、ASTM、AATCC</b><strong>ISO</strong> 是國際標準化組織，官方說法它不是英文縮寫，而是取自希臘文 isos（相等），讓各種語言都叫同一個名字。<strong>ASTM</strong> 是美國材料試驗協會，1898 年成立。<strong>AATCC</strong> 是美國紡織化學家和染色家協會，1921 年成立，專門制定色牢度等紡織化學測試方法。</div>
+
+  <h3>測試作業流程</h3>
+  <ol class="steps">
+    <li><b>委託</b>：生產或品管填寫委託單，寫明款號、布號、缸號、測試項目、客戶標準。</li>
+    <li><b>收樣登記</b>：給每個樣品一個唯一的實驗室編號，拍照、記錄收樣時間。</li>
+    <li><b>調濕</b>：放入標準大氣中足夠時間。</li>
+    <li><b>測試</b>：依 SOP 操作，<strong>原始數據當場用筆或系統記錄</strong>，不可事後憑記憶填。</li>
+    <li><b>計算與判定</b>：對照客戶標準判定合格或不合格。</li>
+    <li><b>審核</b>：由另一位合格人員覆核數據和計算。</li>
+    <li><b>報告與留樣</b>：發出報告，樣品保留一段時間（例如 3–6 個月），以備客戶質疑時重測。</li>
+  </ol>
+
+  <h3>兩個最常用的計算</h3>
+  <div class="lab">
+    <p class="t">縮水率計算機</p>
+    <p style="font-size:.92rem;margin-top:0">做法：在布上畫出記號（例如 50 cm 的正方形），依標準洗滌、乾燥、調濕後再量。<br>公式：縮水率 ＝（洗後 − 洗前）÷ 洗前 × 100%，負數代表縮、正數代表伸長。</p>
+    <div class="row">
+      <label class="f">直向洗前（cm）<input type="number" id="shL0" value="50" step="0.1"></label>
+      <label class="f">直向洗後（cm）<input type="number" id="shL1" value="48.2" step="0.1"></label>
+      <label class="f">橫向洗前（cm）<input type="number" id="shW0" value="50" step="0.1"></label>
+      <label class="f">橫向洗後（cm）<input type="number" id="shW1" value="49.3" step="0.1"></label>
+      <label class="f">允許範圍 ±%<input type="number" id="shLim" value="3" step="0.5"></label>
+    </div>
+    <div id="shOut" class="out"></div>
+  </div>
+  <div class="lab">
+    <p class="t">克重計算機</p>
+    <p style="font-size:.92rem;margin-top:0">做法：用圓盤取樣器切下面積 100 cm² 的圓片（調濕後），放上天平秤重。因為 1 平方公尺 = 10,000 cm²，所以克重 ＝ 重量 × 100。通常取 3–5 片平均，而且不要取在布邊附近。</p>
+    <div class="row">
+      <label class="f">圓片 1（g）<input type="number" id="gs1" value="1.82" step="0.01"></label>
+      <label class="f">圓片 2（g）<input type="number" id="gs2" value="1.79" step="0.01"></label>
+      <label class="f">圓片 3（g）<input type="number" id="gs3" value="1.85" step="0.01"></label>
+      <label class="f">要求（GSM）<input type="number" id="gsReq" value="180"></label>
+      <label class="f">允差 ±%<input type="number" id="gsTol" value="5"></label>
+    </div>
+    <div id="gsOut" class="out"></div>
+  </div>
+
+  <h3>校正：讓儀器說真話</h3>
+  <p>秤不準、尺拉長、拉力機偏差，量出來的數字都沒有意義。<strong>校正</strong>（calibration）就是拿儀器和「已知準確的標準」比對，確認誤差在允許範圍內。</p>
+  <ul>
+    <li><b>外部校正</b>：天平、拉力機、溫濕度計等，送有資格的校正機構，通常每年一次，取得校正證書。</li>
+    <li><b>內部查核</b>：每天或每次使用前自己用標準砝碼、標準尺做快速檢查並記錄。</li>
+    <li><b>校正標籤</b>：每台設備貼上「校正日期、下次到期日」。過期的設備不能用。</li>
+  </ul>
+
+  <h3>設立檢核表</h3>
+  <div class="lab">
+    <p class="t">實驗室開張前自我檢查</p>
+    <div id="labChk"></div>
+    <div id="labChkOut" class="out"></div>
+  </div>
+  <div class="box warn"><b>安全第一</b>色牢度、pH 測試會用到化學品。每種化學品要有 SDS（安全資料表），放在上鎖的化學品櫃，貼好標示；操作時戴手套和護目鏡；濕區插座要有漏電斷路器。</div>
+  <div class="quiz" data-l="L11"></div>
+</article>
+
+<!-- ============ 第12課 ============ -->
+<article class="lesson" id="L12">
+  <header class="lh"><div class="wlabel l4"><small>專業</small><b>12</b></div>
+    <div><h2>專業品質系統與持續改善</h2><p class="goal">學完你會知道：PDCA、5 個為什麼、8D 報告、防呆、品質指標（DHU、FPY）、製程能力 Cp／Cpk，以及品質成本和職涯發展。</p></div></header>
+
+  <h3>PDCA：改善的輪子</h3>
+  <svg viewBox="0 0 300 300" style="width:100%;max-width:320px;height:auto;display:block;margin:10px auto" aria-label="PDCA循環">
+    <g style="stroke:var(--card);stroke-width:4">
+      <path d="M150 150 L150 20 A130 130 0 0 1 280 150 Z" style="fill:var(--denim)"/>
+      <path d="M150 150 L280 150 A130 130 0 0 1 150 280 Z" style="fill:var(--denim2)"/>
+      <path d="M150 150 L150 280 A130 130 0 0 1 20 150 Z" style="fill:#9A7418"/>
+      <path d="M150 150 L20 150 A130 130 0 0 1 150 20 Z" style="fill:#9B302A"/>
+    </g>
+    <g style="fill:#fff;font-weight:700;font-size:15px" text-anchor="middle">
+      <text x="205" y="90">P 計畫</text><text x="205" y="220">D 執行</text><text x="95" y="220">C 檢查</text><text x="95" y="90">A 行動</text>
+    </g>
+  </svg>
+  <ul>
+    <li><b>P（Plan）計畫</b>：找出問題、分析原因、定目標和對策。</li>
+    <li><b>D（Do）執行</b>：照計畫試做，最好先小範圍試。</li>
+    <li><b>C（Check）檢查</b>：用數據確認有沒有效。</li>
+    <li><b>A（Act）行動</b>：有效就標準化（改 SOP、訓練大家）；沒效就回到 P 重來。</li>
+  </ul>
+  <div class="box origin"><b>PDCA</b>最早由休哈特提出觀念，戴明在日本推廣，所以日本人叫它「戴明循環」。輪子每轉一圈，品質就往上爬一階，不斷循環就是「持續改善」。</div>
+
+  <h3>5 個為什麼：追到根</h3>
+  <p>遇到問題連續問「為什麼」，通常問到第五次左右就會找到<strong>根本原因</strong>，而不是停在表面。</p>
+  <div class="box eg"><b>範例：客戶投訴 T 恤洗後領口變形</b>
+  為什麼 1：領口羅紋洗後鬆掉了。<br>
+  為什麼 2：羅紋的彈性纖維斷了。<br>
+  為什麼 3：車縫時羅紋被拉得太長，纖維受損。<br>
+  為什麼 4：車工為了趕進度，用手用力拉羅紋來對齊。<br>
+  為什麼 5：<strong>這台拷克車沒有裝羅紋拉筒（導具），也沒有標準的拉伸比例。</strong><br>
+  對策：裝拉筒導具、訂出羅紋與領圍的比例、把它寫進作業指導書。只罵車工，問題下個月還會回來。</div>
+  <div class="box origin"><b>5 Why</b>源自豐田汽車創辦人家族的豐田佐吉，後來由豐田生產方式之父大野耐一推廣。重點不是剛好問五次，而是「不停在表面原因」。</div>
+
+  <h3>8D 報告：處理客訴的標準格式</h3>
+  <p>客戶投訴時，常要求工廠交一份 8D 報告，用八個步驟證明你真的解決問題了：</p>
+  <ol class="steps">
+    <li><b>D1 組成團隊</b>：品管、生產、技術、相關主管。</li>
+    <li><b>D2 描述問題</b>：用數據說清楚，什麼款、多少件、什麼瑕疵、在哪裡發現。</li>
+    <li><b>D3 臨時對策</b>：先止血，例如庫存全檢、在途貨攔截。</li>
+    <li><b>D4 根本原因</b>：用魚骨圖、5 Why 找出為什麼發生、為什麼沒被檢出。</li>
+    <li><b>D5 永久對策</b>：針對根本原因選擇對策。</li>
+    <li><b>D6 執行與驗證</b>：實施並用數據證明有效。</li>
+    <li><b>D7 預防再發</b>：改 SOP、改檢驗標準、橫向展開到其他款和產線。</li>
+    <li><b>D8 團隊肯定</b>：結案、表揚團隊。</li>
+  </ol>
+  <div class="box origin"><b>8D</b>8 Disciplines（八項紀律），美國福特汽車在 1980 年代後期推廣的問題解決方法，後來被各行各業採用。</div>
+
+  <h3>防呆：讓錯誤根本發生不了</h3>
+  <p>人一定會犯錯，所以與其要求「大家要小心」，不如設計成<strong>不可能做錯</strong>，或<strong>做錯馬上會被發現</strong>。</p>
+  <ul>
+    <li><b>車縫導具（拉筒、靠山、捲邊器）</b>：縫份和寬度固定，不靠手感。</li>
+    <li><b>顏色管理</b>：不同尺碼的裁片用不同顏色的束帶或籃子，避免混碼。</li>
+    <li><b>驗針機</b>：人眼找不到的斷針，機器會叫。</li>
+    <li><b>吊牌掃描核對</b>：包裝時掃條碼，尺碼和箱單不符就提示。</li>
+    <li><b>標籤一次只發一個版本</b>：舊版標籤回收銷毀，杜絕用錯。</li>
+  </ul>
+  <div class="box origin"><b>防呆（Poka-yoke）</b>日本工業工程專家新鄉重夫在 1960 年代提出。原本叫 baka-yoke（防笨蛋），因為有工人覺得被冒犯，改成 poka-yoke（防止不小心的失誤）。中文「防呆」保留了原本的味道。</div>
+
+  <h3>品質指標：用數字看品質</h3>
+  <div class="tw"><table>
+    <tr><th>指標</th><th>公式</th><th>意思</th></tr>
+    <tr><td>DHU</td><td>瑕疵總數 ÷ 檢驗件數 × 100</td><td>每百件有幾個瑕疵（Defects per Hundred Units），成衣業最常用</td></tr>
+    <tr><td>不良率</td><td>不良件數 ÷ 檢驗件數 × 100%</td><td>多少比例的衣服有問題</td></tr>
+    <tr><td>FPY／RFT</td><td>一次就合格的件數 ÷ 總件數 × 100%</td><td>一次做對率（First Pass Yield／Right First Time），越高代表越少返工</td></tr>
+    <tr><td>驗貨一次通過率</td><td>一次通過的驗貨批數 ÷ 總驗貨批數</td><td>客戶最在意的工廠成績單</td></tr>
+  </table></div>
+  <div class="lab">
+    <p class="t">DHU 與 FPY 計算機</p>
+    <div class="row">
+      <label class="f">檢驗件數<input type="number" id="dhN" value="800"></label>
+      <label class="f">發現瑕疵個數<input type="number" id="dhD" value="46"></label>
+      <label class="f">不良件數<input type="number" id="dhU" value="38"></label>
+    </div>
+    <div id="dhOut" class="out"></div>
+  </div>
+
+  <h3>製程能力：Cp 與 Cpk</h3>
+  <p>管制圖告訴你製程「穩不穩」，<strong>製程能力</strong>告訴你製程「好不好」，也就是穩定的製程能不能把產品做在規格內。用射箭比喻：</p>
+  <ul>
+    <li><b>Cp</b>：箭有多<strong>集中</strong>（不管有沒有射在靶心）。Cp ＝ 規格寬度 ÷（6 × 標準差）。</li>
+    <li><b>Cpk</b>：考慮有沒有<strong>偏離靶心</strong>後的真實能力。Cpk ＝ 平均值到較近規格線的距離 ÷（3 × 標準差）。</li>
+    <li>一般 Cpk ≥ 1.33 代表製程能力良好；1.00–1.33 尚可，要注意；&lt; 1.00 代表一定會做出不良品。</li>
+  </ul>
+  <div class="lab">
+    <p class="t">Cp／Cpk 計算機</p>
+    <div class="row">
+      <label class="f">規格下限 LSL<input type="number" id="cpL" value="51" step="0.1"></label>
+      <label class="f">規格上限 USL<input type="number" id="cpU" value="53" step="0.1"></label>
+      <label class="f">製程平均<input type="number" id="cpM" value="52.3" step="0.05"></label>
+      <label class="f">標準差<input type="number" id="cpS" value="0.2" step="0.01"></label>
+    </div>
+    <svg id="cpSvg" viewBox="0 0 520 170" style="width:100%;height:auto"></svg>
+    <div id="cpOut" class="out"></div>
+  </div>
+
+  <h3>品質成本：把品質換算成錢</h3>
+  <div class="tw"><table>
+    <tr><th>類別</th><th>意思</th><th>成衣例子</th></tr>
+    <tr><td>預防成本</td><td>為了不發生問題而花的錢</td><td>員工訓練、導具、產前會議、機器保養</td></tr>
+    <tr><td>鑑定成本</td><td>檢查、測試花的錢</td><td>驗布、實驗室、QC 人力、第三方驗貨費</td></tr>
+    <tr><td>內部失敗成本</td><td>出廠前發現問題的損失</td><td>返工、報廢、加班、延誤</td></tr>
+    <tr><td>外部失敗成本</td><td>出廠後才發現的損失</td><td>退貨、索賠、空運費、失去訂單</td></tr>
+  </table></div>
+  <p>聰明的工廠把錢花在前兩項，讓後兩項變小。這就是第 1 課 1–10–100 法則的管理版本。</p>
+
+  <h3>品管人的成長路線</h3>
+  <ol class="steps">
+    <li><b>檢驗員（QC Inspector）</b>：學會看瑕疵、量尺寸、填記錄。本課程第 1–6 課。</li>
+    <li><b>巡檢／驗貨員</b>：會做首件、巡檢、AQL 驗貨、看光源。第 7–8、10 課。</li>
+    <li><b>QC 組長</b>：會用七大手法分析數據、帶小組改善。第 9 課。</li>
+    <li><b>QA 工程師／實驗室主管</b>：訂標準、管實驗室、寫 8D、面對客戶稽核。第 11–12 課。</li>
+    <li><b>品質經理</b>：規劃整個品質系統、品質成本、供應商管理，和客戶談品質協議。</li>
+  </ol>
+  <div class="box tip"><b>最後一句話</b>品管不是「抓錯的人」，而是「幫大家一次做對的人」。當你開始問「為什麼會做錯」而不是「是誰做錯」，你就從 QC 走向真正的品質專業了。</div>
+  <div class="quiz" data-l="L12"></div>
+</article>
+
+<!-- ============ 辭典 ============ -->
+<section class="lesson" id="GL">
+  <h2>附錄 A　名詞小辭典</h2>
+  <p>輸入關鍵字快速查詢，每個名詞都附上意思與由來。</p>
+  <input type="text" id="glQ" placeholder="例如：AQL、色溫、縫份" style="width:100%;max-width:360px" aria-label="搜尋名詞">
+  <dl class="gl-list" id="glList"></dl>
+</section>
+
+<!-- ============ 結業測驗 ============ -->
+<section class="lesson" id="EXAM">
+  <h2>附錄 B　結業測驗</h2>
+  <p>從全部 12 課隨機抽 10 題。答對 8 題以上，恭喜你具備成衣品管的完整基礎觀念。</p>
+  <button class="btn" id="exStart">開始測驗</button>
+  <div id="exBox"></div>
+</section>
+
+<footer>
+  <p>成衣品管學堂｜教學用教材。文中標準數值（公差、合格分數、AQL、測試條件）為業界常見做法，實際作業請以客戶品質手冊與最新版標準為準。</p>
+</footer>
+
+</div>
+</main>
+</div>
+
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const fx=(v,d=1)=>Number(v).toFixed(d);
+const num=id=>parseFloat($(id).value)||0;
+const root=document.documentElement;
+
+/* 圖表在手機上可橫向捲動 */
+['#flowSvg','#stratSvg','#paretoSvg','#histSvg','#scSvg','#ccSvg','#cpSvg'].forEach(id=>{const s=$(id);const w=document.createElement('div');w.className='chartwrap';s.parentNode.insertBefore(w,s);w.appendChild(s)});
+/* 深淺色 */
+const th=store.get('gqc-theme',null); if(th) root.dataset.theme=th;
+$('#themeBtn').addEventListener('click',()=>{
+  const cur=root.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  const nx=cur==='dark'?'light':'dark'; root.dataset.theme=nx; store.set('gqc-theme',nx);
+});
+
+/* 目錄 */
+const toc=$('#toc'), mb=$('#menuBtn');
+mb.addEventListener('click',()=>{const o=toc.classList.toggle('open');mb.setAttribute('aria-expanded',o)});
+$$('#toc a').forEach(a=>a.addEventListener('click',()=>{toc.classList.remove('open');mb.setAttribute('aria-expanded',false)}));
+if('IntersectionObserver' in window){
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){const id=e.target.id;$$('#toc a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+id))}})},{rootMargin:'-40% 0px -55% 0px'});
+  $$('.lesson,.hero').forEach(s=>io.observe(s));
+}
+
+/* 進度 */
+let done=new Set(store.get('gqc-done',[]));
+function renderProg(){
+  $$('#toc a[data-l]').forEach(a=>a.classList.toggle('done',done.has(a.dataset.l)));
+  $('#progBar').style.width=(done.size/12*100)+'%'; $('#progTxt').textContent=done.size+'/12';
+  $$('.donebtn').forEach(b=>{const on=done.has(b.dataset.l);b.textContent=on?'✓ 已完成（再按一次取消）':'標記本課完成';b.classList.toggle('ghost',on)});
+}
+
+/* 測驗題庫 */
+const Q={
+L1:[{q:'QC 和 QA 最大的差別是什麼？',o:['QC 預防問題，QA 找出問題','QC 找出問題，QA 預防問題','兩者完全一樣','QA 只負責出貨'],a:1,e:'QC 像老師改考卷挑錯，QA 像把課教好讓學生一開始就會。'},
+ {q:'「1–10–100 法則」想告訴我們什麼？',o:['問題越晚發現，處理成本越高','每 100 件要抽 10 件','品管員一天要檢 100 件','不良率不能超過 10%'],a:0,e:'源頭預防最便宜，到客人手上才發現最貴。'},
+ {q:'世界上第一張管制圖是誰畫的？',o:['戴明','休哈特','石川馨','朱蘭'],a:1,e:'1924 年休哈特在貝爾實驗室畫出第一張管制圖。'}],
+L2:[{q:'地圖上的「經線、緯線」名稱，其實是從哪裡借來的？',o:['航海','織布','天文','數學'],a:1,e:'織布機上的直紗叫經、橫紗叫緯。'},
+ {q:'一般 T 恤最常用哪一種布？',o:['梭織布','針織布','不織布','皮革'],a:1,e:'T 恤要有彈性、穿起來舒服，多用針織布。'},
+ {q:'布料標示 180 GSM 是什麼意思？',o:['每平方公尺 180 公克','每公尺 180 針','門幅 180 公分','180 支紗'],a:0,e:'GSM = grams per square meter。'}],
+L3:[{q:'平車鎖式線跡，面線和底線理想的交會點在哪裡？',o:['布料上面','布料下面','兩層布的中間','布邊'],a:2,e:'交會點跑到上面或下面代表張力不平衡。'},
+ {q:'針距太密可能造成什麼問題？',o:['縫線不牢','布被打穿變脆弱、容易起皺','顏色變淡','尺寸變大'],a:1,e:'針孔太多會傷布，薄布還會起皺。太疏才是不牢。'},
+ {q:'線跡編號 504、514 屬於哪一類？',o:['鎖式（平車）','包縫（拷克）','繃縫','手縫'],a:1,e:'500 類是包縫，就是工廠說的拷克。'}],
+L4:[{q:'童裝上的鈕扣輕輕一拉就掉，屬於哪一級瑕疵？',o:['次要','主要','致命','不算瑕疵'],a:2,e:'小孩可能吞下窒息，危及安全就是致命。'},
+ {q:'同樣大小的污點，判定等級時還要看什麼？',o:['所在位置（是否顯眼）','污點顏色好不好看','檢驗員心情','布料價格'],a:0,e:'A 區顯眼處比 C 區不顯眼處嚴重。'},
+ {q:'布背面出現一圈圈鬆鬆的線（浮線），主要原因是？',o:['面線和底線張力不平衡','布太厚','燈光太暗','尺寸太大'],a:0,e:'每次換線換布都要試車調張力。'}],
+L5:[{q:'胸寬規格 52 ± 1 cm，實量 53.4 cm，判定是？',o:['合格','不合格，超出上限 0.4 cm','差 1.4 所以合格','無法判斷'],a:1,e:'合格範圍是 51–53 cm，53.4 超出上限。'},
+ {q:'HPS 指的是什麼？',o:['高肩點','下擺','腋下點','袖口'],a:0,e:'High Point Shoulder，量衣長的起點。'},
+ {q:'量針織衣服時，哪一個做法是錯的？',o:['平放在桌面','輕輕撫平皺褶','用力拉直讓它比較平','依照客戶的量法說明'],a:2,e:'針織布一拉就變長，量出來會不準。'}],
+L6:[{q:'四分制中，一個 5 英吋長的瑕疵扣幾分？',o:['1 分','2 分','3 分','4 分'],a:1,e:'超過 3 到 6 英吋扣 2 分。'},
+ {q:'布上的破洞，不論大小扣幾分？',o:['1 分','2 分','3 分','4 分'],a:3,e:'破洞、開口一律扣 4 分。'},
+ {q:'四分制公式裡的 36 是怎麼來的？',o:['1 碼 = 36 英吋','36 個瑕疵','合格線是 36 分','要驗 36 卷'],a:0,e:'把碼 × 英吋換算成平方碼要用 36。'}],
+L7:[{q:'驗布、驗鈕扣拉鍊屬於哪一個關卡？',o:['IQC','IPQC','FQC','OQC'],a:0,e:'I = Incoming，進料檢驗。'},
+ {q:'斷針碎片找不齊時，應該怎麼做？',o:['找不到就算了','隔離附近半成品搜查，必要時整批過驗針機','把那台機器丟掉','請車工賠錢'],a:1,e:'斷針管制零容忍，而且全程要有記錄。'},
+ {q:'首件檢驗的主要目的是？',o:['確認第一件完全正確才大量生產','送給客人當禮物','測試機器速度','計算工資'],a:0,e:'首件能擋下「整批做錯」的災難。'}],
+L8:[{q:'批量 3,000 件、一般檢驗水準 II，要抽幾件？',o:['80 件','125 件','200 件','315 件'],a:1,e:'1,201–3,200 件是代字 K，抽 125 件。'},
+ {q:'主要瑕疵 Ac = 7、Re = 8，結果找到 8 個主要瑕疵，判定？',o:['允收','拒收','再抽一次','看心情'],a:1,e:'大於或等於 Re 就拒收。'},
+ {q:'成衣業常見「致命瑕疵」的 AQL 設定是？',o:['0，一個都不行','1.0','2.5','4.0'],a:0,e:'危及安全或違法的問題不能容許。'}],
+L9:[{q:'想找出「最重要的少數問題」，該用哪個工具？',o:['柏拉圖','散佈圖','管制圖','查檢表'],a:0,e:'柏拉圖由多到少排列，抓前幾項約 80% 的問題。'},
+ {q:'人、機、料、法、環、測（5M1E）通常用在哪個工具？',o:['魚骨圖','直方圖','柏拉圖','散佈圖'],a:0,e:'魚骨圖的六根大骨。'},
+ {q:'管制圖上有一點跑出管制界限，代表什麼？',o:['只是正常波動','可能出現特殊原因，要立刻查','產品一定是不良品','圖畫錯了'],a:1,e:'超出界限是異常訊號，要找出特殊原因。'}],
+L10:[{q:'D65 裡的「65」代表什麼？',o:['色溫約 6500 K','觀看角度 65°','濕度 65%','第 65 號燈管'],a:0,e:'D = Daylight 日光，65 = 6500 K。'},
+ {q:'什麼是同色異譜？',o:['兩塊布在一種光下相同，換光源就不同','同一塊布有很多顏色','顏色越洗越淡','布料有兩面'],a:0,e:'因為染料配方不同，反射光譜不同。'},
+ {q:'灰卡評級 5 級代表什麼？',o:['差異最大','完全沒有差異','不合格','要重新染色'],a:1,e:'5 級最好，1 級差異最大。'}],
+L11:[{q:'ISO 139 規定的紡織測試標準大氣是？',o:['20 ± 2 °C，65 ± 4 %RH','25 °C，50 %RH','30 °C，80 %RH','室溫即可'],a:0,e:'纖維會吸濕，一定要在標準大氣中調濕和測試。'},
+ {q:'100 cm² 圓片重 1.8 g，這塊布的克重是？',o:['18 GSM','180 GSM','1,800 GSM','1.8 GSM'],a:1,e:'重量 × 100 = 每平方公尺的克數。'},
+ {q:'直向洗前 50 cm、洗後 48.5 cm，縮水率是？',o:['−3%','−1.5%','+3%','−15%'],a:0,e:'(48.5 − 50) ÷ 50 × 100% = −3%。'}],
+L12:[{q:'PDCA 中的 C 是什麼？',o:['Check 檢查','Cut 裁剪','Color 顏色','Cost 成本'],a:0,e:'Plan、Do、Check、Act。'},
+ {q:'DHU 的意思是？',o:['每百件的瑕疵數','每小時產量','不良件數','每日工時'],a:0,e:'Defects per Hundred Units。'},
+ {q:'Cpk = 0.8 代表什麼？',o:['製程能力良好','製程一定會做出不良品，需要改善','完美無缺','跟規格沒關係'],a:1,e:'Cpk < 1 代表分佈已經超出規格線。'}]
+};
+
+function renderQs(box,arr,cb){
+  arr.forEach((it,i)=>{
+    const d=document.createElement('div');d.className='qi';
+    d.innerHTML='<p>'+(i+1)+'. '+it.q+'</p>';
+    it.o.forEach((t,j)=>{const b=document.createElement('button');b.type='button';b.textContent=t;
+      b.addEventListener('click',()=>{if(d.classList.contains('answered'))return;d.classList.add('answered');
+        const bs=d.querySelectorAll('button');bs[it.a].classList.add('right');if(j!==it.a)b.classList.add('wrong');cb&&cb(j===it.a)});
+      d.appendChild(b)});
+    const ex=document.createElement('div');ex.className='ex';ex.textContent='解析：'+it.e;d.appendChild(ex);
+    box.appendChild(d);
+  });
+}
+$$('.quiz[data-l]').forEach(box=>{
+  const l=box.dataset.l;box.innerHTML='<h4>課後小測驗</h4>';
+  let right=0,cnt=0;const sc=document.createElement('div');
+  renderQs(box,Q[l],ok=>{cnt++;if(ok)right++;if(cnt===Q[l].length)sc.innerHTML='<p>答對 <b>'+right+' / '+cnt+'</b> 題。'+(right===cnt?'全對，太棒了！':'看一下解析再讀一次重點。')+'</p>'});
+  box.appendChild(sc);
+  const bar=document.createElement('div');bar.className='donebar';
+  const b=document.createElement('button');b.className='btn sm donebtn';b.dataset.l=l;
+  b.addEventListener('click',()=>{done.has(l)?done.delete(l):done.add(l);store.set('gqc-done',[...done]);renderProg()});
+  bar.appendChild(b);box.appendChild(bar);
+});
+renderProg();
+
+/* 第2課 生產流程 */
+const FLOW=[
+ ['📦','布料進廠','布料和輔料（線、鈕扣、拉鍊、標籤）送到工廠倉庫。','IQC：用四分制驗布、對色、剪布樣送實驗室測縮水和色牢度；輔料核對規格與數量。'],
+ ['🌬️','鬆布','把捲得很緊的布攤開放置一段時間（針織布常放 24 小時），讓布恢復自然狀態。','沒鬆布就裁，縫好後布會回縮，尺寸就變小。'],
+ ['📐','排版與拉布','把紙樣排在布上（排版圖），再把布一層層鋪在裁床上。','檢查拉布張力不能拉太緊、布面對齊、不同缸號的布要分開。'],
+ ['✂️','裁剪','用電剪或自動裁床把布切成一片片裁片。','抽查裁片和紙樣是否一致、剪口位置正確、上下層沒有偏移。'],
+ ['🏷️','編號與配片','每一片裁片貼上編號，同一件衣服的裁片來自同一層布。','防止「件內色差」：同一件衣服混到不同層、不同缸的裁片。'],
+ ['🧵','縫製','裁片送上產線，由幾十位車工分工縫成衣服。','首件檢驗、巡檢紅綠燈、斷針管制都在這一站。'],
+ ['🔍','尾查與修線','衣服下線後 100% 檢查，剪掉線頭，挑出不良品退回修。','記錄每種瑕疵數量，這就是 QC 七大手法的數據來源。'],
+ ['♨️','整燙','用蒸汽熨斗或整燙機把衣服燙平、定型。','溫度太高會燙黃、燙亮、使布收縮；燙完要讓衣服冷卻再量尺寸。'],
+ ['🎁','包裝','掛吊牌、摺衣、裝膠袋、依配比裝箱、貼箱嘜。','核對吊牌價格條碼、尺碼、膠袋警語、裝箱配比、紙箱尺寸與毛重。'],
+ ['🚚','驗針與出貨','每件過驗針機後，客戶或第三方做終期驗貨，合格才出貨。','OQC：AQL 抽樣驗貨、摔箱測試、驗針機校驗記錄。']];
+let fi=0;
+function drawFlow(){
+  const s=$('#flowSvg');let h='<line x1="35" y1="55" x2="665" y2="55" class="c-grid" style="stroke-width:4"/>';
+  FLOW.forEach((f,i)=>{const x=35+i*70;const on=i===fi,past=i<fi;
+    h+='<circle cx="'+x+'" cy="55" r="'+(on?26:18)+'" style="fill:'+(on?'var(--chalk)':past?'var(--denim2)':'var(--card)')+';stroke:var(--denim);stroke-width:2;transition:all .3s"/>';
+    h+='<text x="'+x+'" y="'+(on?64:61)+'" text-anchor="middle" style="font-size:'+(on?24:16)+'px">'+f[0]+'</text>';
+    h+='<text x="'+x+'" y="102" text-anchor="middle" class="c-txt" style="'+(on?'font-weight:700;fill:var(--ink)':'')+'">'+(i+1)+'</text>';});
+  s.innerHTML=h;
+  const f=FLOW[fi];$('#flowCard').innerHTML='<b style="font-size:1.1rem">'+f[0]+' 第 '+(fi+1)+' 站：'+f[1]+'</b><br>'+f[2]+'<br><span style="color:var(--thread);font-weight:700">品管重點：</span>'+f[3];
+  $('#flowIdx').textContent=(fi+1)+' / '+FLOW.length;$('#flowPrev').disabled=fi===0;$('#flowNext').disabled=fi===FLOW.length-1;
+}
+$('#flowPrev').onclick=()=>{if(fi>0){fi--;drawFlow()}};$('#flowNext').onclick=()=>{if(fi<FLOW.length-1){fi++;drawFlow()}};drawFlow();
+
+/* 第2課 布料結構 */
+function drawWeave(t){
+  const s=$('#weaveSvg');let h='';
+  if(t==='woven'){
+    const n=7,w=34,g=8,ox=20,oy=10;
+    for(let c=0;c<n;c++)h+='<rect x="'+(ox+c*(w+g))+'" y="'+oy+'" width="'+w+'" height="160" style="fill:var(--denim2)"/>';
+    for(let r=0;r<4;r++)h+='<rect x="'+ox+'" y="'+(oy+8+r*40)+'" width="'+(n*(w+g)-g)+'" height="24" style="fill:var(--chalk)"/>';
+    for(let r=0;r<4;r++)for(let c=0;c<n;c++)if((r+c)%2===0)h+='<rect x="'+(ox+c*(w+g))+'" y="'+(oy+8+r*40)+'" width="'+w+'" height="24" style="fill:var(--denim2)"/>';
+    h+='<text x="150" y="178" text-anchor="middle" class="c-txt">藍＝經紗（直）　黃＝緯紗（橫）</text>';
+    $('#weaveTxt').innerHTML='<b>梭織平紋</b>：經紗和緯紗「一上一下」交錯，像編竹籃。結構穩定、不太會伸縮，但斜向拉會變形。';
+  }else{
+    const cols=7,rows=4,w=38;
+    for(let r=0;r<rows;r++){const col=r%2?'var(--chalk)':'var(--denim2)';
+      for(let c=0;c<cols;c++){const x=18+c*w,y=18+r*36;
+        h+='<path d="M'+x+' '+y+' C'+(x+4)+' '+(y+34)+', '+(x+w/2-4)+' '+(y+40)+', '+(x+w/2)+' '+(y+26)+' C'+(x+w/2+4)+' '+(y+40)+', '+(x+w-4)+' '+(y+34)+', '+(x+w)+' '+y+'" style="fill:none;stroke:'+col+';stroke-width:6;stroke-linecap:round"/>';}}
+    h+='<text x="150" y="178" text-anchor="middle" class="c-txt">每一排線圈套住上一排</text>';
+    $('#weaveTxt').innerHTML='<b>針織緯編</b>：一根紗線繞成一排排「線圈」，互相套住，像打毛線。所以很有彈性，但一個線圈斷了會一路往下「跑線」，破洞會越來越大。';
+  }
+  s.innerHTML=h;
+}
+$$('#weaveChips .chip').forEach(b=>b.onclick=()=>{$$('#weaveChips .chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');drawWeave(b.dataset.w)});drawWeave('woven');
+
+/* 第3課 針距 */
+function drawSpi(){
+  const v=+$('#spi').value;let h='<rect x="10" y="22" width="320" height="22" style="fill:var(--denim-soft)"/>';
+  const L=300/v;for(let i=0;i<v;i++){const x=20+i*L;h+='<line x1="'+(x+1.5)+'" y1="33" x2="'+(x+L-1.5)+'" y2="33" style="stroke:var(--thread);stroke-width:3;stroke-linecap:round"/>'}
+  h+='<line x1="20" y1="52" x2="320" y2="52" class="c-ax"/><line x1="20" y1="48" x2="20" y2="56" class="c-ax"/><line x1="320" y1="48" x2="320" y2="56" class="c-ax"/><text x="170" y="66" text-anchor="middle" class="c-txt">1 英吋（2.54 cm）</text>';
+  $('#spiSvg').innerHTML=h;$('#spiTxt').textContent=v+' SPI';
+  const per3=v*3/2.54, mm=25.4/v;let j,cls;
+  if(v<8){j='太疏：縫線容易被拉開，只適合裝飾線或特別厚的布。';cls='fail'}else if(v<10){j='偏疏：用在厚布、牛仔布的明線可能可以，一般縫合要注意強度。';cls=''}else if(v<=14){j='常見範圍：一般服裝縫合多在這個區間。';cls='pass'}else{j='偏密：薄布容易起皺、針孔多會傷布，車縫速度也變慢。';cls='fail'}
+  $('#spiOut').innerHTML='每 3 公分約 <b>'+fx(per3)+'</b> 針，每針長約 <b>'+fx(mm,2)+'</b> mm。<br><span class="'+cls+'">'+j+'</span>';
+}
+$('#spi').oninput=drawSpi;drawSpi();
+
+/* 第4課 分級遊戲 */
+const DG=[['童裝外套上的裝飾鈕扣，輕輕一拉就掉下來。','cr','小零件可能被小孩吞下而窒息，屬於安全問題。'],
+ ['尾查時在衣服裡摸到一截斷針。','cr','可能刺傷穿著者，一律致命。'],
+ ['前胸正中央有一塊 2 公分的油污。','ma','顯眼位置、明顯污漬，消費者不會買。'],
+ ['下擺內側有一根 0.5 公分的短線頭。','mi','不顯眼、不影響使用，剪掉即可。'],
+ ['洗標寫「100% 棉」，但布其實是聚酯纖維。','cr','成分標示錯誤違反法規，屬致命。'],
+ ['左右袖長差了 2 公分，公差是 ± 1 公分。','ma','超出公差，外觀和穿著都受影響。'],
+ ['腋下縫線開了 1 公分。','ma','開縫會越來越大，影響功能。'],
+ ['背後下擺內側有個很淡的小點，一臂距離看不到。','mi','位置不顯眼、正常距離看不到。'],
+ ['整箱衣服打開有霉味，布上有霉斑。','cr','霉菌影響健康，通常列為致命。']];
+let dgi=0,dgs=0,dgn=0,dga=false;const GN={cr:'致命',ma:'主要',mi:'次要'};
+function dgShow(){$('#dgQ').innerHTML='<b>第 '+(dgi+1)+' 題</b>：'+DG[dgi][0];$('#dgFb').textContent='';dga=false}
+$$('#dgBtns button').forEach(b=>b.onclick=()=>{if(dga)return;dga=true;dgn++;const it=DG[dgi];const ok=b.dataset.g===it[1];if(ok)dgs++;
+  $('#dgFb').innerHTML=(ok?'<span class="pass">答對！</span>':'<span class="fail">答案是「'+GN[it[1]]+'」。</span>')+' '+it[2];$('#dgScore').textContent='目前 '+dgs+' / '+dgn});
+$('#dgNext').onclick=()=>{dgi=(dgi+1)%DG.length;dgShow()};dgShow();
+
+/* 第5課 尺寸 */
+const MS=[['A 胸寬',52,1,52.5],['B 衣長',72,1.5,70.2],['C 肩寬',45,1,45.3],['D 袖長',20,.5,20.4],['E 下擺寬',51,1,51.8],['F 領寬',18,.5,18.6],['G 袖口寬',17,.5,16.9]];
+const tb=$('#measTbl tbody');
+MS.forEach((m,i)=>{const tr=document.createElement('tr');tr.innerHTML='<td>'+m[0]+'</td><td class="c">'+m[1]+'</td><td class="c">± '+m[2]+'</td><td class="c"><input type="number" step="0.1" value="'+m[3]+'" data-i="'+i+'" style="width:80px" aria-label="'+m[0]+' 實量"></td><td class="c" id="md'+i+'"></td><td class="c" id="mj'+i+'"></td>';tb.appendChild(tr)});
+function meas(){let bad=[];tb.querySelectorAll('input').forEach(inp=>{const i=+inp.dataset.i,m=MS[i],d=(parseFloat(inp.value)||0)-m[1];
+  $('#md'+i).textContent=(d>0?'+':'')+fx(d);const ok=Math.abs(d)<=m[2]+1e-9;$('#mj'+i).innerHTML=ok?'<span class="pass">合格</span>':'<span class="fail">超差</span>';if(!ok)bad.push(m[0])});
+  $('#measOut').innerHTML=bad.length?'這件有 <b class="fail">'+bad.length+'</b> 個部位超出公差：'+bad.join('、')+'。尺寸超差屬於主要瑕疵，要回報產線並加量同尺碼的其他件。':'<span class="pass">全部部位都在公差內，這件尺寸合格。</span>'}
+tb.addEventListener('input',meas);meas();
+$('#inIn').oninput=()=>{$('#cmIn').value=fx(num('#inIn')*2.54,2)};$('#cmIn').oninput=()=>{$('#inIn').value=fx(num('#cmIn')/2.54,3)};
+
+/* 第6課 四分制 */
+function fourPt(){const p=num('#fp1')+2*num('#fp2')+3*num('#fp3')+4*num('#fp4'),yd=num('#fyd'),w=num('#fwd'),lim=num('#flim');
+  if(yd<=0||w<=0){$('#fOut').textContent='請輸入大於 0 的碼數和門幅。';return}
+  const s=p*3600/(yd*w);$('#fOut').innerHTML='總扣分 <b>'+p+'</b> 分 → 每 100 平方碼 <b>'+fx(s)+'</b> 分（'+p+' × 3600 ÷（'+yd+' × '+w+'））<br>'+(s<=lim?'<span class="pass">✓ 合格（≤ '+lim+'）</span>':'<span class="fail">✗ 不合格（> '+lim+'），這卷布應該退回或與供應商協商</span>')}
+['#fp1','#fp2','#fp3','#fp4','#fyd','#fwd','#flim'].forEach(id=>$(id).oninput=fourPt);fourPt();
+
+/* 第7課 紅綠燈 */
+function tl(){const n=+$('#tlR').value;let h='';for(let i=0;i<7;i++){const x=10+i*44,bad=i<n;
+  h+='<rect x="'+x+'" y="10" width="36" height="44" rx="4" style="fill:'+(bad?'var(--thread-soft)':'var(--denim-soft)')+';stroke:'+(bad?'var(--thread)':'var(--denim)')+';stroke-width:2"/>';
+  h+='<text x="'+(x+18)+'" y="39" text-anchor="middle" style="font-size:16px;font-weight:700;fill:'+(bad?'var(--thread)':'var(--pass)')+'">'+(bad?'✗':'✓')+'</text>'}
+  $('#tlSvg').innerHTML=h;$('#tlN').textContent=n+' 件不良';
+  let c,t;if(n===0){c='#2C8656';t='綠燈：表現良好，照正常頻率巡檢。'}else if(n===1){c='#D9A21B';t='黃燈：提醒車工注意，下一輪優先回來檢查。'}else{c='#C2413A';t='紅燈：立即停下來找原因（人、機、料、法），改善後再追蹤；連續紅燈要回報組長。'}
+  $('#tlOut').innerHTML='<span style="display:inline-block;width:18px;height:18px;border-radius:50%;background:'+c+';vertical-align:-3px;margin-right:6px"></span>'+t}
+$('#tlR').oninput=tl;tl();
+
+/* 第8課 AQL */
+const LOTS=[[8,'AAB'],[15,'ABC'],[25,'BCD'],[50,'CDE'],[90,'CEF'],[150,'DFG'],[280,'EGH'],[500,'FHJ'],[1200,'GJK'],[3200,'HKL'],[10000,'JLM'],[35000,'KMN'],[150000,'LNP'],[500000,'MPQ'],[Infinity,'NQR']];
+const LET='ABCDEFGHJKLMNPQR',NS=[2,3,5,8,13,20,32,50,80,125,200,315,500,800,1250,2000];
+const K0={'0.65':5,'1.0':4,'1.5':3,'2.5':2,'4.0':1,'6.5':0},SEQ=[1,2,3,5,7,10,14,21];
+function col(aql){const k=K0[aql],c=[];for(let i=0;i<16;i++){if(i<k)c.push('d');else if(i===k)c.push(0);else if(i===k+1)c.push('u');else if(i===k+2)c.push('d');else{const j=i-k-3;c.push(j<SEQ.length?SEQ[j]:'u')}}return c}
+function plan(aql,idx){const c=col(aql);let i=idx;while(typeof c[i]!=='number'){i+=c[i]==='d'?1:-1}return{n:NS[i],ac:c[i],re:c[i]+1,letter:LET[i]}}
+function aqlCalc(){const lot=Math.max(2,Math.floor(num('#aqLot'))),lv=+$('#aqLv').value;
+  const row=LOTS.find(r=>lot<=r[0]);const L=row[1][lv],idx=LET.indexOf(L),n0=NS[idx];
+  const found={cr:num('#aqFc'),ma:num('#aqFma'),mi:num('#aqFmi')};
+  const ps={cr:{n:n0,ac:0,re:1,letter:L},ma:plan($('#aqMa').value,idx),mi:plan($('#aqMi').value,idx)};
+  let h='樣本代字 <b>'+L+'</b>，標準抽樣數 <b>'+Math.min(n0,lot)+'</b> 件'+(n0>=lot?'（抽樣數大於批量，改為全數檢驗）':'')+'。<div class="tw" style="margin:8px 0"><table><tr><th>類別</th><th class="c">抽樣數</th><th class="c">Ac</th><th class="c">Re</th><th class="c">找到</th><th class="c">判定</th></tr>';
+  const nm={cr:'致命（AQL 0）',ma:'主要（AQL '+$('#aqMa').value+'）',mi:'次要（AQL '+$('#aqMi').value+'）'};let allOk=true,notes=[];
+  ['cr','ma','mi'].forEach(k=>{const p=ps[k],n=Math.min(p.n,lot),ok=found[k]<=p.ac;if(!ok)allOk=false;if(p.n!==n0&&n0<lot)notes.push(nm[k]+'依表中箭頭改用代字 '+p.letter+'（'+p.n+' 件）');
+    h+='<tr><td>'+nm[k]+'</td><td class="c">'+n+'</td><td class="c">'+p.ac+'</td><td class="c">'+p.re+'</td><td class="c">'+found[k]+'</td><td class="c">'+(ok?'<span class="pass">允收</span>':'<span class="fail">拒收</span>')+'</td></tr>'});
+  h+='</table></div>'+(notes.length?'<small>'+notes.join('；')+'。實務上多數驗貨公司會統一用最大的抽樣數來檢驗。</small><br>':'')+'整批結果：'+(allOk?'<b class="pass">✓ 合格，可以出貨</b>':'<b class="fail">✗ 不合格，需重工（返工）後重新驗貨</b>');
+  $('#aqOut').innerHTML=h}
+['#aqLot','#aqLv','#aqMa','#aqMi','#aqFc','#aqFma','#aqFmi'].forEach(id=>{$(id).addEventListener('input',aqlCalc);$(id).addEventListener('change',aqlCalc)});aqlCalc();
+
+/* 第9課 查檢表、層別、柏拉圖 */
+const DT=['跳針','開縫','起皺','線頭','污漬','尺寸不符','色差'];
+const DEF={A:[6,4,18,9,3,2,1],B:[3,2,4,10,2,1,1]};
+let TY=store.get('gqc-tally',null)||JSON.parse(JSON.stringify(DEF));
+function tallyMarks(n){const full=Math.floor(n/5),r=n%5;return '正'.repeat(full)+['','一','丅','下','止'][r]}
+function renderTally(){const t=$('#tallyTbl');let h='<tr><th>不良項目</th><th class="c">A 線</th><th class="c">B 線</th><th class="c">合計</th></tr>';
+  DT.forEach((d,i)=>{h+='<tr><td>'+d+'</td>';['A','B'].forEach(l=>{h+='<td class="c" style="white-space:nowrap"><button class="chip" data-l="'+l+'" data-i="'+i+'" data-d="-1" aria-label="'+l+'線'+d+'減一">−</button> <b style="display:inline-block;min-width:1.8em">'+TY[l][i]+'</b> <button class="chip" data-l="'+l+'" data-i="'+i+'" data-d="1" aria-label="'+l+'線'+d+'加一">＋</button><br><span style="color:var(--muted);font-size:.8rem;letter-spacing:.05em">'+tallyMarks(TY[l][i])+'</span></td>'});
+    h+='<td class="c"><b>'+(TY.A[i]+TY.B[i])+'</b></td></tr>'});
+  const sa=TY.A.reduce((a,b)=>a+b,0),sb=TY.B.reduce((a,b)=>a+b,0);h+='<tr><th>合計</th><th class="c">'+sa+'</th><th class="c">'+sb+'</th><th class="c">'+(sa+sb)+'</th></tr>';t.innerHTML=h;
+  drawPareto();drawStrat()}
+$('#tallyTbl').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const l=b.dataset.l,i=+b.dataset.i;TY[l][i]=Math.max(0,TY[l][i]+(+b.dataset.d));store.set('gqc-tally',TY);renderTally()});
+$('#tallyReset').onclick=()=>{TY=JSON.parse(JSON.stringify(DEF));store.set('gqc-tally',TY);renderTally()};
+function drawPareto(){const it=DT.map((d,i)=>({d,v:TY.A[i]+TY.B[i]})).sort((a,b)=>b.v-a.v);const tot=it.reduce((a,b)=>a+b.v,0)||1;
+  const X0=50,X1=470,Y0=210,Y1=20,H=Y0-Y1,bw=(X1-X0)/it.length;let h='';
+  [0,25,50,75,100].forEach(p=>{const y=Y0-H*p/100;h+='<line x1="'+X0+'" y1="'+y+'" x2="'+X1+'" y2="'+y+'" class="c-grid"/><text x="'+(X1+6)+'" y="'+(y+4)+'" class="c-txt">'+p+'%</text><text x="'+(X0-6)+'" y="'+(y+4)+'" text-anchor="end" class="c-txt">'+Math.round(tot*p/100)+'</text>'});
+  const y80=Y0-H*.8;h+='<line x1="'+X0+'" y1="'+y80+'" x2="'+X1+'" y2="'+y80+'" class="c-spec"/><text x="'+(X0+4)+'" y="'+(y80-4)+'" class="c-txt" style="fill:var(--thread)">80%</text>';
+  let cum=0,pts=[];it.forEach((o,i)=>{const x=X0+i*bw,bh=H*o.v/tot;h+='<rect x="'+(x+5)+'" y="'+(Y0-bh)+'" width="'+(bw-10)+'" height="'+bh+'" class="'+(i<2?'c-bar':'c-bar2')+'"/><text x="'+(x+bw/2)+'" y="'+(Y0-bh-4)+'" text-anchor="middle" class="c-txt2">'+o.v+'</text><text x="'+(x+bw/2)+'" y="'+(Y0+16)+'" text-anchor="middle" class="c-txt2">'+o.d+'</text>';
+    cum+=o.v;pts.push([x+bw/2,Y0-H*cum/tot])});
+  h+='<polyline points="'+pts.map(p=>p.join(',')).join(' ')+'" class="c-line"/>'+pts.map(p=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="3.5" class="c-pt"/>').join('');
+  h+='<line x1="'+X0+'" y1="'+Y0+'" x2="'+X1+'" y2="'+Y0+'" class="c-ax"/>';$('#paretoSvg').innerHTML=h;
+  let c=0,k=0;for(const o of it){c+=o.v;k++;if(c/tot>=.8)break}
+  $('#paretoOut').innerHTML='前兩項「'+it[0].d+'」和「'+it[1].d+'」就佔了 <b>'+fx((it[0].v+it[1].v)/tot*100,0)+'%</b>；前 '+k+' 項累積達到 80%。先集中火力解決「'+it[0].d+'」，效果最大。'}
+function drawStrat(){const X0=40,X1=510,Y0=180,Y1=20;const mx=Math.max(1,...TY.A,...TY.B);const gw=(X1-X0)/DT.length;let h='';
+  [0,.5,1].forEach(p=>{const y=Y0-(Y0-Y1)*p;h+='<line x1="'+X0+'" y1="'+y+'" x2="'+X1+'" y2="'+y+'" class="c-grid"/><text x="'+(X0-6)+'" y="'+(y+4)+'" text-anchor="end" class="c-txt">'+Math.round(mx*p)+'</text>'});
+  DT.forEach((d,i)=>{const x=X0+i*gw;['A','B'].forEach((l,j)=>{const v=TY[l][i],bh=(Y0-Y1)*v/mx;h+='<rect x="'+(x+6+j*(gw/2-6))+'" y="'+(Y0-bh)+'" width="'+(gw/2-8)+'" height="'+bh+'" class="'+(j?'c-bar2':'c-bar')+'"/>'});h+='<text x="'+(x+gw/2)+'" y="'+(Y0+16)+'" text-anchor="middle" class="c-txt2">'+d+'</text>'});
+  h+='<rect x="'+(X1-120)+'" y="2" width="12" height="12" class="c-bar"/><text x="'+(X1-104)+'" y="12" class="c-txt2">A 線</text><rect x="'+(X1-60)+'" y="2" width="12" height="12" class="c-bar2"/><text x="'+(X1-44)+'" y="12" class="c-txt2">B 線</text>';
+  h+='<line x1="'+X0+'" y1="'+Y0+'" x2="'+X1+'" y2="'+Y0+'" class="c-ax"/>';$('#stratSvg').innerHTML=h;
+  let best=0,bi=0;DT.forEach((d,i)=>{const diff=Math.abs(TY.A[i]-TY.B[i]);if(diff>best){best=diff;bi=i}});const hi=TY.A[bi]>=TY.B[bi]?'A':'B';
+  $('#stratOut').innerHTML='兩條線差最多的是「'+DT[bi]+'」：A 線 '+TY.A[bi]+' 個、B 線 '+TY.B[bi]+' 個，問題集中在 <b>'+hi+' 線</b>。如果不分層，你只會看到「全廠'+DT[bi]+'很多」，卻不知道該先去哪條線找原因。'}
+renderTally();
+
+/* 常態亂數 */
+function rn(m,s){let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return m+s*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+
+/* 直方圖 */
+let hz=[];for(let i=0;i<100;i++)hz.push(rn(0,1));
+function hist(){const mu=num('#hMu'),sd=num('#hSd');$('#hMuT').textContent=fx(mu)+' cm';$('#hSdT').textContent=fx(sd,2)+' cm';
+  const d=hz.map(z=>mu+sd*z);const lo=49.5,hi=54.5,bw=.25,nb=Math.round((hi-lo)/bw);const bins=new Array(nb).fill(0);d.forEach(v=>{const i=Math.floor((v-lo)/bw);if(i>=0&&i<nb)bins[i]++});
+  const X0=30,X1=500,Y0=200,Y1=15,mx=Math.max(5,...bins),sx=v=>X0+(v-lo)/(hi-lo)*(X1-X0);let h='';
+  bins.forEach((b,i)=>{const x=sx(lo+i*bw),w=sx(lo+(i+1)*bw)-x,bh=(Y0-Y1)*b/mx,out=(lo+i*bw<51-1e-9)||(lo+(i+1)*bw>53+1e-9);h+='<rect x="'+(x+1)+'" y="'+(Y0-bh)+'" width="'+(w-2)+'" height="'+bh+'" class="'+(out?'c-bad':'c-bar')+'"/>'});
+  [50,51,52,53,54].forEach(v=>{h+='<text x="'+sx(v)+'" y="'+(Y0+16)+'" text-anchor="middle" class="c-txt">'+v+'</text>'});
+  [[51,'下限 51'],[53,'上限 53']].forEach(s=>{h+='<line x1="'+sx(s[0])+'" y1="'+Y1+'" x2="'+sx(s[0])+'" y2="'+Y0+'" class="c-spec"/><text x="'+sx(s[0])+'" y="'+(Y1+10)+'" text-anchor="middle" class="c-txt" style="fill:var(--thread)">'+s[1]+'</text>'});
+  h+='<line x1="'+sx(52)+'" y1="'+(Y1+14)+'" x2="'+sx(52)+'" y2="'+Y0+'" style="stroke:var(--pass);stroke-width:1.5;stroke-dasharray:3 3"/><line x1="'+X0+'" y1="'+Y0+'" x2="'+X1+'" y2="'+Y0+'" class="c-ax"/><text x="'+X1+'" y="'+(Y0+32)+'" text-anchor="end" class="c-txt">胸寬（cm）</text>';
+  $('#histSvg').innerHTML=h;
+  const out=d.filter(v=>v<51||v>53).length,m=d.reduce((a,b)=>a+b,0)/d.length,s=Math.sqrt(d.reduce((a,b)=>a+(b-m)**2,0)/(d.length-1));
+  let c;if(out===0&&Math.abs(mu-52)<=.2)c='分佈集中在規格中間，製程狀況很好。';else if(Math.abs(mu-52)>.2&&sd<=.35)c='變異不大，但整體<b>偏'+(mu>52?'大':'小')+'</b>了。通常是系統性原因，例如紙樣、縮水率估錯，調整中心就能改善。';else c='分佈太寬，就算平均在中間，兩邊也會超出規格。要找造成變異的原因，例如車工手法不一致、布料批次不同。';
+  $('#histOut').innerHTML='實際平均 <b>'+fx(m,2)+'</b> cm，標準差 <b>'+fx(s,2)+'</b> cm，超出規格 <b class="'+(out?'fail':'pass')+'">'+out+'</b> 件（紅色長條）。<br>'+c}
+$('#hMu').oninput=hist;$('#hSd').oninput=hist;$('#hNew').onclick=()=>{hz=hz.map(()=>rn(0,1));hist()};hist();
+
+/* 散佈圖 */
+const SC=[];(function(){const a=[],b=[],c=[];for(let i=0;i<30;i++){const x=2500+Math.random()*2500;a.push([x,Math.max(0,Math.round(.0035*(x-2500)+rn(0,1.6)))]);
+  const e=Math.random()*36;b.push([e,Math.max(0,Math.round(14-0.3*e+rn(0,1.8)))]);const g=18+Math.random()*32;c.push([g,Math.max(0,Math.round(7+rn(0,2.6)))])}
+  SC.push({d:a,x:'車速（轉／分）',y:'每百件跳針數',t:'正相關'},{d:b,x:'車工經驗（月）',y:'每百件不良數',t:'負相關'},{d:c,x:'車工年齡（歲）',y:'每百件不良數',t:'沒有明顯相關'})})();
+function corr(d){const n=d.length,mx=d.reduce((a,p)=>a+p[0],0)/n,my=d.reduce((a,p)=>a+p[1],0)/n;let sxy=0,sxx=0,syy=0;d.forEach(p=>{sxy+=(p[0]-mx)*(p[1]-my);sxx+=(p[0]-mx)**2;syy+=(p[1]-my)**2});return sxy/Math.sqrt(sxx*syy)}
+function drawSc(k){const S=SC[k],d=S.d,xs=d.map(p=>p[0]),ys=d.map(p=>p[1]);const x0=Math.min(...xs),x1=Math.max(...xs),y1=Math.max(...ys)+1;
+  const X0=50,X1=500,Y0=220,Y1=15,sx=v=>X0+(v-x0)/(x1-x0||1)*(X1-X0),sy=v=>Y0-v/y1*(Y0-Y1);let h='<line x1="'+X0+'" y1="'+Y0+'" x2="'+X1+'" y2="'+Y0+'" class="c-ax"/><line x1="'+X0+'" y1="'+Y1+'" x2="'+X0+'" y2="'+Y0+'" class="c-ax"/>';
+  d.forEach(p=>{h+='<circle cx="'+sx(p[0])+'" cy="'+sy(p[1])+'" r="5" class="c-ok" style="opacity:.75"/>'});
+  h+='<text x="'+X1+'" y="'+(Y0+30)+'" text-anchor="end" class="c-txt2">'+S.x+' →</text><text x="'+(X0+6)+'" y="'+(Y1+4)+'" class="c-txt2">↑ '+S.y+'</text>';
+  [x0,x1].forEach(v=>{h+='<text x="'+sx(v)+'" y="'+(Y0+15)+'" text-anchor="middle" class="c-txt">'+Math.round(v)+'</text>'});
+  $('#scSvg').innerHTML=h;const r=corr(d);
+  const tips=['車速越快，跳針越多。可以考慮在難車的部位降低車速，或檢查高速時的針和旋梭配合。','經驗越久，不良越少。代表新人訓練很重要，可以安排師傅帶新人、新人先做簡單工序。','年齡和不良數看不出關係，所以「年紀大的車工比較容易出錯」這種說法沒有數據支持。'];
+  $('#scOut').innerHTML='相關係數 r = <b>'+fx(r,2)+'</b>（越接近 +1 越正相關，越接近 −1 越負相關，接近 0 表示無關），判讀：<b>'+S.t+'</b>。<br>'+tips[k]}
+$$('#scChips .chip').forEach(b=>b.onclick=()=>{$$('#scChips .chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');drawSc(+b.dataset.s)});drawSc(0);
+
+/* 管制圖 */
+function cc(mode){const G=25,n=5,A2=.577,data=[];for(let g=0;g<G;g++){const s=[];for(let j=0;j<n;j++){let v=rn(52,.3);if(mode==='shift'&&g>=14)v+=.45;s.push(v)}if(mode==='spike'&&g===17)s[2]+=3;data.push(s)}
+  const mean=a=>a.reduce((x,y)=>x+y,0)/a.length;const xb=data.map(mean),R=data.map(s=>Math.max(...s)-Math.min(...s));
+  const base=12,Xbb=mean(xb.slice(0,base)),Rb=mean(R.slice(0,base)),UCL=Xbb+A2*Rb,LCL=Xbb-A2*Rb;
+  const lo=Math.min(LCL-.25,...xb),hi=Math.max(UCL+.25,...xb);const X0=50,X1=510,Y0=225,Y1=15,sx=i=>X0+i*(X1-X0)/(G-1),sy=v=>Y0-(v-lo)/(hi-lo)*(Y0-Y1);
+  const bad=new Set(),why=[];xb.forEach((v,i)=>{if(v>UCL||v<LCL){bad.add(i);why.push('第 '+(i+1)+' 組超出管制界限')}});
+  let run=1;for(let i=1;i<G;i++){const same=(xb[i]-Xbb)*(xb[i-1]-Xbb)>0;run=same?run+1:1;if(run===7){for(let k=i-6;k<=i;k++)bad.add(k);why.push('第 '+(i-5)+'–'+(i+1)+' 組連續 7 點在中心線同一側')}}
+  let inc=0,dec=0;for(let i=1;i<G;i++){inc=xb[i]>xb[i-1]?inc+1:0;dec=xb[i]<xb[i-1]?dec+1:0;if(inc===6||dec===6){for(let k=i-6;k<=i;k++)bad.add(k);why.push('第 '+(i-5)+'–'+(i+1)+' 組連續 7 點'+(inc===6?'上升':'下降'))}}
+  let h='';[[UCL,'UCL '+fx(UCL,2),'c-spec'],[Xbb,'CL '+fx(Xbb,2),'c-cl'],[LCL,'LCL '+fx(LCL,2),'c-spec']].forEach(l=>{h+='<line x1="'+X0+'" y1="'+sy(l[0])+'" x2="'+X1+'" y2="'+sy(l[0])+'" class="'+l[2]+'"/><text x="'+(X0-4)+'" y="'+(sy(l[0])+4)+'" text-anchor="end" class="c-txt" style="font-size:9.5px">'+l[1].split(' ')[0]+'</text><text x="'+X1+'" y="'+(sy(l[0])-4)+'" text-anchor="end" class="c-txt">'+l[1].split(' ')[1]+'</text>'});
+  h+='<polyline points="'+xb.map((v,i)=>sx(i)+','+sy(v)).join(' ')+'" style="stroke:var(--denim2);stroke-width:1.8;fill:none"/>';
+  xb.forEach((v,i)=>{h+='<circle cx="'+sx(i)+'" cy="'+sy(v)+'" r="'+(bad.has(i)?5.5:3.8)+'" class="'+(bad.has(i)?'c-bad':'c-ok')+'"/>'});
+  [1,5,10,15,20,25].forEach(i=>{h+='<text x="'+sx(i-1)+'" y="'+(Y0+18)+'" text-anchor="middle" class="c-txt">'+i+'</text>'});h+='<text x="'+X1+'" y="'+(Y0+32)+'" text-anchor="end" class="c-txt">組別（每小時一組）</text>';
+  if(mode==='shift')h+='<line x1="'+sx(13.5)+'" y1="'+Y1+'" x2="'+sx(13.5)+'" y2="'+Y0+'" style="stroke:var(--chalk);stroke-width:2;stroke-dasharray:2 3"/><text x="'+(sx(13.5)+4)+'" y="'+(Y1+10)+'" class="c-txt">換布</text>';
+  $('#ccSvg').innerHTML=h;
+  $('#ccOut').innerHTML='管制界限用前 '+base+' 組（正常期）計算：UCL = X̿ + A₂R̄，LCL = X̿ − A₂R̄（每組 5 件時 A₂ = 0.577）。<br>'+(why.length?'<span class="fail">發現異常：</span>'+[...new Set(why)].slice(0,4).join('；')+'。要立刻停下來找特殊原因。':'<span class="pass">所有點都在界限內，沒有異常排列，製程處於「管制狀態」。</span>'+(mode!=='normal'?'（這次亂數剛好沒觸發，再按一次看看）':''))}
+$('#ccNormal').onclick=()=>cc('normal');$('#ccShift').onclick=()=>cc('shift');$('#ccSpike').onclick=()=>cc('spike');cc('shift');
+
+/* 第10課 色溫 */
+function k2rgb(k){const t=k/100;let r,g,b;if(t<=66){r=255;g=99.4708025861*Math.log(t)-161.1195681661;b=t<=19?0:138.5177312231*Math.log(t-10)-305.0447927307}else{r=329.698727446*Math.pow(t-60,-.1332047592);g=288.1221695283*Math.pow(t-60,-.0755148492);b=255}
+  const c=v=>Math.round(Math.min(255,Math.max(0,v)));return 'rgb('+c(r)+','+c(g)+','+c(b)+')'}
+function ct(){const k=+$('#ctR').value;$('#ctT').textContent=k+' K';$('#ctBox').style.background=k2rgb(k);
+  const L=[[2300,'Horizon 日出日落'],[2856,'A 白熾燈泡'],[3000,'U30 店內燈'],[3500,'U35 店內燈'],[4000,'TL84 賣場螢光燈'],[4150,'CWF 冷白螢光燈'],[6500,'D65 標準日光'],[9000,'陰天或藍天下的陰影處']];
+  let best=L[0];L.forEach(l=>{if(Math.abs(l[0]-k)<Math.abs(best[0]-k))best=l});$('#ctBox').textContent='接近：'+best[1];
+  $('#ctOut').innerHTML=k<3300?'偏<b>暖</b>（黃、紅）：像家裡的燈泡，暖色衣服會看起來更鮮豔，藍色會顯得暗。':k<5000?'<b>中性偏暖</b>：多數賣場、辦公室螢光燈的範圍。':'偏<b>冷</b>（白、藍）：接近日光，對色的主光源大多在這裡。'}
+$('#ctR').oninput=ct;ct();
+
+/* 同色異譜 */
+const MM={D65:['#E6EAEE','#6F7A55','#6F7A55','在 D65 標準日光下，兩塊布看起來<b>一模一樣</b>，很多人就判定合格了。先別急，換個光源看看。'],
+  TL84:['#EFE7D6','#76784F','#80714A','在 TL84 賣場燈下，大貨布<b>偏紅一點</b>。如果客戶的衣服主要在歐洲賣場賣，這個差異消費者看得到。'],
+  CWF:['#E5ECE0','#6B7D57','#727759','在 CWF 冷白燈下，大貨布<b>偏灰暗</b>。美國賣場燈下會被發現。'],
+  A:['#F1D6A6','#8A7442','#9C693C','在 A 黃燈下差異<b>最明顯</b>，大貨布明顯偏紅棕。這就是同色異譜：染料配方和確認樣不同。'],
+  UV:['#2A2148','#3A3552','#6E68B8','在 UV 紫外光下，大貨布<b>發出藍紫色螢光</b>，代表布上有螢光物質（例如螢光增白劑），確認樣沒有。']};
+function mm(k){const m=MM[k];$('#mmBox').style.background=m[0];$('#mmA').style.background=m[1];$('#mmB').style.background=m[2];$$('#mmBox small').forEach(s=>s.style.color=k==='UV'?'#ddd':'#333');$('#mmOut').innerHTML=m[3]}
+$$('#mmChips .chip').forEach(b=>b.onclick=()=>{$$('#mmChips .chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');mm(b.dataset.m)});mm('D65');
+
+/* 灰卡 */
+(function(){const G=[['5',0],['4-5',6],['4',12],['3-4',19],['3',27],['2-3',37],['2',48],['1-2',62],['1',78]];let h='';
+  G.forEach(g=>{const base=128,l=Math.min(230,base+g[1]);h+='<div style="text-align:center;font-size:.8rem"><div style="display:flex;border:1px solid var(--line)"><span style="width:26px;height:40px;background:rgb('+base+','+base+','+base+')"></span><span style="width:26px;height:40px;background:rgb('+l+','+l+','+l+')"></span></div>'+g[0]+' 級</div>'});
+  $('#gsBox').innerHTML=h})();
+
+/* 第11課 計算 */
+function shr(){const a=(num('#shL1')-num('#shL0'))/num('#shL0')*100,b=(num('#shW1')-num('#shW0'))/num('#shW0')*100,lim=num('#shLim');
+  const f=v=>(v>0?'+':'')+fx(v)+'%',ok=v=>Math.abs(v)<=lim;
+  $('#shOut').innerHTML='直向 <b>'+f(a)+'</b> '+(ok(a)?'<span class="pass">合格</span>':'<span class="fail">超出</span>')+'；橫向 <b>'+f(b)+'</b> '+(ok(b)?'<span class="pass">合格</span>':'<span class="fail">超出</span>')+'<br>'+(ok(a)&&ok(b)?'這塊布可以正常使用。':'縮水超標：可以要求布廠重新預縮、退布，或由技術部門依縮率調整紙樣（加放）後再裁。')}
+['#shL0','#shL1','#shW0','#shW1','#shLim'].forEach(id=>$(id).oninput=shr);shr();
+function gsm(){const w=[num('#gs1'),num('#gs2'),num('#gs3')].filter(v=>v>0);if(!w.length){$('#gsOut').textContent='請輸入圓片重量。';return}
+  const avg=w.reduce((a,b)=>a+b,0)/w.length,g=avg*100,req=num('#gsReq'),dev=(g-req)/req*100,tol=num('#gsTol');
+  $('#gsOut').innerHTML='平均重量 '+fx(avg,3)+' g → 克重 <b>'+fx(g,1)+' GSM</b>，與要求相差 '+(dev>0?'+':'')+fx(dev)+'%：'+(Math.abs(dev)<=tol?'<span class="pass">合格</span>':'<span class="fail">超出允差，布料太'+(dev>0?'厚':'薄')+'</span>')}
+['#gs1','#gs2','#gs3','#gsReq','#gsTol'].forEach(id=>$(id).oninput=gsm);gsm();
+
+const LC=['已列出客戶要求的測試項目與標準版本','空間分成收樣、調濕、濕測、乾測、對色區，乾濕分開','恆溫恆濕設備運作，溫濕度每日記錄','對色區無窗、牆面中性灰，燈箱有使用時數記錄','每台設備有履歷卡與校正標籤，未過期','測試人員通過色覺檢查與方法訓練','每個測試項目有作業指導書（SOP）','委託單、原始記錄表、報告格式已建立','已和第三方實驗室做過比對測試','化學品有 SDS、上鎖存放，人員有防護用具'];
+let lcs=store.get('gqc-lab',[]);
+function lcRender(){$('#labChk').innerHTML=LC.map((t,i)=>'<label style="display:flex;gap:8px;align-items:flex-start;margin:6px 0;cursor:pointer"><input type="checkbox" data-i="'+i+'" '+(lcs.includes(i)?'checked':'')+' style="margin-top:6px;width:18px;height:18px;accent-color:var(--pass)">'+t+'</label>').join('');
+  const n=lcs.length;$('#labChkOut').innerHTML='完成 <b>'+n+' / '+LC.length+'</b> 項。'+(n===LC.length?'<span class="pass">準備就緒，可以開始運作了！</span>':'還有 '+(LC.length-n)+' 項要準備。')}
+$('#labChk').addEventListener('change',e=>{const i=+e.target.dataset.i;lcs=e.target.checked?[...new Set([...lcs,i])]:lcs.filter(x=>x!==i);store.set('gqc-lab',lcs);lcRender()});lcRender();
+
+/* 第12課 */
+function dhu(){const n=num('#dhN'),d=num('#dhD'),u=num('#dhU');if(n<=0){$('#dhOut').textContent='請輸入檢驗件數。';return}
+  const D=d/n*100,R=u/n*100,F=(n-u)/n*100;
+  $('#dhOut').innerHTML='DHU = '+d+' ÷ '+n+' × 100 = <b>'+fx(D,2)+'</b>（每百件 '+fx(D,1)+' 個瑕疵）<br>不良率 = <b>'+fx(R,2)+'%</b>　一次做對率 FPY = <b>'+fx(F,1)+'%</b><br><small>DHU 會大於或等於不良率數字，因為一件衣服可能有好幾個瑕疵。</small>'}
+['#dhN','#dhD','#dhU'].forEach(id=>$(id).oninput=dhu);dhu();
+function erf(x){const s=Math.sign(x);x=Math.abs(x);const t=1/(1+.3275911*x);return s*(1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-.284496736)*t+.254829592)*t*Math.exp(-x*x))}
+const Phi=z=>.5*(1+erf(z/Math.SQRT2));
+function cpk(){const L=num('#cpL'),U=num('#cpU'),m=num('#cpM'),s=num('#cpS');if(s<=0||U<=L){$('#cpOut').textContent='請確認上限大於下限、標準差大於 0。';return}
+  const cp=(U-L)/(6*s),k=Math.min(U-m,m-L)/(3*s),out=(1-Phi((U-m)/s))+Phi((L-m)/s);
+  const lo=Math.min(L,m-4*s)-(U-L)*.1,hi=Math.max(U,m+4*s)+(U-L)*.1,X0=20,X1=500,Y0=140,Y1=15,sx=v=>X0+(v-lo)/(hi-lo)*(X1-X0);
+  let p=[];for(let i=0;i<=120;i++){const v=lo+(hi-lo)*i/120;p.push(sx(v)+','+(Y0-(Y0-Y1)*Math.exp(-.5*((v-m)/s)**2)))}
+  let h='<polygon points="'+X0+','+Y0+' '+p.join(' ')+' '+X1+','+Y0+'" style="fill:var(--denim-soft);stroke:var(--denim2);stroke-width:2"/>';
+  [[L,'LSL'],[U,'USL']].forEach(q=>{h+='<line x1="'+sx(q[0])+'" y1="'+Y1+'" x2="'+sx(q[0])+'" y2="'+Y0+'" class="c-spec"/><text x="'+sx(q[0])+'" y="'+(Y1-3)+'" text-anchor="middle" class="c-txt" style="fill:var(--thread)">'+q[1]+' '+q[0]+'</text>'});
+  h+='<line x1="'+sx(m)+'" y1="'+Y1+'" x2="'+sx(m)+'" y2="'+Y0+'" class="c-cl"/><text x="'+sx(m)+'" y="'+(Y0+16)+'" text-anchor="middle" class="c-txt2">平均 '+m+'</text><line x1="'+X0+'" y1="'+Y0+'" x2="'+X1+'" y2="'+Y0+'" class="c-ax"/>';
+  $('#cpSvg').innerHTML=h;const lvl=k>=1.33?'<span class="pass">製程能力良好</span>':k>=1?'<span style="color:#9A7418;font-weight:700">尚可，需要注意</span>':'<span class="fail">能力不足，必定產生不良</span>';
+  $('#cpOut').innerHTML='Cp = <b>'+fx(cp,2)+'</b>　Cpk = <b>'+fx(k,2)+'</b>　'+lvl+'<br>預估超出規格比例約 <b>'+(out*100<.01?'< 0.01':fx(out*100,2))+'%</b>。'+(cp-k>.2?' Cp 明顯大於 Cpk，代表製程<b>偏離中心</b>，先把平均調回中間最有效。':'')}
+['#cpL','#cpU','#cpM','#cpS'].forEach(id=>$(id).oninput=cpk);cpk();
+
+/* 辭典 */
+const GL=[
+['品質 Quality','產品符合要求並讓使用者滿意。','朱蘭定義為「適合使用」（fitness for use）。'],
+['QC 品質管制','找出並處理不良品的活動。','Quality Control；control 意為使其照規矩走。'],
+['QA 品質保證','透過系統和預防，讓不良不發生。','Quality Assurance；assurance 意為保證、讓人放心。'],
+['IQC／IPQC／FQC／OQC','進料、製程、成品、出貨四個檢驗站。','Incoming、In-Process、Final、Outgoing 加上 QC。'],
+['經紗、緯紗','梭織布的直紗與橫紗。','地圖經緯線的名稱即借自織布。'],
+['布邊 Selvedge','布兩側不會散開的邊。','古英語 self-edge「自己收好的邊」。'],
+['梭織 Woven','經緯紗交錯織成的布。','「梭」是帶緯紗穿梭的梭子（shuttle）。'],
+['針織 Knit','紗線成圈互相套住的布。','用織針把紗線繞成線圈。'],
+['GSM 克重','每平方公尺布的公克數。','grams per square meter。'],
+['門幅','布的寬度。','古文「幅」即布帛的寬度。'],
+['Spandex 彈性纖維','可大幅伸長並回復的纖維。','由 expands 字母重組而成；萊卡是品牌名。'],
+['鎖式線跡 301','面線與底線在布中間互鎖的線跡，平車使用。','1846 年豪威的車縫機專利奠定原理。'],
+['拷克（包縫）','邊縫邊切邊、用線包住布邊。','一般認為由 overlock 的 lock 音譯而來。'],
+['SPI 針距','每英吋的針數。','Stitches Per Inch。'],
+['縫份','縫線到布邊的距離。','seam allowance，「預留的份量」。'],
+['致命／主要／次要','瑕疵三等級。','Critical、Major、Minor。'],
+['POM 量測點','尺寸表上從哪裡量到哪裡。','Point of Measurement。'],
+['HPS 高肩點','肩線與領口交會最高點。','High Point Shoulder。'],
+['公差 Tolerance','允許的尺寸誤差範圍。','「大家公認可接受的差」。'],
+['放碼 Grading','把基本碼紙樣放大縮小成各尺碼。','「碼」即尺碼。'],
+['四分制','驗布扣分制度，每個瑕疵最多 4 分。','美國業界發展，見 ASTM D5430。'],
+['PP 產前會議／產前樣','開裁前確認做法與樣品。','Pre-Production。'],
+['DUPRO 中期驗貨','生產中的抽樣檢驗。','During Production。'],
+['FRI 終期驗貨','大貨完成包裝後的隨機抽樣檢驗。','Final Random Inspection。'],
+['AQL','允收品質界限，抽樣檢驗的品質水準設定。','原 Acceptable Quality Level，源自 1950 年 MIL-STD-105。'],
+['Ac／Re','允收數／拒收數。','Accept／Reject。'],
+['樣本代字','由批量和檢驗水準查出的字母。','Code letter；字母跳過 I 和 O，一般認為是避免和數字 1、0 混淆。'],
+['柏拉圖 Pareto','由多到少排列並加累積線的圖。','義大利經濟學家帕雷托的 80/20 觀察，朱蘭應用到品質。'],
+['魚骨圖','找原因的圖，又稱特性要因圖、石川圖。','石川馨於 1940 年代提出，形似魚骨。'],
+['5M1E','人、機、料、法、測、環。','Man、Machine、Material、Method、Measurement、Environment。'],
+['直方圖 Histogram','看數據分佈形狀的長條圖。','皮爾森於 1890 年代命名。'],
+['管制圖 Control Chart','依時間畫點判斷製程是否異常。','休哈特 1924 年發明。'],
+['色溫 K','光色的冷暖，單位克耳文。','以加熱黑體發光顏色對應溫度，紀念克耳文勳爵。'],
+['D65','CIE 標準日光，約 6500 K。','D = Daylight。'],
+['TL84','飛利浦三基色螢光燈，約 4000 K。','8 = 顯色指數 80 多，4 = 4000 K。'],
+['CWF','冷白螢光燈，約 4150 K。','Cool White Fluorescent。'],
+['同色異譜 Metamerism','一種光下同色、換光不同色。','希臘文 meta（改變）＋ meros（部分）。'],
+['灰卡 Grey Scale','評定變色、沾色等級的灰色樣卡，1–5 級。','ISO 105-A02／A03。'],
+['ΔE','儀器量出的色差值。','Δ 表示差，E 來自德文 Empfindung（感覺）。'],
+['lux 照度','照在單位面積上的光量。','拉丁文「光」。'],
+['缸差','不同染缸批次的色差。','「缸」指染布的大缸。'],
+['調濕 Conditioning','測試前讓樣品在標準大氣中達到平衡。','ISO 139：20±2°C、65±4%RH。'],
+['RH 相對濕度','空氣中水氣佔最大容量的比例。','Relative Humidity。'],
+['校正 Calibration','儀器與已知標準比對確認準確。','—'],
+['ISO','國際標準化組織。','取自希臘文 isos（相等），非縮寫。'],
+['AATCC','美國紡織化學家和染色家協會。','1921 年成立，制定色牢度等方法。'],
+['ISO/IEC 17025','測試與校正實驗室能力的國際標準。','實驗室認證依據。'],
+['PDCA','計畫、執行、檢查、行動的改善循環。','休哈特提出觀念，戴明推廣，又稱戴明循環。'],
+['5 Why','連續追問為什麼找根本原因。','豐田佐吉、大野耐一推廣。'],
+['8D','八步驟問題解決與客訴報告。','8 Disciplines，福特汽車推廣。'],
+['防呆 Poka-yoke','讓錯誤不可能發生的設計。','新鄉重夫提出，原名 baka-yoke。'],
+['DHU','每百件瑕疵數。','Defects per Hundred Units。'],
+['FPY／RFT','一次做對率。','First Pass Yield／Right First Time。'],
+['Cp／Cpk','製程能力指數。','Process capability；k 代表考慮偏移。']];
+const gl=$('#glList');
+function glR(q){q=(q||'').trim().toLowerCase();gl.innerHTML=GL.filter(g=>!q||g.join(' ').toLowerCase().includes(q)).map(g=>'<dt>'+g[0]+'</dt><dd>'+g[1]+(g[2]&&g[2]!=='—'?'<br><em>由來：'+g[2]+'</em>':'')+'</dd>').join('')||'<dd>找不到這個名詞，試試其他關鍵字。</dd>'}
+$('#glQ').oninput=e=>glR(e.target.value);glR();
+
+/* 結業測驗 */
+$('#exStart').onclick=()=>{const all=[];Object.values(Q).forEach(a=>a.forEach(x=>all.push(x)));for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]]}
+  const pick=all.slice(0,10),box=$('#exBox');box.innerHTML='';const wrap=document.createElement('div');wrap.className='quiz';box.appendChild(wrap);
+  let r=0,c=0;const res=document.createElement('div');
+  renderQs(wrap,pick,ok=>{c++;if(ok)r++;if(c===10){res.innerHTML='<div class="out" style="font-size:1.1rem">得分 <b>'+r+' / 10</b>。'+(r>=8?'<span class="pass">恭喜結業！你已經具備成衣品管的完整基礎。</span>':'<span class="fail">還差一點，回到答錯的課再複習一次吧。</span>')+'</div>'}});
+  wrap.appendChild(res);$('#exStart').textContent='重新抽 10 題'};
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-c9873bb04a" data-category="garment"></script></body>
+</html>

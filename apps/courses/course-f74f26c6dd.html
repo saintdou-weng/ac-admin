@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>成衣 IE 排工段教室｜從零開始到專業</title>
+<style>
+:root{
+  --mat:#1E4A3D; --mat2:#275A4A; --paper:#F6F7F4; --card:#FFFFFF; --ink:#1B2420; --muted:#5A6862;
+  --line:#D3DAD6; --thread:#C4303A; --chalk:#E6BC3F; --knit:#2F6FA3; --woven:#A8661E; --ok:#2E7D4F;
+  --serif:"Noto Serif TC","Source Han Serif TC","Songti TC","PMingLiU",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+  box-sizing:border-box;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.8;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+a{color:var(--mat2)}
+:focus-visible{outline:3px solid var(--chalk);outline-offset:2px}
+
+/* ---------- 側欄目錄 ---------- */
+.side{position:fixed;inset:0 auto 0 0;width:290px;background:var(--mat);color:#E8EFEB;overflow-y:auto;padding:28px 22px 40px;z-index:30;
+  background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:24px 24px}
+.side h2{font-family:var(--serif);font-size:20px;margin:0 0 4px;color:#fff}
+.side .sub{font-size:13px;opacity:.75;margin-bottom:18px}
+.side .lvl{font-size:13px;color:var(--chalk);margin:18px 0 6px;letter-spacing:.05em}
+.side ol{list-style:none;margin:0;padding:0}
+.side li a{display:flex;gap:10px;color:#E8EFEB;text-decoration:none;font-size:15px;line-height:1.45;padding:6px 8px;border-radius:6px}
+.side li a span{flex:0 0 26px;font-variant-numeric:tabular-nums;opacity:.6}
+.side li a:hover,.side li a.on{background:rgba(255,255,255,.1)}
+.side li a.on span{color:var(--chalk);opacity:1}
+
+/* 縫線進度條 */
+.thread{position:fixed;left:290px;top:0;bottom:0;width:6px;z-index:31;background:repeating-linear-gradient(180deg,var(--line) 0 10px,transparent 10px 16px)}
+.thread i{position:absolute;left:0;top:0;width:6px;height:0;background:repeating-linear-gradient(180deg,var(--thread) 0 10px,transparent 10px 16px)}
+
+.topbar{display:none}
+main{margin-left:290px;padding:0 0 80px}
+.wrap{max-width:760px;margin:0 auto;padding:0 28px}
+
+@media (max-width:980px){
+  .side{transform:translateX(-100%);transition:transform .25s;width:min(86vw,320px);padding-top:calc(24px + env(safe-area-inset-top,0px))}
+  .side.open{transform:none;box-shadow:0 0 0 100vmax rgba(0,0,0,.35)}
+  .thread{left:0;right:0;top:auto;bottom:auto;width:auto;height:5px;top:calc(52px + env(safe-area-inset-top,0px));background:repeating-linear-gradient(90deg,var(--line) 0 10px,transparent 10px 16px)}
+  .thread i{height:5px;width:0;background:repeating-linear-gradient(90deg,var(--thread) 0 10px,transparent 10px 16px)}
+  .topbar{display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:25;background:var(--mat);color:#fff;
+    padding:calc(8px + env(safe-area-inset-top,0px)) 14px 8px;height:calc(52px + env(safe-area-inset-top,0px))}
+  .topbar b{font-family:var(--serif);font-size:16px;font-weight:700}
+  .topbar button{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:4px 12px;font:inherit;font-size:14px}
+  main{margin-left:0}
+  .wrap{padding:0 18px}
+  body{font-size:16px}
+}
+
+/* ---------- 開場 ---------- */
+.hero{background:var(--mat);color:#fff;position:relative;overflow:hidden;padding:64px 0 56px}
+.hero::before{content:"";position:absolute;left:0;right:0;top:0;height:22px;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.55) 0 1px,transparent 1px 10px),repeating-linear-gradient(90deg,rgba(255,255,255,.8) 0 2px,transparent 2px 50px);
+  background-size:auto 10px,auto 18px;background-repeat:repeat-x}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:32px 32px}
+.hero .wrap{position:relative;z-index:1}
+.hero h1{font-family:var(--serif);font-size:clamp(34px,6vw,56px);line-height:1.2;margin:10px 0 18px;font-weight:900}
+.hero p{max-width:34em;font-size:17px;opacity:.92;margin:0 0 14px}
+.hero .stitch{height:0;border-top:3px dashed var(--chalk);width:180px;margin:26px 0}
+.map{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:26px;border:1px solid rgba(255,255,255,.3);border-radius:8px;overflow:hidden}
+.map div{padding:12px 12px;font-size:14px;line-height:1.5;border-right:1px solid rgba(255,255,255,.3)}
+.map div:last-child{border-right:0}
+.map b{display:block;font-family:var(--serif);font-size:17px;color:var(--chalk)}
+@media (max-width:640px){.map{grid-template-columns:1fr 1fr}.map div:nth-child(2){border-right:0}.map div:nth-child(-n+2){border-bottom:1px solid rgba(255,255,255,.3)}}
+
+/* ---------- 課程內容 ---------- */
+.part{padding:56px 0 8px;border-bottom:1px solid var(--line)}
+.part-h{font-family:var(--serif);font-size:15px;color:var(--mat2);margin:0 0 4px}
+section.lesson{padding:40px 0 12px}
+.lesson h2{font-family:var(--serif);font-size:clamp(25px,3.6vw,32px);line-height:1.3;margin:0 0 6px;font-weight:900}
+.lesson h2 .no{display:inline-block;min-width:1.6em;color:var(--thread)}
+.lesson .goal{color:var(--muted);font-size:15px;margin:0 0 20px}
+.lesson h3{font-family:var(--serif);font-size:20px;margin:30px 0 8px}
+.lesson p{margin:0 0 14px}
+.lesson ul,.lesson ol{padding-left:1.4em;margin:0 0 14px}
+.lesson li{margin-bottom:4px}
+strong{color:var(--ink)}
+.formula{font-family:var(--serif);font-size:19px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--mat2);padding:12px 18px;margin:16px 0;border-radius:4px}
+.formula small{display:block;font-family:var(--sans);font-size:14px;color:var(--muted)}
+
+.term{background:var(--card);border:1.5px dashed #B9C3BE;border-radius:10px;padding:14px 18px 10px;margin:18px 0;position:relative}
+.term::before{content:"名詞小卡";position:absolute;top:-11px;left:14px;background:var(--paper);padding:0 8px;font-size:13px;color:var(--thread);font-weight:700}
+.term dl{margin:0}
+.term dt{font-weight:700;font-size:16px}
+.term dt em{font-style:normal;font-weight:400;color:var(--muted);font-size:14px;margin-left:6px}
+.term dd{margin:0 0 10px;font-size:15px;line-height:1.7}
+
+.eg{background:#E9F0EC;border-radius:10px;padding:16px 18px;margin:18px 0}
+.eg > b:first-child{display:block;font-family:var(--serif);font-size:17px;margin-bottom:6px;color:var(--mat)}
+.warn{background:#FBF1D8;border-radius:10px;padding:14px 18px;margin:18px 0;font-size:15.5px}
+
+details.think{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:22px 0;padding:10px 2px}
+details.think summary{cursor:pointer;font-weight:700;color:var(--mat2);list-style:none}
+details.think summary::-webkit-details-marker{display:none}
+details.think summary::before{content:"＋ ";color:var(--thread)}
+details.think[open] summary::before{content:"－ "}
+details.think div{padding-top:8px;font-size:15.5px}
+
+.tbl{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:8px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:460px}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#EEF2EF;font-weight:700;white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+tfoot td{font-weight:700;background:#F4F6F4}
+
+.fig{margin:20px 0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}
+.fig svg{display:block;width:100%;height:auto}
+.fig figcaption,.cap{font-size:14px;color:var(--muted);margin-top:8px;line-height:1.6}
+
+.widget{background:var(--card);border:2px solid var(--mat2);border-radius:12px;padding:16px;margin:22px 0}
+.widget h4{margin:0 0 10px;font-family:var(--serif);font-size:18px;color:var(--mat)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:10px}
+.row label{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+input[type=number],select{font:inherit;font-size:16px;padding:6px 8px;border:1px solid #B7C1BC;border-radius:6px;background:#fff;width:110px;color:var(--ink)}
+select{width:auto}
+.btn{font:inherit;font-size:15px;padding:7px 14px;border-radius:8px;border:1px solid var(--mat2);background:#fff;color:var(--mat);cursor:pointer}
+.btn.pri{background:var(--mat2);color:#fff}
+.btn[aria-pressed=true]{background:var(--mat2);color:#fff}
+.out{background:#F2F5F3;border-radius:8px;padding:10px 12px;font-size:15px;line-height:1.7}
+.out b{font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+
+/* 流程 */
+.flow{display:flex;flex-wrap:wrap;gap:0;align-items:stretch;margin:18px 0}
+.flow div{flex:1 1 110px;background:var(--card);border:1px solid var(--line);padding:10px;font-size:14px;line-height:1.5;position:relative;margin:0 14px 10px 0;border-radius:8px}
+.flow div::after{content:"";position:absolute;right:-12px;top:50%;border:6px solid transparent;border-left-color:var(--muted);transform:translateY(-50%)}
+.flow div:last-child::after{display:none}
+.flow div b{display:block;font-size:15px}
+.flow div.hot{border:2px solid var(--thread)}
+
+/* 長條圖 */
+.bars{position:relative;display:flex;align-items:flex-end;gap:6px;height:220px;padding:10px 4px 0;border-bottom:2px solid var(--ink);margin:10px 0 0}
+.bars .b{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;min-width:0;height:100%}
+.bars .b i{display:block;width:100%;border-radius:4px 4px 0 0;position:relative}
+.bars .b small{font-size:11px;line-height:1.2;font-variant-numeric:tabular-nums;margin-bottom:2px}
+.bars .takt{position:absolute;left:0;right:0;border-top:2px dashed var(--thread);pointer-events:none}
+.bars .takt span{position:absolute;right:2px;top:-20px;font-size:12px;color:var(--thread);background:rgba(255,255,255,.85);padding:0 4px}
+.blabels{display:flex;gap:6px;padding:0 4px}
+.blabels span{flex:1;text-align:center;font-size:11px;line-height:1.3;color:var(--muted);min-width:0;overflow:hidden}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+
+/* 流水線模擬 */
+.sim{display:flex;gap:6px;margin:10px 0}
+.st{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center}
+.st .q{height:96px;width:100%;display:flex;flex-wrap:wrap-reverse;align-content:flex-start;justify-content:center;gap:2px;padding:2px}
+.st .q i{width:9px;height:9px;background:var(--chalk);border-radius:2px}
+.st .q.jam i{background:var(--thread)}
+.st .box{width:100%;border:2px solid var(--mat2);border-radius:8px;padding:6px 4px;text-align:center;font-size:12px;line-height:1.35;background:#fff}
+.st .box b{display:block;font-size:13px}
+.st .pg{height:6px;background:#E3E8E5;border-radius:3px;margin-top:4px;overflow:hidden}
+.st .pg i{display:block;height:100%;width:0;background:var(--mat2)}
+.st .qn{font-size:12px;color:var(--muted);height:18px;font-variant-numeric:tabular-nums}
+
+/* 測驗 */
+.quiz .q{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:14px 16px;margin:14px 0}
+.quiz .q p{font-weight:700;margin-bottom:8px}
+.quiz .opt{display:block;width:100%;text-align:left;font:inherit;font-size:15.5px;padding:8px 12px;margin:6px 0;border:1px solid #C6CEC9;border-radius:8px;background:#fff;cursor:pointer;color:var(--ink)}
+.quiz .opt.right{border-color:var(--ok);background:#E5F3EA}
+.quiz .opt.wrong{border-color:var(--thread);background:#FBE9EA}
+.quiz .fb{font-size:15px;color:var(--muted);min-height:0}
+.score{font-family:var(--serif);font-size:20px;margin:10px 0}
+
+footer{padding:40px 0;color:var(--muted);font-size:14px}
+.kbd{font-family:var(--serif);font-weight:700}
+
+@media print{.side,.thread,.topbar,.widget .row{display:none!important}main{margin:0}.hero{background:#fff;color:#000}.hero::after,.hero::before{display:none}section.lesson{break-inside:avoid-page}}
+</style>
+</head>
+<body>
+<div class="topbar"><b>成衣 IE 排工段教室</b><button id="menuBtn" aria-controls="side" aria-expanded="false">目錄</button></div>
+<nav class="side" id="side" aria-label="課程目錄">
+  <h2>成衣 IE 排工段教室</h2>
+  <div class="sub">針織・梭織｜從零開始到專業</div>
+  <div class="lvl">入門篇</div>
+  <ol>
+    <li><a href="#l1"><span>1</span>一件衣服是怎麼做出來的</a></li>
+    <li><a href="#l2"><span>2</span>針織與梭織：布的兩大家族</a></li>
+    <li><a href="#l3"><span>3</span>認識縫紉機與線跡</a></li>
+    <li><a href="#l4"><span>4</span>IE 是什麼？</a></li>
+  </ol>
+  <div class="lvl">基礎篇</div>
+  <ol>
+    <li><a href="#l5"><span>5</span>時間研究與標準工時</a></li>
+    <li><a href="#l6"><span>6</span>工序分解：把衣服拆開來看</a></li>
+    <li><a href="#l7"><span>7</span>節拍時間與人數計算</a></li>
+  </ol>
+  <div class="lvl">排工段篇</div>
+  <ol>
+    <li><a href="#l8"><span>8</span>瓶頸與線平衡</a></li>
+    <li><a href="#l9"><span>9</span>動手排一條 T 恤線</a></li>
+    <li><a href="#l10"><span>10</span>平衡不好怎麼辦</a></li>
+  </ol>
+  <div class="lvl">專業篇</div>
+  <ol>
+    <li><a href="#l11"><span>11</span>梭織襯衫：部件線與組合線</a></li>
+    <li><a href="#l12"><span>12</span>效率、學習曲線與成本</a></li>
+    <li><a href="#l13"><span>13</span>生產模式與工位佈置</a></li>
+    <li><a href="#l14"><span>14</span>預定動作時間：MTM 與 GSD</a></li>
+    <li><a href="#l15"><span>15</span>排線實驗室</a></li>
+    <li><a href="#l16"><span>16</span>總複習測驗與名詞表</a></li>
+  </ol>
+</nav>
+<div class="thread" aria-hidden="true"><i id="threadFill"></i></div>
+
+<main>
+<header class="hero">
+  <div class="wrap">
+    <h1>一件 T 恤，<br>要幾個人一起做？</h1>
+    <p>一件最簡單的圓領 T 恤，在工廠裡要經過十幾道工序、十幾雙手。誰做哪一段、每段做多久、怎麼安排才不會有人忙死、有人閒著——這門學問叫做「排工段」，是成衣工業工程（IE）的核心。</p>
+    <p>這套課程從「布是怎麼來的」開始講，一路到你能自己算出一條生產線要幾個人、每人做什麼、一天能出多少件。只要會加減乘除，就學得會。</p>
+    <div class="stitch"></div>
+    <div class="map">
+      <div><b>入門篇</b>工廠、布料、機台、IE 的由來</div>
+      <div><b>基礎篇</b>標準工時、工序分解、節拍</div>
+      <div><b>排工段篇</b>瓶頸、線平衡、動手排線</div>
+      <div><b>專業篇</b>梭織襯衫、效率、MTM/GSD、實驗室</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ================= 入門篇 ================= -->
+<div class="part"><p class="part-h">入門篇</p></div>
+
+<section class="lesson" id="l1">
+  <h2><span class="no">1</span>一件衣服是怎麼做出來的</h2>
+  <p class="goal">學完你會知道：成衣工廠的完整流程，以及為什麼「車縫」是 IE 最關心的地方。</p>
+
+  <p>想像你開了一家便當店。你要先買菜、洗菜切菜（備料），再煮菜、把菜裝進便當盒（組合），最後蓋上蓋子、套上袋子（包裝）。成衣工廠其實一模一樣，只是食材換成了布。</p>
+
+  <div class="flow">
+    <div><b>接單與打樣</b>客人下訂單，先做一件樣衣確認</div>
+    <div><b>驗布</b>檢查布料有沒有破洞、色差</div>
+    <div><b>裁剪</b>把整疊布照紙樣切成一片一片</div>
+    <div><b>分包</b>把裁片綁成一包一包，送去車縫</div>
+    <div class="hot"><b>車縫</b>用縫紉機把裁片縫成衣服</div>
+    <div><b>後整</b>剪線頭、整燙、檢驗</div>
+    <div><b>包裝出貨</b>摺好、裝袋、裝箱</div>
+  </div>
+  <p class="cap">紅框的「車縫」通常是工廠裡人最多、花時間最多的一段，也是排工段的主戰場。</p>
+
+  <p>為什麼車縫最花人力？因為布料軟軟的、會滑、會伸縮，機器很難自己抓著布縫，所以到今天大部分的車縫還是要靠「人手推布、機器下針」。一件衣服有幾十條縫線，每一條都需要一個人操作一台機器來完成。</p>
+
+  <div class="term"><dl>
+    <dt>成衣 <em>Ready-to-wear</em></dt>
+    <dd>「成」是「已經做好」的意思。以前衣服多半是找裁縫量身訂做；工業化以後，工廠先照標準尺碼大量做好，客人到店裡直接買，這種「現成的衣服」就叫成衣。</dd>
+    <dt>裁片 <em>Cut pieces</em></dt>
+    <dd>布被裁剪成的一片一片零件，例如前片、後片、袖片、領條。就像拼圖的每一塊。</dd>
+    <dt>生產線 <em>Production line</em></dt>
+    <dd>把工作排成一條線，產品一站一站往下傳。1913 年福特汽車在美國工廠推出「移動式組裝線」，讓汽車像流水一樣一站一站組裝，這個概念後來被所有工業學走，成衣廠的「車縫線」也是這樣來的。</dd>
+  </dl></div>
+
+  <details class="think"><summary>想一想：為什麼要先「分包」再送去車縫？</summary>
+    <div>因為一次裁剪可能疊了幾十層布，切出幾百片。如果不分包，車縫線拿到的是一大堆亂七八糟的裁片，根本不知道哪片跟哪片是一件衣服、哪個尺碼。分包就是把「同一批、同尺碼、同顏色」的裁片綁在一起，貼上標籤，方便追蹤。</div>
+  </details>
+</section>
+
+<section class="lesson" id="l2">
+  <h2><span class="no">2</span>針織與梭織：布的兩大家族</h2>
+  <p class="goal">學完你會知道：兩種布的結構差在哪、各做什麼衣服，以及為什麼這會影響排工段。</p>
+
+  <p>幾乎所有衣服的布料，都可以分成兩大家族：<strong>梭織</strong>和<strong>針織</strong>。它們的差別，就在「線是怎麼組合成布的」。</p>
+
+  <figure class="fig">
+    <svg id="fabricSvg" viewBox="0 0 640 290" role="img" aria-label="左邊是梭織布，直線和橫線上下交錯；右邊是針織布，由一個個線圈串套而成"></svg>
+    <div class="row" style="margin-top:10px">
+      <button class="btn pri" id="stretchBtn" aria-pressed="false">用力拉拉看</button>
+      <span class="cap" id="stretchCap" style="margin:0">按下按鈕，看兩種布被橫向拉扯時的差別。</span>
+    </div>
+    <figcaption>紅色的線：左邊是其中一條「緯線」，右邊是一整排「線圈」。</figcaption>
+  </figure>
+
+  <h3>梭織：像編竹籃</h3>
+  <p>梭織布是用<strong>直的線（經線）</strong>和<strong>橫的線（緯線）</strong>一上一下交錯織成的，就像編竹籃、編草蓆。因為線都是直直的，拉的時候幾乎拉不動，所以梭織布<strong>挺、不太有彈性</strong>。襯衫、牛仔褲、西裝褲、外套大多是梭織布。</p>
+
+  <h3>針織：像打毛線</h3>
+  <p>針織布是把線彎成一個一個<strong>小圈圈（線圈）</strong>，新的圈穿過舊的圈，一圈套一圈連成一片，就像阿嬤用毛線棒打圍巾。圈圈可以被拉開、再縮回去，所以針織布<strong>軟、有彈性</strong>。T 恤、運動服、Polo 衫、內衣大多是針織布。</p>
+
+  <div class="tbl"><table>
+    <thead><tr><th>比較項目</th><th>梭織 Woven</th><th>針織 Knit</th></tr></thead>
+    <tbody>
+      <tr><td>結構</td><td>經線、緯線上下交錯</td><td>線圈互相串套</td></tr>
+      <tr><td>彈性</td><td>小，布很「挺」</td><td>大，布很「軟」</td></tr>
+      <tr><td>常見衣服</td><td>襯衫、牛仔褲、西裝、外套</td><td>T 恤、運動服、Polo 衫、內衣</td></tr>
+      <tr><td>布邊的毛病</td><td>剪開的邊容易「散邊」鬚鬚掉出來</td><td>剪開的邊容易「捲邊」自己捲起來</td></tr>
+      <tr><td>常用機台</td><td>平車、雙針車、埋夾車、鎖邊</td><td>拷克車、坎車（三本車）</td></tr>
+      <tr><td>車縫難點</td><td>部件多、壓線要直要準</td><td>布會滑會伸，縫線也要跟著能伸縮</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="warn"><strong>為什麼 IE 要懂布？</strong>因為布決定機台，機台決定誰能跟誰「合併」成一個工段。一個坐拷克車的人，不可能下一秒去用坎車做下擺——除非他旁邊真的擺了兩台機器。所以排工段的第一步，永遠是先看清楚每道工序用什麼機台。</div>
+
+  <div class="term"><dl>
+    <dt>梭織的「梭」 <em>Shuttle</em></dt>
+    <dd>傳統織布機上有一個像小船的木頭零件叫「梭子」，裡面裝著緯線，織布時被來回拋過經線之間，把橫線帶過去。成語「日月如梭」就是形容時間像梭子一樣飛快來回。用梭子織出來的布，就叫梭織布。</dd>
+    <dt>經線與緯線 <em>Warp／Weft</em></dt>
+    <dd>織布時先在織布機上直直拉好的線叫「經」，橫著穿過去的叫「緯」。地圖上的「經度、緯度」其實就是借用織布的說法——直的是經、橫的是緯。</dd>
+    <dt>汗布 <em>Single jersey</em></dt>
+    <dd>最常見的 T 恤針織布。英文 jersey 來自英國海峽的澤西島（Jersey），當地以漁夫穿的針織毛衣聞名，後來 jersey 就成了針織布的代稱。中文叫汗布，是因為它吸汗、常做貼身衣物。</dd>
+  </dl></div>
+</section>
+
+<section class="lesson" id="l3">
+  <h2><span class="no">3</span>認識縫紉機與線跡</h2>
+  <p class="goal">學完你會知道：工廠最常見的幾種機台、它們縫出的線長什麼樣，以及名字怎麼來的。</p>
+
+  <p>「線跡」就是縫線在布上留下的樣子。不同的機器用不同的方法把線和布綁在一起，有的很牢、有的很有彈性、有的能順便把布邊包起來。國際標準 ISO 4915 把線跡依結構分成六大類，用 100 到 600 的號碼表示，工廠常說的「301」「401」「504」就是從這裡來的。</p>
+
+  <figure class="fig"><div style="overflow-x:auto">
+    <svg viewBox="0 0 640 215" style="min-width:560px" role="img" aria-label="三種線跡的示意圖：鎖式、鏈式、包縫">
+      <defs><pattern id="fab" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#E7EDE9"/><path d="M0 6 L6 0" stroke="#CDD8D2" stroke-width="1"/></pattern></defs>
+      <g font-size="14" fill="#1B2420" font-family="Noto Sans TC,PingFang TC,Microsoft JhengHei,sans-serif">
+        <text x="20" y="28" font-weight="700">鎖式線跡 301</text><text x="20" y="48" font-size="12" fill="#5A6862">平車｜上下兩線在布中間鎖住</text>
+        <rect x="20" y="80" width="180" height="15" fill="url(#fab)" stroke="#9FB0A7"/><rect x="20" y="95" width="180" height="15" fill="url(#fab)" stroke="#9FB0A7"/>
+        <path d="M20 77 H45 L50 95 L55 77 H85 L90 95 L95 77 H125 L130 95 L135 77 H165 L170 95 L175 77 H200" fill="none" stroke="#C4303A" stroke-width="3"/>
+        <path d="M20 113 H45 L50 95 L55 113 H85 L90 95 L95 113 H125 L130 95 L135 113 H165 L170 95 L175 113 H200" fill="none" stroke="#2F6FA3" stroke-width="3"/>
+        <text x="20" y="150" font-size="12" fill="#5A6862">紅＝面線　藍＝底線</text>
+        <text x="20" y="170" font-size="12" fill="#5A6862">優點：牢、兩面一樣</text><text x="20" y="190" font-size="12" fill="#5A6862">缺點：彈性小</text>
+
+        <text x="230" y="28" font-weight="700">鏈式線跡 401</text><text x="230" y="48" font-size="12" fill="#5A6862">埋夾車等｜底下的線繞成一串鏈圈</text>
+        <rect x="230" y="80" width="180" height="15" fill="url(#fab)" stroke="#9FB0A7"/><rect x="230" y="95" width="180" height="15" fill="url(#fab)" stroke="#9FB0A7"/>
+        <path d="M230 77 H255 L260 122 M260 77 H295 L300 122 M300 77 H335 L340 122 M340 77 H375 L380 122 M380 77 H410" fill="none" stroke="#C4303A" stroke-width="3"/>
+        <g fill="none" stroke="#2F6FA3" stroke-width="3"><ellipse cx="280" cy="122" rx="22" ry="7"/><ellipse cx="320" cy="122" rx="22" ry="7"/><ellipse cx="360" cy="122" rx="22" ry="7"/></g>
+        <text x="230" y="170" font-size="12" fill="#5A6862">優點：有彈性、縫得快</text>
+        <text x="230" y="190" font-size="12" fill="#5A6862">缺點：線尾一拉會整條脫開</text>
+
+        <text x="440" y="28" font-weight="700">包縫線跡 504/514</text><text x="440" y="48" font-size="12" fill="#5A6862">拷克車｜邊切邊、邊把布邊包住</text>
+        <rect x="440" y="70" width="140" height="60" fill="url(#fab)" stroke="#9FB0A7"/>
+        <g stroke-width="2.5" fill="none">
+          <path d="M470 76 L590 84 M484 76 L590 92 M498 76 L590 100 M512 76 L590 108 M526 76 L590 116 M540 76 L590 124" stroke="#C4303A"/>
+          <path d="M470 124 L590 84 M484 124 L590 92 M498 124 L590 100 M512 124 L590 108 M526 124 L590 116 M540 124 L590 124" stroke="#2F6FA3" opacity=".75"/>
+        </g>
+        <text x="440" y="170" font-size="12" fill="#5A6862">優點：布邊不散、有彈性</text>
+        <text x="440" y="190" font-size="12" fill="#5A6862">針織衣服的縫合幾乎都靠它</text>
+      </g>
+    </svg></div>
+    <figcaption>示意圖，非真實比例。鏈式線跡的「一拉就脫」你一定見過：打開米袋、麵粉袋時，拉住那條線一扯，整排縫線就刷一聲拆開了。</figcaption>
+  </figure>
+
+  <div class="tbl"><table>
+    <thead><tr><th>機台（俗稱）</th><th>英文</th><th>做什麼</th><th>常見於</th></tr></thead>
+    <tbody>
+      <tr><td>平車</td><td>Single needle lockstitch</td><td>最基本的直線縫、壓線</td><td>梭織最多，針織也會用</td></tr>
+      <tr><td>雙針車</td><td>Double needle</td><td>一次縫出兩條平行線</td><td>襯衫、牛仔褲裝飾線</td></tr>
+      <tr><td>拷克車</td><td>Overlock / Serger</td><td>縫合＋切邊＋包邊一次完成</td><td>針織衣服的縫合</td></tr>
+      <tr><td>坎車／三本車</td><td>Coverstitch</td><td>下擺、袖口折邊，正面兩三條線、背面網狀</td><td>T 恤下擺、袖口</td></tr>
+      <tr><td>埋夾車</td><td>Feed-off-the-arm</td><td>把縫份包在裡面的雙線縫</td><td>襯衫側縫、牛仔褲</td></tr>
+      <tr><td>打結車</td><td>Bartack</td><td>在受力點來回密縫加固</td><td>口袋角、褲耳</td></tr>
+      <tr><td>鎖眼機／釘扣機</td><td>Buttonhole / Button sewer</td><td>開扣眼、釘鈕扣</td><td>襯衫、Polo 衫</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="term"><dl>
+    <dt>平車 <em>Flatbed lockstitch</em></dt>
+    <dd>布平平放在一個平台上縫，所以叫「平」車；它縫出的是鎖式線跡，也叫單針車。台灣、港澳和東南亞華人工廠都這樣叫。</dd>
+    <dt>拷克 <em>Overlock</em></dt>
+    <dd>一般認為是英文 overlock 的音譯。over 是「在上面、越過」，lock 是「鎖」，意思是線越過布邊把它鎖住。美國人也叫它 serger。</dd>
+    <dt>坎車、三本車、繃縫車 <em>Coverstitch</em></dt>
+    <dd>同一種機器的不同叫法。「坎（冚）」在粵語是「蓋住」，對應英文 cover；「三本」來自日文，意思是三根針；中國大陸多叫「繃縫」。它的線跡正面平整、背面像網子一樣蓋住布邊，而且能伸縮，所以最適合針織衣服的下擺。</dd>
+    <dt>埋夾 <em>Felled seam</em></dt>
+    <dd>粵語「埋」是「合攏、收進去」，就是把兩片布的毛邊互相夾住藏在裡面再縫，正反面都看不到毛邊。</dd>
+  </dl></div>
+</section>
+
+<section class="lesson" id="l4">
+  <h2><span class="no">4</span>IE 是什麼？</h2>
+  <p class="goal">學完你會知道：IE 的由來、它在成衣廠做哪些事，以及 IE 的思考方式。</p>
+
+  <p>IE 是 <strong>Industrial Engineering</strong> 的縮寫，中文叫<strong>工業工程</strong>。一句話說：IE 就是研究「怎麼用最少的時間、人力和浪費，把東西做好」的學問。</p>
+
+  <h3>兩個故事，IE 就這樣誕生了</h3>
+  <p><strong>泰勒拿著碼錶。</strong>1900 年前後，美國工程師泰勒（Frederick Taylor）在鋼鐵廠觀察工人鏟煤、搬鐵。他拿著碼錶，一個動作一個動作計時，發現只要換一把大小剛好的鏟子、安排好休息時間，工人不但比較不累，產量還大幅增加。他在 1911 年出版《科學管理原理》，被稱為「科學管理之父」。從此大家知道：工作可以被量測，量測之後就能改善。</p>
+  <p><strong>吉爾布雷斯夫婦數動作。</strong>同一時期，吉爾布雷斯夫婦（Frank &amp; Lillian Gilbreth）研究砌磚工人，發現砌一塊磚要彎腰、轉身、伸手等一大堆多餘動作。他們重新設計了擺磚的高度和順序，把砌一塊磚的動作數大幅減少。他們把人的動作分成十幾種基本單位，取名叫 <em>Therblig</em>——就是把自己的姓 Gilbreth 倒過來拼。</p>
+
+  <div class="term"><dl>
+    <dt>工業工程 <em>Industrial Engineering, IE</em></dt>
+    <dd>源自上面這段「科學管理」運動。後來發展成一門大學科系，研究時間、動作、流程、佈置、品質與成本。在成衣廠裡，負責這些工作的人就叫 IE 或 IE 工程師。</dd>
+    <dt>動素 <em>Therblig</em></dt>
+    <dd>吉爾布雷斯把人的動作分解成「伸手、握取、移動、放下、對準……」等基本動作，中文叫動素，意思是「動作的元素」。第 14 課的 MTM、GSD 就是從這個想法發展出來的。</dd>
+  </dl></div>
+
+  <h3>成衣廠的 IE 每天在做什麼？</h3>
+  <ul>
+    <li><strong>工序分解</strong>：把一件衣服拆成一道一道工序（第 6 課）。</li>
+    <li><strong>訂標準工時</strong>：每道工序應該花幾分鐘（第 5、14 課）。</li>
+    <li><strong>排工段（線平衡）</strong>：決定每個人做哪幾道工序，讓大家忙得差不多（第 8～10 課）。</li>
+    <li><strong>算產能、訂目標</strong>：這條線一天該出多少件、要幾個人（第 7、12 課）。</li>
+    <li><strong>改善方法</strong>：減少多餘動作、設計輔助工具、調整機台擺放（第 10、13 課）。</li>
+    <li><strong>估成本</strong>：一件衣服的車縫人工值多少錢，給業務報價（第 12 課）。</li>
+  </ul>
+
+  <div class="eg"><b>IE 的思考方式</b>IE 不是叫人「做快一點」，而是讓做法「更聰明」。同樣是縫一條線，如果布本來就擺在手邊、不用轉身去拿，每件省兩秒；一天 800 件，就省下將近半小時。IE 找的就是這種「看不見的時間」。</div>
+
+  <details class="think"><summary>想一想：泰勒的方法有沒有缺點？</summary>
+    <div>有。早期科學管理只重視效率，把工人當成機器，常常逼得人很累，引起很多抗議。現代 IE 修正了這點：標準工時要包含合理的休息時間（第 5 課的「寬放」），改善的目標是「減少浪費」而不是「壓榨人」。好的 IE 會讓工人做得更輕鬆，產量自然就上來了。</div>
+  </details>
+</section>
+<!-- ================= 基礎篇 ================= -->
+<div class="part"><p class="part-h">基礎篇</p></div>
+
+<section class="lesson" id="l5">
+  <h2><span class="no">5</span>時間研究與標準工時</h2>
+  <p class="goal">學完你會知道：怎麼用碼錶量出一道工序「應該」花多久，以及 SMV、評比、寬放是什麼。</p>
+
+  <p>要排工段，首先得知道每道工序要花多少時間。但問題來了：同一道工序，新手做 1 分鐘，老手做 0.3 分鐘，今天精神好快一點，下午累了慢一點——到底要用哪個數字？</p>
+  <p>IE 的答案是：找出一個<strong>「普通熟練的人，用正常速度，加上合理休息」</strong>所需要的時間，叫做<strong>標準工時</strong>。它分三步算出來。</p>
+
+  <h3>第一步：量（觀測時間）</h3>
+  <p>找一位熟練的作業員，用碼錶量他做同一道工序 5 到 10 次，去掉明顯不正常的（例如中途斷線），取平均。</p>
+
+  <h3>第二步：評（評比）</h3>
+  <p>被量的人可能特別快，也可能因為緊張而變慢。IE 要判斷他的速度是「正常速度」的百分之多少，這叫<strong>評比</strong>。正常速度訂為 100%；比正常快就大於 100%，慢就小於 100%。</p>
+  <div class="eg"><b>評比怎麼練？用走路來比</b>時間研究界有個經典的參考：一個人在平地上，不背東西，用每小時約 4.8 公里（3 英里）的速度走路，就叫做「100% 的正常速度」。IE 會拿這種標準動作的影片反覆練習，訓練自己的眼睛。看到作業員的手速比這種節奏快一點，就評 110%；慢一點就評 90%。</div>
+  <div class="formula">基本時間 ＝ 平均觀測時間 × 評比<small>把「這個人」的時間，換算成「正常速度的人」的時間。</small></div>
+
+  <h3>第三步：加（寬放）</h3>
+  <p>人不是機器，要喝水、上廁所、會累，機器也會斷線、要換梭心。這些合理的損耗要加回去，叫做<strong>寬放</strong>。車縫常見的寬放率大約在 10%～20% 之間，各廠依自己的情況訂。</p>
+  <div class="formula">標準工時 ＝ 基本時間 × （1 ＋ 寬放率）</div>
+
+  <div class="widget" id="tsWidget">
+    <h4>標準工時計算器</h4>
+    <p class="cap" style="margin-top:0">範例：量「合肩」工序 5 次（單位：分鐘）。你可以改成自己的數字。</p>
+    <div class="row">
+      <label>第 1 次<input type="number" step="0.01" value="0.33" class="obs"></label>
+      <label>第 2 次<input type="number" step="0.01" value="0.35" class="obs"></label>
+      <label>第 3 次<input type="number" step="0.01" value="0.36" class="obs"></label>
+      <label>第 4 次<input type="number" step="0.01" value="0.34" class="obs"></label>
+      <label>第 5 次<input type="number" step="0.01" value="0.32" class="obs"></label>
+    </div>
+    <div class="row">
+      <label>評比（%）<input type="number" id="tsRate" value="105" step="5"></label>
+      <label>寬放率（%）<input type="number" id="tsAllow" value="12" step="1"></label>
+    </div>
+    <div class="out" id="tsOut" aria-live="polite"></div>
+  </div>
+
+  <div class="term"><dl>
+    <dt>SMV／SAM</dt>
+    <dd>SMV 是 Standard Minute Value（標準分鐘值），SAM 是 Standard Allowed Minutes（標準允許分鐘），兩個指的是同一件事：標準工時，以「分鐘」為單位。歐洲、亞洲工廠多說 SMV，美國客人多說 SAM。一件 T 恤的 SMV 就是把所有工序的標準工時加起來。</dd>
+    <dt>評比 <em>Performance rating</em></dt>
+    <dd>也叫「績效評比」。是時間研究中最需要經驗的一步，因為它靠 IE 的判斷。這也是為什麼後來會發展出不用碼錶、改用查表的方法（第 14 課）。</dd>
+    <dt>寬放 <em>Allowance</em></dt>
+    <dd>「寬」是放寬，「放」是給予。英文常寫成 PF&amp;D：Personal（個人需要）、Fatigue（疲勞）、Delay（無法避免的延遲）。</dd>
+  </dl></div>
+
+  <details class="think"><summary>想一想：為什麼不直接用最快那個人的時間當標準？</summary>
+    <div>因為標準是要給「大多數人」用的。如果用最快的人訂標準，其他人永遠達不到，會覺得挫折；工廠用這個數字排線、報價，也會算錯產量、接了做不完的單。標準工時要「公平」：普通熟練的人認真做，就能達到。</div>
+  </details>
+</section>
+
+<section class="lesson" id="l6">
+  <h2><span class="no">6</span>工序分解：把衣服拆開來看</h2>
+  <p class="goal">學完你會知道：什麼是工序、怎麼做一張工序分解表（OB），以及什麼是前後關係。</p>
+
+  <p>拿一件 T 恤翻過來看，你會看到好多條縫線：肩膀兩條、領口一圈、袖子接身體兩圈、側邊兩條、袖口兩圈、下擺一圈。每一條縫線，差不多就是一道<strong>工序</strong>。</p>
+  <p>把一件衣服的所有工序，照順序列成一張表，寫上每道用什麼機台、標準工時多少，這張表叫<strong>工序分解表</strong>，工廠常叫它 <strong>OB 表</strong>（Operation Breakdown）或工序表。它是排工段的「食譜」。</p>
+
+  <div class="tbl"><table>
+    <thead><tr><th class="n">No.</th><th>工序</th><th>機台</th><th class="n">SMV（分）</th></tr></thead>
+    <tbody id="obTee"></tbody>
+    <tfoot><tr><td></td><td>合計</td><td></td><td class="n" id="obTeeSum"></td></tr></tfoot>
+  </table></div>
+  <p class="cap">基本款圓領短袖 T 恤（針織）。數字為教學用示範值，實際會因布料、款式、工廠條件而不同。</p>
+
+  <h3>前後關係：誰要先做？</h3>
+  <p>工序不能亂排。肩膀沒縫起來，領子就沒地方上；袖子沒接好，側縫就沒辦法一路從袖口縫到下擺。這種「A 一定要在 B 之前」的規則，叫<strong>前後關係</strong>。畫成圖就一目了然：</p>
+
+  <figure class="fig" style="max-width:440px;margin-left:auto;margin-right:auto">
+    <svg id="precSvg" viewBox="0 0 360 560" role="img" aria-label="T 恤工序前後關係圖"></svg>
+    <figcaption>左邊是主幹，右邊的「領條接圈」和「袖口折邊」是可以另外先做的分支，最後再匯進主幹。</figcaption>
+  </figure>
+
+  <p>注意右邊那兩個分支。「袖口折邊」只跟袖片有關，所以它可以在任何時候先做好，等「上袖」要用時再送過去。<strong>能獨立先做的工序，排工段時最有彈性</strong>，常被拿來補空檔。</p>
+
+  <div class="term"><dl>
+    <dt>工序 <em>Operation</em></dt>
+    <dd>一個人在一台機器上，連續完成、不適合再拆開的一段工作。例如「合肩」：拿起前後片、對齊肩膀、拷克縫合、放下。</dd>
+    <dt>工位 <em>Workstation</em></dt>
+    <dd>生產線上一個作業員的位置，通常有一台機器、一張椅子、放裁片的地方。</dd>
+    <dt>工段</dt>
+    <dd>「段」就是一段一段。把整件衣服的工序切成幾段，每段分給一個（或一組）工位去做，分好的每一段就叫工段。所以「排工段」就是決定「誰做哪幾道工序」，英文叫 Line balancing 或 Operator allocation。</dd>
+    <dt>OB 表 <em>Operation Breakdown</em></dt>
+    <dd>Breakdown 是「拆解」。台灣、大陸工廠也叫工序表、工藝流程表。</dd>
+  </dl></div>
+
+  <details class="think"><summary>想一想：「上主嘜」為什麼排在第一道？</summary>
+    <div>主嘜（品牌標籤）通常縫在後片領口中間。如果先把肩膀縫起來、領子上好，衣服就變成立體的筒狀，再要把標籤擺正縫上去就難多了。能在「平面」時做的事，盡量在平面時做——這是車縫的重要原則。</div>
+  </details>
+</section>
+
+<section class="lesson" id="l7">
+  <h2><span class="no">7</span>節拍時間與人數計算</h2>
+  <p class="goal">學完你會知道：什麼是節拍時間、怎麼算出一條線需要幾個人。</p>
+
+  <p>老闆說：「這條線一天要做 800 件 T 恤。」工作時間是 8 小時，也就是 480 分鐘。請問：平均多久要做出一件？</p>
+  <div class="formula">節拍時間 ＝ 可用時間 ÷ 目標產量<small>480 分 ÷ 800 件 ＝ 0.6 分／件，也就是每 36 秒，線尾就要出來一件。</small></div>
+  <p>這個「每隔多久要出一件」就叫<strong>節拍時間</strong>。它就像樂隊的節拍器：整條線的每個人，都要跟著這個拍子走。只要有一個人跟不上，整條線就慢下來。</p>
+
+  <h3>要幾個人？</h3>
+  <p>一件 T 恤總共要 4.87 分鐘的工作量，每個人每 0.6 分鐘要交出一件，那最少需要：</p>
+  <div class="formula">理論人數 ＝ 總 SMV ÷ 節拍時間<small>4.87 ÷ 0.6 ＝ 8.12 → 無條件進位 → 至少 9 人</small></div>
+  <p>為什麼要無條件進位？因為世界上沒有「0.12 個人」。8 個人一定做不完，所以至少要 9 個人。</p>
+
+  <h3>反過來算：人數固定時能做多少？</h3>
+  <div class="formula">理論產量 ＝ 人數 × 可用時間 ÷ 總 SMV<small>9 人 × 480 分 ÷ 4.87 ＝ 887 件</small></div>
+
+  <div class="widget" id="taktWidget">
+    <h4>節拍與人數計算器</h4>
+    <div class="row">
+      <label>每天工作（分鐘）<input type="number" id="tkMin" value="480"></label>
+      <label>目標產量（件）<input type="number" id="tkTarget" value="800"></label>
+      <label>總 SMV（分）<input type="number" id="tkSmv" value="4.87" step="0.01"></label>
+    </div>
+    <div class="out" id="tkOut" aria-live="polite"></div>
+  </div>
+
+  <div class="warn"><strong>先記住一件事：</strong>「理論人數」是最理想的情況——每個人都剛好忙滿、沒有一秒浪費。現實中幾乎不可能，因為工序不能隨便切碎、機台不能隨便換。第 9 課你會看到，理論 9 人，實際排出來要 11 人。</div>
+
+  <div class="term"><dl>
+    <dt>節拍時間 <em>Takt time</em></dt>
+    <dd>Takt 是德文，意思是「拍子、節奏」，也指樂團指揮的指揮棒。1930 年代德國飛機工廠用這個詞來控制組裝速度，後來日本豐田汽車把它發揚光大，成為「豐田生產方式」的核心觀念，全世界工廠都跟著這樣叫。</dd>
+    <dt>週期時間 <em>Cycle time</em></dt>
+    <dd>一個工位「實際上」做完一件要多久。節拍時間是「要求」，週期時間是「實際」。週期時間比節拍時間長的工位，就會拖慢整條線。</dd>
+  </dl></div>
+</section>
+
+<!-- ================= 排工段篇 ================= -->
+<div class="part"><p class="part-h">排工段篇</p></div>
+
+<section class="lesson" id="l8">
+  <h2><span class="no">8</span>瓶頸與線平衡</h2>
+  <p class="goal">學完你會知道：什麼是瓶頸、在製品、平衡率，以及為什麼整條線的速度由最慢的人決定。</p>
+
+  <div class="eg"><b>早餐店的故事</b>
+    三個人合作做三明治：阿明烤吐司要 30 秒，小華煎蛋要 60 秒，阿美包裝要 20 秒。請問這家店每多久能出一份三明治？<br><br>
+    答案是 <strong>60 秒</strong>。不管阿明烤得多快，小華每 60 秒才煎好一顆蛋。結果是：阿明面前的吐司越堆越高，阿美每做 20 秒就要乾等 40 秒。三個人加起來的工作只有 110 秒，卻佔用了 3 × 60 ＝ 180 秒的人力。
+  </div>
+
+  <p>小華就是這家店的<strong>瓶頸</strong>。一條生產線的產量，永遠由最慢的那個工位決定，就像瓶子倒水時，流量由最細的瓶頸決定，瓶身再大也沒用。</p>
+
+  <div class="widget" id="simWidget">
+    <h4>流水線模擬</h4>
+    <div class="row">
+      <button class="btn" data-mode="bad" aria-pressed="true">不平衡的線</button>
+      <button class="btn" data-mode="good" aria-pressed="false">平衡的線</button>
+      <button class="btn" id="simReset">重來</button>
+    </div>
+    <div class="sim" id="simLine"></div>
+    <div class="out" id="simOut" aria-live="off"></div>
+    <p class="cap">黃色方塊是等著被做的在製品，堆到變紅代表嚴重堆積。模擬中 1 秒 ＝ 1 分鐘。兩條線總工作量都是 2.0 分鐘、4 個人。</p>
+  </div>
+
+  <p>看出差別了嗎？兩條線的總工作量一樣，但不平衡的那條，產量被 0.8 分鐘的瓶頸卡住，前面堆滿貨、後面的人一直在等。平衡的那條，每個人都是 0.5 分鐘，大家同時做完、同時交接，產量多了六成。</p>
+
+  <h3>用平衡率來打分數</h3>
+  <div class="formula">平衡率 ＝ 總 SMV ÷ （人數 × 瓶頸工位時間）<small>不平衡的線：2.0 ÷ (4 × 0.8) ＝ 62.5%　平衡的線：2.0 ÷ (4 × 0.5) ＝ 100%</small></div>
+  <p>平衡率的意思是：大家被佔用的時間裡，有多少是真正在做事。100% 代表完全沒人閒著。現實中很難做到 100%，很多工廠以 85% 以上當作目標。沒用到的部分叫<strong>平衡損失</strong> ＝ 1 − 平衡率。</p>
+
+  <div class="term"><dl>
+    <dt>瓶頸 <em>Bottleneck</em></dt>
+    <dd>字面就是瓶子的脖子。瓶口最細，不管瓶子多大，倒水的速度都受它限制。用在工廠，指的是限制整條線產量的那個工位。</dd>
+    <dt>在製品 <em>WIP, Work In Process</em></dt>
+    <dd>已經開始做、但還沒做完的半成品。它佔空間、壓資金，堆太多還容易弄髒、弄丟、混錯尺碼。WIP 堆在哪裡，通常瓶頸就在哪裡——這是現場找瓶頸最快的方法。</dd>
+    <dt>線平衡 <em>Line balancing</em></dt>
+    <dd>把工作平均分配給線上每個人，讓每個工位的時間都接近節拍時間、彼此差不多。也就是「排工段」的目標。</dd>
+  </dl></div>
+</section>
+
+<section class="lesson" id="l9">
+  <h2><span class="no">9</span>動手排一條 T 恤線</h2>
+  <p class="goal">學完你會知道：排工段的五條規則，並且親手把第 6 課的 T 恤排成一條線。</p>
+
+  <p>條件：一天 480 分鐘、目標 800 件，所以節拍時間是 <strong>0.6 分</strong>。我們要把 11 道工序分給作業員，讓每個人的工作量都不超過 0.6 分，而且人越少越好。</p>
+
+  <h3>排工段的五條規則</h3>
+  <ol>
+    <li><strong>照順序往下排。</strong>依照前後關係，從第一道排到最後一道，衣服才不會在線上倒著走。</li>
+    <li><strong>一個工位用一種機台。</strong>同一個人盡量只坐一台機器，不同機台的工序不要硬湊在一起。</li>
+    <li><strong>每個工位不超過節拍。</strong>工位的總時間 ≤ 0.6 分，否則它就是瓶頸。</li>
+    <li><strong>太大的工序多人做。</strong>單一工序超過節拍（例如上袖 0.70），就安排 2 個人一起做，每人負責一半的件數。</li>
+    <li><strong>能省人才合併。</strong>相鄰、同機台的工序，如果合在一起能少用人，就合併；合了也不省人，就分開，讓每個人做的事單純一點。</li>
+  </ol>
+
+  <h3>第一版：一道一道排</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>工位</th><th>負責工序</th><th>機台</th><th class="n">人數</th><th class="n">每人負荷</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>①上主嘜 ＋ ②領條接圈</td><td>平車</td><td class="n">1</td><td class="n">0.37</td></tr>
+      <tr><td>2</td><td>③合肩</td><td>拷克</td><td class="n">1</td><td class="n">0.40</td></tr>
+      <tr><td>3</td><td>④上領</td><td>拷克</td><td class="n">1</td><td class="n">0.45</td></tr>
+      <tr><td>4</td><td>⑤後領貼條</td><td>平車</td><td class="n">1</td><td class="n">0.40</td></tr>
+      <tr><td>5</td><td>⑥領圈壓線</td><td>坎車</td><td class="n">1</td><td class="n">0.30</td></tr>
+      <tr><td>6</td><td>⑦袖口折邊</td><td>坎車</td><td class="n">1</td><td class="n">0.50</td></tr>
+      <tr><td>7</td><td>⑧上袖</td><td>拷克</td><td class="n">2</td><td class="n">0.35</td></tr>
+      <tr><td>8</td><td>⑨合側縫</td><td>拷克</td><td class="n">2</td><td class="n">0.40</td></tr>
+      <tr><td>9</td><td>⑩下擺折邊</td><td>坎車</td><td class="n">1</td><td class="n">0.45</td></tr>
+      <tr><td>10</td><td>⑪剪線頭、自檢</td><td>手工</td><td class="n">1</td><td class="n">0.50</td></tr>
+    </tbody>
+    <tfoot><tr><td></td><td>合計</td><td></td><td class="n">12</td><td class="n">最大 0.50</td></tr></tfoot>
+  </table></div>
+  <p>逐步想一遍：①和②都是平車、加起來 0.37 不超過 0.6，合併；③換成拷克，開新工位；③＋④ ＝ 0.85 超過節拍，所以④自己一個工位；⑤是平車，開新工位……⑧上袖 0.70 超過節拍，安排 2 人；⑨合側縫 0.80 也是 2 人。</p>
+  <p>結果：<strong>12 人</strong>，瓶頸 0.50 分，平衡率 ＝ 4.87 ÷ (12 × 0.50) ＝ <strong>81.2%</strong>。</p>
+
+  <h3>第二版：再找一次能合併的地方</h3>
+  <p>看看⑧上袖和⑨合側縫：兩個都是拷克、而且前後相鄰。分開做要 2 ＋ 2 ＝ 4 人；如果合成一組，總共 0.70 ＋ 0.80 ＝ 1.50 分，1.50 ÷ 0.6 ＝ 2.5，進位後<strong>只要 3 人</strong>，每人負荷 0.50。三個人每人拿到一件衣服，就從上袖一路做到側縫。</p>
+  <p>結果：<strong>11 人</strong>，瓶頸還是 0.50，平衡率提升到 4.87 ÷ (11 × 0.50) ＝ <strong>88.5%</strong>。</p>
+
+  <div class="widget">
+    <h4>兩個版本比一比</h4>
+    <div class="row">
+      <button class="btn" data-ver="1" aria-pressed="true">第一版 12 人</button>
+      <button class="btn" data-ver="2" aria-pressed="false">第二版 11 人</button>
+    </div>
+    <div id="balChart"></div>
+    <div class="out" id="balOut"></div>
+  </div>
+
+  <details class="think"><summary>想一想：理論 9 人，為什麼怎麼排都要 11 人？</summary>
+    <div>把工序依機台分組算：平車 0.77 分要 2 人；拷克 2.35 分要 4 人（2.35 ÷ 0.6 ＝ 3.9）；坎車 1.25 分要 3 人（2 人的話每人 0.625，超過節拍）；手工 0.50 要 1 人。加起來 2 ＋ 4 ＋ 3 ＋ 1 ＝ 10 人，這是「機台限制下」的最低人數。再加上工序順序、工序不能任意切割，排出 11 人已經很接近極限了。<br>這就是 IE 的日常：<strong>理論告訴你底線在哪，現實告訴你能靠多近。</strong></div>
+  </details>
+
+  <details class="think"><summary>想一想：第二版的瓶頸 0.50 比節拍 0.6 還快，代表什麼？</summary>
+    <div>代表這條線其實能做到 480 ÷ 0.50 ＝ 960 件，比目標 800 件多。多出來的產能可以用來應付新手、機器故障等損失，或者主管可以考慮把目標訂高一點。第 12 課會教你把「效率」算進來，讓計畫更貼近現實。</div>
+  </details>
+</section>
+
+<section class="lesson" id="l10">
+  <h2><span class="no">10</span>平衡不好怎麼辦</h2>
+  <p class="goal">學完你會知道：現場常用的六種平衡手法、ECRS 改善原則，以及「只改瓶頸」的道理。</p>
+
+  <p>排好線只是開始。上線以後，總會有工位比預期慢：新手、難車的布、機器不順。這時候 IE 和組長要動手調整。常用的手法有六種：</p>
+
+  <div class="tbl"><table>
+    <thead><tr><th>手法</th><th>怎麼做</th><th>T 恤線上的例子</th></tr></thead>
+    <tbody>
+      <tr><td><b>拆</b></td><td>把瓶頸工序切成兩段，分給兩個人</td><td>合側縫拆成「左側縫」和「右側縫」</td></tr>
+      <tr><td><b>合</b></td><td>把兩個很輕的工位合成一個</td><td>第 9 課第二版的上袖＋合側縫</td></tr>
+      <tr><td><b>移</b></td><td>把瓶頸的一小部分動作移給隔壁比較閒的人</td><td>剪線頭的工位太忙，把「翻正衣服」移給前一站</td></tr>
+      <tr><td><b>加</b></td><td>在瓶頸多放一個人或一台機器</td><td>上領多加一台拷克，由附近空檔的人支援</td></tr>
+      <tr><td><b>換</b></td><td>把手最快的人換到瓶頸工位</td><td>讓資深作業員坐上袖，新手去做領條接圈</td></tr>
+      <tr><td><b>改</b></td><td>改方法、加輔助工具，直接把時間變短</td><td>下擺用拉筒自動折邊、用自動剪線平車省掉剪線動作</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>ECRS：改善的四個問題</h3>
+  <p>面對任何一道工序，IE 會依序問四個問題：</p>
+  <ul>
+    <li><strong>E 取消（Eliminate）</strong>：這個動作可以不做嗎？例如縫完就用自動剪線，後面就不用人工剪線頭。</li>
+    <li><strong>C 合併（Combine）</strong>：可以跟別的動作一起做嗎？例如用拷克同時縫合＋包邊，一次完成兩件事。</li>
+    <li><strong>R 重排（Rearrange）</strong>：換個順序會更好嗎？例如袖口在平面時先折邊，比做成筒狀再折簡單。</li>
+    <li><strong>S 簡化（Simplify）</strong>：可以更簡單嗎？例如裁片擺放的位置離手近一點、用定位夾具不用對齊。</li>
+  </ul>
+  <p>順序很重要：<strong>能取消的，就不用費心去簡化。</strong></p>
+
+  <div class="eg"><b>只改瓶頸，才有用</b>
+    1984 年，以色列物理學家高德拉特（Eliyahu Goldratt）寫了一本工廠小說《目標》（The Goal），提出「限制理論」：一條線的產出只由瓶頸決定，所以<strong>在非瓶頸上省下一秒，對產量沒有任何幫助</strong>。<br><br>
+    回到早餐店：讓阿明烤吐司快 10 秒有用嗎？沒有，他只會堆更多吐司。讓小華煎蛋快 10 秒，整家店的產量立刻提升。
+  </div>
+
+  <div class="term"><dl>
+    <dt>拉筒、折邊器 <em>Folder / Attachment</em></dt>
+    <dd>裝在縫紉機壓腳前的小金屬工具，布一穿過去就自動折成固定寬度，作業員不用邊縫邊用手折。它是成衣廠最便宜、最有效的改善工具之一。</dd>
+    <dt>多能工 <em>Multi-skilled operator</em></dt>
+    <dd>會操作多種機台、多道工序的作業員。線上多能工越多，組長調動越靈活，缺人時也能馬上補位。很多工廠會用「技能矩陣表」記錄每個人會做哪些工序。</dd>
+  </dl></div>
+</section>
+<!-- ================= 專業篇 ================= -->
+<div class="part"><p class="part-h">專業篇</p></div>
+
+<section class="lesson" id="l11">
+  <h2><span class="no">11</span>梭織襯衫：部件線與組合線</h2>
+  <p class="goal">學完你會知道：襯衫各部位的名稱與由來、為什麼梭織線要分「部件」和「組合」，以及它跟 T 恤線的差別。</p>
+
+  <p>T 恤只有前片、後片、袖子、領條，一條線從頭縫到尾就好。男式長袖襯衫就複雜多了：領子本身就有三四片布、袖口有袖頭、袖子開口有袖衩、前面有門襟和口袋。如果全部排成一直線，線會長得不像話，而且大部分人都在等。</p>
+  <p>所以梭織襯衫通常把線分成兩部分：</p>
+  <ul>
+    <li><strong>部件線</strong>（準備段）：同時、分開地把領子、袖頭、袖衩、門襟、口袋這些「小零件」先做好。</li>
+    <li><strong>組合線</strong>（組裝段）：把前片、後片、過肩、零件一步步組合成一件完整的襯衫。</li>
+  </ul>
+  <p>就像很多條小溪（部件線）流進一條大河（組合線），而且每條小溪要在「大河需要它的時候」剛好流到。</p>
+
+  <figure class="fig" style="max-width:460px;margin-left:auto;margin-right:auto">
+    <svg id="shirtSvg" viewBox="0 0 360 470" role="img" aria-label="襯衫部件線匯入組合線示意圖"></svg>
+    <figcaption>左邊是部件，右邊是組合主線。箭頭表示部件在哪一道工序被用上。</figcaption>
+  </figure>
+
+  <div class="tbl"><table>
+    <thead><tr><th class="n">No.</th><th>工序</th><th>機台</th><th class="n">SMV（分）</th></tr></thead>
+    <tbody id="obShirt"></tbody>
+    <tfoot><tr><td></td><td>合計</td><td></td><td class="n" id="obShirtSum"></td></tr></tfoot>
+  </table></div>
+  <p class="cap">基本款男式長袖襯衫（梭織）。①～⑧是部件，⑨～⑱是組合。數字為教學示範值；實務上還會加入多道「中燙」（邊做邊燙平）。</p>
+
+  <div class="eg"><b>梭織線排工段的三個重點</b>
+    <strong>一、部件線要算好量。</strong>一件襯衫要 1 個領子、2 個袖頭、2 個袖衩。如果袖頭做得太慢，組合線到了⑭就會停下來等。<br>
+    <strong>二、平車工序特別多。</strong>18 道裡有 12 道是平車，所以同機台合併的機會多，彈性大，但也更考驗作業員的壓線技術——線歪了一眼就看得出來。<br>
+    <strong>三、技術難度差很多。</strong>上領、上袖頭、做袖衩是襯衫最難的三道，要安排最熟練的人，而且它們常是瓶頸。
+  </div>
+
+  <div class="term"><dl>
+    <dt>過肩 <em>Yoke</em></dt>
+    <dd>襯衫背後、肩膀上方那塊橫向的布。英文 yoke 原本是「牛軛」——架在牛脖子上、讓牛拉車的橫木。這塊布也是橫架在肩膀上，承受整件衣服的重量，所以借用了這個字。</dd>
+    <dt>領座 <em>Collar stand</em></dt>
+    <dd>襯衫領子下方那圈直立的布條，讓領子能「坐」在脖子上立起來。上面翻下來的那片叫領面（領葉）。</dd>
+    <dt>門襟 <em>Placket</em></dt>
+    <dd>衣服前面開口、釘扣子的那條布。「襟」在古代就是衣服前面的部分，「門」是開合的地方。</dd>
+    <dt>袖衩、袖頭 <em>Sleeve placket／Cuff</em></dt>
+    <dd>袖衩是袖子末端的開口，讓手能穿過去；「衩」就是衣服開縫的地方，旗袍的開衩也是這個字。袖頭是包住手腕、釘扣子的那圈布，也叫袖口。</dd>
+  </dl></div>
+</section>
+
+<section class="lesson" id="l12">
+  <h2><span class="no">12</span>效率、學習曲線與成本</h2>
+  <p class="goal">學完你會知道：怎麼算效率、為什麼新款上線要慢慢爬坡，以及 SMV 怎麼變成錢。</p>
+
+  <p>第 9 課我們假設每個人都用標準速度工作。但真實的一天裡，會有人請假、機器壞掉、等裁片、返修、開早會。所以我們需要一個數字來量「實際做得怎麼樣」——<strong>效率</strong>。</p>
+
+  <div class="formula">效率 ＝ （產出件數 × SMV）÷ （人數 × 工作分鐘）<small>分子是「做出來的東西值多少標準分鐘」，分母是「花了多少人力分鐘」。</small></div>
+  <div class="eg"><b>例題</b>T 恤線 11 人，工作 480 分鐘，實際產出 900 件，SMV 4.87。<br>
+    產出的標準分鐘 ＝ 900 × 4.87 ＝ 4,383 分<br>
+    投入的人力分鐘 ＝ 11 × 480 ＝ 5,280 分<br>
+    效率 ＝ 4,383 ÷ 5,280 ＝ <strong>83.0%</strong></div>
+
+  <h3>把效率算進計畫裡</h3>
+  <p>知道這條線平常效率大約 80%，訂目標時就要打折，才不會訂出做不到的數字：</p>
+  <div class="formula">計畫產量 ＝ 人數 × 工作分鐘 × 效率 ÷ SMV<small>11 × 480 × 80% ÷ 4.87 ＝ 867 件</small></div>
+  <p>排工段時也一樣：如果目標 800 件、效率 80%，計畫用的節拍就變成 480 × 0.8 ÷ 800 ＝ 0.48 分，比原本的 0.6 分更緊。你可以在第 15 課的實驗室試試看，人數會怎麼變。</p>
+
+  <h3>學習曲線：新款為什麼第一天都很慢</h3>
+  <figure class="fig">
+    <svg id="lcSvg" viewBox="0 0 600 250" role="img" aria-label="新款上線後七天的效率爬升示意曲線"></svg>
+    <figcaption>示意曲線：新款上線第一天效率常常只有四、五成，之後逐日上升，大約一週後趨於穩定。實際爬坡速度取決於款式難度和作業員經驗。</figcaption>
+  </figure>
+  <p>人做同一件事越多次就越快，一開始進步很快，後來慢慢變平——這就是<strong>學習曲線</strong>。所以換新款的頭幾天，計畫產量一定要打折；訂單如果很小（例如只有 300 件），可能還沒爬到高效率就做完了，這種小單的實際效率會很低，報價時要考慮進去。</p>
+
+  <h3>SMV 怎麼變成錢</h3>
+  <p>工廠會算出<strong>每分鐘成本</strong>（Cost Per Minute，CPM）：把車縫部門一個月的工資、管理費、水電、設備折舊加起來，除以這個月所有作業員的上班總分鐘數。</p>
+  <div class="formula">每件車縫成本 ＝ SMV × 每分鐘成本 ÷ 效率<small>假設每分鐘成本 0.10 美元：4.87 × 0.10 ÷ 80% ≈ 0.61 美元／件（數字僅示範）</small></div>
+  <p>這就是為什麼 IE 算的 SMV 要準：SMV 低估，工廠報價太便宜會虧錢；SMV 高估，報價太貴會接不到單。而效率每提高一點，每件成本就直接下降。</p>
+
+  <div class="term"><dl>
+    <dt>效率 <em>Efficiency</em></dt>
+    <dd>有時分成「個人效率」（一個人的產出 SMV ÷ 他的上班分鐘）和「線效率」（整條線）。另外還有人會扣掉停電、待料等不是作業員造成的時間，算出「作業效率」，用來公平地評估作業員。</dd>
+    <dt>學習曲線 <em>Learning curve</em></dt>
+    <dd>1936 年美國航空工程師賴特（T. P. Wright）研究飛機製造時發現：累積產量每增加一倍，每架飛機需要的工時就會以固定比例下降。這個規律後來被各行各業使用。</dd>
+  </dl></div>
+</section>
+
+<section class="lesson" id="l13">
+  <h2><span class="no">13</span>生產模式與工位佈置</h2>
+  <p class="goal">學完你會知道：紮包、吊掛、模組三種生產方式，以及在製品多寡怎麼影響交期。</p>
+
+  <div class="tbl"><table>
+    <thead><tr><th>方式</th><th>怎麼運作</th><th>優點</th><th>缺點</th></tr></thead>
+    <tbody>
+      <tr><td><b>紮包制</b><br>PBS</td><td>裁片 10～30 件綁成一包，一包一包在工位間傳，每包附一張包票記錄</td><td>設備簡單、換款彈性大、最普遍</td><td>在製品多、一件衣服在線上待很久、搬運費工</td></tr>
+      <tr><td><b>吊掛系統</b><br>UPS</td><td>裁片夾在衣架上，沿著頭頂的軌道由電腦送到每個工位</td><td>不用搬運、即時統計產量、在製品少</td><td>設備貴、需要維修保養和系統人員</td></tr>
+      <tr><td><b>模組／小組制</b><br>Modular, TSS</td><td>5～10 人一組，常站著做、一人顧多台機，一件一件往下傳</td><td>在製品極少、交期短、品質問題立刻被發現</td><td>需要大量多能工、訓練時間長</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>在製品越多，衣服走得越慢</h3>
+  <p>有一個很好用的公式，叫<strong>利特爾法則</strong>：</p>
+  <div class="formula">生產週期 ＝ 在製品數量 ÷ 產出速度<small>線上堆了 600 件在製品，每小時產出 100 件 → 一件衣服從上線到下線平均要 6 小時</small></div>
+  <p>如果把在製品降到 200 件，同樣每小時 100 件，週期就只剩 2 小時。產量不變，但交貨更快、線上更乾淨、出問題時被影響的件數也更少。這就是為什麼現代工廠拚命想減少在製品。</p>
+
+  <h3>工位怎麼擺</h3>
+  <ul>
+    <li><strong>順著工序擺</strong>：衣服只往前走，不要來回「倒流」。倒流一次就多一次搬運和混亂。</li>
+    <li><strong>傳遞距離越短越好</strong>：下一個工位最好伸手就能拿到上一站放下的東西。</li>
+    <li><strong>直線或 U 型</strong>：直線最簡單；U 型讓頭尾靠近，一個人可以顧線頭和線尾，多能工也方便互相支援。</li>
+    <li><strong>部件線靠近它要匯入的地方</strong>：做袖頭的人坐在「上袖頭」旁邊，做好直接傳過去。</li>
+  </ul>
+
+  <div class="term"><dl>
+    <dt>PBS <em>Progressive Bundle System</em></dt>
+    <dd>直譯是「漸進式紮包系統」。Progressive 是一站一站往前推進，Bundle 是一捆一包。</dd>
+    <dt>UPS <em>Unit Production System</em></dt>
+    <dd>「單件生產系統」，因為衣架上一次只掛一件（一套裁片）。吊掛系統在 1960～70 年代於北歐發展起來，後來普及到全世界。</dd>
+    <dt>TSS <em>Toyota Sewing System</em></dt>
+    <dd>把豐田汽車的生產方式（少庫存、單件流、多能工）搬到車縫上的小組生產方式。</dd>
+    <dt>利特爾法則 <em>Little's Law</em></dt>
+    <dd>1961 年由美國麻省理工學院教授約翰・利特爾（John Little）證明，原本是排隊理論的公式：排隊的人數 ＝ 到達速度 × 每人等待時間。超市排隊、醫院掛號、工廠在製品都適用。</dd>
+  </dl></div>
+</section>
+
+<section class="lesson" id="l14">
+  <h2><span class="no">14</span>預定動作時間：MTM 與 GSD</h2>
+  <p class="goal">學完你會知道：不用碼錶也能訂工時的方法、TMU 是什麼，以及一道工序的時間到底花在哪。</p>
+
+  <p>第 5 課的碼錶法有兩個麻煩：一是評比靠 IE 的感覺，不同人評出來不一樣；二是一定要等衣服真的在做，才能去量。可是業務在接單報價時，衣服根本還沒做啊！</p>
+  <p>於是有人想：既然所有工作都是由「伸手、抓、移動、放下、對齊」這些基本動作組成（還記得第 4 課的動素嗎？），那就先把每種基本動作要花多少時間研究清楚，做成一本<strong>查表手冊</strong>。以後遇到新工序，只要把它拆成基本動作，一個一個查表加起來就好。這就叫<strong>預定動作時間系統</strong>。</p>
+
+  <h3>MTM 與 TMU</h3>
+  <p>最有名的系統是 1948 年在美國發表的 <strong>MTM</strong>。它用了一個特別的時間單位 <strong>TMU</strong>，因為基本動作都很短，用秒太粗了：</p>
+  <div class="formula">1 TMU ＝ 十萬分之一小時 ＝ 0.036 秒 ＝ 0.0006 分<small>反過來：1 分鐘 ≈ 1,667 TMU</small></div>
+
+  <h3>GSD：專為車縫設計</h3>
+  <p><strong>GSD</strong>（General Sewing Data，通用縫製數據）是從 MTM 延伸、在英國發展出來、專門給縫製業使用的系統。它把車縫常見的動作整理成代碼，例如「拿取一片裁片」「兩片對齊」「車縫一段直線」「剪線」「放下」，每個代碼有固定的 TMU。現在很多國際品牌都要求工廠用 GSD 來報 SMV，因為它有統一標準，客戶和工廠可以用同一把尺溝通。</p>
+
+  <div class="eg"><b>拆開一道工序：時間花在哪？</b>以一道「合側縫」為例（示意數字）：
+    <div class="tbl" style="margin-bottom:6px"><table>
+      <thead><tr><th>動作</th><th class="n">時間（分）</th></tr></thead>
+      <tbody>
+        <tr><td>拿取衣身、找到側縫、兩邊對齊</td><td class="n">0.12</td></tr>
+        <tr><td>車縫中途停下、調整布料</td><td class="n">0.05</td></tr>
+        <tr><td>機器真正在縫：長 50 公分 × 每公分 4 針 ＝ 200 針，平均車速每分鐘 2,500 針</td><td class="n">0.08</td></tr>
+        <tr><td>剪線、放下</td><td class="n">0.07</td></tr>
+      </tbody>
+      <tfoot><tr><td>合計</td><td class="n">0.32</td></tr></tfoot>
+    </table></div>
+    機器真正在縫的時間只佔四分之一，其餘四分之三都是手在「拿、對、調、放」。這在車縫非常常見。所以改善的重點常常不在「換更快的機器」，而在<strong>減少手上的處理動作</strong>：裁片擺對位置、用夾具定位、用自動剪線。
+  </div>
+
+  <div class="term"><dl>
+    <dt>MTM <em>Methods-Time Measurement</em></dt>
+    <dd>「方法時間衡量」。由美國的梅納德（Maynard）等三位工程師發表。名字的意思是：時間取決於方法——方法變了，時間就跟著變。</dd>
+    <dt>TMU <em>Time Measurement Unit</em></dt>
+    <dd>「時間衡量單位」。基本動作往往只有零點幾秒，用秒或分鐘會出現一大堆小數；改用十萬分之一小時當單位，大部分動作都能寫成整數，加總和換算成小時也很方便。</dd>
+    <dt>PMTS <em>Predetermined Motion Time System</em></dt>
+    <dd>「預定動作時間系統」的總稱，MTM、GSD、MOST 都屬於這一類。「預定」就是「事先訂好」。</dd>
+  </dl></div>
+</section>
+
+<section class="lesson" id="l15">
+  <h2><span class="no">15</span>排線實驗室</h2>
+  <p class="goal">把前面學的全部用上：改條件、改工時，看看線會怎麼排。</p>
+
+  <p>這個工具會照第 9 課的五條規則自動排線：照順序、同機台才合併、單一工序太大就多人做、合併能省人才合併。你可以改目標、效率，甚至直接改每道工序的 SMV，看瓶頸和平衡率怎麼變。</p>
+
+  <div class="widget" id="lab">
+    <h4>排線實驗室</h4>
+    <div class="row">
+      <label>款式<select id="labProd"><option value="tee">圓領 T 恤（針織）</option><option value="shirt">男式長袖襯衫（梭織）</option></select></label>
+      <label>工作分鐘<input type="number" id="labMin" value="480"></label>
+      <label>目標產量<input type="number" id="labTarget" value="800"></label>
+      <label>計畫效率（%）<input type="number" id="labEff" value="100" step="5"></label>
+    </div>
+    <div class="out" id="labSum" aria-live="polite"></div>
+    <div id="labChart"></div>
+    <div class="tbl"><table>
+      <thead><tr><th>工位</th><th>工序</th><th>機台</th><th class="n">人數</th><th class="n">每人負荷</th></tr></thead>
+      <tbody id="labStations"></tbody>
+    </table></div>
+    <details class="think" style="margin:10px 0 0"><summary>修改每道工序的 SMV</summary>
+      <div class="tbl"><table>
+        <thead><tr><th class="n">No.</th><th>工序</th><th>機台</th><th class="n">SMV</th></tr></thead>
+        <tbody id="labOps"></tbody>
+      </table></div>
+      <button class="btn" id="labResetOps">還原預設工時</button>
+    </details>
+    <p class="cap">這是簡化模型：只合併前後相鄰、同一種機台的工序；多人共做時假設工作能平均分配。真實排線還要考慮作業員技能、機台數量、動線等，需要 IE 的判斷。</p>
+  </div>
+
+  <div class="eg"><b>建議你試試看</b>
+    一、T 恤：把效率改成 80%，人數從幾人變成幾人？瓶頸換到哪裡？<br>
+    二、T 恤：把目標改成 960，會發生什麼事？（提示：節拍剛好等於 0.5）<br>
+    三、襯衫：目標 400 件時，瓶頸出現在哪幾道？裡面有沒有第 11 課說的「最難的三道」？平衡率為什麼比 T 恤低這麼多？<br>
+    四、把 T 恤「剪線頭」的 SMV 從 0.50 改成 0.30（假設換了自動剪線平車），看看平衡率有沒有變？人數有沒有變？想想看為什麼。
+  </div>
+</section>
+
+<section class="lesson" id="l16">
+  <h2><span class="no">16</span>總複習測驗與名詞表</h2>
+  <p class="goal">點選答案，立刻知道對錯和解釋。</p>
+  <div class="quiz" id="quiz"></div>
+  <div class="score" id="quizScore" aria-live="polite"></div>
+
+  <h3>名詞總表</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>名詞</th><th>英文</th><th>一句話</th><th>課</th></tr></thead>
+    <tbody id="gloss"></tbody>
+  </table></div>
+</section>
+
+<footer>
+  <p>本課程中的 SMV、效率、成本等數字皆為教學示範值，用來說明計算方法。實際排線請以貴廠的工序分解、時間研究或 GSD 分析為準。</p>
+  <p>這是一個單一 HTML 檔，不需要網路即可開啟，也可以直接列印。</p>
+</footer>
+
+</div>
+</main>
+<script>
+(function(){
+"use strict";
+var $=function(s,r){return (r||document).querySelector(s)}, $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var NS="http://www.w3.org/2000/svg";
+function el(tag,attrs,parent,text){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;if(parent)parent.appendChild(e);return e}
+function f2(x){return (Math.round(x*100)/100).toFixed(2)}
+var CIRC="①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳";
+var MC={"平車":"#2F6FA3","拷克":"#2E7D4F","坎車":"#A8661E","手工":"#8A918D","埋夾車":"#6B4C9A","鎖眼機":"#B04A7A","釘扣機":"#3E8C8C"};
+
+/* ---------- 導覽 ---------- */
+var side=$("#side"),mb=$("#menuBtn");
+mb.addEventListener("click",function(){var o=side.classList.toggle("open");mb.setAttribute("aria-expanded",o)});
+$$(".side a").forEach(function(a){a.addEventListener("click",function(){side.classList.remove("open");mb.setAttribute("aria-expanded","false")})});
+document.addEventListener("click",function(e){if(side.classList.contains("open")&&!side.contains(e.target)&&e.target!==mb){side.classList.remove("open");mb.setAttribute("aria-expanded","false")}});
+var fill=$("#threadFill");
+function onScroll(){var h=document.documentElement,p=h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight);p=Math.min(1,Math.max(0,p))*100;
+  if(window.innerWidth<=980){fill.style.width=p+"%";fill.style.height=""}else{fill.style.height=p+"%";fill.style.width=""}}
+window.addEventListener("scroll",onScroll,{passive:true});window.addEventListener("resize",onScroll);onScroll();
+if("IntersectionObserver" in window){
+  var links={};$$(".side a").forEach(function(a){links[a.getAttribute("href").slice(1)]=a});
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){$$(".side a.on").forEach(function(x){x.classList.remove("on")});var l=links[e.target.id];if(l)l.classList.add("on")}})},{rootMargin:"-35% 0px -60% 0px"});
+  $$("section.lesson").forEach(function(s){io.observe(s)});
+}
+
+/* ---------- 第2課：布料結構 ---------- */
+(function(){
+  var svg=$("#fabricSvg");
+  var T={"font-family":"Noto Sans TC,PingFang TC,Microsoft JhengHei,sans-serif"};
+  el("text",Object.assign({x:20,y:26,"font-size":17,"font-weight":700,fill:"#A8661E"},T),svg,"梭織：經緯交錯");
+  el("text",Object.assign({x:340,y:26,"font-size":17,"font-weight":700,fill:"#2F6FA3"},T),svg,"針織：線圈串套");
+  var gw=el("g",{id:"wovenG",style:"transform-box:fill-box;transform-origin:center;transition:transform .8s cubic-bezier(.3,1.4,.5,1)"},svg);
+  var n=10,st=26,x0=30,y0=48,len=n*st;
+  for(var j=0;j<n;j++){el("rect",{x:x0-4,y:y0+j*st+4,width:len+4,height:17,fill:j===4?"#C4303A":"#D9B27C",rx:2},gw)}
+  for(var i=0;i<n;i++){el("rect",{x:x0+i*st+4,y:y0-4,width:17,height:len+4,fill:"#8E5A1C",rx:2},gw)}
+  for(i=0;i<n;i++)for(j=0;j<n;j++){if((i+j)%2===0)el("rect",{x:x0+i*st+2,y:y0+j*st+4,width:21,height:17,fill:j===4?"#C4303A":"#D9B27C"},gw)}
+  el("text",Object.assign({x:30,y:y0+len+22,"font-size":12,fill:"#5A6862"},T),svg,"深色直線＝經線　淺色橫線＝緯線");
+  var gk=el("g",{id:"knitG",style:"transform-box:fill-box;transform-origin:center;transition:transform .8s cubic-bezier(.3,1.4,.5,1)"},svg);
+  var cols=11,rows=11,cx0=356,cy0=56,dx=24,dy=21;
+  for(var r=0;r<rows;r++)for(var c=0;c<cols;c++){
+    var cx=cx0+c*dx,cy=cy0+r*dy,col=r===5?"#C4303A":"#2F6FA3";
+    el("ellipse",{cx:cx-5,cy:cy,rx:5.5,ry:11,transform:"rotate(-28 "+(cx-5)+" "+cy+")",fill:"none",stroke:col,"stroke-width":3.2},gk);
+    el("ellipse",{cx:cx+5,cy:cy,rx:5.5,ry:11,transform:"rotate(28 "+(cx+5)+" "+cy+")",fill:"none",stroke:col,"stroke-width":3.2},gk);
+  }
+  el("text",Object.assign({x:346,y:y0+len+22,"font-size":12,fill:"#5A6862"},T),svg,"一條線繞成一排圈圈，上下排互相套住");
+  var b=$("#stretchBtn"),cap=$("#stretchCap"),on=false;
+  b.addEventListener("click",function(){on=!on;b.setAttribute("aria-pressed",on);b.textContent=on?"放手":"用力拉拉看";
+    gk.style.transform=on?"scale(1.28,0.9)":"none";gw.style.transform=on?"scale(1.03,1)":"none";
+    cap.textContent=on?"針織布的線圈被拉開，整片變寬很多；梭織布的直線拉不動，幾乎不變。":"按下按鈕，看兩種布被橫向拉扯時的差別。"});
+})();
+
+/* ---------- 第5課：標準工時 ---------- */
+function tsCalc(){
+  var v=$$(".obs").map(function(i){return parseFloat(i.value)}).filter(function(x){return x>0});
+  var rate=parseFloat($("#tsRate").value)||0,al=parseFloat($("#tsAllow").value)||0,o=$("#tsOut");
+  if(!v.length){o.textContent="請至少輸入一次觀測時間。";return}
+  var avg=v.reduce(function(a,b){return a+b},0)/v.length,basic=avg*rate/100,std=basic*(1+al/100);
+  o.innerHTML="平均觀測時間 ＝ <b>"+avg.toFixed(3)+"</b> 分（共 "+v.length+" 次）<br>基本時間 ＝ "+avg.toFixed(3)+" × "+rate+"% ＝ <b>"+basic.toFixed(3)+"</b> 分<br>標準工時 ＝ "+basic.toFixed(3)+" × (1 ＋ "+al+"%) ＝ <b>"+std.toFixed(3)+"</b> 分 ≈ <b>"+f2(std)+"</b> 分（"+(std*60).toFixed(1)+" 秒）";
+}
+$$("#tsWidget input").forEach(function(i){i.addEventListener("input",tsCalc)});tsCalc();
+
+/* ---------- 工序資料 ---------- */
+var TEE=[["上主嘜（後片）","平車",0.25],["領條接圈","平車",0.12],["合肩","拷克",0.40],["上領","拷克",0.45],["後領貼條","平車",0.40],["領圈壓線","坎車",0.30],["袖口折邊（兩邊）","坎車",0.50],["上袖（兩邊）","拷克",0.70],["合側縫（兩邊）","拷克",0.80],["下擺折邊","坎車",0.45],["剪線頭、自檢","手工",0.50]];
+var SHIRT=[["領子合縫（領面＋領底）","平車",0.60],["修剪領角、翻領","手工",0.45],["領面壓線","平車",0.55],["上領座","平車",0.90],["做門襟","平車",0.70],["釘口袋","平車",0.80],["做袖衩（兩邊）","平車",1.20],["做袖頭（兩個）","平車",1.10],["上過肩","平車",0.75],["合肩","平車",0.60],["上領","平車",1.30],["上袖（兩邊）","埋夾車",1.00],["合側縫＋袖底","埋夾車",1.20],["上袖頭（兩邊）","平車",1.20],["下擺捲邊","平車",0.70],["鎖扣眼","鎖眼機",0.50],["釘鈕扣","釘扣機",0.55],["剪線頭、自檢","手工",0.80]];
+function fillOB(tb,sumEl,data){var s=0,h="";data.forEach(function(o,i){s+=o[2];h+="<tr><td class='n'>"+CIRC[i]+"</td><td>"+o[0]+"</td><td style='white-space:nowrap'><span style='color:"+MC[o[1]]+";font-weight:700'>●</span> "+o[1]+"</td><td class='n'>"+f2(o[2])+"</td></tr>"});$(tb).innerHTML=h;$(sumEl).textContent=f2(s)}
+fillOB("#obTee","#obTeeSum",TEE);fillOB("#obShirt","#obShirtSum",SHIRT);
+
+/* ---------- 關係圖 ---------- */
+function graph(svg,nodes,edges){
+  var d=el("defs",{},svg),m=el("marker",{id:svg.id+"Ar",viewBox:"0 0 10 10",refX:9,refY:5,markerWidth:7,markerHeight:7,orient:"auto-start-reverse"},d);
+  el("path",{d:"M0 0 L10 5 L0 10 z",fill:"#5A6862"},m);
+  var N={};nodes.forEach(function(n){N[n.id]=n});
+  edges.forEach(function(e){var a=N[e[0]],b=N[e[1]],x1,y1,x2,y2;
+    if(a.x===b.x){x1=x2=a.x+a.w/2;y1=a.y+a.h;y2=b.y}
+    else if(a.x>b.x){x1=a.x;y1=a.y+a.h/2;x2=b.x+b.w;y2=b.y+b.h/2}
+    else{x1=a.x+a.w;y1=a.y+a.h/2;x2=b.x;y2=b.y+b.h/2}
+    el("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:"#5A6862","stroke-width":1.6,"marker-end":"url(#"+svg.id+"Ar)"},svg)});
+  nodes.forEach(function(n){var c=MC[n.m]||"#5A6862";
+    el("rect",{x:n.x,y:n.y,width:n.w,height:n.h,rx:7,fill:n.fill||"#fff",stroke:c,"stroke-width":2},svg);
+    el("rect",{x:n.x,y:n.y,width:6,height:n.h,rx:2,fill:c},svg);
+    el("text",{x:n.x+14,y:n.y+n.h/2+5,"font-size":13.5,fill:"#1B2420","font-family":"Noto Sans TC,PingFang TC,Microsoft JhengHei,sans-serif"},svg,n.t)});
+}
+(function(){
+  var H=38,mx=16,mw=180,bx=208,bw=146,Y={0:10,2:70,3:130,4:190,5:250,7:310,8:370,9:430,10:490},nodes=[];
+  function lab(i){return CIRC[i]+" "+TEE[i][0].replace(/（.*）/,"")+"  "+f2(TEE[i][2])}
+  [0,2,3,4,5,7,8,9,10].forEach(function(i){nodes.push({id:i,x:mx,y:Y[i],w:mw,h:H,m:TEE[i][1],t:lab(i)})});
+  nodes.push({id:1,x:bx,y:100,w:bw,h:H,m:"平車",t:lab(1),fill:"#FBF6E6"});
+  nodes.push({id:6,x:bx,y:280,w:bw,h:H,m:"坎車",t:lab(6),fill:"#FBF6E6"});
+  graph($("#precSvg"),nodes,[[0,2],[2,3],[1,3],[3,4],[4,5],[5,7],[6,7],[7,8],[8,9],[9,10]]);
+})();
+(function(){
+  var H=34,ax=190,aw=164,px=6,pw=160,nodes=[],edges=[];
+  var asm=[8,9,10,11,12,13,14,15,16,17];
+  asm.forEach(function(k,i){nodes.push({id:"a"+k,x:ax,y:10+i*46,w:aw,h:H,m:SHIRT[k][1],t:CIRC[k]+" "+SHIRT[k][0].replace(/（.*）/,"")});if(i)edges.push(["a"+asm[i-1],"a"+k])});
+  var parts=[["p1","前片：⑤門襟 ⑥口袋",0,"a8"],["p2","領子：①～④",2,"a10"],["p3","袖子：⑦袖衩",3,"a11"],["p4","袖頭：⑧",5,"a13"]];
+  parts.forEach(function(p){nodes.push({id:p[0],x:px,y:10+p[2]*46,w:pw,h:H,m:"平車",t:p[1],fill:"#FBF6E6"});edges.push([p[0],p[3]])});
+  graph($("#shirtSvg"),nodes,edges);
+})();
+
+/* ---------- 第7課：節拍 ---------- */
+function tkCalc(){var m=+$("#tkMin").value,t=+$("#tkTarget").value,s=+$("#tkSmv").value,o=$("#tkOut");
+  if(!(m>0&&t>0&&s>0)){o.textContent="三個數字都要大於 0。";return}
+  var tk=m/t,th=s/tk,need=Math.ceil(th-1e-9);
+  o.innerHTML="節拍時間 ＝ "+m+" ÷ "+t+" ＝ <b>"+tk.toFixed(3)+"</b> 分（"+(tk*60).toFixed(1)+" 秒出一件）<br>理論人數 ＝ "+s+" ÷ "+tk.toFixed(3)+" ＝ "+th.toFixed(2)+" → <b>至少 "+need+" 人</b><br>用 "+need+" 人的理論產量 ＝ "+need+" × "+m+" ÷ "+s+" ＝ <b>"+Math.floor(need*m/s)+"</b> 件";}
+$$("#taktWidget input").forEach(function(i){i.addEventListener("input",tkCalc)});tkCalc();
+
+/* ---------- 長條圖 ---------- */
+function bars(box,st,takt){
+  var mx=Math.max(takt,Math.max.apply(null,st.map(function(s){return s.load})))*1.18,maxL=Math.max.apply(null,st.map(function(s){return s.load}));
+  var h="<div class='bars'>";
+  st.forEach(function(s){var bn=Math.abs(s.load-maxL)<1e-9;
+    h+="<div class='b'><small style='color:"+(bn?"#C4303A":"#1B2420")+";font-weight:"+(bn?700:400)+"'>"+f2(s.load)+"</small><i style='height:"+(s.load/mx*100)+"%;background:"+MC[s.m]+(bn?";box-shadow:0 0 0 2px #C4303A":"")+"'></i></div>"});
+  h+="<div class='takt' style='bottom:"+(takt/mx*100)+"%'><span>節拍 "+f2(takt)+"</span></div></div><div class='blabels'>";
+  st.forEach(function(s,i){h+="<span>"+(i+1)+(s.p>1?"<br>×"+s.p:"")+"</span>"});
+  h+="</div><div class='legend'>";
+  var used={};st.forEach(function(s){used[s.m]=1});
+  Object.keys(used).forEach(function(k){h+="<span><i style='background:"+MC[k]+"'></i>"+k+"</span>"});
+  h+="<span><i style='background:#fff;box-shadow:0 0 0 2px #C4303A'></i>瓶頸</span></div><p class='cap'>橫軸是工位編號，「×2」表示該工位有 2 人；長條高度是每人負荷（分）。</p>";
+  box.innerHTML=h;
+}
+
+/* ---------- 自動排線 ---------- */
+function allocate(ops,takt){
+  var g=[],cur=null;
+  function need(t){return Math.max(1,Math.ceil(t/takt-1e-9))}
+  ops.forEach(function(o,i){
+    if(cur&&cur.m===o[1]&&need(cur.t+o[2])<need(cur.t)+need(o[2])){cur.ops.push(i);cur.t+=o[2]}
+    else{cur={m:o[1],t:o[2],ops:[i]};g.push(cur)}});
+  g.forEach(function(s){s.p=need(s.t);s.load=s.t/s.p});
+  return g;
+}
+
+/* ---------- 第9課：兩版比較 ---------- */
+(function(){
+  var V1=[[[0,1],"平車",1],[[2],"拷克",1],[[3],"拷克",1],[[4],"平車",1],[[5],"坎車",1],[[6],"坎車",1],[[7],"拷克",2],[[8],"拷克",2],[[9],"坎車",1],[[10],"手工",1]];
+  var V2=V1.slice(0,6).concat([[[7,8],"拷克",3],[[9],"坎車",1],[[10],"手工",1]]);
+  function mk(v){return v.map(function(x){var t=x[0].reduce(function(a,i){return a+TEE[i][2]},0);return {m:x[1],p:x[2],t:t,load:t/x[2]}})}
+  function show(n){var st=mk(n===1?V1:V2),N=st.reduce(function(a,s){return a+s.p},0),mx=Math.max.apply(null,st.map(function(s){return s.load})),tot=4.87;
+    bars($("#balChart"),st,0.6);
+    $("#balOut").innerHTML="人數 <b>"+N+"</b>　瓶頸 <b>"+f2(mx)+"</b> 分　平衡率 <b>"+(tot/(N*mx)*100).toFixed(1)+"%</b>　最大日產量 <b>"+Math.floor(480/mx)+"</b> 件";
+    $$("[data-ver]").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.ver==String(n))})}
+  $$("[data-ver]").forEach(function(b){b.addEventListener("click",function(){show(+b.dataset.ver)})});show(1);
+})();
+
+/* ---------- 第8課：流水線模擬 ---------- */
+(function(){
+  var MODES={bad:[0.4,0.3,0.8,0.5],good:[0.5,0.5,0.5,0.5]},mode="bad",S,line=$("#simLine"),out=$("#simOut"),running=false,last=0,LIMIT=120;
+  function reset(){var ct=MODES[mode];S={ct:ct,q:[0,0,0,0],busy:[false,false,false,false],rem:[0,0,0,0],done:0,t:0,idle:[0,0,0,0]};
+    line.innerHTML=ct.map(function(c,i){return "<div class='st'><div class='qn'></div><div class='q'></div><div class='box'><b>工位 "+(i+1)+"</b>"+c.toFixed(1)+" 分<div class='pg'><i></i></div></div></div>"}).join("");draw()}
+  function step(dt){var n=S.ct.length;S.t+=dt;
+    for(var i=n-1;i>=0;i--){
+      if(S.busy[i]){S.rem[i]-=dt;if(S.rem[i]<=0){S.busy[i]=false;if(i===n-1)S.done++;else S.q[i+1]++}}
+      if(!S.busy[i]){if(i===0||S.q[i]>0){if(i>0)S.q[i]--;S.busy[i]=true;S.rem[i]+=S.ct[i];if(S.rem[i]<=0)S.rem[i]=S.ct[i]}else{S.idle[i]+=dt;S.rem[i]=0}}
+    }}
+  function draw(){var st=$$(".st",line);
+    st.forEach(function(d,i){var q=$(".q",d),qn=$(".qn",d),pg=$(".pg i",d);
+      if(i===0){qn.textContent="裁片充足";q.innerHTML=""}
+      else{var k=Math.min(S.q[i],44),h="";for(var j=0;j<k;j++)h+="<i></i>";q.innerHTML=h;q.classList.toggle("jam",S.q[i]>=10);qn.textContent="等待 "+S.q[i]+" 件"}
+      pg.style.width=(S.busy[i]?(1-S.rem[i]/S.ct[i])*100:0)+"%"});
+    var rate=S.t>3?S.done/S.t*60:0,idle=S.t>0?S.idle.map(function(x){return Math.round(x/S.t*100)+"%"}).join("、"):"—";
+    out.innerHTML="已跑 <b>"+S.t.toFixed(0)+"</b> 分鐘　完成 <b>"+S.done+"</b> 件　每小時約 <b>"+(rate?rate.toFixed(0):"—")+"</b> 件<br>各工位閒置比例：<b>"+idle+"</b>"+(S.t>=LIMIT?"<br>已模擬 2 小時，按「重來」再看一次。":"")}
+  function loop(ts){if(!running)return;var dt=last?Math.min(.1,(ts-last)/1000):0;last=ts;
+    if(S.t<LIMIT){var k=Math.ceil(dt/0.02);for(var i=0;i<k;i++)step(dt/k);draw()}
+    requestAnimationFrame(loop)}
+  function start(){if(running)return;running=true;last=0;requestAnimationFrame(loop)}
+  $$("#simWidget [data-mode]").forEach(function(b){b.addEventListener("click",function(){mode=b.dataset.mode;$$("#simWidget [data-mode]").forEach(function(x){x.setAttribute("aria-pressed",x===b)});reset()})});
+  $("#simReset").addEventListener("click",reset);
+  reset();
+  if("IntersectionObserver" in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)start();else running=false})}).observe($("#simWidget"))}else start();
+})();
+
+/* ---------- 第12課：學習曲線 ---------- */
+(function(){var svg=$("#lcSvg"),v=[45,58,67,73,77,80,81],T={"font-family":"Noto Sans TC,PingFang TC,Microsoft JhengHei,sans-serif","font-size":16,fill:"#5A6862"};
+  function Y(p){return 215-p*1.9}function X(i){return 70+i*82}
+  [0,25,50,75,100].forEach(function(p){el("line",{x1:60,x2:580,y1:Y(p),y2:Y(p),stroke:"#E1E6E3"},svg);el("text",Object.assign({x:52,y:Y(p)+4,"text-anchor":"end"},T),svg,p+"%")});
+  el("path",{d:v.map(function(p,i){return (i?"L":"M")+X(i)+" "+Y(p)}).join(" "),fill:"none",stroke:"#1E4A3D","stroke-width":3},svg);
+  v.forEach(function(p,i){el("circle",{cx:X(i),cy:Y(p),r:4.5,fill:"#E6BC3F",stroke:"#1E4A3D","stroke-width":2},svg);
+    el("text",Object.assign({x:X(i),y:Y(p)-10,"text-anchor":"middle"},T,{fill:"#1B2420"}),svg,p+"%");
+    el("text",Object.assign({x:X(i),y:236,"text-anchor":"middle"},T),svg,"第"+(i+1)+"天")});
+})();
+
+/* ---------- 第15課：實驗室 ---------- */
+(function(){
+  var DEF={tee:{data:TEE,target:800},shirt:{data:SHIRT,target:400}},prod="tee",ops;
+  function load(){ops=DEF[prod].data.map(function(o){return o.slice()});
+    $("#labOps").innerHTML=ops.map(function(o,i){return "<tr><td class='n'>"+CIRC[i]+"</td><td>"+o[0]+"</td><td style='white-space:nowrap'>"+o[1]+"</td><td class='n'><input type='number' step='0.01' min='0.01' data-i='"+i+"' value='"+o[2].toFixed(2)+"' style='width:80px'></td></tr>"}).join("");
+    $$("#labOps input").forEach(function(inp){inp.addEventListener("input",function(){var v=parseFloat(inp.value);if(v>0){ops[+inp.dataset.i][2]=v;run()}})});run()}
+  function run(){var m=+$("#labMin").value,t=+$("#labTarget").value,e=+$("#labEff").value,sum=$("#labSum");
+    if(!(m>0&&t>0&&e>0)){sum.textContent="工作分鐘、目標產量、效率都要大於 0。";$("#labChart").innerHTML="";$("#labStations").innerHTML="";return}
+    var takt=m*(e/100)/t,tot=ops.reduce(function(a,o){return a+o[2]},0),th=Math.ceil(tot/takt-1e-9),g=allocate(ops,takt);
+    var N=g.reduce(function(a,s){return a+s.p},0),mx=Math.max.apply(null,g.map(function(s){return s.load})),cap=Math.floor(m*(e/100)/mx);
+    sum.innerHTML="總 SMV <b>"+f2(tot)+"</b> 分　計畫節拍 <b>"+takt.toFixed(3)+"</b> 分"+(e!==100?"（已乘效率 "+e+"%）":"")+
+      "<br>理論最少 <b>"+th+"</b> 人　實際排出 <b>"+N+"</b> 人　平衡率 <b>"+(tot/(N*mx)*100).toFixed(1)+"%</b>"+
+      "<br>瓶頸每人負荷 <b>"+f2(mx)+"</b> 分　預估日產量 <b>"+cap+"</b> 件（每小時約 "+Math.floor(cap/(m/60))+" 件）"+
+      (cap<t?"<br><span style='color:#C4303A'>預估產量低於目標：有單一工序做不到節拍以內，請檢查瓶頸。</span>":"");
+    bars($("#labChart"),g,takt);
+    $("#labStations").innerHTML=g.map(function(s,i){var bn=Math.abs(s.load-mx)<1e-9;return "<tr"+(bn?" style='background:#FBE9EA'":"")+"><td>"+(i+1)+"</td><td>"+s.ops.map(function(k){return CIRC[k]+ops[k][0]}).join(" ＋ ")+"</td><td style='white-space:nowrap'><span style='color:"+MC[s.m]+";font-weight:700'>●</span> "+s.m+"</td><td class='n'>"+s.p+"</td><td class='n'>"+f2(s.load)+(bn?" 瓶頸":"")+"</td></tr>"}).join("");
+  }
+  $("#labProd").addEventListener("change",function(){prod=this.value;$("#labTarget").value=DEF[prod].target;load()});
+  ["#labMin","#labTarget","#labEff"].forEach(function(s){$(s).addEventListener("input",run)});
+  $("#labResetOps").addEventListener("click",load);
+  load();
+})();
+
+/* ---------- 第16課：測驗 ---------- */
+(function(){
+  var Q=[
+    ["梭織布是怎麼組成的？",["線圈一圈套一圈","經線和緯線上下交錯","把纖維壓在一起"],1,"梭織＝經緯交錯，像編竹籃；線圈串套是針織。"],
+    ["T 恤的下擺折邊，最常用哪種機台？",["平車","坎車（三本車）","釘扣機"],1,"坎車的線跡能伸縮，適合針織布的下擺和袖口。"],
+    ["標準工時怎麼算？",["取最快那一次","平均觀測時間 × 評比 × (1 ＋ 寬放率)","平均觀測時間就好"],1,"先換算成正常速度（評比），再加上合理的休息與延遲（寬放）。"],
+    ["一天工作 450 分鐘，目標 900 件，節拍時間是？",["0.5 分","2 分","0.45 分"],0,"450 ÷ 900 ＝ 0.5 分，每 30 秒要出一件。"],
+    ["總 SMV 6.0 分、節拍 0.5 分，理論上至少要幾個人？",["3 人","11 人","12 人"],2,"6.0 ÷ 0.5 ＝ 12 人。"],
+    ["一條線三個工位分別是 0.4、0.6、0.5 分，整條線多久出一件？",["0.4 分","0.5 分","0.6 分"],2,"產量由最慢的工位（瓶頸）決定。"],
+    ["4 個人、總 SMV 1.8 分、瓶頸工位 0.6 分，平衡率是？",["75%","60%","90%"],0,"1.8 ÷ (4 × 0.6) ＝ 75%。"],
+    ["在「不是瓶頸」的工位上省下時間，產量會？",["大幅增加","不會變","減少"],1,"產量只由瓶頸決定，改善要先改瓶頸。"],
+    ["10 人工作 480 分鐘，產出 600 件，SMV 6.0，效率是？",["75%","80%","125%"],0,"600 × 6.0 ÷ (10 × 480) ＝ 3,600 ÷ 4,800 ＝ 75%。"],
+    ["線上有 300 件在製品，每小時產出 100 件，一件衣服平均在線上待多久？",["1 小時","3 小時","30 小時"],1,"利特爾法則：300 ÷ 100 ＝ 3 小時。"],
+    ["「Takt」這個字原本是什麼意思？",["日文的「時間」","德文的「拍子、節奏」","英文縮寫"],1,"Takt 是德文，指音樂的拍子，豐田把它變成工廠管理的核心觀念。"],
+    ["1 TMU 等於多少秒？",["0.036 秒","1 秒","0.6 秒"],0,"1 TMU ＝ 十萬分之一小時 ＝ 0.036 秒。"]
+  ],score=0,answered=0,box=$("#quiz");
+  box.innerHTML=Q.map(function(q,i){return "<div class='q' data-i='"+i+"'><p>"+(i+1)+". "+q[0]+"</p>"+q[1].map(function(o,j){return "<button class='opt' data-j='"+j+"'>"+o+"</button>"}).join("")+"<div class='fb' aria-live='polite'></div></div>"}).join("");
+  $$(".q",box).forEach(function(d){var q=Q[+d.dataset.i];
+    $$(".opt",d).forEach(function(b){b.addEventListener("click",function(){if(d.dataset.done)return;d.dataset.done=1;answered++;
+      var j=+b.dataset.j,ok=j===q[2];if(ok)score++;
+      b.classList.add(ok?"right":"wrong");$$(".opt",d)[q[2]].classList.add("right");
+      $(".fb",d).textContent=(ok?"答對了！":"再想想：")+q[3];
+      $("#quizScore").textContent="目前得分："+score+" ／ "+answered+(answered===Q.length?(score===Q.length?"　全對，你已經可以上線排工段了！":score>=9?"　很不錯！錯的題目回去對應課程再看一次。":"　建議回頭複習第 5～9 課，再挑戰一次。"):"")})})});
+})();
+
+/* ---------- 名詞表 ---------- */
+(function(){
+  var G=[["成衣","Ready-to-wear","工廠照標準尺碼大量做好的衣服",1],["裁片","Cut pieces","布被裁成的一片片零件",1],["梭織","Woven","經線與緯線交錯織成的布",2],["針織","Knit","線圈互相串套而成的布",2],["經／緯","Warp／Weft","織布時直的線／橫的線",2],["線跡","Stitch","縫線在布上的結構，ISO 4915 分六類",3],["平車","Lockstitch","上下兩線互鎖的單針車",3],["拷克","Overlock","縫合、切邊、包邊一次完成",3],["坎車／三本車","Coverstitch","下擺袖口用、能伸縮的覆蓋線跡",3],["工業工程","IE","用最少浪費把東西做好的學問",4],["動素","Therblig","人類動作的基本單位",4],["標準工時","SMV／SAM","普通熟練者以正常速度加寬放完成的時間",5],["評比","Rating","把觀測速度換算成正常速度的百分比",5],["寬放","Allowance","個人需要、疲勞、延遲的合理時間",5],["工序","Operation","一人一機連續完成的一段工作",6],["工序分解表","OB","列出所有工序、機台與工時的表",6],["工段","—","分配給同一工位的一組工序",6],["節拍時間","Takt time","每隔多久必須產出一件",7],["瓶頸","Bottleneck","決定整條線產量的最慢工位",8],["在製品","WIP","已開始但還沒完成的半成品",8],["平衡率","Balance efficiency","總 SMV ÷（人數 × 瓶頸時間）",8],["ECRS","—","取消、合併、重排、簡化",10],["部件線","Preparatory section","先做領、袖頭等零件的段落",11],["過肩","Yoke","襯衫背後肩上的橫布，原意牛軛",11],["效率","Efficiency","產出 SMV ÷ 投入人力分鐘",12],["學習曲線","Learning curve","越做越快、最後趨於平穩",12],["每分鐘成本","CPM","每一分鐘人力的成本，用來報價",12],["紮包制","PBS","一包一包傳遞的生產方式",13],["吊掛系統","UPS","衣架沿軌道自動送到工位",13],["利特爾法則","Little's Law","生產週期＝在製品÷產出速度",13],["MTM／GSD","PMTS","查表訂工時的預定動作時間系統",14],["TMU","Time Measurement Unit","十萬分之一小時＝0.036 秒",14]];
+  $("#gloss").innerHTML=G.map(function(g){return "<tr><td><b>"+g[0]+"</b></td><td>"+g[1]+"</td><td>"+g[2]+"</td><td class='n'><a href='#l"+g[3]+"'>"+g[3]+"</a></td></tr>"}).join("");
+})();
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-f74f26c6dd" data-category="garment"></script></body>
+</html>

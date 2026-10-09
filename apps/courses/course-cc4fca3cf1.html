@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>老子與《道德經》入門課</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EEF0EA; --card:#F8F9F5; --ink:#1F2A2E; --muted:#5D6A6C; --line:#D3D8CF;
+  --slip:#E4D6AE; --slip-edge:#C9B783; --slip-ink:#2B2419;
+  --blue:#2F5D7C; --seal:#A6352B; --bamboo:#5C7A4E; --wood:#8A6A45; --clay:#B08A64; --stone:#8E9493;
+  --water:#4F8FB5; --good:#3F7A4F; --bad:#A6352B;
+  --serif:"Noto Serif TC","Songti TC","PMingLiU","MingLiU",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#141A1C; --card:#1C2427; --ink:#DCE3DD; --muted:#98A5A5; --line:#2E3A3D;
+    --slip:#4A4130; --slip-edge:#62553B; --slip-ink:#F1E6C8;
+    --blue:#8EBBD6; --seal:#E07A6C; --bamboo:#9DBB8C; --wood:#B8946A; --clay:#C9A57E; --stone:#6E7676;
+    --water:#6FAED3; --good:#8CC79A; --bad:#E07A6C;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141A1C; --card:#1C2427; --ink:#DCE3DD; --muted:#98A5A5; --line:#2E3A3D;
+  --slip:#4A4130; --slip-edge:#62553B; --slip-ink:#F1E6C8;
+  --blue:#8EBBD6; --seal:#E07A6C; --bamboo:#9DBB8C; --wood:#B8946A; --clay:#C9A57E; --stone:#6E7676;
+  --water:#6FAED3; --good:#8CC79A; --bad:#E07A6C;
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px);}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-text-size-adjust:100%;}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:4px}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);border-bottom:1px solid var(--line)}
+.top-inner{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px 18px}
+.top-title{font-family:var(--serif);font-weight:700;font-size:16px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-count{font-size:14px;color:var(--muted);white-space:nowrap}
+.toc-btn{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:4px 14px;font-size:14px;cursor:pointer}
+.progress{height:3px;background:var(--line)}
+.progress span{display:block;height:100%;width:0;background:var(--seal);transition:width .4s ease}
+
+main{max-width:760px;margin:0 auto;padding:8px 20px 40px}
+.lesson{display:none}
+.lesson.active{display:block}
+.lesson-no{font-family:var(--serif);color:var(--seal);font-weight:700;font-size:15px;margin:28px 0 0}
+h2{font-family:var(--serif);font-weight:900;font-size:30px;line-height:1.35;margin:4px 0 18px;letter-spacing:.02em}
+h3{font-family:var(--serif);font-weight:700;font-size:21px;margin:34px 0 8px}
+p{margin:0 0 14px}
+.lead{font-size:18.5px}
+.small{font-size:14.5px;color:var(--muted)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center;margin:26px 0 10px}
+.hero-char{font-family:var(--serif);font-weight:900;font-size:128px;line-height:1;writing-mode:vertical-rl;color:var(--ink);position:relative}
+.hero-seal{position:absolute;right:-14px;bottom:-6px;writing-mode:horizontal-tb;font-size:13px;color:#fff;background:var(--seal);padding:2px 6px;border-radius:3px;font-weight:700;letter-spacing:.1em}
+.hero h1{font-family:var(--serif);font-weight:900;font-size:34px;line-height:1.3;margin:0 0 10px}
+.hero p{color:var(--muted);margin:0}
+
+/* glossary term */
+.term{color:var(--blue);border-bottom:1.5px dotted var(--blue);cursor:pointer;font-weight:500}
+.term:hover{background:color-mix(in srgb,var(--blue) 10%,transparent)}
+
+/* bamboo slips */
+.slip-wrap{margin:18px 0 6px}
+.slip-src{font-size:14px;color:var(--muted);margin-bottom:6px}
+.slips{display:flex;flex-direction:row-reverse;gap:5px;overflow-x:auto;padding:4px 2px 12px;-webkit-overflow-scrolling:touch}
+.slip{flex:0 0 auto;writing-mode:vertical-rl;font-family:var(--serif);font-weight:700;font-size:21px;letter-spacing:.14em;color:var(--slip-ink);
+  background:linear-gradient(90deg,var(--slip-edge) 0 2px,var(--slip) 2px calc(100% - 2px),var(--slip-edge) calc(100% - 2px));
+  padding:14px 6px;border-radius:3px;min-height:150px;position:relative}
+.slip::before,.slip::after{content:"";position:absolute;left:-3px;right:-3px;height:3px;background:var(--wood);opacity:.55}
+.slip::before{top:26px}.slip::after{bottom:26px}
+.baihua{border-left:3px solid var(--bamboo);padding:4px 0 4px 14px;margin:8px 0 16px}
+.baihua b{font-family:var(--serif)}
+.zhuyin{font-size:14.5px;color:var(--muted);margin:-4px 0 14px}
+
+/* example + think */
+.eg{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:16px 0}
+.eg-h{font-family:var(--serif);font-weight:700;margin-bottom:6px}
+details.think{border:1.5px dashed var(--bamboo);border-radius:12px;padding:12px 16px;margin:22px 0}
+details.think summary{cursor:pointer;font-family:var(--serif);font-weight:700;list-style:none}
+details.think summary::-webkit-details-marker{display:none}
+details.think summary::before{content:"想一想　";color:var(--bamboo)}
+details.think[open] summary{margin-bottom:8px}
+.legend{font-size:14.5px;background:color-mix(in srgb,var(--seal) 8%,transparent);border-radius:8px;padding:8px 12px;margin:10px 0 14px}
+
+/* demo */
+.demo{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:20px 0;text-align:center}
+.demo-h{font-family:var(--serif);font-weight:700;margin-bottom:6px}
+.demo svg{width:100%;max-width:340px;height:auto;display:block;margin:0 auto}
+.demo-msg{min-height:3.4em;margin:10px 0;font-size:16px}
+.btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.btn{border:1.5px solid var(--ink);background:transparent;border-radius:24px;padding:7px 18px;cursor:pointer;font-size:15.5px}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn:active{transform:scale(.97)}
+input[type=range]{width:100%;max-width:340px;accent-color:var(--blue)}
+
+/* loom */
+.weft{stroke-dasharray:180;stroke-dashoffset:180;animation:weave 6s ease-in-out infinite}
+@keyframes weave{0%{stroke-dashoffset:180}30%,80%{stroke-dashoffset:0}100%{stroke-dashoffset:-180}}
+
+/* wheel */
+.spin{animation:spin 5s linear infinite;transform-box:view-box;transform-origin:110px 110px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* timeline */
+.tl{list-style:none;margin:16px 0;padding:0 0 0 22px;border-left:2px solid var(--line)}
+.tl li{position:relative;margin:0 0 16px;padding-left:6px}
+.tl li::before{content:"";position:absolute;left:-30px;top:9px;width:12px;height:12px;border-radius:50%;background:var(--paper);border:2px solid var(--muted)}
+.tl li.key::before{background:var(--seal);border-color:var(--seal)}
+.tl .yr{font-family:var(--serif);font-weight:700;display:block}
+
+/* story */
+.story{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin:20px 0}
+.scene-emoji{font-size:56px;text-align:center;line-height:1.2}
+.scene-title{font-family:var(--serif);font-weight:700;font-size:20px;text-align:center;margin:6px 0}
+.scene-text{min-height:7.5em}
+.dots{display:flex;justify-content:center;gap:6px;margin:10px 0}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--seal)}
+
+/* compare table */
+.cmp{overflow-x:auto;margin:14px 0}
+.cmp table{border-collapse:collapse;width:100%;min-width:420px;font-size:15.5px}
+.cmp th,.cmp td{border-bottom:1px solid var(--line);padding:9px 8px;text-align:left;vertical-align:top}
+.cmp th{font-family:var(--serif)}
+
+/* bars */
+.bars{max-width:360px;margin:8px auto;text-align:left}
+.bar-row{display:flex;align-items:center;gap:10px;margin:10px 0}
+.bar-row span{width:1.4em;font-weight:700}
+.bar{height:22px;border-radius:4px}
+.bar.a{background:var(--muted)}
+.bar.b{background:var(--blue)}
+
+/* wind */
+.reed{transform-box:fill-box;transform-origin:50% 100%}
+.windy .reed{animation:sway .8s ease-in-out infinite alternate}
+.windy .reed:nth-child(2n){animation-delay:.15s}
+@keyframes sway{to{transform:rotate(26deg)}}
+.treetop{transform-box:view-box;transform-origin:84px 124px;transition:transform .7s cubic-bezier(.6,0,.9,.4) 1s}
+.broken .treetop{transform:rotate(78deg)}
+.wline{opacity:0}
+.windy .wline{opacity:.7;animation:blow 1.1s linear infinite}
+.windy .wline:nth-child(2){animation-delay:.35s}.windy .wline:nth-child(3){animation-delay:.7s}
+@keyframes blow{from{transform:translateX(-60px)}to{transform:translateX(330px)}}
+
+/* drip */
+.drop{transition:none}
+.drop.fall{animation:fall .45s ease-in forwards}
+@keyframes fall{from{transform:translateY(0);opacity:1}90%{opacity:1}to{transform:translateY(112px);opacity:0}}
+
+/* cup */
+#cupWater{transform-box:fill-box;transform-origin:50% 100%;transition:transform .6s ease}
+
+/* sprout */
+#treeGrow{transform-box:view-box;transform-origin:110px 190px;transition:transform .2s}
+
+/* fish */
+.pan{font-size:60px;line-height:1.2}
+.pan .fish{display:inline-block;transition:transform .35s}
+
+/* quiz */
+.q{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:16px 0}
+.q-h{font-family:var(--serif);font-weight:700;margin-bottom:10px}
+.opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:transparent;border-radius:10px;padding:9px 14px;margin:7px 0;cursor:pointer;font-size:16px}
+.opt.right{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,transparent)}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,transparent)}
+.opt:disabled{cursor:default}
+.q-exp{font-size:15px;color:var(--muted);margin-top:8px;display:none}
+.q.done .q-exp{display:block}
+.score{font-family:var(--serif);font-size:22px;font-weight:700;text-align:center;margin:20px 0}
+
+/* glossary list */
+.gl dt{font-family:var(--serif);font-weight:700;font-size:18px;margin-top:14px}
+.gl dd{margin:2px 0 0;color:var(--ink)}
+
+/* nav */
+.nav{display:flex;justify-content:space-between;gap:10px;margin:40px 0 10px;padding-top:18px;border-top:1px solid var(--line)}
+.nav .btn{padding:10px 22px}
+.nav .btn[disabled]{opacity:.3;cursor:default}
+
+/* toc */
+.toc{position:fixed;inset:0;z-index:40;background:color-mix(in srgb,var(--ink) 40%,transparent);display:none}
+.toc.open{display:block}
+.toc-panel{position:absolute;right:0;top:0;bottom:0;width:min(340px,88vw);background:var(--paper);overflow-y:auto;
+  padding:calc(env(safe-area-inset-top,0px) + 18px) 18px calc(env(safe-area-inset-bottom,0px) + 18px)}
+.toc-panel h4{font-family:var(--serif);margin:0 0 10px;font-size:19px}
+.toc-panel ol{list-style:none;margin:0;padding:0}
+.toc-panel button{display:flex;gap:10px;width:100%;text-align:left;border:0;background:transparent;padding:9px 8px;border-radius:8px;cursor:pointer;font-size:15.5px}
+.toc-panel button .n{color:var(--muted);min-width:3.2em;font-family:var(--serif)}
+.toc-panel button.cur{background:var(--card);font-weight:700}
+.toc-panel button.cur .n{color:var(--seal)}
+
+/* sheet */
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--card);border-top:1px solid var(--line);
+  box-shadow:0 -8px 30px color-mix(in srgb,var(--ink) 15%,transparent);border-radius:18px 18px 0 0;
+  padding:16px 20px calc(env(safe-area-inset-bottom,0px) + 18px);transform:translateY(110%);transition:transform .28s ease}
+.sheet.open{transform:none}
+.sheet-in{max-width:720px;margin:0 auto}
+.sheet-h{display:flex;justify-content:space-between;align-items:center}
+.sheet-h b{font-family:var(--serif);font-size:24px}
+.sheet-x{border:0;background:transparent;font-size:26px;cursor:pointer;line-height:1;padding:4px 8px}
+.sheet p{margin:6px 0 0;font-size:16px}
+
+@media (max-width:480px){
+  body{font-size:16.5px}
+  h2{font-size:26px}
+  .hero-char{font-size:96px}
+  .hero h1{font-size:27px}
+}
+@media (prefers-reduced-motion:reduce){
+  .spin,.weft,.windy .reed,.windy .wline{animation:none}
+  .weft{stroke-dashoffset:0}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="top-title">老子與《道德經》入門課</div>
+    <div class="top-count" id="count"></div>
+    <button class="toc-btn" id="tocBtn" aria-label="打開課程目錄">目錄</button>
+  </div>
+  <div class="progress"><span id="bar"></span></div>
+</header>
+
+<main id="main">
+
+<!-- 0 -->
+<section class="lesson" data-title="開始之前">
+  <div class="hero">
+    <div class="hero-char">道<span class="hero-seal">入門</span></div>
+    <div>
+      <h1>一個兩千五百年前的老人，留下了五千個字</h1>
+      <p>十四堂短課，從他是誰，讀到他想說什麼。</p>
+    </div>
+  </div>
+  <p class="lead">你可能聽過「上善若水」、「千里之行，始於足下」。這些話都來自同一本書——《道德經》，寫書的人叫老子。</p>
+  <p>這門課會照順序帶你走：先認識書名和時代，再認識老子這個人，最後才讀書裡的句子。每一課只講一個想法，不跳來跳去。</p>
+  <h3>怎麼上這門課</h3>
+  <p>看到<span class="term" data-t="名詞解釋">藍色虛線的詞</span>，點一下就會跳出解釋，告訴你這個詞是什麼意思、從哪裡來。</p>
+  <p>讀原文的時候，你會看到一條一條的黃色木片——那是模仿古代的<span class="term" data-t="竹簡">竹簡</span>，要從右邊往左邊讀、從上往下讀，就像古人一樣。手機上可以左右滑動。</p>
+  <p>每一課有四個部分：<b>原文</b>（老子的話）、<b>白話</b>（翻成今天的話）、<b>生活例子</b>，還有<b>想一想</b>（先自己想，再點開看參考）。有些課還有可以動手玩的小動畫。</p>
+  <div class="slip-wrap">
+    <div class="slip-src">試讀看看：從右往左</div>
+    <div class="slips" data-text="千里之行，始於足下。"></div>
+  </div>
+  <p>讀懂了嗎？意思是「走一千里的遠路，也是從腳下這一步開始的」。那我們就開始第一步吧。</p>
+</section>
+
+<!-- 1 -->
+<section class="lesson" data-title="書名的秘密">
+  <p class="lesson-no">第一課</p>
+  <h2>「道德經」三個字，是三把鑰匙</h2>
+  <p class="lead">很多人以為《道德經》是一本教人「要有道德、要守規矩」的書。其實不是。先把書名拆開看，就會發現它說的東西大得多。</p>
+
+  <h3>道：一條路</h3>
+  <p>「<span class="term" data-t="道">道</span>」這個字，古時候是由「首」（頭）和「<span class="term" data-t="辵">辵</span>」（走路）組成的，本來的意思就是<b>人走的路</b>。</p>
+  <p>路會帶你去一個地方，所以後來「道」又有了「方法」的意思（例如「生財之道」）。老子再把它想得更大：天地萬物都照著某種方式運行——太陽升起落下、四季輪流、種子長成大樹——這背後的<b>根本規律</b>，他就叫它「道」。</p>
+
+  <h3>德：從道那裡「得到」的</h3>
+  <p>古人解釋「<span class="term" data-t="德">德</span>」，常說「德者，得也」。意思是：一個東西從「道」那裡得到它的本性，表現出來，就叫「德」。</p>
+  <div class="eg"><div class="eg-h">生活例子</div>水往低處流、火往上燒、小狗愛搖尾巴——這都是它們各自「得到」的本性。人也一樣，當一個人的行為順著道，那種好的表現，就叫「德」。所以這裡的「德」比今天說的「有沒有道德」範圍更廣。</div>
+
+  <h3>經：織布機上的直線</h3>
+  <p>「<span class="term" data-t="經">經</span>」的來歷很有趣。織布的時候，要先把一排<b>直的線</b>拉緊，這叫「經線」；再用梭子讓<b>橫的線</b>來回穿過去，叫「緯線」。</p>
+  <div class="demo">
+    <div class="demo-h">動畫：經線和緯線</div>
+    <svg viewBox="0 0 220 150" aria-label="織布的經線與緯線">
+      <g stroke="var(--bamboo)" stroke-width="3">
+        <line x1="30" y1="10" x2="30" y2="120"/><line x1="50" y1="10" x2="50" y2="120"/><line x1="70" y1="10" x2="70" y2="120"/>
+        <line x1="90" y1="10" x2="90" y2="120"/><line x1="110" y1="10" x2="110" y2="120"/><line x1="130" y1="10" x2="130" y2="120"/>
+        <line x1="150" y1="10" x2="150" y2="120"/><line x1="170" y1="10" x2="170" y2="120"/><line x1="190" y1="10" x2="190" y2="120"/>
+      </g>
+      <g stroke="var(--seal)" stroke-width="4" stroke-linecap="round">
+        <line class="weft" x1="20" y1="30" x2="200" y2="30" style="animation-delay:0s"/>
+        <line class="weft" x1="20" y1="50" x2="200" y2="50" style="animation-delay:.4s"/>
+        <line class="weft" x1="20" y1="70" x2="200" y2="70" style="animation-delay:.8s"/>
+        <line class="weft" x1="20" y1="90" x2="200" y2="90" style="animation-delay:1.2s"/>
+        <line class="weft" x1="20" y1="110" x2="200" y2="110" style="animation-delay:1.6s"/>
+      </g>
+      <text x="30" y="143" font-size="12" fill="var(--bamboo)">綠：經線（直，先拉好）</text>
+      <text x="138" y="143" font-size="12" fill="var(--seal)">紅：緯線（橫）</text>
+    </svg>
+    <p class="demo-msg">沒有經線，緯線就沒地方穿，布根本織不起來。經線是整塊布的骨架。</p>
+  </div>
+  <p>因為經線是「骨架」，古人就把最重要、最基本、可以撐起一整套想法的書，叫做「經」。</p>
+
+  <h3>這本書長什麼樣子</h3>
+  <p>全書只有大約五千字，所以又叫「老子<span class="term" data-t="五千言">五千言</span>」。它分成 81 段，每段叫一「<span class="term" data-t="章">章</span>」：前面第 1 到 37 章叫〈道經〉，主要講「道」；後面第 38 到 81 章叫〈德經〉，主要講「德」。</p>
+  <p>它最早的名字其實就叫《老子》，用作者的名字當書名。到了漢朝以後，人們越來越尊敬它，才稱它為「經」。</p>
+
+  <details class="think"><summary>用一句話說「道德經」是什麼意思？</summary>
+  <p>參考：「一本講天地萬物運行的道理（道），以及人怎麼順著這個道理生活（德）的重要書籍（經）。」你的說法只要抓到這三個部分就對了。</p></details>
+</section>
+
+<!-- 2 -->
+<section class="lesson" data-title="老子的時代">
+  <p class="lesson-no">第二課</p>
+  <h2>一個很亂的時代，逼出很多想法</h2>
+  <p class="lead">要了解一個人說的話，先要知道他活在什麼樣的世界。老子生活在大約兩千五百多年前，中國的「<span class="term" data-t="春秋">春秋</span>時代」。</p>
+
+  <h3>周朝的老大變弱了</h3>
+  <p>那時候名義上的領袖是周朝的國王，叫「<span class="term" data-t="周天子">周天子</span>」。周天子把土地分給親戚和功臣去管，這些人叫「<span class="term" data-t="諸侯">諸侯</span>」。</p>
+  <p>一開始大家都聽天子的。可是過了幾百年，天子的力量越來越弱，諸侯卻越來越強，彼此打仗、搶地盤，誰也不服誰。</p>
+  <div class="eg"><div class="eg-h">打個比方</div>就像一個班級的導師長期不在，班上分成好幾群，各自訂規矩、互相吵架。這時候一定會有同學站出來說：「我覺得應該這樣才對！」</div>
+  <p>春秋時代正是這樣。很多有學問的人開始想：「世界為什麼變這麼亂？人要怎麼活才好？」他們各自提出答案，後來被合稱為「<span class="term" data-t="諸子百家">諸子百家</span>」。</p>
+  <p>其中兩位最有名的，一位是主張恢復禮儀秩序的<span class="term" data-t="孔子">孔子</span>，另一位就是主張「別太刻意、回到自然」的老子。以老子為代表的這一派，後來被稱為「<span class="term" data-t="道家">道家</span>」。</p>
+
+  <h3>時間線</h3>
+  <p class="small">「公元前」是指耶穌誕生前的年份，數字越大越早。紅點是跟這門課最有關的事件。</p>
+  <ul class="tl">
+    <li><span class="yr">公元前 1046 年左右</span>周朝建立。</li>
+    <li><span class="yr">公元前 770 年</span>周朝把首都往東搬，天子開始變弱，春秋時代開始。</li>
+    <li class="key"><span class="yr">約公元前 6 世紀</span>老子生活的年代（確切生卒年不清楚）。</li>
+    <li class="key"><span class="yr">公元前 551 年</span>孔子出生。老子比孔子年紀大一些。</li>
+    <li><span class="yr">公元前 5 世紀</span>春秋結束，進入更亂的「戰國時代」。</li>
+    <li class="key"><span class="yr">約公元前 300 年</span>有人把《老子》抄在竹簡上，這批竹簡兩千多年後被挖出來（第四課會講）。</li>
+    <li><span class="yr">公元前 221 年</span>秦始皇統一中國。</li>
+    <li class="key"><span class="yr">約公元前 90 年</span>西漢的司馬遷寫成《史記》，裡面有老子的傳記。</li>
+  </ul>
+
+  <details class="think"><summary>為什麼亂世反而會出現很多思想家？</summary>
+  <p>參考：因為舊的規矩不管用了，大家被迫重新思考「什麼才是對的」。問題越大，找答案的人就越多。平靜的時候，大家反而比較少去問這種根本問題。</p></details>
+</section>
+
+<!-- 3 -->
+<section class="lesson" data-title="老子的一生">
+  <p class="lesson-no">第三課</p>
+  <h2>老子的一生：一位圖書館長的故事</h2>
+  <p class="lead">我們對老子的了解，主要來自西漢歷史學家<span class="term" data-t="司馬遷">司馬遷</span>寫的《<span class="term" data-t="史記">史記</span>》。司馬遷生活的年代，距離老子已經四百多年了，所以下面的故事有些是史實、有些可能是傳說。</p>
+  <p>先認識他的名字：「<span class="term" data-t="老子">老子</span>」不是他的本名，而是尊稱。根據《史記》，他姓李，名耳，<span class="term" data-t="字">字</span><span class="term" data-t="聃">聃</span>（ㄉㄢ），所以也有人叫他「老聃」。</p>
+
+  <div class="story" id="story">
+    <div class="scene-emoji" id="sEmoji"></div>
+    <div class="scene-title" id="sTitle"></div>
+    <div class="dots" id="sDots"></div>
+    <div class="scene-text" id="sText"></div>
+    <div class="btns"><button class="btn" id="sPrev">上一幕</button><button class="btn solid" id="sNext">下一幕</button></div>
+  </div>
+
+  <details class="think"><summary>老子為什麼要離開？如果是你，你會留下來嗎？</summary>
+  <p>參考：《史記》說他看到周朝越來越衰落，就決定離開。老子的想法是：與其在一個很亂的地方硬撐、跟人爭來爭去，不如退一步。這沒有標準答案——孔子的選擇就不同，他一輩子到處奔走想改變世界。兩種選擇各有道理。</p></details>
+</section>
+
+<!-- 4 -->
+<section class="lesson" data-title="真實的老子">
+  <p class="lesson-no">第四課</p>
+  <h2>老子真的存在嗎？考古挖出了答案的一部分</h2>
+  <p class="lead">一個誠實的歷史學家，會告訴你他不確定的地方。司馬遷就是這樣。</p>
+  <p>他在《史記》裡寫完老子的故事後，又補充說：也有人說老子其實是另一個叫「老萊子」的人，或是一個叫「太史儋」的官員；還說老子可能活了一百六十多歲、甚至兩百多歲。最後他坦白：世上沒有人知道哪個說法是對的。</p>
+  <p>所以到今天，學者對老子是誰、書是不是他一個人寫的，仍然有不同看法。有人認為這本書是很多人、經過很長時間慢慢整理出來的。</p>
+
+  <h3>從土裡挖出來的證據</h3>
+  <p>雖然老子本人有很多謎，但這本書很早就存在，這點有考古證據。</p>
+  <div class="eg"><div class="eg-h">1973 年：馬王堆帛書</div>在湖南長沙的一座漢朝古墓（<span class="term" data-t="馬王堆">馬王堆</span>）裡，挖出兩份寫在絲綢上的《老子》，叫做<span class="term" data-t="帛書">帛書</span>。有趣的是：它的順序是〈德經〉在前、〈道經〉在後，跟今天的版本相反！</div>
+  <div class="eg"><div class="eg-h">1993 年：郭店楚簡</div>在湖北荊門郭店的一座古墓中，挖出一批<span class="term" data-t="竹簡">竹簡</span>，裡面有《老子》的一部分內容，大約是今天版本的三分之一。這座墓大約是公元前 300 年左右的，是目前發現最早的《老子》抄本之一。</div>
+  <p>這告訴我們：至少在兩千三百年前，這本書已經有人在讀、在抄了。</p>
+
+  <h3>道家和道教，不一樣喔</h3>
+  <p>你在《西遊記》裡看過「<span class="term" data-t="太上老君">太上老君</span>」吧？就是那個有煉丹爐、孫悟空在裡面被燒出火眼金睛的神仙。他其實就是被神化的老子。但這是後來「道教」的說法，和我們現在學的「道家」要分清楚：</p>
+  <div class="cmp"><table>
+    <tr><th></th><th>道家</th><th>道教</th></tr>
+    <tr><td>是什麼</td><td>一種思想、哲學</td><td>一種宗教</td></tr>
+    <tr><td>什麼時候</td><td>春秋戰國時代</td><td>東漢時期（大約公元 2 世紀）才形成</td></tr>
+    <tr><td>老子是誰</td><td>一位思想家</td><td>被尊為神明「太上老君」</td></tr>
+    <tr><td>重點</td><td>思考世界和生活的道理</td><td>有廟宇、儀式、修煉，追求長生</td></tr>
+  </table></div>
+  <p>這門課學的是<b>道家</b>，也就是老子的思想本身。</p>
+
+  <details class="think"><summary>如果老子的生平有很多不確定，那我們還要讀他的書嗎？</summary>
+  <p>參考：要。一本書有沒有價值，看的是裡面的想法能不能幫助我們理解世界。就像你不知道一首好聽的民謠是誰寫的，也不影響你覺得它好聽。</p></details>
+</section>
+
+<!-- 5 -->
+<section class="lesson" data-title="說不出來的道">
+  <p class="lesson-no">第五課</p>
+  <h2>第一章：最重要的東西，說不完</h2>
+  <p class="lead">現在開始讀原文。這本書的第一句話就很特別——老子一開口，就先說「我接下來說的，都說不完整」。</p>
+  <div class="slip-wrap">
+    <div class="slip-src">第一章（節選）</div>
+    <div class="slips" data-text="道可道，非常道；名可名，非常名。"></div>
+  </div>
+  <div class="baihua"><b>白話：</b>能用言語說清楚的「道」，就不是那個永恆不變的「道」；能取出來的名字，也不是永恆不變的名字。</div>
+  <p class="zhuyin">小提醒：這裡的「常」是「永恆、不變」的意思，不是「常常」。第二個「道」是動詞，意思是「說」。</p>
+
+  <div class="eg"><div class="eg-h">生活例子：芒果的味道</div>你的朋友從沒吃過芒果，你想跟他描述：「很甜、很香、有一點酸、軟軟的。」說得再多，他還是不知道芒果真正的味道。<br>要真的懂，只能自己吃一口。<br><br>老子說的「道」也是這樣：它比語言大，語言只能指向它，不能完全裝下它。</div>
+  <div class="eg"><div class="eg-h">另一個例子：地圖和山</div>地圖可以告訴你山在哪裡、有多高，但地圖不是山。你沒辦法在地圖上爬山、感受山風。「名字」就像地圖，很有用，但不等於真實的東西。</div>
+
+  <h3>那「道」要怎麼學？看大自然</h3>
+  <div class="slip-wrap">
+    <div class="slip-src">第二十五章（節選）</div>
+    <div class="slips" data-text="人法地，地法天，天法道，道法自然。"></div>
+  </div>
+  <div class="baihua"><b>白話：</b>人向大地學習，大地向天學習，天向道學習，而道向「自然」學習。</div>
+  <p>「法」在這裡是「效法、學習」的意思。最重要的是最後一個詞：<span class="term" data-t="自然">自然</span>。</p>
+  <p>老子說的「自然」<b>不是</b>我們今天說的「大自然、森林」，而是「<b>自</b>己本來就<b>然</b>（這樣）」。道不聽誰的命令，它就是自己本來的樣子。</p>
+  <div class="eg"><div class="eg-h">生活例子</div>秋天樹葉會變黃掉落，沒有人命令它；肚子餓了就想吃東西，也不用人教。這些「本來就這樣」的事，就是「自然」。</div>
+
+  <details class="think"><summary>除了芒果，你還能想到什麼「說不清楚、要自己經歷才懂」的東西？</summary>
+  <p>參考：騎腳踏車怎麼保持平衡、游泳的感覺、被朋友信任的溫暖、第一次看到大海的心情……這些都很難只靠說明就讓別人完全懂。</p></details>
+</section>
+
+<!-- 6 -->
+<section class="lesson" data-title="有無相生">
+  <p class="lesson-no">第六課</p>
+  <h2>長和短，是比出來的</h2>
+  <p class="lead">老子發現一件很有意思的事：很多我們以為「本來就是這樣」的東西，其實是互相比較才出現的。</p>
+  <div class="slip-wrap">
+    <div class="slip-src">第二章（節選）</div>
+    <div class="slips" data-text="有無相生，難易相成，長短相形，高下相傾，音聲相和，前後相隨。"></div>
+  </div>
+  <div class="baihua"><b>白話：</b>「有」和「無」互相產生，「難」和「易」互相形成，「長」和「短」互相比較才顯現，「高」和「下」互相依靠，樂音和人聲互相應和，「前」和「後」互相跟隨。</div>
+
+  <div class="demo">
+    <div class="demo-h">動手玩：B 是長還是短？</div>
+    <div class="bars">
+      <div class="bar-row"><span>A</span><div class="bar a" id="barA"></div></div>
+      <div class="bar-row"><span>B</span><div class="bar b" style="width:50%"></div></div>
+    </div>
+    <input type="range" min="8" max="92" value="25" id="barSlider" aria-label="調整 A 的長度">
+    <p class="demo-msg" id="barMsg"></p>
+    <p class="small">藍色的 B 從頭到尾都沒有變過。</p>
+  </div>
+  <p>B 一點都沒變，但只要 A 改變，B 就會從「長的」變成「短的」。所以「長」不是 B 自己擁有的，而是跟別人比較出來的。</p>
+  <div class="eg"><div class="eg-h">生活例子</div>
+  排隊時，你是「前面」還是「後面」？要看你跟誰比。<br>
+  一題數學對國小生很「難」，對高中生很「容易」。<br>
+  你在班上身高算「高」，到了籃球隊可能就算「矮」。</div>
+  <p>老子想提醒我們：別急著幫人、幫事情貼上永遠不變的標籤。「我就是很笨」、「他就是很爛」——換一個比較的對象，答案可能完全不同。</p>
+
+  <details class="think"><summary>如果全世界的東西都一樣長，「長」這個字還有意義嗎？</summary>
+  <p>參考：沒有了。因為沒有「短」可以比較，「長」也就不存在。這就是「長短相形」——它們是一對，缺一不可。同樣道理，沒有「難」，也就沒有「容易」。</p></details>
+</section>
+
+<!-- 7 -->
+<section class="lesson" data-title="空的用處">
+  <p class="lesson-no">第七課</p>
+  <h2>空空的，才有用</h2>
+  <p class="lead">大家都覺得「有東西」才有價值。老子卻說：很多東西之所以有用，是因為中間「空」的那部分。</p>
+  <div class="slip-wrap">
+    <div class="slip-src">第十一章</div>
+    <div class="slips" data-text="三十輻共一轂，當其無，有車之用。埏埴以為器，當其無，有器之用。鑿戶牖以為室，當其無，有室之用。故有之以為利，無之以為用。"></div>
+  </div>
+  <p class="zhuyin">難字注音：<span class="term" data-t="輻">輻</span>（ㄈㄨˊ）、<span class="term" data-t="轂">轂</span>（ㄍㄨˇ）、<span class="term" data-t="埏埴">埏埴</span>（ㄕㄢ ㄓˊ）、鑿（ㄗㄠˊ）、<span class="term" data-t="牖">牖</span>（ㄧㄡˇ）</p>
+  <div class="baihua"><b>白話：</b>三十根輻條集中在一個車輪中心，因為中心是空的，車子才能用。揉捏黏土做成碗，因為碗中間是空的，碗才能用。在牆上開門開窗蓋成房子，因為裡面是空的，房子才能用。所以，「有」帶給我們便利，「無（空）」才讓東西發揮作用。</div>
+
+  <div class="demo">
+    <div class="demo-h">動畫一：車輪</div>
+    <svg viewBox="0 0 220 220" aria-label="轉動的車輪">
+      <g id="wheel" class="spin">
+        <circle cx="110" cy="110" r="88" fill="none" stroke="var(--wood)" stroke-width="10"/>
+        <g id="spokes" stroke="var(--wood)" stroke-width="2.5"></g>
+        <circle cx="110" cy="110" r="24" fill="var(--wood)"/>
+      </g>
+      <circle id="hubHole" cx="110" cy="110" r="11" fill="var(--card)"/>
+      <circle id="axle" cx="110" cy="110" r="6" fill="var(--ink)"/>
+      <text x="150" y="208" font-size="13" fill="var(--muted)">輻：30 根木條</text>
+      <text x="4" y="208" font-size="13" fill="var(--muted)">轂：中心的圓木</text>
+    </svg>
+    <p class="demo-msg" id="wheelMsg">中間的空洞讓車軸（黑點）穿過去，輪子才能轉。</p>
+    <div class="btns"><button class="btn" id="wheelBtn">把中間的洞塞滿</button></div>
+  </div>
+
+  <div class="demo">
+    <div class="demo-h">動畫二：杯子</div>
+    <svg viewBox="0 0 200 180" aria-label="杯子">
+      <defs><clipPath id="cupClip"><path d="M52 32 L148 32 L137 158 L63 158 Z"/></clipPath></defs>
+      <rect id="cupWater" x="40" y="32" width="120" height="126" fill="var(--water)" opacity=".8" clip-path="url(#cupClip)" style="transform:scaleY(0)"/>
+      <path id="cupSolid" d="M52 32 L148 32 L137 158 L63 158 Z" fill="var(--clay)" style="display:none"/>
+      <path d="M50 30 L63 160 L137 160 L150 30" fill="none" stroke="var(--clay)" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
+    </svg>
+    <p class="demo-msg" id="cupMsg">杯子是空的，所以可以裝水。</p>
+    <div class="btns"><button class="btn solid" id="cupPour">倒水</button><button class="btn" id="cupSolidBtn">變成實心杯</button><button class="btn" id="cupEmpty">把水倒掉</button></div>
+  </div>
+
+  <div class="eg"><div class="eg-h">生活例子</div>
+  書包塞得滿滿的，就放不進新課本了。<br>
+  行事曆排得一格空檔都沒有，就沒時間休息和思考。<br>
+  一幅畫如果每個地方都畫滿，反而看不出重點——留白讓畫更好看。</div>
+
+  <details class="think"><summary>「心裡留一點空」可能是什麼意思？</summary>
+  <p>參考：如果一個人心裡已經認定「我全都懂了」，就聽不進新的想法，就像裝滿的杯子。願意承認「我還不懂」，心裡有空間，才學得進新東西。</p></details>
+</section>
+
+<!-- 8 -->
+<section class="lesson" data-title="上善若水">
+  <p class="lesson-no">第八課</p>
+  <h2>最好的人，像水一樣</h2>
+  <p class="lead">老子非常喜歡用水來比喻。他覺得水身上，幾乎有「道」的全部特點。</p>
+  <div class="slip-wrap">
+    <div class="slip-src">第八章（節選）</div>
+    <div class="slips" data-text="上善若水。水善利萬物而不爭，處眾人之所惡，故幾於道。夫唯不爭，故無尤。"></div>
+  </div>
+  <div class="baihua"><b>白話：</b>最高的善就像水一樣。水善於幫助萬物，卻不跟誰爭；它停留在大家都不喜歡的低處，所以很接近「道」。正因為不爭，所以不會招來怨恨。</div>
+  <p class="zhuyin">「<span class="term" data-t="上善">上善</span>」＝最好的善。「惡」唸ㄨˋ，是「討厭」。「幾」唸ㄐㄧ，是「接近」。「尤」是「怨恨、過錯」。</p>
+
+  <h3>水有哪些本事？</h3>
+  <div class="eg">
+  <b>幫助萬物</b>：植物、動物、人都需要水，但水從不邀功。<br>
+  <b>往低處去</b>：人都想往高處爬，水卻甘願待在低處。這像一個謙虛的人。<br>
+  <b>隨形狀改變</b>：放進圓杯就是圓的，放進方盒就是方的，很有彈性。<br>
+  <b>看似柔弱，其實很強</b>：這是最厲害的一點，下面試試看。</div>
+
+  <div class="slip-wrap">
+    <div class="slip-src">第七十八章（節選）</div>
+    <div class="slips" data-text="天下莫柔弱於水，而攻堅強者莫之能勝。"></div>
+  </div>
+  <div class="baihua"><b>白話：</b>天下沒有什麼比水更柔軟的了，可是要攻破堅硬的東西，沒有什麼能勝過水。</div>
+
+  <div class="demo">
+    <div class="demo-h">動手玩：一滴一滴</div>
+    <svg viewBox="0 0 220 200" aria-label="水滴滴在石頭上">
+      <path d="M0 0 L220 0 L220 12 Q150 22 110 14 Q70 22 0 12 Z" fill="var(--stone)"/>
+      <circle id="drop" class="drop" cx="110" cy="26" r="6" fill="var(--water)" opacity="0"/>
+      <rect x="30" y="140" width="160" height="56" rx="10" fill="var(--stone)"/>
+      <ellipse id="dent" cx="110" cy="140" rx="0" ry="0" fill="var(--card)"/>
+    </svg>
+    <p class="demo-msg" id="dripMsg">石頭很硬，水很軟。一滴水能做什麼？</p>
+    <div class="btns"><button class="btn solid" id="dripBtn">滴一滴水</button><button class="btn" id="drip10">一次滴十滴</button></div>
+  </div>
+  <p>後來有個成語叫「水滴石穿」，雖然不是老子說的，但道理完全一樣：溫柔、持續的力量，能改變最堅硬的東西。河流切出的大峽谷，也是這樣慢慢形成的。</p>
+
+  <details class="think"><summary>「不爭」是不是代表被欺負也不要反應？</summary>
+  <p>參考：不是。老子的「不爭」是不去搶功勞、不為了面子跟人硬拼。水雖然不爭，但它會一直流、繞過石頭、慢慢找到出路。不爭不等於放棄，而是用更聰明、更柔軟的方式前進。</p></details>
+</section>
+
+<!-- 9 -->
+<section class="lesson" data-title="柔弱勝剛強">
+  <p class="lesson-no">第九課</p>
+  <h2>柔軟，反而活得長</h2>
+  <p class="lead">上一課說水很柔軟。老子把這個想法再往前推：柔軟是「活」的特徵，僵硬是「死」的特徵。</p>
+  <div class="slip-wrap">
+    <div class="slip-src">第七十六章（節選）</div>
+    <div class="slips" data-text="人之生也柔弱，其死也堅強。草木之生也柔脆，其死也枯槁。故堅強者死之徒，柔弱者生之徒。"></div>
+  </div>
+  <div class="baihua"><b>白話：</b>人活著的時候身體是柔軟的，死了就變得僵硬。草木活著的時候柔嫩，死了就乾枯。所以堅硬的屬於死亡一類，<span class="term" data-t="柔弱">柔弱</span>的屬於生命一類。</div>
+  <p class="zhuyin">「槁」唸ㄍㄠˇ，乾枯。「徒」是「同一類」。</p>
+  <div class="eg"><div class="eg-h">看看身邊</div>嬰兒的身體多柔軟，老人的關節卻越來越僵硬。剛冒出來的嫩芽一折就彎，枯樹枝一折就斷。</div>
+
+  <div class="demo">
+    <div class="demo-h">動畫：颱風來了</div>
+    <svg viewBox="0 0 320 200" id="windSvg" aria-label="大樹與蘆葦在風中">
+      <g stroke="var(--blue)" stroke-width="2" stroke-linecap="round">
+        <line class="wline" x1="0" y1="50" x2="40" y2="50"/>
+        <line class="wline" x1="0" y1="95" x2="50" y2="95"/>
+        <line class="wline" x1="0" y1="140" x2="36" y2="140"/>
+      </g>
+      <line x1="0" y1="182" x2="320" y2="182" stroke="var(--muted)" stroke-width="2"/>
+      <rect x="70" y="124" width="14" height="58" fill="var(--wood)"/>
+      <g class="treetop">
+        <rect x="70" y="80" width="14" height="46" fill="var(--wood)"/>
+        <circle cx="77" cy="64" r="34" fill="var(--bamboo)"/>
+      </g>
+      <g stroke="var(--bamboo)" stroke-width="4" fill="none" stroke-linecap="round">
+        <path class="reed" d="M200 182 Q203 130 198 70"/>
+        <path class="reed" d="M218 182 Q221 120 216 60"/>
+        <path class="reed" d="M236 182 Q239 132 234 78"/>
+        <path class="reed" d="M254 182 Q257 118 252 56"/>
+        <path class="reed" d="M272 182 Q275 136 270 84"/>
+      </g>
+      <text x="48" y="198" font-size="12" fill="var(--muted)">硬硬的大樹</text>
+      <text x="210" y="198" font-size="12" fill="var(--muted)">軟軟的蘆葦</text>
+    </svg>
+    <p class="demo-msg" id="windMsg">大樹又高又硬，蘆葦又細又軟。你猜颱風過後，誰還站著？</p>
+    <div class="btns"><button class="btn solid" id="windBtn">颳大風</button><button class="btn" id="windReset">重新來過</button></div>
+  </div>
+  <p>同一章的結尾，老子說「木強則折」：樹木太硬就容易折斷。</p>
+
+  <h3>一個關於牙齒和舌頭的故事</h3>
+  <p class="legend">以下是漢朝《說苑》書中記載的傳說故事，不一定是真的，但很能說明老子的想法。</p>
+  <p>老子的老師常樅（ㄘㄨㄥ）病重，老子去看他。常樅張開嘴問：「我的舌頭還在嗎？」老子說：「在。」又問：「我的牙齒還在嗎？」老子說：「都掉光了。」</p>
+  <p>常樅問：「你知道為什麼嗎？」老子回答：「舌頭能留下來，不就是因為它柔軟嗎？牙齒掉光，不就是因為它太硬嗎？」</p>
+
+  <details class="think"><summary>「柔弱」是不是就是「軟弱、沒主見」？</summary>
+  <p>參考：不是。老子說的柔弱是「有彈性」。像竹子在颱風中彎下腰，風過了又站直——它沒有放棄自己，只是不跟風硬碰硬。吵架時，一個願意先冷靜、先聽對方說話的人，往往比大吼大叫的人更能解決問題。</p></details>
+</section>
+
+<!-- 10 -->
+<section class="lesson" data-title="無為">
+  <p class="lesson-no">第十課</p>
+  <h2>「無為」不是什麼都不做</h2>
+  <p class="lead">「<span class="term" data-t="無為">無為</span>」是老子最有名、也最常被誤會的想法。很多人以為它是「躺著不動、什麼都不管」。其實完全不是。</p>
+  <div class="slip-wrap">
+    <div class="slip-src">第三十七章（節選）</div>
+    <div class="slips" data-text="道常無為而無不為。"></div>
+  </div>
+  <div class="baihua"><b>白話：</b>道總是不刻意去做什麼，但卻沒有一件事不是它成就的。</div>
+  <p>想想看：太陽沒有「努力」要讓植物長大，雨也沒有「規劃」要灌溉田地，但萬物就這樣生長了。這就是「無為而無不為」。</p>
+  <p>所以「無為」的真正意思是：<b>不刻意、不硬來、不做多餘的事，順著事物本來的規律去做。</b></p>
+
+  <h3>煎一條小魚</h3>
+  <div class="slip-wrap">
+    <div class="slip-src">第六十章（節選）</div>
+    <div class="slips" data-text="治大國，若烹小鮮。"></div>
+  </div>
+  <div class="baihua"><b>白話：</b>治理一個大國家，就像煎一條<span class="term" data-t="小鮮">小魚</span>。</div>
+  <div class="demo">
+    <div class="demo-h">動手玩：煎小魚</div>
+    <div class="pan"><span class="fish" id="fish">🐟</span></div>
+    <p class="demo-msg" id="fishMsg">小魚肉很嫩。你要怎麼煎？</p>
+    <div class="btns"><button class="btn" id="flipBtn">翻面</button><button class="btn solid" id="waitBtn">耐心等它煎熟</button><button class="btn" id="fishReset">換一條魚</button></div>
+  </div>
+  <p>小魚一直翻，就會碎掉。治理國家也是一樣：規定太多、一直改來改去，老百姓反而受不了。</p>
+
+  <div class="eg"><div class="eg-h">生活例子：種花</div>你很愛你的盆栽，每天澆三次水、一直挪位置、還把土挖開看根有沒有長——結果花死了。<br>好的照顧是：給它陽光、適量的水，然後<b>讓它自己長</b>。</div>
+  <p class="legend">對照故事：「揠（ㄧㄚˋ）苗助長」出自《孟子》，不是老子說的。有個農夫嫌稻苗長得慢，把每棵苗都往上拔高一點，結果全部枯死了。這正好是「無為」的反面：太刻意、太心急。</p>
+  <p>老子也說過，最好的領導者，事情做成了，老百姓會說：「這是我們自己本來就這樣做到的。」好的班長也是這樣：不是整天管東管西，而是讓大家自然地把事情做好。</p>
+
+  <details class="think"><summary>考試前一天熬夜到三點，算不算違反「無為」？</summary>
+  <p>參考：可以這樣想——身體需要睡眠是「自然」的規律。硬撐熬夜，隔天頭昏腦脹，反而考不好，就像一直翻小魚。「無為」不是不讀書，而是平常一點一點讀，順著身體和學習的規律來。</p></details>
+</section>
+
+<!-- 11 -->
+<section class="lesson" data-title="認識自己">
+  <p class="lesson-no">第十一課</p>
+  <h2>打敗自己，比打敗別人更難</h2>
+  <p class="lead">前面幾課都在看世界，這一課老子把鏡頭轉向我們自己。</p>
+  <div class="slip-wrap">
+    <div class="slip-src">第三十三章（節選）</div>
+    <div class="slips" data-text="知人者智，自知者明。勝人者有力，自勝者強。知足者富，強行者有志。"></div>
+  </div>
+  <div class="baihua"><b>白話：</b>了解別人的人是聰明，了解自己的人才是真正明白。能勝過別人的人算有力氣，能戰勝自己的人才是真正強大。知道滿足的人就是富有，堅持努力去做的人就是有志氣。</div>
+
+  <h3>三組對照</h3>
+  <div class="eg"><div class="eg-h">知人 vs. 自知</div>你可能很會分析同學「他就是愛面子」，但你知道自己為什麼會生氣、為什麼會拖延嗎？看清別人容易，看清自己很難。</div>
+  <div class="eg"><div class="eg-h">勝人 vs. 自勝</div>比賽贏了別人，是有實力。但晚上跟自己說「再滑十分鐘手機就好」，然後真的放下手機去睡覺——這才是老子說的「強」。</div>
+  <div class="eg"><div class="eg-h">知足 vs. 不知足</div>有些人很有錢，卻永遠覺得不夠，每天都很焦慮；有些人東西不多，卻覺得日子很好。誰比較「富」？老子說是後者。</div>
+  <div class="slip-wrap">
+    <div class="slip-src">第四十六章（節選）</div>
+    <div class="slips" data-text="禍莫大於不知足。"></div>
+  </div>
+  <div class="baihua"><b>白話：</b>最大的災禍，就是不知道滿足。</div>
+  <p>但請注意同一章的最後一句：「強行者有志」——堅持努力的人有志氣。所以「知足」不是「不用努力」，而是<b>努力去做，但不要被貪心綁架</b>。</p>
+
+  <details class="think"><summary>寫下一件你這星期「戰勝自己」的小事。</summary>
+  <p>參考：早上鬧鐘響了沒有按掉繼續睡、生氣時先深呼吸沒有罵人、把作業寫完才打電動……「自勝」通常都是這種不起眼的小事。</p></details>
+</section>
+
+<!-- 12 -->
+<section class="lesson" data-title="千里之行">
+  <p class="lesson-no">第十二課</p>
+  <h2>千里之行，始於足下</h2>
+  <p class="lead">還記得開始之前讀過的那句話嗎？現在我們把它放回原來的章節裡，看它完整的樣子。</p>
+  <div class="slip-wrap">
+    <div class="slip-src">第六十四章（節選）</div>
+    <div class="slips" data-text="合抱之木，生於毫末；九層之臺，起於累土；千里之行，始於足下。"></div>
+  </div>
+  <div class="baihua"><b>白話：</b>要兩個人才抱得住的大樹，是從細毛尖那麼小的嫩芽長出來的；九層高的高臺，是從一筐一筐的土堆起來的；一千里的遠行，是從腳下第一步開始的。</div>
+  <p class="zhuyin"><span class="term" data-t="合抱之木">合抱之木</span>＝雙手環抱的大樹；<span class="term" data-t="毫末">毫末</span>＝細毛的尖端；累土＝堆積的泥土；<span class="term" data-t="里">里</span>＝古代長度單位。</p>
+
+  <div class="demo">
+    <div class="demo-h">動手玩：讓時間走一走</div>
+    <svg viewBox="0 0 220 200" aria-label="小芽長成大樹">
+      <line x1="10" y1="190" x2="210" y2="190" stroke="var(--muted)" stroke-width="2"/>
+      <g id="treeGrow" style="transform:scale(.06)">
+        <path d="M104 190 L104 110 Q104 96 96 86 M116 190 L116 110 Q116 96 124 86" stroke="var(--wood)" stroke-width="3" fill="var(--wood)"/>
+        <rect x="102" y="100" width="16" height="90" fill="var(--wood)"/>
+        <circle cx="110" cy="70" r="46" fill="var(--bamboo)"/>
+        <circle cx="76" cy="88" r="28" fill="var(--bamboo)"/>
+        <circle cx="144" cy="88" r="28" fill="var(--bamboo)"/>
+      </g>
+    </svg>
+    <input type="range" min="0" max="100" value="0" id="growSlider" aria-label="經過的時間">
+    <p class="demo-msg" id="growMsg">第 1 天：一個比毛尖還小的芽。</p>
+  </div>
+
+  <div class="slip-wrap">
+    <div class="slip-src">第六十三章（節選）</div>
+    <div class="slips" data-text="天下難事，必作於易；天下大事，必作於細。"></div>
+  </div>
+  <div class="baihua"><b>白話：</b>天下的難事，一定要從容易的地方做起；天下的大事，一定要從細小的地方做起。</div>
+  <div class="eg"><div class="eg-h">生活例子</div>想背完一本英文單字書，看起來好難。但一天背十個，一年就超過三千個。<br>想學會彈一首曲子，先把第一小節練熟就好。</div>
+  <p>這一課和第十課的「無為」是連在一起的：大事不是靠一時硬拚衝出來的，而是順著規律，一步一步、自然地長出來的。</p>
+
+  <details class="think"><summary>你有一件「覺得太難所以一直沒開始」的事嗎？它的第一小步是什麼？</summary>
+  <p>參考：想整理房間→先整理一個抽屜。想變健康→先每天走路十分鐘。想讀完《道德經》→每天讀一章，81 天就讀完了。</p></details>
+</section>
+
+<!-- 13 -->
+<section class="lesson" data-title="總複習小測驗">
+  <p class="lesson-no">第十三課</p>
+  <h2>總複習：十題小測驗</h2>
+  <p class="lead">不用緊張，選錯了也會告訴你為什麼。每題只能選一次。</p>
+  <div id="quiz"></div>
+  <div class="score" id="score"></div>
+  <div class="btns"><button class="btn" id="quizReset">重新作答</button></div>
+</section>
+
+<!-- 14 -->
+<section class="lesson" data-title="詞語小辭典">
+  <p class="lesson-no">附錄</p>
+  <h2>詞語小辭典</h2>
+  <p class="lead">這門課出現過的所有專有名詞，照筆畫順序放在這裡，方便你回來查。</p>
+  <dl class="gl" id="glossList"></dl>
+  <h3>接下來可以怎麼讀</h3>
+  <p>《道德經》只有 81 章，一天讀一章，不到三個月就能讀完。建議找一本有白話翻譯和注釋的版本，讀完每一章，問自己三個問題：老子在說什麼？可以舉一個生活例子嗎？我同意嗎？</p>
+  <p>讀不懂的地方很正常——兩千多年來，學者對很多句子也有不同解釋。老子自己在第一章就說了：真正的道，要靠自己去體會。</p>
+</section>
+
+<nav class="nav">
+  <button class="btn" id="prevBtn">上一課</button>
+  <button class="btn solid" id="nextBtn">下一課</button>
+</nav>
+</main>
+
+<div class="toc" id="toc" role="dialog" aria-label="課程目錄">
+  <div class="toc-panel">
+    <h4>課程目錄</h4>
+    <ol id="tocList"></ol>
+  </div>
+</div>
+
+<div class="sheet" id="sheet" role="dialog" aria-live="polite">
+  <div class="sheet-in">
+    <div class="sheet-h"><b id="sheetT"></b><button class="sheet-x" id="sheetX" aria-label="關閉">×</button></div>
+    <p id="sheetD"></p>
+  </div>
+</div>
+
+<script>
+const GLOSS = {
+  "名詞解釋":"像這樣有虛線的詞，點一下就會出現解釋。解釋完按右上角的 × 關掉。",
+  "道":"字形由「首」（頭）和「辵」（走路）組成，本義是人走的路。後來引申成「方法、規律」。老子用它指宇宙萬物背後那個讓一切運行的根本規律。",
+  "辵":"唸ㄔㄨㄛˋ，意思是走走停停。它當部首時寫成「辶」，就是「走、道、進、過」這些字旁邊的那個符號。",
+  "德":"古人說「德者，得也」：從「道」那裡得到的本性，表現在行為上，就是「德」。比今天說的「道德」範圍更大。",
+  "經":"織布時先拉好的直線叫「經線」，是布的骨架；橫著穿過去的叫「緯線」。因為經線是骨架，古人就把最重要、最基本的書稱為「經」。地球儀上的「經度、緯度」也是從這裡來的。",
+  "五千言":"《道德經》全書大約五千字，「言」在這裡指字。所以又稱「老子五千言」。",
+  "章":"書裡一段一段的單位。《道德經》共 81 章，前 37 章是〈道經〉，後 44 章是〈德經〉。",
+  "竹簡":"紙張普及以前，古人把竹子削成細長的片，在上面寫字，再用繩子串成一卷。「冊」這個字，就像用繩子串起來的竹片。竹簡是由上往下寫、從右往左排。",
+  "帛書":"寫在「帛」（絲綢布料）上的書。絲綢很貴，所以通常是重要人物才用。",
+  "馬王堆":"湖南長沙的一處西漢古墓，1973 年發掘，出土大量文物，包括兩份帛書《老子》。",
+  "春秋":"魯國有一部編年史書叫《春秋》，記錄公元前 722 年到前 481 年的事。後人就借這本書的名字來稱呼這個時代。古人用「春、秋」代表一年，所以「春秋」也就是「歷史」的意思。",
+  "周天子":"周朝的國王。古人認為國王是上天的兒子，替天管理人間，所以叫「天子」。",
+  "諸侯":"周天子把土地分封給親戚、功臣去治理，這些各地的君主就是「諸侯」。「諸」是「許多」的意思。",
+  "諸子百家":"春秋戰國時期許多思想家和學派的總稱。「子」是對有學問的人的尊稱（像孔子、老子、孟子），「家」是學派，「百」形容很多。",
+  "孔子":"春秋時代魯國人，名丘，字仲尼（公元前 551—前 479 年），儒家的創始人，重視禮儀、仁愛與教育。他的言行被記錄在《論語》裡。",
+  "道家":"以老子、莊子為代表的思想學派，重視「道」、「自然」、「無為」。是一種哲學思想，不是宗教。",
+  "司馬遷":"西漢歷史學家（約公元前 145—前 86 年），花了很多年寫成《史記》，被稱為「史學之父」。",
+  "史記":"司馬遷寫的歷史書，記錄從傳說中的黃帝到漢武帝時期約三千年的歷史，其中〈老子韓非列傳〉是老子最早的傳記。",
+  "老子":"「子」是古代對有學問男子的尊稱，類似「老師、先生」。「老子」可以理解為「老先生、老師父」。也有學者認為他可能姓「老」。",
+  "字":"古人除了本名，成年後還會另取一個「字」讓別人稱呼，直接叫本名被認為不禮貌。名和字的意思常常有關係。",
+  "聃":"唸ㄉㄢ，本意是耳朵長而大。老子名「耳」、字「聃」，名和字剛好意思相關。",
+  "守藏室之史":"「守藏室」是周朝王室收藏書籍和文件的地方，「史」是管理紀錄的官員。大概像今天的國家圖書館館長兼檔案管理員。",
+  "禮":"古代的禮儀和規矩，包括祭祀、婚喪、見面、穿著等各種規範。孔子非常重視禮。",
+  "函谷關":"古代重要的關口，在今天河南省靈寶市。兩邊是深谷、中間一條窄路，「關」是設在要道上、檢查來往行人的城門。",
+  "關令尹喜":"「關令」是守關的官員，名叫尹喜。傳說他請老子寫下《道德經》。",
+  "紫氣東來":"傳說老子出關前，尹喜看見紫色的雲氣從東方飄來，知道有聖人要到了。後來變成吉祥話，過年時常寫在門上。",
+  "青牛":"傳說老子騎青牛出關。古代的「青」可以指黑色、深綠或深藍，所以青牛大概是一頭深色的牛。",
+  "太上老君":"道教把老子尊為神明的稱呼。「太上」是最崇高的意思。《西遊記》裡擁有煉丹爐的就是他。",
+  "自然":"老子說的「自然」不是大自然、森林，而是「自己本來如此」。自＝自己，然＝這樣。",
+  "輻":"唸ㄈㄨˊ，從車輪中心連到外圈的直木條，像腳踏車輪子上的鋼絲。",
+  "轂":"唸ㄍㄨˇ，車輪正中心的圓木，中間有孔，讓車軸穿過去。",
+  "埏埴":"唸ㄕㄢ ㄓˊ。「埏」是揉和，「埴」是黏土。合起來就是揉捏黏土做陶器。",
+  "牖":"唸ㄧㄡˇ，窗戶。「戶」是門，「戶牖」就是門窗。",
+  "上善":"最高的、最好的善。「上」是最上等。",
+  "柔弱":"柔軟、有彈性。不是「軟弱無能」，而是能彎、能變、不容易折斷。",
+  "無為":"不是什麼都不做，而是不刻意、不硬來、不做多餘的事，順著事物本來的規律去做。",
+  "小鮮":"小魚。「鮮」這個字左邊是「魚」，本來就是指魚，後來才有「新鮮」的意思。",
+  "合抱之木":"要兩個人張開雙臂才能圍住的大樹。",
+  "毫末":"「毫」是細毛，「末」是尖端。細毛的尖端，形容非常非常小。",
+  "里":"古代的長度單位，各朝代長度不同，大約幾百公尺。「千里」用來形容很遠。"
+};
+
+const SCENES = [
+  {e:"👶",t:"出生在楚國",x:"根據《史記》，老子是楚國苦縣人，大約在今天的河南省鹿邑縣一帶。他姓李，名耳。至於他哪一年出生，已經沒有人知道了。"},
+  {e:"📚",t:"當上王室圖書館長",x:"老子後來到了周朝的首都，擔任「<span class='term' data-t='守藏室之史'>守藏室之史</span>」——管理王室的圖書和文件。在那個書很少的年代，他能讀到天下最多的書，因此學問非常淵博。"},
+  {e:"🙇",t:"孔子來請教",x:"傳說年輕的孔子特地去拜訪老子，向他請教「<span class='term' data-t='禮'>禮</span>」。老子勸他：真正有學問的人，不會到處炫耀，看起來反而像很普通的樣子。孔子回去後對學生說：鳥會飛、魚會游、獸會跑，我都懂；但老子像一條龍，我看不透他。"},
+  {e:"🍂",t:"看見周朝衰落",x:"老子在周朝待了很久，眼看天子越來越沒有力量、諸侯互相爭鬥，他知道這個時代已經無法挽回，於是決定離開，去當一個隱居的人。"},
+  {e:"🐂",t:"西出函谷關",x:"老子往西走，來到<span class='term' data-t='函谷關'>函谷關</span>。後來的傳說還加上了畫面：他騎著一頭<span class='term' data-t='青牛'>青牛</span>，守關的官員遠遠看到「<span class='term' data-t='紫氣東來'>紫氣東來</span>」，就知道有聖人要來了。"},
+  {e:"✍️",t:"留下五千字",x:"守關的<span class='term' data-t='關令尹喜'>關令尹喜</span>對老子說：「您要去隱居了，請一定為我寫一本書吧！」於是老子寫下上下兩篇、講「道」和「德」的文章，大約五千字。這就是《道德經》。"},
+  {e:"🌫️",t:"不知去向",x:"寫完書，老子就出關走了。《史記》說：從此沒有人知道他最後去了哪裡。他留下的，只有這五千個字。"}
+];
+
+const QUIZ = [
+  {q:"「經」這個字，本來是指什麼？",o:["經過的路","織布機上直向的線","經濟","經驗"],a:1,x:"經線是織布的骨架，所以最重要的書被稱為「經」。"},
+  {q:"老子大約生活在哪個時代？",o:["春秋時代","三國時代","唐朝","宋朝"],a:0,x:"老子生活在大約公元前 6 世紀的春秋時代，和孔子差不多同時，年紀大一些。"},
+  {q:"我們對老子生平最早、最重要的記載來自哪本書？",o:["《西遊記》","《論語》","《史記》","《三國演義》"],a:2,x:"西漢司馬遷的《史記》裡有老子的傳記。"},
+  {q:"「道可道，非常道」中的「常」是什麼意思？",o:["常常","平常","永恆不變","非常"],a:2,x:"這裡的「常」是永恆不變的意思：能說清楚的道，就不是永恆的道。"},
+  {q:"按照第二章「長短相形」，下面哪個說法最正確？",o:["長的東西永遠是長的","長和短是比較出來的","短的東西比較沒用","只有長的東西才重要"],a:1,x:"就像第六課的滑桿：B 沒變，換了比較對象，就從長變短。"},
+  {q:"「當其無，有車之用」，車輪有用是因為？",o:["輻條有三十根","用的是好木頭","中心有空洞，車軸能穿過","輪子很重"],a:2,x:"中間空的地方讓車軸穿過，輪子才能轉。「無」讓東西發揮作用。"},
+  {q:"「上善若水」，水的哪個特點最被老子稱讚？",o:["幫助萬物又不爭","往高處爬","很硬","一直不動"],a:0,x:"水善利萬物而不爭，還願意待在低處。"},
+  {q:"「無為」最接近下面哪個意思？",o:["整天躺著","什麼都不管","不刻意硬來，順著規律做","做得越多越好"],a:2,x:"無為不是不做，而是不做多餘、勉強的事。"},
+  {q:"老子說的「自然」是指？",o:["森林和大自然","自己本來如此的樣子","自然科","天氣"],a:1,x:"自＝自己，然＝這樣。"},
+  {q:"關於「道家」和「道教」，哪個正確？",o:["兩個完全一樣","道教比道家早出現","老子親自創立了道教","道家是思想，道教是後來形成的宗教"],a:3,x:"道家是春秋戰國的思想；道教到東漢才形成，並把老子尊為太上老君。"}
+];
+
+/* ---------- utilities ---------- */
+const $ = id => document.getElementById(id);
+const store = {
+  get(k){try{return localStorage.getItem(k)}catch(e){return null}},
+  set(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+};
+
+/* ---------- bamboo slips ---------- */
+document.querySelectorAll('.slips').forEach(box=>{
+  const parts = box.dataset.text.split(/(?<=[，。；、！？])/).map(s=>s.trim()).filter(Boolean);
+  parts.forEach(p=>{
+    const s=document.createElement('span');s.className='slip';s.textContent=p;box.appendChild(s);
+  });
+});
+
+/* ---------- lessons ---------- */
+const lessons=[...document.querySelectorAll('.lesson')];
+const N=lessons.length;
+let cur=0;
+const tocList=$('tocList');
+lessons.forEach((l,i)=>{
+  const li=document.createElement('li');
+  const b=document.createElement('button');
+  const label = i===0?'序':(i===N-1?'附錄':('第'+['','一','二','三','四','五','六','七','八','九','十','十一','十二','十三'][i]+'課'));
+  b.innerHTML=`<span class="n">${label}</span><span>${l.dataset.title}</span>`;
+  b.onclick=()=>{go(i);closeToc();};
+  li.appendChild(b);tocList.appendChild(li);
+});
+function go(i){window.AC_COURSE_GO=function(v){go(v)};window.AC_COURSE_POSITION=i;
+  cur=Math.max(0,Math.min(N-1,i));
+  lessons.forEach((l,j)=>l.classList.toggle('active',j===cur));
+  $('count').textContent=`${cur+1} / ${N}`;
+  $('bar').style.width=((cur)/(N-1)*100)+'%';
+  $('prevBtn').disabled=cur===0;
+  $('nextBtn').textContent=cur===N-1?'回到開頭':(cur===0?'開始上課':'下一課');
+  [...tocList.querySelectorAll('button')].forEach((b,j)=>b.classList.toggle('cur',j===cur));
+  store.set('ddj-lesson',String(cur));
+  window.scrollTo({top:0});
+}
+$('prevBtn').onclick=()=>go(cur-1);
+$('nextBtn').onclick=()=>go(cur===N-1?0:cur+1);
+const toc=$('toc');
+$('tocBtn').onclick=()=>toc.classList.add('open');
+function closeToc(){toc.classList.remove('open')}
+toc.onclick=e=>{if(e.target===toc)closeToc()};
+
+/* ---------- glossary sheet ---------- */
+const sheet=$('sheet');
+document.addEventListener('click',e=>{
+  const t=e.target.closest('.term');
+  if(t){
+    const k=t.dataset.t;
+    $('sheetT').textContent=k==='名詞解釋'?'怎麼用':k;
+    $('sheetD').textContent=GLOSS[k]||'';
+    sheet.classList.add('open');
+  }
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){sheet.classList.remove('open');closeToc();}
+  if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('term')){e.preventDefault();e.target.click();}
+});
+document.querySelectorAll('.term').forEach(t=>{t.tabIndex=0;t.setAttribute('role','button')});
+$('sheetX').onclick=()=>sheet.classList.remove('open');
+
+/* glossary list sorted by stroke-ish order (locale) */
+const gl=$('glossList');
+Object.keys(GLOSS).filter(k=>k!=='名詞解釋').sort((a,b)=>a.localeCompare(b,'zh-Hant-TW-u-co-stroke')).forEach(k=>{
+  const dt=document.createElement('dt');dt.textContent=k;
+  const dd=document.createElement('dd');dd.textContent=GLOSS[k];
+  gl.append(dt,dd);
+});
+
+/* ---------- story ---------- */
+let sc=0;
+const dots=$('sDots');
+SCENES.forEach(()=>dots.appendChild(document.createElement('i')));
+function scene(i){
+  sc=Math.max(0,Math.min(SCENES.length-1,i));
+  const s=SCENES[sc];
+  $('sEmoji').textContent=s.e;
+  $('sTitle').textContent=`第 ${sc+1} 幕：${s.t}`;
+  $('sText').innerHTML=s.x;
+  $('sText').querySelectorAll('.term').forEach(t=>{t.tabIndex=0;t.setAttribute('role','button')});
+  [...dots.children].forEach((d,j)=>d.classList.toggle('on',j<=sc));
+  $('sPrev').disabled=sc===0;
+  $('sNext').textContent=sc===SCENES.length-1?'從頭再看':'下一幕';
+}
+$('sPrev').onclick=()=>scene(sc-1);
+$('sNext').onclick=()=>scene(sc===SCENES.length-1?0:sc+1);
+scene(0);
+
+/* ---------- relative bars ---------- */
+function bars(){
+  const v=+$('barSlider').value;
+  $('barA').style.width=v+'%';
+  let m;
+  if(v<46) m='A 比較短，所以這時候 B 是「長的」。';
+  else if(v>54) m='A 變長了，這時候 B 變成「短的」了！';
+  else m='A 和 B 差不多，B 不長也不短。';
+  $('barMsg').textContent=m;
+}
+$('barSlider').oninput=bars;bars();
+
+/* ---------- wheel ---------- */
+const sp=$('spokes');
+for(let i=0;i<30;i++){
+  const a=i/30*Math.PI*2;
+  const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+  l.setAttribute('x1',110+24*Math.cos(a));l.setAttribute('y1',110+24*Math.sin(a));
+  l.setAttribute('x2',110+84*Math.cos(a));l.setAttribute('y2',110+84*Math.sin(a));
+  sp.appendChild(l);
+}
+let filled=false;
+$('wheelBtn').onclick=()=>{
+  filled=!filled;
+  $('wheel').classList.toggle('spin',!filled);
+  $('hubHole').setAttribute('fill',filled?'var(--wood)':'var(--card)');
+  $('axle').setAttribute('cx',filled?'110':'110');
+  $('axle').setAttribute('fill',filled?'var(--bad)':'var(--ink)');
+  $('axle').setAttribute('cy',filled?'30':'110');
+  $('wheelMsg').textContent=filled?'洞被塞滿了！車軸（紅點）穿不進去，輪子再漂亮也轉不了。':'中間的空洞讓車軸（黑點）穿過去，輪子才能轉。';
+  $('wheelBtn').textContent=filled?'把洞挖回來':'把中間的洞塞滿';
+};
+
+/* ---------- cup ---------- */
+let level=0,solid=false;
+function cup(){
+  $('cupWater').style.transform=`scaleY(${solid?0:level/4})`;
+  $('cupSolid').style.display=solid?'':'none';
+}
+$('cupPour').onclick=()=>{
+  if(solid){$('cupMsg').textContent='倒不進去！實心的杯子沒有空間，水全灑到桌上了。';return;}
+  if(level<4){level++;cup();$('cupMsg').textContent=level<4?`裝了 ${level} 杯的四分之一。空的地方越多，能裝的越多。`:'裝滿了！再倒就滿出來了——滿了也就裝不下新東西。';}
+  else $('cupMsg').textContent='已經滿了，水溢出來了。要先倒掉一些，才能再裝。';
+};
+$('cupSolidBtn').onclick=()=>{
+  solid=!solid;level=0;cup();
+  $('cupSolidBtn').textContent=solid?'變回空心杯':'變成實心杯';
+  $('cupMsg').textContent=solid?'現在杯子中間是滿的黏土，看起來「東西更多」了。試試倒水？':'杯子又變回空心的，可以裝水了。';
+};
+$('cupEmpty').onclick=()=>{level=0;cup();$('cupMsg').textContent='水倒掉了，杯子又空出來，可以再裝新的水。';};
+
+/* ---------- drip ---------- */
+let drips=0;
+function drip(n){
+  const d=$('drop');
+  d.setAttribute('opacity','1');d.classList.remove('fall');void d.getBoundingClientRect();d.classList.add('fall');
+  drips+=n;
+  const depth=Math.min(drips*0.55,58);
+  $('dent').setAttribute('rx',depth>0?Math.min(8+drips*0.12,18):0);
+  $('dent').setAttribute('ry',depth);
+  let m;
+  if(drips<10) m=`滴了 ${drips} 滴。石頭好像……完全沒變？`;
+  else if(drips<50) m=`滴了 ${drips} 滴。仔細看，石頭上出現一個小凹洞了。`;
+  else if(drips<105) m=`滴了 ${drips} 滴。凹洞越來越深！`;
+  else m=`滴了 ${drips} 滴。石頭被滴穿了！最軟的水，打敗了最硬的石頭。`;
+  $('dripMsg').textContent=m;
+}
+$('dripBtn').onclick=()=>drip(1);
+$('drip10').onclick=()=>drip(10);
+
+/* ---------- wind ---------- */
+let windT;
+$('windBtn').onclick=()=>{
+  const s=$('windSvg');
+  s.classList.add('windy','broken');
+  $('windMsg').textContent='大風吹來！蘆葦彎下腰，大樹硬撐著……';
+  clearTimeout(windT);
+  windT=setTimeout(()=>{
+    s.classList.remove('windy');
+    $('windMsg').textContent='風停了。蘆葦又站直了，硬硬的大樹卻折斷了。這就是「木強則折」。';
+  },3200);
+};
+$('windReset').onclick=()=>{
+  clearTimeout(windT);
+  $('windSvg').classList.remove('windy','broken');
+  $('windMsg').textContent='大樹又高又硬，蘆葦又細又軟。你猜颱風過後，誰還站著？';
+};
+
+/* ---------- fish ---------- */
+let flips=0,cooked=false;
+$('flipBtn').onclick=()=>{
+  if(cooked) return;
+  flips++;
+  const f=$('fish');
+  f.style.transform=`scaleX(${flips%2?-1:1}) rotate(${flips*8}deg)`;
+  if(flips===1) $('fishMsg').textContent='翻了一次，還好。';
+  else if(flips<4) $('fishMsg').textContent=`翻了 ${flips} 次……魚皮開始黏鍋、破掉了。`;
+  else {f.textContent='💥';$('fishMsg').textContent='翻太多次，小魚碎成一片一片了！';cooked=true;}
+};
+$('waitBtn').onclick=()=>{
+  if(cooked) return;
+  cooked=true;
+  $('fish').textContent='🍽️';
+  $('fishMsg').textContent=flips<=1?'耐心等，只在該翻的時候翻一次——煎得金黃又完整！這就是「無為」。':'雖然前面翻了幾次，但總算煎好了，只是有點破。';
+};
+$('fishReset').onclick=()=>{flips=0;cooked=false;const f=$('fish');f.textContent='🐟';f.style.transform='';$('fishMsg').textContent='小魚肉很嫩。你要怎麼煎？';};
+
+/* ---------- grow ---------- */
+function grow(){
+  const v=+$('growSlider').value;
+  $('treeGrow').style.transform=`scale(${0.06+0.94*(v/100)})`;
+  let m;
+  if(v<8) m='第 1 天：一個比毛尖還小的芽。';
+  else if(v<35) m='過了幾個月：長成小苗了，每天都只長一點點。';
+  else if(v<70) m='過了幾年：變成一棵小樹，已經可以遮一點陰。';
+  else if(v<100) m='過了幾十年：越長越粗壯……';
+  else m='終於成了「合抱之木」！但它從來沒有一天突然長大，都是一點一點來的。';
+  $('growMsg').textContent=m;
+}
+$('growSlider').oninput=grow;grow();
+
+/* ---------- quiz ---------- */
+const answered={};
+function renderQuiz(){
+  const box=$('quiz');box.innerHTML='';
+  QUIZ.forEach((q,i)=>{
+    const d=document.createElement('div');d.className='q';
+    d.innerHTML=`<div class="q-h">${i+1}. ${q.q}</div>`;
+    q.o.forEach((o,j)=>{
+      const b=document.createElement('button');b.className='opt';b.textContent=o;
+      b.onclick=()=>{
+        if(answered[i]!==undefined)return;
+        answered[i]=j;d.classList.add('done');
+        [...d.querySelectorAll('.opt')].forEach((x,k)=>{x.disabled=true;if(k===q.a)x.classList.add('right');else if(k===j)x.classList.add('wrong');});
+        score();
+      };
+      d.appendChild(b);
+    });
+    const e=document.createElement('div');e.className='q-exp';e.textContent=q.x;d.appendChild(e);
+    box.appendChild(d);
+  });
+}
+function score(){
+  const n=Object.keys(answered).length;
+  const r=Object.entries(answered).filter(([i,j])=>QUIZ[i].a===j).length;
+  if(n<QUIZ.length){$('score').textContent=`已作答 ${n} / ${QUIZ.length} 題`;return;}
+  let w=r===10?'全對！你已經真正讀懂老子的入門了。':r>=7?'很棒！錯的題目可以回到那一課再看一次。':'沒關係，老子說「千里之行，始於足下」，回去再讀一次吧。';
+  $('score').textContent=`答對 ${r} / ${QUIZ.length} 題。${w}`;
+}
+$('quizReset').onclick=()=>{for(const k in answered)delete answered[k];renderQuiz();$('score').textContent='';};
+renderQuiz();
+
+/* ---------- start ---------- */
+const saved=parseInt(store.get('ddj-lesson'),10);
+go(Number.isFinite(saved)?saved:0);
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-cc4fca3cf1" data-category="classics"></script></body>
+</html>

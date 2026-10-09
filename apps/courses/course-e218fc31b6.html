@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI 漫畫學院｜從零開始用 AI 畫出連續漫畫</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Huninn&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#000; --paper:#fff; --tone:#e9e9e9; --line:#222;
+  --blue:#1f6fb5; --blue-soft:#e3f1fc; --blue-line:#7fbdf0;
+  --red:#d9301c; --hi:#fff27a;
+  --display:"Huninn","jf-openhuninn","Yuanti TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:calc(64px + env(safe-area-inset-top,0px))}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.85;-webkit-text-size-adjust:100%}
+img,svg,canvas{max-width:100%}
+a{color:var(--blue)}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+h1,h2,h3,h4{font-family:var(--display);font-weight:400;line-height:1.35;margin:1.4em 0 .5em}
+h3{font-size:1.35rem}
+h4{font-size:1.1rem}
+p{margin:.6em 0}
+strong{font-weight:700}
+.k{background:linear-gradient(transparent 55%,var(--hi) 55%);font-weight:700}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--paper);border-bottom:3px solid var(--ink);display:flex;align-items:center;gap:12px;padding:10px 16px}
+.topbar .logo{font-family:var(--display);font-size:1.15rem;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.progress{flex:0 0 120px;height:12px;border:2px solid var(--ink);border-radius:8px;overflow:hidden;background:var(--paper)}
+.progress i{display:block;height:100%;width:0;background:repeating-linear-gradient(45deg,#000 0 3px,#fff 3px 6px);transition:width .4s}
+.btn{font:inherit;font-weight:700;font-size:.95rem;background:var(--ink);color:var(--paper);border:2px solid var(--ink);border-radius:6px;padding:6px 14px;cursor:pointer}
+.btn.ghost{background:var(--paper);color:var(--ink)}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.btn.ghost:hover{box-shadow:3px 3px 0 var(--ink)}
+
+/* ---------- layout ---------- */
+.wrap{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1180px;margin:0 auto}
+nav.toc{position:sticky;top:64px;align-self:start;height:calc(100vh - 64px);overflow-y:auto;border-right:3px solid var(--ink);padding:18px 14px 40px}
+.toc h2{font-size:1.2rem;margin:0 0 6px}
+.toc .lv{font-family:var(--display);margin:16px 0 4px;padding:2px 8px;background:var(--ink);color:var(--paper);display:inline-block;border-radius:4px;font-size:.9rem}
+.toc ol{list-style:none;margin:0;padding:0}
+.toc a{display:flex;gap:8px;align-items:baseline;padding:5px 6px;text-decoration:none;color:var(--ink);border-radius:4px;font-size:.95rem;line-height:1.5}
+.toc a:hover{background:var(--tone)}
+.toc a .n{font-family:var(--display);min-width:2.4em}
+.toc a.done::after{content:"✓";margin-left:auto;font-weight:900;color:var(--blue)}
+.toc a.active{background:var(--blue-soft);box-shadow:inset 3px 0 0 var(--blue)}
+main{padding:0 28px 120px;min-width:0}
+.col{max-width:760px;margin:0 auto}
+
+@media (max-width:900px){
+  .wrap{grid-template-columns:1fr}
+  nav.toc{position:fixed;inset:0 20% 0 0;top:0;height:100%;z-index:80;background:var(--paper);transform:translateX(-102%);transition:transform .25s;padding-top:calc(20px + env(safe-area-inset-top,0px));border-right:4px solid var(--ink)}
+  nav.toc.open{transform:none}
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:70;display:none}
+  .scrim.show{display:block}
+  main{padding:0 16px 100px}
+  .progress{flex-basis:70px}
+}
+@media (min-width:901px){#menuBtn{display:none}}
+
+/* ---------- hero comic ---------- */
+.hero{margin:28px 0 10px}
+.hero h1{font-size:clamp(2rem,6.4vw,3.4rem);margin:0 0 6px;letter-spacing:.02em}
+.hero .sub{font-size:1.05rem;margin:0 0 18px}
+.strip{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:10px}
+.strip .p{border:4px solid var(--ink);position:relative;min-height:190px;overflow:hidden;background:var(--paper)}
+.strip .p:nth-child(2){background:repeating-conic-gradient(from 0deg at 50% 60%,#000 0 1.2deg,#fff 1.2deg 7deg)}
+.strip .p svg{position:absolute;inset:0;width:100%;height:100%}
+.strip .cap{position:absolute;left:6px;top:6px;background:var(--paper);border:2px solid var(--ink);padding:0 8px;font-family:var(--display);font-size:.95rem;z-index:2;border-radius:3px}
+@media (max-width:600px){.strip{grid-template-columns:1fr 1.4fr}.strip .p:nth-child(3){grid-column:1/-1;min-height:170px}}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:14px;font-size:.95rem}
+.hero-meta span b{font-family:var(--display);font-weight:400;font-size:1.25rem;margin-right:4px}
+
+/* ---------- lessons ---------- */
+section.lesson{padding-top:40px}
+.lhead{border:4px solid var(--ink);padding:18px 18px 16px;position:relative;overflow:hidden;background:var(--paper);margin-bottom:18px}
+.lhead::before{content:"";position:absolute;inset:0;background:repeating-conic-gradient(from 0deg at 92% 50%,rgba(0,0,0,.14) 0 1deg,transparent 1deg 6deg);pointer-events:none}
+.lhead .num{font-family:var(--display);font-size:3rem;line-height:1;position:relative}
+.lhead h2{font-size:clamp(1.5rem,4.4vw,2.1rem);margin:.15em 0 .2em;position:relative}
+.lhead .goal{position:relative;font-size:.98rem;max-width:36em}
+.lhead .tag{position:absolute;right:12px;top:12px;font-family:var(--display);border:2px solid var(--ink);background:var(--paper);padding:0 8px;border-radius:3px;font-size:.9rem}
+
+.box{border:3px solid var(--ink);padding:14px 16px;margin:16px 0;background:var(--paper)}
+.note{border:2px dashed var(--blue-line);background:var(--blue-soft);padding:12px 16px;margin:16px 0;border-radius:4px}
+.note::before{content:"老師筆記";display:block;font-family:var(--display);color:var(--blue);font-size:1rem}
+.origin{border:3px solid var(--ink);margin:16px 0;padding:12px 16px 12px 16px;position:relative;background:radial-gradient(circle,#d4d4d4 1.1px,transparent 1.3px) 0 0/7px 7px,var(--paper)}
+.origin>div{background:var(--paper);padding:8px 12px;border:2px solid var(--ink)}
+.origin .t{font-family:var(--display);font-size:1.15rem}
+.origin .t small{font-family:var(--body);font-size:.85rem;margin-left:6px}
+.warn{border:3px solid var(--red);padding:12px 16px;margin:16px 0;background:#fff5f3}
+.warn::before{content:"注意！";font-family:var(--display);color:var(--red);display:block}
+.try{border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink);padding:14px 16px;margin:22px 6px 22px 0}
+.try::before{content:"動手做";font-family:var(--display);background:var(--ink);color:var(--paper);padding:0 10px;display:inline-block;margin-bottom:6px;border-radius:3px}
+
+.prompt{position:relative;background:#f4f4f4;border-left:6px solid var(--ink);padding:12px 14px;margin:12px 0;font-size:.95rem;white-space:pre-wrap;word-break:break-word;line-height:1.7}
+.prompt .copy{position:absolute;right:6px;top:6px;font-size:.8rem;padding:2px 10px}
+.prompt .lbl{display:block;font-weight:700;font-size:.85rem;margin-bottom:4px;padding-right:70px}
+
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.cmp>div{border:3px solid var(--ink);padding:10px 14px}
+.cmp .bad{border-style:dashed}
+.cmp h4{margin:.2em 0}
+@media (max-width:600px){.cmp{grid-template-columns:1fr}}
+
+.tbl{overflow-x:auto;margin:14px 0;border:3px solid var(--ink)}
+table{border-collapse:collapse;width:100%;font-size:.93rem;line-height:1.6}
+th,td{border:1px solid #999;padding:8px 10px;vertical-align:top;text-align:left}
+th{background:var(--ink);color:var(--paper);font-weight:700;white-space:nowrap}
+
+.steps{counter-reset:s;list-style:none;padding:0;margin:14px 0}
+.steps>li{counter-increment:s;position:relative;padding:4px 0 10px 52px;min-height:44px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:2px;width:38px;height:38px;border:3px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-size:1.2rem}
+
+.figure{border:3px solid var(--ink);margin:16px 0;padding:12px;background:var(--paper)}
+.figure .fc{font-size:.88rem;margin-top:6px;text-align:center}
+
+/* quiz */
+.quiz{border:3px solid var(--ink);padding:14px 16px;margin:24px 0 8px;background:var(--paper)}
+.quiz h4{margin:0 0 6px}
+.quiz .q{margin:12px 0}
+.quiz .q p{font-weight:700;margin:0 0 6px}
+.quiz button.opt{display:block;width:100%;text-align:left;font:inherit;background:var(--paper);border:2px solid var(--ink);border-radius:6px;padding:8px 12px;margin:6px 0;cursor:pointer}
+.quiz button.opt.right{background:var(--blue-soft);border-color:var(--blue)}
+.quiz button.opt.wrong{background:#fff0ed;border-color:var(--red);text-decoration:line-through}
+.quiz .fb{font-size:.92rem;min-height:1em}
+.done-row{display:flex;align-items:center;gap:10px;margin:16px 0 0;font-weight:700}
+.done-row input{width:24px;height:24px;accent-color:#000}
+
+/* storyboard */
+.sb{display:grid;gap:14px;margin:16px 0}
+.sb .card{border:3px solid var(--ink);display:grid;grid-template-columns:70px 1fr;background:var(--paper)}
+.sb .card .no{border-right:3px solid var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--display);font-size:1.8rem;line-height:1.1;padding:6px}
+.sb .card .no small{font-size:.8rem;font-family:var(--body)}
+.sb .card .bd{padding:10px 14px;min-width:0}
+.sb .card .meta{font-size:.85rem;display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px}
+.sb .card .meta span{border:1.5px solid var(--ink);border-radius:20px;padding:0 8px}
+.sb .card .say{font-family:var(--display);font-size:1.05rem}
+.sb .card.flash{background:repeating-linear-gradient(0deg,#fff 0 6px,#f2f2f2 6px 7px)}
+.act{font-family:var(--display);background:var(--ink);color:var(--paper);padding:4px 12px;display:inline-block;margin:18px 0 0;border-radius:3px}
+
+/* tools */
+.tool{border:4px solid var(--ink);padding:14px;margin:18px 0}
+.tool label{font-weight:700;font-size:.9rem;display:block;margin:8px 0 2px}
+.tool select,.tool input[type=text],.tool textarea{width:100%;font:inherit;font-size:.95rem;border:2px solid var(--ink);border-radius:6px;padding:6px 8px;background:var(--paper)}
+.tool .grid2{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}
+@media (max-width:600px){.tool .grid2{grid-template-columns:1fr}}
+.shotbtns,.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chip{font:inherit;font-size:.9rem;border:2px solid var(--ink);background:var(--paper);border-radius:20px;padding:2px 12px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+
+/* workbench */
+.wb-pages{display:grid;gap:18px;margin-top:14px}
+.wb-page{background:#fff;border:1px solid #bbb;padding:14px;display:grid;gap:8px;aspect-ratio:1/1.414;box-shadow:0 2px 0 #bbb}
+.wb-page.l4{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+.wb-page.l6{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr 1fr}
+.wb-page.l3{grid-template-columns:1fr;grid-template-rows:1fr 1.3fr 1fr}
+.wb-page.strip1{aspect-ratio:auto;grid-template-columns:1fr}
+.wb-panel{border:3px solid #000;position:relative;overflow:hidden;background:#eee;min-height:120px}
+.wb-panel img{width:100%;height:100%;object-fit:cover;display:block}
+.wb-page.strip1 .wb-panel img{height:auto}
+.bub{position:absolute;max-width:70%;background:#fff;border:2.5px solid #000;border-radius:50% / 40%;padding:8px 14px;font-family:var(--display);font-size:clamp(10px,2.2vw,16px);line-height:1.35;text-align:center;cursor:text;min-width:40px}
+.bub:empty::before{content:"點我輸入";color:#999}
+.bub.tl{left:6px;top:6px}.bub.tr{right:6px;top:6px}.bub.bl{left:6px;bottom:6px}.bub.br{right:6px;bottom:6px}
+.bub.shout{border-radius:4px;border-width:3px;box-shadow:0 0 0 3px #fff,0 0 0 5px #000}
+.bub.think{border-style:dotted}
+.bub.box{border-radius:0;background:#fffbe0}
+.wb-ctl{position:absolute;right:4px;bottom:4px;display:flex;gap:4px}
+.wb-ctl button{font-size:.72rem;line-height:1.6;white-space:nowrap;border:1.5px solid #000;background:#fff;border-radius:4px;padding:0 5px;cursor:pointer}
+
+.gloss-search{width:100%;font:inherit;border:3px solid var(--ink);border-radius:6px;padding:8px 12px;margin:8px 0 14px}
+.gloss dl{margin:0}
+.gloss .it{border-bottom:2px solid var(--ink);padding:10px 0}
+.gloss dt{font-family:var(--display);font-size:1.15rem}
+.gloss dt small{font-family:var(--body);font-size:.85rem;margin-left:8px}
+.gloss dd{margin:2px 0 0}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(120px);background:var(--ink);color:var(--paper);padding:8px 18px;border-radius:6px;font-weight:700;transition:transform .25s;z-index:99}
+.toast.show{transform:translateX(-50%) translateY(0)}
+footer{border-top:3px solid var(--ink);margin-top:60px;padding:20px 0;font-size:.9rem}
+
+@media print{
+  body.printing-wb *{visibility:hidden}
+  body.printing-wb #wbPages,body.printing-wb #wbPages *{visibility:visible}
+  body.printing-wb #wbPages{position:absolute;left:0;top:0;width:100%}
+  body.printing-wb .wb-page{break-after:page;border:none;box-shadow:none}
+  body.printing-wb .wb-ctl{display:none}
+  .topbar,nav.toc{display:none}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- 阿哲：原創角色（黑色刺刺頭＋一撮白色挑染） -->
+    <symbol id="azhe" viewBox="0 0 100 110">
+      <path d="M18 48 L10 22 L28 34 L30 8 L44 28 L54 4 L62 28 L78 10 L76 34 L94 26 L84 50 Z" fill="#000"/>
+      <path d="M44 28 L54 4 L57 22 Z" fill="#fff" stroke="#000" stroke-width="1.5"/>
+      <ellipse cx="51" cy="60" rx="32" ry="34" fill="#fff" stroke="#000" stroke-width="3"/>
+      <path d="M20 46 Q34 30 50 40 Q66 30 82 46 L84 38 Q66 18 50 28 Q34 18 18 38 Z" fill="#000"/>
+      <ellipse cx="39" cy="60" rx="5" ry="7.5" fill="#000"/><ellipse cx="63" cy="60" rx="5" ry="7.5" fill="#000"/>
+      <circle cx="40.5" cy="57.5" r="1.8" fill="#fff"/><circle cx="64.5" cy="57.5" r="1.8" fill="#fff"/>
+      <path d="M31 49 L45 51 M57 51 L71 49" stroke="#000" stroke-width="3" stroke-linecap="round"/>
+      <path d="M43 78 Q51 84 59 78" stroke="#000" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <!-- 小芸：原創角色（高馬尾＋圓框眼鏡） -->
+    <symbol id="xiaoyun" viewBox="0 0 110 110">
+      <path d="M78 26 Q108 14 100 56 Q96 40 82 40 Z" fill="#000"/>
+      <ellipse cx="50" cy="60" rx="31" ry="33" fill="#fff" stroke="#000" stroke-width="3"/>
+      <path d="M19 56 Q18 22 50 22 Q82 22 81 56 Q72 36 50 38 Q30 36 19 56 Z" fill="#000"/>
+      <circle cx="38" cy="62" r="9" fill="none" stroke="#000" stroke-width="2.5"/><circle cx="62" cy="62" r="9" fill="none" stroke="#000" stroke-width="2.5"/>
+      <path d="M47 62 L53 62" stroke="#000" stroke-width="2.5"/>
+      <circle cx="38" cy="62" r="3" fill="#000"/><circle cx="62" cy="62" r="3" fill="#000"/>
+      <path d="M44 80 Q50 84 56 80" stroke="#000" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="topbar">
+  <button class="btn ghost" id="menuBtn" aria-controls="toc" aria-expanded="false">目次</button>
+  <div class="logo">AI 漫畫學院</div>
+  <div class="progress" title="學習進度" aria-label="學習進度"><i id="progBar"></i></div>
+</header>
+<div class="scrim" id="scrim"></div>
+
+<div class="wrap">
+<nav class="toc" id="toc" aria-label="課程目次">
+  <h2>課程目次</h2>
+  <div class="lv">入門</div>
+  <ol>
+    <li><a href="#l0"><span class="n">00</span>開課前：準備與地圖</a></li>
+    <li><a href="#l1"><span class="n">01</span>AI 到底是什麼？</a></li>
+    <li><a href="#l2"><span class="n">02</span>認識你的 AI 工具</a></li>
+  </ol>
+  <div class="lv">基礎</div>
+  <ol>
+    <li><a href="#l3"><span class="n">03</span>漫畫的零件</a></li>
+    <li><a href="#l4"><span class="n">04</span>故事的骨架</a></li>
+    <li><a href="#l5"><span class="n">05</span>提示詞：跟 AI 說話的方法</a></li>
+    <li><a href="#l6"><span class="n">06</span>鏡頭語言</a></li>
+  </ol>
+  <div class="lv">進階</div>
+  <ol>
+    <li><a href="#l7"><span class="n">07</span>角色一致性</a></li>
+    <li><a href="#l8"><span class="n">08</span>用照片生成漫畫</a></li>
+    <li><a href="#l9"><span class="n">09</span>把小說文字變漫畫</a></li>
+  </ol>
+  <div class="lv">實戰</div>
+  <ol>
+    <li><a href="#l10"><span class="n">10</span>完整做一部 16 格漫畫</a></li>
+    <li><a href="#l11"><span class="n">11</span>加字與排版工作台</a></li>
+  </ol>
+  <div class="lv">專業</div>
+  <ol>
+    <li><a href="#l12"><span class="n">12</span>畫風與畫面控制</a></li>
+    <li><a href="#l13"><span class="n">13</span>專業流程與疑難排解</a></li>
+    <li><a href="#l14"><span class="n">14</span>版權、肖像與安全</a></li>
+    <li><a href="#l15"><span class="n">15</span>畢業專題</a></li>
+  </ol>
+  <div class="lv">附錄</div>
+  <ol>
+    <li><a href="#gloss"><span class="n">A</span>名詞辭典（含由來）</a></li>
+  </ol>
+</nav>
+
+<main>
+<div class="col">
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="strip" aria-label="三格小漫畫：有想法、寫提示詞、完成漫畫">
+    <div class="p"><span class="cap">想法</span>
+      <svg viewBox="0 0 200 190"><ellipse cx="128" cy="44" rx="58" ry="28" fill="#fff" stroke="#000" stroke-width="3"/><circle cx="84" cy="84" r="6" fill="#fff" stroke="#000" stroke-width="2.5"/><circle cx="74" cy="100" r="4" fill="#fff" stroke="#000" stroke-width="2"/><text x="128" y="51" text-anchor="middle" font-family="Huninn,sans-serif" font-size="18">有個故事…</text><use href="#azhe" x="14" y="92" width="90" height="99"/></svg>
+    </div>
+    <div class="p"><span class="cap">提示詞</span>
+      <svg viewBox="0 0 240 190"><rect x="18" y="120" width="204" height="54" fill="#fff" stroke="#000" stroke-width="3"/><text x="30" y="143" font-family="Noto Sans TC,sans-serif" font-size="13">少年在夕陽球場投籃，</text><text x="30" y="163" font-family="Noto Sans TC,sans-serif" font-size="13">仰角、日式黑白漫畫風…</text><use href="#azhe" x="75" y="14" width="90" height="99"/></svg>
+    </div>
+    <div class="p"><span class="cap">漫畫</span>
+      <svg viewBox="0 0 200 190"><g stroke="#000" stroke-width="3" fill="#fff"><rect x="40" y="38" width="56" height="44"/><rect x="104" y="38" width="56" height="44"/><rect x="40" y="90" width="120" height="40"/></g><path d="M54 76 l14-22 14 22z M120 76 q10-24 24 0" fill="none" stroke="#000" stroke-width="2"/><circle cx="100" cy="110" r="10" fill="#000"/><use href="#xiaoyun" x="118" y="118" width="70" height="70"/><text x="54" y="166" font-family="Huninn,sans-serif" font-size="18">完成！</text></svg>
+    </div>
+  </div>
+  <h1>AI 漫畫學院</h1>
+  <p class="sub">從「AI 是什麼」開始，一步一步學會用 Gemini、ChatGPT、Claude 把文字、照片、小說變成一部 15–20 格的連續漫畫。國中生看得懂，專業創作者也用得上。</p>
+  <div class="hero-meta">
+    <span><b>16</b>堂課</span><span><b>5</b>個等級</span><span><b>1</b>部完整示範漫畫</span><span><b>60+</b>個名詞與由來</span>
+  </div>
+  <p style="font-size:.9rem;margin-top:12px">本課程內容整理於 2026 年 9 月。AI 工具更新很快，按鈕位置或功能名稱若和這裡不同，請以工具當下畫面為準——觀念不會變。</p>
+</header>
+
+<!-- ================= L0 ================= -->
+<section class="lesson" id="l0" data-lesson="l0">
+  <div class="lhead"><span class="tag">入門</span><div class="num">00</div><h2>開課前：準備與地圖</h2><p class="goal">這堂課的目標：知道要準備什麼、這門課會帶你走到哪裡。</p></div>
+
+  <h3>這門課怎麼上</h3>
+  <p>請<strong>照順序</strong>上。每一課都建立在前一課上面，就像蓋房子要先打地基。每一課都有同樣的結構：</p>
+  <ol class="steps">
+    <li><strong>觀念</strong>：用生活例子講清楚「為什麼」。</li>
+    <li><strong>名詞由來</strong>：每個專有名詞從哪裡來、為什麼這樣叫。知道由來，就不容易忘。</li>
+    <li><strong>動手做</strong>：馬上打開 AI 試一次。</li>
+    <li><strong>小測驗</strong>：答對了再勾「完成本課」，上面的進度條會前進。</li>
+  </ol>
+  <p>建議節奏：每週 2 課，大約 8 週完成。急的話，第 5、7、10 課是最核心的三課。</p>
+
+  <h3>你需要準備什麼</h3>
+  <div class="tbl"><table>
+    <tr><th>項目</th><th>說明</th></tr>
+    <tr><td>裝置</td><td>電腦最好（排版方便）；手機也可以完成大部分課程。</td></tr>
+    <tr><td>AI 帳號</td><td>至少一個「會畫圖」的 AI：Gemini 或 ChatGPT。想要更好的故事腳本，再加 Claude。免費版就能開始。</td></tr>
+    <tr><td>提示詞筆記</td><td>開一個記事本或文件，把好用的提示詞存起來。專業創作者最重要的資產就是這本筆記。</td></tr>
+    <tr><td>一個資料夾</td><td>專門放這部漫畫的圖片，檔名用「01、02、03…」編號，之後排版才不會亂。</td></tr>
+  </table></div>
+
+  <div class="warn">
+    <p>各平台都有年齡規定，而且會更新，請以官方最新條款為準。一般來說：ChatGPT 需年滿 13 歲，未滿 18 歲要家長同意；Claude 的個人帳號需年滿 18 歲；Gemini 的青少年使用規定依國家地區而不同。<strong>國中生請和家長或老師一起使用</strong>，由大人登入帳號，你負責創作。這不是限制你，而是保護你。</p>
+  </div>
+
+  <h3>學習地圖：三個角色一起做漫畫</h3>
+  <p>做漫畫就像拍電影，需要不同的工作人員。這門課會教你讓 AI 擔任不同職位：</p>
+  <div class="figure">
+    <svg viewBox="0 0 640 200" role="img" aria-label="分工圖：你是導演，Claude 是編劇，Gemini/ChatGPT 是畫師">
+      <g font-family="Huninn,sans-serif" text-anchor="middle">
+        <rect x="235" y="10" width="170" height="64" fill="#000"/><text x="320" y="38" fill="#fff" font-size="20">你＝導演</text><text x="320" y="62" fill="#fff" font-size="13">決定故事、挑選、修改</text>
+        <rect x="20" y="120" width="250" height="70" fill="#fff" stroke="#000" stroke-width="3"/><text x="145" y="148" font-size="18">Claude＝編劇、分鏡師</text><text x="145" y="174" font-size="13">寫故事、拆格子、寫提示詞</text>
+        <rect x="370" y="120" width="250" height="70" fill="#fff" stroke="#000" stroke-width="3"/><text x="495" y="148" font-size="18">Gemini / ChatGPT＝畫師</text><text x="495" y="174" font-size="13">把提示詞畫成圖、修圖</text>
+      </g>
+      <path d="M280 74 L170 118 M360 74 L470 118 M272 155 L366 155" stroke="#000" stroke-width="3" fill="none" marker-end="url(#ar)"/>
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10z"/></marker></defs>
+    </svg>
+    <div class="fc">重點：AI 是工作人員，<strong>你才是導演</strong>。好作品來自你的選擇。</div>
+  </div>
+  <p>課程終點：你會獨立完成一部 <span class="k">15–20 格、角色長相一致、有起承轉合的連續漫畫</span>，並排版成可以列印或貼到社群的頁面。</p>
+</section>
+
+<!-- ================= L1 ================= -->
+<section class="lesson" id="l1" data-lesson="l1">
+  <div class="lhead"><span class="tag">入門</span><div class="num">01</div><h2>AI 到底是什麼？</h2><p class="goal">這堂課的目標：用自己的話說出「AI 怎麼寫字、怎麼畫圖」，知道它會犯哪些錯。</p></div>
+
+  <h3>先打個比方</h3>
+  <p>想像有一位學徒，他看過地球上數不清的書、文章和圖片，但從來沒有出過門。你跟他說「畫一隻在月光下的貓」，他會根據看過的千萬張貓、月亮、夜晚的圖，<strong>拼湊出一張新的圖</strong>。他畫得很快，但他沒有真的見過你家的貓——這就是 AI。</p>
+
+  <div class="origin"><div>
+    <div class="t">人工智慧 AI<small>Artificial Intelligence</small></div>
+    <p>1955 年，美國電腦科學家約翰．麥卡錫（John McCarthy）為了隔年在達特茅斯學院舉辦的研討會寫企劃書，第一次用了這個詞。Artificial 是「人造的」，Intelligence 是「智慧」。意思就是：讓機器做出看起來像有智慧的事。</p>
+  </div></div>
+
+  <h3>「生成式 AI」和一般 AI 有什麼不同</h3>
+  <div class="cmp">
+    <div><h4>辨識型 AI</h4><p>回答「這是什麼？」<br>例：手機認出你的臉來解鎖、相簿自動找出「狗」的照片。</p></div>
+    <div><h4>生成式 AI</h4><p>回答「幫我做一個新的」<br>例：寫一篇故事、畫一張不存在的圖。<strong>做漫畫用的就是這種。</strong></p></div>
+  </div>
+  <div class="origin"><div>
+    <div class="t">生成式 AI<small>Generative AI</small></div>
+    <p>Generate 來自拉丁文 generare，意思是「生出、產生」。所以生成式 AI 就是「會生出新內容的 AI」。</p>
+  </div></div>
+
+  <h3>文字 AI 怎麼寫字？——超強的「文字接龍」</h3>
+  <p>Claude、ChatGPT、Gemini 的聊天功能，本質上是在玩接龍：看你前面寫了什麼，猜「下一個字最可能是什麼」，一個一個接下去。</p>
+  <div class="box">
+    <p>你打：「七龍珠的主角是孫」</p>
+    <p>AI 心裡的機率：悟 → 92%、中 → 1%、子 → 0.5%……</p>
+    <p>它選了「悟」，再接「空」。一句話就這樣長出來。</p>
+  </div>
+  <div class="origin"><div>
+    <div class="t">大型語言模型 LLM<small>Large Language Model</small></div>
+    <p>「模型」是指 AI 學完之後留下來的那套計算規則，就像學徒腦中的經驗。「大型」是因為它有幾千億個可調整的數字（叫做參數）。「語言」代表它學的是文字。</p>
+    <div class="t" style="margin-top:10px">詞元 Token</div>
+    <p>AI 不是一個字一個字讀，而是把文字切成小塊，每一小塊叫 token。英文 token 原本是「代幣、記號」的意思——就像遊樂場的代幣，AI 是用這些「文字代幣」來計算。你常看到「用量限制」，算的就是 token 數。</p>
+    <div class="t" style="margin-top:10px">GPT</div>
+    <p>Generative Pre-trained Transformer：生成式、預先訓練好的、Transformer 架構。Transformer（中文常叫「變換器」）是 Google 研究員在 2017 年論文〈Attention Is All You Need〉提出的設計，讓 AI 能同時注意一句話裡所有字之間的關係。</p>
+  </div></div>
+
+  <h3>圖片 AI 怎麼畫圖？——從雜訊裡「洗」出圖來</h3>
+  <p>很多圖片 AI 用的方法叫「擴散模型」。想像一滴墨水滴進清水，慢慢散開，最後整杯水變灰——這叫擴散。AI 的訓練是反過來：先把一張清楚的圖一點一點加上雜訊，直到變成一片雪花；然後學習「怎麼把雪花一步步變回清楚的圖」。</p>
+  <p>學會之後，給它一片全新的雪花加上你的文字描述，它就能一步步「洗」出一張從來不存在的圖。按下面的播放鍵看看：</p>
+  <div class="tool">
+    <canvas id="diffCanvas" width="320" height="220" style="width:100%;max-width:480px;display:block;margin:0 auto;border:3px solid #000;image-rendering:pixelated"></canvas>
+    <label for="diffRange">去雜訊步驟：<span id="diffStep">0</span> / 30</label>
+    <input type="range" id="diffRange" min="0" max="30" value="0" style="width:100%">
+    <div class="chip-row"><button class="btn" id="diffPlay">▶ 播放</button><button class="btn ghost" id="diffReset">重來</button></div>
+    <p style="font-size:.9rem;margin:0">提示詞：「夕陽下的山、少年站在山頂」。第 0 步是純雜訊，越往後越清楚。</p>
+  </div>
+  <div class="origin"><div>
+    <div class="t">擴散模型<small>Diffusion Model</small></div>
+    <p>名字借自物理學的「擴散」現象（墨水在水裡散開）。2015 年研究者受熱力學啟發提出這個想法，後來 Stable Diffusion 等工具讓它普及。現在的新模型（例如會「先思考再畫」的 ChatGPT 圖像模型）不一定都用這個方法，但「從模糊一步步變清楚」是理解 AI 畫圖最好的入門想像。</p>
+  </div></div>
+
+  <h3>AI 會犯的錯（先知道，才不會被騙）</h3>
+  <div class="tbl"><table>
+    <tr><th>常見錯誤</th><th>為什麼</th><th>對漫畫的影響</th></tr>
+    <tr><td>一本正經講錯話</td><td>它在「猜」最像的答案，不是查證事實。這叫「幻覺」。</td><td>請它解釋歷史或設定時要自己查證。</td></tr>
+    <tr><td>手指數量怪怪的</td><td>手的姿勢變化太多，圖片裡常被擋住，AI 學得比較少。</td><td>每張圖都檢查手。</td></tr>
+    <tr><td>每張圖角色長不一樣</td><td>每次生成都從新的雜訊開始。</td><td>第 7 課專門解決。</td></tr>
+    <tr><td>圖裡的字亂掉</td><td>新模型已經進步很多，但仍會出錯，尤其是中文小字。</td><td>對白建議最後自己加（第 11 課）。</td></tr>
+  </table></div>
+  <div class="origin"><div>
+    <div class="t">幻覺<small>Hallucination</small></div>
+    <p>本來是醫學名詞，指看到不存在的東西。AI 研究者借用它，形容 AI 很有自信地說出不存在或錯誤的內容。</p>
+  </div></div>
+
+  <div class="quiz" data-quiz="l1"></div>
+</section>
+
+<!-- ================= L2 ================= -->
+<section class="lesson" id="l2" data-lesson="l2">
+  <div class="lhead"><span class="tag">入門</span><div class="num">02</div><h2>認識你的 AI 工具</h2><p class="goal">這堂課的目標：知道每個工具擅長什麼，選好你的「畫師」和「編劇」。</p></div>
+
+  <div class="tbl"><table>
+    <tr><th>工具</th><th>公司</th><th>能直接畫圖嗎</th><th>在漫畫製作中最適合當</th></tr>
+    <tr><td><strong>Gemini</strong></td><td>Google</td><td>可以。圖片模型叫 Nano Banana，2026 年 2 月推出的 Nano Banana 2 是目前預設。</td><td>畫師：擅長「拿一張圖改一改」，例如把照片變漫畫風、換背景、多輪修改同一張圖。</td></tr>
+    <tr><td><strong>ChatGPT</strong></td><td>OpenAI</td><td>可以。2026 年 4 月推出 ChatGPT Images 2.0（模型 gpt-image-2），會「先思考再畫」。</td><td>畫師＋編劇：擅長照指令排版、畫中文字比較準，一次能出好幾張角色一致的圖。</td></tr>
+    <tr><td><strong>Claude</strong></td><td>Anthropic</td><td>不能直接產生圖片。可以看懂你上傳的圖並給意見，也能用程式碼畫簡單圖形。</td><td>編劇、分鏡師、提示詞顧問、排版工程師：寫故事、拆格子、寫每格提示詞、幫你做漫畫網頁。</td></tr>
+    <tr><td>Midjourney</td><td>Midjourney</td><td>可以，畫面美感很強。</td><td>進階畫師，偏付費。</td></tr>
+    <tr><td>Stable Diffusion</td><td>Stability AI（開源）</td><td>可以，裝在自己電腦上。</td><td>專業玩家：控制力最強，但要學比較多（第 12 課）。</td></tr>
+  </table></div>
+
+  <div class="origin"><div>
+    <div class="t">ChatGPT</div><p>Chat（聊天）＋ GPT（上一課學過）。就是「可以聊天的 GPT」。</p>
+    <div class="t" style="margin-top:10px">Gemini</div><p>拉丁文「雙胞胎」，也是雙子座。據 Google 的說法，名字代表 Google 兩個 AI 團隊（Google Brain 和 DeepMind）合而為一，也向美國太空總署的雙子星計畫致敬。</p>
+    <div class="t" style="margin-top:10px">Nano Banana</div><p>原本只是 Google 內部的開發代號（奈米香蕉），因為太好記，網友一直這樣叫，後來 Google 乾脆把它變成正式名稱。在 Gemini 裡看到香蕉圖示 🍌，就是它。</p>
+    <div class="t" style="margin-top:10px">Claude</div><p>一般認為是向「資訊理論之父」克勞德．夏農（Claude Shannon）致敬。他在 1948 年發表的理論，是今天所有數位通訊的基礎。</p>
+  </div></div>
+
+  <h3>新手推薦組合</h3>
+  <div class="cmp">
+    <div><h4>只用一個工具</h4><p>選 Gemini 或 ChatGPT，同一個對話裡就能寫故事＋畫圖。適合第 1 部作品。</p></div>
+    <div><h4>專業組合</h4><p>Claude 寫腳本和提示詞 → 貼到 Gemini 或 ChatGPT 畫圖 → 回到 Claude 做排版。故事品質明顯更好。</p></div>
+  </div>
+
+  <div class="try">
+    <p>打開你的畫圖 AI，輸入下面這句，看看它畫出什麼：</p>
+    <div class="prompt"><span class="lbl">練習提示詞</span>畫一個國中男生在學校頂樓看夕陽，日本黑白漫畫風格</div>
+    <p>然後再輸入：「把天空改成下雨」。你會發現 AI 可以<strong>接著上一張改</strong>——這叫多輪編輯，之後會一直用到。</p>
+  </div>
+  <div class="note">免費版每天可以畫的張數有限制。做一部 16 格漫畫可能要生成 40–60 張（因為要挑），所以可以分幾天完成，這很正常。</div>
+
+  <div class="quiz" data-quiz="l2"></div>
+</section>
+
+<!-- ================= L3 ================= -->
+<section class="lesson" id="l3" data-lesson="l3">
+  <div class="lhead"><span class="tag">基礎</span><div class="num">03</div><h2>漫畫的零件</h2><p class="goal">這堂課的目標：認識格子、對話框、狀聲詞、效果線，並從名作學會「節奏」。</p></div>
+  <p>在叫 AI 畫之前，你要先懂漫畫是怎麼組成的。不然就像不懂樂高零件，卻想蓋城堡。</p>
+
+  <h3>1. 格子：漫畫的「一個鏡頭」</h3>
+  <p>每一個框框叫一「格」。一格就是一個時間點的畫面。格子大小代表<strong>重要程度</strong>：大格＝重要、震撼；小格＝快速帶過。</p>
+  <div class="origin"><div>
+    <div class="t">格／コマ（koma）</div><p>日文コマ原本是「一小段、一個片段」，也用在電影膠卷的「一格畫面」。漫畫借來稱呼每個框框。</p>
+    <div class="t" style="margin-top:10px">格間<small>Gutter</small></div><p>格子和格子之間的白色空隙。英文 gutter 是「水溝」。美國漫畫理論家史考特．麥克勞德指出：讀者會在這條「水溝」裡自己腦補兩格之間發生的事。所以<strong>不用每個動作都畫出來</strong>。</p>
+  </div></div>
+
+  <h3>2. 對話框：誰在說、用什麼語氣說</h3>
+  <div class="figure">
+    <svg viewBox="0 0 640 160" role="img" aria-label="四種對話框：一般、思考、大喊、旁白">
+      <g font-family="Huninn,sans-serif" text-anchor="middle" font-size="16">
+        <ellipse cx="80" cy="60" rx="66" ry="40" fill="#fff" stroke="#000" stroke-width="3"/><path d="M70 98 L60 128 L92 97" fill="#fff" stroke="#000" stroke-width="3"/><rect x="62" y="94" width="30" height="6" fill="#fff"/><text x="80" y="66">一起走吧</text><text x="80" y="150" font-size="14">一般：說話</text>
+        <g fill="#fff" stroke="#000" stroke-width="3"><circle cx="200" cy="50" r="26"/><circle cx="240" cy="40" r="30"/><circle cx="280" cy="55" r="24"/><circle cx="230" cy="78" r="28"/><circle cx="198" cy="76" r="20"/><circle cx="270" cy="80" r="20"/><circle cx="212" cy="116" r="7"/><circle cx="202" cy="132" r="4"/></g><ellipse cx="238" cy="62" rx="46" ry="26" fill="#fff"/><text x="238" y="68">好想贏…</text><text x="238" y="150" font-size="14">思考：心裡話</text>
+        <path d="M340 30 L360 45 L372 18 L392 40 L412 12 L424 42 L452 26 L446 56 L474 64 L448 80 L466 106 L432 98 L424 126 L404 102 L384 124 L376 98 L346 108 L358 82 L330 70 L354 56 Z" fill="#fff" stroke="#000" stroke-width="3"/><text x="402" y="74" font-size="20">衝啊！</text><text x="402" y="150" font-size="14">大喊：爆炸框</text>
+        <rect x="508" y="36" width="118" height="54" fill="#fff" stroke="#000" stroke-width="3"/><text x="567" y="58" font-size="14">那一天，</text><text x="567" y="78" font-size="14">一切都變了。</text><text x="567" y="150" font-size="14">旁白：方框</text>
+      </g>
+    </svg>
+  </div>
+  <div class="origin"><div><div class="t">吹き出し（fukidashi）</div><p>日文「吹出來的東西」，因為對話框看起來像從人物嘴巴吹出來的泡泡。英文叫 speech balloon（說話氣球）。</p></div></div>
+
+  <h3>3. 狀聲詞與效果線</h3>
+  <p>「咚！」「咻——」「刷！」這些把聲音畫成字的東西叫狀聲詞。效果線則是把「看不見的東西」畫出來：</p>
+  <div class="figure">
+    <svg viewBox="0 0 640 170" role="img" aria-label="速度線與集中線示意">
+      <g stroke="#000" stroke-width="2"><line x1="20" y1="40" x2="200" y2="40"/><line x1="40" y1="60" x2="210" y2="60"/><line x1="10" y1="80" x2="190" y2="80"/><line x1="50" y1="100" x2="215" y2="100"/><line x1="30" y1="120" x2="200" y2="120"/></g>
+      <circle cx="250" cy="80" r="30" fill="#fff" stroke="#000" stroke-width="3"/><path d="M226 72 Q250 60 274 72 M226 88 Q250 100 274 88" stroke="#000" stroke-width="2" fill="none"/>
+      <g id="burst"></g>
+      <rect x="360" y="10" width="270" height="140" fill="#fff" stroke="#000" stroke-width="3"/>
+      <g stroke="#000" stroke-width="1.6" id="focusLines"></g>
+      <use href="#azhe" x="460" y="36" width="70" height="77"/>
+      <g font-family="Huninn,sans-serif" font-size="14" text-anchor="middle"><text x="140" y="160">速度線：表示很快地移動</text><text x="495" y="166">集中線：把目光集中到中間</text></g>
+    </svg>
+  </div>
+  <div class="origin"><div><div class="t">狀聲詞<small>Onomatopoeia</small></div><p>英文來自希臘文 onoma（名字）＋ poiein（製造），意思是「幫聲音造一個名字」。</p></div></div>
+
+  <h3>4. 閱讀方向</h3>
+  <p>日本漫畫（台灣出版的日漫也是）是<strong>從右到左、從上到下</strong>讀；美國漫畫是從左到右；手機上的「條漫」是一直往下滑。做漫畫前先決定方向，因為角色面向、動作方向都要配合。</p>
+
+  <h3>5. 向名作學「節奏」</h3>
+  <div class="box">
+    <h4 style="margin-top:0">《灌籃高手》：沉默比吶喊更大聲</h4>
+    <p>井上雄彥在最後一場大賽的決勝時刻，連續好幾十頁幾乎沒有任何對白，只用畫面一格接一格推進。讀者會不自覺屏住呼吸，因為「沒有聲音」本身就是一種張力。</p>
+    <p><strong>學起來：</strong>在你的漫畫最緊張的地方，試著放 1–2 格<span class="k">完全沒有字的格子</span>。</p>
+  </div>
+  <div class="box">
+    <h4 style="margin-top:0">《七龍珠》：打得再快，讀者都看得懂</h4>
+    <p>鳥山明的戰鬥場面動作非常快，但你幾乎不會搞不清楚誰打誰。祕訣之一是方向一致：主角通常從同一邊往另一邊攻擊，加上清楚的速度線和衝擊效果。</p>
+    <p><strong>學起來：</strong>兩個角色對峙時，讓 A 一直在畫面左邊、B 一直在右邊，不要突然交換。</p>
+  </div>
+  <div class="origin"><div><div class="t">180 度法則<small>180-degree rule</small></div><p>電影拍攝的規則：在兩個角色之間畫一條假想線，攝影機只待在線的同一側。一旦跨過去，角色的左右會對調，觀眾就會搞混。漫畫也適用。</p></div></div>
+
+  <div class="quiz" data-quiz="l3"></div>
+</section>
+
+<!-- ================= L4 ================= -->
+<section class="lesson" id="l4" data-lesson="l4">
+  <div class="lhead"><span class="tag">基礎</span><div class="num">04</div><h2>故事的骨架</h2><p class="goal">這堂課的目標：用「起承轉合」寫出 4 格故事，再擴充成 16 格。</p></div>
+  <p>AI 可以畫得很美，但如果故事沒有骨架，16 張漂亮的圖也只是 16 張漂亮的圖，不是漫畫。</p>
+
+  <h3>起承轉合：最好用的故事公式</h3>
+  <div class="tbl"><table>
+    <tr><th>段落</th><th>做什麼</th><th>4 格範例：〈晨跑〉</th></tr>
+    <tr><td>起</td><td>介紹誰、在哪、想做什麼</td><td>阿哲睡前宣布：「明天開始，我要六點起床晨跑！」</td></tr>
+    <tr><td>承</td><td>事情發展下去</td><td>早上六點鬧鐘響，他閉著眼睛按掉。</td></tr>
+    <tr><td>轉</td><td>出乎意料的變化</td><td>畫面變成：阿哲在陽光下跑步，笑得超開心。</td></tr>
+    <tr><td>合</td><td>收尾，最好有笑點或感動</td><td>中午他醒來，滿足地說：「今天在夢裡跑完了。」</td></tr>
+  </table></div>
+  <div class="origin"><div><div class="t">起承轉合</div><p>源自中國古典詩文的寫作章法，常用來說明絕句四句的安排：第一句開頭、第二句承接、第三句轉折、第四句收束。後來傳到日本，成為「四格漫畫」的基本結構，一直用到今天。</p></div></div>
+
+  <h3>角色的三個問題</h3>
+  <p>讓角色活起來，只要回答三個問題：</p>
+  <ol class="steps">
+    <li><strong>他想要什麼？</strong>（例：阿哲想在決賽投進關鍵球）</li>
+    <li><strong>什麼擋住他？</strong>（例：他一緊張就投不進）</li>
+    <li><strong>他有什麼讓人一眼認出的特徵？</strong>（例：刺刺頭、額頭一撮白色頭髮）</li>
+  </ol>
+  <p>第 3 題特別重要——它會決定之後 AI 能不能每一格都畫出「同一個人」。</p>
+
+  <h3>從 4 格變成 16 格</h3>
+  <p>秘訣：把每一個段落再拆成 3–5 格。緊張的段落拆多一點（慢動作），交代的段落拆少一點。</p>
+  <div class="tbl"><table>
+    <tr><th>段落</th><th>建議格數</th><th>節奏</th></tr>
+    <tr><td>起</td><td>3–4 格</td><td>快速交代，第 1 格常用「遠景」讓讀者知道在哪裡</td></tr>
+    <tr><td>承</td><td>4 格</td><td>加深困難、可以放回憶</td></tr>
+    <tr><td>轉</td><td>5 格</td><td>最多格，慢動作、特寫、無聲格</td></tr>
+    <tr><td>合</td><td>3 格</td><td>高潮後收尾，最後一格留餘韻或笑點</td></tr>
+  </table></div>
+
+  <div class="try">
+    <p>把下面這段貼給 Claude（或 ChatGPT／Gemini），讓它當你的編劇助理：</p>
+    <div class="prompt"><span class="lbl">請 AI 幫你發想故事</span>你是漫畫編劇老師，學生是國中生。請幫我想 3 個適合做成 16 格短篇漫畫的故事點子，主題是「＿＿＿＿」（例如：友情、比賽、寵物）。
+每個點子請用起承轉合各一句話寫出來，並說明主角想要什麼、什麼阻礙他。
+最後告訴我哪一個最適合新手，為什麼。</div>
+    <p>挑一個你最喜歡的，用自己的話改寫一次——<strong>故事是你的，AI 只是陪你想。</strong></p>
+  </div>
+
+  <div class="quiz" data-quiz="l4"></div>
+</section>
+<!-- ================= L5 ================= -->
+<section class="lesson" id="l5" data-lesson="l5">
+  <div class="lhead"><span class="tag">基礎</span><div class="num">05</div><h2>提示詞：跟 AI 說話的方法</h2><p class="goal">這堂課的目標：學會「七格公式」，寫出 AI 一看就懂的提示詞。</p></div>
+  <p>AI 畫得好不好，一半看工具，一半看你怎麼說。你給它的那段文字，就叫提示詞。</p>
+  <div class="origin"><div><div class="t">提示詞<small>Prompt</small></div><p>英文 prompt 最早用在劇場：演員忘詞時，躲在舞台旁小聲提醒台詞的人叫 prompter（提詞人）。現在我們變成了提詞人，提醒 AI 要演什麼。</p></div></div>
+
+  <h3>先看差別</h3>
+  <div class="cmp">
+    <div class="bad"><h4>模糊的提示詞</h4><p>「畫一個很帥的籃球員」</p><p style="font-size:.9rem">AI 要自己猜：幾歲？在哪？什麼風格？結果每次都不一樣，也不一定是你要的。</p></div>
+    <div><h4>清楚的提示詞</h4><p>「14 歲國中男生，黑色刺刺短髮、額前一撮白髮，穿深藍色 7 號球衣，在夜晚空蕩的體育館跳起來投籃。仰角、全景。日式黑白少年漫畫風格，網點陰影。窗外月光從側面照進來。直式 3:4。」</p></div>
+  </div>
+
+  <h3>七格公式</h3>
+  <div class="tbl"><table>
+    <tr><th>#</th><th>要素</th><th>回答什麼問題</th><th>例子</th></tr>
+    <tr><td>1</td><td>主角</td><td>誰？長什麼樣？</td><td>14 歲男生，刺刺頭，7 號球衣</td></tr>
+    <tr><td>2</td><td>動作／表情</td><td>在做什麼？心情？</td><td>跳起來投籃，咬緊牙</td></tr>
+    <tr><td>3</td><td>場景</td><td>在哪？什麼時候？</td><td>夜晚空蕩的體育館</td></tr>
+    <tr><td>4</td><td>鏡頭</td><td>從多遠、什麼角度看？</td><td>全景、仰角（第 6 課）</td></tr>
+    <tr><td>5</td><td>風格</td><td>畫成什麼樣子？</td><td>日式黑白少年漫畫，網點陰影</td></tr>
+    <tr><td>6</td><td>光線／氣氛</td><td>亮還是暗？什麼感覺？</td><td>側面月光，孤單安靜</td></tr>
+    <tr><td>7</td><td>畫面比例</td><td>直的、橫的、方的？</td><td>直式 3:4</td></tr>
+  </table></div>
+  <div class="origin"><div><div class="t">長寬比<small>Aspect ratio</small></div><p>畫面「寬：高」的比例。16:9 是電視和影片的比例（寬），3:4 是直式照片，1:1 是正方形。漫畫的高格子適合直式，寬大場景適合橫式。</p></div></div>
+
+  <h3>五個小訣竅</h3>
+  <ol class="steps">
+    <li><strong>具體勝過形容詞。</strong>「很帥」AI 不知道你心中的帥；「眼神銳利、嘴角微微上揚」它就懂。</li>
+    <li><strong>說你要什麼，少說不要什麼。</strong>寫「不要大象」，AI 腦中反而先出現大象。想要空教室，就寫「空無一人的教室」。</li>
+    <li><strong>一次只改一件事。</strong>不滿意時，說「只把表情改成哭」，不要同時改表情、衣服和背景，否則原本好的地方也會跑掉。</li>
+    <li><strong>中文就可以。</strong>Gemini 和 ChatGPT 都看得懂中文。遇到很專門的畫風詞，可以附上英文（例：網點 screentone）。</li>
+    <li><strong>圖裡先不要放對白。</strong>加一句「畫面中不要出現任何文字」，對白最後自己加，改起來才方便。</li>
+  </ol>
+
+  <h3>提示詞組合器</h3>
+  <p>選一選，下面會自動組好提示詞，按「複製」就能貼到 Gemini 或 ChatGPT。</p>
+  <div class="tool" id="builder">
+    <div class="grid2">
+      <div><label for="pb1">1 主角</label><select id="pb1"><option>14 歲國中男生阿哲，黑色刺刺短髮、額前一撮白色頭髮，深藍色 7 號籃球背心</option><option>14 歲國中女生小芸，黑色高馬尾、圓框眼鏡，黃色運動外套</option><option>一隻胖胖的橘色流浪貓，左耳有缺口</option><option>50 歲光頭教練，灰色短鬍子，橘色運動外套，脖子掛哨子</option></select></div>
+      <div><label for="pb2">2 動作／表情</label><select id="pb2"><option>跳起來投籃，咬緊牙關</option><option>低頭握緊拳頭，汗水滴下</option><option>回頭微笑，比出大拇指</option><option>全力奔跑，頭髮往後飄</option><option>驚訝地張大眼睛</option></select></div>
+      <div><label for="pb3">3 場景</label><select id="pb3"><option>夜晚空蕩的學校體育館</option><option>夕陽下的河堤步道</option><option>下雨天的教室走廊</option><option>擠滿觀眾的比賽會場</option><option>學校頂樓，遠處是城市</option></select></div>
+      <div><label for="pb4">4 鏡頭</label><select id="pb4"><option>全景（看到全身）</option><option>遠景（人很小，看到整個環境）</option><option>中景（腰部以上）</option><option>近景（胸口以上）</option><option>特寫（整張臉）</option><option>大特寫（只有眼睛）</option></select></div>
+      <div><label for="pb4b">4 角度</label><select id="pb4b"><option>平視角度</option><option>仰角（從下往上拍，顯得強大）</option><option>俯角（從上往下拍，顯得渺小）</option><option>傾斜角度（畫面歪斜，顯得不安）</option></select></div>
+      <div><label for="pb5">5 風格</label><select id="pb5"><option>日式黑白少年漫畫風格，清晰的線條粗細變化，網點陰影</option><option>彩色日系動畫風格，賽璐璐上色</option><option>美式漫畫風格，粗黑輪廓線，鮮豔色塊</option><option>Q 版可愛風格，頭身比 1:2</option><option>中國水墨畫風格，留白</option></select></div>
+      <div><label for="pb6">6 光線／氣氛</label><select id="pb6"><option>夕陽逆光，溫暖但有點感傷</option><option>冷冷的月光從側面照進來，孤單安靜</option><option>強烈的舞台聚光燈，緊張刺激</option><option>柔和的早晨陽光，輕鬆愉快</option></select></div>
+      <div><label for="pb7">7 比例</label><select id="pb7"><option>直式 3:4</option><option>橫式 16:9</option><option>正方形 1:1</option><option>超寬橫式 3:1</option></select></div>
+    </div>
+    <label><input type="checkbox" id="pbNoText" checked> 畫面中不要出現文字（對白之後自己加）</label>
+    <label for="pbOut">組好的提示詞（可以直接修改）</label>
+    <textarea id="pbOut" rows="6"></textarea>
+    <div class="chip-row"><button class="btn" id="pbCopy">複製提示詞</button></div>
+  </div>
+
+  <h3>畫出來後：用「對話」修改</h3>
+  <p>第一張很少完美。專業的做法是接著同一個對話修改：</p>
+  <div class="prompt"><span class="lbl">修改範例</span>很好，保持角色和構圖不變，只把他的表情改成快哭出來的樣子。</div>
+  <div class="prompt"><span class="lbl">修改範例</span>鏡頭再拉近一點，改成近景，背景的觀眾變模糊。</div>
+
+  <div class="quiz" data-quiz="l5"></div>
+</section>
+
+<!-- ================= L6 ================= -->
+<section class="lesson" id="l6" data-lesson="l6">
+  <div class="lhead"><span class="tag">基礎</span><div class="num">06</div><h2>鏡頭語言</h2><p class="goal">這堂課的目標：分得出遠景到大特寫、平視仰角俯角，並知道每一種會帶給讀者什麼感覺。</p></div>
+  <p>漫畫家就像攝影師：同一個人，你站多遠、從什麼角度看，讀者的感覺完全不同。點下面的按鈕看看：</p>
+
+  <div class="tool">
+    <div class="shotbtns" id="shotBtns" role="group" aria-label="選擇景別"></div>
+    <svg viewBox="0 0 300 400" id="shotSvg" style="display:block;width:100%;max-width:300px;margin:0 auto;border:3px solid #000;background:#fff" role="img" aria-label="景別示意圖">
+      <rect x="0" y="310" width="300" height="90" fill="#eee"/>
+      <line x1="0" y1="310" x2="300" y2="310" stroke="#000" stroke-width="2"/>
+      <g stroke="#000" stroke-width="3" fill="#fff"><rect x="18" y="120" width="8" height="190"/><rect x="0" y="92" width="60" height="40"/></g>
+      <path d="M26 132 L46 150 L20 150" stroke="#000" stroke-width="2" fill="none"/>
+      <g stroke="#000" stroke-width="3" fill="#fff" stroke-linejoin="round">
+        <path d="M130 250 L122 312 L138 312 L148 256 Z"/><path d="M170 250 L178 312 L162 312 L152 256 Z"/>
+        <path d="M118 172 L182 172 L186 252 L114 252 Z"/>
+        <path d="M118 176 L96 214 L104 230 L124 196"/><path d="M182 176 L204 150 L214 158 L188 196"/>
+      </g>
+      <text x="150" y="226" text-anchor="middle" font-family="Huninn,sans-serif" font-size="30">7</text>
+      <circle cx="220" cy="140" r="14" fill="#fff" stroke="#000" stroke-width="3"/><path d="M206 140 H234 M220 126 V154" stroke="#000" stroke-width="1.5"/>
+      <use href="#azhe" x="120" y="112" width="60" height="66"/>
+      <rect id="shotFrame" x="0" y="0" width="300" height="400" fill="none" stroke="#1f6fb5" stroke-width="5" stroke-dasharray="10 6" style="transition:all .35s"/>
+    </svg>
+    <p id="shotDesc" style="min-height:3.6em"></p>
+  </div>
+
+  <div class="tbl"><table>
+    <tr><th>景別</th><th>拍到哪裡</th><th>讀者感覺</th><th>什麼時候用</th></tr>
+    <tr><td>遠景</td><td>整個環境，人很小</td><td>這裡是哪裡？孤單、壯闊</td><td>故事開頭、換場景</td></tr>
+    <tr><td>全景</td><td>頭到腳</td><td>看清楚動作</td><td>投籃、打鬥、跑步</td></tr>
+    <tr><td>中景</td><td>腰部以上</td><td>像站在旁邊聊天</td><td>對話</td></tr>
+    <tr><td>近景</td><td>胸口以上</td><td>開始在意他的情緒</td><td>重要對白</td></tr>
+    <tr><td>特寫</td><td>整張臉</td><td>情緒很強</td><td>驚訝、哭、決心</td></tr>
+    <tr><td>大特寫</td><td>眼睛、手、球</td><td>時間好像停了</td><td>最關鍵的一瞬間</td></tr>
+  </table></div>
+
+  <h3>角度：把「情緒」拍出來</h3>
+  <div class="tbl"><table>
+    <tr><th>角度</th><th>做法</th><th>效果</th></tr>
+    <tr><td>平視</td><td>和角色眼睛同高</td><td>平常、客觀</td></tr>
+    <tr><td>仰角</td><td>從下往上看</td><td>角色變得高大、有氣勢（英雄登場）</td></tr>
+    <tr><td>俯角</td><td>從上往下看</td><td>角色變得渺小、無助；也適合拍圍成一圈的人</td></tr>
+    <tr><td>鳥瞰</td><td>從正上方看</td><td>像上帝視角，交代位置關係</td></tr>
+    <tr><td>荷蘭角</td><td>畫面故意歪斜</td><td>不安、混亂、暈眩</td></tr>
+  </table></div>
+  <div class="origin"><div>
+    <div class="t">景別</div><p>來自電影拍攝，意思是「景的級別」，用人物在畫面中占多大來分級。漫畫從電影借來了大量鏡頭語言。</p>
+    <div class="t" style="margin-top:10px">荷蘭角<small>Dutch angle</small></div><p>其實跟荷蘭無關！這種歪斜鏡頭在 1920 年代的德國表現主義電影中很常見，英文叫 Deutsch（德國的）angle，後來被誤聽成發音相近的 Dutch（荷蘭的），就一路錯用到今天。</p>
+  </div></div>
+
+  <h3>節奏小規則</h3>
+  <ol class="steps">
+    <li><strong>不要連續三格同樣的景別。</strong>全是中景，讀者會覺得像在看證件照。</li>
+    <li><strong>常見的「呼吸」：</strong>遠景（在哪）→ 中景（誰在做什麼）→ 特寫（他的感受）。</li>
+    <li><strong>最重要的一格給最大的格子</strong>，而且通常用全景或大特寫。</li>
+  </ol>
+
+  <div class="quiz" data-quiz="l6"></div>
+</section>
+
+<!-- ================= L7 ================= -->
+<section class="lesson" id="l7" data-lesson="l7">
+  <div class="lhead"><span class="tag">進階</span><div class="num">07</div><h2>角色一致性</h2><p class="goal">這堂課的目標：讓同一個角色在 16 格裡都長得一樣——AI 漫畫最難、也最重要的技術。</p></div>
+  <p>你一定會遇到：第 1 格的阿哲是刺刺頭，第 2 格變成捲髮，第 3 格球衣號碼變 9 號。原因是每次生成都從新的雜訊開始（還記得第 1 課嗎？），AI 並不「記得」角色，只是照文字重新猜一次。</p>
+  <p>解決方法有四個，<strong>專業做法是四個一起用</strong>。</p>
+
+  <h3>方法一：角色身分證（固定文字描述）</h3>
+  <p>寫一段固定的角色描述，<strong>每一格都一字不改地貼上</strong>。重點放在「一眼就能認出」的特徵：</p>
+  <div class="prompt"><span class="lbl">角色身分證範例</span>【阿哲】14 歲國中男生，身材偏瘦、比同學矮一點。黑色刺刺短髮往上翹，額頭正前方有一撮白色頭髮。大眼睛、粗眉毛。穿深藍色籃球背心，胸前白色數字「7」，右手腕戴白色護腕，紅色籃球鞋。</div>
+  <div class="note">好的特徵要「具體、少、醒目」：一撮白髮、7 號、白護腕、紅鞋——四個就夠了。特徵太多，AI 反而顧此失彼。</div>
+
+  <h3>方法二：角色設定圖（給 AI 看的參考照）</h3>
+  <p>先專門生成一張「角色設定圖」，之後每一格都把它上傳給 AI 當參考。</p>
+  <div class="prompt"><span class="lbl">生成角色設定圖</span>請畫一張角色設定圖（character sheet）：
+［貼上角色身分證］
+畫面包含：正面、側面、背面三個全身站姿，並排；再加上 4 個頭部表情：開心、生氣、驚訝、難過。
+白色背景，日式黑白少年漫畫風格，網點陰影。畫面比例 16:9。</div>
+  <p>之後每一格這樣下指令：</p>
+  <div class="prompt"><span class="lbl">使用設定圖</span>參考我上傳的角色設定圖，保持角色的髮型、臉、服裝完全一致。這一格請畫：……</div>
+  <div class="origin"><div>
+    <div class="t">角色設定圖<small>Character sheet / Model sheet</small></div><p>來自動畫工作室。一部動畫有幾十位畫師一起畫，為了讓大家畫出同一個角色，會先畫一張「標準樣本」發給所有人。現在我們發給 AI。</p>
+    <div class="t" style="margin-top:10px">三視圖<small>Turnaround</small></div><p>正面、側面、背面的站姿圖。英文 turnaround 是「轉一圈」，像讓角色在你面前轉一圈給你看。</p>
+  </div></div>
+
+  <h3>方法三：畫風身分證</h3>
+  <p>不只角色要一致，<strong>畫風</strong>也要。寫一段固定的畫風描述，每格都貼：</p>
+  <div class="prompt"><span class="lbl">畫風身分證範例</span>【畫風】日式黑白少年漫畫風格，清晰俐落的墨線、有粗細變化，灰階用網點表現，高對比，無彩色。畫面中不要出現任何文字。</div>
+
+  <h3>方法四：同一個對話、一次多格</h3>
+  <p>AI 在同一個對話裡會參考前面的內容，所以一部漫畫盡量在<strong>同一個對話</strong>完成。新模型也能一次產生多張角色一致的圖，例如：</p>
+  <div class="prompt"><span class="lbl">一次生成 4 格</span>用同一個角色，依序畫出以下 4 格漫畫，每格一張圖、角色外觀保持一致：
+第 1 格：……
+第 2 格：……
+第 3 格：……
+第 4 格：……</div>
+  <div class="note">對話太長時，AI 有時會「忘記」前面的設定、畫風慢慢跑掉，這叫「風格漂移」。解決方法：每 4–6 格重新貼一次角色身分證和設定圖，或開新對話重新上傳。</div>
+
+  <h3>每一格的檢查清單</h3>
+  <div class="box">
+    <label style="display:block"><input type="checkbox"> 髮型和那撮白髮還在嗎？</label>
+    <label style="display:block"><input type="checkbox"> 衣服號碼、顏色對嗎？</label>
+    <label style="display:block"><input type="checkbox"> 配件（護腕、眼鏡、鞋子）在正確的位置嗎？</label>
+    <label style="display:block"><input type="checkbox"> 身高比例和別的角色比對嗎？</label>
+    <label style="display:block"><input type="checkbox"> 手指數量正常嗎？</label>
+    <label style="display:block"><input type="checkbox"> 畫風和前一格一樣嗎？</label>
+  </div>
+  <div class="origin"><div><div class="t">種子<small>Seed</small></div><p>有些專業工具（例如 Stable Diffusion、Midjourney）可以設定「種子數字」，決定一開始的那片雜訊長什麼樣子。同樣的種子＋同樣的提示詞＝幾乎一樣的圖。就像種同一顆種子，會長出很像的植物。Gemini 和 ChatGPT 的聊天介面通常不讓你設定，所以要靠前面四個方法。</p></div></div>
+
+  <div class="quiz" data-quiz="l7"></div>
+</section>
+
+<!-- ================= L8 ================= -->
+<section class="lesson" id="l8" data-lesson="l8">
+  <div class="lhead"><span class="tag">進階</span><div class="num">08</div><h2>用照片生成漫畫</h2><p class="goal">這堂課的目標：把自己的照片變成漫畫主角、把真實地點變成漫畫背景，並守住隱私。</p></div>
+  <p>用真實照片做漫畫非常有趣：你可以讓自己、家人或寵物變成主角，或把你家附近的公園變成冒險場景。</p>
+
+  <h3>照片的三種用法</h3>
+  <div class="tbl"><table>
+    <tr><th>用法</th><th>上傳什麼</th><th>例子</th></tr>
+    <tr><td>人物變漫畫角色</td><td>自己（或同意的家人）的正面清楚照片</td><td>把自己畫成少年漫畫主角</td></tr>
+    <tr><td>場景變漫畫背景</td><td>一張地點照片（沒有人最好）</td><td>把學校操場變成決戰場地</td></tr>
+    <tr><td>姿勢參考</td><td>請朋友幫你拍擺好姿勢的照片</td><td>AI 畫不出你要的投籃姿勢時，自己擺給它看</td></tr>
+  </table></div>
+
+  <h3>步驟（以 Gemini 為例，ChatGPT 做法幾乎一樣）</h3>
+  <ol class="steps">
+    <li>在對話框按「＋」或圖片圖示，上傳照片。</li>
+    <li>輸入提示詞，說清楚「保留什麼、改變什麼」。</li>
+    <li>看結果，用對話微調：「眼睛再大一點」「背景改成體育館」。</li>
+    <li>滿意後，用這張當作<strong>角色設定圖</strong>的基礎（接到第 7 課的方法二）。</li>
+  </ol>
+  <div class="prompt"><span class="lbl">照片 → 漫畫角色</span>把這張照片中的人物畫成日式黑白少年漫畫角色。保留他的髮型、臉型和眼鏡等特徵，讓認識他的人一看就知道是他。背景換成純白色，胸口以上的近景。</div>
+  <div class="prompt"><span class="lbl">照片 → 漫畫背景</span>把這張照片的場景畫成漫畫背景：日式黑白漫畫風格，網點陰影，保留建築和樹的位置，畫面中不要有人。</div>
+  <div class="prompt"><span class="lbl">照片 → 設定圖</span>根據剛剛畫好的漫畫角色，畫一張角色設定圖：正面、側面、背面全身站姿，加上開心、生氣、驚訝三個表情。</div>
+  <div class="origin"><div>
+    <div class="t">圖生圖<small>Image-to-image，img2img</small></div><p>用一張圖當起點生成另一張圖，相對於「文生圖」（text-to-image，只用文字）。原理是：不從純雜訊開始，而是從「你的照片加一點雜訊」開始，所以結果會保留原圖的構圖。</p>
+    <div class="t" style="margin-top:10px">局部重繪<small>Inpainting</small></div><p>只重畫圖中一小塊（例如只改手、只換衣服）。英文 inpainting 原本是古畫修復的術語：修復師把畫作損壞的部分「補畫進去」。</p>
+  </div></div>
+
+  <div class="warn">
+    <p><strong>使用真人照片的四條規則</strong></p>
+    <p>1. 只用你自己，或<strong>本人同意</strong>的人的照片。家人也要先問。<br>
+    2. 照片裡不要出現校名、學號、門牌、車牌等能找到你的資訊。<br>
+    3. 不要把同學、老師、名人、政治人物做成惡搞或讓人難堪的漫畫——這可能侵犯肖像權，也會傷害別人，而且各平台通常禁止。<br>
+    4. 未成年人的照片上傳前，先問家長。上傳到 AI 的照片，可能會依平台設定被保存。</p>
+  </div>
+
+  <div class="try">
+    <p>用一張你自己的照片（或寵物照片），做出一張「漫畫版的我」，再做一張三視圖設定圖。這個角色可以當你畢業專題的主角。</p>
+  </div>
+
+  <div class="quiz" data-quiz="l8"></div>
+</section>
+
+<!-- ================= L9 ================= -->
+<section class="lesson" id="l9" data-lesson="l9">
+  <div class="lhead"><span class="tag">進階</span><div class="num">09</div><h2>把小說文字變漫畫</h2><p class="goal">這堂課的目標：學會「改編」——把一段文字拆成看得見的格子。</p></div>
+  <p>小說用文字寫「時間」和「心情」，漫畫用畫面。改編不是把每一句都畫出來，而是<strong>挑出畫得出來、又最重要的瞬間</strong>。</p>
+
+  <h3>改編三步驟</h3>
+  <ol class="steps">
+    <li><strong>找場景：</strong>這段故事發生在幾個地方？每換一個地方，通常要一個遠景。</li>
+    <li><strong>找關鍵瞬間：</strong>哪幾個時刻如果拍成照片，讀者就能看懂整段故事？</li>
+    <li><strong>轉換：</strong>心裡想的→表情或思考框；長對白→剪短成一句；「過了三天」→旁白框。</li>
+  </ol>
+  <div class="origin"><div><div class="t">改編<small>Adaptation</small></div><p>把作品從一種形式轉成另一種（小說→漫畫、漫畫→電影）。英文 adapt 來自拉丁文，意思是「使適合」——讓故事適合新的形式。</p></div></div>
+
+  <h3>實例：《西遊記》——七龍珠的老祖宗</h3>
+  <p>鳥山明畫《七龍珠》的起點，就是明朝小說《西遊記》：主角叫孫悟空、會駕筋斗雲、拿如意棒，都來自這裡。《西遊記》寫於四百多年前，已經是公有領域，大家都可以自由改編。我們來改編其中一段（以下是用白話重新說的版本）：</p>
+  <div class="box" style="font-size:.97rem">
+    <p>孫悟空大鬧天宮，天兵天將都打不過他。如來佛祖出面，伸出手掌說：「你若能一個筋斗翻出我的手掌心，天宮就讓給你。」</p>
+    <p>悟空大笑，一個筋斗雲就飛出十萬八千里，看見天邊有五根粉紅色的大柱子。他想：「這一定是天的盡頭了！」便在中間那根柱子上寫下「齊天大聖到此一遊」，還得意地做了記號，然後飛回來。</p>
+    <p>「我回來了，天宮歸我！」佛祖卻翻開手掌：悟空寫的字，就在佛祖的中指上。原來他從頭到尾，都沒有飛出佛祖的手掌心。</p>
+  </div>
+  <p>這段剛好就是起承轉合！拆成 6 格：</p>
+  <div class="tbl"><table>
+    <tr><th>格</th><th>段落</th><th>鏡頭</th><th>畫面</th><th>文字</th></tr>
+    <tr><td>1</td><td>起</td><td>遠景・仰角</td><td>雲端上，巨大的佛祖伸出手掌，悟空站在掌心，小得像螞蟻</td><td>佛祖：「翻得出我的手掌心，天宮就給你。」</td></tr>
+    <tr><td>2</td><td>承</td><td>特寫</td><td>悟空咧嘴大笑，自信滿滿</td><td>悟空：「太簡單了！」</td></tr>
+    <tr><td>3</td><td>承</td><td>全景・速度線</td><td>悟空駕筋斗雲高速飛過雲海</td><td>狀聲詞：咻——</td></tr>
+    <tr><td>4</td><td>轉</td><td>全景</td><td>五根粉紅色巨柱，悟空在中間那根寫字</td><td>旁白：天的盡頭？</td></tr>
+    <tr><td>5</td><td>轉</td><td>中景</td><td>悟空回到原處，雙手叉腰得意</td><td>悟空：「天宮歸我了！」</td></tr>
+    <tr><td>6</td><td>合</td><td>大特寫</td><td>佛祖的中指上寫著小小的字，悟空嚇到下巴掉下來</td><td>（無聲格）</td></tr>
+  </table></div>
+  <p>注意第 6 格：不用任何對白，讀者一看就懂。「揭曉答案的那一格」常常最適合無聲。</p>
+
+  <div class="try">
+    <p>如果你有自己寫的小說（或作文），把一段貼給 Claude，請它幫你拆分鏡：</p>
+    <div class="prompt"><span class="lbl">讓 AI 幫你拆分鏡</span>你是專業漫畫分鏡師。請把下面這段小說改編成＿＿格漫畫分鏡表。
+要求：
+1. 用起承轉合分配格數，最緊張的段落格數最多。
+2. 每一格寫出：格號、景別與角度、畫面描述、對白或旁白（每格對白不超過 20 個字）。
+3. 至少安排 1 格無聲格。
+4. 標出哪一格最重要、應該用最大的格子。
+5. 用表格輸出。
+
+【小說內容】
+（貼在這裡）</div>
+  </div>
+  <div class="note">改編別人的作品要注意版權：作者過世很久的古典文學（如《西遊記》《三國演義》）通常可以自由改編；現代小說拿來自己練習沒問題，但要公開發表前，需要取得作者或出版社同意（第 14 課詳細說明）。</div>
+
+  <div class="quiz" data-quiz="l9"></div>
+</section>
+<!-- ================= L10 ================= -->
+<section class="lesson" id="l10" data-lesson="l10">
+  <div class="lhead"><span class="tag">實戰</span><div class="num">10</div><h2>完整做一部 16 格漫畫</h2><p class="goal">這堂課的目標：跟著示範，從零做出一部 16 格連續漫畫〈最後三秒〉。前面九課學的，全部用上。</p></div>
+
+  <h3>整個流程</h3>
+  <div class="figure">
+    <svg viewBox="0 0 660 150" role="img" aria-label="七步驟流程">
+      <g font-family="Huninn,sans-serif" text-anchor="middle" font-size="14">
+        <g stroke="#000" stroke-width="3" fill="#fff">
+          <rect x="4" y="20" width="84" height="56"/><rect x="98" y="20" width="84" height="56"/><rect x="192" y="20" width="84" height="56"/><rect x="286" y="20" width="84" height="56"/><rect x="380" y="20" width="84" height="56" fill="#000"/><rect x="474" y="20" width="84" height="56"/><rect x="568" y="20" width="84" height="56"/>
+        </g>
+        <text x="46" y="44">① 大綱</text><text x="46" y="64" font-size="11">Claude</text>
+        <text x="140" y="44">② 分鏡表</text><text x="140" y="64" font-size="11">Claude</text>
+        <text x="234" y="44">③ 身分證</text><text x="234" y="64" font-size="11">你＋Claude</text>
+        <text x="328" y="44">④ 設定圖</text><text x="328" y="64" font-size="11">畫圖 AI</text>
+        <text x="422" y="44" fill="#fff">⑤ 逐格生成</text><text x="422" y="64" font-size="11" fill="#fff">畫圖 AI</text>
+        <text x="516" y="44">⑥ 檢查修圖</text><text x="516" y="64" font-size="11">你＋畫圖 AI</text>
+        <text x="610" y="44">⑦ 加字排版</text><text x="610" y="64" font-size="11">你（第 11 課）</text>
+        <text x="330" y="120" font-size="15">最花時間的是第 ⑤ 步：每格通常要生成 2–4 次，挑最好的一張。</text>
+      </g>
+    </svg>
+  </div>
+  <p>預估時間：第一次做大約 3–5 小時，可以分成 2–3 天。熟練之後 1–2 小時就能完成。</p>
+
+  <h3>步驟 ①：故事大綱</h3>
+  <div class="prompt"><span class="lbl">給 Claude 的提示詞</span>請幫我寫一個 16 格黑白短篇漫畫的故事大綱，主題是「籃球比賽的最後關頭」，主角是一個一緊張就投不進的國中生。
+要求：有起承轉合、有一段回憶、結尾有一點點幽默。主角最後不是靠自己投進，而是學會相信隊友。
+請用起承轉合四段，每段 2–3 句話。</div>
+  <p>這是我們選定的大綱：</p>
+  <div class="tbl"><table>
+    <tr><th>段落</th><th>內容</th><th>格數</th></tr>
+    <tr><td>起</td><td>決賽最後 8 秒，落後 1 分。阿哲又要負責最後一球，他想起自己總是投不進。</td><td>1–3</td></tr>
+    <tr><td>承</td><td>回憶：一週前他罰球失手，晚上獨自練習。經理小芸告訴他：你一直在看觀眾席，看籃框就好，其他交給隊友。</td><td>4–8</td></tr>
+    <tr><td>轉</td><td>暫停後球交給阿哲，他被兩人包夾。他發現「要看的是整個球場」，把球傳給空檔的隊長大熊。</td><td>9–13</td></tr>
+    <tr><td>合</td><td>大熊出手——無聲——球進了，全場爆發。小芸笑著說：下次罰球也要進喔。</td><td>14–16</td></tr>
+  </table></div>
+
+  <h3>步驟 ②＋③：角色與畫風身分證</h3>
+  <p>四個角色、一個畫風。注意每個角色都有「一眼認出」的特徵，而且角色之間不會混淆（只有小芸戴眼鏡、只有阿哲有白髮）。</p>
+  <div id="cardsOut"></div>
+
+  <h3>步驟 ④：先做角色設定圖</h3>
+  <p>用第 7 課的「生成角色設定圖」提示詞，替阿哲、小芸各做一張（大熊、教練出場少，可以只靠身分證）。存成「azhe_sheet.png」「xiaoyun_sheet.png」。</p>
+
+  <h3>步驟 ⑤：開一個新對話，先定規則</h3>
+  <div class="prompt" id="openPrompt"><span class="lbl">對話的第一句（先上傳設定圖再貼）</span>接下來我們要一起完成一部 16 格黑白漫畫〈最後三秒〉。規則：
+1. 每次我會給你一格的描述，你只畫那一格，一格一張圖。
+2. 所有格子的畫風和角色外觀都要保持一致，請參考我上傳的角色設定圖。
+3. 畫面中不要有任何文字、對話框或狀聲詞，這些我之後自己加。
+明白的話請回答「準備好了」，先不要畫圖。</div>
+  <p>然後依序貼下面每一格的「完整提示詞」。每張圖存檔時用格號命名：01.png、02.png……</p>
+
+  <h3>16 格分鏡表</h3>
+  <p>每張卡片：鏡頭、畫面內容、之後要加的對白。按「複製完整提示詞」會自動把畫風身分證＋出場角色的身分證＋這一格內容組在一起。</p>
+  <div class="sb" id="storyboard"></div>
+
+  <h3>步驟 ⑥：檢查與修圖</h3>
+  <p>每格用第 7 課的檢查清單看一遍。有問題時，<strong>只修那個地方</strong>：</p>
+  <div class="prompt"><span class="lbl">局部修正範例</span>這張很好，只有一個問題：阿哲額頭前面那撮白色頭髮不見了，請補上，其他地方完全不要動。</div>
+  <div class="prompt"><span class="lbl">局部修正範例</span>他的左手有六根手指，請只把左手修正成正常的五根手指。</div>
+  <div class="prompt"><span class="lbl">重新生成範例</span>構圖不對。重畫這一格：要從很低的地方往上拍，兩個對手要顯得非常高大，阿哲在畫面下方。</div>
+  <div class="note">Gemini 和 ChatGPT 都可以直接在圖上圈選要修改的區域（功能名稱可能會變，通常叫「編輯」或有畫筆圖示），比用文字描述位置更準。</div>
+
+  <div class="quiz" data-quiz="l10"></div>
+</section>
+
+<!-- ================= L11 ================= -->
+<section class="lesson" id="l11" data-lesson="l11">
+  <div class="lhead"><span class="tag">實戰</span><div class="num">11</div><h2>加字與排版工作台</h2><p class="goal">這堂課的目標：幫 16 張圖加上對話框，排成漫畫頁，輸出成可以列印或分享的檔案。</p></div>
+
+  <h3>為什麼對白要自己加？</h3>
+  <p>雖然新的圖片 AI 寫中文字已經進步很多，但專業作者仍會自己加字，原因有三：想改台詞時不必重畫整張圖、字體和大小整部作品統一、不會出現錯字。</p>
+
+  <h3>寫對白的規則</h3>
+  <ol class="steps">
+    <li><strong>短。</strong>一個對話框最多兩行、20 字以內。說不完就分兩個框。</li>
+    <li><strong>少。</strong>一格最多 2–3 個對話框，否則會蓋住畫面。</li>
+    <li><strong>順序。</strong>日漫讀法是右上先讀、左下後讀，所以先說話的人的框放右上方。</li>
+    <li><strong>不要遮臉。</strong>對話框放在頭頂或空白處，不要蓋住眼睛和嘴巴。</li>
+    <li><strong>字體有分工。</strong>對白用圓體或黑體；旁白用明體；狀聲詞用粗大、手寫感的字。</li>
+  </ol>
+
+  <h3>排版工作台</h3>
+  <p>把你的圖片（01.png 到 16.png）一次選進來，選版型，點對話框就能打字。下面的小按鈕可以換對話框位置和樣式。完成後按「列印／存成 PDF」，在列印視窗選「另存為 PDF」。沒有圖也可以先按「載入示範格子」試玩。</p>
+  <div class="tool">
+    <div class="grid2">
+      <div><label for="wbFiles">1 選擇圖片（可一次選多張，依檔名排序）</label><input type="file" id="wbFiles" accept="image/*" multiple></div>
+      <div><label for="wbLayout">2 版型</label><select id="wbLayout"><option value="l4">每頁 4 格（2×2）</option><option value="l6">每頁 6 格（2×3）</option><option value="l3">每頁 3 格（中間大格）</option><option value="strip1">條漫（手機一路往下滑）</option></select></div>
+    </div>
+    <div class="chip-row" style="margin-top:10px"><button class="btn ghost" id="wbDemo">載入示範格子</button><button class="btn" id="wbPrint">列印／存成 PDF</button><button class="btn ghost" id="wbClear">清空</button></div>
+    <p style="font-size:.88rem;margin:4px 0 0">格子右下角小按鈕：「移動」把對話框換到另一個角落；第二顆按鈕切換一般／思考／大喊／旁白四種框；「隱藏／顯示」開關對話框。圖片只在你的瀏覽器裡處理，不會上傳到任何地方。</p>
+    <div class="wb-pages" id="wbPages"></div>
+  </div>
+
+  <h3>其他排版方式</h3>
+  <div class="tbl"><table>
+    <tr><th>方法</th><th>適合</th></tr>
+    <tr><td>上面的工作台</td><td>最快，適合第一部作品。</td></tr>
+    <tr><td>Canva 等設計工具</td><td>有很多漫畫模板和對話框素材，可以自由拖拉。</td></tr>
+    <tr><td>請 Claude 做成網頁</td><td>想要特別的版型（例如斜格、跨頁大圖）時，請 Claude 寫一個 HTML 漫畫頁，把圖片放進去。</td></tr>
+    <tr><td>手機修圖 App</td><td>只要加幾個字、發到社群時最方便。</td></tr>
+  </table></div>
+  <div class="prompt"><span class="lbl">請 Claude 做漫畫排版網頁</span>請幫我做一個單一 HTML 檔的漫畫閱讀頁：
+- 共 16 格，圖片檔名是 01.png 到 16.png，放在同一個資料夾。
+- 日式閱讀順序（右到左），每頁 4 格，第 12 格和第 15 格要用整排的大格子。
+- 格子之間留白色空隙，格線是黑色粗線。
+- 每格可以加對話框，對白內容如下：（貼上分鏡表的對白）
+- 手機上改成一欄往下滑。</div>
+
+  <h3>發布到哪裡</h3>
+  <p><strong>社群輪播貼文：</strong>一張圖放 1–4 格，做成可以左右滑的多張貼文。<strong>條漫：</strong>適合手機閱讀，一格接一格往下。<strong>列印：</strong>A4 或 B5 直式，每頁 4–6 格。</p>
+  <div class="origin"><div>
+    <div class="t">條漫<small>Webtoon</small></div><p>Web（網路）＋ Cartoon（漫畫）。2000 年代從韓國發展起來，專為手機直向滑動設計，一格一格由上往下排列，中文常叫「條漫」。</p>
+    <div class="t" style="margin-top:10px">輪播<small>Carousel</small></div><p>英文 carousel 是遊樂園的旋轉木馬。社群上可以左右滑動的多張圖貼文，就像木馬一匹一匹轉過來。</p>
+  </div></div>
+
+  <div class="quiz" data-quiz="l11"></div>
+</section>
+<!-- ================= L12 ================= -->
+<section class="lesson" id="l12" data-lesson="l12">
+  <div class="lhead"><span class="tag">專業</span><div class="num">12</div><h2>畫風與畫面控制</h2><p class="goal">這堂課的目標：用專業詞彙精準指定畫風、構圖和光線，並認識專業玩家用的工具。</p></div>
+
+  <h3>畫風詞彙表</h3>
+  <div class="tbl"><table>
+    <tr><th>畫風</th><th>提示詞可以這樣寫</th><th>適合的故事</th></tr>
+    <tr><td>日式少年漫畫</td><td>黑白、墨線粗細變化、網點陰影、速度線</td><td>運動、冒險、戰鬥</td></tr>
+    <tr><td>少女漫畫</td><td>細膩線條、大眼睛有反光、背景有花和泡泡的網點</td><td>戀愛、校園、心情</td></tr>
+    <tr><td>劇畫</td><td>寫實比例、粗獷墨線、大量黑色陰影</td><td>歷史、懸疑、嚴肅題材</td></tr>
+    <tr><td>清線風</td><td>粗細一致的清楚輪廓、平塗色塊、幾乎沒有陰影</td><td>冒險、旅行、給小朋友看</td></tr>
+    <tr><td>美式漫畫</td><td>粗黑輪廓、肌肉誇張、強烈明暗、鮮豔色彩</td><td>英雄動作</td></tr>
+    <tr><td>賽璐璐上色</td><td>動畫般的平塗色、明暗分界清楚</td><td>彩色日系作品</td></tr>
+    <tr><td>Q 版</td><td>頭大身小、頭身比 1:2、表情誇張</td><td>搞笑、日常四格</td></tr>
+  </table></div>
+  <div class="origin"><div>
+    <div class="t">網點<small>Screentone</small></div><p>印刷漫畫用許多小黑點表現灰色，因為印刷機只能印黑色。以前漫畫家要買印好點點的透明貼紙，用刀割下來貼在稿紙上；Screentone 原本是這種貼紙的商品名稱，後來變成通稱。</p>
+    <div class="t" style="margin-top:10px">賽璐璐<small>Cel / Celluloid</small></div><p>早期動畫把角色畫在透明的賽璐珞膠片上，再疊在背景上拍攝。膠片上只能平塗顏色，形成明暗分明的風格。雖然現在都用電腦了，這種上色法仍叫賽璐璐。</p>
+    <div class="t" style="margin-top:10px">劇畫</div><p>1957 年日本漫畫家辰巳嘉裕提出這個詞，用來區分給大人看、像電影一樣寫實嚴肅的漫畫，和當時以兒童為主的「漫畫」。</p>
+    <div class="t" style="margin-top:10px">清線<small>Ligne claire</small></div><p>法文「清晰的線條」，形容《丁丁歷險記》作者艾爾吉那種乾淨俐落的畫法。這個名稱是 1977 年由荷蘭漫畫家約斯特．斯瓦特提出的。</p>
+    <div class="t" style="margin-top:10px">Q 版／ちび（chibi）</div><p>「Q」是英文 cute（可愛）的發音；日文ちび是「小不點」。兩者都指頭大身小的可愛畫法。</p>
+  </div></div>
+  <div class="note">專業建議：與其寫「用某某畫家的畫風」，不如把你喜歡的<strong>特徵</strong>描述出來（線條粗細、陰影方式、眼睛畫法）。這樣更精準、更有你自己的風格，也避免模仿在世創作者引發的爭議。</div>
+
+  <h3>構圖：畫面裡東西怎麼擺</h3>
+  <div class="tbl"><table>
+    <tr><th>技巧</th><th>做法</th><th>提示詞寫法</th></tr>
+    <tr><td>三分法</td><td>把畫面切成井字，主角放在交叉點上，不放正中間</td><td>主角位於畫面右側三分之一處</td></tr>
+    <tr><td>引導線</td><td>用道路、球場線條把視線帶到主角</td><td>球場的線條延伸指向主角</td></tr>
+    <tr><td>前景遮擋</td><td>畫面前方放模糊的東西，製造「偷看」的感覺</td><td>前景是模糊的觀眾背影</td></tr>
+    <tr><td>留白</td><td>大面積空白，讓情緒沉澱</td><td>角色很小，畫面大部分是空白的天空</td></tr>
+  </table></div>
+  <div class="origin"><div><div class="t">三分法<small>Rule of thirds</small></div><p>1797 年英國畫家約翰．湯瑪斯．史密斯在書中提出，用來說明風景畫怎麼擺放明暗更好看。後來攝影、電影、漫畫都在用。</p></div></div>
+
+  <h3>光線：同一個人，不同心情</h3>
+  <div class="tbl"><table>
+    <tr><th>光線</th><th>效果</th></tr>
+    <tr><td>逆光（剪影）</td><td>光從背後來，人變成黑影——神祕、感傷、英雄登場</td></tr>
+    <tr><td>林布蘭光</td><td>光從斜上方打來，臉頰暗面有一塊三角形亮光——有深度、戲劇感</td></tr>
+    <tr><td>頂光</td><td>光從正上方打下，眼睛變暗——壓迫、嚴肅</td></tr>
+    <tr><td>底光</td><td>光從下巴往上照——恐怖、詭異（想想拿手電筒照臉講鬼故事）</td></tr>
+  </table></div>
+  <div class="origin"><div><div class="t">林布蘭光<small>Rembrandt lighting</small></div><p>以十七世紀荷蘭畫家林布蘭命名，他的肖像畫常用這種光，臉的暗面會出現一個小三角形亮區。</p></div></div>
+
+  <h3>專業玩家的工具</h3>
+  <p>當你想要更強的控制，可以研究這些（需要更多時間學習，通常在電腦上操作）：</p>
+  <div class="tbl"><table>
+    <tr><th>名稱</th><th>一句話說明</th><th>名稱由來</th></tr>
+    <tr><td>Stable Diffusion</td><td>可以裝在自己電腦上的開源圖片 AI，能自由加裝各種外掛。</td><td>「穩定的擴散」，Stability AI 公司與研究團隊推出。</td></tr>
+    <tr><td>LoRA</td><td>一個很小的「追加訓練檔」，教 AI 記住某個角色或畫風，一致性最好。</td><td>Low-Rank Adaptation（低秩適應），2021 年微軟研究員提出，只調整一小部分就讓 AI 學新東西。</td></tr>
+    <tr><td>ControlNet</td><td>給 AI 一張火柴人姿勢圖或線稿，它就照這個姿勢和構圖畫。</td><td>Control（控制）＋ Net（網路），2023 年由史丹佛大學研究者提出。</td></tr>
+    <tr><td>Midjourney</td><td>以美感著名的付費圖片 AI，有角色參考、風格參考功能。</td><td>—</td></tr>
+  </table></div>
+
+  <div class="quiz" data-quiz="l12"></div>
+</section>
+
+<!-- ================= L13 ================= -->
+<section class="lesson" id="l13" data-lesson="l13">
+  <div class="lhead"><span class="tag">專業</span><div class="num">13</div><h2>專業流程與疑難排解</h2><p class="goal">這堂課的目標：像專業團隊一樣管理檔案和提示詞，遇到問題知道怎麼解。</p></div>
+
+  <h3>專業三階段</h3>
+  <div class="tbl"><table>
+    <tr><th>階段</th><th>做什麼</th><th>佔時間</th></tr>
+    <tr><td>前製</td><td>故事、角色身分證、設定圖、場景設定圖、分鏡表</td><td>30%</td></tr>
+    <tr><td>製作</td><td>逐格生成、挑選、修圖</td><td>50%</td></tr>
+    <tr><td>後製</td><td>加字、排版、讀者測試、輸出</td><td>20%</td></tr>
+  </table></div>
+  <div class="origin"><div><div class="t">前製、製作、後製<small>Pre-production / Production / Post-production</small></div><p>電影業的分工說法。專業創作者都知道：前製做得越紮實，後面越少重工。新手最常犯的錯，就是跳過分鏡表直接開始畫。</p></div></div>
+
+  <h3>檔案管理</h3>
+  <p>命名規則：<span class="k">作品名_格號_版本</span>，例如「最後三秒_05_v3.png」。所有提示詞存在同一份文件，格號對應圖片。三個月後你想改第 5 格，才找得到當初怎麼寫的。</p>
+
+  <h3>建立你的「提示詞圖書館」</h3>
+  <p>專業創作者最大的資產不是某一張圖，而是一套可以重複用的提示詞。建議你的文件分成：</p>
+  <div class="box">
+    <p><strong>角色卡</strong>：每個角色的身分證＋設定圖檔名<br>
+    <strong>畫風卡</strong>：你常用的 2–3 種畫風描述<br>
+    <strong>場景卡</strong>：常出現的地點描述（例如「體育館：木地板、左邊是紅色觀眾席、天花板有六盞大燈」）<br>
+    <strong>鏡頭句</strong>：各種景別和角度的寫法<br>
+    <strong>修正句</strong>：「只改……其他完全不要動」這類好用的句子</p>
+  </div>
+
+  <h3>疑難排解</h3>
+  <div class="tbl"><table>
+    <tr><th>問題</th><th>可能原因</th><th>解法</th></tr>
+    <tr><td>角色每格長不一樣</td><td>沒有固定描述或參考圖</td><td>第 7 課四個方法全部用上；每 4–6 格重貼身分證</td></tr>
+    <tr><td>畫風越畫越偏</td><td>對話太長，前面的設定被稀釋</td><td>開新對話，重新上傳設定圖＋畫風身分證＋前一格圖</td></tr>
+    <tr><td>背景每格不同</td><td>場景沒有固定</td><td>先做一張「場景設定圖」，之後每格上傳參考</td></tr>
+    <tr><td>兩個角色的特徵混在一起</td><td>同一句描述了太多人，AI 搞混了誰是誰</td><td>分開寫位置：「畫面左邊是阿哲（…）；畫面右邊是小芸（…）」</td></tr>
+    <tr><td>手指、手臂怪怪的</td><td>手的姿勢太複雜</td><td>局部修正；或改構圖讓手被遮住；或拍自己的姿勢照當參考</td></tr>
+    <tr><td>畫面出現亂碼文字</td><td>AI 以為你要字</td><td>加上「畫面中不要出現任何文字」</td></tr>
+    <tr><td>動作不是你要的</td><td>動作描述太抽象</td><td>寫清楚身體每個部位：「右手舉高過頭、左腳彎曲、身體往前傾」</td></tr>
+    <tr><td>AI 拒絕畫</td><td>碰到平台規定（真人、暴力、知名版權角色）</td><td>改成原創角色、降低暴力描寫；不要想辦法「騙」過規則</td></tr>
+    <tr><td>今天不能畫了</td><td>免費額度用完</td><td>隔天再繼續；把時間拿去寫分鏡和對白</td></tr>
+  </table></div>
+
+  <h3>讀者測試：最誠實的評分</h3>
+  <p>完成後，把漫畫給一位朋友或家人看，<strong>你什麼都不要解釋</strong>。看完問他三個問題：發生了什麼事？哪一格印象最深？有哪裡看不懂？他看不懂的地方，就是要修改的地方——不是他看不懂，是你還沒畫清楚。</p>
+
+  <div class="quiz" data-quiz="l13"></div>
+</section>
+
+<!-- ================= L14 ================= -->
+<section class="lesson" id="l14" data-lesson="l14">
+  <div class="lhead"><span class="tag">專業</span><div class="num">14</div><h2>版權、肖像與安全</h2><p class="goal">這堂課的目標：知道什麼能做、什麼不能做，讓你的作品可以安心公開。</p></div>
+
+  <h3>著作權：每個作品都有主人</h3>
+  <p>一個人畫完一部漫畫、寫完一本小說，作品就自動受到法律保護，不用申請。保護期通常到作者過世後 50–70 年（依國家而定，台灣是 50 年）。</p>
+  <div class="origin"><div><div class="t">著作權<small>Copyright</small></div><p>英文 copy（複製）＋ right（權利）：誰有權利複製這個作品。1710 年英國的《安妮法》被認為是世界第一部著作權法，本來是為了保護作者不被書商任意翻印。</p></div></div>
+
+  <h3>那我可以叫 AI 畫灌籃高手、七龍珠的角色嗎？</h3>
+  <div class="tbl"><table>
+    <tr><th>情況</th><th>說明</th></tr>
+    <tr><td>自己在家練習、不公開</td><td>風險低，但很多 AI 平台本來就會拒絕畫知名版權角色。</td></tr>
+    <tr><td>公開貼到網路</td><td>可能侵害著作權，平台也可能下架。</td></tr>
+    <tr><td>拿來賣錢、參加比賽</td><td>很可能侵權，比賽也可能取消資格。</td></tr>
+  </table></div>
+  <p>所以這門課的做法是：<strong>從名作學「技巧」（節奏、鏡頭、無聲格），用自己的原創角色來表現</strong>。這才是真正屬於你的作品。</p>
+  <div class="origin"><div><div class="t">同人<small>Dōjin</small></div><p>日文「同好之人」，原本指興趣相同的人一起出版的刊物。現在常指用既有作品角色創作的「二次創作」。日本有些出版社會默許，但那是出版社的選擇，不代表合法授權。</p></div></div>
+
+  <h3>真人與肖像</h3>
+  <p>每個人都有權利決定自己的臉被怎麼使用，名人也一樣。用 AI 把真人畫進漫畫時：</p>
+  <ol class="steps">
+    <li>只畫自己，或本人同意的人。</li>
+    <li>不畫讓人難堪、或看起來像真實事件的內容（例如某位明星做了他沒做過的事）。</li>
+    <li>不拿同學做惡搞圖——在網路上，這可能變成霸凌，而且圖片傳出去就收不回來。</li>
+  </ol>
+  <div class="origin"><div><div class="t">深偽<small>Deepfake</small></div><p>2017 年一位網友用 deepfakes 當帳號名稱，張貼用 AI 換臉的影片，這個詞就此流傳。它是 deep learning（深度學習）＋ fake（假的）的合成字。現在泛指用 AI 做出以假亂真的人物圖片或影片。</p></div></div>
+
+  <h3>誠實標示 AI 創作</h3>
+  <p>許多 AI 工具會在圖片裡加上看不見的標記。例如 Google 的 SynthID 會在 AI 圖片中加入人眼看不到的浮水印；許多公司也採用「內容憑證」（C2PA）標準，在檔案裡記錄圖片是怎麼做出來的。</p>
+  <p>公開作品時，建議寫上「AI 輔助創作：故事與分鏡由我完成，圖像使用 ＿＿ 生成」。誠實標示不會讓作品變差，反而讓人知道你做了哪些部分。參加比賽前也要先看規則是否允許 AI。</p>
+  <div class="note">AI 生成的圖到底有沒有著作權，各國還在討論。例如美國著作權局的立場是：完全由 AI 產生的部分不受保護，但人類在故事、選擇、編排、修改上的創作可能受到保護。這也是為什麼你的故事、分鏡和排版這麼重要——那是你的。</div>
+
+  <div class="quiz" data-quiz="l14"></div>
+</section>
+
+<!-- ================= L15 ================= -->
+<section class="lesson" id="l15" data-lesson="l15">
+  <div class="lhead"><span class="tag">專業</span><div class="num">15</div><h2>畢業專題</h2><p class="goal">獨立完成一部 15–20 格的原創連續漫畫。</p></div>
+
+  <h3>作品要求</h3>
+  <div class="box">
+    <label style="display:block"><input type="checkbox"> 15–20 格，有清楚的起承轉合</label>
+    <label style="display:block"><input type="checkbox"> 主角是原創角色，或你自己（第 8 課）</label>
+    <label style="display:block"><input type="checkbox"> 至少用到 4 種景別、2 種角度</label>
+    <label style="display:block"><input type="checkbox"> 至少 1 格無聲格</label>
+    <label style="display:block"><input type="checkbox"> 主角在每一格都認得出來</label>
+    <label style="display:block"><input type="checkbox"> 對白自己加，每個框 20 字以內</label>
+    <label style="display:block"><input type="checkbox"> 附上「AI 輔助創作」說明</label>
+  </div>
+
+  <h3>要交出的東西</h3>
+  <ol class="steps">
+    <li>一頁故事大綱（起承轉合）</li>
+    <li>角色身分證＋設定圖</li>
+    <li>分鏡表（含每格提示詞）</li>
+    <li>完成的漫畫（PDF 或條漫圖片）</li>
+    <li>一段 100 字心得：哪一格最難？你怎麼解決？</li>
+  </ol>
+
+  <h3>自我評分表</h3>
+  <div class="tbl"><table>
+    <tr><th>項目</th><th>1 分</th><th>2 分</th><th>3 分</th><th>4 分</th></tr>
+    <tr><td>故事</td><td>看不出重點</td><td>有開頭結尾</td><td>起承轉合完整</td><td>有轉折又有餘韻</td></tr>
+    <tr><td>角色一致</td><td>常認不出</td><td>大致認得出</td><td>每格都認得出</td><td>連表情個性都一致</td></tr>
+    <tr><td>鏡頭</td><td>都一樣</td><td>有變化</td><td>變化配合情緒</td><td>高潮處鏡頭讓人屏息</td></tr>
+    <tr><td>對白排版</td><td>擋住畫面</td><td>看得清楚</td><td>順序自然</td><td>字少但力量大</td></tr>
+    <tr><td>讀者測試</td><td>看不懂</td><td>要解釋才懂</td><td>自己看得懂</td><td>看完想看下一集</td></tr>
+  </table></div>
+
+  <h3>畢業後的挑戰</h3>
+  <p>做一部 3 集的連載，讓同一批角色在三集裡都保持一致；嘗試彩色版本；或把漫畫的幾格用影片生成工具做成會動的短片。你已經學會了整套方法，接下來只需要一直畫下去。</p>
+</section>
+
+<!-- ================= GLOSSARY ================= -->
+<section class="lesson gloss" id="gloss">
+  <div class="lhead"><div class="num">A</div><h2>名詞辭典（含由來）</h2><p class="goal">課程中出現的專有名詞，都整理在這裡。輸入關鍵字可以快速查。</p></div>
+  <input type="search" class="gloss-search" id="glossQ" placeholder="搜尋名詞，例如：網點、prompt、景別" aria-label="搜尋名詞">
+  <dl id="glossList"></dl>
+</section>
+
+<footer>
+  <p>AI 漫畫學院｜課程中的阿哲、小芸、大熊、周教練都是本課程的原創角色，可以自由拿來練習。《灌籃高手》《七龍珠》僅作為技巧分析的文字討論，其角色與圖像版權屬原作者與出版社所有。</p>
+</footer>
+</div>
+</main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const toast=m=>{const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),1600)};
+function copyText(txt){
+  const done=()=>toast("已複製！");
+  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(txt).then(done,()=>fallback())}else fallback();
+  function fallback(){const ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done()}catch(e){toast("請手動選取複製")}ta.remove()}
+}
+
+/* ---------- menu ---------- */
+const toc=$("#toc"),scrim=$("#scrim"),menuBtn=$("#menuBtn");
+function menu(open){toc.classList.toggle("open",open);scrim.classList.toggle("show",open);menuBtn.setAttribute("aria-expanded",open)}
+menuBtn.addEventListener("click",()=>menu(!toc.classList.contains("open")));
+scrim.addEventListener("click",()=>menu(false));
+$$(".toc a").forEach(a=>a.addEventListener("click",()=>menu(false)));
+
+/* ---------- copy buttons on prompts ---------- */
+function addCopy(el){
+  if(el.querySelector(".copy"))return;
+  const b=document.createElement("button");b.className="btn copy";b.textContent="複製";
+  b.addEventListener("click",()=>{const c=el.cloneNode(true);c.querySelectorAll(".lbl,.copy").forEach(n=>n.remove());copyText(c.textContent.trim())});
+  el.appendChild(b);
+}
+
+/* ---------- focus lines (L3) ---------- */
+(function(){const g=$("#focusLines");if(!g)return;const cx=495,cy=80;let s="";
+  for(let i=0;i<64;i++){const a=i/64*Math.PI*2+ (i%3)*0.02;const r1=48+ (i%4)*6, r2=170;
+    let x2=cx+Math.cos(a)*r2,y2=cy+Math.sin(a)*r2;
+    s+=`<line x1="${(cx+Math.cos(a)*r1).toFixed(1)}" y1="${(cy+Math.sin(a)*r1).toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`}
+  g.innerHTML=s;g.setAttribute("clip-path","url(#fclip)");
+  const svg=g.ownerSVGElement;const d=document.createElementNS("http://www.w3.org/2000/svg","defs");d.innerHTML='<clipPath id="fclip"><rect x="362" y="12" width="266" height="136"/></clipPath>';svg.prepend(d);
+})();
+
+/* ---------- diffusion demo (L1) ---------- */
+(function(){
+  const cv=$("#diffCanvas");if(!cv)return;const ctx=cv.getContext("2d");const W=cv.width,H=cv.height;
+  const off=document.createElement("canvas");off.width=W;off.height=H;const o=off.getContext("2d");
+  const g=o.createLinearGradient(0,0,0,H);g.addColorStop(0,"#fff");g.addColorStop(1,"#bbb");o.fillStyle=g;o.fillRect(0,0,W,H);
+  o.fillStyle="#fff";o.strokeStyle="#000";o.lineWidth=3;o.beginPath();o.arc(230,80,38,0,7);o.fill();o.stroke();
+  o.fillStyle="#555";o.beginPath();o.moveTo(0,H);o.lineTo(0,150);o.lineTo(70,110);o.lineTo(130,150);o.lineTo(200,90);o.lineTo(W,160);o.lineTo(W,H);o.fill();
+  o.fillStyle="#000";o.beginPath();o.moveTo(0,H);o.lineTo(0,185);o.lineTo(90,140);o.lineTo(160,175);o.lineTo(250,150);o.lineTo(W,190);o.lineTo(W,H);o.fill();
+  o.fillRect(83,112,14,30);o.beginPath();o.arc(90,106,9,0,7);o.fill();
+  o.fillRect(76,118,8,4);o.fillRect(96,114,10,4);
+  const src=o.getImageData(0,0,W,H).data;const noise=new Float32Array(W*H);
+  for(let i=0;i<noise.length;i++)noise[i]=Math.random()*255;
+  const img=ctx.createImageData(W,H);
+  function draw(step){const t=Math.pow(step/30,1.3);
+    for(let i=0,p=0;i<noise.length;i++,p+=4){const v=noise[i]*(1-t)+src[p]*t;img.data[p]=img.data[p+1]=img.data[p+2]=v;img.data[p+3]=255}
+    ctx.putImageData(img,0,0);$("#diffStep").textContent=step;$("#diffRange").value=step}
+  draw(0);let timer=null;
+  $("#diffRange").addEventListener("input",e=>{clearInterval(timer);draw(+e.target.value)});
+  $("#diffPlay").addEventListener("click",()=>{clearInterval(timer);let s=+$("#diffRange").value;if(s>=30)s=0;timer=setInterval(()=>{draw(s);if(++s>30)clearInterval(timer)},90)});
+  $("#diffReset").addEventListener("click",()=>{clearInterval(timer);for(let i=0;i<noise.length;i++)noise[i]=Math.random()*255;draw(0)});
+})();
+
+/* ---------- shot sizes (L6) ---------- */
+(function(){
+  const shots=[
+    ["遠景",[0,0,300,400],"整個環境都看得到，人物只占一小部分。讀者知道「這是哪裡」。故事開頭、換場景最常用。"],
+    ["全景",[92,100,130,222],"從頭到腳都在畫面裡。動作看得最清楚，適合投籃、奔跑、打鬥。"],
+    ["中景",[96,104,108,150],"大約腰部以上。像站在旁邊和他說話，最常用在對話。"],
+    ["近景",[106,108,88,98],"胸口以上。讀者開始注意他的情緒。"],
+    ["特寫",[116,114,68,66],"整張臉填滿畫面。驚訝、哭泣、下定決心時使用。"],
+    ["大特寫",[124,140,52,24],"只拍眼睛（或手、球）。時間好像停住了，是最關鍵的瞬間。"]
+  ];
+  const box=$("#shotBtns"),fr=$("#shotFrame"),desc=$("#shotDesc");if(!box)return;
+  shots.forEach((s,i)=>{const b=document.createElement("button");b.className="chip";b.textContent=s[0];b.setAttribute("aria-pressed",i===0);
+    b.addEventListener("click",()=>{$$("#shotBtns .chip").forEach(c=>c.setAttribute("aria-pressed","false"));b.setAttribute("aria-pressed","true");
+      const[x,y,w,h]=s[1];fr.setAttribute("x",x);fr.setAttribute("y",y);fr.setAttribute("width",w);fr.setAttribute("height",h);desc.innerHTML="<strong>"+s[0]+"：</strong>"+s[2]});
+    box.appendChild(b)});
+  desc.innerHTML="<strong>遠景：</strong>"+shots[0][2];
+})();
+
+/* ---------- prompt builder (L5) ---------- */
+(function(){
+  const ids=["pb1","pb2","pb3","pb4","pb4b","pb5","pb6","pb7"];if(!$("#pb1"))return;
+  function build(){const v=ids.map(i=>$("#"+i).value);
+    $("#pbOut").value=`請畫一格漫畫：${v[0]}，${v[1]}。\n場景：${v[2]}。\n鏡頭：${v[3]}，${v[4]}。\n風格：${v[5]}。\n光線與氣氛：${v[6]}。\n畫面比例：${v[7]}。`+($("#pbNoText").checked?"\n畫面中不要出現任何文字。":"")}
+  ids.concat("pbNoText").forEach(i=>$("#"+i).addEventListener("change",build));build();
+  $("#pbCopy").addEventListener("click",()=>copyText($("#pbOut").value));
+})();
+
+/* ---------- storyboard (L10) ---------- */
+const STYLE="【畫風】日式黑白少年漫畫風格，清晰俐落的墨線、有粗細變化，灰階用網點表現，高對比，無彩色。單一格畫面，不要分格線。畫面中不要出現任何文字、對話框或狀聲詞。";
+const CARDS={
+  azhe:["阿哲（主角）","【阿哲】14 歲國中男生，身材偏瘦、比隊友矮一點。黑色刺刺短髮往上翹，額頭正前方有一撮白色頭髮。大眼睛、粗眉毛。深藍色籃球背心與短褲，胸前白色數字「7」，右手腕白色護腕，紅色籃球鞋。"],
+  xiaoyun:["小芸（球隊經理）","【小芸】14 歲國中女生，球隊經理。黑色高馬尾、圓框眼鏡、瀏海齊眉。黃色運動外套、深色長褲，脖子掛著一條淺色毛巾。"],
+  daxiong:["大熊（隊長）","【大熊】15 歲國中男生，隊長，全隊最高、肩膀很寬。平頭、濃眉、小眼睛。深藍色籃球背心，胸前白色數字「4」。"],
+  coach:["周教練","【周教練】50 歲男性，光頭、灰色短鬍子，橘色運動外套，脖子掛銀色哨子。"]
+};
+const PANELS=[
+ ["起","遠景・平視","16:9",[],"傍晚的國中體育館外觀，大門上方掛著長長的比賽布條（布條上不要寫字），很多學生和家長正在走進去，天空是一片晚霞。","旁白：縣長盃國中籃球賽，決賽。"],
+ ["起","全景・俯角","16:9",[],"從觀眾席高處往下看的體育館內部，球場上兩隊球員（一隊深藍色球衣、一隊白色球衣），觀眾席坐滿了人，牆上有一個很醒目的大型電子計分板（螢幕上不要有數字）。","旁白：48：49，落後 1 分。剩下 8 秒。"],
+ ["起","中景・平視","3:4",["azhe"],"阿哲站在球場上大口喘氣，滿頭大汗，右手握緊拳頭，眼神不安地往下看，背景是模糊的觀眾。","阿哲（心裡）：又輪到我了……上次，就是我投不進。"],
+ ["承","近景・平視（回憶）","3:4",["azhe"],"回憶畫面：練習時阿哲罰球投偏，球從籃框彈出去，他僵在原地、表情很難過，背景的隊友模糊地低著頭。整張畫面邊緣用柔和的白色暈開，表示這是回憶。","旁白：一週前。"],
+ ["承","遠景・平視（回憶）","16:9",["azhe","xiaoyun"],"回憶畫面：夜晚空無一人的學校體育館，只有天花板一盞燈亮著，阿哲一個人站在罰球線練投，小芸站在遠處的門口看著他。畫面邊緣柔和暈白。","小芸：還不回家？"],
+ ["承","中景・平視（回憶）","3:4",["azhe","xiaoyun"],"回憶畫面：畫面左邊是阿哲，坐在場邊地板上低著頭；畫面右邊是小芸，蹲在他旁邊遞給他一瓶水。畫面邊緣柔和暈白。","小芸：你投籃的時候，眼睛一直在看觀眾席。"],
+ ["承","特寫（回憶）","1:1",["azhe"],"回憶畫面：阿哲驚訝的臉，眼睛睜得很大，嘴巴微張。畫面邊緣柔和暈白。","阿哲：……咦？"],
+ ["承","近景・仰角（回憶）","3:4",["xiaoyun"],"回憶畫面：小芸抬起一隻手指向上方的籃框，另一隻手推了推眼鏡，表情認真又溫柔，背後是體育館的燈光。畫面邊緣柔和暈白。","小芸：看籃框就好。其他的，交給隊友。"],
+ ["轉","鳥瞰（正上方）","1:1",["azhe","daxiong","coach"],"回到現在：比賽暫停中，五名穿深藍色球衣的球員圍成一圈，周教練蹲在圓圈中間，手指著戰術板，從正上方往下看。","教練：最後一球，交給阿哲！"],
+ ["轉","全景・平視・速度線","16:9",["azhe"],"阿哲運球快速衝過半場，身體前傾、表情專注，背景拉出大量水平速度線，表示速度很快。","狀聲詞：咚咚咚"],
+ ["轉","全景・仰角","3:4",["azhe"],"兩名穿白色球衣的對手高舉雙手包夾阿哲，把他逼到邊線，從很低的位置往上拍，對手顯得非常高大，阿哲在畫面下方。","阿哲（心裡）：沒有出手的空間……！"],
+ ["轉","大特寫","3:1",["azhe"],"阿哲眼睛的大特寫，瞳孔裡倒映著球場另一邊：一名高大的隊友站在角落，身邊沒有人防守。","阿哲（心裡）：不對……要看的不只是籃框，是整個球場！"],
+ ["轉","全景・荷蘭角（傾斜）","16:9",["azhe","daxiong"],"畫面傾斜。畫面左邊是被兩人包夾的阿哲，臉朝向籃框，卻把球從背後傳向右邊；球的後面有速度線。畫面右邊遠處是大熊，伸出雙手準備接球。","狀聲詞：咻！"],
+ ["合","全景・平視（無聲）","3:4",["daxiong"],"大熊在三分線外跳起投籃，球剛離開他的手指，背景的觀眾全部靜止、屏住呼吸。畫面非常乾淨安靜，大量留白。","（無聲格，不放任何字）"],
+ ["合","遠景・仰角・集中線","16:9",[],"籃球穿過籃網的瞬間，觀眾席上所有人同時跳起來歡呼，手臂高舉，紙花飛舞，整個畫面有放射狀的集中線。","狀聲詞：刷！"],
+ ["合","中景・平視","16:9",["azhe","xiaoyun","daxiong","coach"],"畫面中間：穿深藍色球衣的隊友們圍著阿哲和大熊歡呼，周教練在後面大笑。畫面右邊：場邊的小芸笑著揮手。阿哲轉頭朝小芸比出大拇指。","小芸：下次，罰球也要投進喔！／阿哲：……是！"]
+];
+function fullPrompt(i){const p=PANELS[i];const cards=p[3].map(k=>CARDS[k][1]).join("\n");
+  return `請畫漫畫〈最後三秒〉第 ${i+1} 格。\n${STYLE}\n${cards?cards+"\n":""}【本格】鏡頭：${p[1]}。${p[4]}\n畫面比例：${p[2]}。`}
+(function(){
+  const co=$("#cardsOut");if(co){let h=`<div class="prompt"><span class="lbl">畫風身分證</span>${STYLE}</div>`;
+    for(const k in CARDS)h+=`<div class="prompt"><span class="lbl">${CARDS[k][0]}</span>${CARDS[k][1]}</div>`;co.innerHTML=h}
+  const sb=$("#storyboard");if(!sb)return;let last="";
+  PANELS.forEach((p,i)=>{
+    if(p[0]!==last){last=p[0];const a=document.createElement("div");a.className="act";a.textContent={"起":"起：交代狀況","承":"承：回憶與困難","轉":"轉：最後 8 秒","合":"合：高潮與收尾"}[p[0]];sb.appendChild(a)}
+    const c=document.createElement("div");c.className="card"+(p[1].includes("回憶")?" flash":"");
+    const who=p[3].length?p[3].map(k=>CARDS[k][0].replace(/（.*）/,"")).join("、"):"無主要角色";
+    c.innerHTML=`<div class="no">${String(i+1).padStart(2,"0")}<small>${p[0]}</small></div><div class="bd"><div class="meta"><span>${p[1]}</span><span>${p[2]}</span><span>${who}</span></div><p style="margin:.2em 0">${p[4]}</p><p class="say">${p[5]}</p><button class="btn ghost" style="font-size:.85rem;padding:3px 10px">複製完整提示詞</button></div>`;
+    c.querySelector("button").addEventListener("click",()=>copyText(fullPrompt(i)));
+    sb.appendChild(c)});
+})();
+
+/* ---------- workbench (L11) ---------- */
+(function(){
+  if(!$("#wbPages"))return;
+  let items=[];// {src, text, pos, style, show}
+  const POS=["tr","tl","bl","br"],STY=["","think","shout","box"],STYN=["一般","思考","大喊","旁白"];
+  const per={l4:4,l6:6,l3:3,strip1:999};
+  const defaultText=PANELS.map(p=>p[5].startsWith("（")?"":p[5].replace(/^[^：]+：/,"").split("／")[0]);
+  function render(){
+    const wrap=$("#wbPages"),lay=$("#wbLayout").value,n=per[lay];wrap.innerHTML="";
+    if(!items.length){wrap.innerHTML='<p style="margin:0;color:#555">還沒有圖片。選擇你的圖片，或按「載入示範格子」。</p>';return}
+    for(let s=0;s<items.length;s+=n){const pg=document.createElement("div");pg.className="wb-page "+lay;
+      items.slice(s,s+n).forEach((it,j)=>{const idx=s+j;const d=document.createElement("div");d.className="wb-panel";
+        d.innerHTML=`<img alt="第 ${idx+1} 格" src="${it.src}">`;
+        if(it.show){const b=document.createElement("div");b.className="bub "+it.pos+" "+it.style;b.contentEditable="true";b.textContent=it.text;b.addEventListener("input",()=>{it.text=b.textContent});d.appendChild(b)}
+        const ctl=document.createElement("div");ctl.className="wb-ctl";
+        ctl.innerHTML=`<button data-a="pos">移動</button><button data-a="sty">${STYN[STY.indexOf(it.style)]}</button><button data-a="show">${it.show?"隱藏":"顯示"}</button>`;
+        ctl.addEventListener("click",e=>{const a=e.target.dataset.a;if(!a)return;
+          if(a==="pos")it.pos=POS[(POS.indexOf(it.pos)+1)%4];if(a==="sty")it.style=STY[(STY.indexOf(it.style)+1)%4];if(a==="show")it.show=!it.show;render()});
+        d.appendChild(ctl);pg.appendChild(d)});
+      wrap.appendChild(pg)}
+  }
+  $("#wbFiles").addEventListener("change",e=>{
+    const fs=Array.from(e.target.files).sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true}));
+    Promise.all(fs.map(f=>new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(f)}))).then(srcs=>{
+      items=srcs.map((src,i)=>({src,text:defaultText[i]||"",pos:"tr",style:"",show:true}));render()})});
+  $("#wbDemo").addEventListener("click",()=>{
+    items=PANELS.map((p,i)=>{const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="#f2f2f2"/><g stroke="#ccc" stroke-width="2">${Array.from({length:24},(_,k)=>`<line x1="200" y1="170" x2="${200+Math.cos(k/24*6.283)*400}" y2="${170+Math.sin(k/24*6.283)*400}"/>`).join("")}</g><text x="200" y="185" font-size="90" text-anchor="middle" font-family="sans-serif" fill="#000">${String(i+1).padStart(2,"0")}</text><text x="200" y="240" font-size="20" text-anchor="middle" font-family="sans-serif" fill="#444">${p[1]}</text></svg>`;
+      return{src:"data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg),text:defaultText[i],pos:"tr",style:p[5].startsWith("旁白")?"box":(p[5].includes("心裡")?"think":(p[5].startsWith("狀聲詞")?"shout":"")),show:!p[5].startsWith("（")}});render()});
+  $("#wbLayout").addEventListener("change",render);
+  $("#wbClear").addEventListener("click",()=>{items=[];$("#wbFiles").value="";render()});
+  $("#wbPrint").addEventListener("click",()=>{if(!items.length){toast("請先放入圖片");return}document.body.classList.add("printing-wb");window.print();setTimeout(()=>document.body.classList.remove("printing-wb"),500)});
+  window.addEventListener("afterprint",()=>document.body.classList.remove("printing-wb"));
+  render();
+})();
+
+/* ---------- quizzes ---------- */
+const QUIZ={
+ l1:[["「生成式 AI」和辨識型 AI 最大的差別是？",["生成式比較貴","生成式會做出新的內容","生成式只能用英文"],1,"生成式 AI 會「生出」新的文字或圖片；辨識型是認出已經存在的東西。"],
+     ["為什麼 AI 畫的角色每張都長得不太一樣？",["每次生成都從新的雜訊開始","AI 故意的","網路太慢"],0,"每次都從新的雜訊「洗」出圖，除非你給它固定的描述或參考圖（第 7 課）。"]],
+ l2:[["哪一個工具「不能」直接產生圖片，但很適合當編劇和分鏡師？",["Gemini","ChatGPT","Claude"],2,"Claude 不直接產生圖片，但擅長寫故事、拆分鏡、寫提示詞和做排版網頁。"],
+     ["「Nano Banana」原本是什麼？",["一種水果品種","Google 內部的開發代號","一部日本漫畫"],1,"它原本只是內部代號，因為好記，後來變成正式名稱。"]],
+ l3:[["格子和格子之間的空白（gutter）有什麼作用？",["只是為了好看","讓讀者自己腦補兩格之間發生的事","放作者簽名"],1,"讀者會在格間想像中間的動作，所以不用每個動作都畫。"],
+     ["想讓最緊張的時刻讓讀者屏息，《灌籃高手》用了什麼方法？",["加更多對白","連續用沒有對白的格子","把字放大"],1,"無聲格的節奏，讓讀者自己「聽見」安靜。"]],
+ l4:[["起承轉合中，「出乎意料的變化」是哪一段？",["起","承","轉","合"],2,"「轉」是轉折，故事在這裡發生變化。"],
+     ["16 格漫畫中，通常哪一段格數最多？",["起","轉","合"],1,"最緊張的「轉」需要慢動作和特寫，格數最多。"]],
+ l5:[["下面哪一個提示詞比較好？",["畫一個很可愛的女生","14 歲女生，黑色高馬尾、圓框眼鏡，在下雨的走廊回頭微笑，近景，日式黑白漫畫風"],1,"具體描述外觀、動作、場景、鏡頭、風格，AI 才知道你要什麼。"],
+     ["想要空教室，最好怎麼寫？",["不要有人的教室，不要學生，不要老師","空無一人的教室"],1,"說你要什麼，少說不要什麼。"]],
+ l6:[["想讓角色看起來強大、有氣勢，要用哪種角度？",["俯角","仰角","平視"],1,"從下往上拍（仰角），角色顯得高大。"],
+     ["「荷蘭角」這個名字其實來自哪裡？",["荷蘭畫家","德國電影，Deutsch 被聽錯成 Dutch","荷蘭的相機品牌"],1,"德國表現主義電影常用傾斜鏡頭，Deutsch 被誤聽成 Dutch。"]],
+ l7:[["角色身分證的特徵應該怎麼寫？",["越多越好，寫 20 個","具體、少、醒目，3–5 個","只寫名字"],1,"特徵太多 AI 會顧此失彼，少而醒目的特徵最有效。"],
+     ["畫到第 10 格，發現畫風慢慢跑掉了，最好的做法是？",["繼續畫，最後再說","重新貼上角色身分證和設定圖，必要時開新對話","換一個 AI"],1,"這叫風格漂移，重新提供設定就能拉回來。"]],
+ l8:[["想把同學畫進漫畫公開貼到網路，應該？",["直接做，朋友不會介意","先取得本人同意，而且不做讓人難堪的內容","把名字遮起來就好"],1,"肖像屬於本人，同意是第一步。"],
+     ["「局部重繪 inpainting」原本是哪個領域的詞？",["古畫修復","烹飪","籃球"],0,"修復師把畫作損壞的部分補畫回去。"]],
+ l9:[["把小說改編成漫畫時，角色心裡想的話可以怎麼處理？",["全部刪掉","變成表情，或放在思考框裡","寫成很長的旁白"],1,"漫畫用表情和思考框表現內心。"],
+     ["為什麼可以自由改編《西遊記》？",["因為很有名","作者過世很久，已經是公有領域","因為是中文"],1,"著作權有保護期限，過了就成為大家共享的公有領域。"]],
+ l10:[["16 格漫畫製作中，最花時間的通常是哪一步？",["寫大綱","逐格生成與挑選","取名字"],1,"每格常要生成好幾次，挑最好的一張。"],
+      ["發現某一格只有白色頭髮不見了，應該怎麼做？",["整張重畫","只請 AI 補上那撮頭髮，其他不要動","不管它"],1,"一次只改一件事，才不會把好的地方也改壞。"]],
+ l11:[["日式漫畫中，一格裡有兩個對話框，先說話的框應該放在？",["左下","右上","正中間"],1,"日漫從右到左、從上到下讀。"],
+      ["一個對話框的字數建議？",["越多越好","20 字以內、最多兩行","至少 50 字"],1,"字少力量大，也不會擋住畫面。"]],
+ l12:[["「網點 Screentone」原本是什麼？",["一種電腦程式","印好點點、可以割下來貼的透明貼紙","一種筆"],1,"以前漫畫家用刀割網點紙貼在稿紙上表現灰色。"],
+      ["想讓 AI 照著你畫的火柴人姿勢來畫，專業玩家會用什麼？",["ControlNet","LoRA","Seed"],0,"ControlNet 可以用姿勢圖或線稿控制構圖。"]],
+ l13:[["兩個角色的特徵常常混在一起（例如眼鏡跑到另一個人臉上），怎麼解決？",["分開寫位置：畫面左邊是誰、右邊是誰","加更多形容詞","換畫風"],0,"清楚指定每個角色的位置和特徵，AI 比較不會搞混。"],
+      ["讀者測試時，你應該？",["邊給他看邊解釋","什麼都不解釋，看他懂不懂","只給他看最好看的一格"],1,"不解釋才能知道作品本身有沒有說清楚。"]],
+ l14:[["想公開發表一部漫畫，主角是七龍珠的角色，可能有什麼問題？",["沒有問題","可能侵害著作權，平台也可能下架","只要標註 AI 生成就沒事"],1,"版權角色屬於原作者和出版社。從名作學技巧，用原創角色表現。"],
+      ["Deepfake 這個詞是怎麼來的？",["一部電影名稱","2017 年一位網友的帳號名稱，deep learning＋fake","一家公司"],1,"它結合了深度學習和「假的」。"]]
+};
+$$(".quiz[data-quiz]").forEach(box=>{
+  const qs=QUIZ[box.dataset.quiz];if(!qs)return;
+  box.innerHTML="<h4>小測驗</h4>";
+  qs.forEach(([q,opts,ans,why])=>{
+    const w=document.createElement("div");w.className="q";w.innerHTML=`<p>${q}</p>`;
+    const fb=document.createElement("div");fb.className="fb";
+    opts.forEach((o,i)=>{const b=document.createElement("button");b.className="opt";b.textContent=o;
+      b.addEventListener("click",()=>{if(i===ans){b.classList.add("right");fb.textContent="答對了！"+why;w.querySelectorAll(".opt").forEach(x=>x.disabled=true)}else{b.classList.add("wrong");fb.textContent="再想想看。"}});
+      w.appendChild(b)});
+    w.appendChild(fb);box.appendChild(w)});
+});
+
+/* ---------- progress ---------- */
+const lessons=$$("section.lesson[data-lesson]");let done=store.get("aimanga-done",{});
+function updateProg(){const n=lessons.filter(s=>done[s.id]).length;$("#progBar").style.width=(n/lessons.length*100)+"%";
+  $$(".toc a").forEach(a=>{const id=a.getAttribute("href").slice(1);a.classList.toggle("done",!!done[id])})}
+lessons.forEach(s=>{const r=document.createElement("label");r.className="done-row";
+  r.innerHTML=`<input type="checkbox" ${done[s.id]?"checked":""}> 我完成這一課了`;
+  r.querySelector("input").addEventListener("change",e=>{done[s.id]=e.target.checked;store.set("aimanga-done",done);updateProg();if(e.target.checked)toast("進度已更新")});
+  s.appendChild(r)});
+updateProg();
+
+/* ---------- toc active ---------- */
+if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){$$(".toc a").forEach(a=>a.classList.toggle("active",a.getAttribute("href")==="#"+e.target.id))}})},{rootMargin:"-30% 0px -65% 0px"});
+  $$("section.lesson").forEach(s=>io.observe(s))}
+
+/* ---------- glossary ---------- */
+const G=[
+["人工智慧","AI","讓機器做出看起來有智慧的事。1955 年約翰．麥卡錫為達特茅斯研討會的企劃書首次使用。"],
+["生成式 AI","Generative AI","會產生新內容的 AI。Generate 來自拉丁文「生出」。"],
+["大型語言模型","LLM","學習大量文字、用「猜下一個字」寫出文章的 AI。Claude、ChatGPT、Gemini 都是。"],
+["參數","Parameter","模型內部可以調整的數字，就像學徒腦中的經驗。大型模型有幾千億個。"],
+["詞元","Token","AI 切分文字的小單位。英文原意是「代幣、記號」。用量限制就是用 token 計算。"],
+["GPT","Generative Pre-trained Transformer","生成式、預先訓練的 Transformer 模型。"],
+["Transformer","變換器","2017 年 Google 研究員在論文〈Attention Is All You Need〉提出的 AI 架構，能同時注意所有字之間的關係。"],
+["擴散模型","Diffusion model","從雜訊一步步去除雜訊來生成圖片的方法，名稱借自物理學的擴散現象。"],
+["幻覺","Hallucination","AI 很有自信地說出錯誤內容。借自醫學名詞「看到不存在的東西」。"],
+["ChatGPT","","Chat（聊天）＋ GPT。OpenAI 的 AI 助理。"],
+["Gemini","","Google 的 AI。拉丁文「雙胞胎」，據 Google 說法象徵兩個團隊合併，並向 NASA 雙子星計畫致敬。"],
+["Nano Banana","","Gemini 的圖片生成模型。原為內部代號，後來成為正式名稱。"],
+["Claude","","Anthropic 的 AI，一般認為名稱向資訊理論之父克勞德．夏農致敬。"],
+["ChatGPT Images","gpt-image-2","ChatGPT 的圖片生成功能，2026 年 4 月推出 2.0 版，會先思考構圖再畫。"],
+["提示詞","Prompt","給 AI 的指令。源自劇場的提詞人 prompter。"],
+["長寬比","Aspect ratio","畫面寬與高的比例，如 16:9、3:4、1:1。"],
+["多輪編輯","Multi-turn editing","在同一個對話中接著修改同一張圖。"],
+["格","コマ / Panel","漫畫的一個畫面框。日文コマ原意是「一小段、一個片段」。"],
+["格間","Gutter","格子之間的空白。英文原意「水溝」，讀者會在這裡腦補。"],
+["對話框","吹き出し / Speech balloon","日文「吹出來的東西」，英文「說話氣球」。"],
+["狀聲詞","Onomatopoeia","把聲音寫成字。希臘文「幫聲音造名字」。"],
+["速度線","Speed lines","平行的線條，表示快速移動。"],
+["集中線","Focus lines","從四周往中心的放射線，把視線集中到主角。"],
+["無聲格","Silent panel","沒有任何文字的格子，用來製造緊張或餘韻。"],
+["180 度法則","180-degree rule","攝影機只待在兩個角色連線的同一側，避免左右混亂。來自電影。"],
+["起承轉合","","源自中國古典詩文作法，四段式結構，是四格漫畫的基礎。"],
+["分鏡","Storyboard","把故事拆成一格一格的草圖或表格。英文 story＋board：早期動畫師把草圖釘在板子上排順序，1930 年代迪士尼工作室發展出這個做法。"],
+["ネーム","Name","日本漫畫業界對「草稿分鏡」的稱呼，包含格子、構圖和對白。"],
+["景別","Shot size","依人物在畫面中占多大分級：遠景、全景、中景、近景、特寫、大特寫。"],
+["仰角","Low angle","從下往上拍，角色顯得強大。"],
+["俯角","High angle","從上往下拍，角色顯得渺小。"],
+["鳥瞰","Bird's-eye view","從正上方往下看，像鳥在天上看。"],
+["荷蘭角","Dutch angle","傾斜的鏡頭，表示不安。源自 Deutsch（德國的）被誤聽成 Dutch。"],
+["角色設定圖","Character sheet / Model sheet","角色的標準樣本圖，來自動畫工作室讓多位畫師畫出同一角色的做法。"],
+["三視圖","Turnaround","正面、側面、背面的站姿圖，turnaround 意思是「轉一圈」。"],
+["角色一致性","Consistency","同一角色在每一格都長得一樣。AI 漫畫最重要的技術。"],
+["風格漂移","Style drift","對話變長後，畫風或角色慢慢跑掉的現象。"],
+["種子","Seed","決定起始雜訊的數字，同種子＋同提示詞＝幾乎一樣的圖。"],
+["文生圖","Text-to-image","只用文字生成圖片。"],
+["圖生圖","Image-to-image / img2img","用一張圖當起點生成新圖，會保留原圖構圖。"],
+["局部重繪","Inpainting","只重畫圖中一小塊。原為古畫修復術語。"],
+["改編","Adaptation","把作品轉換成另一種形式。拉丁文「使適合」。"],
+["公有領域","Public domain","著作權保護期過後，大家都能自由使用的作品。"],
+["條漫","Webtoon","Web＋Cartoon，為手機直向滑動設計的漫畫，起源於韓國。"],
+["輪播","Carousel","可以左右滑動的多張圖貼文。英文原意「旋轉木馬」。"],
+["網點","Screentone","用小黑點表現灰色的印刷技巧，原為一種網點貼紙的商品名。"],
+["賽璐璐","Cel","平塗、明暗分明的上色法，源自早期動畫的賽璐珞透明膠片。"],
+["劇畫","Gekiga","寫實、嚴肅的漫畫，1957 年辰巳嘉裕提出。"],
+["清線","Ligne claire","法文「清晰的線條」，丁丁歷險記式畫風，1977 年由約斯特．斯瓦特命名。"],
+["Q 版","Chibi","頭大身小的可愛畫法。Q 取自 cute 的發音，ちび是日文「小不點」。"],
+["三分法","Rule of thirds","把主角放在井字交叉點的構圖法，1797 年由約翰．湯瑪斯．史密斯提出。"],
+["林布蘭光","Rembrandt lighting","臉頰暗面出現三角形亮區的打光，以荷蘭畫家林布蘭命名。"],
+["逆光","Backlight","光從主體背後照來，形成剪影。"],
+["LoRA","Low-Rank Adaptation","讓 AI 記住特定角色或畫風的小型追加訓練檔，2021 年微軟研究員提出。"],
+["ControlNet","","用姿勢圖、線稿控制 AI 構圖的技術，2023 年由史丹佛研究者提出。"],
+["Stable Diffusion","","可以安裝在自己電腦上的開源圖片 AI。"],
+["前製／製作／後製","Pre / Production / Post","來自電影業的三階段工作流程。"],
+["著作權","Copyright","作者對作品的權利，作品完成就自動產生。1710 年英國《安妮法》被視為第一部著作權法。"],
+["肖像權","Right of publicity / portrait","每個人決定自己的樣貌如何被使用的權利。"],
+["同人","Dōjin","日文「同好之人」，現常指用既有作品角色的二次創作。"],
+["深偽","Deepfake","deep learning＋fake。2017 年起源於一位網友的帳號名稱。"],
+["SynthID","","Google 在 AI 生成內容中加入的隱形浮水印技術。"],
+["內容憑證","C2PA","記錄數位內容如何產生與編輯的業界標準，許多 AI 工具會在圖片中附上。"]
+];
+(function(){const dl=$("#glossList");
+  function draw(q){q=(q||"").trim().toLowerCase();dl.innerHTML=G.filter(g=>!q||g.join(" ").toLowerCase().includes(q)).map(g=>`<div class="it"><dt>${g[0]}${g[1]?`<small>${g[1]}</small>`:""}</dt><dd>${g[2]}</dd></div>`).join("")||"<p>找不到這個名詞，換個關鍵字試試。</p>"}
+  draw();$("#glossQ").addEventListener("input",e=>draw(e.target.value));
+})();
+
+$$(".prompt").forEach(addCopy);
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-e218fc31b6" data-category="creative"></script></body>
+</html>

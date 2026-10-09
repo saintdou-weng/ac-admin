@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>成衣 MES 從零開始：看懂工廠的數位神經系統</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EEF2F5; --surface:#FFFFFF; --ink:#1C2743; --muted:#56617A;
+  --denim:#2B4478; --denim-soft:#DCE4F2; --thread:#C98E1F; --thread-soft:#F6E7C6;
+  --ok:#2F8A5B; --ok-soft:#DDF0E5; --bad:#C2453D; --bad-soft:#F7DEDC; --line:#C9D2DE;
+  --serif:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --paper:#111A2E; --surface:#182440; --ink:#E6EBF3; --muted:#9AA6BD; --denim:#8FAEE8; --denim-soft:#22345C;
+  --thread:#E8B85A; --thread-soft:#3A3322; --ok:#5CC08B; --ok-soft:#1D3A2C; --bad:#EE7B72; --bad-soft:#44241F; --line:#2E3F63; }}
+:root[data-theme="dark"]{
+  --paper:#111A2E; --surface:#182440; --ink:#E6EBF3; --muted:#9AA6BD; --denim:#8FAEE8; --denim-soft:#22345C;
+  --thread:#E8B85A; --thread-soft:#3A3322; --ok:#5CC08B; --ok-soft:#1D3A2C; --bad:#EE7B72; --bad-soft:#44241F; --line:#2E3F63; }
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(64px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-text-size-adjust:100%}
+a{color:var(--denim)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--thread);outline-offset:2px}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;gap:12px;
+  padding:10px 16px;background:var(--surface);border-bottom:2px dashed var(--thread)}
+.topbar h1{font-family:var(--serif);font-size:1.02rem;margin:0;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.progress{flex:1;min-width:60px;height:8px;background:var(--denim-soft);border-radius:4px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:repeating-linear-gradient(90deg,var(--thread) 0 10px,transparent 10px 14px);transition:width .4s}
+.pct{font-size:.85rem;color:var(--muted);white-space:nowrap}
+.iconbtn{white-space:nowrap;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:.9rem}
+.menu-btn{display:none}
+
+/* ---------- layout ---------- */
+.shell{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 60px)}
+nav.toc{border-right:1px solid var(--line);padding:18px 14px 40px;background:var(--surface);position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto}
+.stage-name{font-family:var(--serif);font-size:.95rem;color:var(--denim);margin:18px 6px 8px;font-weight:900}
+.stage-name small{display:block;font-family:var(--sans);font-weight:400;color:var(--muted);font-size:.78rem}
+.ticket{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;border:1px solid var(--line);background:var(--paper);
+  border-radius:6px;padding:8px 10px 8px 16px;margin:0 0 6px;cursor:pointer;position:relative;font-size:.9rem;line-height:1.45}
+.ticket::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;border-left:2px dotted var(--line)}
+.ticket .no{font-weight:700;color:var(--muted);min-width:1.6em;font-variant-numeric:tabular-nums}
+.ticket.on{background:var(--denim);color:#fff;border-color:var(--denim)}
+.ticket.on .no{color:var(--thread-soft)}
+:root[data-theme="dark"] .ticket.on,.ticket.on{color:var(--surface)}
+.ticket.done .no::after{content:" ✓";color:var(--ok)}
+.ticket.on.done .no::after{color:var(--thread-soft)}
+
+main{padding:28px 20px 80px;min-width:0}
+.lesson{display:none;max-width:760px;margin:0 auto}
+.lesson.on{display:block}
+.crumb{font-size:.85rem;color:var(--muted);margin-bottom:4px}
+.lesson h2{font-family:var(--serif);font-size:clamp(1.6rem,4vw,2.25rem);line-height:1.3;margin:0 0 10px;font-weight:900}
+.lesson h3{font-family:var(--serif);font-size:1.3rem;margin:36px 0 8px;padding-top:16px;border-top:2px dashed var(--thread-soft)}
+.lesson h4{font-size:1.05rem;margin:22px 0 4px}
+.goal{background:var(--denim-soft);border-radius:8px;padding:12px 16px;margin:14px 0 20px}
+.goal b{color:var(--denim)}
+.goal ul{margin:4px 0 0;padding-left:1.2em}
+p{margin:0 0 14px}
+ul,ol{padding-left:1.4em}
+li{margin-bottom:4px}
+.term{border-left:4px solid var(--thread);background:var(--surface);padding:12px 16px;margin:18px 0;border-radius:0 8px 8px 0}
+.term .t{font-weight:700;font-size:1.05rem}
+.term .t span{font-weight:400;color:var(--muted);font-size:.9rem;margin-left:6px}
+.term .origin{font-size:.92rem;color:var(--muted);margin-top:6px}
+.term .origin::before{content:"由來｜";color:var(--thread);font-weight:700}
+.analogy{background:var(--thread-soft);border-radius:8px;padding:12px 16px;margin:18px 0}
+.analogy::before{content:"打個比方";display:block;font-weight:700;color:var(--thread);font-size:.9rem}
+.warn{background:var(--bad-soft);border-radius:8px;padding:12px 16px;margin:18px 0}
+.formula{font-family:var(--serif);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:16px 0;text-align:center;font-size:1.08rem;overflow-x:auto}
+.formula small{display:block;font-family:var(--sans);font-size:.85rem;color:var(--muted);margin-top:6px}
+.summary{border:2px dashed var(--denim);border-radius:10px;padding:14px 18px;margin:30px 0 20px}
+.summary h4{margin:0 0 6px;color:var(--denim)}
+.scroll{overflow-x:auto;margin:14px 0}
+table{border-collapse:collapse;width:100%;font-size:.92rem;background:var(--surface)}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--denim-soft)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+figure{margin:20px 0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px}
+figcaption{font-size:.88rem;color:var(--muted);margin-top:8px}
+svg{max-width:100%;height:auto;display:block}
+.lab{background:var(--surface);border:2px solid var(--denim);border-radius:10px;padding:16px;margin:22px 0}
+.lab>.lab-title{font-weight:700;color:var(--denim);margin-bottom:8px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0}
+.field{display:flex;flex-direction:column;font-size:.85rem;color:var(--muted);min-width:120px;flex:1}
+.field input,.field select{margin-top:3px;padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:var(--paper);font-size:1rem;color:var(--ink)}
+.btn{border:0;background:var(--denim);color:#fff;border-radius:8px;padding:8px 14px;cursor:pointer;font-weight:500}
+.btn.ghost{background:transparent;color:var(--denim);border:1px solid var(--denim)}
+.btn.warnb{background:var(--bad)}
+:root[data-theme="dark"] .btn:not(.ghost){color:#111A2E}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn:not(.ghost){color:#111A2E}}
+.out{background:var(--paper);border-radius:8px;padding:10px 14px;margin-top:10px;font-variant-numeric:tabular-nums}
+.big{font-family:var(--serif);font-size:1.8rem;font-weight:900}
+.pill{display:inline-block;padding:1px 9px;border-radius:99px;font-size:.82rem;font-weight:700}
+.pill.g{background:var(--ok-soft);color:var(--ok)} .pill.r{background:var(--bad-soft);color:var(--bad)} .pill.y{background:var(--thread-soft);color:var(--thread)}
+
+/* quiz */
+.quiz{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:14px 0}
+.quiz .q{font-weight:700;margin-bottom:8px}
+.quiz button.opt{display:block;width:100%;text-align:left;margin:6px 0;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);cursor:pointer}
+.quiz button.opt.right{background:var(--ok-soft);border-color:var(--ok)}
+.quiz button.opt.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.quiz .fb{display:none;margin-top:8px;font-size:.93rem}
+.quiz.answered .fb{display:block}
+
+.pager{display:flex;justify-content:space-between;gap:10px;margin-top:40px;padding-top:18px;border-top:2px dashed var(--thread)}
+.pager .btn{padding:10px 18px}
+
+/* hero */
+.hero{padding:10px 0 6px}
+.hero .kicker{color:var(--muted)}
+.hero h2{font-size:clamp(2rem,6vw,3.1rem)}
+.stitch-draw{stroke-dasharray:8 6;}
+.stitch-anim{stroke-dashoffset:0;animation:sew 3s ease-out both}
+@keyframes sew{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.map{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:18px 0}
+.map div{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:10px 12px;font-size:.9rem}
+.map div b{display:block;font-family:var(--serif);color:var(--denim)}
+
+/* journey */
+.stations{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.station{border:1px solid var(--line);border-radius:8px;padding:8px;text-align:center;font-size:.85rem;background:var(--paper);transition:background .3s,border-color .3s}
+.station.on{background:var(--thread-soft);border-color:var(--thread);font-weight:700}
+.station .ic{font-size:1.5rem;line-height:1.2}
+.journey-text{min-height:5.5em}
+
+/* balance bars */
+.bars{display:grid;gap:6px;margin-top:10px}
+.bar{display:grid;grid-template-columns:7.5em 1fr 6.5em;gap:8px;align-items:center;font-size:.85rem}
+.bar .track{background:var(--paper);height:22px;border-radius:4px;position:relative;overflow:hidden}
+.bar .fill{height:100%;background:var(--denim);transition:width .3s}
+.bar.neck .fill{background:var(--bad)}
+.bar .ctl{display:flex;gap:4px;align-items:center;justify-content:flex-end}
+.bar .ctl button{width:26px;height:26px;border-radius:6px;border:1px solid var(--line);background:var(--surface);cursor:pointer;line-height:1}
+
+/* scan sim */
+.sim-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin:10px 0}
+.opbox{border:1px solid var(--line);border-radius:8px;padding:8px;text-align:center;background:var(--paper);font-size:.85rem}
+.opbox .n{font-size:1.4rem;font-weight:900;font-family:var(--serif)}
+.log{max-height:220px;overflow:auto;margin-top:10px}
+.msg{margin-top:8px;font-weight:500}
+.bundle-tkt{display:inline-flex;gap:12px;align-items:center;border:2px dashed var(--thread);border-radius:6px;padding:8px 12px;background:var(--thread-soft);font-size:.88rem;line-height:1.5}
+
+/* board */
+.board{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:6px;margin-top:10px}
+.hour{border-radius:8px;padding:8px;text-align:center;font-size:.82rem;background:var(--paper);border:1px solid var(--line)}
+.hour .v{font-size:1.3rem;font-weight:900;font-family:var(--serif)}
+.hour.g{background:var(--ok-soft);border-color:var(--ok)} .hour.y{background:var(--thread-soft);border-color:var(--thread)} .hour.r{background:var(--bad-soft);border-color:var(--bad)}
+.andon{margin-top:10px;padding:10px;border-radius:8px;display:none;background:var(--bad);color:#fff;font-weight:700}
+.andon.show{display:block;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:.55}}
+
+/* gantt */
+.gantt{display:grid;grid-template-columns:5em repeat(10,1fr);gap:3px;font-size:.78rem;margin-top:10px;min-width:520px}
+.gantt .h{text-align:center;color:var(--muted)}
+.gantt .ln{font-weight:700;align-self:center}
+.gantt .blk{border-radius:4px;padding:4px 6px;color:#fff;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.c1{background:#2B4478}.c2{background:#2F8A5B}.c3{background:#B3761A}.c4{background:#8A4FA0}.c5{background:#C2453D}
+
+/* glossary */
+.gloss-search{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);margin:10px 0 16px;font-size:1rem}
+dl.gloss dt{font-weight:700;margin-top:14px}
+dl.gloss dd{margin:2px 0 0 0;color:var(--ink)}
+dl.gloss dd small{color:var(--muted)}
+
+@media (max-width:860px){
+  .shell{grid-template-columns:1fr}
+  nav.toc{position:fixed;left:0;top:0;bottom:0;width:86%;max-width:330px;z-index:40;transform:translateX(-102%);transition:transform .25s;height:100%;
+    padding-top:calc(18px + env(safe-area-inset-top,0px))}
+  nav.toc.open{transform:none;box-shadow:0 0 0 100vmax rgba(10,15,30,.45)}
+  .menu-btn{display:inline-block}
+  .stations{grid-template-columns:repeat(2,1fr)}
+  .bar{grid-template-columns:6em 1fr 6em}
+  body{font-size:16px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{.topbar,nav.toc,.pager,.lab,.quiz{display:none!important}.lesson{display:block!important;page-break-after:always}.shell{display:block}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <button class="iconbtn menu-btn" id="menuBtn" aria-label="開啟課程目錄">☰ 目錄</button>
+  <h1>成衣 MES 從零開始</h1>
+  <div class="progress" aria-hidden="true"><i id="progBar"></i></div>
+  <span class="pct" id="pct">0%</span>
+  <button class="iconbtn" id="themeBtn" aria-label="切換深淺色">◐</button>
+</header>
+<div class="shell">
+<nav class="toc" id="toc" aria-label="課程目錄"></nav>
+<main id="main">
+<!-- ================= 第一階段 入門 ================= -->
+<section class="lesson" data-stage="第一階段｜入門" data-stagesub="先認識工廠與 MES" data-title="課前說明：這門課要學什麼">
+  <div class="hero">
+    <svg viewBox="0 0 640 60" aria-hidden="true" style="width:100%"><path class="stitch-anim" d="M10 30 C 120 5, 220 55, 330 30 S 540 5, 630 30" fill="none" stroke="var(--thread)" stroke-width="3" stroke-dasharray="10 7" stroke-linecap="round"/></svg>
+    <p class="kicker">第 0 課</p>
+    <h2>一件 T 恤從一捲布變成一箱貨，中間發生的每一件事，MES 都記得。</h2>
+  </div>
+  <p>你穿的每一件衣服，都在某個工廠裡經過幾十雙手。有人裁布、有人車縫、有人檢查、有人裝箱。一條生產線可能有二、三十個人，一間工廠可能有十幾條線、幾百個人，同時在做好幾款不同的衣服。</p>
+  <p>問題來了：<b>老闆怎麼知道現在做到哪裡了？</b>哪一條線落後？哪一個步驟卡住？今天做出來的衣服有多少件是壞的？答案就是這門課的主角——<b>MES</b>。</p>
+
+  <div class="term">
+    <div class="t">MES<span>Manufacturing Execution System，製造執行系統</span></div>
+    <p style="margin:6px 0 0">一套「記錄並指揮工廠現場每天在做什麼」的電腦系統。</p>
+    <div class="origin">拆開來看：Manufacturing＝製造、Execution＝執行、System＝系統。重點在「執行」兩個字——它不管公司賺多少錢（那是會計系統的事），它管的是「此時此刻，工廠現場正在發生什麼」。這個名稱在 1990 年前後由美國顧問公司 AMR Research 提出，後面第 7 課會詳細講它的歷史。</div>
+  </div>
+
+  <div class="analogy">把工廠想成一所學校。校長要知道全校狀況，但他不可能每節課都去每一間教室看。所以學校有點名表、成績單、聯絡簿。MES 就是工廠的「電子點名表＋成績單＋聯絡簿」，而且是即時更新的。</div>
+
+  <h3>這門課的路線圖</h3>
+  <p>課程分四個階段，<b>請按順序學</b>。後面的課會用到前面學過的名詞，跳著看會卡住。</p>
+  <div class="map">
+    <div><b>第一階段｜入門</b>第 0～2 課：衣服怎麼做出來、為什麼需要 MES</div>
+    <div><b>第二階段｜基礎</b>第 3～6 課：工序、標準工時、效率、瓶頸、紮票——工廠的共通語言</div>
+    <div><b>第三階段｜進階</b>第 7～12 課：MES 的定位、功能、資料、條碼、品質、看板</div>
+    <div><b>第四階段｜專業</b>第 13～18 課：系統架構、資料表設計、排程、現場細節、導入、畢業專題</div>
+  </div>
+
+  <h3>每一課的長相</h3>
+  <ul>
+    <li><b>本課目標</b>：先告訴你這一課學完能做到什麼。</li>
+    <li><b>名詞卡</b>（金色左線）：專有名詞的意思，以及它<b>為什麼叫這個名字</b>。知道由來，就不用死背。</li>
+    <li><b>打個比方</b>（黃底）：用生活中的例子說明。</li>
+    <li><b>動手實驗室</b>（藍框）：可以按、可以改數字的小工具，自己玩一遍最容易懂。</li>
+    <li><b>小測驗</b>：每課最後兩三題，按下去馬上知道對錯和原因。</li>
+  </ul>
+  <p>左邊目錄會打勾記錄你讀完的課（進度存在這台電腦的瀏覽器裡）。課程最後附上<b>名詞總表</b>，忘記的時候可以回去查。</p>
+
+  <h3>全課程會一直用到的例子</h3>
+  <p>我們假想一間工廠叫<b>「小河成衣廠」</b>，有 300 位員工、10 條車縫線。它接到一張訂單：做 <b>6,000 件圓領 T 恤</b>，款號 <b>TS-2601</b>，顏色分黑、白、灰，尺碼分 S、M、L、XL。從第 1 課開始，我們就跟著這批 T 恤一路走到出貨。</p>
+
+  <div class="summary"><h4>本課重點</h4><ul><li>MES＝製造執行系統，負責記錄與指揮「工廠現場此刻在做什麼」。</li><li>課程分四階段，請依序學習。</li></ul></div>
+  <div class="quiz" data-answer="1" data-explain="MES 的重點在 Execution（執行），也就是工廠現場每天的生產活動。算薪水、報稅比較屬於人事或會計系統的工作。">
+    <div class="q">MES 最主要關心的是哪一件事？</div>
+    <button class="opt">公司今年要繳多少稅</button>
+    <button class="opt">工廠現場此刻做到哪裡、做得好不好</button>
+    <button class="opt">公司網站的設計</button>
+  </div>
+</section>
+
+<section class="lesson" data-stage="第一階段｜入門" data-title="一件衣服的旅程">
+  <div class="crumb">第 1 課</div>
+  <h2>一件衣服的旅程</h2>
+  <div class="goal"><b>本課目標</b><ul><li>說得出成衣從接單到出貨的八個站。</li><li>知道每一站會產生哪些「資料」。</li></ul></div>
+
+  <div class="term">
+    <div class="t">成衣<span>Ready-to-wear／Garment</span></div>
+    <div class="origin">「成」是「做好的、現成的」。古代衣服大多是量身訂做，要先挑布再請裁縫量尺寸。19 世紀縫紉機普及（1846 年 Elias Howe 取得鎖式線跡縫紉機專利，1851 年 Isaac Singer 改良並大量販售），衣服可以照標準尺寸大量生產，買了就能穿，所以叫「成衣」。英文 ready-to-wear 也是同一個意思：「準備好可以穿」。</div>
+  </div>
+
+  <h3>八個站，跟著 T 恤走一遍</h3>
+  <div class="lab" id="journey">
+    <div class="lab-title">動手實驗室：按「下一站」看 TS-2601 怎麼被做出來</div>
+    <div class="stations" id="stations"></div>
+    <div class="out journey-text" id="journeyText" aria-live="polite"></div>
+    <div class="row"><button class="btn ghost" id="jPrev">上一站</button><button class="btn" id="jNext">下一站</button><button class="btn ghost" id="jPlay">自動播放</button></div>
+  </div>
+
+  <h3>這趟旅程的三個關鍵觀念</h3>
+  <h4>1. 衣服不是一件一件做的，是「一批一批」做的</h4>
+  <p>裁布時一次鋪幾十層布、一刀切下去，就是幾十件的同一個部位。所以工廠裡流動的單位通常不是「一件」，而是「一紮」（一捆，例如 20 件）。第 6 課會專門講。</p>
+  <h4>2. 車縫被拆成很多個小步驟</h4>
+  <p>一件 T 恤不是一個人從頭做到尾，而是拆成「合肩、上領、上袖、合側縫、折袖口、折下擺……」每個人只負責一兩個步驟，像接力賽一樣傳下去。這些小步驟叫做<b>工序</b>，第 3 課的主角。</p>
+  <h4>3. 每一站都在產生資料</h4>
+  <div class="scroll"><table>
+    <tr><th>站</th><th>會產生的資料（舉例）</th></tr>
+    <tr><td>接單</td><td>客戶、款號、數量、顏色尺碼、交期</td></tr>
+    <tr><td>打版與樣衣</td><td>版型、尺寸表、工序清單、標準工時</td></tr>
+    <tr><td>物料</td><td>布料到貨多少碼、輔料（線、標籤、吊牌）是否齊全</td></tr>
+    <tr><td>裁剪</td><td>裁了多少件、分成幾紮、每紮編號</td></tr>
+    <tr><td>車縫</td><td>誰在什麼時間做完了哪一紮的哪一道工序</td></tr>
+    <tr><td>品檢</td><td>檢查幾件、幾件有問題、是什麼問題</td></tr>
+    <tr><td>後整與包裝</td><td>燙了幾件、裝了幾箱、每箱內容</td></tr>
+    <tr><td>出貨</td><td>哪天出、出多少、還欠多少</td></tr>
+  </table></div>
+  <p>MES 做的事，說穿了就是<b>把這張表右邊那一欄，全部即時、正確地記下來，再變成有用的資訊</b>。</p>
+
+  <div class="term">
+    <div class="t">馬克<span>Marker，排料圖</span></div>
+    <div class="origin">英文 marker 的音譯。裁剪前要在布上畫出（mark）每一片衣片的位置，像拼圖一樣排得越密，浪費的布越少。畫好的那張大圖就叫 marker，中文工廠直接念成「馬克」。</div>
+  </div>
+
+  <div class="summary"><h4>本課重點</h4><ul><li>八站：接單→打版樣衣→物料→裁剪→車縫→品檢→後整包裝→出貨。</li><li>流動單位常是「紮」；車縫被拆成許多「工序」。</li><li>每一站都在產生資料，MES 負責把它記下來、用起來。</li></ul></div>
+  <div class="quiz" data-answer="2" data-explain="裁剪時一次鋪很多層布一起裁，所以同一部位會一次出現幾十片，自然是成批（成紮）往下流。">
+    <div class="q">為什麼成衣工廠裡的衣服常常「一紮一紮」地流動？</div>
+    <button class="opt">因為工人喜歡綁東西</button>
+    <button class="opt">因為客戶規定</button>
+    <button class="opt">因為裁剪時一次裁很多層，同一部位本來就成批出現</button>
+  </div>
+  <div class="quiz" data-answer="0" data-explain="車縫站最核心的資料就是「誰、什麼時間、哪一紮、哪道工序、做完了」。這五件事是 MES 報工的基本組合，後面的課會一直出現。">
+    <div class="q">車縫站最重要的資料是什麼？</div>
+    <button class="opt">誰在什麼時間做完了哪一紮的哪一道工序</button>
+    <button class="opt">布料的價格</button>
+    <button class="opt">客戶公司的地址</button>
+  </div>
+</section>
+
+<section class="lesson" data-stage="第一階段｜入門" data-title="沒有系統的工廠會怎樣">
+  <div class="crumb">第 2 課</div>
+  <h2>沒有系統的工廠會怎樣</h2>
+  <div class="goal"><b>本課目標</b><ul><li>理解「紙本＋白板」管理方式的五個典型問題。</li><li>知道 MES 要解決的其實是「資訊太慢、太亂、不可信」。</li></ul></div>
+
+  <p>很多工廠在沒有 MES 以前是這樣運作的：每條線掛一塊白板，組長每兩個小時寫一次產量；作業員在紙卡上記自己做了幾紮；下班後文員把紙卡打進 Excel；隔天早上主管才看到昨天的報表。</p>
+  <p>聽起來好像也能運作，但它有五個大問題：</p>
+
+  <h3>問題一：太慢</h3>
+  <p>昨天上午第 3 條線的上袖工序卡住，主管今天早上才看到報表。問題已經拖了一整天。</p>
+  <div class="analogy">就像考試考完一個月才發成績單，你早就忘了自己錯在哪，也來不及補救了。</div>
+
+  <h3>問題二：不準</h3>
+  <p>手寫數字會寫錯、打字會打錯、有人會多報幾紮（尤其是按件計酬的時候）。資料一旦不可信，大家開會就在吵「到底做了幾件」，而不是討論怎麼改善。</p>
+
+  <h3>問題三：找不到</h3>
+  <p>客戶來抱怨：「這箱衣服領子歪了。」你想知道是哪一天、哪條線、誰做的——翻紙本翻到天荒地老。這種「往回找出來源」的能力叫<b>追溯</b>。</p>
+  <div class="term">
+    <div class="t">追溯<span>Traceability</span></div>
+    <div class="origin">英文 trace 是「循著痕跡找」，像順著腳印找到人。trace + ability（能力）＝能夠循線找到來源的能力。食品業很早就重視它（出了問題要知道哪一批原料），成衣業則因為品牌客戶要求（例如要證明棉花產地），越來越重要。</div>
+  </div>
+
+  <h3>問題四：看不見「在製品」</h3>
+  <p>布已經裁了、衣服還沒做完，這些半成品散落在各工序旁邊。沒有系統，你不知道哪裡堆了一大堆、哪裡卻在等貨。</p>
+  <div class="term">
+    <div class="t">在製品<span>WIP，Work in Process／Work in Progress</span></div>
+    <div class="origin">字面就是「還在製造過程中的東西」。已經投入但還沒完成的半成品。WIP 太多代表錢被卡在半路（布和人工都花了，但還不能出貨）；太少代表下一站可能沒東西做而停工。</div>
+  </div>
+
+  <h3>問題五：每個人手上的數字不一樣</h3>
+  <p>生產部說做了 5,000 件，品管說合格 4,700 件，倉庫說收到 4,650 件，業務跟客戶說 4,800 件。沒有一個「大家都認同的正確版本」。專業上稱這個目標為<b>單一真實來源</b>。</p>
+  <div class="term">
+    <div class="t">單一真實來源<span>Single Source of Truth</span></div>
+    <div class="origin">資訊系統界的說法：同一筆資料只在一個地方被記錄，其他人都從這裡讀取，而不是各自抄一份。這樣就不會出現「每個人版本不一樣」的情況。</div>
+  </div>
+
+  <h3>所以 MES 要做的是……</h3>
+  <div class="scroll"><table>
+    <tr><th>問題</th><th>MES 的解法</th></tr>
+    <tr><td>太慢</td><td>在現場發生的當下就記錄（掃描），看板即時更新</td></tr>
+    <tr><td>不準</td><td>用掃描代替手寫，系統自動檢查（例如同一紮不能被報兩次）</td></tr>
+    <tr><td>找不到</td><td>每一紮都有編號，每一次經手都留下紀錄</td></tr>
+    <tr><td>看不見 WIP</td><td>系統知道每一紮目前停在哪個工序</td></tr>
+    <tr><td>數字不一樣</td><td>所有部門看同一個資料庫</td></tr>
+  </table></div>
+  <div class="warn"><b>一個常見誤會：</b>MES 不是「買一套軟體裝上去就好」。如果現場的做法很亂（例如紮票亂寫、工序沒定義清楚），電腦只會把亂七八糟的資料記得更快而已。資訊界有句老話：<b>垃圾進，垃圾出</b>（Garbage In, Garbage Out）。所以接下來的第二階段，我們要先把工廠的「語言」學好。</div>
+
+  <div class="summary"><h4>本課重點</h4><ul><li>紙本管理五大問題：慢、不準、找不到、看不見 WIP、數字不一致。</li><li>MES 的核心價值：即時、準確、可追溯、單一真實來源。</li><li>現場規則沒整理好，系統也救不了。</li></ul></div>
+  <div class="quiz" data-answer="1" data-explain="WIP 是已經投入生產、但還沒完成的半成品。太多代表資金卡住，太少可能讓下一站停工。">
+    <div class="q">WIP（在製品）指的是？</div>
+    <button class="opt">已經出貨的衣服</button>
+    <button class="opt">已經開始做、還沒做完的半成品</button>
+    <button class="opt">還沒買的布</button>
+  </div>
+  <div class="quiz" data-answer="2" data-explain="Garbage In, Garbage Out：輸入的資料是錯的，系統算出來的結果也一定是錯的。所以導入 MES 前要先把現場規則定清楚。">
+    <div class="q">「垃圾進，垃圾出」提醒我們什麼？</div>
+    <button class="opt">工廠要常倒垃圾</button>
+    <button class="opt">軟體越貴越好</button>
+    <button class="opt">輸入的資料如果錯誤，系統的結果也會錯</button>
+  </div>
+</section>
+<!-- ================= 第二階段 基礎 ================= -->
+<section class="lesson" data-stage="第二階段｜基礎" data-stagesub="成衣工廠的共通語言" data-title="工序與標準工時 SAM">
+  <div class="crumb">第 3 課</div>
+  <h2>工序與標準工時 SAM</h2>
+  <div class="goal"><b>本課目標</b><ul><li>會看「工序表」。</li><li>理解 SAM 是什麼、怎麼量出來、為什麼它是整個 MES 的地基。</li></ul></div>
+
+  <div class="term">
+    <div class="t">工序<span>Operation</span></div>
+    <div class="origin">「工」是工作，「序」是順序。合起來就是「按順序排好的一個個工作步驟」。英文 operation 來自拉丁文 operari「工作、動手做」。在成衣廠，一道工序通常是一個人在一台機器上連續完成的一個小動作，例如「合肩」。</div>
+  </div>
+
+  <h3>T 恤 TS-2601 的工序表</h3>
+  <p>把一件衣服拆成一道道工序，並寫下每道要用什麼機器、要花幾分鐘，這張表就叫<b>工序表</b>（業界也叫 OB，Operation Breakdown，「工序拆解」）。</p>
+  <div class="scroll"><table>
+    <tr><th>順序</th><th>工序名稱</th><th>機器</th><th class="num">SAM（分鐘）</th></tr>
+    <tr><td>1</td><td>合肩</td><td>拷克（包縫機）</td><td class="num">0.40</td></tr>
+    <tr><td>2</td><td>上領</td><td>拷克</td><td class="num">0.80</td></tr>
+    <tr><td>3</td><td>領口壓線</td><td>三本（繃縫機）</td><td class="num">0.60</td></tr>
+    <tr><td>4</td><td>上袖</td><td>拷克</td><td class="num">1.20</td></tr>
+    <tr><td>5</td><td>合側縫</td><td>拷克</td><td class="num">1.00</td></tr>
+    <tr><td>6</td><td>袖口折邊</td><td>三本</td><td class="num">0.70</td></tr>
+    <tr><td>7</td><td>下擺折邊</td><td>三本</td><td class="num">0.60</td></tr>
+    <tr><td>8</td><td>剪線頭、自檢</td><td>手工</td><td class="num">0.70</td></tr>
+    <tr><th colspan="3">整件合計</th><th class="num">6.00</th></tr>
+  </table></div>
+  <p>這張表的最後一個數字 <b>6.00</b> 非常重要：它代表「一個熟練的人用正常速度，做一件 TS-2601 總共需要 6 分鐘」。這堂課我們會一直用它。</p>
+
+  <div class="term">
+    <div class="t">SAM／SMV<span>Standard Allowed Minute／Standard Minute Value，標準工時</span></div>
+    <p style="margin:6px 0 0">一個<b>受過訓練、熟練的作業員</b>，用<b>正常速度</b>（不偷懶也不拚命），在<b>包含合理休息</b>的情況下，完成一件工作需要的分鐘數。</p>
+    <div class="origin">Standard＝標準、Allowed＝允許（包含了允許的休息時間）、Minute＝分鐘。美國習慣說 SAM，歐洲與亞洲很多工廠說 SMV（Standard Minute Value，標準分鐘值），兩者意思相同。</div>
+  </div>
+
+  <h3>SAM 的祖先：一支碼表</h3>
+  <p>1880 年代，美國工程師<b>佛雷德里克·泰勒</b>（Frederick Taylor）在鋼鐵廠拿著碼表，記錄工人每一個動作花幾秒，想找出「最合理的做法和時間」。這就是<b>時間研究</b>（Time Study），他也因此被稱為「科學管理之父」。</p>
+  <p>接著<b>吉爾布雷斯夫婦</b>（Frank & Lillian Gilbreth）把動作拆得更細，例如「伸手、抓取、移動、放下」，研究怎麼減少多餘動作。有個小趣聞：他們把這些基本動作取名為 <b>Therblig</b>，就是把自己的姓 Gilbreth 倒過來拼（th 當一組）。</p>
+  <p>1948 年，美國發表了 <b>MTM</b>（Methods-Time Measurement，方法時間衡量），把每個基本動作都事先定好標準時間，不必每次都拿碼表。成衣業後來發展出專用版本 <b>GSD</b>（General Sewing Data，通用縫製數據），很多大品牌用它來核定工廠的 SAM。</p>
+
+  <h3>SAM 怎麼算出來？（碼表法）</h3>
+  <div class="formula">標準工時 ＝ 觀測時間 × 評比 × （1 ＋ 寬放率）<small>三個因素分別處理：「量到多久」「這個人快還是慢」「要留多少休息空間」</small></div>
+  <ul>
+    <li><b>觀測時間</b>：拿碼表量同一個人做很多次，取平均。例如合肩平均 0.40 分鐘……但這位阿姨特別快。</li>
+    <li><b>評比</b>（Rating）：觀察員判斷這個人的速度相對「正常速度」是幾 %。很快的人評 110%，慢的人評 90%。這樣就算量到的是快手或新手，算出來也會接近「正常人」。</li>
+    <li><b>寬放</b>（Allowance）：人不是機器，要喝水、上廁所、會累、要換線換針。所以加上一段「允許的額外時間」，成衣業常見 10～20%。「寬放」就是「放寬一點」的意思。</li>
+  </ul>
+  <div class="analogy">評比就像跑步比賽的「讓分」：同學 A 很快、同學 B 很慢，老師想知道「一般人」跑 100 公尺要多久，就不能只看最快的那個，要把他們的速度換算回「普通速度」。</div>
+  <p><b>算算看：</b>量到上領平均 0.72 分鐘，這位作業員評比 95%，寬放 15%。<br>0.72 × 0.95 × 1.15 ＝ <b>0.787</b>，約等於 0.79 分鐘。</p>
+
+  <h3>為什麼 SAM 是 MES 的地基？</h3>
+  <p>因為它讓「不同的衣服」可以比較。做 100 件 T 恤和做 100 件外套，辛苦程度完全不同，直接比件數沒有意義。但換算成「分鐘」就能比了：</p>
+  <ul>
+    <li>100 件 T 恤 × 6 分鐘 ＝ 600 分鐘的工作量</li>
+    <li>100 件外套 × 35 分鐘 ＝ 3,500 分鐘的工作量</li>
+  </ul>
+  <p>下一課的效率、第 5 課的平衡、第 15 課的排程，全部都建立在 SAM 上。<b>SAM 錯了，後面全部都會錯</b>。</p>
+  <div class="warn">專業提醒：SAM 要跟著<b>工序表的版本</b>一起管理。客戶改了設計（例如多加一個口袋），工序和 SAM 都要更新，MES 裡必須記錄「這批貨用的是哪一版」，不然算出來的效率會失真。</div>
+
+  <div class="summary"><h4>本課重點</h4><ul><li>工序＝一個人一台機器完成的小步驟；工序表列出所有工序與 SAM。</li><li>SAM＝熟練者用正常速度、含合理休息所需的分鐘數。</li><li>標準工時＝觀測時間 × 評比 ×（1＋寬放率）。</li><li>SAM 讓不同款式可以用「分鐘」互相比較，是效率、平衡、排程的基礎。</li></ul></div>
+  <div class="quiz" data-answer="2" data-explain="寬放是給喝水、上廁所、疲勞、換線等「人本來就需要」的時間。沒有寬放的標準會不合理，作業員永遠達不到。">
+    <div class="q">為什麼標準工時要加上「寬放」？</div>
+    <button class="opt">讓工廠可以多報產量</button>
+    <button class="opt">因為碼表不準</button>
+    <button class="opt">因為人需要休息、會疲勞、要換線，這些時間要合理算進去</button>
+  </div>
+  <div class="quiz" data-answer="0" data-explain="400 件 × 6 分鐘 ＝ 2,400 分鐘。把件數換成分鐘，不同款式才能比較。">
+    <div class="q">TS-2601 的 SAM 是 6 分鐘，做 400 件等於多少分鐘的工作量？</div>
+    <button class="opt">2,400 分鐘</button>
+    <button class="opt">406 分鐘</button>
+    <button class="opt">66.7 分鐘</button>
+  </div>
+</section>
+
+<section class="lesson" data-stage="第二階段｜基礎" data-title="效率、產量與目標">
+  <div class="crumb">第 4 課</div>
+  <h2>效率、產量與目標</h2>
+  <div class="goal"><b>本課目標</b><ul><li>會算一條線的效率。</li><li>會用效率反推「今天應該做多少件」。</li></ul></div>
+
+  <h3>效率就是「做出來的」除以「花掉的」</h3>
+  <p>一條線今天有 20 個人，每人工作 480 分鐘（8 小時）。那麼這條線今天「花掉」了 20 × 480 ＝ <b>9,600 分鐘</b>。這叫<b>可用分鐘</b>。</p>
+  <p>這條線今天做出 1,200 件 TS-2601。每件值 6 分鐘，所以「做出來的價值」是 1,200 × 6 ＝ <b>7,200 分鐘</b>。這叫<b>產出分鐘</b>（Earned Minutes，「賺到的分鐘」）。</p>
+  <div class="formula">效率 ＝ 產出分鐘 ÷ 可用分鐘 × 100%<br>＝ 7,200 ÷ 9,600 × 100% ＝ <b>75%</b></div>
+  <div class="analogy">考試總分 100 分，你拿到 75 分。「可用分鐘」是總分，「產出分鐘」是你拿到的分數。效率 75% 意思是：這條線花掉的時間中，有 75% 變成了合格的衣服，另外 25% 可能花在等料、換款、重做、動作不熟練上。</div>
+
+  <div class="term">
+    <div class="t">效率<span>Efficiency</span></div>
+    <div class="origin">英文來自拉丁文 efficere「做成、產生結果」。「效」是效果，「率」是比例。不是指「做得快」，而是指「投入的時間有多少比例變成成果」。</div>
+  </div>
+
+  <h3>反過來用：今天的目標是多少？</h3>
+  <p>如果主管根據經驗，認為這條線做 T 恤的合理效率是 75%，就可以反推今天的目標：</p>
+  <div class="formula">目標產量 ＝ 人數 × 工作分鐘 × 目標效率 ÷ SAM<br>＝ 20 × 480 × 75% ÷ 6 ＝ <b>1,200 件</b>，每小時 150 件</div>
+
+  <div class="lab">
+    <div class="lab-title">動手實驗室：效率與目標計算器</div>
+    <div class="row">
+      <label class="field">人數<input type="number" id="e_ppl" value="20" min="1"></label>
+      <label class="field">工作分鐘／人<input type="number" id="e_min" value="480" min="1"></label>
+      <label class="field">SAM（分鐘／件）<input type="number" id="e_sam" value="6" step="0.01" min="0.01"></label>
+    </div>
+    <div class="row">
+      <label class="field">實際產出（件）<input type="number" id="e_out" value="1200" min="0"></label>
+      <label class="field">目標效率（%）<input type="number" id="e_tgt" value="75" min="1" max="150"></label>
+    </div>
+    <div class="out" id="e_res" aria-live="polite"></div>
+  </div>
+  <p>試試看：把人數改成 22，產出不變，效率掉到多少？把 SAM 改成 12（換成做 POLO 衫），同樣人數時間，目標產量變成多少？</p>
+
+  <h3>三種效率，別搞混</h3>
+  <div class="scroll"><table>
+    <tr><th>名稱</th><th>分母算什麼</th><th>用途</th></tr>
+    <tr><td>線效率</td><td>整條線所有人的出勤分鐘</td><td>老闆看整體表現</td></tr>
+    <tr><td>個人效率</td><td>這個人的出勤分鐘，分子是他做的工序件數 × 該工序 SAM</td><td>技能評估、計件獎金</td></tr>
+    <tr><td>在標準效率<br>（On-standard）</td><td>扣掉「非本人造成的損失時間」（停電、等料、機器壞）</td><td>公平評估作業員本身的熟練度</td></tr>
+  </table></div>
+  <p>例如某人工作 480 分鐘，但其中 60 分鐘在等布。總效率可能只有 60%，扣掉等布時間後的在標準效率卻是 70%。<b>MES 必須能記錄「損失時間」和原因</b>，才能分清楚是人的問題還是管理的問題。</p>
+  <div class="warn">專業提醒：效率超過 100% 不一定是好事。可能是 SAM 訂太寬、有人重複報工、或品質沒檢查就算產量。看到異常高的數字，先查資料對不對。</div>
+
+  <div class="summary"><h4>本課重點</h4><ul><li>效率＝產出分鐘（件數×SAM）÷ 可用分鐘（人數×時間）。</li><li>目標產量＝人數×分鐘×目標效率÷SAM。</li><li>要區分線效率、個人效率、在標準效率；MES 要記錄損失時間與原因。</li></ul></div>
+  <div class="quiz" data-answer="1" data-explain="10 人 × 480 ＝ 4,800 可用分鐘；300 件 × 12 ＝ 3,600 產出分鐘；3,600 ÷ 4,800 ＝ 75%。">
+    <div class="q">10 個人工作 480 分鐘，做出 300 件 SAM 12 分鐘的 POLO 衫，效率是多少？</div>
+    <button class="opt">62.5%</button>
+    <button class="opt">75%</button>
+    <button class="opt">120%</button>
+  </div>
+  <div class="quiz" data-answer="2" data-explain="停電不是作業員的錯。在標準效率會把這類時間扣除，才能公平評估人的表現。">
+    <div class="q">今天停電 1 小時，要公平評估作業員的熟練度，應該看哪一種效率？</div>
+    <button class="opt">線效率</button>
+    <button class="opt">不用算效率</button>
+    <button class="opt">在標準效率（扣除非本人造成的損失時間）</button>
+  </div>
+</section>
+
+<section class="lesson" data-stage="第二階段｜基礎" data-title="生產線平衡與瓶頸">
+  <div class="crumb">第 5 課</div>
+  <h2>生產線平衡與瓶頸</h2>
+  <div class="goal"><b>本課目標</b><ul><li>找得出一條線的瓶頸。</li><li>會算平衡率，並知道怎麼重新分配人力。</li></ul></div>
+
+  <div class="term">
+    <div class="t">瓶頸<span>Bottleneck</span></div>
+    <div class="origin">就是「瓶子的脖子」。一瓶水倒出來的速度，不是由瓶身多大決定，而是由最細的瓶口決定。生產線也一樣：整條線的速度，由<b>最慢的那一道工序</b>決定。中文和英文用的是完全相同的比喻。</div>
+  </div>
+  <div class="analogy">全班排成一列傳作業簿，前面 19 個人一秒傳一本，第 7 個同學要三秒才傳一本。不管其他人多快，最後一個人每三秒才收到一本。而且第 7 個同學前面會越堆越多——這就是 WIP 堆積。</div>
+
+  <h3>三個關鍵數字</h3>
+  <div class="formula">工序週期時間 ＝ 工序 SAM ÷ 該工序人數<small>這道工序平均多久「吐出」一件</small></div>
+  <div class="formula">瓶頸 ＝ 週期時間最長的工序　　每小時產量上限 ＝ 60 ÷ 瓶頸週期時間</div>
+  <div class="formula">平衡率 ＝ 總 SAM ÷（總人數 × 瓶頸週期時間）× 100%<small>100% 代表每個人都剛好一樣忙，完全沒有人在等</small></div>
+  <p>理想狀態下，每個人分到的工作量 ＝ 總 SAM ÷ 人數 ＝ 6.00 ÷ 20 ＝ <b>0.30 分鐘</b>。這個理想值叫<b>節距時間</b>（Pitch Time）。每道工序的週期時間越接近 0.30，這條線就越平衡。</p>
+
+  <div class="lab">
+    <div class="lab-title">動手實驗室：把 20 個人分配到 8 道工序</div>
+    <p style="margin:0;font-size:.92rem">紅色長條就是瓶頸。用 ＋／－ 調整人數，試著讓每小時產量變高。提示：先看看「合肩」。</p>
+    <div class="bars" id="bars"></div>
+    <div class="out" id="balRes" aria-live="polite"></div>
+    <div class="row"><button class="btn ghost" id="balReset">恢復初始分配</button></div>
+  </div>
+  <p>你會發現：只把一個人從「剪線頭」移到「合肩」，每小時產量就從 150 件跳到 171 件，平衡率從 75% 升到 86%。<b>沒有加人、沒有加班，只是換個位置</b>。這就是平衡的威力。</p>
+  <p>真實工廠裡人數不一定是整數：一位多能工可能上午做合肩、下午支援上領，或一個人同時負責兩道相鄰的小工序。所以<b>技能矩陣</b>（誰會哪些工序、熟練度多少）是 MES 很重要的資料。</p>
+
+  <div class="term">
+    <div class="t">節拍時間<span>Takt Time</span></div>
+    <div class="origin">Takt 是德文「節拍」，原指樂團指揮揮棒的拍子。據說 1930 年代德國飛機工廠用它來讓各站按同一節奏移動，後來經豐田生產方式推廣到全世界。<br>節拍時間 ＝ 可用時間 ÷ 客戶需求量。例如客戶每天要 1,000 件、一天 480 分鐘，節拍時間 ＝ 0.48 分鐘，也就是整條線每 0.48 分鐘就要產出一件，才跟得上客戶。</div>
+  </div>
+  <p>節距時間（Pitch）看的是「工作量怎麼平均分給人」；節拍時間（Takt）看的是「客戶要求我們多快」。瓶頸週期時間必須<b>小於節拍時間</b>，才能準時交貨。</p>
+
+  <div class="term">
+    <div class="t">限制理論<span>TOC，Theory of Constraints</span></div>
+    <div class="origin">以色列物理學家高德拉特（Eliyahu Goldratt）1984 年在小說《目標》（The Goal）中提出：任何系統的產出都被最弱的一環限制，所以改善要先集中在瓶頸，其他地方改善再多都沒用。</div>
+  </div>
+  <p><b>跟 MES 的關係：</b>有了每一紮每一道工序的掃描紀錄，MES 可以自動算出每道工序的實際速度、每個工序前堆了多少 WIP，<b>即時標出瓶頸</b>，組長不用再憑感覺。</p>
+
+  <div class="summary"><h4>本課重點</h4><ul><li>整條線的速度由最慢的工序（瓶頸）決定。</li><li>週期時間＝工序SAM÷人數；每小時產量＝60÷瓶頸週期時間。</li><li>平衡率＝總SAM÷（總人數×瓶頸週期時間）。</li><li>Takt 看客戶需求，Pitch 看人力分配。</li></ul></div>
+  <div class="quiz" data-answer="0" data-explain="瓶頸決定整條線的速度。上袖改成 3 人後週期時間是 0.40，比原本的 0.30 慢，所以它變成瓶頸，每小時最多 60÷0.40＝150 件。">
+    <div class="q">上袖 SAM 1.20，原本 4 人，抽走 1 人後只剩 3 人，其他工序週期時間都不超過 0.35。整條線每小時最多幾件？</div>
+    <button class="opt">150 件</button>
+    <button class="opt">171 件</button>
+    <button class="opt">200 件</button>
+  </div>
+  <div class="quiz" data-answer="1" data-explain="非瓶頸的地方再快，產品還是得排隊等瓶頸，所以限制理論主張先改善瓶頸。">
+    <div class="q">根據限制理論，改善應該先做哪裡？</div>
+    <button class="opt">最快的工序</button>
+    <button class="opt">瓶頸工序</button>
+    <button class="opt">隨便哪裡都一樣</button>
+  </div>
+</section>
+
+<section class="lesson" data-stage="第二階段｜基礎" data-title="紮與紮票：衣服的身分證">
+  <div class="crumb">第 6 課</div>
+  <h2>紮與紮票：衣服的身分證</h2>
+  <div class="goal"><b>本課目標</b><ul><li>知道「紮」為什麼存在、紮票上寫了什麼。</li><li>理解 PBS 和吊掛系統的差別。</li></ul></div>
+
+  <h3>先回到裁剪台</h3>
+  <p>裁剪時，工人把布一層一層鋪在長桌上，這一整疊叫一<b>床</b>（Lay），鋪布的動作叫<b>拉布</b>（Spreading）。一床可能有 60 層布，裁刀沿著馬克切下去，每個部位就同時得到 60 片。</p>
+  <p>接著這 60 片會被分成幾小捆，例如每 20 片綁在一起，這一小捆就叫一<b>紮</b>（Bundle）。綁在上面的標籤叫<b>紮票</b>（Bundle Ticket）。</p>
+  <div class="term">
+    <div class="t">紮<span>Bundle</span></div>
+    <div class="origin">「紮」本來就是「綑綁」的意思（像紮頭髮、紮稻草）。英文 bundle 也是「一捆」。紮是成衣廠流動與計件的最小單位。</div>
+  </div>
+
+  <h3>為什麼同一紮一定要來自同一疊？——色差</h3>
+  <p>同一種黑色布，不同捲（甚至同一捲的頭尾）染出來的顏色可能有一點點差異，叫<b>色差</b>（Shading）。如果一件衣服的前片來自第 3 層、袖子來自第 40 層，穿起來可能袖子和身體顏色不一樣。</p>
+  <p>所以規則是：<b>同一件衣服的所有裁片，必須來自同一床、同一層</b>。紮票上會記錄「床次」和「層次範圍」，車縫時各部位只能跟同一個紮號的部位配對。這就是為什麼紮票不能亂寫——它保護的是品質。</p>
+
+  <h3>一張紮票長什麼樣子</h3>
+  <figure>
+    <div class="bundle-tkt">
+      <svg width="64" height="64" viewBox="0 0 21 21" aria-label="示意 QR 碼"><rect width="21" height="21" fill="#fff"/><g fill="#1C2743"><rect x="1" y="1" width="7" height="7"/><rect x="13" y="1" width="7" height="7"/><rect x="1" y="13" width="7" height="7"/></g><g fill="#fff"><rect x="2" y="2" width="5" height="5"/><rect x="14" y="2" width="5" height="5"/><rect x="2" y="14" width="5" height="5"/></g><g fill="#1C2743"><rect x="3" y="3" width="3" height="3"/><rect x="15" y="3" width="3" height="3"/><rect x="3" y="15" width="3" height="3"/><rect x="10" y="2" width="1" height="3"/><rect x="9" y="9" width="3" height="1"/><rect x="13" y="10" width="2" height="2"/><rect x="10" y="13" width="1" height="4"/><rect x="16" y="14" width="3" height="1"/><rect x="14" y="17" width="2" height="2"/><rect x="18" y="18" width="2" height="2"/><rect x="11" y="18" width="1" height="2"/><rect x="2" y="10" width="2" height="1"/><rect x="5" y="10" width="2" height="1"/></g></svg>
+      <div><b>紮號 B-0147</b><br>款號 TS-2601｜黑色｜M 碼<br>床次 L-012｜層次 21～40｜20 件</div>
+    </div>
+    <figcaption>紮票至少要有：紮號（唯一編號）、款號、顏色、尺碼、床次、層次、件數。現代紮票會印 QR 碼，掃一下就知道全部資訊。</figcaption>
+  </figure>
+  <p>傳統紮票還會附一排可以撕下的小票（<b>撕票</b>，Coupon），每道工序一張。作業員做完就撕下自己那張，下班貼在計件卡上領錢。MES 用掃描取代撕票：做完掃一下，系統自動記錄，不會遺失、不會重複、主管即時看到。</p>
+
+  <h3>兩種流動方式</h3>
+  <div class="scroll"><table>
+    <tr><th></th><th>PBS 紮包流動</th><th>UPS 吊掛系統</th></tr>
+    <tr><td>全名</td><td>Progressive Bundle System<br>（漸進式紮包系統）</td><td>Unit Production System<br>（單件生產系統）</td></tr>
+    <tr><td>怎麼動</td><td>一紮一紮用手或推車傳給下一站</td><td>裁片夾在吊架上，沿軌道自動送到下一個工位</td></tr>
+    <tr><td>優點</td><td>便宜、彈性大</td><td>WIP 少、速度快、系統自動知道每件在哪</td></tr>
+    <tr><td>缺點</td><td>WIP 容易堆積、要靠人掃描回報</td><td>設備昂貴、換款要重新設定</td></tr>
+    <tr><td>常見於</td><td>大多數東南亞與南亞成衣廠</td><td>高單價、多款少量的工廠</td></tr>
+  </table></div>
+  <p>名字由來：Progressive 是「一步步往前推進」，Unit 是「一個單位」。PBS 是整捆往前推，UPS 是一件一件走。本課程的 MES 以最常見的 PBS 為主。</p>
+
+  <div class="summary"><h4>本課重點</h4><ul><li>一床（Lay）裁完分成許多紮（Bundle），紮票是紮的身分證。</li><li>同一件衣服的裁片必須來自同一層，避免色差。</li><li>MES 用掃描紮票取代手撕計件票。</li><li>PBS 整捆推進，UPS 吊掛單件自動輸送。</li></ul></div>
+  <div class="quiz" data-answer="2" data-explain="不同層的布可能有色差，同一件衣服的裁片混用會讓衣服顏色不一致，所以紮票要記床次與層次。">
+    <div class="q">紮票上為什麼要寫「床次」和「層次」？</div>
+    <button class="opt">方便算薪水</button>
+    <button class="opt">客戶喜歡看</button>
+    <button class="opt">確保同一件衣服的裁片來自同一層布，避免色差</button>
+  </div>
+  <div class="quiz" data-answer="0" data-explain="紮號必須唯一，就像身分證字號一樣。只要掃到紮號，系統就能查出款號、顏色、尺碼等其他所有資訊。">
+    <div class="q">紮票上最關鍵、絕對不能重複的是哪一項？</div>
+    <button class="opt">紮號</button>
+    <button class="opt">顏色</button>
+    <button class="opt">件數</button>
+  </div>
+</section>
+<!-- ================= 第三階段 進階 ================= -->
+<section class="lesson" data-stage="第三階段｜進階" data-stagesub="MES 的腦袋與神經" data-title="MES 的身世與 ISA-95 金字塔">
+  <div class="crumb">第 7 課</div>
+  <h2>MES 的身世與 ISA-95 金字塔</h2>
+  <div class="goal"><b>本課目標</b><ul><li>知道 MES 為什麼在 1990 年代出現。</li><li>分得清 ERP、MES、機器控制各管什麼。</li></ul></div>
+
+  <h3>先有 ERP，才發現中間少了一塊</h3>
+  <p>1960 年代，IBM 的工程師約瑟夫·奧利奇（Joseph Orlicky）等人推廣 <b>MRP</b>（Material Requirements Planning，物料需求計畫）：電腦根據訂單算出「要買多少料、什麼時候買」。1980 年代擴充成 <b>MRP II</b>（加上產能、財務）。1990 年，研究機構 Gartner 把這種涵蓋全公司的系統命名為 <b>ERP</b>。</p>
+  <div class="term">
+    <div class="t">ERP<span>Enterprise Resource Planning，企業資源規劃</span></div>
+    <div class="origin">Enterprise＝企業、Resource＝資源（錢、料、人）、Planning＝規劃。它管的是「整間公司」的帳：訂單、採購、庫存、會計、人事。時間單位通常是「天」或「週」。</div>
+  </div>
+  <p>問題是，ERP 知道「這張訂單 6,000 件，12 月 20 日要交」，但它<b>不知道</b>「現在第 3 條線上袖工序卡住了」。老闆在辦公室看 ERP，現場組長看白板，兩邊中間一片空白。</p>
+  <p>大約 1990 年，美國顧問公司 <b>AMR Research</b> 把填補這塊空白的系統稱為 <b>MES</b>。1992 年，一群軟體商與工廠成立了 <b>MESA</b>（Manufacturing Enterprise Solutions Association，製造企業解決方案協會）推廣這個概念。</p>
+
+  <h3>ISA-95：工廠資訊的五層樓</h3>
+  <p>2000 年起，國際自動化學會（ISA）陸續發布 <b>ISA-95</b> 標準（國際版編號 IEC 62264），把工廠裡的系統分成五層，並定義每層之間要交換什麼資料。它是今天談 MES 時全世界通用的「地圖」。</p>
+  <div class="term">
+    <div class="t">ISA-95<span>ANSI/ISA-95，企業與控制系統整合標準</span></div>
+    <div class="origin">ISA 原名 Instrument Society of America（美國儀器學會），現稱 International Society of Automation。「95」是它在 ISA 標準委員會的編號，不是年份。</div>
+  </div>
+  <div class="lab">
+    <div class="lab-title">動手實驗室：點金字塔的每一層</div>
+    <svg viewBox="0 0 600 330" id="pyr" role="img" aria-label="ISA-95 五層金字塔">
+      <g font-family="var(--sans)" font-size="15" text-anchor="middle">
+        <polygon data-l="4" points="250,10 350,10 390,70 210,70" fill="var(--denim)" style="cursor:pointer"/><text x="300" y="47" fill="#fff" pointer-events="none">第 4 層｜ERP</text>
+        <polygon data-l="3" points="208,75 392,75 432,135 168,135" fill="var(--thread)" style="cursor:pointer"/><text x="300" y="112" fill="#1C2743" font-weight="700" pointer-events="none">第 3 層｜MES</text>
+        <polygon data-l="2" points="166,140 434,140 474,200 126,200" fill="#5B7FB5" style="cursor:pointer"/><text x="300" y="177" fill="#fff" pointer-events="none">第 2 層｜監控</text>
+        <polygon data-l="1" points="124,205 476,205 516,265 84,265" fill="#7E97C4" style="cursor:pointer"/><text x="300" y="242" fill="#fff" pointer-events="none">第 1 層｜感測與控制</text>
+        <polygon data-l="0" points="82,270 518,270 558,325 42,325" fill="#A9B8D6" style="cursor:pointer"/><text x="300" y="304" fill="#1C2743" pointer-events="none">第 0 層｜實體設備</text>
+      </g>
+    </svg>
+    <div class="out" id="pyrText" aria-live="polite">點任何一層看說明。</div>
+  </div>
+  <div class="analogy">把工廠想成學校：<br>第 4 層 ERP 是<b>教務處</b>，排一整學期的課表、管學費。<br>第 3 層 MES 是<b>班導師</b>，每天點名、看誰沒交作業、調整座位、把狀況回報教務處。<br>第 2、1 層是<b>教室裡的設備</b>，像電子鐘、冷氣控制器。<br>第 0 層是<b>桌椅、黑板本身</b>。<br>教務處不會管「第三排的同學現在在打瞌睡」，那是班導的工作。</div>
+
+  <h3>越往上，時間越長；越往下，時間越短</h3>
+  <div class="scroll"><table>
+    <tr><th>層</th><th>在成衣廠是什麼</th><th>時間尺度</th></tr>
+    <tr><td>4 ERP</td><td>訂單、採購、會計、出口文件</td><td>月、週、天</td></tr>
+    <tr><td>3 MES</td><td>排程、派工、報工、品質、WIP、看板</td><td>天、班、小時、分鐘</td></tr>
+    <tr><td>2 監控</td><td>吊掛系統控制台、自動裁床的控制電腦</td><td>分鐘、秒</td></tr>
+    <tr><td>1 感測控制</td><td>縫紉機上的電流感測器、針數計數器</td><td>秒、毫秒</td></tr>
+    <tr><td>0 設備</td><td>縫紉機、裁刀、燙台本身</td><td>即時</td></tr>
+  </table></div>
+  <p>很多成衣廠沒有第 1、2 層的自動化，MES 的資料主要靠<b>人掃描</b>進來。這完全沒問題——ISA-95 是地圖，不是每層都要有東西。</p>
+  <div class="term">
+    <div class="t">MOM<span>Manufacturing Operations Management，製造營運管理</span></div>
+    <div class="origin">ISA-95 其實把第 3 層正式稱為 MOM，範圍比 MES 更大，包含生產、品質、維護、倉儲四大類營運。實務上很多人把 MES 和 MOM 混用，知道這個詞就好。</div>
+  </div>
+
+  <div class="summary"><h4>本課重點</h4><ul><li>ERP 管全公司、以天週為單位；MES 管現場、以小時分鐘為單位。</li><li>MES 這個名稱約 1990 年出現，填補 ERP 與現場之間的空白。</li><li>ISA-95 把工廠系統分為 0～4 層，MES 在第 3 層。</li></ul></div>
+  <div class="quiz" data-answer="1" data-explain="「第 3 條線現在幾件」是小時、分鐘等級的現場資訊，屬於第 3 層 MES。">
+    <div class="q">「第 3 條線這小時做了幾件」應該由哪一層回答？</div>
+    <button class="opt">第 4 層 ERP</button>
+    <button class="opt">第 3 層 MES</button>
+    <button class="opt">第 0 層縫紉機</button>
+  </div>
+  <div class="quiz" data-answer="2" data-explain="「95」是 ISA 標準委員會的編號，第一部分在 2000 年發布。">
+    <div class="q">ISA-95 的「95」是什麼意思？</div>
+    <button class="opt">1995 年發布</button>
+    <button class="opt">95 條規定</button>
+    <button class="opt">標準委員會的編號</button>
+  </div>
+</section>
+
+<section class="lesson" data-stage="第三階段｜進階" data-title="MES 的 11 項功能">
+  <div class="crumb">第 8 課</div>
+  <h2>MES 的 11 項功能</h2>
+  <div class="goal"><b>本課目標</b><ul><li>認識 MESA-11 模型。</li><li>知道成衣廠導入時的優先順序。</li></ul></div>
+  <p>1997 年，MESA 發表白皮書，歸納出 MES 應該具備的 11 項功能，後來大家叫它 <b>MESA-11</b>。它像一份「MES 功能菜單」，不必全點，但要知道有哪些菜。</p>
+
+  <div class="scroll"><table>
+    <tr><th>#</th><th>功能</th><th>在成衣廠的樣子</th></tr>
+    <tr><td>1</td><td>資源配置與狀態<br><small>Resource Allocation & Status</small></td><td>哪台機器在哪條線、是否故障；誰今天出勤</td></tr>
+    <tr><td>2</td><td>詳細排程<br><small>Detailed Scheduling</small></td><td>哪張訂單排在哪條線、哪天上線</td></tr>
+    <tr><td>3</td><td>生產派工<br><small>Dispatching</small></td><td>裁好的紮發到哪條線；今天線上做哪個款</td></tr>
+    <tr><td>4</td><td>文件管理<br><small>Document Control</small></td><td>工序表、樣衣照片、工藝說明、品質標準的最新版本</td></tr>
+    <tr><td>5</td><td>資料收集<br><small>Data Collection</small></td><td>掃描紮票、記錄產量、損失時間</td></tr>
+    <tr><td>6</td><td>人力管理<br><small>Labor Management</small></td><td>出勤、技能矩陣、計件、支援調動</td></tr>
+    <tr><td>7</td><td>品質管理<br><small>Quality Management</small></td><td>巡檢、終檢、DHU、瑕疵原因</td></tr>
+    <tr><td>8</td><td>製程管理<br><small>Process Management</small></td><td>監控工序流程是否正常，異常時警示</td></tr>
+    <tr><td>9</td><td>維護管理<br><small>Maintenance Management</small></td><td>縫紉機保養排程、故障報修與維修時間</td></tr>
+    <tr><td>10</td><td>產品追蹤與譜系<br><small>Product Tracking & Genealogy</small></td><td>某一箱貨是哪幾紮組成、誰做的、用哪捲布</td></tr>
+    <tr><td>11</td><td>績效分析<br><small>Performance Analysis</small></td><td>效率、平衡率、準交率、品質趨勢報表</td></tr>
+  </table></div>
+
+  <div class="term">
+    <div class="t">譜系<span>Genealogy</span></div>
+    <div class="origin">本來是「族譜、家譜」的意思，記錄誰是誰的父母、祖父母。用在製造上，就是記錄「這件成品是由哪些原料、哪些半成品、經過哪些人手做出來的」，可以一代一代往回查。追溯（第 2 課）靠的就是譜系資料。</div>
+  </div>
+  <div class="term">
+    <div class="t">派工<span>Dispatching</span></div>
+    <div class="origin">dispatch 原意是「派遣、發送」，像計程車行派車。「派工」就是把工作派給某條線或某個人。</div>
+  </div>
+
+  <h3>這 11 項其實互相連動</h3>
+  <p>舉一個例子：第 9 項維護管理記錄了一台拷克壞了 40 分鐘 → 第 1 項資源狀態顯示「故障」 → 第 5 項資料收集記下損失時間 → 第 11 項績效分析在計算在標準效率時扣除這 40 分鐘 → 第 2 項排程發現這條線進度落後，建議調整交期。</p>
+  <p>所以設計 MES 時，<b>資料要設計成可以共用</b>，而不是 11 個互不相干的小程式。這是第 14 課資料表設計的核心。</p>
+
+  <h3>成衣廠的建議導入順序</h3>
+  <ol>
+    <li><b>資料收集＋產品追蹤</b>（第 5、10 項）：先讓紮票掃描跑起來。沒有正確的原始資料，其他功能都是空談。</li>
+    <li><b>績效分析</b>（第 11 項）：有了資料立刻做看板與效率報表，讓現場看到價值。</li>
+    <li><b>品質管理</b>（第 7 項）：瑕疵紀錄與 DHU。</li>
+    <li><b>人力管理</b>（第 6 項）：出勤、技能、計件。</li>
+    <li><b>排程與派工</b>（第 2、3 項）：需要前面的效率數據才排得準。</li>
+    <li><b>維護、文件、資源、製程</b>：逐步補上。</li>
+  </ol>
+  <div class="analogy">蓋房子要先打地基，再蓋牆，最後才裝潢。資料收集就是地基。很多工廠一開始就想做漂亮的排程系統（裝潢），結果地基沒有資料，排出來的東西沒人相信。</div>
+
+  <div class="summary"><h4>本課重點</h4><ul><li>MESA-11（1997）列出 MES 的 11 項功能。</li><li>各功能共用資料、互相連動。</li><li>成衣廠建議從資料收集與追蹤開始，再做績效、品質、人力、排程。</li></ul></div>
+  <div class="quiz" data-answer="0" data-explain="排程需要知道各線實際效率才能準確預估，而效率又靠資料收集。所以資料收集要先做。">
+    <div class="q">為什麼不建議一開始就做排程功能？</div>
+    <button class="opt">因為排程需要準確的效率數據，而那要先有資料收集</button>
+    <button class="opt">因為排程不重要</button>
+    <button class="opt">因為 MESA 規定</button>
+  </div>
+  <div class="quiz" data-answer="1" data-explain="Genealogy 原意是族譜；在製造上是記錄成品由哪些原料、半成品、人手組成，可往回追查。">
+    <div class="q">「譜系」（Genealogy）在 MES 中指的是？</div>
+    <button class="opt">員工的家族背景</button>
+    <button class="opt">成品由哪些原料、半成品、工序和人員組成的紀錄</button>
+    <button class="opt">公司的組織圖</button>
+  </div>
+</section>
+
+<section class="lesson" data-stage="第三階段｜進階" data-title="資料：MES 的血液">
+  <div class="crumb">第 9 課</div>
+  <h2>資料：MES 的血液</h2>
+  <div class="goal"><b>本課目標</b><ul><li>分得清主資料與交易資料。</li><li>看得懂資料表、主鍵、外鍵。</li><li>理解為什麼交易紀錄「只能新增、不能改」。</li></ul></div>
+
+  <h3>兩種資料</h3>
+  <div class="scroll"><table>
+    <tr><th></th><th>主資料（Master Data）</th><th>交易資料（Transaction Data）</th></tr>
+    <tr><td>意思</td><td>比較固定、會被反覆使用的基本資料</td><td>每次發生一件事就產生一筆</td></tr>
+    <tr><td>成衣例子</td><td>款式、工序表、SAM、員工、生產線、機台、瑕疵代碼</td><td>掃描報工、品檢紀錄、停機紀錄、出貨</td></tr>
+    <tr><td>多久變一次</td><td>偶爾（新款、新員工）</td><td>每秒都在增加</td></tr>
+    <tr><td>學校比喻</td><td>學生名單、課表</td><td>每天的點名紀錄、每次考試成績</td></tr>
+  </table></div>
+  <p>名稱由來：master 是「主人、母版」，所有交易都要參照它；transaction 是「交易、一筆往來」，原本是商業用語，後來資訊界用來指「一筆發生的紀錄」。</p>
+  <div class="warn"><b>主資料錯，全部錯：</b>如果工序表把上袖的 SAM 打成 12.0（多打一個 0），那之後幾萬筆掃描算出來的效率全部失真。所以主資料要有專人維護、要有審核。</div>
+
+  <h3>資料表：其實就是很守規矩的 Excel</h3>
+  <p>資料庫裡的資料放在一張張<b>資料表</b>（Table）裡。每張表像一個 Excel 工作表：每一<b>列</b>（Row）是一筆資料，每一<b>欄</b>（Column）是一種屬性。差別在於資料表很守規矩：每一欄只能放一種格式（數字就是數字），而且每一列都有一個獨一無二的編號。</p>
+  <div class="term">
+    <div class="t">主鍵<span>Primary Key</span></div>
+    <div class="origin">primary＝最主要的，key＝鑰匙。用一個絕不重複的值來開啟（找到）某一筆資料，就像學號或身分證字號。紮號 B-0147 就是紮資料表的主鍵。</div>
+  </div>
+  <div class="term">
+    <div class="t">外鍵<span>Foreign Key</span></div>
+    <div class="origin">foreign＝外來的。在自己的表裡，存放「別張表的主鍵」，用來連結兩張表。例如掃描紀錄裡寫著「紮號 B-0147」，這個紮號是從紮資料表借來的，所以叫外鍵。</div>
+  </div>
+
+  <h4>看一個例子</h4>
+  <p><b>表 A：紮（bundles）</b></p>
+  <div class="scroll"><table>
+    <tr><th>紮號（主鍵）</th><th>款號</th><th>顏色</th><th>尺碼</th><th class="num">件數</th></tr>
+    <tr><td>B-0147</td><td>TS-2601</td><td>黑</td><td>M</td><td class="num">20</td></tr>
+    <tr><td>B-0148</td><td>TS-2601</td><td>黑</td><td>L</td><td class="num">20</td></tr>
+  </table></div>
+  <p><b>表 B：掃描紀錄（scans）</b></p>
+  <div class="scroll"><table>
+    <tr><th>紀錄號（主鍵）</th><th>紮號（外鍵）</th><th>工序</th><th>員工</th><th>時間</th></tr>
+    <tr><td>90001</td><td>B-0147</td><td>合肩</td><td>E-031</td><td>08:12</td></tr>
+    <tr><td>90002</td><td>B-0147</td><td>上領</td><td>E-044</td><td>08:31</td></tr>
+    <tr><td>90003</td><td>B-0148</td><td>合肩</td><td>E-031</td><td>08:15</td></tr>
+  </table></div>
+  <p>掃描紀錄裡<b>沒有</b>寫顏色、尺碼，因為透過紮號就能去表 A 查到。這個原則叫<b>不重複存放</b>：同一個事實只記一次。好處是改一次就全部正確，不會有「一邊寫黑色、另一邊寫灰色」的矛盾。</p>
+  <div class="term">
+    <div class="t">關聯式資料庫<span>Relational Database</span></div>
+    <div class="origin">1970 年 IBM 研究員科德（Edgar F. Codd）提出的模型：資料放在許多表裡，靠主鍵與外鍵「關聯」起來。今天絕大多數系統（包括 MES）都用它。查詢語言 SQL（Structured Query Language，結構化查詢語言）也是 1970 年代在 IBM 發展出來的。</div>
+  </div>
+
+  <h3>交易紀錄只能新增，不能修改</h3>
+  <p>假設 E-044 不小心把 B-0147 的「上袖」掃成「上領」。最直覺的做法是把那筆紀錄改掉，但專業的 MES <b>不會這樣做</b>。它會：</p>
+  <ol><li>新增一筆「作廢紀錄 90002」的更正紀錄，寫明誰、何時、為什麼作廢。</li><li>再新增一筆正確的掃描紀錄。</li></ol>
+  <div class="analogy">就像銀行存摺：錢存錯了，銀行不會用立可白塗掉，而是再印一行「沖正」。這樣任何時候都能看出發生過什麼事、是誰改的。會計上叫<b>沖銷</b>，資訊系統上叫<b>稽核軌跡</b>（Audit Trail，第 16 課會再談）。</div>
+  <p>這種「只新增、不修改」的設計叫做 <b>Append-only</b>（只附加）。它讓資料可信，也是很多品牌客戶稽核時會要求的。</p>
+
+  <div class="summary"><h4>本課重點</h4><ul><li>主資料相對固定（款式、工序、員工），交易資料每次發生就新增（掃描、品檢）。</li><li>資料表靠主鍵識別每一筆，靠外鍵連接別張表。</li><li>同一事實只記一次；交易紀錄只新增、用更正紀錄代替修改。</li></ul></div>
+  <div class="quiz" data-answer="2" data-explain="工序表是反覆被參照的基本資料，屬於主資料；掃描、品檢、停機都是事件發生時新增的交易資料。">
+    <div class="q">下列哪一個是「主資料」？</div>
+    <button class="opt">08:12 的一筆掃描紀錄</button>
+    <button class="opt">今天的停機紀錄</button>
+    <button class="opt">TS-2601 的工序表與 SAM</button>
+  </div>
+  <div class="quiz" data-answer="0" data-explain="直接修改會讓人看不出發生過什麼事，也可能被拿來做假。用新增更正紀錄的方式保留完整歷史。">
+    <div class="q">掃描報錯了，專業 MES 的做法是？</div>
+    <button class="opt">新增一筆作廢／更正紀錄，保留原紀錄</button>
+    <button class="opt">直接刪掉原紀錄</button>
+    <button class="opt">請 IT 偷偷改資料庫</button>
+  </div>
+</section>
+<section class="lesson" data-stage="第三階段｜進階" data-title="條碼、QR 與 RFID：讓現場自己說話">
+  <div class="crumb">第 10 課</div>
+  <h2>條碼、QR 與 RFID：讓現場自己說話</h2>
+  <div class="goal"><b>本課目標</b><ul><li>知道三種識別技術的由來與差別。</li><li>會設計「在哪裡掃描」。</li><li>親手模擬一紮 T 恤的掃描報工。</li></ul></div>
+
+  <h3>三種讓電腦「認出東西」的方法</h3>
+  <div class="term">
+    <div class="t">條碼<span>Barcode</span></div>
+    <div class="origin">1948 年，美國研究生伍德蘭（Norman Woodland）想幫超市自動記錄商品。流傳的故事是：他坐在海灘上，把摩斯電碼的點和線用手指在沙上往下拉長，變成一粗一細的線條——條碼的點子就這樣誕生，1952 年取得專利。1974 年，美國俄亥俄州一家超市第一次用掃描器結帳，掃的是一包口香糖。「條」＝線條，「碼」＝編碼。</div>
+  </div>
+  <div class="term">
+    <div class="t">QR 碼<span>Quick Response Code，快速回應碼</span></div>
+    <div class="origin">1994 年由日本電裝公司（Denso Wave，屬於豐田集團）的原昌宏發明，原本是為了追蹤汽車零件。據說靈感來自圍棋盤上黑白棋子的排列。Quick Response 意思是「可以很快被讀取」。它能存的資料比條碼多得多，而且缺角、髒汙也能讀，很適合在工廠用。</div>
+  </div>
+  <div class="term">
+    <div class="t">RFID<span>Radio Frequency Identification，無線射頻辨識</span></div>
+    <div class="origin">Radio Frequency＝無線電頻率，Identification＝辨識。它的祖先是二次世界大戰時的「敵我識別系統」，讓雷達分辨飛機是自己人還是敵人。RFID 標籤裡有小晶片和天線，不用對準、隔著布也能讀，還能一次讀很多個。缺點是比紙本 QR 碼貴。</div>
+  </div>
+  <div class="scroll"><table>
+    <tr><th></th><th>條碼</th><th>QR 碼</th><th>RFID</th></tr>
+    <tr><td>成本</td><td>極低（印在紙上）</td><td>極低（印在紙上）</td><td>較高（每個標籤有晶片）</td></tr>
+    <tr><td>讀取方式</td><td>要對準、一次一個</td><td>要對準，手機鏡頭即可</td><td>靠近即可、可一次讀多個</td></tr>
+    <tr><td>成衣廠常用在</td><td>吊牌、外箱</td><td>紮票、員工證</td><td>吊掛衣架、可重複使用的紮夾</td></tr>
+  </table></div>
+
+  <h3>設計重點：在哪裡掃？</h3>
+  <p>掃描點越多，資料越細，但作業員花在掃描的時間也越多。常見有三種設計：</p>
+  <ol>
+    <li><b>只掃入線與出線</b>：知道每紮什麼時候進線、什麼時候做完。最簡單，但看不到線內卡在哪。</li>
+    <li><b>掃關鍵工序</b>：入線、瓶頸工序、線尾品檢、出線。平衡了成本與資訊。</li>
+    <li><b>每道工序都掃</b>：最細，能算個人效率、計件、精準找瓶頸。需要每個工位都有掃描設備。</li>
+  </ol>
+  <p><b>算一下成本：</b>每掃一次約 3 秒。一紮 20 件、8 道工序全掃，共 24 秒，平均每件 1.2 秒。TS-2601 每件 360 秒（6 分鐘），掃描只佔約 0.3%。如果能因此把效率提升幾個百分點，就非常划算。</p>
+
+  <h3>防呆：讓錯誤一開始就發生不了</h3>
+  <div class="term">
+    <div class="t">防呆<span>Poka-yoke（ポカヨケ）</span></div>
+    <div class="origin">日本工程師新鄉重夫（Shigeo Shingo）1960 年代在豐田推廣的概念。日文 poka 是「不小心的失誤」，yoke 是「避免」。最早叫 baka-yoke（笨蛋防止），後來覺得不禮貌才改名。中文譯為「防呆」保留了原本的味道。例子：USB 插頭只能單一方向插入。</div>
+  </div>
+  <p>MES 的掃描防呆通常包括：</p>
+  <ul>
+    <li><b>重複掃描</b>：同一紮同一工序已經報過，就拒絕。</li>
+    <li><b>順序錯誤</b>：前置工序還沒做，就不能報後面的工序（例如還沒上袖，不能報袖口折邊）。</li>
+    <li><b>款不對線</b>：這條線今天派的是 TS-2601，掃到別款的紮就警告。</li>
+    <li><b>技能不符</b>：員工沒有該工序的技能資格，就提醒組長。</li>
+  </ul>
+
+  <div class="lab">
+    <div class="lab-title">動手實驗室：掃描報工模擬器</div>
+    <p style="margin:0 0 6px;font-size:.92rem">選一紮、一道工序，按「掃描」。試試故意重複掃，或跳過前面的工序，看看防呆怎麼擋你。本模擬把工序簡化為依序進行；真實系統會為每道工序設定「前置工序」，允許沒有先後關係的工序同時進行。</p>
+    <div class="row">
+      <label class="field">紮號<select id="s_bundle"></select></label>
+      <label class="field">工序<select id="s_op"></select></label>
+      <label class="field">員工<select id="s_emp"><option>E-031 索菲</option><option>E-044 達拉</option><option>E-052 麗娜</option><option>E-067 薇薩</option></select></label>
+    </div>
+    <div class="row"><button class="btn" id="s_scan">掃描</button><button class="btn ghost" id="s_auto">隨機跑 10 次</button><button class="btn ghost" id="s_reset">清除重來</button></div>
+    <div class="msg" id="s_msg" aria-live="polite"></div>
+    <p style="margin:12px 0 0;font-size:.9rem;color:var(--muted)">每道工序「已完成的紮數」：</p>
+    <div class="sim-grid" id="s_wip"></div>
+    <div class="scroll log"><table><thead><tr><th>#</th><th>時間</th><th>紮號</th><th>工序</th><th>員工</th><th>結果</th></tr></thead><tbody id="s_log"></tbody></table></div>
+  </div>
+  <p>注意觀察：被拒絕的掃描<b>也被記下來了</b>。專業 MES 會記錄失敗的嘗試，因為「某人一直掃錯」本身就是需要訓練或改善的訊號。</p>
+
+  <div class="summary"><h4>本課重點</h4><ul><li>條碼（1952 專利）、QR 碼（1994 豐田集團）、RFID（源自二戰敵我識別）。</li><li>掃描點設計是資料細緻度與作業成本的取捨。</li><li>防呆（Poka-yoke）讓錯誤在掃描當下就被擋下。</li></ul></div>
+  <div class="quiz" data-answer="1" data-explain="QR 碼印在紙上幾乎零成本，手機就能讀，缺角也能辨識，非常適合大量、用完即丟的紮票。">
+    <div class="q">成衣廠的紙本紮票，最適合用哪一種？</div>
+    <button class="opt">RFID</button>
+    <button class="opt">QR 碼</button>
+    <button class="opt">手寫編號</button>
+  </div>
+  <div class="quiz" data-answer="2" data-explain="防呆是在錯誤發生的當下阻止它，而不是事後才發現。重複掃描被擋下，就不會有重複計件。">
+    <div class="q">以下哪個是 MES 的防呆設計？</div>
+    <button class="opt">每週五檢查一次報表</button>
+    <button class="opt">請作業員小心一點</button>
+    <button class="opt">同一紮同一工序掃第二次時，系統直接拒絕</button>
+  </div>
+</section>
+
+<section class="lesson" data-stage="第三階段｜進階" data-title="品質管理：DHU、AQL 與柏拉圖">
+  <div class="crumb">第 11 課</div>
+  <h2>品質管理：DHU、AQL 與柏拉圖</h2>
+  <div class="goal"><b>本課目標</b><ul><li>會算 DHU。</li><li>理解抽樣檢驗 AQL 的邏輯。</li><li>會用柏拉圖找出最該先解決的問題。</li></ul></div>
+
+  <h3>品檢發生在哪些地方</h3>
+  <ol>
+    <li><b>首件檢查</b>：新款上線，第一件做好先檢查，確認做法正確再大量生產。避免錯一整批。</li>
+    <li><b>線上巡檢</b>（Inline Inspection）：品檢員在線上巡迴，抽查每位作業員剛做完的幾件。很多工廠用<b>紅綠燈法</b>：例如每人抽 7 件，全好給綠牌、1 件有問題給黃牌、2 件以上給紅牌，紅牌要立即處理。</li>
+    <li><b>線尾全檢</b>（End-line Inspection）：每一件都檢查，有問題送回返修。</li>
+    <li><b>終期抽驗</b>（Final Audit）：出貨前由品管或客戶派的驗貨員，用 AQL 抽樣決定這批能不能出。</li>
+  </ol>
+
+  <h3>DHU：每一百件有幾個瑕疵</h3>
+  <div class="term">
+    <div class="t">DHU<span>Defects per Hundred Units，每百件瑕疵數</span></div>
+    <div class="origin">字面直譯：每（per）一百（Hundred）個單位（Units）有幾個瑕疵（Defects）。</div>
+  </div>
+  <div class="formula">DHU ＝ 瑕疵總數 ÷ 檢查件數 × 100</div>
+  <p>注意：一件衣服可能同時有兩個瑕疵（領歪又有線頭），所以瑕疵總數可能大於不良件數。另一個指標<b>不良率</b>算的是「有問題的件數」。</p>
+  <p>例：檢查 200 件，發現 14 個瑕疵，分布在 11 件衣服上。<br>DHU ＝ 14 ÷ 200 × 100 ＝ <b>7.0</b>；不良率 ＝ 11 ÷ 200 ＝ <b>5.5%</b>。</p>
+
+  <h3>AQL：為什麼只抽一部分就敢放行？</h3>
+  <div class="analogy">媽媽煮了一大鍋湯，不需要喝完整鍋才知道鹹不鹹，攪一攪舀一匙嚐就夠了。抽樣檢驗也是這個道理：只要抽得夠隨機、數量夠，就能用少量樣本推估整批的品質。</div>
+  <div class="term">
+    <div class="t">AQL<span>Acceptance Quality Limit，允收品質界限</span></div>
+    <div class="origin">源自 1950 年美軍採購標準 MIL-STD-105：軍方買大量物資時不可能每件都驗，於是訂出抽樣規則。後來成為民間標準 ANSI/ASQ Z1.4 與國際標準 ISO 2859-1。舊稱 Acceptable Quality Level（可接受品質水準）。</div>
+  </div>
+  <p>用法是查表：先依<b>批量</b>查出要抽幾件，再依客戶訂的 <b>AQL 值</b>查出「最多允許幾個瑕疵」。</p>
+  <p>例：一批 5,000 件，一般檢驗水準 II，查表要抽 <b>200 件</b>。客戶要求 AQL 2.5，查表得到<b>允收數 10、拒收數 11</b>：抽到的 200 件中瑕疵 ≤ 10 就放行，≥ 11 就整批退回重驗。<small style="color:var(--muted)">（實際數值以客戶規範與標準表為準。）</small></p>
+  <p>MES 在這裡的角色：記錄每次驗貨的批量、抽樣數、瑕疵數與結果，並累積成「這條線、這個款、這位客戶」的歷史通過率。</p>
+
+  <h3>柏拉圖：先解決最大的問題</h3>
+  <div class="term">
+    <div class="t">柏拉圖<span>Pareto Chart，帕雷托圖</span></div>
+    <div class="origin">跟希臘哲學家柏拉圖沒有關係！是義大利經濟學家帕雷托（Vilfredo Pareto，中文常音譯成「柏拉圖」）在 1890 年代觀察到：義大利約 80% 的土地由約 20% 的人擁有。後來品質管理大師朱蘭（Joseph Juran）把它推廣成「少數關鍵，多數次要」原則：大約 80% 的問題來自 20% 的原因。</div>
+  </div>
+  <div class="lab">
+    <div class="lab-title">動手實驗室：DHU 計算與柏拉圖</div>
+    <div class="row"><label class="field">檢查件數<input type="number" id="q_n" value="200" min="1"></label></div>
+    <div class="row" id="q_inputs"></div>
+    <div class="out" id="q_res" aria-live="polite"></div>
+    <div class="scroll"><svg id="q_chart" viewBox="0 0 560 260" style="min-width:420px"></svg></div>
+  </div>
+  <p>圖上的長條由大排到小，折線是累計百分比。通常前兩三項就佔了七八成，<b>改善資源應該先投入那裡</b>。</p>
+  <p><b>MES 的加分點：</b>因為每紮都有掃描紀錄，瑕疵可以追溯到「哪道工序、哪個人、哪台機器」。例如跳針集中在某台三本車 → 可能是機器問題，通知維修；線頭集中在某位新人 → 安排再訓練。這就是資料串起來的威力。</p>
+
+  <div class="summary"><h4>本課重點</h4><ul><li>品檢有首件、巡檢、線尾全檢、終期抽驗四種。</li><li>DHU＝瑕疵總數÷檢查件數×100，和不良率不同。</li><li>AQL 用抽樣判斷整批是否允收，源自 1950 年美軍標準。</li><li>柏拉圖幫你找出影響最大的少數問題。</li></ul></div>
+  <div class="quiz" data-answer="0" data-explain="DHU ＝ 9 ÷ 150 × 100 ＝ 6.0。">
+    <div class="q">檢查 150 件，共發現 9 個瑕疵，DHU 是多少？</div>
+    <button class="opt">6.0</button>
+    <button class="opt">9.0</button>
+    <button class="opt">16.7</button>
+  </div>
+  <div class="quiz" data-answer="1" data-explain="Pareto 是義大利經濟學家帕雷托，中文常音譯為柏拉圖，跟希臘哲學家無關。">
+    <div class="q">「柏拉圖」這個名稱來自誰？</div>
+    <button class="opt">希臘哲學家柏拉圖</button>
+    <button class="opt">義大利經濟學家帕雷托（Pareto）</button>
+    <button class="opt">一位日本品管專家</button>
+  </div>
+</section>
+
+<section class="lesson" data-stage="第三階段｜進階" data-title="即時看板與安燈">
+  <div class="crumb">第 12 課</div>
+  <h2>即時看板與安燈</h2>
+  <div class="goal"><b>本課目標</b><ul><li>知道一個好的產線看板該顯示什麼。</li><li>理解安燈與自働化的由來。</li><li>把「停線」變成可分析的資料。</li></ul></div>
+
+  <h3>從白板到電子看板</h3>
+  <p>還記得第 2 課的白板嗎？組長每兩小時寫一次。電子看板做的是同一件事，但資料直接來自掃描，<b>每幾秒自動更新</b>，而且會自己變色提醒。</p>
+  <div class="term">
+    <div class="t">KPI<span>Key Performance Indicator，關鍵績效指標</span></div>
+    <div class="origin">Key＝關鍵、Performance＝表現、Indicator＝指標。從幾十個數字中，挑出最能代表「做得好不好」的那幾個。看板上不應該塞滿數字，只放 KPI。</div>
+  </div>
+  <p>一條車縫線的看板常見 KPI：</p>
+  <ul><li>本小時目標／實際產量（最重要）</li><li>今日累計與達成率</li><li>即時效率</li><li>線尾 DHU</li><li>目前瓶頸工序與 WIP</li><li>停線時間與原因</li></ul>
+  <p>顏色規則舉例：達成率 ≥ 95% 綠色、85～95% 黃色、&lt; 85% 紅色。規則要簡單到作業員從十公尺外一眼就懂。</p>
+
+  <h3>安燈：讓現場可以喊「停」</h3>
+  <div class="term">
+    <div class="t">安燈<span>Andon（行灯）</span></div>
+    <div class="origin">日文「行灯」是古代用紙糊的提燈。豐田工廠在產線上方掛燈號，作業員遇到問題就拉繩或按鈕，燈亮起來，組長馬上過來處理。中文音譯為「安燈」，剛好也有「讓人安心的燈」的意味。</div>
+  </div>
+  <div class="term">
+    <div class="t">自働化<span>Jidoka</span></div>
+    <div class="origin">注意是「働」（有人字旁），不是「動」。豐田的創辦人豐田佐吉原本是做<b>織布機</b>的——跟紡織業是同一家人！他 1924 年完成的 G 型自動織布機，只要一根線斷掉，機器就會自己停下來，避免繼續織出瑕疵布。「動」加上人字旁，意思是「像人一樣有判斷力的自動化」：發現異常就停。安燈就是把這個精神交給人：發現問題就讓整條線知道。</div>
+  </div>
+  <div class="term">
+    <div class="t">看板<span>Kanban</span></div>
+    <div class="origin">也是豐田的用語，但意思不同！豐田的「看板」是一張卡片，用來通知上游「我這裡用完了，請補貨」，是一種物料拉動的方法。中文的「電子看板」通常指顯示螢幕（英文 Dashboard／Display Board），兩者別搞混。</div>
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">動手實驗室：第 3 線一日看板</div>
+    <div class="row">
+      <label class="field">每小時目標<input type="number" id="b_tgt" value="150" min="1"></label>
+      <button class="btn" id="b_next">跑下一小時</button>
+      <button class="btn ghost" id="b_reset">重新開始</button>
+    </div>
+    <div class="row">
+      <button class="btn warnb" data-andon="缺料（等裁片）">安燈：缺料</button>
+      <button class="btn warnb" data-andon="機器故障">安燈：機器故障</button>
+      <button class="btn warnb" data-andon="品質問題">安燈：品質問題</button>
+      <button class="btn ghost" id="b_fix">問題已解決</button>
+    </div>
+    <div class="andon" id="b_andon" role="status"></div>
+    <div class="board" id="b_board"></div>
+    <div class="out" id="b_sum" aria-live="polite"></div>
+    <div class="scroll"><table><thead><tr><th>停線原因</th><th>開始</th><th>結束</th><th class="num">分鐘</th></tr></thead><tbody id="b_log"></tbody></table></div>
+  </div>
+  <p>按安燈後再跑下一小時，你會發現那一小時的產量掉下來，而停線時間被自動記錄。這些資料會回到第 4 課的「在標準效率」：<b>停線的時間不算在作業員身上</b>，而是變成管理改善的清單——哪一種原因最多？把停線原因也畫成柏拉圖，就知道該先解決缺料還是機器保養。</p>
+  <div class="warn">專業提醒：安燈的價值在於<b>回應速度</b>。如果按了安燈 30 分鐘都沒人來，作業員很快就不會再按了。MES 應記錄「按下→有人到場→解決」三個時間點，並把回應時間本身當成 KPI。</div>
+
+  <div class="summary"><h4>本課重點</h4><ul><li>看板只放 KPI，用顏色讓人一眼判斷。</li><li>安燈源自豐田，讓現場即時呼叫支援；自働化源自豐田佐吉的織布機。</li><li>停線原因與時間要被記錄，才能分析與改善。</li></ul></div>
+  <div class="quiz" data-answer="2" data-explain="G 型自動織布機在斷線時會自動停機，避免繼續生產瑕疵品，這就是自働化「發現異常就停」的精神。">
+    <div class="q">豐田「自働化」的精神來自什麼機器？</div>
+    <button class="opt">汽車引擎</button>
+    <button class="opt">縫紉機</button>
+    <button class="opt">斷線就會自動停下來的織布機</button>
+  </div>
+  <div class="quiz" data-answer="0" data-explain="按了沒人理，安燈就會失去作用。MES 要記錄回應時間，並持續追蹤改善。">
+    <div class="q">安燈系統最常失敗的原因是？</div>
+    <button class="opt">按了之後很久都沒人來處理</button>
+    <button class="opt">燈不夠亮</button>
+    <button class="opt">顏色太多</button>
+  </div>
+</section>
+<!-- ================= 第四階段 專業 ================= -->
+<section class="lesson" data-stage="第四階段｜專業" data-stagesub="設計並導入一套 MES" data-title="系統架構：一套 MES 由哪些零件組成">
+  <div class="crumb">第 13 課</div>
+  <h2>系統架構：一套 MES 由哪些零件組成</h2>
+  <div class="goal"><b>本課目標</b><ul><li>看懂 MES 的架構圖。</li><li>知道前端、後端、資料庫、API 各自的工作。</li><li>了解自建、購買、雲端、地端的取捨。</li></ul></div>
+
+  <div class="analogy">把 MES 想成一家餐廳：<br><b>前端</b>是餐廳的外場，客人看到的桌椅和菜單——在 MES 就是手機掃描畫面、電視看板、主管的報表頁面。<br><b>API</b> 是點菜單：客人不能自己衝進廚房，要透過固定格式的點菜單告訴廚房要什麼。<br><b>後端</b>是廚房：收到點菜單後照規則處理（檢查紮號是否重複、算效率）。<br><b>資料庫</b>是冰箱和倉庫：所有食材（資料）都存在這裡。</div>
+
+  <figure>
+    <svg viewBox="0 0 620 380" role="img" aria-label="MES 系統架構圖">
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker></defs>
+      <g font-family="var(--sans)" font-size="13" fill="var(--ink)">
+        <text x="10" y="20" font-weight="700" fill="var(--denim)">前端（使用者看得到的）</text>
+        <rect x="10" y="30" width="135" height="54" rx="8" fill="var(--thread-soft)" stroke="var(--thread)"/><text x="77" y="54" text-anchor="middle">工位掃描手機</text><text x="77" y="72" text-anchor="middle" font-size="11" fill="var(--muted)">作業員報工</text>
+        <rect x="160" y="30" width="135" height="54" rx="8" fill="var(--thread-soft)" stroke="var(--thread)"/><text x="227" y="54" text-anchor="middle">品檢平板</text><text x="227" y="72" text-anchor="middle" font-size="11" fill="var(--muted)">記錄瑕疵</text>
+        <rect x="310" y="30" width="135" height="54" rx="8" fill="var(--thread-soft)" stroke="var(--thread)"/><text x="377" y="54" text-anchor="middle">產線電視看板</text><text x="377" y="72" text-anchor="middle" font-size="11" fill="var(--muted)">即時 KPI</text>
+        <rect x="460" y="30" width="150" height="54" rx="8" fill="var(--thread-soft)" stroke="var(--thread)"/><text x="535" y="54" text-anchor="middle">主管電腦／手機</text><text x="535" y="72" text-anchor="middle" font-size="11" fill="var(--muted)">報表、主資料維護</text>
+
+        <rect x="10" y="130" width="600" height="40" rx="8" fill="var(--denim-soft)" stroke="var(--denim)"/><text x="310" y="155" text-anchor="middle" font-weight="700">API（應用程式介面）｜規定好的溝通格式</text>
+
+        <rect x="10" y="200" width="600" height="70" rx="8" fill="var(--surface)" stroke="var(--denim)" stroke-width="2"/>
+        <text x="20" y="222" font-weight="700" fill="var(--denim)">後端（伺服器上的規則與計算）</text>
+        <text x="20" y="245" font-size="12">防呆檢查｜效率計算｜瓶頸偵測｜權限驗證｜排程運算｜推播更新看板</text>
+        <text x="20" y="262" font-size="12" fill="var(--muted)">也負責與其他系統交換資料</text>
+
+        <rect x="170" y="305" width="280" height="60" rx="8" fill="var(--denim)"/><text x="310" y="330" text-anchor="middle" fill="#fff" font-weight="700">資料庫</text><text x="310" y="350" text-anchor="middle" fill="#fff" font-size="12">主資料＋交易資料（第 9 課）</text>
+        <rect x="10" y="305" width="140" height="60" rx="8" fill="var(--paper)" stroke="var(--line)" stroke-dasharray="4 3"/><text x="80" y="330" text-anchor="middle">ERP</text><text x="80" y="348" text-anchor="middle" font-size="11" fill="var(--muted)">訂單、物料</text>
+        <rect x="470" y="305" width="140" height="60" rx="8" fill="var(--paper)" stroke="var(--line)" stroke-dasharray="4 3"/><text x="540" y="330" text-anchor="middle">人資／薪資</text><text x="540" y="348" text-anchor="middle" font-size="11" fill="var(--muted)">出勤、計件</text>
+      </g>
+      <g stroke="var(--muted)" stroke-width="1.5" marker-end="url(#ar)">
+        <line x1="77" y1="86" x2="77" y2="128"/><line x1="227" y1="86" x2="227" y2="128"/><line x1="377" y1="128" x2="377" y2="88"/><line x1="535" y1="86" x2="535" y2="128"/>
+        <line x1="310" y1="172" x2="310" y2="198"/><line x1="310" y1="272" x2="310" y2="303"/>
+        <line x1="150" y1="290" x2="100" y2="303"/><line x1="470" y1="290" x2="520" y2="303"/>
+      </g>
+      <circle r="5" fill="var(--thread)" class="packet"><animateMotion dur="3s" repeatCount="indefinite" path="M77,86 L77,150 L310,150 L310,300"/></circle>
+      <circle r="5" fill="var(--ok)" class="packet"><animateMotion dur="3s" begin="1.5s" repeatCount="indefinite" path="M310,300 L310,150 L377,150 L377,88"/></circle>
+    </svg>
+    <figcaption>金色小點：作業員掃描的資料往下送進資料庫。綠色小點：後端計算好的結果往上送到看板。</figcaption>
+  </figure>
+
+  <div class="term">
+    <div class="t">前端／後端<span>Frontend／Backend</span></div>
+    <div class="origin">像舞台劇：前台（front）是觀眾看到的演出，後台（back）是換裝、道具、燈光控制。使用者操作的畫面是前端，看不見的處理與儲存是後端。</div>
+  </div>
+  <div class="term">
+    <div class="t">伺服器<span>Server</span></div>
+    <div class="origin">serve 是「服務、上菜」。伺服器就是一台一直開著、等別人來請求服務的電腦。發出請求的手機或電腦叫<b>用戶端</b>（Client，原意是「顧客」）。這種分工叫「主從式架構」（Client-Server）。</div>
+  </div>
+  <div class="term">
+    <div class="t">API<span>Application Programming Interface，應用程式介面</span></div>
+    <div class="origin">Interface（介面）原本是「兩個面接觸的地方」，像插頭和插座。API 就是兩個程式之間約定好的插座規格：例如「送來紮號、工序、員工，我就回你成功或失敗」。只要規格不變，前端換成手機或平板、後端換寫法，都能繼續相接。</div>
+  </div>
+
+  <h3>一次掃描背後發生的事</h3>
+  <ol>
+    <li>作業員用手機掃紮票 QR 碼，前端讀到「B-0147」，加上工序與員工編號。</li>
+    <li>前端透過 API 送給後端。</li>
+    <li>後端檢查：這紮存在嗎？這工序重複了嗎？前置工序做了嗎？這人有技能嗎？</li>
+    <li>通過就寫進資料庫，回傳「成功」；不通過就回傳原因。</li>
+    <li>後端重新計算這條線的產量與瓶頸，推送給看板。</li>
+  </ol>
+  <p>整個過程通常不到一秒。</p>
+
+  <h3>看板怎麼「即時」？</h3>
+  <p>兩種方式：<b>輪詢</b>（Polling）是看板每隔幾秒主動問伺服器「有新資料嗎？」，簡單但浪費；<b>推播</b>（Push，例如 WebSocket 技術）是伺服器有新資料時主動告訴看板，更即時也更省資源。十幾條線的工廠，每 10～30 秒輪詢一次通常已經足夠。</p>
+
+  <h3>四個重要的選擇</h3>
+  <div class="scroll"><table>
+    <tr><th>選擇</th><th>選項 A</th><th>選項 B</th><th>怎麼判斷</th></tr>
+    <tr><td>取得方式</td><td>買套裝軟體：功能完整、有廠商支援，但貴、要配合它的流程</td><td>自建（含低程式碼、AI 輔助開發）：完全貼合現場，但要自己維護</td><td>流程越特殊、預算越少、內部有人能持續維護，越適合自建</td></tr>
+    <tr><td>放在哪裡</td><td>雲端（Cloud）：不用管機房，隨處可看</td><td>地端（On-premise，「在廠內」）：斷網也能用，資料留在廠內</td><td>工廠網路穩不穩、客戶對資料位置有沒有要求</td></tr>
+    <tr><td>掃描設備</td><td>作業員手機／便宜安卓機</td><td>專用掃描槍或工業平板</td><td>預算、耐用度、是否允許現場用手機</td></tr>
+    <tr><td>資料庫</td><td>關聯式資料庫（第 9 課）</td><td>試算表當資料庫</td><td>試算表適合試點，資料量大、多人同時寫入就要換成真正的資料庫</td></tr>
+  </table></div>
+  <p>「雲端」這個詞由來：早期工程師畫網路圖時，習慣用一朵雲代表「外面那一大片、細節不用管的網路」，後來就把放在網路另一端的服務稱為雲端。</p>
+
+  <div class="summary"><h4>本課重點</h4><ul><li>MES＝前端（畫面）＋API（溝通規格）＋後端（規則計算）＋資料庫（儲存）。</li><li>一次掃描：前端→API→後端檢查→寫入資料庫→更新看板。</li><li>自建 vs 購買、雲端 vs 地端，要看流程特殊性、網路條件與維護能力。</li></ul></div>
+  <div class="quiz" data-answer="1" data-explain="防呆規則屬於「處理邏輯」，要放在後端。只放前端的話，換個裝置或繞過畫面就能送進錯誤資料。">
+    <div class="q">「同一紮不能重複報工」這條規則，最重要的是放在哪裡檢查？</div>
+    <button class="opt">只在前端手機畫面上</button>
+    <button class="opt">後端（前端可以再加一層提示）</button>
+    <button class="opt">看板上</button>
+  </div>
+  <div class="quiz" data-answer="0" data-explain="API 是兩個程式之間約定好的溝通規格，像插頭和插座的規格。">
+    <div class="q">API 最像下列哪一個？</div>
+    <button class="opt">插頭與插座約定好的規格</button>
+    <button class="opt">一台電腦</button>
+    <button class="opt">一張報表</button>
+  </div>
+</section>
+
+<section class="lesson" data-stage="第四階段｜專業" data-title="資料模型：成衣 MES 的核心資料表">
+  <div class="crumb">第 14 課</div>
+  <h2>資料模型：成衣 MES 的核心資料表</h2>
+  <div class="goal"><b>本課目標</b><ul><li>看懂成衣 MES 的核心資料表與關係圖。</li><li>知道常見 KPI 是怎麼從這些表算出來的。</li></ul></div>
+
+  <p>資料模型（Data Model）就是「資料的設計圖」：有哪些表、每張表有哪些欄位、表跟表怎麼連。這一步設計好，系統未來十年都好維護；設計錯了，每加一個功能都在補洞。</p>
+
+  <figure>
+    <div class="scroll">
+    <svg viewBox="0 0 700 420" style="min-width:560px" role="img" aria-label="成衣 MES 資料關係圖">
+      <g font-family="var(--sans)" font-size="12" fill="var(--ink)">
+        <g stroke="var(--muted)" stroke-width="1.4" fill="none">
+          <path d="M120 60 H 250"/><path d="M370 60 H 480"/><path d="M310 85 V 150"/><path d="M120 85 V 150"/>
+          <path d="M120 205 H 250"/><path d="M370 205 H 480"/><path d="M540 85 V 150"/>
+          <path d="M310 230 V 290"/><path d="M540 230 V 290"/><path d="M370 320 H 480"/><path d="M120 230 V 290"/><path d="M180 320 H 250"/>
+        </g>
+        <g>
+          <rect x="10" y="30" width="170" height="55" rx="6" fill="var(--denim-soft)" stroke="var(--denim)"/><text x="95" y="52" text-anchor="middle" font-weight="700">訂單 orders</text><text x="95" y="72" text-anchor="middle" font-size="11">訂單號、客戶、款號、交期</text>
+          <rect x="250" y="30" width="120" height="55" rx="6" fill="var(--denim-soft)" stroke="var(--denim)"/><text x="310" y="52" text-anchor="middle" font-weight="700">款式 styles</text><text x="310" y="72" text-anchor="middle" font-size="11">款號、名稱、客戶</text>
+          <rect x="480" y="30" width="200" height="55" rx="6" fill="var(--denim-soft)" stroke="var(--denim)"/><text x="580" y="52" text-anchor="middle" font-weight="700">工序表 style_ops</text><text x="580" y="72" text-anchor="middle" font-size="11">款號、版本、順序、工序、SAM</text>
+
+          <rect x="10" y="150" width="170" height="80" rx="6" fill="var(--thread-soft)" stroke="var(--thread)"/><text x="95" y="172" text-anchor="middle" font-weight="700">床次 cut_lays</text><text x="95" y="192" text-anchor="middle" font-size="11">床次號、訂單號</text><text x="95" y="208" text-anchor="middle" font-size="11">顏色、層數、裁剪日</text>
+          <rect x="250" y="150" width="120" height="80" rx="6" fill="var(--thread-soft)" stroke="var(--thread)"/><text x="310" y="172" text-anchor="middle" font-weight="700">紮 bundles</text><text x="310" y="192" text-anchor="middle" font-size="11">紮號、床次號</text><text x="310" y="208" text-anchor="middle" font-size="11">尺碼、層次、件數</text>
+          <rect x="480" y="150" width="200" height="80" rx="6" fill="var(--thread-soft)" stroke="var(--thread)"/><text x="580" y="172" text-anchor="middle" font-weight="700">掃描事件 scans</text><text x="580" y="192" text-anchor="middle" font-size="11">紀錄號、紮號、工序、員工</text><text x="580" y="208" text-anchor="middle" font-size="11">線別、時間、狀態</text>
+
+          <rect x="10" y="290" width="170" height="60" rx="6" fill="var(--denim-soft)" stroke="var(--denim)"/><text x="95" y="314" text-anchor="middle" font-weight="700">生產線 lines</text><text x="95" y="334" text-anchor="middle" font-size="11">線別、樓層、組長</text>
+          <rect x="250" y="290" width="120" height="60" rx="6" fill="var(--thread-soft)" stroke="var(--thread)"/><text x="310" y="314" text-anchor="middle" font-weight="700">品檢 qc_checks</text><text x="310" y="334" text-anchor="middle" font-size="11">紮號、檢查數、瑕疵</text>
+          <rect x="480" y="290" width="200" height="60" rx="6" fill="var(--denim-soft)" stroke="var(--denim)"/><text x="580" y="314" text-anchor="middle" font-weight="700">員工 employees／技能 skills</text><text x="580" y="334" text-anchor="middle" font-size="11">工號、姓名、會做的工序與等級</text>
+
+          <rect x="10" y="375" width="330" height="36" rx="6" fill="var(--thread-soft)" stroke="var(--thread)"/><text x="175" y="398" text-anchor="middle">停線 downtime：線別、原因代碼、開始、結束</text>
+          <rect x="360" y="375" width="320" height="36" rx="6" fill="var(--thread-soft)" stroke="var(--thread)"/><text x="520" y="398" text-anchor="middle">裝箱 cartons：箱號、訂單、尺碼配比、紮號清單</text>
+        </g>
+      </g>
+    </svg>
+    </div>
+    <figcaption>藍色＝主資料，金色＝交易資料。連線代表「透過外鍵相連」。例如 scans 透過紮號連到 bundles，bundles 透過床次號連到 cut_lays，再連到訂單與款式。</figcaption>
+  </figure>
+
+  <h3>從資料表算出 KPI</h3>
+  <p>有了這些表，前面學過的每個數字都能自動算：</p>
+  <div class="scroll"><table>
+    <tr><th>KPI</th><th>怎麼算（白話）</th></tr>
+    <tr><td>每小時產量</td><td>在 scans 找出「最後一道工序」、依線別與小時分組，把每筆掃描對應紮的件數加總</td></tr>
+    <tr><td>線效率</td><td>把線上所有工序掃描的「件數 × 該工序 SAM」加總，除以該線出勤人數 × 分鐘</td></tr>
+    <tr><td>個人效率</td><td>同上，但只看某位員工的掃描，除以他自己的出勤分鐘</td></tr>
+    <tr><td>WIP</td><td>某工序「已掃」但下一道「還沒掃」的紮數與件數</td></tr>
+    <tr><td>瓶頸</td><td>比較各工序最近一小時的產出速度與前方 WIP 堆積</td></tr>
+    <tr><td>DHU</td><td>qc_checks 的瑕疵總數 ÷ 檢查數 × 100，可依工序、員工、機台分組</td></tr>
+    <tr><td>訂單進度</td><td>該訂單所有紮中，已完成最後工序的件數 ÷ 訂單數量</td></tr>
+  </table></div>
+  <p>用 SQL 寫出來，「每小時產量」大概長這樣（看不懂沒關係，重點是它就是在做上面那句白話）：</p>
+  <div class="scroll"><pre style="background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:.85rem;line-height:1.6;margin:0">SELECT s.line, HOUR(s.scanned_at) AS hr,
+       SUM(b.qty) AS output
+FROM   scans s
+JOIN   bundles b ON b.bundle_no = s.bundle_no   -- 用外鍵連起來
+WHERE  s.op_seq = 8 AND s.status = 'OK'         -- 最後一道工序、有效紀錄
+GROUP  BY s.line, HOUR(s.scanned_at);</pre></div>
+
+  <h3>資料模型的七條設計原則</h3>
+  <ol>
+    <li><b>用代碼當主鍵，不用名稱。</b>員工改名、工序改說法都不影響。E-031 永遠是 E-031。</li>
+    <li><b>工序表要有版本。</b>scans 記錄的是「哪一版的哪道工序」，改版後舊資料的效率不會亂掉。</li>
+    <li><b>交易資料只新增（第 9 課）。</b>用狀態欄位（OK／作廢）加更正紀錄。</li>
+    <li><b>時間統一記錄方式。</b>全部用同一個時區存，顯示時再轉換。跨夜班時要有明確的「生產日」欄位，凌晨 2 點做的算前一天那班。</li>
+    <li><b>原因要用代碼。</b>瑕疵、停線原因用固定代碼清單，不讓人自由打字。「斷線」「線斷了」「斷線ㄌ」在統計上會被當成三件事。</li>
+    <li><b>件數寫在紮上，不寫在掃描上。</b>若一紮中途被拆（例如 2 件送返修），要新增「拆紮」紀錄，而不是改原本的數量。</li>
+    <li><b>先想報表，再設計表。</b>先列出主管要看哪些問題，倒推需要記錄哪些欄位。沒記錄的資料，事後永遠補不回來。</li>
+  </ol>
+
+  <div class="summary"><h4>本課重點</h4><ul><li>核心表：訂單、款式、工序表、床次、紮、掃描、品檢、生產線、員工技能、停線、裝箱。</li><li>所有 KPI 都能從這些表透過外鍵組合算出。</li><li>代碼當主鍵、工序表分版本、原因用代碼、跨夜班要有生產日。</li></ul></div>
+  <div class="quiz" data-answer="2" data-explain="自由打字會產生很多寫法不同的同一原因，統計時被拆散。固定代碼才能正確分析。">
+    <div class="q">為什麼停線原因要用代碼清單，而不讓人自由輸入文字？</div>
+    <button class="opt">因為打字太慢</button>
+    <button class="opt">因為代碼比較好看</button>
+    <button class="opt">同一個原因會有很多種寫法，無法正確統計</button>
+  </div>
+  <div class="quiz" data-answer="0" data-explain="凌晨的掃描如果只看日期會被算到隔天。明確的「生產日」欄位讓報表按班別正確歸屬。">
+    <div class="q">夜班凌晨 2 點的掃描，要靠哪個欄位正確歸到前一天的班？</div>
+    <button class="opt">生產日</button>
+    <button class="opt">員工姓名</button>
+    <button class="opt">紮號</button>
+  </div>
+</section>
+
+<section class="lesson" data-stage="第四階段｜專業" data-title="產能與排程：答應客戶之前先算清楚">
+  <div class="crumb">第 15 課</div>
+  <h2>產能與排程：答應客戶之前先算清楚</h2>
+  <div class="goal"><b>本課目標</b><ul><li>會算一條線的產能與所需天數。</li><li>理解學習曲線對新款的影響。</li><li>看得懂甘特圖，知道有限產能排程的意思。</li></ul></div>
+
+  <h3>產能：一條線一天能做多少</h3>
+  <p>其實第 4 課已經學過了，只是換個名字：</p>
+  <div class="formula">日產能 ＝ 人數 × 每日分鐘 × 預估效率 ÷ SAM<br>20 × 480 × 75% ÷ 6 ＝ 1,200 件／天</div>
+  <p>6,000 件的 TS-2601，一條線看起來 5 天就能做完。但實際上<b>第一天絕對做不到 1,200 件</b>，因為大家還不熟。</p>
+
+  <h3>學習曲線：新款上線的爬坡期</h3>
+  <div class="term">
+    <div class="t">學習曲線<span>Learning Curve</span></div>
+    <div class="origin">1936 年美國航空工程師萊特（Theodore Wright）研究飛機製造時發現：累積產量每增加一倍，每架飛機所需工時就會下降一個固定比例。畫成圖是一條先陡後平的曲線。成衣廠每次換新款，都會重新走一次這條曲線。</div>
+  </div>
+  <p>成衣廠常用的做法是訂一張「爬坡效率表」，例如：第 1 天 40%、第 2 天 55%、第 3 天 65%、第 4 天 70%、第 5 天起達到目標效率。款式越複雜、跟上一款差越多，爬坡越慢。</p>
+  <div class="lab">
+    <div class="lab-title">動手實驗室：這張訂單要幾天？</div>
+    <div class="row">
+      <label class="field">訂單數量<input type="number" id="c_qty" value="6000" min="1"></label>
+      <label class="field">人數<input type="number" id="c_ppl" value="20" min="1"></label>
+      <label class="field">SAM<input type="number" id="c_sam" value="6" step="0.01" min="0.01"></label>
+    </div>
+    <div class="row">
+      <label class="field">每日分鐘<input type="number" id="c_min" value="480" min="1"></label>
+      <label class="field">目標效率 %<input type="number" id="c_eff" value="75" min="1"></label>
+      <label class="field">爬坡<select id="c_ramp"><option value="none">不考慮爬坡</option><option value="std" selected>一般款（40→55→65→70%）</option><option value="hard">複雜款（30→40→50→60→65%）</option></select></label>
+    </div>
+    <div class="out" id="c_res" aria-live="polite"></div>
+    <div class="scroll"><table id="c_tbl"></table></div>
+  </div>
+  <p>你會看到，考慮爬坡後需要多 1～2 天。業務如果照 5 天答應客戶，就會延誤交貨。這就是為什麼排程要用 MES 裡的<b>真實歷史效率</b>，而不是憑感覺。</p>
+  <div class="warn">避免頻繁換款：同一條線一週換三個款，就爬三次坡，效率會大幅下降。排程時盡量讓相似款式排在同一條線，減少換款損失。</div>
+
+  <h3>甘特圖：把排程畫出來</h3>
+  <div class="term">
+    <div class="t">甘特圖<span>Gantt Chart</span></div>
+    <div class="origin">美國工程師亨利·甘特（Henry Gantt）在 1910 年代推廣的圖表：橫軸是時間，每一列是一個資源（這裡是生產線），用長條表示什麼時候做什麼。一百多年後仍是排程最常用的圖。</div>
+  </div>
+  <figure>
+    <div class="scroll"><div class="gantt" role="img" aria-label="三條生產線十天排程甘特圖">
+      <div></div><div class="h">一</div><div class="h">二</div><div class="h">三</div><div class="h">四</div><div class="h">五</div><div class="h">六</div><div class="h">七</div><div class="h">八</div><div class="h">九</div><div class="h">十</div>
+      <div class="ln">第 1 線</div><div class="blk c1" style="grid-column:span 6">TS-2601 黑 3,000 件</div><div class="blk c3" style="grid-column:span 4">TS-2602 白 2,000</div>
+      <div class="ln">第 2 線</div><div class="blk c2" style="grid-column:span 4">PL-3308 POLO 1,500</div><div class="blk c5" style="grid-column:span 1">換款</div><div class="blk c1" style="grid-column:span 5">TS-2601 灰 3,000 件</div>
+      <div class="ln">第 3 線</div><div class="blk c4" style="grid-column:span 10">JK-1105 外套 1,200 件</div>
+    </div></div>
+    <figcaption>把 TS-2601 的黑色和灰色拆到兩條線同時做，比一條線做完 6,000 件更快交貨。第 2 線從 POLO 換到 T 恤中間留了一天換款。</figcaption>
+  </figure>
+
+  <h3>有限產能 vs 無限產能排程</h3>
+  <p><b>無限產能排程</b>只看交期往回推，不管線上是否已經排滿，結果常常同一天塞了三倍的工作量。<b>有限產能排程</b>（Finite Capacity Scheduling）會檢查每條線每天的產能上限，排滿了就往後排或換線。MES 的排程功能應該是有限產能的，而且產能要用實際效率計算。</p>
+  <p>進一步還要考慮：物料到齊了沒（布還沒到就不能排裁剪）、線上有沒有該款需要的特殊機器、有沒有足夠的熟練工。這些限制條件，都來自前面各課的資料。</p>
+
+  <div class="summary"><h4>本課重點</h4><ul><li>日產能＝人數×分鐘×效率÷SAM。</li><li>新款有學習曲線，排程要把爬坡算進去。</li><li>甘特圖是排程的標準圖；MES 應採有限產能排程。</li></ul></div>
+  <div class="quiz" data-answer="1" data-explain="每次換款都要重新爬坡，效率在前幾天偏低，所以頻繁換款會拉低整體產出。">
+    <div class="q">為什麼要避免同一條線頻繁換款？</div>
+    <button class="opt">因為換款要換顏色的線很麻煩</button>
+    <button class="opt">因為每次換款都要重新走學習曲線，前幾天效率偏低</button>
+    <button class="opt">因為客戶不允許</button>
+  </div>
+  <div class="quiz" data-answer="2" data-explain="有限產能排程會檢查每條線每天的產能上限，不會把超過能力的工作排在同一天。">
+    <div class="q">「有限產能排程」的意思是？</div>
+    <button class="opt">只接少量訂單</button>
+    <button class="opt">只排一條線</button>
+    <button class="opt">排程時考慮每條線每天的產能上限</button>
+  </div>
+</section>
+<section class="lesson" data-stage="第四階段｜專業" data-title="現場的魔鬼細節">
+  <div class="crumb">第 16 課</div>
+  <h2>現場的魔鬼細節</h2>
+  <div class="goal"><b>本課目標</b><ul><li>知道 MES 在真實工廠會遇到的八個問題，以及專業的解法。</li></ul></div>
+  <p>辦公室裡測試得好好的系統，一搬到車間就出問題，這是非常常見的事。以下八個細節，決定一套 MES 能不能真的活下來。</p>
+
+  <h3>1. 網路會斷：離線優先</h3>
+  <p>車間裡鐵架多、機器多、Wi-Fi 常常收不到。如果掃描一定要連上伺服器才能成功，網路一斷，整條線就不能報工。</p>
+  <p><b>解法：離線優先</b>（Offline-first）。手機先把掃描存在自己身上，畫面立刻顯示「已記錄（待上傳）」，網路恢復後自動補傳。</p>
+  <div class="term">
+    <div class="t">冪等<span>Idempotency</span></div>
+    <div class="origin">拉丁文 idem（相同）＋ potent（力量），19 世紀數學家用來形容「做一次和做很多次結果一樣」的運算，例如「取絕對值」。在 MES 裡：網路不穩時手機可能把同一筆掃描送了三次，伺服器必須能認出「這是同一筆」，只記一次。做法是手機在掃描當下就給每筆紀錄產生一個唯一編號，伺服器看到重複的編號就忽略。</div>
+  </div>
+
+  <h3>2. 時間會亂：以伺服器時間為準</h3>
+  <p>每支手機的時鐘可能差幾分鐘。記錄時同時存「手機時間」與「伺服器收到時間」，並定期校時。離線補傳時，用手機時間判斷事情發生的順序。</p>
+
+  <h3>3. 語言不通：給作業員看的畫面</h3>
+  <p>很多成衣廠的管理者和作業員說不同的語言，例如東南亞工廠的主管可能說中文，作業員說高棉語、越南語或孟加拉語。作業員的畫面要：</p>
+  <ul><li>支援作業員的母語，並能一鍵切換。</li><li>多用圖示、顏色、大數字，少用文字。</li><li>按鈕夠大，手指粗、戴指套、趕時間也點得到。</li><li>成功與失敗要有不同的聲音或震動，不必一直看螢幕。</li></ul>
+
+  <h3>4. 權限：誰能看、誰能改</h3>
+  <div class="term">
+    <div class="t">RBAC<span>Role-Based Access Control，角色型權限控制</span></div>
+    <div class="origin">不是一個人一個人設定權限，而是先定義「角色」（作業員、組長、品檢員、主管、系統管理員），每個角色有固定權限，再把人放進角色。人員異動時只要換角色即可。</div>
+  </div>
+  <p>例如：作業員只能報自己的工；組長可以幫組員補登、但會被記錄；只有工程部能改 SAM；作廢紀錄需要主管核准。</p>
+
+  <h3>5. 稽核軌跡：每一次修改都留下足跡</h3>
+  <p>第 9 課講過交易只新增不修改。延伸到整個系統：主資料的每次修改（誰把上袖 SAM 從 1.20 改成 1.10、何時、為什麼）也要記錄。品牌客戶稽核、計件薪資爭議、內部調查時，這份紀錄就是證據。</p>
+
+  <h3>6. 計件薪資：最敏感的資料</h3>
+  <p>如果掃描紀錄直接用來算計件工資，每一筆都關係到作業員的收入。這時要特別注意：</p>
+  <ul><li>作業員要能隨時查看自己今天報了哪些工、累計多少。</li><li>要有明確的申訴與更正流程，更正必須經過核准並留紀錄。</li><li>返修的件數怎麼算、支援其他工序怎麼算，規則要事先公布。</li><li>品質與產量要一起看，避免只拚快不顧品質。</li></ul>
+  <p>也要注意當地勞動法規對工時、最低工資與計件制度的規定，由人資與法務把關。</p>
+
+  <h3>7. 備份：3-2-1 原則</h3>
+  <p>資料至少存 <b>3</b> 份、放在 <b>2</b> 種不同的媒介上、其中 <b>1</b> 份放在廠外（例如雲端）。而且要定期<b>實際試著還原</b>一次——從來沒還原過的備份，等於沒有備份。</p>
+
+  <h3>8. 員工個資</h3>
+  <p>員工姓名、照片、出勤、薪資都是個人資料。只收集真正需要的、限制誰能看、不隨便匯出到個人電腦，並遵守當地的個資法規。</p>
+
+  <div class="analogy">蓋橋的工程師最在意的不是晴天，而是颱風天和地震。MES 也一樣：正常情況人人都會設計，專業的差別在於「斷網、時間錯、掃錯、有人想作弊、資料壞掉」時系統還能不能正確運作。</div>
+
+  <div class="summary"><h4>本課重點</h4><ul><li>離線優先＋冪等，解決網路不穩與重複上傳。</li><li>作業員介面要母語、大按鈕、圖示、聲音回饋。</li><li>RBAC 權限、稽核軌跡、計件申訴流程、3-2-1 備份、個資保護。</li></ul></div>
+  <div class="quiz" data-answer="1" data-explain="手機在掃描時就產生唯一編號，伺服器看到相同編號就只記一次，這就是冪等設計。">
+    <div class="q">網路不穩，手機把同一筆掃描送了三次。怎麼避免被記三次？</div>
+    <button class="opt">叫作業員不要掃太快</button>
+    <button class="opt">每筆掃描帶一個唯一編號，伺服器看到重複就忽略（冪等）</button>
+    <button class="opt">關掉 Wi-Fi</button>
+  </div>
+  <div class="quiz" data-answer="0" data-explain="3 份、2 種媒介、1 份在廠外。另外要定期實際還原測試。">
+    <div class="q">備份的 3-2-1 原則是什麼？</div>
+    <button class="opt">3 份資料、2 種媒介、1 份放廠外</button>
+    <button class="opt">每 3 天備份 2 次，保留 1 年</button>
+    <button class="opt">3 個人管理、2 個密碼、1 台電腦</button>
+  </div>
+</section>
+
+<section class="lesson" data-stage="第四階段｜專業" data-title="導入路線圖與常見失敗">
+  <div class="crumb">第 17 課</div>
+  <h2>導入路線圖與常見失敗</h2>
+  <div class="goal"><b>本課目標</b><ul><li>會規劃一套 MES 的分階段導入。</li><li>知道人為什麼抗拒新系統，以及怎麼處理。</li><li>認得十個常見的失敗原因。</li></ul></div>
+
+  <h3>六個階段</h3>
+  <ol>
+    <li><b>現況盤點</b>（2～4 週）：跟著一紮貨從裁剪走到出貨，記錄每一站現在怎麼記、誰在記、哪裡出錯。訪問組長、品檢、文員：「你每天最頭痛的是什麼？」</li>
+    <li><b>定規則</b>（2～4 週）：統一紮票格式與編號規則、工序表與 SAM、瑕疵代碼、停線代碼、員工工號。<b>這是最容易被跳過、卻最重要的一步</b>（第 2 課：垃圾進，垃圾出）。</li>
+    <li><b>試點一條線</b>（4～8 週）：選一條組長配合度高、款式穩定的線。先做掃描報工和看板。</li>
+    <li><b>修正</b>：每天收集現場回饋，修畫面、修流程、修規則。比對系統數字和人工數字，直到誤差可接受。</li>
+    <li><b>推廣</b>：一次加幾條線，由試點線的組長當「種子教官」教其他線。</li>
+    <li><b>擴充與持續改善</b>：依第 8 課的順序加上品質、人力、排程等功能。</li>
+  </ol>
+  <div class="term">
+    <div class="t">試點<span>Pilot</span></div>
+    <div class="origin">英文 pilot 原是「領航員、引水人」，帶船隻先通過危險水域。試點就是先派一小部分探路，把問題在小範圍內找出來，再讓整支船隊跟上。</div>
+  </div>
+  <div class="term">
+    <div class="t">PDCA 循環<span>Plan-Do-Check-Act，計畫－執行－檢查－行動</span></div>
+    <div class="origin">美國統計學家休哈特（Walter Shewhart）在 1930 年代提出雛形，他的學生戴明（W. Edwards Deming）1950 年起在日本大力推廣，所以也叫「戴明循環」。導入 MES 的每一階段都在轉這個循環：計畫→試做→看數據→調整→再計畫。</div>
+  </div>
+
+  <h3>人為什麼抗拒新系統？</h3>
+  <div class="scroll"><table>
+    <tr><th>擔心</th><th>心裡的聲音</th><th>怎麼處理</th></tr>
+    <tr><td>被監控</td><td>「系統是要抓我偷懶嗎？」</td><td>先展示對他有利的功能：即時看到自己的計件、不用再抄紙卡</td></tr>
+    <tr><td>收入減少</td><td>「以前可以多報一點……」</td><td>計件規則透明、試點期間收入保障、申訴管道</td></tr>
+    <tr><td>變麻煩</td><td>「掃描很浪費時間」</td><td>把每次掃描壓到 3 秒內；讓作業員參與畫面設計</td></tr>
+    <tr><td>權力改變</td><td>「組長的經驗不再重要？」</td><td>讓組長成為系統的主人與教官，數據是幫他說服上級的工具</td></tr>
+    <tr><td>怕學不會</td><td>「我不識字／不會用手機」</td><td>圖示介面、母語、一對一教學、第一週有人在旁邊陪</td></tr>
+  </table></div>
+
+  <h3>十個常見的失敗原因</h3>
+  <ol>
+    <li>跳過「定規則」，直接上系統，結果紮票與工序各線各寫各的。</li>
+    <li>SAM 不準，算出來的效率大家都不相信。</li>
+    <li>一次全廠上線，問題同時爆發，現場崩潰後退回紙本。</li>
+    <li>只有 IT 或老闆想要，現場主管沒有參與。</li>
+    <li>介面為辦公室設計，作業員在車間用不了。</li>
+    <li>網路沒先改善，也沒做離線功能。</li>
+    <li>收了資料卻沒人看，沒有每日檢討會議用這些數字做決定。</li>
+    <li>數字被拿來懲罰人，大家開始想辦法作假。</li>
+    <li>系統只有一個人懂，那個人一離職就沒人能維護。</li>
+    <li>功能越加越多，把簡單的系統變成沒人會用的怪物。</li>
+  </ol>
+  <div class="warn"><b>第 7 點特別重要：</b>MES 的價值不在「收集資料」，而在「用資料做出更好的決定」。建議每天早上固定 15 分鐘，各線組長對著前一天的看板與柏拉圖，決定今天要改善的一件事。</div>
+
+  <h3>怎麼證明導入成功？</h3>
+  <p>導入前先記錄基準數字（Baseline），導入後比較：</p>
+  <ul><li>線效率、在標準效率</li><li>WIP 件數與生產週期（從裁剪到裝箱花幾天）</li><li>DHU 與驗貨一次通過率</li><li>準時交貨率</li><li>文員抄寫報表的時間</li><li>主管發現問題到處理的時間</li></ul>
+
+  <div class="summary"><h4>本課重點</h4><ul><li>盤點→定規則→試點→修正→推廣→擴充，每階段轉 PDCA。</li><li>抗拒來自擔心，要先讓現場得到好處。</li><li>資料要每天被用來做決定，並且不能被拿來懲罰人。</li></ul></div>
+  <div class="quiz" data-answer="2" data-explain="小範圍先試，可以用最低的代價找出問題、修正流程，並培養能教別人的種子教官。">
+    <div class="q">為什麼要先試點一條線，而不是全廠一起上？</div>
+    <button class="opt">因為軟體授權只買了一條線</button>
+    <button class="opt">因為其他線不重要</button>
+    <button class="opt">在小範圍找出問題並修正，也培養種子教官</button>
+  </div>
+  <div class="quiz" data-answer="0" data-explain="數字一旦被用來處罰，大家就會想辦法讓數字好看，而不是讓工作變好，資料就不再可信。">
+    <div class="q">為什麼 MES 的數字不應該被用來懲罰個人？</div>
+    <button class="opt">大家會開始作假，資料就不可信了</button>
+    <button class="opt">因為法律禁止</button>
+    <button class="opt">因為數字一定不準</button>
+  </div>
+</section>
+
+<section class="lesson" data-stage="第四階段｜專業" data-title="畢業專題與期末測驗">
+  <div class="crumb">第 18 課</div>
+  <h2>畢業專題與期末測驗</h2>
+  <div class="goal"><b>本課目標</b><ul><li>把十八課學到的東西，組合成一份完整的 MES 設計。</li><li>用期末測驗確認自己真的懂了。</li></ul></div>
+
+  <h3>畢業專題：為小河成衣廠第 3 線設計 MES</h3>
+  <p><b>情境：</b>第 3 線有 24 人，下個月要做一張 8,000 件的 POLO 衫訂單（款號 PL-3308，SAM 12.0，4 色 × 5 碼），交期 30 個工作天。目前全用紙本與白板，網路只在辦公室穩定。</p>
+  <p><b>請你完成下列七項設計</b>（可以寫在紙上，每項幾行就好）：</p>
+  <ol>
+    <li><b>產能檢查：</b>用 75% 效率、每天 480 分鐘，這條線做得完嗎？考慮爬坡呢？</li>
+    <li><b>主資料清單：</b>上線前要先建好哪些主資料？</li>
+    <li><b>紮票設計：</b>紮票上要印哪些欄位？編號規則是什麼？</li>
+    <li><b>掃描點：</b>要在哪些地方掃？為什麼？</li>
+    <li><b>防呆規則：</b>至少列四條。</li>
+    <li><b>看板 KPI：</b>選五個，並訂出紅黃綠規則。</li>
+    <li><b>導入計畫：</b>用第 17 課的階段，排出前八週要做的事。</li>
+  </ol>
+  <details style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:16px 0">
+    <summary style="cursor:pointer;font-weight:700">寫完之後再打開：參考答案</summary>
+    <ol style="margin-top:10px">
+      <li>日產能 ＝ 24 × 480 × 75% ÷ 12 ＝ 720 件。8,000 ÷ 720 ≈ 11.1 天。考慮一般爬坡約 13 天，30 天內很充裕，甚至可以同時排其他訂單。但要確認物料能準時到、特殊機器（例如開鈕門機）夠不夠。</li>
+      <li>款式 PL-3308、工序表（含版本與 SAM、機器類型）、訂單與色碼配比、第 3 線資料、24 位員工工號與技能矩陣、瑕疵代碼、停線代碼。</li>
+      <li>紮號（唯一，例如 年份＋床次＋流水號）、款號、訂單號、顏色、尺碼、床次、層次範圍、件數、QR 碼。</li>
+      <li>建議掃「關鍵工序」：入線、瓶頸工序（例如上領、開鈕門）、線尾品檢、出線。因為網路只在辦公室穩定，要選支援離線的掃描方式，並先改善車間 Wi-Fi。第二階段再考慮每工序掃描與計件。</li>
+      <li>同紮同工序不能重複；前置工序未完成不能報後段；紮的款號與線上派工不符要警告；員工無該工序技能要提醒組長；已裝箱的紮不能再報工。</li>
+      <li>小時目標 vs 實際（≥95% 綠／85～95% 黃／&lt;85% 紅）、今日累計達成率、線效率、線尾 DHU（例如 ≤5 綠／5～8 黃／&gt;8 紅，依客戶標準調整）、目前停線狀態與累計停線分鐘。</li>
+      <li>第 1～2 週：現況盤點＋記錄基準數字；第 3～4 週：定紮票、工序、代碼規則，建主資料，改善 Wi-Fi；第 5 週：教育訓練與模擬；第 6 週：試點上線（掃描＋看板），每天回饋會；第 7～8 週：修正、比對人工數字、準備評估報告。</li>
+    </ol>
+  </details>
+
+  <h3>期末測驗（10 題）</h3>
+  <div id="final">
+  <div class="quiz" data-answer="1" data-explain="MES 在 ISA-95 的第 3 層，管的是現場的小時、分鐘級活動。"><div class="q">1. MES 在 ISA-95 金字塔的哪一層？</div><button class="opt">第 4 層</button><button class="opt">第 3 層</button><button class="opt">第 1 層</button></div>
+  <div class="quiz" data-answer="0" data-explain="30 × 480 ＝ 14,400；1,500 × 7 ＝ 10,500；10,500 ÷ 14,400 ≈ 72.9%。"><div class="q">2. 30 人、每人 480 分鐘，做出 1,500 件 SAM 7 的衣服，效率約多少？</div><button class="opt">72.9%</button><button class="opt">82.4%</button><button class="opt">65.0%</button></div>
+  <div class="quiz" data-answer="2" data-explain="週期時間 ＝ 1.5 ÷ 3 ＝ 0.5 分鐘；每小時 ＝ 60 ÷ 0.5 ＝ 120 件。"><div class="q">3. 瓶頸工序 SAM 1.5、配 3 人，整條線每小時最多幾件？</div><button class="opt">90 件</button><button class="opt">180 件</button><button class="opt">120 件</button></div>
+  <div class="quiz" data-answer="1" data-explain="同一件衣服的裁片要來自同一層布，才不會有色差。"><div class="q">4. 紮票記錄層次範圍的主要目的是？</div><button class="opt">計算薪資</button><button class="opt">避免同一件衣服出現色差</button><button class="opt">方便倉庫盤點</button></div>
+  <div class="quiz" data-answer="0" data-explain="主鍵在一張表中必須唯一，用來識別每一筆資料。"><div class="q">5. 在「紮」資料表中，最適合當主鍵的是？</div><button class="opt">紮號</button><button class="opt">顏色</button><button class="opt">件數</button></div>
+  <div class="quiz" data-answer="2" data-explain="12 ÷ 300 × 100 ＝ 4.0。"><div class="q">6. 檢查 300 件，發現 12 個瑕疵，DHU 是？</div><button class="opt">12.0</button><button class="opt">25.0</button><button class="opt">4.0</button></div>
+  <div class="quiz" data-answer="1" data-explain="AQL 源自 1950 年美軍採購標準 MIL-STD-105，是一種抽樣檢驗方法。"><div class="q">7. AQL 是一種什麼方法？</div><button class="opt">全數檢驗</button><button class="opt">用抽樣判斷整批是否允收</button><button class="opt">計算效率</button></div>
+  <div class="quiz" data-answer="0" data-explain="冪等讓同一筆資料重送多次也只被記錄一次。"><div class="q">8. 「冪等」設計主要解決什麼問題？</div><button class="opt">網路不穩時同一筆資料被重複寫入</button><button class="opt">畫面太小</button><button class="opt">SAM 不準</button></div>
+  <div class="quiz" data-answer="2" data-explain="沒有規則統一，資料就不一致，系統再好也沒用。定規則是最容易被跳過、卻最關鍵的一步。"><div class="q">9. 導入 MES 最容易被跳過、卻最重要的階段是？</div><button class="opt">買電腦</button><button class="opt">設計看板顏色</button><button class="opt">統一紮票、工序、代碼等規則</button></div>
+  <div class="quiz" data-answer="1" data-explain="安燈源自豐田，日文「行灯」；自働化源自豐田佐吉斷線即停的織布機。"><div class="q">10. 「安燈」一詞來自哪裡？</div><button class="opt">中文「平安的燈」</button><button class="opt">日文「行灯」，豐田生產方式</button><button class="opt">英文 Android</button></div>
+  </div>
+  <div class="out" id="finalScore" aria-live="polite">作答後這裡會顯示你的分數。</div>
+
+  <h3>接下來可以怎麼繼續</h3>
+  <ul>
+    <li>到工廠現場，親自跟一紮貨走完全程，對照這門課的每一課。</li>
+    <li>拿一個真實款式，自己拆工序表、估 SAM、算平衡。</li>
+    <li>用試算表做一個最小版 MES：紮表＋掃描表＋每小時產量報表。</li>
+    <li>延伸閱讀方向：豐田生產方式、精實管理（Lean）、ISA-95 標準、限制理論《目標》。</li>
+  </ul>
+  <p style="font-family:var(--serif);font-size:1.15rem;margin-top:26px">恭喜完成全部課程。現在你看到一件 T 恤時，應該能想像它背後那一串掃描紀錄了。</p>
+</section>
+
+<section class="lesson" data-stage="附錄" data-stagesub="隨時查閱" data-title="名詞總表">
+  <div class="crumb">附錄</div>
+  <h2>名詞總表</h2>
+  <p>依課程出現順序排列。輸入關鍵字可以快速搜尋，中英文都可以。</p>
+  <input class="gloss-search" id="glossQ" type="search" placeholder="搜尋名詞，例如 SAM、瓶頸、QR">
+  <dl class="gloss" id="gloss"></dl>
+</section>
+</main>
+</div>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const KEY="garment-mes-course-v1";
+let state={done:[],cur:0};
+try{const r=localStorage.getItem(KEY); if(r) state=Object.assign(state,JSON.parse(r));}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+
+/* ---------- theme ---------- */
+try{const t=localStorage.getItem(KEY+"-theme"); if(t) document.documentElement.dataset.theme=t;}catch(e){}
+$("#themeBtn").onclick=()=>{
+  const cur=document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+  const nx=cur==="dark"?"light":"dark"; document.documentElement.dataset.theme=nx;
+  try{localStorage.setItem(KEY+"-theme",nx);}catch(e){}
+};
+
+/* ---------- lessons & TOC ---------- */
+const lessons=$$(".lesson"); const toc=$("#toc");
+let lastStage="";
+lessons.forEach((L,i)=>{
+  const st=L.dataset.stage;
+  if(st!==lastStage){
+    const h=document.createElement("div"); h.className="stage-name";
+    h.innerHTML=st+(L.dataset.stagesub?"<small>"+L.dataset.stagesub+"</small>":""); toc.appendChild(h); lastStage=st;
+  }
+  const b=document.createElement("button"); b.className="ticket"; b.type="button";
+  b.innerHTML='<span class="no">'+(st==="附錄"?"附":i)+'</span><span>'+L.dataset.title+'</span>';
+  b.onclick=()=>{show(i);toc.classList.remove("open");};
+  toc.appendChild(b); L._tk=b;
+  // pager
+  const pg=document.createElement("div"); pg.className="pager";
+  const prev=document.createElement("button"); prev.className="btn ghost"; prev.textContent="上一課";
+  prev.disabled=i===0; prev.style.visibility=i===0?"hidden":"visible"; prev.onclick=()=>show(i-1);
+  const next=document.createElement("button"); next.className="btn";
+  next.textContent=i===lessons.length-1?"完成本課":(i===lessons.length-2?"完成，前往名詞總表":"完成本課，下一課");
+  next.onclick=()=>{markDone(i); if(i<lessons.length-1) show(i+1);};
+  pg.append(prev,next); L.appendChild(pg);
+});
+function markDone(i){ if(!state.done.includes(i)) state.done.push(i); save(); refresh(); }
+function refresh(){
+  lessons.forEach((L,i)=>{L._tk.classList.toggle("done",state.done.includes(i)); L._tk.classList.toggle("on",i===state.cur);});
+  const p=Math.round(state.done.length/lessons.length*100);
+  $("#progBar").style.width=p+"%"; $("#pct").textContent=p+"%";
+}
+function show(i){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=i;
+  lessons.forEach((L,j)=>L.classList.toggle("on",j===i));
+  state.cur=i; save(); refresh(); window.scrollTo(0,0);
+  lessons[i]._tk.scrollIntoView({block:"nearest"});
+}
+$("#menuBtn").onclick=()=>toc.classList.toggle("open");
+document.addEventListener("click",e=>{ if(toc.classList.contains("open") && !toc.contains(e.target) && e.target!==$("#menuBtn")) toc.classList.remove("open"); });
+show(Math.min(state.cur||0,lessons.length-1));
+
+/* ---------- quizzes ---------- */
+$$(".quiz").forEach(q=>{
+  const ans=+q.dataset.answer;
+  const buttons=Array.from(q.querySelectorAll("button.opt"));
+  const fb=document.createElement("div"); fb.className="fb"; q.appendChild(fb);
+  buttons.forEach((b,k)=>{ b.type="button"; b.onclick=()=>{
+    if(q.classList.contains("answered")) return;
+    q.classList.add("answered"); q.dataset.correct=k===ans?"1":"0";
+    buttons[ans].classList.add("right"); if(k!==ans) b.classList.add("wrong");
+    fb.innerHTML=(k===ans?'<span class="pill g">答對了</span> ':'<span class="pill r">再想想</span> ')+q.dataset.explain+
+      ' <button type="button" class="btn ghost" style="padding:2px 10px;font-size:.85rem;margin-left:4px">重做</button>';
+    fb.querySelector("button").onclick=()=>{q.classList.remove("answered");buttons.forEach(x=>x.classList.remove("right","wrong"));delete q.dataset.correct;updFinal();};
+    updFinal();
+  };});
+});
+function updFinal(){
+  const qs=$$("#final .quiz"); const done=qs.filter(q=>q.dataset.correct!==undefined); const ok=qs.filter(q=>q.dataset.correct==="1").length;
+  if(!done.length){$("#finalScore").textContent="作答後這裡會顯示你的分數。";return;}
+  let msg=`已作答 ${done.length}／${qs.length} 題，答對 ${ok} 題。`;
+  if(done.length===qs.length) msg+= ok>=9?" 太厲害了，你已經可以跟工廠的人討論 MES 了！": ok>=7?" 很不錯！回頭看看答錯的題目對應哪一課。":" 建議回到答錯題目的那一課再讀一次。";
+  $("#finalScore").textContent=msg;
+}
+
+/* ---------- L1 journey ---------- */
+const J=[
+ ["📋","接單","客戶下單：TS-2601 圓領 T 恤 6,000 件，黑白灰三色、S～XL 四個尺碼，12 月 20 日交貨。業務把訂單輸入 ERP。"],
+ ["📐","打版樣衣","打版師做出紙樣與各尺碼版型，縫製樣衣給客戶確認。工程部拆出工序表，訂出每道工序的標準工時。"],
+ ["🧵","物料","採購布料、縫線、領標、洗標、吊牌、紙箱。布到廠後要驗布（檢查瑕疵、色差、縮率）。"],
+ ["✂️","裁剪","把布一層層鋪在裁床上（一床可能 60 層），依馬克（排料圖）裁切，再分成一紮一紮、貼上紮票。"],
+ ["🪡","車縫","紮被送上生產線。20 多位作業員各負責一兩道工序：合肩、上領、上袖、合側縫……接力完成。"],
+ ["🔍","品檢","線上巡檢抽查每位作業員；線尾每件檢查，有瑕疵就送回返修。"],
+ ["♨️","後整包裝","剪線頭、整燙、掛吊牌、摺衣、套袋、依尺碼配比裝箱。出貨前客戶驗貨員抽樣檢驗。"],
+ ["🚢","出貨","裝櫃、報關、出口。系統記錄每箱內容，客戶收貨後可以追溯到每一箱。"]
+];
+const stBox=$("#stations"); let jIdx=0, jTimer=null;
+J.forEach((s,i)=>{const d=document.createElement("div"); d.className="station"; d.innerHTML='<div class="ic">'+s[0]+'</div>'+(i+1)+'. '+s[1]; d.onclick=()=>jGo(i); stBox.appendChild(d);});
+function jGo(i){jIdx=(i+J.length)%J.length; $$("#stations .station").forEach((d,k)=>d.classList.toggle("on",k===jIdx)); $("#journeyText").innerHTML="<b>第 "+(jIdx+1)+" 站｜"+J[jIdx][1]+"</b><br>"+J[jIdx][2];}
+$("#jNext").onclick=()=>jGo(jIdx+1); $("#jPrev").onclick=()=>jGo(jIdx-1);
+$("#jPlay").onclick=()=>{ if(jTimer){clearInterval(jTimer);jTimer=null;$("#jPlay").textContent="自動播放";return;} $("#jPlay").textContent="停止播放"; jTimer=setInterval(()=>jGo(jIdx+1),2600); };
+jGo(0);
+
+/* ---------- L4 efficiency ---------- */
+function effCalc(){
+  const p=+$("#e_ppl").value||0,m=+$("#e_min").value||0,s=+$("#e_sam").value||0,o=+$("#e_out").value||0,t=+$("#e_tgt").value||0;
+  const avail=p*m, earned=o*s, eff=avail?earned/avail*100:0, target=s?avail*t/100/s:0, hrs=m/60;
+  const cls=eff>=95?"g":eff>=70?"y":"r";
+  $("#e_res").innerHTML=`可用分鐘 ${avail.toLocaleString()}　產出分鐘 ${earned.toLocaleString()}<br>效率 <span class="big">${eff.toFixed(1)}%</span> <span class="pill ${cls}">${eff>110?"異常偏高，先查資料":eff>=70?"合理範圍":"偏低"}</span><br>以目標效率 ${t}% 計算：今日目標 <b>${Math.floor(target).toLocaleString()} 件</b>，每小時約 <b>${hrs?Math.floor(target/hrs):0} 件</b>`;
+}
+["#e_ppl","#e_min","#e_sam","#e_out","#e_tgt"].forEach(id=>$(id).addEventListener("input",effCalc)); effCalc();
+
+/* ---------- L5 balance ---------- */
+const OPS=[["合肩",0.40],["上領",0.80],["領口壓線",0.60],["上袖",1.20],["合側縫",1.00],["袖口折邊",0.70],["下擺折邊",0.60],["剪線自檢",0.70]];
+const INIT=[1,3,2,4,3,2,2,3]; let alloc=INIT.slice();
+function balDraw(){
+  const cyc=OPS.map((o,i)=>alloc[i]?o[1]/alloc[i]:Infinity); const mx=Math.max(...cyc); const tot=alloc.reduce((a,b)=>a+b,0);
+  const total=OPS.reduce((a,o)=>a+o[1],0); const scale=Math.max(0.6,isFinite(mx)?mx:0.6);
+  $("#bars").innerHTML=OPS.map((o,i)=>{const c=cyc[i]; const w=isFinite(c)?Math.min(100,c/scale*100):100;
+    return `<div class="bar ${c===mx?"neck":""}"><span>${o[0]}<br><small style="color:var(--muted)">SAM ${o[1].toFixed(2)}</small></span><div class="track"><div class="fill" style="width:${w}%"></div></div><div class="ctl"><button type="button" data-i="${i}" data-d="-1" aria-label="${o[0]}減一人">−</button><b>${alloc[i]}</b>人<button type="button" data-i="${i}" data-d="1" aria-label="${o[0]}加一人">＋</button></div></div>`;}).join("");
+  const perHr=isFinite(mx)?60/mx:0, bal=isFinite(mx)?total/(tot*mx)*100:0;
+  const neck=OPS[cyc.indexOf(mx)][0];
+  $("#balRes").innerHTML=`總人數 <b>${tot}</b>　節距時間（理想）${(total/tot).toFixed(3)} 分　瓶頸：<b style="color:var(--bad)">${neck}</b>（${isFinite(mx)?mx.toFixed(3):"∞"} 分／件）<br>每小時產量上限 <span class="big">${Math.floor(perHr)}</span> 件　平衡率 <b>${bal.toFixed(1)}%</b>`+(tot!==20?`<br><span class="pill y">目前總人數不是 20，實際工廠要加人或減人喔</span>`:"");
+  $$("#bars button").forEach(b=>b.onclick=()=>{const i=+b.dataset.i; alloc[i]=Math.max(0,alloc[i]+ +b.dataset.d); balDraw();});
+}
+$("#balReset").onclick=()=>{alloc=INIT.slice();balDraw();}; balDraw();
+
+/* ---------- L7 pyramid ---------- */
+const PY={4:"<b>第 4 層｜企業規劃（ERP）</b><br>管全公司：訂單、採購、庫存、會計、人事、出口文件。時間單位是月、週、天。它問的是「這個月要接多少單？錢夠不夠？」",
+3:"<b>第 3 層｜製造營運（MES／MOM）</b><br>管現場：排程、派工、報工、品質、WIP、看板、人員調度。時間單位是天、班、小時、分鐘。它問的是「今天第 3 線做到哪裡？哪裡卡住？」這就是我們這門課的主角。",
+2:"<b>第 2 層｜監控</b><br>監看與控制一群機器，例如吊掛系統的控制台、自動裁床的電腦、SCADA（監控與資料擷取系統）。時間單位是分鐘、秒。",
+1:"<b>第 1 層｜感測與控制</b><br>感測器與控制器，例如縫紉機上的電流感測器（知道機器有沒有在動）、針數計數器、PLC（可程式邏輯控制器）。時間單位是秒、毫秒。",
+0:"<b>第 0 層｜實體製造過程</b><br>真正在動的東西：縫紉機、裁刀、燙斗、布料本身。"};
+$$("#pyr polygon").forEach(p=>{p.setAttribute("tabindex","0"); const f=()=>{$$("#pyr polygon").forEach(x=>x.setAttribute("stroke","none")); p.setAttribute("stroke","var(--ink)"); p.setAttribute("stroke-width","3"); $("#pyrText").innerHTML=PY[p.dataset.l];}; p.onclick=f; p.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();f();}};});
+
+/* ---------- L10 scan sim ---------- */
+const SB=["B-0147","B-0148","B-0149","B-0150"]; let done={}, logN=0, clock=8*60+5;
+const selB=$("#s_bundle"), selO=$("#s_op");
+SB.forEach(b=>selB.add(new Option(b+"（20 件）",b))); OPS.forEach((o,i)=>selO.add(new Option((i+1)+". "+o[0],i)));
+function tm(){clock+=Math.floor(Math.random()*4)+1; return String(Math.floor(clock/60)).padStart(2,"0")+":"+String(clock%60).padStart(2,"0");}
+function scan(b,o,emp){
+  done[b]=done[b]||[]; let res,ok=false;
+  if(done[b].includes(o)) res="拒絕：這紮這道工序已經報過（防重複）";
+  else if(o>0 && !done[b].includes(o-1)) res="拒絕：前一道「"+OPS[o-1][0]+"」還沒完成（防跳序）";
+  else {done[b].push(o); ok=true; res="成功";}
+  logN++; const tr=document.createElement("tr");
+  tr.innerHTML=`<td>${logN}</td><td>${tm()}</td><td>${b}</td><td>${OPS[o][0]}</td><td>${emp}</td><td><span class="pill ${ok?"g":"r"}">${ok?"成功":"拒絕"}</span></td>`;
+  $("#s_log").prepend(tr);
+  $("#s_msg").innerHTML=(ok?'<span class="pill g">✓</span> ':'<span class="pill r">✕</span> ')+b+"｜"+OPS[o][0]+"："+res;
+  wipDraw();
+}
+function wipDraw(){ $("#s_wip").innerHTML=OPS.map((o,i)=>{const n=SB.filter(b=>(done[b]||[]).includes(i)).length; return `<div class="opbox">${o[0]}<div class="n">${n}</div>紮／${n*20} 件</div>`;}).join(""); }
+$("#s_scan").onclick=()=>scan(selB.value,+selO.value,$("#s_emp").value);
+$("#s_auto").onclick=()=>{for(let k=0;k<10;k++){const b=SB[Math.floor(Math.random()*SB.length)]; const d=done[b]||[]; const next=d.length<OPS.length?d.length:OPS.length-1; const o=Math.random()<.8?next:Math.floor(Math.random()*OPS.length); const e=$("#s_emp").options[Math.floor(Math.random()*4)].text; scan(b,o,e);}};
+$("#s_reset").onclick=()=>{done={};logN=0;clock=8*60+5;$("#s_log").innerHTML="";$("#s_msg").textContent="";wipDraw();};
+wipDraw();
+
+/* ---------- L11 DHU + pareto ---------- */
+const DF=[["跳針",5],["線頭未剪",4],["油污",2],["領口不對稱",1],["斷線",1],["尺寸不符",1]];
+$("#q_inputs").innerHTML=DF.map((d,i)=>`<label class="field">${d[0]}<input type="number" min="0" value="${d[1]}" data-k="${i}"></label>`).join("");
+function qCalc(){
+  const n=+$("#q_n").value||1; const vals=$$("#q_inputs input").map(x=>+x.value||0); const tot=vals.reduce((a,b)=>a+b,0);
+  const dhu=tot/n*100; $("#q_res").innerHTML=`瑕疵總數 <b>${tot}</b>　DHU <span class="big">${dhu.toFixed(1)}</span> <span class="pill ${dhu<=5?"g":dhu<=8?"y":"r"}">${dhu<=5?"良好":dhu<=8?"注意":"需要改善"}</span>`;
+  const arr=DF.map((d,i)=>[d[0],vals[i]]).sort((a,b)=>b[1]-a[1]); const mx=Math.max(1,arr[0][1]);
+  const W=560,H=260,L=40,B=210,bw=(W-L-40)/arr.length; let s="",cum=0,pts=[];
+  s+=`<line x1="${L}" y1="${B}" x2="${W-30}" y2="${B}" stroke="var(--line)"/>`;
+  arr.forEach((d,i)=>{const h=d[1]/mx*170; const x=L+i*bw+8; cum+=d[1];
+    s+=`<rect x="${x}" y="${B-h}" width="${bw-16}" height="${h}" rx="3" fill="${i<2?"var(--bad)":"var(--denim)"}"/><text x="${x+(bw-16)/2}" y="${B-h-5}" text-anchor="middle" font-size="12" fill="var(--ink)">${d[1]}</text><text x="${x+(bw-16)/2}" y="${B+18}" text-anchor="middle" font-size="12" fill="var(--ink)">${d[0]}</text>`;
+    pts.push([x+(bw-16)/2, B-(tot?cum/tot:0)*170]);});
+  s+=`<polyline points="${pts.map(p=>p.join(",")).join(" ")}" fill="none" stroke="var(--thread)" stroke-width="2.5"/>`+pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="var(--thread)"/>`).join("");
+  s+=`<text x="${W-28}" y="${B-170+4}" font-size="11" fill="var(--thread)">100%</text><line x1="${L}" y1="${B-170}" x2="${W-30}" y2="${B-170}" stroke="var(--thread)" stroke-dasharray="3 3" opacity=".5"/>`;
+  const top2=tot?(arr[0][1]+arr[1][1])/tot*100:0;
+  s+=`<text x="${L}" y="${H-8}" font-size="12" fill="var(--muted)">前兩項（紅色）佔全部瑕疵的 ${top2.toFixed(0)}%</text>`;
+  $("#q_chart").innerHTML=s;
+}
+$("#q_n").addEventListener("input",qCalc); $$("#q_inputs input").forEach(x=>x.addEventListener("input",qCalc)); qCalc();
+
+/* ---------- L12 board ---------- */
+let hrs=[], andon=null, downs=[], hr=0;
+function bDraw(){
+  const t=+$("#b_tgt").value||1;
+  $("#b_board").innerHTML=Array.from({length:8},(_,i)=>{const h=hrs[i]; if(h===undefined) return `<div class="hour"><div>${8+i+(i>=4?1:0)}:00</div><div class="v">—</div>目標 ${t}</div>`;
+    const r=h/t*100, c=r>=95?"g":r>=85?"y":"r"; return `<div class="hour ${c}"><div>${8+i+(i>=4?1:0)}:00</div><div class="v">${h}</div>${r.toFixed(0)}%</div>`;}).join("");
+  const sum=hrs.reduce((a,b)=>a+b,0), tg=t*hrs.length, dm=downs.reduce((a,d)=>a+(d.m||0),0);
+  $("#b_sum").innerHTML=hrs.length?`累計 <b>${sum}</b>／目標 ${tg}（達成率 <b>${(sum/tg*100).toFixed(1)}%</b>）　停線累計 <b>${dm}</b> 分鐘`+(hrs.length===8?"　<span class='pill y'>一天結束，按重新開始再玩一次</span>":""):"按「跑下一小時」開始。中午 12 點休息，所以第五小時是 13:00。";
+  $("#b_log").innerHTML=downs.map(d=>`<tr><td>${d.r}</td><td>${d.s}</td><td>${d.e||"進行中"}</td><td class="num">${d.m??"—"}</td></tr>`).join("");
+}
+function hLabel(i){return (8+i+(i>=4?1:0))+":00";}
+$("#b_next").onclick=()=>{
+  if(hrs.length>=8) return; const t=+$("#b_tgt").value||1;
+  let v=Math.round(t*(0.82+Math.random()*0.22));
+  if(andon){ const lost=20+Math.floor(Math.random()*25); v=Math.round(v*(60-lost)/60); andon.m=(andon.m||0)+lost; }
+  hrs.push(v); bDraw();
+};
+$$("[data-andon]").forEach(b=>b.onclick=()=>{ if(andon||hrs.length>=8) return; andon={r:b.dataset.andon,s:hLabel(hrs.length),m:0}; downs.push(andon); const a=$("#b_andon"); a.textContent="⚠ 安燈亮起：第 3 線 "+andon.r+"，請組長與支援人員到場"; a.classList.add("show"); bDraw(); });
+$("#b_fix").onclick=()=>{ if(!andon) return; andon.e=hLabel(Math.max(0,hrs.length-1))+" 後"; if(!andon.m) andon.m=5; andon=null; $("#b_andon").classList.remove("show"); bDraw(); };
+$("#b_reset").onclick=()=>{hrs=[];downs=[];andon=null;$("#b_andon").classList.remove("show");bDraw();};
+$("#b_tgt").addEventListener("input",bDraw); bDraw();
+
+/* ---------- L15 capacity ---------- */
+function cCalc(){
+  const q=+$("#c_qty").value||0,p=+$("#c_ppl").value||0,s=+$("#c_sam").value||1,m=+$("#c_min").value||0,e=+$("#c_eff").value||0,ramp=$("#c_ramp").value;
+  const R={none:[],std:[40,55,65,70],hard:[30,40,50,60,65]}[ramp];
+  const full=p*m*e/100/s; let cum=0,d=0,rows=[];
+  while(cum<q && d<200){ const eff=d<R.length?Math.min(R[d],e):e; const out=Math.floor(p*m*eff/100/s); cum+=out; d++; if(d<=12||cum>=q) rows.push([d,eff,out,Math.min(cum,q)]); if(out<=0) break; }
+  const noRamp=full>0?Math.ceil(q/full):0;
+  $("#c_res").innerHTML=`滿速日產能 <b>${Math.floor(full).toLocaleString()}</b> 件　不考慮爬坡需 <b>${noRamp}</b> 天　<br>實際預估需 <span class="big">${d}</span> 天`+(d>noRamp?` <span class="pill y">比理想多 ${d-noRamp} 天</span>`:"");
+  $("#c_tbl").innerHTML="<tr><th>第幾天</th><th class='num'>效率</th><th class='num'>當日產量</th><th class='num'>累計</th></tr>"+rows.map(r=>`<tr><td>第 ${r[0]} 天</td><td class="num">${r[1]}%</td><td class="num">${r[2].toLocaleString()}</td><td class="num">${r[3].toLocaleString()}</td></tr>`).join("");
+}
+["#c_qty","#c_ppl","#c_sam","#c_min","#c_eff","#c_ramp"].forEach(id=>$(id).addEventListener("input",cCalc)); cCalc();
+
+/* ---------- glossary ---------- */
+const G=[
+["MES","Manufacturing Execution System","製造執行系統；記錄並指揮工廠現場每天在做什麼。約 1990 年由 AMR Research 提出。",0],
+["成衣","Ready-to-wear","依標準尺寸大量生產、買了就能穿的衣服，相對於量身訂做。",1],
+["馬克","Marker","排料圖；裁剪前規劃每片衣片在布上的位置，英文音譯。",1],
+["追溯","Traceability","循著紀錄往回找出產品來源的能力。",2],
+["在製品","WIP, Work in Process","已投入生產但尚未完成的半成品。",2],
+["單一真實來源","Single Source of Truth","同一筆資料只在一處記錄，所有人都從這裡讀取。",2],
+["垃圾進，垃圾出","Garbage In, Garbage Out","輸入錯誤資料，系統輸出也必然錯誤。",2],
+["工序","Operation","一個人在一台機器上完成的一個小步驟，例如合肩。",3],
+["工序表","OB, Operation Breakdown","列出一款衣服所有工序、機器與標準工時的表。",3],
+["SAM／SMV","Standard Allowed Minute／Standard Minute Value","標準工時；熟練者以正常速度、含合理寬放完成一件所需的分鐘數。",3],
+["時間研究","Time Study","泰勒於 1880 年代用碼表研究作業時間，科學管理的起點。",3],
+["MTM","Methods-Time Measurement","1948 年發表的預定動作時間標準。",3],
+["GSD","General Sewing Data","以 MTM 為基礎的成衣業專用標準工時系統。",3],
+["評比","Rating","觀察員判斷作業員速度相對於正常速度的百分比。",3],
+["寬放","Allowance","為休息、疲勞、換線等加上的合理額外時間。",3],
+["效率","Efficiency","產出分鐘 ÷ 可用分鐘 × 100%。",4],
+["產出分鐘","Earned Minutes","產出件數 × SAM。",4],
+["在標準效率","On-standard Efficiency","扣除非本人造成的損失時間後計算的效率。",4],
+["瓶頸","Bottleneck","整條線中最慢的工序，決定整條線的速度；比喻自瓶口。",5],
+["節距時間","Pitch Time","總 SAM ÷ 人數，理想狀態下每人分到的工作量。",5],
+["節拍時間","Takt Time","可用時間 ÷ 客戶需求量；德文 Takt 意為節拍。",5],
+["平衡率","Line Balancing Ratio","總 SAM ÷（總人數 × 瓶頸週期時間）。",5],
+["限制理論","TOC, Theory of Constraints","高德拉特 1984 年提出：改善先集中在瓶頸。",5],
+["技能矩陣","Skill Matrix","記錄每位員工會哪些工序及熟練度的表。",5],
+["床","Lay","裁床上鋪好的一整疊布；鋪布稱拉布（Spreading）。",6],
+["紮","Bundle","一小捆裁片，成衣廠流動與計件的基本單位。",6],
+["紮票","Bundle Ticket","紮的身分證，記錄紮號、款號、顏色、尺碼、床次、層次、件數。",6],
+["色差","Shading","不同布卷或層次間的顏色差異。",6],
+["PBS","Progressive Bundle System","漸進式紮包系統，整紮往下一站推進。",6],
+["UPS","Unit Production System","吊掛系統，單件沿軌道自動輸送。",6],
+["ERP","Enterprise Resource Planning","企業資源規劃；管全公司的訂單、採購、會計等。1990 年 Gartner 命名。",7],
+["MRP","Material Requirements Planning","物料需求計畫，1960 年代發展，ERP 的前身。",7],
+["ISA-95","ANSI/ISA-95 (IEC 62264)","企業與控制系統整合標準，把工廠系統分為 0～4 層。",7],
+["MOM","Manufacturing Operations Management","製造營運管理；ISA-95 對第 3 層的正式稱呼。",7],
+["MESA-11","MESA 11 Functions","MESA 於 1997 年歸納的 MES 11 項功能。",8],
+["派工","Dispatching","把工作派給特定生產線或人員。",8],
+["譜系","Genealogy","記錄成品由哪些原料、半成品、人手組成，原意為族譜。",8],
+["主資料","Master Data","相對固定、被反覆參照的基本資料，如款式、工序、員工。",9],
+["交易資料","Transaction Data","每次事件發生就新增的資料，如掃描、品檢。",9],
+["主鍵","Primary Key","唯一識別資料表中每一筆資料的值。",9],
+["外鍵","Foreign Key","存放另一張表主鍵、用來連結兩表的欄位。",9],
+["關聯式資料庫","Relational Database","科德 1970 年提出，以主鍵外鍵關聯多張表。",9],
+["SQL","Structured Query Language","結構化查詢語言，操作關聯式資料庫的語言。",9],
+["只附加","Append-only","交易紀錄只新增不修改，錯誤以更正紀錄處理。",9],
+["條碼","Barcode","以粗細線條編碼；1952 年取得專利，1974 年首次用於超市結帳。",10],
+["QR 碼","Quick Response Code","1994 年由豐田集團的電裝公司發明的二維碼。",10],
+["RFID","Radio Frequency Identification","無線射頻辨識，不需對準即可讀取。",10],
+["防呆","Poka-yoke","從設計上讓錯誤無法發生；新鄉重夫推廣。",10],
+["首件","First Piece","新款上線第一件先檢查確認。",11],
+["DHU","Defects per Hundred Units","每百件瑕疵數 ＝ 瑕疵總數 ÷ 檢查件數 × 100。",11],
+["AQL","Acceptance Quality Limit","允收品質界限；抽樣檢驗標準，源自 1950 年 MIL-STD-105。",11],
+["柏拉圖","Pareto Chart","依影響大小排序的長條圖加累計折線；源自經濟學家帕雷托。",11],
+["KPI","Key Performance Indicator","關鍵績效指標。",12],
+["安燈","Andon（行灯）","產線呼叫支援的燈號系統，源自豐田。",12],
+["自働化","Jidoka","發現異常就自動停止；源自豐田佐吉的自動織布機。",12],
+["看板（豐田）","Kanban","通知上游補貨的卡片，與電子看板不同。",12],
+["前端／後端","Frontend／Backend","使用者看得到的畫面／看不見的處理與儲存。",13],
+["伺服器","Server","持續運作、提供服務給用戶端的電腦。",13],
+["API","Application Programming Interface","應用程式介面；程式之間約定好的溝通規格。",13],
+["輪詢／推播","Polling／Push","主動定時詢問／伺服器主動通知的兩種更新方式。",13],
+["地端","On-premise","系統架設在工廠內部的機房。",13],
+["資料模型","Data Model","資料表、欄位與關係的設計圖。",14],
+["學習曲線","Learning Curve","累積產量增加，單位工時下降；萊特 1936 年提出。",15],
+["甘特圖","Gantt Chart","以時間為橫軸的排程長條圖；甘特 1910 年代推廣。",15],
+["有限產能排程","Finite Capacity Scheduling","考慮每個資源產能上限的排程方式。",15],
+["離線優先","Offline-first","先存在裝置上、有網路再同步的設計。",16],
+["冪等","Idempotency","做一次和做多次結果相同；防止重複寫入。",16],
+["RBAC","Role-Based Access Control","以角色為單位設定權限。",16],
+["稽核軌跡","Audit Trail","記錄每次新增、修改的人、時間與原因。",16],
+["3-2-1 備份","3-2-1 Backup Rule","3 份、2 種媒介、1 份在異地。",16],
+["試點","Pilot","先在小範圍試行，原意為領航員。",17],
+["PDCA","Plan-Do-Check-Act","計畫－執行－檢查－行動的改善循環，又稱戴明循環。",17],
+["基準","Baseline","導入前記錄的數字，用來比較改善成效。",17]
+];
+function gDraw(){
+  const q=($("#glossQ").value||"").trim().toLowerCase();
+  const list=G.filter(g=>!q||(g[0]+g[1]+g[2]).toLowerCase().includes(q));
+  $("#gloss").innerHTML=list.length?list.map(g=>`<dt>${g[0]} <small style="font-weight:400;color:var(--muted)">${g[1]}</small></dt><dd>${g[2]} <a href="#" data-go="${g[3]}"><small>見第 ${g[3]} 課</small></a></dd>`).join(""):"<p>找不到這個名詞。試試別的關鍵字，或用英文縮寫搜尋。</p>";
+  $$("#gloss [data-go]").forEach(a=>a.onclick=e=>{e.preventDefault();show(+a.dataset.go);});
+}
+$("#glossQ").addEventListener("input",gDraw); gDraw();
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-c9d7861423" data-category="garment"></script></body>
+</html>

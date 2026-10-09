@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>吃對的科學：從零開始學減脂與健身飲食</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF3E8; --paper:#FBFDF8; --ink:#1B2621; --soft:#4A5A50; --line:#C9D6C3;
+  --leaf:#1F4D3A; --leaf2:#2F7A57; --yolk:#F2B83B; --yolk-soft:#FFF1CC;
+  --tomato:#C9402F; --tomato-soft:#FBE3DE; --sky:#2E6F95; --sky-soft:#DCEBF3;
+  --carb:#E3A21A; --prot:#C9402F; --fat:#2E6F95;
+  --head:"LXGW WenKai TC","Kaiti TC","STKaiti","DFKai-SB",serif;
+  --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#121A16; --paper:#18221D; --ink:#E6EEE8; --soft:#A9B8AE; --line:#2C3B33;
+    --leaf:#8FD1AE; --leaf2:#6CC196; --yolk:#F2B83B; --yolk-soft:#3A3120;
+    --tomato:#F07A68; --tomato-soft:#3B2420; --sky:#7DB8DB; --sky-soft:#1D2F3A;
+    --carb:#F2B83B; --prot:#F07A68; --fat:#7DB8DB;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121A16; --paper:#18221D; --ink:#E6EEE8; --soft:#A9B8AE; --line:#2C3B33;
+  --leaf:#8FD1AE; --leaf2:#6CC196; --yolk:#F2B83B; --yolk-soft:#3A3120;
+  --tomato:#F07A68; --tomato-soft:#3B2420; --sky:#7DB8DB; --sky-soft:#1D2F3A;
+  --carb:#F2B83B; --prot:#F07A68; --fat:#7DB8DB;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.85;-webkit-text-size-adjust:100%}
+img,svg{max-width:100%}
+a{color:var(--leaf2)}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--yolk);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* top bar */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--leaf);color:#fff;display:flex;align-items:center;gap:12px;padding:10px 16px}
+.topbar h1{font-family:var(--head);font-size:1.15rem;margin:0;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar button{background:transparent;border:1.5px solid rgba(255,255,255,.55);color:#fff;border-radius:8px;padding:4px 10px;font-size:.9rem}
+.progress{height:6px;background:var(--line);position:sticky;top:calc(env(safe-area-inset-top,0px) + 52px);z-index:19}
+.progress i{display:block;height:100%;width:0;background:var(--yolk);transition:width .4s}
+:root[data-theme] .topbar, .topbar{color:#fff}
+@media (prefers-color-scheme:dark){.topbar{background:#1E3A2C}}
+
+.layout{display:grid;grid-template-columns:290px minmax(0,1fr);max-width:1180px;margin:0 auto}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 58px);align-self:start;height:calc(100vh - 70px);overflow-y:auto;padding:20px 14px 40px 18px;border-right:1px solid var(--line)}
+.toc .part{font-family:var(--head);color:var(--leaf);font-size:1.02rem;margin:18px 0 6px;font-weight:700}
+.toc ol{list-style:none;margin:0;padding:0}
+.toc li button{display:flex;gap:8px;width:100%;text-align:left;background:none;border:0;padding:6px 8px;border-radius:8px;color:var(--ink);font-size:.93rem;line-height:1.45}
+.toc li button:hover{background:var(--paper)}
+.toc li button.on{background:var(--leaf);color:#fff}
+@media (prefers-color-scheme:dark){.toc li button.on{color:#10201A}}
+.toc .n{flex:0 0 2em;font-variant-numeric:tabular-nums;opacity:.7}
+.toc .done::after{content:"✓";margin-left:auto;color:var(--leaf2);font-weight:700}
+.toc li button.on.done::after{color:inherit}
+
+main{padding:28px 22px 80px;min-width:0}
+.chapter{display:none;max-width:44em;margin:0 auto}
+.chapter.show{display:block}
+.chapter header .where{color:var(--soft);font-size:.92rem;margin:0}
+.chapter h2{font-family:var(--head);font-size:clamp(1.7rem,4.6vw,2.4rem);line-height:1.3;margin:.2em 0 .5em;color:var(--leaf)}
+.chapter h3{font-family:var(--head);font-size:1.35rem;margin:1.8em 0 .5em;color:var(--ink)}
+.chapter p{margin:.7em 0}
+.goal{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:12px 18px;margin:0 0 1.2em}
+.goal b{font-family:var(--head);color:var(--leaf);font-size:1.05rem}
+.goal ul{margin:.3em 0 0;padding-left:1.2em}
+
+/* term box: the recurring "word origin" device */
+.term{border-left:6px solid var(--yolk);background:var(--yolk-soft);border-radius:0 12px 12px 0;padding:12px 16px;margin:1.2em 0}
+.term .w{font-family:var(--head);font-size:1.2rem;font-weight:700}
+.term .en{color:var(--soft);font-size:.9rem;margin-left:.4em}
+.term .origin{display:block;margin-top:.3em}
+.term .origin::before{content:"名字由來　";font-weight:700;color:var(--leaf)}
+
+.eg{border:1.5px dashed var(--leaf2);border-radius:12px;padding:12px 16px;margin:1.2em 0;background:var(--paper)}
+.eg::before{content:"生活例子";display:block;font-weight:700;color:var(--leaf2);font-size:.95rem}
+.warn{background:var(--tomato-soft);border-radius:12px;padding:12px 16px;margin:1.2em 0}
+.warn::before{content:"注意";display:block;font-weight:700;color:var(--tomato);font-size:.95rem}
+.recap{background:var(--leaf);color:#fff;border-radius:14px;padding:14px 20px;margin:2em 0 1em}
+@media (prefers-color-scheme:dark){.recap{background:#1E3A2C}}
+.recap b{font-family:var(--head);font-size:1.1rem}
+.recap ol{margin:.4em 0 0;padding-left:1.3em}
+
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+.tbl{overflow-x:auto;margin:1em 0}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--paper);font-weight:700}
+
+/* widgets */
+.widget{background:var(--paper);border:1.5px solid var(--line);border-radius:16px;padding:16px;margin:1.4em 0}
+.widget .cap{font-size:.9rem;color:var(--soft);margin-top:8px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{background:var(--leaf);color:#fff;border:0;border-radius:10px;padding:8px 16px;font-weight:500}
+@media (prefers-color-scheme:dark){.btn{color:#10201A}}
+.btn.ghost{background:transparent;color:var(--leaf);border:1.5px solid var(--leaf)}
+label.f{display:flex;flex-direction:column;font-size:.9rem;color:var(--soft);gap:4px;min-width:130px;flex:1}
+input[type=number],select{font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:8px;padding:6px 10px;width:100%}
+input[type=range]{width:100%;accent-color:var(--leaf2)}
+.out{font-size:1.05rem;margin-top:10px;line-height:1.7}
+.big{font-family:var(--head);font-size:1.6rem;color:var(--leaf);font-weight:700}
+
+/* quiz */
+.quiz{margin:1.6em 0;border-top:2px solid var(--line);padding-top:1em}
+.quiz h3{margin-top:.2em}
+.q{margin:1em 0 1.4em}
+.q p{font-weight:500}
+.opts{display:grid;gap:8px}
+.opts button{text-align:left;background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:9px 14px;color:var(--ink)}
+.opts button.right{border-color:var(--leaf2);background:#DDF1E4;color:#12301F}
+.opts button.wrong{border-color:var(--tomato);background:var(--tomato-soft)}
+.opts button:disabled{cursor:default}
+.explain{display:none;margin-top:8px;padding:10px 14px;border-radius:10px;background:var(--sky-soft);font-size:.95rem}
+.explain.show{display:block}
+
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:2.4em;border-top:1px solid var(--line);padding-top:1.2em}
+.pager button{max-width:48%}
+
+/* hero scale */
+.hero-scale{display:block;margin:0 auto;width:100%;max-width:520px}
+.beam{transform-origin:260px 120px;transition:transform .6s cubic-bezier(.3,1.6,.5,1)}
+.pan{transition:transform .6s cubic-bezier(.3,1.6,.5,1)}
+
+.bars .bar{display:flex;align-items:center;gap:10px;margin:8px 0}
+.bars .bar span:first-child{width:5.5em;flex:0 0 auto;font-size:.95rem}
+.bars .track{flex:1;height:26px;background:var(--bg);border-radius:6px;overflow:hidden}
+.bars .fill{height:100%;width:0;border-radius:6px;transition:width 1s ease;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;color:#fff;font-size:.85rem;font-weight:700;white-space:nowrap}
+
+.tank{width:120px;height:200px;border:4px solid var(--ink);border-radius:18px 18px 26px 26px;position:relative;overflow:hidden;background:var(--bg)}
+.tank .lv{position:absolute;left:0;right:0;bottom:0;background:var(--carb);transition:height 1.2s ease}
+.tank .pct{position:absolute;inset:0;display:grid;place-items:center;font-weight:700;font-size:1.2rem;color:var(--ink)}
+
+.hands{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.hand{background:var(--bg);border-radius:12px;padding:10px;text-align:center;font-size:.92rem}
+.hand svg{width:70px;height:70px}
+
+.plate-info{min-height:3.4em;margin-top:8px;font-size:1rem}
+.slice{cursor:pointer;transition:transform .25s;transform-box:view-box;transform-origin:150px 150px}
+circle.slice{transform-origin:250px 250px}
+.slice:hover,.slice.act{transform:scale(1.05)}
+
+.label-card{border:3px solid var(--ink);padding:8px 12px;max-width:340px;font-size:.95rem;background:var(--paper)}
+.label-card .t{font-weight:700;font-size:1.1rem;border-bottom:6px solid var(--ink);margin-bottom:4px}
+.label-card .li{display:flex;justify-content:space-between;border-bottom:1px solid var(--ink);padding:3px 4px;cursor:pointer}
+.label-card .li:hover,.label-card .li.act{background:var(--yolk-soft)}
+.label-card .ind{padding-left:1.4em}
+
+.gloss dt{font-family:var(--head);font-weight:700;font-size:1.1rem;margin-top:1em;color:var(--leaf)}
+.gloss dd{margin:0 0 0 0;border-bottom:1px dashed var(--line);padding-bottom:.6em}
+.gloss input{margin-bottom:10px}
+
+.menu-day{display:grid;gap:10px}
+.meal{background:var(--bg);border-radius:12px;padding:10px 14px}
+.meal b{font-family:var(--head);font-size:1.1rem}
+
+@media (max-width:860px){
+  .layout{grid-template-columns:1fr}
+  nav.toc{position:fixed;left:0;top:0;bottom:0;width:min(86vw,320px);height:100%;background:var(--bg);z-index:40;transform:translateX(-105%);transition:transform .3s;padding-top:calc(env(safe-area-inset-top,0px) + 20px);box-shadow:4px 0 20px rgba(0,0,0,.18)}
+  nav.toc.open{transform:none}
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:30;display:none}
+  .scrim.show{display:block}
+  main{padding:20px 16px 70px}
+  body{font-size:16.5px}
+}
+@media (min-width:861px){#menuBtn{display:none}.scrim{display:none!important}}
+
+@media print{
+  .topbar,.progress,nav.toc,.pager,.quiz,.scrim,.noprint{display:none!important}
+  .layout{display:block}
+  .chapter{display:block!important;page-break-after:always}
+  body{background:#fff;color:#000}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <button id="menuBtn" aria-label="打開課程目錄">目錄</button>
+  <h1>吃對的科學：減脂與健身飲食全攻略</h1>
+  <button id="printBtn" class="noprint" title="列印或另存成 PDF">列印</button>
+</div>
+<div class="progress" aria-hidden="true"><i id="progBar"></i></div>
+<div class="scrim" id="scrim"></div>
+<div class="layout">
+<nav class="toc" id="toc" aria-label="課程目錄"></nav>
+<main id="main">
+
+<!-- ============ 開始之前 ============ -->
+<section class="chapter" id="c0" data-part="開始之前" data-title="這堂課怎麼上">
+<header><p class="where">開始之前</p><h2>吃，是一門可以學會的科學</h2></header>
+
+<svg class="hero-scale" viewBox="0 0 520 300" role="img" aria-label="能量天平：左邊是吃進去的，右邊是用掉的">
+  <polygon points="260,120 235,270 285,270" fill="var(--leaf)"/>
+  <rect x="200" y="268" width="120" height="14" rx="6" fill="var(--leaf)"/>
+  <g class="beam" id="heroBeam">
+    <rect x="60" y="114" width="400" height="12" rx="6" fill="var(--ink)"/>
+    <circle cx="260" cy="120" r="12" fill="var(--yolk)"/>
+    <g class="pan" id="panL">
+      <line x1="80" y1="120" x2="80" y2="170" stroke="var(--ink)" stroke-width="3"/>
+      <path d="M30 170 h100 a50 22 0 0 1 -100 0z" fill="var(--carb)"/>
+      <text x="80" y="215" text-anchor="middle" font-size="18" fill="var(--ink)" font-family="var(--head)">吃進去的</text>
+      <text x="58" y="162" font-size="26">🍚</text><text x="86" y="160" font-size="22">🍗</text>
+    </g>
+    <g class="pan" id="panR">
+      <line x1="440" y1="120" x2="440" y2="170" stroke="var(--ink)" stroke-width="3"/>
+      <path d="M390 170 h100 a50 22 0 0 1 -100 0z" fill="var(--sky)"/>
+      <text x="440" y="215" text-anchor="middle" font-size="18" fill="var(--ink)" font-family="var(--head)">用掉的</text>
+      <text x="418" y="162" font-size="26">🏃</text><text x="448" y="160" font-size="22">💓</text>
+    </g>
+  </g>
+</svg>
+<div class="widget noprint">
+  <div class="row">
+    <label class="f">一天吃進 <span><b id="hIn">2000</b> 大卡</span><input type="range" id="hInR" min="1200" max="3200" step="50" value="2000"></label>
+    <label class="f">一天用掉 <span><b id="hOut">2000</b> 大卡</span><input type="range" id="hOutR" min="1200" max="3200" step="50" value="2000"></label>
+  </div>
+  <p class="out" id="hMsg"></p>
+  <p class="cap">拉拉看兩個滑桿。這個天平就是整堂課的主角，你會在後面一次又一次見到它。</p>
+</div>
+
+<p>你可能聽過很多說法：「晚上吃東西會胖」、「不吃飯就會瘦」、「喝蛋白粉會變金剛」。這些話有的對一半，有的完全錯。這堂課要做的事，就是讓你<b>自己看得懂原理</b>，以後遇到任何飲食說法，都能自己判斷。</p>
+
+<div class="term"><span class="w">飲食（diet）</span><span class="en">Diet</span>
+<span class="origin">英文 diet 來自希臘文 <i>díaita</i>，意思是「生活方式」。古希臘醫生說的 diet，包含吃什麼、睡多久、怎麼運動。所以 diet 本來不是「節食」，而是「怎麼過日子」。這堂課也用這個意思。</span></div>
+
+<h3>課程地圖</h3>
+<p>課程分成五個部分，每一部分都用到前一部分教的東西，所以請<b>照順序讀</b>：</p>
+<div class="tbl"><table>
+<tr><th>部分</th><th>你會學到</th><th>程度</th></tr>
+<tr><td>第一部　入門</td><td>能量是什麼、食物由哪些東西組成</td><td>完全零基礎</td></tr>
+<tr><td>第二部　基礎</td><td>算出自己一天用多少能量、學會估份量、看標示</td><td>會加減乘除就行</td></tr>
+<tr><td>第三部　減脂</td><td>怎麼安全地減掉脂肪，為什麼會卡關</td><td>應用</td></tr>
+<tr><td>第四部　健身</td><td>肌肉怎麼長、運動前後吃什麼、補充品</td><td>應用</td></tr>
+<tr><td>第五部　專業實作</td><td>從零設計菜單、追蹤調整、安全守則</td><td>接近專業</td></tr>
+</table></div>
+
+<h3>每一章都有這些小框框</h3>
+<div class="term"><span class="w">黃色框：名詞小辭典</span><span class="origin">每個專有名詞都會告訴你它的名字從哪裡來。知道由來，就不用死背。</span></div>
+<div class="eg">虛線框是生活例子，用你每天會遇到的事情來說明。</div>
+<div class="warn">紅色框是安全提醒，一定要看。</div>
+<p>每章最後有「重點整理」和「小測驗」。答對全部題目，左邊目錄就會打勾。</p>
+
+<div class="warn">這是一堂教「原理」的課，不是醫療建議。如果你<b>未滿 18 歲、正在長高</b>，或有糖尿病、腎臟病、懷孕等特殊狀況，請先跟醫師或營養師討論再改變飲食。第 19 章會專門講這件事。</div>
+</section>
+
+<!-- ============ 第 1 章 ============ -->
+<section class="chapter" id="c1" data-part="第一部　入門：認識食物與身體" data-title="能量是什麼？認識「大卡」">
+<header><p class="where">第一部　入門</p><h2>第 1 章　能量是什麼？認識「大卡」</h2></header>
+<div class="goal"><b>這章學完你會知道</b><ul><li>身體為什麼需要吃東西</li><li>「大卡」「卡路里」「千焦」到底是什麼</li></ul></div>
+
+<p>想像你的身體是一台<b>永遠不關機的機器</b>。就算你睡著了，心臟還在跳、肺還在呼吸、大腦還在做夢、身體還在保持 37 度左右的體溫。這些全都要用「能量」。</p>
+<p>汽車的能量來自汽油，手機的能量來自電池，而人的能量來自<b>食物</b>。食物進到身體裡，被慢慢「燒掉」（其實是化學反應），放出能量讓我們活動。</p>
+
+<div class="term"><span class="w">卡路里</span><span class="en">calorie</span>
+<span class="origin">來自拉丁文 <i>calor</i>，意思是「熱」。1820 年代法國科學家克萊蒙（Nicolas Clément）用它當作「熱量」的單位。後來美國化學家艾華特（Wilbur Atwater）在 1890 年代把它用到食物上，從此大家用卡路里來量食物的能量。</span></div>
+
+<h3>一大卡有多大？</h3>
+<p>科學上的定義是：<b>把 1 公斤（1 公升）的水加熱，讓它升高 1°C，需要的熱量</b>，就是 1 大卡。</p>
+<div class="eg">一碗白飯（約 200 公克）大約 280 大卡。理論上這些能量，可以把 280 公升的水（差不多一個浴缸）加熱 1°C。聽起來很多，但你的身體一天要用上 1500～2500 大卡。</div>
+
+<div class="term"><span class="w">大卡 vs 小卡</span><span class="en">kcal vs cal</span>
+<span class="origin">其實有兩種「卡」。讓 1 公克水升 1°C 的叫「小卡」（cal）；1000 小卡 = 1 大卡（kcal，k 是 kilo，希臘文「千」的意思）。食品包裝上寫的「熱量 250 大卡」就是 250 kcal。日常說「這個 250 卡」，其實是偷懶省略了「大」字。</span></div>
+
+<div class="term"><span class="w">千焦</span><span class="en">kJ, kilojoule</span>
+<span class="origin">「焦耳」是紀念英國物理學家焦耳（James Joule），他證明了「做功」和「熱」可以互相轉換。國際標準單位是焦耳，所以有些國家的包裝寫 kJ。換算：1 大卡 ≈ 4.18 千焦。看到 kJ 就除以 4.2，差不多就是大卡。</span></div>
+
+<h3>身體把能量用在哪？</h3>
+<p>你可以先記一個簡單的畫面：能量進來，有三個出口——</p>
+<ol>
+<li><b>維持生命</b>：心跳、呼吸、體溫、大腦運作（佔最多）。</li>
+<li><b>活動</b>：走路、寫字、打球、做家事。</li>
+<li><b>消化食物</b>：沒錯，連消化本身都要花能量。</li>
+</ol>
+<p>用不完的能量呢？身體很節省，會把它<b>存起來</b>，最主要的倉庫就是<b>脂肪</b>。這就是下一章要講的事。</p>
+
+<div class="recap"><b>重點整理</b><ol><li>食物是身體的燃料，能量單位是「大卡」（kcal）。</li><li>1 大卡 = 讓 1 公升水升高 1°C 的熱量；1 大卡 ≈ 4.18 千焦。</li><li>能量用在維持生命、活動、消化；用不完的會存起來。</li></ol></div>
+<div class="quiz" data-q="c1"></div>
+</section>
+
+<!-- ============ 第 2 章 ============ -->
+<section class="chapter" id="c2" data-part="第一部　入門：認識食物與身體" data-title="能量平衡：體重為什麼會變">
+<header><p class="where">第一部　入門</p><h2>第 2 章　能量平衡：體重為什麼會變</h2></header>
+<div class="goal"><b>這章學完你會知道</b><ul><li>變胖、變瘦最根本的原因</li><li>為什麼「多一點點」長期下來會差很多</li></ul></div>
+
+<p>回到開場那個天平。左邊是吃進去的能量，右邊是用掉的能量：</p>
+<div class="tbl"><table>
+<tr><th>情況</th><th>天平</th><th>身體會怎樣</th></tr>
+<tr><td>吃進 = 用掉</td><td>平衡</td><td>體重大致不變（維持）</td></tr>
+<tr><td>吃進 &gt; 用掉</td><td>左邊重</td><td>多的能量存起來，體重上升（<b>盈餘</b>）</td></tr>
+<tr><td>吃進 &lt; 用掉</td><td>右邊重</td><td>身體拿存款出來用，體重下降（<b>赤字</b>）</td></tr>
+</table></div>
+
+<div class="term"><span class="w">能量平衡</span><span class="en">energy balance</span>
+<span class="origin">來自物理學的「能量守恆定律」：能量不會憑空出現，也不會憑空消失，只會換一種形式。十九世紀科學家把這條定律用在人體上，發現人吃進去的能量，最後一定是「被用掉」或「被存起來」。</span></div>
+
+<div class="term"><span class="w">恆定</span><span class="en">homeostasis</span>
+<span class="origin">1926 年美國生理學家坎農（Walter Cannon）創造的字，由希臘文 <i>homoios</i>（相同）＋ <i>stasis</i>（站著不動）組成，意思是「保持不變」。身體很喜歡維持原狀：體溫、血糖、體重都會努力維持在熟悉的範圍。這也是為什麼減肥到後面會變難（第 12 章會講）。</span></div>
+
+<h3>小數字的大威力</h3>
+<div class="widget">
+  <label class="f">每天多吃（或少吃）的大卡：<span><b id="drift">150</b> 大卡</span><input type="range" id="driftR" min="-500" max="500" step="50" value="150"></label>
+  <p class="out" id="driftMsg"></p>
+  <p class="cap">1 公斤身體脂肪大約含 7700 大卡。這是粗略估算，第 12 章會說明為什麼真實情況會比這個少一點。</p>
+</div>
+<div class="eg">一罐 330 毫升的含糖汽水約 140 大卡。如果每天多喝一罐、其他都不變，一年累積下來大約 51,000 大卡，換算約 6～7 公斤。反過來，每天少喝一罐，也是一年少掉這麼多。<b>飲食的改變不用很誇張，但要能持續。</b></div>
+
+<h3>那「吃什麼」重要嗎？</h3>
+<p>非常重要！天平決定「體重往哪邊走」，但<b>吃什麼</b>決定：</p>
+<ul>
+<li>減掉的是脂肪還是肌肉；</li>
+<li>你會不會一直餓、一直想吃零食；</li>
+<li>身體健不健康、有沒有精神。</li>
+</ul>
+<p>所以接下來四章，我們要打開食物，看看裡面到底有什麼。</p>
+
+<div class="recap"><b>重點整理</b><ol><li>體重變化的核心是能量平衡：吃進 vs 用掉。</li><li>盈餘會增重，赤字會減重。</li><li>每天一點點差距，長期累積很可觀。</li><li>熱量決定方向，食物種類決定品質。</li></ol></div>
+<div class="quiz" data-q="c2"></div>
+</section>
+
+<!-- ============ 第 3 章 ============ -->
+<section class="chapter" id="c3" data-part="第一部　入門：認識食物與身體" data-title="三大營養素（一）碳水化合物">
+<header><p class="where">第一部　入門</p><h2>第 3 章　三大營養素（一）：碳水化合物</h2></header>
+<div class="goal"><b>這章學完你會知道</b><ul><li>什麼是「巨量營養素」</li><li>碳水化合物的種類：糖、澱粉、纖維</li><li>為什麼碳水不是壞人</li></ul></div>
+
+<p>食物裡能提供能量的東西主要有三種，叫做<b>三大營養素</b>：碳水化合物、蛋白質、脂肪。</p>
+<div class="term"><span class="w">巨量營養素</span><span class="en">macronutrients，簡稱 macros</span>
+<span class="origin">macro 來自希臘文 <i>makros</i>，意思是「大」。因為身體每天需要它們的量很大（以「公克」計算），所以叫「巨量」。相對的 micro（希臘文 <i>mikros</i>，小）是「微量營養素」，像維生素，需要量只有毫克甚至微克。健身圈常說「算 macros」，就是在算這三種營養素。</span></div>
+
+<div class="widget">
+  <p style="margin-top:0"><b>同樣 10 公克，能量差多少？</b></p>
+  <div class="bars" id="macroBars">
+    <div class="bar"><span>碳水 10g</span><div class="track"><div class="fill" style="background:var(--carb)" data-w="44">40 大卡</div></div></div>
+    <div class="bar"><span>蛋白質 10g</span><div class="track"><div class="fill" style="background:var(--prot)" data-w="44">40 大卡</div></div></div>
+    <div class="bar"><span>脂肪 10g</span><div class="track"><div class="fill" style="background:var(--fat)" data-w="100">90 大卡</div></div></div>
+    <div class="bar"><span>酒精 10g</span><div class="track"><div class="fill" style="background:var(--soft)" data-w="78">70 大卡</div></div></div>
+  </div>
+  <button class="btn" id="macroBtn">播放比較</button>
+  <p class="cap">這組「4、4、9」叫做艾華特係數（Atwater factors），就是第 1 章那位艾華特整理出來的。酒精（7）不是營養素，但它有熱量。</p>
+</div>
+
+<div class="term"><span class="w">碳水化合物</span><span class="en">carbohydrate</span>
+<span class="origin">英文 carbo（碳）＋ hydrate（水合物）。早期化學家發現糖和澱粉的化學式剛好像「碳 ＋ 水」，例如葡萄糖 C₆H₁₂O₆ 可以看成 6 個碳配 6 個水（H₂O），就取名「碳的水合物」。中文直譯為「碳水化合物」，簡稱「碳水」或「醣類」。</span></div>
+
+<h3>碳水的三種樣子</h3>
+<p>想像碳水是用「糖珠子」串起來的：</p>
+<div class="tbl"><table>
+<tr><th>種類</th><th>像什麼</th><th>食物例子</th><th>消化速度</th></tr>
+<tr><td>糖（單醣、雙醣）</td><td>1～2 顆珠子</td><td>果汁、汽水、糖果、蜂蜜、水果</td><td>很快</td></tr>
+<tr><td>澱粉（多醣）</td><td>一長串珠子</td><td>米飯、麵、麵包、地瓜、馬鈴薯</td><td>中等，要先拆開</td></tr>
+<tr><td>膳食纖維</td><td>人類剪刀剪不斷的串</td><td>蔬菜、燕麥、豆類、水果皮</td><td>幾乎不被吸收</td></tr>
+</table></div>
+
+<div class="term"><span class="w">葡萄糖</span><span class="en">glucose</span>
+<span class="origin">來自希臘文 <i>glykys</i>，意思是「甜」。中文因為最早從葡萄裡提煉出來，所以叫葡萄糖。它是身體最常用的「現金」，大腦特別愛用它。</span></div>
+
+<p>不管吃的是飯還是糖，最後大多會被拆成葡萄糖，進到血液裡變成「血糖」，供應全身使用。差別在於<b>拆的速度</b>：糖很快，澱粉慢一點，有纖維包著的更慢。這個速度差，第 8 章會用動畫給你看。</p>
+
+<div class="eg">早餐喝一杯含糖奶茶，跟吃一碗燕麥粥，碳水的量可能差不多，但奶茶的糖很快衝進血液，一兩個小時後常常又餓又想睡；燕麥有纖維，吸收慢，比較能撐到中午。</div>
+
+<h3>碳水是壞人嗎？</h3>
+<p>不是。碳水是運動時最好用的燃料，也是大腦的主要能源。問題通常出在：</p>
+<ul><li><b>吃太多精緻的糖</b>（飲料、甜點），熱量高又不飽；</li><li>整體熱量超過需要。</li></ul>
+<p>比較好的選擇是「<b>原型食物</b>」的碳水：糙米、地瓜、燕麥、水果，它們同時帶來纖維和維生素。</p>
+<div class="term"><span class="w">原型食物</span><span class="en">whole foods</span>
+<span class="origin">指「看得出原本長什麼樣子」的食物。地瓜是原型，地瓜酥就不是。這個說法是營養界為了對比「超加工食品」而普及的。越接近原型，通常纖維越多、越有飽足感。</span></div>
+
+<div class="recap"><b>重點整理</b><ol><li>三大營養素：碳水、蛋白質、脂肪，每公克約 4、4、9 大卡。</li><li>碳水分成糖、澱粉、纖維，最後多半變成葡萄糖。</li><li>碳水不是壞人，重點是選原型、控制總量。</li></ol></div>
+<div class="quiz" data-q="c3"></div>
+</section>
+
+<!-- ============ 第 4 章 ============ -->
+<section class="chapter" id="c4" data-part="第一部　入門：認識食物與身體" data-title="三大營養素（二）蛋白質">
+<header><p class="where">第一部　入門</p><h2>第 4 章　三大營養素（二）：蛋白質</h2></header>
+<div class="goal"><b>這章學完你會知道</b><ul><li>蛋白質在身體裡做什麼</li><li>胺基酸、必需胺基酸是什麼</li><li>哪些食物是好的蛋白質來源</li></ul></div>
+
+<div class="term"><span class="w">蛋白質</span><span class="en">protein</span>
+<span class="origin">1838 年瑞典化學家貝采利烏斯（Berzelius）取的名字，來自希臘文 <i>prōteios</i>，意思是「第一重要的」。當時科學家認為它是生命最基本的物質。中文叫「蛋白質」，是因為蛋白（雞蛋的蛋清）幾乎就是純蛋白質，最容易拿來研究。</span></div>
+
+<p>如果碳水是「燃料」，蛋白質就是「<b>建材</b>」。肌肉、皮膚、頭髮、指甲、血液裡的抗體、幫助消化的酵素，都用蛋白質蓋成。身體每天都在拆掉舊零件、換上新零件，所以每天都需要新的蛋白質。</p>
+
+<h3>樂高積木的比喻</h3>
+<p>蛋白質就像用樂高蓋出來的城堡。你吃下一塊雞肉，身體不會直接把「雞肉城堡」搬到你的手臂上，而是先把它<b>拆成一顆顆積木</b>，再依照你身體的設計圖重新組裝。這些積木叫做<b>胺基酸</b>。</p>
+<div class="term"><span class="w">胺基酸</span><span class="en">amino acid</span>
+<span class="origin">因為每顆積木身上都有一個「胺基」（amine，含氮的部分，名字來自氨 ammonia）和一個「酸基」（acid），所以叫胺基酸。組成人體蛋白質的胺基酸有 20 種。</span></div>
+
+<div class="term"><span class="w">必需胺基酸</span><span class="en">essential amino acids</span>
+<span class="origin">20 種積木裡，有 9 種人體自己做不出來，<b>必須</b>從食物裡吃到，所以叫「必需」。英文 essential 在這裡不是「重要」，而是「非得從外面拿」的意思。</span></div>
+
+<div class="eg">想像你要蓋一座需要紅、藍、黃三色積木的城堡，但你手上缺黃色。就算紅藍再多，城堡也蓋不完。蛋白質食物如果缺某種必需胺基酸，身體就「蓋不好」。所以蛋白質來源要多樣化。</div>
+
+<h3>好的蛋白質從哪來？</h3>
+<p>台灣的飲食指南把它們叫做「<b>豆魚蛋肉類</b>」，而且順序是故意排的：建議優先選豆類和魚，再來蛋，最後才是肉，因為前面的通常脂肪較少或脂肪比較健康。</p>
+<div class="tbl"><table>
+<tr><th>食物</th><th>大約份量</th><th>蛋白質</th></tr>
+<tr><td>雞蛋</td><td>1 顆</td><td>約 7 公克</td></tr>
+<tr><td>無糖豆漿</td><td>1 杯 240 毫升</td><td>約 8 公克</td></tr>
+<tr><td>板豆腐</td><td>約 80 公克（手掌心一塊）</td><td>約 7～9 公克</td></tr>
+<tr><td>雞胸肉（熟）</td><td>100 公克</td><td>約 30 公克</td></tr>
+<tr><td>鮭魚（熟）</td><td>100 公克</td><td>約 22～25 公克</td></tr>
+<tr><td>牛奶</td><td>1 杯 240 毫升</td><td>約 8 公克</td></tr>
+</table></div>
+<p class="cap" style="color:var(--soft);font-size:.9rem">以上是常見估算值，不同品牌、做法會有差異。</p>
+
+<h3>蛋白質的三個隱藏優點</h3>
+<ol>
+<li><b>最有飽足感</b>：同樣熱量下，蛋白質讓人飽最久。</li>
+<li><b>消化它最花能量</b>：吃 100 大卡蛋白質，大約有 20～30 大卡用在消化上（碳水約 5～10、脂肪約 0～3）。</li>
+<li><b>保護肌肉</b>：減重時吃夠蛋白質，比較不會連肌肉一起減掉。</li>
+</ol>
+<p>這三點讓蛋白質成為減脂和增肌<b>都最重要</b>的營養素。第 14 章會教你怎麼算自己要吃多少。</p>
+
+<div class="recap"><b>重點整理</b><ol><li>蛋白質是身體的建材，每公克約 4 大卡。</li><li>蛋白質由 20 種胺基酸組成，其中 9 種必需從食物攝取。</li><li>優先選「豆、魚、蛋、肉」，來源要多樣。</li><li>蛋白質飽足感高、消化耗能多、能保護肌肉。</li></ol></div>
+<div class="quiz" data-q="c4"></div>
+</section>
+
+<!-- ============ 第 5 章 ============ -->
+<section class="chapter" id="c5" data-part="第一部　入門：認識食物與身體" data-title="三大營養素（三）脂肪">
+<header><p class="where">第一部　入門</p><h2>第 5 章　三大營養素（三）：脂肪</h2></header>
+<div class="goal"><b>這章學完你會知道</b><ul><li>為什麼人一定要吃脂肪</li><li>飽和、不飽和、反式脂肪的差別</li><li>「吃油會胖」對不對</li></ul></div>
+
+<div class="term"><span class="w">脂質</span><span class="en">lipid</span>
+<span class="origin">來自希臘文 <i>lipos</i>，意思是「油脂、脂肪」。所以抽脂手術叫 liposuction，血液裡的脂肪檢查叫「血脂」（blood lipids）。</span></div>
+
+<p>脂肪名聲很差，但它其實是身體的必需品：</p>
+<ul>
+<li><b>做荷爾蒙的原料</b>：很多荷爾蒙（例如性荷爾蒙）要用脂肪類物質來做。</li>
+<li><b>幫助吸收維生素</b>：維生素 A、D、E、K 要跟油一起吃才吸收得好。</li>
+<li><b>包住每一個細胞</b>：細胞膜就是用脂質做的。</li>
+<li><b>儲存能量、保暖、保護內臟</b>。</li>
+</ul>
+
+<h3>飽和？不飽和？用「座位」來想</h3>
+<p>脂肪酸是一條由碳原子串成的長鏈，每個碳旁邊有「座位」可以讓氫原子坐。</p>
+<div class="widget">
+<svg viewBox="0 0 560 190" role="img" aria-label="飽和脂肪酸是直的，不飽和脂肪酸有彎折">
+  <text x="10" y="24" font-size="16" fill="var(--ink)" font-weight="700">飽和：座位全坐滿，鏈子直直的，容易排整齊 → 室溫常是固體</text>
+  <g fill="var(--fat)">
+    <circle cx="40" cy="60" r="11"/><circle cx="80" cy="60" r="11"/><circle cx="120" cy="60" r="11"/><circle cx="160" cy="60" r="11"/><circle cx="200" cy="60" r="11"/><circle cx="240" cy="60" r="11"/><circle cx="280" cy="60" r="11"/><circle cx="320" cy="60" r="11"/>
+  </g>
+  <path d="M40 60 H320" stroke="var(--fat)" stroke-width="4"/>
+  <text x="10" y="118" font-size="16" fill="var(--ink)" font-weight="700">不飽和：有空位（雙鍵），鏈子會彎 → 排不緊，室溫常是液體</text>
+  <path d="M40 150 L80 150 L120 150 L160 150 L190 178 L230 178 L270 178 L300 150" stroke="var(--leaf2)" stroke-width="4" fill="none"/>
+  <g fill="var(--leaf2)">
+    <circle cx="40" cy="150" r="11"/><circle cx="80" cy="150" r="11"/><circle cx="120" cy="150" r="11"/><circle cx="160" cy="150" r="11"/><circle cx="190" cy="178" r="11"/><circle cx="230" cy="178" r="11"/><circle cx="270" cy="178" r="11"/><circle cx="300" cy="150" r="11"/>
+  </g>
+  <text x="168" y="140" font-size="14" fill="var(--tomato)">彎折處</text>
+</svg>
+<p class="cap">豬油、奶油、椰子油飽和脂肪多，放涼會凝固；橄欖油、芥花油、魚油不飽和脂肪多，常溫是液體。</p>
+</div>
+
+<div class="term"><span class="w">飽和脂肪</span><span class="en">saturated fat</span>
+<span class="origin">saturate 來自拉丁文 <i>satur</i>，意思是「吃飽的、塞滿的」。碳鏈上能坐氫的位置全坐滿了，就叫「飽和」。</span></div>
+<div class="term"><span class="w">反式脂肪</span><span class="en">trans fat</span>
+<span class="origin">trans 是拉丁文「在另一邊」。天然的不飽和脂肪，彎折處的氫在同一邊（cis，順式）；工廠把植物油「部分氫化」讓它變硬時，會產生氫在兩邊的「反式」結構。反式脂肪對心血管傷害很大，台灣從 2018 年起禁止在食品中使用「不完全氫化油」。</span></div>
+
+<h3>健康脂肪怎麼選</h3>
+<div class="tbl"><table>
+<tr><th>多吃一點</th><th>適量</th><th>盡量避免</th></tr>
+<tr><td>魚（尤其鯖魚、鮭魚）、堅果、橄欖油、酪梨、芝麻</td><td>肉的肥肉、奶油、起司、椰子油</td><td>酥炸食物反覆用的油、含不完全氫化油的點心</td></tr>
+</table></div>
+
+<h3>吃油會胖嗎？</h3>
+<p>脂肪本身不會「特別」讓你胖，胖不胖還是看第 2 章的天平。但因為脂肪每公克有 9 大卡，<b>很容易不小心吃太多</b>：</p>
+<div class="eg">一份燙青菜約 25 大卡；如果改成炒的，淋上一大匙油（約 15 公克），馬上多出 135 大卡。一碗「看起來很健康」的炒青菜，可能比一碗白飯的一半還多熱量。所以不是不能吃油，而是要<b>知道油藏在哪裡</b>。</div>
+
+<div class="recap"><b>重點整理</b><ol><li>脂肪是必需營養素，每公克約 9 大卡。</li><li>飽和脂肪「座位坐滿」較硬；不飽和脂肪有彎折較軟、對心血管較友善。</li><li>反式脂肪要避免。</li><li>油不邪惡，但熱量密度高，要注意隱藏的油。</li></ol></div>
+<div class="quiz" data-q="c5"></div>
+</section>
+
+<!-- ============ 第 6 章 ============ -->
+<section class="chapter" id="c6" data-part="第一部　入門：認識食物與身體" data-title="微量營養素、纖維與水">
+<header><p class="where">第一部　入門</p><h2>第 6 章　看不見的小幫手：維生素、礦物質、纖維、水</h2></header>
+<div class="goal"><b>這章學完你會知道</b><ul><li>沒有熱量的東西為什麼也很重要</li><li>纖維和水怎麼幫助減脂</li></ul></div>
+
+<p>三大營養素提供能量和建材，但要讓工廠真正運轉，還需要「螺絲、潤滑油、工人」。這些就是<b>微量營養素</b>：需要量很少，但缺了就會出問題。</p>
+
+<div class="term"><span class="w">維生素</span><span class="en">vitamin</span>
+<span class="origin">1912 年波蘭生化學家馮克（Casimir Funk）發現，缺少米糠裡的某種物質會得「腳氣病」。他以為這類物質都是「維持生命（vital）的胺（amine）」，就取名 vitamine。後來發現很多維生素根本不是胺，英國科學家就把最後的 e 拿掉，變成 vitamin。中文「維生素」是「維持生命的元素」，很貼切。</span></div>
+
+<div class="tbl"><table>
+<tr><th>名稱</th><th>主要工作</th><th>常見來源</th></tr>
+<tr><td>維生素 C</td><td>幫助傷口癒合、抗氧化</td><td>芭樂、奇異果、柑橘、甜椒</td></tr>
+<tr><td>維生素 D</td><td>幫骨頭吸收鈣</td><td>曬太陽（皮膚會自己做）、魚、蛋黃</td></tr>
+<tr><td>B 群</td><td>幫忙把食物變成能量</td><td>全穀、肉、蛋、豆類</td></tr>
+<tr><td>鈣</td><td>骨骼、牙齒、肌肉收縮</td><td>牛奶、小魚乾、板豆腐、深綠色蔬菜</td></tr>
+<tr><td>鐵</td><td>血紅素運送氧氣</td><td>紅肉、深綠色蔬菜、豬血</td></tr>
+<tr><td>鈉</td><td>維持水分與神經訊號</td><td>鹽、醬料、加工食品（通常太多）</td></tr>
+</table></div>
+
+<div class="term"><span class="w">礦物質</span><span class="en">minerals</span>
+<span class="origin">英文 mineral 來自中世紀拉丁文 <i>minera</i>，意思是「礦」。因為這些元素（鈣、鐵、鋅……）原本都來自土壤和岩石，植物吸收它們，我們再吃植物或吃吃植物的動物。</span></div>
+
+<h3>膳食纖維：減脂的好朋友</h3>
+<div class="term"><span class="w">膳食纖維</span><span class="en">dietary fiber</span>
+<span class="origin">fiber 來自拉丁文 <i>fibra</i>，意思是「細絲」，因為早期看到的植物纖維像一條條細線。「膳食」是指「從飲食來的」。它是人類消化酵素切不斷的碳水，所以幾乎沒有熱量。</span></div>
+<p>纖維分兩種：</p>
+<ul>
+<li><b>水溶性</b>：遇水變成黏黏的膠（像燕麥粥、秋葵的黏液），讓血糖上升變慢、增加飽足感。</li>
+<li><b>非水溶性</b>：像海綿吸水，讓糞便變大、腸道順暢（蔬菜的莖、全穀的外殼）。</li>
+</ul>
+<p>台灣國民健康署建議成人每天吃 <b>25～35 公克</b>纖維，但大多數人吃不到一半。</p>
+<div class="eg">一天纖維怎麼湊到 25 公克？例如：燕麥片 40 克（約 4 克）＋ 芭樂 1 顆（約 5 克）＋ 三碗煮熟蔬菜（約 6～9 克）＋ 地瓜一條（約 4 克）＋ 一碗糙米飯（約 3 克）＋ 毛豆一小碗（約 4 克）。</div>
+
+<h3>水：最便宜的營養素</h3>
+<p>人體大約 60% 是水。水負責運送養分、調節體溫、排出廢物。一般建議每天喝約<b>體重（公斤）× 30～35 毫升</b>，天熱或運動流汗要再多。</p>
+<div class="eg">體重 50 公斤的人：50 × 30 = 1500 毫升，大約是 6 杯 250 毫升的水。尿液是淡黃色，通常表示喝得差不多。</div>
+<p>小技巧：很多人把「口渴」誤以為是「餓」。想吃零食時，先喝一杯水等 10 分鐘，常常就沒那麼想吃了。</p>
+
+<div class="recap"><b>重點整理</b><ol><li>維生素和礦物質沒有熱量，但缺一不可；吃得多樣最重要。</li><li>纖維幾乎沒熱量，能增加飽足感、穩定血糖，每天目標 25～35 公克。</li><li>水每天約「體重 × 30～35 毫升」。</li></ol></div>
+<div class="quiz" data-q="c6"></div>
+</section>
+
+<!-- ============ 第 7 章 ============ -->
+<section class="chapter" id="c7" data-part="第二部　基礎：學會估算與搭配" data-title="你一天燒多少？BMR 與 TDEE">
+<header><p class="where">第二部　基礎</p><h2>第 7 章　你一天燒多少？BMR 與 TDEE</h2></header>
+<div class="goal"><b>這章學完你會知道</b><ul><li>代謝、BMR、TDEE 是什麼</li><li>親手算出一天大概用掉多少大卡</li></ul></div>
+
+<p>第 2 章的天平右邊「用掉的能量」，到底是多少？這章我們要把它算出來。</p>
+<div class="term"><span class="w">代謝</span><span class="en">metabolism</span>
+<span class="origin">來自希臘文 <i>metabolē</i>，意思是「改變」。身體把食物「改變」成能量、建材和廢物的全部化學反應，統稱代謝。「新陳代謝」這個中文詞更生動：新的進來、陳舊的出去、不斷交替。</span></div>
+
+<h3>一天的能量花費，分成四塊</h3>
+<div class="widget">
+<div class="row" style="align-items:flex-start">
+<svg viewBox="0 0 200 200" width="190" height="190" role="img" aria-label="一天能量消耗組成圓餅圖">
+  <g transform="rotate(-90 100 100)" fill="none" stroke-width="34">
+    <circle id="d1" cx="100" cy="100" r="70" stroke="var(--leaf2)" stroke-dasharray="0 440"/>
+    <circle id="d2" cx="100" cy="100" r="70" stroke="var(--yolk)" stroke-dasharray="0 440"/>
+    <circle id="d3" cx="100" cy="100" r="70" stroke="var(--tomato)" stroke-dasharray="0 440"/>
+    <circle id="d4" cx="100" cy="100" r="70" stroke="var(--sky)" stroke-dasharray="0 440"/>
+  </g>
+  <text x="100" y="96" text-anchor="middle" font-size="18" font-weight="700" fill="var(--ink)">TDEE</text>
+  <text x="100" y="118" text-anchor="middle" font-size="13" fill="var(--soft)">一天總消耗</text>
+</svg>
+<div style="flex:1;min-width:200px;font-size:.95rem">
+<p style="margin:.2em 0"><b style="color:var(--leaf2)">■ BMR 基礎代謝</b>　約 60～70%</p>
+<p style="margin:.2em 0"><b style="color:var(--yolk)">■ NEAT 日常活動</b>　約 15～30%</p>
+<p style="margin:.2em 0"><b style="color:var(--tomato)">■ TEF 消化食物</b>　約 10%</p>
+<p style="margin:.2em 0"><b style="color:var(--sky)">■ EAT 刻意運動</b>　約 5～10%</p>
+<button class="btn" id="donutBtn" style="margin-top:8px">畫出比例</button>
+</div></div>
+<p class="cap">比例因人而異。重點是：刻意運動佔的比例，往往比大家想的小。</p>
+</div>
+
+<div class="term"><span class="w">BMR 基礎代謝率</span><span class="en">Basal Metabolic Rate</span>
+<span class="origin">basal 來自 basis（基礎、底部）。意思是：你整天躺著不動、不吃東西、室溫舒適時，身體光是「活著」要用的能量。就像手機放著不用，螢幕關了還是會慢慢耗電。</span></div>
+<div class="term"><span class="w">NEAT 非運動性活動產熱</span><span class="en">Non-Exercise Activity Thermogenesis</span>
+<span class="origin">1999 年美國梅約診所的萊文（James Levine）醫師提出。他發現有些人吃多卻不太胖，關鍵在於他們平常「動來動去」比較多：走路、站著、做家事、抖腳。thermogenesis 由希臘文 <i>thermē</i>（熱）＋ <i>genesis</i>（產生）組成，就是「產生熱量」。</span></div>
+<div class="term"><span class="w">TEF 食物熱效應</span><span class="en">Thermic Effect of Food</span>
+<span class="origin">「消化食物本身產生的熱」。第 4 章說過，蛋白質的 TEF 最高。</span></div>
+<div class="term"><span class="w">TDEE 每日總能量消耗</span><span class="en">Total Daily Energy Expenditure</span>
+<span class="origin">把上面四塊加起來的「總」（total）「每日」（daily）「能量」（energy）「花費」（expenditure）。它就是天平右邊的數字。吃得跟 TDEE 一樣，體重大致維持。</span></div>
+
+<div class="eg">同樣是上班族，A 每天通勤走路 30 分鐘、爬樓梯、下班後逛市場；B 開車上下班、坐一整天、回家躺沙發。兩人都每週上健身房三次，但 A 的 NEAT 一天可能多出 300～500 大卡。<b>「多走路」常常比「多運動一小時」更有效。</b></div>
+
+<h3>動手算：你的 TDEE</h3>
+<p>最常用的公式是 1990 年發表的 <b>Mifflin-St Jeor 公式</b>（用兩位研究者的姓氏命名）。先算 BMR，再乘上「活動係數」。</p>
+<div class="tbl"><table>
+<tr><th>性別</th><th>BMR 公式</th></tr>
+<tr><td>男</td><td>10 × 體重(kg) ＋ 6.25 × 身高(cm) − 5 × 年齡 ＋ 5</td></tr>
+<tr><td>女</td><td>10 × 體重(kg) ＋ 6.25 × 身高(cm) − 5 × 年齡 − 161</td></tr>
+</table></div>
+
+<div class="widget" id="calc1">
+  <div class="row">
+    <label class="f">性別<select id="sx"><option value="m">男</option><option value="f">女</option></select></label>
+    <label class="f">年齡<input type="number" id="ag" value="25" min="10" max="90"></label>
+    <label class="f">身高 (cm)<input type="number" id="ht" value="170" min="120" max="220"></label>
+    <label class="f">體重 (kg)<input type="number" id="wt" value="65" min="25" max="250"></label>
+  </div>
+  <label class="f" style="margin-top:10px">平常活動量
+    <select id="act">
+      <option value="1.2">幾乎不動（坐著工作、很少走路）× 1.2</option>
+      <option value="1.375">輕度（每週運動 1～3 天）× 1.375</option>
+      <option value="1.55" selected>中度（每週運動 3～5 天）× 1.55</option>
+      <option value="1.725">高度（每週運動 6～7 天）× 1.725</option>
+      <option value="1.9">非常高（體力勞動＋訓練）× 1.9</option>
+    </select></label>
+  <p class="out" id="tdeeOut"></p>
+  <p class="cap">任何公式都是「估計」，誤差可能有 ±10% 以上。第 18 章會教你用真實體重變化來校正。</p>
+</div>
+
+<div class="warn">公式是為成人設計的。未滿 18 歲的人正在長高、長骨頭，需要的能量比公式高，而且不建議自己「算赤字減肥」。請把這裡當作學習原理就好。</div>
+
+<div class="recap"><b>重點整理</b><ol><li>TDEE = BMR ＋ NEAT ＋ TEF ＋ EAT。</li><li>BMR 佔最大塊；日常活動 NEAT 是最容易改變的一塊。</li><li>用 Mifflin-St Jeor 公式 × 活動係數，可估出 TDEE。</li></ol></div>
+<div class="quiz" data-q="c7"></div>
+</section>
+
+<!-- ============ 第 8 章 ============ -->
+<section class="chapter" id="c8" data-part="第二部　基礎：學會估算與搭配" data-title="血糖與胰島素：吃完為什麼想睡">
+<header><p class="where">第二部　基礎</p><h2>第 8 章　血糖與胰島素：吃完為什麼想睡</h2></header>
+<div class="goal"><b>這章學完你會知道</b><ul><li>血糖、胰島素如何合作</li><li>GI 值是什麼，怎麼用、怎麼不要誤用</li><li>怎麼吃比較不會餐後昏沉</li></ul></div>
+
+<p>第 3 章說過，碳水最後會變成葡萄糖進到血液，這就是「血糖」。血糖太低，你會頭暈、發抖；太高也傷身體。所以身體有一個「管家」專門管血糖，它叫胰島素。</p>
+
+<div class="term"><span class="w">胰島素</span><span class="en">insulin</span>
+<span class="origin">來自拉丁文 <i>insula</i>，意思是「島」。1869 年德國醫學生蘭格漢斯（Paul Langerhans）在顯微鏡下發現，胰臟裡散布著一小團一小團像小島的細胞，後來叫「蘭氏小島」（胰島）。胰島分泌的荷爾蒙，就叫 insulin「島素」。1921 年加拿大的班廷（Banting）和貝斯特（Best）成功提取出來，救了無數糖尿病人。</span></div>
+
+<h3>胰島素像「開門的鑰匙」</h3>
+<p>血糖上升時，胰臟放出胰島素。胰島素跑到肌肉、肝臟、脂肪細胞的門口，<b>把門打開</b>，讓葡萄糖進去。血糖就降下來了。進去的糖，優先拿去用或存成「肝醣」（第 15 章），真的太多才轉成脂肪。</p>
+
+<div class="widget">
+<svg viewBox="0 0 560 250" role="img" aria-label="兩種早餐的血糖曲線比較">
+  <line x1="50" y1="210" x2="540" y2="210" stroke="var(--soft)" stroke-width="2"/>
+  <line x1="50" y1="20" x2="50" y2="210" stroke="var(--soft)" stroke-width="2"/>
+  <text x="54" y="232" font-size="17" fill="var(--soft)">吃完</text>
+  <text x="200" y="232" font-size="17" fill="var(--soft)">1 小時</text>
+  <text x="340" y="232" font-size="17" fill="var(--soft)">2 小時</text>
+  <text x="480" y="232" font-size="17" fill="var(--soft)">3 小時</text>
+  <text x="8" y="30" font-size="17" fill="var(--soft)">血糖</text>
+  <line x1="50" y1="150" x2="540" y2="150" stroke="var(--line)" stroke-dasharray="6 6"/>
+  <text x="400" y="144" font-size="15" fill="var(--soft)">空腹時的水準</text>
+  <path id="gFast" d="M50 150 C 110 150, 130 40, 180 40 S 250 170, 300 185 S 400 160, 540 152" stroke="var(--tomato)" stroke-width="5" fill="none"/>
+  <path id="gSlow" d="M50 150 C 120 150, 170 100, 230 100 S 330 120, 400 138 S 480 150, 540 150" stroke="var(--leaf2)" stroke-width="5" fill="none"/>
+  <text x="150" y="30" font-size="18" fill="var(--tomato)" font-weight="700">白吐司＋含糖奶茶</text>
+  <text x="232" y="88" font-size="18" fill="var(--leaf2)" font-weight="700">燕麥＋蛋＋無糖豆漿</text>
+  <text x="200" y="205" font-size="16" fill="var(--tomato)">掉太低 → 餓、想睡、想吃甜的</text>
+</svg>
+<button class="btn" id="gBtn">播放血糖變化</button>
+<p class="cap">示意圖，不是真實量測數據。實際曲線因人、因份量而異。</p>
+</div>
+
+<p>紅線的早餐糖很快衝進血液，胰島素大量出動，血糖又被「降過頭」，所以一兩小時後又餓又沒精神。綠線的早餐有纖維、蛋白質、脂肪，消化比較慢，血糖像緩坡，比較能撐。</p>
+
+<div class="term"><span class="w">GI 升糖指數</span><span class="en">Glycemic Index</span>
+<span class="origin">1981 年加拿大多倫多大學詹金斯（David Jenkins）團隊提出。glycemic 來自希臘文 <i>glykys</i>（甜）＋ <i>haima</i>（血），意思是「血中的糖」。做法是：讓人吃含 50 公克碳水的某種食物，量兩小時的血糖變化，跟吃純葡萄糖（設為 100）比較。數字越高，血糖升越快。</span></div>
+<div class="term"><span class="w">GL 升糖負荷</span><span class="en">Glycemic Load</span>
+<span class="origin">1997 年哈佛大學研究者提出，用來補 GI 的缺點。GI 只看「速度」，沒看「份量」。GL = GI × 該份量碳水公克數 ÷ 100。</span></div>
+<div class="eg">西瓜的 GI 很高（約 70 多），聽起來很可怕。但一片西瓜大部分是水，碳水只有十幾公克，GL 很低。所以不用因為 GI 高就害怕吃西瓜。<b>看份量比看 GI 更重要。</b></div>
+
+<h3>不用背數字的穩血糖小技巧</h3>
+<ol>
+<li><b>每餐都有蛋白質和蔬菜</b>，不要只吃碳水。</li>
+<li><b>先吃菜和肉，最後吃飯</b>：有研究發現，同一餐改變吃的順序，餐後血糖高峰會比較低。</li>
+<li><b>選原型、有纖維的碳水</b>：糙米、燕麥、地瓜，取代白吐司、甜麵包。</li>
+<li><b>少喝含糖飲料</b>：液體的糖吸收最快，又不會飽。</li>
+</ol>
+
+<div class="recap"><b>重點整理</b><ol><li>胰島素像鑰匙，打開細胞的門讓血糖進去。</li><li>GI 看升糖速度，GL 還考慮份量；份量比 GI 更重要。</li><li>蛋白質＋蔬菜＋原型碳水，能讓血糖平穩、比較不想睡。</li></ol></div>
+<div class="quiz" data-q="c8"></div>
+</section>
+
+<!-- ============ 第 9 章 ============ -->
+<section class="chapter" id="c9" data-part="第二部　基礎：學會估算與搭配" data-title="份量不用秤：手掌法與我的餐盤">
+<header><p class="where">第二部　基礎</p><h2>第 9 章　份量不用秤：手掌法與我的餐盤</h2></header>
+<div class="goal"><b>這章學完你會知道</b><ul><li>不用秤、不用 App 也能估份量</li><li>台灣「我的餐盤」怎麼搭配一餐</li></ul></div>
+
+<p>知道了營養素，下一個問題是：「一餐到底吃多少？」每次都拿秤來量太麻煩。好消息是，你隨身帶著一把尺——<b>你的手</b>。手大的人通常身體也比較大，需要的也比較多，剛好成比例。</p>
+
+<h3>手掌份量法</h3>
+<p>這個方法由加拿大營養教練機構 Precision Nutrition 推廣，現在很多教練都在用：</p>
+<div class="hands">
+  <div class="hand"><svg viewBox="0 0 80 80"><rect x="18" y="14" width="44" height="54" rx="10" fill="var(--prot)"/><rect x="24" y="8" width="12" height="16" rx="5" fill="var(--prot)"/></svg><br><b>一個手掌</b><br>蛋白質<br><span style="color:var(--soft)">厚度和大小都像手掌（不含手指），約 20～30 克蛋白質</span></div>
+  <div class="hand"><svg viewBox="0 0 80 80"><rect x="16" y="20" width="48" height="40" rx="16" fill="var(--leaf2)"/><rect x="16" y="20" width="48" height="12" rx="6" fill="var(--leaf)"/></svg><br><b>一個拳頭</b><br>蔬菜<br><span style="color:var(--soft)">煮熟或生的蔬菜，一拳頭大</span></div>
+  <div class="hand"><svg viewBox="0 0 80 80"><path d="M12 36 Q40 72 68 36 Z" fill="var(--carb)"/><ellipse cx="40" cy="36" rx="28" ry="8" fill="var(--yolk)"/></svg><br><b>一個手捧</b><br>碳水<br><span style="color:var(--soft)">手掌彎成碗狀，捧起的飯、地瓜、水果</span></div>
+  <div class="hand"><svg viewBox="0 0 80 80"><rect x="30" y="16" width="20" height="46" rx="10" fill="var(--fat)"/><rect x="30" y="16" width="20" height="16" rx="8" fill="var(--sky-soft)" stroke="var(--fat)" stroke-width="2"/></svg><br><b>一根拇指</b><br>油脂<br><span style="color:var(--soft)">油、堅果醬、起司，一拇指大小</span></div>
+</div>
+<div class="tbl"><table>
+<tr><th>每一餐的起點</th><th>蛋白質</th><th>蔬菜</th><th>碳水</th><th>油脂</th></tr>
+<tr><td>多數男性</td><td>2 手掌</td><td>2 拳頭</td><td>2 手捧</td><td>2 拇指</td></tr>
+<tr><td>多數女性</td><td>1 手掌</td><td>1 拳頭</td><td>1 手捧</td><td>1 拇指</td></tr>
+</table></div>
+<p>這只是「起點」。想減脂，先從減少一手捧碳水或一拇指油脂開始；想增肌，就增加。第 17 章會教你怎麼把它跟精確的數字對起來。</p>
+
+<h3>台灣「我的餐盤」</h3>
+<p>國民健康署在 2018 年推出「我的餐盤」，把六大類食物畫在一個盤子上。點點看每一塊：</p>
+<div class="widget">
+<div class="row" style="justify-content:center">
+<svg viewBox="0 0 300 300" width="280" height="280" role="img" aria-label="我的餐盤互動圖">
+  <circle cx="150" cy="150" r="140" fill="var(--bg)" stroke="var(--line)" stroke-width="4"/>
+  <g style="transform-origin:150px 150px">
+  <path class="slice" data-k="0" d="M150 150 L150 20 A130 130 0 0 1 262.6 85 Z" fill="#E0703C"/>
+  <path class="slice" data-k="1" d="M150 150 L262.6 85 A130 130 0 0 1 225 256 Z" fill="var(--leaf2)"/>
+  <path class="slice" data-k="2" d="M150 150 L225 256 A130 130 0 0 1 75 256 Z" fill="var(--prot)"/>
+  <path class="slice" data-k="3" d="M150 150 L75 256 A130 130 0 0 1 37.4 85 Z" fill="var(--carb)"/>
+  <path class="slice" data-k="4" d="M150 150 L37.4 85 A130 130 0 0 1 150 20 Z" fill="var(--sky)"/>
+  </g>
+  <text x="192" y="80" text-anchor="middle" font-size="14" fill="#fff" font-weight="700" pointer-events="none">水果</text>
+  <text x="228" y="172" text-anchor="middle" font-size="14" fill="#fff" font-weight="700" pointer-events="none">蔬菜</text>
+  <text x="150" y="232" text-anchor="middle" font-size="14" fill="#fff" font-weight="700" pointer-events="none">豆魚蛋肉</text>
+  <text x="80" y="172" text-anchor="middle" font-size="14" fill="#fff" font-weight="700" pointer-events="none">全穀雜糧</text>
+  <text x="108" y="80" text-anchor="middle" font-size="14" fill="#fff" font-weight="700" pointer-events="none">乳品</text>
+  <circle class="slice" data-k="5" cx="250" cy="250" r="26" fill="#8A6A3B"/>
+  <text x="250" y="255" text-anchor="middle" font-size="12" fill="#fff" pointer-events="none">堅果</text>
+</svg></div>
+<p class="plate-info" id="plateInfo">點盤子上的任何一塊，看它的口訣。</p>
+<p class="cap">圖中比例是示意。美國哈佛大學在 2011 年也推出過類似的「健康飲食餐盤」，概念相同：蔬菜、全穀、好的蛋白質，喝水不喝糖。</p>
+</div>
+
+<div class="eg">把一個便當套進餐盤：白飯一碗（全穀雜糧）＋ 一塊滷雞腿（豆魚蛋肉）＋ 三樣配菜（蔬菜）。缺什麼？水果和乳品。所以飯後補一顆橘子、下午喝一杯牛奶或無糖優酪乳，一天就更完整。常見的問題則是：飯很多、菜很少、肉是炸的。</div>
+
+<div class="recap"><b>重點整理</b><ol><li>手掌＝蛋白質、拳頭＝蔬菜、手捧＝碳水、拇指＝油脂。</li><li>「我的餐盤」六大類：全穀雜糧、豆魚蛋肉、蔬菜、水果、乳品、油脂與堅果種子。</li><li>先用手估份量，再依目標增減。</li></ol></div>
+<div class="quiz" data-q="c9"></div>
+</section>
+
+<!-- ============ 第 10 章 ============ -->
+<section class="chapter" id="c10" data-part="第二部　基礎：學會估算與搭配" data-title="看懂營養標示">
+<header><p class="where">第二部　基礎</p><h2>第 10 章　看懂營養標示</h2></header>
+<div class="goal"><b>這章學完你會知道</b><ul><li>營養標示每一行在說什麼</li><li>「每一份」的陷阱</li><li>從成分表看出食物的真面目</li></ul></div>
+
+<p>超商裡每個包裝食品背後都有一張「成績單」，叫做營養標示。學會看它，你就能在 10 秒內判斷一包零食適不適合你。點點看下面每一行：</p>
+
+<div class="widget">
+<div class="row" style="align-items:flex-start">
+<div class="label-card" id="lblCard">
+  <div class="t">營養標示</div>
+  <div class="li" data-k="0"><span>每一份量 30 公克</span><span></span></div>
+  <div class="li" data-k="1"><span>本包裝含 3 份</span><span></span></div>
+  <div class="li" data-k="2"><span>熱量</span><span>160 大卡</span></div>
+  <div class="li" data-k="3"><span>蛋白質</span><span>2.0 公克</span></div>
+  <div class="li" data-k="4"><span>脂肪</span><span>10.0 公克</span></div>
+  <div class="li ind" data-k="5"><span>飽和脂肪</span><span>4.5 公克</span></div>
+  <div class="li ind" data-k="6"><span>反式脂肪</span><span>0 公克</span></div>
+  <div class="li" data-k="7"><span>碳水化合物</span><span>16.0 公克</span></div>
+  <div class="li ind" data-k="8"><span>糖</span><span>1.0 公克</span></div>
+  <div class="li" data-k="9"><span>鈉</span><span>180 毫克</span></div>
+</div>
+<p class="plate-info" id="lblInfo" style="flex:1;min-width:200px">這是一包虛構的洋芋片。點左邊任一行看解說。</p>
+</div></div>
+
+<h3>最大的陷阱：「每一份」</h3>
+<p>上面那包洋芋片寫「160 大卡」，看起來還好。但它是「每一份」，而一包有 3 份。你一個人把整包吃完，就是：</p>
+<p class="big">160 × 3 = 480 大卡</p>
+<p>差不多是一碗半白飯的熱量。很多飲料、零食都這樣，一定要先看<b>份量和份數</b>。有些產品也會標「每 100 公克」，方便你比較不同產品。</p>
+
+<h3>每天的上限參考</h3>
+<div class="tbl"><table>
+<tr><th>項目</th><th>成人參考</th><th>為什麼</th></tr>
+<tr><td>鈉</td><td>每天不超過 2400 毫克（約 6 公克鹽）</td><td>太多容易血壓高、水腫</td></tr>
+<tr><td>添加糖</td><td>每天熱量的 10% 以下（2000 大卡的人約 50 公克）</td><td>一杯全糖手搖飲就可能超過</td></tr>
+<tr><td>反式脂肪</td><td>越少越好</td><td>傷害心血管</td></tr>
+<tr><td>飽和脂肪</td><td>每天熱量的 10% 以下</td><td>吃太多可能提高壞膽固醇</td></tr>
+</table></div>
+
+<h3>成分表：照重量由多到少排</h3>
+<p>營養標示旁邊通常有「成分」。規定是<b>用量最多的排最前面</b>。</p>
+<div class="eg">一罐「燕麥飲」的成分寫著：「水、糖、燕麥、植物油……」。糖排在燕麥前面，表示裡面的糖比燕麥還多！另一罐寫著「水、燕麥、鹽」，就單純多了。<b>成分越短、看得懂的字越多，通常越接近原型食物。</b></div>
+
+<div class="term"><span class="w">營養標示</span><span class="en">nutrition facts label</span>
+<span class="origin">美國在 1990 年通過法律（NLEA），規定包裝食品必須標出營養成分，後來各國跟進。台灣由衛生福利部規定，要標示熱量、蛋白質、脂肪、飽和脂肪、反式脂肪、碳水化合物、糖、鈉這幾項。</span></div>
+
+<div class="recap"><b>重點整理</b><ol><li>先看「每一份量」和「本包裝含幾份」，再乘出整包熱量。</li><li>注意鈉、糖、飽和脂肪、反式脂肪。</li><li>成分表由多到少排列，排前面的就是主角。</li></ol></div>
+<div class="quiz" data-q="c10"></div>
+</section>
+
+<!-- ============ 第 11 章 ============ -->
+<section class="chapter" id="c11" data-part="第三部　減脂篇" data-title="熱量赤字：減脂的核心">
+<header><p class="where">第三部　減脂篇</p><h2>第 11 章　熱量赤字：減脂的核心</h2></header>
+<div class="goal"><b>這章學完你會知道</b><ul><li>赤字要多大才安全</li><li>減掉的脂肪去哪了</li><li>怎麼吃得少，卻不會一直餓</li></ul></div>
+
+<div class="term"><span class="w">熱量赤字</span><span class="en">calorie deficit</span>
+<span class="origin">deficit 來自拉丁文 <i>deficere</i>，意思是「缺少、不足」。會計上用它表示「支出大於收入」。用在身體上，就是「用掉的能量大於吃進的能量」，差額由身體的存款（脂肪）來補。</span></div>
+
+<p>前面十章都在為這一刻做準備。減脂的原則只有一句話：<b>讓天平右邊比左邊重一點點，並維持夠久</b>。</p>
+
+<h3>赤字要多大？</h3>
+<div class="tbl"><table>
+<tr><th>赤字大小</th><th>每週體重變化（參考）</th><th>感覺</th><th>適合</th></tr>
+<tr><td>TDEE 的 10～15%</td><td>約體重的 0.25～0.5%</td><td>幾乎不太餓</td><td>新手、想長期維持的人</td></tr>
+<tr><td>TDEE 的 15～25%</td><td>約體重的 0.5～1%</td><td>有時會餓，可以忍受</td><td>多數成人</td></tr>
+<tr><td>超過 25%</td><td>超過體重的 1%</td><td>很餓、沒力、易怒</td><td>只適合在專業指導下短期使用</td></tr>
+</table></div>
+
+<div class="warn">長期吃得比自己的 BMR 還少、或一般成人低於約 1200 大卡（女性）/ 1500 大卡（男性），又沒有醫師或營養師指導，容易造成肌肉流失、掉髮、月經失調、骨質變差、注意力下降。<b>減得快不等於減得好。</b></div>
+
+<div class="eg">阿美的 TDEE 大約 2000 大卡。她設定 20% 赤字，每天吃約 1600 大卡。體重 60 公斤的她，每週大約會減 0.3～0.6 公斤。三個月後，大概能少 4～6 公斤，而且大多是脂肪，因為她同時吃夠蛋白質、每週做重量訓練。</div>
+
+<h3>脂肪到底「去哪了」？</h3>
+<p>很多人以為脂肪變成汗、或變成大便排出去。其實 2014 年澳洲科學家米爾曼（Ruben Meerman）和布朗（Andrew Brown）算出來：燃燒脂肪時，大約 <b>84% 變成二氧化碳，從你的嘴巴呼出去</b>；剩下約 16% 變成水，從尿、汗、呼吸排出。</p>
+<p>所以沒錯，<b>你是用「呼吸」把脂肪吐出去的</b>。但光是用力呼吸沒用，要先讓身體「需要」燒脂肪，也就是製造赤字。</p>
+
+<h3>吃得少，卻不一直餓：熱量密度</h3>
+<div class="term"><span class="w">熱量密度</span><span class="en">energy density</span>
+<span class="origin">每一公克食物含有多少大卡。美國賓州州立大學的羅爾斯（Barbara Rolls）教授從 1990 年代開始研究，發現人通常會吃「差不多重量」的食物才覺得飽。所以選熱量密度低的食物，吃同樣多卻吃進比較少的熱量。這個方法叫 Volumetrics（體積飲食法）。</span></div>
+<div class="widget">
+  <p style="margin-top:0"><b>同樣 300 大卡，可以吃多少？</b></p>
+  <div class="bars" id="densBars">
+    <div class="bar"><span>燙高麗菜</span><div class="track"><div class="fill" style="background:var(--leaf2)" data-w="100">約 1200 公克</div></div></div>
+    <div class="bar"><span>蒸地瓜</span><div class="track"><div class="fill" style="background:var(--carb)" data-w="22">約 260 克</div></div></div>
+    <div class="bar"><span>白飯</span><div class="track"><div class="fill" style="background:var(--carb)" data-w="18">約 215 克</div></div></div>
+    <div class="bar"><span>雞胸肉（熟）</span><div class="track"><div class="fill" style="background:var(--prot)" data-w="15">約 180 克</div></div></div>
+    <div class="bar"><span>洋芋片</span><div class="track"><div class="fill" style="background:var(--tomato)" data-w="6">55 克</div></div></div>
+    <div class="bar"><span>綜合堅果</span><div class="track"><div class="fill" style="background:var(--fat)" data-w="5">50 克</div></div></div>
+  </div>
+  <button class="btn" id="densBtn">播放比較</button>
+  <p class="cap">數字是常見估算。堅果很健康，但熱量密度高，所以「一小把」就夠。</p>
+</div>
+
+<h3>減脂的三個槓桿</h3>
+<ol>
+<li><b>少吃一點</b>：先砍掉「沒什麼營養又高熱量」的東西，例如含糖飲料、炸物、宵夜零食。</li>
+<li><b>多動一點</b>：優先增加 NEAT（多走路、多站），再加上運動。</li>
+<li><b>留住肌肉</b>：吃夠蛋白質、做重量訓練。這會讓你減下來的是脂肪，而不是肌肉，外表也會更結實。</li>
+</ol>
+
+<div class="recap"><b>重點整理</b><ol><li>減脂就是維持溫和的熱量赤字，建議 TDEE 的 10～25%。</li><li>每週減體重的 0.5～1% 是多數成人的合理速度。</li><li>脂肪大部分變成二氧化碳呼出去。</li><li>選低熱量密度、高蛋白、高纖食物，比較不會餓。</li></ol></div>
+<div class="quiz" data-q="c11"></div>
+</section>
+
+<!-- ============ 第 12 章 ============ -->
+<section class="chapter" id="c12" data-part="第三部　減脂篇" data-title="體重計會騙人：水分、平台期、代謝適應">
+<header><p class="where">第三部　減脂篇</p><h2>第 12 章　體重計會騙人：水分、平台期與代謝適應</h2></header>
+<div class="goal"><b>這章學完你會知道</b><ul><li>為什麼體重一天可以差 1～2 公斤</li><li>怎麼正確看體重</li><li>平台期與代謝適應是什麼</li><li>BMI、腰圍等其他量尺</li></ul></div>
+
+<p>很多人減肥失敗，不是方法錯，而是<b>被體重計嚇到放棄</b>。體重計量的是「全身所有東西的重量」：脂肪、肌肉、骨頭、水、還在肚子裡的食物。其中<b>水的變化最大、也最快</b>。</p>
+
+<h3>讓體重亂跳的原因</h3>
+<ul>
+<li><b>吃比較鹹</b>：身體會留住水分來稀釋鈉。</li>
+<li><b>吃比較多碳水</b>：身體存 1 公克肝醣，大約會一起存 3 公克水。</li>
+<li><b>肚子裡的食物還沒排出</b>。</li>
+<li><b>女生的生理週期</b>：經期前常會水腫。</li>
+<li><b>壓力大、睡不好</b>：壓力荷爾蒙也會讓身體留水。</li>
+</ul>
+<div class="eg">週五晚上吃了一頓火鍋，週六早上量體重多了 1.5 公斤。這是 1.5 公斤脂肪嗎？不可能！1.5 公斤脂肪大約要多吃 11,000 大卡，一頓火鍋吃不了那麼多。多出來的主要是鹽帶來的水、醬料和食物本身的重量，幾天後就會消掉。</div>
+
+<h3>聰明看體重：看「週平均」</h3>
+<div class="widget">
+<svg viewBox="0 0 560 260" id="wChart" role="img" aria-label="每日體重與週平均的比較圖"></svg>
+<div class="row"><button class="btn" id="wBtn">換一組模擬資料</button></div>
+<p class="cap">灰點是每天早上的體重，上上下下很亂；綠線是每 7 天平均，趨勢就很清楚。這是模擬資料。</p>
+</div>
+<p>正確做法：每天<b>早上起床、上完廁所、吃東西前</b>量，記下來，每週算一次平均，<b>拿這週平均跟上週平均比</b>。</p>
+
+<h3>平台期與代謝適應</h3>
+<div class="term"><span class="w">平台期</span><span class="en">plateau</span>
+<span class="origin">法文 plateau，原意是「高原、平坦的台地」。畫成圖時，體重的線本來往下走，突然變平，像走到一片高原，所以叫平台期。</span></div>
+<div class="term"><span class="w">代謝適應</span><span class="en">metabolic adaptation / adaptive thermogenesis</span>
+<span class="origin">adaptation 來自拉丁文 <i>adaptare</i>「調整使合適」。身體發現能量變少了，會想辦法省電：還記得第 2 章的「恆定」嗎？這就是它在作用。美國國家衛生院的霍爾（Kevin Hall）等研究者，追蹤減重比賽參賽者多年，發現減重後的代謝率會比預期更低。</span></div>
+<p>為什麼減到後面會變慢？原因有好幾個，加起來就是平台期：</p>
+<ol>
+<li><b>身體變小了</b>：體重少了，BMR 本來就會下降，原本的赤字變小了。這也是第 2 章說「7700 大卡 = 1 公斤」長期會高估的原因。</li>
+<li><b>不知不覺動得少</b>：吃少了，身體會讓你想躺著，NEAT 下降。</li>
+<li><b>飢餓荷爾蒙變化</b>：讓你更餓、更想吃。</li>
+<li><b>記錄越來越隨便</b>：這是最常見的原因。</li>
+</ol>
+<div class="term"><span class="w">瘦素</span><span class="en">leptin</span>
+<span class="origin">1994 年美國洛克斐勒大學弗里德曼（Jeffrey Friedman）發現，來自希臘文 <i>leptos</i>「瘦的」。脂肪細胞會分泌它，告訴大腦「存糧夠了」。脂肪減少時，瘦素也變少，大腦就以為要鬧饑荒。</span></div>
+<div class="term"><span class="w">飢餓素</span><span class="en">ghrelin</span>
+<span class="origin">1999 年日本科學家兒島將康團隊發現。名字取自它能刺激生長激素釋放（growth hormone release），字根 ghre 在古印歐語也有「生長」的意思。它主要由胃分泌，負責讓你「覺得餓」。睡不夠時，飢餓素會上升。</span></div>
+<p>遇到平台期時，先檢查：記錄準不準？睡得夠不夠？步數有沒有變少？如果都沒問題、而且已經卡了 2～3 週以上（看週平均），才考慮再減一點點熱量（例如 100～150 大卡）或增加活動。第 18 章會講更進階的處理方法。</p>
+
+<h3>體重以外的量尺</h3>
+<div class="term"><span class="w">BMI 身體質量指數</span><span class="en">Body Mass Index</span>
+<span class="origin">1830 年代比利時統計學家凱特勒（Adolphe Quetelet）提出，1972 年美國科學家基斯（Ancel Keys）正式取名 BMI。公式：體重(kg) ÷ 身高(m)²。它原本是用來看「一大群人」的統計工具，不是量單一個人的完美方法。肌肉很多的運動員，BMI 可能被判為「過重」。</span></div>
+<div class="tbl"><table>
+<tr><th>台灣成人 BMI</th><th>分類</th></tr>
+<tr><td>低於 18.5</td><td>過輕</td></tr>
+<tr><td>18.5 ～ 未滿 24</td><td>健康體位</td></tr>
+<tr><td>24 ～ 未滿 27</td><td>過重</td></tr>
+<tr><td>27 以上</td><td>肥胖</td></tr>
+</table></div>
+<p>兒童和青少年<b>不能用這個表</b>，要用依年齡、性別的生長曲線判斷。</p>
+<p>其他好用的量尺：<b>腰圍</b>（台灣成人男性 ≥ 90 公分、女性 ≥ 80 公分代表腹部肥胖）、<b>每 2～4 週拍同角度照片</b>、<b>褲子鬆緊</b>、<b>力量有沒有進步</b>。</p>
+
+<div class="recap"><b>重點整理</b><ol><li>體重每天波動主要是水，不是脂肪。</li><li>固定時間量，看週平均。</li><li>平台期來自身體變小、NEAT 下降、荷爾蒙與記錄誤差。</li><li>搭配腰圍、照片、力量一起看，比只看體重可靠。</li></ol></div>
+<div class="quiz" data-q="c12"></div>
+</section>
+
+<!-- ============ 第 13 章 ============ -->
+<section class="chapter" id="c13" data-part="第三部　減脂篇" data-title="流行飲食法大評比與迷思破解">
+<header><p class="where">第三部　減脂篇</p><h2>第 13 章　流行飲食法大評比與迷思破解</h2></header>
+<div class="goal"><b>這章學完你會知道</b><ul><li>生酮、低碳、斷食、地中海飲食的原理</li><li>為什麼「最好的飲食法」因人而異</li><li>常見減肥迷思的真相</li></ul></div>
+
+<p>網路上每年都有新的飲食法。學完前面的課，你會發現：<b>它們幾乎都是用不同方式製造熱量赤字</b>。</p>
+
+<div class="term"><span class="w">生酮飲食</span><span class="en">ketogenic diet</span>
+<span class="origin">ketone（酮）來自德文 Keton，由 Aceton（丙酮）改寫而來。genic 是「產生」。當碳水吃得極少時，肝臟會把脂肪轉成「酮體」給大腦當替代燃料，這叫「生酮」。1921 年美國梅約診所的懷爾德（Russell Wilder）醫師最早用它來治療兒童癲癇，後來才被拿來減重。</span></div>
+<div class="term"><span class="w">間歇性斷食</span><span class="en">intermittent fasting, IF</span>
+<span class="origin">intermittent 來自拉丁文 <i>intermittere</i>「中間停一下」。常見的 16:8 是一天 16 小時不吃、8 小時內吃完；5:2 是一週兩天吃很少、五天正常吃。</span></div>
+<div class="term"><span class="w">地中海飲食</span><span class="en">Mediterranean diet</span>
+<span class="origin">美國科學家基斯（就是命名 BMI 的那位）在 1950 年代開始「七國研究」，觀察到希臘克里特島、義大利南部等地中海沿岸居民心臟病比較少。他們的飲食特色是：蔬果、全穀、豆類、魚、橄欖油、堅果多，紅肉和甜食少。</span></div>
+
+<div class="tbl"><table>
+<tr><th>飲食法</th><th>怎麼製造赤字</th><th>優點</th><th>缺點</th></tr>
+<tr><td>低碳 / 生酮</td><td>砍掉一整類食物，自然吃少；前幾天大量掉水（肝醣帶走的水）</td><td>有些人食慾下降、控制血糖</td><td>很難長期、外食困難、運動表現可能下降、纖維容易不夠</td></tr>
+<tr><td>間歇性斷食</td><td>縮短吃東西的時間，少吃一兩餐</td><td>規則簡單、不用算</td><td>進食時段容易暴食、蛋白質可能不夠、不適合成長中與某些病人</td></tr>
+<tr><td>地中海飲食</td><td>高纖、原型食物，飽足感高</td><td>對心血管健康證據最多、容易長期</td><td>不一定會自動減重，份量仍要注意</td></tr>
+<tr><td>均衡控制份量（手掌法、餐盤）</td><td>直接控制份量</td><td>彈性最大、適合家庭和外食</td><td>需要一點學習（就是這堂課）</td></tr>
+</table></div>
+
+<div class="eg">2018 年美國史丹佛大學的 DIETFITS 研究，讓 600 多位成人分成「健康低脂組」和「健康低碳組」，都強調原型食物、少加工。一年後，兩組平均減重幾乎一樣。研究者的結論是：<b>最適合你的飲食法，就是你能長期做到的那一個。</b></div>
+<div class="term"><span class="w">依從性</span><span class="en">adherence</span>
+<span class="origin">來自拉丁文 <i>adhaerere</i>「黏著、附著」。在營養學裡指「能不能一直黏著這個計畫」。研究一再發現，依從性是減重成功最重要的因素，比飲食法本身還重要。</span></div>
+
+<h3>迷思破解</h3>
+<div class="tbl"><table>
+<tr><th>說法</th><th>真相</th></tr>
+<tr><td>做仰臥起坐可以消肚子</td><td>錯。不能「局部減脂」（spot reduction），脂肪是全身一起減，從哪裡先減由基因決定。仰臥起坐練的是腹肌，不是燒肚子的油。</td></tr>
+<tr><td>晚上 8 點後吃東西會胖</td><td>時間不是重點，一整天的總熱量才是。但宵夜常常是額外的零食，所以才「看起來」會胖。</td></tr>
+<tr><td>流越多汗燃脂越多</td><td>汗是水，量體重會輕，喝水後就回來了。穿暖暖衣、泡三溫暖不會多燒脂肪，還可能脫水。</td></tr>
+<tr><td>喝排毒果汁可以瘦</td><td>肝和腎就是你的排毒系統。果汁斷食會瘦，是因為熱量很低、加上掉水，恢復飲食很快就回來。</td></tr>
+<tr><td>吃澱粉一定胖</td><td>第 3 章學過，碳水不是壞人。總熱量超過才會胖。</td></tr>
+<tr><td>不吃早餐一定會胖</td><td>研究結果不一致。吃不吃早餐都可以，重點是一整天的總量和品質，選自己比較好執行的方式。</td></tr>
+</table></div>
+
+<div class="recap"><b>重點整理</b><ol><li>各種飲食法大多是用不同方式製造熱量赤字。</li><li>在蛋白質和熱量相近時，不同飲食法的減脂效果差不多。</li><li>最重要的是依從性：選你能長期做到的。</li><li>不能局部減脂；流汗不等於燃脂。</li></ol></div>
+<div class="quiz" data-q="c13"></div>
+</section>
+
+<!-- ============ 第 14 章 ============ -->
+<section class="chapter" id="c14" data-part="第四部　健身增肌篇" data-title="肌肉是怎麼長出來的">
+<header><p class="where">第四部　健身增肌篇</p><h2>第 14 章　肌肉是怎麼長出來的</h2></header>
+<div class="goal"><b>這章學完你會知道</b><ul><li>訓練、飲食、睡眠如何合作長肌肉</li><li>一天要吃多少蛋白質、怎麼分配</li></ul></div>
+
+<p>很多人以為「多吃蛋白質就會長肌肉」。其實長肌肉需要三樣東西同時到位：</p>
+<div class="tbl"><table>
+<tr><th>要素</th><th>比喻</th><th>負責什麼</th></tr>
+<tr><td>訓練</td><td>工地發出的「施工命令」</td><td>告訴身體：這塊肌肉不夠用，要加強</td></tr>
+<tr><td>蛋白質與熱量</td><td>建材與工錢</td><td>提供蓋肌肉的胺基酸和能量</td></tr>
+<tr><td>睡眠與休息</td><td>施工時間</td><td>真正修補、變粗，大多發生在休息時</td></tr>
+</table></div>
+<p>只吃蛋白質、不訓練，身體沒有收到命令，多的蛋白質會被當成燃料燒掉或存起來。</p>
+
+<div class="term"><span class="w">肌肥大</span><span class="en">hypertrophy</span>
+<span class="origin">希臘文 <i>hyper</i>（超過）＋ <i>trophē</i>（營養、餵養），意思是「被餵得比原本更大」。肌肉訓練後，肌纖維變粗，就是肌肥大。「肥大」在這裡不是變胖，而是「變粗壯」。</span></div>
+<div class="term"><span class="w">合成代謝與分解代謝</span><span class="en">anabolism / catabolism</span>
+<span class="origin">都來自希臘文 <i>ballein</i>「丟、放」。<i>ana</i> 是「往上」，anabolism 就是「往上堆」＝把小東西組成大東西（例如胺基酸蓋成肌肉）。<i>kata</i> 是「往下」，catabolism 就是「往下拆」＝把大東西拆成小東西。身體一整天都在拆和蓋之間拉扯，蓋的比拆的多，肌肉就長。</span></div>
+<div class="term"><span class="w">漸進式超負荷</span><span class="en">progressive overload</span>
+<span class="origin">傳說古希臘摔角手米羅（Milo of Croton）每天扛著一頭小牛，小牛越長越大，他也越來越強壯。1940 年代美國醫師德洛姆（Thomas DeLorme）用科學方法證明：逐步增加重量、次數，肌肉才會持續進步。</span></div>
+
+<h3>蛋白質要吃多少？</h3>
+<div class="tbl"><table>
+<tr><th>對象</th><th>每公斤體重每天</th><th>60 公斤的人</th></tr>
+<tr><td>一般成人（不太運動）</td><td>約 0.8～1.0 公克</td><td>48～60 公克</td></tr>
+<tr><td>有規律重量訓練、想增肌</td><td>約 1.6～2.2 公克</td><td>96～132 公克</td></tr>
+<tr><td>減脂期間想保住肌肉</td><td>約 1.8～2.4 公克（偏高一點）</td><td>108～144 公克</td></tr>
+</table></div>
+<p class="cap" style="color:var(--soft);font-size:.9rem">參考 2018 年多篇研究的整合分析：增肌效果大約在 1.6 公克左右開始趨於平緩，2.2 公克是保守的上限值。肝腎有疾病的人要先問醫師。</p>
+
+<h3>分配比總量更進一步</h3>
+<p>身體一次「用來蓋肌肉」的蛋白質有效率高低之分。研究建議每餐約吃<b>體重 × 0.4 公克</b>（60 公斤約 24 克），分成 3～5 餐，比一餐塞很多更好。</p>
+<div class="widget">
+  <p style="margin-top:0"><b>兩個人一天都吃 120 公克蛋白質</b>（60 公斤，每餐建議約 24 克以上）</p>
+  <svg viewBox="0 0 560 230" id="protSvg" role="img" aria-label="蛋白質分配比較"></svg>
+  <button class="btn" id="protBtn">播放比較</button>
+  <p class="cap">虛線是每餐的建議量。A 早餐和午餐都沒到門檻；B 每餐都跨過了門檻。</p>
+</div>
+
+<div class="term"><span class="w">白胺酸</span><span class="en">leucine</span>
+<span class="origin">1820 年法國化學家布拉孔諾（Henri Braconnot）從肌肉和羊毛裡分離出來，因為結晶是白色的，就用希臘文 <i>leukos</i>「白色」命名。它像「開工的按鈕」，能啟動肌肉蛋白質合成。乳清、雞蛋、肉類、魚含量都高。</span></div>
+<div class="eg">早餐只吃一片吐司和一杯紅茶，蛋白質大概只有 4 公克。改成吐司夾一顆蛋、加一杯無糖豆漿或牛奶，就變成 20 公克左右，輕鬆跨過門檻。</div>
+
+<h3>實際能長多快？</h3>
+<p>肌肉長得比脂肪慢很多。一般粗略估計，健身新手第一年，男性每月大約能增加 0.5～1 公斤肌肉，女性大約一半；訓練越久，速度越慢。所以如果一個月體重增加 3 公斤，大部分應該是脂肪和水。</p>
+
+<div class="recap"><b>重點整理</b><ol><li>長肌肉＝訓練（命令）＋蛋白質與熱量（建材）＋睡眠（施工）。</li><li>有訓練的人蛋白質約每公斤 1.6～2.2 公克。</li><li>每餐約體重 × 0.4 公克，分 3～5 餐。</li><li>肌肉長得慢，要有耐心。</li></ol></div>
+<div class="quiz" data-q="c14"></div>
+</section>
+
+<!-- ============ 第 15 章 ============ -->
+<section class="chapter" id="c15" data-part="第四部　健身增肌篇" data-title="運動前後怎麼吃">
+<header><p class="where">第四部　健身增肌篇</p><h2>第 15 章　運動前後怎麼吃</h2></header>
+<div class="goal"><b>這章學完你會知道</b><ul><li>肝醣是什麼，跟運動表現的關係</li><li>運動前、中、後的吃法</li><li>怎麼補水</li></ul></div>
+
+<div class="term"><span class="w">肝醣</span><span class="en">glycogen</span>
+<span class="origin">1857 年法國生理學家貝爾納（Claude Bernard）在肝臟裡發現。希臘文 <i>glykys</i>（甜）＋ <i>-gen</i>（產生），意思是「能產生糖的東西」。它是葡萄糖串成的大分子，存在肌肉和肝臟裡，就像身體內建的「隨身油箱」。</span></div>
+<p>一般成人的肌肉大約能存 300～500 公克肝醣，肝臟大約 80～100 公克。肌肉裡的肝醣只給那塊肌肉用；肝臟的肝醣負責維持血糖、供應大腦。</p>
+
+<div class="widget">
+<div class="row">
+  <div class="tank" aria-label="肌肉肝醣油箱"><div class="lv" id="tankLv" style="height:80%"></div><div class="pct" id="tankPct">80%</div></div>
+  <div style="flex:1;min-width:200px">
+    <p style="margin-top:0">這是你大腿肌肉的肝醣油箱。</p>
+    <div class="row">
+      <button class="btn" data-tank="-35">練腿 1 小時</button>
+      <button class="btn" data-tank="-15">慢跑 30 分鐘</button>
+      <button class="btn ghost" data-tank="30">吃一餐有碳水的飯</button>
+      <button class="btn ghost" data-tank="-10">吃超低碳一天</button>
+    </div>
+    <p class="out" id="tankMsg"></p>
+  </div>
+</div>
+<p class="cap">示意動畫，數字不是真實測量。油箱越空，高強度運動越沒力；長跑選手說的「撞牆」，就是肝醣快用完的感覺。</p>
+</div>
+
+<h3>運動前：加滿油，但別塞太飽</h3>
+<div class="tbl"><table>
+<tr><th>離運動多久</th><th>建議吃</th><th>例子</th></tr>
+<tr><td>2～3 小時前</td><td>正常一餐：碳水＋蛋白質，油和纖維少一點</td><td>雞肉飯、鮭魚飯糰加一杯豆漿</td></tr>
+<tr><td>30～60 分鐘前</td><td>好消化的小點心，以碳水為主</td><td>一根香蕉、一片吐司夾果醬、小餐包</td></tr>
+</table></div>
+<p>為什麼運動前油和纖維要少？因為它們消化慢，運動時還在胃裡，容易肚子不舒服。</p>
+
+<h3>運動中：大多只需要水</h3>
+<p>一小時以內的重訓或一般運動，喝水就夠了。如果是超過 60～90 分鐘的耐力運動（長跑、騎車、比賽），可以每小時補充約 30～60 公克碳水（例如運動飲料、香蕉、能量膠）。</p>
+
+<h3>運動後：補充與修復</h3>
+<p>練完之後，吃一餐有<b>蛋白質（約 20～40 公克）＋ 碳水</b>的正餐或點心，幫肌肉修補、把肝醣油箱補回來。</p>
+<div class="term"><span class="w">合成窗口</span><span class="en">anabolic window</span>
+<span class="origin">過去健身圈流傳：練完 30 分鐘內沒喝到蛋白質，就「白練了」，這段時間被叫做合成「窗口」。2013 年研究者阿拉岡（Alan Aragon）和舍恩菲爾德（Brad Schoenfeld）整理研究後發現，這扇窗其實開得很大，前後幾個小時內吃到都可以。一整天的總蛋白質，比「分秒必爭」重要得多。</span></div>
+<div class="eg">晚上 7 點練完，8 點回家吃晚餐（一份魚、一碗飯、兩樣青菜），完全沒問題，不用在健身房門口急著灌蛋白粉。但如果你練完後要 4～5 小時才能吃飯，那先吃一個點心（例如優格加香蕉、茶葉蛋加地瓜）會比較好。</div>
+
+<h3>補水</h3>
+<ul>
+<li>運動前 2～4 小時喝約每公斤體重 5～7 毫升的水。</li>
+<li>流很多汗時，可以運動前後各量一次體重：<b>每少 1 公斤，大約補 1.25～1.5 公升</b>水，慢慢分次喝。</li>
+<li>大量流汗超過一小時，汗裡流失的鈉要補，可以喝運動飲料或吃點有鹹味的食物。</li>
+</ul>
+
+<div class="recap"><b>重點整理</b><ol><li>肝醣是肌肉和肝臟裡的「糖油箱」，高強度運動很依賴它。</li><li>運動前 2～3 小時吃正餐，30～60 分鐘前吃好消化的碳水。</li><li>運動後吃蛋白質＋碳水，時間不必太緊張，總量最重要。</li><li>流汗多要補水、補鈉。</li></ol></div>
+<div class="quiz" data-q="c15"></div>
+</section>
+
+<!-- ============ 第 16 章 ============ -->
+<section class="chapter" id="c16" data-part="第四部　健身增肌篇" data-title="增肌、體態重組與補充品">
+<header><p class="where">第四部　健身增肌篇</p><h2>第 16 章　增肌、體態重組與補充品</h2></header>
+<div class="goal"><b>這章學完你會知道</b><ul><li>增肌期的熱量怎麼抓</li><li>什麼是「體態重組」</li><li>哪些補充品有用、哪些是浪費錢</li></ul></div>
+
+<div class="term"><span class="w">熱量盈餘</span><span class="en">calorie surplus</span>
+<span class="origin">surplus 來自中世紀拉丁文 <i>super</i>（在上面）＋ <i>plus</i>（更多），意思是「多出來的」。和第 11 章的赤字相反，吃進的比用掉的多一點。</span></div>
+
+<h3>增肌期：盈餘要小</h3>
+<p>身體蓋肌肉的速度有上限（第 14 章），多吃的熱量超過這個速度，就變成脂肪。所以建議：</p>
+<div class="tbl"><table>
+<tr><th>程度</th><th>熱量</th><th>每月體重增加（參考）</th></tr>
+<tr><td>新手</td><td>TDEE ＋ 約 10%</td><td>約體重的 1～1.5%</td></tr>
+<tr><td>有經驗者</td><td>TDEE ＋ 約 5%</td><td>約體重的 0.5～1%</td></tr>
+</table></div>
+<div class="eg">70 公斤的健身新手，TDEE 2500 大卡。增肌期每天吃約 2750 大卡，蛋白質 120～150 公克。一個月體重增加 0.7～1 公斤算理想。如果一個月胖了 3 公斤、腰圍明顯變粗，表示吃太多了，要減回一點。</div>
+
+<div class="term"><span class="w">體態重組</span><span class="en">body recomposition</span>
+<span class="origin">re-（重新）＋ composition（組成），意思是「重新組合身體的成分」：同時減脂肪、增肌肉，體重可能不太變，但身形變了。它最容易發生在健身新手、久未訓練後回來的人、以及體脂較高的人身上。做法是吃在維持熱量或小赤字、蛋白質吃高、認真做重量訓練。</span></div>
+
+<h3>補充品：先看證據</h3>
+<p>補充品的英文 supplement 來自拉丁文 <i>supplere</i>「補滿」，意思是補上飲食不足的部分，<b>不是取代食物</b>。依照目前的研究證據：</p>
+<div class="tbl"><table>
+<tr><th>補充品</th><th>證據強度</th><th>說明</th></tr>
+<tr><td>乳清蛋白</td><td>強（但本質就是食物）</td><td>方便補蛋白質的「食物」。從食物吃夠了就不需要。</td></tr>
+<tr><td>肌酸</td><td>強</td><td>研究最多、效果最穩定的運動補充品之一。</td></tr>
+<tr><td>咖啡因</td><td>強</td><td>能提升耐力和專注，但要注意用量與睡眠。</td></tr>
+<tr><td>BCAA 支鏈胺基酸</td><td>弱</td><td>如果蛋白質已吃夠，幾乎沒有額外效果。</td></tr>
+<tr><td>「燃脂」產品</td><td>很弱或有風險</td><td>多數靠咖啡因或利尿，有些曾被驗出違禁成分。</td></tr>
+</table></div>
+
+<div class="term"><span class="w">乳清</span><span class="en">whey</span>
+<span class="origin">做起司時，牛奶會分成固體的「凝乳」（curds）和黃綠色的液體，這個液體就是 whey，中文叫乳清。古英文就有這個字。以前它被當成廢料，後來發現裡面的蛋白質吸收快、白胺酸多，才變成健身熱門商品。</span></div>
+<div class="term"><span class="w">肌酸</span><span class="en">creatine</span>
+<span class="origin">1832 年法國化學家舍夫勒（Michel Chevreul）從肉湯裡發現，用希臘文 <i>kreas</i>「肉」命名。肌肉裡本來就有，負責短時間爆發力（像衝刺、舉重的前幾秒）。成人常見用法是每天 3～5 公克。它會讓肌肉存多一點水，所以體重可能增加 1～2 公斤，這是水不是脂肪。</span></div>
+<div class="term"><span class="w">咖啡因</span><span class="en">caffeine</span>
+<span class="origin">1819 年德國化學家倫格（Friedlieb Runge）從咖啡豆中分離出來，名字來自德文 Kaffee（咖啡）。一般健康成人每天建議不超過約 400 毫克（大約 3～4 杯美式咖啡）。下午太晚喝會影響睡眠，而睡眠正是長肌肉的施工時間。</span></div>
+
+<div class="warn">未滿 18 歲的人，不建議使用肌酸、咖啡因錠或任何運動補充品，應以正常飲食為主。成人購買時，優先選有第三方檢驗標章的產品，並留意是否有健康食品或相關檢驗認證。懷孕、有慢性病或正在服藥的人，使用前請問醫師。</div>
+
+<div class="recap"><b>重點整理</b><ol><li>增肌只需小盈餘：新手 ＋10%，有經驗 ＋5%。</li><li>體態重組：維持或小赤字＋高蛋白＋重訓，新手最容易成功。</li><li>證據最強：乳清（方便的食物）、肌酸、咖啡因。其他多半不需要。</li><li>補充品是「補」，不是「取代」。</li></ol></div>
+<div class="quiz" data-q="c16"></div>
+</section>
+
+<!-- ============ 第 17 章 ============ -->
+<section class="chapter" id="c17" data-part="第五部　專業實作" data-title="從零設計一份菜單">
+<header><p class="where">第五部　專業實作</p><h2>第 17 章　從零設計一份菜單</h2></header>
+<div class="goal"><b>這章學完你會知道</b><ul><li>營養師設計菜單的六個步驟</li><li>用「食物代換」把數字變成真的食物</li><li>親手產出自己的營養目標</li></ul></div>
+
+<p>現在把前面學的東西全部串起來。專業的做法是這六步，<b>順序不能亂</b>：</p>
+<ol>
+<li><b>算 TDEE</b>（第 7 章）</li>
+<li><b>依目標調整熱量</b>：減脂 −10～25%、維持 ±0、增肌 ＋5～10%（第 11、16 章）</li>
+<li><b>先定蛋白質</b>：每公斤 1.6～2.2 公克（第 14 章），因為它最重要。</li>
+<li><b>再定脂肪</b>：每公斤約 0.7～1.0 公克，不要低於總熱量的 20%，荷爾蒙需要它（第 5 章）。</li>
+<li><b>剩下的給碳水</b>：（總熱量 − 蛋白質大卡 − 脂肪大卡）÷ 4（第 3 章）。</li>
+<li><b>換成真的食物，分配到每一餐</b>（第 9 章手掌法或下面的食物代換）。</li>
+</ol>
+
+<div class="widget" id="calc2">
+  <p style="margin-top:0"><b>營養目標計算器</b>（身體資料會自動帶入第 7 章填的數字）</p>
+  <div class="row">
+    <label class="f">目標<select id="goal">
+      <option value="-0.2">減脂（−20%）</option>
+      <option value="-0.12">溫和減脂（−12%）</option>
+      <option value="0" selected>維持</option>
+      <option value="0.05">增肌（有經驗 ＋5%）</option>
+      <option value="0.1">增肌（新手 ＋10%）</option>
+    </select></label>
+    <label class="f">蛋白質 g/kg<input type="number" id="pk" value="1.8" step="0.1" min="0.8" max="2.4"></label>
+    <label class="f">脂肪 g/kg<input type="number" id="fk" value="0.9" step="0.1" min="0.5" max="1.5"></label>
+    <label class="f">一天吃幾餐<select id="meals"><option>3</option><option selected>4</option><option>5</option></select></label>
+  </div>
+  <div class="out" id="macroOut"></div>
+  <p class="cap">手掌換算是粗略值：一手掌蛋白質約 25 克、一手捧碳水約 25 克、一拇指油脂約 8 克。蛋白質食物裡本身也有油，所以額外的油可以再少一點。</p>
+</div>
+
+<h3>食物代換：營養師的「換算貨幣」</h3>
+<div class="term"><span class="w">食物代換表</span><span class="en">food exchange list</span>
+<span class="origin">1950 年美國飲食協會和糖尿病協會為了讓糖尿病人方便控制飲食而設計。概念像「貨幣」：把營養相近的食物歸成一「份」，同一類裡可以互相交換。台灣也有自己的版本。</span></div>
+<div class="tbl"><table>
+<tr><th>類別（1 份）</th><th>大約營養</th><th>1 份大約是</th></tr>
+<tr><td>全穀雜糧</td><td>碳水 15g、蛋白質 2g、70 大卡</td><td>白飯 1/4 碗、吐司半片、地瓜約 55 克</td></tr>
+<tr><td>豆魚蛋肉（中脂）</td><td>蛋白質 7g、脂肪 5g、75 大卡</td><td>雞蛋 1 顆、板豆腐約 80 克</td></tr>
+<tr><td>豆魚蛋肉（低脂）</td><td>蛋白質 7g、脂肪 3g、55 大卡</td><td>雞胸肉約 30 克、魚肉約 35 克</td></tr>
+<tr><td>蔬菜</td><td>碳水 5g、蛋白質 1g、25 大卡</td><td>生的蔬菜約 100 克（煮熟約半碗）</td></tr>
+<tr><td>水果</td><td>碳水 15g、60 大卡</td><td>拳頭大的橘子 1 顆、香蕉半根</td></tr>
+<tr><td>乳品（低脂）</td><td>蛋白質 8g、脂肪 4g、碳水 12g、120 大卡</td><td>低脂牛奶 1 杯 240 毫升</td></tr>
+<tr><td>油脂</td><td>脂肪 5g、45 大卡</td><td>植物油 1 茶匙、堅果約 1 湯匙</td></tr>
+</table></div>
+<p class="cap" style="color:var(--soft);font-size:.9rem">數值為常用的教學近似值，各版本略有差異。</p>
+
+<h3>範例：阿傑的一天</h3>
+<p>阿傑 25 歲男性、170 公分、75 公斤，坐辦公室但每週重訓 3～4 次（活動係數 1.55），想減脂。</p>
+<ol>
+<li>BMR = 10×75 ＋ 6.25×170 − 5×25 ＋ 5 ≈ <b>1690 大卡</b></li>
+<li>TDEE = 1690 × 1.55 ≈ <b>2620 大卡</b>；減脂 −20% ≈ <b>2100 大卡</b></li>
+<li>蛋白質 2.0 × 75 = <b>150 公克</b>（600 大卡）</li>
+<li>脂肪 0.8 × 75 = <b>60 公克</b>（540 大卡）</li>
+<li>碳水 (2100 − 600 − 540) ÷ 4 = <b>240 公克</b></li>
+</ol>
+<div class="menu-day">
+<div class="meal"><b>早餐 7:30</b>　無糖豆漿 400 毫升、茶葉蛋 2 顆、蒸地瓜 1 條（約 150 克）<br><span style="color:var(--soft)">約 470 大卡・蛋白質 30g</span></div>
+<div class="meal"><b>午餐 12:00</b>　雞腿便當（雞腿去皮、白飯一碗、三樣青菜）<br><span style="color:var(--soft)">約 660 大卡・蛋白質 47g</span></div>
+<div class="meal"><b>練前點心 16:30</b>　香蕉 1 根、無糖希臘優格 150 克<br><span style="color:var(--soft)">約 215 大卡・蛋白質 16g</span></div>
+<div class="meal"><b>晚餐 19:30（練後）</b>　烤鮭魚 120 克、白飯 3/4 碗、燙青菜淋 1 茶匙橄欖油、板豆腐 100 克<br><span style="color:var(--soft)">約 615 大卡・蛋白質 41g</span></div>
+<div class="meal"><b>晚點心</b>　低脂牛奶 1 杯、芭樂 1 顆<br><span style="color:var(--soft)">約 180 大卡・蛋白質 8g</span></div>
+</div>
+<p>合計大約 <b>2140 大卡、蛋白質 142 公克</b>，跟目標差不到 10%。這樣就非常好了。</p>
+<div class="eg">專業的秘密：<b>真實生活不需要精準到個位數。</b>食品標示本身就允許誤差，你的 TDEE 也是估的。與其每天糾結差 5 公克，不如穩定地每天都「差不多做到」，再用第 18 章的方法看結果調整。</div>
+
+<h3>外食族的小抄（台灣常見場景）</h3>
+<div class="tbl"><table>
+<tr><th>場景</th><th>比較好的組合</th></tr>
+<tr><td>便利商店</td><td>雞胸肉或茶葉蛋 ＋ 地瓜或飯糰 ＋ 生菜沙拉（醬減半）＋ 無糖豆漿</td></tr>
+<tr><td>自助餐</td><td>一份非油炸的主菜 ＋ 三樣蔬菜（選燙、滷，不選勾芡、油炸）＋ 飯依目標調整</td></tr>
+<tr><td>早餐店</td><td>蛋餅或吐司夾蛋 ＋ 無糖豆漿 / 鮮奶茶（少糖），少選薯餅、炸雞</td></tr>
+<tr><td>麵店</td><td>湯麵優於乾麵（乾麵常拌油），加燙青菜、滷蛋或豆干</td></tr>
+</table></div>
+
+<div class="recap"><b>重點整理</b><ol><li>六步驟：TDEE → 調熱量 → 蛋白質 → 脂肪 → 碳水 → 換成食物。</li><li>食物代換讓你在同類食物裡自由交換。</li><li>差不多做到、長期穩定，比每天精準更重要。</li></ol></div>
+<div class="quiz" data-q="c17"></div>
+</section>
+
+<!-- ============ 第 18 章 ============ -->
+<section class="chapter" id="c18" data-part="第五部　專業實作" data-title="追蹤、調整與進階策略">
+<header><p class="where">第五部　專業實作</p><h2>第 18 章　追蹤、調整與進階策略</h2></header>
+<div class="goal"><b>這章學完你會知道</b><ul><li>怎麼用真實數據校正計畫</li><li>飲食休息期、再餵食、碳循環是什麼</li><li>減完之後如何不復胖</li></ul></div>
+
+<p>第 7 章說過，公式算出來的 TDEE 只是估計。專業的做法是：<b>先照計畫吃 2～3 週，再用真實結果回推</b>。你的身體才是最準的計算機。</p>
+
+<h3>調整的規則</h3>
+<div class="tbl"><table>
+<tr><th>連續 2～3 週的週平均體重</th><th>減脂期怎麼做</th></tr>
+<tr><td>下降速度在目標範圍（每週 0.5～1%）</td><td>什麼都不要改！</td></tr>
+<tr><td>下降太慢或不動</td><td>先檢查記錄、睡眠、步數；確定沒問題，每天減 100～150 大卡，或每天多走約 2000 步</td></tr>
+<tr><td>下降太快、很累、訓練表現掉</td><td>每天加回 100～200 大卡（優先加碳水）</td></tr>
+</table></div>
+<div class="eg">回推實際 TDEE 的方法：如果你每天平均吃 1800 大卡，兩週週平均體重下降 0.6 公斤。0.6 × 7700 ÷ 14 ≈ 330，所以你的實際 TDEE 大約是 1800 ＋ 330 = 2130 大卡。這比公式更貼近你本人（但只是近似，因為前幾週會有水分變化）。</div>
+
+<h3>進階策略</h3>
+<div class="term"><span class="w">飲食休息期</span><span class="en">diet break</span>
+<span class="origin">break 就是「休息」。在長期減脂中，安排 1～2 週吃回維持熱量，讓身體和心理喘口氣。2018 年澳洲的 MATADOR 研究讓一組人「減 2 週、休 2 週」交替，結果減脂效果比連續減脂更好，而且之後比較不容易復胖。</span></div>
+<div class="term"><span class="w">再餵食日</span><span class="en">refeed</span>
+<span class="origin">re-（再次）＋ feed（餵）。在減脂期中安排 1～2 天，把熱量拉到維持水準，而且多出來的主要是碳水，用來補回肝醣、改善訓練表現。它比飲食休息期短，通常用在已經很瘦、赤字時間很長的人。</span></div>
+<div class="term"><span class="w">碳循環</span><span class="en">carb cycling</span>
+<span class="origin">cycling 是「循環」。訓練日吃多一點碳水、休息日吃少一點，一週總熱量不變。這是健美選手常用的方法。它的效果主要是「讓碳水跟著訓練走」，比較好安排，並沒有魔法。</span></div>
+
+<h3>減完之後：維持期</h3>
+<p>很多人減完就「解放」，結果很快復胖。更好的做法是：</p>
+<ol>
+<li>達到目標後，<b>每週加回約 100～150 大卡</b>，慢慢加到新的維持熱量。</li>
+<li>繼續每週看週平均，允許體重在一個 1～2 公斤的區間波動。</li>
+<li>保持重量訓練和高蛋白，保住肌肉就是保住代謝。</li>
+<li>用<b>八二法則</b>：大約八成時間吃得乾淨，兩成時間享受喜歡的食物。</li>
+</ol>
+<div class="term"><span class="w">八二法則</span><span class="en">80/20 rule</span>
+<span class="origin">原本來自義大利經濟學家帕雷托（Vilfredo Pareto）在 1896 年觀察到「80% 的土地屬於 20% 的人」，後來被借用成「重要的少數」的概念。在飲食上被改編成：大部分時間做到就好，不必 100% 完美。完美主義反而最容易放棄。</span></div>
+
+<h3>習慣比意志力可靠</h3>
+<ul>
+<li>把水果放在看得到的地方，把零食收進櫃子。</li>
+<li>每週固定一天準備便當或採買。</li>
+<li>設定「如果……就……」：「如果下午想吃甜的，就先喝一杯水、吃一顆芭樂。」</li>
+<li>睡滿 7～9 小時。睡不夠會讓第 12 章的飢餓素上升。</li>
+</ul>
+
+<div class="recap"><b>重點整理</b><ol><li>用 2～3 週的週平均體重校正計畫，一次只調 100～200 大卡。</li><li>飲食休息期、再餵食、碳循環是工具，不是魔法。</li><li>減完要慢慢加回熱量，進入維持期。</li><li>靠環境和習慣，而不是只靠意志力。</li></ol></div>
+<div class="quiz" data-q="c18"></div>
+</section>
+
+<!-- ============ 第 19 章 ============ -->
+<section class="chapter" id="c19" data-part="第五部　專業實作" data-title="安全第一：青少年與特殊狀況">
+<header><p class="where">第五部　專業實作</p><h2>第 19 章　安全第一：青少年、特殊狀況與警訊</h2></header>
+<div class="goal"><b>這章學完你會知道</b><ul><li>成長中的青少年該怎麼看待飲食與體重</li><li>什麼時候一定要找專業人員</li><li>飲食出問題的警訊</li></ul></div>
+
+<p>一個真正專業的人，不只知道「怎麼做」，更知道「什麼時候<b>不該</b>做」。這一章可能是整堂課最重要的一章。</p>
+
+<h3>如果你還在長高</h3>
+<p>青春期是人一生中長得最快的時期之一，骨頭、肌肉、大腦都在發育，需要大量能量和營養。所以：</p>
+<ul>
+<li><b>不建議自己算熱量赤字、節食減肥。</b>吃不夠可能影響長高、骨骼、月經和學習。</li>
+<li>成人的 BMI 表不適用，要看<b>生長曲線</b>，請醫師判斷。</li>
+<li>如果醫師說體重需要調整，重點通常是：<b>少喝含糖飲料、多吃原型食物、多運動、睡飽</b>，讓身高慢慢「長上來」，而不是讓體重「減下去」。</li>
+<li>多做運動、學會本課的營養知識，是給未來最好的禮物。</li>
+</ul>
+
+<h3>一定要先找醫師或營養師的情況</h3>
+<ul>
+<li>糖尿病、腎臟病、肝病、心臟病、高血壓正在用藥</li>
+<li>懷孕、哺乳</li>
+<li>正在服用會影響食慾或血糖的藥物</li>
+<li>曾經有飲食相關的困擾</li>
+<li>想做很大的改變，例如生酮、長時間斷食</li>
+</ul>
+<div class="term"><span class="w">營養師</span><span class="en">dietitian</span>
+<span class="origin">來自開場學過的 diet（生活方式）。在台灣，「營養師」是需要考取國家證照的專業人員，可以在醫院、診所、社區提供飲食建議。網路上的「營養教練」不一定有這張證照。</span></div>
+
+<h3>能量長期不足的警訊</h3>
+<div class="term"><span class="w">運動相對能量不足</span><span class="en">RED-S, Relative Energy Deficiency in Sport</span>
+<span class="origin">2014 年國際奧林匹克委員會（IOC）提出。「相對」的意思是：吃進的能量相對於運動消耗太少。它會影響荷爾蒙、骨骼、免疫、心情和表現。女性常見的表現是月經不規則或停經，男女都可能發生。</span></div>
+
+<h3>飲食困擾的警訊</h3>
+<p>學了營養知識，是為了讓生活更好，而不是讓食物變成壓力。如果你或身邊的人出現這些情況，請認真看待：</p>
+<ul>
+<li>對體重、身材非常焦慮，心情完全被體重計的數字決定</li>
+<li>常常刻意不吃、或吃完後覺得很罪惡，想用各種方法「彌補」</li>
+<li>越來越多食物被列為「絕對不能吃」，和家人朋友吃飯變得很痛苦</li>
+<li>偷偷吃東西，或吃到停不下來</li>
+<li>頭暈、怕冷、掉髮、月經停止、體力明顯變差</li>
+</ul>
+<div class="warn">出現這些情況，請不要自己硬撐。可以先告訴一位信任的大人（家人、老師、學校輔導老師），或直接看醫師（家醫科、身心科）。在台灣，也可以撥打衛生福利部 <b>1925 安心專線</b>（24 小時）。尋求幫助是勇敢的事，這些狀況越早處理越容易恢復。</div>
+
+<h3>健康不是只有體重</h3>
+<p>整堂課我們談了很多數字，但請記得：精神好不好、睡得好不好、能不能跑跳、能不能開心跟朋友吃一頓飯，都是健康的一部分。<b>最好的飲食，是能讓你長期健康、又能好好生活的飲食。</b></p>
+
+<div class="recap"><b>重點整理</b><ol><li>成長中的青少年以均衡飲食、運動、睡眠為主，不自行節食。</li><li>有慢性病、懷孕、用藥或想做大改變，先問醫師或營養師。</li><li>注意能量不足和飲食困擾的警訊，及早求助。</li><li>健康不只是體重。</li></ol></div>
+<div class="quiz" data-q="c19"></div>
+</section>
+
+<!-- ============ 期末 ============ -->
+<section class="chapter" id="c20" data-part="結業" data-title="期末總測驗">
+<header><p class="where">結業</p><h2>期末總測驗</h2></header>
+<p>從前面所有章節隨機抽出 12 題。答完會顯示分數，答錯的題目旁邊會告訴你要回去看哪一章。</p>
+<div id="finalBox"></div>
+<div class="row noprint"><button class="btn" id="finalNew">重新抽題</button></div>
+<p class="out" id="finalScore"></p>
+</section>
+
+<section class="chapter" id="c21" data-part="結業" data-title="名詞總表">
+<header><p class="where">結業</p><h2>名詞總表</h2></header>
+<p>整堂課出現過的專有名詞與由來，全部集中在這裡，方便複習。</p>
+<input type="search" id="glossQ" placeholder="搜尋名詞，例如：胰島素" style="font:inherit;width:100%;padding:8px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink)">
+<dl class="gloss" id="gloss"></dl>
+</section>
+
+</main>
+</div>
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const chapters=$$('.chapter');
+const done=new Set();
+
+/* ---------- TOC ---------- */
+const toc=$('#toc'); let lastPart=null, ol=null;
+chapters.forEach((c,i)=>{
+  const part=c.dataset.part;
+  if(part!==lastPart){const h=document.createElement('div');h.className='part';h.textContent=part;toc.appendChild(h);ol=document.createElement('ol');toc.appendChild(ol);lastPart=part;}
+  const li=document.createElement('li'),b=document.createElement('button');
+  const num=/^c(\d+)$/.exec(c.id)[1];
+  const label=(+num>=1&&+num<=19)?num:'';
+  b.innerHTML=`<span class="n">${label}</span><span>${c.dataset.title}</span>`;
+  b.dataset.target=c.id; b.onclick=()=>go(c.id);
+  li.appendChild(b); ol.appendChild(li);
+});
+function tocBtn(id){return toc.querySelector(`[data-target="${id}"]`)}
+
+/* ---------- pager ---------- */
+chapters.forEach((c,i)=>{
+  const p=document.createElement('div');p.className='pager noprint';
+  const prev=chapters[i-1],next=chapters[i+1];
+  p.innerHTML=(prev?`<button class="btn ghost" data-go="${prev.id}">上一章：${prev.dataset.title}</button>`:'<span></span>')+
+              (next?`<button class="btn" data-go="${next.id}">下一章：${next.dataset.title}</button>`:'');
+  c.appendChild(p);
+});
+document.addEventListener('click',e=>{const t=e.target.closest('[data-go]');if(t)go(t.dataset.go)});
+
+let current=null;
+function go(id,noScroll){window.AC_COURSE_GO=function(v){go(v)};window.AC_COURSE_POSITION=id;
+  const c=document.getElementById(id)||chapters[0];
+  chapters.forEach(x=>x.classList.toggle('show',x===c));
+  $$('#toc button').forEach(b=>b.classList.toggle('on',b.dataset.target===c.id));
+  current=c.id;
+  if(location.hash!=='#'+c.id) history.replaceState(null,'','#'+c.id);
+  if(!noScroll) window.scrollTo({top:0,behavior:'instant'});
+  closeMenu();
+  onShow(c.id);
+}
+function updateProgress(){
+  const total=19; $('#progBar').style.width=(done.size/total*100)+'%';
+}
+
+/* ---------- menu (mobile) ---------- */
+function closeMenu(){toc.classList.remove('open');$('#scrim').classList.remove('show')}
+$('#menuBtn').onclick=()=>{toc.classList.add('open');$('#scrim').classList.add('show')};
+$('#scrim').onclick=closeMenu;
+$('#printBtn').onclick=()=>window.print();
+
+/* ---------- hero scale ---------- */
+function hero(){
+  const i=+$('#hInR').value,o=+$('#hOutR').value; $('#hIn').textContent=i;$('#hOut').textContent=o;
+  const d=i-o, ang=Math.max(-14,Math.min(14,d/40));
+  $('#heroBeam').style.transform=`rotate(${-ang}deg)`;
+  $('#panL').style.transform=`rotate(${ang}deg)`;$('#panL').style.transformOrigin='80px 120px';
+  $('#panR').style.transform=`rotate(${ang}deg)`;$('#panR').style.transformOrigin='440px 120px';
+  let m;
+  if(Math.abs(d)<50) m='吃進和用掉差不多：<b>維持</b>體重。';
+  else if(d>0) m=`每天多出 ${d} 大卡：多的能量會被存起來，體重慢慢<b>上升</b>（盈餘）。`;
+  else m=`每天少了 ${-d} 大卡：身體拿存下來的能量出來用，體重慢慢<b>下降</b>（赤字）。`;
+  $('#hMsg').innerHTML=m;
+}
+['#hInR','#hOutR'].forEach(s=>$(s).addEventListener('input',hero)); hero();
+
+/* ---------- drift ---------- */
+function drift(){
+  const v=+$('#driftR').value; $('#drift').textContent=v;
+  const y=v*365, kg=(y/7700).toFixed(1);
+  $('#driftMsg').innerHTML = v===0?'每天剛好平衡，一年下來體重大致不變。':
+   `一年累積 <b>${y>0?'+':''}${y.toLocaleString()}</b> 大卡，大約等於 <span class="big">${y>0?'+':''}${kg} 公斤</span> 的脂肪。`;
+}
+$('#driftR').addEventListener('input',drift); drift();
+
+/* ---------- bars ---------- */
+function playBars(wrap){
+  wrap.querySelectorAll('.fill').forEach(f=>f.style.width='0');
+  requestAnimationFrame(()=>setTimeout(()=>wrap.querySelectorAll('.fill').forEach(f=>f.style.width=f.dataset.w+'%'),60));
+}
+$('#macroBtn').onclick=()=>playBars($('#macroBars'));
+$('#densBtn').onclick=()=>playBars($('#densBars'));
+
+/* ---------- donut ---------- */
+function donut(){
+  const C=2*Math.PI*70, parts=[0.62,0.20,0.10,0.08]; let off=0;
+  ['#d1','#d2','#d3','#d4'].forEach((s,i)=>{
+    const el=$(s); el.style.transition='none'; el.setAttribute('stroke-dasharray',`0 ${C}`); el.setAttribute('stroke-dashoffset',-off*C);
+    const len=parts[i]*C, o=off;
+    setTimeout(()=>{el.style.transition='stroke-dasharray .8s ease';el.setAttribute('stroke-dasharray',`${len} ${C-len}`)},80+i*500);
+    off+=parts[i];
+  });
+}
+$('#donutBtn').onclick=donut;
+
+/* ---------- TDEE ---------- */
+const P={};
+function readBody(){
+  P.sx=$('#sx').value;P.ag=+$('#ag').value;P.ht=+$('#ht').value;P.wt=+$('#wt').value;P.act=+$('#act').value;
+  P.bmr=10*P.wt+6.25*P.ht-5*P.ag+(P.sx==='m'?5:-161);
+  P.tdee=P.bmr*P.act;
+}
+function tdee(){
+  readBody();
+  if(!(P.wt>0&&P.ht>0&&P.ag>0)){$('#tdeeOut').textContent='請把資料填完整。';return;}
+  let h=`BMR（基礎代謝）約 <b>${Math.round(P.bmr)}</b> 大卡<br>TDEE（一天總消耗）約 <span class="big">${Math.round(P.tdee)} 大卡</span>`;
+  const bmi=P.wt/((P.ht/100)**2);
+  h+=`<br>BMI 約 ${bmi.toFixed(1)}`;
+  if(P.ag<18) h+=`<br><span style="color:var(--tomato)">你輸入的年齡未滿 18 歲：成長期需要的能量通常比公式更高，BMI 也要用生長曲線判斷，不適用成人標準。這個結果只當作學習參考。</span>`;
+  $('#tdeeOut').innerHTML=h; macro();
+}
+['#sx','#ag','#ht','#wt','#act'].forEach(s=>$(s).addEventListener('input',tdee));
+
+/* ---------- macro planner ---------- */
+function macro(){
+  readBody(); if(!(P.wt>0)) return;
+  const g=+$('#goal').value, pk=+$('#pk').value, fk=+$('#fk').value, meals=+$('#meals').value;
+  const out=$('#macroOut');
+  if(P.ag<18 && g!==0){
+    out.innerHTML=`<span style="color:var(--tomato)">未滿 18 歲不建議自行設定減脂赤字或增重盈餘。請維持均衡飲食，有需要時請醫師或營養師評估。下面改用「維持」計算給你參考。</span>`;
+  } else out.innerHTML='';
+  const goal=(P.ag<18)?0:g;
+  let kcal=P.tdee*(1+goal);
+  const floor=Math.max(P.bmr, P.sx==='m'?1500:1200);
+  let warn='';
+  if(goal<0 && kcal<floor){kcal=floor;warn=`<br><span style="color:var(--tomato)">原本算出的熱量低於安全下限，已調整為約 ${Math.round(floor)} 大卡。長期低於 BMR 或成人一般下限，請在專業人員指導下進行。</span>`;}
+  const p=pk*P.wt, f=fk*P.wt; let c=(kcal-p*4-f*9)/4;
+  let cw=''; if(c<50){cw=`<br><span style="color:var(--tomato)">碳水剩太少了，請把蛋白質或脂肪的 g/kg 調低一點。</span>`;c=Math.max(c,0);}
+  const fatPct=f*9/kcal*100;
+  out.innerHTML+=`每天熱量約 <span class="big">${Math.round(kcal)} 大卡</span>${warn}
+  <div class="tbl"><table><tr><th></th><th>公克</th><th>大卡</th><th>每餐約</th><th>手掌法（每天）</th></tr>
+  <tr><td style="color:var(--prot)"><b>蛋白質</b></td><td>${Math.round(p)}</td><td>${Math.round(p*4)}</td><td>${Math.round(p/meals)} g</td><td>約 ${(p/25).toFixed(1)} 手掌</td></tr>
+  <tr><td style="color:var(--fat)"><b>脂肪</b></td><td>${Math.round(f)}</td><td>${Math.round(f*9)}</td><td>${Math.round(f/meals)} g</td><td>約 ${(f/8).toFixed(1)} 拇指</td></tr>
+  <tr><td style="color:var(--carb)"><b>碳水</b></td><td>${Math.round(c)}</td><td>${Math.round(c*4)}</td><td>${Math.round(c/meals)} g</td><td>約 ${(c/25).toFixed(1)} 手捧</td></tr>
+  </table></div>脂肪佔總熱量約 ${fatPct.toFixed(0)}%${fatPct<20?'（低於 20%，建議調高脂肪）':''}。另外每天加上至少 4～6 拳頭蔬菜、纖維 25～35 公克、水約 ${Math.round(P.wt*30)}～${Math.round(P.wt*35)} 毫升。${cw}`;
+}
+['#goal','#pk','#fk','#meals'].forEach(s=>$(s).addEventListener('input',macro));
+tdee();
+
+/* ---------- glucose curves ---------- */
+function gluc(){
+  ['#gFast','#gSlow'].forEach((s,i)=>{
+    const el=$(s),L=el.getTotalLength();
+    el.style.transition='none';el.style.strokeDasharray=L;el.style.strokeDashoffset=L;
+    el.getBoundingClientRect();
+    el.style.transition=`stroke-dashoffset 2.6s ease ${i*0.3}s`;el.style.strokeDashoffset=0;
+  });
+}
+$('#gBtn').onclick=gluc;
+
+/* ---------- plate ---------- */
+const plateTxt=[
+ '<b>水果</b>：每餐水果拳頭大。選新鮮水果，不選果汁（果汁沒有纖維、很快喝下大量糖）。',
+ '<b>蔬菜</b>：菜比水果多一點。深綠色、紅黃色都要吃，每天至少 3 份。',
+ '<b>豆魚蛋肉</b>：豆魚蛋肉一掌心。依「豆 → 魚 → 蛋 → 肉」的順序優先選擇。',
+ '<b>全穀雜糧</b>：飯跟蔬菜一樣多。其中至少三分之一選未精製的，如糙米、燕麥、地瓜、玉米。',
+ '<b>乳品</b>：每天早晚一杯奶（約 1.5～2 杯），補充鈣質。不喝牛奶的人可選優格、起司、高鈣豆製品。',
+ '<b>油脂與堅果種子</b>：堅果種子一茶匙。烹調選植物油，每天吃一小把堅果。'
+];
+$$('.slice').forEach(s=>s.addEventListener('click',()=>{
+  $$('.slice').forEach(x=>x.classList.remove('act'));s.classList.add('act');
+  $('#plateInfo').innerHTML=plateTxt[+s.dataset.k];
+}));
+
+/* ---------- label ---------- */
+const lblTxt=[
+ '<b>每一份量</b>：廠商自己訂的「一份」有多重。每個產品的一份都不一樣，要先看這行。',
+ '<b>本包裝含幾份</b>：整包有幾份。整包吃完，下面所有數字都要乘上這個數。這包是 × 3！',
+ '<b>熱量</b>：每一份的大卡。整包 = 160 × 3 = 480 大卡。',
+ '<b>蛋白質</b>：只有 2 公克，很少。所以洋芋片不會讓你飽很久（第 4 章）。',
+ '<b>脂肪</b>：10 公克 × 9 = 90 大卡，佔這一份熱量的一半以上（第 5 章）。',
+ '<b>飽和脂肪</b>：屬於脂肪的一部分，所以往內縮排。整包 13.5 公克，已經超過很多人一天建議的一半。',
+ '<b>反式脂肪</b>：寫 0 不一定真的是 0。台灣規定每 100 公克低於 0.3 公克可以標 0，所以還要看成分表有沒有「氫化油」。',
+ '<b>碳水化合物</b>：這裡主要是馬鈴薯的澱粉（第 3 章）。',
+ '<b>糖</b>：碳水化合物裡屬於「糖」的部分。洋芋片糖少，但這不代表它健康。',
+ '<b>鈉</b>：整包 540 毫克，約是成人一天建議上限 2400 毫克的 22%。'
+];
+$$('#lblCard .li').forEach(r=>r.addEventListener('click',()=>{
+  $$('#lblCard .li').forEach(x=>x.classList.remove('act'));r.classList.add('act');
+  $('#lblInfo').innerHTML=lblTxt[+r.dataset.k];
+}));
+
+/* ---------- weight chart ---------- */
+function wchart(){
+  const svg=$('#wChart'),W=560,H=270,pad=48,days=42;
+  let w=[],base=72;
+  for(let i=0;i<days;i++){const trend=base-0.07*i;let n=(Math.random()-0.5)*1.4;if(i%7===5)n+=0.9;w.push(trend+n);}
+  const min=Math.min(...w)-0.5,max=Math.max(...w)+0.5;
+  const x=i=>pad+i*(W-pad-10)/(days-1), y=v=>10+(max-v)/(max-min)*(H-50);
+  let s=`<line x1="${pad}" y1="${H-40}" x2="${W-10}" y2="${H-40}" stroke="var(--soft)"/>`;
+  for(let k=0;k<6;k++) s+=`<text x="${x(k*7)}" y="${H-20}" font-size="16" fill="var(--soft)">第${k+1}週</text>`;
+  s+=`<text x="2" y="${y(max-0.5)+4}" font-size="15" fill="var(--soft)">${(max-0.5).toFixed(1)}</text><text x="2" y="${y(min+0.5)+4}" font-size="15" fill="var(--soft)">${(min+0.5).toFixed(1)}</text>`;
+  s+=`<polyline fill="none" stroke="var(--line)" stroke-width="1.5" points="${w.map((v,i)=>x(i)+','+y(v)).join(' ')}"/>`;
+  w.forEach((v,i)=>s+=`<circle cx="${x(i)}" cy="${y(v)}" r="3.5" fill="var(--soft)" opacity=".7"/>`);
+  let pts=[];for(let k=0;k<6;k++){const a=w.slice(k*7,k*7+7);const m=a.reduce((p,q)=>p+q,0)/7;pts.push([x(k*7+3),y(m),m]);}
+  s+=`<polyline id="wAvg" fill="none" stroke="var(--leaf2)" stroke-width="4" points="${pts.map(p=>p[0]+','+p[1]).join(' ')}"/>`;
+  pts.forEach(p=>s+=`<circle cx="${p[0]}" cy="${p[1]}" r="6" fill="var(--leaf2)"/><text x="${p[0]}" y="${p[1]-12}" text-anchor="middle" font-size="17" font-weight="700" fill="var(--leaf2)">${p[2].toFixed(1)}</text>`);
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.innerHTML=s;
+  const pl=$('#wAvg'),L=pl.getTotalLength();pl.style.strokeDasharray=L;pl.style.strokeDashoffset=L;pl.getBoundingClientRect();pl.style.transition='stroke-dashoffset 1.8s ease';pl.style.strokeDashoffset=0;
+}
+$('#wBtn').onclick=wchart;
+
+/* ---------- protein distribution ---------- */
+function prot(){
+  const svg=$('#protSvg'),A=[8,15,85,12],B=[30,32,30,28],names=['早餐','午餐','晚餐','點心'];
+  const H=230,base=200,sc=1.75,thr=24;
+  let s=`<text x="10" y="22" font-size="19" font-weight="700" fill="var(--ink)">A：集中在晚餐</text><text x="300" y="22" font-size="19" font-weight="700" fill="var(--ink)">B：平均分配</text>`;
+  [[A,20],[B,300]].forEach(([arr,ox])=>{
+    arr.forEach((v,i)=>{const bx=ox+i*60,h=v*sc,ok=v>=thr;
+      s+=`<rect class="pb" x="${bx}" y="${base}" width="40" height="0" data-h="${h}" fill="${ok?'var(--leaf2)':'var(--tomato)'}" rx="4"/>`;
+      s+=`<text x="${bx+20}" y="${base+22}" text-anchor="middle" font-size="16" fill="var(--soft)">${names[i]}</text>`;
+      s+=`<text class="pv" x="${bx+20}" y="${base-h-6}" text-anchor="middle" font-size="17" font-weight="700" fill="var(--ink)" opacity="0">${v}g</text>`;
+    });
+    s+=`<line x1="${ox-6}" y1="${base-thr*sc}" x2="${ox+236}" y2="${base-thr*sc}" stroke="var(--yolk)" stroke-width="2" stroke-dasharray="6 5"/>`;
+  });
+  svg.setAttribute('viewBox','0 0 560 '+(H+10));svg.innerHTML=s;
+  setTimeout(()=>svg.querySelectorAll('.pb').forEach((r,i)=>{r.style.transition=`all .7s ease ${i*0.08}s`;const h=+r.dataset.h;r.setAttribute('y',base-h);r.setAttribute('height',h);}),60);
+  setTimeout(()=>svg.querySelectorAll('.pv').forEach(t=>t.setAttribute('opacity',1)),900);
+}
+$('#protBtn').onclick=prot;
+
+/* ---------- glycogen tank ---------- */
+let tank=80;
+$$('[data-tank]').forEach(b=>b.onclick=()=>{
+  const d=+b.dataset.tank; tank=Math.max(5,Math.min(100,tank+d));
+  $('#tankLv').style.height=tank+'%';$('#tankPct').textContent=tank+'%';
+  $('#tankLv').style.background=tank<30?'var(--tomato)':'var(--carb)';
+  $('#tankMsg').textContent= tank<30?'油箱快空了：這時候做高強度訓練會很沒力，動作也容易變形。':
+    tank>=95?'油箱滿了！再多的碳水就會轉去別的地方用或存起來。':
+    d>0?'吃進碳水後，肌肉把葡萄糖存回肝醣（還記得胰島素這把鑰匙嗎？）。':'運動在消耗肌肉裡的肝醣。';
+});
+
+/* ---------- quiz data ---------- */
+const Q={
+c1:[
+ {q:'食品包裝上寫「熱量 200 大卡」，是指？',o:['200 小卡','200 千卡（kcal）','200 千焦'],a:1,e:'大卡就是 kcal，等於 1000 小卡。'},
+ {q:'「卡路里」這個字原本的意思是？',o:['食物','熱','重量'],a:1,e:'來自拉丁文 calor，意思是熱。'},
+ {q:'看到外國包裝寫 840 kJ，大約是多少大卡？',o:['約 200 大卡','約 840 大卡','約 3500 大卡'],a:0,e:'1 大卡約 4.18 千焦，840 ÷ 4.2 ≈ 200。'}],
+c2:[
+ {q:'吃進的能量比用掉的少，會發生什麼？',o:['體重上升','體重下降','完全不會變'],a:1,e:'這叫熱量赤字，身體會動用儲存的能量。'},
+ {q:'「恆定」（homeostasis）描述的是身體的什麼傾向？',o:['一直改變','保持在熟悉的狀態','越來越快'],a:1,e:'homoios 相同 ＋ stasis 站著不動。'}],
+c3:[
+ {q:'哪一種營養素每公克熱量最高？',o:['碳水化合物','蛋白質','脂肪'],a:2,e:'脂肪 9 大卡，碳水和蛋白質都是 4 大卡。'},
+ {q:'碳水化合物為什麼叫這個名字？',o:['因為像炭一樣黑','化學式像「碳 ＋ 水」','因為來自碳酸飲料'],a:1,e:'例如葡萄糖 C₆H₁₂O₆ 像 6 個碳配 6 個水。'},
+ {q:'下面哪一個是「原型食物」？',o:['地瓜','地瓜酥','地瓜口味洋芋片'],a:0,e:'看得出原本樣子的才是原型食物。'}],
+c4:[
+ {q:'「必需胺基酸」的「必需」是什麼意思？',o:['最重要的','身體做不出來，一定要從食物吃','一天只要吃一次'],a:1,e:'9 種必需胺基酸人體無法自己製造。'},
+ {q:'下列哪個不是蛋白質的好處？',o:['飽足感高','消化時花較多能量','每公克熱量最高'],a:2,e:'蛋白質每公克 4 大卡，熱量最高的是脂肪。'}],
+c5:[
+ {q:'橄欖油在室溫是液體，主要是因為？',o:['含較多不飽和脂肪，鏈子彎折排不緊','含水','沒有熱量'],a:0,e:'不飽和脂肪有彎折，分子排不緊密。'},
+ {q:'一大匙炒菜油（約 15 公克）大約多少大卡？',o:['約 15 大卡','約 60 大卡','約 135 大卡'],a:2,e:'15 × 9 = 135 大卡。'},
+ {q:'哪一種脂肪要盡量避免？',o:['魚油','反式脂肪','堅果的油'],a:1,e:'反式脂肪對心血管傷害大。'}],
+c6:[
+ {q:'「維生素」最早被取名 vitamine，是因為科學家以為它是？',o:['維持生命的胺','一種礦物','一種糖'],a:0,e:'vital ＋ amine，後來發現很多不是胺，就去掉 e。'},
+ {q:'成人每天纖維建議量大約是？',o:['5～10 公克','25～35 公克','100 公克以上'],a:1,e:'台灣國健署建議 25～35 公克。'},
+ {q:'體重 60 公斤的人，每天喝水大約多少？',o:['約 600 毫升','約 1800～2100 毫升','約 5000 毫升'],a:1,e:'60 × 30～35 = 1800～2100 毫升。'}],
+c7:[
+ {q:'TDEE 裡通常佔最大比例的是？',o:['刻意運動 EAT','基礎代謝 BMR','消化食物 TEF'],a:1,e:'BMR 約佔 60～70%。'},
+ {q:'NEAT 指的是？',o:['健身房裡的運動','走路、站立、做家事等日常活動消耗','睡覺時的消耗'],a:1,e:'非運動性活動產熱，是最容易改變的一塊。'},
+ {q:'公式算出的 TDEE 應該怎麼看待？',o:['百分之百準確','一個估計值，需要用實際結果校正','完全沒用'],a:1,e:'第 18 章會用週平均體重來校正。'}],
+c8:[
+ {q:'胰島素的名字來自什麼？',o:['拉丁文「島」','希臘文「糖」','發明者的名字'],a:0,e:'因為它由胰臟裡像小島的「胰島」分泌。'},
+ {q:'西瓜 GI 高，但一片西瓜對血糖影響不大，因為？',o:['西瓜沒有糖','一片的碳水量少，GL 低','西瓜是蔬菜'],a:1,e:'GL 同時考慮速度和份量。'},
+ {q:'哪一份早餐比較不容易讓人餐後昏沉？',o:['白吐司＋含糖奶茶','燕麥＋蛋＋無糖豆漿','甜麵包＋果汁'],a:1,e:'有纖維、蛋白質、脂肪，血糖較平穩。'}],
+c9:[
+ {q:'手掌份量法中，「一個手掌」代表？',o:['蔬菜','蛋白質','油脂'],a:1,e:'手掌 = 蛋白質、拳頭 = 蔬菜、手捧 = 碳水、拇指 = 油脂。'},
+ {q:'「我的餐盤」口訣：豆魚蛋肉要多少？',o:['一掌心','兩大碗','一茶匙'],a:0,e:'豆魚蛋肉一掌心。'}],
+c10:[
+ {q:'一包餅乾：每份 120 大卡，本包裝含 2.5 份。整包熱量是？',o:['120 大卡','240 大卡','300 大卡'],a:2,e:'120 × 2.5 = 300 大卡。'},
+ {q:'成分表寫「水、糖、燕麥、植物油」，代表什麼？',o:['燕麥最多','糖比燕麥多','糖最少'],a:1,e:'成分依重量由多到少排列。'},
+ {q:'成人一天鈉的建議上限約是？',o:['240 毫克','2400 毫克','24000 毫克'],a:1,e:'約 2400 毫克，相當於 6 公克鹽。'}],
+c11:[
+ {q:'對多數成人比較合理的減重速度是每週？',o:['體重的 0.5～1%','體重的 3～5%','越快越好'],a:0,e:'太快容易掉肌肉、難維持。'},
+ {q:'燃燒掉的脂肪大部分從哪裡離開身體？',o:['變成汗','變成二氧化碳呼出去','變成大便'],a:1,e:'約 84% 變成二氧化碳由肺呼出。'},
+ {q:'「熱量密度低」的食物有什麼好處？',o:['同樣熱量可以吃比較多、比較飽','熱量是零','會燃燒脂肪'],a:0,e:'例如 300 大卡的蔬菜份量很大。'}],
+c12:[
+ {q:'週六早上體重比週五多 1.5 公斤，最可能是？',o:['長了 1.5 公斤脂肪','水分和食物重量','肌肉'],a:1,e:'1.5 公斤脂肪要多吃約 11,000 大卡，一頓飯做不到。'},
+ {q:'看體重最好的方法是？',o:['一天量五次，看最低的','固定時間量，看每週平均','一個月量一次'],a:1,e:'週平均能抵消每天的水分波動。'},
+ {q:'瘦素（leptin）減少時，大腦會以為？',o:['存糧很多','快鬧饑荒了','應該睡覺'],a:1,e:'瘦素由脂肪細胞分泌，脂肪減少它也減少。'}],
+c13:[
+ {q:'DIETFITS 研究中，健康低脂和健康低碳組一年後的結果？',o:['低碳組減很多','低脂組減很多','兩組差不多'],a:2,e:'關鍵是依從性，選能長期做到的。'},
+ {q:'每天做 100 下仰臥起坐，能專門消掉肚子的脂肪嗎？',o:['可以','不行，脂肪無法局部減','只有晚上做可以'],a:1,e:'不能局部減脂，脂肪是全身一起減。'},
+ {q:'生酮飲食最早是用來治療什麼？',o:['兒童癲癇','感冒','近視'],a:0,e:'1921 年梅約診所的懷爾德醫師用於癲癇。'}],
+c14:[
+ {q:'長肌肉需要哪三樣同時到位？',o:['訓練、蛋白質與熱量、睡眠','只要蛋白粉','只要流汗'],a:0,e:'訓練是命令、食物是建材、睡眠是施工時間。'},
+ {q:'有規律重訓的人，蛋白質每公斤體重大約吃多少？',o:['0.3 公克','1.6～2.2 公克','5 公克'],a:1,e:'研究顯示約 1.6 開始趨緩，2.2 是保守上限。'},
+ {q:'anabolism（合成代謝）的 ana 是什麼意思？',o:['往上','往下','停止'],a:0,e:'ana 往上堆，kata 往下拆。'}],
+c15:[
+ {q:'肝醣（glycogen）比較像身體的什麼？',o:['糖的隨身油箱','永久倉庫','廢物'],a:0,e:'存在肌肉和肝臟，高強度運動很依賴它。'},
+ {q:'離運動只剩 30～60 分鐘，比較適合吃？',o:['炸雞排','一根香蕉','一大碗麻辣鍋'],a:1,e:'好消化的碳水，油和纖維少。'},
+ {q:'運動後一定要在 30 分鐘內喝蛋白粉嗎？',o:['一定要，不然白練','不用，前後幾小時內吃到都可以，總量更重要','運動後不能吃東西'],a:1,e:'「合成窗口」其實很寬。'}],
+c16:[
+ {q:'健身新手增肌期，熱量大約怎麼抓？',o:['TDEE ＋ 約 10%','TDEE ＋ 50%','TDEE − 30%'],a:0,e:'盈餘太大，多的會變脂肪。'},
+ {q:'哪一個補充品研究證據最多、最穩定？',o:['燃脂錠','肌酸','排毒茶'],a:1,e:'肌酸是研究最多的運動補充品之一（成人）。'},
+ {q:'「體態重組」指的是？',o:['同時減脂肪、增肌肉','只減體重','只增體重'],a:0,e:'體重可能不太變，但身形改變。'}],
+c17:[
+ {q:'設計菜單時，巨量營養素的正確順序是？',o:['先碳水，再蛋白質','先蛋白質，再脂肪，剩下給碳水','隨便都可以'],a:1,e:'蛋白質最重要先定，脂肪要有下限，碳水填剩下的。'},
+ {q:'食物代換表中，1 顆雞蛋大約等於幾份豆魚蛋肉？',o:['1 份','3 份','半份'],a:0,e:'約 7 公克蛋白質，1 份。'},
+ {q:'每天吃的營養素跟目標差 5 公克，應該？',o:['很嚴重，要重來','沒關係，長期穩定比精準更重要','停止吃飯'],a:1,e:'差不多做到、持續，才是關鍵。'}],
+c18:[
+ {q:'減脂時週平均體重連續 3 週沒動，而且確定記錄準確，可以？',o:['每天少吃 100～150 大卡或多走點路','直接少吃 800 大卡','放棄'],a:0,e:'一次只做小調整。'},
+ {q:'「飲食休息期」（diet break）是？',o:['停止吃東西','在減脂中安排 1～2 週吃回維持熱量','每天吃一餐'],a:1,e:'MATADOR 研究顯示有助於長期效果。'},
+ {q:'減脂結束後，比較好的做法是？',o:['立刻大吃慶祝','每週慢慢加回熱量，進入維持期','繼續減到越瘦越好'],a:1,e:'慢慢加回，比較不容易復胖。'}],
+c19:[
+ {q:'正在長高的國中生想變瘦，比較適合的做法是？',o:['自己算赤字、每天吃很少','少喝含糖飲料、多運動、睡飽，有需要請醫師評估','只喝果汁'],a:1,e:'成長期需要足夠能量，不建議自行節食。'},
+ {q:'以下哪個是需要注意的警訊？',o:['喜歡吃水果','心情完全被體重數字決定、常刻意不吃','每天走路'],a:1,e:'出現這類情況，請找信任的大人或醫師談談。'}]
+};
+
+/* ---------- render quiz ---------- */
+function renderQ(box,list,onDone,tag){
+  box.innerHTML='';let right=0,answered=0;
+  list.forEach((it,qi)=>{
+    const d=document.createElement('div');d.className='q';
+    d.innerHTML=`<p>${qi+1}. ${it.q}${tag&&it.ch?` <span style="color:var(--soft);font-weight:400;font-size:.85rem">（第 ${it.ch} 章）</span>`:''}</p><div class="opts"></div><div class="explain"></div>`;
+    const opts=d.querySelector('.opts'),ex=d.querySelector('.explain');
+    it.o.forEach((t,oi)=>{const b=document.createElement('button');b.textContent=t;
+      b.onclick=()=>{opts.querySelectorAll('button').forEach(x=>x.disabled=true);
+        opts.children[it.a].classList.add('right');
+        if(oi===it.a){right++;ex.innerHTML='答對了！'+it.e;}else{b.classList.add('wrong');ex.innerHTML='再想想：'+it.e+(it.ch?`（可以回去看第 ${it.ch} 章）`:'');}
+        ex.classList.add('show');answered++;if(answered===list.length)onDone(right,list.length);};
+      opts.appendChild(b);});
+    box.appendChild(d);
+  });
+}
+$$('.quiz').forEach(box=>{
+  const id=box.dataset.q, list=Q[id]||[];
+  const h=document.createElement('h3');h.textContent='小測驗';box.before(h);h.className='noprint';
+  function finish(r,n){
+    const m=document.createElement('p');m.className='out';
+    if(r===n){done.add(id);tocBtn(id).classList.add('done');m.innerHTML='全部答對！這一章完成了，目錄已打勾。';updateProgress();}
+    else{const b=document.createElement('button');b.className='btn ghost';b.textContent='重新作答';b.onclick=()=>renderQ(box,list,finish,false);m.innerHTML='答對 '+r+' / '+n+' 題。看看解說，再試一次。 ';m.appendChild(b);}
+    box.appendChild(m);
+  }
+  renderQ(box,list,finish,false);
+});
+
+/* ---------- final ---------- */
+function finalExam(){
+  let pool=[];Object.keys(Q).forEach(k=>Q[k].forEach(q=>pool.push(Object.assign({ch:k.slice(1)},q))));
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+  const pick=pool.slice(0,12).sort((a,b)=>a.ch-b.ch);
+  $('#finalScore').textContent='';
+  renderQ($('#finalBox'),pick,(r,n)=>{
+    const pct=Math.round(r/n*100);
+    $('#finalScore').innerHTML=`你的分數：<span class="big">${r} / ${n}（${pct} 分）</span><br>`+
+     (pct>=90?'非常好！你已經掌握了從入門到實作的核心概念。':pct>=70?'不錯！把答錯的章節再複習一次就更完整了。':'建議回到答錯的章節重讀，再挑戰一次。');
+  },true);
+}
+$('#finalNew').onclick=finalExam; finalExam();
+
+/* ---------- glossary ---------- */
+const terms=[];
+chapters.forEach(c=>{const num=c.id.slice(1);c.querySelectorAll('.term').forEach(t=>{
+  const w=t.querySelector('.w'),en=t.querySelector('.en'),o=t.querySelector('.origin');
+  if(!w||!o||/框/.test(w.textContent))return;
+  terms.push({w:w.textContent,en:en?en.textContent:'',o:o.innerHTML,ch:num});
+});});
+function gloss(q){
+  q=(q||'').trim().toLowerCase();
+  $('#gloss').innerHTML=terms.filter(t=>!q||(t.w+t.en+t.o).toLowerCase().includes(q))
+   .map(t=>`<dt>${t.w} <span style="font-family:var(--body);font-weight:400;font-size:.85rem;color:var(--soft)">${t.en}${+t.ch>0?'　第 '+t.ch+' 章':''}</span></dt><dd>${t.o}</dd>`).join('')||'<p>找不到這個名詞，換個關鍵字試試。</p>';
+}
+$('#glossQ').addEventListener('input',e=>gloss(e.target.value)); gloss();
+
+/* ---------- on show hooks ---------- */
+const shown=new Set();
+function onShow(id){
+  if(shown.has(id))return;shown.add(id);
+  if(id==='c3')playBars($('#macroBars'));
+  if(id==='c7')donut();
+  if(id==='c8')gluc();
+  if(id==='c11')playBars($('#densBars'));
+  if(id==='c12')wchart();
+  if(id==='c14')prot();
+}
+
+/* ---------- theme meta + start ---------- */
+window.addEventListener('hashchange',()=>{const id=location.hash.slice(1);if(id&&id!==current)go(id)});
+go((location.hash||'#c0').slice(1),true);
+updateProgress();
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-6563d2fab8" data-category="personal"></script></body>
+</html>

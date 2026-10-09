@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI 影片導演課｜從一句話到一部短片（入門到專業）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=LXGW+WenKai+TC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4F7FB;
+  --panel:#FFFFFF;
+  --ink:#1B1F3B;
+  --ink-soft:#4A5075;
+  --line:#1B1F3B;
+  --court:#FF5A1F;
+  --ki:#FFC400;
+  --sky:#2F6BFF;
+  --tint:#E6ECF8;
+  --ok:#14956B;
+  --bad:#D7263D;
+  --tone: radial-gradient(circle, rgba(27,31,59,.13) 1px, transparent 1.4px);
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
+  --kai:"LXGW WenKai TC","Kaiti TC","DFKai-SB","BiauKai",serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#12152A; --panel:#1C2140; --ink:#EEF1FA; --ink-soft:#B4BAD6; --line:#8F97C4;
+    --tint:#262C52; --tone: radial-gradient(circle, rgba(238,241,250,.08) 1px, transparent 1.4px);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#12152A; --panel:#1C2140; --ink:#EEF1FA; --ink-soft:#B4BAD6; --line:#8F97C4;
+  --tint:#262C52; --tone: radial-gradient(circle, rgba(238,241,250,.08) 1px, transparent 1.4px);
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 16px);scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-text-size-adjust:100%}
+img,svg,canvas{max-width:100%}
+a{color:var(--sky)}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px;border-radius:4px}
+button{font-family:inherit;font-size:15px;cursor:pointer}
+
+/* ===== layout ===== */
+.shell{display:grid;grid-template-columns:290px minmax(0,1fr);min-height:100vh}
+.side{position:sticky;top:0;height:100vh;overflow:auto;border-right:3px solid var(--line);background:var(--panel);padding:22px 18px 40px}
+.side h2{font-size:18px;font-weight:900;margin:0 0 4px;letter-spacing:.02em}
+.side .meter{height:10px;border:2px solid var(--line);border-radius:6px;overflow:hidden;margin:8px 0 4px}
+.side .meter i{display:block;height:100%;width:0;background:var(--court);transition:width .4s}
+.side small{color:var(--ink-soft)}
+.stage-name{font-family:var(--kai);font-size:16px;color:var(--ink-soft);margin:20px 0 6px;padding-bottom:4px;border-bottom:1px dashed var(--line)}
+.toc{list-style:none;margin:0;padding:0}
+.toc a{display:grid;grid-template-columns:34px 1fr 18px;align-items:start;gap:6px;padding:6px 6px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:15px;line-height:1.5}
+.toc a:hover{background:var(--tint)}
+.toc a .no{font-weight:900;color:var(--court)}
+.toc a .ck{color:var(--ok);font-weight:900;visibility:hidden}
+.toc a.done .ck{visibility:visible}
+.toc a.here{background:var(--tint);box-shadow:inset 3px 0 0 var(--court)}
+.main{min-width:0}
+.col{max-width:820px;margin:0 auto;padding:0 28px}
+.topbar{display:none}
+.theme-btn{margin-top:18px;border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:8px;padding:4px 10px}
+
+/* ===== hero ===== */
+.hero{position:relative;border-bottom:3px solid var(--line);background:var(--ink);color:#fff;overflow:hidden}
+.hero canvas{display:block;width:100%;height:auto;aspect-ratio:16/9;max-height:62vh;object-fit:cover;image-rendering:auto}
+.hero .cap{position:absolute;left:0;right:0;bottom:0;padding:28px 32px 26px;background:linear-gradient(transparent,rgba(10,12,30,.86))}
+.hero h1{font-size:clamp(30px,5.4vw,58px);line-height:1.12;margin:0 0 10px;font-weight:900;letter-spacing:.01em}
+.hero p{margin:0;max-width:44em;font-size:clamp(15px,1.8vw,18px);color:#E6E9F7}
+.hero .step{position:absolute;top:16px;right:18px;font-family:var(--kai);background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.4);padding:4px 12px;border-radius:20px;font-size:15px}
+.hero .replay{position:absolute;top:16px;left:18px;border:2px solid #fff;background:rgba(0,0,0,.4);color:#fff;border-radius:20px;padding:3px 14px}
+
+/* ===== lessons ===== */
+.stage-banner{margin:64px 0 0;padding:26px 0 8px;border-top:6px solid var(--line)}
+.stage-banner h2{font-size:clamp(26px,4vw,38px);font-weight:900;margin:0;line-height:1.25}
+.stage-banner p{margin:6px 0 0;color:var(--ink-soft)}
+.lesson{padding:46px 0 10px;border-bottom:1px dashed var(--line)}
+.lesson>header{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;align-items:end;margin-bottom:18px}
+.lesson>header .no{grid-row:1/3;font-size:64px;font-weight:900;line-height:.9;color:var(--court);-webkit-text-stroke:2px var(--line);paint-order:stroke fill}
+.lesson>header h3{margin:0;font-size:clamp(23px,3.2vw,31px);line-height:1.3;font-weight:900}
+.lesson>header .goal{margin:0;font-family:var(--kai);color:var(--ink-soft);font-size:17px}
+.lesson h4{font-size:20px;margin:30px 0 8px;font-weight:900}
+.lesson p{margin:0 0 14px}
+.lesson ul,.lesson ol{padding-left:1.4em;margin:0 0 14px}
+.lesson li{margin:4px 0}
+
+/* comic panel */
+.panel{position:relative;background:var(--panel);border:3px solid var(--line);border-radius:4px;padding:18px 20px;margin:20px 0;box-shadow:6px 6px 0 var(--line)}
+.panel.tone{background-image:var(--tone);background-size:9px 9px;background-color:var(--panel)}
+.panel>.tag{position:absolute;top:-15px;left:14px;background:var(--ink);color:var(--paper);font-size:14px;font-weight:700;padding:1px 12px;border-radius:3px}
+.origin{border-left:6px solid var(--ki);background:var(--tint);padding:12px 16px;margin:16px 0;border-radius:0 6px 6px 0;font-family:var(--kai);font-size:17px;line-height:1.8}
+.origin b{font-family:var(--sans)}
+.origin .ot{font-family:var(--sans);font-weight:900;font-size:14px;color:var(--ink-soft);display:block;margin-bottom:2px}
+.warn{border:3px solid var(--bad);border-radius:6px;padding:12px 16px;margin:16px 0;background:color-mix(in srgb,var(--bad) 7%,var(--panel))}
+.tip{border:3px dashed var(--ok);border-radius:6px;padding:12px 16px;margin:16px 0}
+.analogy{font-family:var(--kai);font-size:19px;line-height:1.75;padding:6px 0 6px 18px;border-left:4px solid var(--court);margin:16px 0}
+.mission{background:var(--ink);color:var(--paper);border-radius:6px;padding:16px 20px;margin:22px 0}
+.mission b{color:var(--ki)}
+.mission ol{margin:6px 0 0}
+.done-btn{display:inline-flex;align-items:center;gap:8px;margin:14px 0 30px;border:3px solid var(--line);background:var(--panel);color:var(--ink);font-weight:900;padding:8px 18px;border-radius:30px;box-shadow:3px 3px 0 var(--line)}
+.done-btn[aria-pressed="true"]{background:var(--ok);color:#fff;border-color:var(--ok);box-shadow:none}
+
+/* tables */
+.tbl{overflow-x:auto;margin:16px 0;border:3px solid var(--line);border-radius:4px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:15px;line-height:1.6}
+th,td{border-bottom:1px solid color-mix(in srgb,var(--line) 30%,transparent);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:var(--tint);font-weight:900;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+
+/* code / prompt */
+.prompt{position:relative;background:#0F1330;color:#E9EDFF;border-radius:6px;padding:16px 18px 16px;margin:14px 0;font-size:15px;line-height:1.75;white-space:pre-wrap;word-break:break-word;font-family:var(--sans)}
+.prompt .copy{position:absolute;top:8px;right:8px;background:var(--ki);color:#1B1F3B;border:0;border-radius:4px;padding:2px 10px;font-size:13px;font-weight:700}
+.prompt .lbl{display:block;color:var(--ki);font-size:13px;font-weight:700;margin-bottom:4px}
+.good-bad{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.good-bad>div{border:3px solid var(--line);border-radius:4px;padding:12px 14px;background:var(--panel)}
+.good-bad .b{border-color:var(--bad)} .good-bad .g{border-color:var(--ok)}
+.good-bad h5{margin:0 0 6px;font-size:15px}
+.good-bad .b h5{color:var(--bad)} .good-bad .g h5{color:var(--ok)}
+
+/* widgets */
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.seg button{border:2px solid var(--line);background:var(--panel);color:var(--ink);border-radius:20px;padding:4px 14px;font-weight:700}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.stage-frame{position:relative;border:3px solid var(--line);border-radius:4px;overflow:hidden;background:#cfe0ff;aspect-ratio:16/9}
+.stage-frame svg{display:block;width:100%;height:100%}
+.readout{font-family:var(--kai);font-size:17px;margin:10px 0 0;min-height:3.4em}
+input[type=range]{width:100%;accent-color:var(--court)}
+.flip{display:grid;grid-template-columns:1fr;gap:10px}
+.flip canvas{width:100%;border:3px solid var(--line);border-radius:4px;background:#fff;aspect-ratio:2/1}
+.filmstrip{display:flex;gap:4px;overflow-x:auto;padding:6px;background:#111;border-radius:4px}
+.filmstrip canvas{flex:0 0 64px;width:64px;height:32px;border:0;border-radius:2px;background:#fff}
+.filmstrip canvas.on{outline:3px solid var(--ki)}
+
+/* pipeline */
+.pipe{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:18px 0;counter-reset:p}
+.pipe>div{border:3px solid var(--line);background:var(--panel);border-radius:4px;padding:10px 12px;position:relative;counter-increment:p}
+.pipe>div::before{content:counter(p);position:absolute;top:-12px;right:-6px;width:28px;height:28px;border-radius:50%;background:var(--court);color:#fff;font-weight:900;display:grid;place-items:center;border:2px solid var(--line)}
+.pipe b{display:block;font-size:16px}
+.pipe span{font-size:14px;color:var(--ink-soft);line-height:1.5;display:block}
+
+/* builder */
+.builder{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px 14px}
+.builder label{font-weight:700;font-size:14px;display:block}
+.builder select,.builder input{width:100%;font-family:inherit;font-size:15px;padding:6px 8px;border:2px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink)}
+
+/* storyboard */
+.board{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;margin:18px 0}
+.shot{border:3px solid var(--line);background:var(--panel);border-radius:4px;display:flex;flex-direction:column}
+.shot svg{display:block;width:100%;aspect-ratio:16/9;border-bottom:3px solid var(--line);background:#fff}
+.shot .meta{padding:8px 10px;font-size:14px;line-height:1.55}
+.shot .meta b{font-size:15px}
+.shot .meta .k{display:inline-block;background:var(--tint);border-radius:3px;padding:0 6px;margin:2px 4px 2px 0;font-size:12.5px}
+.shot details{border-top:1px dashed var(--line);padding:6px 10px;font-size:13.5px}
+.shot summary{cursor:pointer;font-weight:700;color:var(--sky)}
+.shot .prompt{font-size:13px;padding:30px 10px 10px}
+
+/* timeline */
+.tl{border:3px solid var(--line);border-radius:4px;background:var(--panel);padding:12px;overflow-x:auto}
+.tl-inner{min-width:640px;position:relative}
+.trk{display:grid;grid-template-columns:70px 1fr;align-items:center;gap:8px;margin:6px 0}
+.trk>span{font-size:13px;font-weight:700}
+.lane{position:relative;height:30px;background:var(--tint);border-radius:4px}
+.clip{position:absolute;top:3px;bottom:3px;border-radius:3px;font-size:11.5px;color:#fff;padding:2px 6px;overflow:hidden;white-space:nowrap;border:1px solid rgba(0,0,0,.25)}
+.playhead{position:absolute;top:0;bottom:0;width:2px;background:var(--bad);left:78px;animation:ph 9s linear infinite}
+@keyframes ph{from{left:78px}to{left:100%}}
+
+/* chain */
+.chain svg{width:100%;height:auto;display:block}
+
+/* quiz */
+.q{border:3px solid var(--line);border-radius:4px;background:var(--panel);padding:14px 16px;margin:14px 0}
+.q p{font-weight:700;margin:0 0 8px}
+.q label{display:block;padding:5px 8px;border-radius:6px;cursor:pointer}
+.q label:hover{background:var(--tint)}
+.q .fb{font-family:var(--kai);margin-top:6px;min-height:1.6em}
+.q.right{border-color:var(--ok)} .q.wrong{border-color:var(--bad)}
+.score{font-size:22px;font-weight:900}
+
+/* glossary */
+.gsearch{width:100%;font-family:inherit;font-size:17px;padding:10px 14px;border:3px solid var(--line);border-radius:30px;background:var(--panel);color:var(--ink);margin:10px 0 16px}
+.gl{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.gl article{border:2px solid var(--line);border-radius:4px;background:var(--panel);padding:10px 12px;font-size:14.5px;line-height:1.65}
+.gl h5{margin:0;font-size:17px}
+.gl .en{color:var(--ink-soft);font-size:13px}
+.gl .og{font-family:var(--kai);font-size:15px;margin-top:6px;border-top:1px dashed var(--line);padding-top:6px}
+
+footer{padding:50px 0 80px;color:var(--ink-soft);font-size:14px}
+
+/* camera move demo */
+.cam .world{transform-origin:50% 55%;transform-box:view-box}
+.cam.pan .world{animation:pan 4s ease-in-out infinite alternate}
+.cam.tilt .world{animation:tilt 4s ease-in-out infinite alternate}
+.cam.push .world{animation:push 4s ease-in-out infinite alternate}
+.cam.pull .world{animation:push 4s ease-in-out infinite alternate-reverse}
+.cam.track .world{animation:track 5s linear infinite}
+.cam.track .runner{animation:none}
+.cam.orbit .world{animation:orbit 5s ease-in-out infinite alternate}
+.cam.still .world{animation:none}
+.cam .runner{transform-box:view-box}
+.cam.still .runner{animation:run 5s linear infinite}
+@keyframes pan{from{transform:translateX(18%)}to{transform:translateX(-18%)}}
+@keyframes tilt{from{transform:translateY(-22%)}to{transform:translateY(18%)}}
+@keyframes push{from{transform:scale(1)}to{transform:scale(2.3)}}
+@keyframes track{from{transform:translateX(30%)}to{transform:translateX(-30%)}}
+@keyframes orbit{0%{transform:scaleX(1) translateX(0)}50%{transform:scaleX(.35) translateX(10%)}100%{transform:scaleX(-1) translateX(0)}}
+@keyframes run{from{transform:translateX(-45%)}to{transform:translateX(45%)}}
+
+@media (max-width:960px){
+  .shell{grid-template-columns:1fr}
+  .side{position:fixed;inset:0 20% 0 0;z-index:30;transform:translateX(-105%);transition:transform .25s;height:100%;padding-top:calc(22px + env(safe-area-inset-top,0px))}
+  .side.open{transform:none;box-shadow:12px 0 0 rgba(0,0,0,.2)}
+  .topbar{display:flex;position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--panel);border-bottom:3px solid var(--line);padding:8px 14px;align-items:center;gap:12px}
+  .topbar button{border:2px solid var(--line);background:var(--paper);color:var(--ink);border-radius:8px;padding:3px 12px;font-weight:700}
+  .topbar .meter{flex:1;height:10px;border:2px solid var(--line);border-radius:6px;overflow:hidden}
+  .topbar .meter i{display:block;height:100%;width:0;background:var(--court)}
+  .col{padding:0 18px}
+  .good-bad{grid-template-columns:1fr}
+  .lesson>header .no{font-size:46px}
+  .hero .cap{position:static;padding:18px 18px 22px;background:#1B1F3B}
+  .hero canvas{aspect-ratio:16/9}
+}
+@media print{.side,.topbar,.hero .replay,.done-btn,.copy{display:none!important}.shell{display:block}.panel{box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav class="side" id="side" aria-label="課程目錄">
+  <h2>AI 影片導演課</h2>
+  <div class="meter" aria-hidden="true"><i id="meterSide"></i></div>
+  <small id="progTxt">已完成 0 / 17 課</small>
+  <div id="toc"></div>
+  <button class="theme-btn" id="themeBtn" type="button">切換深色／淺色</button>
+</nav>
+
+<div class="main">
+<div class="topbar">
+  <button type="button" id="menuBtn" aria-controls="side" aria-expanded="false">目錄</button>
+  <div class="meter" aria-hidden="true"><i id="meterTop"></i></div>
+  <small id="progTop">0/17</small>
+</div>
+
+<header class="hero">
+  <canvas id="heroCanvas" width="320" height="180" aria-label="一張畫面從雜訊慢慢變清楚的動畫，示範 AI 如何生成圖像"></canvas>
+  <button class="replay" type="button" id="heroReplay">再看一次</button>
+  <div class="step" id="heroStep">雜訊</div>
+  <div class="cap">
+    <h1>從一句話，到一部短片</h1>
+    <p>你剛剛看到的，就是 AI 生成畫面的方法：從一堆亂點開始，一步一步「擦掉不像的部分」。這門課 17 堂，從「影片是什麼」開始，一路學到用 Claude、ChatGPT、Gemini 等 AI，自己導演一部 1–5 分鐘、角色前後一致的連續短片。</p>
+  </div>
+</header>
+
+<div class="col">
+
+<section class="lesson" id="L0" style="border-bottom:0">
+  <h4 style="margin-top:36px">開始之前：這門課怎麼上</h4>
+  <p>請照順序上，一課只學一件事，每課最後都有一個「小任務」。做完任務再按「我學會了」，目錄旁的進度條會記住你上到哪裡。</p>
+  <div class="panel tone">
+    <span class="tag">你最後會做出什麼</span>
+    <p style="margin:0">一部原創的 90 秒熱血籃球短片《最後三秒》：比賽剩三秒、落後一分、主角握著球……。完整的劇本、角色設定、14 格分鏡、每一鏡的提示詞，都在第 14 課。學會之後，你可以用同一套方法做到 5 分鐘。</p>
+  </div>
+  <div class="tip">
+    <b>關於《灌籃高手》《七龍珠》：</b>這門課會用「像灌籃高手那種最後幾秒的熱血」「像七龍珠那種集氣變身」來說明<em>類型與手法</em>，但範例裡的角色全部是原創的。原因在第 17 課會講清楚：別人的角色有著作權，大部分 AI 平台也會直接擋掉。學會做原創角色，才是真正屬於你的作品。
+  </div>
+  <div class="warn">
+    <b>給國中生：</b>很多 AI 影片工具規定要滿 18 歲、或需要付費訂閱（例如 Google 的 Gemini Omni 影片功能）。請和爸媽或老師一起用他們的帳號操作。前面 1–3 課和寫劇本、畫分鏡的部分，不用任何帳號也能學。
+  </div>
+  <p style="font-size:14px;color:var(--ink-soft)">工具資訊整理至 2026 年 9 月。AI 工具變化非常快，名稱和規格若和官網不同，以官網為準；但這門課教的「方法」不會過時。</p>
+</section>
+
+<!-- ================= 入門篇 ================= -->
+<div class="stage-banner" data-stage="入門篇">
+  <h2>入門篇：先搞懂 AI 影片是怎麼來的</h2>
+  <p>第 1–4 課。學完你會做出人生第一支 8 秒 AI 影片。</p>
+</div>
+
+<section class="lesson" id="L1" data-title="影片到底是什麼？AI 又怎麼「畫」出來？">
+  <header><span class="no">1</span><h3>影片到底是什麼？AI 又怎麼「畫」出來？</h3><p class="goal">學會：幀、FPS、擴散模型，以及為什麼 AI 一次只能做幾秒</p></header>
+
+  <h4>影片其實是「很快翻過去的圖」</h4>
+  <p>你小時候玩過課本角落的翻頁動畫嗎？每一頁畫一點點不一樣的小人，快速翻過去，小人就「動」起來了。電影、動畫、手機影片，全部都是這個原理。</p>
+  <p>下面是一顆籃球的翻頁動畫。拉動速度，看看每秒翻幾張時，眼睛開始覺得它是「連續」的：</p>
+  <div class="panel">
+    <span class="tag">動手玩：翻頁書</span>
+    <div class="flip">
+      <canvas id="flipCanvas" width="600" height="300" aria-label="籃球彈跳的逐格動畫"></canvas>
+      <div class="filmstrip" id="filmstrip" aria-hidden="true"></div>
+      <div class="seg" id="fpsSeg" role="group" aria-label="每秒張數">
+        <button type="button" data-fps="2" aria-pressed="false">每秒 2 張</button>
+        <button type="button" data-fps="6" aria-pressed="false">每秒 6 張</button>
+        <button type="button" data-fps="12" aria-pressed="false">每秒 12 張</button>
+        <button type="button" data-fps="24" aria-pressed="true">每秒 24 張</button>
+      </div>
+      <p class="readout" id="fpsRead"></p>
+    </div>
+  </div>
+  <div class="origin"><span class="ot">名詞由來</span><b>幀（ㄓㄣˋ）／Frame</b>：英文 frame 原本是「畫框」。早期電影底片是一格一格的小照片，每一格就叫一個 frame。中文的「幀」本來是指一幅畫、一張字畫（「一幀山水」），所以翻譯時拿來當「一張畫面」。</div>
+  <div class="origin"><span class="ot">名詞由來</span><b>FPS（每秒幀數）</b>：Frames Per Second 的縮寫。1920 年代電影開始有聲音，聲音要跟畫面一起跑，速度就必須固定，電影業最後統一成每秒 24 格，一直用到今天。所以「24fps」會讓人覺得「有電影感」。</div>
+
+  <h4>AI 怎麼「畫」出一張圖？像雕刻家</h4>
+  <p class="analogy">有人問雕刻家怎麼刻出一匹馬，他說：「很簡單，把石頭上不像馬的部分，全部敲掉就好。」</p>
+  <p>現在主流的 AI 畫圖方法幾乎一模一樣。它先準備一張全是亂點的「雜訊」圖（就像電視沒訊號時的雪花），然後根據你的文字，一步一步把「不像你描述的東西」擦掉。擦個幾十次，畫面就出現了。拉拉看：</p>
+  <div class="panel">
+    <span class="tag">動手玩：去雜訊</span>
+    <canvas id="diffCanvas" width="320" height="180" style="width:100%;border:3px solid var(--line);border-radius:4px;aspect-ratio:16/9;display:block" aria-label="雜訊逐步變成清楚畫面"></canvas>
+    <label for="diffRange" style="display:block;margin-top:10px;font-weight:700">去雜訊步數：<span id="diffNum">0</span> / 40</label>
+    <input id="diffRange" type="range" min="0" max="40" value="0">
+    <p class="readout" id="diffRead">第 0 步：一片雪花，什麼都看不出來。</p>
+  </div>
+  <div class="origin"><span class="ot">名詞由來</span><b>擴散模型（Diffusion Model）</b>：「擴散」是物理名詞：一滴墨水滴進水裡，會慢慢散開、變成一片均勻的灰。2015 年科學家想到：如果讓電腦學會把這個過程「倒著播」——從一片均勻的灰，變回那滴清楚的墨水——它就能從雜訊變出圖來。這就是名字的由來。</div>
+  <div class="origin"><span class="ot">名詞由來</span><b>模型（Model）</b>：像「汽車模型」是真車的縮小版，AI 模型是電腦從大量圖片、影片裡學到的「世界的縮小版規律」。Gemini、Kling 這些名字，都是某一個模型的名字。</div>
+
+  <h4>為什麼 AI 影片一次只有幾秒？</h4>
+  <p>一張圖只要擦乾淨一次。影片 1 秒就有 24 張，而且這 24 張要<strong>互相對得上</strong>：上一張球在這裡，下一張不能突然跳到那裡；主角的衣服不能每一張都換顏色。這叫<strong>時間一致性</strong>，非常吃電腦的力氣。</p>
+  <p>所以到 2026 年，大部分工具一次只能做 <strong>5 到 15 秒</strong>。這件事很重要，它決定了整門課的做法：</p>
+  <div class="panel tone"><span class="tag">整門課的核心觀念</span><p style="margin:0;font-size:19px;font-weight:700">一部 3 分鐘的片 ＝ 很多個 5–10 秒的「鏡頭」，一個一個做好，再接起來。</p><p style="margin:6px 0 0">真正的電影也是這樣拍的：一部電影有上千個鏡頭，每個鏡頭通常只有幾秒。你要學的不是「叫 AI 一次做完」，而是當一個會拆鏡頭、會接鏡頭的<strong>導演</strong>。</p></div>
+
+  <div class="mission"><b>小任務：</b>打開手機相機，錄 3 秒影片，看看設定裡寫的是 30fps 還是 60fps。算算看：這 3 秒一共有幾張圖？（答案：90 或 180 張）</div>
+  <button class="done-btn" type="button" data-done="L1" aria-pressed="false">我學會了</button>
+</section>
+
+<section class="lesson" id="L2" data-title="認識你的 AI 劇組：誰負責什麼">
+  <header><span class="no">2</span><h3>認識你的 AI 劇組：誰負責什麼</h3><p class="goal">學會：Claude、ChatGPT、Gemini 和影片 AI 各自的工作</p></header>
+  <p>拍一部片需要很多人：編劇寫故事、美術設計角色、攝影師拍畫面、配音員講話、剪輯師把片段接起來。做 AI 影片也一樣，只是每個位子換成不同的 AI。很多人一開始以為「找一個 AI 就能全部做完」，結果做出來的東西亂七八糟，就是因為沒有分工。</p>
+  <div class="pipe">
+    <div><b>編劇・導演助理</b><span>Claude／ChatGPT／Gemini 聊天：寫故事、拆鏡頭、寫提示詞、檢查錯誤</span></div>
+    <div><b>美術</b><span>圖片 AI：畫出角色設定圖、每一鏡的第一格畫面</span></div>
+    <div><b>攝影師</b><span>影片 AI：把文字或圖片變成會動的鏡頭</span></div>
+    <div><b>聲音</b><span>影片內建聲音、配音 AI、音樂 AI</span></div>
+    <div><b>剪輯師</b><span>CapCut（剪映）等剪輯軟體：接片、字幕、配樂</span></div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>工具</th><th>哪家公司</th><th>在劇組裡的位子</th><th>重點</th></tr></thead>
+    <tbody>
+      <tr><td><b>Claude</b></td><td>Anthropic</td><td>編劇、分鏡師、提示詞工程師</td><td>擅長寫長篇劇本、把故事拆成鏡頭表、檢查前後矛盾。<b>不會直接生成影片或圖片</b>，是你的「大腦」。</td></tr>
+      <tr><td><b>ChatGPT</b></td><td>OpenAI</td><td>編劇、美術（生圖）</td><td>能寫劇本，也能畫角色圖。它原本的影片工具 Sora 已在 2026 年 4 月停止 App 服務，目前主要用來寫和畫圖。</td></tr>
+      <tr><td><b>Gemini</b></td><td>Google</td><td>編劇＋攝影師（一人兩職）</td><td>聊天寫劇本之外，Gemini App 裡的 <b>Gemini Omni</b> 可以直接生成影片（約 10 秒），還能用聊天的方式修改影片。需要 Google AI 付費方案、18 歲以上。進階製作在 Google <b>Flow</b>。</td></tr>
+      <tr><td><b>Veo 3.1</b></td><td>Google</td><td>攝影師（電影級）</td><td>畫質高、可做 4K，每段約 8 秒可延長。在 Gemini App 裡已被 Omni 取代，但 Flow 和開發者工具仍可用。</td></tr>
+      <tr><td><b>可靈 Kling 3.0</b></td><td>快手（中國）</td><td>攝影師（動作派）</td><td>動作流暢，每段最長約 15 秒，可以<b>一次指定最多 6 個鏡頭</b>（多鏡頭分鏡），角色一致性好。</td></tr>
+      <tr><td><b>即夢／Seedance 2.0</b></td><td>字節跳動</td><td>攝影師（照參考圖）</td><td>很會「照著你給的參考圖」做影片，也能對嘴說話。</td></tr>
+      <tr><td><b>海螺 Hailuo</b></td><td>MiniMax</td><td>攝影師（省錢）</td><td>便宜、寫實，適合大量試。</td></tr>
+      <tr><td><b>Runway</b></td><td>Runway（美國）</td><td>特效・後製</td><td>把拍好的影片換風格（影片轉影片），和專業剪輯軟體配合好。</td></tr>
+      <tr><td><b>萬相 Wan</b></td><td>阿里巴巴</td><td>自己架的攝影棚</td><td><b>開源</b>：可以下載到自己電腦跑，不用付月費，但需要很強的顯示卡。</td></tr>
+      <tr><td><b>CapCut／剪映</b></td><td>字節跳動</td><td>剪輯師</td><td>免費、手機電腦都能用，自動字幕很方便。</td></tr>
+    </tbody>
+  </table></div>
+  <div class="origin"><span class="ot">名詞由來</span><b>AI（人工智慧）</b>：Artificial Intelligence。1956 年美國達特茅斯大學開了一場暑期研討會，數學家麥卡錫（John McCarthy）為了申請經費，替這個新領域取名叫 AI，這個名字就一直用到現在。</div>
+  <div class="origin"><span class="ot">名詞由來</span><b>多模態（Multimodal）</b>：「模態」指資訊的種類：文字、圖片、聲音、影片各是一種。能同時看懂好幾種的 AI 就叫多模態。Gemini Omni 的 Omni 是拉丁文「全部」的意思，意思是什麼都能吃進去。</div>
+  <div class="origin"><span class="ot">名詞由來</span><b>開源（Open Source）</b>：把程式「原始碼」公開（open）給大家看、改、用。像公開食譜，誰都能在自己家的廚房煮。</div>
+  <div class="tip"><b>新手建議：</b>先用「一個聊天 AI（Claude、ChatGPT 或 Gemini 任選）＋ 一個影片 AI（Gemini 或 Kling 任選）＋ CapCut」三件就夠了。工具不在多，在熟。</div>
+  <div class="mission"><b>小任務：</b>在筆記本畫五個格子，寫上「編劇、美術、攝影、聲音、剪輯」，每格填上你打算用的工具。</div>
+  <button class="done-btn" type="button" data-done="L2" aria-pressed="false">我學會了</button>
+</section>
+
+<section class="lesson" id="L3" data-title="四種做法：文字、照片、首尾幀、影片">
+  <header><span class="no">3</span><h3>四種做法：用文字、用照片、用頭尾兩張圖、用影片</h3><p class="goal">學會：T2V、I2V、首尾幀、V2V 什麼時候用哪一種</p></header>
+  <p>把東西「餵」給影片 AI 的方式有四種。越往下，你對畫面的控制越多。</p>
+  <div class="tbl"><table>
+    <thead><tr><th>做法</th><th>你給 AI 什麼</th><th>好處</th><th>缺點</th><th>適合</th></tr></thead>
+    <tbody>
+      <tr><td><b>① 文生影片</b><br>T2V</td><td>一段文字</td><td>最簡單、最快</td><td>角色長相每次都不一樣</td><td>練習、空景、氣氛鏡頭</td></tr>
+      <tr><td><b>② 圖生影片</b><br>I2V</td><td>一張圖＋描述動作的文字</td><td>角色長相被「釘住」</td><td>要先做好圖</td><td><b>連續短片的主力</b></td></tr>
+      <tr><td><b>③ 首尾幀</b></td><td>第一張圖＋最後一張圖</td><td>開頭和結尾都控制住</td><td>兩張圖差太多會變形</td><td>變身、轉場、精準動作</td></tr>
+      <tr><td><b>④ 影片轉影片</b><br>V2V</td><td>一段真的影片</td><td>動作完全照你拍的</td><td>要自己先拍</td><td>自己演、AI 換成動畫風</td></tr>
+    </tbody>
+  </table></div>
+  <div class="origin"><span class="ot">名詞由來</span><b>T2V／I2V</b>：Text-to-Video（文字到影片）、Image-to-Video（圖片到影片）。英文裡的 2 和 to 同音，工程師偷懶就寫成 2。中文的「文生影片」就是「由文字生成影片」的簡稱。</div>
+  <div class="origin"><span class="ot">名詞由來</span><b>首尾幀＝關鍵影格（Keyframe）</b>：1930 年代迪士尼動畫廠，資深動畫師只畫動作裡最重要的幾張（例如揮拳的起點和打到的那一刻），叫「關鍵影格」；中間那幾十張交給助手補，叫「補間」（in-between）。現在 AI 就是那個助手：你給頭和尾，它補中間。</div>
+  <div class="panel tone">
+    <span class="tag">用例子想一想</span>
+    <p>你想做「集氣變身」：少年站著 → 全身冒出綠色光焰、頭髮飄起來。</p>
+    <ul>
+      <li>用 ① 文字：每次生成的少年長得都不一樣，下一個鏡頭就接不上了。</li>
+      <li>用 ② 圖片：先畫好少年，再叫 AI「讓他開始集氣」，臉不會跑掉。</li>
+      <li>用 ③ 首尾幀：第一張是普通少年，最後一張是變身完成的少年，AI 負責中間的變身過程——<b>最準</b>。</li>
+    </ul>
+  </div>
+  <div class="mission"><b>小任務：</b>想三個你想做的畫面，各自判斷要用哪一種做法，寫下理由。</div>
+  <button class="done-btn" type="button" data-done="L3" aria-pressed="false">我學會了</button>
+</section>
+
+<section class="lesson" id="L4" data-title="手把手：你的第一支 8 秒影片">
+  <header><span class="no">4</span><h3>手把手：你的第一支 8 秒影片</h3><p class="goal">學會：從輸入文字到下載影片的完整流程</p></header>
+  <p>先不管漂不漂亮，目標只有一個：<strong>完整走過一次</strong>。以下用 Gemini App 示範（用 Kling 等其他工具，步驟幾乎一樣）。</p>
+  <ol>
+    <li><b>打開工具。</b>Gemini App 或網頁版，找到「影片」或「Video」功能（有的版本是在輸入框旁的＋號裡）。</li>
+    <li><b>選比例。</b>要放 YouTube 選 16:9（橫的）；要放 Shorts、TikTok、IG 限動選 9:16（直的）。</li>
+    <li><b>貼上下面這段文字，送出。</b></li>
+  </ol>
+  <div class="prompt"><span class="lbl">第一支影片的提示詞（中文即可）</span><button class="copy" type="button">複製</button>傍晚的學校室外籃球場，夕陽把地面照成橘色。一個穿白色球衣的高中男生，從三分線外跳起投籃，籃球在空中劃出一條弧線，唰一聲進網。鏡頭從側面慢慢跟著球移動。寫實電影風格，聽得到球鞋摩擦地面和籃網的聲音。</div>
+  <ol start="4">
+    <li><b>等待。</b>通常 1–3 分鐘。這時候 AI 正在做你第 1 課看到的「去雜訊」，只是要做幾百張。</li>
+    <li><b>檢查。</b>用下面的五點檢查表看結果。</li>
+    <li><b>修改。</b>哪裡不對，就直接跟它說（例如「球要真的進籃框，不要穿過籃板」），或改提示詞重做。</li>
+    <li><b>下載。</b>存到手機或電腦，檔名取好，例如 <code>第一支_v1.mp4</code>。</li>
+  </ol>
+  <div class="panel">
+    <span class="tag">五點檢查表</span>
+    <ol style="margin:0">
+      <li><b>有沒有照做？</b>夕陽、籃球場、白球衣、投籃——每一樣都有嗎？</li>
+      <li><b>物理對不對？</b>球有沒有穿牆、突然變大變小、飛出去又自己回來？</li>
+      <li><b>人對不對？</b>手指數量、臉有沒有扭曲、腳有沒有陷進地板？</li>
+      <li><b>鏡頭對不對？</b>是不是你要的角度和移動方式？</li>
+      <li><b>聲音對不對？</b>有沒有怪聲、有沒有亂講話？</li>
+    </ol>
+  </div>
+  <div class="tip"><b>很正常的事：</b>同一段文字送兩次，會得到兩個不一樣的影片（第 1 課說過，AI 每次都從「不同的雜訊」開始擦）。所以專業的人通常一個鏡頭會生成 3–5 次，挑最好的一個。這叫「抽卡」，第 16 課會教怎麼抽得更省。</div>
+  <div class="origin"><span class="ot">名詞由來</span><b>16:9 與 9:16</b>：畫面「寬:高」的比例。1980 年代工程師帕沃斯（Kerns Powers）要找一個能同時容納老電視（4:3）和電影寬銀幕的折衷比例，算出 16:9，後來成為全世界電視和 YouTube 的標準。手機直著拿，就把它倒過來變成 9:16。</div>
+  <div class="mission"><b>小任務：</b>做出你的第一支 8 秒影片，用五點檢查表打分數（每項 1 分），然後改一次提示詞，看分數有沒有變高。</div>
+  <button class="done-btn" type="button" data-done="L4" aria-pressed="false">我學會了</button>
+</section>
+<!-- ================= 基礎篇 ================= -->
+<div class="stage-banner" data-stage="基礎篇">
+  <h2>基礎篇：學會「跟 AI 講話」和「用鏡頭說故事」</h2>
+  <p>第 5–7 課。學完你寫的提示詞，會從「碰運氣」變成「說什麼有什麼」。</p>
+</div>
+
+<section class="lesson" id="L5" data-title="提示詞公式：七格填空法">
+  <header><span class="no">5</span><h3>提示詞公式：七格填空法</h3><p class="goal">學會：把腦中的畫面，拆成 AI 聽得懂的七個部分</p></header>
+  <div class="origin"><span class="ot">名詞由來</span><b>提示詞（Prompt）</b>：以前舞台劇演員忘詞時，躲在幕後小聲提醒台詞的人叫 prompter（提詞員）。prompt 來自拉丁文 promptus，意思是「準備好、拿出來的」。現在你就是那個提詞員：你給 AI 一句提示，它照著演。</div>
+  <p>新手最常犯的錯，是只寫「一個人在打籃球」。AI 只好自己亂猜：什麼人？在哪裡？白天晚上？鏡頭在哪？猜錯了就怪 AI 很笨。其實是我們沒講清楚。</p>
+  <p>記住這七格，照順序填：</p>
+  <div class="pipe">
+    <div><b>誰</b><span>主體：長相、穿著、年紀</span></div>
+    <div><b>做什麼</b><span>動作：越具體越好</span></div>
+    <div><b>在哪裡</b><span>場景：地點、天氣、時間</span></div>
+    <div><b>怎麼拍</b><span>鏡頭：景別＋運鏡（第 6 課）</span></div>
+    <div><b>什麼光</b><span>光線：決定情緒（第 7 課）</span></div>
+    <div><b>什麼風格</b><span>寫實？動畫？漫畫？</span></div>
+    <div><b>什麼聲音</b><span>音效、對白、音樂</span></div>
+  </div>
+  <div class="good-bad">
+    <div class="b"><h5>不好的寫法</h5>一個人在打籃球，很帥。</div>
+    <div class="g"><h5>好的寫法</h5>一個刺蝟頭、穿白色 11 號球衣的高中男生（誰），在擠滿觀眾的體育館裡運球切入、跳起上籃（做什麼、在哪裡），低角度中景、鏡頭跟著他移動（怎麼拍），頂燈打出強烈的輪廓光（什麼光），日系動畫風、粗黑輪廓線（風格），觀眾歡呼和球鞋摩擦聲（聲音）。</div>
+  </div>
+  <h4>寫動作的三個訣竅</h4>
+  <ul>
+    <li><b>一個鏡頭只做一件事。</b>「運球、傳球、對手搶斷、再投籃」太多了，AI 會搞混。拆成四個鏡頭。</li>
+    <li><b>用看得見的動詞。</b>「他很緊張」AI 拍不出來；「他咬住下唇，額頭流下一滴汗」就拍得出來。</li>
+    <li><b>寫出速度。</b>「慢慢」「突然」「慢動作」這些字，會大大改變影片感覺。</li>
+  </ul>
+  <div class="panel">
+    <span class="tag">動手玩：提示詞產生器</span>
+    <p style="margin-top:4px">每一格選一個，下面會自動組出中文和英文兩種提示詞。英文版在某些工具（例如 Kling、Runway）效果更穩定。</p>
+    <div class="builder" id="builder"></div>
+    <div class="prompt" id="pbZh"><span class="lbl">中文提示詞</span><button class="copy" type="button">複製</button><span class="out"></span></div>
+    <div class="prompt" id="pbEn"><span class="lbl">English prompt</span><button class="copy" type="button">複製</button><span class="out"></span></div>
+  </div>
+  <div class="origin"><span class="ot">名詞由來</span><b>負面提示詞（Negative Prompt）</b>：告訴 AI「不要什麼」，例如「不要文字、不要浮水印、不要多餘的手指」。有些工具有專門的欄位，有些要寫在句尾，例如「畫面中沒有任何文字」。</div>
+  <div class="mission"><b>小任務：</b>用產生器組三種不同的提示詞，拿去做三支影片，比較哪一格改變後，畫面變化最大。</div>
+  <button class="done-btn" type="button" data-done="L5" aria-pressed="false">我學會了</button>
+</section>
+
+<section class="lesson" id="L6" data-title="鏡頭語言：景別、角度、運鏡">
+  <header><span class="no">6</span><h3>鏡頭語言：景別、角度、運鏡</h3><p class="goal">學會：像導演一樣決定「觀眾看到多少」和「鏡頭怎麼動」</p></header>
+  <p>同一個人、同一個動作，鏡頭拍得遠或近，觀眾的感覺完全不同。拍很遠，觀眾知道「他在哪」；拍很近，觀眾知道「他在想什麼」。這就是電影人說的<strong>鏡頭語言</strong>。</p>
+  <h4>景別：觀眾看到多少</h4>
+  <div class="panel">
+    <span class="tag">動手玩：六種景別</span>
+    <div class="stage-frame"><svg id="shotSvg" viewBox="-400 -225 2400 1350" preserveAspectRatio="xMidYMid slice" role="img" aria-label="籃球場上的原創角色，依選擇的景別放大"></svg></div>
+    <div class="seg" id="shotSeg" role="group" aria-label="景別"></div>
+    <p class="readout" id="shotRead"></p>
+  </div>
+  <div class="origin"><span class="ot">名詞由來</span><b>特寫（Close-up）</b>：大約 1900 年，英國的早期電影導演開始把攝影機推到人的臉前面拍，觀眾第一次在大銀幕上看到巨大的臉，非常震撼。close-up 就是「靠得很近地拍」。中文「特寫」借自寫文章：「特別仔細地描寫」某個部分。</div>
+
+  <h4>角度：鏡頭從哪個高度看</h4>
+  <div class="tbl"><table>
+    <thead><tr><th>角度</th><th>鏡頭位置</th><th>觀眾的感覺</th><th>熱血片怎麼用</th></tr></thead>
+    <tbody>
+      <tr><td><b>平視</b></td><td>和眼睛同高</td><td>普通、真實、像旁邊的人</td><td>日常對話</td></tr>
+      <tr><td><b>仰拍</b>（low angle）</td><td>從下往上拍</td><td>對象變得高大、強、有壓迫感</td><td>主角覺醒、對手登場、最後一投起跳</td></tr>
+      <tr><td><b>俯拍</b>（high angle）</td><td>從上往下拍</td><td>對象變得渺小、孤單、無力</td><td>主角失誤後跪在場上</td></tr>
+      <tr><td><b>鳥瞰</b>（top-down）</td><td>正上方</td><td>像在看地圖、看全局</td><td>教練畫戰術、全場跑位</td></tr>
+    </tbody>
+  </table></div>
+
+  <h4>運鏡：鏡頭怎麼動</h4>
+  <div class="panel">
+    <span class="tag">動手玩：六種運鏡</span>
+    <div class="stage-frame cam still" id="camFrame"><svg id="camSvg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="示範不同運鏡方式的動畫"></svg></div>
+    <div class="seg" id="camSeg" role="group" aria-label="運鏡"></div>
+    <p class="readout" id="camRead"></p>
+  </div>
+  <div class="origin"><span class="ot">名詞由來</span><b>搖鏡（Pan）</b>：來自 panorama（全景畫）。1787 年英國畫家巴克（Robert Barker）發明一種把整圈風景畫在圓形牆上的展覽，用希臘文 pan（全部）＋ horama（景色）命名。攝影機左右轉著拍，就像在看一圈全景畫，所以叫 pan。</div>
+  <div class="origin"><span class="ot">名詞由來</span><b>推軌（Dolly）與跟拍（Tracking）</b>：攝影機太重，劇組把它放在有輪子的小推車上，推車的暱稱就是 dolly；推車跑在鋪好的軌道（track）上，所以跟著人移動的鏡頭叫 tracking shot。中文的「推」「拉」就是把推車往前推、往後拉。</div>
+  <div class="origin"><span class="ot">名詞由來</span><b>變焦（Zoom）</b>：zoom 原本是英文的狀聲詞「咻——」，形容東西快速衝過去。變焦鏡頭讓畫面「咻」一下放大，就借用了這個字。注意：zoom 是鏡頭放大，dolly 是攝影機真的往前走，兩種看起來不太一樣，AI 也分得出來。</div>
+  <div class="tip"><b>寫進提示詞的方法：</b>「低角度仰拍、中景、鏡頭慢慢推近」。英文寫 <code>low-angle medium shot, slow dolly-in</code>。一個鏡頭最多一種運鏡，兩種以上 AI 容易暈。</div>
+  <div class="mission"><b>小任務：</b>找一部你喜歡的動畫或電影的 30 秒片段，按暫停，一格一格記下每個鏡頭是什麼景別、什麼運鏡。你會發現專業作品幾乎每 2–5 秒就換一個鏡頭。</div>
+  <button class="done-btn" type="button" data-done="L6" aria-pressed="false">我學會了</button>
+</section>
+
+<section class="lesson" id="L7" data-title="光線與風格：決定整部片的情緒">
+  <header><span class="no">7</span><h3>光線與風格：決定整部片的情緒</h3><p class="goal">學會：用光線控制情緒，用「風格句」讓整部片看起來像同一部</p></header>
+  <p>同一個球員站在球場上：夕陽照著他，觀眾覺得溫暖、有希望；只有頭頂一盞燈照著他，觀眾覺得孤單、壓力很大。<strong>光線就是情緒。</strong></p>
+  <div class="tbl"><table>
+    <thead><tr><th>光線</th><th>提示詞寫法</th><th>情緒</th></tr></thead>
+    <tbody>
+      <tr><td>黃金時刻</td><td>夕陽、golden hour</td><td>溫暖、青春、回憶</td></tr>
+      <tr><td>逆光輪廓光</td><td>背光、rim light、主角邊緣發光</td><td>英雄感、神聖、登場</td></tr>
+      <tr><td>頂光</td><td>一盞頂燈、top light、四周很暗</td><td>孤單、壓力、審問</td></tr>
+      <tr><td>陰天柔光</td><td>overcast soft light</td><td>平靜、憂鬱</td></tr>
+      <tr><td>高對比硬光</td><td>強烈陰影、high contrast</td><td>緊張、決戰</td></tr>
+    </tbody>
+  </table></div>
+  <div class="origin"><span class="ot">名詞由來</span><b>黃金時刻（Golden Hour）</b>：攝影師的說法，指日出後和日落前大約一小時。太陽很低，光要穿過很厚的空氣，藍光被散掉，剩下暖暖的金黃色，拍什麼都好看，所以叫「黃金」時刻。</div>
+  <div class="origin"><span class="ot">名詞由來</span><b>三點打光（Three-point Lighting）</b>：好萊塢片廠時代的標準打光法：主光（key light）照亮主角、補光（fill light）把陰影補淡、背光（back light）從後面打出一圈亮邊，讓人從背景「跳」出來。你在提示詞寫「輪廓光」，就是在要求背光。</div>
+
+  <h4>風格：用描述，不用作品名</h4>
+  <p>想要「像某部動漫」的感覺，<strong>不要寫作品名或作者名</strong>，要寫出那種風格「長什麼樣子」。這樣做有兩個好處：平台不會擋你，而且描述越具體，AI 越做得出來。</p>
+  <div class="good-bad">
+    <div class="b"><h5>容易被擋、效果也不穩</h5>做成灌籃高手的畫風。</div>
+    <div class="g"><h5>具體描述風格</h5>1990 年代日本運動漫畫風：粗黑墨線、平塗上色、網點陰影、誇張的汗珠、背景用放射狀速度線表現衝刺。</div>
+  </div>
+  <div class="origin"><span class="ot">名詞由來</span><b>賽璐璐（Cel）</b>：來自 celluloid（賽璐珞），一種透明塑膠片。以前的手繪動畫，把角色畫在一張張透明片上，疊在背景畫上拍攝，塗色用的是一塊塊平平的顏色。所以現在「一塊一塊平塗、沒有漸層」的日系動畫風，就叫賽璐璐風（cel-shaded）。</div>
+
+  <h4>最重要的技巧：寫一句「風格句」，每一鏡都貼一樣的</h4>
+  <p>一部片看起來「像同一部」，是因為每個鏡頭的色調、畫風都一樣。做法很簡單：寫好一段風格句，之後每一個鏡頭的提示詞最後，都原封不動貼上去。</p>
+  <div class="prompt"><span class="lbl">範例風格句（《最後三秒》用的）</span><button class="copy" type="button">複製</button>日系 2D 動畫風格，賽璐璐平塗上色，乾淨的黑色輪廓線，高對比，暖橘色與深藍色為主色調，體育館頂燈造成強烈輪廓光，16:9，電影感構圖。</div>
+  <div class="mission"><b>小任務：</b>同一段提示詞，只換光線那一格做三次（夕陽、頂光、逆光），比較情緒差多少。然後替你自己的作品寫一句風格句。</div>
+  <button class="done-btn" type="button" data-done="L7" aria-pressed="false">我學會了</button>
+</section>
+<!-- ================= 進階篇 ================= -->
+<div class="stage-banner" data-stage="進階篇">
+  <h2>進階篇：從一個鏡頭，到一部連續的片</h2>
+  <p>第 8–13 課。劇本、角色一致、分鏡、接鏡頭、聲音、剪輯——做長片的六大功夫。</p>
+</div>
+
+<section class="lesson" id="L8" data-title="故事先行：用 AI 寫劇本、算鏡頭">
+  <header><span class="no">8</span><h3>故事先行：用 AI 寫劇本、算鏡頭</h3><p class="goal">學會：起承轉合、把片長換算成鏡頭數，並請 Claude 幫你寫劇本</p></header>
+  <p>很多人一拿到影片 AI，就開始亂生成好看的畫面，最後手上有 50 支漂亮片段，卻接不成一個故事。<strong>先有故事，再做畫面</strong>，順序絕對不能反。</p>
+  <h4>故事的骨架：起承轉合</h4>
+  <div class="pipe">
+    <div><b>起</b><span>介紹：誰、在哪、想要什麼。<br>例：阿嘯站上罰球線，全場安靜。</span></div>
+    <div><b>承</b><span>困難出現、越來越糟。<br>例：兩球都沒進，落後一分，只剩三秒。</span></div>
+    <div><b>轉</b><span>轉折：關鍵決定或意外。<br>例：教練把最後一球交給他。</span></div>
+    <div><b>合</b><span>結果與感受。<br>例：出手、蜂鳴器、球在籃框上轉……</span></div>
+  </div>
+  <div class="origin"><span class="ot">名詞由來</span><b>起承轉合</b>：原本是中國古代寫詩（特別是四句的絕句、八句的律詩）的章法：第一部分起頭、第二部分承接、第三部分轉折、最後收合。元代的詩論就已經把這四個字講得很清楚，後來也被日本漫畫家大量使用，四格漫畫就是最標準的起承轉合。</div>
+  <div class="origin"><span class="ot">名詞由來</span><b>三幕劇</b>：西方的說法。兩千多年前希臘哲學家亞里斯多德在《詩學》裡說，好故事要有「開頭、中間、結尾」。後來好萊塢把它發展成「第一幕：建立，第二幕：衝突，第三幕：解決」。和起承轉合是同一件事的不同講法。</div>
+
+  <h4>片長換算：我要做幾個鏡頭？</h4>
+  <p>AI 一段只有 5–15 秒，所以先算清楚工作量。拉拉看：</p>
+  <div class="panel">
+    <span class="tag">動手玩：鏡頭計算機</span>
+    <label for="lenR" style="font-weight:700">影片長度：<span id="lenV"></span></label>
+    <input type="range" id="lenR" min="30" max="300" step="15" value="90">
+    <label for="avgR" style="font-weight:700">平均每個鏡頭幾秒：<span id="avgV"></span></label>
+    <input type="range" id="avgR" min="3" max="10" step="1" value="6">
+    <label for="tryR" style="font-weight:700">每鏡抽幾次卡：<span id="tryV"></span></label>
+    <input type="range" id="tryR" min="1" max="6" step="1" value="3">
+    <p class="readout" id="calcOut"></p>
+  </div>
+
+  <h4>請 Claude（或 ChatGPT、Gemini）當你的編劇</h4>
+  <p>聊天 AI 最擅長的就是寫東西。重點是：把「規格」講清楚，它才會寫出能拍的劇本，而不是一篇小說。</p>
+  <div class="prompt"><span class="lbl">劇本提示詞範本（複製後改【】裡的字）</span><button class="copy" type="button">複製</button>你是專門寫 AI 短片的編劇。請幫我寫一支【90 秒】的原創短片劇本。
+
+類型：【熱血運動／高中籃球】
+主角：【阿嘯，高二後衛，上一場罰球失手，很怕再讓大家失望】
+故事一句話：【比賽剩三秒落後一分，他必須投出最後一球】
+
+規格要求：
+1. 用「起、承、轉、合」四段，每段標出大約秒數。
+2. 拆成【14】個鏡頭，每個鏡頭 5–8 秒，一個鏡頭只做一件事。
+3. 每個鏡頭寫出：畫面內容、角色動作（要看得見的動作，不要寫心情）、對白或旁白、音效。
+4. 角色全部原創，不可以使用任何現有動漫角色、真實球員或真人的名字與長相。
+5. 最後用表格整理：鏡號／秒數／景別／運鏡／畫面／聲音。</div>
+  <div class="tip"><b>跟 AI 來回修改：</b>第一版通常不完美。可以接著說「第 3 鏡太平淡，加一個更有張力的動作」「總長超過 100 秒了，刪到 90 秒」。你是導演，它是編劇，最後拍板的是你。</div>
+  <div class="mission"><b>小任務：</b>用上面的範本，替你自己的故事（任何主題都可以）寫出一份 60 秒、8–10 個鏡頭的劇本表格。</div>
+  <button class="done-btn" type="button" data-done="L8" aria-pressed="false">我學會了</button>
+</section>
+
+<section class="lesson" id="L9" data-title="角色一致性：讓主角每一鏡都長一樣">
+  <header><span class="no">9</span><h3>角色一致性：讓主角每一鏡都長一樣</h3><p class="goal">學會：角色聖經、角色設定圖、參考圖三招</p></header>
+  <p>這是做連續短片<strong>最難、也最重要</strong>的一課。第 1 課說過，AI 每次都從不同的雜訊開始擦，所以你寫「一個高中男生」十次，會得到十個不同的男生。觀眾看到主角的臉一直變，故事就垮了。</p>
+
+  <h4>第一招：角色聖經——一段每次都一字不改的外觀描述</h4>
+  <div class="prompt"><span class="lbl">阿嘯的角色聖經（英文比較穩定，每一鏡都整段貼上）</span><button class="copy" type="button">複製</button>AH-XIAO: a 17-year-old Taiwanese high school basketball player, lean athletic build, short spiky black hair, thick straight eyebrows, sharp determined eyes, small scar on left eyebrow, white basketball jersey with navy trim and navy number 11, white shorts, bright orange wristband on left wrist, white high-top sneakers with navy laces.</div>
+  <p>注意裡面的「<b>記憶點</b>」：左眉的小疤、左手的橘色護腕、11 號。就算臉有一點點不一樣，觀眾看到這些記憶點，還是會認定「是他」。專業角色設計都會刻意放 2–3 個記憶點。</p>
+  <div class="origin"><span class="ot">名詞由來</span><b>角色聖經（Character Bible）</b>：電視劇和動畫公司會把角色的所有設定（外型、個性、口頭禪、不能做的事）寫成一本厚厚的手冊，每個編劇、畫師都要照著做，不能違背，就像宗教的「聖經」一樣不能改，所以叫 bible。</div>
+
+  <h4>第二招：角色設定圖——先做一張「官方長相」</h4>
+  <p>用圖片 AI（ChatGPT、Gemini 的 Nano Banana 等）把角色畫成「三視圖」：正面、側面、背面站在一起，白色背景。之後所有鏡頭都拿這張圖當參考。</p>
+  <div class="panel">
+    <span class="tag">原創角色設定圖示意：阿嘯</span>
+    <svg id="sheetSvg" viewBox="0 0 900 420" style="width:100%;display:block;background:#fff;border:2px solid var(--line);border-radius:4px" role="img" aria-label="原創角色阿嘯的正面、側面、背面三視圖示意"></svg>
+  </div>
+  <div class="prompt"><span class="lbl">角色設定圖的圖片提示詞</span><button class="copy" type="button">複製</button>Character turnaround sheet of [貼上角色聖經], three full-body views side by side: front view, side view, back view, neutral standing pose, plain white background, even flat lighting, Japanese 2D anime style with clean black outlines and cel shading, no text.</div>
+  <div class="origin"><span class="ot">名詞由來</span><b>設定圖（Model Sheet）與三視圖（Turnaround）</b>：早期迪士尼一部動畫要幾十個人一起畫，米老鼠常常被畫得胖瘦不一。於是公司做了「model sheet」，把角色的標準樣子、各種角度畫在一張紙上，大家照著畫。turnaround 是「轉一圈」的意思，就是把角色轉一圈畫出來。</div>
+
+  <h4>第三招：用參考圖生成，不要只用文字</h4>
+  <ul>
+    <li><b>Gemini（Omni）</b>：可以上傳最多 5 張參考照片，再用文字說要做什麼。</li>
+    <li><b>Kling 3.0</b>：有「主體／Elements」功能，把角色圖存起來，之後每一鏡都叫它出來。</li>
+    <li><b>通用做法</b>：先用圖片 AI 做出「這一鏡的第一格畫面」（角色擺好姿勢、場景對），再用圖生影片讓它動起來。這是最穩定的方法。</li>
+  </ul>
+  <div class="origin"><span class="ot">名詞由來</span><b>種子（Seed）</b>：電腦的「隨機」其實是從一個起始數字算出來的，這個數字就叫種子。同一顆種子會長出同一棵樹——同樣的種子＋同樣的提示詞，會得到很接近的結果。有些工具可以設定 seed，找到好結果時記下來。</div>
+  <div class="warn"><b>真人照片注意：</b>用你自己的照片當參考沒問題；用朋友、家人的照片，一定要先問過本人。明星、網紅、政治人物的照片，大部分平台都會擋，而且可能違法（第 17 課）。</div>
+  <div class="mission"><b>小任務：</b>替你的主角寫一段角色聖經（包含 2–3 個記憶點），用圖片 AI 做出三視圖，再用這張圖做兩支不同動作的影片，檢查臉有沒有跑掉。</div>
+  <button class="done-btn" type="button" data-done="L9" aria-pressed="false">我學會了</button>
+</section>
+
+<section class="lesson" id="L10" data-title="分鏡：拍之前，先把整部片畫出來">
+  <header><span class="no">10</span><h3>分鏡：拍之前，先把整部片畫出來</h3><p class="goal">學會：分鏡表、定場鏡頭、180 度法則、動作接點</p></header>
+  <p>分鏡就是「漫畫版的電影」。每一格代表一個鏡頭，旁邊寫上秒數、景別、運鏡和聲音。畫得醜沒關係，火柴人就好，重點是在花錢生成之前，先確定整部片說得通。</p>
+  <div class="origin"><span class="ot">名詞由來</span><b>分鏡（Storyboard）</b>：1930 年代初，迪士尼的動畫師韋伯・史密斯（Webb Smith）把畫在紙上的一格格畫面，用圖釘按順序釘在牆上（board 是木板），大家站在牆前面討論故事要怎麼改。這方法太好用，後來全世界的電影都照做。中文「分鏡」就是「把故事分成一個一個鏡頭」。</div>
+
+  <h4>分鏡表長這樣</h4>
+  <div class="tbl"><table>
+    <thead><tr><th>鏡號</th><th>秒數</th><th>景別／角度</th><th>運鏡</th><th>畫面</th><th>聲音</th><th>做法</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>6</td><td>遠景／高角度</td><td>慢慢推近</td><td>擠滿人的體育館，比分牌 58:59，剩 0:03</td><td>觀眾嗡嗡聲</td><td>文生影片</td></tr>
+      <tr><td>2</td><td>5</td><td>近景／平視</td><td>固定</td><td>阿嘯擦汗，看向比分牌</td><td>心跳聲</td><td>圖生影片</td></tr>
+      <tr><td>3</td><td>6</td><td>特寫</td><td>固定</td><td>教練的手在戰術板上畫一條線</td><td>麥克筆摩擦聲</td><td>圖生影片</td></tr>
+    </tbody>
+  </table></div>
+
+  <h4>三條讓觀眾不會看暈的規則</h4>
+  <p><b>① 先給定場鏡頭。</b>每換一個新場景，第一個鏡頭先用遠景讓觀眾知道「這是哪裡」，再切近。</p>
+  <div class="origin"><span class="ot">名詞由來</span><b>定場鏡頭（Establishing Shot）</b>：establish 是「建立」的意思，這一鏡用來「建立」地點和氣氛。所以幾乎每部電影的開頭都是一個城市或建築的大遠景。</div>
+  <p><b>② 180 度法則：攝影機不要越線。</b>兩個人面對面時，在他們中間畫一條看不見的線。所有鏡頭都要在線的同一邊拍，觀眾才會覺得「阿嘯一直在左邊、對手一直在右邊」。一旦越線，兩人的左右會對調，觀眾會以為他們換了位置。</p>
+  <div class="panel">
+    <span class="tag">圖解：180 度法則</span>
+    <svg viewBox="0 0 800 360" style="width:100%;display:block" role="img" aria-label="兩個角色中間有一條線，攝影機A和B在同一邊是正確的，攝影機C越線是錯誤的">
+      <rect x="0" y="0" width="800" height="360" fill="var(--panel)"/>
+      <path d="M40 180 L760 180" stroke="var(--bad)" stroke-width="4" stroke-dasharray="14 10"/>
+      <text x="610" y="170" fill="var(--bad)" font-size="20" font-weight="700" font-family="Noto Sans TC,sans-serif">假想線</text>
+      <circle cx="290" cy="180" r="34" fill="#fff" stroke="#1B1F3B" stroke-width="4"/><text x="290" y="188" text-anchor="middle" font-size="22" font-weight="900" fill="#1B1F3B" font-family="Noto Sans TC,sans-serif">嘯</text>
+      <circle cx="510" cy="180" r="34" fill="#1B1F3B" stroke="#1B1F3B" stroke-width="4"/><text x="510" y="188" text-anchor="middle" font-size="22" font-weight="900" fill="#fff" font-family="Noto Sans TC,sans-serif">敵</text>
+      <g transform="translate(250 300)"><rect x="-30" y="-18" width="60" height="36" rx="5" fill="#14956B"/><path d="M-10 -18 L0 -34 L10 -18Z" fill="#14956B"/><text x="0" y="8" text-anchor="middle" fill="#fff" font-size="18" font-weight="700" font-family="Noto Sans TC,sans-serif">A</text></g>
+      <g transform="translate(550 300)"><rect x="-30" y="-18" width="60" height="36" rx="5" fill="#14956B"/><path d="M-10 -18 L0 -34 L10 -18Z" fill="#14956B"/><text x="0" y="8" text-anchor="middle" fill="#fff" font-size="18" font-weight="700" font-family="Noto Sans TC,sans-serif">B</text></g>
+      <g transform="translate(400 60)"><rect x="-30" y="-18" width="60" height="36" rx="5" fill="#D7263D"/><path d="M-10 18 L0 34 L10 18Z" fill="#D7263D"/><text x="0" y="8" text-anchor="middle" fill="#fff" font-size="18" font-weight="700" font-family="Noto Sans TC,sans-serif">C</text></g>
+      <text x="400" y="345" text-anchor="middle" font-size="18" fill="var(--ink)" font-family="Noto Sans TC,sans-serif">A、B 在同一邊：阿嘯永遠在畫面左邊 ✓　　C 越線：左右對調，觀眾會混亂 ✗</text>
+    </svg>
+  </div>
+  <p><b>③ 動作接點：在動作「正在發生」的時候切換鏡頭。</b>例如阿嘯起跳時，上一鏡拍到他膝蓋彎下、雙腳離地的一瞬間，下一鏡直接接他在空中出手的特寫。動作連起來，觀眾的眼睛會跟著動作走，完全不會發現換了鏡頭。這個技巧對 AI 影片特別重要，因為它能把兩段不同的生成影片「藏」得天衣無縫。</p>
+  <div class="origin"><span class="ot">名詞由來</span><b>動作接點（Match on Action）</b>：match 是「對上」，在動作上把兩個鏡頭對起來。早期電影剪接師發現，只要動作連續，觀眾就不會注意到剪接，這成了「看不見的剪接」的基本功。</div>
+
+  <h4>請 AI 幫你把劇本變分鏡表</h4>
+  <div class="prompt"><span class="lbl">分鏡表提示詞範本</span><button class="copy" type="button">複製</button>請把下面的劇本整理成分鏡表。欄位：鏡號、秒數、景別與角度、運鏡、畫面內容、角色動作、聲音、建議做法（文生影片／圖生影片／首尾幀）。
+
+規則：
+1. 每個新場景第一鏡用定場遠景。
+2. 所有鏡頭遵守 180 度法則，主角固定在畫面左側，對手固定在右側。
+3. 標出適合用「動作接點」切換的地方。
+4. 緊張的段落鏡頭短（3–4 秒），情緒段落鏡頭長（6–8 秒）。
+
+【貼上劇本】</div>
+  <div class="mission"><b>小任務：</b>把第 8 課寫的劇本變成分鏡表，並在紙上用火柴人畫出每一格。檢查有沒有越線的鏡頭。</div>
+  <button class="done-btn" type="button" data-done="L10" aria-pressed="false">我學會了</button>
+</section>
+
+<section class="lesson" id="L11" data-title="接鏡頭：把 8 秒變成 3 分鐘">
+  <header><span class="no">11</span><h3>接鏡頭：把 8 秒變成 3 分鐘</h3><p class="goal">學會：尾幀接首幀、延長、多鏡頭生成，以及連戲檢查</p></header>
+  <p>現在你有劇本、角色、分鏡了。這一課教你怎麼讓一個一個鏡頭「接得起來」。有四種方法，由簡單到進階：</p>
+  <h4>方法一：直接切換（最常用）</h4>
+  <p>兩個鏡頭景別不同（例如遠景切到特寫），觀眾本來就預期畫面會變，中間不需要任何銜接。專業電影 90% 以上的換鏡都是這樣。只要角色一致（第 9 課）、方向一致（第 10 課），就接得起來。</p>
+  <h4>方法二：尾幀接首幀（接力法）</h4>
+  <p>同一個動作要連續很久時使用：把上一段影片的<b>最後一格畫面</b>存成圖片，拿去當下一段的<b>第一格</b>，用圖生影片繼續往下做。就像接力賽交棒。</p>
+  <div class="chain panel">
+    <span class="tag">圖解：接力法</span>
+    <svg id="chainSvg" viewBox="0 0 900 250" role="img" aria-label="片段A的最後一格成為片段B的第一格，片段B的最後一格成為片段C的第一格"></svg>
+  </div>
+  <div class="tip"><b>怎麼取出最後一格：</b>在 CapCut 或手機相簿裡把影片停在最後一格，用「匯出目前畫格」或截圖（截圖要裁掉手機的狀態列）。很多工具（如 Flow、Kling）有「延長」按鈕，會自動幫你做這件事。</div>
+  <h4>方法三：延長（Extend）</h4>
+  <p>在 Google Flow（Veo）等工具裡，選一段影片按「延長」，再寫接下來發生什麼。它會自動從最後幾格接著做。缺點是接越多次，畫面越容易走樣，通常接 2–3 次就該換鏡頭了。</p>
+  <h4>方法四：一次生成多個鏡頭</h4>
+  <p>Kling 3.0 可以在一次生成裡指定最多 6 個鏡頭，各自寫景別和動作，AI 會自己保持角色和場景一致。適合一整段連續的戲，例如「教練暫停 → 畫戰術 → 大家的臉」。</p>
+  <h4>連戲檢查：接之前一定要看</h4>
+  <div class="tbl"><table>
+    <thead><tr><th>檢查項目</th><th>常見錯誤</th></tr></thead>
+    <tbody>
+      <tr><td>服裝</td><td>上一鏡 11 號，下一鏡變 17 號；護腕從左手跑到右手</td></tr>
+      <tr><td>方向</td><td>上一鏡往右跑，下一鏡往左跑（越線了）</td></tr>
+      <tr><td>光線與時間</td><td>上一鏡夕陽，下一鏡大白天</td></tr>
+      <tr><td>道具與數字</td><td>比分牌、時間、球在誰手上前後不一樣</td></tr>
+      <tr><td>身體狀態</td><td>上一鏡滿頭大汗，下一鏡乾乾淨淨</td></tr>
+    </tbody>
+  </table></div>
+  <div class="origin"><span class="ot">名詞由來</span><b>連戲（Continuity）與場記</b>：continuity 是「連續性」。拍電影時會有一個專門的人，記錄每一鏡演員穿什麼、杯子裡水剩多少、頭髮往哪邊梳，確保分好幾天拍的鏡頭接起來不會穿幫。這個人叫場記（script supervisor）。做 AI 影片，你就是自己的場記——也可以請 Claude 幫你當場記，把分鏡表貼給它，請它找出不連戲的地方。</div>
+  <div class="mission"><b>小任務：</b>用接力法做一段連續 20 秒的動作（例如運球 → 過人 → 上籃），三段接起來，檢查接縫處有沒有跳動。</div>
+  <button class="done-btn" type="button" data-done="L11" aria-pressed="false">我學會了</button>
+</section>
+
+<section class="lesson" id="L12" data-title="聲音：畫面的另一半">
+  <header><span class="no">12</span><h3>聲音：畫面的另一半</h3><p class="goal">學會：原生音訊、配音、對嘴、配樂、音效</p></header>
+  <p>一個奇怪的事實：觀眾可以原諒畫面有點粗糙，卻很難忍受聲音很爛。把同一段影片配上心跳聲和漸強的鼓聲，緊張感會增加好幾倍。<strong>聲音是免費的電影感。</strong></p>
+  <div class="tbl"><table>
+    <thead><tr><th>聲音種類</th><th>用什麼做</th><th>小訣竅</th></tr></thead>
+    <tbody>
+      <tr><td><b>原生音訊</b>（影片自帶的聲音）</td><td>Gemini Omni、Veo 3.1、Kling 3.0 等會直接生成聲音</td><td>提示詞寫出你要的聲音；不要的話寫「沒有對白、沒有音樂」</td></tr>
+      <tr><td><b>旁白、配音</b></td><td>配音 AI（例如 ElevenLabs）、剪輯軟體內建的朗讀功能，或自己錄</td><td>自己錄的聲音最有感情；AI 配音要選對語氣</td></tr>
+      <tr><td><b>對嘴</b></td><td>Seedance、Kling 等的對嘴功能</td><td>對白短、嘴巴大一點的鏡頭效果比較好</td></tr>
+      <tr><td><b>配樂</b></td><td>AI 音樂工具（例如 Google 的 Lyria、Suno 等）或免版稅音樂庫</td><td>高潮前 2 秒先讓音樂停掉，效果最強</td></tr>
+      <tr><td><b>音效</b></td><td>影片原生音訊、CapCut 音效庫</td><td>球鞋聲、籃網聲、蜂鳴器——小聲音最有真實感</td></tr>
+    </tbody>
+  </table></div>
+  <div class="origin"><span class="ot">名詞由來</span><b>TTS（文字轉語音）</b>：Text-To-Speech。早在 1930 年代就有機器能「唸」出聲音，但像機器人；現在的 AI 配音能模仿呼吸、停頓和情緒。</div>
+  <div class="origin"><span class="ot">名詞由來</span><b>擬音（Foley）</b>：1920 年代末電影剛有聲音，美國環球影業的傑克・佛利（Jack Foley）發明在錄音室裡「演」出聲音的方法：用手套拍打模仿鳥飛、在沙盤上踩出腳步聲。後來做音效的人都叫 Foley artist。</div>
+  <div class="origin"><span class="ot">名詞由來</span><b>對嘴（Lip Sync）</b>：lip 是嘴唇，sync 是 synchronize（同步）的縮寫。讓嘴唇的動作和聲音同步。</div>
+  <div class="warn"><b>音樂版權：</b>流行歌、動畫主題曲都有版權，放進影片上傳 YouTube 很容易被靜音或下架。用 AI 生成的音樂或標明「免版稅」的音樂庫比較安全，並看清楚各平台的使用規定。</div>
+  <div class="mission"><b>小任務：</b>把第 11 課做的 20 秒片段，做兩個版本：一個只有原聲，一個加上心跳聲和鼓聲。給家人看，問他們哪個比較緊張。</div>
+  <button class="done-btn" type="button" data-done="L12" aria-pressed="false">我學會了</button>
+</section>
+
+<section class="lesson" id="L13" data-title="剪輯與後製：把片段變成作品">
+  <header><span class="no">13</span><h3>剪輯與後製：把片段變成作品</h3><p class="goal">學會：時間軸、剪輯節奏、J-cut／L-cut、調色、字幕、放大</p></header>
+  <p>剪輯是整個流程裡「最有魔法」的一步。同樣的素材，剪法不同，可以變成熱血片，也可以變成搞笑片。</p>
+  <h4>認識時間軸</h4>
+  <p>所有剪輯軟體都長得差不多：畫面由左往右跑，一層一層疊起來。上面的層蓋住下面的層。</p>
+  <div class="tl" aria-label="剪輯時間軸示意"><div class="tl-inner">
+    <div class="trk"><span>字幕</span><div class="lane"><div class="clip" style="left:30%;width:18%;background:#6b6f95">「最後一球……」</div><div class="clip" style="left:70%;width:14%;background:#6b6f95">「交給你了」</div></div></div>
+    <div class="trk"><span>影片</span><div class="lane"><div class="clip" style="left:0;width:16%;background:#2F6BFF">鏡1 遠景</div><div class="clip" style="left:16%;width:12%;background:#1f4fd1">鏡2 近景</div><div class="clip" style="left:28%;width:22%;background:#2F6BFF">鏡3 戰術板</div><div class="clip" style="left:50%;width:10%;background:#1f4fd1">鏡4</div><div class="clip" style="left:60%;width:40%;background:#2F6BFF">鏡5–7 最後一投</div></div></div>
+    <div class="trk"><span>對白</span><div class="lane"><div class="clip" style="left:24%;width:26%;background:#14956B">教練台詞（J-cut：先聽到聲音）</div></div></div>
+    <div class="trk"><span>音效</span><div class="lane"><div class="clip" style="left:8%;width:30%;background:#b7791f">心跳聲</div><div class="clip" style="left:88%;width:8%;background:#b7791f">蜂鳴器</div></div></div>
+    <div class="trk"><span>音樂</span><div class="lane"><div class="clip" style="left:0;width:82%;background:#FF5A1F">配樂漸強→（最後 2 秒停掉）</div></div></div>
+    <div class="playhead"></div>
+  </div></div>
+  <h4>剪輯節奏</h4>
+  <ul>
+    <li><b>緊張時剪得快：</b>每鏡 1–3 秒，觀眾心跳跟著加快。</li>
+    <li><b>感動時剪得慢：</b>一個鏡頭停久一點，讓情緒沉下去。</li>
+    <li><b>剪掉頭尾：</b>AI 影片開頭 0.5 秒和結尾 0.5 秒常常有點怪，通常直接剪掉。</li>
+  </ul>
+  <div class="origin"><span class="ot">名詞由來</span><b>剪接（Cut）</b>：早期電影真的是用剪刀把底片剪開，再用膠帶黏起來，所以換鏡頭叫 cut，中文叫「剪」接。現在軟體裡的剪刀圖示，就是這個歷史留下來的。</div>
+  <div class="origin"><span class="ot">名詞由來</span><b>庫里肖夫效應（Kuleshov Effect）</b>：1920 年代蘇聯導演庫里肖夫做了一個實驗：同一個演員「沒有表情」的臉，接在一碗湯後面，觀眾說他看起來很餓；接在棺材後面，觀眾說他很悲傷。臉一模一樣！證明了<b>意義來自鏡頭的組合</b>。這對 AI 影片是好消息：角色表情不夠到位時，靠前後鏡頭的安排就能補回來。</div>
+  <div class="origin"><span class="ot">名詞由來</span><b>J-cut 與 L-cut</b>：J-cut 是「下一鏡的聲音先出現，畫面才切過去」；L-cut 是「畫面切走了，上一鏡的聲音還在」。在時間軸上，聲音和畫面錯開的形狀，看起來就像字母 J 和 L，因此得名。這是讓剪接變順的最強小技巧。</div>
+  <div class="origin"><span class="ot">名詞由來</span><b>蒙太奇（Montage）</b>：法文 monter 是「組裝」。把好幾個短鏡頭快速組在一起，表達時間過去或情緒累積，例如「練球一整個暑假」用 10 個 1 秒鏡頭帶過。</div>
+  <h4>後製四件事</h4>
+  <ol>
+    <li><b>調色：</b>每一鏡顏色可能有點不同，用剪輯軟體的濾鏡或「調色」把全部統一。</li>
+    <li><b>字幕：</b>CapCut 有自動字幕，生成後一定要逐句檢查錯字。</li>
+    <li><b>放大（Upscale）：</b>720p 的 AI 影片可以用放大工具變成 1080p 或 4K，畫面更清楚。</li>
+    <li><b>輸出：</b>一般用 1080p、24 或 30fps、MP4 格式就夠了。</li>
+  </ol>
+  <div class="origin"><span class="ot">名詞由來</span><b>調色（Color Grading）</b>：grade 是「分級、調整等級」。以前在沖洗底片的實驗室，調色師會替每一段底片調整顏色的等級，讓整部片色調一致。</div>
+  <div class="mission"><b>小任務：</b>把你到目前為止做的片段剪成一支 30 秒短片：至少用一次 J-cut 或 L-cut、加字幕、加配樂，並把所有鏡頭調成同一個色調。</div>
+  <button class="done-btn" type="button" data-done="L13" aria-pressed="false">我學會了</button>
+</section>
+<!-- ================= 專業篇 ================= -->
+<div class="stage-banner" data-stage="專業篇">
+  <h2>專業篇：完整做一部片，並且做得對</h2>
+  <p>第 14–17 課。兩個完整實戰、專業工作流、還有每個創作者都必須知道的規則。</p>
+</div>
+
+<section class="lesson" id="L14" data-title="實戰一：90 秒熱血籃球短片《最後三秒》">
+  <header><span class="no">14</span><h3>實戰一：90 秒熱血籃球短片《最後三秒》</h3><p class="goal">把前 13 課全部用上：劇本、角色、分鏡、14 鏡提示詞、剪輯</p></header>
+  <div class="panel tone">
+    <span class="tag">一句話故事</span>
+    <p style="margin:0;font-size:19px;font-family:var(--kai)">上一場罰球失手的高二後衛阿嘯，在比賽剩三秒、落後一分時，接下教練交給他的最後一球。</p>
+  </div>
+  <h4>步驟 1：角色聖經（四位，全部原創）</h4>
+  <p>把下面四段存起來。分鏡裡的提示詞會自動帶入，你按「複製」就是完整版本。</p>
+  <div id="bibles"></div>
+  <h4>步驟 2：風格句</h4>
+  <div class="prompt"><span class="lbl">STYLE（每一鏡最後都貼上）</span><button class="copy" type="button">複製</button><span id="styleTxt"></span></div>
+  <h4>步驟 3：14 格分鏡（點「看提示詞」展開完整英文提示詞）</h4>
+  <p>顏色標籤：<span style="background:#FFE3D6;padding:0 6px;border-radius:3px">起</span> <span style="background:#FFF1BF;padding:0 6px;border-radius:3px">承</span> <span style="background:#D9E5FF;padding:0 6px;border-radius:3px">轉</span> <span style="background:#D4F2E6;padding:0 6px;border-radius:3px">合</span>　總長 <b id="totalSec"></b> 秒。</p>
+  <div class="board" id="board"></div>
+  <h4>步驟 4：製作順序（照做就對了）</h4>
+  <ol>
+    <li><b>先做四張角色設定圖</b>（第 9 課），確認長相後就不再改。</li>
+    <li><b>替每一鏡做「第一格」畫面</b>：用圖片 AI，上傳角色設定圖當參考，描述這一鏡開始時的樣子。</li>
+    <li><b>生成影片</b>：每鏡抽 3 次卡，挑最好的，檔名寫 <code>鏡05_v2.mp4</code>。</li>
+    <li><b>第 11 鏡用首尾幀</b>：第一格是蹲下準備起跳，最後一格是空中出手。</li>
+    <li><b>第 14 鏡超過 10 秒</b>：分兩段用接力法做（第 11 課）。</li>
+    <li><b>比分牌的數字最後在剪輯軟體裡加</b>：AI 很常把數字畫錯，後製加上去最準。</li>
+    <li><b>剪輯</b>：第 10 鏡把所有聲音抽掉只留心跳；第 12 鏡蜂鳴器響起；第 13 鏡進球前 1 秒完全無聲；第 14 鏡音樂和歡呼一起爆出來。</li>
+  </ol>
+  <div class="tip"><b>如果你用 Kling 3.0 的多鏡頭功能：</b>第 5、6、7 鏡（暫停、教練、隊長）是同一個地點的連續對話，可以寫在同一次生成裡，角色會更一致。</div>
+  <div class="mission"><b>畢業作品之一：</b>完成《最後三秒》，或用同一套流程改成你自己的故事（換成排球、田徑、電競都可以）。</div>
+  <button class="done-btn" type="button" data-done="L14" aria-pressed="false">我學會了</button>
+</section>
+
+<section class="lesson" id="L15" data-title="實戰二：60 秒武道覺醒《氣》">
+  <header><span class="no">15</span><h3>實戰二：60 秒武道覺醒《氣》</h3><p class="goal">學會：特效鏡頭、變身、慢動作——「集氣變身」類型怎麼做</p></header>
+  <p>熱血動漫最經典的一幕：主角被打倒、想起師父的話、閉上眼睛、全身爆出光芒。這種鏡頭特效很多，AI 最容易「暴走」，所以要比籃球片更講究控制。</p>
+  <div class="panel tone">
+    <span class="tag">一句話故事</span>
+    <p style="margin:0;font-size:19px;font-family:var(--kai)">在山頂瀑布前修行的少年小楓，一次次被水流打倒，直到他聽懂師父說的「氣，不在拳頭，在呼吸」。</p>
+  </div>
+  <div id="bibles2"></div>
+  <div class="tbl"><table id="qiTable">
+    <thead><tr><th>鏡</th><th>秒</th><th>景別／運鏡</th><th>畫面</th><th>做法</th><th>提示詞</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+  <h4>特效鏡頭的五個控制技巧</h4>
+  <ol>
+    <li><b>鎖定能量顏色：</b>氣的顏色就是記憶點。整部片都寫同一種「翡翠綠」，不要一下綠一下藍。</li>
+    <li><b>變身一定用首尾幀：</b>開始和結束的樣子都由你決定，AI 只負責中間，不會變成別的東西。</li>
+    <li><b>先安靜，再爆發：</b>第 4 鏡刻意很慢、很安靜，第 5 鏡的爆發才會有力。這是剪輯節奏，不是特效。</li>
+    <li><b>用環境表現力量：</b>與其說「很強的氣」，不如寫「腳邊的小石頭浮起來、水面出現一圈圈波紋、衣角被往上吹」。看得見的後果，比形容詞有用十倍。</li>
+    <li><b>慢動作要寫出來：</b>寫 <code>slow motion</code>，並描述細節（水珠停在空中），AI 才會真的放慢。</li>
+  </ol>
+  <div class="mission"><b>畢業作品之二：</b>完成《氣》，或設計你自己的原創招式和變身（顏色、聲音、姿勢都由你決定）。</div>
+  <button class="done-btn" type="button" data-done="L15" aria-pressed="false">我學會了</button>
+</section>
+
+<section class="lesson" id="L16" data-title="專業工作流：省錢、除錯、做到 5 分鐘">
+  <header><span class="no">16</span><h3>專業工作流：省錢、除錯、做到 5 分鐘</h3><p class="goal">學會：專案管理、聰明抽卡、常見失敗修正，以及長片的拆法</p></header>
+  <h4>完整流程一張圖</h4>
+  <div class="pipe">
+    <div><b>構想</b><span>一句話故事</span></div>
+    <div><b>劇本</b><span>Claude 等聊天 AI</span></div>
+    <div><b>角色</b><span>角色聖經＋設定圖</span></div>
+    <div><b>分鏡</b><span>分鏡表＋火柴人</span></div>
+    <div><b>首幀圖</b><span>圖片 AI</span></div>
+    <div><b>生成</b><span>影片 AI，抽卡</span></div>
+    <div><b>聲音</b><span>配音・音效・配樂</span></div>
+    <div><b>剪輯</b><span>CapCut 等</span></div>
+    <div><b>發佈</b><span>標示 AI 生成</span></div>
+  </div>
+  <h4>資料夾這樣開，一輩子受用</h4>
+  <div class="prompt" style="font-family:ui-monospace,Menlo,Consolas,monospace"><span class="lbl">專案資料夾範例</span>最後三秒/
+  01_劇本/        劇本_v3.docx、分鏡表.xlsx
+  02_角色/        阿嘯_設定圖.png、教練_設定圖.png
+  03_首幀/        鏡01.png … 鏡14.png
+  04_影片素材/    鏡01_v1.mp4、鏡01_v2.mp4 …（不滿意的也別刪）
+  05_聲音/        旁白.wav、心跳.wav、配樂.mp3
+  06_剪輯專案/
+  07_輸出/        最後三秒_完成版_1080p.mp4</div>
+  <h4>聰明抽卡，省下一半點數</h4>
+  <div class="origin"><span class="ot">名詞由來</span><b>抽卡</b>：來自日本手機遊戲的「轉蛋」（gacha，模仿扭蛋機轉動的聲音「ガチャガチャ」），投錢不知道會抽到什麼。AI 生成每次結果都不一樣，大家就戲稱重新生成叫抽卡。</div>
+  <ul>
+    <li><b>先用便宜的快速模型試：</b>大部分工具都有 Fast、Lite 或低解析度模式。先用它確定構圖和動作對了，再用高品質模式做正式版。</li>
+    <li><b>先抽圖，再抽影片：</b>圖片比影片便宜又快。首幀圖挑到完美的，影片成功率會高很多。</li>
+    <li><b>一次只改一個地方：</b>失敗時不要整段重寫。改一格（例如只改運鏡），才知道是哪裡出問題。</li>
+    <li><b>記錄成功的配方：</b>哪段提示詞、哪張圖、哪個設定成功了，記在分鏡表的備註欄。</li>
+  </ul>
+  <h4>常見失敗與修正</h4>
+  <div class="tbl"><table>
+    <thead><tr><th>症狀</th><th>原因</th><th>修正方法</th></tr></thead>
+    <tbody>
+      <tr><td>臉在影片中途變形</td><td>動作太大、鏡頭離臉太遠</td><td>用圖生影片；臉要清楚時用近景；動作改小</td></tr>
+      <tr><td>手指變多、黏在一起</td><td>手是 AI 最難畫的部位</td><td>避免手的特寫；讓手握著東西（球）；多抽幾次</td></tr>
+      <tr><td>球穿過籃板、人穿過人</td><td>物理理解不夠</td><td>一個鏡頭只做一個動作；寫清楚「球從籃框上方落入網中」</td></tr>
+      <tr><td>比分牌、招牌文字是亂碼</td><td>影片 AI 不擅長寫字</td><td>寫「沒有文字」，數字在剪輯時加</td></tr>
+      <tr><td>角色突然開口亂講話</td><td>原生音訊自己加了對白</td><td>提示詞寫「沒有對白」；或剪輯時換掉聲音</td></tr>
+      <tr><td>動作慢吞吞像在水裡</td><td>AI 預設偏慢</td><td>寫「快速」「突然」「爆發性地」；或在剪輯軟體加速 1.2–1.5 倍</td></tr>
+      <tr><td>每一鏡色調都不同</td><td>沒有固定風格句</td><td>每鏡貼同一段風格句；剪輯時統一調色</td></tr>
+    </tbody>
+  </table></div>
+  <h4>從 90 秒到 5 分鐘：用「場」來拆</h4>
+  <p>5 分鐘大約需要 40–60 個鏡頭，一次處理會崩潰。專業的做法是先分成 4–6 「場」，每場 1 分鐘左右，每場當成一支獨立短片做完，最後再接起來。所有場都用同一份角色聖經和風格句。</p>
+  <div class="origin"><span class="ot">名詞由來</span><b>片、場、鏡、幀</b>：電影由大到小的四層。「場」（scene）來自舞台劇，一個地點、一段連續時間的戲就是一場；「鏡」（shot）是攝影機一次開機到關機拍下的畫面；「幀」是最小的一張畫面。一部片 → 好幾場 → 每場好幾鏡 → 每鏡好幾百幀。</div>
+  <div class="origin"><span class="ot">名詞由來</span><b>空鏡／B-roll</b>：早期電視新聞剪接時用兩台放映機，A 捲放主要畫面（人在說話），B 捲放補充畫面（風景、街道）。現在沒有主角、用來營造氣氛或轉場的鏡頭就叫 B-roll。AI 做空鏡特別容易成功，是拉長片長、調整節奏的好幫手。</div>
+  <div class="tip"><b>請 Claude 當你的製片：</b>把分鏡表貼給 Claude，請它做一份「製作追蹤表」（每鏡的狀態：未開始／首幀完成／影片完成／已剪入），或請它檢查整份分鏡的連戲問題。Claude 也能直接幫你做一個可以在瀏覽器開的互動分鏡板，就像這份教材一樣。</div>
+  <div class="mission"><b>小任務：</b>把你的一個故事構想擴充成 3 分鐘：先分成 3 場，每場寫一句話，再挑其中一場做出完整分鏡表。</div>
+  <button class="done-btn" type="button" data-done="L16" aria-pressed="false">我學會了</button>
+</section>
+
+<section class="lesson" id="L17" data-title="創作者的規則：著作權、真人、標示">
+  <header><span class="no">17</span><h3>創作者的規則：著作權、真人、標示</h3><p class="goal">學會：哪些可以做、哪些不能做，以及為什麼</p></header>
+  <h4>一、別人的角色：可以學「類型」，不要拿「角色」</h4>
+  <p>《灌籃高手》的角色屬於作者井上雄彥和出版社，《七龍珠》的角色屬於作者鳥山明的著作權人和出版社。用 AI 生成這些角色並公開發表，有侵權風險；大部分 AI 平台也會直接拒絕，或事後下架。2025 年有影片平台一開始放寬讓大家生成知名角色，結果引發創作者和版權方強烈反彈，這件事就是很好的教訓。</p>
+  <div class="tbl"><table>
+    <thead><tr><th>可以借用的（類型與手法）</th><th>不要拿的（別人的角色與設計）</th></tr></thead>
+    <tbody>
+      <tr><td>最後幾秒逆轉的熱血運動故事</td><td>角色的名字、長相、招牌髮型與服裝</td></tr>
+      <tr><td>集氣、變身、光焰、大喊出招的演出手法</td><td>作品的招式名稱、標誌、球隊名稱</td></tr>
+      <tr><td>粗線條、速度線、網點的畫風描述</td><td>「畫成某某作品」「某某畫家風格」的寫法</td></tr>
+      <tr><td>仰拍、慢動作、蒙太奇等鏡頭語言</td><td>整段複製原作的劇情和台詞</td></tr>
+    </tbody>
+  </table></div>
+  <p>最好的方法，就是這門課一直在做的事：<b>學它為什麼好看，然後做一個你自己的原創角色。</b>原創角色可以一直用、可以公開、可以參加比賽，是真正屬於你的東西。</p>
+  <h4>二、真人：先問、不冒充、不騙人</h4>
+  <ul>
+    <li><b>你自己：</b>可以。有些工具（例如 Gemini 的 AI 分身功能）讓你安全地建立自己的數位分身，而且只有你本人能用。</li>
+    <li><b>朋友、家人：</b>一定要先得到本人同意，並讓他看過成品再發佈。</li>
+    <li><b>明星、運動員、政治人物：</b>不要做。可能侵犯肖像權，也會被平台擋。</li>
+    <li><b>絕對不做：</b>讓人以為是真的假新聞、嘲笑或霸凌別人、任何色情或血腥內容。</li>
+  </ul>
+  <div class="origin"><span class="ot">名詞由來</span><b>深偽（Deepfake）</b>：2017 年，美國論壇 Reddit 上一個名叫「deepfakes」的使用者，用 AI 把別人的臉換到影片上並散布，引起很大的風波。名字來自 deep learning（深度學習）＋ fake（假的）。從那之後，所有用 AI 偽造真人的影片都叫深偽。</div>
+  <h4>三、公開時要標示「AI 生成」</h4>
+  <p>YouTube 等平台規定，看起來很真實的 AI 內容要主動標示。Google 的 AI 影片還會加上肉眼看不到的 <b>SynthID</b> 數位浮水印，就算你不說，也查得出來。誠實標示不丟臉，反而讓觀眾更信任你。</p>
+  <div class="origin"><span class="ot">名詞由來</span><b>浮水印（Watermark）</b>：大約 700 多年前，義大利的造紙工坊在紙漿還濕的時候壓出圖案，紙乾了以後對著光才看得到，用來證明「這是我們家做的紙」。現在的數位浮水印是同樣的想法，只是藏在畫面的像素裡。</div>
+  <div class="panel">
+    <span class="tag">發佈前檢查清單</span>
+    <ol style="margin:0">
+      <li>角色都是原創的，或已取得本人同意？</li>
+      <li>音樂可以合法使用？</li>
+      <li>有標示「本片使用 AI 生成」？</li>
+      <li>內容不會讓人誤以為是真實事件？</li>
+      <li>符合你使用的 AI 工具和發佈平台的規定（包括年齡限制）？</li>
+    </ol>
+  </div>
+  <div class="mission"><b>小任務：</b>替你的作品寫一段片尾說明，包含：導演（你）、使用的 AI 工具、音樂來源、「本片使用 AI 生成」。</div>
+  <button class="done-btn" type="button" data-done="L17" aria-pressed="false">我學會了</button>
+</section>
+
+<!-- ================= 畢業 ================= -->
+<div class="stage-banner" id="grad">
+  <h2>畢業考與名詞辭典</h2>
+  <p>十題選擇題，選完按「交卷」。之後隨時可以回來查名詞。</p>
+</div>
+<section id="quizWrap" style="padding-top:20px">
+  <div id="quiz"></div>
+  <button class="done-btn" type="button" id="quizSubmit">交卷</button>
+  <p class="score" id="quizScore" aria-live="polite"></p>
+</section>
+<section id="glossary" style="padding-top:30px">
+  <h3 style="font-size:26px;font-weight:900;margin:0">名詞辭典（含由來）</h3>
+  <input class="gsearch" id="gsearch" type="search" placeholder="搜尋名詞，例如：分鏡、fps、deepfake" aria-label="搜尋名詞">
+  <div class="gl" id="gl"></div>
+</section>
+
+<footer>
+  <p>AI 影片導演課｜工具資訊整理至 2026 年 9 月。本教材中的角色《阿嘯》《林教練》《大川》《小楓》等皆為原創示範角色。提到的作品與工具名稱屬各權利人所有，僅作說明用途。</p>
+  <p>下一步：每週做一支 30 秒作品，連續做 10 週。你會發現，真正的進步不是來自更新的工具，而是來自更多次的「拆鏡頭、接鏡頭」。</p>
+</footer>
+
+</div><!-- /col -->
+</div><!-- /main -->
+</div><!-- /shell -->
+<style>
+.cam .runner{transform-origin:50% 55%}
+.cam.pan .runner{animation:pan 4s ease-in-out infinite alternate}
+.cam.tilt .runner{animation:tilt 4s ease-in-out infinite alternate}
+.cam.push .runner{animation:push 4s ease-in-out infinite alternate}
+.cam.pull .runner{animation:push 4s ease-in-out infinite alternate-reverse}
+.cam.orbit .runner{animation:orbit 5s ease-in-out infinite alternate}
+</style>
+<script>
+(function(){
+"use strict";
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const store={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const INK='#1B1F3B',NAVY='#22306E',SKIN='#F2C9A0',BAND='#FF8A00',BALL='#E4661E';
+
+/* ---------- theme ---------- */
+const th=store.get('aivc-theme',null); if(th) document.documentElement.setAttribute('data-theme',th);
+$('#themeBtn').addEventListener('click',()=>{
+  const cur=document.documentElement.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  const nx=cur==='dark'?'light':'dark'; document.documentElement.setAttribute('data-theme',nx); store.set('aivc-theme',nx);
+});
+
+/* ---------- TOC & progress ---------- */
+const toc=$('#toc'); let html='', ul=null;
+const nodes=$$('.stage-banner[data-stage], section.lesson[data-title]');
+let buf=[];
+nodes.forEach(n=>{
+  if(n.classList.contains('stage-banner')){ if(buf.length){html+='<ul class="toc">'+buf.join('')+'</ul>';buf=[]} html+='<div class="stage-name">'+n.dataset.stage+'</div>'; }
+  else { const no=n.id.slice(1); buf.push('<li><a href="#'+n.id+'" data-l="'+n.id+'"><span class="no">'+no+'</span><span>'+n.dataset.title+'</span><span class="ck" aria-label="已完成">✓</span></a></li>'); }
+});
+if(buf.length) html+='<ul class="toc">'+buf.join('')+'</ul>';
+html+='<div class="stage-name">畢業</div><ul class="toc"><li><a href="#grad"><span class="no">★</span><span>畢業考與名詞辭典</span><span class="ck"></span></a></li></ul>';
+toc.innerHTML=html;
+let done=new Set(store.get('aivc-done',[]));
+function paint(){
+  const n=done.size, pct=Math.round(n/17*100)+'%';
+  $('#meterSide').style.width=pct; $('#meterTop').style.width=pct;
+  $('#progTxt').textContent='已完成 '+n+' / 17 課'; $('#progTop').textContent=n+'/17';
+  $$('.toc a[data-l]').forEach(a=>a.classList.toggle('done',done.has(a.dataset.l)));
+  $$('.done-btn[data-done]').forEach(b=>{const on=done.has(b.dataset.done);b.setAttribute('aria-pressed',on);b.textContent=on?'✓ 已學會（再按一次取消）':'我學會了';});
+}
+$$('.done-btn[data-done]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.done; done.has(k)?done.delete(k):done.add(k); store.set('aivc-done',[...done]); paint();}));
+paint();
+const side=$('#side'), mb=$('#menuBtn');
+mb.addEventListener('click',()=>{const o=side.classList.toggle('open');mb.setAttribute('aria-expanded',o)});
+toc.addEventListener('click',e=>{if(e.target.closest('a')){side.classList.remove('open');mb.setAttribute('aria-expanded','false')}});
+if('IntersectionObserver' in window){
+  const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){$$('.toc a').forEach(a=>a.classList.toggle('here',a.getAttribute('href')==='#'+en.target.id))}})},{rootMargin:'-40% 0px -55% 0px'});
+  $$('section.lesson[data-title]').forEach(s=>io.observe(s));
+}
+
+/* ---------- target picture for diffusion ---------- */
+function drawTarget(c){
+  const W=c.canvas.width,H=c.canvas.height;
+  let g=c.createLinearGradient(0,0,0,H*.62); g.addColorStop(0,'#27336F'); g.addColorStop(.55,'#E0624A'); g.addColorStop(1,'#FFB347');
+  c.fillStyle=g; c.fillRect(0,0,W,H);
+  c.fillStyle='#FFE08A'; c.beginPath(); c.arc(W*.62,H*.6,H*.13,0,7); c.fill();
+  c.fillStyle='#3B2A4A'; for(let i=0;i<9;i++){const x=i*W/8; c.beginPath(); c.moveTo(x-30,H*.62); c.lineTo(x+10,H*.43+ (i%3)*8); c.lineTo(x+50,H*.62); c.fill();}
+  g=c.createLinearGradient(0,H*.62,0,H); g.addColorStop(0,'#C0613A'); g.addColorStop(1,'#6E2E22'); c.fillStyle=g; c.fillRect(0,H*.62,W,H*.38);
+  c.strokeStyle='rgba(255,240,220,.8)'; c.lineWidth=2; c.beginPath(); c.ellipse(W*.8,H*.9,W*.28,H*.1,0,Math.PI,2*Math.PI); c.stroke();
+  c.fillStyle='#1B1F3B'; c.fillRect(W*.86,H*.22,4,H*.45); c.fillRect(W*.82,H*.2,W*.1,H*.12); c.fillStyle='#fff'; c.fillRect(W*.835,H*.215,W*.07,H*.09);
+  c.strokeStyle='#FF5A1F'; c.lineWidth=3; c.beginPath(); c.moveTo(W*.8,H*.33); c.lineTo(W*.84,H*.33); c.stroke();
+  c.setLineDash([3,4]); c.strokeStyle='rgba(255,255,255,.85)'; c.lineWidth=1.5; c.beginPath(); c.moveTo(W*.3,H*.38); c.quadraticCurveTo(W*.55,H*.02,W*.815,H*.3); c.stroke(); c.setLineDash([]);
+  c.fillStyle=BALL; c.beginPath(); c.arc(W*.74,H*.16,H*.035,0,7); c.fill(); c.strokeStyle='#1B1F3B'; c.lineWidth=1; c.stroke();
+  // jumping player silhouette
+  c.fillStyle='#1B1F3B'; const px=W*.27, py=H*.66;
+  c.beginPath(); c.arc(px,py-H*.34,H*.04,0,7); c.fill();
+  c.lineCap='round'; c.strokeStyle='#1B1F3B';
+  c.lineWidth=H*.05; c.beginPath(); c.moveTo(px,py-H*.29); c.lineTo(px+2,py-H*.15); c.stroke();
+  c.lineWidth=H*.025; c.beginPath(); c.moveTo(px,py-H*.27); c.lineTo(px+H*.05,py-H*.4); c.moveTo(px,py-H*.27); c.lineTo(px+H*.03,py-H*.41); c.stroke();
+  c.beginPath(); c.moveTo(px,py-H*.15); c.lineTo(px-H*.05,py-H*.06); c.lineTo(px-H*.02,py); c.moveTo(px+2,py-H*.15); c.lineTo(px+H*.05,py-H*.08); c.lineTo(px+H*.06,py-H*.01); c.stroke();
+  c.fillStyle='rgba(0,0,0,.25)'; c.beginPath(); c.ellipse(px,H*.93,H*.08,H*.02,0,0,7); c.fill();
+}
+function makeDiff(canvas){
+  const c=canvas.getContext('2d'), W=canvas.width, H=canvas.height;
+  const off=document.createElement('canvas'); off.width=W; off.height=H; const oc=off.getContext('2d'); drawTarget(oc);
+  const T=oc.getImageData(0,0,W,H).data, N=new Float32Array(W*H*3);
+  let s=7; const rnd=()=>{s=(s*16807)%2147483647;return s/2147483647};
+  for(let i=0;i<N.length;i++) N[i]=rnd()*255;
+  const img=c.createImageData(W,H), D=img.data;
+  return function(step){
+    const a=Math.pow(step/40,1.35), j=(1-a)*70;
+    // coarse-to-fine: early steps show blurred target
+    for(let p=0,q=0;p<D.length;p+=4,q+=3){
+      for(let k=0;k<3;k++){ D[p+k]=T[p+k]*a+N[q+k]*(1-a)+(Math.random()-.5)*j; }
+      D[p+3]=255;
+    }
+    c.putImageData(img,0,0);
+  };
+}
+const hero=makeDiff($('#heroCanvas'));
+function runHero(){
+  if(reduce){hero(40);$('#heroStep').textContent='完成';return}
+  let st=0; const t0=performance.now();
+  (function f(t){st=Math.min(40,Math.floor((t-t0)/110)); hero(st); $('#heroStep').textContent=st>=40?'完成：第 40 步':'去雜訊 第 '+st+' / 40 步'; if(st<40) requestAnimationFrame(f)})(t0);
+}
+runHero(); $('#heroReplay').addEventListener('click',runHero);
+const dd=makeDiff($('#diffCanvas')); dd(0);
+const dr=$('#diffRange');
+function diffText(v){ if(v==0)return'第 0 步：一片雪花，什麼都看不出來。這就是 AI 的起點。';
+  if(v<=8)return'第 '+v+' 步：開始出現大塊的明暗——上面比較亮（天空），下面比較暗（地面）。AI 先決定「大方向」。';
+  if(v<=20)return'第 '+v+' 步：顏色和大形狀出來了——夕陽、山、地面。這時候細節還很亂。';
+  if(v<=32)return'第 '+v+' 步：細節一點一點浮現——球員、籃框、球的軌跡。';
+  return'第 '+v+' 步：幾乎完成！影片 AI 要對「每一格」都做這件事，而且格和格之間還要對得上。'; }
+dr.addEventListener('input',()=>{const v=+dr.value;dd(v);$('#diffNum').textContent=v;$('#diffRead').textContent=diffText(v)});
+
+/* ---------- flipbook ---------- */
+const fc=$('#flipCanvas'), fx=fc.getContext('2d'), FR=24;
+function drawBall(c,i,W,H,mini){
+  c.fillStyle='#fff'; c.fillRect(0,0,W,H);
+  c.fillStyle='#F3D2A8'; c.fillRect(0,H*.82,W,H*.18);
+  const t=i/FR, x=W*.1+W*.8*t, b=Math.abs(Math.sin(Math.PI*t*2)), y=H*.82-b*H*.62;
+  const r=H*.09, sq=b<.12?1.25:1;
+  c.fillStyle='rgba(0,0,0,.18)'; c.beginPath(); c.ellipse(x,H*.84,r*(1.2-b*.5),r*.25,0,0,7); c.fill();
+  c.save(); c.translate(x,y-r/sq); c.scale(sq,1/sq); c.rotate(t*8);
+  c.fillStyle=BALL; c.beginPath(); c.arc(0,0,r,0,7); c.fill(); c.strokeStyle=INK; c.lineWidth=mini?1:3; c.stroke();
+  c.beginPath(); c.moveTo(-r,0); c.lineTo(r,0); c.moveTo(0,-r); c.lineTo(0,r); c.stroke(); c.restore();
+  if(!mini){c.fillStyle=INK; c.font='700 22px "Noto Sans TC",sans-serif'; c.fillText('第 '+(i+1)+' 格',14,32)}
+}
+const strip=$('#filmstrip'), minis=[];
+for(let i=0;i<FR;i++){const m=document.createElement('canvas');m.width=64;m.height=32;drawBall(m.getContext('2d'),i,64,32,true);strip.appendChild(m);minis.push(m)}
+let fi=0, ftimer=null;
+const fpsTxt={2:'每秒 2 張：一張一張跳，像在看投影片，大腦還拼不起來。',6:'每秒 6 張：看得出在動，但一頓一頓的，很卡。',12:'每秒 12 張：已經順了！很多日本手繪動畫其實是「一張畫停兩格」，也就是每秒 12 張不同的畫。',24:'每秒 24 張：電影的標準，非常流暢。AI 影片也常用 24fps，1 秒就要生成 24 張互相對得上的圖。'};
+function setFps(f){
+  $$('#fpsSeg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.fps==f));
+  $('#fpsRead').textContent=fpsTxt[f]; clearInterval(ftimer);
+  const tick=()=>{drawBall(fx,fi,fc.width,fc.height,false);minis.forEach((m,k)=>m.classList.toggle('on',k===fi));fi=(fi+1)%FR};
+  tick(); if(!reduce) ftimer=setInterval(tick,1000/f);
+}
+$$('#fpsSeg button').forEach(b=>b.addEventListener('click',()=>setFps(+b.dataset.fps)));
+setFps(24);
+
+/* ---------- figure builder (local coords: feet at 0,0, height ~486) ---------- */
+function fig(o){
+  o=Object.assign({x:0,y:0,s:1,jersey:'#fff',trim:NAVY,num:'11',hair:'spiky',hairC:INK,view:'front',arms:'down',band:true,ball:null,shorts:null,sweat:false,skin:SKIN,scar:true,faceDir:0},o);
+  let h='<g transform="translate('+o.x+' '+o.y+') scale('+o.s+')" stroke="'+INK+'" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">';
+  const side=o.view==='side', back=o.view==='back';
+  // ponytail behind
+  if(o.hair==='pony') h+='<ellipse cx="'+(side?-46:40)+'" cy="-430" rx="14" ry="34" fill="'+o.hairC+'" transform="rotate(20 40 -430)"/>';
+  // arms
+  const ar=o.arms, la=ar==='up'?'M-40 -355 L-22 -505':ar==='forward'?'M-50 -355 L-20 -300':ar==='wide'?'M-50 -355 L-120 -300':'M-52 -355 L-72 -245';
+  const ra=ar==='up'?'M40 -355 L26 -508':ar==='forward'?'M50 -355 L20 -300':ar==='wide'?'M50 -355 L120 -300':'M52 -355 L72 -245';
+  if(side){
+    h+='<path d="M-6 -140 L-10 -20" stroke="'+o.skin+'" stroke-width="22"/><path d="M8 -140 L10 -20" stroke="'+o.skin+'" stroke-width="22"/>';
+    h+='<ellipse cx="4" cy="-10" rx="28" ry="12" fill="#fff"/>';
+    h+='<rect x="-44" y="-210" width="88" height="72" rx="6" fill="'+(o.shorts||o.jersey)+'"/>';
+  } else {
+    h+='<path d="'+la+'" stroke="'+o.skin+'" stroke-width="20" fill="none"/>';
+    h+='<path d="'+ra+'" stroke="'+o.skin+'" stroke-width="20" fill="none"/>';
+    h+='<path d="M-24 -140 L-30 -20" stroke="'+o.skin+'" stroke-width="22"/><path d="M24 -140 L30 -20" stroke="'+o.skin+'" stroke-width="22"/>';
+    h+='<ellipse cx="-34" cy="-10" rx="22" ry="12" fill="#fff"/><ellipse cx="34" cy="-10" rx="22" ry="12" fill="#fff"/>';
+    h+='<rect x="-60" y="-210" width="120" height="72" rx="6" fill="'+(o.shorts||o.jersey)+'"/>';
+  }
+  const jw=side?40:58;
+  h+='<path d="M'+(-jw)+' -365 L'+jw+' -365 L'+(jw+4)+' -210 L'+(-jw-4)+' -210 Z" fill="'+o.jersey+'"/>';
+  if(!side) h+='<path d="M-20 -365 Q0 -340 20 -365" fill="none" stroke="'+o.trim+'" stroke-width="6"/>';
+  if(side) h+='<path d="M4 -352 L14 -240" stroke="'+o.skin+'" stroke-width="20"/><path d="M-12 -365 L20 -365 L20 -330 Q4 -320 -12 -330Z" fill="'+o.jersey+'" stroke-width="3"/>';
+  if(o.num && !side) h+='<text x="0" y="'+(back?-260:-270)+'" text-anchor="middle" font-size="'+(back?72:56)+'" font-weight="900" fill="'+o.trim+'" stroke="none" font-family="Noto Sans TC,sans-serif">'+o.num+'</text>';
+  // band on character's left wrist (viewer right in front view)
+  if(o.band){ if(ar==='up') h+='<rect x="18" y="-490" width="18" height="16" fill="'+BAND+'" stroke-width="3"/>'; else if(ar==='down'&&!back) h+='<rect x="62" y="-268" width="20" height="16" fill="'+BAND+'" stroke-width="3" transform="rotate(10 72 -260)"/>'; else if(back) h+='<rect x="-82" y="-268" width="20" height="16" fill="'+BAND+'" stroke-width="3"/>'; }
+  // neck & head
+  h+='<rect x="-12" y="-380" width="24" height="18" fill="'+o.skin+'" stroke="none"/>';
+  h+='<circle cx="0" cy="-418" r="42" fill="'+(back?o.hairC:o.skin)+'"/>';
+  if(!back){
+    if(side){ h+='<path d="M40 -420 L52 -410 L40 -404" fill="'+o.skin+'"/><ellipse cx="22" cy="-420" rx="4" ry="5.5" fill="'+INK+'" stroke="none"/><path d="M14 -434 L30 -436" stroke-width="6"/>'; }
+    else {
+      const dx=o.faceDir*6;
+      h+='<path d="M'+(-24+dx)+' -434 L'+(-8+dx)+' -437 M'+(8+dx)+' -437 L'+(24+dx)+' -434" stroke-width="6"/>';
+      h+='<ellipse cx="'+(-15+dx)+'" cy="-418" rx="4" ry="5.5" fill="'+INK+'" stroke="none"/><ellipse cx="'+(15+dx)+'" cy="-418" rx="4" ry="5.5" fill="'+INK+'" stroke="none"/>';
+      h+='<path d="M'+(-8+dx)+' -396 L'+(8+dx)+' -396" stroke-width="3"/>';
+      if(o.scar) h+='<path d="M'+(18+dx)+' -444 L'+(23+dx)+' -430" stroke="#B0413E" stroke-width="3"/>';
+    }
+    if(o.sweat) h+='<path d="M-38 -440 q-6 12 0 16 q6 -4 0 -16Z" fill="#9CD3FF" stroke-width="2"/><path d="M40 -410 q-5 10 0 13 q5 -3 0 -13Z" fill="#9CD3FF" stroke-width="2"/>';
+  }
+  // hair
+  const hp={
+    spiky:'M-44 -424 L-52 -456 L-32 -448 L-30 -478 L-12 -458 L0 -486 L12 -458 L30 -478 L32 -448 L52 -456 L44 -424 Q20 -448 0 -446 Q-20 -448 -44 -424 Z',
+    pony:'M-44 -416 Q-42 -466 0 -464 Q42 -466 44 -416 Q24 -444 0 -442 Q-24 -444 -44 -416 Z',
+    bun:'M-44 -416 Q-42 -466 0 -464 Q42 -466 44 -416 Q24 -444 0 -442 Q-24 -444 -44 -416 Z',
+    curly:'M-44 -420 a12 12 0 0 1 10 -30 a14 14 0 0 1 24 -12 a14 14 0 0 1 22 0 a14 14 0 0 1 24 12 a12 12 0 0 1 8 30 Q20 -442 0 -440 Q-20 -442 -44 -420Z'
+  };
+  if(o.hair && hp[o.hair] && !back) h+='<path d="'+hp[o.hair]+'" fill="'+o.hairC+'"/>';
+  if(back && o.hair==='spiky') h+='<path d="'+hp.spiky+'" fill="'+o.hairC+'"/>';
+  if(o.hair==='bun'){ h+='<circle cx="0" cy="-470" r="14" fill="'+o.hairC+'"/>'; if(!back) h+='<path d="M-43 -436 Q0 -452 43 -436" stroke="'+NAVY+'" stroke-width="9" fill="none"/>'; }
+  if(o.ball){ const bp=o.ball==='hand'?[-80,-230]:o.ball==='up'?[0,-535]:o.ball==='chest'?[0,-300]:o.ball; h+='<circle cx="'+bp[0]+'" cy="'+bp[1]+'" r="30" fill="'+BALL+'"/><path d="M'+(bp[0]-30)+' '+bp[1]+' L'+(bp[0]+30)+' '+bp[1]+' M'+bp[0]+' '+(bp[1]-30)+' L'+bp[0]+' '+(bp[1]+30)+'" stroke-width="3"/>'; }
+  return h+'</g>';
+}
+window.__fig=fig;
+/* ---------- gym scene (world coords) ---------- */
+function gymScene(opts){
+  opts=opts||{};
+  let h='<rect x="-2000" y="-1400" width="6000" height="2100" fill="#3C4A8C"/>';
+  for(let i=0;i<7;i++) h+='<circle cx="'+(i*320-200)+'" cy="-120" r="36" fill="#FFF6D8" opacity=".9"/>';
+  for(let r=0;r<6;r++){ const y=40+r*80; h+='<rect x="-2000" y="'+(y+26)+'" width="6000" height="14" fill="#2A3470"/>'; let dots=''; for(let x=-1980;x<3980;x+=46){ const c=['#F2C9A0','#FFB347','#fff','#9CB3FF','#FF5A1F'][((Math.round(x/46)+r)%5+5)%5]; dots+='<circle cx="'+(x+(r%2)*23)+'" cy="'+y+'" r="15" fill="'+c+'" opacity=".75"/>'; } h+=dots; }
+  h+='<rect x="-2000" y="600" width="6000" height="1400" fill="#E8A25E"/>';
+  for(let x=-2000;x<4000;x+=90) h+='<path d="M'+x+' 600 L'+(x-60)+' 2000" stroke="#D38D4B" stroke-width="3"/>';
+  h+='<ellipse cx="800" cy="840" rx="620" ry="120" fill="none" stroke="#fff" stroke-width="8"/><path d="M-2000 640 L4000 640" stroke="#fff" stroke-width="8"/>';
+  // hoop
+  h+='<rect x="120" y="120" width="18" height="540" fill="#1B1F3B"/><rect x="40" y="160" width="220" height="140" fill="#fff" stroke="#1B1F3B" stroke-width="8"/><rect x="100" y="210" width="100" height="70" fill="none" stroke="#FF5A1F" stroke-width="6"/><ellipse cx="170" cy="310" rx="60" ry="14" fill="none" stroke="#FF5A1F" stroke-width="8"/><path d="M115 312 L135 380 L150 312 L165 380 L185 312 L200 380 L225 312" fill="none" stroke="#fff" stroke-width="4"/>';
+  if(opts.board) h+='<rect x="620" y="-300" width="420" height="200" rx="10" fill="#111" stroke="#1B1F3B" stroke-width="8"/><text x="830" y="-200" text-anchor="middle" font-size="90" font-weight="900" fill="#fff" font-family="Noto Sans TC,sans-serif">58 : 59</text><text x="830" y="-120" text-anchor="middle" font-size="56" font-weight="900" fill="#FFC400" font-family="Noto Sans TC,sans-serif">0:03</text>';
+  return h;
+}
+const shotSvg=$('#shotSvg');
+shotSvg.innerHTML=gymScene({board:true})+fig({x:910,y:770,s:1,ball:[-90,-235],sweat:true});
+const SH=[
+  ['大遠景',[-400,-225,2400,1350],'<b>大遠景（Extreme Wide）</b>：交代「在哪裡」。人很小，環境才是主角。常放在開場，當作定場鏡頭（第 10 課）。'],
+  ['全景',[448,272,924,520],'<b>全景（Full Shot）</b>：從頭到腳都在畫面裡。要看清楚整個身體動作——投籃、奔跑、摔倒——就用它。'],
+  ['中景',[661,285,498,280],'<b>中景（Medium Shot）</b>：腰部以上。最常用的對話鏡頭，看得到手勢和表情。'],
+  ['近景',[759,288,302,170],'<b>近景（Medium Close-up）</b>：胸口以上。觀眾開始感覺到角色的情緒。'],
+  ['特寫',[810,290,199,112],'<b>特寫（Close-up）</b>：整張臉。觀眾直接感受角色的內心：緊張、害怕、決心。注意他額頭的汗。'],
+  ['大特寫',[872,328,75,42],'<b>大特寫（Extreme Close-up）</b>：只有眼睛或一個小地方。最強烈的情緒，留給最關鍵的時刻——用太多就不稀奇了。你看得到他左眉上的小疤嗎？那是他的「記憶點」（第 9 課）。']
+];
+let curVB=SH[0][1].slice(), vbAnim=null;
+const shotSeg=$('#shotSeg');
+SH.forEach((s,i)=>{const b=document.createElement('button');b.type='button';b.textContent=s[0];b.setAttribute('aria-pressed',i===0);b.addEventListener('click',()=>goShot(i));shotSeg.appendChild(b)});
+function goShot(i){
+  $$('button',shotSeg).forEach((b,k)=>b.setAttribute('aria-pressed',k===i)); $('#shotRead').innerHTML=SH[i][2];
+  const from=curVB.slice(), to=SH[i][1]; cancelAnimationFrame(vbAnim);
+  if(reduce){curVB=to.slice();shotSvg.setAttribute('viewBox',to.join(' '));return}
+  const t0=performance.now();
+  (function f(t){let k=Math.min(1,(t-t0)/700);k=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+    curVB=from.map((v,j)=>v+(to[j]-v)*k); shotSvg.setAttribute('viewBox',curVB.join(' ')); if(k<1) vbAnim=requestAnimationFrame(f)})(t0);
+}
+$('#shotRead').innerHTML=SH[0][2];
+
+/* ---------- camera moves ---------- */
+$('#camSvg').innerHTML='<g class="world">'+gymScene({board:false})+'</g><g class="runner">'+fig({x:800,y:760,s:.62,ball:'hand'})+'</g>';
+const CM=[
+  ['still','固定','<b>固定鏡頭（Static）</b>：攝影機完全不動，讓角色在畫面裡移動。最穩、最好控制，新手最該多用。'],
+  ['push','推（推近）','<b>推（Dolly in／Push in）</b>：攝影機慢慢靠近。觀眾被「拉進」角色的情緒——下定決心、發現真相時用。'],
+  ['pull','拉（拉遠）','<b>拉（Dolly out／Pull out）</b>：攝影機慢慢遠離，揭露更大的環境，或表現孤單、故事結束。'],
+  ['pan','搖（左右）','<b>搖（Pan）</b>：攝影機站在原地左右轉，像人轉頭看——帶出場景有多寬、有多少人。'],
+  ['tilt','俯仰（上下）','<b>俯仰（Tilt）</b>：攝影機原地上下轉，像從腳看到頭——表現高大，或慢慢揭露。'],
+  ['track','跟拍','<b>跟拍（Tracking）</b>：攝影機跟著角色一起跑，角色一直在畫面中間，背景往後退。速度感最強。'],
+  ['orbit','環繞','<b>環繞（Orbit）</b>：攝影機繞著角色轉。最有「英雄登場」的感覺，但 AI 很容易轉壞，要多抽幾次。（這裡用翻轉示意）']
+];
+const camSeg=$('#camSeg'), camF=$('#camFrame');
+CM.forEach((c,i)=>{const b=document.createElement('button');b.type='button';b.textContent=c[1];b.setAttribute('aria-pressed',i===0);b.addEventListener('click',()=>{
+  $$('button',camSeg).forEach((x,k)=>x.setAttribute('aria-pressed',k===i)); camF.className='stage-frame cam '+c[0]; $('#camRead').innerHTML=c[2];});camSeg.appendChild(b)});
+$('#camRead').innerHTML=CM[0][2];
+
+/* ---------- prompt builder ---------- */
+const PB=[
+  ['誰（主體）',[['刺蝟頭、穿白色 11 號球衣的高中男生','a high school boy with short spiky black hair wearing a white number 11 basketball jersey'],['綁高馬尾、穿深藍運動外套的年輕女教練','a young female coach with a high black ponytail in a navy track jacket'],['綁綠色頭巾、穿灰色修行服的少年','a teenage boy with a jade-green headband in a grey sleeveless training robe'],['戴紅色頭巾的柴犬','a Shiba Inu dog wearing a red bandana']]],
+  ['做什麼（動作）',[['跳起投三分球','jumps and shoots a three-pointer'],['運球切入、跳起上籃','dribbles past a defender and leaps for a layup'],['雙手握拳、大喊集氣，全身冒出光芒','clenches both fists and shouts as a glowing aura bursts around his body'],['慢慢轉頭看向鏡頭','slowly turns his head to look straight into the camera']]],
+  ['在哪裡（場景）',[['夕陽下的學校室外球場','an outdoor school basketball court at sunset'],['擠滿觀眾的體育館','a packed indoor gymnasium full of cheering fans'],['山頂瀑布前的大岩石','a large rock in front of a mountain waterfall'],['下雨的夜晚街道','a rainy street at night']]],
+  ['景別',[['中景','medium shot'],['遠景','wide shot'],['全景','full shot'],['近景','medium close-up'],['特寫','close-up']]],
+  ['角度與運鏡',[['平視、鏡頭固定','eye level, static camera'],['低角度仰拍、鏡頭慢慢推近','low angle, slow dolly-in'],['鏡頭跟著主角移動','tracking shot following the subject'],['鏡頭環繞主角半圈','camera orbits halfway around the subject'],['高角度俯拍、鏡頭慢慢拉遠','high angle, slow pull-back']]],
+  ['光線',[['黃金時刻的夕陽光','warm golden hour sunlight'],['體育館頂燈造成的強烈輪廓光','strong rim light from gym ceiling lights'],['逆光，主角邊緣發亮','backlit, glowing edges around the subject'],['陰天柔光','soft overcast light'],['霓虹燈的藍紫色光','blue and purple neon light']]],
+  ['風格',[['寫實電影風格','cinematic live-action realism'],['日系 2D 動畫、賽璐璐平塗、乾淨黑色輪廓線','Japanese 2D anime style, cel shading, clean black outlines'],['黑白漫畫風、網點陰影、放射狀速度線','black-and-white manga style, screentone shading, radial speed lines'],['柔和水彩繪本風','soft watercolor picture-book style']]],
+  ['聲音',[['球鞋摩擦聲和觀眾歡呼','sneaker squeaks and a cheering crowd'],['風聲和瀑布聲','wind and a roaring waterfall'],['越來越快的心跳聲','a heartbeat that gets faster and faster'],['沒有對白、沒有音樂','no dialogue, no music']]],
+  ['速度',[['正常速度','normal speed'],['慢動作','in slow motion']]]
+];
+const bd=$('#builder');
+PB.forEach((g,i)=>{const w=document.createElement('div');const id='pb'+i;w.innerHTML='<label for="'+id+'">'+g[0]+'</label><select id="'+id+'">'+g[1].map((o,k)=>'<option value="'+k+'">'+o[0]+'</option>').join('')+'</select>';bd.appendChild(w)});
+function pbUpdate(){
+  const v=PB.map((g,i)=>g[1][+$('#pb'+i).value]);
+  const zh=v[3][0]+'，'+v[4][0]+'。'+v[0][0]+'在'+v[2][0]+'，'+(v[8][0]==='慢動作'?'以慢動作':'')+v[1][0]+'。'+v[5][0]+'。'+v[6][0]+'。聲音：'+v[7][0]+'。畫面中沒有文字。';
+  const en=v[3][1][0].toUpperCase()+v[3][1].slice(1)+', '+v[4][1]+'. '+v[0][1][0].toUpperCase()+v[0][1].slice(1)+' '+v[1][1]+(v[8][1]==='in slow motion'?' in slow motion':'')+', in '+v[2][1]+'. '+v[5][1][0].toUpperCase()+v[5][1].slice(1)+'. '+v[6][1][0].toUpperCase()+v[6][1].slice(1)+'. Sound: '+v[7][1]+'. No on-screen text.';
+  $('#pbZh .out').textContent=zh; $('#pbEn .out').textContent=en;
+}
+$$('#builder select').forEach(s=>s.addEventListener('change',pbUpdate)); pbUpdate();
+
+/* ---------- shot calculator ---------- */
+function calc(){
+  const L=+$('#lenR').value, A=+$('#avgR').value, T=+$('#tryR').value;
+  const m=Math.floor(L/60), s=L%60; $('#lenV').textContent=(m?m+' 分 ':'')+(s?s+' 秒':''); $('#avgV').textContent=A+' 秒'; $('#tryV').textContent=T+' 次';
+  const shots=Math.ceil(L/A), gens=shots*T, mins=gens*2;
+  $('#calcOut').innerHTML='大約需要 <b>'+shots+'</b> 個鏡頭，總共生成 <b>'+gens+'</b> 次影片。若每次等 2 分鐘，光是等待就要約 <b>'+(mins>=60?Math.floor(mins/60)+' 小時 '+(mins%60)+' 分':mins+' 分鐘')+'</b>，還不算寫劇本和剪輯。所以一定要先把分鏡想清楚再生成。';
+}
+['#lenR','#avgR','#tryR'].forEach(s=>$(s).addEventListener('input',calc)); calc();
+
+/* ---------- character sheet ---------- */
+(function(){
+  let h='<rect width="900" height="420" fill="#fff"/>';
+  const lab=(x,t)=>'<text x="'+x+'" y="410" text-anchor="middle" font-size="22" font-weight="700" fill="'+INK+'" font-family="Noto Sans TC,sans-serif">'+t+'</text>';
+  h+=fig({x:160,y:385,s:.72,view:'front'})+fig({x:450,y:385,s:.72,view:'side',band:false})+fig({x:740,y:385,s:.72,view:'back'});
+  h+=lab(160,'正面')+lab(450,'側面')+lab(740,'背面');
+  const call=(x1,y1,x2,y2,t,anchor)=>'<path d="M'+x1+' '+y1+' L'+x2+' '+y2+'" stroke="#D7263D" stroke-width="2"/><circle cx="'+x1+'" cy="'+y1+'" r="4" fill="#D7263D"/><text x="'+x2+'" y="'+(y2-6)+'" text-anchor="'+anchor+'" font-size="18" fill="#D7263D" font-weight="700" font-family="Noto Sans TC,sans-serif">'+t+'</text>';
+  h+=call(177,70,280,40,'左眉小疤','start')+call(212,197,285,230,'左手橘色護腕','start')+call(160,182,40,150,'11 號','start')+call(160,40,40,40,'刺蝟短髮','start');
+  $('#sheetSvg').innerHTML=h;
+})();
+
+/* ---------- chain diagram ---------- */
+(function(){
+  const cols=['#2F6BFF','#14956B','#FF5A1F'], names=['片段 A：運球','片段 B：過人','片段 C：上籃'];
+  let h='';
+  for(let c=0;c<3;c++){
+    const x0=20+c*300;
+    h+='<text x="'+(x0+120)+'" y="30" text-anchor="middle" font-size="20" font-weight="900" fill="var(--ink)" font-family="Noto Sans TC,sans-serif">'+names[c]+'</text>';
+    h+='<rect x="'+x0+'" y="45" width="250" height="90" rx="4" fill="#111"/>';
+    for(let k=0;k<5;k++){
+      const fx=x0+8+k*48, isLast=k===4, isFirst=k===0&&c>0;
+      const col=isFirst?cols[c-1]:cols[c];
+      h+='<rect x="'+fx+'" y="60" width="42" height="60" fill="'+((isLast&&c<2)||isFirst?col:'#fff')+'" stroke="'+((isLast&&c<2)||isFirst?'#FFC400':'none')+'" stroke-width="4"/>';
+      const bx=fx+21, by=110-Math.abs(Math.sin((k+c*4)/2))*34;
+      h+='<circle cx="'+bx+'" cy="'+by+'" r="7" fill="'+BALL+'" stroke="#1B1F3B" stroke-width="2"/>';
+    }
+    if(c<2) h+='<path d="M'+(x0+234)+' 140 Q'+(x0+270)+' 200 '+(x0+320)+' 140" fill="none" stroke="#FFC400" stroke-width="5"/><path d="M'+(x0+312)+' 130 L'+(x0+322)+' 142 L'+(x0+306)+' 146" fill="none" stroke="#FFC400" stroke-width="5"/><text x="'+(x0+277)+'" y="222" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)" font-family="Noto Sans TC,sans-serif">最後一格＝下一段第一格</text>';
+  }
+  $('#chainSvg').innerHTML=h;
+})();
+/* ---------- bibles & storyboard ---------- */
+const BIB={
+  AX:['阿嘯（主角）','AH-XIAO: a 17-year-old Taiwanese high school basketball player, lean athletic build, short spiky black hair, thick straight eyebrows, sharp determined eyes, small scar on left eyebrow, white basketball jersey with navy trim and navy number 11, white shorts, bright orange wristband on left wrist, white high-top sneakers with navy laces.'],
+  CO:['林教練','COACH LIN: a calm woman in her early 30s, high black ponytail, sharp focused eyes, navy track jacket with white stripes on the sleeves, silver whistle on a red lanyard.'],
+  CA:['大川（隊長）','DA-CHUAN: an 18-year-old team captain, tall and broad-shouldered, shoulder-length black hair tied in a small low bun, navy headband, gentle steady eyes, white jersey with navy trim and navy number 5, black sleeve on right knee.'],
+  DF:['對手防守球員','DEFENDER: a tall opposing player, short curly brown hair, stern expression, black jersey with gold trim and gold number 7, black shorts.'],
+  ST:['風格句','Japanese 2D anime style, cel shading with flat colors, clean black outlines, high contrast, warm orange and deep navy color palette, strong rim light from gymnasium ceiling lights, cinematic 16:9 composition, no on-screen text, no watermark.'],
+  FE:['小楓（主角）','XIAO-FENG: a 15-year-old boy martial arts trainee, messy chestnut-brown hair tied back with a jade-green cloth headband, thin but wiry build, grey sleeveless training robe with a black sash, both forearms wrapped in white cloth bandages, barefoot.'],
+  MA:['婆婆師父','GRANNY MASTER: an elderly woman martial arts master, silver hair in a tight bun held by a wooden pin, calm smiling eyes, deep crimson long robe, holding a gnarled wooden staff.'],
+  ST2:['風格句','Japanese 2D anime style with painterly backgrounds, cel shading, clean black outlines, misty mountain palette of teal, grey and dawn gold, the energy aura is always jade green, cinematic 16:9 composition, no on-screen text, no watermark.']
+};
+const expand=t=>t.replace(/\{(AX|CO|CA|DF|ST2|ST|FE|MA)\}/g,(m,k)=>BIB[k][1]);
+function bibleBox(keys){return keys.map(k=>'<div class="prompt"><span class="lbl">'+BIB[k][0]+'</span><button class="copy" type="button">複製</button>'+BIB[k][1]+'</div>').join('')}
+$('#bibles').innerHTML=bibleBox(['AX','CO','CA','DF']);
+$('#bibles2').innerHTML=bibleBox(['FE','MA','ST2']);
+$('#styleTxt').textContent=BIB.ST[1];
+
+const PART={起:'#FFE3D6',承:'#FFF1BF',轉:'#D9E5FF',合:'#D4F2E6'};
+const f=o=>fig(o);
+const frame=inner=>'<svg viewBox="0 0 320 180" aria-hidden="true"><rect width="320" height="180" fill="#fff"/>'+inner+'</svg>';
+const crowd=(y0,rows)=>{let h='';for(let r=0;r<rows;r++)for(let x=4;x<320;x+=10)h+='<circle cx="'+(x+(r%2)*5)+'" cy="'+(y0+r*9)+'" r="3.2" fill="'+INK+'" opacity="'+(.25+.1*(r%3))+'"/>';return h};
+const speed=(cx,cy,n,col)=>{let h='';for(let i=0;i<n;i++){const a=i/n*Math.PI*2,r1=70,r2=200;h+='<path d="M'+(cx+Math.cos(a)*r1)+' '+(cy+Math.sin(a)*r1)+' L'+(cx+Math.cos(a)*r2)+' '+(cy+Math.sin(a)*r2)+'" stroke="'+(col||INK)+'" stroke-width="1.5" opacity=".35"/>'}return h};
+const PAN={
+  gym:()=>frame(crowd(12,7)+'<rect x="115" y="6" width="90" height="36" rx="3" fill="'+INK+'"/><text x="160" y="25" text-anchor="middle" font-size="14" font-weight="900" fill="#fff" font-family="Noto Sans TC,sans-serif">58 : 59</text><text x="160" y="39" text-anchor="middle" font-size="11" font-weight="900" fill="#FFC400" font-family="Noto Sans TC,sans-serif">0:03</text><path d="M0 110 L320 110 L320 180 L0 180Z" fill="#F3D2A8"/><ellipse cx="160" cy="150" rx="46" ry="10" fill="none" stroke="#fff" stroke-width="2"/><rect x="292" y="70" width="5" height="40" fill="'+INK+'"/><rect x="280" y="68" width="22" height="16" fill="#fff" stroke="'+INK+'" stroke-width="2"/><ellipse cx="282" cy="86" rx="7" ry="2" fill="none" stroke="#FF5A1F" stroke-width="2"/>'+f({x:110,y:158,s:.09,ball:null})+f({x:150,y:150,s:.09,jersey:INK,trim:'#C9A227',num:'',band:false,hair:'curly',hairC:'#6b4a2b'})+f({x:200,y:160,s:.09,num:'5',hair:'bun',band:false})+f({x:240,y:152,s:.09,jersey:INK,trim:'#C9A227',num:'',band:false,hair:'curly',hairC:'#6b4a2b'})),
+  face:()=>frame('<rect width="320" height="180" fill="#E6ECF8"/>'+crowd(8,4)+f({x:160,y:590,s:1.2,sweat:true,faceDir:0})),
+  wrist:()=>frame('<rect width="320" height="180" fill="#EEF2FA"/><path d="M-10 150 L190 70" stroke="'+SKIN+'" stroke-width="44" stroke-linecap="round"/><path d="M-10 150 L190 70" stroke="'+INK+'" stroke-width="3" fill="none" opacity="0"/><rect x="150" y="62" width="30" height="40" fill="'+BAND+'" stroke="'+INK+'" stroke-width="3" transform="rotate(-22 165 82)"/><ellipse cx="220" cy="62" rx="36" ry="28" fill="'+SKIN+'" stroke="'+INK+'" stroke-width="3"/><path d="M200 44 q20 -10 40 4 M198 60 q24 -8 46 6 M200 76 q20 -6 40 4" stroke="'+INK+'" stroke-width="2.5" fill="none"/>'+'<path d="M40 30 l14 6 M60 18 l8 12 M250 140 l14 6" stroke="'+INK+'" stroke-width="2" opacity=".4"/>'),
+  flash:()=>frame('<rect width="320" height="180" fill="#B8BFCC"/><rect x="250" y="20" width="44" height="30" fill="#DDE1E8" stroke="#555" stroke-width="2"/><ellipse cx="262" cy="54" rx="14" ry="4" fill="none" stroke="#777" stroke-width="3"/><circle cx="220" cy="70" r="9" fill="#8a8f99" stroke="#555" stroke-width="2"/><path d="M252 56 q-14 -10 -26 8 M214 80 q-10 20 -30 30" stroke="#555" stroke-dasharray="4 4" fill="none" stroke-width="2"/><g opacity=".85">'+f({x:110,y:170,s:.2,jersey:'#e5e7ec',trim:'#666',skin:'#c9c9c9',hairC:'#444',band:false,arms:'down'})+'</g><text x="14" y="26" font-size="14" font-weight="700" fill="#444" font-family="Noto Sans TC,sans-serif">回憶</text>'),
+  board:()=>frame('<rect width="320" height="180" fill="#DCDFE6"/><circle cx="20" cy="20" r="18" fill="#fff" stroke="'+INK+'" stroke-width="2"/><circle cx="300" cy="160" r="18" fill="#fff" stroke="'+INK+'" stroke-width="2"/><circle cx="300" cy="20" r="18" fill="#fff" stroke="'+INK+'" stroke-width="2"/><rect x="60" y="22" width="200" height="136" rx="6" fill="#fff" stroke="'+INK+'" stroke-width="3"/><path d="M80 40 L240 40 L240 140 L80 140Z M160 40 L160 140" stroke="#9aa3c7" stroke-width="2" fill="none"/><path d="M200 70 A40 40 0 0 1 200 110" stroke="#9aa3c7" stroke-width="2" fill="none"/>'+[[110,70,'5'],[120,120,'8'],[150,90,'3'],[100,100,'2']].map(p=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="9" fill="none" stroke="'+NAVY+'" stroke-width="2"/><text x="'+p[0]+'" y="'+(p[1]+4)+'" text-anchor="middle" font-size="10" fill="'+NAVY+'" font-family="Noto Sans TC,sans-serif">'+p[2]+'</text>').join('')+'<circle cx="130" cy="60" r="10" fill="'+BAND+'" stroke="'+INK+'" stroke-width="2"/><text x="130" y="64" text-anchor="middle" font-size="10" font-weight="900" fill="'+INK+'" font-family="Noto Sans TC,sans-serif">11</text><path d="M138 64 Q190 70 210 104" stroke="#D7263D" stroke-width="3" fill="none"/><path d="M204 96 L211 106 L214 94" stroke="#D7263D" stroke-width="3" fill="none"/><path d="M214 106 L250 150" stroke="'+SKIN+'" stroke-width="14" stroke-linecap="round"/><rect x="206" y="98" width="12" height="16" fill="'+INK+'" transform="rotate(-40 212 106)"/>'),
+  coach:()=>frame('<rect width="320" height="180" fill="#E6ECF8"/>'+f({x:170,y:600,s:1.2,jersey:NAVY,trim:'#fff',num:'',hair:'pony',band:false,scar:false,faceDir:-1})+'<path d="M160 158 L150 180 M180 158 L190 180" stroke="#D7263D" stroke-width="3"/><rect x="8" y="10" width="112" height="44" rx="20" fill="#fff" stroke="'+INK+'" stroke-width="2.5"/><path d="M110 44 L128 58 L100 50" fill="#fff" stroke="'+INK+'" stroke-width="2.5"/><text x="64" y="30" text-anchor="middle" font-size="12" font-weight="700" fill="'+INK+'" font-family="Noto Sans TC,sans-serif">最後一球，</text><text x="64" y="46" text-anchor="middle" font-size="12" font-weight="700" fill="'+INK+'" font-family="Noto Sans TC,sans-serif">交給你。</text>'),
+  shoulder:()=>frame('<rect width="320" height="180" fill="#E6ECF8"/>'+crowd(6,3)+f({x:120,y:330,s:.62,sweat:true})+f({x:220,y:320,s:.66,num:'5',hair:'bun',band:false,scar:false,arms:'down'})+'<path d="M190 118 L150 124" stroke="'+SKIN+'" stroke-width="12" stroke-linecap="round"/><path d="M190 118 L150 124" stroke="'+INK+'" stroke-width="1" opacity=".0"/>'),
+  catch:()=>frame('<rect width="320" height="180" fill="#3C4A8C"/>'+speed(160,90,26,'#fff')+'<path d="M0 150 L320 150 L320 180 L0 180Z" fill="#E8A25E"/>'+f({x:160,y:176,s:.33,arms:'forward',ball:[0,-300]})),
+  guard:()=>frame('<rect width="320" height="180" fill="#E6ECF8"/>'+crowd(6,3)+'<path d="M0 150 L320 150 L320 180 L0 180Z" fill="#F3D2A8"/>'+f({x:110,y:200,s:.38,ball:'hand'})+f({x:220,y:196,s:.4,jersey:INK,trim:'#C9A227',num:'7',hair:'curly',hairC:'#6b4a2b',band:false,scar:false,arms:'wide'})+'<path d="M92 36 q-30 10 -40 30" stroke="#D7263D" stroke-width="3" fill="none"/><path d="M50 58 L52 70 L62 62" stroke="#D7263D" stroke-width="3" fill="none"/><text x="18" y="30" font-size="13" font-weight="700" fill="#D7263D" font-family="Noto Sans TC,sans-serif">假動作</text>'),
+  eyes:()=>frame('<rect width="320" height="180" fill="'+SKIN+'"/><g transform="translate(160 1846) scale(4.2)">'+f({x:0,y:0,s:1,sweat:true})+'</g>'),
+  jump:()=>frame('<rect width="320" height="180" fill="#27336F"/>'+[40,110,210,280].map(x=>'<circle cx="'+x+'" cy="16" r="12" fill="#FFF6D8"/>').join('')+speed(160,40,30,'#FFF6D8')+f({x:160,y:230,s:.36,arms:'up',ball:'up'})+'<text x="14" y="170" font-size="13" font-weight="700" fill="#FFC400" font-family="Noto Sans TC,sans-serif">慢動作・仰拍</text>'),
+  ball:()=>frame('<rect width="320" height="180" fill="#3C4A8C"/><rect x="200" y="20" width="100" height="44" rx="4" fill="#111" opacity=".7"/><text x="250" y="52" text-anchor="middle" font-size="26" font-weight="900" fill="#FFC400" opacity=".75" font-family="Noto Sans TC,sans-serif">0:00</text>'+[0,1,2,3,4].map(i=>'<path d="M'+(30+i*12)+' '+(140-i*18)+' L'+(110+i*6)+' '+(110-i*10)+'" stroke="#fff" stroke-width="2" opacity=".5"/>').join('')+'<circle cx="150" cy="96" r="34" fill="'+BALL+'" stroke="'+INK+'" stroke-width="3"/><path d="M116 96 L184 96 M150 62 L150 130 M126 72 Q150 96 126 120 M174 72 Q150 96 174 120" stroke="'+INK+'" stroke-width="2.5" fill="none"/><text x="220" y="150" font-size="26" font-weight="900" fill="#fff" transform="rotate(-8 220 150)" font-family="Noto Sans TC,sans-serif">嗶——</text>'),
+  rim:()=>frame('<rect width="320" height="180" fill="#E6ECF8"/><rect x="90" y="0" width="140" height="60" fill="#fff" stroke="'+INK+'" stroke-width="3"/><ellipse cx="160" cy="92" rx="90" ry="20" fill="none" stroke="#FF5A1F" stroke-width="7"/>'+[0,1,2,3,4,5,6,7].map(i=>'<path d="M'+(76+i*24)+' 100 L'+(100+i*16)+' 176" stroke="#9aa3c7" stroke-width="2"/>').join('')+'<circle cx="228" cy="68" r="22" fill="'+BALL+'" stroke="'+INK+'" stroke-width="3"/><path d="M206 68 L250 68" stroke="'+INK+'" stroke-width="2"/><path d="M250 44 Q290 60 262 96" stroke="#D7263D" stroke-width="3" fill="none" stroke-dasharray="5 4"/>'),
+  end:()=>frame('<rect width="320" height="180" fill="#E8A25E"/>'+speed(160,92,34,'#fff')+'<g transform="rotate(-90 160 92)">'+f({x:160,y:92+120,s:.26,arms:'wide'})+'</g>'+[[70,40,'5','bun'],[250,40,'8','spiky'],[60,150,'3','curly'],[260,150,'2','pony']].map(p=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="16" fill="#fff" stroke="'+INK+'" stroke-width="3"/><text x="'+p[0]+'" y="'+(p[1]+5)+'" text-anchor="middle" font-size="13" font-weight="900" fill="'+NAVY+'" font-family="Noto Sans TC,sans-serif">'+p[2]+'</text>').join(''))
+};
+const SHOTS=[
+  ['起',7,'大遠景／高角度','慢慢推近','gym','擠滿觀眾的體育館，比分牌 58:59，只剩 3 秒。','觀眾低沉的嗡嗡聲、遠處的鼓','文生影片','Extreme wide shot from a high angle, slow dolly-in. A packed high school gymnasium at night during a basketball final, fans standing on both sides, players spread across the court frozen in tension, a large scoreboard hanging above the court. Sound: low tense crowd murmur, distant drums. {ST}'],
+  ['起',6,'特寫／平視','固定','face','阿嘯彎著腰喘氣，汗從下巴滴落，慢慢抬眼看比分牌。','悶住的人聲、喘氣、慢心跳','圖生影片','Close-up at eye level, static camera. {AX} He is bent over with hands on knees, breathing hard, sweat dripping from his chin, then slowly lifts his eyes toward the scoreboard above. Background: blurred crowd and court lights. Sound: muffled crowd, his heavy breathing, a slow heartbeat. No dialogue. {ST}'],
+  ['起',7,'中景→手腕','慢慢推近','wrist','他低頭看左手的橘色護腕，用右手緊緊握住。','人聲慢慢變小','圖生影片','Medium shot, slow push-in toward his left wrist. {AX} He looks down at the orange wristband on his left wrist and grips it tightly with his right hand, knuckles tightening. Sound: crowd noise fading into a muffled hum. No dialogue. {ST}'],
+  ['承',8,'俯拍','固定','flash','回憶：上一場他站在罰球線，球彈框而出，他單膝跪在場上。','一聲「匡」的回音，然後安靜','圖生影片','High-angle shot looking down, static. Flashback memory: {AX} stands at the free-throw line and shoots; the ball bounces off the rim and rolls away; he drops to one knee on the court, head lowered. This shot only: desaturated blue-grey flashback tone with a soft vignette. Sound: a single rim clang echoing, then silence. {ST}'],
+  ['承',6,'鳥瞰','固定','board','暫停。教練的麥克筆在戰術板上，從 11 號畫一條弧線到三分線。','麥克筆摩擦聲、哨音回音','圖生影片','Top-down overhead shot, static. A small basketball tactics whiteboard held in the hands of {CO} Her black marker draws a fast curved arrow from a circle marked 11 to the three-point line. Sneakers of players in a timeout huddle visible around the edge. Sound: marker squeaking on the board, a whistle echo. No readable text except simple circles and arrows. {ST}'],
+  ['承',5,'特寫／平視','固定','coach','教練抬頭看著畫面左邊的阿嘯：「最後一球，交給你。」','教練清楚的聲音','圖生影片＋對嘴','Close-up at eye level, static. {CO} She looks up from the whiteboard straight at a player off-screen to the left and says in Mandarin with calm determination: "最後一球，交給你。" Background: blurred teammates in the huddle. Sound: her voice clear, crowd muffled. {ST}'],
+  ['承',5,'中景雙人','慢慢推近','shoulder','隊長大川把手放在阿嘯肩上點一下頭，阿嘯深吸一口氣，也點頭。','人聲升高、裁判哨音','圖生影片','Medium two-shot, slow push-in. {CA} He places a hand firmly on the shoulder of {AX} and gives one small nod. AH-XIAO is on the left of the frame, DA-CHUAN on the right. AH-XIAO takes a deep breath and nods back. Sound: crowd rising, a referee whistle. No dialogue. {ST}'],
+  ['轉',5,'全景／低角度','橫向跟拍','catch','哨聲響，阿嘯繞過掩護，在三分線外接到發球。','球鞋摩擦、接球「啪」、觀眾吼聲','圖生影片','Low-angle full shot, camera tracking sideways. {AX} He runs around a screen and catches an inbound pass just outside the three-point line, the ball smacking into his hands. Sound: sneaker squeaks, the thump of the catch, crowd roar. {ST}'],
+  ['轉',5,'中景','手持微晃','guard','對手 7 號衝上來封阻，阿嘯肩膀往左一晃，對手重心被騙。','球鞋摩擦、對手的悶哼','圖生影片','Medium shot with a handheld feel and slight shake. {AX} He is on the left of the frame facing {DF} who rushes in from the right with arms up to block. AH-XIAO fakes left with his shoulders and the defender leans the wrong way. Fast, sharp movement. Sound: sneaker squeaks, the defender grunts. {ST}'],
+  ['轉',4,'大特寫','固定','eyes','他的眼睛瞇起來，一滴汗滑過左眉的小疤。','所有人聲消失，只剩一聲心跳','圖生影片','Extreme close-up on the eyes, static. {AX} His eyes narrow with focus as a bead of sweat runs past the small scar on his left eyebrow. Sound: all crowd noise drops away, leaving only one loud heartbeat. {ST}'],
+  ['轉',5,'中景／仰拍','固定・慢動作','jump','起跳，在最高點出手，頂燈在他身後打出一圈亮邊。','安靜，然後一口氣吐出','首尾幀','Low-angle medium shot, slow motion. {AX} He jumps straight up and releases a three-point shot at the peak, right hand following through, arena lights glowing behind him and creating a bright rim light. Start frame: crouched, ready to jump. End frame: in the air, the ball just leaving his fingertips. Sound: silence, then a sharp exhale. {ST}'],
+  ['合',8,'跟拍球','慢動作','ball','球在空中旋轉，背景模糊的比分牌跳到 0:00，蜂鳴器響起。','蜂鳴器、全場倒抽一口氣','文生或圖生','Tracking shot following a spinning basketball through the air in slow motion, seams clearly visible, a blurred scoreboard glowing in the background. Halfway through, a loud buzzer sounds. Sound: buzzer, a crowd gasp. {ST}'],
+  ['合',6,'特寫','固定','rim','球打到籃框前緣，繞框一圈，停在邊上……掉進網裡。','完全無聲一秒，然後「唰」','圖生影片','Close-up of the basketball rim, static. The basketball hits the front of the rim, rolls around the rim once, pauses on the edge, then drops through the net with a clean swish. Sound: complete silence for one second, then the net swish. {ST}'],
+  ['合',12,'俯拍','從近處升高拉遠','end','阿嘯躺在場上看著天花板的燈，慢慢笑了；隊友從四面八方衝過來，觀眾湧進球場。','歡呼爆開、配樂響起','圖生影片（分兩段接力）','Top-down shot, starting close and slowly rising high above. {AX} He lies on his back on the court with arms spread, staring up at the ceiling lights and slowly smiling, as teammates in white jerseys rush in from all sides and gather around him while fans flood onto the court. Sound: an explosion of cheers, triumphant music swells. {ST}']
+];
+$('#totalSec').textContent=SHOTS.reduce((a,s)=>a+s[1],0);
+$('#board').innerHTML=SHOTS.map((s,i)=>'<article class="shot">'+PAN[s[4]]()+'<div class="meta" style="box-shadow:inset 0 5px 0 '+PART[s[0]]+'"><b>鏡 '+(i+1)+'</b>　<span class="k" style="background:'+PART[s[0]]+'">'+s[0]+'</span><span class="k">'+s[1]+' 秒</span><span class="k">'+s[2]+'</span><span class="k">'+s[3]+'</span><br>'+s[5]+'<br><span style="color:var(--ink-soft)">聲音：'+s[6]+'</span><br><span style="color:var(--ink-soft)">做法：'+s[7]+'</span></div><details><summary>看提示詞</summary><div class="prompt"><button class="copy" type="button">複製</button>'+expand(s[8]).replace(/</g,'&lt;')+'</div></details></article>').join('');
+
+const QI=[
+  [1,6,'大遠景／慢慢推近','清晨山頂的瀑布，雲霧繚繞，瀑布下有一塊平台大石。','文生影片','Extreme wide shot, slow push-in. A towering waterfall on a misty mountain peak at dawn, a flat rock platform at its base, pine trees clinging to the cliffs, birds crossing the sky. Sound: roaring waterfall, wind. {ST2}'],
+  [2,7,'中景／固定','小楓站在瀑布下出拳，被水流沖倒，摔進淺水裡。','圖生影片','Medium shot, static. {FE} He stands knee-deep in the pool below the waterfall and punches into the falling water; the force of the water throws him backward into the shallow pool with a big splash. Sound: water crashing, a splash, a frustrated shout. {ST2}'],
+  [3,7,'近景／固定','婆婆師父盤腿坐在石頭上：「氣，不在拳頭，在呼吸。」','圖生影片＋對嘴','Medium close-up, static. {MA} She sits cross-legged on a rock beside the pool and says calmly in Mandarin: "氣，不在拳頭，在呼吸。" Sound: her calm voice over the waterfall. {ST2}'],
+  [4,8,'特寫／慢慢推近','小楓重新站好，閉上眼睛，臉上掛著水珠，胸口慢慢起伏。','圖生影片','Close-up, slow push-in. {FE} He stands in the water again and closes his eyes, water droplets on his face, his chest rising and falling slowly. The waterfall sound fades until only his breathing can be heard. {ST2}'],
+  [5,8,'全景／仰拍','翡翠綠的光焰從全身燃起，頭髮和頭巾飄起，小石頭和水珠浮在空中。','首尾幀','Low-angle full shot, static. {FE} Start frame: standing still with eyes closed. End frame: a jade-green flame-like aura surrounds his whole body, his hair and headband tails float upward, small pebbles and water droplets hover in the air around him, rings of ripples spread across the water. Sound: a low rising hum, crackling energy. {ST2}'],
+  [6,5,'大特寫','眼睛猛然睜開，瞳孔映著綠光。','圖生影片','Extreme close-up on the eyes. {FE} His eyes snap open with jade-green light reflected in his pupils, a strand of hair drifting in the energy wind. Sound: a sharp whoosh. {ST2}'],
+  [7,10,'全景／慢動作','他向前推出右掌，一顆綠色光球撞上瀑布，瀑布從中間被劈成兩半，水花停在空中。','圖生影片（可分兩段）','Full shot, slow motion. {FE} He thrusts his right palm forward and releases a glowing jade-green sphere of energy that slams into the waterfall; the falling water splits apart in two, spray frozen in mid-air. Sound: a deep boom, then roaring water. {ST2}'],
+  [8,9,'遠景／慢慢拉遠','瀑布維持分開，日出的光穿過雲霧；師父微笑，用拐杖輕敲一下石頭。','圖生影片','Wide shot, slow pull-back. The waterfall stays split in two as sunrise light breaks through the mist. {FE} He stands in the center breathing hard; on the rock nearby, {MA} smiles and taps her staff once. Sound: a gentle bamboo flute melody begins, birdsong. {ST2}']
+];
+$('#qiTable tbody').innerHTML=QI.map(r=>'<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+r[3]+'</td><td>'+r[4]+'</td><td style="min-width:130px"><details><summary style="cursor:pointer;color:var(--sky);font-weight:700">看提示詞</summary><div class="prompt" style="font-size:13px;padding-top:32px"><button class="copy" type="button">複製</button>'+expand(r[5]).replace(/</g,'&lt;')+'</div></details></td></tr>').join('');
+
+/* ---------- copy ---------- */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.copy'); if(!b) return;
+  const box=b.closest('.prompt'); const cl=box.cloneNode(true); $$('.copy,.lbl',cl).forEach(x=>x.remove());
+  const txt=cl.textContent.trim();
+  const ok=()=>{const o=b.textContent;b.textContent='已複製';setTimeout(()=>b.textContent='複製',1400)};
+  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(txt).then(ok,()=>fallback())}else fallback();
+  function fallback(){const t=document.createElement('textarea');t.value=txt;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.select();try{document.execCommand('copy');ok()}catch(err){b.textContent='請手動選取'}t.remove()}
+});
+/* ---------- quiz ---------- */
+const QZ=[
+  ['「24fps」是什麼意思？',['每秒播放 24 張畫面','影片長 24 秒','畫質是 24 萬像素'],0,'fps 是 Frames Per Second，每秒幾格。電影的標準是每秒 24 格。'],
+  ['為什麼 AI 影片一次通常只能做 5–15 秒？',['因為法律規定','因為每一格都要和前後格對得上，非常耗費運算','因為手機只能存 15 秒'],1,'這叫時間一致性。所以長片要拆成很多短鏡頭再接起來。'],
+  ['想讓主角每一鏡都長得一樣，最有效的做法是？',['每次都換一種說法描述他','用角色設定圖當參考，用圖生影片','只用文生影片，多抽幾次'],1,'角色聖經＋設定圖＋參考圖，是角色一致的三招。'],
+  ['想做「普通少年 → 變身完成」，開頭和結尾都要精準控制，該用？',['文生影片','首尾幀','影片轉影片'],1,'首尾幀就像迪士尼的關鍵影格：你給頭尾，AI 補中間。'],
+  ['用低角度「仰拍」主角，觀眾通常會覺得他？',['渺小、無力','高大、強悍','很遙遠'],1,'仰拍讓對象顯得有力量，適合覺醒、登場、關鍵一投。'],
+  ['「180 度法則」在說什麼？',['每個鏡頭要轉 180 度','攝影機不要越過兩個角色之間的假想線','影片不能超過 180 秒'],1,'不越線，角色的左右位置才不會突然對調。'],
+  ['為什麼提示詞寫「他很緊張」效果不好？',['AI 看不懂中文','心情看不見，要寫成看得見的動作','緊張是不雅的字'],1,'改寫成「咬住下唇，額頭流下一滴汗」，AI 才拍得出來。'],
+  ['讓整部片看起來「像同一部」最簡單的方法是？',['每一鏡都貼上同一段風格句','每一鏡都用不同的工具','每一鏡都換一種光線'],0,'固定風格句，加上剪輯時統一調色。'],
+  ['J-cut 是指？',['下一鏡的聲音先出現，畫面才切過去','把畫面剪成 J 字形','一種特效轉場'],0,'在時間軸上聲音和畫面錯開，形狀像字母 J。'],
+  ['想公開發表一部熱血籃球動畫，最適當的做法是？',['直接生成灌籃高手的角色','用原創角色，並用描述來表現想要的畫風','用真實球星的照片當主角'],1,'學類型、不拿角色；真人要本人同意。']
+];
+$('#quiz').innerHTML=QZ.map((q,i)=>'<div class="q" id="q'+i+'"><p>'+(i+1)+'. '+q[0]+'</p>'+q[1].map((o,k)=>'<label><input type="radio" name="q'+i+'" value="'+k+'"> '+o+'</label>').join('')+'<div class="fb" aria-live="polite"></div></div>').join('');
+$('#quizSubmit').addEventListener('click',()=>{
+  let sc=0;
+  QZ.forEach((q,i)=>{const el=$('#q'+i), sel=$('input[name=q'+i+']:checked',el), fb=$('.fb',el);
+    el.classList.remove('right','wrong');
+    if(!sel){fb.textContent='還沒作答。';return}
+    const ok=+sel.value===q[2]; if(ok)sc++; el.classList.add(ok?'right':'wrong'); fb.textContent=(ok?'✓ 答對！':'✗ 正確答案：'+q[1][q[2]]+'。')+q[3];});
+  $('#quizScore').textContent='你的分數：'+sc+' / 10　'+(sc===10?'滿分！你可以開始導演了。':sc>=7?'很棒！回去看看答錯的那一課。':'再複習一次，重點都在前面的課裡。');
+});
+
+/* ---------- glossary ---------- */
+const GL=[
+  ['AI（人工智慧）','Artificial Intelligence','讓電腦做出看起來像有智慧的事。','1956 年達特茅斯研討會，數學家麥卡錫為新領域取的名字。'],
+  ['模型','Model','AI 從大量資料學到的「規律」，像世界的縮小版。','借用「汽車模型」的意思：真實事物的縮小版本。'],
+  ['幀','Frame','影片裡的一張畫面。','英文 frame 原意是畫框；中文「幀」原指一幅畫。'],
+  ['FPS','Frames Per Second','每秒播放幾張畫面。','1920 年代有聲電影為了讓聲音穩定，統一成每秒 24 格。'],
+  ['擴散模型','Diffusion Model','從雜訊一步步去除不像的部分，變出圖像或影片。','物理的擴散是墨水散開；2015 年科學家讓電腦學會「倒著播」。'],
+  ['時間一致性','Temporal Consistency','影片每一格之間要對得上，東西不能亂跳。','temporal 來自拉丁文 tempus，「時間」。'],
+  ['多模態','Multimodal','能同時處理文字、圖片、聲音、影片。','「模態」指資訊的種類；Omni 是拉丁文「全部」。'],
+  ['開源','Open Source','公開程式碼，大家都能下載使用與修改。','把原始碼（source code）打開（open）給大家。'],
+  ['文生影片','Text-to-Video (T2V)','用文字生成影片。','英文 to 和 2 同音，工程師簡寫成 2。'],
+  ['圖生影片','Image-to-Video (I2V)','用一張圖加文字，讓圖動起來。','同上；是做連續短片的主力方法。'],
+  ['首尾幀／關鍵影格','Keyframe','給開頭和結尾畫面，讓 AI 補中間。','1930 年代迪士尼：資深畫師畫關鍵張，助手補「中間張」。'],
+  ['影片轉影片','Video-to-Video (V2V)','把一段真實影片轉成另一種風格。','保留動作、換掉外觀，像替影片「換皮」。'],
+  ['提示詞','Prompt','給 AI 的指令文字。','舞台上的提詞員 prompter；拉丁文 promptus「準備好的」。'],
+  ['負面提示詞','Negative Prompt','告訴 AI 不要出現什麼。','與「正面」提示相對的說法。'],
+  ['16:9／9:16','Aspect Ratio','畫面的寬高比例；橫式與直式。','1980 年代工程師帕沃斯為兼容電視與電影而算出 16:9。'],
+  ['景別','Shot Size','鏡頭拍到多少範圍：遠景、全景、中景、近景、特寫。','電影業依「人在畫面中占多大」來分類。'],
+  ['特寫','Close-up','拍整張臉或一個小地方。','約 1900 年英國早期電影開始使用；中文借自「特別描寫」。'],
+  ['仰拍／俯拍','Low / High Angle','從下往上拍／從上往下拍。','仰是抬頭、俯是低頭，以觀眾的視線來命名。'],
+  ['搖鏡','Pan','攝影機原地左右轉。','來自 panorama 全景畫（1787 年，希臘文 pan 全＋horama 景）。'],
+  ['俯仰鏡頭','Tilt','攝影機原地上下轉。','tilt 英文原意是「傾斜」。'],
+  ['推軌','Dolly','攝影機整台往前推或往後拉。','放攝影機的小推車暱稱 dolly。'],
+  ['跟拍','Tracking Shot','攝影機跟著角色一起移動。','推車跑在鋪好的軌道（track）上。'],
+  ['變焦','Zoom','鏡頭放大或縮小畫面，攝影機本身不動。','zoom 原是狀聲詞「咻」，形容快速衝過去。'],
+  ['黃金時刻','Golden Hour','日出後、日落前約一小時的暖色光。','光穿過厚厚的大氣，藍光被散掉，只剩金黃色。'],
+  ['三點打光','Three-point Lighting','主光、補光、背光三盞燈的標準打光。','好萊塢片廠時代發展出的標準做法。'],
+  ['輪廓光','Rim Light','從背後打來、讓人物邊緣發亮的光。','rim 是「邊緣」，像鍋子的邊。'],
+  ['賽璐璐風','Cel Shading','平塗色塊、沒有漸層的動畫畫風。','早期動畫畫在透明賽璐珞（celluloid）片上。'],
+  ['角色聖經','Character Bible','記錄角色所有設定、不能改的文件。','影視公司把設定手冊比喻成不能違背的「聖經」。'],
+  ['設定圖／三視圖','Model Sheet / Turnaround','角色的標準長相與正、側、背面圖。','迪士尼為了讓多位畫師畫出同一個角色而發明。'],
+  ['記憶點','Signature Feature','讓觀眾一眼認出角色的特徵（疤、護腕、顏色）。','角色設計的行話：讓人「記得住」的地方。'],
+  ['種子','Seed','隨機生成的起始數字；同種子＋同提示詞＝相近結果。','同一顆種子長出同一棵樹的比喻。'],
+  ['分鏡','Storyboard','用一格格圖畫預先規劃每個鏡頭。','1930 年代迪士尼韋伯・史密斯把畫釘在木板（board）上。'],
+  ['定場鏡頭','Establishing Shot','新場景的第一個遠景，交代地點。','establish 是「建立」。'],
+  ['180 度法則','180-degree Rule','攝影機不越過兩角色間的假想線。','攝影機只能在半個圓（180 度）裡活動。'],
+  ['動作接點','Match on Action','在動作進行中換鏡頭，讓剪接看不出來。','match 是「對上」：在動作上把兩鏡對齊。'],
+  ['連戲','Continuity','前後鏡頭的服裝、道具、方向、光線一致。','拍攝現場由「場記」負責記錄。'],
+  ['延長','Extend','讓 AI 從影片結尾繼續生成下去。','extend 是「延伸」；接太多次畫面容易走樣。'],
+  ['場／鏡','Scene / Shot','一個地點一段時間的戲是「場」；攝影機開到關是「鏡」。','「場」來自舞台劇的一場戲。'],
+  ['空鏡','B-roll','沒有主角、營造氣氛或轉場用的鏡頭。','早期電視用兩捲底片，B 捲放補充畫面。'],
+  ['原生音訊','Native Audio','影片 AI 生成畫面時一起生成的聲音。','native 是「天生的、原本就有的」。'],
+  ['TTS','Text-to-Speech','把文字轉成語音。','1930 年代就有會「唸字」的機器，但聲音像機器人。'],
+  ['擬音','Foley','在錄音室「演」出腳步、打鬥等聲音。','1920 年代末環球影業的傑克・佛利發明。'],
+  ['對嘴','Lip Sync','讓嘴型和聲音同步。','lip 嘴唇＋sync（synchronize 同步）。'],
+  ['剪接','Cut','把兩個鏡頭接在一起。','早期真的用剪刀剪開底片再黏起來。'],
+  ['庫里肖夫效應','Kuleshov Effect','同一張臉接上不同畫面，觀眾會讀出不同情緒。','1920 年代蘇聯導演庫里肖夫的實驗。'],
+  ['J-cut／L-cut','J-cut / L-cut','聲音比畫面早出現／晚結束。','時間軸上聲音與畫面錯開的形狀像 J 和 L。'],
+  ['蒙太奇','Montage','把多個短鏡頭組合，表達時間或情緒。','法文 monter，「組裝」。'],
+  ['調色','Color Grading','統一並調整整部片的顏色。','底片沖洗室替每段底片調整色彩「等級」（grade）。'],
+  ['放大','Upscale','把低解析度影片放大成高解析度。','up（往上）＋scale（尺寸）。'],
+  ['補幀','Frame Interpolation','在兩格之間補出新的格，讓動作更順。','interpolation 是數學的「內插」。'],
+  ['抽卡','—','重新生成、碰運氣挑最好的結果。','日本手遊「轉蛋」gacha，模仿扭蛋機的聲音。'],
+  ['深偽','Deepfake','用 AI 偽造真人的影像或聲音。','2017 年 Reddit 使用者「deepfakes」；deep learning＋fake。'],
+  ['數位浮水印','Watermark／SynthID','藏在畫面裡、證明來源的標記。','源自 13 世紀義大利造紙坊壓在紙漿裡的圖案。']
+];
+function renderGL(q){q=(q||'').trim().toLowerCase();
+  $('#gl').innerHTML=GL.filter(g=>!q||g.join(' ').toLowerCase().includes(q)).map(g=>'<article><h5>'+g[0]+'</h5><div class="en">'+g[1]+'</div><div>'+g[2]+'</div><div class="og">由來：'+g[3]+'</div></article>').join('')||'<p>找不到這個名詞。試試看更短的關鍵字，例如「鏡」或「幀」。</p>';}
+$('#gsearch').addEventListener('input',e=>renderGL(e.target.value)); renderGL('');
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-a8f22ec277" data-category="creative"></script></body>
+</html>

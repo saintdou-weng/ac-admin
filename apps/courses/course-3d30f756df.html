@@ -1,0 +1,2270 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>風水學堂｜從零開始的完整風水課</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#E9EEE8;--paper:#F7F9F5;--card:#EFF3EE;--ink:#1E2826;--muted:#5D6B67;--line:#CDD7D1;
+--red:#B8321F;--red-soft:rgba(184,50,31,.10);--red-mid:rgba(184,50,31,.45);
+--jade:#3E7D68;--jade-soft:rgba(62,125,104,.13);--gold:#9A7228;--gold-soft:rgba(154,114,40,.13);
+--blue:#2E4E7A;--blue-soft:rgba(46,78,122,.12);
+--wood:#3F8A4E;--fire:#C9412B;--earth:#A77A22;--metal:#7F8891;--water:#2A4F80;
+--yang:#F7F9F5;--yin:#1E2826;--bar:rgba(233,238,232,.9);--shadow:0 4px 18px rgba(30,50,45,.08);
+--kai:"LXGW WenKai TC","Kaiti TC","STKaiti","DFKai-SB","BiauKai",serif;
+--sans:"Noto Sans TC",-apple-system,"PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+--bg:#101816;--paper:#172220;--card:#1C2926;--ink:#E4EAE4;--muted:#93A39E;--line:#2E3D39;
+--red:#E0654F;--red-soft:rgba(224,101,79,.14);--red-mid:rgba(224,101,79,.5);
+--jade:#6DBB9F;--jade-soft:rgba(109,187,159,.15);--gold:#D4A850;--gold-soft:rgba(212,168,80,.15);
+--blue:#7FA5D8;--blue-soft:rgba(127,165,216,.15);
+--wood:#5DB26E;--fire:#E86A50;--earth:#D0A445;--metal:#AEB6BF;--water:#6C9DD8;
+--yang:#E4EAE4;--yin:#101816;--bar:rgba(16,24,22,.9);--shadow:0 4px 18px rgba(0,0,0,.35);}}
+:root[data-theme="dark"]{
+--bg:#101816;--paper:#172220;--card:#1C2926;--ink:#E4EAE4;--muted:#93A39E;--line:#2E3D39;
+--red:#E0654F;--red-soft:rgba(224,101,79,.14);--red-mid:rgba(224,101,79,.5);
+--jade:#6DBB9F;--jade-soft:rgba(109,187,159,.15);--gold:#D4A850;--gold-soft:rgba(212,168,80,.15);
+--blue:#7FA5D8;--blue-soft:rgba(127,165,216,.15);
+--wood:#5DB26E;--fire:#E86A50;--earth:#D0A445;--metal:#AEB6BF;--water:#6C9DD8;
+--yang:#E4EAE4;--yin:#101816;--bar:rgba(16,24,22,.9);--shadow:0 4px 18px rgba(0,0,0,.35);}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px);-webkit-text-size-adjust:100%;}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,.kai{font-family:var(--kai);font-weight:700;line-height:1.35}
+img,svg,canvas{max-width:100%}
+button{font:inherit;color:inherit}
+a{color:var(--red)}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+svg text{font-family:var(--sans)}
+b,strong{font-weight:700}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bar);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.iconbtn{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--paper);font-size:18px;cursor:pointer;display:grid;place-items:center;flex:none}
+.tb-title{flex:1;min-width:0;font-family:var(--kai);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:18px}
+.tb-title small{color:var(--muted);font-family:var(--sans);font-weight:500;font-size:13px;margin-right:6px}
+.prog{position:absolute;left:0;right:0;bottom:-1px;height:3px}
+.prog i{display:block;height:100%;width:0;background:var(--red);transition:width .5s}
+.drawer{position:fixed;top:0;bottom:0;left:0;width:min(86vw,340px);background:var(--paper);z-index:50;transform:translateX(-105%);transition:transform .3s ease;overflow-y:auto;padding:calc(env(safe-area-inset-top,0px) + 14px) 12px calc(env(safe-area-inset-bottom,0px) + 24px);box-shadow:4px 0 30px rgba(0,0,0,.2)}
+.drawer.open{transform:none}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:40;opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.open{opacity:1;pointer-events:auto}
+.dhead{font-family:var(--kai);font-size:22px;padding:4px 10px 8px}
+.dgroup{margin:14px 10px 4px;font-size:13px;color:var(--gold);font-weight:700}
+.dlink{display:flex;gap:10px;align-items:baseline;width:100%;text-align:left;padding:7px 10px;border-radius:8px;border:0;background:none;cursor:pointer;font-size:15px;line-height:1.5}
+.dlink:hover{background:var(--card)}
+.dlink.cur{background:var(--red-soft);color:var(--red);font-weight:700}
+.dlink .n{font-size:12px;color:var(--muted);width:22px;flex:none;text-align:right}
+.dlink .ck{margin-left:auto;color:var(--jade)}
+main{max-width:760px;margin:0 auto;padding:18px 18px 80px}
+.view{display:none}
+.view.active{display:block}
+.lh{margin:12px 0 18px}
+.stag{font-size:13px;color:var(--gold);font-weight:700}
+.lnum{font-family:var(--kai);font-size:17px;color:var(--muted);margin-top:4px}
+.lh h1{font-size:clamp(28px,7vw,40px);margin:2px 0 0;letter-spacing:.02em}
+h2{font-size:24px;margin:36px 0 8px;display:flex;align-items:center;gap:10px}
+h2::before{content:"";width:10px;height:10px;background:var(--red);transform:rotate(45deg);flex:none}
+h3{font-size:20px;margin:24px 0 4px}
+p{margin:10px 0}
+.goal{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.goal b{color:var(--red);margin-right:6px}
+.box{position:relative;padding:12px 14px 12px 58px;margin:20px 0;background:var(--paper);border:1px solid var(--line);border-radius:12px}
+.box::before{position:absolute;left:12px;top:14px;width:34px;height:34px;display:grid;place-items:center;font-family:var(--kai);font-size:20px;font-weight:700;color:#fff;border-radius:6px;transform:rotate(-4deg)}
+.box.origin::before{content:"源";background:var(--gold)}
+.box.example::before{content:"例";background:var(--jade)}
+.box.think::before{content:"思";background:var(--blue)}
+.box.warn::before{content:"注";background:var(--red)}
+.box>.bt{font-weight:700;margin-bottom:2px}
+.box.origin>.bt{color:var(--gold)}.box.example>.bt{color:var(--jade)}.box.think>.bt{color:var(--blue)}.box.warn>.bt{color:var(--red)}
+.classic{font-family:var(--kai);font-size:1.25em;line-height:1.9;text-align:center;padding:6px 4px;margin:8px 0 0;letter-spacing:.08em}
+.src{text-align:right;color:var(--muted);font-size:14px;margin-top:0}
+.widget{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px;margin:24px 0;box-shadow:var(--shadow)}
+.wt{font-weight:700;color:var(--red);font-size:16px;margin-bottom:8px}
+.cap{font-size:15px;color:var(--muted);margin:8px 0 0;min-height:1.6em}
+.rel{font-size:16px;background:var(--card);border-radius:10px;padding:10px 12px;margin:10px 0 0}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:7px 14px;cursor:pointer;font-size:15px;line-height:1.35;transition:border-color .15s,background .15s}
+.btn:hover{border-color:var(--red)}
+.btn.on,.btn.primary{background:var(--red);border-color:var(--red);color:#fff}
+.btn.big{padding:12px 24px;font-size:17px;font-weight:700}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+.row.c{justify-content:center}
+.tw{overflow-x:auto;margin:14px 0;border-radius:12px;border:1px solid var(--line)}
+table.t{border-collapse:collapse;width:100%;font-size:15px;min-width:500px;background:var(--paper)}
+table.t th,table.t td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+table.t th{background:var(--card);white-space:nowrap}
+table.t tr:last-child td{border-bottom:0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:14px 0}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.card h4{margin:0 0 4px;font-size:18px}
+.card p{margin:4px 0;font-size:15px}
+.recap{border:2px solid var(--ink);border-radius:14px;padding:14px 18px;margin:34px 0 10px;background:var(--paper)}
+.recap b{display:block;font-family:var(--kai);font-size:19px;margin-bottom:4px}
+.recap ol{margin:0;padding-left:1.3em}
+.quiz{margin:28px 0}
+.quiz>h3{margin-bottom:6px}
+.qitem{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:12px 0}
+.qq{font-weight:700;margin-bottom:6px}
+.opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:var(--card);border-radius:10px;padding:9px 12px;margin:6px 0;cursor:pointer;line-height:1.5;font-size:16px}
+.opt:hover{border-color:var(--gold)}
+.opt.right{border-color:var(--jade);background:var(--jade-soft)}
+.opt.wrong{border-color:var(--red);background:var(--red-soft)}
+.qexp{display:none;font-size:15px;color:var(--muted);margin-top:6px}
+.qitem.done .qexp{display:block}
+.qres{font-weight:700;color:var(--jade);margin-top:8px}
+.lnav{display:flex;gap:10px;justify-content:space-between;margin-top:36px;padding-top:18px;border-top:1px solid var(--line)}
+.lnav .btn{flex:1;text-align:center;padding:12px 10px}
+.tl{list-style:none;padding:0;margin:14px 0;position:relative}
+.tl::before{content:"";position:absolute;left:8px;top:8px;bottom:8px;width:2px;background:var(--line)}
+.tl li{position:relative;padding:2px 0 12px 32px}
+.tl li::before{content:"";position:absolute;left:2px;top:9px;width:14px;height:14px;border-radius:50%;background:var(--paper);border:3px solid var(--red)}
+.tl .era{font-weight:700;color:var(--red);margin-right:6px}
+.pill{display:inline-block;font-size:14px;padding:2px 10px;border-radius:99px;background:var(--gold-soft);color:var(--gold);font-weight:700}
+.muted{color:var(--muted)}
+.center{text-align:center}
+.svgbox{display:block;margin:0 auto;width:100%;max-width:400px;height:auto}
+input[type=range]{width:100%;accent-color:var(--red);margin:10px 0 0}
+input[type=number],input[type=text],select{font:inherit;padding:7px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);max-width:100%}
+label.chk{display:flex;gap:6px;align-items:center;font-size:15px}
+.spin{animation:spin 24s linear infinite;transform-box:fill-box;transform-origin:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){.spin{animation:none}}
+.grid9{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:340px;margin:6px auto}
+.cell{aspect-ratio:1;border-radius:10px;background:var(--card);border:1.5px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;transition:transform .25s,background .25s,border-color .25s;font-size:13px;color:var(--muted);text-align:center;line-height:1.3;padding:4px}
+.cell .num{font-family:var(--kai);font-size:32px;color:var(--ink);font-weight:700;line-height:1.1}
+.cell.hit{background:var(--gold-soft);border-color:var(--gold);transform:scale(1.04)}
+.cell.pop{animation:pop .45s ease}
+@keyframes pop{0%{transform:scale(.6);opacity:.2}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+.dirlab{display:flex;justify-content:space-between;max-width:340px;margin:0 auto;font-size:13px;color:var(--muted);padding:0 4px}
+.dots{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;max-width:58px;margin-bottom:4px}
+.dots i{width:10px;height:10px;border-radius:50%}
+.dots i.o{border:2px solid var(--ink);background:var(--paper)}
+.dots i.x{background:var(--ink)}
+details.fs{background:var(--paper);border:1px solid var(--line);border-radius:12px;margin:10px 0;overflow:hidden}
+details.fs summary{cursor:pointer;padding:12px 14px;font-weight:700;list-style:none;display:flex;gap:12px;align-items:center}
+details.fs summary::-webkit-details-marker{display:none}
+details.fs summary::after{content:"＋";margin-left:auto;color:var(--muted);flex:none}
+details.fs[open] summary::after{content:"－"}
+details.fs .dc{padding:0 14px 12px}
+details.fs .dc p{margin:6px 0;font-size:16px}
+.tag{font-size:13px;padding:1px 8px;border-radius:6px;font-weight:700;margin-right:4px}
+.tag.g{background:var(--jade-soft);color:var(--jade)}.tag.r{background:var(--red-soft);color:var(--red)}.tag.y{background:var(--gold-soft);color:var(--gold)}.tag.b{background:var(--blue-soft);color:var(--blue)}
+.ico{width:54px;height:54px;stroke:var(--ink);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ico .r{stroke:var(--red)}
+.ico .fr{fill:var(--red-soft);stroke:var(--red)}
+.ico .fb{fill:var(--blue-soft)}
+/* home */
+.hero{display:grid;grid-template-columns:1fr;gap:6px;align-items:center;padding:8px 0 10px}
+.hero-dial{width:min(78vw,300px);margin:0 auto;display:block}
+.hero h1{font-size:clamp(44px,13vw,68px);margin:0;letter-spacing:.12em;text-align:center}
+.hero .sub{text-align:center;font-family:var(--kai);font-size:19px;color:var(--muted);margin:0}
+.hero .lead{max-width:34em;margin:10px auto;text-align:center}
+@media (min-width:720px){.hero{grid-template-columns:300px 1fr;gap:28px}.hero h1,.hero .sub,.hero .lead{text-align:left}.hero .row{justify-content:flex-start}}
+.stage{border-left:3px solid var(--red);padding:2px 0 2px 16px;margin:20px 0}
+.stage h3{margin:0;font-size:21px}
+.stage .sd{color:var(--muted);font-size:15px;margin:2px 0 6px}
+.mapl{display:flex;gap:12px;align-items:baseline;width:100%;text-align:left;border:0;background:none;padding:6px 4px;border-bottom:1px dashed var(--line);cursor:pointer;font-size:16px}
+.mapl:hover{color:var(--red)}
+.mapl .n{font-family:var(--kai);color:var(--muted);width:40px;flex:none}
+.mapl .ck{margin-left:auto;color:var(--jade)}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:12px 0}
+.legend div{display:flex;gap:10px;align-items:center;font-size:15px}
+.seal{width:30px;height:30px;display:grid;place-items:center;font-family:var(--kai);font-weight:700;color:#fff;border-radius:5px;flex:none}
+/* widgets misc */
+.yyc-wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
+@media (max-width:480px){.yyc-wrap{grid-template-columns:repeat(2,1fr)}}
+.yyc{border:1.5px solid var(--line);background:var(--yang);color:var(--ink);border-radius:10px;padding:12px 6px;cursor:pointer;font-size:17px;font-weight:700;transition:background .3s,color .3s}
+.yyc .yn{display:none}
+.yyc.flip{background:var(--yin);color:var(--yang);border-color:var(--ink)}
+.yyc.flip .yy{display:none}.yyc.flip .yn{display:inline}
+.wxb{border-color:var(--c)!important}
+.wxb.on{background:var(--c)!important;color:#fff}
+.wxa{stroke-width:3;transition:opacity .35s,stroke-width .35s}
+#wxSvg[data-mode="sheng"] .wxa-ke,#wxSvg[data-mode="ke"] .wxa-sheng{opacity:0}
+#wxSvg.playing .wxa{opacity:.12}
+#wxSvg.playing .wxa.cur{opacity:1;stroke-width:6}
+.yao-full,.yao-half{fill:var(--ink)}
+.yaowrap{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:center}
+.yaoout{min-width:200px;flex:1;font-size:15px}
+.bigtri{font-family:var(--kai);font-size:44px;color:var(--red);line-height:1.1}
+.bgt{transition:transform .9s cubic-bezier(.5,0,.2,1)}
+.m24.on{fill:var(--red-mid)!important}
+.m24.zuo{fill:var(--line)!important}
+.lp-hl{animation:glow 1s ease-in-out infinite alternate}
+@keyframes glow{from{opacity:1}to{opacity:.25}}
+.shake{animation:shake .3s linear infinite}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-2px)}75%{transform:translateX(2px)}}
+.flow{stroke-dasharray:6 14;animation:flow 1.2s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-20}}
+.sl-a{cursor:pointer}
+.yunbar{display:grid;grid-template-columns:repeat(9,1fr);gap:3px;margin:10px 0 2px}
+.yunbar div{background:var(--card);border:1px solid var(--line);border-radius:6px;text-align:center;font-size:12px;line-height:1.3;padding:6px 1px}
+.yunbar div b{display:block;font-family:var(--kai);font-size:17px}
+.yunbar div.now{background:var(--red);border-color:var(--red);color:#fff}
+.yungrp{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;text-align:center;font-size:13px;color:var(--muted)}
+.yungrp span{border-top:2px solid var(--gold);padding-top:2px}
+.star{display:inline-grid;place-items:center;min-width:44px;height:44px;border-radius:50%;font-family:var(--kai);font-size:17px;font-weight:700;border:2px solid transparent;padding:0 4px}
+.star.good{box-shadow:0 0 0 3px var(--jade-soft)}
+.star.bad{box-shadow:0 0 0 3px var(--red-soft)}
+.zp .cell{justify-content:flex-end;padding-bottom:6px}
+.zs,.zx{position:absolute;top:5px;font-family:var(--kai);font-size:19px;font-weight:700;color:var(--ink)}
+.zs{left:9px}.zx{right:9px}
+.zy{font-family:var(--kai);font-size:26px;font-weight:700;color:var(--muted);line-height:1}
+.zp .wang{color:var(--red)}
+.zbadge{position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-size:12px;background:var(--ink);color:var(--paper);border-radius:6px;padding:0 6px;line-height:1.5}
+.dt-hot{cursor:pointer;fill:transparent}
+.dt-mark{pointer-events:none}
+.tree,.tree ul{list-style:none;margin:0;padding-left:18px;position:relative}
+.tree{padding-left:0}
+.tree li{position:relative;padding:4px 0 4px 16px}
+.tree ul li::before{content:"";position:absolute;left:0;top:18px;width:12px;height:2px;background:var(--line)}
+.tree ul::before{content:"";position:absolute;left:0;top:0;bottom:18px;width:2px;background:var(--line)}
+.tree .nd{display:inline-block;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:4px 10px;font-size:15px;line-height:1.5}
+.tree .nd b{font-family:var(--kai);font-size:17px}
+.cert{border:3px double var(--red);border-radius:6px;padding:26px 20px;text-align:center;background:var(--paper);margin-top:14px}
+.cert h3{font-size:30px;letter-spacing:.3em;margin:0 0 4px;color:var(--red)}
+.cert .nm{font-family:var(--kai);font-size:30px;border-bottom:1px solid var(--line);display:inline-block;padding:0 20px;margin:10px 0}
+.cert .stamp{display:inline-grid;place-items:center;width:64px;height:64px;border:3px solid var(--red);color:var(--red);font-family:var(--kai);font-size:17px;line-height:1.1;transform:rotate(-8deg);margin-top:10px;border-radius:6px}
+.glo-item{border-bottom:1px dashed var(--line);padding:10px 2px}
+.glo-item b{font-family:var(--kai);font-size:19px;margin-right:8px}
+.glo-item .lk{font-size:13px;color:var(--gold);cursor:pointer;background:none;border:0;padding:0;text-decoration:underline}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <button class="iconbtn" id="menuBtn" aria-label="打開課程目錄">☰</button>
+  <div class="tb-title" id="tbTitle">風水學堂</div>
+  <button class="iconbtn" id="themeBtn" aria-label="切換深色或淺色">◐</button>
+  <div class="prog"><i id="progBar"></i></div>
+</header>
+<nav class="drawer" id="drawer" aria-label="課程目錄"><div id="drawerInner"></div></nav>
+<div class="scrim" id="scrim"></div>
+<main id="main">
+
+<section class="view" id="home">
+  <div class="hero">
+    <svg id="heroDial" class="hero-dial" viewBox="0 0 320 320" aria-hidden="true"></svg>
+    <div>
+      <h1>風水學堂</h1>
+      <p class="sub">從第一個字開始，一步一步學會風水</p>
+      <p class="lead">20 堂課、6 個階段，從「風水兩個字怎麼來的」一路學到羅盤、八卦、八宅、玄空飛星與實戰看屋。每個專有名詞都會說明由來，每一課都有動畫或動手做的練習，國中生也看得懂。</p>
+      <div class="row c"><button class="btn primary big" id="startBtn">從第 1 課開始</button><button class="btn big" data-go="glossary">名詞辭典</button></div>
+      <p class="muted center" id="homeProg" style="font-size:14px"></p>
+    </div>
+  </div>
+
+  <h2>怎麼使用這套課程</h2>
+  <p>請<b>照順序</b>一課一課學。後面的課程都建立在前面的基礎上，例如不懂「五行」就看不懂「八卦」，不懂「洛書」就學不會「飛星」。每課最後有小測驗，答完就會自動記錄進度。</p>
+  <div class="legend">
+    <div><span class="seal" style="background:var(--gold)">源</span>名詞由來：這個詞從哪來</div>
+    <div><span class="seal" style="background:var(--jade)">例</span>生活例子：用你熟悉的事說明</div>
+    <div><span class="seal" style="background:var(--blue)">思</span>想一想：用理性檢驗說法</div>
+    <div><span class="seal" style="background:var(--red)">注</span>注意：容易搞錯的地方</div>
+  </div>
+
+  <h2>課程地圖</h2>
+  <div id="stageMap"></div>
+</section>
+<!-- ============ L1 ============ -->
+<article class="view lesson" id="L1" data-id="1" data-stage="1" data-title="風水到底是什麼？">
+<header class="lh"><div class="stag">第一階段｜入門：認識風水</div><div class="lnum">第 1 課</div><h1>風水到底是什麼？</h1></header>
+<div class="goal"><b>本課目標</b>知道「風水」兩個字的由來、它在研究什麼，以及學風水該有的態度。</div>
+
+<h2>先做個小實驗</h2>
+<p>走進一間空教室，老師說：「隨便坐。」你會選哪個位子？</p>
+<p>大部分人會挑<b>靠牆、看得到門口、旁邊有窗戶</b>的位子，很少人想坐在門口正中間、背後一直有人走來走去的地方。</p>
+<p>你沒學過風水，卻已經在用風水的直覺了：<b>人天生喜歡「背後有靠、前面看得清楚、空氣和光線舒服」的地方。</b>風水，就是古人把這種直覺，加上幾千年觀察天氣、地形、河流的經驗，整理成一套「怎麼挑選和安排居住環境」的學問。</p>
+
+<div class="box origin"><div class="bt">「風水」這兩個字從哪來？</div>
+<div class="classic">氣乘風則散，界水則止。<br>古人聚之使不散，行之使有止，<br>故謂之風水。</div>
+<p class="src">晉朝・郭璞《葬書》，距今約 1700 年</p>
+<p>翻成白話：「氣」遇到風就會被吹散，碰到水就會停下來。古人想辦法讓氣聚在一起不散掉、流動時又有地方停留，所以把這門學問叫做「風水」。</p>
+<p>郭璞是晉朝的大學者，還幫《山海經》做過註解，後來被尊為風水的祖師之一。</p>
+</div>
+
+<div class="box origin"><div class="bt">風水的另一個名字：「堪輿」</div>
+<p>東漢的文字學家許慎解釋：「<b>堪，天道也；輿，地道也。</b>」「輿」本來是車廂，能裝載東西，後來引申為承載萬物的大地。所以「堪輿」就是研究<b>天與地</b>的學問，看風水的人也叫「堪輿師」或「地理師」。</p>
+</div>
+
+<h2>風水研究什麼？</h2>
+<p>風水研究的對象分兩種：</p>
+<div class="grid2">
+<div class="card"><h4>陽宅</h4><p>活人住和使用的地方：房子、店面、辦公室、學校、工廠。</p></div>
+<div class="card"><h4>陰宅</h4><p>祖先的墳墓。古代非常重視，但本課程<b>只教陽宅</b>。</p></div>
+</div>
+<p>看陽宅的方法，大致分成兩大方向（第三、四階段會詳細教）：</p>
+<div class="grid2">
+<div class="card"><h4>形勢派（巒頭）</h4><p>用<b>眼睛</b>看：山、水、道路、建築的形狀和位置。</p></div>
+<div class="card"><h4>理氣派</h4><p>用<b>羅盤和公式</b>算：方位、年份、時間的影響。</p></div>
+</div>
+<div class="box example"><div class="bt">打個比方</div><p>就像醫生看病：形勢派像「看臉色、聽咳嗽」，一眼就能發現明顯問題；理氣派像「驗血、照 X 光」，用數據找出看不見的細節。好醫生兩種都會用。</p></div>
+
+<h2>風水的歷史</h2>
+<ul class="tl">
+<li><span class="era">約三千年前・周朝</span>《詩經》記載周人的祖先公劉「相其陰陽，觀其流泉」：觀察山坡哪邊向陽、哪邊背陰，尋找水源，決定部落要建在哪裡。</li>
+<li><span class="era">漢朝</span>出現專門看地的「堪輿家」。</li>
+<li><span class="era">晉朝</span>郭璞在《葬書》中提出「風水」一詞。</li>
+<li><span class="era">唐朝</span>楊筠松專看山形地勢，傳說他幫許多窮人選到好地而翻身，人稱「楊救貧」，是形勢派的代表人物。</li>
+<li><span class="era">宋朝</span>磁針被裝進羅盤，用方位來計算的理氣派興起。</li>
+<li><span class="era">明清</span>流派百花齊放，北京紫禁城、各地民居都講究風水。</li>
+<li><span class="era">現代</span>建築學、環境心理學開始用科學方法研究「人為什麼在某些空間比較舒服」。</li>
+</ul>
+
+<h2>該用什麼態度學風水？</h2>
+<p>風水裡的內容，可以分成三層：</p>
+<div class="grid2">
+<div class="card"><h4><span class="tag g">第一層</span>環境智慧</h4><p>採光、通風、防潮、安全、動線。今天用科學也說得通，最值得學。</p></div>
+<div class="card"><h4><span class="tag y">第二層</span>文化象徵</h4><p>顏色、吉祥物、方位的意義。了解它，就能讀懂古建築和古人的想法。</p></div>
+<div class="card"><h4><span class="tag b">第三層</span>無法驗證的說法</h4><p>例如「這樣擺就會發財」。當作傳統說法了解就好，不迷信、也不害怕。</p></div>
+</div>
+<div class="box think"><div class="bt">本課程的學習習慣</div><p>每學一個觀念，我們都會問：「古人為什麼這樣說？有沒有合理的原因？」這是學風水最重要的習慣，也是分辨專業和迷信的關鍵。</p></div>
+
+<div class="recap"><b>本課重點</b><ol>
+<li>風水是研究「環境如何影響人」的學問。</li>
+<li>名稱出自郭璞《葬書》：氣遇風會散、遇水會停。</li>
+<li>「堪輿」是風水的古稱，堪是天、輿是地。</li>
+<li>陽宅是活人住的地方，本課程只學陽宅。</li>
+<li>兩大方向：形勢派用眼睛看，理氣派用羅盤算。</li>
+</ol></div>
+<div class="quiz" data-quiz="1"></div>
+</article>
+
+<!-- ============ L2 ============ -->
+<article class="view lesson" id="L2" data-id="2" data-stage="1" data-title="氣：風水的核心">
+<header class="lh"><div class="stag">第一階段｜入門：認識風水</div><div class="lnum">第 2 課</div><h1>氣：風水的核心</h1></header>
+<div class="goal"><b>本課目標</b>了解風水最核心的概念「氣」，以及什麼是「藏風聚氣」。</div>
+
+<p>上一課說，風水的名字來自「氣遇風散、遇水止」。那麼，到底什麼是「氣」？</p>
+
+<div class="box origin"><div class="bt">「氣」字的由來</div>
+<p>甲骨文的「气」寫成<b>三條橫線</b>，像天上飄動的雲氣，現在的「氣」是後來的寫法。古人看到冬天呼吸時的白霧、山谷裡的雲霧、煮飯冒出的蒸氣，覺得世界上有一種<b>看不見、會流動、又會影響萬物</b>的東西，就叫它「氣」。</p>
+</div>
+
+<p>在風水裡，你可以把「氣」想成<b>一個地方給人的整體感覺和能量</b>，包括空氣流動、陽光、溫度、濕度、聲音，甚至你待在那裡的心情。</p>
+<div class="grid2">
+<div class="card"><h4><span class="tag g">好</span>生氣</h4><p>生機勃勃、讓人舒服有活力的氣。注意：這裡的「生氣」不是發脾氣！</p></div>
+<div class="card"><h4><span class="tag r">壞</span>煞氣</h4><p>讓人不安全、不舒服的影響：強風、噪音、刺眼光線、尖銳的東西、潮濕陰暗。</p></div>
+</div>
+
+<h2>藏風聚氣</h2>
+<p>郭璞說：氣「乘風則散，界水則止」。所以理想的地方要能<b>擋住強風</b>（藏風），讓氣<b>聚集不散</b>（聚氣）。看看下面的動畫，金色小點代表「氣」：</p>
+<div class="widget"><div class="wt">動畫：藏風聚氣</div>
+<canvas id="qiCanvas" width="640" height="360" style="width:100%;border-radius:12px;background:var(--card);display:block"></canvas>
+<div class="row c"><button class="btn on" data-qi="open">空曠平地</button><button class="btn" data-qi="hold">山環水抱</button></div>
+<p class="center" style="margin:4px 0">留在中央的氣：<b id="qiCount" style="color:var(--red);font-size:20px">0</b> 顆</p>
+<p class="cap center" id="qiCap"></p>
+</div>
+
+<div class="box example"><div class="bt">生活中的藏風聚氣</div>
+<p><b>冬天的操場：</b>站在空曠的操場中央，冷風一直吹，好冷；躲到有牆擋住的角落曬太陽，馬上暖和起來。牆擋住了風，暖空氣就留住了。</p>
+<p><b>煮湯蓋鍋蓋：</b>蓋上鍋蓋，熱氣不會散掉，湯很快就滾了。</p>
+</div>
+
+<h2>氣要「緩」：不急、不死</h2>
+<p>那是不是把房子封得死死的最好？也不是。想想三種河流：</p>
+<div class="grid2">
+<div class="card"><h4>急流</h4><p>湍急的瀑布，不能靠近游泳。就像大門對後門的強風，氣一下子就衝走了。</p></div>
+<div class="card"><h4>死水</h4><p>不流動的臭水溝。就像不通風的房間，悶熱潮濕、容易發霉。</p></div>
+<div class="card"><h4>緩流</h4><p>彎彎的小溪，清澈又舒服。<b>氣最好也是這樣：慢慢流動、轉個彎、有地方停留。</b></p></div>
+</div>
+
+<div class="box think"><div class="bt">科學怎麼看「氣」？</div><p>科學儀器量不到叫做「氣」的東西。但我們可以把氣的好壞，翻譯成可以測量的東西：<b>風速、日照、溫度、濕度、噪音分貝、空氣品質</b>。你會發現，很多風水建議換成這些數字之後，都說得通。</p></div>
+
+<div class="recap"><b>本課重點</b><ol>
+<li>「氣」指看不見、會流動、影響人的環境能量。</li>
+<li>生氣讓人舒服；煞氣讓人不安全、不舒服。</li>
+<li>理想環境要「藏風聚氣」：擋住強風、讓氣聚集。</li>
+<li>氣最好緩緩流動，不能太急，也不能不動。</li>
+</ol></div>
+<div class="quiz" data-quiz="2"></div>
+</article>
+
+<!-- ============ L3 ============ -->
+<article class="view lesson" id="L3" data-id="3" data-stage="1" data-title="陰陽：一體的兩面">
+<header class="lh"><div class="stag">第一階段｜入門：認識風水</div><div class="lnum">第 3 課</div><h1>陰陽：一體的兩面</h1></header>
+<div class="goal"><b>本課目標</b>知道陰陽的本來意思、太極圖在說什麼，並學會用陰陽判斷空間。</div>
+
+<div class="box origin"><div class="bt">陰陽本來指的是山坡</div>
+<p>「陰」「陽」兩個字左邊都有「阝」，代表山坡。「陽」右邊的「昜」像太陽升起照耀。所以最早的意思很具體：<b>山坡曬得到太陽的那一面叫陽，曬不到的那一面叫陰。</b></p>
+<p>古人說「<b>山南水北為陽</b>」。為什麼？在中國這種北半球的地方，太陽都在南邊的天空：</p>
+<p>・山的<b>南</b>坡正對太陽，曬得到，所以是陽。<br>・河的<b>北</b>岸面朝南方，也曬得到，所以也是陽。</p>
+</div>
+
+<div class="box example"><div class="bt">地名裡的陰陽</div>
+<p>很多地名就是這樣取的：<b>衡陽</b>在衡山的南邊；<b>洛陽</b>在洛水的北邊；<b>漢陽</b>在漢水的北邊；<b>華陰</b>在華山的北邊；<b>江陰</b>在長江的南邊。日本也有「山陽」「山陰」地方。下次看到地名有陰或陽，就能猜出它在山或河的哪一邊了！</p>
+</div>
+
+<h2>從山坡到萬物</h2>
+<p>後來，古人把陰陽擴大成<b>所有相對的兩面</b>。點點看下面的卡片，把「陽」翻成「陰」：</p>
+<div class="widget"><div class="wt">動手做：陰陽翻翻卡</div>
+<div class="yyc-wrap">
+<button class="yyc"><span class="yy">☀ 白天</span><span class="yn">☾ 夜晚</span></button>
+<button class="yyc"><span class="yy">☀ 明亮</span><span class="yn">☾ 陰暗</span></button>
+<button class="yyc"><span class="yy">☀ 熱</span><span class="yn">☾ 冷</span></button>
+<button class="yyc"><span class="yy">☀ 動</span><span class="yn">☾ 靜</span></button>
+<button class="yyc"><span class="yy">☀ 高</span><span class="yn">☾ 低</span></button>
+<button class="yyc"><span class="yy">☀ 外</span><span class="yn">☾ 內</span></button>
+<button class="yyc"><span class="yy">☀ 前</span><span class="yn">☾ 後</span></button>
+<button class="yyc"><span class="yy">☀ 硬</span><span class="yn">☾ 軟</span></button>
+</div>
+<p class="cap">注意：陰陽沒有好壞之分，只是相對。白天不比夜晚高級，兩者都需要。</p>
+</div>
+
+<h2>太極圖在說什麼</h2>
+<div class="box origin"><div class="bt">「太極」的由來</div><p>《易經》的〈繫辭傳〉說：「易有太極，是生兩儀。」「太」是最、「極」是根源，<b>太極就是萬物最初的根源</b>；「兩儀」就是陰和陽。</p></div>
+<div class="widget"><div class="wt">動畫：旋轉的太極圖</div>
+<svg id="tjSvg" viewBox="0 0 200 200" style="display:block;margin:0 auto;width:180px"></svg>
+<div class="grid2">
+<div class="card"><h4>一、相對</h4><p>黑白兩半，代表陰陽相對。</p></div>
+<div class="card"><h4>二、互含</h4><p>黑中有白點、白中有黑點：最熱的夏天也有涼爽的夜晚。</p></div>
+<div class="card"><h4>三、消長</h4><p>白的變大，黑的就變小，像一天從半夜到中午、一年從冬到夏。</p></div>
+</div></div>
+
+<h2>風水怎麼用陰陽</h2>
+<p>一個好的空間要<b>陰陽平衡</b>。太陰（太暗太濕）會發霉、讓人心情低落；太陽（太亮太熱）會讓人無法放鬆。拉動下面的滑桿試試看：</p>
+<div class="widget"><div class="wt">動手做：調整房間的陰陽</div>
+<svg id="roomSvg" class="svgbox" viewBox="0 0 320 190">
+<rect x="10" y="10" width="300" height="170" rx="10" style="fill:var(--card);stroke:var(--line)"/>
+<rect x="30" y="30" width="90" height="80" rx="4" fill="#bfe1f5" stroke="#7f9eb2"/>
+<line x1="75" y1="30" x2="75" y2="110" stroke="#7f9eb2"/><line x1="30" y1="70" x2="120" y2="70" stroke="#7f9eb2"/>
+<rect x="160" y="95" width="120" height="24" rx="8" fill="#9b6a4c"/>
+<rect x="160" y="112" width="120" height="42" rx="8" fill="#b88262"/>
+<rect x="150" y="140" width="10" height="24" fill="#8a6a4a"/><ellipse cx="155" cy="132" rx="14" ry="16" fill="#5f9a5f"/>
+<circle cx="230" cy="45" r="13" fill="#f0cf72"/><line x1="230" y1="10" x2="230" y2="32" stroke="#888"/>
+<rect id="roomDark" x="10" y="10" width="300" height="170" rx="10" fill="#070b12" opacity=".39"/>
+<circle id="roomGlare" cx="75" cy="70" r="120" fill="#fff4b8" opacity="0"/>
+</svg>
+<div class="row" style="justify-content:space-between;font-size:14px;margin:6px 0 -6px"><span>☾ 陰</span><span>陽 ☀</span></div>
+<input type="range" id="yyRange" min="0" max="100" value="50" aria-label="陰陽比例">
+<p class="rel" id="yyOut"></p></div>
+<p>陰陽也用來分配房間：客廳、廚房常有人走動、比較熱鬧，是<b>動區（陽）</b>；臥室、書房需要安靜，是<b>靜區（陰）</b>。好的格局會讓<b>動靜分開</b>，臥室不要緊貼吵鬧的客廳或馬路。</p>
+
+<div class="recap"><b>本課重點</b><ol>
+<li>陰陽本指山坡的背陰面和向陽面：山南水北為陽。</li>
+<li>後來引申為一切相對的兩面，沒有好壞之分。</li>
+<li>太極圖說明三件事：相對、互含、消長。</li>
+<li>空間要陰陽平衡、動靜分開。</li>
+</ol></div>
+<div class="quiz" data-quiz="3"></div>
+</article>
+
+<!-- ============ L4 ============ -->
+<article class="view lesson" id="L4" data-id="4" data-stage="1" data-title="五行：五種變化">
+<header class="lh"><div class="stag">第一階段｜入門：認識風水</div><div class="lnum">第 4 課</div><h1>五行：五種變化</h1></header>
+<div class="goal"><b>本課目標</b>認識木火土金水的特性，學會相生與相剋，並知道五行對應的方位、顏色和形狀。</div>
+
+<div class="box origin"><div class="bt">「五行」出自哪裡？</div>
+<div class="classic">五行：一曰水，二曰火，三曰木，四曰金，五曰土。</div>
+<p class="src">《尚書・洪範》，距今約三千年</p>
+<p>「行」字在甲骨文裡像一個十字路口，意思是<b>行走、運行</b>。所以五行不是五種「材料」，而是<b>五種會變化、會運轉的狀態</b>。</p>
+</div>
+
+<h2>五種特性</h2>
+<p>〈洪範〉用幾個字就把五行的個性說完了：</p>
+<div class="grid2">
+<div class="card" style="border-top:4px solid var(--wood)"><h4 style="color:var(--wood)">木：曲直</h4><p>可彎可直、向上生長，像春天發芽的樹。</p></div>
+<div class="card" style="border-top:4px solid var(--fire)"><h4 style="color:var(--fire)">火：炎上</h4><p>熱、往上竄，像燃燒的火焰。</p></div>
+<div class="card" style="border-top:4px solid var(--earth)"><h4 style="color:var(--earth)">土：稼穡</h4><p>能種植收成，承載、包容一切，像大地。</p></div>
+<div class="card" style="border-top:4px solid var(--metal)"><h4 style="color:var(--metal)">金：從革</h4><p>可以被熔化改造，收斂、堅固，像金屬。</p></div>
+<div class="card" style="border-top:4px solid var(--water)"><h4 style="color:var(--water)">水：潤下</h4><p>滋潤萬物、往下流，像雨水河流。</p></div>
+</div>
+
+<h2>相生與相剋</h2>
+<p>五行不是各自獨立的，它們之間有兩種關係：<b>相生</b>（幫助）和<b>相剋</b>（管住）。</p>
+<div class="widget"><div class="wt">動畫：五行怎麼轉</div>
+<svg id="wxSvg" class="svgbox" viewBox="0 0 340 350" data-mode="sheng"></svg>
+<div class="row c"><button class="btn on" data-wx="sheng">相生（外圈）</button><button class="btn" data-wx="ke">相剋（星形）</button><button class="btn" data-wx="both">一起看</button></div>
+<div class="row c"><button class="btn primary" id="wxPlay">▶ 一步一步播放</button></div>
+<p class="rel center" id="wxCap">按「一步一步播放」，看五行怎麼轉。</p></div>
+
+<div class="grid2">
+<div class="card"><h4 style="color:var(--jade)">相生：順著圓圈走</h4><p>木生火：木頭燒起來生出火。<br>火生土：燒完成灰，回到泥土。<br>土生金：金屬礦藏在土裡。<br>金生水：冰冷的金屬表面會凝結水珠。<br>水生木：澆水讓植物長大。</p></div>
+<div class="card"><h4 style="color:var(--red)">相剋：隔一個跳著走</h4><p>木剋土：樹根能鑽破泥土。<br>土剋水：土堆成堤防擋住洪水。<br>水剋火：水能澆熄火。<br>火剋金：高溫能熔化金屬。<br>金剋木：斧頭能砍倒樹。</p></div>
+</div>
+<div class="box think"><div class="bt">相剋一定不好嗎？</div><p>不是！「剋」的意思是<b>制衡、管理</b>。腳踏車要有踏板（相生）才能前進，也要有剎車（相剋）才不會失控。只有相生會停不下來，只有相剋會動不了，兩者平衡才健康。</p></div>
+
+<div class="widget"><div class="wt">動手做：兩個五行是什麼關係？</div>
+<div class="row"><span style="width:64px">第一個</span><span id="wxA" class="row" style="margin:0"></span></div>
+<div class="row"><span style="width:64px">第二個</span><span id="wxB" class="row" style="margin:0"></span></div>
+<p class="rel" id="wxRel"></p></div>
+
+<h2>五行對照表</h2>
+<p>這張表後面會一直用到，特別是<b>方位</b>和<b>形狀</b>：</p>
+<div class="tw"><table class="t">
+<tr><th>五行</th><th>方位</th><th>季節</th><th>顏色</th><th>形狀</th><th>建築例子</th></tr>
+<tr><td style="color:var(--wood)"><b>木</b></td><td>東</td><td>春</td><td>綠、青</td><td>長條、直立</td><td>又高又瘦的大樓</td></tr>
+<tr><td style="color:var(--fire)"><b>火</b></td><td>南</td><td>夏</td><td>紅、紫</td><td>尖角、三角形</td><td>尖屋頂、尖塔</td></tr>
+<tr><td style="color:var(--earth)"><b>土</b></td><td>中央</td><td>換季時</td><td>黃、咖啡</td><td>方形、扁平</td><td>方正的平頂建築</td></tr>
+<tr><td style="color:var(--metal)"><b>金</b></td><td>西</td><td>秋</td><td>白、金、銀</td><td>圓形、弧形</td><td>圓頂體育館</td></tr>
+<tr><td style="color:var(--water)"><b>水</b></td><td>北</td><td>冬</td><td>黑、藍</td><td>波浪、不規則</td><td>曲線造型、玻璃帷幕</td></tr>
+</table></div>
+<div class="box warn"><div class="bt">記憶小技巧</div><p>把中國地圖想一想：<b>東</b>邊太陽升起、萬物生長（木）；<b>南</b>方炎熱（火）；<b>西</b>方秋天收成、刀劍肅殺（金）；<b>北</b>方寒冷、冬天結冰（水）；<b>中央</b>是大地（土）。傳統上水是黑色，本課程的圖用深藍色代表。</p></div>
+
+<div class="recap"><b>本課重點</b><ol>
+<li>五行出自《尚書・洪範》，是五種變化的狀態。</li>
+<li>相生：木→火→土→金→水→木，順著圓圈。</li>
+<li>相剋：木→土→水→火→金→木，隔一個跳，畫出來是星星。</li>
+<li>相剋是制衡，不是壞事。</li>
+<li>五行對應方位：東木、南火、中土、西金、北水。</li>
+</ol></div>
+<div class="quiz" data-quiz="4"></div>
+</article>
+
+<!-- ============ L5 ============ -->
+<article class="view lesson" id="L5" data-id="5" data-stage="1" data-title="方位與坐向">
+<header class="lh"><div class="stag">第一階段｜入門：認識風水</div><div class="lnum">第 5 課</div><h1>方位與坐向</h1></header>
+<div class="goal"><b>本課目標</b>看懂傳統風水圖的方位，分清楚「坐」和「向」，並理解為什麼古人喜歡坐北朝南。</div>
+
+<h2>八個方位加中央</h2>
+<p>風水把周圍分成八個方向：北、東北、東、東南、南、西南、西、西北，再加上房子的<b>中央</b>，一共九個位置。記住這個「九」，第 7 課會用到。</p>
+
+<div class="box warn"><div class="bt">最容易搞混：傳統風水圖是「上南下北」</div>
+<p>我們平常看的地圖是上北下南，但<b>古代風水圖剛好相反：上面是南方，下面是北方</b>，所以左邊變成東、右邊變成西。</p>
+<p>為什麼？古代皇帝「坐北朝南」，坐在北邊面向南方，地圖攤在面前，南方自然在上面。<b>本課程所有傳統圖（八卦、洛書、飛星）一律上南下北，四周都會標出方位</b>，看圖時先找「南」在哪裡。</p>
+</div>
+<div class="grid2">
+<div class="card center"><h4>現代地圖</h4><svg viewBox="0 0 120 120" width="120"><circle cx="60" cy="60" r="44" fill="none" style="stroke:var(--line)" stroke-width="2"/><text x="60" y="10" text-anchor="middle" dominant-baseline="central" style="fill:var(--red);font-weight:700">北</text><text x="60" y="110" text-anchor="middle" dominant-baseline="central" style="fill:var(--ink)">南</text><text x="8" y="60" text-anchor="middle" dominant-baseline="central" style="fill:var(--ink)">西</text><text x="112" y="60" text-anchor="middle" dominant-baseline="central" style="fill:var(--ink)">東</text><path d="M60 26 L68 60 L60 94 L52 60Z" style="fill:var(--line)"/><path d="M60 26 L68 60 L52 60Z" style="fill:var(--red)"/></svg></div>
+<div class="card center"><h4>傳統風水圖</h4><svg viewBox="0 0 120 120" width="120"><circle cx="60" cy="60" r="44" fill="none" style="stroke:var(--line)" stroke-width="2"/><text x="60" y="10" text-anchor="middle" dominant-baseline="central" style="fill:var(--red);font-weight:700">南</text><text x="60" y="110" text-anchor="middle" dominant-baseline="central" style="fill:var(--ink)">北</text><text x="8" y="60" text-anchor="middle" dominant-baseline="central" style="fill:var(--ink)">東</text><text x="112" y="60" text-anchor="middle" dominant-baseline="central" style="fill:var(--ink)">西</text><path d="M60 26 L68 60 L60 94 L52 60Z" style="fill:var(--line)"/><path d="M60 94 L68 60 L52 60Z" style="fill:var(--red)"/></svg></div>
+</div>
+
+<h2>坐與向</h2>
+<p>風水描述一間房子，一定會說它的「坐向」：</p>
+<div class="grid2">
+<div class="card"><h4>向</h4><p>房子<b>面對</b>的方向，通常是大門或最大、最亮的窗戶那一面。</p></div>
+<div class="card"><h4>坐</h4><p>房子<b>背後靠著</b>的方向，永遠和「向」相反。</p></div>
+</div>
+<div class="box example"><div class="bt">用椅子想像</div><p>你坐在椅子上，<b>背靠的方向就是「坐」，臉朝的方向就是「向」</b>。大門朝南的房子，背就靠著北方，叫做「<b>坐北朝南</b>」。</p></div>
+<div class="widget"><div class="wt">動手做：轉動房子，看它的坐向</div>
+<svg id="faceSvg" class="svgbox" viewBox="0 0 300 300" style="max-width:320px"></svg>
+<input type="range" id="faceRange" min="0" max="359" value="180" aria-label="房子朝向角度">
+<p class="rel center" id="faceOut"></p></div>
+<div class="box think"><div class="bt">現代公寓的「向」怎麼決定？</div><p>傳統平房看大門就好。現代公寓比較複雜，不同流派有不同看法：看整棟大樓的大門、看自己家的大門，或看陽台、最大的落地窗（採光面）。初學者可以先用「<b>屋子最明亮、最開闊的那一面</b>」判斷，並記得這是有爭議的地方。</p></div>
+
+<h2>為什麼喜歡坐北朝南？</h2>
+<p>這不是迷信，而是太陽的科學。北半球的太陽總是在南方天空，而且冬天低、夏天高：</p>
+<div class="widget"><div class="wt">動畫：冬天和夏天的陽光</div>
+<svg id="sunSvg" class="svgbox" viewBox="0 0 320 180">
+<text x="8" y="170" style="fill:var(--muted);font-size:12px">← 南</text><text x="312" y="170" text-anchor="end" style="fill:var(--muted);font-size:12px">北 →</text>
+<g id="sunW"><polygon points="0,57 140,85 140,135 0,107" fill="rgba(245,185,58,.22)"/><polygon points="140,85 300,139 300,150 185,150 140,135" fill="rgba(245,185,58,.5)"/><circle cx="24" cy="40" r="14" fill="#f2b23a"/></g>
+<g id="sunS" style="display:none"><polygon points="40,0 83,0 105,62 134,150 94,150" fill="rgba(245,185,58,.3)"/><circle cx="36" cy="14" r="13" fill="#f2b23a"/></g>
+<line x1="0" y1="150" x2="320" y2="150" style="stroke:var(--muted)" stroke-width="2"/>
+<rect x="140" y="70" width="160" height="80" style="fill:none;stroke:var(--ink)" stroke-width="2"/>
+<rect x="136" y="85" width="8" height="50" fill="#bfe1f5" stroke="#7f9eb2"/>
+<rect x="104" y="62" width="206" height="8" style="fill:var(--ink)"/>
+<text x="112" y="54" style="fill:var(--muted);font-size:12px">屋簷</text>
+<text x="222" y="110" text-anchor="middle" id="sunTxt" style="fill:var(--ink);font-size:13px;font-weight:700">陽光照進屋內深處</text>
+</svg>
+<div class="row c"><button class="btn on" data-sun="w">冬天</button><button class="btn" data-sun="s">夏天</button></div>
+<p class="cap center" id="sunCap"></p></div>
+<p>再加上冬天的寒風多半從北方吹來，背後（北方）有牆或山擋著，屋子就更溫暖。<b>冬暖夏涼</b>，這就是坐北朝南受歡迎的原因。</p>
+<div class="box think"><div class="bt">那澳洲人呢？</div><p>南半球的太陽在<b>北方</b>天空，所以澳洲、紐西蘭的人反而喜歡「坐南朝北」！靠近赤道的國家，太陽幾乎從頭頂經過，朝向就沒那麼重要，反而要注意遮陽和雨季的風向。這告訴我們：<b>風水的道理要配合當地環境，不能死背。</b></p></div>
+
+<div class="recap"><b>本課重點</b><ol>
+<li>八方加中央共九個位置。</li>
+<li>傳統風水圖上南下北，左東右西。</li>
+<li>「向」是面對的方向，「坐」是背靠的方向，兩者相反。</li>
+<li>坐北朝南在北半球冬暖夏涼，是太陽角度的科學。</li>
+</ol></div>
+<div class="quiz" data-quiz="5"></div>
+</article>
+<!-- ============ L6 ============ -->
+<article class="view lesson" id="L6" data-id="6" data-stage="2" data-title="八卦：三條線的密碼">
+<header class="lh"><div class="stag">第二階段｜工具：古人的座標系統</div><div class="lnum">第 6 課</div><h1>八卦：三條線的密碼</h1></header>
+<div class="goal"><b>本課目標</b>看懂八卦的符號，記住八卦口訣，分清楚先天八卦和後天八卦。</div>
+
+<p>第一階段學了陰陽和五行，現在要把它們組合成古人的「座標系統」。第一個工具，就是八卦。</p>
+<div class="box origin"><div class="bt">「爻」是什麼？</div><p>八卦由線條組成，每一條線叫做一個「<b>爻</b>」（音同「搖」）。「爻」字本身就像線條交錯的樣子。爻只有兩種：</p>
+<p>・<b>陽爻 ⚊</b>：一條完整的線，代表陽。<br>・<b>陰爻 ⚋</b>：中間斷開的線，代表陰。</p></div>
+
+<h2>為什麼剛好是八個？</h2>
+<p>三個爻疊在一起成為一個「卦」。每一爻有陰、陽兩種可能，所以：<b>2 × 2 × 2 = 8</b>，剛好八種組合，這就是「八卦」。這其實就是數學的排列組合！</p>
+<div class="box warn"><div class="bt">重要規則：由下往上讀</div><p>卦是<b>從最下面那一條開始算</b>的。最下面叫「初爻」，中間叫「中爻」，最上面叫「上爻」，就像蓋房子從地基蓋起。</p></div>
+<div class="widget"><div class="wt">動手做：點擊爻線，組出八卦</div>
+<div class="yaowrap"><svg id="yaoSvg" viewBox="0 0 230 150" style="width:230px"></svg><div id="yaoOut" class="yaoout"></div></div>
+<p class="cap">點一下線條，就能在陽爻和陰爻之間切換。把八種組合都試試看！</p></div>
+
+<h2>八卦口訣</h2>
+<div class="box origin"><div class="bt">八卦取象歌</div>
+<div class="classic">乾三連，坤六斷；震仰盂，艮覆碗；<br>離中虛，坎中滿；兌上缺，巽下斷。</div>
+<p class="src">南宋・朱熹《周易本義》卷首</p>
+<p>這是古人背八卦的口訣，看形狀就能記住：</p>
+<div class="tw"><table class="t">
+<tr><th>口訣</th><th>意思</th><th>卦</th><th>代表自然</th><th>家人</th><th>五行</th></tr>
+<tr><td>乾三連</td><td>三條都連著</td><td>乾</td><td>天</td><td>父親</td><td>金</td></tr>
+<tr><td>坤六斷</td><td>斷成六段</td><td>坤</td><td>地</td><td>母親</td><td>土</td></tr>
+<tr><td>震仰盂</td><td>像仰放的碗（盂），底實口開</td><td>震</td><td>雷</td><td>大兒子</td><td>木</td></tr>
+<tr><td>艮覆碗</td><td>像倒扣的碗</td><td>艮</td><td>山</td><td>小兒子</td><td>土</td></tr>
+<tr><td>離中虛</td><td>中間是空的</td><td>離</td><td>火</td><td>二女兒</td><td>火</td></tr>
+<tr><td>坎中滿</td><td>中間是實的</td><td>坎</td><td>水</td><td>二兒子</td><td>水</td></tr>
+<tr><td>兌上缺</td><td>上面有缺口</td><td>兌</td><td>澤（湖泊）</td><td>小女兒</td><td>金</td></tr>
+<tr><td>巽下斷</td><td>下面斷開</td><td>巽</td><td>風</td><td>大女兒</td><td>木</td></tr>
+</table></div></div>
+<div class="box think"><div class="bt">家人怎麼分的？有規律！</div><p>乾（全陽）是父親，坤（全陰）是母親。其他六卦：<b>哪一種爻比較少，那一爻就決定性別</b>。一條陽爻兩條陰爻 → 男生；一條陰爻兩條陽爻 → 女生。那一爻的<b>位置</b>決定排行：在最下面是老大，中間是老二，最上面是老么。例如震卦只有最下面是陽爻，所以是「大兒子」。</p></div>
+
+<h2>先天八卦與後天八卦</h2>
+<p>八卦排成一圈放到八個方位上，有兩種排法：</p>
+<div class="grid2">
+<div class="card"><h4>先天八卦（伏羲八卦）</h4><p>相傳伏羲所畫。天與地、水與火、山與澤、雷與風<b>兩兩相對</b>，描述「宇宙本來的樣子」。</p></div>
+<div class="card"><h4>後天八卦（文王八卦）</h4><p>相傳周文王所排。配合四季和方位<b>運轉變化</b>，<b>風水實際使用的是這一個</b>。</p></div>
+</div>
+<div class="widget"><div class="wt">互動：先天和後天八卦的位置（上南下北）</div>
+<svg id="bgSvg" class="svgbox" viewBox="0 0 340 340"></svg>
+<div class="row c"><button class="btn on" data-bg="xian">先天八卦</button><button class="btn" data-bg="hou">後天八卦</button></div>
+<p class="rel" id="bgCap"></p></div>
+<div class="box example"><div class="bt">後天八卦和季節</div><p>震在<b>東</b>：春天打雷，萬物甦醒。離在<b>南</b>：夏天像火一樣熱。兌在<b>西</b>：秋天收成，「兌」有喜悅的意思。坎在<b>北</b>：冬天寒冷，屬水。你看，後天八卦和第 4 課的五行方位完全對得上！</p></div>
+
+<div class="recap"><b>本課重點</b><ol>
+<li>爻有陽爻（實線）和陰爻（斷線），三爻成一卦，共 8 卦。</li>
+<li>卦由下往上讀：初爻、中爻、上爻。</li>
+<li>口訣：乾三連、坤六斷、震仰盂、艮覆碗、離中虛、坎中滿、兌上缺、巽下斷。</li>
+<li>風水實際用的是後天八卦：坎北、離南、震東、兌西、乾西北、坤西南、艮東北、巽東南。</li>
+</ol></div>
+<div class="quiz" data-quiz="6"></div>
+</article>
+
+<!-- ============ L7 ============ -->
+<article class="view lesson" id="L7" data-id="7" data-stage="2" data-title="河圖洛書與九宮">
+<header class="lh"><div class="stag">第二階段｜工具：古人的座標系統</div><div class="lnum">第 7 課</div><h1>河圖洛書與九宮</h1></header>
+<div class="goal"><b>本課目標</b>認識河圖和洛書，背熟洛書的數字位置，並把它和後天八卦結合成「九宮」。</div>
+
+<div class="box origin"><div class="bt">兩個古老的傳說</div>
+<p><b>河圖：</b>傳說伏羲時代，一匹龍馬從黃河跳出來，背上的花紋就是河圖。</p>
+<p><b>洛書：</b>傳說大禹治水時，一隻神龜從洛水爬出來，背殼上的圖案就是洛書。</p>
+<p>「河出圖，洛出書」這句話在《易經・繫辭傳》裡就有。它們其實是用<b>黑白圓點</b>排成的數字圖：白點（奇數）是陽，黑點（偶數）是陰。</p></div>
+
+<h2>河圖：數字與五行</h2>
+<p>河圖把 1 到 10 兩兩配對，放在五個方位，對應五行：</p>
+<div class="tw"><table class="t">
+<tr><th>數字</th><th>方位</th><th>五行</th><th>古人的口訣</th></tr>
+<tr><td>1、6</td><td>北</td><td>水</td><td>一六共宗</td></tr>
+<tr><td>2、7</td><td>南</td><td>火</td><td>二七同道</td></tr>
+<tr><td>3、8</td><td>東</td><td>木</td><td>三八為朋</td></tr>
+<tr><td>4、9</td><td>西</td><td>金</td><td>四九為友</td></tr>
+<tr><td>5、10</td><td>中</td><td>土</td><td>五十同途</td></tr>
+</table></div>
+
+<h2>洛書：神奇的九宮格</h2>
+<p>洛書是本課的重點，後面的八宅和飛星都靠它。先背口訣：</p>
+<div class="box origin"><div class="bt">洛書口訣</div>
+<div class="classic">戴九履一，左三右七，<br>二四為肩，六八為足，五居中央。</div>
+<p>把洛書想成一隻烏龜：<b>頭頂</b>戴著 9，<b>腳</b>踩著 1，<b>左邊</b> 3、<b>右邊</b> 7，兩個<b>肩膀</b>是 2 和 4，兩隻<b>腳</b>是 6 和 8，<b>肚子中間</b>是 5。</p></div>
+<div class="widget"><div class="wt">互動：洛書九宮（上南下北）</div>
+<div class="row c"><button class="btn on" data-ls="num">數字</button><button class="btn" data-ls="dot">古代點點圖</button><button class="btn" data-ls="gua">配上八卦方位</button></div>
+<div class="dirlab"><span>東南</span><span>南</span><span>西南</span></div>
+<div class="grid9" id="lsGrid"></div>
+<div class="dirlab"><span>東北</span><span>北</span><span>西北</span></div>
+<p class="center muted" style="font-size:14px;margin:4px 0">左邊一排是東，右邊一排是西</p>
+<div class="row c" id="lsSums"></div>
+<p class="rel center" id="lsCap">點上面的按鈕，驗證每一條線加起來是多少。</p></div>
+<div class="box example"><div class="bt">數學課也有洛書</div><p>每一橫排、每一直排、兩條斜線，加起來<b>全部等於 15</b>！數學上叫做「三階幻方」，洛書是世界上最早的幻方紀錄之一。為什麼是 15？1 加到 9 等於 45，平分成三排，每排就是 15。</p></div>
+
+<h2>洛書 + 後天八卦 = 九宮</h2>
+<p>按下上面的「配上八卦方位」，你會發現：<b>洛書的數字位置，剛好和後天八卦的方位對在一起</b>：</p>
+<div class="tw"><table class="t">
+<tr><th>數字</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr>
+<tr><td><b>卦</b></td><td>坎</td><td>坤</td><td>震</td><td>巽</td><td>（中）</td><td>乾</td><td>兌</td><td>艮</td><td>離</td></tr>
+<tr><td><b>方位</b></td><td>北</td><td>西南</td><td>東</td><td>東南</td><td>中央</td><td>西北</td><td>西</td><td>東北</td><td>南</td></tr>
+</table></div>
+<p>這九個格子就叫「<b>九宮</b>」，正中間叫「<b>中宮</b>」。每一格也叫一個「宮」，例如北方叫坎宮、南方叫離宮。從今以後，你可以用數字來稱呼方位：「一白在北」「九紫在南」，這是風水師的共同語言。</p>
+<div class="box example"><div class="bt">生活中的九宮格</div><p>手機的數字鍵盤、數獨、井字遊戲都是九宮格。我們現在也用九宮格來看一間房子：把平面圖切成九格，每一格就是一個方位。</p></div>
+
+<div class="recap"><b>本課重點</b><ol>
+<li>河圖：1-6 水北、2-7 火南、3-8 木東、4-9 金西、5-10 土中。</li>
+<li>洛書口訣：戴九履一，左三右七，二四為肩，六八為足，五居中央。</li>
+<li>洛書每條線加起來都是 15。</li>
+<li>洛書配上後天八卦就成為「九宮」，是八宅和飛星的基礎。</li>
+</ol></div>
+<div class="quiz" data-quiz="7"></div>
+</article>
+
+<!-- ============ L8 ============ -->
+<article class="view lesson" id="L8" data-id="8" data-stage="2" data-title="天干地支與二十四山">
+<header class="lh"><div class="stag">第二階段｜工具：古人的座標系統</div><div class="lnum">第 8 課</div><h1>天干地支與二十四山</h1></header>
+<div class="goal"><b>本課目標</b>認識十天干、十二地支，並學會把一圈 360° 分成更精細的「二十四山」。</div>
+
+<p>八個方位還是太粗了。一個方位就占 45°，兩間朝向差了 30° 的房子，可能都算「南」。所以古人用天干和地支，把圓圈切得更細。</p>
+
+<h2>天干與地支</h2>
+<div class="box origin"><div class="bt">名字的由來</div>
+<p><b>天干</b>：甲、乙、丙、丁、戊、己、庚、辛、壬、癸，共十個。古代以十天為一「旬」，用來給日子取名。「干」有樹幹的意思。</p>
+<p><b>地支</b>：子、丑、寅、卯、辰、巳、午、未、申、酉、戌、亥，共十二個。用來記月份和時辰，「支」像樹枝。它們就是十二生肖的由來。</p>
+<p>樹幹配樹枝，天干配地支，合稱「<b>干支</b>」。</p></div>
+
+<div class="tw"><table class="t">
+<tr><th>天干</th><th>甲乙</th><th>丙丁</th><th>戊己</th><th>庚辛</th><th>壬癸</th></tr>
+<tr><td><b>五行</b></td><td>木</td><td>火</td><td>土</td><td>金</td><td>水</td></tr>
+<tr><td><b>方位</b></td><td>東</td><td>南</td><td>中央</td><td>西</td><td>北</td></tr>
+</table></div>
+<div class="tw"><table class="t">
+<tr><th>地支</th><th>子</th><th>丑</th><th>寅</th><th>卯</th><th>辰</th><th>巳</th><th>午</th><th>未</th><th>申</th><th>酉</th><th>戌</th><th>亥</th></tr>
+<tr><td><b>生肖</b></td><td>鼠</td><td>牛</td><td>虎</td><td>兔</td><td>龍</td><td>蛇</td><td>馬</td><td>羊</td><td>猴</td><td>雞</td><td>狗</td><td>豬</td></tr>
+<tr><td><b>時辰</b></td><td>23–1</td><td>1–3</td><td>3–5</td><td>5–7</td><td>7–9</td><td>9–11</td><td>11–13</td><td>13–15</td><td>15–17</td><td>17–19</td><td>19–21</td><td>21–23</td></tr>
+</table></div>
+<div class="box example"><div class="bt">你每天都在用地支</div><p><b>中午</b>：「午時」是 11 點到 13 點，正中間 12 點就叫「正午」。<br><b>子夜</b>：「子時」包含半夜 12 點。<br><b>子午線</b>：地支中「子」代表北、「午」代表南，所以連接南北極的經線，中文叫「子午線」！</p></div>
+
+<h3>六十甲子</h3>
+<p>十個天干和十二個地支依序配對：甲子、乙丑、丙寅……要配到兩者同時回到起點，需要 10 和 12 的最小公倍數：<b>60</b>。所以干支紀年 60 年一循環，叫做「六十甲子」。</p>
+<div class="widget"><div class="wt">動手做：查任何一年的干支與生肖</div>
+<div class="row"><input type="number" id="gzYear" value="2026" min="1" max="3000" style="width:120px" aria-label="西元年"><button class="btn primary" id="gzBtn">查詢</button></div>
+<p class="rel" id="gzOut"></p>
+<p class="cap">注意：風水和命理以「立春」（約 2 月 4 日）作為一年的開始，不是 1 月 1 日。</p></div>
+
+<h2>二十四山</h2>
+<p>把一圈 360° 分成 24 份，每份 <b>15°</b>，每一份叫一「山」。24 個名字是這樣湊出來的：</p>
+<div class="grid2">
+<div class="card"><h4><span class="tag b">8 個</span>天干</h4><p>十天干去掉戊、己，因為它們屬土、在中央，沒有方位。</p></div>
+<div class="card"><h4><span class="tag g">12 個</span>地支</h4><p>子在正北、午在正南、卯在正東、酉在正西。</p></div>
+<div class="card"><h4><span class="tag y">4 個</span>卦</h4><p>乾、坤、艮、巽，放在西北、西南、東北、東南四個斜角。</p></div>
+</div>
+<p>8 + 12 + 4 = 24。每個八方正好分到 3 山，例如北方是「壬、子、癸」，南方是「丙、午、丁」。</p>
+<div class="box origin"><div class="bt">為什麼叫「山」？</div><p>房子背靠的方向叫「坐山」，古人習慣用「山」來稱呼方位。所以二十四個方位就叫二十四山。一間坐北朝南的房子，精確一點可以說是「<b>子山午向</b>」：坐子、向午。</p></div>
+<div class="widget"><div class="wt">互動：二十四山羅盤（上南下北）</div>
+<svg id="m24Svg" class="svgbox" viewBox="0 0 340 340"></svg>
+<input type="range" id="m24Range" min="0" max="359" value="180" aria-label="朝向角度">
+<p class="rel center" id="m24Out"></p>
+<div class="row c" style="font-size:14px"><span><span class="tag b">藍</span>天干</span><span><span class="tag g">綠</span>地支</span><span><span class="tag y">金</span>四卦</span><span><span class="tag r">紅</span>向</span></div></div>
+
+<div class="recap"><b>本課重點</b><ol>
+<li>十天干、十二地支，合稱干支，60 年一循環。</li>
+<li>子是北、午是南，這也是「子午線」「中午」的由來。</li>
+<li>二十四山 = 8 天干 + 12 地支 + 4 卦，每山 15°。</li>
+<li>坐向可以精確說成「某山某向」，例如子山午向。</li>
+</ol></div>
+<div class="quiz" data-quiz="8"></div>
+</article>
+
+<!-- ============ L9 ============ -->
+<article class="view lesson" id="L9" data-id="9" data-stage="2" data-title="羅盤：風水師的工具">
+<header class="lh"><div class="stag">第二階段｜工具：古人的座標系統</div><div class="lnum">第 9 課</div><h1>羅盤：風水師的工具</h1></header>
+<div class="goal"><b>本課目標</b>知道羅盤的由來和構造，學會正確測量一間房子的坐向。</div>
+
+<p>前面學的八卦、洛書、二十四山，全部都刻在同一個工具上，這就是<b>羅盤</b>。</p>
+<div class="box origin"><div class="bt">從司南到羅盤</div>
+<p><b>司南：</b>最早的指南工具。東漢王充在《論衡》裡記載：把勺子形的磁石放在光滑的銅盤上，勺柄會指向南方。</p>
+<p><b>磁針：</b>北宋沈括在《夢溪筆談》記載了用磁針指南的方法，還發現磁針指的方向和正南北有一點偏差（就是後來說的「磁偏角」）。</p>
+<p><b>羅經：</b>羅盤的正式名稱叫「羅經」。「羅」是包羅萬象，「經」是經緯天地，意思是整個天地的道理都刻在上面了。</p></div>
+
+<h2>羅盤的構造</h2>
+<div class="widget"><div class="wt">互動：點選部位認識羅盤</div>
+<svg id="lpSvg" class="svgbox" viewBox="0 0 320 320"></svg>
+<div class="row c" id="lpParts"></div>
+<p class="rel" id="lpCap">點上面的按鈕，看看每個部位的作用。</p>
+<div class="row c"><button class="btn primary" id="lpDrop">放下羅盤，看磁針穩定下來</button></div></div>
+<p>專業羅盤的內盤可以多達幾十圈，除了本課程學過的八卦、洛書、二十四山，還有更細的「分金」等圈層。初學者只要先會讀<b>二十四山</b>那一圈就夠了。</p>
+
+<h2>測量步驟</h2>
+<div class="tw"><table class="t">
+<tr><th>步驟</th><th>做法</th><th>原因</th></tr>
+<tr><td>1. 遠離干擾</td><td>離開汽車、鐵門、冰箱、電腦、手機至少一兩公尺。</td><td>金屬和電器會讓磁針偏掉。</td></tr>
+<tr><td>2. 立極</td><td>決定測量的位置：站在大門內側，或房子的中心點。</td><td>「立極」就是先定下基準點，像在地圖上釘圖釘。</td></tr>
+<tr><td>3. 平放對齊</td><td>羅盤拿平，外盤的邊和大門或牆面平行。</td><td>這樣十字線才會指著房子真正的正前方。</td></tr>
+<tr><td>4. 轉內盤</td><td>慢慢轉動內盤，直到磁針和海底線重疊。</td><td>內盤因此對準了南北。</td></tr>
+<tr><td>5. 讀數</td><td>看天心十道在「向」那一邊壓到哪一山，另一邊就是坐山。</td><td>得到「某山某向」。</td></tr>
+<tr><td>6. 重複</td><td>換幾個位置多量兩三次，取結果一致的。</td><td>避免一次失誤。</td></tr>
+</table></div>
+<div class="box warn"><div class="bt">現代大樓要注意</div><p>大樓裡鋼筋很多，室內量的結果常常不準。可以到樓下空地、沿著大樓外牆量，或在陽台、窗邊多量幾次。用手機指南針 App 也可以，但要先校正，並遠離喇叭和磁鐵殼。</p></div>
+<div class="box think"><div class="bt">磁北不是正北</div><p>指南針指的是「磁北」，和地圖上的「正北」差了幾度，各地不同。大部分風水流派直接用羅盤的磁北讀數，因為古人就是這樣量的。知道有這個差別就好。</p></div>
+
+<div class="recap"><b>本課重點</b><ol>
+<li>羅盤由司南演變而來，正式名稱叫羅經。</li>
+<li>構造：外盤（方）、內盤（圓，可轉）、天池（磁針）、海底線、天心十道。</li>
+<li>測量：遠離干擾 → 立極 → 平放對齊 → 轉內盤 → 讀數 → 重複確認。</li>
+</ol></div>
+<div class="quiz" data-quiz="9"></div>
+</article>
+
+<!-- ============ L10 ============ -->
+<article class="view lesson" id="L10" data-id="10" data-stage="3" data-title="四靈獸：理想的環境">
+<header class="lh"><div class="stag">第三階段｜形勢：用眼睛看環境</div><div class="lnum">第 10 課</div><h1>四靈獸：理想的環境</h1></header>
+<div class="goal"><b>本課目標</b>認識青龍、白虎、朱雀、玄武，學會用「四靈」判斷一個地方好不好。</div>
+
+<p>工具準備好了，從這一課開始學<b>形勢派</b>：不用算，用眼睛看。形勢派最重要的觀念，就是「四靈」。</p>
+<div class="box origin"><div class="bt">四靈從天上來</div>
+<p>古人把天上的二十八個星宿分成四組，每組連起來想像成一隻神獸，叫做「<b>四象</b>」：東方<b>青龍</b>、西方<b>白虎</b>、南方<b>朱雀</b>、北方<b>玄武</b>（烏龜和蛇的合體）。</p>
+<p>《禮記・曲禮》記載軍隊行進時：「<b>前朱鳥而後玄武，左青龍而右白虎。</b>」後來風水就用這四隻神獸，代表房子四周的環境。</p></div>
+
+<div class="widget"><div class="wt">互動：點一點四靈獸（上南下北，房子坐北朝南）</div>
+<svg id="slSvg" class="svgbox" viewBox="0 0 340 360"></svg>
+<p class="rel" id="slCap">點圖中的神獸或房子，看看說明。</p></div>
+
+<div class="tw"><table class="t">
+<tr><th>四靈</th><th>位置</th><th>五行</th><th>理想的樣子</th><th>現代城市版</th></tr>
+<tr><td><b>玄武</b></td><td>後</td><td>水</td><td>背後有高山可靠，擋住寒風</td><td>背後有較高的大樓或實牆</td></tr>
+<tr><td><b>朱雀</b></td><td>前</td><td>火</td><td>前方開闊，遠處有矮山</td><td>前面有公園、廣場，視野開闊</td></tr>
+<tr><td><b>青龍</b></td><td>左</td><td>木</td><td>左邊有山環護，可以略高</td><td>左邊有建築</td></tr>
+<tr><td><b>白虎</b></td><td>右</td><td>金</td><td>右邊有山環護，宜低而平順</td><td>右邊建築較低矮</td></tr>
+</table></div>
+
+<div class="box warn"><div class="bt">左右是誰的左右？</div><p>「左青龍、右白虎」的左右，是<b>站在屋子裡面，面向大門外面</b>時的左右，不是你站在馬路上看著房子的左右。這是初學者最常犯的錯。</p></div>
+<div class="box origin"><div class="bt">「寧可青龍高萬丈，不可白虎亂抬頭」</div><p>這是一句傳統俗語。青龍代表貴人、和諧，白虎代表威猛、壓力，所以傳統認為左邊略高沒關係，右邊最好不要比左邊更高、更有壓迫感。這屬於文化說法，了解就好。</p></div>
+
+<h2>太師椅格局</h2>
+<p>把四靈合起來，就像坐在一張中國的<b>太師椅</b>上：背後有高高的椅背（玄武），左右有扶手（青龍、白虎），前面空出來可以放腳、看得很遠（朱雀）。坐在這樣的椅子上，人自然覺得安穩。</p>
+<div class="box example"><div class="bt">你的書桌也有四靈</div><p>背後靠牆（玄武）、左右有隔板或書架（青龍白虎）、前面桌面整潔開闊（朱雀）。這樣讀書最不容易分心。第一課的「挑座位實驗」，其實就是四靈！</p></div>
+<div class="box think"><div class="bt">科學怎麼說？</div><p>英國地理學家阿普爾頓在 1975 年提出「<b>瞭望─庇護理論</b>」：人類天生喜歡「能看清四周（瞭望）、又有掩護（庇護）」的地方，因為遠古時代這樣最能發現危險又不被偷襲。這跟四靈的道理幾乎一模一樣。</p></div>
+
+<div class="recap"><b>本課重點</b><ol>
+<li>四靈來自天上四象：青龍、白虎、朱雀、玄武。</li>
+<li>後玄武要有靠、前朱雀要開闊、左青龍右白虎要環護。</li>
+<li>左右是從屋內往外看的左右。</li>
+<li>四靈合起來就是「太師椅格局」，符合瞭望─庇護理論。</li>
+</ol></div>
+<div class="quiz" data-quiz="10"></div>
+</article>
+<!-- ============ L11 ============ -->
+<article class="view lesson" id="L11" data-id="11" data-stage="3" data-title="龍、穴、砂、水、向">
+<header class="lh"><div class="stag">第三階段｜形勢：用眼睛看環境</div><div class="lnum">第 11 課</div><h1>龍、穴、砂、水、向</h1></header>
+<div class="goal"><b>本課目標</b>學會形勢派的五個關鍵字，並知道每個字在現代城市裡對應什麼。</div>
+
+<p>上一課的四靈是「大方向」。這一課把它拆得更細：形勢派看一個地方，會依序看<b>龍、穴、砂、水、向</b>五件事，古人叫「地理五訣」。</p>
+
+<h2>一、龍：山脈的走勢</h2>
+<div class="box origin"><div class="bt">為什麼山叫做「龍」？</div><p>從高處往下看，連綿起伏的山脈忽高忽低、左彎右拐，就像一條身體扭動的龍。所以風水把山脈叫做「<b>龍脈</b>」，找山脈的源頭和走向叫「尋龍」。唐朝楊筠松的名著就叫《撼龍經》。</p></div>
+<p>好的龍脈要<b>有起有伏、連綿不斷</b>，代表地形穩固、有生命力。被開路、挖礦切斷的山，古人說「龍脈被斬斷」。</p>
+<div class="box example"><div class="bt">城市裡的龍</div><p>城市裡很少有山，一般把<b>地勢的高低</b>和<b>一整排高樓</b>當作龍。房子最好建在略高、排水好的地方，不要蓋在低窪、一下雨就淹水的地方。</p></div>
+
+<h2>二、穴：最好的那一點</h2>
+<div class="box origin"><div class="bt">「穴」字的由來</div><p>「穴」原本是中醫針灸的穴道：人身上氣血聚集的點，一針下去最有效。風水借用這個字：山脈的「氣」流到某一點最聚集，那一點就是「<b>穴</b>」，也就是最適合蓋房子的位置。</p></div>
+<p>穴通常在山腳平緩的地方，<b>後有靠、前開闊、左右有護</b>，正好就是上一課的太師椅中心。</p>
+
+<h2>三、砂：周圍的小山和建築</h2>
+<div class="box origin"><div class="bt">為什麼叫「砂」？</div><p>古代老師教風水時，沒有投影片，就在地上<b>用沙子堆出山的模型</b>給學生看，像今天的「沙盤推演」。久而久之，穴周圍的小山就被叫做「<b>砂</b>」。</p></div>
+<p>砂包括四靈中的青龍、白虎，以及前面的山。現代城市裡，<b>周圍的建築物</b>就是砂。砂要<b>環抱、有情</b>，不要尖尖的對著你，也不要比你高太多壓著你。</p>
+<div class="grid2">
+<div class="card"><h4>案山</h4><p>房子前方<b>近處的矮山</b>，像書桌（古代叫「案」）一樣在你面前。高度約在胸口最好。</p></div>
+<div class="card"><h4>朝山</h4><p>案山後面、<b>遠處的高山</b>，像臣子來朝拜。遠遠的有層次，視野就不單調。</p></div>
+</div>
+
+<h2>四、水：河流與道路</h2>
+<p>風水有句話：「<b>山管人丁，水管財。</b>」山穩穩的，代表人住得安定健康；水會流動，像錢一樣流來流去，代表財運和交通。</p>
+<div class="box example"><div class="bt">道路就是「虛水」</div><p>現代城市裡，<b>馬路</b>也被看成水，叫做「虛水」：車流就像水流。河流、道路都一樣，重點是<b>怎麼繞過你的房子</b>。</p></div>
+
+<div class="widget"><div class="wt">動畫：河流彎來彎去，哪一邊比較安全？</div>
+<svg id="mdSvg" class="svgbox" viewBox="0 0 300 240" style="max-width:360px"></svg>
+<div class="row c"><button class="btn primary" id="mdPlay">▶ 快轉一百年</button><button class="btn" id="mdReset">重來</button></div>
+<p class="rel" id="mdCap">甲屋在河的內側，乙屋在河的外側。按「快轉一百年」，看河流怎麼改變。</p></div>
+
+<div class="grid2">
+<div class="card" style="border-top:4px solid var(--jade)"><h4>玉帶環腰（吉）</h4><p>河流或道路像一條<b>玉做的腰帶</b>，彎彎地環抱著房子。房子在彎的<b>內側</b>。</p></div>
+<div class="card" style="border-top:4px solid var(--red)"><h4>反弓（凶）</h4><p>彎曲的外側背對房子，像一張<b>拉開的弓</b>，弓背朝你射過來。房子在彎的<b>外側</b>。</p></div>
+</div>
+<div class="box think"><div class="bt">科學怎麼說？</div><p>地理課學過「<b>曲流</b>」：河流轉彎時，外側水流快，會一直<b>侵蝕</b>河岸（叫「攻擊坡」）；內側水流慢，泥沙<b>堆積</b>成新的土地（叫「滑走坡」）。所以住在外側，房子遲早會被河水掏空；住在內側，土地越來越多。道路也一樣：車子轉彎時會往<b>外側</b>甩，失控的車就會衝向外側的房子。</p></div>
+
+<h2>明堂：門前的空地</h2>
+<div class="box origin"><div class="bt">「明堂」從哪來？</div><p>「明堂」原本是古代天子接見諸侯、發布政令的大殿，大殿前面是寬廣的廣場。風水借用來指<b>房子前方開闊的空地</b>：就像天子面前要有空間讓百官排列，房子前面也要有空間讓氣聚集。</p></div>
+<p>明堂要<b>寬敞、平坦、乾淨</b>。門口一出去就是牆、堆滿雜物、或緊貼馬路，叫做「明堂狹窄」。在公寓裡，<b>玄關</b>和<b>客廳</b>就是室內的明堂。</p>
+
+<h2>五、向：最後決定朝哪裡</h2>
+<p>看完龍、穴、砂、水，最後才決定房子<b>朝哪個方向</b>。一般原則是：背靠龍脈（坐實）、面向明堂和水（朝空）。這就是第 5 課的「坐」與「向」。精確的方位則要用羅盤量，並用第四階段的理氣公式來算。</p>
+
+<div class="recap"><b>本課重點</b><ol>
+<li>地理五訣：龍（山脈）、穴（最佳位置）、砂（周圍山或建築）、水（河流或道路）、向（朝向）。</li>
+<li>「砂」來自古人用沙子堆模型教學；「穴」借自中醫穴道。</li>
+<li>山管人丁，水管財；現代道路叫「虛水」。</li>
+<li>玉帶環腰吉、反弓凶，符合地理課的曲流侵蝕與堆積。</li>
+<li>明堂是門前的開闊空地，要寬敞乾淨。</li>
+</ol></div>
+<div class="quiz" data-quiz="11"></div>
+</article>
+
+<!-- ============ L12 ============ -->
+<article class="view lesson" id="L12" data-id="12" data-stage="3" data-title="形煞：看得見的壓力">
+<header class="lh"><div class="stag">第三階段｜形勢：用眼睛看環境</div><div class="lnum">第 12 課</div><h1>形煞：看得見的壓力</h1></header>
+<div class="goal"><b>本課目標</b>認識十種常見的形煞，知道每一種的傳統說法、合理原因，以及怎麼處理。</div>
+
+<div class="box origin"><div class="bt">「煞」是什麼意思？</div><p>「煞」本來是「凶神、殺氣」的意思，和「殺」同源。第 2 課學過「煞氣」：讓人不安全、不舒服的氣。<b>看得見的</b>環境形狀造成的煞，就叫「<b>形煞</b>」。</p></div>
+<p>學形煞時，請一直用三個問題檢查：<span class="tag y">傳統怎麼說</span><span class="tag g">合理的原因是什麼</span><span class="tag b">實際上怎麼處理</span>。點開每一張卡片看看：</p>
+
+<details class="fs"><summary><svg class="ico" viewBox="0 0 54 54"><rect x="17" y="6" width="20" height="20" class="fb"/><path d="M27 30v20" class="r"/><path d="M21 36l6-6 6 6" class="r"/><path d="M4 50h46"/></svg>路沖</summary><div class="dc">
+<p><span class="tag y">傳統</span>一條馬路直直衝向大門，像一把箭射過來，叫「路沖」，被視為最嚴重的煞之一。</p>
+<p><span class="tag g">原因</span>車子直直開過來，若煞車不及就會撞進屋子；晚上車燈也一直照進屋內，又吵又亮。</p>
+<p><span class="tag b">處理</span>門前設矮牆、花台、樹叢緩衝；窗戶裝厚窗簾；盡量不要選路沖的房子，尤其有小孩的家庭。</p></div></details>
+
+<details class="fs"><summary><svg class="ico" viewBox="0 0 54 54"><path d="M8 6 Q48 27 8 48" class="r"/><rect x="36" y="20" width="14" height="14" class="fb"/></svg>反弓煞</summary><div class="dc">
+<p><span class="tag y">傳統</span>河流或道路的彎曲外側對著房子，像一把弓對準你，叫「反弓」。</p>
+<p><span class="tag g">原因</span>上一課學過：河流外側會被侵蝕；車子轉彎會往外側甩出去。</p>
+<p><span class="tag b">處理</span>面向彎道的一側加設堅固的圍牆或護欄，種植植物；買房時盡量選彎道內側。</p></div></details>
+
+<details class="fs"><summary><svg class="ico" viewBox="0 0 54 54"><rect x="4" y="10" width="18" height="40" class="fb"/><rect x="32" y="10" width="18" height="40" class="fb"/><path d="M27 4v26" class="r"/><path d="M22 24l5 6 5-6" class="r"/></svg>天斬煞</summary><div class="dc">
+<p><span class="tag y">傳統</span>兩棟高樓中間只隔一條很窄的縫，像天上一把刀劈下來，叫「天斬煞」。</p>
+<p><span class="tag g">原因</span>物理學的「<b>狹管效應</b>」：風被擠進窄縫會突然變強，形成強烈的「大樓風」，颱風天特別危險，也會把灰塵噪音吹過來。</p>
+<p><span class="tag b">處理</span>面對窄縫的窗戶加強防風、裝氣密窗；陽台不要放容易被吹落的東西。</p></div></details>
+
+<details class="fs"><summary><svg class="ico" viewBox="0 0 54 54"><rect x="30" y="8" width="20" height="38" class="fb"/><path d="M4 30h20" class="r"/><path d="M28 30l-8-5v10z" class="fr"/></svg>壁刀煞</summary><div class="dc">
+<p><span class="tag y">傳統</span>隔壁大樓的牆面邊緣，像刀刃一樣正對著你的窗戶或大門。</p>
+<p><span class="tag g">原因</span>尖銳的直線會讓人產生被「切」的壓迫感；大樓的轉角也常有強風。</p>
+<p><span class="tag b">處理</span>用窗簾、百葉窗或植物遮住視線，讓每天看到的是比較柔和的景色。</p></div></details>
+
+<details class="fs"><summary><svg class="ico" viewBox="0 0 54 54"><path d="M6 10l26 17-26 17" class="r"/><rect x="38" y="16" width="12" height="22" class="fb"/></svg>尖角煞</summary><div class="dc">
+<p><span class="tag y">傳統</span>屋頂的尖角、招牌的角、室內柱子的稜角對著人常坐的位置。</p>
+<p><span class="tag g">原因</span>尖角讓人下意識覺得危險；室內的桌角、櫃角真的會撞傷人，特別是小孩。</p>
+<p><span class="tag b">處理</span>室內家具選圓角或加防撞條；柱角可以用植物、層架修飾；座位避開尖角正對。</p></div></details>
+
+<details class="fs"><summary><svg class="ico" viewBox="0 0 54 54"><rect x="6" y="6" width="42" height="42" class="fb"/><path d="M27 48V6" class="r"/><path d="M22 12l5-6 5 6" class="r"/></svg>穿堂煞</summary><div class="dc">
+<p><span class="tag y">傳統</span>一打開大門就直接看到對面的落地窗或後門，前後一直線，叫「穿堂煞」，說氣會「直進直出」留不住。</p>
+<p><span class="tag g">原因</span>強風會直接穿過整個屋子；外面的人也能一眼看穿屋內，缺少隱私。第 2 課說過：氣最好緩緩流動。</p>
+<p><span class="tag b">處理</span>玄關放屏風、鞋櫃或植物擋一下，讓動線轉個彎；窗戶加窗簾。</p></div></details>
+
+<details class="fs"><summary><svg class="ico" viewBox="0 0 54 54"><rect x="4" y="8" width="46" height="8" class="fr"/><rect x="10" y="32" width="34" height="14" class="fb"/><path d="M27 18v12" class="r"/></svg>樑壓</summary><div class="dc">
+<p><span class="tag y">傳統</span>床、沙發、書桌的正上方有大樑橫過，叫「樑壓」，說會讓人運氣受壓。</p>
+<p><span class="tag g">原因</span>躺在床上看到頭頂一根粗樑，心理上會有壓迫感，不容易放鬆入睡；地震時也讓人不安。</p>
+<p><span class="tag b">處理</span>移動床或書桌避開大樑；無法移動時用天花板把樑包平。</p></div></details>
+
+<details class="fs"><summary><svg class="ico" viewBox="0 0 54 54"><rect x="4" y="34" width="14" height="16"/><path d="M18 34l6-8" /><circle cx="42" cy="40" r="7" class="fr"/><path d="M22 42h12" class="r"/></svg>開門見灶</summary><div class="dc">
+<p><span class="tag y">傳統</span>一進大門就看到瓦斯爐，說家中財運和健康會受影響。</p>
+<p><span class="tag g">原因</span>大門開關時的風會吹動爐火，古代柴火更容易引起火災；爐子的油煙也直接飄向玄關和客廳。</p>
+<p><span class="tag b">處理</span>加設廚房門或拉門；爐子前加隔屏；保持抽油煙機運作。</p></div></details>
+
+<details class="fs"><summary><svg class="ico" viewBox="0 0 54 54"><rect x="4" y="26" width="24" height="22" class="fb"/><rect x="40" y="10" width="10" height="30" class="fr"/><path d="M38 24L30 32" class="r"/></svg>鏡對床</summary><div class="dc">
+<p><span class="tag y">傳統</span>鏡子正對著床，說會影響睡眠、夫妻感情。</p>
+<p><span class="tag g">原因</span>半夜醒來，在昏暗中看到鏡子裡有個移動的影子（其實是自己），很容易被嚇到；鏡子也會反射窗外燈光。</p>
+<p><span class="tag b">處理</span>把鏡子移到衣櫃門內側，或睡前用布簾蓋起來。</p></div></details>
+
+<details class="fs"><summary><svg class="ico" viewBox="0 0 54 54"><path d="M6 6h28v14h14v28H6z" class="fb"/><path d="M34 6h14v14H34z" class="r" stroke-dasharray="3 3"/></svg>缺角</summary><div class="dc">
+<p><span class="tag y">傳統</span>房子的平面不是完整的方形，少了一角，說對應方位代表的家人（第 6 課八卦的家人）會受影響。</p>
+<p><span class="tag g">原因</span>方正的格局最好利用空間、好擺家具、採光通風平均；不規則的角落常變成浪費的死角。</p>
+<p><span class="tag b">處理</span>把缺角的區域好好利用（例如放書櫃、植物），不必過度擔心；買房時優先選方正格局。</p></div></details>
+
+<h2>傳統的化煞物品</h2>
+<p>古人遇到形煞，常用一些象徵物品來「化解」。這些屬於第 1 課說的<b>第二層：文化象徵</b>，認識它們，走在老街上就能看懂。</p>
+<div class="grid2">
+<div class="card"><h4>石敢當</h4><p>刻著「石敢當」或「泰山石敢當」的石碑，立在路沖的牆角。「石」代表堅固，「敢當」就是「敢擋得住」。最早見於漢朝《急就章》，是很古老的民俗。</p></div>
+<div class="card"><h4>八卦鏡</h4><p>中間一面鏡子、周圍畫八卦，掛在門楣上，傳說能把煞氣反射回去。要注意：對著鄰居掛，常引起鄰居不愉快。</p></div>
+<div class="card"><h4>山海鎮</h4><p>畫著山、海、日月的木牌，意思是「把山海的力量搬來鎮守」。</p></div>
+</div>
+<div class="box warn"><div class="bt">先解決真正的問題</div><p>掛一面鏡子並不會讓衝過來的車子停下來。<b>真正有效的化解，是處理背後的合理原因</b>：擋車就用矮牆，擋風就用氣密窗，擋視線就用窗簾。這才是專業的做法。</p></div>
+
+<div class="recap"><b>本課重點</b><ol>
+<li>形煞 = 看得見的環境形狀造成的不安全或不舒服。</li>
+<li>每個形煞都要問：傳統說法、合理原因、實際處理。</li>
+<li>天斬煞是狹管效應；穿堂煞是強風直穿、缺少隱私；鏡對床是半夜被自己嚇到。</li>
+<li>石敢當、八卦鏡、山海鎮是文化象徵；真正的化解要處理背後的原因。</li>
+</ol></div>
+<div class="quiz" data-quiz="12"></div>
+</article>
+
+<!-- ============ L13 ============ -->
+<article class="view lesson" id="L13" data-id="13" data-stage="4" data-title="八宅法：人和房子配不配">
+<header class="lh"><div class="stag">第四階段｜理氣：用公式算方位</div><div class="lnum">第 13 課</div><h1>八宅法：人和房子配不配</h1></header>
+<div class="goal"><b>本課目標</b>會算自己的「命卦」，知道自己屬於東四命還是西四命，並找出家裡的四個吉方。</div>
+
+<p>第三階段用眼睛看，第四階段開始用<b>公式</b>算。理氣派有很多方法，最容易入門的就是「<b>八宅法</b>」。它用到的工具你都學過了：第 6 課的<b>後天八卦</b>和第 7 課的<b>洛書九宮</b>。</p>
+<div class="box origin"><div class="bt">「八宅」的由來</div><p>八宅法把房子依照坐向分成 <b>8 種</b>（對應八卦），所以叫「八宅」。清朝流行的《<b>八宅明鏡</b>》把這套方法整理得很完整，一直流傳到今天，是民間最普遍的風水方法。</p></div>
+
+<h2>第一步：算出你的命卦</h2>
+<p>「<b>命卦</b>」是根據出生年份和性別，算出你屬於八卦裡的哪一卦。公式只要加減和除法：</p>
+<div class="tw"><table class="t">
+<tr><th></th><th>1900–1999 年出生</th><th>2000 年以後出生</th></tr>
+<tr><td><b>男</b></td><td>(100 − 年份後兩位) ÷ 9 的餘數</td><td>(99 − 年份後兩位) ÷ 9 的餘數</td></tr>
+<tr><td><b>女</b></td><td>(年份後兩位 + 5) ÷ 9 的餘數</td><td>(年份後兩位 + 6) ÷ 9 的餘數</td></tr>
+</table></div>
+<p>得到的數字對照洛書：<b>1 坎、2 坤、3 震、4 巽、6 乾、7 兌、8 艮、9 離</b>。餘數是 0 就當作 9。</p>
+<div class="box warn"><div class="bt">兩個特別規則</div><p>① 算出 <b>5</b> 怎麼辦？5 在中宮，沒有卦，所以規定：<b>男生改成 2 坤、女生改成 8 艮</b>。<br>② 第 8 課說過，風水以<b>立春</b>（約 2 月 4 日）為一年的開始。1 月或 2 月初出生的人，要用<b>前一年</b>來算。</p></div>
+<div class="box example"><div class="bt">算一次看看</div><p>2012 年 5 月出生的男生：99 − 12 = 87，87 ÷ 9 = 9 餘 <b>6</b>，所以命卦是 6 <b>乾</b>。<br>同一年出生的女生：12 + 6 = 18，18 ÷ 9 = 2 餘 <b>0</b>，當作 9，命卦是 9 <b>離</b>。</p></div>
+
+<div class="widget"><div class="wt">動手做：算出你的命卦和吉凶方位（上南下北）</div>
+<div class="row"><input type="number" id="bzYear" value="2012" min="1900" max="2099" style="width:110px" aria-label="出生年份"><button class="btn on" data-g="m">男</button><button class="btn" data-g="f">女</button></div>
+<div class="row"><label class="chk"><input type="checkbox" id="bzEarly"> 生日在立春（2 月 4 日）之前</label><button class="btn primary" id="bzBtn">計算</button></div>
+<p class="rel" id="bzOut"></p>
+<svg id="bzSvg" class="svgbox" viewBox="0 0 340 340"></svg></div>
+
+<h2>第二步：東四命和西四命</h2>
+<p>八個卦分成兩組，同一組的人和房子最合：</p>
+<div class="grid2">
+<div class="card" style="border-top:4px solid var(--wood)"><h4>東四命</h4><p><b>坎（北）、離（南）、震（東）、巽（東南）</b><br>五行是水、火、木、木，互相生來生去。</p></div>
+<div class="card" style="border-top:4px solid var(--metal)"><h4>西四命</h4><p><b>乾（西北）、坤（西南）、艮（東北）、兌（西）</b><br>五行是金、土、土、金，也是一家人。</p></div>
+</div>
+<p>房子也有「宅卦」，看<b>坐</b>的方位：坐北就是坎宅、坐南是離宅、坐東是震宅、坐東南是巽宅（東四宅）；坐西北是乾宅、坐西南是坤宅、坐東北是艮宅、坐西是兌宅（西四宅）。東四命的人住東四宅，西四命的人住西四宅，叫做「<b>命宅相配</b>」。</p>
+
+<h2>第三步：四吉四凶</h2>
+<p>八宅法把 8 個方位分成 4 吉 4 凶，每個都配上北斗九星的名字：</p>
+<div class="tw"><table class="t">
+<tr><th>名稱</th><th>九星</th><th>意思</th><th>適合放</th></tr>
+<tr><td><span class="tag g">大吉</span><b>生氣</b></td><td>貪狼</td><td>生氣勃勃，最旺的方位</td><td>大門、書桌、主臥</td></tr>
+<tr><td><span class="tag g">吉</span><b>天醫</b></td><td>巨門</td><td>像天上的醫生，主健康</td><td>臥室、餐廳</td></tr>
+<tr><td><span class="tag g">吉</span><b>延年</b></td><td>武曲</td><td>延長壽命，主人緣和感情</td><td>臥室、客廳</td></tr>
+<tr><td><span class="tag g">小吉</span><b>伏位</b></td><td>輔弼</td><td>「伏」是安穩趴著，主平穩</td><td>床頭、書桌</td></tr>
+<tr><td><span class="tag r">小凶</span><b>禍害</b></td><td>祿存</td><td>小麻煩、口角</td><td>廁所、儲藏室</td></tr>
+<tr><td><span class="tag r">凶</span><b>六煞</b></td><td>文曲</td><td>感情、是非的困擾</td><td>廁所、儲藏室</td></tr>
+<tr><td><span class="tag r">凶</span><b>五鬼</b></td><td>廉貞</td><td>意外、火災、小人</td><td>廁所、廚房</td></tr>
+<tr><td><span class="tag r">大凶</span><b>絕命</b></td><td>破軍</td><td>最不好的方位</td><td>廁所、儲藏室</td></tr>
+</table></div>
+<div class="box origin"><div class="bt">九星是什麼星？</div><p>貪狼、巨門、祿存、文曲、廉貞、武曲、破軍，就是天上的<b>北斗七星</b>，再加上旁邊兩顆看不清楚的輔星、弼星，合稱「九星」。古人相信北斗星掌管人間的命運。下一課還會再見到九星。</p></div>
+<div class="box think"><div class="bt">凶位不是壞事</div><p>家裡本來就需要廁所、儲藏室。八宅法的精神是「<b>以凶壓凶</b>」：把不需要久待的空間放在凶位，把常待的地方放在吉位。這跟「好的位置留給最重要的事」的生活常識一致。</p></div>
+<div class="box warn"><div class="bt">一家人命卦不同怎麼辦？</div><p>很常見！通常以<b>負責家計的人</b>為主決定大方向，再讓每個人的<b>床頭、書桌</b>朝向自己的吉方。八宅法也有批評：它只看出生年，不考慮時間變化，所以專業風水師會搭配第 15、16 課的<b>飛星</b>一起看。</p></div>
+
+<div class="recap"><b>本課重點</b><ol>
+<li>八宅法出自《八宅明鏡》，把房子依坐向分成 8 種。</li>
+<li>命卦用出生年和性別算；算出 5 時男改 2 坤、女改 8 艮；立春前出生用前一年。</li>
+<li>東四命：坎離震巽；西四命：乾坤艮兌。</li>
+<li>四吉：生氣、天醫、延年、伏位；四凶：禍害、六煞、五鬼、絕命。</li>
+<li>常待的地方放吉位，廁所儲藏室放凶位。</li>
+</ol></div>
+<div class="quiz" data-quiz="13"></div>
+</article>
+
+<!-- ============ L14 ============ -->
+<article class="view lesson" id="L14" data-id="14" data-stage="4" data-title="三元九運與九星">
+<header class="lh"><div class="stag">第四階段｜理氣：用公式算方位</div><div class="lnum">第 14 課</div><h1>三元九運與九星</h1></header>
+<div class="goal"><b>本課目標</b>了解風水的「時間觀」：每 20 年換一個運，並認識九顆星的個性。</div>
+
+<p>八宅法只看<b>空間</b>，但古人發現，同一間房子，有時候住得很順，過了二十年卻不順了。所以理氣派加入了<b>時間</b>：好壞會隨著時間輪流轉換。這就是「玄空」的核心想法。</p>
+<div class="box origin"><div class="bt">「玄空」兩個字</div><p>「玄」是深奧、看不見的時間；「空」是空間。玄空學就是研究「<b>時間 × 空間</b>」怎麼一起影響房子的學問。它的主要工具叫「<b>飛星</b>」，下兩課會教。</p></div>
+
+<h2>什麼是三元九運？</h2>
+<p>玄空學把 <b>180 年</b>當作一個大循環，分成三「元」，每元 60 年（正好是第 8 課的一輪六十甲子）；每元又分三「運」，每運 <b>20 年</b>，總共九運：</p>
+<div class="widget"><div class="wt">時間軸：現在是第幾運？</div>
+<div class="yunbar" id="yunBar"></div>
+<div class="yungrp"><span>上元</span><span>中元</span><span>下元</span></div>
+<p class="rel" id="yunOut"></p></div>
+<div class="box origin"><div class="bt">為什麼是 20 年？</div><p>一個常見的說法是：天上的<b>木星和土星</b>大約每 20 年在天空中「會合」一次，而三次會合大約是 60 年。古人觀察天象，就用 20 年作為一運。這是傳統的解釋，天文上也確實有這個週期。</p></div>
+<p>公式：一運從 1864 年開始，每 20 年換一次。所以 <b>2024 到 2043 年是「九運」</b>，也是這一輪大循環的最後一運。</p>
+
+<h2>九星：九個數字的個性</h2>
+<p>還記得洛書的 1 到 9 嗎？玄空學給每個數字一個顏色和星名（就是上一課的北斗九星），叫做「<b>紫白九星</b>」。名字裡的白、黑、碧、綠、黃、赤、紫就是它的顏色：</p>
+<div class="tw"><table class="t">
+<tr><th>數字</th><th>名稱</th><th>五行</th><th>傳統意義</th><th>在九運的狀態</th></tr>
+<tr><td><span class="star good">1</span></td><td>一白貪狼</td><td>水</td><td>桃花、人緣、智慧</td><td><span class="tag g">生氣</span>接下來會旺</td></tr>
+<tr><td><span class="star bad">2</span></td><td>二黑巨門</td><td>土</td><td>病符，主疾病</td><td><span class="tag y">生氣</span>接下來會旺，但本性帶病</td></tr>
+<tr><td><span class="star bad">3</span></td><td>三碧祿存</td><td>木</td><td>是非、爭吵</td><td><span class="tag r">衰死</span></td></tr>
+<tr><td><span class="star good">4</span></td><td>四綠文曲</td><td>木</td><td>文昌，主讀書考試</td><td><span class="tag r">衰死</span>仍常用來催讀書</td></tr>
+<tr><td><span class="star bad">5</span></td><td>五黃廉貞</td><td>土</td><td>最凶的星，意外災禍</td><td><span class="tag r">大凶</span>任何運都要小心</td></tr>
+<tr><td><span class="star good">6</span></td><td>六白武曲</td><td>金</td><td>權力、事業</td><td><span class="tag r">衰氣</span></td></tr>
+<tr><td><span class="star bad">7</span></td><td>七赤破軍</td><td>金</td><td>口舌、破財</td><td><span class="tag r">衰氣</span></td></tr>
+<tr><td><span class="star good">8</span></td><td>八白左輔</td><td>土</td><td>財富、置產</td><td><span class="tag y">退氣</span>剛卸任，力量還在</td></tr>
+<tr><td><span class="star good">9</span></td><td>九紫右弼</td><td>火</td><td>喜慶、名聲</td><td><span class="tag g">當旺</span>現在最旺</td></tr>
+</table></div>
+<div class="box example"><div class="bt">輪流當班長</div><p>九運就像九個同學<b>輪流當班長</b>：輪到誰當班長（<b>當旺</b>），誰的力量就最大；下一個要當的（<b>生氣</b>）正在準備，也很有力；剛卸任的（<b>退氣</b>）力量慢慢變弱；卸任很久的就變成<b>衰死</b>。現在是九運，所以 <b>9 最旺</b>，1 和 2 是接下來的生氣，8 剛退下來。</p></div>
+
+<h2>九星怎麼「飛」？</h2>
+<p>九星不是固定不動的，它們會依照洛書的數字順序，在九宮之間「<b>飛</b>」來飛去，所以叫「<b>飛星</b>」。飛的路線就是洛書從 1 到 9 的順序。看看這條軌跡：</p>
+<div class="widget"><div class="wt">動畫：洛書的飛行路線（上南下北）</div>
+<svg id="pathSvg" class="svgbox" viewBox="0 0 300 300" style="max-width:320px"></svg>
+<div class="row c"><button class="btn primary" id="pathPlay">▶ 再播一次</button></div>
+<p class="cap center" id="pathCap">從中宮出發，依序飛到每一宮。</p></div>
+<p>把數字換成宮位，飛行順序就是：<b>中 → 西北 → 西 → 東北 → 南 → 北 → 西南 → 東 → 東南</b>。這條路線請記熟，下一課就要用它來排飛星。</p>
+<div class="box think"><div class="bt">怎麼背這條路線？</div><p>這條路線叫「<b>洛書軌跡</b>」。也可以背卦名口訣：<b>「中、乾、兌、艮、離、坎、坤、震、巽」</b>，就是後天八卦依洛書數字 5、6、7、8、9、1、2、3、4 排列。</p></div>
+
+<div class="recap"><b>本課重點</b><ol>
+<li>玄空學 = 時間 × 空間，好壞會輪流轉換。</li>
+<li>三元九運：180 年大循環，每運 20 年，2024–2043 是九運。</li>
+<li>九星：1 白、2 黑、3 碧、4 綠、5 黃、6 白、7 赤、8 白、9 紫。</li>
+<li>當運的星最旺（九運是 9），將來的星是生氣，過去的星是退氣或衰死。</li>
+<li>飛行順序：中 → 西北 → 西 → 東北 → 南 → 北 → 西南 → 東 → 東南。</li>
+</ol></div>
+<div class="quiz" data-quiz="14"></div>
+</article>
+
+<!-- ============ L15 ============ -->
+<article class="view lesson" id="L15" data-id="15" data-stage="4" data-title="流年飛星：每一年的變化">
+<header class="lh"><div class="stag">第四階段｜理氣：用公式算方位</div><div class="lnum">第 15 課</div><h1>流年飛星：每一年的變化</h1></header>
+<div class="goal"><b>本課目標</b>會排出任何一年的「流年飛星圖」，並找出當年的五黃、二黑位置。</div>
+
+<p>上一課九星每 20 年換一次班長。其實九星每一<b>年</b>也會換一次位置，叫做「<b>流年飛星</b>」。「流年」就是「流動的年份」，一年換一次，像水一樣流過去。</p>
+
+<h2>第一步：找出今年誰「入中」</h2>
+<p>每一年都有一顆星飛進中宮，叫做「<b>入中</b>」。規則很簡單：<b>每過一年，入中的數字就減 1</b>，減到 1 之後回到 9。</p>
+<div class="tw"><table class="t" style="min-width:420px">
+<tr><th>年份</th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>2028</th></tr>
+<tr><td>入中星</td><td>3 三碧</td><td>2 二黑</td><td><b>1 一白</b></td><td>9 九紫</td><td>8 八白</td></tr>
+</table></div>
+<div class="box origin"><div class="bt">為什麼是倒著數？</div><p>這是古代曆法定下的規則，傳統稱年星「<b>逆行</b>」：每過一年退一格，九年一輪，和第 8 課的干支一樣是循環計數。流年也從<b>立春</b>開始算。</p></div>
+
+<h2>第二步：順著路線飛</h2>
+<p>決定了入中的數字，就沿著上一課的路線<b>一格一格加 1</b>：中 → 西北 → 西 → 東北 → 南 → 北 → 西南 → 東 → 東南。超過 9 就回到 1。</p>
+<div class="box example"><div class="bt">2026 年怎麼排</div><p>一白入中：中 1、西北 2、西 3、東北 4、南 <b>5</b>、北 6、西南 7、東 8、東南 9。<br>所以 2026 年的五黃在<b>南方</b>、二黑在<b>西北</b>。</p></div>
+
+<div class="widget"><div class="wt">動手做：排出任何一年的流年飛星（上南下北）</div>
+<div class="row"><input type="number" id="fyYear" value="2026" min="1900" max="2200" style="width:110px" aria-label="年份"><button class="btn primary" id="fyBtn">排飛星</button></div>
+<div class="dirlab"><span>東南</span><span>南</span><span>西南</span></div>
+<div class="grid9" id="fyGrid"></div>
+<div class="dirlab"><span>東北</span><span>北</span><span>西北</span></div>
+<p class="rel" id="fyOut"></p></div>
+
+<h2>怎麼使用流年飛星？</h2>
+<div class="grid2">
+<div class="card" style="border-top:4px solid var(--red)"><h4>五黃位：避免大動土</h4><p>五黃是最凶的星。傳統建議那一年<b>不要在五黃方位大裝修、敲牆</b>，保持安靜。</p></div>
+<div class="card" style="border-top:4px solid var(--red)"><h4>二黑位：注意健康</h4><p>二黑是「病符星」，傳統說那個方位的房間要特別注意通風、清潔。</p></div>
+<div class="card" style="border-top:4px solid var(--jade)"><h4>四綠位：讀書</h4><p>四綠是「文昌星」，學生可以把書桌放在當年四綠飛到的方位。</p></div>
+<div class="card" style="border-top:4px solid var(--jade)"><h4>吉星與凶星</h4><p>一般把 1、4、6、8、9 看作吉星，2、3、5、7 看作凶星（還要配合當運判斷）。</p></div>
+</div>
+<div class="box think"><div class="bt">理性看待</div><p>「五黃年不能動土」的合理解讀是：<b>裝修本來就有噪音、粉塵和工安風險</b>，分區、分時間進行比較安全。流年飛星可以當成「年度提醒表」，不必因此恐慌。</p></div>
+<div class="box warn"><div class="bt">還有流月飛星</div><p>專業的風水師還會排「流月」，每個月也有一顆星入中。原理完全一樣，只是換得更快。本課程學會流年就夠了。</p></div>
+
+<div class="recap"><b>本課重點</b><ol>
+<li>流年飛星：九星每年換一次位置，從立春開始算。</li>
+<li>入中星每年減 1：2024 三碧、2025 二黑、2026 一白、2027 九紫。</li>
+<li>入中後依洛書路線順飛，每格加 1。</li>
+<li>2026 年五黃在南、二黑在西北。</li>
+</ol></div>
+<div class="quiz" data-quiz="15"></div>
+</article>
+
+<!-- ============ L16 ============ -->
+<article class="view lesson" id="L16" data-id="16" data-stage="4" data-title="宅運盤：玄空飛星的核心">
+<header class="lh"><div class="stag">第四階段｜理氣：用公式算方位</div><div class="lnum">第 16 課</div><h1>宅運盤：玄空飛星的核心</h1></header>
+<div class="goal"><b>本課目標</b>了解專業風水師怎麼排「宅運盤」，並能判斷四種基本格局。這是整套課程最難的一課，慢慢來。</div>
+
+<p>上一課的流年飛星是每一年<b>所有房子都一樣</b>。但每間房子的<b>坐向</b>和<b>蓋好的時間</b>不同，所以還有一張專屬於這間房子的圖，叫做「<b>宅運盤</b>」（也叫玄空飛星盤）。它由三層數字組成：</p>
+<div class="grid2">
+<div class="card"><h4>運星（中間大字）</h4><p>房子<b>蓋好或入住</b>的那一運，入中順飛。例如 2024 年後蓋好的是九運屋，9 入中。</p></div>
+<div class="card"><h4>山星（左上）</h4><p>從<b>坐</b>方來的星，主<b>人丁、健康</b>。第 11 課：山管人丁。</p></div>
+<div class="card"><h4>向星（右上）</h4><p>從<b>向</b>方來的星，主<b>財運</b>。第 11 課：水管財。</p></div>
+</div>
+
+<h2>排盤三步驟</h2>
+<p><b>第一步：排運盤。</b>把房子的「運」放進中宮，照第 15 課的方法順飛。</p>
+<p><b>第二步：排山星。</b>看<b>坐方</b>那一宮的運星數字，把它放進中宮當山星，再飛一次。<br><b>第三步：排向星。</b>看<b>向方</b>那一宮的運星數字，放進中宮當向星，再飛一次。</p>
+<p>難的地方在於：山星和向星有時<b>順飛（+1）</b>，有時<b>逆飛（−1）</b>。怎麼決定？要用第 8 課的<b>二十四山</b>。</p>
+
+<div class="box origin"><div class="bt">三元龍與陰陽</div><p>每一個宮有三座山，依順時鐘分別叫<b>地元龍、天元龍、人元龍</b>（例如北方：壬是地元、子是天元、癸是人元）。每座山有陰陽：</p>
+<p>四正宮（北、南、東、西）：地元<b>陽</b>、天元陰、人元陰。<br>四隅宮（東北、東南、西南、西北）：地元陰、天元<b>陽</b>、人元<b>陽</b>。</p>
+<p>判斷方法：假設坐方運星是 4，就到洛書 4 原本的家（東南巽宮），找和你坐山<b>同一元龍</b>的那座山。那座山是陽就<b>順飛</b>，是陰就<b>逆飛</b>。如果數字是 5（沒有家），就用坐山本身的陰陽。</p></div>
+<p>聽起來很複雜？沒關係，下面的工具會一步一步幫你算，並告訴你每一步的理由。</p>
+
+<div class="widget"><div class="wt">專業工具：排出宅運盤（上南下北）</div>
+<div class="row"><span>建成時期</span><select id="zpYun"><option value="7">七運（1984–2003）</option><option value="8">八運（2004–2023）</option><option value="9" selected>九運（2024–2043）</option><option value="1">一運（2044–2063）</option></select></div>
+<div class="row"><span>坐山</span><select id="zpMtn"></select></div>
+<div class="dirlab"><span>東南</span><span>南</span><span>西南</span></div>
+<div class="grid9 zp" id="zpGrid"></div>
+<div class="dirlab"><span>東北</span><span>北</span><span>西北</span></div>
+<p class="center muted" style="font-size:14px;margin:4px 0">左上＝山星　中＝運星　右上＝向星　紅字＝當運旺星</p>
+<div class="rel" id="zpOut"></div></div>
+
+<h2>四種基本格局</h2>
+<p>排好盤之後，專業風水師第一眼會看：<b>當運的旺星</b>（九運就是 9）落在哪裡？</p>
+<div class="tw"><table class="t">
+<tr><th>格局</th><th>條件</th><th>傳統判斷</th></tr>
+<tr><td><span class="tag g">最佳</span><b>旺山旺向</b></td><td>旺的山星在坐方，旺的向星在向方</td><td>人丁和財運都好：山星要靠山（坐方有實牆高樓），向星要見水（向方開闊）</td></tr>
+<tr><td><span class="tag r">最差</span><b>上山下水</b></td><td>旺的山星跑到向方，旺的向星跑到坐方</td><td>「山星下了水、向星上了山」，都放錯地方</td></tr>
+<tr><td><span class="tag y">中等</span><b>雙星到向</b></td><td>兩顆旺星都在向方</td><td>旺財；向方要開闊，最好遠處還有高樓當靠</td></tr>
+<tr><td><span class="tag y">中等</span><b>雙星到坐</b></td><td>兩顆旺星都在坐方</td><td>旺丁；坐方要有靠，最好還有空地或水</td></tr>
+</table></div>
+<div class="box example"><div class="bt">用工具驗證</div><p>選「八運」＋「子山午向」，會得到<b>雙星到向</b>；改成「九運」，同一個坐向就變成<b>雙星到坐</b>。你看，<b>同樣的房子，換一個運，格局就不一樣了</b>，這就是玄空「時間 × 空間」的精神。</p></div>
+<div class="box think"><div class="bt">形勢配理氣</div><p>注意表格裡的「要靠山、要見水」：理氣算出來的結果，最後還是要回到<b>第三階段的形勢</b>去檢查。只看公式、不看環境，是初學者最常犯的錯。這叫「<b>巒頭為體，理氣為用</b>」，第 19 課會再說明。</p></div>
+<div class="box warn"><div class="bt">專業還有更多細節</div><p>真正的玄空學還包括：坐向接近兩座山交界時用的「<b>替卦</b>」和「<b>兼向</b>」、山星向星組合的吉凶斷法、城門訣等。本課只教最核心的「正向下卦」排法。</p></div>
+
+<div class="recap"><b>本課重點</b><ol>
+<li>宅運盤三層：運星（中）、山星（主人丁）、向星（主財）。</li>
+<li>運盤入中順飛；山星取坐方運星、向星取向方運星入中。</li>
+<li>順飛或逆飛由三元龍的陰陽決定；5 用坐山（或向山）本身的陰陽。</li>
+<li>四格局：旺山旺向、上山下水、雙星到向、雙星到坐。</li>
+<li>巒頭為體，理氣為用：算完一定要回頭看環境。</li>
+</ol></div>
+<div class="quiz" data-quiz="16"></div>
+</article>
+
+<!-- ============ L17 ============ -->
+<article class="view lesson" id="L17" data-id="17" data-stage="5" data-title="住宅各空間的重點">
+<header class="lh"><div class="stag">第五階段｜實務：生活中的應用</div><div class="lnum">第 17 課</div><h1>住宅各空間的重點</h1></header>
+<div class="goal"><b>本課目標</b>把前面學的四靈、形煞、陰陽、五行，用到家裡的每一個空間。</div>
+
+<p>前面四個階段是「理論」，從這一課開始是「應用」。你會發現：<b>很多規則其實都是同一個道理</b>，就是第 10 課的太師椅：背後有靠、前面開闊、看得到門、不被沖到。點開每個空間看看：</p>
+
+<details class="fs" open><summary><span class="seal" style="background:var(--red)">門</span>大門與玄關</summary><div class="dc">
+<p>大門是「<b>氣口</b>」：氣和人都從這裡進出，古人說「宅之吉凶全在大門」。</p>
+<p><span class="tag g">宜</span>門前明亮乾淨（室外明堂）；進門有玄關緩衝（室內明堂）；鞋子收進鞋櫃。</p>
+<p><span class="tag r">忌</span>路沖（第 12 課）；一進門就看到後窗（穿堂煞）；門口堆雜物、燈光昏暗。</p>
+<p><span class="tag b">道理</span>第一眼的印象決定心情；玄關緩衝也增加隱私和安全。</p></div></details>
+
+<details class="fs"><summary><span class="seal" style="background:var(--gold)">廳</span>客廳</summary><div class="dc">
+<p>客廳是全家的<b>動區（陽）</b>，要明亮、寬敞，最好靠近大門。</p>
+<p><span class="tag g">宜</span>沙發<b>背後靠實牆</b>（玄武），前面有茶几（案山），再前面開闊（明堂）；坐在沙發上看得到大門。</p>
+<p><span class="tag r">忌</span>沙發背對大門或走道，背後一直有人走動；頭頂有大樑。</p>
+<p><span class="tag b">道理</span>瞭望─庇護理論：背後有靠、看得見門，人才能放鬆。</p></div></details>
+
+<details class="fs"><summary><span class="seal" style="background:var(--blue)">臥</span>臥室</summary><div class="dc">
+<p>臥室是<b>靜區（陰）</b>，重點是睡得好。</p>
+<p><span class="tag g">宜</span>床頭靠實牆；躺著看得到房門但不正對房門；房間大小適中、光線柔和。</p>
+<p><span class="tag r">忌</span>床頭靠窗；樑壓床；鏡子對床；床正對房門（傳統說像「棺材頭」出門的方向）；床下堆滿雜物。</p>
+<p><span class="tag b">道理</span>頭靠窗容易吹風著涼、被光線吵醒；看得到門，半夜才有安全感。</p></div></details>
+
+<details class="fs"><summary><span class="seal" style="background:var(--fire)">灶</span>廚房</summary><div class="dc">
+<p>廚房是「火」的地方，和家人的健康最有關係。</p>
+<p><span class="tag g">宜</span>通風好、有對外窗；爐子背後靠牆；爐子和水槽之間隔一段檯面。</p>
+<p><span class="tag r">忌</span>開門見灶；爐子和水槽緊貼或正對（傳統叫「<b>水火相剋</b>」）；爐子在窗戶正下方。</p>
+<p><span class="tag b">道理</span>水火相剋其實是廚房安全：<b>水濺進熱油會噴油爆炸</b>；窗邊的風會吹熄火焰或吹動窗簾著火。</p></div></details>
+
+<details class="fs"><summary><span class="seal" style="background:var(--water)">廁</span>廁所與浴室</summary><div class="dc">
+<p>傳統把廁所放在<b>凶位</b>（第 13 課以凶壓凶）。</p>
+<p><span class="tag g">宜</span>有窗戶或抽風機；保持乾燥；門常關。</p>
+<p><span class="tag r">忌</span>廁所在房子正中央（<b>中宮</b>）；廁所門正對大門、廚房或床。</p>
+<p><span class="tag b">道理</span>中央的廁所通常沒有窗，濕氣和臭味會擴散到全家；正對床或餐桌也不衛生。</p></div></details>
+
+<details class="fs"><summary><span class="seal" style="background:var(--wood)">書</span>書桌</summary><div class="dc">
+<p>對國中生最重要的一個位置！</p>
+<p><span class="tag g">宜</span><b>背後靠牆</b>；桌子<b>斜對</b>房門，抬頭就看得到門；左右有書架；右撇子讓光線從<b>左邊</b>來。</p>
+<p><span class="tag r">忌</span>背對房門（有人進來會嚇一跳）；正對房門（一直分心）；面對窗戶正對強光。</p>
+<p><span class="tag b">道理</span>右撇子寫字時，光從左邊來，手就不會擋住光、把字遮成陰影。有趣的是，<b>左邊</b>正好是<b>青龍</b>方，傳統說青龍宜亮、宜有情，兩者剛好吻合。</p></div></details>
+
+<details class="fs"><summary><span class="seal" style="background:var(--metal)">陽</span>陽台與窗戶</summary><div class="dc">
+<p>陽台是房子「呼吸」的地方，也是現代公寓最常被當作「向」的一面。</p>
+<p><span class="tag g">宜</span>保持通風、植物適量；晾衣服不要擋住整片光線。</p>
+<p><span class="tag r">忌</span>堆滿雜物變成倉庫；對面正對形煞（壁刀、尖角）又沒有遮擋。</p>
+<p><span class="tag b">道理</span>通風採光是陽宅的基本；雜物堆積會發霉、招蟲。</p></div></details>
+
+<div class="box example"><div class="bt">整理一句話</div><p>臥室、書房、客廳的共同原則：<b>背後有靠、看得到門、不正對門、頭上沒有壓、光線柔和</b>。記住這一句，你就能看懂一大半的居家風水。</p></div>
+<div class="box think"><div class="bt">小空間怎麼辦？</div><p>學生宿舍或小套房，很多條件做不到。優先順序：<b>①安全（尖角、路沖、電線）→ ②睡眠（床的位置）→ ③讀書（書桌）→ ④其他</b>。先處理影響健康和安全的，其他的盡力就好。</p></div>
+
+<div class="recap"><b>本課重點</b><ol>
+<li>大門是氣口，玄關是室內明堂。</li>
+<li>沙發、床、書桌都要背後有靠、看得到門。</li>
+<li>水火相剋 = 廚房安全（水濺熱油）；廁所不宜在中宮。</li>
+<li>書桌斜對門、背靠牆；右撇子光從左來，呼應左青龍。</li>
+</ol></div>
+<div class="quiz" data-quiz="17"></div>
+</article>
+
+<!-- ============ L18 ============ -->
+<article class="view lesson" id="L18" data-id="18" data-stage="5" data-title="實戰：平面圖偵探">
+<header class="lh"><div class="stag">第五階段｜實務：生活中的應用</div><div class="lnum">第 18 課</div><h1>實戰：平面圖偵探</h1></header>
+<div class="goal"><b>本課目標</b>用學過的知識，在一張真實的平面圖上找出問題，並提出解決方法。</div>
+
+<p>看房子時，房仲會給你一張<b>平面圖</b>。專業的風水師第一步就是看平面圖。下面這間房子藏了 <b>6 個問題</b>，請你當偵探，點擊你覺得有問題的地方！</p>
+<div class="box warn"><div class="bt">看圖前先確認方向</div><p>一般平面圖是<b>上北下南</b>，和傳統風水圖（上南下北）相反！看圖第一件事，就是找到圖上的指北針。這張圖只看形勢，所以方向不影響答案。</p></div>
+
+<div class="widget"><div class="wt">找找看：這間房子有哪 6 個問題？</div>
+<svg id="dtSvg" class="svgbox" viewBox="0 0 360 330" style="max-width:480px">
+<g style="fill:none;stroke:var(--ink);stroke-width:4;stroke-linecap:square">
+<path d="M10 10H150M210 10H350V320H200M160 320H10V10"/>
+<path d="M150 10V100M150 130V160"/>
+<path d="M210 10V55M210 85V260M210 300V320"/>
+<path d="M10 160H150M210 160H350"/>
+</g>
+<rect x="150" y="6" width="60" height="8" fill="#bfe1f5" stroke="#7f9eb2"/>
+<rect x="160" y="316" width="40" height="8" style="fill:var(--red)"/>
+<text x="180" y="30" text-anchor="middle" style="fill:var(--muted);font-size:11px">落地窗</text>
+<text x="180" y="308" text-anchor="middle" style="fill:var(--red);font-size:12px;font-weight:700">大門</text>
+<text x="180" y="120" text-anchor="middle" style="fill:var(--muted);font-size:11px">走道</text>
+<text x="80" y="115" text-anchor="middle" style="fill:var(--muted);font-size:13px">臥室</text>
+<text x="255" y="140" text-anchor="middle" style="fill:var(--muted);font-size:13px">書房</text>
+<text x="60" y="300" text-anchor="middle" style="fill:var(--muted);font-size:13px">客廳</text>
+<text x="280" y="200" text-anchor="middle" style="fill:var(--muted);font-size:13px">廚房</text>
+<rect x="25" y="20" width="70" height="80" rx="4" style="fill:var(--card);stroke:var(--ink)" stroke-width="1.5"/>
+<rect x="30" y="24" width="60" height="16" rx="3" style="fill:var(--paper);stroke:var(--ink)"/>
+<line x1="12" y1="45" x2="148" y2="45" style="stroke:var(--muted)" stroke-width="5" stroke-dasharray="8 5" opacity=".6"/>
+<text x="120" y="40" style="fill:var(--muted);font-size:10px">大樑</text>
+<rect x="30" y="148" width="50" height="8" style="fill:#bfe1f5;stroke:#7f9eb2"/>
+<text x="55" y="142" text-anchor="middle" style="fill:var(--muted);font-size:10px">鏡子</text>
+<rect x="318" y="50" width="28" height="50" style="fill:var(--card);stroke:var(--ink)" stroke-width="1.5"/>
+<circle cx="305" cy="75" r="9" style="fill:var(--paper);stroke:var(--ink)" stroke-width="1.5"/>
+<text x="330" y="115" text-anchor="middle" style="fill:var(--muted);font-size:10px">書桌</text>
+<rect x="318" y="265" width="28" height="30" style="fill:var(--card);stroke:var(--ink)" stroke-width="1.5"/>
+<circle cx="332" cy="275" r="5" style="fill:none;stroke:var(--red)"/><circle cx="332" cy="287" r="5" style="fill:none;stroke:var(--red)"/>
+<text x="312" y="310" text-anchor="end" style="fill:var(--muted);font-size:10px">瓦斯爐</text>
+<rect x="15" y="215" width="10" height="45" style="fill:var(--ink)"/>
+<text x="30" y="275" style="fill:var(--muted);font-size:10px">電視</text>
+<rect x="105" y="205" width="28" height="62" rx="6" style="fill:var(--card);stroke:var(--ink)" stroke-width="1.5"/>
+<rect x="60" y="222" width="30" height="28" rx="3" style="fill:none;stroke:var(--ink)"/>
+<text x="119" y="282" text-anchor="middle" style="fill:var(--muted);font-size:10px">沙發</text>
+<g id="dtHot"></g>
+<g id="dtMarks"></g>
+</svg>
+<div class="row c"><span>已找到 <b id="dtCount" style="color:var(--red)">0</b> / 6</span><button class="btn" id="dtShow">顯示答案</button><button class="btn" id="dtReset">重來</button></div>
+<p class="rel" id="dtCap">點圖上你覺得有問題的地方。</p>
+<ol id="dtList" style="padding-left:1.4em;margin:10px 0 0"></ol></div>
+
+<h2>專業看屋流程</h2>
+<p>實際看房子時，照這個順序檢查，就不會漏掉：</p>
+<div class="tw"><table class="t">
+<tr><th>順序</th><th>看什麼</th><th>用到哪一課</th></tr>
+<tr><td>1. 看外環境</td><td>地勢高低、後面有沒有靠、前面開不開闊、有沒有路沖反弓</td><td>第 10、11、12 課</td></tr>
+<tr><td>2. 定坐向</td><td>用羅盤或手機指南針量方向，記下「某山某向」</td><td>第 5、8、9 課</td></tr>
+<tr><td>3. 看格局</td><td>是否方正、有沒有缺角、動靜是否分開、穿堂</td><td>第 3、12 課</td></tr>
+<tr><td>4. 看各空間</td><td>大門、客廳、臥室、廚房、廁所、書桌</td><td>第 17 課</td></tr>
+<tr><td>5. 算理氣</td><td>命卦配宅卦、排宅運盤、看流年</td><td>第 13–16 課</td></tr>
+<tr><td>6. 綜合判斷</td><td>先處理安全健康，再考慮吉凶方位</td><td>第 19、20 課</td></tr>
+</table></div>
+<div class="box think"><div class="bt">為什麼先看形勢？</div><p>形勢的問題（採光、通風、路沖）是<b>看得見、影響大、很難改</b>的；理氣的方位安排，常常移動家具就能調整。所以專業的順序一定是<b>先形勢、後理氣</b>。</p></div>
+
+<div class="recap"><b>本課重點</b><ol>
+<li>平面圖通常上北下南，先找指北針。</li>
+<li>常見問題：穿堂煞、樑壓床、鏡對床、書桌背門、開門見灶、沙發背後空。</li>
+<li>看屋順序：外環境 → 坐向 → 格局 → 各空間 → 理氣 → 綜合判斷。</li>
+</ol></div>
+<div class="quiz" data-quiz="18"></div>
+</article>
+
+<!-- ============ L19 ============ -->
+<article class="view lesson" id="L19" data-id="19" data-stage="6" data-title="風水流派地圖">
+<header class="lh"><div class="stag">第六階段｜專業：流派與進修</div><div class="lnum">第 19 課</div><h1>風水流派地圖</h1></header>
+<div class="goal"><b>本課目標</b>看懂風水的各大流派，知道你學過的每個方法屬於哪一派，以及它們之間的關係。</div>
+
+<p>你已經學完所有核心技術了。現在退一步，看看整張地圖。風水在一千多年裡發展出很多流派，但大致可以分成<b>兩大系統</b>，也就是第 1 課提過的形勢派和理氣派。</p>
+
+<div class="widget"><div class="wt">風水流派樹</div>
+<ul class="tree">
+<li><span class="nd"><b>風水（堪輿）</b></span>
+<ul>
+<li><span class="nd"><b>形勢派</b>（巒頭派）<br><span class="muted">用眼睛看山水形狀</span></span>
+<ul>
+<li><span class="nd">唐・<b>楊筠松</b>《撼龍經》《疑龍經》<br><span class="muted">發源於江西，又叫「江西派」</span></span></li>
+<li><span class="nd">你學過：四靈、龍穴砂水向、形煞<br><span class="muted">第 10–12 課</span></span></li>
+</ul></li>
+<li><span class="nd"><b>理氣派</b><br><span class="muted">用羅盤和公式算方位、時間</span></span>
+<ul>
+<li><span class="nd">宋・王伋等人推廣<br><span class="muted">發源於福建，又叫「福建派」「屋宅派」</span></span></li>
+<li><span class="nd"><b>八宅派</b>《八宅明鏡》<br><span class="muted">你學過：第 13 課</span></span></li>
+<li><span class="nd"><b>三合派</b><br><span class="muted">用地支三合（如申子辰合水局）看水的來去</span></span></li>
+<li><span class="nd"><b>三元玄空派</b><br><span class="muted">清・蔣大鴻《地理辨正》、沈竹礽《沈氏玄空學》<br>你學過：第 14–16 課</span></span></li>
+</ul></li>
+</ul></li>
+</ul></div>
+
+<div class="box origin"><div class="bt">「巒頭」是什麼？</div><p>「巒」是連綿的山，「頭」是山的形狀、樣子。所以「<b>巒頭</b>」就是山的形勢，形勢派也叫巒頭派。「<b>理氣</b>」則是「氣的道理」：用方位和時間推算氣的好壞。</p></div>
+<div class="box origin"><div class="bt">三合派的「三合」</div><p>十二地支中，每三個會「合」成一種五行，例如申、子、辰合成水局（水在申開始、在子最旺、在辰收藏）。三合派用這個規律來判斷水從哪裡來、往哪裡去比較好。本課程沒有深入，只要知道有這一派即可。</p></div>
+
+<h2>派別之間的關係</h2>
+<div class="classic">巒頭為體，理氣為用。</div>
+<p class="src">風水界公認的原則</p>
+<p>「體」是身體、根本；「用」是作用、應用。意思是：<b>形勢是根本，理氣是應用</b>。就像蓋房子，地基（形勢）要先穩，裝潢（理氣）才有意義。一間路沖、潮濕、採光差的房子，就算飛星算出「旺山旺向」，也不會是好房子。</p>
+<div class="box example"><div class="bt">比喻：看病</div><p>第 1 課說形勢像「看臉色」、理氣像「驗血」。好醫生會兩個一起看：臉色很差就算驗血正常也要追查；驗血有問題就算臉色好也要注意。風水也一樣，<b>兩派互相補充，不是互相對立</b>。</p></div>
+<div class="box think"><div class="bt">為什麼流派會吵架？</div><p>不同流派對同一間房子，有時會得到相反的結論（例如八宅說吉、飛星說凶）。這正好說明：理氣的公式是<b>人定出來的系統</b>，每個系統的前提不同。專業的態度是了解每個系統的邏輯，而不是認定只有一派是真理。</p></div>
+
+<h2>其他你可能聽過的</h2>
+<div class="grid2">
+<div class="card"><h4>西方的 Feng Shui</h4><p>1970 年代後傳到歐美，常用簡化的「<b>八方位格</b>」（Bagua map），直接把格子貼在大門上，和傳統的方位系統不同。</p></div>
+<div class="card"><h4>擇日</h4><p>選擇搬家、開工、結婚的好日子，是理氣派的延伸，要用到干支和曆法。</p></div>
+<div class="card"><h4>陰宅</h4><p>祖先墳墓的風水，古代最受重視，技術和陽宅相通，本課程不教。</p></div>
+</div>
+
+<div class="recap"><b>本課重點</b><ol>
+<li>兩大系統：形勢派（巒頭，楊筠松）與理氣派（八宅、三合、玄空）。</li>
+<li>玄空派代表：蔣大鴻《地理辨正》、沈竹礽《沈氏玄空學》。</li>
+<li>巒頭為體，理氣為用：先形勢、後理氣。</li>
+<li>不同流派前提不同，專業要懂各系統的邏輯。</li>
+</ol></div>
+<div class="quiz" data-quiz="19"></div>
+</article>
+
+<!-- ============ L20 ============ -->
+<article class="view lesson" id="L20" data-id="20" data-stage="6" data-title="理性看風水與進修之路">
+<header class="lh"><div class="stag">第六階段｜專業：流派與進修</div><div class="lnum">第 20 課</div><h1>理性看風水與進修之路</h1></header>
+<div class="goal"><b>本課目標</b>用科學的眼光重新整理風水，學會分辨詐騙，並知道接下來怎麼繼續學。最後完成結業測驗！</div>
+
+<h2>風水 × 科學對照表</h2>
+<p>整套課程中，我們一直在問「合理的原因是什麼」。把答案整理起來：</p>
+<div class="tw"><table class="t">
+<tr><th>風水說法</th><th>科學對應</th><th>課</th></tr>
+<tr><td>藏風聚氣</td><td>擋住冷風、保持適當通風的微氣候</td><td>2</td></tr>
+<tr><td>坐北朝南</td><td><b>被動式太陽能設計</b>：冬天陽光照進、夏天被屋簷擋住</td><td>5</td></tr>
+<tr><td>四靈、太師椅</td><td><b>瞭望─庇護理論</b>（Appleton，1975）</td><td>10</td></tr>
+<tr><td>玉帶環腰、反弓</td><td><b>曲流</b>：外側侵蝕、內側堆積；車輛轉彎向外甩</td><td>11</td></tr>
+<tr><td>天斬煞</td><td><b>狹管效應</b>：窄縫中風速變快</td><td>12</td></tr>
+<tr><td>水火相剋</td><td>熱油遇水噴濺</td><td>17</td></tr>
+<tr><td>床頭靠牆、看得到門</td><td>安全感與睡眠品質</td><td>17</td></tr>
+</table></div>
+<div class="box think"><div class="bt">那些無法驗證的呢？</div><p>「向星主財」「五黃年動土會出事」這些說法，目前沒有科學證據支持。它們是<b>傳統文化系統</b>的一部分，可以學習它的邏輯和歷史，但不要把人生重大決定完全交給它，也不必因此害怕。</p></div>
+
+<h2>小心風水詐騙</h2>
+<div class="box warn"><div class="bt">聽到這些話，就要提高警覺</div><p>① 「你家有大凶，不處理會出人命」：<b>用恐懼逼你</b>。<br>② 「要買我的開光水晶、符咒才能化解」，而且價格很高：<b>推銷商品</b>。<br>③ 「要改運必須馬上做，不能跟家人商量」：<b>催促、隔離</b>。<br>④ 保證「一定發財、一定考上」：<b>沒有人能保證</b>。<br>真正專業的風水師會解釋原因、提出你自己就能做的改善方法，不會恐嚇你。</p></div>
+
+<h2>專業的倫理</h2>
+<p>如果將來你想成為風水師，古人留下幾條很好的原則：</p>
+<div class="grid2">
+<div class="card"><h4>不恐嚇</h4><p>說明問題時提出解決辦法，不製造恐慌。</p></div>
+<div class="card"><h4>不誇大</h4><p>清楚區分「環境事實」和「傳統說法」。</p></div>
+<div class="card"><h4>先安全</h4><p>建議的第一優先永遠是住的人的安全和健康。</p></div>
+<div class="card"><h4>重尊重</h4><p>不為了自家好，就把八卦鏡對準鄰居。</p></div>
+</div>
+
+<h2>接下來怎麼學</h2>
+<ul class="tl">
+<li><span class="era">第一步</span>觀察自己的家和學校，練習用四靈、形煞分析，畫出平面圖。</li>
+<li><span class="era">第二步</span>買一個簡單的羅盤（或用手機指南針），實際量坐向，排出八宅和宅運盤。</li>
+<li><span class="era">第三步</span>讀原典的白話譯注版，了解古人的原意。</li>
+<li><span class="era">第四步</span>學習相關的現代知識：建築、室內設計、環境心理學、地理。</li>
+<li><span class="era">第五步</span>若想深入玄空，跟隨有口碑、願意講道理的老師學習替卦、兼向和斷法。</li>
+</ul>
+
+<h2>推薦書單</h2>
+<div class="tw"><table class="t">
+<tr><th>書名</th><th>作者／時代</th><th>內容</th></tr>
+<tr><td>《葬書》</td><td>晉・郭璞</td><td>「風水」一詞出處，第 1 課</td></tr>
+<tr><td>《青囊經》</td><td>相傳漢・黃石公</td><td>理氣派的古老經典，文字很短</td></tr>
+<tr><td>《撼龍經》</td><td>唐・楊筠松</td><td>形勢派經典，講龍脈</td></tr>
+<tr><td>《八宅明鏡》</td><td>清代流傳</td><td>八宅法，第 13 課</td></tr>
+<tr><td>《地理辨正》</td><td>清・蔣大鴻</td><td>三元玄空的重要著作</td></tr>
+<tr><td>《沈氏玄空學》</td><td>清・沈竹礽</td><td>本課程宅運盤的主要依據</td></tr>
+<tr><td>《建築模式語言》</td><td>Christopher Alexander（1977）</td><td>現代建築學談「人喜歡什麼樣的空間」，可和風水對照</td></tr>
+</table></div>
+
+<h2>結業測驗</h2>
+<div class="widget" id="finalBox">
+<p>從全部 20 課的題庫中隨機抽 <b>10 題</b>。答對 <b>8 題以上</b>，就能拿到結業證書！</p>
+<div class="row c"><button class="btn primary big" id="finalStart">開始結業測驗</button></div>
+<div id="finalQuiz"></div>
+<div id="finalResult"></div></div>
+
+<div class="recap"><b>本課重點</b><ol>
+<li>很多風水說法可以用科學解釋：被動式太陽能、瞭望─庇護、曲流、狹管效應。</li>
+<li>無法驗證的說法當作文化了解，不迷信、不害怕。</li>
+<li>詐騙警訊：恐嚇、推銷高價商品、催促、保證結果。</li>
+<li>專業倫理：不恐嚇、不誇大、先安全、重尊重。</li>
+</ol></div>
+<div class="quiz" data-quiz="20"></div>
+</article>
+
+<!-- ============ 辭典 ============ -->
+<section class="view" id="glossary" data-title="名詞辭典">
+<header class="lh"><div class="stag">隨時查詢</div><h1>名詞辭典</h1></header>
+<p>課程中出現的專有名詞都在這裡，每個都附上由來。點「第 N 課」可以回到那一課。</p>
+<input type="text" id="gloQ" placeholder="搜尋名詞，例如：明堂" style="width:100%" aria-label="搜尋名詞">
+<div id="gloList" style="margin-top:10px"></div>
+</section>
+
+</main>
+<script>
+(function(){
+"use strict";
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const NS="http://www.w3.org/2000/svg";
+function S(tag,at,par){const e=document.createElementNS(NS,tag);if(at)for(const k in at)e.setAttribute(k,at[k]);if(par)par.appendChild(e);return e;}
+function T(par,x,y,txt,at){const e=S("text",Object.assign({x:x,y:y,"text-anchor":"middle","dominant-baseline":"central"},at||{}),par);e.textContent=txt;return e;}
+const rad=a=>a*Math.PI/180;
+function pol(cx,cy,r,a){return [cx+r*Math.cos(rad(a)),cy+r*Math.sin(rad(a))];}
+const scr=b=>90+b; // 羅盤方位角 → 螢幕角（上南下北）
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function segBtns(sel,attr,fn){const bs=$$(sel);bs.forEach(b=>b.addEventListener("click",()=>{bs.forEach(x=>x.classList.toggle("on",x===b));fn(b.getAttribute(attr),b);}));}
+function sector(cx,cy,r1,r2,a1,a2,at,par){
+  const [x1,y1]=pol(cx,cy,r2,a1),[x2,y2]=pol(cx,cy,r2,a2),[x3,y3]=pol(cx,cy,r1,a2),[x4,y4]=pol(cx,cy,r1,a1);
+  const lg=(a2-a1)>180?1:0;
+  return S("path",Object.assign({d:`M${x1} ${y1}A${r2} ${r2} 0 ${lg} 1 ${x2} ${y2}L${x3} ${y3}A${r1} ${r1} 0 ${lg} 0 ${x4} ${y4}Z`},at||{}),par);
+}
+const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- 資料 ---------- */
+const DIR8=["北","東北","東","東南","南","西南","西","西北"];
+const dirAt=b=>DIR8[Math.round((((b%360)+360)%360)/45)%8];
+const MTN="壬子癸丑艮寅甲卯乙辰巽巳丙午丁未坤申庚酉辛戌乾亥";
+const mtnAt=b=>Math.floor(((((b-337.5)%360)+360)%360)/15);
+const mtnBear=i=>(345+15*i)%360;
+const MTYPE=c=>"甲乙丙丁庚辛壬癸".includes(c)?"g":("乾坤艮巽".includes(c)?"k":"z");
+const PAL_NUM=[1,8,3,4,9,2,7,6];
+const NUM_PAL={};PAL_NUM.forEach((n,d)=>NUM_PAL[n]=d);
+const FLY=["C",7,6,1,4,0,5,2,3];
+const GRID=[3,4,5,2,"C",6,1,0,7];
+const wrap9=n=>((((n-1)%9)+9)%9)+1;
+function fly(c,dir){const r={C:c};for(let k=1;k<9;k++)r[FLY[k]]=wrap9(c+dir*k);return r;}
+const TRI={
+ "乾":{s:"☰",b:[1,1,1],n:"天",f:"父親",w:"金",v:"乾三連",x:180,h:315},
+ "兌":{s:"☱",b:[1,1,0],n:"澤（湖）",f:"小女兒",w:"金",v:"兌上缺",x:135,h:270},
+ "離":{s:"☲",b:[1,0,1],n:"火",f:"二女兒",w:"火",v:"離中虛",x:90,h:180},
+ "震":{s:"☳",b:[1,0,0],n:"雷",f:"大兒子",w:"木",v:"震仰盂",x:45,h:90},
+ "巽":{s:"☴",b:[0,1,1],n:"風",f:"大女兒",w:"木",v:"巽下斷",x:225,h:135},
+ "坎":{s:"☵",b:[0,1,0],n:"水",f:"二兒子",w:"水",v:"坎中滿",x:270,h:0},
+ "艮":{s:"☶",b:[0,0,1],n:"山",f:"小兒子",w:"土",v:"艮覆碗",x:315,h:45},
+ "坤":{s:"☷",b:[0,0,0],n:"地",f:"母親",w:"土",v:"坤六斷",x:0,h:225}
+};
+const TRI_BY_BITS={};for(const k in TRI)TRI_BY_BITS[TRI[k].b.join("")]=k;
+const PAL_TRI=["坎","艮","震","巽","離","坤","兌","乾"]; // 依 DIR8 順序（後天）
+const NUM_TRI={1:"坎",2:"坤",3:"震",4:"巽",6:"乾",7:"兌",8:"艮",9:"離"};
+const WX=["木","火","土","金","水"],WXC=["var(--wood)","var(--fire)","var(--earth)","var(--metal)","var(--water)"];
+const SHENG=["木生火：鑽木取火，木頭燒起來就生出火。","火生土：東西燒完變成灰，回到泥土。","土生金：金屬礦藏在泥土和岩石裡。","金生水：冰冷的金屬表面會凝結出水珠。","水生木：植物喝水才能長大。"];
+const KE=["木剋土：樹根鑽進土裡，把泥土抓牢。","火剋金：高溫可以把金屬熔化。","土剋水：堆土築堤可以擋住洪水。","金剋木：金屬做的斧頭可以砍樹。","水剋火：用水可以把火澆熄。"];
+const KE_OF=i=>i; // KE[i] 即「WX[i] 剋 WX[i+2]」
+const GAN="甲乙丙丁戊己庚辛壬癸",ZHI="子丑寅卯辰巳午未申酉戌亥",SX="鼠牛虎兔龍蛇馬羊猴雞狗豬";
+const BZ_ORDER=["生氣","天醫","延年","伏位","禍害","六煞","五鬼","絕命"];
+const BZ_STAR=["貪狼","巨門","武曲","輔弼","祿存","文曲","廉貞","破軍"];
+const BZ={
+ "坎":"東南,東,南,北,西,西北,東北,西南","離":"東,東南,北,南,東北,西南,西,西北",
+ "震":"南,北,東南,東,西南,東北,西北,西","巽":"北,南,東,東南,西北,西,西南,東北",
+ "乾":"西,東北,西南,西北,東南,北,東,南","坤":"東北,西,西北,西南,東,南,東南,北",
+ "艮":"西南,西北,西,東北,南,東,北,東南","兌":"西北,西南,東北,西,北,東南,南,東"
+};
+for(const k in BZ)BZ[k]=BZ[k].split(",");
+const STAGES={1:["入門","認識風水"],2:["工具","古人的座標系統"],3:["形勢","用眼睛看環境"],4:["理氣","用公式算方位"],5:["實務","生活中的應用"],6:["專業","流派與進修"]};
+const STAGE_NUM=["","一","二","三","四","五","六"];
+/* ---------- 題庫：o[0] 為正確答案 ---------- */
+const QUIZ={
+1:[{q:"「風水」一詞最早出自哪本書？",o:["晉朝郭璞《葬書》","《詩經》","《尚書》","唐朝《撼龍經》"],e:"《葬書》：「氣乘風則散，界水則止……故謂之風水。」"},
+{q:"「堪輿」的「堪」和「輿」分別代表什麼？",o:["天和地","山和水","陰和陽","風和水"],e:"許慎說：堪，天道也；輿，地道也。"},
+{q:"用眼睛觀察山、水、道路、建築形狀的，是哪一派？",o:["形勢派","理氣派","八宅派","玄空派"],e:"形勢派用眼睛看，理氣派用羅盤和公式算。"}],
+2:[{q:"理想的環境要做到哪四個字？",o:["藏風聚氣","風大水急","四面開闊","密不透風"],e:"擋住強風、讓氣聚集，就是藏風聚氣。"},
+{q:"氣最好怎麼流動？",o:["緩緩流動、有地方停留","越快越好","完全不動","直進直出"],e:"太快會散，完全不動會悶，緩緩流動最好。"},
+{q:"下列哪一個最接近「煞氣」？",o:["直衝大門的強風","冬天溫暖的陽光","緩緩流過的小河","安靜的小公園"],e:"煞氣是讓人不安全、不舒服的氣。"}],
+3:[{q:"「陰陽」最早指的是什麼？",o:["山坡的背陰面和向陽面","男生和女生","太陽和月亮","好和壞"],e:"陰陽本來是看山坡哪一面曬得到太陽。"},
+{q:"古人說「山南水北為陽」，山的哪一面是陽？",o:["南面","北面","東面","西面"],e:"北半球太陽在南方，山的南面曬得到太陽。"},
+{q:"太極圖中「黑中有白點」代表什麼？",o:["互含：陰中有陽","陰比陽強","黑白互相討厭","沒有特別意思"],e:"太極圖講相對、互含、消長。黑中有白就是互含。"}],
+4:[{q:"下列哪一個是正確的相生順序？",o:["木→火→土→金→水","木→土→水→火→金","火→木→水→金→土","金→木→水→火→土"],e:"相生順著圓圈走；木→土→水→火→金是相剋的順序。"},
+{q:"「水剋火」屬於哪一種關係？",o:["相剋","相生","比和","沒有關係"],e:"用水可以滅火，是相剋。"},
+{q:"五行中哪一個對應東方？",o:["木","火","金","水"],e:"東木、南火、中土、西金、北水。"}],
+5:[{q:"傳統風水圖的方向是？",o:["上南下北","上北下南","上東下西","沒有固定方向"],e:"傳統圖上南下北，所以左邊是東、右邊是西。"},
+{q:"大門朝南、背靠北方的房子，坐向怎麼說？",o:["坐北朝南","坐南朝北","坐東朝西","坐西朝東"],e:"坐是背靠的方向，向是面對的方向。"},
+{q:"坐北朝南在北半球冬暖夏涼，原因是？",o:["冬天太陽低能照進屋，夏天太陽高被屋簷擋住","北方比較熱","南方從來不颳風","只是古人規定"],e:"這是太陽角度的科學。"}],
+6:[{q:"一個卦要從哪裡開始讀？",o:["從下往上","從上往下","從中間開始","哪裡都可以"],e:"最下面是初爻，接著中爻，最上面是上爻。"},
+{q:"「離中虛」的離卦長什麼樣子？",o:["上下是陽爻、中間是陰爻","上下是陰爻、中間是陽爻","三條都是陽爻","三條都是陰爻"],e:"中間斷開、空空的，所以叫中虛。"},
+{q:"後天八卦中，坎卦在哪個方位？",o:["北","南","東","西"],e:"坎北、離南、震東、兌西。"}],
+7:[{q:"洛書每一橫排、直排、斜線加起來都是多少？",o:["15","10","18","45"],e:"1 加到 9 是 45，平分三排，每排 15。"},
+{q:"洛書口訣「戴九履一」，9 在哪裡？",o:["南方（圖的上方）","北方（圖的下方）","東方","西方"],e:"頭上戴 9、腳踩 1；圖上南下北，所以 9 在南。"},
+{q:"洛書正中央的數字是？",o:["5","1","9","0"],e:"口訣最後一句：五居中央。"}],
+8:[{q:"地支「子」代表哪個方位？",o:["正北","正南","正東","正西"],e:"子北午南，所以南北線叫子午線。"},
+{q:"二十四山每一山是幾度？",o:["15 度","10 度","30 度","24 度"],e:"360 ÷ 24 = 15。"},
+{q:"二十四山裡為什麼沒有天干「戊、己」？",o:["它們屬土、在中央，沒有方位","寫錯了","它們不吉利","古人忘記了"],e:"戊己屬土，土在中央，所以不佔方位。"}],
+9:[{q:"羅盤的正式名稱是？",o:["羅經","司南","指北針","天池"],e:"羅盤正式叫羅經，由司南演變而來。"},
+{q:"羅盤中央放磁針的地方叫做？",o:["天池","海底","明堂","中宮"],e:"古代指南針浮在水上，所以叫天池。"},
+{q:"量坐向時，為什麼要遠離汽車和鐵門？",o:["金屬會讓磁針偏掉","會吵到別人","古人的規定","羅盤會生鏽"],e:"金屬和電器會干擾磁場，讀數就不準。"}],
+10:[{q:"「左青龍」的左邊是指？",o:["站在屋內、面向大門外時的左邊","站在馬路上看房子的左邊","地圖的左邊","哪一邊都可以"],e:"這是初學者最常犯的錯。"},
+{q:"房子背後的靠山，對應哪一靈？",o:["玄武","朱雀","青龍","白虎"],e:"後玄武、前朱雀、左青龍、右白虎。"},
+{q:"四靈的道理和哪個現代理論最接近？",o:["瞭望─庇護理論","相對論","大爆炸理論","萬有引力"],e:"人喜歡能看清四周、又有掩護的地方。"}],
+11:[{q:"風水中「砂」這個名稱的由來是？",o:["古人用沙子堆出山的模型來教學","附近都是沙漠","沙子很值錢","山上都是沙"],e:"像今天的沙盤推演。"},
+{q:"房子在河流彎道的哪一側比較好？",o:["內側（玉帶環腰）","外側（反弓）","正中間","都一樣"],e:"外側會被侵蝕，內側會堆積新土地。"},
+{q:"現代城市裡的「虛水」指的是？",o:["道路","雨水","水族箱","游泳池"],e:"車流像水流，所以道路叫虛水。"}],
+12:[{q:"兩棟高樓中間的窄縫叫做？",o:["天斬煞","壁刀煞","路沖","反弓煞"],e:"像天上一把刀劈下來。"},
+{q:"天斬煞的科學原因是？",o:["狹管效應讓風變強","地心引力","光的折射","大樓會移動"],e:"風被擠進窄縫會突然加速。"},
+{q:"處理形煞最專業的做法是？",o:["處理背後真正的原因","一律掛八卦鏡","立刻搬家","完全不用管"],e:"擋車用矮牆、擋風用氣密窗、擋視線用窗簾。"}],
+13:[{q:"2012 年 5 月出生的男生，命卦是？",o:["6 乾","2 坤","9 離","5 中"],e:"99 − 12 = 87，87 ÷ 9 餘 6，是乾卦。"},
+{q:"下列哪一組全都是東四命？",o:["坎、離、震、巽","乾、坤、艮、兌","坎、坤、震、兌","乾、離、艮、巽"],e:"東四命：坎離震巽；西四命：乾坤艮兌。"},
+{q:"八宅法中最吉的方位是？",o:["生氣","伏位","絕命","五鬼"],e:"生氣（貪狼）是四吉之首；絕命是大凶。"}],
+14:[{q:"2024 到 2043 年是第幾運？",o:["九運","八運","一運","三運"],e:"一運從 1864 年開始，每運 20 年。"},
+{q:"三元九運中，每一運是幾年？",o:["20 年","10 年","60 年","180 年"],e:"每運 20 年，每元 60 年，一輪 180 年。"},
+{q:"九星從中宮出發，飛的第一站是？",o:["西北","北","東南","南"],e:"中 → 西北 → 西 → 東北 → 南 → 北 → 西南 → 東 → 東南。"}],
+15:[{q:"2026 年是哪一顆星入中？",o:["一白","三碧","九紫","五黃"],e:"2024 三碧、2025 二黑、2026 一白。"},
+{q:"流年入中的數字，每過一年會怎麼變？",o:["減 1","加 1","不變","隨機"],e:"年星逆行，每年退一格。"},
+{q:"2026 年的五黃在哪個方位？",o:["南","北","東","西北"],e:"一白入中後順飛：中1、西北2、西3、東北4、南5。"}],
+16:[{q:"宅運盤中，主管財運的是？",o:["向星","山星","運星","年星"],e:"山管人丁（山星），水管財（向星）。"},
+{q:"四種格局中最理想的是？",o:["旺山旺向","上山下水","雙星到坐","雙星到向"],e:"旺山星在坐、旺向星在向，各在該在的位置。"},
+{q:"八運的子山午向，是哪一種格局？",o:["雙星到向","雙星到坐","旺山旺向","上山下水"],e:"兩顆 8 都飛到向方（南）。換成九運就變成雙星到坐。"}],
+17:[{q:"爐子和水槽不要緊貼（水火相剋），合理原因是？",o:["水濺進熱油會噴油","水會把火變成金","顏色不搭","古人討厭水"],e:"這其實是廚房安全。"},
+{q:"書桌最好怎麼擺？",o:["背靠牆、斜對房門","背對房門","正對房門","正對強光的窗戶"],e:"背後有靠、抬頭看得到門，最不容易分心。"},
+{q:"廁所最不適合放在房子的哪裡？",o:["正中央（中宮）","角落","靠外牆","有窗戶的位置"],e:"中央的廁所通常沒有窗，濕氣臭味會擴散全家。"}],
+18:[{q:"一般房屋平面圖的方向通常是？",o:["上北下南","上南下北","上東下西","沒有方向"],e:"和傳統風水圖相反，看圖先找指北針。"},
+{q:"一進大門就直接看到對面的落地窗，叫做？",o:["穿堂煞","路沖","樑壓","壁刀"],e:"前後一直線，氣直進直出。"},
+{q:"專業看屋時應該先看什麼？",o:["外環境與形勢","流年飛星","家具顏色","吉祥物擺設"],e:"形勢問題影響大、很難改，所以先看。"}],
+19:[{q:"「巒頭為體，理氣為用」的意思是？",o:["形勢是根本，理氣是應用","理氣比形勢重要","兩者毫無關係","只要看理氣就好"],e:"地基穩了，裝潢才有意義。"},
+{q:"唐朝楊筠松是哪一派的代表人物？",o:["形勢派","八宅派","三合派","西方風水"],e:"他寫了《撼龍經》《疑龍經》。"},
+{q:"《沈氏玄空學》屬於哪一派？",o:["三元玄空派","形勢派","八宅派","三合派"],e:"清代沈竹礽所著，是飛星排盤的重要依據。"}],
+20:[{q:"下列哪一句最可能是風水詐騙？",o:["不買我的高價開光水晶，家裡會出大事","這扇窗可以加窗簾擋強光","床可以移開大樑的正下方","玄關可以放個鞋櫃"],e:"恐嚇加推銷高價商品，是典型的詐騙警訊。"},
+{q:"「坐北朝南」對應的現代科學是？",o:["被動式太陽能設計","狹管效應","曲流侵蝕","萬有引力"],e:"冬天讓陽光進來、夏天把陽光擋在外面。"},
+{q:"專業風水師的第一優先是？",o:["住的人的安全和健康","賣出最多吉祥物","讓客人害怕","只看理氣公式"],e:"先安全、不恐嚇、不誇大、重尊重。"}]
+};
+
+/* ---------- 名詞辭典 [名詞, 說明與由來, 課] ---------- */
+const GLO=[
+["風水","研究環境如何影響人的學問。出自郭璞《葬書》：「氣乘風則散，界水則止……故謂之風水。」",1],
+["堪輿","風水的古稱。許慎：堪，天道也；輿，地道也。「輿」本是車廂，引申為承載萬物的大地。",1],
+["陽宅／陰宅","陽宅是活人住的房子；陰宅是祖先的墳墓。",1],
+["形勢派","又叫巒頭派，用眼睛看山水、道路、建築的形狀。代表人物是唐朝楊筠松。",1],
+["理氣派","用羅盤和公式計算方位與時間的流派，包括八宅、三合、玄空。",1],
+["氣","看不見、會流動、會影響人的環境能量。古字像雲氣上升的樣子。",2],
+["生氣","讓人舒服、有活力的氣，像溫和的風和陽光。八宅法中也是最吉方位的名稱。",2],
+["煞氣","讓人不安全、不舒服的氣。「煞」本是凶神、殺氣的意思。",2],
+["藏風聚氣","擋住強風，讓氣聚集，是理想環境的條件。",2],
+["陰陽","本指山坡的背陰面和向陽面（山南水北為陽），後來引申為一切相對的兩面。",3],
+["太極","陰陽合在一起的狀態。太極圖說明相對、互含、消長。",3],
+["兩儀","陰和陽。《易傳》：太極生兩儀，兩儀生四象，四象生八卦。",3],
+["五行","木、火、土、金、水五種變化的狀態，出自《尚書・洪範》。「行」是運行、變化。",4],
+["相生","一個幫助下一個：木生火、火生土、土生金、金生水、水生木。",4],
+["相剋","一個制衡另一個：木剋土、土剋水、水剋火、火剋金、金剋木。",4],
+["比和","同一種五行，互相幫忙。",4],
+["坐向","「向」是房子面對的方向，「坐」是背靠的方向，兩者相反。",5],
+["坐北朝南","背靠北、面向南。在北半球冬暖夏涼，是被動式太陽能的道理。",5],
+["爻","組成卦的線條。實線是陽爻，斷線是陰爻。「爻」字像線條交錯的樣子。",6],
+["八卦","三個爻組成一卦，共八種：乾、兌、離、震、巽、坎、艮、坤。",6],
+["先天八卦","相傳伏羲所畫，乾南坤北、離東坎西，講宇宙本來的樣子。",6],
+["後天八卦","相傳周文王所排，坎北離南、震東兌西，依季節排列。風水實際使用後天八卦。",6],
+["河圖","傳說伏羲時龍馬從黃河背出的圖，由 1 到 10 的黑白點組成。",7],
+["洛書","傳說大禹治水時神龜從洛水背出的圖。戴九履一、左三右七、二四為肩、六八為足、五居中央。",7],
+["九宮","洛書的九個格子配上八卦和中央，是八宅和飛星的基礎。",7],
+["中宮","九宮正中央的格子，洛書數字是 5。",7],
+["天干","甲乙丙丁戊己庚辛壬癸，共 10 個。",8],
+["地支","子丑寅卯辰巳午未申酉戌亥，共 12 個，配十二生肖。",8],
+["六十甲子","天干和地支依序配對，60 年一循環，第一個是甲子。",8],
+["子午線","子是正北、午是正南，所以南北線叫子午線；中午就是午時。",8],
+["二十四山","8 個天干＋12 個地支＋4 個卦（乾坤艮巽），把一圈分成 24 份，每份 15°。",8],
+["某山某向","精確的坐向說法，例如子山午向＝坐子（正北）朝午（正南）。",8],
+["羅經（羅盤）","風水師測方位的工具。「羅」是包羅萬象，「經」是經緯、規則。",9],
+["司南","戰國時代的指南工具，用磁石做成湯匙形，放在光滑的盤上。",9],
+["天池","羅盤中央放磁針的小圓池。古代指南針浮在水上，所以叫池。",9],
+["海底線","天池底部的紅線，讓磁針對齊它就完成校準。",9],
+["天心十道","外盤上交叉的兩條紅線，用來對準牆面讀出坐向。",9],
+["立極","決定測量的中心點，例如大門內側或房子中心。",9],
+["四靈","青龍（左）、白虎（右）、朱雀（前）、玄武（後），來自天上的四象星宿。",10],
+["玄武","烏龜和蛇合體的神獸，在北方、屋後，代表靠山。",10],
+["太師椅格局","背有靠、左右有扶手、前方開闊，像坐在太師椅上。",10],
+["瞭望─庇護理論","英國地理學家阿普爾頓 1975 年提出：人天生喜歡能看清四周又有掩護的地方。",10],
+["龍脈","連綿起伏的山脈，形狀像龍。",11],
+["穴","氣最聚集、最適合蓋房子的位置，借用中醫穴道的說法。",11],
+["砂","穴周圍的小山或建築。古人用沙子堆模型教學而得名。",11],
+["明堂","房子前方開闊的空地。原指天子接見諸侯的大殿與廣場。",11],
+["案山／朝山","案山是前方近處的矮山（像書桌），朝山是遠處的高山。",11],
+["玉帶環腰","河流或道路彎彎環抱房子，房子在彎道內側，為吉。",11],
+["反弓","彎道外側對著房子，像拉開的弓，為凶。符合曲流外側侵蝕的道理。",11],
+["虛水","現代道路，車流像水流。",11],
+["形煞","看得見的環境形狀造成的煞，例如路沖、天斬煞。",12],
+["路沖","馬路直直衝向大門。",12],
+["天斬煞","兩棟高樓中間的窄縫，會產生狹管效應的強風。",12],
+["壁刀煞","隔壁大樓的牆邊像刀刃一樣對著你。",12],
+["穿堂煞","大門和後窗或後門成一直線，風和視線直穿屋內。",12],
+["石敢當","立在路沖牆角的石碑，意思是「石頭敢擋」。最早見於漢朝《急就章》。",12],
+["八卦鏡","畫著八卦的鏡子，傳說能反射煞氣，屬於文化象徵。",12],
+["八宅法","依坐向把房子分成 8 種，配合命卦找吉凶方位。出自清代流行的《八宅明鏡》。",13],
+["命卦","依出生年和性別算出的卦。算出 5 時男改坤、女改艮。",13],
+["東四命／西四命","東四命：坎離震巽；西四命：乾坤艮兌。",13],
+["四吉四凶","生氣、天醫、延年、伏位為吉；禍害、六煞、五鬼、絕命為凶。",13],
+["伏位","「伏」是安穩趴著，代表平穩的小吉方位。",13],
+["立春","二十四節氣的第一個，約 2 月 4 日，風水以它作為一年的開始。",13],
+["玄空","「玄」是時間，「空」是空間，研究時間 × 空間的學問。",14],
+["三元九運","180 年一大循環，分上中下三元，每元三運，每運 20 年。2024–2043 是九運。",14],
+["九星（紫白九星）","洛書 1 到 9 配上顏色和北斗九星名稱：一白、二黑、三碧、四綠、五黃、六白、七赤、八白、九紫。",14],
+["當旺／生氣／退氣","當運的星最旺，下一運的星是生氣，上一運的星是退氣。",14],
+["飛星","九星依洛書順序在九宮之間移動。",14],
+["入中","某一顆星飛進中宮。",15],
+["五黃","五黃廉貞，傳統認為最凶的星。",15],
+["二黑","二黑巨門，又叫病符星。",15],
+["流年","每一年的飛星變化，從立春起算。",15],
+["順飛／逆飛","順飛每格加 1，逆飛每格減 1。",16],
+["山星／向星","山星從坐方來，主人丁；向星從向方來，主財運。",16],
+["三元龍","每宮三座山依序為地元龍、天元龍、人元龍，用來決定陰陽和順逆。",16],
+["旺山旺向","旺的山星在坐方、旺的向星在向方，最理想的格局。",16],
+["上山下水","旺的山星在向方、旺的向星在坐方，最不理想的格局。",16],
+["替卦／兼向","坐向靠近兩座山交界時使用的進階排法。",16],
+["氣口","大門，氣和人進出的地方。",17],
+["水火相剋（廚房）","爐子和水槽太近。合理原因是水濺熱油會噴油。",17],
+["巒頭","「巒」是連綿的山，「頭」是形狀，指山的形勢。",19],
+["巒頭為體，理氣為用","形勢是根本，理氣是應用。",19],
+["三合派","用地支三合（例如申子辰合水局）判斷水的來去。",19],
+["狹管效應","風或水被擠進窄處時速度變快。",20],
+["被動式太陽能","不用機器，只靠建築方位和屋簷，讓冬天陽光照進、夏天擋住。",20]
+];
+/* ---------- 各課互動 ---------- */
+const INIT={},ANIM={};
+
+/* 首頁羅盤 */
+function drawHero(){
+  const g0=$("#heroDial");if(!g0)return;
+  const cx=160,cy=160;
+  S("circle",{cx,cy,r:156,style:"fill:var(--paper);stroke:var(--ink)","stroke-width":2},g0);
+  const g=S("g",{class:"spin"},g0);
+  for(let i=0;i<24;i++){
+    const b=mtnBear(i),a=scr(b);
+    const [x1,y1]=pol(cx,cy,152,a-7.5),[x2,y2]=pol(cx,cy,124,a-7.5);
+    S("line",{x1,y1,x2,y2,style:"stroke:var(--line)"},g);
+    const [tx,ty]=pol(cx,cy,138,a);const c=MTN[i],t=MTYPE(c);
+    T(g,tx,ty,c,{style:`fill:${t==="g"?"var(--blue)":t==="k"?"var(--gold)":"var(--jade)"};font-family:var(--kai);font-size:15px;font-weight:700`,transform:`rotate(${a+90} ${tx} ${ty})`});
+  }
+  S("circle",{cx,cy,r:124,style:"fill:none;stroke:var(--ink)"},g);
+  DIR8.forEach((d,i)=>{
+    const k=PAL_TRI[i],a=scr(i*45);const [tx,ty]=pol(cx,cy,104,a);
+    T(g,tx,ty,TRI[k].s,{style:"fill:var(--ink);font-size:26px",transform:`rotate(${a+90} ${tx} ${ty})`});
+  });
+  S("circle",{cx,cy,r:84,style:"fill:none;stroke:var(--line)"},g);
+  DIR8.forEach((d,i)=>{const a=scr(i*45);const [tx,ty]=pol(cx,cy,68,a);T(g,tx,ty,PAL_NUM[i],{style:"fill:var(--muted);font-family:var(--kai);font-size:16px"});});
+  S("circle",{cx,cy,r:52,style:"fill:none;stroke:var(--line)"},g);
+  taiji(g0,cx,cy,40);
+  S("line",{x1:cx,y1:cy-50,x2:cx,y2:cy+50,style:"stroke:var(--red)","stroke-width":2},g0);
+}
+function taiji(par,cx,cy,r,cls){
+  const g=S("g",cls?{class:cls}:null,par);
+  S("circle",{cx,cy,r,style:"fill:var(--yang);stroke:var(--ink)","stroke-width":1.5},g);
+  S("path",{d:`M${cx} ${cy-r}A${r} ${r} 0 0 1 ${cx} ${cy+r}A${r/2} ${r/2} 0 0 1 ${cx} ${cy}A${r/2} ${r/2} 0 0 0 ${cx} ${cy-r}Z`,style:"fill:var(--yin)"},g);
+  S("circle",{cx,cy:cy-r/2,r:r/7,style:"fill:var(--yin)"},g);
+  S("circle",{cx,cy:cy+r/2,r:r/7,style:"fill:var(--yang)"},g);
+  return g;
+}
+function tri(par,k,x,y,w,h,col){ // 由下往上畫三爻
+  const g=S("g",null,par),b=TRI[k].b,gap=h/5,lh=h/5*0.9;
+  for(let i=0;i<3;i++){
+    const yy=y+h-lh-i*(gap*2);
+    if(b[i])S("rect",{x,y:yy,width:w,height:lh,rx:1,style:`fill:${col||"var(--ink)"}`},g);
+    else{S("rect",{x,y:yy,width:w*0.42,height:lh,rx:1,style:`fill:${col||"var(--ink)"}`},g);S("rect",{x:x+w*0.58,y:yy,width:w*0.42,height:lh,rx:1,style:`fill:${col||"var(--ink)"}`},g);}
+  }
+  return g;
+}
+
+/* L2 氣 */
+let qiMode="open";
+INIT[2]=function(){
+  segBtns("[data-qi]","data-qi",m=>{qiMode=m;qiReset();});
+};
+let qiParts=[];
+function qiReset(){qiParts=[];
+  $("#qiCap").textContent=qiMode==="open"?"空曠平地：風一吹，氣就被吹散，很難留在中央。":"山環水抱：強風被山擋住、繞道而行；沿著山脈（龍脈）來的氣慢慢流進中央，碰到水就停下來。這就是「氣乘風則散，界水則止」。";}
+ANIM[2]=function(){
+  const cv=$("#qiCanvas"),ctx=cv.getContext&&cv.getContext("2d");qiReset();if(!ctx)return null;let raf,alive=true;
+  const W=640,H=360,ex=330,ey=185,rx=165,ry=118;
+  const css=getComputedStyle(document.documentElement);
+  function inE(x,y,s){return ((x-ex)/(rx*s))**2+((y-ey)/(ry*s))**2<1;}
+  function spawn(){
+    if(qiMode==="open"){qiParts.push({x:-5,y:30+Math.random()*300,vx:2.5+Math.random()*1.5,vy:(Math.random()-.5)*.4,t:0,k:"w"});}
+    else{
+      if(Math.random()<.55)qiParts.push({x:-5,y:20+Math.random()*320,vx:2.6+Math.random()*1.4,vy:(Math.random()-.5)*.4,t:0,k:"w"});
+      else{const a=Math.PI*(0.8+Math.random()*0.4);qiParts.push({x:ex+Math.cos(a)*rx*0.8,y:ey+Math.sin(a)*ry*0.8,vx:.8+Math.random()*.4,vy:(Math.random()-.5)*.6,t:0,k:"q"});}
+    }
+  }
+  function frame(){
+    if(!alive)return;
+    const ink=css.getPropertyValue("--ink").trim(),red=css.getPropertyValue("--red").trim(),gold=css.getPropertyValue("--gold").trim(),jade=css.getPropertyValue("--jade").trim(),water=css.getPropertyValue("--water").trim(),muted=css.getPropertyValue("--muted").trim();
+    ctx.clearRect(0,0,W,H);
+    // 中央明堂
+    ctx.setLineDash([6,6]);ctx.strokeStyle=muted;ctx.beginPath();ctx.arc(ex,ey,78,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle=muted;ctx.font="15px sans-serif";ctx.textAlign="center";ctx.fillText("中央（明堂）",ex,ey+100);
+    if(qiMode==="hold"){
+      ctx.lineWidth=26;ctx.strokeStyle=jade;ctx.globalAlpha=.55;ctx.lineCap="round";
+      ctx.beginPath();ctx.ellipse(ex,ey,rx,ry,0,Math.PI*0.42,Math.PI*1.58,false);ctx.stroke();
+      ctx.globalAlpha=1;ctx.lineWidth=10;ctx.strokeStyle=water;ctx.globalAlpha=.6;
+      ctx.beginPath();ctx.moveTo(ex+60,ey-ry-10);ctx.quadraticCurveTo(ex+rx+70,ey,ex+60,ey+ry+10);ctx.stroke();ctx.globalAlpha=1;
+      ctx.fillStyle=jade;ctx.font="bold 15px sans-serif";ctx.fillText("山",ex-rx-2,ey+5);ctx.fillStyle=water;ctx.fillText("水",ex+rx+30,ey+5);
+    }
+    ctx.fillStyle=muted;ctx.font="14px sans-serif";ctx.textAlign="left";ctx.fillText("風 →",10,20);
+    if(Math.random()<(reduce?.3:.9))spawn();
+    let cnt=0;
+    for(const p of qiParts){
+      p.t++;
+      if(p.k==="w"){
+        if(qiMode==="hold"){
+          const inside=inE(p.x+p.vx*3,p.y+p.vy*3,1.12);
+          if(inside&&!inE(p.x,p.y,1.0)){const up=p.y<ey?-1:1;p.vy+=up*0.9;p.vx*=0.9;}
+          if(inE(p.x,p.y,1.0))p.vy+=(p.y<ey?-1:1)*.4;
+        }
+        p.vx+=(3-p.vx)*.03;p.vy*=.98;
+      }else{
+        p.vx*=.965;p.vy*=.965;p.vx+=(Math.random()-.5)*.25;p.vy+=(Math.random()-.5)*.25;
+        if(!inE(p.x+p.vx,p.y+p.vy,.9)){p.vx*=-.5;p.vy*=-.5;}
+        const wx=ex+80+ (p.y-ey)*0; if(p.x>wx){p.vx=-Math.abs(p.vx)*.5;}
+      }
+      p.x+=p.vx;p.y+=p.vy;
+      const inC=(p.x-ex)**2+(p.y-ey)**2<78*78;if(inC)cnt++;
+      ctx.globalAlpha=p.k==="q"?Math.max(0,1-p.t/900):.8;
+      ctx.fillStyle=p.k==="q"?gold:red;ctx.beginPath();ctx.arc(p.x,p.y,p.k==="q"?4:3,0,Math.PI*2);ctx.fill();
+    }
+    ctx.globalAlpha=1;
+    qiParts=qiParts.filter(p=>p.x<W+10&&p.x>-10&&p.y>-10&&p.y<H+10&&!(p.k==="q"&&p.t>900));
+    if(qiParts.length>420)qiParts.splice(0,qiParts.length-420);
+    $("#qiCount").textContent=cnt;
+    raf=requestAnimationFrame(frame);
+  }
+  frame();
+  return ()=>{alive=false;cancelAnimationFrame(raf);};
+};
+
+/* L3 陰陽 */
+INIT[3]=function(){
+  $$(".yyc").forEach(b=>b.addEventListener("click",()=>b.classList.toggle("flip")));
+  taiji($("#tjSvg"),100,100,90,reduce?null:"spin");
+  const r=$("#yyRange");
+  function up(){const v=+r.value;
+    $("#roomDark").setAttribute("opacity",Math.max(0,(50-v)/50)*.75);
+    $("#roomGlare").setAttribute("opacity",Math.max(0,(v-50)/50)*.65);
+    let t;
+    if(v<30)t="<b>太陰</b>：房間陰暗潮濕，容易發霉，人也容易沒精神。可以打開窗簾、加照明、除濕。";
+    else if(v>70)t="<b>太陽</b>：陽光直射、刺眼燥熱，人很難放鬆，家具也會曬壞。可以加窗簾、種植物遮陽。";
+    else t="<b>陰陽平衡</b>：光線柔和、溫度舒服，這就是好空間的感覺。";
+    $("#yyOut").innerHTML=t;}
+  r.addEventListener("input",up);up();
+};
+
+/* L4 五行 */
+INIT[4]=function(){
+  const svg=$("#wxSvg"),cx=170,cy=180,R=125;
+  const defs=S("defs",null,svg);
+  ["sheng","ke"].forEach(k=>{const m=S("marker",{id:"ar-"+k,viewBox:"0 0 10 10",refX:8,refY:5,markerWidth:6,markerHeight:6,orient:"auto-start-reverse"},defs);
+    S("path",{d:"M0 0L10 5L0 10z",style:`fill:${k==="sheng"?"var(--jade)":"var(--red)"}`},m);});
+  const ang=[198,270,342,54,126]; // 木 火 土 金 水
+  const P=ang.map(a=>pol(cx,cy,R,a));
+  const arrows={sheng:[],ke:[]};
+  for(let i=0;i<5;i++){
+    const j=(i+1)%5;const [x1,y1]=P[i],[x2,y2]=P[j];
+    const mx=(x1+x2)/2,my=(y1+y2)/2,dx=mx-cx,dy=my-cy,l=Math.hypot(dx,dy);
+    const qx=mx+dx/l*36,qy=my+dy/l*36;
+    const sh=shorten(x1,y1,x2,y2,34);
+    arrows.sheng.push(S("path",{d:`M${sh[0]} ${sh[1]}Q${qx} ${qy} ${sh[2]} ${sh[3]}`,class:"wxa wxa-sheng",style:"fill:none;stroke:var(--jade)","marker-end":"url(#ar-sheng)"},svg));
+  }
+  for(let i=0;i<5;i++){
+    const j=(i+2)%5;const sh=shorten(P[i][0],P[i][1],P[j][0],P[j][1],36);
+    arrows.ke.push(S("line",{x1:sh[0],y1:sh[1],x2:sh[2],y2:sh[3],class:"wxa wxa-ke",style:"stroke:var(--red)","stroke-dasharray":"7 5","marker-end":"url(#ar-ke)"},svg));
+  }
+  P.forEach(([x,y],i)=>{S("circle",{cx:x,cy:y,r:30,style:`fill:${WXC[i]}`},svg);T(svg,x,y,WX[i],{style:"fill:#fff;font-family:var(--kai);font-size:26px;font-weight:700"});});
+  let mode="sheng",timer=null;
+  segBtns("[data-wx]","data-wx",m=>{mode=m;svg.setAttribute("data-mode",m);stopPlay();$("#wxCap").textContent=m==="sheng"?"相生：順著外圈，一個生下一個。":m==="ke"?"相剋：隔一個跳，畫出來是一顆星星。":"相生和相剋一起運作，彼此平衡。";});
+  function stopPlay(){if(timer){clearInterval(timer);timer=null;}svg.classList.remove("playing");arrows.sheng.concat(arrows.ke).forEach(a=>a.classList.remove("cur"));$("#wxPlay").textContent="▶ 一步一步播放";}
+  $("#wxPlay").addEventListener("click",()=>{
+    if(timer){stopPlay();return;}
+    const seq=[];if(mode!=="ke")for(let i=0;i<5;i++)seq.push(["sheng",i]);if(mode!=="sheng")for(let i=0;i<5;i++)seq.push(["ke",i]);
+    let k=0;svg.classList.add("playing");$("#wxPlay").textContent="■ 停止";
+    const step=()=>{arrows.sheng.concat(arrows.ke).forEach(a=>a.classList.remove("cur"));
+      if(k>=seq.length){stopPlay();$("#wxCap").textContent="播放完畢！五行就是這樣循環不停。";return;}
+      const [t,i]=seq[k++];arrows[t][i].classList.add("cur");
+      $("#wxCap").textContent=t==="sheng"?SHENG[i]:KE[KE_OF(i)];};
+    step();timer=setInterval(step,1900);
+  });
+  INIT[4].stop=stopPlay;
+  // 關係查詢
+  let A=0,B=1;
+  function mk(id,set){const box=$(id);WX.forEach((w,i)=>{const b=document.createElement("button");b.className="btn wxb";b.style.setProperty("--c",WXC[i]);b.textContent=w;b.addEventListener("click",()=>{set(i);$$(".wxb",box).forEach((x,j)=>x.classList.toggle("on",j===i));rel();});box.appendChild(b);});}
+  mk("#wxA",i=>A=i);mk("#wxB",i=>B=i);
+  $$("#wxA .wxb")[0].classList.add("on");$$("#wxB .wxb")[1].classList.add("on");
+  function rel(){let t;
+    if(A===B)t=`<b>${WX[A]}和${WX[B]}：比和</b>。同一類，互相幫忙、力量加倍。`;
+    else if((A+1)%5===B)t=`<b>${WX[A]}生${WX[B]}</b>（相生）。${SHENG[A]}`;
+    else if((B+1)%5===A)t=`<b>${WX[B]}生${WX[A]}</b>（相生）。${SHENG[B]}`;
+    else if((A+2)%5===B)t=`<b>${WX[A]}剋${WX[B]}</b>（相剋）。${KE[KE_OF(A)]}`;
+    else t=`<b>${WX[B]}剋${WX[A]}</b>（相剋）。${KE[KE_OF(B)]}`;
+    $("#wxRel").innerHTML=t;}
+  rel();
+};
+ANIM[4]=function(){return ()=>{if(INIT[4].stop)INIT[4].stop();};};
+function shorten(x1,y1,x2,y2,d){const l=Math.hypot(x2-x1,y2-y1),ux=(x2-x1)/l,uy=(y2-y1)/l;return [x1+ux*d,y1+uy*d,x2-ux*d,y2-uy*d];}
+
+/* 方位環 */
+function dirRing(svg,cx,cy,r,fs){
+  S("circle",{cx,cy,r,style:"fill:none;stroke:var(--line)","stroke-width":2},svg);
+  DIR8.forEach((d,i)=>{const [x,y]=pol(cx,cy,r+(d.length>1?4:0),scr(i*45));
+    const bg=S("circle",{cx:x,cy:y,r:d.length>1?17:13,style:"fill:var(--paper);stroke:var(--line)"},svg);
+    T(svg,x,y,d,{style:`fill:${d==="南"?"var(--red)":"var(--ink)"};font-size:${d.length>1?fs-3:fs}px;font-weight:700`});});
+}
+/* L5 坐向 */
+INIT[5]=function(){
+  const svg=$("#faceSvg"),cx=150,cy=150;
+  dirRing(svg,cx,cy,128,15);
+  const h=S("g",null,svg);
+  S("rect",{x:cx-48,y:cy-40,width:96,height:80,rx:4,style:"fill:var(--card);stroke:var(--ink)","stroke-width":2},h);
+  S("path",{d:`M${cx-58} ${cy-40}L${cx} ${cy-78}L${cx+58} ${cy-40}`,style:"fill:none;stroke:var(--ink)","stroke-width":0},h);
+  S("rect",{x:cx-12,y:cy-44,width:24,height:10,style:"fill:var(--red)"},h);
+  T(h,cx,cy-24,"大門",{style:"fill:var(--red);font-size:12px;font-weight:700"});
+  S("line",{x1:cx,y1:cy-50,x2:cx,y2:cy-98,style:"stroke:var(--red)","stroke-width":3,"marker-end":""},h);
+  S("path",{d:`M${cx-7} ${cy-90}L${cx} ${cy-104}L${cx+7} ${cy-90}z`,style:"fill:var(--red)"},h);
+  const tx=T(h,cx,cy+8,"屋",{style:"fill:var(--ink);font-family:var(--kai);font-size:22px"});
+  S("line",{x1:cx,y1:cy+44,x2:cx,y2:cy+86,style:"stroke:var(--muted)","stroke-width":3,"stroke-dasharray":"5 4"},h);
+  const lx=T(h,cx+16,cy-92,"向",{style:"fill:var(--red);font-weight:700;font-size:15px"});
+  const lz=T(h,cx+16,cy+78,"坐",{style:"fill:var(--muted);font-weight:700;font-size:15px"});
+  const r=$("#faceRange");
+  function up(){const f=+r.value,rot=scr(f)-270;h.setAttribute("transform",`rotate(${rot} ${cx} ${cy})`);
+    [tx,lx,lz].forEach(t=>t.setAttribute("transform",`rotate(${-rot} ${t.getAttribute("x")} ${t.getAttribute("y")})`));
+    const fd=dirAt(f),sd=dirAt(f+180);
+    $("#faceOut").innerHTML=`大門朝 <b style="color:var(--red)">${fd}</b>（${f}°），背靠 <b>${sd}</b><br>這間房子是「<b>坐${sd}朝${fd}</b>」`;}
+  r.addEventListener("input",up);up();
+  segBtns("[data-sun]","data-sun",m=>{$("#sunW").style.display=m==="w"?"":"none";$("#sunS").style.display=m==="s"?"":"none";
+    $("#sunTxt").textContent=m==="w"?"陽光照進屋內深處":"陽光被屋簷擋在外面";
+    $("#sunCap").textContent=m==="w"?"冬天太陽低，陽光斜斜地照進朝南的窗戶，屋裡溫暖明亮。":"夏天太陽高，陽光被屋簷擋住，只照到窗外，屋裡比較涼快。";});
+  $("#sunCap").textContent="冬天太陽低，陽光斜斜地照進朝南的窗戶，屋裡溫暖明亮。";
+};
+
+/* L6 八卦 */
+INIT[6]=function(){
+  const svg=$("#yaoSvg");let bits=[1,1,1];const names=["初爻（下）","中爻","上爻（上）"];
+  const lines=[];
+  for(let i=0;i<3;i++){
+    const y=108-i*40,g=S("g",{style:"cursor:pointer"},svg);
+    S("rect",{x:10,y:y-14,width:140,height:40,style:"fill:transparent"},g);
+    const a=S("rect",{x:14,y,width:132,height:14,rx:2,class:"yao-full"},g);
+    const b1=S("rect",{x:14,y,width:56,height:14,rx:2,class:"yao-half"},g),b2=S("rect",{x:90,y,width:56,height:14,rx:2,class:"yao-half"},g);
+    T(svg,190,y+7,names[i],{style:"fill:var(--muted);font-size:12px"});
+    g.addEventListener("click",()=>{bits[i]=1-bits[i];draw();});
+    lines.push([a,b1,b2]);
+  }
+  function draw(){lines.forEach(([a,b1,b2],i)=>{a.style.display=bits[i]?"":"none";b1.style.display=b2.style.display=bits[i]?"none":"";});
+    const k=TRI_BY_BITS[bits.join("")],t=TRI[k];
+    $("#yaoOut").innerHTML=`<div class="bigtri">${t.s} ${k}</div><div>自然：<b>${t.n}</b>　家人：<b>${t.f}</b></div><div>五行：<b>${t.w}</b>　口訣：<b>${t.v}</b></div><div>後天方位：<b>${dirAt(t.h)}</b></div>`;}
+  draw();
+  // 先天後天
+  const bg=$("#bgSvg"),cx=170,cy=170;
+  dirRing(bg,cx,cy,150,14);
+  taiji(bg,cx,cy,34);
+  const G={};
+  for(const k in TRI){const g=S("g",{class:"bgt"},bg);tri(g,k,-22,-40,44,34);T(g,0,12,k,{style:"fill:var(--ink);font-family:var(--kai);font-size:17px;font-weight:700"});T(g,0,30,TRI[k].n,{style:"fill:var(--muted);font-size:11px"});G[k]=g;}
+  function place(m){for(const k in TRI){const b=m==="xian"?TRI[k].x:TRI[k].h;const [x,y]=pol(cx,cy,98,scr(b));G[k].style.transform=`translate(${x}px,${y}px)`;}
+    $("#bgCap").innerHTML=m==="xian"?"<b>先天八卦</b>（相傳伏羲所畫）：天（乾）在上、地（坤）在下，火（離）與水（坎）相對，講的是宇宙「本來的樣子」，兩兩相對。":"<b>後天八卦</b>（相傳周文王所排）：依照季節和方位排列，坎北、離南、震東、兌西。<b>風水實際使用的是後天八卦。</b>";}
+  place("xian");
+  segBtns("[data-bg]","data-bg",place);
+};
+
+/* L7 洛書 */
+INIT[7]=function(){
+  const grid=$("#lsGrid");const cells=[];
+  GRID.forEach(p=>{const d=document.createElement("div");d.className="cell";grid.appendChild(d);cells.push(p);});
+  const els=$$(".cell",grid);
+  const numOf=p=>p==="C"?5:PAL_NUM[p];
+  let mode="num";
+  function draw(){els.forEach((el,i)=>{const p=cells[i],n=numOf(p);
+    if(mode==="num")el.innerHTML=`<span class="num">${n}</span>`;
+    else if(mode==="dot")el.innerHTML=`<span class="dots">${Array.from({length:n},()=>`<i class="${n%2?"o":"x"}"></i>`).join("")}</span><span>${n%2?"陽數（白點）":"陰數（黑點）"}</span>`;
+    else el.innerHTML=`<span class="num">${n}</span><span>${p==="C"?"中宮":TRI[PAL_TRI[p]].s+" "+PAL_TRI[p]+"・"+DIR8[p]}</span>`;});}
+  draw();
+  segBtns("[data-ls]","data-ls",m=>{mode=m;draw();$("#lsCap").textContent=m==="dot"?"古代的洛書是用黑白點畫的：奇數是白點（陽），偶數是黑點（陰）。":m==="gua"?"把後天八卦放進九宮：1 坎北、9 離南、3 震東、7 兌西……5 在中宮沒有卦。":"點上面的按鈕，驗證每一條線加起來是多少。";});
+  const L=[["第一橫",[0,1,2]],["第二橫",[3,4,5]],["第三橫",[6,7,8]],["左直",[0,3,6]],["中直",[1,4,7]],["右直",[2,5,8]],["斜線 ↘",[0,4,8]],["斜線 ↙",[2,4,6]]];
+  const box=$("#lsSums");
+  L.forEach(([nm,ix])=>{const b=document.createElement("button");b.className="btn";b.textContent=nm;b.addEventListener("click",()=>{
+    $$(".btn",box).forEach(x=>x.classList.toggle("on",x===b));els.forEach((e,i)=>e.classList.toggle("hit",ix.includes(i)));
+    const ns=ix.map(i=>numOf(cells[i]));$("#lsCap").innerHTML=`${nm}：${ns.join(" + ")} = <b style="color:var(--red)">${ns.reduce((a,c)=>a+c,0)}</b>`;});box.appendChild(b);});
+};
+
+/* L8 干支、二十四山 */
+function gz(y){const g=((y-4)%10+10)%10,z=((y-4)%12+12)%12;return {g:GAN[g],z:ZHI[z],sx:SX[z],zi:z};}
+INIT[8]=function(){
+  function q(){const y=parseInt($("#gzYear").value,10);if(!y||y<1){$("#gzOut").textContent="請輸入西元年份，例如 2026。";return;}
+    const r=gz(y);const zd=["北","東北偏北","東北偏東","東","東南偏東","東南偏南","南","西南偏南","西南偏西","西","西北偏西","西北偏北"][r.zi];
+    $("#gzOut").innerHTML=`西元 ${y} 年是 <b style="color:var(--red);font-size:20px">${r.g}${r.z}</b> 年，生肖屬 <b>${r.sx}</b>。<br>天干「${r.g}」＋地支「${r.z}」；地支「${r.z}」在羅盤上指向<b>${zd}</b>。60 年後（${y+60} 年）又是${r.g}${r.z}年。`;}
+  $("#gzBtn").addEventListener("click",q);$("#gzYear").addEventListener("keydown",e=>{if(e.key==="Enter")q();});q();
+  const svg=$("#m24Svg"),cx=170,cy=170;const segs=[];
+  for(let i=0;i<24;i++){const a=scr(mtnBear(i));const c=MTN[i],t=MTYPE(c);
+    const col=t==="g"?"var(--blue-soft)":t==="k"?"var(--gold-soft)":"var(--jade-soft)";
+    segs.push(sector(cx,cy,92,150,a-7.5,a+7.5,{class:"m24",style:`fill:${col};stroke:var(--paper)`,"stroke-width":1.5},svg));
+    const [x,y]=pol(cx,cy,122,a);T(svg,x,y,c,{style:`fill:${t==="g"?"var(--blue)":t==="k"?"var(--gold)":"var(--jade)"};font-family:var(--kai);font-size:19px;font-weight:700`});}
+  S("circle",{cx,cy,r:92,style:"fill:var(--paper);stroke:var(--line)"},svg);
+  DIR8.forEach((d,i)=>{const [x,y]=pol(cx,cy,72,scr(i*45));T(svg,x,y,d,{style:"fill:var(--muted);font-size:13px"});});
+  const needle=S("g",null,svg);
+  S("line",{x1:cx,y1:cy,x2:cx,y2:cy-88,style:"stroke:var(--red)","stroke-width":3},needle);
+  S("line",{x1:cx,y1:cy,x2:cx,y2:cy+50,style:"stroke:var(--muted)","stroke-width":3,"stroke-dasharray":"4 3"},needle);
+  S("circle",{cx,cy,r:6,style:"fill:var(--red)"},needle);
+  const r=$("#m24Range");
+  function up(){const f=+r.value,fi=mtnAt(f),si=(fi+12)%24;
+    segs.forEach((s,i)=>{s.classList.toggle("on",i===fi);s.classList.toggle("zuo",i===si);});
+    needle.setAttribute("transform",`rotate(${scr(f)-270} ${cx} ${cy})`);
+    $("#m24Out").innerHTML=`朝向 ${f}°：向「<b style="color:var(--red)">${MTN[fi]}</b>」、坐「<b>${MTN[si]}</b>」<br>專業說法：<b>${MTN[si]}山${MTN[fi]}向</b>（坐${dirAt(f+180)}朝${dirAt(f)}）`;}
+  r.addEventListener("input",up);up();
+};
+
+/* L9 羅盤 */
+INIT[9]=function(){
+  const svg=$("#lpSvg"),cx=160,cy=160;
+  const P={};
+  P.wai=S("g",null,svg);S("rect",{x:8,y:8,width:304,height:304,rx:10,style:"fill:#c8a064;stroke:#7a5a2a","stroke-width":2},P.wai);
+  P.nei=S("g",null,svg);
+  S("circle",{cx,cy,r:140,style:"fill:#e9d6a8;stroke:#7a5a2a","stroke-width":2},P.nei);
+  for(let i=0;i<24;i++){const a=scr(mtnBear(i));const [x1,y1]=pol(cx,cy,140,a-7.5),[x2,y2]=pol(cx,cy,112,a-7.5);S("line",{x1,y1,x2,y2,stroke:"#7a5a2a"},P.nei);
+    const [x,y]=pol(cx,cy,126,a);T(P.nei,x,y,MTN[i],{style:"fill:#3a2a10;font-family:var(--kai);font-size:14px;font-weight:700",transform:`rotate(${a+90} ${x} ${y})`});}
+  S("circle",{cx,cy,r:112,style:"fill:none",stroke:"#7a5a2a"},P.nei);
+  DIR8.forEach((d,i)=>{const [x,y]=pol(cx,cy,94,scr(i*45));T(P.nei,x,y,TRI[PAL_TRI[i]].s,{style:"fill:#3a2a10;font-size:22px",transform:`rotate(${scr(i*45)+90} ${x} ${y})`});});
+  S("circle",{cx,cy,r:76,style:"fill:none",stroke:"#7a5a2a"},P.nei);
+  DIR8.forEach((d,i)=>{const [x,y]=pol(cx,cy,62,scr(i*45));T(P.nei,x,y,PAL_NUM[i],{style:"fill:#3a2a10;font-size:14px;font-family:var(--kai)"});});
+  P.tc=S("g",null,svg);S("circle",{cx,cy,r:46,style:"fill:#fdfaf0;stroke:#7a5a2a","stroke-width":2},P.tc);
+  P.hd=S("g",null,svg);S("line",{x1:cx,y1:cy-46,x2:cx,y2:cy+46,stroke:"#c0392b","stroke-width":2},P.hd);S("circle",{cx,cy:cy+36,r:3,fill:"#c0392b"},P.hd);S("circle",{cx,cy:cy+28,r:3,fill:"#c0392b"},P.hd);
+  const nd=S("g",null,svg);S("path",{d:`M${cx} ${cy+40}L${cx+5} ${cy}L${cx} ${cy-40}L${cx-5} ${cy}Z`,fill:"#2c3e50"},nd);S("path",{d:`M${cx} ${cy+40}L${cx+5} ${cy}L${cx-5} ${cy}Z`,fill:"#c0392b"},nd);S("circle",{cx,cy,r:3,fill:"#888"},nd);
+  P.sd=S("g",null,svg);[[cx,8,cx,312],[8,cy,312,cy]].forEach(([a,b,c,d])=>S("line",{x1:a,y1:b,x2:c,y2:d,stroke:"#c0392b","stroke-width":1.5},P.sd));
+  const info={wai:["外盤","方形的底座，固定不動。古人說「天圓地方」，方的外盤代表地。"],nei:["內盤","圓形、可以轉動，上面一圈一圈寫著八卦、洛書數字、二十四山等資料，代表天。"],tc:["天池","中央放磁針的小圓池。「池」是因為古代的指南針是浮在水上的「水羅盤」。"],hd:["海底線","天池底部畫的一條紅線，線旁有兩個紅點。轉動內盤，讓磁針和海底線對齊，羅盤就校準好了。"],sd:["天心十道","外盤上兩條交叉的紅線，交點在正中心。量房子時，讓紅線對準牆面或門，就能讀出坐向。"]};
+  const box=$("#lpParts");
+  for(const k in info){const b=document.createElement("button");b.className="btn";b.textContent=info[k][0];b.addEventListener("click",()=>{
+    $$(".btn",box).forEach(x=>x.classList.toggle("on",x===b));for(const j in P)P[j].classList.toggle("lp-hl",j===k);$("#lpCap").innerHTML=`<b>${info[k][0]}</b>：${info[k][1]}`;});box.appendChild(b);}
+  let raf=null;
+  $("#lpDrop").addEventListener("click",()=>{cancelAnimationFrame(raf);const t0=performance.now();
+    const f=now=>{const t=(now-t0)/1000;const a=reduce?0:70*Math.exp(-t*0.9)*Math.cos(t*5.5);nd.setAttribute("transform",`rotate(${a} ${cx} ${cy})`);
+      if(t<5&&!reduce)raf=requestAnimationFrame(f);else{nd.removeAttribute("transform");$("#lpCap").innerHTML="磁針穩定了，和<b>海底線</b>對齊，指向南北。這時就可以從天心十道讀出坐向。";}};
+    $("#lpCap").textContent="磁針左右擺動，要等它完全停下來再讀數……";raf=requestAnimationFrame(f);});
+};
+
+/* L10 四靈 */
+INIT[10]=function(){
+  const svg=$("#slSvg");
+  T(svg,170,12,"南（前）",{style:"fill:var(--red);font-size:13px;font-weight:700"});T(svg,170,350,"北（後）",{style:"fill:var(--muted);font-size:13px"});
+  T(svg,14,190,"東",{style:"fill:var(--muted);font-size:13px"});T(svg,326,190,"西",{style:"fill:var(--muted);font-size:13px"});
+  const A={};
+  A.xw=S("g",{class:"sl-a"},svg);S("path",{d:"M40 330 L95 262 L135 290 L175 240 L215 285 L250 262 L300 330Z",style:"fill:var(--water);opacity:.75"},A.xw);T(A.xw,170,305,"玄武・靠山",{style:"fill:#fff;font-size:14px;font-weight:700"});
+  A.ql=S("g",{class:"sl-a"},svg);S("path",{d:"M30 285 L55 230 L45 180 L70 130 L60 95 L95 115 L100 175 L90 235 L110 280Z",style:"fill:var(--wood);opacity:.75"},A.ql);T(A.ql,74,195,"青龍",{style:"fill:#fff;font-size:14px;font-weight:700",transform:"rotate(-80 74 195)"});
+  A.bh=S("g",{class:"sl-a"},svg);S("path",{d:"M310 285 L292 235 L298 175 L280 130 L250 118 L248 180 L256 235 L240 280Z",style:"fill:var(--metal);opacity:.75"},A.bh);T(A.bh,274,205,"白虎",{style:"fill:#fff;font-size:14px;font-weight:700",transform:"rotate(80 274 205)"});
+  A.zq=S("g",{class:"sl-a"},svg);S("ellipse",{cx:170,cy:120,rx:62,ry:22,style:"fill:var(--water);opacity:.25"},A.zq);S("path",{d:"M110 60 L140 38 L170 50 L200 34 L230 60Z",style:"fill:var(--fire);opacity:.65"},A.zq);T(A.zq,170,120,"朱雀・明堂",{style:"fill:var(--ink);font-size:13px;font-weight:700"});T(A.zq,170,70,"案山",{style:"fill:var(--muted);font-size:11px"});
+  A.hs=S("g",{class:"sl-a"},svg);S("rect",{x:145,y:175,width:50,height:45,rx:4,style:"fill:var(--paper);stroke:var(--ink)","stroke-width":2},A.hs);S("rect",{x:162,y:171,width:16,height:7,style:"fill:var(--red)"},A.hs);T(A.hs,170,200,"屋",{style:"fill:var(--ink);font-family:var(--kai);font-size:18px"});
+  const info={xw:"<b>玄武（後，北，水）</b>：背後有高山或高樓當靠山，擋住冬天的北風，住起來有安全感。",ql:"<b>青龍（左，東，木）</b>：從屋內往外看的左邊。有山環護，可以略高。",bh:"<b>白虎（右，西，金）</b>：從屋內往外看的右邊。有山環護，但要低一點、平順，不要比青龍更高更有壓迫感。",zq:"<b>朱雀（前，南，火）</b>：前方開闊（明堂），遠處有矮矮的案山，還有水彎彎地流過，視野好、陽光足。",hs:"<b>穴（房子）</b>：坐在四靈中間，就像坐在太師椅上：背有靠、左右有扶手、前面開闊。"};
+  for(const k in A)A[k].addEventListener("click",()=>{for(const j in A)A[j].style.opacity=j===k?1:.45;$("#slCap").innerHTML=info[k];});
+};
+/* L11 曲流 */
+INIT[11]=function(){
+  const svg=$("#mdSvg");
+  S("rect",{x:0,y:0,width:300,height:240,rx:10,style:"fill:var(--card)"},svg);
+  const sand=S("path",{style:"fill:var(--gold-soft);stroke:var(--gold)","stroke-dasharray":"3 3"},svg);
+  const riv=S("path",{style:"fill:none;stroke:var(--water);opacity:.55","stroke-width":28,"stroke-linecap":"round"},svg);
+  const fl=S("path",{class:"flow",style:"fill:none;stroke:#fff;opacity:.8","stroke-width":2},svg);
+  const hA=S("g",null,svg);S("rect",{x:30,y:100,width:34,height:28,rx:3,style:"fill:var(--paper);stroke:var(--jade)","stroke-width":2.5},hA);T(hA,47,114,"甲",{style:"fill:var(--jade);font-weight:700;font-size:14px"});
+  const hB=S("g",null,svg);const hBr=S("rect",{x:236,y:100,width:36,height:28,rx:3,style:"fill:var(--paper);stroke:var(--red)","stroke-width":2.5},hB);T(hB,254,114,"乙",{style:"fill:var(--red);font-weight:700;font-size:14px"});
+  const tIn=T(svg,95,118,"慢・堆積",{style:"fill:var(--gold);font-size:11px;font-weight:700"});
+  const tOut=T(svg,160,60,"快・侵蝕",{style:"fill:var(--red);font-size:11px;font-weight:700"});
+  const yr=T(svg,250,225,"",{style:"fill:var(--muted);font-size:12px"});
+  let cx=260,raf=null;
+  function draw(){
+    riv.setAttribute("d",`M20 -10Q${cx} 115 20 240`);fl.setAttribute("d",`M20 -10Q${cx} 115 20 240`);
+    sand.setAttribute("d",`M20 -10Q260 115 20 240Q${cx-28} 115 20 -10Z`);sand.style.display=cx>275?"":"none";
+    const apex=10+cx/2;tOut.setAttribute("x",apex+22);tIn.setAttribute("x",Math.max(95,apex-45));
+    const edge=apex+14;
+    hB.classList.toggle("shake",edge>226&&edge<250);
+    if(edge>=250){hB.setAttribute("transform","rotate(18 254 128) translate(6 10)");hBr.style.opacity=.5;}else{hB.removeAttribute("transform");hBr.style.opacity=1;}
+    yr.textContent=`第 ${Math.round((cx-260)/170*100)} 年`;
+  }
+  function reset(){cancelAnimationFrame(raf);cx=260;draw();$("#mdCap").textContent="甲屋在河的內側，乙屋在河的外側。按「快轉一百年」，看河流怎麼改變。";}
+  $("#mdPlay").addEventListener("click",()=>{cancelAnimationFrame(raf);if(cx>=430)cx=260;const t0=performance.now(),c0=cx;
+    $("#mdCap").textContent="河流外側水流快，一直沖刷河岸，河道慢慢往外移……";
+    const f=now=>{const t=Math.min(1,(now-t0)/(reduce?1:6000));cx=c0+(430-c0)*t;draw();
+      if(t<1)raf=requestAnimationFrame(f);else $("#mdCap").innerHTML="一百年後：<b style='color:var(--red)'>乙屋（反弓）</b>的地基被河水掏空；<b style='color:var(--jade)'>甲屋（玉帶環腰）</b>前面反而多出一大片沙洲新地。這就是古人說「玉帶環腰吉、反弓凶」的原因。";};
+    raf=requestAnimationFrame(f);});
+  $("#mdReset").addEventListener("click",reset);
+  draw();INIT[11].stop=()=>cancelAnimationFrame(raf);
+};
+ANIM[11]=()=>()=>{if(INIT[11].stop)INIT[11].stop();};
+
+/* L13 八宅 */
+function mingGua(y,g,early){
+  if(early)y--;const yy=y%100;let n;
+  const m=y<2000?(g==="m"?100-yy:yy+5):(g==="m"?99-yy:yy+6);n=m%9;const rem=n;
+  if(n===0)n=9;const raw=n;if(n===5)n=g==="m"?2:8;return {n,raw,y,m,rem};
+}
+INIT[13]=function(){
+  let g="m";segBtns("[data-g]","data-g",v=>{g=v;calc();});
+  const svg=$("#bzSvg"),cx=170,cy=170;
+  function calc(){
+    const y=parseInt($("#bzYear").value,10);
+    if(!y||y<1900||y>2099){$("#bzOut").textContent="請輸入 1900 到 2099 之間的年份。";svg.innerHTML="";return;}
+    const r=mingGua(y,g,$("#bzEarly").checked),k=NUM_TRI[r.n],east="坎離震巽".includes(k);
+    const yy=r.y%100;
+    const f=r.y<2000?(g==="m"?`100 − ${yy}`:`${yy} + 5`):(g==="m"?`99 − ${yy}`:`${yy} + 6`);
+    let s=`${$("#bzEarly").checked?`立春前出生，改用 ${r.y} 年計算。<br>`:""}算式：${f} = ${r.m}，${r.m} ÷ 9 餘 <b>${r.rem}</b>${r.rem===0?"（餘 0 當作 9）":""}`;
+    if(r.raw===5)s+=`（得 5，${g==="m"?"男生改為 2 坤":"女生改為 8 艮"}）`;
+    s+=`<br>命卦：<b style="color:var(--red);font-size:20px">${r.n} ${TRI[k].s} ${k}</b>，屬於 <b>${east?"東四命":"西四命"}</b>。<br>最適合住：坐<b>${east?"北、南、東、東南":"西北、西南、東北、西"}</b>的房子。`;
+    $("#bzOut").innerHTML=s;
+    svg.innerHTML="";const list=BZ[k];
+    list.forEach((d,i)=>{const b=DIR8.indexOf(d)*45,a=scr(b),good=i<4;
+      sector(cx,cy,48,160,a-22.5,a+22.5,{style:`fill:${good?"var(--jade-soft)":"var(--red-soft)"};stroke:var(--paper)`,"stroke-width":2},svg);
+      const [x1,y1]=pol(cx,cy,136,a);T(svg,x1,y1,d,{style:"fill:var(--muted);font-size:12px"});
+      const [x2,y2]=pol(cx,cy,110,a);T(svg,x2,y2,BZ_ORDER[i],{style:`fill:${good?"var(--jade)":"var(--red)"};font-family:var(--kai);font-size:17px;font-weight:700`});
+      const [x3,y3]=pol(cx,cy,86,a);T(svg,x3,y3,good?"吉":"凶",{style:`fill:${good?"var(--jade)":"var(--red)"};font-size:12px`});});
+    S("circle",{cx,cy,r:48,style:"fill:var(--paper);stroke:var(--line)"},svg);
+    T(svg,cx,cy-12,TRI[k].s,{style:"fill:var(--ink);font-size:28px"});T(svg,cx,cy+18,k+"命",{style:"fill:var(--ink);font-family:var(--kai);font-size:16px;font-weight:700"});
+  }
+  $("#bzBtn").addEventListener("click",calc);$("#bzEarly").addEventListener("change",calc);calc();
+};
+
+/* L14 三元九運 */
+const yunOf=y=>(Math.floor((y-1864)/20)%9+9)%9+1;
+INIT[14]=function(){
+  const y=new Date().getFullYear(),now=yunOf(y),bar=$("#yunBar");
+  for(let i=1;i<=9;i++){const s=1864+(i-1)*20;const d=document.createElement("div");if(i===now)d.className="now";d.innerHTML=`<b>${["一","二","三","四","五","六","七","八","九"][i-1]}</b>${String(s).slice(2)}–${String(s+19).slice(2)}`;bar.appendChild(d);}
+  const s=1864+(now-1)*20;$("#yunOut").innerHTML=`今年是 ${y} 年，屬於<b>${["上","上","上","中","中","中","下","下","下"][now-1]}元${["一","二","三","四","五","六","七","八","九"][now-1]}運</b>（${s}–${s+19}）。九運結束後，2044 年又從一運開始。上表的數字是西元年份的後兩位。`;
+  $("#pathPlay").addEventListener("click",()=>{if(INIT[14].stop)INIT[14].stop();INIT[14].stop=ANIM[14]();});
+};
+ANIM[14]=function(){
+  const svg=$("#pathSvg");svg.innerHTML="";const c=[50,150,250];const pos={};
+  GRID.forEach((p,i)=>{pos[p]=[c[i%3],c[Math.floor(i/3)]];S("rect",{x:c[i%3]-46,y:c[Math.floor(i/3)]-46,width:92,height:92,rx:10,style:"fill:var(--card);stroke:var(--line)"},svg);
+    T(svg,c[i%3],c[Math.floor(i/3)]+30,p==="C"?"中":DIR8[p],{style:"fill:var(--muted);font-size:12px"});});
+  const nums=[];const line=S("polyline",{points:"",style:"fill:none;stroke:var(--red);opacity:.7","stroke-width":3,"stroke-linejoin":"round"},svg);
+  let k=0,pts=[],timer;
+  function step(){if(k>=9){$("#pathCap").textContent="完成！順序：中 → 西北 → 西 → 東北 → 南 → 北 → 西南 → 東 → 東南";clearInterval(timer);return;}
+    const p=FLY[k],[x,y]=pos[p],n=wrap9(5+k);pts.push(x+","+(y-6));line.setAttribute("points",pts.join(" "));
+    const t=T(svg,x,y-6,n,{style:"fill:var(--ink);font-family:var(--kai);font-size:34px;font-weight:700"});nums.push(t);
+    $("#pathCap").textContent=`第 ${k+1} 步：${p==="C"?"中宮":DIR8[p]}（洛書 ${n}）`;k++;}
+  step();timer=setInterval(step,reduce?60:800);
+  return ()=>clearInterval(timer);
+};
+
+/* L15 流年 */
+const yearStar=y=>wrap9(1-(y-2026));
+INIT[15]=function(){
+  const grid=$("#fyGrid");GRID.forEach(()=>{const d=document.createElement("div");d.className="cell";grid.appendChild(d);});
+  const els=$$(".cell",grid);const SN=["","一白","二黑","三碧","四綠","五黃","六白","七赤","八白","九紫"];
+  let tms=[];
+  function run(){
+    tms.forEach(clearTimeout);tms=[];
+    const y=parseInt($("#fyYear").value,10);if(!y){$("#fyOut").textContent="請輸入年份。";return;}
+    const c=yearStar(y),r=fly(c,1),at={};for(const p in r)at[r[p]]=p;
+    els.forEach(e=>{e.innerHTML="";e.classList.remove("hit","pop");});
+    FLY.forEach((p,k)=>{tms.push(setTimeout(()=>{const i=GRID.indexOf(p),n=r[p],el=els[i];
+      el.innerHTML=`<span class="num" style="color:${n===5||n===2?"var(--red)":[1,4,6,8,9].includes(n)?"var(--jade)":"var(--ink)"}">${n}</span><span>${SN[n]}</span><span>${p==="C"?"中宮":DIR8[p]}</span>`;
+      el.classList.add("pop");if(n===5)el.classList.add("hit");},reduce?0:k*260));});
+    const d=p=>p==="C"?"中宮":DIR8[p];
+    const g=gz(y);
+    $("#fyOut").innerHTML=`${y} 年（${g.g}${g.z}年，從立春起算）：<b>${SN[c]}入中</b>。<br><span class="tag r">五黃</span>在 <b>${d(at[5])}</b>，避免大動土<br><span class="tag r">二黑</span>在 <b>${d(at[2])}</b>，注意通風清潔<br><span class="tag g">四綠文昌</span>在 <b>${d(at[4])}</b>，適合書桌`;
+  }
+  $("#fyBtn").addEventListener("click",run);$("#fyYear").addEventListener("keydown",e=>{if(e.key==="Enter")run();});run();
+};
+
+/* L16 宅運盤 */
+function mYY(i){const d=Math.floor(i/3),yu=i%3;return d%2===0?(yu===0?1:-1):(yu===0?-1:1);}
+const YUAN=["地元","天元","人元"];
+function zhaiPan(yun,si){
+  const fi=(si+12)%24,sd=Math.floor(si/3),fd=Math.floor(fi/3);
+  const base=fly(yun,1);
+  function star(d,mi){const n=base[d];let sign,why;
+    if(n===5){sign=mYY(mi);why=`數字是 5（沒有原宮），用「${MTN[mi]}」本身：${sign>0?"陽":"陰"}`;}
+    else{const pd=NUM_PAL[n],m2=pd*3+(mi%3);sign=mYY(m2);why=`${n} 的原宮是${DIR8[pd]}（${NUM_TRI[n]}宮），同為${YUAN[mi%3]}龍的山是「${MTN[m2]}」：${sign>0?"陽":"陰"}`;}
+    return {n,sign,why,chart:fly(n,sign)};}
+  const sh=star(sd,si),xi=star(fd,fi);
+  const W=yun;let pat;
+  const sOK=sh.chart[sd]===W,xOK=xi.chart[fd]===W,sAtF=sh.chart[fd]===W,xAtS=xi.chart[sd]===W;
+  if(sOK&&xOK)pat=["旺山旺向","g","旺的山星在坐方、旺的向星在向方，最理想。坐方要有靠，向方要開闊見水。"];
+  else if(sAtF&&xAtS)pat=["上山下水","r","旺的山星跑到向方、旺的向星跑到坐方，傳統認為最不理想。若外環境剛好「前有山、後有水」，反而可以補救。"];
+  else if(sAtF&&xOK)pat=["雙星到向","y","兩顆旺星都在向方，旺財。向方要開闊，最好遠處還有高樓或山當靠。"];
+  else if(sOK&&xAtS)pat=["雙星到坐","y","兩顆旺星都在坐方，旺丁。坐方要有靠，最好還有空地或水。"];
+  else pat=["其他","b","不屬於四種基本格局（例如特殊格局），需要更深入的判斷。"];
+  return {si,fi,sd,fd,base,sh,xi,pat};
+}
+INIT[16]=function(){
+  const sel=$("#zpMtn");
+  for(let i=0;i<24;i++){const fi=(i+12)%24;const o=document.createElement("option");o.value=i;o.textContent=`${MTN[i]}山${MTN[fi]}向（坐${DIR8[Math.floor(i/3)]}朝${DIR8[Math.floor(fi/3)]}）`;sel.appendChild(o);}
+  sel.value=1;
+  const grid=$("#zpGrid");GRID.forEach(()=>{const d=document.createElement("div");d.className="cell";grid.appendChild(d);});
+  const els=$$(".cell",grid);
+  function draw(){
+    const yun=+$("#zpYun").value,z=zhaiPan(yun,+sel.value),W=yun;
+    GRID.forEach((p,i)=>{const s=z.sh.chart[p],x=z.xi.chart[p],y=z.base[p];
+      els[i].innerHTML=`<span class="zs${s===W?" wang":""}">${s}</span><span class="zx${x===W?" wang":""}">${x}</span><span class="zy">${y}</span><span>${p==="C"?"中宮":DIR8[p]}</span>${p===z.sd?'<span class="zbadge">坐</span>':p===z.fd?'<span class="zbadge" style="background:var(--red)">向</span>':""}`;
+      els[i].classList.remove("pop");void els[i].offsetWidth;els[i].classList.add("pop");});
+    const yn=["","一","二","三","四","五","六","七","八","九"];
+    $("#zpOut").innerHTML=`<b>①運盤</b>：${yn[yun]}運，${yun} 入中順飛。<br>
+<b>②山星</b>：坐方（${DIR8[z.sd]}）運星是 <b>${z.sh.n}</b>。${z.sh.why} → <b>${z.sh.sign>0?"順飛":"逆飛"}</b>。<br>
+<b>③向星</b>：向方（${DIR8[z.fd]}）運星是 <b>${z.xi.n}</b>。${z.xi.why} → <b>${z.xi.sign>0?"順飛":"逆飛"}</b>。<br>
+<b>④格局</b>：<span class="tag ${z.pat[1]}">${z.pat[0]}</span>${z.pat[2]}`;
+  }
+  $("#zpYun").addEventListener("change",draw);sel.addEventListener("change",draw);draw();
+};
+
+/* L18 平面圖偵探 */
+const DT=[
+ {x:180,y:170,r:28,t:"穿堂煞",d:"大門和落地窗在同一直線上，一開門就看穿整個屋子，風直進直出、缺少隱私。",f:"玄關放屏風或鞋櫃，讓動線轉個彎；落地窗加窗簾。"},
+ {x:60,y:45,r:22,t:"樑壓床",d:"大樑正好橫過床的上方，躺著會有壓迫感。",f:"把床往下移，避開大樑；或用天花板把樑包平。"},
+ {x:55,y:152,r:18,t:"鏡對床",d:"衣櫃的鏡子正對著床，半夜醒來容易被自己的影子嚇到。",f:"把鏡子改到衣櫃門內側，或加布簾。"},
+ {x:305,y:75,r:20,t:"書桌背對房門",d:"坐在書桌前背對房門，後面有人進來看不到，容易分心、沒安全感。",f:"把書桌轉向，背靠牆、斜對房門。"},
+ {x:332,y:280,r:22,t:"開門見灶",d:"從大門走進來，穿過廚房門口就直接看到瓦斯爐，風會吹動爐火，油煙也飄向玄關。",f:"廚房門口加拉門或隔屏，保持抽油煙機運作。"},
+ {x:143,y:236,r:20,t:"沙發背後空",d:"沙發背後就是走道，一直有人在後面走動，坐著很難放鬆（缺少玄武靠山）。",f:"把沙發靠牆擺，或在沙發後面放矮櫃當「靠山」。"}
+];
+INIT[18]=function(){
+  const hot=$("#dtHot"),mk=$("#dtMarks");const found=new Set();
+  function mark(i,show){if(found.has(i))return;found.add(i);const h=DT[i];
+    S("circle",{cx:h.x,cy:h.y,r:h.r,class:"dt-mark",style:`fill:${show?"var(--gold-soft)":"var(--red-soft)"};stroke:${show?"var(--gold)":"var(--red)"}`,"stroke-width":2.5},mk);
+    T(mk,h.x,h.y,found.size,{class:"dt-mark",style:`fill:${show?"var(--gold)":"var(--red)"};font-weight:700;font-size:14px`});
+    const li=document.createElement("li");li.innerHTML=`<b>${h.t}</b>：${h.d}<br><span class="tag b">改善</span>${h.f}`;$("#dtList").appendChild(li);
+    $("#dtCount").textContent=found.size;
+    $("#dtCap").innerHTML=show?"答案都在下面了，對照看看你找到幾個。":found.size===6?"太厲害了！6 個問題全部找到，你已經是平面圖偵探了！":`找到了：<b>${h.t}</b>！還有 ${6-found.size} 個。`;}
+  DT.forEach((h,i)=>{const c=S("circle",{cx:h.x,cy:h.y,r:h.r+4,class:"dt-hot"},hot);c.addEventListener("click",e=>{e.stopPropagation();mark(i,false);});});
+  $("#dtSvg").addEventListener("click",()=>{if(found.size<6)$("#dtCap").textContent="這裡看起來沒問題，再找找看！";});
+  $("#dtShow").addEventListener("click",()=>DT.forEach((h,i)=>mark(i,true)));
+  $("#dtReset").addEventListener("click",()=>{found.clear();mk.innerHTML="";$("#dtList").innerHTML="";$("#dtCount").textContent=0;$("#dtCap").textContent="點圖上你覺得有問題的地方。";});
+};
+/* ---------- 進度 ---------- */
+const KEY="fengshui-course-v1";
+let ST={done:{},last:null};
+try{const s=localStorage.getItem(KEY);if(s)ST=Object.assign(ST,JSON.parse(s));}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(ST));}catch(e){}}
+const LESSONS=$$("article.lesson").map(a=>({id:+a.dataset.id,stage:+a.dataset.stage,title:a.dataset.title,el:a}));
+function doneCount(){return LESSONS.filter(l=>ST.done[l.id]).length;}
+function refreshProgress(){
+  const n=doneCount();$("#progBar").style.width=(n/LESSONS.length*100)+"%";
+  $("#homeProg").textContent=n?`已完成 ${n} / ${LESSONS.length} 課`:"進度會自動保存在這台裝置上";
+  const next=LESSONS.find(l=>!ST.done[l.id]);
+  $("#startBtn").textContent=n===0?"從第 1 課開始":next?`繼續第 ${next.id} 課`:"複習第 1 課";
+  $("#startBtn").dataset.go="L"+(n===0||!next?1:next.id);
+  buildNav();
+}
+
+/* ---------- 目錄 ---------- */
+function buildNav(){
+  const cur=location.hash.slice(1)||"home";
+  let h=`<div class="dhead">風水學堂</div><button class="dlink${cur==="home"?" cur":""}" data-go="home"><span class="n">⌂</span>首頁與課程地圖</button><button class="dlink${cur==="glossary"?" cur":""}" data-go="glossary"><span class="n">辭</span>名詞辭典</button>`;
+  let m="";
+  for(const s in STAGES){
+    h+=`<div class="dgroup">第${STAGE_NUM[s]}階段｜${STAGES[s][0]}：${STAGES[s][1]}</div>`;
+    m+=`<div class="stage"><h3>第${STAGE_NUM[s]}階段　${STAGES[s][0]}</h3><p class="sd">${STAGES[s][1]}</p>`;
+    LESSONS.filter(l=>l.stage==s).forEach(l=>{
+      const ck=ST.done[l.id]?'<span class="ck">✓</span>':"";
+      h+=`<button class="dlink${cur==="L"+l.id?" cur":""}" data-go="L${l.id}"><span class="n">${l.id}</span>${l.title}${ck}</button>`;
+      m+=`<button class="mapl" data-go="L${l.id}"><span class="n">第${l.id}課</span>${l.title}${ck}</button>`;
+    });
+    m+="</div>";
+  }
+  $("#drawerInner").innerHTML=h;$("#stageMap").innerHTML=m;
+}
+function openDrawer(o){$("#drawer").classList.toggle("open",o);$("#scrim").classList.toggle("open",o);}
+$("#menuBtn").addEventListener("click",()=>openDrawer(true));
+$("#scrim").addEventListener("click",()=>openDrawer(false));
+document.addEventListener("keydown",e=>{if(e.key==="Escape")openDrawer(false);});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(!b)return;e.preventDefault();openDrawer(false);go(b.dataset.go);});
+function go(id){if(location.hash==="#"+id)show(id);else location.hash=id;}
+
+/* ---------- 主題 ---------- */
+function applyTheme(t){if(t)document.documentElement.setAttribute("data-theme",t);else document.documentElement.removeAttribute("data-theme");}
+try{applyTheme(localStorage.getItem("fs-theme"));}catch(e){}
+$("#themeBtn").addEventListener("click",()=>{
+  const at=document.documentElement.getAttribute("data-theme");
+  const dark=at?at==="dark":(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);
+  const t=dark?"light":"dark";applyTheme(t);try{localStorage.setItem("fs-theme",t);}catch(e){}
+});
+
+/* ---------- 路由 ---------- */
+const inited={};let stopAnim=null;
+function show(id){window.AC_COURSE_GO=function(v){show(v)};window.AC_COURSE_POSITION=id;
+  let v=document.getElementById(id);
+  if(!v||!v.classList.contains("view")){id="home";v=$("#home");}
+  if(stopAnim){try{stopAnim();}catch(e){}stopAnim=null;}
+  $$(".view").forEach(x=>x.classList.toggle("active",x===v));
+  const n=id[0]==="L"?+id.slice(1):0;
+  if(n){
+    if(!inited[n]){inited[n]=true;try{INIT[n]&&INIT[n]();}catch(e){console.error(e);}}
+    if(ANIM[n])try{stopAnim=ANIM[n]();}catch(e){console.error(e);}
+    $("#tbTitle").innerHTML=`<small>第 ${n} 課</small>${LESSONS[n-1].title}`;
+    ST.last=id;save();
+  }else if(id==="glossary"){$("#tbTitle").textContent="名詞辭典";}
+  else $("#tbTitle").textContent="風水學堂";
+  buildNav();
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange",()=>show(location.hash.slice(1)));
+
+/* ---------- 上一課 / 下一課 ---------- */
+LESSONS.forEach((l,i)=>{
+  const nav=document.createElement("div");nav.className="lnav";
+  const p=LESSONS[i-1],n=LESSONS[i+1];
+  nav.innerHTML=(p?`<button class="btn" data-go="L${p.id}">← 第 ${p.id} 課</button>`:`<button class="btn" data-go="home">← 首頁</button>`)+
+    (n?`<button class="btn primary" data-go="L${n.id}">下一課：${n.title}</button>`:`<button class="btn primary" data-go="glossary">名詞辭典</button>`);
+  l.el.appendChild(nav);
+});
+
+/* ---------- 測驗 ---------- */
+function renderQ(box,items,onDone){
+  box.innerHTML="";let answered=0,right=0;
+  items.forEach((it,qi)=>{
+    const d=document.createElement("div");d.className="qitem";
+    d.innerHTML=`<div class="qq">${qi+1}. ${it.q}</div>`;
+    const opts=shuffle(it.o.map((t,i)=>({t,ok:i===0})));
+    opts.forEach(o=>{const b=document.createElement("button");b.className="opt";b.textContent=o.t;b.dataset.ok=o.ok?1:0;
+      b.addEventListener("click",()=>{if(d.classList.contains("done"))return;d.classList.add("done");answered++;
+        if(o.ok){right++;b.classList.add("right");}else{b.classList.add("wrong");$$(".opt",d).find(x=>x.dataset.ok==="1").classList.add("right");}
+        if(answered===items.length)onDone(right);});
+      d.appendChild(b);});
+    const ex=document.createElement("div");ex.className="qexp";ex.textContent="解說："+it.e;d.appendChild(ex);
+    box.appendChild(d);
+  });
+}
+function lessonQuiz(n){
+  const box=$(`.quiz[data-quiz="${n}"]`);if(!box)return;
+  box.innerHTML=`<h3>小測驗</h3><p class="muted" style="font-size:15px;margin:0">${ST.done[n]?"你已經完成這一課，可以再練習一次。":"三題都作答後，這一課就會標記為完成。"}</p><div class="qbody"></div><div class="qres"></div>`;
+  renderQ($(".qbody",box),QUIZ[n],r=>{
+    ST.done[n]=true;save();refreshProgress();
+    $(".qres",box).innerHTML=`答對 ${r} / 3。${r===3?"全對，太棒了！":"看看解說，再複習一下重點。"} <button class="btn" style="margin-left:6px">再做一次</button>`;
+    $(".qres .btn",box).addEventListener("click",()=>lessonQuiz(n));
+  });
+}
+LESSONS.forEach(l=>lessonQuiz(l.id));
+
+/* 結業測驗 */
+$("#finalStart").addEventListener("click",()=>{
+  const all=[];for(const k in QUIZ)QUIZ[k].forEach(q=>all.push(q));
+  const pick=shuffle(all).slice(0,10);
+  $("#finalResult").innerHTML="";$("#finalStart").textContent="重新抽題";
+  renderQ($("#finalQuiz"),pick,r=>{
+    const box=$("#finalResult");
+    if(r>=8){
+      const d=new Date();
+      box.innerHTML=`<p class="rel">答對 <b>${r}</b> / 10，恭喜通過！輸入你的名字，領取證書：</p><div class="row"><input type="text" id="certName" placeholder="你的名字" maxlength="20"></div>
+<div class="cert"><h3>結業證書</h3><p class="muted" style="margin:0">風水學堂</p><div class="nm" id="certNm">＿＿＿＿</div>
+<p>完成「風水學堂」六個階段、二十堂課程，<br>通過結業測驗，成績 ${r} / 10。</p><p class="muted">${d.getFullYear()} 年 ${d.getMonth()+1} 月 ${d.getDate()} 日</p><span class="stamp">風水<br>學堂</span></div>`;
+      $("#certName").addEventListener("input",e=>{$("#certNm").textContent=e.target.value.trim()||"＿＿＿＿";});
+    }else box.innerHTML=`<p class="rel">答對 <b>${r}</b> / 10。還差一點！看看上面的解說，複習後按「重新抽題」再挑戰一次。</p>`;
+    if(box.scrollIntoView)box.scrollIntoView({behavior:"smooth",block:"nearest"});
+  });
+});
+
+/* ---------- 名詞辭典 ---------- */
+function drawGlo(){
+  const q=$("#gloQ").value.trim();
+  const list=GLO.filter(g=>!q||g[0].includes(q)||g[1].includes(q));
+  $("#gloList").innerHTML=list.length?list.map(g=>`<div class="glo-item"><b>${g[0]}</b><button class="lk" data-go="L${g[2]}">第 ${g[2]} 課</button><div>${g[1]}</div></div>`).join(""):`<p class="muted">找不到「${q.replace(/[<>&]/g,"")}」。試試更短的關鍵字，例如「龍」或「星」。</p>`;
+}
+$("#gloQ").addEventListener("input",drawGlo);drawGlo();
+
+/* ---------- 啟動 ---------- */
+drawHero();
+refreshProgress();
+show(location.hash.slice(1)||"home");
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-3d30f756df" data-category="classics"></script></body></html>

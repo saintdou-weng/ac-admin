@@ -1,0 +1,2125 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>室內設計與家具：從零開始的完整課程</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E8EBE4;      /* 描圖紙灰綠 */
+  --sheet:#F7F8F4;      /* 圖紙白 */
+  --ink:#232A2F;        /* 繪圖墨 */
+  --ink2:#5A646B;
+  --line:#C9CFC4;
+  --oak:#A8703C;        /* 橡木 */
+  --oak-soft:#EFDFCB;
+  --sage:#56735A;       /* 植栽綠 */
+  --sage-soft:#DCE6D8;
+  --blue:#3B5874;       /* 藍圖藍 */
+  --blue-soft:#DCE4EC;
+  --red:#B5473A;        /* 修改紅筆 */
+  --red-soft:#F3DDD8;
+  --serif:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#1C2124; --sheet:#242A2E; --ink:#E6E9E3; --ink2:#A6B0B5; --line:#3A4348;
+    --oak:#D39A62; --oak-soft:#3A2E22; --sage:#8DB191; --sage-soft:#26342A;
+    --blue:#8FB0CF; --blue-soft:#243240; --red:#E0826F; --red-soft:#3E2622;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1C2124; --sheet:#242A2E; --ink:#E6E9E3; --ink2:#A6B0B5; --line:#3A4348;
+  --oak:#D39A62; --oak-soft:#3A2E22; --sage:#8DB191; --sage-soft:#26342A;
+  --blue:#8FB0CF; --blue-soft:#243240; --red:#E0826F; --red-soft:#3E2622;
+}
+*{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-text-size-adjust:100%}
+img,svg{max-width:100%}
+button{font:inherit;color:inherit}
+a{color:var(--blue)}
+:focus-visible{outline:3px solid var(--oak);outline-offset:2px}
+
+/* ---------- layout ---------- */
+.app{display:grid;grid-template-columns:300px 1fr;min-height:100vh}
+aside.nav{position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--sheet);border-right:1px solid var(--line);padding:24px 18px 40px}
+.brand{font-family:var(--serif);font-weight:900;font-size:22px;line-height:1.3;margin:0 0 4px}
+.brand-sub{font-size:13px;color:var(--ink2);margin:0 0 18px}
+.progress{margin:0 0 20px}
+.progress-bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.progress-bar i{display:block;height:100%;background:var(--sage);width:0;transition:width .4s}
+.progress-txt{font-size:13px;color:var(--ink2);margin-top:6px}
+.part-title{font-family:var(--serif);font-size:14px;font-weight:700;color:var(--oak);margin:20px 0 6px;padding-left:6px}
+.nav ol{list-style:none;margin:0;padding:0}
+.nav li button{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;background:none;border:0;padding:7px 8px;border-radius:6px;cursor:pointer;font-size:15px;line-height:1.5}
+.nav li button:hover{background:var(--paper)}
+.nav li button.active{background:var(--blue-soft);font-weight:700}
+.nav .num{flex:0 0 28px;font-family:var(--serif);color:var(--ink2);font-size:13px;padding-top:2px}
+.nav .done .num::after{content:" ✓";color:var(--sage);font-weight:700}
+.nav-tools{margin-top:24px;display:flex;flex-wrap:wrap;gap:8px}
+.nav-tools button{font-size:13px;padding:6px 10px;border:1px solid var(--line);background:var(--paper);border-radius:6px;cursor:pointer}
+
+.topbar{display:none}
+main{padding:40px 48px 120px;min-width:0}
+.lesson{display:none;max-width:760px;margin:0 auto}
+.lesson.show{display:block;animation:open .35s ease}
+@keyframes open{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- signature: 尺寸線 heading ---------- */
+.dim{display:flex;align-items:center;gap:10px;color:var(--blue);font-family:var(--serif);font-size:14px;margin:0 0 10px}
+.dim::before,.dim::after{content:"";flex:1;height:0;border-top:1.5px solid currentColor}
+.dim::before{max-width:28px}
+.dim span{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.dim span::before,.dim span::after{content:"";width:1.5px;height:14px;background:currentColor;transform:skewX(-35deg)}
+.lesson h1{font-family:var(--serif);font-weight:900;font-size:clamp(28px,5vw,40px);line-height:1.3;margin:0 0 10px;letter-spacing:.02em}
+.lead{font-size:18px;color:var(--ink2);margin:0 0 28px}
+.lesson h2{font-family:var(--serif);font-size:24px;line-height:1.4;margin:44px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--ink)}
+.lesson h3{font-family:var(--serif);font-size:19px;margin:28px 0 8px}
+.lesson p{margin:0 0 16px}
+.lesson ul,.lesson ol.steps{padding-left:1.3em;margin:0 0 16px}
+.lesson li{margin-bottom:6px}
+strong{font-weight:700}
+.en{font-size:.85em;color:var(--ink2);font-style:italic}
+.goal{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:0 0 28px}
+.goal b{font-family:var(--serif)}
+.goal ul{margin:6px 0 0}
+
+/* ---------- callouts ---------- */
+.box{border-radius:10px;padding:14px 18px 6px;margin:20px 0;border-left:5px solid}
+.box .t{font-weight:700;margin-bottom:6px;display:flex;gap:8px;align-items:center}
+.origin{background:var(--oak-soft);border-color:var(--oak)}
+.origin .t{color:var(--oak)}
+.eg{background:var(--sage-soft);border-color:var(--sage)}
+.eg .t{color:var(--sage)}
+.tip{background:var(--blue-soft);border-color:var(--blue)}
+.tip .t{color:var(--blue)}
+.warn{background:var(--red-soft);border-color:var(--red)}
+.warn .t{color:var(--red)}
+
+/* ---------- figures & widgets ---------- */
+figure{margin:24px 0;background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:16px;overflow-x:auto}
+figcaption{font-size:14px;color:var(--ink2);margin-top:10px;text-align:center}
+.widget{background:var(--sheet);border:1.5px dashed var(--blue);border-radius:10px;padding:18px;margin:24px 0}
+.widget-t{font-family:var(--serif);font-weight:700;color:var(--blue);margin-bottom:10px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+input[type=range]{width:100%;accent-color:var(--oak)}
+input[type=number],input[type=text],select{font:inherit;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);max-width:100%}
+.btn{border:1.5px solid var(--ink);background:var(--sheet);padding:7px 14px;border-radius:8px;cursor:pointer;font-size:15px}
+.btn:hover{background:var(--paper)}
+.btn.on{background:var(--ink);color:var(--sheet)}
+.result{margin-top:10px;padding:10px 14px;border-radius:8px;background:var(--paper);font-weight:500}
+.ok{color:var(--sage)} .bad{color:var(--red)}
+table{border-collapse:collapse;width:100%;font-size:15px;margin:16px 0}
+.tw{overflow-x:auto;margin:16px 0}
+.tw table{margin:0;min-width:520px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--paper);font-family:var(--serif)}
+.swatch{display:inline-block;width:18px;height:18px;border-radius:4px;vertical-align:-3px;border:1px solid rgba(0,0,0,.15);margin-right:2px}
+
+/* ---------- quiz ---------- */
+.quiz{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:18px 0}
+.quiz .q{font-weight:700;margin-bottom:10px}
+.quiz .opts{display:grid;gap:8px}
+.quiz .opts button{text-align:left;padding:9px 14px;border:1.5px solid var(--line);background:var(--paper);border-radius:8px;cursor:pointer;line-height:1.5}
+.quiz .opts button:hover{border-color:var(--ink2)}
+.quiz .opts button.right{border-color:var(--sage);background:var(--sage-soft)}
+.quiz .opts button.wrong{border-color:var(--red);background:var(--red-soft)}
+.quiz .fb{display:none;margin-top:10px;font-size:15px}
+.quiz.answered .fb{display:block}
+
+/* ---------- lesson footer ---------- */
+.lesson-end{margin-top:48px;padding-top:20px;border-top:2px solid var(--ink);display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
+.lesson-end .btn.primary{background:var(--oak);border-color:var(--oak);color:#fff}
+.summary{background:var(--ink);color:var(--sheet);border-radius:10px;padding:18px 22px 8px;margin:32px 0}
+.summary .t{font-family:var(--serif);font-weight:700;margin-bottom:6px}
+.summary li{margin-bottom:6px}
+
+/* ---------- misc components ---------- */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin:18px 0}
+.card{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.card h4{font-family:var(--serif);margin:0 0 6px;font-size:17px}
+.card p{font-size:15px;margin:0 0 8px}
+.palette{display:flex;height:26px;border-radius:6px;overflow:hidden;margin:6px 0 10px;border:1px solid var(--line)}
+.palette i{flex:1}
+.timeline{position:relative;margin:20px 0;padding-left:28px}
+.timeline::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl{position:relative;margin-bottom:18px}
+.tl::before{content:"";position:absolute;left:-24px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--sheet);border:2.5px solid var(--oak)}
+.tl b{font-family:var(--serif);color:var(--oak)}
+.tl.active::before{background:var(--oak)}
+.glossary-item{padding:10px 0;border-bottom:1px solid var(--line)}
+.glossary-item b{font-family:var(--serif)}
+.cert{border:3px double var(--oak);background:var(--sheet);padding:36px 24px;text-align:center;border-radius:6px;margin:20px 0}
+.cert h3{font-size:30px;margin:0 0 8px}
+.cert .who{font-family:var(--serif);font-size:32px;font-weight:900;border-bottom:1.5px solid var(--ink);display:inline-block;min-width:200px;padding:0 20px;margin:14px 0}
+.hero{background:var(--sheet);border:1px solid var(--line);border-radius:12px;padding:0;overflow:hidden;margin-bottom:28px}
+.hero svg{display:block;width:100%;height:auto}
+.hero-text{padding:20px 24px}
+
+/* ---------- mobile ---------- */
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  aside.nav{position:fixed;left:0;top:0;bottom:0;width:86%;max-width:330px;z-index:30;transform:translateX(-102%);transition:transform .3s;padding-top:calc(24px + env(safe-area-inset-top,0px));height:100%}
+  aside.nav.open{transform:none;box-shadow:0 0 0 100vmax rgba(0,0,0,.35)}
+  .topbar{display:flex;position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--sheet);border-bottom:1px solid var(--line);padding:10px 14px;align-items:center;gap:12px}
+  .topbar button{border:1px solid var(--line);background:var(--paper);border-radius:6px;padding:4px 12px;cursor:pointer}
+  .topbar .tt{font-family:var(--serif);font-weight:700;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  main{padding:24px 18px 100px}
+  body{font-size:16px}
+}
+@media print{
+  aside.nav,.topbar,.lesson-end{display:none!important}
+  .app{display:block}
+  .lesson{display:block!important;page-break-after:always}
+}
+</style>
+</head>
+<body>
+<div class="topbar"><button id="menuBtn" aria-label="開啟課程目錄">☰ 目錄</button><div class="tt" id="topTitle">室內設計與家具</div></div>
+<div class="app">
+<aside class="nav" id="nav">
+  <p class="brand">室內設計與家具</p>
+  <p class="brand-sub">從零開始的完整課程，共 22 課</p>
+  <div class="progress"><div class="progress-bar"><i id="pbar"></i></div><div class="progress-txt" id="ptxt">尚未開始</div></div>
+  <div id="navList"></div>
+  <div class="nav-tools">
+    <button id="glossBtn">📖 名詞總表</button>
+    <button id="themeBtn">🌓 深淺色</button>
+    <button id="resetBtn">↺ 重設進度</button>
+  </div>
+</aside>
+<main id="main">
+<!-- ===================== 序 ===================== -->
+<section class="lesson" id="L0" data-part="開始之前" data-num="序" data-title="課程導覽：怎麼學最有效">
+<div class="dim"><span>序章</span></div>
+<h1>歡迎來到室內設計的世界</h1>
+<p class="lead">你每天都生活在「室內」：教室、房間、便利商店、餐廳。這門課要帶你看懂這些空間背後的道理，從「為什麼桌子是 75 公分高」一路學到「設計師怎麼把一間空屋變成家」。</p>
+
+<div class="hero">
+<svg viewBox="0 0 720 300" role="img" aria-label="一間客廳從空屋到完成的示意圖">
+  <defs><pattern id="g0" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="var(--line)" stroke-width=".6"/></pattern></defs>
+  <rect width="720" height="300" fill="url(#g0)"/>
+  <!-- room outline -->
+  <path d="M60 250 L60 60 L660 60 L660 250 Z" fill="none" stroke="var(--ink)" stroke-width="6"/>
+  <rect x="300" y="54" width="140" height="12" fill="var(--sheet)" stroke="var(--ink)" stroke-width="2"/>
+  <line x1="300" y1="60" x2="440" y2="60" stroke="var(--blue)" stroke-width="2"/>
+  <!-- sofa -->
+  <g class="h-anim" style="animation-delay:.2s"><rect x="110" y="170" width="200" height="60" rx="8" fill="var(--oak-soft)" stroke="var(--oak)" stroke-width="2"/><rect x="110" y="200" width="200" height="30" rx="6" fill="var(--oak)" opacity=".35"/></g>
+  <!-- coffee table -->
+  <g class="h-anim" style="animation-delay:.5s"><rect x="150" y="110" width="120" height="40" rx="4" fill="none" stroke="var(--ink)" stroke-width="2"/></g>
+  <!-- plant -->
+  <g class="h-anim" style="animation-delay:.8s"><circle cx="600" cy="100" r="26" fill="var(--sage-soft)" stroke="var(--sage)" stroke-width="2"/><circle cx="600" cy="100" r="8" fill="var(--sage)"/></g>
+  <!-- tv cabinet -->
+  <g class="h-anim" style="animation-delay:1.1s"><rect x="480" y="200" width="150" height="36" fill="var(--blue-soft)" stroke="var(--blue)" stroke-width="2"/></g>
+  <!-- dimension line -->
+  <g stroke="var(--red)" stroke-width="1.5" fill="var(--red)" font-size="14" font-family="sans-serif">
+    <line x1="60" y1="280" x2="660" y2="280"/><line x1="60" y1="272" x2="60" y2="288"/><line x1="660" y1="272" x2="660" y2="288"/>
+    <text x="360" y="274" text-anchor="middle" stroke="none">600 cm</text>
+  </g>
+</svg>
+<div class="hero-text">空屋（牆、窗）→ 放入沙發、茶几、植物、電視櫃 → 標上尺寸。這就是室內設計最基本的樣子。</div>
+</div>
+<style>.h-anim{opacity:0;animation:pop .6s ease forwards}@keyframes pop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}</style>
+
+<h2>這門課怎麼安排</h2>
+<p>課程分成七篇，一步一步往上蓋，就像蓋房子要先打地基：</p>
+<div class="tw"><table>
+<tr><th>篇</th><th>學什麼</th><th>程度</th></tr>
+<tr><td>第一篇 認識室內設計</td><td>室內設計是什麼、單位、看懂設計圖</td><td>入門</td></tr>
+<tr><td>第二篇 人與空間</td><td>人體工學、動線</td><td>入門</td></tr>
+<tr><td>第三篇 美學基礎</td><td>元素、原則、色彩、照明</td><td>基礎</td></tr>
+<tr><td>第四篇 家具全攻略</td><td>家具名稱、材料、結構、經典名作</td><td>基礎到進階</td></tr>
+<tr><td>第五篇 各空間設計</td><td>客廳、廚房、臥室、浴室、收納</td><td>進階</td></tr>
+<tr><td>第六篇 風格</td><td>北歐、日式、工業風等十多種風格</td><td>進階</td></tr>
+<tr><td>第七篇 從圖紙到完工</td><td>建材工法、施工流程、設計師的工作與法規、期末專題</td><td>專業</td></tr>
+</table></div>
+
+<h2>你會看到的小方塊</h2>
+<div class="box origin"><div class="t">📜 名詞由來</div><p>專有名詞從哪裡來、為什麼叫這個名字。知道由來，就不用死背。</p></div>
+<div class="box eg"><div class="t">🏠 生活例子</div><p>用你身邊看得到的東西來解釋。</p></div>
+<div class="box tip"><div class="t">💡 小撇步</div><p>設計師實際工作時會用的技巧。</p></div>
+<div class="box warn"><div class="t">⚠️ 常見錯誤</div><p>很多人（包括大人）會犯的錯。</p></div>
+<div class="widget"><div class="widget-t">✏️ 動手試試</div><p style="margin:0">可以拖、可以按、可以調的互動練習。每課最後還有小測驗。</p></div>
+
+<h2>學習建議</h2>
+<ul>
+<li><strong>照順序讀。</strong>後面的課會用到前面學過的名詞。</li>
+<li><strong>準備一把捲尺。</strong>讀到尺寸時，去量量看家裡的桌子、椅子、床，印象會深十倍。</li>
+<li><strong>每課做完測驗再按「完成本課」。</strong>進度會自動存在這台裝置的瀏覽器裡。</li>
+<li>這個檔案可以離線打開，也可以用瀏覽器「列印」存成 PDF。</li>
+</ul>
+</section>
+
+<!-- ===================== L1 ===================== -->
+<section class="lesson" id="L1" data-part="第一篇 認識室內設計" data-num="1" data-title="室內設計是什麼？">
+<div class="dim"><span>第 1 課</span></div>
+<h1>室內設計是什麼？</h1>
+<p class="lead">是把房間變漂亮嗎？只答對了一小部分。</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>室內設計、室內裝飾、裝潢三者的差別</li><li>好的室內設計要同時照顧哪三件事</li><li>室內設計師每天在做什麼</li></ul></div>
+
+<h2>一句話定義</h2>
+<p><strong>室內設計</strong>，就是「規劃建築物裡面的空間，讓住在裡面、用這個空間的人，生活得更方便、更安全、更舒服，也更好看」。</p>
+<p>注意順序：方便、安全、舒服排在「好看」前面。一間很美但每天撞到桌角、找不到東西放的房間，不算好設計。</p>
+
+<div class="box origin"><div class="t">📜 名詞由來：室內設計 <span class="en">Interior Design</span></div>
+<p>英文 <em>interior</em> 來自拉丁文，意思是「更裡面的」；<em>design</em> 來自拉丁文 <em>designare</em>，意思是「標記出來、畫出來」。合起來就是「把裡面的空間畫出規劃」。</p>
+<p>這個行業在 20 世紀初才慢慢從「幫有錢人挑窗簾、擺家具」的裝飾工作，發展成要懂結構、法規、照明、人體工學的專業。</p></div>
+
+<div class="box origin"><div class="t">📜 名詞由來：裝潢</div>
+<p>「裝潢」這兩個字原本跟房子無關！古時候「裝」是裝裱書畫，「潢」是用黃檗（一種植物）的汁把紙染黃，可以防蟲蛀。後來「裝潢」被借用成「把東西包裝、修飾得好看」，現在台灣多用來指「房屋裝修工程」。</p></div>
+
+<h2>三個很像的詞，差在哪？</h2>
+<div class="tw"><table>
+<tr><th>名詞</th><th>做什麼</th><th>例子</th></tr>
+<tr><td><strong>室內設計</strong></td><td>從頭規劃空間：牆要不要拆、動線怎麼走、燈裝哪裡、櫃子做多深</td><td>把三房改成兩房加大書房</td></tr>
+<tr><td><strong>室內裝飾</strong><br><span class="en">Interior Decoration</span></td><td>不動結構，只挑家具、窗簾、畫、植物、顏色</td><td>換一組沙發、掛兩幅畫</td></tr>
+<tr><td><strong>裝潢／裝修</strong></td><td>實際動手施工的工程</td><td>師傅來拆牆、鋪地板、做櫃子</td></tr>
+</table></div>
+<div class="box eg"><div class="t">🏠 生活例子</div><p>把你的房間想成一場生日派對。「室內設計」是決定在哪裡辦、幾個人、怎麼走位；「室內裝飾」是挑氣球顏色和桌巾；「裝潢」是真的去搬桌子、吹氣球的人。</p></div>
+
+<h2>好設計的三個支柱</h2>
+<figure>
+<svg viewBox="0 0 600 230" role="img" aria-label="好設計三支柱：機能、美感、安全">
+  <rect x="40" y="20" width="520" height="30" rx="4" fill="var(--ink)"/>
+  <text x="300" y="41" text-anchor="middle" fill="var(--sheet)" font-size="16" font-weight="700">好的室內設計</text>
+  <g font-size="16" text-anchor="middle" font-weight="700">
+    <rect x="70" y="50" width="100" height="130" fill="var(--blue-soft)" stroke="var(--blue)" stroke-width="2"/><text x="120" y="120" fill="var(--blue)">機能</text>
+    <rect x="250" y="50" width="100" height="130" fill="var(--oak-soft)" stroke="var(--oak)" stroke-width="2"/><text x="300" y="120" fill="var(--oak)">美感</text>
+    <rect x="430" y="50" width="100" height="130" fill="var(--sage-soft)" stroke="var(--sage)" stroke-width="2"/><text x="480" y="120" fill="var(--sage)">安全健康</text>
+  </g>
+  <rect x="40" y="180" width="520" height="16" fill="var(--ink2)"/>
+  <text x="300" y="220" text-anchor="middle" fill="var(--ink2)" font-size="14">少了任何一根柱子，屋頂都會歪</text>
+</svg>
+<figcaption>機能＝好用；美感＝好看、有感覺；安全健康＝不會受傷、空氣好、光線夠</figcaption>
+</figure>
+<p>建築界有一句很有名的話：<strong>「形隨機能」</strong>（Form follows function），是美國建築師路易斯．蘇利文在 1896 年提出的。意思是：先想清楚東西要拿來做什麼，形狀自然就會出來。例如椅子要讓人坐，所以座面高度要剛好讓腳踩到地；不是先畫一張好看的椅子，再來煩惱能不能坐。</p>
+
+<h2>室內設計師做什麼？</h2>
+<ol class="steps">
+<li><strong>聽</strong>：問屋主幾個人住、有沒有寵物、喜歡在家做什麼、預算多少。</li>
+<li><strong>量</strong>：到現場把每面牆、每扇窗、每根柱子都量清楚。</li>
+<li><strong>畫</strong>：畫平面配置圖、3D 圖，跟屋主討論修改。</li>
+<li><strong>算</strong>：估算要花多少錢、要多久。</li>
+<li><strong>管</strong>：施工時到現場監督，確認師傅做得跟圖一樣。</li>
+</ol>
+<p>第 21 課會把這整個流程講得更仔細。現在你只要記得：設計師一半是藝術家，一半是工程師，還要兼一點點心理諮商師。</p>
+
+<div class="summary"><div class="t">本課重點</div><ul>
+<li>室內設計＝規劃空間，讓人用起來方便、安全、舒服、好看。</li>
+<li>室內設計 ≠ 室內裝飾 ≠ 裝潢施工。</li>
+<li>三支柱：機能、美感、安全健康。「形隨機能」。</li></ul></div>
+
+<h2>小測驗</h2>
+<div class="quiz" data-a="2"><div class="q">1. 只換窗簾和沙發顏色，不動任何牆和水電，比較接近哪一種工作？</div><div class="opts"><button>室內設計</button><button>建築設計</button><button>室內裝飾</button></div><div class="fb">室內裝飾（Decoration）只處理可以搬動、更換的物品與色彩，不改動空間結構。</div></div>
+<div class="quiz" data-a="0"><div class="q">2. 「裝潢」的「潢」原本是什麼意思？</div><div class="opts"><button>把紙染黃來防蟲</button><button>黃金做的裝飾</button><button>水池</button></div><div class="fb">古代用黃檗汁染紙防蟲，稱為「潢」。</div></div>
+<div class="quiz" data-a="1"><div class="q">3. 「形隨機能」的意思最接近哪一句？</div><div class="opts"><button>先畫出好看的形狀再想用途</button><button>先想清楚用途，形狀跟著用途決定</button><button>機能不重要，好看就好</button></div><div class="fb">先有用途，才有形狀。</div></div>
+</section>
+
+<!-- ===================== L2 ===================== -->
+<section class="lesson" id="L2" data-part="第一篇 認識室內設計" data-num="2" data-title="空間的單位：公分、坪、比例尺">
+<div class="dim"><span>第 2 課</span></div>
+<h1>空間的單位：公分、坪、比例尺</h1>
+<p class="lead">設計師講的是「數字的語言」。先把尺學會，後面才看得懂圖。</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>為什麼室內設計都用「公分」和「公釐」</li><li>「坪」怎麼來的、怎麼換算</li><li>比例尺 1:50 是什麼意思</li></ul></div>
+
+<h2>長度：公分與公釐</h2>
+<p>室內設計最常用 <strong>公分（cm）</strong>；施工圖和做家具更常用 <strong>公釐（mm）</strong>，因為木工差 3 公釐，抽屜可能就關不起來。</p>
+<ul><li>1 公尺（m）＝ 100 公分（cm）＝ 1000 公釐（mm）</li><li>一張 A4 紙寬約 21 cm；一般房門寬約 80–90 cm；天花板高度常見 240–280 cm。</li></ul>
+<div class="box origin"><div class="t">📜 名詞由來：台尺</div><p>台灣的木工師傅常說「幾尺幾寸」，這是日治時期留下的<strong>台尺</strong>：1 台尺 ≈ 30.3 公分，1 寸 ≈ 3.03 公分。所以床墊的「5 尺 × 6.2 尺」標準雙人床，大約就是 152 × 188 公分。聽到師傅講尺，要會自動換算。</p></div>
+
+<h2>面積：平方公尺與坪</h2>
+<p>面積＝長 × 寬。一個 3 m × 4 m 的房間，面積是 12 平方公尺（m²）。</p>
+<div class="box origin"><div class="t">📜 名詞由來：坪</div><p>「坪」（日文 <em>tsubo</em>）是日本的面積單位，日治時期帶到台灣。1 坪 ＝ 6 尺 × 6 尺（日本尺，約 1.818 m × 1.818 m），剛好大約是<strong>兩張榻榻米</strong>的大小，也差不多是一個大人手腳張開躺下的空間。</p><p><strong>1 坪 ≈ 3.3058 m²</strong>；反過來 <strong>1 m² ≈ 0.3025 坪</strong>。</p></div>
+
+<div class="widget"><div class="widget-t">✏️ 動手試試：坪數換算器</div>
+<div class="row"><label>長（公分）<br><input type="number" id="pingL" value="400" min="0"></label><label>寬（公分）<br><input type="number" id="pingW" value="300" min="0"></label></div>
+<div class="result" id="pingOut"></div>
+<p style="font-size:14px;color:var(--ink2);margin:8px 0 0">試試看量你房間的長寬填進來。一般台灣小孩房約 3–4 坪。</p></div>
+
+<div class="box warn"><div class="t">⚠️ 常見錯誤：權狀坪數 ≠ 室內坪數</div><p>買房子時說的「30 坪」，常包含公共設施（電梯、大廳）和陽台。真正在家裡能用的「室內實際坪數」可能只有 20 多坪。設計時一定要用<strong>現場實際量的尺寸</strong>。</p></div>
+
+<h2>比例尺：把大房子縮進紙裡</h2>
+<p>房子太大，不可能用原尺寸畫在紙上，所以要<strong>等比例縮小</strong>。</p>
+<ul>
+<li><strong>1:100</strong>：圖上 1 公分＝實際 100 公分（1 公尺）。適合畫整間房子的平面。</li>
+<li><strong>1:50</strong>：圖上 1 公分＝實際 50 公分。可以看出家具細節，室內設計最常用。</li>
+<li><strong>1:20、1:10、1:1</strong>：畫櫃子、門把細節。1:1 就是「原尺寸」。</li>
+</ul>
+<figure>
+<svg viewBox="0 0 600 170" role="img" aria-label="同一張200公分的床用不同比例尺畫出">
+ <g font-size="13" fill="var(--ink)">
+  <text x="20" y="30">1:100</text><rect x="90" y="16" width="40" height="30" fill="var(--oak-soft)" stroke="var(--oak)"/><text x="140" y="36" fill="var(--ink2)">2 cm 長</text>
+  <text x="20" y="90">1:50</text><rect x="90" y="70" width="80" height="60" fill="var(--oak-soft)" stroke="var(--oak)"/><text x="180" y="105" fill="var(--ink2)">4 cm 長</text>
+  <text x="290" y="30">1:20</text><rect x="350" y="16" width="200" height="140" fill="var(--oak-soft)" stroke="var(--oak)"/><text x="450" y="92" text-anchor="middle" fill="var(--ink2)">10 cm 長</text>
+ </g>
+</svg>
+<figcaption>同一張長 200 cm 的床，比例尺越大（分母越小），畫出來越大、越能看到細節</figcaption>
+</figure>
+
+<div class="widget"><div class="widget-t">✏️ 動手試試：比例尺換算</div>
+<div class="row"><label>圖上量到（公分）<br><input type="number" id="scD" value="4" step="0.1"></label>
+<label>比例尺<br><select id="scS"><option value="100">1:100</option><option value="50" selected>1:50</option><option value="30">1:30</option><option value="20">1:20</option><option value="10">1:10</option></select></label></div>
+<div class="result" id="scOut"></div></div>
+<div class="box tip"><div class="t">💡 小撇步：比例尺規</div><p>設計師有一種三角柱形狀的尺，叫<strong>比例尺規</strong>（三稜尺），六個面分別刻著 1:100、1:200、1:300、1:400、1:500、1:600。量圖時直接讀實際尺寸，不用心算。</p></div>
+
+<div class="summary"><div class="t">本課重點</div><ul><li>室內設計用 cm，施工與家具用 mm；師傅常說台尺（≈30.3 cm）。</li><li>1 坪 ≈ 3.3058 m² ≈ 兩張榻榻米。</li><li>比例尺 1:50＝圖上 1 cm 代表真實 50 cm。</li></ul></div>
+<h2>小測驗</h2>
+<div class="quiz" data-a="1"><div class="q">1. 一個房間 330 cm × 300 cm，大約幾坪？</div><div class="opts"><button>約 1 坪</button><button>約 3 坪</button><button>約 10 坪</button></div><div class="fb">3.3 × 3.0 ＝ 9.9 m²；9.9 × 0.3025 ≈ 3 坪。</div></div>
+<div class="quiz" data-a="2"><div class="q">2. 在 1:50 的圖上，一張沙發畫成 4 公分長，真實長度是？</div><div class="opts"><button>50 cm</button><button>100 cm</button><button>200 cm</button></div><div class="fb">4 × 50 ＝ 200 cm。</div></div>
+<div class="quiz" data-a="0"><div class="q">3. 師傅說「這個櫃子寬 3 尺」，大約是幾公分？</div><div class="opts"><button>約 91 cm</button><button>約 30 cm</button><button>約 300 cm</button></div><div class="fb">3 × 30.3 ≈ 91 cm。</div></div>
+</section>
+
+<!-- ===================== L3 ===================== -->
+<section class="lesson" id="L3" data-part="第一篇 認識室內設計" data-num="3" data-title="看懂設計圖：平面、立面、剖面">
+<div class="dim"><span>第 3 課</span></div>
+<h1>看懂設計圖：平面、立面、剖面</h1>
+<p class="lead">設計圖就像空間的「地圖」。學會三種看的角度，你就能在腦中把紙上的線蓋成房子。</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>平面圖、立面圖、剖面圖各從哪個角度看</li><li>門、窗、牆、家具在圖上長什麼樣子</li><li>尺寸線怎麼讀</li></ul></div>
+
+<h2>三種角度：想像你在切蛋糕</h2>
+<p>把一間房子想成一個<strong>蛋糕</strong>：</p>
+<ul>
+<li><strong>平面圖</strong>：拿刀在離地約 1.2–1.5 公尺高的地方<strong>水平切一刀</strong>，拿掉上半部，從正上方往下看。</li>
+<li><strong>立面圖</strong>：站在房間裡，<strong>正對著一面牆</strong>看，把牆上的東西（櫃子、窗戶、插座）畫出來。</li>
+<li><strong>剖面圖</strong>：拿刀<strong>垂直切一刀</strong>，從側面看切開的樣子，可以看到天花板高度、樓板厚度、樑。</li>
+</ul>
+<figure>
+<svg viewBox="0 0 660 240" role="img" aria-label="平面、立面、剖面三種切法示意">
+ <g font-size="14" text-anchor="middle" fill="var(--ink)">
+  <!-- plan -->
+  <g transform="translate(20,20)">
+   <path d="M20 40 L100 10 L180 40 L100 70 Z" fill="var(--blue-soft)" stroke="var(--ink)"/>
+   <path d="M20 40 L20 120 L100 150 L180 120 L180 40" fill="none" stroke="var(--ink)"/><line x1="100" y1="70" x2="100" y2="150" stroke="var(--ink)"/>
+   <path d="M10 80 L100 45 L190 80 L100 115 Z" fill="none" stroke="var(--red)" stroke-width="2" stroke-dasharray="6 4"/>
+   <text x="100" y="185">平面圖</text><text x="100" y="205" font-size="12" fill="var(--ink2)">水平切，從上往下看</text>
+  </g>
+  <!-- elevation -->
+  <g transform="translate(240,20)">
+   <rect x="20" y="20" width="160" height="130" fill="var(--sheet)" stroke="var(--ink)"/>
+   <rect x="40" y="60" width="50" height="90" fill="var(--oak-soft)" stroke="var(--oak)"/>
+   <rect x="110" y="50" width="50" height="40" fill="var(--blue-soft)" stroke="var(--blue)"/>
+   <circle cx="100" cy="0" r="0"/>
+   <text x="100" y="185">立面圖</text><text x="100" y="205" font-size="12" fill="var(--ink2)">正對一面牆看</text>
+  </g>
+  <!-- section -->
+  <g transform="translate(460,20)">
+   <rect x="20" y="10" width="160" height="14" fill="var(--ink2)"/>
+   <rect x="20" y="150" width="160" height="10" fill="var(--ink2)"/>
+   <rect x="20" y="24" width="14" height="126" fill="var(--ink2)"/><rect x="166" y="24" width="14" height="126" fill="var(--ink2)"/>
+   <rect x="120" y="24" width="30" height="24" fill="var(--ink2)"/>
+   <line x1="40" y1="44" x2="160" y2="44" stroke="var(--red)" stroke-dasharray="4 3"/>
+   <text x="80" y="40" font-size="11" fill="var(--red)">天花板</text>
+   <text x="135" y="62" font-size="11" fill="var(--ink2)">樑</text>
+   <text x="100" y="185">剖面圖</text><text x="100" y="205" font-size="12" fill="var(--ink2)">垂直切，從側面看</text>
+  </g>
+ </g>
+</svg>
+<figcaption>平面看「配置」、立面看「牆上」、剖面看「高度」</figcaption>
+</figure>
+
+<h2>平面圖的符號</h2>
+<p>下面是一間小套房的平面圖。點按下方按鈕，看看每種符號在哪裡。</p>
+<div class="widget"><div class="widget-t">✏️ 動手試試：找符號</div>
+<div class="row" id="planBtns">
+<button class="btn" data-hl="wall">牆</button><button class="btn" data-hl="door">門</button><button class="btn" data-hl="win">窗</button><button class="btn" data-hl="furn">家具</button><button class="btn" data-hl="dimn">尺寸線</button><button class="btn" data-hl="north">指北針</button></div>
+<svg id="planSvg" viewBox="0 0 620 420" style="margin-top:12px;width:100%;height:auto" role="img" aria-label="小套房平面圖">
+ <style>#planSvg .hl{transition:opacity .25s}#planSvg.focus .hl{opacity:.15}#planSvg.focus .hl.on{opacity:1}</style>
+ <g class="hl" data-k="wall" fill="var(--ink)">
+  <rect x="60" y="40" width="480" height="12"/><rect x="60" y="340" width="480" height="12"/>
+  <rect x="60" y="40" width="12" height="312"/><rect x="528" y="40" width="12" height="312"/>
+  <rect x="360" y="52" width="10" height="130"/><rect x="360" y="232" width="10" height="108"/>
+ </g>
+ <g class="hl" data-k="win">
+  <rect x="160" y="40" width="140" height="12" fill="var(--sheet)" stroke="var(--ink)"/><line x1="160" y1="46" x2="300" y2="46" stroke="var(--blue)" stroke-width="2"/>
+  <rect x="528" y="120" width="12" height="80" fill="var(--sheet)" stroke="var(--ink)"/><line x1="534" y1="120" x2="534" y2="200" stroke="var(--blue)" stroke-width="2"/>
+ </g>
+ <g class="hl" data-k="door" fill="none" stroke="var(--red)" stroke-width="2">
+  <rect x="440" y="340" width="80" height="12" fill="var(--sheet)" stroke="none"/>
+  <line x1="440" y1="340" x2="440" y2="260"/><path d="M440 260 A80 80 0 0 1 520 340"/>
+  <rect x="360" y="182" width="10" height="50" fill="var(--sheet)" stroke="none"/>
+  <line x1="370" y1="182" x2="415" y2="182"/><path d="M415 182 A45 45 0 0 1 370 227"/>
+ </g>
+ <g class="hl" data-k="furn" fill="var(--oak-soft)" stroke="var(--oak)" stroke-width="1.5">
+  <rect x="84" y="64" width="152" height="200" rx="4"/><rect x="92" y="70" width="60" height="30" rx="4" fill="var(--sheet)"/><rect x="168" y="70" width="60" height="30" rx="4" fill="var(--sheet)"/>
+  <rect x="84" y="280" width="200" height="50"/><text x="184" y="310" text-anchor="middle" font-size="12" fill="var(--ink)" stroke="none">衣櫃</text>
+  <rect x="250" y="64" width="100" height="50"/><text x="300" y="94" text-anchor="middle" font-size="12" fill="var(--ink)" stroke="none">書桌</text>
+  <circle cx="300" cy="135" r="16"/>
+  <rect x="440" y="64" width="80" height="44" rx="20" fill="var(--sheet)"/><text x="480" y="90" text-anchor="middle" font-size="11" fill="var(--ink)" stroke="none">馬桶</text>
+  <rect x="380" y="240" width="60" height="40" rx="6" fill="var(--sheet)"/><text x="410" y="265" text-anchor="middle" font-size="11" fill="var(--ink)" stroke="none">洗手台</text>
+  <text x="160" y="180" text-anchor="middle" font-size="13" fill="var(--ink)" stroke="none">雙人床</text>
+ </g>
+ <g class="hl" data-k="dimn" stroke="var(--blue)" fill="var(--blue)" font-size="13">
+  <line x1="60" y1="20" x2="540" y2="20"/><line x1="60" y1="12" x2="60" y2="28"/><line x1="540" y1="12" x2="540" y2="28"/>
+  <line x1="56" y1="24" x2="64" y2="16"/><line x1="536" y1="24" x2="544" y2="16"/>
+  <text x="300" y="15" text-anchor="middle" stroke="none">600</text>
+  <line x1="30" y1="40" x2="30" y2="352"/><line x1="22" y1="40" x2="38" y2="40"/><line x1="22" y1="352" x2="38" y2="352"/>
+  <text x="24" y="200" text-anchor="middle" stroke="none" transform="rotate(-90 24 200)">390</text>
+ </g>
+ <g class="hl" data-k="north" transform="translate(585,390)"><circle r="18" fill="none" stroke="var(--ink)"/><path d="M0 -16 L7 8 L0 3 L-7 8 Z" fill="var(--ink)"/><text y="-22" text-anchor="middle" font-size="12" fill="var(--ink)">N</text></g>
+</svg>
+<div class="result" id="planOut">點上面的按鈕試試。</div></div>
+
+<div class="tw"><table>
+<tr><th>符號</th><th>長什麼樣</th><th>為什麼這樣畫</th></tr>
+<tr><td>牆</td><td>粗實線或塗黑</td><td>被「切到」的東西畫最粗，表示實心</td></tr>
+<tr><td>窗</td><td>牆中間斷開，畫細線</td><td>代表玻璃，比牆薄</td></tr>
+<tr><td>門</td><td>一條直線加四分之一圓弧</td><td>圓弧是「門打開時掃過的範圍」，提醒這裡不能放東西</td></tr>
+<tr><td>家具</td><td>細線畫外框</td><td>沒被切到，只是從上面看見</td></tr>
+<tr><td>尺寸線</td><td>兩端有斜短線的直線，上面寫數字</td><td>數字單位通常是 mm 或 cm，圖上會註明</td></tr>
+<tr><td>指北針</td><td>圓圈加箭頭</td><td>知道方位，才知道陽光從哪邊進來</td></tr>
+</table></div>
+
+<div class="box origin"><div class="t">📜 名詞由來：藍圖</div><p>以前沒有影印機，建築圖是用一種感光紙複製的（19 世紀發明的「曬圖法」），複製出來是<strong>藍底白線</strong>，所以叫 <em>blueprint</em> 藍圖。現在雖然都用電腦列印了，大家還是把「計畫」叫做藍圖。</p></div>
+
+<h2>線條的粗細有意義</h2>
+<ul>
+<li><strong>最粗</strong>：被切到的牆、柱（實心的東西）。</li>
+<li><strong>中等</strong>：看得到的家具、櫃體外框。</li>
+<li><strong>最細</strong>：尺寸線、地板分割、材質紋路。</li>
+<li><strong>虛線</strong>：看不到但存在的東西，例如頭頂的樑、天花板的造型、櫃子裡面的層板。</li>
+</ul>
+<div class="box tip"><div class="t">💡 小撇步：怎麼讀圖</div><p>拿到平面圖先找三樣東西：<strong>① 門在哪</strong>（從哪裡進來）、<strong>② 窗在哪</strong>（光從哪來）、<strong>③ 指北針</strong>（哪邊西曬）。這三樣決定了一大半的配置。</p></div>
+
+<h2>其他你會遇到的圖</h2>
+<ul>
+<li><strong>天花板圖（RCP）</strong>：<em>Reflected Ceiling Plan</em>，「反射天花圖」。想像地板是一面鏡子，照出天花板，標示燈具、空調出風口的位置。</li>
+<li><strong>水電圖</strong>：插座、開關、給排水管的位置。</li>
+<li><strong>3D 透視圖</strong>：像照片一樣的立體圖，讓屋主看得懂（第 21 課會介紹軟體）。</li>
+</ul>
+
+<div class="summary"><div class="t">本課重點</div><ul><li>平面（水平切往下看）、立面（正看一面牆）、剖面（垂直切看側面）。</li><li>門的圓弧＝開門範圍；線越粗＝越是被切到的實體；虛線＝看不見但存在。</li><li>讀平面先找門、窗、指北針。</li></ul></div>
+<h2>小測驗</h2>
+<div class="quiz" data-a="1"><div class="q">1. 想知道「電視牆上的櫃子多高、插座在哪」，應該看哪一張圖？</div><div class="opts"><button>平面圖</button><button>立面圖</button><button>天花板圖</button></div><div class="fb">立面圖是正對牆面畫，牆上的高度資訊都在這裡。</div></div>
+<div class="quiz" data-a="2"><div class="q">2. 平面圖上門旁邊的四分之一圓弧代表什麼？</div><div class="opts"><button>地毯</button><button>門把</button><button>門打開時掃過的範圍</button></div><div class="fb">這個範圍內不能放家具，否則門打不開。</div></div>
+<div class="quiz" data-a="0"><div class="q">3. 平面圖上的「虛線」通常表示？</div><div class="opts"><button>看不到但存在的東西，例如頭上的樑</button><button>還沒決定的牆</button><button>畫錯的線</button></div><div class="fb">虛線＝隱藏線。</div></div>
+</section>
+<!-- ===================== L4 ===================== -->
+<section class="lesson" id="L4" data-part="第二篇 人與空間" data-num="4" data-title="人體工學：家具為什麼是這個尺寸">
+<div class="dim"><span>第 4 課</span></div>
+<h1>人體工學：家具為什麼是這個尺寸</h1>
+<p class="lead">為什麼書桌大多 75 公分高？為什麼走道至少要 60 公分？答案都藏在你的身體裡。</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>什麼是人體工學、它從哪來</li><li>坐、站、躺、走各需要多少空間</li><li>用自己的身高算出適合的桌椅高度</li></ul></div>
+
+<div class="box origin"><div class="t">📜 名詞由來：人體工學 <span class="en">Ergonomics</span></div><p>來自希臘文 <em>ergon</em>（工作）＋ <em>nomos</em>（規律、法則），意思是「人工作時的規律」。1857 年波蘭學者雅斯切博夫斯基第一次用這個字；二次大戰時，軍方為了讓飛行員看得清儀表、手搆得到按鈕，大量研究人體尺寸，這門學問才真正發展起來。</p><p>簡單說：<strong>讓東西去配合人，而不是讓人去忍耐東西。</strong></p></div>
+
+<h2>坐：三個關鍵高度</h2>
+<figure>
+<svg viewBox="0 0 560 330" role="img" aria-label="坐姿人體工學尺寸圖">
+ <line x1="30" y1="300" x2="530" y2="300" stroke="var(--ink)" stroke-width="2"/>
+ <!-- desk -->
+ <rect x="300" y="140" width="200" height="10" fill="var(--oak)"/><rect x="480" y="150" width="10" height="150" fill="var(--oak)"/>
+ <!-- chair -->
+ <rect x="150" y="190" width="100" height="10" fill="var(--blue)"/><rect x="160" y="200" width="8" height="100" fill="var(--blue)"/><rect x="232" y="200" width="8" height="100" fill="var(--blue)"/><rect x="150" y="90" width="10" height="100" fill="var(--blue)"/>
+ <!-- person -->
+ <g stroke="var(--ink)" stroke-width="10" stroke-linecap="round" fill="none">
+  <circle cx="200" cy="55" r="20" stroke-width="3" fill="var(--sheet)"/>
+  <line x1="195" y1="80" x2="180" y2="180"/>
+  <line x1="180" y1="180" x2="275" y2="185"/>
+  <line x1="275" y1="185" x2="275" y2="295"/>
+  <line x1="275" y1="295" x2="300" y2="295"/>
+  <line x1="192" y1="95" x2="215" y2="140"/><line x1="215" y1="140" x2="300" y2="135"/>
+ </g>
+ <!-- dims -->
+ <g stroke="var(--red)" fill="var(--red)" font-size="14">
+  <line x1="120" y1="190" x2="120" y2="300"/><line x1="112" y1="190" x2="128" y2="190"/><line x1="112" y1="300" x2="128" y2="300"/>
+  <text x="112" y="250" text-anchor="end" stroke="none">座高 40–45</text>
+  <line x1="520" y1="140" x2="520" y2="300"/><line x1="512" y1="140" x2="528" y2="140"/><line x1="512" y1="300" x2="528" y2="300"/>
+  <text x="515" y="230" text-anchor="end" stroke="none" transform="rotate(-90 515 230)">桌高 72–76</text>
+  <line x1="330" y1="150" x2="330" y2="190"/><line x1="322" y1="150" x2="338" y2="150"/><line x1="322" y1="190" x2="338" y2="190"/>
+  <text x="340" y="176" stroke="none">差尺 27–30</text>
+ </g>
+ <g font-size="13" fill="var(--sage)"><text x="230" y="215">膝蓋約 90°</text><text x="220" y="125">手肘約 90°</text></g>
+</svg>
+<figcaption>坐姿三數字（單位 cm）：座高、桌高、以及兩者的差距「差尺」</figcaption>
+</figure>
+<ul>
+<li><strong>座高 40–45 cm</strong>：腳能平踩地面、大腿與地面平行、膝蓋約 90°。太高腳會懸空、大腿下面被壓；太低膝蓋會頂高。</li>
+<li><strong>桌高 72–76 cm</strong>：手放桌上時手肘約 90°、肩膀不聳起。</li>
+<li><strong>差尺 27–30 cm</strong>：桌面減座面的高度差。這個數字比桌高本身還重要，因為大腿要塞得進桌下，手又不能舉太高。</li>
+</ul>
+<div class="box origin"><div class="t">📜 名詞由來：差尺</div><p>「差尺」是日本家具業用語，傳到台灣木工界。字面就是「高度的差」。挑餐桌椅時，把桌和椅的高度相減，落在 27–30 cm 就對了。</p></div>
+
+<div class="widget"><div class="widget-t">✏️ 動手試試：算出適合你的高度</div>
+<label>你的身高：<b id="hVal">160</b> cm<input type="range" id="hIn" min="120" max="195" value="160"></label>
+<div class="tw"><table id="hTable"></table></div>
+<p style="font-size:14px;color:var(--ink2);margin:0">這些是經驗公式，只是「起點」。實際還要試坐、看穿什麼鞋、做什麼事。</p></div>
+
+<h2>站：流理台與櫃子</h2>
+<ul>
+<li><strong>廚房流理台</strong>：約「身高 ÷ 2 ＋ 5～10 cm」。太低切菜會駝背，太高手會酸。</li>
+<li><strong>最順手的收納高度</strong>：大約腰到眼睛之間（約 70–160 cm），常用的東西放這裡。</li>
+<li><strong>伸手可及的最高處</strong>：約身高 × 1.2。再高就要踩椅子，只適合放很少用的東西。</li>
+</ul>
+
+<h2>走：通道要多寬</h2>
+<p>一個大人肩膀寬約 45–50 cm，走路時還會擺動，所以：</p>
+<figure>
+<svg viewBox="0 0 560 180" role="img" aria-label="通道寬度示意">
+ <g font-size="13" text-anchor="middle">
+  <g transform="translate(20,20)"><rect x="0" y="0" width="8" height="120" fill="var(--ink)"/><rect x="72" y="0" width="8" height="120" fill="var(--ink)"/><ellipse cx="40" cy="60" rx="24" ry="12" fill="var(--oak-soft)" stroke="var(--oak)"/><circle cx="40" cy="60" r="8" fill="var(--oak)"/><text x="40" y="145" fill="var(--ink)">60 cm</text><text x="40" y="162" fill="var(--ink2)" font-size="12">一人側身可過</text></g>
+  <g transform="translate(170,20)"><rect x="0" y="0" width="8" height="120" fill="var(--ink)"/><rect x="100" y="0" width="8" height="120" fill="var(--ink)"/><ellipse cx="54" cy="60" rx="26" ry="12" fill="var(--oak-soft)" stroke="var(--oak)"/><circle cx="54" cy="60" r="8" fill="var(--oak)"/><text x="54" y="145" fill="var(--ink)">90 cm</text><text x="54" y="162" fill="var(--ink2)" font-size="12">一人舒服正面走</text></g>
+  <g transform="translate(340,20)"><rect x="0" y="0" width="8" height="120" fill="var(--ink)"/><rect x="140" y="0" width="8" height="120" fill="var(--ink)"/><ellipse cx="44" cy="45" rx="24" ry="12" fill="var(--oak-soft)" stroke="var(--oak)"/><circle cx="44" cy="45" r="8" fill="var(--oak)"/><ellipse cx="104" cy="80" rx="24" ry="12" fill="var(--sage-soft)" stroke="var(--sage)"/><circle cx="104" cy="80" r="8" fill="var(--sage)"/><text x="74" y="145" fill="var(--ink)">120 cm</text><text x="74" y="162" fill="var(--ink2)" font-size="12">兩人可以交會</text></g>
+ </g>
+</svg>
+<figcaption>從上往下看：60 是最低限度，90 是舒適的主要通道，120 讓兩人錯身</figcaption>
+</figure>
+
+<h2>躺：床的尺寸</h2>
+<div class="tw"><table>
+<tr><th>台灣常見叫法</th><th>台尺</th><th>約公分</th></tr>
+<tr><td>單人床</td><td>3 × 6.2 尺</td><td>91 × 188</td></tr>
+<tr><td>單人加大</td><td>3.5 × 6.2 尺</td><td>106 × 188</td></tr>
+<tr><td>標準雙人</td><td>5 × 6.2 尺</td><td>152 × 188</td></tr>
+<tr><td>雙人加大</td><td>6 × 6.2 尺</td><td>182 × 188</td></tr>
+<tr><td>雙人特大</td><td>6 × 7 尺</td><td>182 × 212</td></tr>
+</table></div>
+<p>床的長度通常是「身高＋20 cm 以上」，身高 185 以上的人要考慮加長。床的旁邊要留至少 <strong>60 cm</strong> 讓人上下床、整理床單。</p>
+
+<h2>專業延伸：模矩與樓梯公式</h2>
+<div class="box origin"><div class="t">📜 名詞由來：模矩 <span class="en">Modulor</span></div><p>法國建築大師<strong>柯比意</strong>（Le Corbusier）在 1940 年代發明了一套尺寸系統，叫 <em>Modulor</em>（法文 module 模組 ＋ or 黃金）。他以一個身高 183 cm、舉手高 226 cm 的男人為基準，搭配黃金比例，推出一整串「好用又好看」的尺寸，想讓全世界的建築都照人體來設計。中文翻成「模矩」。</p></div>
+<div class="box tip"><div class="t">💡 專業小知識：樓梯好不好走有公式</div><p>樓梯每一階的<strong>級高 R</strong>（往上多少）和<strong>級深 T</strong>（踩的深度）要符合：<strong>2R ＋ T ≈ 60～64 cm</strong>。這是 17 世紀法國建築師布隆代爾觀察人的步伐發現的。例如 R ＝ 17、T ＝ 28，2×17＋28 ＝ 62，就很好走。</p></div>
+
+<div class="summary"><div class="t">本課重點</div><ul><li>人體工學＝讓東西配合人。</li><li>座高 40–45、桌高 72–76、差尺 27–30（cm）。</li><li>通道 60 最低、90 舒適、120 可交會；床邊留 60。</li></ul></div>
+<h2>小測驗</h2>
+<div class="quiz" data-a="1"><div class="q">1. 一張餐桌高 75 cm，配哪張椅子最剛好？</div><div class="opts"><button>座高 55 cm 的吧台椅</button><button>座高 46 cm 的餐椅</button><button>座高 30 cm 的矮凳</button></div><div class="fb">75 − 46 ＝ 29，落在差尺 27–30 之間。</div></div>
+<div class="quiz" data-a="2"><div class="q">2. 家裡的主要走道，舒適寬度大約多少？</div><div class="opts"><button>30 cm</button><button>50 cm</button><button>90 cm</button></div><div class="fb">一人正面舒適走動約 90 cm。</div></div>
+<div class="quiz" data-a="0"><div class="q">3. Ergonomics 這個字的字根「ergon」是什麼意思？</div><div class="opts"><button>工作</button><button>椅子</button><button>身體</button></div><div class="fb">希臘文 ergon＝工作，nomos＝規律。</div></div>
+</section>
+
+<!-- ===================== L5 ===================== -->
+<section class="lesson" id="L5" data-part="第二篇 人與空間" data-num="5" data-title="動線與空間分區">
+<div class="dim"><span>第 5 課</span></div>
+<h1>動線與空間分區</h1>
+<p class="lead">家具擺得再美，如果每天回家都要繞一大圈才能放下書包，就不是好設計。</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>什麼是動線、好動線的條件</li><li>公私、動靜、乾濕三種分區</li><li>家具之間要留多少空隙</li></ul></div>
+
+<div class="box origin"><div class="t">📜 名詞由來：動線</div><p>「動線」是從日文建築用語借來的（日文也寫作 動線，どうせん），英文叫 <em>circulation</em>（循環、流通）。意思是<strong>人在空間裡移動的路線</strong>。把你一天在家走過的路，用筆畫在平面圖上，那些線就是動線。</p></div>
+
+<h2>好動線的四個條件</h2>
+<ol class="steps">
+<li><strong>短</strong>：常做的事，路線要短。例如回家 → 放鞋 → 放包 → 洗手。</li>
+<li><strong>順</strong>：不要來回折返、不要繞過障礙物。</li>
+<li><strong>不打架</strong>：不同人的動線盡量不交叉。例如有人在煮飯時，另一個人拿飲料不會一直擋路。</li>
+<li><strong>不穿過</strong>：走道不要從兩張沙發中間、或別人的書桌後面穿過。</li>
+</ol>
+
+<figure>
+<svg viewBox="0 0 640 260" role="img" aria-label="不好的動線與好的動線對比">
+ <g font-size="14" text-anchor="middle">
+ <g transform="translate(10,10)">
+  <rect x="0" y="0" width="300" height="200" fill="none" stroke="var(--ink)" stroke-width="5"/>
+  <rect x="120" y="197" width="50" height="6" fill="var(--sheet)"/>
+  <rect x="20" y="20" width="60" height="40" fill="var(--oak-soft)" stroke="var(--oak)"/><text x="50" y="45" font-size="11">鞋櫃</text>
+  <rect x="220" y="20" width="60" height="50" fill="var(--blue-soft)" stroke="var(--blue)"/><text x="250" y="50" font-size="11">廚房</text>
+  <rect x="100" y="90" width="110" height="50" fill="var(--sage-soft)" stroke="var(--sage)"/><text x="155" y="120" font-size="11">沙發</text>
+  <path d="M145 195 L145 160 L40 160 L40 65 M40 65 L40 160 L230 160 L250 75" fill="none" stroke="var(--red)" stroke-width="3" stroke-dasharray="7 5"/>
+  <text x="150" y="230" fill="var(--red)">✗ 鞋櫃在屋子最裡面，繞路又折返</text>
+ </g>
+ <g transform="translate(330,10)">
+  <rect x="0" y="0" width="300" height="200" fill="none" stroke="var(--ink)" stroke-width="5"/>
+  <rect x="120" y="197" width="50" height="6" fill="var(--sheet)"/>
+  <rect x="190" y="140" width="80" height="40" fill="var(--oak-soft)" stroke="var(--oak)"/><text x="230" y="165" font-size="11">鞋櫃</text>
+  <rect x="220" y="20" width="60" height="50" fill="var(--blue-soft)" stroke="var(--blue)"/><text x="250" y="50" font-size="11">廚房</text>
+  <rect x="20" y="70" width="110" height="50" fill="var(--sage-soft)" stroke="var(--sage)"/><text x="75" y="100" font-size="11">沙發</text>
+  <path d="M145 195 L175 160 L175 90 L220 60" fill="none" stroke="var(--sage)" stroke-width="3"/>
+  <text x="150" y="230" fill="var(--sage)">✓ 進門就放鞋，一路直達廚房</text>
+ </g>
+ </g>
+</svg>
+<figcaption>同一個空間，只是換家具位置，動線就從繞路變成直線</figcaption>
+</figure>
+
+<h2>三種分區</h2>
+<div class="cards">
+<div class="card"><h4>公私分區</h4><p><b>公</b>：客廳、餐廳、玄關，客人會到的地方。<br><b>私</b>：臥室、主浴。</p><p>公共區放在靠大門的地方，私密區放深處，客人來了不用經過你的房間。</p></div>
+<div class="card"><h4>動靜分區</h4><p><b>動</b>：客廳、廚房、遊戲區，有聲音。<br><b>靜</b>：臥室、書房。</p><p>讀書的房間最好不要緊貼電視牆。</p></div>
+<div class="card"><h4>乾濕分區</h4><p><b>濕</b>：廚房、浴室、陽台，有水。<br><b>乾</b>：其他地方。</p><p>有水的地方集中在一起，水管短、防水好做、比較不會漏水。</p></div>
+</div>
+<div class="box eg"><div class="t">🏠 生活例子：學校</div><p>你的學校其實就有分區：教室和圖書館（靜）通常離操場和音樂教室（動）遠一點；廁所和飲水機（濕）會集中在樓梯旁邊。設計學校和設計家，道理是一樣的。</p></div>
+
+<h2>回遊動線</h2>
+<p>近年很流行的做法是<strong>回遊動線</strong>（也叫洄游動線），讓空間可以「繞一圈」而不是走到底要回頭。例如廚房中島兩邊都能走，或是臥室、更衣室、浴室串成一個環。好處是兩人同時使用不會卡住，空間也感覺更大。</p>
+<figure>
+<svg viewBox="0 0 400 180" role="img" aria-label="回遊動線示意">
+ <rect x="10" y="10" width="380" height="160" fill="none" stroke="var(--ink)" stroke-width="4"/>
+ <rect x="140" y="65" width="120" height="50" fill="var(--oak-soft)" stroke="var(--oak)"/><text x="200" y="95" text-anchor="middle" font-size="13">中島</text>
+ <rect x="30" y="20" width="340" height="24" fill="var(--blue-soft)" stroke="var(--blue)"/><text x="200" y="37" text-anchor="middle" font-size="12">流理台</text>
+ <ellipse cx="200" cy="90" rx="110" ry="55" fill="none" stroke="var(--sage)" stroke-width="3" stroke-dasharray="8 6"><animate attributeName="stroke-dashoffset" from="0" to="-56" dur="2s" repeatCount="indefinite"/></ellipse>
+</svg>
+<figcaption>中島四周都能走，形成一個圈</figcaption>
+</figure>
+
+<h2>家具之間要留多少？</h2>
+<div class="widget"><div class="widget-t">✏️ 動手試試：沙發和茶几的距離</div>
+<label>距離：<b id="gapVal">40</b> cm<input type="range" id="gapIn" min="10" max="110" value="40"></label>
+<svg viewBox="0 0 400 190" style="width:100%;height:auto;margin-top:8px" aria-label="沙發茶几距離示意">
+ <rect x="80" y="130" width="240" height="50" rx="8" fill="var(--oak-soft)" stroke="var(--oak)" stroke-width="2"/><text x="200" y="160" text-anchor="middle" font-size="13">沙發</text>
+ <rect id="gapTable" x="120" y="60" width="160" height="40" rx="4" fill="var(--blue-soft)" stroke="var(--blue)" stroke-width="2"/><text id="gapTxt" x="200" y="85" text-anchor="middle" font-size="13">茶几</text>
+ <line id="gapLine" x1="330" y1="100" x2="330" y2="130" stroke="var(--red)" stroke-width="2"/>
+</svg>
+<div class="result" id="gapOut"></div></div>
+
+<div class="tw"><table>
+<tr><th>位置</th><th>建議留空</th><th>原因</th></tr>
+<tr><td>沙發到茶几</td><td>35–45 cm</td><td>腳伸得進去，又拿得到杯子</td></tr>
+<tr><td>餐椅後方</td><td>至少 75 cm；後面要走人 90–110 cm</td><td>椅子要往後拉才能坐下</td></tr>
+<tr><td>床側</td><td>至少 60 cm</td><td>上下床、鋪床單</td></tr>
+<tr><td>衣櫃前方</td><td>至少 80–90 cm</td><td>門片打開＋人站著</td></tr>
+<tr><td>書桌椅後方</td><td>至少 90 cm</td><td>椅子後退起身</td></tr>
+</table></div>
+<div class="box warn"><div class="t">⚠️ 常見錯誤：只看家具本身尺寸</div><p>很多人量了沙發 200 cm、牆 210 cm，就覺得放得下。但家具要「使用」：抽屜要拉開、門要打開、人要坐下。規劃時要把<strong>使用空間</strong>一起算進去。</p></div>
+
+<div class="summary"><div class="t">本課重點</div><ul><li>動線＝人在空間中走的路線；好動線：短、順、不打架、不穿過。</li><li>三分區：公私、動靜、乾濕。</li><li>家具尺寸 ＋ 使用空間，才是真正需要的空間。</li></ul></div>
+<h2>小測驗</h2>
+<div class="quiz" data-a="2"><div class="q">1. 為什麼廚房和浴室最好靠近一點？</div><div class="opts"><button>比較好看</button><button>方便邊煮飯邊洗澡</button><button>管線短、防水集中，比較不容易漏水</button></div><div class="fb">這就是「乾濕分區」的道理。</div></div>
+<div class="quiz" data-a="0"><div class="q">2. 餐椅後面如果要讓人走過，至少要留多少？</div><div class="opts"><button>約 90–110 cm</button><button>約 30 cm</button><button>不用留</button></div><div class="fb">椅子拉出來＋坐著的人約 75 cm，再加人走過，要 90 以上。</div></div>
+<div class="quiz" data-a="1"><div class="q">3. 下列何者是「回遊動線」的優點？</div><div class="opts"><button>走道變少</button><button>可以繞一圈，兩人同時用不卡住</button><button>家具可以放更多</button></div><div class="fb">走到底不用回頭，就是回遊的精神。</div></div>
+</section>
+<!-- ===================== L6 ===================== -->
+<section class="lesson" id="L6" data-part="第三篇 美學基礎" data-num="6" data-title="設計元素：點、線、面、形、質感">
+<div class="dim"><span>第 6 課</span></div>
+<h1>設計元素：點、線、面、形、質感</h1>
+<p class="lead">寫作文要先認識字，設計也有它的「字」。這些字叫做設計元素。</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>點、線、面、體在房間裡各是什麼</li><li>不同的線條給人什麼感覺</li><li>什麼是正空間、負空間、質感</li></ul></div>
+
+<h2>點、線、面、體</h2>
+<div class="cards">
+<div class="card"><h4>點</h4><p>在大空間裡很小、會吸引目光的東西：一盞吊燈、一個花瓶、牆上的一幅小畫。</p></div>
+<div class="card"><h4>線</h4><p>很多點排在一起就成了線：窗框、層板邊、地板縫、一排掛鉤。</p></div>
+<div class="card"><h4>面</h4><p>線往旁邊延伸就成了面：一整面牆、桌面、地板。</p></div>
+<div class="card"><h4>體</h4><p>面圍起來就是有體積的東西：沙發、櫃子，甚至整個房間。</p></div>
+</div>
+
+<h2>線條會說話</h2>
+<figure>
+<svg viewBox="0 0 640 200" role="img" aria-label="四種線條與感覺">
+ <g stroke="var(--ink)" stroke-width="4" fill="none" stroke-linecap="round">
+  <line x1="30" y1="80" x2="130" y2="80"/><line x1="30" y1="100" x2="130" y2="100"/>
+  <line x1="200" y1="40" x2="200" y2="130"/><line x1="230" y1="40" x2="230" y2="130"/><line x1="260" y1="40" x2="260" y2="130"/>
+  <line x1="350" y1="130" x2="420" y2="40"/><line x1="380" y1="130" x2="450" y2="40"/>
+  <path d="M510 110 C540 40, 570 140, 610 70"/>
+ </g>
+ <g font-size="15" text-anchor="middle" fill="var(--ink)"><text x="80" y="160">水平線</text><text x="230" y="160">垂直線</text><text x="400" y="160">斜線</text><text x="560" y="160">曲線</text></g>
+ <g font-size="13" text-anchor="middle" fill="var(--ink2)"><text x="80" y="182">平靜、安穩、變寬</text><text x="230" y="182">挺拔、莊重、變高</text><text x="400" y="182">動感、不安定</text><text x="560" y="182">柔和、親切</text></g>
+</svg>
+</figure>
+<div class="box eg"><div class="t">🏠 生活例子：讓天花板看起來更高</div><p>房間天花板很低怎麼辦？用<strong>垂直線</strong>：直條紋窗簾從天花板垂到地、高高細細的書櫃、直立的植物。眼睛會跟著垂直線往上看，空間就顯得高。反過來，走廊很窄，可以在地板鋪橫向的木紋，讓人覺得比較寬。</p></div>
+
+<h2>形狀：幾何與有機</h2>
+<ul>
+<li><strong>幾何形</strong>：方、圓、三角，規則、有秩序，看起來現代、理性。</li>
+<li><strong>有機形</strong>：像鵝卵石、樹葉、雲一樣不規則的形，看起來自然、放鬆。</li>
+</ul>
+<p>一個全是方形的房間放一張圓桌或一盆植物，馬上就不那麼僵硬了。這就是「對比」的力量（下一課會講）。</p>
+
+<h2>空間：正與負</h2>
+<p><strong>正空間</strong>是被東西佔滿的地方；<strong>負空間</strong>是空著的地方。很多新手會想把每個角落都塞滿，但空著的地方其實讓眼睛休息、讓重要的東西被看見。</p>
+<div class="box origin"><div class="t">📜 名詞由來：留白</div><p>「留白」原是中國山水畫的技巧，畫家故意留下沒畫的紙面，讓人想像那裡是雲、是水、是天。室內設計借用這個詞，指<strong>刻意留下空的牆面、地面</strong>，讓空間有呼吸感。</p></div>
+
+<h2>質感</h2>
+<p>質感（<em>texture</em>，來自拉丁文 <em>texere</em>「編織」，和 textile 紡織品同源）就是材料表面的感覺，分兩種：</p>
+<ul><li><strong>觸覺質感</strong>：摸起來的感覺，粗糙的麻布、光滑的大理石、毛茸茸的地毯。</li>
+<li><strong>視覺質感</strong>：看起來的感覺，木紋、石紋、壁紙花紋，不一定摸得出來。</li></ul>
+<div class="box tip"><div class="t">💡 小撇步：全白也能有層次</div><p>如果房間只用一兩種顏色，可以靠<strong>混搭質感</strong>讓它不無聊：白牆＋白色粗針織毯＋白色亞麻窗簾＋白色陶瓷燈。顏色一樣，但每種材料反光和觸感不同，空間就有層次。</p></div>
+
+<div class="summary"><div class="t">本課重點</div><ul><li>點、線、面、體是空間的基本字。</li><li>水平線穩、垂直線高、斜線動、曲線柔。</li><li>留白與質感讓空間有呼吸、有層次。</li></ul></div>
+<h2>小測驗</h2>
+<div class="quiz" data-a="1"><div class="q">1. 想讓一個天花板很低的房間看起來高一點，應該多用？</div><div class="opts"><button>水平線</button><button>垂直線</button><button>斜線</button></div><div class="fb">垂直線引導視線往上。</div></div>
+<div class="quiz" data-a="0"><div class="q">2. 「texture 質感」和哪個字同源？</div><div class="opts"><button>textile 紡織品</button><button>text 文字（完全無關）</button><button>taxi 計程車</button></div><div class="fb">都來自拉丁文 texere「編織」。（其實 text 也同源喔，文章就像文字編織出來的。）</div></div>
+<div class="quiz" data-a="2"><div class="q">3. 牆上故意什麼都不掛，讓空間有呼吸感，這叫？</div><div class="opts"><button>偷懶</button><button>正空間</button><button>留白</button></div><div class="fb">留白＝刻意保留的負空間。</div></div>
+</section>
+
+<!-- ===================== L7 ===================== -->
+<section class="lesson" id="L7" data-part="第三篇 美學基礎" data-num="7" data-title="設計原則：平衡、比例、節奏、重點、統一">
+<div class="dim"><span>第 7 課</span></div>
+<h1>設計原則：平衡、比例、節奏、重點、統一</h1>
+<p class="lead">上一課學了「字」，這一課學「文法」：怎麼把元素組合得好看。</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>五個設計原則，以及怎麼在房間裡用</li><li>黃金比例與三分法</li><li>為什麼設計師喜歡「放三個」</li></ul></div>
+
+<h2>1. 平衡</h2>
+<p>空間像一個蹺蹺板，一邊太重就會讓人不舒服。平衡有三種：</p>
+<figure>
+<svg viewBox="0 0 640 190" role="img" aria-label="對稱、不對稱、放射平衡">
+ <g font-size="14" text-anchor="middle">
+ <g transform="translate(10,10)"><line x1="100" y1="10" x2="100" y2="130" stroke="var(--red)" stroke-dasharray="4 3"/><rect x="60" y="60" width="80" height="60" fill="var(--oak-soft)" stroke="var(--oak)"/><rect x="20" y="70" width="30" height="50" fill="var(--blue-soft)" stroke="var(--blue)"/><rect x="150" y="70" width="30" height="50" fill="var(--blue-soft)" stroke="var(--blue)"/><circle cx="35" cy="55" r="12" fill="var(--sage-soft)" stroke="var(--sage)"/><circle cx="165" cy="55" r="12" fill="var(--sage-soft)" stroke="var(--sage)"/><text x="100" y="160">對稱平衡</text><text x="100" y="178" font-size="12" fill="var(--ink2)">左右一樣，莊重、正式</text></g>
+ <g transform="translate(220,10)"><line x1="100" y1="10" x2="100" y2="130" stroke="var(--red)" stroke-dasharray="4 3"/><rect x="20" y="50" width="70" height="70" fill="var(--oak-soft)" stroke="var(--oak)"/><rect x="115" y="95" width="25" height="25" fill="var(--blue-soft)" stroke="var(--blue)"/><rect x="150" y="95" width="25" height="25" fill="var(--blue-soft)" stroke="var(--blue)"/><line x1="170" y1="40" x2="170" y2="95" stroke="var(--sage)" stroke-width="3"/><circle cx="170" cy="35" r="16" fill="var(--sage-soft)" stroke="var(--sage)"/><text x="100" y="160">不對稱平衡</text><text x="100" y="178" font-size="12" fill="var(--ink2)">一大對兩小，輕鬆、現代</text></g>
+ <g transform="translate(430,10)"><circle cx="100" cy="75" r="22" fill="var(--oak-soft)" stroke="var(--oak)"/><g fill="var(--blue-soft)" stroke="var(--blue)"><rect x="90" y="15" width="20" height="20"/><rect x="90" y="115" width="20" height="20"/><rect x="40" y="65" width="20" height="20"/><rect x="140" y="65" width="20" height="20"/></g><text x="100" y="160">放射平衡</text><text x="100" y="178" font-size="12" fill="var(--ink2)">從中心向外，如圓桌配椅</text></g>
+ </g>
+</svg>
+</figure>
+<div class="box eg"><div class="t">🏠 生活例子</div><p>飯店大廳常用<strong>對稱</strong>，感覺隆重；咖啡廳常用<strong>不對稱</strong>，感覺輕鬆；圓形餐桌四周圍著椅子，就是<strong>放射</strong>。</p></div>
+
+<h2>2. 比例與尺度</h2>
+<p>這兩個詞很像，但不一樣：</p>
+<ul><li><strong>比例</strong>（<em>proportion</em>）：東西自己內部，或東西和東西之間的大小關係。例如桌腳跟桌面比起來是不是太細。</li>
+<li><strong>尺度</strong>（<em>scale</em>）：東西和「人」或「空間」比起來的大小。例如 8 坪的客廳放一組巨大的 L 型沙發，就是尺度不對。</li></ul>
+<div class="box origin"><div class="t">📜 名詞由來：黃金比例</div><p>約 <strong>1 : 1.618</strong>。古希臘數學家歐幾里得就研究過這個比例；現在用希臘字母 φ（phi）代表它，據說是紀念雕刻家菲迪亞斯（Phidias）。很多人覺得接近這個比例的長方形特別順眼，所以書、名片、畫框、櫃子分割常常接近它。</p></div>
+<figure>
+<svg viewBox="0 0 520 220" role="img" aria-label="黃金比例與三分法">
+ <g transform="translate(20,20)">
+  <rect x="0" y="0" width="243" height="150" fill="var(--oak-soft)" stroke="var(--oak)" stroke-width="2"/>
+  <line x1="150" y1="0" x2="150" y2="150" stroke="var(--oak)" stroke-width="2"/>
+  <line x1="150" y1="93" x2="243" y2="93" stroke="var(--oak)" stroke-width="1.5"/>
+  <path d="M150 150 A150 150 0 0 1 0 0" transform="translate(0,0)" fill="none" stroke="var(--red)" stroke-width="0"/>
+  <path d="M0 150 A150 150 0 0 1 150 0 A93 93 0 0 1 243 93 A57 57 0 0 1 186 150" fill="none" stroke="var(--red)" stroke-width="2"/>
+  <text x="121" y="180" text-anchor="middle" font-size="14">黃金比例：大方塊＋小長方形</text>
+ </g>
+ <g transform="translate(290,20)">
+  <rect x="0" y="0" width="210" height="150" fill="var(--blue-soft)" stroke="var(--blue)" stroke-width="2"/>
+  <g stroke="var(--blue)" stroke-dasharray="4 3"><line x1="70" y1="0" x2="70" y2="150"/><line x1="140" y1="0" x2="140" y2="150"/><line x1="0" y1="50" x2="210" y2="50"/><line x1="0" y1="100" x2="210" y2="100"/></g>
+  <circle cx="140" cy="50" r="8" fill="var(--red)"/>
+  <text x="105" y="180" text-anchor="middle" font-size="14">三分法：重點放在交叉點</text>
+ </g>
+</svg>
+</figure>
+<div class="box tip"><div class="t">💡 小撇步：三分法比黃金比例好用</div><p>把牆面或畫面切成 3 × 3 九宮格，重點物品放在線或交叉點上，比擺在正中間更生動。例如窗簾桿不一定要貼著窗框，可以往上移到牆高約三分之二的位置。</p></div>
+
+<h2>3. 節奏</h2>
+<p>就像音樂有拍子，空間也可以讓眼睛「跟著跳」：</p>
+<ul><li><strong>重複</strong>：同樣的吊燈一排三盞、同樣的椅子一排。</li>
+<li><strong>漸變</strong>：大、中、小的花瓶排在一起；顏色由深到淺。</li>
+<li><strong>交替</strong>：黑白相間的磁磚、一格櫃子一格開放。</li></ul>
+
+<h2>4. 重點（焦點）</h2>
+<p>每個空間都需要一個「主角」，讓人一進來眼睛就知道看哪裡。可能是一面石材電視牆、一盞造型吊燈、一幅大畫、一扇看得到山的窗。<strong>主角只能有一個</strong>，如果每樣東西都很搶眼，眼睛會累，空間會亂。</p>
+<div class="box origin"><div class="t">📜 名詞由來：主題牆</div><p>英文叫 <em>feature wall</em> 或 <em>accent wall</em>。「feature」是特色，「accent」原是說話的重音，也就是空間裡「講大聲一點」的那面牆。</p></div>
+
+<h2>5. 統一與變化</h2>
+<p>全部都一樣會無聊，全部都不一樣會亂。好的設計是<strong>大部分統一、一小部分變化</strong>。例如整間房子用同一種木色、同一種金屬色（統一），但沙發抱枕換成有圖案的（變化）。</p>
+<div class="box tip"><div class="t">💡 小撇步：奇數法則</div><p>擺飾品時，放 <strong>3 個或 5 個</strong>通常比 2 個或 4 個好看。偶數容易被眼睛配成對、變得呆板；奇數會讓眼睛在物品間遊走。三個東西最好有高、中、低的變化，排成三角形。</p></div>
+
+<div class="summary"><div class="t">本課重點</div><ul><li>平衡：對稱、不對稱、放射。</li><li>比例看東西之間、尺度看東西和人／空間。黃金比例 1:1.618、三分法。</li><li>節奏：重複、漸變、交替。重點只能一個。統一中帶變化。奇數法則。</li></ul></div>
+<h2>小測驗</h2>
+<div class="quiz" data-a="1"><div class="q">1. 在很小的房間放一張超大的沙發，主要違反了什麼？</div><div class="opts"><button>節奏</button><button>尺度</button><button>留白</button></div><div class="fb">尺度＝東西和空間／人的大小關係。</div></div>
+<div class="quiz" data-a="0"><div class="q">2. 左邊一張大沙發，右邊兩張小單椅加一盞立燈，屬於哪種平衡？</div><div class="opts"><button>不對稱平衡</button><button>對稱平衡</button><button>放射平衡</button></div><div class="fb">兩邊東西不同，但視覺重量差不多。</div></div>
+<div class="quiz" data-a="2"><div class="q">3. 茶几上要擺飾品，通常建議放幾個？</div><div class="opts"><button>2 個</button><button>4 個</button><button>3 個</button></div><div class="fb">奇數法則：3 或 5 個，而且高低錯落。</div></div>
+</section>
+
+<!-- ===================== L8 ===================== -->
+<section class="lesson" id="L8" data-part="第三篇 美學基礎" data-num="8" data-title="色彩學">
+<div class="dim"><span>第 8 課</span></div>
+<h1>色彩學：顏色是怎麼搭的</h1>
+<p class="lead">換一面牆的顏色，是改變房間最便宜、最快的方法。但前提是：你要知道顏色的規則。</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>色相、明度、彩度三個屬性</li><li>色環與五種基本配色法</li><li>60-30-10 法則，以及顏色怎麼讓房間變大變小</li></ul></div>
+
+<h2>顏色從哪裡來？</h2>
+<p>1666 年，牛頓把一道陽光射進三稜鏡，光被分成紅、橙、黃、綠、藍、靛、紫。他把這些顏色首尾相接排成一個圓，這就是<strong>色環</strong>的起源。我們看到一個蘋果是紅的，是因為它吸收了其他顏色的光，只把紅光反射到眼睛裡。</p>
+
+<h2>顏色的三個屬性</h2>
+<div class="box origin"><div class="t">📜 名詞由來：孟塞爾色彩系統</div><p>1905 年美國畫家孟塞爾（Albert Munsell）發現，只說「紅色」不夠精確，於是用三個數字描述顏色：<strong>Hue 色相、Value 明度、Chroma 彩度</strong>。現在設計、印刷、油漆業都還在用他的觀念。</p></div>
+<div class="tw"><table>
+<tr><th>屬性</th><th>意思</th><th>用比喻記</th></tr>
+<tr><td><strong>色相</strong></td><td>是什麼顏色：紅、黃、藍……</td><td>顏色的「名字」</td></tr>
+<tr><td><strong>明度</strong></td><td>有多亮、多暗；加白變亮，加黑變暗</td><td>顏色的「開燈關燈」</td></tr>
+<tr><td><strong>彩度</strong></td><td>有多鮮豔；加灰會變得不鮮豔</td><td>顏色的「音量大小」</td></tr>
+</table></div>
+<div class="box origin"><div class="t">📜 名詞由來：莫蘭迪色</div><p>台灣常聽到的「莫蘭迪色」，來自義大利畫家<strong>莫蘭迪</strong>（Giorgio Morandi，1890–1964）。他一輩子畫瓶瓶罐罐，用的都是加了灰的柔和顏色。所以莫蘭迪色＝<strong>低彩度</strong>的顏色，看起來安靜、高級，很適合大面積的牆。</p></div>
+
+<h2>色環與配色法</h2>
+<div class="widget"><div class="widget-t">✏️ 動手試試：配色實驗室</div>
+<p style="margin:0 0 8px;font-size:15px">點色環選一個主色，再選配色法，右邊的房間會自動上色。</p>
+<div class="row" style="align-items:flex-start">
+<svg id="wheel" viewBox="-110 -110 220 220" style="width:220px;max-width:100%;cursor:pointer" role="img" aria-label="可點選的十二色環"></svg>
+<svg id="roomC" viewBox="0 0 300 200" style="flex:1;min-width:240px;border-radius:8px" role="img" aria-label="配色預覽房間">
+ <rect id="rcWall" width="300" height="150" fill="#ddd"/>
+ <rect id="rcFloor" y="150" width="300" height="50" fill="#bbb"/>
+ <rect id="rcArt" x="120" y="30" width="60" height="44" fill="#999" stroke="#fff" stroke-width="3"/>
+ <rect id="rcSofa" x="60" y="100" width="180" height="55" rx="10" fill="#888"/>
+ <rect id="rcSofa2" x="60" y="128" width="180" height="27" rx="6" fill="#000" opacity=".12"/>
+ <rect id="rcPil1" x="78" y="88" width="30" height="26" rx="6" fill="#f00"/>
+ <rect id="rcPil2" x="192" y="88" width="30" height="26" rx="6" fill="#f00"/>
+ <rect id="rcRug" x="40" y="162" width="220" height="30" rx="4" fill="#aaa"/>
+ <rect id="rcVase" x="262" y="112" width="16" height="38" rx="6" fill="#f00"/>
+</svg></div>
+<div class="row" id="schemeBtns" style="margin-top:12px">
+<button class="btn on" data-s="mono">單色</button><button class="btn" data-s="analog">類似色</button><button class="btn" data-s="comp">互補色</button><button class="btn" data-s="split">分裂互補</button><button class="btn" data-s="triad">三等分</button></div>
+<div class="result" id="schemeOut"></div></div>
+
+<div class="tw"><table>
+<tr><th>配色法</th><th>怎麼找</th><th>感覺</th></tr>
+<tr><td>單色</td><td>同一個色相，只改明度和彩度</td><td>最安全、最安靜</td></tr>
+<tr><td>類似色</td><td>色環上相鄰的 2–3 個顏色</td><td>和諧、自然，像秋天的葉子</td></tr>
+<tr><td>互補色</td><td>色環上正對面的顏色</td><td>對比強、有活力，要小心用量</td></tr>
+<tr><td>分裂互補</td><td>主色＋互補色兩旁的顏色</td><td>有對比但比互補溫和</td></tr>
+<tr><td>三等分</td><td>色環上等距的三個顏色</td><td>繽紛、活潑，適合兒童房</td></tr>
+</table></div>
+
+<h2>60-30-10 法則</h2>
+<p>這是室內設計最好用的配色公式：</p>
+<ul><li><strong>60%</strong> 主色：牆面、大面積地板。通常是比較淡、安靜的顏色。</li>
+<li><strong>30%</strong> 輔色：沙發、窗簾、櫃子、地毯。</li>
+<li><strong>10%</strong> 點綴色：抱枕、花瓶、畫。最鮮豔的顏色放這裡。</li></ul>
+<p>上面的配色實驗室就是照這個比例上色的：牆是 60，沙發和地毯是 30，抱枕和花瓶是 10。</p>
+<div class="box eg"><div class="t">🏠 生活例子：穿衣服</div><p>60-30-10 其實跟穿衣服一樣：褲子和外套是 60（大面積、低調）、上衣是 30、帽子或鞋子是 10（可以亮一點）。全身都是螢光色，就會很刺眼。</p></div>
+
+<h2>顏色會改變空間感</h2>
+<ul>
+<li><strong>暖色</strong>（紅、橙、黃）會「前進」，讓牆看起來比較近，空間溫暖但變小。</li>
+<li><strong>冷色</strong>（藍、綠、紫）會「後退」，讓牆看起來比較遠，空間清爽、變大。</li>
+<li><strong>淺色天花板</strong>讓房間顯高；<strong>深色天花板</strong>讓房間變矮、變包覆。</li>
+<li>狹長的房間，把兩端短牆漆深一點，會感覺比較方正。</li>
+</ul>
+<div class="box warn"><div class="t">⚠️ 常見錯誤：只看色卡小小一格</div><p>顏色塗成一整面牆後，看起來會比色卡<strong>更亮、更鮮</strong>，這叫「面積效應」。所以挑牆色時，通常要選比你想像中再灰一點、淡一點的顏色，並且買小罐試塗一大塊，白天晚上各看一次。</p></div>
+
+<div class="summary"><div class="t">本課重點</div><ul><li>色相（名字）、明度（亮暗）、彩度（鮮豔）。</li><li>五種配色：單色、類似、互補、分裂互補、三等分。</li><li>60-30-10；暖色前進、冷色後退；色卡要試塗。</li></ul></div>
+<h2>小測驗</h2>
+<div class="quiz" data-a="2"><div class="q">1. 在藍色裡加灰色，改變的是哪個屬性？</div><div class="opts"><button>色相</button><button>明度</button><button>彩度</button></div><div class="fb">加灰主要讓顏色變不鮮豔，也就是彩度降低（明度也可能略變）。</div></div>
+<div class="quiz" data-a="0"><div class="q">2. 60-30-10 法則中，最鮮豔的顏色通常放在？</div><div class="opts"><button>10% 的點綴物</button><button>60% 的牆面</button><button>30% 的沙發</button></div><div class="fb">鮮豔的顏色少量使用，才會「點睛」而不刺眼。</div></div>
+<div class="quiz" data-a="1"><div class="q">3. 小房間想看起來大一點，牆面適合？</div><div class="opts"><button>深紅色</button><button>淺的冷色或淺中性色</button><button>螢光橘</button></div><div class="fb">淺色與冷色都有「後退」效果。</div></div>
+</section>
+
+<!-- ===================== L9 ===================== -->
+<section class="lesson" id="L9" data-part="第三篇 美學基礎" data-num="9" data-title="光與照明">
+<div class="dim"><span>第 9 課</span></div>
+<h1>光與照明</h1>
+<p class="lead">同一個房間，燈光對了像咖啡廳，燈光錯了像醫院走廊。照明是設計裡「看不見但最有感」的部分。</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>自然光與方位</li><li>色溫、流明、照度、演色性四個數字</li><li>三層照明的觀念與常見燈具</li></ul></div>
+
+<h2>自然光：先看窗戶朝哪邊</h2>
+<ul>
+<li><strong>東邊</strong>：早上有陽光，適合臥室、早餐區。</li>
+<li><strong>南邊</strong>（北半球）：一整天光線均勻，冬暖夏涼，最受歡迎。</li>
+<li><strong>西邊</strong>：下午太陽很曬、很熱，俗稱<strong>西曬</strong>，需要遮陽窗簾或隔熱膜。</li>
+<li><strong>北邊</strong>：光線柔和穩定，畫家很喜歡北向畫室，因為顏色不會一直變。</li>
+</ul>
+
+<h2>四個照明數字</h2>
+<h3>1. 色溫（K）：光是黃還是白</h3>
+<div class="box origin"><div class="t">📜 名詞由來：色溫與 K</div><p>英國物理學家<strong>克耳文勳爵</strong>（Lord Kelvin）訂出了「絕對溫度」，單位就用他的名字 K。科學家發現，把一塊黑色的鐵加熱，溫度低時發紅光，越熱越變黃、變白、甚至偏藍。所以用「把鐵燒到幾度時發出的光」來形容光的顏色，這就是<strong>色溫</strong>。</p><p>有趣的是：數字越低，光看起來越「暖」；數字越高反而越「冷」。</p></div>
+<div class="widget"><div class="widget-t">✏️ 動手試試：拉拉看色溫</div>
+<label>色溫：<b id="ktVal">3000</b> K<input type="range" id="ktIn" min="1800" max="6500" step="100" value="3000"></label>
+<svg viewBox="0 0 400 180" style="width:100%;height:auto;margin-top:8px;border-radius:8px" aria-label="色溫改變房間氣氛">
+ <rect width="400" height="180" fill="#F4F2EE"/><rect y="140" width="400" height="40" fill="#C9B79C"/>
+ <rect x="40" y="90" width="150" height="55" rx="8" fill="#8A9AA6"/><rect x="250" y="70" width="90" height="75" fill="#B08A63"/>
+ <rect x="170" y="20" width="60" height="40" fill="#fff" stroke="#999"/>
+ <line x1="200" y1="0" x2="200" y2="30" stroke="#666"/>
+ <rect id="ktTint" width="400" height="180" fill="#ffb060" style="mix-blend-mode:multiply" opacity=".35"/>
+</svg>
+<div class="result" id="ktOut"></div></div>
+<div class="tw"><table>
+<tr><th>色溫</th><th>俗稱</th><th>適合</th></tr>
+<tr><td>2700–3000 K</td><td>黃光、暖白</td><td>臥室、客廳、餐廳，放鬆</td></tr>
+<tr><td>3500–4000 K</td><td>自然光、中性白</td><td>廚房、書房、浴室</td></tr>
+<tr><td>5000–6500 K</td><td>白光、晝光</td><td>辦公室、工作室、需要看清楚細節</td></tr>
+</table></div>
+<div class="box tip"><div class="t">💡 小撇步：同一個空間色溫要一致</div><p>一個房間裡混用 3000 K 和 6500 K 的燈，牆面會一塊黃一塊藍，看起來很廉價。同一區域請統一色溫。</p></div>
+
+<h3>2. 流明（lm）：燈泡發出多少光</h3>
+<p>拉丁文 <em>lumen</em>＝光。流明越高，燈越亮。以前大家看「瓦數」判斷亮度，但 LED 很省電，10 瓦就可能比以前的 60 瓦燈泡還亮，所以現在要看流明。</p>
+<h3>3. 照度（lux）：桌面上實際有多亮</h3>
+<p>拉丁文 <em>lux</em> 也是「光」。1 lux ＝ 1 流明的光均勻灑在 1 平方公尺上。同一盞燈，離桌面越遠，照度越低。</p>
+<div class="tw"><table><tr><th>活動</th><th>建議照度（約）</th></tr><tr><td>客廳一般活動、走道</td><td>100–300 lux</td></tr><tr><td>廚房料理台</td><td>300–500 lux</td></tr><tr><td>讀書、寫功課、做手工</td><td>500–750 lux 以上</td></tr></table></div>
+<h3>4. 演色性（CRI、Ra）：顏色看起來準不準</h3>
+<p>在陽光下看到的顏色最真實，定為 100。便宜的燈演色性差，會讓食物看起來不新鮮、臉色蠟黃。住家建議 <strong>Ra 80 以上</strong>，化妝台、餐桌、畫作最好 <strong>Ra 90 以上</strong>。</p>
+
+<h2>三層照明</h2>
+<p>專業設計師不會只在天花板中間裝一盞大燈，而是把光分成三層：</p>
+<div class="widget"><div class="widget-t">✏️ 動手試試：一層一層開燈</div>
+<div class="row" id="layerBtns"><button class="btn" data-l="amb">環境照明</button><button class="btn" data-l="task">工作照明</button><button class="btn" data-l="acc">重點照明</button></div>
+<svg viewBox="0 0 420 220" style="width:100%;height:auto;margin-top:10px;border-radius:8px;background:#1d2226" aria-label="三層照明示意房間">
+ <g id="lyBase"><rect width="420" height="220" fill="#2b3035"/><rect y="180" width="420" height="40" fill="#3a3430"/><rect x="40" y="130" width="140" height="55" rx="8" fill="#3d4650"/><rect x="290" y="120" width="100" height="10" fill="#4a3c30"/><rect x="335" y="130" width="8" height="55" fill="#4a3c30"/><rect x="190" y="40" width="70" height="50" fill="#3a3f45" stroke="#555"/></g>
+ <g id="lyAmb" opacity="0"><rect width="420" height="220" fill="#F3E3C8" opacity=".55"/><rect x="0" y="0" width="420" height="8" fill="#fff4dc"/><rect x="40" y="130" width="140" height="55" rx="8" fill="#8e9aa5" opacity=".7"/><rect x="190" y="40" width="70" height="50" fill="#b2a58f" opacity=".6"/></g>
+ <g id="lyTask" opacity="0"><polygon points="330,60 300,120 380,120" fill="#FFE8B0" opacity=".75"/><rect x="318" y="50" width="24" height="12" rx="3" fill="#ddd"/><line x1="330" y1="0" x2="330" y2="50" stroke="#aaa"/><rect x="290" y="118" width="100" height="4" fill="#fff3cc"/></g>
+ <g id="lyAcc" opacity="0"><polygon points="225,0 180,40 270,40" fill="#fff6e0" opacity=".35"/><rect x="190" y="40" width="70" height="50" fill="#d8a45a"/><circle cx="215" cy="60" r="10" fill="#f1d38b"/><path d="M195 85 L215 65 L235 80 L255 60 L255 85 Z" fill="#6d8f6d"/></g>
+</svg>
+<div class="result" id="layerOut">目前全部關燈。點按鈕一層一層打開。</div></div>
+<div class="cards">
+<div class="card"><h4>環境照明</h4><p><em>Ambient</em>。讓整個房間有基本亮度、看得到路。例如吸頂燈、崁燈、間接照明。</p></div>
+<div class="card"><h4>工作照明</h4><p><em>Task</em>。讓做事的地方夠亮。例如書桌檯燈、廚房吊櫃下的燈、化妝鏡燈。</p></div>
+<div class="card"><h4>重點照明</h4><p><em>Accent</em>。打亮你想讓人看的東西。例如照畫的軌道燈、展示櫃裡的燈。亮度約是周圍的 3 倍以上才有效果。</p></div>
+</div>
+
+<h2>常見燈具</h2>
+<div class="tw"><table>
+<tr><th>燈具</th><th>說明</th></tr>
+<tr><td>崁燈</td><td>「崁」是「嵌」的俗寫，意思是嵌入，燈埋進天花板裡，只露出一個圓孔。乾淨俐落，但要有天花板才能裝。</td></tr>
+<tr><td>筒燈、軌道燈</td><td>裝在軌道上，可以移動、轉角度，適合打亮牆上的畫或裝在沒有天花板的房子。</td></tr>
+<tr><td>吊燈</td><td>從天花板垂下來，常放在餐桌上方，燈罩底部離桌面約 65–80 cm。</td></tr>
+<tr><td>間接照明</td><td>把燈藏在天花板溝槽或櫃子後面，只看到光、看不到燈，光線柔和不刺眼。</td></tr>
+<tr><td>立燈、檯燈、壁燈</td><td>可以移動或補在角落，讓光有高低層次。</td></tr>
+</table></div>
+<div class="box warn"><div class="t">⚠️ 常見錯誤：眩光</div><p>眩光（glare）就是光直接刺進眼睛，讓人不舒服。例如崁燈正好在沙發頭頂上、躺床時看到裸露的燈泡、電腦螢幕反射燈光。規劃時要想：「人會坐在哪、躺在哪、眼睛會看向哪？」</p></div>
+
+<div class="summary"><div class="t">本課重點</div><ul><li>色溫（K）低暖高冷；流明看燈多亮、照度看桌面多亮；演色性 Ra 越接近 100 越真。</li><li>三層照明：環境、工作、重點。</li><li>同區色溫一致，避免眩光。</li></ul></div>
+<h2>小測驗</h2>
+<div class="quiz" data-a="0"><div class="q">1. 想讓臥室溫暖放鬆，燈的色溫大約選？</div><div class="opts"><button>2700–3000 K</button><button>6500 K</button><button>10000 K</button></div><div class="fb">數字低＝偏黃＝暖。</div></div>
+<div class="quiz" data-a="2"><div class="q">2. 書桌上的檯燈屬於哪一層照明？</div><div class="opts"><button>環境照明</button><button>重點照明</button><button>工作照明</button></div><div class="fb">為了「做事」而設的光，就是工作照明。</div></div>
+<div class="quiz" data-a="1"><div class="q">3. 哪個數字告訴你「顏色看起來準不準」？</div><div class="opts"><button>流明</button><button>演色性 Ra</button><button>瓦數</button></div><div class="fb">演色性越接近 100 越接近陽光下的顏色。</div></div>
+</section>
+<!-- ===================== L10 ===================== -->
+<section class="lesson" id="L10" data-part="第四篇 家具全攻略" data-num="10" data-title="家具家族：名稱與由來">
+<div class="dim"><span>第 10 課</span></div>
+<h1>家具家族：名稱與由來</h1>
+<p class="lead">家具的名字很多來自外國，每一個都藏著一段故事。記住故事，名字就忘不掉。</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>家具的四大類</li><li>沙發、貴妃椅、邊几、斗櫃等名稱與由來</li><li>各類家具的標準尺寸</li></ul></div>
+
+<h2>家具的四大類</h2>
+<div class="cards">
+<div class="card"><h4>坐具</h4><p>讓人坐：椅子、沙發、凳子、長凳。</p></div>
+<div class="card"><h4>臥具</h4><p>讓人躺：床、沙發床、躺椅。</p></div>
+<div class="card"><h4>承具</h4><p>放東西在上面：桌子、茶几、邊几、工作台。</p></div>
+<div class="card"><h4>庋具（收納）</h4><p>「庋」音同「鬼」，古字是放東西的架子。現在就是櫃子、抽屜、書架。</p></div>
+</div>
+
+<h2>坐的家族</h2>
+<div class="box origin"><div class="t">📜 沙發 <span class="en">Sofa</span></div><p>來自阿拉伯文 <em>ṣuffa</em>，原本是鋪著地毯和靠墊的長石台。經過土耳其、法國傳到英國，17 世紀才變成現在有軟墊的長椅。中文「沙發」是英文發音直接翻過來的。</p></div>
+<div class="box origin"><div class="t">📜 貴妃椅 <span class="en">Chaise longue</span></div><p>法文原意是「<strong>長椅子</strong>」，一端有靠背可以半躺。英文常被誤寫成 chaise <em>lounge</em>，因為 lounge（休息）聽起來很像，錯著錯著大家也接受了。中文叫「貴妃椅」，是聯想到古畫裡斜躺的貴妃。</p></div>
+<div class="box origin"><div class="t">📜 腳凳 <span class="en">Ottoman</span></div><p>名字來自<strong>鄂圖曼帝國</strong>（今土耳其一帶）。18 世紀歐洲流行東方風，從那裡傳來的軟墊矮凳就被叫作 ottoman。現在指放腳、當小椅子、甚至可以掀蓋收納的軟凳。</p></div>
+<div class="box origin"><div class="t">📜 太師椅與圈椅</div><p><strong>太師椅</strong>相傳起源於宋代，因為一位官拜「太師」的大臣椅子被加上荷葉形的頭靠而得名，後來泛指有扶手、靠背的大型中式官椅。<strong>圈椅</strong>的靠背和扶手是一條連續的圓弧，坐下時手臂剛好被圈住，是明代家具的經典，後來還影響了丹麥設計（第 13 課會講）。</p></div>
+<div class="tw"><table>
+<tr><th>名稱</th><th>特徵</th><th>常見尺寸（cm）</th></tr>
+<tr><td>單椅／扶手椅</td><td>一人座，有沒有扶手都行</td><td>寬 55–85，座高 40–45</td></tr>
+<tr><td>雙人沙發（loveseat）</td><td>英文「情人座」，兩人剛好</td><td>寬 140–170</td></tr>
+<tr><td>三人沙發</td><td>客廳主角</td><td>寬 190–240，深 85–100</td></tr>
+<tr><td>L 型沙發</td><td>多一段可以伸腳的躺位</td><td>長邊 240–300</td></tr>
+<tr><td>吧台椅</td><td>配合高吧台</td><td>座高 65–80</td></tr>
+</table></div>
+
+<h2>桌的家族</h2>
+<div class="tw"><table>
+<tr><th>名稱</th><th>由來／特徵</th><th>常見尺寸（cm）</th></tr>
+<tr><td>茶几</td><td>放在沙發前，古代用來放茶杯，所以叫茶几</td><td>高 35–45</td></tr>
+<tr><td>邊几</td><td>放在沙發或床旁邊的小桌</td><td>高度約與沙發扶手同高</td></tr>
+<tr><td>玄關桌 <span class="en">Console</span></td><td>console 原指牆上撐起東西的「托架」，所以是靠牆、很窄的長桌</td><td>深 25–40，高 75–85</td></tr>
+<tr><td>餐桌</td><td>每人需要寬約 60 cm、深約 40 cm 的用餐範圍</td><td>4 人 約 120–150 × 75–90</td></tr>
+<tr><td>書桌</td><td>放得下電腦、書本與手肘</td><td>寬 100–140，深 60–75，高 72–75</td></tr>
+</table></div>
+
+<h2>櫃的家族</h2>
+<div class="box origin"><div class="t">📜 衣櫃 <span class="en">Wardrobe</span></div><p>來自古法文 <em>garde-robe</em>：<em>garder</em>（保護、看守）＋ <em>robe</em>（衣服）＝「守護衣服的地方」。中世紀時其實是一整個小房間，後來才縮小成櫃子。</p></div>
+<div class="box origin"><div class="t">📜 餐邊櫃 <span class="en">Credenza／Sideboard</span></div><p>義大利文 <em>credenza</em> 意思是「相信」。傳說中世紀貴族怕被下毒，會讓僕人先在這個櫃子上<strong>試吃</strong>，確認安全才上菜，所以放食物的矮櫃就叫 credenza。現在指客廳或餐廳靠牆的長矮櫃。</p></div>
+<div class="box origin"><div class="t">📜 斗櫃 <span class="en">Chest of drawers</span></div><p>「斗」是抽屜的意思（台灣木工常說「抽斗」）。斗櫃就是一整排抽屜組成的櫃子。常說「五斗櫃」就是五層抽屜。</p></div>
+<div class="box origin"><div class="t">📜 辦公桌 <span class="en">Bureau</span></div><p>法文 <em>bure</em> 是一種粗羊毛布。以前寫字桌上會鋪這種布，後來布的名字變成桌子的名字，最後連「在桌子旁工作的地方」都叫 bureau，所以現在政府機關也叫 bureau（局）。</p></div>
+<div class="tw"><table>
+<tr><th>櫃子</th><th>建議深度（cm）</th><th>為什麼</th></tr>
+<tr><td>衣櫃（吊掛）</td><td>55–60</td><td>衣架寬約 45，兩邊要留空</td></tr>
+<tr><td>鞋櫃</td><td>35–40</td><td>成人鞋長約 25–30</td></tr>
+<tr><td>書櫃</td><td>25–35</td><td>一般書不會超過 25，太深會前後放兩排找不到</td></tr>
+<tr><td>電視櫃</td><td>40–50</td><td>放得下機上盒與遊戲機</td></tr>
+<tr><td>廚房下櫃</td><td>60</td><td>放得下爐具與水槽</td></tr>
+<tr><td>廚房吊櫃</td><td>30–35</td><td>太深會撞頭</td></tr>
+</table></div>
+
+<h2>床的家族</h2>
+<ul>
+<li><strong>床架</strong>：撐起床墊的結構；有掀床（床板掀起來下面可收納）、抽屜床、懸浮床等。</li>
+<li><strong>床頭板</strong>：靠背的那塊板，讓你坐在床上看書時有東西靠。</li>
+<li><strong>床墊</strong>：彈簧（獨立筒、連結式）、乳膠、記憶棉等。</li>
+</ul>
+<div class="box origin"><div class="t">📜 獨立筒</div><p>每一顆彈簧都用布袋包起來，一顆一顆獨立，英文叫 <em>pocket spring</em>（口袋彈簧）。好處是旁邊的人翻身，你比較不會被震到。</p></div>
+<div class="box origin"><div class="t">📜 蒲團 <span class="en">Futon</span></div><p>英文 futon 其實來自日文「布団」（ふとん），而日文又來自中文的「<strong>蒲團</strong>」：古代用蒲草編成的圓坐墊，給和尚打坐用。從中國到日本，再到西方，最後變成「可以摺疊的床墊」。</p></div>
+
+<div class="summary"><div class="t">本課重點</div><ul><li>家具四大類：坐、臥、承、收納。</li><li>Sofa（阿拉伯石台）、Chaise longue（長椅）、Ottoman（鄂圖曼帝國）、Wardrobe（守護衣服）、Credenza（試毒）。</li><li>記住深度：衣櫃 60、鞋櫃 35–40、書櫃 30、吊櫃 35。</li></ul></div>
+<h2>小測驗</h2>
+<div class="quiz" data-a="1"><div class="q">1. Chaise longue 的法文原意是？</div><div class="opts"><button>休息室的椅子</button><button>長椅子</button><button>貴妃的椅子</button></div><div class="fb">longue＝長；英文 lounge 是誤寫。</div></div>
+<div class="quiz" data-a="2"><div class="q">2. 一般吊掛衣服的衣櫃，深度約多少才夠？</div><div class="opts"><button>30 cm</button><button>40 cm</button><button>55–60 cm</button></div><div class="fb">衣架約 45 cm 寬，前後都要留空間。</div></div>
+<div class="quiz" data-a="0"><div class="q">3. Credenza 這個字跟什麼傳說有關？</div><div class="opts"><button>試吃確認沒有毒</button><button>存放信用卡</button><button>放宗教經書</button></div><div class="fb">義大利文 credenza＝相信、信任。</div></div>
+</section>
+
+<!-- ===================== L11 ===================== -->
+<section class="lesson" id="L11" data-part="第四篇 家具全攻略" data-num="11" data-title="家具材料：木頭、板材、金屬、布料">
+<div class="dim"><span>第 11 課</span></div>
+<h1>家具材料：木頭、板材、金屬、布料</h1>
+<p class="lead">兩個看起來一樣的櫃子，價錢可能差五倍。差別就在材料。</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>實木的特性，以及為什麼木頭會「動」</li><li>夾板、木心板、密底板、塑合板的差別</li><li>表面處理、金屬、石材、布料怎麼挑</li></ul></div>
+
+<h2>實木</h2>
+<p>從一整棵樹直接鋸下來的木頭。優點是紋路自然、可以一直修補重新打磨、越用越有味道；缺點是貴、重，而且<strong>會動</strong>。</p>
+<div class="box eg"><div class="t">🏠 生活例子：木頭會呼吸</div><p>木頭像海綿，會吸收和吐出空氣裡的水分。台灣夏天潮濕時木頭會膨脹，冬天乾燥時會收縮。這就是為什麼老舊木門夏天常常卡住、關不緊。做實木家具時，師傅會刻意留伸縮縫，讓木頭有空間「呼吸」。</p></div>
+<div class="box origin"><div class="t">📜 名詞由來：硬木與軟木</div><p>英文 <em>hardwood</em>（硬木）和 <em>softwood</em>（軟木）其實<strong>跟硬不硬無關</strong>，是植物分類：</p><ul><li>硬木＝闊葉樹（葉子寬大、秋天會落葉），例如橡木、胡桃木、柚木。</li><li>軟木＝針葉樹（葉子像針），例如松木、杉木、檜木。</li></ul><p>冷知識：做模型用的超輕「巴沙木」其實是硬木！</p></div>
+<div class="tw"><table>
+<tr><th>木種</th><th>顏色與特性</th><th>常見用途</th></tr>
+<tr><td>橡木 Oak</td><td>淺黃褐，紋路明顯，硬、耐用</td><td>北歐風家具、地板</td></tr>
+<tr><td>白蠟木 Ash</td><td>比橡木更淺，有彈性</td><td>椅子、工具柄</td></tr>
+<tr><td>胡桃木 Walnut</td><td>深咖啡，高級感</td><td>中世紀現代風、桌面</td></tr>
+<tr><td>柚木 Teak</td><td>金褐色、含油、耐水</td><td>戶外家具、船甲板</td></tr>
+<tr><td>松木 Pine</td><td>淺黃、有節疤、較軟便宜</td><td>鄉村風、平價家具</td></tr>
+<tr><td>檜木</td><td>香氣濃，台灣特產，防蟲</td><td>浴桶、高級櫃子</td></tr>
+</table></div>
+
+<h2>人造板材</h2>
+<p>把木頭切碎、削片或打成纖維，再用膠壓在一起，就是人造板。好處是<strong>不太會變形、尺寸大、便宜</strong>。</p>
+<figure>
+<svg viewBox="0 0 640 240" role="img" aria-label="四種板材剖面示意">
+ <g font-size="14" text-anchor="middle">
+ <g transform="translate(10,20)"><g stroke="var(--oak)" stroke-width="1"><rect x="0" y="0" width="140" height="10" fill="#d8b489"/><rect x="0" y="10" width="140" height="10" fill="#c49a6a"/><rect x="0" y="20" width="140" height="10" fill="#d8b489"/><rect x="0" y="30" width="140" height="10" fill="#c49a6a"/><rect x="0" y="40" width="140" height="10" fill="#d8b489"/></g><text x="70" y="80">夾板</text><text x="70" y="100" font-size="12" fill="var(--ink2)">薄木片交叉疊</text><text x="70" y="116" font-size="12" fill="var(--ink2)">防潮、耐重</text></g>
+ <g transform="translate(170,20)"><rect x="0" y="0" width="140" height="6" fill="#d8b489" stroke="var(--oak)"/><g fill="#c49a6a" stroke="var(--oak)"><rect x="0" y="6" width="28" height="38"/><rect x="28" y="6" width="28" height="38"/><rect x="56" y="6" width="28" height="38"/><rect x="84" y="6" width="28" height="38"/><rect x="112" y="6" width="28" height="38"/></g><rect x="0" y="44" width="140" height="6" fill="#d8b489" stroke="var(--oak)"/><text x="70" y="80">木心板</text><text x="70" y="100" font-size="12" fill="var(--ink2)">中間是木條</text><text x="70" y="116" font-size="12" fill="var(--ink2)">輕、好上釘，木作常用</text></g>
+ <g transform="translate(330,20)"><rect x="0" y="0" width="140" height="50" fill="#b99a78" stroke="var(--oak)"/><text x="70" y="80">密底板 MDF</text><text x="70" y="100" font-size="12" fill="var(--ink2)">木纖維壓成，很平滑</text><text x="70" y="116" font-size="12" fill="var(--ink2)">適合烤漆、雕花；怕水</text></g>
+ <g transform="translate(490,20)"><rect x="0" y="0" width="140" height="50" fill="#c9a77e" stroke="var(--oak)"/><g fill="#a37f57"><rect x="10" y="8" width="12" height="4"/><rect x="40" y="20" width="16" height="5"/><rect x="80" y="10" width="10" height="4"/><rect x="100" y="30" width="18" height="5"/><rect x="20" y="34" width="14" height="4"/><rect x="60" y="38" width="12" height="4"/><rect x="118" y="14" width="10" height="4"/><rect x="70" y="26" width="8" height="3"/></g><text x="70" y="80">塑合板</text><text x="70" y="100" font-size="12" fill="var(--ink2)">木屑碎片壓成</text><text x="70" y="116" font-size="12" fill="var(--ink2)">便宜，系統櫃主力</text></g>
+ </g>
+ <text x="320" y="175" text-anchor="middle" font-size="13" fill="var(--ink2)">（示意剖面，實際厚度常見 15–18 mm）</text>
+</svg>
+</figure>
+<div class="box origin"><div class="t">📜 名詞由來：夾板為什麼要「交叉」？</div><p>木頭順著紋路方向很強，橫著紋路就容易裂、容易伸縮。把每一層薄木片的紋路<strong>轉 90 度交叉</strong>疊起來，每一層都互相「拉住」，板子就不容易變形。而且層數一定是<strong>單數</strong>（3、5、7 層），上下兩面紋路方向才會一樣、受力對稱。</p></div>
+<div class="box origin"><div class="t">📜 名詞由來：密底板</div><p>MDF 是 <em>Medium Density Fiberboard</em>「中密度纖維板」的縮寫。台灣俗稱「密底板」或「中纖板」，重點在「密」：木纖維壓得非常緊密，所以表面細緻平滑，可以直接烤漆或雕刻線條。</p></div>
+
+<h2>表面處理：板子的衣服</h2>
+<p>人造板本身不好看，所以外面要「穿衣服」：</p>
+<ul>
+<li><strong>實木貼皮</strong>：把真的木頭削成 0.2–0.6 mm 的薄片貼上去，看起來就是實木。英文 <em>veneer</em>，來自德文 <em>furnieren</em>「裝備、裝飾」。</li>
+<li><strong>美耐皿</strong>（melamine）：系統櫃最常見，印刷木紋或素色的紙浸樹脂後熱壓在塑合板上，耐刮、好清理。</li>
+<li><strong>美耐板</strong>（HPL，高壓裝飾板）：比美耐皿更厚、更耐磨，常貼在木作櫃子、桌面上。</li>
+<li><strong>烤漆</strong>：噴上漆再烘烤，表面光亮平滑，常用在門片。</li>
+<li><strong>木器漆、護木油</strong>：塗在實木上保護，油類能保留木頭觸感。</li>
+</ul>
+<div class="box warn"><div class="t">⚠️ 甲醛：看不見的問題</div><p>人造板的膠水可能會慢慢釋放<strong>甲醛</strong>，一種有刺激味、對身體不好的氣體。選購時要看板材的甲醛等級，例如台灣國家標準 CNS 的 <strong>F1</strong> 級（F 後面數字越小越好），或歐洲標準 E1、E0 等。新家裝修完要多通風。</p></div>
+
+<h2>金屬、石材、玻璃</h2>
+<div class="tw"><table>
+<tr><th>材料</th><th>特性</th><th>常見用途</th></tr>
+<tr><td>鐵件</td><td>可以做很細很薄的線條；要做防鏽烤漆</td><td>層架、桌腳、隔屏</td></tr>
+<tr><td>不鏽鋼 304</td><td>含鉻鎳，不容易生鏽；「304」是鋼材編號</td><td>廚房檯面、水槽、五金</td></tr>
+<tr><td>鋁</td><td>輕、不生鏽</td><td>門窗框、戶外家具</td></tr>
+<tr><td>大理石</td><td>天然紋路漂亮，但怕酸（檸檬汁、醋會咬壞表面）</td><td>桌面、電視牆</td></tr>
+<tr><td>石英石</td><td>石英砂加樹脂的人造石，比大理石耐刮耐污</td><td>廚房檯面</td></tr>
+<tr><td>強化玻璃</td><td>加熱後急速冷卻，強度提高，碎掉時是顆粒狀比較不會割傷</td><td>桌面、淋浴拉門</td></tr>
+</table></div>
+
+<h2>布料與皮革</h2>
+<ul>
+<li><strong>棉麻</strong>：透氣、自然、容易皺，適合休閒感。</li>
+<li><strong>絨布</strong>：觸感柔軟，有光澤變化，冬天溫暖。</li>
+<li><strong>科技布</strong>：像布一樣透氣，但防潑水、耐貓抓，有寵物的家庭很愛用。</li>
+<li><strong>真皮</strong>：越用越有光澤；<strong>PU 皮</strong>是人造皮，便宜但幾年後容易脫皮。</li>
+</ul>
+<div class="box origin"><div class="t">📜 名詞由來：馬丁代爾耐磨測試</div><p>沙發布耐不耐用，要看「耐磨次數」。測試機器是英國人 J. G. Martindale 在 1940 年代發明的，用一塊羊毛布在樣品上一直畫圈摩擦，數到布料壞掉為止。家用沙發建議 <strong>20,000 次以上</strong>，常坐、有小孩寵物的最好 30,000 次以上。</p></div>
+
+<div class="summary"><div class="t">本課重點</div><ul><li>實木會隨濕度伸縮；硬木＝闊葉、軟木＝針葉。</li><li>夾板（交叉疊）、木心板（木條心）、密底板（纖維）、塑合板（木屑）。</li><li>表面有貼皮、美耐皿、美耐板、烤漆；注意甲醛等級；布料看耐磨次數。</li></ul></div>
+<h2>小測驗</h2>
+<div class="quiz" data-a="2"><div class="q">1. 夾板的木片為什麼要一層一層「交叉 90 度」疊？</div><div class="opts"><button>比較好看</button><button>比較便宜</button><button>互相拉住，不容易變形</button></div><div class="fb">木頭順紋強、橫紋弱，交叉疊可以互補。</div></div>
+<div class="quiz" data-a="0"><div class="q">2. 松樹是「軟木」，因為？</div><div class="opts"><button>它是針葉樹</button><button>它一定很軟</button><button>它長得快</button></div><div class="fb">硬木／軟木是植物分類，不是硬度。</div></div>
+<div class="quiz" data-a="1"><div class="q">3. 家裡養貓，沙發布料比較適合？</div><div class="opts"><button>細緻的絲質</button><button>耐磨次數高的科技布</button><button>便宜的 PU 皮</button></div><div class="fb">科技布防抓防潑水，耐磨次數也高。</div></div>
+</section>
+<!-- ===================== L12 ===================== -->
+<section class="lesson" id="L12" data-part="第四篇 家具全攻略" data-num="12" data-title="家具結構：榫卯與五金">
+<div class="dim"><span>第 12 課</span></div>
+<h1>家具結構：榫卯與五金</h1>
+<p class="lead">一張椅子要撐住一個大人好幾十年，每天前後搖、左右晃。它靠什麼不散掉？</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>三角形為什麼最穩</li><li>榫卯的原理與幾種常見接法</li><li>鉸鏈、滑軌等五金的名稱與選擇</li></ul></div>
+
+<h2>三角形最穩</h2>
+<p>四根棍子釘成一個方框，用手一推就會歪成菱形；但三根棍子釘成三角形，怎麼推都不會變形。所以很多椅子的腳之間會加一根<strong>橫撐</strong>（也叫拉檔），或在角落加一塊三角形的木塊，就是為了做出三角形。</p>
+<figure>
+<svg viewBox="0 0 520 170" role="img" aria-label="方框容易變形，加斜撐就穩定">
+ <g font-size="14" text-anchor="middle">
+  <g transform="translate(30,20)"><rect x="0" y="0" width="100" height="100" fill="none" stroke="var(--ink)" stroke-width="5"><animate attributeName="width" values="100;100;100" dur="2s"/></rect><path d="M0 100 L30 0 L130 0 L100 100 Z" fill="none" stroke="var(--red)" stroke-width="3" stroke-dasharray="6 4"/><text x="60" y="135">方框：一推就歪</text></g>
+  <g transform="translate(200,20)"><polygon points="50,0 100,100 0,100" fill="none" stroke="var(--sage)" stroke-width="5"/><text x="50" y="135">三角形：推不動</text></g>
+  <g transform="translate(360,20)"><rect x="0" y="0" width="100" height="100" fill="none" stroke="var(--ink)" stroke-width="5"/><line x1="0" y1="100" x2="100" y2="0" stroke="var(--sage)" stroke-width="5"/><text x="50" y="135">方框＋斜撐：變穩</text></g>
+ </g>
+</svg>
+</figure>
+
+<h2>榫卯：不用釘子的智慧</h2>
+<div class="box origin"><div class="t">📜 名詞由來：榫與卯</div><p>「榫」（音同「損」）是木頭<strong>凸出來</strong>的部分；「卯」是<strong>挖空的洞</strong>。凸的插進凹的，就接起來了。考古學家在浙江的<strong>河姆渡遺址</strong>發現約七千年前的房屋木構件上就有榫卯，這可能是人類最古老的木工接合技術之一。英文叫 <em>mortise and tenon</em>（卯與榫）。</p></div>
+<div class="widget"><div class="widget-t">✏️ 動手試試：組裝榫卯</div>
+<div class="row"><button class="btn" id="tenonBtn">組裝</button><select id="jointSel"><option value="straight">直榫</option><option value="dove">燕尾榫</option></select></div>
+<svg viewBox="0 -110 440 310" style="width:100%;height:auto;margin-top:10px" aria-label="榫卯組裝動畫">
+ <g id="mortise"><path id="mortPath" d="M240 40 L400 40 L400 160 L240 160 L240 125 L300 125 L300 75 L240 75 Z" fill="#d8b489" stroke="var(--oak)" stroke-width="2"/><text x="350" y="185" font-size="13" text-anchor="middle" fill="var(--ink2)">卯（凹）</text></g>
+ <g id="tenon" style="transition:transform 1.2s cubic-bezier(.4,0,.2,1)"><path id="tenPath" d="M40 40 L180 40 L180 75 L240 75 L240 125 L180 125 L180 160 L40 160 Z" fill="#c49a6a" stroke="var(--oak)" stroke-width="2"/><text x="110" y="185" font-size="13" text-anchor="middle" fill="var(--ink2)">榫（凸）</text></g>
+</svg>
+<div class="result" id="jointOut">直榫：最基本的接法，靠榫頭和卯眼緊密咬合，再加膠固定。</div></div>
+<div class="tw"><table>
+<tr><th>接法</th><th>樣子</th><th>用在哪</th></tr>
+<tr><td>直榫</td><td>方方正正插進去</td><td>椅腳和橫撐、桌腳和牙板</td></tr>
+<tr><td>燕尾榫</td><td>榫頭像燕子尾巴，外寬內窄，拉不出來</td><td>抽屜四角，天天拉也不會鬆</td></tr>
+<tr><td>指接榫</td><td>像兩隻手手指交叉</td><td>把短木條接成長木條（集成材）</td></tr>
+<tr><td>圓木榫</td><td>一根小圓木棒插進兩邊的孔</td><td>現代工廠家具，定位準、做得快</td></tr>
+</table></div>
+
+<h2>現代家具的連接</h2>
+<p>工廠大量生產的家具，特別是可以自己組裝的平板包裝家具（例如 IKEA），常用：</p>
+<ul>
+<li><strong>三合一連接件</strong>：一個圓形偏心輪＋一根螺桿，轉一下就把兩塊板拉緊。你組裝過 IKEA 衣櫃，那個用螺絲起子轉的圓圓金屬件就是它。</li>
+<li><strong>木螺絲、自攻螺絲</strong>：直接鎖進板材。</li>
+<li><strong>隱藏式連接件</strong>：藏在板子裡面，外面看不到。</li>
+</ul>
+<div class="box origin"><div class="t">📜 名詞由來：KD 家具</div><p>KD＝<em>Knock-Down</em>，「可以拆散」的意思。這種家具出廠時是一片一片的板子，攤平裝箱運送，到家再組裝，運費和倉庫空間都省很多。</p></div>
+
+<h2>五金：家具的關節</h2>
+<div class="box origin"><div class="t">📜 名詞由來：西德鉸鏈</div><p>台灣師傅說的「<strong>西德鉸鏈</strong>」，是指櫃子門片內側那種杯狀、可以調整的隱藏式鉸鏈。因為早期這種高品質鉸鏈多從<strong>西德</strong>（兩德統一前的西德國）進口，名字就一直用到現在，就算現在是奧地利或台灣做的也照樣這麼叫。</p></div>
+<div class="tw"><table>
+<tr><th>五金</th><th>功能</th><th>挑選重點</th></tr>
+<tr><td>鉸鏈</td><td>讓門片開關</td><td>有沒有<strong>緩衝</strong>（門會慢慢關、不會碰一聲）；開啟角度</td></tr>
+<tr><td>滑軌</td><td>讓抽屜拉出來</td><td><strong>三節滑軌</strong>可以全部拉出、看到最裡面；有沒有緩衝；承重幾公斤</td></tr>
+<tr><td>拍拍手（反彈器）</td><td>按一下門就彈開，不用把手</td><td>適合極簡設計，但有小孩的家庭容易被亂按</td></tr>
+<tr><td>把手</td><td>開門開抽屜</td><td>形狀、材質、手感；也可以用門片斜切的「隱藏把手」</td></tr>
+<tr><td>層板粒</td><td>撐住櫃子裡的層板</td><td>櫃子側板預先鑽一排孔，層板高度可以調</td></tr>
+</table></div>
+<div class="box tip"><div class="t">💡 小撇步：五金是最不能省的地方</div><p>櫃子壞掉，很少是板子壞，大多是鉸鏈鬆了、滑軌卡了。預算有限時，寧可板材普通一點，五金也要選好品牌，因為它們每天都在動。</p></div>
+
+<div class="summary"><div class="t">本課重點</div><ul><li>三角形最穩，所以椅子要有橫撐或斜撐。</li><li>榫＝凸、卯＝凹；燕尾榫用在抽屜不會拉脫。</li><li>KD 家具＝可拆裝；西德鉸鏈、三節滑軌、緩衝功能；五金不要省。</li></ul></div>
+<h2>小測驗</h2>
+<div class="quiz" data-a="1"><div class="q">1. 抽屜四個角最適合用哪種接法，才不會被一直拉而鬆脫？</div><div class="opts"><button>直榫</button><button>燕尾榫</button><button>只用膠水</button></div><div class="fb">燕尾榫外寬內窄，往外拉會卡住。</div></div>
+<div class="quiz" data-a="0"><div class="q">2. 「西德鉸鏈」這個名字怎麼來的？</div><div class="opts"><button>早期多從西德進口</button><button>發明人姓西德</button><button>要裝在櫃子西側</button></div><div class="fb">名字沿用至今，與產地已無關。</div></div>
+<div class="quiz" data-a="2"><div class="q">3. 想讓抽屜能完全拉出、看到最裡面的東西，要選？</div><div class="opts"><button>兩節滑軌</button><button>拍拍手</button><button>三節滑軌</button></div><div class="fb">三節滑軌可全拉出。</div></div>
+</section>
+
+<!-- ===================== L13 ===================== -->
+<section class="lesson" id="L13" data-part="第四篇 家具全攻略" data-num="13" data-title="家具設計史與經典名作">
+<div class="dim"><span>第 13 課</span></div>
+<h1>家具設計史與經典名作</h1>
+<p class="lead">今天你在家具店看到的椅子，很多都是 50 年、100 年前某個設計師想出來的點子。跟著時間軸走一遍吧。</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>從明式家具到現代家具的重要轉折</li><li>包浩斯、北歐設計、中世紀現代是什麼</li><li>幾把改變歷史的名椅，以及它們為什麼重要</li></ul></div>
+
+<p>點選時間軸上的年代，看看每個轉折點：</p>
+<div class="timeline" id="histTL">
+<div class="tl"><b>約 1368–1644　明式家具</b><p>中國明朝的家具。用黃花梨、紫檀等硬木，線條簡潔、比例優美、幾乎沒有多餘裝飾，全靠榫卯組成。很多西方設計師認為它是「東方的現代主義」。代表作：圈椅、官帽椅、條案。</p></div>
+<div class="tl"><b>1859　曲木椅</b><p>出生於德國、在維也納發展的木匠<strong>托勒</strong>（Michael Thonet）發明用<strong>蒸汽把實木蒸軟再彎曲</strong>的技術，做出只要幾根彎木、幾顆螺絲就能組成的咖啡館椅。它可以拆開運送，是最早大量生產、賣到全世界的椅子之一，到 1930 年據說已賣出約五千萬張。</p></div>
+<div class="tl"><b>1919　包浩斯成立</b><p>德國威瑪的一所設計學校，由建築師葛羅培斯創辦。主張<strong>藝術與工業結合</strong>、形隨機能、適合工廠量產、拒絕多餘裝飾。1933 年被納粹關閉，老師們逃到世界各地，反而讓這個想法傳遍全球。</p></div>
+<div class="tl"><b>1925　鋼管椅</b><p>包浩斯的年輕老師<strong>布魯爾</strong>（Marcel Breuer）看著自己腳踏車的彎曲鋼管把手，想到：椅子也能用鋼管做！他做出了以鋼管為骨架、皮革或帆布為座面的扶手椅，開啟了金屬家具的時代。</p></div>
+<div class="tl"><b>1929　密斯的「少即是多」</b><p>德國建築師<strong>密斯．凡德羅</strong>與設計師莉莉．瑞希為巴塞隆納世界博覽會的德國館設計了一張 X 形鋼腳皮椅，成為現代奢華的代表。密斯常說的「<strong>Less is more</strong>（少即是多）」也成了極簡主義的口號。</p></div>
+<div class="tl"><b>1940–60 年代　北歐設計黃金期</b><p>丹麥、瑞典、芬蘭的設計師用在地木材、手工技術，做出溫暖、實用、給一般家庭用的家具。丹麥設計師<strong>韋格納</strong>（Hans Wegner）研究明式圈椅後，設計了一系列椅子，其中 1949 年的一款 Y 形靠背椅至今仍在生產，是東西方設計交流的經典例子。</p></div>
+<div class="tl"><b>1943　IKEA 創立</b><p>瑞典人坎普拉德 17 歲創業。IKEA 這個名字是<strong>他的姓名縮寫 I.K.</strong>，加上他長大的農場 <strong>E</strong>lmtaryd、村莊 <strong>A</strong>gunnaryd 的第一個字母。1950 年代，一位員工為了把桌子塞進車裡而拆掉桌腳，啟發了「平板包裝、自己組裝」的模式。</p></div>
+<div class="tl"><b>1945–1970　中世紀現代</b><p>美國的<strong>伊姆斯夫婦</strong>（Charles & Ray Eames）用當時的新技術：彎曲夾板、玻璃纖維、鋁，設計了大量家具。1956 年的皮革躺椅配腳凳，是他們想做出「像一隻用舊了的棒球手套一樣舒服」的椅子。</p></div>
+<div class="tl"><b>1958–1967　塑膠與太空時代</b><p>丹麥的<strong>雅各布森</strong>設計了像蛋殼包住人的單椅；<strong>潘頓</strong>（Verner Panton）做出世界上第一張<strong>一體成形</strong>的塑膠椅，整張椅子沒有任何接縫，像一條 S 形的絲帶。</p></div>
+<div class="tl"><b>1981　曼菲斯設計</b><p>義大利設計師索特薩斯帶領一群年輕人，故意用鮮豔撞色、怪異幾何、塑膠貼皮，反抗「現代主義很無聊」。團體名字來自他們聚會時一直重播的一首 Bob Dylan 歌曲，歌名裡有 Memphis。這是<strong>後現代主義</strong>的代表。</p></div>
+<div class="tl"><b>2000 年代至今　永續與數位</b><p>設計師開始重視回收材料、可拆解維修、低碳運輸；3D 列印、參數化設計也讓以前做不出的形狀變得可能。</p></div>
+</div>
+
+<div class="box eg"><div class="t">🏠 生活例子：你家可能就有「經典」</div><p>家具店常看到的彎木咖啡椅、鋼管椅、Y 形靠背木椅、塑膠一體椅，很多都是上面這些經典的正版或仿製品。下次逛家具店，試著猜猜它們的「祖先」是誰。</p></div>
+<div class="box warn"><div class="t">⚠️ 關於仿品</div><p>很多經典設計至今仍受設計權或商標保護，市面上便宜的「復刻款」不一定合法，品質和比例也常有落差。身為設計人，要懂得尊重原創，也要知道自己買的是什麼。</p></div>
+
+<figure>
+<svg viewBox="0 0 560 170" role="img" aria-label="曲木技術步驟">
+ <g font-size="13" text-anchor="middle">
+  <g transform="translate(20,20)"><rect x="0" y="40" width="130" height="14" fill="#c49a6a" stroke="var(--oak)"/><path d="M20 30 q5 -10 0 -20 M50 30 q5 -10 0 -20 M80 30 q5 -10 0 -20 M110 30 q5 -10 0 -20" stroke="var(--blue)" fill="none" stroke-width="2"/><text x="65" y="90">① 蒸氣蒸軟木條</text></g>
+  <g transform="translate(200,20)"><path d="M10 70 Q65 -10 120 70" fill="none" stroke="var(--ink2)" stroke-width="10"/><path d="M10 60 Q65 -20 120 60" fill="none" stroke="#c49a6a" stroke-width="12"/><text x="65" y="90">② 壓在模具上彎曲</text></g>
+  <g transform="translate(390,20)"><path d="M10 60 Q65 -20 120 60" fill="none" stroke="#c49a6a" stroke-width="12"/><text x="65" y="90">③ 乾燥定型，不會彈回</text></g>
+ </g>
+</svg>
+<figcaption>1859 年曲木技術的原理，現在的彎木家具仍在使用</figcaption>
+</figure>
+
+<div class="summary"><div class="t">本課重點</div><ul><li>明式家具：簡潔、榫卯，影響了北歐設計。</li><li>包浩斯（1919）：藝術＋工業、形隨機能；鋼管椅、「少即是多」。</li><li>北歐設計、中世紀現代、塑膠一體椅、曼菲斯後現代、永續設計。</li></ul></div>
+<h2>小測驗</h2>
+<div class="quiz" data-a="0"><div class="q">1. 布魯爾設計鋼管椅的靈感來自？</div><div class="opts"><button>腳踏車把手</button><button>水管</button><button>欄杆</button></div><div class="fb">他看著自己的腳踏車把手想到的。</div></div>
+<div class="quiz" data-a="2"><div class="q">2. 韋格納的 Y 形靠背椅，靈感來自哪裡？</div><div class="opts"><button>太空船</button><button>日本榻榻米</button><button>中國明式圈椅</button></div><div class="fb">東西方設計交流的經典例子。</div></div>
+<div class="quiz" data-a="1"><div class="q">3. 「Less is more 少即是多」常和哪位設計師連在一起？</div><div class="opts"><button>伊姆斯</button><button>密斯．凡德羅</button><button>潘頓</button></div><div class="fb">這句話成為極簡主義的代表口號。</div></div>
+</section>
+<!-- ===================== L14 ===================== -->
+<section class="lesson" id="L14" data-part="第五篇 各空間設計" data-num="14" data-title="玄關與客廳">
+<div class="dim"><span>第 14 課</span></div>
+<h1>玄關與客廳</h1>
+<p class="lead">從這一課開始，我們把前面學的尺寸、動線、色彩、照明，一個空間一個空間用起來。先從進門的地方開始。</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>玄關要解決哪些事</li><li>客廳的四種常見配置</li><li>地毯、畫、窗簾、電視距離的實用規則</li></ul></div>
+
+<h2>玄關</h2>
+<div class="box origin"><div class="t">📜 名詞由來：玄關</div><p>「玄」是深奧、玄妙；「關」是關口。「玄關」原本是佛教用語，指進入深奧佛法的入口，後來日本禪寺把寺院的入口叫玄關，再慢慢變成一般住宅「進門處」的名稱，傳回台灣後沿用至今。</p></div>
+<p>玄關雖小，卻是每天一定會經過兩次的地方。一個好玄關要解決：</p>
+<ul>
+<li><strong>放鞋</strong>：鞋櫃深 35–40 cm；櫃子下方離地 15–20 cm 懸空，常穿的鞋直接踢進去。</li>
+<li><strong>坐下穿鞋</strong>：一張穿鞋椅或凳子，高約 40 cm。</li>
+<li><strong>放雜物</strong>：鑰匙、口罩、雨傘、包包、外套的固定位置。</li>
+<li><strong>照鏡子</strong>：出門前整理儀容。</li>
+<li><strong>緩衝視線</strong>：不讓外面的人一開門就看光客廳。</li>
+</ul>
+<div class="box eg"><div class="t">🏠 文化小知識：穿堂煞</div><p>台灣很多人在意「開門就直接看到落地窗或後門」，傳統上叫「穿堂煞」。先不論風水，從設計角度來看，一開門就看穿整間屋子確實缺乏隱私、沒有層次感。常見的解法是在玄關做一道半高櫃或格柵屏風。<strong>尊重屋主的文化習慣，也是設計師的專業之一。</strong></p></div>
+
+<h2>客廳的四種配置</h2>
+<figure>
+<svg viewBox="0 0 640 200" role="img" aria-label="客廳四種配置">
+ <g font-size="13" text-anchor="middle">
+ <g transform="translate(10,10)"><rect width="140" height="130" fill="none" stroke="var(--ink)" stroke-width="3"/><rect x="20" y="96" width="100" height="24" rx="4" fill="var(--oak-soft)" stroke="var(--oak)"/><rect x="45" y="62" width="50" height="24" fill="var(--blue-soft)" stroke="var(--blue)"/><rect x="30" y="8" width="80" height="10" fill="var(--ink2)"/><text x="70" y="160">一字型</text><text x="70" y="178" font-size="11" fill="var(--ink2)">沙發對電視，最常見</text></g>
+ <g transform="translate(170,10)"><rect width="140" height="130" fill="none" stroke="var(--ink)" stroke-width="3"/><rect x="10" y="96" width="110" height="24" rx="4" fill="var(--oak-soft)" stroke="var(--oak)"/><rect x="10" y="40" width="24" height="56" rx="4" fill="var(--oak-soft)" stroke="var(--oak)"/><rect x="50" y="58" width="50" height="26" fill="var(--blue-soft)" stroke="var(--blue)"/><rect x="30" y="8" width="80" height="10" fill="var(--ink2)"/><text x="70" y="160">L 型</text><text x="70" y="178" font-size="11" fill="var(--ink2)">圍出角落，適合轉角</text></g>
+ <g transform="translate(330,10)"><rect width="140" height="130" fill="none" stroke="var(--ink)" stroke-width="3"/><rect x="20" y="96" width="100" height="24" rx="4" fill="var(--oak-soft)" stroke="var(--oak)"/><rect x="20" y="12" width="100" height="24" rx="4" fill="var(--oak-soft)" stroke="var(--oak)"/><rect x="45" y="52" width="50" height="28" fill="var(--blue-soft)" stroke="var(--blue)"/><text x="70" y="160">面對面</text><text x="70" y="178" font-size="11" fill="var(--ink2)">重聊天，不重電視</text></g>
+ <g transform="translate(490,10)"><rect width="140" height="130" fill="none" stroke="var(--ink)" stroke-width="3"/><rect x="20" y="96" width="100" height="24" rx="4" fill="var(--oak-soft)" stroke="var(--oak)"/><rect x="10" y="44" width="26" height="30" rx="4" fill="var(--oak-soft)" stroke="var(--oak)"/><rect x="104" y="44" width="26" height="30" rx="4" fill="var(--oak-soft)" stroke="var(--oak)"/><circle cx="70" cy="62" r="20" fill="var(--blue-soft)" stroke="var(--blue)"/><text x="70" y="160">圍合型</text><text x="70" y="178" font-size="11" fill="var(--ink2)">沙發＋兩單椅，像小會議</text></g>
+ </g>
+</svg>
+</figure>
+<div class="box tip"><div class="t">💡 小撇步：先決定客廳的「主角」</div><p>你家客廳主要用來看電視、聊天、玩遊戲、還是看書？主角決定配置。很多家庭現在不放電視，改放大書牆或投影布幕，客廳就變成「家庭活動室」。</p></div>
+
+<h2>實用規則</h2>
+<h3>電視與沙發的距離</h3>
+<p>常見的建議是<strong>螢幕對角線長度的約 1.2–2.5 倍</strong>。例如 55 吋（對角線約 140 cm）的電視，坐在 1.7–3.5 公尺左右都可以；解析度越高可以坐越近。電視螢幕中心大約在<strong>坐著時眼睛的高度</strong>，約離地 100–110 cm，不要掛太高，否則脖子會酸。</p>
+<h3>地毯</h3>
+<p>地毯太小是最常見的錯誤，看起來像一張浮在地上的郵票。原則是：<strong>至少讓所有沙發和椅子的前腳都踩在地毯上</strong>，讓整組家具被「綁」在一起。</p>
+<h3>掛畫</h3>
+<p>畫的<strong>中心離地約 145–150 cm</strong>，大約是站著的人的視線高度，很多美術館都用這個高度。掛在沙發上方時，畫的寬度約沙發的 2/3，畫底離沙發椅背約 20–25 cm。</p>
+<h3>窗簾</h3>
+<p>窗簾桿裝得比窗框<strong>更高、更寬</strong>（往上 15–20 cm、左右各多 15–30 cm），布長到地面或只差 1–2 cm，會讓窗戶看起來大很多、天花板更高。</p>
+
+<div class="summary"><div class="t">本課重點</div><ul><li>玄關：放鞋、坐下、放雜物、鏡子、遮視線。</li><li>客廳配置：一字、L 型、面對面、圍合；先決定主角。</li><li>電視距離約對角線 1.2–2.5 倍；地毯壓住前腳；畫中心 145–150 cm；窗簾高又寬。</li></ul></div>
+<h2>小測驗</h2>
+<div class="quiz" data-a="1"><div class="q">1. 客廳地毯大小的基本原則是？</div><div class="opts"><button>越小越好，方便清洗</button><button>至少讓沙發和椅子的前腳都踩在上面</button><button>剛好放在茶几底下就好</button></div><div class="fb">讓家具被地毯「綁」成一組。</div></div>
+<div class="quiz" data-a="2"><div class="q">2. 牆上掛畫，畫的中心大約離地多高？</div><div class="opts"><button>100 cm</button><button>200 cm</button><button>145–150 cm</button></div><div class="fb">大約是站立時的眼睛高度。</div></div>
+<div class="quiz" data-a="0"><div class="q">3. 「玄關」這個詞最早來自？</div><div class="opts"><button>佛教用語，指入道之門</button><button>英文 hall 的音譯</button><button>台語「門口」</button></div><div class="fb">經日本禪寺轉為建築用語。</div></div>
+</section>
+
+<!-- ===================== L15 ===================== -->
+<section class="lesson" id="L15" data-part="第五篇 各空間設計" data-num="15" data-title="廚房與餐廳">
+<div class="dim"><span>第 15 課</span></div>
+<h1>廚房與餐廳</h1>
+<p class="lead">廚房是家裡「最像工廠」的地方：有流程、有效率、有安全問題。設計廚房，就像設計一條小小的生產線。</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>廚房的工作流程與五種配置</li><li>廚房工作三角形</li><li>餐桌、吊燈的尺寸規則</li></ul></div>
+
+<h2>先想流程：拿、洗、切、煮、盛</h2>
+<figure>
+<svg viewBox="0 0 640 110" role="img" aria-label="廚房工作流程">
+ <g font-size="14" text-anchor="middle">
+  <g fill="var(--blue-soft)" stroke="var(--blue)" stroke-width="2">
+   <rect x="10" y="20" width="100" height="50" rx="8"/><rect x="140" y="20" width="100" height="50" rx="8"/><rect x="270" y="20" width="100" height="50" rx="8"/><rect x="400" y="20" width="100" height="50" rx="8"/><rect x="530" y="20" width="100" height="50" rx="8"/>
+  </g>
+  <g fill="var(--ink)"><text x="60" y="50">冰箱：拿</text><text x="190" y="50">水槽：洗</text><text x="320" y="50">檯面：切</text><text x="450" y="50">爐具：煮</text><text x="580" y="50">出菜：盛</text></g>
+  <g stroke="var(--oak)" stroke-width="3" fill="var(--oak)"><line x1="112" y1="45" x2="134" y2="45"/><line x1="242" y1="45" x2="264" y2="45"/><line x1="372" y1="45" x2="394" y2="45"/><line x1="502" y1="45" x2="524" y2="45"/></g>
+  <text x="320" y="100" fill="var(--ink2)" font-size="13">把設備照這個順序排，就不會一直來回跑</text>
+ </g>
+</svg>
+</figure>
+<div class="box tip"><div class="t">💡 小撇步：備料檯面要夠長</div><p>水槽和爐子中間是「切菜區」，最好至少留 <strong>60–90 cm</strong>。很多小廚房這段只有 30 cm，砧板一放就沒地方放切好的菜。</p></div>
+
+<h2>廚房工作三角形</h2>
+<p>1940 年代，美國伊利諾大學的研究者觀察家庭主婦做菜，發現最常走的是<strong>冰箱、水槽、爐具</strong>三點之間。把這三點連起來就是一個三角形，它的大小決定了做菜累不累。</p>
+<ul><li>每一邊約 <strong>120–270 cm</strong>。</li><li>三邊加起來約 <strong>400–790 cm</strong>。</li><li>太小：兩個人會撞在一起；太大：走到腿酸。</li></ul>
+<div class="widget"><div class="widget-t">✏️ 動手試試：拖拉三個點</div>
+<p style="margin:0 0 8px;font-size:15px">拖動冰箱、水槽、爐具，看看三角形是否合格。（格線每格 30 cm）</p>
+<svg id="triSvg" viewBox="0 0 600 360" style="width:100%;height:auto;touch-action:none;background:var(--paper);border-radius:8px" aria-label="可拖動的廚房工作三角形">
+ <defs><pattern id="tg" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" fill="none" stroke="var(--line)" stroke-width=".8"/></pattern></defs>
+ <rect width="600" height="360" fill="url(#tg)"/>
+ <polygon id="triPoly" fill="var(--sage-soft)" stroke="var(--sage)" stroke-width="3" opacity=".8"/>
+ <g id="triLabels" font-size="13" fill="var(--ink)"></g>
+ <g id="triPts"></g>
+</svg>
+<div class="result" id="triOut"></div></div>
+
+<h2>五種廚房配置</h2>
+<figure>
+<svg viewBox="0 0 640 170" role="img" aria-label="五種廚房配置">
+ <g font-size="13" text-anchor="middle" fill="var(--blue-soft)" stroke="var(--blue)" stroke-width="2">
+  <g transform="translate(5,10)"><rect width="110" height="110" fill="none" stroke="var(--ink)"/><rect x="5" y="5" width="100" height="22"/><text x="55" y="140" fill="var(--ink)" stroke="none">一字型</text></g>
+  <g transform="translate(132,10)"><rect width="110" height="110" fill="none" stroke="var(--ink)"/><rect x="5" y="5" width="100" height="22"/><rect x="5" y="27" width="22" height="70"/><text x="55" y="140" fill="var(--ink)" stroke="none">L 型</text></g>
+  <g transform="translate(259,10)"><rect width="110" height="110" fill="none" stroke="var(--ink)"/><rect x="5" y="5" width="100" height="22"/><rect x="5" y="83" width="100" height="22"/><text x="55" y="140" fill="var(--ink)" stroke="none">二字型</text></g>
+  <g transform="translate(386,10)"><rect width="110" height="110" fill="none" stroke="var(--ink)"/><rect x="5" y="5" width="100" height="22"/><rect x="5" y="27" width="22" height="78"/><rect x="83" y="27" width="22" height="78"/><text x="55" y="140" fill="var(--ink)" stroke="none">ㄇ型（U 型）</text></g>
+  <g transform="translate(513,10)"><rect width="120" height="110" fill="none" stroke="var(--ink)"/><rect x="5" y="5" width="110" height="22"/><rect x="25" y="60" width="70" height="28" fill="var(--oak-soft)" stroke="var(--oak)"/><text x="60" y="140" fill="var(--ink)" stroke="none">中島型</text></g>
+ </g>
+</svg>
+</figure>
+<div class="tw"><table>
+<tr><th>配置</th><th>適合</th><th>注意</th></tr>
+<tr><td>一字型</td><td>小坪數、套房</td><td>太長（超過 4 m）會變成來回跑</td></tr>
+<tr><td>L 型</td><td>中小坪數，最容易形成好三角</td><td>轉角櫃容易變死角，要用轉角五金</td></tr>
+<tr><td>二字型</td><td>狹長空間，效率高</td><td>兩排中間走道 100–120 cm 最好</td></tr>
+<tr><td>ㄇ型</td><td>空間夠、常做菜的家庭</td><td>中間要至少 120 cm，否則很擠</td></tr>
+<tr><td>中島型</td><td>大空間、開放式、喜歡邊煮邊聊天</td><td>中島四周走道至少 90–100 cm；中島若有水槽要預留管線</td></tr>
+</table></div>
+<div class="box origin"><div class="t">📜 名詞由來：中島</div><p>英文 <em>kitchen island</em>。因為它是一座站在廚房中間、四面不靠牆的檯子，就像海中的「島」。台灣翻成「中島」，連帶出現「半島」：一端靠牆、三面可用的檯子。</p></div>
+
+<h2>廚房的關鍵尺寸</h2>
+<div class="tw"><table>
+<tr><th>項目</th><th>建議（cm）</th></tr>
+<tr><td>檯面高度</td><td>約 身高÷2＋5～10，常見 85–90</td></tr>
+<tr><td>下櫃深度</td><td>60（檯面約 60–65）</td></tr>
+<tr><td>吊櫃深度</td><td>30–35</td></tr>
+<tr><td>檯面到吊櫃底</td><td>60–70</td></tr>
+<tr><td>爐面到抽油煙機底</td><td>約 65–75（依機型說明書）</td></tr>
+</table></div>
+<div class="box warn"><div class="t">⚠️ 安全重點</div><ul><li>爐具不要緊貼窗戶，風會吹熄火、窗簾可能著火。</li><li>爐具兩側都要留至少 30–40 cm 檯面，鍋柄才不會凸出去被撞翻。</li><li>冰箱不要貼著爐具，熱氣會讓冰箱更耗電。</li></ul></div>
+
+<h2>餐廳</h2>
+<div class="tw"><table>
+<tr><th>人數</th><th>方桌／長桌（cm）</th><th>圓桌直徑（cm）</th></tr>
+<tr><td>2 人</td><td>70–80 × 70–80</td><td>70–80</td></tr>
+<tr><td>4 人</td><td>120–150 × 75–90</td><td>90–110</td></tr>
+<tr><td>6 人</td><td>160–190 × 90</td><td>120–130</td></tr>
+<tr><td>8 人</td><td>200–240 × 90–100</td><td>150</td></tr>
+</table></div>
+<p>餐桌上方的吊燈，燈罩底部離桌面約 <strong>65–80 cm</strong>，燈的寬度約桌子長度的 1/2 到 2/3；長桌可以用兩到三盞小吊燈排成一排（還記得「節奏」嗎？）。色溫選 2700–3000 K、演色性 Ra 90 以上，食物才會好看。</p>
+
+<div class="summary"><div class="t">本課重點</div><ul><li>流程：拿、洗、切、煮、盛；備料區 60–90 cm。</li><li>工作三角：每邊 120–270，總和 400–790 cm。</li><li>一字、L、二字、ㄇ、中島；檯面約身高÷2＋5～10；吊燈離桌 65–80 cm。</li></ul></div>
+<h2>小測驗</h2>
+<div class="quiz" data-a="2"><div class="q">1. 廚房工作三角形的三個點是？</div><div class="opts"><button>冰箱、餐桌、烤箱</button><button>水槽、垃圾桶、微波爐</button><button>冰箱、水槽、爐具</button></div><div class="fb">這三個是做菜時最常來回的點。</div></div>
+<div class="quiz" data-a="0"><div class="q">2. 身高 160 cm 的人，流理台大約多高比較好？</div><div class="opts"><button>85–90 cm</button><button>70 cm</button><button>100 cm</button></div><div class="fb">160÷2＋5～10 ＝ 85～90。</div></div>
+<div class="quiz" data-a="1"><div class="q">3. 狹長型的廚房最適合哪種配置？</div><div class="opts"><button>中島型</button><button>二字型</button><button>圍合型</button></div><div class="fb">兩排檯面平行，走道在中間。</div></div>
+</section>
+<!-- ===================== L16 ===================== -->
+<section class="lesson" id="L16" data-part="第五篇 各空間設計" data-num="16" data-title="臥室、書房與浴室">
+<div class="dim"><span>第 16 課</span></div>
+<h1>臥室、書房與浴室</h1>
+<p class="lead">這三個是家裡最「私人」的空間。臥室要讓人睡好，書房要讓人專心，浴室要安全又乾淨。</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>床怎麼擺、臥室要注意什麼</li><li>書桌、檯燈、兒童房的規劃重點</li><li>浴室的尺寸、乾濕分離與安全</li></ul></div>
+
+<h2>臥室</h2>
+<ul>
+<li><strong>床頭靠實牆</strong>：有安全感，也比較隔音。盡量不要靠著窗戶，冬天冷、夏天熱，還有風從縫隙吹進來。</li>
+<li><strong>床頭避開大樑</strong>：躺著看到一根粗樑壓在頭上會有壓迫感。可以用天花板把樑包起來，或做床頭櫃把床往前推。</li>
+<li><strong>床邊至少留 60 cm</strong>，雙人床兩側都要留，兩人都能自己上下床。</li>
+<li><strong>衣櫃前留 80–90 cm</strong>，空間不夠時改用<strong>拉門</strong>，拉門不需要開門迴轉空間。</li>
+<li><strong>照明分開控制</strong>：床頭要有一個開關可以關掉全部的燈，不用下床。</li>
+<li><strong>窗簾選遮光</strong>：遮光率越高，白天也能睡得著。</li>
+</ul>
+<figure>
+<svg viewBox="0 0 520 260" role="img" aria-label="臥室配置示意，標出床邊與衣櫃前的空間">
+ <rect x="20" y="20" width="480" height="220" fill="none" stroke="var(--ink)" stroke-width="5"/>
+ <rect x="170" y="23" width="180" height="200" rx="4" fill="var(--oak-soft)" stroke="var(--oak)" stroke-width="2"/>
+ <rect x="180" y="30" width="75" height="30" rx="4" fill="var(--sheet)" stroke="var(--oak)"/><rect x="265" y="30" width="75" height="30" rx="4" fill="var(--sheet)" stroke="var(--oak)"/>
+ <rect x="125" y="23" width="40" height="40" fill="var(--blue-soft)" stroke="var(--blue)"/><rect x="355" y="23" width="40" height="40" fill="var(--blue-soft)" stroke="var(--blue)"/>
+ <rect x="23" y="80" width="60" height="157" fill="var(--sage-soft)" stroke="var(--sage)"/><text x="53" y="165" text-anchor="middle" font-size="12" transform="rotate(-90 53 165)">衣櫃 深 60</text>
+ <g stroke="var(--red)" fill="var(--red)" font-size="12">
+  <line x1="83" y1="200" x2="170" y2="200"/><text x="126" y="195" text-anchor="middle" stroke="none">≥ 80</text>
+  <line x1="350" y1="150" x2="497" y2="150"/><text x="424" y="145" text-anchor="middle" stroke="none">≥ 60</text>
+ </g>
+ <text x="260" y="140" text-anchor="middle" font-size="14">雙人床</text>
+</svg>
+<figcaption>床頭靠牆、兩側有床頭櫃，衣櫃前與床側都留出使用空間（cm）</figcaption>
+</figure>
+
+<h2>書房與兒童房</h2>
+<ul>
+<li><strong>書桌面向或側對窗戶</strong>：背對窗戶，螢幕會反光；正對牆壁容易覺得悶。側對窗最理想。</li>
+<li><strong>光從非慣用手那邊來</strong>：右撇子的檯燈放左前方，寫字時手的影子才不會擋住字。</li>
+<li><strong>螢幕頂端約與眼睛同高</strong>，距離約一個手臂長（50–70 cm）。</li>
+<li><strong>兒童房要能「長大」</strong>：選可以調高度的書桌椅、可以改變用途的櫃子。小時候放玩具，長大放書。</li>
+<li><strong>兒童安全</strong>：櫃子要固定在牆上防傾倒、插座加蓋、窗戶加限位器、家具邊角做圓角。</li>
+</ul>
+<div class="box eg"><div class="t">🏠 生活例子：你的書桌</div><p>現在去看看你的書桌：光是從哪邊來的？寫字時手的影子會不會擋住？椅子和桌子的差尺是不是 27–30 cm？這就是在做一次小小的「設計檢查」。</p></div>
+
+<h2>浴室</h2>
+<div class="box origin"><div class="t">📜 名詞由來：馬桶</div><p>漢朝時，便壺做成老虎的樣子，叫「虎子」。相傳到了唐朝，因為要避開唐高祖祖父「李虎」的名諱，把「虎子」改叫「馬子」，後來演變成「馬桶」。一個名字，藏著一千多年的歷史。</p></div>
+<h3>三件式與乾濕分離</h3>
+<p>一般浴室有<strong>三件式</strong>：馬桶、洗手台、淋浴（或浴缸）。<strong>乾濕分離</strong>就是用玻璃門或浴簾，把會噴水的淋浴區和其他區隔開，讓地板保持乾燥，不容易滑倒、不容易發霉。</p>
+<figure>
+<svg viewBox="0 0 440 240" role="img" aria-label="浴室三件式配置">
+ <rect x="20" y="20" width="400" height="200" fill="none" stroke="var(--ink)" stroke-width="5"/>
+ <rect x="300" y="23" width="117" height="194" fill="var(--blue-soft)"/>
+ <line x1="300" y1="23" x2="300" y2="217" stroke="var(--blue)" stroke-width="3"/><text x="358" y="125" text-anchor="middle" font-size="13">淋浴區（濕）</text><text x="358" y="145" text-anchor="middle" font-size="12" fill="var(--ink2)">≥ 90 × 90</text>
+ <rect x="40" y="23" width="80" height="48" rx="10" fill="var(--sheet)" stroke="var(--ink)"/><text x="80" y="52" text-anchor="middle" font-size="12">洗手台</text>
+ <rect x="180" y="23" width="44" height="30" fill="var(--sheet)" stroke="var(--ink)"/><ellipse cx="202" cy="75" rx="22" ry="28" fill="var(--sheet)" stroke="var(--ink)"/><text x="202" y="80" text-anchor="middle" font-size="12">馬桶</text>
+ <g stroke="var(--red)" fill="var(--red)" font-size="11"><line x1="202" y1="110" x2="202" y2="170"/><text x="210" y="145" stroke="none">前方 ≥ 60</text><line x1="224" y1="60" x2="300" y2="60"/><text x="262" y="55" text-anchor="middle" stroke="none">中心到側牆 ≥ 40</text></g>
+ <text x="150" y="200" text-anchor="middle" font-size="13">乾區</text>
+</svg>
+</figure>
+<div class="tw"><table>
+<tr><th>項目</th><th>建議</th></tr>
+<tr><td>馬桶中心到側牆</td><td>至少 40 cm，最好 45 cm 以上</td></tr>
+<tr><td>馬桶前方淨空</td><td>至少 60 cm</td></tr>
+<tr><td>洗手台高度</td><td>約 75–85 cm</td></tr>
+<tr><td>淋浴區</td><td>至少 90 × 90 cm，100 × 100 以上比較舒服</td></tr>
+<tr><td>浴室門寬</td><td>約 70–80 cm，考慮長輩或輪椅則要更寬</td></tr>
+</table></div>
+<div class="box warn"><div class="t">⚠️ 浴室三大安全</div><ul><li><strong>防滑</strong>：地磚選防滑係數高的，淋浴區可用小尺寸磁磚（縫多比較不滑）。</li><li><strong>通風</strong>：一定要有窗戶或抽風機，否則會發霉。</li><li><strong>排水與防水</strong>：地板要有洩水坡度讓水流向排水孔；淋浴區牆面防水層通常做到 180 cm 以上甚至到頂（第 19 課詳細講）。家裡有長輩時，馬桶旁和淋浴區要裝扶手。</li></ul></div>
+
+<div class="summary"><div class="t">本課重點</div><ul><li>臥室：床頭靠牆避樑、床邊 60、衣櫃前 80、床頭總開關。</li><li>書房：側對窗、光從非慣用手來、兒童房能長大與防傾倒。</li><li>浴室：三件式、乾濕分離、馬桶中心距牆 40+、防滑通風防水。</li></ul></div>
+<h2>小測驗</h2>
+<div class="quiz" data-a="0"><div class="q">1. 右撇子的檯燈應該放在哪邊？</div><div class="opts"><button>左前方</button><button>右前方</button><button>正後方</button></div><div class="fb">光從左邊來，右手寫字的影子不會擋住字。</div></div>
+<div class="quiz" data-a="1"><div class="q">2. 臥室空間太窄，衣櫃門打不開，可以改用？</div><div class="opts"><button>更大的門片</button><button>拉門</button><button>不要衣櫃</button></div><div class="fb">拉門左右滑動，不需要開門迴轉空間。</div></div>
+<div class="quiz" data-a="2"><div class="q">3. 「乾濕分離」主要是為了？</div><div class="opts"><button>讓浴室看起來比較貴</button><button>節省水費</button><button>讓地板保持乾燥、防滑、防霉</button></div><div class="fb">把會噴水的淋浴區隔開。</div></div>
+</section>
+
+<!-- ===================== L17 ===================== -->
+<section class="lesson" id="L17" data-part="第五篇 各空間設計" data-num="17" data-title="收納設計">
+<div class="dim"><span>第 17 課</span></div>
+<h1>收納設計</h1>
+<p class="lead">「東西太多放不下」是屋主最常抱怨的事。但很多時候，問題不是櫃子不夠，而是櫃子設計錯了。</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>收納的四個原則</li><li>「黃金收納區」與依使用頻率分區</li><li>系統櫃與木作櫃的差別</li></ul></div>
+
+<h2>收納四原則</h2>
+<ol class="steps">
+<li><strong>先減量，再收納</strong>：不用的東西，再多櫃子也塞不下。設計前先請屋主盤點物品。</li>
+<li><strong>就近收納</strong>：在哪裡用，就收在哪裡。吹風機收在浴室或梳妝台，不是收在儲藏室。</li>
+<li><strong>依頻率分高低</strong>：每天用的放最順手的高度，一年用一次的放最高或最低。</li>
+<li><strong>八分滿</strong>：櫃子只放八成，留兩成空間讓東西拿得出來、放得回去。</li>
+</ol>
+
+<h2>黃金收納區</h2>
+<figure>
+<svg viewBox="0 0 480 300" role="img" aria-label="收納高度分區">
+ <rect x="180" y="20" width="150" height="260" fill="none" stroke="var(--ink)" stroke-width="3"/>
+ <rect x="182" y="22" width="146" height="58" fill="var(--line)" opacity=".6"/>
+ <rect x="182" y="80" width="146" height="140" fill="var(--sage-soft)"/>
+ <rect x="182" y="220" width="146" height="58" fill="var(--oak-soft)"/>
+ <g font-size="13"><text x="340" y="55">180 cm 以上：很少用</text><text x="340" y="72" fill="var(--ink2)" font-size="12">換季棉被、行李箱</text>
+ <text x="340" y="140">約 70–160 cm：黃金區</text><text x="340" y="157" fill="var(--ink2)" font-size="12">每天用的東西</text>
+ <text x="340" y="245">約 70 cm 以下：偶爾用、重物</text><text x="340" y="262" fill="var(--ink2)" font-size="12">鍋子、飲料箱、備品</text></g>
+ <g stroke="var(--ink)" stroke-width="5" stroke-linecap="round" fill="none"><circle cx="100" cy="60" r="18" stroke-width="3" fill="var(--sheet)"/><line x1="100" y1="80" x2="100" y2="180"/><line x1="100" y1="180" x2="85" y2="275"/><line x1="100" y1="180" x2="115" y2="275"/><line x1="100" y1="100" x2="150" y2="130"/><line x1="100" y1="100" x2="70" y2="150"/></g>
+ <line x1="20" y1="280" x2="460" y2="280" stroke="var(--ink)" stroke-width="2"/>
+</svg>
+<figcaption>腰部到眼睛的高度，不用彎腰也不用踮腳，是最好用的收納區</figcaption>
+</figure>
+
+<div class="widget"><div class="widget-t">✏️ 動手試試：幫東西找位置</div>
+<p style="margin:0 0 10px;font-size:15px">幫每樣物品選一個收納高度，然後按「檢查」。</p>
+<div id="storeGame"></div>
+<button class="btn" id="storeCheck" style="margin-top:10px">檢查</button>
+<div class="result" id="storeOut" style="display:none"></div></div>
+
+<h2>收納要照「東西的尺寸」設計</h2>
+<p>還記得第 10 課的櫃子深度嗎？收納設計的重點是：<strong>先量東西，再設計櫃子</strong>。</p>
+<div class="tw"><table>
+<tr><th>物品</th><th>需要的空間（約）</th></tr>
+<tr><td>長大衣、洋裝吊掛</td><td>高 130–150 cm</td></tr>
+<tr><td>襯衫、外套吊掛</td><td>高 90–100 cm（可以上下兩層吊桿）</td></tr>
+<tr><td>摺疊衣物</td><td>層板間距 25–35 cm，或用抽屜</td></tr>
+<tr><td>一般書本</td><td>層板間距 25–30 cm，深 25–30 cm</td></tr>
+<tr><td>A4 資料夾</td><td>層板間距約 33–35 cm</td></tr>
+<tr><td>行李箱</td><td>量實際尺寸，常見 28 吋約 75 × 50 × 30 cm</td></tr>
+</table></div>
+
+<h2>藏起來的空間</h2>
+<ul>
+<li><strong>樓梯下</strong>：做抽屜或儲藏室。</li>
+<li><strong>床下</strong>：掀床或抽屜床，收換季棉被。</li>
+<li><strong>窗台</strong>：做成可以坐的臥榻，下面是抽屜。</li>
+<li><strong>門的上方</strong>：做吊櫃放少用物品。</li>
+<li><strong>牆的厚度</strong>：在隔間牆裡做淺淺的壁龕放小東西。</li>
+</ul>
+<div class="box tip"><div class="t">💡 小撇步：開放與封閉的比例</div><p>全部都是門片的櫃子會很壓迫；全部開放又容易看起來亂。常見的比例是<strong>七成封閉、三成開放</strong>：封閉的藏雜物，開放的放漂亮的書和擺飾。</p></div>
+
+<h2>系統櫃 vs 木作櫃</h2>
+<div class="tw"><table>
+<tr><th></th><th>系統櫃</th><th>木作櫃</th></tr>
+<tr><td>怎麼做</td><td>工廠依尺寸裁好塑合板，到現場組裝</td><td>木工師傅在現場用木心板、夾板製作</td></tr>
+<tr><td>工期</td><td>快，現場組裝幾天</td><td>慢，還要等油漆</td></tr>
+<tr><td>價格</td><td>通常較便宜</td><td>通常較貴</td></tr>
+<tr><td>造型</td><td>以方正為主，受板材與五金限制</td><td>彎曲、斜角、包樑、結合天花板都可以</td></tr>
+<tr><td>異味</td><td>工廠封好邊，現場少</td><td>現場上漆，味道較重</td></tr>
+<tr><td>適合</td><td>衣櫃、書櫃、一般收納</td><td>造型牆、特殊尺寸、需要與建築結合的地方</td></tr>
+</table></div>
+<p>現在很多案子是<strong>混搭</strong>：大量收納用系統櫃，需要造型的地方用木作，把錢花在刀口上。</p>
+
+<div class="summary"><div class="t">本課重點</div><ul><li>先減量、就近、依頻率、八分滿。</li><li>黃金區約 70–160 cm 放每天用的東西。</li><li>先量東西再做櫃子；七封三開；系統櫃快又省，木作櫃彈性大。</li></ul></div>
+<h2>小測驗</h2>
+<div class="quiz" data-a="1"><div class="q">1. 每天都要用的東西，最適合放在？</div><div class="opts"><button>櫃子最上層</button><button>腰到眼睛的高度</button><button>床底下</button></div><div class="fb">黃金收納區不用彎腰也不用踮腳。</div></div>
+<div class="quiz" data-a="2"><div class="q">2. 想做一個包住大樑、又有弧形轉角的櫃子，比較適合？</div><div class="opts"><button>系統櫃</button><button>買現成家具</button><button>木作櫃</button></div><div class="fb">木作在現場施工，造型彈性最大。</div></div>
+<div class="quiz" data-a="0"><div class="q">3. 「八分滿」原則是為了？</div><div class="opts"><button>留空間讓東西好拿好放</button><button>節省櫃子的錢</button><button>看起來比較少</button></div><div class="fb">塞到十分滿，拿一樣東西就得把其他全部拿出來。</div></div>
+</section>
+<!-- ===================== L18 ===================== -->
+<section class="lesson" id="L18" data-part="第六篇 風格" data-num="18" data-title="室內設計風格大全">
+<div class="dim"><span>第 18 課</span></div>
+<h1>室內設計風格大全</h1>
+<p class="lead">「我想要北歐風」「我喜歡工業風」。風格是屋主和設計師溝通最快的共同語言。但每個風格背後，都有它誕生的時代和原因。</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>十四種常見風格的由來、元素與色彩</li><li>怎麼從「為什麼」理解風格，而不是背清單</li><li>找出你自己喜歡的方向</li></ul></div>
+
+<div class="box tip"><div class="t">💡 讀這課的方法</div><p>每種風格都問三個問題：<strong>它從哪裡來？為了解決什麼？用了哪些材料和顏色？</strong>懂了原因，你就能靈活混搭，而不是只會照抄。</p></div>
+
+<div class="widget"><div class="widget-t">✏️ 動手試試：找出你的風格傾向</div><div id="styleQuiz"></div><div class="result" id="styleOut" style="display:none"></div></div>
+
+<div class="cards" id="styleCards">
+<div class="card"><h4>現代風</h4><div class="palette"><i style="background:#F2F2F0"></i><i style="background:#9A9A98"></i><i style="background:#2E2E2E"></i><i style="background:#B8B9BB"></i></div><p><b>由來：</b>20 世紀初的現代主義，受包浩斯影響，擁抱工業材料。</p><p><b>元素：</b>直線、平整面、玻璃、金屬、黑白灰。</p><p><b>小心：</b>太多硬材料會冷，用地毯和布料平衡。</p></div>
+<div class="card"><h4>極簡風</h4><div class="palette"><i style="background:#FFFFFF"></i><i style="background:#ECEAE6"></i><i style="background:#D6D2CB"></i><i style="background:#3A3A3A"></i></div><p><b>由來：</b>英文 Minimalism，1960 年代紐約的「極簡藝術」運動，加上密斯「少即是多」與日本禪的影響。</p><p><b>元素：</b>大量留白、隱藏收納、無把手門片、極少裝飾。</p><p><b>小心：</b>看起來簡單其實最難，需要大量「看不見」的收納。</p></div>
+<div class="card"><h4>北歐風</h4><div class="palette"><i style="background:#FAFAF7"></i><i style="background:#E0D3BE"></i><i style="background:#A9B8A5"></i><i style="background:#6E7C87"></i></div><p><b>由來：</b>北歐冬天漫長、日照很短，所以用白牆、淺色木頭、大窗戶，把僅有的光留在室內。</p><p><b>元素：</b>淺木、白牆、羊毛毯、植物、蠟燭、實用的家具。</p><p><b>名詞：</b>丹麥文 <em>hygge</em>，意思是溫暖、舒適、和親友一起的幸福感。</p></div>
+<div class="card"><h4>日式／無印風</h4><div class="palette"><i style="background:#F5F1E8"></i><i style="background:#D9C8A9"></i><i style="background:#A68A64"></i><i style="background:#56584E"></i></div><p><b>由來：</b>日本傳統住宅與 1980 年誕生的「無印良品」（意思是「沒有品牌標誌的好東西」）。</p><p><b>元素：</b>原木色、米白、低矮家具、紙拉門、榻榻米。</p><p><b>名詞：</b>榻榻米日文「畳」，來自「疊起來」，因為以前不用時可以疊起收好。</p></div>
+<div class="card"><h4>侘寂風</h4><div class="palette"><i style="background:#E8E1D6"></i><i style="background:#C2B5A2"></i><i style="background:#8C7B68"></i><i style="background:#4D4439"></i></div><p><b>由來：</b>日本美學「侘寂」（wabi-sabi）：「侘」是簡樸安靜，「寂」是時間留下的痕跡。欣賞不完美、不對稱、會老化的東西。</p><p><b>元素：</b>手捏陶器、粗糙的礦物塗料牆、老木頭、亞麻、大地色。</p><p><b>小心：</b>不是「舊」或「髒」，而是有質感的樸素。</p></div>
+<div class="card"><h4>日式北歐（Japandi）</h4><div class="palette"><i style="background:#F3EFE8"></i><i style="background:#CDBFAA"></i><i style="background:#7A6A58"></i><i style="background:#2F3132"></i></div><p><b>由來：</b>Japan ＋ Scandi 組成的新字，2010 年代開始流行。兩者都愛木頭、簡單、自然，一拍即合。</p><p><b>元素：</b>北歐的溫暖＋日式的低矮與沉穩，常加入深色木或黑色點綴。</p></div>
+<div class="card"><h4>工業風</h4><div class="palette"><i style="background:#8E8B86"></i><i style="background:#A0522D"></i><i style="background:#3B3B3B"></i><i style="background:#C8A165"></i></div><p><b>由來：</b>1960–70 年代紐約 SoHo 區，藝術家租不起房子，搬進廢棄工廠和倉庫住。英文 <em>loft</em> 原是倉庫的上層閣樓。</p><p><b>元素：</b>裸露管線、紅磚、清水模或水泥、鐵件、皮革、鎢絲燈泡。</p><p><b>小心：</b>需要挑高才好看；灰塵容易積在管線上。</p></div>
+<div class="card"><h4>中世紀現代</h4><div class="palette"><i style="background:#F1E6D0"></i><i style="background:#D9A441"></i><i style="background:#2F6F6A"></i><i style="background:#6B4226"></i></div><p><b>由來：</b>指約 1945–1970 年的設計，這個名稱在 1980 年代因一本介紹 1950 年代家具的書而流行。</p><p><b>元素：</b>胡桃木、細細往外斜的家具腳、有機曲線、芥末黃、墨綠、橘。</p></div>
+<div class="card"><h4>美式鄉村風</h4><div class="palette"><i style="background:#F4EFE6"></i><i style="background:#C9B99A"></i><i style="background:#7D8C73"></i><i style="background:#8B5E3C"></i></div><p><b>由來：</b>來自美國郊區大房子與農舍，重視家庭感與舒適。</p><p><b>元素：</b>大沙發、格子布、護牆板、壁爐、仿舊木家具。</p><p><b>名詞：</b>護牆板英文 <em>wainscoting</em>，來自荷蘭文，原指做牆板用的上等橡木。</p></div>
+<div class="card"><h4>古典與新古典</h4><div class="palette"><i style="background:#F6F1E7"></i><i style="background:#D8C8A8"></i><i style="background:#B8964E"></i><i style="background:#3F4A5A"></i></div><p><b>由來：</b>源自古希臘羅馬建築，歐洲宮廷一再復興。「新古典」是把古典元素簡化、現代化。</p><p><b>元素：</b>對稱、線板、柱子、拱門、水晶燈、大理石。</p></div>
+<div class="card"><h4>新中式</h4><div class="palette"><i style="background:#F2EEE6"></i><i style="background:#B7A48A"></i><i style="background:#5B3A29"></i><i style="background:#2F3A36"></i></div><p><b>由來：</b>把明式家具的線條、中國庭園的借景，用現代手法重新詮釋。</p><p><b>元素：</b>格柵、圈椅、水墨、對稱、留白、茶席、深色木。</p></div>
+<div class="card"><h4>地中海風</h4><div class="palette"><i style="background:#FFFFFF"></i><i style="background:#2F6DA3"></i><i style="background:#E5D3B3"></i><i style="background:#C06C3E"></i></div><p><b>由來：</b>希臘、西班牙、南義大利沿海，夏天炎熱，所以用厚白牆反射陽光。</p><p><b>元素：</b>白牆、藍門窗、拱形門洞、陶磚、鍛鐵。</p></div>
+<div class="card"><h4>波希米亞風</h4><div class="palette"><i style="background:#E9D8BF"></i><i style="background:#B5533C"></i><i style="background:#D9A441"></i><i style="background:#3F6B53"></i></div><p><b>由來：</b>波希米亞是捷克的一個地區。以前法國人誤以為流浪的吉普賽人來自那裡，後來「波希米亞」就代表自由、不受拘束的藝術家生活。</p><p><b>元素：</b>多種花紋混搭、藤編、流蘇、地毯、很多植物。</p></div>
+<div class="card"><h4>輕奢風</h4><div class="palette"><i style="background:#EDEBE8"></i><i style="background:#9C9894"></i><i style="background:#C6A26B"></i><i style="background:#2E3338"></i></div><p><b>由來：</b>近年華人圈流行的說法，「輕」量的奢華：不像古典那麼繁複，但保留精緻感。</p><p><b>元素：</b>大理石紋、細金屬線條（香檳金、黑鈦）、絨布、灰色調、弧形家具。</p></div>
+</div>
+
+<div class="box warn"><div class="t">⚠️ 風格是語言，不是規則</div><p>真實的家很少「百分之百」是某一種風格。好的設計師會先理解屋主的生活，再從風格中挑選適合的元素。記住第 7 課：<strong>統一中帶變化</strong>。混搭時，讓 70–80% 屬於一個主風格，其他當作點綴，就不容易亂。</p></div>
+
+<div class="summary"><div class="t">本課重點</div><ul><li>北歐：為了留住光；工業：藝術家住工廠；地中海：白牆反射陽光。風格都有原因。</li><li>侘寂＝欣賞不完美；Japandi＝日式＋北歐；中世紀現代＝1945–1970。</li><li>混搭時一個主風格佔七八成。</li></ul></div>
+<h2>小測驗</h2>
+<div class="quiz" data-a="0"><div class="q">1. 北歐風大量用白牆和淺色木頭，最主要的原因是？</div><div class="opts"><button>冬天日照短，要把光留在室內</button><button>白色油漆最便宜</button><button>北歐人不喜歡顏色</button></div><div class="fb">風格背後有氣候原因。</div></div>
+<div class="quiz" data-a="2"><div class="q">2. 工業風最早出現在什麼場景？</div><div class="opts"><button>日本寺廟</button><button>法國宮廷</button><button>藝術家住進廢棄工廠、倉庫</button></div><div class="fb">1960–70 年代紐約 SoHo 的 loft。</div></div>
+<div class="quiz" data-a="1"><div class="q">3. 「侘寂」欣賞的是？</div><div class="opts"><button>閃亮完美的新東西</button><button>樸素、不完美、時間留下的痕跡</button><button>鮮豔的撞色</button></div><div class="fb">wabi-sabi：不完美之美。</div></div>
+</section>
+<!-- ===================== L19 ===================== -->
+<section class="lesson" id="L19" data-part="第七篇 從圖紙到完工" data-num="19" data-title="裝修材料與工法">
+<div class="dim"><span>第 19 課</span></div>
+<h1>裝修材料與工法</h1>
+<p class="lead">進入專業篇。這一課認識「房子本體」的材料：地板、牆面、天花板、水電，還有絕對不能碰的結構。</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>結構牆與隔間牆的差別</li><li>常見地板、牆面、天花板材料的優缺點</li><li>防水、插座與開關的基本規則</li></ul></div>
+
+<h2>先認識結構：不能動的部分</h2>
+<ul>
+<li><strong>柱、樑</strong>：房子的骨架，撐住整棟樓的重量。</li>
+<li><strong>剪力牆</strong>：抵抗地震時左右搖晃的鋼筋混凝土牆，英文 <em>shear wall</em>（shear＝剪切力）。台灣多地震，這種牆非常重要。</li>
+<li><strong>樓板</strong>：每一層的地板兼樓下的天花板。</li>
+</ul>
+<div class="box warn"><div class="t">⚠️ 絕對不能自己拆的牆</div><p>柱、樑、剪力牆、承重牆<strong>絕對不能拆或打洞</strong>，會危害整棟樓的安全，也違法。要拆牆前，一定要看原始建築圖或請專業人員判斷。一般的<strong>隔間牆</strong>（例如輕隔間、紅磚隔間）才比較有機會調整，但也要評估。</p></div>
+<div class="box eg"><div class="t">🏠 怎麼分辨？</div><p>敲敲看：輕隔間會有空心的「咚咚」聲；鋼筋混凝土牆很實、很硬，厚度常在 15 cm 以上。但「敲」只是初步判斷，最準確的還是看建築圖。</p></div>
+
+<h2>地板</h2>
+<div class="tw"><table>
+<tr><th>材料</th><th>優點</th><th>缺點</th></tr>
+<tr><td>拋光石英磚</td><td>耐磨、好清理、便宜</td><td>冰冷、濕了容易滑</td></tr>
+<tr><td>霧面磚、板岩磚</td><td>止滑、有石頭質感</td><td>表面紋路較容易卡髒污</td></tr>
+<tr><td>實木地板</td><td>觸感溫潤、自然</td><td>怕水、會伸縮、貴</td></tr>
+<tr><td>海島型木地板</td><td>表面實木、底層夾板，比實木穩定</td><td>表面實木層薄，不能多次打磨</td></tr>
+<tr><td>超耐磨地板</td><td>表面耐刮、平價、花色多</td><td>怕長時間泡水；觸感較不像木頭</td></tr>
+<tr><td>石塑地板（SPC）</td><td>石粉加塑膠，防水、薄</td><td>質感較「塑膠」，品質差異大</td></tr>
+<tr><td>磨石子</td><td>耐用、有懷舊感、可以做無接縫</td><td>施工期長、需要好師傅</td></tr>
+</table></div>
+<div class="box origin"><div class="t">📜 名詞由來：海島型地板與磨石子</div><p><strong>海島型</strong>是台灣業界的說法：這種地板的結構特別適合台灣、日本這種<strong>潮濕的海島氣候</strong>，比實木更不容易變形，所以就叫海島型。</p><p><strong>磨石子</strong>英文 <em>terrazzo</em>，義大利文「露台」。傳說 15 世紀威尼斯工人把大理石碎料混進水泥，鋪在自家露台，再磨平，就成了這種有碎石花紋的地板。</p></div>
+
+<h2>牆面</h2>
+<ul>
+<li><strong>乳膠漆</strong>：最常見。以水為基底，味道少，可以調出任何顏色。台灣常說的「批土、上漆」就是先用補土把牆填平，再刷漆。</li>
+<li><strong>特殊塗料</strong>：礦物塗料、仿清水模塗料、珪藻土，有質感、有些能調濕。</li>
+<li><strong>壁紙</strong>：花樣多、施工快，但潮濕的牆容易起泡脫落。</li>
+<li><strong>磁磚</strong>：廚房和浴室的牆常用，防水好清。</li>
+<li><strong>木作造型牆、護牆板、石材</strong>：用在電視牆、主題牆。</li>
+</ul>
+
+<h2>天花板</h2>
+<div class="box origin"><div class="t">📜 名詞由來：天花板</div><p>中國傳統建築的室內頂棚，常用木板拼成格子，並在格子裡彩繪花卉圖案，看起來像「天上開的花」，所以稱為「天花」。現代的天花板雖然多半是白色平面，名字還是留了下來。</p></div>
+<p>為什麼要做天花板？<strong>藏管線</strong>（空調、電線、排水管）、<strong>包樑</strong>、<strong>裝崁燈與間接照明</strong>、<strong>隔音隔熱</strong>。但天花板會讓房間變矮，所以要盡量「能不壓就不壓」。</p>
+<ul>
+<li><strong>矽酸鈣板</strong>：台灣最常用的天花板材料，防火（耐燃一級）、防潮、不怕蟲。</li>
+<li><strong>輕鋼架</strong>：辦公室常見的格子天花板，一格一格可以掀開維修，便宜但比較不像住家。</li>
+<li><strong>平釘 vs 造型</strong>：平釘是一整片平的；造型天花有高低層次、弧形、間接燈溝。</li>
+</ul>
+<div class="box tip"><div class="t">💡 小撇步：天花板要預留維修孔</div><p>冷氣室內機、排水管的轉接處，未來都可能需要維修。做天花板時一定要在這些地方留<strong>維修孔</strong>，不然壞了只能把天花板拆掉。</p></div>
+
+<h2>防水：浴室和陽台的生命線</h2>
+<ol class="steps">
+<li>把舊磁磚和水泥打到見底，確認沒有裂縫。</li>
+<li>牆角和管線周圍先加強（最容易漏水的地方）。</li>
+<li>塗上多層防水材料（例如彈性水泥、防水塗膜）。淋浴區牆面防水常見做到 180 cm 以上，甚至到頂。</li>
+<li><strong>試水</strong>：把地板排水孔塞住、放水，等 24–48 小時，確認樓下沒有滲水，才可以貼磁磚。</li>
+</ol>
+
+<h2>插座與開關的高度</h2>
+<div class="tw"><table>
+<tr><th>位置</th><th>常見高度（中心離地，cm）</th></tr>
+<tr><td>一般插座</td><td>約 30</td></tr>
+<tr><td>床頭插座（手機充電）</td><td>約 60–70，床頭櫃上方</td></tr>
+<tr><td>書桌插座</td><td>約 85–90，桌面上方</td></tr>
+<tr><td>廚房檯面插座</td><td>約 110–120，檯面上方</td></tr>
+<tr><td>電燈開關</td><td>約 110–120，門邊把手側</td></tr>
+</table></div>
+<div class="box warn"><div class="t">⚠️ 專用迴路</div><p>冷氣、烤箱、微波爐、電熱水器、洗衣烘衣機這些高耗電的電器，要拉<strong>專用迴路</strong>（從電箱獨立拉一條線），不能和其他插座共用，否則容易跳電甚至電線過熱起火。電工必須由有證照的專業人員施作。</p></div>
+
+<div class="summary"><div class="t">本課重點</div><ul><li>柱、樑、剪力牆、承重牆不能拆。</li><li>地板：磁磚、實木、海島型、超耐磨、SPC、磨石子各有優缺點。</li><li>天花板用矽酸鈣板、留維修孔；浴室防水要試水；高耗電器用專用迴路。</li></ul></div>
+<h2>小測驗</h2>
+<div class="quiz" data-a="2"><div class="q">1. 下列哪一種牆最可能可以拆？</div><div class="opts"><button>剪力牆</button><button>承重牆</button><button>輕隔間牆（仍須專業評估）</button></div><div class="fb">結構牆一律不能拆。</div></div>
+<div class="quiz" data-a="0"><div class="q">2. 浴室做完防水後，要先做什麼才能貼磁磚？</div><div class="opts"><button>試水 24–48 小時</button><button>直接貼</button><button>先裝馬桶</button></div><div class="fb">確認不漏水再往下做，否則貼了磚才發現漏水就要全部打掉。</div></div>
+<div class="quiz" data-a="1"><div class="q">3. 「海島型木地板」名字的由來是？</div><div class="opts"><button>木頭來自海島</button><button>結構適合潮濕的海島氣候</button><button>品牌名稱</button></div><div class="fb">上層實木、下層夾板，比實木更穩定。</div></div>
+</section>
+
+<!-- ===================== L20 ===================== -->
+<section class="lesson" id="L20" data-part="第七篇 從圖紙到完工" data-num="20" data-title="施工流程與監工驗收">
+<div class="dim"><span>第 20 課</span></div>
+<h1>施工流程與監工驗收</h1>
+<p class="lead">裝修就像做一道很複雜的菜，順序錯了，前面做好的會被後面弄壞。這一課學「先做什麼、後做什麼」，以及怎麼檢查品質。</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>住宅裝修的標準施工順序</li><li>決定順序的四個原則</li><li>監工與驗收要看什麼</li></ul></div>
+
+<h2>四個順序原則</h2>
+<div class="cards">
+<div class="card"><h4>從粗到細</h4><p>先做會產生大量灰塵、敲敲打打的工程，最後才做細緻的。</p></div>
+<div class="card"><h4>從上到下</h4><p>先做天花板，再做牆，最後做地板，東西掉下來才不會弄髒已完成的地方。</p></div>
+<div class="card"><h4>從裡到外</h4><p>從屋子最深處往大門做，工人才不用踩過已完成的區域。</p></div>
+<div class="card"><h4>先藏後露</h4><p>先做會被蓋住的管線、防水，再做看得見的表面。</p></div>
+</div>
+
+<h2>標準施工順序</h2>
+<p>點選每一個步驟看說明：</p>
+<div class="timeline" id="buildTL">
+<div class="tl"><b>1　保護工程</b><p>先把電梯、公共走廊、還要保留的門窗和地板，用板子和塑膠布包起來。這是對鄰居的尊重，也是保護自己。</p></div>
+<div class="tl"><b>2　拆除工程</b><p>拆掉不要的牆、舊磁磚、舊櫃子。拆除最吵最髒，也常在這時才發現原本藏著的問題（壁癌、管線老舊、漏水）。</p></div>
+<div class="tl"><b>3　水電配管</b><p>重新規劃電線、插座、開關、網路線、給水管、排水管。這些都要「藏」進牆裡、地板下、天花板上，所以要最早做。</p></div>
+<div class="tl"><b>4　泥作工程</b><p>砌磚牆、做防水、粉光、整平地面、貼磁磚。因為泥作用水泥，需要時間乾燥。</p></div>
+<div class="tl"><b>5　空調配管</b><p>冷氣的冷媒管和排水管要在天花板封起來之前拉好。</p></div>
+<div class="tl"><b>6　木作工程</b><p>天花板、木作櫃、造型牆、隔間。</p></div>
+<div class="tl"><b>7　油漆工程</b><p>批土、打磨、上漆。油漆要在木作之後，因為木作的接縫要被補平漆好。</p></div>
+<div class="tl"><b>8　系統櫃、廚具安裝</b><p>在油漆之後進場，避免被油漆噴到或粉塵弄髒。</p></div>
+<div class="tl"><b>9　地板、燈具、衛浴設備、五金</b><p>木地板、燈具、馬桶、面盆、門把、插座面板安裝。</p></div>
+<div class="tl"><b>10　細部清潔</b><p>專業清潔人員把粉塵徹底清乾淨，包括櫃子裡、窗溝、燈具內。</p></div>
+<div class="tl"><b>11　驗收</b><p>屋主和設計師一起逐項檢查，有問題列表請師傅修補。</p></div>
+<div class="tl"><b>12　家具、窗簾、軟裝進場</b><p>搬入家具、掛窗簾、擺飾品、植物。「軟裝」就是可以移動的裝飾，相對於固定的「硬裝」。</p></div>
+</div>
+<div class="box origin"><div class="t">📜 名詞由來：泥作、木作、硬裝、軟裝</div><p>台灣裝修業常把工程依照「工班」來命名：用水泥的師傅做「泥作」、做木頭的師傅做「木作」、水電師傅做「水電」。<strong>硬裝</strong>是固定在房子上、搬不走的（地板、天花、牆）；<strong>軟裝</strong>是可以搬走的（家具、窗簾、地毯、立燈與檯燈、畫、植物）。</p></div>
+
+<h2>監工：設計師要看什麼</h2>
+<ul>
+<li><strong>尺寸</strong>：跟圖面一樣嗎？插座、開關的位置有沒有錯？</li>
+<li><strong>材料</strong>：進場的材料是不是合約寫的品牌、等級、顏色？</li>
+<li><strong>工序</strong>：有沒有偷跳步驟？例如防水沒試水就貼磚。</li>
+<li><strong>拍照紀錄</strong>：管線封起來之前一定要拍照，未來維修時才知道管線走哪裡。</li>
+</ul>
+
+<h2>驗收：屋主也能做的檢查</h2>
+<div class="tw"><table>
+<tr><th>項目</th><th>怎麼檢查</th></tr>
+<tr><td>磁磚空心</td><td>用硬幣或小鐵鎚輕敲，聲音「咚咚」空空的，代表底下水泥沒填滿，叫<strong>膨拱／空心</strong>，以後可能會翹起來。</td></tr>
+<tr><td>水平與垂直</td><td>用水平尺放在檯面、層板上，氣泡要在中間。</td></tr>
+<tr><td>門片與抽屜</td><td>每一扇都開關幾次，縫隙要平均、不能卡、不能自己打開。</td></tr>
+<tr><td>排水</td><td>浴室、陽台倒水，看水會不會流到排水孔、有沒有積水。</td></tr>
+<tr><td>插座與燈</td><td>每一個插座用小夜燈或手機充電器測試；每一個開關都按。</td></tr>
+<tr><td>油漆</td><td>用手電筒斜著照牆面，檢查有沒有凹凸、刷痕、色差。</td></tr>
+</table></div>
+
+<div class="summary"><div class="t">本課重點</div><ul><li>從粗到細、從上到下、從裡到外、先藏後露。</li><li>保護→拆除→水電→泥作→空調→木作→油漆→系統櫃→設備→清潔→驗收→軟裝。</li><li>管線封前拍照；驗收敲磚、量水平、試開關、倒水。</li></ul></div>
+<h2>小測驗</h2>
+<div class="quiz" data-a="1"><div class="q">1. 為什麼水電配管要在很前面做？</div><div class="opts"><button>水電師傅比較有空</button><button>管線要藏進牆、地、天花裡，要先做才能被蓋起來</button><button>法律規定</button></div><div class="fb">「先藏後露」原則。</div></div>
+<div class="quiz" data-a="2"><div class="q">2. 系統櫃通常在哪個工程之後進場？</div><div class="opts"><button>拆除</button><button>水電</button><button>油漆</button></div><div class="fb">避免被油漆和粉塵弄髒。</div></div>
+<div class="quiz" data-a="0"><div class="q">3. 敲磁磚聽到空空的聲音，代表？</div><div class="opts"><button>底下水泥沒填滿，可能會翹起</button><button>磁磚品質特別好</button><button>下面有暖氣</button></div><div class="fb">這叫膨拱或空心，驗收時要請師傅處理。</div></div>
+</section>
+<!-- ===================== L21 ===================== -->
+<section class="lesson" id="L21" data-part="第七篇 從圖紙到完工" data-num="21" data-title="設計師的工作：流程、預算、法規與工具">
+<div class="dim"><span>第 21 課</span></div>
+<h1>設計師的工作：流程、預算、法規與工具</h1>
+<p class="lead">把前面所有東西串起來，看一個真實的案子從第一次見面到交屋，設計師到底做了哪些事。</p>
+<div class="goal"><b>這課學完你會知道：</b><ul><li>專業設計案的完整流程</li><li>預算怎麼分配、合約要注意什麼</li><li>台灣相關法規觀念、設計軟體與職業證照</li></ul></div>
+
+<h2>專業設計流程</h2>
+<div class="timeline">
+<div class="tl"><b>1　初次訪談</b><p>了解屋主：家庭成員、年齡、作息、興趣、寵物、收藏品、未來計畫（會不會生小孩、長輩會不會同住）、喜歡的風格、預算、完工期限。這份資料叫<strong>設計需求書</strong>（英文 <em>brief</em>，原意是「簡短的說明」）。</p></div>
+<div class="tl"><b>2　現場丈量</b><p>量每一面牆、窗、門、樑、柱、天花高度，找出排水孔、糞管、電箱、瓦斯管位置，並拍照、檢查漏水與壁癌。</p></div>
+<div class="tl"><b>3　平面配置</b><p>用第 4、5 課學的尺寸和動線，畫出 2–3 種配置方案讓屋主比較。這是整個設計最重要的一步。</p></div>
+<div class="tl"><b>4　概念提案</b><p>用<strong>情緒板</strong>（mood board）呈現風格方向：把材料照片、色票、家具圖片、氛圍照拼貼在一起，讓屋主「感覺」到未來的家。</p></div>
+<div class="tl"><b>5　3D 模擬圖</b><p>用軟體做出像照片一樣的立體圖，確認顏色、材質、比例。</p></div>
+<div class="tl"><b>6　施工圖</b><p>一整套給師傅看的圖：平面、立面、剖面、天花板圖、水電圖、櫃體大樣圖、材料表。圖越清楚，施工越少出錯。</p></div>
+<div class="tl"><b>7　估價與簽約</b><p>依照施工圖逐項計算數量和單價，列出<strong>工程估價單</strong>，雙方同意後簽合約。</p></div>
+<div class="tl"><b>8　施工與監造</b><p>照第 20 課的順序施工，設計師定期到現場監督，處理現場發現的問題。</p></div>
+<div class="tl"><b>9　驗收與交屋</b><p>逐項檢查、修補，清潔後交給屋主。</p></div>
+<div class="tl"><b>10　保固與售後</b><p>一般工程會有保固期，期間出問題要回來維修。</p></div>
+</div>
+<div class="box tip"><div class="t">💡 小撇步：訪談時問「動作」，不要只問「喜好」</div><p>與其問「你喜歡什麼風格？」，不如問「你下班回家第一件事做什麼？」「週末早上在家做什麼？」。屋主說的<strong>生活動作</strong>，比說的風格名詞更能決定設計。</p></div>
+
+<h2>預算怎麼分</h2>
+<p>每個案子差很多，但一個中古屋全室裝修，大致會花在這些地方：</p>
+<figure>
+<svg viewBox="0 0 600 120" role="img" aria-label="裝修預算大致比例示意">
+ <g font-size="12" text-anchor="middle">
+  <rect x="0" y="20" width="120" height="40" fill="#8FA7BE"/><text x="60" y="45" fill="#fff">基礎工程 約 20%</text>
+  <rect x="120" y="20" width="150" height="40" fill="#A8703C"/><text x="195" y="45" fill="#fff">木作／系統櫃 約 25%</text>
+  <rect x="270" y="20" width="90" height="40" fill="#56735A"/><text x="315" y="45" fill="#fff">泥作 約 15%</text>
+  <rect x="360" y="20" width="90" height="40" fill="#5A646B"/><text x="405" y="45" fill="#fff">廚衛 約 15%</text>
+  <rect x="450" y="20" width="60" height="40" fill="#B5473A"/><text x="480" y="45" fill="#fff">油漆等 10%</text>
+  <rect x="510" y="20" width="90" height="40" fill="#C9B79C"/><text x="555" y="45" fill="#232A2F">家具軟裝 15%</text>
+ </g>
+ <text x="300" y="90" text-anchor="middle" font-size="13" fill="var(--ink2)">（僅為示意比例，不同屋況差異很大；基礎工程含拆除、水電、空調配管）</text>
+</svg>
+</figure>
+<ul>
+<li><strong>預留 10–15% 預備金</strong>：舊房子拆開後常有意外（管線老舊、漏水），這筆錢救命。</li>
+<li><strong>先花在「看不到」的地方</strong>：水電、防水、結構的錢不能省；家具軟裝以後還能慢慢換。</li>
+<li><strong>追加減帳</strong>：施工中屋主改主意，增加的叫追加、減少的叫減帳，都要<strong>書面</strong>確認金額。</li>
+</ul>
+<div class="box warn"><div class="t">⚠️ 合約注意事項</div><ul><li>估價單要寫清楚<strong>品牌、型號、尺寸、數量、單價</strong>，不能只寫「一式」。</li><li>付款跟著工程進度分期付，不要一次付清。</li><li>寫明完工日期、延遲怎麼處理、保固範圍與年限。</li><li>所有變更都用文字（訊息或文件）留紀錄。</li></ul></div>
+
+<h2>法規觀念（以台灣為例）</h2>
+<ul>
+<li><strong>室內裝修許可</strong>：依《建築物室內裝修管理辦法》，某些建築物（例如供公眾使用的建築、特定條件下的住宅）的裝修，要先向主管機關申請審查許可，並由<strong>登記合格的室內裝修業者</strong>施工。</li>
+<li><strong>防火</strong>：天花板、牆面裝修材料有<strong>耐燃等級</strong>規定（耐燃一級最好），商業空間與高樓規定更嚴格。</li>
+<li><strong>公寓大廈規約</strong>：社區通常規定施工時間（例如假日不能敲打）、需要繳保證金、要保護公共區域。</li>
+<li><strong>結構安全</strong>：不能拆柱、樑、剪力牆，不能在陽台外推或違法加蓋。</li>
+<li><strong>無障礙</strong>：公共空間要符合無障礙規範；住家若有長輩或輪椅使用者，也可參考：輪椅迴轉需要直徑約 150 cm 的圓、門淨寬 80 cm 以上、門檻盡量取消。</li>
+</ul>
+<p style="font-size:15px;color:var(--ink2)">法規會修訂、各國也不同，實際執業時要以當地最新公告為準。</p>
+
+<h2>設計師的工具</h2>
+<div class="tw"><table>
+<tr><th>用途</th><th>常見軟體</th><th>說明</th></tr>
+<tr><td>2D 施工圖</td><td>AutoCAD</td><td>業界標準，畫平面、立面、大樣</td></tr>
+<tr><td>3D 建模</td><td>SketchUp、3ds Max</td><td>SketchUp 好上手，適合入門</td></tr>
+<tr><td>渲染（算出擬真圖）</td><td>V-Ray、Enscape、D5</td><td>加上光影材質，變成像照片的圖</td></tr>
+<tr><td>BIM 建築資訊模型</td><td>Revit</td><td>模型裡每樣東西都帶有資料（材質、數量、價格），大型專案常用</td></tr>
+<tr><td>簡報排版</td><td>Photoshop、InDesign、Canva</td><td>做情緒板、提案簡報</td></tr>
+</table></div>
+<div class="box origin"><div class="t">📜 名詞由來：渲染 <span class="en">Rendering</span></div><p>「渲染」原是中國水墨畫技法：用水把墨暈開，畫出雲霧、光影。電腦繪圖借用這個詞，指<strong>計算光線如何照在物體上</strong>，把 3D 模型「算」成一張有光影的圖。</p></div>
+
+<h2>成為室內設計師</h2>
+<ul>
+<li><strong>學歷</strong>：大學或技職體系的室內設計、空間設計、建築相關科系；也有人從其他科系轉行。</li>
+<li><strong>證照（台灣）</strong>：例如勞動部的「建築物室內設計」與「建築物室內裝修工程管理」技術士證照（有乙級、丙級等）。取得相關證照並登記，才能以專業技術人員身分申請室內裝修審查。</li>
+<li><strong>作品集</strong>：比學歷更重要。從學生時期就開始記錄自己的設計過程，而不只是漂亮的完成圖。</li>
+<li><strong>相關職業</strong>：室內設計師、軟裝設計師、家具設計師、燈光設計師、展場設計師、工程監造、3D 繪圖師。</li>
+</ul>
+
+<div class="summary"><div class="t">本課重點</div><ul><li>訪談→丈量→配置→提案→3D→施工圖→估價簽約→監造→驗收→保固。</li><li>預留預備金、先花在看不到的地方、估價寫清楚、分期付款、變更留紀錄。</li><li>裝修許可、耐燃等級、社區規約、結構安全、無障礙；CAD、SketchUp、渲染、BIM；作品集最重要。</li></ul></div>
+<h2>小測驗</h2>
+<div class="quiz" data-a="0"><div class="q">1. 把材料照片、色票、家具圖拼貼在一起，讓屋主感受風格的東西叫？</div><div class="opts"><button>情緒板 mood board</button><button>施工圖</button><button>估價單</button></div><div class="fb">情緒板是提案時的溝通工具。</div></div>
+<div class="quiz" data-a="2"><div class="q">2. 預算有限時，最不應該省的是？</div><div class="opts"><button>裝飾畫</button><button>抱枕</button><button>水電與防水</button></div><div class="fb">看不到的基礎工程，出問題最難修也最貴。</div></div>
+<div class="quiz" data-a="1"><div class="q">3. 估價單上寫「浴室工程 一式」，問題在哪？</div><div class="opts"><button>沒有問題</button><button>沒寫清楚品牌、型號、數量、單價，日後容易有爭議</button><button>字太少</button></div><div class="fb">項目寫得越清楚，越能保障雙方。</div></div>
+</section>
+
+<!-- ===================== L22 ===================== -->
+<section class="lesson" id="L22" data-part="第七篇 從圖紙到完工" data-num="22" data-title="期末專題與結業測驗">
+<div class="dim"><span>第 22 課</span></div>
+<h1>期末專題與結業測驗</h1>
+<p class="lead">恭喜走到最後一課。現在輪到你當設計師了。</p>
+
+<h2>期末專題：設計一間 10 坪的小套房</h2>
+<p><strong>屋主資料：</strong>一位 28 歲的上班族，養一隻貓，平常在家工作兩天，喜歡煮飯和看書，希望家裡「看起來很乾淨、但東西都放得下」。房子長 600 cm、寬 550 cm（約 10 坪），一個門、一面大窗朝東，有一間已經存在的浴室在角落。</p>
+<p>請拿一張方格紙（1 格＝30 cm，或用比例尺 1:50），照下面的步驟完成：</p>
+<div class="widget"><div class="widget-t">✏️ 專題檢查清單（勾選完成的步驟）</div><div id="projList"></div><div class="result" id="projOut"></div></div>
+
+<h2>結業測驗</h2>
+<p>10 題綜合題，涵蓋整門課。答對 7 題以上即可取得結業證書。</p>
+<div id="finalExam"></div>
+<button class="btn primary" id="finalSubmit" style="background:var(--oak);color:#fff;border-color:var(--oak)">交卷</button>
+<div class="result" id="finalOut" style="display:none"></div>
+<div id="certWrap" style="display:none">
+ <div class="row" style="margin-top:16px"><label>輸入你的名字：<input type="text" id="certName" placeholder="你的名字" maxlength="20"></label></div>
+ <div class="cert" id="cert"><div class="dim" style="justify-content:center"><span>結業證書</span></div><h3 style="font-family:var(--serif)">室內設計與家具</h3><p>茲證明</p><div class="who" id="certWho">　</div><p>已完成全部 22 課課程，並通過結業測驗，<br>具備室內設計與家具的完整基礎知識。</p><p id="certDate" style="color:var(--ink2);font-size:14px"></p></div>
+ <button class="btn" onclick="window.print()">列印／存成 PDF</button>
+</div>
+
+<h2>接下來可以怎麼學</h2>
+<ul>
+<li><strong>觀察</strong>：去咖啡廳、書店、飯店時，觀察它的動線、燈光、材料，猜猜設計師為什麼這樣做。</li>
+<li><strong>測量</strong>：把家裡每樣家具量一遍，建立自己的「尺寸手冊」。</li>
+<li><strong>畫圖</strong>：先用方格紙畫平面，再學 SketchUp 做 3D。</li>
+<li><strong>閱讀</strong>：看設計雜誌、建築師的作品集、家具博物館的網站。</li>
+<li><strong>實作</strong>：從改造自己的房間開始。真正的設計師，都是從改造一張書桌開始的。</li>
+</ul>
+<div class="summary"><div class="t">給你的最後一句話</div><p style="margin:0 0 12px">設計的起點永遠是「人」。量尺寸、選材料、挑顏色，最終都是為了讓某個人在那個空間裡，生活得更好一點。</p></div>
+</section>
+
+<!-- ===================== 名詞總表 ===================== -->
+<section class="lesson" id="G" data-part="附錄" data-num="附" data-title="名詞總表">
+<div class="dim"><span>附錄</span></div>
+<h1>名詞總表</h1>
+<p class="lead">課程中出現的專有名詞，按課次排列。可以搜尋。</p>
+<input type="text" id="glossSearch" placeholder="搜尋名詞，例如：色溫、榫、坪" style="width:100%;margin-bottom:16px">
+<div id="glossList"></div>
+</section>
+</main>
+</div>
+<style>
+.timeline.interactive .tl{cursor:pointer}
+.timeline.interactive .tl p{display:none;margin-top:4px}
+.timeline.interactive .tl.active p{display:block}
+.timeline.interactive .tl b::after{content:"　＋";color:var(--ink2);font-weight:400}
+.timeline.interactive .tl.active b::after{content:"　－"}
+.store-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.proj-item{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.proj-item input{margin-top:6px;accent-color:var(--sage);width:18px;height:18px;flex:0 0 auto}
+.sq-q{margin-bottom:14px}
+.sq-q .opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.sq-q .opts button{font-size:14px;padding:6px 12px;border:1.5px solid var(--line);background:var(--paper);border-radius:8px;cursor:pointer}
+.sq-q .opts button.on{border-color:var(--oak);background:var(--oak-soft)}
+</style>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const KEY='idcourse-v1-';
+
+/* ---------- theme ---------- */
+const savedTheme=store.get(KEY+'theme',null);
+if(savedTheme)document.documentElement.setAttribute('data-theme',savedTheme);
+$('#themeBtn').onclick=()=>{
+  const cur=document.documentElement.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  const nx=cur==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',nx);store.set(KEY+'theme',nx);
+};
+
+/* ---------- lessons & nav ---------- */
+const lessons=$$('section.lesson');
+const course=lessons.filter(s=>s.id!=='G');
+let done=new Set(store.get(KEY+'done',[]));
+function buildNav(){
+  const nav=$('#navList');nav.innerHTML='';let part=null,ol=null;
+  lessons.forEach(s=>{
+    if(s.dataset.part!==part){part=s.dataset.part;const h=document.createElement('div');h.className='part-title';h.textContent=part;nav.appendChild(h);ol=document.createElement('ol');nav.appendChild(ol);}
+    const li=document.createElement('li');if(done.has(s.id))li.className='done';
+    const b=document.createElement('button');b.dataset.go=s.id;
+    b.innerHTML='<span class="num">'+s.dataset.num+'</span><span>'+s.dataset.title+'</span>';
+    b.onclick=()=>go(s.id);li.appendChild(b);ol.appendChild(li);
+  });
+}
+function updateProgress(){
+  const n=course.filter(s=>done.has(s.id)).length;
+  $('#pbar').style.width=(n/course.length*100)+'%';
+  $('#ptxt').textContent=n===0?'尚未開始，共 '+course.length+' 課':(n===course.length?'全部完成！':'已完成 '+n+' / '+course.length+' 課');
+}
+course.forEach((s,i)=>{
+  const prev=course[i-1],next=course[i+1];
+  const f=document.createElement('div');f.className='lesson-end';
+  const pb=document.createElement('button');pb.className='btn';
+  if(prev){pb.textContent='← 上一課';pb.onclick=()=>go(prev.id);}else{pb.style.visibility='hidden';pb.textContent='.';}
+  const nb=document.createElement('button');nb.className='btn primary';
+  nb.textContent=next?'完成本課，前往：'+next.dataset.title:'完成全部課程';
+  nb.onclick=()=>{done.add(s.id);store.set(KEY+'done',[...done]);buildNav();updateProgress();go(next?next.id:'G');};
+  f.append(pb,nb);s.appendChild(f);
+});
+function go(id,noScroll){window.AC_COURSE_GO=function(v){go(v)};window.AC_COURSE_POSITION=id;
+  const t=document.getElementById(id)||course[0];
+  lessons.forEach(s=>s.classList.toggle('show',s===t));
+  $$('#navList button').forEach(b=>b.classList.toggle('active',b.dataset.go===t.id));
+  $('#topTitle').textContent=(t.dataset.num&&/^\d+$/.test(t.dataset.num)?'第 '+t.dataset.num+' 課　':'')+t.dataset.title;
+  if(location.hash!=='#'+t.id)history.replaceState(null,'','#'+t.id);
+  store.set(KEY+'last',t.id);
+  $('#nav').classList.remove('open');
+  if(!noScroll)window.scrollTo({top:0,behavior:'instant' in window?'instant':'auto'});
+}
+buildNav();updateProgress();
+go((location.hash||'').slice(1)||store.get(KEY+'last','L0'),true);
+window.addEventListener('hashchange',()=>go(location.hash.slice(1)));
+$('#menuBtn').onclick=e=>{e.stopPropagation();$('#nav').classList.toggle('open');};
+document.addEventListener('click',e=>{const n=$('#nav');if(n.classList.contains('open')&&!n.contains(e.target))n.classList.remove('open');});
+$('#glossBtn').onclick=()=>go('G');
+$('#resetBtn').onclick=()=>{if(confirm('確定要清除所有學習進度嗎？')){done=new Set();store.set(KEY+'done',[]);store.set(KEY+'proj',[]);buildNav();updateProgress();renderProj();}};
+
+/* ---------- quizzes ---------- */
+$$('.quiz').forEach(q=>{
+  const a=+q.dataset.a,btns=q.querySelectorAll('.opts button');
+  const fb=q.querySelector('.fb'),base=fb.innerHTML;
+  btns.forEach((b,i)=>b.onclick=()=>{
+    if(q.classList.contains('answered'))return;
+    q.classList.add('answered');
+    btns.forEach((x,j)=>{if(j===a)x.classList.add('right');});
+    if(i!==a)b.classList.add('wrong');
+    fb.innerHTML=(i===a?'<b class="ok">✓ 答對了！</b> ':'<b class="bad">✗ 再想想。</b> 正確答案是「'+btns[a].textContent+'」。')+base;
+  });
+});
+
+/* ---------- L2 坪 & scale ---------- */
+function ping(){const L=+$('#pingL').value||0,W=+$('#pingW').value||0;const m2=L*W/10000;$('#pingOut').innerHTML=`${L} × ${W} cm ＝ <b>${m2.toFixed(2)} m²</b> ≈ <b>${(m2*0.3025).toFixed(2)} 坪</b>，大約 ${(m2/1.65).toFixed(1)} 張榻榻米`;}
+['#pingL','#pingW'].forEach(s=>$(s).oninput=ping);ping();
+function sc(){const d=+$('#scD').value||0,s=+$('#scS').value;const r=d*s;$('#scOut').innerHTML=`圖上 ${d} cm × ${s} ＝ 真實 <b>${r.toFixed(0)} cm</b>（${(r/100).toFixed(2)} m）`;}
+$('#scD').oninput=sc;$('#scS').onchange=sc;sc();
+
+/* ---------- L3 plan highlight ---------- */
+const planTxt={wall:'牆：最粗、塗黑的線，因為它被「切到」而且是實心的。',door:'門：直線加四分之一圓弧。弧線範圍內不能放家具。這裡有大門和浴室門。',win:'窗：牆中間斷開，畫細線代表玻璃。上方與右邊各有一扇。',furn:'家具：細線畫外框，從上往下看到的樣子。',dimn:'尺寸線：兩端有斜短線，上面寫數字。這間是 600 × 390 cm。',north:'指北針：箭頭指向北方。知道方位才知道哪面窗會西曬。'};
+$$('#planBtns button').forEach(b=>b.onclick=()=>{
+  const k=b.dataset.hl,svg=$('#planSvg'),on=b.classList.contains('on');
+  $$('#planBtns button').forEach(x=>x.classList.remove('on'));
+  svg.querySelectorAll('.hl').forEach(g=>g.classList.remove('on'));
+  if(on){svg.classList.remove('focus');$('#planOut').textContent='點上面的按鈕試試。';return;}
+  b.classList.add('on');svg.classList.add('focus');svg.querySelector('.hl[data-k="'+k+'"]').classList.add('on');$('#planOut').textContent=planTxt[k];
+});
+
+/* ---------- L4 heights ---------- */
+function hcalc(){const h=+$('#hIn').value;$('#hVal').textContent=h;const seat=h*0.25,desk=seat+28;
+$('#hTable').innerHTML=`<tr><th>項目</th><th>建議高度（約）</th><th>算法</th></tr>
+<tr><td>椅子座高</td><td><b>${seat.toFixed(0)} cm</b></td><td>身高 × 0.25</td></tr>
+<tr><td>書桌／餐桌高</td><td><b>${desk.toFixed(0)} cm</b></td><td>座高 ＋ 差尺約 28</td></tr>
+<tr><td>廚房流理台</td><td><b>${(h/2+5).toFixed(0)}–${(h/2+10).toFixed(0)} cm</b></td><td>身高 ÷ 2 ＋ 5～10</td></tr>
+<tr><td>伸手可拿的最高層板</td><td><b>${(h*1.2).toFixed(0)} cm</b></td><td>身高 × 1.2</td></tr>
+<tr><td>床的長度</td><td><b>${Math.max(188,h+20).toFixed(0)} cm 以上</b></td><td>身高 ＋ 20</td></tr>`;}
+$('#hIn').oninput=hcalc;hcalc();
+
+/* ---------- L5 gap ---------- */
+function gap(){const g=+$('#gapIn').value;$('#gapVal').textContent=g;const px=g*0.6;const y=130-px-40;
+$('#gapTable').setAttribute('y',y);$('#gapTxt').setAttribute('y',y+25);$('#gapLine').setAttribute('y1',y+40);
+let m;if(g<30)m='<span class="bad">太近了！腳伸不進去，站起來會撞到。</span>';else if(g<=50)m='<span class="ok">剛剛好。坐著伸手拿得到杯子，腳也有空間。</span>';else if(g<=75)m='有點遠，拿東西要彎腰站起來，但還能用。';else m='<span class="bad">太遠了，茶几變成擺設。不過如果這裡要當走道，要 90 cm 以上。</span>';
+$('#gapOut').innerHTML=m;}
+$('#gapIn').oninput=gap;gap();
+
+/* ---------- L8 color wheel ---------- */
+let baseH=200,scheme='mono';
+const wheel=$('#wheel');
+(function drawWheel(){let s='';for(let i=0;i<12;i++){const a0=(i*30-105)*Math.PI/180,a1=((i+1)*30-105)*Math.PI/180,r=100,ri=48;
+const p=[[Math.cos(a0)*r,Math.sin(a0)*r],[Math.cos(a1)*r,Math.sin(a1)*r],[Math.cos(a1)*ri,Math.sin(a1)*ri],[Math.cos(a0)*ri,Math.sin(a0)*ri]];
+s+=`<path data-h="${i*30}" d="M${p[0]} A${r} ${r} 0 0 1 ${p[1]} L${p[2]} A${ri} ${ri} 0 0 0 ${p[3]}Z" fill="hsl(${i*30},65%,55%)" stroke="var(--sheet)" stroke-width="2"/>`;}
+s+='<g id="wheelMarks"></g>';wheel.innerHTML=s;
+wheel.querySelectorAll('path').forEach(p=>p.onclick=()=>{baseH=+p.dataset.h;paint();});})();
+const schemes={mono:{n:'單色',h:[0,0,0]},analog:{n:'類似色',h:[0,30,-30]},comp:{n:'互補色',h:[0,180,180]},split:{n:'分裂互補',h:[0,150,210]},triad:{n:'三等分',h:[0,120,240]}};
+function paint(){
+  const hs=schemes[scheme].h.map(d=>((baseH+d)%360+360)%360);
+  const [h1,h2,h3]=hs;
+  const wall=`hsl(${h1},22%,88%)`,floor=`hsl(${h1},12%,70%)`,sofa=scheme==='mono'?`hsl(${h1},30%,42%)`:`hsl(${h2},30%,45%)`,rug=scheme==='mono'?`hsl(${h1},20%,74%)`:`hsl(${h2},22%,72%)`,acc=scheme==='mono'?`hsl(${h1},70%,50%)`:`hsl(${h3},70%,52%)`,art=`hsl(${h3},45%,62%)`;
+  $('#rcWall').setAttribute('fill',wall);$('#rcFloor').setAttribute('fill',floor);$('#rcSofa').setAttribute('fill',sofa);$('#rcRug').setAttribute('fill',rug);
+  ['#rcPil1','#rcPil2','#rcVase'].forEach(s=>$(s).setAttribute('fill',acc));$('#rcArt').setAttribute('fill',art);
+  let m='';[...new Set(hs)].forEach(h=>{const a=(h-105+15)*Math.PI/180;m+=`<circle cx="${Math.cos(a)*74}" cy="${Math.sin(a)*74}" r="9" fill="none" stroke="var(--ink)" stroke-width="3"/>`;});
+  $('#wheelMarks').innerHTML=m;
+  const sw=c=>`<span class="swatch" style="background:${c}"></span>`;
+  $('#schemeOut').innerHTML=`<b>${schemes[scheme].n}</b>　60% 牆面 ${sw(wall)}　30% 沙發與地毯 ${sw(sofa)}${sw(rug)}　10% 抱枕與花瓶 ${sw(acc)}`;
+}
+$$('#schemeBtns button').forEach(b=>b.onclick=()=>{scheme=b.dataset.s;$$('#schemeBtns button').forEach(x=>x.classList.toggle('on',x===b));paint();});
+paint();
+
+/* ---------- L9 kelvin ---------- */
+const kStops=[[1800,[255,138,42]],[2700,[255,184,107]],[3000,[255,197,135]],[4000,[255,227,194]],[5000,[255,243,230]],[6500,[214,226,255]]];
+function kCol(k){for(let i=0;i<kStops.length-1;i++){const[a,ca]=kStops[i],[b,cb]=kStops[i+1];if(k<=b){const t=(k-a)/(b-a);return ca.map((v,j)=>Math.round(v+(cb[j]-v)*t));}}return kStops[kStops.length-1][1];}
+function kt(){const k=+$('#ktIn').value;$('#ktVal').textContent=k;const c=kCol(k);$('#ktTint').setAttribute('fill',`rgb(${c})`);
+let m;if(k<2200)m='燭光、營火的顏色。很有氣氛，但太暗太黃，不適合做事。';else if(k<=3200)m='黃光、暖白。放鬆、溫馨，適合臥室、客廳、餐廳。';else if(k<=4500)m='自然光、中性白。看得清楚又不刺眼，適合廚房、書房、浴室。';else m='白光、晝光。像中午的陽光，提神、看得清細節，適合辦公和工作，但晚上用會讓人比較難放鬆。';
+$('#ktOut').textContent=m;}
+$('#ktIn').oninput=kt;kt();
+
+/* ---------- L9 layers ---------- */
+const layerOn={amb:false,task:false,acc:false};
+const layerTxt={amb:'環境照明：整間房有了基本亮度，但看起來平平的。',task:'工作照明：書桌上方亮了，做事看得清楚。',acc:'重點照明：牆上的畫被打亮，成為空間主角。'};
+$$('#layerBtns button').forEach(b=>b.onclick=()=>{const l=b.dataset.l;layerOn[l]=!layerOn[l];b.classList.toggle('on',layerOn[l]);
+$('#lyAmb').setAttribute('opacity',layerOn.amb?1:0);$('#lyTask').setAttribute('opacity',layerOn.task?1:0);$('#lyAcc').setAttribute('opacity',layerOn.acc?1:0);
+const n=Object.values(layerOn).filter(Boolean).length;
+$('#layerOut').textContent=n===0?'目前全部關燈。':(n===3?'三層全開：有基本亮度、有工作光、有主角，空間有了層次。這就是專業的照明設計。':layerTxt[l]+(layerOn[l]?'':'（已關閉）'));});
+
+/* ---------- L12 joint ---------- */
+const joints={straight:{t:'M40 40 L180 40 L180 75 L240 75 L240 125 L180 125 L180 160 L40 160 Z',m:'M240 40 L400 40 L400 160 L240 160 L240 125 L300 125 L300 75 L240 75 Z',start:'translate(0px,0px)',end:'translate(60px,0px)',txt:'直榫：最基本的接法，榫頭直直插進卯眼，靠緊密咬合再加膠固定。'},
+dove:{t:'M40 40 L180 40 L180 80 L240 65 L240 135 L180 120 L180 160 L40 160 Z',m:'M240 40 L400 40 L400 160 L240 160 L240 120 L300 135 L300 65 L240 80 Z',start:'translate(60px,-140px)',end:'translate(60px,0px)',txt:'燕尾榫：榫頭外寬內窄，只能從上方滑進去。裝好後往左拉，寬的部分會被卡住，所以抽屜天天拉也拉不脫。'}};
+let jointK='straight',jointIn=false;
+function setJoint(){const j=joints[jointK];$('#tenPath').setAttribute('d',j.t);$('#mortPath').setAttribute('d',j.m);const t=$('#tenon');t.style.transition='none';t.style.transform=j.start;void t.getBoundingClientRect();t.style.transition='';jointIn=false;$('#tenonBtn').textContent='組裝';$('#jointOut').textContent=j.txt;}
+$('#jointSel').onchange=e=>{jointK=e.target.value;setJoint();};
+$('#tenonBtn').onclick=()=>{jointIn=!jointIn;$('#tenon').style.transform=jointIn?joints[jointK].end:joints[jointK].start;$('#tenonBtn').textContent=jointIn?'拆開':'組裝';};
+setJoint();
+
+/* ---------- interactive timelines ---------- */
+['#histTL','#buildTL'].forEach(sel=>{const tl=$(sel);if(!tl)return;tl.classList.add('interactive');const items=tl.querySelectorAll('.tl');items[0].classList.add('active');
+items.forEach(it=>{it.tabIndex=0;it.setAttribute('role','button');const f=()=>it.classList.toggle('active');it.onclick=f;it.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();f();}};});});
+
+/* ---------- L15 triangle ---------- */
+const triPts=[{n:'冰箱',x:90,y:60,c:'var(--blue)'},{n:'水槽',x:300,y:60,c:'var(--sage)'},{n:'爐具',x:420,y:240,c:'var(--red)'}];
+const triSvg=$('#triSvg');
+function triDraw(){
+  $('#triPoly').setAttribute('points',triPts.map(p=>p.x+','+p.y).join(' '));
+  const d=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+  const sides=[[0,1],[1,2],[2,0]].map(([a,b])=>({a,b,l:d(triPts[a],triPts[b])}));
+  let lab='';sides.forEach(s=>{const A=triPts[s.a],B=triPts[s.b];const ok=s.l>=120&&s.l<=270;lab+=`<text x="${(A.x+B.x)/2}" y="${(A.y+B.y)/2-8}" text-anchor="middle" fill="${ok?'var(--sage)':'var(--red)'}" font-weight="700">${Math.round(s.l)} cm</text>`;});
+  $('#triLabels').innerHTML=lab;
+  $('#triPts').innerHTML=triPts.map((p,i)=>`<g data-i="${i}" style="cursor:grab"><circle cx="${p.x}" cy="${p.y}" r="22" fill="${p.c}" opacity=".9"/><text x="${p.x}" y="${p.y+5}" text-anchor="middle" font-size="13" fill="#fff" font-weight="700" pointer-events="none">${p.n}</text></g>`).join('');
+  const tot=sides.reduce((s,x)=>s+x.l,0);const bad=sides.filter(s=>s.l<120||s.l>270);
+  let m=`三邊總長 <b>${Math.round(tot)} cm</b>。`;
+  if(bad.length===0&&tot>=400&&tot<=790)m+='<span class="ok">✓ 合格！三個點距離剛好，做菜不會太擠也不會太累。</span>';
+  else{const r=[];bad.forEach(s=>r.push(`${triPts[s.a].n}到${triPts[s.b].n} ${s.l<120?'太近':'太遠'}`));if(tot<400)r.push('總長太短，兩個人會撞在一起');if(tot>790)r.push('總長太長，走到腿酸');m+='<span class="bad">✗ '+r.join('；')+'。</span>';}
+  $('#triOut').innerHTML=m;
+}
+let drag=null;
+function svgPt(e){const pt=triSvg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;return pt.matrixTransform(triSvg.getScreenCTM().inverse());}
+triSvg.addEventListener('pointerdown',e=>{const g=e.target.closest('g[data-i]');if(!g)return;drag=+g.dataset.i;triSvg.setPointerCapture(e.pointerId);e.preventDefault();});
+triSvg.addEventListener('pointermove',e=>{if(drag===null)return;const p=svgPt(e);triPts[drag].x=Math.max(22,Math.min(578,Math.round(p.x/10)*10));triPts[drag].y=Math.max(22,Math.min(338,Math.round(p.y/10)*10));triDraw();});
+['pointerup','pointercancel'].forEach(ev=>triSvg.addEventListener(ev,()=>drag=null));
+triDraw();
+
+/* ---------- L17 storage game ---------- */
+const storeItems=[['牙刷、牙膏','mid'],['換季的厚棉被','high'],['每天穿的外套','mid'],['很重的鍋子','low'],['聖誕節裝飾','high'],['常用的碗盤','mid'],['整箱礦泉水','low'],['偶爾出國用的行李箱','high']];
+const zoneName={high:'高處（180 cm 以上）',mid:'黃金區（70–160 cm）',low:'低處（70 cm 以下）'};
+$('#storeGame').innerHTML=storeItems.map((it,i)=>`<div class="store-row"><span>${it[0]}</span><select data-i="${i}"><option value="">選擇高度</option><option value="high">${zoneName.high}</option><option value="mid">${zoneName.mid}</option><option value="low">${zoneName.low}</option></select></div>`).join('');
+$('#storeCheck').onclick=()=>{let ok=0;const wrong=[];$$('#storeGame select').forEach(s=>{const it=storeItems[+s.dataset.i];if(s.value===it[1])ok++;else wrong.push(`${it[0]} → ${zoneName[it[1]]}`);});
+const o=$('#storeOut');o.style.display='block';o.innerHTML=`答對 <b>${ok} / ${storeItems.length}</b>。`+(wrong.length?'<br>建議：'+wrong.join('；')+'。<br><span style="font-size:14px;color:var(--ink2)">原則：每天用的放黃金區，很少用的放高處，重的東西放低處（避免從高處掉下來）。</span>':' <span class="ok">全部正確，你已經有收納規劃師的直覺了！</span>');};
+
+/* ---------- L18 style quiz ---------- */
+const sq=[['週末早上，你最想待在哪裡？',['陽光灑進來的窗邊','安靜的和室泡茶','老倉庫改的咖啡廳','乾淨明亮、什麼都沒有的房間','飯店大廳','滿是植物的市集']],
+['最喜歡摸起來的感覺？',['淺色木頭與羊毛','原木、紙、亞麻','鐵、紅磚、皮革','玻璃、白色烤漆','大理石、絨布、金屬','藤編、編織、陶器']],
+['最喜歡的一組顏色？',['白、米、淺灰綠','米白、原木、墨黑','灰、鏽紅、咖啡','白、黑、灰','灰、香檳金、深藍','土黃、磚紅、橄欖綠']],
+['你的東西大概是？',['一些，但都很實用','很少，每樣都有意義','喜歡收藏有故事的舊東西','越少越好，全部藏起來','喜歡精緻的擺飾','很多，而且很愛展示']]];
+const sqRes=[['北歐風','你喜歡溫暖、明亮、實用。可以從淺木家具、白牆、羊毛毯和植物開始。'],['日式／侘寂／Japandi','你喜歡安靜、自然、有質感的樸素。低矮家具、原木、亞麻和手作陶器會很適合你。'],['工業風','你喜歡有個性、有故事感的空間。鐵件、皮革、裸露材質和復古燈泡是你的好朋友。'],['現代極簡風','你喜歡乾淨俐落。重點是大量隱藏收納和精準的比例。'],['輕奢／新古典','你喜歡精緻與質感。大理石、細金屬線條、絨布和對稱的配置很適合你。'],['波希米亞／地中海','你喜歡自由、熱情、多彩。花紋混搭、藤編、植物和溫暖的土色能讓你開心。']];
+const sqAns=new Array(sq.length).fill(null);
+$('#styleQuiz').innerHTML=sq.map((q,i)=>`<div class="sq-q"><b>${i+1}. ${q[0]}</b><div class="opts">${q[1].map((o,j)=>`<button data-q="${i}" data-o="${j}">${o}</button>`).join('')}</div></div>`).join('');
+$$('#styleQuiz button').forEach(b=>b.onclick=()=>{const q=+b.dataset.q;sqAns[q]=+b.dataset.o;$$(`#styleQuiz button[data-q="${q}"]`).forEach(x=>x.classList.toggle('on',x===b));
+if(sqAns.every(v=>v!==null)){const c=new Array(6).fill(0);sqAns.forEach(v=>c[v]++);const max=Math.max(...c);const top=c.map((v,i)=>v===max?i:-1).filter(i=>i>=0);
+const o=$('#styleOut');o.style.display='block';o.innerHTML=top.map(i=>`你的傾向：<b>${sqRes[i][0]}</b>。${sqRes[i][1]}`).join('<br>')+'<br><span style="font-size:14px;color:var(--ink2)">這只是好玩的方向參考。往下讀每種風格的由來，你會更了解自己為什麼喜歡它。</span>';}});
+
+/* ---------- L22 project ---------- */
+const projSteps=['用 1:50 比例畫出房間外框，標出門、東邊的大窗、角落的浴室。','想想東邊窗的晨光：床或書桌要放哪裡？寫下理由。','分區：睡眠、工作、廚房、休息四區，檢查公私、動靜、乾濕分區。','畫動線：從門口到廚房、浴室、床，路線要短、順、不穿過。','放家具並檢查使用空間：床邊 60、衣櫃前 80、書桌椅後 90 cm。','設計廚房：選一字或 L 型，畫出工作三角並量三邊長度。','規劃收納：至少 5 個收納位置，別忘了貓砂、貓糧和貓跳台。','配色：用 60-30-10 選三個顏色，說明各用在哪裡。','照明：標出環境、工作、重點照明各至少一盞，並選色溫。','風格：選一個主風格，寫出 3 個你會使用的元素。','寫一段約 100 字的設計說明，向屋主介紹你的設計。'];
+function renderProj(){const st=store.get(KEY+'proj',[]);$('#projList').innerHTML=projSteps.map((s,i)=>`<label class="proj-item"><input type="checkbox" data-i="${i}" ${st.includes(i)?'checked':''}><span><b>步驟 ${i+1}</b>　${s}</span></label>`).join('');
+$$('#projList input').forEach(c=>c.onchange=()=>{const a=$$('#projList input').filter(x=>x.checked).map(x=>+x.dataset.i);store.set(KEY+'proj',a);projMsg(a.length);});projMsg(st.length);}
+function projMsg(n){$('#projOut').innerHTML=n===projSteps.length?'<span class="ok">✓ 專題全部完成！你剛剛走完了一個設計師的完整思考流程。</span>':`已完成 ${n} / ${projSteps.length} 步。`;}
+renderProj();
+
+/* ---------- L22 final exam ---------- */
+const exam=[
+['1 坪大約等於幾平方公尺？',['1','3.3','10'],1,'1 坪 ≈ 3.3058 m²（第 2 課）'],
+['平面圖上，門旁邊的四分之一圓弧代表？',['窗簾','門打開掃過的範圍','地毯'],1,'弧線範圍內不能放家具（第 3 課）'],
+['桌高減座高的「差尺」，理想值約是？',['10–15 cm','27–30 cm','45–50 cm'],1,'第 4 課'],
+['「公私、動靜、乾濕」是在講什麼？',['配色','空間分區','施工順序'],1,'第 5 課'],
+['60-30-10 法則裡，10% 通常用在哪？',['牆面','沙發','抱枕、花瓶等點綴'],2,'第 8 課'],
+['色溫 2700 K 的光看起來？',['偏黃、溫暖','偏藍、冷','完全白'],0,'數字越低越暖（第 9 課）'],
+['抽屜四角最常用、拉不脫的接法是？',['直榫','燕尾榫','釘子'],1,'第 12 課'],
+['廚房工作三角形三邊總長建議約？',['100–200 cm','400–790 cm','1000 cm 以上'],1,'第 15 課'],
+['北歐風多用白牆淺木，主要原因是？',['冬天日照短，要留住光線','比較便宜','宗教規定'],0,'第 18 課'],
+['下列施工順序何者正確？',['油漆 → 水電 → 泥作','水電 → 泥作 → 木作 → 油漆','系統櫃 → 拆除 → 油漆'],1,'先藏後露、從粗到細（第 20 課）']];
+const exAns=new Array(exam.length).fill(null);
+$('#finalExam').innerHTML=exam.map((q,i)=>`<div class="quiz" id="ex${i}"><div class="q">${q[0]}</div><div class="opts">${q[1].map((o,j)=>`<button data-q="${i}" data-o="${j}">${o}</button>`).join('')}</div><div class="fb"></div></div>`).join('');
+$$('#finalExam button').forEach(b=>b.onclick=()=>{const q=+b.dataset.q;if($('#ex'+q).classList.contains('answered'))return;exAns[q]=+b.dataset.o;$$(`#finalExam button[data-q="${q}"]`).forEach(x=>x.style.borderColor=x===b?'var(--oak)':'');});
+$('#finalSubmit').onclick=()=>{
+  if(exAns.some(v=>v===null)){const o=$('#finalOut');o.style.display='block';o.innerHTML='<span class="bad">還有 '+exAns.filter(v=>v===null).length+' 題沒作答。</span>';return;}
+  let sc=0;exam.forEach((q,i)=>{const box=$('#ex'+i),btns=box.querySelectorAll('button');box.classList.add('answered');btns.forEach(x=>x.style.borderColor='');btns[q[2]].classList.add('right');if(exAns[i]!==q[2])btns[exAns[i]].classList.add('wrong');else sc++;box.querySelector('.fb').innerHTML=(exAns[i]===q[2]?'<b class="ok">✓</b> ':'<b class="bad">✗</b> ')+q[3];});
+  const o=$('#finalOut');o.style.display='block';
+  if(sc>=7){o.innerHTML=`<span class="ok">得分 <b>${sc} / 10</b>，恭喜通過！</span>請在下方輸入名字取得證書。`;$('#certWrap').style.display='block';$('#finalSubmit').style.display='none';done.add('L22');store.set(KEY+'done',[...done]);buildNav();updateProgress();$$('#navList button').forEach(b=>b.classList.toggle('active',b.dataset.go==='L22'));}
+  else{o.innerHTML=`<span class="bad">得分 <b>${sc} / 10</b>，差一點點！</span>看看錯的題目是哪一課，回去複習後再試一次。<br><button class="btn" id="retryExam" style="margin-top:8px">重新作答</button>`;
+    $('#retryExam').onclick=()=>{exAns.fill(null);$$('#finalExam .quiz').forEach(q=>{q.classList.remove('answered');q.querySelectorAll('button').forEach(x=>{x.classList.remove('right','wrong');x.style.borderColor='';});});o.style.display='none';};}
+};
+const d=new Date();$('#certDate').textContent=`${d.getFullYear()} 年 ${d.getMonth()+1} 月 ${d.getDate()} 日`;
+$('#certName').oninput=e=>{$('#certWho').textContent=e.target.value||'　';};
+
+/* ---------- glossary ---------- */
+const G=[
+['室內設計 Interior Design',1,'規劃建築內部空間，使其方便、安全、舒適、美觀。interior 意為「更裡面」，design 源自「畫出標記」。'],
+['裝潢',1,'原指書畫裝裱與以黃檗染紙防蟲，今指房屋裝修工程。'],
+['形隨機能',1,'Form follows function，蘇利文 1896 年提出：先有用途，再有形狀。'],
+['台尺',2,'日治時期沿用的長度單位，1 台尺 ≈ 30.3 cm。'],
+['坪',2,'日本面積單位 tsubo，約兩張榻榻米，1 坪 ≈ 3.3058 m²。'],
+['比例尺',2,'圖面與實物的縮放比，1:50 表示圖上 1 cm 代表實際 50 cm。'],
+['平面圖',3,'在約 1.2–1.5 m 高水平切開、由上往下看的圖。'],
+['立面圖',3,'正對一面牆所畫的圖，表示牆上物件的高度與位置。'],
+['剖面圖',3,'垂直切開建築後從側面看的圖，表示高度、樓板、樑。'],
+['藍圖 Blueprint',3,'19 世紀曬圖法複製的圖為藍底白線，因而得名。'],
+['RCP 反射天花圖',3,'Reflected Ceiling Plan，把地板當鏡子映出天花板，標示燈具與設備。'],
+['人體工學 Ergonomics',4,'希臘文 ergon（工作）＋nomos（規律），讓物件配合人體。'],
+['差尺',4,'桌面高度減去椅座高度，理想約 27–30 cm。'],
+['模矩 Modulor',4,'柯比意以人體與黃金比例建立的尺寸系統。'],
+['動線 Circulation',5,'人在空間中移動的路線。'],
+['回遊動線',5,'可繞一圈、不必折返的動線。'],
+['公私／動靜／乾濕分區',5,'依隱私、聲音、用水程度劃分空間。'],
+['留白',6,'源自中國山水畫，刻意保留空的空間讓畫面呼吸。'],
+['質感 Texture',6,'材料表面的觸覺或視覺感受，源自拉丁文 texere「編織」。'],
+['黃金比例',7,'約 1:1.618，以希臘字母 φ 表示。'],
+['三分法',7,'把畫面切成九宮格，重點放在線上或交叉點。'],
+['主題牆 Feature wall',7,'空間中刻意強調、成為焦點的牆面。'],
+['色相、明度、彩度',8,'孟塞爾色彩系統的三屬性：顏色名稱、亮暗、鮮豔度。'],
+['莫蘭迪色',8,'源自義大利畫家莫蘭迪，指低彩度、帶灰的柔和色。'],
+['60-30-10 法則',8,'主色 60%、輔色 30%、點綴色 10% 的配色比例。'],
+['色溫 K',9,'以克耳文命名，描述光偏黃（低 K）或偏藍白（高 K）。'],
+['流明 lm',9,'光源發出的總光量，拉丁文 lumen＝光。'],
+['照度 lux',9,'照在表面上的亮度，1 lux＝1 lm/m²。'],
+['演色性 CRI／Ra',9,'光源還原物體顏色的能力，100 為最佳。'],
+['三層照明',9,'環境照明、工作照明、重點照明。'],
+['崁燈',9,'嵌入天花板的燈具。'],
+['眩光 Glare',9,'光線直射眼睛造成的不適。'],
+['沙發 Sofa',10,'源自阿拉伯文 ṣuffa，原為鋪地毯的長石台。'],
+['貴妃椅 Chaise longue',10,'法文「長椅子」，常被誤寫為 chaise lounge。'],
+['腳凳 Ottoman',10,'以鄂圖曼帝國命名的軟墊矮凳。'],
+['玄關桌 Console',10,'console 原指牆上托架，指靠牆的窄長桌。'],
+['衣櫃 Wardrobe',10,'古法文 garde-robe，「守護衣服」。'],
+['餐邊櫃 Credenza',10,'義大利文「相信」，傳說源於上菜前試毒。'],
+['斗櫃',10,'「斗」即抽屜，由多層抽屜組成的櫃子。'],
+['獨立筒',10,'每顆彈簧以布袋獨立包覆的床墊結構。'],
+['Futon',10,'日文布団，源自中文「蒲團」。'],
+['硬木／軟木',11,'植物分類：闊葉樹為硬木、針葉樹為軟木，與硬度無關。'],
+['夾板',11,'薄木片紋路交叉、奇數層膠合的板材。'],
+['木心板',11,'中間為木條、上下貼薄板的板材，木作常用。'],
+['密底板 MDF',11,'中密度纖維板，表面平滑，適合烤漆。'],
+['塑合板',11,'木屑碎片膠合壓製，系統櫃主要板材。'],
+['實木貼皮 Veneer',11,'0.2–0.6 mm 的實木薄片貼於板材表面。'],
+['美耐皿／美耐板',11,'前者為系統櫃常見的低壓樹脂面，後者為較厚耐磨的高壓裝飾板 HPL。'],
+['甲醛等級',11,'人造板釋放甲醛的標準，如台灣 CNS F1、歐洲 E1。'],
+['馬丁代爾耐磨',11,'以發明者命名的布料耐磨測試，家用沙發建議 2 萬次以上。'],
+['榫卯',12,'榫為凸、卯為凹的木構接合；河姆渡遺址已可見。'],
+['燕尾榫',12,'外寬內窄、拉不脫的榫，常用於抽屜。'],
+['KD 家具',12,'Knock-Down，可拆裝、平板包裝的家具。'],
+['西德鉸鏈',12,'隱藏式杯狀鉸鏈，因早期多自西德進口而得名。'],
+['三節滑軌',12,'可讓抽屜完全拉出的滑軌。'],
+['明式家具',13,'明代硬木家具，線條簡潔、以榫卯構成。'],
+['包浩斯 Bauhaus',13,'1919 年德國設計學校，主張藝術與工業結合。'],
+['少即是多',13,'Less is more，與密斯．凡德羅相關的極簡口號。'],
+['中世紀現代',13,'約 1945–1970 年的設計風格。'],
+['玄關',14,'原為佛教用語「入道之門」，經日本成為住宅入口之稱。'],
+['工作三角形',15,'冰箱、水槽、爐具三點，每邊 120–270 cm、總和 400–790 cm。'],
+['中島',15,'Kitchen island，不靠牆、四面可用的廚房檯面。'],
+['乾濕分離',16,'以隔屏區隔淋浴區，保持其他地面乾燥。'],
+['馬桶',16,'由漢代「虎子」，相傳唐代避諱改稱「馬子」而來。'],
+['黃金收納區',17,'約 70–160 cm 高，不彎腰不踮腳的收納高度。'],
+['系統櫃／木作櫃',17,'前者工廠裁板現場組裝；後者由木工現場製作。'],
+['Hygge',18,'丹麥文，溫暖舒適與親友共處的幸福感。'],
+['侘寂 Wabi-sabi',18,'日本美學，欣賞樸素、不完美與時間痕跡。'],
+['Japandi',18,'Japan＋Scandi，日式與北歐融合風格。'],
+['Loft',18,'原為倉庫上層，引申為工業風挑高住宅。'],
+['護牆板 Wainscoting',18,'牆面下半部的木作飾板，源自荷蘭文上等橡木板。'],
+['波希米亞',18,'捷克地名，引申為自由不羈的藝術生活。'],
+['剪力牆',19,'抵抗地震水平力的鋼筋混凝土牆，不可拆除。'],
+['海島型地板',19,'表層實木、底層夾板，適合潮濕氣候的地板。'],
+['磨石子 Terrazzo',19,'義大利文「露台」，碎石混水泥磨平的地坪。'],
+['天花板',19,'源自傳統頂棚彩繪花卉如「天上之花」。'],
+['矽酸鈣板',19,'耐燃、防潮的天花板常用板材。'],
+['試水',19,'防水完成後放水 24–48 小時確認不漏。'],
+['專用迴路',19,'高耗電器從電箱獨立拉出的線路。'],
+['泥作／木作',20,'依工班命名的工程類別。'],
+['硬裝／軟裝',20,'固定於建築的裝修／可移動的家具與飾品。'],
+['膨拱（空心）',20,'磁磚下水泥未填滿，敲擊有空聲。'],
+['設計需求書 Brief',21,'記錄屋主需求的文件，brief 原意「簡短說明」。'],
+['情緒板 Mood board',21,'以圖片、色票、材料拼貼呈現風格方向。'],
+['渲染 Rendering',21,'源自水墨暈染，指電腦計算光影生成擬真圖。'],
+['BIM',21,'建築資訊模型，模型中每個物件帶有資料。'],
+['耐燃等級',21,'裝修材料防火性能分級，耐燃一級最佳。']];
+function renderG(f){f=(f||'').trim().toLowerCase();$('#glossList').innerHTML=G.filter(g=>!f||g[0].toLowerCase().includes(f)||g[2].toLowerCase().includes(f)).map(g=>`<div class="glossary-item"><b>${g[0]}</b>　<a href="#L${g[1]}" style="font-size:13px">第 ${g[1]} 課</a><div>${g[2]}</div></div>`).join('')||'<p>找不到這個名詞。試試較短的關鍵字，例如「榫」或「光」。</p>';}
+$('#glossSearch').oninput=e=>renderG(e.target.value);renderG();
+})();
+</script>
+<script src="../../shared/module-shell.js?v=1.4.0" data-group="learning"></script><script src="../../shared/reading-store.js?v=1.4.0"></script><script src="../../shared/reading-progress.js?v=1.4.0" data-course="course-27f495ea25" data-category="science"></script></body>
+</html>
