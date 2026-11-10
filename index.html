@@ -3,111 +3,110 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f4f6f8">
+<meta name="theme-color" content="#eef3fb">
 <title>VRT OS · 行政中心</title>
 <script>if(/[?&]view=(learning|personal)\b/.test(location.search))location.replace("/vrt-acc-flow-cost/learn/index.html"+location.search+location.hash)</script>
-<script src="config.js?v=2.0.0"></script>
+<script src="config.js?v=2.1.0"></script>
 <style>
-:root{--bg:#f4f6f8;--card:#fff;--ink:#16212b;--mut:#63707c;--line:#dfe5ea;--rail:#fff;--acc:#16212b;--ok:#16a34a;--warn:#d97706;--bad:#dc2626;--r:16px;--railw:76px}
+:root{--bg:#f3f6fa;--surface:#eef3fb;--card:#fff;--ink:#1b2738;--ink2:#33445a;--mut:#6b7a8d;--line:#d5deea;--accent:#2563eb;--on:#e9f7ef;--onink:#1c6b4a;--ok:#16a34a;--warn:#d97706;--bad:#dc2626;--side:272px}
 *{box-sizing:border-box}html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","Noto Sans Khmer","Segoe UI",system-ui,-apple-system,Arial,sans-serif;font-size:15px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans","Noto Sans TC","Noto Sans Khmer","Segoe UI",system-ui,-apple-system,Arial,sans-serif;font-size:15px;line-height:1.5;-webkit-tap-highlight-color:transparent}
 button,input,select{font:inherit;color:inherit}button{cursor:pointer}
-a{color:inherit}
-/* ---------- rail (desktop) ---------- */
-#rail{position:fixed;inset:0 auto 0 0;width:var(--railw);background:var(--rail);border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:stretch;padding:10px 8px;gap:4px;z-index:30}
-.logo{height:44px;border-radius:12px;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:800;letter-spacing:.06em;font-size:13px;margin-bottom:8px;border:0}
-.rb{border:0;background:none;border-radius:12px;padding:8px 2px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:600;color:var(--mut);position:relative}
-.rb .i{font-size:21px;line-height:1.1}
-.rb:hover{background:#f0f3f6;color:var(--ink)}
-.rb.on{background:color-mix(in srgb,var(--c,#16212b) 12%,#fff);color:var(--c,#16212b)}
-.rb.on::before{content:"";position:absolute;left:-8px;top:10px;bottom:10px;width:3px;border-radius:3px;background:var(--c,#16212b)}
-.rb .dot{position:absolute;top:6px;right:12px}
-.grow{flex:1}
+/* ================= left menu (one menu for all four systems) ================= */
+#side{position:fixed;inset:0 auto 0 0;width:var(--side);background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:40;transition:transform .2s}
+.brand{display:flex;align-items:center;gap:12px;padding:16px 16px 14px;border-bottom:1px solid var(--line);background:none;border-width:0 0 1px;text-align:left;width:100%}
+.mark{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;display:grid;place-items:center;font-weight:800;font-size:15px;letter-spacing:.02em;flex:none}
+.brand b{display:block;font-size:19px;line-height:1.15}.brand span{font-size:12px;color:var(--mut)}
+.sfind{margin:10px 12px 4px;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:7px 10px}
+.sfind input{flex:1;min-width:0;border:0;outline:0;background:none;font-size:14px}
+.sfind kbd{font:600 10px ui-monospace,monospace;color:var(--mut);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+#menu{flex:1;overflow-y:auto;padding:4px 0 18px;overscroll-behavior:contain}
+.it{display:flex;align-items:center;gap:11px;width:calc(100% - 16px);margin:1px 8px;padding:8px 12px;border:0;background:none;border-radius:8px;color:var(--ink2);font-size:14.5px;text-align:left}
+.it .ic{width:24px;text-align:center;font-size:17px;flex:none}
+.it .lb{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.it:hover{background:#e3ebf7}
+.it.on{background:var(--on);color:var(--onink);font-weight:700}
+.bd{font-size:11px;color:var(--mut);border:1px solid #c9d4e2;border-radius:6px;padding:0 6px;line-height:18px;font-variant-numeric:tabular-nums;white-space:nowrap;flex:none}
+.bd.n{border:0;padding:0;font-size:12.5px}
+.sysh{display:flex;align-items:center;gap:10px;width:calc(100% - 16px);margin:10px 8px 2px;padding:9px 12px;border:0;border-radius:9px;background:color-mix(in srgb,var(--c) 9%,#fff);border-left:4px solid var(--c);font-weight:800;font-size:14.5px;text-align:left;color:var(--ink)}
+.sysh .ic{font-size:18px}.sysh .lb{flex:1}.sysh .tg{font-size:10px;font-weight:800;letter-spacing:.06em;color:var(--c)}
+.sysh .ch{color:var(--mut);font-size:11px;transition:transform .15s}.sysh.shut .ch{transform:rotate(-90deg)}
+.sysh.cur{background:color-mix(in srgb,var(--c) 16%,#fff)}
+.g{padding:10px 20px 3px;font-size:11.5px;letter-spacing:.06em;color:var(--mut);font-weight:700}
+.sfoot{border-top:1px solid var(--line);padding:10px 12px;display:flex;gap:8px;align-items:center}
+.sfoot .btn{flex:1;justify-content:center}
 .dot{width:9px;height:9px;border-radius:50%;background:#c3ccd4;display:inline-block;flex:none}
 .dot.ok{background:var(--ok)}.dot.bad{background:var(--bad)}.dot.busy{background:var(--warn);animation:pulse 1s infinite}
 @keyframes pulse{50%{opacity:.35}}
-/* ---------- stage ---------- */
-#stage{position:fixed;inset:0 0 0 var(--railw)}
-#home{position:absolute;inset:0;overflow:auto;padding:22px clamp(14px,3vw,34px) 60px}
-.frame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff;display:none}
-.frame.on{display:block}
-#loading{position:absolute;inset:0;display:none;place-items:center;background:var(--bg);color:var(--mut);font-weight:600;z-index:2}
-#loading.on{display:grid}
-/* ---------- home ---------- */
-.top{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:16px}
-.top h1{margin:0;font-size:clamp(22px,3.2vw,30px);letter-spacing:-.01em}
-.top p{margin:2px 0 0;color:var(--mut);font-size:13px}
-.top .sp{flex:1}
-.btn{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:9px 14px;font-weight:650;display:inline-flex;align-items:center;gap:7px;text-decoration:none;white-space:nowrap}
-.btn:hover{border-color:#b9c4cd}.btn.pri{background:var(--ink);color:#fff;border-color:var(--ink)}
-.btn:disabled{opacity:.6;cursor:default}
-select.btn{padding-right:8px}
-.search{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;box-shadow:0 1px 2px rgba(22,33,43,.04)}
-.search input{flex:1;border:0;outline:0;background:none;font-size:16px;min-width:0}
-.search kbd{font:600 11px ui-monospace,monospace;color:var(--mut);border:1px solid var(--line);border-radius:6px;padding:2px 6px}
-#results{display:none;background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden}
-#results.on{display:block}
-.res{display:flex;align-items:center;gap:10px;width:100%;border:0;border-bottom:1px solid var(--line);background:none;padding:10px 14px;text-align:left}
-.res:last-child{border-bottom:0}.res:hover,.res.sel{background:#f3f6f9}
-.res .ic{width:26px;text-align:center;font-size:17px}.res b{font-weight:650}.res small{color:var(--mut);margin-left:auto;white-space:nowrap}
-.tag{font-size:11px;font-weight:700;border-radius:999px;padding:2px 8px;background:color-mix(in srgb,var(--c) 13%,#fff);color:var(--c);white-space:nowrap}
-.none{padding:14px;color:var(--mut)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:14px;margin-top:14px}
-.sys{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:12px;border-top:4px solid var(--c)}
-.sys header{display:flex;align-items:center;gap:12px}
-.sys .big{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;font-size:24px;background:color-mix(in srgb,var(--c) 12%,#fff);flex:none}
-.sys h2{margin:0;font-size:18px}.sys header p{margin:0;font-size:12.5px;color:var(--mut)}
-.sys .open{margin-left:auto;background:var(--c);color:#fff;border:0;border-radius:11px;padding:9px 14px;font-weight:700}
-.st{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--mut)}
-.grp{font-size:11.5px;font-weight:700;color:var(--mut);margin:2px 0 -4px;letter-spacing:.02em}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{border:1px solid var(--line);background:#fafbfc;border-radius:999px;padding:5px 11px;font-size:13px;font-weight:550}
-.chip:hover{border-color:var(--c);color:var(--c);background:#fff}
-.more{border:0;background:none;color:var(--c);font-weight:700;font-size:13px;padding:4px 2px;text-align:left}
-.sec{margin:26px 0 8px;font-size:13px;font-weight:800;color:var(--mut);letter-spacing:.04em}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;font-weight:650;display:inline-flex;align-items:center;gap:7px;white-space:nowrap;font-size:14px}
+.btn:hover{border-color:#aebcd0}.btn.pri{background:var(--accent);color:#fff;border-color:var(--accent)}.btn:disabled{opacity:.6;cursor:default}
+/* ================= work area ================= */
+#stage{position:fixed;inset:0 0 0 var(--side)}
+#home{position:absolute;inset:0;overflow:auto;padding:22px clamp(14px,2.6vw,32px) 70px}
+.frame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff;display:none}.frame.on{display:block}
+#loading{position:absolute;inset:0;display:none;place-items:center;background:var(--bg);color:var(--mut);font-weight:600;z-index:2}#loading.on{display:grid}
+#mtop{display:none}
+.top{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.top h1{margin:0;font-size:clamp(22px,3vw,28px);letter-spacing:-.01em}.top p{margin:2px 0 0;color:var(--mut);font-size:13px}.top .sp{flex:1}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:12px;margin-bottom:18px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;border-top:4px solid var(--c);text-align:left;display:flex;flex-direction:column;gap:4px}
+.kpi:hover{box-shadow:0 4px 14px rgba(27,39,56,.08)}
+.kpi .h{display:flex;align-items:center;gap:9px;font-weight:800;font-size:16px}.kpi .h span:first-child{font-size:21px}
+.kpi small{color:var(--mut);font-size:12.5px}.kpi .s{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--mut);margin-top:4px}
+.sec{margin:22px 0 10px;font-size:13px;font-weight:800;color:var(--mut);letter-spacing:.05em;display:flex;align-items:center;gap:8px}
+.sec::after{content:"";flex:1;height:1px;background:var(--line)}
+/* process map: rows = systems (top to bottom), columns = steps (left to right) */
+.lane{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden}
+.lane>header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:color-mix(in srgb,var(--c) 8%,#fff);border-bottom:1px solid var(--line);font-weight:800}
+.lane>header .tg{font-size:10px;letter-spacing:.06em;color:var(--c)}.lane>header .go{margin-left:auto;border:0;background:var(--c);color:#fff;border-radius:8px;padding:5px 12px;font-weight:700;font-size:13px}
+.steps{display:flex;overflow-x:auto;scroll-snap-type:x proximity}
+.step{flex:1 0 190px;padding:12px 14px 14px;border-right:1px solid var(--line);scroll-snap-align:start;position:relative}
+.step:last-child{border-right:0}
+.step h3{margin:0 0 8px;font-size:12.5px;color:var(--c);letter-spacing:.03em;display:flex;align-items:center;gap:6px}
+.step h3 i{font-style:normal;width:20px;height:20px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-size:11px;flex:none}
+.pg{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;padding:5px 6px;border-radius:7px;text-align:left;font-size:14px;color:var(--ink2)}
+.pg:hover{background:color-mix(in srgb,var(--c) 10%,#fff);color:var(--ink)}.pg .ic{width:20px;text-align:center}
 .row{display:flex;flex-wrap:wrap;gap:8px}
-footer{margin-top:28px;color:var(--mut);font-size:12px;display:flex;gap:14px;flex-wrap:wrap}
-footer a{color:var(--mut)}
-#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-weight:600;z-index:80;display:none;max-width:90vw}
-/* ---------- palette / launcher ---------- */
-#pal{position:fixed;inset:0;background:rgba(15,23,31,.38);z-index:60;display:none;align-items:flex-start;justify-content:center;padding:8vh 12px 12px}
-#pal.on{display:flex}
-#palbox{width:min(640px,100%);max-height:84vh;background:var(--card);border-radius:18px;box-shadow:0 20px 60px rgba(15,23,31,.3);display:flex;flex-direction:column;overflow:hidden}
-#palbox .search{border:0;border-bottom:1px solid var(--line);border-radius:0;margin:0;box-shadow:none}
-#palsys{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:10px;border-bottom:1px solid var(--line)}
-#palsys .rb{font-size:12px}#palsys .rb.on::before{display:none}
-#pallist{overflow:auto}
-/* ---------- mobile ---------- */
-#fab{display:none}
-@media(max-width:760px){
- :root{--railw:0px}
- #rail{display:none}
- #home{padding:16px 12px 90px}
- #fab{display:grid;place-items:center;position:fixed;right:8px;top:46%;width:46px;height:46px;border-radius:50%;border:0;background:var(--ink);color:#fff;font-weight:800;font-size:11px;letter-spacing:.04em;z-index:50;box-shadow:0 6px 18px rgba(15,23,31,.35);opacity:.88;touch-action:none}
- #fab i{position:absolute;top:1px;right:1px;width:11px;height:11px;border-radius:50%;border:2px solid #fff;background:var(--c,#16a34a);font-style:normal}
- #pal{padding:0;align-items:flex-end}
- #palbox{width:100%;max-height:88vh;border-radius:20px 20px 0 0}
- .top .btn span.l{display:none}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;font-size:13.5px;font-weight:550}.chip:hover{border-color:var(--accent);color:var(--accent)}
+.tag{font-size:10.5px;font-weight:800;border-radius:999px;padding:1px 7px;background:color-mix(in srgb,var(--c) 13%,#fff);color:var(--c);white-space:nowrap}
+footer{margin-top:26px;color:var(--mut);font-size:12px;display:flex;gap:14px;flex-wrap:wrap}footer a{color:var(--mut)}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-weight:600;z-index:90;display:none;max-width:90vw}
+#shade{display:none}#fab{display:none}
+/* ================= phone / narrow ================= */
+@media(max-width:900px){
+ :root{--side:0px}
+ #side{width:min(300px,86vw);transform:translateX(-103%);box-shadow:none;padding-top:env(safe-area-inset-top,0px)}
+ body.menu #side{transform:none;box-shadow:8px 0 30px rgba(15,23,42,.25)}
+ #shade{position:fixed;inset:0;background:rgba(15,23,42,.4);z-index:39}body.menu #shade{display:block}
+ #home{padding:0 12px 90px}
+ #mtop{display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0;margin-bottom:6px}
+ #mtop button{border:1px solid var(--line);background:#fff;border-radius:10px;width:42px;height:42px;font-size:19px}
+ #mtop b{font-size:18px}
+ .top h1{display:none}
+ #fab{display:grid;place-items:center;position:fixed;right:8px;top:46%;width:46px;height:46px;border-radius:50%;border:0;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;font-weight:800;font-size:11px;z-index:38;box-shadow:0 6px 18px rgba(15,23,42,.35);opacity:.9;touch-action:none}
+ #fab i{position:absolute;top:1px;right:1px;width:11px;height:11px;border-radius:50%;border:2px solid #fff;background:var(--c,#16a34a)}
+ body.athome #fab{display:none}
+ .step{flex-basis:170px}
 }
 </style>
 </head>
-<body>
-<nav id="rail" aria-label="VRT OS"></nav>
-<div id="stage">
-  <main id="home"></main>
-  <div id="loading"></div>
-</div>
-<button id="fab" aria-label="VRT OS">VRT<i></i></button>
-<div id="pal" role="dialog" aria-modal="true"><div id="palbox">
-  <div class="search"><span>🔎</span><input id="palq" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
-  <div id="palsys"></div>
-  <div id="pallist"></div>
-</div></div>
+<body class="athome">
+<aside id="side" aria-label="VRT OS">
+  <button class="brand" id="brand"><div class="mark">VRT</div><div><b>OS</b><span id="brandsub"></span></div></button>
+  <label class="sfind"><span>🔎</span><input id="find" autocomplete="off" spellcheck="false"><kbd>/</kbd></label>
+  <nav id="menu"></nav>
+  <div class="sfoot"><button class="btn pri" id="upd"></button><select class="btn" id="lang" aria-label="Language" style="flex:none"><option value="zh">繁中</option><option value="en">EN</option><option value="km">ខ្មែរ</option></select></div>
+</aside>
+<div id="shade"></div>
+<div id="stage"><main id="home"></main><div id="loading"></div></div>
+<button id="fab" aria-label="Menu">VRT<i></i></button>
 <div id="toast" role="status"></div>
 <script>
-/* VRT OS shell v2.0 — one workspace over the four live systems (HR / ERP / GA / Audit).
-   Each system keeps running at its own address; the shell shows the live page (same origin),
-   reads its menu as it is today, and never copies or rewrites its data. */
+/* VRT OS shell v2.1 — one ERP-style workspace over the four live systems.
+   Menu order follows a garment factory's flow: order → materials → production → shipping → cost,
+   then people (HR), site (GA & security) and compliance (audit).
+   Every system keeps running at its own address; the shell shows the live page (same origin),
+   reads that system's own menu as it is today, and never copies or rewrites its data. */
 (function(){'use strict';
 const CFG=window.AC_CONFIG||{},SYS=(CFG.systems||[]).slice(),$=id=>document.getElementById(id);
 const E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -116,75 +115,83 @@ const put=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
 let lang=get('ac_admin_lang','zh');if(!['zh','en','km'].includes(lang))lang='zh';
 const t=(zh,en,km)=>lang==='zh'?zh:lang==='km'?(km||en):en;
 const nm=o=>lang==='zh'?o.zh:(lang==='km'&&o.km)||o.en||o.zh;
+const narrow=()=>matchMedia('(max-width:900px)').matches;
 const ADMIN=[
  {k:'apps/admin/admin_org_chart.html',ic:'🏢',zh:'組織架構',en:'Organisation chart',frame:true},
  {k:'apps/admin/budget_vs_actual.html',ic:'📊',zh:'預算 vs 實際支出',en:'Budget vs actual',frame:true},
- {k:'resources/admin/salary_adjust_2026.xlsx',ic:'📈',zh:'年度調薪 2026',en:'Salary adjustment 2026'},
- {k:'resources/admin/salary_adjust_2022.xlsx',ic:'📈',zh:'年度調薪 2022',en:'Salary adjustment 2022'},
- {k:'resources/admin/salary_adjust_2021.xlsx',ic:'📈',zh:'年度調薪 2021',en:'Salary adjustment 2021'},
- {k:'resources/admin/salary_structure_2022.xls',ic:'🗂',zh:'薪資架構（2022 歷史檔）',en:'Salary structure (2022)'}
+ {k:'resources/admin/salary_adjust_2026.xlsx',ic:'📈',zh:'年度調薪 2026',en:'Salary adjustment 2026',bd:'xlsx'},
+ {k:'resources/admin/salary_adjust_2022.xlsx',ic:'📈',zh:'年度調薪 2022',en:'Salary adjustment 2022',bd:'xlsx'},
+ {k:'resources/admin/salary_adjust_2021.xlsx',ic:'📈',zh:'年度調薪 2021',en:'Salary adjustment 2021',bd:'xlsx'},
+ {k:'resources/admin/salary_structure_2022.xls',ic:'🗂',zh:'薪資架構（2022 歷史檔）',en:'Salary structure (2022)',bd:'xls'}
 ];
-const ADMINSYS={id:'admin',icon:'🏛',color:'#16212b',zh:'行政',en:'Admin',km:'រដ្ឋបាល',mode:'file',url:new URL('./',location.href).href,pages:[]};
+const ADMINSYS={id:'admin',icon:'🏛',color:'#475569',zh:'行政',en:'Administration',km:'រដ្ឋបាល',tag:'ADMIN',mode:'file',url:new URL('./',location.href).href,pages:[]};
 const byId=id=>id==='admin'?ADMINSYS:SYS.find(s=>s.id===id);
-const frames={},status=get('vrt_os_status_v1',{}),menus=get('vrt_os_menu_v1',{});
-let cur='home',recents=get('vrt_os_recent_v1',[]),selIdx=0,syncing=false;
+/* per system: hide its own side menu inside the workspace (ours replaces it) and send its ☰ button to our menu */
+const FUSE={
+ hr:{css:'.rail{display:none!important}.app{grid-template-columns:minmax(0,1fr)!important}',menu:'#menuBtn'},
+ erp:{css:'.rail{display:none!important}.app{grid-template-columns:minmax(0,1fr)!important}',menu:'#menuBtn'},
+ ga:{css:'#ga-sidebar,.backdrop{display:none!important}.shell{display:block!important}.main-shell{grid-column:auto!important}',menu:'[data-action="menu"]'}
+};
+const frames={},status=get('vrt_os_status_v1',{}),menus=get('vrt_os_menu_v2',{});
+let cur='home',curKey='',recents=get('vrt_os_recent_v1',[]),syncing=false,shut=new Set(get('vrt_os_shut_v1',[]));
 
-/* ---------- menu: live one read from the system itself, seed list until first visit ---------- */
-function pages(s){const m=menus[s.id];return m&&Array.isArray(m.items)&&m.items.length>=3?m.items:s.pages||[]}
+/* ---------- menu data: live from each system, seed list until its first visit ---------- */
+function pages(s){if(s.id==='admin')return ADMIN;const m=menus[s.id];return m&&Array.isArray(m.items)&&m.items.length>=3?m.items:s.pages||[]}
 function harvest(s){
- const f=frames[s.id];if(!f)return;let d;try{d=f.contentDocument}catch(e){return}if(!d||!d.body)return;
+ const f=frames[s.id];if(!f||s.mode!=='hash')return;let d;try{d=f.contentDocument}catch(e){return}if(!d||!d.body)return;
  const items=[],seen=new Set();let g='';
- if(s.mode==='hash'){
-  d.querySelectorAll('nav .nav-g,nav .nav-caption,aside .nav-caption,nav a[href^="#"],aside a[href^="#"],aside button[data-route]').forEach(el=>{
-   if(el.tagName!=='A'&&!el.hasAttribute('data-route')){g=el.textContent.trim();return}
-   const k=el.tagName==='A'?decodeURIComponent((el.getAttribute('href')||'').slice(1)):el.getAttribute('data-route');if(!k||seen.has(k)||k.length>60||el.classList.contains('brand'))return;
-   const sp=[...el.querySelectorAll('span')].find(x=>!x.classList.contains('ic')&&!x.classList.contains('nav-count')&&x.textContent.trim().length>1&&!x.querySelector('span'));
-   const label=(sp?sp.textContent:el.textContent).replace(/\s+/g,' ').trim();if(!label)return;
-   const ic=el.querySelector('.ic');seen.add(k);items.push({k,zh:label,en:label,g,ge:g,ic:ic?ic.textContent.trim():''});
-  });
- }
+ d.querySelectorAll('nav .nav-g,nav .nav-caption,aside .nav-caption,nav a[href^="#"],aside a[href^="#"],aside button[data-route]').forEach(el=>{
+  const isItem=el.tagName==='A'||el.hasAttribute('data-route');if(!isItem){g=el.textContent.trim();return}
+  const k=el.tagName==='A'?decodeURIComponent((el.getAttribute('href')||'').slice(1)):el.getAttribute('data-route');
+  if(!k||seen.has(k)||k.length>60||el.classList.contains('brand'))return;
+  const spans=[...el.querySelectorAll('span')].filter(x=>!x.querySelector('span'));
+  const sp=spans.find(x=>!x.classList.contains('ic')&&!x.classList.contains('ct')&&!x.classList.contains('nav-count')&&x.textContent.trim().length>1);
+  const label=(sp?sp.textContent:el.textContent).replace(/\s+/g,' ').trim();if(!label)return;
+  const ic=el.querySelector('.ic'),bd=spans.filter(x=>x!==sp&&x!==ic).map(x=>x.textContent.trim()).filter(Boolean).join(' ').slice(0,12);
+  seen.add(k);items.push({k,zh:label,en:label,g,ge:g,ic:ic?ic.textContent.trim():'',bd});
+ });
  if(items.length>=3){
-  const seed=new Map((s.pages||[]).map(p=>[p.k,p]));
-  items.forEach(it=>{const p=seed.get(it.k);if(p){if(!it.ic)it.ic=p.ic;it.en=p.en}});
+  const seed=new Map((s.pages||[]).map(p=>[p.k,p]));items.forEach(it=>{const p=seed.get(it.k);if(p&&!it.ic)it.ic=p.ic});
   const old=JSON.stringify((menus[s.id]||{}).items||[]);menus[s.id]={items,at:Date.now()};
-  if(old!==JSON.stringify(items)){put('vrt_os_menu_v1',menus);if(cur==='home')drawHome()}
+  if(old!==JSON.stringify(items)){put('vrt_os_menu_v2',menus);drawMenu();if(cur==='home')drawHome()}
  }
 }
-function fuse(s){ /* light touch only: the shell already shows the brand, so hide the inner one */
- try{const d=frames[s.id].contentDocument;if(!d||d.getElementById('vrt-os-fuse'))return;const st=d.createElement('style');st.id='vrt-os-fuse';st.textContent='.rail .brand,aside>.brand{display:none!important}';d.head.appendChild(st)}catch(e){}
+function fuse(s){const F=FUSE[s.id];if(!F)return;
+ try{const d=frames[s.id].contentDocument;if(!d||d.getElementById('vrt-os-fuse'))return;const st=d.createElement('style');st.id='vrt-os-fuse';st.textContent=F.css;d.head.appendChild(st);
+  d.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest(F.menu);if(b){e.preventDefault();e.stopPropagation();openMenu()}},true)}catch(e){}
 }
 
 /* ---------- open a system / page ---------- */
 function target(s,k){if(s.mode==='hash')return s.url+(k?'#'+encodeURI(k):'');return s.url+(k||s.home||'')}
 function open(id,k,opts){
- const s=byId(id);if(!s)return goHome();
- if(id==='admin'){const a=ADMIN.find(x=>x.k===k);if(!a||!a.frame){if(a)location.href=a.k;return}}
- let f=frames[id];const url=target(s,k);
+ const s=byId(id);if(!s)return goHome();k=k||'';
+ if(id==='admin'){const a=ADMIN.find(x=>x.k===k);if(!a)return goHome();if(!a.frame){location.href=a.k;return}}
+ let f=frames[id];const url=target(s,k),bg=opts&&opts.background;
  if(!f){f=document.createElement('iframe');f.className='frame';f.title=s.name||nm(s);f.setAttribute('allow','clipboard-read; clipboard-write; fullscreen');f.dataset.loaded='0';
-  f.addEventListener('load',()=>{f.dataset.loaded='1';if(cur===id)$('loading').classList.remove('on');fuse(s);[300,2500,7000,16000].forEach(ms=>setTimeout(()=>harvest(s),ms));drawRail()});
-  $('stage').appendChild(f);frames[id]=f;f.src=url;if(!(opts&&opts.background)){$('loading').textContent=t('正在開啟 ','Opening ','កំពុងបើក ')+nm(s)+'…';$('loading').classList.add('on')}}
- else if(k!==undefined&&k!==null&&k!==''){
-  try{if(s.mode==='hash'&&f.dataset.loaded==='1'&&f.contentWindow.location.href.split('#')[0]===s.url.split('#')[0]){f.contentWindow.location.hash=k}else{f.dataset.loaded='0';f.src=url}}catch(e){f.src=url}}
- if(opts&&opts.background)return;
- cur=id;Object.entries(frames).forEach(([i,x])=>x.classList.toggle('on',i===id));$('home').style.display='none';
+  f.addEventListener('load',()=>{f.dataset.loaded='1';if(cur===id)$('loading').classList.remove('on');fuse(s);[300,2500,7000,16000].forEach(ms=>setTimeout(()=>harvest(s),ms))});
+  $('stage').appendChild(f);frames[id]=f;f.src=url;if(!bg){$('loading').textContent=t('正在開啟 ','Opening ','កំពុងបើក ')+nm(s)+'…';$('loading').classList.add('on')}}
+ else if(k){try{if(s.mode==='hash'&&f.dataset.loaded==='1'&&f.contentWindow.location.href.split('#')[0]===s.url.split('#')[0])f.contentWindow.location.hash=k;else{f.dataset.loaded='0';f.src=url}}catch(e){f.src=url}}
+ if(bg)return;
+ cur=id;curKey=k;Object.entries(frames).forEach(([i,x])=>x.classList.toggle('on',i===id));$('home').style.display='none';document.body.classList.remove('athome');
  if(f.dataset.loaded==='1')$('loading').classList.remove('on');
  const h='#'+id+(k?'/'+k:'');if(location.hash!==h)history.pushState(null,'',h);
- if(k&&id!=='admin'){const p=pages(s).find(x=>x.k===k);recents=[{s:id,k,zh:p?p.zh:k,en:p?p.en:k,ic:p&&p.ic||s.icon}].concat(recents.filter(r=>!(r.s===id&&r.k===k))).slice(0,8);put('vrt_os_recent_v1',recents)}
- document.title=nm(s)+' · VRT OS';drawRail();closePal();
+ if(k){const p=pages(s).find(x=>x.k===k);recents=[{s:id,k,zh:p?p.zh:k,en:p?p.en:k,ic:p&&p.ic||s.icon}].concat(recents.filter(r=>!(r.s===id&&r.k===k))).slice(0,8);put('vrt_os_recent_v1',recents)}
+ if(shut.has(id)){shut.delete(id);put('vrt_os_shut_v1',[...shut])}
+ document.title=nm(s)+' · VRT OS';closeMenu();drawMenu();
 }
-function goHome(){cur='home';Object.values(frames).forEach(x=>x.classList.remove('on'));$('loading').classList.remove('on');$('home').style.display='';if(location.hash&&location.hash!=='#home')history.pushState(null,'','#home');document.title='VRT OS · '+t('行政中心','Admin Center','មជ្ឈមណ្ឌលរដ្ឋបាល');drawRail();drawHome();closePal()}
-function route(){const h=decodeURIComponent(location.hash.slice(1));if(!h||h==='home')return goHome();const i=h.indexOf('/'),id=i<0?h:h.slice(0,i),k=i<0?'':h.slice(i+1);if(!byId(id))return goHome();if(cur===id&&!k)return;open(id,k)}
-/* keep the address in step with where the person is inside the system (deep links, refresh) */
-setInterval(()=>{if(cur==='home'||cur==='admin')return;const s=byId(cur),f=frames[cur];if(!s||!f||f.dataset.loaded!=='1')return;try{const w=f.contentWindow.location;let k='';if(s.mode==='hash')k=decodeURIComponent(w.hash.slice(1)).split('?')[0];else k=w.pathname.split('/').pop();const h='#'+cur+(k?'/'+k:'');if(location.hash!==h)history.replaceState(null,'',h)}catch(e){}},1200);
+function goHome(){cur='home';curKey='';Object.values(frames).forEach(x=>x.classList.remove('on'));$('loading').classList.remove('on');$('home').style.display='';document.body.classList.add('athome');if(location.hash&&location.hash!=='#home')history.pushState(null,'','#home');document.title='VRT OS · '+t('行政中心','Admin Center','មជ្ឈមណ្ឌលរដ្ឋបាល');closeMenu();drawMenu();drawHome()}
+function route(){const h=decodeURIComponent(location.hash.slice(1));if(!h||h==='home')return goHome();const i=h.indexOf('/'),id=i<0?h:h.slice(0,i),k=i<0?'':h.slice(i+1);if(!byId(id))return goHome();if(cur===id&&(!k||k===curKey))return;open(id,k)}
+/* follow where the person goes inside the system: address bar and the highlighted menu line stay right */
+setInterval(()=>{if(cur==='home'||cur==='admin')return;const s=byId(cur),f=frames[cur];if(!s||!f||f.dataset.loaded!=='1')return;try{const w=f.contentWindow.location;let k=s.mode==='hash'?decodeURIComponent(w.hash.slice(1)).split('?')[0]:w.pathname.split('/').pop();
+ if(s.mode==='hash'&&!k){const first=pages(s)[0];k=first?first.k:''}
+ if(k!==curKey){curKey=k;const h='#'+cur+(k?'/'+k:'');if(location.hash!==h)history.replaceState(null,'',h);markActive()}}catch(e){}},900);
 
 /* ---------- cloud status: plain read-only check, no sign-in window ---------- */
 async function probe(s){
  status[s.id]={state:'busy',at:Date.now()};paintStatus();
  const ctrl=new AbortController(),tm=setTimeout(()=>ctrl.abort(),20000);
- try{const r=await fetch(s.gas+'?action='+encodeURIComponent(s.probe||'ping'),{signal:ctrl.signal,redirect:'follow'});const d=JSON.parse(await r.text());
-  status[s.id]={state:'ok',ver:d&&(d.version||d.ver)||'',at:Date.now()}}
- catch(e){status[s.id]={state:'bad',at:Date.now()}}
- finally{clearTimeout(tm)}
+ try{const r=await fetch(s.gas+'?action='+encodeURIComponent(s.probe||'ping'),{signal:ctrl.signal,redirect:'follow'});const d=JSON.parse(await r.text());status[s.id]={state:'ok',ver:d&&(d.version||d.ver)||'',at:Date.now()}}
+ catch(e){status[s.id]={state:'bad',at:Date.now()}}finally{clearTimeout(tm)}
  put('vrt_os_status_v1',status);paintStatus();
 }
 function stText(s){const x=status[s.id]||{};const tm=x.at?new Date(x.at).toLocaleTimeString(lang==='zh'?'zh-TW':'en-GB',{hour:'2-digit',minute:'2-digit'}):'';
@@ -197,75 +204,72 @@ function paintStatus(){SYS.forEach(s=>{const x=status[s.id]||{};document.querySe
 /* one press: check all four clouds and wake all four systems so each runs its own sync.
    A system that is already open is left alone, so nothing being typed there is lost. */
 async function updateAll(){
- if(syncing)return;syncing=true;const b=$('upd');if(b)b.disabled=true;toast(t('正在更新四套系統…','Updating all four systems…','កំពុងធ្វើបច្ចុប្បន្នភាព…'));
+ if(syncing)return;syncing=true;$('upd').disabled=true;toast(t('正在更新四套系統…','Updating all four systems…','កំពុងធ្វើបច្ចុប្បន្នភាព…'));
  const checks=Promise.all(SYS.map(probe));
  for(const s of SYS){if(!frames[s.id]){open(s.id,'',{background:true});await new Promise(r=>{const f=frames[s.id];let done=false;const fin=()=>{if(!done){done=true;r()}};f.addEventListener('load',fin,{once:true});setTimeout(fin,25000)})}}
- await checks;syncing=false;if($('upd'))$('upd').disabled=false;
+ await checks;syncing=false;$('upd').disabled=false;
  const ok=SYS.filter(s=>(status[s.id]||{}).state==='ok').length;
- toast(t(`已更新：${ok}/${SYS.length} 套雲端正常，四套系統都已開啟並各自同步最新資料。`,`Updated: ${ok}/${SYS.length} clouds OK; all four systems are open and syncing.`,`បានធ្វើបច្ចុប្បន្នភាព ${ok}/${SYS.length}`),6000);drawRail();
+ toast(t(`已更新：${ok}/${SYS.length} 套雲端正常，四套系統都已開啟並各自同步最新資料。`,`Updated: ${ok}/${SYS.length} clouds OK; all four systems are open and syncing.`,`បានធ្វើបច្ចុប្បន្នភាព ${ok}/${SYS.length}`),6000);
 }
 
-/* ---------- search across every page of every system ---------- */
-function allItems(){const out=[];SYS.forEach(s=>pages(s).forEach(p=>out.push({s,p,text:(p.zh+' '+p.en+' '+p.k+' '+(p.g||'')+' '+(p.ge||'')+' '+s.zh+' '+s.en+' '+(s.name||'')).toLowerCase()})));
- ADMIN.forEach(a=>out.push({s:ADMINSYS,p:a,text:(a.zh+' '+a.en+' 行政 admin').toLowerCase()}));return out}
-function find(q){q=q.trim().toLowerCase();if(!q)return [];const ws=q.split(/\s+/);return allItems().filter(x=>ws.every(w=>x.text.includes(w))).slice(0,40)}
-function resHTML(list,q){if(!list.length)return q?'<div class="none">'+E(t('找不到「','Nothing matches “','រកមិនឃើញ “')+q+t('」。試試部門或頁面名稱，例如：薪資、訂單、宿舍、DCC。','”. Try a department or page name, e.g. payroll, orders, dormitory, DCC.','”'))+'</div>':'';
- return list.map((x,i)=>`<button class="res${i===selIdx?' sel':''}" data-open="${E(x.s.id)}" data-k="${E(x.p.k)}"><span class="ic">${E(x.p.ic||x.s.icon)}</span><b>${E(nm(x.p))}</b><small>${E(lang==='zh'?(x.p.g||''):(x.p.ge||x.p.g||''))}</small><span class="tag" style="--c:${x.s.color}">${E(nm(x.s))}</span></button>`).join('')}
-function bindRes(root){root.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>open(b.dataset.open,b.dataset.k))}
-
-/* ---------- drawing ---------- */
-function drawRail(){
- const btn=(id,ic,label,c,dot)=>`<button class="rb${cur===id?' on':''}" style="--c:${c}" data-go="${id}" title="${E(label)}"><span class="i">${ic}</span>${E(label)}${dot?`<span class="dot ${(status[id]||{}).state||''}" data-dot="${id}"></span>`:''}</button>`;
- const html=btn('home','🏠',t('首頁','Home','ទំព័រដើម'),'#16212b')+SYS.map(s=>btn(s.id,s.icon,nm(s),s.color,true)).join('');
- $('rail').innerHTML=`<button class="logo" data-go="home">VRT</button>`+html+`<div class="grow"></div><button class="rb" id="railSearch"><span class="i">🔎</span>${E(t('搜尋','Search','ស្វែងរក'))}</button>`;
- $('palsys').innerHTML=html;
- document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>b.dataset.go==='home'?goHome():open(b.dataset.go,''));
- $('railSearch').onclick=openPal;
+/* ---------- the left menu ---------- */
+const HIDE=/^(telegram|settings|architecture|sources)$/; /* housekeeping pages stay inside each system's own 設定 */
+function groupsOf(s){const out=[];pages(s).forEach(p=>{const g=(lang==='zh'?p.g:(p.ge||p.g))||'';let x=out[out.length-1];if(!x||x.g!==g){x={g,items:[]};out.push(x)}x.items.push(p)});return out}
+function drawMenu(){
+ const q=$('find').value.trim().toLowerCase(),ws=q?q.split(/\s+/):[];
+ const hit=(s,p)=>!ws.length||ws.every(w=>(p.zh+' '+p.en+' '+p.k+' '+(p.g||'')+' '+(p.ge||'')+' '+s.zh+' '+s.en+' '+(s.tag||'')).toLowerCase().includes(w));
+ let h=ws.length?'':`<button class="it${cur==='home'?' on':''}" data-home="1"><span class="ic">🏠</span><span class="lb">${E(t('首頁・流程總圖','Home · process map','ទំព័រដើម'))}</span></button>`,n=0;
+ [...SYS,ADMINSYS].forEach(s=>{
+  const closed=!ws.length&&shut.has(s.id);let body='';
+  if(s.id==='admin'){const it=ADMIN.filter(p=>hit(s,p));n+=it.length;if(ws.length&&!it.length)return;body=closed?'':it.map(p=>item(s,p)).join('')}
+  else{const gs=groupsOf(s).map(G=>({g:G.g,items:G.items.filter(p=>hit(s,p)&&(ws.length||!HIDE.test(p.k)))})).filter(G=>G.items.length);if(ws.length&&!gs.length)return;gs.forEach(G=>n+=G.items.length);
+   body=closed?'':gs.map(G=>(G.g?`<div class="g">${E(G.g)}</div>`:'')+G.items.map(p=>item(s,p)).join('')).join('')}
+  h+=`<button class="sysh${closed?' shut':''}${cur===s.id?' cur':''}" style="--c:${s.color}" data-sys="${s.id}"><span class="ic">${s.icon}</span><span class="lb">${E(nm(s))}</span><span class="tg">${E(s.tag||'')}</span>${s.gas?`<span class="dot ${(status[s.id]||{}).state||''}" data-dot="${s.id}"></span>`:''}<span class="ch">▼</span></button>${body}`;
+ });
+ if(ws.length&&!n)h+=`<div class="g" style="padding:16px 20px;font-weight:500;letter-spacing:0">${E(t('找不到。試試：薪資、訂單、宿舍、DCC、出勤。','No match. Try: payroll, orders, dormitory, DCC.','រកមិនឃើញ'))}</div>`;
+ $('menu').innerHTML=h;
+ $('menu').querySelectorAll('[data-home]').forEach(b=>b.onclick=goHome);
+ $('menu').querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{open(b.dataset.open,b.dataset.k);if($('find').value){$('find').value='';drawMenu()}});
+ $('menu').querySelectorAll('[data-sys]').forEach(b=>b.onclick=()=>{const id=b.dataset.sys;if(shut.has(id))shut.delete(id);else shut.add(id);put('vrt_os_shut_v1',[...shut]);drawMenu()});
+ markActive(true);
 }
-function sysCard(s){const ps=pages(s),groups=[];ps.forEach(p=>{const g=(lang==='zh'?p.g:(p.ge||p.g))||'';let x=groups.find(y=>y.g===g);if(!x){x={g,items:[]};groups.push(x)}x.items.push(p)});
- const skip=/^(dashboard|overview|settings|telegram|smart-import)$/;let shown=0;const body=groups.map(G=>{const it=G.items.filter(p=>!skip.test(p.k));if(!it.length||shown>=14)return '';const take=it.slice(0,Math.max(0,14-shown));shown+=take.length;
-  return `<div class="grp">${E(G.g)}</div><div class="chips">${take.map(p=>`<button class="chip" data-open="${s.id}" data-k="${E(p.k)}">${E(p.ic?p.ic+' ':'')}${E(nm(p))}</button>`).join('')}</div>`}).join('');
- return `<section class="sys" style="--c:${s.color}"><header><div class="big">${s.icon}</div><div><h2>${E(nm(s))}</h2><p>${E(nm(s.sub))}</p></div><button class="open" data-open="${s.id}" data-k="">${E(t('進入','Open','បើក'))}</button></header>
- <div class="st"><span class="dot ${(status[s.id]||{}).state||''}" data-dot="${s.id}"></span><span data-st="${s.id}">${E(stText(s))}</span></div>${body}
- ${ps.length>shown?`<button class="more" data-all="${s.id}">${E(t(`全部 ${ps.length} 個頁面 →`,`All ${ps.length} pages →`,`ទំព័រទាំងអស់ ${ps.length} →`))}</button>`:''}</section>`}
+function item(s,p){const num=/^[\d,]+$/.test(p.bd||'');return `<button class="it" data-open="${s.id}" data-k="${E(p.k)}"><span class="ic">${E(p.ic||'•')}</span><span class="lb">${E(nm(p))}</span>${p.bd?`<span class="bd${num&&p.bd.length>2?' n':''}">${E(p.bd)}</span>`:''}</button>`}
+function markActive(scroll){let on=null;$('menu').querySelectorAll('.it[data-open]').forEach(b=>{const a=b.dataset.open===cur&&b.dataset.k===curKey;b.classList.toggle('on',a);if(a)on=b});if(on&&scroll)on.scrollIntoView({block:'nearest'})}
+function openMenu(){document.body.classList.add('menu')}function closeMenu(){document.body.classList.remove('menu')}
+
+/* ---------- home: status on top, then the process map (top→bottom = systems, left→right = steps) ---------- */
 function drawHome(){
  const d=new Date(),day=d.toLocaleDateString(lang==='zh'?'zh-TW':lang==='km'?'km-KH':'en-GB',{timeZone:'Asia/Phnom_Penh',weekday:'long',year:'numeric',month:'long',day:'numeric'});
- const q=($('q')&&$('q').value)||'';
- $('home').innerHTML=`<div class="top"><div><h1>VRT OS</h1><p>${E(day)} · ${E(t('四套系統，一個工作台','Four systems, one workspace','ប្រព័ន្ធបួន កន្លែងធ្វើការមួយ'))}</p></div><div class="sp"></div>
-  <button class="btn pri" id="upd">↻ <span>${E(t('全部更新','Update all','ធ្វើបច្ចុប្បន្នភាពទាំងអស់'))}</span></button>
-  <select class="btn" id="lang" aria-label="Language"><option value="zh">繁中</option><option value="en">EN</option><option value="km">ខ្មែរ</option></select></div>
- <label class="search"><span>🔎</span><input id="q" autocomplete="off" spellcheck="false" placeholder="${E(t('找任何頁面：薪資、訂單、宿舍、DCC、出勤…','Find any page: payroll, orders, dormitory, DCC…','ស្វែងរកទំព័រ…'))}" value="${E(q)}"><kbd>/</kbd></label>
- <div id="results"></div>
- ${recents.length?`<div class="sec">${E(t('最近開過','RECENT','ថ្មីៗ'))}</div><div class="row">${recents.map(r=>{const s=byId(r.s);return s?`<button class="chip" style="--c:${s.color}" data-open="${r.s}" data-k="${E(r.k)}">${E(r.ic||'')} ${E(lang==='zh'?r.zh:r.en)} <span class="tag" style="--c:${s.color}">${E(nm(s))}</span></button>`:''}).join('')}</div>`:''}
- <div class="grid">${SYS.map(sysCard).join('')}</div>
- <div class="sec">${E(t('行政工具','ADMIN TOOLS','ឧបករណ៍រដ្ឋបាល'))}</div><div class="row">${ADMIN.map(a=>`<button class="chip" style="--c:#16212b" data-open="admin" data-k="${E(a.k)}">${a.ic} ${E(nm(a))}</button>`).join('')}</div>
- <footer><span>VRT OS v${E(CFG.version||'2.0.0')} · Vantage River Textiles</span><a href="/vrt-acc-flow-cost/index.html">${E(t('學習／個人 → ACC Flow','Learning / personal → ACC Flow','ការសិក្សា → ACC Flow'))}</a></footer>`;
- $('lang').value=lang;$('lang').onchange=()=>{lang=$('lang').value;put('ac_admin_lang',lang);document.documentElement.lang=lang==='zh'?'zh-Hant':lang;drawRail();drawHome()};
- $('upd').onclick=updateAll;$('upd').disabled=syncing;
- const inp=$('q'),box=$('results'),run=()=>{selIdx=0;const list=find(inp.value);box.innerHTML=resHTML(list,inp.value.trim());box.classList.toggle('on',!!inp.value.trim());bindRes(box)};
- inp.oninput=run;inp.onkeydown=e=>{if(e.key==='Enter'){const b=box.querySelector('.res');if(b)b.click()}};if(q)run();
- bindRes($('home'));$('home').querySelectorAll('[data-all]').forEach(b=>b.onclick=()=>{openPal();$('palq').value=nm(byId(b.dataset.all))+' ';palRun()});
- paintStatus();
+ const lane=s=>{const gs=groupsOf(s).map(G=>({g:G.g,items:G.items.filter(p=>!HIDE.test(p.k))})).filter(G=>G.items.length);
+  return `<section class="lane" style="--c:${s.color}"><header><span>${s.icon}</span><span>${E(nm(s))}</span><span class="tg">${E(s.tag||'')}</span><button class="go" data-open="${s.id}" data-k="">${E(t('進入','Open','បើក'))}</button></header>
+  <div class="steps">${gs.map((G,i)=>`<div class="step"><h3><i>${i+1}</i>${E(G.g||nm(s))}</h3>${G.items.map(p=>`<button class="pg" data-open="${s.id}" data-k="${E(p.k)}"><span class="ic">${E(p.ic||'•')}</span><span>${E(nm(p))}</span></button>`).join('')}</div>`).join('')}</div></section>`};
+ $('home').innerHTML=`<div id="mtop"><button id="mmenu" aria-label="Menu">☰</button><b>VRT OS</b></div>
+ <div class="top"><div><h1>VRT OS</h1><p>${E(day)} · ${E(t('四套系統，一個工作台','Four systems, one workspace','ប្រព័ន្ធបួន កន្លែងធ្វើការមួយ'))}</p></div></div>
+ <div class="kpis">${SYS.map(s=>`<button class="kpi" style="--c:${s.color}" data-open="${s.id}" data-k=""><span class="h"><span>${s.icon}</span>${E(nm(s))}</span><small>${E(nm(s.sub))}</small><span class="s"><span class="dot ${(status[s.id]||{}).state||''}" data-dot="${s.id}"></span><span data-st="${s.id}">${E(stText(s))}</span></span></button>`).join('')}</div>
+ ${recents.length?`<div class="sec">${E(t('最近開過','RECENT','ថ្មីៗ'))}</div><div class="row">${recents.map(r=>{const s=byId(r.s);return s?`<button class="chip" data-open="${r.s}" data-k="${E(r.k)}">${E(r.ic||'')} ${E(lang==='zh'?r.zh:r.en)} <span class="tag" style="--c:${s.color}">${E(s.tag||nm(s))}</span></button>`:''}).join('')}</div>`:''}
+ <div class="sec">${E(t('流程總圖　由上到下：接單生產 → 人 → 廠區 → 合規　｜　由左到右：每套系統的作業順序','PROCESS MAP — top to bottom: order & production → people → site → compliance | left to right: the working order inside each','ផែនទីដំណើរការ'))}</div>
+ ${SYS.map(lane).join('')}
+ <div class="sec">${E(t('行政工具','ADMIN TOOLS','ឧបករណ៍រដ្ឋបាល'))}</div><div class="row">${ADMIN.map(a=>`<button class="chip" data-open="admin" data-k="${E(a.k)}">${a.ic} ${E(nm(a))}</button>`).join('')}</div>
+ <footer><span>VRT OS v${E(CFG.version||'2.1.0')} · Vantage River Textiles</span><a href="/vrt-acc-flow-cost/index.html">${E(t('學習／個人 → ACC Flow','Learning / personal → ACC Flow','ការសិក្សា → ACC Flow'))}</a></footer>`;
+ $('home').querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>open(b.dataset.open,b.dataset.k));
+ $('mmenu').onclick=openMenu;paintStatus();
 }
-/* ---------- palette (desktop Ctrl+K or /, phone: the round VRT button) ---------- */
-function palRun(){selIdx=0;const q=$('palq').value,list=q.trim()?find(q):recents.map(r=>{const s=byId(r.s);return s&&{s,p:{k:r.k,zh:r.zh,en:r.en,ic:r.ic,g:t('最近開過','Recent','ថ្មីៗ'),ge:'Recent'}}}).filter(Boolean);$('pallist').innerHTML=resHTML(list,q.trim());bindRes($('pallist'))}
-function openPal(){$('pal').classList.add('on');$('palq').placeholder=t('切換系統，或輸入頁面名稱…','Switch system or type a page name…','ប្ដូរប្រព័ន្ធ ឬវាយឈ្មោះទំព័រ…');$('palq').value='';palRun();if(matchMedia('(min-width:761px)').matches)$('palq').focus()}
-function closePal(){$('pal').classList.remove('on')}
-$('palq').oninput=palRun;
-$('palq').onkeydown=e=>{const rs=[...$('pallist').querySelectorAll('.res')];if(e.key==='Enter'&&rs[selIdx])rs[selIdx].click();else if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();selIdx=Math.max(0,Math.min(rs.length-1,selIdx+(e.key==='ArrowDown'?1:-1)));rs.forEach((r,i)=>r.classList.toggle('sel',i===selIdx));rs[selIdx]&&rs[selIdx].scrollIntoView({block:'nearest'})}};
-$('pal').onclick=e=>{if(e.target===$('pal'))closePal()};
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closePal();else if((e.key==='k'&&(e.ctrlKey||e.metaKey))||(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))){e.preventDefault();if(cur==='home'&&e.key==='/'&&$('q'))$('q').focus();else openPal()}});
-/* phone: one small round button, draggable up and down, so the system keeps the whole screen */
+function chrome(){ $('brandsub').textContent=t('行政中心 · Vantage River Textiles','Admin Center · Vantage River Textiles','Vantage River Textiles');$('find').placeholder=t('找頁面：薪資、訂單、宿舍…','Find a page…','ស្វែងរកទំព័រ…');$('upd').innerHTML='↻ '+E(t('全部更新','Update all','ធ្វើបច្ចុប្បន្នភាព'));$('lang').value=lang;document.documentElement.lang=lang==='zh'?'zh-Hant':lang}
+$('lang').onchange=()=>{lang=$('lang').value;put('ac_admin_lang',lang);chrome();drawMenu();if(cur==='home')drawHome()};
+$('upd').onclick=updateAll;$('brand').onclick=goHome;$('shade').onclick=closeMenu;
+$('find').oninput=drawMenu;
+$('find').onkeydown=e=>{if(e.key==='Enter'){const b=$('menu').querySelector('.it[data-open]');if(b)b.click()}else if(e.key==='Escape'){$('find').value='';drawMenu();$('find').blur()}};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();else if((e.key==='k'&&(e.ctrlKey||e.metaKey))||(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))){e.preventDefault();openMenu();$('find').focus();$('find').select()}});
+/* phone: one small round button (drag it up or down) opens the same left menu, so the page keeps the whole screen */
 (function(){const f=$('fab');let y0=null,moved=false,top=get('vrt_os_fab_top',null);if(top!==null)f.style.top=top+'px';
  f.addEventListener('pointerdown',e=>{y0=e.clientY-f.getBoundingClientRect().top;moved=false;f.setPointerCapture(e.pointerId)});
  f.addEventListener('pointermove',e=>{if(y0===null)return;const y=Math.max(8,Math.min(innerHeight-56,e.clientY-y0));if(Math.abs(y-f.getBoundingClientRect().top)>4)moved=true;if(moved)f.style.top=y+'px'});
- f.addEventListener('pointerup',()=>{if(y0===null)return;y0=null;if(moved)put('vrt_os_fab_top',parseInt(f.style.top,10));else if($('pal').classList.contains('on'))closePal();else openPal()});})();
+ f.addEventListener('pointerup',()=>{if(y0===null)return;y0=null;if(moved)put('vrt_os_fab_top',parseInt(f.style.top,10));else openMenu()});})();
 function toast(m,ms){const e=$('toast');e.textContent=m;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',ms||3500)}
 
 window.addEventListener('hashchange',route);window.addEventListener('popstate',route);
-document.documentElement.lang=lang==='zh'?'zh-Hant':lang;
-drawRail();drawHome();route();
-/* check the four clouds on arrival; nothing to press, no sign-in window */
+if(narrow()&&!get('vrt_os_shut_v1',null)){SYS.slice(1).forEach(s=>shut.add(s.id));shut.add('admin')}
+chrome();drawMenu();drawHome();route();
 SYS.forEach(s=>{const x=status[s.id];if(!x||x.state!=='ok'||Date.now()-x.at>5*60*1000)probe(s);else paintStatus()});
 })();
 </script>
