@@ -1,11 +1,82 @@
 window.AC_CONFIG = {
   "appName": "AC Admin Center",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "repo": "ac-admin",
   "gasProject": "AC_ADMIN_CENTER",
   "telegramBot": "ac_admin_center_bot",
   "platformOwner": "saintdou-weng",
   "platforms": [
+    {
+      "id": "psjhr",
+      "name": "VRT HR (PSJHR)",
+      "zh": "人事系統 VRT HR",
+      "km": "ប្រព័ន្ធ HR",
+      "icon": "🧑‍💼",
+      "repo": "psjhr",
+      "url": "https://saintdou-weng.github.io/psjhr/",
+      "gas": "https://script.google.com/macros/s/AKfycbx9Pdt5vu_AcTHCrlLH4lcVONXS_VoE47SEjDUn7Iv27C2CRgoADRLpalVIJQHWBcqK/exec",
+      "probe": "ping",
+      "identity": [
+        "psjhr",
+        "hr"
+      ],
+      "localKeys": [],
+      "quick": [],
+      "source": "ERP module added 2026-11-10"
+    },
+    {
+      "id": "psjerp",
+      "name": "VRT ERP (PSJERP)",
+      "zh": "ERP 系統 VRT ERP",
+      "km": "ប្រព័ន្ធ ERP",
+      "icon": "🗂️",
+      "repo": "PSJERP",
+      "url": "https://saintdou-weng.github.io/PSJERP/",
+      "gas": "https://script.google.com/macros/s/AKfycbzyAaaKlMGdot9YtYAlBp-dktm2xRr_aHbOcQ-TNfouERMjuq4iCfRhCY0_3LsPa2mL/exec",
+      "probe": "ping",
+      "identity": [
+        "psjerp",
+        "erp"
+      ],
+      "localKeys": [],
+      "quick": [
+        {
+          "label": {
+            "zh": "生產",
+            "en": "Production",
+            "km": "ផលិតកម្ម"
+          },
+          "url": "https://saintdou-weng.github.io/PSJERP/?s=prod"
+        },
+        {
+          "label": {
+            "zh": "財務／會計",
+            "en": "Finance",
+            "km": "ហិរញ្ញវត្ថុ"
+          },
+          "url": "https://saintdou-weng.github.io/PSJERP/?s=fin"
+        }
+      ],
+      "source": "ERP module added 2026-11-10"
+    },
+    {
+      "id": "psjga",
+      "name": "VRT GA (PSJGA)",
+      "zh": "總務系統 VRT GA",
+      "km": "ប្រព័ន្ធ GA",
+      "icon": "🧹",
+      "repo": "PSJGAS",
+      "url": "https://saintdou-weng.github.io/PSJGAS/",
+      "gas": "https://script.google.com/macros/s/AKfycbzE50qR1ZV83_ywYEXlgnHJ16reJKvrttFSV4s37yVIqIVPseXEf4w2ZVCCM2GSmM7NXw/exec",
+      "probe": "ping",
+      "identity": [
+        "psjga",
+        "ga"
+      ],
+      "localKeys": [],
+      "quick": [],
+      "source": "ERP module added 2026-11-10"
+    },
     {
       "id": "hra",
       "name": "AC-HRA Portal",
@@ -293,7 +364,7 @@ window.AC_CONFIG = {
       "km": "គណនេយ្យ និងថ្លៃដើមផលិតកម្ម",
       "icon": "📊",
       "repo": "vrt-acc-flow-cost",
-      "url": "https://saintdou-weng.github.io/vrt-acc-flow-cost/index.html",
+      "url": "https://saintdou-weng.github.io/PSJERP/?s=fin#acc-overview",
       "gas": "https://script.google.com/macros/s/AKfycbzojXP0ixSsJqO1Ri2lfkdazTF-9XxoDqRYI0B4OEThkvjc95zacRflYtuArOd8ewHp/exec",
       "localKeys": [],
       "identity": [
@@ -304,22 +375,30 @@ window.AC_CONFIG = {
       "quick": [
         {
           "label": {
-            "zh": "人工成本",
-            "en": "Labour cost",
-            "km": "ថ្លៃពលកម្ម"
+            "zh": "WIP",
+            "en": "WIP",
+            "km": "WIP"
           },
-          "url": "https://saintdou-weng.github.io/vrt-acc-flow-cost/modules/salary-management.html"
+          "url": "https://saintdou-weng.github.io/PSJERP/?s=fin#acc-wip"
         },
         {
           "label": {
-            "zh": "工廠地圖",
-            "en": "Factory map",
-            "km": "ផែនទីរោងចក្រ"
+            "zh": "成品入庫",
+            "en": "FG inbound",
+            "km": "FG"
           },
-          "url": "https://saintdou-weng.github.io/vrt-acc-flow-cost/factory-map.html"
+          "url": "https://saintdou-weng.github.io/PSJERP/?s=fin#acc-fg"
+        },
+        {
+          "label": {
+            "zh": "製造費用",
+            "en": "Factory expense",
+            "km": "ចំណាយរោងចក្រ"
+          },
+          "url": "https://saintdou-weng.github.io/PSJERP/?s=fin#acc-expense"
         }
       ],
-      "source": "Repository source checked 2026-09-06"
+      "source": "Accounting pages shown in PSJERP finance since 2026-11-06; launcher repointed 2026-11-10"
     },
     {
       "id": "salary",
@@ -338,8 +417,9 @@ window.AC_CONFIG = {
       "source": "Current repository salary-management.html read 2026-09-13; original archive retained"
     }
   ],
-  "verifiedAt": "2026-09-13",
+  "verifiedAt": "2026-11-10",
   "timezone": "Asia/Phnom_Penh",
   "hubUrl": "https://script.google.com/macros/s/AKfycbyEWtDE39lzCC_qAIyXNTojWOHlAJj35hnBcj3ayePtJOBhG_zydaQ60AaI2NkMCyo2/exec",
-  "authMode": "google-owner"
+  "authMode": "google-owner",
+  "learningHub": "https://saintdou-weng.github.io/vrt-acc-flow-cost/learn/"
 };
