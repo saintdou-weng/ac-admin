@@ -1,6 +1,6 @@
 window.AC_CONFIG = {
   "appName": "AC Admin Center",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "repo": "ac-admin",
   "gasProject": "AC_ADMIN_CENTER",
   "telegramBot": "ac_admin_center_bot",
@@ -1077,25 +1077,25 @@ window.AC_CONFIG = {
       "name": "AC Audit",
       "mode": "file",
       "url": "https://saintdou-weng.github.io/ac-audit/",
-      "home": "audit_hub_main.html",
+      "home": "ac_audit_platform_v1.html",
       "gas": "https://script.google.com/macros/s/AKfycbxN61TQr2S_tKxSgGKJe_yjNVpPAdu_YRw-8pByWiHDCWdJpcGNCk2c2Li1yGQdkRcB_Q/exec",
       "probe": "ping",
       "pages": [
         {
+          "k": "ac_audit_platform_v1.html",
+          "zh": "稽核總覽",
+          "en": "Audit overview",
+          "g": "驗廠評鑑",
+          "ge": "Assessment",
+          "ic": "🧭"
+        },
+        {
           "k": "audit_hub_main.html",
-          "zh": "驗廠評鑑總覽",
+          "zh": "驗廠評鑑表",
           "en": "Compliance assessment",
           "g": "驗廠評鑑",
           "ge": "Assessment",
           "ic": "📋"
-        },
-        {
-          "k": "ac_audit_platform_v1.html",
-          "zh": "稽核入口",
-          "en": "Audit portal",
-          "g": "驗廠評鑑",
-          "ge": "Assessment",
-          "ic": "🧭"
         },
         {
           "k": "wse_audit_v1.html",
