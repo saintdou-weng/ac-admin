@@ -1,6 +1,6 @@
 window.AC_CONFIG = {
   "appName": "AC Admin Center",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "repo": "ac-admin",
   "gasProject": "AC_ADMIN_CENTER",
   "telegramBot": "ac_admin_center_bot",
@@ -424,12 +424,209 @@ window.AC_CONFIG = {
   "learningHub": "https://saintdou-weng.github.io/vrt-acc-flow-cost/learn/",
   "systems": [
     {
+      "id": "erp",
+      "icon": "🏭",
+      "color": "#0d8074",
+      "zh": "生產營運",
+      "en": "Production & ERP",
+      "km": "ផលិតកម្ម ERP",
+      "sub": {
+        "zh": "訂單・物料・生產・成本",
+        "en": "Orders · materials · production · cost",
+        "km": "បញ្ជាទិញ · ផលិតកម្ម · ថ្លៃដើម"
+      },
+      "name": "VRT ERP",
+      "mode": "hash",
+      "url": "https://saintdou-weng.github.io/PSJERP/",
+      "gas": "https://script.google.com/macros/s/AKfycbzyAaaKlMGdot9YtYAlBp-dktm2xRr_aHbOcQ-TNfouERMjuq4iCfRhCY0_3LsPa2mL/exec",
+      "probe": "ping",
+      "pages": [
+        {
+          "k": "dashboard",
+          "zh": "總覽",
+          "en": "Overview",
+          "g": "總覽",
+          "ge": "Overview",
+          "ic": "📊"
+        },
+        {
+          "k": "smart-import",
+          "zh": "智慧匯入",
+          "en": "Smart import",
+          "g": "總覽",
+          "ge": "Overview",
+          "ic": "🧠"
+        },
+        {
+          "k": "orders",
+          "zh": "訂單 / PO",
+          "en": "Orders / PO",
+          "g": "訂單與物料",
+          "ge": "Orders & materials",
+          "ic": "🧾"
+        },
+        {
+          "k": "bom",
+          "zh": "BOM 用料",
+          "en": "BOM",
+          "g": "訂單與物料",
+          "ge": "Orders & materials",
+          "ic": "🧵"
+        },
+        {
+          "k": "purchase",
+          "zh": "採購",
+          "en": "Purchasing",
+          "g": "訂單與物料",
+          "ge": "Orders & materials",
+          "ic": "🛒"
+        },
+        {
+          "k": "pprice",
+          "zh": "採購單價",
+          "en": "Purchase prices",
+          "g": "訂單與物料",
+          "ge": "Orders & materials",
+          "ic": "🏷️"
+        },
+        {
+          "k": "receiving",
+          "zh": "進貨驗收",
+          "en": "Receiving",
+          "g": "訂單與物料",
+          "ge": "Orders & materials",
+          "ic": "📥"
+        },
+        {
+          "k": "fabric",
+          "zh": "布料",
+          "en": "Fabric",
+          "g": "訂單與物料",
+          "ge": "Orders & materials",
+          "ic": "🧶"
+        },
+        {
+          "k": "accessories",
+          "zh": "輔料",
+          "en": "Trims",
+          "g": "訂單與物料",
+          "ge": "Orders & materials",
+          "ic": "🧷"
+        },
+        {
+          "k": "stockmove",
+          "zh": "主副料進耗存",
+          "en": "Material movement",
+          "g": "訂單與物料",
+          "ge": "Orders & materials",
+          "ic": "🔁"
+        },
+        {
+          "k": "production",
+          "zh": "生產",
+          "en": "Production",
+          "g": "生產與出貨",
+          "ge": "Production & shipping",
+          "ic": "🏭"
+        },
+        {
+          "k": "wip",
+          "zh": "在製 WIP",
+          "en": "WIP",
+          "g": "生產與出貨",
+          "ge": "Production & shipping",
+          "ic": "⏳"
+        },
+        {
+          "k": "finished-goods",
+          "zh": "成品入庫",
+          "en": "FG inbound",
+          "g": "生產與出貨",
+          "ge": "Production & shipping",
+          "ic": "📦"
+        },
+        {
+          "k": "fgstock",
+          "zh": "成品庫存",
+          "en": "FG stock",
+          "g": "生產與出貨",
+          "ge": "Production & shipping",
+          "ic": "🗃️"
+        },
+        {
+          "k": "shipping",
+          "zh": "出貨",
+          "en": "Shipping",
+          "g": "生產與出貨",
+          "ge": "Production & shipping",
+          "ic": "🚢"
+        },
+        {
+          "k": "factory-cost",
+          "zh": "製造費用",
+          "en": "Factory cost",
+          "g": "成本",
+          "ge": "Cost",
+          "ic": "💰"
+        },
+        {
+          "k": "labor",
+          "zh": "人工彙總",
+          "en": "Labour summary",
+          "g": "成本",
+          "ge": "Cost",
+          "ic": "👷"
+        },
+        {
+          "k": "costing",
+          "zh": "成本分析",
+          "en": "Costing",
+          "g": "成本",
+          "ge": "Cost",
+          "ic": "🧮"
+        },
+        {
+          "k": "sync",
+          "zh": "同步中心",
+          "en": "Sync centre",
+          "g": "資料中樞",
+          "ge": "Data hub",
+          "ic": "🔄"
+        },
+        {
+          "k": "compare",
+          "zh": "比對中心",
+          "en": "Compare",
+          "g": "資料中樞",
+          "ge": "Data hub",
+          "ic": "🔍"
+        },
+        {
+          "k": "exceptions",
+          "zh": "異常中心",
+          "en": "Exceptions",
+          "g": "資料中樞",
+          "ge": "Data hub",
+          "ic": "⚠️"
+        },
+        {
+          "k": "reports",
+          "zh": "報告",
+          "en": "Reports",
+          "g": "資料中樞",
+          "ge": "Data hub",
+          "ic": "📑"
+        }
+      ],
+      "tag": "ERP"
+    },
+    {
       "id": "hr",
       "icon": "🧑‍💼",
       "color": "#2563eb",
-      "zh": "人事",
-      "en": "HR",
-      "km": "HR",
+      "zh": "人事薪資",
+      "en": "HR & Payroll",
+      "km": "ធនធានមនុស្ស",
       "sub": {
         "zh": "員工・出勤・薪資福利",
         "en": "People · attendance · pay",
@@ -625,211 +822,16 @@ window.AC_CONFIG = {
           "ge": "Data hub",
           "ic": "📑"
         }
-      ]
-    },
-    {
-      "id": "erp",
-      "icon": "🏭",
-      "color": "#0d8074",
-      "zh": "生產財務",
-      "en": "ERP",
-      "km": "ERP",
-      "sub": {
-        "zh": "訂單・物料・生產・成本",
-        "en": "Orders · materials · production · cost",
-        "km": "បញ្ជាទិញ · ផលិតកម្ម · ថ្លៃដើម"
-      },
-      "name": "VRT ERP",
-      "mode": "hash",
-      "url": "https://saintdou-weng.github.io/PSJERP/",
-      "gas": "https://script.google.com/macros/s/AKfycbzyAaaKlMGdot9YtYAlBp-dktm2xRr_aHbOcQ-TNfouERMjuq4iCfRhCY0_3LsPa2mL/exec",
-      "probe": "ping",
-      "pages": [
-        {
-          "k": "dashboard",
-          "zh": "總覽",
-          "en": "Overview",
-          "g": "總覽",
-          "ge": "Overview",
-          "ic": "📊"
-        },
-        {
-          "k": "smart-import",
-          "zh": "智慧匯入",
-          "en": "Smart import",
-          "g": "總覽",
-          "ge": "Overview",
-          "ic": "🧠"
-        },
-        {
-          "k": "orders",
-          "zh": "訂單 / PO",
-          "en": "Orders / PO",
-          "g": "訂單與物料",
-          "ge": "Orders & materials",
-          "ic": "🧾"
-        },
-        {
-          "k": "bom",
-          "zh": "BOM 用料",
-          "en": "BOM",
-          "g": "訂單與物料",
-          "ge": "Orders & materials",
-          "ic": "🧵"
-        },
-        {
-          "k": "purchase",
-          "zh": "採購",
-          "en": "Purchasing",
-          "g": "訂單與物料",
-          "ge": "Orders & materials",
-          "ic": "🛒"
-        },
-        {
-          "k": "pprice",
-          "zh": "採購單價",
-          "en": "Purchase prices",
-          "g": "訂單與物料",
-          "ge": "Orders & materials",
-          "ic": "🏷️"
-        },
-        {
-          "k": "receiving",
-          "zh": "進貨驗收",
-          "en": "Receiving",
-          "g": "訂單與物料",
-          "ge": "Orders & materials",
-          "ic": "📥"
-        },
-        {
-          "k": "fabric",
-          "zh": "布料",
-          "en": "Fabric",
-          "g": "訂單與物料",
-          "ge": "Orders & materials",
-          "ic": "🧶"
-        },
-        {
-          "k": "accessories",
-          "zh": "輔料",
-          "en": "Trims",
-          "g": "訂單與物料",
-          "ge": "Orders & materials",
-          "ic": "🧷"
-        },
-        {
-          "k": "stockmove",
-          "zh": "主副料進耗存",
-          "en": "Material movement",
-          "g": "訂單與物料",
-          "ge": "Orders & materials",
-          "ic": "🔁"
-        },
-        {
-          "k": "production",
-          "zh": "生產",
-          "en": "Production",
-          "g": "生產與出貨",
-          "ge": "Production & shipping",
-          "ic": "🏭"
-        },
-        {
-          "k": "wip",
-          "zh": "在製 WIP",
-          "en": "WIP",
-          "g": "生產與出貨",
-          "ge": "Production & shipping",
-          "ic": "⏳"
-        },
-        {
-          "k": "finished-goods",
-          "zh": "成品入庫",
-          "en": "FG inbound",
-          "g": "生產與出貨",
-          "ge": "Production & shipping",
-          "ic": "📦"
-        },
-        {
-          "k": "fgstock",
-          "zh": "成品庫存",
-          "en": "FG stock",
-          "g": "生產與出貨",
-          "ge": "Production & shipping",
-          "ic": "🗃️"
-        },
-        {
-          "k": "shipping",
-          "zh": "出貨",
-          "en": "Shipping",
-          "g": "生產與出貨",
-          "ge": "Production & shipping",
-          "ic": "🚢"
-        },
-        {
-          "k": "factory-cost",
-          "zh": "製造費用",
-          "en": "Factory cost",
-          "g": "成本",
-          "ge": "Cost",
-          "ic": "💰"
-        },
-        {
-          "k": "labor",
-          "zh": "人工彙總",
-          "en": "Labour summary",
-          "g": "成本",
-          "ge": "Cost",
-          "ic": "👷"
-        },
-        {
-          "k": "costing",
-          "zh": "成本分析",
-          "en": "Costing",
-          "g": "成本",
-          "ge": "Cost",
-          "ic": "🧮"
-        },
-        {
-          "k": "sync",
-          "zh": "同步中心",
-          "en": "Sync centre",
-          "g": "資料中樞",
-          "ge": "Data hub",
-          "ic": "🔄"
-        },
-        {
-          "k": "compare",
-          "zh": "比對中心",
-          "en": "Compare",
-          "g": "資料中樞",
-          "ge": "Data hub",
-          "ic": "🔍"
-        },
-        {
-          "k": "exceptions",
-          "zh": "異常中心",
-          "en": "Exceptions",
-          "g": "資料中樞",
-          "ge": "Data hub",
-          "ic": "⚠️"
-        },
-        {
-          "k": "reports",
-          "zh": "報告",
-          "en": "Reports",
-          "g": "資料中樞",
-          "ge": "Data hub",
-          "ic": "📑"
-        }
-      ]
+      ],
+      "tag": "HR"
     },
     {
       "id": "ga",
       "icon": "🧹",
       "color": "#8760c8",
       "zh": "總務保全",
-      "en": "GA",
-      "km": "GA",
+      "en": "GA & Security",
+      "km": "កិច្ចការទូទៅ",
       "sub": {
         "zh": "保全・巡檢・宿舍・採購費用",
         "en": "Security · inspections · dorms · expense",
@@ -1057,15 +1059,16 @@ window.AC_CONFIG = {
           "ge": "Procurement & expense",
           "ic": "🧾"
         }
-      ]
+      ],
+      "tag": "GA"
     },
     {
       "id": "audit",
       "icon": "📋",
       "color": "#c2410c",
       "zh": "驗廠合規",
-      "en": "Audit",
-      "km": "សវនកម្ម",
+      "en": "Compliance",
+      "km": "អនុលោមភាព",
       "sub": {
         "zh": "驗廠評鑑・文件・法規・培訓",
         "en": "Assessment · documents · law · training",
@@ -1174,7 +1177,8 @@ window.AC_CONFIG = {
           "ge": "Training & incidents",
           "ic": "📝"
         }
-      ]
+      ],
+      "tag": "AUDIT"
     }
   ]
 };
