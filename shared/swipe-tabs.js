@@ -1,4 +1,4 @@
-/* VRT swipe-tabs v1.0 (2026-11-11)  https://saintdou-weng.github.io/ac-admin/shared/swipe-tabs.js
+/* VRT swipe-tabs v1.1 (2026-11-11)  https://saintdou-weng.github.io/ac-admin/shared/swipe-tabs.js
    Swipe left / right (finger, mouse drag or trackpad) to move to the next / previous tab of the page.
    One file for every VRT system. It only LISTENS and then presses the page's own tab, exactly as a tap would:
    - never calls preventDefault on touches, never changes styles, data or storage;
@@ -158,6 +158,9 @@
   function attach(doc) {
     if (!doc || doc.__vrtSwipe || !doc.documentElement) return false;
     doc.__vrtSwipe = true;
+    /* a sideways swipe that the page has nothing to scroll with must not be taken by the browser as "go back / forward"
+       (Chrome, Edge, Android). Has no effect on scrolling inside the page. iPhone's own edge-of-screen swipe cannot be switched off. */
+    try { doc.documentElement.style.overscrollBehaviorX = 'none'; } catch (e) {}
     var win = doc.defaultView, t = null, lastAt = 0;
     function fire(dir, y) { var now = Date.now(); if (now - lastAt < 350) return false; var ok = move(doc, dir, y); if (ok) lastAt = now; return ok; }
 
@@ -219,7 +222,7 @@
   }
   function watch(win, skipSelf) { sweep(win, skipSelf); return win.setInterval(function () { sweep(win, skipSelf); }, 800); }
 
-  root.VRTSwipeTabs = { attach: attach, sweep: sweep, watch: watch, groups: groups, move: move, blocked: blocked, version: '1.0' };
+  root.VRTSwipeTabs = { attach: attach, sweep: sweep, watch: watch, groups: groups, move: move, blocked: blocked, version: '1.1' };
   /* a page that includes this file gets it for itself and its frames; the VRT OS shell sets data-host to keep its own home page out */
   var me = document.currentScript, host = me && me.getAttribute('data-host') === 'shell';
   var start = function () { watch(root, host); };
