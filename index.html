@@ -358,5 +358,7 @@ chrome();drawMenu();drawHome();route();
 SYS.forEach(s=>{const x=status[s.id];if(!x||x.state!=='ok'||Date.now()-x.at>5*60*1000)probe(s);else paintStatus()});
 })();
 </script>
+<!-- 左右滑動切換分頁：掛到每一個內嵌系統頁面（首頁本身的摘要輪播不受影響） -->
+<script src="shared/swipe-tabs.js" data-host="shell" defer></script>
 </body>
 </html>
