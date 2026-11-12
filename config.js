@@ -1,6 +1,6 @@
 window.AC_CONFIG = {
   "appName": "AC Admin Center",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "repo": "ac-admin",
   "gasProject": "AC_ADMIN_CENTER",
   "telegramBot": "ac_admin_center_bot",
@@ -450,172 +450,156 @@ window.AC_CONFIG = {
           "ic": "📊"
         },
         {
-          "k": "smart-import",
-          "zh": "智慧匯入",
-          "en": "Smart import",
+          "k": "inbox",
+          "zh": "收件匣・匯入",
+          "en": "Inbox · import",
           "g": "總覽",
           "ge": "Overview",
-          "ic": "🧠"
+          "ic": "📥"
         },
         {
-          "k": "orders",
-          "zh": "訂單 / PO",
-          "en": "Orders / PO",
-          "g": "訂單與物料",
-          "ge": "Orders & materials",
-          "ic": "🧾"
+          "k": "prodreports",
+          "zh": "生產報告",
+          "en": "Production reports",
+          "g": "總覽",
+          "ge": "Overview",
+          "ic": "📰"
+        },
+        {
+          "k": "ordercenter",
+          "zh": "訂單中心",
+          "en": "Order centre",
+          "g": "接單",
+          "ge": "Orders",
+          "ic": "🧭"
+        },
+        {
+          "k": "styles",
+          "zh": "款式 SMV",
+          "en": "Styles · SMV",
+          "g": "接單",
+          "ge": "Orders",
+          "ic": "👕"
         },
         {
           "k": "bom",
-          "zh": "BOM 用料",
+          "zh": "BOM",
           "en": "BOM",
-          "g": "訂單與物料",
-          "ge": "Orders & materials",
+          "g": "接單",
+          "ge": "Orders",
           "ic": "🧵"
         },
         {
           "k": "purchase",
-          "zh": "採購",
+          "zh": "採購與進貨",
           "en": "Purchasing",
-          "g": "訂單與物料",
-          "ge": "Orders & materials",
+          "g": "備料",
+          "ge": "Materials",
           "ic": "🛒"
         },
         {
-          "k": "pprice",
-          "zh": "採購單價",
-          "en": "Purchase prices",
-          "g": "訂單與物料",
-          "ge": "Orders & materials",
-          "ic": "🏷️"
-        },
-        {
-          "k": "receiving",
-          "zh": "進貨驗收",
-          "en": "Receiving",
-          "g": "訂單與物料",
-          "ge": "Orders & materials",
-          "ic": "📥"
+          "k": "materials",
+          "zh": "料品・領料・進耗存",
+          "en": "Materials · issue · stock",
+          "g": "備料",
+          "ge": "Materials",
+          "ic": "🗂️"
         },
         {
           "k": "fabric",
-          "zh": "布料",
+          "zh": "布料與輔料庫存",
           "en": "Fabric",
-          "g": "訂單與物料",
-          "ge": "Orders & materials",
+          "g": "備料",
+          "ge": "Materials",
           "ic": "🧶"
         },
         {
-          "k": "accessories",
-          "zh": "輔料",
-          "en": "Trims",
-          "g": "訂單與物料",
-          "ge": "Orders & materials",
-          "ic": "🧷"
+          "k": "p-prodplan",
+          "zh": "排單・裁剪",
+          "en": "Planning · cutting",
+          "g": "生產",
+          "ge": "Production",
+          "ic": "📅"
         },
         {
-          "k": "stockmove",
-          "zh": "主副料進耗存",
-          "en": "Material movement",
-          "g": "訂單與物料",
-          "ge": "Orders & materials",
-          "ic": "🔁"
+          "k": "p-sewing",
+          "zh": "車縫・在製・總覽",
+          "en": "Sewing · WIP · overview",
+          "g": "生產",
+          "ge": "Production",
+          "ic": "🪡"
         },
         {
-          "k": "production",
-          "zh": "生產",
-          "en": "Production",
-          "g": "生產與出貨",
-          "ge": "Production & shipping",
-          "ic": "🏭"
+          "k": "p-qc",
+          "zh": "Final QC",
+          "en": "Final QC",
+          "g": "生產",
+          "ge": "Production",
+          "ic": "✅"
         },
         {
-          "k": "wip",
-          "zh": "在製 WIP",
-          "en": "WIP",
-          "g": "生產與出貨",
-          "ge": "Production & shipping",
-          "ic": "⏳"
+          "k": "p-spare",
+          "zh": "機修零件",
+          "en": "Machine spare parts",
+          "g": "生產",
+          "ge": "Production",
+          "ic": "🔧"
         },
         {
           "k": "finished-goods",
-          "zh": "成品入庫",
+          "zh": "成品",
           "en": "FG inbound",
-          "g": "生產與出貨",
-          "ge": "Production & shipping",
+          "g": "成品與出貨",
+          "ge": "FG & shipping",
           "ic": "📦"
-        },
-        {
-          "k": "fgstock",
-          "zh": "成品庫存",
-          "en": "FG stock",
-          "g": "生產與出貨",
-          "ge": "Production & shipping",
-          "ic": "🗃️"
         },
         {
           "k": "shipping",
           "zh": "出貨",
           "en": "Shipping",
-          "g": "生產與出貨",
-          "ge": "Production & shipping",
+          "g": "成品與出貨",
+          "ge": "FG & shipping",
           "ic": "🚢"
         },
         {
-          "k": "factory-cost",
-          "zh": "製造費用",
-          "en": "Factory cost",
-          "g": "成本",
-          "ge": "Cost",
-          "ic": "💰"
-        },
-        {
-          "k": "labor",
-          "zh": "人工彙總",
-          "en": "Labour summary",
-          "g": "成本",
-          "ge": "Cost",
-          "ic": "👷"
-        },
-        {
-          "k": "costing",
-          "zh": "成本分析",
-          "en": "Costing",
-          "g": "成本",
-          "ge": "Cost",
-          "ic": "🧮"
-        },
-        {
           "k": "sync",
-          "zh": "同步中心",
+          "zh": "同步・比對・異常",
           "en": "Sync centre",
           "g": "資料中樞",
           "ge": "Data hub",
           "ic": "🔄"
         },
         {
-          "k": "compare",
-          "zh": "比對中心",
-          "en": "Compare",
+          "k": "p-portal",
+          "zh": "生產平台入口",
+          "en": "Production platform",
           "g": "資料中樞",
           "ge": "Data hub",
-          "ic": "🔍"
+          "ic": "🏭"
         },
         {
-          "k": "exceptions",
-          "zh": "異常中心",
-          "en": "Exceptions",
-          "g": "資料中樞",
-          "ge": "Data hub",
-          "ic": "⚠️"
+          "k": "telegram",
+          "zh": "Telegram",
+          "en": "Telegram",
+          "g": "系統",
+          "ge": "System",
+          "ic": "✈️"
         },
         {
-          "k": "reports",
-          "zh": "報告",
-          "en": "Reports",
-          "g": "資料中樞",
-          "ge": "Data hub",
-          "ic": "📑"
+          "k": "audit",
+          "zh": "稽核 / 回收",
+          "en": "Audit · recycle",
+          "g": "系統",
+          "ge": "System",
+          "ic": "🗂️"
+        },
+        {
+          "k": "settings",
+          "zh": "設定",
+          "en": "Settings",
+          "g": "系統",
+          "ge": "System",
+          "ic": "⚙️"
         }
       ],
       "tag": "ERP"
@@ -688,7 +672,7 @@ window.AC_CONFIG = {
         },
         {
           "k": "x-hra-mat",
-          "zh": "產假",
+          "zh": "產假／護理費",
           "en": "Maternity",
           "g": "人員",
           "ge": "People",
@@ -696,7 +680,7 @@ window.AC_CONFIG = {
         },
         {
           "k": "x-hra-man",
-          "zh": "人力需求",
+          "zh": "人力規劃",
           "en": "Manpower",
           "g": "人員",
           "ge": "People",
@@ -704,7 +688,7 @@ window.AC_CONFIG = {
         },
         {
           "k": "x-hra-cert",
-          "zh": "證照／簽證",
+          "zh": "證書／簽證",
           "en": "Certificates / visas",
           "g": "人員",
           "ge": "People",
@@ -712,7 +696,7 @@ window.AC_CONFIG = {
         },
         {
           "k": "x-pay-warn",
-          "zh": "警告",
+          "zh": "警告單",
           "en": "Warnings",
           "g": "人員",
           "ge": "People",
@@ -720,7 +704,7 @@ window.AC_CONFIG = {
         },
         {
           "k": "att",
-          "zh": "考勤工時",
+          "zh": "考勤／出勤",
           "en": "Attendance",
           "g": "出勤",
           "ge": "Time & attendance",
@@ -744,7 +728,7 @@ window.AC_CONFIG = {
         },
         {
           "k": "x-pay-ot",
-          "zh": "加班獎金",
+          "zh": "加班／獎金",
           "en": "OT bonus",
           "g": "出勤",
           "ge": "Time & attendance",
@@ -768,7 +752,7 @@ window.AC_CONFIG = {
         },
         {
           "k": "payroll",
-          "zh": "薪資估算",
+          "zh": "薪資",
           "en": "Payroll",
           "g": "薪資福利",
           "ge": "Pay & benefits",
@@ -776,7 +760,7 @@ window.AC_CONFIG = {
         },
         {
           "k": "recon",
-          "zh": "薪資核對",
+          "zh": "試算對帳",
           "en": "Pay reconciliation",
           "g": "薪資福利",
           "ge": "Pay & benefits",
@@ -821,6 +805,22 @@ window.AC_CONFIG = {
           "g": "資料中樞",
           "ge": "Data hub",
           "ic": "📑"
+        },
+        {
+          "k": "jobcode",
+          "zh": "職務代碼",
+          "en": "Job codes",
+          "g": "資料中樞",
+          "ge": "Data hub",
+          "ic": "🏷️"
+        },
+        {
+          "k": "settings",
+          "zh": "設定",
+          "en": "Settings",
+          "g": "系統",
+          "ge": "System",
+          "ic": "⚙️"
         }
       ],
       "tag": "HR"
@@ -988,6 +988,14 @@ window.AC_CONFIG = {
           "ic": "💧"
         },
         {
+          "k": "sec.expense",
+          "zh": "保安費用",
+          "en": "Security expenses",
+          "g": "採購與費用",
+          "ge": "Procurement & expense",
+          "ic": "🧾"
+        },
+        {
           "k": "exp.procurement",
           "zh": "採購中心",
           "en": "Procurement",
@@ -1052,12 +1060,20 @@ window.AC_CONFIG = {
           "ic": "🛣"
         },
         {
-          "k": "sec.expense",
-          "zh": "保安費用",
-          "en": "Security expenses",
-          "g": "採購與費用",
-          "ge": "Procurement & expense",
-          "ic": "🧾"
+          "k": "sources",
+          "zh": "資料與連線",
+          "en": "Data & connections",
+          "g": "管理工具",
+          "ge": "Admin tools",
+          "ic": ""
+        },
+        {
+          "k": "architecture",
+          "zh": "系統架構",
+          "en": "System architecture",
+          "g": "管理工具",
+          "ge": "Admin tools",
+          "ic": ""
         }
       ],
       "tag": "GA"
