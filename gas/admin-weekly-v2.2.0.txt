@@ -1,0 +1,160 @@
+/* ===== 2026-11-13 v2.2.0 每週五 09:00 全系統週報 Weekly report =====
+   Paul 11/13：每週五早上 9 點發「當週」週報，分 ① 生產 ② 人事行政；以 PSJERP／PSJHR／PSJGA 的資料為主，寫法照各平台摘要；有問題可以問 bot。
+   · 生產：直接向生產平台（VRT Production GAS）要「本週到目前為止」的效率週報＝同一套情境版（REPORT_STANDARD），數字不在這裡重算。
+   · 人事行政：向各來源要它們自己核過的週摘要（WEEKLY_SOURCES 裡有網址的才會出現）；還沒接上的來源不發空殼。
+   · 發送：沿用每分鐘的接收排程，週五 09:00 那一分鐘發，一週只發一次（WEEKLY_SENT＝該週週一日期）。
+   · 問法（同生產平台）：訊息開頭打 ？ 再接問題，或直接「回覆」bot 發的週報。有 CLAUDE_API_KEY（指令碼屬性）就用 AI 依週報數字回答；
+     沒有就從週報裡找出相關的那幾行回給你。資料裡沒有的不猜。 */
+const AC_WEEKLY={
+ PROD_URL:'https://script.google.com/macros/s/AKfycbxKAEMe1Y2bYH2qQkCQclJQljA8-nxgmE-lbbpqbmByzconjC5IjcJJwS8INVytEtvv/exec',
+ HR_URL:'',      /* 之後接：人事（出勤／入離職）週摘要 */
+ GA_URL:'',      /* 之後接：總務保全週摘要 */
+ DOW:5, AT:'09:00', UNTIL:'12:00'
+};
+function weeklyMonday_(d){
+ const ymd=Utilities.formatDate(d||new Date(),AC_ADMIN.TZ,'yyyy-MM-dd'),t=new Date(ymd+'T00:00:00Z'),dow=(t.getUTCDay()+6)%7;
+ t.setUTCDate(t.getUTCDate()-dow);return t.toISOString().slice(0,10);
+}
+function weeklyMd_(ymd){return String(ymd||'').slice(5).replace(/^0/,'').replace('-0','/').replace('-','/');}
+function weeklyPlain_(html){return String(html||'').replace(/<[^>]+>/g,'').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');}
+function weeklyFetchProd_(fresh){
+ const r=UrlFetchApp.fetch(AC_WEEKLY.PROD_URL,{method:'post',contentType:'text/plain;charset=utf-8',payload:JSON.stringify({action:'dailyReportWeekNow',fresh:fresh?1:0}),muteHttpExceptions:true,followRedirects:true});
+ if(r.getResponseCode()!==200)throw new Error('生產平台 HTTP '+r.getResponseCode());
+ const j=JSON.parse(r.getContentText()),d=j&&j.data&&j.data.html?j.data:j;
+ if(!d||!d.ok||!d.html)throw new Error('生產平台沒有回傳週報');
+ return d;
+}
+function weeklyProdMessage_(d,monday){
+ const today=Utilities.formatDate(new Date(),AC_ADMIN.TZ,'yyyy-MM-dd');
+ const head='🏭 <b>生產週報｜Production</b>　'+weeklyMd_(monday)+'–'+weeklyMd_(today);
+ if(String(d.start)!==monday){
+  return head+'\n🔵 本週的車縫日報還沒進來，最新資料是 '+weeklyMd_(d.dataDate)+'（上一週）。\nNo sewing data for this week yet; latest is '+weeklyMd_(d.dataDate)+'.\n資料進來後可回覆這則訊息打「重算」。';
+ }
+ const body=String(d.html).split('\n');body.shift();                      /* 生產平台自己的標題行換成上面這行 */
+ return head+'（資料到 '+weeklyMd_(d.dataDate)+'）\n'+body.join('\n');
+}
+function weeklyFetchPart_(url){
+ if(!url)return null;
+ const r=UrlFetchApp.fetch(url,{muteHttpExceptions:true,followRedirects:true});if(r.getResponseCode()!==200)throw new Error('HTTP '+r.getResponseCode());
+ const j=JSON.parse(r.getContentText()),d=j&&j.data&&(j.data.text||j.data.html)?j.data:j;
+ if(!d||d.ok===false||!(d.text||d.html))throw new Error(String(d&&d.error||'沒有回傳摘要'));return d;
+}
+function weeklyKeyboard_(kind){
+ const H=AC_ADMIN.HOME_URL,rows=kind==='prod'?[[{text:'🏭 生產財務 VRT ERP',url:H+'#erp'},{text:'📅 排單・裁剪',url:H+'#erp/p-prodplan'}]]:[[{text:'🧑‍💼 人事 VRT HR',url:H+'#hr'},{text:'🧹 總務保全 VRT GA',url:H+'#ga'}]];
+ rows.push([{text:'🏠 VRT OS',url:H},{text:'📊 摘要 Summary',callback_data:'ac:summary'}]);return {inline_keyboard:rows};
+}
+/* 組出本週要發的訊息（不發）。回傳 {monday, parts:[{id,html,kind}], errors:[]} */
+function weeklyBuild_(fresh){
+ const monday=weeklyMonday_(),parts=[],errors=[];
+ try{const d=weeklyFetchProd_(fresh);parts.push({id:'prod',kind:'prod',html:weeklyProdMessage_(d,monday),facts:d.facts||null,dataDate:d.dataDate});}catch(e){errors.push('生產：'+String(e&&e.message||e).slice(0,160));}
+ const adm=[];
+ [['hr','🧑‍💼 人事',AC_WEEKLY.HR_URL],['ga','🧹 總務保全',AC_WEEKLY.GA_URL]].forEach(function(s){
+  if(!s[2])return;
+  try{const d=weeklyFetchPart_(s[2]);adm.push(String(d.html||esc_(d.text)));}catch(e){errors.push(s[1]+'：'+String(e&&e.message||e).slice(0,160));}
+ });
+ if(adm.length){const today=Utilities.formatDate(new Date(),AC_ADMIN.TZ,'yyyy-MM-dd');parts.push({id:'admin',kind:'admin',html:'🧑‍💼 <b>人事行政週報｜HR & Admin</b>　'+weeklyMd_(monday)+'–'+weeklyMd_(today)+'\n'+adm.join('\n━━━━━━━━━━━━\n')});}
+ return {monday:monday,parts:parts,errors:errors};
+}
+function weeklySend_(built){
+ const p=PropertiesService.getScriptProperties();let sent=0;
+ built.parts.forEach(function(part){
+  const text=String(part.html).slice(0,4000);
+  const res=tgRequest_('sendMessage',{chat_id:AC_ADMIN.CHAT_ID,text:text,parse_mode:'HTML',disable_web_page_preview:true,reply_markup:JSON.stringify(weeklyKeyboard_(part.kind))});
+  sent++;
+  try{p.setProperty('WEEKLY_TEXT_'+part.id,weeklyPlain_(text).slice(0,8500));if(part.facts)p.setProperty('WEEKLY_FACTS_'+part.id,JSON.stringify(part.facts).slice(0,8500));p.setProperty('WEEKLY_MSG_'+part.id,String(res&&res.result&&res.result.message_id||''));}catch(e){}
+ });
+ if(sent){p.setProperty('WEEKLY_SENT',built.monday);p.setProperty('WEEKLY_SENT_AT',new Date().toISOString());}
+ if(built.errors.length)p.setProperty('WEEKLY_LAST_ERROR',built.errors.join(' | ').slice(0,500));else p.deleteProperty('WEEKLY_LAST_ERROR');
+ return sent;
+}
+/* 每分鐘由 pollAdminTelegram 呼叫：週五 09:00 起、當週還沒發過才發；失敗最多再試 3 次 */
+function weeklyTick_(){
+ try{
+  const now=new Date(),tz=AC_ADMIN.TZ;if(Number(Utilities.formatDate(now,tz,'u'))!==AC_WEEKLY.DOW)return;
+  const hm=Utilities.formatDate(now,tz,'HH:mm');if(hm<AC_WEEKLY.AT||hm>AC_WEEKLY.UNTIL)return;
+  const p=PropertiesService.getScriptProperties(),monday=weeklyMonday_(now);if(p.getProperty('WEEKLY_SENT')===monday)return;
+  const tk='WEEKLY_TRY',tries=String(p.getProperty(tk)||'').split('|'),n=tries[0]===monday?Number(tries[1])||0:0;if(n>=3)return;
+  p.setProperty(tk,monday+'|'+(n+1));
+  const built=weeklyBuild_(false);if(!built.parts.length){p.setProperty('WEEKLY_LAST_ERROR',(built.errors.join(' | ')||'no parts').slice(0,500));return;}
+  weeklySend_(built);
+ }catch(e){try{PropertiesService.getScriptProperties().setProperty('WEEKLY_LAST_ERROR',String(e&&e.message||e).slice(0,500));}catch(x){}}
+}
+/* 在編輯器按執行：只看內容，不發群組 */
+function previewWeekly(){const b=weeklyBuild_(false);b.parts.forEach(function(x){Logger.log(weeklyPlain_(x.html));});Logger.log('errors: '+JSON.stringify(b.errors));return b.parts.length;}
+/* 在編輯器按執行：現在就把本週週報發到行政群組（補發用） */
+function sendWeeklyNow(){const b=weeklyBuild_(true);const n=weeklySend_(b);Logger.log('sent '+n+' errors '+JSON.stringify(b.errors));return n;}
+
+/* ── 問答 ── */
+function weeklyClaude_(system,user){
+ const p=PropertiesService.getScriptProperties(),key=p.getProperty('CLAUDE_API_KEY');if(!key)return null;
+ const H={'x-api-key':key,'anthropic-version':'2023-06-01'};
+ let model=p.getProperty('CLAUDE_MODEL');
+ if(!model){try{const m=JSON.parse(UrlFetchApp.fetch('https://api.anthropic.com/v1/models?limit=50',{headers:H,muteHttpExceptions:true}).getContentText());const ids=(m.data||[]).map(function(x){return x.id;});model=ids.filter(function(x){return /sonnet/.test(x);})[0]||ids[0]||'';if(model)p.setProperty('CLAUDE_MODEL',model);}catch(e){}}
+ if(!model)return null;
+ const r=UrlFetchApp.fetch('https://api.anthropic.com/v1/messages',{method:'post',contentType:'application/json',headers:H,muteHttpExceptions:true,payload:JSON.stringify({model:model,max_tokens:700,system:system,messages:[{role:'user',content:user}]})});
+ const j=JSON.parse(r.getContentText());if(r.getResponseCode()!==200)throw new Error(String(j&&j.error&&j.error.message||('HTTP '+r.getResponseCode())).slice(0,160));
+ return String((j.content||[]).map(function(c){return c.text||'';}).join('')).trim();
+}
+function weeklyTokens_(q){
+ const out=[],s=String(q||'').toLowerCase();
+ (s.match(/[a-z]+\d*|\d+/g)||[]).forEach(function(w){if(w.length>=2||/\d/.test(w))out.push(w);});
+ const zh=s.replace(/[^一-鿿]/g,' ').split(/\s+/);zh.forEach(function(seg){for(let i=0;i+2<=seg.length;i++)out.push(seg.slice(i,i+2));});
+ const stop={'多少':1,'什麼':1,'怎麼':1,'為什':1,'這週':1,'本週':1,'今天':1,'一下':1,'可以':1,'是不':1,'不是':1,'如何':1,'請問':1,'幫我':1,'the':1,'is':1,'how':1,'what':1,'why':1,'many':1};
+ return out.filter(function(w,i){return !stop[w]&&out.indexOf(w)===i;});
+}
+function weeklyLookup_(q){
+ const p=PropertiesService.getScriptProperties(),tok=weeklyTokens_(q);if(!tok.length)return '';
+ const hits=[];
+ ['prod','admin'].forEach(function(id){
+  const lines=String(p.getProperty('WEEKLY_TEXT_'+id)||'').split('\n');let section='';
+  lines.forEach(function(line,i){
+   if(/^[^\s　]/.test(line)&&!/^━/.test(line))section=line;
+   const low=line.toLowerCase().replace(/l(\d+)/g,' l$1 ');let sc=0;tok.forEach(function(w){if(/^l?\d+$/.test(w)?(' '+low+' ').indexOf(' '+w+' ')>=0||low.indexOf(w+' ')>=0:low.indexOf(w)>=0)sc+=w.length;});
+   if(sc&&line.trim()&&!/^━/.test(line))hits.push({sc:sc,i:i,id:id,line:line,section:section});
+  });
+ });
+ if(!hits.length)return '';
+ hits.sort(function(a,b){return b.sc-a.sc||a.i-b.i;});
+ const top=hits.slice(0,5).sort(function(a,b){return a.id===b.id?a.i-b.i:(a.id<b.id?1:-1);}),out=[];
+ const all={prod:String(p.getProperty('WEEKLY_TEXT_prod')||'').split('\n'),admin:String(p.getProperty('WEEKLY_TEXT_admin')||'').split('\n')};
+ const add=function(l){if(l&&out.indexOf(l)<0)out.push(l);};
+ top.forEach(function(h){
+  if(h.section&&h.section!==h.line)add(h.section);
+  add(h.line);
+  if(h.line===h.section){const L=all[h.id];for(let k=h.i+1;k<L.length&&k<=h.i+3&&/^[\s　]/.test(L[k]);k++)add(L[k]);}   /* 標題行命中：把底下縮排的細項一起帶出來 */
+ });
+ return out.join('\n');
+}
+/* 回 {text, markup} 或 null（不是在問週報） */
+function weeklyAnswer_(m){
+ const raw=String(m.text||'').trim(),own=(prop_('ADMIN_BOT_USERNAME')||'ac_admin_center_bot').toLowerCase();
+ const p=PropertiesService.getScriptProperties(),rep=m.reply_to_message;
+ const repIsWeekly=!!(rep&&rep.from&&String(rep.from.username||'').toLowerCase()===own&&/週報｜/.test(String(rep.text||'')));
+ const marked=/^[?？]/.test(raw);if(!marked&&!repIsWeekly)return null;
+ const q=raw.replace(/^[?？]\s*/,'').replace(new RegExp('@'+own,'ig'),' ').trim();if(!q)return {text:'🤖 問法：開頭打 ？ 再接問題，或回覆週報直接問。\n例：？L1 效率　？本月排單進度　？已裁未縫\nAsk with a leading ? or reply to the weekly report.',markup:weeklyKeyboard_('prod')};
+ const sentFor=p.getProperty('WEEKLY_SENT')||'',ctxProd=p.getProperty('WEEKLY_TEXT_prod')||'',ctxAdm=p.getProperty('WEEKLY_TEXT_admin')||'';
+ if(/重算|重發|重新|recalc|resend|refresh/i.test(q)){
+  const b=weeklyBuild_(true);if(!b.parts.length)return {text:'⚠️ 現在算不出來：'+esc_(b.errors.join('；')||'沒有資料'),markup:weeklyKeyboard_('prod')};
+  weeklySend_(b);return {text:'🔄 已用最新資料重算並重發本週週報。'+(b.errors.length?'\n⚠️ '+esc_(b.errors.join('；')):''),markup:null};
+ }
+ if(!ctxProd&&!ctxAdm)return {text:'🤖 這週的週報還沒發（每週五 09:00）。要現在看，回我「？重算」。',markup:weeklyKeyboard_('prod')};
+ const day=Utilities.formatDate(new Date(),AC_ADMIN.TZ,'yyyy-MM-dd'),nk='WEEKLY_QA_N',cnt=String(p.getProperty(nk)||'').split('|'),n=cnt[0]===day?Number(cnt[1])||0:0;
+ let ans='';
+ if(n<40){
+  try{
+   const sys='你是 VRT（柬埔寨成衣廠）行政中心的助理，在 Telegram 群組回答廠協理 Paul 與主管的問題。只能根據下面給的週報內容與數字回答：數字要精準、逐字沿用；週報裡沒有的就直接說「這份週報裡沒有這筆資料」，不要猜、不要自己算新數字。繁體中文、口語、精簡，最多 8 行，不要用 Markdown 符號。';
+   const user='今天 '+day+'（週報週別：'+sentFor+' 起）\n\n【他回覆的訊息】\n'+(rep?String(rep.text||'').slice(0,2500):'（沒有）')+'\n\n【生產週報】\n'+(ctxProd||'（沒有）')+'\n\n【生產數字 JSON】\n'+String(p.getProperty('WEEKLY_FACTS_prod')||'（沒有）')+'\n\n【人事行政週報】\n'+(ctxAdm||'（這週還沒有）')+'\n\n【問題】\n'+q;
+   const a=weeklyClaude_(sys,user);if(a){ans='🤖 '+esc_(a);p.setProperty(nk,day+'|'+(n+1));}
+  }catch(e){ans='';try{log_('weekly-qa-error','admin',String(e&&e.message||e).slice(0,300));}catch(x){}}
+ }
+ if(!ans){
+  const found=weeklyLookup_(q);
+  ans=found?'🔎 週報裡相關的內容（'+esc_(sentFor)+' 那週）：\n'+esc_(found):'🤖 這份週報裡找不到「'+esc_(q.slice(0,40))+'」。\n可以問：各組效率（例 ？L3）、產量、裁剪、已裁未縫、本月排單、QC、出貨。';
+ }
+ return {text:ans,markup:weeklyKeyboard_(/出勤|人事|請假|入職|離職|總務|保全|宿舍|消防/.test(q)?'admin':'prod')};
+}
+/* 接到原本的群組對話：先看是不是在問週報 */
+function weeklyReply_(m){
+ if(!m||!m.chat||String(m.chat.id)!==AC_ADMIN.CHAT_ID||!m.from||m.from.is_bot)return null;
+ const a=weeklyAnswer_(m);return a?{text:a.text,markup:a.markup,replyTo:m.message_id}:null;
+}
