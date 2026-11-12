@@ -23,3 +23,13 @@ Paul 11/13：每週五早上 9 點發「當週」週報，分 ① 生產 ② 人
 3. **機器人讀一般訊息**：@ac_admin_center_bot 在群組是一般成員（`checkGroupReading()`），Telegram 只送指令和「回覆它的訊息」給它；
    開頭打 ？ 要能收到，需把它設成群組管理員（等 Paul 同意）。
 4. 資料時間：車縫日報通常下午才匯入，週五 09:00 的「當週」多半只到週二～週三。可改週五 16:30 或週六早上再發（等 Paul 決定）。
+
+## 11/13 02:45 更新（Paul：改週六、設管理員、金鑰不自己貼、人事自己跟進、全自動）
+- **改週六 09:00**：AC_ADMIN_CENTER `AC_WEEKLY.DOW=6`（v2.2.3，部署第 20 版）；PROD 的 `adminWeekWarm` 觸發器改週六約 08:15（PROD 部署第 42 版）。
+- **人事已接上**：AC_HRA_CloudSync 加 `adminWeekNow`（doGet，唯讀，`adminWeekAttendance74_`，在檔案最後；快取 30 分鐘；部署第 103 版）。
+  回傳本週到目前的考勤週報（HRAAttTg，中＋英）。`AC_WEEKLY.HR_URL` 已填。預覽 11/10–11/12：出勤率 94.3%、已核對正確。
+- **AI 問答不用貼金鑰**：行政中心沒有金鑰時走 `weeklyClaudeRelay_` → PROD `dailyReportAdminAsk`（`adminAsk_`）。PROD 先回頭問行政中心 `doGet qaNonce`
+  確認一次性號碼才用自己的 `CLAUDE_API_KEY` 回答；每天 40 題。`checkWeeklyQa()` 測過會回答。
+- **/ask 指令**：`/ask L1 效率`（指令在隱私模式也收得到，已加進群組指令選單）。開頭打「？」仍需要 bot 是管理員。
+- **沒做成**：把 bot 設成群組管理員——瀏覽器工具不允許開 web.telegram.org。改用 /ask 與「回覆週報」。
+- **還沒做**：總務保全（`GA_URL` 空）；人事可再加入離職明細／人力缺額／證照到期；首次自動發送是 11/14（六）09:00，發完要看實際訊息。
