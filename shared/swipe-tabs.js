@@ -1,5 +1,5 @@
-/* VRT swipe-tabs v1.1 (2026-11-11)  https://saintdou-weng.github.io/ac-admin/shared/swipe-tabs.js
-   Swipe left / right (finger, mouse drag or trackpad) to move to the next / previous tab of the page.
+/* VRT swipe-tabs v1.2 (2026-11-11)  https://saintdou-weng.github.io/ac-admin/shared/swipe-tabs.js
+   Swipe left / right (finger, mouse drag, trackpad, or the ← → keys) to move to the next / previous tab of the page.
    One file for every VRT system. It only LISTENS and then presses the page's own tab, exactly as a tap would:
    - never calls preventDefault on touches, never changes styles, data or storage;
    - ignores gestures on form fields, canvases (signatures, maps), anything that scrolls sideways (wide tables,
@@ -216,13 +216,46 @@
     return true;
   }
 
+  /* keyboard ← / → on a computer: same as a swipe, for whatever page is showing (also the page inside a frame).
+     Only when nobody is typing or using a control that needs the arrows itself, and the page has nothing to slide sideways. */
+  var KEY_BUSY = 'input,textarea,select,option,[contenteditable=""],[contenteditable=true],video,audio,[role=slider],[role=listbox],[role=menu],[role=menubar],[role=grid],[role=tree],[role=radiogroup],[role=spinbutton],[role=combobox],[data-noswipe]';
+  function deepest(win) {
+    try {
+      var best = null, area = 0, fs = win.document.querySelectorAll('iframe');
+      for (var i = 0; i < fs.length; i++) {
+        var r = fs[i].getBoundingClientRect(); if (r.width < 200 || r.height < 200 || !fs[i].getClientRects().length) continue;
+        var cs = win.getComputedStyle(fs[i]); if (cs.visibility === 'hidden' || cs.pointerEvents === 'none') continue;
+        try { if (!fs[i].contentDocument || !fs[i].contentDocument.body) continue; } catch (e) { continue; }
+        if (r.width * r.height > area) { area = r.width * r.height; best = fs[i]; }
+      }
+      return best ? deepest(best.contentWindow) : win;
+    } catch (e) { return win; }
+  }
+  function keys(doc, hostOnly) {
+    if (!doc || doc.__vrtKeys) return; doc.__vrtKeys = true;
+    var last = 0;
+    doc.addEventListener('keydown', function (e) {
+      if (e.defaultPrevented || e.repeat || e.ctrlKey || e.metaKey || e.altKey || e.shiftKey || e.isComposing) return;
+      var dir = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!dir) return;
+      var ae = doc.activeElement;
+      if (ae && ae.closest && ae.closest(KEY_BUSY)) return;
+      if (ae && ae !== doc.body && scrollsSideways(ae, doc)) return;
+      var now = Date.now(); if (now - last < 250) return;
+      var w = deepest(doc.defaultView), d = w.document;
+      if (hostOnly && d === doc) return;                                              /* the VRT OS home page itself has no tabs to move */
+      try { var a2 = d.activeElement; if (a2 && a2.closest && a2.closest(KEY_BUSY)) return; } catch (x) {}
+      if (pageCanPan(doc, dir) || pageCanPan(d, dir)) return;
+      if (move(d, dir, w.innerHeight)) last = now;
+    }, false);
+  }
+
   /* attach to a window and every same-site frame inside it, now and as frames come and go */
   function sweep(win, skipSelf) {
-    try { if (!skipSelf) attach(win.document); for (var i = 0; i < win.frames.length; i++) sweep(win.frames[i], false); } catch (e) {}
+    try { if (!skipSelf) attach(win.document); keys(win.document, skipSelf); for (var i = 0; i < win.frames.length; i++) sweep(win.frames[i], false); } catch (e) {}
   }
   function watch(win, skipSelf) { sweep(win, skipSelf); return win.setInterval(function () { sweep(win, skipSelf); }, 800); }
 
-  root.VRTSwipeTabs = { attach: attach, sweep: sweep, watch: watch, groups: groups, move: move, blocked: blocked, version: '1.1' };
+  root.VRTSwipeTabs = { attach: attach, sweep: sweep, watch: watch, groups: groups, move: move, blocked: blocked, version: '1.2' };
   /* a page that includes this file gets it for itself and its frames; the VRT OS shell sets data-host to keep its own home page out */
   var me = document.currentScript, host = me && me.getAttribute('data-host') === 'shell';
   var start = function () { watch(root, host); };
