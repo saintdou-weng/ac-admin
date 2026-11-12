@@ -1,0 +1,104 @@
+/* ===== 2026-11-13 v2.1.0 群組對話 Group talk =====
+   The bot now also reads ordinary sentences in the Admin group (not only /commands) and answers when
+   (a) it is @mentioned or someone replies to one of its messages, or (b) the sentence is clearly a question / request
+   about one of the four systems or one of their pages. Anything else is left alone, so normal chat is not interrupted.
+   No AI service and no extra cost: it matches system / page names (read from the VRT OS menu, so new pages are followed). */
+const AC_TALK_SYS=[
+ {id:'psjhr',key:'hr',re:/(人事|人資|員工|出勤|考勤|請假|薪資|薪水|加班|入職|離職|合約|簽證|產假|工會|(^|[^a-z])hr([^a-z]|$)|attendance|payroll|staff|employee|leave|salary)/i},
+ {id:'psjerp',key:'erp',re:/(生產|訂單|車縫|裁剪|出貨|成本|財務|庫存|布料|物料|排單|產量|成品|(^|[^a-z])erp([^a-z]|$)|order|sewing|cutting|shipment|shipping|cost|production|fabric|output)/i},
+ {id:'psjga',key:'ga',re:/(總務|保全|保安|消防|宿舍|巡邏|cctv|監視|採購|清潔|溫度|溫濕度|鑰匙|飲用水|貨櫃|通勤|維修|油料|(^|[^a-z])ga([^a-z]|$)|security|fire|dorm|patrol|purchase|procurement|cleaning|fuel|container)/i},
+ {id:'audit',key:'audit',re:/(驗廠|稽核|合規|培訓|訓練|(^|[^a-z])(dcc|wse|wrap|cap)([^a-z]|$)|audit|compliance|training)/i}
+];
+function talkPages_(){
+ const cache=CacheService.getScriptCache(),old=cache.get('talk-pages-v1');if(old)return JSON.parse(old);
+ const out=[];
+ try{
+  const r=UrlFetchApp.fetch(AC_ADMIN.HOME_URL+'config.js?t='+Math.floor(Date.now()/3600000),{muteHttpExceptions:true});
+  const s=r.getContentText(),c=JSON.parse(s.slice(s.indexOf('{'),s.lastIndexOf('}')+1));
+  (c.systems||[]).forEach(function(sy){(sy.pages||[]).forEach(function(p){out.push({s:sy.id,k:p.k,zh:String(p.zh||''),en:String(p.en||''),ic:String(p.ic||'')});});});
+ }catch(e){}
+ if(out.length)cache.put('talk-pages-v1',JSON.stringify(out).slice(0,90000),1800);
+ return out;
+}
+function talkNorm_(s){return String(s||'').toLowerCase().replace(/[\s・·／\/\-—_,，。.!！?？:：]+/g,'');}
+function talkFindPages_(text){
+ const t=talkNorm_(text),low=' '+String(text||'').toLowerCase().replace(/[^a-z0-9]+/g,' ')+' ',hits=[];
+ talkPages_().forEach(function(p){
+  let score=0;const zh=talkNorm_(p.zh);
+  if(zh.length>=2&&!/^(總覽|設定|首頁)$/.test(p.zh)&&t.indexOf(zh)>=0)score=zh.length+10;
+  else{String(p.zh).split(/[\s・·／\/與和,，]+/).forEach(function(w){w=talkNorm_(w);if(w.length>=2&&!/^(總覽|設定|管理|中心|報告|資料)$/.test(w)&&t.indexOf(w)>=0)score=Math.max(score,w.length);});}
+  if(!score){const en=String(p.en||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+   if(en.length>=4&&!/^(overview|settings)$/.test(en)&&low.indexOf(' '+en+' ')>=0)score=en.length;
+   else en.split(' ').forEach(function(w){if(w.length>=4&&!/^(management|manage|report|reports|centre|center|list|data|system|overview|settings|daily|records|record|analysis|summary|platform|tools|with|from|open|show|please|what|where|which|many|much)$/.test(w)&&low.indexOf(' '+w+' ')>=0)score=Math.max(score,2);});}
+  if(!score){const pre=zh.slice(0,2);if(pre.length===2&&/[\u4e00-\u9fff]{2}/.test(pre)&&!/^(總覽|設定|資料|系統|全部|管理|其他|生產|智慧|同步)$/.test(pre)&&t.indexOf(pre)>=0)score=1;}
+  if(score)hits.push({p:p,score:score});
+ });
+ hits.sort(function(a,b){return b.score-a.score;});
+ return hits.slice(0,4).map(function(h){return h.p;});
+}
+function talkHelp_(){
+ const lines=[];
+  lines.push('🤖 <b>可以直接用一般的話問我</b>｜Just ask in plain words','','例 Examples：','• 今天出勤多少？ / How is attendance?','• 打開消防設施 / Open fire equipment','• 訂單摘要 / Order summary','• 驗廠培訓在哪？ / Where is audit training?','• 狀態 / status','','我會回數字（有的話）和可以直接點開的頁面。','I reply with figures (when available) and a button that opens the page.');
+  return lines.join('\n');
+}
+function talkReply_(m){
+ if(!m||!m.chat||String(m.chat.id)!==AC_ADMIN.CHAT_ID||!m.from||m.from.is_bot)return null;
+ let text=String(m.text||m.caption||'').trim();if(!text||text.charAt(0)==='/'||text.length>400)return null;
+ const own=(prop_('ADMIN_BOT_USERNAME')||'ac_admin_center_bot').toLowerCase();
+ const mention=text.toLowerCase().indexOf('@'+own)>=0;
+ const toBot=!!(m.reply_to_message&&m.reply_to_message.from&&String(m.reply_to_message.from.username||'').toLowerCase()===own);
+ const addressed=mention||toBot;
+ text=text.replace(new RegExp('@'+own,'ig'),' ').trim();
+ const asks=/[?？]|多少|幾個|幾人|幾筆|幾張|嗎|呢|怎麼|如何|哪裡|在哪|哪個|請問|幫我|給我|我要|想看|查一下|查詢|看一下|打開|開啟|連結|網址|摘要|報表|狀況|情況|進度|how many|how much|what|where|which|show|open|link|summary|report|status|please/i.test(text);
+ const sys=AC_TALK_SYS.filter(function(s){return s.re.test(text);});
+ const pages=talkFindPages_(text);
+ const wantHelp=/幫助|說明|怎麼用|你會什麼|妳會什麼|可以問|能做什麼|(^|[^a-z])help([^a-z]|$)|what can you/i.test(text);
+ const wantStatus=/狀態|在嗎|還在嗎|有在運作|(^|[^a-z])(status|alive|online)([^a-z]|$)/i.test(text);
+ const wantAll=/摘要|總覽|全部|所有|各系統|各平台|summary|overview|all systems/i.test(text);
+ const wantMenu=/選單|首頁|平台|入口|menu|home|portal/i.test(text);
+ const shortAsk=asks&&text.length<=20&&(wantAll||wantStatus||wantHelp);
+ if(!addressed&&!(asks&&(sys.length||pages.length))&&!shortAsk)return null;      /* ordinary chat: stay quiet */
+ const lines=[],rows=[];
+ pages.forEach(function(p){rows.push([{text:(p.ic?p.ic+' ':'')+p.zh+(p.en&&p.en!==p.zh?'｜'+p.en:''),url:AC_ADMIN.HOME_URL+'#'+p.s+'/'+p.k}]);});
+ const ids=sys.map(function(s){return s.id;});pages.forEach(function(p){const s=AC_TALK_SYS.filter(function(x){return x.key===p.s;})[0];if(s&&ids.indexOf(s.id)<0){ids.push(s.id);}});
+ if(wantHelp&&!ids.length){
+  return {text:talkHelp_(),markup:adminMenu_(),replyTo:m.message_id};
+ }
+ if(wantStatus&&!ids.length&&!pages.length)return {text:statusMessage_(),markup:adminMenu_(),replyTo:m.message_id};
+ if(!ids.length&&!pages.length){
+  if(wantAll){let snap=null;try{snap=snapshotSummary_(false);}catch(e){}return {text:snap?summaryMessage_(snap):'📊 本次未能讀取摘要，請稍後再問。\nSummary could not be read; please ask again shortly.',markup:adminMenu_(),replyTo:m.message_id};}
+  if(wantMenu)return {text:'🏛 <b>VRT OS｜行政中心</b>\n請選擇系統 / Choose a system',markup:adminMenu_(),replyTo:m.message_id};
+  if(!mention)return null;                                            /* "ok / thanks" replied to the bot: stay quiet */
+  return {text:talkHelp_(),markup:adminMenu_(),replyTo:m.message_id};
+ }
+ let snap=null;try{snap=snapshotSummary_(false);}catch(e){}
+ ids.slice(0,3).forEach(function(id){
+  const meta=AC_OS_SYSTEMS[id];if(!meta)return;
+  const row=snap&&snap.platforms?snap.platforms.filter(function(p){return p.id===id;})[0]:null;
+  lines.push('<b>'+esc_(meta[1])+'</b>');
+  if(row&&row.metrics&&row.metrics.length){
+   lines.push(row.metrics.slice(0,4).map(function(x){return esc_(x.label)+' <b>'+formatNumber_(x.value)+'</b> '+esc_(x.unit);}).join(' · '));
+   if(row.period)lines.push('期間 Period：'+esc_(row.period));
+   if(row.cached)lines.push('◷ 上次摘要，非即時 / Last saved, not live：'+esc_(String(row.cachedAt).slice(0,16)));
+  }else lines.push('目前沒有可直接回報的數字，請點下方開啟查看。\nNo figures to report here yet; open it below.');
+  rows.push([{text:'開啟 Open '+meta[1],url:AC_ADMIN.HOME_URL+'#'+meta[0]}]);
+  lines.push('');
+ });
+ if(pages.length)lines.push('👇 相關頁面 / Related pages');
+ rows.push([{text:'🏠 VRT OS',url:AC_ADMIN.HOME_URL},{text:'📊 摘要 Summary',callback_data:'ac:summary'}]);
+ return {text:lines.join('\n').trim(),markup:{inline_keyboard:rows.slice(0,8)},replyTo:m.message_id};
+}
+function talkAction_(u){
+ try{if(!u||!u.message)return null;const r=talkReply_(u.message);return r?{kind:'talk',reply:r}:null;}catch(e){try{log_('talk-error',String(e&&e.message||e).slice(0,300));}catch(x){}return null;}
+}
+function sendTalk_(r){
+ const p={chat_id:AC_ADMIN.CHAT_ID,text:String(r.text||'').slice(0,3900),parse_mode:'HTML',disable_web_page_preview:true,reply_to_message_id:String(r.replyTo||''),allow_sending_without_reply:true};
+ if(r.markup)p.reply_markup=JSON.stringify(r.markup);
+ try{return tgRequest_('sendMessage',p);}catch(e){try{log_('talk-send-error',String(e&&e.message||e).slice(0,300));}catch(x){}return null;}   /* a failed chat reply must never block the command queue */
+}
+/* Run once from the editor to see whether Telegram lets the bot read ordinary group messages. Sends nothing to the group. */
+function checkGroupReading(){
+ const me=tgRequest_('getMe').result;let member={};try{member=tgRequest_('getChatMember',{chat_id:AC_ADMIN.CHAT_ID,user_id:String(me.id)}).result||{};}catch(e){member={status:'unknown: '+e.message};}
+ const out={bot:me.username,canReadAllGroupMessages:!!me.can_read_all_group_messages,statusInGroup:member.status,readsOrdinaryMessages:!!me.can_read_all_group_messages||member.status==='administrator',pages:talkPages_().length};
+ Logger.log(JSON.stringify(out));return out;
+}
