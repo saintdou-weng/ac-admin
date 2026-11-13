@@ -1,6 +1,6 @@
 /* ===== 2026-11-13 v2.3.0 週報：總務保全那一段 =====
    VRT GA（PSJGA）目前沒有雲端快照（沒有人上傳過），所以直接問它的三個來源後端：保全 SEC、巡檢 GASCheck、總務費用 GA-EXP。
-   用的是各後端本來就公開的 smartManifest（VRT GA 網頁讀資料也是用它）：每個模組「本月雲端筆數」和「最後更新時間」，
+   用的是各後端本來就公開的 smartManifest（VRT GA 網頁讀資料也是用它）：每個模組的「最後更新時間」（筆數因各模組分桶方式不同，怕算錯所以不列），
    SEC 另外問 weeklyDigestStatus（這週有沒有摘要還沒發）。只讀、不改任何資料、不含明細。
    燈號：每週該更新的模組（巡邏、CCTV、貨櫃、通勤、溫濕度、清潔、鑰匙、收貨、費用）🟢 本週有更新 🟡 上週有、本週還沒 🔴 兩週以上沒更新；
    每月更新的模組（保安出勤、消防、人員、保安費用、回收、宿舍、資產、飲用水）🟢 本月有更新 🟡 45 天內 🔴 更久。 */
@@ -41,13 +41,12 @@ function weeklyGa_(){
    }
    if(m[1]==='SEC'&&digest[m[2]]&&digest[m[2]].pendingDays&&digest[m[2]].pendingDays.length&&!digest[m[2]].sentWeek)extra=' · ⏳ 摘要待發 '+digest[m[2]].pendingDays.map(md).join('、');
   }else{unread++;if(man&&man.exists===false){when='雲端沒有資料 no cloud data';}}
-  (byGroup[m[0]]=byGroup[m[0]]||[]).push(light+' <code>'+pad(cnt,5)+'</code> '+esc_(m[3])+' '+esc_(m[4])+' · '+when+(m[5]==='m'?'（月）':'')+extra);
+  (byGroup[m[0]]=byGroup[m[0]]||[]).push(light+' '+esc_(m[3])+' '+esc_(m[4])+' · '+when+(m[5]==='m'?'（月）':'')+extra);
  });
  if(unread===AC_GA_MODS.length)throw new Error('三個後端都讀不到');
  const lines=['🧹 <b>總務保全 GA &amp; Security</b> · 各模組雲端資料狀態 Cloud data status','━━━━━━━━━━━━',
-  (red?'🔴':yellow?'🟡':'🟢')+' <b>'+green+' 個正常</b> · 🟡 '+yellow+' 該更新了 · 🔴 '+red+' 很久沒更新'+(unread?' · ⚪ '+unread+' 讀不到':''),
-  '<i>數字＝'+Number(ym.slice(5,7))+' 月雲端筆數，日期＝最後更新；（月）＝每月更新的模組</i>',
-  '<i>Number = records this month, date = last update; （月）= monthly modules</i>'];
+  '🟢 <b>'+green+' 個正常</b> · 🟡 '+yellow+' 個該更新了 · 🔴 '+red+' 個很久沒更新'+(unread?' · ⚪ '+unread+' 讀不到':''),
+  '<i>日期＝雲端最後更新；（月）＝每月更新的模組。Date = last cloud update; （月）= monthly modules</i>'];
  AC_GA_GROUPS.forEach(function(g){if(byGroup[g[0]]){lines.push('');lines.push('<b>'+g[1]+'</b>');byGroup[g[0]].forEach(function(l){lines.push(l);});}});
  lines.push('');lines.push('<i>🟢 有照時間更新　🟡 該更新了　🔴 很久沒更新　⏳ 有資料但摘要還沒發。採購、維修、燃油、行車、ETC 還沒列入。</i>');
  return lines.join('\n');
