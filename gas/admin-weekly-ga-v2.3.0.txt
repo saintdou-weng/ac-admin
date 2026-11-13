@@ -1,0 +1,55 @@
+/* ===== 2026-11-13 v2.3.0 週報：總務保全那一段 =====
+   VRT GA（PSJGA）目前沒有雲端快照（沒有人上傳過），所以直接問它的三個來源後端：保全 SEC、巡檢 GASCheck、總務費用 GA-EXP。
+   用的是各後端本來就公開的 smartManifest（VRT GA 網頁讀資料也是用它）：每個模組「本月雲端筆數」和「最後更新時間」，
+   SEC 另外問 weeklyDigestStatus（這週有沒有摘要還沒發）。只讀、不改任何資料、不含明細。
+   燈號：每週該更新的模組（巡邏、CCTV、貨櫃、通勤、溫濕度、清潔、鑰匙、收貨、費用）🟢 本週有更新 🟡 上週有、本週還沒 🔴 兩週以上沒更新；
+   每月更新的模組（保安出勤、消防、人員、保安費用、回收、宿舍、資產、飲用水）🟢 本月有更新 🟡 45 天內 🔴 更久。 */
+const AC_GA_SRC={
+ SEC:'https://script.google.com/macros/s/AKfycbyxBN_t2AfxTPQ3AYdt7Jxl3pNiJV17H1T0pub4SR8GBgDH47WnDn9JF556KSxUiIU-/exec',
+ GC:'https://script.google.com/macros/s/AKfycbzRsf_DuYJu0kXxqefR8qbLWhO7uz2flCY7jkPQQ73ZMwptcHDwrtJnhBQFwxG_EM3v/exec',
+ EXP:'https://script.google.com/macros/s/AKfycbxPTXdEhjb4vhAxO-fQYYLnt_m4BZNkVsPiYVmyUzA-kxgr_b4VMC9yayXQCOS7xYYWAQ/exec'
+};
+const AC_GA_GROUPS=[['sec','🛡 門禁與安全 Security'],['env','🌿 環境與巡檢 Environment'],['fac','🏠 宿舍與資產 Dorms &amp; assets'],['fin','🧾 採購與費用 Procurement &amp; expenses']];
+const AC_GA_MODS=[
+ ['sec','SEC','patrol','保安巡邏','Patrol','w'],['sec','SEC','cctv','CCTV 監控','CCTV','w'],['sec','SEC','container','貨櫃出入','Container','w'],['sec','SEC','commute','通勤與門禁','Commute','w'],
+ ['sec','SEC','attendance','保安出勤','Guard attendance','m'],['sec','SEC','fire','消防設施','Fire safety','m'],['sec','SEC','personnel','保安人員','Personnel','m'],
+ ['env','GC','temperature','溫濕度','Temperature','w'],['env','GC','cleaning','清潔與 6S','Cleaning','w'],['env','GC','ehs','回收與廢料','Waste','m'],
+ ['fac','GC','dormitory','宿舍管理','Dormitory','m'],['fac','GC','asset','資產設備','Assets','m'],['fac','GC','keymovement','鑰匙借還','Keys','w'],['fac','GC','waterdrum','飲用水','Drinking water','m'],
+ ['fin','SEC','expense','保安費用','Security expenses','m'],['fin','EXP','receiving','收貨與領用','Receiving','w'],['fin','EXP','expense','費用中心','Expenses','w']
+];
+function weeklyGaYmd_(iso){if(!iso)return '';const d=new Date(iso);return isNaN(d.getTime())?'':Utilities.formatDate(d,AC_ADMIN.TZ,'yyyy-MM-dd');}
+function weeklyGaAddDays_(ymd,n){const t=new Date(ymd+'T00:00:00Z');t.setUTCDate(t.getUTCDate()+n);return t.toISOString().slice(0,10);}
+function weeklyGa_(){
+ const today=Utilities.formatDate(new Date(),AC_ADMIN.TZ,'yyyy-MM-dd'),monday=weeklyMonday_(),ym=today.slice(0,7);
+ const reqs=AC_GA_MODS.map(function(m){return {url:AC_GA_SRC[m[1]]+'?action=smartManifest&tool='+encodeURIComponent(m[2]),method:'get',followRedirects:true,muteHttpExceptions:true};});
+ reqs.push({url:AC_GA_SRC.SEC+'?action=weeklyDigestStatus&from='+monday+'&to='+weeklyGaAddDays_(monday,6),method:'get',followRedirects:true,muteHttpExceptions:true});
+ const res=UrlFetchApp.fetchAll(reqs);
+ let digest={};try{const j=JSON.parse(res[res.length-1].getContentText());digest=(j&&j.data&&j.data.tools)||j.tools||{};}catch(e){digest={};}
+ const pad=function(n,w){let s=String(n);while(s.length<w)s=' '+s;return s;},md=function(s){return Number(s.slice(5,7))+'/'+Number(s.slice(8,10));};
+ let green=0,yellow=0,red=0,unread=0;const byGroup={};
+ AC_GA_MODS.forEach(function(m,i){
+  let man=null;try{if(res[i].getResponseCode()===200){const j=JSON.parse(res[i].getContentText());man=j&&j.data&&(j.data.updatedAt!==undefined||j.data.counts)?j.data:j;}}catch(e){man=null;}
+  let light='⚪',cnt='—',when='讀不到 unreadable',extra='';
+  if(man&&man.exists!==false&&(man.updatedAt||man.counts)){
+   const up=weeklyGaYmd_(man.updatedAt),c=man.counts&&man.counts['m:'+ym];
+   cnt=(typeof c==='number')?String(c):'0';
+   if(!up){light='⚪';when='沒有更新時間';unread++;}
+   else{
+    if(m[5]==='w')light=up>=monday?'🟢':up>=weeklyGaAddDays_(monday,-7)?'🟡':'🔴';
+    else{const first=ym+'-01',prevFirst=weeklyGaAddDays_(first,-1).slice(0,7)+'-01';light=(up>=first||(Number(today.slice(8,10))<=7&&up>=prevFirst))?'🟢':up>=weeklyGaAddDays_(today,-45)?'🟡':'🔴';}
+    when=md(up);if(light==='🟢')green++;else if(light==='🟡')yellow++;else red++;
+   }
+   if(m[1]==='SEC'&&digest[m[2]]&&digest[m[2]].pendingDays&&digest[m[2]].pendingDays.length&&!digest[m[2]].sentWeek)extra=' · ⏳ 摘要待發 '+digest[m[2]].pendingDays.map(md).join('、');
+  }else{unread++;if(man&&man.exists===false){when='雲端沒有資料 no cloud data';}}
+  (byGroup[m[0]]=byGroup[m[0]]||[]).push(light+' <code>'+pad(cnt,5)+'</code> '+esc_(m[3])+' '+esc_(m[4])+' · '+when+(m[5]==='m'?'（月）':'')+extra);
+ });
+ if(unread===AC_GA_MODS.length)throw new Error('三個後端都讀不到');
+ const lines=['🧹 <b>總務保全 GA &amp; Security</b> · 各模組雲端資料狀態 Cloud data status','━━━━━━━━━━━━',
+  (red?'🔴':yellow?'🟡':'🟢')+' <b>'+green+' 個正常</b> · 🟡 '+yellow+' 該更新了 · 🔴 '+red+' 很久沒更新'+(unread?' · ⚪ '+unread+' 讀不到':''),
+  '<i>數字＝'+Number(ym.slice(5,7))+' 月雲端筆數，日期＝最後更新；（月）＝每月更新的模組</i>',
+  '<i>Number = records this month, date = last update; （月）= monthly modules</i>'];
+ AC_GA_GROUPS.forEach(function(g){if(byGroup[g[0]]){lines.push('');lines.push('<b>'+g[1]+'</b>');byGroup[g[0]].forEach(function(l){lines.push(l);});}});
+ lines.push('');lines.push('<i>🟢 有照時間更新　🟡 該更新了　🔴 很久沒更新　⏳ 有資料但摘要還沒發。採購、維修、燃油、行車、ETC 還沒列入。</i>');
+ return lines.join('\n');
+}
+function checkWeeklyGa(){const t=weeklyGa_();Logger.log(weeklyPlain_(t));return t.length;}
