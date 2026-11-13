@@ -14,7 +14,7 @@ const AC_GA_MODS=[
  ['sec','SEC','patrol','保安巡邏','Patrol','w'],['sec','SEC','cctv','CCTV 監控','CCTV','w'],['sec','SEC','container','貨櫃出入','Container','w'],['sec','SEC','commute','通勤與門禁','Commute','w'],
  ['sec','SEC','attendance','保安出勤','Guard attendance','m'],['sec','SEC','fire','消防設施','Fire safety','m'],['sec','SEC','personnel','保安人員','Personnel','m'],
  ['env','GC','temperature','溫濕度','Temperature','w'],['env','GC','cleaning','清潔與 6S','Cleaning','w'],['env','GC','ehs','回收與廢料','Waste','m'],
- ['fac','GC','dormitory','宿舍管理','Dormitory','m'],['fac','GC','asset','資產設備','Assets','m'],['fac','GC','keymovement','鑰匙借還','Keys','w'],['fac','GC','waterdrum','飲用水','Drinking water','m'],
+ ['fac','GC','dormitory','宿舍管理','Dormitory','m'],['fac','GC','asset','資產設備','Assets','m'],['fac','GC','waterdrum','飲用水','Drinking water','m'],
  ['fin','SEC','expense','保安費用','Security expenses','m'],['fin','EXP','receiving','收貨與領用','Receiving','w'],['fin','EXP','expense','費用中心','Expenses','w']
 ];
 function weeklyGaYmd_(iso){if(!iso)return '';const d=new Date(iso);return isNaN(d.getTime())?'':Utilities.formatDate(d,AC_ADMIN.TZ,'yyyy-MM-dd');}
@@ -48,7 +48,7 @@ function weeklyGa_(){
   '🟢 <b>'+green+' 個正常</b> · 🟡 '+yellow+' 個該更新了 · 🔴 '+red+' 個很久沒更新'+(unread?' · ⚪ '+unread+' 讀不到':''),
   '<i>日期＝雲端最後更新；（月）＝每月更新的模組。Date = last cloud update; （月）= monthly modules</i>'];
  AC_GA_GROUPS.forEach(function(g){if(byGroup[g[0]]){lines.push('');lines.push('<b>'+g[1]+'</b>');byGroup[g[0]].forEach(function(l){lines.push(l);});}});
- lines.push('');lines.push('<i>🟢 有照時間更新　🟡 該更新了　🔴 很久沒更新　⏳ 有資料但摘要還沒發。採購、維修、燃油、行車、ETC 還沒列入。</i>');
+ lines.push('');lines.push('<i>🟢 有照時間更新　🟡 該更新了　🔴 很久沒更新　⏳ 有資料但摘要還沒發。採購、維修、燃油、行車、ETC、鑰匙還沒列入。</i>');
  return lines.join('\n');
 }
 function checkWeeklyGa(){const t=weeklyGa_();Logger.log(weeklyPlain_(t));return t.length;}
