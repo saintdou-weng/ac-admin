@@ -1,0 +1,45 @@
+/* ═══ PSJGA v1.1.8（2026-11-13）行政中心週報用：總務保全本週摘要 ═══
+   Paul 11/13：行政中心每週六 09:00 發全系統週報，人事行政那一份要有總務保全。
+   doGet ?action=adminWeekNow（唯讀、不用金鑰）：只回「本週各業務的筆數／完成／需注意／待核可／已入帳費用合計」這些統計數字，
+   不含任何明細、姓名、照片。資料＝VRT GA 網頁同步上來的雲端快照（跟網頁首頁看到的是同一份）；快照多久沒更新會寫在最後一行。 */
+function psjgaAdminWeek_(){
+  const head=psjgaHead_();
+  if(!head.fileId)return {ok:false,error:'雲端還沒有 VRT GA 的資料快照'};
+  const d=psjgaRead_(head),ref=todayICT(),range=periodRange('week',ref);
+  const rows=filterRecords(d.snapshot.records,{mode:'week',ref:ref}),all=metrics(rows);
+  const md=s=>Number(s.slice(5,7))+'/'+Number(s.slice(8,10)),num=n=>Number(n).toLocaleString('en-US',{maximumFractionDigits:2});
+  const pad=(n,w)=>{let s=String(n);while(s.length<w)s=' '+s;return s;};
+  const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const lines=['🧹 <b>總務保全 GA &amp; Security</b> · '+md(range.from)+' ~ '+md(ref<range.to?ref:range.to),'━━━━━━━━━━━━'];
+  if(!rows.length)lines.push('🔵 這週雲端快照裡還沒有紀錄。No records in the cloud snapshot for this week yet.');
+  else{
+    const light=all.abnormal>0?'🟡':'🟢';
+    lines.push(light+' <b>本週 '+num(all.total)+' 筆紀錄 records</b>');
+    lines.push('<code>'+pad(all.completed,4)+'</code> ✅ 完成 Completed');
+    lines.push('<code>'+pad(all.abnormal,4)+'</code> '+(all.abnormal?'⚠️':'🟢')+' 需注意 Attention');
+    lines.push('<code>'+pad(all.pending,4)+'</code> '+(all.pending?'⏳':'🟢')+' 待核可 Awaiting approval');
+    const cur=Object.keys(all.expenses).sort();
+    if(cur.length)lines.push('💰 已入帳費用 Posted expenses：'+cur.map(k=>esc(k)+' '+num(all.expenses[k])).join(' · '));
+    lines.push('');
+    GROUPS.forEach(g=>{
+      const gr=rows.filter(r=>MODULE_MAP[r.module]&&MODULE_MAP[r.module].group===g.id),gm=metrics(gr);
+      const mods=MODULES.filter(x=>x.group===g.id);
+      lines.push((gr.length?(gm.abnormal?'🟡':'🟢'):'⚪')+' <code>'+pad(gr.length,4)+'</code> <b>'+esc(g.name.zh)+' '+esc(g.name.en)+'</b>'+(gm.abnormal?' · ⚠️ '+gm.abnormal:'')+(gm.pending?' · ⏳ '+gm.pending:''));
+      const have=[],none=[];
+      mods.forEach(x=>{const mr=gr.filter(r=>r.module===x.id);if(!mr.length){none.push(x.name.zh);return;}const ab=mr.filter(r=>r.status==='abnormal').length,pe=mr.filter(r=>r.requiresApproval&&r.status==='pending').length;have.push(esc(x.name.zh)+' '+mr.length+(ab?' ⚠️'+ab:'')+(pe?' ⏳'+pe:''));});
+      if(have.length)lines.push('      <i>'+have.join(' · ')+'</i>');
+      if(none.length&&gr.length)lines.push('      <i>沒有紀錄 none：'+esc(none.join('、'))+'</i>');
+    });
+    lines.push('<i>🟢 正常　🟡 有需注意　⚪ 這週沒有紀錄　⚠️ 需注意筆數　⏳ 待核可筆數</i>');
+  }
+  const up=head.updatedAt?new Date(head.updatedAt):null,ageDays=up?Math.floor((Date.now()-up.getTime())/86400000):null;
+  const upTxt=up?new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Phnom_Penh',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(up).replace(',',''):'—';
+  lines.push('');
+  lines.push((ageDays!=null&&ageDays>=3?'🔵 ':'')+'資料 Data：VRT GA 雲端快照 '+upTxt+(ageDays!=null&&ageDays>=3?'（已 '+ageDays+' 天沒同步，數字可能少算；打開 VRT GA 就會更新）':'')+' · 共 '+num(head.rowCount)+' 筆');
+  return {ok:true,week:range.from,to:ref,records:all.total,abnormal:all.abnormal,pending:all.pending,updatedAt:head.updatedAt||'',ageDays:ageDays,html:lines.join('\n')};
+}
+function doGet(e){
+  try{if(e&&e.parameter&&e.parameter.action==='adminWeekNow')return psjgaOutput_(psjgaAdminWeek_());}catch(err){return psjgaOutput_({ok:false,error:String(err&&err.code||err&&err.message||err).slice(0,120)});}
+  return psjgaOutput_(psjgaReply_(true,{status:'PSJGA cloud API',authenticated:false}));
+}
+function checkPSJGAAdminWeek(){const r=psjgaAdminWeek_();console.log(JSON.stringify({ok:r.ok,error:r.error,week:r.week,records:r.records,updatedAt:r.updatedAt,ageDays:r.ageDays}));console.log(String(r.html||'').replace(/<[^>]+>/g,''));return r.ok;}
