@@ -55,3 +55,11 @@ Paul 11/13：每週五早上 9 點發「當週」週報，分 ① 生產 ② 人
   → 沒有資料可算，先把「鑰匙借還」從週報拿掉。等鑰匙頁重新登記並上傳後再做「按部門／領用人：借出中、已歸還、在庫」。
 - 總務保全維持「更新狀態」16 個模組，不做件數。
 - AI 問答不需要 Paul 貼金鑰（走 PROD 代問），他 09:35 又問「在哪一行」→ 已回覆不用加。
+
+## 11/17 18:50 每天 13:00 VRT 日報＋新消息（v2.4.0，程式寫好、還沒貼進 AC_ADMIN_CENTER）
+- Paul 11/17：每天下午 1 點更新全部、發日報讓他知道 VRT 現況，分「生產」「行政管理」兩部分；有新消息也可以發。
+- 原始碼 `gas/admin-daily-v2.4.0.txt`（接在 v2.3.1 後面，用到 AC_WEEKLY.PROD_URL、weeklyMd_、weeklyKeyboard_、weeklyChunks_、weeklyPlain_、AC_GA_MODS/AC_GA_SRC、weeklyGaYmd_/weeklyGaAddDays_、tgRequest_、esc_）。
+- 生產：PROD `dailyReportText`（mode day, zh）＝生產平台 10:00／15:00 自己產生的日報；新消息看 `dailyReportList`。
+- 考勤：直接讀 HRA 雲端 `smartBucket tool=attendance bucket=m:YYYY-MM`（公開唯讀），用 GitHub Pages 上的 `shared/att-tg.js`（eval，快取 6 小時）產生 daily 中文摘要＝HRA 頁面同一份。**不用改 AC_HRA_CloudSync**（那個專案編輯器很重，11/17 晚上打不開）。考勤列的日期欄位名稱還沒實測（dailyAttDate_ 試 date/attDate/workDate/day/reportDate）。
+- 總務保全：三個後端 smartManifest，自上次日報後有更新的模組、🔴 很久沒更新、⏳ 摘要待發。
+- 還要做：① 貼進 AC_ADMIN_CENTER 檔尾 ② `pollAdminTelegram` 裡 `weeklyTick_()` 後面加 `dailyTick_()` ③ 執行 previewDaily 核對 ④ 問答：`weeklyAnswer_` 的 /週報｜/ 改成 /(週報|日報)｜/，提示詞加【今日日報】DAILY_TEXT。

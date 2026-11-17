@@ -1,0 +1,195 @@
+/* ===== 2026-11-17 v2.4.0 每天 13:00 VRT 日報＋新消息 Daily report =====
+   Paul 11/17：每天下午 1 點更新全部，發日報讓他知道 VRT 現況，分「生產」「行政管理」兩部分；有新消息也可以發。
+   · 13:00（週一～週六；週日不發）發兩則到行政群組「AI AC System」：
+     ① 🏭 生產：生產平台（VRT Production GAS）已經產生好的最新車縫日報（dailyReportText，同一套格式，數字不在這裡重算）。
+       最新資料日比「前一個工作天」舊 → 加一行「⏳ M/D 的日報還沒匯入（下午才進來），進來後補發」，不寫成沒生產。
+     ② 🧑‍💼 行政管理：考勤日報（HRA Portal 雲端最新一天，用 HRA 頁面同一份 shared/att-tg.js 產生，含出勤率、入離、本月累計）
+       ＋ 總務保全今天有更新的模組、很久沒更新的模組、待發摘要。
+   · 新消息：發完日報到 21:00，每 30 分鐘看一次；車縫日報或考勤有更新的日期進來 → 發一則「🆕 新消息」。同一天的資料只補一次。
+   · 只讀：不改任何平台資料。DAILY_SENT＝今天日期（一天只發一次）；失敗最多試 3 次；錯誤在 DAILY_LAST_ERROR。
+   · previewDaily() 只看不發；sendDailyNow() 立刻發；checkDailyNews() 看新消息判斷結果（不發）。 */
+const AC_DAILY={
+ AT:'13:00', UNTIL:'16:00', NEWS_UNTIL:'21:00', NEWS_EVERY_MIN:30,
+ HRA_URL:'https://script.google.com/macros/s/AKfycbya4jZG7YixRmumt9vKA-5Cv92jP8fi_o4toiU-8J2exQCYBhBsLOtN4kX9hoKqzp12/exec',
+ ATT_TG_JS:'https://saintdou-weng.github.io/ac-hra-portal/shared/att-tg.js'
+};
+const AC_DAILY_WD=['日','一','二','三','四','五','六'];
+function dailyToday_(){return Utilities.formatDate(new Date(),AC_ADMIN.TZ,'yyyy-MM-dd');}
+function dailyWd_(ymd){return AC_DAILY_WD[new Date(ymd+'T00:00:00Z').getUTCDay()];}
+function dailyMdw_(ymd){return ymd?weeklyMd_(ymd)+'（'+dailyWd_(ymd)+'）':'—';}
+/* 前一個工作天（週日不上班；國定假日不在這裡判斷，所以只用來決定要不要加「還沒匯入」提示） */
+function dailyPrevWork_(ymd){let d=weeklyGaAddDays_(ymd,-1);if(new Date(d+'T00:00:00Z').getUTCDay()===0)d=weeklyGaAddDays_(d,-1);return d;}
+function dailyJson_(r){const j=JSON.parse(r.getContentText());return j&&j.data&&typeof j.data==='object'&&!Array.isArray(j.data)&&(j.data.ok!==undefined||j.data.records||j.data.html)?j.data:j;}
+
+/* ── 生產 ── */
+function dailyProdFetch_(){
+ const r=UrlFetchApp.fetch(AC_WEEKLY.PROD_URL,{method:'post',contentType:'text/plain;charset=utf-8',payload:JSON.stringify({action:'dailyReportText',mode:'day',lang:'zh'}),muteHttpExceptions:true,followRedirects:true});
+ if(r.getResponseCode()!==200)throw new Error('生產平台 HTTP '+r.getResponseCode());
+ const d=dailyJson_(r);if(!d||!d.ok||!(d.html||d.text))throw new Error('生產平台沒有日報'+(d&&d.error?'：'+d.error:''));
+ return d;
+}
+function dailyProdLatest_(){   /* 新消息用：只看日報索引，不拿全文 */
+ const r=UrlFetchApp.fetch(AC_WEEKLY.PROD_URL,{method:'post',contentType:'text/plain;charset=utf-8',payload:JSON.stringify({action:'dailyReportList',limit:20}),muteHttpExceptions:true,followRedirects:true});
+ if(r.getResponseCode()!==200)return '';
+ const d=dailyJson_(r),idx=(d&&d.index)||[];
+ const days=idx.map(function(x){return String(x&&x.date||'');}).filter(function(s){return /^\d{4}-\d{2}-\d{2}$/.test(s);}).sort();
+ return days.length?days[days.length-1]:'';
+}
+function dailyProdBody_(d){const lines=String(d.html||esc_(d.text)).split('\n');lines.shift();while(lines.length&&!lines[0].trim())lines.shift();return lines.join('\n');}
+function dailyProdMessage_(d,today,isNews){
+ const head=isNews?'🆕 <b>新消息｜生產 Production</b>　'+dailyMdw_(d.date)+' 車縫日報已匯入':'🏭 <b>VRT 日報｜生產 Production</b>　'+dailyMdw_(today);
+ const out=[head];
+ if(!isNews){
+  out.push('📅 資料日 '+dailyMdw_(d.date));
+  const exp=dailyPrevWork_(today);
+  if(d.date<exp)out.push('⏳ '+dailyMdw_(exp)+' 的車縫日報還沒匯入（前一天的報告通常下午才進來），進來後會補發。');
+ }
+ out.push(dailyProdBody_(d));
+ return out.join('\n');
+}
+
+/* ── 考勤（HRA Portal 雲端，HRA 頁面同一份 att-tg.js） ── */
+function dailyAttLib_(){
+ if(globalThis.HRAAttTg)return globalThis.HRAAttTg;
+ const c=CacheService.getScriptCache();let js=c.get('ATT_TG_JS');
+ if(!js){const r=UrlFetchApp.fetch(AC_DAILY.ATT_TG_JS+'?t='+Date.now(),{muteHttpExceptions:true,followRedirects:true});if(r.getResponseCode()!==200)throw new Error('att-tg.js HTTP '+r.getResponseCode());js=r.getContentText();try{c.put('ATT_TG_JS',js,21600);}catch(e){}}
+ (0,eval)(js);   /* 全域執行：檔尾 (typeof window!=='undefined'?window:this) → this＝全域 */
+ if(!globalThis.HRAAttTg)throw new Error('att-tg.js 載入失敗');
+ return globalThis.HRAAttTg;
+}
+function dailyAttDate_(r){
+ const keys=['date','attDate','workDate','day','reportDate'];
+ for(let i=0;i<keys.length;i++){const v=r&&r[keys[i]];if(!v)continue;const s=String(v);let m=/^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(s);if(m)return m[1]+'-'+('0'+m[2]).slice(-2)+'-'+('0'+m[3]).slice(-2);m=/^(\d{4})\/(\d{1,2})\/(\d{1,2})/.exec(s);if(m)return m[1]+'-'+('0'+m[2]).slice(-2)+'-'+('0'+m[3]).slice(-2);const t=new Date(s);if(!isNaN(t.getTime()))return Utilities.formatDate(t,AC_ADMIN.TZ,'yyyy-MM-dd');}
+ return '';
+}
+function dailyAttBucket_(ym){
+ const r=UrlFetchApp.fetch(AC_DAILY.HRA_URL+'?action=smartBucket&tool=attendance&bucket='+encodeURIComponent('m:'+ym),{muteHttpExceptions:true,followRedirects:true});
+ if(r.getResponseCode()!==200)throw new Error('HRA HTTP '+r.getResponseCode());
+ const d=dailyJson_(r);return (d&&(d.records||d.rows))||[];
+}
+/* 回 {date, days:[{date,rows}]（該月 1 號到最新一天）} */
+function dailyAttDays_(){
+ const today=dailyToday_();let rows=dailyAttBucket_(today.slice(0,7));
+ const prevYm=weeklyGaAddDays_(today.slice(0,7)+'-01',-1).slice(0,7);
+ const hasGrand=function(rs){return rs.some(function(r){return r&&r.isGrand;});};
+ if(!hasGrand(rows))rows=dailyAttBucket_(prevYm);
+ const by={},seen={};
+ rows.forEach(function(r){
+  const dt=dailyAttDate_(r);if(!dt||dt>today)return;
+  const dims=[r.dept,r.sect,r.line].map(function(x){return String(x==null?'':x).trim().toUpperCase().replace(/\s+/g,' ');}).join('|');
+  const kind=r.isGrand?'G':r.isSubtotal?'S':'D',k=dt+'|'+kind+'|'+dims;
+  by[dt]=by[dt]||[];
+  if(dims.replace(/\|/g,'')&&seen[k]!==undefined){by[dt][seen[k]]=r;return;}   /* 同一天同一列：後面的蓋前面的（同 HRA 週報作法） */
+  seen[k]=by[dt].length;by[dt].push(r);
+ });
+ const days=Object.keys(by).sort().map(function(dt){return {date:dt,rows:by[dt]};}).filter(function(x){return hasGrand(x.rows);});
+ if(!days.length)return {date:'',days:[]};
+ const last=days[days.length-1].date;
+ return {date:last,days:days.filter(function(x){return x.date.slice(0,7)===last.slice(0,7)&&x.date<=last;})};
+}
+function dailyAtt_(){
+ const a=dailyAttDays_();if(!a.date)throw new Error('HRA 雲端沒有考勤資料');
+ const lib=dailyAttLib_(),day=a.days[a.days.length-1];
+ const text=lib.build({mode:'daily',lang:'zh',key:a.date,days:[day],monthDays:a.days});
+ return {date:a.date,html:String(text||'')};
+}
+function dailyAttLatest_(){try{return dailyAttDays_().date;}catch(e){return '';}}
+
+/* ── 總務保全（三個後端的 smartManifest，只看更新時間） ── */
+function dailyGa_(sinceIso){
+ const today=dailyToday_(),monday=weeklyMonday_(),ym=today.slice(0,7);
+ const since=sinceIso?new Date(sinceIso):new Date(Date.now()-24*3600*1000);
+ const reqs=AC_GA_MODS.map(function(m){return {url:AC_GA_SRC[m[1]]+'?action=smartManifest&tool='+encodeURIComponent(m[2]),method:'get',followRedirects:true,muteHttpExceptions:true};});
+ reqs.push({url:AC_GA_SRC.SEC+'?action=weeklyDigestStatus&from='+monday+'&to='+weeklyGaAddDays_(monday,6),method:'get',followRedirects:true,muteHttpExceptions:true});
+ const res=UrlFetchApp.fetchAll(reqs);
+ let digest={};try{const j=JSON.parse(res[res.length-1].getContentText());digest=(j&&j.data&&j.data.tools)||j.tools||{};}catch(e){digest={};}
+ const fresh=[],stale=[],pend=[];let unread=0;
+ AC_GA_MODS.forEach(function(m,i){
+  let man=null;try{if(res[i].getResponseCode()===200){const j=JSON.parse(res[i].getContentText());man=j&&j.data&&(j.data.updatedAt!==undefined||j.data.counts)?j.data:j;}}catch(e){man=null;}
+  if(!man||man.exists===false||!man.updatedAt){unread++;return;}
+  const t=new Date(man.updatedAt),up=weeklyGaYmd_(man.updatedAt);if(isNaN(t.getTime())){unread++;return;}
+  if(t>=since)fresh.push(m[3]);
+  else{
+   let red;if(m[5]==='w')red=up<weeklyGaAddDays_(monday,-7);
+   else{const first=ym+'-01',prevFirst=weeklyGaAddDays_(first,-1).slice(0,7)+'-01';red=!(up>=first||(Number(today.slice(8,10))<=7&&up>=prevFirst))&&up<weeklyGaAddDays_(today,-45);}
+   if(red)stale.push(m[3]+' '+weeklyMd_(up));
+  }
+  if(m[1]==='SEC'&&digest[m[2]]&&digest[m[2]].pendingDays&&digest[m[2]].pendingDays.length&&!digest[m[2]].sentWeek)pend.push(m[3]);
+ });
+ if(unread===AC_GA_MODS.length)throw new Error('總務三個後端都讀不到');
+ const L=['🧹 <b>總務保全 GA &amp; Security</b>'];
+ L.push('🆕 有更新 '+fresh.length+' 個'+(fresh.length?'：'+esc_(fresh.join('、')):'（自上次日報後沒有新資料）'));
+ if(stale.length)L.push('🔴 很久沒更新 '+stale.length+' 個：'+esc_(stale.join('、')));
+ if(pend.length)L.push('⏳ 本週摘要待發：'+esc_(pend.join('、')));
+ if(!stale.length&&!pend.length)L.push('🟢 其他模組都有照時間更新');
+ if(unread)L.push('<i>⚪ '+unread+' 個模組讀不到更新時間</i>');
+ return L.join('\n');
+}
+
+/* ── 組訊息（不發） ── */
+function dailyBuild_(){
+ const today=dailyToday_(),p=PropertiesService.getScriptProperties(),parts=[],errors=[];let prodDate='',attDate='';
+ try{const d=dailyProdFetch_();prodDate=d.date;parts.push({id:'prod',kind:'prod',html:dailyProdMessage_(d,today,false)});}catch(e){errors.push('生產：'+String(e&&e.message||e).slice(0,160));}
+ const adm=[];
+ try{const a=dailyAtt_();attDate=a.date;const exp=dailyPrevWork_(today);adm.push((a.date<exp?'⏳ 考勤最新到 '+dailyMdw_(a.date)+'，之後的還沒上傳。\n':'')+a.html);}catch(e){errors.push('考勤：'+String(e&&e.message||e).slice(0,160));}
+ try{adm.push(dailyGa_(p.getProperty('DAILY_SENT_AT')));}catch(e){errors.push('總務保全：'+String(e&&e.message||e).slice(0,160));}
+ if(adm.length)parts.push({id:'admin',kind:'admin',html:'🧑‍💼 <b>VRT 日報｜行政管理 Admin</b>　'+dailyMdw_(today)+'\n'+adm.join('\n━━━━━━━━━━━━\n')});
+ return {today:today,parts:parts,errors:errors,prodDate:prodDate,attDate:attDate};
+}
+function dailyPost_(html,kind){
+ const chunks=typeof weeklyChunks_==='function'?weeklyChunks_(html):[String(html).slice(0,4000)];let last=null;
+ chunks.forEach(function(t,i){last=tgRequest_('sendMessage',{chat_id:AC_ADMIN.CHAT_ID,text:t,parse_mode:'HTML',disable_web_page_preview:true,reply_markup:i===chunks.length-1?JSON.stringify(weeklyKeyboard_(kind)):undefined});});
+ return last;
+}
+function dailySend_(b){
+ const p=PropertiesService.getScriptProperties();let sent=0;const texts=[];
+ b.parts.forEach(function(part){dailyPost_(part.html,part.kind);sent++;texts.push(weeklyPlain_(part.html));});
+ if(sent){
+  p.setProperty('DAILY_SENT',b.today);p.setProperty('DAILY_SENT_AT',new Date().toISOString());
+  if(b.prodDate)p.setProperty('DAILY_PROD_DATE',b.prodDate);if(b.attDate)p.setProperty('DAILY_ATT_DATE',b.attDate);
+  try{p.setProperty('DAILY_TEXT',texts.join('\n\n').slice(0,8500));}catch(e){}
+ }
+ if(b.errors.length)p.setProperty('DAILY_LAST_ERROR',b.today+' '+b.errors.join(' | ').slice(0,480));else p.deleteProperty('DAILY_LAST_ERROR');
+ return sent;
+}
+
+/* ── 新消息：日報發出後，車縫日報或考勤有新日期進來就補一則 ── */
+function dailyNews_(dry){
+ const p=PropertiesService.getScriptProperties(),today=dailyToday_(),out=[];
+ const pd=p.getProperty('DAILY_PROD_DATE')||'',ad=p.getProperty('DAILY_ATT_DATE')||'';
+ const lp=dailyProdLatest_();
+ if(lp&&lp>pd){
+  if(dry)out.push('prod '+pd+' → '+lp);
+  else{try{const d=dailyProdFetch_();if(d.date>pd){dailyPost_(dailyProdMessage_(d,today,true),'prod');p.setProperty('DAILY_PROD_DATE',d.date);out.push('prod '+d.date);}}catch(e){out.push('prod error '+String(e&&e.message||e).slice(0,120));}}
+ }
+ const la=dailyAttLatest_();
+ if(la&&la>ad){
+  if(dry)out.push('att '+ad+' → '+la);
+  else{try{const a=dailyAtt_();if(a.date>ad){dailyPost_('🆕 <b>新消息｜考勤 Attendance</b>　'+dailyMdw_(a.date)+' 考勤已上傳\n'+a.html,'admin');p.setProperty('DAILY_ATT_DATE',a.date);out.push('att '+a.date);}}catch(e){out.push('att error '+String(e&&e.message||e).slice(0,120));}}
+ }
+ return out;
+}
+
+/* 每分鐘由 pollAdminTelegram 呼叫（和週報同一把鎖） */
+function dailyTick_(){
+ try{
+  const now=new Date(),tz=AC_ADMIN.TZ;if(Number(Utilities.formatDate(now,tz,'u'))===7)return;   /* 週日不發 */
+  const hm=Utilities.formatDate(now,tz,'HH:mm'),today=dailyToday_(),p=PropertiesService.getScriptProperties();
+  if(hm<AC_DAILY.AT)return;
+  if(p.getProperty('DAILY_SENT')!==today){
+   if(hm>AC_DAILY.UNTIL)return;
+   const tries=String(p.getProperty('DAILY_TRY')||'').split('|'),n=tries[0]===today?Number(tries[1])||0:0;if(n>=3)return;
+   p.setProperty('DAILY_TRY',today+'|'+(n+1));
+   const b=dailyBuild_();if(!b.parts.length){p.setProperty('DAILY_LAST_ERROR',today+' '+(b.errors.join(' | ')||'no parts').slice(0,480));return;}
+   dailySend_(b);return;
+  }
+  if(hm>AC_DAILY.NEWS_UNTIL)return;
+  const last=Number(p.getProperty('DAILY_NEWS_AT')||0);if(Date.now()-last<AC_DAILY.NEWS_EVERY_MIN*60000)return;
+  p.setProperty('DAILY_NEWS_AT',String(Date.now()));
+  dailyNews_(false);
+ }catch(e){try{PropertiesService.getScriptProperties().setProperty('DAILY_LAST_ERROR',String(e&&e.message||e).slice(0,500));}catch(x){}}
+}
+/* 在編輯器按執行 */
+function previewDaily(){const b=dailyBuild_();b.parts.forEach(function(x){Logger.log(weeklyPlain_(x.html));});Logger.log('prodDate '+b.prodDate+' attDate '+b.attDate+' errors '+JSON.stringify(b.errors));return b.parts.length+' parts · '+b.errors.length+' errors';}
+function sendDailyNow(){const b=dailyBuild_();const n=dailySend_(b);Logger.log('sent '+n+' errors '+JSON.stringify(b.errors));return n;}
+function checkDailyNews(){const r=dailyNews_(true);Logger.log(JSON.stringify(r));return JSON.stringify(r);}
