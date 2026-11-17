@@ -3,7 +3,7 @@
    · 13:00（週一～週六；週日不發）發兩則到行政群組「AI AC System」：
      ① 🏭 生產：整體生產（車縫、裁剪、已裁未縫、本月排單、QC、本週出貨、訂單／缺布、機修、要處理），數字取生產平台已算好的最新日報 facts；最後一行 ERP 最近更新。沒資料的區塊不列。
        Paul 11/17：發前一天的也可以；最新資料日比前一個工作天舊 → 加一行「⏳ 還沒匯入，進來後補發」，不寫成沒生產。
-     ② 🧑‍💼 行政管理：考勤日報（HRA Portal 雲端最新一天，用 HRA 頁面同一份 shared/att-tg.js 產生，含出勤率、入離、本月累計）
+     ② 🧑‍💼 行政管理：考勤日報（HRA Portal 雲端最新一天，attendanceDiff 唯讀讀取，用 HRA 頁面同一份 shared/att-tg.js 產生，含出勤率、入離、本月累計）
        ＋ 總務保全今天有更新的模組、很久沒更新的模組、待發摘要。
    · 新消息：發完日報到 21:00，每 30 分鐘看一次；車縫日報或考勤有更新的日期進來 → 發一則「🆕 新消息」。同一天的資料只補一次。
    · 只讀：不改任何平台資料。DAILY_SENT＝今天日期（一天只發一次）；失敗最多試 3 次；錯誤在 DAILY_LAST_ERROR。
@@ -106,20 +106,22 @@ function dailyAttDate_(r){
  for(let i=0;i<keys.length;i++){const v=r&&r[keys[i]];if(!v)continue;const s=String(v);let m=/^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(s);if(m)return m[1]+'-'+('0'+m[2]).slice(-2)+'-'+('0'+m[3]).slice(-2);m=/^(\d{4})\/(\d{1,2})\/(\d{1,2})/.exec(s);if(m)return m[1]+'-'+('0'+m[2]).slice(-2)+'-'+('0'+m[3]).slice(-2);const t=new Date(s);if(!isNaN(t.getTime()))return Utilities.formatDate(t,AC_ADMIN.TZ,'yyyy-MM-dd');}
  return '';
 }
-function dailyAttBucket_(ym){
- const r=UrlFetchApp.fetch(AC_DAILY.HRA_URL+'?action=smartBucket&tool=attendance&bucket='+encodeURIComponent('m:'+ym),{muteHttpExceptions:true,followRedirects:true});
+/* HRA 考勤頁自己用的唯讀讀法：attendanceDiff（metaOnly 拿每天的筆數／指紋，再指定日期拿列） */
+function dailyAttPost_(body){
+ const r=UrlFetchApp.fetch(AC_DAILY.HRA_URL,{method:'post',contentType:'text/plain;charset=utf-8',payload:JSON.stringify(body),muteHttpExceptions:true,followRedirects:true});
  if(r.getResponseCode()!==200)throw new Error('HRA HTTP '+r.getResponseCode());
- const d=dailyJson_(r);return (d&&(d.records||d.rows))||[];
+ const j=JSON.parse(r.getContentText());if(j&&j.ok===false)throw new Error('HRA '+String(j.error||'error').slice(0,100));
+ return (j&&j.data)||j||{};
 }
-/* 回 {date, days:[{date,rows}]（該月 1 號到最新一天）} */
+function dailyAttDates_(){const d=dailyAttPost_({action:'attendanceDiff',dateStats:{},dates:[],metaOnly:true});const today=dailyToday_();return Object.keys(d.dateStats||{}).filter(function(x){return /^\d{4}-\d{2}-\d{2}$/.test(x)&&x<=today;}).sort();}
+/* 回 {date, days:[{date,rows}]（最新一天那個月的 1 號到最新一天）} */
 function dailyAttDays_(){
- const today=dailyToday_();let rows=dailyAttBucket_(today.slice(0,7));
- const prevYm=weeklyGaAddDays_(today.slice(0,7)+'-01',-1).slice(0,7);
- const hasGrand=function(rs){return rs.some(function(r){return r&&r.isGrand;});};
- if(!hasGrand(rows))rows=dailyAttBucket_(prevYm);
- const by={},seen={};
+ const all=dailyAttDates_();if(!all.length)return {date:'',days:[]};
+ const last=all[all.length-1],want=all.filter(function(x){return x.slice(0,7)===last.slice(0,7);});
+ const rows=(dailyAttPost_({action:'attendanceDiff',dateStats:{},dates:want,metaOnly:false}).records)||[];
+ const by={},seen={},hasGrand=function(rs){return rs.some(function(r){return r&&r.isGrand;});};
  rows.forEach(function(r){
-  const dt=dailyAttDate_(r);if(!dt||dt>today)return;
+  const dt=dailyAttDate_(r);if(!dt)return;
   const dims=[r.dept,r.sect,r.line].map(function(x){return String(x==null?'':x).trim().toUpperCase().replace(/\s+/g,' ');}).join('|');
   const kind=r.isGrand?'G':r.isSubtotal?'S':'D',k=dt+'|'+kind+'|'+dims;
   by[dt]=by[dt]||[];
@@ -127,9 +129,7 @@ function dailyAttDays_(){
   seen[k]=by[dt].length;by[dt].push(r);
  });
  const days=Object.keys(by).sort().map(function(dt){return {date:dt,rows:by[dt]};}).filter(function(x){return hasGrand(x.rows);});
- if(!days.length)return {date:'',days:[]};
- const last=days[days.length-1].date;
- return {date:last,days:days.filter(function(x){return x.date.slice(0,7)===last.slice(0,7)&&x.date<=last;})};
+ return days.length?{date:days[days.length-1].date,days:days}:{date:'',days:[]};
 }
 function dailyAtt_(){
  const a=dailyAttDays_();if(!a.date)throw new Error('HRA 雲端沒有考勤資料');
@@ -137,7 +137,7 @@ function dailyAtt_(){
  const text=lib.build({mode:'daily',lang:'zh',key:a.date,days:[day],monthDays:a.days});
  return {date:a.date,html:String(text||'')};
 }
-function dailyAttLatest_(){try{return dailyAttDays_().date;}catch(e){return '';}}
+function dailyAttLatest_(){try{const a=dailyAttDates_();return a.length?a[a.length-1]:'';}catch(e){return '';}}
 
 /* ── 總務保全（三個後端的 smartManifest，只看更新時間） ── */
 function dailyGa_(sinceIso){
