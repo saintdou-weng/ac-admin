@@ -56,10 +56,13 @@ Paul 11/13：每週五早上 9 點發「當週」週報，分 ① 生產 ② 人
 - 總務保全維持「更新狀態」16 個模組，不做件數。
 - AI 問答不需要 Paul 貼金鑰（走 PROD 代問），他 09:35 又問「在哪一行」→ 已回覆不用加。
 
-## 11/17 18:50 每天 13:00 VRT 日報＋新消息（v2.4.0，程式寫好、還沒貼進 AC_ADMIN_CENTER）
+## 11/17 每天 13:00 VRT 日報＋新消息（v2.4.0，19:20 已貼進 AC_ADMIN_CENTER 並存檔；polling 觸發器跑 HEAD，明天 11/18 13:00 第一次發）
 - Paul 11/17：每天下午 1 點更新全部、發日報讓他知道 VRT 現況，分「生產」「行政管理」兩部分；有新消息也可以發。
 - 原始碼 `gas/admin-daily-v2.4.0.txt`（接在 v2.3.1 後面，用到 AC_WEEKLY.PROD_URL、weeklyMd_、weeklyKeyboard_、weeklyChunks_、weeklyPlain_、AC_GA_MODS/AC_GA_SRC、weeklyGaYmd_/weeklyGaAddDays_、tgRequest_、esc_）。
 - 生產（Paul 11/17：要整體生產，不只車縫，能 cover 多少算多少；發前一天的也可以）：PROD `dailyReportList`→`dailyReportGet` 取 facts，自己排版車縫/裁剪/已裁未縫/排單/QC/出貨/訂單缺布/機修/要處理；末行 PSJERP `synclog` 最新 DIGEST（ERP 更新）。退路 `dailyReportText`。
 - 考勤：直接讀 HRA 雲端 `smartBucket tool=attendance bucket=m:YYYY-MM`（公開唯讀），用 GitHub Pages 上的 `shared/att-tg.js`（eval，快取 6 小時）產生 daily 中文摘要＝HRA 頁面同一份。**不用改 AC_HRA_CloudSync**（那個專案編輯器很重，11/17 晚上打不開）。考勤列的日期欄位名稱還沒實測（dailyAttDate_ 試 date/attDate/workDate/day/reportDate）。
 - 總務保全：三個後端 smartManifest，自上次日報後有更新的模組、🔴 很久沒更新、⏳ 摘要待發。
 - 還要做：① 貼進 AC_ADMIN_CENTER 檔尾 ② `pollAdminTelegram` 裡 `weeklyTick_()` 後面加 `dailyTick_()` ③ 執行 previewDaily 核對 ④ 問答：`weeklyAnswer_` 的 /週報｜/ 改成 /(週報|日報)｜/，提示詞加【今日日報】DAILY_TEXT。
+- 19:20 已安裝：檔尾接 v2.4.0；`weeklyTick_();dailyTick_();`；問答 regex `/(週報|日報|新消息)｜/`、提示詞加【今日日報】DAILY_TEXT、沒週報但有日報也能問。
+- 驗證（在 github.io 頁面用同步 XHR 模擬跑 dailyBuild_，資料是真的）：兩則都產生、errors 空；生產資料日 11/12、考勤 11/16。GAS 端的 eval(att-tg.js) 還沒在 GAS 裡實際跑過（筆電螢幕關著，編輯器「執行」按不到）→ 11/18 13:20 排了檢查。
+- 發現：生產雲端車縫資料停在 11/12（sewing 最後更新 11/14 10:31，11 月 332 列）；11/13、11/14、11/16 的日報都還沒匯入 → 匯入自動化落後。客戶統計快照是 9/29（舊），日報會標「資料較舊」。
