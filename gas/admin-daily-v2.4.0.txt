@@ -1,8 +1,8 @@
 /* ===== 2026-11-17 v2.4.0 每天 13:00 VRT 日報＋新消息 Daily report =====
    Paul 11/17：每天下午 1 點更新全部，發日報讓他知道 VRT 現況，分「生產」「行政管理」兩部分；有新消息也可以發。
    · 13:00（週一～週六；週日不發）發兩則到行政群組「AI AC System」：
-     ① 🏭 生產：生產平台（VRT Production GAS）已經產生好的最新車縫日報（dailyReportText，同一套格式，數字不在這裡重算）。
-       最新資料日比「前一個工作天」舊 → 加一行「⏳ M/D 的日報還沒匯入（下午才進來），進來後補發」，不寫成沒生產。
+     ① 🏭 生產：整體生產（車縫、裁剪、已裁未縫、本月排單、QC、本週出貨、訂單／缺布、機修、要處理），數字取生產平台已算好的最新日報 facts；最後一行 ERP 最近更新。沒資料的區塊不列。
+       Paul 11/17：發前一天的也可以；最新資料日比前一個工作天舊 → 加一行「⏳ 還沒匯入，進來後補發」，不寫成沒生產。
      ② 🧑‍💼 行政管理：考勤日報（HRA Portal 雲端最新一天，用 HRA 頁面同一份 shared/att-tg.js 產生，含出勤率、入離、本月累計）
        ＋ 總務保全今天有更新的模組、很久沒更新的模組、待發摘要。
    · 新消息：發完日報到 21:00，每 30 分鐘看一次；車縫日報或考勤有更新的日期進來 → 發一則「🆕 新消息」。同一天的資料只補一次。
@@ -21,30 +21,74 @@ function dailyMdw_(ymd){return ymd?weeklyMd_(ymd)+'（'+dailyWd_(ymd)+'）':'—
 function dailyPrevWork_(ymd){let d=weeklyGaAddDays_(ymd,-1);if(new Date(d+'T00:00:00Z').getUTCDay()===0)d=weeklyGaAddDays_(d,-1);return d;}
 function dailyJson_(r){const j=JSON.parse(r.getContentText());return j&&j.data&&typeof j.data==='object'&&!Array.isArray(j.data)&&(j.data.ok!==undefined||j.data.records||j.data.html)?j.data:j;}
 
-/* ── 生產 ── */
-function dailyProdFetch_(){
- const r=UrlFetchApp.fetch(AC_WEEKLY.PROD_URL,{method:'post',contentType:'text/plain;charset=utf-8',payload:JSON.stringify({action:'dailyReportText',mode:'day',lang:'zh'}),muteHttpExceptions:true,followRedirects:true});
+/* ── 生產（整體：車縫・裁剪・在製・排單・QC・出貨・可上線／缺布・換針換件・要處理＋ERP 更新）──
+   數字全部取生產平台已算好的 facts（dailyReportGet），這裡只排版；哪一塊沒有資料就不列，能列多少算多少。 */
+function dailyProdPost_(body){
+ const r=UrlFetchApp.fetch(AC_WEEKLY.PROD_URL,{method:'post',contentType:'text/plain;charset=utf-8',payload:JSON.stringify(body),muteHttpExceptions:true,followRedirects:true});
  if(r.getResponseCode()!==200)throw new Error('生產平台 HTTP '+r.getResponseCode());
- const d=dailyJson_(r);if(!d||!d.ok||!(d.html||d.text))throw new Error('生產平台沒有日報'+(d&&d.error?'：'+d.error:''));
- return d;
+ return dailyJson_(r);
 }
-function dailyProdLatest_(){   /* 新消息用：只看日報索引，不拿全文 */
- const r=UrlFetchApp.fetch(AC_WEEKLY.PROD_URL,{method:'post',contentType:'text/plain;charset=utf-8',payload:JSON.stringify({action:'dailyReportList',limit:20}),muteHttpExceptions:true,followRedirects:true});
- if(r.getResponseCode()!==200)return '';
- const d=dailyJson_(r),idx=(d&&d.index)||[];
- const days=idx.map(function(x){return String(x&&x.date||'');}).filter(function(s){return /^\d{4}-\d{2}-\d{2}$/.test(s);}).sort();
- return days.length?days[days.length-1]:'';
+function dailyProdLatest_(){   /* 最新一天日報的日期（只看索引） */
+ try{const d=dailyProdPost_({action:'dailyReportList',limit:30}),idx=(d&&d.index)||[];
+  const days=idx.map(function(x){return String(x&&x.date||'');}).filter(function(s){return /^\d{4}-\d{2}-\d{2}$/.test(s);}).sort();
+  return days.length?days[days.length-1]:'';}catch(e){return '';}
 }
-function dailyProdBody_(d){const lines=String(d.html||esc_(d.text)).split('\n');lines.shift();while(lines.length&&!lines[0].trim())lines.shift();return lines.join('\n');}
+function dailyProdFetch_(){
+ const date=dailyProdLatest_();
+ if(date){const g=dailyProdPost_({action:'dailyReportGet',date:date}),rep=g&&g.report;if(rep&&rep.facts)return {date:date,facts:rep.facts};}
+ const d=dailyProdPost_({action:'dailyReportText',mode:'day',lang:'zh'});   /* 退路：平台自己的文字 */
+ if(!d||!d.ok||!(d.html||d.text))throw new Error('生產平台沒有日報'+(d&&d.error?'：'+d.error:''));
+ return {date:d.date,html:d.html||esc_(d.text)};
+}
+function dailyN_(v){return v==null||isNaN(v)?'—':Math.round(Number(v)).toLocaleString('en-US');}
+function dailyP1_(v){return v==null||isNaN(v)?'—':(Math.round(Number(v)*10)/10).toFixed(1).replace(/\.0$/,'');}
+function dailyArrow_(cur,prev){if(cur==null||prev==null||!prev)return '';const r=Math.round((cur-prev)/prev*100);return r>0?' ▲'+r+'%':r<0?' ▼'+Math.abs(r)+'%':' ＝';}
+function dailyEffDot_(e){return e==null?'⚪':e>=35?'🟢':e>=25?'🟡':'🔴';}
+function dailyProdFacts_(f){
+ const L=[],s=f.sewing||{},c=f.cutting||{},w=f.wip||{},pl=f.plan||{},q=f.qc||{},sh=f.shipping||{},fb=f.fabric||{},mt=f.maint||{},pv=f.prevDay||{};
+ /* 車縫 */
+ if(s.rows){
+  L.push('🧵 <b>車縫</b>　'+dailyN_(s.pieces)+' 件'+dailyArrow_(s.pieces,pv.pieces)+'　'+dailyEffDot_(s.eff)+' 效率 '+dailyP1_(s.eff)+'%'+(pv.eff!=null?'（前一天 '+dailyP1_(pv.eff)+'%）':''));
+  const sub=[];if(s.lines)sub.push(dailyN_(s.lines)+' 組');if(s.manpower)sub.push(dailyP1_(s.manpower)+' 人');if(s.garment||s.apron)sub.push((s.garment?'成衣 '+dailyN_(s.garment):'')+(s.garment&&s.apron?'｜':'')+(s.apron?'圍裙 '+dailyN_(s.apron):''));
+  if(sub.length)L.push('　'+sub.join('・'));
+  const bl=(s.byLine||[]).filter(function(x){return x&&x.eff!=null;}).slice().sort(function(a,b){return String(a.line).localeCompare(String(b.line),'en',{numeric:true});});
+  if(bl.length){const cells=bl.map(function(x){return dailyEffDot_(x.eff)+esc_(String(x.line).replace(/^Line\s*/i,'L'))+' '+Math.round(x.eff)+'%';});for(let i=0;i<cells.length;i+=4)L.push('　'+cells.slice(i,i+4).join('　'));}
+ }else L.push('🧵 <b>車縫</b>　這天沒有車縫資料');
+ /* 裁剪／在製 */
+ if(c.rows)L.push('✂️ <b>裁剪</b>　'+dailyN_(c.pieces)+' 件'+dailyArrow_(c.pieces,c.prevPieces)+(c.tables?'・'+dailyN_(c.tables)+' 床':'')+(c.yds?'・用布 '+dailyN_(c.yds)+' 碼':''));
+ if(w&&w.cutNotSewn)L.push('📦 <b>已裁未縫</b>　'+dailyN_(w.cutNotSewn)+' 件'+(w.daysOfOutput?'（約 '+dailyP1_(w.daysOfOutput)+' 天產量）':''));
+ /* 排單 */
+ if(pl&&pl.planQty){L.push('📅 <b>'+Number(String(pl.month||'').slice(5,7))+' 月排單</b>　'+dailyN_(pl.mtd)+' / '+dailyN_(pl.planQty)+' 件（'+Math.round(pl.completion||0)+'%）'+(pl.workdaysLeft!=null?'・剩 '+dailyN_(pl.workdaysLeft)+' 工作天'+(pl.requiredPerDay?'，每天要 '+dailyN_(pl.requiredPerDay):''):''));}
+ /* QC */
+ if(q&&q.reports)L.push('🔍 <b>QC</b>　退修率 '+(q.rate!=null?dailyP1_(q.rate)+'%':'—')+'・檢驗 '+dailyN_(q.inspected)+'・退修 '+dailyN_(q.rejected)+(q.asOf&&q.date?'（'+weeklyMd_(q.date)+' 報告）':'')+(q.top&&q.top.length?'\n　主要缺點：'+q.top.slice(0,3).map(function(x){return esc_(x.name)+' '+dailyN_(x.qty);}).join('、'):''));
+ else L.push('🔍 <b>QC</b>　沒有報告');
+ /* 出貨 */
+ if(sh&&sh.rows){L.push('🚢 <b>本週出貨</b>（'+weeklyMd_(sh.weekStart)+'–'+weeklyMd_(sh.weekEnd)+'）　已出 '+dailyN_(sh.shipped)+' / '+dailyN_(sh.orig)+' 件'+(sh.pct!=null?'（'+Math.round(sh.pct)+'%）':'')+'・未出 '+dailyN_(sh.open));
+  if(sh.overdueRows)L.push('　🔴 已過 ETD 未出 '+dailyN_(sh.overdueRows)+' 筆 '+dailyN_(sh.overdueOpen)+' 件：'+(sh.overdue||[]).slice(0,3).map(function(o){return esc_(o.cust)+' '+esc_(o.po)+' '+dailyN_(o.open);}).join('、'));}
+ /* 可上線／缺布 */
+ if(fb&&fb.hasData){const z=[];if(fb.notSewn!=null)z.push('未車縫 '+dailyN_(fb.notSewn));if(fb.cuttingWip!=null)z.push('裁片在製 '+dailyN_(fb.cuttingWip));if(fb.noFabricPcs)z.push('🔴 缺布 '+dailyN_(fb.noFabricPcs)+(fb.noFabricShare!=null?'（'+dailyP1_(fb.noFabricShare)+'%）':''));if(fb.fg!=null)z.push('成品 '+dailyN_(fb.fg));
+  if(z.length)L.push('🧶 <b>訂單／布料</b>（客戶統計 '+weeklyMd_(fb.snapshotDate)+'）　'+z.join('・'));}
+ /* 換針換件 */
+ const nd=mt.needle||{},pt=mt.part||{};if(nd.qty||pt.qty)L.push('🔧 <b>機修</b>　換針 '+dailyN_(nd.qty)+' 支（非計畫 '+dailyN_(nd.unplanned)+'）・換件 '+dailyN_(pt.qty)+' 件'+(nd.flag&&nd.flag.length?'　⚠️ '+nd.flag.slice(0,2).map(function(x){return esc_(String(x.line))+' 非計畫 '+x.unplanned;}).join('、'):''));
+ /* 要處理 */
+ const an=(f.anomalies||[]).slice().sort(function(a,b){return (b.sev||0)-(a.sev||0);}).slice(0,4);
+ if(an.length){L.push('━━━━━━━━━━━━');L.push('⚠️ <b>要處理</b>');an.forEach(function(a,i){let t=String(a.zh||'');if(t.length>70)t=t.slice(0,68)+'…';L.push((i+1)+'. '+esc_(t)+(a.who&&a.who.zh?'　→ '+esc_(a.who.zh):''));});}
+ return L.join('\n');
+}
+/* ERP（成衣管理系統→VRT ERP）最近一次更新摘要：PSJERP 公開的 synclog 裡的 DIGEST 列 */
+const AC_DAILY_ERP='https://script.google.com/macros/s/AKfycbzyAaaKlMGdot9YtYAlBp-dktm2xRr_aHbOcQ-TNfouERMjuq4iCfRhCY0_3LsPa2mL/exec';
+function dailyErp_(){
+ try{const r=UrlFetchApp.fetch(AC_DAILY_ERP+'?action=synclog',{muteHttpExceptions:true,followRedirects:true});if(r.getResponseCode()!==200)return null;
+  const rows=(JSON.parse(r.getContentText()).rows)||[];const d=rows.filter(function(x){return x&&x.ACTION==='DIGEST'&&x.STATUS==='OK';})[0];
+  return d?{at:String(d.TIME||''),note:String(d.NOTE||'')}:null;}catch(e){return null;}
+}
 function dailyProdMessage_(d,today,isNews){
- const head=isNews?'🆕 <b>新消息｜生產 Production</b>　'+dailyMdw_(d.date)+' 車縫日報已匯入':'🏭 <b>VRT 日報｜生產 Production</b>　'+dailyMdw_(today);
- const out=[head];
- if(!isNews){
-  out.push('📅 資料日 '+dailyMdw_(d.date));
-  const exp=dailyPrevWork_(today);
-  if(d.date<exp)out.push('⏳ '+dailyMdw_(exp)+' 的車縫日報還沒匯入（前一天的報告通常下午才進來），進來後會補發。');
- }
- out.push(dailyProdBody_(d));
+ const head=isNews?'🆕 <b>新消息｜生產 Production</b>　'+dailyMdw_(d.date)+' 生產日報已匯入':'🏭 <b>VRT 日報｜生產 Production</b>　'+dailyMdw_(today);
+ const out=[head,'📅 資料日 '+dailyMdw_(d.date)];
+ if(!isNews){const exp=dailyPrevWork_(today);if(d.date<exp)out.push('⏳ '+dailyMdw_(exp)+' 的生產日報還沒匯入（前一天的報告通常下午才進來），進來後會補發。');}
+ out.push('━━━━━━━━━━━━');
+ out.push(d.facts?dailyProdFacts_(d.facts):(function(){const l=String(d.html).split('\n');l.shift();return l.join('\n');})());
+ if(!isNews){const e=dailyErp_();if(e){out.push('━━━━━━━━━━━━');out.push('🗂 <b>ERP 資料</b>　最近更新 '+esc_(e.at.slice(5,16).replace('-','/'))+(e.note?'：'+esc_(e.note.slice(0,160)):''));}}
  return out.join('\n');
 }
 
