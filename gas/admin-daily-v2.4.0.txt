@@ -67,7 +67,7 @@ function dailyProdFacts_(f){
   if(sh.overdueRows)L.push('　🔴 已過 ETD 未出 '+dailyN_(sh.overdueRows)+' 筆 '+dailyN_(sh.overdueOpen)+' 件：'+(sh.overdue||[]).slice(0,3).map(function(o){return esc_(o.cust)+' '+esc_(o.po)+' '+dailyN_(o.open);}).join('、'));}
  /* 可上線／缺布 */
  if(fb&&fb.hasData){const z=[];if(fb.notSewn!=null)z.push('未車縫 '+dailyN_(fb.notSewn));if(fb.cuttingWip!=null)z.push('裁片在製 '+dailyN_(fb.cuttingWip));if(fb.noFabricPcs)z.push('🔴 缺布 '+dailyN_(fb.noFabricPcs)+(fb.noFabricShare!=null?'（'+dailyP1_(fb.noFabricShare)+'%）':''));if(fb.fg!=null)z.push('成品 '+dailyN_(fb.fg));
-  if(z.length)L.push('🧶 <b>訂單／布料</b>（客戶統計 '+weeklyMd_(fb.snapshotDate)+'）　'+z.join('・'));}
+  if(z.length){const old=/^\d{4}-\d{2}-\d{2}$/.test(String(fb.snapshotDate))&&String(fb.snapshotDate)<weeklyGaAddDays_(dailyToday_(),-14);L.push('🧶 <b>訂單／布料</b>（客戶統計 '+weeklyMd_(fb.snapshotDate)+(old?'，⚠️ 資料較舊':'')+'）　'+z.join('・'));}}
  /* 換針換件 */
  const nd=mt.needle||{},pt=mt.part||{};if(nd.qty||pt.qty)L.push('🔧 <b>機修</b>　換針 '+dailyN_(nd.qty)+' 支（非計畫 '+dailyN_(nd.unplanned)+'）・換件 '+dailyN_(pt.qty)+' 件'+(nd.flag&&nd.flag.length?'　⚠️ '+nd.flag.slice(0,2).map(function(x){return esc_(String(x.line))+' 非計畫 '+x.unplanned;}).join('、'):''));
  /* 要處理 */
