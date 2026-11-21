@@ -5,6 +5,8 @@
   'use strict';
   var KEY='vrt_admin_os_open',H='f065b43108b2d9766e5aff7f77a79f99575d34f6c2cb001b368686098ed75433';
   try{if(localStorage.getItem(KEY)===H)return;}catch(e){}
+  /* 2026-11-22 嵌在 VRT HR（PSJHR）裡的頁面（?embed=hr，例：直接／間接人工預算）不要再問第二次密碼——PSJHR 自己有門鎖 */
+  try{if(/[?&]embed=hr\b/.test(location.search)&&window.parent!==window&&window.parent.location.origin===location.origin&&/\/psjhr\//.test(window.parent.location.pathname))return;}catch(e){}
   var hide=document.createElement('style');hide.id='gate-hide';hide.textContent='body>*:not(#vrtGate){display:none!important}';
   (document.head||document.documentElement).appendChild(hide);
   function sha(t){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)).then(function(b){return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')})}

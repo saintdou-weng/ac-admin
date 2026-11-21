@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<script src="../../shared/gate.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VRT 預算 vs 實際</title>
+<script src="../../config.js"></script>
+<script src="../../shared/vrt-budget-data.js"></script>
+<script src="../../shared/vrt-budget.js"></script>
+<style>
+:root{color-scheme:light;--bg:#f6f7f9;--card:#fff;--ink:#0f172a;--ink2:#475569;--mut:#64748b;--line:#e2e8f0;--soft:#f1f5f9;--acc:#2563eb;
+ --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--flex:#8a8985;--good:#15803d;--warn:#b45309;--bad:#b91c1c;--info:#1d4ed8;--goodbg:#dcfce7;--warnbg:#fef3c7;--badbg:#fee2e2;--infobg:#dbeafe}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0f1115;--card:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--mut:#9b9a92;--line:#2e2e2b;--soft:#232321;--acc:#60a5fa;
+ --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--flex:#9b9a92;--good:#4ade80;--warn:#fbbf24;--bad:#f87171;--info:#93c5fd;--goodbg:#14532d55;--warnbg:#78350f55;--badbg:#7f1d1d55;--infobg:#1e3a8a55}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0f1115;--card:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--mut:#9b9a92;--line:#2e2e2b;--soft:#232321;--acc:#60a5fa;
+ --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--flex:#9b9a92;--good:#4ade80;--warn:#fbbf24;--bad:#f87171;--info:#93c5fd;--goodbg:#14532d55;--warnbg:#78350f55;--badbg:#7f1d1d55;--infobg:#1e3a8a55}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI","Noto Sans TC","PingFang TC",sans-serif}
+button,select,input,textarea{font:inherit;color:inherit}
+.top{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);padding:8px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.top h1{font-size:16px;margin:0;font-weight:750;display:flex;align-items:center;gap:6px}
+.top .grow{flex:1}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--soft)}
+.seg button{border:0;background:transparent;padding:6px 11px;cursor:pointer;white-space:nowrap}
+.seg button.on{background:var(--acc);color:#fff;font-weight:650}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:9px;padding:6px 11px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--acc)}
+.btn.pri{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:650}
+.btn.sm{padding:3px 8px;font-size:12.5px}
+.btn.danger{color:var(--bad)}
+.wrap{max-width:1280px;margin:0 auto;padding:12px 14px 40px}
+.years{display:flex;gap:8px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:thin}
+.yc{flex:0 0 auto;min-width:118px;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:8px 10px;cursor:pointer;text-align:left}
+.yc.on{border-color:var(--acc);box-shadow:0 0 0 2px color-mix(in srgb,var(--acc) 30%,transparent)}
+.yc b{font-size:16px}.yc small{display:block;color:var(--mut);font-size:11.5px;line-height:1.35}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:6px 0 12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-width:0}
+.kpi .l{font-size:12px;color:var(--mut)}.kpi .v{font-size:22px;font-weight:750;font-variant-numeric:tabular-nums;line-height:1.25}.kpi .s{font-size:12px;color:var(--ink2)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:12px;min-width:0}
+.card h2{font-size:15px;margin:0 0 8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.card h2 .grow{flex:1}
+.mut{color:var(--mut)}.small{font-size:12.5px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--ink2);margin-bottom:4px}
+.legend i{display:inline-block;width:16px;height:3px;border-radius:2px;vertical-align:middle;margin-right:5px}
+.legend i.d{background:repeating-linear-gradient(90deg,currentColor 0 5px,transparent 5px 8px)!important}
+.chart{position:relative;width:100%}
+.chart svg{width:100%;height:auto;display:block}
+.tip{position:absolute;pointer-events:none;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:7px 9px;font-size:12.5px;box-shadow:0 8px 24px rgba(0,0,0,.15);min-width:170px;display:none;z-index:5}
+.tip b{display:block;margin-bottom:2px}.tip div{display:flex;justify-content:space-between;gap:12px;font-variant-numeric:tabular-nums}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{background:var(--soft);font-size:12px;color:var(--ink2);font-weight:650;position:sticky;top:0}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--card);z-index:1;max-width:230px;white-space:normal;min-width:140px}
+th:first-child{background:var(--soft);z-index:2}
+td.ex{text-align:left;white-space:normal;min-width:260px;color:var(--ink2);font-size:12.5px}
+tr.tot td{font-weight:750;background:var(--soft)}
+tr.grp td{background:var(--soft);font-size:12px;color:var(--mut);font-weight:650;text-align:left}
+td.cl,th.cl{background:color-mix(in srgb,var(--acc) 8%,var(--card))}
+.pill{display:inline-block;border-radius:999px;padding:0 7px;font-size:12px;font-weight:650}
+.p-g{background:var(--goodbg);color:var(--good)}.p-y{background:var(--warnbg);color:var(--warn)}.p-r{background:var(--badbg);color:var(--bad)}.p-b{background:var(--infobg);color:var(--info)}.p-n{background:var(--soft);color:var(--mut)}
+.note{display:block;margin-top:3px;color:var(--ink);background:var(--warnbg);border-radius:6px;padding:2px 6px}
+.nb{border:0;background:transparent;cursor:pointer;font-size:13px;padding:0 3px;opacity:.7}.nb:hover{opacity:1}
+.bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.status{font-size:12.5px;color:var(--mut)}
+.flag{font-size:12px;border-radius:8px;padding:6px 9px;margin:6px 0;background:var(--infobg);color:var(--ink)}
+.flag.w{background:var(--warnbg)}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);padding:0;width:min(760px,96vw);max-height:90vh}
+dialog::backdrop{background:rgba(15,23,42,.45)}
+.dh{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--card);z-index:2}
+.dh h3{margin:0;font-size:15px;flex:1}
+.db{padding:12px 14px;overflow:auto;max-height:calc(90vh - 110px)}
+.df{padding:10px 14px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.fg label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--ink2)}
+.fg label.w{grid-column:1/-1}
+input,select,textarea{border:1px solid var(--line);border-radius:8px;padding:6px 8px;background:var(--card);min-width:0}
+textarea{width:100%;min-height:90px}
+.dtab td input,.dtab td select{width:100%;padding:4px 6px}
+pre.tg{white-space:pre-wrap;background:var(--soft);border-radius:10px;padding:10px;font:12.5px/1.5 ui-monospace,Menlo,Consolas,monospace;max-height:60vh;overflow:auto}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#0f172a;color:#fff;padding:8px 14px;border-radius:10px;font-size:13px;z-index:99;display:none;max-width:92vw}
+#tools .btn{white-space:normal;text-align:left}
+details>summary{cursor:pointer;font-weight:650}
+@media (max-width:640px){
+ .top{padding:6px 10px}.top h1{font-size:14.5px}.wrap{padding:10px 10px 40px}
+ .kpi .v{font-size:19px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+ th,td{padding:5px 6px;font-size:12.5px}th:first-child,td:first-child{min-width:112px;max-width:150px}
+ td.ex{min-width:200px}
+ .hidem{display:none}
+}
+</style>
+</head>
+<body>
+<div class="top">
+ <h1 id="ttl">📊</h1>
+ <div class="seg" id="viewSeg"></div>
+ <span class="grow"></span>
+ <span class="status" id="cloudSt"></span>
+ <div class="seg" id="langSeg"><button data-l="zh">繁中</button><button data-l="en">EN</button></div>
+</div>
+<div class="wrap">
+ <div class="years" id="years"></div>
+ <div id="flags"></div>
+ <div class="kpis" id="kpis"></div>
+ <div class="card">
+  <h2><span id="chT"></span><span class="grow"></span><span class="seg" id="perSeg"></span></h2>
+  <div class="legend" id="legend"></div>
+  <div class="chart" id="chart"><div class="tip" id="tip"></div></div>
+ </div>
+ <div class="card">
+  <h2><span id="tbT"></span><span class="grow"></span><label class="small mut"><span id="cmpL"></span> <select id="cmp"></select></label></h2>
+  <div class="tw"><table id="tbl"></table></div>
+  <p class="small mut" id="method"></p>
+ </div>
+ <div class="card">
+  <details id="monD"><summary id="monT"></summary><div class="tw" style="margin-top:8px"><table id="mon"></table></div></details>
+ </div>
+ <div class="card">
+  <h2 id="hisT"></h2>
+  <div class="tw"><table id="his"></table></div>
+ </div>
+ <div class="card">
+  <h2 id="toolT"></h2>
+  <div class="bar" id="tools"></div>
+  <p class="small mut" id="toolNote"></p>
+ </div>
+</div>
+
+<dialog id="dlg"><div class="dh"><h3 id="dlgT"></h3><button class="btn sm" data-x>✕</button></div><div class="db" id="dlgB"></div><div class="df" id="dlgF"></div></dialog>
+<input type="file" id="file" accept=".json,.csv,.xlsx,.xls" hidden>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const Q=new URLSearchParams(location.search);
+const EMBED=Q.get('embed')||'';                       // 'hr' = 嵌在 PSJHR 裡
+let VIEW=Q.get('view')==='labor'?'labor':'admin';
+if(EMBED)document.documentElement.setAttribute('data-theme','light');   /* PSJHR 深色模式會把嵌入頁整頁反相，所以這裡固定淺色 */
+const DOC_KEY='vrt_budget_doc_v1',LIVE_KEY='vrt_budget_live_v1',PREV_KEY='vrt_budget_doc_prev',META_KEY='vrt_budget_meta_v1';
+const GATE_H='f065b43108b2d9766e5aff7f77a79f99575d34f6c2cb001b368686098ed75433';
+const HUB=(()=>{try{const o=JSON.parse(localStorage.getItem('ac_admin_cloud_config')||'{}');if(o.url)return o.url}catch(e){}return (window.AC_CONFIG||{}).hubUrl||''})();
+const jget=(k,f)=>{try{const v=localStorage.getItem(k);return v==null?f:JSON.parse(v)}catch(e){return f}};
+const jput=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}};
+/* 語言：Admin OS 用 ac_admin_lang；嵌在 PSJHR 時跟著 PSJHR 的 LANG（0 中／1 英／2 高棉→英） */
+function parentLang(){try{if(window.parent!==window&&typeof window.parent.LANG==='number')return window.parent.LANG===0?'zh':'en'}catch(e){}return null}
+let LANG=Q.get('lang')||parentLang()||(()=>{const l=jget('ac_admin_lang','zh');return l==='zh'?'zh':'en'})();
+const T=(zh,en)=>LANG==='en'?en:zh;
+const N=v=>v==null||isNaN(v)?'—':Math.round(v).toLocaleString('en-US');
+const K=v=>{if(v==null||isNaN(v))return '—';const a=Math.abs(v);return (v<0?'−':'')+(a>=1e6?(a/1e6).toFixed(2)+'M':a>=1e4?(a/1e3).toFixed(1)+'k':N(a))};
+const P1=v=>v==null||isNaN(v)?'—':(Math.round(v*10)/10).toFixed(1);
+const E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pct=(a,b)=>b?(a-b)/b*100:null;
+const sgn=p=>p==null?'—':(p>=0?'+':'−')+Math.abs(p).toFixed(1)+'%';
+const now=()=>new Date().toISOString();
+function toast(s){const t=$('toast');t.textContent=s;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',3200)}
+function pill(act,bud){const p=pct(act,bud);if(p==null)return '<span class="pill p-n">—</span>';const c=Math.abs(p)<=5?'p-g':p>10?'p-r':p>5?'p-y':'p-b';const ic=Math.abs(p)<=5?'✓':p>0?'▲':'▼';return `<span class="pill ${c}">${ic} ${sgn(p)}</span>`}
+
+/* ── 文件（可編輯部分）：本機＋雲端；每一項記時間，合併時新的贏 ── */
+let DOC=jget(DOC_KEY,null)||{v:1,rev:0,years:{},cats:{},notes:{},actual:{},custom:[],at:{},del:{}};
+['years','cats','notes','actual','at','del'].forEach(k=>DOC[k]=DOC[k]||{});DOC.custom=DOC.custom||[];
+let LIVE=jget(LIVE_KEY,{});let META=jget(META_KEY,{rev:0,dirty:false,last:''});
+let M=null;
+function rebuild(){M=VRTBudget.make(VRTB_DATA,JSON.parse(JSON.stringify(DOC)),LIVE)}
+function touch(path){DOC.at[path]=now();delete DOC.del[path]}
+function saveDoc(why){try{const old=localStorage.getItem(DOC_KEY);if(old)localStorage.setItem(PREV_KEY,old)}catch(e){}
+ jput(DOC_KEY,DOC);META.dirty=true;jput(META_KEY,META);rebuild();render();scheduleUp();if(why)toast(why)}
+function mergeDocs(a,b){ /* a＝本機，b＝雲端；逐項比時間 */
+ const out=JSON.parse(JSON.stringify(b));['years','cats','notes','actual'].forEach(k=>out[k]=out[k]||{});out.at=out.at||{};out.del=out.del||{};out.custom=out.custom||[];
+ const ta=p=>a.at&&a.at[p]||'',tb=p=>b.at&&b.at[p]||'';
+ ['years','cats','notes','actual'].forEach(sec=>{const ks=new Set([...Object.keys(a[sec]||{}),...Object.keys(b[sec]||{}),...Object.keys(a.del||{}).filter(p=>p.startsWith(sec+'.')).map(p=>p.slice(sec.length+1))]);
+  ks.forEach(k=>{const p=sec+'.'+k;const da=(a.del||{})[p]||'',db=(b.del||{})[p]||'';   const la=[ta(p),da].sort().pop(),lb=[tb(p),db].sort().pop();
+   if(la>lb){if(da&&da>=ta(p)){delete out[sec][k];out.del[p]=da;delete out.at[p]}else if(a[sec]&&a[sec][k]!==undefined){out[sec][k]=a[sec][k];out.at[p]=ta(p);delete out.del[p]}}});});
+ const ids=new Set([...(a.custom||[]).map(x=>x.id),...(b.custom||[]).map(x=>x.id)]);const cu=[];
+ ids.forEach(id=>{const p='custom.'+id,xa=(a.custom||[]).find(x=>x.id===id),xb=(b.custom||[]).find(x=>x.id===id);const la=[ta(p),(a.del||{})[p]||''].sort().pop(),lb=[tb(p),(b.del||{})[p]||''].sort().pop();
+  let pick=la>lb?xa:xb;const dl=la>lb?(a.del||{})[p]:(b.del||{})[p];if(dl&&dl>=(la>lb?ta(p):tb(p))){out.del[p]=dl;pick=null}if(pick){cu.push(pick);out.at[p]=la>lb?ta(p):tb(p)}});
+ out.custom=cu;return out}
+
+/* ── 雲端（AC_ADMIN_CENTER）：budgetGet 公開唯讀（含 ERP／HRA-PAY 最新月份）；budgetPut 用 Admin OS 門鎖碼 ── */
+let upT=null,BUSY=false;
+let STK=null;const STM={sync:['☁️ 同步中…','☁️ Syncing…'],synced:['☁️ 已同步 ','☁️ Synced '],up:['☁️ 上傳中…','☁️ Uploading…'],upd:['☁️ 已上傳 ','☁️ Uploaded '],off:['⚠️ 雲端暫時連不上，先用本機資料','⚠️ Cloud unreachable — using local data'],noup:['⚠️ 未上傳（下次自動再試）','⚠️ Not uploaded (will retry)'],nourl:['沒有雲端網址','No cloud URL']};
+function setSt(k,tm){if(k)STK=[k,tm||''];if(!STK)return;const m=STM[STK[0]];$('cloudSt').textContent=(LANG==='en'?m[1]:m[0])+STK[1]}
+const hm=()=>new Date().toTimeString().slice(0,5);
+async function jfetch(url,opt){const c=new AbortController(),t=setTimeout(()=>c.abort(),60000);try{const r=await fetch(url,{...(opt||{}),signal:c.signal,redirect:'follow'});const d=await r.json();if(!d||d.ok===false)throw new Error(d&&d.error||'cloud error');return d}finally{clearTimeout(t)}}
+async function down(manual){if(!HUB){setSt('nourl');return}
+ setSt('sync');
+ try{const d=await jfetch(HUB+'?action=budgetGet&t='+Date.now());
+  if(d.live){LIVE=d.live;jput(LIVE_KEY,LIVE)}
+  if(d.doc&&typeof d.doc==='object'){const merged=META.dirty?mergeDocs(DOC,d.doc):d.doc;['years','cats','notes','actual','at','del'].forEach(k=>merged[k]=merged[k]||{});merged.custom=merged.custom||[];DOC=merged;jput(DOC_KEY,DOC)}
+  META.rev=d.rev||0;META.last=now();jput(META_KEY,META);rebuild();render();
+  if(META.dirty)await up(false);else setSt('synced',hm());
+  if(manual)toast(T('已從雲端下載最新資料','Downloaded the latest from the cloud'));
+ }catch(e){setSt('off');if(manual)toast(String(e.message||e))}}
+function scheduleUp(){clearTimeout(upT);upT=setTimeout(()=>up(false),1800)}
+async function up(manual){if(!HUB||BUSY)return;BUSY=true;setSt('up');
+ try{const body={action:'budgetPut',key:GATE_H,baseRev:META.rev||0,doc:DOC,who:EMBED==='hr'?'PSJHR':'Admin OS'};
+  let d=await jfetch(HUB,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)});
+  if(d.conflict&&d.doc){DOC=mergeDocs(DOC,d.doc);body.doc=DOC;body.baseRev=d.rev;d=await jfetch(HUB,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)})}
+  META.rev=d.rev||META.rev;META.dirty=false;META.last=now();jput(META_KEY,META);jput(DOC_KEY,DOC);
+  setSt('upd',hm());if(manual)toast(T('已上傳到雲端','Uploaded to the cloud'));
+ }catch(e){setSt('noup');if(manual)toast(String(e.message||e))}finally{BUSY=false}}
+
+/* ── 畫面 ── */
+let Y0=null,SEL=0,PER='ytd',CMP=null;
+const COLS=['var(--s2)','var(--s3)','var(--s4)','var(--s1)'];
+function rowName(r){return LANG==='en'?r.en:r.zh}
+function curYear(){const ys=M.years();if(Y0==null){const d=new Date();Y0=ys.includes(d.getFullYear())?d.getFullYear():ys[ys.length-1]}return Y0}
+function render(){
+ const y=curYear(),Y=M.year(y,VIEW),ys=M.years();
+ document.documentElement.lang=LANG==='zh'?'zh-Hant':'en';
+ document.title=VIEW==='labor'?T('直接／間接人工預算 vs 實際','DL / IDL labour budget vs actual'):T('管理部預算 vs 實際','Admin budget vs actual');
+ $('ttl').textContent=(VIEW==='labor'?'👷 ':'📊 ')+document.title;
+ $('viewSeg').innerHTML=EMBED?'':[['admin',T('管理部預算','Admin budget')],['labor',T('直接／間接人工','DL / IDL labour')]].map(([k,l])=>`<button data-v="${k}" class="${VIEW===k?'on':''}">${l}</button>`).join('');
+ $('viewSeg').style.display=EMBED?'none':'';
+ [...$('langSeg').children].forEach(b=>b.classList.toggle('on',b.dataset.l===LANG));
+ setSt();
+ /* 年度卡 */
+ $('years').innerHTML=ys.map(yy=>{const A=M.year(yy,VIEW);const c=A.closest>=0?A.scen[A.closest]:null;const acc=c!=null?100-Math.abs(pct(A.total.act,A.total.bud[A.closest].ytd)):null;
+  const kind=A.scenKind==='plan'?T('10／12／15 組','10/12/15 lines'):A.scenKind==='avg'?T('平均 ±2 組','avg ±2 lines'):T('自訂情境','custom');
+  return `<button class="yc ${yy===y?'on':''}" data-y="${yy}"><b>${yy}</b>${yy>=2027||!A.actMonths.length?' <span class="pill p-b">'+T('預算','Plan')+'</span>':''}<small>${kind}</small><small>${A.actMonths.length?T('實際 ','Actual ')+A.actMonths.length+T(' 個月','m')+' · '+T('組數 ','lines ')+P1(A.lines):T('等實際數進來','awaiting actuals')}</small><small>${c!=null?'⭐ '+c+T(' 組 · 準確 ',' lines · acc. ')+P1(acc)+'%':'&nbsp;'}</small></button>`}).join('');
+ /* 提示 */
+ const fl=[];
+ if(Y.estMonths.length)fl.push(`<div class="flag w">⚠️ ${T('這些月份沒有 HRA-PAY 實發薪資，人工是依「出勤人數 × 最低工資 × 歷年平均倍數」估算：','No HRA-PAY payroll for these months — labour is estimated from attendance × minimum wage × historical ratio: ')}${Y.estMonths.map(s=>s.slice(5)).join('、')}</div>`);
+ if(Y.provMonths.length)fl.push(`<div class="flag w">⏳ ${T('ERP 製造費用看起來還沒結完（低於前 3 月平均 80%），先照列、不當明年基準：','ERP overhead looks provisional (below 80% of the prior 3-month average) — shown, but not used as next year’s base: ')}${Y.provMonths.join('、')}</div>`);
+ if(y===2021&&VIEW==='admin')fl.push(`<div class="flag">📎 ${T('2021 原始試作預算（Paul 2021.01，18 組 × 32 人，人車比 1.45）全年 $','Original 2021 trial budget (Paul, Jan 2021: 18 lines × 32 people, ratio 1.45) full year $')}${N(VRTB_DATA.paul2021.items.reduce((s,x)=>s+x[3].reduce((a,b)=>a+b,0),0))}${T('；1 月實際 $228,880。下表改用同一套公式重算，可跟實際逐月比。',' ; January actual $228,880. The table below recomputes it with the same formula so it can be compared month by month.')} <button class="btn sm" data-act="paul">${T('看原始表','View original')}</button></div>`);
+ $('flags').innerHTML=fl.join('');
+ /* 比較情境 */
+ if(CMP==null||CMP>=Y.scen.length)CMP=Y.closest>=0?Y.closest:Math.floor(Y.scen.length/2);
+ $('cmpL').textContent=T('差異對照','Compare with');
+ $('cmp').innerHTML=Y.scen.map((s,i)=>`<option value="${i}" ${i===CMP?'selected':''}>${s} ${T('組','lines')}${i===Y.closest?' ⭐':''}</option>`).join('')+`<option value="flex" ${CMP==='flex'?'selected':''}>${T('彈性預算（實際組數）','Flex budget (actual lines)')}</option>`;
+ /* KPI */
+ const has=Y.actMonths.length,bC=Y.closest>=0?Y.total.bud[Y.closest].ytd:null;
+ const k=[];
+ k.push([T('平均組數（DL ÷ ','Avg lines (DL ÷ ')+M.ppl(y)+')',has?P1(Y.lines):'—',has?T('情境 ','Scenarios ')+Y.scen.join(' / ')+T(' 組',''):T('情境 ','Scenarios ')+Y.scen.join(' / ')+T(' 組','')]);
+ k.push([T('實際（','Actual (')+has+T(' 個月）',' months)'),has?'$'+K(Y.total.act):'—',has?Y.actMonths[0].slice(5)+'–'+Y.actMonths[has-1].slice(5)+T(' 月',''):T('等實際數進來','awaiting actuals')]);
+ k.push([T('最接近情境','Closest scenario'),Y.closest>=0?'⭐ '+Y.scen[Y.closest]+T(' 組',''):'—',Y.closest>=0?T('預算 $','budget $')+K(bC)+' · '+sgn(pct(Y.total.act,bC)):T('全年預算見下表','see full-year budget below')]);
+ Y.scen.forEach((s,i)=>k.push([s+T(' 組全年預算',' lines · full-year budget'),'$'+K(Y.total.bud[i].full),has?T('同期 $','same months $')+K(Y.total.bud[i].ytd)+' '+sgn(pct(Y.total.act,Y.total.bud[i].ytd)):T('每月約 $','≈ $')+K(Y.total.bud[i].full/12)+T('',' / month')]));
+ $('kpis').innerHTML=k.map(x=>`<div class="kpi"><div class="l">${E(x[0])}</div><div class="v">${x[1]}</div><div class="s">${x[2]}</div></div>`).join('');
+ drawChart(Y);drawTable(Y);drawMonths(Y);drawHistory(ys);drawTools(Y);
+}
+function drawChart(Y){
+ $('chT').textContent=T('每月 預算 vs 實際（USD）','Monthly budget vs actual (USD)');
+ $('perSeg').innerHTML='';
+ const cw=Math.max(320,Math.min(1000,($('chart').clientWidth||720))),W=cw,H=cw<520?230:270,pl=46,pr=cw<520?50:62,pt=12,pb=26,ser=Y.scen.map((s,i)=>({n:s+T(' 組',' lines'),c:COLS[i],d:true,v:Y.months.map(m=>m.bud[i])}));
+ ser.push({n:T('彈性預算','Flex budget'),c:'var(--flex)',d:true,dot:true,v:Y.months.map(m=>m.has?m.flex:null)});
+ ser.push({n:T('實際','Actual'),c:'var(--s1)',v:Y.months.map(m=>m.has?m.act:null),main:true});
+ const all=ser.flatMap(s=>s.v).filter(v=>v!=null);const hi=Math.max(1,...all),lo=Math.min(...all);
+ /* 折線圖：y 軸從資料附近開始（不從 0），才看得出預算與實際的差 */
+ const span=Math.max(hi-lo,hi*0.1),raw=span/4,step=Math.pow(10,Math.floor(Math.log10(raw)));const st=[1,2,2.5,5,10].map(x=>x*step).find(x=>x>=raw)||step*10;
+ const mn=Math.max(0,Math.floor((lo-span*0.08)/st)*st),mx=Math.ceil((hi+span*0.08)/st)*st;
+ const xs=i=>pl+(W-pl-pr)*(i/11),ys=v=>pt+(H-pt-pb)*(1-(v-mn)/(mx-mn));
+ let g='';for(let v=mn;v<=mx+1e-6;v+=st)g+=`<line x1="${pl}" x2="${W-pr}" y1="${ys(v)}" y2="${ys(v)}" stroke="var(--line)" stroke-width="1"/><text x="${pl-6}" y="${ys(v)+4}" text-anchor="end" font-size="11" fill="var(--mut)">${K(v)}</text>`;
+ for(let i=0;i<12;i++)g+=`<text x="${xs(i)}" y="${H-8}" text-anchor="middle" font-size="11" fill="var(--mut)">${i+1}${cw<520?'':T('月','')}</text>`;
+ const lab=[];
+ ser.forEach(s=>{let d='',pen=false;s.v.forEach((v,i)=>{if(v==null){pen=false;return}d+=(pen?'L':'M')+xs(i).toFixed(1)+' '+ys(v).toFixed(1);pen=true});
+  g+=`<path d="${d}" fill="none" stroke="${s.c}" stroke-width="${s.main?2.5:2}" ${s.d?`stroke-dasharray="${s.dot?'2 4':'6 4'}"`:''} stroke-linecap="round" stroke-linejoin="round"/>`;
+  if(s.main)s.v.forEach((v,i)=>{if(v!=null)g+=`<circle cx="${xs(i)}" cy="${ys(v)}" r="4" fill="${s.c}" stroke="var(--card)" stroke-width="2"/>`});
+  let li=-1;s.v.forEach((v,i)=>{if(v!=null)li=i});if(li>=0&&!s.dot)lab.push({y:ys(s.v[li]),x:xs(li),t:s.n,c:s.c});});
+ lab.sort((a,b)=>a.y-b.y);for(let i=1;i<lab.length;i++)if(lab[i].y-lab[i-1].y<13)lab[i].y=lab[i-1].y+13;
+ lab.forEach(l=>g+=`<text x="${l.x+6}" y="${l.y+4}" font-size="11" fill="var(--ink2)">${E(l.t)}</text>`);
+ g+=`<line id="xh" x1="0" x2="0" y1="${pt}" y2="${H-pb}" stroke="var(--mut)" stroke-width="1" opacity="0"/>`;
+ for(let i=0;i<12;i++)g+=`<rect data-i="${i}" x="${xs(i)-(W-pl-pr)/22}" y="${pt}" width="${(W-pl-pr)/11}" height="${H-pt-pb}" fill="transparent"/>`;
+ const ch=$('chart');ch.innerHTML=`<div class="tip" id="tip"></div><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${E($('chT').textContent)}">${g}</svg>`;
+ $('legend').innerHTML=ser.map(s=>`<span><i class="${s.d?'d':''}" style="background:${s.c};color:${s.c}"></i>${E(s.n)}</span>`).join('');
+ const svg=ch.querySelector('svg'),tip=$('tip'),xh=svg.querySelector('#xh');
+ const show=i=>{const m=Y.months[i];xh.setAttribute('x1',xs(i));xh.setAttribute('x2',xs(i));xh.setAttribute('opacity',.5);
+  tip.innerHTML=`<b>${m.ym}${m.has?' · '+T('組數 ','lines ')+P1(m.lines):''}${m.est?' · '+T('估算','est.'):''}${m.prov?' · ⏳':''}</b>`+ser.slice().reverse().map(s=>s.v[i]==null?'':`<div><span><i style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${s.c};margin-right:5px"></i>${E(s.n)}</span><span>$${N(s.v[i])}</span></div>`).join('')+(m.has?`<div><span>${T('差異 vs ','Var vs ')}${Y.scen[Y.closest>=0?Y.closest:0]}</span><span>${sgn(pct(m.act,m.bud[Y.closest>=0?Y.closest:0]))}</span></div>`:'');
+  tip.style.display='block';const r=ch.getBoundingClientRect(),px=xs(i)/W*r.width;tip.style.left=Math.min(Math.max(4,px+12),r.width-tip.offsetWidth-4)+'px';tip.style.top='8px'};
+ svg.querySelectorAll('rect[data-i]').forEach(rc=>{rc.addEventListener('mouseenter',()=>show(+rc.dataset.i));rc.addEventListener('click',()=>show(+rc.dataset.i))});
+ svg.addEventListener('mouseleave',()=>{tip.style.display='none';xh.setAttribute('opacity',0)});
+}
+function drawTable(Y){
+ const y=Y.y,has=Y.actMonths.length,ci=CMP==='flex'?-1:CMP;
+ $('tbT').textContent=has?T('各項 預算 vs 實際（同期 '+has+' 個月）','By item — budget vs actual (same '+has+' months)'):T('各項 全年預算','By item — full-year budget');
+ let h=`<thead><tr><th>${T('項目','Item')}</th>`+Y.scen.map((s,i)=>`<th class="${i===ci?'cl':''}">${s} ${T('組','lines')}${i===Y.closest?' ⭐':''}<br><small>${has?T('同期預算','budget, same months'):T('全年預算','full-year')}</small></th>`).join('')+
+  (has?`<th class="${ci<0?'cl':''}">${T('彈性預算','Flex budget')}<br><small>${T('實際組數','actual lines')}</small></th><th>${T('實際','Actual')}</th><th>${T('差異','Variance')}</th><th>%</th><th>${T('差異說明','Explanation')}</th>`:`<th>${T('每月（中間情境）','Per month (mid)')}</th><th>${T('說明','Note')}</th>`)+'</tr></thead><tbody>';
+ let grp='';
+ const gName={L:T('人工','Labour'),A:T('管理部可控費用','Admin-controllable expenses'),B:T('其他帳列（折舊・運費・保險等，非管理部可控）','Other booked costs (depreciation, freight, insurance … not admin-controlled)'),C:T('自訂項目','Custom items')};
+ const rows=Y.rows.filter(r=>r.act||r.flex||r.bud.some(b=>b.full)||M.note(y,r.key)).sort((a,b)=>'LABC'.indexOf(a.group)-'LABC'.indexOf(b.group));
+ rows.forEach(r=>{
+  if(r.group!==grp&&VIEW==='admin'){grp=r.group;h+=`<tr class="grp"><td colspan="${Y.scen.length+(has?6:3)}">${E(gName[grp]||'')}</td></tr>`}
+  const ref=ci<0?r.flex:r.bud[ci].ytd,nt=M.note(y,r.key),mid=Math.floor(Y.scen.length/2);
+  const hd=r.hd&&r.hd.n?`<br><small class="mut">${T('人數 ','heads ')}${N(r.hd.act)} · ${T('預算 ','bud ')}${N(r.hd.bud[ci<0?(Y.closest>=0?Y.closest:mid):ci])}</small>`:'';
+  h+=`<tr><td>${E(rowName(r))}${hd}</td>`+Y.scen.map((s,i)=>`<td class="${i===ci?'cl':''}">${N(has?r.bud[i].ytd:r.bud[i].full)}</td>`).join('')+
+   (has?`<td class="${ci<0?'cl':''}">${N(r.flex)}</td><td><b>${N(r.act)}</b></td><td>${(r.act-ref>=0?'+':'')+N(r.act-ref)}</td><td>${pill(r.act,ref)}</td><td class="ex">${E(M.explain(Y,r,ci<0?(Y.closest>=0?Y.closest:mid):ci,LANG))}${nt?`<span class="note">📝 ${E(nt)}</span>`:''} <button class="nb" data-note="${E(r.key)}" title="${T('寫說明','Add note')}">📝</button></td>`
+   :`<td>${N(r.bud[mid].full/12)}</td><td class="ex">${nt?`<span class="note">📝 ${E(nt)}</span>`:''}<button class="nb" data-note="${E(r.key)}">📝</button></td>`)+'</tr>'});
+ const t=Y.total,ref=ci<0?t.flex:(t.bud[ci]||{}).ytd;
+ h+=`<tr class="tot"><td>${T('合計','Total')}</td>`+Y.scen.map((s,i)=>`<td class="${i===ci?'cl':''}">${N(has?t.bud[i].ytd:t.bud[i].full)}</td>`).join('')+(has?`<td class="${ci<0?'cl':''}">${N(t.flex)}</td><td>${N(t.act)}</td><td>${(t.act-ref>=0?'+':'')+N(t.act-ref)}</td><td>${pill(t.act,ref)}</td><td class="ex">${E(M.note(y,'year')||'')} <button class="nb" data-note="year">📝</button></td>`:`<td>${N(t.bud[Math.floor(Y.scen.length/2)].full/12)}</td><td class="ex">${E(M.note(y,'year')||'')}<button class="nb" data-note="year">📝</button></td>`)+'</tr></tbody>';
+ $('tbl').innerHTML=h;
+ const b=Y.base;
+ $('method').innerHTML=VIEW==='labor'?
+  T(`計算方式：DL 預算人數＝組數 × ${M.ppl(y)} 人；IDL＝DL × ${b.rIDL.toFixed(3)}（${b.year} 年實際比）；OFF＝${N(b.offN)} 人（${b.year} 年平均）。平均工資＝最低工資 $${M.mw(y)} × 倍數（DL ${b.k.dl.toFixed(2)}・IDL ${b.k.idl.toFixed(2)}・OFF ${b.k.off.toFixed(2)}，${b.year} 年實際，含加班與加給）；12 月 × ${M.decF(y)}。工資＝HRA-PAY 實發小計＋預支（不含公司社保）。差異＝組數差異（量）＋人數比／平均工資差異（價）。`,
+   `Method: DL budget heads = lines × ${M.ppl(y)}; IDL = DL × ${b.rIDL.toFixed(3)} (${b.year} actual ratio); OFF = ${N(b.offN)} (${b.year} average). Average wage = minimum wage $${M.mw(y)} × multiple (DL ${b.k.dl.toFixed(2)}, IDL ${b.k.idl.toFixed(2)}, OFF ${b.k.off.toFixed(2)}, ${b.year} actual, incl. OT and allowances); December × ${M.decF(y)}. Wages = HRA-PAY paid subtotal + advance (excl. company NSSF). Variance = line-count effect (volume) + head-ratio / wage effect (price).`)
+  :T(`計算方式：人工同右邊「直接／間接人工」；變動費用＝${b.year} 年每月平均 ×（情境組數 ÷ ${P1(b.lines)}）×（1＋加成，水電・修繕・油料 +10%）；固定費用（租金・保全・保險・折舊・稅捐）＝${b.year} 年每月平均；社保＝人工預算 × ${(b.nssfPct*100).toFixed(1)}% × 費率調整（${y} 年 ${M.nssfRate(y)}%）。彈性預算＝把實際組數代進同一公式；差異說明＝組數差異＋單價／用量差異。可在「設定」改每組人數、最低工資、各項變動／固定與加成。`,
+   `Method: labour as in the DL / IDL view; variable items = ${b.year} monthly average × (scenario lines ÷ ${P1(b.lines)}) × (1 + uplift; utilities, repairs, fuel +10%); fixed items (rent, security, insurance, depreciation, taxes) = ${b.year} monthly average; NSSF = labour budget × ${(b.nssfPct*100).toFixed(1)}% × rate change (${y}: ${M.nssfRate(y)}%). Flex budget = same formula at actual lines; explanation = line-count effect + price/usage effect. People per line, minimum wage, item drivers and uplifts can be changed in Settings.`);
+}
+function drawMonths(Y){
+ $('monT').textContent=T('逐月明細（組數・預算・實際）','Month by month (lines, budget, actual)');
+ const ci=Y.closest>=0?Y.closest:Math.floor(Y.scen.length/2);
+ let h=`<thead><tr><th>${T('月份','Month')}</th><th>${T('組數','Lines')}</th>`+Y.scen.map(s=>`<th>${s} ${T('組','lines')}</th>`).join('')+`<th>${T('彈性','Flex')}</th><th>${T('實際','Actual')}</th><th>vs ${Y.scen[ci]}</th><th>${T('來源','Source')}</th><th></th></tr></thead><tbody>`;
+ Y.months.forEach(m=>{const s=M.src('lab',m.ym),f=M.src('fc',m.ym);
+  const src=m.has?[s==='pay'?'HRA-PAY':s==='est'?T('出勤估算','attendance est.'):s==='manual'?T('手動','manual'):'',VIEW==='admin'?(f==='manual'?T('手動','manual'):'ERP')+(m.prov?' ⏳':''):''].filter(Boolean).join(' + '):'';
+  h+=`<tr><td>${m.ym}</td><td>${m.has?P1(m.lines):'—'}</td>`+m.bud.map(b=>`<td>${N(b)}</td>`).join('')+`<td>${m.has?N(m.flex):'—'}</td><td>${m.has?'<b>'+N(m.act)+'</b>':'—'}</td><td>${m.has?pill(m.act,m.bud[ci]):''}</td><td class="small mut" style="text-align:left">${src}</td><td><button class="btn sm" data-actm="${m.ym}">✏️</button> <button class="btn sm" data-tg="${m.ym}" ${m.has?'':'disabled'}>📨</button></td></tr>`});
+ $('mon').innerHTML=h+'</tbody>';
+}
+function drawHistory(ys){
+ $('hisT').textContent=T('歷年對照（預算準確度）','Year by year (budget accuracy)');
+ let h=`<thead><tr><th>${T('年度','Year')}</th><th>${T('情境','Scenarios')}</th><th>${T('平均組數','Avg lines')}</th><th>${T('最接近','Closest')}</th><th>${T('同期預算','Budget (same months)')}</th><th>${T('實際','Actual')}</th><th>${T('差異','Var.')}</th><th>${T('月份','Months')}</th><th class="hidem">${T('全年預算（中間情境）','Full-year budget (mid)')}</th></tr></thead><tbody>`;
+ ys.forEach(y=>{const A=M.year(y,VIEW),c=A.closest,mid=Math.floor(A.scen.length/2);
+  h+=`<tr><td><a href="#" data-y="${y}"><b>${y}</b></a></td><td>${A.scen.join(' / ')}</td><td>${A.actMonths.length?P1(A.lines):'—'}</td><td>${c>=0?'⭐ '+A.scen[c]:'—'}</td><td>${c>=0?N(A.total.bud[c].ytd):'—'}</td><td>${A.actMonths.length?N(A.total.act):'—'}</td><td>${c>=0?pill(A.total.act,A.total.bud[c].ytd):''}</td><td>${A.actMonths.length}${A.estMonths.length?' <small class="mut">('+A.estMonths.length+T(' 估',' est')+')</small>':''}</td><td class="hidem">${N(A.total.bud[mid].full)}</td></tr>`});
+ $('his').innerHTML=h+'</tbody>';
+}
+function drawTools(Y){
+ $('toolT').textContent=T('編輯・匯入匯出・雲端','Edit · import / export · cloud');
+ const b=[['settings','⚙️ '+T(Y.y+' 年設定（情境、每組人數、最低工資…）','Settings for '+Y.y+' (scenarios, people/line, min. wage…)'),'pri'],
+  ['custom','➕ '+T('自訂預算項目','Custom budget items')],['actual','✏️ '+T('輸入／修改實際數','Enter / edit actuals')],
+  ['down','⬇️ '+T('雲端下載','Cloud download')],['up','⬆️ '+T('雲端上傳','Cloud upload')],
+  ['import','📥 '+T('匯入','Import')],['exjson','📤 '+T('匯出 JSON（全部）','Export JSON (all)')],['excsv','📄 '+T('匯出本表 CSV','Export this table (CSV)')],
+  ['tg','📨 '+T('看月報文字','Preview monthly report')],['undo','↩️ '+T('復原上一次修改','Undo last change')]];
+ $('tools').innerHTML=b.map(x=>`<button class="btn ${x[2]||''}" data-act="${x[0]}">${x[1]}</button>`).join('');
+ $('toolNote').textContent=T('改了就自動存本機並上傳雲端（Admin OS 與 PSJHR 共用同一份）；每月 ERP／HRA-PAY 結算後由行政中心自動算好，月報中英文發到群組，人工預算另外私訊 Paul。','Changes save locally and upload automatically (Admin OS and PSJHR share one copy). After each month’s ERP / HRA-PAY close the Admin Center settles it automatically, posts the zh/en report to the group and DMs the labour report to Paul.');
+}
+
+/* ── 對話框 ── */
+function dlg(title,body,foot){$('dlgT').textContent=title;$('dlgB').innerHTML=body;$('dlgF').innerHTML=foot||'';$('dlg').showModal()}
+function closeDlg(){$('dlg').close()}
+$('dlg').addEventListener('click',e=>{if(e.target.closest('[data-x]'))closeDlg()});
+$('dlg').addEventListener('close',()=>{$('dlgB').innerHTML='';$('dlgF').innerHTML=''});
+function noteDlg(key){const y=curYear(),k=y+'|'+key,cur=M.note(y,key);
+ dlg(T('差異說明 ','Explanation ')+y+' · '+(key==='year'?T('全年','whole year'):key),`<p class="small mut">${T('寫給看報表的人：為什麼差、之後怎麼做。會出現在表格和每月月報裡。','For readers of the report: why it differs and what happens next. Shown in the table and in the monthly report.')}</p><textarea id="nt">${E(cur)}</textarea>`,
+  `<button class="btn danger" id="ntDel">${T('刪除','Delete')}</button><button class="btn pri" id="ntOk">${T('儲存','Save')}</button>`);
+ $('ntOk').onclick=()=>{const v=$('nt').value.trim();if(v){DOC.notes[k]={v,at:now()};touch('notes.'+k)}else{delete DOC.notes[k];DOC.del['notes.'+k]=now()}closeDlg();saveDoc(T('說明已儲存','Note saved'))};
+ $('ntDel').onclick=()=>{delete DOC.notes[k];DOC.del['notes.'+k]=now();closeDlg();saveDoc(T('已刪除','Deleted'))}}
+function settingsDlg(){const y=curYear(),o=DOC.years[y]||{},sc=M.scen(y);
+ let cat='';if(VIEW==='admin'){cat=`<h4>${T('各項費用','Expense items')}</h4><div class="tw"><table class="dtab"><thead><tr><th>${T('項目','Item')}</th><th>${T('方式','Driver')}</th><th>${T('加成 %','Uplift %')}</th><th>${T('分類','Group')}</th><th>${T('不列入','Hide')}</th></tr></thead><tbody>`+
+  M.cats.map(c=>{const g=M.catCfg(c);return `<tr data-c="${c}"><td>${E(M.catName(c,LANG))}</td><td><select data-f="driver">${[['line',T('隨組數變動','varies with lines')],['fixed',T('固定','fixed')],['nssf',T('隨人工（社保）','follows labour (NSSF)')]].map(([v,l])=>`<option value="${v}" ${g.driver===v?'selected':''}>${l}</option>`).join('')}</select></td><td><input data-f="up" type="number" step="1" value="${g.up}"></td><td><select data-f="group"><option value="A" ${g.group==='A'?'selected':''}>${T('管理部可控','Admin')}</option><option value="B" ${g.group==='B'?'selected':''}>${T('其他帳列','Other')}</option></select></td><td><input data-f="off" type="checkbox" ${g.off?'checked':''}></td></tr>`}).join('')+'</tbody></table></div>'}
+ dlg(y+T(' 年設定',' settings'),`<div class="fg">
+  <label class="w">${T('情境組數（逗號分開，可增減；空白＝預設）','Scenario lines (comma-separated; blank = default)')}<input id="sScen" value="${E((o.scen||[]).join(', '))}" placeholder="${sc.join(', ')}"></label>
+  <label>${T('每組人數（DL）','People per line (DL)')}<input id="sPpl" type="number" value="${E(o.ppl||'')}" placeholder="${M.ppl(y)}"></label>
+  <label>${T('最低工資 USD','Minimum wage USD')}<input id="sMw" type="number" value="${E(o.mw||'')}" placeholder="${M.mw(y)}"></label>
+  <label>${T('12 月係數（年終）','December factor')}<input id="sDec" type="number" step="0.01" value="${E(o.decF??'')}" placeholder="${M.decF(y)}"></label>
+  <label>${T('公司社保費率 %','Company NSSF rate %')}<input id="sNs" type="number" step="0.1" value="${E(o.nssf||'')}" placeholder="${M.nssfRate(y)}"></label></div>
+  <p class="small mut">${T('預設：2025–2027 用 10／12／15 組；之前的年度用平均組數 ±2。基準＝前一年實際（','Defaults: 2025–2027 use 10/12/15 lines; earlier years use the average ±2. Base = previous year actuals (')}${M.base(y).year}）。</p>${cat}`,
+  `<button class="btn" id="sReset">${T('恢復預設','Reset to default')}</button><button class="btn pri" id="sOk">${T('儲存','Save')}</button>`);
+ $('sOk').onclick=()=>{const n={};const sv=$('sScen').value.split(/[,，\s]+/).map(Number).filter(v=>v>0);if(sv.length)n.scen=sv;
+  [['ppl','sPpl'],['mw','sMw'],['decF','sDec'],['nssf','sNs']].forEach(([k,id])=>{const v=$(id).value;if(v!=='')n[k]=Number(v)});
+  DOC.years[y]=n;touch('years.'+y);
+  if(VIEW==='admin')document.querySelectorAll('#dlgB tr[data-c]').forEach(tr=>{const c=tr.dataset.c,info=VRTBudget.CAT_INFO[c],x={};tr.querySelectorAll('[data-f]').forEach(el=>{const f=el.dataset.f,v=el.type==='checkbox'?el.checked:el.value;
+   if(f==='driver'&&v!==info[2])x.driver=v;if(f==='up'&&Number(v)!==info[3])x.up=Number(v);if(f==='group'&&v!==info[4])x.group=v;if(f==='off'&&v)x.off=true});
+   const had=JSON.stringify(DOC.cats[c]||{});if(Object.keys(x).length)DOC.cats[c]=x;else delete DOC.cats[c];if(had!==JSON.stringify(DOC.cats[c]||{}))touch('cats.'+c)});
+  CMP=null;closeDlg();saveDoc(T('設定已儲存，已重算','Saved and recalculated'))};
+ $('sReset').onclick=()=>{delete DOC.years[y];DOC.del['years.'+y]=now();CMP=null;closeDlg();saveDoc(T('已恢復預設','Reset to default'))}}
+function customDlg(){const y=curYear();const list=DOC.custom.filter(x=>+x.y===y);
+ const row=x=>`<tr data-id="${E(x.id)}"><td><input data-f="zh" value="${E(x.zh||'')}" placeholder="${T('名稱（中）','Name (zh)')}"></td><td><input data-f="en" value="${E(x.en||'')}" placeholder="Name (en)"></td><td><input data-f="amt" type="number" value="${E(x.amt||'')}"></td><td><input data-f="months" value="${E((x.months||[]).join(','))}" placeholder="1-12"></td><td><button class="btn sm danger" data-del>✕</button></td></tr>`;
+ dlg(y+T(' 年自訂預算項目',' custom budget items'),`<p class="small mut">${T('例：驗廠費、年度健檢、一次性採購。金額＝每月預算；月份空白＝每個月。實際數可在「輸入實際數」填。','E.g. audit fees, annual check-up, one-off purchases. Amount = monthly budget; months blank = every month. Actuals go in “Enter actuals”.')}</p>
+  <div class="tw"><table class="dtab" id="cuT"><thead><tr><th>${T('名稱','Name')}</th><th>English</th><th>${T('每月預算','Monthly budget')}</th><th>${T('月份','Months')}</th><th></th></tr></thead><tbody>${list.map(row).join('')}</tbody></table></div>`,
+  `<button class="btn" id="cuAdd">➕ ${T('新增一行','Add row')}</button><button class="btn pri" id="cuOk">${T('儲存','Save')}</button>`);
+ $('cuAdd').onclick=()=>{$('cuT').tBodies[0].insertAdjacentHTML('beforeend',row({id:'c'+Date.now().toString(36)}))};
+ $('cuT').addEventListener('click',e=>{const d=e.target.closest('[data-del]');if(d)d.closest('tr').remove()});
+ $('cuOk').onclick=()=>{const keep=new Set();document.querySelectorAll('#cuT tbody tr').forEach(tr=>{const id=tr.dataset.id,g=f=>tr.querySelector(`[data-f="${f}"]`).value.trim();if(!g('zh')&&!g('en'))return;
+   const ms=g('months').split(/[,，\s]+/).flatMap(s=>{const m=s.match(/^(\d+)-(\d+)$/);if(m){const a=[];for(let i=+m[1];i<=+m[2];i++)a.push(i);return a}return s?[+s]:[]}).filter(v=>v>=1&&v<=12);
+   const old=DOC.custom.find(x=>x.id===id)||{};const n={...old,id,y,zh:g('zh'),en:g('en'),amt:Number(g('amt'))||0,months:ms};
+   if(JSON.stringify(old)!==JSON.stringify(n)){DOC.custom=DOC.custom.filter(x=>x.id!==id).concat([n]);touch('custom.'+id)}keep.add(id)});
+  list.forEach(x=>{if(!keep.has(x.id)){DOC.custom=DOC.custom.filter(z=>z.id!==x.id);DOC.del['custom.'+x.id]=now();delete DOC.at['custom.'+x.id]}});
+  closeDlg();saveDoc(T('自訂項目已儲存','Custom items saved'))}}
+function actualDlg(ym){const y=curYear();ym=ym||(M.year(y,VIEW).actMonths.slice(-1)[0]||y+'-01');
+ const f=M.fc(ym)||{},l=M.lab(ym)||[],a=DOC.actual[ym]||{};
+ const fld=(k,lab,v)=>`<label>${E(lab)}${a[k]!=null?' ✏️':''}<input data-k="${k}" type="number" value="${a[k]!=null?E(a[k]):''}" placeholder="${v==null?'':Math.round(v)}"></label>`;
+ const labF=[['dlN',T('DL 人數','DL heads'),l[0]],['dlG',T('DL 工資','DL wages'),l[1]],['idlN',T('IDL 人數','IDL heads'),l[2]],['idlG',T('IDL 工資','IDL wages'),l[3]],['offN',T('OFF 人數','OFF heads'),l[4]],['offG',T('OFF 工資','OFF wages'),l[5]]];
+ const cus=DOC.custom.filter(x=>+x.y===+ym.slice(0,4));
+ dlg(T('實際數 ','Actuals ')+ym,`<label class="small">${T('月份','Month')} <input id="aYm" type="month" value="${ym}"></label>
+  <p class="small mut">${T('空白＝用系統資料（灰色是目前的數字：ERP 製造費用／HRA-PAY 實發）。填了就以手動為準，月報也照這個算。','Blank = use system data (grey = current ERP / HRA-PAY figure). A value you enter overrides it, including in the monthly report.')}</p>
+  <h4>${T('人工','Labour')}</h4><div class="fg">${labF.map(x=>fld(...x)).join('')}</div>
+  ${VIEW==='admin'?`<h4>${T('費用（ERP W_CCS450）','Expenses (ERP W_CCS450)')}</h4><div class="fg">${M.cats.map(c=>fld(c,M.catName(c,LANG),f[c])).join('')}</div>`:''}
+  ${cus.length?`<h4>${T('自訂項目實際','Custom item actuals')}</h4><div class="fg">${cus.map(x=>`<label>${E(LANG==='en'?x.en||x.zh:x.zh||x.en)}<input data-cu="${E(x.id)}" type="number" value="${x.act&&x.act[ym]!=null?x.act[ym]:''}"></label>`).join('')}</div>`:''}`,
+  `<button class="btn danger" id="aClr">${T('清掉這個月的手動數','Clear manual values for this month')}</button><button class="btn pri" id="aOk">${T('儲存','Save')}</button>`);
+ $('aYm').onchange=e=>{closeDlg();actualDlg(e.target.value)};
+ $('aOk').onclick=()=>{const n={};document.querySelectorAll('#dlgB [data-k]').forEach(i=>{if(i.value!=='')n[i.dataset.k]=Number(i.value)});
+  if(Object.keys(n).length){DOC.actual[ym]=n;touch('actual.'+ym)}else if(DOC.actual[ym]){delete DOC.actual[ym];DOC.del['actual.'+ym]=now()}
+  document.querySelectorAll('#dlgB [data-cu]').forEach(i=>{const x=DOC.custom.find(z=>z.id===i.dataset.cu);if(!x)return;x.act=x.act||{};const ov=x.act[ym];if(i.value==='')delete x.act[ym];else x.act[ym]=Number(i.value);if(ov!==x.act[ym])touch('custom.'+x.id)});
+  closeDlg();saveDoc(T('實際數已儲存','Actuals saved'))};
+ $('aClr').onclick=()=>{delete DOC.actual[ym];DOC.del['actual.'+ym]=now();closeDlg();saveDoc(T('已清除','Cleared'))}}
+function tgDlg(ym){const y=curYear();ym=ym||M.year(y,VIEW).actMonths.slice(-1)[0];if(!ym){toast(T('這一年還沒有實際數','No actuals for this year yet'));return}
+ const html=M.monthReport(ym,VIEW)||'';const txt=html.replace(/<pre>/g,'\n').replace(/<\/pre>/g,'').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
+ dlg(T('月報預覽 ','Report preview ')+ym,`<p class="small mut">${T('行政中心每月結算後會自動發這一則（','The Admin Center sends this automatically after each month’s close (')}${VIEW==='labor'?T('私訊 Paul','DM to Paul'):T('AI AC System 群組','AI AC System group')}${T('），這裡只預覽，不會發送。','); this is a preview only — nothing is sent.')}</p><pre class="tg">${E(txt)}</pre>`,`<button class="btn" id="tgCp">📋 ${T('複製','Copy')}</button>`);
+ $('tgCp').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(txt).then(()=>toast(T('已複製','Copied')))}}
+function paulDlg(){const it=VRTB_DATA.paul2021.items;const tot=it.reduce((s,x)=>s+x[3].reduce((a,b)=>a+b,0),0);
+ dlg(T('2021 原始試作預算（Paul，18 組）','Original 2021 trial budget (Paul, 18 lines)'),`<div class="tw"><table><thead><tr><th>${T('項目','Item')}</th><th>${T('全年預算','Full year')}</th><th>${T('每月平均','Per month')}</th><th>${T('1 月實際','Jan actual')}</th></tr></thead><tbody>`+
+  it.map(x=>{const s=x[3].reduce((a,b)=>a+b,0);return `<tr><td>${E(LANG==='en'?x[1]:x[0])}</td><td>${N(s)}</td><td>${N(s/12)}</td><td>${x[4]?N(x[4]):'—'}</td></tr>`}).join('')+`<tr class="tot"><td>${T('合計','Total')}</td><td>${N(tot)}</td><td>${N(tot/12)}</td><td>${N(it.reduce((s,x)=>s+(x[4]||0),0))}</td></tr></tbody></table></div><p class="small mut">${E(VRTB_DATA.paul2021.note)}</p>`)}
+/* ── 匯入匯出 ── */
+function download(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+function exportCsv(){const Y=M.year(curYear(),VIEW);const has=Y.actMonths.length;const head=[T('項目','Item'),...Y.scen.map(s=>s+(has?T(' 組同期預算',' lines budget (same months)'):T(' 組全年預算',' lines full-year'))),...(has?[T('彈性預算','Flex budget'),T('實際','Actual'),T('說明','Explanation')]:[])];
+ const L=[head];Y.rows.forEach(r=>L.push([rowName(r),...r.bud.map(b=>Math.round(has?b.ytd:b.full)),...(has?[Math.round(r.flex),Math.round(r.act),M.explain(Y,r,Y.closest>=0?Y.closest:1,LANG)+(M.note(Y.y,r.key)?' / '+M.note(Y.y,r.key):'')]:[])]));
+ L.push([T('合計','Total'),...Y.total.bud.map(b=>Math.round(has?b.ytd:b.full)),...(has?[Math.round(Y.total.flex),Math.round(Y.total.act),'']:[])]);
+ L.push([]);L.push([T('月份','Month'),T('組數','Lines'),...Y.scen.map(s=>s+T(' 組',' lines')),T('彈性','Flex'),T('實際','Actual')]);Y.months.forEach(m=>L.push([m.ym,m.has?P1(m.lines):'',...m.bud.map(Math.round),m.has?Math.round(m.flex):'',m.has?Math.round(m.act):'']));
+ download(`VRT_${VIEW==='labor'?'labour':'admin'}_budget_${Y.y}.csv`,'﻿'+L.map(r=>r.map(v=>{v=String(v??'');return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(',')).join('\n'),'text/csv')}
+function importFile(f){const rd=new FileReader();const name=f.name.toLowerCase();
+ rd.onload=()=>{try{
+  if(name.endsWith('.json')){const d=JSON.parse(rd.result);const doc=d.doc||d;if(!doc||typeof doc!=='object'||!('years' in doc||'notes' in doc||'actual' in doc))throw new Error(T('不是預算檔','Not a budget file'));
+   DOC=mergeDocs(doc,DOC);saveDoc(T('已匯入並合併（新的為準）','Imported and merged (newer wins)'));return}
+  let rows;if(/\.xlsx?$/.test(name)){if(!window.XLSX)throw new Error('XLSX');const wb=XLSX.read(new Uint8Array(rd.result),{type:'array'});rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1})}
+  else rows=String(rd.result).replace(/^﻿/,'').split(/\r?\n/).map(l=>l.split(','));
+  /* 實際數：每列 月份(YYYY-MM), 項目代號或名稱, 金額 */
+  const names={};M.cats.forEach(c=>{names[c]=c;names[M.catName(c,'zh')]=c;names[M.catName(c,'en').toLowerCase()]=c});['dlN','dlG','idlN','idlG','offN','offG'].forEach(k=>names[k.toLowerCase()]=k);
+  let n=0;rows.forEach(r=>{if(!r||r.length<3)return;const ym=String(r[0]).trim().slice(0,7).replace('/','-');const k=names[String(r[1]).trim()]||names[String(r[1]).trim().toLowerCase()];const v=Number(String(r[2]).replace(/[$,\s]/g,''));
+   if(!/^\d{4}-\d{2}$/.test(ym)||!k||isNaN(v))return;DOC.actual[ym]=DOC.actual[ym]||{};DOC.actual[ym][k]=v;touch('actual.'+ym);n++});
+  if(!n)throw new Error(T('沒讀到資料：每列要「月份, 項目, 金額」（例：2026-11, meal, 8500）','Nothing read — each row needs “month, item, amount” (e.g. 2026-11, meal, 8500)'));
+  saveDoc(T('已匯入 ','Imported ')+n+T(' 筆實際數',' actual values'))}catch(e){toast(T('匯入失敗：','Import failed: ')+(e.message||e))}};
+ if(/\.xlsx?$/.test(name)){if(!window.XLSX){const s=document.createElement('script');s.src='../../shared/xlsx.full.min.js';s.onload=()=>rd.readAsArrayBuffer(f);document.head.appendChild(s)}else rd.readAsArrayBuffer(f)}else rd.readAsText(f)}
+/* ── 事件 ── */
+document.addEventListener('click',e=>{const t=e.target.closest('[data-y],[data-v],[data-l],[data-note],[data-act],[data-actm],[data-tg]');if(!t)return;
+ if(t.dataset.y){e.preventDefault();Y0=+t.dataset.y;CMP=null;render();window.scrollTo({top:0,behavior:'smooth'});return}
+ if(t.dataset.v){VIEW=t.dataset.v;CMP=null;render();return}
+ if(t.dataset.l){LANG=t.dataset.l;if(!EMBED)jput('ac_admin_lang',LANG);render();return}
+ if(t.dataset.note){noteDlg(t.dataset.note);return}
+ if(t.dataset.actm){actualDlg(t.dataset.actm);return}
+ if(t.dataset.tg){tgDlg(t.dataset.tg);return}
+ const a=t.dataset.act;
+ if(a==='settings')settingsDlg();else if(a==='custom')customDlg();else if(a==='actual')actualDlg();else if(a==='down')down(true);else if(a==='up')up(true);
+ else if(a==='import')$('file').click();else if(a==='exjson')download('VRT_budget_'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({kind:'vrt-budget',exportedAt:now(),doc:DOC},null,1),'application/json');
+ else if(a==='excsv')exportCsv();else if(a==='tg')tgDlg();else if(a==='paul')paulDlg();
+ else if(a==='undo'){const p=jget(PREV_KEY,null);if(!p){toast(T('沒有可復原的修改','Nothing to undo'));return}localStorage.removeItem(PREV_KEY);DOC=p;const ts=now();Object.keys(DOC.at||{}).forEach(k=>DOC.at[k]=ts);jput(DOC_KEY,DOC);META.dirty=true;jput(META_KEY,META);rebuild();render();scheduleUp();toast(T('已復原上一次修改','Last change undone'))}});
+$('cmp').onchange=e=>{CMP=e.target.value==='flex'?'flex':+e.target.value;render()};
+$('file').onchange=e=>{const f=e.target.files[0];if(f)importFile(f);e.target.value=''};
+/* 嵌在 PSJHR：跟著外框換語言 */
+if(EMBED){setInterval(()=>{const l=parentLang();if(l&&l!==LANG){LANG=l;render()}},1200)}
+window.addEventListener('storage',e=>{if(e.key===DOC_KEY&&e.newValue){try{DOC=JSON.parse(e.newValue);rebuild();render()}catch(x){}}});
+let rzT=null;window.addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(()=>drawChart(M.year(curYear(),VIEW)),200)});
+rebuild();render();down(false);
+window.VRTB_PAGE={get M(){return M},get DOC(){return DOC},render,down,up};
+})();
+</script>
+</body>
+</html>

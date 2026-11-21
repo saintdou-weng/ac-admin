@@ -1,0 +1,136 @@
+/* ===== 2026-11-22 v2.6.0 預算 vs 實際：雲端文件＋每月自動結算月報 Budget vs actual =====
+   Paul 11/22：Admin OS「管理部預算 vs 實際」、PSJHR「直接／間接人工預算 vs 實際」（同一頁 apps/admin/budget_history.html）。
+   · 計算全部用網頁同一份 shared/vrt-budget.js ＋ shared/vrt-budget-data.js（從 github.io 讀，快取 6 小時），網頁跟月報數字一定一樣。
+   · GET  ?action=budgetGet   公開唯讀 → {ok, rev, doc, live:{fc, lab, asOf}}（只有合計，沒有個人資料）
+   · POST {action:'budgetPut', key, baseRev, doc, who}  key＝Admin OS 門鎖碼；baseRev 不同 → {conflict:true, rev, doc} 讓網頁合併再送
+          少覆多保護：新文件項目數 < 舊的一半（舊的 ≥ 6 項）→ 拒絕（SHRINK），不覆蓋；每次覆蓋前備份到 BudgetBackup（留 40 筆）
+   · live.fc  ＝ PSJERP「PSJERP_ERP_FACTORY_COST」試算表（W_CCS450 每月 20 項），種子最後 3 個月起重讀（ERP 會補結）
+   · live.lab ＝ HRA-PAY hrpay_payroll 實發（m:YYYY-MM:p*），種子之後的月份；DL／IDL／OFF 依部門名稱分類；工資＝AG＋預支 S
+   · 每月結算（pollAdminTelegram 每分鐘呼叫 budgetTick_，每天 10:00 後看一次）：上個月 HRA-PAY 實發進來（每月 12 日起）
+       ① 人工預算月報 → 私訊 Paul（失敗改發群組）
+       ② 管理部預算月報 → 群組（ERP 製造費用也進來才發；到 25 日 ERP 還沒進來就先發一則「等 ERP」提示，進來後自動補發）
+     一個月各發一次（BUD_SENT_<ym>）。previewBudget() 只看不發；sendBudgetNow('2026-10') 立刻重發。錯誤在 BUD_LAST_ERROR。 */
+const AC_BUDGET={
+ LIB:'https://saintdou-weng.github.io/ac-admin/shared/vrt-budget.js',
+ DATA:'https://saintdou-weng.github.io/ac-admin/shared/vrt-budget-data.js',
+ PAGE:'https://saintdou-weng.github.io/ac-admin/apps/admin/budget_history.html',
+ FC_SS:'1ovcs9lo1EpmDP2BvWCoPL002yZIZONMyXW2kQpFmFsg',
+ HRPAY:'https://script.google.com/macros/s/AKfycbwmmRduvOe5RdnR_iALwEIi_6lQaTq4SXH88jmoIjiHwTsTrW5qnlPTr8PSmOT7C2rdGg/exec',
+ KEY:'f065b43108b2d9766e5aff7f77a79f99575d34f6c2cb001b368686098ed75433',
+ PAUL:'5026942575', AT:'10:00', START:'2026-10', FROM_DAY:12, ERP_WAIT_DAY:25, CELL:45000
+};
+function budgetSheet_(){return sh_('BudgetDoc',['rev','index','json']);}
+function budgetDocRead_(){
+ const sh=budgetSheet_(),n=sh.getLastRow();if(n<2)return {rev:0,doc:null};
+ const v=sh.getRange(2,1,n-1,3).getValues();let rev=0,parts=[];
+ v.forEach(function(r){if(Number(r[0])>rev){rev=Number(r[0]);parts=[];}if(Number(r[0])===rev)parts[Number(r[1])]=String(r[2]).replace(/^j:/,'');});
+ if(!rev)return {rev:0,doc:null};try{return {rev:rev,doc:JSON.parse(parts.join(''))};}catch(e){return {rev:rev,doc:null,error:'BAD_DOC'};}
+}
+function budgetDocWrite_(doc,rev){
+ const sh=budgetSheet_(),s=JSON.stringify(doc),rows=[];
+ for(let i=0,k=0;i<s.length;i+=AC_BUDGET.CELL,k++)rows.push([rev,k,'j:'+s.slice(i,i+AC_BUDGET.CELL)]);
+ const old=budgetDocRead_();
+ if(old.doc){const bk=sh_('BudgetBackup',['time','rev','who','json']);const os=JSON.stringify(old.doc);bk.appendRow([new Date(),old.rev,String(doc._who||''),os.length<49000?'j:'+os:'(too big) '+os.length]);
+  const bn=bk.getLastRow();if(bn>41)bk.deleteRows(2,bn-41);}
+ sh.getRange(2,1,rows.length,3).setNumberFormat('@').setValues(rows);
+ const last=sh.getLastRow();if(last>rows.length+1)sh.getRange(rows.length+2,1,last-rows.length-1,3).clearContent();
+}
+function budgetItems_(d){if(!d)return 0;const c=function(o){return o?Object.keys(o).length:0;};return c(d.years)+c(d.notes)+c(d.actual)+c(d.cats)+(d.custom||[]).length;}
+function budgetPut_(b){
+ if(String(b.key||'')!==AC_BUDGET.KEY)return {ok:false,error:'BAD_KEY'};
+ const doc=b.doc;if(!doc||typeof doc!=='object')return {ok:false,error:'NO_DOC'};
+ const lock=LockService.getScriptLock();lock.waitLock(20000);
+ try{
+  const cur=budgetDocRead_();
+  if(Number(b.baseRev||0)!==cur.rev)return {ok:true,conflict:true,rev:cur.rev,doc:cur.doc};
+  const was=budgetItems_(cur.doc),now=budgetItems_(doc);
+  if(was>=6&&now<was/2&&!b.force)return {ok:false,error:'SHRINK',msg:'新資料比雲端少一半以上，沒有覆蓋（'+now+' < '+was+'）'};
+  doc._who=String(b.who||'').slice(0,40);doc._at=new Date().toISOString();
+  const rev=cur.rev+1;budgetDocWrite_(doc,rev);
+  return {ok:true,rev:rev};
+ }finally{lock.releaseLock();}
+}
+/* ── 最新實際數 ── */
+function budgetFcLive_(fromYm){
+ const ss=SpreadsheetApp.openById(AC_BUDGET.FC_SS),out={},end={};
+ ss.getSheets().forEach(function(sh){
+  if(sh.getLastRow()<2)return;const v=sh.getDataRange().getValues(),h=v[0].map(String),im=h.indexOf('month');if(im<0||h.indexOf('total')<0)return;
+  const tabEnd=(sh.getName().match(/(\d{4}-\d{2})\D*$/)||[])[1]||'';
+  v.slice(1).forEach(function(r){let ym=r[im];if(ym instanceof Date)ym=Utilities.formatDate(ym,AC_ADMIN.TZ,'yyyy-MM');ym=String(ym).slice(0,7);if(!/^\d{4}-\d{2}$/.test(ym)||ym<fromYm)return;
+   if(end[ym]&&end[ym]>tabEnd)return;const o={};h.forEach(function(k,i){if(!k||/^(month|total|_row|_key|erp|id)$/.test(k)||r[i]===''||r[i]==null)return;const n=Number(r[i]);if(!isNaN(n))o[k]=n;});out[ym]=o;end[ym]=tabEnd;});
+ });
+ return out;
+}
+function budgetCls_(d){d=String(d||'').toLowerCase().replace(/[\u200b\s]+/g,' ').trim();
+ if(/clean|guard|secur|driver|admin|nurse|doctor|export|lab office|^pc$|account|\bhr\b|cook|canteen|office|gardener|import|purchas|merchand|electric/.test(d))return 'OFF';
+ if(/line|sample|supervisor garment|supervisor napkin|training|service in garment|maker|sewer|sewing/.test(d)&&!/machin|mechanic/.test(d))return 'DL';return 'IDL';}
+function budgetHp_(q){const r=UrlFetchApp.fetch(AC_BUDGET.HRPAY+'?'+q,{muteHttpExceptions:true,followRedirects:true});if(r.getResponseCode()!==200)throw new Error('HRA-PAY HTTP '+r.getResponseCode());const j=JSON.parse(r.getContentText());return j.data||j;}
+function budgetXl_(row,col,which){const c=(row&&row._excel&&row._excel.cells)||{};let best=null,br=null;Object.keys(c).forEach(function(k){const m=k.match(/^([A-Z]+)(\d+)$/);if(!m||m[1]!==col)return;const n=Number(m[2]);if(br===null||(which==='in'?n<br:n>br)){br=n;best=c[k]&&c[k].v;}});return best==null?null:Number(best)||0;}
+function budgetPayLive_(fromYm,toYm){
+ const p=PropertiesService.getScriptProperties(),man=budgetHp_('action=smartManifest&tool=hrpay_payroll'),hs=man.hashes||{},by={},out={};
+ Object.keys(hs).forEach(function(k){const m=k.match(/^m:(\d{4}-\d{2}):p\d/);if(m&&m[1]>=fromYm&&m[1]<=toYm)(by[m[1]]=by[m[1]]||[]).push(k);});
+ Object.keys(by).sort().forEach(function(ym){
+  const sig=by[ym].sort().map(function(k){return k+'='+hs[k];}).join('|'),ck='BUD_PAY_'+ym,old=p.getProperty(ck);
+  if(old){try{const o=JSON.parse(old);if(o.sig===Utilities.base64Encode(Utilities.computeDigest(Utilities.DigestAlgorithm.MD5,sig))){out[ym]=o.a;return;}}catch(e){}}
+  const a=[0,0,0,0,0,0],ix={DL:0,IDL:2,OFF:4};
+  by[ym].forEach(function(k){const d=budgetHp_('action=smartBucket&tool=hrpay_payroll&bucket='+encodeURIComponent(k));(d.records||[]).forEach(function(rec){const r=rec.row;if(!r||r.id==null)return;
+   let AG=budgetXl_(r,'AG');if(AG==null)AG=Number(r.subtotal)||0;let S=budgetXl_(r,'S');if(S==null)S=Number(r.advGiven)||0;const i=ix[budgetCls_(r.dept)];a[i]++;a[i+1]+=AG+S;});});
+  a[1]=Math.round(a[1]);a[3]=Math.round(a[3]);a[5]=Math.round(a[5]);out[ym]=a;
+  p.setProperty(ck,JSON.stringify({sig:Utilities.base64Encode(Utilities.computeDigest(Utilities.DigestAlgorithm.MD5,sig)),a:a}));
+ });
+ return out;
+}
+function budgetLib_(){
+ if(globalThis.VRTBudget&&globalThis.VRTB_DATA)return globalThis.VRTBudget;
+ const c=CacheService.getScriptCache();
+ [['BUD_LIB',AC_BUDGET.LIB],['BUD_DATA',AC_BUDGET.DATA]].forEach(function(x){let js=c.get(x[0]);
+  if(!js){const r=UrlFetchApp.fetch(x[1]+'?t='+Date.now(),{muteHttpExceptions:true,followRedirects:true});if(r.getResponseCode()!==200)throw new Error(x[1].split('/').pop()+' HTTP '+r.getResponseCode());js=r.getContentText();try{c.put(x[0],js,21600);}catch(e){}}
+  (0,eval)(js);});
+ if(!globalThis.VRTBudget||!globalThis.VRTB_DATA)throw new Error('vrt-budget.js 載入失敗');
+ return globalThis.VRTBudget;
+}
+function budgetLive_(force){
+ const c=CacheService.getScriptCache();if(!force){const h=c.get('BUD_LIVE');if(h)try{return JSON.parse(h);}catch(e){}}
+ budgetLib_();const seed=globalThis.VRTB_DATA,fm=Object.keys(seed.fc).sort(),lm=Object.keys(seed.lab).sort();
+ const fcFrom=fm[Math.max(0,fm.length-3)],labFrom=(function(ym){const d=new Date(Number(ym.slice(0,4)),Number(ym.slice(5,7)),1);return Utilities.formatDate(d,AC_ADMIN.TZ,'yyyy-MM');})(lm[lm.length-1]);
+ const to=Utilities.formatDate(new Date(),AC_ADMIN.TZ,'yyyy-MM');const live={asOf:new Date().toISOString(),fc:{},lab:{},err:[]};
+ try{live.fc=budgetFcLive_(fcFrom);}catch(e){live.err.push('ERP '+String(e.message||e).slice(0,120));}
+ try{live.lab=budgetPayLive_(labFrom,to);}catch(e){live.err.push('HRA-PAY '+String(e.message||e).slice(0,120));}
+ try{c.put('BUD_LIVE',JSON.stringify(live),1800);}catch(e){}
+ return live;
+}
+function budgetGet_(p){const d=budgetDocRead_();let live={};try{live=budgetLive_(p&&p.fresh==='1');}catch(e){live={err:[String(e.message||e)]};}return {ok:true,rev:d.rev,doc:d.doc,live:live};}
+function budgetModel_(force){const B=budgetLib_(),d=budgetDocRead_(),live=budgetLive_(force);return B.make(globalThis.VRTB_DATA,d.doc||{},live);}
+/* ── 每月結算 ── */
+function budgetKb_(view){return JSON.stringify({inline_keyboard:[[{text:view==='labor'?'👷 人工預算頁 Labour budget':'📊 預算頁 Budget page',url:AC_BUDGET.PAGE+(view==='labor'?'?view=labor':'')},{text:'🏠 Main',url:AC_ADMIN.HOME_URL}]]});}
+function budgetPost_(chat,html,view){const chunks=typeof weeklyChunks_==='function'?weeklyChunks_(html):[String(html).slice(0,4000)];chunks.forEach(function(t,i){tgRequest_('sendMessage',{chat_id:chat,text:t,parse_mode:'HTML',disable_web_page_preview:true,reply_markup:i===chunks.length-1?budgetKb_(view):undefined});});}
+function budgetPrevYm_(){const n=new Date();const d=new Date(n.getFullYear(),n.getMonth()-1,1);return Utilities.formatDate(d,AC_ADMIN.TZ,'yyyy-MM');}
+function budgetSettle_(ym,force,dry){
+ const p=PropertiesService.getScriptProperties(),k='BUD_SENT_'+ym,st=force?{}:JSON.parse(p.getProperty(k)||'{}'),out=[];
+ const M=budgetModel_(true),day=Number(Utilities.formatDate(new Date(),AC_ADMIN.TZ,'d'));
+ const lab=M.lab(ym),fc=M.fc(ym),labOk=!!(lab&&lab[0]>0&&M.src('lab',ym)!=='est');
+ if(labOk&&!st.labor){const html=M.monthReport(ym,'labor');if(html){if(dry)out.push(html);else{try{budgetPost_(AC_BUDGET.PAUL,html,'labor');}catch(e){budgetPost_(AC_ADMIN.CHAT_ID,'（私訊 Paul 失敗，改發群組 DM failed — posted here）\n'+html,'labor');}st.labor=new Date().toISOString();}out.push('labor sent');}}
+ if(labOk&&!st.admin){
+  const ready=fc&&(!M.isProv(ym)||day>=AC_BUDGET.ERP_WAIT_DAY||force);
+  if(ready){const html=M.monthReport(ym,'admin');if(html){if(dry)out.push(html);else{budgetPost_(AC_ADMIN.CHAT_ID,html,'admin');st.admin=new Date().toISOString();}out.push('admin sent');}}
+  else if(day>=AC_BUDGET.ERP_WAIT_DAY&&!st.wait){const y=ym.slice(0,4),m=Number(ym.slice(5));const t='⏳ <b>管理部預算月報 '+y+' 年 '+m+' 月：等 ERP 製造費用</b>\n<b>Admin budget report '+ym+': waiting for ERP overhead</b>\n人工（HRA-PAY）已結算；PSJERP W_CCS450 '+m+' 月'+(fc?'看起來還沒結完':'還沒匯入')+'，進來後自動補發。\nLabour is settled; the report follows automatically once the ERP overhead for '+ym+' is in.';
+   if(dry)out.push(t);else{budgetPost_(AC_ADMIN.CHAT_ID,t,'admin');st.wait=new Date().toISOString();}out.push('wait sent');}
+ }
+ if(!dry)p.setProperty(k,JSON.stringify(st));
+ return out;
+}
+function budgetTick_(){
+ try{
+  const tz=AC_ADMIN.TZ,now=new Date(),hm=Utilities.formatDate(now,tz,'HH:mm'),today=Utilities.formatDate(now,tz,'yyyy-MM-dd'),day=Number(Utilities.formatDate(now,tz,'d'));
+  if(hm<AC_BUDGET.AT)return;const p=PropertiesService.getScriptProperties();if(p.getProperty('BUD_CHECK')===today)return;
+  p.setProperty('BUD_CHECK',today);
+  const yms=[budgetPrevYm_()];if(day<AC_BUDGET.FROM_DAY){const d=new Date(now.getFullYear(),now.getMonth()-2,1);yms[0]=Utilities.formatDate(d,tz,'yyyy-MM');}   /* 12 日前：還在追上上個月（ERP 晚到） */
+  else{const d=new Date(now.getFullYear(),now.getMonth()-2,1);yms.unshift(Utilities.formatDate(d,tz,'yyyy-MM'));}
+  const res=[];yms.forEach(function(ym){if(ym<AC_BUDGET.START)return;const st=JSON.parse(p.getProperty('BUD_SENT_'+ym)||'{}');if(st.labor&&st.admin)return;res.push(ym+': '+budgetSettle_(ym,false,false).join(','));});
+  p.setProperty('BUD_LAST',today+' '+res.join(' | ').slice(0,400));p.deleteProperty('BUD_LAST_ERROR');
+ }catch(e){try{PropertiesService.getScriptProperties().setProperty('BUD_LAST_ERROR',new Date().toISOString()+' '+String(e&&e.message||e).slice(0,450));}catch(x){}}
+}
+/* 在編輯器按執行 */
+function previewBudget(){const ym=budgetPrevYm_();const r=budgetSettle_(ym,true,true);r.forEach(function(x){Logger.log(String(x).replace(/<[^>]+>/g,''));});const M=budgetModel_(false);Logger.log('live err '+JSON.stringify(M.live.err||[])+' lab '+JSON.stringify(M.live.lab||{})+' fc months '+Object.keys(M.live.fc||{}).join(','));return r.length;}
+function sendBudgetNow(ym){ym=ym||budgetPrevYm_();const r=budgetSettle_(ym,true,false);Logger.log(JSON.stringify(r));return r;}
+function checkBudget(){const p=PropertiesService.getScriptProperties();Logger.log('last '+p.getProperty('BUD_LAST')+' err '+p.getProperty('BUD_LAST_ERROR'));const d=budgetDocRead_();Logger.log('doc rev '+d.rev+' items '+budgetItems_(d.doc));}
