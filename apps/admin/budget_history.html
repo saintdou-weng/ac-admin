@@ -67,6 +67,7 @@ td.cl,th.cl{background:color-mix(in srgb,var(--acc) 8%,var(--card))}
 .flag{font-size:12px;border-radius:8px;padding:6px 9px;margin:6px 0;background:var(--infobg);color:var(--ink)}
 .flag.w{background:var(--warnbg)}
 dialog{border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);padding:0;width:min(760px,96vw);max-height:90vh}
+dialog.big{width:min(1120px,96vw)}
 dialog::backdrop{background:rgba(15,23,42,.45)}
 .dh{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--card);z-index:2}
 .dh h3{margin:0;font-size:15px;flex:1}
@@ -81,6 +82,25 @@ textarea{width:100%;min-height:90px}
 pre.tg{white-space:pre-wrap;background:var(--soft);border-radius:10px;padding:10px;font:12.5px/1.5 ui-monospace,Menlo,Consolas,monospace;max-height:60vh;overflow:auto}
 .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#0f172a;color:#fff;padding:8px 14px;border-radius:10px;font-size:13px;z-index:99;display:none;max-width:92vw}
 #tools .btn{white-space:normal;text-align:left}
+.pers{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;align-items:center;scrollbar-width:thin}
+.pc{flex:0 0 auto;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 11px;cursor:pointer;font-variant-numeric:tabular-nums;position:relative}
+.pc.on{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:650}
+.pc.rg{background:color-mix(in srgb,var(--acc) 18%,var(--card));border-color:var(--acc)}
+.pc .dt{position:absolute;top:3px;right:4px;width:5px;height:5px;border-radius:50%;background:var(--s3)}
+.pc[disabled]{opacity:.45}
+.cum{display:flex;align-items:center;gap:4px;font-size:12.5px;color:var(--ink2);white-space:nowrap;flex:0 0 auto;padding-left:4px}
+tr[data-item],tr[data-pm]{cursor:pointer}tr[data-item]:hover td,tr[data-pm]:hover td{background:color-mix(in srgb,var(--acc) 6%,var(--card))}
+td .go{color:var(--acc);font-size:12px;margin-left:4px}
+.icards{display:none;flex-direction:column;gap:8px}
+.icard{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--card);cursor:pointer;text-align:left;width:100%}
+.icard .h{display:flex;justify-content:space-between;gap:8px;align-items:center;font-weight:650}
+.icard .n{display:flex;gap:10px;flex-wrap:wrap;font-size:12.5px;color:var(--ink2);margin-top:3px;font-variant-numeric:tabular-nums}
+.icard .n b{color:var(--ink)}
+.icard .x{font-size:12px;color:var(--mut);margin-top:3px}
+.igrp{font-size:12px;color:var(--mut);font-weight:650;margin:6px 2px 0}
+.mini{width:100%;height:auto;display:block;margin:4px 0 8px}
+tr.oor td{opacity:.55}
+@media (max-width:700px){.wide{display:none}.icards{display:flex}}
 details>summary{cursor:pointer;font-weight:650}
 @media (max-width:640px){
  .top{padding:6px 10px}.top h1{font-size:14.5px}.wrap{padding:10px 10px 40px}
@@ -101,6 +121,7 @@ details>summary{cursor:pointer;font-weight:650}
 </div>
 <div class="wrap">
  <div class="years" id="years"></div>
+ <div class="pers" id="pers"></div>
  <div id="flags"></div>
  <div class="kpis" id="kpis"></div>
  <div class="card">
@@ -110,7 +131,7 @@ details>summary{cursor:pointer;font-weight:650}
  </div>
  <div class="card">
   <h2><span id="tbT"></span><span class="grow"></span><label class="small mut"><span id="cmpL"></span> <select id="cmp"></select></label></h2>
-  <div class="tw"><table id="tbl"></table></div>
+  <div class="tw wide"><table id="tbl"></table></div><div class="icards" id="icards"></div>
   <p class="small mut" id="method"></p>
  </div>
  <div class="card">
@@ -203,12 +224,14 @@ async function up(manual){if(!HUB||BUSY)return;BUSY=true;setSt('up');
  }catch(e){setSt('noup');if(manual)toast(String(e.message||e))}finally{BUSY=false}}
 
 /* ── 畫面 ── */
-let Y0=null,SEL=0,PER='ytd',CMP=null;
+let Y0=null,SEL=0,PER='ytd',CMP=null,PF=1,PT=12,CUM=false;
+const PERIOD=()=>({from:PF,to:PT});
+const perLabel=y=>PF===1&&PT===12?T('全年','Full year'):PF===PT?y+'-'+String(PF).padStart(2,'0'):T(PF+'–'+PT+' 月','Months '+PF+'–'+PT);
 const COLS=['var(--s2)','var(--s3)','var(--s4)','var(--s1)'];
 function rowName(r){return LANG==='en'?r.en:r.zh}
 function curYear(){const ys=M.years();if(Y0==null){const d=new Date();Y0=ys.includes(d.getFullYear())?d.getFullYear():ys[ys.length-1]}return Y0}
 function render(){
- const y=curYear(),Y=M.year(y,VIEW),ys=M.years();
+ const y=curYear(),Y=M.year(y,VIEW,PERIOD()),ys=M.years();
  document.documentElement.lang=LANG==='zh'?'zh-Hant':'en';
  document.title=VIEW==='labor'?T('直接／間接人工預算 vs 實際','DL / IDL labour budget vs actual'):T('管理部預算 vs 實際','Admin budget vs actual');
  $('ttl').textContent=(VIEW==='labor'?'👷 ':'📊 ')+document.title;
@@ -234,11 +257,11 @@ function render(){
  const has=Y.actMonths.length,bC=Y.closest>=0?Y.total.bud[Y.closest].ytd:null;
  const k=[];
  k.push([T('平均組數（DL ÷ ','Avg lines (DL ÷ ')+M.ppl(y)+')',has?P1(Y.lines):'—',has?T('情境 ','Scenarios ')+Y.scen.join(' / ')+T(' 組',''):T('情境 ','Scenarios ')+Y.scen.join(' / ')+T(' 組','')]);
- k.push([T('實際（','Actual (')+has+T(' 個月）',' months)'),has?'$'+K(Y.total.act):'—',has?Y.actMonths[0].slice(5)+'–'+Y.actMonths[has-1].slice(5)+T(' 月',''):T('等實際數進來','awaiting actuals')]);
+ k.push([T('實際・','Actual · ')+perLabel(y)+T('（'+has+' 個月）',' ('+has+' m)'),has?'$'+K(Y.total.act):'—',has?Y.actMonths[0].slice(5)+'–'+Y.actMonths[has-1].slice(5)+T(' 月',''):T('等實際數進來','awaiting actuals')]);
  k.push([T('最接近情境','Closest scenario'),Y.closest>=0?'⭐ '+Y.scen[Y.closest]+T(' 組',''):'—',Y.closest>=0?T('預算 $','budget $')+K(bC)+' · '+sgn(pct(Y.total.act,bC)):T('全年預算見下表','see full-year budget below')]);
  Y.scen.forEach((s,i)=>k.push([s+T(' 組全年預算',' lines · full-year budget'),'$'+K(Y.total.bud[i].full),has?T('同期 $','same months $')+K(Y.total.bud[i].ytd)+' '+sgn(pct(Y.total.act,Y.total.bud[i].ytd)):T('每月約 $','≈ $')+K(Y.total.bud[i].full/12)+T('',' / month')]));
  $('kpis').innerHTML=k.map(x=>`<div class="kpi"><div class="l">${E(x[0])}</div><div class="v">${x[1]}</div><div class="s">${x[2]}</div></div>`).join('');
- drawChart(Y);drawTable(Y);drawMonths(Y);drawHistory(ys);drawTools(Y);
+ drawPeriod(Y);drawChart(Y);drawTable(Y);drawMonths(Y);drawHistory(ys);drawTools(Y);
 }
 function drawChart(Y){
  $('chT').textContent=T('每月 預算 vs 實際（USD）','Monthly budget vs actual (USD)');
@@ -268,12 +291,12 @@ function drawChart(Y){
  const show=i=>{const m=Y.months[i];xh.setAttribute('x1',xs(i));xh.setAttribute('x2',xs(i));xh.setAttribute('opacity',.5);
   tip.innerHTML=`<b>${m.ym}${m.has?' · '+T('組數 ','lines ')+P1(m.lines):''}${m.est?' · '+T('估算','est.'):''}${m.prov?' · ⏳':''}</b>`+ser.slice().reverse().map(s=>s.v[i]==null?'':`<div><span><i style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${s.c};margin-right:5px"></i>${E(s.n)}</span><span>$${N(s.v[i])}</span></div>`).join('')+(m.has?`<div><span>${T('差異 vs ','Var vs ')}${Y.scen[Y.closest>=0?Y.closest:0]}</span><span>${sgn(pct(m.act,m.bud[Y.closest>=0?Y.closest:0]))}</span></div>`:'');
   tip.style.display='block';const r=ch.getBoundingClientRect(),px=xs(i)/W*r.width;tip.style.left=Math.min(Math.max(4,px+12),r.width-tip.offsetWidth-4)+'px';tip.style.top='8px'};
- svg.querySelectorAll('rect[data-i]').forEach(rc=>{rc.addEventListener('mouseenter',()=>show(+rc.dataset.i));rc.addEventListener('click',()=>show(+rc.dataset.i))});
+ svg.querySelectorAll('rect[data-i]').forEach(rc=>{rc.addEventListener('mouseenter',()=>show(+rc.dataset.i));rc.addEventListener('click',()=>{if(Y.months[+rc.dataset.i].has)selMonth(+rc.dataset.i+1);else show(+rc.dataset.i)})});
  svg.addEventListener('mouseleave',()=>{tip.style.display='none';xh.setAttribute('opacity',0)});
 }
 function drawTable(Y){
  const y=Y.y,has=Y.actMonths.length,ci=CMP==='flex'?-1:CMP;
- $('tbT').textContent=has?T('各項 預算 vs 實際（同期 '+has+' 個月）','By item — budget vs actual (same '+has+' months)'):T('各項 全年預算','By item — full-year budget');
+ $('tbT').textContent=has?T('各項 預算 vs 實際・'+perLabel(y)+'（'+has+' 個月，點項目看每月明細）','By item — budget vs actual · '+perLabel(y)+' ('+has+' m; tap an item for monthly detail)'):T('各項 全年預算（點項目看每月）','By item — full-year budget (tap for monthly)');
  let h=`<thead><tr><th>${T('項目','Item')}</th>`+Y.scen.map((s,i)=>`<th class="${i===ci?'cl':''}">${s} ${T('組','lines')}${i===Y.closest?' ⭐':''}<br><small>${has?T('同期預算','budget, same months'):T('全年預算','full-year')}</small></th>`).join('')+
   (has?`<th class="${ci<0?'cl':''}">${T('彈性預算','Flex budget')}<br><small>${T('實際組數','actual lines')}</small></th><th>${T('實際','Actual')}</th><th>${T('差異','Variance')}</th><th>%</th><th>${T('差異說明','Explanation')}</th>`:`<th>${T('每月（中間情境）','Per month (mid)')}</th><th>${T('說明','Note')}</th>`)+'</tr></thead><tbody>';
  let grp='';
@@ -283,12 +306,20 @@ function drawTable(Y){
   if(r.group!==grp&&VIEW==='admin'){grp=r.group;h+=`<tr class="grp"><td colspan="${Y.scen.length+(has?6:3)}">${E(gName[grp]||'')}</td></tr>`}
   const ref=ci<0?r.flex:r.bud[ci].ytd,nt=M.note(y,r.key),mid=Math.floor(Y.scen.length/2);
   const hd=r.hd&&r.hd.n?`<br><small class="mut">${T('人數 ','heads ')}${N(r.hd.act)} · ${T('預算 ','bud ')}${N(r.hd.bud[ci<0?(Y.closest>=0?Y.closest:mid):ci])}</small>`:'';
-  h+=`<tr><td>${E(rowName(r))}${hd}</td>`+Y.scen.map((s,i)=>`<td class="${i===ci?'cl':''}">${N(has?r.bud[i].ytd:r.bud[i].full)}</td>`).join('')+
+  h+=`<tr data-item="${E(r.key)}"><td>${E(rowName(r))} <span class="go">›</span>${hd}</td>`+Y.scen.map((s,i)=>`<td class="${i===ci?'cl':''}">${N(has?r.bud[i].ytd:r.bud[i].full)}</td>`).join('')+
    (has?`<td class="${ci<0?'cl':''}">${N(r.flex)}</td><td><b>${N(r.act)}</b></td><td>${(r.act-ref>=0?'+':'')+N(r.act-ref)}</td><td>${pill(r.act,ref)}</td><td class="ex">${E(M.explain(Y,r,ci<0?(Y.closest>=0?Y.closest:mid):ci,LANG))}${nt?`<span class="note">📝 ${E(nt)}</span>`:''} <button class="nb" data-note="${E(r.key)}" title="${T('寫說明','Add note')}">📝</button></td>`
    :`<td>${N(r.bud[mid].full/12)}</td><td class="ex">${nt?`<span class="note">📝 ${E(nt)}</span>`:''}<button class="nb" data-note="${E(r.key)}">📝</button></td>`)+'</tr>'});
  const t=Y.total,ref=ci<0?t.flex:(t.bud[ci]||{}).ytd;
  h+=`<tr class="tot"><td>${T('合計','Total')}</td>`+Y.scen.map((s,i)=>`<td class="${i===ci?'cl':''}">${N(has?t.bud[i].ytd:t.bud[i].full)}</td>`).join('')+(has?`<td class="${ci<0?'cl':''}">${N(t.flex)}</td><td>${N(t.act)}</td><td>${(t.act-ref>=0?'+':'')+N(t.act-ref)}</td><td>${pill(t.act,ref)}</td><td class="ex">${E(M.note(y,'year')||'')} <button class="nb" data-note="year">📝</button></td>`:`<td>${N(t.bud[Math.floor(Y.scen.length/2)].full/12)}</td><td class="ex">${E(M.note(y,'year')||'')}<button class="nb" data-note="year">📝</button></td>`)+'</tr></tbody>';
  $('tbl').innerHTML=h;
+ /* 手機：卡片清單 */
+ const si=ci<0?(Y.closest>=0?Y.closest:Math.floor(Y.scen.length/2)):ci;let c='',g2='';
+ rows.forEach(r=>{if(r.group!==g2&&VIEW==='admin'){g2=r.group;c+=`<div class="igrp">${E(gName[g2]||'')}</div>`}
+  const ref=ci<0?r.flex:r.bud[ci].ytd,nt=M.note(y,r.key);
+  c+=has?`<button class="icard" data-item="${E(r.key)}"><div class="h"><span>${E(rowName(r))}</span>${pill(r.act,ref)}</div><div class="n"><span>${T('實際','Actual')} <b>$${N(r.act)}</b></span><span>${ci<0?T('彈性','Flex'):Y.scen[ci]+T(' 組',' lines')} $${N(ref)}</span><span>${T('差','Var')} ${(r.act-ref>=0?'+':'')+N(r.act-ref)}</span></div><div class="x">${E(M.explain(Y,r,si,LANG))}${nt?' · 📝 '+E(nt):''}</div></button>`
+   :`<button class="icard" data-item="${E(r.key)}"><div class="h"><span>${E(rowName(r))}</span><span class="small mut">›</span></div><div class="n">${Y.scen.map((s2,i)=>`<span>${s2}${T('組',' lines')} <b>$${K(r.bud[i].full)}</b></span>`).join('')}</div></button>`});
+ c+=has?`<div class="icard" style="cursor:default"><div class="h"><span>${T('合計','Total')}</span>${pill(t.act,ref)}</div><div class="n"><span>${T('實際','Actual')} <b>$${N(t.act)}</b></span><span>${ci<0?T('彈性','Flex'):Y.scen[ci]+T(' 組',' lines')} $${N(ref)}</span><span>${T('差','Var')} ${(t.act-ref>=0?'+':'')+N(t.act-ref)}</span></div><div class="x">${E(M.note(y,'year')||'')} <button class="nb" data-note="year">📝</button></div></div>`:'';
+ $('icards').innerHTML=c;
  const b=Y.base;
  $('method').innerHTML=VIEW==='labor'?
   T(`計算方式：DL 預算人數＝組數 × ${M.ppl(y)} 人；IDL＝DL × ${b.rIDL.toFixed(3)}（${b.year} 年實際比）；OFF＝${N(b.offN)} 人（${b.year} 年平均）。平均工資＝最低工資 $${M.mw(y)} × 倍數（DL ${b.k.dl.toFixed(2)}・IDL ${b.k.idl.toFixed(2)}・OFF ${b.k.off.toFixed(2)}，${b.year} 年實際，含加班與加給）；12 月 × ${M.decF(y)}。工資＝HRA-PAY 實發小計＋預支（不含公司社保）。差異＝組數差異（量）＋人數比／平均工資差異（價）。`,
@@ -296,13 +327,55 @@ function drawTable(Y){
   :T(`計算方式：人工同右邊「直接／間接人工」；變動費用＝${b.year} 年每月平均 ×（情境組數 ÷ ${P1(b.lines)}）×（1＋加成，水電・修繕・油料 +10%）；固定費用（租金・保全・保險・折舊・稅捐）＝${b.year} 年每月平均；社保＝人工預算 × ${(b.nssfPct*100).toFixed(1)}% × 費率調整（${y} 年 ${M.nssfRate(y)}%）。彈性預算＝把實際組數代進同一公式；差異說明＝組數差異＋單價／用量差異。可在「設定」改每組人數、最低工資、各項變動／固定與加成。`,
    `Method: labour as in the DL / IDL view; variable items = ${b.year} monthly average × (scenario lines ÷ ${P1(b.lines)}) × (1 + uplift; utilities, repairs, fuel +10%); fixed items (rent, security, insurance, depreciation, taxes) = ${b.year} monthly average; NSSF = labour budget × ${(b.nssfPct*100).toFixed(1)}% × rate change (${y}: ${M.nssfRate(y)}%). Flex budget = same formula at actual lines; explanation = line-count effect + price/usage effect. People per line, minimum wage, item drivers and uplifts can be changed in Settings.`);
 }
+function selMonth(m,noRender){if(CUM){PF=1;PT=m}else{PF=m;PT=m}CMP=null;if(!noRender)render()}
+function drawPeriod(Y){
+ const has=new Set(Y.allMonths.map(ym=>+ym.slice(5)));
+ let h=`<button class="pc ${PF===1&&PT===12?'on':''}" data-pc="all">${T('全年','All')}</button>`;
+ for(let m=1;m<=12;m++){const on=PF===PT&&PF===m||(!(PF===1&&PT===12)&&PF!==PT&&m===PT),rg=!(PF===1&&PT===12)&&PF!==PT&&m>=PF&&m<PT;
+  h+=`<button class="pc ${on?'on':rg?'rg':''}" data-pc="${m}" title="${has.has(m)?'':T('沒有實際數，只有預算','budget only')}">${m}${T('月','')}${has.has(m)?'<span class="dt"></span>':''}</button>`}
+ h+=`<label class="cum"><input type="checkbox" id="cumC" ${CUM?'checked':''}> ${T('累計到所選月','Cumulative to month')}</label>`;
+ $('pers').innerHTML=h;
+ const on=$('pers').querySelector('.pc.on');if(on){const P=$('pers');P.scrollLeft=Math.max(0,on.offsetLeft-P.clientWidth/2+on.offsetWidth/2)}
+ $('cumC').onchange=e=>{CUM=e.target.checked;if(!(PF===1&&PT===12))selMonth(PT);};
+}
+function itemDlg(key){
+ const y=curYear(),I=M.item(y,VIEW,key),Y=M.year(y,VIEW,PERIOD());const row=Y.rows.find(r=>r.key===key)||{zh:key,en:key};
+ const si=CMP==='flex'||CMP==null?(Y.closest>=0?Y.closest:Math.floor(Y.scen.length/2)):CMP,L=I.scen[si];
+ const ms=I.months,inP=o=>o.m>=PF&&o.m<=PT;
+ const sel=ms.filter(o=>inP(o)&&o.act!=null),sA=sel.reduce((a,o)=>a+o.act,0),sB=sel.reduce((a,o)=>a+o.bud[si],0),sF=sel.reduce((a,o)=>a+o.flex,0),sP=sel.reduce((a,o)=>a+(o.prev||0),0);
+ const isLab=VIEW==='labor'||key==='labor';
+ /* 迷你圖：實際（長條）vs 預算（虛線）vs 彈性（點線） */
+ const W=Math.max(320,Math.min(700,(document.getElementById('dlg').clientWidth||innerWidth)-30)),H=W<500?150:180,pl=40,pr=8,pt=10,pb=22,vals=ms.flatMap(o=>[o.act,o.bud[si],o.flex,o.prev]).filter(v=>v!=null),mx=Math.max(1,...vals)*1.1;
+ const bw=(W-pl-pr)/12,xs=i=>pl+bw*i+bw/2,ys=v=>pt+(H-pt-pb)*(1-v/mx);
+ let g='';[0,.5,1].forEach(f=>{const v=mx*f;g+=`<line x1="${pl}" x2="${W-pr}" y1="${ys(v)}" y2="${ys(v)}" stroke="var(--line)"/><text x="${pl-5}" y="${ys(v)+4}" font-size="10" text-anchor="end" fill="var(--mut)">${K(v)}</text>`});
+ ms.forEach((o,i)=>{if(o.prev!=null)g+=`<rect x="${xs(i)-bw*0.36}" y="${ys(o.prev)}" width="${bw*0.3}" height="${Math.max(0,ys(0)-ys(o.prev))}" rx="2" fill="var(--line)"/>`;
+  if(o.act!=null)g+=`<rect x="${xs(i)-bw*0.04}" y="${ys(o.act)}" width="${bw*0.4}" height="${Math.max(0,ys(0)-ys(o.act))}" rx="3" fill="${inP(o)?'var(--s1)':'color-mix(in srgb,var(--s1) 45%,var(--card))'}"/>`;
+  g+=`<text x="${xs(i)}" y="${H-6}" font-size="10" text-anchor="middle" fill="var(--mut)">${i+1}</text>`});
+ const pth=f=>{let d='',pen=false;ms.forEach((o,i)=>{const v=f(o);if(v==null){pen=false;return}d+=(pen?'L':'M')+xs(i).toFixed(1)+' '+ys(v).toFixed(1);pen=true});return d};
+ g+=`<path d="${pth(o=>o.bud[si])}" fill="none" stroke="var(--s2)" stroke-width="2" stroke-dasharray="6 4"/><path d="${pth(o=>o.flex)}" fill="none" stroke="var(--flex)" stroke-width="2" stroke-dasharray="2 4"/>`;
+ const lg=`<div class="legend"><span><i style="background:var(--s1)"></i>${T('實際','Actual')}</span><span><i class="d" style="background:var(--s2);color:var(--s2)"></i>${L} ${T('組預算','lines budget')}</span><span><i class="d" style="background:var(--flex);color:var(--flex)"></i>${T('彈性預算','Flex budget')}</span><span><i style="background:var(--line)"></i>${y-1} ${T('同月','same month')}</span></div>`;
+ const cfg=I.cfg;const how=cfg?(cfg.driver==='line'?T('隨組數變動','varies with lines'):cfg.driver==='fixed'?T('固定','fixed'):T('隨人工（社保）','follows labour'))+(cfg.up?T('，加成 ',', uplift ')+cfg.up+'%':''):isLab?T('人數 × 平均工資','heads × average wage'):'';
+ let t=`<thead><tr><th>${T('月份','Month')}</th><th>${T('組數','Lines')}</th>${isLab?`<th>${T('人數','Heads')}</th>`:''}<th>${L} ${T('組預算','lines bud.')}</th><th>${T('彈性','Flex')}</th><th>${T('實際','Actual')}</th><th>${T('差異','Var.')}</th><th>%</th><th>${y-1} ${T('同月','same m.')}</th><th>${T('差異說明（點 📝 寫原因）','Explanation (📝 to add a reason)')}</th></tr></thead><tbody>`;
+ ms.forEach(o=>{const nk=key+'@'+o.ym,nt=M.note(y,nk);const lab=o.parts?`<br><small class="mut">DL $${N(o.parts[0])}（${N(o.hp[0])}）・IDL $${N(o.parts[1])}（${N(o.hp[1])}）・OFF $${N(o.parts[2])}（${N(o.hp[2])}）</small>`:'';
+  t+=`<tr class="${inP(o)?'':'oor'}"><td>${o.ym}${o.est&&isLab?` <span class="pill p-y">${T('估','est')}</span>`:''}${o.prov?' ⏳':''}</td><td>${o.lines!=null?P1(o.lines):'—'}</td>${isLab?`<td>${o.heads!=null?N(o.heads):'—'}${o.budH&&o.budH[si]!=null?`<br><small class="mut">${T('預算 ','bud ')}${N(o.budH[si])}</small>`:''}</td>`:''}<td>${N(o.bud[si])}</td><td>${o.flex!=null?N(o.flex):'—'}</td><td>${o.act!=null?'<b>'+N(o.act)+'</b>':'—'}</td><td>${o.act!=null?(o.act-o.bud[si]>=0?'+':'')+N(o.act-o.bud[si]):''}</td><td>${o.act!=null?pill(o.act,o.bud[si]):''}</td><td>${o.prev!=null?N(o.prev):'—'}</td><td class="ex">${E(M.explainMonth(o,L,si,LANG))}${lab}${nt?`<span class="note">📝 ${E(nt)}</span>`:''} ${o.act!=null?`<button class="nb" data-note2="${E(nk)}">📝</button>`:''}</td></tr>`});
+ t+=`<tr class="tot"><td>${perLabel(y)}</td><td></td>${isLab?'<td></td>':''}<td>${N(sB)}</td><td>${N(sF)}</td><td>${N(sA)}</td><td>${(sA-sB>=0?'+':'')+N(sA-sB)}</td><td>${pill(sA,sB)}</td><td>${N(sP)}</td><td class="ex">${sP?T('比去年同期 ','vs last year ')+sgn(pct(sA,sP)):''}</td></tr></tbody>`;
+ let mc='';ms.forEach(o=>{if(o.act==null&&!inP(o))return;const nk=key+'@'+o.ym,nt=M.note(y,nk);
+  mc+=`<div class="icard" style="cursor:default;${inP(o)?'':'opacity:.6'}"><div class="h"><span>${o.ym}${o.lines!=null?' · '+P1(o.lines)+T(' 組',' lines'):''}${o.est&&isLab?' · '+T('估算','est.'):''}${o.prov?' ⏳':''}</span>${o.act!=null?pill(o.act,o.bud[si]):''}</div>
+  <div class="n"><span>${T('實際','Actual')} <b>${o.act!=null?'$'+N(o.act):'—'}</b></span><span>${L}${T('組預算',' bud.')} $${N(o.bud[si])}</span>${o.flex!=null?`<span>${T('彈性','Flex')} $${N(o.flex)}</span>`:''}${isLab&&o.heads!=null?`<span>${T('人數','Heads')} ${N(o.heads)}</span>`:''}<span>${y-1}: ${o.prev!=null?'$'+N(o.prev):'—'}</span></div>
+  ${o.act!=null?`<div class="x">${E(M.explainMonth(o,L,si,LANG))}${o.parts?`<br>DL $${N(o.parts[0])}（${N(o.hp[0])}）・IDL $${N(o.parts[1])}（${N(o.hp[1])}）・OFF $${N(o.parts[2])}（${N(o.hp[2])}）`:''}</div>${nt?`<span class="note">📝 ${E(nt)}</span>`:''}<div style="text-align:right"><button class="btn sm" data-note2="${E(nk)}">📝 ${T('寫原因','Add reason')}</button></div>`:''}</div>`});
+ const kp=[[T('實際','Actual')+' · '+perLabel(y),'$'+N(sA),sel.length+T(' 個月',' months')],[L+T(' 組預算',' lines budget'),'$'+N(sB),pill(sA,sB)],[T('彈性預算（實際組數）','Flex budget (actual lines)'),'$'+N(sF),pill(sA,sF)],[T('去年同期','Same period last year'),sP?'$'+N(sP):'—',sP?sgn(pct(sA,sP)):'']];
+ dlg(rowName(row)+' · '+y,`<p class="small mut">${T('預算方式：','Budget basis: ')}${how}${T('；對照情境 ','; compared with ')}${L}${T(' 組（可在主頁「差異對照」換）。淡色＝不在所選期間。',' lines (change under “Compare with”). Faded = outside the selected period.')}</p>
+  <div class="kpis">${kp.map(x=>`<div class="kpi"><div class="l">${x[0]}</div><div class="v">${x[1]}</div><div class="s">${x[2]}</div></div>`).join('')}</div>
+  ${lg}<svg class="mini" viewBox="0 0 ${W} ${H}">${g}</svg><div class="tw wide"><table>${t}</table></div><div class="icards">${mc}</div>`,`<button class="btn" data-x>${T('關閉','Close')}</button>`,true);
+ $('dlgB').querySelectorAll('[data-note2]').forEach(b=>b.onclick=()=>{const nk=b.dataset.note2;closeDlg();noteDlg(nk,()=>itemDlg(key))});
+}
 function drawMonths(Y){
- $('monT').textContent=T('逐月明細（組數・預算・實際）','Month by month (lines, budget, actual)');
+ $('monT').textContent=T('逐月明細（點月份＝只看那個月）','Month by month (tap a month to compare that month only)');
  const ci=Y.closest>=0?Y.closest:Math.floor(Y.scen.length/2);
  let h=`<thead><tr><th>${T('月份','Month')}</th><th>${T('組數','Lines')}</th>`+Y.scen.map(s=>`<th>${s} ${T('組','lines')}</th>`).join('')+`<th>${T('彈性','Flex')}</th><th>${T('實際','Actual')}</th><th>vs ${Y.scen[ci]}</th><th>${T('來源','Source')}</th><th></th></tr></thead><tbody>`;
  Y.months.forEach(m=>{const s=M.src('lab',m.ym),f=M.src('fc',m.ym);
   const src=m.has?[s==='pay'?'HRA-PAY':s==='est'?T('出勤估算','attendance est.'):s==='manual'?T('手動','manual'):'',VIEW==='admin'?(f==='manual'?T('手動','manual'):'ERP')+(m.prov?' ⏳':''):''].filter(Boolean).join(' + '):'';
-  h+=`<tr><td>${m.ym}</td><td>${m.has?P1(m.lines):'—'}</td>`+m.bud.map(b=>`<td>${N(b)}</td>`).join('')+`<td>${m.has?N(m.flex):'—'}</td><td>${m.has?'<b>'+N(m.act)+'</b>':'—'}</td><td>${m.has?pill(m.act,m.bud[ci]):''}</td><td class="small mut" style="text-align:left">${src}</td><td><button class="btn sm" data-actm="${m.ym}">✏️</button> <button class="btn sm" data-tg="${m.ym}" ${m.has?'':'disabled'}>📨</button></td></tr>`});
+  h+=`<tr class="${m.inR?'':'oor'}" ${m.has?`data-pm="${m.m}"`:''}><td>${m.ym}${m.has?' <span class="go">›</span>':''}</td><td>${m.has?P1(m.lines):'—'}</td>`+m.bud.map(b=>`<td>${N(b)}</td>`).join('')+`<td>${m.has?N(m.flex):'—'}</td><td>${m.has?'<b>'+N(m.act)+'</b>':'—'}</td><td>${m.has?pill(m.act,m.bud[ci]):''}</td><td class="small mut" style="text-align:left">${src}</td><td><button class="btn sm" data-actm="${m.ym}">✏️</button> <button class="btn sm" data-tg="${m.ym}" ${m.has?'':'disabled'}>📨</button></td></tr>`});
  $('mon').innerHTML=h+'</tbody>';
 }
 function drawHistory(ys){
@@ -324,14 +397,14 @@ function drawTools(Y){
 }
 
 /* ── 對話框 ── */
-function dlg(title,body,foot){$('dlgT').textContent=title;$('dlgB').innerHTML=body;$('dlgF').innerHTML=foot||'';$('dlg').showModal()}
+function dlg(title,body,foot,big){$('dlg').classList.toggle('big',!!big);$('dlgT').textContent=title;$('dlgB').innerHTML=body;$('dlgF').innerHTML=foot||'';$('dlg').showModal()}
 function closeDlg(){$('dlg').close()}
 $('dlg').addEventListener('click',e=>{if(e.target.closest('[data-x]'))closeDlg()});
-$('dlg').addEventListener('close',()=>{$('dlgB').innerHTML='';$('dlgF').innerHTML=''});
-function noteDlg(key){const y=curYear(),k=y+'|'+key,cur=M.note(y,key);
- dlg(T('差異說明 ','Explanation ')+y+' · '+(key==='year'?T('全年','whole year'):key),`<p class="small mut">${T('寫給看報表的人：為什麼差、之後怎麼做。會出現在表格和每月月報裡。','For readers of the report: why it differs and what happens next. Shown in the table and in the monthly report.')}</p><textarea id="nt">${E(cur)}</textarea>`,
+$('dlg').addEventListener('close',()=>{if($('dlg').open)return;$('dlgB').innerHTML='';$('dlgF').innerHTML=''});
+function noteDlg(key,after){const y=curYear(),k=y+'|'+key,cur=M.note(y,key);
+ dlg(T('差異說明 ','Explanation ')+y+' · '+(key==='year'?T('全年','whole year'):key.includes('@')?(()=>{const [k,ym]=key.split('@');const r=M.year(y,VIEW).rows.find(x=>x.key===k);return (r?rowName(r):k)+' · '+ym})():(()=>{const r=M.year(y,VIEW).rows.find(x=>x.key===key);return r?rowName(r):key})()),`<p class="small mut">${T('寫給看報表的人：為什麼差、之後怎麼做。會出現在表格和每月月報裡。','For readers of the report: why it differs and what happens next. Shown in the table and in the monthly report.')}</p><textarea id="nt">${E(cur)}</textarea>`,
   `<button class="btn danger" id="ntDel">${T('刪除','Delete')}</button><button class="btn pri" id="ntOk">${T('儲存','Save')}</button>`);
- $('ntOk').onclick=()=>{const v=$('nt').value.trim();if(v){DOC.notes[k]={v,at:now()};touch('notes.'+k)}else{delete DOC.notes[k];DOC.del['notes.'+k]=now()}closeDlg();saveDoc(T('說明已儲存','Note saved'))};
+ $('ntOk').onclick=()=>{const v=$('nt').value.trim();if(v){DOC.notes[k]={v,at:now()};touch('notes.'+k)}else{delete DOC.notes[k];DOC.del['notes.'+k]=now()}closeDlg();saveDoc(T('說明已儲存','Note saved'));if(after)after()};
  $('ntDel').onclick=()=>{delete DOC.notes[k];DOC.del['notes.'+k]=now();closeDlg();saveDoc(T('已刪除','Deleted'))}}
 function settingsDlg(){const y=curYear(),o=DOC.years[y]||{},sc=M.scen(y);
  let cat='';if(VIEW==='admin'){cat=`<h4>${T('各項費用','Expense items')}</h4><div class="tw"><table class="dtab"><thead><tr><th>${T('項目','Item')}</th><th>${T('方式','Driver')}</th><th>${T('加成 %','Uplift %')}</th><th>${T('分類','Group')}</th><th>${T('不列入','Hide')}</th></tr></thead><tbody>`+
@@ -391,7 +464,7 @@ function paulDlg(){const it=VRTB_DATA.paul2021.items;const tot=it.reduce((s,x)=>
   it.map(x=>{const s=x[3].reduce((a,b)=>a+b,0);return `<tr><td>${E(LANG==='en'?x[1]:x[0])}</td><td>${N(s)}</td><td>${N(s/12)}</td><td>${x[4]?N(x[4]):'—'}</td></tr>`}).join('')+`<tr class="tot"><td>${T('合計','Total')}</td><td>${N(tot)}</td><td>${N(tot/12)}</td><td>${N(it.reduce((s,x)=>s+(x[4]||0),0))}</td></tr></tbody></table></div><p class="small mut">${E(VRTB_DATA.paul2021.note)}</p>`)}
 /* ── 匯入匯出 ── */
 function download(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
-function exportCsv(){const Y=M.year(curYear(),VIEW);const has=Y.actMonths.length;const head=[T('項目','Item'),...Y.scen.map(s=>s+(has?T(' 組同期預算',' lines budget (same months)'):T(' 組全年預算',' lines full-year'))),...(has?[T('彈性預算','Flex budget'),T('實際','Actual'),T('說明','Explanation')]:[])];
+function exportCsv(){const Y=M.year(curYear(),VIEW,PERIOD());const has=Y.actMonths.length;const head=[T('項目','Item'),...Y.scen.map(s=>s+(has?T(' 組同期預算',' lines budget (same months)'):T(' 組全年預算',' lines full-year'))),...(has?[T('彈性預算','Flex budget'),T('實際','Actual'),T('說明','Explanation')]:[])];
  const L=[head];Y.rows.forEach(r=>L.push([rowName(r),...r.bud.map(b=>Math.round(has?b.ytd:b.full)),...(has?[Math.round(r.flex),Math.round(r.act),M.explain(Y,r,Y.closest>=0?Y.closest:1,LANG)+(M.note(Y.y,r.key)?' / '+M.note(Y.y,r.key):'')]:[])]));
  L.push([T('合計','Total'),...Y.total.bud.map(b=>Math.round(has?b.ytd:b.full)),...(has?[Math.round(Y.total.flex),Math.round(Y.total.act),'']:[])]);
  L.push([]);L.push([T('月份','Month'),T('組數','Lines'),...Y.scen.map(s=>s+T(' 組',' lines')),T('彈性','Flex'),T('實際','Actual')]);Y.months.forEach(m=>L.push([m.ym,m.has?P1(m.lines):'',...m.bud.map(Math.round),m.has?Math.round(m.flex):'',m.has?Math.round(m.act):'']));
@@ -410,8 +483,14 @@ function importFile(f){const rd=new FileReader();const name=f.name.toLowerCase()
   saveDoc(T('已匯入 ','Imported ')+n+T(' 筆實際數',' actual values'))}catch(e){toast(T('匯入失敗：','Import failed: ')+(e.message||e))}};
  if(/\.xlsx?$/.test(name)){if(!window.XLSX){const s=document.createElement('script');s.src='../../shared/xlsx.full.min.js';s.onload=()=>rd.readAsArrayBuffer(f);document.head.appendChild(s)}else rd.readAsArrayBuffer(f)}else rd.readAsText(f)}
 /* ── 事件 ── */
-document.addEventListener('click',e=>{const t=e.target.closest('[data-y],[data-v],[data-l],[data-note],[data-act],[data-actm],[data-tg]');if(!t)return;
- if(t.dataset.y){e.preventDefault();Y0=+t.dataset.y;CMP=null;render();window.scrollTo({top:0,behavior:'smooth'});return}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-y],[data-v],[data-l],[data-note],[data-act],[data-actm],[data-tg],[data-pc],[data-item],[data-pm]');if(!t)return;
+ if(t.dataset.pc){const v=t.dataset.pc;if(v==='all'){PF=1;PT=12}else selMonth(+v,true);render();return}
+ if(t.dataset.note){noteDlg(t.dataset.note);return}
+ if(t.dataset.actm){actualDlg(t.dataset.actm);return}
+ if(t.dataset.tg){tgDlg(t.dataset.tg);return}
+ if(t.dataset.item){itemDlg(t.dataset.item);return}
+ if(t.dataset.pm){selMonth(+t.dataset.pm);document.getElementById('tbT').scrollIntoView({behavior:'smooth',block:'start'});return}
+ if(t.dataset.y){e.preventDefault();Y0=+t.dataset.y;CMP=null;PF=1;PT=12;render();window.scrollTo({top:0,behavior:'smooth'});return}
  if(t.dataset.v){VIEW=t.dataset.v;CMP=null;render();return}
  if(t.dataset.l){LANG=t.dataset.l;if(!EMBED)jput('ac_admin_lang',LANG);render();return}
  if(t.dataset.note){noteDlg(t.dataset.note);return}
@@ -427,7 +506,7 @@ $('file').onchange=e=>{const f=e.target.files[0];if(f)importFile(f);e.target.val
 /* 嵌在 PSJHR：跟著外框換語言 */
 if(EMBED){setInterval(()=>{const l=parentLang();if(l&&l!==LANG){LANG=l;render()}},1200)}
 window.addEventListener('storage',e=>{if(e.key===DOC_KEY&&e.newValue){try{DOC=JSON.parse(e.newValue);rebuild();render()}catch(x){}}});
-let rzT=null;window.addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(()=>drawChart(M.year(curYear(),VIEW)),200)});
+let rzT=null;window.addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(()=>drawChart(M.year(curYear(),VIEW,PERIOD())),200)});
 rebuild();render();down(false);
 window.VRTB_PAGE={get M(){return M},get DOC(){return DOC},render,down,up};
 })();

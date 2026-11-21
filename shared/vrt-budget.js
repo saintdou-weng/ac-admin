@@ -122,31 +122,32 @@ P.catBudget=function(y,m,L,c,labTotal){
 P.customFor=function(y,m){var out=[];this.doc.custom.forEach(function(x){if(+x.y!==+y)return;var ms=x.months&&x.months.length?x.months.map(Number):[1,2,3,4,5,6,7,8,9,10,11,12];if(ms.indexOf(m)<0)return;out.push(x);});return out;};
 
 /* 一年的整張表：kind＝'admin' | 'labor' */
-P.year=function(y,kind){
- var self=this,sc=this.scen(y),rows=[],lab=kind==='labor';
- var actM=lab?this.monthsOf(y,'lab'):this.monthsOf(y,'both');
- var acts={};actM.forEach(function(ym){acts[+ym.slice(5)]=ym;});
+P.year=function(y,kind,opt){
+ /* opt＝{from:月,to:月}：只比較這段期間（單月＝from＝to）；圖表與逐月仍顯示全年 */
+ var self=this,sc=this.scen(y),rows=[],lab=kind==='labor',F=(opt&&+opt.from)||1,TO=(opt&&+opt.to)||12;
+ var allM=lab?this.monthsOf(y,'lab'):this.monthsOf(y,'both');
+ var acts={};allM.forEach(function(ym){acts[+ym.slice(5)]=ym;});
+ var actM=allM.filter(function(ym){var m=+ym.slice(5);return m>=F&&m<=TO;});
  function mk(key,zh,en,group){return {key:key,zh:zh,en:en,group:group,bud:sc.map(function(){return {full:0,ytd:0};}),flex:0,act:0,heads:null};}
  var R={};
  if(lab){['dl','idl','off'].forEach(function(k){R[k]=mk(k,LAB_INFO[k][0],LAB_INFO[k][1],'L');R[k].hd={bud:sc.map(function(){return 0;}),act:0,flex:0,n:0};});}
  else{R.labor=mk('labor','人工（DL＋IDL＋OFF 工資）','Labour (DL + IDL + OFF wages)','L');this.cats.forEach(function(c){var cfg=self.catCfg(c);if(cfg.off)return;R[c]=mk(c,self.catName(c,'zh'),self.catName(c,'en'),cfg.group);});}
- var cust={};
- var mon=[];
+ var cust={},mon=[];
  for(var m=1;m<=12;m++){
-  var ym=ymOf(y,m),has=!!acts[m],la=has?this._lab[ym]:null,mo={ym:ym,has:has,bud:sc.map(function(){return 0;}),flex:0,act:0,lines:has?this.lines(ym):null,prov:!lab&&has&&this._prov[ym],est:has&&this._src['lab|'+ym]==='est'};
+  var ym=ymOf(y,m),has=!!acts[m],inR=has&&m>=F&&m<=TO,la=has?this._lab[ym]:null,mo={ym:ym,m:m,has:has,inR:m>=F&&m<=TO,bud:sc.map(function(){return 0;}),flex:0,act:0,lines:has?this.lines(ym):null,prov:!lab&&has&&this._prov[ym],est:has&&this._src['lab|'+ym]==='est'};
   sc.forEach(function(L,si){
    var lb=self.labBudget(y,m,L);
-   if(lab){['dl','idl','off'].forEach(function(k){var v=lb[k+'G'];R[k].bud[si].full+=v;if(has)R[k].bud[si].ytd+=v;R[k].hd.bud[si]+=lb[k+'N']/12;mo.bud[si]+=v;});}
-   else{R.labor.bud[si].full+=lb.total;if(has)R.labor.bud[si].ytd+=lb.total;mo.bud[si]+=lb.total;
-    self.cats.forEach(function(c){if(!R[c])return;var v=self.catBudget(y,m,L,c,lb.total);R[c].bud[si].full+=v;if(has)R[c].bud[si].ytd+=v;mo.bud[si]+=v;});
-    self.customFor(y,m).forEach(function(x){var id='cx_'+x.id;if(!cust[id]){cust[id]=mk(id,x.zh||x.en||'—',x.en||x.zh||'—','C');cust[id].custom=x;}cust[id].bud[si].full+=Number(x.amt)||0;if(has)cust[id].bud[si].ytd+=Number(x.amt)||0;mo.bud[si]+=Number(x.amt)||0;});}
+   if(lab){['dl','idl','off'].forEach(function(k){var v=lb[k+'G'];R[k].bud[si].full+=v;if(inR)R[k].bud[si].ytd+=v;R[k].hd.bud[si]+=lb[k+'N']/12;mo.bud[si]+=v;});}
+   else{R.labor.bud[si].full+=lb.total;if(inR)R.labor.bud[si].ytd+=lb.total;mo.bud[si]+=lb.total;
+    self.cats.forEach(function(c){if(!R[c])return;var v=self.catBudget(y,m,L,c,lb.total);R[c].bud[si].full+=v;if(inR)R[c].bud[si].ytd+=v;mo.bud[si]+=v;});
+    self.customFor(y,m).forEach(function(x){var id='cx_'+x.id;if(!cust[id]){cust[id]=mk(id,x.zh||x.en||'—',x.en||x.zh||'—','C');cust[id].custom=x;}cust[id].bud[si].full+=Number(x.amt)||0;if(inR)cust[id].bud[si].ytd+=Number(x.amt)||0;mo.bud[si]+=Number(x.amt)||0;});}
   });
   if(has){
    var fl=self.labBudget(y,m,mo.lines,la);
-   if(lab){[['dl',0],['idl',2],['off',4]].forEach(function(p){var k=p[0],i=p[1];R[k].act+=la[i+1];R[k].flex+=fl[k+'G'];R[k].hd.act+=la[i];R[k].hd.flex+=fl[k+'N'];R[k].hd.n++;mo.act+=la[i+1];mo.flex+=fl[k+'G'];});}
-   else{var lt=la[1]+la[3]+la[5];R.labor.act+=lt;R.labor.flex+=fl.total;mo.act+=lt;mo.flex+=fl.total;
-    var f=self._fc[ym];self.cats.forEach(function(c){if(!R[c])return;R[c].act+=f[c]||0;var v=self.catBudget(y,m,mo.lines,c,lt);R[c].flex+=v;mo.act+=f[c]||0;mo.flex+=v;});
-    self.customFor(y,m).forEach(function(x){var id='cx_'+x.id,a=x.act&&x.act[ym]!=null?Number(x.act[ym]):null;if(cust[id]&&a!=null){cust[id].act+=a;mo.act+=a;cust[id].flex+=Number(x.amt)||0;mo.flex+=Number(x.amt)||0;}});}
+   if(lab){[['dl',0],['idl',2],['off',4]].forEach(function(p){var k=p[0],i=p[1];mo.act+=la[i+1];mo.flex+=fl[k+'G'];if(inR){R[k].act+=la[i+1];R[k].flex+=fl[k+'G'];R[k].hd.act+=la[i];R[k].hd.flex+=fl[k+'N'];R[k].hd.n++;}});}
+   else{var lt=la[1]+la[3]+la[5];mo.act+=lt;mo.flex+=fl.total;if(inR){R.labor.act+=lt;R.labor.flex+=fl.total;}
+    var f=self._fc[ym];self.cats.forEach(function(c){if(!R[c])return;var v=self.catBudget(y,m,mo.lines,c,lt);mo.act+=f[c]||0;mo.flex+=v;if(inR){R[c].act+=f[c]||0;R[c].flex+=v;}});
+    self.customFor(y,m).forEach(function(x){var id='cx_'+x.id,a=x.act&&x.act[ym]!=null?Number(x.act[ym]):null;if(cust[id]&&a!=null){mo.act+=a;mo.flex+=Number(x.amt)||0;if(inR){cust[id].act+=a;cust[id].flex+=Number(x.amt)||0;}}});}
   }
   mon.push(mo);
  }
@@ -155,8 +156,45 @@ P.year=function(y,kind){
  var T={bud:sc.map(function(_,si){return {full:sum(rows.map(function(r){return r.bud[si].full;})),ytd:sum(rows.map(function(r){return r.bud[si].ytd;}))};}),flex:sum(rows.map(function(r){return r.flex;})),act:sum(rows.map(function(r){return r.act;}))};
  var closest=-1,best=Infinity;if(actM.length)T.bud.forEach(function(b,si){var d=Math.abs(b.ytd-T.act);if(d<best){best=d;closest=si;}});
  var lines=actM.length?avg(actM.map(function(ym){return self.lines(ym);})):null;
- return {y:y,kind:kind,scen:sc,scenKind:this.scenKind(y),rows:rows,total:T,months:mon,actMonths:actM,closest:closest,lines:lines,base:this.base(y),
+ return {y:y,kind:kind,from:F,to:TO,scen:sc,scenKind:this.scenKind(y),rows:rows,total:T,months:mon,actMonths:actM,allMonths:allM,closest:closest,lines:lines,base:this.base(y),
   estMonths:actM.filter(function(ym){return self._src['lab|'+ym]==='est';}),provMonths:lab?[]:actM.filter(function(ym){return self._prov[ym];})};
+};
+/* 單一項目的 12 個月明細（卡片用）：每月 預算(各情境)／彈性／實際／去年同月／人數 */
+P.item=function(y,kind,key){
+ var self=this,sc=this.scen(y),lab=kind==='labor',out=[],idx={dl:0,idl:2,off:4};
+ var cx=key.indexOf('cx_')===0?this.doc.custom.filter(function(x){return 'cx_'+x.id===key;})[0]:null;
+ function actOf(yy,mm){var ym=ymOf(yy,mm),la=self._lab[ym];
+  if(lab){if(!la)return null;return {v:la[idx[key]+1],h:la[idx[key]]};}
+  if(key==='labor')return la?{v:la[1]+la[3]+la[5],h:la[0]+la[2]+la[4],parts:[la[1],la[3],la[5]],hp:[la[0],la[2],la[4]]}:null;
+  if(cx){return cx.act&&cx.act[ym]!=null?{v:Number(cx.act[ym])}:null;}
+  var f=self._fc[ym];return f?{v:f[key]||0}:null;}
+ for(var m=1;m<=12;m++){
+  var ym=ymOf(y,m),la=this._lab[ym],hasL=!!la,hasF=lab||key==='labor'||cx?true:!!this._fc[ym];
+  var a=hasL&&hasF?actOf(y,m):null,lines=hasL?this.lines(ym):null,o={ym:ym,m:m,lines:lines,act:a?a.v:null,heads:a&&a.h!=null?a.h:null,parts:a&&a.parts,hp:a&&a.hp,prev:(actOf(y-1,m)||{}).v,bud:[],budH:[],flex:null,flexH:null,est:hasL&&this._src['lab|'+ym]==='est',prov:!lab&&this._prov[ym],src:lab||key==='labor'?this._src['lab|'+ym]:this._src['fc|'+ym]};
+  if(o.prev==null)o.prev=null;
+  sc.forEach(function(L){var lb=self.labBudget(y,m,L);
+   if(lab){o.bud.push(lb[key+'G']);o.budH.push(lb[key+'N']);}
+   else if(key==='labor'){o.bud.push(lb.total);o.budH.push(lb.dlN+lb.idlN+lb.offN);}
+   else if(cx){var ms=cx.months&&cx.months.length?cx.months.map(Number):[1,2,3,4,5,6,7,8,9,10,11,12];o.bud.push(ms.indexOf(m)>=0?Number(cx.amt)||0:0);}
+   else o.bud.push(self.catBudget(y,m,L,key,lb.total));});
+  if(a&&hasL){var fl=this.labBudget(y,m,lines,la);
+   if(lab){o.flex=fl[key+'G'];o.flexH=fl[key+'N'];}
+   else if(key==='labor'){o.flex=fl.total;o.flexH=fl.dlN+fl.idlN+fl.offN;}
+   else if(cx){o.flex=o.bud[0];}
+   else o.flex=this.catBudget(y,m,lines,key,la[1]+la[3]+la[5]);}
+  out.push(o);
+ }
+ return {y:y,key:key,scen:sc,months:out,cfg:lab||key==='labor'||cx?null:this.catCfg(key),base:this.base(y)};
+};
+/* 單月的差異說明 */
+P.explainMonth=function(o,L,si,lang){
+ if(o.act==null)return '';var en=lang==='en',b=o.bud[si],vol=o.flex-b,spd=o.act-o.flex,out=[];
+ function $(v){return (v>=0?'+':'−')+'$'+Math.abs(r0(v)).toLocaleString('en-US');}
+ if(Math.abs(vol)>=1)out.push(en?'Lines '+(Math.round(o.lines*10)/10)+' vs '+L+' → '+$(vol):'組數 '+(Math.round(o.lines*10)/10)+' vs '+L+' → '+$(vol));
+ if(o.heads!=null&&o.flexH!=null&&o.heads>0){var ra=o.act/o.heads,rf=o.flex/Math.max(1,o.flexH);
+  out.push(en?'Heads '+r0(o.heads)+' (flex '+r0(o.flexH)+'), avg $'+r0(ra)+' vs $'+r0(rf)+' → '+$(spd):'人數 '+r0(o.heads)+'（彈性 '+r0(o.flexH)+'）、平均 $'+r0(ra)+' vs $'+r0(rf)+' → '+$(spd));}
+ else if(Math.abs(spd)>=1)out.push(en?'Price / usage '+$(spd):'單價／用量 '+$(spd));
+ return out.join(en?'; ':'；');
 };
 /* 差異說明（自動）：組數差異＝彈性預算 − 情境預算；單價／用量差異＝實際 − 彈性預算 */
 P.explain=function(Y,row,si,lang){
@@ -199,12 +237,12 @@ P.monthReport=function(ym,kind){
  L.push('* ⭐ 最接近 Closest：<b>'+Y.scen[bestM]+' 組</b>（'+sgn(pct(mo.act,mo.bud[bestM]))+'）'+this.light(mo.act,mo.bud[bestM]));
  /* 本月各項差異（vs 彈性預算）前 4 名 */
  var items=[];
- if(lab){[['dl',0],['idl',2],['off',4]].forEach(function(p){var k=p[0],i=p[1];var fl=self.labBudget(y,m,mo.lines,la),sb=self.labBudget(y,m,Y.scen[bestM]);items.push({n:LAB_INFO[k],a:la[i+1],f:fl[k+'G'],hA:la[i],hF:sb[k+'N']});});}
- else{var lt=la[1]+la[3]+la[5],fl=self.labBudget(y,m,mo.lines,la);items.push({n:['人工','Labour'],a:lt,f:fl.total});
-  this.cats.forEach(function(c){if(self.catCfg(c).off)return;items.push({n:[self.catName(c,'zh'),self.catName(c,'en')],a:self._fc[ym][c]||0,f:self.catBudget(y,m,mo.lines,c,lt)});});}
+ if(lab){[['dl',0],['idl',2],['off',4]].forEach(function(p){var k=p[0],i=p[1];var fl=self.labBudget(y,m,mo.lines,la),sb=self.labBudget(y,m,Y.scen[bestM]);items.push({k:k,n:LAB_INFO[k],a:la[i+1],f:fl[k+'G'],hA:la[i],hF:sb[k+'N']});});}
+ else{var lt=la[1]+la[3]+la[5],fl=self.labBudget(y,m,mo.lines,la);items.push({k:'labor',n:['人工','Labour'],a:lt,f:fl.total});
+  this.cats.forEach(function(c){if(self.catCfg(c).off)return;items.push({k:c,n:[self.catName(c,'zh'),self.catName(c,'en')],a:self._fc[ym][c]||0,f:self.catBudget(y,m,mo.lines,c,lt)});});}
  items.sort(function(a,b){return Math.abs(b.a-b.f)-Math.abs(a.a-a.f);});
  L.push('━━━━━━━━━━━━');L.push('<b>主要差異 Top variances</b>（vs 彈性預算 flex budget）');
- items.slice(0,lab?3:4).forEach(function(x,i){var d=x.a-x.f;L.push((i+1)+'. '+self.light(x.a,x.f)+' '+esc(x.n[0])+' '+esc(x.n[1])+'　'+N(x.a)+' vs '+N(x.f)+'（'+(d>=0?'+':'')+N(d)+'）'+(x.hA!=null?'\n　人數 Heads '+N(x.hA)+'（'+Y.scen[bestM]+' 組預算 budget '+N(x.hF)+'）':''));});
+ items.slice(0,lab?3:4).forEach(function(x,i){var d=x.a-x.f;L.push((i+1)+'. '+self.light(x.a,x.f)+' '+esc(x.n[0])+' '+esc(x.n[1])+'　'+N(x.a)+' vs '+N(x.f)+'（'+(d>=0?'+':'')+N(d)+'）'+(self.note(y,x.k+'@'+ym)?'\n　📝 '+esc(String(self.note(y,x.k+'@'+ym)).slice(0,160)):'')+(x.hA!=null?'\n　人數 Heads '+N(x.hA)+'（'+Y.scen[bestM]+' 組預算 budget '+N(x.hF)+'）':''));});
  /* 今年累計 */
  var ytd={act:0,bud:Y.scen.map(function(){return 0;})};Y.months.slice(0,m).forEach(function(q){if(!q.has)return;ytd.act+=q.act;q.bud.forEach(function(b,si){ytd.bud[si]+=b;});});
  var bi=-1,bb=Infinity;ytd.bud.forEach(function(b,si){var d=Math.abs(b-ytd.act);if(d<bb){bb=d;bi=si;}});
