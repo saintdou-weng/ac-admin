@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#eef3fb">
 <title>VRT OS · 行政中心</title>
 <script>if(/[?&]view=(learning|personal)\b/.test(location.search))location.replace("/vrt-acc-flow-cost/learn/index.html"+location.search+location.hash)</script>
-<script src="config.js?v=2.3.0"></script>
+<script src="config.js?v=2.3.1"></script>
 <style>
 :root{--bg:#f3f6fa;--surface:#eef3fb;--card:#fff;--ink:#1b2738;--ink2:#33445a;--mut:#6b7a8d;--line:#d5deea;--accent:#2563eb;--on:#e9f7ef;--onink:#1c6b4a;--ok:#16a34a;--warn:#d97706;--bad:#dc2626;--side:272px}
 *{box-sizing:border-box}html,body{height:100%}
@@ -151,7 +151,8 @@ const ADMIN=[
  {k:'resources/admin/salary_adjust_2026.xlsx',ic:'📈',zh:'年度調薪 2026',en:'Salary adjustment 2026',bd:'xlsx'},
  {k:'resources/admin/salary_adjust_2022.xlsx',ic:'📈',zh:'年度調薪 2022',en:'Salary adjustment 2022',bd:'xlsx'},
  {k:'resources/admin/salary_adjust_2021.xlsx',ic:'📈',zh:'年度調薪 2021',en:'Salary adjustment 2021',bd:'xlsx'},
- {k:'resources/admin/salary_structure_2022.xls',ic:'🗂',zh:'薪資架構（2022 歷史檔）',en:'Salary structure (2022)',bd:'xls'}
+ /* 2026-11-21 薪資架構搬進 VRT HR（歷年 2020–2026，可編輯）；這裡只是捷徑，直接開 VRT HR 的那一頁，不再放獨立檔 */
+ {k:'go:hr:salstruct',go:['hr','salstruct'],ic:'📐',zh:'薪資架構（2020–2026）',en:'Salary structure (2020–2026)',km:'រចនាសម្ព័ន្ធប្រាក់ខែ',bd:'HR'}
 ];
 const ADMINSYS={id:'admin',icon:'🏛',color:'#475569',zh:'行政',en:'Administration',km:'រដ្ឋបាល',tag:'ADMIN',mode:'file',url:new URL('./',location.href).href,pages:[]};
 const byId=id=>id==='admin'?ADMINSYS:SYS.find(s=>s.id===id);
@@ -194,7 +195,7 @@ function fuse(s){const F=FUSE[s.id];if(!F)return;
 function target(s,k){if(s.mode==='hash')return s.url+(k?'#'+encodeURI(k):'');return s.url+(k||s.home||'')}
 function open(id,k,opts){
  const s=byId(id);if(!s)return goHome();k=k||'';
- if(id==='admin'){const a=ADMIN.find(x=>x.k===k);if(!a)return goHome();if(!a.frame){location.href=a.k;return}}
+ if(id==='admin'){const a=ADMIN.find(x=>x.k===k);if(!a)return goHome();if(a.go)return open(a.go[0],a.go[1],opts);if(!a.frame){location.href=a.k;return}}
  let f=frames[id];const url=target(s,k),bg=opts&&opts.background;
  if(!f){f=document.createElement('iframe');f.className='frame';f.title=s.name||nm(s);f.setAttribute('allow','clipboard-read; clipboard-write; fullscreen');f.dataset.loaded='0';
   f.addEventListener('load',()=>{f.dataset.loaded='1';if(cur===id)$('loading').classList.remove('on');fuse(s);[300,2500,7000,16000].forEach(ms=>setTimeout(()=>harvest(s),ms));if(SUM[s.id])setTimeout(()=>paintSlide(s),50)});

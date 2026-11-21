@@ -30,23 +30,23 @@ window.AC_CATALOG = [
     "group": "admin",
     "icon": "💰",
     "title": {
-      "zh": "薪資架構（2022 歷史檔）",
-      "en": "Salary structure · 2022 archive",
-      "km": "រចនាសម្ព័ន្ធប្រាក់ខែ · ឯកសារ 2022"
+      "zh": "薪資架構（2020–2026）",
+      "en": "Salary structure · 2020–2026",
+      "km": "រចនាសម្ព័ន្ធប្រាក់ខែ · 2020–2026"
     },
     "desc": {
-      "zh": "附件提供的是 2022 年資料，請勿當作現行薪資標準。",
-      "en": "The supplied file is from 2022; it is historical.",
-      "km": "ឯកសារឆ្នាំ 2022 សម្រាប់យោងប្រវត្តិ។"
+      "zh": "已搬進 VRT HR：歷年職等職級、底薪、加給、職位清單，可編輯、匯入匯出。",
+      "en": "Now lives in VRT HR: grades, base pay, allowances and positions by year — editable, import / export.",
+      "km": "ឥឡូវនៅក្នុង VRT HR ។"
     },
     "links": [
       {
         "label": {
-          "zh": "開啟／下載",
-          "en": "Excel",
-          "km": "Excel"
+          "zh": "開啟 VRT HR",
+          "en": "Open in VRT HR",
+          "km": "បើក VRT HR"
         },
-        "url": "resources/admin/salary_structure_2022.xls"
+        "url": "https://saintdou-weng.github.io/psjhr/#salstruct"
       }
     ],
     "search": "salary structure 薪資架構"

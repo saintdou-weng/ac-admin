@@ -751,6 +751,14 @@ window.AC_CONFIG = {
           "ic": "💵"
         },
         {
+          "k": "salstruct",
+          "zh": "薪資架構",
+          "en": "Salary structure",
+          "g": "薪資福利",
+          "ge": "Pay & benefits",
+          "ic": "📐"
+        },
+        {
           "k": "payroll",
           "zh": "薪資",
           "en": "Payroll",
@@ -1170,9 +1178,9 @@ window.AC_CONFIG = {
           "ic": "⚖️"
         },
         {
-          "k": "VRT_Factory_Rules_v2.html",
-          "zh": "廠規手冊",
-          "en": "Factory rules",
+          "k": "VRT_Factory_Rules_2027.html",
+          "zh": "廠規手冊 2027",
+          "en": "Factory rules 2027",
           "g": "文件與法規",
           "ge": "Documents & law",
           "ic": "📘"
