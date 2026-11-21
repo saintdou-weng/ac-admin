@@ -91,6 +91,12 @@ pre.tg{white-space:pre-wrap;background:var(--soft);border-radius:10px;padding:10
 .cum{display:flex;align-items:center;gap:4px;font-size:12.5px;color:var(--ink2);white-space:nowrap;flex:0 0 auto;padding-left:4px}
 tr[data-item],tr[data-pm]{cursor:pointer}tr[data-item]:hover td,tr[data-pm]:hover td{background:color-mix(in srgb,var(--acc) 6%,var(--card))}
 td .go{color:var(--acc);font-size:12px;margin-left:4px}
+.itabs{display:flex;gap:6px;overflow-x:auto;position:sticky;top:-12px;z-index:3;background:var(--card);padding:6px 0 8px;margin:-4px 0 6px;scrollbar-width:thin}
+.itab{flex:0 0 auto;border:1px solid var(--line);background:var(--soft);border-radius:999px;padding:5px 11px;cursor:pointer;white-space:nowrap;font-size:13px}
+.itab.on{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:650}
+.mlist{display:flex;flex-direction:column;gap:8px}.mcard{cursor:pointer}.mcard:hover{border-color:var(--acc)}
+.ai{margin-top:4px;font-size:12.5px;color:var(--ink2);background:var(--infobg);border-radius:6px;padding:3px 7px}
+.nextb{width:100%;margin-top:12px;padding:12px;font-weight:650}
 .icards{display:none;flex-direction:column;gap:8px}
 .icard{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--card);cursor:pointer;text-align:left;width:100%}
 .icard .h{display:flex;justify-content:space-between;gap:8px;align-items:center;font-weight:650}
@@ -338,36 +344,123 @@ function drawPeriod(Y){
  const on=$('pers').querySelector('.pc.on');if(on){const P=$('pers');P.scrollLeft=Math.max(0,on.offsetLeft-P.clientWidth/2+on.offsetWidth/2)}
  $('cumC').onchange=e=>{CUM=e.target.checked;if(!(PF===1&&PT===12))selMonth(PT);};
 }
+/* ── 項目卡片：上方分頁（所有項目）、左右滑換項目、點月份看明細 ── */
+const HRPAY_URL='https://script.google.com/macros/s/AKfycbwmmRduvOe5RdnR_iALwEIi_6lQaTq4SXH88jmoIjiHwTsTrW5qnlPTr8PSmOT7C2rdGg/exec';
+const GAEXP_URL='https://script.google.com/macros/s/AKfycbxPTXdEhjb4vhAxO-fQYYLnt_m4BZNkVsPiYVmyUzA-kxgr_b4VMC9yayXQCOS7xYYWAQ/exec';
+const DCACHE={};
+async function getJ(u){const r=await fetch(u,{redirect:'follow'});const j=await r.json();return j.data||j}
+function itemRows(){const y=curYear(),Y=M.year(y,VIEW,PERIOD());return Y.rows.filter(r=>r.act||r.flex||r.bud.some(b=>b.full)).sort((a,b)=>'LABC'.indexOf(a.group)-'LABC'.indexOf(b.group))}
+let CUR={key:null,idx:null};
+function curSi(Y){return CMP==='flex'||CMP==null?(Y.closest>=0?Y.closest:Math.floor(Y.scen.length/2)):CMP}
+function tabsHtml(key){return `<div class="itabs" id="itabs">${itemRows().map(r=>`<button class="itab ${r.key===key?'on':''}" data-itab="${E(r.key)}">${E(rowName(r))}</button>`).join('')}</div>`}
+function stepItem(d){const rs=itemRows(),i=rs.findIndex(r=>r.key===CUR.key);const n=rs[(i+d+rs.length)%rs.length];if(n)itemDlg(n.key)}
+function reasonsHtml(I,idx,si,nk){const y=curYear(),nt=M.note(y,nk);const ar=M.autoReason(I,idx,si,LANG,VIEW);
+ return (nt?`<span class="note">📝 ${E(nt)}</span>`:'')+(ar.length?`<div class="ai">🤖 ${T(nt?'系統另外看到：':'可能原因（系統推測）：',nt?'System also sees: ':'Possible reasons (system): ')}${ar.map(E).join(T('；','; '))}</div>`:'')}
 function itemDlg(key){
+ CUR={key,idx:null};
  const y=curYear(),I=M.item(y,VIEW,key),Y=M.year(y,VIEW,PERIOD());const row=Y.rows.find(r=>r.key===key)||{zh:key,en:key};
- const si=CMP==='flex'||CMP==null?(Y.closest>=0?Y.closest:Math.floor(Y.scen.length/2)):CMP,L=I.scen[si];
- const ms=I.months,inP=o=>o.m>=PF&&o.m<=PT;
+ const si=curSi(Y),L=I.scen[si],ms=I.months,inP=o=>o.m>=PF&&o.m<=PT;
  const sel=ms.filter(o=>inP(o)&&o.act!=null),sA=sel.reduce((a,o)=>a+o.act,0),sB=sel.reduce((a,o)=>a+o.bud[si],0),sF=sel.reduce((a,o)=>a+o.flex,0),sP=sel.reduce((a,o)=>a+(o.prev||0),0);
  const isLab=VIEW==='labor'||key==='labor';
- /* 迷你圖：實際（長條）vs 預算（虛線）vs 彈性（點線） */
  const W=Math.max(320,Math.min(700,(document.getElementById('dlg').clientWidth||innerWidth)-30)),H=W<500?150:180,pl=40,pr=8,pt=10,pb=22,vals=ms.flatMap(o=>[o.act,o.bud[si],o.flex,o.prev]).filter(v=>v!=null),mx=Math.max(1,...vals)*1.1;
  const bw=(W-pl-pr)/12,xs=i=>pl+bw*i+bw/2,ys=v=>pt+(H-pt-pb)*(1-v/mx);
  let g='';[0,.5,1].forEach(f=>{const v=mx*f;g+=`<line x1="${pl}" x2="${W-pr}" y1="${ys(v)}" y2="${ys(v)}" stroke="var(--line)"/><text x="${pl-5}" y="${ys(v)+4}" font-size="10" text-anchor="end" fill="var(--mut)">${K(v)}</text>`});
  ms.forEach((o,i)=>{if(o.prev!=null)g+=`<rect x="${xs(i)-bw*0.36}" y="${ys(o.prev)}" width="${bw*0.3}" height="${Math.max(0,ys(0)-ys(o.prev))}" rx="2" fill="var(--line)"/>`;
-  if(o.act!=null)g+=`<rect x="${xs(i)-bw*0.04}" y="${ys(o.act)}" width="${bw*0.4}" height="${Math.max(0,ys(0)-ys(o.act))}" rx="3" fill="${inP(o)?'var(--s1)':'color-mix(in srgb,var(--s1) 45%,var(--card))'}"/>`;
+  if(o.act!=null)g+=`<rect data-mi="${i}" x="${xs(i)-bw*0.04}" y="${ys(o.act)}" width="${bw*0.4}" height="${Math.max(0,ys(0)-ys(o.act))}" rx="3" fill="${inP(o)?'var(--s1)':'color-mix(in srgb,var(--s1) 45%,var(--card))'}" style="cursor:pointer"/>`;
   g+=`<text x="${xs(i)}" y="${H-6}" font-size="10" text-anchor="middle" fill="var(--mut)">${i+1}</text>`});
  const pth=f=>{let d='',pen=false;ms.forEach((o,i)=>{const v=f(o);if(v==null){pen=false;return}d+=(pen?'L':'M')+xs(i).toFixed(1)+' '+ys(v).toFixed(1);pen=true});return d};
  g+=`<path d="${pth(o=>o.bud[si])}" fill="none" stroke="var(--s2)" stroke-width="2" stroke-dasharray="6 4"/><path d="${pth(o=>o.flex)}" fill="none" stroke="var(--flex)" stroke-width="2" stroke-dasharray="2 4"/>`;
  const lg=`<div class="legend"><span><i style="background:var(--s1)"></i>${T('實際','Actual')}</span><span><i class="d" style="background:var(--s2);color:var(--s2)"></i>${L} ${T('組預算','lines budget')}</span><span><i class="d" style="background:var(--flex);color:var(--flex)"></i>${T('彈性預算','Flex budget')}</span><span><i style="background:var(--line)"></i>${y-1} ${T('同月','same month')}</span></div>`;
  const cfg=I.cfg;const how=cfg?(cfg.driver==='line'?T('隨組數變動','varies with lines'):cfg.driver==='fixed'?T('固定','fixed'):T('隨人工（社保）','follows labour'))+(cfg.up?T('，加成 ',', uplift ')+cfg.up+'%':''):isLab?T('人數 × 平均工資','heads × average wage'):'';
- let t=`<thead><tr><th>${T('月份','Month')}</th><th>${T('組數','Lines')}</th>${isLab?`<th>${T('人數','Heads')}</th>`:''}<th>${L} ${T('組預算','lines bud.')}</th><th>${T('彈性','Flex')}</th><th>${T('實際','Actual')}</th><th>${T('差異','Var.')}</th><th>%</th><th>${y-1} ${T('同月','same m.')}</th><th>${T('差異說明（點 📝 寫原因）','Explanation (📝 to add a reason)')}</th></tr></thead><tbody>`;
- ms.forEach(o=>{const nk=key+'@'+o.ym,nt=M.note(y,nk);const lab=o.parts?`<br><small class="mut">DL $${N(o.parts[0])}（${N(o.hp[0])}）・IDL $${N(o.parts[1])}（${N(o.hp[1])}）・OFF $${N(o.parts[2])}（${N(o.hp[2])}）</small>`:'';
-  t+=`<tr class="${inP(o)?'':'oor'}"><td>${o.ym}${o.est&&isLab?` <span class="pill p-y">${T('估','est')}</span>`:''}${o.prov?' ⏳':''}</td><td>${o.lines!=null?P1(o.lines):'—'}</td>${isLab?`<td>${o.heads!=null?N(o.heads):'—'}${o.budH&&o.budH[si]!=null?`<br><small class="mut">${T('預算 ','bud ')}${N(o.budH[si])}</small>`:''}</td>`:''}<td>${N(o.bud[si])}</td><td>${o.flex!=null?N(o.flex):'—'}</td><td>${o.act!=null?'<b>'+N(o.act)+'</b>':'—'}</td><td>${o.act!=null?(o.act-o.bud[si]>=0?'+':'')+N(o.act-o.bud[si]):''}</td><td>${o.act!=null?pill(o.act,o.bud[si]):''}</td><td>${o.prev!=null?N(o.prev):'—'}</td><td class="ex">${E(M.explainMonth(o,L,si,LANG))}${lab}${nt?`<span class="note">📝 ${E(nt)}</span>`:''} ${o.act!=null?`<button class="nb" data-note2="${E(nk)}">📝</button>`:''}</td></tr>`});
- t+=`<tr class="tot"><td>${perLabel(y)}</td><td></td>${isLab?'<td></td>':''}<td>${N(sB)}</td><td>${N(sF)}</td><td>${N(sA)}</td><td>${(sA-sB>=0?'+':'')+N(sA-sB)}</td><td>${pill(sA,sB)}</td><td>${N(sP)}</td><td class="ex">${sP?T('比去年同期 ','vs last year ')+sgn(pct(sA,sP)):''}</td></tr></tbody>`;
- let mc='';ms.forEach(o=>{if(o.act==null&&!inP(o))return;const nk=key+'@'+o.ym,nt=M.note(y,nk);
-  mc+=`<div class="icard" style="cursor:default;${inP(o)?'':'opacity:.6'}"><div class="h"><span>${o.ym}${o.lines!=null?' · '+P1(o.lines)+T(' 組',' lines'):''}${o.est&&isLab?' · '+T('估算','est.'):''}${o.prov?' ⏳':''}</span>${o.act!=null?pill(o.act,o.bud[si]):''}</div>
+ let mc='';ms.forEach((o,i)=>{if(o.act==null&&!inP(o))return;const nk=key+'@'+o.ym;
+  mc+=`<div class="icard mcard" data-mon="${i}" style="${inP(o)?'':'opacity:.6'}"><div class="h"><span>${o.ym}${o.lines!=null?' · '+P1(o.lines)+T(' 組',' lines'):''}${o.est&&isLab?' · '+T('估算','est.'):''}${o.prov?' ⏳':''}</span><span>${o.act!=null?pill(o.act,o.bud[si]):''} <span class="go">${T('明細','detail')} ›</span></span></div>
   <div class="n"><span>${T('實際','Actual')} <b>${o.act!=null?'$'+N(o.act):'—'}</b></span><span>${L}${T('組預算',' bud.')} $${N(o.bud[si])}</span>${o.flex!=null?`<span>${T('彈性','Flex')} $${N(o.flex)}</span>`:''}${isLab&&o.heads!=null?`<span>${T('人數','Heads')} ${N(o.heads)}</span>`:''}<span>${y-1}: ${o.prev!=null?'$'+N(o.prev):'—'}</span></div>
-  ${o.act!=null?`<div class="x">${E(M.explainMonth(o,L,si,LANG))}${o.parts?`<br>DL $${N(o.parts[0])}（${N(o.hp[0])}）・IDL $${N(o.parts[1])}（${N(o.hp[1])}）・OFF $${N(o.parts[2])}（${N(o.hp[2])}）`:''}</div>${nt?`<span class="note">📝 ${E(nt)}</span>`:''}<div style="text-align:right"><button class="btn sm" data-note2="${E(nk)}">📝 ${T('寫原因','Add reason')}</button></div>`:''}</div>`});
+  ${o.act!=null?`<div class="x">${E(M.explainMonth(o,L,si,LANG))}</div>${reasonsHtml(I,i,si,nk)}`:''}</div>`});
  const kp=[[T('實際','Actual')+' · '+perLabel(y),'$'+N(sA),sel.length+T(' 個月',' months')],[L+T(' 組預算',' lines budget'),'$'+N(sB),pill(sA,sB)],[T('彈性預算（實際組數）','Flex budget (actual lines)'),'$'+N(sF),pill(sA,sF)],[T('去年同期','Same period last year'),sP?'$'+N(sP):'—',sP?sgn(pct(sA,sP)):'']];
- dlg(rowName(row)+' · '+y,`<p class="small mut">${T('預算方式：','Budget basis: ')}${how}${T('；對照情境 ','; compared with ')}${L}${T(' 組（可在主頁「差異對照」換）。淡色＝不在所選期間。',' lines (change under “Compare with”). Faded = outside the selected period.')}</p>
+ const rs=itemRows(),ri=rs.findIndex(r=>r.key===key),nx=rs[(ri+1)%rs.length],pv=rs[(ri-1+rs.length)%rs.length];
+ dlg(rowName(row)+' · '+y,`${tabsHtml(key)}<p class="small mut">${T('預算方式：','Budget basis: ')}${how}${T('；對照 ','; vs ')}${L}${T(' 組。點月份（或長條）看部門／費用明細；左右滑換項目。',' lines. Tap a month (or bar) for department / expense detail; swipe left/right for the next item.')}</p>
   <div class="kpis">${kp.map(x=>`<div class="kpi"><div class="l">${x[0]}</div><div class="v">${x[1]}</div><div class="s">${x[2]}</div></div>`).join('')}</div>
-  ${lg}<svg class="mini" viewBox="0 0 ${W} ${H}">${g}</svg><div class="tw wide"><table>${t}</table></div><div class="icards">${mc}</div>`,`<button class="btn" data-x>${T('關閉','Close')}</button>`,true);
- $('dlgB').querySelectorAll('[data-note2]').forEach(b=>b.onclick=()=>{const nk=b.dataset.note2;closeDlg();noteDlg(nk,()=>itemDlg(key))});
+  ${lg}<svg class="mini" viewBox="0 0 ${W} ${H}">${g}</svg><div class="mlist">${mc}</div>
+  <button class="btn nextb" data-step="1">${T('下一項：','Next: ')}${E(rowName(nx))} ›</button>`,
+  `<button class="btn" data-step="-1">‹ ${E(rowName(pv))}</button><span style="flex:1"></span><button class="btn" data-x>${T('關閉','Close')}</button><button class="btn pri" data-step="1">${E(rowName(nx))} ›</button>`,true);
+ const b=$('dlgB');b.scrollTop=0;
+ const on=b.querySelector('.itab.on');if(on){const tb=$('itabs');tb.scrollLeft=Math.max(0,on.offsetLeft-tb.clientWidth/2+on.offsetWidth/2)}
+ b.querySelectorAll('[data-mon],[data-mi]').forEach(el=>el.onclick=()=>monthDlg(key,+(el.dataset.mon??el.dataset.mi)));
+}
+/* 單月明細：部門薪資或費用明細＋原因 */
+function monthDlg(key,idx){
+ CUR={key,idx};
+ const y=curYear(),I=M.item(y,VIEW,key),Y=M.year(y,VIEW,PERIOD()),si=curSi(Y),L=I.scen[si],o=I.months[idx],row=Y.rows.find(r=>r.key===key)||{zh:key,en:key};
+ if(!o||o.act==null){toast(T('這個月還沒有實際數','No actuals for this month yet'));return}
+ const nk=key+'@'+o.ym,pv=idx>0?I.months[idx-1]:null,isLab=VIEW==='labor'||key==='labor';
+ const has=I.months.map((x,i)=>x.act!=null?i:-1).filter(i=>i>=0),pi=has[has.indexOf(idx)-1],ni=has[has.indexOf(idx)+1];
+ const kp=[[T('實際','Actual'),'$'+N(o.act),o.lines!=null?P1(o.lines)+T(' 組',' lines'):''],[L+T(' 組預算',' lines budget'),'$'+N(o.bud[si]),pill(o.act,o.bud[si])],[T('彈性預算','Flex budget'),o.flex!=null?'$'+N(o.flex):'—',o.flex!=null?pill(o.act,o.flex):''],[T('上月','Last month'),pv&&pv.act!=null?'$'+N(pv.act):'—',pv&&pv.act!=null?sgn(pct(o.act,pv.act)):''],[(y-1)+T(' 同月',' same month'),o.prev!=null?'$'+N(o.prev):'—',o.prev?sgn(pct(o.act,o.prev)):'']];
+ dlg(rowName(row)+' · '+o.ym,`${tabsHtml(key)}<button class="btn sm" data-back>‹ ${T('回到 ','Back to ')}${E(rowName(row))} ${T('全年','year')}</button>
+  <div class="kpis" style="margin-top:8px">${kp.map(x=>`<div class="kpi"><div class="l">${x[0]}</div><div class="v">${x[1]}</div><div class="s">${x[2]}</div></div>`).join('')}</div>
+  <div class="card" style="margin:0 0 10px"><h2>🔎 ${T('差異與原因','Variance & reasons')}</h2><div class="small">${E(M.explainMonth(o,L,si,LANG))}</div>${reasonsHtml(I,idx,si,nk)}<div id="detReason"></div><div style="text-align:right;margin-top:6px"><button class="btn sm" data-note2="${E(nk)}">📝 ${M.note(y,nk)?T('改原因','Edit reason'):T('寫原因','Add reason')}</button></div></div>
+  <div class="card" style="margin:0"><h2 id="detT">${isLab?'👥 '+T('各部門薪資','Wages by department'):'🧾 '+T('費用明細','Expense detail')}</h2><div id="det" class="small mut">${T('讀取中…','Loading…')}</div></div>`,
+  `<button class="btn" data-mstep="${pi??''}" ${pi==null?'disabled':''}>‹ ${pi!=null?I.months[pi].ym:''}</button><span style="flex:1"></span><button class="btn" data-x>${T('關閉','Close')}</button><button class="btn pri" data-mstep="${ni??''}" ${ni==null?'disabled':''}>${ni!=null?I.months[ni].ym:''} ›</button>`,true);
+ $('dlgB').scrollTop=0;
+ const on=$('dlgB').querySelector('.itab.on');if(on){const tb=$('itabs');tb.scrollLeft=Math.max(0,on.offsetLeft-tb.clientWidth/2+on.offsetWidth/2)}
+ (isLab?deptDetail(key,o):expDetail(key,o)).catch(e=>{const d=$('det');if(d)d.textContent=T('明細暫時讀不到：','Detail unavailable: ')+(e.message||e)});
+}
+async function payByDept(ym){
+ if(DCACHE['p'+ym])return DCACHE['p'+ym];
+ const man=await getJ(HRPAY_URL+'?action=smartManifest&tool=hrpay_payroll');const ks=Object.keys(man.hashes||{}).filter(k=>new RegExp('^m:'+ym+':p\\d').test(k));if(!ks.length)return null;
+ const by={};const xl=(r,col)=>{const c=(r._excel&&r._excel.cells)||{};let best=null,br=null;Object.keys(c).forEach(k=>{const m=k.match(/^([A-Z]+)(\d+)$/);if(!m||m[1]!==col)return;if(br===null||+m[2]>br){br=+m[2];best=c[k]&&c[k].v}});return best==null?null:Number(best)||0};
+ for(const k of ks){const d=await getJ(HRPAY_URL+'?action=smartBucket&tool=hrpay_payroll&bucket='+encodeURIComponent(k));(d.records||[]).forEach(rec=>{const r=rec.row;if(!r||r.id==null)return;
+  let AG=xl(r,'AG');if(AG==null)AG=Number(r.subtotal)||0;let S=xl(r,'S');if(S==null)S=Number(r.advGiven)||0;let OT=xl(r,'AE');const nm=String(r.dept||'?').replace(/[​]/g,'').replace(/\s+/g,' ').trim().replace(/^line\s*(\d+)$/i,'L$1');
+  const o=by[nm]=by[nm]||{n:0,g:0,f:0,m:0};o.n++;o.g+=AG+S;if(/^(f|female|ស្រី)/i.test(String(r.gender||'')))o.f++;else o.m++;});}
+ return DCACHE['p'+ym]=by;
+}
+async function deptDetail(key,o){
+ const ym=o.ym,src=M.src('lab',ym),la=M.lab(ym)||[];let by=null,est=false;
+ if(src==='pay'){try{by=await payByDept(ym)}catch(e){by=null}}
+ if(!by){const S=DOC._seed_dept;if(S&&S.M&&S.M[ym]){est=true;by={};const rate={dl:la[0]?la[1]/la[0]:0,idl:la[2]?la[3]/la[2]:0,off:la[4]?la[5]/la[4]:0};S.N.forEach((n,i)=>{const h=S.M[ym][i];if(!h)return;const c=M.cls(n);by[n]={n:h,g:h*rate[c],est:true}})}}
+ const d=$('det');if(!d)return;
+ if(!by){d.innerHTML=T('這個月沒有 HRA-PAY 實發，也沒有出勤部門資料。','No HRA-PAY payroll or attendance department data for this month.');return}
+ const want=VIEW==='labor'?key:null;let rows=Object.entries(by).map(([nm,v])=>({nm,c:M.cls(nm),h:v.n,g:v.g,f:v.f||0,m:v.m||0})).filter(r=>!want||r.c===want).sort((a,b)=>'dl idl off'.indexOf(a.c)-'dl idl off'.indexOf(b.c)||b.g-a.g);
+ const tot=rows.reduce((a,r)=>a+r.g,0),th=rows.reduce((a,r)=>a+r.h,0),cn={dl:'DL',idl:'IDL',off:'OFF'};
+ const mx=Math.max(1,...rows.map(r=>r.g));
+ d.innerHTML=`<p class="small mut">${est?T('這個月沒有 HRA-PAY 實發：人數＝出勤（依組別），金額＝人數 × 當月該類平均工資（估算）。舊資料有些員工沒有組別，歸在「Production／Cut and Sew／003」。','No HRA-PAY payroll this month: heads = attendance by section; amount = heads × that class’s average wage (estimate). Older records without a section fall under “Production / Cut and Sew / 003”.'):T('HRA-PAY 實發（小計＋預支），依組別合計；只有合計，沒有個人資料。','HRA-PAY paid (subtotal + advance) totalled by section; totals only, no personal data.')}</p>
+ <div class="tw"><table><thead><tr><th>${T('部門／組別','Department / section')}</th><th>${T('類別','Class')}</th><th>${T('人數','Heads')}</th>${est?'':`<th class="hidem">${T('男／女','M / F')}</th>`}<th>${T('工資','Wages')}</th><th>${T('平均','Avg')}</th><th>${T('占比','Share')}</th><th></th></tr></thead><tbody>`+
+  rows.map(r=>`<tr><td>${E(r.nm)}</td><td><span class="pill ${r.c==='dl'?'p-b':r.c==='idl'?'p-y':'p-n'}">${cn[r.c]}</span></td><td>${N(r.h)}</td>${est?'':`<td class="hidem"><span style="color:#3b82f6">♂${r.m}</span> <span style="color:#ec4899">♀${r.f}</span></td>`}<td>${est?'≈':''}${N(r.g)}</td><td>${N(r.g/Math.max(1,r.h))}</td><td>${(r.g/Math.max(1,tot)*100).toFixed(1)}%</td><td style="min-width:70px"><div style="height:8px;border-radius:4px;background:var(--s1);width:${Math.max(2,r.g/mx*100)}%"></div></td></tr>`).join('')+
+  `<tr class="tot"><td>${T('合計','Total')}</td><td></td><td>${N(th)}</td>${est?'':'<td class="hidem"></td>'}<td>${N(tot)}</td><td>${N(tot/Math.max(1,th))}</td><td>100%</td><td></td></tr></tbody></table></div>`+
+  (!est&&Math.abs(tot-o.act)>1?`<p class="small mut">${T('註：依部門名稱分類，與本頁 DL／IDL／OFF 的分法可能差幾個人。','Note: classified by section name; may differ by a few heads from this page’s DL / IDL / OFF split.')}</p>`:'');
+ /* 部門變化 → 原因 */
+ if(!est&&idxPrevPay(ym)){try{const pb=await payByDept(idxPrevPay(ym));const ch=rows.map(r=>({n:r.nm,d:r.g-((pb[r.nm]||{}).g||0),h:r.h,ph:(pb[r.nm]||{}).n||0})).sort((a,b)=>Math.abs(b.d)-Math.abs(a.d)).slice(0,3).filter(x=>Math.abs(x.d)>=100);
+  if(ch.length)$('detReason').innerHTML=`<div class="ai">🤖 ${T('跟上月比變化最大的組別：','Biggest changes vs last month: ')}${ch.map(x=>E(x.n)+' '+(x.d>=0?'+':'−')+'$'+N(Math.abs(x.d))+T('（人數 ',' (heads ')+x.ph+'→'+x.h+'）').join(T('；','; '))}</div>`}catch(e){}}
+}
+function idxPrevPay(ym){const d=new Date(+ym.slice(0,4),+ym.slice(5)-2,1);const p=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');return M.src('lab',p)==='pay'?p:null}
+const GAMAP=[['utilities',/^electric|^water/],['security',/^security/],['repairs',/repair|fire_ext|mainten/],['supplies',/paper|stationery|cleaning|toilet|mask|application_form|banner|drink/],['meal',/kitchen|food/],['gasoline',/gasoline|^gas$|fuel|diesel/],['medical',/clinic|medic/]];
+function gaCat(src,cat){if(src==='repair')return 'repairs';const c=String(cat||'').toLowerCase();for(const [k,re] of GAMAP)if(re.test(c))return k;return 'misc_purchase'}
+async function gaMonth(ym){if(DCACHE['g'+ym])return DCACHE['g'+ym];const out=[];for(const s of ['general','purchase','repair']){try{const d=await getJ(GAEXP_URL+'?action=smartBucket&tool=expense&bucket='+encodeURIComponent('m:'+ym+':'+s));(d.records||[]).forEach(x=>{const r=x.row||{};out.push({src:s,cat:r.category||s,lab:r.categoryLabel||r.category||s,date:r.date||'',item:r.item||r.description||'',sup:r.supplier||'',qty:r.qty,unit:r.unit||'',amt:Number(r.amount)||0,purpose:r.purpose||'',k:gaCat(s,r.category)})})}catch(e){}}return DCACHE['g'+ym]=out}
+const NOTE_FIXED={rent:['工廠租金、宿舍租金、公司車租金（合約固定；2021 合約：工廠 $24,840、宿舍 $6,360、車 $5,800／月）','Factory, staff-house and car rent (fixed contracts; 2021: factory $24,840, staff house $6,360, car $5,800 / month)'],
+ depreciation:['折舊是 ERP 依資產自動提列，沒有逐筆費用','Depreciation is booked automatically from the asset register'],insurance:['保險費（年度保單分攤）','Insurance (annual policies spread monthly)'],
+ freight:['出口／進口運費，隨出貨量變動','Import / export freight, varies with shipments'],nssf:['公司負擔社保＝工資 × 費率（職業風險 0.8%＋健康 2.6%＋退休金 2%）','Company NSSF = wages × rate (0.8% risk + 2.6% health + 2% pension)'],
+ indirect_labor:['ERP 帳列的間接人工（管理職等，非 HRA-PAY 工人薪資）','Indirect labour booked in the ERP (management etc., not HRA-PAY worker payroll)'],taxes_licences:['稅捐、執照、驗廠與政府規費','Taxes, licences, audits and government fees'],
+ employee_benefit:['生產獎金、全勤與福利','Production / attendance bonus and benefits'],mfg_overhead:['其他製造費用','Other manufacturing overhead'],postage:['郵電、快遞、網路電話','Post, courier, internet and phone'],taxi:['交通、計程車','Transport and taxi'],printing_markers:['印刷、馬克紙','Printing and markers']};
+async function expDetail(key,o){
+ const d=$('det');const ym=o.ym;let rows=[];
+ const mapped=['utilities','security','repairs','supplies','meal','gasoline','medical','misc_purchase'].includes(key);
+ if(mapped){rows=(await gaMonth(ym)).filter(r=>r.k===key)}
+ if(!$('det'))return;
+ let h='';const fx=NOTE_FIXED[key];if(fx)h+=`<p class="small">${E(T(fx[0],fx[1]))}</p>`;
+ if(key==='nssf'){const la=M.lab(ym);if(la){const g=la[1]+la[3]+la[5];h+=`<p class="small">${T('本月工資 $','Wages this month $')}${N(g)} → ${T('社保占 ','NSSF = ')}${(o.act/Math.max(1,g)*100).toFixed(2)}%（${T('費率 ','rate ')}${M.nssfRate(+ym.slice(0,4))}%）</p>`}}
+ if(mapped){
+  if(!rows.length)h+=`<p class="small mut">${T('GA-EXP 這個月沒有這類的記帳明細。','GA-EXP has no detail lines of this type for this month.')}</p>`;
+  else{const tot=rows.reduce((a,r)=>a+r.amt,0),byc={};rows.forEach(r=>{byc[r.lab]=(byc[r.lab]||0)+r.amt});
+   h+=`<p class="small mut">${T('明細來自 GA-EXP 記帳（總務），跟 ERP 入帳月份、範圍可能不同；ERP 本月 $','Lines from GA-EXP (General Affairs); timing and scope can differ from the ERP. ERP this month $')}${N(o.act)}${T('，GA-EXP 合計 $',', GA-EXP total $')}${N(tot)}。</p>
+   <div class="legend">${Object.entries(byc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<span class="pill p-n">${E(k)} $${N(v)}</span>`).join('')}</div>
+   <div class="tw"><table><thead><tr><th>${T('品項','Item')}</th><th>${T('日期','Date')}</th><th class="hidem">${T('廠商','Supplier')}</th><th>${T('數量','Qty')}</th><th>${T('金額','Amount')}</th><th class="hidem">${T('用途','Purpose')}</th></tr></thead><tbody>`+
+   rows.sort((a,b)=>b.amt-a.amt).slice(0,60).map(r=>`<tr><td>${E(r.item||r.lab)}</td><td>${E(String(r.date).slice(5,10))}</td><td class="hidem">${E(r.sup)}</td><td>${r.qty!=null&&r.qty!==''?E(r.qty)+' '+E(r.unit):''}</td><td>${N(r.amt)}</td><td class="hidem" style="white-space:normal;text-align:left">${E(r.purpose)}</td></tr>`).join('')+`</tbody></table></div>`+(rows.length>60?`<p class="small mut">${T('只列金額最大的 60 筆，共 ','Top 60 by amount of ')}${rows.length}${T(' 筆',' lines')}</p>`:'');
+   const top=rows.slice().sort((a,b)=>b.amt-a.amt)[0];if(top&&top.amt>=Math.max(100,tot*0.25))$('detReason').innerHTML=`<div class="ai">🤖 ${T('本月最大一筆：','Largest line this month: ')}${E(top.item||top.lab)} $${N(top.amt)}${top.sup?'（'+E(top.sup)+'）':''}${top.purpose?T('，用途：',', purpose: ')+E(top.purpose):''}</div>`}}
+ else if(!fx)h+=`<p class="small mut">${T('ERP 這一項只有月合計，沒有逐筆明細來源。','The ERP only has a monthly total for this item.')}</p>`;
+ /* 近 12 個月走勢 */
+ const y=+ym.slice(0,4),m=+ym.slice(5),hist=[];for(let i=11;i>=0;i--){const dd=new Date(y,m-1-i,1),k=dd.getFullYear()+'-'+String(dd.getMonth()+1).padStart(2,'0');const f=key.startsWith('cx_')?null:M.fc(k);hist.push([k,f?f[key]||0:null])}
+ const mxh=Math.max(1,...hist.map(x=>x[1]||0)),av=hist.filter(x=>x[1]!=null);const a12=av.length?av.reduce((a,x)=>a+x[1],0)/av.length:0;
+ if(av.length)h+=`<h4 style="margin:10px 0 4px">${T('近 12 個月','Last 12 months')}（${T('平均 $','avg $')}${N(a12)}）</h4><div class="tw"><table><tbody>`+hist.map(([k,v])=>`<tr><td>${k}${k===ym?' ◀':''}</td><td>${v==null?'—':N(v)}</td><td>${v!=null&&a12?sgn(pct(v,a12)):''}</td><td style="min-width:90px"><div style="height:8px;border-radius:4px;background:${k===ym?'var(--s1)':'var(--line)'};width:${v?Math.max(2,v/mxh*100):0}%"></div></td></tr>`).join('')+'</tbody></table></div>';
+ d.className='';d.innerHTML=h;
 }
 function drawMonths(Y){
  $('monT').textContent=T('逐月明細（點月份＝只看那個月）','Month by month (tap a month to compare that month only)');
@@ -399,8 +492,18 @@ function drawTools(Y){
 /* ── 對話框 ── */
 function dlg(title,body,foot,big){$('dlg').classList.toggle('big',!!big);$('dlgT').textContent=title;$('dlgB').innerHTML=body;$('dlgF').innerHTML=foot||'';$('dlg').showModal()}
 function closeDlg(){$('dlg').close()}
-$('dlg').addEventListener('click',e=>{if(e.target.closest('[data-x]'))closeDlg()});
-$('dlg').addEventListener('close',()=>{if($('dlg').open)return;$('dlgB').innerHTML='';$('dlgF').innerHTML=''});
+$('dlg').addEventListener('click',e=>{if(e.target.closest('[data-x]')){closeDlg();return}
+ const t=e.target.closest('[data-itab],[data-step],[data-back],[data-mstep],[data-note2]');if(!t)return;
+ if(t.dataset.itab){CUR.idx!=null?(()=>{const k=t.dataset.itab,i=CUR.idx;const o=M.item(curYear(),VIEW,k).months[i];o&&o.act!=null?monthDlg(k,i):itemDlg(k)})():itemDlg(t.dataset.itab);return}
+ if(t.dataset.step){stepItem(+t.dataset.step);return}
+ if(t.dataset.back!=null){itemDlg(CUR.key);return}
+ if(t.dataset.mstep){monthDlg(CUR.key,+t.dataset.mstep);return}
+ if(t.dataset.note2){const nk=t.dataset.note2,k=CUR.key,i=CUR.idx;closeDlg();noteDlg(nk,()=>i!=null?monthDlg(k,i):itemDlg(k));return}});
+/* 左右滑：項目卡片換項目；月份明細換月份 */
+(function(){let sx=0,sy=0,st=0;const b=$('dlgB');b.addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;st=Date.now()},{passive:true});
+ b.addEventListener('touchend',e=>{if(!CUR.key||!$('itabs'))return;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;if(Date.now()-st>700||Math.abs(dx)<70||Math.abs(dx)<Math.abs(dy)*1.6)return;if(e.target.closest('.tw,.itabs'))return;
+  if(CUR.idx!=null){const I=M.item(curYear(),VIEW,CUR.key),has=I.months.map((x,i)=>x.act!=null?i:-1).filter(i=>i>=0),p=has.indexOf(CUR.idx),n=has[p+(dx<0?1:-1)];if(n!=null)monthDlg(CUR.key,n)}else stepItem(dx<0?1:-1)},{passive:true})})();
+$('dlg').addEventListener('close',()=>{if($('dlg').open)return;CUR={key:null,idx:null};$('dlgB').innerHTML='';$('dlgF').innerHTML=''});
 function noteDlg(key,after){const y=curYear(),k=y+'|'+key,cur=M.note(y,key);
  dlg(T('差異說明 ','Explanation ')+y+' · '+(key==='year'?T('全年','whole year'):key.includes('@')?(()=>{const [k,ym]=key.split('@');const r=M.year(y,VIEW).rows.find(x=>x.key===k);return (r?rowName(r):k)+' · '+ym})():(()=>{const r=M.year(y,VIEW).rows.find(x=>x.key===key);return r?rowName(r):key})()),`<p class="small mut">${T('寫給看報表的人：為什麼差、之後怎麼做。會出現在表格和每月月報裡。','For readers of the report: why it differs and what happens next. Shown in the table and in the monthly report.')}</p><textarea id="nt">${E(cur)}</textarea>`,
   `<button class="btn danger" id="ntDel">${T('刪除','Delete')}</button><button class="btn pri" id="ntOk">${T('儲存','Save')}</button>`);

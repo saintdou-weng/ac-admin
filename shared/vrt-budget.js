@@ -170,7 +170,7 @@ P.item=function(y,kind,key){
   var f=self._fc[ym];return f?{v:f[key]||0}:null;}
  for(var m=1;m<=12;m++){
   var ym=ymOf(y,m),la=this._lab[ym],hasL=!!la,hasF=lab||key==='labor'||cx?true:!!this._fc[ym];
-  var a=hasL&&hasF?actOf(y,m):null,lines=hasL?this.lines(ym):null,o={ym:ym,m:m,lines:lines,act:a?a.v:null,heads:a&&a.h!=null?a.h:null,parts:a&&a.parts,hp:a&&a.hp,prev:(actOf(y-1,m)||{}).v,bud:[],budH:[],flex:null,flexH:null,est:hasL&&this._src['lab|'+ym]==='est',prov:!lab&&this._prov[ym],src:lab||key==='labor'?this._src['lab|'+ym]:this._src['fc|'+ym]};
+  var a=hasL&&hasF?actOf(y,m):null,lines=hasL?this.lines(ym):null,o={ym:ym,m:m,lines:lines,act:a?a.v:null,heads:a&&a.h!=null?a.h:null,parts:a&&a.parts,hp:a&&a.hp,prev:(actOf(y-1,m)||{}).v,bud:[],budH:[],flex:null,flexH:null,est:hasL&&this._src['lab|'+ym]==='est',prov:!lab&&key!=='labor'&&!cx&&!!this._prov[ym],src:lab||key==='labor'?this._src['lab|'+ym]:this._src['fc|'+ym]};
   if(o.prev==null)o.prev=null;
   sc.forEach(function(L){var lb=self.labBudget(y,m,L);
    if(lab){o.bud.push(lb[key+'G']);o.budH.push(lb[key+'N']);}
@@ -185,6 +185,32 @@ P.item=function(y,kind,key){
   out.push(o);
  }
  return {y:y,key:key,scen:sc,months:out,cfg:lab||key==='labor'||cx?null:this.catCfg(key),base:this.base(y)};
+};
+
+/* 部門分類（HRA-PAY 部門／組別名稱 → DL／IDL／OFF） */
+P.cls=function(d){d=String(d||'').toLowerCase().replace(/[​\s]+/g,' ').trim();
+ if(/clean|guard|secur|driver|admin|nurse|doctor|export|lab office|^pc$|account|\bhr\b|hra|cook|canteen|office|gardener|import|purchas|merchand|electric|compliance|^it\b|ga\b|general affairs|gereral/.test(d))return 'off';
+ if(/^l\d+$|line|sample|supervisor|training|service on line|service in garment|maker|sewer|sewing|cut and sew|^production$|^003$/.test(d)&&!/machin|mechanic/.test(d))return 'dl';return 'idl';};
+/* 🤖 系統推測的可能原因（沒有人工說明時顯示；Paul：AI 覺得有就自己備註） */
+P.autoReason=function(I,idx,si,lang,kind){
+ var en=lang==='en',ms=I.months,o=ms[idx],key=I.key,out=[];if(!o||o.act==null)return [];
+ function pc(a,b){return b?((a-b)/b*100):null;}function f(p){return (p>=0?'+':'')+p.toFixed(0)+'%';}function $(v){return '$'+r0(v).toLocaleString('en-US');}
+ var lab=kind==='labor'||key==='labor',b=o.bud[si],L=I.scen[si],vol=o.flex!=null?o.flex-b:0,tot=o.act-b,spd=o.flex!=null?o.act-o.flex:tot;
+ if(o.prov)out.push(en?'ERP has probably not closed this month yet (amount unusually low) — wait for the final figure':'ERP 這個月可能還沒結完（金額偏低），等結帳後再看');
+ if(lab&&o.est)out.push(en?'Labour is estimated from attendance (no HRA-PAY payroll)':'人工是依出勤估算（沒有 HRA-PAY 實發），僅供參考');
+ if(Math.abs(tot)>=1&&Math.abs(vol)>Math.abs(tot)*0.5&&o.lines!=null)out.push(en?'Mostly the line count: '+(Math.round(o.lines*10)/10)+' actual vs '+L+' budgeted':'主要是組數差：實際 '+(Math.round(o.lines*10)/10)+' 組，預算 '+L+' 組');
+ if(lab&&o.heads!=null&&o.flexH!=null){var dh=o.heads-o.flexH;if(Math.abs(dh)>=Math.max(3,o.flexH*0.05))out.push(en?'Heads '+(dh>0?'+':'')+r0(dh)+' vs the line-based standard':'人數比依組數算的標準'+(dh>0?'多 ':'少 ')+Math.abs(r0(dh))+' 人');
+  var ra=o.act/Math.max(1,o.heads),rf=o.flex/Math.max(1,o.flexH);if(Math.abs(ra-rf)>=rf*0.04)out.push(en?'Average wage '+$(ra)+' vs '+$(rf)+' (OT, allowances or raises)':'平均工資 '+$(ra)+'，標準 '+$(rf)+'（加班、加給或調薪影響）');}
+ if(lab&&o.m===12)out.push(en?'December includes year-end / seniority pay':'12 月含年終／年資金，偏高屬正常');
+ if(lab&&o.m===1)out.push(en?'January: new minimum wage $'+this.mw(I.y)+' takes effect':'1 月起最低工資調為 $'+this.mw(I.y));
+ var pv=idx>0?ms[idx-1]:null;if(pv&&pv.act!=null&&!pv.prov){var p1=pc(o.act,pv.act);if(p1!=null&&Math.abs(p1)>=25)out.push(en?'vs last month '+f(p1)+' (last month '+$(pv.act)+')':'比上月 '+f(p1)+'（上月 '+$(pv.act)+'）');}
+ var last3=ms.slice(Math.max(0,idx-3),idx).filter(function(x){return x.act!=null&&!x.prov;});if(last3.length>=2){var a3=avg(last3.map(function(x){return x.act;})),p3=pc(o.act,a3);if(p3!=null&&p3>=40&&!o.prov)out.push(en?f(p3)+' above the 3-month average — likely a one-off expense':'比前 3 個月平均高 '+f(p3)+'，可能有一次性支出');}
+ if(o.prev!=null&&o.prev>0){var py=pc(o.act,o.prev);if(Math.abs(py)>=25&&!o.prov)out.push(en?'vs same month last year '+f(py):'比去年同月 '+f(py));}
+ var hint={utilities:[[3,4,5],'旱季用電較高（冷氣、風扇、抽風）','Hot season — more air-con / fans'],meal:[null,'加班多時加班餐增加；人數變動也會影響','More OT means more OT meals; headcount also matters'],
+  nssf:[null,'社保費率或投保薪資上下限調整（2022-10 退休金、2026-11 上下限）','NSSF rate or wage floor/ceiling changes (pension Oct 2022, limits Nov 2026)'],depreciation:[null,'資產折舊到期或新增設備','Assets fully depreciated or new equipment'],
+  rent:[null,'租約調整或補繳','Lease change or catch-up payment'],employee_benefit:[null,'生產獎金／全勤獎隨達成率變動','Production / attendance bonus follows achievement'],repairs:[null,'設備大修（發電機、空調、叉車）多為一次性','Major repairs (generator, air-con, forklift) are usually one-off'],gasoline:[null,'停電時發電機用油增加','Power cuts raise generator diesel use']}[key];
+ if(hint&&Math.abs(spd)>=Math.max(50,Math.abs(b)*0.08)&&(!hint[0]||hint[0].indexOf(o.m)>=0))out.push(en?hint[2]:hint[1]);
+ return out.slice(0,4);
 };
 /* 單月的差異說明 */
 P.explainMonth=function(o,L,si,lang){
@@ -242,7 +268,7 @@ P.monthReport=function(ym,kind){
   this.cats.forEach(function(c){if(self.catCfg(c).off)return;items.push({k:c,n:[self.catName(c,'zh'),self.catName(c,'en')],a:self._fc[ym][c]||0,f:self.catBudget(y,m,mo.lines,c,lt)});});}
  items.sort(function(a,b){return Math.abs(b.a-b.f)-Math.abs(a.a-a.f);});
  L.push('━━━━━━━━━━━━');L.push('<b>主要差異 Top variances</b>（vs 彈性預算 flex budget）');
- items.slice(0,lab?3:4).forEach(function(x,i){var d=x.a-x.f;L.push((i+1)+'. '+self.light(x.a,x.f)+' '+esc(x.n[0])+' '+esc(x.n[1])+'　'+N(x.a)+' vs '+N(x.f)+'（'+(d>=0?'+':'')+N(d)+'）'+(self.note(y,x.k+'@'+ym)?'\n　📝 '+esc(String(self.note(y,x.k+'@'+ym)).slice(0,160)):'')+(x.hA!=null?'\n　人數 Heads '+N(x.hA)+'（'+Y.scen[bestM]+' 組預算 budget '+N(x.hF)+'）':''));});
+ items.slice(0,lab?3:4).forEach(function(x,i){var d=x.a-x.f;L.push((i+1)+'. '+self.light(x.a,x.f)+' '+esc(x.n[0])+' '+esc(x.n[1])+'　'+N(x.a)+' vs '+N(x.f)+'（'+(d>=0?'+':'')+N(d)+'）'+(self.note(y,x.k+'@'+ym)?'\n　📝 '+esc(String(self.note(y,x.k+'@'+ym)).slice(0,160)):(function(){var I=self.item(y,kind,x.k),r=self.autoReason(I,m-1,bestM,'zh',kind),re=self.autoReason(I,m-1,bestM,'en',kind);return r.length?'\n　🤖 '+esc(r.slice(0,2).join('；'))+'\n　🤖 '+esc(re.slice(0,2).join('; ')):'';})())+(x.hA!=null?'\n　人數 Heads '+N(x.hA)+'（'+Y.scen[bestM]+' 組預算 budget '+N(x.hF)+'）':''));});
  /* 今年累計 */
  var ytd={act:0,bud:Y.scen.map(function(){return 0;})};Y.months.slice(0,m).forEach(function(q){if(!q.has)return;ytd.act+=q.act;q.bud.forEach(function(b,si){ytd.bud[si]+=b;});});
  var bi=-1,bb=Infinity;ytd.bud.forEach(function(b,si){var d=Math.abs(b-ytd.act);if(d<bb){bb=d;bi=si;}});
