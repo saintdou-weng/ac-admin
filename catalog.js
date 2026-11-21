@@ -163,9 +163,9 @@ window.AC_CATALOG = [
       "km": "ផ្លូវដែកពិភពលោក 3D"
     },
     "desc": {
-      "zh": "四島環球鐵道 3D 景觀（v5.4）。檔案約 9.5 MB，第一次開啟請等它載完。",
-      "en": "Four-island 3D railway world (v5.4). About 9.5 MB; allow time for the first load.",
-      "km": "ពិភពផ្លូវដែក 3D (v5.4)"
+      "zh": "四島環球鐵道 3D 景觀。可在頁面內匯入新版 HTML 更新。",
+      "en": "Four-island 3D railway world. A new HTML can be imported on the page.",
+      "km": "ពិភពផ្លូវដែក 3D"
     },
     "links": [
       {
@@ -174,7 +174,7 @@ window.AC_CATALOG = [
           "en": "Open",
           "km": "បើក"
         },
-        "url": "apps/world/seasons_express.html"
+        "url": "apps/world/index.html"
       }
     ],
     "search": "世界鐵道 四季慢行 3D railway seasons express 火車 地圖"

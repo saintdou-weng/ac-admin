@@ -1,0 +1,123 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>世界鐵道・四季慢行 3D · VRT OS</title>
+<style>
+:root{--bg:#0f172a;--card:#1e293b;--line:#334155;--tx:#e2e8f0;--mut:#94a3b8;--ac:#38bdf8;--ok:#34d399;--warn:#fbbf24;--bad:#f87171}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.55 system-ui,-apple-system,"Noto Sans TC","Microsoft JhengHei",sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:14px 14px 40px}
+header{display:flex;align-items:center;gap:10px;margin-bottom:12px}header a{color:var(--mut);text-decoration:none;font-size:14px;padding:6px 10px;border:1px solid var(--line);border-radius:10px}
+h1{font-size:19px;margin:0;flex:1}h2{font-size:14px;color:var(--mut);font-weight:600;margin:20px 0 8px;letter-spacing:.04em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.grow{flex:1;min-width:0}
+.big{font-size:22px;font-weight:700}.mut{color:var(--mut);font-size:13px}.tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--mut);margin-left:6px;vertical-align:middle}
+.tag.on{border-color:var(--ok);color:var(--ok)}.tag.new{border-color:var(--warn);color:var(--warn)}
+button,.btn{font:inherit;font-weight:600;border:1px solid var(--line);background:#0b1220;color:var(--tx);border-radius:12px;padding:11px 14px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;justify-content:center}
+button.pri,.btn.pri{background:var(--ac);border-color:var(--ac);color:#06202e}button.danger{color:var(--bad)}button:disabled{opacity:.5;cursor:default}
+.go{width:100%;font-size:17px;padding:14px}
+.drop{border:2px dashed var(--line);border-radius:16px;padding:22px 14px;text-align:center;cursor:pointer;transition:.15s}.drop.over{border-color:var(--ac);background:#0b1b2b}
+.drop b{display:block;font-size:16px;margin-bottom:4px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chips a{flex:1 1 30%;min-width:96px}
+#msg{margin-top:10px;padding:10px 12px;border-radius:12px;font-size:14px;display:none}#msg.ok{display:block;background:#0c2a22;border:1px solid var(--ok)}#msg.bad{display:block;background:#2a1212;border:1px solid var(--bad)}#msg.info{display:block;background:#10243a;border:1px solid var(--ac)}
+ol{margin:6px 0 0;padding-left:20px;color:var(--mut);font-size:13.5px}li{margin:3px 0}
+.bar{height:6px;border-radius:9px;background:#0b1220;overflow:hidden;margin-top:8px;display:none}.bar i{display:block;height:100%;width:0;background:var(--ac);transition:width .2s}
+</style></head><body><div class="wrap">
+<header><a href="../../index.html">← VRT OS</a><h1>🚂 世界鐵道・四季慢行 3D</h1></header>
+
+<div class="card">
+ <div class="row"><div class="grow"><div class="mut">這台裝置現在會開啟</div><div class="big" id="curV">…</div><div class="mut" id="curD"></div></div></div>
+ <div style="margin-top:12px"><a class="btn pri go" id="open" href="seasons_express.html">▶ 進入 3D 世界</a></div>
+ <div class="mut" style="margin-top:8px">檔案約 <span id="curS">11</span> MB，第一次開啟請等它載完。</div>
+</div>
+
+<h2>快速前往</h2>
+<div class="card"><div class="chips">
+ <a class="btn" href="seasons_express.html">🚂 從列車開始</a>
+ <a class="btn" href="seasons_express.html?visit=angkor">🛕 吳哥窟參觀</a>
+</div></div>
+
+<h2>匯入更新</h2>
+<div class="card">
+ <div class="drop" id="drop"><b>📥 點這裡選新版檔案，或把檔案拖進來</b><span class="mut">可以放 <b style="display:inline;font-size:inherit">.html</b> 或整包 <b style="display:inline;font-size:inherit">.zip</b>（會自動找出裡面的 seasons_express.html）</span></div>
+ <input type="file" id="file" accept=".html,.htm,.zip,text/html,application/zip" hidden>
+ <div class="bar" id="bar"><i></i></div><div id="msg"></div>
+ <ol><li>匯入後，<b>這台裝置</b>馬上改用新版，不用等任何人。</li><li>匯入的版本存在這台裝置的瀏覽器裡；<b>其他手機／電腦不會跟著變</b>，要每台各匯入一次，或請 AI 把它推成「內建版」。</li><li>清除瀏覽器網站資料會把匯入版清掉，回到內建版。</li></ol>
+</div>
+
+<h2>版本管理</h2>
+<div class="card">
+ <div class="row"><div class="grow"><b>內建版</b><span class="tag" id="bTag">線上</span><div class="mut" id="bInfo">…</div></div><a class="btn" href="seasons_express.html?builtin=1">開啟</a></div>
+ <hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
+ <div class="row"><div class="grow"><b>本機匯入版</b><span class="tag" id="iTag">沒有</span><div class="mut" id="iInfo">還沒有匯入過。</div></div>
+  <a class="btn" id="dl" download="seasons_express.html" href="seasons_express.html" style="display:none">⬇ 下載</a><button class="danger" id="reset" style="display:none">↩ 改回內建版</button></div>
+</div>
+<div class="mut" id="sw"></div>
+</div>
+<script>
+(function(){
+const CACHE='vrt-world-import-v1',KEY='imported/seasons_express.html',META='vrtWorldImportMeta';
+const $=id=>document.getElementById(id),mb=n=>(n/1048576).toFixed(1);
+const say=(cls,t)=>{const m=$('msg');m.className=cls;m.textContent=t;};
+const meta=()=>{try{return JSON.parse(localStorage.getItem(META)||'null');}catch(e){return null;}};
+const when=s=>{const d=new Date(s);return isNaN(d)?'':d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');};
+let builtin=null,swReady=false;
+
+/* the service worker is what makes the imported copy answer at the normal address */
+if('serviceWorker' in navigator&&window.caches){navigator.serviceWorker.register('sw.js',{scope:'./'}).then(()=>navigator.serviceWorker.ready).then(()=>{swReady=true;paint();}).catch(e=>{$('sw').textContent='⚠ 這個瀏覽器無法啟用匯入功能（'+e.message+'），只能用內建版。';});}
+else $('sw').textContent='⚠ 這個瀏覽器不支援匯入功能（需要 https 與一般模式，無痕模式不行），只能用內建版。';
+
+fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.json()).then(j=>{builtin=j;paint();}).catch(()=>paint());
+
+async function hasImport(){if(!window.caches)return false;try{return !!(await (await caches.open(CACHE)).match(KEY));}catch(e){return false;}}
+async function paint(){
+ const m=meta(),imp=await hasImport();
+ $('bInfo').textContent=builtin?builtin.version+'　'+builtin.date+'　'+(builtin.note||'')+'　約 '+mb(builtin.bytes)+' MB':'讀不到版本資訊';
+ if(imp&&m){$('curV').textContent=(m.version||'匯入版')+' ・本機匯入版';$('curD').textContent=(m.name||'')+'　匯入於 '+when(m.at);$('curS').textContent=mb(m.bytes);
+  $('iTag').textContent='使用中';$('iTag').className='tag on';$('iInfo').textContent=(m.title||m.version||'')+'　'+mb(m.bytes)+' MB　'+when(m.at);$('dl').style.display='';$('reset').style.display='';$('bTag').textContent='備用';$('bTag').className='tag';
+  if(builtin&&builtin.date&&m.at&&new Date(builtin.date+'T00:00:00')>new Date(m.at)){$('bTag').textContent='比匯入版新';$('bTag').className='tag new';}}
+ else{$('curV').textContent=(builtin?builtin.version:'')+' ・內建版';$('curD').textContent=builtin?builtin.date+'　'+(builtin.note||''):'';if(builtin)$('curS').textContent=mb(builtin.bytes);
+  $('iTag').textContent='沒有';$('iTag').className='tag';$('iInfo').textContent='還沒有匯入過。';$('dl').style.display='none';$('reset').style.display='none';$('bTag').textContent='使用中';$('bTag').className='tag on';}
+}
+
+/* ---- zip: read the central directory, pull out the largest .html entry (stored or deflated) ---- */
+async function fromZip(file){
+ const buf=new Uint8Array(await file.arrayBuffer()),dv=new DataView(buf.buffer),td=new TextDecoder();let e=buf.length-22;while(e>=0&&dv.getUint32(e,true)!==0x06054b50)e--;if(e<0)throw new Error('這不是有效的 zip 檔');
+ const n=dv.getUint16(e+10,true);let p=dv.getUint32(e+16,true),best=null;
+ for(let i=0;i<n;i++){if(dv.getUint32(p,true)!==0x02014b50)break;const method=dv.getUint16(p+10,true),csize=dv.getUint32(p+20,true),usize=dv.getUint32(p+24,true),nl=dv.getUint16(p+28,true),xl=dv.getUint16(p+30,true),cl=dv.getUint16(p+32,true),off=dv.getUint32(p+42,true),name=td.decode(buf.subarray(p+46,p+46+nl));
+  if(/\.html?$/i.test(name)&&!/(^|\/)(index|sw)\.html?$/i.test(name)&&(!best||usize>best.usize))best={name,method,csize,usize,off};p+=46+nl+xl+cl;}
+ if(!best)throw new Error('zip 裡面找不到 3D 的 html 檔');
+ const lh=best.off,start=lh+30+dv.getUint16(lh+26,true)+dv.getUint16(lh+28,true),raw=buf.subarray(start,start+best.csize);
+ if(best.method===0)return {name:best.name.split('/').pop(),blob:new Blob([raw])};
+ if(best.method!==8||!window.DecompressionStream)throw new Error('這個瀏覽器解不開這包 zip，請直接放 .html');
+ const out=await new Response(new Blob([raw]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).blob();return {name:best.name.split('/').pop(),blob:out};
+}
+
+const RET='<script id="vrt-os-return">/* VRT OS: when this page is opened inside the Admin Center, the back button returns to the world page */(function(){if(!/\\/ac-admin\\//.test(location.pathname))return;var a=document.querySelector("a.back");if(a){a.href="./index.html";a.title="返回";a.textContent="← 返回";}})();<\/script>\n';
+
+async function importFile(file){
+ if(!swReady){say('bad','匯入功能還沒準備好，請重新整理這一頁再試一次。');return;}
+ $('bar').style.display='block';$('bar').firstElementChild.style.width='15%';say('info','讀取中… '+file.name);
+ try{
+  let name=file.name,blob=file;if(/\.zip$/i.test(name)||file.type==='application/zip'||file.type==='application/x-zip-compressed'){const z=await fromZip(file);name=z.name;blob=z.blob;}
+  $('bar').firstElementChild.style.width='45%';
+  let html=await blob.text();
+  /* checks: it must be the railway world, complete, and not a tiny fragment */
+  const title=(html.match(/<title>([^<]*)<\/title>/i)||[])[1]||'',ver=(title.match(/v\d+(?:\.\d+)+/i)||[])[0]||'';
+  if(html.length<500000||!/RailwayApp/.test(html)||!/四季慢行|Seasons Express/i.test(html))throw new Error('這個檔案看起來不是「四季慢行」的 3D 頁面（或檔案不完整），沒有匯入。');
+  if(!/<\/html>\s*$/i.test(html))throw new Error('檔案結尾不完整（可能下載到一半），沒有匯入。');
+  html=html.replace(/<script id="vrt-os-return">[\s\S]*?<\/script>\s*/i,'');const i=html.lastIndexOf('</body>');html=i>0?html.slice(0,i)+RET+html.slice(i):html+RET;
+  $('bar').firstElementChild.style.width='75%';
+  const body=new Blob([html],{type:'text/html;charset=utf-8'});
+  if(navigator.storage&&navigator.storage.persist)try{await navigator.storage.persist();}catch(e){}
+  const c=await caches.open(CACHE);await c.put(KEY,new Response(body,{headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'}}));
+  if(!(await c.match(KEY)))throw new Error('存不進這台裝置（空間不足？）');
+  localStorage.setItem(META,JSON.stringify({name,title,version:ver,bytes:body.size,at:new Date().toISOString()}));
+  $('bar').firstElementChild.style.width='100%';say('ok','✅ 已匯入 '+(ver||name)+'（'+mb(body.size)+' MB）。這台裝置現在開的就是這一版。');
+ }catch(e){say('bad','❌ '+(e&&e.message||e));}
+ setTimeout(()=>{$('bar').style.display='none';},600);paint();
+}
+
+const drop=$('drop'),file=$('file');drop.onclick=()=>file.click();file.onchange=()=>{if(file.files[0])importFile(file.files[0]);file.value='';};
+['dragenter','dragover'].forEach(k=>drop.addEventListener(k,e=>{e.preventDefault();drop.classList.add('over');}));['dragleave','drop'].forEach(k=>drop.addEventListener(k,e=>{e.preventDefault();drop.classList.remove('over');}));
+drop.addEventListener('drop',e=>{const f=e.dataTransfer.files[0];if(f)importFile(f);});
+$('reset').onclick=async()=>{if(!confirm('改回內建版？這台裝置上的匯入版會被移除。'))return;try{await (await caches.open(CACHE)).delete(KEY);}catch(e){}localStorage.removeItem(META);say('ok','已改回內建版。');paint();};
+})();
+</script></body></html>
