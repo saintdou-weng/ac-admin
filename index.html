@@ -152,7 +152,12 @@ const ADMIN=[
  {k:'resources/admin/salary_adjust_2022.xlsx',ic:'📈',zh:'年度調薪 2022',en:'Salary adjustment 2022',bd:'xlsx'},
  {k:'resources/admin/salary_adjust_2021.xlsx',ic:'📈',zh:'年度調薪 2021',en:'Salary adjustment 2021',bd:'xlsx'},
  /* 2026-11-21 薪資架構搬進 VRT HR（歷年 2020–2026，可編輯）；這裡只是捷徑，直接開 VRT HR 的那一頁，不再放獨立檔 */
- {k:'go:hr:salstruct',go:['hr','salstruct'],ic:'📐',zh:'薪資架構（2020–2026）',en:'Salary structure (2020–2026)',km:'រចនាសម្ព័ន្ធប្រាក់ខែ',bd:'HR'}
+ {k:'go:hr:salstruct',go:['hr','salstruct'],ic:'📐',zh:'薪資架構（2020–2026）',en:'Salary structure (2020–2026)',km:'រចនាសម្ព័ន្ធប្រាក់ខែ',bd:'HR'},
+ /* 2026-11-21 Paul：外幹／幹部等工廠相關的合約、薪資、伙食費，先從 ACC Flow 移到這裡最底下放著（工具本身與資料不動，仍是 ACC Flow 那一份） */
+ {k:'../vrt-acc-flow-cost/modules/foreign-manager-payroll.html?embedded=1',ic:'💵',zh:'外籍／當地管理層薪資（含伙食費）',en:'Expat / local manager payroll',frame:true,bd:'暫放'},
+ {k:'../vrt-acc-flow-cost/modules/salary-management.html?embedded=1',ic:'💰',zh:'薪資管理／人工成本',en:'Salary & labor cost',frame:true,bd:'暫放'},
+ {k:'../vrt-acc-flow-cost/modules/leave-manager.html?embedded=1',ic:'🏖️',zh:'外籍幹部年假管理',en:'Expat leave manager',frame:true,bd:'暫放'},
+ {k:'../vrt-acc-flow-cost/modules/contract-manager.html?embedded=1',ic:'📄',zh:'海外幹部合約管理',en:'Expat contract manager',frame:true,bd:'暫放'}
 ];
 const ADMINSYS={id:'admin',icon:'🏛',color:'#475569',zh:'行政',en:'Administration',km:'រដ្ឋបាល',tag:'ADMIN',mode:'file',url:new URL('./',location.href).href,pages:[]};
 const byId=id=>id==='admin'?ADMINSYS:SYS.find(s=>s.id===id);
