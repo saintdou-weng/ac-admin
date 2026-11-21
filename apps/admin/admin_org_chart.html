@@ -178,6 +178,36 @@ textarea.field-input{min-height:72px;resize:vertical;line-height:1.6;}
 
 .ac-phone-only{display:none}
 @media(max-width:640px){body{height:100dvh}#toolbar{height:46px;min-height:46px;overflow-y:hidden}#toolbar .tb-btn{min-height:36px}#toolbar .tb-logo{display:none}#page-tabs{padding:0 4px;overflow-x:auto;overflow-y:hidden}.page-tab{padding:0 10px;height:38px;font-size:12px}#canvas-wrap{min-width:0;touch-action:none}#side-panel{position:fixed;z-index:240;right:0;top:0;bottom:0;width:min(340px,calc(100vw - 24px));box-shadow:-8px 0 35px #102a4355;visibility:hidden;transform:translateX(110%)}body.ac-editor-open #side-panel{visibility:visible;transform:none}#links-panel{position:fixed;z-index:241;right:0;top:44px;bottom:0;width:min(320px,calc(100vw - 24px));box-shadow:-8px 0 35px #102a4355}.ac-phone-only{display:block}#ac-close-editor{margin:8px;min-height:44px;flex-shrink:0}#panel-actions{flex-wrap:wrap;padding-bottom:max(10px,env(safe-area-inset-bottom))}#panel-actions button{min-height:40px}#duties-toolbar{flex-wrap:wrap}.modal{max-width:calc(100vw - 24px);max-height:85dvh;overflow:auto}}
+/* 2026-11-21 歷年組織（年度篩選） */
+#yearSel{margin-left:auto;align-self:center;border:1px solid var(--border);border-radius:8px;padding:6px 8px;font:inherit;font-size:13px;background:#fff;color:inherit;max-width:150px}
+#page-history{flex-direction:column;overflow:auto;background:#f4f6f9}
+.oh-wrap{max-width:1100px;margin:0 auto;padding:14px 14px 40px;width:100%;box-sizing:border-box}
+.oh-years{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.oh-years button{border:1px solid #cfd8e3;background:#fff;border-radius:999px;padding:7px 13px;font:600 13px/1 inherit;font-family:inherit;cursor:pointer;color:#22374b}
+.oh-years button.on{background:#1f3a5a;color:#fff;border-color:#1f3a5a}
+.oh-years button small{font-weight:400;opacity:.7;margin-left:3px}
+.oh-intro{font-size:12.5px;color:#5b6b7b;margin:0 0 12px;line-height:1.55}
+.oh-card{background:#fff;border:1px solid #dfe6ee;border-radius:14px;padding:14px;margin:0 0 14px;box-shadow:0 1px 3px rgba(20,40,60,.05)}
+.oh-card h3{margin:0 0 4px;font-size:16px;color:#1b3148;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.oh-card h3 .d{font:700 13px ui-monospace,Menlo,monospace;color:#fff;background:#3a6ea5;border-radius:6px;padding:2px 7px}
+.oh-card .src{font-size:11px;color:#8a97a5;margin:0 0 8px}
+.oh-card ul{margin:6px 0 10px;padding-left:20px;font-size:13.5px;line-height:1.6;color:#24384c}
+.oh-card .hc{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 8px}
+.oh-card .hc span{background:#eef4fa;border-radius:8px;padding:4px 9px;font-size:12px;color:#29506f}
+.oh-imgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.oh-imgs figure{margin:0;border:1px solid #e3e9f0;border-radius:10px;overflow:hidden;background:#fafbfc;cursor:zoom-in}
+.oh-imgs img{display:block;width:100%;height:160px;object-fit:contain;background:#fff}
+.oh-imgs figcaption{font-size:12px;padding:6px 8px;color:#34495e;border-top:1px solid #eef2f6}
+.oh-empty{padding:30px;text-align:center;color:#7a8896}
+#oh-lb{position:fixed;inset:0;z-index:9999;background:rgba(10,20,30,.88);display:none;flex-direction:column}
+#oh-lb.on{display:flex}
+#oh-lb .bar{display:flex;align-items:center;gap:8px;padding:10px 12px;color:#fff;font-size:14px}
+#oh-lb .bar b{flex:1}
+#oh-lb .bar button,#oh-lb .bar a{border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;border-radius:8px;padding:6px 10px;font:inherit;cursor:pointer;text-decoration:none}
+#oh-lb .stage{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;text-align:center}
+#oh-lb .stage img{max-width:none;width:auto;height:auto;background:#fff}
+#oh-lb .stage.fit img{max-width:100%;max-height:100%}
+@media(max-width:640px){#yearSel{max-width:110px;font-size:12px;padding:5px 6px}.oh-wrap{padding:10px 10px 30px}.oh-imgs{grid-template-columns:1fr 1fr}.oh-imgs img{height:120px}.oh-card ul{font-size:13px}}
 </style>
 <script src="../../shared/module-shell.js" data-group="admin" data-langfn="setLang" data-zh="tw" defer></script>
 </head>
@@ -220,6 +250,8 @@ textarea.field-input{min-height:72px;resize:vertical;line-height:1.6;}
 <div id="page-tabs">
   <div class="page-tab active" data-page="chart"  onclick="switchPage('chart')">📊 組織圖</div>
   <div class="page-tab"        data-page="duties" onclick="switchPage('duties')">📋 職責總覽</div>
+  <div class="page-tab"        data-page="history" onclick="switchPage('history')">📅 歷年組織</div>
+  <select id="yearSel" aria-label="年度" onchange="pickYear(this.value)"></select>
 </div>
 
 <!-- ══ PAGE: CHART ══ -->
@@ -343,6 +375,14 @@ textarea.field-input{min-height:72px;resize:vertical;line-height:1.6;}
 </div>
 
 <!-- ══ PAGE: DUTIES ══ -->
+<!-- ══ PAGE: HISTORY（歷年組織，可篩選年度）══ -->
+<div class="page" id="page-history"><div class="oh-wrap">
+  <div class="oh-years" id="oh-years"></div>
+  <p class="oh-intro" id="oh-intro"></p>
+  <div id="oh-list"></div>
+</div></div>
+<div id="oh-lb" role="dialog" aria-modal="true"><div class="bar"><b id="oh-lb-t"></b><button type="button" onclick="ohFit()" id="oh-fit">🔍 放大</button><a id="oh-dl" download>⬇</a><button type="button" onclick="ohClose()">✕</button></div><div class="stage fit" id="oh-stage"><img id="oh-img" alt=""></div></div>
+<script src="org_history.js"></script>
 <div class="page" id="page-duties">
   <div style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
     <div id="duties-toolbar">
@@ -624,6 +664,8 @@ function switchPage(p){
   document.querySelectorAll('.page-tab').forEach(t=>t.classList.toggle('active',t.dataset.page===p));
   document.querySelectorAll('.page').forEach(pg=>pg.classList.toggle('active',pg.id==='page-'+p));
   if(p==='duties')renderDuties();
+  if(p==='history')renderHistory();
+  const ys=document.getElementById('yearSel');if(ys){if(p==='chart'||p==='duties')ys.value='now';else ys.value=String(OH_YEAR);}
 }
 
 // ═══════════════════════════════════════════════════
@@ -1258,6 +1300,38 @@ function showToast(msg){
 
 init();
 if(matchMedia('(max-width:640px)').matches)requestAnimationFrame(fitChart);
+
+// ═══════════════════════════════════════════════════
+//  歷年組織（2026-11-21）：依年度篩選歷次組織架構 update（圖＋變動說明）
+// ═══════════════════════════════════════════════════
+const OH_IMG_BASE='../../resources/admin/org/';
+const OH_NOW=new Date().getFullYear();
+let OH_YEAR=null;
+function ohList(){return (window.ORG_HISTORY||[]).slice().sort((a,b)=>a.d.localeCompare(b.d));}
+function ohYears(){const ys=[...new Set(ohList().map(v=>+v.d.slice(0,4)))];return ys.sort((a,b)=>b-a);}
+function ohEsc(x){return String(x==null?'':x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function ohInitSel(){const sel=document.getElementById('yearSel');if(!sel||sel.options.length)return;const ys=ohYears();
+  sel.innerHTML='<option value="now">現行 '+OH_NOW+'</option>'+ys.map(y=>'<option value="'+y+'">'+y+' 年</option>').join('');sel.value='now';}
+function pickYear(v){if(v==='now'){switchPage('chart');return}OH_YEAR=+v;switchPage('history');}
+function renderHistory(){const all=ohList(),ys=ohYears();if(OH_YEAR==null||!ys.includes(OH_YEAR))OH_YEAR=ys[0];
+  const cnt=y=>all.filter(v=>+v.d.slice(0,4)===y).length;
+  document.getElementById('oh-years').innerHTML='<button type="button" onclick="switchPage(\'chart\')">📊 現行 '+OH_NOW+'</button>'+ys.map(y=>'<button type="button" class="'+(y===OH_YEAR?'on':'')+'" onclick="OH_YEAR='+y+';renderHistory();document.getElementById(\'yearSel\').value=\''+y+'\'">'+y+'<small>'+cnt(y)+' 次</small></button>').join('');
+  const list=all.filter(v=>+v.d.slice(0,4)===OH_YEAR);
+  document.getElementById('oh-intro').textContent=OH_YEAR+' 年共 '+list.length+' 次組織架構更新（資料來自每次發給台北的組織架構 update 信與附件）。點圖可放大。'+(OH_YEAR===ys[0]?' 現在的組織圖請看「📊 組織圖」。':'');
+  const L=window.ORG_IMG_LABEL||{};
+  document.getElementById('oh-list').innerHTML=list.length?list.slice().reverse().map(v=>{const im=v.img||{};const hc=v.hc||{};
+    const hcs=[hc.admin!=null?'管理部 '+hc.admin+' 人':'',hc.plan!=null?'規劃 '+hc.plan+' 人':'',hc.total!=null?'全廠 '+hc.total+' 人':''].filter(Boolean);
+    return '<div class="oh-card"><h3><span class="d">'+ohEsc(v.d)+'</span>'+ohEsc(v.t)+'</h3><div class="src">📧 '+ohEsc(v.src)+'</div>'
+     +(hcs.length?'<div class="hc">'+hcs.map(x=>'<span>👥 '+ohEsc(x)+'</span>').join('')+'</div>':'')
+     +'<ul>'+(v.n||[]).map(x=>'<li>'+ohEsc(x)+'</li>').join('')+'</ul>'
+     +(Object.keys(im).length?'<div class="oh-imgs">'+Object.entries(im).map(([k,f])=>{const lab=(L[k]||[k])[0];return '<figure onclick="ohOpen(\''+ohEsc(f)+'\',\''+ohEsc(v.d+' · '+lab)+'\')"><img loading="lazy" src="'+OH_IMG_BASE+ohEsc(f)+'" alt="'+ohEsc(lab)+'"><figcaption>'+ohEsc(lab)+'</figcaption></figure>'}).join('')+'</div>':'<div class="src">這次只有文字說明，圖沿用前一版。</div>')
+     +'</div>'}).join(''):'<div class="oh-empty">這一年沒有資料</div>';
+}
+function ohOpen(f,t){const lb=document.getElementById('oh-lb');document.getElementById('oh-img').src=OH_IMG_BASE+f;document.getElementById('oh-dl').href=OH_IMG_BASE+f;document.getElementById('oh-lb-t').textContent=t;document.getElementById('oh-stage').className='stage fit';document.getElementById('oh-fit').textContent='🔍 放大';lb.classList.add('on');}
+function ohClose(){document.getElementById('oh-lb').classList.remove('on');}
+function ohFit(){const st=document.getElementById('oh-stage');const fit=st.classList.toggle('fit');document.getElementById('oh-fit').textContent=fit?'🔍 放大':'↙ 縮小';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')ohClose();});
+(function(){const go=()=>{ohInitSel();const m=location.hash.match(/^#org-(\d{4})$/);if(m){OH_YEAR=+m[1];switchPage('history');}};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();})();
 </script>
 </body>
 </html>
