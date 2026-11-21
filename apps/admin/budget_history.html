@@ -408,9 +408,9 @@ async function payByDept(ym){
  if(DCACHE['p'+ym])return DCACHE['p'+ym];
  const man=await getJ(HRPAY_URL+'?action=smartManifest&tool=hrpay_payroll');const ks=Object.keys(man.hashes||{}).filter(k=>new RegExp('^m:'+ym+':p\\d').test(k));if(!ks.length)return null;
  const by={};const xl=(r,col)=>{const c=(r._excel&&r._excel.cells)||{};let best=null,br=null;Object.keys(c).forEach(k=>{const m=k.match(/^([A-Z]+)(\d+)$/);if(!m||m[1]!==col)return;if(br===null||+m[2]>br){br=+m[2];best=c[k]&&c[k].v}});return best==null?null:Number(best)||0};
- for(const k of ks){const d=await getJ(HRPAY_URL+'?action=smartBucket&tool=hrpay_payroll&bucket='+encodeURIComponent(k));(d.records||[]).forEach(rec=>{const r=rec.row;if(!r||r.id==null)return;
+ const ds=await Promise.all(ks.map(k=>getJ(HRPAY_URL+'?action=smartBucket&tool=hrpay_payroll&bucket='+encodeURIComponent(k))));for(const d of ds){(d.records||[]).forEach(rec=>{const r=rec.row;if(!r||r.id==null)return;
   let AG=xl(r,'AG');if(AG==null)AG=Number(r.subtotal)||0;let S=xl(r,'S');if(S==null)S=Number(r.advGiven)||0;let OT=xl(r,'AE');const nm=String(r.dept||'?').replace(/[​]/g,'').replace(/\s+/g,' ').trim().replace(/^line\s*(\d+)$/i,'L$1');
-  const o=by[nm]=by[nm]||{n:0,g:0,f:0,m:0};o.n++;o.g+=AG+S;if(/^(f|female|ស្រី)/i.test(String(r.gender||'')))o.f++;else o.m++;});}
+  const o=by[nm]=by[nm]||{n:0,g:0,f:0,m:0};o.n++;o.g+=AG+S;if(/^(f|female|ស)/i.test(String(r.gender||'').trim()))o.f++;else o.m++;});}
  return DCACHE['p'+ym]=by;
 }
 async function deptDetail(key,o){
@@ -434,7 +434,7 @@ async function deptDetail(key,o){
 function idxPrevPay(ym){const d=new Date(+ym.slice(0,4),+ym.slice(5)-2,1);const p=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');return M.src('lab',p)==='pay'?p:null}
 const GAMAP=[['utilities',/^electric|^water/],['security',/^security/],['repairs',/repair|fire_ext|mainten/],['supplies',/paper|stationery|cleaning|toilet|mask|application_form|banner|drink/],['meal',/kitchen|food/],['gasoline',/gasoline|^gas$|fuel|diesel/],['medical',/clinic|medic/]];
 function gaCat(src,cat){if(src==='repair')return 'repairs';const c=String(cat||'').toLowerCase();for(const [k,re] of GAMAP)if(re.test(c))return k;return 'misc_purchase'}
-async function gaMonth(ym){if(DCACHE['g'+ym])return DCACHE['g'+ym];const out=[];for(const s of ['general','purchase','repair']){try{const d=await getJ(GAEXP_URL+'?action=smartBucket&tool=expense&bucket='+encodeURIComponent('m:'+ym+':'+s));(d.records||[]).forEach(x=>{const r=x.row||{};out.push({src:s,cat:r.category||s,lab:r.categoryLabel||r.category||s,date:r.date||'',item:r.item||r.description||'',sup:r.supplier||'',qty:r.qty,unit:r.unit||'',amt:Number(r.amount)||0,purpose:r.purpose||'',k:gaCat(s,r.category)})})}catch(e){}}return DCACHE['g'+ym]=out}
+async function gaMonth(ym){if(DCACHE['g'+ym])return DCACHE['g'+ym];const out=[];const SR=['general','purchase','repair'];const DS=await Promise.all(SR.map(s=>getJ(GAEXP_URL+'?action=smartBucket&tool=expense&bucket='+encodeURIComponent('m:'+ym+':'+s)).catch(()=>({}))));for(let si2=0;si2<3;si2++){const s=SR[si2];try{const d=DS[si2];(d.records||[]).forEach(x=>{const r=x.row||{};out.push({src:s,cat:r.category||s,lab:r.categoryLabel||r.category||s,date:r.date||'',item:r.item||r.description||'',sup:r.supplier||'',qty:r.qty,unit:r.unit||'',amt:Number(r.amount)||0,purpose:r.purpose||'',k:gaCat(s,r.category)})})}catch(e){}}return DCACHE['g'+ym]=out}
 const NOTE_FIXED={rent:['工廠租金、宿舍租金、公司車租金（合約固定；2021 合約：工廠 $24,840、宿舍 $6,360、車 $5,800／月）','Factory, staff-house and car rent (fixed contracts; 2021: factory $24,840, staff house $6,360, car $5,800 / month)'],
  depreciation:['折舊是 ERP 依資產自動提列，沒有逐筆費用','Depreciation is booked automatically from the asset register'],insurance:['保險費（年度保單分攤）','Insurance (annual policies spread monthly)'],
  freight:['出口／進口運費，隨出貨量變動','Import / export freight, varies with shipments'],nssf:['公司負擔社保＝工資 × 費率（職業風險 0.8%＋健康 2.6%＋退休金 2%）','Company NSSF = wages × rate (0.8% risk + 2.6% health + 2% pension)'],
