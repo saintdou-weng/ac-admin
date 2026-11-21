@@ -165,7 +165,7 @@ const FUSE={
  erp:{css:'.rail{display:none!important}.app{grid-template-columns:minmax(0,1fr)!important}',menu:'#menuBtn'},
  ga:{css:'#ga-sidebar,.backdrop{display:none!important}.shell{display:block!important}.main-shell{grid-column:auto!important}',menu:'[data-action="menu"]'}
 };
-const frames={},status=get('vrt_os_status_v1',{}),menus=get('vrt_os_menu_v2',{});
+const frames={},status=get('vrt_os_status_v1',{}),menus=get('vrt_os_menu_v3',{});
 let cur='home',curKey='',recents=get('vrt_os_recent_v1',[]),syncing=false,shut=new Set(get('vrt_os_shut_v1',[]));
 
 /* ---------- menu data: live from each system, seed list until its first visit ---------- */
@@ -181,12 +181,20 @@ function harvest(s){
   const sp=spans.find(x=>!x.classList.contains('ic')&&!x.classList.contains('ct')&&!x.classList.contains('nav-count')&&x.textContent.trim().length>1);
   const label=(sp?sp.textContent:el.textContent).replace(/\s+/g,' ').trim();if(!label)return;
   const ic=el.querySelector('.ic'),bd=spans.filter(x=>x!==sp&&x!==ic).map(x=>x.textContent.trim()).filter(Boolean).join(' ').slice(0,12);
-  seen.add(k);items.push({k,zh:label,en:label,g,ge:g,ic:ic?ic.textContent.trim():'',bd});
+  seen.add(k);items.push({k,label,g,ic:ic?ic.textContent.trim():'',bd});
  });
  if(items.length>=3){
-  const seed=new Map((s.pages||[]).map(p=>[p.k,p]));items.forEach(it=>{const p=seed.get(it.k);if(p&&!it.ic)it.ic=p.ic});
+  /* 2026-11-21 語言分開存：抓到的字是中文就放 zh、英文放 en、高棉文放 km；另一種語言沿用上次抓到的或內建清單，切換語言時才不會中英混雜 */
+  const seed=new Map((s.pages||[]).map(p=>[p.k,p])),prev=new Map(((menus[s.id]||{}).items||[]).map(p=>[p.k,p]));
+  const slot=x=>/[\u1780-\u17ff]/.test(x)?'km':/[\u3400-\u9fff]/.test(x)?'zh':'en';
+  const gmap={};(s.pages||[]).forEach(p=>{if(p.g)gmap[p.g]=p;if(p.ge)gmap[p.ge]=p});
+  items.forEach((it,i)=>{const p=prev.get(it.k)||{},sd=seed.get(it.k)||{};const ok=(v,l)=>v&&slot(v)===l?v:'';const o={k:it.k,zh:ok(p.zh,'zh')||ok(sd.zh,'zh'),en:ok(p.en,'en')||ok(sd.en,'en'),km:ok(p.km,'km')||ok(sd.km,'km'),g:ok(p.g,'zh')||ok(sd.g,'zh'),ge:ok(p.ge,'en')||ok(sd.ge,'en'),gk:p.gk||'',ic:it.ic||p.ic||sd.ic||'',bd:it.bd};
+   o[slot(it.label)]=it.label;
+   if(it.g){const gs=slot(it.g);if(gs==='zh')o.g=it.g;else if(gs==='en')o.ge=it.g;else o.gk=it.g;const gp=gmap[it.g];if(gp){o.g=o.g||gp.g;o.ge=o.ge||gp.ge}}
+   if(!o.zh)o.zh=o.en||it.label;if(!o.en)o.en=o.zh;if(!o.ge)o.ge=o.g;if(!o.g)o.g=o.ge;
+   items[i]=o});
   const old=JSON.stringify((menus[s.id]||{}).items||[]);menus[s.id]={items,at:Date.now()};
-  if(old!==JSON.stringify(items)){put('vrt_os_menu_v2',menus);drawMenu();if(cur==='home')drawLanes()}
+  if(old!==JSON.stringify(items)){put('vrt_os_menu_v3',menus);drawMenu();if(cur==='home')drawLanes()}
  }
 }
 function fuse(s){const F=FUSE[s.id];if(!F)return;
@@ -201,7 +209,7 @@ function open(id,k,opts){
  if(id==='admin'){const a=ADMIN.find(x=>x.k===k);if(!a)return goHome();if(a.go)return open(a.go[0],a.go[1],opts);if(!a.frame){location.href=a.k;return}}
  let f=frames[id];const url=target(s,k),bg=opts&&opts.background;
  if(!f){f=document.createElement('iframe');f.className='frame';f.title=s.name||nm(s);f.setAttribute('allow','clipboard-read; clipboard-write; fullscreen');f.dataset.loaded='0';
-  f.addEventListener('load',()=>{f.dataset.loaded='1';if(cur===id)$('loading').classList.remove('on');fuse(s);[300,2500,7000,16000].forEach(ms=>setTimeout(()=>harvest(s),ms));if(SUM[s.id])setTimeout(()=>paintSlide(s),50)});
+  f.addEventListener('load',()=>{f.dataset.loaded='1';f.dataset.lang=lang;setTimeout(()=>pushLang(id),60);if(cur===id)$('loading').classList.remove('on');fuse(s);[300,2500,7000,16000].forEach(ms=>setTimeout(()=>harvest(s),ms));if(SUM[s.id])setTimeout(()=>paintSlide(s),50)});
   $('stage').appendChild(f);frames[id]=f;f.src=url;if(!bg){$('loading').textContent=t('正在開啟 ','Opening ','កំពុងបើក ')+nm(s)+'…';$('loading').classList.add('on')}}
  else if(k){try{if(s.mode==='hash'&&f.dataset.loaded==='1'&&f.contentWindow.location.href.split('#')[0]===s.url.split('#')[0])f.contentWindow.location.hash=k;else{f.dataset.loaded='0';f.src=url}}catch(e){f.src=url}}
  if(bg)return;
@@ -296,7 +304,7 @@ function carInit(){const car=$('car');if(!car)return;const n=SYS.length;requestA
 
 /* ---------- the left menu ---------- */
 const HIDE=/^(telegram|settings|architecture|sources)$/; /* housekeeping pages stay inside each system's own 設定 */
-function groupsOf(s){const out=[];pages(s).forEach(p=>{const g=(lang==='zh'?p.g:(p.ge||p.g))||'';let x=out[out.length-1];if(!x||x.g!==g){x={g,items:[]};out.push(x)}x.items.push(p)});return out}
+function groupsOf(s){const out=[];pages(s).forEach(p=>{const g=(lang==='zh'?p.g:lang==='km'?(p.gk||p.ge||p.g):(p.ge||p.g))||'';let x=out[out.length-1];if(!x||x.g!==g){x={g,items:[]};out.push(x)}x.items.push(p)});return out}
 function drawMenu(){
  const q=$('find').value.trim().toLowerCase(),ws=q?q.split(/\s+/):[];
  const hit=(s,p)=>!ws.length||ws.every(w=>(p.zh+' '+p.en+' '+p.k+' '+(p.g||'')+' '+(p.ge||'')+' '+s.zh+' '+s.en+' '+(s.tag||'')).toLowerCase().includes(w));
@@ -345,7 +353,16 @@ function drawHome(){
 }
 function drawLanes(){const el=$('lanes');if(!el||!drawLanes.lane)return;el.innerHTML=SYS.map(drawLanes.lane).join('');el.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>open(b.dataset.open,b.dataset.k))}
 function chrome(){ $('brandsub').textContent=t('行政中心 · Vantage River Textiles','Admin Center · Vantage River Textiles','Vantage River Textiles');$('find').placeholder=t('找頁面：薪資、訂單、宿舍…','Find a page…','ស្វែងរកទំព័រ…');$('upd').innerHTML='↻ '+E(t('全部更新','Update all','ធ្វើបច្ចុប្បន្នភាព'));$('lang').value=lang;document.documentElement.lang=lang==='zh'?'zh-Hant':lang}
-$('lang').onchange=()=>{lang=$('lang').value;put('ac_admin_lang',lang);chrome();drawMenu();if(cur==='home')drawHome()};
+/* 2026-11-21 切語言要從頭到尾：外框、選單、首頁，加上已開著的各系統頁面一起切 */
+function pushLang(id){const f=frames[id];if(!f||f.dataset.loaded!=='1')return;let w;try{w=f.contentWindow;if(!w||!w.document)return}catch(e){return}
+ const n=lang==='zh'?0:lang==='en'?1:2;
+ try{if(id==='hr'||id==='erp'){if(typeof w.setLang==='function'&&w.LANG!==n)w.setLang(n)}
+  else if(id==='ga'){const b=w.document.createElement('button');b.dataset.lang=lang;b.hidden=true;w.document.body.appendChild(b);b.click();b.remove()}
+  else if(id==='audit'){if(typeof w.setLang==='function')w.setLang(lang)}
+  else if(id==='admin'){if(f.dataset.lang!==lang){f.dataset.lang=lang;w.location.reload()}}
+ }catch(e){}
+ const s=byId(id);if(s)[500,1500].forEach(ms=>setTimeout(()=>harvest(s),ms));}
+$('lang').onchange=()=>{lang=$('lang').value;put('ac_admin_lang',lang);document.documentElement.lang=lang==='zh'?'zh-Hant':lang;chrome();drawMenu();if(cur==='home')drawHome();Object.keys(frames).forEach(pushLang)};
 $('upd').onclick=updateAll;$('brand').onclick=goHome;$('shade').onclick=closeMenu;
 $('find').oninput=drawMenu;
 $('find').onkeydown=e=>{if(e.key==='Enter'){const b=$('menu').querySelector('.it[data-open]');if(b)b.click()}else if(e.key==='Escape'){$('find').value='';drawMenu();$('find').blur()}};
