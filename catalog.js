@@ -72,7 +72,7 @@ window.AC_CATALOG = [
           "en": "2021",
           "km": "2021"
         },
-        "url": "resources/admin/salary_adjust_2021.xlsx"
+        "url": "https://drive.google.com/file/d/1fGi62G99BZkiMvN0XcB9_ulakP5junv0/view"
       },
       {
         "label": {
@@ -80,7 +80,7 @@ window.AC_CATALOG = [
           "en": "2022",
           "km": "2022"
         },
-        "url": "resources/admin/salary_adjust_2022.xlsx"
+        "url": "https://drive.google.com/file/d/19Z50voXPJvh_Ubp0guO-OkB8jgDzTks4/view"
       },
       {
         "label": {
@@ -88,7 +88,7 @@ window.AC_CATALOG = [
           "en": "2026",
           "km": "2026"
         },
-        "url": "resources/admin/salary_adjust_2026.xlsx"
+        "url": "https://drive.google.com/file/d/1ehG-cNvryCZiK379bR47PfuTnuBh1I0x/view"
       }
     ],
     "search": "年度調薪 annual salary adjustment 2021 2022 2026"
