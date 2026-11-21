@@ -39,18 +39,21 @@ ol{margin:6px 0 0;padding-left:20px;color:var(--mut);font-size:13.5px}li{margin:
  <div class="drop" id="drop"><b>📥 點這裡選新版檔案，或把檔案拖進來</b><span class="mut">可以放 <b style="display:inline;font-size:inherit">.html</b> 或整包 <b style="display:inline;font-size:inherit">.zip</b>（會自動找出裡面的 seasons_express.html）</span></div>
  <input type="file" id="file" accept=".html,.htm,.zip,text/html,application/zip" hidden>
  <div class="bar" id="bar"><i></i></div><div id="msg"></div>
- <ol><li>匯入後，<b>這台裝置</b>馬上改用新版，不用等任何人。</li><li>匯入的版本存在這台裝置的瀏覽器裡；<b>其他手機／電腦不會跟著變</b>，要每台各匯入一次，或請 AI 把它推成「內建版」。</li><li>清除瀏覽器網站資料會把匯入版清掉，回到內建版。</li></ol>
+ <ol><li>匯入後，<b>這台裝置</b>馬上改用新版，同時<b>自動上傳雲端</b>。</li><li>其他手機／電腦只要打開這一頁，就會<b>自動下載同一版</b>，不用再匯入。</li><li>上傳要用安裝行政中心的 Google 帳號連線（第一次會跳出連線視窗）；下載不用登入。</li></ol>
 </div>
 
 <h2>版本管理</h2>
 <div class="card">
  <div class="row"><div class="grow"><b>內建版</b><span class="tag" id="bTag">線上</span><div class="mut" id="bInfo">…</div></div><a class="btn" href="seasons_express.html?builtin=1">開啟</a></div>
  <hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
- <div class="row"><div class="grow"><b>本機匯入版</b><span class="tag" id="iTag">沒有</span><div class="mut" id="iInfo">還沒有匯入過。</div></div>
+ <div class="row"><div class="grow"><b>雲端版</b><span class="tag" id="cTag">…</span><div class="mut" id="cInfo">檢查中…</div></div><button id="up" style="display:none">☁ 上傳到雲端</button></div>
+ <hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
+ <div class="row"><div class="grow"><b>這台裝置的匯入版</b><span class="tag" id="iTag">沒有</span><div class="mut" id="iInfo">還沒有匯入過。</div></div>
   <a class="btn" id="dl" download="seasons_express.html" href="seasons_express.html" style="display:none">⬇ 下載</a><button class="danger" id="reset" style="display:none">↩ 改回內建版</button></div>
 </div>
 <div class="mut" id="sw"></div>
 </div>
+<script src="../../config.js"></script><script src="../../shared/admin-core.js"></script>
 <script>
 (function(){
 const CACHE='vrt-world-import-v1',KEY='imported/seasons_express.html',META='vrtWorldImportMeta';
@@ -58,10 +61,12 @@ const $=id=>document.getElementById(id),mb=n=>(n/1048576).toFixed(1);
 const say=(cls,t)=>{const m=$('msg');m.className=cls;m.textContent=t;};
 const meta=()=>{try{return JSON.parse(localStorage.getItem(META)||'null');}catch(e){return null;}};
 const when=s=>{const d=new Date(s);return isNaN(d)?'':d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');};
-let builtin=null,swReady=false;
+let builtin=null,swReady=false,cloud=null,busy=false;
+const HUB=()=>{try{return window.Admin.hubConfig().url||'';}catch(e){return (window.AC_CONFIG||{}).hubUrl||'';}};
+const bar=p=>{$('bar').style.display=p==null?'none':'block';if(p!=null)$('bar').firstElementChild.style.width=p+'%';};
 
 /* the service worker is what makes the imported copy answer at the normal address */
-if('serviceWorker' in navigator&&window.caches){navigator.serviceWorker.register('sw.js',{scope:'./'}).then(()=>navigator.serviceWorker.ready).then(()=>{swReady=true;paint();}).catch(e=>{$('sw').textContent='⚠ 這個瀏覽器無法啟用匯入功能（'+e.message+'），只能用內建版。';});}
+if('serviceWorker' in navigator&&window.caches){navigator.serviceWorker.register('sw.js',{scope:'./'}).then(()=>navigator.serviceWorker.ready).then(()=>{swReady=true;paint();syncDown();}).catch(e=>{$('sw').textContent='⚠ 這個瀏覽器無法啟用匯入功能（'+e.message+'），只能用內建版。';});}
 else $('sw').textContent='⚠ 這個瀏覽器不支援匯入功能（需要 https 與一般模式，無痕模式不行），只能用內建版。';
 
 fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.json()).then(j=>{builtin=j;paint();}).catch(()=>paint());
@@ -69,8 +74,13 @@ fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.json()).then(j=
 async function hasImport(){if(!window.caches)return false;try{return !!(await (await caches.open(CACHE)).match(KEY));}catch(e){return false;}}
 async function paint(){
  const m=meta(),imp=await hasImport();
+ if(cloud===null){$('cTag').textContent='…';$('cInfo').textContent='檢查中…';}
+ else if(cloud===false){$('cTag').textContent='連不上';$('cTag').className='tag new';$('cInfo').textContent='現在連不到雲端，先用這台裝置上的版本。';}
+ else if(!cloud.rev){$('cTag').textContent='沒有';$('cTag').className='tag';$('cInfo').textContent='雲端還沒有匯入版，所有裝置用內建版。';}
+ else{const same=imp&&m&&m.rev===cloud.rev;$('cTag').textContent=same?'已同步 ✓':'有新版';$('cTag').className=same?'tag on':'tag new';$('cInfo').textContent=((cloud.meta&&(cloud.meta.title||cloud.meta.version))||'')+'　'+mb((cloud.meta&&cloud.meta.bytes)||0)+' MB　'+when(cloud.updatedAt);}
+ $('up').style.display=imp&&m&&cloud!==null&&!(cloud&&cloud.rev&&m.rev===cloud.rev)&&!busy?'':'none';
  $('bInfo').textContent=builtin?builtin.version+'　'+builtin.date+'　'+(builtin.note||'')+'　約 '+mb(builtin.bytes)+' MB':'讀不到版本資訊';
- if(imp&&m){$('curV').textContent=(m.version||'匯入版')+' ・本機匯入版';$('curD').textContent=(m.name||'')+'　匯入於 '+when(m.at);$('curS').textContent=mb(m.bytes);
+ if(imp&&m){$('curV').textContent=(m.version||'匯入版')+(cloud&&cloud.rev&&m.rev===cloud.rev?' ・雲端同步版':' ・匯入版');$('curD').textContent=(m.name||'')+'　匯入於 '+when(m.at);$('curS').textContent=mb(m.bytes);
   $('iTag').textContent='使用中';$('iTag').className='tag on';$('iInfo').textContent=(m.title||m.version||'')+'　'+mb(m.bytes)+' MB　'+when(m.at);$('dl').style.display='';$('reset').style.display='';$('bTag').textContent='備用';$('bTag').className='tag';
   if(builtin&&builtin.date&&m.at&&new Date(builtin.date+'T00:00:00')>new Date(m.at)){$('bTag').textContent='比匯入版新';$('bTag').className='tag new';}}
  else{$('curV').textContent=(builtin?builtin.version:'')+' ・內建版';$('curD').textContent=builtin?builtin.date+'　'+(builtin.note||''):'';if(builtin)$('curS').textContent=mb(builtin.bytes);
@@ -94,6 +104,9 @@ const RET='<script id="vrt-os-return">/* VRT OS: when this page is opened inside
 
 async function importFile(file){
  if(!swReady){say('bad','匯入功能還沒準備好，請重新整理這一頁再試一次。');return;}
+ if(busy){say('info','上一個動作還在進行，請稍等。');return;}busy=true;
+ const signIn=window.Admin?window.Admin.ensureAuth().then(()=>true,e=>e):Promise.resolve(new Error('no admin core'));
+ let stored=null;
  $('bar').style.display='block';$('bar').firstElementChild.style.width='15%';say('info','讀取中… '+file.name);
  try{
   let name=file.name,blob=file;if(/\.zip$/i.test(name)||file.type==='application/zip'||file.type==='application/x-zip-compressed'){const z=await fromZip(file);name=z.name;blob=z.blob;}
@@ -109,15 +122,60 @@ async function importFile(file){
   if(navigator.storage&&navigator.storage.persist)try{await navigator.storage.persist();}catch(e){}
   const c=await caches.open(CACHE);await c.put(KEY,new Response(body,{headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'}}));
   if(!(await c.match(KEY)))throw new Error('存不進這台裝置（空間不足？）');
-  localStorage.setItem(META,JSON.stringify({name,title,version:ver,bytes:body.size,at:new Date().toISOString()}));
-  $('bar').firstElementChild.style.width='100%';say('ok','✅ 已匯入 '+(ver||name)+'（'+mb(body.size)+' MB）。這台裝置現在開的就是這一版。');
+  localStorage.setItem(META,JSON.stringify({name,title,version:ver,bytes:body.size,at:new Date().toISOString()}));stored=body;
+  say('ok','✅ 已匯入 '+(ver||name)+'（'+mb(body.size)+' MB）。這台裝置現在開的就是這一版。接著上傳雲端…');
  }catch(e){say('bad','❌ '+(e&&e.message||e));}
- setTimeout(()=>{$('bar').style.display='none';},600);paint();
+ await paint();
+ if(stored){const ok=await signIn;if(ok===true)await upload(stored);else say('info','✅ 這台裝置已換成新版；☁ 雲端還沒上傳（'+((ok&&ok.message)||'未連線')+'）。按下面「上傳到雲端」再試一次。');}
+ busy=false;bar(null);paint();
 }
 
 const drop=$('drop'),file=$('file');drop.onclick=()=>file.click();file.onchange=()=>{if(file.files[0])importFile(file.files[0]);file.value='';};
 ['dragenter','dragover'].forEach(k=>drop.addEventListener(k,e=>{e.preventDefault();drop.classList.add('over');}));['dragleave','drop'].forEach(k=>drop.addEventListener(k,e=>{e.preventDefault();drop.classList.remove('over');}));
 drop.addEventListener('drop',e=>{const f=e.dataTransfer.files[0];if(f)importFile(f);});
-$('reset').onclick=async()=>{if(!confirm('改回內建版？這台裝置上的匯入版會被移除。'))return;try{await (await caches.open(CACHE)).delete(KEY);}catch(e){}localStorage.removeItem(META);say('ok','已改回內建版。');paint();};
+$('reset').onclick=async()=>{
+ const shared=cloud&&cloud.rev;
+ if(!confirm(shared?'改回內建版？\n\n雲端的匯入版也會一起取消，所有裝置都回到內建版。':'改回內建版？這台裝置上的匯入版會被移除。'))return;
+ if(shared){try{await window.Admin.ensureAuth();await post('worldClear',{});cloud={ok:true,rev:0};}catch(e){say('bad','❌ 雲端取消失敗（'+e.message+'），沒有變更。');return;}}
+ try{await (await caches.open(CACHE)).delete(KEY);}catch(e){}localStorage.removeItem(META);say('ok',shared?'已改回內建版（所有裝置）。':'已改回內建版。');paint();};
+$('up').onclick=async()=>{if(busy)return;busy=true;try{await window.Admin.ensureAuth();const r=await (await caches.open(CACHE)).match(KEY);if(!r)throw new Error('這台裝置沒有匯入版');await upload(await r.blob());}catch(e){say('bad','❌ 上傳失敗：'+e.message);}busy=false;bar(null);paint();};
+
+/* ---- cloud: the imported page travels gzip+base64 in 45k pieces through the Admin Center script ---- */
+const PART=45000;
+async function call(url,opt){const c=new AbortController(),t=setTimeout(()=>c.abort(),150000);try{const r=await fetch(url,{...opt,signal:c.signal,redirect:'follow'});if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();if(!d||d.ok===false||d.error)throw new Error(String((d&&d.error)||'雲端拒絕'));return d;}finally{clearTimeout(t);}}
+async function post(action,payload){const token=await window.Admin.ensureAuth();return call(HUB(),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({...payload,action,session:token})});}
+const get=q=>call(HUB()+'?'+new URLSearchParams(q).toString(),{});
+async function retry(fn,n=3){let last;for(let i=0;i<n;i++){try{return await fn();}catch(e){last=e;if(/AUTH_REQUIRED|expired|Invalid|WORLD_REV_CHANGED/.test(e.message))break;await new Promise(r=>setTimeout(r,1500*(i+1)));}}throw last;}
+function b64(u8){let out='';const step=0x8000*3;for(let i=0;i<u8.length;i+=step)out+=btoa(String.fromCharCode.apply(null,u8.subarray(i,i+step)));return out;}
+async function upload(blob){
+ if(!window.CompressionStream){say('info','✅ 這台裝置已換成新版；這個瀏覽器不能上傳雲端（太舊），請用電腦 Chrome 匯入一次。');return;}
+ try{
+  bar(5);say('info','☁ 壓縮中…');const gz=new Uint8Array(await new Response(blob.stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer()),text=b64(gz),parts=[];for(let i=0;i<text.length;i+=PART)parts.push(text.slice(i,i+PART));
+  const m=meta()||{},begin=await retry(()=>post('worldBegin',{count:parts.length,meta:{name:m.name,title:m.title,version:m.version,bytes:blob.size,gz:gz.length}}));
+  for(let i=0;i<parts.length;i+=28){say('info','☁ 上傳雲端中… '+Math.round(i/parts.length*100)+'%');bar(10+i/parts.length*85);await retry(()=>post('worldChunk',{rev:begin.rev,from:i,parts:parts.slice(i,i+28)}));}
+  cloud=await retry(()=>post('worldCommit',{rev:begin.rev}));
+  localStorage.setItem(META,JSON.stringify({...m,rev:cloud.rev,source:'cloud'}));bar(100);say('ok','✅ 已匯入並上傳雲端：'+(m.version||m.name||'')+'。其他裝置打開這一頁就會自動換成這一版。');
+ }catch(e){say('info','✅ 這台裝置已換成新版；☁ 雲端上傳沒完成（'+e.message+'），雲端仍是原來的版本。按「上傳到雲端」再試一次。');}
+}
+async function syncDown(){
+ try{cloud=await retry(()=>get({action:'worldMeta',t:Date.now()}),2);}catch(e){cloud=false;paint();return;}
+ const m=meta(),imp=await hasImport();
+ if(!cloud.rev){if(imp&&m&&m.source==='cloud'){try{await (await caches.open(CACHE)).delete(KEY);}catch(e){}localStorage.removeItem(META);say('info','雲端的匯入版已取消，這台裝置回到內建版。');}paint();return;}
+ if(imp&&m&&m.rev===cloud.rev){paint();return;}
+ if(busy||!window.DecompressionStream){paint();return;}
+ busy=true;paint();
+ try{
+  const chunks=[];for(let from=0;from<cloud.count;){say('info','☁ 雲端有新版 '+((cloud.meta&&cloud.meta.version)||'')+'，下載中… '+Math.round(from/cloud.count*100)+'%');bar(5+from/cloud.count*85);
+   const r=await retry(()=>get({action:'worldGet',rev:cloud.rev,from}));for(const s of r.parts){const bin=atob(s),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);chunks.push(u);}from+=r.parts.length;}
+  const html=await new Response(new Blob(chunks).stream().pipeThrough(new DecompressionStream('gzip'))).blob();
+  if(cloud.meta&&cloud.meta.bytes&&html.size!==cloud.meta.bytes)throw new Error('下載的檔案大小不對');
+  const tail=await html.slice(Math.max(0,html.size-200)).text();if(!/<\/html>\s*$/i.test(tail))throw new Error('下載的檔案不完整');
+  if(navigator.storage&&navigator.storage.persist)try{await navigator.storage.persist();}catch(e){}
+  const c=await caches.open(CACHE);await c.put(KEY,new Response(new Blob([html],{type:'text/html;charset=utf-8'}),{headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'}}));
+  localStorage.setItem(META,JSON.stringify({name:cloud.meta.name,title:cloud.meta.title,version:cloud.meta.version,bytes:html.size,at:cloud.updatedAt,rev:cloud.rev,source:'cloud'}));
+  bar(100);say('ok','✅ 已從雲端更新到 '+(cloud.meta.version||cloud.meta.title||'新版')+'。');
+ }catch(e){say('info','☁ 雲端有新版，但這次沒下載成功（'+e.message+'）。先用這台裝置原本的版本；重新整理可再試。');}
+ busy=false;setTimeout(()=>bar(null),600);paint();
+}
 })();
 </script></body></html>

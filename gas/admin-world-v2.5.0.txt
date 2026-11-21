@@ -1,0 +1,20 @@
+AC_ADMIN_CENTER · v2.5.0 world block (installed and deployed as web-app version 25 on 2026-11-21)
+
+What it does
+  The imported 3D page (apps/world/seasons_express.html) is shared between devices through the Admin Center script.
+  Stored gzip+base64 in sheet 'WorldPage' (columns rev, index, b64; 45k characters per cell, each prefixed 'b:').
+  Script properties: WORLD_CURRENT (live revision + meta), WORLD_PENDING (upload in progress).
+
+Actions
+  GET  ?action=worldMeta                 public   -> {ok, rev, count, meta, updatedAt}   (rev 0 = none)
+  GET  ?action=worldGet&rev=&from=       public   -> up to 36 pieces from index `from`
+  POST worldBegin  {count, meta}         session  -> {rev}
+  POST worldChunk  {rev, from, parts[]}  session  (requests stay under the 2 MB doPost limit: 28 pieces each)
+  POST worldCommit {rev}                 session  -> checks every piece is there, drops older revisions, makes it live
+  POST worldClear                        session  -> no shared page; every device falls back to the built-in file
+
+Where it is wired in 程式碼.gs
+  doGet : two lines before the 'summary' action.
+  doPost: four lines right after `const a=data.action||'';` (i.e. after auth_).
+  Functions worldSheet_ … worldClear_ sit just above auth_().
+Client: apps/world/index.html (upload(), syncDown()).
