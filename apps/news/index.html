@@ -286,4 +286,36 @@ function bind(){document.addEventListener('click',async e=>{const b=e.target.clo
  );document.addEventListener('submit',async e=>{e.preventDefault();if(e.target.id==='articleForm')await submitArticle(e.target);if(e.target.id==='taskForm')submitTask(e.target)});$('q').addEventListener('input',()=>{renderFeed();renderBookmarks()});$('drawerShade').addEventListener('click',closeDrawer);$('accentColor').addEventListener('input',e=>{pref().accent=e.target.value;commit();applyTheme()});$('veil').addEventListener('input',e=>{pref().veil=Number(e.target.value)/100;$('veilValue').textContent=e.target.value+'%';commit();applyTheme()});$('bgImageInput').addEventListener('change',e=>{if(e.target.files[0])setBackgroundImage(e.target.files[0])});$('lang').addEventListener('change',e=>{pref().language=e.target.value;commit();renderAll()});$('fileInput').addEventListener('change',e=>{if(e.target.files[0])doImport(e.target.files[0])});document.addEventListener('change',e=>{if(e.target.id==='articlePhoto'){$('photoFileName').textContent=e.target.files[0]?.name||'未選圖片'}});document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeReader();closeDrawer()}if(e.key==='ArrowRight'&&$('readerRoot').innerHTML)jumpReader(readerIndex+1);if(e.key==='ArrowLeft'&&$('readerRoot').innerHTML)jumpReader(readerIndex-1)});attachSwipe()}
 renderAll();bind();setView(pref().view||'feed');
 
-</script></body></html>
+</script>
+<script>
+/* 2026-11-22 Paul：新聞「自動雲端更新」——像之前 Gemini／ChatGPT 的排程一樣，每週固定哪天、幾點、發什麼類新聞。
+   Claude 每天 06:40（金邊）讀 feed/schedules.json，到了該發的那天就上網整理過去 7 天新聞，寫進 feed/latest.json；
+   AC_ADMIN_CENTER 時間到自動發到行政中心群組（附「打開新聞」鈕）。這頁每次打開都讀同一份 → 文章自動更新、排程顯示雲端實際的那份。 */
+(function(){
+ 'use strict';
+ const nowMs=Date.now();
+ Promise.all([fetch('feed/latest.json?t='+nowMs,{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null),fetch('feed/schedules.json?t='+nowMs,{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null)]).then(([feed,sch])=>{
+  if(!feed&&!sch)return;
+  const old={};db.articles.forEach(a=>{if(a.kind==='cloud')old[a.id]=a});
+  const fresh=[];
+  ((feed&&feed.issues)||[]).forEach(is=>{const t=Date.parse(is.sendAt||is.created||'')||nowMs;if(t>Date.now())return;   /* 還沒到發送時間的先不顯示 */
+   const id='cloud_'+is.id,o=old[id]||{};
+   fresh.push({id,category:is.cat||'world',title:is.title,summary:is.headline||'',body:is.body||'',source:'Saintdou NEWS · 每週整理',sourceUrl:'',imageUrl:'',kind:'cloud',tags:['雲端',is.title],createdAt:t,updatedAt:t,saved:!!o.saved,read:!!o.read});
+   (is.items||[]).forEach((it,j)=>{const iid=id+'_'+j,oo=old[iid]||{};const body=[it.summary,it.why?'🏭 對 VRT：'+it.why:'',it.titleEn?'EN: '+it.titleEn:'',it.date?'📅 '+it.date:''].filter(Boolean).join('\n\n');
+    fresh.push({id:iid,category:it.cat||is.cat||'world',title:it.title,summary:it.summary||'',body,source:it.source||'',sourceUrl:it.url||'',imageUrl:'',kind:'cloud',tags:[is.title],createdAt:t-(j+1)*1000,updatedAt:t,saved:!!oo.saved,read:!!oo.read})})});
+  db.articles=db.articles.filter(a=>a.kind!=='cloud').concat(fresh);
+  if(fresh.length){db.articles=db.articles.filter(a=>a.kind!=='demo');pref().demoCleared=true}   /* 有真新聞了 → 示範卡收起來 */
+  if(sch&&Array.isArray(sch.tasks)){
+   const cloud=sch.tasks.map(t=>({id:'cloud_'+t.id,title:(t.active?'☁ ':'')+t.title,status:t.active?'active':'paused',frequency:'weekly',weekdays:t.weekdays||[],monthDay:1,onceDate:'',time:t.time,channels:{telegram:!!t.telegram,email:false,webhook:false},prompt:t.prompt||'',cloud:true}));
+   const covered=/^(task_0[123])$/;
+   db.tasks=cloud.concat(db.tasks.filter(t=>!t.cloud&&!covered.test(t.id)).map(t=>({...t,status:'paused'})));
+   const sec=document.getElementById('view-schedule');
+   if(sec){const h=sec.querySelector('h1');if(h)h.textContent='⏱️ 新聞排程（雲端自動發群組）';const sub=sec.querySelector('.lead .sub');if(sub)sub.textContent='☁ 標示的是實際執行中的排程：時間到自動發到行政中心群組';
+    const n=sec.querySelector('.notice');if(n)n.textContent='☁ 雲端排程：Claude 每天早上依排程整理新聞（過去 7 天、附來源連結），到了設定的星期幾、幾點，行政中心群組自動收到，這頁也同步更新。要新增、改哪天幾點或改主題，直接跟 Claude 說就好。其餘沒有 ☁ 的是舊排程草稿（已暫停）。';}
+  }
+  try{commit()}catch(e){}
+  renderAll();
+ });
+})();
+</script>
+</body></html>
