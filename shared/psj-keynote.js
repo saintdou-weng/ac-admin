@@ -11,7 +11,7 @@ if(G.PSJKN)return;
 var D=document,API=G.PSJKN={hook:hook};
 var SKIP='button,a[href],input,select,textarea,label,summary,[contenteditable],[onclick],[role=button],[data-action]';
 var NOGO='dialog,[role=dialog],[class*=modal i],[class*=drawer i],#drawer,#kn-mask,.pkn-mask,#hdWrap,nav,header,.side,.sidebar';
-var KSEL='.kpi,.stat,.kcard,.metric,.kpi-card,.stat-card,.sum-card,.mini-kpi,.kpis>*,.stats>*,.kpi-grid>*,.kpi-row>*,.cards-kpi>*,.report-card';
+var KSEL='.kc,.kcard,.kpi,.stat,.kcard,.metric,.kpi-card,.stat-card,.sum-card,.mini-kpi,.kpis>*,.stats>*,.kpi-grid>*,.kpi-row>*,.cards-kpi>*,.report-card';
 function txt(e){return String(e&&(e.innerText||e.textContent)||'').replace(/[ \t ]+/g,' ').replace(/\n\s*\n+/g,'\n').trim();}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 function ptr(w,e){try{return w.getComputedStyle(e).cursor==='pointer';}catch(x){return false;}}
@@ -31,7 +31,13 @@ function markDoc(doc){var w=doc.defaultView;if(!w||!doc.body)return;
    var bad=r.width<70||r.width>560||r.height<34||r.height>260||!/\d/.test(t)||t.length>180||k.closest(NOGO)||k.closest('.pkn-kpi')||k.querySelector('.pkn-kpi')||
      k.hasAttribute('onclick')||ptr(w,k)||k.closest('button,a,[onclick],[role=button]')||k.querySelector('button,a[href],input,select,textarea,[onclick],table,canvas,svg');
    if(bad){k.setAttribute('data-pkn-no','');continue;}
-   k.classList.add('pkn-kpi');}}
+   k.classList.add('pkn-kpi');}
+ /* v2.4 生產平台（有 VRTKeynote）／PSJKN_LOOSE：各頁 KPI 卡 class 名稱不一（.kc、.sc…）→ 同一排有 2 張以上同樣 class、有數字的小卡也算 */
+ if(w.VRTKeynote||w.PSJKN_LOOSE||w.__vrtKpiLoose){var ps=doc.querySelectorAll('div,section,ul');for(var q=0;q<ps.length&&q<8000;q++){var P=ps[q],ch=P.children,n=ch.length;if(n<2||n>24||P.__pknN===n)continue;P.__pknN=n;
+   var c0=ch[0].className;if(!c0||typeof c0!=='string'||ch[0].classList.contains('pkn-kpi'))continue;var same=[].filter.call(ch,function(c){return c.className===c0&&/^(DIV|LI|SECTION|ARTICLE)$/.test(c.tagName);});if(same.length<2||same.length<n*.6||P.closest(NOGO+',table,.pkn-box,#vkn,.sheet,[data-keynote="off"]'))continue;
+   same.forEach(function(k){if(k.classList.contains('pkn-kpi')||k.hasAttribute('data-pkn-no')||k.offsetParent===null)return;var r=k.getBoundingClientRect(),t=txt(k);
+     var bad=r.width<70||r.width>560||r.height<34||r.height>220||!/\d/.test(t)||t.length>120||t.split('\n').length<2||k.querySelector('.pkn-kpi')||k.hasAttribute('onclick')||ptr(w,k)||k.closest('button,a,[onclick],[role=button]')||k.querySelector('button,a[href],input,select,textarea,[onclick],table,canvas,svg,img');
+     if(bad){k.setAttribute('data-pkn-no','');return;}k.classList.add('pkn-kpi');});}}}
 
 function hook(doc){if(!doc||doc.__pkn)return;var w=doc.defaultView;if(!w)return;doc.__pkn=1;
  try{var st=doc.createElement('style');st.id='pkn-css';st.textContent='tbody tr.pkn-row{cursor:pointer}tbody tr.pkn-row:hover>td{filter:brightness(.97)}.pkn-kpi{cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}.pkn-kpi:hover{box-shadow:0 4px 14px rgba(15,23,42,.12)}.pkn-kpi:active{transform:scale(.97)}';(doc.head||doc.documentElement).appendChild(st);}catch(e){}
@@ -169,6 +175,6 @@ function openRows(tr){ui();STK=[];REG=[];var tb=tr.closest('tbody');S.kind='row'
 function openKpis(el){ui();STK=[];REG=[];var par=el.parentElement;S.kind='kpi';S.list=par?[].filter.call(par.children,function(x){return x.classList.contains('pkn-kpi')&&x.offsetParent!==null;}):[el];if(!S.list.length)S.list=[el];S.i=Math.max(0,S.list.indexOf(el));draw();}
 API.openRows=openRows;API.openKpis=openKpis;
 
-function start(){hook(D);frames();setInterval(frames,2000);}
+function start(){if(G.VRT_HUBS)return;   /* 生產平台入口頁本身有物品頁；分頁 iframe 各自載入 */hook(D);frames();setInterval(frames,2000);}
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',start);else start();
 })(window);
