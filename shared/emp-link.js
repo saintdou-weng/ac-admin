@@ -17,7 +17,9 @@ function loadIdx(){try{var raw=localStorage.getItem('vrt_emp_idx_v1');if(!raw){I
  (o.n||[]).forEach(function(r){var no=String(r[0]);IDX.set(no,{no:no,name:r[1]||'',dept:r[2]||'',status:r[3]||'',sex:r[4]||''});var nm=norm(r[1]);if(nm.length>=5)BYNAME.push([nm,no]);});
  BYNAME.sort(function(a,b){return b[0].length-a[0].length;});return true;}catch(e){IDX=null;return false;}}
 function norm(s){return String(s||'').toLowerCase().replace(/\s+/g,' ').trim();}
-var IDH=/工號|員工編號|編號|emp|staff|worker|\bid\b|id no|no\.?$|code|លេខ|អត្តលេខ/i;
+/* 2026-11-22：只認明確是「員工」的欄名／欄位；單純 No.／ID／編號／code（序號、培訓號、單號）不當工號 */
+var IDH=/工號|員工代號|員工編號|員工號|(^|[^a-z])emp(loyee)?([ ._-]*(no|id|#|code|number))?$|^emp|employee|staff[ ._-]*(#|no|id|code)?$|worker[ ._-]*(no|id)?$|factory[ ._-]*id|^fid$|^id_?no$|អត្តលេខ|លេខ(កាត|បុគ្គលិក|សម្គាល់)/i;
+var NOTEMP=/培訓|課程|訓練|course|training|序號|項次|單號|訂單|order|style|款|批|lot|bundle|room|房/i;
 function headerOf(td){try{var tb=td.closest('table');if(!tb||!tb.tHead)return '';var row=tb.tHead.rows[tb.tHead.rows.length-1];var i=0,c=0;for(var k=0;k<td.parentElement.cells.length;k++){if(td.parentElement.cells[k]===td)break;c+=td.parentElement.cells[k].colSpan||1;}
  for(var j=0;j<row.cells.length;j++){var sp=row.cells[j].colSpan||1;if(c>=i&&c<i+sp)return row.cells[j].textContent;i+=sp;}}catch(e){}return '';}
 /* 從點到的東西找員工：先看那一格本身，再看整列／整張卡 */
@@ -29,9 +31,9 @@ function findEmp(target){
  var named=null;for(var i=0;i<BYNAME.length;i++){if(low.indexOf(BYNAME[i][0])>=0){named=BYNAME[i][1];break;}}
  if(named&&(ids.length===0||ids.indexOf(named)>=0))return IDX.get(named);       /* 有全名（工號對得上或沒工號） */
  if(ids.length){
-  if(cell){var own=(cell.textContent||'').trim();if(IDX.has(own)&&(own===ids[0]||ids.indexOf(own)>=0)&&(IDH.test(headerOf(cell))||named===own))return IDX.get(own);}
-  for(var k=0;k<ids.length;k++){var e=IDX.get(ids[k]),first=norm(e.name).split(' ').filter(function(w){return w.length>=3;});if(first.some(function(w){return low.indexOf(w)>=0;}))return e;}  /* 工號＋名字的一部分 */
-  if(box.tagName==='TR'){var tds=box.cells;for(var j=0;j<tds.length;j++){var v=(tds[j].textContent||'').trim();if(IDX.has(v)&&IDH.test(headerOf(tds[j])))return IDX.get(v);}}
+  if(cell){var own=(cell.textContent||'').trim();var hh=headerOf(cell);if(IDX.has(own)&&(own===ids[0]||ids.indexOf(own)>=0)&&((IDH.test(hh)&&!NOTEMP.test(hh))||named===own))return IDX.get(own);}
+  for(var k=0;k<ids.length;k++){var e=IDX.get(ids[k]),first=norm(e.name).split(/[\s()（）\/]+/).filter(function(w){return w.length>=4;});if(first.some(function(w){return low.indexOf(w)>=0;}))return e;}  /* 工號＋名字的一部分 */
+  if(box.tagName==='TR'){var tds=box.cells;for(var j=0;j<tds.length;j++){var v=(tds[j].textContent||'').trim();var h2=headerOf(tds[j]);if(IDX.has(v)&&IDH.test(h2)&&!NOTEMP.test(h2))return IDX.get(v);}}
  }
  return null;}
 /* ── 監看各平台頁（同網域 iframe，含巢狀）── */
