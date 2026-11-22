@@ -109,7 +109,7 @@ var SRC=[[/gascheck|gc_|ac_gc/i,'🧹 GASCheck'],[/sec|patrol|guard|保全/i,'�
 var SKIP=/^(vrt_emp_idx_v1|ac_admin_lang|vrt_sync_ledger_v1|vrt_bus_v1|vrt_admin_os_open|vrt_canteen_v10)$|theme|lang$|tint|prefs?$|ui_|_ui|cache_meta/i;
 function srcName(k){for(var i=0;i<SRC.length;i++)if(SRC[i][0].test(k))return SRC[i][1];return '📦 '+k.slice(0,32);}
 /* 在一包資料裡找「同一個工號」的紀錄（欄名像工號，或同一筆也有他的名字） */
-function walkFind(o,no,nameW,found){var seen=0;(function walk(v,depth){if(found.length>=12||seen>80000||depth>8||v==null)return;seen++;
+function walkFind(o,no,nameW,found){var seen=0;(function walk(v,depth){if(found.length>=12||seen>250000||depth>8||v==null)return;seen++;
  if(typeof v==='string'){if(v.length>40&&v.length<8e6&&(v[0]==='{'||v[0]==='[')&&v.indexOf(no)>=0){try{walk(JSON.parse(v),depth+1);}catch(x){}}return;}
  if(Array.isArray(v)){for(var i=0;i<v.length&&found.length<12;i++)walk(v[i],depth+1);return;}
  if(typeof v!=='object')return;var hit=false,ks=Object.keys(v);
@@ -124,7 +124,7 @@ function othersIdb(no,nameW){if(OTH_CACHE[no])return Promise.resolve(OTH_CACHE[n
   var label=IDBSRC.filter(function(x){return x[0].test(d.name);})[0][1];
   return new Promise(function(res){var rq=indexedDB.open(d.name);rq.onupgradeneeded=function(e){try{e.target.transaction.abort();}catch(x){}};rq.onerror=function(){res();};rq.onblocked=function(){res();};
    rq.onsuccess=function(){var db=rq.result,stores=[].slice.call(db.objectStoreNames),found=[],left=stores.length;if(!left){db.close();return res();}
-    stores.forEach(function(st){try{var tx=db.transaction(st),os=tx.objectStore(st),c=os.count();c.onsuccess=function(){if(c.result>30000){if(--left===0){db.close();fin();}return;}var g=os.getAll();g.onsuccess=function(){walkFind(g.result,no,nameW,found);if(--left===0){db.close();fin();}};g.onerror=function(){if(--left===0){db.close();fin();}};};c.onerror=function(){if(--left===0){db.close();fin();}};}catch(x){if(--left===0){db.close();fin();}}});
+    stores.forEach(function(st){try{var tx=db.transaction(st),os=tx.objectStore(st),c=os.count();c.onsuccess=function(){if(c.result>30000){if(--left===0){db.close();fin();}return;}var g=os.getAll();g.onsuccess=function(){(g.result||[]).forEach(function(rec){if(found.length<12)walkFind(rec,no,nameW,found);});if(--left===0){db.close();fin();}};g.onerror=function(){if(--left===0){db.close();fin();}};};c.onerror=function(){if(--left===0){db.close();fin();}};}catch(x){if(--left===0){db.close();fin();}}});
     function fin(){if(found.length)(out[label]=out[label]||[]).push.apply(out[label],found);res();}};});});
   return Promise.all(jobs).then(function(){OTH_CACHE[no]=out;return out;});}).catch(function(){return {};});}
 function othHtml(out,no){var html=Object.keys(out).map(function(s){return '<div class="src"><h4>'+esc(s)+' · '+out[s].length+'</h4>'+out[s].slice(0,12).map(function(r){return '<div class="rec">'+Object.keys(r).filter(function(k){var v=r[k];return v!==''&&v!=null&&typeof v!=='object'&&String(v).length<120&&!/^(_|id$|uuid|hash|token|sig|photo|img|image|data$)/i.test(k)&&!/salary|wage|pay|amount|usd|khr|bank|account|id_no|idno|passport|nssf/i.test(k);}).slice(0,12).map(function(k){return '<span><i>'+esc(k)+'</i> '+esc(r[k])+'</span>';}).join('')+'</div>';}).join('')+'</div>';}).join('');
