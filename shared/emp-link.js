@@ -85,6 +85,7 @@ function openCard(no){
  var oth=others(no,e);OTH=oth;
  D.getElementById('epO').innerHTML='<div style="color:#64748b">'+T('讀取中…','Loading…')+'</div>';ov.classList.add('on');
  cardData(no).then(function(r){if(cur!==no)return;CARD=r;drawCard();});
+ othersIdb(no,oth.nameW).then(function(m){if(cur!==no)return;Object.keys(m).forEach(function(k){(oth.out[k]=oth.out[k]||[]).push.apply(oth.out[k],m[k]);oth.n+=m[k].length;});oth.html=othHtml(oth.out,no);OTH=oth;if(CARD)drawCard();});
 }
 var CARD=null,OTH=null;
 function kv(l,v){return v||v===0?'<div class="kv"><i>'+esc(l)+'</i><b>'+esc(v)+'</b></div>':'';}
@@ -107,23 +108,33 @@ function tab(k){CT=k;drawCard();}
 var SRC=[[/gascheck|gc_|ac_gc/i,'🧹 GASCheck'],[/sec|patrol|guard|保全/i,'🛡️ SEC 保全'],[/ga_exp|gaexp|expense|procure/i,'💳 GA-EXP'],[/audit|wrap|wse|train/i,'📋 Audit'],[/prod|sewing|qc|spare|vrt_prod/i,'🏭 生產'],[/erp/i,'🏭 ERP'],[/canteen|meal/i,'🍱 伙食'],[/hra|pay/i,'🧑‍💼 HRA'],[/acc|contract|leave-manager|salary/i,'🌏 ACC'],[/dorm|宿舍/i,'🏠 宿舍']];
 var SKIP=/^(vrt_emp_idx_v1|ac_admin_lang|vrt_sync_ledger_v1|vrt_bus_v1|vrt_admin_os_open|vrt_canteen_v10)$|theme|lang$|tint|prefs?$|ui_|_ui|cache_meta/i;
 function srcName(k){for(var i=0;i<SRC.length;i++)if(SRC[i][0].test(k))return SRC[i][1];return '📦 '+k.slice(0,32);}
+/* 在一包資料裡找「同一個工號」的紀錄（欄名像工號，或同一筆也有他的名字） */
+function walkFind(o,no,nameW,found){var seen=0;(function walk(v,depth){if(found.length>=12||seen>80000||depth>8||v==null)return;seen++;
+ if(typeof v==='string'){if(v.length>40&&v.length<8e6&&(v[0]==='{'||v[0]==='[')&&v.indexOf(no)>=0){try{walk(JSON.parse(v),depth+1);}catch(x){}}return;}
+ if(Array.isArray(v)){for(var i=0;i<v.length&&found.length<12;i++)walk(v[i],depth+1);return;}
+ if(typeof v!=='object')return;var hit=false,ks=Object.keys(v);
+ for(var j=0;j<ks.length;j++){var x=v[ks[j]];if((typeof x==='string'||typeof x==='number')&&String(x).trim()===no){if(IDH.test(ks[j])||ks.some(function(kk){var y=v[kk];return typeof y==='string'&&nameW.some(function(w){return norm(y).indexOf(w)>=0;});})){hit=true;break;}}}
+ if(hit){found.push(v);return;}
+ for(var m=0;m<ks.length&&found.length<12;m++){var y=v[ks[m]];if(y&&(typeof y==='object'||typeof y==='string'))walk(y,depth+1);}})(o,0);return found;}
+/* 各平台存在這台裝置 IndexedDB 的資料（只看跟員工有關、而且不是薪資的資料庫） */
+var IDBSRC=[[/^ac_gascheck_data/i,'🧹 GASCheck（宿舍・資產・清潔…）'],[/^ac_sec_data/i,'🛡️ SEC 保全'],[/^(ga-exp-(expense|mobility)|AC_GA_EXP)/i,'💳 GA-EXP'],[/^ac_hra_certificate/i,'🪪 證照／簽證'],[/^(ac_hra_contract|HRContractDB)/i,'📄 合約'],[/^ac_hra_manpower/i,'👥 人力規劃'],[/^ac_hra_transfer/i,'🔁 調動'],[/^ac_hra_warn/i,'⚠️ 警告'],[/^ac_hra_welfare/i,'🎁 福利建議'],[/^ac_hra_meal/i,'🍱 伙食'],[/^ac_hra_shutdown/i,'⛔ 停工'],[/^ac_hra_emp/i,'🧑‍💼 HRA 員工'],[/^AC_HRA_Attendance/i,'⏰ HRA 出勤']];
+var NOPAY=/salary|payroll|hrpay|otbonus|pay_|_pay|wage/i,OTH_CACHE={};
+function othersIdb(no,nameW){if(OTH_CACHE[no])return Promise.resolve(OTH_CACHE[no]);if(!indexedDB.databases)return Promise.resolve({});
+ return indexedDB.databases().then(function(list){var out={},jobs=list.filter(function(d){return d.name&&!NOPAY.test(d.name)&&IDBSRC.some(function(x){return x[0].test(d.name);});}).map(function(d){
+  var label=IDBSRC.filter(function(x){return x[0].test(d.name);})[0][1];
+  return new Promise(function(res){var rq=indexedDB.open(d.name);rq.onupgradeneeded=function(e){try{e.target.transaction.abort();}catch(x){}};rq.onerror=function(){res();};rq.onblocked=function(){res();};
+   rq.onsuccess=function(){var db=rq.result,stores=[].slice.call(db.objectStoreNames),found=[],left=stores.length;if(!left){db.close();return res();}
+    stores.forEach(function(st){try{var tx=db.transaction(st),os=tx.objectStore(st),c=os.count();c.onsuccess=function(){if(c.result>30000){if(--left===0){db.close();fin();}return;}var g=os.getAll();g.onsuccess=function(){walkFind(g.result,no,nameW,found);if(--left===0){db.close();fin();}};g.onerror=function(){if(--left===0){db.close();fin();}};};c.onerror=function(){if(--left===0){db.close();fin();}};}catch(x){if(--left===0){db.close();fin();}}});
+    function fin(){if(found.length)(out[label]=out[label]||[]).push.apply(out[label],found);res();}};});});
+  return Promise.all(jobs).then(function(){OTH_CACHE[no]=out;return out;});}).catch(function(){return {};});}
+function othHtml(out,no){var html=Object.keys(out).map(function(s){return '<div class="src"><h4>'+esc(s)+' · '+out[s].length+'</h4>'+out[s].slice(0,12).map(function(r){return '<div class="rec">'+Object.keys(r).filter(function(k){var v=r[k];return v!==''&&v!=null&&typeof v!=='object'&&String(v).length<120&&!/^(_|id$|uuid|hash|token|sig|photo|img|image|data$)/i.test(k)&&!/salary|wage|pay|amount|usd|khr|bank|account|id_no|idno|passport|nssf/i.test(k);}).slice(0,12).map(function(k){return '<span><i>'+esc(k)+'</i> '+esc(r[k])+'</span>';}).join('')+'</div>';}).join('')+'</div>';}).join('');
+ return html||'<div style="color:#64748b;padding:20px 4px">'+T('這台裝置上其他平台的資料裡，沒有找到這位員工（工號 '+esc(no)+'）。平台資料只在雲端、還沒在這台裝置打開過的，這裡看不到——在 Admin OS 打開那個平台一次就會有。','No records for this employee in other platforms on this device yet.')+'</div>';}
 function others(no,e){
- var out={},n=0,name=norm(e.name),nameW=name.split(' ').filter(function(w){return w.length>=3;});
+ var out={},n=0,nameW=norm(e.name).split(' ').filter(function(w){return w.length>=3;});
  var keys=[];try{for(var i=0;i<localStorage.length;i++)keys.push(localStorage.key(i));}catch(x){}
- keys.forEach(function(k){if(!k||SKIP.test(k))return;var raw;try{raw=localStorage.getItem(k);}catch(x){return;}if(!raw||raw.length>6e6||raw.indexOf(no)<0)return;var o;try{o=JSON.parse(raw);}catch(x){return;}
-  var found=[],seen=0;
-  (function walk(v,depth){if(found.length>=12||seen>60000||depth>7||v==null)return;seen++;
-   if(Array.isArray(v)){for(var i=0;i<v.length&&found.length<12;i++)walk(v[i],depth+1);return;}
-   if(typeof v!=='object')return;
-   var hit=false,ks=Object.keys(v);
-   for(var j=0;j<ks.length;j++){var x=v[ks[j]];if((typeof x==='string'||typeof x==='number')&&String(x).trim()===no){if(IDH.test(ks[j])||ks.some(function(kk){var y=v[kk];return typeof y==='string'&&nameW.some(function(w){return norm(y).indexOf(w)>=0;});})){hit=true;break;}}}
-   if(hit){found.push(v);return;}
-   for(var m=0;m<ks.length&&found.length<12;m++){var y=v[ks[m]];if(y&&typeof y==='object')walk(y,depth+1);}
-  })(o,0);
-  if(found.length){var s=srcName(k);(out[s]=out[s]||[]).push.apply(out[s],found);n+=found.length;}});
- var html=Object.keys(out).map(function(s){return '<div class="src"><h4>'+esc(s)+' · '+out[s].length+'</h4>'+out[s].slice(0,12).map(function(r){return '<div class="rec">'+Object.keys(r).filter(function(k){var v=r[k];return v!==''&&v!=null&&typeof v!=='object'&&String(v).length<120&&!/^(_|id$|uuid|hash|token|sig)/i.test(k);}).slice(0,12).map(function(k){return '<span><i>'+esc(k)+'</i> '+esc(r[k])+'</span>';}).join('')+'</div>';}).join('')+'</div>';}).join('');
- if(!html)html='<div style="color:#64748b;padding:20px 4px">'+T('這台裝置上其他平台的資料裡，沒有找到這位員工（工號 '+esc(no)+'）。平台資料只存在雲端、還沒在這台裝置打開過的，這裡看不到——先在 Admin OS 打開那個平台一次就會有。','No records for this employee in other platforms on this device yet.')+'</div>';
- return {n:n,html:html};}
+ keys.forEach(function(k){if(!k||SKIP.test(k)||NOPAY.test(k))return;var raw;try{raw=localStorage.getItem(k);}catch(x){return;}if(!raw||raw.length>6e6||raw.indexOf(no)<0)return;var o;try{o=JSON.parse(raw);}catch(x){return;}
+  var found=walkFind(o,no,nameW,[]);if(found.length){var s=srcName(k);(out[s]=out[s]||[]).push.apply(out[s],found);n+=found.length;}});
+ return {n:n,out:out,html:othHtml(out,no),nameW:nameW};}
 function start(){loadIdx();scan(G,0);setInterval(function(){scan(G,0);},2000);
 }
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',start);else start();
