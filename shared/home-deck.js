@@ -11,13 +11,13 @@ var P=(location.pathname||'').toLowerCase();
 var A=null;
 var PAL=['#0f766e','#2563eb','#7c3aed','#c2410c','#be185d','#0369a1','#4d7c0f','#a16207','#475569','#9333ea'];
 var KW_HR=[[/在職|headcount|active/i,'emp'],[/新進|離職|join|resign/i,'joinleave'],[/異常|未請假|缺勤|exception|absen/i,'attexc|att'],[/請假|leave/i,'leave|att'],[/出勤|工時|attend|hour/i,'att'],[/薪資|payroll|salary/i,'payroll'],[/伙食|meal/i,'meal']];
-var KW_ERP=[[/訂單|order/i,'orders'],[/成品|finished|fg/i,'fg'],[/出貨|ship/i,'shipping'],[/布|fabric/i,'fabric'],[/輔料|access/i,'accessories'],[/應付|payable|ap/i,'payables'],[/發票|invoice/i,'invoices'],[/產量|生產|output|prod/i,'production']];
+var KW_ERP=[[/訂單|order/i,'orders|!orders'],[/成品|finished|fg/i,'fg|acc-fg|!production'],[/出貨|ship/i,'shipping|!shipping'],[/布|fabric/i,'fabric'],[/輔料|access/i,'accessories'],[/應付|payable|ap/i,'payables'],[/發票|invoice/i,'invoices'],[/產量|生產|output|prod/i,'production']];
 function psj(kw){return {
   home:function(){var h=(location.hash||'').slice(1).split(/[/?]/)[0];return !h||h==='dashboard';},
   host:function(){return document.getElementById('page');},
   src:function(){var p=document.getElementById('page');if(!p)return null;for(var i=0;i<p.children.length;i++){var c=p.children[i];if(c.classList.contains('kpis'))return c;}return null;},
   kpis:function(src){return [].slice.call(src.querySelectorAll('.kpi')).map(function(k){var l=k.querySelector('.l'),v=k.querySelector('.v'),d=k.querySelector('.d');var lab=l?l.textContent.trim():'';var r=null;for(var i=0;i<kw.length;i++)if(kw[i][0].test(lab)){r=kw[i][1];break;}
-    if(r){r=r.split('|').filter(function(x){return document.querySelector('#nav a[href="#'+x+'"]');})[0]||null;}return {l:lab,v:v?v.textContent.trim():'',d:d?d.textContent.trim():'',hot:/warn|crit|bad|hot/.test(k.className),go:r?'#'+r:null};});},
+    if(r){r=r.split('|').filter(function(x){return x.charAt(0)==='!'||document.querySelector('#nav a[href="#'+x+'"]');})[0]||null;if(r)r=r.replace(/^!/,'');}return {l:lab,v:v?v.textContent.trim():'',d:d?d.textContent.trim():'',hot:/warn|crit|bad|hot/.test(k.className),go:r?'#'+r:null};});},
   groups:function(){var n=document.getElementById('nav');if(!n)return [];var gs=[],g=null;[].forEach.call(n.children,function(c){
     if(c.classList.contains('nav-g')){g={t:c.textContent.trim(),items:[]};gs.push(g);return;}
     if(c.tagName==='A'&&g){var href=c.getAttribute('href')||'';if(!href||href==='#dashboard')return;var tx=c.textContent.trim().replace(/\s+/g,' ');var ic=(tx.match(/^(\p{Extended_Pictographic}️?|\S)/u)||[''])[0];
@@ -65,7 +65,7 @@ function build(){
  if(!A.home()||!src||!host){if(old&&!A.home())old.remove();return;}
  var s=sig();if(old&&s===last&&old.parentNode)return;last=s;
  var k=A.kpis(src),gs=A.groups();
- var en=/^en|^km/.test(document.documentElement.lang||'')||/[a-z]{4}/i.test((gs[0]||{}).t||'');
+ var en=!/[\u4e00-\u9fff]/.test(((gs[0]||{}).t||'')+((gs[1]||{}).t||''));
  var extra=[];gs=gs.filter(function(g,i){if(i===0&&/總覽|概覽|overview|工作空間|workspace/i.test(g.t)){extra=g.items;return false;}return true;});
  var slides=[{t:en?'Overview':'總覽',c:PAL[0],kpi:k,items:extra}].concat(gs.map(function(g,i){return {t:g.t,c:PAL[(i+1)%PAL.length],items:g.items};}));
  var h='<div class="hd-tabs">'+slides.map(function(sl,i){return '<button type="button" class="hd-tab" style="--c:'+sl.c+'" data-hd="'+i+'"><i></i>'+esc(sl.t)+'</button>';}).join('')+'</div>'+
