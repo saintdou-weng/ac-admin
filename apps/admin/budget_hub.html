@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<script src="../../shared/gate.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>預算 vs 實際</title>
+<style>
+:root{--bg:#f3f6fa;--card:#fff;--ink:#1b2738;--mut:#6b7a8d;--line:#d5deea;--acc:#2563eb}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1115;--card:#1a1a19;--ink:#f0efec;--mut:#9b9a92;--line:#2e2e2b;--acc:#60a5fa}}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Noto Sans TC",sans-serif;display:flex;flex-direction:column}
+.bar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--card);border-bottom:1px solid var(--line);flex:none}
+.bar h1{font-size:15px;margin:0;white-space:nowrap}
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:6px 12px;font:inherit;font-size:13.5px;font-weight:650;cursor:pointer;white-space:nowrap}
+.tab.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.lang{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:5px 8px;font:inherit;font-size:12.5px;cursor:pointer}
+.wrap{flex:1;position:relative;min-height:0}
+iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--bg);display:none}iframe.on{display:block}
+@media (max-width:640px){.bar h1{display:none}}
+</style>
+</head>
+<body>
+<div class="bar"><h1 id="ttl">📊 預算 vs 實際</h1><div class="tabs" id="tabs"></div><button class="lang" id="lang">EN</button></div>
+<div class="wrap" id="wrap"></div>
+<script>
+/* 2026-11-22 15:13 Paul：行政選單裡「預算相關」三項合成一項（同外籍幹部那樣）——
+   管理部預算 vs 實際、直接／間接人工預算、預算 vs 實際支出（單筆記帳）放同一頁分頁切換。各頁本身與資料不動。 */
+(function(){
+'use strict';
+const T=[
+ {k:'admin',ic:'📊',zh:'管理部預算 vs 實際',en:'Admin budget vs actual',src:'budget_history.html?embed=hub'},
+ {k:'labor',ic:'👷',zh:'直接／間接人工',en:'DL / IDL labour',src:'budget_history.html?view=labor&embed=hub'},
+ {k:'entries',ic:'🧾',zh:'單筆記帳',en:'Entries',src:'budget_vs_actual.html?embedded=1'}];
+let lang=(()=>{try{const v=JSON.parse(localStorage.getItem('ac_admin_lang')||'"zh"');return v==='zh'?'zh':'en'}catch(e){return 'zh'}})();
+let cur=(location.hash.slice(1)||'admin');if(!T.some(t=>t.k===cur))cur='admin';
+const fr={};
+function draw(){
+ document.getElementById('ttl').textContent=lang==='zh'?'📊 預算 vs 實際':'📊 Budget vs actual';
+ document.getElementById('lang').textContent=lang==='zh'?'EN':'中';
+ document.getElementById('tabs').innerHTML=T.map(t=>`<button class="tab ${t.k===cur?'on':''}" data-tab="${t.k}">${t.ic} ${lang==='zh'?t.zh:t.en}</button>`).join('');
+ if(!fr[cur]){const f=document.createElement('iframe');f.src=T.find(t=>t.k===cur).src;f.title=cur;document.getElementById('wrap').appendChild(f);fr[cur]=f}
+ Object.entries(fr).forEach(([k,f])=>f.classList.toggle('on',k===cur));
+ document.title=(lang==='zh'?'預算 vs 實際 · ':'Budget vs actual · ')+(lang==='zh'?T.find(t=>t.k===cur).zh:T.find(t=>t.k===cur).en);
+}
+document.getElementById('tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;cur=b.dataset.tab;history.replaceState(null,'','#'+cur);draw()});
+document.getElementById('lang').onclick=()=>{lang=lang==='zh'?'en':'zh';try{localStorage.setItem('ac_admin_lang',JSON.stringify(lang))}catch(e){}draw()};
+window.addEventListener('storage',e=>{if(e.key==='ac_admin_lang'){try{const v=JSON.parse(e.newValue);lang=v==='zh'?'zh':'en';draw()}catch(x){}}});
+draw();
+})();
+</script>
+<script src="../../shared/swipe-tabs.js" defer></script>
+</body>
+</html>
