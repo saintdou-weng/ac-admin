@@ -269,3 +269,9 @@
 (function(){try{if(window.parent===window||window.VRTTint||document.querySelector('script[src*="tint-bridge.js"]'))return;var s=document.createElement('script');s.src='https://saintdou-weng.github.io/ac-admin/shared/tint-bridge.js?v=1';s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
 /* 2026-11-22 順帶載入卡片互動微變色（card-fx.js）：PSJERP、PSJHR、PSJGA、Admin OS、Audit 的可點卡片，滑鼠移入／手指按下時柔和變色。 */
 (function(){try{if(window.VRTCardFx||document.querySelector('script[src*="card-fx.js"]'))return;if(!/^\/(psjhr|psjerp|psjgas|ac-admin|ac-audit)\//i.test(location.pathname))return;var s=document.createElement('script');s.src='https://saintdou-weng.github.io/ac-admin/shared/card-fx.js?v=1';s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
+
+/* 2026-11-23 順帶載入 ♪ 音樂開關＋🎨 共用調色盤（PSJERP repo 的 music.js，一支兩用）。
+   Paul：各平台上方都要有音樂開關跟調色盤。PSJERP／PSJHR／生產平台自己已經載了，這裡跳過；
+   調色盤只會出現在「自己沒有調色盤」的平台（Admin OS、HRA Portal、HRA-PAY、SEC、GA-EXP、Audit），不干涉 PSJGA／GASCheck 原本的換色。
+   開關位置會自動避開頁面原有的按鈕；載入失敗不影響左右滑。 */
+(function(){try{if(window.__VRT_MUSIC||document.querySelector('script[src*="/PSJERP/music.js"]'))return;if(/^\/(psjhr|psjerp|vrt-prod)\//i.test(location.pathname))return;var s=document.createElement('script');s.src='https://saintdou-weng.github.io/PSJERP/music.js?v=1.1.0';s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
