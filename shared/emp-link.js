@@ -85,12 +85,12 @@ function openCard(no){
  var oth=others(no,e);OTH=oth;
  D.getElementById('epO').innerHTML='<div style="color:#64748b">'+T('讀取中…','Loading…')+'</div>';ov.classList.add('on');
  cardData(no).then(function(r){if(cur!==no)return;CARD=r;drawCard();});
- othersIdb(no,oth.nameW).then(function(m){if(cur!==no)return;Object.keys(m).forEach(function(k){(oth.out[k]=oth.out[k]||[]).push.apply(oth.out[k],m[k]);oth.n+=m[k].length;});oth.html=othHtml(oth.out,no);OTH=oth;if(CARD)drawCard();});
+ oth.idb=false;
 }
 var CARD=null,OTH=null;
 function kv(l,v){return v||v===0?'<div class="kv"><i>'+esc(l)+'</i><b>'+esc(v)+'</b></div>':'';}
 function drawCard(){var r=CARD||{},c=r.c,o=OTH||{n:0,html:''};
- var tabs=[['prof',T('👤 基本','👤 Profile')],['job',T('🏭 職務','🏭 Job')],['lv',T('🌴 請假／特休','🌴 Leave')],['ex',T('⏰ 出勤異常','⏰ Attendance')],['oth',T('🔗 其他平台','🔗 Other')+' ('+o.n+')']];
+ var tabs=[['prof',T('👤 基本','👤 Profile')],['job',T('🏭 職務','🏭 Job')],['lv',T('🌴 請假／特休','🌴 Leave')],['ex',T('⏰ 出勤異常','⏰ Attendance')],['oth',T('🔗 其他平台','🔗 Other')+(o.idb?' ('+o.n+')':'')]];
  D.querySelector('#empOv .et').innerHTML=tabs.map(function(t){return '<button data-et="'+t[0]+'" class="'+(CT===t[0]?'on':'')+'">'+t[1]+'</button>';}).join('');
  var h='';
  if(!c){h='<div style="color:#64748b;padding:14px 2px">'+T('這台裝置還沒有這位員工的 HR 卡資料——在 Admin OS 打開「人事 VRT HR」一次（約 10 秒）就會建立，之後點員工會直接顯示。','No HR card data on this device yet — open VRT HR once in Admin OS.')+'</div>';}
@@ -103,7 +103,10 @@ function drawCard(){var r=CARD||{},c=r.c,o=OTH||{n:0,html:''};
   (c.ex&&c.ex.length?'<table><tr><th>'+T('日期','Date')+'</th><th>'+T('類型','Type')+'</th><th>'+T('假別','Leave')+'</th><th>'+T('未請假','Missing')+'</th></tr>'+c.ex.map(function(x){return '<tr><td>'+esc(x[0])+'</td><td>'+esc(x[1])+'</td><td>'+esc(x[2])+'</td><td>'+esc(x[3])+'</td></tr>';}).join('')+'</table>':'<div class="mut">'+T('沒有出勤異常','No exceptions')+'</div>');
  if(CT==='oth')h=o.html;
  var box=D.getElementById('epO');box.innerHTML=h;box.style.display='block';}
-function tab(k){CT=k;drawCard();}
+function tab(k){CT=k;drawCard();
+ /* 其他平台的大資料（宿舍、保全…）點這個分頁才去找，平常開員工卡不拖慢 */
+ var o=OTH,no=cur;if(k==='oth'&&o&&!o.idb){o.idb=true;D.getElementById('epO').insertAdjacentHTML('afterbegin','<div class="mut" id="epBusy">🔎 '+T('也在找各平台存在這台裝置的資料…','Searching other platforms on this device…')+'</div>');
+  setTimeout(function(){othersIdb(no,o.nameW).then(function(m){if(cur!==no)return;Object.keys(m).forEach(function(x){(o.out[x]=o.out[x]||[]).push.apply(o.out[x],m[x]);o.n+=m[x].length;});o.html=othHtml(o.out,no);drawCard();});},50);}}
 /* 其他平台：在這台裝置上各平台存的資料裡找同一個工號 */
 var SRC=[[/gascheck|gc_|ac_gc/i,'🧹 GASCheck'],[/sec|patrol|guard|保全/i,'🛡️ SEC 保全'],[/ga_exp|gaexp|expense|procure/i,'💳 GA-EXP'],[/audit|wrap|wse|train/i,'📋 Audit'],[/prod|sewing|qc|spare|vrt_prod/i,'🏭 生產'],[/erp/i,'🏭 ERP'],[/canteen|meal/i,'🍱 伙食'],[/hra|pay/i,'🧑‍💼 HRA'],[/acc|contract|leave-manager|salary/i,'🌏 ACC'],[/dorm|宿舍/i,'🏠 宿舍']];
 var SKIP=/^(vrt_emp_idx_v1|ac_admin_lang|vrt_sync_ledger_v1|vrt_bus_v1|vrt_admin_os_open|vrt_canteen_v10)$|theme|lang$|tint|prefs?$|ui_|_ui|cache_meta/i;
@@ -117,7 +120,7 @@ function walkFind(o,no,nameW,found){var seen=0;(function walk(v,depth){if(found.
  if(hit){if(!v._deleted&&!v.deleted&&!v.deletedAt)found.push(v);return;}   /* 已刪除的紀錄不顯示 */
  for(var m=0;m<ks.length&&found.length<12;m++){var y=v[ks[m]];if(y&&(typeof y==='object'||typeof y==='string'))walk(y,depth+1);}})(o,0);return found;}
 /* 各平台存在這台裝置 IndexedDB 的資料（只看跟員工有關、而且不是薪資的資料庫） */
-var IDBSRC=[[/^ac_gascheck_data/i,'🧹 GASCheck（宿舍・資產・清潔…）'],[/^ac_sec_data/i,'🛡️ SEC 保全'],[/^(ga-exp-(expense|mobility)|AC_GA_EXP)/i,'💳 GA-EXP'],[/^ac_hra_certificate/i,'🪪 證照／簽證'],[/^(ac_hra_contract|HRContractDB)/i,'📄 合約'],[/^ac_hra_manpower/i,'👥 人力規劃'],[/^ac_hra_transfer/i,'🔁 調動'],[/^ac_hra_warn/i,'⚠️ 警告'],[/^ac_hra_welfare/i,'🎁 福利建議'],[/^ac_hra_meal/i,'🍱 伙食'],[/^ac_hra_shutdown/i,'⛔ 停工'],[/^ac_hra_emp/i,'🧑‍💼 HRA 員工'],[/^AC_HRA_Attendance/i,'⏰ HRA 出勤']];
+var IDBSRC=[[/^psjga-source-cache/i,'🧹 PSJGA 總務原表（宿舍・保全・資產…）'],[/^ac_gascheck_data/i,'🧹 GASCheck（宿舍・資產・清潔…）'],[/^ac_sec_data/i,'🛡️ SEC 保全'],[/^(ga-exp-(expense|mobility)|AC_GA_EXP)/i,'💳 GA-EXP'],[/^ac_hra_certificate/i,'🪪 證照／簽證'],[/^(ac_hra_contract|HRContractDB)/i,'📄 合約'],[/^ac_hra_manpower/i,'👥 人力規劃'],[/^ac_hra_transfer/i,'🔁 調動'],[/^ac_hra_warn/i,'⚠️ 警告'],[/^ac_hra_welfare/i,'🎁 福利建議'],[/^ac_hra_meal/i,'🍱 伙食'],[/^ac_hra_shutdown/i,'⛔ 停工'],[/^ac_hra_emp/i,'🧑‍💼 HRA 員工'],[/^AC_HRA_Attendance/i,'⏰ HRA 出勤']];
 var NOPAY=/salary|payroll|hrpay|otbonus|pay_|_pay|wage/i,OTH_CACHE={};
 function othersIdb(no,nameW){if(OTH_CACHE[no])return Promise.resolve(OTH_CACHE[no]);if(!indexedDB.databases)return Promise.resolve({});
  return indexedDB.databases().then(function(list){var out={},jobs=list.filter(function(d){return d.name&&!NOPAY.test(d.name)&&IDBSRC.some(function(x){return x[0].test(d.name);});}).map(function(d){
