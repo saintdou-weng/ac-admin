@@ -112,10 +112,10 @@ new MutationObserver(function(){tint();}).observe(document.documentElement,{attr
 /* 同步執行（在 MutationObserver 回呼裡，畫面還沒畫出來之前）→ 不會先閃出原本那排數字 */
 function build(){
  if(!A.home()){if(W&&W.parentNode)W.remove();return;}
- var host=A.host(),src=A.src();if(!host)return;var anc=src||(A.anchor&&A.anchor());if(!src&&!A.anchor)return;if(!src&&!host.children.length)return;
+ var host=A.host(),src=A.src();if(!host)return;var anc=A.anchor?A.anchor():src; /* 卡片放在頁面標題正下方，總覽重點數字收進第一張卡 */if(!src&&!A.anchor)return;if(!src&&!host.children.length)return;
  var s=sig();
  if(W&&s===last){ /* 內容沒變：平台重畫把卡片拿掉了 → 原封不動放回去（滑動位置也保留） */
-  if(W.parentNode!==host||(src&&W.nextSibling!==src))host.insertBefore(W,anc);
+  if(W.parentNode!==host||(anc&&W.nextElementSibling!==anc))host.insertBefore(W,anc);
   if(src&&!src.classList.contains('hd-src-hidden'))src.classList.add('hd-src-hidden');
   var c0=W.querySelector('.hd-car');if(c0&&Math.abs(c0.scrollLeft-IDX*c0.clientWidth)>4)c0.scrollLeft=IDX*c0.clientWidth;
   return;}
@@ -125,7 +125,7 @@ function build(){
  if(!W){W=document.createElement('div');W.id='hdWrap';W.className='hd-wrap';}
  W.className='hd-wrap '+(A.mode==='grid'?'hd-gridm':'hd-carm');
  W.innerHTML=html(K,gs,extra);tint();
- if(W.parentNode!==host||(src&&W.nextSibling!==src))host.insertBefore(W,anc);
+ if(W.parentNode!==host||(anc&&W.nextElementSibling!==anc))host.insertBefore(W,anc);
  if(src)src.classList.add('hd-src-hidden');
  var car=W.querySelector('.hd-car');
  if(car){if(IDX>=SL.length)IDX=0;car.scrollLeft=IDX*car.clientWidth;mark(IDX);
