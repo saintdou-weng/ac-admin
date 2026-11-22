@@ -15,7 +15,7 @@ var A=null;
 var PAL=['#0f766e','#2563eb','#7c3aed','#c2410c','#be185d','#0369a1','#4d7c0f','#a16207','#475569','#9333ea'];
 var KW_HR=[[/在職|headcount|active/i,'emp'],[/新進|離職|join|resign/i,'joinleave'],[/異常|未請假|缺勤|exception|absen/i,'attexc|att'],[/請假|leave/i,'leave|att'],[/出勤|工時|attend|hour/i,'att'],[/薪資|payroll|salary/i,'payroll'],[/伙食|meal/i,'meal']];
 var KW_ERP=[[/訂單|order/i,'ordercenter|orders|!orders'],[/成品|finished|fg/i,'finished-goods|fg|acc-fg|!production'],[/出貨|ship/i,'shipping|!shipping'],[/布|fabric/i,'fabric'],[/輔料|access/i,'materials|accessories'],[/應付|payable|ap/i,'payables'],[/發票|invoice/i,'invoices'],[/產量|生產|output|prod/i,'prodreports|production']];
-function psj(kw){return {mode:'grid',
+function psj(kw){return {mode:'car', /* 2026-11-22 13:33 Paul：PSJERP 跟其他平台一樣，用左右滑、一個分類一頁當首頁（PSJHR 一起統一） */
   home:function(){var h=(location.hash||'').slice(1).split(/[/?]/)[0];return !h||h==='dashboard';},
   host:function(){return document.getElementById('page');},
   anchor:function(){var p=document.getElementById('page');if(!p)return null;for(var i=0;i<p.children.length;i++){var c=p.children[i];if(c.id!=='hdWrap'&&i>0)return c;}return null;}, /* 沒有重點數字時：放在頁面標題下面 */
@@ -100,7 +100,7 @@ function html(k,gs,extra){
      '<span class="ft"><span class="n">'+g.items.length+' '+tx('項','pages','ទំព័រ')+'</span>'+(sum?'<span class="s">'+sum+'</span>':'')+'<span class="go">›</span></span></button>';}).join('')+'</div>';}
  return '<div class="hd-tabs">'+slides.map(function(sl,i){return '<button type="button" class="hd-tab" style="--c:'+sl.c+'" data-hd="'+i+'"><i></i>'+esc(sl.t)+'</button>';}).join('')+'</div>'+
   '<div class="hd-carw"><button type="button" class="hd-nav l" data-hdp="-1" aria-label="Previous">‹</button><div class="hd-car" data-noswipe>'+
-  slides.map(function(sl,i){var body=sl.kpi?'<div class="hd-tiles">'+sl.kpi.map(tileK).join('')+'</div>'+(sl.items&&sl.items.length?'<div class="hd-tiles">'+sl.items.map(function(x,j){return tileM(x,i+':'+j);}).join('')+'</div>':''):'<div class="hd-tiles">'+sl.items.map(function(x,j){return tileM(x,i+':'+j);}).join('')+'</div>';
+  slides.map(function(sl,i){var body=sl.kpi?'<div class="hd-tiles">'+sl.kpi.map(tileK).join('')+'</div>'+(sl.items&&sl.items.length?'<div class="hd-tiles">'+sl.items.map(function(x,j){return tileM(x,i+':'+j);}).join('')+'</div>':''):'<div class="hd-tiles g2">'+sl.items.map(function(x,j){return tileM(x,i+':'+j,true);}).join('')+'</div>';
    return '<div class="hd-slide"><div class="hd-box" style="--c:'+sl.c+'"><div class="hd-head"><h2>'+esc(sl.t)+'</h2><span class="pl">'+(sl.kpi?sl.kpi.length:sl.items.length)+' '+tx('項','items','ធាតុ')+'</span></div>'+body+'</div></div>';}).join('')+
   '</div><button type="button" class="hd-nav r" data-hdp="1" aria-label="Next">›</button></div><div class="hd-dots">'+slides.map(function(_,i){return '<i data-hd="'+i+'"></i>';}).join('')+'</div>';}
 /* 顏色融合：讀平台目前的背景色（🎨 選粉紅就是粉紅），取它的色相做成較深的同色系，卡片顏色往這個色調和 */

@@ -10,6 +10,29 @@
 (function(G){
 'use strict';
 if(G.VRTShell)return;G.VRTShell=1;
+(function(){/* 2026-11-22 Paul：PSJGA 手機上方（原系統紀錄＋大標題＋日週月年＋年月選擇）太佔空間 → 縮成兩排，學 Admin OS：
+   第一排＝資料狀態燈號＋「更新資料／連線設定」小圖示鈕；第二排＝日週月年＋◀ 年 月 ▶。
+   大標題在頂部麵包屑已經有了，手機上收起（標題列有按鈕的頁面照常顯示）。電腦版不變。 */
+if(/^\/psjgas\//i.test(location.pathname)){var D=document,gc=D.createElement('style');gc.id='vrt-ga-compact';gc.textContent='@media(max-width:720px){'+
+ '.cloud-toolbar.source-toolbar{flex-wrap:nowrap!important;gap:6px!important;padding:6px 8px!important;margin:0 0 8px!important;border-radius:12px!important}'+
+ '.source-toolbar .cloud-toolbar-status{min-width:0;flex:1 1 auto;display:flex;align-items:center;gap:6px;overflow:hidden}'+
+ '.source-toolbar .cloud-toolbar-status>svg,.source-toolbar .cloud-toolbar-status strong,.source-toolbar .cloud-toolbar-status small{display:none!important}'+
+ '.source-toolbar .cloud-toolbar-status>div{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'+
+ '.source-toolbar .pill{font-size:11.5px!important;padding:3px 9px!important;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'+
+ '.source-toolbar .cloud-actions{display:flex!important;flex:none;gap:5px!important;flex-wrap:nowrap!important}'+
+ '.source-toolbar .cloud-actions .btn{font-size:0!important;width:34px;height:34px;min-height:34px!important;padding:0!important;display:inline-grid!important;place-items:center;gap:0!important}'+
+ '.source-toolbar .cloud-actions .btn.primary{font-size:12px!important;width:auto;padding:0 10px!important;display:inline-flex!important;gap:5px!important}'+
+ '.source-toolbar .cloud-actions .btn svg{width:17px!important;height:17px!important;margin:0!important}'+
+ '.title-row:not(:has(button,a,select,input)){display:none!important}'+
+ '.periodbar{flex-wrap:nowrap!important;gap:5px!important;margin-bottom:12px!important}'+
+ '.periodbar .segments{width:auto!important;flex:none;padding:3px!important;gap:2px!important}'+
+ '.periodbar .segments button{flex:none!important;padding:0 8px!important;min-height:30px!important;font-size:12px!important}'+
+ '.periodbar .periodnav{width:auto!important;flex:1 1 auto;min-width:0;gap:4px!important;justify-content:flex-end!important}'+
+ '.periodbar .periodnav select,.periodbar .periodnav input{min-width:0;flex:1 1 0;max-width:96px;height:32px!important;min-height:32px!important;padding:0 18px 0 6px!important;font-size:12.5px!important;background-position:right 4px center!important}'+
+ '.periodbar .periodnav .btn.square{width:30px!important;height:32px!important;min-height:32px!important;min-width:30px!important;padding:0!important;flex:none}'+
+ '.periodbar .periodnav .period-label{font-size:11.5px;white-space:nowrap}'+
+ '.periodbar .periodnav [data-action="today"],.periodbar .range{display:none!important}'+
+ '}';(D.head||D.documentElement).appendChild(gc);}})();   /* 被 Admin OS 嵌著時也縮 */
 try{if(G.top!==G)return;}catch(e){return;}
 var D=document,P=(location.pathname||'').toLowerCase(),K='vrt_shell_side_off_'+(P.split('/')[1]||'x');
 var GA=P.indexOf('/psjgas/')===0;
@@ -31,6 +54,7 @@ st.textContent=
  /* 電腦：收起左側選單 */
  '@media(min-width:'+(CFG.bp+1)+'px){'+CFG.off+'}';
 (D.head||D.documentElement).appendChild(st);
+
 var off=false;try{off=localStorage.getItem(K)==='1';}catch(e){}
 function apply(){D.documentElement.classList.toggle('vs-off',off&&wide());}
 apply();G.addEventListener('resize',apply);
