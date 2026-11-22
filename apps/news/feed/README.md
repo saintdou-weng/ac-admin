@@ -6,7 +6,8 @@ Paul（2026-11-22）：新聞要像之前 Gemini／ChatGPT 的排程一樣，每
 
 1. **Claude 每天 06:40（金邊時間）跑一次**（Claude 的排程工作「Saintdou NEWS 每日新聞整理」）。
    - 讀 `schedules.json`，找出 `active: true`、而且 `weekdays` 含今天星期幾（0＝星期日…6＝星期六，金邊時間）的任務。
-   - 每個任務上網找**過去 7 天**的新聞，照 `prompt` 寫一期，加進 `latest.json` 最前面。`sendAt` 設成今天的 `time`（+07:00）。
+   - **例假日不發**（Paul 2026-11-22）：今天是星期六、星期日，或是柬埔寨國定假日（清單在 `ac-admin/shared/canteen-core.js` 的 `HOLIDAYS`，日期格式 `YYYY-MM-DD`），就什麼都不寫、直接結束（不補發）。
+   - 每個任務上網找**過去 7 天**的新聞，照 `prompt` 寫一期，加進 `latest.json` 最前面。`sendAt` 設成今天的 `time`（+07:00；目前一律 08:00）。
    - `id` 用 `<task id>-<YYYY-MM-DD>`。同一個 id 已經有了就跳過，不要重複寫。
 2. **AC_ADMIN_CENTER（GAS）每 10 分鐘看一次 `latest.json`**。到了 `sendAt`、還沒發過（而且在 12 小時內）的那一期，把 `tg` 發到行政中心群組，附一顆「📰 打開新聞」鈕。每一期只發一次，失敗最多重試 3 次。
 3. **新聞頁（apps/news/index.html）每次打開都讀這兩個檔**。過了 `sendAt` 的期數會變成文章卡（每期一張總覽，加上每則新聞一張），排程分頁也顯示這份雲端排程。
