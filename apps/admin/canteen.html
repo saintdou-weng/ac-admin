@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<script src="../../shared/gate.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>外幹伙食費</title>
+<style>
+:root{--bg:#f3f6fa;--card:#fff;--ink:#1b2738;--mut:#6b7a8d;--line:#d5deea;--acc:#b45309;--acc2:#2563eb;--ok:#15803d;--bad:#b91c1c;--hol:#fde2d8;--off:#fef3c7;--al:#e0e7ff;--sun:#eef2f7;--skip:#fce7f3;--shut:#e5e7eb;--work:#dcfce7}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1115;--card:#1a1c20;--ink:#eef0f3;--mut:#9aa3ad;--line:#2d3138;--hol:#4a2a22;--off:#47391a;--al:#262c4a;--sun:#1f242b;--skip:#43233a;--shut:#2a2d33;--work:#173b25}}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Noto Sans TC","Noto Sans Khmer",sans-serif;padding:12px 12px 90px;max-width:1100px;margin:0 auto}
+h1{font-size:18px;margin:0}.mut{color:var(--mut);font-size:12.5px}
+.bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.bar .sp{flex:1}
+button,select,input{font:inherit;color:inherit}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;font-weight:650;cursor:pointer;white-space:nowrap}
+.btn.pri{background:var(--acc);border-color:var(--acc);color:#fff}.btn.blue{background:var(--acc2);border-color:var(--acc2);color:#fff}
+.btn:disabled{opacity:.55;cursor:default}
+.mon{display:flex;align-items:center;gap:6px}.mon b{min-width:118px;text-align:center;font-size:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:12px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.kpi .l{font-size:12px;color:var(--mut)}.kpi .v{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.2}.kpi .d{font-size:11.5px;color:var(--mut)}
+.kpi.due{background:#fff7d6;border-color:#f5d36b}.kpi.due .v{color:#8b4b0a}.kpi.ref .v{color:var(--ok)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .kpi.due{background:#3a3112;border-color:#6b5a1a}:root:not([data-theme="light"]) .kpi.due .v{color:#fcd34d}}
+.formula{font-size:13px;line-height:1.7;background:var(--bg);border-radius:10px;padding:8px 10px;margin-top:6px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cal .h{font-size:11.5px;color:var(--mut);text-align:center;font-weight:700}
+.day{min-height:62px;border:1px solid var(--line);border-radius:10px;padding:4px 6px;background:var(--card);cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:1px}
+.day .n{font-weight:800;font-size:14px}.day .t{font-size:10.5px;color:var(--mut);line-height:1.25;overflow:hidden}
+.day .m{margin-top:auto;font-size:12px;font-weight:700;color:var(--acc)}
+.day.Sun{background:var(--sun);cursor:default}.day.Hol{background:var(--hol);cursor:default}.day.Off{background:var(--off);cursor:default}.day.AL{background:var(--al)}.day.Skip{background:var(--skip)}.day.Shut{background:var(--shut)}.day.work{background:var(--work)}
+.day.empty{visibility:hidden}
+.legend{display:flex;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--mut);margin-top:8px}.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:4px;border:1px solid var(--line)}
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:12px}
+summary{padding:11px 14px;font-weight:700;cursor:pointer}
+.sec{padding:0 14px 12px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}
+label.f{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--mut)}
+label.f input,label.f select{border:1px solid var(--line);border-radius:8px;padding:7px 8px;background:var(--card);font-size:14px}
+table{width:100%;border-collapse:collapse;font-size:13px}td,th{border-bottom:1px solid var(--line);padding:6px 4px;text-align:left;vertical-align:top}
+td input{width:100%;border:1px solid var(--line);border-radius:6px;padding:4px 6px;background:var(--card)}
+.x{border:0;background:none;color:var(--bad);font-size:16px;cursor:pointer}
+.status{font-size:12.5px;padding:8px 10px;border-radius:10px;background:var(--bg);margin-top:6px}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#1b2738;color:#fff;padding:9px 16px;border-radius:10px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:50;max-width:92vw;white-space:pre-line}
+#toast.on{opacity:1}
+@media (max-width:560px){.day{min-height:54px;padding:3px 4px}.day .t{display:none}.kpi .v{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="bar">
+ <div><h1 id="ttl">🍱 外幹伙食費</h1><div class="mut" id="sub"></div></div>
+ <span class="sp"></span>
+ <div class="mon"><button class="btn" id="prev">◀</button><b id="ymL"></b><button class="btn" id="next">▶</button></div>
+ <button class="btn" id="lang">EN</button>
+</div>
+<div class="kpis" id="kpis"></div>
+<div class="card">
+ <div class="bar" style="margin:0 0 6px"><b id="calT"></b><span class="sp"></span><span class="mut" id="tapHint"></span></div>
+ <div class="cal" id="cal"></div>
+ <div class="legend" id="legend"></div>
+ <div class="formula" id="formula"></div>
+</div>
+<div class="card">
+ <div class="bar" style="margin:0">
+  <button class="btn pri" id="xls">⬇ Excel</button>
+  <button class="btn blue" id="send">✈ 發給總務</button>
+  <button class="btn" id="save">☁ 儲存</button>
+  <span class="sp"></span>
+ </div>
+ <div class="status" id="auto"></div>
+</div>
+<details id="dSet"><summary id="sSet">⚙️ 設定</summary><div class="sec">
+ <div class="grid2" id="setF"></div>
+</div></details>
+<details id="dLeave"><summary id="sLeave">✈️ 請假／出差</summary><div class="sec"><table id="tLeave"></table><button class="btn" id="addLeave" style="margin-top:8px">＋</button></div></details>
+<details id="dSwap"><summary id="sSwap">🔁 調休（上班日／放假日對調）</summary><div class="sec"><table id="tSwap"></table><button class="btn" id="addSwap" style="margin-top:8px">＋</button></div></details>
+<details id="dHol"><summary id="sHol">🇰🇭 國定假日</summary><div class="sec"><div class="mut" id="holNote"></div><table id="tHol"></table><button class="btn" id="addHol" style="margin-top:8px">＋</button></div></details>
+<div id="toast"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="../../shared/canteen-core.js"></script>
+<script>
+/* 2026-11-22 Paul：外幹伙食費 v10——現在只剩 Paul 一人；每月 25 號算下個月伙食費並產生 Excel 給總務。
+   計算與 Excel 照 VRT_Canteen_Cost_Nov_2026_EN_KM.xlsx；12 月和平日 12/29 上班、與 2027/1/2 對調放假；
+   2027/1/31–2/12 返亞庇（機票行程）＝不供餐。設定存在 Admin OS 雲端（AC_ADMIN_CENTER），每月 25 日 09:00 由雲端自動發 Excel 到群組給總務。 */
+(function(){
+'use strict';
+const C=window.VRTCanteen,$=id=>document.getElementById(id);
+const GATE_H='f065b43108b2d9766e5aff7f77a79f99575d34f6c2cb001b368686098ed75433';
+const HUB=(()=>{try{const o=JSON.parse(localStorage.getItem('ac_admin_cloud_config')||'{}');if(o.url)return o.url}catch(e){}return (window.AC_CONFIG||{}).hubUrl||'https://script.google.com/macros/s/AKfycbyEWtDE39lzCC_qAIyXNTojWOHlAJj35hnBcj3ayePtJOBhG_zydaQ60AaI2NkMCyo2/exec'})();
+const LK='vrt_canteen_v10';
+let lang=(()=>{try{const v=JSON.parse(localStorage.getItem('ac_admin_lang')||'"zh"');return v==='zh'?'zh':'en'}catch(e){return 'zh'}})();
+const T=(zh,en)=>lang==='zh'?zh:en;
+let cfg=(()=>{try{const v=JSON.parse(localStorage.getItem(LK)||'null');if(v&&v.v===10)return v}catch(e){}return C.defaults()})();
+let sent={},dirty=false;
+const now=new Date();let ym=(()=>{const d=new Date(now.getFullYear(),now.getMonth()+(now.getDate()>=20?1:0),1);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')})();
+function toast(s){const t=$('toast');t.textContent=s;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2600)}
+function keep(){try{localStorage.setItem(LK,JSON.stringify(cfg))}catch(e){}dirty=true;draw()}
+async function hub(body){const r=await fetch(HUB,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({key:GATE_H},body))});const d=await r.json();if(!d.ok)throw new Error(d.error||'cloud error');return d}
+async function pull(){try{const d=await hub({action:'canteenGet'});if(d.doc&&d.doc.v===10){cfg=d.doc;try{localStorage.setItem(LK,JSON.stringify(cfg))}catch(e){}}sent=d.sent||{};dirty=false;draw()}catch(e){$('auto').textContent='⚠️ '+T('雲端讀取失敗，先用這台裝置的設定：','Cloud read failed; using this device: ')+e.message}}
+async function save(quiet){try{await hub({action:'canteenPut',doc:cfg});dirty=false;if(!quiet)toast(T('✅ 已儲存到雲端（25 號自動發送會用這份設定）','✅ Saved to cloud (used by the auto-send on the 25th)'));draw();return true}catch(e){toast('⚠️ '+e.message);return false}}
+const MARK={Sun:['星期日','Sunday'],Hol:['國定假日','Public holiday'],Off:['調休放假','Company day off'],AL:['請假／出差','Leave / away'],Shut:['停工','Shutdown'],Skip:['沒吃','No meal']};
+function draw(){
+ const r=C.calc(cfg,ym),c=r.c,M=r.m-1;
+ document.documentElement.lang=lang==='zh'?'zh-Hant':'en';
+ $('ttl').textContent=T('🍱 外幹伙食費','🍱 Expat canteen cost');$('lang').textContent=lang==='zh'?'EN':'中';
+ $('sub').textContent=cfg.person.first+' '+cfg.person.last+' · '+T(cfg.meals.l&&!cfg.meals.b&&!cfg.meals.d?'只吃午餐':'用餐','Lunch only')+' · US$'+cfg.budget+T('／月','/month');
+ $('ymL').textContent=lang==='zh'?r.y+' 年 '+C.MON_ZH[M]:C.MON_EN[M]+' '+r.y;
+ $('kpis').innerHTML=[
+  [T('可計費天數','Billable days'),c.bill,r.days+T(' 天 − 不計費 ',' days − ')+(r.days-c.bill)],
+  [T('餐數','Meals'),r.total,T('每天 ','')+r.meals+T(' 餐',' meal(s)/day')],
+  [T('每餐單價','Cost / meal'),'$'+r.unit.toFixed(4),'$'+cfg.budget+' ÷ '+cfg.baseDays+' ÷ '+cfg.divisor],
+  [T('本月伙食費','Meal charge'),'US$'+r.charge,T('取整數美元','rounded to whole USD'),'due'],
+  [T('退款（預付 $'+r.advance+'）','Refund (advance $'+r.advance+')'),'US$'+r.refund,r.cash.map(x=>x.n+'×$'+x.d).join(' · '),'ref']
+ ].map(k=>`<div class="kpi ${k[3]||''}"><div class="l">${k[0]}</div><div class="v">${k[1]}</div><div class="d">${k[2]}</div></div>`).join('');
+ $('calT').textContent=T('每日用餐','Daily meals');$('tapHint').textContent=T('點平日：沒吃 → 請假 → 停工 → 恢復','Tap a weekday: no meal → leave → shutdown → normal');
+ const lead=r.list[0].dow;let h=C.DAYS_EN.map((d,i)=>`<div class="h">${lang==='zh'?'日一二三四五六'[i]:d}</div>`).join('');
+ for(let i=0;i<lead;i++)h+='<div class="day empty"></div>';
+ r.list.forEach(x=>{const why=x.mark==='Hol'?(lang==='zh'?x.note.zh||x.note.en:x.note.en):x.mark==='Off'?(lang==='zh'?x.note.zh:x.note.en):x.mark==='AL'?(lang==='zh'?x.note.zh||x.note.en:x.note.en):x.mark?T(MARK[x.mark][0],MARK[x.mark][1]):x.swapWork?T('調休上班','Swapped workday'):'';
+  h+=`<button class="day ${x.mark} ${x.swapWork?'work':''}" data-d="${x.date}" title="${why}"><span class="n">${x.d}</span><span class="t">${why}</span>${x.meals?`<span class="m">🍱 ${x.meals}</span>`:''}</button>`});
+ $('cal').innerHTML=h;
+ $('legend').innerHTML=[['--sun',MARK.Sun],['--hol',MARK.Hol],['--off',MARK.Off],['--work',['調休上班','Swapped workday']],['--al',MARK.AL],['--shut',MARK.Shut],['--skip',MARK.Skip]].map(x=>`<span><i style="background:var(${x[0]})"></i>${T(x[1][0],x[1][1])}</span>`).join('');
+ const parts=[r.days+T(' 天',' days'),'− '+c.sun+T(' 星期日',' Sun')];if(c.hol)parts.push('− '+c.hol+T(' 國定假日',' holiday'));if(c.off)parts.push('− '+c.off+T(' 調休',' day off'));if(c.shut)parts.push('− '+c.shut+T(' 停工',' shutdown'));if(c.al)parts.push('− '+c.al+T(' 請假／出差',' leave'));if(c.skip)parts.push('− '+c.skip+T(' 沒吃',' no meal'));
+ $('formula').innerHTML=`📅 ${parts.join(' ')} = <b>${c.bill}</b> ${T('天','days')}<br>💵 ${r.total} ${T('餐','meals')} × $${r.unit.toFixed(6)} = $${(r.total*r.unit).toFixed(2)} → <b>US$${r.charge}</b>${r.extra?' (+$'+r.extra+')':''}<br>↩️ $${r.advance} − $${r.charge} = <b>US$${r.refund}</b>`;
+ const s=sent[ym];const nx=C.nextYm((()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')})());
+ $('auto').innerHTML=(s?'✅ '+T(ym+' 已發給總務：','Sent to GA for '+ym+': ')+String(s).replace('T',' ').slice(0,16):'🕘 '+T('每月 '+(cfg.autoSend||{}).day+' 號 '+(cfg.autoSend||{}).at+' 雲端自動算好下個月、把 Excel 發到群組給總務（'+nx+' 會在本月 '+(cfg.autoSend||{}).day+' 號發）。','Every month on day '+(cfg.autoSend||{}).day+' at '+(cfg.autoSend||{}).at+' the cloud sends next month\'s Excel to GA.'))+(dirty?'<br>⚠️ '+T('有改過還沒儲存到雲端——自動發送用的是雲端那份，按「☁ 儲存」。','Unsaved changes — tap ☁ Save so the auto-send uses them.'):'');
+ $('send').textContent=T('✈ 立即發給總務','✈ Send to GA now');$('save').textContent=T('☁ 儲存','☁ Save');$('xls').textContent=T('⬇ 下載 Excel','⬇ Excel');
+ $('sSet').textContent=T('⚙️ 設定','⚙️ Settings');$('sLeave').textContent=T('✈️ 請假／出差（不供餐）','✈️ Leave / away (no meals)');$('sSwap').textContent=T('🔁 調休（上班／放假對調）','🔁 Swapped days');$('sHol').textContent=T('🇰🇭 國定假日','🇰🇭 Public holidays');
+ $('holNote').textContent=T('農曆節日以政府當年公告為準，可在這裡改。','Lunar holidays follow the official yearly announcement; edit here if needed.');
+ drawSet();drawTables();
+}
+function drawSet(){
+ const f=[['first',T('名','First name'),cfg.person.first,'text'],['last',T('姓','Last name'),cfg.person.last,'text'],['budget',T('每月伙食預算 US$','Monthly budget US$'),cfg.budget,'number'],['baseDays',T('基準工作天','Base workdays'),cfg.baseDays,'number'],['divisor',T('每天幾餐（除數）','Meals per day (divisor)'),cfg.divisor,'number'],['advance',T('預付 US$','Advance US$'),cfg.advance,'number'],['extra',T('本月額外費用 US$','Extra this month US$'),(cfg.extra||{})[ym]||'','number']];
+ $('setF').innerHTML=f.map(x=>`<label class="f">${x[1]}<input data-k="${x[0]}" type="${x[3]}" value="${x[2]}"></label>`).join('')+
+  `<label class="f">${T('吃哪幾餐','Meals taken')}<span>${['b','l','d'].map(k=>`<label style="margin-right:10px"><input type="checkbox" data-meal="${k}" ${cfg.meals[k]?'checked':''}> ${T({b:'早',l:'午',d:'晚'}[k],{b:'B',l:'L',d:'D'}[k])}</label>`).join('')}</span></label>`;
+}
+function drawTables(){
+ $('tLeave').innerHTML=`<tr><th>${T('開始','From')}</th><th>${T('結束','To')}</th><th>${T('說明','Note')}</th><th></th></tr>`+cfg.leaves.map((l,i)=>`<tr><td><input type="date" data-t="leaves" data-i="${i}" data-f="from" value="${l.from}"></td><td><input type="date" data-t="leaves" data-i="${i}" data-f="to" value="${l.to}"></td><td><input data-t="leaves" data-i="${i}" data-f="${lang==='zh'?'zh':'en'}" value="${(lang==='zh'?l.zh:l.en)||''}"></td><td><button class="x" data-del="leaves" data-i="${i}">✕</button></td></tr>`).join('');
+ $('tSwap').innerHTML=`<tr><th>${T('日期','Date')}</th><th>${T('變成','Becomes')}</th><th>${T('說明','Note')}</th><th></th></tr>`+cfg.swaps.map((s,i)=>`<tr><td><input type="date" data-t="swaps" data-i="${i}" data-f="d" value="${s.d}"></td><td><select data-t="swaps" data-i="${i}" data-f="type"><option value="work" ${s.type==='work'?'selected':''}>${T('上班','Workday')}</option><option value="off" ${s.type==='off'?'selected':''}>${T('放假','Day off')}</option></select></td><td><input data-t="swaps" data-i="${i}" data-f="${lang==='zh'?'zh':'en'}" value="${(lang==='zh'?s.zh:s.en)||''}"></td><td><button class="x" data-del="swaps" data-i="${i}">✕</button></td></tr>`).join('');
+ const yr=ym.slice(0,4),hs=cfg.holidays.map((h,i)=>[h,i]).filter(x=>x[0].d.slice(0,4)===yr||x[0].d.slice(0,4)===String(+yr+1));
+ $('tHol').innerHTML=`<tr><th>${T('日期','Date')}</th><th>${T('名稱','Name')}</th><th></th></tr>`+hs.map(([h,i])=>`<tr><td><input type="date" data-t="holidays" data-i="${i}" data-f="d" value="${h.d}"></td><td><input data-t="holidays" data-i="${i}" data-f="${lang==='zh'?'zh':'en'}" value="${(lang==='zh'?h.zh||h.en:h.en)||''}"></td><td><button class="x" data-del="holidays" data-i="${i}">✕</button></td></tr>`).join('');
+}
+document.addEventListener('change',e=>{const t=e.target;
+ if(t.dataset.k){const k=t.dataset.k;if(k==='first'||k==='last')cfg.person[k]=t.value.trim();else if(k==='extra'){cfg.extra=cfg.extra||{};if(+t.value)cfg.extra[ym]=+t.value;else delete cfg.extra[ym]}else cfg[k]=+t.value||0;keep();return}
+ if(t.dataset.meal){cfg.meals[t.dataset.meal]=t.checked?1:0;keep();return}
+ if(t.dataset.t){const a=cfg[t.dataset.t][+t.dataset.i];a[t.dataset.f]=t.value;if(t.dataset.t==='holidays'||t.dataset.t==='swaps')cfg[t.dataset.t].sort((x,y)=>x.d<y.d?-1:1);keep()}});
+document.addEventListener('click',e=>{const t=e.target.closest('button');if(!t)return;
+ if(t.dataset.del){if(!confirm(T('刪除這一筆？','Delete this row?')))return;cfg[t.dataset.del].splice(+t.dataset.i,1);keep();return}
+ if(t.dataset.d){const ds=t.dataset.d,x=C.calc(cfg,ym).list.find(v=>v.date===ds);if(!x||['Sun','Hol','Off'].includes(x.mark))return;
+  const rm=(arr)=>{const i=arr.findIndex(v=>(v.d||v)===ds);if(i>=0)arr.splice(i,1)};
+  if(!x.mark){cfg.skip.push(ds)}
+  else if(x.mark==='Skip'){rm(cfg.skip);cfg.leaves.push({from:ds,to:ds,zh:'請假',en:'Leave',km:'ច្បាប់'})}
+  else if(x.mark==='AL'){const i=cfg.leaves.findIndex(l=>l.from===ds&&l.to===ds);if(i>=0){cfg.leaves.splice(i,1);cfg.shutdown.push(ds)}else{toast(T('這天在請假期間內，請到下面「請假／出差」修改日期','This day is inside a leave period; edit it below'));return}}
+  else if(x.mark==='Shut'){rm(cfg.shutdown)}
+  keep();return}
+});
+$('prev').onclick=()=>{const d=new Date(+ym.slice(0,4),+ym.slice(5,7)-2,1);ym=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');draw()};
+$('next').onclick=()=>{ym=C.nextYm(ym);draw()};
+$('lang').onclick=()=>{lang=lang==='zh'?'en':'zh';try{localStorage.setItem('ac_admin_lang',JSON.stringify(lang))}catch(e){}draw()};
+$('addLeave').onclick=()=>{const d=ym+'-01';cfg.leaves.push({from:d,to:d,zh:'',en:'',km:''});keep()};
+$('addSwap').onclick=()=>{cfg.swaps.push({d:ym+'-01',type:'off',zh:'',en:'',km:''});cfg.swaps.sort((a,b)=>a.d<b.d?-1:1);keep()};
+$('addHol').onclick=()=>{cfg.holidays.push({d:ym+'-01',en:'Holiday',km:'ថ្ងៃឈប់សម្រាក',zh:'假日'});cfg.holidays.sort((a,b)=>a.d<b.d?-1:1);keep()};
+$('save').onclick=()=>save(false);
+$('xls').onclick=async()=>{const x=C.xlsxFiles(cfg,ym),z=new JSZip();Object.keys(x.files).forEach(k=>z.file(k,x.files[k]));const b=await z.generateAsync({type:'blob',mimeType:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',compression:'DEFLATE'});
+ const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=x.filename;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)};
+$('send').onclick=async()=>{const r=C.calc(cfg,ym);if(!confirm(T(`把 ${ym} 伙食費 Excel（US$${r.charge}，退 US$${r.refund}）發到群組給總務？`,`Send the ${ym} canteen Excel (US$${r.charge}, refund US$${r.refund}) to the GA group?`)))return;
+ $('send').disabled=true;try{if(dirty&&!(await save(true)))return;const d=await hub({action:'canteenSend',ym:ym});sent=d.sent||sent;toast(T('✅ 已發到群組','✅ Sent to the group'));draw()}catch(e){toast('⚠️ '+e.message)}finally{$('send').disabled=false}};
+window.addEventListener('storage',e=>{if(e.key==='ac_admin_lang'){try{const v=JSON.parse(e.newValue);lang=v==='zh'?'zh':'en';draw()}catch(x){}}});
+draw();pull();
+})();
+</script>
+<script src="../../shared/swipe-tabs.js" defer></script>
+</body>
+</html>
