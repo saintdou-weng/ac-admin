@@ -114,7 +114,7 @@ function walkFind(o,no,nameW,found){var seen=0;(function walk(v,depth){if(found.
  if(Array.isArray(v)){for(var i=0;i<v.length&&found.length<12;i++)walk(v[i],depth+1);return;}
  if(typeof v!=='object')return;var hit=false,ks=Object.keys(v);
  for(var j=0;j<ks.length;j++){var x=v[ks[j]];if((typeof x==='string'||typeof x==='number')&&String(x).trim()===no){if(IDH.test(ks[j])||ks.some(function(kk){var y=v[kk];return typeof y==='string'&&nameW.some(function(w){return norm(y).indexOf(w)>=0;});})){hit=true;break;}}}
- if(hit){found.push(v);return;}
+ if(hit){if(!v._deleted&&!v.deleted&&!v.deletedAt)found.push(v);return;}   /* 已刪除的紀錄不顯示 */
  for(var m=0;m<ks.length&&found.length<12;m++){var y=v[ks[m]];if(y&&(typeof y==='object'||typeof y==='string'))walk(y,depth+1);}})(o,0);return found;}
 /* 各平台存在這台裝置 IndexedDB 的資料（只看跟員工有關、而且不是薪資的資料庫） */
 var IDBSRC=[[/^ac_gascheck_data/i,'🧹 GASCheck（宿舍・資產・清潔…）'],[/^ac_sec_data/i,'🛡️ SEC 保全'],[/^(ga-exp-(expense|mobility)|AC_GA_EXP)/i,'💳 GA-EXP'],[/^ac_hra_certificate/i,'🪪 證照／簽證'],[/^(ac_hra_contract|HRContractDB)/i,'📄 合約'],[/^ac_hra_manpower/i,'👥 人力規劃'],[/^ac_hra_transfer/i,'🔁 調動'],[/^ac_hra_warn/i,'⚠️ 警告'],[/^ac_hra_welfare/i,'🎁 福利建議'],[/^ac_hra_meal/i,'🍱 伙食'],[/^ac_hra_shutdown/i,'⛔ 停工'],[/^ac_hra_emp/i,'🧑‍💼 HRA 員工'],[/^AC_HRA_Attendance/i,'⏰ HRA 出勤']];
