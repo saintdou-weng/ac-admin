@@ -284,4 +284,33 @@
    Paul：各平台上方都要有音樂開關跟調色盤。PSJERP／PSJHR／生產平台自己已經載了，這裡跳過；
    調色盤只會出現在「自己沒有調色盤」的平台（Admin OS、HRA Portal、HRA-PAY、SEC、GA-EXP、Audit），不干涉 PSJGA／GASCheck 原本的換色。
    開關位置會自動避開頁面原有的按鈕；載入失敗不影響左右滑。 */
-(function(){try{if(window.__VRT_MUSIC||document.querySelector('script[src*="/PSJERP/music.js"]'))return;if(/^\/(psjhr|psjerp|vrt-prod)\//i.test(location.pathname))return;var s=document.createElement('script');s.src='https://saintdou-weng.github.io/PSJERP/music.js?v=1.4.2';s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
+(function(){try{if(window.__VRT_MUSIC||document.querySelector('script[src*="/PSJERP/music.js"]'))return;if(/^\/(psjhr|psjerp|vrt-prod)\//i.test(location.pathname))return;var s=document.createElement('script');s.src='https://saintdou-weng.github.io/PSJERP/music.js?v=1.5.0';s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
+
+/* 2026-11-23 Paul：嵌在別的平台裡的分頁（例：PSJGA 裡的 CCTV、Admin OS 裡的款式卡），點開重點卡／物品頁時不要被外框的頁首、
+   左側選單佔掉一半 → 卡片開著的期間，把這個分頁暫時放大到整個視窗（只改外框那個 iframe 的位置大小），關掉卡片就還原。
+   只認得已知的卡片：物品頁 .gip-ov、SEC／GASCheck 重點卡 .cmp-mask／.cmp-zoom、HRA 重點卡 #kn-mask、PSJ 重點卡 .pkn-mask、PSJERP／PSJHR 的 #drawer。
+   不動資料、不動各頁功能；外框不是同網域就不做。 */
+(function(){try{
+  var W=window;if(W.parent===W||W.__vrtFrameZoom)return;
+  try{if(!W.frameElement||W.parent.location.origin!==location.origin)return;}catch(e){return;}
+  W.__vrtFrameZoom=1;
+  function vis(e){return e&&(e.offsetWidth||e.offsetHeight)&&getComputedStyle(e).visibility!=='hidden';}
+  function isOpen(){var d=document,els=d.querySelectorAll('.gip-ov,.cmp-mask,.cmp-zoom,#kn-mask.on,.pkn-mask.on,.pkn-mask[style*="flex"],.pkn-mask[style*="block"]');
+    for(var i=0;i<els.length;i++)if(vis(els[i]))return true;
+    var dr=d.getElementById('drawer');return !!(dr&&!dr.hidden&&vis(dr));}
+  function chain(){var out=[],w=W;try{while(w!==w.parent&&w.frameElement&&w.parent.location.origin===location.origin){out.push(w.frameElement);w=w.parent;}}catch(e){}return out;}
+  var on=false;
+  function set(v){if(v===on)return;on=v;chain().forEach(function(f){try{
+    if(v){if(f.__vz==null)f.__vz=f.getAttribute('style')||'';var hw=f.ownerDocument.defaultView;
+      f.style.cssText=f.__vz+';position:fixed!important;left:0!important;top:0!important;width:'+hw.innerWidth+'px!important;height:'+hw.innerHeight+'px!important;max-width:none!important;max-height:none!important;min-height:0!important;z-index:9000!important;border:0!important;border-radius:0!important;margin:0!important;transform:none!important';
+      var r=f.getBoundingClientRect();   /* 外框有 transform／毛玻璃時 fixed 會以它為準 → 用量到的位置補回來 */
+      if(Math.abs(r.left)>1||Math.abs(r.top)>1){f.style.setProperty('left',(-r.left)+'px','important');f.style.setProperty('top',(-r.top)+'px','important');}
+      f.setAttribute('data-vrt-zoom','1');}
+    else if(f.__vz!=null){f.setAttribute('style',f.__vz);if(!f.__vz)f.removeAttribute('style');f.__vz=null;f.removeAttribute('data-vrt-zoom');}
+  }catch(e){}});}
+  var tm=0;function check(){if(tm)return;tm=setTimeout(function(){tm=0;try{set(isOpen());}catch(e){}},80);}
+  function start(){try{new MutationObserver(check).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['class','style','hidden','open']});}catch(e){}check();}
+  if(document.body)start();else document.addEventListener('DOMContentLoaded',start);
+  W.addEventListener('pagehide',function(){try{set(false);}catch(e){}});
+  try{W.parent.addEventListener('resize',function(){if(on){on=false;set(true);}});}catch(e){}
+}catch(e){}})();
