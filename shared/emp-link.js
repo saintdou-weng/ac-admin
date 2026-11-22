@@ -5,7 +5,7 @@
    1 PSJHR 會存一份小索引 vrt_emp_idx_v1（工號、姓名、部門、狀態；不含照片薪資）。
    2 Admin OS 監看嵌在裡面的各平台頁（含它們再嵌的分頁）：點了一列或一張卡，裡面若有某位員工的「工號」（欄名是工號／ID，或同一列也有他的名字）
       或「全名」→ 右側（手機是整頁）跳出「👤 員工卡」。
-      · 「HR 資料」分頁：用 PSJHR 員工卡模式（?card=1）顯示——照片、基本資料、出勤、請假、年假…跟 PSJHR 員工頁一樣。
+      · 基本／職務／請假特休／出勤異常：讀 PSJHR 存在這台裝置的員工卡資料（empcard_v1）與照片，秒開；「↗ PSJHR」看完整員工頁。
       · 「其他平台」分頁：在這台裝置上各平台存的資料裡找同一個工號（宿舍、資產、保全、伙食、稽核訓練…），列出來源與內容。
    3 PSJHR 本身不套（它點員工本來就會開員工抽屜）。原本點了會做的事照做，員工卡只是另外疊在上面，按 ✕ 或點外面關掉。 */
 (function(G){
@@ -42,7 +42,7 @@ function hook(w){try{var d=w.document;if(!d||d.__empLink||skipDoc(w))return;d.__
   var emp=findEmp(t);if(emp)setTimeout(function(){openCard(emp.no,w);},120);},true);}catch(e){}}
 function scan(w,depth){if(depth>3)return;try{[].forEach.call(w.document.querySelectorAll('iframe'),function(f){try{var cw=f.contentWindow;if(!cw||!cw.document||cw.location.href==='about:blank')return;if(skipDoc(cw))return;hook(cw);scan(cw,depth+1);if(!f.__empL){f.__empL=1;f.addEventListener('load',function(){setTimeout(function(){scan(w,depth);},500);});}}catch(e){}});}catch(e){}}
 /* ── 員工卡 ── */
-var ov=null,fr=null,frReady=false,cur=null;
+var ov=null,cur=null;
 function L(){var l='zh';try{var v=JSON.parse(localStorage.getItem('ac_admin_lang')||'"zh"');l=v==='zh'?'zh':v==='km'?'km':'en';}catch(e){}return l;}
 function T(zh,en){return L()==='zh'?zh:en;}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
@@ -56,11 +56,14 @@ function ui(){if(ov)return;
  '#empOv .et{display:flex;gap:6px;padding:8px 12px;border-bottom:1px solid #e2e8f0;background:#f8fafc}#empOv .et button{border:1px solid #cbd5e1;background:#fff;border-radius:999px;padding:6px 12px;font:650 13px system-ui;cursor:pointer}#empOv .et button.on{background:#0f172a;color:#fff;border-color:#0f172a}'+
  '#empOv .eb{flex:1;position:relative;min-height:0}#empOv iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}#empOv .eo{position:absolute;inset:0;overflow:auto;padding:12px;display:none;font:14px/1.5 system-ui,"Noto Sans TC",sans-serif;color:#1b2738}'+
  '#empOv .eo .src{border:1px solid #e2e8f0;border-radius:12px;margin-bottom:10px;overflow:hidden}#empOv .eo .src h4{margin:0;padding:8px 10px;background:#f1f5f9;font-size:13.5px}#empOv .eo .rec{padding:8px 10px;border-top:1px solid #eef2f7;font-size:13px}#empOv .eo .rec span{display:inline-block;margin:0 10px 2px 0}#empOv .eo .rec i{font-style:normal;color:#64748b}'+
+ '#empOv .hd{display:flex;gap:14px;align-items:center;margin-bottom:12px}#empOv .ph{width:96px;height:120px;border-radius:12px;overflow:hidden;background:#e2e8f0;flex:none;display:flex;align-items:center;justify-content:center;font-size:44px}#empOv .ph img{width:100%;height:100%;object-fit:cover}#empOv .nm{font-size:18px;font-weight:800}#empOv .sub{color:#64748b;font-size:13px}#empOv .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}#empOv .chip{font-size:12px;border:1px solid #cbd5e1;border-radius:999px;padding:1px 8px}#empOv .chip.ok{background:#dcfce7;border-color:#86efac;color:#166534}'+
+ '#empOv .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-bottom:12px}#empOv .kv{border:1px solid #e2e8f0;border-radius:10px;padding:6px 9px}#empOv .kv i{display:block;font-style:normal;font-size:11.5px;color:#64748b}#empOv .kv b{font-weight:650;word-break:break-word}#empOv .eo table{width:100%;border-collapse:collapse;font-size:13px}#empOv .eo th,#empOv .eo td{border-bottom:1px solid #e2e8f0;padding:6px 4px;text-align:left}#empOv .mut{color:#64748b}#empOv .eo{display:block}'+
+ '#empOv .et{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}#empOv .et button{flex:none}'+
  '#empOv .ld{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#64748b;font:14px system-ui;background:#fff}'+
  '@media (prefers-color-scheme:dark){#empOv .ep,#empOv iframe,#empOv .ld{background:#1a1c20}#empOv .et{background:#202329;border-color:#2d3138}#empOv .et button{background:#26292f;color:#eee;border-color:#3a3f47}#empOv .eo{color:#eef0f3}#empOv .eo .src{border-color:#2d3138}#empOv .eo .src h4{background:#24272d}}';
  D.head.appendChild(st);
  ov=D.createElement('div');ov.id='empOv';ov.innerHTML='<div class="ep" role="dialog" aria-modal="true"><div class="eh"><span style="font-size:22px">👤</span><div><b id="epN"></b><div class="s" id="epS"></div></div><button id="epHR">↗ PSJHR</button><button class="x" id="epX" aria-label="close">✕</button></div>'+
-  '<div class="et"><button data-et="hr" class="on" id="epT1"></button><button data-et="oth" id="epT2"></button></div><div class="eb"><div class="ld" id="epLd"></div><div class="eo" id="epO"></div></div></div>';
+  '<div class="et"></div><div class="eb"><div class="eo" id="epO"></div></div></div>';
  D.body.appendChild(ov);
  ov.addEventListener('click',function(e){if(e.target===ov)close();var b=e.target.closest('[data-et]');if(b)tab(b.dataset.et);});
  D.getElementById('epX').onclick=close;
@@ -68,19 +71,38 @@ function ui(){if(ov)return;
  D.addEventListener('keydown',function(e){if(e.key==='Escape'&&ov.classList.contains('on'))close();});
  G.addEventListener('message',function(e){if(e.origin===location.origin&&e.data&&e.data.vrt==='emp-close')close();});}
 function close(){if(ov)ov.classList.remove('on');}
-function tab(k){D.querySelectorAll('#empOv .et button').forEach(function(b){b.classList.toggle('on',b.dataset.et===k);});if(fr)fr.style.visibility=k==='hr'?'visible':'hidden';D.getElementById('epO').style.display=k==='oth'?'block':'none';if(k==='hr'&&!frReady)D.getElementById('epLd').style.display='flex';else D.getElementById('epLd').style.display='none';}
-function openCard(no,srcWin){
+/* 員工資料：直接讀 PSJHR 存在這台裝置的 empcard_v1＋照片（IndexedDB，同網站共用，秒開）；不會建立或改動 PSJHR 的資料庫 */
+var CARDS=null,CARDS_AT=0;
+function idb(){return new Promise(function(res){try{var go=function(){var rq=indexedDB.open('psjhr');rq.onupgradeneeded=function(e){try{e.target.transaction.abort();}catch(x){}};rq.onsuccess=function(){res(rq.result);};rq.onerror=function(){res(null);};rq.onblocked=function(){res(null);};};
+ if(indexedDB.databases)indexedDB.databases().then(function(l){if(l.some(function(d){return d.name==='psjhr';}))go();else res(null);},go);else go();}catch(e){res(null);}});}
+function kvGet(db,k){return new Promise(function(res){try{if(!db.objectStoreNames.contains('kv'))return res(null);var r=db.transaction('kv').objectStore('kv').get(k);r.onsuccess=function(){res(r.result||null);};r.onerror=function(){res(null);};}catch(e){res(null);}});}
+function cardData(no){return idb().then(function(db){if(!db)return {c:null,p:null};var need=!CARDS||Date.now()-CARDS_AT>60000;
+ return Promise.all([need?kvGet(db,'empcard_v1'):Promise.resolve(null),kvGet(db,'photo|'+no)]).then(function(r){if(r[0]&&r[0].m){CARDS=r[0].m;CARDS_AT=Date.now();}try{db.close();}catch(e){}return {c:CARDS&&CARDS[no],p:r[1]};});});}
+var CT='prof';
+function openCard(no){
  loadIdx();ui();no=String(no);cur=no;var e=(IDX&&IDX.get(no))||{no:no,name:'',dept:'',status:''};
  D.getElementById('epN').textContent=no+'　'+e.name;D.getElementById('epS').textContent=[e.dept,e.status].filter(Boolean).join(' · ');
- D.getElementById('epT1').textContent=T('👤 HR 資料（照片・分頁）','👤 HR profile');
- var oth=others(no,e);D.getElementById('epT2').textContent=T('🔗 其他平台 ','🔗 Other platforms ')+'('+oth.n+')';D.getElementById('epO').innerHTML=oth.html;
- D.getElementById('epLd').textContent=T('載入 PSJHR 員工資料…','Loading PSJHR profile…');
- ov.classList.add('on');tab('hr');
- if(!fr){fr=D.createElement('iframe');fr.title='employee';fr.src='/psjhr/?card=1#card';D.querySelector('#empOv .eb').appendChild(fr);fr.addEventListener('load',function(){waitCard();});}
- else if(frReady)show(no);
+ var oth=others(no,e);OTH=oth;
+ D.getElementById('epO').innerHTML='<div style="color:#64748b">'+T('讀取中…','Loading…')+'</div>';ov.classList.add('on');
+ cardData(no).then(function(r){if(cur!==no)return;CARD=r;drawCard();});
 }
-function waitCard(){var t0=Date.now();(function go(){try{if(fr.contentWindow.psjhrCard){frReady=true;show(cur);return;}}catch(e){}if(Date.now()-t0<20000)setTimeout(go,300);})();}
-function show(no){if(!no)return;try{fr.contentWindow.psjhrCard(no).then(function(ok){D.getElementById('epLd').style.display='none';if(!ok)D.getElementById('epLd').style.display='flex',D.getElementById('epLd').textContent=T('PSJHR 裡找不到這位員工的資料','No PSJHR profile for this employee');});}catch(e){}}
+var CARD=null,OTH=null;
+function kv(l,v){return v||v===0?'<div class="kv"><i>'+esc(l)+'</i><b>'+esc(v)+'</b></div>':'';}
+function drawCard(){var r=CARD||{},c=r.c,o=OTH||{n:0,html:''};
+ var tabs=[['prof',T('👤 基本','👤 Profile')],['job',T('🏭 職務','🏭 Job')],['lv',T('🌴 請假／特休','🌴 Leave')],['ex',T('⏰ 出勤異常','⏰ Attendance')],['oth',T('🔗 其他平台','🔗 Other')+' ('+o.n+')']];
+ D.querySelector('#empOv .et').innerHTML=tabs.map(function(t){return '<button data-et="'+t[0]+'" class="'+(CT===t[0]?'on':'')+'">'+t[1]+'</button>';}).join('');
+ var h='';
+ if(!c){h='<div style="color:#64748b;padding:14px 2px">'+T('這台裝置還沒有這位員工的 HR 卡資料——在 Admin OS 打開「人事 VRT HR」一次（約 10 秒）就會建立，之後點員工會直接顯示。','No HR card data on this device yet — open VRT HR once in Admin OS.')+'</div>';}
+ var head=c?'<div class="hd"><div class="ph">'+(r.p?'<img src="'+esc(r.p)+'" alt="">':'<span>'+(/女|^f/i.test(c.sex)?'👩':'👨')+'</span>')+'</div><div><div class="nm">'+esc(c.name)+'</div><div class="sub">'+esc([c.no,c.dept,c.title].filter(Boolean).join(' · '))+'</div><div class="chips">'+(c.status?'<span class="chip '+(c.status==='在職'?'ok':'')+'">'+esc(c.status)+'</span>':'')+(c.sex?'<span class="chip">'+esc(c.sex)+'</span>':'')+(c.join?'<span class="chip">'+T('到職 ','Joined ')+esc(c.join)+'</span>':'')+'</div></div></div>':'';
+ if(c&&CT==='prof')h=head+'<div class="grid">'+kv(T('工號','Emp no'),c.no)+kv(T('姓名','Name'),c.name)+kv(T('性別','Sex'),c.sex)+kv(T('生日','Birthday'),c.birthday)+kv(T('國籍','Nationality'),c.nationality)+kv(T('手機','Mobile'),c.mobile)+kv(T('電話','Phone'),c.phone)+kv(T('地址','Address'),c.address)+kv(T('緊急聯絡人','Emergency'),c.emergency)+kv(T('關係','Relation'),c.relation)+kv(T('學歷','Education'),c.edu)+'</div>';
+ if(c&&CT==='job')h=head+'<div class="grid">'+kv(T('部門','Dept'),c.dept)+kv(T('職稱','Title'),c.title)+kv(T('組別／線別','Line'),c.line)+kv(T('狀態','Status'),c.status)+kv(T('到職日','Join date'),c.join)+'</div>';
+ if(c&&CT==='lv')h=head+'<div class="grid">'+(c.al?kv(T(c.al.year+' 特休天數',c.al.year+' annual leave'),c.al.days)+kv(T('已休','Used'),c.al.used)+kv(T('剩餘','Left'),c.al.left):'')+kv(T('今年請假天數','Leave days this year'),c.lvY)+'</div>'+
+  (c.lv&&c.lv.length?'<table><tr><th>'+T('開始','From')+'</th><th>'+T('結束','To')+'</th><th>'+T('假別','Type')+'</th><th>'+T('天','Days')+'</th></tr>'+c.lv.map(function(x){return '<tr><td>'+esc(x[0])+'</td><td>'+esc(x[1])+'</td><td>'+esc(x[2])+'</td><td>'+esc(x[3])+'</td></tr>';}).join('')+'</table>':'<div class="mut">'+T('沒有請假紀錄','No leave records')+'</div>');
+ if(c&&CT==='ex')h=head+'<div class="grid">'+kv(T('今年出勤異常次數','Exceptions this year'),c.exY)+'</div>'+
+  (c.ex&&c.ex.length?'<table><tr><th>'+T('日期','Date')+'</th><th>'+T('類型','Type')+'</th><th>'+T('假別','Leave')+'</th><th>'+T('未請假','Missing')+'</th></tr>'+c.ex.map(function(x){return '<tr><td>'+esc(x[0])+'</td><td>'+esc(x[1])+'</td><td>'+esc(x[2])+'</td><td>'+esc(x[3])+'</td></tr>';}).join('')+'</table>':'<div class="mut">'+T('沒有出勤異常','No exceptions')+'</div>');
+ if(CT==='oth')h=o.html;
+ var box=D.getElementById('epO');box.innerHTML=h;box.style.display='block';}
+function tab(k){CT=k;drawCard();}
 /* 其他平台：在這台裝置上各平台存的資料裡找同一個工號 */
 var SRC=[[/gascheck|gc_|ac_gc/i,'🧹 GASCheck'],[/sec|patrol|guard|保全/i,'🛡️ SEC 保全'],[/ga_exp|gaexp|expense|procure/i,'💳 GA-EXP'],[/audit|wrap|wse|train/i,'📋 Audit'],[/prod|sewing|qc|spare|vrt_prod/i,'🏭 生產'],[/erp/i,'🏭 ERP'],[/canteen|meal/i,'🍱 伙食'],[/hra|pay/i,'🧑‍💼 HRA'],[/acc|contract|leave-manager|salary/i,'🌏 ACC'],[/dorm|宿舍/i,'🏠 宿舍']];
 var SKIP=/^(vrt_emp_idx_v1|ac_admin_lang|vrt_sync_ledger_v1|vrt_bus_v1|vrt_admin_os_open|vrt_canteen_v10)$|theme|lang$|tint|prefs?$|ui_|_ui|cache_meta/i;
@@ -103,7 +125,6 @@ function others(no,e){
  if(!html)html='<div style="color:#64748b;padding:20px 4px">'+T('這台裝置上其他平台的資料裡，沒有找到這位員工（工號 '+esc(no)+'）。平台資料只存在雲端、還沒在這台裝置打開過的，這裡看不到——先在 Admin OS 打開那個平台一次就會有。','No records for this employee in other platforms on this device yet.')+'</div>';
  return {n:n,html:html};}
 function start(){loadIdx();scan(G,0);setInterval(function(){scan(G,0);},2000);
- /* 還沒有索引（PSJHR 沒在這台開過）→ 背景開一次員工卡模式，順便建立索引 */
- if(!IDX)setTimeout(function(){if(!IDX&&!fr){ui();fr=D.createElement('iframe');fr.title='employee';fr.src='/psjhr/?card=1#card';D.querySelector('#empOv .eb').appendChild(fr);fr.addEventListener('load',waitCard);}},8000);}
+}
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',start);else start();
 })(window);
