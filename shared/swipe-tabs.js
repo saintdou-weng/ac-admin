@@ -261,3 +261,7 @@
   var start = function () { watch(root, host); };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })(window);
+
+/* 2026-11-22 順帶載入 VRT 同步通知（vrt-bus.js）：來源平台更新 → 下游平台自動同步（單向）。
+   每個平台都有載這支，所以掛在這裡一次到位；載入失敗不影響左右滑。 */
+(function(){try{if(window.VRTBus||document.querySelector('script[src*="vrt-bus.js"]'))return;var s=document.createElement('script');s.src='https://saintdou-weng.github.io/ac-admin/shared/vrt-bus.js?v=1';s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();

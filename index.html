@@ -98,7 +98,7 @@ button,input,select{font:inherit;color:inherit}button{cursor:pointer}
 .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;font-size:13.5px;font-weight:550}.chip:hover{border-color:var(--accent);color:var(--accent)}
 .tag{font-size:10.5px;font-weight:800;border-radius:999px;padding:1px 7px;background:color-mix(in srgb,var(--c) 13%,#fff);color:var(--c);white-space:nowrap}
 footer{margin-top:26px;color:var(--mut);font-size:12px;display:flex;gap:14px;flex-wrap:wrap}footer a{color:var(--mut)}
-#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-weight:600;z-index:90;display:none;max-width:90vw}
+#toast{white-space:pre-line;position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-weight:600;z-index:90;display:none;max-width:90vw}
 #shade{display:none}#fab{display:none}
 /* ================= phone / narrow ================= */
 @media(max-width:900px){
@@ -250,10 +250,17 @@ function paintStatus(){SYS.forEach(s=>{const x=status[s.id]||{};document.querySe
 async function updateAll(){
  if(syncing)return;syncing=true;$('upd').disabled=true;toast(t('正在更新四套系統…','Updating all four systems…','កំពុងធ្វើបច្ចុប្បន្នភាព…'));
  const checks=Promise.all(SYS.map(probe));
- for(const s of SYS){if(!frames[s.id]){open(s.id,'',{background:true});await new Promise(r=>{const f=frames[s.id];let done=false;const fin=()=>{if(!done){done=true;r()}};f.addEventListener('load',fin,{once:true});setTimeout(fin,25000)})}}
+ /* 2026-11-22：已開著的系統改成「在背景叫它自己同步」（不重新載入，打到一半的字不會不見）；3 分鐘內剛同步過的跳過；沒開的照舊在背景打開 */
+ const L=(()=>{try{return JSON.parse(localStorage.getItem('vrt_sync_ledger_v1')||'{}')}catch(e){return {}}})(),BUSN={hr:'psjhr',erp:'psjerp',ga:'psjga'},res={};
+ for(const s of SYS){const f=frames[s.id],bn=BUSN[s.id],le=bn&&L[bn];
+  if(f){if(le&&Date.now()-le.at<3*60e3){res[s.id]='skip';continue}
+   let r='open';try{const B=f.contentWindow.VRTBus;if(B&&B.syncNow)r=await Promise.race([B.syncNow(),new Promise(z=>setTimeout(()=>z('slow'),60000))])}catch(e){r='err'}res[s.id]=r;continue}
+  open(s.id,'',{background:true});res[s.id]='new';await new Promise(r=>{const fr=frames[s.id];let done=false;const fin=()=>{if(!done){done=true;r()}};fr.addEventListener('load',fin,{once:true});setTimeout(fin,25000)})}
  await checks;syncing=false;$('upd').disabled=false;
  const ok=SYS.filter(s=>(status[s.id]||{}).state==='ok').length;
- toast(t(`已更新：${ok}/${SYS.length} 套雲端正常，四套系統都已開啟並各自同步最新資料。`,`Updated: ${ok}/${SYS.length} clouds OK; all four systems are open and syncing.`,`បានធ្វើបច្ចុប្បន្នភាព ${ok}/${SYS.length}`),6000);
+ const lab={skip:t('剛同步過，跳過','just synced, skipped','skip'),ok:t('已更新','updated','ok'),new:t('已開啟並同步','opened & syncing','new'),open:t('已開啟','open','open'),busy:t('同步中','syncing','busy'),recent:t('剛同步過','recent','recent'),editing:t('正在編輯，稍後自動同步','editing — will sync shortly','editing'),slow:t('仍在同步','still syncing','slow'),err:t('同步失敗','failed','err'),'n/a':t('已開啟（自己會同步）','open (syncs itself)','open')};
+ const lines=SYS.map(s=>{const r=res[s.id]||'open',st=(status[s.id]||{}).state;return (st==='bad'||r==='err'?'⚠️':'✅')+' '+nm(s)+'：'+(lab[r]||r)});
+ toast(t(`已更新（雲端正常 ${ok}/${SYS.length}）`,`Updated (clouds OK ${ok}/${SYS.length})`,`OK ${ok}/${SYS.length}`)+'\n'+lines.join('\n'),9000);
 }
 
 /* ---------- key figures for the home page ----------
