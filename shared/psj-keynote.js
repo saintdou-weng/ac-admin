@@ -18,7 +18,7 @@ function ptr(w,e){try{return w.getComputedStyle(e).cursor==='pointer';}catch(x){
 
 /* ── 標記：哪些列／卡原本點了沒反應 ── */
 function markDoc(doc){var w=doc.defaultView;if(!w||!doc.body)return;
- var rowsOk=!w.__acKeynote&&!doc.__psjKn;
+ var rowsOk=!w.__acKeynote&&!doc.__psjKn&&!w.VRTKeynote;   /* 生產平台的頁自己有列表 Keynote（可開入口頁物品頁）→ 列交給它 */
  if(rowsOk){var trs=doc.querySelectorAll('tbody tr:not(.pkn-row):not([data-pkn-no])');for(var i=0;i<trs.length&&i<4000;i++){var tr=trs[i];
    if(tr.cells.length<2||tr.closest(NOGO)||tr.closest('table[data-keynote="off"]')){tr.setAttribute('data-pkn-no','');continue;}
    if(tr.offsetParent===null)continue;
@@ -42,7 +42,7 @@ function hook(doc){if(!doc||doc.__pkn)return;var w=doc.defaultView;if(!w)return;
    try{var sel=w.getSelection&&String(w.getSelection());if(sel&&sel.length>1)return;}catch(x){}
    var tr=t.closest('tr.pkn-row'),kp=!tr&&t.closest('.pkn-kpi');if(!tr&&!kp)return;
    var hit=t.closest(SKIP);if(hit&&(tr?tr.contains(hit):kp.contains(hit)))return;
-   if(tr){if(doc===D&&typeof G.psjKnOpenRows==='function'){G.psjKnOpenRows(tr);return;}openRows(tr);}
+   if(tr&&w.VRTKeynote)return;if(tr){if(doc===D&&typeof G.psjKnOpenRows==='function'){G.psjKnOpenRows(tr);return;}openRows(tr);}
    else openKpis(kp);},false);}
 
 /* ── 外框：嵌入分頁一起照顧（同網域、載入後） ── */
@@ -110,7 +110,7 @@ function tmodel(tb){if(tb.__pknM&&tb.__pknM.n===tb.tBodies[0].rows.length)return
 var ENT=[[/客戶|customer|buyer/i,'客戶','👥'],[/款號|款式|style/i,'款式','👕'],[/^po\b|po\s*no|po#|訂單|order/i,'PO','📄'],[/線別|組別|^line/i,'線別','🧵'],[/料號|item|物料|品名/i,'料號','🧶']];
 function entCols(M){var out=[];M.cols.forEach(function(c){if(c.numeric||/數|count|qty|件|%|主要|top|最多/i.test(c.h))return;var pv=M.rows.filter(function(r){return r.cells[c.i]&&/\d+(\.\d+)?%/.test(txt(r.cells[c.i]));}).length;if(pv>M.rows.length*.5)return;for(var k=0;k<ENT.length;k++)if(ENT[k][0].test(c.h)){out.push({c:c,e:ENT[k]});break;}});return out;}
 function pcsCol(M){return M.cols.filter(function(c){return c.numeric&&/pcs|件|數量|qty|quantity/i.test(c.h);})[0]||null;}
-function usdCol(M){return M.cols.filter(function(c){return c.numeric&&/usd|金額|amount|價|\$/i.test(c.h);})[0]||null;}
+function usdCol(M){var n=M.cols.filter(function(c){return c.numeric;});return n.filter(function(c){return /usd|金額|amount|產值|value|\$/i.test(c.h)&&!/單價|unit/i.test(c.h);})[0]||n.filter(function(c){return /價/.test(c.h)&&!/單價/.test(c.h);})[0]||null;}
 function nameOf(M,r){for(var i=0;i<r.cells.length;i++){var v=txt(r.cells[i]).split('\n')[0];if(v&&!/^[\d\-\/\s.:—$,%+]+$/.test(v))return v;}return txt(r.cells[0]).split('\n')[0]||'—';}
 function itemBtn(pk,nm,vl,sb,w){return '<button class="pkn-it" data-pk="'+pk+'"><span class="nm">'+esc(nm)+'</span>'+(w!=null?'<span class="bx"><i style="width:'+Math.max(2,w).toFixed(1)+'%"></i></span>':'')+'<span class="vl">'+esc(vl)+'</span>'+(sb?'<span class="sb">'+esc(sb)+'</span>':'')+' ›</button>';}
 /* 依某欄分組（客戶／款式／PO…）→ 每組幾筆、合計件數／金額，點了看那一組的列 */
@@ -120,6 +120,7 @@ function groupHtml(M,c,e,title,max){var g={},ord=[],pc=pcsCol(M),us=usdCol(M);M.
 function topHtml(M,c,title){var idx=M.rows.map(function(r,i){return i;}).filter(function(i){return c.vals[i]!=null;}).sort(function(a,b){return c.vals[b]-c.vals[a];}).slice(0,8);if(!idx.length)return '';var l=M.rows,id=reg(l);
  return '<div class="pkn-rel"><div class="pkn-rt">🏆 '+esc(title)+' <small>'+esc(c.h)+' 最大的 '+idx.length+' 筆（共 '+l.length+' 筆，合計 '+F(c.sum,0)+'），點了看那一筆</small></div>'+idx.map(function(i){return itemBtn('r'+id+':'+i,nameOf(M,l[i]),F(c.vals[i]),c.sum?F(c.vals[i]/c.sum*100,1)+'%':'',c.max?Math.abs(c.vals[i])/c.max*100:0);}).join('')+'</div>';}
 /* KPI 屬於哪一區 → 那一區最大的明細表 */
+function paneTables(el){var p=el,doc=el.ownerDocument;for(var k=0;k<7&&p&&p!==doc.body;k++){p=p.parentElement;if(!p)break;var ts=[].filter.call(p.querySelectorAll('table'),function(t){return t.tBodies[0]&&t.offsetParent!==null&&!t.closest('.pkn-box')&&t.tBodies[0].rows.length>=2;});if(ts.length)return ts;}return [];}
 function paneTable(el){var p=el,doc=el.ownerDocument;for(var k=0;k<7&&p&&p!==doc.body;k++){p=p.parentElement;if(!p)break;var ts=[].filter.call(p.querySelectorAll('table'),function(t){return t.tBodies[0]&&t.offsetParent!==null&&!t.closest('.pkn-box')&&t.tBodies[0].rows.length>=2;});if(ts.length){ts.sort(function(a,b){return b.tBodies[0].rows.length-a.tBodies[0].rows.length;});return ts[0];}}return null;}
 function nz(x){return String(x||'').replace(/[\s()（）:：·\-_/]/g,'').toLowerCase();}
 function matchCol(M,lab){var a=nz(lab);if(a.length<2)return null;var ex=M.cols.filter(function(c){return nz(c.h)===a;})[0];if(ex)return ex;if(!/期間|月份|月別|年度|年別|週別|period|month|year|week/i.test(M.hs[0]||''))return null;return M.cols.filter(function(c){var b=nz(c.h);return b.length>=2&&(b.indexOf(a)>=0||a.indexOf(b)>=0);})[0]||null;}
@@ -133,7 +134,7 @@ function kpiRel(el,p){var tb=paneTable(el);if(!tb)return '';var M=tmodel(tb);if(
  if(/線|line/i.test(lab)&&(x=pick(/線|line/i)))return groupHtml(M,x.c,x.e);
  var c=/usd|金額|\$|amount/i.test(lab+p.v)?usdCol(M):/pcs|件|數量|qty/i.test(lab+p.v)?pcsCol(M):null;
  var g=pick(/客戶|customer|buyer/i)||ec[0];
- if(c)return topHtml(M,c,'最大的幾筆')+(g?groupHtml(M,g.c,g.e,'依'+g.e[1]+'分',6):'');
+ if(c){var tr2='';paneTables(el).some(function(t){if(t===tb)return false;var P=tmodel(t);if(!P||!/日期|date|期間|月|年|週|period/i.test(P.hs[0]||''))return false;var pc2=/usd|金額|\$|amount/i.test(lab+p.v)?usdCol(P):pcsCol(P)||P.cols.filter(function(x){return x.numeric&&nz(x.h)===nz(c.h);})[0];if(!pc2)return false;tr2=trendHtml(P,pc2);return true;});return tr2+topHtml(M,c,'最大的幾筆')+(g?groupHtml(M,g.c,g.e,'依'+g.e[1]+'分',6):'');}
  return g?groupHtml(M,g.c,g.e,'依'+g.e[1]+'分'):topHtml(M,M.cols.filter(function(c){return c.numeric;})[0]||{vals:[]},'最大的幾筆');}
 function kpiSec(it,k,first){var p=kpiParts(it);
  return '<section class="pkn-sec" data-i="'+k+'"><div class="pkn-sh"><b>📊 '+esc(p.l||p.v)+'</b><span>'+(k+1)+' / '+S.list.length+'</span></div><div class="pkn-big"><div class="pkn-bv">'+esc(p.v)+'</div>'+(p.s?'<div class="pkn-bs">'+esc(p.s)+'</div>':'')+'</div>'+
