@@ -265,3 +265,5 @@
 /* 2026-11-22 順帶載入 VRT 同步通知（vrt-bus.js）：來源平台更新 → 下游平台自動同步（單向）。
    每個平台都有載這支，所以掛在這裡一次到位；載入失敗不影響左右滑。 */
 (function(){try{if(window.VRTBus||document.querySelector('script[src*="vrt-bus.js"]'))return;var s=document.createElement('script');s.src='https://saintdou-weng.github.io/ac-admin/shared/vrt-bus.js?v=1';s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
+/* 2026-11-22 順帶載入背景色融合（tint-bridge.js）：被嵌在 PSJHR／PSJERP／PSJGA／Admin OS 裡時，跟外框選的底色融合（選粉紅就粉紅，不出白塊黑塊）。 */
+(function(){try{if(window.parent===window||window.VRTTint||document.querySelector('script[src*="tint-bridge.js"]'))return;var s=document.createElement('script');s.src='https://saintdou-weng.github.io/ac-admin/shared/tint-bridge.js?v=1';s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
