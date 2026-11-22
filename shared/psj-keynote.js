@@ -82,6 +82,7 @@ function ui(){if(mask)return;
   if(a==='x')close();else if(a==='p')step(-1);else if(a==='n')step(1);else if(a==='b')back();else if(a==='more')add();
   else if(/^\d+$/.test(a)){S.i=+a;draw();}
   else if((m=a.match(/^r(\d+):(\d+)$/))){var l=REG[+m[1]],sc=b.closest('.pkn-sec');if(sc)S.i=+sc.getAttribute('data-i');if(l)push('row',l,+m[2]);}
+  else if((m=a.match(/^c(\d+):(\d+)$/))){var l2=REG[+m[1]],tr=l2&&l2[+m[2]];close();if(tr){try{tr.scrollIntoView({block:'center'});}catch(x){}tr.click();}}
   else if((m=a.match(/^s:(.+)$/))){openStyleCard(decodeURIComponent(m[1]));}});
  D.addEventListener('keydown',function(e){if(!mask.classList.contains('on'))return;if(e.key==='Escape')(STK.length?back():close());else if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1);});
  var sx=0,sy=0;box.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
@@ -107,7 +108,7 @@ function tmodel(tb){if(tb.__pknM&&tb.__pknM.n===tb.tBodies[0].rows.length)return
    return {h:h,i:i,numeric:numeric,pct:numeric&&rows.some(function(r){return r.cells[i]&&/%/.test(txt(r.cells[i]));}),vals:vals,max:nn.length?Math.max.apply(null,nn.map(Math.abs)):0,sum:nn.reduce(function(a,b){return a+b;},0),n:nn.length};});
  return tb.__pknM={n:body.rows.length,rows:rows,hs:hs,cols:cols};}
 var ENT=[[/客戶|customer|buyer/i,'客戶','👥'],[/款號|款式|style/i,'款式','👕'],[/^po\b|po\s*no|po#|訂單|order/i,'PO','📄'],[/線別|組別|^line/i,'線別','🧵'],[/料號|item|物料|品名/i,'料號','🧶']];
-function entCols(M){var out=[];M.cols.forEach(function(c){if(c.numeric||/數|count|qty|件|%/i.test(c.h))return;for(var k=0;k<ENT.length;k++)if(ENT[k][0].test(c.h)){out.push({c:c,e:ENT[k]});break;}});return out;}
+function entCols(M){var out=[];M.cols.forEach(function(c){if(c.numeric||/數|count|qty|件|%|主要|top|最多/i.test(c.h))return;var pv=M.rows.filter(function(r){return r.cells[c.i]&&/\d+(\.\d+)?%/.test(txt(r.cells[c.i]));}).length;if(pv>M.rows.length*.5)return;for(var k=0;k<ENT.length;k++)if(ENT[k][0].test(c.h)){out.push({c:c,e:ENT[k]});break;}});return out;}
 function pcsCol(M){return M.cols.filter(function(c){return c.numeric&&/pcs|件|數量|qty|quantity/i.test(c.h);})[0]||null;}
 function usdCol(M){return M.cols.filter(function(c){return c.numeric&&/usd|金額|amount|價|\$/i.test(c.h);})[0]||null;}
 function nameOf(M,r){for(var i=0;i<r.cells.length;i++){var v=txt(r.cells[i]).split('\n')[0];if(v&&!/^[\d\-\/\s.:—$,%+]+$/.test(v))return v;}return txt(r.cells[0]).split('\n')[0]||'—';}
@@ -120,7 +121,12 @@ function topHtml(M,c,title){var idx=M.rows.map(function(r,i){return i;}).filter(
  return '<div class="pkn-rel"><div class="pkn-rt">🏆 '+esc(title)+' <small>'+esc(c.h)+' 最大的 '+idx.length+' 筆（共 '+l.length+' 筆，合計 '+F(c.sum,0)+'），點了看那一筆</small></div>'+idx.map(function(i){return itemBtn('r'+id+':'+i,nameOf(M,l[i]),F(c.vals[i]),c.sum?F(c.vals[i]/c.sum*100,1)+'%':'',c.max?Math.abs(c.vals[i])/c.max*100:0);}).join('')+'</div>';}
 /* KPI 屬於哪一區 → 那一區最大的明細表 */
 function paneTable(el){var p=el,doc=el.ownerDocument;for(var k=0;k<7&&p&&p!==doc.body;k++){p=p.parentElement;if(!p)break;var ts=[].filter.call(p.querySelectorAll('table'),function(t){return t.tBodies[0]&&t.offsetParent!==null&&!t.closest('.pkn-box')&&t.tBodies[0].rows.length>=2;});if(ts.length){ts.sort(function(a,b){return b.tBodies[0].rows.length-a.tBodies[0].rows.length;});return ts[0];}}return null;}
-function kpiRel(el,p){var tb=paneTable(el);if(!tb)return '';var M=tmodel(tb);if(!M||!M.rows.length)return '';var lab=(p.l||'')+' ',ec=entCols(M),pick=function(re){return ec.filter(function(x){return re.test(x.c.h);})[0];},x;
+function nz(x){return String(x||'').replace(/[\s()（）:：·\-_/]/g,'').toLowerCase();}
+function matchCol(M,lab){var a=nz(lab);if(a.length<2)return null;var ex=M.cols.filter(function(c){return nz(c.h)===a;})[0];if(ex)return ex;if(!/期間|月份|月別|年度|年別|週別|period|month|year|week/i.test(M.hs[0]||''))return null;return M.cols.filter(function(c){var b=nz(c.h);return b.length>=2&&(b.indexOf(a)>=0||a.indexOf(b)>=0);})[0]||null;}
+/* KPI 名稱 = 表格某一欄（例：入庫筆數）→ 這個數字每一期／每一列的走勢，點了打開那一期 */
+function trendHtml(M,c){var rows=M.rows.slice(0,15),id=reg(M.rows),vals=rows.map(function(r){return c.vals[M.rows.indexOf(r)];}),nn=vals.filter(function(v){return v!=null;}),mx=nn.length?Math.max.apply(null,nn.map(Math.abs)):0,avg=nn.length?nn.reduce(function(a,b){return a+b;},0)/nn.length:null;
+ return '<div class="pkn-rel"><div class="pkn-rt">📈 '+esc(c.h)+' 走勢 <small>'+M.rows.length+' 筆'+(c.numeric?' · 平均 '+F(avg,1)+' · 最高 '+F(mx,0):'')+'，點了看那一期</small></div>'+rows.map(function(r,k){var v=vals[k],raw=r.cells[c.i]?txt(r.cells[c.i]).split('\n')[0]:'—';return itemBtn((r.hasAttribute('onclick')?'c':'r')+id+':'+M.rows.indexOf(r),txt(r.cells[0]).split('\n')[0],c.numeric?raw:raw,'',c.numeric&&mx&&v!=null?Math.abs(v)/mx*100:null);}).join('')+(M.rows.length>15?'<div class="pkn-ref">…還有 '+(M.rows.length-15)+' 筆，往下滑表格看</div>':'')+'</div>';}
+function kpiRel(el,p){var tb=paneTable(el);if(!tb)return '';var M=tmodel(tb);if(!M||!M.rows.length)return '';var mc=matchCol(M,p.l);if(mc&&mc.i>0)return trendHtml(M,mc);var lab=(p.l||'')+' ',ec=entCols(M),pick=function(re){return ec.filter(function(x){return re.test(x.c.h);})[0];},x;
  if(/客戶|customer/i.test(lab)&&(x=pick(/客戶|customer|buyer/i)))return groupHtml(M,x.c,x.e);
  if(/款|style/i.test(lab)&&(x=pick(/款|style/i)))return groupHtml(M,x.c,x.e);
  if(/\bpo\b|訂單/i.test(lab)&&(x=pick(/po|訂單|order/i)))return groupHtml(M,x.c,x.e);
