@@ -14,6 +14,7 @@
 (function(G){
 'use strict';
 if(G.VRTBus)return;
+if(/[?&]card=1\b/.test(location.search)){G.VRTBus={role:null,me:null,ledger:function(){return {};},syncNow:function(){return Promise.resolve('n/a');}};return;}   /* Admin OS 員工卡小視窗：不參與同步 */
 var P=(location.pathname||'').toLowerCase();
 var SRC={'/ac-hra-pay/':'hrpay','/ac-hra-portal/':'hraportal','/ac-gascheck/':'gascheck','/ac-gas-sec/':'sec','/ac-ga-exp/':'gaexp','/ac-audit/':'audit','/vrt-prod/':'prod'};
 var CONS={

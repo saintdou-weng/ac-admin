@@ -76,7 +76,7 @@ function openCard(no,srcWin){
  var oth=others(no,e);D.getElementById('epT2').textContent=T('🔗 其他平台 ','🔗 Other platforms ')+'('+oth.n+')';D.getElementById('epO').innerHTML=oth.html;
  D.getElementById('epLd').textContent=T('載入 PSJHR 員工資料…','Loading PSJHR profile…');
  ov.classList.add('on');tab('hr');
- if(!fr){fr=D.createElement('iframe');fr.title='employee';fr.src='/psjhr/?card=1#dashboard';D.querySelector('#empOv .eb').appendChild(fr);fr.addEventListener('load',function(){waitCard();});}
+ if(!fr){fr=D.createElement('iframe');fr.title='employee';fr.src='/psjhr/?card=1#card';D.querySelector('#empOv .eb').appendChild(fr);fr.addEventListener('load',function(){waitCard();});}
  else if(frReady)show(no);
 }
 function waitCard(){var t0=Date.now();(function go(){try{if(fr.contentWindow.psjhrCard){frReady=true;show(cur);return;}}catch(e){}if(Date.now()-t0<20000)setTimeout(go,300);})();}
@@ -104,6 +104,6 @@ function others(no,e){
  return {n:n,html:html};}
 function start(){loadIdx();scan(G,0);setInterval(function(){scan(G,0);},2000);
  /* 還沒有索引（PSJHR 沒在這台開過）→ 背景開一次員工卡模式，順便建立索引 */
- if(!IDX)setTimeout(function(){if(!IDX&&!fr){ui();fr=D.createElement('iframe');fr.title='employee';fr.src='/psjhr/?card=1#dashboard';D.querySelector('#empOv .eb').appendChild(fr);fr.addEventListener('load',waitCard);}},8000);}
+ if(!IDX)setTimeout(function(){if(!IDX&&!fr){ui();fr=D.createElement('iframe');fr.title='employee';fr.src='/psjhr/?card=1#card';D.querySelector('#empOv .eb').appendChild(fr);fr.addEventListener('load',waitCard);}},8000);}
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',start);else start();
 })(window);
