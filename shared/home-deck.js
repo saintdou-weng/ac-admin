@@ -73,7 +73,7 @@ var css='.hd-wrap{margin:4px 0 16px;--hd-acc:'+A.acc+'}'+
  '.hd-nav{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:0;background:#fff;color:#1b2738;box-shadow:0 2px 10px rgba(27,39,56,.25);font-size:16px;z-index:3;cursor:pointer}.hd-nav.l{left:-10px}.hd-nav.r{right:-10px}'+
  '.hd-dots{display:flex;justify-content:center;gap:7px;margin:9px 0 2px}.hd-dots i{width:8px;height:8px;border-radius:50%;background:rgba(127,127,127,.4);transition:.2s;cursor:pointer}.hd-dots i.on{width:22px;border-radius:5px;background:currentColor}'+
  '.hd-in{animation:hdIn .22s ease-out}@keyframes hdIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}'+
- '.hd-src-hidden{display:none!important}@media(max-width:900px){.hd-nav{display:none}.hd-car .hd-box{min-height:210px}}'+
+ '.hd-src-hidden{display:none!important}@media(max-width:900px){.hd-car .hd-box{min-height:210px}}@media(max-width:600px){.hd-nav{display:none}}'+
  '@media(max-width:560px){.hd-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.hd-card{min-height:124px;padding:13px 12px 11px}.hd-card b{font-size:16px}.hd-card .pv{font-size:11.5px}.hd-tiles.g2{grid-template-columns:repeat(2,minmax(0,1fr))}}'+
  '@media(prefers-reduced-motion:reduce){.hd-in{animation:none}.hd-card{transition:none}}';
 var st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
@@ -132,12 +132,17 @@ function build(){
   /* 2026-11-23 Paul：左右滑到底不要停 → 循環。在最後一張再往左滑＝回第一張；在第一張再往右滑＝跳到最後一張（◀ ▶ 本來就會循環）。 */
   (function(){var s0=null;car.addEventListener('touchstart',function(e){s0=e.touches.length===1?{x:e.touches[0].clientX,y:e.touches[0].clientY,l:car.scrollLeft}:null;},{passive:true});
    car.addEventListener('touchend',function(e){var s=s0;s0=null;if(!s||SL.length<2)return;var p=e.changedTouches[0],dx=p.clientX-s.x,dy=p.clientY-s.y;if(Math.abs(dx)<48||Math.abs(dx)<Math.abs(dy)*1.6)return;
-    var max=car.scrollWidth-car.clientWidth;if(dx<0&&s.l>=max-4)go(0);else if(dx>0&&s.l<=4)go(SL.length-1);},{passive:true});})();
+    var max=car.scrollWidth-car.clientWidth;if(dx<0&&s.l>=max-4)go(IDX+1);else if(dx>0&&s.l<=4)go(IDX-1);},{passive:true});})();
   var t=0;car.addEventListener('scroll',function(){if(t)return;t=requestAnimationFrame(function(){t=0;var i=Math.round(car.scrollLeft/Math.max(1,car.clientWidth));if(i!==IDX){IDX=i;try{sessionStorage.setItem('hd_idx_'+P,i);}catch(e){}mark(i);}});},{passive:true});}
 }
 function mark(i){if(!W)return;[].forEach.call(W.querySelectorAll('.hd-tab'),function(b,j){b.classList.toggle('on',j===i);});[].forEach.call(W.querySelectorAll('.hd-dots i'),function(b,j){b.classList.toggle('on',j===i);});
  var tb=W.querySelector('.hd-tab.on'),tabs=W.querySelector('.hd-tabs');if(tb&&tabs)tabs.scrollLeft=Math.max(0,tb.offsetLeft-tabs.clientWidth/2+tb.offsetWidth/2);}
-function go(i){var car=W&&W.querySelector('.hd-car');if(!car)return;var n=SL.length;i=(i+n)%n;IDX=i;car.scrollTo({left:i*car.clientWidth,behavior:'smooth'});mark(i);}
+/* 2026-11-23 Paul：換頁要順，不要「到底後一張張倒退回最前面」。相鄰的照舊平滑滑過去；繞一圈（最後→第一）或跳很多張時，
+   改成：目前這張淡出 → 直接換到目標那張 → 從滑動的方向輕輕滑進來。 */
+function go(i){var car=W&&W.querySelector('.hd-car');if(!car)return;var n=SL.length,raw=i,from=IDX;i=(i+n)%n;if(i===from)return;var dir=raw>from?1:-1;IDX=i;mark(i);
+ if(Math.abs(i-from)===1&&raw===i||!car.animate){car.scrollTo({left:i*car.clientWidth,behavior:'smooth'});return;}
+ var a=car.animate([{opacity:1},{opacity:0}],{duration:130,easing:'ease-out'});
+ a.onfinish=function(){try{car.scrollTo({left:i*car.clientWidth,behavior:'instant'});}catch(e){car.scrollLeft=i*car.clientWidth;}car.animate([{opacity:0,transform:'translateX('+(dir*42)+'px)'},{opacity:1,transform:'translateX(0)'}],{duration:340,easing:'cubic-bezier(.22,.61,.36,1)'});};}
 function setGV(v,push){GV=v;if(push){try{history.pushState({hdg:v},'',location.href);}catch(e){}}last='';build();try{var y=W.getBoundingClientRect().top+G.scrollY-80;if(G.scrollY>y)G.scrollTo({top:Math.max(0,y)});}catch(e){}}
 G.addEventListener('popstate',function(e){if(A.mode!=='grid'||!A.home())return;var v=e.state&&e.state.hdg;var nv=v>0?v:-1;if(nv!==GV)setGV(nv,false);});
 document.addEventListener('click',function(e){if(!W||!W.contains(e.target))return;
