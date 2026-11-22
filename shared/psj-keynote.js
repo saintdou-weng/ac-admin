@@ -11,7 +11,7 @@ if(G.PSJKN)return;
 var D=document,API=G.PSJKN={hook:hook};
 var SKIP='button,a[href],input,select,textarea,label,summary,[contenteditable],[onclick],[role=button],[data-action]';
 var NOGO='dialog,[role=dialog],[class*=modal i],[class*=drawer i],#drawer,#kn-mask,.pkn-mask,#hdWrap,nav,header,.side,.sidebar';
-var KSEL='.kpi,.stat,.kcard,.metric,.kpi-card,.stat-card,.sum-card,.mini-kpi,.kpis>*,.stats>*,.kpi-grid>*,.kpi-row>*,.cards-kpi>*';
+var KSEL='.kpi,.stat,.kcard,.metric,.kpi-card,.stat-card,.sum-card,.mini-kpi,.kpis>*,.stats>*,.kpi-grid>*,.kpi-row>*,.cards-kpi>*,.report-card';
 function txt(e){return String(e&&(e.innerText||e.textContent)||'').replace(/[ \t ]+/g,' ').replace(/\n\s*\n+/g,'\n').trim();}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 function ptr(w,e){try{return w.getComputedStyle(e).cursor==='pointer';}catch(x){return false;}}
@@ -73,7 +73,7 @@ function close(){if(mask)mask.classList.remove('on');}
 function step(d){var j=S.i+d;if(j<0||j>=S.list.length)return;S.i=j;draw();}
 function head(title){return '<div class="pkn-h"><div class="pkn-t">'+title+'</div><span class="pkn-pos">'+(S.i+1)+' / '+S.list.length+'</span>'+(S.list.length>1?'<button data-pk="p" aria-label="prev">◀</button><button data-pk="n" aria-label="next">▶</button>':'')+'<button data-pk="x" aria-label="close">✕</button></div>';}
 function heads(tr){var tb=tr.closest('table'),out=[],row=tb&&tb.tHead&&tb.tHead.rows.length?tb.tHead.rows[tb.tHead.rows.length-1]:null,c=0;if(!row)return out;[].forEach.call(row.cells,function(x){var t=txt(x).replace(/\n/g,' ');for(var j=0;j<(x.colSpan||1);j++)out[c++]=t;});return out;}
-function kpiParts(el){var v=el.querySelector('.v,.val,.value,.num,.n,.big,.kv,.kpi-v,.stat-v,b,strong'),l=el.querySelector('.l,.lb,.label,.t,.title,.k,.kl,.kpi-l,.stat-l,small');
+function kpiParts(el){var v=el.querySelector('.stat-value,.v,.val,.value,.num,.n,.big,.kv,.kpi-v,.stat-v,b,strong'),l=el.querySelector('.l,.lb,.label,.t,.title,.k,.kl,.kpi-l,.stat-l,small');
  var lines=txt(el).split('\n').map(function(s){return s.trim();}).filter(Boolean);
  var val=v&&txt(v)&&/\d/.test(txt(v))?txt(v).split('\n')[0]:'';if(!val)val=lines.filter(function(s){return /\d/.test(s)&&s.length<=26;})[0]||lines[0]||'';
  var lab=l&&txt(l)&&txt(l)!==val?txt(l).split('\n')[0]:'';if(!lab)lab=lines.filter(function(s){return s!==val;})[0]||'';
