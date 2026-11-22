@@ -10,14 +10,14 @@ if(G.VRTHomeDeck)return;G.VRTHomeDeck=1;
 var P=(location.pathname||'').toLowerCase();
 var A=null;
 var PAL=['#0f766e','#2563eb','#7c3aed','#c2410c','#be185d','#0369a1','#4d7c0f','#a16207','#475569','#9333ea'];
-var KW_HR=[[/在職|headcount|active/i,'emp'],[/新進|離職|join|leav|resign/i,'joinleave'],[/異常|exception/i,'attexc'],[/請假|leave/i,'leave'],[/出勤|工時|未請假|attend|hour/i,'att'],[/薪資|payroll|salary/i,'payroll'],[/伙食|meal/i,'meal']];
+var KW_HR=[[/在職|headcount|active/i,'emp'],[/新進|離職|join|resign/i,'joinleave'],[/異常|未請假|缺勤|exception|absen/i,'attexc|att'],[/請假|leave/i,'leave|att'],[/出勤|工時|attend|hour/i,'att'],[/薪資|payroll|salary/i,'payroll'],[/伙食|meal/i,'meal']];
 var KW_ERP=[[/訂單|order/i,'orders'],[/成品|finished|fg/i,'fg'],[/出貨|ship/i,'shipping'],[/布|fabric/i,'fabric'],[/輔料|access/i,'accessories'],[/應付|payable|ap/i,'payables'],[/發票|invoice/i,'invoices'],[/產量|生產|output|prod/i,'production']];
 function psj(kw){return {
   home:function(){var h=(location.hash||'').slice(1).split(/[/?]/)[0];return !h||h==='dashboard';},
   host:function(){return document.getElementById('page');},
   src:function(){var p=document.getElementById('page');if(!p)return null;for(var i=0;i<p.children.length;i++){var c=p.children[i];if(c.classList.contains('kpis'))return c;}return null;},
   kpis:function(src){return [].slice.call(src.querySelectorAll('.kpi')).map(function(k){var l=k.querySelector('.l'),v=k.querySelector('.v'),d=k.querySelector('.d');var lab=l?l.textContent.trim():'';var r=null;for(var i=0;i<kw.length;i++)if(kw[i][0].test(lab)){r=kw[i][1];break;}
-    if(r&&!document.querySelector('#nav a[href="#'+r+'"]'))r=null;return {l:lab,v:v?v.textContent.trim():'',d:d?d.textContent.trim():'',hot:/warn|crit|bad|hot/.test(k.className),go:r?'#'+r:null};});},
+    if(r){r=r.split('|').filter(function(x){return document.querySelector('#nav a[href="#'+x+'"]');})[0]||null;}return {l:lab,v:v?v.textContent.trim():'',d:d?d.textContent.trim():'',hot:/warn|crit|bad|hot/.test(k.className),go:r?'#'+r:null};});},
   groups:function(){var n=document.getElementById('nav');if(!n)return [];var gs=[],g=null;[].forEach.call(n.children,function(c){
     if(c.classList.contains('nav-g')){g={t:c.textContent.trim(),items:[]};gs.push(g);return;}
     if(c.tagName==='A'&&g){var href=c.getAttribute('href')||'';if(!href||href==='#dashboard')return;var tx=c.textContent.trim().replace(/\s+/g,' ');var ic=(tx.match(/^(\p{Extended_Pictographic}️?|\S)/u)||[''])[0];
@@ -66,11 +66,13 @@ function build(){
  var s=sig();if(old&&s===last&&old.parentNode)return;last=s;
  var k=A.kpis(src),gs=A.groups();
  var en=/^en|^km/.test(document.documentElement.lang||'')||/[a-z]{4}/i.test((gs[0]||{}).t||'');
- var slides=[{t:en?'Overview':'總覽',c:PAL[0],kpi:k}].concat(gs.map(function(g,i){return {t:g.t,c:PAL[(i+1)%PAL.length],items:g.items};}));
+ var extra=[];gs=gs.filter(function(g,i){if(i===0&&/總覽|概覽|overview|工作空間|workspace/i.test(g.t)){extra=g.items;return false;}return true;});
+ var slides=[{t:en?'Overview':'總覽',c:PAL[0],kpi:k,items:extra}].concat(gs.map(function(g,i){return {t:g.t,c:PAL[(i+1)%PAL.length],items:g.items};}));
  var h='<div class="hd-tabs">'+slides.map(function(sl,i){return '<button type="button" class="hd-tab" style="--c:'+sl.c+'" data-hd="'+i+'"><i></i>'+esc(sl.t)+'</button>';}).join('')+'</div>'+
   '<div class="hd-carw"><button type="button" class="hd-nav l" data-hdp="-1" aria-label="Previous">‹</button><div class="hd-car" data-noswipe>'+
   slides.map(function(sl,i){var body;
-   if(sl.kpi)body='<div class="hd-tiles">'+sl.kpi.map(function(x,j){return '<button type="button" class="hd-tile'+(x.hot?' hot':'')+'" data-hk="'+j+'"><span class="l">'+esc(x.l)+'</span><span class="v">'+esc(x.v)+'</span>'+(x.d?'<span class="d">'+esc(x.d)+'</span>':'')+'</button>';}).join('')+'</div>';
+   var mt=function(arr){return arr.map(function(x,j){return '<button type="button" class="hd-tile m" data-hg="'+i+':'+j+'"><span class="ic">'+(x.svg||esc(x.ic))+'</span><span class="t">'+esc(x.t)+'</span>'+(x.b?'<span class="b">'+esc(x.b)+'</span>':'')+'</button>';}).join('');};
+   if(sl.kpi)body='<div class="hd-tiles">'+sl.kpi.map(function(x,j){return '<button type="button" class="hd-tile'+(x.hot?' hot':'')+'" data-hk="'+j+'"><span class="l">'+esc(x.l)+'</span><span class="v">'+esc(x.v)+'</span>'+(x.d?'<span class="d">'+esc(x.d)+'</span>':'')+'</button>';}).join('')+'</div>'+(sl.items&&sl.items.length?'<div class="hd-tiles">'+mt(sl.items)+'</div>':'');
    else body='<div class="hd-tiles">'+sl.items.map(function(x,j){return '<button type="button" class="hd-tile m" data-hg="'+i+':'+j+'"><span class="ic">'+(x.svg||esc(x.ic))+'</span><span class="t">'+esc(x.t)+'</span>'+(x.b?'<span class="b">'+esc(x.b)+'</span>':'')+'</button>';}).join('')+'</div>';
    return '<div class="hd-slide"><div class="hd-box" style="--c:'+sl.c+'"><div class="hd-head"><h2>'+esc(sl.t)+'</h2><span class="pl">'+(sl.kpi?sl.kpi.length:sl.items.length)+(en?' items':' 項')+'</span></div>'+body+'</div></div>';}).join('')+
   '</div><button type="button" class="hd-nav r" data-hdp="1" aria-label="Next">›</button></div><div class="hd-dots">'+slides.map(function(_,i){return '<i data-hd="'+i+'"></i>';}).join('')+'</div>';
