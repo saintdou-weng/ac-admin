@@ -145,6 +145,8 @@ const t=(zh,en,km)=>lang==='zh'?zh:lang==='km'?(km||en):en;
 const nm=o=>lang==='zh'?o.zh:(lang==='km'&&o.km)||o.en||o.zh;
 const narrow=()=>matchMedia('(max-width:900px)').matches;
 const ADMIN=[
+ /* 2026-11-22 聖道新聞 Saintdou NEWS OS（閱讀・排程・群組速報）；行政群組選單也有一顆「📰 新聞」直接開 */
+ {k:'apps/news/index.html',ic:'📰',zh:'新聞 Saintdou NEWS',en:'News · Saintdou NEWS',km:'ព័ត៌មាន',frame:true},
  {k:'apps/admin/admin_org_chart.html',ic:'🏢',zh:'組織架構（可選年度 2019–）',en:'Organisation chart (by year, 2019–)',frame:true},
  /* 2026-11-22 管理部預算 vs 實際（2021–2027 歷年、10/12/15 組情境、每月自動結算）；人工預算同一頁的另一個分頁，PSJHR 也嵌同一頁 */
  {k:'apps/admin/budget_history.html',ic:'📊',zh:'管理部預算 vs 實際（2021–2027）',en:'Admin budget vs actual (2021–2027)',frame:true},
@@ -155,10 +157,8 @@ const ADMIN=[
  /* 2026-11-21 年度調薪（2020–2026）併進 VRT HR 薪資架構裡當分頁，選單不再單列 xlsx */
  {k:'go:hr:salstruct',go:['hr','salstruct'],ic:'📐',zh:'薪資架構＋年度調薪（2020–2026）',en:'Salary structure + annual raises (2020–2026)',km:'រចនាសម្ព័ន្ធប្រាក់ខែ',bd:'HR'},
  /* 2026-11-21 Paul：外幹／幹部等工廠相關的合約、薪資、伙食費，先從 ACC Flow 移到這裡最底下放著（工具本身與資料不動，仍是 ACC Flow 那一份） */
- {k:'../vrt-acc-flow-cost/modules/foreign-manager-payroll.html?embedded=1',ic:'💵',zh:'外籍／當地管理層薪資（含伙食費）',en:'Expat / local manager payroll',frame:true,bd:'暫放'},
- {k:'../vrt-acc-flow-cost/modules/salary-management.html?embedded=1',ic:'💰',zh:'薪資管理／人工成本',en:'Salary & labor cost',frame:true,bd:'暫放'},
- {k:'../vrt-acc-flow-cost/modules/leave-manager.html?embedded=1',ic:'🏖️',zh:'外籍幹部年假管理',en:'Expat leave manager',frame:true,bd:'暫放'},
- {k:'../vrt-acc-flow-cost/modules/contract-manager.html?embedded=1',ic:'📄',zh:'海外幹部合約管理',en:'Expat contract manager',frame:true,bd:'暫放'}
+ /* 2026-11-22 Paul：外籍相關（薪資含伙食費、年假、合約、人工成本）合成一項，進去用分頁切換；工具與資料仍是 ACC Flow 那四個模組 */
+ {k:'apps/admin/expat_hub.html',ic:'🌏',zh:'外籍幹部管理（薪資・年假・合約・人工成本）',en:'Expat staff (payroll, leave, contracts, labour cost)',frame:true,bd:'暫放'}
 ];
 const ADMINSYS={id:'admin',icon:'🏛',color:'#475569',zh:'行政',en:'Administration',km:'រដ្ឋបាល',tag:'ADMIN',mode:'file',url:new URL('./',location.href).href,pages:[]};
 const byId=id=>id==='admin'?ADMINSYS:SYS.find(s=>s.id===id);
