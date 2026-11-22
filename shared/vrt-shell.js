@@ -63,7 +63,8 @@ function side(){return D.querySelector(CFG.side);}
 function setOpen(v){var s=side();if(!s)return;
  if(GA){if(CFG.isOpen(s)!==v){var b=D.querySelector(CFG.btn);if(b){b.__vs=1;b.click();b.__vs=0;}}return;}
  s.classList.toggle('open',v);sync();}
-function sync(){if(GA)return;var s=side();if(!scrim){scrim=D.createElement('div');scrim.className='vs-scrim';scrim.addEventListener('click',function(){setOpen(false);});D.body.appendChild(scrim);}
+var openAt=0,wasOpen=false;
+function sync(){if(GA)return;var s=side();var o=!!(s&&CFG.isOpen(s));if(o&&!wasOpen)openAt=Date.now();wasOpen=o;if(!scrim){scrim=D.createElement('div');scrim.className='vs-scrim';scrim.addEventListener('click',function(){if(Date.now()-openAt<450)return;setOpen(false);});/* 2026-11-22：剛打開的那一下（手指放開時）點擊會落在遮罩上 → 選單一開就被關掉，忽略 */D.body.appendChild(scrim);}
  scrim.classList.toggle('on',!!(s&&!wide()&&CFG.isOpen(s)));}
 /* 按 VRT 標誌：電腦＝收起／展開；手機＝開／關。
    在「手指按下」那一刻就動作（PSJGA 讀資料時會一直重畫頂部，等到放開手指時按鈕可能已換新，點擊就被吃掉 → 看起來按了沒反應） */
