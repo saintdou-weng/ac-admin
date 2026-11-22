@@ -129,6 +129,10 @@ function build(){
  if(src)src.classList.add('hd-src-hidden');
  var car=W.querySelector('.hd-car');
  if(car){if(IDX>=SL.length)IDX=0;car.scrollLeft=IDX*car.clientWidth;mark(IDX);
+  /* 2026-11-23 Paul：左右滑到底不要停 → 循環。在最後一張再往左滑＝回第一張；在第一張再往右滑＝跳到最後一張（◀ ▶ 本來就會循環）。 */
+  (function(){var s0=null;car.addEventListener('touchstart',function(e){s0=e.touches.length===1?{x:e.touches[0].clientX,y:e.touches[0].clientY,l:car.scrollLeft}:null;},{passive:true});
+   car.addEventListener('touchend',function(e){var s=s0;s0=null;if(!s||SL.length<2)return;var p=e.changedTouches[0],dx=p.clientX-s.x,dy=p.clientY-s.y;if(Math.abs(dx)<48||Math.abs(dx)<Math.abs(dy)*1.6)return;
+    var max=car.scrollWidth-car.clientWidth;if(dx<0&&s.l>=max-4)go(0);else if(dx>0&&s.l<=4)go(SL.length-1);},{passive:true});})();
   var t=0;car.addEventListener('scroll',function(){if(t)return;t=requestAnimationFrame(function(){t=0;var i=Math.round(car.scrollLeft/Math.max(1,car.clientWidth));if(i!==IDX){IDX=i;try{sessionStorage.setItem('hd_idx_'+P,i);}catch(e){}mark(i);}});},{passive:true});}
 }
 function mark(i){if(!W)return;[].forEach.call(W.querySelectorAll('.hd-tab'),function(b,j){b.classList.toggle('on',j===i);});[].forEach.call(W.querySelectorAll('.hd-dots i'),function(b,j){b.classList.toggle('on',j===i);});

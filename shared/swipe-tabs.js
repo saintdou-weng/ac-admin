@@ -152,6 +152,16 @@
       var w = doc.defaultView, fe = w.frameElement;
       if (fe && fe.ownerDocument && fe.ownerDocument.__vrtSwipe) return move(fe.ownerDocument, dir, fe.getBoundingClientRect().top + y);
     } catch (e) {}
+    /* 2026-11-23 Paul：滑到最後一個分頁不要停 → 循環。沒有別排可以接手、也沒有外層頁面可以接手時，
+       最靠近手指的那一排從最後一個繞回第一個（或第一個繞到最後一個）。 */
+    for (var q = 0; q < order.length; q++) {
+      var g2 = order[q], n2 = g2.items.length;
+      if (n2 < 3 || g2.index < 0) continue;
+      var wrapTo = dir > 0 ? (g2.index === n2 - 1 ? g2.items[0] : null) : (g2.index === 0 ? g2.items[n2 - 1] : null);
+      if (!wrapTo) continue;
+      try { wrapTo.click(); var b2 = g2.bar; if (b2.scrollWidth > b2.clientWidth + 4) b2.scrollLeft = dir > 0 ? 0 : b2.scrollWidth; } catch (e) {}
+      return true;
+    }
     return false;
   }
 
@@ -274,4 +284,4 @@
    Paul：各平台上方都要有音樂開關跟調色盤。PSJERP／PSJHR／生產平台自己已經載了，這裡跳過；
    調色盤只會出現在「自己沒有調色盤」的平台（Admin OS、HRA Portal、HRA-PAY、SEC、GA-EXP、Audit），不干涉 PSJGA／GASCheck 原本的換色。
    開關位置會自動避開頁面原有的按鈕；載入失敗不影響左右滑。 */
-(function(){try{if(window.__VRT_MUSIC||document.querySelector('script[src*="/PSJERP/music.js"]'))return;if(/^\/(psjhr|psjerp|vrt-prod)\//i.test(location.pathname))return;var s=document.createElement('script');s.src='https://saintdou-weng.github.io/PSJERP/music.js?v=1.2.0';s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
+(function(){try{if(window.__VRT_MUSIC||document.querySelector('script[src*="/PSJERP/music.js"]'))return;if(/^\/(psjhr|psjerp|vrt-prod)\//i.test(location.pathname))return;var s=document.createElement('script');s.src='https://saintdou-weng.github.io/PSJERP/music.js?v=1.3.0';s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();

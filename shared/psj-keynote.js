@@ -97,7 +97,8 @@ function ui(){if(mask)return;
  box.addEventListener('touchend',function(e){if(e.target.closest&&e.target.closest('.pkn-grid,.pkn-lk'))return;var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.6)step(dx<0?1:-1);},{passive:true});
  var tk=0;box.addEventListener('scroll',function(){if(tk)return;tk=setTimeout(function(){tk=0;fill();var c=base,secs=box.querySelectorAll('.pkn-sec'),top=box.scrollTop+70;for(var k=0;k<secs.length;k++){if(secs[k].offsetTop<=top)c=+secs[k].getAttribute('data-i');else break;}if(c!==S.i){S.i=c;setHead();}},90);},{passive:true});}
 function close(){if(mask)mask.classList.remove('on');STK=[];if(IO){IO.disconnect();IO=null;}}
-function step(d){var j=S.i+d;if(j<0||j>=S.list.length)return;S.i=j;draw();}
+function kfx(d,o){try{var f=G.vrtFx;if(!f){try{f=G.top.vrtFx;}catch(e){}}if(f&&box)f(box,d,o);}catch(e){}}   /* 2026-11-23 翻頁特效（music.js 的 vrtFx；沒載就什麼都不做） */
+function step(d){var j=S.i+d;if(j<0||j>=S.list.length)return;S.i=j;draw();kfx(d);}
 function push(kind,list,i){STK.push({kind:S.kind,list:S.list,i:S.i});S.kind=kind;S.list=list;S.i=Math.max(0,i);draw();}
 function back(){var s=STK.pop();if(!s)return close();S.kind=s.kind;S.list=s.list;S.i=s.i;draw();}
 function reg(l){REG.push(l);return REG.length-1;}
@@ -193,8 +194,8 @@ function draw(){if(!S.list[S.i])return;box.classList.toggle('dk',dark());base=la
  label();setHead();box.scrollTop=0;mask.classList.add('on');
  if(IO)IO.disconnect();if(G.IntersectionObserver){IO=new IntersectionObserver(function(es){if(es.some(function(x){return x.isIntersecting;}))fill();},{root:box,rootMargin:'0px 0px 420px 0px'});IO.observe(box.querySelector('.pkn-more'));}
  setTimeout(fill,50);}
-function openRows(tr){ui();STK=[];REG=[];var tb=tr.closest('tbody');S.kind='row';S.list=tb?[].filter.call(tb.rows,function(r){return r.classList.contains('pkn-row')&&r.offsetParent!==null;}):[tr];if(S.list.indexOf(tr)<0)S.list=[tr];S.i=Math.max(0,S.list.indexOf(tr));draw();}
-function openKpis(el){ui();STK=[];REG=[];var par=el.parentElement;S.kind='kpi';S.list=par?[].filter.call(par.children,function(x){return x.classList.contains('pkn-kpi')&&x.offsetParent!==null;}):[el];if(!S.list.length)S.list=[el];S.i=Math.max(0,S.list.indexOf(el));draw();}
+function openRows(tr){ui();setTimeout(function(){kfx(1,1);},0);STK=[];REG=[];var tb=tr.closest('tbody');S.kind='row';S.list=tb?[].filter.call(tb.rows,function(r){return r.classList.contains('pkn-row')&&r.offsetParent!==null;}):[tr];if(S.list.indexOf(tr)<0)S.list=[tr];S.i=Math.max(0,S.list.indexOf(tr));draw();}
+function openKpis(el){ui();setTimeout(function(){kfx(1,1);},0);STK=[];REG=[];var par=el.parentElement;S.kind='kpi';S.list=par?[].filter.call(par.children,function(x){return x.classList.contains('pkn-kpi')&&x.offsetParent!==null;}):[el];if(!S.list.length)S.list=[el];S.i=Math.max(0,S.list.indexOf(el));draw();}
 API.openRows=openRows;API.openKpis=openKpis;
 
 function start(){if(G.VRT_HUBS)return;   /* 生產平台入口頁本身有物品頁；分頁 iframe 各自載入 */hook(D);frames();setInterval(frames,2000);}
