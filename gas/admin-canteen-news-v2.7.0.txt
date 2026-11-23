@@ -294,7 +294,7 @@ function canteenSend_(ym,why){
  if(!/^\d{4}-\d{2}$/.test(String(ym||'')))throw new Error('Bad month');
  const x=canteenXlsx_(ym);let cap=VRTCanteen.caption(x.result);if(why==='auto')cap+='\n🤖 每月 '+AC_CANTEEN.DAY+' 號自動發送 · Auto-sent on the '+AC_CANTEEN.DAY+'th';
  const short=cap.length>1000;
- tgRequest_('sendDocument',{chat_id:AC_ADMIN.CHAT_ID,document:x.blob,caption:short?'🍱 VRT Canteen '+ym:cap,parse_mode:'HTML'});
+ tgRequest_('sendDocument',{chat_id:AC_ADMIN.CHAT_ID,document:x.blob,caption:short?'🍱 VRT Canteen '+ym:cap,parse_mode:'HTML',reply_markup:JSON.stringify({inline_keyboard:[[{text:'🍱 伙食費 Canteen',url:AC_CANTEEN.PAGE},{text:'🏠 Admin OS',url:AC_ADMIN.HOME_URL}]]})});
  if(short)tgSend_(AC_ADMIN.CHAT_ID,cap);
  const s=canteenSent_();s[ym]=new Date().toISOString();PropertiesService.getScriptProperties().setProperty('CANTEEN_SENT',JSON.stringify(s));
  return {ok:true,sent:s,charge:x.result.charge,refund:x.result.refund};
@@ -332,7 +332,7 @@ function newsTick_(dry){
   due.forEach(function(is){
    const tk='NEWS_TRY_'+is.id,n=Number(p.getProperty(tk)||0);if(n>=3)return;p.setProperty(tk,String(n+1));
    let text=String(is.tg||'');if(!text)return;if(text.length>3900)text=text.slice(0,3880).replace(/\n[^\n]*$/,'')+'\n…';
-   const kb={inline_keyboard:[[{text:'📰 打開新聞 News',url:AC_NEWS.PAGE}]]};
+   const kb={inline_keyboard:[[{text:'📰 打開新聞 News',url:AC_NEWS.PAGE},{text:'🏠 Admin OS',url:AC_ADMIN.HOME_URL}]]};
    try{tgSend_(AC_ADMIN.CHAT_ID,text,kb);}catch(e){tgRequest_('sendMessage',{chat_id:AC_ADMIN.CHAT_ID,text:text.replace(/<[^>]+>/g,'').slice(0,3990),disable_web_page_preview:true,reply_markup:JSON.stringify(kb)});}
    sent.push(is.id);p.setProperty('NEWS_SENT',JSON.stringify(sent.slice(-80)));p.deleteProperty(tk);
   });

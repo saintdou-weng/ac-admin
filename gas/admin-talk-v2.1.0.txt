@@ -85,7 +85,7 @@ function talkReply_(m){
   lines.push('');
  });
  if(pages.length)lines.push('👇 相關頁面 / Related pages');
- rows.push([{text:'🏠 VRT OS',url:AC_ADMIN.HOME_URL},{text:'📊 摘要 Summary',callback_data:'ac:summary'}]);
+ rows.push([{text:'🏠 Admin OS',url:AC_ADMIN.HOME_URL},{text:'📊 摘要 Summary',callback_data:'ac:summary'}]);
  return {text:lines.join('\n').trim(),markup:{inline_keyboard:rows.slice(0,8)},replyTo:m.message_id};
 }
 function talkAction_(u){

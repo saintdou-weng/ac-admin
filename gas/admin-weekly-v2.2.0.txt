@@ -41,7 +41,7 @@ function weeklyFetchPart_(url){
 }
 function weeklyKeyboard_(kind){
  const H=AC_ADMIN.HOME_URL,rows=kind==='prod'?[[{text:'🏭 生產財務 VRT ERP',url:H+'#erp'},{text:'📅 排單・裁剪',url:H+'#erp/p-prodplan'}]]:[[{text:'🧑‍💼 人事 VRT HR',url:H+'#hr'},{text:'🧹 總務保全 VRT GA',url:H+'#ga'}]];
- rows.push([{text:'🏠 VRT OS',url:H},{text:'📊 摘要 Summary',callback_data:'ac:summary'}]);return {inline_keyboard:rows};
+ rows.push([{text:'🏠 Admin OS',url:H},{text:'📊 摘要 Summary',callback_data:'ac:summary'}]);return {inline_keyboard:rows};
 }
 /* 組出本週要發的訊息（不發）。回傳 {monday, parts:[{id,html,kind}], errors:[]} */
 function weeklyBuild_(fresh){

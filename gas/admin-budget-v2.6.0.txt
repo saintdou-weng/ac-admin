@@ -102,7 +102,7 @@ function budgetLive_(force){
 function budgetGet_(p){const d=budgetDocRead_();let live={};try{live=budgetLive_(p&&p.fresh==='1');}catch(e){live={err:[String(e.message||e)]};}return {ok:true,rev:d.rev,doc:d.doc,live:live};}
 function budgetModel_(force){const B=budgetLib_(),d=budgetDocRead_(),live=budgetLive_(force);return B.make(globalThis.VRTB_DATA,d.doc||{},live);}
 /* ── 每月結算 ── */
-function budgetKb_(view){return JSON.stringify({inline_keyboard:[[{text:view==='labor'?'👷 人工預算頁 Labour budget':'📊 預算頁 Budget page',url:AC_BUDGET.PAGE+(view==='labor'?'?view=labor':'')},{text:'🏠 Main',url:AC_ADMIN.HOME_URL}]]});}
+function budgetKb_(view){return JSON.stringify({inline_keyboard:[[{text:view==='labor'?'👷 人工預算頁 Labour budget':'📊 預算頁 Budget page',url:AC_BUDGET.PAGE+(view==='labor'?'?view=labor':'')},{text:'🏠 Admin OS',url:AC_ADMIN.HOME_URL}]]});}
 function budgetPost_(chat,html,view){const chunks=typeof weeklyChunks_==='function'?weeklyChunks_(html):[String(html).slice(0,4000)];chunks.forEach(function(t,i){tgRequest_('sendMessage',{chat_id:chat,text:t,parse_mode:'HTML',disable_web_page_preview:true,reply_markup:i===chunks.length-1?budgetKb_(view):undefined});});}
 function budgetPrevYm_(){const n=new Date();const d=new Date(n.getFullYear(),n.getMonth()-1,1);return Utilities.formatDate(d,AC_ADMIN.TZ,'yyyy-MM');}
 function budgetSettle_(ym,force,dry){
