@@ -1,0 +1,72 @@
+/* ===== 2026-11-24 v1.0.0 行政／人資 法規生效與政府檢查提醒 → 私訊 Paul（14 天前、7 天前） =====
+   Paul 11/24：「可以要 bot 私訊通知我就行，但要一到二周前通知最好」。
+   · 來源（都是公開、不含個資的 github.io 檔；跟網頁同一份）：
+       ① PSJHR regs-data.js       → 法規「即將生效」項目（st:'up'，略過 lsd／cycle 兩類，那兩類在行事曆）＋ events 截止日
+       ② HRA Portal shared/calendar-inspect-v1.js → 🏛️ 政府檢查／稽核／健檢（type:'inspect'）
+   · 每天 08:00 後跑一次（complianceInstall() 建的每日觸發；每天只會真的檢查一次 CMP_CHECK＝今天）
+   · 每一筆：剩 ≤14 天發一次（階段 14）、剩 ≤7 天再發一次（階段 7）；同一天要發的合併成一則；發過記在 CMP_SENT_<id>（"14"／"7"）。
+     第一次上線時已經在 7 天內的直接發階段 7（不補發 14）。
+   · 私訊失敗 → 改發 Admin 群組。previewCompliance() 只看不發；sendComplianceNow() 立刻檢查一次（忽略 CMP_CHECK）。錯誤在 CMP_LAST_ERROR。 */
+const AC_CMP={
+ REGS:'https://saintdou-weng.github.io/psjhr/regs-data.js',
+ INSP:'https://saintdou-weng.github.io/ac-hra-portal/shared/calendar-inspect-v1.js',
+ PAUL:'5026942575', AT:'08:00', STAGES:[14,7]
+};
+function cmpLoad_(url,name){
+ const r=UrlFetchApp.fetch(url+'?t='+Date.now(),{muteHttpExceptions:true,followRedirects:true});
+ if(r.getResponseCode()!==200)throw new Error(name+' HTTP '+r.getResponseCode());
+ (0,eval)(r.getContentText());
+ return globalThis[name];
+}
+function cmpDays_(d,today){return Math.round((new Date(d+'T00:00:00Z')-new Date(today+'T00:00:00Z'))/864e5);}
+function cmpItems_(){
+ const out=[],seen={};
+ const add=function(o){const k=o.d+'|'+o.zh;if(seen[k])return;seen[k]=1;out.push(o);};
+ try{const R=cmpLoad_(AC_CMP.REGS,'VRT_REGS');
+  (R.topics||[]).forEach(function(tp){if(tp.k==='lsd'||tp.k==='cycle')return;(tp.items||[]).forEach(function(it,i){if(it.st!=='up')return;
+   add({id:'reg-'+tp.k+'-'+it.d,d:it.d,ic:tp.ic||'📜',zh:it.t[0],en:it.t[1]||it.t[0],note:(it.b&&it.b[0])?it.b[0][0]:'',src:'PSJHR 法規'});});});
+  (R.events||[]).forEach(function(e){add({id:'ev-'+e.id,d:e.d,ic:'⏰',zh:e.zh,en:e.en||e.zh,note:'',src:'PSJHR 法規'});});
+ }catch(e){PropertiesService.getScriptProperties().setProperty('CMP_LAST_ERROR','regs: '+e);}
+ try{const S=cmpLoad_(AC_CMP.INSP,'HRAInspectSeed');
+  (S.list||[]).forEach(function(r){if(r.type!=='inspect'||/^insp-law-/.test(r.id))return;   /* 法規那幾筆由 PSJHR 那邊提醒，避免重複 */add({id:r.id,d:r.date,ic:'🏛️',zh:r.zh,en:r.en||r.zh,note:String(r.note||'').split(/[。；\n]/)[0],src:'HRA 行事曆'});});
+ }catch(e){PropertiesService.getScriptProperties().setProperty('CMP_LAST_ERROR','inspect: '+e);}
+ return out;
+}
+function cmpWeek_(d){const w=['日','一','二','三','四','五','六'],x=new Date(d+'T00:00:00Z');return w[x.getUTCDay()];}
+function cmpRun_(force,dry){
+ const tz=AC_ADMIN.TZ,now=new Date(),today=Utilities.formatDate(now,tz,'yyyy-MM-dd'),hm=Utilities.formatDate(now,tz,'HH:mm'),p=PropertiesService.getScriptProperties();
+ if(!force){if(hm<AC_CMP.AT)return 'too early';if(p.getProperty('CMP_CHECK')===today)return 'done today';}
+ const due=[];
+ cmpItems_().forEach(function(o){const n=cmpDays_(o.d,today);if(n<0||n>AC_CMP.STAGES[0])return;
+  const sent=p.getProperty('CMP_SENT_'+o.id)||'';const stage=n<=AC_CMP.STAGES[1]?'7':'14';
+  if(sent==='7'||(sent==='14'&&stage==='14'))return;o.n=n;o.stage=stage;due.push(o);});
+ if(!due.length){if(!dry)p.setProperty('CMP_CHECK',today);return 'nothing due';}
+ due.sort(function(a,b){return a.d<b.d?-1:a.d>b.d?1:0;});
+ const L=['⏰ <b>行政／人資提醒 Admin &amp; HR reminder</b>','<i>'+today+'（週'+cmpWeek_(today)+'）· '+due.length+' 項 item(s)</i>',''];
+ due.forEach(function(o){
+  const tag=o.n===0?'🔴 今天 today':o.n<=7?'🔴 還有 '+o.n+' 天 · '+o.n+' days left':'🟡 還有 '+o.n+' 天 · '+o.n+' days left';
+  L.push(o.ic+' <b>'+o.d+'（週'+cmpWeek_(o.d)+'）</b> '+escH_(o.zh));
+  if(o.en&&o.en!==o.zh)L.push('    <i>'+escH_(o.en)+'</i>');
+  L.push('    '+tag);
+  if(o.note)L.push('    📝 '+escH_(o.note));
+  L.push('');
+ });
+ L.push('<i>來源：PSJHR 法規與重大通知／HRA 行事曆 🏛️。14 天前、7 天前各提醒一次。</i>');
+ const html=L.join('\n');
+ if(dry)return html;
+ try{tgRequest_('sendMessage',{chat_id:AC_CMP.PAUL,text:html,parse_mode:'HTML',disable_web_page_preview:true});}
+ catch(e){tgRequest_('sendMessage',{chat_id:AC_ADMIN.CHAT_ID,text:'（私訊 Paul 失敗，改發群組 DM failed — posted here）\n'+html,parse_mode:'HTML',disable_web_page_preview:true});}
+ due.forEach(function(o){p.setProperty('CMP_SENT_'+o.id,o.stage);});
+ p.setProperty('CMP_CHECK',today);p.setProperty('CMP_LAST',today+' sent '+due.length);p.deleteProperty('CMP_LAST_ERROR');
+ return 'sent '+due.length;
+}
+function escH_(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function complianceTick_(){try{return cmpRun_(false,false);}catch(e){PropertiesService.getScriptProperties().setProperty('CMP_LAST_ERROR',String(e).slice(0,400));return 'error';}}
+function previewCompliance(){const r=cmpRun_(true,true);Logger.log(r);return r;}
+function sendComplianceNow(){const r=cmpRun_(true,false);Logger.log(r);return r;}
+/* 執行一次：建立每天 08:00–09:00 的觸發（已有就不重建） */
+function complianceInstall(){
+ const has=ScriptApp.getProjectTriggers().some(function(t){return t.getHandlerFunction()==='complianceTick_';});
+ if(!has)ScriptApp.newTrigger('complianceTick_').timeBased().everyDays(1).atHour(8).inTimezone(AC_ADMIN.TZ).create();
+ Logger.log(has?'trigger exists':'trigger created');return has?'exists':'created';
+}
