@@ -156,7 +156,9 @@ const ADMIN=[
  {k:'go:hr:salstruct',go:['hr','salstruct'],ic:'📐',zh:'薪資架構＋年度調薪（2020–2026）',en:'Salary structure + annual raises (2020–2026)',km:'រចនាសម្ព័ន្ធប្រាក់ខែ',bd:'HR'},
  /* 2026-11-21 Paul：外幹／幹部等工廠相關的合約、薪資、伙食費，先從 ACC Flow 移到這裡最底下放著（工具本身與資料不動，仍是 ACC Flow 那一份） */
  /* 2026-11-22 Paul：外籍相關（薪資含伙食費、年假、合約、人工成本）合成一項，進去用分頁切換；工具與資料仍是 ACC Flow 那四個模組 */
- {k:'apps/admin/expat_hub.html',ic:'🌏',zh:'外籍幹部管理（薪資・年假・合約・人工成本）',en:'Expat staff (payroll, leave, contracts, labour cost)',frame:true,bd:'暫放'}
+ {k:'apps/admin/expat_hub.html',ic:'🌏',zh:'外籍幹部管理（薪資・年假・合約・人工成本）',en:'Expat staff (payroll, leave, contracts, labour cost)',frame:true,bd:'暫放'},
+ /* 2026-11-24 Paul：外籍、Isay 那邊算薪的人、管理層的薪資只放 Admin OS（加密上雲；PSJHR／HRA-PAY／員工頁都不出現） */
+ {k:'apps/admin/conf_pay.html',ic:'🔐',zh:'機密薪資（外籍・Isay・管理層）',en:'Confidential pay (expat, Isay, management)',frame:true,bd:'🔐'}
 ];
 const ADMINSYS={id:'admin',icon:'🏛',color:'#475569',zh:'行政',en:'Administration',km:'រដ្ឋបាល',tag:'ADMIN',mode:'file',url:new URL('./',location.href).href,pages:[]};
 const byId=id=>id==='admin'?ADMINSYS:SYS.find(s=>s.id===id);

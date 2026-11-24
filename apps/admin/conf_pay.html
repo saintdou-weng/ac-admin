@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>機密薪資 · Admin OS</title>
+<script src="../../shared/gate.js"></script>
+<script src="../../shared/xlsx.full.min.js"></script>
+<script src="https://saintdou-weng.github.io/ac-hra-portal/shared/hra-smart-sync.js?v=cp1"></script>
+<style>
+:root{--bg:#f4f6f8;--card:#fff;--ink:#1f2933;--mut:#6b7280;--line:#e5e7eb;--acc:#7c3aed;--grn:#059669;--red:#dc2626;--amb:#d97706;--blu:#2563eb}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1115;--card:#1a1b1e;--ink:#eceae4;--mut:#9b9a92;--line:#2e2e2b}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Noto Sans TC",sans-serif}
+.bar{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 12px;background:var(--card);border-bottom:1px solid var(--line)}
+.bar h1{font-size:15px;margin:0 8px 0 0}.grow{flex:1}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:9px;padding:6px 11px;font:inherit;font-size:13px;font-weight:650;cursor:pointer;white-space:nowrap}
+.btn.p{background:var(--acc);border-color:var(--acc);color:#fff}.btn.d{color:var(--red)}.btn:disabled{opacity:.5}
+.tabs{display:flex;gap:6px;padding:8px 12px;overflow-x:auto}.tab{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 12px;cursor:pointer;font-weight:650;font-size:13px;white-space:nowrap}.tab.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.wrap{padding:0 12px 24px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:10px 0;overflow:hidden}
+.card h2{font-size:14px;margin:0;padding:10px 12px;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:10px 0}.k{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--acc);border-radius:10px;padding:8px 10px}.k b{font-size:20px;display:block}.k span{color:var(--mut);font-size:12px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:rgba(124,58,237,.06);font-size:12px;color:var(--mut);position:sticky;top:0}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}.tw{overflow:auto;max-height:65vh}
+tr.click{cursor:pointer}tr.click:hover td{background:rgba(124,58,237,.05)}
+.pill{display:inline-block;border-radius:999px;padding:1px 8px;font-size:11.5px;font-weight:700}.g-expat{background:#e0f2fe;color:#075985}.g-isay{background:#fef3c7;color:#92400e}.g-mgmt{background:#ede9fe;color:#5b21b6}
+.mut{color:var(--mut);font-size:12px}.note{background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.25);border-radius:10px;padding:8px 10px;margin:10px 0;font-size:13px}
+.lock{position:fixed;inset:0;display:grid;place-items:center;background:var(--bg);z-index:50}.lock .box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;width:min(380px,92vw);text-align:center}
+.lock input{width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;font:inherit;margin:10px 0;background:var(--bg);color:var(--ink)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;place-items:center;z-index:40}.modal.on{display:grid}
+.modal .box{background:var(--card);border-radius:14px;padding:14px;width:min(560px,94vw);max-height:90vh;overflow:auto}
+.fg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.fg label{font-size:12px;color:var(--mut);display:block}.fg input,.fg select,.fg textarea{width:100%;padding:7px;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--bg);color:var(--ink)}
+.barc{height:12px;border-radius:6px;background:#eef2f7;overflow:hidden;min-width:80px}.barc i{display:block;height:100%}
+#toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:9px 14px;border-radius:10px;font-size:13px;display:none;z-index:60;max-width:92vw;white-space:pre-line}
+</style>
+</head>
+<body>
+<div class="lock" id="lock"><div class="box">
+ <div style="font-size:34px">🔐</div><h3 style="margin:6px 0">機密薪資 · Confidential pay</h3>
+ <div class="mut">外籍人員、Isay 那邊算薪的人、管理層。資料在這台裝置加密後才上雲端；雲端和程式裡都只有密文。</div>
+ <input id="pw" type="password" placeholder="機密密碼" autocomplete="current-password" onkeydown="if(event.key==='Enter')CP.unlock()">
+ <button class="btn p" style="width:100%" onclick="CP.unlock()">解鎖 Unlock</button>
+ <div class="mut" id="lockMsg" style="margin-top:8px">第一次在這台裝置輸入一次，之後記住（只記加密金鑰，不記密碼）。</div>
+</div></div>
+
+<div class="bar">
+ <h1>🔐 機密薪資</h1>
+ <select id="year" class="btn" onchange="CP.setYear(this.value)"></select>
+ <button class="btn p" onclick="CP.edit()">＋ 新增</button>
+ <label class="btn" style="cursor:pointer">⬆ Excel／PDF<input type="file" id="fileIn" accept=".xlsx,.xls,.pdf" multiple style="display:none" onchange="CP.importFiles(this.files);this.value=''"></label>
+ <button class="btn" onclick="CP.exportXlsx()">⬇ Excel</button>
+ <span class="grow"></span>
+ <span class="mut" id="sync">—</span>
+ <button class="btn" onclick="CP.sync(true)">☁ 同步</button>
+ <button class="btn" onclick="CP.lockNow()">🔒</button>
+</div>
+<div class="tabs" id="tabs"></div>
+<div class="wrap" id="main"></div>
+
+<div class="modal" id="modal"><div class="box" id="mbox"></div></div>
+<div id="toast"></div>
+
+<script>
+/* 機密薪資（2026-11-24 Paul）
+ * 範圍：外籍人員、Isay 那邊算薪的人、管理層。只放 Admin OS；PSJHR、HRA-PAY、員工頁都不會出現。
+ * 加密：輸入機密密碼 → PBKDF2（25 萬次）導出 AES-GCM 金鑰和 HMAC 金鑰（不可匯出，存在這台裝置的 IndexedDB）。
+ *   每一筆資料各自加密成 {_k:'C|'+HMAC(id), ct, iv}；雲端的鍵值也是雜湊，看不出是誰、哪一年。程式裡沒有密碼。
+ * 雲端：HRA 雲端的智慧同步（tool 'admin_conf_pay'），只傳有變的分桶；中斷了下次接著傳。刪除＝在密文裡標記 deleted，不真的刪。
+ * 匯入：Excel（調薪表：兩組薪資欄＝調前／調後；或一組＝當年）、PDF（原檔加密分段存，按一下解密開啟）。同一檔案（SHA-256）不重傳，沒傳完的段落下次接著傳。
+ */
+(function(){'use strict';
+const TOOL='admin_conf_pay',DB='vrt_conf_pay',ITER=250000,CHUNK=30000;
+const GAS=()=>{try{return (localStorage.getItem('vrt_att_cloud_v1_url')||localStorage.getItem('ac_hra_gas_url')||'').trim()}catch(e){return ''}};
+const GAS_DEF='https://script.google.com/macros/s/AKfycbya4jZG7YixRmumt9vKA-5Cv92jP8fi_o4toiU-8J2exQCYBhBsLOtN4kX9hoKqzp12/exec';
+const url=()=>GAS()||GAS_DEF;
+const GRP={expat:['外籍','Expat','g-expat'],isay:['Isay 算薪','Isay payroll','g-isay'],mgmt:['管理層','Management','g-mgmt']};
+const PARTS=[['basic','底薪'],['seniority','工齡'],['skill','技能'],['position','職位'],['language','語言'],['housing','交通住宿'],['attendance','全勤'],['other','其他']];
+let K=null,H=null,ENC=new Map(),DATA=new Map(),YEAR=new Date().getFullYear()+(new Date().getMonth()>=9?1:0),TAB='list',Q='',BUSY=false;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num=v=>{const x=parseFloat(String(v==null?'':v).replace(/[$,\s]/g,''));return isFinite(x)?x:0};
+const money=v=>'$'+(Math.round(num(v)*100)/100).toLocaleString('en-US',{maximumFractionDigits:2});
+const now=()=>new Date().toISOString();
+function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(toast._t);toast._t=setTimeout(()=>t.style.display='none',4200)}
+const b64=u=>{let s='';const a=new Uint8Array(u);for(let i=0;i<a.length;i+=0x8000)s+=String.fromCharCode.apply(null,a.subarray(i,i+0x8000));return btoa(s)};
+const unb64=s=>{const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u};
+const hex=u=>Array.from(new Uint8Array(u)).map(x=>x.toString(16).padStart(2,'0')).join('');
+/* ── IndexedDB（只存金鑰物件和密文） ── */
+function idb(){return new Promise((res,rej)=>{const r=indexedDB.open(DB,1);r.onupgradeneeded=()=>{r.result.createObjectStore('kv')};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+async function kvGet(k){const d=await idb();return new Promise(r=>{const q=d.transaction('kv').objectStore('kv').get(k);q.onsuccess=()=>r(q.result);q.onerror=()=>r(null)})}
+async function kvSet(k,v){const d=await idb();return new Promise(r=>{const t=d.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=()=>r(true);t.onerror=()=>r(false)})}
+async function kvDel(k){const d=await idb();return new Promise(r=>{const t=d.transaction('kv','readwrite');t.objectStore('kv').delete(k);t.oncomplete=()=>r(true)})}
+/* ── 加解密 ── */
+async function derive(pw){const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);
+ const aes=await crypto.subtle.deriveKey({name:'PBKDF2',salt:new TextEncoder().encode('VRT-ConfPay-AES-v1'),iterations:ITER,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
+ const mac=await crypto.subtle.deriveKey({name:'PBKDF2',salt:new TextEncoder().encode('VRT-ConfPay-MAC-v1'),iterations:ITER,hash:'SHA-256'},base,{name:'HMAC',hash:'SHA-256',length:256},false,['sign']);return {aes,mac}}
+async function kname(id){const s=await crypto.subtle.sign('HMAC',H,new TextEncoder().encode(id));return 'C|'+hex(s).slice(0,40)}
+async function enc(obj){const iv=crypto.getRandomValues(new Uint8Array(12));const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv},K,new TextEncoder().encode(JSON.stringify(obj)));return {iv:b64(iv),ct:b64(ct)}}
+async function dec(r){const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(r.iv)},K,unb64(r.ct));return JSON.parse(new TextDecoder().decode(pt))}
+/* ── 解鎖 ── */
+async function tryKeys(k){K=k.aes;H=k.mac;const cache=(await kvGet('enc'))||[];ENC=new Map(cache.map(r=>[r._k,r]));const ck=await kname('check');let rec=ENC.get(ck);
+ if(!rec){await pull(true);rec=ENC.get(ck)}
+ if(rec){try{const o=await dec(rec);if(o&&o.check==='VRT-CONF-OK')return true}catch(e){}return false}
+ /* 雲端和本機都沒有：第一次使用，用這個密碼建立 */
+ await put({id:'check',kind:'check',check:'VRT-CONF-OK'});return true}
+window.CP={};
+CP.unlock=async()=>{const pw=$('pw').value;if(!pw){$('lockMsg').textContent='請輸入機密密碼';return}$('lockMsg').textContent='解鎖中…（約 1–2 秒）';
+ try{const k=await derive(pw);$('pw').value='';const ok=await tryKeys(k);if(!ok){K=H=null;$('lockMsg').textContent='❌ 密碼不對';return}await kvSet('keys',k);await openApp()}catch(e){$('lockMsg').textContent='⚠ '+e.message}};
+CP.lockNow=async()=>{await kvDel('keys');K=H=null;DATA.clear();location.reload()};
+async function boot(){const k=await kvGet('keys');if(k&&k.aes&&k.mac){try{if(await tryKeys(k)){await openApp();return}}catch(e){}}$('lock').style.display='grid';setTimeout(()=>$('pw').focus(),50)}
+async function openApp(){$('lock').style.display='none';await decryptAll();render();sync(false)}
+async function decryptAll(){DATA.clear();for(const r of ENC.values()){try{const o=await dec(r);if(o&&o.id)DATA.set(o.id,o)}catch(e){}}}
+/* ── 存取 ── */
+async function put(o,quiet){o.updatedAt=now();const e=await enc(o);const rec={_k:await kname(o.id),iv:e.iv,ct:e.ct,updatedAt:o.updatedAt};ENC.set(rec._k,rec);DATA.set(o.id,o);await kvSet('enc',[...ENC.values()]);if(!quiet)schedule()}
+let _t=null;function schedule(){clearTimeout(_t);_t=setTimeout(()=>sync(false),1200)}
+async function pull(silent){if(!window.HRASmartSync)return;try{const res=await HRASmartSync.pull({url:url(),tool:TOOL,localRecords:[...ENC.values()]});const rows=(res&&res.records)||[];let n=0;rows.forEach(r=>{if(!r||!r._k||!r.ct)return;const c=ENC.get(r._k);if(!c||String(r.updatedAt||'')>String(c.updatedAt||'')){ENC.set(r._k,{_k:r._k,iv:r.iv,ct:r.ct,updatedAt:r.updatedAt});n++}});if(n)await kvSet('enc',[...ENC.values()]);return n}catch(e){if(!silent)toast('☁↓ '+e.message);return 0}}
+async function sync(manual){if(BUSY||!K)return;BUSY=true;$('sync').textContent='☁ 同步中…';try{const n=await pull(true);if(n){await decryptAll();render()}const recs=[...ENC.values()];const d=await HRASmartSync.push({url:url(),tool:TOOL,records:recs,recordCount:recs.length,summary:{encrypted:recs.length},allowDeletes:false,autoConfirmConflicts:true});$('sync').textContent='☁ ✓ '+new Date().toTimeString().slice(0,5)+' · '+recs.length+' 筆密文';if(manual)toast('☁ 雲端已同步'+(d&&d.uploaded?' · 上傳 '+d.uploaded:''))}catch(e){$('sync').textContent='☁ 待同步（'+e.message+'）'}finally{BUSY=false}}
+CP.sync=m=>sync(m);
+/* ── 資料 ── */
+const pays=()=>[...DATA.values()].filter(o=>o.kind==='pay'&&!o.deleted);
+const years=()=>{const s=new Set([YEAR]);pays().forEach(o=>s.add(+o.year));return [...s].sort((a,b)=>b-a)};
+const total=o=>num(o.total)||PARTS.reduce((s,[k])=>s+num(o[k]),0);
+function guessGrp(t){t=String(t||'');if(/expat|外籍|foreign|taiwan|台|china|philipp|菲|malays|F\d+/i.test(t))return 'expat';if(/ship|account|船務|會計|finance/i.test(t))return 'isay';return 'mgmt'}
+CP.setYear=y=>{YEAR=+y;render()};CP.tab=t=>{TAB=t;render()};CP.q=v=>{Q=v;render(true)};
+/* ── 畫面 ── */
+function render(keepFocus){
+ $('year').innerHTML=years().map(y=>`<option ${y===YEAR?'selected':''}>${y}</option>`).join('');
+ $('tabs').innerHTML=[['list','📋 名單'],['hist','📊 歷年比較'],['files','📎 檔案']].map(([k,l])=>`<span class="tab ${TAB===k?'on':''}" onclick="CP.tab('${k}')">${l}</span>`).join('');
+ const M=$('main');if(TAB==='list')M.innerHTML=listView();else if(TAB==='hist')M.innerHTML=histView();else M.innerHTML=filesView();
+ if(keepFocus){const i=$('q');if(i){i.focus();i.setSelectionRange(Q.length,Q.length)}}}
+function listView(){const ys=pays().filter(o=>+o.year===YEAR),prev=new Map(pays().filter(o=>+o.year===YEAR-1).map(o=>[String(o.empId),o]));const q=Q.toLowerCase();
+ const rows=ys.filter(o=>!q||[o.empId,o.name,o.dept,o.position].join(' ').toLowerCase().includes(q)).sort((a,b)=>(a.group||'').localeCompare(b.group||'')||String(a.empId).localeCompare(String(b.empId),undefined,{numeric:true}));
+ const by={};ys.forEach(o=>{const g=o.group||'mgmt';by[g]=by[g]||{n:0,t:0};by[g].n++;by[g].t+=total(o)});const all=ys.reduce((s,o)=>s+total(o),0),allP=[...prev.values()].reduce((s,o)=>s+total(o),0);
+ let h=`<div class="note">🔐 ${YEAR} 年機密薪資：只在 Admin OS，PSJHR／HRA-PAY／員工頁都不會出現。雲端只有密文。</div><div class="kpis"><div class="k"><span>${YEAR} 人數</span><b>${ys.length}</b></div><div class="k"><span>每月合計</span><b>${money(all)}</b><span>${allP?'比 '+(YEAR-1)+' '+(all-allP>=0?'+':'')+money(all-allP):''}</span></div>${Object.keys(GRP).map(g=>`<div class="k" style="border-left-color:${g==='expat'?'#0284c7':g==='isay'?'#d97706':'#7c3aed'}"><span>${GRP[g][0]}</span><b>${by[g]?by[g].n:0} 人</b><span>${by[g]?money(by[g].t):'—'}</span></div>`).join('')}</div>`;
+ h+=`<div class="card"><h2>📋 ${YEAR} 名單 <input id="q" class="btn" style="font-weight:400" placeholder="搜尋工號／姓名" value="${esc(Q)}" oninput="CP.q(this.value)"><span class="grow"></span><span class="mut">點一列可編輯／刪除</span></h2><div class="tw"><table><thead><tr><th>類別</th><th>工號</th><th>姓名</th><th>部門／職稱</th><th class="n">底薪</th><th class="n">其他</th><th class="n">月薪合計</th><th class="n">比去年</th><th>說明</th></tr></thead><tbody>${rows.map(o=>{const p=prev.get(String(o.empId)),d=p?total(o)-total(p):null;return `<tr class="click" onclick="CP.edit('${esc(o.id)}')"><td><span class="pill ${GRP[o.group||'mgmt'][2]}">${GRP[o.group||'mgmt'][0]}</span></td><td>${esc(o.empId)}</td><td><b>${esc(o.name)}</b></td><td class="mut">${esc([o.dept,o.position].filter(Boolean).join(' · '))}</td><td class="n">${money(o.basic)}</td><td class="n">${money(total(o)-num(o.basic))}</td><td class="n"><b>${money(total(o))}</b>${o.currency&&o.currency!=='USD'?' <span class="mut">'+esc(o.currency)+'</span>':''}</td><td class="n" style="color:${d>0?'var(--grn)':d<0?'var(--red)':'inherit'}">${d==null?'—':(d>0?'+':'')+money(d)}</td><td class="mut">${esc(o.note||'')}</td></tr>`}).join('')||`<tr><td colspan="9" class="mut" style="text-align:center;padding:18px">${YEAR} 年還沒有資料：按「＋ 新增」或匯入 Excel</td></tr>`}</tbody></table></div></div>`;return h}
+function histView(){const ys=years().slice().sort();const per={};pays().forEach(o=>{const id=String(o.empId);(per[id]=per[id]||{o,y:{}}).y[o.year]=total(o);if(+o.year>=+per[id].o.year)per[id].o=o});
+ const tot=ys.map(y=>{const l=pays().filter(o=>+o.year===y);return {y,n:l.length,t:l.reduce((s,o)=>s+total(o),0)}});const mx=Math.max(1,...tot.map(x=>x.t));
+ let h=`<div class="card"><h2>📊 各年度每月合計</h2><div class="tw"><table><thead><tr><th>年度</th><th class="n">人數</th><th>每月合計</th><th class="n">比前一年</th></tr></thead><tbody>${tot.slice().reverse().map((x,i,a)=>{const p=a[i+1];const d=p?x.t-p.t:null;return `<tr><td>${x.y}${x.y===YEAR?' <span class="pill g-mgmt">選擇中</span>':''}</td><td class="n">${x.n}</td><td><div style="display:flex;gap:8px;align-items:center"><div class="barc" style="flex:1;max-width:340px"><i style="width:${(x.t/mx*100).toFixed(1)}%;background:#8b5cf6"></i></div><b>${money(x.t)}</b></div></td><td class="n" style="color:${d>0?'var(--grn)':d<0?'var(--red)':'inherit'}">${d==null?'—':(d>0?'+':'')+money(d)}</td></tr>`}).join('')}</tbody></table></div></div>`;
+ h+=`<div class="card"><h2>👤 每人歷年月薪</h2><div class="tw"><table><thead><tr><th>類別</th><th>工號</th><th>姓名</th>${ys.map(y=>`<th class="n">${y}</th>`).join('')}</tr></thead><tbody>${Object.values(per).sort((a,b)=>String(a.o.empId).localeCompare(String(b.o.empId),undefined,{numeric:true})).map(({o,y})=>`<tr><td><span class="pill ${GRP[o.group||'mgmt'][2]}">${GRP[o.group||'mgmt'][0]}</span></td><td>${esc(o.empId)}</td><td>${esc(o.name)}</td>${ys.map((yy,i)=>{const v=y[yy],p=i?y[ys[i-1]]:undefined;return `<td class="n">${v==null?'—':money(v)}${v!=null&&p!=null&&v!==p?`<div class="mut" style="color:${v>p?'var(--grn)':'var(--red)'}">${v>p?'+':''}${money(v-p)}</div>`:''}</td>`}).join('')}</tr>`).join('')||`<tr><td colspan="${3+ys.length}" class="mut">—</td></tr>`}</tbody></table></div></div>`;return h}
+function filesView(){const fs=[...DATA.values()].filter(o=>(o.kind==='file'||o.kind==='pdf')&&!o.deleted).sort((a,b)=>String(b.at).localeCompare(String(a.at)));
+ return `<div class="note">📎 匯入過的 Excel 和 PDF。同一個檔案不會重傳；沒傳完的（⏸）再丟一次同一個檔案會接著傳。PDF 原檔加密存在雲端，按「開啟」才在這台裝置解密。</div><div class="card"><h2>📎 檔案</h2><div class="tw"><table><thead><tr><th>檔名</th><th>類型</th><th>年度</th><th>內容</th><th>匯入時間</th><th></th></tr></thead><tbody>${fs.map(f=>`<tr><td>${f.done?'✅':'⏸'} ${esc(f.name)}</td><td>${f.kind==='pdf'?'PDF':'Excel'}</td><td>${esc(f.year||'')}</td><td class="mut">${f.kind==='pdf'?(f.got||0)+'/'+f.chunks+' 段':(f.rows||0)+' 筆'}</td><td class="mut">${esc(String(f.at||'').slice(0,16).replace('T',' '))}</td><td>${f.kind==='pdf'&&f.done?`<button class="btn" onclick="CP.openPdf('${esc(f.id)}')">開啟</button>`:''} <button class="btn d" onclick="CP.delFile('${esc(f.id)}')">🗑</button></td></tr>`).join('')||'<tr><td colspan="6" class="mut">—</td></tr>'}</tbody></table></div></div>`}
+/* ── 新增／編輯／刪除 ── */
+CP.edit=id=>{const o=id?DATA.get(id):{id:'',kind:'pay',year:YEAR,group:'mgmt',currency:'USD'};const f=(k,l,t)=>`<div><label>${l}</label><input id="f_${k}" ${t?'type="'+t+'"':''} value="${esc(o[k]==null?'':o[k])}"></div>`;
+ $('mbox').innerHTML=`<h3 style="margin:0 0 10px">${id?'✏ 編輯':'＋ 新增'}機密薪資</h3><div class="fg">${f('year','年度','number')}<div><label>類別</label><select id="f_group">${Object.keys(GRP).map(g=>`<option value="${g}" ${o.group===g?'selected':''}>${GRP[g][0]}</option>`).join('')}</select></div>${f('empId','工號')}${f('name','姓名')}${f('dept','部門')}${f('position','職稱')}${PARTS.map(([k,l])=>f(k,l+'（每月）','number')).join('')}${f('total','月薪合計（空白＝自動加總）','number')}${f('currency','幣別')}${f('adjust','當年調整金額','number')}<div style="grid-column:1/-1"><label>說明</label><textarea id="f_note" rows="2">${esc(o.note||'')}</textarea></div></div>
+ <div style="display:flex;gap:8px;margin-top:12px">${id?`<button class="btn d" onclick="CP.del('${esc(id)}')">🗑 刪除</button>`:''}<span class="grow"></span><button class="btn" onclick="CP.close()">取消</button><button class="btn p" onclick="CP.save('${esc(id||'')}')">💾 儲存</button></div>`;$('modal').classList.add('on')};
+CP.close=()=>$('modal').classList.remove('on');
+CP.save=async id=>{const g=k=>{const e=$('f_'+k);return e?e.value.trim():''};const y=+g('year')||YEAR,emp=g('empId');if(!emp&&!g('name')){toast('請填工號或姓名');return}
+ const o=Object.assign({},id?DATA.get(id):{},{kind:'pay',year:y,group:g('group'),empId:emp,name:g('name'),dept:g('dept'),position:g('position'),currency:g('currency')||'USD',adjust:g('adjust')===''?null:num(g('adjust')),note:g('note')});PARTS.forEach(([k])=>o[k]=g(k)===''?null:num(g(k)));o.total=g('total')===''?null:num(g('total'));
+ const nid='pay|'+y+'|'+(emp||o.name);if(id&&id!==nid){const old=DATA.get(id);old.deleted=true;await put(old,true)}o.id=nid;o.src=o.src||'手動';await put(o);CP.close();YEAR=y;render();toast('✅ 已加密儲存')};
+CP.del=async id=>{if(!confirm('確定刪除這一筆？（雲端只會標記刪除，可再新增回來）'))return;const o=DATA.get(id);o.deleted=true;await put(o);CP.close();render();toast('已刪除')};
+CP.delFile=async id=>{if(!confirm('刪除這個檔案紀錄？（已匯入的薪資資料保留）'))return;const o=DATA.get(id);o.deleted=true;await put(o);render()};
+/* ── 匯入 ── */
+async function sha(buf){return hex(await crypto.subtle.digest('SHA-256',buf))}
+const KEYMAP=[[/^basic$|^底薪$/i,'basic'],[/^seniority$|^工齡$/i,'seniority'],[/^skill$|^技能$/i,'skill'],[/^position$|^職位$/i,'position'],[/^language$|^語言$/i,'language'],[/housing|transport|房屋|交通|住宿/i,'housing'],[/motivation|attend|全勤/i,'attendance'],[/^total$|薪資總額|合計|total salary|gross/i,'total']];
+function parseSheet(ws){const A=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null});let hdr=-1;
+ for(let i=0;i<Math.min(A.length,15);i++){const r=(A[i]||[]).map(c=>String(c==null?'':c).trim());if(r.some(c=>/factory\s*id|工號|\bid\b|emp/i.test(c))&&r.some(c=>/basic|底薪|salary|total|薪資/i.test(c))){hdr=i;break}}
+ if(hdr<0)return [];const H=A[hdr].map(c=>String(c==null?'':c).replace(/\s+/g,' ').trim()),near=[A[hdr-1]||[],A[hdr+1]||[]].map(r=>r.map(c=>String(c==null?'':c)));const lab=j=>[H[j]].concat(near.map(r=>r[j]||'')).join(' | ');
+ const groups=[];H.forEach((h,j)=>{if(/^(basic|底薪)$/i.test(h)){const g={start:j,cols:{}};for(let k=j;k<Math.min(H.length,j+12);k++){const key=(KEYMAP.find(x=>x[0].test(H[k]||''))||[])[1];if(key&&g.cols[key]==null)g.cols[key]=k;if(key==='total'){g.end=k;break}}if(g.end!=null)groups.push(g)}});
+ const yr=g=>{for(let j=g.start;j<=g.end;j++){const m=lab(j).match(/(20\d\d)/);if(m)return +m[1]}return null};
+ const col=re=>H.findIndex((h,j)=>re.test(lab(j)));const cId=col(/factory\s*id|工號|^id$|emp/i),cEn=col(/english\s*sure|^name$|姓名/i),cDept=col(/department|部門/i),cPos=col(/^position|崗位|職稱|title/i),cNat=col(/national|國籍/i);
+ const cTot=groups.length?-1:col(/total|薪資|salary|gross/i);
+ const out=[];for(let i=hdr+1;i<A.length;i++){const r=A[i]||[];const id=String(r[cId]==null?'':r[cId]).trim();if(!id||/董事|副總|經辦|經理|total|合計/i.test(id))continue;
+  const name=cEn>=0?[r[cEn],r[cEn+1]].filter(x=>x!=null&&x!==''&&!/^\d+(\.\d+)?$/.test(String(x))).join(' ').trim():'';const base={empId:id,name,dept:cDept>=0?String(r[cDept]||''):'',position:cPos>=0?String(r[cPos]||''):''};base.group=guessGrp([id,base.dept,base.position,cNat>=0?r[cNat]:''].join(' '));
+  if(groups.length){groups.forEach((g,gi)=>{const y=yr(g)||(gi===groups.length-1?YEAR:YEAR-1);const o=Object.assign({year:y},base);Object.keys(g.cols).forEach(k=>o[k]=num(r[g.cols[k]]));if(total(o))out.push(o)})}
+  else if(cTot>=0&&num(r[cTot]))out.push(Object.assign({year:YEAR,total:num(r[cTot])},base))}
+ return out}
+CP.importFiles=async list=>{if(!K)return;const msg=[];for(const f of [...list]){const buf=await f.arrayBuffer(),h=await sha(buf),fid='file|'+h;let fr=DATA.get(fid);
+  if(fr&&fr.done&&!fr.deleted){msg.push('⏭ '+f.name+'：已經匯入過，不重複');continue}
+  if(/\.pdf$/i.test(f.name)){const s=b64(buf),n=Math.ceil(s.length/CHUNK);fr=fr&&!fr.deleted?fr:{id:fid,kind:'pdf',name:f.name,size:f.size,chunks:n,got:0,year:YEAR,at:now(),done:false};
+   for(let i=0;i<n;i++){const cid='pdfc|'+h+'|'+i;if(DATA.get(cid))continue;await put({id:cid,kind:'pdfc',i,data:s.slice(i*CHUNK,(i+1)*CHUNK)},true);fr.got=i+1;if(i%5===4)await put(fr,true)}
+   fr.got=n;fr.done=true;await put(fr);msg.push('✅ '+f.name+'：PDF 已加密存好（'+n+' 段）');continue}
+  if(!window.XLSX){msg.push('XLSX ✗');continue}const wb=XLSX.read(buf,{type:'array'});fr=fr&&!fr.deleted?fr:{id:fid,kind:'file',name:f.name,size:f.size,sheets:{},rows:0,at:now(),done:false};let added=0;const ys=new Set();
+  for(const sn of wb.SheetNames){if(fr.sheets[sn])continue;if(/all\s*staff|general|summary/i.test(sn)){fr.sheets[sn]={skip:1};continue}const rows=parseSheet(wb.Sheets[sn]);
+   for(const o of rows){o.kind='pay';o.id='pay|'+o.year+'|'+(o.empId||o.name);o.src=f.name+' / '+sn;const cur=DATA.get(o.id);await put(Object.assign({},cur||{},o,{deleted:false}),true);added++;ys.add(o.year)}
+   fr.sheets[sn]={rows:rows.length};fr.rows=(fr.rows||0)+rows.length;await put(fr,true)}
+  fr.done=true;fr.year=[...ys].join('/');await put(fr);msg.push('✅ '+f.name+'：'+added+' 筆（'+([...ys].join('、')||'沒有找到薪資欄')+'）')}
+ schedule();render();toast(msg.join('\n'))};
+CP.openPdf=async id=>{const f=DATA.get(id);const h=id.split('|')[1];let s='';for(let i=0;i<f.chunks;i++){const c=DATA.get('pdfc|'+h+'|'+i);if(!c){toast('還有段落沒下載完，先按 ☁ 同步');return}s+=c.data}const u=URL.createObjectURL(new Blob([unb64(s)],{type:'application/pdf'}));window.open(u,'_blank')};
+CP.exportXlsx=()=>{const rows=pays().sort((a,b)=>b.year-a.year||String(a.empId).localeCompare(String(b.empId),undefined,{numeric:true})).map(o=>({Year:o.year,Group:GRP[o.group||'mgmt'][0],ID:o.empId,Name:o.name,Dept:o.dept,Position:o.position,...Object.fromEntries(PARTS.map(([k,l])=>[l,o[k]==null?'':o[k]])),Total:total(o),Currency:o.currency||'USD',Adjust:o.adjust==null?'':o.adjust,Note:o.note||'',Source:o.src||''}));const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(rows),'Confidential pay');XLSX.writeFile(wb,'VRT_Confidential_Pay_'+new Date().toISOString().slice(0,10)+'.xlsx')};
+document.addEventListener('DOMContentLoaded',boot);
+})();
+</script>
+</body>
+</html>
