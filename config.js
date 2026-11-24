@@ -695,6 +695,14 @@ window.AC_CONFIG = {
           "ic": "🛂"
         },
         {
+          "k": "x-hra-safety",
+          "zh": "職安衛／員工關係（消防・工傷・急救・委員會・離職面談）",
+          "en": "Safety & employee relations",
+          "g": "人員",
+          "ge": "People",
+          "ic": "🦺"
+        },
+        {
           "k": "x-pay-warn",
           "zh": "警告單",
           "en": "Warnings",
