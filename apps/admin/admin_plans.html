@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>管理部年度計劃 · Admin OS</title>
+<script src="../../shared/gate.js"></script>
+<script src="./admin_plans_vault.js?v=pl1"></script>
+<style>
+:root{--bg:#f4f6f8;--card:#fff;--ink:#1f2933;--mut:#6b7280;--line:#e5e7eb;--acc:#0f766e}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1115;--card:#1a1b1e;--ink:#eceae4;--mut:#9b9a92;--line:#2e2e2b}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 system-ui,-apple-system,"Noto Sans TC",sans-serif}
+.bar{position:sticky;top:0;z-index:5;display:flex;gap:8px;align-items:center;padding:9px 12px;background:var(--card);border-bottom:1px solid var(--line)}
+.bar h1{font-size:15px;margin:0;flex:1}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:10px 12px 0;max-width:1150px;margin:0 auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:6px 14px;font:inherit;font-weight:700;cursor:pointer;white-space:nowrap}.tab.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.wrap{max-width:1150px;margin:0 auto;padding:10px 12px 40px}
+.yrs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px}.yb{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:6px 12px;font:inherit;font-weight:800;cursor:pointer}.yb.on{background:#134e4a;color:#fff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:10px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+.card h2{margin:0 0 4px;font-size:17px;color:var(--acc)}.mut{color:var(--mut);font-size:12.5px}
+.pl{display:grid;grid-template-columns:200px 34px 1fr;gap:8px;padding:8px 0;border-top:1px dashed var(--line);align-items:start}
+.pre{white-space:pre-wrap;background:color-mix(in srgb,var(--acc) 6%,var(--card));border-radius:10px;padding:10px;font-size:13px;margin-top:10px}
+.mx{overflow:auto}.mx table{border-collapse:separate;border-spacing:0;width:100%;min-width:820px;font-size:12.5px}
+.mx th,.mx td{border-bottom:1px solid var(--line);padding:7px;vertical-align:top;text-align:left}.mx th{background:var(--card);position:sticky;top:0}
+.mx td.p{font-weight:700;white-space:nowrap;position:sticky;left:0;background:var(--card)}
+.mx td.c{cursor:pointer}.mx td.c:hover{background:color-mix(in srgb,var(--acc) 8%,transparent)}
+.ev{display:grid;grid-template-columns:92px 54px 1fr;gap:8px;padding:8px 10px;border-left:4px solid var(--acc);background:var(--card);border-radius:8px;margin:6px 0;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.ev .s{color:var(--mut);font-size:12px}
+.lg{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;margin:6px 0}
+.lock{max-width:380px;margin:12vh auto;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center}
+.lock input{width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;font:inherit;margin:10px 0;background:var(--bg);color:var(--ink)}
+.btn{border:0;background:var(--acc);color:#fff;border-radius:9px;padding:9px 14px;font:inherit;font-weight:700;cursor:pointer;width:100%}.err{color:#dc2626;font-size:13px;min-height:18px}
+#pop{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;place-items:center;z-index:20}#pop.on{display:grid}#pop .box{background:var(--card);border-radius:14px;padding:16px;width:min(520px,92vw)}
+@media(max-width:640px){.pl{grid-template-columns:1fr 30px}.pl>div:last-child{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<div class="bar"><h1>🎯 管理部年度計劃 · 2020–2027</h1><span class="mut" id="cnt"></span></div>
+<div class="tabs" id="tabs"></div>
+<div class="wrap" id="app"></div>
+<div id="pop" onclick="this.classList.remove('on')"><div class="box" id="popb"></div></div>
+<script>
+(function(){'use strict';
+const $=id=>document.getElementById(id),E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const B=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+let D=null,tab='year',yr='2025';
+const LEG='✅ 完成　🟡 進行中　⚠️ 落後／卡住　⏸️ 暫停　— 當年沒列';
+async function keyFrom(pw){const b=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt:new TextEncoder().encode('VRT-PSJ-Vault-v1'),iterations:250000,hash:'SHA-256'},b,{name:'AES-GCM',length:256},true,['decrypt'])}
+async function open(k){const v=window.PL_VAULT;D=JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:B(v.iv)},k,B(v.ct))))}
+async function auto(){try{const r=localStorage.getItem('psj_vault_k');if(!r)return false;await open(await crypto.subtle.importKey('raw',B(r),{name:'AES-GCM'},true,['decrypt']));return true}catch(e){return false}}
+function lock(err){$('tabs').innerHTML='';$('app').innerHTML=`<form class="lock" id="lf"><div style="font-size:34px">🔐</div><h3 style="margin:6px 0">年度計劃已加密</h3><div class="mut">密碼同 Admin OS／PSJGA，這台裝置輸入一次之後自動打開。</div><input id="pw" type="password" autocomplete="current-password" placeholder="密碼"><button class="btn">🔓 打開</button><div class="err">${E(err||'')}</div></form>`;
+ $('lf').onsubmit=async e=>{e.preventDefault();try{const k=await keyFrom($('pw').value.trim());await open(k);try{localStorage.setItem('psj_vault_k',btoa(String.fromCharCode(...new Uint8Array(await crypto.subtle.exportKey('raw',k)))))}catch(_){}render()}catch(_){lock('密碼不對，請再試一次')}}}
+function render(){
+ $('cnt').textContent=D.years.length+' 個年度 · '+D.log.length+' 筆進度';
+ $('tabs').innerHTML=[['year','📅 各年度'],['cmp','🔍 年度比對'],['log','📈 進度時間軸']].map(([k,t])=>`<button class="tab ${tab===k?'on':''}" data-t="${k}">${t}</button>`).join('');
+ let h='';
+ if(tab==='year'){const y=D.years.find(x=>x.y===yr)||D.years[0];
+  h+=`<div class="yrs">${D.years.map(x=>`<button class="yb ${x.y===y.y?'on':''}" data-y="${x.y}">${x.y}</button>`).join('')}</div>`;
+  h+=`<div class="card"><h2>${E(y.title)}</h2><div><b>主軸：</b>${E(y.theme)}</div><div class="mut" style="margin-top:4px">📎 ${E(y.src)}</div><div class="lg mut">${LEG}</div>`;
+  const ks=Object.keys(y.m);h+=ks.length?ks.map(p=>`<div class="pl"><div><b>${E(p)}</b></div><div style="font-size:18px">${y.m[p][0]}</div><div>${E(y.m[p][1])}</div></div>`).join(''):'<div class="mut" style="padding:10px 0">這年還沒有內容，找到信或檔案後會補上。</div>';
+  if(D.slides[y.y])h+=`<div class="pre"><b>📄 計劃內容（PPT 摘要）</b>\n${E(D.slides[y.y])}</div>`;
+  const lg=D.log.filter(l=>l.y===y.y);if(lg.length)h+=`<h3 style="margin:14px 0 4px;font-size:14px">📈 這年的進度信</h3>`+lg.map(ev).join('');
+  h+='</div>';}
+ else if(tab==='cmp'){h+=`<div class="card"><h2>同一個項目，每年做到哪</h2><div class="lg mut">${LEG}　（點格子看內容）</div><div class="mx"><table><tr><th>項目</th>${D.years.map(y=>`<th>${y.y}</th>`).join('')}</tr>`+D.pillars.map(p=>`<tr><td class="p">${E(p)}</td>${D.years.map(y=>{const v=y.m[p];return v?`<td class="c" data-pop="${y.y}|${E(p)}" style="font-size:18px;text-align:center">${v[0]}</td>`:'<td class="mut" style="text-align:center">—</td>'}).join('')}</tr>`).join('')+`</table></div></div>`;}
+ else{h+=`<div class="card"><h2>年度計劃相關 email（依日期）</h2>`+D.log.slice().reverse().map(ev).join('')+'</div>';}
+ h+='<div class="mut" style="margin-top:12px">來源：Paul 寄給台北的年度計劃、半年回顧與進度 email 和附件。之後有新的年度計劃信，會自動加進來。</div>';
+ $('app').innerHTML=h;
+}
+const ev=l=>`<div class="ev"><b>${E(l.d)}</b><span class="mut">${E(l.y)}</span><div>${E(l.t)}<div class="s">✉️ ${E(l.s)}</div></div></div>`;
+document.addEventListener('click',e=>{const t=e.target.closest('[data-t]');if(t){tab=t.dataset.t;render();return}const y=e.target.closest('[data-y]');if(y){yr=y.dataset.y;render();return}
+ const c=e.target.closest('[data-pop]');if(c){const[yy,p]=c.dataset.pop.split('|');const v=D.years.find(x=>x.y===yy).m[p];$('popb').innerHTML=`<h3 style="margin:0 0 6px">${E(yy)} · ${E(p)}</h3><div style="font-size:22px">${v[0]}</div><div>${E(v[1])}</div><button class="btn" style="margin-top:12px" data-t="year" onclick="">看 ${E(yy)} 全年 →</button>`;$('popb').querySelector('button').onclick=()=>{yr=yy;tab='year';render()};$('pop').classList.add('on')}});
+auto().then(ok=>ok?render():lock());
+})();
+</script>
+</body>
+</html>
