@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>行政專案 · Admin OS</title>
+<script src="../../shared/gate.js"></script>
+<script src="./admin_projects_vault.js?v=ap1"></script>
+<style>
+:root{--bg:#f4f6f8;--card:#fff;--ink:#1f2933;--mut:#6b7280;--line:#e5e7eb;--acc:#475569;--L:#7c3aed;--C:#0891b2;--T:#d97706}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1115;--card:#1a1b1e;--ink:#eceae4;--mut:#9b9a92;--line:#2e2e2b}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 system-ui,-apple-system,"Noto Sans TC",sans-serif}
+.bar{position:sticky;top:0;z-index:5;display:flex;gap:8px;align-items:center;padding:9px 12px;background:var(--card);border-bottom:1px solid var(--line)}
+.bar h1{font-size:15px;margin:0;flex:1}
+.wrap{max-width:1100px;margin:0 auto;padding:10px 12px 40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.pc{background:var(--card);border:1px solid var(--line);border-top:5px solid var(--c);border-radius:14px;padding:14px;box-shadow:0 6px 18px rgba(0,0,0,.07);cursor:pointer;transition:transform .15s,box-shadow .15s}
+.pc:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.1)}.pc:active{transform:translateY(1px)}
+.pc.on{outline:2px solid var(--c)}
+.pc h2{margin:0 0 4px;font-size:16px;color:var(--c)}.mut{color:var(--mut);font-size:12.5px}
+.st{display:inline-block;border-radius:99px;padding:1px 9px;font-size:12px;font-weight:700;background:color-mix(in srgb,var(--c) 14%,transparent);color:var(--c)}
+.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:14px}
+.box h3{margin:0 0 6px;font-size:15px}
+ul.open{margin:6px 0 0;padding-left:20px}ul.open li{margin:3px 0}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:4px 0 8px}.chip{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:4px 12px;font:inherit;font-size:13px;font-weight:650;cursor:pointer;white-space:nowrap;color:var(--ink)}.chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.yr{font-weight:800;margin:14px 0 4px;color:var(--mut)}
+.ev{display:grid;grid-template-columns:92px 1fr;gap:10px;padding:8px 10px;border-left:4px solid var(--c);background:var(--card);border-radius:8px;margin:6px 0;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.ev b{font-variant-numeric:tabular-nums;font-size:13px}.ev .s{color:var(--mut);font-size:12px;margin-top:2px}
+.lock{max-width:380px;margin:12vh auto;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center}
+.lock input{width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;font:inherit;margin:10px 0;background:var(--bg);color:var(--ink)}
+.btn{border:0;background:var(--acc);color:#fff;border-radius:9px;padding:9px 14px;font:inherit;font-weight:700;cursor:pointer;width:100%}
+.err{color:#dc2626;font-size:13px;min-height:18px}
+input.q{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:9px;font:inherit;background:var(--card);color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="bar"><h1>🗂️ 行政專案 · 工會案／防疫／稅務</h1><span class="mut" id="cnt"></span></div>
+<div class="wrap" id="app"></div>
+<script>
+(function(){'use strict';
+const $=id=>document.getElementById(id),E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const B=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const COL={L:'var(--L)',C:'var(--C)',T:'var(--T)'};
+let D=null,cur='T',q='';
+async function keyFrom(pw){const b=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt:new TextEncoder().encode('VRT-PSJ-Vault-v1'),iterations:250000,hash:'SHA-256'},b,{name:'AES-GCM',length:256},true,['decrypt'])}
+async function open(k){const v=window.AP_VAULT;const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:B(v.iv)},k,B(v.ct));D=JSON.parse(new TextDecoder().decode(pt));}
+async function auto(){try{const r=localStorage.getItem('psj_vault_k');if(!r)return false;const k=await crypto.subtle.importKey('raw',B(r),{name:'AES-GCM'},true,['decrypt']);await open(k);return true}catch(e){return false}}
+function lock(err){$('app').innerHTML=`<form class="lock" id="lf"><div style="font-size:34px">🔐</div><h3 style="margin:6px 0">行政專案已加密</h3><div class="mut">密碼同 Admin OS／PSJGA。這台裝置輸入一次，之後自動打開（PSJGA 解鎖過也會直接打開）。</div><input id="pw" type="password" autocomplete="current-password" placeholder="密碼"><button class="btn">🔓 打開</button><div class="err">${E(err||'')}</div></form>`;
+ $('lf').onsubmit=async e=>{e.preventDefault();try{const k=await keyFrom($('pw').value.trim());await open(k);try{localStorage.setItem('psj_vault_k',btoa(String.fromCharCode(...new Uint8Array(await crypto.subtle.exportKey('raw',k)))))}catch(_){}render()}catch(_){lock('密碼不對，請再試一次')}};}
+function render(){const P=D.projects,p=P.find(x=>x.id===cur);
+ const items=D.items.filter(x=>x.p===cur&&(!q||(x.t+x.s).toLowerCase().includes(q.toLowerCase())));
+ $('cnt').textContent=D.items.length+' 筆紀錄';
+ let h='<div class="grid">'+P.map(x=>{const n=D.items.filter(i=>i.p===x.id).length;return `<div class="pc ${x.id===cur?'on':''}" style="--c:${COL[x.id]}" data-p="${x.id}"><h2>${x.ic} ${E(x.name)}</h2><div class="mut">${E(x.period)} · ${n} 筆</div><div style="margin-top:6px"><span class="st">${E(x.status)}</span></div></div>`}).join('')+'</div>';
+ h+=`<div class="box" style="--c:${COL[cur]};border-left:5px solid ${COL[cur]}"><h3>${p.ic} ${E(p.name)}</h3><div>${E(p.sum)}</div><div class="mut" style="margin-top:6px">👥 ${E(p.who)}</div><h3 style="margin-top:10px">📌 待追／注意</h3><ul class="open">${p.open.map(o=>`<li>${E(o)}</li>`).join('')}</ul></div>`;
+ h+=`<div class="box"><input class="q" id="q" placeholder="🔎 搜尋這個專案的紀錄" value="${E(q)}">`;
+ let y='';items.forEach(x=>{const yy=x.d.slice(0,4);if(yy!==y){y=yy;h+=`<div class="yr">${yy}</div>`}h+=`<div class="ev" style="--c:${COL[x.p]}"><b>${E(x.d)}</b><div>${E(x.t)}<div class="s">✉️ ${E(x.s)}</div></div></div>`});
+ if(!items.length)h+='<div class="mut" style="padding:10px">沒有符合的紀錄</div>';
+ h+='<div class="mut" style="margin-top:10px">資料來源：Paul 的 email（2019 起），依信件主旨或信件日期排序。</div></div>';
+ $('app').innerHTML=h;
+ document.querySelectorAll('[data-p]').forEach(el=>el.onclick=()=>{cur=el.dataset.p;q='';render();window.scrollTo({top:0,behavior:'smooth'})});
+ const qi=$('q');qi.oninput=()=>{q=qi.value;const pos=qi.selectionStart;render();const n=$('q');n.focus();n.setSelectionRange(pos,pos)};
+}
+auto().then(ok=>ok?render():lock());
+})();
+</script>
+</body>
+</html>
