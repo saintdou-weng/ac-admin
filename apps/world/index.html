@@ -381,6 +381,47 @@ html, body {
 }
 .toast[hidden] { display: none; }
 
+
+/* v6.3 layout: one full-width all-islands card, then island tiles two per row */
+.cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.island-card{padding:11px 11px 11px 15px;display:flex;flex-direction:column}
+.island-card .card-head{gap:8px;align-items:flex-start}
+.island-card .card-icon{width:32px;height:32px;font-size:17px;border-radius:9px}
+.island-card .card-title h2{font-size:14px;gap:5px;line-height:1.3}
+.island-card .badge{font-size:9.5px}
+.island-card .card-sub{font-size:11px}
+.island-card .prog-row{margin-top:7px}
+.island-card .spot-details{margin-top:6px}
+.island-card .spot-details summary{font-size:11.5px}
+.island-card .card-desc{font-size:12px;margin:6px 0 0}
+.island-card .card-actions{margin-top:auto;padding-top:9px;gap:6px}
+.island-card .btn{min-width:0;min-height:36px;font-size:12.5px;padding:6px 8px}
+.world-card{margin-top:12px;border-radius:16px;padding:14px 15px;background:linear-gradient(135deg,#21483b,#2f6b55 55%,#3b6e8c);color:#fff;box-shadow:var(--shadow)}
+.world-card .wc-head{display:flex;align-items:center;gap:11px}
+.world-card .wc-icon{width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.16);display:grid;place-items:center;font-size:23px;flex-shrink:0}
+.world-card h2{margin:0;font-size:17px;font-weight:800}
+.world-card p{margin:3px 0 0;font-size:12px;opacity:.85}
+.world-card .wc-stats{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.world-card .wc-stats span{font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:99px;background:rgba(255,255,255,.14)}
+.world-card .wc-actions{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+.world-card .btn{flex:1;min-width:120px;min-height:40px;font-size:13px}
+.world-card .btn.light{background:#fff;color:#1f4637;border-color:#fff}
+.world-card .btn.ghost{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.35)}
+.world-card details{margin-top:10px;background:rgba(255,255,255,.08);border-radius:11px;padding:7px 10px}
+.world-card summary{cursor:pointer;font-size:12.5px;font-weight:800}
+.world-card .all-spots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 14px;margin-top:8px}
+.world-card .all-spots h4{margin:0 0 3px;font-size:12.5px;display:flex;justify-content:space-between;gap:6px}
+.world-card .all-spots h4 a{color:#cfe8ff;font-weight:700;text-decoration:none;white-space:nowrap;font-size:11.5px}
+.world-card .all-spots ul{margin:0;padding-left:16px;font-size:11.5px;line-height:1.55;opacity:.92}
+@media (max-width:520px){
+  .island-card{padding:10px 9px 10px 13px}
+  .island-card .card-head{flex-direction:column;gap:5px}
+  .island-card .card-desc{display:none}
+  .island-card .card-actions{flex-direction:column}
+  .island-card .btn{width:100%;flex:none}
+  .world-card .all-spots{grid-template-columns:1fr}
+}
+
 /* Import & sync panel */
 .sync-card{margin-top:12px;padding:13px 14px;border-radius:15px;background:linear-gradient(180deg,#faf8f2,#f0ece0);border:1px solid var(--line);box-shadow:var(--shadow)}
 .sync-card h3{margin:0 0 8px;font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px}
@@ -424,18 +465,9 @@ html, body {
     <a href="#syncCard" style="color:var(--blue);font-weight:700;text-decoration:none">📥 匯入更新</a>
   </div>
 
+  <section class="world-card" id="worldCard"></section>
   <main class="cards" id="islandCards"></main>
 
-  <section class="legacy-card" id="legacyCard">
-    <div>
-      <strong>🌐 四島六角大環線（v5.16 整合版備援）</strong>
-      <small>保留原四島大環線、敦煌 42 洞窟、101 與馬雅剖面，隨開隨玩。</small>
-    </div>
-    <div style="display:flex;gap:6px;">
-      <a class="btn secondary" href="./seasons_express.html?route=globe">進入全景環線</a>
-      <a class="btn secondary" href="./seasons_express.html" data-dl="seasons_express" data-name="Seasons_Express_v5_16.html">⬇ 下載</a>
-    </div>
-  </section>
 
   <section class="sync-card" id="syncCard">
     <h3>📥 匯入更新・☁ 各裝置同步</h3>
@@ -492,6 +524,7 @@ html, body {
 
   /* ================= files: cloud copy > built-in copy, both kept on this device ================= */
   const FILES = 'vrt-world-files-v2';
+  const UI_PATCH = "<style id=\"vrt-world-ui\">\n/* VRT World hub \u00b7 desktop layout patch (added by the hub when an island page is served): the route / scene list and\n   the view buttons fold into the \u8def\u7dda button like on the phone, and the bottom bar is compact. */\n@media (min-width:701px){\n  #sceneMenu.phone-only{display:inline-flex!important;align-items:center}\n  #quickMenu{display:none!important;position:absolute;z-index:6;top:var(--vrt-head,112px);right:24px;width:min(400px,42vw);max-height:calc(100dvh - var(--vrt-head,112px) - 120px);overflow:auto;padding:10px;gap:8px;background:var(--glass);border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px #182d3122;backdrop-filter:blur(14px)}\n  .menu-open:not(.ui-hidden) #quickMenu{display:grid!important}\n  #quickMenu .chapters,#quickMenu .view-switch{position:static!important;inset:auto!important;width:auto!important;max-height:none!important;margin:0!important;border:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;visibility:visible!important}\n  #quickMenu .chapters{display:flex!important;flex-direction:column!important;padding:0!important}\n  #quickMenu .view-switch{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;border-top:1px solid var(--line)!important;padding:8px 0 0!important}\n  #quickMenu .junction-note{width:auto!important;display:block!important}\n  #sceneMenu[aria-expanded=\"true\"]{background:#2b5c49!important;color:#fff!important;border-color:#1f4637!important}\n  /* pages that move the view buttons out to a full-width bottom bar: show them only with the menu, under the panel */\n  body:not(.menu-open) .view-switch{display:none!important}\n  .menu-open:not(.ui-hidden) .view-switch{position:fixed!important;left:auto!important;right:24px!important;bottom:24px!important;width:min(400px,42vw)!important;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))}\n  .controls{right:auto!important;width:min(620px,calc(100vw - 48px))!important;padding:8px 12px!important}\n  .controls .bottomline{display:none!important}\n  .settings-open .controls .bottomline{display:flex!important}\n}\n<\/style>\n<script id=\"vrt-world-ui-js\">(function(){function f(){var h=document.querySelector('header');if(h)document.documentElement.style.setProperty('--vrt-head',Math.round(h.getBoundingClientRect().bottom+10)+'px');}addEventListener('resize',f);addEventListener('load',f);setTimeout(f,800);setTimeout(f,3000);})();<\/script>\n";
   const LABEL = { island1: '第一島', island2: '第二島', island3: '第三島', island4: '第四島', island5: '第五島', island6: '第六島', island7: '第七島', island8: '第八島', island9: '第九島', seasons_express: '四島合集', manifest: '島嶼清單' };
   const HAS_CACHE = !!window.caches && (location.protocol === 'https:' || location.hostname === 'localhost');
   const enc = (v) => encodeURIComponent(String(v || ''));
@@ -621,18 +654,35 @@ html, body {
           </div>
         </div>
         <div class="prog-row"><div class="prog-track"><div class="prog-fill" style="width:${isl.progress || 0}%"></div></div><strong>${isl.progress || 0}%</strong></div>
-        <p class="card-desc">${isl.summary}</p>
-        <details class="spot-details" ${isReady ? 'open' : ''}>
-          <summary>查看本島下車參觀與載具清單（${(isl.spots || []).length} 處）</summary>
+        <details class="spot-details">
+          <summary>簡介與景點（${(isl.spots || []).length} 處）</summary>
+          <p class="card-desc">${isl.summary}</p>
           <ul class="spot-list">${(isl.spots || []).map(s => '<li>' + s + '</li>').join('')}</ul>
         </details>
         <div class="card-actions">
-          <a class="btn primary" href="${url}">🚆 進入本島 3D</a>
-          <a class="btn secondary" href="${dl}" data-dl="${dlKey}" data-name="${own ? 'VRT_World_' + isl.id + '.html' : isl.downloadName}">⬇ 離線下載 HTML</a>
+          <a class="btn primary" href="${url}">🚆 進入</a>
+          <a class="btn secondary" href="${dl}" data-dl="${dlKey}" data-name="${own ? 'VRT_World_' + isl.id + '.html' : isl.downloadName}">⬇ 下載</a>
         </div>`;
       wrap.appendChild(card);
     });
-    if (!wrap.children.length) wrap.innerHTML = '<div class="meta-strip">找不到符合「' + filter + '」的島嶼或景點。</div>';
+    if (!wrap.children.length) wrap.innerHTML = '<div class="meta-strip" style="grid-column:1/-1">找不到符合「' + filter + '」的島嶼或景點。</div>';
+    renderWorld(islands, q);
+  }
+
+  function renderWorld(islands, q) {
+    const g = manifestData.legacyGlobe || { name: '四島六角大環線', url: './seasons_express.html?route=globe', downloadFile: './seasons_express.html', downloadName: 'Seasons_Express.html' };
+    const spots = islands.reduce((n, i) => n + (i.spots || []).length, 0), ready = islands.filter(i => i.status === 'ready').length;
+    const groups = islands.map((isl) => {
+      const list = (isl.spots || []).filter((s) => !q || (isl.name + ' ' + s).toLowerCase().includes(q));
+      if (q && !list.length) return '';
+      const url = state[isl.id] ? './' + isl.id + '.html' : isl.url;
+      return '<div><h4><span>' + (isl.icon || '🏝️') + ' ' + isl.name + '</span><a href="' + url + '">進入 ›</a></h4><ul>' + list.map((s) => '<li>' + s + '</li>').join('') + '</ul></div>';
+    }).join('');
+    $('worldCard').innerHTML = `
+      <div class="wc-head"><div class="wc-icon">🌐</div><div><h2>四島全覽・六角大環線</h2><p>一次看完全部島嶼；列車繞行四島，任何一站都能下車參觀</p></div></div>
+      <div class="wc-stats"><span>🏝️ ${islands.length} 座島</span><span>📍 ${spots} 處景點</span><span>✨ ${ready} 島完成 v6 精修</span></div>
+      <div class="wc-actions"><a class="btn light" href="${g.url}">🚆 進入全覽環線</a><a class="btn ghost" href="${g.downloadFile}" data-dl="${keyOfUrl(g.downloadFile)}" data-name="${g.downloadName}">⬇ 下載全覽</a></div>
+      <details ${q ? 'open' : ''}><summary>📋 全部景點總表（${spots} 處・依島分列）</summary><div class="all-spots">${groups || '<div>沒有符合的景點。</div>'}</div></details>`;
   }
 
   async function loadManifest(bust = false) {
@@ -816,7 +866,7 @@ html, body {
     e.preventDefault();
     try {
       let c = await active(a.dataset.dl), blob;
-      if (c) blob = await c.r.blob();
+      if (c) blob = new Blob([await c.r.blob(), UI_PATCH], { type: 'text/html' });
       else { showToast('第一次下載這一島，請稍等…', 4000); blob = await (await fetch(a.getAttribute('href').split('?')[0])).blob(); }
       const u = URL.createObjectURL(blob), x = document.createElement('a'); x.href = u; x.download = a.dataset.name || (a.dataset.dl + '.html'); document.body.appendChild(x); x.click(); x.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000);
       showToast('⬇ 已存成單一 HTML（' + mb(blob.size) + ' MB），不用網路也能開。'); renderFiles();
