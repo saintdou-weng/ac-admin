@@ -22,9 +22,17 @@ css+=on;
 var ACT='box-shadow:inset 0 0 0 999px var(--fx-l),0 4px 14px rgba(15,23,42,.10)!important;border-color:var(--fx-lb)!important';
 var ACTO='box-shadow:inset 0 0 0 999px var(--fx-o),0 4px 14px rgba(0,0,0,.18)!important;border-color:var(--fx-ob)!important';
 css+='@media (hover:hover) and (pointer:fine){.cfx:hover,.cfx:active{'+ACT+'}.cfx.cfx-o:hover,.cfx.cfx-o:active,html.cfx-dark .cfx:hover,html.cfx-dark .cfx:active{'+ACTO+'}}';
-css+='@media (hover:none),(pointer:coarse){.cfx{transition:none!important}.cfx:active{'+ACT+'}.cfx.cfx-o:active,html.cfx-dark .cfx:active{'+ACTO+'}}';
+/* 2026-11-25 Paul：首頁／分頁卡片會閃 → 手機不用 :active（手指一碰、只是要捲動也會亮一下），改成手指停 120ms 沒移動才亮（.cfx-dn） */
+css+='@media (hover:none),(pointer:coarse){.cfx{transition:none!important}.cfx.cfx-dn{'+ACT+'}.cfx.cfx-o.cfx-dn,html.cfx-dark .cfx.cfx-dn{'+ACTO+'}}';
 st.textContent=css;(D.head||D.documentElement).appendChild(st);
-try{D.addEventListener('touchstart',function(){},{passive:true});}catch(e){}   /* iPhone：讓 :active 在按下時就生效 */
+try{(function(){var T=null,el=null,off=0;
+ function clr(){if(T){clearTimeout(T.t);T=null}}
+ function rel(){clr();var x=el;el=null;if(x){clearTimeout(off);off=setTimeout(function(){x.classList.remove('cfx-dn')},90)}}
+ D.addEventListener('touchstart',function(e){rel();if(e.touches.length!==1)return;var c=e.target.closest&&e.target.closest('.cfx');if(!c)return;var p=e.touches[0];T={c:c,x:p.clientX,y:p.clientY,t:setTimeout(function(){T=null;el=c;c.classList.add('cfx-dn')},120)}},{passive:true});
+ D.addEventListener('touchmove',function(e){if(!T&&!el)return;var p=e.touches[0];if(T&&p&&(Math.abs(p.clientX-T.x)>8||Math.abs(p.clientY-T.y)>8))clr();if(el)rel()},{passive:true});
+ D.addEventListener('touchend',function(){if(T){var c=T.c;clr();el=c;c.classList.add('cfx-dn')}rel()},{passive:true});   /* 很快點一下：放開時亮一下 */
+ D.addEventListener('touchcancel',rel,{passive:true});D.addEventListener('scroll',function(){clr();if(el)rel()},{passive:true,capture:true});
+})();}catch(e){}   /* iPhone：讓 :active 在按下時就生效 */
 function rgb(c){var m=/rgba?\(([^)]+)\)/.exec(c||'');if(!m)return null;var p=m[1].split(',').map(parseFloat);return {r:p[0],g:p[1],b:p[2],a:p.length>3?p[3]:1};}
 function lum(c){return (0.2126*c.r+0.7152*c.g+0.0722*c.b)/255;}
 function darkPage(){var r=D.documentElement;if(r.hasAttribute('data-dark')||r.getAttribute('data-theme')==='dark'||r.hasAttribute('data-ga-dark'))return true;
