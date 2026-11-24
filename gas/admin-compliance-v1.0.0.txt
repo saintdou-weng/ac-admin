@@ -3,7 +3,7 @@
    · 來源（都是公開、不含個資的 github.io 檔；跟網頁同一份）：
        ① PSJHR regs-data.js       → 法規「即將生效」項目（st:'up'，略過 lsd／cycle 兩類，那兩類在行事曆）＋ events 截止日
        ② HRA Portal shared/calendar-inspect-v1.js → 🏛️ 政府檢查／稽核／健檢（type:'inspect'）
-   · 每天 08:00 後跑一次（complianceInstall() 建的每日觸發；每天只會真的檢查一次 CMP_CHECK＝今天）
+   · 每天 08:00 後跑一次（complianceInstall() 建的每日觸發 complianceDaily；每天只會真的檢查一次 CMP_CHECK＝今天）
    · 每一筆：剩 ≤14 天發一次（階段 14）、剩 ≤7 天再發一次（階段 7）；同一天要發的合併成一則；發過記在 CMP_SENT_<id>（"14"／"7"）。
      第一次上線時已經在 7 天內的直接發階段 7（不補發 14）。
    · 私訊失敗 → 改發 Admin 群組。previewCompliance() 只看不發；sendComplianceNow() 立刻檢查一次（忽略 CMP_CHECK）。錯誤在 CMP_LAST_ERROR。 */
@@ -61,12 +61,12 @@ function cmpRun_(force,dry){
  return 'sent '+due.length;
 }
 function escH_(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function complianceTick_(){try{return cmpRun_(false,false);}catch(e){PropertiesService.getScriptProperties().setProperty('CMP_LAST_ERROR',String(e).slice(0,400));return 'error';}}
+function complianceDaily(){try{return cmpRun_(false,false);}catch(e){PropertiesService.getScriptProperties().setProperty('CMP_LAST_ERROR',String(e).slice(0,400));return 'error';}}
 function previewCompliance(){const r=cmpRun_(true,true);Logger.log(r);return r;}
 function sendComplianceNow(){const r=cmpRun_(true,false);Logger.log(r);return r;}
 /* 執行一次：建立每天 08:00–09:00 的觸發（已有就不重建） */
 function complianceInstall(){
- const has=ScriptApp.getProjectTriggers().some(function(t){return t.getHandlerFunction()==='complianceTick_';});
- if(!has)ScriptApp.newTrigger('complianceTick_').timeBased().everyDays(1).atHour(8).inTimezone(AC_ADMIN.TZ).create();
+ const has=ScriptApp.getProjectTriggers().some(function(t){return t.getHandlerFunction()==='complianceDaily';});
+ if(!has)ScriptApp.newTrigger('complianceDaily').timeBased().everyDays(1).atHour(8).inTimezone(AC_ADMIN.TZ).create();
  Logger.log(has?'trigger exists':'trigger created');return has?'exists':'created';
 }
