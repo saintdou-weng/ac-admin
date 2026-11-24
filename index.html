@@ -21,6 +21,8 @@ button,input,select{font:inherit;color:inherit}button{cursor:pointer}
 .sfind input{flex:1;min-width:0;border:0;outline:0;background:none;font-size:14px}
 .sfind kbd{font:600 10px ui-monospace,monospace;color:var(--mut);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
 #menu{flex:1;overflow-y:auto;padding:4px 0 18px;overscroll-behavior:contain}
+#mjump{position:absolute;right:12px;bottom:66px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--accent);font-size:20px;font-weight:800;box-shadow:0 3px 10px rgba(15,23,42,.18);display:grid;place-items:center;z-index:2;cursor:pointer}
+#mjump[hidden]{display:none}#mjump:hover{background:#eaf1fd}
 .it{display:flex;align-items:center;gap:11px;width:calc(100% - 16px);margin:1px 8px;padding:8px 12px;border:0;background:none;border-radius:8px;color:var(--ink2);font-size:14.5px;text-align:left}
 .it .ic{width:24px;text-align:center;font-size:17px;flex:none}
 .it .lb{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -123,6 +125,7 @@ footer{margin-top:26px;color:var(--mut);font-size:12px;display:flex;gap:14px;fle
   <button class="brand" id="brand"><div class="mark">VRT</div><div><b>OS</b><span id="brandsub"></span></div></button>
   <label class="sfind"><span>🔎</span><input id="find" autocomplete="off" spellcheck="false"><kbd>/</kbd></label>
   <nav id="menu"></nav>
+  <button id="mjump" aria-label="Scroll menu" title="到底／回上方" hidden>↓</button>
   <div class="sfoot"><button class="btn pri" id="upd"></button><select class="btn" id="lang" aria-label="Language" style="flex:none"><option value="zh">繁中</option><option value="en">EN</option><option value="km">ខ្មែរ</option></select></div>
 </aside>
 <div id="shade"></div>
@@ -161,6 +164,8 @@ const ADMIN=[
  {k:'apps/admin/conf_pay.html',ic:'🔐',zh:'機密薪資（外籍・Isay・管理層）',en:'Confidential pay (expat, Isay, management)',frame:true,bd:'🔐'}
 ];
 const ADMINSYS={id:'admin',icon:'🏛',color:'#475569',zh:'行政',en:'Administration',km:'រដ្ឋបាល',tag:'ADMIN',mode:'file',url:new URL('./',location.href).href,pages:[]};
+/* 2026-11-24 Paul：首頁卡片也要有「行政」一張 */
+const CAR=()=>[...SYS,ADMINSYS];
 const byId=id=>id==='admin'?ADMINSYS:SYS.find(s=>s.id===id);
 /* per system: hide its own side menu inside the workspace (ours replaces it) and send its ☰ button to our menu */
 const FUSE={
@@ -289,11 +294,12 @@ function readSum(s){const c=SUM[s.id];if(!c||!onOverview(s))return;try{const f=f
   if(!old||JSON.stringify(old.cards)!==sig){(sums[s.id]=sums[s.id]||{})[key]={cards,at:Date.now()};put('vrt_os_sum_v1',sums);paintSlide(s)}else if(Date.now()-old.at>60000){old.at=Date.now();put('vrt_os_sum_v1',sums);paintSlide(s)}
  }catch(e){}}
 /* wake the systems one at a time in the background (the one being looked at first) */
-async function wakeAll(){if(loadingAll)return;loadingAll=true;const order=SYS.slice(slideIdx).concat(SYS.slice(0,slideIdx));
+async function wakeAll(){if(loadingAll)return;loadingAll=true;const si=Math.min(slideIdx,SYS.length-1),order=SYS.slice(si).concat(SYS.slice(0,si));
  for(const s of order){if(cur!=='home')break;if(!frames[s.id]){open(s.id,'',{background:true});paintSlide(s);await new Promise(r=>{const f=frames[s.id];let done=false;const fin=()=>{if(!done){done=true;r()}};f.addEventListener('load',fin,{once:true});setTimeout(fin,25000)});await new Promise(r=>setTimeout(r,1200))}}
  loadingAll=false}
 setInterval(()=>{if(cur==='home')SYS.forEach(readSum)},2500);
 function slideHTML(s){
+ if(s.id==='admin')return `<div class="sbox" style="--c:${s.color}" data-ic="${s.icon}"><div class="shead"><h2>${s.icon} ${E(nm(s))}</h2><span class="pl">${E(t('工具','Tools','ឧបករណ៍'))}</span></div><div class="tiles">${ADMIN.map(a=>`<button class="tile" data-open="admin" data-k="${E(a.k)}"><span class="l">${E(a.bd||'')}</span><span class="v" style="font-size:26px">${a.ic}</span><span class="d" style="white-space:normal">${E(nm(a))}</span></button>`).join('')}</div><div class="sfootr"><span>${E(t('只有你能進的行政工具','Admin tools (owner only)','ឧបករណ៍រដ្ឋបាល'))}</span></div></div>`;
  const c=SUM[s.id]||{},key=sumKey(s),data=(sums[s.id]||{})[key],f=frames[s.id],live=onOverview(s),busy=f&&f.dataset.loaded!=='1';
  const hot=x=>/待|異常|關注|缺勤|逾期|未結|pending|attention|exception|absent|overdue/i.test(x.l)&&parseFloat(String(x.v).replace(/,/g,''))>0;
  const real=data&&data.cards.some(x=>/\d/.test(x.v));
@@ -306,7 +312,7 @@ function slideHTML(s){
 function paintSlide(s){document.querySelectorAll('.slide[data-s="'+s.id+'"]').forEach(el=>{el.innerHTML=slideHTML(s);el.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>open(b.dataset.open,b.dataset.k))})}
 function carGo(i,smooth){const car=$('car');if(!car)return;const w=car.clientWidth;car.scrollTo({left:(i+1)*w,behavior:smooth?'smooth':'instant'})}
 function carMark(){document.querySelectorAll('.ctab').forEach((b,i)=>b.classList.toggle('on',i===slideIdx));document.querySelectorAll('.dots i').forEach((b,i)=>b.classList.toggle('on',i===slideIdx))}
-function carInit(){const car=$('car');if(!car)return;const n=SYS.length;requestAnimationFrame(()=>carGo(slideIdx,false));let tm;
+function carInit(){const car=$('car');if(!car)return;const n=CAR().length;requestAnimationFrame(()=>carGo(slideIdx,false));let tm;
  car.onscroll=()=>{clearTimeout(tm);tm=setTimeout(()=>{const w=car.clientWidth||1;let i=Math.round(car.scrollLeft/w)-1;if(i<0){i=n-1;carGo(i,false)}else if(i>=n){i=0;carGo(i,false)}if(i!==slideIdx){slideIdx=i;carMark()}},90)};
  /* 2026-11-23 Paul：點上方分類換頁要順——相鄰的平滑滑過去；最後↔第一走循環那一側（不倒退一整排）；跳很多張就淡出→換→從該方向滑進來 */
  document.querySelectorAll('.ctab').forEach((b,i)=>b.onclick=()=>{const d=i-slideIdx;if(!d)return;
@@ -336,7 +342,11 @@ function drawMenu(){
  $('menu').querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{open(b.dataset.open,b.dataset.k);if($('find').value){$('find').value='';drawMenu()}});
  $('menu').querySelectorAll('[data-sys]').forEach(b=>b.onclick=()=>{const id=b.dataset.sys;if(shut.has(id))shut.delete(id);else shut.add(id);put('vrt_os_shut_v1',[...shut]);drawMenu()});
  markActive(true);
+ jumpInit();setTimeout(jumpUpd,30);
 }
+/* 2026-11-24 Paul：左側選單加箭頭——↓ 直接到底，到底後變 ↑ 直接回上方 */
+function jumpUpd(){const m=$('menu'),b=$('mjump');if(!m||!b)return;const long=m.scrollHeight>m.clientHeight+40;b.hidden=!long;const atEnd=m.scrollTop+m.clientHeight>=m.scrollHeight-24;b.textContent=atEnd?'↑':'↓';b.dataset.up=atEnd?'1':''}
+function jumpInit(){const m=$('menu'),b=$('mjump');if(!m||!b||b.dataset.on)return;b.dataset.on='1';m.addEventListener('scroll',jumpUpd,{passive:true});addEventListener('resize',jumpUpd);b.onclick=()=>m.scrollTo({top:b.dataset.up?0:m.scrollHeight,behavior:'smooth'})}
 function item(s,p){const num=/^[\d,]+$/.test(p.bd||'');return `<button class="it" data-open="${s.id}" data-k="${E(p.k)}"><span class="ic">${E(p.ic||'•')}</span><span class="lb">${E(nm(p))}</span>${p.bd?`<span class="bd${num&&p.bd.length>2?' n':''}">${E(p.bd)}</span>`:''}</button>`}
 function markActive(scroll){let on=null;$('menu').querySelectorAll('.it[data-open]').forEach(b=>{const a=b.dataset.open===cur&&b.dataset.k===curKey;b.classList.toggle('on',a);if(a)on=b});if(on&&scroll)on.scrollIntoView({block:'nearest'})}
 function openMenu(){document.body.classList.add('menu')}function closeMenu(){document.body.classList.remove('menu')}
@@ -351,9 +361,9 @@ function drawHome(){
  $('home').innerHTML=`<div id="mtop"><button id="mmenu" aria-label="Menu">☰</button><b>VRT OS</b></div>
  <div class="top"><div><h1>VRT OS</h1><p>${E(day)} · ${E(t('四套系統，一個工作台','Four systems, one workspace','ប្រព័ន្ធបួន កន្លែងធ្វើការមួយ'))}</p></div></div>
  <div class="seg" id="pseg">${Object.entries(PN()).map(([k,l])=>`<button class="${k===period?'on':''}" data-p="${k}">${E(l)}</button>`).join('')}</div>
- <div class="ctabs">${SYS.map(s=>`<button class="ctab" style="--c:${s.color}">${s.icon} ${E(nm(s))}<span class="dot ${(status[s.id]||{}).state||''}" data-dot="${s.id}"></span></button>`).join('')}</div>
- <div class="carw"><button class="cnav l" id="cprev" aria-label="Previous">‹</button><div id="car">${[SYS[SYS.length-1],...SYS,SYS[0]].map(s=>`<div class="slide" data-s="${s.id}">${slideHTML(s)}</div>`).join('')}</div><button class="cnav r" id="cnext" aria-label="Next">›</button></div>
- <div class="dots">${SYS.map(()=>'<i></i>').join('')}</div>
+ <div class="ctabs">${CAR().map(s=>`<button class="ctab" style="--c:${s.color}">${s.icon} ${E(nm(s))}${s.id==='admin'?'':`<span class="dot ${(status[s.id]||{}).state||''}" data-dot="${s.id}"></span>`}</button>`).join('')}</div>
+ <div class="carw"><button class="cnav l" id="cprev" aria-label="Previous">‹</button><div id="car">${(C=>[C[C.length-1],...C,C[0]])(CAR()).map(s=>`<div class="slide" data-s="${s.id}">${slideHTML(s)}</div>`).join('')}</div><button class="cnav r" id="cnext" aria-label="Next">›</button></div>
+ <div class="dots">${CAR().map(()=>'<i></i>').join('')}</div>
  ${recents.length?`<div class="sec">${E(t('最近開過','RECENT','ថ្មីៗ'))}</div><div class="row">${recents.map(r=>{const s=byId(r.s);return s?`<button class="chip" data-open="${r.s}" data-k="${E(r.k)}">${E(r.ic||'')} ${E(lang==='zh'?r.zh:r.en)} <span class="tag" style="--c:${s.color}">${E(s.tag||nm(s))}</span></button>`:''}).join('')}</div>`:''}
  <div class="sec">${E(t('流程總圖　由上到下：接單生產 → 人 → 廠區 → 合規　｜　由左到右：每套系統的作業順序','PROCESS MAP — top to bottom: order & production → people → site → compliance | left to right: the working order inside each','ផែនទីដំណើរការ'))}</div>
  <div id="lanes"></div>
