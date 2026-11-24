@@ -1,0 +1,55 @@
+// AC_ADMIN_CENTER · v2.6.0 world-files block — installed in 程式碼.gs and deployed as web-app version 29 on 2026-11-24.
+// Routes: doGet worldIndex / worldPieces (public); doPost worldHave / worldPut / worldSetFile / worldDelFile (signed-in). The older v2.5.0 single-file actions stay but are no longer used.
+
+/* ===== v2.6.0 · World 3D files shared between devices, per file, in content-addressed pieces (2026-11-24) =====
+   Each file (island1…island9, seasons_express, manifest) is cut by the page into ~256 KB pieces at content-defined
+   boundaries; a piece is stored once, gzip+base64, in sheet 'WorldPieces' (hash, part, parts, 'b:'+45k chars).
+   A file is a list of piece hashes in script property WORLD_FILE_<key>. Unchanged pieces are never sent twice.
+   Public GET: worldIndex, worldPieces. Signed-in POST: worldHave, worldPut, worldSetFile, worldDelFile. */
+var WORLD_KEY_RE_=/^(island[1-9]|seasons_express|manifest)$/,WORLD_HASH_RE_=/^[0-9a-f]{32}$/;
+function worldKey_(k){k=String(k||'');if(!WORLD_KEY_RE_.test(k))throw new Error('Invalid world file');return k;}
+function worldHash_(h){h=String(h||'');if(!WORLD_HASH_RE_.test(h))throw new Error('Invalid piece hash');return h;}
+function worldPieceSheet_(){return sh_('WorldPieces',['hash','part','parts','b64']);}
+function worldHex_(bytes){return bytes.map(function(b){return ((b+256)%256).toString(16).padStart(2,'0');}).join('').slice(0,32);}
+function worldFiles_(){const all=PropertiesService.getScriptProperties().getProperties(),files={};Object.keys(all).forEach(function(p){if(p.indexOf('WORLD_FILE_')===0){try{files[p.slice(11)]=JSON.parse(all[p]);}catch(e){}}});return files;}
+function worldIndex_(){return {ok:true,files:worldFiles_()};}
+function worldStored_(){const sh=worldPieceSheet_(),n=sh.getLastRow(),set={};if(n>1)sh.getRange(2,1,n-1,1).getValues().forEach(function(r){set[String(r[0])]=1;});return set;}
+function worldHave_(d){const hs=(d.hashes||[]).map(worldHash_);if(hs.length>2000)throw new Error('Too many pieces');const got=worldStored_();return {ok:true,missing:hs.filter(function(h){return !got[h];})};}
+function worldPut_(d){
+ const hash=worldHash_(d.hash),b64=String(d.b64||'');if(!b64||/[^A-Za-z0-9+/=]/.test(b64))throw new Error('Invalid piece data');
+ const raw=Utilities.ungzip(Utilities.newBlob(Utilities.base64Decode(b64),'application/x-gzip'));
+ if(worldHex_(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,raw.getBytes()))!==hash)throw new Error('Piece checksum mismatch');
+ const lock=LockService.getScriptLock();lock.waitLock(30000);
+ try{
+  if(worldStored_()[hash])return {ok:true,stored:0};
+  const parts=[];for(let i=0;i<b64.length;i+=45000)parts.push(b64.slice(i,i+45000));
+  const sh=worldPieceSheet_(),at=sh.getLastRow()+1,need=at+parts.length-1;if(sh.getMaxRows()<need)sh.insertRowsAfter(sh.getMaxRows(),need-sh.getMaxRows());
+  sh.getRange(at,1,parts.length,4).setValues(parts.map(function(p,i){return [hash,i,parts.length,'b:'+p];}));
+ }finally{lock.releaseLock();}
+ return {ok:true,stored:1};
+}
+function worldPieces_(q){
+ const hs=String(q.h||'').split(',').filter(String).map(worldHash_);if(!hs.length||hs.length>8)throw new Error('Ask for 1–8 pieces');
+ const sh=worldPieceSheet_(),n=sh.getLastRow(),col=n>1?sh.getRange(2,1,n-1,1):null,out={};
+ hs.forEach(function(h){if(!col)throw new Error('Piece not found');const c=col.createTextFinder(h).matchEntireCell(true).findNext();if(!c)throw new Error('Piece not found: '+h);
+  const row=c.getRow(),first=sh.getRange(row,1,1,3).getValues()[0],cnt=Number(first[2]),vals=sh.getRange(row,1,cnt,4).getValues();
+  out[h]=vals.map(function(r,i){if(String(r[0])!==h||Number(r[1])!==i)throw new Error('Stored piece is inconsistent');return String(r[3]).slice(2);}).join('');});
+ return {ok:true,pieces:out};
+}
+function worldGc_(){
+ const keep={};const files=worldFiles_();Object.keys(files).forEach(function(k){(files[k].pieces||[]).forEach(function(h){keep[h]=1;});});
+ const sh=worldPieceSheet_(),n=sh.getLastRow();if(n<2)return 0;const ids=sh.getRange(2,1,n-1,1).getValues();let i=ids.length-1,gone=0;
+ while(i>=0){if(!keep[String(ids[i][0])]){let j=i;while(j>0&&!keep[String(ids[j-1][0])])j--;sh.deleteRows(j+2,i-j+1);gone+=i-j+1;i=j-1;}else i--;}
+ return gone;
+}
+function worldSetFile_(d){
+ const key=worldKey_(d.key),pieces=(d.pieces||[]).map(worldHash_),m=d.meta||{};if(!pieces.length||pieces.length>260)throw new Error('Invalid piece list');
+ const lock=LockService.getScriptLock();lock.waitLock(30000);
+ try{
+  const got=worldStored_(),miss=pieces.filter(function(h){return !got[h];});if(miss.length)throw new Error('Upload incomplete: '+miss.length+' pieces missing; nothing changed');
+  const rec={hash:worldHash_(m.hash),size:Number(m.size)||0,name:String(m.name||'').slice(0,120),title:String(m.title||'').slice(0,160),version:String(m.version||'').slice(0,24),pieces:pieces,updatedAt:new Date().toISOString()};
+  PropertiesService.getScriptProperties().setProperty('WORLD_FILE_'+key,JSON.stringify(rec));worldGc_();
+  return {ok:true,key:key,file:rec};
+ }finally{lock.releaseLock();}
+}
+function worldDelFile_(d){const key=worldKey_(d.key),lock=LockService.getScriptLock();lock.waitLock(30000);try{PropertiesService.getScriptProperties().deleteProperty('WORLD_FILE_'+key);worldGc_();}finally{lock.releaseLock();}return {ok:true,key:key};}

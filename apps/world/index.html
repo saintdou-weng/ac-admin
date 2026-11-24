@@ -1,181 +1,875 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><script src="../../shared/gate.js"></script><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>世界鐵道・四季慢行 3D · VRT OS</title>
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ebe5d5">
+<title>世界鐵道・四季慢行 3D 總控台 · VRT OS</title>
 <style>
-:root{--bg:#0f172a;--card:#1e293b;--line:#334155;--tx:#e2e8f0;--mut:#94a3b8;--ac:#38bdf8;--ok:#34d399;--warn:#fbbf24;--bad:#f87171}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.55 system-ui,-apple-system,"Noto Sans TC","Microsoft JhengHei",sans-serif}
-.wrap{max-width:720px;margin:0 auto;padding:14px 14px 40px}
-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}header a{color:var(--mut);text-decoration:none;font-size:14px;padding:6px 10px;border:1px solid var(--line);border-radius:10px}
-h1{font-size:19px;margin:0;flex:1}h2{font-size:14px;color:var(--mut);font-weight:600;margin:20px 0 8px;letter-spacing:.04em}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.grow{flex:1;min-width:0}
-.big{font-size:22px;font-weight:700}.mut{color:var(--mut);font-size:13px}.tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--mut);margin-left:6px;vertical-align:middle}
-.tag.on{border-color:var(--ok);color:var(--ok)}.tag.new{border-color:var(--warn);color:var(--warn)}
-button,.btn{font:inherit;font-weight:600;border:1px solid var(--line);background:#0b1220;color:var(--tx);border-radius:12px;padding:11px 14px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;justify-content:center}
-button.pri,.btn.pri{background:var(--ac);border-color:var(--ac);color:#06202e}button.danger{color:var(--bad)}button:disabled{opacity:.5;cursor:default}
-.go{width:100%;font-size:17px;padding:14px}
-.drop{border:2px dashed var(--line);border-radius:16px;padding:22px 14px;text-align:center;cursor:pointer;transition:.15s}.drop.over{border-color:var(--ac);background:#0b1b2b}
-.drop b{display:block;font-size:16px;margin-bottom:4px}
-.chips{display:flex;gap:8px;flex-wrap:wrap}.chips a{flex:1 1 30%;min-width:96px}
-#msg{margin-top:10px;padding:10px 12px;border-radius:12px;font-size:14px;display:none}#msg.ok{display:block;background:#0c2a22;border:1px solid var(--ok)}#msg.bad{display:block;background:#2a1212;border:1px solid var(--bad)}#msg.info{display:block;background:#10243a;border:1px solid var(--ac)}
-ol{margin:6px 0 0;padding-left:20px;color:var(--mut);font-size:13.5px}li{margin:3px 0}
-.bar{height:6px;border-radius:9px;background:#0b1220;overflow:hidden;margin-top:8px;display:none}.bar i{display:block;height:100%;width:0;background:var(--ac);transition:width .2s}
-</style></head><body><div class="wrap">
-<header><a href="../../index.html">← VRT OS</a><h1>🚂 世界鐵道・四季慢行 3D</h1></header>
+:root {
+  --bg: #ece7da;
+  --card: #f7f4ec;
+  --card-hover: #fbf9f3;
+  --ink: #22352d;
+  --muted: #617068;
+  --line: rgba(34, 53, 45, 0.14);
+  --blue: #2359c7;
+  --blue-dark: #19449e;
+  --green: #1e9e5a;
+  --amber: #d4891c;
+  --shadow: 0 4px 16px rgba(24, 38, 32, 0.08);
+  font-family: system-ui, -apple-system, "Noto Sans TC", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: linear-gradient(180deg, #e7e0cf 0%, #f1ede2 40%, #e6e2d6 100%);
+  color: var(--ink);
+  -webkit-tap-highlight-color: transparent;
+}
+.shell {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: max(12px, env(safe-area-inset-top)) 12px calc(86px + env(safe-area-inset-bottom));
+}
+/* VRT OS Top Header */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #f9f6ee, #efe9da);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+.logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #2760d1, #19439b);
+  color: #fff;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: .04em;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  box-shadow: inset 0 1px 1px rgba(255,255,255,.35), 0 3px 8px rgba(25,67,155,.28);
+}
+.title-wrap { flex: 1; min-width: 0; }
+.title-wrap h1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: .03em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.title-wrap p {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.back-os {
+  text-decoration: none;
+  color: var(--ink);
+  background: #fdfbf6;
+  border: 1px solid var(--line);
+  padding: 7px 11px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.back-os:active { transform: scale(0.97); }
 
-<div class="card">
- <div class="row"><div class="grow"><div class="mut">這台裝置現在會開啟</div><div class="big" id="curV">…</div><div class="mut" id="curD"></div></div></div>
- <div style="margin-top:12px"><a class="btn pri go" id="open" href="seasons_express.html">▶ 進入 3D 世界</a></div>
- <div class="mut" style="margin-top:8px">檔案約 <span id="curS">11</span> MB，第一次開啟請等它載完。</div>
+/* Search & Status strip */
+.search-bar {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.search-input-wrap {
+  flex: 1;
+  position: relative;
+}
+.search-input-wrap input {
+  width: 100%;
+  padding: 10px 14px 10px 36px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(255,253,247,.9);
+  font-size: 14px;
+  color: var(--ink);
+  outline: none;
+}
+.search-input-wrap input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(35,89,199,.12); }
+.search-icon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 15px;
+  opacity: .7;
+  pointer-events: none;
+}
+.status-pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 7px 10px;
+  border-radius: 10px;
+  background: #e4efe8;
+  color: #1c6b42;
+  border: 1px solid rgba(30,158,90,.25);
+  white-space: nowrap;
+}
+.status-pill.offline { background: #f4ead8; color: #8c5a12; border-color: rgba(212,137,28,.3); }
+
+/* Summary bar */
+.meta-strip {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 9px 13px;
+  border-radius: 12px;
+  background: rgba(247,244,236,.78);
+  border: 1px solid var(--line);
+  font-size: 12px;
+  color: var(--muted);
+}
+.meta-strip strong { color: var(--ink); }
+
+/* Island Module Cards (VRT OS Tactile Card Style) */
+.cards {
+  margin-top: 12px;
+  display: grid;
+  gap: 11px;
+}
+.island-card {
+  position: relative;
+  border-radius: 15px;
+  background: linear-gradient(180deg, #faf8f2, #f0ece0);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.8);
+  padding: 13px 14px 13px 18px;
+  overflow: hidden;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.island-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 5px;
+  border-radius: 0 5px 5px 0;
+  background: var(--accent, #2d6a4f);
+}
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.85);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.card-title { flex: 1; min-width: 0; }
+.card-title h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+.badge {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 6px;
+  letter-spacing: .04em;
+  background: #e2ebe5;
+  color: #1f5c3d;
+}
+.badge.wip { background: #f3e7d0; color: #8c5910; }
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.dot.ready { background: var(--green); box-shadow: 0 0 0 3px rgba(30,158,90,.18); }
+.dot.upgrading { background: var(--amber); box-shadow: 0 0 0 3px rgba(212,137,28,.2); }
+.card-sub {
+  margin: 3px 0 0;
+  font-size: 11.5px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.prog-row {
+  margin-top: 9px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.prog-track {
+  flex: 1;
+  height: 6px;
+  border-radius: 99px;
+  background: rgba(34,53,45,.1);
+  overflow: hidden;
+}
+.prog-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: var(--accent, #2d6a4f);
+}
+.card-desc {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #3f5048;
+}
+.spot-details {
+  margin-top: 8px;
+}
+.spot-details summary {
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent, #2d6a4f);
+  user-select: none;
+  padding: 3px 0;
+}
+.spot-list {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  font-size: 12px;
+  line-height: 1.65;
+  color: #3c4d45;
+}
+.card-actions {
+  margin-top: 11px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.btn {
+  flex: 1;
+  min-width: 120px;
+  min-height: 40px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #fdfbf6;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.btn.primary {
+  background: linear-gradient(180deg, #2b5c49, #1f4637);
+  color: #fff;
+  border-color: #1f4637;
+}
+.btn.secondary {
+  background: #f4efe2;
+  color: #2c433a;
+}
+.btn:active { transform: scale(0.98); }
+
+/* Legacy full-world card */
+.legacy-card {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(244,239,227,.85);
+  border: 1px dashed rgba(34,53,45,.25);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.legacy-card strong { font-size: 13.5px; display: block; }
+.legacy-card small { font-size: 11.5px; color: var(--muted); }
+.legacy-card .btn { flex: 0 0 auto; min-width: auto; min-height: 36px; font-size: 12px; }
+
+/* Bottom VRT OS Action Bar */
+.dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  padding: 10px 12px max(10px, env(safe-area-inset-bottom));
+  background: rgba(238, 232, 217, 0.95);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--line);
+}
+.dock-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  gap: 8px;
+}
+.dock-btn {
+  flex: 1;
+  min-height: 44px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.dock-btn.update {
+  background: linear-gradient(180deg, #326fe8, #1e52bd);
+  color: #fff;
+  border-color: #1b49a8;
+  box-shadow: 0 3px 10px rgba(30,82,189,.28);
+}
+.dock-btn.cache {
+  background: linear-gradient(180deg, #fcfaf3, #ede6d5);
+  color: var(--ink);
+}
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 76px;
+  transform: translateX(-50%);
+  background: rgba(24, 39, 33, 0.94);
+  color: #fff9eb;
+  padding: 9px 16px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  z-index: 40;
+  max-width: 90vw;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0,0,0,.22);
+}
+.toast[hidden] { display: none; }
+
+/* Import & sync panel */
+.sync-card{margin-top:12px;padding:13px 14px;border-radius:15px;background:linear-gradient(180deg,#faf8f2,#f0ece0);border:1px solid var(--line);box-shadow:var(--shadow)}
+.sync-card h3{margin:0 0 8px;font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px}
+.drop{border:2px dashed rgba(34,53,45,.28);border-radius:13px;padding:16px 12px;text-align:center;cursor:pointer;background:rgba(255,253,247,.7)}
+.drop.over{border-color:var(--blue);background:#eef3fd}
+.drop b{display:block;font-size:14.5px;margin-bottom:3px}.drop span{font-size:12px;color:var(--muted)}
+.pbar{height:6px;border-radius:99px;background:rgba(34,53,45,.1);overflow:hidden;margin-top:9px}.pbar i{display:block;height:100%;width:0;background:var(--blue);transition:width .2s}
+.smsg{margin-top:9px;padding:9px 11px;border-radius:10px;font-size:12.5px;line-height:1.55;background:#eef3fd;border:1px solid rgba(35,89,199,.25)}
+.smsg.ok{background:#e4efe8;border-color:rgba(30,158,90,.3)}.smsg.bad{background:#f8e6e2;border-color:rgba(190,60,40,.3)}
+.ftable{margin-top:10px;display:grid;gap:6px}
+.frow{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;background:rgba(255,253,247,.85);border:1px solid var(--line);font-size:12.5px}
+.frow .fn{font-weight:800;min-width:64px}.frow .fv{flex:1;min-width:0;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip{font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:6px;white-space:nowrap;background:#e8e4d8;color:#5b6660}
+.chip.ok{background:#e2ebe5;color:#1f5c3d}.chip.wait{background:#f3e7d0;color:#8c5910}.chip.off{background:#e4e9f5;color:#2a4a8c}
+.mini{font:inherit;font-size:11.5px;font-weight:700;padding:5px 8px;border-radius:8px;border:1px solid var(--line);background:#fdfbf6;color:var(--ink);cursor:pointer;white-space:nowrap}
+.notes{margin:9px 0 0;padding-left:18px;font-size:11.5px;line-height:1.6;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="logo">VRT</div>
+    <div class="title-wrap">
+      <h1>世界鐵道・四季慢行 3D <span class="badge" id="hubVer">v6.3</span></h1>
+      <p>四島獨立高精細架構 · 各島獨立上傳、自動同步、支援離線下載</p>
+    </div>
+    <a class="back-os" href="https://saintdou-weng.github.io/ac-admin/">← VRT OS</a>
+  </header>
+
+  <div class="search-bar">
+    <div class="search-input-wrap">
+      <span class="search-icon">🔍</span>
+      <input id="searchBox" type="search" placeholder="找島嶼、景點、載具（例：高龍島、公館、101、纜車…）">
+    </div>
+    <span class="status-pill" id="netPill">● 線上</span>
+  </div>
+
+  <div class="meta-strip">
+    <span>清單同步：<strong id="syncDate">2026-11-24</strong></span>
+    <span>精修進度：<strong id="overallPct">1 / 4 島完成 v6 寫實重鑄</strong></span>
+    <a href="#syncCard" style="color:var(--blue);font-weight:700;text-decoration:none">📥 匯入更新</a>
+  </div>
+
+  <main class="cards" id="islandCards"></main>
+
+  <section class="legacy-card" id="legacyCard">
+    <div>
+      <strong>🌐 四島六角大環線（v5.16 整合版備援）</strong>
+      <small>保留原四島大環線、敦煌 42 洞窟、101 與馬雅剖面，隨開隨玩。</small>
+    </div>
+    <div style="display:flex;gap:6px;">
+      <a class="btn secondary" href="./seasons_express.html?route=globe">進入全景環線</a>
+      <a class="btn secondary" href="./seasons_express.html" data-dl="seasons_express" data-name="Seasons_Express_v5_16.html">⬇ 下載</a>
+    </div>
+  </section>
+
+  <section class="sync-card" id="syncCard">
+    <h3>📥 匯入更新・☁ 各裝置同步</h3>
+    <div class="drop" id="drop"><b>點這裡選檔，或把檔案拖進來</b><span>整包 .zip，或任一島的單一 .html（例：island1.html、seasons_express.html），也可一次選多個</span></div>
+    <input type="file" id="file" accept=".html,.htm,.zip,.json,text/html,application/zip" multiple hidden>
+    <div class="pbar" id="pbar" hidden><i></i></div>
+    <div class="smsg" id="smsg" hidden></div>
+    <div class="ftable" id="ftable"></div>
+    <ol class="notes">
+      <li>匯入後這台裝置立刻換新版，並上傳雲端；其他裝置打開這一頁就自動換成同一版。</li>
+      <li>只傳有變的部分：跟雲端一樣的島不重傳；換版時也只上傳／下載有改到的片段。</li>
+      <li>下載過的島會留在這台裝置，之後飛航模式也能玩，不會每次重下。</li>
+      <li>上傳要用安裝行政中心的 Google 帳號（saintdou@gmail.com）連線；下載不用登入。</li>
+    </ol>
+  </section>
 </div>
 
-<h2>快速前往</h2>
-<div class="card"><div class="chips">
- <a class="btn" href="seasons_express.html">🚂 從列車開始</a>
- <a class="btn" href="seasons_express.html?visit=angkor">🛕 吳哥窟參觀</a>
-</div></div>
-
-<h2>匯入更新</h2>
-<div class="card">
- <div class="drop" id="drop"><b>📥 點這裡選新版檔案，或把檔案拖進來</b><span class="mut">可以放 <b style="display:inline;font-size:inherit">.html</b> 或整包 <b style="display:inline;font-size:inherit">.zip</b>（會自動找出裡面的 seasons_express.html）</span></div>
- <input type="file" id="file" accept=".html,.htm,.zip,text/html,application/zip" hidden>
- <div class="bar" id="bar"><i></i></div><div id="msg"></div>
- <ol><li>匯入後，<b>這台裝置</b>馬上改用新版，同時<b>自動上傳雲端</b>。</li><li>其他手機／電腦只要打開這一頁，就會<b>自動下載同一版</b>，不用再匯入。</li><li>上傳要用安裝行政中心的 Google 帳號連線（第一次會跳出連線視窗）；下載不用登入。</li></ol>
+<div class="dock">
+  <div class="dock-inner">
+    <button class="dock-btn update" id="btnRefresh" type="button">↻ 全部更新</button>
+    <button class="dock-btn cache" id="btnCacheAll" type="button">📥 離線快取全部</button>
+  </div>
 </div>
 
-<h2>版本管理</h2>
-<div class="card">
- <div class="row"><div class="grow"><b>內建版</b><span class="tag" id="bTag">線上</span><div class="mut" id="bInfo">…</div></div><a class="btn" href="seasons_express.html?builtin=1">開啟</a></div>
- <hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
- <div class="row"><div class="grow"><b>雲端版</b><span class="tag" id="cTag">…</span><div class="mut" id="cInfo">檢查中…</div></div><button id="up" style="display:none">☁ 上傳到雲端</button></div>
- <hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
- <div class="row"><div class="grow"><b>這台裝置的匯入版</b><span class="tag" id="iTag">沒有</span><div class="mut" id="iInfo">還沒有匯入過。</div></div>
-  <a class="btn" id="dl" download="seasons_express.html" href="seasons_express.html" style="display:none">⬇ 下載</a><button class="danger" id="reset" style="display:none">↩ 改回內建版</button></div>
-</div>
-<div class="mut" id="sw"></div>
-</div>
-<script src="../../config.js"></script><script src="../../shared/admin-core.js"></script>
+<div class="toast" id="toast" hidden></div>
+
+<script src="../../config.js"></script>
+<script src="../../shared/admin-core.js"></script>
 <script>
-(function(){
-const CACHE='vrt-world-import-v1',KEY='imported/seasons_express.html',META='vrtWorldImportMeta';
-const $=id=>document.getElementById(id),mb=n=>(n/1048576).toFixed(1);
-const say=(cls,t)=>{const m=$('msg');m.className=cls;m.textContent=t;};
-const meta=()=>{try{return JSON.parse(localStorage.getItem(META)||'null');}catch(e){return null;}};
-const when=s=>{const d=new Date(s);return isNaN(d)?'':d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');};
-let builtin=null,swReady=false,cloud=null,busy=false;
-const HUB=()=>{try{return window.Admin.hubConfig().url||'';}catch(e){return (window.AC_CONFIG||{}).hubUrl||'';}};
-const bar=p=>{$('bar').style.display=p==null?'none':'block';if(p!=null)$('bar').firstElementChild.style.width=p+'%';};
+(() => {
+  'use strict';
+  const FALLBACK_MANIFEST = {"hubVersion": "6.3.0", "updatedAt": "2026-11-24", "title": "世界鐵道・四季慢行 3D 總控台", "subtitle": "四島獨立高精細引擎 · VRT OS 模組整合", "islands": [{"id": "island1", "order": 1, "name": "第一島・經典六境", "badge": "v6.3 寫實精修可入內", "status": "ready", "statusText": "原版資產＋四大精修完成", "progress": 100, "accent": "#2d6a4f", "icon": "🚂", "url": "./island1.html", "downloadFile": "./island1.html", "downloadName": "VRT_World_Island1_v6_3.html", "summary": "在 v5.16 原版 Blender 樹木與 11 關節動物地基上完成四大精修：(1) 剔除擋路民房、修復西港廠港大道零穿模；(2) 北歐古堡、京都御所、東京鐵塔全面支援多樓層剖面與走入室內參觀（同艾芙琳公館）；(3) 北歐與京都道路屋街升級真實 3D PBR 凹凸質感與立體街飾；(4) 新增南方海岸近海高龍島＆高龍撒冷島，可搭高速渡輪或長尾小船登島漫步。", "spots": ["南方海岸：西港零穿模 18m 廠港大道與動態平交道 ＋ 搭高速客運渡輪／長尾小船去高龍島＆高龍撒冷島登島漫步", "瑞士山谷：雪水源頭→上游高山湖→瀑布木棧道 ＋ 季節動態農園與原版 Blender 針葉林", "北歐小鎮：真 3D PBR 鵝卵石街與鍛鐵路燈 ＋ 艾芙琳公館（5 層可入內）＋ 峽灣古堡（B1–3F 剖面入內）", "京都老街：真 3D PBR 石板古道與犬矢來提燈 ＋ 京都御所紫宸殿（庭院／1F／2F 剖面入內）＋ 雙節路面電車", "非洲草原：原版 Blender 11 關節骨架動物群（長頸鹿／大象／斑馬／水牛）＋ 草原聚落與水塘", "東京街區：東京鐵塔（1F／150m 玻璃地板／250m 鏡面鑽石廊剖面入內）＋ 澀谷夜景與十節車廂漫遊"]}, {"id": "island2", "order": 2, "name": "第二島・秘境五境", "badge": "v5.16 基礎版", "status": "upgrading", "statusText": "可遊玩 · 待 v6 寫實升級", "progress": 65, "accent": "#b07d3b", "icon": "🏛️", "url": "./seasons_express.html?route=two", "downloadFile": "./seasons_express.html", "downloadName": "VRT_World_All_v5_16.html", "summary": "目前銜接 v5.16 完整運作版；下一步拆分為獨立 island2.html 並拉滿馬雅、金字塔、聖托里尼日落、大峽谷與極光冰川細節。", "spots": ["翡翠雨林：馬雅神廟剖面入內 ＋ 叢林探險隊與跨島渡輪", "尼羅綠洲：吉薩金字塔地下通道與法老墓室剖面", "愛琴海白城：聖托里尼藍頂教堂、石階與風車日落", "美西大峽谷：急流泛舟、玻璃天空步道與崖壁攀岩", "極光冰川：地熱溫泉、玻璃植物園與極地破冰船"]}, {"id": "island3", "order": 3, "name": "第三島・亞洲中東五境", "badge": "v5.16 基礎版", "status": "upgrading", "statusText": "可遊玩 · 待 v6 寫實升級", "progress": 70, "accent": "#3b6e8c", "icon": "🏙️", "url": "./seasons_express.html?route=three", "downloadFile": "./seasons_express.html", "downloadName": "VRT_World_All_v5_16.html", "summary": "已含敦煌九層樓 1F–9F 與 42 洞窟、101 購物中心剖面與吳哥窟；下一步拆分獨立 island3.html 並新增亞庇神山徒步、濱海菜市場與獨島搭船。", "spots": ["台北信義：台北 101 挑高百貨中庭剖面 ＋ 89F 阻尼球觀景台", "亞庇神山：京那巴魯徒步登山 ＋ 靠海菜市場 ＋ 搭船去獨島", "吳哥窟：七頭那伽石道、北池五塔倒影與浮雕迴廊", "杜拜未來城：哈里發塔 124F 剖面、音樂噴泉與未來博物館", "敦煌石窟：莫高窟九層樓 1F–9F 剖面室內 ＋ 42 座彩繪洞窟"]}, {"id": "island4", "order": 4, "name": "第四島・世界文化與樂園", "badge": "v5.16 基礎版", "status": "upgrading", "statusText": "可遊玩 · 待 v6 寫實升級", "progress": 60, "accent": "#7b4b7a", "icon": "🏰", "url": "./seasons_express.html?route=four", "downloadFile": "./seasons_express.html", "downloadName": "VRT_World_All_v5_16.html", "summary": "已含環球城堡樂園步行、開普敦與里約；下一步拆分獨立 island4.html 並實裝桌山纜車、企鵝島搭船、巴西貧民窟寫實巷弄與樂園遊園車。", "spots": ["里約熱內盧：寫實紅磚貧民窟巷弄步行 ＋ 基督山救世主神像", "開普敦：360° 旋轉纜車上桌山國家公園 ＋ 搭船去企鵝島", "巴黎：奧斯曼古典光廊商業大道 ＋ 塞納河與艾菲爾鐵塔", "伊斯坦堡：藍色清真寺穹頂內殿 ＋ 大巴札彩燈市集", "夢幻環球城堡樂園：七大主題區步行 ＋ 園區電動遊園車"]}], "legacyGlobe": {"name": "四島六角大環線（v5.16 全覽合集）", "url": "./seasons_express.html?route=globe", "downloadFile": "./seasons_express.html", "downloadName": "Seasons_Express_v5_16.html"}};
+  const $ = (id) => document.getElementById(id);
+  let manifestData = FALLBACK_MANIFEST;
+  let toastTimer = null;
 
-/* the service worker is what makes the imported copy answer at the normal address */
-if('serviceWorker' in navigator&&window.caches){navigator.serviceWorker.register('sw.js',{scope:'./'}).then(()=>navigator.serviceWorker.ready).then(()=>{swReady=true;paint();syncDown();}).catch(e=>{$('sw').textContent='⚠ 這個瀏覽器無法啟用匯入功能（'+e.message+'），只能用內建版。';});}
-else $('sw').textContent='⚠ 這個瀏覽器不支援匯入功能（需要 https 與一般模式，無痕模式不行），只能用內建版。';
+  function showToast(msg, ms = 2600) {
+    const t = $('toast');
+    t.textContent = msg;
+    t.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.hidden = true; }, ms);
+  }
 
-fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.json()).then(j=>{builtin=j;paint();}).catch(()=>paint());
+  function updateNet() {
+    const pill = $('netPill');
+    const online = navigator.onLine !== false;
+    pill.textContent = online ? '● 線上' : '● 離線模式';
+    pill.classList.toggle('offline', !online);
+  }
+  window.addEventListener('online', updateNet);
+  window.addEventListener('offline', updateNet);
+  updateNet();
 
-async function hasImport(){if(!window.caches)return false;try{return !!(await (await caches.open(CACHE)).match(KEY));}catch(e){return false;}}
-async function paint(){
- const m=meta(),imp=await hasImport();
- if(cloud===null){$('cTag').textContent='…';$('cInfo').textContent='檢查中…';}
- else if(cloud===false){$('cTag').textContent='連不上';$('cTag').className='tag new';$('cInfo').textContent='現在連不到雲端，先用這台裝置上的版本。';}
- else if(!cloud.rev){$('cTag').textContent='沒有';$('cTag').className='tag';$('cInfo').textContent='雲端還沒有匯入版，所有裝置用內建版。';}
- else{const same=imp&&m&&m.rev===cloud.rev;$('cTag').textContent=same?'已同步 ✓':'有新版';$('cTag').className=same?'tag on':'tag new';$('cInfo').textContent=((cloud.meta&&(cloud.meta.title||cloud.meta.version))||'')+'　'+mb((cloud.meta&&cloud.meta.bytes)||0)+' MB　'+when(cloud.updatedAt);}
- $('up').style.display=imp&&m&&cloud!==null&&!(cloud&&cloud.rev&&m.rev===cloud.rev)&&!busy?'':'none';
- $('bInfo').textContent=builtin?builtin.version+'　'+builtin.date+'　'+(builtin.note||'')+'　約 '+mb(builtin.bytes)+' MB':'讀不到版本資訊';
- if(imp&&m){$('curV').textContent=(m.version||'匯入版')+(cloud&&cloud.rev&&m.rev===cloud.rev?' ・雲端同步版':' ・匯入版');$('curD').textContent=(m.name||'')+'　匯入於 '+when(m.at);$('curS').textContent=mb(m.bytes);
-  $('iTag').textContent='使用中';$('iTag').className='tag on';$('iInfo').textContent=(m.title||m.version||'')+'　'+mb(m.bytes)+' MB　'+when(m.at);$('dl').style.display='';$('reset').style.display='';$('bTag').textContent='備用';$('bTag').className='tag';
-  if(builtin&&builtin.date&&m.at&&new Date(builtin.date+'T00:00:00')>new Date(m.at)){$('bTag').textContent='比匯入版新';$('bTag').className='tag new';}}
- else{$('curV').textContent=(builtin?builtin.version:'')+' ・內建版';$('curD').textContent=builtin?builtin.date+'　'+(builtin.note||''):'';if(builtin)$('curS').textContent=mb(builtin.bytes);
-  $('iTag').textContent='沒有';$('iTag').className='tag';$('iInfo').textContent='還沒有匯入過。';$('dl').style.display='none';$('reset').style.display='none';$('bTag').textContent='使用中';$('bTag').className='tag on';}
-}
+  /* ================= files: cloud copy > built-in copy, both kept on this device ================= */
+  const FILES = 'vrt-world-files-v2';
+  const LABEL = { island1: '第一島', island2: '第二島', island3: '第三島', island4: '第四島', island5: '第五島', island6: '第六島', island7: '第七島', island8: '第八島', island9: '第九島', seasons_express: '四島合集', manifest: '島嶼清單' };
+  const HAS_CACHE = !!window.caches && (location.protocol === 'https:' || location.hostname === 'localhost');
+  const enc = (v) => encodeURIComponent(String(v || ''));
+  const dec = (v) => { try { return decodeURIComponent(v || ''); } catch (e) { return v || ''; } };
+  const mb = (n) => (n / 1048576).toFixed(1);
+  const keyOfUrl = (u) => ((String(u || '').match(/(island[1-9]|seasons_express)\.html/) || [])[1] || '');
+  let builtinManifest = FALLBACK_MANIFEST, cloudIdx = null, busy = false, state = {};
 
-/* ---- zip: read the central directory, pull out the largest .html entry (stored or deflated) ---- */
-async function fromZip(file){
- const buf=new Uint8Array(await file.arrayBuffer()),dv=new DataView(buf.buffer),td=new TextDecoder();let e=buf.length-22;while(e>=0&&dv.getUint32(e,true)!==0x06054b50)e--;if(e<0)throw new Error('這不是有效的 zip 檔');
- const n=dv.getUint16(e+10,true);let p=dv.getUint32(e+16,true),best=null;
- for(let i=0;i<n;i++){if(dv.getUint32(p,true)!==0x02014b50)break;const method=dv.getUint16(p+10,true),csize=dv.getUint32(p+20,true),usize=dv.getUint32(p+24,true),nl=dv.getUint16(p+28,true),xl=dv.getUint16(p+30,true),cl=dv.getUint16(p+32,true),off=dv.getUint32(p+42,true),name=td.decode(buf.subarray(p+46,p+46+nl));
-  if(/\.html?$/i.test(name)&&!/(^|\/)(index|sw)\.html?$/i.test(name)&&(!best||usize>best.usize))best={name,method,csize,usize,off};p+=46+nl+xl+cl;}
- if(!best)throw new Error('zip 裡面找不到 3D 的 html 檔');
- const lh=best.off,start=lh+30+dv.getUint16(lh+26,true)+dv.getUint16(lh+28,true),raw=buf.subarray(start,start+best.csize);
- if(best.method===0)return {name:best.name.split('/').pop(),blob:new Blob([raw])};
- if(best.method!==8||!window.DecompressionStream)throw new Error('這個瀏覽器解不開這包 zip，請直接放 .html');
- const out=await new Response(new Blob([raw]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).blob();return {name:best.name.split('/').pop(),blob:out};
-}
+  const store = () => caches.open(FILES);
+  async function entry(slot, key) {
+    if (!HAS_CACHE) return null;
+    const r = await (await store()).match(slot + '/' + key);
+    if (!r) return null;
+    const h = r.headers;
+    return { r, slot, key, hash: h.get('X-Hash') || '', src: h.get('X-Source') || slot, version: dec(h.get('X-Version')), title: dec(h.get('X-Title')), name: dec(h.get('X-Name')), at: h.get('X-At') || '', size: Number(h.get('X-Size')) || 0 };
+  }
+  async function put(slot, key, blob, m) {
+    await (await store()).put(slot + '/' + key, new Response(blob, { headers: {
+      'Content-Type': key === 'manifest' ? 'application/json; charset=utf-8' : 'text/html; charset=utf-8',
+      'X-Hash': m.hash || '', 'X-Source': m.src || slot, 'X-Version': enc(m.version), 'X-Title': enc(m.title), 'X-Name': enc(m.name), 'X-At': m.at || '', 'X-Size': String(blob.size) } }));
+  }
+  const drop = async (slot, key) => { if (HAS_CACHE) await (await store()).delete(slot + '/' + key); };
+  const active = async (key) => (await entry('cloud', key)) || (await entry('builtin', key));
 
-const RET='<script id="vrt-os-return">/* VRT OS: when this page is opened inside the Admin Center, the back button returns to the world page */(function(){if(!/\\/ac-admin\\//.test(location.pathname))return;var a=document.querySelector("a.back");if(a){a.href="./index.html";a.title="返回";a.textContent="← 返回";}})();<\/script>\n';
+  /* ================= hashing and content-defined pieces (same cut points on every device) ================= */
+  async function sha(buf) { const d = new Uint8Array(await crypto.subtle.digest('SHA-256', buf)); let s = ''; for (let i = 0; i < 16; i++) s += d[i].toString(16).padStart(2, '0'); return s; }
+  const GEAR = (() => { const g = new Uint32Array(256); let x = 0x9e3779b9; for (let i = 0; i < 256; i++) { x ^= x << 13; x >>>= 0; x ^= x >>> 17; x ^= x << 5; x >>>= 0; g[i] = x; } return g; })();
+  function cuts(u8) {
+    const MIN = 65536, MAX = 1048576, MASK = 0xFFFFC000, out = []; let start = 0;
+    while (start < u8.length) {
+      let end = Math.min(u8.length, start + MAX), i = start + MIN, h = 0;
+      if (i >= end) { out.push([start, end]); break; }
+      for (let j = Math.max(start, i - 64); j < i; j++) h = ((h << 1) + GEAR[u8[j]]) >>> 0;
+      for (; i < end; i++) { h = ((h << 1) + GEAR[u8[i]]) >>> 0; if ((h & MASK) === 0) { i++; break; } }
+      out.push([start, i]); start = i;
+    }
+    return out;
+  }
+  async function pieces(u8) { const out = []; for (const [a, b] of cuts(u8)) { const part = u8.subarray(a, b); out.push({ h: await sha(part), part }); } return out; }
+  const gz = async (u8) => new Uint8Array(await new Response(new Blob([u8]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
+  const ungz = async (u8) => new Uint8Array(await new Response(new Blob([u8]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());
+  function b64(u8) { let s = ''; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s); }
+  function unb64(s) { const bin = atob(s), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u; }
 
-async function importFile(file){
- if(!swReady){say('bad','匯入功能還沒準備好，請重新整理這一頁再試一次。');return;}
- if(busy){say('info','上一個動作還在進行，請稍等。');return;}busy=true;
- const signIn=window.Admin?window.Admin.ensureAuth().then(()=>true,e=>e):Promise.resolve(new Error('no admin core'));
- let stored=null;
- $('bar').style.display='block';$('bar').firstElementChild.style.width='15%';say('info','讀取中… '+file.name);
- try{
-  let name=file.name,blob=file;if(/\.zip$/i.test(name)||file.type==='application/zip'||file.type==='application/x-zip-compressed'){const z=await fromZip(file);name=z.name;blob=z.blob;}
-  $('bar').firstElementChild.style.width='45%';
-  let html=await blob.text();
-  /* checks: it must be the railway world, complete, and not a tiny fragment */
-  const title=(html.match(/<title>([^<]*)<\/title>/i)||[])[1]||'',ver=(title.match(/v\d+(?:\.\d+)+/i)||[])[0]||'';
-  if(html.length<500000||!/RailwayApp/.test(html)||!/四季慢行|Seasons Express/i.test(html))throw new Error('這個檔案看起來不是「四季慢行」的 3D 頁面（或檔案不完整），沒有匯入。');
-  if(!/<\/html>\s*$/i.test(html))throw new Error('檔案結尾不完整（可能下載到一半），沒有匯入。');
-  html=html.replace(/<script id="vrt-os-return">[\s\S]*?<\/script>\s*/i,'');const i=html.lastIndexOf('</body>');html=i>0?html.slice(0,i)+RET+html.slice(i):html+RET;
-  $('bar').firstElementChild.style.width='75%';
-  const body=new Blob([html],{type:'text/html;charset=utf-8'});
-  if(navigator.storage&&navigator.storage.persist)try{await navigator.storage.persist();}catch(e){}
-  const c=await caches.open(CACHE);await c.put(KEY,new Response(body,{headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'}}));
-  if(!(await c.match(KEY)))throw new Error('存不進這台裝置（空間不足？）');
-  localStorage.setItem(META,JSON.stringify({name,title,version:ver,bytes:body.size,at:new Date().toISOString()}));stored=body;
-  say('ok','✅ 已匯入 '+(ver||name)+'（'+mb(body.size)+' MB）。這台裝置現在開的就是這一版。接著上傳雲端…');
- }catch(e){say('bad','❌ '+(e&&e.message||e));}
- await paint();
- if(stored){const ok=await signIn;if(ok===true)await upload(stored);else say('info','✅ 這台裝置已換成新版；☁ 雲端還沒上傳（'+((ok&&ok.message)||'未連線')+'）。按下面「上傳到雲端」再試一次。');}
- busy=false;bar(null);paint();
-}
+  /* ================= cloud (Admin Center script) ================= */
+  const HUB = () => { try { return window.Admin.hubConfig().url || ''; } catch (e) { return (window.AC_CONFIG || {}).hubUrl || ''; } };
+  async function call(url, opt) {
+    const c = new AbortController(), t = setTimeout(() => c.abort(), 150000);
+    try { const r = await fetch(url, { ...opt, signal: c.signal, redirect: 'follow' }); if (!r.ok) throw new Error('HTTP ' + r.status); const d = await r.json(); if (!d || d.ok === false || d.error) throw new Error(String((d && d.error) || '雲端拒絕')); return d; }
+    finally { clearTimeout(t); }
+  }
+  const get = (q) => call(HUB() + '?' + new URLSearchParams(q).toString(), {});
+  async function post(action, payload) { const token = await window.Admin.ensureAuth(); return call(HUB(), { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ ...payload, action, session: token }) }); }
+  async function retry(fn, n = 3) { let last; for (let i = 0; i < n; i++) { try { return await fn(); } catch (e) { last = e; if (/AUTH_REQUIRED|Invalid|mismatch|not found/i.test(e.message)) break; await new Promise((r) => setTimeout(r, 1500 * (i + 1))); } } throw last; }
+  const canCloud = () => HAS_CACHE && !!window.Admin && (/^https:\/\/script\.google\.com\//.test(HUB()) || /^http:\/\/localhost:\d+\//.test(HUB())) && !!window.CompressionStream && !!window.DecompressionStream && !!(window.crypto && crypto.subtle);
 
-const drop=$('drop'),file=$('file');drop.onclick=()=>file.click();file.onchange=()=>{if(file.files[0])importFile(file.files[0]);file.value='';};
-['dragenter','dragover'].forEach(k=>drop.addEventListener(k,e=>{e.preventDefault();drop.classList.add('over');}));['dragleave','drop'].forEach(k=>drop.addEventListener(k,e=>{e.preventDefault();drop.classList.remove('over');}));
-drop.addEventListener('drop',e=>{const f=e.dataTransfer.files[0];if(f)importFile(f);});
-$('reset').onclick=async()=>{
- const shared=cloud&&cloud.rev;
- if(!confirm(shared?'改回內建版？\n\n雲端的匯入版也會一起取消，所有裝置都回到內建版。':'改回內建版？這台裝置上的匯入版會被移除。'))return;
- if(shared){try{await window.Admin.ensureAuth();await post('worldClear',{});cloud={ok:true,rev:0};}catch(e){say('bad','❌ 雲端取消失敗（'+e.message+'），沒有變更。');return;}}
- try{await (await caches.open(CACHE)).delete(KEY);}catch(e){}localStorage.removeItem(META);say('ok',shared?'已改回內建版（所有裝置）。':'已改回內建版。');paint();};
-$('up').onclick=async()=>{if(busy)return;busy=true;try{await window.Admin.ensureAuth();const r=await (await caches.open(CACHE)).match(KEY);if(!r)throw new Error('這台裝置沒有匯入版');await upload(await r.blob());}catch(e){say('bad','❌ 上傳失敗：'+e.message);}busy=false;bar(null);paint();};
+  /* ================= UI helpers ================= */
+  const bar = (p) => { const b = $('pbar'); b.hidden = p == null; if (p != null) b.firstElementChild.style.width = Math.max(2, Math.min(100, p)) + '%'; };
+  const say = (cls, t) => { const m = $('smsg'); m.hidden = !t; m.className = 'smsg ' + (cls || ''); m.textContent = t || ''; };
+  function when(s) { const d = new Date(s); return isNaN(d) ? '' : (d.getMonth() + 1) + '/' + d.getDate() + ' ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
 
-/* ---- cloud: the imported page travels gzip+base64 in 45k pieces through the Admin Center script ---- */
-const PART=45000;
-async function call(url,opt){const c=new AbortController(),t=setTimeout(()=>c.abort(),150000);try{const r=await fetch(url,{...opt,signal:c.signal,redirect:'follow'});if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();if(!d||d.ok===false||d.error)throw new Error(String((d&&d.error)||'雲端拒絕'));return d;}finally{clearTimeout(t);}}
-async function post(action,payload){const token=await window.Admin.ensureAuth();return call(HUB(),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({...payload,action,session:token})});}
-const get=q=>call(HUB()+'?'+new URLSearchParams(q).toString(),{});
-async function retry(fn,n=3){let last;for(let i=0;i<n;i++){try{return await fn();}catch(e){last=e;if(/AUTH_REQUIRED|expired|Invalid|WORLD_REV_CHANGED/.test(e.message))break;await new Promise(r=>setTimeout(r,1500*(i+1)));}}throw last;}
-function b64(u8){let out='';const step=0x8000*3;for(let i=0;i<u8.length;i+=step)out+=btoa(String.fromCharCode.apply(null,u8.subarray(i,i+step)));return out;}
-async function upload(blob){
- if(!window.CompressionStream){say('info','✅ 這台裝置已換成新版；這個瀏覽器不能上傳雲端（太舊），請用電腦 Chrome 匯入一次。');return;}
- try{
-  bar(5);say('info','☁ 壓縮中…');const gz=new Uint8Array(await new Response(blob.stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer()),text=b64(gz),parts=[];for(let i=0;i<text.length;i+=PART)parts.push(text.slice(i,i+PART));
-  const m=meta()||{},begin=await retry(()=>post('worldBegin',{count:parts.length,meta:{name:m.name,title:m.title,version:m.version,bytes:blob.size,gz:gz.length}}));
-  for(let i=0;i<parts.length;i+=28){say('info','☁ 上傳雲端中… '+Math.round(i/parts.length*100)+'%');bar(10+i/parts.length*85);await retry(()=>post('worldChunk',{rev:begin.rev,from:i,parts:parts.slice(i,i+28)}));}
-  cloud=await retry(()=>post('worldCommit',{rev:begin.rev}));
-  localStorage.setItem(META,JSON.stringify({...m,rev:cloud.rev,source:'cloud'}));bar(100);say('ok','✅ 已匯入並上傳雲端：'+(m.version||m.name||'')+'。其他裝置打開這一頁就會自動換成這一版。');
- }catch(e){say('info','✅ 這台裝置已換成新版；☁ 雲端上傳沒完成（'+e.message+'），雲端仍是原來的版本。按「上傳到雲端」再試一次。');}
-}
-async function syncDown(){
- try{cloud=await retry(()=>get({action:'worldMeta',t:Date.now()}),2);}catch(e){cloud=false;paint();return;}
- const m=meta(),imp=await hasImport();
- if(!cloud.rev){if(imp&&m&&m.source==='cloud'){try{await (await caches.open(CACHE)).delete(KEY);}catch(e){}localStorage.removeItem(META);say('info','雲端的匯入版已取消，這台裝置回到內建版。');}paint();return;}
- if(imp&&m&&m.rev===cloud.rev){paint();return;}
- if(busy||!window.DecompressionStream){paint();return;}
- busy=true;paint();
- try{
-  const chunks=[];for(let from=0;from<cloud.count;){say('info','☁ 雲端有新版 '+((cloud.meta&&cloud.meta.version)||'')+'，下載中… '+Math.round(from/cloud.count*100)+'%');bar(5+from/cloud.count*85);
-   const r=await retry(()=>get({action:'worldGet',rev:cloud.rev,from}));for(const s of r.parts){const bin=atob(s),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);chunks.push(u);}from+=r.parts.length;}
-  const html=await new Response(new Blob(chunks).stream().pipeThrough(new DecompressionStream('gzip'))).blob();
-  if(cloud.meta&&cloud.meta.bytes&&html.size!==cloud.meta.bytes)throw new Error('下載的檔案大小不對');
-  const tail=await html.slice(Math.max(0,html.size-200)).text();if(!/<\/html>\s*$/i.test(tail))throw new Error('下載的檔案不完整');
-  if(navigator.storage&&navigator.storage.persist)try{await navigator.storage.persist();}catch(e){}
-  const c=await caches.open(CACHE);await c.put(KEY,new Response(new Blob([html],{type:'text/html;charset=utf-8'}),{headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'}}));
-  localStorage.setItem(META,JSON.stringify({name:cloud.meta.name,title:cloud.meta.title,version:cloud.meta.version,bytes:html.size,at:cloud.updatedAt,rev:cloud.rev,source:'cloud'}));
-  bar(100);say('ok','✅ 已從雲端更新到 '+(cloud.meta.version||cloud.meta.title||'新版')+'。');
- }catch(e){say('info','☁ 雲端有新版，但這次沒下載成功（'+e.message+'）。先用這台裝置原本的版本；重新整理可再試。');}
- busy=false;setTimeout(()=>bar(null),600);paint();
-}
+  async function renderFiles() {
+    const keys = new Set(Object.keys((builtinManifest.files) || {}).map((f) => f.replace(/\.html$/, '')));
+    if (cloudIdx) Object.keys(cloudIdx).forEach((k) => keys.add(k));
+    for (const k of ['island1', 'seasons_express']) keys.add(k);
+    const rows = [];
+    for (const k of [...keys].sort()) {
+      const c = await entry('cloud', k), b = await entry('builtin', k), cl = cloudIdx && cloudIdx[k];
+      const use = c || b, ver = use ? (use.version || (use.title.match(/v\d+(?:\.\d+)+/) || [])[0] || '') : '';
+      let chips = '';
+      if (c && c.src === 'local') chips += '<span class="chip wait">⏳ 待上傳</span>';
+      else if (c && cl && cl.hash === c.hash) chips += '<span class="chip ok">☁ 已同步</span>';
+      else if (cl && (!c || cl.hash !== c.hash)) chips += '<span class="chip wait">☁ 雲端有新版</span>';
+      if (k !== 'manifest') chips += use ? '<span class="chip off">📴 已存本機</span>' : '<span class="chip">未下載</span>';
+      const which = c ? (c.src === 'local' ? '匯入版' : '雲端版') : (b ? '內建版' : (k === 'manifest' ? '內建清單' : '內建版（未下載）'));
+      const btn = c ? (c.src === 'local' ? '<button class="mini" data-act="up" data-k="' + k + '">☁ 上傳</button>' : '') + '<button class="mini" data-act="reset" data-k="' + k + '">↩ 內建</button>' : '';
+      rows.push('<div class="frow"><span class="fn">' + (LABEL[k] || k) + '</span><span class="fv">' + which + (ver ? ' ' + ver : '') + (use && use.size && k !== 'manifest' ? ' · ' + mb(use.size) + ' MB' : '') + (c && c.at ? ' · ' + when(c.at) : '') + '</span>' + chips + btn + '</div>');
+    }
+    $('ftable').innerHTML = rows.join('') + (cloudIdx === false ? '<div class="frow"><span class="fv">⚠ 現在連不到雲端，先用這台裝置上的版本。</span></div>' : '') + (HAS_CACHE ? '' : '<div class="frow"><span class="fv">⚠ 這個開啟方式不能存檔（需要用 https 網址開，不能是無痕模式），匯入與離線功能停用。</span></div>');
+  }
+  $('ftable').addEventListener('click', async (e) => {
+    const b = e.target.closest('button[data-act]'); if (!b || busy) return;
+    const k = b.dataset.k;
+    if (b.dataset.act === 'up') { busy = true; try { if (!window.Admin.session()) await window.Admin.ensureAuth(); const c = await entry('cloud', k); await upload(k, await c.r.blob(), c); } catch (err) { say('bad', '❌ 上傳失敗：' + err.message); } busy = false; bar(null); refreshAll(); }
+    if (b.dataset.act === 'reset') {
+      const shared = cloudIdx && cloudIdx[k];
+      if (!confirm((LABEL[k] || k) + ' 改回內建版？' + (shared ? '\n\n雲端的版本也會取消，所有裝置都回到內建版。' : ''))) return;
+      busy = true;
+      try { if (shared) { await post('worldDelFile', { key: k }); delete cloudIdx[k]; } await drop('cloud', k); say('ok', '✅ ' + (LABEL[k] || k) + ' 已改回內建版' + (shared ? '（所有裝置）' : '') + '。'); }
+      catch (err) { say('bad', '❌ 沒有改：' + err.message); }
+      busy = false; refreshAll();
+    }
+  });
+
+  /* ================= manifest: built-in, or an imported one when it is newer ================= */
+  async function currentManifest() {
+    let m = builtinManifest;
+    const c = await entry('cloud', 'manifest');
+    if (c) { try { const j = JSON.parse(await c.r.clone().text()); if (Array.isArray(j.islands) && String(j.updatedAt || '') >= String(m.updatedAt || '')) m = { ...j, files: builtinManifest.files }; } catch (e) {} }
+    return m;
+  }
+
+  function renderCards(filter = '') {
+    const q = filter.trim().toLowerCase();
+    const wrap = $('islandCards');
+    wrap.innerHTML = '';
+    const islands = manifestData.islands || [];
+    const readyCount = islands.filter(i => i.status === 'ready').length;
+    $('hubVer').textContent = 'v' + (manifestData.hubVersion || '6.0').replace(/\.0$/, '');
+    $('syncDate').textContent = manifestData.updatedAt || '最新';
+    $('overallPct').textContent = readyCount + ' / ' + islands.length + ' 島完成 v6 寫實重鑄';
+    islands.forEach((isl) => {
+      const hay = (isl.name + ' ' + isl.summary + ' ' + (isl.spots || []).join(' ')).toLowerCase();
+      if (q && !hay.includes(q)) return;
+      const own = state[isl.id] ? './' + isl.id + '.html' : '';     // an imported single-island file takes over this card
+      const url = own || isl.url, dl = own || isl.downloadFile, dlKey = keyOfUrl(dl);
+      const card = document.createElement('article');
+      card.className = 'island-card';
+      card.style.setProperty('--accent', isl.accent || '#2d6a4f');
+      const isReady = isl.status === 'ready';
+      card.innerHTML = `
+        <div class="card-head">
+          <div class="card-icon">${isl.icon || '🏝️'}</div>
+          <div class="card-title">
+            <h2><span>${isl.name}</span><span class="badge ${isReady ? '' : 'wip'}">${isl.badge}</span></h2>
+            <div class="card-sub"><span class="dot ${isReady ? 'ready' : 'upgrading'}"></span><span>${isl.statusText}</span></div>
+          </div>
+        </div>
+        <div class="prog-row"><div class="prog-track"><div class="prog-fill" style="width:${isl.progress || 0}%"></div></div><strong>${isl.progress || 0}%</strong></div>
+        <p class="card-desc">${isl.summary}</p>
+        <details class="spot-details" ${isReady ? 'open' : ''}>
+          <summary>查看本島下車參觀與載具清單（${(isl.spots || []).length} 處）</summary>
+          <ul class="spot-list">${(isl.spots || []).map(s => '<li>' + s + '</li>').join('')}</ul>
+        </details>
+        <div class="card-actions">
+          <a class="btn primary" href="${url}">🚆 進入本島 3D</a>
+          <a class="btn secondary" href="${dl}" data-dl="${dlKey}" data-name="${own ? 'VRT_World_' + isl.id + '.html' : isl.downloadName}">⬇ 離線下載 HTML</a>
+        </div>`;
+      wrap.appendChild(card);
+    });
+    if (!wrap.children.length) wrap.innerHTML = '<div class="meta-strip">找不到符合「' + filter + '」的島嶼或景點。</div>';
+  }
+
+  async function loadManifest(bust = false) {
+    if (location.protocol !== 'file:' && location.protocol !== 'content:') {
+      try { const res = await fetch('./world-manifest.json?t=' + Date.now(), { cache: 'no-store' }); if (!res.ok) throw new Error('HTTP ' + res.status); builtinManifest = await res.json(); }
+      catch (e) { try { const c = await caches.match('./world-manifest.json', { ignoreSearch: true }); if (c) builtinManifest = await c.json(); } catch (e2) {} if (bust) showToast('離線狀態：已保留快取清單。'); }
+    }
+    state = {};
+    for (const k of ['island1', 'island2', 'island3', 'island4', 'island5', 'island6', 'island7', 'island8', 'island9']) if (await entry('cloud', k)) state[k] = 1;
+    manifestData = await currentManifest();
+    renderCards($('searchBox').value);
+  }
+
+  /* ================= built-in copies: refresh only a file whose hash changed ================= */
+  async function refreshBuiltins(fetchMissing) {
+    const files = builtinManifest.files || {}; let got = 0, mbytes = 0;
+    for (const f of Object.keys(files)) {
+      const key = f.replace(/\.html$/, ''), want = files[f].sha;
+      let b = await entry('builtin', key);
+      if (b && !b.hash) { const blob = await b.r.blob(), h = await sha(await blob.arrayBuffer()); await put('builtin', key, blob, { hash: h, src: 'builtin', version: b.version, title: b.title }); b = await entry('builtin', key); }
+      if ((b && b.hash === want) || (!b && !fetchMissing) || navigator.onLine === false) continue;
+      say('', '📥 下載' + (LABEL[key] || key) + '（內建版）…'); 
+      const res = await fetch('./' + f + '?builtin=1&h=' + want, { cache: 'no-store' }); if (!res.ok) throw new Error(f + ' HTTP ' + res.status);
+      const blob = await res.blob(), h = await sha(await blob.arrayBuffer());
+      const title = ((await blob.slice(0, 4000).text()).match(/<title>([^<]*)/) || [])[1] || '';
+      await put('builtin', key, blob, { hash: h, src: 'builtin', title, version: (title.match(/v\d+(?:\.\d+)+/) || [])[0] || '' });
+      got++; mbytes += blob.size;
+    }
+    return { got, mbytes };
+  }
+
+  /* ================= download from the cloud: only pieces this device does not already hold ================= */
+  async function localPieces(want) {
+    const have = new Map();
+    if (!HAS_CACHE) return have;
+    const keys = await (await store()).keys();
+    for (const req of keys) {
+      if (want.size === have.size) break;
+      const u8 = new Uint8Array(await (await (await store()).match(req)).arrayBuffer());
+      for (const p of await pieces(u8)) if (want.has(p.h) && !have.has(p.h)) have.set(p.h, p.part);
+    }
+    return have;
+  }
+  async function download(key, f, tally) {
+    const want = new Set(f.pieces), have = await localPieces(want), miss = f.pieces.filter((h, i, a) => !have.has(h) && a.indexOf(h) === i);
+    for (let i = 0; i < miss.length; i += 6) {
+      say('', '☁ ' + (LABEL[key] || key) + ' 雲端有新版 ' + (f.version || '') + '，下載有改到的片段 ' + i + ' / ' + miss.length + '…'); bar(5 + 90 * i / Math.max(1, miss.length));
+      const r = await retry(() => get({ action: 'worldPieces', h: miss.slice(i, i + 6).join(',') }));
+      for (const h of miss.slice(i, i + 6)) { const z = unb64(r.pieces[h]), raw = await ungz(z); if (await sha(raw) !== h) throw new Error('下載的片段檢查不符'); have.set(h, raw); tally.bytes += z.length; }
+    }
+    tally.got += miss.length; tally.total += f.pieces.length;
+    const blob = new Blob(f.pieces.map((h) => have.get(h)), { type: key === 'manifest' ? 'application/json' : 'text/html' });
+    if (await sha(await blob.arrayBuffer()) !== f.hash) throw new Error((LABEL[key] || key) + ' 組回來的檔案檢查不符');
+    await put('cloud', key, blob, { hash: f.hash, src: 'cloud', version: f.version, title: f.title, name: f.name, at: f.updatedAt });
+  }
+  async function syncDown() {
+    if (!canCloud()) { cloudIdx = null; return null; }
+    try { cloudIdx = (await retry(() => get({ action: 'worldIndex', t: Date.now() }), 2)).files || {}; } catch (e) { cloudIdx = false; return null; }
+    const tally = { got: 0, total: 0, bytes: 0, files: [] };
+    for (const k of Object.keys(cloudIdx)) {
+      const f = cloudIdx[k], c = await entry('cloud', k);
+      if (c && c.hash === f.hash) { if (c.src === 'local') { const blob = await c.r.blob(); await put('cloud', k, blob, { ...c, src: 'cloud', at: f.updatedAt }); } continue; }
+      if (c && c.src === 'local' && c.at > f.updatedAt) continue;           // this device's newer import is still waiting to upload
+      await download(k, f, tally); tally.files.push(LABEL[k] || k);
+    }
+    for (const k of ['island1', 'island2', 'island3', 'island4', 'island5', 'island6', 'island7', 'island8', 'island9', 'seasons_express', 'manifest']) {
+      const c = await entry('cloud', k); if (c && c.src === 'cloud' && !cloudIdx[k]) { await drop('cloud', k); tally.files.push((LABEL[k] || k) + '（回到內建版）'); }
+    }
+    return tally;
+  }
+
+  /* ================= upload: only pieces the cloud does not already hold ================= */
+  async function upload(key, blob, m) {
+    if (!canCloud()) throw new Error('這個瀏覽器不能上傳（太舊或不是 https 開啟）');
+    const u8 = new Uint8Array(await blob.arrayBuffer()), hash = await sha(u8);
+    say('', '☁ ' + (LABEL[key] || key) + ' 比對雲端…'); bar(4);
+    const idx = (await retry(() => get({ action: 'worldIndex', t: Date.now() }))).files || {};
+    if (idx[key] && idx[key].hash === hash) { await put('cloud', key, blob, { ...m, hash, src: 'cloud', at: idx[key].updatedAt }); cloudIdx = idx; return { sent: 0, total: 0, same: true }; }
+    const list = await pieces(u8), uniq = [...new Map(list.map((p) => [p.h, p])).values()];
+    const { missing } = await retry(() => post('worldHave', { hashes: uniq.map((p) => p.h) }));
+    const need = uniq.filter((p) => missing.includes(p.h));
+    for (let i = 0; i < need.length; i++) {
+      say('', '☁ 上傳' + (LABEL[key] || key) + '：有改到的片段 ' + i + ' / ' + need.length + '（其餘 ' + (uniq.length - need.length) + ' 片雲端已有，不重傳）'); bar(8 + 88 * i / need.length);
+      const z = await gz(need[i].part); await retry(() => post('worldPut', { hash: need[i].h, b64: b64(z) }));
+    }
+    const r = await retry(() => post('worldSetFile', { key, pieces: list.map((p) => p.h), meta: { hash, size: blob.size, name: m.name, title: m.title, version: m.version } }));
+    await put('cloud', key, blob, { ...m, hash, src: 'cloud', at: r.file.updatedAt });
+    if (cloudIdx) cloudIdx[key] = r.file;
+    return { sent: need.length, total: uniq.length };
+  }
+
+  /* ================= import: a zip, or one / several single files ================= */
+  async function unzip(file) {
+    const buf = new Uint8Array(await file.arrayBuffer()), dv = new DataView(buf.buffer), td = new TextDecoder(); let e = buf.length - 22;
+    while (e >= 0 && dv.getUint32(e, true) !== 0x06054b50) e--; if (e < 0) throw new Error(file.name + ' 不是有效的 zip 檔');
+    const n = dv.getUint16(e + 10, true); let p = dv.getUint32(e + 16, true); const out = [];
+    for (let i = 0; i < n; i++) {
+      if (dv.getUint32(p, true) !== 0x02014b50) break;
+      const method = dv.getUint16(p + 10, true), csize = dv.getUint32(p + 20, true), nl = dv.getUint16(p + 28, true), xl = dv.getUint16(p + 30, true), cl = dv.getUint16(p + 32, true), off = dv.getUint32(p + 42, true), name = td.decode(buf.subarray(p + 46, p + 46 + nl));
+      p += 46 + nl + xl + cl;
+      if (/\/$/.test(name) || !/\.(html?|json|js)$/i.test(name) || /(^|\/)(__MACOSX|\.)/.test(name)) continue;
+      const start = off + 30 + dv.getUint16(off + 26, true) + dv.getUint16(off + 28, true), raw = buf.subarray(start, start + csize);
+      let blob;
+      if (method === 0) blob = new Blob([raw]);
+      else if (method === 8) blob = await new Response(new Blob([raw]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).blob();
+      else throw new Error('zip 裡的 ' + name + ' 用了不支援的壓縮方式');
+      out.push({ name: name.split('/').pop(), blob });
+    }
+    return out;
+  }
+  async function classify(name, blob) {
+    const low = name.toLowerCase();
+    if (/^(index\.html?|sw\.js)$/.test(low) || /\.js$/.test(low)) return { skip: '總控台程式（由 AI 推送，匯入時略過）' };
+    if (low === 'world-manifest.json' || /\.json$/.test(low)) {
+      let j; try { j = JSON.parse(await blob.text()); } catch (e) { return { skip: '不是有效的 JSON' }; }
+      if (!Array.isArray(j.islands)) return { skip: '不是島嶼清單' };
+      return { key: 'manifest', title: j.title || '島嶼清單', version: j.hubVersion ? 'v' + j.hubVersion : '' };
+    }
+    const head = await blob.slice(0, 6000).text(), tail = await blob.slice(Math.max(0, blob.size - 400)).text();
+    const title = (head.match(/<title>([^<]*)/i) || [])[1] || '', version = (title.match(/v\d+(?:\.\d+)+/i) || [])[0] || '';
+    let key = (low.match(/island[ _-]?([1-9])/) || [])[1] ? 'island' + low.match(/island[ _-]?([1-9])/)[1] : '';
+    if (!key && /seasons[ _-]?express|world[ _-]?all/.test(low)) key = 'seasons_express';
+    if (!key) { const t = title.match(/第([一二三四五六七八九1-9])島/); if (t) key = 'island' + ('一二三四五六七八九'.indexOf(t[1]) + 1 || t[1]); else if (/四島環球鐵道|四季慢行/.test(title)) key = 'seasons_express'; }
+    if (!key) return { skip: '認不出是哪一島（檔名請含 island1～island9 或 seasons_express）' };
+    if (blob.size < 300000 || !/<\/html>\s*$/i.test(tail)) return { skip: '檔案不完整（可能下載到一半）' };
+    if (!/四季慢行|世界鐵道|Seasons Express|RailwayApp/i.test(head + (await blob.slice(0, 200000).text()))) return { skip: '不像世界鐵道的 3D 檔' };
+    return { key, title, version };
+  }
+  async function importFiles(list) {
+    if (busy) { say('', '上一個動作還在進行，請稍等。'); return; }
+    if (!HAS_CACHE) { say('bad', '這個開啟方式不能匯入（要用 https 網址開，不能是無痕模式）。'); return; }
+    busy = true;
+    const signIn = canCloud() && !window.Admin.session() ? window.Admin.ensureAuth().then(() => true, (e) => e) : Promise.resolve(canCloud() ? true : new Error('這個瀏覽器不能上傳'));
+    const done = [], same = [], skipped = [], todo = [];
+    try {
+      bar(3); say('', '讀取中…');
+      for (const f of list) {
+        const items = /\.zip$/i.test(f.name) || /zip/.test(f.type) ? await unzip(f) : [{ name: f.name, blob: f }];
+        for (const it of items) {
+          const c = await classify(it.name, it.blob);
+          if (c.skip) { skipped.push(it.name + '：' + c.skip); continue; }
+          const u8 = new Uint8Array(await it.blob.arrayBuffer()), hash = await sha(u8), cur = await active(c.key);
+          let curHash = cur && cur.hash; if (cur && !curHash) curHash = await sha(await (await cur.r.blob()).arrayBuffer());
+          const builtinSha = c.key !== 'manifest' && ((builtinManifest.files || {})[c.key + '.html'] || {}).sha;
+          const sameManifest = c.key === 'manifest' && !cur && (() => { try { const x = JSON.parse(new TextDecoder().decode(u8)), y = { ...builtinManifest }; delete x.files; delete y.files; return JSON.stringify(x) === JSON.stringify(y); } catch (e) { return false; } })();
+          if (curHash === hash || (!cur && builtinSha === hash) || sameManifest) { same.push(LABEL[c.key] || c.key); continue; }
+          const blob = new Blob([u8], { type: c.key === 'manifest' ? 'application/json' : 'text/html' });
+          const meta = { hash, src: 'local', title: c.title, version: c.version, name: it.name, at: new Date().toISOString() };
+          await put('cloud', c.key, blob, meta); todo.push({ key: c.key, blob, meta }); done.push((LABEL[c.key] || c.key) + (c.version ? ' ' + c.version : ''));
+        }
+      }
+      await loadManifest(false); await renderFiles();
+      let up = '';
+      if (todo.length) {
+        const ok = await signIn;
+        if (ok === true) {
+          let sent = 0, total = 0;
+          for (const t of todo) { const r = await upload(t.key, t.blob, t.meta); sent += r.sent; total += r.total; }
+          up = '☁ 已上傳雲端（只傳了有改到的 ' + sent + ' / ' + total + ' 片），其他裝置打開這頁會自動換版。';
+        } else up = '☁ 雲端還沒上傳（' + ((ok && ok.message) || '未連線') + '）——按該島的「☁ 上傳」再試。';
+      }
+      const lines = [];
+      if (done.length) lines.push('✅ 已換新版：' + done.join('、') + '。');
+      if (same.length) lines.push('＝ 跟現在一樣，不用更新：' + same.join('、') + '。');
+      if (up) lines.push(up);
+      if (skipped.length) lines.push('略過：' + skipped.join('；'));
+      if (!lines.length) lines.push('沒有找到可以匯入的檔案。');
+      say(done.length ? 'ok' : (skipped.length && !same.length ? 'bad' : ''), lines.join('\n'));
+    } catch (e) { say('bad', '❌ ' + (e && e.message || e) + (done.length ? '\n（這台裝置已換的：' + done.join('、') + '）' : '')); }
+    busy = false; bar(null); await loadManifest(false); renderFiles();
+  }
+  const dz = $('drop'), fi = $('file');
+  dz.onclick = () => fi.click(); fi.onchange = () => { if (fi.files.length) importFiles([...fi.files]); fi.value = ''; };
+  ['dragenter', 'dragover'].forEach((k) => dz.addEventListener(k, (e) => { e.preventDefault(); dz.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach((k) => dz.addEventListener(k, (e) => { e.preventDefault(); dz.classList.remove('over'); }));
+  dz.addEventListener('drop', (e) => { if (e.dataTransfer.files.length) importFiles([...e.dataTransfer.files]); });
+
+  /* ================= save an island as a single offline HTML (from this device's copy when it has one) ================= */
+  document.addEventListener('click', async (e) => {
+    const a = e.target.closest('a[data-dl]'); if (!a || !a.dataset.dl || !HAS_CACHE) return;
+    e.preventDefault();
+    try {
+      let c = await active(a.dataset.dl), blob;
+      if (c) blob = await c.r.blob();
+      else { showToast('第一次下載這一島，請稍等…', 4000); blob = await (await fetch(a.getAttribute('href').split('?')[0])).blob(); }
+      const u = URL.createObjectURL(blob), x = document.createElement('a'); x.href = u; x.download = a.dataset.name || (a.dataset.dl + '.html'); document.body.appendChild(x); x.click(); x.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000);
+      showToast('⬇ 已存成單一 HTML（' + mb(blob.size) + ' MB），不用網路也能開。'); renderFiles();
+    } catch (err) { showToast('下載失敗：' + err.message, 4000); }
+  });
+
+  /* ================= dock buttons ================= */
+  async function refreshAll(manual) {
+    if (busy && manual) { showToast('正在處理中，請稍等。'); return; }
+    const wasBusy = busy; busy = true;
+    try {
+      await loadManifest(manual);
+      const b = await refreshBuiltins(false), t = await syncDown();
+      await loadManifest(false);
+      const parts = [];
+      if (t && t.files.length) parts.push('☁ 從雲端更新：' + t.files.join('、') + (t.total ? '（只下載有改到的 ' + t.got + ' / ' + t.total + ' 片，約 ' + mb(t.bytes) + ' MB）' : ''));
+      if (b.got) parts.push('📥 內建版更新 ' + b.got + ' 個檔（' + mb(b.mbytes) + ' MB）');
+      if (parts.length) say('ok', '✅ ' + parts.join('\n'));
+      else if (manual) { say('ok', '✅ 都是最新版，這次沒有下載任何東西。'); }
+      else if (!$('smsg').className.includes('ok') && !$('smsg').className.includes('bad')) say('', '');
+    } catch (e) { say('bad', '⚠ 更新沒完成：' + e.message + '（先用這台裝置原本的版本）'); }
+    busy = wasBusy; bar(null); renderFiles();
+  }
+  $('searchBox').addEventListener('input', (e) => renderCards(e.target.value));
+  $('btnRefresh').addEventListener('click', async () => {
+    showToast('正在檢查各島更新…', 1500);
+    try { const reg = await navigator.serviceWorker?.getRegistration(); if (reg) await reg.update(); } catch (e) {}
+    await refreshAll(true);
+  });
+  $('btnCacheAll').addEventListener('click', async () => {
+    if (!HAS_CACHE) { showToast('目前為本機檔案模式，可直接點各島的「⬇ 離線下載 HTML」保存單檔。', 3500); return; }
+    if (busy) { showToast('正在處理中，請稍等。'); return; }
+    busy = true;
+    try {
+      const keys = [...new Set([...(manifestData.islands || []).map((i) => state[i.id] ? i.id : keyOfUrl(i.url)), 'seasons_express'].filter(Boolean))];
+      let had = 0, got = 0, bytes = 0;
+      for (let i = 0; i < keys.length; i++) {
+        if (await active(keys[i])) { had++; continue; }
+        say('', '📥 下載' + (LABEL[keys[i]] || keys[i]) + '到這台裝置…'); bar(10 + 85 * i / keys.length);
+        const blob = await (await fetch('./' + keys[i] + '.html', { cache: 'no-cache' })).blob(); bytes += blob.size; got++;
+        await new Promise((r) => setTimeout(r, 400));
+      }
+      await refreshBuiltins(false);
+      say('ok', '✅ 全部島都已存在這台裝置（新下載 ' + got + ' 個、' + mb(bytes) + ' MB；已經有的 ' + had + ' 個沒有重下）。飛航模式也能玩。');
+    } catch (e) { say('bad', '📥 離線快取沒完成：' + e.message); }
+    busy = false; bar(null); renderFiles();
+  });
+
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    navigator.serviceWorker.register('./sw.js').then(() => navigator.serviceWorker.ready).then(() => refreshAll(false)).catch(() => refreshAll(false));
+  }
+  loadManifest(false).then(renderFiles);
 })();
-</script></body></html>
+</script>
+</body>
+</html>
