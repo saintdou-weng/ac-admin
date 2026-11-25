@@ -1,10 +1,10 @@
-/* VRT World Railway Offline Service Worker v6.4
+/* VRT World Railway Offline Service Worker v6.9
    - shell (index / manifest) : network first, cached copy when offline
    - island files              : downloaded once and kept in FILES_CACHE; never re-fetched in the background.
      The hub page decides when a file has really changed (by hash) and replaces only that file.
    - a cloud / imported copy of a file (FILES_CACHE 'cloud/<key>') wins over the built-in one ('builtin/<key>');
      add ?builtin=1 to a file URL to bypass both. */
-const CACHE_NAME = 'vrt-world-rail-v6-4';
+const CACHE_NAME = 'vrt-world-rail-v6-9';
 const FILES_CACHE = 'vrt-world-files-v2';            // kept across versions so nothing is downloaded again
 const CORE_FILES = ['./', './index.html', './world-manifest.json'];
 const FILE_RE = /\/(island[1-9]|seasons_express)\.html$/;
