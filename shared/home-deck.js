@@ -64,6 +64,8 @@ var css='.hd-wrap{margin:4px 0 16px;--hd-acc:'+A.acc+'}'+
  '.hd-tile.big{padding:14px 14px;min-height:64px}.hd-tile.big .ic{font-size:24px;width:30px}.hd-tile.big .t{font-size:15px;white-space:normal;line-height:1.3}'+
 '/* 2026-11-25 Paul：卡片要比後面的底色深、而且不要閃 → ① 面板裡的小卡改成比面板更深的顏色（白字）；② 拿掉毛玻璃 backdrop-filter（手機上捲動／左右滑時，模糊效果每一格都要重算，會一直閃），改成稍微不透明一點的底色；③ 立體按鈕的白色反光在這裡調淡，不讓深色小卡又被蓋成淺色。 */'+
  '.hd-wrap .hd-tile.vc-bk,.hd-wrap .hd-tile.vc-bk.vc-bk-t,.hd-wrap .hd-tile.vc-bk.vc-bk-c,.hd-wrap .hd-tile.vc-bk.vc-hov.vc-bk-t,.hd-wrap .hd-tile.vc-bk.vc-hov.vc-bk-c,.hd-wrap .hd-tile.vc3.vc3-g{background-image:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,0) 55%)!important;background-size:100% 100%!important;color:#fff!important;text-shadow:0 1px 1px rgba(0,0,0,.35)!important}'+
+ '.hd-wrap .hd-tile{box-shadow:0 7px 16px rgba(0,0,0,.26),0 2px 4px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.22),inset 0 -2px 0 rgba(0,0,0,.30);background-image:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,0) 55%);transition:transform .12s ease,box-shadow .12s ease}'+
+ '.hd-wrap .hd-tile.vc-dn{transform:translateY(2px);box-shadow:0 1px 2px rgba(0,0,0,.3),inset 0 2px 6px rgba(0,0,0,.35)}'+
  '.hd-wrap .hd-tile.vc-bk-n:not(.vc-hov){background-color:color-mix(in srgb,color-mix(in srgb,var(--cc,#334155) 26%,#0d1420) 80%,transparent)!important}'+
  '.hd-wrap .hd-tile.hot,.hd-wrap .hd-tile.hot.vc-bk{background:#fff!important;color:#9a3412!important;text-shadow:none!important}'+
  /* 分類大卡 */
