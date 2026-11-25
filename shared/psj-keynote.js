@@ -41,7 +41,7 @@ function markDoc(doc){var w=doc.defaultView;if(!w||!doc.body)return;
      if(bad){k.setAttribute('data-pkn-no','');return;}k.classList.add('pkn-kpi');});}}}
 
 function hook(doc){if(!doc||doc.__pkn)return;var w=doc.defaultView;if(!w)return;doc.__pkn=1;
- try{var st=doc.createElement('style');st.id='pkn-css';st.textContent='tbody tr.pkn-row{cursor:pointer}tbody tr.pkn-row:hover>td{filter:brightness(.97)}.pkn-kpi{cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}.pkn-kpi:hover{box-shadow:0 4px 14px rgba(15,23,42,.12)}.pkn-kpi:active{transform:scale(.97)}';(doc.head||doc.documentElement).appendChild(st);}catch(e){}
+ try{var st=doc.createElement('style');st.id='pkn-css';st.textContent='tbody tr.pkn-row{cursor:pointer}tbody tr.pkn-row:hover>td{filter:brightness(.97)}.pkn-kpi{cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}.pkn-kpi:hover{box-shadow:0 4px 14px rgba(15,23,42,.12)}@media(hover:hover) and (pointer:fine){.pkn-kpi:active{transform:scale(.97)}}';(doc.head||doc.documentElement).appendChild(st);}catch(e){}
  var tm=0,run=function(){tm=0;try{markDoc(doc);}catch(e){}};
  run();setTimeout(run,1200);
  try{new w.MutationObserver(function(){if(!tm)tm=setTimeout(run,400);}).observe(doc.body,{childList:true,subtree:true});}catch(e){}
