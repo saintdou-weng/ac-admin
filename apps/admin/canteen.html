@@ -162,8 +162,36 @@ $('addLeave').onclick=()=>{const d=ym+'-01';cfg.leaves.push({from:d,to:d,zh:'',e
 $('addSwap').onclick=()=>{cfg.swaps.push({d:ym+'-01',type:'off',zh:'',en:'',km:''});cfg.swaps.sort((a,b)=>a.d<b.d?-1:1);keep()};
 $('addHol').onclick=()=>{cfg.holidays.push({d:ym+'-01',en:'Holiday',km:'ថ្ងៃឈប់សម្រាក',zh:'假日'});cfg.holidays.sort((a,b)=>a.d<b.d?-1:1);keep()};
 $('save').onclick=()=>save(false);
-$('xls').onclick=async()=>{const x=C.xlsxFiles(cfg,ym),z=new JSZip();Object.keys(x.files).forEach(k=>z.file(k,x.files[k]));const b=await z.generateAsync({type:'blob',mimeType:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',compression:'DEFLATE'});
- const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=x.filename;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)};
+/* 2026-11-25 Paul：手機（Telegram／LINE 等 App 裡開的頁面）按「下載 Excel」沒反應 → App 內建瀏覽器不能下載檔案。
+   改成：一般瀏覽器照舊直接下載；App 內建瀏覽器 → 先試「分享檔案」（可存到檔案／雲端硬碟，或直接傳到 Telegram），
+   不行就跳出說明：一鍵改用手機的 Chrome 開啟並自動下載，或改按「立即發給總務」。Excel 格式不變（跟發給總務的同一份）。 */
+const XMIME='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+async function xlsBlob(){if(typeof JSZip==='undefined')throw new Error(T('Excel 工具沒載入，請重新整理頁面','Excel library not loaded — reload the page'));const x=C.xlsxFiles(cfg,ym),z=new JSZip();Object.keys(x.files).forEach(k=>z.file(k,x.files[k]));return {name:x.filename,blob:await z.generateAsync({type:'blob',mimeType:XMIME,compression:'DEFLATE'})}}
+function inApp(){const u=navigator.userAgent||'';return !!(window.TelegramWebview||window.TelegramWebviewProxy||/Telegram|; wv\)|FBAN|FBAV|Instagram|\bLine\/|MicroMessenger|WhatsApp/i.test(u))}
+function saveLink(b,name){const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000)}
+function dlHelp(){const u=new URL(location.href);u.searchParams.set('dl',ym);const href=u.toString(),and=/Android/i.test(navigator.userAgent);
+ const intent='intent://'+href.replace(/^https?:\/\//,'')+'#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url='+encodeURIComponent(href)+';end';
+ let d=$('dlHelp');if(d)d.remove();d=document.createElement('div');d.id='dlHelp';
+ d.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(15,23,42,.55);display:flex;align-items:flex-end;justify-content:center;padding:12px';
+ d.innerHTML=`<div style="background:#fff;color:#0f172a;border-radius:16px;max-width:520px;width:100%;padding:16px 16px 12px;font-size:15px;line-height:1.6;box-shadow:0 20px 50px rgba(0,0,0,.35)">
+  <b style="font-size:16px">⬇ ${T('這裡不能直接下載檔案','This in-app browser can’t download files')}</b>
+  <p style="margin:6px 0 12px;color:#475569">${T('你是在 App（例如 Telegram）裡面開的頁面，它不讓網頁存檔案。可以改用下面的方式拿到同一份 Excel：','This page is open inside an app (e.g. Telegram), which blocks file downloads. Get the same Excel another way:')}</p>
+  ${and?`<a href="${intent.replace(/"/g,'&quot;')}" style="display:block;text-align:center;background:#2563eb;color:#fff;border-radius:12px;padding:12px;font-weight:700;text-decoration:none;margin-bottom:8px">🌐 ${T('用 Chrome 開啟並自動下載','Open in Chrome and download')}</a>`:`<p style="margin:0 0 8px;background:#eff6ff;border-radius:10px;padding:8px 10px">🌐 ${T('按右上角「⋯」→「在瀏覽器（Safari）中開啟」，打開後會自動下載。','Tap “⋯” at the top right → “Open in browser (Safari)”; it downloads automatically.')}</p>`}
+  <button type="button" id="dlCopy" style="display:block;width:100%;border:1px solid #cbd5e1;background:#f8fafc;border-radius:12px;padding:11px;font:inherit;font-weight:700;margin-bottom:8px">📋 ${T('複製下載網址（貼到瀏覽器打開）','Copy the download link (paste into a browser)')}</button>
+  <button type="button" id="dlSend" style="display:block;width:100%;border:1px solid #93c5fd;background:#eff6ff;color:#1d4ed8;border-radius:12px;padding:11px;font:inherit;font-weight:700;margin-bottom:8px">✈ ${T('改用「立即發給總務」：直接把 Excel 發到群組','Use “Send to GA now” to post the Excel to the group')}</button>
+  <button type="button" id="dlClose" style="display:block;width:100%;border:0;background:none;color:#64748b;padding:8px;font:inherit">${T('關閉','Close')}</button></div>`;
+ document.body.appendChild(d);
+ d.onclick=e=>{if(e.target===d)d.remove()};$('dlClose').onclick=()=>d.remove();
+ $('dlSend').onclick=()=>{d.remove();$('send').click()};
+ $('dlCopy').onclick=async()=>{try{await navigator.clipboard.writeText(href);toast(T('✅ 已複製，貼到 Chrome／Safari 打開就會下載','✅ Copied — paste into Chrome/Safari to download'))}catch(e){prompt(T('複製這個網址：','Copy this link:'),href)}};}
+async function doXls(auto){try{const {name,blob}=await xlsBlob();
+  if(inApp()&&!auto){let f=null;try{f=new File([blob],name,{type:XMIME})}catch(e){}
+   if(f&&navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:name});return}catch(e){if(e&&e.name==='AbortError')return}}
+   dlHelp();return}
+  saveLink(blob,name);if(auto)toast(T('⬇ 已下載 ','⬇ Downloaded ')+name)}catch(e){toast('⚠️ '+e.message)}}
+$('xls').onclick=()=>doXls(false);
+/* 從 App 裡「用 Chrome 開啟」過來的：?dl=2026-12 → 讀完設定後自動下載那個月 */
+(function(){try{const q=new URLSearchParams(location.search).get('dl');if(!/^\d{4}-\d{2}$/.test(q||''))return;ym=q;draw();setTimeout(async()=>{try{await pull()}catch(e){}doXls(true);const u=new URL(location.href);u.searchParams.delete('dl');history.replaceState(null,'',u.toString())},600)}catch(e){}})();
 $('send').onclick=async()=>{const r=C.calc(cfg,ym);if(!confirm(T(`把 ${ym} 伙食費 Excel（US$${r.charge}，退 US$${r.refund}）發到群組給總務？`,`Send the ${ym} canteen Excel (US$${r.charge}, refund US$${r.refund}) to the GA group?`)))return;
  $('send').disabled=true;try{if(dirty&&!(await save(true)))return;const d=await hub({action:'canteenSend',ym:ym});sent=d.sent||sent;toast(T('✅ 已發到群組','✅ Sent to the group'));draw()}catch(e){toast('⚠️ '+e.message)}finally{$('send').disabled=false}};
 window.addEventListener('storage',e=>{if(e.key==='ac_admin_lang'){try{const v=JSON.parse(e.newValue);lang=v==='zh'?'zh':'en';draw()}catch(x){}}});
