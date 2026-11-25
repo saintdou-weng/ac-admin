@@ -29532,8 +29532,13 @@ function ensureModel(id) {
   return models[id];
 }
 
+// 剖面規則（Paul 2026-11-25）：地標與山不整座剖開，只看完整外觀；保留走入室內與各入口。
+const NO_CUT4 = new Set(['rio']);
 function applyMode() {
   const m = models[tour.id]; if (!m) return;
+  const noCut = NO_CUT4.has(tour.id);
+  if (noCut && (tour.mode === 'cut' || tour.mode === 'stack')) tour.mode = 'exterior';
+  document.querySelectorAll('[data-lm4-mode=cut],[data-lm4-mode=stack]').forEach(b => { b.hidden = noCut; });
   const isExt = tour.mode === 'exterior';
   const isStack = tour.mode === 'stack';
   m.exterior.visible = isExt;
@@ -29543,7 +29548,7 @@ function applyMode() {
   $('lm4Floors').hidden = isExt;
   $('lm4Walk').hidden = tour.mode !== 'walk';
   const lv = m.levels[tour.floor];
-  $('lm4Status').textContent = isExt ? '建築外觀全景 · 拖曳旋轉、雙指縮放'
+  $('lm4Status').textContent = isExt ? (noCut ? '完整外觀（地標不剖）· 拖曳旋轉、雙指縮放；點「走入室內」參觀' : '建築外觀全景 · 拖曳旋轉、雙指縮放')
     : tour.mode === 'walk' ? `${lv.name} · 自由漫步中（WASD／方向鍵移動，拖曳環視）`
     : isStack ? '全樓層疊合透視 · 可切換單層剖面或走入室內'
     : `${lv.name} · 剖面導覽（拖曳旋轉、點樓層切換）`;
@@ -29584,7 +29589,7 @@ function openLandmark4(id, initialMode = 'cut') {
     const b = document.createElement('button');
     b.dataset.lm4Floor = i;
     b.textContent = lv.name.split(' ')[0];
-    b.onclick = () => { tour.floor = i; if (tour.mode === 'exterior') tour.mode = 'cut'; goRoom(i, 0); };
+    b.onclick = () => { tour.floor = i; if (tour.mode === 'exterior') tour.mode = NO_CUT4.has(tour.id) ? 'walk' : 'cut'; goRoom(i, 0); };
     fBar.append(b);
   });
   $('lm4CableJump').hidden = !m.hasCapeJumps;
