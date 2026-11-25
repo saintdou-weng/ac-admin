@@ -172,7 +172,9 @@ function kpiRel(el,p){var tb=paneTable(el);if(!tb)return recRel(el,p);var M=tmod
  return g?groupHtml(M,g.c,g.e,'依'+g.e[1]+'分'):topHtml(M,M.cols.filter(function(c){return c.numeric;})[0]||{vals:[]},'最大的幾筆');}
 function kpiSec(it,k,first){var p=kpiParts(it);
  return '<section class="pkn-sec" data-i="'+k+'"><div class="pkn-sh"><b>📊 '+esc(p.l||p.v)+'</b><span>'+(k+1)+' / '+S.list.length+'</span></div><div class="pkn-big"><div class="pkn-bv">'+esc(p.v)+'</div>'+(p.s?'<div class="pkn-bs">'+esc(p.s)+'</div>':'')+'</div>'+
-  (first&&S.list.length>1?'<div class="pkn-grid">'+S.list.map(function(o,i){var q=kpiParts(o);return '<button class="pkn-g'+(i===k?' on':'')+'" data-pk="'+i+'"><div class="pkn-gl">'+esc(q.l)+'</div><div class="pkn-gv">'+esc(q.v)+'</div></button>';}).join('')+'</div>':'')+kpiRel(it,p)+'</section>';}
+  (first&&S.list.length>1?'<div class="pkn-grid">'+S.list.map(function(o,i){var q=kpiParts(o);return '<button class="pkn-g'+(i===k?' on':'')+'" data-pk="'+i+'"><div class="pkn-gl">'+esc(q.l)+'</div><div class="pkn-gv">'+esc(q.v)+'</div></button>';}).join('')+'</div>':'')+(function(){var sm=null;try{if(typeof G.acSmartCard==='function')sm=G.acSmartCard(it,p.l||'',p.v||'','',p.s||'');}catch(e){}var r0=sm&&sm.filtered?'':kpiRel(it,p);return r0+smartHtml(sm,r0);})()+'</section>';}
+/* v3（2026-11-25 Paul：其他頁照入離職的方式——名單、分布、走勢都要，每條可點）*/
+function smartHtml(sm,r0){try{if(!sm||!sm.panes)return '';var want=(r0||'').length<400?['ppl','grp','num']:['ppl','num'];return sm.top+sm.panes.filter(function(x){return want.indexOf(x[0])>=0;}).map(function(x){return '<div class="pkn-sm"><div style="font-weight:800;margin:14px 14px 0;font-size:14px">'+x[1]+'</div>'+x[2]+'</div>';}).join('');}catch(e){return '';}}
 function isERP(){return typeof G.openStyle==='function'||/\/PSJERP\//i.test(location.pathname);}
 function openStyleCard(s){close();try{location.hash='style='+encodeURIComponent(s);}catch(e){}}
 function rowSec(tr,k){var tb=tr.closest('table'),M=tb?tmodel(tb):null,hs=heads(tr),ri=M?M.rows.indexOf(tr):-1,nums=[],kv=[],lk=[],rel='',title='';
@@ -212,6 +214,8 @@ function openRows(tr){ui();setTimeout(function(){kfx(1,1);},0);STK=[];REG=[];var
 function openKpis(el){ui();setTimeout(function(){kfx(1,1);},0);STK=[];REG=[];var par=el.parentElement;S.kind='kpi';S.list=par?[].filter.call(par.children,function(x){return x.classList.contains('pkn-kpi')&&x.offsetParent!==null;}):[el];if(!S.list.length)S.list=[el];S.i=Math.max(0,S.list.indexOf(el));draw();}
 API.openRows=openRows;API.openKpis=openKpis;
 
-function start(){if(G.VRT_HUBS)return;   /* 生產平台入口頁本身有物品頁；分頁 iframe 各自載入 */hook(D);frames();setInterval(frames,2000);}
+function loadSmart(){try{if(G.acSmartCard||D.querySelector('script[src*="smart-kn.js"]'))return;var sc=D.createElement('script');sc.src='https://saintdou-weng.github.io/ac-hra-portal/shared/smart-kn.js?v=2';sc.defer=true;D.head.appendChild(sc);}catch(e){}}
+D.addEventListener('click',function(e){var k=e.target.closest&&e.target.closest('.pkn-box .skn-r[data-skr]');if(!k||!G.acSmartRow)return;var r=G.acSmartRow(+k.getAttribute('data-skr'));if(r&&r.nodeType===1){e.stopPropagation();e.preventDefault();push('row',[r],0);}},true);
+function start(){loadSmart();if(G.VRT_HUBS)return;   /* 生產平台入口頁本身有物品頁；分頁 iframe 各自載入 */hook(D);frames();setInterval(frames,2000);}
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',start);else start();
 })(window);
