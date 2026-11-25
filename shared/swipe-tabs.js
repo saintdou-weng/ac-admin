@@ -284,12 +284,12 @@
    Paul：各平台上方都要有音樂開關跟調色盤。PSJERP／PSJHR／生產平台自己已經載了，這裡跳過；
    調色盤只會出現在「自己沒有調色盤」的平台（Admin OS、HRA Portal、HRA-PAY、SEC、GA-EXP、Audit），不干涉 PSJGA／GASCheck 原本的換色。
    開關位置會自動避開頁面原有的按鈕；載入失敗不影響左右滑。 */
-(function(){try{if(window.__VRT_MUSIC||document.querySelector('script[src*="/PSJERP/music.js"]'))return;if(/^\/(psjhr|psjerp|vrt-prod)\//i.test(location.pathname))return;var s=document.createElement('script');s.src='https://saintdou-weng.github.io/PSJERP/music.js?v=2.25&h='+Math.floor(Date.now()/36e5);s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
+(function(){try{if(window.__VRT_MUSIC||document.querySelector('script[src*="/PSJERP/music.js"]'))return;if(/^\/(psjhr|psjerp|vrt-prod)\//i.test(location.pathname))return;var s=document.createElement('script');s.src='https://saintdou-weng.github.io/PSJERP/music.js?v=2.26&h='+Math.floor(Date.now()/36e5);s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
 
 /* 2026-11-25 Paul：Admin／GASCheck／GA-EXP／SEC 的小卡也要點了有內容（不要按假的）→ 載入 HRA 同一支大字卡 row-keynote.js。
    安全模式（data-safe）：原本點了就有功能的卡（滑鼠是手指形狀、onclick、按鈕、連結）一律不攔，只補「點了沒反應」的數字卡；
    大字卡裡會帶出同一區塊的圖表和明細表，可往下滑接同一排的下一張。 */
-(function(){try{if(window.__acKeynote||document.querySelector('script[src*="row-keynote.js"]'))return;if(!/^\/(ac-admin|ac-gascheck|ac-ga-exp|ac-gas-sec)\//i.test(location.pathname))return;var s=document.createElement('script');s.src='https://saintdou-weng.github.io/ac-hra-portal/shared/row-keynote.js?v=42';s.defer=true;s.setAttribute('data-safe','1');(document.head||document.documentElement).appendChild(s);}catch(e){}})();
+(function(){try{if(window.__acKeynote||document.querySelector('script[src*="row-keynote.js"]'))return;if(!/^\/(ac-admin|ac-gascheck|ac-ga-exp|ac-gas-sec)\//i.test(location.pathname))return;var s=document.createElement('script');s.src='https://saintdou-weng.github.io/ac-hra-portal/shared/row-keynote.js?v=43';s.defer=true;s.setAttribute('data-safe','1');(document.head||document.documentElement).appendChild(s);}catch(e){}})();
 
 /* 2026-11-23 Paul：嵌在別的平台裡的分頁（例：PSJGA 裡的 CCTV、Admin OS 裡的款式卡），點開重點卡／物品頁時不要被外框的頁首、
    左側選單佔掉一半 → 卡片開著的期間，把這個分頁暫時放大到整個視窗（只改外框那個 iframe 的位置大小），關掉卡片就還原。
@@ -332,22 +332,28 @@
   try{W.parent.addEventListener('resize',function(){if(on){on=false;set(true);}});}catch(e){}
 }catch(e){}})();
 
-/* 2026-11-26 Paul：在分頁裡從左邊往右滑（手機的「返回」）要像 Facebook 一樣先回到平台首頁，不要直接跳回 Telegram。
-   做法：分頁打開時在瀏覽紀錄多墊一格；按返回先落在這一格 → 換成平台首頁。已在首頁、或嵌在框裡的頁面不處理。卡片視窗（gip）自己的返回照舊。 */
+/* 2026-11-26 Paul：在分頁從左邊往右滑（手機「返回」）要先回到平台首頁，不要直接跳回 Telegram。
+   v2：Chrome 會「跳過」頁面在使用者還沒碰畫面前自己加的瀏覽紀錄 → 改成手指第一次點畫面時才墊那一格。
+   已在首頁、或嵌在框裡的頁面不處理。卡片視窗（gip）自己的返回照舊。 */
 (function () {
   try {
     if (window.top !== window || window.__vrtBackHome) return; window.__vrtBackHome = 1;
     var HOME = { 'ac-gas-sec': 'index.html', 'ac-ga-exp': 'index.html', 'ac-gascheck': 'ac_gascheck_portal_v1.html', 'ac-hra-portal': 'hra_portal_v2.html', 'ac-hra-pay': 'index.html', 'ac-audit': 'audit_hub_main.html', 'ac-admin': 'index.html' };
-    function go() {
+    var url = '', armed = false;
+    function homeUrl() {
       var seg = location.pathname.split('/').filter(Boolean), repo = (seg[0] || '').toLowerCase(), h = HOME[repo];
-      var a = document.querySelector('a.tb-back[href],a[data-i="back"][href]'), url = a ? a.href : (h ? location.origin + '/' + seg[0] + '/' + h : '');
-      if (!url) return; var hp = new URL(url, location.href).pathname, me = location.pathname.replace(/\/$/, '/index.html');
-      if (hp.replace(/\/$/, '/index.html') === me) return;                                   /* 就在首頁 */
-      if (history.state && (history.state.vrtHome || history.state.vrtBase)) return;
-      history.replaceState(Object.assign({}, history.state || {}, { vrtBase: 1 }), '');
-      history.pushState({ vrtHome: 1 }, '');
-      window.addEventListener('popstate', function (e) { if (e.state && e.state.vrtBase) location.replace(url); });
+      if (!h) return '';
+      var a = document.querySelector('a.tb-back[href],a[data-i="back"][href]'), u = a ? a.href : location.origin + '/' + seg[0] + '/' + h;
+      var hp = new URL(u, location.href).pathname.replace(/\/$/, '/index.html'), me = location.pathname.replace(/\/$/, '/index.html');
+      return hp === me ? '' : u;
     }
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go); else go();
+    function arm() {
+      if (armed) return; url = homeUrl(); if (!url) return; armed = true;
+      ['pointerup', 'touchend', 'click', 'keydown'].forEach(function (ev) { document.removeEventListener(ev, arm, true); });
+      if (history.state && history.state.vrtHome) return;
+      try { history.replaceState(Object.assign({}, history.state || {}, { vrtBase: 1 }), ''); history.pushState({ vrtHome: 1 }, ''); } catch (e) {}
+    }
+    window.addEventListener('popstate', function (e) { if (e.state && e.state.vrtBase && url) location.replace(url); });
+    ['pointerup', 'touchend', 'click', 'keydown'].forEach(function (ev) { document.addEventListener(ev, arm, true); });
   } catch (e) {}
 })();

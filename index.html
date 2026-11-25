@@ -397,9 +397,9 @@ $('find').onkeydown=e=>{if(e.key==='Enter'){const b=$('menu').querySelector('.it
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();else if((e.key==='k'&&(e.ctrlKey||e.metaKey))||(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))){e.preventDefault();openMenu();$('find').focus();$('find').select()}});
 /* phone: one small round button (drag it up or down) opens the same left menu, so the page keeps the whole screen */
 (function(){const f=$('fab');let y0=null,moved=false,top=get('vrt_os_fab_top',null);if(top!==null)f.style.top=top+'px';
- f.addEventListener('pointerdown',e=>{y0=e.clientY-f.getBoundingClientRect().top;moved=false;f.setPointerCapture(e.pointerId)});
+ let t0=0;f.title=t('點一下回首頁；按住開選單','Tap: home · Hold: menu','ចុច៖ ទំព័រដើម · សង្កត់៖ ម៉ឺនុយ');f.addEventListener('pointerdown',e=>{y0=e.clientY-f.getBoundingClientRect().top;moved=false;t0=Date.now();f.setPointerCapture(e.pointerId)});
  f.addEventListener('pointermove',e=>{if(y0===null)return;const y=Math.max(8,Math.min(innerHeight-56,e.clientY-y0));if(Math.abs(y-f.getBoundingClientRect().top)>4)moved=true;if(moved)f.style.top=y+'px'});
- f.addEventListener('pointerup',()=>{if(y0===null)return;y0=null;if(moved)put('vrt_os_fab_top',parseInt(f.style.top,10));else openMenu()});})();
+ /* 2026-11-26 Paul：這顆 VRT 跟 PSJ 平台一樣＝點一下回首頁；按住（0.5 秒）才開左邊選單 */f.addEventListener('pointerup',()=>{if(y0===null)return;y0=null;if(moved)put('vrt_os_fab_top',parseInt(f.style.top,10));else if(Date.now()-t0>=500)openMenu();else{try{document.body.classList.remove('menu')}catch(e){}goHome()}});})();
 function toast(m,ms){const e=$('toast');e.textContent=m;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',ms||3500)}
 
 window.addEventListener('hashchange',route);window.addEventListener('popstate',route);
