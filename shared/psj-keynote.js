@@ -25,6 +25,7 @@ function markDoc(doc){var w=doc.defaultView;if(!w||!doc.body)return;
    var own=tr.hasAttribute('onclick')||ptr(w,tr)||[].some.call(tr.cells,function(c){return c.hasAttribute('onclick')||ptr(w,c);});
    if(own){tr.setAttribute('data-pkn-no','');continue;}
    tr.classList.add('pkn-row');}}
+ if(w.__acKeynote){[].forEach.call(doc.querySelectorAll('.pkn-kpi'),function(x){x.classList.remove('pkn-kpi');});return;}   /* 2026-11-25 分頁自己有大字卡（HRA Portal／HRA-PAY 的 row-keynote，含名單、分布、走勢）→ KPI 卡交給它，不再蓋成只有數字的卡 */
  var ks=doc.querySelectorAll(KSEL);for(var j=0;j<ks.length&&j<600;j++){var k=ks[j];if(k.classList.contains('pkn-kpi')||k.hasAttribute('data-pkn-no'))continue;
    if(k.offsetParent===null)continue;
    var r=k.getBoundingClientRect(),t=txt(k);
