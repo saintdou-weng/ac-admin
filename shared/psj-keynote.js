@@ -74,7 +74,7 @@ function ui(){if(mask)return;
   '.pkn-box{box-shadow:0 24px 60px rgba(15,23,42,.34),0 2px 8px rgba(15,23,42,.12)}.pkn-box.dk{outline:1.5px solid rgba(255,255,255,.78);outline-offset:-1px;--c:#1b1f27;--i:#eef1f6;--m:#9aa4b5;--l:#2e3542;--s:#232935;--a:#262c48;--ab:#3b4475;--at:#c7d2fe}@media(min-width:720px){.pkn-box{border-radius:18px}}@keyframes pknUp{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}'+
   '.pkn-h{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;padding:12px 14px;background:#0f172a;color:#fff}.pkn-t{flex:1;min-width:0;font-weight:700;font-size:16px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pkn-pos{font-size:11.5px;opacity:.75;white-space:nowrap}'+
   '.pkn-h button{border:0;background:rgba(255,255,255,.16);color:#fff;width:34px;height:34px;border-radius:50%;font-size:15px;cursor:pointer;flex:none}.pkn-h button:disabled{opacity:.3}'+
-  '.pkn-sec{padding-bottom:6px}.pkn-sec+.pkn-sec{border-top:3px dashed var(--l);margin-top:6px}.pkn-sh{display:flex;gap:8px;align-items:baseline;padding:14px 16px 0}.pkn-sh b{font-size:18px;word-break:break-word}.pkn-sh span{margin-left:auto;font-size:11.5px;color:var(--m);white-space:nowrap}'+
+  '.pkn-sec{padding-bottom:6px}.pkn-sec+.pkn-sec{border-top:3px dashed #94a3b8;margin-top:14px;padding-top:4px}.pkn-up{text-align:center;color:var(--m);font-size:12px;padding:8px 0;border-bottom:2px dashed var(--l)}.pkn-emp{margin:10px 16px 4px}.pkn-emp .ecard{cursor:pointer}.pkn-empgo{width:100%;margin-top:6px;border:1px solid var(--ab);background:var(--a);color:var(--at);border-radius:10px;padding:9px;font:700 13px/1.2 inherit;cursor:pointer}'+'.pkn-sh{display:flex;gap:8px;align-items:baseline;padding:14px 16px 0}.pkn-sh b{font-size:18px;word-break:break-word}.pkn-sh span{margin-left:auto;font-size:11.5px;color:var(--m);white-space:nowrap}'+
   '.pkn-big{padding:10px 16px 6px}.pkn-bl{font-size:13px;color:var(--m)}.pkn-bv{font-size:34px;font-weight:800;line-height:1.15;margin:4px 0;word-break:break-word}.pkn-bs{font-size:13px;color:var(--m);white-space:pre-wrap;line-height:1.5}'+
   '.pkn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;padding:10px 16px 8px}.pkn-g{border:1px solid var(--l);background:var(--s);border-radius:12px;padding:9px 11px;cursor:pointer;text-align:left;color:inherit;font:inherit}.pkn-g.on{outline:2px solid #0ea5e9}.pkn-gl{font-size:11px;color:var(--m)}.pkn-gv{font-size:18px;font-weight:700;line-height:1.2;word-break:break-word}'+
   '.pkn-bar{height:5px;border-radius:3px;background:var(--l);margin:6px 0 3px;overflow:hidden}.pkn-bar i{display:block;height:100%;background:#4f46e5;border-radius:3px}.pkn-ref{font-size:10.5px;color:var(--m)}'+
@@ -91,14 +91,18 @@ function ui(){if(mask)return;
   else if((m=a.match(/^r(\d+):(\d+)$/))){var l=REG[+m[1]],sc=b.closest('.pkn-sec');if(sc)S.i=+sc.getAttribute('data-i');if(l)push('row',l,+m[2]);}
   else if((m=a.match(/^q(\d+):(\d+)$/))){var lq=REG[+m[1]],sq=b.closest('.pkn-sec');if(sq)S.i=+sq.getAttribute('data-i');if(lq)push('rec',lq,+m[2]);}
   else if((m=a.match(/^c(\d+):(\d+)$/))){var l2=REG[+m[1]],tr=l2&&l2[+m[2]];close();if(tr){try{tr.scrollIntoView({block:'center'});}catch(x){}tr.click();}}
-  else if((m=a.match(/^s:(.+)$/))){openStyleCard(decodeURIComponent(m[1]));}});
+  else if((m=a.match(/^s:(.+)$/))){openStyleCard(decodeURIComponent(m[1]));}
+  else if((m=a.match(/^e:(.+)$/))){close();try{G.openEmp(m[1]);}catch(x){}}});
+ mask.addEventListener('click',function(e){var ec=e.target.closest&&e.target.closest('.pkn-emp [onclick]');if(ec){setTimeout(close,0);}},true);
  D.addEventListener('keydown',function(e){if(!mask.classList.contains('on'))return;if(e.key==='Escape')(STK.length?back():close());else if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1);});
  var sx=0,sy=0;box.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
  box.addEventListener('touchend',function(e){if(e.target.closest&&e.target.closest('.pkn-grid,.pkn-lk'))return;var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.6)step(dx<0?1:-1);},{passive:true});
- var tk=0;box.addEventListener('scroll',function(){if(tk)return;tk=setTimeout(function(){tk=0;fill();var c=base,secs=box.querySelectorAll('.pkn-sec'),top=box.scrollTop+70;for(var k=0;k<secs.length;k++){if(secs[k].offsetTop<=top)c=+secs[k].getAttribute('data-i');else break;}if(c!==S.i){S.i=c;setHead();}},90);},{passive:true});}
+ var tk=0;box.addEventListener('scroll',function(){if(tk)return;tk=setTimeout(function(){tk=0;fill();if(box.scrollTop<200&&base>0)pre();var c=base,secs=box.querySelectorAll('.pkn-sec'),top=box.scrollTop+70;for(var k=0;k<secs.length;k++){if(secs[k].offsetTop<=top)c=+secs[k].getAttribute('data-i');else break;}if(c!==S.i){S.i=c;setHead();}},90);},{passive:true});}
 function close(){if(mask)mask.classList.remove('on');STK=[];if(IO){IO.disconnect();IO=null;}}
 function kfx(d,o){try{var f=G.vrtFx;if(!f){try{f=G.top.vrtFx;}catch(e){}}if(f&&box)f(box,d,o);}catch(e){}}   /* 2026-11-23 翻頁特效（music.js 的 vrtFx；沒載就什麼都不做） */
-function step(d){var j=S.i+d;if(j<0||j>=S.list.length)return;S.i=j;draw();kfx(d);}
+function step(d){var j=S.i+d;if(j<0||j>=S.list.length)return;while(j<base&&pre()){}while(j>last&&add()){}var el=box&&box.querySelector('.pkn-sec[data-i="'+j+'"]');if(el){var hh=(box.querySelector('.pkn-h')||{}).offsetHeight||0;box.scrollTo({top:el.offsetTop-hh,behavior:'smooth'});S.i=j;setHead();return;}S.i=j;draw();kfx(d);}
+/* v3 往上滑：捲到頂附近就把上一筆接在上面，畫面不跳 */
+function pre(){if(base<=0||!S.list[base-1])return false;var f=box.querySelector('.pkn-sec');if(!f)return false;var h0=box.scrollHeight;f.insertAdjacentHTML('beforebegin',sec(base-1));base--;box.scrollTop+=box.scrollHeight-h0;var u=box.querySelector('.pkn-up');if(u){if(base<=0)u.remove();else{u.textContent='▲ 往上滑看前面 '+base+' 筆';box.querySelector('.pkn-h').insertAdjacentElement('afterend',u);}}return true;}
 function push(kind,list,i){STK.push({kind:S.kind,list:S.list,i:S.i});S.kind=kind;S.list=list;S.i=Math.max(0,i);draw();}
 function back(){var s=STK.pop();if(!s)return close();S.kind=s.kind;S.list=s.list;S.i=s.i;draw();}
 function reg(l){REG.push(l);return REG.length-1;}
@@ -113,7 +117,7 @@ function kpiParts(el){var v=el.querySelector('.stat-value,.v,.val,.value,.num,.n
 function tmodel(tb){if(tb.__pknM&&tb.__pknM.n===tb.tBodies[0].rows.length)return tb.__pknM;var body=tb.tBodies[0];if(!body)return null;
  var rows=[].filter.call(body.rows,function(r){return r.cells.length>=2&&!/^(合計|總計|小計|total|sum|平均)/i.test(txt(r.cells[0]))&&r.offsetParent!==null;});
  var hs=rows.length?heads(rows[0]):[];var cols=hs.map(function(h,i){var vals=rows.map(function(r){return r.cells[i]?numOf(txt(r.cells[i])):null;}),nn=vals.filter(function(v){return v!=null;});
-   var numeric=nn.length>=Math.max(1,rows.length*.6)&&!/日期|date|期間|月份|週|年|款|style|po|單號|no\.?$|編號|code/i.test(h);
+   var numeric=nn.length>=Math.max(1,rows.length*.6)&&!/日期|date|期間|月份|週|年|款|style|po|單號|no\.?$|編號|code|^#$|^no$|\bid\b|工號|序號|factory|電話|phone|mobile/i.test(h);
    return {h:h,i:i,numeric:numeric,pct:numeric&&rows.some(function(r){return r.cells[i]&&/%/.test(txt(r.cells[i]));}),vals:vals,max:nn.length?Math.max.apply(null,nn.map(Math.abs)):0,sum:nn.reduce(function(a,b){return a+b;},0),n:nn.length};});
  return tb.__pknM={n:body.rows.length,rows:rows,hs:hs,cols:cols};}
 var ENT=[[/客戶|customer|buyer/i,'客戶','👥'],[/款號|款式|style/i,'款式','👕'],[/^po\b|po\s*no|po#|訂單|order/i,'PO','📄'],[/線別|組別|^line/i,'線別','🧵'],[/料號|item|物料|品名/i,'料號','🧶']];
@@ -180,7 +184,16 @@ function rowSec(tr,k){var tb=tr.closest('table'),M=tb?tmodel(tb):null,hs=heads(t
    if(same.length>1){var pc=pcsCol(M),us=usdCol(M),sp=pc?same.reduce(function(s,r){return s+(pc.vals[M.rows.indexOf(r)]||0);},0):null,su=us?same.reduce(function(s,r){return s+(us.vals[M.rows.indexOf(r)]||0);},0):null;
     lk.push('<button data-pk="r'+reg(same)+':'+same.indexOf(tr)+'">'+x.e[2]+' 同'+x.e[1]+'「'+esc(v)+'」'+same.length+' 筆'+(sp!=null?' · '+F(sp,0)+' pcs':'')+(su!=null?' · $'+F(su,0):'')+' ›</button>');}
    if(x.e[1]==='款式'&&isERP())lk.push('<button data-pk="s:'+encodeURIComponent(v)+'">👕 '+esc(v)+' 款式卡 ›</button>');});}
- return '<section class="pkn-sec" data-i="'+k+'"><div class="pkn-sh"><b>🔎 '+esc(title||(kv[0]&&kv[0][1])||'—')+'</b><span>'+(k+1)+' / '+S.list.length+'</span></div>'+(lk.length?'<div class="pkn-lk">'+lk.join('')+'</div>':'')+(nums.length?'<div class="pkn-grid">'+nums.join('')+'</div>':'')+'<div class="pkn-rows">'+kv.map(function(p){return '<div class="pkn-r"><div class="pkn-rl">'+esc(p[0])+'</div><div class="pkn-rv">'+esc(p[1])+'</div></div>';}).join('')+'</div></section>';}
+ var emh=empHtml(tr,hs);
+ return '<section class="pkn-sec" data-i="'+k+'"><div class="pkn-sh"><b>🔎 '+esc(title||(kv[0]&&kv[0][1])||'—')+'</b><span>'+(k+1)+' / '+S.list.length+'</span></div>'+emh+(lk.length?'<div class="pkn-lk">'+lk.join('')+'</div>':'')+(nums.length?'<div class="pkn-grid">'+nums.join('')+'</div>':'')+'<div class="pkn-rows">'+kv.map(function(p){return '<div class="pkn-r"><div class="pkn-rl">'+esc(p[0])+'</div><div class="pkn-rv">'+esc(p[1])+'</div></div>';}).join('')+'</div></section>';}
+/* v3（2026-11-25 Paul：PSJHR 裡有員工的資料，就要有照片和員工頁）：列裡有工號 → 上面放員工小卡（照片、部門、到職、年資…），點了開完整員工頁 */
+function empNo(tr,hs){for(var j=0;j<tr.cells.length;j++){var h=hs[j]||'',v=txt(tr.cells[j]).split('\n')[0].trim();if(/factory\s*id|工號|emp(loyee)?\s*(no|id|#)|員工(編號|號碼)|staff\s*(no|id)|^id$/i.test(h)&&/^\d{2,7}$/.test(v))return v;}
+ for(var k=0;k<Math.min(3,tr.cells.length);k++){var w=txt(tr.cells[k]).split('\n')[0].trim();if(/^\d{3,6}$/.test(w)&&typeof G.emp==='function'&&G.emp(w))return w;}return '';}
+function empHtml(tr,hs){try{var no=empNo(tr,hs),nm='';for(var j=0;j<tr.cells.length;j++){if(/姓名|name|ឈ្មោះ/i.test(hs[j]||'')){nm=txt(tr.cells[j]).split('\n')[0].trim();break;}}
+  if(typeof G.psjEmpHTML==='function'){var h=G.psjEmpHTML(no,nm,D);if(h)return '<div class="pkn-emp">'+h+'</div>';}
+  if(typeof G.emp!=='function'||typeof G.empCardHTML!=='function'||!no||!G.emp(no))return '';var h2=G.empCardHTML(no);if(!h2)return '';
+  setTimeout(function(){try{if(G.hasPhoto&&G.hasPhoto(no)&&G.photoGet)G.photoGet(no).then(function(d){var el=box&&box.querySelector('.pkn-emp [data-cph="'+no+'"]');if(el&&d){el.classList.add('ph');el.innerHTML='<img src="'+d+'" alt="">';}});}catch(e){}},30);
+  return '<div class="pkn-emp">'+h2+'<button class="pkn-empgo" data-pk="e:'+esc(no)+'">👤 開員工頁（照片、出勤、請假、薪資、合約…）›</button></div>';}catch(e){return '';}}
 function sec(k,first){var it=S.list[k];if(!it)return '';try{return S.kind==='kpi'?kpiSec(it,k,first):S.kind==='rec'?recSec(it,k):rowSec(it,k);}catch(e){return '<section class="pkn-sec" data-i="'+k+'"><div class="pkn-rows">'+esc(txt(it))+'</div></section>';}}
 function titleOf(k){var it=S.list[k];if(!it)return '';if(S.kind==='kpi'){var p=kpiParts(it);return '📊 '+esc(p.l||p.v);}if(S.kind==='rec')return '📄 '+esc(it.po||it.item||it.style||it.styleNo||it.customer||('#'+(k+1)));var tb=it.closest('table'),M=tb&&tmodel(tb);return '🔎 '+esc(M?nameOf(M,it):txt(it.cells[0]));}
 function setHead(){var h=box.querySelector('.pkn-h');if(!h)return;h.querySelector('.pkn-t').innerHTML=titleOf(S.i);h.querySelector('.pkn-pos').textContent=(S.i+1)+' / '+S.list.length;var p=h.querySelector('[data-pk=p]'),n=h.querySelector('[data-pk=n]');if(p)p.disabled=S.i<=0;if(n)n.disabled=S.i>=S.list.length-1;
@@ -190,7 +203,7 @@ function add(){if(!S.list[last+1])return false;var m=box.querySelector('.pkn-mor
 function near(){var m=box.querySelector('.pkn-more');return m&&m.getBoundingClientRect().top<box.getBoundingClientRect().bottom+420;}
 function fill(){var n=0;while(near()&&n++<3&&add());}
 function draw(){if(!S.list[S.i])return;box.classList.toggle('dk',dark());base=last=S.i;
- box.innerHTML='<div class="pkn-h">'+(STK.length?'<button data-pk="b" aria-label="back" title="回上一層">↩</button>':'')+'<div class="pkn-t"></div><span class="pkn-pos"></span>'+(S.list.length>1?'<button data-pk="p" aria-label="prev">◀</button><button data-pk="n" aria-label="next">▶</button>':'')+'<button data-pk="x" aria-label="close">✕</button></div>'+sec(S.i,true)+'<div class="pkn-more" data-pk="more"></div>';
+ box.innerHTML='<div class="pkn-h">'+(STK.length?'<button data-pk="b" aria-label="back" title="回上一層">↩</button>':'')+'<div class="pkn-t"></div><span class="pkn-pos"></span>'+(S.list.length>1?'<button data-pk="p" aria-label="prev" title="上一筆">▲</button><button data-pk="n" aria-label="next" title="下一筆">▼</button>':'')+'<button data-pk="x" aria-label="close">✕</button></div>'+(S.i>0?'<div class="pkn-up">▲ 往上滑看前面 '+S.i+' 筆</div>':'')+sec(S.i,true)+'<div class="pkn-more" data-pk="more"></div>';
  label();setHead();box.scrollTop=0;mask.classList.add('on');
  if(IO)IO.disconnect();if(G.IntersectionObserver){IO=new IntersectionObserver(function(es){if(es.some(function(x){return x.isIntersecting;}))fill();},{root:box,rootMargin:'0px 0px 420px 0px'});IO.observe(box.querySelector('.pkn-more'));}
  setTimeout(fill,50);}
