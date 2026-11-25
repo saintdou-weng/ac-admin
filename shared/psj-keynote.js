@@ -178,7 +178,7 @@ function rowSec(tr,k){var tb=tr.closest('table'),M=tb?tmodel(tb):null,hs=heads(t
  [].forEach.call(tr.cells,function(td,j){var cl=td.cloneNode(true);[].forEach.call(cl.querySelectorAll('button,input,select'),function(x){x.remove();});var v=txt(cl),h=hs[j]||'';if(!h&&!v)return;if(/^(操作|動作|action)/i.test(h))return;
   if(!title&&v&&!/^[\d\-\/\s.:—$,%+]+$/.test(v))title=v.split('\n')[0];var c=M&&M.cols[j];
   if(c&&c.numeric&&ri>=0&&c.vals[ri]!=null){var x=c.vals[ri],rank=1+c.vals.filter(function(o){return o!=null&&o>x;}).length;
-   nums.push('<div class="pkn-g" style="cursor:default"><div class="pkn-gl">'+esc(h)+'</div><div class="pkn-gv">'+esc(v)+'</div><div class="pkn-bar"><i style="width:'+(c.max?Math.abs(x)/c.max*100:0).toFixed(1)+'%"></i></div><div class="pkn-ref">'+(c.pct?'':'合計 '+F(c.sum,0)+' · ')+'第 '+rank+' / '+c.n+' 名</div></div>');}
+   nums.push('<div class="pkn-g" style="cursor:default"><div class="pkn-gl">'+esc(h)+'</div><div class="pkn-gv">'+esc(v)+'</div></div>');}
   else kv.push([h||'—',v||'—']);});
  if(M&&ri>=0){entCols(M).forEach(function(x){var v=tr.cells[x.c.i]?txt(tr.cells[x.c.i]).split('\n')[0].trim():'';if(!v||v==='—')return;var same=M.rows.filter(function(r){return r.cells[x.c.i]&&txt(r.cells[x.c.i]).split('\n')[0].trim()===v;});
    if(same.length>1){var pc=pcsCol(M),us=usdCol(M),sp=pc?same.reduce(function(s,r){return s+(pc.vals[M.rows.indexOf(r)]||0);},0):null,su=us?same.reduce(function(s,r){return s+(us.vals[M.rows.indexOf(r)]||0);},0):null;
