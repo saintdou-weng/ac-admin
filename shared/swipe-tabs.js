@@ -284,12 +284,12 @@
    Paul：各平台上方都要有音樂開關跟調色盤。PSJERP／PSJHR／生產平台自己已經載了，這裡跳過；
    調色盤只會出現在「自己沒有調色盤」的平台（Admin OS、HRA Portal、HRA-PAY、SEC、GA-EXP、Audit），不干涉 PSJGA／GASCheck 原本的換色。
    開關位置會自動避開頁面原有的按鈕；載入失敗不影響左右滑。 */
-(function(){try{if(window.__VRT_MUSIC||document.querySelector('script[src*="/PSJERP/music.js"]'))return;if(/^\/(psjhr|psjerp|vrt-prod)\//i.test(location.pathname))return;var s=document.createElement('script');s.src='https://saintdou-weng.github.io/PSJERP/music.js?v=2.28&h='+Math.floor(Date.now()/36e5);s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
+(function(){try{if(window.__VRT_MUSIC||document.querySelector('script[src*="/PSJERP/music.js"]'))return;if(/^\/(psjhr|psjerp|vrt-prod)\//i.test(location.pathname))return;var s=document.createElement('script');s.src='https://saintdou-weng.github.io/PSJERP/music.js?v=2.29&h='+Math.floor(Date.now()/36e5);s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
 
 /* 2026-11-25 Paul：Admin／GASCheck／GA-EXP／SEC 的小卡也要點了有內容（不要按假的）→ 載入 HRA 同一支大字卡 row-keynote.js。
    安全模式（data-safe）：原本點了就有功能的卡（滑鼠是手指形狀、onclick、按鈕、連結）一律不攔，只補「點了沒反應」的數字卡；
    大字卡裡會帶出同一區塊的圖表和明細表，可往下滑接同一排的下一張。 */
-(function(){try{if(window.__acKeynote||document.querySelector('script[src*="row-keynote.js"]'))return;if(!/^\/(ac-admin|ac-gascheck|ac-ga-exp|ac-gas-sec)\//i.test(location.pathname))return;var s=document.createElement('script');s.src='https://saintdou-weng.github.io/ac-hra-portal/shared/row-keynote.js?v=43';s.defer=true;s.setAttribute('data-safe','1');(document.head||document.documentElement).appendChild(s);}catch(e){}})();
+(function(){try{if(window.__acKeynote||document.querySelector('script[src*="row-keynote.js"]'))return;if(!/^\/(ac-admin|ac-gascheck|ac-ga-exp|ac-gas-sec)\//i.test(location.pathname))return;var s=document.createElement('script');s.src='https://saintdou-weng.github.io/ac-hra-portal/shared/row-keynote.js?v=44';s.defer=true;s.setAttribute('data-safe','1');(document.head||document.documentElement).appendChild(s);}catch(e){}})();
 
 /* 2026-11-23 Paul：嵌在別的平台裡的分頁（例：PSJGA 裡的 CCTV、Admin OS 裡的款式卡），點開重點卡／物品頁時不要被外框的頁首、
    左側選單佔掉一半 → 卡片開著的期間，把這個分頁暫時放大到整個視窗（只改外框那個 iframe 的位置大小），關掉卡片就還原。

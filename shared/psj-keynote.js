@@ -214,7 +214,7 @@ function openRows(tr){ui();setTimeout(function(){kfx(1,1);},0);STK=[];REG=[];var
 function openKpis(el){ui();setTimeout(function(){kfx(1,1);},0);STK=[];REG=[];var par=el.parentElement;S.kind='kpi';S.list=par?[].filter.call(par.children,function(x){return x.classList.contains('pkn-kpi')&&x.offsetParent!==null;}):[el];if(!S.list.length)S.list=[el];S.i=Math.max(0,S.list.indexOf(el));draw();}
 API.openRows=openRows;API.openKpis=openKpis;
 
-function loadSmart(){try{if(G.acSmartCard||D.querySelector('script[src*="smart-kn.js"]'))return;var sc=D.createElement('script');sc.src='https://saintdou-weng.github.io/ac-hra-portal/shared/smart-kn.js?v=3';sc.defer=true;D.head.appendChild(sc);}catch(e){}}
+function loadSmart(){try{if(G.acSmartCard||D.querySelector('script[src*="smart-kn.js"]'))return;var sc=D.createElement('script');sc.src='https://saintdou-weng.github.io/ac-hra-portal/shared/smart-kn.js?v=4';sc.defer=true;D.head.appendChild(sc);}catch(e){}}
 D.addEventListener('click',function(e){var k=e.target.closest&&e.target.closest('.pkn-box .skn-r[data-skr]');if(!k||!G.acSmartRow)return;var r=G.acSmartRow(+k.getAttribute('data-skr'));if(r&&r.nodeType===1){e.stopPropagation();e.preventDefault();push('row',[r],0);}},true);
 function start(){loadSmart();if(G.VRT_HUBS)return;   /* 生產平台入口頁本身有物品頁；分頁 iframe 各自載入 */hook(D);frames();setInterval(frames,2000);}
 if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',start);else start();
