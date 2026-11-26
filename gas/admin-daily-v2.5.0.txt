@@ -205,7 +205,7 @@ function dailyBuild_(){
  /* 總務保全 */
  try{const g=dailyGaBrief_(p.getProperty('DAILY_SENT_AT'));if(g.fresh||g.stale){L.push(g.line);if(g.fresh)news++;}}catch(e){errors.push('總務保全：'+String(e&&e.message||e).slice(0,160));}
  /* ERP */
- try{const e=dailyErp_(),last=p.getProperty('DAILY_ERP_AT')||'';if(e&&e.at&&e.at>last){L.push('🗂 <b>ERP</b>　'+esc_(e.at.slice(5,16).replace('-','/'))+' 已更新'+(e.note?'：'+esc_(String(e.note).slice(0,60)):'')+'。');keys.erp=e.at;news++;}}catch(e){}
+ try{const e=dailyErp_(),last=p.getProperty('DAILY_ERP_AT')||'';if(e&&e.at&&e.at>last&&e.at.slice(0,10)>=weeklyGaAddDays_(today,-2)){L.push('🗂 <b>ERP</b>　'+esc_(e.at.slice(5,16).replace('-','/'))+' 已更新'+(e.note?'：'+esc_(String(e.note).slice(0,60)):'')+'。');keys.erp=e.at;news++;}}catch(e){}
  const parts=news?[{id:'brief',kind:'admin',html:'🏛️ <b>VRT 每日綜合摘要</b>　'+dailyMdw_(today)+'\n'+L.join('\n')}]:[];
  return {today:today,parts:parts,errors:errors,keys:keys};
 }
