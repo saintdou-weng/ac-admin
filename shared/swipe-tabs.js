@@ -357,3 +357,5 @@
     ['pointerup', 'touchend', 'click', 'keydown'].forEach(function (ev) { document.addEventListener(ev, arm, true); });
   } catch (e) {}
 })();
+
+/* legible：字與底色對比不足自動加深、卡片微浮（Paul 11/27）。一支檔案在 ac-admin/shared/legible.js */(function(){try{if(window.VRTLegible||document.querySelector('script[src*="legible.js"]'))return;var s=document.createElement("script");s.src="https://saintdou-weng.github.io/ac-admin/shared/legible.js?v=1.0.1";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();
