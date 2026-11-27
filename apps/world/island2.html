@@ -18084,7 +18084,7 @@ const aliasToId = { rain: 'maya', maya: 'maya', egypt: 'egypt', med: 'santorini'
 const tour = { active: false, id: null, mode: 'cut', floor: 0, time: 0, walkPos: V(0, 1.75, 2.5), walkYaw: Math.PI, keys: new Set() };
 
 // v7.0：聖托里尼改為單棟模型（教堂、崖洞屋、風車；外觀與剖面同一組建築，見 world-building-kit-v70）；金字塔、神廟、大峽谷不整座剖開
-const NO_CUT2 = new Set(['maya', 'egypt', 'canyon']);
+const NO_CUT2 = new Set(['maya', 'egypt', 'canyon', 'polar']);   // 溫室的舊剖面是分離房盒，先只看外觀與走入室內，之後換單棟模型
 function getModel(id) {
   if (!models[id] && id === 'santorini' && window.Kit70?.santorini) {
     const k = window.Kit70.santorini();
