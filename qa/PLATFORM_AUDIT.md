@@ -35,7 +35,7 @@ psjerp 3、psjgas 2、psjhr 2、vrt-prod 26、vrt-acc-flow-cost 3。桌面 1366�
 - [ ] 第 7 層：排程巡檢（每個排程最近一次有沒有成功、有沒有產出）。
 - [ ] <10px 的小字（audit_hub_main 345 處、gascheck cleaning／dormitory、ga-exp index）要不要放大——會動版面，先列著。
 - [ ] vrt-prod/portal_v2.html 還是 8 個入口，沒有新的「🧰 器具工具」。
-- [ ] PSJHR 補測（第 2 層沒測到的）：quiz.html 要輸入工號才進得去，只測到語言鍵；嵌入的 10 個外部分頁（#x-hra-*、#x-pay-*、#x-adm-labor、#x-aud-*）是 iframe，內容留給各自平台那一晚；考勤（att）要真的匯入檔才有資料；每頁超過 90 個可點項目的後段（員工表後面的列）沒點完。
+- [ ] PSJHR 補測（第 2 層沒測到的）：quiz.html 要輸入工號才進得去，只測到語言鍵；嵌入的 10 個外部分頁（#x-hra-*、#x-pay-*、#x-adm-labor、#x-aud-*）是 iframe，內容留給各自平台那一晚；考勤（att）要真的匯入檔才有資料；每頁超過 90 個可點項目的後段（員工表後面的列）沒點完；不在選單上的分頁 #attexc、#delok、#annual-hist、#sen-hist 沒走。
 - [ ] PSJHR：沒輸入同步密碼時頁面仍會嘗試連 script.google.com（測試中全數攔下，每輪 GET 很多、POST 約 70–90 次）——第 6 層時確認沒密碼是否該先不送。
 
 ## 第 2 層紀錄
