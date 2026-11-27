@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#efe9dd"><title>四季慢行 · 四島環球鐵道 v5.23 · 第三島 v6.9 修復 · 第四島 v6.8 保留</title>
+<meta name="theme-color" content="#efe9dd"><title>四季慢行 · 四島環球鐵道 v5.24 · 單棟建築剖面與冬季小鎮（第二～四島 v7.0）</title>
 <meta name="description" content="一列蒸汽火車，穿越六段風景、四季與晝夜。可探索八節功能車廂的互動 3D 鐵道。">
 <style>:root{color-scheme:light;--ink:#23382f;--muted:#65726a;--paper:#f8f4e9;--glass:rgba(249,246,236,.91);--line:rgba(51,68,48,.17);--accent:#54785f;--gold:#ad7c3f;font-family:Arial,"Noto Sans TC",sans-serif}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}body{background:#bfd1d5;color:var(--ink)}button,select,input{font:inherit}button,a,select,input{touch-action:manipulation}button{cursor:pointer;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--ink);min-height:36px;padding:8px 13px}button:hover,button:focus-visible{background:#e4eadd;outline-color:var(--accent)}button.active{background:var(--ink);color:#fff}select{max-width:100%;border:1px solid var(--line);border-radius:8px;padding:7px;background:var(--paper);color:var(--ink)}[hidden]{display:none!important}#scene{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;filter:contrast(1.04) saturate(1.06)}
 body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;background:radial-gradient(circle at 50% 46%,transparent 58%,rgba(6,9,15,.42) 100%);mix-blend-mode:multiply}header{position:absolute;inset:18px 24px auto;display:flex;align-items:center;gap:20px;padding:13px 17px;border:1px solid var(--line);border-radius:14px;background:var(--glass);backdrop-filter:blur(14px);box-shadow:0 4px 22px #182d3112;z-index:3}.back{color:var(--muted);text-decoration:none;font-size:12px;white-space:nowrap}.brand{display:flex;align-items:baseline;gap:15px;flex:1}.brand b{font-family:Georgia,"Noto Serif TC",serif;font-size:24px;letter-spacing:.13em}.brand span{font-size:10px;letter-spacing:.24em;color:var(--muted)}.head-actions{display:flex;gap:6px}.head-actions button{padding:6px 10px}.journey-card{position:absolute;left:30px;top:115px;max-width:330px;padding:20px 23px;background:var(--glass);border-radius:14px;border:1px solid var(--line);backdrop-filter:blur(10px)}.eyebrow{color:var(--gold);font-size:10px;font-weight:bold;letter-spacing:.18em}.journey-card h1{font-family:Georgia,"Noto Serif TC",serif;font-size:26px;letter-spacing:.06em;margin:13px 0 10px;font-weight:500}.journey-card p{color:var(--muted);font-size:13px;line-height:1.8;margin:0}.conditions{display:flex;gap:12px;border-top:1px solid var(--line);padding-top:13px;margin-top:14px;font-size:11px}.conditions span:first-child{font-variant-numeric:tabular-nums;font-weight:bold;color:var(--ink)}.chapters{position:absolute;right:24px;top:112px;display:flex;flex-direction:column;gap:6px;background:var(--glass);border:1px solid var(--line);padding:8px;border-radius:14px}.chapters button{text-align:left;padding:9px 14px;font-size:12px;border:0}.chapters small{display:inline-block;width:27px;opacity:.6;font-size:10px}.view-switch{position:absolute;left:30px;bottom:137px;display:flex;gap:3px;padding:5px;border:1px solid var(--line);border-radius:12px;background:var(--glass)}.view-switch button{padding:8px 12px;font-size:12px;border:0}.controls{position:absolute;left:24px;right:24px;bottom:20px;padding:13px 17px;background:var(--glass);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(14px);z-index:3}.transport{display:flex;align-items:center;gap:16px}.transport>button:first-child{background:var(--ink);color:white;font-size:17px;min-width:43px}.journey-progress{flex:1}.progress-top{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px}.progress-top span{color:var(--muted)}input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer;vertical-align:middle}.bottomline{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding-top:8px;margin-top:7px;font-size:11px;color:var(--muted)}.bottomline button{border:0;min-height:28px;padding:3px 9px;font-size:11px;color:var(--accent)}#settings{border-top:1px solid var(--line);margin-top:10px;padding-top:12px;display:flex;flex-wrap:wrap;align-items:center;gap:15px;font-size:12px}#settings label{display:flex;align-items:center;gap:8px}#settings label input[type=range]{width:110px}#settings small{width:100%;line-height:1.6;color:var(--muted)}#interiorCard{position:absolute;right:24px;top:113px;width:290px;max-height:calc(100% - 275px);overflow:auto;background:var(--glass);padding:18px 20px;border:1px solid var(--line);border-radius:14px;z-index:2}.interior-head{display:flex;align-items:center;justify-content:space-between}#closeCabin{border:0;font-size:22px;padding:0;min-height:25px}#interiorCard h2{font-family:Georgia,"Noto Serif TC",serif;font-weight:500;font-size:24px;margin:10px 0}#interiorCard p{font-size:12px;color:var(--muted);line-height:1.8}#cabinDetails{display:flex;gap:8px;flex-wrap:wrap;font-size:11px}#cabinDetails span{padding:6px 8px;border-radius:7px;background:#e8edde}#peopleList{margin-top:12px;border-top:1px solid var(--line);padding-top:10px;font-size:11px;color:var(--muted);line-height:1.9}#quietNotice{display:block;margin-top:10px;color:var(--gold);line-height:1.7}.ui-hidden header,.ui-hidden .journey-card,.ui-hidden .chapters,.ui-hidden .view-switch,.ui-hidden .controls,.ui-hidden #interiorCard{display:none}#restore{position:absolute;bottom:20px;right:20px;background:var(--glass);z-index:4}#loading{position:absolute;inset:0;z-index:20;background:#f3f0e5;display:flex;justify-content:center;align-items:center;flex-direction:column;transition:opacity .7s}#loading h1{font-family:Georgia,"Noto Serif TC",serif;font-size:35px;font-weight:400;letter-spacing:.2em}#loading p{font-size:13px;letter-spacing:.1em;color:var(--muted)}#loadText{margin-top:25px;font-size:11px;color:var(--accent)}.loading-orbit{font-size:60px;color:var(--accent);animation:drift 2s infinite ease-in-out}@keyframes drift{50%{transform:translateX(15px)}}#error{position:absolute;inset:25% 8% auto;padding:30px;background:var(--paper);z-index:25;border-radius:15px;line-height:1.8}
@@ -26681,7 +26681,14 @@ const aliasToId = { rain: 'maya', maya: 'maya', egypt: 'egypt', med: 'santorini'
 
 const tour = { active: false, id: null, mode: 'cut', floor: 0, time: 0, walkPos: V(0, 1.75, 2.5), walkYaw: Math.PI, keys: new Set() };
 
+// v7.0：聖托里尼改為單棟模型（教堂、崖洞屋、風車；外觀與剖面同一組建築，見 world-building-kit-v70）；金字塔、神廟、大峽谷不整座剖開
+const NO_CUT2 = new Set(['maya', 'egypt', 'canyon']);
 function getModel(id) {
+  if (!models[id] && id === 'santorini' && window.Kit70?.santorini) {
+    const k = window.Kit70.santorini();
+    models[id] = { ...k, outer: k.exterior, floors: k.levels.map(l => ({ group: l.group, y: l.y, h: l.h, w: 2 * (k.bounds.x + 1), d: 2 * (k.bounds.z + 1), code: l.name.split(' ')[0], name: l.name, rooms: l.rooms })), bgColor: 0xdcddd9, outerView: { target: V(0, 6, -2), pos: V(14, 16, 40) }, floorRadius: 30 };
+    scene.add(models[id].root);
+  }
   if (!models[id] && builders[id]) {
     models[id] = window.Island2Art65.build(id);
     models[id].floors.forEach((f,j)=>{const visitor=addPerson(f.group,f.w*.24,0,1.1,[0x657c78,0x9b8068,0x65758c][j%3]);visitor.traverse(o=>o.userData.dynamic=true);models[id].anims.push(t=>{visitor.position.z=1.1+Math.sin(t*.12+j)*.25;visitor.rotation.y=Math.sin(t*.08+j)*.3;});});
@@ -26692,11 +26699,18 @@ function getModel(id) {
 
 function applyLayout() {
   const m = models[tour.id]; if (!m) return;
+  const whole = !!m.whole, noCut = NO_CUT2.has(tour.id);
+  if (noCut && (tour.mode === 'cut' || tour.mode === 'stack')) tour.mode = 'exterior';
+  if (whole && tour.mode === 'stack') tour.mode = 'cut';
+  for (const b of document.querySelectorAll('[data-lm2-mode=cut]')) b.hidden = noCut;
+  for (const b of document.querySelectorAll('[data-lm2-mode=stack]')) b.hidden = noCut || whole;
   const isExt = tour.mode === 'exterior', isStack = tour.mode === 'stack', isWalk = tour.mode === 'walk';
-  m.outer.visible = isExt;
+  m.outer.visible = isExt || (whole && isWalk);
+  if (m.cutOnly) m.cutOnly.visible = tour.mode === 'cut';
+  if (whole) { const bg = isExt ? 0x9db4cf : 0xdcddd9; scene.background.setHex(bg); if (scene.fog) scene.fog.color.setHex(bg); }
   m.floors.forEach((f, idx) => {
-    f.group.visible = !isExt && (isStack || idx === tour.floor);
-    f.group.position.y = isStack ? (f.y + idx * 2.2) : f.y;
+    f.group.visible = !isExt && (whole || isStack || idx === tour.floor);
+    f.group.position.y = whole ? 0 : isStack ? (f.y + idx * 2.2) : f.y;
     f.group.traverse(o=>{if(o.userData.roomCeiling)o.visible=isWalk;});
   });
   for (const b of document.querySelectorAll('[data-lm2-mode]')) b.setAttribute('aria-pressed', String(b.dataset.lm2Mode === tour.mode));
@@ -26704,7 +26718,7 @@ function applyLayout() {
   $('lm2Walk').hidden = !isWalk;
   $('lm2RaftJump').hidden = (tour.id !== 'canyon');
   const f = m.floors[tour.floor];
-  $('lm2Status').textContent = isExt ? '建築外觀全景・拖曳旋轉與雙指縮放' : isStack ? '全樓層展開剖面・一次總覽各層結構' : isWalk ? ('室內漫步 · ' + f.name) : ('單層剖面 · ' + f.name);
+  $('lm2Status').textContent = isExt ? (noCut ? '完整外觀（山與地標不剖）・拖曳旋轉；點「走入室內」參觀' : '建築外觀全景・拖曳旋轉與雙指縮放') : whole && tour.mode === 'cut' ? (tour.focus ? ('剖面 · ' + f.name) : '整組剖面：拿掉面海的牆，看教堂、崖洞屋與風車內部・點樓層拉近') : isStack ? '全樓層展開剖面・一次總覽各層結構' : isWalk ? ('室內漫步 · ' + f.name) : ('單層剖面 · ' + f.name);
 }
 
 function populateHUD(m) {
@@ -26713,8 +26727,8 @@ function populateHUD(m) {
   m.floors.forEach((f, idx) => {
     const b = document.createElement('button'); b.dataset.lm2Floor = idx; b.textContent = f.code;
     b.onclick = () => {
-      tour.floor = idx;
-      if (tour.mode === 'exterior') tour.mode = 'cut';
+      tour.floor = idx; tour.focus = true;
+      if (tour.mode === 'exterior') tour.mode = NO_CUT2.has(tour.id) ? 'walk' : 'cut';
       const rm = m.floors[idx].rooms[0];
       if (rm) { tour.walkPos.set(...rm.pos); tour.walkYaw = Math.PI; }
       window.RailwayApp?.resetBuildingCamera515?.();
@@ -26749,7 +26763,7 @@ function openLandmark2(rawId) {
   const m = getModel(id);
   for (const k in models) models[k].root.visible = (k === id);
   scene.background = new T.Color(m.bgColor);
-  tour.active = true; tour.id = id; tour.mode = 'cut'; tour.floor = Math.min(1, m.floors.length - 1);
+  tour.active = true; tour.id = id; tour.mode = 'cut'; tour.focus = false; tour.floor = Math.min(1, m.floors.length - 1);
   const rm = m.floors[tour.floor].rooms[0];
   if (rm) { tour.walkPos.set(...rm.pos); tour.walkYaw = Math.PI; }
   populateHUD(m);
@@ -26778,11 +26792,14 @@ function buildingCamera2(yaw, pitch, zoom, aspect, dt = .016) {
     if (tour.keys.has('left')) tour.walkPos.addScaledVector(right, -spd);
     if (tour.keys.has('right')) tour.walkPos.addScaledVector(right, spd);
     tour.walkPos.x = clamp(tour.walkPos.x, -(f.w/2-1), f.w/2-1);
-    tour.walkPos.z = clamp(tour.walkPos.z, -(f.d/2-1), f.d/2-1);
+    tour.walkPos.z = m.whole ? clamp(tour.walkPos.z, m.bounds.z0 ?? -m.bounds.z, m.bounds.z) : clamp(tour.walkPos.z, -(f.d/2-1), f.d/2-1);
     tour.walkPos.y = f.y + 1.75;
     const el = clamp(-pitch * .85, -.75, .75);
     return { position: tour.walkPos.clone(), target: tour.walkPos.clone().add(V(Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el)).multiplyScalar(6)), fov: 66 };
   }
+  if (m.whole) { const fo = tour.focus && tour.mode === 'cut', H = m.height || 20, r = (tour.mode === 'exterior' ? m.radius : (m.cutR || m.radius)) * (fo ? .8 : tour.mode === 'exterior' ? 1.56 : 1.5) * zoom * Math.max(1, .76 / aspect);
+    const az = (m.az ?? .5) + yaw, el = clamp((fo ? .26 : .3) + pitch, .06, 1.38), ec = m.extCenter || [0, 0], target = V(ec[0], fo ? f.y + (f.h || 3) * .5 : H * .5, ec[1]);
+    return { position: target.clone().add(V(Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el)).multiplyScalar(r)), target, fov: 46 }; }
   if (tour.mode === 'exterior') {
     const tgt = m.outerView.target.clone(), off = m.outerView.pos.clone().sub(tgt);
     const r = off.length() * zoom * Math.max(1, .68 / aspect);
@@ -26798,7 +26815,7 @@ function buildingCamera2(yaw, pitch, zoom, aspect, dt = .016) {
 
 $('lm2Modes').addEventListener('click', e => {
   const b = e.target.closest('[data-lm2-mode]'); if (!b) return;
-  tour.mode = b.dataset.lm2Mode;
+  tour.mode = b.dataset.lm2Mode; tour.focus = false;
   const m = models[tour.id];
   if (tour.mode === 'walk' && m) {
     const rm = m.floors[tour.floor].rooms[0];
@@ -28222,14 +28239,16 @@ function refineLandmark68(m){
  m.root.updateMatrixWorld(true);
 }
 
-const builders = { taipei: buildTaipei101, kk: buildKotaKinabalu, angkor: buildAngkor, dubai: buildDubai, dunhuang: buildDunhuang };
+// v7.0：敦煌改為單棟九層樓（倚崖樓閣外觀與剖面，見 world-building-kit-v70）；山與大型地標不整座剖開
+const builders = { taipei: buildTaipei101, kk: buildKotaKinabalu, angkor: buildAngkor, dubai: buildDubai, dunhuang: () => Object.assign(window.Kit70.dunhuang(), { hasCavesJump: true }) };
+const NO_CUT3 = new Set(['taipei', 'kk', 'angkor', 'dubai']);
 const models = {};
 const tour = { active: false, id: null, mode: 'cut', floor: 0, walkPos: new T.Vector3(), walkYaw: 0, walkPitch: 0, keys: new Set(), time: 0 };
 
 function ensureModel(id) {
   if (!models[id]) {
     models[id] = builders[id]();
-    refineLandmark68(models[id]);window.Island3Architecture69.furnish(models[id]);
+    if (!models[id].whole) { refineLandmark68(models[id]);window.Island3Architecture69.furnish(models[id]); }
     models[id].root.visible = false;
     scene.add(models[id].root);
   }
@@ -28238,12 +28257,20 @@ function ensureModel(id) {
 
 function applyMode() {
   const m = models[tour.id]; if (!m) return;
+  const whole = !!m.whole, noCut = NO_CUT3.has(tour.id);
+  if (noCut && (tour.mode === 'cut' || tour.mode === 'stack')) tour.mode = 'exterior';
+  if (whole && tour.mode === 'stack') tour.mode = 'cut';
+  document.querySelectorAll('[data-lm3-mode=cut]').forEach(b => { b.hidden = noCut; });
+  document.querySelectorAll('[data-lm3-mode=stack]').forEach(b => { b.hidden = noCut || whole; });
   const isExt = tour.mode === 'exterior';
   const isStack = tour.mode === 'stack';
-  m.exterior.visible = isExt;
+  m.exterior.visible = isExt || (whole && tour.mode === 'walk');
+  if (m.cutOnly) m.cutOnly.visible = tour.mode === 'cut';
+  { const bg = whole ? (isExt ? 0x9db4cf : 0xdcddd9) : 0x161d24; scene.background.setHex(bg); scene.fog.color.setHex(bg); scene.fog.near = whole ? 110 : 58; scene.fog.far = whole ? 320 : 165;
+    groundMesh.material.color.setHex(whole ? (isExt ? 0x9aa3a8 : 0xcfd1cd) : 0x1c242c); }
   m.levels.forEach((lv, i) => {
-    lv.group.position.y = lv.y + (isStack ? i * 3.8 : 0);
-    lv.group.visible = !isExt && (isStack || i === tour.floor);
+    lv.group.position.y = whole ? 0 : lv.y + (isStack ? i * 3.8 : 0);
+    lv.group.visible = !isExt && (whole || isStack || i === tour.floor);
     lv.group.traverse(o => { if(o.userData.roomCeiling68) o.visible=tour.mode==='walk'; });
   });
   document.querySelectorAll('[data-lm3-mode]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lm3Mode === tour.mode)));
@@ -28251,7 +28278,8 @@ function applyMode() {
   $('lm3Floors').hidden = isExt;
   $('lm3Walk').hidden = tour.mode !== 'walk';
   const lv = m.levels[tour.floor];
-  $('lm3Status').textContent = isExt ? '建築外觀全景 · 拖曳旋轉、雙指縮放'
+  $('lm3Status').textContent = isExt ? (noCut ? '完整外觀（山與地標不剖）· 拖曳旋轉、雙指縮放；點「走入室內」參觀' : '建築外觀全景 · 拖曳旋轉、雙指縮放')
+    : whole && tour.mode === 'cut' ? (tour.focus ? `${lv.name} · 剖面（點「剖面」回到整棟）` : '整棟剖面：拿掉正面木構，看大佛、迴廊、樓梯與崖壁 · 點樓層拉近')
     : tour.mode === 'walk' ? `${lv.name} · 自由漫步中（WASD／方向鍵移動，拖曳環視）`
     : isStack ? '全層空間示意 · 樓板、柱梁、房間與通道分離顯示'
     : `${lv.name} · 剖面導覽（拖曳旋轉、點樓層切換）`;
@@ -28285,7 +28313,7 @@ function openLandmark3(id, initialMode = 'cut') {
   for (const k in models) models[k].root.visible = false;
   const m = ensureModel(id);
   m.root.visible = true;
-  tour.active = true; tour.id = id; tour.mode = initialMode; tour.floor = 0; tour.keys.clear();
+  tour.active = true; tour.id = id; tour.mode = initialMode; tour.floor = 0; tour.focus = false; tour.keys.clear();
 
   $('lm3Title').textContent = m.title;
   const fBar = $('lm3Floors'); fBar.replaceChildren();
@@ -28293,7 +28321,7 @@ function openLandmark3(id, initialMode = 'cut') {
     const b = document.createElement('button');
     b.dataset.lm3Floor = i;
     b.textContent = lv.name.split(' ')[0];
-    b.onclick = () => { tour.floor = i; if (tour.mode === 'exterior') tour.mode = 'cut'; goRoom(i, 0); };
+    b.onclick = () => { tour.floor = i; tour.focus = true; if (tour.mode === 'exterior') tour.mode = NO_CUT3.has(tour.id) ? 'walk' : 'cut'; goRoom(i, 0); };
     fBar.append(b);
   });
   $('lm3BoatJump').hidden = !m.hasBoatJump;
@@ -28321,7 +28349,7 @@ function closeLandmark3(returnFollow = false) {
 
 document.querySelectorAll('[data-lm3-mode]').forEach(b => {
   b.onclick = () => {
-    tour.mode = b.dataset.lm3Mode;
+    tour.mode = b.dataset.lm3Mode; tour.focus = false;
     if (tour.mode === 'walk') goRoom(tour.floor, 0);
     else applyMode();
     window.RailwayApp?.resetBuildingCamera515?.();
@@ -28373,11 +28401,14 @@ function buildingCamera3(yaw, pitch, zoom, aspect, dt = .016) {
     if (tour.keys.has('left')) tour.walkPos.addScaledVector(right, spd);
     if (tour.keys.has('right')) tour.walkPos.addScaledVector(right, -spd);
     tour.walkPos.x = clamp(tour.walkPos.x, -m.bounds.x, m.bounds.x);
-    tour.walkPos.z = clamp(tour.walkPos.z, -m.bounds.z, m.bounds.z);
+    tour.walkPos.z = clamp(tour.walkPos.z, m.bounds.z0 ?? -m.bounds.z, m.bounds.z);
     tour.walkPos.y = lv.y + 1.72;
     const target = tour.walkPos.clone().add(V(Math.sin(a) * Math.cos(el), Math.sin(el), Math.cos(a) * Math.cos(el)).multiplyScalar(6));
     return { position: tour.walkPos.clone(), target, fov: 62 };
   }
+  if (m.whole) { const lvw = m.levels[tour.floor] || m.levels[0], f = tour.focus && tour.mode === 'cut', H = m.height || 20, r = (tour.mode === 'exterior' ? m.radius : (m.cutR || m.radius)) * (f ? .8 : tour.mode === 'exterior' ? 1.56 : 1.5) * zoom * Math.max(1, .76 / aspect);
+    const az = (m.az ?? .5) + yaw, el = clamp((f ? .26 : .3) + pitch, .06, 1.38), ec = tour.mode === 'exterior' && m.extCenter ? m.extCenter : [0, 0], target = V(ec[0], f ? lvw.y + lvw.h * .5 : H * .5, ec[1]);
+    return { position: target.clone().add(V(Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el)).multiplyScalar(r)), target, fov: 46 }; }
   const box = new T.Box3();
   if(tour.mode==='exterior')box.setFromObject(m.exterior);
   else for(const L of m.levels)if(L.group.visible)box.union(new T.Box3().setFromObject(L.group));
@@ -28977,6 +29008,13 @@ class G{
   const [rt,yt]=prof[prof.length-1];if(rt>.02&&!o.open){const c=rgb(o.cap??(typeof col==='function'?col(prof.length-2,0):col)),m=this.p.length/3;this.p.push(x,y+yt,z);this.n.push(0,1,0);this.c.push(c[0],c[1],c[2]);
    for(let j=0;j<=seg;j++){const v=at(rt,yt,j);this.p.push(v[0],v[1],v[2]);this.n.push(0,1,0);this.c.push(c[0],c[1],c[2]);}for(let j=0;j<seg;j++)this.i.push(m,m+2+j,m+1+j);}
   return this;}
+ /* free surface f(u,v) → [x,y,z]; col may be f(u,v,p) */
+ surf(f,nu,nv,col){const P=[];for(let j=0;j<=nv;j++)for(let i=0;i<=nu;i++)P.push(f(i/nu,j/nv));const id=(i,j)=>j*(nu+1)+i,base=this.p.length/3;
+  for(let j=0;j<=nv;j++)for(let i=0;i<=nu;i++){const a=P[id(Math.min(nu,i+1),j)],b=P[id(Math.max(0,i-1),j)],c=P[id(i,Math.min(nv,j+1))],d=P[id(i,Math.max(0,j-1))],u=[a[0]-b[0],a[1]-b[1],a[2]-b[2]],w=[c[0]-d[0],c[1]-d[1],c[2]-d[2]];
+   let n=[u[1]*w[2]-u[2]*w[1],u[2]*w[0]-u[0]*w[2],u[0]*w[1]-u[1]*w[0]];const l=Math.hypot(n[0],n[1],n[2])||1,p=P[id(i,j)],c3=rgb(typeof col==='function'?col(i/nu,j/nv,p):col);this.p.push(p[0],p[1],p[2]);this.n.push(n[0]/l,n[1]/l,n[2]/l);this.c.push(c3[0],c3[1],c3[2]);}
+  for(let j=0;j<nv;j++)for(let i=0;i<nu;i++){const a=base+id(i,j);this.i.push(a,a+1,a+nu+2,a,a+nu+2,a+nu+1);}return this;}
+ /* flat disc (or ring) in the x-y plane, facing +z */
+ disc(x,y,z,r,col,seg=16,r0=0){for(let j=0;j<seg;j++){const a=j*TAU/seg,b=(j+1)*TAU/seg;this.q([x+Math.cos(a)*r0,y+Math.sin(a)*r0,z],[x+Math.cos(a)*r,y+Math.sin(a)*r,z],[x+Math.cos(b)*r,y+Math.sin(b)*r,z],[x+Math.cos(b)*r0,y+Math.sin(b)*r0,z],col);}return this;}
  beam(a,b,t,col){const d=[b[0]-a[0],b[1]-a[1],b[2]-a[2]],l=Math.hypot(d[0],d[1],d[2])||1,u=d.map(q=>q/l),s=Math.abs(u[1])>.9?[1,0,0]:[0,1,0];
   let p=[u[1]*s[2]-u[2]*s[1],u[2]*s[0]-u[0]*s[2],u[0]*s[1]-u[1]*s[0]];const pl=Math.hypot(p[0],p[1],p[2])||1;p=p.map(q=>q/pl);const w=[u[1]*p[2]-u[2]*p[1],u[2]*p[0]-u[0]*p[2],u[0]*p[1]-u[1]*p[0]];
   const c=(o,i,j)=>[o[0]+(p[0]*i+w[0]*j)*t/2,o[1]+(p[1]*i+w[1]*j)*t/2,o[2]+(p[2]*i+w[2]*j)*t/2],A=[c(a,-1,-1),c(a,1,-1),c(a,1,1),c(a,-1,1)],E=[c(b,-1,-1),c(b,1,-1),c(b,1,1),c(b,-1,1)];
@@ -29333,7 +29371,236 @@ function castle(){
  return {id:'disney',title:'童話城堡（單棟外觀與剖面）',root,exterior:frontG,shell:shellG,cutOnly:cutG,levels,anims:[],bounds:{x:6.0,z:1.0,z0:-6.8},radius:40,height:42,az:.42,whole:true,hasDisneyJumps:true};
 }
 
-window.Kit70={G,F,part,flush,face,railing,tree,tower,twin,rng,shade,rgb,mats,haussmann,castle,IRON,CUT,GOLD,ROOF};
+/* =====================================================================================
+   3 · 清真寺（層疊圓頂＋六座宣禮塔＋拱廊前庭）：剖面沿禮拜大殿中線切開，看得到四根巨柱撐起主圓頂、
+       半圓頂、側廊看台、米哈拉布與講壇、大吊燈環
+   ===================================================================================== */
+const LEAD=0x8793a0;
+const domeP=(R,k=1,n=9)=>{const p=[];for(let i=0;i<=n;i++){const u=i/n*Math.PI/2;p.push([Math.max(.03,R*Math.cos(u)),R*k*Math.sin(u)]);}return p;};
+function minaret(pt,x,z,H,o={}){const st=o.stone??0xe4dfd2,n=H>30?3:2,prof=[[1.25,0],[1.25,2.6],[.92,3.4]],seg=12;for(let i=1;i<=n;i++){const y=3.4+(H-10.4)*i/n;prof.push([.92-.07*i+.07,y-.5],[1.45,y-.1],[1.45,y+.55],[.92-.07*i,y+.6]);}prof.push([.92-.07*n,H-3.6]);
+ pt.s.lathe(prof,seg,x,o.y0||0,z,(k,j)=>(k%4===2||k%4===3)&&k>2?shade(st,.9):(j+k)%5?st:shade(st,.96));pt.s.lathe([[.98-.07*n,0],[.5,1.8],[.05,3.6]],seg,x,(o.y0||0)+H-3.6,z,(k,j)=>k?LEAD:shade(LEAD,.86));
+ pt.s.lathe([[.06,0],[.12,.2],[.03,.45],[.02,1.3]],6,x,(o.y0||0)+H-.1,z,GOLD);for(let i=1;i<=n;i++){const y=(o.y0||0)+3.4+(H-10.4)*i/n+.75;for(let k=0;k<10;k++){const a=k*TAU/10;pt.s.box(x+Math.cos(a)*1.42,y+.2,z+Math.sin(a)*1.42,.08,.5,.08,shade(st,.8),Math.PI/2-a);}pt.s.lathe([[1.44,.42],[1.44,.5]],seg,x,y,z,shade(st,.85),{open:true});}}
+function mosque(){
+ const r=rng(1616),root=new T.Group(),shellG=new T.Group(),frontG=new T.Group(),cutG=new T.Group(),sh=part(),fr=part(),ct=part();
+ const ST=0xdcd6c8,ST2=shade(ST,.93),HW=14.5,WH=11,UW=8,UH=17,DR=7.7,DY=19.6,TB=.6,TILE=0x2f6f9a,PL=0xf0e9da;
+ // terrace and steps
+ sh.s.box(0,TB/2,8,HW*2+10,TB,HW*2+46,0xc9c2b2);sh.s.box(0,.05,8,HW*2+22,.1,HW*2+58,0x9aa58a);
+ // arched window on a flat wall facing (nx,nz)
+ const wwin=(pt,x,y,z,w,h,ry,lit)=>{const [fx,fz]=loc(x,z,ry,0,.06);pt.s.box(fx,y,fz,w+.3,h+.3,.1,shade(ST,1.05),ry);const [px,pz]=loc(x,z,ry,0,.1);pt[lit?'g':'w'].box(px,y-.05,pz,w,h,.05,lit?0xffe2a8:0x3f5f86,ry);
+  pt[lit?'g':'w'].box(px,y+h/2+.12,pz,w*.66,.3,.05,lit?0xffe2a8:0x3f5f86,ry);pt.s.box(px,y,pz,.05,h,.07,shade(ST,1.05),ry);};
+ const wall=(pt,x0,z0,x1,z1,y0,y1,th=.9,rows=[],out=1)=>{const L=Math.hypot(x1-x0,z1-z0),cx=(x0+x1)/2,cz=(z0+z1)/2,ry=Math.atan2(-(z1-z0),x1-x0);pt.s.box(cx,(y0+y1)/2,cz,L,y1-y0,th,ST,ry);
+  for(let y=y0+1;y<y1;y+=1)pt.s.box(cx,y,cz,L+.02,.04,th+.03,shade(ST,.86),ry);pt.s.box(cx,y1+.12,cz,L+.3,.3,th+.3,ST2,ry);
+  const nrm=ry+(out>0?0:Math.PI);for(const [yy,ww,hh] of rows){const n=Math.max(1,Math.floor(L/2.7));for(let i=0;i<n;i++){const u=-L/2+(i+.5)*L/n,[wx,wz]=loc(cx,cz,ry,u,out*th/2);wwin(pt,wx,yy,wz,ww,hh,nrm,r()<.62);}}};
+ const R1=[[3.2,.9,2.2],[7.6,.9,2.0]],R2=[[14,1.0,2.4]];
+ wall(sh,-HW,-HW,HW,-HW,TB,WH,.9,R1,-1);wall(sh,-HW,-HW,-HW,0,TB,WH,.9,R1,1);wall(sh,HW,-HW,HW,0,TB,WH,.9,R1,-1);
+ wall(fr,-HW,0,-HW,HW,TB,WH,.9,R1,1);wall(fr,HW,0,HW,HW,TB,WH,.9,R1,-1);wall(fr,-HW,HW,-3,HW,TB,WH,.9,R1,1);wall(fr,3,HW,HW,HW,TB,WH,.9,R1,1);fr.s.box(0,WH-1.6,HW,6,3.4,.9,ST);
+ for(let k=0;k<=10;k++){const a=Math.PI*k/10;fr.s.box(Math.cos(a)*2.9,7.6+Math.sin(a)*1.2,HW+.5,.9,.7,.2,k%2?0xf0e9da:0xc9b79a);}fr.s.box(0,4.0,HW-.2,5.0,6.8,.2,0x3a2a1e);fr.g.box(0,7.0,HW+.3,3.4,.8,.1,0xe9c66a);for(const s of [-1,1])fr.s.box(s*1.25,3.6,HW+.02,2.3,6.0,.12,0x5b3d26);
+ // flat roof of the low tier, the high cube that carries the drum
+ sh.s.box(0,WH+.2,-HW/2,2*HW,.4,HW,0xbfb8a8);fr.s.box(0,WH+.2,HW/2,2*HW,.4,HW,0xbfb8a8);
+ wall(sh,-UW,-UW,UW,-UW,WH+.4,UH,.8,R2,-1);wall(sh,-UW,-UW,-UW,0,WH+.4,UH,.8,R2,1);wall(sh,UW,-UW,UW,0,WH+.4,UH,.8,R2,-1);wall(fr,-UW,0,-UW,UW,WH+.4,UH,.8,R2,1);wall(fr,UW,0,UW,UW,WH+.4,UH,.8,R2,-1);wall(fr,-UW,UW,UW,UW,WH+.4,UH,.8,R2,1);
+ const lead=(k,j)=>k%3===2?shade(LEAD,.9):LEAD;
+ for(const [pt,a0,a1,fin] of [[sh,Math.PI,TAU,0],[fr,0,Math.PI,1]]){pt.s.lathe([[DR,0],[DR,DY-UH]],24,0,UH,0,ST,{a0,a1,open:true});pt.s.lathe(domeP(DR,.92,10),24,0,DY,0,lead,{a0,a1,open:true});pt.s.lathe([[DR+.25,0],[DR+.25,.3]],24,0,DY-.1,0,ST2,{a0,a1,open:true});
+  for(let k=0;k<10;k++){const a=a0+(a1-a0)*(k+.5)/10;pt[r()<.7?'g':'w'].box(Math.cos(a)*(DR+.04),UH+1.3,Math.sin(a)*(DR+.04),.8,1.6,.08,0xffe2a8,Math.PI/2-a);}
+  if(fin){pt.s.lathe([[.14,0],[.3,.4],[.08,.9],[.2,1.3],[.03,1.7],[.02,3.0]],8,0,DY+DR*.92-.1,0,GOLD);}}
+ // semi-domes on the four sides, small domes on the corners, turrets at the drum
+ for(const s of [-1,1]){sh.s.lathe(domeP(6.5,.8),16,s*UW,WH+.4,0,lead,{a0:s>0?-Math.PI/2:Math.PI,a1:s>0?0:Math.PI*1.5,open:true});fr.s.lathe(domeP(6.5,.8),16,s*UW,WH+.4,0,lead,{a0:s>0?0:Math.PI/2,a1:s>0?Math.PI/2:Math.PI,open:true});
+  ct.s.box(s*(UW+3.25),WH+.3,-.02,6.5,.3,.1,CUT);for(let k=0;k<8;k++){const u0=k/8*Math.PI/2,u1=(k+1)/8*Math.PI/2;ct.s.beam([s*(UW+6.5*Math.cos(u0)),WH+.4+5.2*Math.sin(u0),.02],[s*(UW+6.5*Math.cos(u1)),WH+.4+5.2*Math.sin(u1),.02],.16,CUT);}}
+ sh.s.lathe(domeP(6.5,.8),16,0,WH+.4,-UW,lead,{a0:Math.PI,a1:TAU,open:true});fr.s.lathe(domeP(6.5,.8),16,0,WH+.4,UW,lead,{a0:0,a1:Math.PI,open:true});
+ for(const sx of [-1,1])for(const sz of [-1,1]){const pt=sz<0?sh:fr;pt.s.lathe([[3.1,0],[3.1,.8]],12,sx*11.3,WH+.4,sz*11.3,ST);pt.s.lathe(domeP(3.0,.85,6),12,sx*11.3,WH+1.2,sz*11.3,lead,{open:true});pt.s.lathe([[.05,0],[.1,.2],[.02,.9]],6,sx*11.3,WH+3.7,sz*11.3,GOLD);
+  pt.s.lathe([[1.0,0],[1.0,4.2],[1.2,4.4],[.6,5.6],[.04,6.6]],8,sx*UW,UH-1.2,sz*UW,(k,j)=>k>2?LEAD:ST);minaret(pt,sx*(HW+.2),sz*(HW+.2),36,{y0:TB});}
+ // cut outline of drum and main dome
+ for(const s of [-1,1]){ct.s.box(s*(DR-.2),(UH+DY)/2,-.02,.4,DY-UH,.1,CUT);ct.s.box(s*(UW-.4),(WH+UH)/2+.2,-.02,.8,UH-WH-.4,.1,CUT);ct.s.box(s*(HW-.45),(TB+WH)/2,-.02,.9,WH-TB,.1,CUT);
+  for(let k=0;k<10;k++){const u0=k/10*Math.PI/2,u1=(k+1)/10*Math.PI/2;ct.s.beam([s*DR*Math.cos(u0),DY+DR*.92*Math.sin(u0),.02],[s*DR*Math.cos(u1),DY+DR*.92*Math.sin(u1),.02],.18,CUT);}}
+ ct.s.box(0,WH+.2,-.02,2*HW,.4,.1,CUT);ct.s.box(0,TB-.1,-.02,2*HW,.2,.1,CUT);
+ // forecourt: paving, arcade with little domes, ablution fountain, far gate, two outer minarets, cypresses
+ { const g=fr,Z0=HW,Z1=HW+22,CW=HW;g.s.box(0,TB+.05,(Z0+Z1)/2,2*CW,.1,Z1-Z0,0xd9d2c2);for(let i=-4;i<=4;i++)g.s.box(i*3,TB+.11,(Z0+Z1)/2,.06,.01,Z1-Z0,0xb9b1a0);
+  const bay=(x,z,ry)=>{g.s.lathe([[.34,0],[.28,.3],[.26,4.0],[.4,4.3]],8,x,TB+.1,z,0xe9e4d8);g.s.box(x,TB+5.0,z,3.4,1.2,3.4,ST);g.s.lathe(domeP(1.5,.8,5),10,x,TB+5.6,z,lead,{open:true});
+   for(let k=0;k<=6;k++){const a=Math.PI*k/6,[ax,az]=loc(x,z,ry,Math.cos(a)*1.45,1.72);g.s.box(ax,TB+4.3+Math.sin(a)*.45,az,.5,.4,.14,k%2?0xf0e9da:0xc9917a,ry);}};
+  for(let k=0;k<7;k++){const z=Z0+1.7+k*3.1;bay(-CW+1.7,z,Math.PI/2);bay(CW-1.7,z,-Math.PI/2);}for(let k=1;k<8;k++){const x=-CW+1.7+k*3.2;if(Math.abs(x)>2)bay(x,Z1-1.7,Math.PI);}
+  g.s.box(0,TB+3.6,Z1-.4,5.2,7.2,1.4,ST);g.s.box(0,TB+2.8,Z1-.2,2.6,5.4,1.6,0x3a2a1e);g.s.lathe(domeP(2.0,.8,5),10,0,TB+7.2,Z1-.4,lead,{open:true});
+  g.s.lathe([[2.2,0],[2.3,.8],[2.0,.85],[2.0,.4]],6,0,TB+.1,Z0+11,0xe9e4d8,{flat:true});g.w.lathe([[0,.6],[2.0,.6]],6,0,TB+.1,Z0+11,0x6fb0c4,{open:true,flat:true});for(let k=0;k<6;k++){const a=k*TAU/6;g.s.lathe([[.14,0],[.12,2.6]],6,Math.cos(a)*2.1,TB+.9,Z0+11+Math.sin(a)*2.1,0xe9e4d8);}g.s.lathe([[2.7,0],[1.6,.7],[.06,1.7]],6,0,TB+3.5,Z0+11,LEAD,{flat:true});
+  for(const s of [-1,1]){minaret(g,s*(CW+.2),Z1+.2,27,{y0:TB});for(const z of [Z0+6,Z0+16])g.s.lathe([[.14,0],[.16,.5],[.7,1.2],[.5,3.6],[.04,6.2]],7,s*(CW+4.5),TB,z,(k,j)=>k?0x3f6a4a:0x6a4a33,{flat:true});} }
+ // ---------------- interior ----------------
+ const levels=[];
+ { const g=new T.Group(),pt=part(),y=TB;pt.s.box(0,y+.03,-HW/2,2*HW-1.8,.06,HW-.9,0x9a2b2b);for(let i=-9;i<=9;i++)pt.s.box(i*1.45,y+.065,-HW/2,.1,.01,HW-1,0xc9a24a);for(let k=1;k<9;k++)pt.s.box(0,y+.065,-k*1.5,2*HW-2,.01,.06,0x7a1f24);
+  fr.s.box(0,y+.03,HW/2,2*HW-1.8,.06,HW-.9,0x9a2b2b);
+  // inner faces: plaster, blue tile bands, painted dome lining
+  pt.s.box(0,(y+WH)/2,-HW+.5,2*HW-1,WH-y,.06,PL);pt.s.box(0,y+3.4,-HW+.54,2*HW-1,4.6,.05,TILE);for(let i=-10;i<=10;i++)pt.s.box(i*1.35,y+3.4,-HW+.57,.5,4.0,.03,i%2?0x3f86b4:0xe9e4d8);pt.s.box(0,y+5.9,-HW+.58,2*HW-1,.3,.06,0xc9a24a);
+  for(const s of [-1,1]){pt.s.box(s*(HW-.5),(y+WH)/2,-HW/2,.06,WH-y,HW-1,PL);pt.s.box(s*(HW-.54),y+3.4,-HW/2,.05,4.6,HW-1,TILE);pt.s.box(s*(UW-.45),(WH+UH)/2,-UW/2,.06,UH-WH,UW,PL);}
+  pt.s.box(0,(WH+UH)/2,-UW+.45,2*UW-.8,UH-WH,.06,PL);pt.s.lathe([[DR-.1,0],[DR-.1,DY-UH]],24,0,UH,0,PL,{a0:Math.PI,a1:TAU,open:true});
+  pt.s.lathe(domeP(DR-.12,.92,10),24,0,DY,0,(k,j)=>k===0||k===4?TILE:k===9?0xc9a24a:(j%2?0xf3ecdc:0xe9dfc8),{a0:Math.PI,a1:TAU,open:true});for(const s of [-1,1])pt.s.lathe(domeP(6.38,.8),16,s*UW,WH+.4,0,(k,j)=>k===0?TILE:j%2?0xf3ecdc:0xe9dfc8,{a0:s>0?-Math.PI/2:Math.PI,a1:s>0?0:Math.PI*1.5,open:true});
+  pt.s.lathe(domeP(6.38,.8),16,0,WH+.4,-UW,(k,j)=>k===0?TILE:j%2?0xf3ecdc:0xe9dfc8,{a0:Math.PI,a1:TAU,open:true});
+  fr.s.lathe(domeP(DR-.12,.92,10),24,0,DY,0,(k,j)=>k===0||k===4?TILE:k===9?0xc9a24a:(j%2?0xf3ecdc:0xe9dfc8),{a0:0,a1:Math.PI,open:true});fr.s.lathe([[DR-.1,0],[DR-.1,DY-UH]],24,0,UH,0,PL,{a0:0,a1:Math.PI,open:true});fr.s.lathe(domeP(6.38,.8),16,0,WH+.4,UW,(k,j)=>k===0?TILE:j%2?0xf3ecdc:0xe9dfc8,{a0:0,a1:Math.PI,open:true});
+  for(const s of [-1,1]){fr.s.lathe(domeP(6.38,.8),16,s*UW,WH+.4,0,(k,j)=>k===0?TILE:j%2?0xf3ecdc:0xe9dfc8,{a0:s>0?0:Math.PI/2,a1:s>0?Math.PI/2:Math.PI,open:true});fr.s.box(s*(HW-.5),(y+WH)/2,HW/2,.06,WH-y,HW-1,PL);fr.s.box(s*(HW-.54),y+3.4,HW/2,.05,4.6,HW-1,TILE);}fr.s.box(0,WH+.02,HW/2,2*HW-1.8,.05,HW-.9,PL);pt.s.box(0,WH+.02,-HW/2,2*HW-1.8,.05,HW-.9,PL);
+  // the four great piers and the arches they carry
+  for(const [px,pz,P] of [[-UW+.9,-UW+.9,pt],[UW-.9,-UW+.9,pt],[-UW+.9,UW-.9,fr],[UW-.9,UW-.9,fr]]){P.s.lathe([[1.9,0],[1.75,.5],[1.6,.9],[1.6,9.4],[1.9,9.9],[1.9,10.6],[1.5,10.9],[1.5,UH-y]],14,px,y,pz,(k,j)=>k===3?(j%2?0xf3ecdc:0xe6dcc8):0xe9e2d2);P.s.lathe([[1.63,2.2],[1.63,5.6]],14,px,y,pz,(k,j)=>j%2?TILE:0x3f86b4,{open:true});
+   const a=Math.atan2(-pz,-px);P.s.lathe([[0,0],[.95,0]],14,0,0,0,0x1f3a2a,{open:true});const Q=P.s.p,s0=Q.length-14*4*3,cx=px+Math.cos(a)*1.66,cz=pz+Math.sin(a)*1.66,ry=Math.PI/2-a;for(let i=s0;i<Q.length;i+=3){const lx=Q[i],lz=Q[i+2],[wx,wz]=loc(cx,cz,ry,lx,0);Q[i]=wx;Q[i+1]=y+7.6+lz;Q[i+2]=wz;}
+   const [gx,gz]=loc(cx,cz,ry,0,.04);P.s.box(gx,y+7.6,gz,1.0,.14,.03,GOLD,ry);P.s.box(gx,y+7.6,gz,.14,1.0,.03,GOLD,ry);}
+  for(const s of [-1,1])for(let k=0;k<=14;k++){const a=Math.PI/2*k/14;pt.s.box(s*(UW-.9),WH+.6+Math.sin(a)*5.0,-(UW-.9)*Math.cos(a),.7,.7,.95,k%2?0xf0e9da:0xc9917a);}
+  for(let k=0;k<=28;k++){const a=Math.PI*k/28;pt.s.box(Math.cos(a)*(UW-1.6),WH+.6+Math.sin(a)*5.0,-UW+.9,.9,.7,.7,k%2?0xf0e9da:0xc9917a);}
+  // mihrab, minbar, loge
+  pt.s.box(0,y+3.2,-HW+.75,3.4,6.4,.5,0xf0e9da);pt.s.box(0,y+2.6,-HW+.95,1.8,5.0,.3,0x1f3a5a);pt.g.box(0,y+2.4,-HW+1.12,1.2,3.6,.06,0xffe7b0);for(let k=0;k<=8;k++){const a=Math.PI*k/8;pt.s.box(Math.cos(a)*1.0,y+5.1+Math.sin(a)*.8,-HW+1.05,.34,.3,.2,GOLD);}pt.s.box(0,y+6.9,-HW+.9,3.0,.5,.3,TILE);
+  for(let k=0;k<9;k++)pt.s.box(4.6,y+.2+k*.4,-HW+1.4+k*.5,1.3,.4+k*.0,.55,0xe9e2d2);pt.s.box(4.6,y+4.2,-HW+1.2,1.5,.2,1.5,0xe9e2d2);for(const [dx,dz] of [[-.6,-.6],[.6,-.6],[-.6,.6],[.6,.6]])pt.s.box(4.6+dx,y+5.1,-HW+1.2+dz,.1,1.8,.1,0xe9e2d2);pt.s.lathe([[1.0,0],[.6,.9],[.04,2.4]],6,4.6,y+6.0,-HW+1.2,0x2f6f6a,{flat:true});pt.s.lathe([[.04,0],[.09,.15],[.02,.6]],5,4.6,y+8.4,-HW+1.2,GOLD);
+  for(const s of [-1,1])pt.s.box(4.6+s*.7,y+2.3,-HW+3.4,.08,4.2,4.4,0xdcd4c2);
+  pt.s.box(-9.4,y+3.0,-HW+2.6,4.2,.3,4.2,0xe9e2d2);for(const [dx,dz] of [[-1.8,-1.8],[1.8,-1.8],[-1.8,1.8],[1.8,1.8]])pt.s.lathe([[.22,0],[.18,2.85]],8,-9.4+dx,y,-HW+2.6+dz,0xc9917a);for(let k=0;k<12;k++)pt.s.box(-11.2+k*.33,y+3.6,-HW+4.6,.06,.9,.06,GOLD);pt.s.box(-9.4,y+4.05,-HW+4.6,4.2,.08,.1,GOLD);
+  // chandelier rings, lamps on chains
+  const ring=(cx,cz,R,n,yy)=>{pt.s.lathe([[R,0],[R+.07,.06],[R,.12]],28,cx,yy,cz,0x2a2a2e,{open:true});for(let k=0;k<n;k++){const a=k*TAU/n;pt.g.lathe([[.05,0],[.14,.12],[.1,.3]],6,cx+Math.cos(a)*R,yy-.32,cz+Math.sin(a)*R,0xffe9b8);}for(let k=0;k<4;k++){const a=k*TAU/4+.4;pt.s.beam([cx+Math.cos(a)*R,yy+.1,cz+Math.sin(a)*R],[cx,yy+9,cz],.03,0x2a2a2e);}};
+  ring(0,-4.2,3.6,26,y+3.6);ring(0,-4.2,2.0,14,y+4.3);ring(-10.4,-5,1.3,10,y+3.4);ring(10.4,-5,1.3,10,y+3.4);
+  for(const [x,z] of [[-3,-2.4],[2.6,-3.2],[-1,-6.4],[5,-7],[-6,-8.6]]){pt.s.lathe([[.2,0],[.24,.5],[.18,.62]],7,x,y+.06,z,[0x2f4b63,0x6b4e38,0x3f6247,0x7a2e2a,0x40546a][Math.abs(Math.round(x*3))%5]);pt.s.lathe([[.02,0],[.13,.08],[.14,.2],[.03,.28]],6,x,y+.66,z,0xe6c2a4);}
+  flush(g,pt,'mosque hall');levels.push({group:g,name:'1F 禮拜大殿',y,h:5,rooms:[{name:'大殿中央・主圓頂下',pos:[0,y+1.7,-1.5],look:[0,y+6,-12]},{name:'米哈拉布與講壇',pos:[2,y+1.7,-7],look:[1,y+2.4,-14]}]}); }
+ { const g=new T.Group(),pt=part(),y=6.2;for(const s of [-1,1]){pt.s.box(s*11.4,y-.15,-HW/2-.2,4.6,.3,HW-1.4,0xb89a78);for(let k=0;k<5;k++){pt.s.lathe([[.24,0],[.2,.3],[.18,y-TB-.5],[.3,y-TB-.3]],8,s*9.3,TB,-1.4-k*2.9,0xc9917a);if(k<4)for(let j=0;j<=6;j++){const a=Math.PI*j/6;pt.s.box(s*9.3,y-1.3+Math.sin(a)*.8,-2.85-k*2.9+Math.cos(a)*1.3,.3,.3,.36,j%2?0xf0e9da:0xc9917a);}}
+   for(let k=0;k<34;k++)pt.s.box(s*9.2,y+.45,-1.2-k*.36,.06,.9,.06,0xe9e2d2);pt.s.box(s*9.2,y+.92,-HW/2-.2,.12,.1,HW-1.6,0xe9e2d2);F.rug(pt,s*11.4,y+.02,-7,2.6,8.4,0x2f4a78);
+   for(let k=0;k<12;k++)pt.s.box(s*(12.6-k*.0),TB+.22+k*.46,-HW+1.0+k*.0+ (k*.42),1.4,.46,.44,0xd9d2c2);}
+  flush(g,pt,'mosque gallery');levels.push({group:g,name:'2F 側廊看台',y,h:4.4,rooms:[{name:'東側看台',pos:[11.2,y+1.7,-3],look:[0,y+2,-6]},{name:'西側看台',pos:[-11.2,y+1.7,-3],look:[0,y+2,-6]}]}); }
+ flush(shellG,sh,'mosque shell');flush(frontG,fr,'mosque front');flush(cutG,ct,'mosque cut edge');root.add(shellG,frontG,cutG);levels.forEach(l=>root.add(l.group));
+ return {id:'istanbul',title:'伊斯坦堡・藍色清真寺（單棟外觀與剖面）',root,exterior:frontG,shell:shellG,cutOnly:cutG,levels,anims:[],bounds:{x:12.5,z:12.5,z0:-12.5},radius:44,height:36,az:.34,extCenter:[0,10],cutR:27,whole:true};
+}
+
+/* =====================================================================================
+   4 · 敦煌莫高窟九層樓：倚崖而建的九層木構樓閣，樓內是通高的倚坐大佛；兩側崖面有洞窟與棧道相連
+       剖面拿掉正面木構，看得到大佛、三層迴廊、樓梯、供桌，以及崖壁
+   ===================================================================================== */
+function dunhuang(){
+ const r=rng(96096),root=new T.Group(),shellG=new T.Group(),frontG=new T.Group(),cutG=new T.Group(),sh=part(),fr=part(),ct=part();
+ const RED=0x8e2f24,RED2=0x7a261e,TILEC=0x6f7f72,CREAM=0xe9dcc0,WOOD=0x6b4a33,Y0=1.2,TH=3.5,ZB=-4,N=9;
+ const hw=i=>9-i*.72,zf=i=>6-i*.55,ty=i=>Y0+i*TH,ns=(x,y)=>Math.sin(x*.31+y*.17)*.6+Math.sin(x*.83-y*.41)*.3+Math.sin(x*1.9+y*1.3)*.12,cz=(x,y)=>ZB-.25-y*.05-.9*(ns(x,y)*.5+.5);
+ // ground, terrace, cliff
+ sh.s.box(0,.05,6,90,.1,60,0xd9c08f);sh.s.box(0,Y0/2,5,26,Y0,22,0xcdb98f);for(let k=0;k<5;k++)sh.s.box(0,Y0-.12-k*.24,16.2+k*.5,9,.24,.5,0xbfa97c);
+ sh.s.surf((u,v)=>{const x=-36+u*72,y=v*46;return [x,y,cz(x,y)];},48,30,(u,v,p)=>{const k=Math.floor(p[1]/2.3+ns(p[0]*.6,p[1])*.9);return [0xc9a66f,0xbf9a62,0xd4b27c,0xc4a06a,0xb89058][((k%5)+5)%5];});
+ sh.s.surf((u,v)=>{const x=-36+u*72;return [x,46+v*2,cz(x,46)-v*22];},20,4,0xcbb27e);
+ // one skirt of tiled eave on a wall line; corners sweep upward
+ const eave=(pt,i,side)=>{const y=ty(i)+TH-.05,h=hw(i),z1=zf(i),out=1.9,drop=.8,st=.5;
+  if(side===0){const W=h+out;for(let u=-W;u<W-.01;u+=st){const a=u,b=Math.min(W,u+st),up=q=>.95*Math.pow(Math.abs(q)/W,4),ci=q=>Math.max(-h,Math.min(h,q)),col=Math.round(u/st)%2?TILEC:shade(TILEC,.84);
+    pt.s.q([ci(a),y,z1+.1],[ci(b),y,z1+.1],[b,y-drop+up(b),z1+out],[a,y-drop+up(a),z1+out],col);}
+   pt.s.box(0,y-drop-.02,z1+out-.05,2*W*.86,.1,.12,0x4a5a4f);}
+  else{const L0=ZB,L1=z1+out;for(let w=L0;w<L1-.01;w+=st){const a=w,b=Math.min(L1,w+st),up=q=>.95*Math.pow(Math.max(0,(q-L0)/(L1-L0)),5),ci=q=>Math.min(z1,q),col=Math.round(w/st)%2?TILEC:shade(TILEC,.84);
+    pt.s.q([side*h,y,ci(b)],[side*h,y,ci(a)],[side*(h+out),y-drop+up(a),a],[side*(h+out),y-drop+up(b),b],col);}}};
+ for(let i=0;i<N;i++){const y=ty(i),h=hw(i),z1=zf(i);
+  for(const s of [-1,1]){sh.s.box(s*(h-.15),y+TH/2,(ZB+z1)/2,.3,TH,z1-ZB,RED);sh.s.box(s*(h+.02),y+2.75,(ZB+z1)/2,.1,.3,z1-ZB,0x2f6f6a);for(let k=0;k<(z1-ZB)/1.1;k++)sh.s.box(s*(h+.06),y+2.5,ZB+.6+k*1.1,.16,.3,.3,k%2?0x2f6f9a:0xc9a24a);
+   if(i<N-1)for(const zz of [ZB+2.2,z1-1.6]){if(zz<ZB+1)continue;sh.s.box(s*(h+.03),y+1.5,zz,.08,1.5,1.3,CREAM);for(let k=-1;k<=1;k++){sh.s.box(s*(h+.08),y+1.5,zz+k*.4,.05,1.5,.05,RED2);sh.s.box(s*(h+.08),y+1.5+k*.45,zz,.05,.05,1.3,RED2);}}
+   eave(sh,i,s);ct.s.box(s*(h-.15),y+TH/2,z1-.02,.34,TH,.12,CUT);}
+  // street front: plinth beam, columns, lattice bays, bracket band
+  fr.s.box(0,y+TH/2,z1-.15,2*h,TH,.3,RED);fr.s.box(0,y+.15,z1+.06,2*h+.3,.3,.3,RED2);fr.s.box(0,y+2.75,z1+.08,2*h+.2,.3,.16,0x2f6f6a);for(let k=0;k<2*h/.7;k++)fr.s.box(-h+.35+k*.7,y+2.5,z1+.16,.3,.3,.2,k%2?0x2f6f9a:0xc9a24a);
+  const nb=Math.max(2,Math.round(2*h/2.3));for(let k=0;k<=nb;k++)fr.s.lathe([[.24,0],[.2,.2],[.19,2.6],[.26,2.75]],8,-h+.1+k*(2*h-.2)/nb,y+.1,z1+.12,RED2);
+  for(let k=0;k<nb;k++){const u=-h+.1+(k+.5)*(2*h-.2)/nb,w=(2*h-.2)/nb-.6;if(i===0&&k===Math.floor(nb/2)){fr.s.box(u,y+1.3,z1+.04,w,2.4,.1,0x3a1a14);fr.g.box(u,y+1.2,z1+.1,w-.4,2.1,.05,0xffd9a0);continue;}
+   fr.s.box(u,y+1.45,z1+.03,w,1.7,.08,CREAM);for(let q=1;q<5;q++)fr.s.box(u-w/2+q*w/5,y+1.45,z1+.08,.05,1.7,.04,RED2);for(const q of [-.5,0,.5])fr.s.box(u,y+1.45+q,z1+.08,w,.05,.04,RED2);fr.s.box(u,y+.45,z1+.03,w,.3,.1,RED2);}
+  eave(fr,i,0);}
+ // top: pyramidal tiled roof with bronze finial
+ { const y=ty(N-1)+TH,h=hw(N-1)+1.2,zc0=(ZB+zf(N-1))/2,d=(zf(N-1)-ZB)/2+1.2;sh.s.lathe([[1.42,-.5],[1.0,.5],[.62,1.9],[.3,3.6],[.07,5.4]],4,0,y,zc0,(k,j)=>k%2?TILEC:shade(TILEC,.84),{rot:Math.PI/4,sx:h,sz:d,flat:true});
+  sh.s.lathe([[.5,0],[.6,.3],[.25,.5],[.45,.9],[.2,1.2],[.34,1.6],[.08,2.0],[.04,3.2]],8,0,y+5.3,zc0,0xb88a3c); }
+ // cave mouths, plank walkways with rails, stair flights on the cliff face
+ const rows=[6.2,13.2,20.2];rows.forEach((y,ri)=>{for(const s of [-1,1]){const x0=s*(hw(Math.round((y-Y0)/TH))+.4),x1=s*30;
+   sh.s.box((x0+x1)/2,y-.1,ZB+.75-y*.05,Math.abs(x1-x0),.16,1.5,WOOD);for(let k=0;k<=Math.abs(x1-x0)/2.2;k++){const x=x0+s*k*2.2,zc0=ZB+.75-y*.05;sh.s.beam([x,y-.15,zc0+.6],[x,y-2.0,zc0-.8],.14,0x5b3d26);sh.s.box(x,y+.5,zc0+.7,.08,1.1,.08,0x5b3d26);}
+   sh.s.box((x0+x1)/2,y+1.02,ZB+1.45-y*.05,Math.abs(x1-x0),.08,.1,0x5b3d26);sh.s.box((x0+x1)/2,y+.55,ZB+1.45-y*.05,Math.abs(x1-x0),.05,.06,0x5b3d26);
+   for(let k=0;k<4;k++){const x=s*(13.5+k*4.4+(ri%2)*1.6),zz=cz(x,y+1.2)+.2;sh.s.box(x,y+1.35,zz,2.1,2.9,.3,CREAM);sh.s.box(x,y+1.15,zz+.12,1.3,2.3,.3,0x1c1410);sh.s.box(x,y+2.5,zz+.2,1.7,.2,.2,RED2);if((k+ri)%2)sh.g.box(x,y+.9,zz+.3,.5,.9,.05,0xffc98a);}
+   if(ri<2){const up=rows[ri+1]-y,n=Math.round(up/.25),xa=s*(22+ri*3),zc0=ZB+.75-y*.05;for(let k=0;k<n;k++)sh.s.box(xa+s*k*.3,y+(k+.5)*up/n,zc0-(k/n)*(up*.05),.32,up/n+.02,1.3,k%2?0x7a5a3d:WOOD);sh.s.beam([xa,y+1,zc0+.7],[xa+s*n*.3,y+up+1,zc0+.7-up*.05],.07,0x5b3d26);}}});
+ // forecourt: incense burner, flag poles, poplars
+ sh.s.lathe([[.9,0],[.6,.3],[.5,.9],[1.1,1.2],[1.2,1.9],[.9,2.0]],10,0,Y0,11,0x4a4f55);sh.s.lathe([[1.3,0],[.9,.5],[.1,1.3]],6,0,Y0+2.6,11,0x3a3f45,{flat:true});for(const [dx,dz] of [[-.8,-.8],[.8,-.8],[-.8,.8],[.8,.8]])sh.s.box(dx,Y0+2.3,11+dz,.1,.7,.1,0x3a3f45);
+ for(const s of [-1,1]){sh.s.lathe([[.12,0],[.08,9]],6,s*11.5,Y0,13,0x7a261e);for(let k=0;k<5;k++)sh.s.q([s*11.5,Y0+8.6-k*1.2,13],[s*11.5+1.0,Y0+8.5-k*1.2,13],[s*11.5+1.0,Y0+7.7-k*1.2,13],[s*11.5,Y0+7.6-k*1.2,13],[0x2f6f9a,0xf2efe6,0xb3262d,0x3f8a4a,0xe0a63c][k]);
+  for(const [x,z,h] of [[17,15,11],[21,11,9.5],[25,16,12],[30,12,10]]){sh.s.lathe([[.2,0],[.12,h*.4]],6,s*x,.1,z,0x8a7a5a,{flat:true});sh.s.lathe([[.3,h*.2],[1.3,h*.45],[1.0,h*.75],[.1,h]],7,s*x,.1,z,(k,j)=>j%2?0x6f9a4f:0x5f8a45,{flat:true});}}
+ // ---------------- interior ----------------
+ const levels=[],SK=0xe0c59a,ROBE=0xa5523a,HAIR=0x23283f;
+ { const g=new T.Group(),pt=part();
+  // back wall plaster with halo and mandorla, floor
+  pt.s.box(0,Y0+.03,(ZB+zf(0))/2,2*hw(0)-.6,.06,zf(0)-ZB,0x8a6a4a);for(let i=0;i<N;i++){const y=ty(i),h=hw(i);pt.s.box(0,y+TH/2,ZB+.12,2*h-.6,TH,.1,i>5?0x2f4a6a:0xdcc9a0);
+   for(const s of [-1,1]){pt.s.box(s*(h-.33),y+TH/2,(ZB+zf(i))/2,.06,TH,zf(i)-ZB-.3,0xd9c59a);for(let a=0;a<Math.floor((zf(i)-ZB-1)/1.0);a++)for(let b=0;b<3;b++){pt.s.box(s*(h-.38),y+.75+b*.95,ZB+.9+a*1.0,.04,.7,.62,[0x2f6f6a,0xb3523a,0x2f4a78,0xc9a24a][(a+b+i)%4]);pt.s.box(s*(h-.41),y+.72+b*.95,ZB+.9+a*1.0,.03,.4,.3,0xe6cfa0);}}}
+  pt.s.disc(0,22.6,ZB+.2,6.4,0x2f6f6a,24);pt.s.disc(0,22.6,ZB+.24,5.4,0xb3523a,24);pt.s.disc(0,22.6,ZB+.28,4.5,0xc9a24a,24);pt.s.disc(0,22.6,ZB+.32,3.7,0x2f4a78,24);pt.g.disc(0,22.6,ZB+.36,3.0,0xf3d9a0,24);
+  for(let k=0;k<16;k++){const a=k*TAU/16;pt.s.box(Math.cos(a)*4.95,22.6+Math.sin(a)*4.95,ZB+.3,.5,.5,.06,0xf2efe6,0);}
+  pt.s.lathe([[7.6,0],[8.0,7],[7.0,12],[5.4,15.5]],20,0,Y0+3,ZB+.16,(k,j)=>[0x3f8a6a,0xc9a24a,0xb3523a][(j+k)%3],{a0:0,a1:Math.PI,sz:.02,open:true});
+  // throne, feet on lotus, legs, lap
+  pt.s.box(0,Y0+1.5,-.6,10,3.0,5.6,0xb9a070);pt.s.box(0,Y0+3.1,-.6,10.6,.3,6.0,0xc9a24a);for(let k=0;k<12;k++)pt.s.box(-4.6+k*.84,Y0+1.5,2.24,.5,2.2,.06,k%2?0x2f6f6a:0xb3523a);
+  for(const s of [-1,1]){pt.s.lathe([[1.5,0],[1.7,.3],[1.3,.6]],10,s*1.9,Y0,3.6,0xd9a0a8);pt.s.box(s*1.9,Y0+.95,3.7,1.5,.7,2.6,SK);pt.s.lathe([[1.05,0],[1.25,3.0],[1.5,6.4]],10,s*1.9,Y0+1.2,2.9,ROBE,{sz:.9});pt.s.lathe([[1.7,0],[1.9,1.2],[1.5,2.2]],10,s*2.0,Y0+7.0,1.6,ROBE,{sz:1.7});}
+  pt.s.box(0,Y0+8.2,.2,7.8,2.4,5.0,ROBE);for(let k=0;k<7;k++)pt.s.box(0,Y0+4+k*.55,3.86-k*.02,2.2-k*.2,.1,.1,shade(ROBE,.8));
+  // torso, chest, shoulders, arms, hands
+  pt.s.lathe([[3.3,0],[3.5,2.6],[3.8,6.2],[3.5,8.4],[1.5,9.8]],16,0,Y0+9.2,-.9,ROBE,{sz:.72});pt.s.lathe([[1.7,0],[2.3,1.2],[2.5,3.2],[1.2,4.4]],12,0,Y0+14.2,.9,SK,{sz:.5,a0:0,a1:Math.PI,open:true});
+  for(let k=0;k<6;k++)pt.s.beam([-2.6+k*.2,Y0+17.6-k*.9,1.75-k*.05],[2.9-k*.5,Y0+12.4-k*.2,2.0],.1,shade(ROBE,.82));
+  pt.s.beam([-3.6,Y0+17.4,-.6],[-4.2,Y0+12.2,.8],1.9,ROBE);pt.s.beam([-4.2,Y0+12.2,.8],[-2.4,Y0+10.0,3.4],1.4,ROBE);pt.s.box(-2.2,Y0+9.9,3.9,1.7,.5,1.5,SK);for(let k=0;k<4;k++)pt.s.box(-2.8+k*.4,Y0+9.75,4.8,.3,.3,.9,SK);
+  pt.s.beam([3.6,Y0+17.4,-.6],[4.3,Y0+12.8,1.2],1.9,ROBE);pt.s.beam([4.3,Y0+12.8,1.2],[3.1,Y0+15.4,3.6],1.3,ROBE);pt.s.box(3.0,Y0+16.6,3.9,1.5,2.0,.5,SK);for(let k=0;k<4;k++)pt.s.box(2.4+k*.4,Y0+18.2,3.9,.3,1.3,.4,SK);
+  // neck, head, hair, features
+  pt.s.lathe([[1.3,0],[1.15,1.0]],12,0,Y0+18.6,-.5,SK);const HY=Y0+21.9,sp=[];for(let k=0;k<=10;k++){const u=-Math.PI/2+Math.PI*k/10;sp.push([Math.max(.05,2.15*Math.cos(u)),2.5*Math.sin(u)]);}pt.s.lathe(sp,18,0,HY,-.3,SK,{sz:.95});
+  pt.s.lathe(sp.slice(7).map(([a,b])=>[a*1.07,b*1.05]),18,0,HY+.05,-.45,HAIR,{sz:.98});pt.s.lathe([[.9,0],[.95,.5],[.5,1.0],[.05,1.2]],12,0,HY+2.4,-.5,HAIR);for(const s of [-1,1]){pt.s.box(s*2.12,HY-.3,-.4,.24,1.9,.7,SK);pt.s.box(s*.85,HY+.35,1.72,.8,.1,.08,0x1c1410);pt.s.box(s*.85,HY+.8,1.6,.95,.07,.08,0x2a2018);}
+  pt.s.box(0,HY-.25,1.95,.42,.9,.36,shade(SK,.94));pt.s.box(0,HY-1.05,1.68,.95,.16,.1,0xb3523a);pt.g.disc(0,HY+1.05,1.72,.14,0xffe9a8,8);
+  // altar, offerings, lamps, cushions, pilgrims
+  F.table(pt,0,Y0,4.9,4.2,1.0,0,0x7a261e,.95);pt.s.box(0,Y0+.5,5.42,4.2,.9,.04,0xc9a24a);pt.s.lathe([[.3,0],[.2,.15],[.36,.4],[.3,.55]],8,0,Y0+.98,4.9,0x8a6a3a);for(const s of [-1,1]){pt.s.lathe([[.14,0],[.05,.1],[.05,.5]],6,s*1.2,Y0+.98,4.9,GOLD);pt.g.box(s*1.2,Y0+1.6,4.9,.07,.2,.07,0xffd27a);for(let k=0;k<3;k++)pt.s.lathe([[.14,0],[.16,.1],[.02,.22]],6,s*(.5+.0*k),Y0+.98,4.6+k*.3,[0xe0a63c,0xc33b3b,0xf2efe6][k]);
+   pt.s.lathe([[.3,0],[.08,.2],[.07,2.6]],6,s*6.2,Y0,4.6,0x4a3326);pt.g.lathe([[.3,2.6],[.36,2.9],[.2,3.3]],8,s*6.2,Y0,4.6,0xffd27a);}
+  for(const [x,z,c] of [[-1.4,6.2,0x7a2e2a],[0,6.3,0x2f4b63],[1.4,6.2,0xc9a24a]]){pt.s.lathe([[.4,0],[.42,.12],[.3,.18]],8,x,Y0+.06,z-.6+0*r(),0xb3523a);}
+  flush(g,pt,'dunhuang hall');levels.push({group:g,name:'1F 大佛殿（蓮座前）',y:Y0,h:TH,rooms:[{name:'大佛蓮座前',pos:[0,Y0+1.7,5.4],look:[0,Y0+14,-3]},{name:'供桌與長明燈',pos:[4.6,Y0+1.7,5.0],look:[0,Y0+4,3]}]}); }
+ for(const [lv,nm,rm] of [[3,'4F 迴廊（佛手高度）','佛手迴廊'],[6,'7F 迴廊（佛首高度）','佛首迴廊']]){const g=new T.Group(),pt=part(),y=ty(lv),h=hw(lv),z1=zf(lv),up=ty(lv+3)-y;
+  for(const s of [-1,1]){pt.s.box(s*(h-1.2),y-.1,(ZB+z1)/2,1.9,.2,z1-ZB-.2,0x8a6a4a);for(let k=0;k<(z1-ZB)/.5;k++)pt.s.box(s*(h-2.1),y+.5,ZB+.3+k*.5,.07,1.0,.07,RED2);pt.s.box(s*(h-2.1),y+1.02,(ZB+z1)/2,.1,.1,z1-ZB-.2,RED2);
+   for(let k=0;k<3;k++)pt.s.beam([s*(h-.4),y-.2,ZB+1.2+k*2.6],[s*(h-2.0),y-.2,ZB+1.2+k*2.6],.2,0x5b3d26);
+   if(lv<6){const n=Math.round(up/.26),z0=z1-.6;for(let k=0;k<n;k++)pt.s.box(s*(h-.95),y+(k+.5)*up/n,z0-k*(z0-ZB-1.2)/n,1.2,up/n+.02,.34,k%2?0x9a7650:0x8a6a4a);pt.s.beam([s*(h-1.6),y+1,z0],[s*(h-1.6),y+up+1,ZB+1.2],.07,RED2);}
+   else{F.table(pt,s*(h-1.2),y,1.2,.9,.5,0,0x7a261e,.7);pt.g.box(s*(h-1.2),y+.9,1.2,.08,.2,.08,0xffd27a);}}
+  fr.s.box(0,y-.1,z1-.9,2*h-4.2,.2,1.6,0x8a6a4a);for(let k=0;k<(2*h-4.2)/.5;k++)fr.s.box(-h+2.1+k*.5,y+.5,z1-1.65,.07,1.0,.07,RED2);fr.s.box(0,y+1.02,z1-1.65,2*h-4.2,.1,.1,RED2);
+  flush(g,pt,'dunhuang gallery '+lv);levels.push({group:g,name:nm,y,h:TH,rooms:[{name:rm+'・東',pos:[h-1.2,y+1.7,z1-.9],look:[0,y+4.5,-2.5]},{name:rm+'・西',pos:[-h+1.2,y+1.7,z1-.9],look:[0,y+4.5,-2.5]}]});}
+ flush(shellG,sh,'dunhuang shell');flush(frontG,fr,'dunhuang front');flush(cutG,ct,'dunhuang cut edge');root.add(shellG,frontG,cutG);levels.forEach(l=>root.add(l.group));
+ return {id:'dunhuang',title:'敦煌・莫高窟九層樓（倚崖樓閣外觀與剖面）',root,exterior:frontG,shell:shellG,cutOnly:cutG,levels,anims:[],bounds:{x:7.4,z:5.4,z0:-3.2},radius:44,height:40,az:.26,cutR:36,whole:true};
+}
+
+/* =====================================================================================
+   5 · 聖托里尼崖邊小教堂：白牆藍頂教堂＋三鐘鐘牆、崖洞屋、白風車。剖面拿掉面海的牆，
+       看得到教堂主殿與聖幛、崖洞屋的拱頂起居與臥龕、風車的磨石與木齒輪
+   ===================================================================================== */
+function santorini(){
+ const r=rng(3615),root=new T.Group(),shellG=new T.Group(),frontG=new T.Group(),cutG=new T.Group(),sh=part(),fr=part(),ct=part();
+ const WH=0xf6f4ee,WH2=0xe9e6dd,BLUE=0x2a5fb0,BL2=0x3f7fd0,ROCK=0x7a5646,T1=3.4,T2=7.0;
+ const vaultX=(pt,x0,x1,y,zc,rr,col,a0,a1,n=8)=>{for(let k=0;k<n;k++){const a=a0+(a1-a0)*k/n,b=a0+(a1-a0)*(k+1)/n;pt.s.q([x0,y+Math.sin(a)*rr,zc+Math.cos(a)*rr],[x1,y+Math.sin(a)*rr,zc+Math.cos(a)*rr],[x1,y+Math.sin(b)*rr,zc+Math.cos(b)*rr],[x0,y+Math.sin(b)*rr,zc+Math.cos(b)*rr],col);}};
+ // volcanic cliff in three terraces, whitewashed parapets, the sea below
+ sh.s.box(0,-.6,8,60,1.2,60,0x3f78a8);sh.s.surf((u,v)=>{const x=-15+u*30,z=11-v*5.5,n=Math.sin(x*.9)*.3+Math.sin(x*2.3+v*4)*.14;return [x,-.1+v*.2*0+ (1-v)*-.0+ (v<.02?-1.2:0)+n*.2,z+n];},30,6,(u,v)=>v<.3?0x5e4236:ROCK);
+ sh.s.box(0,-.5,2.6,30,1.2,12,ROCK);sh.s.box(0,T1/2,-2.4,30,T1,7.6,ROCK);sh.s.box(0,T2/2,-8.2,30,T2,5.6,shade(ROCK,.92));sh.s.box(0,T2+2,-12.5,30,T2+4,3.4,shade(ROCK,.85));
+ sh.s.box(0,.12,5.6,29,.14,5.6,WH2);sh.s.box(0,T1+.06,-2.6,29,.12,6.9,WH2);sh.s.box(0,T2+.06,-8.2,29,.12,5.4,WH2);
+ for(const [x0,x1,y,z] of [[-14.5,-4.2,.2,8.3],[3.2,14.5,.2,8.3],[-14.5,-7.2,T1+.1,.75],[5.6,14.5,T1+.1,.75],[-14.5,-1,T2+.1,-5.6],[5.4,14.5,T2+.1,-5.6]]){sh.s.box((x0+x1)/2,y+.4,z,x1-x0,.8,.34,WH);sh.s.box((x0+x1)/2,y+.84,z,x1-x0+.1,.1,.44,WH2);}
+ // stairs between the terraces
+ for(let k=0;k<10;k++)sh.s.box(11.8,.2+(k+.5)*(T1-.2)/10,5.2-k*.42,2.0,(T1-.2)/10+.02,.44,k%2?WH:WH2);for(let k=0;k<10;k++)sh.s.box(-11.6,T1+.1+(k+.5)*(T2-T1)/10,.2-k*.5,2.0,(T2-T1)/10+.02,.52,k%2?WH:WH2);
+ // ---- cave house on the low terrace: vaulted room dug into the cliff, white front with blue door
+ const CX=-.5,CW=7.4,CD=5.6,CZ1=2.9;sh.s.box(CX,1.75,CZ1-CD-.2,CW+.8,3.3,.4,WH);for(const s of [-1,1])sh.s.box(CX+s*(CW/2+.2),1.75,CZ1-CD/2,.4,3.3,CD,WH);sh.s.box(CX,3.22,CZ1-CD/2,CW+.8,.36,CD+.4,WH);
+ fr.s.box(CX,1.75,CZ1,CW+.8,3.3,.36,WH);fr.s.box(CX-1.9,1.25,CZ1+.2,1.1,2.3,.1,BLUE);fr.s.box(CX-1.9,2.6,CZ1+.2,1.1,.4,.08,BL2);for(const x of [CX+.6,CX+2.5]){fr.s.box(x,1.75,CZ1+.2,1.0,1.2,.08,WH2);fr.w.box(x,1.75,CZ1+.22,.8,1.0,.05,0x6f9ab8);for(const q of [-1,1])fr.s.box(x+q*.72,1.75,CZ1+.24,.4,1.2,.05,BLUE);}
+ for(const s of [-1,1])ct.s.box(CX+s*(CW/2+.2),1.75,CZ1+.02,.4,3.3,.1,CUT);ct.s.box(CX,3.22,CZ1+.02,CW+.8,.36,.1,CUT);ct.s.box(CX,.1,CZ1+.02,CW+.8,.16,.1,CUT);
+ // ---- church on the middle terrace: nave with barrel vault, drum and blue dome, apse, belfry wall
+ const NX0=-6.4,NX1=4.6,NZ=-2.9,NR=2.6,NH=3.0,NY=T1+.12;                                  // nave axis along x, half-width NR
+ sh.s.box((NX0+NX1)/2,NY+NH/2,NZ-NR+.2,NX1-NX0,NH,.4,WH);sh.s.box(NX0+.2,NY+NH/2,NZ,.4,NH,2*NR,WH);sh.s.box(NX1-.2,NY+NH/2,NZ-NR/2,.4,NH,NR,WH);fr.s.box(NX1-.2,NY+NH/2,NZ+NR/2,.4,NH,NR,WH);
+ vaultX(sh,NX0,NX1,NY+NH,NZ,NR,WH,Math.PI/2,Math.PI);vaultX(fr,NX0,NX1,NY+NH,NZ,NR,WH,0,Math.PI/2);for(const x of [NX0,NX1]){sh.s.lathe([[0,0],[NR,0]],10,0,0,0,WH,{open:true});const Q=sh.s.p,s0=Q.length-10*4*3;for(let i=s0;i<Q.length;i+=3){const lx=Q[i],lz=Q[i+2];Q[i]=x;Q[i+1]=NY+NH+Math.abs(lz);Q[i+2]=NZ+lx;}}
+ fr.s.box((NX0+NX1)/2,NY+NH/2,NZ+NR-.2,NX1-NX0,NH,.4,WH);for(const x of [-3.6,-.8,2]){fr.s.box(x,NY+1.7,NZ+NR+.02,.9,1.5,.08,WH2);fr.w.box(x,NY+1.7,NZ+NR+.05,.6,1.2,.05,0x5f8fc0);fr.s.box(x,NY+2.5,NZ+NR+.04,.6,.3,.06,BLUE);}fr.s.box(-5.2,NY+1.15,NZ+NR+.04,1.0,2.2,.1,BLUE);
+ const DX=2.2,DRm=2.25,DY0=NY+NH+1.5;for(const [pt,a0,a1,top] of [[sh,Math.PI,TAU,0],[fr,0,Math.PI,1]]){pt.s.lathe([[DRm,0],[DRm,1.5]],16,DX,DY0,NZ,WH,{a0,a1,open:true});pt.s.lathe(domeP(DRm+.05,1.0,8),16,DX,DY0+1.5,NZ,(k,j)=>k%4===3?BL2:BLUE,{a0,a1,open:true});pt.s.lathe([[DRm+.18,1.4],[DRm+.18,1.56]],16,DX,DY0,NZ,WH2,{a0,a1,open:true});
+  for(let k=0;k<4;k++){const a=a0+(a1-a0)*(k+.5)/4;pt.w.box(DX+Math.cos(a)*(DRm+.03),DY0+.8,NZ+Math.sin(a)*(DRm+.03),.4,.8,.06,0x5f8fc0,Math.PI/2-a);}
+  if(top){pt.s.box(DX,DY0+4.2,NZ,.07,.9,.07,WH);pt.s.box(DX,DY0+4.4,NZ,.5,.07,.07,WH);}}
+ sh.s.lathe([[1.5,0],[1.5,NH-.4]],10,NX1,NY,NZ,WH,{a0:-Math.PI/2,a1:0,open:true});fr.s.lathe([[1.5,0],[1.5,NH-.4]],10,NX1,NY,NZ,WH,{a0:0,a1:Math.PI/2,open:true});sh.s.lathe(domeP(1.5,1,5),10,NX1,NY+NH-.4,NZ,WH,{a0:-Math.PI/2,a1:0,open:true});fr.s.lathe(domeP(1.5,1,5),10,NX1,NY+NH-.4,NZ,WH,{a0:0,a1:Math.PI/2,open:true});
+ { const bx=NX0-.2,bz=NZ;sh.s.box(bx,NY+3.6,bz,.6,7.2,4.4,WH);for(const [y,zz] of [[NY+5.0,-1.1],[NY+5.0,1.1],[NY+6.6,0]]){sh.s.box(bx,y,bz+zz,.66,1.25,.95,0x8fb0c8);sh.s.lathe([[.3,0],[.34,.1],[.2,.5],[.1,.6]],8,bx,y-.4,bz+zz,0xb88a3c);}sh.s.box(bx,NY+7.5,bz,.6,.9,1.7,WH);sh.s.box(bx,NY+8.4,bz,.08,.9,.08,WH);sh.s.box(bx,NY+8.6,bz,.08,.08,.5,WH); }
+ for(const s of [NX0,NX1])ct.s.box(s+(s<0?.2:-.2),NY+NH/2,NZ+NR,.4,NH,.1,CUT);ct.s.box((NX0+NX1)/2,NY-.06,NZ+NR,NX1-NX0,.14,.1,CUT);
+ // ---- windmill and a cube house on the upper terrace
+ const MX=8.6,MZ=-8.4,MR=2.3,MY=T2+.12,MH=5.6;for(const [pt,a0,a1] of [[sh,Math.PI,TAU],[fr,0,Math.PI]]){pt.s.lathe([[MR+.25,0],[MR,1.2],[MR-.25,MH]],16,MX,MY,MZ,WH,{a0,a1,open:true});pt.s.lathe([[MR+.2,0],[MR*.55,1.6],[.06,3.0]],12,MX,MY+MH-.05,MZ,(k,j)=>j%2?0x8a6a45:0x7a5a3a,{a0,a1,open:true});}
+ for(const s of [-1,1])ct.s.box(MX+s*(MR-.15),MY+MH/2,MZ+.02,.3,MH,.1,CUT);fr.s.box(MX,MY+1.1,MZ+MR+.12,.9,2.0,.1,BLUE);fr.w.box(MX,MY+3.6,MZ+MR-.2,.6,.7,.08,0x5f8fc0);
+ { const hx=MX,hy=MY+MH-.9,hz=MZ+MR+.5;fr.s.beam([hx,hy,MZ],[hx,hy,hz+.3],.22,0x5b4130);for(let k=0;k<8;k++){const a=k*TAU/8,ex=hx+Math.cos(a)*3.6,ey=hy+Math.sin(a)*3.6;fr.s.beam([hx,hy,hz],[ex,ey,hz],.09,0x5b4130);const b=a+.42;fr.s.q([hx+Math.cos(a)*.9,hy+Math.sin(a)*.9,hz+.04],[ex,ey,hz+.04],[hx+Math.cos(b)*3.0,hy+Math.sin(b)*3.0,hz+.04],[hx+Math.cos(b)*.9,hy+Math.sin(b)*.9,hz+.04],0xf7f5ef);}
+  for(let k=0;k<8;k++){const a=k*TAU/8,b=a+TAU/8;fr.s.beam([hx+Math.cos(a)*3.6,hy+Math.sin(a)*3.6,hz],[hx+Math.cos(b)*3.6,hy+Math.sin(b)*3.6,hz],.04,0x8a7a5a);} }
+ sh.s.box(-6.4,MY+1.6,-9.0,5.2,3.2,3.6,WH);sh.s.box(-6.4,MY+3.3,-9.0,5.4,.2,3.8,WH2);fr.s.box(-7.4,MY+1.2,-7.16,1.0,2.2,.08,BLUE);for(const x of [-5.4])for(const q of [-1,1])fr.s.box(x+q*.7,MY+1.8,-7.16,.4,1.1,.06,BLUE);fr.w.box(-5.4,MY+1.8,-7.17,.9,1.0,.05,0x6f9ab8);
+ for(const [x,y,z,n] of [[-3.4,MY,-7.4,9],[-9.2,MY,-7.6,7],[4.4,.2,6.6,8],[-12.6,T1+.1,-.6,7]]){for(let k=0;k<n;k++)sh.s.lathe([[.3,-.3],[.5,0],[.3,.4]],5,x+(r()-.5)*1.4,y+1.2+r()*1.5,z+(r()-.5)*.6,[0xd9388a,0xe3559a,0xc92f7a][k%3],{flat:true});sh.s.beam([x,y,z],[x+.2,y+1.4,z],.1,0x5b4130);}
+ for(const [x,y,z] of [[9.2,.2,6.4],[10.6,.2,5.0],[-9.4,T1+.1,-1.2],[2.2,T2+.1,-6.4]]){sh.s.lathe([[.26,0],[.34,.5],[.26,.62]],8,x,y,z,0xb5673f);sh.s.lathe([[.1,.5],[.4,.9],[.1,1.3]],6,x,y,z,0x4f8a45,{flat:true});}
+ sh.s.box(-9.6,.16,4.6,5.4,.3,3.0,WH);sh.w.box(-9.6,.33,4.6,4.8,.04,2.4,0x45b5d6);for(const [x,z] of [[6.6,5.2],[8.2,6.6]]){F.round(sh,x,.2,z,.4,WH);F.chair(sh,x-.65,.2,z,Math.PI/2,BLUE);F.chair(sh,x+.65,.2,z,-Math.PI/2,BLUE);}
+ // ---------------- interiors ----------------
+ const levels=[];
+ { const g=new T.Group(),pt=part(),y=.2,x0=CX-CW/2,z0=CZ1-CD;pt.s.box(CX,y+.02,CZ1-CD/2,CW,.05,CD-.2,0xd9cdb8);vaultX(pt,x0,x0+CW,y+1.7,CZ1-CD/2,CD/2-.1,0xfbfaf6,Math.PI/2,Math.PI,8);
+  pt.s.box(x0+1.3,y+.35,z0+1.1,2.4,.7,1.8,WH);pt.s.box(x0+1.3,y+.78,z0+1.1,2.2,.2,1.6,0x5f8fc0);for(const q of [-.5,.5])pt.s.box(x0+1.3+q,y+.95,z0+.5,.7,.16,.4,0xffffff);pt.s.box(x0+1.3,y+1.9,z0+.3,2.6,1.8,.1,WH2);
+  pt.s.box(x0+CW-1.0,y+.45,z0+.6,1.8,.9,.7,WH);pt.s.box(x0+CW-1.0,y+.93,z0+.6,1.9,.06,.8,0x8fb0c8);for(let k=0;k<4;k++)pt.s.lathe([[.1,0],[.13,.16],[.07,.24]],6,x0+CW-1.7+k*.45,y+.96,z0+.6,[0xb5673f,BLUE,0xf7f5ef,0xe0a63c][k]);pt.s.box(x0+CW-1.0,y+2.0,z0+.36,1.6,.06,.3,0x8a6a45);
+  pt.s.box(CX+.6,y+.3,CZ1-1.6,2.6,.5,.9,WH);pt.s.box(CX+.6,y+.6,CZ1-1.6,2.5,.14,.8,BL2);for(const q of [-.8,0,.8])pt.s.box(CX+.6+q,y+.86,CZ1-1.95,.6,.4,.16,[0xf7f5ef,0xe0a63c,0xf7f5ef][q+.8>1?2:q?0:1]);F.round(pt,CX+.6,y,CZ1-2.9,.42,0x8a6a45);F.rug(pt,CX+.4,y+.05,CZ1-2.6,2.6,1.8,0x2a5fb0);F.tlamp(pt,x0+2.9,y+.7,z0+.5);pt.s.box(x0+2.9,y+.35,z0+.5,.5,.7,.5,WH);
+  flush(g,pt,'santorini cave house');levels.push({group:g,name:'B1 崖洞屋（拱頂起居與臥龕）',y,h:3,rooms:[{name:'拱頂起居',pos:[CX,y+1.6,1.6],look:[CX,y+1.2,-3]}]}); }
+ { const g=new T.Group(),pt=part(),y=NY,L=NX1-NX0;pt.s.box((NX0+NX1)/2,y+.02,NZ,L-.6,.05,2*NR-.6,0xf2efe6);for(let i=0;i<18;i++)for(let j=0;j<8;j++)if((i+j)%2)pt.s.box(NX0+.6+i*(L-1.2)/17,y+.05,NZ-NR+.6+j*(2*NR-1.2)/7,.56,.01,.56,BLUE);
+  vaultX(pt,NX0+.4,NX1-.4,y+NH,NZ,NR-.12,0xfbfaf6,Math.PI/2,Math.PI,8);pt.s.box((NX0+NX1)/2,y+NH/2,NZ-NR+.42,L-.8,NH,.05,0xfbfaf6);
+  const ix=2.9;pt.s.box(ix,y+1.3,NZ,.14,2.6,2*NR-.9,0x6b4a2a);for(let k=0;k<5;k++){pt.s.box(ix-.08,y+1.55,NZ-1.7+k*.85,.04,1.0,.6,GOLD);pt.s.box(ix-.1,y+1.6,NZ-1.7+k*.85,.03,.6,.36,[0x2a4f8a,0x8a2f2a,0x2f6a4a,0x8a2f2a,0x2a4f8a][k]);}pt.s.box(ix-.08,y+2.75,NZ,.06,.3,2*NR-1.0,GOLD);pt.s.box(ix-.1,y+3.2,NZ,.05,.6,.05,GOLD);pt.s.box(ix-.1,y+3.3,NZ,.05,.05,.4,GOLD);
+  for(let k=0;k<4;k++)for(const s of [-1,1]){pt.s.box(-4.4+k*1.5,y+.42,NZ+s*1.2,.5,.08,1.5,0x6b4a2a);pt.s.box(-4.62+k*1.5,y+.7,NZ+s*1.2,.07,.6,1.5,0x6b4a2a);}
+  pt.s.lathe([[.9,0],[.94,.06],[.9,.12]],14,-1.4,y+2.9,NZ,GOLD,{open:true});for(let k=0;k<8;k++){const a=k*TAU/8;pt.g.box(-1.4+Math.cos(a)*.9,y+3.08,NZ+Math.sin(a)*.9,.07,.18,.07,0xfff0c4);}pt.s.box(-1.4,y+3.9,NZ,.03,1.6,.03,GOLD);
+  for(const [x,c] of [[-4.6,0x8a2f2a],[-2.4,0x2a4f8a],[-.2,0x2f6a4a]])F.pic(pt,x,y+1.9,NZ-NR+.48,0,.5,.7,c);pt.s.lathe([[.3,0],[.1,.1],[.08,1.0],[.34,1.1]],8,1.6,y,NZ-1.4,GOLD);for(let k=0;k<6;k++)pt.g.box(1.6+Math.cos(k)*.2,y+1.25,NZ-1.4+Math.sin(k)*.2,.04,.2,.04,0xffd27a);
+  pt.s.lathe(domeP(DRm-.1,1.0,8),16,DX,DY0+1.5,NZ,(k,j)=>k>5?0x2a4f8a:0xfbfaf6,{a0:Math.PI,a1:TAU,open:true});pt.s.lathe([[DRm-.08,0],[DRm-.08,1.5]],16,DX,DY0,NZ,0xfbfaf6,{a0:Math.PI,a1:TAU,open:true});
+  flush(g,pt,'santorini church');levels.push({group:g,name:'1F 藍頂教堂主殿與聖幛',y,h:NH+1,rooms:[{name:'主殿',pos:[-3.6,y+1.6,NZ+.4],look:[4,y+1.6,NZ]},{name:'聖幛前',pos:[.6,y+1.6,NZ],look:[4,y+1.8,NZ]}]}); }
+ { const g=new T.Group(),pt=part(),y=MY;pt.s.lathe([[0,0],[MR-.2,0]],14,MX,y+.03,MZ,0x9a7650,{open:true});pt.s.lathe([[0,0],[MR-.4,0],[MR-.4,-.18]],14,MX,y+2.9,MZ,0x8a6a45,{a0:Math.PI,a1:TAU,open:true});ct.s.box(MX,y+2.82,MZ+.02,2*MR-.7,.18,.1,CUT);
+  pt.s.lathe([[1.0,0],[1.0,.34]],14,MX,y+.5,MZ-.2,0xb9b1a0);pt.s.lathe([[.95,0],[.95,.3]],14,MX,y+.9,MZ-.2,0xa39a88);pt.s.lathe([[.14,0],[.14,4.4]],8,MX,y+.3,MZ-.2,0x6b4a2a);pt.s.box(MX,y+.25,MZ-.2,2.4,.5,2.4,0x7a5a3a);
+  for(const [dx,dz] of [[-1.4,-.9],[-1.6,-.2],[1.5,-1.0]]){pt.s.lathe([[.3,0],[.36,.3],[.3,.7],[.12,.8]],7,MX+dx,y+.03,MZ+dz,0xd9c9a0);}
+  pt.s.lathe([[1.25,0],[1.25,.16]],16,MX,y+4.0,MZ-.2,0x8a6a45);for(let k=0;k<16;k++){const a=k*TAU/16;pt.s.box(MX+Math.cos(a)*1.32,y+4.08,MZ-.2+Math.sin(a)*1.32,.14,.3,.14,0x6b4a2a,Math.PI/2-a);}pt.s.beam([MX,y+MH-.9,MZ-.9],[MX,y+MH-.9,MZ+MR],.2,0x5b4130);pt.s.lathe([[.5,0],[.5,.5]],10,MX,y+MH-1.4,MZ+.6,0x7a5a3a,{flat:true});
+  for(let k=0;k<9;k++)pt.s.box(MX-1.5,y+.2+k*.32,MZ-1.0+k*.02,.5,.05,.08,0x6b4a2a);for(const q of [-.24,.24])pt.s.beam([MX-1.5+q,y,MZ-1.0],[MX-1.5+q,y+3.0,MZ-.82],.05,0x6b4a2a);
+  flush(g,pt,'santorini windmill');levels.push({group:g,name:'2F 白風車磨坊（磨石與木齒輪）',y,h:MH,rooms:[{name:'磨石層',pos:[MX-.6,y+1.6,MZ+.6],look:[MX,y+1.2,MZ-2]}]}); }
+ flush(shellG,sh,'santorini shell');flush(frontG,fr,'santorini sea front');flush(cutG,ct,'santorini cut edge');root.add(shellG,frontG,cutG);levels.forEach(l=>root.add(l.group));
+ return {id:'santorini',title:'聖托里尼・藍頂教堂、崖洞屋與白風車（外觀與剖面）',root,exterior:frontG,shell:shellG,cutOnly:cutG,levels,anims:[],bounds:{x:12,z:6,z0:-10},radius:30,height:14,az:.3,extCenter:[0,-2],whole:true};
+}
+
+window.Kit70={G,F,part,flush,face,railing,tree,tower,twin,rng,shade,rgb,mats,haussmann,castle,mosque,dunhuang,santorini,minaret,domeP,IRON,CUT,GOLD,ROOF,LEAD};
 })();
 </script>
 <script id="island4-landmarks-cutaway-v67">
@@ -29692,84 +29959,8 @@ function buildParis() { return window.Kit70.haussmann(); }
 // ---------------------------------------------------------------------------
 // 4. 伊斯坦堡・藍色清真寺穹頂內殿＆大巴札彩燈市集 (3 層)
 // ---------------------------------------------------------------------------
-function buildIstanbul() {
-  const X = getTex();
-  const root = new T.Group(), exterior = new T.Group(), anims = [];
-  const tileMat = M(0x2878a2, { map: X.iznik, bumpMap: X.iznik, bumpScale: .18, roughness: .32, metalness: .15 });
-  const travertine = M(0xe6dcc8, { roughness: .62 });
-  const domeMat = M(0x4b6a82, { roughness: .35, metalness: .3 });
-
-  // Exterior: Blue Mosque cascade of domes + 6 slender minarets
-  addM(exterior, geoBox, travertine, 0, 3.4, 0, 15.5, 6.8, 15.5);
-  addM(exterior, geoSph, domeMat, 0, 8.2, 0, 6.4, 4.8, 6.4);
-  for (const [dx, dz] of [[-4.8, 0], [4.8, 0], [0, -4.8], [0, 4.8]]) addM(exterior, geoSph, domeMat, dx, 6.6, dz, 3.6, 2.8, 3.6);
-  addM(exterior, geoCyl, matGold, 0, 13.8, 0, .18, 2.6, .18);
-  for (const [mx, mz] of [[-8.6, -8.6], [8.6, -8.6], [-8.6, 8.6], [8.6, 8.6], [-8.6, 0], [8.6, 0]]) {
-    addM(exterior, geoCyl, travertine, mx, 8.5, mz, .55, 17, .55);
-    addM(exterior, geoCone, domeMat, mx, 18.2, mz, .62, 2.8, .62);
-  }
-
-  const levels = [];
-  const flDefs = [
-    { name: '1F 大巴札彩燈拱廊市集', y: 0, h: 4.6, rooms: [{ name: '土耳其馬賽克彩燈拱道', pos: [0, 1.7, 4.6], look: [0, 2.2, -3] }, { name: '香料與手工波斯地毯鋪', pos: [-4.8, 1.7, 2.0], look: [2, 1.6, -2] }] },
-    { name: '2F 藍色清真寺20,000藍瓷內殿', y: 4.9, h: 5.0, rooms: [{ name: '巨型象足大理石柱＆吊燈環', pos: [0, 6.7, 4.5], look: [0, 7.6, -2] }, { name: '伊茲尼克藍瓷米哈拉布聖龕', pos: [4.6, 6.7, 2.0], look: [-1, 7.2, -4] }] },
-    { name: '3F 43m穹頂天窗＆六塔觀景廊', y: 10.2, h: 4.8, rooms: [{ name: '彩繪玻璃穹頂天窗環廊', pos: [0, 11.9, 4.2], look: [0, 13.2, -1] }, { name: '博斯普魯斯海峽宣禮塔景觀', pos: [4.4, 11.9, 2.2], look: [-2, 12.2, -3] }] },
-  ];
-
-  // Floor 0: Grand Bazaar Mosaic Lantern Arcade
-  const f0 = new T.Group();
-  addPocheShell(f0, 16, 4.6, 13, M(0xc8b89a), travertine);
-  // Hanging clusters of colorful Turkish mosaic lamps
-  const lampCols = [matWarmLight, matBlueLight, matPinkLight, M(0x9aff8c, { emissive: 0x38d84c, emissiveIntensity: 1.4 })];
-  const mosLamps = [];
-  for (let i = 0; i < 12; i++) {
-    const lx = -5.4 + (i % 6) * 2.15, lz = i < 6 ? -2.2 : 1.6, ly = 3.2 - (i % 3) * .35;
-    addM(f0, geoCyl, matBrass, lx, ly + .6, lz, .03, 1.2, .03);
-    const lm = addM(f0, geoSph, lampCols[i % 4], lx, ly, lz, .28, .36, .28);
-    lm.userData.dynamic=true;mosLamps.push({ m: lm, ph: i * .8 });
-  }
-  anims.push(t => { for (const q of mosLamps) q.m.scale.setScalar(.28 + .04 * Math.sin(t * 4 + q.ph)); });
-  // Spice cones & rolled carpets
-  const spiceCols = [0xd43822, 0xe8a820, 0x8c4218, 0x488c34];
-  for (let i = 0; i < 4; i++) addM(f0, geoCone, M(spiceCols[i]), -5.4 + i * 1.4, .95, -4.2, .52, .85, .52);
-  addM(f0, geoBox, M(0x9a282e), 4.2, .32, -2.5, 4.2, .12, 5.4);
-  addWarmLamp(f0, 0, 4.0, 0);
-  levels.push({ group: f0, ...flDefs[0] });
-
-  // Floor 1: Blue Mosque Interior Hall (20,000 Iznik Tiles + Suspended Chandelier Ring)
-  const f1 = new T.Group(); f1.position.y = 4.9;
-  addPocheShell(f1, 15.5, 5.0, 12.5, M(0xa63238, { roughness: .85 }), tileMat);
-  // 4 iconic giant fluted "elephant-foot" piers
-  for (const [px, pz] of [[-4.4, -3.4], [4.4, -3.4], [-4.4, 2.4], [4.4, 2.4]]) {
-    addM(f1, geoCyl, travertine, px, 2.5, pz, 1.05, 4.9, 1.05);
-  }
-  // Low-hung massive Ottoman iron/gold circular chandelier ring
-  const chRing = new T.Group(); chRing.position.set(0, 2.95, -.4); f1.add(chRing);
-  addM(chRing, geoTor, matBrass, 0, 0, 0, 3.6, 3.6, .08, Math.PI / 2);
-  for (let i = 0; i < 12; i++) {
-    const a = i * Math.PI * 2 / 12;
-    addM(chRing, geoSph, matWarmLight, Math.cos(a) * 3.6, .2, Math.sin(a) * 3.6, .22, .22, .22);
-  }
-  anims.push(t => { chRing.rotation.y = t * .15; });
-  // Carved marble Mihrab niche
-  addM(f1, geoBox, matGold, 0, 2.1, -5.8, 2.6, 3.8, .35);
-  addWarmLamp(f1, 0, 4.3, 0);
-  levels.push({ group: f1, ...flDefs[1] });
-
-  // Floor 2: 43m Grand Dome Clerestory Gallery
-  const f2 = new T.Group(); f2.position.y = 10.2;
-  addPocheShell(f2, 14, 4.8, 11.5, travertine, tileMat);
-  addM(f2, geoSph, tileMat, 0, 4.4, -.5, 5.2, 2.4, 5.2);
-  for (let i = 0; i < 10; i++) {
-    const a = -1.3 + i * .29;
-    addM(f2, geoBox, i % 2 ? matBlueLight : matWarmLight, Math.sin(a) * 5.4, 2.8, -.5 - Math.cos(a) * 4.4, .55, 1.4, .18, 0, -a);
-  }
-  addWarmLamp(f2, 0, 3.8, .5);
-  levels.push({ group: f2, ...flDefs[2] });
-
-  root.add(exterior, f0, f1, f2);
-  return { id: 'istanbul', title: '伊斯坦堡・藍色清真寺＆大巴札彩燈市集', root, exterior, levels, anims, bounds: { x: 6.2, z: 4.8 }, radius: 27 };
-}
+// v7.0：伊斯坦堡改為單棟清真寺（層疊圓頂、六座宣禮塔、前庭；剖面沿大殿中線）
+function buildIstanbul() { return window.Kit70.mosque(); }
 
 // ---------------------------------------------------------------------------
 // 5. 夢幻環球城堡樂園・水晶大廳＆星空煙火塔 (3 層 + 一鍵進遊園車＆步行遊園)
@@ -29854,7 +30045,7 @@ function ensureModel(id) {
 }
 
 // 剖面規則（Paul 2026-11-25）：地標與山不整座剖開，只看完整外觀；保留走入室內與各入口。
-const NO_CUT4 = new Set(['rio', 'cape', 'istanbul']);
+const NO_CUT4 = new Set(['rio', 'cape']);
 function applyMode() {
   const m = models[tour.id]; if (!m) return;
   const noCut = NO_CUT4.has(tour.id);
@@ -30003,8 +30194,8 @@ function buildingCamera4(yaw, pitch, zoom, aspect, dt = .016) {
     const target = tour.walkPos.clone().add(V(Math.sin(a) * Math.cos(el), Math.sin(el), Math.cos(a) * Math.cos(el)).multiplyScalar(6));
     return { position: tour.walkPos.clone(), target, fov: 62 };
   }
-  if (m.whole) { const f = tour.focus && tour.mode === 'cut', H = m.height || 20, r = m.radius * (f ? .8 : tour.mode === 'exterior' ? 1.56 : 1.5) * zoom * Math.max(1, .76 / aspect);
-    const az = (m.az ?? .5) + yaw, el = clamp((f ? .26 : .3) + pitch, .06, 1.38), target = V(0, f ? lv.y + lv.h * .5 : H * .5, 0);
+  if (m.whole) { const f = tour.focus && tour.mode === 'cut', H = m.height || 20, r = (tour.mode === 'exterior' ? m.radius : (m.cutR || m.radius)) * (f ? .8 : tour.mode === 'exterior' ? 1.56 : 1.5) * zoom * Math.max(1, .76 / aspect);
+    const az = (m.az ?? .5) + yaw, el = clamp((f ? .26 : .3) + pitch, .06, 1.38), ec = tour.mode === 'exterior' && m.extCenter ? m.extCenter : [0, 0], target = V(ec[0], f ? lv.y + lv.h * .5 : H * .5, ec[1]);
     return { position: target.clone().add(V(Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el)).multiplyScalar(r)), target, fov: 46 }; }
   const cy = tour.mode === 'exterior' ? (m.id === 'paris' ? 14 : m.id === 'rio' || m.id === 'disney' ? 11 : 7.5)
     : tour.mode === 'stack' ? ((m.levels[m.levels.length-1].y+(m.levels.length-1)*4.4+m.levels[m.levels.length-1].h)*.5)
@@ -30157,7 +30348,7 @@ function setupVoyages(world) {
   const stStone = M(0xcfc6b2, { roughness: .9 }), stDark = M(0x4a4f55, { metalness: .45, roughness: .5 }), stDeck = M(0xb9b1a0, { roughness: .92 });
   sPut(stDeck, 0, -1.2, 0, 30, 2.4, 30);
   for (const [dx, dz, sx, sz] of [[0, -14.8, 30, .4], [0, 14.8, 30, .4], [14.8, 0, .4, 30], [-14.8, -9, .4, 12], [-14.8, 9, .4, 12]]) sPut(stStone, dx, .55, dz, sx, 1.1, sz);
-  sPut(stStone, 5.6, 3.7, 0, .7, 7.4, 13); for (const dz of [-6.2, 6.2]) sPut(stStone, 1.6, 3.7, dz, 8.6, 7.4, .6);
+  sPut(stStone, 5.6, 3.7, 0, .7, 7.4, 13); for (const dz of [-6.2, 6.2]) for (const dx of [5.4, 1.2]) sPut(stStone, dx, 3.7, dz, .6, 7.4, .6);
   sPut(stDark, 1.2, 7.65, 0, 10.4, .5, 13.6); sPut(stDark, -3.8, 6.9, 0, .5, 1.2, 13.6); for (const dz of [-6.4, 6.4]) sPut(stDark, -3.6, 3.7, dz, .45, 7.4, .45);
   for (const dz of [-3, 0, 3]) sPut(M(0x8fb7c9, { roughness: .2, metalness: .3 }), 5.2, 3.6, dz, .1, 2.2, 1.8);
   for (const dz of [-10.6, -5.4]) sPut(M(0xf0be22), -11, 2.2, dz, .5, 4.4, .5); sPut(M(0xf0be22), -11, 4.6, -8, .5, .5, 5.7); sPut(M(0xf0be22), -11, .25, -8, .5, .5, 5.7);

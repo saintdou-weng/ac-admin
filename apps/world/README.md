@@ -32,3 +32,10 @@
 
 ## 換內建版（AI 做）
 覆蓋檔案後，重算 `world-manifest.json` 的 `files`（sha-256 前 32 碼與 bytes）。總控台與島嶼檔的返回鍵指向 `./index.html`。
+
+## v7.0（2026-11-27）單棟建築剖面與冬季小鎮
+- 共用區塊 `world-building-kit-v70`（`island2.html`、`island3.html`、`island4.html`、`seasons_express.html` 各帶一份，內容相同）：`window.Kit70` 提供 `haussmann()`（巴黎奧斯曼公寓）、`castle()`（童話城堡）、`mosque()`（清真寺）、`dunhuang()`（敦煌九層樓）、`santorini()`（藍頂教堂＋崖洞屋＋風車）。
+- 這些模型的外觀與剖面是同一棟樓：`exterior`（只在外觀顯示的正立面）＋`shell`（一直顯示的外殼）＋`cutOnly`（剖面黑邊）＋`levels`（各層室內）。各島的地標參觀區塊看到 `whole:true` 就走單棟流程（隱藏「全層」、點樓層拉近）。
+- 山與大型地標不整座剖開：第四島 `NO_CUT4`（里約、開普敦）、第三島 `NO_CUT3`（101、神山、吳哥窟、哈里發塔）、第二島 `NO_CUT2`（馬雅神廟、金字塔、大峽谷），只看完整外觀並保留走入室內與各交通入口。
+- 第四島巴黎區運河北岸有彩色半木造小鎮；季節選「冬」時巴黎與城堡區積雪、亮聖誕樹與燈串。
+- 改共用區塊後四個檔要一起換：`python3 refine/tools/setblock.py <檔> world-building-kit-v70 <kit.js>`，再更新 `world-manifest.json` 的 sha／bytes／updatedAt。
